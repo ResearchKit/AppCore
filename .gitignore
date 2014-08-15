@@ -21,15 +21,3 @@ profile
 DerivedData
 *.hmap
 *.ipa
-
-# CocoaPods
-Pods
-
-
-### Xcode ###
-build
-*.xcodeproj/*
-!*.xcodeproj/project.pbxproj
-!*.xcworkspace/contents.xcworkspacedata
-APCAppleCore/*.xcodeproj/project.pbxproj
-APCAppleCore/*.xcodeproj/project.xcworkspace/contents.xcworkspacedata
