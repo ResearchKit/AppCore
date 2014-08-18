@@ -1,0 +1,22 @@
+# Created by Dhanush Balachandran on 8/15/14.
+# Copyright (c) 2014 Y Media Labs. All rights reserved.
+
+# Sinatra Instructions
+#  In command line type
+#  $ gem install sinatra
+#  $ ruby server_mockup.rb
+
+require 'sinatra'
+require 'json'
+
+get '/api/*' do
+	[200, {endpoint: params}.to_json] 
+end
+
+post '/api/*' do 
+	[200, {endpoint: params}.to_json] 
+end
+
+put '/api/*' do 
+	[200, {endpoint: params}.to_json] 
+end
