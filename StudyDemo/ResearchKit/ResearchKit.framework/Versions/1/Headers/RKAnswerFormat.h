@@ -147,6 +147,41 @@ typedef NS_ENUM(NSInteger, RKNumericAnswerStyle) {
  */
 @property (nonatomic, readonly, copy) NSString *unit;
 
+/**
+ * @brief Minimum qualified value.
+ */
+@property (copy) NSNumber *minimum;
+
+/**
+ * @brief Maximum qualified value.
+ */
+@property (copy) NSNumber *maximum;
+
+/**
+ * @brief Rounding mode.
+ * Default value is NSNumberFormatterRoundHalfEven
+ */
+@property NSNumberFormatterRoundingMode roundingMode;
+
+/**
+ * @brief Rounding increment.
+ * Default value is nil, rounding will not be applied.
+ */
+@property (nonatomic, copy) NSNumber *roundingIncrement;
+
+/**
+ * @brief Manage the number of fraction digits.
+ * Default value is nil, 0 will be used in actual formatting.
+ */
+@property (nonatomic, copy) NSNumber *minimumFractionDigits;
+
+/**
+ * @brief Manage the number of fraction digits.
+ * Default value is nil, 42 will be used in actual formatting.
+ */
+@property (nonatomic, copy) NSNumber *maximumFractionDigits;
+
+
 @end
 
 

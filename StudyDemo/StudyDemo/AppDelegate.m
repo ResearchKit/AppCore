@@ -19,8 +19,11 @@
 
 NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
 
-@interface AppDelegate ()<RKStudyStoreDelegate>
-            
+@interface AppDelegate ()<RKStudyDelegate,RKDataLoggerManagerDelegate>
+{
+    NSString *_logDirectory;
+    RKDataLoggerManager *_logManager;
+}
 
 @end
 
@@ -29,21 +32,14 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
 -(BOOL)initializeStudiesOnStore:(RKStudyStore*)store
 {
     NSError *error = nil;
-    RKStudy *study = [store addStudyWithIdentifier:MainStudyIdentifier error:&error];
+    RKStudy *study = [store addStudyWithIdentifier:MainStudyIdentifier delegate:self error:&error];
     if (!study)
     {
         NSLog(@"Error creating study %@: %@", MainStudyIdentifier, error);
         return NO;
     }
     
-    NSData *identity = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"investigator" ofType:@"pem"]];
-    RKUploader *uploader = [study addUploaderWithEndpoint:[NSURL URLWithString:TARGET_URL] identity:identity archiveFormat:RKDataArchiveFormatZip error:&error];
-    if (!uploader)
-    {
-        NSLog(@"Error creating uploader: %@", error);
-        [store removeStudy:study error:nil];
-        return NO;
-    }
+    // NSData *identity = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"investigator" ofType:@"pem"]];
     
     HKQuantityType *quantityType = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
     RKHealthCollector *healthCollector = [study addHealthCollectorWithSampleType:quantityType unit:[HKUnit countUnit] startDate:nil error:&error];
@@ -53,6 +49,17 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
         [store removeStudy:study error:nil];
         return NO;
     }
+    
+    HKQuantityType *quantityType2 = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodGlucose];
+    HKUnit *unit = [HKUnit unitFromString:@"mg/dL"];
+    RKHealthCollector *glucoseCollector = [study addHealthCollectorWithSampleType:quantityType2 unit:unit startDate:nil error:&error];
+    if (!glucoseCollector)
+    {
+        NSLog(@"Error creating glucose collector: %@", error);
+        [store removeStudy:study error:nil];
+        return NO;
+    }
+    
     
     RKMotionActivityCollector *motionCollector = [study addMotionActivityCollectorWithStartDate:nil error:&error];
     if (!motionCollector)
@@ -69,7 +76,15 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    RKStudyStore *studyStore = [[RKStudyStore alloc] initWithIdentifier:[[NSBundle bundleForClass:[self class]] bundleIdentifier] delegate:self];
+    _logDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"ResearchKitLogs"]; // for now
+    [[NSFileManager defaultManager] createDirectoryAtPath:_logDirectory withIntermediateDirectories:YES attributes:nil error:nil];
+    
+    _logManager = [[RKDataLoggerManager alloc] initWithDirectory:[NSURL fileURLWithPath:_logDirectory] delegate:self];
+    _logManager.pendingUploadBytesThreshold = 5 * 1024 * 1024; // 5 MB
+    _logManager.totalBytesThreshold = 50 * 1024 * 1024; // 50 MB
+    
+    RKStudyStore *studyStore = [RKStudyStore sharedStudyStore];
+    
     
     self.studyStore = studyStore;
     
@@ -84,11 +99,23 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     }
 #endif
     
-    // On first launch, configure the study
+    // On launch, either create the study objects, or setup
+    // delegates on the existing study objects.
     if (! [studyStore studyWithIdentifier:MainStudyIdentifier])
     {
         [self initializeStudiesOnStore:studyStore];
     }
+    else
+    {
+        for (RKStudy *study in studyStore.studies)
+        {
+            [study setDelegate:self];
+        }
+    }
+    
+    // Resume data collection
+    [studyStore resume];
+    
         
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
@@ -102,45 +129,132 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
 }
 
 
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    // Because in the current iteration, passive data collection is not fully automatic,
-    // it may be helpful to try collecting data if the application is foregrounded.
-    
-    NSLog(@"Trying to collect data");
-    for (RKStudy *study in self.studyStore.studies)
-    {
-        [study tryCollectingData];
-    }
-}
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
 }
 
-- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler
+
+// Generate a unique archive URL in the documents directory
+- (NSURL *)_makeArchiveURL
 {
-    assert(self.studyStore);
-    if ([self.studyStore handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler])
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *zipPath = [[paths lastObject] stringByAppendingPathComponent:[[[NSUUID UUID] UUIDString] stringByAppendingString:@".zip"]];
+    return [NSURL fileURLWithPath:zipPath];
+}
+
+- (void)_createArchiveForUpload
+{
+    // Wrap archive creation in a background task, so that the archive can be created
+    // and queued, even if
+    __block UIBackgroundTaskIdentifier taskIdentifier = UIBackgroundTaskInvalid;
+    taskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        taskIdentifier = UIBackgroundTaskInvalid;
+    }];
+    NSError *err = nil;
+    NSArray *pendingFiles = nil;
+    NSURL *archiveFile = [RKDataArchive makeArchiveFromDataLoggerManager:_logManager
+                                                          itemIdentifier:[[RKItemIdentifier alloc] initWithComponents:@[@"com",@"apple",@"ResearchKit",@"collection"]]
+                                                         studyIdentifier:MainStudyIdentifier
+                                                          fileProtection:nil
+                                                       maximumInputBytes:1024*1024*10
+                                                            maximumFiles:0
+                                                            pendingFiles:&pendingFiles
+                                                                   error:&err];
+   
+    if (err)
     {
+        NSLog(@"Error creating archive from log manager: %@", err);
         return;
     }
     
-    // If reaching here, the identifier has not been consumed and is probably relevant to the app.
-        
+    NSURL *url = [self _makeArchiveURL];
+    
+    // TODO: upload the actual file. For demo purposes, just move it to the documents
+    // directory so you can see it in iTunes.
+    NSLog(@"Moving archive file to %@", [url path]);
+    if (![[NSFileManager defaultManager] moveItemAtURL:archiveFile toURL:url error:&err])
+    {
+        // If the upload fails, unmark the files as uploaded.
+        [_logManager unmarkUploadedFiles:pendingFiles error:NULL];
+    }
+    else
+    {
+        // If the upload enqueue succeeds, remove the files we know are pending
+        [_logManager removeUploadedFiles:pendingFiles error:NULL];
+    }
+    
+    if (taskIdentifier != UIBackgroundTaskInvalid)
+    {
+        [[UIApplication sharedApplication] endBackgroundTask:taskIdentifier];
+    }
+}
+
+- (void)dataLoggerManager:(RKDataLoggerManager*)manager pendingUploadBytesReachedThreshold:(unsigned long long)pendingUploadBytes
+{
+    NSLog(@"Pending bytes threshold reached");
+    // Create the archive.
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        while (manager.pendingUploadBytes >= manager.pendingUploadBytesThreshold)
+        {
+            [self _createArchiveForUpload];
+        }
+    });
+}
+
+- (void)dataLoggerManager:(RKDataLoggerManager*)manager totalBytesReachedThreshold:(unsigned long long)totalBytes
+{
+    NSLog(@"Total bytes threshold reached");
+    // Throw out old files
+    [manager removeOldAndUploadedLogsToThreshold:manager.totalBytesThreshold/2 error:nil];
+}
+
+#pragma mark RKStudyDelegate
+
+
+- (BOOL)study:(RKStudy *)study healthCollector:(RKHealthCollector *)collector anchor:(NSNumber *)anchor didCollectObjects:(NSArray /* <HKSample> */ *)objects
+{
+    NSString *identifier = [[collector sampleType] identifier];
+    RKDataLogger *logger = [_logManager dataLoggerForLogName:identifier];
+    if (! logger)
+    {
+        logger = [_logManager addJSONDataLoggerForLogName:identifier];
+        logger.fileProtectionMode = NSFileProtectionCompleteUnlessOpen;
+    }
+    BOOL success = [logger appendObjects:[collector serializableObjectsForObjects:objects] error:nil];
+    NSLog(@"Health log (%d)", success);
+    return success;
+}
+
+- (BOOL)study:(RKStudy *)study motionActivityCollector:(RKMotionActivityCollector *)collector startDate:(NSDate *)startDate didCollectObjects:(NSArray /* <CMMotionActivity> */ *)objects
+{
+    NSString *logName = @"RKMotionActivity";
+    RKDataLogger *logger = [_logManager dataLoggerForLogName:logName];
+    if (! logger)
+    {
+        logger = [_logManager addJSONDataLoggerForLogName:logName];
+        logger.fileProtectionMode = NSFileProtectionCompleteUnlessOpen;
+    }
+    BOOL success = [logger appendObjects:[collector serializableObjectsForObjects:objects] error:nil];
+    NSLog(@"Motion log (%d)", success);
+    return success;
 }
 
 
-- (void)studyStore:(RKStudyStore *)studyStore willRestoreState:(NSDictionary *)dict
+- (void)passiveCollectionDidFinishForStudy:(RKStudy *)study
 {
-    NSLog(@"Restoring store with dict: %@", dict);
-    // Can re-attach data collection blocks for collectors here
-    for (RKCollector *collector in dict[RKStudyStoreRestoredCollectorsKey])
+    if (self.justJoined)
     {
-        // do stuff with the collector
-        // collector.dataHandler = xxx;
-    }
+        self.justJoined = NO;
         
+        NSLog(@"First collection finished - queue an upload");
+        // Create the archive.
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            [self _createArchiveForUpload];
+        });
+    }
+    
+
 }
 
 @end

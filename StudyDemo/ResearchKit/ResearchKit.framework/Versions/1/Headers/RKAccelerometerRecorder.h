@@ -5,10 +5,13 @@
 //  Copyright (c) 2013-2014 Apple Inc. All rights reserved.
 //
 
-#import "RKRecorder.h"
+#import <ResearchKit/RKRecorder.h>
 
 /**
  * @brief A recorder that requests and collects raw accelerometer data from CoreMotion at a fixed frequency.
+ *
+ * The accelerometer recorder continues to record if the application enters the
+ * background using UIApplication's background task support.
  */
 @interface RKAccelerometerRecorder : RKRecorder
 

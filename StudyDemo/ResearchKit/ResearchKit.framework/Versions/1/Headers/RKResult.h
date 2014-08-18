@@ -133,17 +133,34 @@
 
 
 /**
- * @brief The RKAccelerometerResult class has the attributes for accelerometer data result.
+ * @brief Reports data from an RKAccelerometerRecorder (CMAccelerometerData)
  */
 @interface RKAccelerometerResult : RKResult
 
 /**
- * @brief Accelerometer updating frequency in Hz.
+ * @brief Accelerometer sampling frequency in Hz.
  */
 @property (nonatomic) double frequency;
 
 /**
  * @brief A list of CMAccelerometerData objects collected over a mount of time by RKAccelerometerRecorder.
+ */
+@property (nonatomic, copy) NSArray* dataArray;
+
+@end
+
+/**
+ * @brief Reports data from an RKDeviceMotionRecorder (CMDeviceMotion).
+ */
+@interface RKDeviceMotionResult : RKResult
+
+/**
+ * @brief Device motion sampling frequency in Hz.
+ */
+@property (nonatomic) double frequency;
+
+/**
+ * @brief A list of CMDeviceMotion collected over a mount of time by RKDeviceMotionRecorder.
  */
 @property (nonatomic, copy) NSArray* dataArray;
 

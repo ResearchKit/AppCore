@@ -37,6 +37,18 @@
 - (void)taskViewControllerDidCancel:(RKTaskViewController *)taskViewController;
 
 /**
+ * @brief Asks the delegate should display a more info button at the bottom of a step view.
+ *
+ * The learn more button would not show through the task if this delegate method is not implemented.
+ */
+- (BOOL)taskViewController:(RKTaskViewController *)taskViewController shouldShowMoreInfoOnStep:(RKStep *)step;
+
+/**
+ * @brief Tells the delegate that the learn more button was tapped.
+ */
+- (void)taskViewController:(RKTaskViewController *)taskViewController didReceiveLearnMoreEventFromStepViewController:(RKStepViewController *)stepViewController;
+
+/**
  * @brief Ask the delegate to supply a view controller of a given step.
  * 
  * The delegate should provide a step view controller implementation for any custom steps. 
@@ -75,6 +87,8 @@ willPresentStepViewController:(RKStepViewController *)stepViewController;
  * @note RKStepViewController objects are managed by RKTaskViewController, 
  */
 @interface RKTaskViewController : UIViewController
+
+- (instancetype)init NS_UNAVAILABLE;
 
 /**
  * @brief Designated initializer

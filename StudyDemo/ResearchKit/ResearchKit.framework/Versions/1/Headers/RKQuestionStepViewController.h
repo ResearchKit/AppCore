@@ -22,6 +22,26 @@
  */
 - (instancetype)initWithQuestionStep:(RKQuestionStep*)step result:(RKQuestionResult*)result;
 
+/**
+ * @brief Question label
+ * @discussion Its own properties are read/write. Use these properties primarily to configure the font or layout of the question.
+ */
+@property (nonatomic, readonly) UILabel *questionLabel;
 
+/**
+ * @brief Prompt label
+ * @discussion Its own properties are read/write. Use these properties primarily to configure the font or layout of the question.
+ */
+@property (nonatomic, readonly) UILabel *promptLabel;
+
+/**
+ * @brief Height of the container view of questionLabel and questionLabel
+ */
+@property (nonatomic) CGFloat labelContainerViewHeight;
+
+/**
+ * @brief Customizable footer view at the bottom
+ */
+@property (nonatomic) UIView* footerView;
 
 @end

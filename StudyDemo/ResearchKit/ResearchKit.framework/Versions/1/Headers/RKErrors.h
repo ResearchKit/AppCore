@@ -6,11 +6,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <ResearchKit/RKDefines.h>
 
 
-extern NSString * const RKErrorDomain;
-extern NSString * const RKInvalidArgumentException;
-extern NSString * const RKAbstractMethodException;
+RK_EXTERN NSString * const RKErrorDomain;
+RK_EXTERN NSString * const RKInvalidArgumentException;
+RK_EXTERN NSString * const RKAbstractMethodException;
 
 typedef NS_ENUM(NSInteger, RKErrorCode) {
     RKNoError = 0,
@@ -24,7 +25,9 @@ typedef NS_ENUM(NSInteger, RKErrorCode) {
     RKErrorTimeout                = -100107,
     RKErrorQueueFull              = -100108,
     RKErrorException              = -100109,  // Exception caught during operation
-    RKErrorArchiveFailed          = -100110   // could not create archive
+    RKErrorArchiveFailed          = -100110,   // could not create archive
+    RKErrorBackground             = -100111,
+    RKErrorMultipleErrors         = -100112
 };
 
 

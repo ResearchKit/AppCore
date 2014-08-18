@@ -8,17 +8,59 @@
 #import "MainViewController.h"
 #import <ResearchKit/ResearchKit.h>
 #import "DynamicTask.h"
-#import "PurpleRecorder.h"
+#import "CustomRecorder.h"
+#import "AppDelegate.h"
 
-@interface MainViewController ()<RKTaskViewControllerDelegate, RKResultCollector>
+
+@interface PDFViewController : UIViewController
+
+@property (nonatomic, strong) UIWebView* pdfView;
+@property (nonatomic, strong) NSData *pdfData;
+
+@end
+
+@implementation PDFViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self pdfView];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneAction:)];
+}
+
+- (UIWebView*)pdfView{
+    if (_pdfView == nil) {
+        _pdfView = [[UIWebView alloc] initWithFrame:self.view.bounds];
+        _pdfView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        [self reloadContent];
+        [self.view addSubview:_pdfView];
+    }
+    return _pdfView;
+}
+
+- (void)reloadContent
+{
+    [_pdfView loadData:self.pdfData MIMEType:@"application/pdf" textEncodingName:nil baseURL:nil];
+}
+
+- (IBAction)doneAction:(id)sender{
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+}
+
+@end
+
+@interface MainViewController ()<RKTaskViewControllerDelegate>
 
 @property (nonatomic, strong) RKTaskViewController* taskVC;
-@property (nonatomic, strong) RKConsentViewController* consentVC;
 @property (nonatomic, strong) RKStudy* study;
+@property (nonatomic, strong) NSData *signedPdfData;
 
 @end
 
 @implementation MainViewController
+
 
 - (instancetype)initWithStudy:(RKStudy*)study
 {
@@ -43,7 +85,7 @@
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor lightGrayColor];
+    [[UIBarButtonItem appearance] setTintColor:[UIColor orangeColor]];
     
     CGRect buttonFrame = CGRectMake(0, 0, 240, 40);
     
@@ -132,6 +174,7 @@
 -(void)joinStudy:(id)sender
 {
     NSError *err = nil;
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] setJustJoined:YES];
     if (![self.study updateParticipating:YES withJoinDate:[NSDate date] error:&err])
     {
         NSLog(@"Could not join %@: %@", self.study, err);
@@ -142,6 +185,7 @@
 -(void)leaveStudy:(id)sender
 {
     NSError *err = nil;
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] setJustJoined:NO];
     if (![self.study updateParticipating:NO withJoinDate:nil error:&err])
     {
         NSLog(@"Could not leave %@: %@", self.study, err);
@@ -152,6 +196,14 @@
 - (IBAction)showTaskButtonTapped:(id)sender{
     
     NSMutableArray* steps = [NSMutableArray new];
+    
+    {
+        RKIntroductionStep* step = [[RKIntroductionStep alloc] initWithIdentifier:@"iid_001" name:@"intro step"];
+        step.titleText = @"Demo Study";
+        step.descriptionText = @"We're conducting research on the different question types ResearchKit has to offer. We'd love to hear from you about what question types you use the most and what question types you want to see built. This will help us make improvements to the existing tool and prioritize new features.";
+        [steps addObject:step];
+    }
+    
     {
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001a" name:@"active step"];
         step.text = @"An active test, touch collection";
@@ -163,26 +215,37 @@
     
     {
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001b" name:@"active step"];
-        step.text = @"An active test B";
-        step.voicePrompt = @"An active test";
-        step.recorderConfigurations = @[[PurpleRecorderConfigration new]];
+        step.text = @"An active test\nPlease tap the orange button above when it appears.";
+        step.countDown = 10.0;
+        step.recorderConfigurations = @[[CustomRecorderConfiguration new]];
         [steps addObject:step];
     }
     
     {
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001c" name:@"active step"];
-        step.text = @"An active test C";
+        step.text = @"An active test collecting device motion data";
+        step.recorderConfigurations = @[ [[RKDeviceMotionRecorderConfiguration alloc] initWithFrequency:100.0]];
         [steps addObject:step];
     }
     
     {
-        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_001" name:@"HowOld" question:@"How old are you?" answer:[RKNumericAnswerFormat integerAnswerWithUnit:@"years"]];
+        RKNumericAnswerFormat* format = [RKNumericAnswerFormat integerAnswerWithUnit:@"years"];
+        format.minimum = @(0);
+        format.maximum = @(199);
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_001" name:@"HowOld" question:@"How old are you?" answer:format];
         [steps addObject:step];
     }
     
     
     {
-        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_002" name:@"HowMuch" question:@"What is your annual salary?" answer:[RKNumericAnswerFormat decimalAnswerWithUnit:nil]];
+        RKNumericAnswerFormat* format = [RKNumericAnswerFormat decimalAnswerWithUnit:nil];
+        format.minimum = @(0);
+        format.minimumFractionDigits = @(2);
+        format.maximumFractionDigits = @(2);
+        format.roundingIncrement = @(100);
+        format.roundingMode = kCFNumberFormatterRoundFloor;
+        
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_002" name:@"HowMuch" question:@"What is your annual salary?" answer:format];
         [steps addObject:step];
     }
     
@@ -205,12 +268,11 @@
         [steps addObject:step];
     }
     
-    
     {
         RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_005"
-                                                                  name:@"Text"
-                                                              question:@"How did you feel last night?"
-                                                                answer:[RKTextAnswerFormat textAnswer]];
+                                                                     name:@"Text"
+                                                                 question:@"How did you feel last night?"
+                                                                   answer:[RKTextAnswerFormat textAnswer]];
         [steps addObject:step];
     }
     
@@ -268,16 +330,32 @@
 }
 
 - (IBAction)showConsentButtonTapped:(id)sender{
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"printing" ofType:@"pdf"];
     
-    //RKConsentStep* step = [[RKConsentStep alloc] initWithIdentifier:@"sid_001" name:@"consnet" consentFile:[NSData dataWithContentsOfFile:path]];
-    //RKTask* task = [[RKTask alloc] initWithName:@"Consent" identifier:@"tid_001" steps:@[step]];
     
-    self.consentVC = [[RKConsentViewController alloc] initWithConsentPDF:[NSData dataWithContentsOfFile:path] taskInstanceUUID:[NSUUID UUID]];
-    self.consentVC.delegate = self;
-    [self presentViewController:_consentVC animated:YES completion:^{
+     NSMutableArray* steps = [NSMutableArray new];
+    
+    {
+        RKIntroductionStep* step = [[RKIntroductionStep alloc] initWithIdentifier:@"iid_001" name:@"intro step"];
+        step.titleText = @"Demo Study";
+        step.descriptionText = @"We're conducting research on the different question types ResearchKit has to offer. We'd love to hear from you about what question types you use the most and what question types you want to see built. This will help us make improvements to the existing tool and prioritize new features.";
+        [steps addObject:step];
+    }
+    
+    {
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"printing" ofType:@"pdf"];
+        RKConsentStep* step = [[RKConsentStep alloc] initWithIdentifier:@"cid_a" name:@"Conent step" consentFile:[NSData dataWithContentsOfFile:path]];
+        [steps addObject:step];
+    }
+    
+    RKTask* task = [[RKTask alloc] initWithName:@"Consent" identifier:@"ConsentTask" steps:steps];
+    
+    _taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    _taskVC.delegate = self;
+    
+    [self presentViewController:_taskVC animated:YES completion:^{
         NSLog(@"consent Presented");
     }];
+    
 }
 
 - (IBAction)showSample001ButtonTapped:(id)sender{
@@ -398,6 +476,12 @@
     }
     
     {
+        RKMediaStep *step = [[RKMediaStep alloc] initWithIdentifier:@"itid_004" name:@"media"];
+        step.request = @"Please take a picture of your right hand.";
+        [steps addObject:step];
+    }
+    
+    {
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"itid_003" name:@"active step"];
         step.text = @"Thank you for completing this task.";
         step.voicePrompt = step.text;
@@ -415,40 +499,20 @@
 
 #pragma mark - Helpers
 
--(void)sendResult:(RKResult*)result uploader:(RKUploader*)uploader
+-(void)sendResult:(RKResult*)result
 {
-    /*
-    NSError *error = nil;
-    NSData *data = [result serializationToJSONWithError:&error includingBase64RawData:NO];
-    if (!data)
-    {
-        NSLog(@"Error producing data from %@: %@", result, error);
-        return;
-    }
-    
-    
-    RKItemIdentifier *itemIdentifier = [[RKItemIdentifier alloc] initWithString:result.taskIdentifier];
-    if (result.stepIdentifier)
-    {
-        itemIdentifier = [itemIdentifier itemIdentifierByAppendingComponent:result.stepIdentifier];
-    }
-    if (![uploader sendData:data itemIdentifier:itemIdentifier taskInstanceUUID:result.taskInstanceUUID mimeType:result.contentType error:&error])
-    {
-        NSLog(@"Error queueing data from %@ on %@: %@", result, uploader, error);
-        return;
-    }
-     */
-    NSError *error = nil;
-    
-    if (![uploader sendArchive:[result dataArchive] error:&error])
-    {
-        NSLog(@"Error queueing data from %@ on %@: %@", result, uploader, error);
-        return;
-    }
-    
+    NSLog(@"To do: Upload %@", result);
 }
 
 #pragma mark - RKTaskViewControllerDelegate
+
+- (BOOL)taskViewController:(RKTaskViewController *)taskViewController shouldShowMoreInfoOnStep:(RKStep *)step{
+    return YES;
+}
+
+- (void)taskViewController:(RKTaskViewController *)taskViewController didReceiveLearnMoreEventFromStepViewController:(RKStepViewController *)stepViewController{
+    NSLog(@"Want to learn more = %@", stepViewController);
+}
 
 - (void)taskViewController:(RKTaskViewController *)taskViewController didProduceResult:(RKResult*)result{
     
@@ -463,12 +527,11 @@
         }
     }
     
-    RKUploader *uploader = self.study.primaryUploader;
-    if (uploader && result)
-    {
-        [self sendResult:result uploader:uploader];
+    if ([result isKindOfClass:[RKDataResult class]] && [result.stepIdentifier isEqualToString:@"cid_a"]) {
+        self.signedPdfData = [(RKDataResult*)result data];
     }
     
+    [self sendResult:result];
         
 }
 
@@ -509,6 +572,12 @@
         customView.frame = [(RKActiveStepViewController*)stepViewController customViewContainer].bounds;
         customView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         [[(RKActiveStepViewController*)stepViewController customViewContainer] addSubview:customView];
+        
+        // Set custom button on navi bar
+        stepViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Custom button"
+                                                                                               style:UIBarButtonItemStylePlain
+                                                                                               target:nil
+                                                                                              action:nil];
     }else if ([stepViewController.step.identifier isEqualToString:@"gait_001"]) {
         stepViewController.nextButton = nil;
     }else if ([stepViewController.step.identifier isEqualToString:@"gait_002"]) {
@@ -516,8 +585,16 @@
         stepViewController.backButton = nil;
     }else if ([stepViewController.step.identifier isEqualToString:@"gait_003"]) {
         stepViewController.backButton = nil;
+    }else if ([stepViewController.step.identifier isEqualToString:@"qid_003"]) {
+        RKQuestionStepViewController* qsvc = (RKQuestionStepViewController*)stepViewController;
+        UILabel* footerView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 200)];
+        footerView.text = @"Custom footer view";
+        footerView.textAlignment = NSTextAlignmentCenter;
+        footerView.textColor = [UIColor lightGrayColor];
+        footerView.layer.borderWidth = 1.0;
+        footerView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+        qsvc.footerView = footerView;
     }
-
 }
 
 
@@ -538,23 +615,22 @@
     
     [taskViewController suspend];
     
+    
     [self dismissViewControllerAnimated:YES completion:^{
+        if (self.signedPdfData) {
+            PDFViewController* pdfVC = [[PDFViewController alloc] init];
+            pdfVC.pdfData = self.signedPdfData;
         
+            UINavigationController* nav = [[UINavigationController alloc] initWithRootViewController:pdfVC];
+            [self presentViewController:nav animated:YES completion:^{
+                self.signedPdfData = nil;
+            }];
+        }
     }];
     
-}
-
-#pragma mark - RKResultCollector
-
--(void)didChangeResult:(RKResult *)result forStep:(RKStep *)step{
+    
     
 }
-
-
--(void)didProduceResult:(RKResult *)result forStep:(RKStep *)step{
-    
-}
-
 
 
 

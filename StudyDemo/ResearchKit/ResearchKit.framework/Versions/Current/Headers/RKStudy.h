@@ -18,8 +18,49 @@
 @class RKHealthCollector;
 @class RKMotionActivityCollector;
 @class RKItemIdentifier;
+@class RKStudy;
 
-@protocol RKStudyCollectorDelegate;
+/**
+ * @brief Study delegate
+ *
+ * @discussion Each study can have a delegate. The delegate should be attached
+ * before calling -resume to enable data collection. These callbacks will arrive
+ * on an arbitrary queue.
+ *
+ */
+@protocol RKStudyDelegate <NSObject>
+
+@optional
+
+/**
+ * @brief Reports health data collection
+ * @discussion Will be called on an arbitrary queue.
+ * @return Return NO if the collected objects could not be consumed (will stop further collection)
+ */
+- (BOOL)study:(RKStudy *)study healthCollector:(RKHealthCollector *)collector anchor:(NSNumber *)anchor didCollectObjects:(NSArray /* <HKSample> */ *)objects;
+
+/**
+ * @brief Reports activity data collection
+ * @discussion Will be called on an arbitrary queue.
+ * @return Return NO if the collected objects could not be consumed (will stop further collection)
+ */
+- (BOOL)study:(RKStudy *)study motionActivityCollector:(RKMotionActivityCollector *)collector startDate:(NSDate *)startDate didCollectObjects:(NSArray /* <CMMotionActivity> */ *)objects;
+
+/*
+ * @brief Collection is about to begin
+ * @discussion Will be called on an arbitrary queue.
+ * @return YES if it is ok to begin collecting data
+ */
+- (BOOL)passiveCollectionShouldBeginForStudy:(RKStudy *)study;
+
+/*
+ * @brief Collection has finished
+ * @discussion Will be called on an arbitrary queue.
+ */
+- (void)passiveCollectionDidFinishForStudy:(RKStudy *)study;
+
+@end
+
 
 /**
  * @brief Individual study
@@ -29,6 +70,11 @@
  *
  */
 @interface RKStudy : NSObject
+
+/**
+ * @brief Delegate for receiving data collection and other information about the study.
+ */
+@property (weak) id<RKStudyDelegate> delegate;
 
 /**
  * @brief The identifier of the study.
@@ -55,8 +101,6 @@
 @property (getter=isParticipating, readonly) BOOL participating;
 
 
-
-
 /*!
  * @brief Changes the participation state of the study.
  *
@@ -66,55 +110,14 @@
  *
  * @return YES on success
  */
-- (BOOL)updateParticipating:(BOOL)participating withJoinDate:(NSDate *)joinDate  error:(NSError* __autoreleasing *)error;
+- (BOOL)updateParticipating:(BOOL)participating withJoinDate:(NSDate *)joinDate  error:(NSError * __autoreleasing *)error;
 
 
 @end
 
 
 
-@interface RKStudy(RKUploader)
-
-/**
- * @brief The primary uploader. This will be the default uploader for newly added collectors.
- */
-@property (strong, readonly) RKUploader *primaryUploader;
-
-/**
- * @brief The uploaders for this study.
- *
- */
-@property (copy, readonly) NSArray *uploaders;
-
-/**
- * @brief Add an uploader to the study with the specified endpoint.
- *
- * If it is the first uploader added, it will be marked primary by default.
- *
- * @param endpoint the URL where uploaded data should be sent
- * @param identity X.509 PEM certificate for encrypting data using Cryptographic
- *      Message Syntax before sending. If nil, CMS is not used.
- * @param archiveFormat The format of archive to use for upload.
- *
- */
-- (RKUploader*)addUploaderWithEndpoint:(NSURL *)endpoint identity:(NSData *)identity archiveFormat:(RKDataArchiveFormat)archiveFormat error:(NSError* __autoreleasing *)error;
-
-/**
- * @brief Remove an uploader from the study.
- *
- */
-- (BOOL)removeUploader:(RKUploader *)uploader  error:(NSError* __autoreleasing *)error;
-
-/**
- * @brief Updates which is the primary uploader.
- */
-- (BOOL)updatePrimaryUploader:(RKUploader *)uploader  error:(NSError* __autoreleasing *)error;
-
-@end
-
-
-
-@interface RKStudy(RKCollector)
+@interface RKStudy (RKCollector)
 
 /**
  * @brief Array of any active RKCollector objects for this study.
@@ -135,7 +138,7 @@
  *
  * @param startDate Samples should be collected starting at this date
  */
-- (RKHealthCollector *)addHealthCollectorWithSampleType:(HKSampleType*)sampleType unit:(HKUnit *)unit startDate:(NSDate *)startDate error:(NSError* __autoreleasing *)error;
+- (RKHealthCollector *)addHealthCollectorWithSampleType:(HKSampleType *)sampleType unit:(HKUnit *)unit startDate:(NSDate *)startDate error:(NSError * __autoreleasing *)error;
 
 /**
  * @brief Add an RKCMActivityCollector
@@ -144,22 +147,6 @@
  *
  */
 - (RKMotionActivityCollector *)addMotionActivityCollectorWithStartDate:(NSDate *)startDate error:(NSError* __autoreleasing *)error;
-
-/**
- * @brief Assigns a collector to an uploader.
- *
- * If a collector is assigned to an uploader, then data produced by the collector will
- * be automatically sent to the uploader, and the collector will only collect data if
- * the uploader is ready to receive it.
- *
- * If a collector is added while there is a primary uploader, that uploader will
- * automatically be assigned to the collector.
- *
- * @param collector The collector that should be assigned to an uploader.
- *
- * @param uploader The uploader. If nil, the collector will be removed from any uploader specified.
- */
-- (BOOL)assignCollector:(RKCollector *)collector toUploader:(RKUploader *)uploader error:(NSError* __autoreleasing *)error;
 
 /**
  * @brief Remove the specified collector

@@ -15,6 +15,7 @@
 		B1277E7B193D924D00D8CB20 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1277E7A193D924D00D8CB20 /* HealthKit.framework */; };
 		B1277E7D193D925300D8CB20 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1277E7C193D925300D8CB20 /* CoreData.framework */; };
 		B1277E7F193D925900D8CB20 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B1277E7E193D925900D8CB20 /* libbz2.dylib */; };
+		B18627E5199B1EE900E68479 /* CustomRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = B18627E4199B1EE900E68479 /* CustomRecorder.m */; };
 		B1C056E41981C13500DC0362 /* printing.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B1C056E31981C13400DC0362 /* printing.pdf */; };
 		B1C610E01942881E00252617 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1C610DF1942881E00252617 /* AVFoundation.framework */; };
 		B1C610E21942887500252617 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1C610E11942887500252617 /* Security.framework */; };
@@ -22,7 +23,6 @@
 		B1DEAF3B1979E1170055143E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B1DEAF3A1979E1170055143E /* libz.dylib */; };
 		B1DEAF421979E12E0055143E /* DynamicTask.m in Sources */ = {isa = PBXBuildFile; fileRef = B1DEAF3D1979E12E0055143E /* DynamicTask.m */; };
 		B1DEAF431979E12E0055143E /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1DEAF3E1979E12E0055143E /* MainViewController.m */; };
-		B1DEAF441979E12E0055143E /* PurpleRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = B1DEAF411979E12E0055143E /* PurpleRecorder.m */; };
 		B1DEAF451979E23E0055143E /* investigator.pem in Resources */ = {isa = PBXBuildFile; fileRef = B10FAF97193D32B5005858C2 /* investigator.pem */; };
 		B1DEAF461979E23E0055143E /* investigator.pem in Resources */ = {isa = PBXBuildFile; fileRef = B10FAF97193D32B5005858C2 /* investigator.pem */; };
 		B1EB16E0193E43DE009AA707 /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1EB16DF193E43DE009AA707 /* ResearchKit.framework */; };
@@ -74,6 +74,8 @@
 		B1277E7A193D924D00D8CB20 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		B1277E7C193D925300D8CB20 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		B1277E7E193D925900D8CB20 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
+		B18627E3199B1EE900E68479 /* CustomRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomRecorder.h; sourceTree = "<group>"; };
+		B18627E4199B1EE900E68479 /* CustomRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomRecorder.m; sourceTree = "<group>"; };
 		B1C056E31981C13400DC0362 /* printing.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = printing.pdf; sourceTree = "<group>"; };
 		B1C610DF1942881E00252617 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		B1C610E11942887500252617 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -83,8 +85,6 @@
 		B1DEAF3D1979E12E0055143E /* DynamicTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DynamicTask.m; sourceTree = "<group>"; };
 		B1DEAF3E1979E12E0055143E /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		B1DEAF3F1979E12E0055143E /* DynamicTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicTask.h; sourceTree = "<group>"; };
-		B1DEAF401979E12E0055143E /* PurpleRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurpleRecorder.h; sourceTree = "<group>"; };
-		B1DEAF411979E12E0055143E /* PurpleRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurpleRecorder.m; sourceTree = "<group>"; };
 		B1EB16DF193E43DE009AA707 /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = ResearchKit/ResearchKit.framework; sourceTree = "<group>"; };
 		B1EB16E1193E4416009AA707 /* ResearchKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = ResearchKit.bundle; path = ResearchKit/ResearchKit.bundle; sourceTree = "<group>"; };
 		B1EB16E4193E69F0009AA707 /* StudyDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = StudyDemo.entitlements; sourceTree = "<group>"; };
@@ -148,14 +148,14 @@
 		B10FAF5E193D31AD005858C2 /* StudyDemo */ = {
 			isa = PBXGroup;
 			children = (
+				B18627E3199B1EE900E68479 /* CustomRecorder.h */,
+				B18627E4199B1EE900E68479 /* CustomRecorder.m */,
 				B10FAF63193D31AD005858C2 /* AppDelegate.h */,
 				B10FAF64193D31AD005858C2 /* AppDelegate.m */,
 				B1DEAF3C1979E12E0055143E /* MainViewController.h */,
 				B1DEAF3E1979E12E0055143E /* MainViewController.m */,
 				B1DEAF3F1979E12E0055143E /* DynamicTask.h */,
 				B1DEAF3D1979E12E0055143E /* DynamicTask.m */,
-				B1DEAF401979E12E0055143E /* PurpleRecorder.h */,
-				B1DEAF411979E12E0055143E /* PurpleRecorder.m */,
 				B10FAF66193D31AD005858C2 /* Images.xcassets */,
 				B10FAF5F193D31AD005858C2 /* Supporting Files */,
 			);
@@ -311,7 +311,7 @@
 				TargetAttributes = {
 					B10FAF5B193D31AD005858C2 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = NL3PRC58UN;
+						DevelopmentTeam = 7JYUG8QGJ3;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
 								enabled = 1;
@@ -381,8 +381,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1DEAF441979E12E0055143E /* PurpleRecorder.m in Sources */,
 				B1DEAF421979E12E0055143E /* DynamicTask.m in Sources */,
+				B18627E5199B1EE900E68479 /* CustomRecorder.m in Sources */,
 				B10FAF65193D31AD005858C2 /* AppDelegate.m in Sources */,
 				B10FAF62193D31AD005858C2 /* main.m in Sources */,
 				B1DEAF431979E12E0055143E /* MainViewController.m in Sources */,
@@ -517,7 +517,6 @@
 				INFOPLIST_FILE = StudyDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -537,7 +536,6 @@
 				INFOPLIST_FILE = StudyDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

@@ -17,5 +17,7 @@ extern NSString *const MainStudyIdentifier;
 
 @property (strong, nonatomic) RKStudyStore *studyStore;
 
+@property (assign, nonatomic) BOOL justJoined;
+
 @end
 

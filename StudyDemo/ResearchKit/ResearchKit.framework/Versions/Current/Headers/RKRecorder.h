@@ -9,6 +9,24 @@
 #import <UIKit/UIKit.h>
 
 @class RKResult;
+@class RKRecorder;
+
+@protocol RKRecorderDelegate <NSObject>
+
+/**
+ * @brief Tells the delegate that the recorder is completed and pass out recording result.
+ * @note The methods will be called when recording is stopped.
+ */
+- (void)recorder:(RKRecorder*)recorder didCompleteWithResult:(RKResult*)result;
+
+/**
+ * @brief Tells the delegate that recording failed.
+ */
+- (void)recorder:(RKRecorder*)recorder didFailWithError:(NSError**)error;
+
+@end
+
+
 @class RKStep;
 /**
  * @brief Base class of recorders, defines common interfaces for subclasses.
@@ -21,17 +39,18 @@
  */
 @interface RKRecorder : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
+
+/**
+ * Designated initializer.
+ */
 - (instancetype)initWithStep:(RKStep*)step taskInstanceUUID:(NSUUID*)taskInstanceUUID;
 
 @property (nonatomic, strong, readonly) RKStep *step;
 
 @property (nonatomic, copy, readonly) NSUUID *taskInstanceUUID;
 
-/**
- * @brief Recording completion handler to pass out recording result.
- * @note The block will be called when recording is stopped.
- */
-@property (nonatomic, copy) void (^recordingDidComplete)(RKResult* result);
+@property (nonatomic, weak) id<RKRecorderDelegate> delegate;
 
 /**
  * @brief A preparation step to provide viewController and view before record starting.
@@ -43,13 +62,13 @@
  * @brief Start data recording.
  * @return If an error occurs, an NSError object that describes the problem.
  */
-- (BOOL)start:(NSError**)error;
+- (BOOL)start:(NSError * __autoreleasing *)error NS_REQUIRES_SUPER;
 
 /**
  * @brief Stop data recording.
  * @return If an error occurs, an NSError object that describes the problem.
  */
-- (BOOL)stop:(NSError**)error;
+- (BOOL)stop:(NSError * __autoreleasing *)error NS_REQUIRES_SUPER;
 
 /**
  * @brief Recording status.

@@ -16,9 +16,6 @@
 @class RKMotionActivityCollector;
 @class RKItemIdentifier;
 
-typedef void (^RKHealthCollectorDataHandler)(RKHealthCollector *collector, NSNumber *anchor, NSArray *objects);
-
-typedef void (^RKMotionActivityCollectorDataHandler)(RKMotionActivityCollector *collector, NSDate *startDate, NSArray *objects);
 
 @interface RKCollector : NSObject
 
@@ -41,7 +38,15 @@ typedef void (^RKMotionActivityCollectorDataHandler)(RKMotionActivityCollector *
  *
  * Subclasses should implement to provide a default serialization for upload.
  */
--(NSData*)serializedDataForObjects:(NSArray*)objects;
+- (NSData *)serializedDataForObjects:(NSArray *)objects;
+
+/**
+ * @brief Serialization helper that produces objects suitable for serialization to JSON.
+ *
+ * Subclasses should implement to provide a default JSON serialization for upload.
+ * Called by -serializedDataForObjects:
+ */
+- (NSArray *)serializableObjectsForObjects:(NSArray *)objects;
 
 @end
 
@@ -55,10 +60,6 @@ typedef void (^RKMotionActivityCollectorDataHandler)(RKMotionActivityCollector *
 // Last anchor already seen
 @property (copy, readonly) NSNumber *lastAnchor;
 
-/**
- * If set, the handler is called each time data is collected
- */
-@property (copy) RKHealthCollectorDataHandler dataHandler;
 
 @end
 
@@ -71,10 +72,6 @@ typedef void (^RKMotionActivityCollectorDataHandler)(RKMotionActivityCollector *
 // Last date already seen
 @property (copy, readonly) NSDate *lastDate;
 
-/**
- * If set, the handler is called each time data is collected.
- */
-@property (copy) RKMotionActivityCollectorDataHandler dataHandler;
 
 @end
 

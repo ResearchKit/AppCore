@@ -92,6 +92,7 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
  * @brief Control buttons
  */
 @property (nonatomic, strong) UIBarButtonItem* nextButton;
+@property (nonatomic, strong) UIBarButtonItem* learnMoreButton;
 @property (nonatomic, strong) UIBarButtonItem* backButton;
 @property (nonatomic, strong) UIBarButtonItem* quitButton;
 
