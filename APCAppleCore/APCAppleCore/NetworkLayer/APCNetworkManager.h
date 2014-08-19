@@ -15,6 +15,8 @@
 /*********************************************************************************/
 + (APCNetworkManager*) sharedManager;
 + (void) setUpSharedNetworkManagerWithBaseURL:(NSString*) baseURL;
+- (BOOL) isReachable;
+- (BOOL) isServerReachable;
 
 /*********************************************************************************/
 #pragma mark - Basic HTTP Methods

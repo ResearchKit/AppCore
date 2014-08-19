@@ -7,11 +7,16 @@
 //
 
 #import "APCNetworkManager.h"
+#import "Reachability.h"
 
 static APCNetworkManager * sharedInstance;
 NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
 
 @interface APCNetworkManager ()
+{
+    Reachability * _internetReachability;
+    Reachability * _serverReachability;
+}
 
 @property (nonatomic, strong) NSString * baseURL;
 @property (nonatomic, strong) NSURLSession * mainSession; //For data tasks
@@ -34,9 +39,21 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init]; //Using self instead of APCNetworkManager to enable subclassing
-        sharedInstance.baseURL = baseURL;
+        sharedInstance = [[self alloc] initWithBaseURL:baseURL];
     });
+}
+
+- (instancetype) initWithBaseURL: (NSString*) baseURL
+{
+    self = [[[self class] alloc] init]; //Using [self class] instead of APCNetworkManager to enable subclassing
+    if (self) {
+        self.baseURL = baseURL;
+        _internetReachability = [Reachability reachabilityForInternetConnection];
+        NSURL * url = [NSURL URLWithString:baseURL];
+        _serverReachability = [Reachability reachabilityWithHostName:[url host]]; //Check if only hostname is required
+        
+    }
+    return self;
 }
 
 - (NSURLSession *)mainSession
@@ -54,6 +71,16 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
         _backgroundSession = [NSURLSession sessionWithConfiguration:config];
     }
     return _backgroundSession;
+}
+
+- (BOOL)isReachable
+{
+    return (_internetReachability.currentReachabilityStatus == NotReachable) ? NO : YES;
+}
+
+- (BOOL)isServerReachable
+{
+    return (_serverReachability.currentReachabilityStatus == NotReachable) ? NO : YES;
 }
 
 /*********************************************************************************/
