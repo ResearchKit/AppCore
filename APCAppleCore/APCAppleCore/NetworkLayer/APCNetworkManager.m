@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCNetworkManager.h"
+#import "APCAppleCore.h"
 #import "Reachability.h"
 
 static APCNetworkManager * sharedInstance;
@@ -92,19 +92,27 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
 {
     NSMutableURLRequest *request = [self requestWithMethod:@"GET" URLString:URLString parameters:parameters error:nil];
     
-    __block NSURLSessionDataTask *task = [self.mainSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSessionDataTask *task = [self.mainSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse * httpresponse = (NSHTTPURLResponse*)response;
+        NSError * networkError = [self generateNetworkErrorIfNecessary:httpresponse];
         if (error)
         {
             if (failure) {
                 failure(task, error);
             }
         }
+        else if (networkError)
+        {
+            if (failure) {
+                failure(task, networkError);
+            }
+        }
         else
         {
-            NSError * error;
-            NSDictionary * responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-            if (error) {
-                NSLog(@"%@",error);
+            NSError * JSONError;
+            NSDictionary * responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&JSONError];
+            if (JSONError) {
+                NSLog(@"%@",JSONError);
             }
             if (success) {
                 success(task, responseObject);
@@ -112,7 +120,6 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
         }
     }];
 
-    
     [task resume];
     
     return task;
@@ -122,11 +129,19 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
 {
     NSMutableURLRequest *request = [self requestWithMethod:@"POST" URLString:URLString parameters:parameters error:nil];
     
-    __block NSURLSessionDataTask *task = [self.mainSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSessionDataTask *task = [self.mainSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse * httpresponse = (NSHTTPURLResponse*)response;
+        NSError * networkError = [self generateNetworkErrorIfNecessary:httpresponse];
         if (error)
         {
             if (failure) {
                 failure(task, error);
+            }
+        }
+        else if (networkError)
+        {
+            if (failure) {
+                failure(task, networkError);
             }
         }
         else
@@ -137,7 +152,6 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
             }
         }
     }];
-    
     
     [task resume];
     
@@ -182,6 +196,11 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
         NSURL * tempURL =[NSURL URLWithString:URLString relativeToURL:[NSURL URLWithString:self.baseURL]];
         return [NSURL URLWithString:[tempURL absoluteString]];
     }
+}
+
+- (NSError*) generateNetworkErrorIfNecessary: (NSHTTPURLResponse*) response
+{
+    return NSLocationInRange(response.statusCode, NSMakeRange(200, 99)) ? nil : [NSError errorWithDomain:APC_ERROR_DOMAIN code:APC_SERVER_ERROR userInfo:nil];
 }
 
 /*********************************************************************************/

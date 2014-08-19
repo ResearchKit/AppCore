@@ -9,6 +9,19 @@
 require 'sinatra'
 require 'json'
 
+#Errors
+get '/api/test_fail' do
+	[404, {message: 'Error'}.to_json]
+end
+
+post '/api/test_fail' do
+	[404, {message: 'Error'}.to_json]
+end
+
+put '/api/test_fail' do
+	[404, {message: 'Error'}.to_json]
+end
+
 get '/api/*' do
 	[200, {endpoint: {hello: 'world'}}.to_json] 
 end

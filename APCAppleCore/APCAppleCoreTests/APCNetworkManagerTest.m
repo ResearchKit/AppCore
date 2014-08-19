@@ -12,6 +12,8 @@
 #import "APCNetworkManager.h"
 #define BASE_URL @"http://localhost:4567/api/" //@"http://api.openweathermap.org/data/2.5/weather?q="
 
+//NOTE: Requires MockupServer to be running in the background!
+
 @interface APCNetworkManagerTest : XCTestCase
 
 @property (readonly) APCNetworkManager * localNetworkManager;
@@ -38,6 +40,7 @@
     XCTAssertTrue(self.localNetworkManager.isServerReachable, @"Test Server Not Reachable");
 }
 
+//TODO: Lower Priority. Find a way to reliably test reachability notifications.
 //- (void) testReachabilityChangedBlockWorks
 //{
 //    XCTestExpectation * expectation = [self expectationWithDescription:@"Reachability"];
@@ -47,7 +50,7 @@
 //    [self waitForExpectationsWithTimeout:5.0 handler:NULL];
 //}
 
-- (void) testGETMethod
+- (void) testGETMethodforSuccess
 {
     XCTestExpectation * expectation = [self expectationWithDescription:@"GET Test"];
     [self.localNetworkManager GET:@"test_pass" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -61,7 +64,7 @@
     [self waitForExpectationsWithTimeout:5.0 handler:NULL];
 }
 
-- (void) testPOSTMethod
+- (void) testPOSTMethodforSuccess
 {
     XCTestExpectation * expectation = [self expectationWithDescription:@"POST Test"];
     [self.localNetworkManager POST:@"test_pass" parameters:@{@"hello":@"world"} success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -75,7 +78,7 @@
     [self waitForExpectationsWithTimeout:5.0 handler:NULL];
 }
 
-- (void) testGETWithAbsoluteURL
+- (void) testGETWithAbsoluteURLforSuccess
 {
     XCTestExpectation * expectation = [self expectationWithDescription:@"GET Test with absolute URL"];
     [self.localNetworkManager GET:@"http://api.openweathermap.org/data/2.5/weather?q=london,uk" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -84,6 +87,21 @@
         [expectation fulfill];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         XCTFail(@"Received Failure in GET Method");
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:5.0 handler:NULL];
+}
+
+- (void) testGETMethodforFailure
+{
+    XCTestExpectation * expectation = [self expectationWithDescription:@"GET Test with absolute URL"];
+    [self.localNetworkManager GET:@"test_fail" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        XCTFail(@"Should not receive Success");
+        NSLog(@"%@", responseObject);
+        [expectation fulfill];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        XCTAssertNotNil(error, @"Error is NIL!");
+        NSLog(@"%@", error);
         [expectation fulfill];
     }];
     [self waitForExpectationsWithTimeout:5.0 handler:NULL];

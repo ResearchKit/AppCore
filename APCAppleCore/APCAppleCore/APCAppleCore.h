@@ -10,4 +10,12 @@
 
 #ifndef _APCAPPLECORE_
     #define _APCAPPLECORE_
+
+//Headers
+#import "APCNetworkManager.h"
+
+//Error Codes
+#define APC_ERROR_DOMAIN @"com.ymedialabs.error_domain"
+#define APC_SERVER_ERROR -1000
+
 #endif
