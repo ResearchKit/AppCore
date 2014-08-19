@@ -51,6 +51,8 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
         _internetReachability = [Reachability reachabilityForInternetConnection];
         NSURL * url = [NSURL URLWithString:baseURL];
         _serverReachability = [Reachability reachabilityWithHostName:[url host]]; //Check if only hostname is required
+        [_serverReachability startNotifier]; //Turning on ONLY server reachability notifiers
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
         
     }
     return self;
@@ -88,13 +90,114 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
 /*********************************************************************************/
 -(NSURLSessionDataTask *)GET:(NSString *)URLString parameters:(id)parameters success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    return nil;
+    NSMutableURLRequest *request = [self requestWithMethod:@"GET" URLString:URLString parameters:parameters error:nil];
+    
+    __block NSURLSessionDataTask *task = [self.mainSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error)
+        {
+            if (failure) {
+                failure(task, error);
+            }
+        }
+        else
+        {
+            NSError * error;
+            NSDictionary * responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+            if (error) {
+                NSLog(@"%@",error);
+            }
+            if (success) {
+                success(task, responseObject);
+            }
+        }
+    }];
+
+    
+    [task resume];
+    
+    return task;
 }
 
 - (NSURLSessionDataTask *)POST:(NSString *)URLString parameters:(id)parameters success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    return nil;
+    NSMutableURLRequest *request = [self requestWithMethod:@"POST" URLString:URLString parameters:parameters error:nil];
+    
+    __block NSURLSessionDataTask *task = [self.mainSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error)
+        {
+            if (failure) {
+                failure(task, error);
+            }
+        }
+        else
+        {
+            NSDictionary * responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+            if (success) {
+                success(task, responseObject);
+            }
+        }
+    }];
+    
+    
+    [task resume];
+    
+    return task;
 }
 
+/*********************************************************************************/
+#pragma mark - Helper Methods
+/*********************************************************************************/
+
+- (NSMutableURLRequest *)requestWithMethod:(NSString *)method
+                                 URLString:(NSString *)URLString
+                                parameters:(id)parameters
+                                     error:(NSError *__autoreleasing *)error
+{
+    
+    NSURL *url = [self URLForRelativeorAbsoluteURLString:URLString];
+    NSMutableURLRequest *mutableRequest = [[NSMutableURLRequest alloc] initWithURL:url];
+    mutableRequest.HTTPMethod = method;
+    
+    //TODO: Lower Priority. Switch parameters to part of query if its GET.
+    if (parameters) {
+        if (![mutableRequest valueForHTTPHeaderField:@"Content-Type"]) {
+            NSString *charset = (__bridge NSString *)CFStringConvertEncodingToIANACharSetName(CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding));
+            [mutableRequest setValue:[NSString stringWithFormat:@"application/json; charset=%@", charset] forHTTPHeaderField:@"Content-Type"];
+        }
+        
+        [mutableRequest setHTTPBody:[NSJSONSerialization dataWithJSONObject:parameters options:0 error:error]];
+    }
+    
+    return mutableRequest;
+}
+
+- (NSURL *) URLForRelativeorAbsoluteURLString: (NSString*) URLString
+{
+    NSURL *url = [NSURL URLWithString:URLString];
+    if ([url.scheme.lowercaseString isEqualToString:@"http:"]) {
+        return url;
+    }
+    else
+    {
+        NSURL * tempURL =[NSURL URLWithString:URLString relativeToURL:[NSURL URLWithString:self.baseURL]];
+        return [NSURL URLWithString:[tempURL absoluteString]];
+    }
+}
+
+/*********************************************************************************/
+#pragma mark - Misc
+/*********************************************************************************/
+- (void)reachabilityChanged: (NSNotification*) notification
+{
+    if (self.reachabilityChanged) {
+        self.reachabilityChanged();
+    }
+}
+
+- (void)dealloc
+{
+    [_serverReachability stopNotifier];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:self];
+}
 
 @end

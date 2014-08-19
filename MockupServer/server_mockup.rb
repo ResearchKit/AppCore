@@ -10,13 +10,15 @@ require 'sinatra'
 require 'json'
 
 get '/api/*' do
-	[200, {endpoint: params}.to_json] 
+	[200, {endpoint: {hello: 'world'}}.to_json] 
 end
 
 post '/api/*' do 
-	[200, {endpoint: params}.to_json] 
+	json = JSON.parse request.body.read
+	[200, {endpoint: params, body: json }.to_json] 
 end
 
 put '/api/*' do 
-	[200, {endpoint: params}.to_json] 
+	json = JSON.parse request.body.read
+	[200, {endpoint: params, body: json }.to_json] 
 end

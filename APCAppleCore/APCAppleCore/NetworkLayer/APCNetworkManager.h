@@ -11,12 +11,18 @@
 @interface APCNetworkManager : NSObject
 
 /*********************************************************************************/
+#pragma mark - Properties
+/*********************************************************************************/
+@property (nonatomic, copy) void (^reachabilityChanged)(void);
+
+/*********************************************************************************/
 #pragma mark - Init & Accessor Methods
 /*********************************************************************************/
 + (APCNetworkManager*) sharedManager;
 + (void) setUpSharedNetworkManagerWithBaseURL:(NSString*) baseURL;
 - (BOOL) isReachable;
 - (BOOL) isServerReachable;
+
 
 /*********************************************************************************/
 #pragma mark - Basic HTTP Methods
