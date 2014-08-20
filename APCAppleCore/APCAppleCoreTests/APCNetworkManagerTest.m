@@ -11,6 +11,7 @@
 
 #import "APCNetworkManager.h"
 #define BASE_URL @"http://localhost:4567/api/" //@"http://api.openweathermap.org/data/2.5/weather?q="
+#define TIME_OUT 10.0
 
 //NOTE: Requires MockupServer to be running in the background!
 
@@ -61,7 +62,7 @@
         XCTFail(@"Received Failure in GET Method");
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:5.0 handler:NULL];
+    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
 }
 
 - (void) testPOSTMethodforSuccess
@@ -75,7 +76,7 @@
         XCTFail(@"Received Failure in POST Method");
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:5.0 handler:NULL];
+    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
 }
 
 - (void) testGETWithAbsoluteURLforSuccess
@@ -89,12 +90,12 @@
         XCTFail(@"Received Failure in GET Method");
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:5.0 handler:NULL];
+    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
 }
 
 - (void) testGETMethodforFailure
 {
-    XCTestExpectation * expectation = [self expectationWithDescription:@"GET Test with absolute URL"];
+    XCTestExpectation * expectation = [self expectationWithDescription:@"GET Test for failure"];
     [self.localNetworkManager GET:@"test_fail" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         XCTFail(@"Should not receive Success");
         NSLog(@"%@", responseObject);
@@ -104,7 +105,23 @@
         NSLog(@"%@", error);
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:5.0 handler:NULL];
+    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
+}
+
+- (void) testGETMethodforServerMaintenance
+{
+    XCTestExpectation * expectation = [self expectationWithDescription:@"GET Test with Server Maintenance"];
+    [self.localNetworkManager GET:@"server_maintenance" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        XCTFail(@"Should not receive Success");
+        NSLog(@"%@", responseObject);
+        [expectation fulfill];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        XCTAssertNotNil(error, @"Error is NIL!");
+        XCTAssertTrue(error.code == 503,@"Error not server maintenance");
+        NSLog(@"%@", error);
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
 }
 
 @end

@@ -22,6 +22,12 @@ put '/api/test_fail' do
 	[404, {message: 'Error'}.to_json]
 end
 
+#Maintenance
+get '/api/server_maintenance' do
+	[503, {message: 'Server Under Maintenance'}.to_json]
+end
+
+#Successes
 get '/api/*' do
 	[200, {endpoint: {hello: 'world'}}.to_json] 
 end

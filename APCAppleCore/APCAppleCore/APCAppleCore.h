@@ -15,7 +15,13 @@
 #import "APCNetworkManager.h"
 
 //Error Codes
-#define APC_ERROR_DOMAIN @"com.ymedialabs.error_domain"
-#define APC_SERVER_ERROR -1000
+#define APC_ERROR_DOMAIN @"com.ymedialabs.network_error_domain"
+enum
+{
+    kAPCUnknownError = -1,
+    kAPCInternetNotConnected = -1000,
+    kAPCServerNotReachable = -1001,
+    kAPCServerUnderMaintenance = -1002
+};
 
 #endif
