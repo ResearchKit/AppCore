@@ -11,27 +11,23 @@
 @interface APCNetworkManager : NSObject
 
 /*********************************************************************************/
-#pragma mark - Properties
-/*********************************************************************************/
-@property (nonatomic, copy) void (^reachabilityChanged)(void);
-
-/*********************************************************************************/
 #pragma mark - Init & Accessor Methods
 /*********************************************************************************/
 + (APCNetworkManager*) sharedManager;
 + (void) setUpSharedNetworkManagerWithBaseURL:(NSString*) baseURL;
-- (BOOL) isReachable;
+
+- (BOOL) isInternetConnected;
 - (BOOL) isServerReachable;
 
 /*********************************************************************************/
 #pragma mark - Basic HTTP Methods
 /*********************************************************************************/
-- (NSURLSessionDataTask* )GET:(NSString *)URLString
+- (NSURLSessionDataTask* )get:(NSString *)URLString
                    parameters:(id)parameters
                       success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
 
-- (NSURLSessionDataTask* )POST:(NSString *)URLString
+- (NSURLSessionDataTask* )post:(NSString *)URLString
                    parameters:(id)parameters
                       success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;

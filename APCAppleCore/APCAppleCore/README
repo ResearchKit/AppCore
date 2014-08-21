@@ -2,6 +2,7 @@ README
 
 THINGS TO DO IN NETWORK LAYER
 -----------------------------
-* Error Handler & Retry Logic
+* Basic Methods - GET/POST - DONE
+* Error Handler & Retry Logic - 90% DONE
 * Key Chain / Authorization Logic
 * Higher Level Methods

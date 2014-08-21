@@ -21,7 +21,8 @@ enum
     kAPCUnknownError = -1,
     kAPCInternetNotConnected = -1000,
     kAPCServerNotReachable = -1001,
-    kAPCServerUnderMaintenance = -1002
+    kAPCServerUnderMaintenance = -1002,
+    kAPCServerNotAuthenticated = -1003
 };
 
 #endif

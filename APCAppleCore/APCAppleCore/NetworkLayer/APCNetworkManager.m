@@ -96,7 +96,7 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
     return _backgroundSession;
 }
 
-- (BOOL)isReachable
+- (BOOL)isInternetConnected
 {
     return (_internetReachability.currentReachabilityStatus == NotReachable) ? NO : YES;
 }
@@ -109,17 +109,26 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
 /*********************************************************************************/
 #pragma mark - basic HTTP methods
 /*********************************************************************************/
--(NSURLSessionDataTask *)GET:(NSString *)URLString parameters:(id)parameters success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+-(NSURLSessionDataTask *)get:(NSString *)URLString parameters:(id)parameters success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
     return [self doDataTask:@"GET" retryObject:nil URLString:URLString parameters:parameters success:success failure:failure];
 }
 
-- (NSURLSessionDataTask *)POST:(NSString *)URLString parameters:(id)parameters success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+- (NSURLSessionDataTask *)post:(NSString *)URLString parameters:(id)parameters success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
     return [self doDataTask:@"POST" retryObject:nil URLString:URLString parameters:parameters success:success failure:failure];
 }
 
-- (NSURLSessionDataTask *) doDataTask: (NSString*) method retryObject: (APCNetworkRetryObject*) retryObject URLString: (NSString*)URLString parameters:(id)parameters success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+
+/*********************************************************************************/
+#pragma mark - Helper Methods
+/*********************************************************************************/
+- (NSURLSessionDataTask *) doDataTask: (NSString*) method
+                          retryObject: (APCNetworkRetryObject*) retryObject
+                            URLString: (NSString*)URLString
+                           parameters:(id)parameters
+                              success:(void (^)(NSURLSessionDataTask *, id))success
+                              failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
     APCNetworkRetryObject * localRetryObject;
     __weak APCNetworkRetryObject * weakLocalRetryObject;
@@ -128,8 +137,8 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
         weakLocalRetryObject = localRetryObject;
         localRetryObject.failureBlock = failure;
         localRetryObject.retryBlock = ^ {
-            __strong APCNetworkRetryObject * blockStrongRetryObject = weakLocalRetryObject; //To break retain cycle
-            [self doDataTask:method retryObject:blockStrongRetryObject URLString:URLString parameters:parameters success:success failure:failure];
+            __strong APCNetworkRetryObject * strongLocalRetryObject = weakLocalRetryObject; //To break retain cycle
+            [self doDataTask:method retryObject:strongLocalRetryObject URLString:URLString parameters:parameters success:success failure:failure];
         };
     }
     else
@@ -138,18 +147,17 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
     }
     
     NSMutableURLRequest *request = [self requestWithMethod:method URLString:URLString parameters:parameters error:nil];
-    
     NSURLSessionDataTask *task = [self.mainSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSHTTPURLResponse * httpresponse = (NSHTTPURLResponse*)response;
-        NSError * networkError = [self generateNetworkErrorIfNecessary:httpresponse];
+        NSError * httpError = [self generateAPCErrorForHTTPResponse:(NSHTTPURLResponse*)response];
         if (error)
         {
             [self handleError:error task:task retryObject:localRetryObject];
         }
-        else if (networkError)
+        else if (httpError)
         {
+            //TODO: Add retry for Server maintenance
             if (failure) {
-                failure(task, networkError);
+                failure(task, httpError);
             }
         }
         else
@@ -165,10 +173,6 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
     return task;
     
 }
-
-/*********************************************************************************/
-#pragma mark - Helper Methods
-/*********************************************************************************/
 
 - (NSMutableURLRequest *)requestWithMethod:(NSString *)method
                                  URLString:(NSString *)URLString
@@ -206,41 +210,28 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
     }
 }
 
-- (NSError*) generateNetworkErrorIfNecessary: (NSHTTPURLResponse*) response
-{
-    return NSLocationInRange(response.statusCode, NSMakeRange(200, 99)) ? nil : [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:nil];
-}
-
-/*********************************************************************************/
-#pragma mark - Misc
-/*********************************************************************************/
-- (void)reachabilityChanged: (NSNotification*) notification
-{
-    if (self.reachabilityChanged) {
-        self.reachabilityChanged();
-    }
-}
-
-- (void)dealloc
-{
-    [_serverReachability stopNotifier];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:self];
-}
-
 /*********************************************************************************/
 #pragma mark - Error Handler
 /*********************************************************************************/
 - (void)handleError:(NSError*)error task:(NSURLSessionDataTask*) task retryObject: (APCNetworkRetryObject*) retryObject
 {
     NSInteger errorCode = error.code;
+    NSError * apcError = [self generateAPCErrorForNSURLError:error isInternetConnected:self.isInternetConnected isServerReachable:self.isServerReachable];
+    
+    if (!self.isInternetConnected || !self.isServerReachable) {
+        if (retryObject.failureBlock)
+        {
+            retryObject.failureBlock(task, apcError);
+        }
+        retryObject.retryBlock = nil;
+    }
     
     if (errorCode == NSURLErrorTimedOut || errorCode == NSURLErrorCannotFindHost || errorCode == NSURLErrorCannotConnectToHost || errorCode == NSURLErrorNotConnectedToInternet || errorCode == NSURLErrorSecureConnectionFailed)
     {
         
-        if (self.isServerReachable && retryObject && retryObject.retryCount < MAX_RETRY_COUNT)
+        if (retryObject && retryObject.retryCount < MAX_RETRY_COUNT)
         {
             double delayInSeconds = pow(2.0, retryObject.retryCount + 1); //Exponential backoff
-            NSLog(@"Delay: %f", delayInSeconds);
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 retryObject.retryBlock();
@@ -251,12 +242,68 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
         {
             if (retryObject.failureBlock)
             {
-                retryObject.failureBlock(task, error);
+                retryObject.failureBlock(task, apcError);
             }
+            retryObject.retryBlock = nil;
         }
     }
 }
 
+/*********************************************************************************/
+#pragma mark - Error Generators
+/*********************************************************************************/
 
+- (NSError *)generateAPCErrorForNSURLError:(NSError *)urlError isInternetConnected:(BOOL)internetConnected isServerReachable:(BOOL)isServerReachable
+{
+    if (!internetConnected) {
+        return [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCInternetNotConnected userInfo:@{NSLocalizedDescriptionKey: @"Internet Not Connected."}];
+    }
+    
+    if (!isServerReachable) {
+        return [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerNotReachable userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Not Reachable."}];
+    }
+    
+    return [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCUnknownError userInfo:urlError.userInfo];
+}
 
+- (NSError*) generateAPCErrorForHTTPResponse: (NSHTTPURLResponse*) response
+{
+    if (NSLocationInRange(response.statusCode, NSMakeRange(200, 99))) {
+        return nil;
+    }
+    
+    //TODO: Verify 3xx needs to be addressed
+    
+    if (response.statusCode == 401) {
+        [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerNotAuthenticated userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Authentiction Error. Please sign in."}];
+    }
+    
+    if (NSLocationInRange(response.statusCode, NSMakeRange(400, 99))) {
+        return [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:@{NSLocalizedDescriptionKey: @"Client Error. Please contact SOMEBODY"}];
+    }
+    
+    if (response.statusCode == 503) {
+        [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerUnderMaintenance userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Under Maintenance."}];
+    }
+    
+    if (NSLocationInRange(response.statusCode, NSMakeRange(500, 99))) {
+        return [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Error. Please contact SOMEBODY"}];
+    }
+    
+    return nil;
+}
+
+/*********************************************************************************/
+#pragma mark - Misc
+/*********************************************************************************/
+- (void)reachabilityChanged: (NSNotification*) notification
+{
+    //TODO: Figure out what needs to be done here
+}
+
+- (void)dealloc
+{
+    [_serverReachability stopNotifier];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:self];
+}
 @end

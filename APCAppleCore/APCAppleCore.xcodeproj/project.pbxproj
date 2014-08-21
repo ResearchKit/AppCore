@@ -108,8 +108,8 @@
 		F5DAB55E199EBFF6008E4A8E /* APCAppleCoreTests */ = {
 			isa = PBXGroup;
 			children = (
-				F5DAB55F199EBFF6008E4A8E /* Supporting Files */,
 				F58668B719A3D0E000E9C375 /* APCNetworkManagerTest.m */,
+				F5DAB55F199EBFF6008E4A8E /* Supporting Files */,
 			);
 			path = APCAppleCoreTests;
 			sourceTree = "<group>";
