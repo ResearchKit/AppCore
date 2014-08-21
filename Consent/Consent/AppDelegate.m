@@ -3,7 +3,7 @@
 //  Consent
 //
 //  Created by Karthik Keyan on 8/18/14.
-//  Copyright (c) 2014 Karthik Keyan. All rights reserved.
+//  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "AppDelegate.h"

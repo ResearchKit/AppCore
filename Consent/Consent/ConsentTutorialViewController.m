@@ -3,10 +3,15 @@
 //  Consent
 //
 //  Created by Karthik Keyan on 8/18/14.
-//  Copyright (c) 2014 Karthik Keyan. All rights reserved.
+//  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "ConsentTutorialViewController.h"
+
+static const CGFloat kConsentRubberBandElasticConstant      = 0.55;
+
+static const CGFloat kLeftPanMaximunResistance              = 1.0;
+static const CGFloat kRightPanMaximunResistance             = 2.6;
 
 @interface ConsentTutorialViewController () <UIScrollViewDelegate>
 
@@ -49,8 +54,8 @@
         [scrollView addSubview:view];
     }
     
-    UIPanGestureRecognizer *leftSwipeGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(leftSwipe:)];
-    [self.view addGestureRecognizer:leftSwipeGesture];
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+    [self.view addGestureRecognizer:panGesture];
     
     self.stepsScrollView = scrollView;
 }
@@ -93,23 +98,23 @@
 
 #pragma mark - Private Methods
 
-- (void) leftSwipe:(UIPanGestureRecognizer *)swipeGesture {
-    if (swipeGesture.state == UIGestureRecognizerStateChanged) {
-        CGPoint translation = [swipeGesture translationInView:self.view];
+- (void) pan:(UIPanGestureRecognizer *)panGesture {
+    if (panGesture.state == UIGestureRecognizerStateChanged) {
+        CGPoint translation = [panGesture translationInView:self.view];
         
         CGFloat x = translation.x;
-        CGFloat d = self.stepsScrollView.frame.size.width;
-        CGFloat c = 0.55;
         
-        CGFloat b = (1.0 - (1.0 / ((x * c / d) + 1.0))) * d;
+        CGFloat distance = self.stepsScrollView.frame.size.width;
         
-        CGFloat resistance = x/b;
+        CGFloat rubberBandElasticValue = (1.0 - (1.0 / ((x * kConsentRubberBandElasticConstant / distance) + 1.0))) * distance;
+        
+        CGFloat resistance = x/rubberBandElasticValue;
         
         CGPoint offset = self.stepsScrollView.contentOffset;
         
         NSLog(@"%f", resistance);
         
-        if (resistance > 1.0 && resistance < 2.6) {
+        if (resistance > kLeftPanMaximunResistance && resistance < kRightPanMaximunResistance) {
             if (x > 0) {
                 offset.x -= resistance;
             }
@@ -124,43 +129,23 @@
             if (translation.x < 0) {
                 step++;
             }
+            
             CGPoint point = CGPointMake(self.stepsScrollView.frame.size.width * step, 0);
+            
             [self.stepsScrollView setContentOffset:point animated:YES];
-            swipeGesture.enabled = NO;
+            panGesture.enabled = NO;
         }
-        
-//        if (ABS(x) <= 70) {
-//            CGFloat ratio = -x/100;
-//            CGFloat deltaX = 60 * ratio;
-//            
-//            CGPoint point = CGPointMake((self.stepsScrollView.frame.size.width * step) + deltaX, 0);
-//            self.stepsScrollView.contentOffset = point;
-//        }
-//        else {
-//            if (x < 0) {
-//                step += 1;
-//            }
-//            else {
-//                if (step != 0) {
-//                    step -= 1;
-//                }
-//            }
-//            
-//            CGPoint point = CGPointMake(self.stepsScrollView.frame.size.width * step, 0);
-//            [self.stepsScrollView setContentOffset:point animated:YES];
-//            
-//            swipeGesture.cancelsTouchesInView = YES;
-//        }
-    }
-    else if (swipeGesture.state == UIGestureRecognizerStateEnded) {
-        swipeGesture.enabled = YES;
-        
-        NSInteger step = ceil(self.stepsScrollView.contentOffset.x/self.stepsScrollView.frame.size.width);
-        CGPoint point = CGPointMake(self.stepsScrollView.frame.size.width * step, 0);
-        [self.stepsScrollView setContentOffset:point animated:YES];
     }
     else {
-        swipeGesture.enabled = YES;
+        panGesture.enabled = YES;
+        
+        if (panGesture.state == UIGestureRecognizerStateEnded) {
+            NSInteger step = ceil(self.stepsScrollView.contentOffset.x/self.stepsScrollView.frame.size.width);
+            
+            CGPoint point = CGPointMake(self.stepsScrollView.frame.size.width * step, 0);
+            
+            [self.stepsScrollView setContentOffset:point animated:YES];
+        }
     }
 }
 
