@@ -22,7 +22,7 @@
 #pragma mark - Basic HTTP Methods
 /*********************************************************************************/
 - (NSURLSessionDataTask* )get:(NSString *)URLString
-                   parameters:(id)parameters
+                   parameters:(id)parameters //NSDictionary or Array of NSDictionary
                       success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
 

@@ -244,18 +244,18 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
 /*********************************************************************************/
 #pragma mark - Error Generators
 /*********************************************************************************/
-- (NSError *)generateAPCErrorForNSURLError:(NSError *)urlError isInternetConnected:(BOOL)internetConnected isServerReachable:(BOOL)isServerReachable
+- (NSError *) generateAPCErrorForNSURLError:(NSError *)urlError isInternetConnected:(BOOL)internetConnected isServerReachable:(BOOL)isServerReachable
 {
     NSError * retError;
     if (!internetConnected) {
-        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCInternetNotConnected userInfo:@{NSLocalizedDescriptionKey: @"Internet Not Connected."}];
+        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCInternetNotConnected userInfo:@{NSLocalizedDescriptionKey: @"Internet Not Connected", APC_ORIGINAL_ERROR_KEY: urlError}];
     }
     else if (!isServerReachable) {
-        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerNotReachable userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Not Reachable."}];
+        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerNotReachable userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Not Reachable",APC_ORIGINAL_ERROR_KEY: urlError}];
     }
     else
     {
-        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCUnknownError userInfo:urlError.userInfo];
+        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCUnknownError userInfo:@{NSLocalizedDescriptionKey: @"Unknown Network Error",APC_ORIGINAL_ERROR_KEY: urlError}];
     }
     return retError;
 }

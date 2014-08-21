@@ -16,7 +16,9 @@
 
 //Error Codes
 #define APC_ERROR_DOMAIN @"com.ymedialabs.network_error_domain"
-enum
+#define APC_ORIGINAL_ERROR_KEY @"APCOriginalErrorKey"
+
+typedef NS_ENUM(NSInteger, APCNetworkErrorCodes)
 {
     kAPCUnknownError = -1,
     kAPCInternetNotConnected = -1000,
