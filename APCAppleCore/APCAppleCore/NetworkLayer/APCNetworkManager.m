@@ -9,7 +9,7 @@
 #import "APCAppleCore.h"
 #import "Reachability.h"
 
-#define MAX_RETRY_COUNT 5
+const NSInteger kMaxRetryCount = 5;
 
 static APCNetworkManager * sharedInstance;
 NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
@@ -51,19 +51,6 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
 #pragma mark - Initializers & Accessors
 /*********************************************************************************/
 
-+ (APCNetworkManager *)sharedManager
-{
-    return  sharedInstance;
-}
-
-+ (void)setUpSharedNetworkManagerWithBaseURL:(NSString *)baseURL
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] initWithBaseURL:baseURL];
-    });
-}
-
 - (instancetype) initWithBaseURL: (NSString*) baseURL
 {
     self = [[[self class] alloc] init]; //Using [self class] instead of APCNetworkManager to enable subclassing
@@ -98,12 +85,12 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
 
 - (BOOL)isInternetConnected
 {
-    return (_internetReachability.currentReachabilityStatus == NotReachable) ? NO : YES;
+    return (_internetReachability.currentReachabilityStatus != NotReachable);
 }
 
 - (BOOL)isServerReachable
 {
-    return (_serverReachability.currentReachabilityStatus == NotReachable) ? NO : YES;
+    return (_serverReachability.currentReachabilityStatus != NotReachable);
 }
 
 /*********************************************************************************/
@@ -226,10 +213,10 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
         retryObject.retryBlock = nil;
     }
     
-    if (errorCode == NSURLErrorTimedOut || errorCode == NSURLErrorCannotFindHost || errorCode == NSURLErrorCannotConnectToHost || errorCode == NSURLErrorNotConnectedToInternet || errorCode == NSURLErrorSecureConnectionFailed)
+    if ([self checkForTemporaryErrors:errorCode])
     {
         
-        if (retryObject && retryObject.retryCount < MAX_RETRY_COUNT)
+        if (retryObject && retryObject.retryCount < kMaxRetryCount)
         {
             double delayInSeconds = pow(2.0, retryObject.retryCount + 1); //Exponential backoff
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
@@ -249,48 +236,47 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
     }
 }
 
+- (BOOL) checkForTemporaryErrors:(NSInteger) errorCode
+{
+    return (errorCode == NSURLErrorTimedOut || errorCode == NSURLErrorCannotFindHost || errorCode == NSURLErrorCannotConnectToHost || errorCode == NSURLErrorNotConnectedToInternet || errorCode == NSURLErrorSecureConnectionFailed);
+}
+
 /*********************************************************************************/
 #pragma mark - Error Generators
 /*********************************************************************************/
-
 - (NSError *)generateAPCErrorForNSURLError:(NSError *)urlError isInternetConnected:(BOOL)internetConnected isServerReachable:(BOOL)isServerReachable
 {
+    NSError * retError;
     if (!internetConnected) {
-        return [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCInternetNotConnected userInfo:@{NSLocalizedDescriptionKey: @"Internet Not Connected."}];
+        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCInternetNotConnected userInfo:@{NSLocalizedDescriptionKey: @"Internet Not Connected."}];
     }
-    
-    if (!isServerReachable) {
-        return [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerNotReachable userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Not Reachable."}];
+    else if (!isServerReachable) {
+        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerNotReachable userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Not Reachable."}];
     }
-    
-    return [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCUnknownError userInfo:urlError.userInfo];
+    else
+    {
+        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCUnknownError userInfo:urlError.userInfo];
+    }
+    return retError;
 }
 
 - (NSError*) generateAPCErrorForHTTPResponse: (NSHTTPURLResponse*) response
 {
-    if (NSLocationInRange(response.statusCode, NSMakeRange(200, 99))) {
-        return nil;
-    }
-    
-    //TODO: Verify 3xx needs to be addressed
-    
+    NSError * retError;
     if (response.statusCode == 401) {
-        [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerNotAuthenticated userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Authentiction Error. Please sign in."}];
+        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerNotAuthenticated userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Authentiction Error. Please sign in."}];
+    }
+    else if (NSLocationInRange(response.statusCode, NSMakeRange(400, 99))) {
+         retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:@{NSLocalizedDescriptionKey: @"Client Error. Please contact SOMEBODY"}];
+    }
+    else if (response.statusCode == 503) {
+         retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerUnderMaintenance userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Under Maintenance."}];
+    }
+    else if (NSLocationInRange(response.statusCode, NSMakeRange(500, 99))) {
+         retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Error. Please contact SOMEBODY"}];
     }
     
-    if (NSLocationInRange(response.statusCode, NSMakeRange(400, 99))) {
-        return [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:@{NSLocalizedDescriptionKey: @"Client Error. Please contact SOMEBODY"}];
-    }
-    
-    if (response.statusCode == 503) {
-        [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerUnderMaintenance userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Under Maintenance."}];
-    }
-    
-    if (NSLocationInRange(response.statusCode, NSMakeRange(500, 99))) {
-        return [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Error. Please contact SOMEBODY"}];
-    }
-    
-    return nil;
+    return retError;
 }
 
 /*********************************************************************************/

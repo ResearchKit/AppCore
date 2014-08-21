@@ -10,14 +10,14 @@
 #import <XCTest/XCTest.h>
 
 #import "APCAppleCore.h"
-#define BASE_URL @"http://localhost:4567/api/" //@"http://api.openweathermap.org/data/2.5/weather?q="
-#define TIME_OUT 10.0
+NSString* kBaseURL = @"http://localhost:4567/api/";
+const double kTimeOut = 10.0;
 
 //NOTE: Requires MockupServer to be running in the background!
 
 @interface APCNetworkManagerTest : XCTestCase
 
-@property (readonly) APCNetworkManager * localNetworkManager;
+@property (nonatomic, strong) APCNetworkManager * localNetworkManager;
 
 @end
 
@@ -25,14 +25,10 @@
 
 - (APCNetworkManager *)localNetworkManager
 {
-    if (![APCNetworkManager sharedManager]) {
-        [APCNetworkManager setUpSharedNetworkManagerWithBaseURL:BASE_URL];
+    if (!_localNetworkManager) {
+        _localNetworkManager = [[APCNetworkManager alloc] initWithBaseURL:kBaseURL];
     }
-    return [APCNetworkManager sharedManager];
-}
-
-- (void)testSingletonCreated {
-    XCTAssertNotNil(self.localNetworkManager);
+    return _localNetworkManager;
 }
 
 - (void) testReachabilityWorks
@@ -54,6 +50,7 @@
 - (void) testGETMethodforSuccess
 {
     XCTestExpectation * expectation = [self expectationWithDescription:@"GET Test"];
+    
     [self.localNetworkManager get:@"test_pass" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         XCTAssertNotNil(responseObject, @"Response Object nil");
         NSLog(@"%@", responseObject);
@@ -62,7 +59,7 @@
         XCTFail(@"Received Failure in GET Method");
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
+    [self waitForExpectationsWithTimeout:kTimeOut handler:NULL];
 }
 
 - (void) testPOSTMethodforSuccess
@@ -76,7 +73,7 @@
         XCTFail(@"Received Failure in POST Method");
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
+    [self waitForExpectationsWithTimeout:kTimeOut handler:NULL];
 }
 
 - (void) testGETWithAbsoluteURLforSuccess
@@ -90,7 +87,7 @@
         XCTFail(@"Received Failure in GET Method");
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
+    [self waitForExpectationsWithTimeout:kTimeOut handler:NULL];
 }
 
 - (void) testGETMethodforFailure
@@ -105,7 +102,7 @@
         NSLog(@"%@", error);
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
+    [self waitForExpectationsWithTimeout:kTimeOut handler:NULL];
 }
 
 - (void) testGETMethodforServerMaintenance
@@ -117,11 +114,11 @@
         [expectation fulfill];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         XCTAssertTrue([error.domain isEqualToString:APC_ERROR_DOMAIN], @"Wrong Error Domain");
-        XCTAssertTrue(error.code == 503,@"Error not server maintenance");
+        XCTAssertTrue(error.code == kAPCServerUnderMaintenance,@"Error not server maintenance");
         NSLog(@"%@", error);
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
+    [self waitForExpectationsWithTimeout:kTimeOut handler:NULL];
 }
 
 @end

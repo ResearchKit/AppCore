@@ -13,8 +13,7 @@
 /*********************************************************************************/
 #pragma mark - Init & Accessor Methods
 /*********************************************************************************/
-+ (APCNetworkManager*) sharedManager;
-+ (void) setUpSharedNetworkManagerWithBaseURL:(NSString*) baseURL;
+- (instancetype) initWithBaseURL: (NSString*) baseURL;
 
 - (BOOL) isInternetConnected;
 - (BOOL) isServerReachable;
