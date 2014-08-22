@@ -13,19 +13,22 @@
 /*********************************************************************************/
 #pragma mark - Init & Accessor Methods
 /*********************************************************************************/
-+ (APCNetworkManager*) sharedManager;
-+ (void) setUpSharedNetworkManagerWithBaseURL:(NSString*) baseURL;
+- (instancetype) initWithBaseURL: (NSString*) baseURL;
+
+- (BOOL) isInternetConnected;
+- (BOOL) isServerReachable;
 
 /*********************************************************************************/
 #pragma mark - Basic HTTP Methods
 /*********************************************************************************/
-- (NSURLSessionDataTask* )GET:(NSString *)URLString
+- (NSURLSessionDataTask* )get:(NSString *)URLString
+                   parameters:(id)parameters //NSDictionary or Array of NSDictionary
+                      success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
+                      failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
+
+- (NSURLSessionDataTask* )post:(NSString *)URLString
                    parameters:(id)parameters
                       success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
 
-- (NSURLSessionDataTask* )POST:(NSString *)URLString
-                   parameters:(id)parameters
-                      success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
-                      failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
 @end

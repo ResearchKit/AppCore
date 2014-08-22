@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F560074E19A797E6009F877F /* NSError+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F560074D19A797E6009F877F /* NSError+APCAdditions.m */; };
+		F560074F19A797E6009F877F /* NSError+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F560074D19A797E6009F877F /* NSError+APCAdditions.m */; };
+		F560075219A7A502009F877F /* APCSageNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F560075119A7A502009F877F /* APCSageNetworkManager.m */; };
+		F560075319A7A502009F877F /* APCSageNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F560075119A7A502009F877F /* APCSageNetworkManager.m */; };
+		F560075519A7A81E009F877F /* APCSageNetworkManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F560075419A7A81E009F877F /* APCSageNetworkManagerTest.m */; };
+		F58668B819A3D0E000E9C375 /* APCNetworkManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F58668B719A3D0E000E9C375 /* APCNetworkManagerTest.m */; };
+		F58668B919A3D99400E9C375 /* APCNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DAB56B199EC0D0008E4A8E /* APCNetworkManager.m */; };
+		F58668BA19A3D99B00E9C375 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F59C278219A3B65700596ACC /* Reachability.m */; };
+		F59C278319A3B65700596ACC /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F59C278219A3B65700596ACC /* Reachability.m */; };
 		F5DAB556199EBFF6008E4A8E /* APCAppleCore.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = F5DAB555199EBFF6008E4A8E /* APCAppleCore.h */; };
 		F5DAB56C199EC0D0008E4A8E /* APCNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DAB56B199EC0D0008E4A8E /* APCNetworkManager.m */; };
 /* End PBXBuildFile section */
@@ -25,6 +34,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F560074C19A797E6009F877F /* NSError+APCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+APCAdditions.h"; sourceTree = "<group>"; };
+		F560074D19A797E6009F877F /* NSError+APCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+APCAdditions.m"; sourceTree = "<group>"; };
+		F560075019A7A502009F877F /* APCSageNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSageNetworkManager.h; sourceTree = "<group>"; };
+		F560075119A7A502009F877F /* APCSageNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSageNetworkManager.m; sourceTree = "<group>"; };
+		F560075419A7A81E009F877F /* APCSageNetworkManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSageNetworkManagerTest.m; sourceTree = "<group>"; };
+		F58668B719A3D0E000E9C375 /* APCNetworkManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCNetworkManagerTest.m; sourceTree = "<group>"; };
+		F59C278119A3B65700596ACC /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		F59C278219A3B65700596ACC /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		F5BDD99819A401F2009921E7 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		F5DAB552199EBFF6008E4A8E /* libAPCAppleCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAPCAppleCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5DAB555199EBFF6008E4A8E /* APCAppleCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APCAppleCore.h; sourceTree = "<group>"; };
 		F5DAB55D199EBFF6008E4A8E /* APCAppleCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APCAppleCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -51,6 +69,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F560074A19A797CE009F877F /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				F560074B19A797CE009F877F /* Categories */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		F560074B19A797CE009F877F /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				F560074C19A797E6009F877F /* NSError+APCAdditions.h */,
+				F560074D19A797E6009F877F /* NSError+APCAdditions.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		F59C277F19A3B65700596ACC /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				F59C278019A3B65700596ACC /* Reachability */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
+		F59C278019A3B65700596ACC /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				F59C278119A3B65700596ACC /* Reachability.h */,
+				F59C278219A3B65700596ACC /* Reachability.m */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
 		F5DAB549199EBFF6008E4A8E = {
 			isa = PBXGroup;
 			children = (
@@ -72,8 +124,11 @@
 		F5DAB554199EBFF6008E4A8E /* APCAppleCore */ = {
 			isa = PBXGroup;
 			children = (
+				F5BDD99819A401F2009921E7 /* README */,
 				F5DAB555199EBFF6008E4A8E /* APCAppleCore.h */,
 				F5DAB569199EC085008E4A8E /* NetworkLayer */,
+				F59C277F19A3B65700596ACC /* Vendor */,
+				F560074A19A797CE009F877F /* Library */,
 			);
 			path = APCAppleCore;
 			sourceTree = "<group>";
@@ -81,6 +136,8 @@
 		F5DAB55E199EBFF6008E4A8E /* APCAppleCoreTests */ = {
 			isa = PBXGroup;
 			children = (
+				F58668B719A3D0E000E9C375 /* APCNetworkManagerTest.m */,
+				F560075419A7A81E009F877F /* APCSageNetworkManagerTest.m */,
 				F5DAB55F199EBFF6008E4A8E /* Supporting Files */,
 			);
 			path = APCAppleCoreTests;
@@ -99,6 +156,8 @@
 			children = (
 				F5DAB56A199EC0D0008E4A8E /* APCNetworkManager.h */,
 				F5DAB56B199EC0D0008E4A8E /* APCNetworkManager.m */,
+				F560075019A7A502009F877F /* APCSageNetworkManager.h */,
+				F560075119A7A502009F877F /* APCSageNetworkManager.m */,
 			);
 			path = NetworkLayer;
 			sourceTree = "<group>";
@@ -190,7 +249,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F560074E19A797E6009F877F /* NSError+APCAdditions.m in Sources */,
+				F59C278319A3B65700596ACC /* Reachability.m in Sources */,
 				F5DAB56C199EC0D0008E4A8E /* APCNetworkManager.m in Sources */,
+				F560075219A7A502009F877F /* APCSageNetworkManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,6 +260,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F58668B819A3D0E000E9C375 /* APCNetworkManagerTest.m in Sources */,
+				F58668BA19A3D99B00E9C375 /* Reachability.m in Sources */,
+				F560075319A7A502009F877F /* APCSageNetworkManager.m in Sources */,
+				F560075519A7A81E009F877F /* APCSageNetworkManagerTest.m in Sources */,
+				F560074F19A797E6009F877F /* NSError+APCAdditions.m in Sources */,
+				F58668B919A3D99400E9C375 /* APCNetworkManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,6 +413,7 @@
 				F5DAB565199EBFF6008E4A8E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F5DAB566199EBFF6008E4A8E /* Build configuration list for PBXNativeTarget "APCAppleCoreTests" */ = {
 			isa = XCConfigurationList;
@@ -353,6 +422,7 @@
 				F5DAB568199EBFF6008E4A8E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
