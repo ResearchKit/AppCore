@@ -135,7 +135,7 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
     
     NSMutableURLRequest *request = [self requestWithMethod:method URLString:URLString parameters:parameters error:nil];
     NSURLSessionDataTask *task = [self.mainSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSError * httpError = [self generateAPCErrorForHTTPResponse:(NSHTTPURLResponse*)response];
+        NSError * httpError = [NSError generateAPCErrorForHTTPResponse:(NSHTTPURLResponse*)response];
         if (error)
         {
             [self handleError:error task:task retryObject:localRetryObject];
@@ -203,7 +203,7 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
 - (void)handleError:(NSError*)error task:(NSURLSessionDataTask*) task retryObject: (APCNetworkRetryObject*) retryObject
 {
     NSInteger errorCode = error.code;
-    NSError * apcError = [self generateAPCErrorForNSURLError:error isInternetConnected:self.isInternetConnected isServerReachable:self.isServerReachable];
+    NSError * apcError = [NSError generateAPCErrorForNSURLError:error isInternetConnected:self.isInternetConnected isServerReachable:self.isServerReachable];
     
     if (!self.isInternetConnected || !self.isServerReachable) {
         if (retryObject.failureBlock)
@@ -241,43 +241,6 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
     return (errorCode == NSURLErrorTimedOut || errorCode == NSURLErrorCannotFindHost || errorCode == NSURLErrorCannotConnectToHost || errorCode == NSURLErrorNotConnectedToInternet || errorCode == NSURLErrorSecureConnectionFailed);
 }
 
-/*********************************************************************************/
-#pragma mark - Error Generators
-/*********************************************************************************/
-- (NSError *) generateAPCErrorForNSURLError:(NSError *)urlError isInternetConnected:(BOOL)internetConnected isServerReachable:(BOOL)isServerReachable
-{
-    NSError * retError;
-    if (!internetConnected) {
-        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCInternetNotConnected userInfo:@{NSLocalizedDescriptionKey: @"Internet Not Connected", APC_ORIGINAL_ERROR_KEY: urlError}];
-    }
-    else if (!isServerReachable) {
-        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerNotReachable userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Not Reachable",APC_ORIGINAL_ERROR_KEY: urlError}];
-    }
-    else
-    {
-        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCUnknownError userInfo:@{NSLocalizedDescriptionKey: @"Unknown Network Error",APC_ORIGINAL_ERROR_KEY: urlError}];
-    }
-    return retError;
-}
-
-- (NSError*) generateAPCErrorForHTTPResponse: (NSHTTPURLResponse*) response
-{
-    NSError * retError;
-    if (response.statusCode == 401) {
-        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerNotAuthenticated userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Authentiction Error. Please sign in."}];
-    }
-    else if (NSLocationInRange(response.statusCode, NSMakeRange(400, 99))) {
-         retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:@{NSLocalizedDescriptionKey: @"Client Error. Please contact SOMEBODY"}];
-    }
-    else if (response.statusCode == 503) {
-         retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerUnderMaintenance userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Under Maintenance."}];
-    }
-    else if (NSLocationInRange(response.statusCode, NSMakeRange(500, 99))) {
-         retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Error. Please contact SOMEBODY"}];
-    }
-    
-    return retError;
-}
 
 /*********************************************************************************/
 #pragma mark - Misc

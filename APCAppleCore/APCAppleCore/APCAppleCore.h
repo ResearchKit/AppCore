@@ -14,6 +14,9 @@
 //Headers
 #import "APCNetworkManager.h"
 
+//Categories
+#import "NSError+APCAdditions.h"
+
 //Error Codes
 #define APC_ERROR_DOMAIN @"com.ymedialabs.network_error_domain"
 #define APC_ORIGINAL_ERROR_KEY @"APCOriginalErrorKey"
