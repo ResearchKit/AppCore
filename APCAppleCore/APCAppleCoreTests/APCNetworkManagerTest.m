@@ -10,8 +10,8 @@
 #import <XCTest/XCTest.h>
 
 #import "APCAppleCore.h"
-NSString* kBaseURL = @"http://localhost:4567/api/";
-const double kTimeOut = 10.0;
+#define BASE_URL @"http://localhost:4567/api/v1/"
+#define TIME_OUT 10.0
 
 //NOTE: Requires MockupServer to be running in the background!
 
@@ -26,7 +26,7 @@ const double kTimeOut = 10.0;
 - (APCNetworkManager *)localNetworkManager
 {
     if (!_localNetworkManager) {
-        _localNetworkManager = [[APCNetworkManager alloc] initWithBaseURL:kBaseURL];
+        _localNetworkManager = [[APCNetworkManager alloc] initWithBaseURL:BASE_URL];
     }
     return _localNetworkManager;
 }
@@ -59,7 +59,7 @@ const double kTimeOut = 10.0;
         XCTFail(@"Received Failure in GET Method");
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:kTimeOut handler:NULL];
+    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
 }
 
 - (void) testPOSTMethodforSuccess
@@ -73,7 +73,7 @@ const double kTimeOut = 10.0;
         XCTFail(@"Received Failure in POST Method");
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:kTimeOut handler:NULL];
+    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
 }
 
 - (void) testGETWithAbsoluteURLforSuccess
@@ -87,7 +87,7 @@ const double kTimeOut = 10.0;
         XCTFail(@"Received Failure in GET Method");
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:kTimeOut handler:NULL];
+    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
 }
 
 - (void) testGETMethodforFailure
@@ -102,7 +102,7 @@ const double kTimeOut = 10.0;
         NSLog(@"%@", error);
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:kTimeOut handler:NULL];
+    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
 }
 
 - (void) testGETMethodforServerMaintenance
@@ -118,7 +118,7 @@ const double kTimeOut = 10.0;
         NSLog(@"%@", error);
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:kTimeOut handler:NULL];
+    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
 }
 
 @end

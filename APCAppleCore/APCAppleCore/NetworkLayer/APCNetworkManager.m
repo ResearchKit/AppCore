@@ -53,7 +53,7 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
 
 - (instancetype) initWithBaseURL: (NSString*) baseURL
 {
-    self = [[[self class] alloc] init]; //Using [self class] instead of APCNetworkManager to enable subclassing
+    self = [super init]; //Using [self class] instead of APCNetworkManager to enable subclassing
     if (self) {
         self.baseURL = baseURL;
         _internetReachability = [Reachability reachabilityForInternetConnection];

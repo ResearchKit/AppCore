@@ -9,35 +9,46 @@
 require 'sinatra'
 require 'json'
 
+base_path = '/api/v1'
 #Errors
-get '/api/test_fail' do
+get "#{base_path}/test_fail" do
 	[404, {message: 'Error'}.to_json]
 end
 
-post '/api/test_fail' do
+post "#{base_path}/test_fail" do
 	[404, {message: 'Error'}.to_json]
 end
 
-put '/api/test_fail' do
+put "#{base_path}/test_fail" do
 	[404, {message: 'Error'}.to_json]
 end
 
 #Maintenance
-get '/api/server_maintenance' do
+get "#{base_path}/server_maintenance" do
 	[503, {message: 'Server Under Maintenance'}.to_json]
 end
 
-#Successes
-get '/api/*' do
+#Authentication
+post "#{base_path}/auth/signUp" do
+	200
+end
+
+post "#{base_path}/auth/signIn" do
+	json = JSON.parse request.body.read
+	[200, {username: json[:username], sessionToken: 'sessionToken', consented: true, authenticated: true}.to_json]
+end
+
+#Catch All
+get "#{base_path}/*" do
 	[200, {endpoint: {hello: 'world'}}.to_json] 
 end
 
-post '/api/*' do 
+post "#{base_path}/*" do 
 	json = JSON.parse request.body.read
 	[200, {endpoint: params, body: json }.to_json] 
 end
 
-put '/api/*' do 
+put "#{base_path}/*" do 
 	json = JSON.parse request.body.read
 	[200, {endpoint: params, body: json }.to_json] 
 end
