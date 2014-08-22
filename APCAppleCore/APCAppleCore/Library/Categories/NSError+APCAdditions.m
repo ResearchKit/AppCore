@@ -33,7 +33,7 @@
 {
     NSError * retError;
     if (response.statusCode == 401) {
-        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerNotAuthenticated userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Authentiction Error. Please sign in."}];
+        retError = [self APCNotAuthenticatedError];
     }
     else if (NSLocationInRange(response.statusCode, NSMakeRange(400, 99))) {
         retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:@{NSLocalizedDescriptionKey: @"Client Error. Please contact SOMEBODY"}];
@@ -46,6 +46,11 @@
     }
     
     return retError;
+}
+
++ (NSError *)APCNotAuthenticatedError
+{
+    return [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerNotAuthenticated userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Authentiction Error. Please sign in."}];
 }
 
 @end

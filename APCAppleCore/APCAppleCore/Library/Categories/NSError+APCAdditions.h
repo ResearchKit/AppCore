@@ -12,5 +12,6 @@
 
 + (NSError*) generateAPCErrorForNSURLError:(NSError *)urlError isInternetConnected:(BOOL)internetConnected isServerReachable:(BOOL)isServerReachable;
 + (NSError*) generateAPCErrorForHTTPResponse: (NSHTTPURLResponse*) response;
++ (NSError*) APCNotAuthenticatedError;
 
 @end

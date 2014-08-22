@@ -28,9 +28,10 @@
     return _localNetworkManager;
 }
 
-- (void) testSignUpAndSignIn
+- (void)setUp
 {
-    XCTestExpectation * expectation = [self expectationWithDescription:@"POST Test"];
+    NSLog(@"Setting Up");
+    XCTestExpectation * expectation = [self expectationWithDescription:@"SignUp&SignIn"];
     [self.localNetworkManager signUpAndSignIn:@"email@email.com" username:@"username" password:@"password" success:^(NSURLSessionDataTask * task, id responseObject) {
         XCTAssertTrue([responseObject[@"sessionToken"] isEqualToString:@"sessionToken"], @"sessionToken Missing");
         [expectation fulfill];
@@ -39,6 +40,34 @@
         [expectation fulfill];
     }];
     [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
+    [self.localNetworkManager clearSessionToken];
 }
+
+- (void) tearDown
+{
+    NSLog(@"Tearing Down");
+    XCTestExpectation * expectation = [self expectationWithDescription:@"Authenticate"];
+    [self.localNetworkManager signOutWithSuccess:^(NSURLSessionDataTask *task, id responseObject) {
+        [expectation fulfill];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        XCTFail(@"Received Failure in SignOut: %@", error );
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
+}
+
+- (void)testAuthenticateIfNecessary
+{
+    XCTestExpectation * expectation = [self expectationWithDescription:@"Authenticate"];
+    [self.localNetworkManager authenticateWithExistingCredentialsIfNecessaryWithSuccess:^(NSURLSessionDataTask *task, id responseObject) {
+        [expectation fulfill];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        XCTFail(@"Received Failure in Authenticate: %@", error );
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
+}
+
+
 
 @end
