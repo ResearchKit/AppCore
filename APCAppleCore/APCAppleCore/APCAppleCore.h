@@ -28,7 +28,8 @@ typedef NS_ENUM(NSInteger, APCNetworkErrorCodes)
     kAPCInternetNotConnected = -1000,
     kAPCServerNotReachable = -1001,
     kAPCServerUnderMaintenance = -1002,
-    kAPCServerNotAuthenticated = -1003
+    kAPCServerNotAuthenticated = -1003,
+    kAPCServerPreconditionNotMet = -1004
 };
 
 #endif

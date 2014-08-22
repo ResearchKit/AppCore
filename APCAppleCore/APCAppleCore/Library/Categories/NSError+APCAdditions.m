@@ -31,9 +31,14 @@
 
 + (NSError*) generateAPCErrorForHTTPResponse: (NSHTTPURLResponse*) response
 {
+    //TODO: Get appropriate error strings
     NSError * retError;
     if (response.statusCode == 401) {
         retError = [self APCNotAuthenticatedError];
+    }
+    else if (response.statusCode == 412)
+    {
+        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerPreconditionNotMet userInfo:@{NSLocalizedDescriptionKey: @"Client not consented"}];
     }
     else if (NSLocationInRange(response.statusCode, NSMakeRange(400, 99))) {
         retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:@{NSLocalizedDescriptionKey: @"Client Error. Please contact SOMEBODY"}];
