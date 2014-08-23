@@ -8,10 +8,10 @@
 
 #import "ConsentTutorialViewController.h"
 
-static const CGFloat kConsentRubberBandElasticConstant      = 0.55;
+static CGFloat const kConsentRubberBandElasticConstant      = 0.55;
 
-static const CGFloat kLeftPanMaximunResistance              = 1.0;
-static const CGFloat kRightPanMaximunResistance             = 2.6;
+static CGFloat const kLeftPanMaximunResistance              = 1.0;
+static CGFloat const kRightPanMaximunResistance             = 2.6;
 
 @interface ConsentTutorialViewController () <UIScrollViewDelegate>
 
@@ -23,18 +23,12 @@ static const CGFloat kRightPanMaximunResistance             = 2.6;
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
     
-    [self addNavigationButton];
     [self addViews];
 }
 
 
 #pragma mark - UI Creation Methods
-
-- (void) addNavigationButton {
-    
-}
 
 - (void) addViews {
     CGRect rect = self.view.bounds;
@@ -61,8 +55,8 @@ static const CGFloat kRightPanMaximunResistance             = 2.6;
 }
 
 
-#pragma mark - UIScrolViewDelegate
-
+//#pragma mark - UIScrolViewDelegate
+//
 //- (void) scrollViewDidScroll:(UIScrollView *)scrollView {
 //    CGFloat xOffset = scrollView.contentOffset.x;
 //    CGFloat scrollViewWidth = CGRectGetWidth(scrollView.bounds);
@@ -81,19 +75,19 @@ static const CGFloat kRightPanMaximunResistance             = 2.6;
 //            break;
 //    }
 //}
-
-- (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    NSInteger step = scrollView.contentOffset.x/scrollView.frame.size.width;
-    
-    switch (step) {
-        case 1:
-            [self layoutStepOneForMovedRatio:1.0];
-            break;
-            
-        default:
-            break;
-    }
-}
+//
+//- (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+//    NSInteger step = scrollView.contentOffset.x/scrollView.frame.size.width;
+//    
+//    switch (step) {
+//        case 1:
+//            [self layoutStepOneForMovedRatio:1.0];
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//}
 
 
 #pragma mark - Private Methods
