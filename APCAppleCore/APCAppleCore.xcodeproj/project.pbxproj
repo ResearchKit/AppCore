@@ -20,6 +20,11 @@
 		F5DAB56C199EC0D0008E4A8E /* APCNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DAB56B199EC0D0008E4A8E /* APCNetworkManager.m */; };
 		F5E4871219ABB1A300C86FC6 /* APCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4871119ABB1A300C86FC6 /* APCAppDelegate.m */; };
 		F5E4871319ABB1A300C86FC6 /* APCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4871119ABB1A300C86FC6 /* APCAppDelegate.m */; };
+		F5E4872419ABDBF000C86FC6 /* APCDataSubstrate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4872319ABDBF000C86FC6 /* APCDataSubstrate.m */; };
+		F5E4872519ABDBF000C86FC6 /* APCDataSubstrate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4872319ABDBF000C86FC6 /* APCDataSubstrate.m */; };
+		F5E4873419ABDEB500C86FC6 /* APCModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F5E4873219ABDEB500C86FC6 /* APCModel.xcdatamodeld */; };
+		F5E4873519ABDEB500C86FC6 /* APCModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F5E4873219ABDEB500C86FC6 /* APCModel.xcdatamodeld */; };
+		F5E4874319ABE1A400C86FC6 /* APCModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F5E4873219ABDEB500C86FC6 /* APCModel.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,6 +58,12 @@
 		F5DAB56B199EC0D0008E4A8E /* APCNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCNetworkManager.m; sourceTree = "<group>"; };
 		F5E4871019ABB1A300C86FC6 /* APCAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAppDelegate.h; sourceTree = "<group>"; };
 		F5E4871119ABB1A300C86FC6 /* APCAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAppDelegate.m; sourceTree = "<group>"; };
+		F5E4872219ABDBF000C86FC6 /* APCDataSubstrate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataSubstrate.h; sourceTree = "<group>"; };
+		F5E4872319ABDBF000C86FC6 /* APCDataSubstrate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataSubstrate.m; sourceTree = "<group>"; };
+		F5E4872D19ABDE6300C86FC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F5E4873319ABDEB500C86FC6 /* APCModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = APCModel.xcdatamodel; sourceTree = "<group>"; };
+		F5E4873C19ABE18000C86FC6 /* APCAppleCoreBundle.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APCAppleCoreBundle.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5E4873F19ABE18000C86FC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +75,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5DAB55A199EBFF6008E4A8E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5E4873919ABE18000C86FC6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -112,6 +130,8 @@
 			children = (
 				F5DAB554199EBFF6008E4A8E /* APCAppleCore */,
 				F5DAB55E199EBFF6008E4A8E /* APCAppleCoreTests */,
+				F5E4872B19ABDE6300C86FC6 /* APCAppleCoreBundle */,
+				F5E4873D19ABE18000C86FC6 /* APCAppleCoreBundle */,
 				F5DAB553199EBFF6008E4A8E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -121,6 +141,7 @@
 			children = (
 				F5DAB552199EBFF6008E4A8E /* libAPCAppleCore.a */,
 				F5DAB55D199EBFF6008E4A8E /* APCAppleCoreTests.xctest */,
+				F5E4873C19ABE18000C86FC6 /* APCAppleCoreBundle.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -133,6 +154,7 @@
 				F5E4871019ABB1A300C86FC6 /* APCAppDelegate.h */,
 				F5E4871119ABB1A300C86FC6 /* APCAppDelegate.m */,
 				F5DAB569199EC085008E4A8E /* NetworkLayer */,
+				F5E4872119ABDBC800C86FC6 /* DataSubstrate */,
 				F59C277F19A3B65700596ACC /* Vendor */,
 				F560074A19A797CE009F877F /* Library */,
 			);
@@ -166,6 +188,56 @@
 				F560075119A7A502009F877F /* APCSageNetworkManager.m */,
 			);
 			path = NetworkLayer;
+			sourceTree = "<group>";
+		};
+		F5E4872119ABDBC800C86FC6 /* DataSubstrate */ = {
+			isa = PBXGroup;
+			children = (
+				F5E4873119ABDE8E00C86FC6 /* Model */,
+				F5E4872219ABDBF000C86FC6 /* APCDataSubstrate.h */,
+				F5E4872319ABDBF000C86FC6 /* APCDataSubstrate.m */,
+			);
+			path = DataSubstrate;
+			sourceTree = "<group>";
+		};
+		F5E4872B19ABDE6300C86FC6 /* APCAppleCoreBundle */ = {
+			isa = PBXGroup;
+			children = (
+				F5E4872C19ABDE6300C86FC6 /* Supporting Files */,
+			);
+			path = APCAppleCoreBundle;
+			sourceTree = "<group>";
+		};
+		F5E4872C19ABDE6300C86FC6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F5E4872D19ABDE6300C86FC6 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F5E4873119ABDE8E00C86FC6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F5E4873219ABDEB500C86FC6 /* APCModel.xcdatamodeld */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F5E4873D19ABE18000C86FC6 /* APCAppleCoreBundle */ = {
+			isa = PBXGroup;
+			children = (
+				F5E4873E19ABE18000C86FC6 /* Supporting Files */,
+			);
+			path = APCAppleCoreBundle;
+			sourceTree = "<group>";
+		};
+		F5E4873E19ABE18000C86FC6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F5E4873F19ABE18000C86FC6 /* Info.plist */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -205,6 +277,23 @@
 			productReference = F5DAB55D199EBFF6008E4A8E /* APCAppleCoreTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		F5E4873B19ABE18000C86FC6 /* APCAppleCoreBundle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F5E4874019ABE18000C86FC6 /* Build configuration list for PBXNativeTarget "APCAppleCoreBundle" */;
+			buildPhases = (
+				F5E4873819ABE18000C86FC6 /* Sources */,
+				F5E4873919ABE18000C86FC6 /* Frameworks */,
+				F5E4873A19ABE18000C86FC6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = APCAppleCoreBundle;
+			productName = APCAppleCoreBundle;
+			productReference = F5E4873C19ABE18000C86FC6 /* APCAppleCoreBundle.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -218,6 +307,9 @@
 						CreatedOnToolsVersion = 6.0;
 					};
 					F5DAB55C199EBFF6008E4A8E = {
+						CreatedOnToolsVersion = 6.0;
+					};
+					F5E4873B19ABE18000C86FC6 = {
 						CreatedOnToolsVersion = 6.0;
 					};
 				};
@@ -236,12 +328,20 @@
 			targets = (
 				F5DAB551199EBFF6008E4A8E /* APCAppleCore */,
 				F5DAB55C199EBFF6008E4A8E /* APCAppleCoreTests */,
+				F5E4873B19ABE18000C86FC6 /* APCAppleCoreBundle */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		F5DAB55B199EBFF6008E4A8E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5E4873A19ABE18000C86FC6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -256,7 +356,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F560074E19A797E6009F877F /* NSError+APCAdditions.m in Sources */,
+				F5E4873419ABDEB500C86FC6 /* APCModel.xcdatamodeld in Sources */,
 				F59C278319A3B65700596ACC /* Reachability.m in Sources */,
+				F5E4872419ABDBF000C86FC6 /* APCDataSubstrate.m in Sources */,
 				F5DAB56C199EC0D0008E4A8E /* APCNetworkManager.m in Sources */,
 				F5E4871219ABB1A300C86FC6 /* APCAppDelegate.m in Sources */,
 				F560075219A7A502009F877F /* APCSageNetworkManager.m in Sources */,
@@ -267,13 +369,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5E4872519ABDBF000C86FC6 /* APCDataSubstrate.m in Sources */,
 				F58668B819A3D0E000E9C375 /* APCNetworkManagerTest.m in Sources */,
 				F5E4871319ABB1A300C86FC6 /* APCAppDelegate.m in Sources */,
 				F58668BA19A3D99B00E9C375 /* Reachability.m in Sources */,
+				F5E4873519ABDEB500C86FC6 /* APCModel.xcdatamodeld in Sources */,
 				F560075319A7A502009F877F /* APCSageNetworkManager.m in Sources */,
 				F560075519A7A81E009F877F /* APCSageNetworkManagerTest.m in Sources */,
 				F560074F19A797E6009F877F /* NSError+APCAdditions.m in Sources */,
 				F58668B919A3D99400E9C375 /* APCNetworkManager.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5E4873819ABE18000C86FC6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5E4874319ABE1A400C86FC6 /* APCModel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,6 +514,39 @@
 			};
 			name = Release;
 		};
+		F5E4874119ABE18000C86FC6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = APCAppleCoreBundle/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos8.0;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		F5E4874219ABE18000C86FC6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				INFOPLIST_FILE = APCAppleCoreBundle/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos8.0;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -432,7 +577,28 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		F5E4874019ABE18000C86FC6 /* Build configuration list for PBXNativeTarget "APCAppleCoreBundle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F5E4874119ABE18000C86FC6 /* Debug */,
+				F5E4874219ABE18000C86FC6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		F5E4873219ABDEB500C86FC6 /* APCModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F5E4873319ABDEB500C86FC6 /* APCModel.xcdatamodel */,
+			);
+			currentVersion = F5E4873319ABDEB500C86FC6 /* APCModel.xcdatamodel */;
+			path = APCModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = F5DAB54A199EBFF6008E4A8E /* Project object */;
 }

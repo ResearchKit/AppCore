@@ -15,6 +15,7 @@
 #import "APCAppDelegate.h"
 #import "APCNetworkManager.h"
 #import "APCSageNetworkManager.h"
+#import "APCDataSubstrate.h"
 
 //Categories
 #import "NSError+APCAdditions.h"

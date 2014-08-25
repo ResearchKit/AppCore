@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class APCNetworkManager;
+@class APCNetworkManager, APCDataSubstrate;
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property  (strong, nonatomic)  UIWindow                *window;
 
 //APC Related Properties & Methods
 @property (strong, nonatomic) APCNetworkManager * networkManager;
+@property (strong, nonatomic) APCDataSubstrate * dataSubstrate;
 
 @end
