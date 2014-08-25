@@ -63,7 +63,6 @@
 		F5E4872D19ABDE6300C86FC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5E4873319ABDEB500C86FC6 /* APCModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = APCModel.xcdatamodel; sourceTree = "<group>"; };
 		F5E4873C19ABE18000C86FC6 /* APCAppleCoreBundle.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APCAppleCoreBundle.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		F5E4873F19ABE18000C86FC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,7 +130,6 @@
 				F5DAB554199EBFF6008E4A8E /* APCAppleCore */,
 				F5DAB55E199EBFF6008E4A8E /* APCAppleCoreTests */,
 				F5E4872B19ABDE6300C86FC6 /* APCAppleCoreBundle */,
-				F5E4873D19ABE18000C86FC6 /* APCAppleCoreBundle */,
 				F5DAB553199EBFF6008E4A8E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -222,22 +220,6 @@
 				F5E4873219ABDEB500C86FC6 /* APCModel.xcdatamodeld */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		F5E4873D19ABE18000C86FC6 /* APCAppleCoreBundle */ = {
-			isa = PBXGroup;
-			children = (
-				F5E4873E19ABE18000C86FC6 /* Supporting Files */,
-			);
-			path = APCAppleCoreBundle;
-			sourceTree = "<group>";
-		};
-		F5E4873E19ABE18000C86FC6 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				F5E4873F19ABE18000C86FC6 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -584,6 +566,7 @@
 				F5E4874219ABE18000C86FC6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
