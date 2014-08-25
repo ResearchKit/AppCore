@@ -13,7 +13,7 @@
 
 @property  (strong, nonatomic)  UIWindow                *window;
 
-//APC Related Methods
+//APC Related Properties & Methods
 @property (strong, nonatomic) APCNetworkManager * networkManager;
 
 @end

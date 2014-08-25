@@ -7,7 +7,7 @@
 //
 
 #import "APCAppDelegate.h"
-//#import "APCAppleCore.h"
+#import "APCAppleCore.h"
 
 @implementation APCAppDelegate
 
