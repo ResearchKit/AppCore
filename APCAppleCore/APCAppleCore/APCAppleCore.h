@@ -12,6 +12,7 @@
     #define _APCAPPLECORE_
 
 //Headers
+#import "APCAppDelegate.h"
 #import "APCNetworkManager.h"
 #import "APCSageNetworkManager.h"
 

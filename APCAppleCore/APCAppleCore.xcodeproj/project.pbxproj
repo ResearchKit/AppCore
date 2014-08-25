@@ -18,6 +18,8 @@
 		F59C278319A3B65700596ACC /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F59C278219A3B65700596ACC /* Reachability.m */; };
 		F5DAB556199EBFF6008E4A8E /* APCAppleCore.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = F5DAB555199EBFF6008E4A8E /* APCAppleCore.h */; };
 		F5DAB56C199EC0D0008E4A8E /* APCNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DAB56B199EC0D0008E4A8E /* APCNetworkManager.m */; };
+		F5E4871219ABB1A300C86FC6 /* APCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4871119ABB1A300C86FC6 /* APCAppDelegate.m */; };
+		F5E4871319ABB1A300C86FC6 /* APCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4871119ABB1A300C86FC6 /* APCAppDelegate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,6 +51,8 @@
 		F5DAB560199EBFF6008E4A8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5DAB56A199EC0D0008E4A8E /* APCNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCNetworkManager.h; sourceTree = "<group>"; };
 		F5DAB56B199EC0D0008E4A8E /* APCNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCNetworkManager.m; sourceTree = "<group>"; };
+		F5E4871019ABB1A300C86FC6 /* APCAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAppDelegate.h; sourceTree = "<group>"; };
+		F5E4871119ABB1A300C86FC6 /* APCAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAppDelegate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +130,8 @@
 			children = (
 				F5BDD99819A401F2009921E7 /* README */,
 				F5DAB555199EBFF6008E4A8E /* APCAppleCore.h */,
+				F5E4871019ABB1A300C86FC6 /* APCAppDelegate.h */,
+				F5E4871119ABB1A300C86FC6 /* APCAppDelegate.m */,
 				F5DAB569199EC085008E4A8E /* NetworkLayer */,
 				F59C277F19A3B65700596ACC /* Vendor */,
 				F560074A19A797CE009F877F /* Library */,
@@ -252,6 +258,7 @@
 				F560074E19A797E6009F877F /* NSError+APCAdditions.m in Sources */,
 				F59C278319A3B65700596ACC /* Reachability.m in Sources */,
 				F5DAB56C199EC0D0008E4A8E /* APCNetworkManager.m in Sources */,
+				F5E4871219ABB1A300C86FC6 /* APCAppDelegate.m in Sources */,
 				F560075219A7A502009F877F /* APCSageNetworkManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -261,6 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F58668B819A3D0E000E9C375 /* APCNetworkManagerTest.m in Sources */,
+				F5E4871319ABB1A300C86FC6 /* APCAppDelegate.m in Sources */,
 				F58668BA19A3D99B00E9C375 /* Reachability.m in Sources */,
 				F560075319A7A502009F877F /* APCSageNetworkManager.m in Sources */,
 				F560075519A7A81E009F877F /* APCSageNetworkManagerTest.m in Sources */,
