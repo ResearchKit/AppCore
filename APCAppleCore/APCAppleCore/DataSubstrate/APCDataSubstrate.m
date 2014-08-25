@@ -26,7 +26,6 @@
     return self;
 }
 
-
 - (void) setUpCoreDataStackWithPersistentStorePath: (NSString*) storePath additionalModels:(NSManagedObjectModel *)mergedModels
 {
     [self loadManagedObjectModel:mergedModels];
@@ -37,7 +36,6 @@
 
 - (void) loadManagedObjectModel: (NSManagedObjectModel*) mergedModels
 {
-    // Initialize managed object store
     NSString* bundlePath = [[NSBundle mainBundle] pathForResource:@"APCAppleCoreBundle" ofType:@"bundle"];
     
     NSBundle* bundle = [NSBundle bundleWithPath:bundlePath];
@@ -58,7 +56,13 @@
     NSError * error;
     NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @(YES),
                  NSInferMappingModelAutomaticallyOption: @(YES) };
-    [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:storePath] options:options error:&error];
+     NSPersistentStore *persistentStore = [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:storePath] options:options error:&error];
+    if (!persistentStore) {
+        [[NSFileManager defaultManager] removeItemAtPath:storePath error:&error];
+        NSAssert((error == nil), @"Database delete Error");
+        [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:storePath] options:options error:&error];
+        NSAssert((error == nil), @"Persistent Store Creation Error");
+    }
     NSAssert([[NSFileManager defaultManager] fileExistsAtPath:storePath], @"Database Not Created");
 }
 
