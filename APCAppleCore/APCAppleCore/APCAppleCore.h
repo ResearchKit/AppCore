@@ -13,9 +13,13 @@
 
 //Headers
 #import "APCAppDelegate.h"
+
 #import "APCNetworkManager.h"
 #import "APCSageNetworkManager.h"
+
 #import "APCDataSubstrate.h"
+#import "APCDataSubstrate+ResearchKit.h"
+#import "APCDataSubstrate+CoreData.h"
 
 //Categories
 #import "NSError+APCAdditions.h"

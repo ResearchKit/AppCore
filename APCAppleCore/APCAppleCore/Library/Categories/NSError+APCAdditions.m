@@ -58,4 +58,13 @@
     return [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerNotAuthenticated userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Authentiction Error. Please sign in."}];
 }
 
+/*********************************************************************************/
+#pragma mark - Error handlers
+/*********************************************************************************/
+
+- (void) handle
+{
+    NSLog(@"ERROR GENERATED: %@", self);
+}
+
 @end

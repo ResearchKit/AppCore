@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F5241C5019ACF9F10098A4DF /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5241C4F19ACF9F10098A4DF /* ResearchKit.framework */; };
 		F5241C5919ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5241C5819ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m */; };
 		F5241C5A19ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5241C5819ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m */; };
 		F5241C5D19ACFF070098A4DF /* APCDataSubstrate+CoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = F5241C5C19ACFF070098A4DF /* APCDataSubstrate+CoreData.m */; };
 		F5241C5E19ACFF070098A4DF /* APCDataSubstrate+CoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = F5241C5C19ACFF070098A4DF /* APCDataSubstrate+CoreData.m */; };
+		F5241C6919AD313C0098A4DF /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5241C6819AD313C0098A4DF /* ResearchKit.framework */; };
+		F5241C6D19AD35AE0098A4DF /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5241C6819AD313C0098A4DF /* ResearchKit.framework */; };
 		F560074E19A797E6009F877F /* NSError+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F560074D19A797E6009F877F /* NSError+APCAdditions.m */; };
 		F560074F19A797E6009F877F /* NSError+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F560074D19A797E6009F877F /* NSError+APCAdditions.m */; };
 		F560075219A7A502009F877F /* APCSageNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F560075119A7A502009F877F /* APCSageNetworkManager.m */; };
@@ -47,11 +48,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		F5241C4F19ACF9F10098A4DF /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = ../StudyDemo/ResearchKit/ResearchKit.framework; sourceTree = "<group>"; };
 		F5241C5719ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+ResearchKit.h"; sourceTree = "<group>"; };
 		F5241C5819ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCDataSubstrate+ResearchKit.m"; sourceTree = "<group>"; };
 		F5241C5B19ACFF070098A4DF /* APCDataSubstrate+CoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+CoreData.h"; sourceTree = "<group>"; };
 		F5241C5C19ACFF070098A4DF /* APCDataSubstrate+CoreData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCDataSubstrate+CoreData.m"; sourceTree = "<group>"; };
+		F5241C6819AD313C0098A4DF /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = ../StudyDemo/ResearchKit/ResearchKit.framework; sourceTree = "<group>"; };
 		F560074C19A797E6009F877F /* NSError+APCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+APCAdditions.h"; sourceTree = "<group>"; };
 		F560074D19A797E6009F877F /* NSError+APCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+APCAdditions.m"; sourceTree = "<group>"; };
 		F560075019A7A502009F877F /* APCSageNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSageNetworkManager.h; sourceTree = "<group>"; };
@@ -81,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5241C5019ACF9F10098A4DF /* ResearchKit.framework in Frameworks */,
+				F5241C6919AD313C0098A4DF /* ResearchKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5241C6D19AD35AE0098A4DF /* ResearchKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,7 +145,7 @@
 				F5DAB55E199EBFF6008E4A8E /* APCAppleCoreTests */,
 				F5E4872B19ABDE6300C86FC6 /* APCAppleCoreBundle */,
 				F5DAB553199EBFF6008E4A8E /* Products */,
-				F5241C4F19ACF9F10098A4DF /* ResearchKit.framework */,
+				F5241C6819AD313C0098A4DF /* ResearchKit.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -501,6 +503,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
+					/Users/dhanush.balachandran/Documents/Projects/AppleParkinson/AppleCore/StudyDemo/ResearchKit,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -508,6 +511,12 @@
 				);
 				INFOPLIST_FILE = APCAppleCoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -518,9 +527,16 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
+					/Users/dhanush.balachandran/Documents/Projects/AppleParkinson/AppleCore/StudyDemo/ResearchKit,
 				);
 				INFOPLIST_FILE = APCAppleCoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

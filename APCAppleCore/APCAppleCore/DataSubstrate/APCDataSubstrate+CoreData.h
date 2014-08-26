@@ -10,4 +10,9 @@
 
 @interface APCDataSubstrate (CoreData)
 
+/*********************************************************************************/
+#pragma mark - Methods meant only for Categories
+/*********************************************************************************/
+- (void) setUpCoreDataStackWithPersistentStorePath:(NSString*) storePath additionalModels: (NSManagedObjectModel*) mergedModels;
+
 @end
