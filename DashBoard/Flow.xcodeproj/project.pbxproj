@@ -1,0 +1,620 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2537CD8419ABF1180076D341 /* ChartDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 2537CD8319ABF1180076D341 /* ChartDataService.m */; };
+		2537F49419A77F68009EA4C4 /* YMLCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2537F49319A77F68009EA4C4 /* YMLCommon.m */; };
+		2541415719A672A0003116C3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2541415619A672A0003116C3 /* main.m */; };
+		2541415A19A672A0003116C3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2541415919A672A0003116C3 /* AppDelegate.m */; };
+		2541416219A672A0003116C3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2541416119A672A0003116C3 /* Images.xcassets */; };
+		2541416E19A672A0003116C3 /* FlowTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2541416D19A672A0003116C3 /* FlowTests.m */; };
+		254141C519A691AB003116C3 /* DashBoardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 254141C419A691AB003116C3 /* DashBoardViewController.m */; };
+		254141C819A69268003116C3 /* DashBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 254141C719A69268003116C3 /* DashBoard.m */; };
+		2561739219A6F5FC002CB6B5 /* PieSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561736519A6F5FC002CB6B5 /* PieSliceLayer.m */; };
+		2561739319A6F5FC002CB6B5 /* YMLAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561736819A6F5FC002CB6B5 /* YMLAxisView.m */; };
+		2561739419A6F5FC002CB6B5 /* YMLBarLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561736A19A6F5FC002CB6B5 /* YMLBarLayer.m */; };
+		2561739519A6F5FC002CB6B5 /* YMLBarPlotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561736C19A6F5FC002CB6B5 /* YMLBarPlotView.m */; };
+		2561739619A6F5FC002CB6B5 /* YMLBarSegmentLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561736E19A6F5FC002CB6B5 /* YMLBarSegmentLayer.m */; };
+		2561739719A6F5FC002CB6B5 /* YMLBaseBarLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561737019A6F5FC002CB6B5 /* YMLBaseBarLayer.m */; };
+		2561739819A6F5FC002CB6B5 /* YMLBaseBarPlotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561737219A6F5FC002CB6B5 /* YMLBaseBarPlotView.m */; };
+		2561739919A6F5FC002CB6B5 /* YMLChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561737519A6F5FC002CB6B5 /* YMLChartView.m */; };
+		2561739A19A6F5FC002CB6B5 /* YMLCurrencyFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561737719A6F5FC002CB6B5 /* YMLCurrencyFormatter.m */; };
+		2561739B19A6F5FC002CB6B5 /* YMLDateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561737919A6F5FC002CB6B5 /* YMLDateFormatter.m */; };
+		2561739C19A6F5FC002CB6B5 /* YMLDefaultFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561737B19A6F5FC002CB6B5 /* YMLDefaultFormatter.m */; };
+		2561739D19A6F5FC002CB6B5 /* YMLLinePlotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561737D19A6F5FC002CB6B5 /* YMLLinePlotView.m */; };
+		2561739E19A6F5FC002CB6B5 /* YMLMultiLinePlotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561737F19A6F5FC002CB6B5 /* YMLMultiLinePlotView.m */; };
+		2561739F19A6F5FC002CB6B5 /* YMLNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561738119A6F5FC002CB6B5 /* YMLNumberFormatter.m */; };
+		256173A019A6F5FC002CB6B5 /* YMLPercentFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561738319A6F5FC002CB6B5 /* YMLPercentFormatter.m */; };
+		256173A119A6F5FC002CB6B5 /* YMLPiePlotTitleInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561738519A6F5FC002CB6B5 /* YMLPiePlotTitleInfo.m */; };
+		256173A219A6F5FC002CB6B5 /* YMLPiePlotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561738719A6F5FC002CB6B5 /* YMLPiePlotView.m */; };
+		256173A319A6F5FC002CB6B5 /* YMLPieSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561738919A6F5FC002CB6B5 /* YMLPieSliceLayer.m */; };
+		256173A419A6F5FC002CB6B5 /* YMLPlotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561738B19A6F5FC002CB6B5 /* YMLPlotView.m */; };
+		256173A519A6F5FC002CB6B5 /* YMLPointLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561738D19A6F5FC002CB6B5 /* YMLPointLayer.m */; };
+		256173A619A6F5FC002CB6B5 /* YMLScrollableChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561738F19A6F5FC002CB6B5 /* YMLScrollableChartView.m */; };
+		256173A719A6F5FC002CB6B5 /* YMLStackedBarPlotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2561739119A6F5FC002CB6B5 /* YMLStackedBarPlotView.m */; };
+		256173AA19A6F7D8002CB6B5 /* NSArray+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 256173A919A6F7D8002CB6B5 /* NSArray+Helpers.m */; };
+		256173AD19A6FD0A002CB6B5 /* Enumerations.m in Sources */ = {isa = PBXBuildFile; fileRef = 256173AC19A6FD0A002CB6B5 /* Enumerations.m */; };
+		2574FE6519AB939A006E977F /* YMLTimeLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2574FE6419AB939A006E977F /* YMLTimeLineChartView.m */; };
+		259E33F519ABFCF3003864DB /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 259E33F419ABFCF3003864DB /* HealthKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2541416819A672A0003116C3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2541414919A672A0003116C3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2541415019A672A0003116C3;
+			remoteInfo = Flow;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2537CD8219ABF1180076D341 /* ChartDataService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChartDataService.h; sourceTree = "<group>"; };
+		2537CD8319ABF1180076D341 /* ChartDataService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChartDataService.m; sourceTree = "<group>"; };
+		2537F49219A77F68009EA4C4 /* YMLCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLCommon.h; sourceTree = "<group>"; };
+		2537F49319A77F68009EA4C4 /* YMLCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLCommon.m; sourceTree = "<group>"; };
+		2541415119A672A0003116C3 /* Flow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2541415519A672A0003116C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2541415619A672A0003116C3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2541415819A672A0003116C3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		2541415919A672A0003116C3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		2541416119A672A0003116C3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		2541416719A672A0003116C3 /* FlowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2541416C19A672A0003116C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2541416D19A672A0003116C3 /* FlowTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlowTests.m; sourceTree = "<group>"; };
+		254141C319A691AB003116C3 /* DashBoardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashBoardViewController.h; sourceTree = "<group>"; };
+		254141C419A691AB003116C3 /* DashBoardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashBoardViewController.m; sourceTree = "<group>"; };
+		254141C619A69268003116C3 /* DashBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashBoard.h; sourceTree = "<group>"; };
+		254141C719A69268003116C3 /* DashBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashBoard.m; sourceTree = "<group>"; };
+		2561736419A6F5FC002CB6B5 /* PieSliceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PieSliceLayer.h; sourceTree = "<group>"; };
+		2561736519A6F5FC002CB6B5 /* PieSliceLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PieSliceLayer.m; sourceTree = "<group>"; };
+		2561736619A6F5FC002CB6B5 /* YMLAxisFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLAxisFormatter.h; sourceTree = "<group>"; };
+		2561736719A6F5FC002CB6B5 /* YMLAxisView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLAxisView.h; sourceTree = "<group>"; };
+		2561736819A6F5FC002CB6B5 /* YMLAxisView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLAxisView.m; sourceTree = "<group>"; };
+		2561736919A6F5FC002CB6B5 /* YMLBarLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLBarLayer.h; sourceTree = "<group>"; };
+		2561736A19A6F5FC002CB6B5 /* YMLBarLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLBarLayer.m; sourceTree = "<group>"; };
+		2561736B19A6F5FC002CB6B5 /* YMLBarPlotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLBarPlotView.h; sourceTree = "<group>"; };
+		2561736C19A6F5FC002CB6B5 /* YMLBarPlotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLBarPlotView.m; sourceTree = "<group>"; };
+		2561736D19A6F5FC002CB6B5 /* YMLBarSegmentLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLBarSegmentLayer.h; sourceTree = "<group>"; };
+		2561736E19A6F5FC002CB6B5 /* YMLBarSegmentLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLBarSegmentLayer.m; sourceTree = "<group>"; };
+		2561736F19A6F5FC002CB6B5 /* YMLBaseBarLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLBaseBarLayer.h; sourceTree = "<group>"; };
+		2561737019A6F5FC002CB6B5 /* YMLBaseBarLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLBaseBarLayer.m; sourceTree = "<group>"; };
+		2561737119A6F5FC002CB6B5 /* YMLBaseBarPlotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLBaseBarPlotView.h; sourceTree = "<group>"; };
+		2561737219A6F5FC002CB6B5 /* YMLBaseBarPlotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLBaseBarPlotView.m; sourceTree = "<group>"; };
+		2561737319A6F5FC002CB6B5 /* YMLChartEnumerations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLChartEnumerations.h; sourceTree = "<group>"; };
+		2561737419A6F5FC002CB6B5 /* YMLChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLChartView.h; sourceTree = "<group>"; };
+		2561737519A6F5FC002CB6B5 /* YMLChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLChartView.m; sourceTree = "<group>"; };
+		2561737619A6F5FC002CB6B5 /* YMLCurrencyFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLCurrencyFormatter.h; sourceTree = "<group>"; };
+		2561737719A6F5FC002CB6B5 /* YMLCurrencyFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLCurrencyFormatter.m; sourceTree = "<group>"; };
+		2561737819A6F5FC002CB6B5 /* YMLDateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLDateFormatter.h; sourceTree = "<group>"; };
+		2561737919A6F5FC002CB6B5 /* YMLDateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLDateFormatter.m; sourceTree = "<group>"; };
+		2561737A19A6F5FC002CB6B5 /* YMLDefaultFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLDefaultFormatter.h; sourceTree = "<group>"; };
+		2561737B19A6F5FC002CB6B5 /* YMLDefaultFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLDefaultFormatter.m; sourceTree = "<group>"; };
+		2561737C19A6F5FC002CB6B5 /* YMLLinePlotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLLinePlotView.h; sourceTree = "<group>"; };
+		2561737D19A6F5FC002CB6B5 /* YMLLinePlotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLLinePlotView.m; sourceTree = "<group>"; };
+		2561737E19A6F5FC002CB6B5 /* YMLMultiLinePlotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLMultiLinePlotView.h; sourceTree = "<group>"; };
+		2561737F19A6F5FC002CB6B5 /* YMLMultiLinePlotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLMultiLinePlotView.m; sourceTree = "<group>"; };
+		2561738019A6F5FC002CB6B5 /* YMLNumberFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLNumberFormatter.h; sourceTree = "<group>"; };
+		2561738119A6F5FC002CB6B5 /* YMLNumberFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLNumberFormatter.m; sourceTree = "<group>"; };
+		2561738219A6F5FC002CB6B5 /* YMLPercentFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLPercentFormatter.h; sourceTree = "<group>"; };
+		2561738319A6F5FC002CB6B5 /* YMLPercentFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLPercentFormatter.m; sourceTree = "<group>"; };
+		2561738419A6F5FC002CB6B5 /* YMLPiePlotTitleInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLPiePlotTitleInfo.h; sourceTree = "<group>"; };
+		2561738519A6F5FC002CB6B5 /* YMLPiePlotTitleInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLPiePlotTitleInfo.m; sourceTree = "<group>"; };
+		2561738619A6F5FC002CB6B5 /* YMLPiePlotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLPiePlotView.h; sourceTree = "<group>"; };
+		2561738719A6F5FC002CB6B5 /* YMLPiePlotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLPiePlotView.m; sourceTree = "<group>"; };
+		2561738819A6F5FC002CB6B5 /* YMLPieSliceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLPieSliceLayer.h; sourceTree = "<group>"; };
+		2561738919A6F5FC002CB6B5 /* YMLPieSliceLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLPieSliceLayer.m; sourceTree = "<group>"; };
+		2561738A19A6F5FC002CB6B5 /* YMLPlotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLPlotView.h; sourceTree = "<group>"; };
+		2561738B19A6F5FC002CB6B5 /* YMLPlotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLPlotView.m; sourceTree = "<group>"; };
+		2561738C19A6F5FC002CB6B5 /* YMLPointLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLPointLayer.h; sourceTree = "<group>"; };
+		2561738D19A6F5FC002CB6B5 /* YMLPointLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLPointLayer.m; sourceTree = "<group>"; };
+		2561738E19A6F5FC002CB6B5 /* YMLScrollableChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLScrollableChartView.h; sourceTree = "<group>"; };
+		2561738F19A6F5FC002CB6B5 /* YMLScrollableChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLScrollableChartView.m; sourceTree = "<group>"; };
+		2561739019A6F5FC002CB6B5 /* YMLStackedBarPlotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLStackedBarPlotView.h; sourceTree = "<group>"; };
+		2561739119A6F5FC002CB6B5 /* YMLStackedBarPlotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLStackedBarPlotView.m; sourceTree = "<group>"; };
+		256173A819A6F7D8002CB6B5 /* NSArray+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Helpers.h"; sourceTree = "<group>"; };
+		256173A919A6F7D8002CB6B5 /* NSArray+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Helpers.m"; sourceTree = "<group>"; };
+		256173AB19A6FD0A002CB6B5 /* Enumerations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enumerations.h; sourceTree = "<group>"; };
+		256173AC19A6FD0A002CB6B5 /* Enumerations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Enumerations.m; sourceTree = "<group>"; };
+		2574FE6319AB939A006E977F /* YMLTimeLineChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLTimeLineChartView.h; sourceTree = "<group>"; };
+		2574FE6419AB939A006E977F /* YMLTimeLineChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLTimeLineChartView.m; sourceTree = "<group>"; };
+		259E33F419ABFCF3003864DB /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2541414E19A672A0003116C3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				259E33F519ABFCF3003864DB /* HealthKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2541416419A672A0003116C3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2541414819A672A0003116C3 = {
+			isa = PBXGroup;
+			children = (
+				259E33F419ABFCF3003864DB /* HealthKit.framework */,
+				2541415319A672A0003116C3 /* Flow */,
+				2541416A19A672A0003116C3 /* FlowTests */,
+				2541415219A672A0003116C3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2541415219A672A0003116C3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2541415119A672A0003116C3 /* Flow.app */,
+				2541416719A672A0003116C3 /* FlowTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2541415319A672A0003116C3 /* Flow */ = {
+			isa = PBXGroup;
+			children = (
+				2541416119A672A0003116C3 /* Images.xcassets */,
+				2541415419A672A0003116C3 /* Supporting Files */,
+				2561736319A6F5FC002CB6B5 /* YMLCharting */,
+				25EB506D19ABF55400C9ED84 /* ChartDataService */,
+				2541415819A672A0003116C3 /* AppDelegate.h */,
+				2541415919A672A0003116C3 /* AppDelegate.m */,
+				254141C619A69268003116C3 /* DashBoard.h */,
+				254141C719A69268003116C3 /* DashBoard.m */,
+				254141C319A691AB003116C3 /* DashBoardViewController.h */,
+				254141C419A691AB003116C3 /* DashBoardViewController.m */,
+			);
+			path = Flow;
+			sourceTree = "<group>";
+		};
+		2541415419A672A0003116C3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2541415519A672A0003116C3 /* Info.plist */,
+				2541415619A672A0003116C3 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2541416A19A672A0003116C3 /* FlowTests */ = {
+			isa = PBXGroup;
+			children = (
+				2541416D19A672A0003116C3 /* FlowTests.m */,
+				2541416B19A672A0003116C3 /* Supporting Files */,
+			);
+			path = FlowTests;
+			sourceTree = "<group>";
+		};
+		2541416B19A672A0003116C3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2541416C19A672A0003116C3 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2561736319A6F5FC002CB6B5 /* YMLCharting */ = {
+			isa = PBXGroup;
+			children = (
+				2537F49219A77F68009EA4C4 /* YMLCommon.h */,
+				2537F49319A77F68009EA4C4 /* YMLCommon.m */,
+				256173A819A6F7D8002CB6B5 /* NSArray+Helpers.h */,
+				256173A919A6F7D8002CB6B5 /* NSArray+Helpers.m */,
+				256173AB19A6FD0A002CB6B5 /* Enumerations.h */,
+				256173AC19A6FD0A002CB6B5 /* Enumerations.m */,
+				2561736419A6F5FC002CB6B5 /* PieSliceLayer.h */,
+				2561736519A6F5FC002CB6B5 /* PieSliceLayer.m */,
+				2561736619A6F5FC002CB6B5 /* YMLAxisFormatter.h */,
+				2561736719A6F5FC002CB6B5 /* YMLAxisView.h */,
+				2561736819A6F5FC002CB6B5 /* YMLAxisView.m */,
+				2561736919A6F5FC002CB6B5 /* YMLBarLayer.h */,
+				2561736A19A6F5FC002CB6B5 /* YMLBarLayer.m */,
+				2561736B19A6F5FC002CB6B5 /* YMLBarPlotView.h */,
+				2561736C19A6F5FC002CB6B5 /* YMLBarPlotView.m */,
+				2561736D19A6F5FC002CB6B5 /* YMLBarSegmentLayer.h */,
+				2561736E19A6F5FC002CB6B5 /* YMLBarSegmentLayer.m */,
+				2561736F19A6F5FC002CB6B5 /* YMLBaseBarLayer.h */,
+				2561737019A6F5FC002CB6B5 /* YMLBaseBarLayer.m */,
+				2561737119A6F5FC002CB6B5 /* YMLBaseBarPlotView.h */,
+				2561737219A6F5FC002CB6B5 /* YMLBaseBarPlotView.m */,
+				2561737319A6F5FC002CB6B5 /* YMLChartEnumerations.h */,
+				2561737419A6F5FC002CB6B5 /* YMLChartView.h */,
+				2561737519A6F5FC002CB6B5 /* YMLChartView.m */,
+				2561737619A6F5FC002CB6B5 /* YMLCurrencyFormatter.h */,
+				2561737719A6F5FC002CB6B5 /* YMLCurrencyFormatter.m */,
+				2561737819A6F5FC002CB6B5 /* YMLDateFormatter.h */,
+				2561737919A6F5FC002CB6B5 /* YMLDateFormatter.m */,
+				2561737A19A6F5FC002CB6B5 /* YMLDefaultFormatter.h */,
+				2561737B19A6F5FC002CB6B5 /* YMLDefaultFormatter.m */,
+				2561737C19A6F5FC002CB6B5 /* YMLLinePlotView.h */,
+				2561737D19A6F5FC002CB6B5 /* YMLLinePlotView.m */,
+				2561737E19A6F5FC002CB6B5 /* YMLMultiLinePlotView.h */,
+				2561737F19A6F5FC002CB6B5 /* YMLMultiLinePlotView.m */,
+				2561738019A6F5FC002CB6B5 /* YMLNumberFormatter.h */,
+				2561738119A6F5FC002CB6B5 /* YMLNumberFormatter.m */,
+				2561738219A6F5FC002CB6B5 /* YMLPercentFormatter.h */,
+				2561738319A6F5FC002CB6B5 /* YMLPercentFormatter.m */,
+				2561738419A6F5FC002CB6B5 /* YMLPiePlotTitleInfo.h */,
+				2561738519A6F5FC002CB6B5 /* YMLPiePlotTitleInfo.m */,
+				2561738619A6F5FC002CB6B5 /* YMLPiePlotView.h */,
+				2561738719A6F5FC002CB6B5 /* YMLPiePlotView.m */,
+				2561738819A6F5FC002CB6B5 /* YMLPieSliceLayer.h */,
+				2561738919A6F5FC002CB6B5 /* YMLPieSliceLayer.m */,
+				2561738A19A6F5FC002CB6B5 /* YMLPlotView.h */,
+				2561738B19A6F5FC002CB6B5 /* YMLPlotView.m */,
+				2561738C19A6F5FC002CB6B5 /* YMLPointLayer.h */,
+				2561738D19A6F5FC002CB6B5 /* YMLPointLayer.m */,
+				2561738E19A6F5FC002CB6B5 /* YMLScrollableChartView.h */,
+				2561738F19A6F5FC002CB6B5 /* YMLScrollableChartView.m */,
+				2561739019A6F5FC002CB6B5 /* YMLStackedBarPlotView.h */,
+				2561739119A6F5FC002CB6B5 /* YMLStackedBarPlotView.m */,
+				2574FE6319AB939A006E977F /* YMLTimeLineChartView.h */,
+				2574FE6419AB939A006E977F /* YMLTimeLineChartView.m */,
+			);
+			path = YMLCharting;
+			sourceTree = "<group>";
+		};
+		25EB506D19ABF55400C9ED84 /* ChartDataService */ = {
+			isa = PBXGroup;
+			children = (
+				2537CD8219ABF1180076D341 /* ChartDataService.h */,
+				2537CD8319ABF1180076D341 /* ChartDataService.m */,
+			);
+			name = ChartDataService;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2541415019A672A0003116C3 /* Flow */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2541417119A672A0003116C3 /* Build configuration list for PBXNativeTarget "Flow" */;
+			buildPhases = (
+				2541414D19A672A0003116C3 /* Sources */,
+				2541414E19A672A0003116C3 /* Frameworks */,
+				2541414F19A672A0003116C3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Flow;
+			productName = Flow;
+			productReference = 2541415119A672A0003116C3 /* Flow.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2541416619A672A0003116C3 /* FlowTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2541417419A672A0003116C3 /* Build configuration list for PBXNativeTarget "FlowTests" */;
+			buildPhases = (
+				2541416319A672A0003116C3 /* Sources */,
+				2541416419A672A0003116C3 /* Frameworks */,
+				2541416519A672A0003116C3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2541416919A672A0003116C3 /* PBXTargetDependency */,
+			);
+			name = FlowTests;
+			productName = FlowTests;
+			productReference = 2541416719A672A0003116C3 /* FlowTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2541414919A672A0003116C3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0600;
+				ORGANIZATIONNAME = "Y Media Labs";
+				TargetAttributes = {
+					2541415019A672A0003116C3 = {
+						CreatedOnToolsVersion = 6.0;
+					};
+					2541416619A672A0003116C3 = {
+						CreatedOnToolsVersion = 6.0;
+						TestTargetID = 2541415019A672A0003116C3;
+					};
+				};
+			};
+			buildConfigurationList = 2541414C19A672A0003116C3 /* Build configuration list for PBXProject "Flow" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2541414819A672A0003116C3;
+			productRefGroup = 2541415219A672A0003116C3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2541415019A672A0003116C3 /* Flow */,
+				2541416619A672A0003116C3 /* FlowTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2541414F19A672A0003116C3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2541416219A672A0003116C3 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2541416519A672A0003116C3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2541414D19A672A0003116C3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2561739D19A6F5FC002CB6B5 /* YMLLinePlotView.m in Sources */,
+				254141C819A69268003116C3 /* DashBoard.m in Sources */,
+				256173A219A6F5FC002CB6B5 /* YMLPiePlotView.m in Sources */,
+				2561739719A6F5FC002CB6B5 /* YMLBaseBarLayer.m in Sources */,
+				2561739E19A6F5FC002CB6B5 /* YMLMultiLinePlotView.m in Sources */,
+				2561739F19A6F5FC002CB6B5 /* YMLNumberFormatter.m in Sources */,
+				2561739419A6F5FC002CB6B5 /* YMLBarLayer.m in Sources */,
+				256173AD19A6FD0A002CB6B5 /* Enumerations.m in Sources */,
+				256173A419A6F5FC002CB6B5 /* YMLPlotView.m in Sources */,
+				2561739819A6F5FC002CB6B5 /* YMLBaseBarPlotView.m in Sources */,
+				2537CD8419ABF1180076D341 /* ChartDataService.m in Sources */,
+				2561739619A6F5FC002CB6B5 /* YMLBarSegmentLayer.m in Sources */,
+				2561739C19A6F5FC002CB6B5 /* YMLDefaultFormatter.m in Sources */,
+				256173A619A6F5FC002CB6B5 /* YMLScrollableChartView.m in Sources */,
+				256173AA19A6F7D8002CB6B5 /* NSArray+Helpers.m in Sources */,
+				256173A319A6F5FC002CB6B5 /* YMLPieSliceLayer.m in Sources */,
+				256173A119A6F5FC002CB6B5 /* YMLPiePlotTitleInfo.m in Sources */,
+				2541415A19A672A0003116C3 /* AppDelegate.m in Sources */,
+				2541415719A672A0003116C3 /* main.m in Sources */,
+				2561739B19A6F5FC002CB6B5 /* YMLDateFormatter.m in Sources */,
+				2561739519A6F5FC002CB6B5 /* YMLBarPlotView.m in Sources */,
+				256173A719A6F5FC002CB6B5 /* YMLStackedBarPlotView.m in Sources */,
+				2537F49419A77F68009EA4C4 /* YMLCommon.m in Sources */,
+				2561739919A6F5FC002CB6B5 /* YMLChartView.m in Sources */,
+				254141C519A691AB003116C3 /* DashBoardViewController.m in Sources */,
+				256173A519A6F5FC002CB6B5 /* YMLPointLayer.m in Sources */,
+				256173A019A6F5FC002CB6B5 /* YMLPercentFormatter.m in Sources */,
+				2561739A19A6F5FC002CB6B5 /* YMLCurrencyFormatter.m in Sources */,
+				2574FE6519AB939A006E977F /* YMLTimeLineChartView.m in Sources */,
+				2561739319A6F5FC002CB6B5 /* YMLAxisView.m in Sources */,
+				2561739219A6F5FC002CB6B5 /* PieSliceLayer.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2541416319A672A0003116C3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2541416E19A672A0003116C3 /* FlowTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2541416919A672A0003116C3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2541415019A672A0003116C3 /* Flow */;
+			targetProxy = 2541416819A672A0003116C3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2541416F19A672A0003116C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		2541417019A672A0003116C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2541417219A672A0003116C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Flow",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Applications/Xcode6-Beta6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+					"$(PROJECT_DIR)/Flow",
+				);
+				INFOPLIST_FILE = Flow/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "0DCEBF4C-E1FA-4C73-B96C-18B8AFA66CD0";
+			};
+			name = Debug;
+		};
+		2541417319A672A0003116C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Flow",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Applications/Xcode6-Beta6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+					"$(PROJECT_DIR)/Flow",
+				);
+				INFOPLIST_FILE = Flow/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "0DCEBF4C-E1FA-4C73-B96C-18B8AFA66CD0";
+			};
+			name = Release;
+		};
+		2541417519A672A0003116C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = FlowTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Flow.app/Flow";
+			};
+			name = Debug;
+		};
+		2541417619A672A0003116C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = FlowTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Flow.app/Flow";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2541414C19A672A0003116C3 /* Build configuration list for PBXProject "Flow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2541416F19A672A0003116C3 /* Debug */,
+				2541417019A672A0003116C3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2541417119A672A0003116C3 /* Build configuration list for PBXNativeTarget "Flow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2541417219A672A0003116C3 /* Debug */,
+				2541417319A672A0003116C3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2541417419A672A0003116C3 /* Build configuration list for PBXNativeTarget "FlowTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2541417519A672A0003116C3 /* Debug */,
+				2541417619A672A0003116C3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2541414919A672A0003116C3 /* Project object */;
+}

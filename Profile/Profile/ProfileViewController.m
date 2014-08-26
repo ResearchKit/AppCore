@@ -119,6 +119,7 @@ typedef NS_ENUM(NSUInteger, ProfileTableViewCellOrder) {
     self.profileTableView.delegate = self;
     self.profileTableView.dataSource = self;
     self.profileTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.profileTableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     [self.view addSubview:self.profileTableView];
 }
 
