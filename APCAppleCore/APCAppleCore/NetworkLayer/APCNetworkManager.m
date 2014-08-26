@@ -34,11 +34,9 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
 /*********************************************************************************/
 
 @interface APCNetworkManager ()
-{
-    Reachability * _internetReachability;
-    Reachability * _serverReachability;
-}
 
+@property (nonatomic, strong) Reachability * internetReachability;
+@property (nonatomic, strong) Reachability * serverReachability;
 @property (nonatomic, strong) NSString * baseURL;
 @property (nonatomic, strong) NSURLSession * mainSession; //For data tasks
 @property (nonatomic, strong) NSURLSession * backgroundSession; //For upload/download tasks
@@ -56,10 +54,10 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
     self = [super init]; //Using [self class] instead of APCNetworkManager to enable subclassing
     if (self) {
         self.baseURL = baseURL;
-        _internetReachability = [Reachability reachabilityForInternetConnection];
+        self.internetReachability = [Reachability reachabilityForInternetConnection];
         NSURL * url = [NSURL URLWithString:baseURL];
-        _serverReachability = [Reachability reachabilityWithHostName:[url host]]; //Check if only hostname is required
-        [_serverReachability startNotifier]; //Turning on ONLY server reachability notifiers
+        self.serverReachability = [Reachability reachabilityWithHostName:[url host]]; //Check if only hostname is required
+        [self.serverReachability startNotifier]; //Turning on ONLY server reachability notifiers
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
         
     }
@@ -85,12 +83,12 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
 
 - (BOOL)isInternetConnected
 {
-    return (_internetReachability.currentReachabilityStatus != NotReachable);
+    return (self.internetReachability.currentReachabilityStatus != NotReachable);
 }
 
 - (BOOL)isServerReachable
 {
-    return (_serverReachability.currentReachabilityStatus != NotReachable);
+    return (self.serverReachability.currentReachabilityStatus != NotReachable);
 }
 
 /*********************************************************************************/
@@ -252,7 +250,7 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
 
 - (void)dealloc
 {
-    [_serverReachability stopNotifier];
+    [self.serverReachability stopNotifier];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:self];
 }
 @end
