@@ -17,14 +17,27 @@
 
 @implementation APCDataSubstrate
 
-- (instancetype)initWithPersistentStorePath: (NSString*) storePath additionalModels:(NSManagedObjectModel *)mergedModels
+- (instancetype)initWithPersistentStorePath: (NSString*) storePath additionalModels:(NSManagedObjectModel *)mergedModels studyIdentifier:(NSString *)studyIdentifier
 {
     self = [super init];
     if (self) {
+        [self setUpResearchStudy:studyIdentifier];
         [self setUpCoreDataStackWithPersistentStorePath:storePath additionalModels:mergedModels];
     }
     return self;
 }
+
+/*********************************************************************************/
+#pragma mark - ResearchKit Subsystem
+/*********************************************************************************/
+- (void) setUpResearchStudy: (NSString*) studyIdentifier
+{
+    
+}
+
+/*********************************************************************************/
+#pragma mark - Core Data Subsystem
+/*********************************************************************************/
 
 - (void) setUpCoreDataStackWithPersistentStorePath: (NSString*) storePath additionalModels:(NSManagedObjectModel *)mergedModels
 {

@@ -7,20 +7,28 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <ResearchKit/ResearchKit.h>
 
 @class  NSManagedObjectContext, NSManagedObjectModel;
-@interface APCDataSubstrate : NSObject
+
+@interface APCDataSubstrate : NSObject <RKStudyDelegate>
+
+/*********************************************************************************/
+#pragma mark - Initializer
+/*********************************************************************************/
+- (instancetype)initWithPersistentStorePath: (NSString*) storePath additionalModels:(NSManagedObjectModel *)mergedModels studyIdentifier: (NSString*) studyIdentifier;
+
+/*********************************************************************************/
+#pragma mark - ResearchKit Subsystem
+/*********************************************************************************/
+@property (nonatomic, strong) RKStudyStore * studyStore;
 
 
 /*********************************************************************************/
-#pragma mark - Properties
+#pragma mark - Core Data Subsystem
 /*********************************************************************************/
 @property (nonatomic, strong) NSManagedObjectContext * mainContext;
 @property (nonatomic, strong) NSManagedObjectContext * persistentContext;
 
-/*********************************************************************************/
-#pragma mark - Initializers/Methods
-/*********************************************************************************/
-- (instancetype)initWithPersistentStorePath: (NSString*) storePath additionalModels:(NSManagedObjectModel *)mergedModels;
 
 @end

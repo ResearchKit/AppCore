@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F5241C5019ACF9F10098A4DF /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5241C4F19ACF9F10098A4DF /* ResearchKit.framework */; };
+		F5241C5919ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5241C5819ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m */; };
+		F5241C5A19ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5241C5819ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m */; };
+		F5241C5D19ACFF070098A4DF /* APCDataSubstrate+CoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = F5241C5C19ACFF070098A4DF /* APCDataSubstrate+CoreData.m */; };
+		F5241C5E19ACFF070098A4DF /* APCDataSubstrate+CoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = F5241C5C19ACFF070098A4DF /* APCDataSubstrate+CoreData.m */; };
 		F560074E19A797E6009F877F /* NSError+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F560074D19A797E6009F877F /* NSError+APCAdditions.m */; };
 		F560074F19A797E6009F877F /* NSError+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F560074D19A797E6009F877F /* NSError+APCAdditions.m */; };
 		F560075219A7A502009F877F /* APCSageNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F560075119A7A502009F877F /* APCSageNetworkManager.m */; };
@@ -16,7 +21,7 @@
 		F58668B919A3D99400E9C375 /* APCNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DAB56B199EC0D0008E4A8E /* APCNetworkManager.m */; };
 		F58668BA19A3D99B00E9C375 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F59C278219A3B65700596ACC /* Reachability.m */; };
 		F59C278319A3B65700596ACC /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F59C278219A3B65700596ACC /* Reachability.m */; };
-		F5DAB556199EBFF6008E4A8E /* APCAppleCore.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = F5DAB555199EBFF6008E4A8E /* APCAppleCore.h */; };
+		F5DAB556199EBFF6008E4A8E /* APCAppleCore.h in Copy Files */ = {isa = PBXBuildFile; fileRef = F5DAB555199EBFF6008E4A8E /* APCAppleCore.h */; };
 		F5DAB56C199EC0D0008E4A8E /* APCNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DAB56B199EC0D0008E4A8E /* APCNetworkManager.m */; };
 		F5E4871219ABB1A300C86FC6 /* APCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4871119ABB1A300C86FC6 /* APCAppDelegate.m */; };
 		F5E4871319ABB1A300C86FC6 /* APCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4871119ABB1A300C86FC6 /* APCAppDelegate.m */; };
@@ -28,19 +33,25 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		F5DAB550199EBFF6008E4A8E /* CopyFiles */ = {
+		F5DAB550199EBFF6008E4A8E /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				F5DAB556199EBFF6008E4A8E /* APCAppleCore.h in CopyFiles */,
+				F5DAB556199EBFF6008E4A8E /* APCAppleCore.h in Copy Files */,
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F5241C4F19ACF9F10098A4DF /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = ../StudyDemo/ResearchKit/ResearchKit.framework; sourceTree = "<group>"; };
+		F5241C5719ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+ResearchKit.h"; sourceTree = "<group>"; };
+		F5241C5819ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCDataSubstrate+ResearchKit.m"; sourceTree = "<group>"; };
+		F5241C5B19ACFF070098A4DF /* APCDataSubstrate+CoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+CoreData.h"; sourceTree = "<group>"; };
+		F5241C5C19ACFF070098A4DF /* APCDataSubstrate+CoreData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCDataSubstrate+CoreData.m"; sourceTree = "<group>"; };
 		F560074C19A797E6009F877F /* NSError+APCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+APCAdditions.h"; sourceTree = "<group>"; };
 		F560074D19A797E6009F877F /* NSError+APCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+APCAdditions.m"; sourceTree = "<group>"; };
 		F560075019A7A502009F877F /* APCSageNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSageNetworkManager.h; sourceTree = "<group>"; };
@@ -70,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5241C5019ACF9F10098A4DF /* ResearchKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +143,7 @@
 				F5DAB55E199EBFF6008E4A8E /* APCAppleCoreTests */,
 				F5E4872B19ABDE6300C86FC6 /* APCAppleCoreBundle */,
 				F5DAB553199EBFF6008E4A8E /* Products */,
+				F5241C4F19ACF9F10098A4DF /* ResearchKit.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -194,6 +207,10 @@
 				F5E4873119ABDE8E00C86FC6 /* Model */,
 				F5E4872219ABDBF000C86FC6 /* APCDataSubstrate.h */,
 				F5E4872319ABDBF000C86FC6 /* APCDataSubstrate.m */,
+				F5241C5719ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.h */,
+				F5241C5819ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m */,
+				F5241C5B19ACFF070098A4DF /* APCDataSubstrate+CoreData.h */,
+				F5241C5C19ACFF070098A4DF /* APCDataSubstrate+CoreData.m */,
 			);
 			path = DataSubstrate;
 			sourceTree = "<group>";
@@ -231,7 +248,7 @@
 			buildPhases = (
 				F5DAB54E199EBFF6008E4A8E /* Sources */,
 				F5DAB54F199EBFF6008E4A8E /* Frameworks */,
-				F5DAB550199EBFF6008E4A8E /* CopyFiles */,
+				F5DAB550199EBFF6008E4A8E /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -338,9 +355,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				F560074E19A797E6009F877F /* NSError+APCAdditions.m in Sources */,
+				F5241C5D19ACFF070098A4DF /* APCDataSubstrate+CoreData.m in Sources */,
 				F5E4873419ABDEB500C86FC6 /* APCModel.xcdatamodeld in Sources */,
 				F59C278319A3B65700596ACC /* Reachability.m in Sources */,
 				F5E4872419ABDBF000C86FC6 /* APCDataSubstrate.m in Sources */,
+				F5241C5919ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m in Sources */,
 				F5DAB56C199EC0D0008E4A8E /* APCNetworkManager.m in Sources */,
 				F5E4871219ABB1A300C86FC6 /* APCAppDelegate.m in Sources */,
 				F560075219A7A502009F877F /* APCSageNetworkManager.m in Sources */,
@@ -353,7 +372,9 @@
 			files = (
 				F5E4872519ABDBF000C86FC6 /* APCDataSubstrate.m in Sources */,
 				F58668B819A3D0E000E9C375 /* APCNetworkManagerTest.m in Sources */,
+				F5241C5A19ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m in Sources */,
 				F5E4871319ABB1A300C86FC6 /* APCAppDelegate.m in Sources */,
+				F5241C5E19ACFF070098A4DF /* APCDataSubstrate+CoreData.m in Sources */,
 				F58668BA19A3D99B00E9C375 /* Reachability.m in Sources */,
 				F5E4873519ABDEB500C86FC6 /* APCModel.xcdatamodeld in Sources */,
 				F560075319A7A502009F877F /* APCSageNetworkManager.m in Sources */,
@@ -451,6 +472,10 @@
 		F5DAB564199EBFF6008E4A8E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/dhanush.balachandran/Documents/Projects/AppleParkinson/AppleCore/StudyDemo/ResearchKit,
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -460,6 +485,10 @@
 		F5DAB565199EBFF6008E4A8E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/dhanush.balachandran/Documents/Projects/AppleParkinson/AppleCore/StudyDemo/ResearchKit,
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -500,6 +529,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/dhanush.balachandran/Documents/Projects/AppleParkinson/AppleCore/StudyDemo/ResearchKit,
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -519,6 +552,10 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/dhanush.balachandran/Documents/Projects/AppleParkinson/AppleCore/StudyDemo/ResearchKit,
+				);
 				INFOPLIST_FILE = APCAppleCoreBundle/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
