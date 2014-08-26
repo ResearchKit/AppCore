@@ -24,6 +24,7 @@ extern NSString * const RKStudyStoreRestoredCollectorsKey;
     self.study = [self.studyStore addStudyWithIdentifier:studyIdentifier delegate:self error:&error];
     [error handle];
     [self setUpCollectors];
+    [self.studyStore resume];
 }
 
 //Abstract Methods with blank implementations
@@ -33,10 +34,5 @@ extern NSString * const RKStudyStoreRestoredCollectorsKey;
 /*********************************************************************************/
 #pragma mark - Research Kit RKStudyDelegate
 /*********************************************************************************/
-- (void)studyStore:(RKStudyStore *)studyStore willRestoreState:(NSDictionary *)dict
-{
-    //TODO: Figure out what needs to be done here
-    NSLog(@"Restoring store with dict: %@", dict);
-}
 
 @end
