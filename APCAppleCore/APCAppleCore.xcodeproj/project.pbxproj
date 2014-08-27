@@ -13,6 +13,9 @@
 		F5241C5E19ACFF070098A4DF /* APCDataSubstrate+CoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = F5241C5C19ACFF070098A4DF /* APCDataSubstrate+CoreData.m */; };
 		F5241C9019AD4CB20098A4DF /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5241C8E19AD4CB20098A4DF /* ResearchKit.framework */; };
 		F5241C9119AD4CB20098A4DF /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5241C8E19AD4CB20098A4DF /* ResearchKit.framework */; };
+		F5241CA219AD57230098A4DF /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5241CA019AD56E30098A4DF /* libbz2.dylib */; };
+		F5241CA319AD572A0098A4DF /* libarchive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5241C6E19AD3CC80098A4DF /* libarchive.dylib */; };
+		F5241CA419AD57310098A4DF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5241C7019AD3CCF0098A4DF /* libz.dylib */; };
 		F560074E19A797E6009F877F /* NSError+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F560074D19A797E6009F877F /* NSError+APCAdditions.m */; };
 		F560074F19A797E6009F877F /* NSError+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F560074D19A797E6009F877F /* NSError+APCAdditions.m */; };
 		F560075219A7A502009F877F /* APCSageNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F560075119A7A502009F877F /* APCSageNetworkManager.m */; };
@@ -55,6 +58,7 @@
 		F5241C6E19AD3CC80098A4DF /* libarchive.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libarchive.dylib; path = usr/lib/libarchive.dylib; sourceTree = SDKROOT; };
 		F5241C7019AD3CCF0098A4DF /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F5241C8E19AD4CB20098A4DF /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = ResearchKit/ResearchKit.framework; sourceTree = "<group>"; };
+		F5241CA019AD56E30098A4DF /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
 		F560074C19A797E6009F877F /* NSError+APCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+APCAdditions.h"; sourceTree = "<group>"; };
 		F560074D19A797E6009F877F /* NSError+APCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+APCAdditions.m"; sourceTree = "<group>"; };
 		F560075019A7A502009F877F /* APCSageNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSageNetworkManager.h; sourceTree = "<group>"; };
@@ -92,6 +96,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5241CA419AD57310098A4DF /* libz.dylib in Frameworks */,
+				F5241CA319AD572A0098A4DF /* libarchive.dylib in Frameworks */,
+				F5241CA219AD57230098A4DF /* libbz2.dylib in Frameworks */,
 				F5241C9119AD4CB20098A4DF /* ResearchKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -149,6 +156,7 @@
 				F5DAB553199EBFF6008E4A8E /* Products */,
 				F5241C8E19AD4CB20098A4DF /* ResearchKit.framework */,
 				F5241C7019AD3CCF0098A4DF /* libz.dylib */,
+				F5241CA019AD56E30098A4DF /* libbz2.dylib */,
 				F5241C6E19AD3CC80098A4DF /* libarchive.dylib */,
 			);
 			sourceTree = "<group>";
