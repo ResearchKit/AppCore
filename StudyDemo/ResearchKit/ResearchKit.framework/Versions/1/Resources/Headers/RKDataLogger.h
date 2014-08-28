@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <ResearchKit/RKDefines.h>
 
 @class RKDataLogger;
 @class HKUnit;
@@ -79,7 +80,7 @@
 @property unsigned long long uploadedBytes;
 
 /// Set the file protection mode to use for newly created files.
-@property (copy) NSString *fileProtectionMode;
+@property (assign) RKFileProtectionMode fileProtectionMode;
 
 /// The prefix on the log file names
 @property (copy, readonly) NSString *logName;

@@ -17,7 +17,7 @@
  *
  * A result may be produced either directly in a step or task view controller, or by an RKRecorder subclass.
  */
-@interface RKResult : NSObject <NSSecureCoding>
+@interface RKResult : NSObject
 
 /**
  * @brief Produce a recorder with taskInstanceUUID, taskItemId, and stepItemId filled in
@@ -45,24 +45,9 @@
 @property (nonatomic, copy) NSDate* timestamp;
 
 /**
- * @brief Identifier of study.
+ * @brief Item identifier describing the result
  */
-@property (nonatomic, copy) NSString* studyIdentifier;
-
-/**
- * @brief Result producer's task identifier.
- */
-@property (nonatomic, copy) NSString* taskIdentifier;
-
-/**
- * @brief Result producer's step identifier.
- */
-@property (nonatomic, copy) NSString* stepIdentifier;
-
-/**
- * @brief Result's data type.
- */
-@property (nonatomic, copy) NSString* dataType;
+@property (nonatomic, copy) RKItemIdentifier* itemIdentifier;
 
 /**
  * @brief Result's contentType.
@@ -70,24 +55,16 @@
 @property (nonatomic, copy) NSString* contentType;
 
 /**
- * @brief Suggested name for result file.
- */
-@property (nonatomic, copy) NSString* filename;
-
-/**
  * @brief Device hardware information.
  */
 @property (nonatomic, copy, readonly) NSString* deviceHardware;
 
 /**
- * @brief Convenience method to generate itemIdentifier from taskIdentifier and stepIdentifier
+ * @brief Metadata about the conditions in which this result was acquired
  */
-- (RKItemIdentifier *)itemIdentifier;
+@property (nonatomic, copy) NSDictionary *metadata;
 
-/**
- * @brief Produce dataArchive instance.
- */
-- (RKDataArchive *)dataArchive;
+- (BOOL)addToArchive:(RKDataArchive *)archive error:(NSError * __autoreleasing *)error;
 
 @end
 
@@ -97,9 +74,37 @@
 @interface RKDataResult : RKResult
 
 /**
+ * @brief filename to use when archiving
+ */
+@property (nonatomic, copy) NSString *filename;
+
+/**
  * @brief Data object attached to the result.
  */
 @property (nonatomic, copy) NSData* data;
+
+@end
+
+@interface RKFileResult : RKResult
+
+/**
+ * If ownsContainingDirectory is set, the directory containing the file will
+ * be removed on dealloc.
+ */
+@property (nonatomic) BOOL ownsContainingDirectory;
+
+/**
+ * If ownsFile is set, the file will be removed on dealloc.
+ */
+@property (nonatomic) BOOL ownsFile;
+
+/**
+ * @brief URL of the file produced.
+ *
+ * It is the responsibility of the receiver of the result object to delete
+ * the file when it is no longer needed.
+ */
+@property (nonatomic, copy) NSURL *fileUrl;
 
 @end
 
@@ -131,52 +136,6 @@
 
 @end
 
-
-/**
- * @brief Reports data from an RKAccelerometerRecorder (CMAccelerometerData)
- */
-@interface RKAccelerometerResult : RKResult
-
-/**
- * @brief Accelerometer sampling frequency in Hz.
- */
-@property (nonatomic) double frequency;
-
-/**
- * @brief A list of CMAccelerometerData objects collected over a mount of time by RKAccelerometerRecorder.
- */
-@property (nonatomic, copy) NSArray* dataArray;
-
-@end
-
-/**
- * @brief Reports data from an RKDeviceMotionRecorder (CMDeviceMotion).
- */
-@interface RKDeviceMotionResult : RKResult
-
-/**
- * @brief Device motion sampling frequency in Hz.
- */
-@property (nonatomic) double frequency;
-
-/**
- * @brief A list of CMDeviceMotion collected over a mount of time by RKDeviceMotionRecorder.
- */
-@property (nonatomic, copy) NSArray* dataArray;
-
-@end
-
-/**
- * @brief The RKTouchResult class defines the attributes of touch events data result.
- */
-@interface RKTouchResult : RKResult
-
-/**
- * @brief A list of NSDictionary objects for each captured touch event.
- */
-@property (nonatomic, copy) NSArray* dataArray;
-
-@end
 
 /**
  * @brief The RKConsentResult class defines the attributes of consent step result.
