@@ -1,4 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6220.8" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
-    <elements/>
+    <entity name="APCResult" syncable="YES">
+        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="uploaded" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <relationship name="scheduledTask" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCScheduledTask" inverseName="result" inverseEntity="APCScheduledTask" syncable="YES"/>
+    </entity>
+    <entity name="APCSchedule" syncable="YES">
+        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+    </entity>
+    <entity name="APCScheduledTask" syncable="YES">
+        <attribute name="completed" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="result" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCResult" inverseName="scheduledTask" inverseEntity="APCResult" syncable="YES"/>
+        <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCTask" inverseName="schedules" inverseEntity="APCTask" syncable="YES"/>
+    </entity>
+    <entity name="APCTask" syncable="YES">
+        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="taskDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taskType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="schedules" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="APCScheduledTask" inverseName="task" inverseEntity="APCScheduledTask" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="APCTask" positionX="-954" positionY="497" width="128" height="133"/>
+        <element name="APCSchedule" positionX="-954" positionY="693" width="128" height="90"/>
+        <element name="APCScheduledTask" positionX="-468" positionY="449" width="128" height="118"/>
+        <element name="APCResult" positionX="-720" positionY="333" width="128" height="118"/>
+    </elements>
 </model>
