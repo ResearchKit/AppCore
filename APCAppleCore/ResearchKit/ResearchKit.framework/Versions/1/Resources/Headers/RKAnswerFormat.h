@@ -91,6 +91,14 @@ typedef NS_ENUM(NSInteger, RKChoiceAnswerStyle) {
 @end
 
 /**
+ * @brief The RKBooleanAnswerFormat class allow participant pick from Yes or No from answer options.
+ */
+@interface RKBooleanAnswerFormat : RKAnswerFormat
+
+
+@end
+
+/**
  * @brief The RKAnswerOption class defines  brief/detailed option text for a option which can be included within RKChoiceAnswerFormat.
  */
 @interface RKAnswerOption : NSObject<RKSerialization>

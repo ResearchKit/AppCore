@@ -10,6 +10,7 @@
 
 @class RKResult;
 @class RKRecorder;
+@class RKItemIdentifier;
 
 @protocol RKRecorderDelegate <NSObject>
 
@@ -17,12 +18,12 @@
  * @brief Tells the delegate that the recorder is completed and pass out recording result.
  * @note The methods will be called when recording is stopped.
  */
-- (void)recorder:(RKRecorder*)recorder didCompleteWithResult:(RKResult*)result;
+- (void)recorder:(RKRecorder *)recorder didCompleteWithResult:(RKResult *)result;
 
 /**
  * @brief Tells the delegate that recording failed.
  */
-- (void)recorder:(RKRecorder*)recorder didFailWithError:(NSError**)error;
+- (void)recorder:(RKRecorder *)recorder didFailWithError:(NSError *)error;
 
 @end
 
@@ -52,6 +53,9 @@
 
 @property (nonatomic, weak) id<RKRecorderDelegate> delegate;
 
+
+- (RKItemIdentifier *)itemIdentifier;
+
 /**
  * @brief A preparation step to provide viewController and view before record starting.
  * @note Call this method before starting the recorder.
@@ -75,6 +79,15 @@
  * @return YES if recorder is recording, otherwise NO.
  */
 - (BOOL)isRecording;
+
+
+/**
+ * @brief Recording has failed; stop recording and report the error to the delegate
+ * @discussion Provided as an override point for subclasses.
+ *
+ */
+- (void)finishRecordingWithError:(NSError *)error NS_REQUIRES_SUPER;
+
 
 @end
 
