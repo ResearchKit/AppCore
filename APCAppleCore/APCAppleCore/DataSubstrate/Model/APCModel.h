@@ -9,5 +9,8 @@
 #ifndef APCAppleCore_APCModel_h
 #define APCAppleCore_APCModel_h
 
+#import "NSManagedObject+APCHelper.h"
+
+#import "APCTask+AddOn.h"
 
 #endif

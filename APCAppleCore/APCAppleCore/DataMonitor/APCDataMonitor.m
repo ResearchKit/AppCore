@@ -30,7 +30,9 @@
 
 - (void)appBecameActive
 {
-    
+    APCTask * task = [APCTask newObjectForContext:self.dataSubstrate.mainContext];
+    task.taskType = @"taskType";
+    [task saveToPersistentStore:NULL];
 }
 
 - (void)backgroundFetch:(void (^)(UIBackgroundFetchResult))completionHandler
