@@ -48,26 +48,9 @@
 
 @protocol YMLTimeLineChartViewDelegate <NSObject>
 
-- (void) timeLineChartView:(YMLTimeLineChartView *)chartView didBeginPointer:(YMLAxisPosition)axis;
+- (void) timeLineChartView:(YMLTimeLineChartView *)chartView didBeginPointer:(YMLChartAxisPosition)axis;
 
 @end
-
-
-
-#pragma mark - YMLTimeLineChartUnitsView
-
-@interface YMLTimeLineChartUnitsView : UIView
-
-@property (nonatomic, strong) NSArray *units;
-
-@property (nonatomic, strong) NSArray *labels;
-
-- (CGFloat) locationForUnit:(CGFloat)unit;
-
-- (CGFloat) unitAtLocation:(CGFloat)location;
-
-@end
-
 
 
 #pragma mark - YMLTimeLineChartBarLayer
