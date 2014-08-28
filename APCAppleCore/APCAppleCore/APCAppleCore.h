@@ -21,6 +21,8 @@
 #import "APCDataSubstrate+ResearchKit.h"
 #import "APCDataSubstrate+CoreData.h"
 
+#import "APCDataMonitor.h"
+
 //Categories
 #import "NSError+APCAdditions.h"
 
