@@ -25,14 +25,30 @@
 @property (nonatomic) NSTimeInterval countDown;
 
 /**
+ * @brief Whether to start the count down timer automatically on step start, or click button to start. 
+ * 
+ * Default value is NO.
+ */
+@property (nonatomic) BOOL clickButtonToStartTimer;
+
+/**
  * @brief Make buzz sound from device speaker on step start.
+ *
+ * Default value is NO.
  */
 @property (nonatomic) BOOL buzz;
 
 /**
  * @brief Enable device vibrating alert on step start.
+ *
+ * Default value is NO.
  */
 @property (nonatomic) BOOL vibration;
+
+/**
+ * @brief Caption text to be displayed on the screen.
+ */
+@property (nonatomic, copy) NSString *caption;
 
 /**
  * @brief Instructional text to be displayed on the screen.
@@ -63,6 +79,7 @@
  * @brief Convenience methods.
  */
 - (BOOL)hasCountDown;
+- (BOOL)hasCaption;
 - (BOOL)hasText;
 - (BOOL)hasVoice;
 

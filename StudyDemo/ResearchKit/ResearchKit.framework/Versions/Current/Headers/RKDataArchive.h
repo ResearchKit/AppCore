@@ -37,7 +37,7 @@
                        studyIdentifier:(NSString *)studyIdentifier
                       taskInstanceUUID:(NSUUID *)taskInstanceUUID
                          extraMetadata:(NSDictionary *)extraMetadata
-                        fileProtection:(NSString *)fileProtection;
+                        fileProtection:(RKFileProtectionMode)fileProtection;
 
 /**
  * @brief Add data to the archive
@@ -54,6 +54,7 @@
                   filename:(NSString *)filename
                contentType:(NSString *)contentType
                  timestamp:(NSDate *)timestamp
+                  metadata:(NSDictionary *)metadata
                      error:(NSError * __autoreleasing *)error;
 
 /**
@@ -67,6 +68,7 @@
  */
 - (BOOL)addFileWithURL:(NSURL *)url
            contentType:(NSString *)contentType
+              metadata:(NSDictionary *)metadata
                  error:(NSError * __autoreleasing *)error;
 
 /**
@@ -136,7 +138,7 @@
  * @param itemIdentifier Identifier to use in the archive's index
  * @param studyIdentifier Study identifier to put in the archive's index
  * @param fileProtection Level of file protection to use. Recommend
- *   NSFileProtectionCompleteUnlessOpen or NSFileProtectionCompleteUntilFirstUserAuthentication
+ *   RKFileProtectionCompleteUnlessOpen or RKFileProtectionCompleteUntilFirstUserAuthentication
  * @param maxBytes       Maximum number of uncompressed bytes to add to the archive
  * @param maxFiles       Maximum number of files to add to the archive
  * @param pendingFiles   OUT array containing the URLs of the files that are in the archive
@@ -148,7 +150,7 @@
 + (NSURL *)makeArchiveFromDataLoggerManager:(RKDataLoggerManager *)manager
                              itemIdentifier:(RKItemIdentifier *)itemIdentifier
                             studyIdentifier:(NSString *)studyIdentifier
-                             fileProtection:(NSString *)fileProtection
+                             fileProtection:(RKFileProtectionMode)fileProtection
                           maximumInputBytes:(unsigned long long)maxBytes
                                maximumFiles:(NSInteger)maxFiles
                                pendingFiles:(NSArray * __autoreleasing *)pendingFiles
@@ -169,7 +171,7 @@
  * @param itemIdentifier Identifier to use in the archive's index
  * @param studyIdentifier Study identifier to put in the archive's index
  * @param fileProtection Level of file protection to use. Recommend
- *   NSFileProtectionCompleteUntilFirstUserAuthentication
+ *   RKFileProtectionCompleteUntilFirstUserAuthentication
  * @param maxBytes       Maximum number of uncompressed bytes to add to the archive
  * @param maxFiles       Maximum number of files to add to the archive
  * @param identity       X.509 PEM certificate for CMS encryption.
@@ -182,7 +184,7 @@
 + (NSData *)makeEncryptedArchiveFromDataLoggerManager:(RKDataLoggerManager *)manager
                                        itemIdentifier:(RKItemIdentifier *)itemIdentifier
                                       studyIdentifier:(NSString *)studyIdentifier
-                                       fileProtection:(NSString *)fileProtection
+                                       fileProtection:(RKFileProtectionMode)fileProtection
                                     maximumInputBytes:(unsigned long long)maxBytes
                                          maximumFiles:(NSInteger)maxFiles
                                              identity:(NSData *)identity
