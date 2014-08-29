@@ -1,0 +1,21 @@
+Instructions to create a new model object & saving it
+-----------------------------------------------------
+
+1) Use + newObjectForContext: method to create new model objects
+2) Use - saveToPersistentStore: method to save model objects to persistent store
+3) These helper methods are defined in NSManagedObject+APCHelper category
+
+
+Examples:
+
+APCTask * task = [APCTask newObjectForContext:self.dataSubstrate.mainContext];
+[task saveToPersistentStore:NULL];
+
+APCSchedule * schedule = [APCSchedule newObjectForContext:self.dataSubstrate.mainContext];
+[schedule saveToPersistentStore:NULL];
+
+APCScheduledTask * scheduledTask = [APCScheduledTask newObjectForContext:self.dataSubstrate.mainContext];
+[scheduledTask saveToPersistentStore:NULL];
+
+APCResult * result = [APCResult newObjectForContext:self.dataSubstrate.mainContext];
+[result saveToPersistentStore:NULL];

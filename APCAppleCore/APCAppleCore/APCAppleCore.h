@@ -20,6 +20,10 @@
 #import "APCDataSubstrate.h"
 #import "APCDataSubstrate+ResearchKit.h"
 #import "APCDataSubstrate+CoreData.h"
+#import "APCModel.h"
+
+#import "APCDataMonitor.h"
+
 
 //Categories
 #import "NSError+APCAdditions.h"
