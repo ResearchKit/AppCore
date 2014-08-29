@@ -2,7 +2,7 @@
 //  APCResult.h
 //  APCAppleCore
 //
-//  Created by Dhanush Balachandran on 8/28/14.
+//  Created by Dhanush Balachandran on 8/29/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
@@ -13,10 +13,10 @@
 
 @interface APCResult : NSManagedObject
 
+@property (nonatomic, retain) NSDate * createdAt;
 @property (nonatomic, retain) NSString * uid;
-@property (nonatomic) BOOL uploaded;
-@property (nonatomic) NSTimeInterval createdAt;
-@property (nonatomic) NSTimeInterval updatedAt;
+@property (nonatomic, retain) NSDate * updatedAt;
+@property (nonatomic, retain) NSNumber * uploaded;
 @property (nonatomic, retain) APCScheduledTask *scheduledTask;
 
 @end

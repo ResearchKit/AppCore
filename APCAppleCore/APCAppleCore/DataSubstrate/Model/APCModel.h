@@ -12,5 +12,8 @@
 #import "NSManagedObject+APCHelper.h"
 
 #import "APCTask+AddOn.h"
+#import "APCSchedule+AddOn.h"
+#import "APCScheduledTask+AddOn.h"
+#import "APCResult+AddOn.h"
 
 #endif

@@ -9,12 +9,18 @@
     </entity>
     <entity name="APCSchedule" representedClassName="APCSchedule" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="notificationMessage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="reminder" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="scheduleExpression" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCTask" inverseName="schedule_unused" inverseEntity="APCTask" syncable="YES"/>
     </entity>
     <entity name="APCScheduledTask" representedClassName="APCScheduledTask" syncable="YES">
         <attribute name="completed" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dueOn" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="notificationUID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="result" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCResult" inverseName="scheduledTask" inverseEntity="APCResult" syncable="YES"/>
         <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCTask" inverseName="schedules" inverseEntity="APCTask" syncable="YES"/>
@@ -25,12 +31,13 @@
         <attribute name="taskType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="schedule_unused" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCSchedule" inverseName="task" inverseEntity="APCSchedule" syncable="YES"/>
         <relationship name="schedules" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="APCScheduledTask" inverseName="task" inverseEntity="APCScheduledTask" syncable="YES"/>
     </entity>
     <elements>
-        <element name="APCTask" positionX="-954" positionY="497" width="128" height="133"/>
-        <element name="APCSchedule" positionX="-954" positionY="693" width="128" height="88"/>
-        <element name="APCScheduledTask" positionX="-468" positionY="449" width="128" height="118"/>
         <element name="APCResult" positionX="-720" positionY="333" width="128" height="118"/>
+        <element name="APCSchedule" positionX="-1161" positionY="513" width="128" height="148"/>
+        <element name="APCScheduledTask" positionX="-468" positionY="449" width="128" height="148"/>
+        <element name="APCTask" positionX="-954" positionY="497" width="128" height="148"/>
     </elements>
 </model>
