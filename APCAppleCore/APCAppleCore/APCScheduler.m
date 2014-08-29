@@ -13,9 +13,8 @@
 
 @implementation APCScheduler
 
-- (void)updateDynamicSchedule {
-    
-    
+- (void)updateScheduledTasks {
+    [self fetchSchedule];    
 }
 
 /* Fetches Notification Entities */
@@ -27,7 +26,8 @@
     
     //Persistent context used for background threads.
     NSManagedObjectContext *context = dataSubstrate.persistentContext;
-    
+    context.persistentStoreCoordinator = dataSubstrate.persistentStoreCoordinator;
+
     NSEntityDescription *entityDescription = [NSEntityDescription
                                               entityForName:@"APCSchedule" inManagedObjectContext:context];
     

@@ -11,5 +11,7 @@
 
 @interface APCScheduler : NSObject
 
+- (void)updateScheduledTasks;
+
 @end
 
