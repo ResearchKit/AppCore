@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7B7179CB19AE473100B34319 /* APCScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B7179CA19AE473100B34319 /* APCScheduler.m */; };
+		7BFEB4B319B0D67A0009C917 /* APCScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B7179CA19AE473100B34319 /* APCScheduler.m */; };
+		7BFEB4B519B0DA0A0009C917 /* APCSchedulerTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BFEB4B419B0DA0A0009C917 /* APCSchedulerTestCase.m */; };
 		F5241C5919ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5241C5819ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m */; };
 		F5241C5A19ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5241C5819ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m */; };
 		F5241C5D19ACFF070098A4DF /* APCDataSubstrate+CoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = F5241C5C19ACFF070098A4DF /* APCDataSubstrate+CoreData.m */; };
@@ -48,6 +51,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7B7179C919AE473100B34319 /* APCScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduler.h; sourceTree = "<group>"; };
+		7B7179CA19AE473100B34319 /* APCScheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduler.m; sourceTree = "<group>"; };
+		7BFEB4B419B0DA0A0009C917 /* APCSchedulerTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSchedulerTestCase.m; sourceTree = "<group>"; };
 		F5241C5719ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+ResearchKit.h"; sourceTree = "<group>"; };
 		F5241C5819ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCDataSubstrate+ResearchKit.m"; sourceTree = "<group>"; };
 		F5241C5B19ACFF070098A4DF /* APCDataSubstrate+CoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+CoreData.h"; sourceTree = "<group>"; };
@@ -106,6 +112,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7B7179C819AE46EC00B34319 /* Scheduler */ = {
+			isa = PBXGroup;
+			children = (
+				7B7179C919AE473100B34319 /* APCScheduler.h */,
+				7B7179CA19AE473100B34319 /* APCScheduler.m */,
+			);
+			name = Scheduler;
+			sourceTree = "<group>";
+		};
 		F560074A19A797CE009F877F /* Library */ = {
 			isa = PBXGroup;
 			children = (
@@ -170,6 +185,7 @@
 				F5DAB555199EBFF6008E4A8E /* APCAppleCore.h */,
 				F5E4871019ABB1A300C86FC6 /* APCAppDelegate.h */,
 				F5E4871119ABB1A300C86FC6 /* APCAppDelegate.m */,
+				7B7179C819AE46EC00B34319 /* Scheduler */,
 				F5DAB569199EC085008E4A8E /* NetworkLayer */,
 				F5E4872119ABDBC800C86FC6 /* DataSubstrate */,
 				F59C277F19A3B65700596ACC /* Vendor */,
@@ -183,6 +199,7 @@
 			children = (
 				F58668B719A3D0E000E9C375 /* APCNetworkManagerTest.m */,
 				F560075419A7A81E009F877F /* APCSageNetworkManagerTest.m */,
+				7BFEB4B419B0DA0A0009C917 /* APCSchedulerTestCase.m */,
 				F5DAB55F199EBFF6008E4A8E /* Supporting Files */,
 			);
 			path = APCAppleCoreTests;
@@ -361,6 +378,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F560074E19A797E6009F877F /* NSError+APCAdditions.m in Sources */,
+				7B7179CB19AE473100B34319 /* APCScheduler.m in Sources */,
 				F5241C5D19ACFF070098A4DF /* APCDataSubstrate+CoreData.m in Sources */,
 				F5E4873419ABDEB500C86FC6 /* APCModel.xcdatamodeld in Sources */,
 				F59C278319A3B65700596ACC /* Reachability.m in Sources */,
@@ -376,6 +394,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7BFEB4B319B0D67A0009C917 /* APCScheduler.m in Sources */,
 				F5E4872519ABDBF000C86FC6 /* APCDataSubstrate.m in Sources */,
 				F58668B819A3D0E000E9C375 /* APCNetworkManagerTest.m in Sources */,
 				F5241C5A19ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m in Sources */,
@@ -383,6 +402,7 @@
 				F5241C5E19ACFF070098A4DF /* APCDataSubstrate+CoreData.m in Sources */,
 				F58668BA19A3D99B00E9C375 /* Reachability.m in Sources */,
 				F5E4873519ABDEB500C86FC6 /* APCModel.xcdatamodeld in Sources */,
+				7BFEB4B519B0DA0A0009C917 /* APCSchedulerTestCase.m in Sources */,
 				F560075319A7A502009F877F /* APCSageNetworkManager.m in Sources */,
 				F560075519A7A81E009F877F /* APCSageNetworkManagerTest.m in Sources */,
 				F560074F19A797E6009F877F /* NSError+APCAdditions.m in Sources */,
