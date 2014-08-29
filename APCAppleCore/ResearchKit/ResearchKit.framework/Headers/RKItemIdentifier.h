@@ -7,11 +7,18 @@
 
 #import <Foundation/Foundation.h>
 
+@class RKStep;
+@class RKTask;
+@protocol RKLogicalTask;
+
 /**
  * An RKItemIdentifier is a "."-separated set of strings.
  *
  */
 @interface RKItemIdentifier : NSObject<NSCopying,NSSecureCoding>
+
++ (RKItemIdentifier *)itemIdentifierForStep:(RKStep *)step;
++ (RKItemIdentifier *)itemIdentifierForTask:(id<RKLogicalTask>)task;
 
 -(instancetype)initWithString:(NSString*)string;
 

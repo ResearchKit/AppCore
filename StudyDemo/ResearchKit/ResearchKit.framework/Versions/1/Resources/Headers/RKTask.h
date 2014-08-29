@@ -9,6 +9,12 @@
 #import <ResearchKit/RKStep.h>
 #import <ResearchKit/RKSerialization.h>
 
+typedef struct _RKTaskProgress {
+    NSUInteger index;
+    NSUInteger count;
+} RKTaskProgress;
+
+
 /**
  * @brief The RKLogicalTask protocol defines necessary methods describing a task object.
  *
@@ -45,6 +51,15 @@
  * @return A step before reference step, if there is none return nil.
  */
 - (RKStep *)stepBeforeStep:(RKStep *)step withSurveyResults:(NSDictionary *)surveyResults;
+
+/**
+ * @brief Progress of current step.
+ * @param step    Reference step.
+ * @param surveyResults   Collected survey results til now (keys are step identifiers), which assist dynamic selection of the steps.
+ * @discussion If this method is not implemented, the progress label will not show.
+ * @return Current step's index and total number of steps.
+ */
+- (RKTaskProgress)progressOfCurrentStep:(RKStep *)step withSurveyResults:(NSDictionary *)surveyResults;
 
 @end
 

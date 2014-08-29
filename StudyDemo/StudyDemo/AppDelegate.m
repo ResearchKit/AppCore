@@ -219,7 +219,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     if (! logger)
     {
         logger = [_logManager addJSONDataLoggerForLogName:identifier];
-        logger.fileProtectionMode = NSFileProtectionCompleteUnlessOpen;
+        logger.fileProtectionMode = RKFileProtectionCompleteUnlessOpen;
     }
     BOOL success = [logger appendObjects:[collector serializableObjectsForObjects:objects] error:nil];
     NSLog(@"Health log (%d)", success);
@@ -233,7 +233,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     if (! logger)
     {
         logger = [_logManager addJSONDataLoggerForLogName:logName];
-        logger.fileProtectionMode = NSFileProtectionCompleteUnlessOpen;
+        logger.fileProtectionMode = RKFileProtectionCompleteUnlessOpen;
     }
     BOOL success = [logger appendObjects:[collector serializableObjectsForObjects:objects] error:nil];
     NSLog(@"Motion log (%d)", success);
