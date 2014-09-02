@@ -8,107 +8,183 @@
 
 
 #import "APCScheduler.h"
-#import "APCAppDelegate.h"
 #import "APCDataSubstrate.h"
+
+#import "NSManagedObject+APCHelper.h"
+#import "APCSchedule.h"
+#import "APCScheduledTask.h"
+#import "APCTask.h"
+#import "APCSageNetworkManager.h"
+
+@interface APCScheduler()
+
+@property  (nonatomic, strong)  NSArray                 *schedules;
+
+//Declaring as weak so as not to hold on to below objects
+@property  (weak, nonatomic)    APCDataSubstrate        *dataSubstrate;
+@property (weak, nonatomic)     APCSageNetworkManager   *networkManager;
+
+@end
 
 @implementation APCScheduler
 
-- (void)updateScheduledTasks {
-    [self fetchSchedule];    
-}
+enum {MIDNIGHT, TWILIGHT, MORNING, NOON, MIDNOON, EVENING};
 
-/* Fetches Notification Entities */
-- (NSArray *)fetchSchedule {
-
-    //Fetch Schedule
-    APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
-    APCDataSubstrate *dataSubstrate = appDelegate.dataSubstrate;
+- (instancetype)initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate networkManager: (APCSageNetworkManager*) networkManager {
     
-    //Persistent context used for background threads.
-    NSManagedObjectContext *context = dataSubstrate.persistentContext;
-    context.persistentStoreCoordinator = dataSubstrate.persistentStoreCoordinator;
-
-    NSEntityDescription *entityDescription = [NSEntityDescription
-                                              entityForName:@"APCSchedule" inManagedObjectContext:context];
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:entityDescription];
-    
-    NSError *error = nil;
-    NSArray *schedules = [context executeFetchRequest:fetchRequest error:&error];
-    
-    if (schedules == nil) {
-        // Deal with error...
-        return schedules;
+    self = [super init];
+    if (self) {
+        self.dataSubstrate = dataSubstrate;
+        self.networkManager = networkManager;
     }
-
-    
-//    @{@"href" : @"applicationURLForActivity",
-//      @"type" : @"NSCalendarUnit Representative of recurrence or ONE_TIME or IMMEDIATE",
-//      @"dueOn" : @"",
-//      @"Task" : @"TASK_NAME",
-//      @"notificationUID" : @"stringRepresentationOfUID",
-//      @"UUID" : @"Represent scheduled object from server",
-//      @"message" : @"Message",
-//      }
-    
-    NSArray *scheduless = @[
-                           @{
-                               @"taskGUID" : @"12345",
-                               @"dueOn" : @"30",
-                               @"createdAt" : @"12345",
-                               @"updatedAt" : @"12345",
-                               @"reminder" : @true
-                             },
-                           @{
-                               @"taskGUID" : @"12345",
-                               @"dueOn" : @"60",
-                               @"createdAt" : @"12345",
-                               @"updatedAt" : @"12345",
-                               @"reminder" : @false
-                             },
-                           @{
-                               @"taskGUID" : @"12345",
-                               @"dueOn" : @"90",
-                               @"createdAt" : @"12345",
-                               @"updatedAt" : @"12345",
-                               @"reminder" : @true
-                             }
-                           ];
-    
-    //TODO returning schedules but I should be returning just 'schedule'
-    return scheduless;
+    return self;
 }
 
-- (void)scheduleLocalNotification:(NSString *)schedule {
-    UILocalNotification *notif = [[UILocalNotification alloc] init];
+- (void)updateScheduledTasks:(NSArray *)schedules {
     
+    self.schedules = schedules;
+    
+    for(APCSchedule *schedule in schedules) {
 
-    //notif.repeatInterval =;
+        [self setScheduledTask:schedule];
+    }
 }
 
-- (void)clearAllLocalNotifications {
+- (void)setScheduledTask:(APCSchedule *)schedule {
     
-    [[UIApplication sharedApplication] cancelAllLocalNotifications];
-}
-
-- (void)cancelLocationNotifications:(NSString *)notificationUID {
+    NSString *scheduleExpression = schedule.scheduleExpression;
     
-    NSArray *notifications = [[UIApplication sharedApplication] scheduledLocalNotifications];
+    NSArray* tasks = [scheduleExpression componentsSeparatedByString: @","];
     
-    NSLog(@"Get array of notifs");
-    
-    for (UILocalNotification *notif in notifications) {
+    for(NSString *task in tasks) {
         
-        NSDictionary *userInfoCurrent = notif.userInfo;
-        NSString *uid=[NSString stringWithFormat:@"%@",[userInfoCurrent valueForKey:@"uid"]];
+        APCScheduledTask * scheduledTask = [APCScheduledTask newObjectForContext:self.dataSubstrate.mainContext];
         
-        if ([uid isEqualToString:notificationUID]) {
-            [[UIApplication sharedApplication] cancelLocalNotification:notif];
-            break;
+        scheduledTask.completed = 0;
+        scheduledTask.createdAt = schedule.createdAt;
+        scheduledTask.updatedAt = schedule.updatedAt;
+        scheduledTask.task = schedule.task;
+        
+        NSDate *dueOn = [self setTimeWithInterval:task];
+        
+        scheduledTask.dueOn = dueOn;
+        
+        [scheduledTask saveToPersistentStore:NULL];
+        
+        //Get the APCScheduledTask ID to reference
+        NSString *objectId = [[scheduledTask.objectID URIRepresentation] absoluteString];
+        
+        //Set a local notification at time of event
+        [self scheduleLocalNotification:schedule.notificationMessage withDate:dueOn withTaskType:schedule.task.taskType withAPCScheduleTaskId:objectId andReminder:0];
+    }
+}
+
+- (NSDate *)setTimeWithInterval:(NSString *)expression {
+    
+    //Period or Interval : Time of day : Interval within 4 hours : min, hourly, daily, weekly, monthly : whether a reminder is set
+    //0 - 1              : 0-5         : 0 0 0 0 0               : 0 - 4                               : 0 - 1 25% of time interval
+
+    
+    NSArray* timeComponents = [expression componentsSeparatedByString: @":"];
+    
+    [timeComponents objectAtIndex:1];
+    
+    [timeComponents objectAtIndex:1];
+    
+    [timeComponents objectAtIndex:1];
+    
+    
+    NSInteger *number;
+    
+    switch ([[timeComponents objectAtIndex:2]  intValue]) {
+        case MIDNIGHT:  break;
+        case TWILIGHT:  break;
+        case MORNING:   break;
+        case NOON:      break;
+        case MIDNOON:   break;
+        case EVENING:   break;
+        default: ;
+    }
+    
+    
+    NSDate *now = [NSDate date];
+    
+    
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    
+    NSDateComponents *components = [calendar components:NSCalendarUnitDay    |
+                                                        NSCalendarUnitMonth  |
+                                                        NSCalendarUnitYear   |
+                                                        NSCalendarUnitEra    |
+                                                        NSCalendarUnitSecond |
+                                                        NSCalendarUnitMinute |
+                                                        NSCalendarUnitHour   |
+                                                        NSCalendarUnitWeekday
+                                               fromDate:now];
+    
+    [components setHour:10];
+    NSDate *today10am = [calendar dateFromComponents:components];
+
+    [today10am dateByAddingTimeInterval:123124];
+    
+    return today10am;
+}
+
+- (void)scheduleLocalNotification:(NSString *)message withDate:(NSDate *)dueOn withTaskType:(NSString *)taskType withAPCScheduleTaskId:(NSString *)objectUID andReminder:(int)reminder  {
+
+    // Schedule the notification
+    UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+    localNotification.fireDate = dueOn;
+    localNotification.alertBody = message;
+    
+    localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+    
+    NSDictionary *notificationInfo =     @{
+                                           @"taskType" : taskType,
+                                           @"scheduledTaskId" : objectUID
+                                           };
+    
+    if (reminder) {
+        [notificationInfo setValue:@"reminder" forKey:@"reminder"];
+    }
+    
+    localNotification.userInfo = notificationInfo;
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+}
+
+- (void)clearAllScheduledTaskNotifications {
+    
+    UIApplication *app = [UIApplication sharedApplication];
+    NSArray *eventArray = [app scheduledLocalNotifications];
+    
+    for (int i=0; i<[eventArray count]; i++) {
+        UILocalNotification* oneEvent = [eventArray objectAtIndex:i];
+        
+        NSDictionary *userInfoCurrent = oneEvent.userInfo;
+        
+        //If scheduled task identification exists then it was issued by scheduler and can be deleted
+        if ([userInfoCurrent objectForKey:@"scheduledTaskId"] ) {
+            [app cancelLocalNotification:oneEvent];
         }
     }
 }
 
+- (void)clearNotificationActivityType:(NSString *)taskType {
+    
+    UIApplication *app = [UIApplication sharedApplication];
+    NSArray *eventArray = [app scheduledLocalNotifications];
+    
+    for (int i=0; i<[eventArray count]; i++) {
+        UILocalNotification* oneEvent = [eventArray objectAtIndex:i];
+        
+        NSDictionary *userInfoCurrent = oneEvent.userInfo;
+        
+        //If scheduled task activity exists then delete
+        if ([[userInfoCurrent objectForKey:@"taskType"] isEqualToString:taskType]) {
+            [app cancelLocalNotification:oneEvent];
+        }
+    }
+}
 
 @end

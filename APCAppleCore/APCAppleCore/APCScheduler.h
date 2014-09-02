@@ -9,9 +9,15 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+@class APCDataSubstrate, APCSageNetworkManager;
+
 @interface APCScheduler : NSObject
 
-- (void)updateScheduledTasks;
+- (void)updateScheduledTasks:(NSArray *)schedules;
+- (instancetype)initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate networkManager: (APCSageNetworkManager*) networkManager;
+
+- (void)clearNotificationActivityType:(NSString *)taskType;
+- (void)clearAllScheduledTaskNotifications;
 
 @end
 
