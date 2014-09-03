@@ -11,4 +11,21 @@
 
 @implementation APCAppDelegate
 
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    self.dataMonitor = [[APCDataMonitor alloc] initWithDataSubstrate:self.dataSubstrate networkManager:(APCSageNetworkManager*)self.networkManager];
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    return YES;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    [self.dataMonitor appBecameActive];
+}
+
+- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    [self.dataMonitor backgroundFetch:completionHandler];
+}
+
 @end
