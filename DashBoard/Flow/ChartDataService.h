@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "ChartDataEnumerator.h"
+
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, ChartDataServiceType) {
@@ -32,7 +34,7 @@ typedef NS_ENUM(NSUInteger, ChartDataServiceType) {
 @protocol ChartDataServiceDelegate <NSObject>
 
 @optional
-- (void) chartDataService:(ChartDataService *)service didReceiveNewValues:(NSEnumerator *)enumerator forServiceType:(ChartDataServiceType)serviceType;
+- (void) chartDataService:(ChartDataService *)service didReceiveNewValues:(ChartDataEnumerator *)enumerator forServiceType:(ChartDataServiceType)serviceType;
 
 @end
 

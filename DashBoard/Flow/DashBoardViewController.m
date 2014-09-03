@@ -7,10 +7,9 @@
 //
 
 #import "DashBoard.h"
-#import "YMLAxisView.h"
-#import "YMLChartView.h"
-#import "YMLLinePlotView.h"
+#import "HKManager.h"
 #import "ChartDataService.h"
+#import "YMLLineChartView.h"
 #import "YMLTimeLineChartView.h"
 #import "DashBoardViewController.h"
 
@@ -26,7 +25,9 @@ static NSUInteger const kDashBoardCardMargin        = 10;
 
 @end
 
-@implementation DashBoardViewController
+@implementation DashBoardViewController {
+    YMLLineChartView *lineCharView;
+}
 
 - (void) loadView {
     self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -36,6 +37,59 @@ static NSUInteger const kDashBoardCardMargin        = 10;
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    [[HKManager sharedManager] authorizeWithCompletion:^(NSError *error) {
+        if (error) {
+            NSLog(@"%@", error);
+        }
+        else {
+//            NSDate *date = [NSDate date];
+//            for (int i = 0; i < 3; i++) {
+//                date = [date dateByAddingTimeInterval:(60 * 60) + i];
+//                
+//                int lowerBound = 70;
+//                int upperBound = 90;
+//                int rndValue = lowerBound + arc4random() % (upperBound - lowerBound);
+//                
+//                NSLog(@"%i", rndValue);
+//                
+//                [[HKManager sharedManager] storeHeartBeatsAtMinute:rndValue startDate:date endDate:date completion:^(NSError *err) {
+//                    if (err) {
+//                        NSLog(@"%@", err);
+//                    }
+//                }];
+//            }
+            
+            [[HKManager sharedManager] heartBeatsCompletion:^(NSArray *result, NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSMutableArray *yAxis = [NSMutableArray array];
+                    NSMutableArray *xAxis = [NSMutableArray array];
+                    NSMutableArray *values = [NSMutableArray array];
+                    
+                    HKUnit *unit = [[HKUnit countUnit] unitDividedByUnit:[HKUnit minuteUnit]];
+                    
+                    NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
+                    dateFormater.dateFormat = @"HH";
+                    
+                    for (HKQuantitySample *sample in result) {
+                        CGFloat x = [[dateFormater stringFromDate:sample.startDate] integerValue];
+                        CGFloat y = [[sample quantity] doubleValueForUnit:unit];
+                        
+                        [xAxis addObject:@(x)];
+                        [yAxis addObject:@(y)];
+                        [values addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
+                    }
+                    
+                    lineCharView.xUnits = xAxis;
+                    lineCharView.yUnits = @[@(70), @(75), @(80), @(85), @(90)];
+                    
+                    lineCharView.values = values;
+                    [lineCharView draw];
+                });
+            }];
+        }
+    }];
+    
     
     self.cards = [[DashBoard new] availableCards];
     
@@ -136,55 +190,44 @@ static NSUInteger const kDashBoardCardMargin        = 10;
     CGRect frame = [self nextFrameForCard];
     frame.size.height = 150;
     
-    YMLChartView *chartView = [[YMLChartView alloc] initWithFrame:frame];
-    chartView.layer.borderColor = [UIColor grayColor].CGColor;
-    chartView.layer.borderWidth = 1.0;
-    chartView.layer.cornerRadius = 5;
-    
-    // X AXIS
-    {
-        YMLAxisView *coversAxis = [[YMLAxisView alloc ] initWithPosition:YMLAxisPositionBottom];
-        coversAxis.size = CGSizeMake(CGRectGetWidth(chartView.frame), 20);
-        coversAxis.font = [UIFont systemFontOfSize:10];
-        coversAxis.textColor = [UIColor blackColor];
-        coversAxis.minimumInterItemSpacing = 0;
-        coversAxis.values = @[@"August 8", @"9", @"10", @"11"];
-        [chartView addAxisView:coversAxis toPosition:YMLAxisPositionBottom];
-    }
-    
-    // Y AXIS
-    {
-        YMLAxisView *coversAxis = [[YMLAxisView alloc ] initWithPosition:YMLAxisPositionLeft];
-        coversAxis.size = CGSizeMake(20, CGRectGetHeight(chartView.frame));
-        coversAxis.font = [UIFont systemFontOfSize:10];
-        coversAxis.textColor = [UIColor blackColor];
-        coversAxis.minimumInterItemSpacing = 0;
-        coversAxis.values = @[@"10", @"50", @"30", @"40"];
-        
-        [chartView addAxisView:coversAxis toPosition:YMLAxisPositionLeft];
-    }
-    
-    // line Plot 1
-    {
-        YMLLinePlotView *trendLinePlot = [[YMLLinePlotView alloc] initWithOrientation:YMLChartOrientationVertical];
-        trendLinePlot.leftMargin = 10;
-        trendLinePlot.topMargin = 10;
-        trendLinePlot.rightMargin = 10;
-        trendLinePlot.bottomMargin = 0;
-        trendLinePlot.backgroundColor = [UIColor clearColor];
-        trendLinePlot.pointColor = [UIColor blueColor];
-        trendLinePlot.lineColor = [UIColor blueColor];
-        trendLinePlot.pointSize = CGSizeMake(8, 8);
-        trendLinePlot.lineWidth = 1;
-        trendLinePlot.symbol = YMLPointSymbolCircle;
-        trendLinePlot.values = @[@(10), @(5), @(10), @(5)];
-        [chartView addPlot:trendLinePlot withScaleAxis:YMLAxisPositionLeft titleAxis:YMLAxisPositionBottom];
-    }
+    lineCharView = [[YMLLineChartView alloc] initWithFrame:frame];
+    lineCharView.layer.borderColor = [UIColor grayColor].CGColor;
+    lineCharView.layer.borderWidth = 1.0;
+    lineCharView.layer.cornerRadius = 5;
+    lineCharView.layer.masksToBounds = YES;
     
     
-    [self.cardsScrollView addSubview:chartView];
+    lineCharView.xUnits = @[@(8), @(9), @(10), @(11), @(12)];
     
-    self.cardsScrollView.contentSize = CGSizeMake(CGRectGetWidth(self.cardsScrollView.bounds), CGRectGetMaxY(chartView.frame));
+    lineCharView.yUnits = @[@(70), @(75), @(80), @(85), @(90)];
+    
+    
+    
+    
+    lineCharView.values = @[
+                            [NSValue valueWithCGPoint:CGPointMake(8, 75)],
+                            [NSValue valueWithCGPoint:CGPointMake(9, 85)],
+                            [NSValue valueWithCGPoint:CGPointMake(10, 75)],
+                            [NSValue valueWithCGPoint:CGPointMake(11, 90)],
+                            [NSValue valueWithCGPoint:CGPointMake(12, 80)]
+                            ];
+    
+    
+    
+    
+    lineCharView.lineLayer.strokeColor = [UIColor redColor].CGColor;
+    lineCharView.lineLayer.shadowOpacity = 0.5;
+    lineCharView.lineLayer.shadowOffset = CGSizeMake(0, 1);
+    lineCharView.lineLayer.shadowRadius = 2;
+    lineCharView.lineLayer.lineWidth = 1.5;
+    lineCharView.markerColor = [UIColor grayColor];
+    lineCharView.markerRadius = 3;
+    
+    [self.cardsScrollView addSubview:lineCharView];
+    
+    [lineCharView draw];
+    
+    self.cardsScrollView.contentSize = CGSizeMake(CGRectGetWidth(self.cardsScrollView.bounds), CGRectGetMaxY(lineCharView.frame));
 }
 
 - (void) addStepsCard {
@@ -195,20 +238,20 @@ static NSUInteger const kDashBoardCardMargin        = 10;
     CGRect frame = [self nextFrameForCard];
     frame.size.height = 150;
     
-    YMLTimeLineChartView *chartView = [[YMLTimeLineChartView alloc] initWithFrame:frame orientation:YMLChartOrientationHorizontal];
-    chartView.datasource = self;
-    chartView.layer.borderColor = [UIColor grayColor].CGColor;
-    chartView.layer.borderWidth = 1.0;
-    chartView.layer.cornerRadius = 5;
-    chartView.layer.masksToBounds = YES;
-    [self.cardsScrollView addSubview:chartView];
+    YMLTimeLineChartView *timeLineChartView = [[YMLTimeLineChartView alloc] initWithFrame:frame orientation:YMLChartOrientationHorizontal];
+    timeLineChartView.datasource = self;
+    timeLineChartView.layer.borderColor = [UIColor grayColor].CGColor;
+    timeLineChartView.layer.borderWidth = 1.0;
+    timeLineChartView.layer.cornerRadius = 5;
+    timeLineChartView.layer.masksToBounds = YES;
+    [self.cardsScrollView addSubview:timeLineChartView];
     
-    [chartView redrawCanvas];
-    [chartView addBar:[YMLTimeLineChartBarLayer layer] fromUnit:10 toUnit:12 animation:YES];
-    [chartView addBar:[YMLTimeLineChartBarLayer layer] fromUnit:9.5 toUnit:10.5 animation:YES];
-    [chartView addBar:[YMLTimeLineChartBarLayer layer] fromUnit:8 toUnit:10 animation:YES];
+    [timeLineChartView redrawCanvas];
+    [timeLineChartView addBar:[YMLTimeLineChartBarLayer layer] fromUnit:10 toUnit:12 animation:YES];
+    [timeLineChartView addBar:[YMLTimeLineChartBarLayer layer] fromUnit:9.5 toUnit:10.5 animation:YES];
+    [timeLineChartView addBar:[YMLTimeLineChartBarLayer layer] fromUnit:8 toUnit:10 animation:YES];
 
-    self.cardsScrollView.contentSize = CGSizeMake(CGRectGetWidth(self.cardsScrollView.bounds), CGRectGetMaxY(chartView.frame));
+    self.cardsScrollView.contentSize = CGSizeMake(CGRectGetWidth(self.cardsScrollView.bounds), CGRectGetMaxY(timeLineChartView.frame));
 }
 
 - (void) addMyJournalCard {

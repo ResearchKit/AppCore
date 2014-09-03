@@ -46,7 +46,7 @@
 - (void) didReceiveNewValues:(NSArray *)newValues {
     newValues = @[@(8), @(9), @(10), @(11), @(12)];
     
-    [self.delegate chartDataService:self didReceiveNewValues:newValues.objectEnumerator forServiceType:ChartDataServiceTypeHeartRate];
+    [self.delegate chartDataService:self didReceiveNewValues:newValues.chartEnumerator forServiceType:ChartDataServiceTypeHeartRate];
 }
 
 @end
