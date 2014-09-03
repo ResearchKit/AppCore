@@ -9,12 +9,12 @@
 
 #import "APCScheduler.h"
 #import "APCDataSubstrate.h"
-
 #import "NSManagedObject+APCHelper.h"
 #import "APCSchedule.h"
 #import "APCScheduledTask.h"
 #import "APCTask.h"
 #import "APCSageNetworkManager.h"
+#import "APCScheduleInterpreter.h"
 
 @interface APCScheduler()
 
@@ -24,11 +24,11 @@
 @property  (weak, nonatomic)    APCDataSubstrate        *dataSubstrate;
 @property (weak, nonatomic)     APCSageNetworkManager   *networkManager;
 
+@property (strong, nonatomic) APCScheduleInterpreter *scheduleInterpreter;
+
 @end
 
 @implementation APCScheduler
-
-enum {MIDNIGHT, TWILIGHT, MORNING, NOON, MIDNOON, EVENING};
 
 - (instancetype)initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate networkManager: (APCSageNetworkManager*) networkManager {
     
@@ -36,8 +36,37 @@ enum {MIDNIGHT, TWILIGHT, MORNING, NOON, MIDNOON, EVENING};
     if (self) {
         self.dataSubstrate = dataSubstrate;
         self.networkManager = networkManager;
+        
+        self.scheduleInterpreter = [[APCScheduleInterpreter alloc] init];
     }
     return self;
+}
+
+- (BOOL)scheduleUpdated:(APCSchedule *)schedule {
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+
+    NSManagedObjectContext *moc = [[NSManagedObjectContext alloc]
+                                   initWithConcurrencyType:NSConfinementConcurrencyType];
+    
+    moc.parentContext = self.dataSubstrate.mainContext;
+    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"APCScheduledTask"
+                                              inManagedObjectContext:self.dataSubstrate.persistentContext ];
+    [request setEntity:entity];
+    
+    NSMutableArray *dates = [self.scheduleInterpreter taskDates:schedule.scheduleExpression];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dueOn = %@, task = %@", [dates objectAtIndex:0], schedule.task];
+    [request setPredicate:predicate];
+    NSError *error;
+    NSArray *array = [moc executeFetchRequest:request error:&error];
+
+    if (!array.count) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (void)updateScheduledTasks:(NSArray *)schedules {
@@ -46,7 +75,8 @@ enum {MIDNIGHT, TWILIGHT, MORNING, NOON, MIDNOON, EVENING};
     
     for(APCSchedule *schedule in schedules) {
 
-        [self setScheduledTask:schedule];
+        if (![self scheduleUpdated:schedule]) [self setScheduledTask:schedule];
+
     }
 }
 
@@ -54,20 +84,17 @@ enum {MIDNIGHT, TWILIGHT, MORNING, NOON, MIDNOON, EVENING};
     
     NSString *scheduleExpression = schedule.scheduleExpression;
     
-    NSArray* tasks = [scheduleExpression componentsSeparatedByString: @","];
+    NSMutableArray *dates = [self.scheduleInterpreter taskDates:scheduleExpression];
     
-    for(NSString *task in tasks) {
-        
+    for (NSDate *date in dates) {
+     
         APCScheduledTask * scheduledTask = [APCScheduledTask newObjectForContext:self.dataSubstrate.mainContext];
         
-        scheduledTask.completed = 0;
-        scheduledTask.createdAt = schedule.createdAt;
-        scheduledTask.updatedAt = schedule.updatedAt;
+        scheduledTask.completed = [NSNumber numberWithInt:0];
+        scheduledTask.createdAt = [NSDate date];
+        scheduledTask.dueOn = date;
+        scheduledTask.updatedAt = [NSDate date];
         scheduledTask.task = schedule.task;
-        
-        NSDate *dueOn = [self setTimeWithInterval:task];
-        
-        scheduledTask.dueOn = dueOn;
         
         [scheduledTask saveToPersistentStore:NULL];
         
@@ -75,60 +102,10 @@ enum {MIDNIGHT, TWILIGHT, MORNING, NOON, MIDNOON, EVENING};
         NSString *objectId = [[scheduledTask.objectID URIRepresentation] absoluteString];
         
         //Set a local notification at time of event
-        [self scheduleLocalNotification:schedule.notificationMessage withDate:dueOn withTaskType:schedule.task.taskType withAPCScheduleTaskId:objectId andReminder:0];
+        [self scheduleLocalNotification:schedule.notificationMessage withDate:date withTaskType:schedule.task.taskType withAPCScheduleTaskId:objectId andReminder:0];
     }
 }
 
-- (NSDate *)setTimeWithInterval:(NSString *)expression {
-    
-    //Period or Interval : Time of day : Interval within 4 hours : min, hourly, daily, weekly, monthly : whether a reminder is set
-    //0 - 1              : 0-5         : 0 0 0 0 0               : 0 - 4                               : 0 - 1 25% of time interval
-
-    
-    NSArray* timeComponents = [expression componentsSeparatedByString: @":"];
-    
-    [timeComponents objectAtIndex:1];
-    
-    [timeComponents objectAtIndex:1];
-    
-    [timeComponents objectAtIndex:1];
-    
-    
-    NSInteger *number;
-    
-    switch ([[timeComponents objectAtIndex:2]  intValue]) {
-        case MIDNIGHT:  break;
-        case TWILIGHT:  break;
-        case MORNING:   break;
-        case NOON:      break;
-        case MIDNOON:   break;
-        case EVENING:   break;
-        default: ;
-    }
-    
-    
-    NSDate *now = [NSDate date];
-    
-    
-    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    
-    NSDateComponents *components = [calendar components:NSCalendarUnitDay    |
-                                                        NSCalendarUnitMonth  |
-                                                        NSCalendarUnitYear   |
-                                                        NSCalendarUnitEra    |
-                                                        NSCalendarUnitSecond |
-                                                        NSCalendarUnitMinute |
-                                                        NSCalendarUnitHour   |
-                                                        NSCalendarUnitWeekday
-                                               fromDate:now];
-    
-    [components setHour:10];
-    NSDate *today10am = [calendar dateFromComponents:components];
-
-    [today10am dateByAddingTimeInterval:123124];
-    
-    return today10am;
-}
 
 - (void)scheduleLocalNotification:(NSString *)message withDate:(NSDate *)dueOn withTaskType:(NSString *)taskType withAPCScheduleTaskId:(NSString *)objectUID andReminder:(int)reminder  {
 
