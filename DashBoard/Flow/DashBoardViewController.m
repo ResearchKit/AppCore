@@ -195,8 +195,15 @@ static NSUInteger const kDashBoardCardMargin        = 10;
     lineCharView.layer.borderWidth = 1.0;
     lineCharView.layer.cornerRadius = 5;
     lineCharView.layer.masksToBounds = YES;
+    
+    
     lineCharView.xUnits = @[@(8), @(9), @(10), @(11), @(12)];
+    
     lineCharView.yUnits = @[@(70), @(75), @(80), @(85), @(90)];
+    
+    
+    
+    
     lineCharView.values = @[
                             [NSValue valueWithCGPoint:CGPointMake(8, 75)],
                             [NSValue valueWithCGPoint:CGPointMake(9, 85)],
@@ -204,6 +211,9 @@ static NSUInteger const kDashBoardCardMargin        = 10;
                             [NSValue valueWithCGPoint:CGPointMake(11, 90)],
                             [NSValue valueWithCGPoint:CGPointMake(12, 80)]
                             ];
+    
+    
+    
     
     lineCharView.lineLayer.strokeColor = [UIColor redColor].CGColor;
     lineCharView.lineLayer.shadowOpacity = 0.5;
