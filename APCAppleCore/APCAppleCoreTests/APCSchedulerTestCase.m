@@ -197,4 +197,8 @@
     
 }
 
+- (void)testSetLocalNotification {
+    [_scheduler scheduleLocalNotification:@"Hello, world" withDate:[NSDate date] withTaskType:@"WALK" withAPCScheduleTaskId:@"12345" andReminder:1];
+}
+
 @end

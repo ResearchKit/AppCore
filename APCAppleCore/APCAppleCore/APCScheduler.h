@@ -21,5 +21,7 @@
 - (void)clearAllScheduledTaskNotifications;
 - (BOOL)scheduleUpdated:(APCSchedule *)schedule;
 - (void)setScheduledTask:(APCSchedule *)schedule;
+- (void)scheduleLocalNotification:(NSString *)message withDate:(NSDate *)dueOn withTaskType:(NSString *)taskType withAPCScheduleTaskId:(NSString *)objectUID andReminder:(int)reminder;
+
 @end
 

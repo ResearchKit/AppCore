@@ -118,10 +118,10 @@
     
     localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
     
-    NSDictionary *notificationInfo =     @{
-                                           @"taskType" : taskType,
-                                           @"scheduledTaskId" : objectUID
-                                           };
+    NSDictionary *notificationInfo = @{@"scheduledTaskId" : objectUID};
+  
+    //TODO Save the activity type in the local notification later so it's accessible by a view controller later.
+    //@{@"taskType" : taskType, @"scheduledTaskId" : objectUID};
     
     if (reminder) {
         
