@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 
 @class APCDataSubstrate, APCSageNetworkManager;
+@class APCSchedule;
 
 @interface APCScheduler : NSObject
 
@@ -18,6 +19,6 @@
 
 - (void)clearNotificationActivityType:(NSString *)taskType;
 - (void)clearAllScheduledTaskNotifications;
-
+- (BOOL)scheduleUpdated:(APCSchedule *)schedule;
 @end
 

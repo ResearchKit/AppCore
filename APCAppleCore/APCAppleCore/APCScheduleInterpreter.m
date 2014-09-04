@@ -12,9 +12,6 @@
 
 - (NSMutableArray *)taskDates:(NSString *)expression {
     
-    //TODO this is a shim
-    int userWakeTime = 8;
-    
     NSMutableArray *taskDates = [[NSMutableArray alloc] init];
     
     NSArray* expressionComponents = [expression componentsSeparatedByString: @":"];
@@ -28,8 +25,9 @@
         
         for (int i = 0; i < [numberOfHours count]; i++) {
             
+            NSDate * zeroHour = [self localizedAbsoluteHour];
             int executionHour = [[numberOfHours objectAtIndex:i] intValue];
-            NSDate *taskDate = [self createDateFrom:0 atHour:executionHour];
+            NSDate *taskDate = [self createDateFrom:zeroHour atHour:executionHour];
             [taskDates addObject:taskDate];
             
         }
@@ -37,8 +35,9 @@
         
         for (int i = 0; i < [numberOfHours count]; i++) {
             
+            NSDate * zeroHour = [self relativeHour];
             int executionHour = [[numberOfHours objectAtIndex:i] intValue];
-            NSDate *taskDate = [self createDateFrom:userWakeTime atHour:executionHour];
+            NSDate *taskDate = [self createDateFrom:zeroHour atHour:executionHour];
             [taskDates addObject:taskDate];        }
     }
     
@@ -50,13 +49,14 @@
     return [expression componentsSeparatedByString:@","];
 }
 
-- (NSDate *)createDateFrom:(int)startHour atHour:(int)hourIncrement {
+- (NSDate *)localizedAbsoluteHour {
     
-    NSLog(@"Starting at %d adding %d", startHour, hourIncrement);
+    // Use the user's current calendar and time zone
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    [calendar setTimeZone: [NSTimeZone systemTimeZone]];
+    
+    // Specify the date components manually (year, month, day, hour, minutes, etc.)
     NSDate *now = [NSDate date];
-    
-    
-    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     
     NSDateComponents *components = [calendar components:NSCalendarUnitDay    |
                                     NSCalendarUnitMonth  |
@@ -68,18 +68,61 @@
                                     NSCalendarUnitWeekday
                                                fromDate:now];
     
-    int hour = startHour + hourIncrement;
-    
-    [components setHour:hour];
+    [components setHour:0];
     [components setMinute:0];
-    NSDate *taskDate = [calendar dateFromComponents:components];
+    [components setSecond:0];
     
-    NSTimeInterval distanceBetweenDates = [now timeIntervalSinceDate:taskDate];
-    double secondsInAnHour = 3600;
-    NSInteger hoursBetweenDates = distanceBetweenDates / secondsInAnHour;
-    NSLog(@"Update at %@ Hours Between Dates %ld and now %@", taskDate, (long)hoursBetweenDates, now);
+    // transform the date compoments into a date, based on current calendar settings
+    NSDate *date = [calendar dateFromComponents:components];
     
-    return taskDate;
+    NSLog(@"localized hour %@", date);
+    return date;
+    
 }
+
+//This is based on the user's waking time;
+- (NSDate *)relativeHour {
     
+    //TODO this is a shim
+    int userWakeTime = 8;
+    
+    // Use the user's current calendar and time zone
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    [calendar setTimeZone: [NSTimeZone systemTimeZone]];
+    
+    // Specify the date components manually (year, month, day, hour, minutes, etc.)
+    NSDate *now = [NSDate date];
+    
+    NSDateComponents *components = [calendar components:NSCalendarUnitDay    |
+                                    NSCalendarUnitMonth  |
+                                    NSCalendarUnitYear   |
+                                    NSCalendarUnitEra    |
+                                    NSCalendarUnitSecond |
+                                    NSCalendarUnitMinute |
+                                    NSCalendarUnitHour   |
+                                    NSCalendarUnitWeekday
+                                               fromDate:now];
+    
+    [components setHour:userWakeTime];
+    [components setMinute:0];
+    [components setSecond:0];
+    
+    // transform the date compoments into a date, based on current calendar settings
+    NSDate *date = [calendar dateFromComponents:components];
+    
+    NSLog(@"localized hour %@", date);
+    return date;
+}
+
+- (NSDate *)createDateFrom:(NSDate *)zeroHour atHour:(int)hourIncrement {
+    
+    NSLog(@"Starting at %@ adding %d", zeroHour, hourIncrement);
+
+    NSTimeInterval hourInterval = hourIncrement * 60 * 60;
+    
+    NSDate *dueOnDate = [zeroHour dateByAddingTimeInterval:hourInterval];
+    
+    return dueOnDate;
+}
+
 @end

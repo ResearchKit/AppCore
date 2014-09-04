@@ -19,12 +19,9 @@
 @interface APCScheduler()
 
 @property  (nonatomic, strong)  NSArray                 *schedules;
-
-//Declaring as weak so as not to hold on to below objects
 @property  (weak, nonatomic)    APCDataSubstrate        *dataSubstrate;
 @property (weak, nonatomic)     APCSageNetworkManager   *networkManager;
-
-@property (strong, nonatomic) APCScheduleInterpreter *scheduleInterpreter;
+@property (strong, nonatomic)   APCScheduleInterpreter  *scheduleInterpreter;
 
 @end
 
@@ -96,13 +93,20 @@
         scheduledTask.updatedAt = [NSDate date];
         scheduledTask.task = schedule.task;
         
-        [scheduledTask saveToPersistentStore:NULL];
-        
         //Get the APCScheduledTask ID to reference
         NSString *objectId = [[scheduledTask.objectID URIRepresentation] absoluteString];
         
         //Set a local notification at time of event
         [self scheduleLocalNotification:schedule.notificationMessage withDate:date withTaskType:schedule.task.taskType withAPCScheduleTaskId:objectId andReminder:0];
+        
+        //TODO may have to interpret a cron expression, however, for now I'll just set reminders 15 mintues before
+        if (schedule.reminder) {
+
+            //Set a local reminder notification at time of event
+            [self scheduleLocalNotification:schedule.notificationMessage withDate:date withTaskType:schedule.task.taskType withAPCScheduleTaskId:objectId andReminder:1];
+        }
+        
+        [scheduledTask saveToPersistentStore:NULL];
     }
 }
 
@@ -122,6 +126,10 @@
                                            };
     
     if (reminder) {
+        
+        NSTimeInterval reminderInterval = -15 * 60;
+        
+        [dueOn dateByAddingTimeInterval:reminderInterval];
         [notificationInfo setValue:@"reminder" forKey:@"reminder"];
     }
     

@@ -11,6 +11,6 @@
 @interface APCScheduleInterpreter : NSObject
 
 - (NSMutableArray *)taskDates:(NSString *)expression;
-
+- (NSDate *)localizedAbsoluteHour;
 @end
 
