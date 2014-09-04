@@ -20,5 +20,6 @@
 - (void)clearNotificationActivityType:(NSString *)taskType;
 - (void)clearAllScheduledTaskNotifications;
 - (BOOL)scheduleUpdated:(APCSchedule *)schedule;
+- (void)setScheduledTask:(APCSchedule *)schedule;
 @end
 

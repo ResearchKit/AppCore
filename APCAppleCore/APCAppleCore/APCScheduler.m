@@ -54,7 +54,7 @@
     
     NSMutableArray *dates = [self.scheduleInterpreter taskDates:schedule.scheduleExpression];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dueOn = %@, task = %@", [dates objectAtIndex:0], schedule.task];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dueOn == %@ AND task == %@", [dates objectAtIndex:0], schedule.task];
     [request setPredicate:predicate];
     NSError *error;
     NSArray *array = [moc executeFetchRequest:request error:&error];

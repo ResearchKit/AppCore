@@ -154,10 +154,10 @@
     
     NSMutableArray *dates = [_schedulerInterpreter taskDates:@"1:1,2,12"];
     
-    NSDate *date0 = (NSDate *)[dates objectAtIndex:0];
+    NSDate *date0 = [dates objectAtIndex:0];
     
 
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dueOn = %@, task = %@", date0, @"TASK"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dueOn == %@ AND task == %@", date0, @"TASK"];
     
     [request setPredicate:predicate];
     
@@ -170,6 +170,31 @@
     }
     NSLog(@"YES");
     //return YES;
+}
+
+- (void)testSetScheduledTask {
+    APCSchedule *schedule = [NSEntityDescription insertNewObjectForEntityForName:@"APCSchedule" inManagedObjectContext:self.moc];
+    
+    APCTask *task = [NSEntityDescription insertNewObjectForEntityForName:@"APCTask" inManagedObjectContext:self.moc];
+    
+    schedule.createdAt = [NSDate date];
+    schedule.updatedAt = [NSDate date];
+    schedule.scheduleExpression = @"1:6,7,8";
+    schedule.reminder = @"0";
+    schedule.task = task;
+    
+    // Save the context.
+    NSError *error = nil;
+    if (![self.moc save:&error]) {
+        // Replace this implementation with code to handle the error appropriately.
+        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+        XCTFail(@"Error saving in \"%s\" : %@, %@", __PRETTY_FUNCTION__, error, [error userInfo]);
+    }
+    XCTAssertFalse(self.moc.hasChanges,"All the changes should be saved");
+    
+    [_scheduler setScheduledTask:schedule];
+    
+    
 }
 
 @end
