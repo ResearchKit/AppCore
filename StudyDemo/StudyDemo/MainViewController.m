@@ -205,6 +205,15 @@
     NSMutableArray* steps = [NSMutableArray new];
     
     {
+        RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001d" name:@"active step"];
+        step.caption = @"Audio";
+        step.countDown = 10.0;
+        step.text = @"An active test recording audio";
+        step.recorderConfigurations = @[[RKAudioRecorderConfiguration configuration]];
+        [steps addObject:step];
+    }
+    
+    {
         RKIntroductionStep* step = [[RKIntroductionStep alloc] initWithIdentifier:@"iid_001" name:@"intro step"];
         step.caption = @"Demo Study";
         step.instruction = @"This 12-step walkthrough will explain the study and the impact it will have on your life.";
@@ -644,6 +653,7 @@
         // to the documents directory, where you could copy it off using iTunes, for instance.
         [[NSFileManager defaultManager] moveItemAtURL:archiveFileURL toURL:outputUrl error:nil];
         
+        NSLog(@"outputUrl= %@", outputUrl);
         
         // When done, clean up:
         self.taskArchive = nil;

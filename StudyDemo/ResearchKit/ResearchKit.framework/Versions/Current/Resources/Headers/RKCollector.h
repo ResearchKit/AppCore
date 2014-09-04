@@ -63,6 +63,18 @@
 
 @end
 
+@interface RKHealthCorrelationCollector : RKCollector
+
+@property (copy, readonly) HKCorrelationType *correlationType;
+@property (copy, readonly) NSArray *sampleTypes;
+@property (copy, readonly) NSArray *units;
+
+@property (copy, readonly) NSDate *startDate;
+
+@property (copy, readonly) NSNumber *lastAnchor;
+
+@end
+
 
 
 @interface RKMotionActivityCollector : RKCollector
