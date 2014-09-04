@@ -88,9 +88,7 @@
         APCScheduledTask * scheduledTask = [APCScheduledTask newObjectForContext:self.dataSubstrate.mainContext];
         
         scheduledTask.completed = [NSNumber numberWithInt:0];
-        scheduledTask.createdAt = [NSDate date];
         scheduledTask.dueOn = date;
-        scheduledTask.updatedAt = [NSDate date];
         scheduledTask.task = schedule.task;
         
         //Get the APCScheduledTask ID to reference
