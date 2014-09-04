@@ -9,6 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
 
+typedef NS_ENUM(NSUInteger, ProfileGender) {
+    ProfileGenderMale = 0,
+    ProfileGenderFemale,
+    ProfileGenderOther
+};
+
 @interface Profile : NSObject
 
 @property (nonatomic, copy) NSString *firstName;
@@ -32,6 +38,8 @@
 @property (nonatomic, strong) NSNumber *weight;
 
 @property (nonatomic, strong) NSString *height;
+
+@property (nonatomic, readwrite) ProfileGender gender;
 
 @end
 

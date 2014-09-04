@@ -1,5 +1,5 @@
 //
-//  ProfileCell.m
+//  UserInfoCell.m
 //  Configuration
 //
 //  Created by Karthik Keyan on 8/11/14.
@@ -18,7 +18,7 @@
 
 @implementation UserInfoCell
 
-- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier type:(ProfileCellType)type {
+- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier type:(UserInfoCellType)type {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.textLabel.font = [UIFont systemFontOfSize:15];
@@ -42,36 +42,36 @@
 
 #pragma mark - Custom Setter
 
-- (void) setType:(ProfileCellType)type {
+- (void) setType:(UserInfoCellType)type {
     if (_type != type) {
         _type = type;
         
         switch (self.type) {
-            case ProfileCellTypeImageText:
+            case UserInfoCellTypeImageText:
                 [self addImageText];
                 break;
                 
-            case ProfileCellTypeSingleInputText:
+            case UserInfoCellTypeSingleInputText:
                 [self addSingleInputText];
                 break;
                 
-            case ProfileCellTypeSwitch:
+            case UserInfoCellTypeSwitch:
                 [self addSwitch];
                 break;
                 
-            case ProfileCellTypeDatePicker:
+            case UserInfoCellTypeDatePicker:
                 [self addDatePicker];
                 break;
             
-            case ProfileCellTypeCustomPicker:
+            case UserInfoCellTypeCustomPicker:
                 [self addCustomPicker];
                 break;
                 
-            case ProfileCellTypeTitleValue:
+            case UserInfoCellTypeTitleValue:
                 [self addTitleValue];
                 break;
                 
-            case ProfileCellTypeSegment:
+            case UserInfoCellTypeSegment:
                 [self addSegmentControl];
                 break;
                 
@@ -98,8 +98,8 @@
 }
 
 - (void) textFieldDidEndEditing:(UITextField *)textField {
-    if ([self.delegate respondsToSelector:@selector(profileCellValueChanged:)]) {
-        [self.delegate profileCellValueChanged:self];
+    if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
+        [self.delegate userInfoCellValueChanged:self];
     }
 }
 
@@ -227,36 +227,36 @@
 }
 
 - (void) switchValueChanged {
-    if ([self.delegate respondsToSelector:@selector(profileCellValueChanged:)]) {
-        [self.delegate profileCellValueChanged:self];
+    if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
+        [self.delegate userInfoCellValueChanged:self];
     }
 }
 
 - (void) datePickerValueChanged {
     [_valueTextField resignFirstResponder];
     
-    if ([self.delegate respondsToSelector:@selector(profileCellValueChanged:)]) {
-        [self.delegate profileCellValueChanged:self];
+    if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
+        [self.delegate userInfoCellValueChanged:self];
     }
 }
 
 - (void) profileImageButtonClicked {
-    if ([self.delegate respondsToSelector:@selector(profileCellDidSelectProfileImage:)]) {
-        [self.delegate profileCellDidSelectProfileImage:self];
+    if ([self.delegate respondsToSelector:@selector(userInfoCellDidSelectProfileImage:)]) {
+        [self.delegate userInfoCellDidSelectProfileImage:self];
     }
 }
 
 - (void) customPickerValueChanged {
     [_valueTextField resignFirstResponder];
     
-    if ([self.delegate respondsToSelector:@selector(profileCellValueChanged:)]) {
-        [self.delegate profileCellValueChanged:self];
+    if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
+        [self.delegate userInfoCellValueChanged:self];
     }
 }
 
 - (void) segmentIndexChanged {
-    if ([self.delegate respondsToSelector:@selector(profileCellValueChanged:)]) {
-        [self.delegate profileCellValueChanged:self];
+    if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
+        [self.delegate userInfoCellValueChanged:self];
     }
 }
 
@@ -305,10 +305,10 @@
     
     self.separatorLayer.frame = CGRectMake(15, self.bounds.size.height - 1, self.bounds.size.width - 15, 0.5);
     
-    if (self.type == ProfileCellTypeSingleInputText) {
+    if (self.type == UserInfoCellTypeSingleInputText) {
         self.valueTextField.frame = CGRectMake(15, (self.bounds.size.height - 30) * 0.5, 300, 30);
     }
-    else if (self.type == ProfileCellTypeImageText) {
+    else if (self.type == UserInfoCellTypeImageText) {
         CGFloat leftInset = 15 + 80 + 10;
         
         self.valueTextField.frame = CGRectMake(leftInset, ((self.bounds.size.height - 30) * 0.5) - 10, 300 - leftInset, 30);
@@ -319,13 +319,15 @@
         
         self.profileImageCircleLayer.frame = self.profileImageButton.frame;
     }
-    else if (self.type == ProfileCellTypeSegment) {
+    else if (self.type == UserInfoCellTypeSegment) {
+        [self.textLabel sizeToFit];
+        
         CGRect frame = self.textLabel.frame;
-        frame.origin.y -= 20;
+        frame.origin.y = 9;
         self.textLabel.frame = frame;
         
         frame = self.segmentControl.frame;
-        frame.origin.y = CGRectGetMinY(self.textLabel.frame) + 58;
+        frame.origin.y = CGRectGetMaxY(self.textLabel.frame) + 9;
         self.segmentControl.frame = frame;
     }
 }

@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "SettingsViewController.h"
-#import "OnBoardingVideoViewController.h"
+#import "APCOnBoardingVideoViewController.h"
 
 @interface AppDelegate ()
 
@@ -27,7 +27,7 @@
         self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[SettingsViewController new]];
     }
     else {
-        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[OnBoardingVideoViewController new]];
+        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[APCOnBoardingVideoViewController new]];
     }
     
     [self.window makeKeyAndVisible];

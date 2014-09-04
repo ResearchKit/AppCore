@@ -1,5 +1,5 @@
 //
-//  ProfileCell.h
+//  UserInfoCell.h
 //  Configuration
 //
 //  Created by Karthik Keyan on 8/11/14.
@@ -8,22 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_OPTIONS (NSUInteger, ProfileCellType) {
-    ProfileCellTypeNone = 0,
-    ProfileCellTypeImageText,
-    ProfileCellTypeSingleInputText,
-    ProfileCellTypeSwitch,
-    ProfileCellTypeDatePicker,
-    ProfileCellTypeCustomPicker,
-    ProfileCellTypeTitleValue,
-    ProfileCellTypeSegment,
+typedef NS_OPTIONS (NSUInteger, UserInfoCellType) {
+    UserInfoCellTypeNone = 0,
+    UserInfoCellTypeImageText,
+    UserInfoCellTypeSingleInputText,
+    UserInfoCellTypeSwitch,
+    UserInfoCellTypeDatePicker,
+    UserInfoCellTypeCustomPicker,
+    UserInfoCellTypeTitleValue,
+    UserInfoCellTypeSegment,
 };
 
-@protocol ProfileCellDelegate;
+@protocol UserInfoCellDelegate;
 
 @interface UserInfoCell : UITableViewCell
 
-@property (nonatomic, readonly) ProfileCellType type;
+@property (nonatomic, readonly) UserInfoCellType type;
 
 @property (nonatomic, strong) UIButton *profileImageButton;
 
@@ -41,9 +41,9 @@ typedef NS_OPTIONS (NSUInteger, ProfileCellType) {
 
 @property (nonatomic, strong) NSArray *customPickerValues;
 
-@property (nonatomic, weak) id<ProfileCellDelegate> delegate;
+@property (nonatomic, weak) id<UserInfoCellDelegate> delegate;
 
-- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier type:(ProfileCellType)type;
+- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier type:(UserInfoCellType)type;
 
 - (void) setNeedsHiddenField;
 
@@ -52,10 +52,10 @@ typedef NS_OPTIONS (NSUInteger, ProfileCellType) {
 @end
 
 
-@protocol ProfileCellDelegate <NSObject>
+@protocol UserInfoCellDelegate <NSObject>
 
 @optional
-- (void) profileCellValueChanged:(UserInfoCell *)cell;
-- (void) profileCellDidSelectProfileImage:(UserInfoCell *)cell;
+- (void) userInfoCellValueChanged:(UserInfoCell *)cell;
+- (void) userInfoCellDidSelectProfileImage:(UserInfoCell *)cell;
 
 @end

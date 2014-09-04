@@ -9,7 +9,8 @@
 #import "UserInfoCell.h"
 
 typedef NS_ENUM(NSUInteger, UserInfoField) {
-    UserInfoFieldEmail = 0,
+    UserInfoFieldUserName = 0,
+    UserInfoFieldEmail,
     UserInfoFieldPassword,
     UserInfoFieldDateOfBirth,
     UserInfoFieldMedicalCondition,
@@ -22,7 +23,7 @@ typedef NS_ENUM(NSUInteger, UserInfoField) {
 
 @class Profile;
 
-@interface UserInfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, ProfileCellDelegate>
+@interface UserInfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UserInfoCellDelegate>
 
 @property (nonatomic, strong) NSArray *fields;
 

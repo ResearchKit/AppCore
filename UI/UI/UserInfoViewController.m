@@ -47,7 +47,7 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
 @interface UserInfoViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
-@property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UIView *headerTextFieldSeparatorView;
 
@@ -85,10 +85,22 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
 #pragma mark - UI Methods
 
 - (void) loadValues {
-    _medicalConditions = @[ @[@"Not listed", @"Condition 1" , @"Condition 2"] ];
-    _medications = @[ @[@"Not listed", @"Medication 1" , @"Medication 2"] ];
-    _bloodTypes = @[ @[@"O-", @"O+", @"A-", @"A+", @"B-", @"B+", @"AB-", @"AB+"] ];
-    _heightValues = @[ @[@"3'", @"4'", @"5'", @"6'", @"7'"], @[@"0''", @"1''", @"2''", @"3''", @"4''", @"5''", @"6''", @"7''", @"8''", @"9''"] ];
+    _medicalConditions = @[
+                           @[@"Not listed", @"Condition 1" , @"Condition 2"]
+                           ];
+    
+    _medications = @[
+                     @[@"Not listed", @"Medication 1" , @"Medication 2"]
+                      ];
+    
+    _bloodTypes = @[ 
+                    @[@"O-", @"O+", @"A-", @"A+", @"B-", @"B+", @"AB-", @"AB+"]
+                     ];
+    
+    _heightValues = @[
+                      @[@"3'", @"4'", @"5'", @"6'", @"7'"],
+                      @[@"0''", @"1''", @"2''", @"3''", @"4''", @"5''", @"6''", @"7''", @"8''", @"9''"]
+                       ];
 }
 
 - (void) addTableView {
@@ -120,7 +132,7 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
     self.profileImageView.layer.borderWidth = 1.0;
     
     self.firstNameTextField.text = self.profile.firstName;
-    self.userNameTextField.text = self.profile.userName;
+    self.lastNameTextField.text = self.profile.lastName;
 }
 
 
@@ -140,11 +152,25 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
     UserInfoField field = [self.fields[indexPath.row] integerValue];
     
     switch (field) {
+        case UserInfoFieldUserName:
+        {
+            cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellTextIdentifier];
+            if (!cell) {
+                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTextIdentifier type:UserInfoCellTypeSingleInputText];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+            
+            cell.valueTextField.placeholder = kUserInfoTableViewCellUserNamePlaceholder;
+            cell.valueTextRegularExpression = kUserInfoTableViewCellUserNameRegEx;
+            cell.valueTextField.text = self.profile.userName;
+            cell.valueTextField.keyboardType = UIKeyboardTypeEmailAddress;
+        } break;
+            
         case UserInfoFieldEmail:
         {
             cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellTextIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTextIdentifier type:ProfileCellTypeSingleInputText];
+                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTextIdentifier type:UserInfoCellTypeSingleInputText];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             
@@ -157,7 +183,7 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
         {
             cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellTextIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTextIdentifier type:ProfileCellTypeSingleInputText];
+                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTextIdentifier type:UserInfoCellTypeSingleInputText];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             
@@ -171,7 +197,7 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
         {
             cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellDateIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellDateIdentifier type:ProfileCellTypeDatePicker];
+                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellDateIdentifier type:UserInfoCellTypeDatePicker];
             }
             
             cell.textLabel.text = kUserInfoTableViewCellBirthdayTitle;
@@ -182,7 +208,7 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
         {
             cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellSubtitleIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kUserInfoTableViewCellSubtitleIdentifier type:ProfileCellTypeNone];
+                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kUserInfoTableViewCellSubtitleIdentifier type:UserInfoCellTypeNone];
                 [cell setNeedsCustomPicker];
                 [cell setNeedsHiddenField];
             }
@@ -197,7 +223,7 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
         {
             cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellSubtitleIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kUserInfoTableViewCellSubtitleIdentifier type:ProfileCellTypeNone];
+                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kUserInfoTableViewCellSubtitleIdentifier type:UserInfoCellTypeNone];
                 [cell setNeedsCustomPicker];
                 [cell setNeedsHiddenField];
             }
@@ -212,7 +238,7 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
         {
             cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellTitleValueIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTitleValueIdentifier type:ProfileCellTypeTitleValue];
+                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTitleValueIdentifier type:UserInfoCellTypeTitleValue];
                 [cell setNeedsCustomPicker];
             }
             
@@ -225,7 +251,7 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
         {
             cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellTitleValueIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTitleValueIdentifier type:ProfileCellTypeTitleValue];
+                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTitleValueIdentifier type:UserInfoCellTypeTitleValue];
                 [cell setNeedsCustomPicker];
             }
             
@@ -238,7 +264,7 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
         {
             cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellTitleValueIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTitleValueIdentifier type:ProfileCellTypeTitleValue];
+                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTitleValueIdentifier type:UserInfoCellTypeTitleValue];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             
@@ -253,7 +279,7 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
         {
             cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellSegmentIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellSegmentIdentifier type:ProfileCellTypeSegment];
+                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellSegmentIdentifier type:UserInfoCellTypeSegment];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             
@@ -262,6 +288,8 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
             [cell.segmentControl insertSegmentWithTitle:@"Male" atIndex:0 animated:NO];
             [cell.segmentControl insertSegmentWithTitle:@"Female" atIndex:1 animated:NO];
             [cell.segmentControl insertSegmentWithTitle:@"Other" atIndex:2 animated:NO];
+            
+            [cell.segmentControl setSelectedSegmentIndex:self.profile.gender];
         } break;
             
         default:
@@ -277,11 +305,11 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
 #pragma mark - UITableViewDelegate
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat height = 64;
+    CGFloat height = 54;
     UserInfoField field = [self.fields[indexPath.row] integerValue];
     
     if (field == UserInfoFieldGender) {
-        height = 80;
+        height += 20;
     }
     
     return height;
@@ -292,10 +320,10 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
     
     UserInfoCell *cell = (UserInfoCell *)[tableView cellForRowAtIndexPath:indexPath];
     switch (cell.type) {
-        case ProfileCellTypeNone:
-        case ProfileCellTypeDatePicker:
-        case ProfileCellTypeCustomPicker:
-        case ProfileCellTypeTitleValue:
+        case UserInfoCellTypeNone:
+        case UserInfoCellTypeDatePicker:
+        case UserInfoCellTypeCustomPicker:
+        case UserInfoCellTypeTitleValue:
             [cell.valueTextField becomeFirstResponder];
             break;
             
@@ -362,7 +390,7 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
 
 #pragma mark - InputCellDelegate
 
-- (void) profileCellValueChanged:(UserInfoCell *)cell {
+- (void) userInfoCellValueChanged:(UserInfoCell *)cell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     if (indexPath) {
@@ -400,6 +428,9 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
             case UserInfoFieldPassword:
                 self.profile.password = cell.valueTextField.text;
                 break;
+                
+            case UserInfoFieldGender:
+                self.profile.gender = (ProfileGender)cell.segmentControl.selectedSegmentIndex;
                 
             default:
                 break;

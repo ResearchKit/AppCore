@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "OnBoardingOptionsViewController.h"
-#import "SignUpGeneralInfoViewController.h"
+#import "APCOnBoardingOptionsViewController.h"
+#import "APCSignUpGeneralInfoViewController.h"
 
-@interface OnBoardingOptionsViewController ()
+@interface APCOnBoardingOptionsViewController ()
 
 @end
 
-@implementation OnBoardingOptionsViewController
+@implementation APCOnBoardingOptionsViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,7 +29,7 @@
 #pragma mark - IBActions
 
 - (IBAction) signUp {
-    [self.navigationController pushViewController:[SignUpGeneralInfoViewController new] animated:YES];
+    [self.navigationController pushViewController:[APCSignUpGeneralInfoViewController new] animated:YES];
 }
 
 - (IBAction) signIn {

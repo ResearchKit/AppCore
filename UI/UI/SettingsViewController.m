@@ -26,7 +26,7 @@
 {
     self = [super init];
     if (self) {
-        self.fields = @[@(UserInfoFieldEmail), @(UserInfoFieldDateOfBirth), @(UserInfoFieldMedicalCondition), @(UserInfoFieldMedication), @(UserInfoFieldBloodType), @(UserInfoFieldWeight), @(UserInfoFieldGender)];
+        self.fields = @[@(UserInfoFieldUserName), @(UserInfoFieldEmail), @(UserInfoFieldDateOfBirth), @(UserInfoFieldMedicalCondition), @(UserInfoFieldMedication), @(UserInfoFieldBloodType), @(UserInfoFieldWeight), @(UserInfoFieldGender)];
         
         self.profile = [Profile new];
         self.profile.firstName = @"Karthik Keyan";
