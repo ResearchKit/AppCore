@@ -8,6 +8,8 @@
 
 #import "APCCriteria.h"
 
+extern NSString const *APCCriteriaDateFormate = @"MMMM dd, yyyy";
+
 @implementation APCCriteria
 
 @end

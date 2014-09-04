@@ -9,13 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
 
-typedef NS_ENUM(NSUInteger, ProfileGender) {
-    ProfileGenderMale = 0,
-    ProfileGenderFemale,
-    ProfileGenderOther
+typedef NS_ENUM(NSUInteger, APCProfileGender) {
+    APCProfileGenderMale = 0,
+    APCProfileGenderFemale,
+    APCProfileGenderOther
 };
 
-@interface Profile : NSObject
+@interface APCProfile : NSObject
 
 @property (nonatomic, copy) NSString *firstName;
 
@@ -39,13 +39,7 @@ typedef NS_ENUM(NSUInteger, ProfileGender) {
 
 @property (nonatomic, strong) NSString *height;
 
-@property (nonatomic, readwrite) ProfileGender gender;
+@property (nonatomic, readwrite) APCProfileGender gender;
 
 @end
 
-
-@interface Profile (DateOfBirth)
-
-- (NSString *) dateOfBirthStringWithFormat:(NSString *)formate;
-
-@end

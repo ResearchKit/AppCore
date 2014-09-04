@@ -4,7 +4,16 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7026.1"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsViewController"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="APCSettingsViewController">
+            <connections>
+                <outlet property="footerConsentView" destination="pEG-QK-zRE" id="P7F-Pm-zKC"/>
+                <outlet property="footerDiseaseLabel" destination="YQ4-Hx-MbH" id="6D0-xT-nSg"/>
+                <outlet property="leaveStudyButton" destination="pXi-sL-0oz" id="ute-Dm-xxf"/>
+                <outlet property="logoutButton" destination="yY2-vA-x2j" id="HwV-Eq-FWT"/>
+                <outlet property="reviewConsentButton" destination="ETw-5q-jBD" id="NG2-ej-eNC"/>
+                <outlet property="studyPeriodLabel" destination="Rb8-00-Wvd" id="976-qo-H5r"/>
+            </connections>
+        </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="320" height="250"/>

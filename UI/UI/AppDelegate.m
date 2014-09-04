@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "SettingsViewController.h"
+#import "APCSettingsViewController.h"
 #import "APCOnBoardingVideoViewController.h"
 
 @interface AppDelegate ()
@@ -24,7 +24,7 @@
     BOOL isProfile = NO;
     
     if (isProfile) {
-        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[SettingsViewController new]];
+        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[APCSettingsViewController new]];
     }
     else {
         self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[APCOnBoardingVideoViewController new]];

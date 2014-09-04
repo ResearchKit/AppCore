@@ -7,8 +7,8 @@
 //
 
 #import "APCSignUpProgressing.h"
-#import "UserInfoViewController.h"
+#import "APCUserInfoViewController.h"
 
-@interface APCSignUpUserInfoViewController : UserInfoViewController <APCSignUpProgressing>
+@interface APCSignUpUserInfoViewController : APCUserInfoViewController <APCSignUpProgressing>
 
 @end

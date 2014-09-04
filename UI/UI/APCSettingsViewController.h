@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "UserInfoViewController.h"
+#import "APCUserInfoViewController.h"
 
-@interface SettingsViewController : UserInfoViewController
+@interface APCSettingsViewController : APCUserInfoViewController
 
 @end

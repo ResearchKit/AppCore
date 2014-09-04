@@ -8,7 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString const *APCCriteriaDateFormate;
+
+typedef NS_ENUM(NSUInteger, APCCriteriaAnswerType) {
+    APCCriteriaAnswerTypeChoice = 0,
+    APCCriteriaAnswerTypeDate,
+};
+
 @interface APCCriteria : NSObject
+
+@property (nonatomic, readwrite) APCCriteriaAnswerType answerType;
 
 @property (nonatomic, strong) NSString *question;
 

@@ -8,13 +8,14 @@
 
 #import "APCCriteria.h"
 #import "APCCriteriaCell.h"
+#import "NSDate+Category.h"
 #import "APCStepProgressBar.h"
 #import "APCSignupCriteriaViewController.h"
 
 static NSString const *kAPCCriteriaCellIdentifier    =   @"Criteria";
 
 
-@interface APCSignupCriteriaViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface APCSignupCriteriaViewController () <UITableViewDataSource, UITableViewDelegate, APCCriteriaCellDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -33,6 +34,7 @@ static NSString const *kAPCCriteriaCellIdentifier    =   @"Criteria";
         APCCriteria *criteria = [APCCriteria new];
         criteria.question = @"I am a:";
         criteria.answers = @[ @"Patient", @"Caregiver" ];
+        criteria.answerType = APCCriteriaAnswerTypeChoice;
         [self.criterias addObject:criteria];
     }
     
@@ -40,6 +42,15 @@ static NSString const *kAPCCriteriaCellIdentifier    =   @"Criteria";
         APCCriteria *criteria = [APCCriteria new];
         criteria.question = @"Do you have Parkinson's Desease?";
         criteria.answers = @[ @"Yes", @"No" ];
+        criteria.answerType = APCCriteriaAnswerTypeChoice;
+        [self.criterias addObject:criteria];
+    }
+    
+    {
+        APCCriteria *criteria = [APCCriteria new];
+        criteria.question = @"When were you diagnosed?";
+        criteria.answers = @[ @"June 4, 1992" ];
+        criteria.answerType = APCCriteriaAnswerTypeDate;
         [self.criterias addObject:criteria];
     }
     
@@ -47,6 +58,7 @@ static NSString const *kAPCCriteriaCellIdentifier    =   @"Criteria";
         APCCriteria *criteria = [APCCriteria new];
         criteria.question = @"What is the level of severity?";
         criteria.answers = @[ @"Mid", @"Moderate", @"Advanced" ];
+        criteria.answerType = APCCriteriaAnswerTypeChoice;
         [self.criterias addObject:criteria];
     }
     
@@ -102,12 +114,30 @@ static NSString const *kAPCCriteriaCellIdentifier    =   @"Criteria";
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    APCCriteriaCell *cell = (APCCriteriaCell *)[tableView dequeueReusableCellWithIdentifier:(NSString *)kAPCCriteriaCellIdentifier];
-    
     APCCriteria *criteria = self.criterias[indexPath.row];
     
+    APCCriteriaCell *cell = (APCCriteriaCell *)[tableView dequeueReusableCellWithIdentifier:(NSString *)kAPCCriteriaCellIdentifier];
+    cell.delegate = self;
     cell.questionLabel.text = criteria.question;
-    cell.choices = criteria.answers;
+    
+    switch (criteria.answerType) {
+        case APCCriteriaAnswerTypeChoice:
+            [cell setNeedsChoiceInputCell];
+            
+            cell.choices = criteria.answers;
+            [cell setSelectedChoiceIndex:criteria.answerIndex];
+            break;
+            
+        case APCCriteriaAnswerTypeDate:
+            [cell setNeedsDateInputCell];
+            
+            cell.captionLabel.text = NSLocalizedString(@"Date", @"");
+            cell.answerTextField.text = criteria.answers[criteria.answerIndex];
+            break;
+            
+        default:
+            break;
+    }
     
     return cell;
 }
@@ -117,6 +147,30 @@ static NSString const *kAPCCriteriaCellIdentifier    =   @"Criteria";
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 98;
+}
+
+
+#pragma mark - APCCriteriaCellDelegate
+
+- (void) criteriaCellValueChanged:(APCCriteriaCell *)cell {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    APCCriteria *criteria = self.criterias[indexPath.row];
+    
+    switch (criteria.answerType) {
+        case APCCriteriaAnswerTypeChoice:
+            criteria.answerIndex = cell.selectedChoiceIndex;
+            break;
+            
+        case APCCriteriaAnswerTypeDate:
+            criteria.answers = @[ [cell.datePicker.date toStringWithFormat:(NSString *)APCCriteriaDateFormate] ];
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 

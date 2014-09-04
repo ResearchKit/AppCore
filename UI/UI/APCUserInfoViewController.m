@@ -6,45 +6,46 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "Profile.h"
-#import "NSString+Extension.h"
-#import "UserInfoViewController.h"
+#import "APCProfile.h"
+#import "NSDate+Category.h"
+#import "NSString+Category.h"
+#import "APCUserInfoViewController.h"
 
 // Cell Identifiers
-static NSString * const kUserInfoTableViewCellImageTextIdentifier    = @"ImageTextCell";
-static NSString * const kUserInfoTableViewCellTextIdentifier         = @"TextCell";
-static NSString * const kUserInfoTableViewCellDateIdentifier         = @"DateCell";
-static NSString * const kUserInfoTableViewCellTitleValueIdentifier   = @"TitleValueCell";
-static NSString * const kUserInfoTableViewCellSubtitleIdentifier     = @"SubtitleCell";
-static NSString * const kUserInfoTableViewCellSegmentIdentifier      = @"SegmentCell";
+static NSString * const kAPCUserInfoTableViewCellImageTextIdentifier    = @"ImageTextCell";
+static NSString * const kAPCUserInfoTableViewCellTextIdentifier         = @"TextCell";
+static NSString * const kAPCUserInfoTableViewCellDateIdentifier         = @"DateCell";
+static NSString * const kAPCUserInfoTableViewCellTitleValueIdentifier   = @"TitleValueCell";
+static NSString * const kAPCUserInfoTableViewCellSubtitleIdentifier     = @"SubtitleCell";
+static NSString * const kAPCUserInfoTableViewCellSegmentIdentifier      = @"SegmentCell";
 
 // Regular Expressions
-static NSString * const kUserInfoTableViewCellNameRegEx              = @"[A-Za-z]";
-static NSString * const kUserInfoTableViewCellUserNameRegEx          = @"[A-Za-z0-9_.]";
-static NSString * const kUserInfoTableViewCellEmailRegEx             = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-static NSString * const kUserInfoTableViewCellWeightRegEx            = @"[0-9]{1,3}";
+static NSString * const kAPCUserInfoTableViewCellNameRegEx              = @"[A-Za-z]";
+static NSString * const kAPCUserInfoTableViewCellUserNameRegEx          = @"[A-Za-z0-9_.]";
+static NSString * const kAPCUserInfoTableViewCellEmailRegEx             = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+static NSString * const kAPCUserInfoTableViewCellWeightRegEx            = @"[0-9]{1,3}";
 
 // PlaceHolders
-static NSString * const kUserInfoTableViewCellNamePlaceholder        = @"Name";
-static NSString * const kUserInfoTableViewCellUserNamePlaceholder    = @"User Name";
-static NSString * const kUserInfoTableViewCellEmailPlaceholder       = @"Email";
-static NSString * const kUserInfoTableViewCellPasswordPlaceholder    = @"Password";
-static NSString * const kUserInfoTableViewCellWeightPlaceHolder      = @"lb";
+static NSString * const kAPCUserInfoTableViewCellNamePlaceholder        = @"Name";
+static NSString * const kAPCUserInfoTableViewCellUserNamePlaceholder    = @"User Name";
+static NSString * const kAPCUserInfoTableViewCellEmailPlaceholder       = @"Email";
+static NSString * const kAPCUserInfoTableViewCellPasswordPlaceholder    = @"Password";
+static NSString * const kAPCUserInfoTableViewCellWeightPlaceHolder      = @"lb";
 
 // Cell Title
-static NSString * const kUserInfoTableViewCellBirthdayTitle          = @"Birthday";
-static NSString * const kUserInfoTableViewCellMedicalConditionTitle  = @"Medical Condition";
-static NSString * const kUserInfoTableViewCellMedicationTitle        = @"Medication";
-static NSString * const kUserInfoTableViewCellBloodType              = @"Blood Type";
-static NSString * const kUserInfoTableViewCellWeightTitle            = @"Weight";
-static NSString * const kUserInfoTableViewCellHeightTitle            = @"Height";
-static NSString * const kUserInfoTableViewCellGenderTitle            = @"Biological Sex";
+static NSString * const kAPCUserInfoTableViewCellBirthdayTitle          = @"Birthday";
+static NSString * const kAPCUserInfoTableViewCellMedicalConditionTitle  = @"Medical Condition";
+static NSString * const kAPCUserInfoTableViewCellMedicationTitle        = @"Medication";
+static NSString * const kAPCUserInfoTableViewCellBloodType              = @"Blood Type";
+static NSString * const kAPCUserInfoTableViewCellWeightTitle            = @"Weight";
+static NSString * const kAPCUserInfoTableViewCellHeightTitle            = @"Height";
+static NSString * const kAPCUserInfoTableViewCellGenderTitle            = @"Biological Sex";
 
 // Date Formatter
-static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd, yyyy";
+static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd, yyyy";
 
 
-@interface UserInfoViewController ()
+@interface APCUserInfoViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
@@ -53,7 +54,7 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
 
 @end
 
-@implementation UserInfoViewController
+@implementation APCUserInfoViewController
 
 - (instancetype)init
 {
@@ -147,143 +148,145 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UserInfoCell *cell;
+    APCUserInfoCell *cell;
     
-    UserInfoField field = [self.fields[indexPath.row] integerValue];
+    APCUserInfoField field = [self.fields[indexPath.row] integerValue];
     
     switch (field) {
-        case UserInfoFieldUserName:
+        case APCUserInfoFieldUserName:
         {
-            cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellTextIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:kAPCUserInfoTableViewCellTextIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTextIdentifier type:UserInfoCellTypeSingleInputText];
+                cell = [[APCUserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kAPCUserInfoTableViewCellTextIdentifier type:APCUserInfoCellTypeSingleInputText];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             
-            cell.valueTextField.placeholder = kUserInfoTableViewCellUserNamePlaceholder;
-            cell.valueTextRegularExpression = kUserInfoTableViewCellUserNameRegEx;
+            cell.valueTextField.placeholder = kAPCUserInfoTableViewCellUserNamePlaceholder;
+            cell.valueTextRegularExpression = kAPCUserInfoTableViewCellUserNameRegEx;
             cell.valueTextField.text = self.profile.userName;
             cell.valueTextField.keyboardType = UIKeyboardTypeEmailAddress;
         } break;
             
-        case UserInfoFieldEmail:
+        case APCUserInfoFieldEmail:
         {
-            cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellTextIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:kAPCUserInfoTableViewCellTextIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTextIdentifier type:UserInfoCellTypeSingleInputText];
+                cell = [[APCUserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kAPCUserInfoTableViewCellTextIdentifier type:APCUserInfoCellTypeSingleInputText];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             
-            cell.valueTextField.placeholder = kUserInfoTableViewCellEmailPlaceholder;
+            cell.valueTextField.placeholder = kAPCUserInfoTableViewCellEmailPlaceholder;
             cell.valueTextField.text = self.profile.email;
             cell.valueTextField.keyboardType = UIKeyboardTypeEmailAddress;
         } break;
             
-        case UserInfoFieldPassword:
+        case APCUserInfoFieldPassword:
         {
-            cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellTextIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:kAPCUserInfoTableViewCellTextIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTextIdentifier type:UserInfoCellTypeSingleInputText];
+                cell = [[APCUserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kAPCUserInfoTableViewCellTextIdentifier type:APCUserInfoCellTypeSingleInputText];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             
-            cell.valueTextField.placeholder = kUserInfoTableViewCellPasswordPlaceholder;
+            cell.valueTextField.placeholder = kAPCUserInfoTableViewCellPasswordPlaceholder;
             cell.valueTextField.text = self.profile.password;
             cell.valueTextField.keyboardType = UIKeyboardTypeDefault;
             cell.valueTextField.secureTextEntry = YES;
         } break;
             
-        case UserInfoFieldDateOfBirth:
+        case APCUserInfoFieldDateOfBirth:
         {
-            cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellDateIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:kAPCUserInfoTableViewCellDateIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellDateIdentifier type:UserInfoCellTypeDatePicker];
+                cell = [[APCUserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kAPCUserInfoTableViewCellDateIdentifier type:APCUserInfoCellTypeDatePicker];
             }
             
-            cell.textLabel.text = kUserInfoTableViewCellBirthdayTitle;
-            cell.valueTextField.text = [self.profile dateOfBirthStringWithFormat:kUserInfoTableViewCellDateOfBirthFormat];
+            cell.textLabel.text = kAPCUserInfoTableViewCellBirthdayTitle;
+            if (self.profile.dateOfBirth) {
+                cell.valueTextField.text = [self.profile.dateOfBirth toStringWithFormat:kAPCUserInfoTableViewCellDateOfBirthFormat];
+            }
         } break;
             
-        case UserInfoFieldMedicalCondition:
+        case APCUserInfoFieldMedicalCondition:
         {
-            cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellSubtitleIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:kAPCUserInfoTableViewCellSubtitleIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kUserInfoTableViewCellSubtitleIdentifier type:UserInfoCellTypeNone];
+                cell = [[APCUserInfoCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kAPCUserInfoTableViewCellSubtitleIdentifier type:APCUserInfoCellTypeNone];
                 [cell setNeedsCustomPicker];
                 [cell setNeedsHiddenField];
             }
             
-            cell.textLabel.text = kUserInfoTableViewCellMedicalConditionTitle;
+            cell.textLabel.text = kAPCUserInfoTableViewCellMedicalConditionTitle;
             cell.detailTextLabel.text = self.profile.medicalCondition;
             
             cell.customPickerValues = self.medicalConditions;
         } break;
             
-        case UserInfoFieldMedication:
+        case APCUserInfoFieldMedication:
         {
-            cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellSubtitleIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:kAPCUserInfoTableViewCellSubtitleIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kUserInfoTableViewCellSubtitleIdentifier type:UserInfoCellTypeNone];
+                cell = [[APCUserInfoCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kAPCUserInfoTableViewCellSubtitleIdentifier type:APCUserInfoCellTypeNone];
                 [cell setNeedsCustomPicker];
                 [cell setNeedsHiddenField];
             }
             
-            cell.textLabel.text = kUserInfoTableViewCellMedicationTitle;
+            cell.textLabel.text = kAPCUserInfoTableViewCellMedicationTitle;
             cell.detailTextLabel.text = self.profile.medication;
             
             cell.customPickerValues = self.medications;
         } break;
             
-        case UserInfoFieldBloodType:
+        case APCUserInfoFieldBloodType:
         {
-            cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellTitleValueIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:kAPCUserInfoTableViewCellTitleValueIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTitleValueIdentifier type:UserInfoCellTypeTitleValue];
+                cell = [[APCUserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kAPCUserInfoTableViewCellTitleValueIdentifier type:APCUserInfoCellTypeTitleValue];
                 [cell setNeedsCustomPicker];
             }
             
-            cell.textLabel.text = kUserInfoTableViewCellBloodType;
+            cell.textLabel.text = kAPCUserInfoTableViewCellBloodType;
             cell.valueTextField.text = self.profile.bloodType;
             cell.customPickerValues = self.bloodTypes;
         } break;
             
-        case UserInfoFieldHeight:
+        case APCUserInfoFieldHeight:
         {
-            cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellTitleValueIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:kAPCUserInfoTableViewCellTitleValueIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTitleValueIdentifier type:UserInfoCellTypeTitleValue];
+                cell = [[APCUserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kAPCUserInfoTableViewCellTitleValueIdentifier type:APCUserInfoCellTypeTitleValue];
                 [cell setNeedsCustomPicker];
             }
             
-            cell.textLabel.text = kUserInfoTableViewCellHeightTitle;
+            cell.textLabel.text = kAPCUserInfoTableViewCellHeightTitle;
             cell.valueTextField.text = self.profile.height;
             cell.customPickerValues = self.heightValues;
         } break;
             
-        case UserInfoFieldWeight:
+        case APCUserInfoFieldWeight:
         {
-            cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellTitleValueIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:kAPCUserInfoTableViewCellTitleValueIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellTitleValueIdentifier type:UserInfoCellTypeTitleValue];
+                cell = [[APCUserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kAPCUserInfoTableViewCellTitleValueIdentifier type:APCUserInfoCellTypeTitleValue];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             
-            cell.textLabel.text = kUserInfoTableViewCellWeightTitle;
-            cell.valueTextRegularExpression = kUserInfoTableViewCellWeightRegEx;
-            cell.valueTextField.placeholder = kUserInfoTableViewCellWeightPlaceHolder;
+            cell.textLabel.text = kAPCUserInfoTableViewCellWeightTitle;
+            cell.valueTextRegularExpression = kAPCUserInfoTableViewCellWeightRegEx;
+            cell.valueTextField.placeholder = kAPCUserInfoTableViewCellWeightPlaceHolder;
             cell.valueTextField.text = self.profile.weight.stringValue;
             cell.valueTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
         } break;
             
-        case UserInfoFieldGender:
+        case APCUserInfoFieldGender:
         {
-            cell = [tableView dequeueReusableCellWithIdentifier:kUserInfoTableViewCellSegmentIdentifier];
+            cell = [tableView dequeueReusableCellWithIdentifier:kAPCUserInfoTableViewCellSegmentIdentifier];
             if (!cell) {
-                cell = [[UserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserInfoTableViewCellSegmentIdentifier type:UserInfoCellTypeSegment];
+                cell = [[APCUserInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kAPCUserInfoTableViewCellSegmentIdentifier type:APCUserInfoCellTypeSegment];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             
-            cell.textLabel.text = kUserInfoTableViewCellGenderTitle;
+            cell.textLabel.text = kAPCUserInfoTableViewCellGenderTitle;
             
             [cell.segmentControl insertSegmentWithTitle:@"Male" atIndex:0 animated:NO];
             [cell.segmentControl insertSegmentWithTitle:@"Female" atIndex:1 animated:NO];
@@ -306,9 +309,9 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat height = 54;
-    UserInfoField field = [self.fields[indexPath.row] integerValue];
+    APCUserInfoField field = [self.fields[indexPath.row] integerValue];
     
-    if (field == UserInfoFieldGender) {
+    if (field == APCUserInfoFieldGender) {
         height += 20;
     }
     
@@ -318,12 +321,12 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    UserInfoCell *cell = (UserInfoCell *)[tableView cellForRowAtIndexPath:indexPath];
+    APCUserInfoCell *cell = (APCUserInfoCell *)[tableView cellForRowAtIndexPath:indexPath];
     switch (cell.type) {
-        case UserInfoCellTypeNone:
-        case UserInfoCellTypeDatePicker:
-        case UserInfoCellTypeCustomPicker:
-        case UserInfoCellTypeTitleValue:
+        case APCUserInfoCellTypeNone:
+        case APCUserInfoCellTypeDatePicker:
+        case APCUserInfoCellTypeCustomPicker:
+        case APCUserInfoCellTypeTitleValue:
             [cell.valueTextField becomeFirstResponder];
             break;
             
@@ -341,7 +344,7 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
         image = info[UIImagePickerControllerOriginalImage];
     }
     
-    UserInfoCell *cell = (UserInfoCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    APCUserInfoCell *cell = (APCUserInfoCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     [cell.profileImageButton setImage:image forState:UIControlStateNormal];
     
     [picker dismissViewControllerAnimated:YES completion:nil];
@@ -361,10 +364,10 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
     
     if (text.length > 0) {
         if ([textField isEqual:self.firstNameTextField]) {
-            isValid = [text isValidForRegex:kUserInfoTableViewCellNameRegEx];
+            isValid = [text isValidForRegex:kAPCUserInfoTableViewCellNameRegEx];
         }
         else {
-            isValid = [text isValidForRegex:kUserInfoTableViewCellUserNameRegEx];
+            isValid = [text isValidForRegex:kAPCUserInfoTableViewCellUserNameRegEx];
         }
     }
     
@@ -390,47 +393,47 @@ static NSString * const kUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd,
 
 #pragma mark - InputCellDelegate
 
-- (void) userInfoCellValueChanged:(UserInfoCell *)cell {
+- (void) APCUserInfoCellValueChanged:(APCUserInfoCell *)cell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     if (indexPath) {
-        UserInfoField field = [self.fields[indexPath.row] integerValue];
+        APCUserInfoField field = [self.fields[indexPath.row] integerValue];
         
         switch (field) {
-            case UserInfoFieldEmail:
+            case APCUserInfoFieldEmail:
                 self.profile.email = cell.valueTextField.text;
                 break;
                 
-            case UserInfoFieldDateOfBirth:
+            case APCUserInfoFieldDateOfBirth:
                 self.profile.dateOfBirth = cell.datePicker.date;
                 break;
                 
-            case UserInfoFieldMedicalCondition:
+            case APCUserInfoFieldMedicalCondition:
                 self.profile.medicalCondition =  cell.valueTextField.text;
                 break;
                 
-            case UserInfoFieldMedication:
+            case APCUserInfoFieldMedication:
                 self.profile.medication = cell.valueTextField.text;
                 break;
                 
-            case UserInfoFieldBloodType:
+            case APCUserInfoFieldBloodType:
                 self.profile.bloodType = cell.valueTextField.text;
                 break;
                 
-            case UserInfoFieldWeight:
+            case APCUserInfoFieldWeight:
                 self.profile.weight = @([cell.valueTextField.text integerValue]);
                 break;
                 
-            case UserInfoFieldHeight:
+            case APCUserInfoFieldHeight:
                 self.profile.height = cell.valueTextField.text;
                 break;
                 
-            case UserInfoFieldPassword:
+            case APCUserInfoFieldPassword:
                 self.profile.password = cell.valueTextField.text;
                 break;
                 
-            case UserInfoFieldGender:
-                self.profile.gender = (ProfileGender)cell.segmentControl.selectedSegmentIndex;
+            case APCUserInfoFieldGender:
+                self.profile.gender = (APCProfileGender)cell.segmentControl.selectedSegmentIndex;
                 
             default:
                 break;

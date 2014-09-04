@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "Profile.h"
+#import "APCProfile.h"
 #import "APCStepProgressBar.h"
 #import "APCSignUpGeneralInfoViewController.h"
 #import "APCSignUpMedicalInfoViewController.h"
@@ -24,7 +24,7 @@
     self = [super init];
     if (self) {
         self.fields = @[@(UserInfoFieldUserName), @(UserInfoFieldEmail), @(UserInfoFieldPassword), @(UserInfoFieldDateOfBirth), @(UserInfoFieldGender)];
-        self.profile = [Profile new];
+        self.profile = [APCProfile new];
     }
     return self;
 }

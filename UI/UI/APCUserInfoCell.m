@@ -1,24 +1,24 @@
 //
-//  UserInfoCell.m
+//  APCUserInfoCell.m
 //  Configuration
 //
 //  Created by Karthik Keyan on 8/11/14.
 //  Copyright (c) 2014 Karthik Keyan. All rights reserved.
 //
 
-#import "UserInfoCell.h"
-#import "NSString+Extension.h"
+#import "APCUserInfoCell.h"
+#import "NSString+Category.h"
 
-@interface UserInfoCell () <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
+@interface APCUserInfoCell () <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (nonatomic, strong) CALayer *separatorLayer;
 @property (nonatomic, strong) CALayer *profileImageCircleLayer;
 
 @end
 
-@implementation UserInfoCell
+@implementation APCUserInfoCell
 
-- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier type:(UserInfoCellType)type {
+- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier type:(APCUserInfoCellType)type {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.textLabel.font = [UIFont systemFontOfSize:15];
@@ -42,36 +42,36 @@
 
 #pragma mark - Custom Setter
 
-- (void) setType:(UserInfoCellType)type {
+- (void) setType:(APCUserInfoCellType)type {
     if (_type != type) {
         _type = type;
         
         switch (self.type) {
-            case UserInfoCellTypeImageText:
+            case APCUserInfoCellTypeImageText:
                 [self addImageText];
                 break;
                 
-            case UserInfoCellTypeSingleInputText:
+            case APCUserInfoCellTypeSingleInputText:
                 [self addSingleInputText];
                 break;
                 
-            case UserInfoCellTypeSwitch:
+            case APCUserInfoCellTypeSwitch:
                 [self addSwitch];
                 break;
                 
-            case UserInfoCellTypeDatePicker:
+            case APCUserInfoCellTypeDatePicker:
                 [self addDatePicker];
                 break;
             
-            case UserInfoCellTypeCustomPicker:
+            case APCUserInfoCellTypeCustomPicker:
                 [self addCustomPicker];
                 break;
                 
-            case UserInfoCellTypeTitleValue:
+            case APCUserInfoCellTypeTitleValue:
                 [self addTitleValue];
                 break;
                 
-            case UserInfoCellTypeSegment:
+            case APCUserInfoCellTypeSegment:
                 [self addSegmentControl];
                 break;
                 
@@ -305,10 +305,10 @@
     
     self.separatorLayer.frame = CGRectMake(15, self.bounds.size.height - 1, self.bounds.size.width - 15, 0.5);
     
-    if (self.type == UserInfoCellTypeSingleInputText) {
+    if (self.type == APCUserInfoCellTypeSingleInputText) {
         self.valueTextField.frame = CGRectMake(15, (self.bounds.size.height - 30) * 0.5, 300, 30);
     }
-    else if (self.type == UserInfoCellTypeImageText) {
+    else if (self.type == APCUserInfoCellTypeImageText) {
         CGFloat leftInset = 15 + 80 + 10;
         
         self.valueTextField.frame = CGRectMake(leftInset, ((self.bounds.size.height - 30) * 0.5) - 10, 300 - leftInset, 30);
@@ -319,7 +319,7 @@
         
         self.profileImageCircleLayer.frame = self.profileImageButton.frame;
     }
-    else if (self.type == UserInfoCellTypeSegment) {
+    else if (self.type == APCUserInfoCellTypeSegment) {
         [self.textLabel sizeToFit];
         
         CGRect frame = self.textLabel.frame;
