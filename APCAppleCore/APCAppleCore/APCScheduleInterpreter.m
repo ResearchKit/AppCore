@@ -74,10 +74,8 @@
     
     // transform the date compoments into a date, based on current calendar settings
     NSDate *date = [calendar dateFromComponents:components];
-    
-    NSLog(@"localized hour %@", date);
+
     return date;
-    
 }
 
 //This is based on the user's waking time;
@@ -109,15 +107,12 @@
     
     // transform the date compoments into a date, based on current calendar settings
     NSDate *date = [calendar dateFromComponents:components];
-    
-    NSLog(@"localized hour %@", date);
+
     return date;
 }
 
 - (NSDate *)createDateFrom:(NSDate *)zeroHour atHour:(int)hourIncrement {
     
-    NSLog(@"Starting at %@ adding %d", zeroHour, hourIncrement);
-
     NSTimeInterval hourInterval = hourIncrement * 60 * 60;
     
     NSDate *dueOnDate = [zeroHour dateByAddingTimeInterval:hourInterval];
