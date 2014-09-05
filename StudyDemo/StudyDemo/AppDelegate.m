@@ -60,14 +60,6 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
         return NO;
     }
     
-    HKCorrelationType *bpType = (HKCorrelationType *)[HKCorrelationType correlationTypeForIdentifier:HKCorrelationTypeIdentifierBloodPressure];
-    RKHealthCorrelationCollector *bpCollector = [study addHealthCorrelationCollectorWithCorrelationType:bpType sampleTypes:@[[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureDiastolic], [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic]] units:@[[HKUnit unitFromString:@"mmHg"], [HKUnit unitFromString:@"mmHg"]] startDate:nil error:&error];
-    if (!bpCollector)
-    {
-        NSLog(@"Error creating BP collector: %@", error);
-        [store removeStudy:study error:nil];
-        return NO;
-    }
     
     RKMotionActivityCollector *motionCollector = [study addMotionActivityCollectorWithStartDate:nil error:&error];
     if (!motionCollector)
@@ -227,21 +219,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     if (! logger)
     {
         logger = [_logManager addJSONDataLoggerForLogName:identifier];
-        logger.fileProtectionMode = RKFileProtectionCompleteUnlessOpen;
-    }
-    BOOL success = [logger appendObjects:[collector serializableObjectsForObjects:objects] error:nil];
-    NSLog(@"Health log (%d)", success);
-    return success;
-}
-
-- (BOOL)study:(RKStudy *)study healthCorrelationCollector:(RKHealthCorrelationCollector *)collector anchor:(NSNumber *)anchor didCollectObjects:(NSArray /* <HKCorrelation> */ *)objects
-{
-    NSString *identifier = [[collector correlationType] identifier];
-    RKDataLogger *logger = [_logManager dataLoggerForLogName:identifier];
-    if (! logger)
-    {
-        logger = [_logManager addJSONDataLoggerForLogName:identifier];
-        logger.fileProtectionMode = RKFileProtectionCompleteUnlessOpen;
+        logger.fileProtectionMode = NSFileProtectionCompleteUnlessOpen;
     }
     BOOL success = [logger appendObjects:[collector serializableObjectsForObjects:objects] error:nil];
     NSLog(@"Health log (%d)", success);
@@ -255,7 +233,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     if (! logger)
     {
         logger = [_logManager addJSONDataLoggerForLogName:logName];
-        logger.fileProtectionMode = RKFileProtectionCompleteUnlessOpen;
+        logger.fileProtectionMode = NSFileProtectionCompleteUnlessOpen;
     }
     BOOL success = [logger appendObjects:[collector serializableObjectsForObjects:objects] error:nil];
     NSLog(@"Motion log (%d)", success);

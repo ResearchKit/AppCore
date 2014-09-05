@@ -91,16 +91,10 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
 /**
  * @brief Control buttons
  */
-@property (nonatomic, strong) UIBarButtonItem* continueButton;
+@property (nonatomic, strong) UIBarButtonItem* nextButton;
 @property (nonatomic, strong) UIBarButtonItem* learnMoreButton;
 @property (nonatomic, strong) UIBarButtonItem* backButton;
-@property (nonatomic, strong) UIBarButtonItem* cancelButton;
-
-/**
- * @brief Whether to add continueButton to toolbar at the bottom
- * Default value is YES;
- */
-@property (nonatomic) BOOL continueButtonOnToolbar;
+@property (nonatomic, strong) UIBarButtonItem* quitButton;
 
 /**
  * @brief Methods tell if next/prevous step is available

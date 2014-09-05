@@ -13,18 +13,13 @@
 @interface RKIntroductionStep : RKStep
 
 /**
- * @brief The caption content.
+ * @brief The title content.
  */
-@property (nonatomic, copy) NSString* caption;
+@property (nonatomic, copy) NSString* titleText;
 
 /**
- * @brief The instruction content with bold font.
+ * @brief The description content.
  */
-@property (nonatomic, copy) NSString* instruction;
-
-/**
- * @brief The explanation content below instruction.
- */
-@property (nonatomic, copy) NSString* explanation;
+@property (nonatomic, copy) NSString* descriptionText;
 
 @end

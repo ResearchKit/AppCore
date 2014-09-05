@@ -56,7 +56,6 @@
 @property (nonatomic, strong) RKTaskViewController* taskVC;
 @property (nonatomic, strong) RKStudy* study;
 @property (nonatomic, strong) NSData *signedPdfData;
-@property (nonatomic, strong) RKDataArchive *taskArchive;
 
 @end
 
@@ -86,7 +85,7 @@
 {
     [super viewDidLoad];
     
-    [[UIView appearance] setTintColor:[UIColor orangeColor]];
+    [[UIBarButtonItem appearance] setTintColor:[UIColor orangeColor]];
     
     CGRect buttonFrame = CGRectMake(0, 0, 240, 40);
     
@@ -170,11 +169,6 @@
     
 }
 
-- (void)dealloc
-{
-    [self.taskArchive resetContent];
-}
-
 #pragma mark - button handlers
 
 -(void)joinStudy:(id)sender
@@ -201,31 +195,18 @@
 
 - (IBAction)showTaskButtonTapped:(id)sender{
     
-    
     NSMutableArray* steps = [NSMutableArray new];
     
     {
-        RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001d" name:@"active step"];
-        step.caption = @"Audio";
-        step.countDown = 10.0;
-        step.text = @"An active test recording audio";
-        step.recorderConfigurations = @[[RKAudioRecorderConfiguration configuration]];
-        [steps addObject:step];
-    }
-    
-    {
         RKIntroductionStep* step = [[RKIntroductionStep alloc] initWithIdentifier:@"iid_001" name:@"intro step"];
-        step.caption = @"Demo Study";
-        step.instruction = @"This 12-step walkthrough will explain the study and the impact it will have on your life.";
-        step.explanation = @"You must complete the walkthough to participate in the study.";
+        step.titleText = @"Demo Study";
+        step.descriptionText = @"We're conducting research on the different question types ResearchKit has to offer. We'd love to hear from you about what question types you use the most and what question types you want to see built. This will help us make improvements to the existing tool and prioritize new features.";
         [steps addObject:step];
     }
     
     {
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001a" name:@"active step"];
-        step.caption = @"Touch";
         step.text = @"An active test, touch collection";
-        step.clickButtonToStartTimer = YES;
         step.countDown = 30.0;
         step.voicePrompt = @"An active test, touch collection";
         step.recorderConfigurations = @[[RKTouchRecorderConfiguration configuration]];
@@ -234,8 +215,7 @@
     
     {
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001b" name:@"active step"];
-        step.caption = @"Button Tap";
-        step.text = @"Please tap the orange button above when it appears.";
+        step.text = @"An active test\nPlease tap the orange button above when it appears.";
         step.countDown = 10.0;
         step.recorderConfigurations = @[[CustomRecorderConfiguration new]];
         [steps addObject:step];
@@ -243,7 +223,6 @@
     
     {
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001c" name:@"active step"];
-        step.caption = @"Motion";
         step.text = @"An active test collecting device motion data";
         step.recorderConfigurations = @[ [[RKDeviceMotionRecorderConfiguration alloc] initWithFrequency:100.0]];
         [steps addObject:step];
@@ -254,12 +233,6 @@
         format.minimum = @(0);
         format.maximum = @(199);
         RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_001" name:@"HowOld" question:@"How old are you?" answer:format];
-        [steps addObject:step];
-    }
-    
-    {
-        RKBooleanAnswerFormat* format = [RKBooleanAnswerFormat new];
-        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_001b" name:@"Boolean" question:@"Do you consent to a background check?" answer:format];
         [steps addObject:step];
     }
     
@@ -281,7 +254,7 @@
         RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_003"
                                                                       name:@"Choices ONE"
                                                                   question:@"How many hours did you sleep last night?"
-                                                                    answer:[RKChoiceAnswerFormat choiceAnswerWithOptions:@[@"Less than seven", @"Between seven and eight", @"More than eight"] style:RKChoiceAnswerStyleSingleChoice]];
+                                                                    answer:[RKChoiceAnswerFormat choiceAnswerWithOptions:@[@[@"s1",@"choice1"], @[@"s2",@"choice2"], @[@"s3",@"choice3"]] style:RKChoiceAnswerStyleSingleChoice]];
         [steps addObject:step];
     }
     
@@ -289,8 +262,8 @@
     {
         RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_004"
                                                                   name:@"Choices Muti"
-                                                              question:@"Which symptoms do you have?"
-                                                                answer:[RKChoiceAnswerFormat choiceAnswerWithOptions:@[@[@"Cough",@"A cough and/or sore throat"], @[@"Fever", @"A 100F or higher fever or feeling feverish"], @[@"Headaches",@"Headaches and/or body aches"]]  style:RKChoiceAnswerStyleMultipleChoice]];
+                                                              question:@"How many hours did you sleep last night?"
+                                                                answer:[RKChoiceAnswerFormat choiceAnswerWithOptions:@[@[@"m1",@"choice1"], @[@"m2",@"choice2"], @[@"m3",@"choice3"]]  style:RKChoiceAnswerStyleMultipleChoice]];
         
         [steps addObject:step];
     }
@@ -314,7 +287,7 @@
     {
         RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_007"
                                                                       name:@"date"
-                                                                  question:@"When is your birthday?"
+                                                                  question:@"When did you arrive?"
                                                                     answer:[RKDateAnswerFormat dateAnswer]];
         
         [steps addObject:step];
@@ -323,7 +296,7 @@
     {
         RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_008"
                                                                       name:@"time"
-                                                                  question:@"What time do you get up?"
+                                                                  question:@"When did you arrive?"
                                                                     answer:[RKDateAnswerFormat timeAnswer]];
         [steps addObject:step];
     }
@@ -331,7 +304,7 @@
     {
         RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_009"
                                                                    name:@"date & time"
-                                                               question:@"When is your next meeting?"
+                                                               question:@"When did you arrive?"
                                                                  answer:[RKDateAnswerFormat dateTimeAnswer]];
         [steps addObject:step];
         
@@ -348,7 +321,12 @@
     RKTask* task = [[RKTask alloc] initWithName:@"Demo" identifier:@"tid_001" steps:steps];
     
     self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
-    [self beginTask:task];
+    
+    self.taskVC.delegate = self;
+    
+    [self presentViewController:_taskVC animated:YES completion:^{
+        NSLog(@"task Presented");
+    }];
 }
 
 - (IBAction)showConsentButtonTapped:(id)sender{
@@ -358,29 +336,36 @@
     
     {
         RKIntroductionStep* step = [[RKIntroductionStep alloc] initWithIdentifier:@"iid_001" name:@"intro step"];
-        step.caption = @"Demo Study";
-        step.explanation = @"We're conducting research on the different question types ResearchKit has to offer. We'd love to hear from you about what question types you use the most and what question types you want to see built. This will help us make improvements to the existing tool and prioritize new features.";
+        step.titleText = @"Demo Study";
+        step.descriptionText = @"We're conducting research on the different question types ResearchKit has to offer. We'd love to hear from you about what question types you use the most and what question types you want to see built. This will help us make improvements to the existing tool and prioritize new features.";
         [steps addObject:step];
     }
     
     {
         NSString *path = [[NSBundle mainBundle] pathForResource:@"printing" ofType:@"pdf"];
-        RKConsentStep* step = [[RKConsentStep alloc] initWithIdentifier:@"cid_a" name:@"Consent step" consentFile:[NSData dataWithContentsOfFile:path]];
+        RKConsentStep* step = [[RKConsentStep alloc] initWithIdentifier:@"cid_a" name:@"Conent step" consentFile:[NSData dataWithContentsOfFile:path]];
         [steps addObject:step];
     }
     
     RKTask* task = [[RKTask alloc] initWithName:@"Consent" identifier:@"ConsentTask" steps:steps];
-    [self beginTask:task];
+    
+    _taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    _taskVC.delegate = self;
+    
+    [self presentViewController:_taskVC animated:YES completion:^{
+        NSLog(@"consent Presented");
+    }];
+    
 }
 
 - (IBAction)showSample001ButtonTapped:(id)sender{
     
     NSArray* qlist = @[@"MOBILITY",
-                       @[@[@"No Problems", @"I have no problems in walking about."], @[@"Slight Problems",@"I have slight problems in walking about."], @[@"Moderate Problems", @"I have moderate problems in walking about."],  @[@"Severe Problems",@"I have severe problems in walking about."], @[@"Unable to complete",@"I am unable to walk about."]],
+                       @[@[@"No problems", @"I have no problems in walking about"], @[@"Slight problems",@"I have slight problems in walking about"], @[@"Moderate problems", @"I have moderate problems in walking about"],  @[@"Severe problems",@"I have severe problems in walking about"], @[@"Unable to complete",@"I am unable to walk about"]],
                        @"SELF-CARE",
-                       @[@[@"No Problems",@"I have no problems washing or dressing myself"], @[@"Slight problems", @"I have slight problems washing or dressing myself"], @[@"Moderate problems", @"I have moderate problems washing or dressing myself"], @[@"Severe problems", @"I have severe problems washing or dressing myself"], @[@"Unable to complete", @"I am unable to wash or dress myself"] ],
+                       @[@[@"No problems",@"I have no problems washing or dressing myself"], @[@"Slight problems", @"I have slight problems washing or dressing myself"], @[@"Moderate problems", @"I have moderate problems washing or dressing myself"], @[@"Severe problems", @"I have severe problems washing or dressing myself"], @[@"Unable to complete", @"I am unable to wash or dress myself"] ],
                        @"USUAL ACTIVITIES (e.g. work, study, housework, family or leisure activities)",
-                       @[@[@"No Problems",@"I have no problems doing my usual activities"], @[@"Slight problems", @"I have slight problems doing my usual activities"], @[@"Moderate problems", @"I have moderate problems doing my usual activities"], @[@"Severe problems", @"I have severe problems doing my usual activities"], @[@"Unable to complete", @"I am unable to do my usual activities"]],
+                       @[@[@"No problems",@"I have no problems doing my usual activities"], @[@"Slight problems", @"I have slight problems doing my usual activities"], @[@"Moderate problems", @"I have moderate problems doing my usual activities"], @[@"Severe problems", @"I have severe problems doing my usual activities"], @[@"Unable to complete", @"I am unable to do my usual activities"]],
                        @"PAIN / DISCOMFORT",
                        @[@[@"No pain or discomfort", @"I have no pain or discomfort"], @[@"Slight pain or discomfort", @"I have slight pain or discomfort"], @[@"Moderate pain or discomfort", @"I have moderate pain or discomfort"], @[@"Severe pain or discomfort", @"I have severe pain or discomfort"], @[@"Extreme pain or discomfort", @"I have extreme pain or discomfort"]],
                        @"ANXIETY / DEPRESSION",
@@ -398,7 +383,7 @@
                                                                           name:@""
                                                                       question:object
                                                                         answer:[RKChoiceAnswerFormat choiceAnswerWithOptions:qlist[[qlist indexOfObject:object]+1] style:RKChoiceAnswerStyleSingleChoice]];
-            step.prompt = @"Please pick the ONE box that best describes your health TODAY";
+            step.prompt = @"Please tick the ONE box that best describes your health TODAY";
             [steps addObject:step];
         }
     }
@@ -415,7 +400,12 @@
     RKTask* task = [[RKTask alloc] initWithName:@"Health Questionnaire" identifier:@"tid_001" steps:steps];
     
     self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
-    [self beginTask:task];
+    
+    self.taskVC.delegate = self;
+    
+    [self presentViewController:_taskVC animated:YES completion:^{
+        
+    }];
 }
 
 - (IBAction)showDynamicButtonTapped:(id)sender{
@@ -432,29 +422,12 @@
     }];
 }
 
-- (void)beginTask:(id<RKLogicalTask>)task
-{
-    if (self.taskArchive)
-    {
-        [self.taskArchive resetContent];
-    }
-    
-    self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
-    self.taskVC.delegate = self;
-    
-    self.taskArchive = [[RKDataArchive alloc] initWithItemIdentifier:[RKItemIdentifier itemIdentifierForTask:task] studyIdentifier:MainStudyIdentifier taskInstanceUUID:self.taskVC.taskInstanceUUID extraMetadata:nil fileProtection:RKFileProtectionCompleteUnlessOpen];
-    
-    [self presentViewController:_taskVC animated:YES completion:nil];
-}
-
-
 - (IBAction)showGAITButtonTapped:(id)sender{
     
     NSMutableArray* steps = [NSMutableArray new];
     
     {
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"gait_001" name:@"active step"];
-        step.caption = @"20 Yards Walk";
         step.text = @"Please put the phone in a pocket or armband. Then wait for voice instruction.";
         step.countDown = 8.0;
         [steps addObject:step];
@@ -462,7 +435,6 @@
     
     {
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"gait_002" name:@"active step"];
-        step.caption = @"20 Yards Walk";
         step.text = @"Now please walk 20 yards, turn 180 degrees, and walk back.";
         step.buzz = YES;
         step.vibration = YES;
@@ -474,13 +446,18 @@
     
     {
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"gait_003" name:@"active step"];
-        step.caption = @"Thank you for completing this task.";
+        step.text = @"Thank you for completing this task.";
         step.voicePrompt = step.text;
         [steps addObject:step];
     }
     
     RKTask* task = [[RKTask alloc] initWithName:@"GAIT" identifier:@"tid_001" steps:steps];
-    [self beginTask:task];
+    self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    self.taskVC.delegate = self;
+    
+    [self presentViewController:_taskVC animated:YES completion:^{
+        NSLog(@"task Presented");
+    }];
     
     
 }
@@ -506,26 +483,25 @@
     
     {
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"itid_003" name:@"active step"];
-        step.caption = @"Thank you for completing this task.";
+        step.text = @"Thank you for completing this task.";
         step.voicePrompt = step.text;
         [steps addObject:step];
     }
     
     RKTask* task = [[RKTask alloc] initWithName:@"Screening" identifier:@"tid_001" steps:steps];
-    [self beginTask:task];
+    self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    self.taskVC.delegate = self;
+    
+    [self presentViewController:_taskVC animated:YES completion:^{
+        NSLog(@"task Presented");
+    }];
 }
 
 #pragma mark - Helpers
 
 -(void)sendResult:(RKResult*)result
 {
-    // In a real application, consider adding to the archive on a concurrent queue.
-    NSError *err = nil;
-    if (![result addToArchive:self.taskArchive error:&err])
-    {
-        // Error adding the result to the archive; archive may be invalid. Tell
-        // the user there's been a problem and stop the task.
-    }
+    NSLog(@"To do: Upload %@", result);
 }
 
 #pragma mark - RKTaskViewControllerDelegate
@@ -551,7 +527,7 @@
         }
     }
     
-    if ([result isKindOfClass:[RKDataResult class]] && [[[result.itemIdentifier components] lastObject] isEqualToString:@"document"]) {
+    if ([result isKindOfClass:[RKDataResult class]] && [result.stepIdentifier isEqualToString:@"cid_a"]) {
         self.signedPdfData = [(RKDataResult*)result data];
     }
     
@@ -603,9 +579,9 @@
                                                                                                target:nil
                                                                                               action:nil];
     }else if ([stepViewController.step.identifier isEqualToString:@"gait_001"]) {
-        stepViewController.continueButton = nil;
+        stepViewController.nextButton = nil;
     }else if ([stepViewController.step.identifier isEqualToString:@"gait_002"]) {
-        stepViewController.continueButton = [[UIBarButtonItem alloc] initWithTitle:@"I'm done" style:stepViewController.continueButton.style target:stepViewController.continueButton.target action:stepViewController.continueButton.action];
+        stepViewController.nextButton = [[UIBarButtonItem alloc] initWithTitle:@"I'm done" style:stepViewController.nextButton.style target:stepViewController.nextButton.target action:stepViewController.nextButton.action];
         stepViewController.backButton = nil;
     }else if ([stepViewController.step.identifier isEqualToString:@"gait_003"]) {
         stepViewController.backButton = nil;
@@ -615,7 +591,8 @@
         footerView.text = @"Custom footer view";
         footerView.textAlignment = NSTextAlignmentCenter;
         footerView.textColor = [UIColor lightGrayColor];
-        
+        footerView.layer.borderWidth = 1.0;
+        footerView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
         qsvc.footerView = footerView;
     }
 }
@@ -623,46 +600,20 @@
 
 - (void)taskViewControllerDidFail: (RKTaskViewController *)taskViewController withError:(NSError*)error{
     
-    [self.taskArchive resetContent];
-    self.taskArchive = nil;
-    
 }
 
 - (void)taskViewControllerDidCancel:(RKTaskViewController *)taskViewController{
     
     [taskViewController suspend];
     
-    [self.taskArchive resetContent];
-    self.taskArchive = nil;
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 
 - (void)taskViewControllerDidComplete: (RKTaskViewController *)taskViewController{
     
     [taskViewController suspend];
-    
-    NSError *err = nil;
-    NSURL *archiveFileURL = [self.taskArchive archiveURLWithError:&err];
-    if (archiveFileURL)
-    {
-        NSURL *documents = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]];
-        NSURL *outputUrl = [documents URLByAppendingPathComponent:[archiveFileURL lastPathComponent]];
-        
-        // This is where you would queue the archive for upload. In this demo, we move it
-        // to the documents directory, where you could copy it off using iTunes, for instance.
-        [[NSFileManager defaultManager] moveItemAtURL:archiveFileURL toURL:outputUrl error:nil];
-        
-        NSLog(@"outputUrl= %@", outputUrl);
-        
-        // When done, clean up:
-        self.taskArchive = nil;
-        if (archiveFileURL)
-        {
-            [[NSFileManager defaultManager] removeItemAtURL:archiveFileURL error:nil];
-        }
-    }
-    
     
     
     [self dismissViewControllerAnimated:YES completion:^{

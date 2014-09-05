@@ -9,7 +9,7 @@
 
 @interface DynamicTask ()
 
-@property (nonatomic, strong) RKIntroductionStep* step1;
+@property (nonatomic, strong) RKActiveStep* step1;
 @property (nonatomic, strong) RKQuestionStep* step2;
 @property (nonatomic, strong) RKQuestionStep* step3a;
 @property (nonatomic, strong) RKQuestionStep* step3b;
@@ -64,7 +64,8 @@
         if (result == nil || result.answer == nil) {
             return nil;
         }else{
-            if ([(NSNumber*)result.answer boolValue]) {
+            NSInteger index = [(NSNumber*)result.answer integerValue];
+            if (index == 0) {
                 return _step4;
             }
         }
@@ -94,11 +95,13 @@
     return nil;
 }
 
-- (RKIntroductionStep *)step1{
+- (RKActiveStep *)step1{
     if (_step1 == nil) {
-        _step1 = [[RKIntroductionStep alloc] initWithIdentifier:@"step1" name:@"name"];
-        _step1.caption = @"This is a dynamic task";
+        _step1 = [[RKActiveStep alloc] initWithIdentifier:@"step1" name:@"name"];
+        _step1.text = @"First Step";
+        _step1.voicePrompt = @"First Step";
     }
+    
     return _step1;
 }
 
@@ -119,7 +122,7 @@
     if (_step3a == nil) {
         _step3a = [[RKQuestionStep alloc] initWithIdentifier:@"step3a" name:@"name"];
         _step3a.question = @"You chose route1. Do you like it?";
-        _step3a.answerFormat = [RKBooleanAnswerFormat new];
+        _step3a.answerFormat = [RKChoiceAnswerFormat choiceAnswerWithOptions:@[@"YES", @"NO"] style:RKChoiceAnswerStyleSingleChoice];
         _step3a.optional = NO;
     }
     
@@ -130,7 +133,7 @@
     if (_step3b == nil) {
         _step3b = [[RKQuestionStep alloc] initWithIdentifier:@"step3b" name:@"name"];
         _step3b.question = @"You chose route2. Do you like it?";
-        _step3b.answerFormat = [RKBooleanAnswerFormat new];
+        _step3b.answerFormat = [RKChoiceAnswerFormat choiceAnswerWithOptions:@[@"YES", @"NO"] style:RKChoiceAnswerStyleSingleChoice];
         _step3b.optional = NO;
     }
     
@@ -141,7 +144,7 @@
 - (RKActiveStep *)step4{
     if (_step4 == nil) {
         _step4 = [[RKActiveStep alloc] initWithIdentifier:@"step4" name:@"name"];
-        _step4.caption = @"Thank you for enjoying the route.";
+        _step4.text = @"Thank you for enjoying the route.";
         _step4.voicePrompt = @"Thank you for enjoying the route.";
         
     }

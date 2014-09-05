@@ -9,4 +9,4 @@
 
 RK_EXTERN const double RKVersionNumber;
 
-#define RKVersionNumber_Internal_1 0.03
+#define RKVersionNumber_Internal_1 0.01

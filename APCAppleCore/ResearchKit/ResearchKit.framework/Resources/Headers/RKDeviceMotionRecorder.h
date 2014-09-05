@@ -12,13 +12,13 @@
 /**
  * @brief A recorder that requests and collects device motion data from CoreMotion at a fixed frequency.
  *
- * The motion recorder continues to record if the application enters the
+ * The accelerometer recorder continues to record if the application enters the
  * background using UIApplication's background task support.
  */
 @interface RKDeviceMotionRecorder : RKRecorder
 
 /**
- * @brief Motion data collection frequency from CoreMotion in Hz.
+ * @brief Accelerometer data collection frequency from CoreMotion in Hz.
  */
 @property (nonatomic, readonly) double frequency;
 
@@ -36,7 +36,7 @@
 @interface RKDeviceMotionRecorderConfiguration : NSObject <RKRecorderConfiguration>
 
 /**
- * @brief motion data collection frequency, unit is hertz (Hz).
+ * @brief accelerometer data collection frequency, unit is hertz (Hz).
  */
 @property (nonatomic, readonly) double frequency;
 
