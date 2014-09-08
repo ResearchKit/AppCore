@@ -1,0 +1,24 @@
+[
+    {
+        "guid": "1",
+        "type": "REPEATING",
+        "href": "appleparkinson:",
+        "schedule": "1:2,4,6",
+        "taskType": "walking"
+    },
+    {
+        "guid": "1",
+        "type": "REPEATING",
+        "href": "appleparkinson:",
+        "schedule": "1:5",
+        "taskType": "phonation",
+        "reminder": "1"
+    },
+    {
+        "guid": "1",
+        "type": "REPEATING",
+        "href": "appleparkinson:",
+        "schedule": "1:7",
+        "taskType": "tapping"
+    }
+]
