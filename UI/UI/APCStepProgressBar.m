@@ -54,7 +54,7 @@
     
     _progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
     _progressView.frame = CGRectMake(0, self.bounds.size.height - 1, self.bounds.size.width, 1);
-    _progressView.trackTintColor = [UIColor whiteColor];
+    _progressView.trackTintColor = [UIColor colorWithRed:248/255.0 green:248/255.0 blue:248/255.0 alpha:1.0];
     _progressView.progressTintColor = [UIColor colorWithRed:45/255.0 green:180/255.0 blue:251/255.0 alpha:1.0];
     [self addSubview:_progressView];
     

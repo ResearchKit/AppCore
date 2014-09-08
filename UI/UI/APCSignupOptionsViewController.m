@@ -7,14 +7,14 @@
 //
 
 #import "APCSignInViewController.h"
-#import "APCOnBoardingOptionsViewController.h"
-#import "APCSignUpGeneralInfoViewController.h"
+#import "APCSignupOptionsViewController.h"
+#import "APHSignUpGeneralInfoViewController.h"
 
-@interface APCOnBoardingOptionsViewController ()
+@interface APCSignupOptionsViewController ()
 
 @end
 
-@implementation APCOnBoardingOptionsViewController
+@implementation APCSignupOptionsViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -30,7 +30,7 @@
 #pragma mark - IBActions
 
 - (IBAction) signUp {
-    [self.navigationController pushViewController:[APCSignUpGeneralInfoViewController new] animated:YES];
+    [self.navigationController pushViewController:[APHSignUpGeneralInfoViewController new] animated:YES];
 }
 
 - (IBAction) signIn {

@@ -10,16 +10,16 @@
 #import "APHUserInfoCell.h"
 #import "APCStepProgressBar.h"
 #import "UITableView+AppearanceCategory.h"
-#import "APCSignUpGeneralInfoViewController.h"
-#import "APCSignUpMedicalInfoViewController.h"
+#import "APHSignUpGeneralInfoViewController.h"
+#import "APHSignUpMedicalInfoViewController.h"
 
-@interface APCSignUpGeneralInfoViewController ()
+@interface APHSignUpGeneralInfoViewController ()
 
 @property (weak, nonatomic) IBOutlet UIButton *agreeButton;
 
 @end
 
-@implementation APCSignUpGeneralInfoViewController
+@implementation APHSignUpGeneralInfoViewController
 
 - (instancetype)init
 {
@@ -93,7 +93,7 @@
 #pragma mark - Private Methods
 
 - (void) next {
-    APCSignUpMedicalInfoViewController *medicalInfoViewController = [APCSignUpMedicalInfoViewController new];
+    APHSignUpMedicalInfoViewController *medicalInfoViewController = [APHSignUpMedicalInfoViewController new];
     medicalInfoViewController.profile = self.profile;
     
     [self.navigationController pushViewController:medicalInfoViewController animated:YES];

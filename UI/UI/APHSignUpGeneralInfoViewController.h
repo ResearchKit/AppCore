@@ -8,6 +8,6 @@
 
 #import "APCSignUpUserInfoViewController.h"
 
-@interface APCSignUpGeneralInfoViewController : APCSignUpUserInfoViewController
+@interface APHSignUpGeneralInfoViewController : APCSignUpUserInfoViewController
 
 @end

@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCOnBoardingVideoViewController.h"
-#import "APCOnBoardingOptionsViewController.h"
+#import "APCIntroVideoViewController.h"
+#import "APCSignupOptionsViewController.h"
 
-@interface APCOnBoardingVideoViewController ()
+@interface APCIntroVideoViewController ()
 
 @end
 
-@implementation APCOnBoardingVideoViewController
+@implementation APCIntroVideoViewController
 
 - (void) loadView {
     self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -37,7 +37,7 @@
 #pragma mark - Private Methods
 
 - (void) skip {
-    APCOnBoardingOptionsViewController *optionsViewController = [[APCOnBoardingOptionsViewController alloc] initWithNibName:@"APCOnBoardingOptionsViewController" bundle:nil];
+    APCSignupOptionsViewController *optionsViewController = [[APCSignupOptionsViewController alloc] initWithNibName:@"APCOnBoardingOptionsViewController" bundle:nil];
     
     [self.navigationController pushViewController:optionsViewController animated:YES];
 }

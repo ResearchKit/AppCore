@@ -12,6 +12,8 @@
 #import "APCSignupTouchIDViewController.h"
 #import "APCSignupCriteriaViewController.h"
 
+@import LocalAuthentication;
+
 @interface APCSignupTouchIDViewController () <APCPasscodeViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -102,7 +104,18 @@
 #pragma mark - IBActions
 
 - (IBAction) touchID {
+    LAContext *context = [[LAContext alloc] init];
     
+    NSError *error;
+    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
+        NSString *localizedReason = NSLocalizedString(@"Application authentication", @"");
+        [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:localizedReason reply:^(BOOL success, NSError *error) {
+            
+        }];
+    }
+    else {
+        NSLog(@"%@", error);
+    }
 }
 
 

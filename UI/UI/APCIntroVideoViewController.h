@@ -1,5 +1,5 @@
 //
-//  OnBoardingOptionsViewController.h
+//  OnBoardingVideoViewController.h
 //  OnBoarding
 //
 //  Created by Karthik Keyan on 9/2/14.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface APCOnBoardingOptionsViewController : UIViewController
+@interface APCIntroVideoViewController : UIViewController
 
 @end

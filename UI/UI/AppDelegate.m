@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "APCSettingsViewController.h"
-#import "APCOnBoardingVideoViewController.h"
+#import "APCIntroVideoViewController.h"
 #import "UIBarButtonItem+AppearanceCategory.h"
 
 @interface AppDelegate ()
@@ -30,7 +30,7 @@
         self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[APCSettingsViewController new]];
     }
     else {
-        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[APCOnBoardingVideoViewController new]];
+        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[APCIntroVideoViewController new]];
     }
     
     [self.window makeKeyAndVisible];

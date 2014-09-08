@@ -9,13 +9,13 @@
 #import "APCStepProgressBar.h"
 #import "UITableView+AppearanceCategory.h"
 #import "APCSignupTouchIDViewController.h"
-#import "APCSignUpMedicalInfoViewController.h"
+#import "APHSignUpMedicalInfoViewController.h"
 
-@interface APCSignUpMedicalInfoViewController ()
+@interface APHSignUpMedicalInfoViewController ()
 
 @end
 
-@implementation APCSignUpMedicalInfoViewController
+@implementation APHSignUpMedicalInfoViewController
 
 - (instancetype)init
 {
