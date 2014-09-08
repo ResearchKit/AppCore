@@ -36,7 +36,7 @@
         self.profile.dateOfBirth = [NSDate date];
         self.profile.medicalCondition = self.medicalConditions[0];
         self.profile.medication = self.medications[0];
-        self.profile.bloodType = self.bloodTypes[0];
+        self.profile.bloodType = HKBloodTypeNotSet;
         self.profile.weight = @(160);
     }
     

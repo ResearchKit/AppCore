@@ -18,8 +18,13 @@
 @synthesize stepProgressBar;
 
 - (void) loadView {
-    self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.view.backgroundColor = [UIColor whiteColor];
+    if (self.nibName) {
+        [super loadView];
+    }
+    else {
+        self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        self.view.backgroundColor = [UIColor whiteColor];
+    }
 }
 
 - (void)viewDidLoad {
@@ -34,7 +39,7 @@
 }
 
 - (void) addProgressBar {
-    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, 64, self.view.bounds.size.width, 44)];
+    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, 64, self.view.bounds.size.width, 2) style:APCStepProgressBarStyleOnlyProgressView];
     self.stepProgressBar.numberOfSteps = 4;
     [self.view addSubview:self.stepProgressBar];
 }

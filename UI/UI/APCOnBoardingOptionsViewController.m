@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "APCSignInViewController.h"
 #import "APCOnBoardingOptionsViewController.h"
 #import "APCSignUpGeneralInfoViewController.h"
 
@@ -33,7 +34,7 @@
 }
 
 - (IBAction) signIn {
-    
+    [self.navigationController pushViewController:[APCSignInViewController new] animated:YES];
 }
 
 @end

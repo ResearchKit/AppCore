@@ -7,7 +7,9 @@
 //
 
 #import "APCProfile.h"
+#import "APHUserInfoCell.h"
 #import "APCStepProgressBar.h"
+#import "UITableView+AppearanceCategory.h"
 #import "APCSignUpGeneralInfoViewController.h"
 #import "APCSignUpMedicalInfoViewController.h"
 
@@ -23,7 +25,7 @@
 {
     self = [super init];
     if (self) {
-        self.fields = @[@(UserInfoFieldUserName), @(UserInfoFieldEmail), @(UserInfoFieldPassword), @(UserInfoFieldDateOfBirth), @(UserInfoFieldGender)];
+        self.fields = @[@(APCUserInfoFieldUserName), @(APCUserInfoFieldEmail), @(APCUserInfoFieldPassword), @(APCUserInfoFieldDateOfBirth), @(APCUserInfoFieldGender)];
         self.profile = [APCProfile new];
     }
     return self;
@@ -41,7 +43,7 @@
 #pragma mark - UI Methods
 
 - (void) addNavigationItems {
-    self.title = NSLocalizedString(@"Sign Up", @"");
+    self.title = NSLocalizedString(@"General Information", @"");
     
     UIBarButtonItem *nextBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next", @"") style:UIBarButtonItemStylePlain target:self action:@selector(next)];
     self.navigationItem.rightBarButtonItem = nextBarButton;
@@ -49,19 +51,42 @@
 
 - (void) setupProgressBar {
     self.stepProgressBar.rightLabel.text = NSLocalizedString(@"Mandatory", @"");
-    [self setStepNumber:1 title:NSLocalizedString(@"General Information", @"")];
 }
 
 - (void) addFooterView {
-    UIView *footerView = [[UINib nibWithNibName:@"SignUpGeneralInfoFooterView" bundle:nil] instantiateWithOwner:self options:nil][0];
-    self.tableView.tableFooterView = footerView;
+    UILabel *label = [UILabel new];
+    label.frame = CGRectMake(0, 0, self.tableView.frame.size.width, 44);
+    label.font = [UITableView footerFont];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.textColor = [UITableView footerTextColor];
+    label.text = NSLocalizedString(@"All fields on this screen are required.", @"");
+    self.tableView.tableFooterView = label;
 }
 
+
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    APCUserInfoCell *cell = (APCUserInfoCell *)[super tableView:tableView cellForRowAtIndexPath:indexPath];
+    
+    APCUserInfoField field = [self.fields[indexPath.row] integerValue];
+    
+    if (field == APCUserInfoFieldDateOfBirth) {
+        cell.valueTextField.textAlignment = NSTextAlignmentLeft;
+    }
+    
+    return cell;
+}
 
 #pragma mark - IBActions
 
 - (IBAction) agree {
     self.agreeButton.selected = !self.agreeButton.isSelected;
+}
+
+
+#pragma mark - Public Methods
+
+- (Class) cellClass {
+    return [APHUserInfoCell class];
 }
 
 

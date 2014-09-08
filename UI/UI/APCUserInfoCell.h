@@ -23,7 +23,7 @@ typedef NS_OPTIONS (NSUInteger, APCUserInfoCellType) {
 
 @interface APCUserInfoCell : UITableViewCell
 
-@property (nonatomic, readonly) APCUserInfoCellType type;
+@property (nonatomic, readwrite) APCUserInfoCellType type;
 
 @property (nonatomic, strong) UIButton *profileImageButton;
 
@@ -43,7 +43,7 @@ typedef NS_OPTIONS (NSUInteger, APCUserInfoCellType) {
 
 @property (nonatomic, weak) id<APCUserInfoCellDelegate> delegate;
 
-- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier type:(APCUserInfoCellType)type;
+- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 
 - (void) setNeedsHiddenField;
 
@@ -55,6 +55,7 @@ typedef NS_OPTIONS (NSUInteger, APCUserInfoCellType) {
 @protocol APCUserInfoCellDelegate <NSObject>
 
 @optional
+- (void) userInfoCellDidBecomFirstResponder:(APCUserInfoCell *)cell;
 - (void) userInfoCellValueChanged:(APCUserInfoCell *)cell;
 - (void) userInfoCellDidSelectProfileImage:(APCUserInfoCell *)cell;
 

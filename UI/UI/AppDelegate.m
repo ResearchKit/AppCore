@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "APCSettingsViewController.h"
 #import "APCOnBoardingVideoViewController.h"
+#import "UIBarButtonItem+AppearanceCategory.h"
 
 @interface AppDelegate ()
 
@@ -18,6 +19,8 @@
             
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [self initAppearance];
+    
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
@@ -56,6 +59,15 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void) initAppearance {
+    [[UIBarButtonItem appearance] setTintColor:[UIBarButtonItem textColor]];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{
+                                                            NSForegroundColorAttributeName : [UIBarButtonItem textColor],
+                                                            NSFontAttributeName : [UIBarButtonItem font]
+                                                           }
+                                                forState:UIControlStateNormal];
 }
 
 @end

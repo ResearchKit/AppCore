@@ -7,6 +7,7 @@
 //
 
 #import "APCStepProgressBar.h"
+#import "UITableView+AppearanceCategory.h"
 #import "APCSignupTouchIDViewController.h"
 #import "APCSignUpMedicalInfoViewController.h"
 
@@ -20,7 +21,7 @@
 {
     self = [super init];
     if (self) {
-        self.fields = @[@(UserInfoFieldMedicalCondition), @(UserInfoFieldMedication), @(UserInfoFieldBloodType), @(UserInfoFieldWeight), @(UserInfoFieldHeight)];
+        self.fields = @[@(APCUserInfoFieldMedicalCondition), @(APCUserInfoFieldMedication), @(APCUserInfoFieldBloodType), @(APCUserInfoFieldHeight), @(APCUserInfoFieldWeight)];
     }
     return self;
 }
@@ -32,6 +33,7 @@
     
     [self addNavigationItems];
     [self setupProgressBar];
+    [self addFooterView];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -41,7 +43,7 @@
 }
 
 - (void) addNavigationItems {
-    self.title = NSLocalizedString(@"Sign Up", @"");
+    self.title = NSLocalizedString(@"Medical Information", @"");
     
     UIBarButtonItem *nextBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next", @"") style:UIBarButtonItemStylePlain target:self action:@selector(next)];
     self.navigationItem.rightBarButtonItem = nextBarButton;
@@ -49,7 +51,16 @@
 
 - (void) setupProgressBar {
     self.stepProgressBar.rightLabel.text = NSLocalizedString(@"optional", @"");
-    [self setStepNumber:2 title:NSLocalizedString(@"Medical Information", @"")];
+}
+
+- (void) addFooterView {
+    UILabel *label = [UILabel new];
+    label.frame = CGRectMake(0, 0, self.tableView.frame.size.width, 44);
+    label.font = [UITableView footerFont];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.textColor = [UITableView footerTextColor];
+    label.text = NSLocalizedString(@"All fields on this screen are optional.", @"");
+    self.tableView.tableFooterView = label;
 }
 
 

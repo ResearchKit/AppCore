@@ -37,7 +37,7 @@
 #pragma mark - Private Methods
 
 - (void) skip {
-    APCOnBoardingOptionsViewController *optionsViewController = [[APCOnBoardingOptionsViewController alloc] initWithNibName:@"OnBoardingOptionsViewController" bundle:nil];
+    APCOnBoardingOptionsViewController *optionsViewController = [[APCOnBoardingOptionsViewController alloc] initWithNibName:@"APCOnBoardingOptionsViewController" bundle:nil];
     
     [self.navigationController pushViewController:optionsViewController animated:YES];
 }

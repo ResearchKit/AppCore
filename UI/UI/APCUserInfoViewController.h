@@ -39,5 +39,7 @@ typedef NS_ENUM(NSUInteger, APCUserInfoField) {
 
 @property (nonatomic, strong) APCProfile *profile;
 
+- (Class) cellClass;
+
 @end
 

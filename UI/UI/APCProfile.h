@@ -9,11 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
 
-typedef NS_ENUM(NSUInteger, APCProfileGender) {
-    APCProfileGenderMale = 0,
-    APCProfileGenderFemale,
-    APCProfileGenderOther
-};
+@import HealthKit;
 
 @interface APCProfile : NSObject
 
@@ -33,13 +29,13 @@ typedef NS_ENUM(NSUInteger, APCProfileGender) {
 
 @property (nonatomic, copy) NSString *medication;
 
-@property (nonatomic, copy) NSString *bloodType;
-
 @property (nonatomic, strong) NSNumber *weight;
 
 @property (nonatomic, strong) NSString *height;
 
-@property (nonatomic, readwrite) APCProfileGender gender;
+@property (nonatomic, readwrite) HKBiologicalSex gender;
+
+@property (nonatomic, readwrite) HKBloodType bloodType;
 
 @end
 

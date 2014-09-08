@@ -14,16 +14,13 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HIu-EX-0Cz">
-                    <rect key="frame" x="8" y="490" width="304" height="30"/>
-                    <state key="normal" title="Sign Up"/>
-                    <connections>
-                        <action selector="signUp" destination="-1" eventType="touchUpInside" id="BYK-XK-uQe"/>
-                    </connections>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="na0-ac-uoU">
-                    <rect key="frame" x="45" y="524" width="230" height="30"/>
-                    <state key="normal" title="Already have an account? Sign In">
+                    <rect key="frame" x="0.0" y="524" width="160" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="160" id="jS8-O6-vXX"/>
+                        <constraint firstAttribute="height" constant="44" id="rLH-Zm-mH6"/>
+                    </constraints>
+                    <state key="normal" title="Sign In">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -31,7 +28,7 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XQU-vV-lDY">
-                    <rect key="frame" x="40" y="91" width="240" height="25"/>
+                    <rect key="frame" x="40" y="90" width="240" height="25"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="25" id="2ms-hx-aXX"/>
                     </constraints>
@@ -40,28 +37,35 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="z29-t2-yHW">
-                    <rect key="frame" x="40" y="149" width="240" height="128"/>
+                    <rect key="frame" x="40" y="195" width="240" height="150"/>
                     <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="128" id="lgX-Tm-Zgv"/>
+                        <constraint firstAttribute="height" constant="150" id="lgX-Tm-Zgv"/>
                         <constraint firstAttribute="width" constant="240" id="mRO-jZ-VIw"/>
                     </constraints>
                 </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HIu-EX-0Cz">
+                    <rect key="frame" x="160" y="524" width="160" height="44"/>
+                    <state key="normal" title="Sign Up"/>
+                    <connections>
+                        <action selector="signUp" destination="-1" eventType="touchUpInside" id="BYK-XK-uQe"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstItem="na0-ac-uoU" firstAttribute="bottom" secondItem="HIu-EX-0Cz" secondAttribute="bottom" id="3hX-qs-N6M"/>
+                <constraint firstItem="na0-ac-uoU" firstAttribute="height" secondItem="HIu-EX-0Cz" secondAttribute="height" id="3ie-ke-hit"/>
+                <constraint firstAttribute="trailing" secondItem="HIu-EX-0Cz" secondAttribute="trailing" id="3m2-KV-0g2"/>
                 <constraint firstAttribute="trailing" secondItem="z29-t2-yHW" secondAttribute="trailing" constant="40" id="4cG-g2-196"/>
-                <constraint firstItem="z29-t2-yHW" firstAttribute="top" secondItem="XQU-vV-lDY" secondAttribute="bottom" constant="33" id="Azo-tq-dKI"/>
+                <constraint firstItem="na0-ac-uoU" firstAttribute="width" secondItem="HIu-EX-0Cz" secondAttribute="width" id="9cO-de-10z"/>
+                <constraint firstItem="z29-t2-yHW" firstAttribute="top" secondItem="XQU-vV-lDY" secondAttribute="bottom" constant="80" id="Azo-tq-dKI"/>
                 <constraint firstAttribute="centerX" secondItem="z29-t2-yHW" secondAttribute="centerX" id="HYl-9C-sQ2"/>
-                <constraint firstAttribute="bottom" secondItem="na0-ac-uoU" secondAttribute="bottom" constant="14" id="MtA-82-KV2"/>
-                <constraint firstItem="na0-ac-uoU" firstAttribute="top" secondItem="HIu-EX-0Cz" secondAttribute="bottom" constant="4" id="Rca-ML-5fr"/>
-                <constraint firstItem="HIu-EX-0Cz" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="ToJ-ro-y8c"/>
-                <constraint firstItem="XQU-vV-lDY" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="91" id="WO7-v6-whc"/>
-                <constraint firstAttribute="trailing" secondItem="HIu-EX-0Cz" secondAttribute="trailing" constant="8" id="deT-JH-FOd"/>
+                <constraint firstAttribute="bottom" secondItem="na0-ac-uoU" secondAttribute="bottom" id="Oyk-8N-vmg"/>
+                <constraint firstItem="XQU-vV-lDY" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="90" id="WO7-v6-whc"/>
                 <constraint firstItem="XQU-vV-lDY" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="40" id="exW-Cp-h53"/>
-                <constraint firstAttribute="trailing" secondItem="na0-ac-uoU" secondAttribute="trailing" constant="45" id="hDT-hT-pP4"/>
                 <constraint firstAttribute="trailing" secondItem="XQU-vV-lDY" secondAttribute="trailing" constant="40" id="hFB-S0-DiQ"/>
-                <constraint firstItem="na0-ac-uoU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="45" id="k5e-PH-cDM"/>
+                <constraint firstItem="na0-ac-uoU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="iN2-nd-GLw"/>
                 <constraint firstItem="z29-t2-yHW" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="40" id="wcE-kQ-ASe"/>
             </constraints>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
@@ -69,7 +73,7 @@
                 <size key="portraitSize" width="320" height="568"/>
                 <size key="landscapeSize" width="568" height="320"/>
             </simulatedScreenMetrics>
-            <point key="canvasLocation" x="674" y="-800"/>
+            <point key="canvasLocation" x="451" y="-826"/>
         </view>
     </objects>
 </document>

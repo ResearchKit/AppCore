@@ -117,6 +117,7 @@ static NSString const *kAPCCriteriaCellIdentifier    =   @"Criteria";
     APCCriteria *criteria = self.criterias[indexPath.row];
     
     APCCriteriaCell *cell = (APCCriteriaCell *)[tableView dequeueReusableCellWithIdentifier:(NSString *)kAPCCriteriaCellIdentifier];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.delegate = self;
     cell.questionLabel.text = criteria.question;
     

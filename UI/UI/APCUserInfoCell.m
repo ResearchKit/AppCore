@@ -8,6 +8,7 @@
 
 #import "APCUserInfoCell.h"
 #import "NSString+Category.h"
+#import "UITableView+AppearanceCategory.h"
 
 @interface APCUserInfoCell () <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
@@ -18,23 +19,26 @@
 
 @implementation APCUserInfoCell
 
-- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier type:(APCUserInfoCellType)type {
+- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.textLabel.font = [UIFont systemFontOfSize:15];
+        self.textLabel.font = [UITableView textLabelFont];
+        self.textLabel.textColor = [UITableView textLabelTextColor];
+        
+        self.detailTextLabel.font = [UITableView detailLabelFont];
+        self.detailTextLabel.textColor = [UITableView detailLabelTextColor];
         
         _valueTextField = [[UITextField alloc] initWithFrame:CGRectMake(15, 7, 140, 30)];
         _valueTextField.delegate = self;
         _valueTextField.textAlignment = NSTextAlignmentLeft;
-        _valueTextField.font = [UIFont systemFontOfSize:15];
+        _valueTextField.font = [UITableView textFieldFont];
+        _valueTextField.textColor = [UITableView textFieldTextColor];
         
-        _separatorLayer = [CALayer layer];
-        _separatorLayer.frame = CGRectMake(15, self.bounds.size.height - 1, self.bounds.size.width - 15, 0.5);
-        _separatorLayer.borderWidth = 1.0;
-        _separatorLayer.borderColor = [UIColor colorWithWhite:0.5 alpha:0.6].CGColor;
-        [self.layer addSublayer:_separatorLayer];
-        
-        [self setType:type];
+//        _separatorLayer = [CALayer layer];
+//        _separatorLayer.frame = CGRectMake(0, self.bounds.size.height - 1, self.bounds.size.width, 0.5);
+//        _separatorLayer.borderWidth = 1.0;
+//        _separatorLayer.borderColor = [UIColor colorWithWhite:0.5 alpha:0.6].CGColor;
+//        [self.layer addSublayer:_separatorLayer];
     }
     
     return self;
@@ -82,8 +86,24 @@
     }
 }
 
+- (void) setCustomPickerValues:(NSArray *)customPickerValues {
+    if (customPickerValues != _customPickerValues) {
+        _customPickerValues = customPickerValues;
+        
+        [self.customPickerView reloadAllComponents];
+    }
+}
+
 
 #pragma mark - UITextFieldDelegate
+
+- (BOOL) textFieldShouldBeginEditing:(UITextField *)textField {
+    if ([self.delegate respondsToSelector:@selector(userInfoCellDidBecomFirstResponder:)]) {
+        [self.delegate userInfoCellDidBecomFirstResponder:self];
+    }
+    
+    return YES;
+}
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     BOOL isValid = YES;
@@ -155,8 +175,6 @@
     self.selectionStyle = UITableViewCellSelectionStyleDefault;
     
     _valueTextField.frame = CGRectMake(0, 0, 100, 30);
-    _valueTextField.font = [UIFont systemFontOfSize:14];
-    _valueTextField.textColor = [UIColor grayColor];
     _valueTextField.textAlignment = NSTextAlignmentRight;
     _valueTextField.tintColor = [UIColor clearColor];
     
@@ -167,30 +185,29 @@
             self.datePicker = [[UIDatePicker alloc] init];
             self.datePicker.backgroundColor = [UIColor whiteColor];
             self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
+            [self.datePicker addTarget:self action:@selector(datePickerValueChanged) forControlEvents:UIControlEventValueChanged];
         }
         
         self.valueTextField.inputView = self.datePicker;
     }
     
-    {
-        UIBarButtonItem *extraSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        UIBarButtonItem *accept = [[UIBarButtonItem alloc] initWithTitle:@"Select" style:UIBarButtonItemStyleDone target:self action:@selector(datePickerValueChanged)];
-        
-        UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 44)];
-        keyboardToolbar.tintColor = [UIColor whiteColor];
-        keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
-        keyboardToolbar.items = @[extraSpace, accept];
-        
-        self.valueTextField.inputAccessoryView = keyboardToolbar;
-    }
+//    {
+//        UIBarButtonItem *extraSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+//        UIBarButtonItem *accept = [[UIBarButtonItem alloc] initWithTitle:@"Select" style:UIBarButtonItemStyleDone target:self action:@selector(datePickerValueChanged)];
+//        
+//        UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 44)];
+//        keyboardToolbar.tintColor = [UIColor whiteColor];
+//        keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
+//        keyboardToolbar.items = @[extraSpace, accept];
+//        
+//        self.valueTextField.inputAccessoryView = keyboardToolbar;
+//    }
 }
 
 - (void) addCustomPicker {
     self.selectionStyle = UITableViewCellSelectionStyleDefault;
     
     _valueTextField.frame = CGRectMake(0, 0, 100, 30);
-    _valueTextField.font = [UIFont systemFontOfSize:14];
-    _valueTextField.textColor = [UIColor grayColor];
     _valueTextField.textAlignment = NSTextAlignmentCenter;
     _valueTextField.tintColor = [UIColor clearColor];
     
@@ -203,8 +220,6 @@
     self.selectionStyle = UITableViewCellSelectionStyleDefault;
     
     _valueTextField.frame = CGRectMake(0, 0, 100, 30);
-    _valueTextField.font = [UIFont systemFontOfSize:14];
-    _valueTextField.textColor = [UIColor grayColor];
     _valueTextField.textAlignment = NSTextAlignmentRight;
     _valueTextField.tintColor = [UIColor clearColor];
     
@@ -233,7 +248,7 @@
 }
 
 - (void) datePickerValueChanged {
-    [_valueTextField resignFirstResponder];
+//    [_valueTextField resignFirstResponder];
     
     if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
         [self.delegate userInfoCellValueChanged:self];
@@ -247,7 +262,7 @@
 }
 
 - (void) customPickerValueChanged {
-    [_valueTextField resignFirstResponder];
+//    [_valueTextField resignFirstResponder];
     
     if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
         [self.delegate userInfoCellValueChanged:self];
@@ -291,6 +306,10 @@
     }
     
     self.valueTextField.text = string;
+    
+    if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
+        [self.delegate userInfoCellValueChanged:self];
+    }
 }
 
 - (NSString *) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
@@ -303,7 +322,7 @@
 - (void) layoutSubviews {
     [super layoutSubviews];
     
-    self.separatorLayer.frame = CGRectMake(15, self.bounds.size.height - 1, self.bounds.size.width - 15, 0.5);
+    self.separatorLayer.frame = CGRectMake(0, self.bounds.size.height - 1, self.bounds.size.width, 0.5);
     
     if (self.type == APCUserInfoCellTypeSingleInputText) {
         self.valueTextField.frame = CGRectMake(15, (self.bounds.size.height - 30) * 0.5, 300, 30);
@@ -360,19 +379,19 @@
         self.valueTextField.inputView = self.customPickerView;
     }
     
-    {
-        if (!self.valueTextField.inputAccessoryView) {
-            UIBarButtonItem *extraSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-            UIBarButtonItem *accept = [[UIBarButtonItem alloc] initWithTitle:@"Select" style:UIBarButtonItemStyleDone target:self action:@selector(customPickerValueChanged)];
-            
-            UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 44)];
-            keyboardToolbar.tintColor = [UIColor whiteColor];
-            keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
-            keyboardToolbar.items = @[extraSpace, accept];
-            
-            self.valueTextField.inputAccessoryView = keyboardToolbar;
-        }
-    }
+//    {
+//        if (!self.valueTextField.inputAccessoryView) {
+//            UIBarButtonItem *extraSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+//            UIBarButtonItem *accept = [[UIBarButtonItem alloc] initWithTitle:@"Select" style:UIBarButtonItemStyleDone target:self action:@selector(customPickerValueChanged)];
+//            
+//            UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 44)];
+//            keyboardToolbar.tintColor = [UIColor whiteColor];
+//            keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
+//            keyboardToolbar.items = @[extraSpace, accept];
+//            
+//            self.valueTextField.inputAccessoryView = keyboardToolbar;
+//        }
+//    }
 }
 
 @end

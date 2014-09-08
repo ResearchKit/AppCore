@@ -29,7 +29,7 @@
 }
 
 - (void) addProgressBar {
-    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, 64, self.view.bounds.size.width, 44)];
+    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, 64, self.view.bounds.size.width, 2) style:APCStepProgressBarStyleOnlyProgressView];
     self.stepProgressBar.numberOfSteps = 4;
     [self.view addSubview:self.stepProgressBar];
     
