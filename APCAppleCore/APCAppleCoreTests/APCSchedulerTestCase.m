@@ -32,17 +32,17 @@
     
     // Put setup code here. This method is called before the invocation of each test method in the class.
     _scheduler = [[APCScheduler alloc] init];
-    _schedulerInterpreter = [[APCScheduleInterpreter alloc] init];
-    
-    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    NSURL *modelURL = [bundle URLForResource:@"APCModel" withExtension:@"momd"];
-
-    
-    NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
-    XCTAssertTrue([psc addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:NULL] ? YES : NO, @"Should be able to add in-memory store");
-    self.moc = [[NSManagedObjectContext alloc] init];
-    self.moc.persistentStoreCoordinator = psc;
+//    _schedulerInterpreter = [[APCScheduleInterpreter alloc] init];
+//    
+//    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+//    NSURL *modelURL = [bundle URLForResource:@"APCModel" withExtension:@"momd"];
+//
+//    
+//    NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+//    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
+//    XCTAssertTrue([psc addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:NULL] ? YES : NO, @"Should be able to add in-memory store");
+//    self.moc = [[NSManagedObjectContext alloc] init];
+//    self.moc.persistentStoreCoordinator = psc;
     
 }
 
@@ -199,6 +199,10 @@
 
 - (void)testSetLocalNotification {
     [_scheduler scheduleLocalNotification:@"Hello, world" withDate:[NSDate date] withTaskType:@"WALK" withAPCScheduleTaskId:@"12345" andReminder:1];
+}
+
+- (void)testPreflightData {
+    [_scheduler setPreFlightSchedule];
 }
 
 @end

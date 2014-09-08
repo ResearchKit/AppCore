@@ -8,6 +8,17 @@
 
 #import "APCScheduleInterpreter.h"
 
+static NSInteger kSeconds = 60;
+static NSInteger kMinutes = 60;
+
+enum _APHStartOfDay {
+    APHStartOfDayAbsolute = 0,
+    APHStartOfDayRelative = 1
+} APHStartOfDay;
+
+//TODO shim
+static NSInteger users_wake_time = 8;
+
 @implementation APCScheduleInterpreter
 
 - (NSMutableArray *)taskDates:(NSString *)expression {
@@ -21,7 +32,7 @@
     NSArray *numberOfHours = [self checkHours:hourExpression];
     
     //Determine whether date is based on absolute or relative time
-    if ([[expressionComponents objectAtIndex:0] intValue] == 0) {
+    if ([[expressionComponents objectAtIndex:0] intValue] == APHStartOfDayAbsolute) {
         
         for (int i = 0; i < [numberOfHours count]; i++) {
             
@@ -81,9 +92,6 @@
 //This is based on the user's waking time;
 - (NSDate *)relativeHour {
     
-    //TODO this is a shim
-    int userWakeTime = 8;
-    
     // Use the user's current calendar and time zone
     NSCalendar *calendar = [NSCalendar currentCalendar];
     [calendar setTimeZone: [NSTimeZone systemTimeZone]];
@@ -101,7 +109,8 @@
                                     NSCalendarUnitWeekday
                                                fromDate:now];
     
-    [components setHour:userWakeTime];
+    //TODO this is a shim
+    [components setHour:users_wake_time];
     [components setMinute:0];
     [components setSecond:0];
     
@@ -113,7 +122,7 @@
 
 - (NSDate *)createDateFrom:(NSDate *)zeroHour atHour:(int)hourIncrement {
     
-    NSTimeInterval hourInterval = hourIncrement * 60 * 60;
+    NSTimeInterval hourInterval = hourIncrement * kSeconds * kMinutes;
     
     NSDate *dueOnDate = [zeroHour dateByAddingTimeInterval:hourInterval];
     

@@ -14,14 +14,15 @@
 
 @interface APCScheduler : NSObject
 
-- (void)updateScheduledTasks:(NSArray *)schedules;
-- (instancetype)initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate networkManager: (APCSageNetworkManager*) networkManager;
+- (instancetype)initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate;
+- (void)updateScheduledTasks;
 
 - (void)clearNotificationActivityType:(NSString *)taskType;
 - (void)clearAllScheduledTaskNotifications;
 - (BOOL)scheduleUpdated:(APCSchedule *)schedule;
-- (void)setScheduledTask:(APCSchedule *)schedule;
+- (void)createScheduledTask:(APCSchedule *)schedule;
 - (void)scheduleLocalNotification:(NSString *)message withDate:(NSDate *)dueOn withTaskType:(NSString *)taskType withAPCScheduleTaskId:(NSString *)objectUID andReminder:(int)reminder;
+- (void)setPreFlightSchedule:(NSString *)fileName;
 
 @end
 
