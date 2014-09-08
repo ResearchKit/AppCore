@@ -16,6 +16,7 @@
 @class RKUploader;
 @class RKCollector;
 @class RKHealthCollector;
+@class RKHealthCorrelationCollector;
 @class RKMotionActivityCollector;
 @class RKItemIdentifier;
 @class RKStudy;
@@ -38,6 +39,13 @@
  * @return Return NO if the collected objects could not be consumed (will stop further collection)
  */
 - (BOOL)study:(RKStudy *)study healthCollector:(RKHealthCollector *)collector anchor:(NSNumber *)anchor didCollectObjects:(NSArray /* <HKSample> */ *)objects;
+
+/**
+ * @brief Reports health correlation data collection
+ * @discussion Will be called on an arbitrary queue.
+ * @return Return NO if the collected objects could not be consumed (will stop further collection)
+ */
+- (BOOL)study:(RKStudy *)study healthCorrelationCollector:(RKHealthCorrelationCollector *)collector anchor:(NSNumber *)anchor didCollectObjects:(NSArray /* <HKSample> */ *)objects;
 
 /**
  * @brief Reports activity data collection
@@ -130,15 +138,28 @@
 @property (copy, readonly) NSArray *collectors;
 
 /**
- * @brief Add an RKHKCollector
+ * @brief Add a collector for HealthKit quantity and category samples
  *
- * @param objectType HealthKit object type
+ * @param sampleType HealthKit sample type
  *
  * @param unit HealthKit unit into which data should be collected
  *
  * @param startDate Samples should be collected starting at this date
  */
 - (RKHealthCollector *)addHealthCollectorWithSampleType:(HKSampleType *)sampleType unit:(HKUnit *)unit startDate:(NSDate *)startDate error:(NSError * __autoreleasing *)error;
+
+/**
+ * @brief Add a collector for HealthKit correlations
+ *
+ * @param correlationType HealthKit correlation type
+ *
+ * @param sampleTypes Array of HKSampleType expected in the correlation
+ *
+ * @param units Array of HKUnit to use when serializing the samples collected (should be same size as sampleTypes)
+ *
+ * @param startDate Samples should be collected starting at this date
+ */
+- (RKHealthCorrelationCollector *)addHealthCorrelationCollectorWithCorrelationType:(HKCorrelationType *)correlationType sampleTypes:(NSArray *)sampleTypes units:(NSArray *)units startDate:(NSDate *)startDate error:(NSError * __autoreleasing *)error;
 
 /**
  * @brief Add an RKCMActivityCollector
