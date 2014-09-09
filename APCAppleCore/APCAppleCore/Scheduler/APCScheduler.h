@@ -22,7 +22,6 @@
 - (BOOL)scheduleUpdated:(APCSchedule *)schedule;
 - (void)createScheduledTask:(APCSchedule *)schedule;
 - (void)scheduleLocalNotification:(NSString *)message withDate:(NSDate *)dueOn withTaskType:(NSString *)taskType withAPCScheduleTaskId:(NSString *)objectUID andReminder:(int)reminder;
-- (void)setPreFlightSchedule:(NSString *)fileName;
 
 @end
 

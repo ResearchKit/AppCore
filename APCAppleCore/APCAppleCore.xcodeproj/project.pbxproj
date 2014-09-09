@@ -23,8 +23,6 @@
 		F54513C419BE76EE00988651 /* APCScheduleInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = F54513C019BE76EE00988651 /* APCScheduleInterpreter.m */; };
 		F54513C519BE76EE00988651 /* APCScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = F54513C219BE76EE00988651 /* APCScheduler.m */; };
 		F54513C619BE76EE00988651 /* APCScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = F54513C219BE76EE00988651 /* APCScheduler.m */; };
-		F54513C919BE777700988651 /* schedulerPreflight.json in Resources */ = {isa = PBXBuildFile; fileRef = F54513C819BE777700988651 /* schedulerPreflight.json */; };
-		F54513CA19BE777700988651 /* schedulerPreflight.json in Resources */ = {isa = PBXBuildFile; fileRef = F54513C819BE777700988651 /* schedulerPreflight.json */; };
 		F560074E19A797E6009F877F /* NSError+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F560074D19A797E6009F877F /* NSError+APCAdditions.m */; };
 		F560074F19A797E6009F877F /* NSError+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F560074D19A797E6009F877F /* NSError+APCAdditions.m */; };
 		F560075219A7A502009F877F /* APCSageNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F560075119A7A502009F877F /* APCSageNetworkManager.m */; };
@@ -94,7 +92,6 @@
 		F54513C019BE76EE00988651 /* APCScheduleInterpreter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCScheduleInterpreter.m; path = Scheduler/APCScheduleInterpreter.m; sourceTree = "<group>"; };
 		F54513C119BE76EE00988651 /* APCScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCScheduler.h; path = Scheduler/APCScheduler.h; sourceTree = "<group>"; };
 		F54513C219BE76EE00988651 /* APCScheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCScheduler.m; path = Scheduler/APCScheduler.m; sourceTree = "<group>"; };
-		F54513C819BE777700988651 /* schedulerPreflight.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = schedulerPreflight.json; path = Scheduler/schedulerPreflight.json; sourceTree = "<group>"; };
 		F560074C19A797E6009F877F /* NSError+APCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+APCAdditions.h"; sourceTree = "<group>"; };
 		F560074D19A797E6009F877F /* NSError+APCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+APCAdditions.m"; sourceTree = "<group>"; };
 		F560075019A7A502009F877F /* APCSageNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSageNetworkManager.h; sourceTree = "<group>"; };
@@ -176,7 +173,6 @@
 				F54513C019BE76EE00988651 /* APCScheduleInterpreter.m */,
 				F54513C119BE76EE00988651 /* APCScheduler.h */,
 				F54513C219BE76EE00988651 /* APCScheduler.m */,
-				F54513C819BE777700988651 /* schedulerPreflight.json */,
 			);
 			name = Scheduler;
 			sourceTree = "<group>";
@@ -287,10 +283,10 @@
 				F5DAB555199EBFF6008E4A8E /* APCAppleCore.h */,
 				F5E4871019ABB1A300C86FC6 /* APCAppDelegate.h */,
 				F5E4871119ABB1A300C86FC6 /* APCAppDelegate.m */,
+				F594B4BD19AFA2C100AD19C9 /* DataMonitor */,
 				7B7179C819AE46EC00B34319 /* Scheduler */,
 				F5DAB569199EC085008E4A8E /* NetworkLayer */,
 				F5E4872119ABDBC800C86FC6 /* DataSubstrate */,
-				F594B4BD19AFA2C100AD19C9 /* DataMonitor */,
 				F59C277F19A3B65700596ACC /* Vendor */,
 				F560074A19A797CE009F877F /* Library */,
 			);
@@ -468,7 +464,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5A8F38F19B10263008C9F9C /* MODEL_README in Resources */,
-				F54513C919BE777700988651 /* schedulerPreflight.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -476,7 +471,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F54513CA19BE777700988651 /* schedulerPreflight.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

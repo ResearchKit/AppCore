@@ -82,16 +82,16 @@
 
 - (void)updateScheduledTasks {
     
-    //Get APCSchedules from Core Data
-    self.schedules = [self schedule];
-    
-    for(APCSchedule *schedule in self.schedules) {
-
-        //Make sure scheduled task is not already created and then create scheduled task
-        if (![self scheduleUpdated:schedule]) {
-            [self createScheduledTask:schedule];
-        }
-    }
+//    //Get APCSchedules from Core Data
+//    self.schedules = [self schedule];
+//    
+//    for(APCSchedule *schedule in self.schedules) {
+//
+//        //Make sure scheduled task is not already created and then create scheduled task
+//        if (![self scheduleUpdated:schedule]) {
+//            [self createScheduledTask:schedule];
+//        }
+//    }
 }
 
 
@@ -187,64 +187,6 @@
             [app cancelLocalNotification:oneEvent];
         }
     }
-}
-
-
-- (void)setPreFlightSchedule:(NSString *)fileName {
-    
-    NSArray *schedules = [self scheduleObjects:fileName];
-    
-    //Create APCSChedule Objects
-    for(NSDictionary *scheduleObj in schedules) {
-        
-        [self createAPCSchedule:scheduleObj];
-    }
-
-    [self updateScheduledTasks];
-}
-
-
-- (NSArray *)scheduleObjects:(NSString *)fileName {
-    
-    //TODO This code below is used for unit testing.
-    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    NSString *resource = [bundle pathForResource:fileName ofType:@"json"];
-    
-    //TODO I believe I should just be using this to access the file.
-    //    NSString *resource = [[NSBundle mainBundle] pathForResource:fileName ofType:@"json"];
-    
-    NSData *jsonData = [NSData dataWithContentsOfFile:resource];
-    NSLog(@"json data %@", jsonData);
-    
-    NSArray *schedules = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:nil];
-    
-    return schedules;
-}
-
-
-- (APCSchedule*)createAPCSchedule:(NSDictionary*)scheduleObj {
-    
-    APCSchedule * schedule = [APCSchedule newObjectForContext:self.dataSubstrate.mainContext];
-    schedule.uid = [scheduleObj objectForKey:@"guid"];
-    schedule.scheduleExpression = [scheduleObj objectForKey:@"schedule"];
-    schedule.reminder = [scheduleObj objectForKey:@"reminder"];
-    
-    APCTask *task = [self createAPCTask:[scheduleObj objectForKey:@"taskType"]];
-    schedule.task = task;
-    
-    [schedule saveToPersistentStore:NULL];
-    
-    return schedule;
-}
-
-
-- (APCTask*)createAPCTask:(NSString *)taskType {
-    
-    APCTask * task = [APCTask newObjectForContext:self.dataSubstrate.mainContext];
-    task.taskType = taskType;
-    [task saveToPersistentStore:NULL];
-    
-    return task;
 }
 
 @end
