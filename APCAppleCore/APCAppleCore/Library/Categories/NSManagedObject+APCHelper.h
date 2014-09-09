@@ -13,6 +13,7 @@
 #pragma mark - Class Methods
 /*********************************************************************************/
 + (instancetype) newObjectForContext: (NSManagedObjectContext*) context;
++ (NSFetchRequest*) request;
 
 /*********************************************************************************/
 #pragma mark - Instance Methods

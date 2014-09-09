@@ -10,4 +10,6 @@
 
 @interface APCTask (AddOn)
 
++ createTasksFromJson: (NSArray*) tasksArray;
+
 @end

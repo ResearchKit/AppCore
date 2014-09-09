@@ -10,6 +10,11 @@
 
 @implementation APCSchedule (AddOn)
 
++(void)createSchedulesFromJSON:(NSArray *)tasksArray
+{
+    
+}
+
 /*********************************************************************************/
 #pragma mark - Life Cycle Methods
 /*********************************************************************************/

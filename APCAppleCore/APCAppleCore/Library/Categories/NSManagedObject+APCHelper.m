@@ -16,6 +16,11 @@
     
 }
 
++(NSFetchRequest *)request
+{
+    return [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([self class])];
+}
+
 - (BOOL)saveToPersistentStore:(NSError *__autoreleasing *)error
 {
     __block NSError *localError = nil;

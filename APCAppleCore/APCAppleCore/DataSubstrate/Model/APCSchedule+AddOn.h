@@ -10,4 +10,6 @@
 
 @interface APCSchedule (AddOn)
 
++ (void) createSchedulesFromJSON: (NSArray*) tasksArray;
+
 @end
