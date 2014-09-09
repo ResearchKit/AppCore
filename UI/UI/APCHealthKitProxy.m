@@ -7,17 +7,72 @@
 //
 
 #import "APCProfile.h"
-#import "APCHKManager.h"
+#import "APCHealthKitProxy.h"
 
-@implementation APCHKManager
+@interface APCHealthKitProxy ()
+
+@property (nonatomic, strong) NSMutableSet *shareTypes;
+
+@property (nonatomic, strong) NSMutableSet *readTypes;
+
+@end
+
+@implementation APCHealthKitProxy
+
+#pragma mark - Init
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
         _store = [HKHealthStore new];
+        [self loadShareTypes];
+        [self loadReadTypes];
     }
     return self;
+}
+
+- (void) loadShareTypes {
+    self.shareTypes = [NSMutableSet set];
+    
+    {
+        HKQuantityType *type = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
+        [self.shareTypes addObject:type];
+    }
+    
+    {
+        HKQuantityType *type = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight];
+        [self.shareTypes addObject:type];
+    }
+}
+
+- (void) loadReadTypes {
+    self.readTypes = [NSMutableSet set];
+    
+    {
+        HKCharacteristicType *type = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex];
+        [self.readTypes addObject:type];
+    }
+    
+    {
+        HKCharacteristicType *type = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType];
+        [self.readTypes addObject:type];
+    }
+    
+    {
+        HKCharacteristicType *type = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth];
+        [self.readTypes addObject:type];
+    }
+    
+    {
+        HKQuantityType *type = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
+        [self.readTypes addObject:type];
+    }
+    
+    {
+        HKQuantityType *type = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight];
+        [self.readTypes addObject:type];
+    }
 }
 
 
@@ -90,76 +145,6 @@
     }];
     
     [self.store executeQuery:query];
-}
-
-- (NSSet *) shareTypes {
-    static NSMutableSet *types;
-    
-    if (!types) {
-        types = [NSMutableSet set];
-        
-//        {
-//            HKCharacteristicType *type = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex];
-//            [types addObject:type];
-//        }
-//        
-//        {
-//            HKCharacteristicType *type = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType];
-//            [types addObject:type];
-//        }
-//        
-//        {
-//            HKCharacteristicType *type = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth];
-//            [types addObject:type];
-//        }
-        
-        {
-            HKQuantityType *type = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
-            [types addObject:type];
-        }
-        
-        {
-            HKQuantityType *type = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight];
-            [types addObject:type];
-        }
-    }
-    
-    return types;
-}
-
-- (NSSet *) readTypes {
-    static NSMutableSet *types;
-    
-    if (!types) {
-        types = [NSMutableSet set];
-        
-        {
-            HKCharacteristicType *type = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex];
-            [types addObject:type];
-        }
-        
-        {
-            HKCharacteristicType *type = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType];
-            [types addObject:type];
-        }
-        
-        {
-            HKCharacteristicType *type = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth];
-            [types addObject:type];
-        }
-        
-        {
-            HKQuantityType *type = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
-            [types addObject:type];
-        }
-        
-        {
-            HKQuantityType *type = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight];
-            [types addObject:type];
-        }
-    }
-    
-    return types;
 }
 
 @end

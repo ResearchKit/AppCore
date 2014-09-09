@@ -7,7 +7,7 @@
 //
 
 #import "APCProfile.h"
-#import "APCHKManager.h"
+#import "APCHealthKitProxy.h"
 #import "NSDate+Category.h"
 #import "NSString+Category.h"
 #import "UIScrollView+Category.h"
@@ -52,6 +52,8 @@ static NSString * const kAPCUserInfoTableViewCellGenderTitle            = @"Biol
 // Date Formatter
 static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd, yyyy";
 
+static CGFloat const kAPCUserInfoTableViewDefaultRowHeight              = 64.0;
+
 
 @interface APCUserInfoViewController ()
 
@@ -60,7 +62,7 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UIView *headerTextFieldSeparatorView;
 
-@property (nonatomic, strong) APCHKManager *hkManager;
+@property (nonatomic, strong) APCHealthKitProxy *hkManager;
 
 @end
 
@@ -119,13 +121,11 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
     
     _heightValues = @[ @[@"3'", @"4'", @"5'", @"6'", @"7'"], @[@"0''", @"1''", @"2''", @"3''", @"4''", @"5''", @"6''", @"7''", @"8''", @"9''"] ];
     
-    self.hkManager = [APCHKManager new];
+    self.hkManager = [APCHealthKitProxy new];
 }
 
 - (void) addTableView {
     CGRect frame = self.view.bounds;
-    frame.size.height -= 64;
-    frame.origin.y = 64;
     
     self.tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
@@ -133,6 +133,7 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
+    self.tableView.contentInset = UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height, 0, 0, 0);
     [self.view addSubview:self.tableView];
 }
 
@@ -173,10 +174,6 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.fields.count;
 }
@@ -194,8 +191,8 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.type = APCUserInfoCellTypeSingleInputText;
             
-            cell.textLabel.text = kAPCUserInfoTableViewCellUserNameTitle;
-            cell.valueTextField.placeholder = kAPCUserInfoTableViewCellUserNamePlaceholder;
+            cell.textLabel.text = NSLocalizedString(kAPCUserInfoTableViewCellUserNameTitle, @"");
+            cell.valueTextField.placeholder = NSLocalizedString(kAPCUserInfoTableViewCellUserNamePlaceholder, @"");
             cell.valueTextField.text = self.profile.userName;
             cell.valueTextField.keyboardType = UIKeyboardTypeEmailAddress;
         } break;
@@ -206,8 +203,8 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.type = APCUserInfoCellTypeSingleInputText;
-            cell.textLabel.text = kAPCUserInfoTableViewCellEmailTitle;
-            cell.valueTextField.placeholder = kAPCUserInfoTableViewCellEmailPlaceholder;
+            cell.textLabel.text = NSLocalizedString(kAPCUserInfoTableViewCellEmailTitle, @"");
+            cell.valueTextField.placeholder = NSLocalizedString(kAPCUserInfoTableViewCellEmailPlaceholder, @"");
             cell.valueTextField.text = self.profile.email;
             cell.valueTextField.keyboardType = UIKeyboardTypeEmailAddress;
         } break;
@@ -218,8 +215,8 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.type = APCUserInfoCellTypeSingleInputText;
-            cell.textLabel.text = kAPCUserInfoTableViewCellPasswordTitle;
-            cell.valueTextField.placeholder = kAPCUserInfoTableViewCellPasswordPlaceholder;
+            cell.textLabel.text = NSLocalizedString(kAPCUserInfoTableViewCellPasswordTitle, @"");
+            cell.valueTextField.placeholder = NSLocalizedString(kAPCUserInfoTableViewCellPasswordPlaceholder, @"");
             cell.valueTextField.text = self.profile.password;
             cell.valueTextField.keyboardType = UIKeyboardTypeDefault;
             cell.valueTextField.secureTextEntry = YES;
@@ -230,7 +227,7 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
             cell = [self cellForIdentifier:kAPCUserInfoTableViewCellDateIdentifier style:UITableViewCellStyleDefault];
             
             cell.type = APCUserInfoCellTypeDatePicker;
-            cell.textLabel.text = kAPCUserInfoTableViewCellBirthdayTitle;
+            cell.textLabel.text = NSLocalizedString(kAPCUserInfoTableViewCellBirthdayTitle, @"");
             
             if (self.profile.dateOfBirth) {
                 cell.valueTextField.text = [self.profile.dateOfBirth toStringWithFormat:kAPCUserInfoTableViewCellDateOfBirthFormat];
@@ -247,7 +244,7 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
             [cell setNeedsCustomPicker];
             [cell setNeedsHiddenField];
             
-            cell.textLabel.text = kAPCUserInfoTableViewCellMedicalConditionTitle;
+            cell.textLabel.text = NSLocalizedString(kAPCUserInfoTableViewCellMedicalConditionTitle, @"");
             cell.detailTextLabel.text = self.profile.medicalCondition;
             cell.customPickerValues = self.medicalConditions;
         } break;
@@ -262,7 +259,7 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
             [cell setNeedsCustomPicker];
             [cell setNeedsHiddenField];
             
-            cell.textLabel.text = kAPCUserInfoTableViewCellMedicationTitle;
+            cell.textLabel.text = NSLocalizedString(kAPCUserInfoTableViewCellMedicationTitle, @"");
             cell.detailTextLabel.text = self.profile.medication;
             cell.customPickerValues = self.medications;
         } break;
@@ -274,7 +271,7 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
             cell.type = APCUserInfoCellTypeTitleValue;
             [cell setNeedsCustomPicker];
             
-            cell.textLabel.text = kAPCUserInfoTableViewCellBloodType;
+            cell.textLabel.text = NSLocalizedString(kAPCUserInfoTableViewCellBloodType, @"");
             cell.valueTextField.text = self.bloodTypes[0][self.profile.bloodType];
             cell.customPickerValues = self.bloodTypes;
         } break;
@@ -286,7 +283,7 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
             cell.type = APCUserInfoCellTypeTitleValue;
             [cell setNeedsCustomPicker];
             
-            cell.textLabel.text = kAPCUserInfoTableViewCellHeightTitle;
+            cell.textLabel.text = NSLocalizedString(kAPCUserInfoTableViewCellHeightTitle, @"");
             cell.valueTextField.text = self.profile.height;
             cell.customPickerValues = self.heightValues;
         } break;
@@ -298,9 +295,9 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.type = APCUserInfoCellTypeTitleValue;
             
-            cell.textLabel.text = kAPCUserInfoTableViewCellWeightTitle;
+            cell.textLabel.text = NSLocalizedString(kAPCUserInfoTableViewCellWeightTitle, @"");
             cell.valueTextRegularExpression = kAPCUserInfoTableViewCellWeightRegEx;
-            cell.valueTextField.placeholder = kAPCUserInfoTableViewCellWeightPlaceHolder;
+            cell.valueTextField.placeholder = NSLocalizedString(kAPCUserInfoTableViewCellWeightPlaceHolder, @"");
             cell.valueTextField.text = self.profile.weight.stringValue;
             cell.valueTextField.keyboardType = UIKeyboardTypeNumberPad;
         } break;
@@ -312,11 +309,11 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.type = APCUserInfoCellTypeSegment;
             
-            cell.textLabel.text = kAPCUserInfoTableViewCellGenderTitle;
+            cell.textLabel.text = NSLocalizedString(kAPCUserInfoTableViewCellGenderTitle, @"");
             
-            [cell.segmentControl insertSegmentWithTitle:@"Male" atIndex:0 animated:NO];
-            [cell.segmentControl insertSegmentWithTitle:@"Female" atIndex:1 animated:NO];
-            [cell.segmentControl insertSegmentWithTitle:@"Other" atIndex:2 animated:NO];
+            [cell.segmentControl insertSegmentWithTitle:NSLocalizedString(@"Male", @"") atIndex:0 animated:NO];
+            [cell.segmentControl insertSegmentWithTitle:NSLocalizedString(@"Female", @"") atIndex:1 animated:NO];
+            [cell.segmentControl insertSegmentWithTitle:NSLocalizedString(@"Other", @"") atIndex:2 animated:NO];
             
             if (self.profile.gender == HKBiologicalSexMale) {
                 [cell.segmentControl setSelectedSegmentIndex:0];
@@ -330,6 +327,8 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
         } break;
             
         default:
+#warning assert message require
+            NSAssert(field < APCUserInfoFieldGender, NSLocalizedString(@"ASSERT_MESSAGE", @""));
             break;
     }
     
@@ -351,7 +350,7 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
 #pragma mark - UITableViewDelegate
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 64;
+    return kAPCUserInfoTableViewDefaultRowHeight;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -367,6 +366,8 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
             break;
             
         default:
+#warning assert message require
+            NSAssert(cell.type < APCUserInfoCellTypeSegment, NSLocalizedString(@"ASSERT_MESSAGE", @""));
             break;
     }
 }
@@ -434,6 +435,8 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
                 }
                 
             default:
+#warning assert message require
+                NSAssert(field < APCUserInfoCellTypeSegment, NSLocalizedString(@"ASSERT_MESSAGE", @""));
                 break;
         }
     }
@@ -448,8 +451,7 @@ static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM 
         image = info[UIImagePickerControllerOriginalImage];
     }
     
-    APCUserInfoCell *cell = (APCUserInfoCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    [cell.profileImageButton setImage:image forState:UIControlStateNormal];
+    self.profileImageView.image = image;
     
     [picker dismissViewControllerAnimated:YES completion:nil];
 }

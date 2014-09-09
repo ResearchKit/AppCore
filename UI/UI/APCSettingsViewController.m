@@ -8,6 +8,9 @@
 
 #import "APCProfile.h"
 #import "APCSettingsViewController.h"
+#import "UITableView+AppearanceCategory.h"
+
+static
 
 @interface APCSettingsViewController ()
 
@@ -27,17 +30,6 @@
     self = [super init];
     if (self) {
         self.fields = @[@(APCUserInfoFieldUserName), @(APCUserInfoFieldEmail), @(APCUserInfoFieldDateOfBirth), @(APCUserInfoFieldMedicalCondition), @(APCUserInfoFieldMedication), @(APCUserInfoFieldBloodType), @(APCUserInfoFieldWeight), @(APCUserInfoFieldGender)];
-        
-        self.profile = [APCProfile new];
-        self.profile.firstName = @"Karthik Keyan";
-        self.profile.lastName = @"Balan";
-        self.profile.userName = @"karthikkeyan";
-        self.profile.email = @"karthikkeyan.balan@gmail.com";
-        self.profile.dateOfBirth = [NSDate date];
-        self.profile.medicalCondition = self.medicalConditions[0];
-        self.profile.medication = self.medications[0];
-        self.profile.bloodType = HKBloodTypeNotSet;
-        self.profile.weight = @(160);
     }
     
     return self;
@@ -61,7 +53,7 @@
     UIView *footerView = [[UINib nibWithNibName:@"SettingsTableFooterView" bundle:nil] instantiateWithOwner:self options:nil][0];
     self.tableView.tableFooterView = footerView;
     
-    UIColor *color = [UIColor colorWithWhite:0.8 alpha:0.5];
+    UIColor *color = [UITableView controlsBorderColor];
     
     self.footerConsentView.layer.borderWidth = 1.0;
     self.footerConsentView.layer.borderColor = color.CGColor;

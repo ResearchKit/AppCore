@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		250105B819BB8DC400B27757 /* APCHKManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 250105B719BB8DC400B27757 /* APCHKManager.m */; };
+		250105B819BB8DC400B27757 /* APCHealthKitProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 250105B719BB8DC400B27757 /* APCHealthKitProxy.m */; };
 		250105BA19BB8E8500B27757 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 250105B919BB8E8500B27757 /* HealthKit.framework */; };
 		251F45FC19BA3EEA004FBD06 /* APHUserInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 251F45FB19BA3EEA004FBD06 /* APHUserInfoCell.m */; };
 		251F45FF19BA43D0004FBD06 /* UITableView+AppearanceCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 251F45FE19BA43D0004FBD06 /* UITableView+AppearanceCategory.m */; };
@@ -28,6 +28,8 @@
 		2526A9B719B663FE0088A42C /* APCUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2526A9B519B663FE0088A42C /* APCUserInfoViewController.m */; };
 		2526A9B919B665AE0088A42C /* APCSettingsTableFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2526A9B819B665AE0088A42C /* APCSettingsTableFooterView.xib */; };
 		2526A9BB19B6668F0088A42C /* APCUserInfoTableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2526A9BA19B6668F0088A42C /* APCUserInfoTableHeaderView.xib */; };
+		2547F9B919BF9FFE00A155CF /* UIAlertView+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 2547F9B819BF9FFE00A155CF /* UIAlertView+Category.m */; };
+		2547F9BC19BFA55B00A155CF /* APCStepProgressBar+AppearanceCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 2547F9BB19BFA55B00A155CF /* APCStepProgressBar+AppearanceCategory.m */; };
 		2549447A19B8F25700DE72AF /* NSDate+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 2549447919B8F25700DE72AF /* NSDate+Category.m */; };
 		2549447E19B91A2F00DE72AF /* APCSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2549447C19B91A2F00DE72AF /* APCSignInViewController.m */; };
 		2549447F19B91A2F00DE72AF /* APCSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2549447D19B91A2F00DE72AF /* APCSignInViewController.xib */; };
@@ -60,8 +62,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		250105B619BB8DC400B27757 /* APCHKManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHKManager.h; sourceTree = "<group>"; };
-		250105B719BB8DC400B27757 /* APCHKManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHKManager.m; sourceTree = "<group>"; };
+		250105B619BB8DC400B27757 /* APCHealthKitProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHealthKitProxy.h; sourceTree = "<group>"; };
+		250105B719BB8DC400B27757 /* APCHealthKitProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHealthKitProxy.m; sourceTree = "<group>"; };
 		250105B919BB8E8500B27757 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		250105BB19BBE17300B27757 /* UI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = UI.entitlements; sourceTree = "<group>"; };
 		251F45FA19BA3EEA004FBD06 /* APHUserInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APHUserInfoCell.h; sourceTree = "<group>"; };
@@ -98,6 +100,10 @@
 		2526A9B519B663FE0088A42C /* APCUserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCUserInfoViewController.m; sourceTree = "<group>"; };
 		2526A9B819B665AE0088A42C /* APCSettingsTableFooterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSettingsTableFooterView.xib; sourceTree = "<group>"; };
 		2526A9BA19B6668F0088A42C /* APCUserInfoTableHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCUserInfoTableHeaderView.xib; sourceTree = "<group>"; };
+		2547F9B719BF9FFE00A155CF /* UIAlertView+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Category.h"; sourceTree = "<group>"; };
+		2547F9B819BF9FFE00A155CF /* UIAlertView+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Category.m"; sourceTree = "<group>"; };
+		2547F9BA19BFA55B00A155CF /* APCStepProgressBar+AppearanceCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCStepProgressBar+AppearanceCategory.h"; sourceTree = "<group>"; };
+		2547F9BB19BFA55B00A155CF /* APCStepProgressBar+AppearanceCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCStepProgressBar+AppearanceCategory.m"; sourceTree = "<group>"; };
 		2549447819B8F25700DE72AF /* NSDate+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Category.h"; sourceTree = "<group>"; };
 		2549447919B8F25700DE72AF /* NSDate+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Category.m"; sourceTree = "<group>"; };
 		2549447B19B91A2F00DE72AF /* APCSignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignInViewController.h; sourceTree = "<group>"; };
@@ -321,6 +327,8 @@
 				251F460919BA8C79004FBD06 /* UIScrollView+Category.m */,
 				2550BB7C19BE5292000EF023 /* UIView+Category.h */,
 				2550BB7D19BE5292000EF023 /* UIView+Category.m */,
+				2547F9B719BF9FFE00A155CF /* UIAlertView+Category.h */,
+				2547F9B819BF9FFE00A155CF /* UIAlertView+Category.m */,
 			);
 			name = General;
 			sourceTree = "<group>";
@@ -334,6 +342,8 @@
 				25A1910A19BE2B07006CD59F /* UIBarButtonItem+AppearanceCategory.m */,
 				25A1911019BE3B3E006CD59F /* CALayer+AppearanceCategory.h */,
 				25A1911119BE3B3E006CD59F /* CALayer+AppearanceCategory.m */,
+				2547F9BA19BFA55B00A155CF /* APCStepProgressBar+AppearanceCategory.h */,
+				2547F9BB19BFA55B00A155CF /* APCStepProgressBar+AppearanceCategory.m */,
 			);
 			name = Appearance;
 			sourceTree = "<group>";
@@ -361,18 +371,18 @@
 		258F468F19BECBCF00F4C373 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				258F469019BECBDA00F4C373 /* APCHKManager */,
+				258F469019BECBDA00F4C373 /* APCHealthKitProxy */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
 		};
-		258F469019BECBDA00F4C373 /* APCHKManager */ = {
+		258F469019BECBDA00F4C373 /* APCHealthKitProxy */ = {
 			isa = PBXGroup;
 			children = (
-				250105B619BB8DC400B27757 /* APCHKManager.h */,
-				250105B719BB8DC400B27757 /* APCHKManager.m */,
+				250105B619BB8DC400B27757 /* APCHealthKitProxy.h */,
+				250105B719BB8DC400B27757 /* APCHealthKitProxy.m */,
 			);
-			name = APCHKManager;
+			name = APCHealthKitProxy;
 			sourceTree = "<group>";
 		};
 		25A1910C19BE2F1A006CD59F /* Views */ = {
@@ -503,9 +513,11 @@
 				2526A9B719B663FE0088A42C /* APCUserInfoViewController.m in Sources */,
 				2526A9AB19B663A00088A42C /* APCIntroVideoViewController.m in Sources */,
 				2549447E19B91A2F00DE72AF /* APCSignInViewController.m in Sources */,
-				250105B819BB8DC400B27757 /* APCHKManager.m in Sources */,
+				250105B819BB8DC400B27757 /* APCHealthKitProxy.m in Sources */,
 				2526A9AC19B663A00088A42C /* APCSignupOptionsViewController.m in Sources */,
+				2547F9BC19BFA55B00A155CF /* APCStepProgressBar+AppearanceCategory.m in Sources */,
 				2526A98119B6635C0088A42C /* AppDelegate.m in Sources */,
+				2547F9B919BF9FFE00A155CF /* UIAlertView+Category.m in Sources */,
 				251F45FF19BA43D0004FBD06 /* UITableView+AppearanceCategory.m in Sources */,
 				251F45FC19BA3EEA004FBD06 /* APHUserInfoCell.m in Sources */,
 				25A1910F19BE2FB8006CD59F /* APCPasscodeView.m in Sources */,

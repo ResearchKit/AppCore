@@ -10,7 +10,6 @@
 
 typedef NS_OPTIONS (NSUInteger, APCUserInfoCellType) {
     APCUserInfoCellTypeNone = 0,
-    APCUserInfoCellTypeImageText,
     APCUserInfoCellTypeSingleInputText,
     APCUserInfoCellTypeSwitch,
     APCUserInfoCellTypeDatePicker,
@@ -24,8 +23,6 @@ typedef NS_OPTIONS (NSUInteger, APCUserInfoCellType) {
 @interface APCUserInfoCell : UITableViewCell
 
 @property (nonatomic, readwrite) APCUserInfoCellType type;
-
-@property (nonatomic, strong) UIButton *profileImageButton;
 
 @property (nonatomic, strong) NSString *valueTextRegularExpression;
 

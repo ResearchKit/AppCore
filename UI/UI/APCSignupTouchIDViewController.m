@@ -9,6 +9,7 @@
 #import "APCPasscodeView.h"
 #import "UIView+Category.h"
 #import "APCStepProgressBar.h"
+#import "UIAlertView+Category.h"
 #import "APCSignupTouchIDViewController.h"
 #import "APCSignupCriteriaViewController.h"
 
@@ -24,6 +25,8 @@
 
 @property (weak, nonatomic) IBOutlet APCPasscodeView *retryPasscodeView;
 
+@property (nonatomic, strong) LAContext *touchContext;
+
 @end
 
 @implementation APCSignupTouchIDViewController
@@ -34,10 +37,13 @@
     [self addNavigationItems];
     [self setupProgressBar];
     
+    self.touchContext = [LAContext new];
+    
+    [self enableTouchIDFeatureIfAvailable];
+    
     self.titleLabel.text = NSLocalizedString(@"Set a passcode\nfor secure identification", @"");
     
     self.passcodeView.delegate = self;
-    
     self.retryPasscodeView.delegate = self;
 }
 
@@ -69,6 +75,20 @@
 
 - (void) setupProgressBar {
     [self.stepProgressBar setCompletedSteps:1 animation:NO];
+}
+
+- (void) enableTouchIDFeatureIfAvailable {
+    NSError *error;
+    if ([self.touchContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
+        self.touchIDButton.hidden = NO;
+    }
+    else {
+        self.touchIDButton.hidden = YES;
+        
+        if (error) {
+            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Touch Authentication", @"") message:error.localizedDescription];
+        }
+    }
 }
 
 
@@ -104,25 +124,24 @@
 #pragma mark - IBActions
 
 - (IBAction) touchID {
-    LAContext *context = [[LAContext alloc] init];
+    NSString *localizedReason = NSLocalizedString(@"Authentication", @"");
     
-    NSError *error;
-    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-        NSString *localizedReason = NSLocalizedString(@"Application authentication", @"");
-        [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:localizedReason reply:^(BOOL success, NSError *error) {
-            
-        }];
-    }
-    else {
-        NSLog(@"%@", error);
-    }
+    typeof(self) __weak weakSelf = self;
+    [self.touchContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:localizedReason reply:^(BOOL success, NSError *error) {
+        if (success) {
+            [weakSelf next];
+        }
+        else {
+            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Touch Authentication", @"") message:error.localizedDescription];
+        }
+    }];
 }
 
 
 #pragma mark - Private Methods
 
 - (void) next {
-    [self.navigationController setViewControllers:@[[APCSignupCriteriaViewController new]] animated:YES];
+    [self.navigationController pushViewController:[APCSignupCriteriaViewController new] animated:YES];
 }
 
 

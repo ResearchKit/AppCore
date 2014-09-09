@@ -28,7 +28,7 @@ U2V0IGEgcGFzc2NvZGUDIGZvciBzZWN1cmUgaWRlbnRpZmljYXRpb24
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ZVc-VH-i0U">
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ZVc-VH-i0U">
                     <rect key="frame" x="0.0" y="504" width="320" height="64"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.1764705882352941" green="0.70588235294117641" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>

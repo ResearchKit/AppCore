@@ -7,6 +7,9 @@
 //
 
 #import "APCStepProgressBar.h"
+#import "APCStepProgressBar+AppearanceCategory.h"
+
+static CGFloat const kAPCStepProgressBarControlsMinMargin   = 10;
 
 @implementation APCStepProgressBar
 
@@ -18,52 +21,58 @@
         
         _style = style;
         
-        [self loadViews];
+        _progressView = [UIProgressView new];
+        [self addSubview:_progressView];
+        
+        if (self.style == APCStepProgressBarStyleDefault) {
+            _leftLabel = [UILabel new];
+            [self addSubview:_leftLabel];
+            
+            _rightLabel = [UILabel new];
+            [self addSubview:_rightLabel];
+        }
+        
+        [self applyStyle];
     }
     return self;
 }
 
-- (void) loadViews {
-    CGFloat const MARGIN = 10;
+- (void) applyStyle {
     CGRect frame = self.bounds;
     
     if (self.style == APCStepProgressBarStyleDefault) {
-        CGFloat availableWidth = self.bounds.size.width - (2 * MARGIN);
+        CGFloat availableWidth = self.bounds.size.width - (2 * kAPCStepProgressBarControlsMinMargin);
         
         {
             frame.size.width = availableWidth * 0.75;
-            frame.origin.x = MARGIN;
+            frame.origin.x = kAPCStepProgressBarControlsMinMargin;
             
-            _leftLabel = [UILabel new];
-            _leftLabel.frame = frame;
-            _leftLabel.font = [UIFont boldSystemFontOfSize:14.0];
-            [self addSubview:_leftLabel];
+            self.leftLabel.frame = frame;
+            self.leftLabel.font = [APCStepProgressBar leftLabelFont];
+            self.leftLabel.textColor = [APCStepProgressBar leftLabelTextColor];
         }
 
         {
             frame.origin.x = CGRectGetMaxX(frame);
             frame.size.width = availableWidth * 0.25;
             
-            _rightLabel = [UILabel new];
-            _rightLabel.frame = frame;
-            _rightLabel.font = [UIFont systemFontOfSize:12.0];
-            _rightLabel.textAlignment = NSTextAlignmentRight;
-            [self addSubview:_rightLabel];
+            self.rightLabel.frame = frame;
+            self.rightLabel.font = [APCStepProgressBar rightLabelFont];
+            self.rightLabel.textColor = [APCStepProgressBar rightLabelTextColor];
+            self.rightLabel.textAlignment = NSTextAlignmentRight;
         }
     }
     
-    _progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-    _progressView.frame = CGRectMake(0, self.bounds.size.height - 1, self.bounds.size.width, 1);
-    _progressView.trackTintColor = [UIColor colorWithRed:248/255.0 green:248/255.0 blue:248/255.0 alpha:1.0];
-    _progressView.progressTintColor = [UIColor colorWithRed:45/255.0 green:180/255.0 blue:251/255.0 alpha:1.0];
-    [self addSubview:_progressView];
-    
     if (self.style == APCStepProgressBarStyleOnlyProgressView) {
-        _progressView.frame = self.bounds;
+        frame = self.bounds;
     }
     else {
-        _progressView.frame = CGRectMake(0, self.bounds.size.height - 1, self.bounds.size.width, 1);
+        frame = CGRectMake(0, self.bounds.size.height - 1, self.bounds.size.width, 1);
     }
+    
+    self.progressView.frame = frame;
+    self.progressView.trackTintColor = [APCStepProgressBar progressBarTrackTintColor];
+    self.progressView.progressTintColor = [APCStepProgressBar progressBarProgressTintColor];
 }
 
 - (void) setCompletedSteps:(NSUInteger)completedStep animation:(BOOL)animation {

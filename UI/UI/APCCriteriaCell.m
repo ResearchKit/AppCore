@@ -7,6 +7,7 @@
 //
 
 #import "APCCriteriaCell.h"
+#import "UITableView+AppearanceCategory.h"
 
 @interface APCCriteriaCell () <UITextFieldDelegate>
 
@@ -20,21 +21,23 @@
     
     self.textLabel.backgroundColor = [UIColor clearColor];
     
-    UIColor *color = [UIColor colorWithWhite:0.8 alpha:0.5];
+    UIColor *color = [UITableView controlsBorderColor];
     
-    self.containerView.layer.borderWidth = 1.0;
+    CGFloat borderWidth = [UITableView controlsBorderWidth];
+    
+    self.containerView.layer.borderWidth = borderWidth;
     self.containerView.layer.borderColor = color.CGColor;
     
-    self.questionLabel.layer.borderWidth = 1.0;
+    self.questionLabel.layer.borderWidth = borderWidth;
     self.questionLabel.layer.borderColor = color.CGColor;
     
-    self.choice1.layer.borderWidth = 1.0;
+    self.choice1.layer.borderWidth = borderWidth;
     self.choice1.layer.borderColor = color.CGColor;
     
-    self.choice2.layer.borderWidth = 1.0;
+    self.choice2.layer.borderWidth = borderWidth;
     self.choice2.layer.borderColor = color.CGColor;
     
-    self.choice3.layer.borderWidth = 1.0;
+    self.choice3.layer.borderWidth = borderWidth;
     self.choice3.layer.borderColor = color.CGColor;
 }
 
@@ -84,6 +87,8 @@
             break;
             
         default:
+#warning assert message require
+            NSAssert(self.choices.count < 3, NSLocalizedString(@"ASSERT_MESSAGE", @""));
             break;
     }
 }
@@ -91,7 +96,9 @@
 - (void) prepareForReuse {
     [super prepareForReuse];
     
-    self.choice1.selected = self.choice2.selected = self.choice3.selected = NO;
+    self.choice1.selected = NO;
+    self.choice2.selected = NO;
+    self.choice3.selected = NO;
 }
 
 
@@ -134,6 +141,8 @@
                 break;
                 
             default:
+#warning assert message require
+                NSAssert(self.choices.count < 3, NSLocalizedString(@"ASSERT_MESSAGE", @""));
                 break;
         }
     }
@@ -141,48 +150,61 @@
 
 
 - (void) setNeedsChoiceInputCell {
-    self.choice3.hidden = self.choice2.hidden = self.choice1.hidden = NO;
-    self.captionLabel.hidden = self.answerTextField.hidden = YES;
+    self.choice3.hidden = NO;
+    self.choice2.hidden = NO;
+    self.choice1.hidden = NO;
+    
+    self.captionLabel.hidden = YES;
+    self.answerTextField.hidden = YES;
     
     [self removeDatePicker];
 }
 
 - (void) setNeedsTextInputCell {
-    self.choice3.hidden = self.choice2.hidden = self.choice1.hidden = YES;
-    self.captionLabel.hidden = self.answerTextField.hidden = NO;
+    self.choice3.hidden = YES;
+    self.choice2.hidden = YES;
+    self.choice1.hidden = YES;
+    
+    self.captionLabel.hidden = NO;
+    self.answerTextField.hidden = NO;
     
     [self removeDatePicker];
 }
 
 - (void) setNeedsDateInputCell {
-    self.choice3.hidden = self.choice2.hidden = self.choice1.hidden = YES;
-    self.captionLabel.hidden = self.answerTextField.hidden = NO;
+    self.choice3.hidden = YES;
+    self.choice2.hidden = YES;
+    self.choice1.hidden = YES;
+    
+    self.captionLabel.hidden = NO;
+    self.answerTextField.hidden = NO;
     
     {
         if (!self.datePicker) {
             self.datePicker = [[UIDatePicker alloc] init];
             self.datePicker.backgroundColor = [UIColor whiteColor];
             self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
+            [self.datePicker addTarget:self action:@selector(datePickerValueChanged) forControlEvents:UIControlEventValueChanged];
         }
         
         self.answerTextField.inputView = self.datePicker;
     }
-    
-    {
-        UIBarButtonItem *extraSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        UIBarButtonItem *accept = [[UIBarButtonItem alloc] initWithTitle:@"Select" style:UIBarButtonItemStyleDone target:self action:@selector(datePickerValueChanged)];
-        
-        UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 44)];
-        keyboardToolbar.tintColor = [UIColor whiteColor];
-        keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
-        keyboardToolbar.items = @[extraSpace, accept];
-        
-        self.answerTextField.inputAccessoryView = keyboardToolbar;
-    }
 }
 
 - (NSUInteger) selectedChoiceIndex {
-    return (self.choice1.isSelected)? 0 : ((self.choice2.isSelected) ? 1 : 2);
+    NSUInteger index;
+    
+    if (self.choice1.isSelected) {
+        index = 0;
+    }
+    else if (self.choice2.isSelected) {
+        index = 1;
+    }
+    else {
+        index = 2;
+    }
+    
+    return index;
 }
 
 - (void) setSelectedChoiceIndex:(NSUInteger)index {
@@ -202,6 +224,8 @@
             break;
             
         default:
+#warning assert message require
+            NSAssert(self.choices.count < 3, NSLocalizedString(@"ASSERT_MESSAGE", @""));
             break;
     }
 }
@@ -210,7 +234,9 @@
 #pragma mark - IBActions
 
 - (IBAction) choiceDidChoose:(id)sender {
-    self.choice1.selected = self.choice2.selected = self.choice3.selected = NO;
+    self.choice1.selected = NO;
+    self.choice2.selected = NO;
+    self.choice3.selected = NO;
     
     [(UIButton *)sender setSelected:YES];
     

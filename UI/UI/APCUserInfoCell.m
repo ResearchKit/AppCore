@@ -10,9 +10,13 @@
 #import "NSString+Category.h"
 #import "UITableView+AppearanceCategory.h"
 
+static CGFloat const kAPCUserInfoCellControlsMinHorizontalMargin    = 15.0;
+static CGFloat const kAPCUserInfoCellControlsMinVerticalMargin      = 7.0;
+static CGFloat const kAPCUserInfoCellTextFieldMinWidth              = 140.0;
+static CGFloat const kAPCUserInfoCellControlsMinHeight              = 30.0;
+
 @interface APCUserInfoCell () <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
-@property (nonatomic, strong) CALayer *separatorLayer;
 @property (nonatomic, strong) CALayer *profileImageCircleLayer;
 
 @end
@@ -28,17 +32,13 @@
         self.detailTextLabel.font = [UITableView detailLabelFont];
         self.detailTextLabel.textColor = [UITableView detailLabelTextColor];
         
-        _valueTextField = [[UITextField alloc] initWithFrame:CGRectMake(15, 7, 140, 30)];
-        _valueTextField.delegate = self;
-        _valueTextField.textAlignment = NSTextAlignmentLeft;
-        _valueTextField.font = [UITableView textFieldFont];
-        _valueTextField.textColor = [UITableView textFieldTextColor];
+        CGRect frame = CGRectMake(kAPCUserInfoCellControlsMinHorizontalMargin, kAPCUserInfoCellControlsMinVerticalMargin, kAPCUserInfoCellTextFieldMinWidth, kAPCUserInfoCellControlsMinHeight);
         
-//        _separatorLayer = [CALayer layer];
-//        _separatorLayer.frame = CGRectMake(0, self.bounds.size.height - 1, self.bounds.size.width, 0.5);
-//        _separatorLayer.borderWidth = 1.0;
-//        _separatorLayer.borderColor = [UIColor colorWithWhite:0.5 alpha:0.6].CGColor;
-//        [self.layer addSublayer:_separatorLayer];
+        self.valueTextField = [[UITextField alloc] initWithFrame:frame];
+        self.valueTextField.delegate = self;
+        self.valueTextField.textAlignment = NSTextAlignmentLeft;
+        self.valueTextField.font = [UITableView textFieldFont];
+        self.valueTextField.textColor = [UITableView textFieldTextColor];
     }
     
     return self;
@@ -51,10 +51,6 @@
         _type = type;
         
         switch (self.type) {
-            case APCUserInfoCellTypeImageText:
-                [self addImageText];
-                break;
-                
             case APCUserInfoCellTypeSingleInputText:
                 [self addSingleInputText];
                 break;
@@ -78,9 +74,10 @@
             case APCUserInfoCellTypeSegment:
                 [self addSegmentControl];
                 break;
-                
             
             default:
+#warning assert message require
+                NSAssert(_type < APCUserInfoCellTypeSegment, NSLocalizedString(@"ASSERT_MESSAGE", @""));
                 break;
         }
     }
@@ -106,12 +103,15 @@
 }
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    BOOL isValid = YES;
+    BOOL isValid = NO;
     
     NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
     if (text.length > 0 && self.valueTextRegularExpression) {
         isValid = [text isValidForRegex:self.valueTextRegularExpression];
+    }
+    else {
+        isValid = YES;
     }
     
     return isValid;
@@ -132,40 +132,19 @@
 
 #pragma mark - Private Methods
 
-- (void) addImageText {
-//    self.backgroundColor = [UIColor greenColor];
-    
-    self.valueTextField.inputAccessoryView = nil;
-    [self addSubview:_valueTextField];
-    
-    self.profileImageCircleLayer = [CALayer layer];
-    self.profileImageCircleLayer.cornerRadius = 35;
-    self.profileImageCircleLayer.borderColor = [UIColor colorWithWhite:0.5 alpha:0.6].CGColor;
-    self.profileImageCircleLayer.borderWidth = 1.0;
-    [self.layer addSublayer:self.profileImageCircleLayer];
-    
-    self.profileImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.profileImageButton.titleLabel.numberOfLines = 2;
-    self.profileImageButton.titleLabel.textAlignment = NSTextAlignmentCenter;
-    [self.profileImageButton setTitle:@"add\nphoto" forState:UIControlStateNormal];
-    [self.profileImageButton addTarget:self action:@selector(profileImageButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:self.profileImageButton];
-}
-
 - (void) addSingleInputText {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    self.valueTextField.frame = CGRectMake(15, (self.bounds.size.height - 30) * 0.5, 300, 30);
     self.valueTextField.inputAccessoryView = nil;
-    [self addSubview:_valueTextField];
+    [self addSubview:self.valueTextField];
 }
 
 - (void) addSwitch {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
     if (!self.switchView) {
-        self.switchView = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
-        [self.switchView addTarget:self action:@selector(switchValueChanged) forControlEvents:UIControlEventValueChanged];
+        self.switchView = [UISwitch new];
+        [self.switchView addTarget:self action:@selector(valueChanged) forControlEvents:UIControlEventValueChanged];
     }
     
     self.accessoryView = self.switchView;
@@ -174,9 +153,9 @@
 - (void) addDatePicker {
     self.selectionStyle = UITableViewCellSelectionStyleDefault;
     
-    _valueTextField.frame = CGRectMake(0, 0, 100, 30);
-    _valueTextField.textAlignment = NSTextAlignmentRight;
-    _valueTextField.tintColor = [UIColor clearColor];
+    self.valueTextField.frame = CGRectMake(0, 0, kAPCUserInfoCellTextFieldMinWidth, kAPCUserInfoCellControlsMinHeight);
+    self.valueTextField.textAlignment = NSTextAlignmentRight;
+    self.valueTextField.tintColor = [UIColor clearColor];
     
     self.accessoryView = self.valueTextField;
     
@@ -185,31 +164,19 @@
             self.datePicker = [[UIDatePicker alloc] init];
             self.datePicker.backgroundColor = [UIColor whiteColor];
             self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
-            [self.datePicker addTarget:self action:@selector(datePickerValueChanged) forControlEvents:UIControlEventValueChanged];
+            [self.datePicker addTarget:self action:@selector(valueChanged) forControlEvents:UIControlEventValueChanged];
         }
         
         self.valueTextField.inputView = self.datePicker;
     }
-    
-//    {
-//        UIBarButtonItem *extraSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-//        UIBarButtonItem *accept = [[UIBarButtonItem alloc] initWithTitle:@"Select" style:UIBarButtonItemStyleDone target:self action:@selector(datePickerValueChanged)];
-//        
-//        UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 44)];
-//        keyboardToolbar.tintColor = [UIColor whiteColor];
-//        keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
-//        keyboardToolbar.items = @[extraSpace, accept];
-//        
-//        self.valueTextField.inputAccessoryView = keyboardToolbar;
-//    }
 }
 
 - (void) addCustomPicker {
     self.selectionStyle = UITableViewCellSelectionStyleDefault;
     
-    _valueTextField.frame = CGRectMake(0, 0, 100, 30);
-    _valueTextField.textAlignment = NSTextAlignmentCenter;
-    _valueTextField.tintColor = [UIColor clearColor];
+    self.valueTextField.frame = CGRectMake(0, 0, kAPCUserInfoCellTextFieldMinWidth, kAPCUserInfoCellControlsMinHeight);
+    self.valueTextField.textAlignment = NSTextAlignmentCenter;
+    self.valueTextField.tintColor = [UIColor clearColor];
     
     self.accessoryView = self.valueTextField;
     
@@ -219,9 +186,9 @@
 - (void) addTitleValue {
     self.selectionStyle = UITableViewCellSelectionStyleDefault;
     
-    _valueTextField.frame = CGRectMake(0, 0, 100, 30);
-    _valueTextField.textAlignment = NSTextAlignmentRight;
-    _valueTextField.tintColor = [UIColor clearColor];
+    self.valueTextField.frame = CGRectMake(0, 0, kAPCUserInfoCellTextFieldMinWidth, kAPCUserInfoCellControlsMinHeight);
+    self.valueTextField.textAlignment = NSTextAlignmentRight;
+    self.valueTextField.tintColor = [UIColor clearColor];
     
     self.valueTextField.inputAccessoryView = nil;
     
@@ -234,24 +201,12 @@
     self.textLabel.font = [UIFont systemFontOfSize:12];
     
     if (!self.segmentControl) {
+        CGFloat width = self.bounds.size.width - (2 * kAPCUserInfoCellControlsMinHorizontalMargin);
+        
         self.segmentControl = [[UISegmentedControl alloc] init];
-        self.segmentControl.frame = CGRectMake(15, 40, self.bounds.size.width - 30, 30);
-        [self.segmentControl addTarget:self action:@selector(segmentIndexChanged) forControlEvents:UIControlEventValueChanged];
+        self.segmentControl.frame = CGRectMake(kAPCUserInfoCellControlsMinHorizontalMargin, 40, width, kAPCUserInfoCellControlsMinHeight);
+        [self.segmentControl addTarget:self action:@selector(valueChanged) forControlEvents:UIControlEventValueChanged];
         [self addSubview:self.segmentControl];
-    }
-}
-
-- (void) switchValueChanged {
-    if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
-        [self.delegate userInfoCellValueChanged:self];
-    }
-}
-
-- (void) datePickerValueChanged {
-//    [_valueTextField resignFirstResponder];
-    
-    if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
-        [self.delegate userInfoCellValueChanged:self];
     }
 }
 
@@ -261,15 +216,7 @@
     }
 }
 
-- (void) customPickerValueChanged {
-//    [_valueTextField resignFirstResponder];
-    
-    if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
-        [self.delegate userInfoCellValueChanged:self];
-    }
-}
-
-- (void) segmentIndexChanged {
+- (void) valueChanged {
     if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
         [self.delegate userInfoCellValueChanged:self];
     }
@@ -322,31 +269,23 @@
 - (void) layoutSubviews {
     [super layoutSubviews];
     
-    self.separatorLayer.frame = CGRectMake(0, self.bounds.size.height - 1, self.bounds.size.width, 0.5);
-    
     if (self.type == APCUserInfoCellTypeSingleInputText) {
-        self.valueTextField.frame = CGRectMake(15, (self.bounds.size.height - 30) * 0.5, 300, 30);
-    }
-    else if (self.type == APCUserInfoCellTypeImageText) {
-        CGFloat leftInset = 15 + 80 + 10;
+        CGFloat width = self.bounds.size.width - (2 * kAPCUserInfoCellControlsMinHorizontalMargin);
+        CGFloat rectY = (self.bounds.size.height - kAPCUserInfoCellControlsMinHeight) * 0.5;
         
-        self.valueTextField.frame = CGRectMake(leftInset, ((self.bounds.size.height - 30) * 0.5) - 10, 300 - leftInset, 30);
-        
-        self.profileImageButton.frame = CGRectMake(15, (self.bounds.size.height - 70) * 0.5, 70, 70);
-        
-        self.separatorLayer.frame = CGRectMake(leftInset, CGRectGetMaxY(self.valueTextField.frame) + 3, self.bounds.size.width - leftInset, 1);
-        
-        self.profileImageCircleLayer.frame = self.profileImageButton.frame;
+        self.valueTextField.frame = CGRectMake(kAPCUserInfoCellControlsMinHorizontalMargin, rectY, width, kAPCUserInfoCellControlsMinHeight);
     }
     else if (self.type == APCUserInfoCellTypeSegment) {
         [self.textLabel sizeToFit];
         
+        CGFloat veticalSpace = kAPCUserInfoCellControlsMinVerticalMargin + 2;
+        
         CGRect frame = self.textLabel.frame;
-        frame.origin.y = 9;
+        frame.origin.y = veticalSpace;
         self.textLabel.frame = frame;
         
         frame = self.segmentControl.frame;
-        frame.origin.y = CGRectGetMaxY(self.textLabel.frame) + 9;
+        frame.origin.y = CGRectGetMaxY(self.textLabel.frame) + veticalSpace;
         self.segmentControl.frame = frame;
     }
 }
@@ -354,7 +293,9 @@
 - (void) prepareForReuse {
     [super prepareForReuse];
     
-    _valueTextField.frame = CGRectMake(15, 7, 140, 30);
+    CGRect frame = CGRectMake(kAPCUserInfoCellControlsMinHorizontalMargin, kAPCUserInfoCellControlsMinVerticalMargin, kAPCUserInfoCellTextFieldMinWidth, kAPCUserInfoCellControlsMinHeight);
+    
+    self.valueTextField.frame = frame;
     
     self.textLabel.text = nil;
     self.detailTextLabel.text = nil;
@@ -363,14 +304,14 @@
 }
 
 - (void) setNeedsHiddenField {
-    _valueTextField.hidden = YES;
-    [self addSubview:_valueTextField];
+    self.valueTextField.hidden = YES;
+    [self addSubview:self.valueTextField];
 }
 
 - (void) setNeedsCustomPicker {
     {
         if (!self.customPickerValues) {
-            self.customPickerView = [[UIPickerView alloc] init];
+            self.customPickerView = [UIPickerView new];
             self.customPickerView.backgroundColor = [UIColor whiteColor];
             self.customPickerView.dataSource = self;
             self.customPickerView.delegate = self;
@@ -378,20 +319,6 @@
         
         self.valueTextField.inputView = self.customPickerView;
     }
-    
-//    {
-//        if (!self.valueTextField.inputAccessoryView) {
-//            UIBarButtonItem *extraSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-//            UIBarButtonItem *accept = [[UIBarButtonItem alloc] initWithTitle:@"Select" style:UIBarButtonItemStyleDone target:self action:@selector(customPickerValueChanged)];
-//            
-//            UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 44)];
-//            keyboardToolbar.tintColor = [UIColor whiteColor];
-//            keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
-//            keyboardToolbar.items = @[extraSpace, accept];
-//            
-//            self.valueTextField.inputAccessoryView = keyboardToolbar;
-//        }
-//    }
 }
 
 @end

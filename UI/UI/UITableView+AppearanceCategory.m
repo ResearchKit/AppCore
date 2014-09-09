@@ -54,4 +54,12 @@
     return [UIColor colorWithRed:45/255.0 green:180/255.0 blue:251/255.0 alpha:1.0];
 }
 
++ (CGFloat) controlsBorderWidth {
+    return 1.0;
+}
+
++ (UIColor *) controlsBorderColor {
+    return [UIColor colorWithWhite:0.8 alpha:0.5];
+}
+
 @end

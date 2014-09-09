@@ -12,7 +12,9 @@
 #import "APCStepProgressBar.h"
 #import "APCSignupCriteriaViewController.h"
 
-static NSString const *kAPCCriteriaCellIdentifier    =   @"Criteria";
+static NSString const *kAPCSignupCriteriaTableViewCellIdentifier    =   @"Criteria";
+
+static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 
 @interface APCSignupCriteriaViewController () <UITableViewDataSource, UITableViewDelegate, APCCriteriaCellDelegate>
@@ -99,15 +101,11 @@ static NSString const *kAPCCriteriaCellIdentifier    =   @"Criteria";
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
     
-    [self.tableView registerNib:[UINib nibWithNibName:@"APCCriteriaCell" bundle:nil] forCellReuseIdentifier:(NSString *)kAPCCriteriaCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"APCCriteriaCell" bundle:nil] forCellReuseIdentifier:(NSString *)kAPCSignupCriteriaTableViewCellIdentifier];
 }
 
 
 #pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.criterias.count;
@@ -116,7 +114,7 @@ static NSString const *kAPCCriteriaCellIdentifier    =   @"Criteria";
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     APCCriteria *criteria = self.criterias[indexPath.row];
     
-    APCCriteriaCell *cell = (APCCriteriaCell *)[tableView dequeueReusableCellWithIdentifier:(NSString *)kAPCCriteriaCellIdentifier];
+    APCCriteriaCell *cell = (APCCriteriaCell *)[tableView dequeueReusableCellWithIdentifier:(NSString *)kAPCSignupCriteriaTableViewCellIdentifier];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.delegate = self;
     cell.questionLabel.text = criteria.question;
@@ -147,7 +145,7 @@ static NSString const *kAPCCriteriaCellIdentifier    =   @"Criteria";
 #pragma mark - UITableViewDelegate
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 98;
+    return kAPCSignupCriteriaTableViewCellHeight;
 }
 
 

@@ -12,7 +12,7 @@
 
 @class APCProfile;
 
-@interface APCHKManager : NSObject
+@interface APCHealthKitProxy : NSObject
 
 @property (nonatomic, strong) HKHealthStore *store;
 

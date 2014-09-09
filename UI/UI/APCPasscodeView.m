@@ -9,6 +9,8 @@
 #import "APCPasscodeView.h"
 #import "CALayer+AppearanceCategory.h"
 
+static CGFloat const kAPCPasscodeViewPinLength = 4;
+
 @interface APCPasscodeView () <UITextFieldDelegate>
 
 @property (nonatomic, strong) UITextField *hiddenTextField;
@@ -44,7 +46,7 @@
     }
     
     
-    CGFloat digitWidth = self.bounds.size.width/4;
+    CGFloat digitWidth = self.bounds.size.width/kAPCPasscodeViewPinLength;
     CGRect frame = CGRectMake(0, 0, digitWidth, digitWidth);
     
     {
@@ -107,7 +109,7 @@
     BOOL canAppendText = NO;
     
     NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    if (text.length <= 4) {
+    if (text.length <= kAPCPasscodeViewPinLength) {
         canAppendText = YES;
         
         APCPasscodeDigitView *digitView = (APCPasscodeDigitView *)self.digitViews[range.location];
@@ -126,7 +128,7 @@
             [self.delegate passcodeView:self didChangeDigit:digit atIndex:range.location];
         }
         
-        if (text.length == 4) {
+        if (text.length == kAPCPasscodeViewPinLength) {
             [textField performSelector:@selector(resignFirstResponder) withObject:nil afterDelay:0.3];
         }
     }
@@ -166,6 +168,7 @@ static CGFloat const kAPCPasscodeDigitViewLayerMargin   = 10;
         _shapeLayer.allowsEdgeAntialiasing = YES;
         [self.layer addSublayer:_shapeLayer];
         
+        // Once the view is initialized, then calling reset method will make shape layer to inital state (i.e. hypen (-))
         [self reset];
     }
     
@@ -184,7 +187,7 @@ static CGFloat const kAPCPasscodeDigitViewLayerMargin   = 10;
 }
 
 - (void) reset {
-    _path = [UIBezierPath bezierPath];
+    self.path = [UIBezierPath bezierPath];
     
     [self.path moveToPoint:CGPointMake(kAPCPasscodeDigitViewLayerMargin, CGRectGetMidY(self.bounds))];
     [self.path addLineToPoint:CGPointMake(CGRectGetMaxX(self.bounds) - kAPCPasscodeDigitViewLayerMargin, CGRectGetMidY(self.bounds))];

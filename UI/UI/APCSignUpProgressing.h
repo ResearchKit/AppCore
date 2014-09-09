@@ -8,6 +8,8 @@
 
 @import Foundation;
 
+static CGFloat const kAPCSignUpProgressBarHeight = 14;
+
 @class APCStepProgressBar;
 
 @protocol APCSignUpProgressing <NSObject>

@@ -41,4 +41,10 @@
 
 + (UIColor *) segmentControlSelectedTextColor;
 
+
+// Control Border Color
++ (CGFloat) controlsBorderWidth;
+
++ (UIColor *) controlsBorderColor;
+
 @end
