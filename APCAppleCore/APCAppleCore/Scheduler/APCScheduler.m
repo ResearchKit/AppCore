@@ -12,13 +12,26 @@
 #import "APCScheduleInterpreter.h"
 
 
+static NSInteger kMinutes = 60;
+static NSInteger APCScheduledTaskNotComplete = 0;
+//TODO local notificiation reminders are set to 15 minutes before the task
+static NSInteger reminder_minutes_before_task = -15;
+
+typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
+{
+    APCScheduleReminderNo = 0,
+    APCScheduleReminderYES = 1
+};
+
 @interface APCScheduler()
 
 @property  (nonatomic, strong)   NSArray                 *schedules;
 @property  (weak, nonatomic)     APCDataSubstrate        *dataSubstrate;
 @property  (strong, nonatomic)   APCScheduleInterpreter  *scheduleInterpreter;
+@property  (strong, nonatomic)   NSManagedObjectContext  *localMOC;
 
 @end
+
 
 @implementation APCScheduler
 
@@ -33,27 +46,56 @@
 }
 
 
+- (void)updateScheduledTasks {
+    
+    self.localMOC = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    self.localMOC.parentContext = self.dataSubstrate.persistentContext;
+    
+    [self.localMOC performBlock:^{
+        
+        //Get APCSchedules from Core Data
+        self.schedules = [self schedule];
+        
+        for(APCSchedule *schedule in self.schedules) {
+            
+            //Make sure scheduled task is not already created and then create scheduled task
+            BOOL isUpdated = [self scheduleUpdated:schedule];
+            
+            if (!isUpdated) {
+                
+                [self createScheduledTask:schedule];
+                
+            }
+        }
+    }];
+}
+
+
 - (BOOL)scheduleUpdated:(APCSchedule *)schedule {
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
-
-    NSManagedObjectContext *moc = [[NSManagedObjectContext alloc]
-                                   initWithConcurrencyType:NSConfinementConcurrencyType];
-    
-    moc.parentContext = self.dataSubstrate.mainContext;
     
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"APCScheduledTask"
-                                              inManagedObjectContext:self.dataSubstrate.persistentContext ];
+                                              inManagedObjectContext:self.localMOC ];
     [request setEntity:entity];
     
     NSMutableArray *dates = [self.scheduleInterpreter taskDates:schedule.scheduleExpression];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"dueOn == %@ AND task == %@", [dates objectAtIndex:0], schedule.task];
+    NSDate *dueOn = [dates objectAtIndex:0];
+    APCTask *task = schedule.task;
+    
+    NSLog(@"TASK %@", schedule.task.taskType);
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"( dueOn == %@ ) AND ( task.taskType == %@ )", dueOn, task.taskType];
     [request setPredicate:predicate];
     NSError *error;
-    NSArray *array = [moc executeFetchRequest:request error:&error];
-
-    if (!array.count) {
+    NSArray *array = [self.localMOC executeFetchRequest:request error:&error];
+    
+    NSAssert(array, @"Core data did not return an array on requesting fetch");
+    
+    NSLog(@"Array %@", array);
+    
+    if ([array count] == 0) {
+        
         return NO;
     }
     
@@ -64,34 +106,16 @@
 - (NSArray *)schedule {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     
-    NSManagedObjectContext *moc = [[NSManagedObjectContext alloc]
-                                   initWithConcurrencyType:NSConfinementConcurrencyType];
-    
-    moc.parentContext = self.dataSubstrate.mainContext;
-    
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"APCSchedule"
-                                              inManagedObjectContext:self.dataSubstrate.persistentContext ];
+                                              inManagedObjectContext:self.localMOC];
     [request setEntity:entity];
     
     NSError *error;
-    NSArray *array = [moc executeFetchRequest:request error:&error];
+    NSArray *array = [self.localMOC executeFetchRequest:request error:&error];
+    
+    NSAssert(array, @"Core data did not return an array on requesting APCSchedule entities");
     
     return array;
-}
-
-
-- (void)updateScheduledTasks {
-    
-//    //Get APCSchedules from Core Data
-//    self.schedules = [self schedule];
-//    
-//    for(APCSchedule *schedule in self.schedules) {
-//
-//        //Make sure scheduled task is not already created and then create scheduled task
-//        if (![self scheduleUpdated:schedule]) {
-//            [self createScheduledTask:schedule];
-//        }
-//    }
 }
 
 
@@ -103,9 +127,9 @@
     
     for (NSDate *date in dates) {
      
-        APCScheduledTask * scheduledTask = [APCScheduledTask newObjectForContext:self.dataSubstrate.mainContext];
+        APCScheduledTask * scheduledTask = [APCScheduledTask newObjectForContext:self.localMOC];
         
-        scheduledTask.completed = [NSNumber numberWithInt:0];
+        scheduledTask.completed = [NSNumber numberWithInteger:APCScheduledTaskNotComplete];
         scheduledTask.dueOn = date;
         scheduledTask.task = schedule.task;
         
@@ -113,13 +137,13 @@
         NSString *objectId = [[scheduledTask.objectID URIRepresentation] absoluteString];
         
         //Set a local notification at time of event
-        [self scheduleLocalNotification:schedule.notificationMessage withDate:date withTaskType:schedule.task.taskType withAPCScheduleTaskId:objectId andReminder:0];
+        [self scheduleLocalNotification:schedule.notificationMessage withDate:date withTaskType:schedule.task.taskType withAPCScheduleTaskId:objectId andReminder:APCScheduleReminderNo];
         
         //TODO may have to interpret a cron expression, however, for now I'll just set reminders 15 mintues before
         if (schedule.reminder) {
 
             //Set a local reminder notification at time of event
-            [self scheduleLocalNotification:schedule.notificationMessage withDate:date withTaskType:schedule.task.taskType withAPCScheduleTaskId:objectId andReminder:1];
+            [self scheduleLocalNotification:schedule.notificationMessage withDate:date withTaskType:schedule.task.taskType withAPCScheduleTaskId:objectId andReminder:APCScheduleReminderYES];
         }
         
         [scheduledTask saveToPersistentStore:NULL];
@@ -127,26 +151,26 @@
 }
 
 
-- (void)scheduleLocalNotification:(NSString *)message withDate:(NSDate *)dueOn withTaskType:(NSString *)taskType withAPCScheduleTaskId:(NSString *)objectUID andReminder:(int)reminder  {
+- (void)scheduleLocalNotification:(NSString *)message withDate:(NSDate *)dueOn withTaskType:(NSString *)taskType withAPCScheduleTaskId:(NSString *)APCScheduledTaskId andReminder:(int)reminder  {
 
     // Schedule the notification
     UILocalNotification* localNotification = [[UILocalNotification alloc] init];
     localNotification.fireDate = dueOn;
     localNotification.alertBody = message;
     
-    localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+    //TODO: figure out how the badge numbers are going to be set.
+    //localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
     
-    NSDictionary *notificationInfo = @{@"scheduledTaskId" : objectUID};
-  
-    //TODO Save the activity type in the local notification later so it's accessible by a view controller later.
-    //@{@"taskType" : taskType, @"scheduledTaskId" : objectUID};
+    NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
+    notificationInfo[@"taskType"] = taskType;
+    notificationInfo[@"APCScheduledTaskId"] = APCScheduledTaskId;
     
     if (reminder) {
         
-        NSTimeInterval reminderInterval = -15 * 60;
+        NSTimeInterval reminderInterval = reminder_minutes_before_task * kMinutes;
         
         [dueOn dateByAddingTimeInterval:reminderInterval];
-        [notificationInfo setValue:@"reminder" forKey:@"reminder"];
+        notificationInfo[@"reminder"] = @"reminder";
     }
     
     localNotification.userInfo = notificationInfo;
@@ -166,11 +190,13 @@
         NSDictionary *userInfoCurrent = oneEvent.userInfo;
         
         //If scheduled task identification exists then it was issued by scheduler and can be deleted
-        if ([userInfoCurrent objectForKey:@"scheduledTaskId"] ) {
+        
+        if ( userInfoCurrent[@"scheduledTaskId"] ) {
             [app cancelLocalNotification:oneEvent];
         }
     }
 }
+
 
 - (void)clearNotificationActivityType:(NSString *)taskType {
     
@@ -183,7 +209,7 @@
         NSDictionary *userInfoCurrent = oneEvent.userInfo;
         
         //If scheduled task activity exists then delete
-        if ([[userInfoCurrent objectForKey:@"taskType"] isEqualToString:taskType]) {
+        if ([userInfoCurrent[@"taskType"] isEqualToString:taskType]) {
             [app cancelLocalNotification:oneEvent];
         }
     }
