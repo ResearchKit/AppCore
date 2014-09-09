@@ -84,15 +84,12 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
     NSDate *dueOn = [dates objectAtIndex:0];
     APCTask *task = schedule.task;
     
-    NSLog(@"TASK %@", schedule.task.taskType);
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"( dueOn == %@ ) AND ( task.taskType == %@ )", dueOn, task.taskType];
     [request setPredicate:predicate];
     NSError *error;
     NSArray *array = [self.localMOC executeFetchRequest:request error:&error];
     
     NSAssert(array, @"Core data did not return an array on requesting fetch");
-    
-    NSLog(@"Array %@", array);
     
     if ([array count] == 0) {
         
