@@ -155,16 +155,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		250105B519BB8D9B00B27757 /* APCHKManager */ = {
-			isa = PBXGroup;
-			children = (
-				250105B919BB8E8500B27757 /* HealthKit.framework */,
-				250105B619BB8DC400B27757 /* APCHKManager.h */,
-				250105B719BB8DC400B27757 /* APCHKManager.m */,
-			);
-			name = APCHKManager;
-			sourceTree = "<group>";
-		};
 		251F460019BA5347004FBD06 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -177,7 +167,7 @@
 		2526A96F19B6635C0088A42C = {
 			isa = PBXGroup;
 			children = (
-				2550BB7F19BE567B000EF023 /* LocalAuthentication.framework */,
+				258F468D19BECB7C00F4C373 /* Frameworks */,
 				2526A97A19B6635C0088A42C /* UI */,
 				2526A99119B6635C0088A42C /* UITests */,
 				2526A97919B6635C0088A42C /* Products */,
@@ -197,9 +187,10 @@
 			isa = PBXGroup;
 			children = (
 				250105BB19BBE17300B27757 /* UI.entitlements */,
-				250105B519BB8D9B00B27757 /* APCHKManager */,
 				251F460019BA5347004FBD06 /* Images */,
 				2526A9B119B663CE0088A42C /* Categories */,
+				258F468F19BECBCF00F4C373 /* Managers */,
+				258F468E19BECB9300F4C373 /* Models */,
 				2550BB8119BE71A7000EF023 /* UserInfo */,
 				2526A9AF19B663AD0088A42C /* Onboarding */,
 				2526A9B019B663C90088A42C /* Profile */,
@@ -260,20 +251,8 @@
 		2526A9B119B663CE0088A42C /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				2526A99E19B663A00088A42C /* NSString+Category.h */,
-				2526A99F19B663A00088A42C /* NSString+Category.m */,
-				2549447819B8F25700DE72AF /* NSDate+Category.h */,
-				2549447919B8F25700DE72AF /* NSDate+Category.m */,
-				251F460819BA8C79004FBD06 /* UIScrollView+Category.h */,
-				251F460919BA8C79004FBD06 /* UIScrollView+Category.m */,
-				251F45FD19BA43D0004FBD06 /* UITableView+AppearanceCategory.h */,
-				251F45FE19BA43D0004FBD06 /* UITableView+AppearanceCategory.m */,
-				25A1910919BE2B07006CD59F /* UIBarButtonItem+AppearanceCategory.h */,
-				25A1910A19BE2B07006CD59F /* UIBarButtonItem+AppearanceCategory.m */,
-				25A1911019BE3B3E006CD59F /* CALayer+AppearanceCategory.h */,
-				25A1911119BE3B3E006CD59F /* CALayer+AppearanceCategory.m */,
-				2550BB7C19BE5292000EF023 /* UIView+Category.h */,
-				2550BB7D19BE5292000EF023 /* UIView+Category.m */,
+				258F468C19BECB4B00F4C373 /* Appearance */,
+				258F468B19BECB4400F4C373 /* General */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -281,8 +260,6 @@
 		2550BB8119BE71A7000EF023 /* UserInfo */ = {
 			isa = PBXGroup;
 			children = (
-				2526A9B219B663FE0088A42C /* APCProfile.h */,
-				2526A9B319B663FE0088A42C /* APCProfile.m */,
 				2526A9A019B663A00088A42C /* APCUserInfoCell.h */,
 				2526A9A119B663A00088A42C /* APCUserInfoCell.m */,
 				2526A9B419B663FE0088A42C /* APCUserInfoViewController.h */,
@@ -311,8 +288,6 @@
 				2549447B19B91A2F00DE72AF /* APCSignInViewController.h */,
 				2549447C19B91A2F00DE72AF /* APCSignInViewController.m */,
 				2549447D19B91A2F00DE72AF /* APCSignInViewController.xib */,
-				25DB79F819B7DED900664C48 /* APCCriteria.h */,
-				25DB79F919B7DED900664C48 /* APCCriteria.m */,
 				25DB79F519B7CFB000664C48 /* APCCriteriaCell.h */,
 				25DB79F619B7CFB000664C48 /* APCCriteriaCell.m */,
 				25DB79F319B7CF6800664C48 /* APCCriteriaCell.xib */,
@@ -333,6 +308,71 @@
 				2578CFC919B6898B00D94E2A /* APHSignUpMedicalInfoViewController.m */,
 			);
 			name = Parkinson;
+			sourceTree = "<group>";
+		};
+		258F468B19BECB4400F4C373 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				2526A99E19B663A00088A42C /* NSString+Category.h */,
+				2526A99F19B663A00088A42C /* NSString+Category.m */,
+				2549447819B8F25700DE72AF /* NSDate+Category.h */,
+				2549447919B8F25700DE72AF /* NSDate+Category.m */,
+				251F460819BA8C79004FBD06 /* UIScrollView+Category.h */,
+				251F460919BA8C79004FBD06 /* UIScrollView+Category.m */,
+				2550BB7C19BE5292000EF023 /* UIView+Category.h */,
+				2550BB7D19BE5292000EF023 /* UIView+Category.m */,
+			);
+			name = General;
+			sourceTree = "<group>";
+		};
+		258F468C19BECB4B00F4C373 /* Appearance */ = {
+			isa = PBXGroup;
+			children = (
+				251F45FD19BA43D0004FBD06 /* UITableView+AppearanceCategory.h */,
+				251F45FE19BA43D0004FBD06 /* UITableView+AppearanceCategory.m */,
+				25A1910919BE2B07006CD59F /* UIBarButtonItem+AppearanceCategory.h */,
+				25A1910A19BE2B07006CD59F /* UIBarButtonItem+AppearanceCategory.m */,
+				25A1911019BE3B3E006CD59F /* CALayer+AppearanceCategory.h */,
+				25A1911119BE3B3E006CD59F /* CALayer+AppearanceCategory.m */,
+			);
+			name = Appearance;
+			sourceTree = "<group>";
+		};
+		258F468D19BECB7C00F4C373 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				250105B919BB8E8500B27757 /* HealthKit.framework */,
+				2550BB7F19BE567B000EF023 /* LocalAuthentication.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		258F468E19BECB9300F4C373 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2526A9B219B663FE0088A42C /* APCProfile.h */,
+				2526A9B319B663FE0088A42C /* APCProfile.m */,
+				25DB79F819B7DED900664C48 /* APCCriteria.h */,
+				25DB79F919B7DED900664C48 /* APCCriteria.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		258F468F19BECBCF00F4C373 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				258F469019BECBDA00F4C373 /* APCHKManager */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
+		258F469019BECBDA00F4C373 /* APCHKManager */ = {
+			isa = PBXGroup;
+			children = (
+				250105B619BB8DC400B27757 /* APCHKManager.h */,
+				250105B719BB8DC400B27757 /* APCHKManager.m */,
+			);
+			name = APCHKManager;
 			sourceTree = "<group>";
 		};
 		25A1910C19BE2F1A006CD59F /* Views */ = {

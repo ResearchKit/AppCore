@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <XCTest/XCTest.h>
+@import XCTest;
+@import UIKit;
 
 @interface UITests : XCTestCase
 

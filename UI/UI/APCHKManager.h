@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 @import HealthKit;
 
@@ -15,33 +15,6 @@
 @interface APCHKManager : NSObject
 
 @property (nonatomic, strong) HKHealthStore *store;
-
-/*
- {
- HKCharacteristicType *type = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex];
- [types addObject:type];
- }
- 
- {
- HKCharacteristicType *type = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType];
- [types addObject:type];
- }
- 
- {
- HKCharacteristicType *type = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth];
- [types addObject:type];
- }
- 
- {
- HKQuantityType *type = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
- [types addObject:type];
- }
- 
- {
- HKQuantityType *type = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight];
- [types addObject:type];
- }
- */
 
 - (void) authenticate:(void (^)(BOOL granted, NSError *error))completion;
 
