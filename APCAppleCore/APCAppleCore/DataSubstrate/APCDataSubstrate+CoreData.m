@@ -68,5 +68,14 @@
     self.mainContext.parentContext = self.persistentContext;
 }
 
+/*********************************************************************************/
+#pragma mark - Core Data Methods
+/*********************************************************************************/
+- (void)loadStaticTasksAndSchedulesIfNecessary: (NSDictionary*) jsonDictionary
+{
+    [APCSchedule createSchedulesFromJSON:jsonDictionary[@"schedules"] inContext:self.persistentContext];
+    [APCTask createTasksFromJson:jsonDictionary[@"tasks"] inContext:self.persistentContext];
+}
+
 
 @end
