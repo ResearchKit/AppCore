@@ -73,7 +73,7 @@
 /*********************************************************************************/
 - (void)loadStaticTasksAndSchedules: (NSDictionary*) jsonDictionary
 {
-    [APCTask createTasksFromJson:jsonDictionary[@"tasks"] inContext:self.persistentContext];
+    [APCTask createTasksFromJSON:jsonDictionary[@"tasks"] inContext:self.persistentContext];
     [APCSchedule createSchedulesFromJSON:jsonDictionary[@"schedules"] inContext:self.persistentContext];
 }
 

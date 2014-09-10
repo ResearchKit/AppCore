@@ -10,17 +10,22 @@
 #import "APCAppleCore.h"
 #import <ResearchKit/ResearchKit.h>
 
+static NSString * const kTaskIDKey = @"taskID";
+static NSString * const kTaskTypeKey = @"taskType";
+static NSString * const kTaskFileNameKey = @"fileName";
+static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
+
 @implementation APCTask (AddOn)
 
-+ (void)createTasksFromJson:(NSArray *)tasksArray inContext:(NSManagedObjectContext *)context
++ (void)createTasksFromJSON:(NSArray *)tasksArray inContext:(NSManagedObjectContext *)context
 {
   [context performBlockAndWait:^{
       for (NSDictionary * taskDict in tasksArray) {
           APCTask * task = [APCTask newObjectForContext:context];
-          task.uid = taskDict[@"taskID"];
-          task.taskType = taskDict[@"taskType"];
-          if ([task.taskType isEqualToString:@"APHCustomizableSurvey"]) {
-              NSString *resource = [[NSBundle mainBundle] pathForResource:taskDict[@"fileName"] ofType:@"json"];
+          task.uid = taskDict[kTaskIDKey];
+          task.taskType = taskDict[kTaskTypeKey];
+          if ([task.taskType isEqualToString:kCustomizableSurveyTaskType]) {
+              NSString *resource = [[NSBundle mainBundle] pathForResource:taskDict[kTaskFileNameKey] ofType:@"json"];
               NSError * error;
               NSString *taskDescription = [NSString stringWithContentsOfFile:resource encoding:NSUTF8StringEncoding error:&error];
               [error handle];

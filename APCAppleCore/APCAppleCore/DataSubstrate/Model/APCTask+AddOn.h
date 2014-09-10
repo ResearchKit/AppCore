@@ -12,7 +12,7 @@
 @interface APCTask (AddOn)
 
 //Synchronous Method Call
-+ (void) createTasksFromJson: (NSArray*) tasksArray inContext: (NSManagedObjectContext*) context;
++ (void) createTasksFromJSON: (NSArray*) tasksArray inContext: (NSManagedObjectContext*) context;
 
 + (APCTask*) taskWithTaskID: (NSString*) taskID inContext: (NSManagedObjectContext*) context;
 
