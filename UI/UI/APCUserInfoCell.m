@@ -49,7 +49,7 @@ static CGFloat const kAPCUserInfoCellControlsMinHeight              = 30.0;
 #pragma mark - Getter 
 
 - (UIPickerView *) customPickerView {
-    if (!_customPickerValues) {
+    if (!_customPickerView) {
         _customPickerView = [UIPickerView new];
         _customPickerView.backgroundColor = [UIColor whiteColor];
         _customPickerView.dataSource = self;
@@ -118,8 +118,9 @@ static CGFloat const kAPCUserInfoCellControlsMinHeight              = 30.0;
 }
 
 - (void) textFieldDidEndEditing:(UITextField *)textField {
-    // Cell contains hidden textfield, will have some other controls which will actuall change the value
-    if (!textField.isHidden) {
+    // If the textfeld has any input view other than keyboard,
+    // then the input pull have to respond to value change
+    if (!textField.inputView) {
         [self textValueChanged];
     }
 }

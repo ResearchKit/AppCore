@@ -9,20 +9,17 @@
 #import "APHUserInfoCell.h"
 #import "UITableView+AppearanceCategory.h"
 
-//static CGFloat const kAPHUserInfoCellTextFieldLeftMargin    = 125.0;
-//static CGFloat const kAPHUserInfoCellTextFieldRightMargin   = 10.0;
-
 @implementation APHUserInfoCell
 
-//- (void) setType:(APCUserInfoCellType)type {
-//    [super setType:type];
-//    
-//    if (self.type == APCUserInfoCellTypeSegment) {
-//        [self.segmentControl setTintColor:[UIColor whiteColor]];
-//        [self.segmentControl setTitleTextAttributes:@{ NSFontAttributeName : [UITableView segmentControlFont]} forState:UIControlStateNormal];
-//        [self.segmentControl setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UITableView segmentControlTextColor]} forState:UIControlStateNormal];
-//        [self.segmentControl setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UITableView segmentControlSelectedTextColor]} forState:UIControlStateSelected];
-//    }
-//}
+- (UISegmentedControl *) segmentControl {
+    UISegmentedControl *segmentControl = [super segmentControl];
+    
+    [segmentControl setTintColor:[UIColor whiteColor]];
+    [segmentControl setTitleTextAttributes:@{ NSFontAttributeName : [UITableView segmentControlFont]} forState:UIControlStateNormal];
+    [segmentControl setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UITableView segmentControlTextColor]} forState:UIControlStateNormal];
+    [segmentControl setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UITableView segmentControlSelectedTextColor]} forState:UIControlStateSelected];
+    
+    return segmentControl;
+}
 
 @end

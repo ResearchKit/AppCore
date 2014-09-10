@@ -15,6 +15,16 @@
 #import "APHSignUpGeneralInfoViewController.h"
 #import "APHSignUpMedicalInfoViewController.h"
 
+
+// Regular Expressions
+static NSString * const kAPCUserInfoFieldUserNameRegEx          = @"[A-Za-z0-9_.]+";
+static NSString * const kAPCUserInfoFieldEmailRegEx             = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+static NSString * const kAPCUserInfoFieldWeightRegEx            = @"[0-9]{1,3}";
+
+// Date Formatter
+static NSString * const kAPCUserInfoFieldDateOfBirthFormat      = @"MMM dd, yyyy";
+
+
 @interface APHSignUpGeneralInfoViewController ()
 
 @property (weak, nonatomic) IBOutlet UIButton *agreeButton;
@@ -44,50 +54,60 @@
     
     {
         APCUserInfoTextField *field = [APCUserInfoTextField new];
+        field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Username", @"");
         field.placeholder = NSLocalizedString(@"Add Username", @"");
         field.value = nil;
         field.keyboardType = UIKeyboardTypeDefault;
+        field.regularExpression = kAPCUserInfoFieldUserNameRegEx;
+        field.identifier = NSStringFromClass([APCUserInfoTextField class]);
         
         [fields addObject:field];
     }
     
     {
         APCUserInfoTextField *field = [APCUserInfoTextField new];
-        field.caption = NSLocalizedString(@"Email", @"");
-        field.placeholder = NSLocalizedString(@"Add Email Address", @"");
-        field.value = nil;
-        field.keyboardType = UIKeyboardTypeEmailAddress;
-        
-        [fields addObject:field];
-    }
-    
-    {
-        APCUserInfoTextField *field = [APCUserInfoTextField new];
+        field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Password", @"");
         field.placeholder = NSLocalizedString(@"Add Password", @"");
         field.value = nil;
         field.secure = YES;
         field.keyboardType = UIKeyboardTypeDefault;
+        field.identifier = NSStringFromClass([APCUserInfoTextField class]);
+        
+        [fields addObject:field];
+    }
+    
+    {
+        APCUserInfoTextField *field = [APCUserInfoTextField new];
+        field.style = UITableViewCellStyleValue1;
+        field.caption = NSLocalizedString(@"Email", @"");
+        field.placeholder = NSLocalizedString(@"Add Email Address", @"");
+        field.value = nil;
+        field.keyboardType = UIKeyboardTypeEmailAddress;
+        field.identifier = NSStringFromClass([APCUserInfoTextField class]);
         
         [fields addObject:field];
     }
     
     {
         APCUserInfoDatePickerField *field = [APCUserInfoDatePickerField new];
+        field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Birthdate", @"");
         field.placeholder = NSLocalizedString(@"MMMM DD, YYYY", @"");
-        field.textAlignnment = NSTextAlignmentRight;
-        field.dateFormate = @"MMMM dd, yyyy";
+        field.dateFormate = kAPCUserInfoFieldDateOfBirthFormat;
         field.date = nil;
+        field.identifier = NSStringFromClass([APCUserInfoDatePickerField class]);
         
         [fields addObject:field];
     }
     
     {
         APCUserInfoSegmentField *field = [APCUserInfoSegmentField new];
+        field.style = UITableViewCellStyleValue1;
         field.segments = @[ NSLocalizedString(@"Male", @""), NSLocalizedString(@"Female", @""), NSLocalizedString(@"Other", @"") ];
         field.selectedIndex = 0;
+        field.identifier = NSStringFromClass([APCUserInfoSegmentField class]);
         
         [fields addObject:field];
     }

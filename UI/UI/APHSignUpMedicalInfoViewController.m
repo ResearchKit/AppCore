@@ -38,13 +38,13 @@
 }
 
 - (void) loadValues {
-    _medicalConditions = @[ @[@"Not listed", @"Condition 1" , @"Condition 2"] ];
+    self.medicalConditions = @[ @[@"Not listed", @"Condition 1" , @"Condition 2"] ];
     
-    _medications = @[ @[@"Not listed", @"Medication 1" , @"Medication 2"] ];
+    self.medications = @[ @[@"Not listed", @"Medication 1" , @"Medication 2"] ];
     
-    _bloodTypes = @[ @[@" ", @"A+", @"A-", @"B+", @"B-", @"AB+", @"AB-", @"O+", @"O-"] ];
+    self.bloodTypes = @[ @[@" ", @"A+", @"A-", @"B+", @"B-", @"AB+", @"AB-", @"O+", @"O-"] ];
     
-    _heightValues = @[ @[@"3'", @"4'", @"5'", @"6'", @"7'"], @[@"0''", @"1''", @"2''", @"3''", @"4''", @"5''", @"6''", @"7''", @"8''", @"9''"] ];
+    self.heightValues = @[ @[@"3'", @"4'", @"5'", @"6'", @"7'"], @[@"0''", @"1''", @"2''", @"3''", @"4''", @"5''", @"6''", @"7''", @"8''", @"9''"] ];
 }
 
 - (void) prepareFields {
@@ -52,42 +52,51 @@
     
     {
         APCUserInfoCustomPickerField *field = [APCUserInfoCustomPickerField new];
+        field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Medical Conditions", @"");
         field.detailDiscloserStyle = YES;
         field.selectedRowIndices = @[ @(0) ];
+        field.pickerData = self.medicalConditions;
         
         [fields addObject:field];
     }
     
     {
         APCUserInfoCustomPickerField *field = [APCUserInfoCustomPickerField new];
+        field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Medication", @"");
         field.detailDiscloserStyle = YES;
         field.selectedRowIndices = @[ @(0) ];
+        field.pickerData = self.medications;
         
         [fields addObject:field];
     }
     
     {
         APCUserInfoCustomPickerField *field = [APCUserInfoCustomPickerField new];
+        field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Blood Type", @"");
         field.detailDiscloserStyle = YES;
         field.selectedRowIndices = @[ @(0) ];
+        field.pickerData = self.bloodTypes;
         
         [fields addObject:field];
     }
     
     {
         APCUserInfoCustomPickerField *field = [APCUserInfoCustomPickerField new];
+        field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Height", @"");
         field.detailDiscloserStyle = YES;
         field.selectedRowIndices = @[ @(2), @(5) ];
+        field.pickerData = self.heightValues;
         
         [fields addObject:field];
     }
     
     {
         APCUserInfoTextField *field = [APCUserInfoTextField new];
+        field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Weight", @"");
         field.placeholder = NSLocalizedString(@"lb", @"");
         field.value = nil;

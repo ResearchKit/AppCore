@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "APCAssertionHandler.h"
 #import "APCSettingsViewController.h"
 #import "APCIntroVideoViewController.h"
 #import "UIBarButtonItem+AppearanceCategory.h"
@@ -20,6 +21,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self initAppearance];
+    [self initAssertionHandler];
     
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     self.window.backgroundColor = [UIColor whiteColor];
@@ -34,7 +36,6 @@
     }
     
     [self.window makeKeyAndVisible];
-    
     
     return YES;
 }
@@ -68,6 +69,10 @@
                                                             NSFontAttributeName : [UIBarButtonItem font]
                                                            }
                                                 forState:UIControlStateNormal];
+}
+
+- (void) initAssertionHandler {
+    [[[NSThread currentThread] threadDictionary] setValue:[APCAssertionHandler new] forKey:NSAssertionHandlerKey];
 }
 
 @end

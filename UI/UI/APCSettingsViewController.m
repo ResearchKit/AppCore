@@ -25,16 +25,6 @@ static
 
 @implementation APCSettingsViewController
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-//        self.fields = @[@(APCUserInfoFieldUserName), @(APCUserInfoFieldEmail), @(APCUserInfoFieldDateOfBirth), @(APCUserInfoFieldMedicalCondition), @(APCUserInfoFieldMedication), @(APCUserInfoFieldBloodType), @(APCUserInfoFieldWeight), @(APCUserInfoFieldGender)];
-    }
-    
-    return self;
-}
-
 - (void) viewDidLoad {
     [super viewDidLoad];
     

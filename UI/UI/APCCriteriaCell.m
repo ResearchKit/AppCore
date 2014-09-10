@@ -88,7 +88,7 @@
             
         default:
 #warning assert message require
-            NSAssert(self.choices.count < 3, NSLocalizedString(@"ASSERT_MESSAGE", @""));
+            NSAssert(NO, NSLocalizedString(@"ASSERT_MESSAGE", @""));
             break;
     }
 }
@@ -142,7 +142,7 @@
                 
             default:
 #warning assert message require
-                NSAssert(self.choices.count < 3, NSLocalizedString(@"ASSERT_MESSAGE", @""));
+                NSAssert(NO, NSLocalizedString(@"ASSERT_MESSAGE", @""));
                 break;
         }
     }
@@ -179,16 +179,14 @@
     self.captionLabel.hidden = NO;
     self.answerTextField.hidden = NO;
     
-    {
-        if (!self.datePicker) {
-            self.datePicker = [[UIDatePicker alloc] init];
-            self.datePicker.backgroundColor = [UIColor whiteColor];
-            self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
-            [self.datePicker addTarget:self action:@selector(datePickerValueChanged) forControlEvents:UIControlEventValueChanged];
-        }
-        
-        self.answerTextField.inputView = self.datePicker;
+    if (!self.datePicker) {
+        self.datePicker = [[UIDatePicker alloc] init];
+        self.datePicker.backgroundColor = [UIColor whiteColor];
+        self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
+        [self.datePicker addTarget:self action:@selector(datePickerValueChanged) forControlEvents:UIControlEventValueChanged];
     }
+    
+    self.answerTextField.inputView = self.datePicker;
 }
 
 - (NSUInteger) selectedChoiceIndex {
@@ -208,7 +206,9 @@
 }
 
 - (void) setSelectedChoiceIndex:(NSUInteger)index {
-    self.choice1.selected = self.choice2.selected = self.choice3.selected = NO;
+    self.choice1.selected = NO;
+    self.choice2.selected = NO;
+    self.choice3.selected = NO;
     
     switch (index) {
         case 0:
@@ -225,7 +225,7 @@
             
         default:
 #warning assert message require
-            NSAssert(self.choices.count < 3, NSLocalizedString(@"ASSERT_MESSAGE", @""));
+            NSAssert(NO, NSLocalizedString(@"ASSERT_MESSAGE", @""));
             break;
     }
 }

@@ -14,51 +14,13 @@
 #import "APCUserInfoViewController.h"
 #import "UITableView+AppearanceCategory.h"
 
-//// Cell Identifiers
-//static NSString * const kAPCUserInfoTableViewCellImageTextIdentifier    = @"ImageTextCell";
-//static NSString * const kAPCUserInfoTableViewCellTextIdentifier         = @"TextCell";
-//static NSString * const kAPCUserInfoTableViewCellPasswordIdentifier     = @"PasswordCell";
-//static NSString * const kAPCUserInfoTableViewCellDateIdentifier         = @"DateCell";
-//static NSString * const kAPCUserInfoTableViewCellCustomPickerIdentifier = @"CustomPickerCell";
-//static NSString * const kAPCUserInfoTableViewCellTitleValueIdentifier   = @"TitleValueCell";
-//static NSString * const kAPCUserInfoTableViewCellSubtitleIdentifier     = @"SubtitleCell";
-//static NSString * const kAPCUserInfoTableViewCellSegmentIdentifier      = @"SegmentCell";
-//
-//// Regular Expressions
-static NSString * const kAPCUserInfoTableViewCellNameRegEx              = @"[A-Za-z]";
-//static NSString * const kAPCUserInfoTableViewCellUserNameRegEx          = @"[A-Za-z0-9_.]";
-//static NSString * const kAPCUserInfoTableViewCellEmailRegEx             = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-//static NSString * const kAPCUserInfoTableViewCellWeightRegEx            = @"[0-9]{1,3}";
-//
-//// PlaceHolders
-//static NSString * const kAPCUserInfoTableViewCellNamePlaceholder        = @"Name";
-//static NSString * const kAPCUserInfoTableViewCellUserNamePlaceholder    = @"Add Username";
-//static NSString * const kAPCUserInfoTableViewCellEmailPlaceholder       = @"Add Email Address";
-//static NSString * const kAPCUserInfoTableViewCellPasswordPlaceholder    = @"Password";
-//static NSString * const kAPCUserInfoTableViewCellWeightPlaceHolder      = @"lb";
-//
-//// Cell Title
-//static NSString * const kAPCUserInfoTableViewCellUserNameTitle          = @"Username";
-//static NSString * const kAPCUserInfoTableViewCellEmailTitle             = @"Email";
-//static NSString * const kAPCUserInfoTableViewCellPasswordTitle          = @"Password";
-//static NSString * const kAPCUserInfoTableViewCellBirthdayTitle          = @"Birthday";
-//static NSString * const kAPCUserInfoTableViewCellMedicalConditionTitle  = @"Medical Condition";
-//static NSString * const kAPCUserInfoTableViewCellMedicationTitle        = @"Medication";
-//static NSString * const kAPCUserInfoTableViewCellBloodType              = @"Blood Type";
-//static NSString * const kAPCUserInfoTableViewCellWeightTitle            = @"Weight";
-//static NSString * const kAPCUserInfoTableViewCellHeightTitle            = @"Height";
-//static NSString * const kAPCUserInfoTableViewCellGenderTitle            = @"Biological Sex";
-//
-//// Date Formatter
-//static NSString * const kAPCUserInfoTableViewCellDateOfBirthFormat      = @"MMM dd, yyyy";
+static NSString * const kAPCUserInfoFieldNameRegEx              = @"[A-Za-z]+";
 
-static CGFloat const kAPCUserInfoTableViewDefaultRowHeight              = 64.0;
-
+static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 
 @interface APCUserInfoViewController ()
 
 @end
-
 
 
 @implementation APCUserInfoViewController
@@ -150,6 +112,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight              = 64.0;
         cell.textLabel.text = field.caption;
         cell.detailTextLabel.text = field.detailText;
         cell.valueTextField.textAlignment = field.textAlignnment;
+        cell.valueTextRegularExpression = field.regularExpression;
         
         
         if ([field isKindOfClass:[APCUserInfoTextField class]]) {
@@ -167,7 +130,6 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight              = 64.0;
             
             cell.accessoryView = cell.valueTextField;
             
-            cell.valueTextField.textAlignment = NSTextAlignmentRight;
             cell.valueTextField.placeholder = datePickerField.placeholder;
             cell.valueTextField.text = [datePickerField.date toStringWithFormat:datePickerField.dateFormate];
             cell.valueTextField.inputView = cell.datePicker;
@@ -186,6 +148,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight              = 64.0;
                 
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 cell.detailTextLabel.text = customPickerField.stringValue;
+                cell.valueTextField.inputView = cell.customPickerView;
             }
             else {
                 cell.accessoryView = cell.valueTextField;
@@ -216,6 +179,13 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight              = 64.0;
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    APCUserInfoCell *cell = (APCUserInfoCell *)[tableView cellForRowAtIndexPath:indexPath];
+    
+    APCUserInfoField *field = self.fields[indexPath.row];
+    
+    if ([field isKindOfClass:[APCUserInfoCustomPickerField class]] && [(APCUserInfoCustomPickerField *)field isDetailDiscloserStyle]) {
+        [cell.valueTextField becomeFirstResponder];
+    }
 }
 
 
@@ -224,7 +194,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight              = 64.0;
 - (void) userInfoCellDidBecomFirstResponder:(APCUserInfoCell *)cell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (void) userInfoCell:(APCUserInfoCell *)cell textValueChanged:(NSString *)text {
@@ -298,7 +268,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight              = 64.0;
     NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
     if (text.length > 0) {
-        isValid = [text isValidForRegex:kAPCUserInfoTableViewCellNameRegEx];
+        isValid = [text isValidForRegex:kAPCUserInfoFieldNameRegEx];
     }
     
     return isValid;
