@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "APCUserInfoField.h"
 #import "APCStepProgressBar.h"
 #import "UITableView+AppearanceCategory.h"
 #import "APCSignupTouchIDViewController.h"
@@ -13,18 +14,94 @@
 
 @interface APHSignUpMedicalInfoViewController ()
 
+@property (nonatomic, strong) NSArray *medicalConditions;
+
+@property (nonatomic, strong) NSArray *medications;
+
+@property (nonatomic, strong) NSArray *bloodTypes;
+
+@property (nonatomic, strong) NSArray *heightValues;
+
 @end
 
 @implementation APHSignUpMedicalInfoViewController
 
-- (instancetype)init
-{
+#pragma mark - Init
+
+- (instancetype)init {
     self = [super init];
     if (self) {
-        self.fields = @[@(APCUserInfoFieldMedicalCondition), @(APCUserInfoFieldMedication), @(APCUserInfoFieldBloodType), @(APCUserInfoFieldHeight), @(APCUserInfoFieldWeight)];
+        [self loadValues];
+        [self prepareFields];
     }
     return self;
 }
+
+- (void) loadValues {
+    _medicalConditions = @[ @[@"Not listed", @"Condition 1" , @"Condition 2"] ];
+    
+    _medications = @[ @[@"Not listed", @"Medication 1" , @"Medication 2"] ];
+    
+    _bloodTypes = @[ @[@" ", @"A+", @"A-", @"B+", @"B-", @"AB+", @"AB-", @"O+", @"O-"] ];
+    
+    _heightValues = @[ @[@"3'", @"4'", @"5'", @"6'", @"7'"], @[@"0''", @"1''", @"2''", @"3''", @"4''", @"5''", @"6''", @"7''", @"8''", @"9''"] ];
+}
+
+- (void) prepareFields {
+    NSMutableArray *fields = [NSMutableArray array];
+    
+    {
+        APCUserInfoCustomPickerField *field = [APCUserInfoCustomPickerField new];
+        field.caption = NSLocalizedString(@"Medical Conditions", @"");
+        field.detailDiscloserStyle = YES;
+        field.selectedRowIndices = @[ @(0) ];
+        
+        [fields addObject:field];
+    }
+    
+    {
+        APCUserInfoCustomPickerField *field = [APCUserInfoCustomPickerField new];
+        field.caption = NSLocalizedString(@"Medication", @"");
+        field.detailDiscloserStyle = YES;
+        field.selectedRowIndices = @[ @(0) ];
+        
+        [fields addObject:field];
+    }
+    
+    {
+        APCUserInfoCustomPickerField *field = [APCUserInfoCustomPickerField new];
+        field.caption = NSLocalizedString(@"Blood Type", @"");
+        field.detailDiscloserStyle = YES;
+        field.selectedRowIndices = @[ @(0) ];
+        
+        [fields addObject:field];
+    }
+    
+    {
+        APCUserInfoCustomPickerField *field = [APCUserInfoCustomPickerField new];
+        field.caption = NSLocalizedString(@"Height", @"");
+        field.detailDiscloserStyle = YES;
+        field.selectedRowIndices = @[ @(2), @(5) ];
+        
+        [fields addObject:field];
+    }
+    
+    {
+        APCUserInfoTextField *field = [APCUserInfoTextField new];
+        field.caption = NSLocalizedString(@"Weight", @"");
+        field.placeholder = NSLocalizedString(@"lb", @"");
+        field.value = nil;
+        field.keyboardType = UIKeyboardTypeNumberPad;
+        field.textAlignnment = NSTextAlignmentRight;
+        
+        [fields addObject:field];
+    }
+    
+    self.fields = fields;
+}
+
+
+#pragma mark - View Life Cycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];

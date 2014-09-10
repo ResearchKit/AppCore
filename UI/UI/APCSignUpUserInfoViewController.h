@@ -9,6 +9,19 @@
 #import "APCSignUpProgressing.h"
 #import "APCUserInfoViewController.h"
 
+typedef NS_ENUM(NSUInteger, APCSignUpUserInfoField) {
+    APCSignUpUserInfoFieldUserName = 0,
+    APCSignUpUserInfoFieldEmail,
+    APCSignUpUserInfoFieldPassword,
+    APCSignUpUserInfoFieldDateOfBirth,
+    APCSignUpUserInfoFieldMedicalCondition,
+    APCSignUpUserInfoFieldMedication,
+    APCSignUpUserInfoFieldBloodType,
+    APCSignUpUserInfoFieldWeight,
+    APCSignUpUserInfoFieldHeight,
+    APCSignUpUserInfoFieldGender
+};
+
 @interface APCSignUpUserInfoViewController : APCUserInfoViewController <APCSignUpProgressing>
 
 @end

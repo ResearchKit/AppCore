@@ -29,7 +29,7 @@ static
 {
     self = [super init];
     if (self) {
-        self.fields = @[@(APCUserInfoFieldUserName), @(APCUserInfoFieldEmail), @(APCUserInfoFieldDateOfBirth), @(APCUserInfoFieldMedicalCondition), @(APCUserInfoFieldMedication), @(APCUserInfoFieldBloodType), @(APCUserInfoFieldWeight), @(APCUserInfoFieldGender)];
+//        self.fields = @[@(APCUserInfoFieldUserName), @(APCUserInfoFieldEmail), @(APCUserInfoFieldDateOfBirth), @(APCUserInfoFieldMedicalCondition), @(APCUserInfoFieldMedication), @(APCUserInfoFieldBloodType), @(APCUserInfoFieldWeight), @(APCUserInfoFieldGender)];
     }
     
     return self;

@@ -17,6 +17,8 @@
 
 @synthesize stepProgressBar;
 
+@synthesize profile;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     

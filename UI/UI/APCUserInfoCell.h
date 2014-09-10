@@ -8,21 +8,9 @@
 
 @import UIKit;
 
-typedef NS_OPTIONS (NSUInteger, APCUserInfoCellType) {
-    APCUserInfoCellTypeNone = 0,
-    APCUserInfoCellTypeSingleInputText,
-    APCUserInfoCellTypeSwitch,
-    APCUserInfoCellTypeDatePicker,
-    APCUserInfoCellTypeCustomPicker,
-    APCUserInfoCellTypeTitleValue,
-    APCUserInfoCellTypeSegment,
-};
-
 @protocol APCUserInfoCellDelegate;
 
 @interface APCUserInfoCell : UITableViewCell
-
-@property (nonatomic, readwrite) APCUserInfoCellType type;
 
 @property (nonatomic, strong) NSString *valueTextRegularExpression;
 
@@ -36,15 +24,15 @@ typedef NS_OPTIONS (NSUInteger, APCUserInfoCellType) {
 
 @property (nonatomic, strong) UIPickerView *customPickerView;
 
-@property (nonatomic, strong) NSArray *customPickerValues;
-
 @property (nonatomic, weak) id<APCUserInfoCellDelegate> delegate;
 
 - (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 
-- (void) setNeedsHiddenField;
+- (void) setSegments:(NSArray *)segments selectedIndex:(NSUInteger)selectedIndex;
 
-- (void) setNeedsCustomPicker;
+- (void) setCustomPickerValues:(NSArray *)customPickerValues selectedRowIndices:(NSArray *)selectedRowIndices;
+
+- (void) setNeedsHiddenField;
 
 @end
 
@@ -53,7 +41,15 @@ typedef NS_OPTIONS (NSUInteger, APCUserInfoCellType) {
 
 @optional
 - (void) userInfoCellDidBecomFirstResponder:(APCUserInfoCell *)cell;
-- (void) userInfoCellValueChanged:(APCUserInfoCell *)cell;
-- (void) userInfoCellDidSelectProfileImage:(APCUserInfoCell *)cell;
+
+- (void) userInfoCell:(APCUserInfoCell *)cell textValueChanged:(NSString *)text;
+
+- (void) userInfoCell:(APCUserInfoCell *)cell switchValueChanged:(BOOL)isOn;
+
+- (void) userInfoCell:(APCUserInfoCell *)cell segmentIndexChanged:(NSUInteger)index;
+
+- (void) userInfoCell:(APCUserInfoCell *)cell dateValueChanged:(NSDate *)date;
+
+- (void) userInfoCell:(APCUserInfoCell *)cell customPickerValueChanged:(NSArray *)selectedRowIndices;
 
 @end

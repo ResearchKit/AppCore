@@ -35,6 +35,7 @@
 		2549447F19B91A2F00DE72AF /* APCSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2549447D19B91A2F00DE72AF /* APCSignInViewController.xib */; };
 		2550BB7E19BE5292000EF023 /* UIView+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 2550BB7D19BE5292000EF023 /* UIView+Category.m */; };
 		2550BB8019BE567B000EF023 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2550BB7F19BE567B000EF023 /* LocalAuthentication.framework */; };
+		2560BAC319BFC446004E9297 /* APCUserInfoField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2560BAC219BFC446004E9297 /* APCUserInfoField.m */; };
 		2571647619B78F3600D26F55 /* APCStepProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2571647519B78F3600D26F55 /* APCStepProgressBar.m */; };
 		2578CFC519B67E2100D94E2A /* APCSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2578CFC419B67E2100D94E2A /* APCSettingsViewController.m */; };
 		2578CFCA19B6898B00D94E2A /* APHSignUpMedicalInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2578CFC919B6898B00D94E2A /* APHSignUpMedicalInfoViewController.m */; };
@@ -112,6 +113,8 @@
 		2550BB7C19BE5292000EF023 /* UIView+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Category.h"; sourceTree = "<group>"; };
 		2550BB7D19BE5292000EF023 /* UIView+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Category.m"; sourceTree = "<group>"; };
 		2550BB7F19BE567B000EF023 /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
+		2560BAC119BFC446004E9297 /* APCUserInfoField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCUserInfoField.h; sourceTree = "<group>"; };
+		2560BAC219BFC446004E9297 /* APCUserInfoField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCUserInfoField.m; sourceTree = "<group>"; };
 		2571647419B78F3600D26F55 /* APCStepProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStepProgressBar.h; sourceTree = "<group>"; };
 		2571647519B78F3600D26F55 /* APCStepProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStepProgressBar.m; sourceTree = "<group>"; };
 		2578CFC319B67E2100D94E2A /* APCSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSettingsViewController.h; sourceTree = "<group>"; };
@@ -364,6 +367,8 @@
 				2526A9B319B663FE0088A42C /* APCProfile.m */,
 				25DB79F819B7DED900664C48 /* APCCriteria.h */,
 				25DB79F919B7DED900664C48 /* APCCriteria.m */,
+				2560BAC119BFC446004E9297 /* APCUserInfoField.h */,
+				2560BAC219BFC446004E9297 /* APCUserInfoField.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -516,6 +521,7 @@
 				250105B819BB8DC400B27757 /* APCHealthKitProxy.m in Sources */,
 				2526A9AC19B663A00088A42C /* APCSignupOptionsViewController.m in Sources */,
 				2547F9BC19BFA55B00A155CF /* APCStepProgressBar+AppearanceCategory.m in Sources */,
+				2560BAC319BFC446004E9297 /* APCUserInfoField.m in Sources */,
 				2526A98119B6635C0088A42C /* AppDelegate.m in Sources */,
 				2547F9B919BF9FFE00A155CF /* UIAlertView+Category.m in Sources */,
 				251F45FF19BA43D0004FBD06 /* UITableView+AppearanceCategory.m in Sources */,

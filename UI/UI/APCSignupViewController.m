@@ -17,6 +17,8 @@
 
 @synthesize stepProgressBar;
 
+@synthesize profile;
+
 - (void) loadView {
     if (self.nibName) {
         [super loadView];

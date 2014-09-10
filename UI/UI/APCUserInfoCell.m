@@ -12,12 +12,14 @@
 
 static CGFloat const kAPCUserInfoCellControlsMinHorizontalMargin    = 15.0;
 static CGFloat const kAPCUserInfoCellControlsMinVerticalMargin      = 7.0;
-static CGFloat const kAPCUserInfoCellTextFieldMinWidth              = 140.0;
+static CGFloat const kAPCUserInfoCellTextFieldMinWidth              = 186.0;
 static CGFloat const kAPCUserInfoCellControlsMinHeight              = 30.0;
 
 @interface APCUserInfoCell () <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (nonatomic, strong) CALayer *profileImageCircleLayer;
+
+@property (nonatomic, strong) NSArray *customPickerValues;
 
 @end
 
@@ -36,7 +38,6 @@ static CGFloat const kAPCUserInfoCellControlsMinHeight              = 30.0;
         
         self.valueTextField = [[UITextField alloc] initWithFrame:frame];
         self.valueTextField.delegate = self;
-        self.valueTextField.textAlignment = NSTextAlignmentLeft;
         self.valueTextField.font = [UITableView textFieldFont];
         self.valueTextField.textColor = [UITableView textFieldTextColor];
     }
@@ -44,51 +45,50 @@ static CGFloat const kAPCUserInfoCellControlsMinHeight              = 30.0;
     return self;
 }
 
-#pragma mark - Custom Setter
 
-- (void) setType:(APCUserInfoCellType)type {
-    if (_type != type) {
-        _type = type;
-        
-        switch (self.type) {
-            case APCUserInfoCellTypeSingleInputText:
-                [self addSingleInputText];
-                break;
-                
-            case APCUserInfoCellTypeSwitch:
-                [self addSwitch];
-                break;
-                
-            case APCUserInfoCellTypeDatePicker:
-                [self addDatePicker];
-                break;
-            
-            case APCUserInfoCellTypeCustomPicker:
-                [self addCustomPicker];
-                break;
-                
-            case APCUserInfoCellTypeTitleValue:
-                [self addTitleValue];
-                break;
-                
-            case APCUserInfoCellTypeSegment:
-                [self addSegmentControl];
-                break;
-            
-            default:
-#warning assert message require
-                NSAssert(_type < APCUserInfoCellTypeSegment, NSLocalizedString(@"ASSERT_MESSAGE", @""));
-                break;
-        }
+#pragma mark - Getter 
+
+- (UIPickerView *) customPickerView {
+    if (!_customPickerValues) {
+        _customPickerView = [UIPickerView new];
+        _customPickerView.backgroundColor = [UIColor whiteColor];
+        _customPickerView.dataSource = self;
+        _customPickerView.delegate = self;
     }
+    
+    return _customPickerView;
 }
 
-- (void) setCustomPickerValues:(NSArray *)customPickerValues {
-    if (customPickerValues != _customPickerValues) {
-        _customPickerValues = customPickerValues;
-        
-        [self.customPickerView reloadAllComponents];
+- (UIDatePicker *) datePicker {
+    if (!_datePicker) {
+        _datePicker = [UIDatePicker new];
+        _datePicker.backgroundColor = [UIColor whiteColor];
+        _datePicker.datePickerMode = UIDatePickerModeDateAndTime;
+        [_datePicker addTarget:self action:@selector(datePickerValueChanged) forControlEvents:UIControlEventValueChanged];
     }
+    
+    return _datePicker;
+}
+
+- (UISegmentedControl *) segmentControl {
+    if (!_segmentControl) {
+        CGFloat width = self.bounds.size.width - (2 * kAPCUserInfoCellControlsMinHorizontalMargin);
+        
+        _segmentControl = [UISegmentedControl new];
+        _segmentControl.frame = CGRectMake(kAPCUserInfoCellControlsMinHorizontalMargin, 0, width, kAPCUserInfoCellControlsMinHeight);
+        [_segmentControl addTarget:self action:@selector(segmentIndexChanged) forControlEvents:UIControlEventValueChanged];
+    }
+    
+    return _segmentControl;
+}
+
+- (UISwitch *) switchView {
+    if (!_switchView) {
+        _switchView = [UISwitch new];
+        [_switchView addTarget:self action:@selector(switchValueChanged) forControlEvents:UIControlEventValueChanged];
+    }
+    
+    return _switchView;
 }
 
 
@@ -118,8 +118,9 @@ static CGFloat const kAPCUserInfoCellControlsMinHeight              = 30.0;
 }
 
 - (void) textFieldDidEndEditing:(UITextField *)textField {
-    if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
-        [self.delegate userInfoCellValueChanged:self];
+    // Cell contains hidden textfield, will have some other controls which will actuall change the value
+    if (!textField.isHidden) {
+        [self textValueChanged];
     }
 }
 
@@ -132,93 +133,39 @@ static CGFloat const kAPCUserInfoCellControlsMinHeight              = 30.0;
 
 #pragma mark - Private Methods
 
-- (void) addSingleInputText {
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    self.valueTextField.inputAccessoryView = nil;
-    [self addSubview:self.valueTextField];
-}
-
-- (void) addSwitch {
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    if (!self.switchView) {
-        self.switchView = [UISwitch new];
-        [self.switchView addTarget:self action:@selector(valueChanged) forControlEvents:UIControlEventValueChanged];
-    }
-    
-    self.accessoryView = self.switchView;
-}
-
-- (void) addDatePicker {
-    self.selectionStyle = UITableViewCellSelectionStyleDefault;
-    
-    self.valueTextField.frame = CGRectMake(0, 0, kAPCUserInfoCellTextFieldMinWidth, kAPCUserInfoCellControlsMinHeight);
-    self.valueTextField.textAlignment = NSTextAlignmentRight;
-    self.valueTextField.tintColor = [UIColor clearColor];
-    
-    self.accessoryView = self.valueTextField;
-    
-    {
-        if (!self.datePicker) {
-            self.datePicker = [[UIDatePicker alloc] init];
-            self.datePicker.backgroundColor = [UIColor whiteColor];
-            self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
-            [self.datePicker addTarget:self action:@selector(valueChanged) forControlEvents:UIControlEventValueChanged];
-        }
-        
-        self.valueTextField.inputView = self.datePicker;
+- (void) datePickerValueChanged {
+    if ([self.delegate respondsToSelector:@selector(userInfoCell:dateValueChanged:)]) {
+        [self.delegate userInfoCell:self dateValueChanged:self.datePicker.date];
     }
 }
 
-- (void) addCustomPicker {
-    self.selectionStyle = UITableViewCellSelectionStyleDefault;
-    
-    self.valueTextField.frame = CGRectMake(0, 0, kAPCUserInfoCellTextFieldMinWidth, kAPCUserInfoCellControlsMinHeight);
-    self.valueTextField.textAlignment = NSTextAlignmentCenter;
-    self.valueTextField.tintColor = [UIColor clearColor];
-    
-    self.accessoryView = self.valueTextField;
-    
-    [self setNeedsCustomPicker];
-}
-
-- (void) addTitleValue {
-    self.selectionStyle = UITableViewCellSelectionStyleDefault;
-    
-    self.valueTextField.frame = CGRectMake(0, 0, kAPCUserInfoCellTextFieldMinWidth, kAPCUserInfoCellControlsMinHeight);
-    self.valueTextField.textAlignment = NSTextAlignmentRight;
-    self.valueTextField.tintColor = [UIColor clearColor];
-    
-    self.valueTextField.inputAccessoryView = nil;
-    
-    self.accessoryView = self.valueTextField;
-}
-
-- (void) addSegmentControl {
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    self.textLabel.font = [UIFont systemFontOfSize:12];
-    
-    if (!self.segmentControl) {
-        CGFloat width = self.bounds.size.width - (2 * kAPCUserInfoCellControlsMinHorizontalMargin);
-        
-        self.segmentControl = [[UISegmentedControl alloc] init];
-        self.segmentControl.frame = CGRectMake(kAPCUserInfoCellControlsMinHorizontalMargin, 40, width, kAPCUserInfoCellControlsMinHeight);
-        [self.segmentControl addTarget:self action:@selector(valueChanged) forControlEvents:UIControlEventValueChanged];
-        [self addSubview:self.segmentControl];
+- (void) segmentIndexChanged {
+    if ([self.delegate respondsToSelector:@selector(userInfoCell:segmentIndexChanged:)]) {
+        [self.delegate userInfoCell:self segmentIndexChanged:self.segmentControl.selectedSegmentIndex];
     }
 }
 
-- (void) profileImageButtonClicked {
-    if ([self.delegate respondsToSelector:@selector(userInfoCellDidSelectProfileImage:)]) {
-        [self.delegate userInfoCellDidSelectProfileImage:self];
+- (void) switchValueChanged {
+    if ([self.delegate respondsToSelector:@selector(userInfoCell:switchValueChanged:)]) {
+        [self.delegate userInfoCell:self switchValueChanged:self.switchView.isOn];
     }
 }
 
-- (void) valueChanged {
-    if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
-        [self.delegate userInfoCellValueChanged:self];
+- (void) textValueChanged {
+    if ([self.delegate respondsToSelector:@selector(userInfoCell:textValueChanged:)]) {
+        [self.delegate userInfoCell:self textValueChanged:self.valueTextField.text];
+    }
+}
+
+- (void) customPickerValueChanged {
+    NSMutableArray *selectedRowIndices = [NSMutableArray array];
+    
+    for (int i = 0 ; i < self.customPickerValues.count; i++) {
+        [selectedRowIndices addObject:@([self.customPickerView selectedRowInComponent:i])];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(userInfoCell:customPickerValueChanged:)]) {
+        [self.delegate userInfoCell:self customPickerValueChanged:selectedRowIndices];
     }
 }
 
@@ -237,26 +184,7 @@ static CGFloat const kAPCUserInfoCellControlsMinHeight              = 30.0;
 #pragma mark - UIPickerViewDelegate
 
 - (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    NSMutableString *string = [NSMutableString string];
-    
-    if (pickerView.numberOfComponents == 1) {
-        [string appendString:self.customPickerValues[component][row]];
-    }
-    else {
-        for (int i = 0; i < self.customPickerValues.count; i++) {
-            [string appendString:self.customPickerValues[i][[self.customPickerView selectedRowInComponent:i]]];
-            
-            if (i < (self.customPickerValues.count - 1)) {
-                [string appendString:@" "];
-            }
-        }
-    }
-    
-    self.valueTextField.text = string;
-    
-    if ([self.delegate respondsToSelector:@selector(userInfoCellValueChanged:)]) {
-        [self.delegate userInfoCellValueChanged:self];
-    }
+    [self customPickerValueChanged];
 }
 
 - (NSString *) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
@@ -264,31 +192,7 @@ static CGFloat const kAPCUserInfoCellControlsMinHeight              = 30.0;
 }
 
 
-#pragma mark - Pubic Methods
-
-- (void) layoutSubviews {
-    [super layoutSubviews];
-    
-    if (self.type == APCUserInfoCellTypeSingleInputText) {
-        CGFloat width = self.bounds.size.width - (2 * kAPCUserInfoCellControlsMinHorizontalMargin);
-        CGFloat rectY = (self.bounds.size.height - kAPCUserInfoCellControlsMinHeight) * 0.5;
-        
-        self.valueTextField.frame = CGRectMake(kAPCUserInfoCellControlsMinHorizontalMargin, rectY, width, kAPCUserInfoCellControlsMinHeight);
-    }
-    else if (self.type == APCUserInfoCellTypeSegment) {
-        [self.textLabel sizeToFit];
-        
-        CGFloat veticalSpace = kAPCUserInfoCellControlsMinVerticalMargin + 2;
-        
-        CGRect frame = self.textLabel.frame;
-        frame.origin.y = veticalSpace;
-        self.textLabel.frame = frame;
-        
-        frame = self.segmentControl.frame;
-        frame.origin.y = CGRectGetMaxY(self.textLabel.frame) + veticalSpace;
-        self.segmentControl.frame = frame;
-    }
-}
+#pragma mark - Super Class Methods
 
 - (void) prepareForReuse {
     [super prepareForReuse];
@@ -303,22 +207,35 @@ static CGFloat const kAPCUserInfoCellControlsMinHeight              = 30.0;
     [self.segmentControl removeAllSegments];
 }
 
+
+#pragma mark - Pubic Methods
+
+- (void) setSegments:(NSArray *)segments selectedIndex:(NSUInteger)selectedIndex {
+    [self.segmentControl removeAllSegments];
+    
+    for (int i = 0; i < segments.count; i++) {
+        [self.segmentControl insertSegmentWithTitle:segments[i] atIndex:i animated:NO];
+    }
+    
+    [self.segmentControl setSelectedSegmentIndex:selectedIndex];
+}
+
+- (void) setCustomPickerValues:(NSArray *)customPickerValues selectedRowIndices:(NSArray *)selectedRowIndices {
+    if (customPickerValues != _customPickerValues) {
+        _customPickerValues = customPickerValues;
+        
+        [self.customPickerView reloadAllComponents];
+        
+        for (int i = 0 ; i < selectedRowIndices.count; i++) {
+            [self.customPickerView selectRow:[selectedRowIndices[i] integerValue] inComponent:i animated:NO];
+        }
+    }
+}
+
+
 - (void) setNeedsHiddenField {
     self.valueTextField.hidden = YES;
     [self addSubview:self.valueTextField];
-}
-
-- (void) setNeedsCustomPicker {
-    {
-        if (!self.customPickerValues) {
-            self.customPickerView = [UIPickerView new];
-            self.customPickerView.backgroundColor = [UIColor whiteColor];
-            self.customPickerView.dataSource = self;
-            self.customPickerView.delegate = self;
-        }
-        
-        self.valueTextField.inputView = self.customPickerView;
-    }
 }
 
 @end

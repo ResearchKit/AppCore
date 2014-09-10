@@ -8,6 +8,8 @@
 
 #import "APCProfile.h"
 #import "APHUserInfoCell.h"
+#import "APCUserInfoField.h"
+#import "APCHealthKitProxy.h"
 #import "APCStepProgressBar.h"
 #import "UITableView+AppearanceCategory.h"
 #import "APHSignUpGeneralInfoViewController.h"
@@ -17,19 +19,84 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *agreeButton;
 
+@property (nonatomic, strong) APCHealthKitProxy *healthKitProxy;
+
 @end
 
 @implementation APHSignUpGeneralInfoViewController
+
+
+#pragma mark - Init
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        self.fields = @[@(APCUserInfoFieldUserName), @(APCUserInfoFieldEmail), @(APCUserInfoFieldPassword), @(APCUserInfoFieldDateOfBirth), @(APCUserInfoFieldGender)];
         self.profile = [APCProfile new];
+        
+        [self prepareFields];
     }
     return self;
 }
+
+- (void) prepareFields {
+    NSMutableArray *fields = [NSMutableArray array];
+    
+    {
+        APCUserInfoTextField *field = [APCUserInfoTextField new];
+        field.caption = NSLocalizedString(@"Username", @"");
+        field.placeholder = NSLocalizedString(@"Add Username", @"");
+        field.value = nil;
+        field.keyboardType = UIKeyboardTypeDefault;
+        
+        [fields addObject:field];
+    }
+    
+    {
+        APCUserInfoTextField *field = [APCUserInfoTextField new];
+        field.caption = NSLocalizedString(@"Email", @"");
+        field.placeholder = NSLocalizedString(@"Add Email Address", @"");
+        field.value = nil;
+        field.keyboardType = UIKeyboardTypeEmailAddress;
+        
+        [fields addObject:field];
+    }
+    
+    {
+        APCUserInfoTextField *field = [APCUserInfoTextField new];
+        field.caption = NSLocalizedString(@"Password", @"");
+        field.placeholder = NSLocalizedString(@"Add Password", @"");
+        field.value = nil;
+        field.secure = YES;
+        field.keyboardType = UIKeyboardTypeDefault;
+        
+        [fields addObject:field];
+    }
+    
+    {
+        APCUserInfoDatePickerField *field = [APCUserInfoDatePickerField new];
+        field.caption = NSLocalizedString(@"Birthdate", @"");
+        field.placeholder = NSLocalizedString(@"MMMM DD, YYYY", @"");
+        field.textAlignnment = NSTextAlignmentRight;
+        field.dateFormate = @"MMMM dd, yyyy";
+        field.date = nil;
+        
+        [fields addObject:field];
+    }
+    
+    {
+        APCUserInfoSegmentField *field = [APCUserInfoSegmentField new];
+        field.segments = @[ NSLocalizedString(@"Male", @""), NSLocalizedString(@"Female", @""), NSLocalizedString(@"Other", @"") ];
+        field.selectedIndex = 0;
+        
+        [fields addObject:field];
+    }
+    
+    self.fields = fields;
+}
+
+
+#pragma mark - View Life Cycle
 
 - (void) viewDidLoad {
     [super viewDidLoad];
@@ -37,6 +104,7 @@
     [self addNavigationItems];
     [self addFooterView];
     [self setupProgressBar];
+    [self loadHealthKitValues];
 }
 
 
@@ -64,18 +132,6 @@
 }
 
 
-- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    APCUserInfoCell *cell = (APCUserInfoCell *)[super tableView:tableView cellForRowAtIndexPath:indexPath];
-    
-    APCUserInfoField field = [self.fields[indexPath.row] integerValue];
-    
-    if (field == APCUserInfoFieldDateOfBirth) {
-        cell.valueTextField.textAlignment = NSTextAlignmentLeft;
-    }
-    
-    return cell;
-}
-
 #pragma mark - IBActions
 
 - (IBAction) agree {
@@ -91,6 +147,43 @@
 
 
 #pragma mark - Private Methods
+
+- (void) loadHealthKitValues {
+    typeof(self) __weak weakSelf = self;
+    [self.healthKitProxy authenticate:^(BOOL granted, NSError *error) {
+        if (granted) {
+            [weakSelf loadBiologicalInfo];
+            [weakSelf loadHeight];
+            [weakSelf loadWidth];
+        }
+    }];
+}
+
+- (void) loadHeight {
+    typeof(self) __weak weakSelf = self;
+    [self.healthKitProxy latestHeight:^(HKQuantity *quantity, NSError *error) {
+        if (!error) {
+            weakSelf.profile.height = [NSString stringWithFormat:@"%f", [quantity doubleValueForUnit:[HKUnit unitFromLengthFormatterUnit:NSLengthFormatterUnitInch]]];
+            [weakSelf.tableView reloadData];
+        }
+    }];
+}
+
+- (void) loadWidth {
+    typeof(self) __weak weakSelf = self;
+    
+    [self.healthKitProxy latestHeight:^(HKQuantity *quantity, NSError *error) {
+        if (!error) {
+            weakSelf.profile.weight = @([quantity doubleValueForUnit:[HKUnit unitFromMassFormatterUnit:NSMassFormatterUnitKilogram]]);
+            [weakSelf.tableView reloadData];
+        }
+    }];
+}
+
+- (void) loadBiologicalInfo {
+    [self.healthKitProxy fillBiologicalInfo:self.profile];
+    [self.tableView reloadData];
+}
 
 - (void) next {
     APHSignUpMedicalInfoViewController *medicalInfoViewController = [APHSignUpMedicalInfoViewController new];

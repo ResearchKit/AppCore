@@ -8,36 +8,19 @@
 
 #import "APCUserInfoCell.h"
 
-typedef NS_ENUM(NSUInteger, APCUserInfoField) {
-    APCUserInfoFieldUserName = 0,
-    APCUserInfoFieldEmail,
-    APCUserInfoFieldPassword,
-    APCUserInfoFieldDateOfBirth,
-    APCUserInfoFieldMedicalCondition,
-    APCUserInfoFieldMedication,
-    APCUserInfoFieldBloodType,
-    APCUserInfoFieldWeight,
-    APCUserInfoFieldHeight,
-    APCUserInfoFieldGender
-};
-
-@class APCProfile;
-
 @interface APCUserInfoViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, APCUserInfoCellDelegate>
 
 @property (nonatomic, strong) NSArray *fields;
 
-@property (nonatomic, readonly) NSArray *medicalConditions;
+@property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
 
-@property (nonatomic, readonly) NSArray *medications;
+@property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
 
-@property (nonatomic, readonly) NSArray *bloodTypes;
+@property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 
-@property (nonatomic, readonly) NSArray *heightValues;
+@property (weak, nonatomic) IBOutlet UIView *headerTextFieldSeparatorView;
 
 @property (nonatomic, strong) UITableView *tableView;
-
-@property (nonatomic, strong) APCProfile *profile;
 
 - (Class) cellClass;
 
