@@ -10,4 +10,7 @@
 
 @interface APCSchedule (AddOn)
 
+//Synchronous Method Call
++ (void) createSchedulesFromJSON: (NSArray*) schedulesArray inContext: (NSManagedObjectContext*) context;
+
 @end

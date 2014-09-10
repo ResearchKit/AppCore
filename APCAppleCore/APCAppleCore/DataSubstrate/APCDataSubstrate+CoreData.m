@@ -21,7 +21,6 @@
     [self loadManagedObjectModel:mergedModels];
     [self initializePersistentStoreCoordinator:storePath];
     [self createManagedObjectContexts];
-    
 }
 
 - (void) loadManagedObjectModel: (NSManagedObjectModel*) mergedModels
@@ -51,10 +50,11 @@
                               };
     NSPersistentStore *persistentStore = [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:storePath] options:options error:&error];
     if (!persistentStore) {
-        [[NSFileManager defaultManager] removeItemAtPath:storePath error:&error];
-        [error handle];
-        [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:storePath] options:options error:&error];
-        [error handle];
+        NSError* localError;
+        [[NSFileManager defaultManager] removeItemAtPath:storePath error:&localError];
+        [localError handle];
+        [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:storePath] options:options error:&localError];
+        [localError handle];
     }
     NSAssert([[NSFileManager defaultManager] fileExistsAtPath:storePath], @"Database Not Created");
 }
@@ -66,6 +66,15 @@
     
     self.mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     self.mainContext.parentContext = self.persistentContext;
+}
+
+/*********************************************************************************/
+#pragma mark - Core Data Methods
+/*********************************************************************************/
+- (void)loadStaticTasksAndSchedules: (NSDictionary*) jsonDictionary
+{
+    [APCTask createTasksFromJSON:jsonDictionary[@"tasks"] inContext:self.persistentContext];
+    [APCSchedule createSchedulesFromJSON:jsonDictionary[@"schedules"] inContext:self.persistentContext];
 }
 
 
