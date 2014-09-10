@@ -13,7 +13,7 @@
 /*********************************************************************************/
 #pragma mark - Core Data Public Methods
 /*********************************************************************************/
-- (void)loadStaticTasksAndSchedulesIfNecessary: (NSDictionary*) jsonDictionary;
+- (void)loadStaticTasksAndSchedules: (NSDictionary*) jsonDictionary;
 
 /*********************************************************************************/
 #pragma mark - Methods meant only for Categories

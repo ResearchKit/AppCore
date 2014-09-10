@@ -84,7 +84,7 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
     NSDate *dueOn = [dates objectAtIndex:0];
     APCTask *task = schedule.task;
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"( dueOn == %@ ) AND ( task.taskType == %@ )", dueOn, task.taskType];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"( dueOn == %@ ) AND ( task.uid == %@ )", dueOn, task.uid];
     [request setPredicate:predicate];
     NSError *error;
     NSArray *array = [self.localMOC executeFetchRequest:request error:&error];

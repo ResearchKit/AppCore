@@ -71,10 +71,10 @@
 /*********************************************************************************/
 #pragma mark - Core Data Methods
 /*********************************************************************************/
-- (void)loadStaticTasksAndSchedulesIfNecessary: (NSDictionary*) jsonDictionary
+- (void)loadStaticTasksAndSchedules: (NSDictionary*) jsonDictionary
 {
-    [APCSchedule createSchedulesFromJSON:jsonDictionary[@"schedules"] inContext:self.persistentContext];
     [APCTask createTasksFromJson:jsonDictionary[@"tasks"] inContext:self.persistentContext];
+    [APCSchedule createSchedulesFromJSON:jsonDictionary[@"schedules"] inContext:self.persistentContext];
 }
 
 

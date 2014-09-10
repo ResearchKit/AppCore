@@ -8,9 +8,14 @@
 
 #import "APCTask.h"
 
+@class RKTask;
 @interface APCTask (AddOn)
 
 //Synchronous Method Call
 + (void) createTasksFromJson: (NSArray*) tasksArray inContext: (NSManagedObjectContext*) context;
+
++ (APCTask*) taskWithTaskID: (NSString*) taskID inContext: (NSManagedObjectContext*) context;
+
+- (RKTask*) generateRKTaskFromTaskDescription;
 
 @end

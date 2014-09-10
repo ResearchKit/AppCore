@@ -14,15 +14,12 @@
 +(void)createSchedulesFromJSON:(NSArray *)schedulesArray inContext:(NSManagedObjectContext *)context
 {
     [context performBlockAndWait:^{
-        for(NSDictionary *scheduleObj in schedulesArray) {
-            
-            APCTask * task = [APCTask newObjectForContext:context];
-            task.taskType = scheduleObj[@"taskType"];
+        for(NSDictionary *scheduleDict in schedulesArray) {
             
             APCSchedule * schedule = [APCSchedule newObjectForContext:context];
-            schedule.scheduleExpression = [scheduleObj objectForKey:@"schedule"];
-            schedule.reminder = [scheduleObj objectForKey:@"reminder"];
-            schedule.task = task;
+            schedule.scheduleExpression = [scheduleDict objectForKey:@"schedule"];
+            schedule.reminder = [scheduleDict objectForKey:@"reminder"];
+            schedule.task = [APCTask taskWithTaskID:scheduleDict[@"taskID"] inContext:context];
             
             [schedule saveToPersistentStore:NULL];
         }
