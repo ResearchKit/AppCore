@@ -12,6 +12,7 @@
 
 static NSString * const kTaskIDKey = @"taskID";
 static NSString * const kTaskTypeKey = @"taskType";
+static NSString * const kTaskTitleKey = @"taskTitle";
 static NSString * const kTaskFileNameKey = @"fileName";
 static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
 
@@ -24,6 +25,7 @@ static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
           APCTask * task = [APCTask newObjectForContext:context];
           task.uid = taskDict[kTaskIDKey];
           task.taskType = taskDict[kTaskTypeKey];
+          task.taskTitle = taskDict[kTaskTitleKey];
           if ([task.taskType isEqualToString:kCustomizableSurveyTaskType]) {
               NSString *resource = [[NSBundle mainBundle] pathForResource:taskDict[kTaskFileNameKey] ofType:@"json"];
               NSError * error;
