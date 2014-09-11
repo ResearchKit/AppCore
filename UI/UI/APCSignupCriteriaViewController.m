@@ -99,6 +99,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     [self.view addSubview:self.tableView];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"APCCriteriaCell" bundle:nil] forCellReuseIdentifier:(NSString *)kAPCSignupCriteriaTableViewCellIdentifier];
@@ -163,13 +164,12 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
             
         case APCCriteriaAnswerTypeDate:
             criteria.answers = @[ [cell.datePicker.date toStringWithFormat:(NSString *)APCCriteriaDateFormate] ];
+            cell.answerTextField.text = criteria.answers[criteria.answerIndex ];
             break;
             
         default:
             break;
     }
-    
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 

@@ -19,15 +19,11 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *questionLabel;
 
-@property (weak, nonatomic) IBOutlet UIButton *choice1;
-
-@property (weak, nonatomic) IBOutlet UIButton *choice2;
-
-@property (weak, nonatomic) IBOutlet UIButton *choice3;
-
 @property (weak, nonatomic) IBOutlet UILabel *captionLabel;
 
 @property (weak, nonatomic) IBOutlet UITextField *answerTextField;
+
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 
 @property (nonatomic, strong) UIDatePicker *datePicker;
 

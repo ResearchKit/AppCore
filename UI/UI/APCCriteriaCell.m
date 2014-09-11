@@ -9,6 +9,8 @@
 #import "APCCriteriaCell.h"
 #import "UITableView+AppearanceCategory.h"
 
+static CGFloat kAPCCriteriaCellContainerViewMargin  = 10;
+
 @interface APCCriteriaCell () <UITextFieldDelegate>
 
 @end
@@ -31,74 +33,40 @@
     self.questionLabel.layer.borderWidth = borderWidth;
     self.questionLabel.layer.borderColor = color.CGColor;
     
-    self.choice1.layer.borderWidth = borderWidth;
-    self.choice1.layer.borderColor = color.CGColor;
-    
-    self.choice2.layer.borderWidth = borderWidth;
-    self.choice2.layer.borderColor = color.CGColor;
-    
-    self.choice3.layer.borderWidth = borderWidth;
-    self.choice3.layer.borderColor = color.CGColor;
+    self.answerTextField.tintColor = [UIColor clearColor];
 }
 
 - (void) layoutSubviews {
     [super layoutSubviews];
     
-    self.choice1.frame = CGRectZero;
-    self.choice2.frame = CGRectZero;
-    self.choice3.frame = CGRectZero;
+    CGRect containerFrame = CGRectInset(self.bounds, kAPCCriteriaCellContainerViewMargin, kAPCCriteriaCellContainerViewMargin);
+    containerFrame.size.height += kAPCCriteriaCellContainerViewMargin;
     
-    CGRect bounds = self.containerView.bounds;
+    self.containerView.frame = containerFrame;
     
-    CGFloat width = bounds.size.width;
-    CGRect frame = CGRectMake(0, 0, width, bounds.size.height/2);
-    self.textLabel.frame = frame;
+    CGRect containerBounds = self.containerView.bounds;
     
-    frame.origin.y = CGRectGetMaxY(frame);
+    CGRect textLabelFrame;
+    CGRect remainingFrame;
     
-    switch (self.choices.count) {
-        case 1:
-            self.choice1.frame = frame;
-            break;
-            
-        case 2:
-            width = bounds.size.width/2;
-            
-            frame.size.width = width;
-            self.choice1.frame = frame;
-            
-            frame.origin.x = CGRectGetMaxX(frame) - 1;
-            frame.size.width += 1;
-            self.choice2.frame = frame;
-            break;
-            
-        case 3:
-            width = bounds.size.width/3;
-            
-            frame.size.width = width;
-            self.choice1.frame = frame;
-            
-            frame.origin.x = CGRectGetMaxX(frame) - 1;
-            frame.size.width += 1;
-            self.choice2.frame = frame;
-            
-            frame.origin.x = CGRectGetMaxX(frame) - 1;
-            self.choice3.frame = frame;
-            break;
-            
-        default:
-#warning assert message require
-            NSAssert(NO, NSLocalizedString(@"ASSERT_MESSAGE", @""));
-            break;
+    CGRectDivide(containerBounds, &textLabelFrame, &remainingFrame, containerBounds.size.height/2, CGRectMinYEdge);
+    self.questionLabel.frame = textLabelFrame;
+    
+    if (!self.segmentControl.isHidden) {
+        [self.segmentControl setFrame:remainingFrame];
     }
-}
-
-- (void) prepareForReuse {
-    [super prepareForReuse];
     
-    self.choice1.selected = NO;
-    self.choice2.selected = NO;
-    self.choice3.selected = NO;
+    remainingFrame = CGRectInset(remainingFrame, kAPCCriteriaCellContainerViewMargin, 0);
+    
+    if (!self.captionLabel.isHidden) {
+        CGRect captionFrame;
+        CGRectDivide(remainingFrame, &captionFrame, &remainingFrame, remainingFrame.size.width/2, CGRectMinXEdge);
+        self.captionLabel.frame = captionFrame;
+    }
+    
+    if (!self.answerTextField.isHidden) {
+        self.answerTextField.frame = remainingFrame;
+    }
 }
 
 
@@ -124,35 +92,17 @@
     if (_choices != choices) {
         _choices = choices;
         
-        switch (self.choices.count) {
-            case 1:
-                [self.choice1 setTitle:self.choices[0] forState:UIControlStateNormal];
-                break;
-                
-            case 2:
-                [self.choice1 setTitle:self.choices[0] forState:UIControlStateNormal];
-                [self.choice2 setTitle:self.choices[1] forState:UIControlStateNormal];
-                break;
-                
-            case 3:
-                [self.choice1 setTitle:self.choices[0] forState:UIControlStateNormal];
-                [self.choice2 setTitle:self.choices[1] forState:UIControlStateNormal];
-                [self.choice3 setTitle:self.choices[2] forState:UIControlStateNormal];
-                break;
-                
-            default:
-#warning assert message require
-                NSAssert(NO, NSLocalizedString(@"ASSERT_MESSAGE", @""));
-                break;
+        [self.segmentControl removeAllSegments];
+        
+        for (int i = 0; i < self.choices.count; i++) {
+            [self.segmentControl insertSegmentWithTitle:self.choices[i] atIndex:i animated:NO];
         }
     }
 }
 
 
 - (void) setNeedsChoiceInputCell {
-    self.choice3.hidden = NO;
-    self.choice2.hidden = NO;
-    self.choice1.hidden = NO;
+    self.segmentControl.hidden = NO;
     
     self.captionLabel.hidden = YES;
     self.answerTextField.hidden = YES;
@@ -161,9 +111,7 @@
 }
 
 - (void) setNeedsTextInputCell {
-    self.choice3.hidden = YES;
-    self.choice2.hidden = YES;
-    self.choice1.hidden = YES;
+    self.segmentControl.hidden = YES;
     
     self.captionLabel.hidden = NO;
     self.answerTextField.hidden = NO;
@@ -172,9 +120,7 @@
 }
 
 - (void) setNeedsDateInputCell {
-    self.choice3.hidden = YES;
-    self.choice2.hidden = YES;
-    self.choice1.hidden = YES;
+    self.segmentControl.hidden = YES;
     
     self.captionLabel.hidden = NO;
     self.answerTextField.hidden = NO;
@@ -190,56 +136,17 @@
 }
 
 - (NSUInteger) selectedChoiceIndex {
-    NSUInteger index;
-    
-    if (self.choice1.isSelected) {
-        index = 0;
-    }
-    else if (self.choice2.isSelected) {
-        index = 1;
-    }
-    else {
-        index = 2;
-    }
-    
-    return index;
+    return self.segmentControl.selectedSegmentIndex;
 }
 
 - (void) setSelectedChoiceIndex:(NSUInteger)index {
-    self.choice1.selected = NO;
-    self.choice2.selected = NO;
-    self.choice3.selected = NO;
-    
-    switch (index) {
-        case 0:
-            self.choice1.selected = YES;
-            break;
-            
-        case 1:
-            self.choice2.selected = YES;
-            break;
-            
-        case 2:
-            self.choice3.selected = YES;
-            break;
-            
-        default:
-#warning assert message require
-            NSAssert(NO, NSLocalizedString(@"ASSERT_MESSAGE", @""));
-            break;
-    }
+    [self.segmentControl setSelectedSegmentIndex:index];
 }
 
 
 #pragma mark - IBActions
 
-- (IBAction) choiceDidChoose:(id)sender {
-    self.choice1.selected = NO;
-    self.choice2.selected = NO;
-    self.choice3.selected = NO;
-    
-    [(UIButton *)sender setSelected:YES];
-    
+- (IBAction) segmentValueChanged {
     if ([self.delegate respondsToSelector:@selector(criteriaCellValueChanged:)]) {
         [self.delegate criteriaCellValueChanged:self];
     }
@@ -255,7 +162,9 @@
 }
 
 - (void) datePickerValueChanged {
-    [self.answerTextField resignFirstResponder];
+    if ([self.delegate respondsToSelector:@selector(criteriaCellValueChanged:)]) {
+        [self.delegate criteriaCellValueChanged:self];
+    }
 }
 
 @end

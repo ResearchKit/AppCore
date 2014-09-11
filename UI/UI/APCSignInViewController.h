@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-@import UIKit;
+#import "APCViewController.h"
 
-@interface APCSignInViewController : UIViewController
+@interface APCSignInViewController : APCViewController
 
 @end

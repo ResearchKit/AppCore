@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "APCAssertionHandler.h"
+#import "APCNavigationController.h"
 #import "APCSettingsViewController.h"
 #import "APCIntroVideoViewController.h"
 #import "UIBarButtonItem+AppearanceCategory.h"
@@ -29,10 +30,10 @@
     BOOL isProfile = NO;
     
     if (isProfile) {
-        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[APCSettingsViewController new]];
+        self.window.rootViewController = [[APCNavigationController alloc] initWithRootViewController:[APCSettingsViewController new]];
     }
     else {
-        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[APCIntroVideoViewController new]];
+        self.window.rootViewController = [[APCNavigationController alloc] initWithRootViewController:[APCIntroVideoViewController new]];
     }
     
     [self.window makeKeyAndVisible];

@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-@import UIKit;
+#import "APCViewController.h"
 
-@interface APCIntroVideoViewController : UIViewController
+@interface APCIntroVideoViewController : APCViewController
 
 @end

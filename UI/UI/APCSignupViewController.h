@@ -8,8 +8,8 @@
 
 #import "APCSignUpProgressing.h"
 
-@import UIKit;
+#import "APCViewController.h"
 
-@interface APCSignupViewController : UIViewController <APCSignUpProgressing>
+@interface APCSignupViewController : APCViewController <APCSignUpProgressing>
 
 @end

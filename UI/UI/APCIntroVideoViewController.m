@@ -34,10 +34,11 @@
 }
 
 
+
 #pragma mark - Private Methods
 
 - (void) skip {
-    APCSignupOptionsViewController *optionsViewController = [[APCSignupOptionsViewController alloc] initWithNibName:@"APCOnBoardingOptionsViewController" bundle:nil];
+    APCSignupOptionsViewController *optionsViewController = [[APCSignupOptionsViewController alloc] initWithNibName:@"APCSignupOptionsViewController" bundle:nil];
     
     [self.navigationController pushViewController:optionsViewController animated:YES];
 }
