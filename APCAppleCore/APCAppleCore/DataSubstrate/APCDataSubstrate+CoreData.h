@@ -16,6 +16,13 @@
 - (void)loadStaticTasksAndSchedules: (NSDictionary*) jsonDictionary;
 
 /*********************************************************************************/
+#pragma mark - Helpers - ONLY RETURNS IN NSManagedObjects in mainContext
+/*********************************************************************************/
+- (NSArray *)scheduledTasksDueFrom:(NSDate *)fromDate toDate:(NSDate *)toDate sortDescriptors: (NSArray*) sortDescriptors; //NOTE: Excludes toDate
+- (NSArray *)scheduledTasksForPredicate:(NSPredicate *)predicate sortDescriptors: (NSArray*) sortDescriptors;
+
+
+/*********************************************************************************/
 #pragma mark - Methods meant only for Categories
 /*********************************************************************************/
 - (void) setUpCoreDataStackWithPersistentStorePath:(NSString*) storePath additionalModels: (NSManagedObjectModel*) mergedModels;

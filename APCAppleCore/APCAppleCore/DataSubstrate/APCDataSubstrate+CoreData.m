@@ -69,7 +69,7 @@
 }
 
 /*********************************************************************************/
-#pragma mark - Core Data Methods
+#pragma mark - Core Data Public Methods
 /*********************************************************************************/
 - (void)loadStaticTasksAndSchedules: (NSDictionary*) jsonDictionary
 {
@@ -77,5 +77,25 @@
     [APCSchedule createSchedulesFromJSON:jsonDictionary[@"schedules"] inContext:self.persistentContext];
 }
 
+/*********************************************************************************/
+#pragma mark - Helpers - ONLY RETURNS IN NSManagedObjects in mainContext
+/*********************************************************************************/
+- (NSArray *)scheduledTasksDueFrom:(NSDate *)fromDate toDate:(NSDate *)toDate sortDescriptors: (NSArray*) sortDescriptors
+{
+    NSFetchRequest * request = [APCScheduledTask request];
+    request.predicate = [NSPredicate predicateWithFormat:@"dueOn >= %@ and dueOn < %@", fromDate, toDate];
+    request.sortDescriptors = sortDescriptors;
+    NSError* error;
+    return [self.mainContext executeFetchRequest:request error:&error];
+}
+
+- (NSArray *)scheduledTasksForPredicate:(NSPredicate *)predicate sortDescriptors: (NSArray*) sortDescriptors
+{
+    NSFetchRequest * request = [APCScheduledTask request];
+    request.predicate = predicate;
+    request.sortDescriptors = sortDescriptors;
+    NSError* error;
+    return [self.mainContext executeFetchRequest:request error:&error];
+}
 
 @end
