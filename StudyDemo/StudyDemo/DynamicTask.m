@@ -41,14 +41,30 @@
     return @"DynamicTask";
 }
 
-- (RKStep *)stepAfterStep:(RKStep *)step withSurveyResults:(NSDictionary *)surveyResults{
+- (RKQuestionResult *)questionResultForStep:(RKStep *)step fromSurveyResults:(NSArray *)surveyResults
+{
+    for (RKQuestionResult *result in surveyResults)
+    {
+        if (! [result isKindOfClass:[RKQuestionResult class]])
+        {
+            continue;
+        }
+        if ([[[[result itemIdentifier] components] lastObject] isEqualToString:step.identifier])
+        {
+            return result;
+        }
+    }
+    return nil;
+}
+
+- (RKStep *)stepAfterStep:(RKStep *)step withSurveyResults:(NSArray *)surveyResults{
     
     if (step == nil) {
         return _step1;
     }else if (step == _step1){
         return _step2;
     }else if (step == _step2){
-        RKQuestionResult* result = surveyResults[step.identifier];
+        RKQuestionResult *result = [self questionResultForStep:step fromSurveyResults:surveyResults];
         if (result == nil || result.answer == nil) {
             return nil;
         }else{
@@ -60,7 +76,7 @@
             }
         }
     }else if (step == _step3a || step == _step3b){
-        RKQuestionResult* result = surveyResults[step.identifier];
+        RKQuestionResult *result = [self questionResultForStep:step fromSurveyResults:surveyResults];
         if (result == nil || result.answer == nil) {
             return nil;
         }else{
@@ -74,7 +90,7 @@
 }
 
 
-- (RKStep *)stepBeforeStep:(RKStep *)step withSurveyResults:(NSDictionary *)surveyResults{
+- (RKStep *)stepBeforeStep:(RKStep *)step withSurveyResults:(NSArray *)surveyResults{
     
     if (step == nil || step == _step1) {
         return nil;
@@ -83,8 +99,9 @@
     }else if (step == _step3a || step == _step3b){
         return _step2;
     }else if (step == _step4 ){
+        RKQuestionResult *result = [self questionResultForStep:_step3a fromSurveyResults:surveyResults];
         
-        if (surveyResults[_step3a.identifier]) {
+        if (result) {
              return _step3a;
         }else{
             return _step3b;

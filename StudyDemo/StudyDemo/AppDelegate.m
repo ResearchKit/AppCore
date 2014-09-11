@@ -164,7 +164,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     NSURL *archiveFile = [RKDataArchive makeArchiveFromDataLoggerManager:_logManager
                                                           itemIdentifier:[[RKItemIdentifier alloc] initWithComponents:@[@"com",@"apple",@"ResearchKit",@"collection"]]
                                                          studyIdentifier:MainStudyIdentifier
-                                                          fileProtection:nil
+                                                          fileProtection:RKFileProtectionNone
                                                        maximumInputBytes:1024*1024*10
                                                             maximumFiles:0
                                                             pendingFiles:&pendingFiles
