@@ -21,6 +21,4 @@
 - (void) appBecameActive;
 - (void) backgroundFetch:(void (^)(UIBackgroundFetchResult))completionHandler;
 
-- (void) performFirstUserSetup:(NSString* ) jsonFileName;
-
 @end

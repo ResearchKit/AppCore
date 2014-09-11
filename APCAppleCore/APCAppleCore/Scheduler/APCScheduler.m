@@ -14,8 +14,9 @@
 
 static NSInteger kMinutes = 60;
 static NSInteger APCScheduledTaskNotComplete = 0;
-//TODO local notificiation reminders are set to 15 minutes before the task
-static NSInteger reminder_minutes_before_task = -15;
+
+//TODO grab this default 'advance' notification from Parameters
+static NSInteger kReminderMinutesBeforeTask = -15;
 
 typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
 {
@@ -84,19 +85,14 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
     NSDate *dueOn = [dates objectAtIndex:0];
     APCTask *task = schedule.task;
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"( dueOn == %@ ) AND ( task.taskType == %@ )", dueOn, task.taskType];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"( dueOn == %@ ) AND ( task.uid == %@ )", dueOn, task.uid];
     [request setPredicate:predicate];
     NSError *error;
     NSArray *array = [self.localMOC executeFetchRequest:request error:&error];
     
     NSAssert(array, @"Core data did not return an array on requesting fetch");
     
-    if ([array count] == 0) {
-        
-        return NO;
-    }
-    
-    return YES;
+    return [array count] != 0;
 }
 
 
@@ -164,7 +160,7 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
     
     if (reminder) {
         
-        NSTimeInterval reminderInterval = reminder_minutes_before_task * kMinutes;
+        NSTimeInterval reminderInterval = kReminderMinutesBeforeTask * kMinutes;
         
         [dueOn dateByAddingTimeInterval:reminderInterval];
         notificationInfo[@"reminder"] = @"reminder";

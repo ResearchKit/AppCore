@@ -7,6 +7,7 @@
 
 #import "MainViewController.h"
 #import <ResearchKit/ResearchKit.h>
+#import <AVFoundation/AVFoundation.h>
 #import "DynamicTask.h"
 #import "CustomRecorder.h"
 #import "AppDelegate.h"
@@ -88,14 +89,23 @@
     
     [[UIView appearance] setTintColor:[UIColor orangeColor]];
     
-    CGRect buttonFrame = CGRectMake(0, 0, 240, 40);
+    CGRect buttonFrame = CGRectMake(0, 0, 160, 40);
     
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
         button.frame = buttonFrame;
-        button.center = CGPointMake(self.view.center.x, 90);
+        button.center = CGPointMake(self.view.center.x-buttonFrame.size.width/2, 90);
         [button addTarget:self action:@selector(showTaskButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitle:@"Show Task" forState:UIControlStateNormal];
+        [self.view addSubview:button];
+    }
+    
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
+        button.frame = buttonFrame;
+        button.center = CGPointMake(self.view.center.x+buttonFrame.size.width/2, 90);
+        [button addTarget:self action:@selector(pickDatesTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Pick Dates" forState:UIControlStateNormal];
         [self.view addSubview:button];
     }
     
@@ -198,6 +208,46 @@
     }
 }
 
+- (IBAction)pickDatesTapped:(id)sender {
+    NSMutableArray* steps = [NSMutableArray new];
+    {
+        RKIntroductionStep* step = [[RKIntroductionStep alloc] initWithIdentifier:@"iid_001" name:@"intro step"];
+        step.caption = @"Demo Study";
+        step.instruction = @"This 12-step walkthrough will explain the study and the impact it will have on your life.";
+        step.explanation = @"You must complete the walkthough to participate in the study.";
+        [steps addObject:step];
+    }
+    {
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_007"
+                                                                     name:@"date"
+                                                                 question:@"When is your birthday?"
+                                                                   answer:[RKDateAnswerFormat dateAnswer]];
+        
+        [steps addObject:step];
+    }
+    
+    {
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_008"
+                                                                     name:@"time"
+                                                                 question:@"What time do you get up?"
+                                                                   answer:[RKDateAnswerFormat timeAnswer]];
+        [steps addObject:step];
+    }
+    
+    {
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_009"
+                                                                     name:@"date & time"
+                                                                 question:@"When is your next meeting?"
+                                                                   answer:[RKDateAnswerFormat dateTimeAnswer]];
+        [steps addObject:step];
+        
+    }
+    RKTask* task = [[RKTask alloc] initWithName:@"Dates" identifier:@"dates_001" steps:steps];
+    
+    self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    [self beginTask:task];
+}
+
 
 - (IBAction)showTaskButtonTapped:(id)sender{
     
@@ -209,7 +259,19 @@
         step.caption = @"Audio";
         step.countDown = 10.0;
         step.text = @"An active test recording audio";
-        step.recorderConfigurations = @[[RKAudioRecorderConfiguration configuration]];
+        step.recorderConfigurations = @[[RKAudioRecorderConfiguration new]];
+        [steps addObject:step];
+    }
+    
+    {
+        RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001e" name:@"active step"];
+        step.caption = @"Audio";
+        step.countDown = 10.0;
+        step.text = @"An active test recording lossless audio";
+        step.recorderConfigurations = @[[[RKAudioRecorderConfiguration alloc] initWithRecorderSettings:@{AVFormatIDKey : @(kAudioFormatAppleLossless),
+                                                                                                         AVNumberOfChannelsKey : @(2),
+                                                                                                         AVSampleRateKey: @(44100.0)
+                                                                                                         }]];
         [steps addObject:step];
     }
     
@@ -425,7 +487,7 @@
     
     self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
     
-    self.taskVC.delegate = self;
+    self.taskVC.taskDelegate = self;
     
     [self presentViewController:_taskVC animated:YES completion:^{
         
@@ -440,7 +502,7 @@
     }
     
     self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
-    self.taskVC.delegate = self;
+    self.taskVC.taskDelegate = self;
     
     self.taskArchive = [[RKDataArchive alloc] initWithItemIdentifier:[RKItemIdentifier itemIdentifierForTask:task] studyIdentifier:MainStudyIdentifier taskInstanceUUID:self.taskVC.taskInstanceUUID extraMetadata:nil fileProtection:RKFileProtectionCompleteUnlessOpen];
     
@@ -525,6 +587,7 @@
     {
         // Error adding the result to the archive; archive may be invalid. Tell
         // the user there's been a problem and stop the task.
+        NSLog(@"Error adding %@ to archive: %@", result, err);
     }
 }
 
@@ -545,9 +608,8 @@
     if ([result isKindOfClass:[RKSurveyResult class]]) {
         RKSurveyResult* sresult = (RKSurveyResult*)result;
         
-        for (NSString* key in sresult.surveyResults) {
-            RKQuestionResult* qr = sresult.surveyResults[key];
-            NSLog(@"%@ = [%@] %@ ", key, qr.answer.class, qr.answer);
+        for (RKQuestionResult* qr in sresult.surveyResults) {
+            NSLog(@"%@ = [%@] %@ ", [[qr itemIdentifier] stringValue], qr.answer.class, qr.answer);
         }
     }
     
@@ -559,9 +621,25 @@
         
 }
 
+- (RKQuestionResult *)_questionResultForStepIdentifier:(NSString *)identifier fromSurveyResults:(NSArray *)surveyResults
+{
+    for (RKQuestionResult *result in surveyResults)
+    {
+        if ([result isKindOfClass:[RKQuestionResult class]])
+        {
+            continue;
+        }
+        if ([[[[result itemIdentifier] components] lastObject] isEqualToString:identifier])
+        {
+            return result;
+        }
+    }
+    return nil;
+}
+
 - (BOOL)taskViewController:(RKTaskViewController *)taskViewController shouldPresentStep:(RKStep*)step{
     if ([ step.identifier isEqualToString:@"itid_002"]) {
-        RKQuestionResult* qr = taskViewController.surveyResults[@"itid_001"];
+        RKQuestionResult* qr = [self _questionResultForStepIdentifier:@"itid_001" fromSurveyResults:taskViewController.surveyResults];
         if (qr== nil || [(NSNumber*)qr.answer integerValue] < 18) {
             UIAlertController* alerVC = [UIAlertController alertControllerWithTitle:@"Warning" message:@"You can't participate if you are under 18." preferredStyle:UIAlertControllerStyleAlert];
             

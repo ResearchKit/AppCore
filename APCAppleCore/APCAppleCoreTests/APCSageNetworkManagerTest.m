@@ -9,7 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "APCAppleCore.h"
 
-#define BASE_URL @"http://localhost:4567/api/v1/"
+#define BASE_URL @"http://pd-staging.sagebridge.org/api/v1/"
 #define TIME_OUT 10.0
 
 @interface APCSageNetworkManagerTest : XCTestCase
@@ -28,46 +28,36 @@
     return _localNetworkManager;
 }
 
-- (void)setUp
-{
-    NSLog(@"Setting Up");
-    XCTestExpectation * expectation = [self expectationWithDescription:@"SignUp&SignIn"];
-    [self.localNetworkManager signUpAndSignIn:@"email@email.com" username:@"username" password:@"password" success:^(NSURLSessionDataTask * task, id responseObject) {
-        XCTAssertTrue([responseObject[@"sessionToken"] isEqualToString:@"sessionToken"], @"sessionToken Missing");
-        [expectation fulfill];
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        XCTFail(@"Received Failure in Sign up & sign In");
-        [expectation fulfill];
-    }];
-    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
-    [self.localNetworkManager clearSessionToken];
-}
-
-- (void) tearDown
-{
-    NSLog(@"Tearing Down");
-    XCTestExpectation * expectation = [self expectationWithDescription:@"Authenticate"];
-    [self.localNetworkManager signOutWithSuccess:^(NSURLSessionDataTask *task, id responseObject) {
-        [expectation fulfill];
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        XCTFail(@"Received Failure in SignOut: %@", error );
-        [expectation fulfill];
-    }];
-    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
-}
-
-- (void)testAuthenticateIfNecessary
+- (void) testSignUp
 {
     XCTestExpectation * expectation = [self expectationWithDescription:@"Authenticate"];
-    [self.localNetworkManager authenticateWithExistingCredentialsIfNecessaryWithSuccess:^(NSURLSessionDataTask *task, id responseObject) {
-        [expectation fulfill];
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        XCTFail(@"Received Failure in Authenticate: %@", error );
-        [expectation fulfill];
-    }];
+    [self.localNetworkManager signUp:@"dhanush.balachandran@ymedialabs.com"
+                            username:@"dhanush"
+                            password:@"Password123"
+                             success:^(NSURLSessionDataTask *task, id responseObject) {
+                                 [expectation fulfill];
+                             }
+                             failure:^(NSURLSessionDataTask *task, NSError *error) {
+                                 XCTFail(@"Received Failure: %@", error );
+                                 [expectation fulfill];
+                             }];
     [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
 }
 
+- (void) testSignIn
+{
+    XCTestExpectation * expectation = [self expectationWithDescription:@"Authenticate"];
+    [self.localNetworkManager signIn:@"dhanush"
+                            password:@"Password123"
+                             success:^(NSURLSessionDataTask *task, id responseObject) {
+                                 NSLog(@"Success");
+                                 [expectation fulfill];
+                             } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                                 XCTFail(@"Received Failure: %@", error );
+                                 [expectation fulfill];
+                             }];
 
+    [self waitForExpectationsWithTimeout:TIME_OUT handler:NULL];
+}
 
 @end

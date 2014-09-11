@@ -16,6 +16,7 @@
 @dynamic createdAt;
 @dynamic taskDescription;
 @dynamic taskType;
+@dynamic taskTitle;
 @dynamic uid;
 @dynamic updatedAt;
 @dynamic schedules;

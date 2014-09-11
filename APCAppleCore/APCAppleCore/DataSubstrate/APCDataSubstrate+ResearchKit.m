@@ -21,7 +21,9 @@ extern NSString * const RKStudyStoreRestoredCollectorsKey;
 {
     self.studyStore = [RKStudyStore sharedStudyStore];
     NSError * error;
-    self.study = [self.studyStore addStudyWithIdentifier:studyIdentifier delegate:self error:&error];
+    if (![self.studyStore studyWithIdentifier:studyIdentifier]) {
+        self.study = [self.studyStore addStudyWithIdentifier:studyIdentifier delegate:self error:&error];
+    }
     [error handle];
     [self setUpCollectors];
     [self.studyStore resume];

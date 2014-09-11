@@ -7,12 +7,27 @@
 //
 
 #import "APCSchedule+AddOn.h"
+#import "APCModel.h"
+
+static NSString * const kScheduleReminderKey = @"reminder";
+static NSString * const kTaskIDKey = @"taskID";
+static NSString * const kScheduleExpressionKey = @"schedule";
 
 @implementation APCSchedule (AddOn)
 
-+(void)createSchedulesFromJSON:(NSArray *)tasksArray
++(void)createSchedulesFromJSON:(NSArray *)schedulesArray inContext:(NSManagedObjectContext *)context
 {
-    
+    [context performBlockAndWait:^{
+        for(NSDictionary *scheduleDict in schedulesArray) {
+            
+            APCSchedule * schedule = [APCSchedule newObjectForContext:context];
+            schedule.scheduleExpression = [scheduleDict objectForKey:kScheduleExpressionKey];
+            schedule.reminder = [scheduleDict objectForKey:kScheduleReminderKey];
+            schedule.task = [APCTask taskWithTaskID:scheduleDict[kTaskIDKey] inContext:context];
+            
+            [schedule saveToPersistentStore:NULL];
+        }
+    }];
 }
 
 /*********************************************************************************/

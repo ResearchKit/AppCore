@@ -16,8 +16,6 @@ enum _APHStartOfDay {
     APHStartOfDayRelative = 1
 } APHStartOfDay;
 
-//TODO shim
-static NSInteger users_wake_time = 8;
 
 @implementation APCScheduleInterpreter
 
@@ -109,8 +107,10 @@ static NSInteger users_wake_time = 8;
                                     NSCalendarUnitWeekday
                                                fromDate:now];
     
-    //TODO this is a shim
-    [components setHour:users_wake_time];
+    //TODO grab this default 'advance' notification from Parameters
+    int usersWakeTime = 8;
+    
+    [components setHour:usersWakeTime];
     [components setMinute:0];
     [components setSecond:0];
     

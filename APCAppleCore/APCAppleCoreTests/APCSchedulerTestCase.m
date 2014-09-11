@@ -192,7 +192,7 @@
     }
     XCTAssertFalse(self.moc.hasChanges,"All the changes should be saved");
     
-    [_scheduler setScheduledTask:schedule];
+//    [_scheduler setScheduledTask:schedule];
     
     
 }
@@ -202,7 +202,7 @@
 }
 
 - (void)testPreflightData {
-    [_scheduler setPreFlightSchedule];
+//    [_scheduler setPreFlightSchedule];
 }
 
 @end

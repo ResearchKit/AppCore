@@ -56,6 +56,7 @@
 		F5A8F38C19B1011F008C9F9C /* APCResult+AddOn.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A8F38B19B1011F008C9F9C /* APCResult+AddOn.m */; };
 		F5A8F38D19B1011F008C9F9C /* APCResult+AddOn.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A8F38B19B1011F008C9F9C /* APCResult+AddOn.m */; };
 		F5A8F38F19B10263008C9F9C /* MODEL_README in Resources */ = {isa = PBXBuildFile; fileRef = F5A8F38E19B10263008C9F9C /* MODEL_README */; };
+		F5AC934119C0EBCA0062C89A /* APCDBStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B39FC019BFA39700CA7B8C /* APCDBStatus.m */; };
 		F5B39FC119BFA39700CA7B8C /* APCDBStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B39FC019BFA39700CA7B8C /* APCDBStatus.m */; };
 		F5B39FC419BFA3C300CA7B8C /* APCDBStatus+AddOn.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B39FC319BFA3C300CA7B8C /* APCDBStatus+AddOn.m */; };
 		F5B39FC519BFA3C300CA7B8C /* APCDBStatus+AddOn.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B39FC319BFA3C300CA7B8C /* APCDBStatus+AddOn.m */; };
@@ -548,6 +549,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5AC934119C0EBCA0062C89A /* APCDBStatus.m in Sources */,
 				F5E4872519ABDBF000C86FC6 /* APCDataSubstrate.m in Sources */,
 				F5A8F37119B0FDF8008C9F9C /* APCTask.m in Sources */,
 				F58668B819A3D0E000E9C375 /* APCNetworkManagerTest.m in Sources */,
