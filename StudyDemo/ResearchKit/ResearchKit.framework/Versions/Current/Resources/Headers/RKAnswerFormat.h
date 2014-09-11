@@ -76,7 +76,7 @@ typedef NS_ENUM(NSInteger, RKChoiceAnswerStyle) {
  * @param options             A list of predefined options.
  * @param style               Answer style of the multiple-choice question
  */
-+ (instancetype)choiceAnswerWithOptions:(NSArray *)options style:(RKChoiceAnswerStyle)style;
++ (instancetype)choiceAnswerWithOptions:(NSArray /* <RKAnswerOption> */ *)options style:(RKChoiceAnswerStyle)style;
 
 /**
  * @brief Style of answer desired
@@ -106,7 +106,7 @@ typedef NS_ENUM(NSInteger, RKChoiceAnswerStyle) {
 /**
  * @brief Designated convenience constructor
  */
-+ (instancetype)optionWithShortText:(NSString*)shortText longText:(NSString*)longText;
++ (instancetype)optionWithShortText:(NSString*)shortText longText:(NSString*)longText value:(id)value;
 
 /**
  * @brief Brief option text.
@@ -117,6 +117,14 @@ typedef NS_ENUM(NSInteger, RKChoiceAnswerStyle) {
  * @brief Detailed option text.
  */
 @property (nonatomic, readonly, copy) NSString* longText;
+
+/**
+ * @brief The value to be returned if this option is selected.
+ *
+ * Expected to be a scalar type serializable to JSON, e.g. NSNumber or NSString.
+ * If no value is provided, the index of the option in the RKChoiceAnswerFormat options list will be used.
+ */
+@property (nonatomic, readonly, copy) id value;
 
 @end
 

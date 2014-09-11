@@ -25,6 +25,14 @@
 @property (nonatomic) NSTimeInterval countDown;
 
 /**
+ * @brief During timer countdown, counts down the last few seconds with voice
+ *
+ * Default value is NO.
+ */
+@property (nonatomic) BOOL speakCountDown;
+
+
+/**
  * @brief Whether to start the count down timer automatically on step start, or click button to start. 
  * 
  * Default value is NO.
