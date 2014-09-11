@@ -75,7 +75,12 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
  */
 - (instancetype)initWithStep:(RKStep*)step;
 
-@property (nonatomic, strong, readonly) RKStep* step;
+/**
+ * @brief The step to be presented.
+ * 
+ * Setting the step after the controller has been presented is an error.
+ */
+@property (nonatomic, strong) RKStep* step;
 
 /**
  *  @note By default, RKTaskViewController should be the delegate to ensure its effective management.

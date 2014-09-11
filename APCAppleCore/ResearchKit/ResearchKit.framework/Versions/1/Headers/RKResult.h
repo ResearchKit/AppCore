@@ -12,6 +12,8 @@
 @class RKDataArchive;
 @class RKItemIdentifier;
 @class RKStep;
+@class RKQuestionStep;
+
 /**
  * @brief The RKResult class defines the attributes of a result from one step or a group of steps.
  *
@@ -134,6 +136,8 @@
  */
 @property (nonatomic, strong) NSObject* answer;
 
++ (RKQuestionResult *)nullResultForQuestionStep:(RKQuestionStep *)questionStep;
+
 @end
 
 
@@ -148,18 +152,19 @@
 @end
 
 /**
- * @brief The RKSurveyResult class defines the attributes of survey answers result.
+ * @brief A combined result for covering all survey questions in a task.
  */
 @interface RKSurveyResult : RKResult
 
-- (instancetype)initWithSurveyResults:(NSDictionary *)surveyResults;
+/**
+ * @brief Designated initializer
+ * @param surveyResults Array of RKQuestionResult resulting from this survey, in order of answering
+ */
+- (instancetype)initWithSurveyResults:(NSArray *)surveyResults;
 
 /**
- * @brief A dictionary contains all question anwsers.
- * 
- * Keys are step identifiers.
- * Values are RKStepQuestionResult objects.
+ * @brief An array that contains answers to the questions.
  */
-@property (nonatomic, strong) NSDictionary *surveyResults;
+@property (nonatomic, strong) NSArray *surveyResults;
 
 @end

@@ -28,4 +28,12 @@
  */
 @property (nonatomic, strong, readonly) UILabel* instructionLabel;
 
+/**
+ * Override point for subclasses, called when the step has finished.
+ *
+ * The default implementation does nothing except for steps with countdown
+ * enabled, where it will continue automatically to the next step.
+ */
+- (void)stepDidFinish;
+
 @end

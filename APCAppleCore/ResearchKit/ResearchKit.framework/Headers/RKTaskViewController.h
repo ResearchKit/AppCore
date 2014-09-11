@@ -86,9 +86,8 @@ willPresentStepViewController:(RKStepViewController *)stepViewController;
  * @brief The RKTaskViewController class defines the attributes and behavior of a task view controller.
  * @note RKStepViewController objects are managed by RKTaskViewController, 
  */
-@interface RKTaskViewController : UIViewController
+@interface RKTaskViewController : UINavigationController
 
-- (instancetype)init NS_UNAVAILABLE;
 
 /**
  * @brief Designated initializer
@@ -100,11 +99,12 @@ willPresentStepViewController:(RKStepViewController *)stepViewController;
 /**
  * @brief The object that acts as view controller's delegate.
  */
-@property (nonatomic, weak) id<RKTaskViewControllerDelegate> delegate;
+@property (nonatomic, weak) id<RKTaskViewControllerDelegate> taskDelegate;
 
 /**
- * @brief Task datasource
- * @note Notice it has a strong reference, please avoid reference loop.
+ * @brief Task data source
+ * 
+ * It is an error to change the task after presenting the RKTaskViewController.
  */
 @property (nonatomic, strong) id<RKLogicalTask> task;
 
@@ -113,17 +113,28 @@ willPresentStepViewController:(RKStepViewController *)stepViewController;
  * 
  * Unique identifier for this run of the task controller. All results produced by this
  * instance will be tagged with this UUID.
+ *
+ * It is an error to set the taskInstanceUUID after the first time the task VC is presented.
  */
-@property (nonatomic, copy, readonly) NSUUID *taskInstanceUUID;
+@property (nonatomic, copy) NSUUID *taskInstanceUUID;
 
 
 /**
  * @brief Survey question results received by RKTaskViewController
  *
- * Use step's identifier to access its result value , values are RKQuestionResult objects.
- * A question's result will not be included in this dictionary, if user use back button to leave the question step.
+ * RKQuestionResult objects in the order the questions were completed.
+ * If the user uses the back button to go back through the steps, the
+ * results forward of the current position are not included in this array.
  */
-@property (nonatomic, copy, readonly) NSDictionary *surveyResults;
+@property (nonatomic, copy, readonly) NSArray *surveyResults;
+
+
+/**
+ * @brief Controls whether progress is shown in the navigation bar
+ *
+ * Defaults to YES. Set to NO to disable showing progress in the navigation bar.
+ */
+@property (nonatomic, assign) BOOL showsProgressInNavigationBar;
 
 /**
  * @brief Stop current running step.
