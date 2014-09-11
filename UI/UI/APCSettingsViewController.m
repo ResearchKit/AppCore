@@ -7,8 +7,8 @@
 //
 
 #import "APCProfile.h"
+#import "UITableView+Appearance.h"
 #import "APCSettingsViewController.h"
-#import "UITableView+AppearanceCategory.h"
 
 static
 

@@ -7,7 +7,7 @@
 //
 
 #import "APHUserInfoCell.h"
-#import "UITableView+AppearanceCategory.h"
+#import "UITableView+APHAppearance.h"
 
 @implementation APHUserInfoCell
 

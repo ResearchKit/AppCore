@@ -11,7 +11,7 @@
 #import "APCNavigationController.h"
 #import "APCSettingsViewController.h"
 #import "APCIntroVideoViewController.h"
-#import "UIBarButtonItem+AppearanceCategory.h"
+#import "UIBarButtonItem+APHAppearance.h"
 
 @interface AppDelegate ()
 

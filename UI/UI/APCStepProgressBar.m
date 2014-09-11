@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "UIView+Category.h"
 #import "APCStepProgressBar.h"
-#import "APCStepProgressBar+AppearanceCategory.h"
+#import "APCStepProgressBar+Appearance.h"
 
 static CGFloat const kAPCStepProgressBarControlsMinMargin   = 10;
 
@@ -41,7 +42,7 @@ static CGFloat const kAPCStepProgressBarControlsMinMargin   = 10;
     CGRect frame = self.bounds;
     
     if (self.style == APCStepProgressBarStyleDefault) {
-        CGFloat availableWidth = self.bounds.size.width - (2 * kAPCStepProgressBarControlsMinMargin);
+        CGFloat availableWidth = self.innerWidth - (2 * kAPCStepProgressBarControlsMinMargin);
         
         {
             frame.size.width = availableWidth * 0.75;
@@ -67,7 +68,7 @@ static CGFloat const kAPCStepProgressBarControlsMinMargin   = 10;
         frame = self.bounds;
     }
     else {
-        frame = CGRectMake(0, self.bounds.size.height - 1, self.bounds.size.width, 1);
+        frame = CGRectMake(0, self.innerHeight - 1, self.innerWidth, 1);
     }
     
     self.progressView.frame = frame;

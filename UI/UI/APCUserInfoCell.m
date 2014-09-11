@@ -7,8 +7,9 @@
 //
 
 #import "APCUserInfoCell.h"
+#import "UIView+Category.h"
 #import "NSString+Category.h"
-#import "UITableView+AppearanceCategory.h"
+#import "UITableView+Appearance.h"
 
 static CGFloat const kAPCUserInfoCellControlsMinHorizontalMargin    = 15.0;
 static CGFloat const kAPCUserInfoCellControlsMinVerticalMargin      = 7.0;
@@ -72,7 +73,7 @@ static CGFloat const kAPCUserInfoCellControlsMinHeight              = 30.0;
 
 - (UISegmentedControl *) segmentControl {
     if (!_segmentControl) {
-        CGFloat width = self.bounds.size.width - (2 * kAPCUserInfoCellControlsMinHorizontalMargin);
+        CGFloat width = self.innerWidth - (2 * kAPCUserInfoCellControlsMinHorizontalMargin);
         
         _segmentControl = [UISegmentedControl new];
         _segmentControl.frame = CGRectMake(kAPCUserInfoCellControlsMinHorizontalMargin, 0, width, kAPCUserInfoCellControlsMinHeight);

@@ -8,11 +8,12 @@
 
 #import "APCProfile.h"
 #import "NSDate+Category.h"
+#import "UIView+Category.h"
 #import "APCUserInfoField.h"
 #import "NSString+Category.h"
 #import "UIScrollView+Category.h"
+#import "UITableView+Appearance.h"
 #import "APCUserInfoViewController.h"
-#import "UITableView+AppearanceCategory.h"
 
 static NSString * const kAPCUserInfoFieldNameRegEx              = @"[A-Za-z]+";
 
@@ -66,7 +67,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
-    self.tableView.contentInset = UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height + 10, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(self.navigationController.navigationBar.height + 10, 0, 0, 0);
     [self.view addSubview:self.tableView];
 }
 
@@ -81,7 +82,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
     self.headerTextFieldSeparatorView.frame = frame;
     self.headerTextFieldSeparatorView.backgroundColor = self.tableView.separatorColor;
     
-    self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width/2;
+    self.profileImageButton.layer.cornerRadius = self.profileImageButton.frame.size.width/2;
     
     self.firstNameTextField.font = [UITableView textFieldFont];
     self.firstNameTextField.textColor = [UITableView textFieldTextColor];
@@ -250,7 +251,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
         image = info[UIImagePickerControllerOriginalImage];
     }
     
-    self.profileImageView.image = image;
+    [self.profileImageButton setImage:image forState:UIControlStateNormal];
     
     [picker dismissViewControllerAnimated:YES completion:nil];
 }

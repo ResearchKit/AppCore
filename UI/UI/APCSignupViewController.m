@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "UIView+Category.h"
 #import "APCStepProgressBar.h"
 #import "APCSignupViewController.h"
 
@@ -43,9 +44,9 @@
 - (void) addProgressBar {
     // Need to put step progress bar just below navigation bar,
     // So the UINavigationBar's end position will be the begining of step progress bar
-    CGFloat stepProgressByYPosition = CGRectGetMaxY(self.navigationController.navigationBar.frame);
+    CGFloat stepProgressByYPosition = self.navigationController.navigationBar.bottom;
     
-    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.bounds.size.width, kAPCSignUpProgressBarHeight)
+    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.width, kAPCSignUpProgressBarHeight)
                                                                style:APCStepProgressBarStyleOnlyProgressView];
     self.stepProgressBar.numberOfSteps = 4;
     [self.view addSubview:self.stepProgressBar];

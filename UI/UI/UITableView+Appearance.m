@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "UITableView+AppearanceCategory.h"
+#import "UITableView+Appearance.h"
 
-@implementation UITableView (AppearanceCategory)
+@implementation UITableView (Appearance)
 
 + (UIFont *) footerFont {
     return [UIFont systemFontOfSize:14];

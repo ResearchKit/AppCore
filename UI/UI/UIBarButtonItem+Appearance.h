@@ -1,5 +1,5 @@
 //
-//  CALayer+AppearanceCategory.h
+//  UIBarButtonItem+AppearanceCategory.h
 //  UI
 //
 //  Created by Karthik Keyan on 9/8/14.
@@ -7,10 +7,11 @@
 //
 
 @import UIKit;
-@import QuartzCore;
 
-@interface CALayer (AppearanceCategory)
+@interface UIBarButtonItem (Appearance)
 
-+ (CGColorRef) lineColor;
++ (UIFont *) font;
+
++ (UIColor *) textColor;
 
 @end

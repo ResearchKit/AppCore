@@ -6,9 +6,10 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "UIView+Category.h"
 #import "APCUserInfoField.h"
 #import "APCStepProgressBar.h"
-#import "UITableView+AppearanceCategory.h"
+#import "UITableView+Appearance.h"
 #import "APCSignupTouchIDViewController.h"
 #import "APHSignUpMedicalInfoViewController.h"
 
@@ -141,7 +142,7 @@
 
 - (void) addFooterView {
     UILabel *label = [UILabel new];
-    label.frame = CGRectMake(0, 0, self.tableView.frame.size.width, 44);
+    label.frame = CGRectMake(0, 0, self.tableView.width, 44);
     label.font = [UITableView footerFont];
     label.textAlignment = NSTextAlignmentCenter;
     label.textColor = [UITableView footerTextColor];

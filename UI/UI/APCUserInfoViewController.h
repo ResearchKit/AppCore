@@ -17,7 +17,7 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
 
-@property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
+@property (weak, nonatomic) IBOutlet UIButton *profileImageButton;
 
 @property (weak, nonatomic) IBOutlet UIView *headerTextFieldSeparatorView;
 

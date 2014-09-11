@@ -7,7 +7,7 @@
 //
 
 #import "APCCriteriaCell.h"
-#import "UITableView+AppearanceCategory.h"
+#import "UITableView+Appearance.h"
 
 static CGFloat kAPCCriteriaCellContainerViewMargin  = 10;
 

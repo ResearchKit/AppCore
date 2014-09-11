@@ -8,7 +8,7 @@
 
 @import UIKit;
 
-@interface UITableView (AppearanceCategory)
+@interface UITableView (Appearance)
 
 // Footer
 + (UIFont *) footerFont;

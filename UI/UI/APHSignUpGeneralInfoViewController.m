@@ -8,10 +8,11 @@
 
 #import "APCProfile.h"
 #import "APHUserInfoCell.h"
+#import "UIView+Category.h"
 #import "APCUserInfoField.h"
 #import "APCHealthKitProxy.h"
 #import "APCStepProgressBar.h"
-#import "UITableView+AppearanceCategory.h"
+#import "UITableView+Appearance.h"
 #import "APHSignUpGeneralInfoViewController.h"
 #import "APHSignUpMedicalInfoViewController.h"
 
@@ -143,7 +144,7 @@ static NSString * const kAPCUserInfoFieldDateOfBirthFormat      = @"MMM dd, yyyy
 
 - (void) addFooterView {
     UILabel *label = [UILabel new];
-    label.frame = CGRectMake(0, 0, self.tableView.frame.size.width, 44);
+    label.frame = CGRectMake(0, 0, self.tableView.width, 44);
     label.font = [UITableView footerFont];
     label.textAlignment = NSTextAlignmentCenter;
     label.textColor = [UITableView footerTextColor];

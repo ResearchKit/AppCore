@@ -7,7 +7,8 @@
 //
 
 #import "APCPasscodeView.h"
-#import "CALayer+AppearanceCategory.h"
+#import "UIView+Category.h"
+#import "CALayer+Appearance.h"
 
 static CGFloat const kAPCPasscodeViewPinLength = 4;
 
@@ -179,7 +180,7 @@ static CGFloat const kAPCPasscodeDigitViewLayerMargin   = 10;
 #pragma mark - Public Methods
 
 - (void) occupied {
-    self.path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(self.bounds, kAPCPasscodeDigitViewLayerMargin, kAPCPasscodeDigitViewLayerMargin) cornerRadius:self.bounds.size.width/2];
+    self.path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(self.bounds, kAPCPasscodeDigitViewLayerMargin, kAPCPasscodeDigitViewLayerMargin) cornerRadius:self.innerWidth/2];
     
     self.shapeLayer.strokeColor = [CALayer lineColor];
     self.shapeLayer.lineWidth = 2.0;
@@ -189,8 +190,8 @@ static CGFloat const kAPCPasscodeDigitViewLayerMargin   = 10;
 - (void) reset {
     self.path = [UIBezierPath bezierPath];
     
-    [self.path moveToPoint:CGPointMake(kAPCPasscodeDigitViewLayerMargin, CGRectGetMidY(self.bounds))];
-    [self.path addLineToPoint:CGPointMake(CGRectGetMaxX(self.bounds) - kAPCPasscodeDigitViewLayerMargin, CGRectGetMidY(self.bounds))];
+    [self.path moveToPoint:CGPointMake(kAPCPasscodeDigitViewLayerMargin, self.verticalCenter)];
+    [self.path addLineToPoint:CGPointMake(self.right - kAPCPasscodeDigitViewLayerMargin, self.verticalCenter)];
     
     self.shapeLayer.strokeColor = [UIColor blackColor].CGColor;
     self.shapeLayer.lineWidth = 4.0;

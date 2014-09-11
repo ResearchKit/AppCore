@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCStepProgressBar+AppearanceCategory.h"
+#import "APCStepProgressBar+Appearance.h"
 
-@implementation APCStepProgressBar (AppearanceCategory)
+@implementation APCStepProgressBar (Appearance)
 
 // Left Label
 + (UIFont *) leftLabelFont {

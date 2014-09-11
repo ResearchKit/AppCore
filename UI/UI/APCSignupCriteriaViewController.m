@@ -8,6 +8,7 @@
 
 #import "APCCriteria.h"
 #import "APCCriteriaCell.h"
+#import "UIView+Category.h"
 #import "NSDate+Category.h"
 #import "APCStepProgressBar.h"
 #import "APCSignupCriteriaViewController.h"
@@ -91,7 +92,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 - (void) addTableView {
     CGRect frame = self.view.bounds;
-    frame.origin.y = CGRectGetMaxY(self.stepProgressBar.frame);
+    frame.origin.y = self.stepProgressBar.bottom;
     frame.size.height -= frame.origin.y;
     
     self.tableView = [UITableView new];

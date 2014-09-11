@@ -8,7 +8,7 @@
 
 #import "APCStepProgressBar.h"
 
-@interface APCStepProgressBar (AppearanceCategory)
+@interface APCStepProgressBar (Appearance)
 
 // Left Label
 + (UIFont *) leftLabelFont;

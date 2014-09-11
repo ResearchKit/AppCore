@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "UIBarButtonItem+AppearanceCategory.h"
+#import "UIBarButtonItem+Appearance.h"
 
-@implementation UIBarButtonItem (AppearanceCategory)
+@implementation UIBarButtonItem (Appearance)
 
 + (UIFont *) font {
     return [UIFont systemFontOfSize:14.0];

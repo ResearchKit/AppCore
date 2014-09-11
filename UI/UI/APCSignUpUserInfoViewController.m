@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "UIView+Category.h"
 #import "APCStepProgressBar.h"
 #import "APCSignUpUserInfoViewController.h"
 
@@ -33,7 +34,7 @@
 - (void) addProgressBar {
     // Need to put step progress bar just below navigation bar,
     // So the UINavigationBar's end position will be the begining of step progress bar
-    CGFloat stepProgressByYPosition = CGRectGetMaxY(self.navigationController.navigationBar.frame);
+    CGFloat stepProgressByYPosition = self.navigationController.navigationBar.bottom;
     
     self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.bounds.size.width, kAPCSignUpProgressBarHeight)
                                                                style:APCStepProgressBarStyleOnlyProgressView];
@@ -43,7 +44,7 @@
     
     // Instead of reducing table view height, we can just adjust tableview scroll insets
     UIEdgeInsets inset = self.tableView.contentInset;
-    inset.top += self.stepProgressBar.frame.size.height;
+    inset.top += self.stepProgressBar.height;
     
     self.tableView.contentInset = inset;
 }
