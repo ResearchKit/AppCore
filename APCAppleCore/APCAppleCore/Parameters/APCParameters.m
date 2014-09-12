@@ -1,181 +1,310 @@
 //
-//  Parameters.m
-//  Parameters
+//  APCParameters.m
+//  APCParameters
 //
-//  Created by Karthik Keyan on 8/14/14.
-//  Copyright (c) 2014 Karthik Keyan. All rights reserved.
+//  Created by Justin Warmkessel on 8/14/14.
+//  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCParameters.h"
 
 
-// Notification constants
-NSString *const ParametersValueChangeNotification   = @"com.apple.parameters.notification.valuechange";
-
 // Private constants
-NSString *const kParamentersFileName                = @"APCparameters.plist";
+NSString *const kParamentersFileName                    = @"APCparameters.json";
+
 
 @interface APCParameters ()
 
-@property  (nonatomic, strong)  NSMutableDictionary     *plistDict;
-@property  (nonatomic, strong)  NSString                *plistPath;
+@property  (nonatomic, strong)  NSMutableDictionary     *jsonDict;
+@property  (nonatomic, strong)  NSString                *jsonPath;
+@property  (nonatomic, strong)  NSString                *fileName;
 
 @end
 
 
 @implementation APCParameters
 
+- (instancetype)init
+{
+    self = [self initWithFileName:kParamentersFileName];
+    
+    return self;
+}
 
-- (instancetype) init {
+- (instancetype) initWithFileName:(NSString *)fileName {
     self = [super init];
     if (self) {
-        _plistDict = [NSMutableDictionary new];
+        _jsonDict = [NSMutableDictionary new];
+        _fileName = fileName;
         
+        /* This should only be called inside the init */
         [self loadValuesFromBundle];
     }
     return self;
 }
 
 
+- (NSNumber*)numberForKey:(NSString*)key
+{
+    NSNumber*   number = nil;
+    id          value = [self.jsonDict objectForKey:key];
+    
+    if ([self isNumber:value] == YES)
+    {
+        number = (NSNumber*)value;
+    }
+    else
+    {
+        [self didFailWithValue:value];
+    }
+    
+    return number;
+}
+
+
+- (NSString *)stringForKey:(NSString*)key
+{
+    NSString*   str = nil;
+    id          value = [self.jsonDict objectForKey:key];
+    
+    if ([self isString:value] == YES)
+    {
+        str = (NSString*)value;
+    }
+    else
+    {
+        [self didFailWithKey:value];
+    }
+    
+    return str;
+}
+
+
+- (BOOL)boolForKey:(NSString *)key
+{
+    NSNumber*   number = [self numberForKey:key];
+    BOOL        boolean = NO;
+    
+    if (number == (void*)kCFBooleanFalse || number == (void*)kCFBooleanTrue)
+    {
+        boolean = number.boolValue;
+    }
+    else
+    {
+        [self didFailWithKey:key];
+    }
+    
+    return boolean;
+}
+
+
+- (NSInteger)integerForKey:(NSString *)key
+{
+    NSNumber*   number = [self numberForKey:key];
+    NSInteger   integer = 0;
+    
+    CFNumberType numberType = CFNumberGetType((CFNumberRef)number);
+    
+    if (numberType == kCFNumberSInt32Type)
+    {
+        integer = number.integerValue;
+    }
+    else
+    {
+        [self didFailWithKey:key];
+    }
+    
+    return integer;
+}
+
+- (float)floatForKey:(NSString *)key
+{
+    NSNumber*   number = [self numberForKey:key];
+    float       aFloat = 0.0;
+    
+    CFNumberType numberType = CFNumberGetType((CFNumberRef)number);
+    
+    if (numberType == kCFNumberFloat64Type)
+    {
+        aFloat = number.floatValue;
+    }
+    else
+    {
+        [self didFailWithKey:key];
+    }
+    
+    return aFloat;
+}
+
+
+- (void)setNumber:(NSNumber*)value  forKey:(NSString*)key
+{
+    NSParameterAssert(value != nil);
+    
+    [self.jsonDict setValue:value forKey:key];
+    NSError *error;
+    
+    NSOutputStream *outputStream = [[NSOutputStream alloc] initToFileAtPath:self.jsonPath append:NO];
+    
+    [outputStream open];
+    
+    if (![NSJSONSerialization writeJSONObject:self.jsonDict toStream:outputStream options:0 error:&error]) {
+        [self didFail:error];
+    }
+    
+    [outputStream close];
+}
+
+
+- (void)setString:(NSString*)value  forKey:(NSString*)key
+{
+    NSParameterAssert(value != nil);
+    
+    [self.jsonDict setValue:value forKey:key];
+    NSError *error;
+    
+    NSOutputStream *outputStream = [[NSOutputStream alloc] initToFileAtPath:self.jsonPath append:NO];
+    
+    [outputStream open];
+    
+    if (![NSJSONSerialization writeJSONObject:self.jsonDict toStream:outputStream options:0 error:&error]) {
+        [self didFail:error];
+    }
+    
+    [outputStream close];
+}
+
+
+- (void)setBool:(BOOL)value         forKey:(NSString*)key
+{
+    NSNumber*   boolValue = [NSNumber numberWithBool:value];
+    [self setNumber:boolValue forKey:key];
+}
+
+
+- (void)setInteger:(NSInteger)value forKey:(NSString *)key
+{
+    NSNumber*   intNumber = [NSNumber numberWithInteger:value];
+    [self setNumber:intNumber forKey:key];
+}
+
+
+- (void)setFloat:(float)value     forKey:(NSString *)key {
+    NSNumber*   intNumber = [NSNumber numberWithFloat:value];
+    [self setNumber:intNumber forKey:key];
+}
+
+
+- (void)deleteValueforKey:(NSString *)key
+{
+    [self.jsonDict removeObjectForKey:key];
+    NSError *error;
+    
+    NSOutputStream *outputStream = [[NSOutputStream alloc] initToFileAtPath:self.jsonPath append:NO];
+    
+    [outputStream open];
+    
+    if (![NSJSONSerialization writeJSONObject:self.jsonDict toStream:outputStream options:0 error:&error]) {
+        [self didFail:error];
+    }
+    
+    [outputStream close];
+}
+
+
 #pragma mark - Private Methods
 
-
+/* This should only be called at initWithFileName */
 - (void) loadValuesFromBundle {
     
-    //Load files from bundle if .plist file doesn't exist
-    NSString* documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString*   documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
-    self.plistPath = [documentsPath stringByAppendingPathComponent:kParamentersFileName];
-    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.plistPath];
+    self.jsonPath             = [documentsPath stringByAppendingPathComponent:kParamentersFileName];
+    BOOL           fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.jsonPath];
+    
+    NSString *currentFileName = kParamentersFileName;
     
     if (!fileExists) {
-        NSArray *fileNameAndExtension = [kParamentersFileName componentsSeparatedByString:@"."];
+        currentFileName       = self.fileName;
         
+        NSArray *fileNameAndExtension = [currentFileName componentsSeparatedByString:@"."];
+        
+        //This is used for unit testing
+//        NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+//        NSString *bundlePath = [bundle pathForResource:fileNameAndExtension[0] ofType:fileNameAndExtension[1]];
+
         NSString *bundlePath = [[NSBundle mainBundle] pathForResource:fileNameAndExtension[0] ofType:fileNameAndExtension[1]];
         
         NSError *error;
-        if (![[NSFileManager defaultManager] copyItemAtPath:bundlePath toPath:self.plistPath error:&error]) {
+        if (![[NSFileManager defaultManager] copyItemAtPath:bundlePath toPath:self.jsonPath error:&error]) {
             NSLog(@"Copy File Error : %@", error);
+        } else {
             
-            NSData *data = [[NSFileManager defaultManager] contentsAtPath:self.plistPath];
-            
-            NSError *error;
-            self.plistDict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-            
-            if (![self.plistDict writeToFile:self.plistPath atomically: YES]) {
-                NSLog(@"FAILED TO STORE PLISTDICT - %@", self.plistPath);
-                return;
-            }
+            [self setContentOfFileToDictionary];
         }
-    }
-}
-
-
--(id)objectForKey:(NSString*)key {
-
-    id value = [self.plistDict objectForKey:key];
-    
-    if ([self isNumber:(NSString *)value]) {
-
-        NSNumber *number = [[NSNumber alloc] init];
-
-        number = @([self.plistDict[key] floatValue]);
-    }
-        
-    return value;
-}
-
-
--(NSDictionary*)dictionary {
-    return self.plistDict;
-}
-
-
--(void)setObject:(id)object forKey:(NSString*)key {
-
-    if (object != nil) {
-        
-        [self.plistDict setValue:object forKey:key];
-        
     } else {
         
-        [self.plistDict removeObjectForKey:key];
-        
+        [self setContentOfFileToDictionary];
     }
+}
+
+- (void)setContentOfFileToDictionary {
+    NSData *data = [[NSFileManager defaultManager] contentsAtPath:self.jsonPath];
     
-    if (![self.plistDict writeToFile:self.plistPath atomically: YES]) {
-        NSLog(@"FAILED TO STORE PLISTDICT - %@", self.plistPath);
-        return;
+    NSError *error;
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    
+    if (error) {
+        NSLog(@"File Parsing Error : %@", error);
+        [self didFail:error];
+    }
+    else {
+        self.jsonDict = [dict mutableCopy];
     }
 }
 
 
-- (void) removeValueforKey:(NSString *)key {
-    [self.plistDict removeObjectForKey:key];
+- (BOOL) isString:(id)value {
+    BOOL isString = [value isKindOfClass:[NSString class]];
 
-    if (![self.plistDict writeToFile:self.plistPath atomically: YES]) {
-        NSLog(@"FAILED TO STORE PLISTDICT - %@", self.plistPath);
-        return;
-    }
+    return isString;
 }
 
 
-- (BOOL) isNumber:(NSString *)string {
-    BOOL isNumber = NO;
-    
-    NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-    if ([string rangeOfCharacterFromSet:notDigits].location == NSNotFound)
-    {
-        NSLog(@"Supposedly valid");
-        isNumber = YES;
-    } else {
-        NSLog(@"Not valid");
-    }
+- (BOOL) isNumber:(id)value {
+    BOOL isNumber = [value isKindOfClass:[NSNumber class]];
     
     return isNumber;
-}
-
-
-#pragma mark - Overrided Methods
-
-- (id) valueForUndefinedKey:(NSString *)key {
-    return [self.plistDict valueForKey:key];
-}
-
-
-- (void) setValue:(id)value forUndefinedKey:(NSString *)key {
-    [self.plistDict setValue:value forKey:key];
 }
 
 
 #pragma mark - Public Methods
 
 - (NSArray *) allKeys {
-    return [self.plistDict allKeys];
+    return [self.jsonDict allKeys];
 }
 
 
 - (void) reset {
-    //Reset takes the data from document and sets values to that.
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *path = [documentsDirectory stringByAppendingPathComponent:kParamentersFileName];
     
     NSError *error;
-    if(![[NSFileManager defaultManager] removeItemAtPath:path error:&error])
-    {
+    if (![[NSFileManager defaultManager] removeItemAtPath:path error:&error]) {
+        [self didFail:error];
+        
+    } else {
+        
         [self loadValuesFromBundle];
     }
-    
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:ParametersValueChangeNotification object:nil];
 }
 
 
 #pragma mark - Delegate Methods
 
-- (void)didFail:(NSError *)error {
+- (void) didFail:(NSError *)error {
 
     if ( [self.delegate respondsToSelector:@selector(parameters:didFailWithError:)] ) {
 
@@ -183,7 +312,26 @@ NSString *const kParamentersFileName                = @"APCparameters.plist";
     }
 }
 
-- (void)didSave:(id)object {
+
+- (void) didFailWithValue:(id)value {
+    
+    if ( [self.delegate respondsToSelector:@selector(parameters:didFailWithValue:)] ) {
+        
+        [self.delegate parameters:self didFailWithValue:value];
+    }
+}
+
+
+- (void) didFailWithKey:(NSString *)key {
+    
+    if ( [self.delegate respondsToSelector:@selector(parameters:didFailWithKey:)] ) {
+        
+        [self.delegate parameters:self didFailWithKey:key];
+    }
+}
+
+
+- (void) didSave:(id)object {
 
     if ( [self.delegate respondsToSelector:@selector(parameters:didFinishSaving:)] ) {
         
@@ -191,7 +339,8 @@ NSString *const kParamentersFileName                = @"APCparameters.plist";
     }
 }
 
-- (void)didReset:(id)object {
+
+- (void) didReset:(id)object {
     
     if ( [self.delegate respondsToSelector:@selector(parameters:didFinishResetting:)] ) {
         

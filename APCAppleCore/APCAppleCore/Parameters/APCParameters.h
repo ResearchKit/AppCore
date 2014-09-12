@@ -1,9 +1,9 @@
 //
-//  Parameters.h
-//  Parameters
+//  APCParameters.h
+//  APCParameters
 //
-//  Created by Karthik Keyan on 8/14/14.
-//  Copyright (c) 2014 Karthik Keyan. All rights reserved.
+//  Created by Justin Warmkessel on 8/14/14.
+//  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -13,11 +13,13 @@ extern NSString *const ParametersValueChangeNotification;
 @class APCParameters;
 @protocol APCParametersDelegate <NSObject>
 
-- (void)parameters:(APCParameters *)parameters didFinishSaving:(id)item;
 - (void)parameters:(APCParameters *)parameters didFailWithError:(NSError *)error;
+- (void)parameters:(APCParameters *)parameters didFailWithValue:(id)value;
+- (void)parameters:(APCParameters *)parameters didFailWithKey:(NSString *)key;
 
 @optional
 
+- (void)parameters:(APCParameters *)parameters didFinishSaving:(id)item;
 - (void)parameters:(APCParameters *)parameters didFinishResetting:(id)item;
 
 @end
@@ -27,20 +29,24 @@ extern NSString *const ParametersValueChangeNotification;
 
 @property (nonatomic, weak) id <APCParametersDelegate> delegate;
 
--(id)objectForKey:(NSString*)key;
--(void)setObject:(id)object forKey:(NSString*)key;
--(NSDictionary*)dictionary;
+- (instancetype)                        init;
+- (instancetype)                        initWithFileName:(NSString *)fileName;
 
-// Use [NSObject valueForKey:] to get value and [NSObject setValue:forKey:] to set values
-- (NSArray *) allKeys;
+- (NSNumber*)                           numberForKey:(NSString*)key;
+- (NSString *)                          stringForKey:(NSString*)key;
+- (BOOL)                                boolForKey:(NSString*)key;
+- (NSInteger)                           integerForKey:(NSString*)key;
+- (float)                               floatForKey:(NSString*)key;
 
-// Clear all value and load values freshly from bundle
-- (void) reset;
+- (void)setNumber:(NSNumber*)value      forKey:(NSString*)key;
+- (void)setString:(NSString*)value      forKey:(NSString*)key;
+- (void)setBool:(BOOL)value             forKey:(NSString*)key;
+- (void)setInteger:(NSInteger)value     forKey:(NSString*)key;
+- (void)setFloat:(float)value           forKey:(NSString*)key;
+
+- (void)                                deleteValueforKey:(NSString *)key;
+
+- (NSArray *)                           allKeys;
+- (void)                                reset;
 
 @end
-
-/*
- 
-Parameters read in a data file pre-flight. Those parameters are used all over for tasks and schedule and possibly more. Parameters is an NSObject using KVC to store specific values, for example, tap interval should last for 20 seconds. Parameters should provide delegates to indicate state like error.
-
-*/

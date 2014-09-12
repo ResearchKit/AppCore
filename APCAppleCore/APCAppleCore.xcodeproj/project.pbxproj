@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7BBBEEEC19BFCB28009F2669 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BBBEEE819BFCB28009F2669 /* NSString+Extension.m */; };
-		7BBBEEED19BFCB28009F2669 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BBBEEE819BFCB28009F2669 /* NSString+Extension.m */; };
+		7B22812219C21937004BBECF /* APCParametersTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B22812119C21937004BBECF /* APCParametersTest.m */; };
 		7BBBEEEE19BFCB28009F2669 /* parameters.json in Resources */ = {isa = PBXBuildFile; fileRef = 7BBBEEEA19BFCB28009F2669 /* parameters.json */; };
 		7BBBEEEF19BFCB28009F2669 /* APCParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BBBEEEB19BFCB28009F2669 /* APCParameters.m */; };
 		7BBBEEF019BFCB28009F2669 /* APCParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BBBEEEB19BFCB28009F2669 /* APCParameters.m */; };
@@ -86,8 +85,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7BBBEEE719BFCB28009F2669 /* NSString+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extension.h"; sourceTree = "<group>"; };
-		7BBBEEE819BFCB28009F2669 /* NSString+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extension.m"; sourceTree = "<group>"; };
+		7B22812119C21937004BBECF /* APCParametersTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCParametersTest.m; sourceTree = "<group>"; };
 		7BBBEEE919BFCB28009F2669 /* APCParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCParameters.h; sourceTree = "<group>"; };
 		7BBBEEEA19BFCB28009F2669 /* parameters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = parameters.json; sourceTree = "<group>"; };
 		7BBBEEEB19BFCB28009F2669 /* APCParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCParameters.m; sourceTree = "<group>"; };
@@ -199,8 +197,6 @@
 			isa = PBXGroup;
 			children = (
 				7BBBEEEA19BFCB28009F2669 /* parameters.json */,
-				7BBBEEE719BFCB28009F2669 /* NSString+Extension.h */,
-				7BBBEEE819BFCB28009F2669 /* NSString+Extension.m */,
 				7BBBEEE919BFCB28009F2669 /* APCParameters.h */,
 				7BBBEEEB19BFCB28009F2669 /* APCParameters.m */,
 			);
@@ -334,6 +330,7 @@
 				F58668B719A3D0E000E9C375 /* APCNetworkManagerTest.m */,
 				F560075419A7A81E009F877F /* APCSageNetworkManagerTest.m */,
 				7BFEB4B419B0DA0A0009C917 /* APCSchedulerTestCase.m */,
+				7B22812119C21937004BBECF /* APCParametersTest.m */,
 				F5DAB55F199EBFF6008E4A8E /* Supporting Files */,
 			);
 			path = APCAppleCoreTests;
@@ -525,7 +522,6 @@
 				F5E4873419ABDEB500C86FC6 /* APCModel.xcdatamodeld in Sources */,
 				F59C278319A3B65700596ACC /* Reachability.m in Sources */,
 				F5E4872419ABDBF000C86FC6 /* APCDataSubstrate.m in Sources */,
-				7BBBEEEC19BFCB28009F2669 /* NSString+Extension.m in Sources */,
 				F5A8F37019B0FDF8008C9F9C /* APCTask.m in Sources */,
 				F5A8F38C19B1011F008C9F9C /* APCResult+AddOn.m in Sources */,
 				F54513C319BE76EE00988651 /* APCScheduleInterpreter.m in Sources */,
@@ -566,11 +562,11 @@
 				7BFEB4B519B0DA0A0009C917 /* APCSchedulerTestCase.m in Sources */,
 				F560075319A7A502009F877F /* APCSageNetworkManager.m in Sources */,
 				F560075519A7A81E009F877F /* APCSageNetworkManagerTest.m in Sources */,
+				7B22812219C21937004BBECF /* APCParametersTest.m in Sources */,
 				F5A8F36C19AFE757008C9F9C /* NSManagedObject+APCHelper.m in Sources */,
 				7BBBEEF019BFCB28009F2669 /* APCParameters.m in Sources */,
 				F5B39FC519BFA3C300CA7B8C /* APCDBStatus+AddOn.m in Sources */,
 				F5A8F38D19B1011F008C9F9C /* APCResult+AddOn.m in Sources */,
-				7BBBEEED19BFCB28009F2669 /* NSString+Extension.m in Sources */,
 				F594B4C119AFA2ED00AD19C9 /* APCDataMonitor.m in Sources */,
 				F54513C419BE76EE00988651 /* APCScheduleInterpreter.m in Sources */,
 				F5A8F38119B0FF78008C9F9C /* APCSchedule+AddOn.m in Sources */,
