@@ -35,14 +35,21 @@ static NSDictionary * lookupDictionary;
 + (instancetype) storeRKResult:(RKResult*) rkResult inContext: (NSManagedObjectContext*) context
 {
     __block APCResult * result;
-    [context performBlockAndWait:^{
-        result = [[self lookUpAPCResultClassForRKResult:rkResult] newObjectForContext:context];
-        [self mapRKResult:rkResult toAPCResult:result];
-        NSError * saveError;
-        [result saveToPersistentStore:&saveError];
-        [saveError handle];
-    }];
+    if ([rkResult isMemberOfClass:[RKResult class]]) {
+        [context performBlockAndWait:^{
+            result = [APCResult newObjectForContext:context];
+            [self mapRKResult:rkResult toAPCResult:result];
+            NSError * saveError;
+            [result saveToPersistentStore:&saveError];
+            [saveError handle];
+        }];
+    }
+    else
+    {
+        result = [[self lookUpAPCResultClassForRKResult:rkResult] storeRKResult:rkResult inContext:context];
+    }
     return result;
+
 }
 
 + (void) mapRKResult:(RKResult*) rkResult toAPCResult: (APCResult*) apcResult
