@@ -19,5 +19,9 @@
 //Results Cluster
 #import "APCResult+AddOn.h"
 #import "APCConsentResult+AddOn.h"
+#import "APCDataResult+AddOn.h"
+#import "APCFileResult+AddOn.h"
+#import "APCQuestionResult+AddOn.h"
+#import "APCSurveyResult+AddOn.h"
 
 #endif
