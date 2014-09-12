@@ -6,46 +6,14 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-@import UIKit;
+#import "APCConfigurableCell.h"
 
-@protocol APCCriteriaCellDelegate;
-
-
-@interface APCCriteriaCell : UITableViewCell
-
-@property (nonatomic, strong) NSArray *choices;
+@interface APCCriteriaCell : APCConfigurableCell
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 
 @property (weak, nonatomic) IBOutlet UILabel *questionLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *captionLabel;
-
-@property (weak, nonatomic) IBOutlet UITextField *answerTextField;
-
-@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
-
-@property (nonatomic, strong) UIDatePicker *datePicker;
-
-@property (nonatomic, weak) id<APCCriteriaCellDelegate> delegate;
-
-- (void) setNeedsChoiceInputCell;
-
-- (void) setNeedsTextInputCell;
-
-- (void) setNeedsDateInputCell;
-
-- (NSUInteger) selectedChoiceIndex;
-
-- (void) setSelectedChoiceIndex:(NSUInteger)index;
-
-@end
-
-
-@protocol APCCriteriaCellDelegate <NSObject>
-
-@optional
-- (void) criteriaCellValueChanged:(APCCriteriaCell *)cell;
-
 
 @end

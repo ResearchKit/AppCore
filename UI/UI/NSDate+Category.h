@@ -8,8 +8,14 @@
 
 @import Foundation;
 
+extern NSString * const NSDateDefaultDateFormat;
+
 @interface NSDate (Category)
 
-- (NSString *) toStringWithFormat:(NSString *)formate;
+/**
+ * @brief convert date to give formate
+ * @param format - format for the date to be converted, Use by NSDateFormatter, if format = nil then NSDateDefaultDateFormat will be use by this method
+ */
+- (NSString *) toStringWithFormat:(NSString *)format;
 
 @end

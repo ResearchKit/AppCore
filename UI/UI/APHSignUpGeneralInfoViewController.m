@@ -9,7 +9,7 @@
 #import "APCProfile.h"
 #import "APHUserInfoCell.h"
 #import "UIView+Category.h"
-#import "APCUserInfoField.h"
+#import "APCTableViewItem.h"
 #import "APCHealthKitProxy.h"
 #import "APCStepProgressBar.h"
 #import "UITableView+Appearance.h"
@@ -20,10 +20,6 @@
 // Regular Expressions
 static NSString * const kAPCUserInfoFieldUserNameRegEx          = @"[A-Za-z0-9_.]+";
 static NSString * const kAPCUserInfoFieldEmailRegEx             = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-static NSString * const kAPCUserInfoFieldWeightRegEx            = @"[0-9]{1,3}";
-
-// Date Formatter
-static NSString * const kAPCUserInfoFieldDateOfBirthFormat      = @"MMM dd, yyyy";
 
 
 @interface APHSignUpGeneralInfoViewController ()
@@ -54,61 +50,60 @@ static NSString * const kAPCUserInfoFieldDateOfBirthFormat      = @"MMM dd, yyyy
     NSMutableArray *fields = [NSMutableArray array];
     
     {
-        APCUserInfoTextField *field = [APCUserInfoTextField new];
+        APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
         field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Username", @"");
         field.placeholder = NSLocalizedString(@"Add Username", @"");
         field.value = nil;
         field.keyboardType = UIKeyboardTypeDefault;
         field.regularExpression = kAPCUserInfoFieldUserNameRegEx;
-        field.identifier = NSStringFromClass([APCUserInfoTextField class]);
+        field.identifier = NSStringFromClass([APCTableViewTextFieldItem class]);
         
         [fields addObject:field];
     }
     
     {
-        APCUserInfoTextField *field = [APCUserInfoTextField new];
+        APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
         field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Password", @"");
         field.placeholder = NSLocalizedString(@"Add Password", @"");
         field.value = nil;
         field.secure = YES;
         field.keyboardType = UIKeyboardTypeDefault;
-        field.identifier = NSStringFromClass([APCUserInfoTextField class]);
+        field.identifier = NSStringFromClass([APCTableViewTextFieldItem class]);
         
         [fields addObject:field];
     }
     
     {
-        APCUserInfoTextField *field = [APCUserInfoTextField new];
+        APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
         field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Email", @"");
         field.placeholder = NSLocalizedString(@"Add Email Address", @"");
         field.value = nil;
         field.keyboardType = UIKeyboardTypeEmailAddress;
-        field.identifier = NSStringFromClass([APCUserInfoTextField class]);
+        field.identifier = NSStringFromClass([APCTableViewTextFieldItem class]);
         
         [fields addObject:field];
     }
     
     {
-        APCUserInfoDatePickerField *field = [APCUserInfoDatePickerField new];
+        APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
         field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Birthdate", @"");
         field.placeholder = NSLocalizedString(@"MMMM DD, YYYY", @"");
-        field.dateFormate = kAPCUserInfoFieldDateOfBirthFormat;
         field.date = nil;
-        field.identifier = NSStringFromClass([APCUserInfoDatePickerField class]);
+        field.identifier = NSStringFromClass([APCTableViewDatePickerItem class]);
         
         [fields addObject:field];
     }
     
     {
-        APCUserInfoSegmentField *field = [APCUserInfoSegmentField new];
+        APCTableViewSegmentItem *field = [APCTableViewSegmentItem new];
         field.style = UITableViewCellStyleValue1;
         field.segments = @[ NSLocalizedString(@"Male", @""), NSLocalizedString(@"Female", @""), NSLocalizedString(@"Other", @"") ];
         field.selectedIndex = 0;
-        field.identifier = NSStringFromClass([APCUserInfoSegmentField class]);
+        field.identifier = NSStringFromClass([APCTableViewSegmentItem class]);
         
         [fields addObject:field];
     }

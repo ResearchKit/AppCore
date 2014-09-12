@@ -6,10 +6,11 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCCriteria.h"
 #import "APCCriteriaCell.h"
 #import "UIView+Category.h"
 #import "NSDate+Category.h"
+#import "APCTableViewItem.h"
+#import "APCSegmentControl.h"
 #import "APCStepProgressBar.h"
 #import "APCSignupCriteriaViewController.h"
 
@@ -18,7 +19,7 @@ static NSString const *kAPCSignupCriteriaTableViewCellIdentifier    =   @"Criter
 static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 
-@interface APCSignupCriteriaViewController () <UITableViewDataSource, UITableViewDelegate, APCCriteriaCellDelegate>
+@interface APCSignupCriteriaViewController () <UITableViewDataSource, UITableViewDelegate, APCConfigurableCellDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -34,35 +35,37 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     self.criterias = [NSMutableArray array];
     
     {
-        APCCriteria *criteria = [APCCriteria new];
-        criteria.question = @"I am a:";
-        criteria.answers = @[ @"Patient", @"Caregiver" ];
-        criteria.answerType = APCCriteriaAnswerTypeChoice;
-        [self.criterias addObject:criteria];
+        APCTableViewSegmentItem *item = [APCTableViewSegmentItem new];
+        item.detailText = NSLocalizedString(@"I am a:", @"");
+        item.segments = @[ NSLocalizedString(@"Patient", @""), NSLocalizedString(@"Caregiver", @"") ];
+        item.selectedIndex = 0;
+        [self.criterias addObject:item];
     }
     
     {
-        APCCriteria *criteria = [APCCriteria new];
-        criteria.question = @"Do you have Parkinson's Desease?";
-        criteria.answers = @[ @"Yes", @"No" ];
-        criteria.answerType = APCCriteriaAnswerTypeChoice;
-        [self.criterias addObject:criteria];
+        APCTableViewSegmentItem *item = [APCTableViewSegmentItem new];
+        item.detailText = NSLocalizedString(@"Do you have Parkinson's Disease?", @"");
+        item.segments = @[ NSLocalizedString(@"Yes", @""), NSLocalizedString(@"No", @""), NSLocalizedString(@"I don't know", @"") ];
+        item.selectedIndex = 2;
+        [self.criterias addObject:item];
     }
     
     {
-        APCCriteria *criteria = [APCCriteria new];
-        criteria.question = @"When were you diagnosed?";
-        criteria.answers = @[ @"June 4, 1992" ];
-        criteria.answerType = APCCriteriaAnswerTypeDate;
-        [self.criterias addObject:criteria];
+        APCTableViewDatePickerItem *item = [APCTableViewDatePickerItem new];
+        item.detailText = NSLocalizedString(@"When were you diagnosed?", @"");
+        item.caption = NSLocalizedString(@"Date", @"");
+        item.placeholder = @"MMMM DD, YYYY";
+        item.textAlignnment = NSTextAlignmentRight;
+        item.date = [NSDate date];
+        [self.criterias addObject:item];
     }
     
     {
-        APCCriteria *criteria = [APCCriteria new];
-        criteria.question = @"What is the level of severity?";
-        criteria.answers = @[ @"Mid", @"Moderate", @"Advanced" ];
-        criteria.answerType = APCCriteriaAnswerTypeChoice;
-        [self.criterias addObject:criteria];
+        APCTableViewSegmentItem *item = [APCTableViewSegmentItem new];
+        item.detailText = NSLocalizedString(@"What is the level of severity?", @"");
+        item.segments = @[ NSLocalizedString(@"Mid", @""), NSLocalizedString(@"Moderate", @""), NSLocalizedString(@"Advanced", @"") ];
+        item.selectedIndex = 1;
+        [self.criterias addObject:item];
     }
     
     [self addNavigationItems];
@@ -114,30 +117,31 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    APCCriteria *criteria = self.criterias[indexPath.row];
+    APCTableViewItem *item = self.criterias[indexPath.row];
     
     APCCriteriaCell *cell = (APCCriteriaCell *)[tableView dequeueReusableCellWithIdentifier:(NSString *)kAPCSignupCriteriaTableViewCellIdentifier];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.delegate = self;
-    cell.questionLabel.text = criteria.question;
+    cell.questionLabel.text = item.detailText;
+    cell.captionLabel.text = item.caption;
     
-    switch (criteria.answerType) {
-        case APCCriteriaAnswerTypeChoice:
-            [cell setNeedsChoiceInputCell];
-            
-            cell.choices = criteria.answers;
-            [cell setSelectedChoiceIndex:criteria.answerIndex];
-            break;
-            
-        case APCCriteriaAnswerTypeDate:
-            [cell setNeedsDateInputCell];
-            
-            cell.captionLabel.text = NSLocalizedString(@"Date", @"");
-            cell.answerTextField.text = criteria.answers[criteria.answerIndex];
-            break;
-            
-        default:
-            break;
+    if ([item isKindOfClass:[APCTableViewSegmentItem class]]) {
+        cell.segmentControl.hidden = NO;
+        
+        [cell setSegments:[(APCTableViewSegmentItem *)item segments] selectedIndex:[(APCTableViewSegmentItem *)item selectedIndex]];
+        cell.segmentControl.segmentBorderColor = [UIColor clearColor];
+    }
+    else if ([item isKindOfClass:[APCTableViewDatePickerItem class]]) {
+        cell.captionLabel.hidden = NO;
+        cell.valueTextField.hidden = NO;
+        
+        NSDate *date = [(APCTableViewDatePickerItem *)item date];
+        cell.valueTextField.text = [date toStringWithFormat:[(APCTableViewDatePickerItem *)item dateFormat]];
+        cell.valueTextField.placeholder = [(APCTableViewDatePickerItem *)item placeholder];
+        cell.valueTextField.textAlignment = [(APCTableViewDatePickerItem *)item textAlignnment];
+        cell.valueTextField.inputView = cell.datePicker;
+        
+        cell.datePicker.date = date;
     }
     
     return cell;
@@ -153,24 +157,20 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 #pragma mark - APCCriteriaCellDelegate
 
-- (void) criteriaCellValueChanged:(APCCriteriaCell *)cell {
+- (void) configurableCell:(APCConfigurableCell *)cell textValueChanged:(NSString *)text {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    APCCriteria *criteria = self.criterias[indexPath.row];
+    APCTableViewTextFieldItem *criteria = self.criterias[indexPath.row];
+    criteria.value = text;
+}
+
+- (void) configurableCell:(APCConfigurableCell *)cell dateValueChanged:(NSDate *)date {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    switch (criteria.answerType) {
-        case APCCriteriaAnswerTypeChoice:
-            criteria.answerIndex = cell.selectedChoiceIndex;
-            break;
-            
-        case APCCriteriaAnswerTypeDate:
-            criteria.answers = @[ [cell.datePicker.date toStringWithFormat:(NSString *)APCCriteriaDateFormate] ];
-            cell.answerTextField.text = criteria.answers[criteria.answerIndex ];
-            break;
-            
-        default:
-            break;
-    }
+    APCTableViewDatePickerItem *criteria = self.criterias[indexPath.row];
+    criteria.date = cell.datePicker.date;
+    
+    cell.valueTextField.text = [cell.datePicker.date toStringWithFormat:nil];
 }
 
 

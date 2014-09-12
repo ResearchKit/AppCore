@@ -12,7 +12,7 @@
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qts-Te-vnn" id="kOC-YS-AFr">
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" id="9da-BU-dzh">
+                    <view clipsSubviews="YES" contentMode="scaleToFill" id="9da-BU-dzh">
                         <rect key="frame" x="10" y="10" width="300" height="88"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -30,41 +30,16 @@
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" id="gA8-Of-Dp5">
-                                <rect key="frame" x="154" y="44" width="138" height="45"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="qts-Te-vnn" id="NaX-kC-YKB"/>
-                                </connections>
-                            </textField>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="RXv-jw-0pd" customClass="APCSegmentControl">
-                                <rect key="frame" x="0.0" y="44" width="300" height="29"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <segments>
-                                    <segment title="First"/>
-                                    <segment title="Second"/>
-                                    <segment title="Three"/>
-                                </segments>
-                                <connections>
-                                    <action selector="segmentValueChanged" destination="qts-Te-vnn" eventType="valueChanged" id="QMi-0I-izL"/>
-                                </connections>
-                            </segmentedControl>
                         </subviews>
-                        <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                 </subviews>
             </tableViewCellContentView>
             <connections>
-                <outlet property="answerTextField" destination="gA8-Of-Dp5" id="XsB-8X-zmr"/>
                 <outlet property="captionLabel" destination="tqf-V3-Koo" id="VXe-8L-Rqz"/>
                 <outlet property="containerView" destination="9da-BU-dzh" id="MG9-SS-8xN"/>
                 <outlet property="questionLabel" destination="wV5-cR-iOz" id="pIW-xY-32g"/>
-                <outlet property="segmentControl" destination="RXv-jw-0pd" id="fDV-p9-rAR"/>
             </connections>
-            <point key="canvasLocation" x="237" y="307"/>
+            <point key="canvasLocation" x="-411" y="161"/>
         </tableViewCell>
     </objects>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

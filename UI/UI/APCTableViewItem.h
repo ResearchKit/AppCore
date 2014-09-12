@@ -8,7 +8,7 @@
 
 @import UIKit;
 
-@interface APCUserInfoField : NSObject
+@interface APCTableViewItem : NSObject
 
 @property (nonatomic, readwrite) UITableViewCellStyle style;
 
@@ -28,7 +28,7 @@
 
 
 
-@interface APCUserInfoTextField : APCUserInfoField
+@interface APCTableViewTextFieldItem : APCTableViewItem
 
 @property (nonatomic, readwrite) UIKeyboardType keyboardType;
 
@@ -42,11 +42,11 @@
 
 
 
-@interface APCUserInfoDatePickerField : APCUserInfoField
+@interface APCTableViewDatePickerItem : APCTableViewItem
 
 @property (nonatomic, copy) NSString *placeholder;
 
-@property (nonatomic, copy) NSString *dateFormate;
+@property (nonatomic, copy) NSString *dateFormat;
 
 @property (nonatomic, strong) NSDate *date;
 
@@ -54,7 +54,7 @@
 
 
 
-@interface APCUserInfoCustomPickerField : APCUserInfoField
+@interface APCTableViewCustomPickerItem : APCTableViewItem
 
 @property (nonatomic, readwrite, getter = isDetailDiscloserStyle) BOOL detailDiscloserStyle;
 
@@ -68,7 +68,7 @@
 
 
 
-@interface APCUserInfoSegmentField : APCUserInfoField
+@interface APCTableViewSegmentItem : APCTableViewItem
 
 @property (nonatomic, readwrite) NSUInteger selectedIndex;
 
@@ -78,7 +78,7 @@
 
 
 
-@interface APCUserInfoSwitchField : APCUserInfoField
+@interface APCTableViewSwitchItem : APCTableViewItem
 
 @property (nonatomic, readwrite, getter = isOn) BOOL on;
 

@@ -7,11 +7,15 @@
 //
 
 #import "UIView+Category.h"
-#import "APCUserInfoField.h"
+#import "APCTableViewItem.h"
 #import "APCStepProgressBar.h"
 #import "UITableView+Appearance.h"
 #import "APCSignupTouchIDViewController.h"
 #import "APHSignUpMedicalInfoViewController.h"
+
+// Regular Expression
+static NSString * const kAPCUserInfoFieldWeightRegEx            = @"[0-9]{1,3}";
+
 
 @interface APHSignUpMedicalInfoViewController ()
 
@@ -52,7 +56,7 @@
     NSMutableArray *fields = [NSMutableArray array];
     
     {
-        APCUserInfoCustomPickerField *field = [APCUserInfoCustomPickerField new];
+        APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
         field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Medical Conditions", @"");
         field.detailDiscloserStyle = YES;
@@ -63,7 +67,7 @@
     }
     
     {
-        APCUserInfoCustomPickerField *field = [APCUserInfoCustomPickerField new];
+        APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
         field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Medication", @"");
         field.detailDiscloserStyle = YES;
@@ -74,7 +78,7 @@
     }
     
     {
-        APCUserInfoCustomPickerField *field = [APCUserInfoCustomPickerField new];
+        APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
         field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Blood Type", @"");
         field.detailDiscloserStyle = YES;
@@ -85,7 +89,7 @@
     }
     
     {
-        APCUserInfoCustomPickerField *field = [APCUserInfoCustomPickerField new];
+        APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
         field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Height", @"");
         field.detailDiscloserStyle = YES;
@@ -96,10 +100,11 @@
     }
     
     {
-        APCUserInfoTextField *field = [APCUserInfoTextField new];
+        APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
         field.style = UITableViewCellStyleValue1;
         field.caption = NSLocalizedString(@"Weight", @"");
         field.placeholder = NSLocalizedString(@"lb", @"");
+        field.regularExpression = kAPCUserInfoFieldWeightRegEx;
         field.value = nil;
         field.keyboardType = UIKeyboardTypeNumberPad;
         field.textAlignnment = NSTextAlignmentRight;

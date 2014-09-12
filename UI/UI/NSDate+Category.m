@@ -8,13 +8,19 @@
 
 #import "NSDate+Category.h"
 
+NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
+
 @implementation NSDate (Category)
 
-- (NSString *) toStringWithFormat:(NSString *)formate {
+- (NSString *) toStringWithFormat:(NSString *)format {
+    if (!format) {
+        format = NSDateDefaultDateFormat;
+    }
+    
     NSString *formattedString = nil;
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    dateFormatter.dateFormat = formate;
+    dateFormatter.dateFormat = format;
     formattedString = [dateFormatter stringFromDate:self];
     
     return formattedString;

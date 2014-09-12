@@ -8,6 +8,24 @@
 
 @import UIKit;
 
+
+#pragma mark - APCSegmentControlBorderLayer
+
+@interface APCSegmentControlBorderLayer : CALayer
+
+- (NSArray *) segmentLayers;
+
+@end
+
+
+#pragma mark - APCSegmentControl
+
 @interface APCSegmentControl : UISegmentedControl
+
+@property (nonatomic, strong) UIColor *segmentBorderColor;
+
+@property (nonatomic, strong) APCSegmentControlBorderLayer *borderLayer;
+
+- (void) setSegmentColor:(UIColor *)color atIndex:(NSUInteger)index;
 
 @end

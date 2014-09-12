@@ -9,7 +9,7 @@
 #import "APCProfile.h"
 #import "NSDate+Category.h"
 #import "UIView+Category.h"
-#import "APCUserInfoField.h"
+#import "APCTableViewItem.h"
 #import "NSString+Category.h"
 #import "APCSegmentControl.h"
 #import "UIScrollView+Category.h"
@@ -103,7 +103,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     APCUserInfoCell *cell;
     
-    APCUserInfoField *field = self.fields[indexPath.row];
+    APCTableViewItem *field = self.fields[indexPath.row];
     
     if (field) {
         cell = [tableView dequeueReusableCellWithIdentifier:field.identifier];
@@ -118,8 +118,8 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
         cell.valueTextRegularExpression = field.regularExpression;
         
         
-        if ([field isKindOfClass:[APCUserInfoTextField class]]) {
-            APCUserInfoTextField *textField = (APCUserInfoTextField *)field;
+        if ([field isKindOfClass:[APCTableViewTextFieldItem class]]) {
+            APCTableViewTextFieldItem *textField = (APCTableViewTextFieldItem *)field;
             
             cell.accessoryView = cell.valueTextField;
             
@@ -128,21 +128,21 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
             cell.valueTextField.secureTextEntry = textField.isSecure;
             cell.valueTextField.keyboardType = textField.keyboardType;
         }
-        else if ([field isKindOfClass:[APCUserInfoDatePickerField class]]) {
-            APCUserInfoDatePickerField *datePickerField = (APCUserInfoDatePickerField *)field;
+        else if ([field isKindOfClass:[APCTableViewDatePickerItem class]]) {
+            APCTableViewDatePickerItem *datePickerField = (APCTableViewDatePickerItem *)field;
             
             cell.accessoryView = cell.valueTextField;
             
             cell.valueTextField.placeholder = datePickerField.placeholder;
-            cell.valueTextField.text = [datePickerField.date toStringWithFormat:datePickerField.dateFormate];
+            cell.valueTextField.text = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
             cell.valueTextField.inputView = cell.datePicker;
             
             if (datePickerField.date) {
                 cell.datePicker.date = datePickerField.date;
             }
         }
-        else if ([field isKindOfClass:[APCUserInfoCustomPickerField class]]) {
-            APCUserInfoCustomPickerField *customPickerField = (APCUserInfoCustomPickerField *)field;
+        else if ([field isKindOfClass:[APCTableViewCustomPickerItem class]]) {
+            APCTableViewCustomPickerItem *customPickerField = (APCTableViewCustomPickerItem *)field;
             
             [cell setCustomPickerValues:customPickerField.pickerData selectedRowIndices:customPickerField.selectedRowIndices];
             
@@ -158,8 +158,8 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
                 cell.valueTextField.text = customPickerField.stringValue;
             }
         }
-        else if ([field isKindOfClass:[APCUserInfoSegmentField class]]) {
-            APCUserInfoSegmentField *segmentPickerField = (APCUserInfoSegmentField *)field;
+        else if ([field isKindOfClass:[APCTableViewSegmentItem class]]) {
+            APCTableViewSegmentItem *segmentPickerField = (APCTableViewSegmentItem *)field;
             
             cell.accessoryView = cell.segmentControl;
             
@@ -184,9 +184,9 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
     
     APCUserInfoCell *cell = (APCUserInfoCell *)[tableView cellForRowAtIndexPath:indexPath];
     
-    APCUserInfoField *field = self.fields[indexPath.row];
+    APCTableViewItem *field = self.fields[indexPath.row];
     
-    if ([field isKindOfClass:[APCUserInfoCustomPickerField class]] && [(APCUserInfoCustomPickerField *)field isDetailDiscloserStyle]) {
+    if ([field isKindOfClass:[APCTableViewCustomPickerItem class]] && [(APCTableViewCustomPickerItem *)field isDetailDiscloserStyle]) {
         [cell.valueTextField becomeFirstResponder];
     }
 }
@@ -194,46 +194,46 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 
 #pragma mark - InputCellDelegate
 
-- (void) userInfoCellDidBecomFirstResponder:(APCUserInfoCell *)cell {
+- (void) configurableCellDidBecomFirstResponder:(APCUserInfoCell *)cell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
-- (void) userInfoCell:(APCUserInfoCell *)cell textValueChanged:(NSString *)text {
+- (void) configurableCell:(APCUserInfoCell *)cell textValueChanged:(NSString *)text {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    APCUserInfoTextField *field = self.fields[indexPath.row];
+    APCTableViewTextFieldItem *field = self.fields[indexPath.row];
     field.value = text;
 }
 
-- (void) userInfoCell:(APCUserInfoCell *)cell switchValueChanged:(BOOL)isOn {
+- (void) configurableCell:(APCUserInfoCell *)cell switchValueChanged:(BOOL)isOn {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    APCUserInfoSwitchField *field = self.fields[indexPath.row];
+    APCTableViewSwitchItem *field = self.fields[indexPath.row];
     field.on = isOn;
 }
 
-- (void) userInfoCell:(APCUserInfoCell *)cell segmentIndexChanged:(NSUInteger)index {
+- (void) configurableCell:(APCUserInfoCell *)cell segmentIndexChanged:(NSUInteger)index {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    APCUserInfoSegmentField *field = self.fields[indexPath.row];
+    APCTableViewSegmentItem *field = self.fields[indexPath.row];
     field.selectedIndex = index;
 }
 
-- (void) userInfoCell:(APCUserInfoCell *)cell dateValueChanged:(NSDate *)date {
+- (void) configurableCell:(APCUserInfoCell *)cell dateValueChanged:(NSDate *)date {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    APCUserInfoDatePickerField *field = self.fields[indexPath.row];
+    APCTableViewDatePickerItem *field = self.fields[indexPath.row];
     field.date = date;
     
-    cell.valueTextField.text = [field.date toStringWithFormat:field.dateFormate];
+    cell.valueTextField.text = [field.date toStringWithFormat:field.dateFormat];
 }
 
-- (void) userInfoCell:(APCUserInfoCell *)cell customPickerValueChanged:(NSArray *)selectedRowIndices {
+- (void) configurableCell:(APCUserInfoCell *)cell customPickerValueChanged:(NSArray *)selectedRowIndices {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    APCUserInfoCustomPickerField *field = self.fields[indexPath.row];
+    APCTableViewCustomPickerItem *field = self.fields[indexPath.row];
     field.selectedRowIndices = selectedRowIndices;
     
     if (field.isDetailDiscloserStyle) {

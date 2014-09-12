@@ -23,19 +23,19 @@ static CGFloat const kAPCPasscodeViewPinLength = 4;
 - (void) awakeFromNib {
     [super awakeFromNib];
     
-    [self loadViews];
+    [self addControls];
 }
 
 - (instancetype) initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [self loadViews];
+        [self addControls];
     }
     
     return self;
 }
 
-- (void) loadViews {
+- (void) addControls {
     _digitViews = [NSMutableArray new];
     
     {

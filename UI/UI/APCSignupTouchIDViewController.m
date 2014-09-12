@@ -141,7 +141,11 @@
 #pragma mark - Private Methods
 
 - (void) next {
-    [self.navigationController pushViewController:[APCSignupCriteriaViewController new] animated:YES];
+    NSMutableArray *viewControllers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+    [viewControllers removeLastObject];
+    [viewControllers addObject:[APCSignupCriteriaViewController new]];
+    
+    [self.navigationController setViewControllers:viewControllers animated:YES];
 }
 
 

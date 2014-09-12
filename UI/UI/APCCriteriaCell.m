@@ -7,33 +7,52 @@
 //
 
 #import "APCCriteriaCell.h"
+#import "APCSegmentControl.h"
 #import "UITableView+Appearance.h"
 
 static CGFloat kAPCCriteriaCellContainerViewMargin  = 10;
 
-@interface APCCriteriaCell () <UITextFieldDelegate>
+@interface APCCriteriaCell ()
+
+@property (nonatomic, strong) CALayer *separatorLayer;
 
 @end
-
 
 @implementation APCCriteriaCell
 
 - (void) awakeFromNib {
     [super awakeFromNib];
     
+    [self addControls];
+    [self applyStyle];
+}
+
+- (void) addControls {
+    [self.containerView addSubview:self.valueTextField];
+    [self.containerView addSubview:self.segmentControl];
+    
+    self.separatorLayer = [CALayer layer];
+    [self.containerView.layer addSublayer:self.separatorLayer];
+    
+    self.valueTextField.hidden = YES;
+    self.segmentControl.hidden = YES;
+    self.captionLabel.hidden = YES;
+}
+
+- (void) applyStyle {
     self.textLabel.backgroundColor = [UIColor clearColor];
     
-    UIColor *color = [UITableView controlsBorderColor];
+    self.separatorLayer.backgroundColor = [UITableView controlsBorderColor].CGColor;
+}
+
+- (void) prepareForReuse {
+    [super prepareForReuse];
     
-    CGFloat borderWidth = [UITableView controlsBorderWidth];
+    self.segmentControl.borderLayer.borderColor = [UIColor clearColor].CGColor;
     
-    self.containerView.layer.borderWidth = borderWidth;
-    self.containerView.layer.borderColor = color.CGColor;
-    
-    self.questionLabel.layer.borderWidth = borderWidth;
-    self.questionLabel.layer.borderColor = color.CGColor;
-    
-    self.answerTextField.tintColor = [UIColor clearColor];
+    self.segmentControl.hidden = YES;
+    self.valueTextField.hidden = YES;
+    self.captionLabel.hidden = YES;
 }
 
 - (void) layoutSubviews {
@@ -52,6 +71,9 @@ static CGFloat kAPCCriteriaCellContainerViewMargin  = 10;
     CGRectDivide(containerBounds, &textLabelFrame, &remainingFrame, containerBounds.size.height/2, CGRectMinYEdge);
     self.questionLabel.frame = textLabelFrame;
     
+    CGRect separatorFrame = CGRectMake(0, textLabelFrame.size.height, textLabelFrame.size.width, 1);
+    self.separatorLayer.frame = separatorFrame;
+    
     if (!self.segmentControl.isHidden) {
         [self.segmentControl setFrame:remainingFrame];
     }
@@ -64,106 +86,8 @@ static CGFloat kAPCCriteriaCellContainerViewMargin  = 10;
         self.captionLabel.frame = captionFrame;
     }
     
-    if (!self.answerTextField.isHidden) {
-        self.answerTextField.frame = remainingFrame;
-    }
-}
-
-
-#pragma mark - UITextFieldDelegate
-
-
-- (void) textFieldDidEndEditing:(UITextField *)textField {
-    if ([self.delegate respondsToSelector:@selector(criteriaCellValueChanged:)]) {
-        [self.delegate criteriaCellValueChanged:self];
-    }
-}
-
-- (BOOL) textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    
-    return YES;
-}
-
-
-#pragma mark - Public Methods
-
-- (void) setChoices:(NSArray *)choices {
-    if (_choices != choices) {
-        _choices = choices;
-        
-        [self.segmentControl removeAllSegments];
-        
-        for (int i = 0; i < self.choices.count; i++) {
-            [self.segmentControl insertSegmentWithTitle:self.choices[i] atIndex:i animated:NO];
-        }
-    }
-}
-
-
-- (void) setNeedsChoiceInputCell {
-    self.segmentControl.hidden = NO;
-    
-    self.captionLabel.hidden = YES;
-    self.answerTextField.hidden = YES;
-    
-    [self removeDatePicker];
-}
-
-- (void) setNeedsTextInputCell {
-    self.segmentControl.hidden = YES;
-    
-    self.captionLabel.hidden = NO;
-    self.answerTextField.hidden = NO;
-    
-    [self removeDatePicker];
-}
-
-- (void) setNeedsDateInputCell {
-    self.segmentControl.hidden = YES;
-    
-    self.captionLabel.hidden = NO;
-    self.answerTextField.hidden = NO;
-    
-    if (!self.datePicker) {
-        self.datePicker = [[UIDatePicker alloc] init];
-        self.datePicker.backgroundColor = [UIColor whiteColor];
-        self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
-        [self.datePicker addTarget:self action:@selector(datePickerValueChanged) forControlEvents:UIControlEventValueChanged];
-    }
-    
-    self.answerTextField.inputView = self.datePicker;
-}
-
-- (NSUInteger) selectedChoiceIndex {
-    return self.segmentControl.selectedSegmentIndex;
-}
-
-- (void) setSelectedChoiceIndex:(NSUInteger)index {
-    [self.segmentControl setSelectedSegmentIndex:index];
-}
-
-
-#pragma mark - IBActions
-
-- (IBAction) segmentValueChanged {
-    if ([self.delegate respondsToSelector:@selector(criteriaCellValueChanged:)]) {
-        [self.delegate criteriaCellValueChanged:self];
-    }
-}
-
-
-#pragma mark - Private Methods
-
-- (void) removeDatePicker {
-    self.datePicker = nil;
-    self.answerTextField.inputAccessoryView = nil;
-    self.answerTextField.inputView = nil;
-}
-
-- (void) datePickerValueChanged {
-    if ([self.delegate respondsToSelector:@selector(criteriaCellValueChanged:)]) {
-        [self.delegate criteriaCellValueChanged:self];
+    if (!self.valueTextField.isHidden) {
+        self.valueTextField.frame = remainingFrame;
     }
 }
 

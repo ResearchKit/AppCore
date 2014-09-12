@@ -10,9 +10,23 @@
 #import "APCSegmentControl.h"
 #import "UISegmentedControl+Appearance.h"
 
-@interface APCSegmentControl ()
+static CGFloat const kAPCSegmentControlBorderWidth      = 1.0;
 
-@property (nonatomic, strong) CALayer *borderLayer;
+
+#pragma mark - APCSegmentControlBorderLayer
+
+@implementation APCSegmentControlBorderLayer
+
+- (NSArray *) segmentLayers {
+    return self.sublayers;
+}
+
+@end
+
+
+#pragma mark - APCSegmentControl
+
+@interface APCSegmentControl ()
 
 @end
 
@@ -63,12 +77,39 @@
     
     self.borderLayer.frame = self.bounds;
     
-    CGFloat segmentWidth = self.innerWidth/self.borderLayer.sublayers.count;
+    CGFloat segmentWidth = self.innerWidth/self.borderLayer.segmentLayers.count;
     
-    for (int i = 0; i < self.borderLayer.sublayers.count; i++) {
-        CALayer *separator = self.borderLayer.sublayers[i];
+    NSArray *segmentLayers = self.borderLayer.segmentLayers;
+    for (int i = 0; i < segmentLayers.count; i++) {
+        CALayer *separator = segmentLayers[i];
         separator.frame = CGRectMake(segmentWidth * (i + 1), 0, 1, self.innerHeight);
     }
+}
+
+
+#pragma mark - Getter
+
+- (void) setSegmentBorderColor:(UIColor *)segmentBorderColor {
+    if (_segmentBorderColor != segmentBorderColor) {
+        _segmentBorderColor = segmentBorderColor;
+        
+        self.borderLayer.borderColor = segmentBorderColor.CGColor;
+    }
+}
+
+- (UIColor *) borderColor {
+    if (!_segmentBorderColor) {
+        _segmentBorderColor = [UISegmentedControl borderColor];
+    }
+    
+    return _segmentBorderColor;
+}
+
+
+#pragma mark - Public Methods
+
+- (void) setSegmentColor:(UIColor *)color atIndex:(NSUInteger)index {
+    [(CALayer *)self.borderLayer.segmentLayers[index] setBackgroundColor:color.CGColor];
 }
 
 
@@ -83,15 +124,15 @@
 
 - (void) layoutBorders {
     if (!self.borderLayer) {
-        self.borderLayer = [CALayer layer];
+        self.borderLayer = [APCSegmentControlBorderLayer layer];
+        self.borderLayer.borderColor = self.borderColor.CGColor;
+        self.borderLayer.borderWidth = kAPCSegmentControlBorderWidth;
         [self.layer addSublayer:self.borderLayer];
     }
     
-    [self.borderLayer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
+    [self.borderLayer.segmentLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     
     self.borderLayer.frame = self.bounds;
-    self.borderLayer.borderColor = [UISegmentedControl borderColor].CGColor;
-    self.borderLayer.borderWidth = 1.0;
     
     for (int i = 0; i < self.numberOfSegments; i++) {
         CALayer *separator = [CALayer layer];

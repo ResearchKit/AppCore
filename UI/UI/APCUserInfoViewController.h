@@ -9,7 +9,7 @@
 #import "APCUserInfoCell.h"
 #import "APCViewController.h"
 
-@interface APCUserInfoViewController : APCViewController <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, APCUserInfoCellDelegate>
+@interface APCUserInfoViewController : APCViewController <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, APCConfigurableCellDelegate>
 
 @property (nonatomic, strong) NSArray *fields;
 

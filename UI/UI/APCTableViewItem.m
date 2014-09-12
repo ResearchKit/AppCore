@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCUserInfoField.h"
+#import "APCTableViewItem.h"
 
-@implementation APCUserInfoField
+@implementation APCTableViewItem
 
 - (NSString *) identifier {
     return @"cell";
@@ -18,19 +18,19 @@
 
 
 
-@implementation APCUserInfoTextField
+@implementation APCTableViewTextFieldItem
 
 @end
 
 
 
-@implementation APCUserInfoDatePickerField
+@implementation APCTableViewDatePickerItem
 
 @end
 
 
 
-@implementation APCUserInfoCustomPickerField
+@implementation APCTableViewCustomPickerItem
 
 - (NSString *) stringValue {
     NSMutableString *string = [NSMutableString string];
@@ -56,6 +56,6 @@
 
 
 
-@implementation APCUserInfoSegmentField
+@implementation APCTableViewSegmentItem
 
 @end

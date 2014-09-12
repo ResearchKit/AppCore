@@ -15,17 +15,16 @@
 @end
 
 @implementation APCIntroVideoViewController
-//
-//- (void) loadView {
-//    self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//    self.view.backgroundColor = [UIColor whiteColor];
-//}
 
 - (instancetype) init {
-    self = [super initWithContentURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"intro" ofType:@"m4v"]]];
+    self = [super init];
     if (self) {
         self.moviePlayer.controlStyle = MPMovieControlStyleNone;
     }
+//    self = [super initWithContentURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"intro" ofType:@"m4v"]]];
+//    if (self) {
+//        self.moviePlayer.controlStyle = MPMovieControlStyleNone;
+//    }
     
     return self;
 }
