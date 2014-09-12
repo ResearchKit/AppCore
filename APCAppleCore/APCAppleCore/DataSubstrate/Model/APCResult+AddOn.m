@@ -10,13 +10,33 @@
 #import "APCAppleCore.h"
 #import <ResearchKit/ResearchKit.h>
 
+static NSDictionary * lookupDictionary;
+
 @implementation APCResult (AddOn)
+
++ (Class) lookUpAPCResultClassForRKResult: (RKResult*) rkResult
+{
+    if (!lookupDictionary) {
+        lookupDictionary = @{
+                             @"RKResult"          :  @"APCResult",
+                             @"RKConsentResult"   :  @"APCConsentResult",
+                             @"RKDataResult"      :  @"APCDataResult",
+                             @"RKFileResult"      :  @"APCFileResult",
+                             @"RKSurveyResult"    :  @"APCSurveyResult"
+                             };
+    }
+    
+    NSString * rkResultClassName = NSStringFromClass([rkResult class]);
+    NSString * apcResultClassname = lookupDictionary[rkResultClassName];
+    Class localClass = apcResultClassname ? NSClassFromString(apcResultClassname) : nil;
+    return localClass;
+}
 
 + (instancetype) storeRKResult:(RKResult*) rkResult inContext: (NSManagedObjectContext*) context
 {
     __block APCResult * result;
     [context performBlockAndWait:^{
-        result = [APCResult newObjectForContext:context];
+        result = [[self lookUpAPCResultClassForRKResult:rkResult] newObjectForContext:context];
         [self mapRKResult:rkResult toAPCResult:result];
         NSError * saveError;
         [result saveToPersistentStore:&saveError];

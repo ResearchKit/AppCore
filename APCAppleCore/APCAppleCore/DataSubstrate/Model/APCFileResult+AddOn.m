@@ -1,22 +1,22 @@
 //
-//  APCConsentResult+AddOn.m
+//  APCFileResult+AddOn.m
 //  APCAppleCore
 //
 //  Created by Dhanush Balachandran on 9/12/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCConsentResult+AddOn.h"
+#import "APCFileResult+AddOn.h"
 #import "APCAppleCore.h"
 #import <ResearchKit/ResearchKit.h>
 
-@implementation APCConsentResult (AddOn)
+@implementation APCFileResult (AddOn)
 
 + (instancetype) storeRKResult:(RKResult*) rkResult inContext: (NSManagedObjectContext*) context
 {
-    __block APCConsentResult * result;
+    __block APCFileResult * result;
     [context performBlockAndWait:^{
-        result = [APCConsentResult newObjectForContext:context];
+        result = [APCFileResult newObjectForContext:context];
         [self mapRKResult:rkResult toAPCResult:result];
         NSError * saveError;
         [result saveToPersistentStore:&saveError];
@@ -29,13 +29,13 @@
 {
     [super mapRKResult:rkResult toAPCResult:apcResult];
     
-    NSAssert([rkResult isKindOfClass:[RKConsentResult class]], @"Not of type RKConsentResult");
-    NSAssert([apcResult isKindOfClass:[APCConsentResult class]], @"Not of type RKConsentResult");
-    RKConsentResult * localRKResult = (RKConsentResult*) rkResult;
-    APCConsentResult * localAPCResult = (APCConsentResult*) apcResult;
-    
-    localAPCResult.signatureName = localRKResult.signatureName;
-    localAPCResult.signatureDate = localRKResult.signatureDate;
+    NSAssert([rkResult isKindOfClass:[RKFileResult class]], @"Not of type RKConsentResult");
+    NSAssert([apcResult isKindOfClass:[APCFileResult class]], @"Not of type RKConsentResult");
+    RKFileResult * localRKResult = (RKFileResult*) rkResult;
+    APCFileResult * localAPCResult = (APCFileResult*) apcResult;
+
+    NSData * data = [NSData dataWithContentsOfFile:localRKResult.fileUrl.path];
+    localAPCResult.file = data;
     
 }
 
