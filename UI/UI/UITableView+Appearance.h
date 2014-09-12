@@ -10,6 +10,8 @@
 
 @interface UITableView (Appearance)
 
++ (UIColor *) separatorColor;
+
 // Footer
 + (UIFont *) footerFont;
 
@@ -32,14 +34,6 @@
 + (UIFont *) textFieldFont;
 
 + (UIColor *) textFieldTextColor;
-
-
-// segment controller inside cell
-+ (UIFont *) segmentControlFont;
-
-+ (UIColor *) segmentControlTextColor;
-
-+ (UIColor *) segmentControlSelectedTextColor;
 
 
 // Control Border Color

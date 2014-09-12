@@ -191,7 +191,7 @@ static CGFloat const kAPCPasscodeDigitViewLayerMargin   = 10;
     self.path = [UIBezierPath bezierPath];
     
     [self.path moveToPoint:CGPointMake(kAPCPasscodeDigitViewLayerMargin, self.verticalCenter)];
-    [self.path addLineToPoint:CGPointMake(self.right - kAPCPasscodeDigitViewLayerMargin, self.verticalCenter)];
+    [self.path addLineToPoint:CGPointMake(self.width - kAPCPasscodeDigitViewLayerMargin, self.verticalCenter)];
     
     self.shapeLayer.strokeColor = [UIColor blackColor].CGColor;
     self.shapeLayer.lineWidth = 4.0;

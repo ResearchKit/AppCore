@@ -7,19 +7,15 @@
 //
 
 #import "APHUserInfoCell.h"
-#import "UITableView+APHAppearance.h"
 
 @implementation APHUserInfoCell
 
-- (UISegmentedControl *) segmentControl {
-    UISegmentedControl *segmentControl = [super segmentControl];
+- (void) layoutSubviews {
+    [super layoutSubviews];
     
-    [segmentControl setTintColor:[UIColor whiteColor]];
-    [segmentControl setTitleTextAttributes:@{ NSFontAttributeName : [UITableView segmentControlFont]} forState:UIControlStateNormal];
-    [segmentControl setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UITableView segmentControlTextColor]} forState:UIControlStateNormal];
-    [segmentControl setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UITableView segmentControlSelectedTextColor]} forState:UIControlStateSelected];
-    
-    return segmentControl;
+    if (self.accessoryView && [self.accessoryView isKindOfClass:[UISegmentedControl class]]) {
+        [(UISegmentedControl *)self.segmentControl setFrame:self.bounds];
+    }
 }
 
 @end

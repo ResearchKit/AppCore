@@ -8,6 +8,7 @@
 
 #import "APCUserInfoCell.h"
 #import "UIView+Category.h"
+#import "APCSegmentControl.h"
 #import "NSString+Category.h"
 #import "UITableView+Appearance.h"
 
@@ -75,7 +76,7 @@ static CGFloat const kAPCUserInfoCellControlsMinHeight              = 30.0;
     if (!_segmentControl) {
         CGFloat width = self.innerWidth - (2 * kAPCUserInfoCellControlsMinHorizontalMargin);
         
-        _segmentControl = [UISegmentedControl new];
+        _segmentControl = [APCSegmentControl new];
         _segmentControl.frame = CGRectMake(kAPCUserInfoCellControlsMinHorizontalMargin, 0, width, kAPCUserInfoCellControlsMinHeight);
         [_segmentControl addTarget:self action:@selector(segmentIndexChanged) forControlEvents:UIControlEventValueChanged];
     }

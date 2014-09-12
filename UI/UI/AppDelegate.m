@@ -10,8 +10,8 @@
 #import "APCAssertionHandler.h"
 #import "APCNavigationController.h"
 #import "APCSettingsViewController.h"
+#import "UIBarButtonItem+Appearance.h"
 #import "APCIntroVideoViewController.h"
-#import "UIBarButtonItem+APHAppearance.h"
 
 @interface AppDelegate ()
 

@@ -11,6 +11,7 @@
 #import "UIView+Category.h"
 #import "APCUserInfoField.h"
 #import "NSString+Category.h"
+#import "APCSegmentControl.h"
 #import "UIScrollView+Category.h"
 #import "UITableView+Appearance.h"
 #import "APCUserInfoViewController.h"
@@ -66,6 +67,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.tableView.separatorColor = [UITableView separatorColor];
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     self.tableView.contentInset = UIEdgeInsetsMake(self.navigationController.navigationBar.height + 10, 0, 0, 0);
     [self.view addSubview:self.tableView];

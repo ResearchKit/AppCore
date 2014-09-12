@@ -8,6 +8,8 @@
 
 @import UIKit;
 
+@class APCSegmentControl;
+
 @protocol APCUserInfoCellDelegate;
 
 @interface APCUserInfoCell : UITableViewCell
@@ -18,7 +20,7 @@
 
 @property (nonatomic, strong) UISwitch *switchView;
 
-@property (nonatomic, strong) UISegmentedControl *segmentControl;
+@property (nonatomic, strong) APCSegmentControl *segmentControl;
 
 @property (nonatomic, strong) UIDatePicker *datePicker;
 
