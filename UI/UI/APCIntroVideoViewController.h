@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCViewController.h"
+@import MediaPlayer;
 
-@interface APCIntroVideoViewController : APCViewController
+@interface APCIntroVideoViewController : MPMoviePlayerViewController
 
 @end

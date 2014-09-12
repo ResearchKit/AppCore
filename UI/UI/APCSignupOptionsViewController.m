@@ -19,6 +19,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    self.title = NSLocalizedString(@"Sign In", @"");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -34,7 +36,8 @@
 }
 
 - (IBAction) signIn {
-    [self.navigationController pushViewController:[APCSignInViewController new] animated:YES];
+    APCSignInViewController *signInViewController = [[APCSignInViewController alloc] initWithNibName:@"APCSignInViewController" bundle:nil];
+    [self.navigationController pushViewController:signInViewController animated:YES];
 }
 
 @end

@@ -20,16 +20,6 @@
 
 @synthesize profile;
 
-- (void) loadView {
-    if (self.nibName) {
-        [super loadView];
-    }
-    else {
-        self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-        self.view.backgroundColor = [UIColor whiteColor];
-    }
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     

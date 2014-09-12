@@ -63,11 +63,11 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
     CGRect frame = self.view.bounds;
     
     self.tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.separatorColor = [UITableView separatorColor];
+    self.tableView.separatorInset = UIEdgeInsetsZero;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     self.tableView.contentInset = UIEdgeInsetsMake(self.navigationController.navigationBar.height + 10, 0, 0, 0);
     [self.view addSubview:self.tableView];

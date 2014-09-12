@@ -33,6 +33,8 @@
 		2529F58C19C224890090231A /* APCNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2529F58B19C224890090231A /* APCNavigationController.m */; };
 		2529F59519C25A890090231A /* APCSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 2529F59419C25A890090231A /* APCSegmentControl.m */; };
 		2529F59819C25B610090231A /* UISegmentedControl+Appearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 2529F59719C25B610090231A /* UISegmentedControl+Appearance.m */; };
+		2529F59B19C276E00090231A /* intro.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 2529F59A19C276E00090231A /* intro.m4v */; };
+		2529F59D19C277400090231A /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2529F59C19C277400090231A /* MediaPlayer.framework */; };
 		2547F9B919BF9FFE00A155CF /* UIAlertView+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 2547F9B819BF9FFE00A155CF /* UIAlertView+Category.m */; };
 		2547F9BC19BFA55B00A155CF /* APCStepProgressBar+Appearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 2547F9BB19BFA55B00A155CF /* APCStepProgressBar+Appearance.m */; };
 		2549447A19B8F25700DE72AF /* NSDate+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 2549447919B8F25700DE72AF /* NSDate+Category.m */; };
@@ -116,6 +118,8 @@
 		2529F59419C25A890090231A /* APCSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSegmentControl.m; sourceTree = "<group>"; };
 		2529F59619C25B610090231A /* UISegmentedControl+Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UISegmentedControl+Appearance.h"; sourceTree = "<group>"; };
 		2529F59719C25B610090231A /* UISegmentedControl+Appearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UISegmentedControl+Appearance.m"; sourceTree = "<group>"; };
+		2529F59A19C276E00090231A /* intro.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = intro.m4v; sourceTree = "<group>"; };
+		2529F59C19C277400090231A /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		2547F9B719BF9FFE00A155CF /* UIAlertView+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Category.h"; sourceTree = "<group>"; };
 		2547F9B819BF9FFE00A155CF /* UIAlertView+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Category.m"; sourceTree = "<group>"; };
 		2547F9BA19BFA55B00A155CF /* APCStepProgressBar+Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCStepProgressBar+Appearance.h"; sourceTree = "<group>"; };
@@ -164,6 +168,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2529F59D19C277400090231A /* MediaPlayer.framework in Frameworks */,
 				2550BB8019BE567B000EF023 /* LocalAuthentication.framework in Frameworks */,
 				250105BA19BB8E8500B27757 /* HealthKit.framework in Frameworks */,
 			);
@@ -211,6 +216,7 @@
 			isa = PBXGroup;
 			children = (
 				250105BB19BBE17300B27757 /* UI.entitlements */,
+				2529F59919C276E00090231A /* Videos */,
 				251F460019BA5347004FBD06 /* Images */,
 				2526A9B119B663CE0088A42C /* Categories */,
 				258F468F19BECBCF00F4C373 /* Services */,
@@ -338,6 +344,14 @@
 			name = Onboarding;
 			sourceTree = "<group>";
 		};
+		2529F59919C276E00090231A /* Videos */ = {
+			isa = PBXGroup;
+			children = (
+				2529F59A19C276E00090231A /* intro.m4v */,
+			);
+			path = Videos;
+			sourceTree = "<group>";
+		};
 		2550BB8419BE7237000EF023 /* Parkinson */ = {
 			isa = PBXGroup;
 			children = (
@@ -384,6 +398,7 @@
 		258F468D19BECB7C00F4C373 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2529F59C19C277400090231A /* MediaPlayer.framework */,
 				250105B919BB8E8500B27757 /* HealthKit.framework */,
 				2550BB7F19BE567B000EF023 /* LocalAuthentication.framework */,
 			);
@@ -520,6 +535,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2529F59B19C276E00090231A /* intro.m4v in Resources */,
 				25CF15FF19B7A10F00A885D7 /* APCSignupTouchIDViewController.xib in Resources */,
 				2526A9BB19B6668F0088A42C /* APCUserInfoTableHeaderView.xib in Resources */,
 				251F460319BA5347004FBD06 /* img_user_placeholder.png in Resources */,

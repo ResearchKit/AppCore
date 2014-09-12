@@ -47,6 +47,10 @@ static CGFloat const kAPCUserInfoCellControlsMinHeight              = 30.0;
     return self;
 }
 
+- (UIEdgeInsets) layoutMargins {
+    return UIEdgeInsetsZero;
+}
+
 
 #pragma mark - Getter 
 
