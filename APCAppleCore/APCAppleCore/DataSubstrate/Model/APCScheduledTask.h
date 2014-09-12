@@ -2,7 +2,7 @@
 //  APCScheduledTask.h
 //  APCAppleCore
 //
-//  Created by Justin Warmkessel on 8/29/14.
+//  Created by Dhanush Balachandran on 9/12/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
@@ -17,9 +17,17 @@
 @property (nonatomic, retain) NSDate * createdAt;
 @property (nonatomic, retain) NSDate * dueOn;
 @property (nonatomic, retain) NSString * notificationUID;
-@property (nonatomic, retain) NSDate * updatedAt;
 @property (nonatomic, retain) NSString * reminderUID;
-@property (nonatomic, retain) APCResult *result;
+@property (nonatomic, retain) NSDate * updatedAt;
+@property (nonatomic, retain) NSSet *results;
 @property (nonatomic, retain) APCTask *task;
+@end
+
+@interface APCScheduledTask (CoreDataGeneratedAccessors)
+
+- (void)addResultsObject:(APCResult *)value;
+- (void)removeResultsObject:(APCResult *)value;
+- (void)addResults:(NSSet *)values;
+- (void)removeResults:(NSSet *)values;
 
 @end
