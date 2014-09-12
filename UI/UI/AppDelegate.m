@@ -7,8 +7,11 @@
 //
 
 #import "AppDelegate.h"
-#import "SettingsViewController.h"
-#import "OnBoardingVideoViewController.h"
+#import "APCAssertionHandler.h"
+#import "APCNavigationController.h"
+#import "APCSettingsViewController.h"
+#import "UIBarButtonItem+Appearance.h"
+#import "APCIntroVideoViewController.h"
 
 @interface AppDelegate ()
 
@@ -18,20 +21,22 @@
             
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [self initAppearance];
+    [self initAssertionHandler];
+    
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
     BOOL isProfile = NO;
     
     if (isProfile) {
-        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[SettingsViewController new]];
+        self.window.rootViewController = [[APCNavigationController alloc] initWithRootViewController:[APCSettingsViewController new]];
     }
     else {
-        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[OnBoardingVideoViewController new]];
+        self.window.rootViewController = [[APCNavigationController alloc] initWithRootViewController:[APCIntroVideoViewController new]];
     }
     
     [self.window makeKeyAndVisible];
-    
     
     return YES;
 }
@@ -56,6 +61,19 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void) initAppearance {
+    [[UIBarButtonItem appearance] setTintColor:[UIBarButtonItem textColor]];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{
+                                                            NSForegroundColorAttributeName : [UIBarButtonItem textColor],
+                                                            NSFontAttributeName : [UIBarButtonItem font]
+                                                           }
+                                                forState:UIControlStateNormal];
+}
+
+- (void) initAssertionHandler {
+    [[[NSThread currentThread] threadDictionary] setValue:[APCAssertionHandler new] forKey:NSAssertionHandlerKey];
 }
 
 @end
