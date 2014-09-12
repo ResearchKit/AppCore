@@ -54,7 +54,7 @@
 - (void)testSettingDouble {
 
     double aDouble = FLT_MAX;
-    [self.parameters setDouble:aDouble forKey:@"Justin"];
+   
     
 }
 
@@ -67,7 +67,7 @@
 
 - (void)testDoubleForKey {
     
-    [self.parameters doubleForKey:@"Justin"];
+   
 }
 
 - (void)testIsNumber {
