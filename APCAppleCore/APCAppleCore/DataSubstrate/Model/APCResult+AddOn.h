@@ -11,6 +11,7 @@
 @interface APCResult (AddOn)
 
 //Creates it synchronously
-+ (APCResult*) storeRKResult:(RKResult*) rkResult inContext: (NSManagedObjectContext*) context;
++ (instancetype) storeRKResult:(RKResult*) rkResult inContext: (NSManagedObjectContext*) context;
++ (void) mapRKResult:(RKResult*) rkResult toAPCResult: (APCResult*) apcResult;
 
 @end

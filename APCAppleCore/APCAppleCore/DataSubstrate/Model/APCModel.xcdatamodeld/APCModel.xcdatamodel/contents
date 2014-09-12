@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="APCConsentResult" representedClassName="APCConsentResult" parentEntity="APCResult" syncable="YES">
+        <attribute name="signatureDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="signatureName" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="APCDataResult" representedClassName="APCDataResult" parentEntity="APCResult" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" storedInTruthFile="YES" syncable="YES"/>
+        <attribute name="fileName" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="APCDBStatus" representedClassName="APCDBStatus" syncable="YES">
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="APCFileResult" representedClassName="APCFileResult" parentEntity="APCResult" syncable="YES">
+        <attribute name="file" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" storedInTruthFile="YES" syncable="YES"/>
     </entity>
     <entity name="APCResult" representedClassName="APCResult" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
@@ -51,6 +62,9 @@
         <element name="APCResult" positionX="-720" positionY="333" width="128" height="210"/>
         <element name="APCSchedule" positionX="-1161" positionY="513" width="128" height="148"/>
         <element name="APCScheduledTask" positionX="-468" positionY="449" width="128" height="163"/>
-        <element name="APCTask" positionX="-965" positionY="585" width="128" height="180"/>
+        <element name="APCTask" positionX="-965" positionY="585" width="128" height="178"/>
+        <element name="APCConsentResult" positionX="-954" positionY="486" width="128" height="73"/>
+        <element name="APCDataResult" positionX="-945" positionY="495" width="128" height="73"/>
+        <element name="APCFileResult" positionX="-936" positionY="504" width="128" height="58"/>
     </elements>
 </model>

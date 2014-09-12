@@ -12,25 +12,31 @@
 
 @implementation APCResult (AddOn)
 
-+ (APCResult*) storeRKResult:(RKResult*) rkResult inContext: (NSManagedObjectContext*) context
++ (instancetype) storeRKResult:(RKResult*) rkResult inContext: (NSManagedObjectContext*) context
 {
     __block APCResult * result;
     [context performBlockAndWait:^{
         result = [APCResult newObjectForContext:context];
-        result.uid = [NSUUID UUID].UUIDString;
-        result.rkTaskInstanceUUID = rkResult.taskInstanceUUID.UUIDString;
-        result.rkTimeStamp = rkResult.timestamp;
-        result.rkItemIdentifier = rkResult.itemIdentifier.stringValue;
-        result.rkContentType = rkResult.contentType;
-        result.rkDeviceHardware = rkResult.deviceHardware;
-        NSError * error;
-        NSData * data = [NSJSONSerialization dataWithJSONObject:rkResult.metadata options:NSJSONWritingPrettyPrinted error:&error];
-        result.rkMetadata = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        [self mapRKResult:rkResult toAPCResult:result];
         NSError * saveError;
         [result saveToPersistentStore:&saveError];
         [saveError handle];
     }];
     return result;
+}
+
++ (void) mapRKResult:(RKResult*) rkResult toAPCResult: (APCResult*) apcResult
+{
+    apcResult.uid = [NSUUID UUID].UUIDString;
+    apcResult.rkTaskInstanceUUID = rkResult.taskInstanceUUID.UUIDString;
+    apcResult.rkTimeStamp = rkResult.timestamp;
+    apcResult.rkItemIdentifier = rkResult.itemIdentifier.stringValue;
+    apcResult.rkContentType = rkResult.contentType;
+    apcResult.rkDeviceHardware = rkResult.deviceHardware;
+    NSError * error;
+    NSData * data = [NSJSONSerialization dataWithJSONObject:rkResult.metadata options:NSJSONWritingPrettyPrinted error:&error];
+    [error handle];
+    apcResult.rkMetadata = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
 
 /*********************************************************************************/

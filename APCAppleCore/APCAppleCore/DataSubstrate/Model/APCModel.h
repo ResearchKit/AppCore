@@ -14,7 +14,10 @@
 #import "APCTask+AddOn.h"
 #import "APCSchedule+AddOn.h"
 #import "APCScheduledTask+AddOn.h"
-#import "APCResult+AddOn.h"
 #import "APCDBStatus+AddOn.h"
+
+//Results Cluster
+#import "APCResult+AddOn.h"
+#import "APCConsentResult+AddOn.h"
 
 #endif
