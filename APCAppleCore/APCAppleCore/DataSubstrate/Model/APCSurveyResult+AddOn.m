@@ -29,8 +29,7 @@
 {
     [super mapRKResult:rkResult toAPCResult:apcResult];
     
-    NSAssert([rkResult isKindOfClass:[RKSurveyResult class]], @"Not of type RKQuestionResult");
-    NSAssert([apcResult isKindOfClass:[APCSurveyResult class]], @"Not of type APCQuestionResult");
+    NSParameterAssert([rkResult isKindOfClass:[RKSurveyResult class]]);
     RKSurveyResult * localRKResult = (RKSurveyResult*) rkResult;
     APCSurveyResult * localAPCResult = (APCSurveyResult*) apcResult;
     

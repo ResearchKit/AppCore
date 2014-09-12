@@ -29,8 +29,7 @@
 {
     [super mapRKResult:rkResult toAPCResult:apcResult];
     
-    NSAssert([rkResult isKindOfClass:[RKConsentResult class]], @"Not of type RKConsentResult");
-    NSAssert([apcResult isKindOfClass:[APCConsentResult class]], @"Not of type APCConsentResult");
+    NSParameterAssert([rkResult isKindOfClass:[RKConsentResult class]]);
     RKConsentResult * localRKResult = (RKConsentResult*) rkResult;
     APCConsentResult * localAPCResult = (APCConsentResult*) apcResult;
     
