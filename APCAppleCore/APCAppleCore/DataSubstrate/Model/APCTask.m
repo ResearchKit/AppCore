@@ -14,6 +14,7 @@
 @implementation APCTask
 
 @dynamic createdAt;
+@dynamic taskClassName;
 @dynamic taskDescription;
 @dynamic taskType;
 @dynamic taskTitle;

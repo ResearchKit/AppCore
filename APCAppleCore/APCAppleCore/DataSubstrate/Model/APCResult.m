@@ -2,7 +2,7 @@
 //  APCResult.m
 //  APCAppleCore
 //
-//  Created by Dhanush Balachandran on 8/29/14.
+//  Created by Dhanush Balachandran on 9/12/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
@@ -16,6 +16,12 @@
 @dynamic uid;
 @dynamic updatedAt;
 @dynamic uploaded;
+@dynamic rkTaskInstanceUUID;
+@dynamic rkTimeStamp;
+@dynamic rkItemIdentifier;
+@dynamic rkContentType;
+@dynamic rkDeviceHardware;
+@dynamic rkMetadata;
 @dynamic scheduledTask;
 
 @end
