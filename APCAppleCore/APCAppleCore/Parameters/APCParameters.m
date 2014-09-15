@@ -15,7 +15,7 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
 
 @interface APCParameters ()
 
-@property  (nonatomic, strong)  NSMutableDictionary     *jsonDict;
+@property  (nonatomic, strong)  NSMutableDictionary     *userDefaults;
 @property  (nonatomic, strong)  NSString                *jsonPath;
 @property  (nonatomic, strong)  NSString                *fileName;
 
@@ -34,7 +34,7 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
 - (instancetype) initWithFileName:(NSString *)fileName {
     self = [super init];
     if (self) {
-        _jsonDict = [NSMutableDictionary new];
+        _userDefaults = [NSMutableDictionary new];
         _fileName = fileName;
         
         /* This should only be called inside the init */
@@ -47,7 +47,7 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
 - (NSNumber*)numberForKey:(NSString*)key
 {
     NSNumber*   number = nil;
-    id          value = [self.jsonDict objectForKey:key];
+    id          value = [self.userDefaults objectForKey:key];
     
     if ([self isNumber:value] == YES)
     {
@@ -65,7 +65,7 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
 - (NSString *)stringForKey:(NSString*)key
 {
     NSString*   str = nil;
-    id          value = [self.jsonDict objectForKey:key];
+    id          value = [self.userDefaults objectForKey:key];
     
     if ([self isString:value] == YES)
     {
@@ -141,18 +141,9 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
 {
     NSParameterAssert(value != nil);
     
-    [self.jsonDict setValue:value forKey:key];
-    NSError *error;
+    [self.userDefaults setValue:value forKey:key];
     
-    NSOutputStream *outputStream = [[NSOutputStream alloc] initToFileAtPath:self.jsonPath append:NO];
-    
-    [outputStream open];
-    
-    if (![NSJSONSerialization writeJSONObject:self.jsonDict toStream:outputStream options:0 error:&error]) {
-        [self didFail:error];
-    }
-    
-    [outputStream close];
+    [self saveToFile];
 }
 
 
@@ -160,18 +151,9 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
 {
     NSParameterAssert(value != nil);
     
-    [self.jsonDict setValue:value forKey:key];
-    NSError *error;
+    [self.userDefaults setValue:value forKey:key];
     
-    NSOutputStream *outputStream = [[NSOutputStream alloc] initToFileAtPath:self.jsonPath append:NO];
-    
-    [outputStream open];
-    
-    if (![NSJSONSerialization writeJSONObject:self.jsonDict toStream:outputStream options:0 error:&error]) {
-        [self didFail:error];
-    }
-    
-    [outputStream close];
+    [self saveToFile];
 }
 
 
@@ -197,22 +179,28 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
 
 - (void)deleteValueforKey:(NSString *)key
 {
-    [self.jsonDict removeObjectForKey:key];
+    [self.userDefaults removeObjectForKey:key];
+    
+    [self saveToFile];
+}
+
+
+#pragma mark - Private Methods
+
+- (void)saveToFile {
     NSError *error;
     
     NSOutputStream *outputStream = [[NSOutputStream alloc] initToFileAtPath:self.jsonPath append:NO];
     
     [outputStream open];
     
-    if (![NSJSONSerialization writeJSONObject:self.jsonDict toStream:outputStream options:0 error:&error]) {
+    if (![NSJSONSerialization writeJSONObject:self.userDefaults toStream:outputStream options:0 error:&error]) {
         [self didFail:error];
     }
     
     [outputStream close];
 }
 
-
-#pragma mark - Private Methods
 
 /* This should only be called at initWithFileName */
 - (void) loadValuesFromBundle {
@@ -237,7 +225,8 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
         
         NSError *error;
         if (![[NSFileManager defaultManager] copyItemAtPath:bundlePath toPath:self.jsonPath error:&error]) {
-            NSLog(@"Copy File Error : %@", error);
+            
+            [self didFail:error];
         } else {
             
             [self setContentOfFileToDictionary];
@@ -259,7 +248,7 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
         [self didFail:error];
     }
     else {
-        self.jsonDict = [dict mutableCopy];
+        self.userDefaults = [dict mutableCopy];
     }
 }
 
@@ -281,7 +270,7 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
 #pragma mark - Public Methods
 
 - (NSArray *) allKeys {
-    return [self.jsonDict allKeys];
+    return [self.userDefaults allKeys];
 }
 
 
