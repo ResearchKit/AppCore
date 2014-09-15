@@ -43,11 +43,10 @@
 {
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
     NSError * error;
-    //TODO: Remove journal_mode
     NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @(YES),
-                              NSInferMappingModelAutomaticallyOption: @(YES),
-                              NSSQLitePragmasOption: @{ @"journal_mode" : @"DELETE"}
+                              NSInferMappingModelAutomaticallyOption: @(YES)
                               };
+
     NSPersistentStore *persistentStore = [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:storePath] options:options error:&error];
     if (!persistentStore) {
         NSError* localError;
