@@ -11,7 +11,7 @@
 
 @interface APCUserInfoViewController : APCViewController <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, APCConfigurableCellDelegate>
 
-@property (nonatomic, strong) NSArray *fields;
+@property (nonatomic, strong) NSArray *items;
 
 @property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
 

@@ -10,6 +10,7 @@
 #import "NSDate+Category.h"
 #import "UIView+Category.h"
 #import "APCTableViewItem.h"
+#import "NSBundle+Category.h"
 #import "NSString+Category.h"
 #import "APCSegmentControl.h"
 #import "UIScrollView+Category.h"
@@ -74,7 +75,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 }
 
 - (void) addHeaderView {
-    UIView *headerView = [[UINib nibWithNibName:@"APCUserInfoTableHeaderView" bundle:nil] instantiateWithOwner:self options:nil][0];
+    UIView *headerView = [[UINib nibWithNibName:@"APCUserInfoTableHeaderView" bundle:[NSBundle appleCoreBundle]] instantiateWithOwner:self options:nil][0];
     self.tableView.tableHeaderView = headerView;
     
     CGRect frame = self.headerTextFieldSeparatorView.frame;
@@ -97,13 +98,13 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.fields.count;
+    return self.items.count;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     APCUserInfoCell *cell;
     
-    APCTableViewItem *field = self.fields[indexPath.row];
+    APCTableViewItem *field = self.items[indexPath.row];
     
     if (field) {
         cell = [tableView dequeueReusableCellWithIdentifier:field.identifier];
@@ -184,7 +185,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
     
     APCUserInfoCell *cell = (APCUserInfoCell *)[tableView cellForRowAtIndexPath:indexPath];
     
-    APCTableViewItem *field = self.fields[indexPath.row];
+    APCTableViewItem *field = self.items[indexPath.row];
     
     if ([field isKindOfClass:[APCTableViewCustomPickerItem class]] && [(APCTableViewCustomPickerItem *)field isDetailDiscloserStyle]) {
         [cell.valueTextField becomeFirstResponder];
@@ -203,28 +204,28 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 - (void) configurableCell:(APCUserInfoCell *)cell textValueChanged:(NSString *)text {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    APCTableViewTextFieldItem *field = self.fields[indexPath.row];
+    APCTableViewTextFieldItem *field = self.items[indexPath.row];
     field.value = text;
 }
 
 - (void) configurableCell:(APCUserInfoCell *)cell switchValueChanged:(BOOL)isOn {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    APCTableViewSwitchItem *field = self.fields[indexPath.row];
+    APCTableViewSwitchItem *field = self.items[indexPath.row];
     field.on = isOn;
 }
 
 - (void) configurableCell:(APCUserInfoCell *)cell segmentIndexChanged:(NSUInteger)index {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    APCTableViewSegmentItem *field = self.fields[indexPath.row];
+    APCTableViewSegmentItem *field = self.items[indexPath.row];
     field.selectedIndex = index;
 }
 
 - (void) configurableCell:(APCUserInfoCell *)cell dateValueChanged:(NSDate *)date {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    APCTableViewDatePickerItem *field = self.fields[indexPath.row];
+    APCTableViewDatePickerItem *field = self.items[indexPath.row];
     field.date = date;
     
     cell.valueTextField.text = [field.date toStringWithFormat:field.dateFormat];
@@ -233,7 +234,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 - (void) configurableCell:(APCUserInfoCell *)cell customPickerValueChanged:(NSArray *)selectedRowIndices {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    APCTableViewCustomPickerItem *field = self.fields[indexPath.row];
+    APCTableViewCustomPickerItem *field = self.items[indexPath.row];
     field.selectedRowIndices = selectedRowIndices;
     
     if (field.isDetailDiscloserStyle) {

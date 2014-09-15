@@ -8,7 +8,6 @@
 
 #import "UIView+Category.h"
 #import "APCIntroVideoViewController.h"
-#import "APCSignupOptionsViewController.h"
 
 @interface APCIntroVideoViewController ()
 
@@ -16,15 +15,12 @@
 
 @implementation APCIntroVideoViewController
 
-- (instancetype) init {
-    self = [super init];
+- (instancetype) initWithContentURL:(NSURL *)contentURL {
+    self = [super initWithContentURL:contentURL];
     if (self) {
+        NSLog(@"%@", contentURL);
         self.moviePlayer.controlStyle = MPMovieControlStyleNone;
     }
-//    self = [super initWithContentURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"intro" ofType:@"m4v"]]];
-//    if (self) {
-//        self.moviePlayer.controlStyle = MPMovieControlStyleNone;
-//    }
     
     return self;
 }
@@ -61,12 +57,9 @@
 
 
 
-#pragma mark - Private Methods
+#pragma mark - Public Methods
 
 - (void) skip {
-    APCSignupOptionsViewController *optionsViewController = [[APCSignupOptionsViewController alloc] initWithNibName:@"APCSignupOptionsViewController" bundle:nil];
-    
-    [self.navigationController pushViewController:optionsViewController animated:YES];
 }
 
 @end

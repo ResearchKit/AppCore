@@ -10,4 +10,6 @@
 
 @interface APCIntroVideoViewController : MPMoviePlayerViewController
 
+- (void) skip;
+
 @end

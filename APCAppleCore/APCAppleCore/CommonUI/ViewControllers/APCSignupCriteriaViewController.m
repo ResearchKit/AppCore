@@ -10,6 +10,7 @@
 #import "UIView+Category.h"
 #import "NSDate+Category.h"
 #import "APCTableViewItem.h"
+#import "NSBundle+Category.h"
 #import "APCSegmentControl.h"
 #import "APCStepProgressBar.h"
 #import "APCSignupCriteriaViewController.h"
@@ -106,7 +107,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     [self.view addSubview:self.tableView];
     
-    [self.tableView registerNib:[UINib nibWithNibName:@"APCCriteriaCell" bundle:nil] forCellReuseIdentifier:(NSString *)kAPCSignupCriteriaTableViewCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:@"APCCriteriaCell" bundle:[NSBundle appleCoreBundle]] forCellReuseIdentifier:(NSString *)kAPCSignupCriteriaTableViewCellIdentifier];
 }
 
 
