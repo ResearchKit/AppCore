@@ -10,6 +10,7 @@
 #import "NSDate+Category.h"
 #import "UIView+Category.h"
 #import "APCTableViewItem.h"
+#import "NSBundle+Category.h"
 #import "NSString+Category.h"
 #import "APCSegmentControl.h"
 #import "UIScrollView+Category.h"
@@ -74,7 +75,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 }
 
 - (void) addHeaderView {
-    UIView *headerView = [[UINib nibWithNibName:@"APCUserInfoTableHeaderView" bundle:nil] instantiateWithOwner:self options:nil][0];
+    UIView *headerView = [[UINib nibWithNibName:@"APCUserInfoTableHeaderView" bundle:[NSBundle appleCoreBundle]] instantiateWithOwner:self options:nil][0];
     self.tableView.tableHeaderView = headerView;
     
     CGRect frame = self.headerTextFieldSeparatorView.frame;
