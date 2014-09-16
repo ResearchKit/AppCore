@@ -29,7 +29,7 @@
     return retError;
 }
 
-+ (NSError*) generateAPCErrorForHTTPResponse: (NSHTTPURLResponse*) response
++ (NSError*) generateAPCErrorForHTTPResponse: (NSHTTPURLResponse*) response data: (NSData*) data
 {
     //TODO: Get appropriate error strings
     NSError * retError;
@@ -38,16 +38,16 @@
     }
     else if (response.statusCode == 412)
     {
-        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerPreconditionNotMet userInfo:@{NSLocalizedDescriptionKey: @"Client not consented"}];
+        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerPreconditionNotMet userInfo:@{NSLocalizedDescriptionKey: @"Client not consented", APC_ORIGINAL_ERROR_KEY: [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]}];
     }
     else if (NSLocationInRange(response.statusCode, NSMakeRange(400, 99))) {
-        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:@{NSLocalizedDescriptionKey: @"Client Error. Please contact SOMEBODY"}];
+        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:@{NSLocalizedDescriptionKey: @"Client Error. Please contact SOMEBODY",  APC_ORIGINAL_ERROR_KEY: [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]}];
     }
     else if (response.statusCode == 503) {
-        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerUnderMaintenance userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Under Maintenance."}];
+        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:kAPCServerUnderMaintenance userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Under Maintenance.", APC_ORIGINAL_ERROR_KEY: [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]}];
     }
     else if (NSLocationInRange(response.statusCode, NSMakeRange(500, 99))) {
-        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Error. Please contact SOMEBODY"}];
+        retError = [NSError errorWithDomain:APC_ERROR_DOMAIN code:response.statusCode userInfo:@{NSLocalizedDescriptionKey: @"Backend Server Error. Please contact SOMEBODY", APC_ORIGINAL_ERROR_KEY: [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]}];
     }
     
     return retError;
