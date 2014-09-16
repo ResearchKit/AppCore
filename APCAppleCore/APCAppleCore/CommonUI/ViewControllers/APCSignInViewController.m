@@ -36,7 +36,7 @@
     if (textField == self.userHandleTextField) {
         [self.passwordTextField becomeFirstResponder];
     }
-    else if (textField == self.userHandleTextField) {
+    else if (textField == self.passwordTextField) {
         [self.passwordTextField resignFirstResponder];
         [self signIn];
     }
