@@ -10,4 +10,6 @@
 
 @interface NSError (APCNetworkManager)
 
+- (NSString *) message;
+
 @end
