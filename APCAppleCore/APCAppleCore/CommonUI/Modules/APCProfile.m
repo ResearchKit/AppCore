@@ -60,6 +60,7 @@
 }
 
 
+
 + (NSArray *) bloodTypeInStringValues {
     return @[@" ", @"A+", @"A-", @"B+", @"B-", @"AB+", @"AB-", @"O+", @"O-"];
 }
@@ -72,6 +73,23 @@
     }
     
     return type;
+}
+
+
+
++ (NSArray *) medicalConditions {
+    return @[@"Not listed", @"Condition 1" , @"Condition 2"];
+}
+
++ (NSArray *) medications {
+    return @[@"Not listed", @"Medication 1" , @"Medication 2"];
+}
+
++ (NSArray *) heights {
+    return @[
+                @[@"3'", @"4'", @"5'", @"6'", @"7'", @"8'", @"9'", @"10'", @"11'", @"12'"],
+                @[@"0''", @"1''", @"2''", @"3''", @"4''", @"5''", @"6''", @"7''", @"8''", @"9''"]
+            ];
 }
 
 @end

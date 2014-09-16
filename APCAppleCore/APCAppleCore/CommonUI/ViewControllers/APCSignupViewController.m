@@ -9,6 +9,7 @@
 #import "APCProfile.h"
 #import "UIView+Category.h"
 #import "APCStepProgressBar.h"
+#import "APCUserInfoConstants.h"
 #import "APCSignupViewController.h"
 
 @interface APCSignupViewController ()

@@ -9,21 +9,6 @@
 #import "APCSignUpProgressing.h"
 #import "APCUserInfoViewController.h"
 
-typedef NS_ENUM(NSUInteger, APCSignUpUserInfoItem) {
-    APCSignUpUserInfoItemUserName = 0,
-    APCSignUpUserInfoItemEmail,
-    APCSignUpUserInfoItemPassword,
-    APCSignUpUserInfoItemDateOfBirth,
-    APCSignUpUserInfoItemMedicalCondition,
-    APCSignUpUserInfoItemMedication,
-    APCSignUpUserInfoItemBloodType,
-    APCSignUpUserInfoItemWeight,
-    APCSignUpUserInfoItemHeight,
-    APCSignUpUserInfoItemGender,
-    APCSignUpUserInfoItemSleepTime,
-    APCSignUpUserInfoItemWakeUpTime
-};
-
 @interface APCSignUpUserInfoViewController : APCUserInfoViewController <APCSignUpProgressing>
 
 @property (nonatomic, strong) NSArray *itemsOrder;

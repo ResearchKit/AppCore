@@ -59,5 +59,12 @@
 
 + (HKBloodType) bloodTypeFromStringValue:(NSString *)stringValue;
 
+
++ (NSArray *) medicalConditions;
+
++ (NSArray *) medications;
+
++ (NSArray *) heights;
+
 @end
 

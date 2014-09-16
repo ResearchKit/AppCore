@@ -250,6 +250,7 @@
 		25E682BA19C7BACB00597734 /* APCForgotPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCForgotPasswordViewController.m; sourceTree = "<group>"; };
 		25E682BE19C7BD7A00597734 /* NSObject+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Extension.h"; sourceTree = "<group>"; };
 		25E682BF19C7BD7A00597734 /* NSObject+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Extension.m"; sourceTree = "<group>"; };
+		25E96C2019C8BD6A00EB30D7 /* APCUserInfoConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCUserInfoConstants.h; sourceTree = "<group>"; };
 		7BE3200E19B1387E00E5E32D /* APCScheduledTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduledTask.m; sourceTree = "<group>"; };
 		7BFEB4B419B0DA0A0009C917 /* APCSchedulerTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSchedulerTestCase.m; sourceTree = "<group>"; };
 		F5241C5719ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+ResearchKit.h"; sourceTree = "<group>"; };
@@ -453,6 +454,7 @@
 		255D2E5519C3A526002137F1 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				25E96C2019C8BD6A00EB30D7 /* APCUserInfoConstants.h */,
 				25E682AF19C7AD6900597734 /* APCSpinnerViewController.h */,
 				25E682AE19C7AD6900597734 /* APCSpinnerViewController.m */,
 				25E682B019C7AD6900597734 /* APCSpinnerViewController.xib */,
