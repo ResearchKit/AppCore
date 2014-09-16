@@ -31,8 +31,9 @@
 - (void) testSignUp
 {
     XCTestExpectation * expectation = [self expectationWithDescription:@"Authenticate"];
-    [self.localNetworkManager signUp:@"dhanush.balachandran@ymedialabs.com"
-                            username:@"dhanush"
+    NSString * testName = [NSString stringWithFormat:@"test%d",arc4random()];
+    [self.localNetworkManager signUp:[NSString stringWithFormat:@"%@@%@.com",testName,testName]
+                            username:testName
                             password:@"Password123"
                              success:^(NSURLSessionDataTask *task, id responseObject) {
                                  [expectation fulfill];

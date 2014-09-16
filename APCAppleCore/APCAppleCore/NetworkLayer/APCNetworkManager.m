@@ -133,7 +133,7 @@ NSString * kBackgroundSessionIdentifier = @"com.ymedialabs.backgroundsession";
     
     NSMutableURLRequest *request = [self requestWithMethod:method URLString:URLString parameters:parameters error:nil];
     NSURLSessionDataTask *task = [self.mainSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSError * httpError = [NSError generateAPCErrorForHTTPResponse:(NSHTTPURLResponse*)response];
+        NSError * httpError = [NSError generateAPCErrorForHTTPResponse:(NSHTTPURLResponse*)response data:data];
         if (error)
         {
             [self handleError:error task:task retryObject:localRetryObject];
