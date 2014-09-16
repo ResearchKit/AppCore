@@ -23,7 +23,7 @@
                         <constraint firstAttribute="width" constant="76" id="YYD-jZ-4eo"/>
                         <constraint firstAttribute="height" constant="76" id="wpV-zI-BCq"/>
                     </constraints>
-                    <state key="normal" image="img_user_placeholder.png">
+                    <state key="normal">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -85,7 +85,4 @@
             <point key="canvasLocation" x="379.5" y="116.5"/>
         </view>
     </objects>
-    <resources>
-        <image name="img_user_placeholder.png" width="76" height="76"/>
-    </resources>
 </document>

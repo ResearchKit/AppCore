@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "APCProfile.h"
 #import "APCPasscodeView.h"
 #import "UIView+Category.h"
 #import "APCStepProgressBar.h"

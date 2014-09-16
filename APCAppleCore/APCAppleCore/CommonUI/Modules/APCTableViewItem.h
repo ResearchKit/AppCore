@@ -42,11 +42,23 @@
 
 
 
-@interface APCTableViewDatePickerItem : APCTableViewItem
+@interface APCTableViewPickerItem : APCTableViewItem
 
 @property (nonatomic, copy) NSString *placeholder;
 
+@property (nonatomic, readwrite, getter = isDetailDiscloserStyle) BOOL detailDiscloserStyle;
+
+@end
+
+
+
+@interface APCTableViewDatePickerItem : APCTableViewPickerItem
+
 @property (nonatomic, copy) NSString *dateFormat;
+
+@property (nonatomic, readwrite, getter = isDetailDiscloserStyle) BOOL detailDiscloserStyle;
+
+@property (nonatomic, readwrite) UIDatePickerMode datePickerMode;
 
 @property (nonatomic, strong) NSDate *date;
 

@@ -24,7 +24,22 @@
 
 
 
+@implementation APCTableViewPickerItem
+
+@end
+
+
+
 @implementation APCTableViewDatePickerItem
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _datePickerMode = UIDatePickerModeDateAndTime;
+    }
+    return self;
+}
 
 @end
 

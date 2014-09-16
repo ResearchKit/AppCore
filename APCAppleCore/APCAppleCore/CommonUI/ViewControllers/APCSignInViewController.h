@@ -8,6 +8,14 @@
 
 #import "APCViewController.h"
 
-@interface APCSignInViewController : APCViewController
+@interface APCSignInViewController : APCViewController <UITextFieldDelegate>
+
+@property (nonatomic, weak) IBOutlet UITextField *userHandleTextField;
+
+@property (nonatomic, weak) IBOutlet UITextField *passwordTextField;
+
+- (void) signIn;
+
+- (IBAction) forgotPassword;
 
 @end

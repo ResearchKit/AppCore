@@ -23,7 +23,7 @@
 }
 
 + (UIFont *) textLabelFont {
-    return [UIFont systemFontOfSize:16];
+    return [UIFont systemFontOfSize:15];
 }
 
 + (UIColor *) textLabelTextColor {
@@ -31,7 +31,7 @@
 }
 
 + (UIFont *) detailLabelFont {
-    return [UIFont systemFontOfSize:16];
+    return [UIFont systemFontOfSize:15];
 }
 
 + (UIColor *) detailLabelTextColor {
@@ -39,7 +39,7 @@
 }
 
 + (UIFont *) textFieldFont {
-    return [UIFont systemFontOfSize:16];
+    return [UIFont systemFontOfSize:15];
 }
 
 + (UIColor *) textFieldTextColor {

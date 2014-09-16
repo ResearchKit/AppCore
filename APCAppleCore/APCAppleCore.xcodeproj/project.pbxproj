@@ -34,10 +34,6 @@
 		255D2E9119C3A526002137F1 /* APCSignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6619C3A526002137F1 /* APCSignupViewController.m */; };
 		255D2E9219C3A526002137F1 /* APCUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6819C3A526002137F1 /* APCUserInfoViewController.m */; };
 		255D2E9319C3A526002137F1 /* APCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6A19C3A526002137F1 /* APCViewController.m */; };
-		255D2E9419C3A526002137F1 /* APCPasscodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6D19C3A526002137F1 /* APCPasscodeView.m */; };
-		255D2E9519C3A526002137F1 /* APCSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6F19C3A526002137F1 /* APCSegmentControl.m */; };
-		255D2E9619C3A526002137F1 /* APCStepProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E7119C3A526002137F1 /* APCStepProgressBar.m */; };
-		255D2E9719C3A526002137F1 /* APCUserInfoTableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 255D2E7219C3A526002137F1 /* APCUserInfoTableHeaderView.xib */; };
 		255D2E9819C3A526002137F1 /* APCHealthKitProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E7519C3A526002137F1 /* APCHealthKitProxy.m */; };
 		255D2E9919C3A526002137F1 /* APCAssertionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E7819C3A526002137F1 /* APCAssertionHandler.m */; };
 		25E6825A19C75B0300597734 /* APCStepProgressBar+Appearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E3419C3A526002137F1 /* APCStepProgressBar+Appearance.m */; };
@@ -64,16 +60,26 @@
 		25E6826F19C75B0300597734 /* APCSignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6619C3A526002137F1 /* APCSignupViewController.m */; };
 		25E6827019C75B0300597734 /* APCUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6819C3A526002137F1 /* APCUserInfoViewController.m */; };
 		25E6827119C75B0300597734 /* APCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6A19C3A526002137F1 /* APCViewController.m */; };
-		25E6827219C75B0300597734 /* APCPasscodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6D19C3A526002137F1 /* APCPasscodeView.m */; };
-		25E6827319C75B0300597734 /* APCSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6F19C3A526002137F1 /* APCSegmentControl.m */; };
-		25E6827419C75B0300597734 /* APCStepProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E7119C3A526002137F1 /* APCStepProgressBar.m */; };
 		25E6827519C75B0300597734 /* APCHealthKitProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E7519C3A526002137F1 /* APCHealthKitProxy.m */; };
 		25E6827619C75B0300597734 /* APCAssertionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E7819C3A526002137F1 /* APCAssertionHandler.m */; };
 		25E6827719C75B1900597734 /* APCCriteriaCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 255D2E4D19C3A526002137F1 /* APCCriteriaCell.xib */; };
 		25E6827819C75B1900597734 /* APCSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 255D2E5C19C3A526002137F1 /* APCSignInViewController.xib */; };
 		25E6827919C75B1900597734 /* APCSignupTouchIDViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 255D2E6219C3A526002137F1 /* APCSignupTouchIDViewController.xib */; };
-		25E6827A19C75B1900597734 /* APCUserInfoTableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 255D2E7219C3A526002137F1 /* APCUserInfoTableHeaderView.xib */; };
 		25E6827F19C75DEB00597734 /* NSBundle+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6827E19C75DEB00597734 /* NSBundle+Category.m */; };
+		25E6829219C7A7DF00597734 /* UIColor+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6829019C7A7DF00597734 /* UIColor+Category.m */; };
+		25E6829E19C7A93500597734 /* APCPasscodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6829619C7A93500597734 /* APCPasscodeView.m */; };
+		25E6829F19C7A93500597734 /* APCPasscodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6829619C7A93500597734 /* APCPasscodeView.m */; };
+		25E682A119C7A93500597734 /* APCSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6829819C7A93500597734 /* APCSegmentControl.m */; };
+		25E682A219C7A93500597734 /* APCSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6829819C7A93500597734 /* APCSegmentControl.m */; };
+		25E682A719C7A93500597734 /* APCStepProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6829C19C7A93500597734 /* APCStepProgressBar.m */; };
+		25E682A819C7A93500597734 /* APCStepProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6829C19C7A93500597734 /* APCStepProgressBar.m */; };
+		25E682AA19C7A93500597734 /* APCUserInfoTableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25E6829D19C7A93500597734 /* APCUserInfoTableHeaderView.xib */; };
+		25E682AB19C7A93500597734 /* APCUserInfoTableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25E6829D19C7A93500597734 /* APCUserInfoTableHeaderView.xib */; };
+		25E682B119C7AD6900597734 /* APCSpinnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E682AE19C7AD6900597734 /* APCSpinnerViewController.m */; };
+		25E682B319C7AD6900597734 /* APCSpinnerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25E682B019C7AD6900597734 /* APCSpinnerViewController.xib */; };
+		25E682BB19C7BACB00597734 /* APCForgotPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25E682B919C7BACB00597734 /* APCForgotPasswordViewController.xib */; };
+		25E682BC19C7BACB00597734 /* APCForgotPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E682BA19C7BACB00597734 /* APCForgotPasswordViewController.m */; };
+		25E682C019C7BD7A00597734 /* NSObject+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E682BF19C7BD7A00597734 /* NSObject+Extension.m */; };
 		7BE3201019B1387E00E5E32D /* APCScheduledTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BE3200E19B1387E00E5E32D /* APCScheduledTask.m */; };
 		7BFEB4B519B0DA0A0009C917 /* APCSchedulerTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BFEB4B419B0DA0A0009C917 /* APCSchedulerTestCase.m */; };
 		F5241C5919ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5241C5819ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m */; };
@@ -221,19 +227,29 @@
 		255D2E6819C3A526002137F1 /* APCUserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCUserInfoViewController.m; sourceTree = "<group>"; };
 		255D2E6919C3A526002137F1 /* APCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCViewController.h; sourceTree = "<group>"; };
 		255D2E6A19C3A526002137F1 /* APCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCViewController.m; sourceTree = "<group>"; };
-		255D2E6C19C3A526002137F1 /* APCPasscodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPasscodeView.h; sourceTree = "<group>"; };
-		255D2E6D19C3A526002137F1 /* APCPasscodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPasscodeView.m; sourceTree = "<group>"; };
-		255D2E6E19C3A526002137F1 /* APCSegmentControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSegmentControl.h; sourceTree = "<group>"; };
-		255D2E6F19C3A526002137F1 /* APCSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSegmentControl.m; sourceTree = "<group>"; };
-		255D2E7019C3A526002137F1 /* APCStepProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStepProgressBar.h; sourceTree = "<group>"; };
-		255D2E7119C3A526002137F1 /* APCStepProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStepProgressBar.m; sourceTree = "<group>"; };
-		255D2E7219C3A526002137F1 /* APCUserInfoTableHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCUserInfoTableHeaderView.xib; sourceTree = "<group>"; };
 		255D2E7419C3A526002137F1 /* APCHealthKitProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHealthKitProxy.h; sourceTree = "<group>"; };
 		255D2E7519C3A526002137F1 /* APCHealthKitProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHealthKitProxy.m; sourceTree = "<group>"; };
 		255D2E7719C3A526002137F1 /* APCAssertionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAssertionHandler.h; sourceTree = "<group>"; };
 		255D2E7819C3A526002137F1 /* APCAssertionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAssertionHandler.m; sourceTree = "<group>"; };
 		25E6827D19C75DEB00597734 /* NSBundle+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+Category.h"; sourceTree = "<group>"; };
 		25E6827E19C75DEB00597734 /* NSBundle+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+Category.m"; sourceTree = "<group>"; };
+		25E6829019C7A7DF00597734 /* UIColor+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Category.m"; sourceTree = "<group>"; };
+		25E6829319C7A84A00597734 /* UIColor+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Category.h"; sourceTree = "<group>"; };
+		25E6829519C7A93500597734 /* APCPasscodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPasscodeView.h; sourceTree = "<group>"; };
+		25E6829619C7A93500597734 /* APCPasscodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPasscodeView.m; sourceTree = "<group>"; };
+		25E6829719C7A93500597734 /* APCSegmentControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSegmentControl.h; sourceTree = "<group>"; };
+		25E6829819C7A93500597734 /* APCSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSegmentControl.m; sourceTree = "<group>"; };
+		25E6829B19C7A93500597734 /* APCStepProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStepProgressBar.h; sourceTree = "<group>"; };
+		25E6829C19C7A93500597734 /* APCStepProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStepProgressBar.m; sourceTree = "<group>"; };
+		25E6829D19C7A93500597734 /* APCUserInfoTableHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCUserInfoTableHeaderView.xib; sourceTree = "<group>"; };
+		25E682AE19C7AD6900597734 /* APCSpinnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSpinnerViewController.m; sourceTree = "<group>"; };
+		25E682AF19C7AD6900597734 /* APCSpinnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSpinnerViewController.h; sourceTree = "<group>"; };
+		25E682B019C7AD6900597734 /* APCSpinnerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSpinnerViewController.xib; sourceTree = "<group>"; };
+		25E682B819C7BACB00597734 /* APCForgotPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCForgotPasswordViewController.h; sourceTree = "<group>"; };
+		25E682B919C7BACB00597734 /* APCForgotPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCForgotPasswordViewController.xib; sourceTree = "<group>"; };
+		25E682BA19C7BACB00597734 /* APCForgotPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCForgotPasswordViewController.m; sourceTree = "<group>"; };
+		25E682BE19C7BD7A00597734 /* NSObject+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Extension.h"; sourceTree = "<group>"; };
+		25E682BF19C7BD7A00597734 /* NSObject+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Extension.m"; sourceTree = "<group>"; };
 		7BE3200E19B1387E00E5E32D /* APCScheduledTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduledTask.m; sourceTree = "<group>"; };
 		7BFEB4B419B0DA0A0009C917 /* APCSchedulerTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSchedulerTestCase.m; sourceTree = "<group>"; };
 		F5241C5719ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+ResearchKit.h"; sourceTree = "<group>"; };
@@ -353,9 +369,9 @@
 			children = (
 				255D2E3119C3A526002137F1 /* Categories */,
 				255D2E4819C3A526002137F1 /* Cells */,
+				25E6829419C7A93500597734 /* Views */,
 				255D2E5019C3A526002137F1 /* Modules */,
 				255D2E5519C3A526002137F1 /* ViewControllers */,
-				255D2E6B19C3A526002137F1 /* Views */,
 			);
 			path = CommonUI;
 			sourceTree = "<group>";
@@ -389,6 +405,10 @@
 		255D2E3D19C3A526002137F1 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				25E682BE19C7BD7A00597734 /* NSObject+Extension.h */,
+				25E682BF19C7BD7A00597734 /* NSObject+Extension.m */,
+				25E6829319C7A84A00597734 /* UIColor+Category.h */,
+				25E6829019C7A7DF00597734 /* UIColor+Category.m */,
 				255D2E3E19C3A526002137F1 /* NSDate+Category.h */,
 				255D2E3F19C3A526002137F1 /* NSDate+Category.m */,
 				255D2E4019C3A526002137F1 /* NSString+Category.h */,
@@ -433,6 +453,9 @@
 		255D2E5519C3A526002137F1 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				25E682AF19C7AD6900597734 /* APCSpinnerViewController.h */,
+				25E682AE19C7AD6900597734 /* APCSpinnerViewController.m */,
+				25E682B019C7AD6900597734 /* APCSpinnerViewController.xib */,
 				255D2E5619C3A526002137F1 /* APCIntroVideoViewController.h */,
 				255D2E5719C3A526002137F1 /* APCIntroVideoViewController.m */,
 				255D2E5819C3A526002137F1 /* APCNavigationController.h */,
@@ -440,6 +463,9 @@
 				255D2E5A19C3A526002137F1 /* APCSignInViewController.h */,
 				255D2E5B19C3A526002137F1 /* APCSignInViewController.m */,
 				255D2E5C19C3A526002137F1 /* APCSignInViewController.xib */,
+				25E682B819C7BACB00597734 /* APCForgotPasswordViewController.h */,
+				25E682BA19C7BACB00597734 /* APCForgotPasswordViewController.m */,
+				25E682B919C7BACB00597734 /* APCForgotPasswordViewController.xib */,
 				255D2E5D19C3A526002137F1 /* APCSignupCriteriaViewController.h */,
 				255D2E5E19C3A526002137F1 /* APCSignupCriteriaViewController.m */,
 				255D2E5F19C3A526002137F1 /* APCSignUpProgressing.h */,
@@ -458,20 +484,6 @@
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
-		255D2E6B19C3A526002137F1 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				255D2E6C19C3A526002137F1 /* APCPasscodeView.h */,
-				255D2E6D19C3A526002137F1 /* APCPasscodeView.m */,
-				255D2E6E19C3A526002137F1 /* APCSegmentControl.h */,
-				255D2E6F19C3A526002137F1 /* APCSegmentControl.m */,
-				255D2E7019C3A526002137F1 /* APCStepProgressBar.h */,
-				255D2E7119C3A526002137F1 /* APCStepProgressBar.m */,
-				255D2E7219C3A526002137F1 /* APCUserInfoTableHeaderView.xib */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		255D2E7319C3A526002137F1 /* HealthKitProxy */ = {
 			isa = PBXGroup;
 			children = (
@@ -488,6 +500,20 @@
 				255D2E7819C3A526002137F1 /* APCAssertionHandler.m */,
 			);
 			path = AssertionHandler;
+			sourceTree = "<group>";
+		};
+		25E6829419C7A93500597734 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				25E6829519C7A93500597734 /* APCPasscodeView.h */,
+				25E6829619C7A93500597734 /* APCPasscodeView.m */,
+				25E6829719C7A93500597734 /* APCSegmentControl.h */,
+				25E6829819C7A93500597734 /* APCSegmentControl.m */,
+				25E6829B19C7A93500597734 /* APCStepProgressBar.h */,
+				25E6829C19C7A93500597734 /* APCStepProgressBar.m */,
+				25E6829D19C7A93500597734 /* APCUserInfoTableHeaderView.xib */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		7B7179C819AE46EC00B34319 /* Scheduler */ = {
@@ -818,7 +844,7 @@
 				F5A8F38F19B10263008C9F9C /* MODEL_README in Resources */,
 				255D2E8C19C3A526002137F1 /* APCSignInViewController.xib in Resources */,
 				255D2E8519C3A526002137F1 /* APCCriteriaCell.xib in Resources */,
-				255D2E9719C3A526002137F1 /* APCUserInfoTableHeaderView.xib in Resources */,
+				25E682AA19C7A93500597734 /* APCUserInfoTableHeaderView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -828,8 +854,10 @@
 			files = (
 				25E6827719C75B1900597734 /* APCCriteriaCell.xib in Resources */,
 				25E6827819C75B1900597734 /* APCSignInViewController.xib in Resources */,
+				25E682AB19C7A93500597734 /* APCUserInfoTableHeaderView.xib in Resources */,
+				25E682BB19C7BACB00597734 /* APCForgotPasswordViewController.xib in Resources */,
 				25E6827919C75B1900597734 /* APCSignupTouchIDViewController.xib in Resources */,
-				25E6827A19C75B1900597734 /* APCUserInfoTableHeaderView.xib in Resources */,
+				25E682B319C7AD6900597734 /* APCSpinnerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -840,10 +868,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				25E682A119C7A93500597734 /* APCSegmentControl.m in Sources */,
 				25E6825A19C75B0300597734 /* APCStepProgressBar+Appearance.m in Sources */,
 				25E6825B19C75B0300597734 /* CALayer+Appearance.m in Sources */,
 				25E6825C19C75B0300597734 /* UIBarButtonItem+Appearance.m in Sources */,
 				25E6825D19C75B0300597734 /* UISegmentedControl+Appearance.m in Sources */,
+				25E682C019C7BD7A00597734 /* NSObject+Extension.m in Sources */,
 				25E6825E19C75B0300597734 /* UITableView+Appearance.m in Sources */,
 				25E6825F19C75B0300597734 /* NSDate+Category.m in Sources */,
 				25E6826019C75B0300597734 /* NSString+Category.m in Sources */,
@@ -857,6 +887,7 @@
 				25E6826819C75B0300597734 /* APCTableViewItem.m in Sources */,
 				25E6826919C75B0300597734 /* APCIntroVideoViewController.m in Sources */,
 				25E6826A19C75B0300597734 /* APCNavigationController.m in Sources */,
+				25E682B119C7AD6900597734 /* APCSpinnerViewController.m in Sources */,
 				25E6826B19C75B0300597734 /* APCSignInViewController.m in Sources */,
 				25E6826C19C75B0300597734 /* APCSignupCriteriaViewController.m in Sources */,
 				25E6826D19C75B0300597734 /* APCSignupTouchIDViewController.m in Sources */,
@@ -864,9 +895,6 @@
 				25E6826F19C75B0300597734 /* APCSignupViewController.m in Sources */,
 				25E6827019C75B0300597734 /* APCUserInfoViewController.m in Sources */,
 				25E6827119C75B0300597734 /* APCViewController.m in Sources */,
-				25E6827219C75B0300597734 /* APCPasscodeView.m in Sources */,
-				25E6827319C75B0300597734 /* APCSegmentControl.m in Sources */,
-				25E6827419C75B0300597734 /* APCStepProgressBar.m in Sources */,
 				25E6827519C75B0300597734 /* APCHealthKitProxy.m in Sources */,
 				25E6827619C75B0300597734 /* APCAssertionHandler.m in Sources */,
 				F560074E19A797E6009F877F /* NSError+APCAdditions.m in Sources */,
@@ -874,6 +902,7 @@
 				F5346FFF19C377D7005D9DC2 /* APCConsentResult+AddOn.m in Sources */,
 				F5A8F38019B0FF78008C9F9C /* APCSchedule+AddOn.m in Sources */,
 				F5985F2B19C39FE100F97584 /* APCSurveyResult+AddOn.m in Sources */,
+				25E682BC19C7BACB00597734 /* APCForgotPasswordViewController.m in Sources */,
 				F54513C519BE76EE00988651 /* APCScheduler.m in Sources */,
 				25E6827F19C75DEB00597734 /* NSBundle+Category.m in Sources */,
 				F5985F2F19C39FF200F97584 /* APCQuestionResult+AddOn.m in Sources */,
@@ -885,7 +914,9 @@
 				F5985F3719C3A08100F97584 /* APCSurveyResult.m in Sources */,
 				F5A8F37019B0FDF8008C9F9C /* APCTask.m in Sources */,
 				F5A8F38C19B1011F008C9F9C /* APCResult+AddOn.m in Sources */,
+				25E682A719C7A93500597734 /* APCStepProgressBar.m in Sources */,
 				F5346FF319C37753005D9DC2 /* APCConsentResult.m in Sources */,
+				25E6829E19C7A93500597734 /* APCPasscodeView.m in Sources */,
 				F54513C319BE76EE00988651 /* APCScheduleInterpreter.m in Sources */,
 				F5241C5919ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m in Sources */,
 				F5346FE619C35EE6005D9DC2 /* APCResult.m in Sources */,
@@ -896,6 +927,7 @@
 				F5346FFB19C37754005D9DC2 /* APCFileResult.m in Sources */,
 				F5B39FC119BFA39700CA7B8C /* APCDBStatus.m in Sources */,
 				F5DAB56C199EC0D0008E4A8E /* APCNetworkManager.m in Sources */,
+				25E6829219C7A7DF00597734 /* UIColor+Category.m in Sources */,
 				F5A8F38819B100E9008C9F9C /* APCScheduledTask+AddOn.m in Sources */,
 				F5B39FC419BFA3C300CA7B8C /* APCDBStatus+AddOn.m in Sources */,
 				F594B4C019AFA2ED00AD19C9 /* APCDataMonitor.m in Sources */,
@@ -919,18 +951,18 @@
 				255D2E9919C3A526002137F1 /* APCAssertionHandler.m in Sources */,
 				F5A8F37119B0FDF8008C9F9C /* APCTask.m in Sources */,
 				F58668B819A3D0E000E9C375 /* APCNetworkManagerTest.m in Sources */,
+				25E6829F19C7A93500597734 /* APCPasscodeView.m in Sources */,
 				F5A8F37D19B0FDF8008C9F9C /* APCSchedule.m in Sources */,
 				255D2E9019C3A526002137F1 /* APCSignUpUserInfoViewController.m in Sources */,
-				255D2E9519C3A526002137F1 /* APCSegmentControl.m in Sources */,
 				7BE3201019B1387E00E5E32D /* APCScheduledTask.m in Sources */,
 				255D2E9819C3A526002137F1 /* APCHealthKitProxy.m in Sources */,
-				255D2E9619C3A526002137F1 /* APCStepProgressBar.m in Sources */,
 				F5A8F38919B100E9008C9F9C /* APCScheduledTask+AddOn.m in Sources */,
 				F5A8F36819AFC9B0008C9F9C /* APCTask+AddOn.m in Sources */,
 				255D2E8D19C3A526002137F1 /* APCSignupCriteriaViewController.m in Sources */,
 				255D2E9119C3A526002137F1 /* APCSignupViewController.m in Sources */,
 				255D2E8919C3A526002137F1 /* APCIntroVideoViewController.m in Sources */,
 				255D2E8219C3A526002137F1 /* UIView+Category.m in Sources */,
+				25E682A819C7A93500597734 /* APCStepProgressBar.m in Sources */,
 				F5A8F38919B100E9008C9F9C /* APCScheduledTask+AddOn.m in Sources */,
 				F5A8F36819AFC9B0008C9F9C /* APCTask+AddOn.m in Sources */,
 				F5346FEF19C36ECD005D9DC2 /* APCScheduledTask.m in Sources */,
@@ -947,7 +979,6 @@
 				F5985F2C19C39FE100F97584 /* APCSurveyResult+AddOn.m in Sources */,
 				7BFEB4B519B0DA0A0009C917 /* APCSchedulerTestCase.m in Sources */,
 				255D2E9219C3A526002137F1 /* APCUserInfoViewController.m in Sources */,
-				255D2E9419C3A526002137F1 /* APCPasscodeView.m in Sources */,
 				255D2E7A19C3A526002137F1 /* CALayer+Appearance.m in Sources */,
 				255D2E7919C3A526002137F1 /* APCStepProgressBar+Appearance.m in Sources */,
 				255D2E8E19C3A526002137F1 /* APCSignupTouchIDViewController.m in Sources */,
@@ -957,6 +988,7 @@
 				255D2E8119C3A526002137F1 /* UIScrollView+Category.m in Sources */,
 				F560075319A7A502009F877F /* APCSageNetworkManager.m in Sources */,
 				255D2E7E19C3A526002137F1 /* NSDate+Category.m in Sources */,
+				25E682A219C7A93500597734 /* APCSegmentControl.m in Sources */,
 				F560075519A7A81E009F877F /* APCSageNetworkManagerTest.m in Sources */,
 				255D2E8319C3A526002137F1 /* APCConfigurableCell.m in Sources */,
 				255D2E8B19C3A526002137F1 /* APCSignInViewController.m in Sources */,

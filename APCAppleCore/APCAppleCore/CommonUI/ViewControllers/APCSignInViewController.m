@@ -6,7 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "NSBundle+Category.h"
 #import "APCSignInViewController.h"
+#import "APCForgotPasswordViewController.h"
 
 @interface APCSignInViewController ()
 
@@ -16,22 +18,39 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
+    [self addNavigationItems];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void) addNavigationItems {
+    self.title = NSLocalizedString(@"Sign In", @"");
+    
+    UIBarButtonItem *nextBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Sign In", @"") style:UIBarButtonItemStylePlain target:self action:@selector(signIn)];
+    self.navigationItem.rightBarButtonItem = nextBarButton;
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark - UITextFieldDelegate
+
+- (BOOL) textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.userHandleTextField) {
+        [self.passwordTextField becomeFirstResponder];
+    }
+    else if (textField == self.userHandleTextField) {
+        [self.passwordTextField resignFirstResponder];
+        [self signIn];
+    }
+    
+    return YES;
 }
-*/
+
+- (void) signIn {
+    
+}
+
+- (IBAction) forgotPassword {
+    APCForgotPasswordViewController *forgotPasswordViewController = [[APCForgotPasswordViewController alloc] initWithNibName:@"APCForgotPasswordViewController" bundle:[NSBundle appleCoreBundle]];
+    [self.navigationController pushViewController:forgotPasswordViewController animated:YES];
+}
 
 @end

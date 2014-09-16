@@ -33,9 +33,31 @@
 
 @property (nonatomic, strong) NSString *height;
 
+@property (nonatomic, strong) NSDate *sleepTime;
+
+@property (nonatomic, strong) NSDate *wakeUpTime;
+
 @property (nonatomic, readwrite) HKBiologicalSex gender;
 
 @property (nonatomic, readwrite) HKBloodType bloodType;
+
+@end
+
+
+@interface APCProfile (HealthKit)
+
++ (NSArray *) sexTypesInStringValue;
+
++ (HKBiologicalSex) sexTypeFromStringValue:(NSString *)stringValue;
+
++ (NSString *) stringValueFromSexType:(HKBiologicalSex)sexType;
+
++ (NSUInteger) stringIndexFromSexType:(HKBiologicalSex)sexType;
+
+
++ (NSArray *) bloodTypeInStringValues;
+
++ (HKBloodType) bloodTypeFromStringValue:(NSString *)stringValue;
 
 @end
 

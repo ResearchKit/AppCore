@@ -19,9 +19,13 @@ typedef NS_ENUM(NSUInteger, APCSignUpUserInfoItem) {
     APCSignUpUserInfoItemBloodType,
     APCSignUpUserInfoItemWeight,
     APCSignUpUserInfoItemHeight,
-    APCSignUpUserInfoItemGender
+    APCSignUpUserInfoItemGender,
+    APCSignUpUserInfoItemSleepTime,
+    APCSignUpUserInfoItemWakeUpTime
 };
 
 @interface APCSignUpUserInfoViewController : APCUserInfoViewController <APCSignUpProgressing>
+
+@property (nonatomic, strong) NSArray *itemsOrder;
 
 @end
