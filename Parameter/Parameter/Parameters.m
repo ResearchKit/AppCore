@@ -12,7 +12,7 @@
 NSString *const ParametersValueChangeNotification   = @"com.apple.parameters.notification.valuechange";
 
 // Private constants
-NSString *const kParamentersFileName                = @"parameters.json";
+NSString *const kParamentersFileName                = @"parameters.plist";
 
 @interface Parameters ()
 
@@ -35,6 +35,7 @@ NSString *const kParamentersFileName                = @"parameters.json";
 
 
 #pragma mark - Private Methods
+
 
 - (void) loadValuesFromBundle {
     NSData *data = [[NSFileManager defaultManager] contentsAtPath:[self filePath]];
