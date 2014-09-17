@@ -34,6 +34,7 @@ static CGFloat const kAPCConfigurableCellControlsMinHeight              = 30.0;
         _valueTextField.delegate = self;
         _valueTextField.font = [UITableView textFieldFont];
         _valueTextField.textColor = [UITableView textFieldTextColor];
+        _valueTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     }
     
     return _valueTextField;

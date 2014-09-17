@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "APCAppleCore.h"
 #import "APCCriteriaCell.h"
 #import "UIView+Category.h"
 #import "NSDate+Category.h"
@@ -178,7 +179,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 #pragma mark - Private Methods
 
 - (void) finishSignUp {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:(NSString *)APCUserLoginNotification object:nil];
 }
 
 @end
