@@ -34,7 +34,6 @@
 		255D2E9119C3A526002137F1 /* APCSignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6619C3A526002137F1 /* APCSignupViewController.m */; };
 		255D2E9219C3A526002137F1 /* APCUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6819C3A526002137F1 /* APCUserInfoViewController.m */; };
 		255D2E9319C3A526002137F1 /* APCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6A19C3A526002137F1 /* APCViewController.m */; };
-		255D2E9819C3A526002137F1 /* APCHealthKitProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E7519C3A526002137F1 /* APCHealthKitProxy.m */; };
 		255D2E9919C3A526002137F1 /* APCAssertionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E7819C3A526002137F1 /* APCAssertionHandler.m */; };
 		25E6825A19C75B0300597734 /* APCStepProgressBar+Appearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E3419C3A526002137F1 /* APCStepProgressBar+Appearance.m */; };
 		25E6825B19C75B0300597734 /* CALayer+Appearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E3619C3A526002137F1 /* CALayer+Appearance.m */; };
@@ -60,7 +59,6 @@
 		25E6826F19C75B0300597734 /* APCSignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6619C3A526002137F1 /* APCSignupViewController.m */; };
 		25E6827019C75B0300597734 /* APCUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6819C3A526002137F1 /* APCUserInfoViewController.m */; };
 		25E6827119C75B0300597734 /* APCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E6A19C3A526002137F1 /* APCViewController.m */; };
-		25E6827519C75B0300597734 /* APCHealthKitProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E7519C3A526002137F1 /* APCHealthKitProxy.m */; };
 		25E6827619C75B0300597734 /* APCAssertionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E7819C3A526002137F1 /* APCAssertionHandler.m */; };
 		25E6827719C75B1900597734 /* APCCriteriaCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 255D2E4D19C3A526002137F1 /* APCCriteriaCell.xib */; };
 		25E6827819C75B1900597734 /* APCSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 255D2E5C19C3A526002137F1 /* APCSignInViewController.xib */; };
@@ -231,8 +229,6 @@
 		255D2E6819C3A526002137F1 /* APCUserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCUserInfoViewController.m; sourceTree = "<group>"; };
 		255D2E6919C3A526002137F1 /* APCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCViewController.h; sourceTree = "<group>"; };
 		255D2E6A19C3A526002137F1 /* APCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCViewController.m; sourceTree = "<group>"; };
-		255D2E7419C3A526002137F1 /* APCHealthKitProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHealthKitProxy.h; sourceTree = "<group>"; };
-		255D2E7519C3A526002137F1 /* APCHealthKitProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHealthKitProxy.m; sourceTree = "<group>"; };
 		255D2E7719C3A526002137F1 /* APCAssertionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAssertionHandler.h; sourceTree = "<group>"; };
 		255D2E7819C3A526002137F1 /* APCAssertionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAssertionHandler.m; sourceTree = "<group>"; };
 		25E6827D19C75DEB00597734 /* NSBundle+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+Category.h"; sourceTree = "<group>"; };
@@ -497,15 +493,6 @@
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
-		255D2E7319C3A526002137F1 /* HealthKitProxy */ = {
-			isa = PBXGroup;
-			children = (
-				255D2E7419C3A526002137F1 /* APCHealthKitProxy.h */,
-				255D2E7519C3A526002137F1 /* APCHealthKitProxy.m */,
-			);
-			path = HealthKitProxy;
-			sourceTree = "<group>";
-		};
 		255D2E7619C3A526002137F1 /* AssertionHandler */ = {
 			isa = PBXGroup;
 			children = (
@@ -688,7 +675,6 @@
 				F59C277F19A3B65700596ACC /* Vendor */,
 				F560074A19A797CE009F877F /* Library */,
 				255D2E3019C3A526002137F1 /* CommonUI */,
-				255D2E7319C3A526002137F1 /* HealthKitProxy */,
 				255D2E7619C3A526002137F1 /* AssertionHandler */,
 			);
 			path = APCAppleCore;
@@ -921,7 +907,6 @@
 				25E6826F19C75B0300597734 /* APCSignupViewController.m in Sources */,
 				25E6827019C75B0300597734 /* APCUserInfoViewController.m in Sources */,
 				25E6827119C75B0300597734 /* APCViewController.m in Sources */,
-				25E6827519C75B0300597734 /* APCHealthKitProxy.m in Sources */,
 				25E6827619C75B0300597734 /* APCAssertionHandler.m in Sources */,
 				F560074E19A797E6009F877F /* NSError+APCAdditions.m in Sources */,
 				F5241C5D19ACFF070098A4DF /* APCDataSubstrate+CoreData.m in Sources */,
@@ -985,8 +970,6 @@
 				F5A8F37D19B0FDF8008C9F9C /* APCSchedule.m in Sources */,
 				255D2E9019C3A526002137F1 /* APCSignUpUserInfoViewController.m in Sources */,
 				7BE3201019B1387E00E5E32D /* APCScheduledTask.m in Sources */,
-				255D2E9819C3A526002137F1 /* APCHealthKitProxy.m in Sources */,
-				255D2E9819C3A526002137F1 /* APCHealthKitProxy.m in Sources */,
 				255D2E8D19C3A526002137F1 /* APCSignupCriteriaViewController.m in Sources */,
 				F528043819C8BB7200BE0E79 /* APCSageNetworkManagerTest.m in Sources */,
 				255D2E9119C3A526002137F1 /* APCSignupViewController.m in Sources */,
