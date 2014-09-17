@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "UIView+Category.h"
+#import "UIView+Helper.h"
 #import "APCIntroVideoViewController.h"
 
 @interface APCIntroVideoViewController ()

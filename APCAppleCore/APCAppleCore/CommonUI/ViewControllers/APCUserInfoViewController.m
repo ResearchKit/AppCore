@@ -7,13 +7,13 @@
 //
 
 #import "APCProfile.h"
-#import "NSDate+Category.h"
-#import "UIView+Category.h"
+#import "NSDate+Helper.h"
+#import "UIView+Helper.h"
 #import "APCTableViewItem.h"
-#import "NSBundle+Category.h"
-#import "NSString+Category.h"
+#import "NSBundle+Helper.h"
+#import "NSString+Helper.h"
 #import "APCSegmentControl.h"
-#import "UIScrollView+Category.h"
+#import "UIScrollView+Helper.h"
 #import "UITableView+Appearance.h"
 #import "APCUserInfoViewController.h"
 

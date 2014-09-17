@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "NSBundle+Category.h"
+#import "NSBundle+Helper.h"
 #import "APCSignInViewController.h"
 #import "APCForgotPasswordViewController.h"
 

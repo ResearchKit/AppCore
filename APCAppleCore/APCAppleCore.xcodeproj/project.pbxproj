@@ -12,11 +12,11 @@
 		255D2E7B19C3A526002137F1 /* UIBarButtonItem+Appearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E3819C3A526002137F1 /* UIBarButtonItem+Appearance.m */; };
 		255D2E7C19C3A526002137F1 /* UISegmentedControl+Appearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E3A19C3A526002137F1 /* UISegmentedControl+Appearance.m */; };
 		255D2E7D19C3A526002137F1 /* UITableView+Appearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E3C19C3A526002137F1 /* UITableView+Appearance.m */; };
-		255D2E7E19C3A526002137F1 /* NSDate+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E3F19C3A526002137F1 /* NSDate+Category.m */; };
-		255D2E7F19C3A526002137F1 /* NSString+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4119C3A526002137F1 /* NSString+Category.m */; };
-		255D2E8019C3A526002137F1 /* UIAlertView+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4319C3A526002137F1 /* UIAlertView+Category.m */; };
-		255D2E8119C3A526002137F1 /* UIScrollView+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4519C3A526002137F1 /* UIScrollView+Category.m */; };
-		255D2E8219C3A526002137F1 /* UIView+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4719C3A526002137F1 /* UIView+Category.m */; };
+		255D2E7E19C3A526002137F1 /* NSDate+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E3F19C3A526002137F1 /* NSDate+Helper.m */; };
+		255D2E7F19C3A526002137F1 /* NSString+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4119C3A526002137F1 /* NSString+Helper.m */; };
+		255D2E8019C3A526002137F1 /* UIAlertView+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4319C3A526002137F1 /* UIAlertView+Helper.m */; };
+		255D2E8119C3A526002137F1 /* UIScrollView+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4519C3A526002137F1 /* UIScrollView+Helper.m */; };
+		255D2E8219C3A526002137F1 /* UIView+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4719C3A526002137F1 /* UIView+Helper.m */; };
 		255D2E8319C3A526002137F1 /* APCConfigurableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4A19C3A526002137F1 /* APCConfigurableCell.m */; };
 		255D2E8419C3A526002137F1 /* APCCriteriaCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4C19C3A526002137F1 /* APCCriteriaCell.m */; };
 		255D2E8519C3A526002137F1 /* APCCriteriaCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 255D2E4D19C3A526002137F1 /* APCCriteriaCell.xib */; };
@@ -40,11 +40,11 @@
 		25E6825C19C75B0300597734 /* UIBarButtonItem+Appearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E3819C3A526002137F1 /* UIBarButtonItem+Appearance.m */; };
 		25E6825D19C75B0300597734 /* UISegmentedControl+Appearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E3A19C3A526002137F1 /* UISegmentedControl+Appearance.m */; };
 		25E6825E19C75B0300597734 /* UITableView+Appearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E3C19C3A526002137F1 /* UITableView+Appearance.m */; };
-		25E6825F19C75B0300597734 /* NSDate+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E3F19C3A526002137F1 /* NSDate+Category.m */; };
-		25E6826019C75B0300597734 /* NSString+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4119C3A526002137F1 /* NSString+Category.m */; };
-		25E6826119C75B0300597734 /* UIAlertView+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4319C3A526002137F1 /* UIAlertView+Category.m */; };
-		25E6826219C75B0300597734 /* UIScrollView+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4519C3A526002137F1 /* UIScrollView+Category.m */; };
-		25E6826319C75B0300597734 /* UIView+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4719C3A526002137F1 /* UIView+Category.m */; };
+		25E6825F19C75B0300597734 /* NSDate+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E3F19C3A526002137F1 /* NSDate+Helper.m */; };
+		25E6826019C75B0300597734 /* NSString+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4119C3A526002137F1 /* NSString+Helper.m */; };
+		25E6826119C75B0300597734 /* UIAlertView+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4319C3A526002137F1 /* UIAlertView+Helper.m */; };
+		25E6826219C75B0300597734 /* UIScrollView+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4519C3A526002137F1 /* UIScrollView+Helper.m */; };
+		25E6826319C75B0300597734 /* UIView+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4719C3A526002137F1 /* UIView+Helper.m */; };
 		25E6826419C75B0300597734 /* APCConfigurableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4A19C3A526002137F1 /* APCConfigurableCell.m */; };
 		25E6826519C75B0300597734 /* APCCriteriaCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4C19C3A526002137F1 /* APCCriteriaCell.m */; };
 		25E6826619C75B0300597734 /* APCUserInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D2E4F19C3A526002137F1 /* APCUserInfoCell.m */; };
@@ -63,8 +63,8 @@
 		25E6827719C75B1900597734 /* APCCriteriaCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 255D2E4D19C3A526002137F1 /* APCCriteriaCell.xib */; };
 		25E6827819C75B1900597734 /* APCSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 255D2E5C19C3A526002137F1 /* APCSignInViewController.xib */; };
 		25E6827919C75B1900597734 /* APCSignupTouchIDViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 255D2E6219C3A526002137F1 /* APCSignupTouchIDViewController.xib */; };
-		25E6827F19C75DEB00597734 /* NSBundle+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6827E19C75DEB00597734 /* NSBundle+Category.m */; };
-		25E6829219C7A7DF00597734 /* UIColor+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6829019C7A7DF00597734 /* UIColor+Category.m */; };
+		25E6827F19C75DEB00597734 /* NSBundle+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6827E19C75DEB00597734 /* NSBundle+Helper.m */; };
+		25E6829219C7A7DF00597734 /* UIColor+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6829019C7A7DF00597734 /* UIColor+Helper.m */; };
 		25E6829E19C7A93500597734 /* APCPasscodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6829619C7A93500597734 /* APCPasscodeView.m */; };
 		25E6829F19C7A93500597734 /* APCPasscodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6829619C7A93500597734 /* APCPasscodeView.m */; };
 		25E682A119C7A93500597734 /* APCSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E6829819C7A93500597734 /* APCSegmentControl.m */; };
@@ -77,7 +77,7 @@
 		25E682B319C7AD6900597734 /* APCSpinnerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25E682B019C7AD6900597734 /* APCSpinnerViewController.xib */; };
 		25E682BB19C7BACB00597734 /* APCForgotPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25E682B919C7BACB00597734 /* APCForgotPasswordViewController.xib */; };
 		25E682BC19C7BACB00597734 /* APCForgotPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E682BA19C7BACB00597734 /* APCForgotPasswordViewController.m */; };
-		25E682C019C7BD7A00597734 /* NSObject+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E682BF19C7BD7A00597734 /* NSObject+Category.m */; };
+		25E682C019C7BD7A00597734 /* NSObject+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E682BF19C7BD7A00597734 /* NSObject+Helper.m */; };
 		25E96C2919C8E80100EB30D7 /* NSError+APCNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E96C2819C8E80100EB30D7 /* NSError+APCNetworkManager.m */; };
 		7BB1C79C19C76D370030D3C2 /* APCParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BB1C79A19C76D370030D3C2 /* APCParameters.m */; };
 		7BB1C79D19C76D370030D3C2 /* APCParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BB1C79A19C76D370030D3C2 /* APCParameters.m */; };
@@ -187,16 +187,16 @@
 		255D2E3A19C3A526002137F1 /* UISegmentedControl+Appearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UISegmentedControl+Appearance.m"; sourceTree = "<group>"; };
 		255D2E3B19C3A526002137F1 /* UITableView+Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+Appearance.h"; sourceTree = "<group>"; };
 		255D2E3C19C3A526002137F1 /* UITableView+Appearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Appearance.m"; sourceTree = "<group>"; };
-		255D2E3E19C3A526002137F1 /* NSDate+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSDate+Category.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		255D2E3F19C3A526002137F1 /* NSDate+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSDate+Category.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		255D2E4019C3A526002137F1 /* NSString+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSString+Category.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		255D2E4119C3A526002137F1 /* NSString+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Category.m"; sourceTree = "<group>"; };
-		255D2E4219C3A526002137F1 /* UIAlertView+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "UIAlertView+Category.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		255D2E4319C3A526002137F1 /* UIAlertView+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "UIAlertView+Category.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		255D2E4419C3A526002137F1 /* UIScrollView+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+Category.h"; sourceTree = "<group>"; };
-		255D2E4519C3A526002137F1 /* UIScrollView+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "UIScrollView+Category.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		255D2E4619C3A526002137F1 /* UIView+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "UIView+Category.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		255D2E4719C3A526002137F1 /* UIView+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "UIView+Category.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		255D2E3E19C3A526002137F1 /* NSDate+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSDate+Helper.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		255D2E3F19C3A526002137F1 /* NSDate+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSDate+Helper.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		255D2E4019C3A526002137F1 /* NSString+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSString+Helper.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		255D2E4119C3A526002137F1 /* NSString+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Helper.m"; sourceTree = "<group>"; };
+		255D2E4219C3A526002137F1 /* UIAlertView+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "UIAlertView+Helper.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		255D2E4319C3A526002137F1 /* UIAlertView+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "UIAlertView+Helper.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		255D2E4419C3A526002137F1 /* UIScrollView+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+Helper.h"; sourceTree = "<group>"; };
+		255D2E4519C3A526002137F1 /* UIScrollView+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "UIScrollView+Helper.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		255D2E4619C3A526002137F1 /* UIView+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "UIView+Helper.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		255D2E4719C3A526002137F1 /* UIView+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "UIView+Helper.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		255D2E4919C3A526002137F1 /* APCConfigurableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCConfigurableCell.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		255D2E4A19C3A526002137F1 /* APCConfigurableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCConfigurableCell.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		255D2E4B19C3A526002137F1 /* APCCriteriaCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCriteriaCell.h; sourceTree = "<group>"; };
@@ -231,10 +231,10 @@
 		255D2E6A19C3A526002137F1 /* APCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCViewController.m; sourceTree = "<group>"; };
 		255D2E7719C3A526002137F1 /* APCAssertionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAssertionHandler.h; sourceTree = "<group>"; };
 		255D2E7819C3A526002137F1 /* APCAssertionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAssertionHandler.m; sourceTree = "<group>"; };
-		25E6827D19C75DEB00597734 /* NSBundle+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+Category.h"; sourceTree = "<group>"; };
-		25E6827E19C75DEB00597734 /* NSBundle+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+Category.m"; sourceTree = "<group>"; };
-		25E6829019C7A7DF00597734 /* UIColor+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Category.m"; sourceTree = "<group>"; };
-		25E6829319C7A84A00597734 /* UIColor+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Category.h"; sourceTree = "<group>"; };
+		25E6827D19C75DEB00597734 /* NSBundle+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+Helper.h"; sourceTree = "<group>"; };
+		25E6827E19C75DEB00597734 /* NSBundle+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+Helper.m"; sourceTree = "<group>"; };
+		25E6829019C7A7DF00597734 /* UIColor+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Helper.m"; sourceTree = "<group>"; };
+		25E6829319C7A84A00597734 /* UIColor+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Helper.h"; sourceTree = "<group>"; };
 		25E6829519C7A93500597734 /* APCPasscodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPasscodeView.h; sourceTree = "<group>"; };
 		25E6829619C7A93500597734 /* APCPasscodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPasscodeView.m; sourceTree = "<group>"; };
 		25E6829719C7A93500597734 /* APCSegmentControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSegmentControl.h; sourceTree = "<group>"; };
@@ -248,8 +248,8 @@
 		25E682B819C7BACB00597734 /* APCForgotPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCForgotPasswordViewController.h; sourceTree = "<group>"; };
 		25E682B919C7BACB00597734 /* APCForgotPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCForgotPasswordViewController.xib; sourceTree = "<group>"; };
 		25E682BA19C7BACB00597734 /* APCForgotPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCForgotPasswordViewController.m; sourceTree = "<group>"; };
-		25E682BE19C7BD7A00597734 /* NSObject+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSObject+Category.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		25E682BF19C7BD7A00597734 /* NSObject+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSObject+Category.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		25E682BE19C7BD7A00597734 /* NSObject+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSObject+Helper.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		25E682BF19C7BD7A00597734 /* NSObject+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSObject+Helper.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		25E96C2019C8BD6A00EB30D7 /* APCUserInfoConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCUserInfoConstants.h; sourceTree = "<group>"; };
 		25E96C2719C8E80100EB30D7 /* NSError+APCNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+APCNetworkManager.h"; sourceTree = "<group>"; };
 		25E96C2819C8E80100EB30D7 /* NSError+APCNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+APCNetworkManager.m"; sourceTree = "<group>"; };
@@ -411,22 +411,22 @@
 		255D2E3D19C3A526002137F1 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				25E682BE19C7BD7A00597734 /* NSObject+Category.h */,
-				25E682BF19C7BD7A00597734 /* NSObject+Category.m */,
-				25E6829319C7A84A00597734 /* UIColor+Category.h */,
-				25E6829019C7A7DF00597734 /* UIColor+Category.m */,
-				255D2E3E19C3A526002137F1 /* NSDate+Category.h */,
-				255D2E3F19C3A526002137F1 /* NSDate+Category.m */,
-				255D2E4019C3A526002137F1 /* NSString+Category.h */,
-				255D2E4119C3A526002137F1 /* NSString+Category.m */,
-				255D2E4219C3A526002137F1 /* UIAlertView+Category.h */,
-				255D2E4319C3A526002137F1 /* UIAlertView+Category.m */,
-				255D2E4419C3A526002137F1 /* UIScrollView+Category.h */,
-				255D2E4519C3A526002137F1 /* UIScrollView+Category.m */,
-				255D2E4619C3A526002137F1 /* UIView+Category.h */,
-				255D2E4719C3A526002137F1 /* UIView+Category.m */,
-				25E6827D19C75DEB00597734 /* NSBundle+Category.h */,
-				25E6827E19C75DEB00597734 /* NSBundle+Category.m */,
+				25E682BE19C7BD7A00597734 /* NSObject+Helper.h */,
+				25E682BF19C7BD7A00597734 /* NSObject+Helper.m */,
+				25E6829319C7A84A00597734 /* UIColor+Helper.h */,
+				25E6829019C7A7DF00597734 /* UIColor+Helper.m */,
+				255D2E3E19C3A526002137F1 /* NSDate+Helper.h */,
+				255D2E3F19C3A526002137F1 /* NSDate+Helper.m */,
+				255D2E4019C3A526002137F1 /* NSString+Helper.h */,
+				255D2E4119C3A526002137F1 /* NSString+Helper.m */,
+				255D2E4219C3A526002137F1 /* UIAlertView+Helper.h */,
+				255D2E4319C3A526002137F1 /* UIAlertView+Helper.m */,
+				255D2E4419C3A526002137F1 /* UIScrollView+Helper.h */,
+				255D2E4519C3A526002137F1 /* UIScrollView+Helper.m */,
+				255D2E4619C3A526002137F1 /* UIView+Helper.h */,
+				255D2E4719C3A526002137F1 /* UIView+Helper.m */,
+				25E6827D19C75DEB00597734 /* NSBundle+Helper.h */,
+				25E6827E19C75DEB00597734 /* NSBundle+Helper.m */,
 				25E96C2719C8E80100EB30D7 /* NSError+APCNetworkManager.h */,
 				25E96C2819C8E80100EB30D7 /* NSError+APCNetworkManager.m */,
 			);
@@ -884,13 +884,13 @@
 				25E6825B19C75B0300597734 /* CALayer+Appearance.m in Sources */,
 				25E6825C19C75B0300597734 /* UIBarButtonItem+Appearance.m in Sources */,
 				25E6825D19C75B0300597734 /* UISegmentedControl+Appearance.m in Sources */,
-				25E682C019C7BD7A00597734 /* NSObject+Category.m in Sources */,
+				25E682C019C7BD7A00597734 /* NSObject+Helper.m in Sources */,
 				25E6825E19C75B0300597734 /* UITableView+Appearance.m in Sources */,
-				25E6825F19C75B0300597734 /* NSDate+Category.m in Sources */,
-				25E6826019C75B0300597734 /* NSString+Category.m in Sources */,
-				25E6826119C75B0300597734 /* UIAlertView+Category.m in Sources */,
-				25E6826219C75B0300597734 /* UIScrollView+Category.m in Sources */,
-				25E6826319C75B0300597734 /* UIView+Category.m in Sources */,
+				25E6825F19C75B0300597734 /* NSDate+Helper.m in Sources */,
+				25E6826019C75B0300597734 /* NSString+Helper.m in Sources */,
+				25E6826119C75B0300597734 /* UIAlertView+Helper.m in Sources */,
+				25E6826219C75B0300597734 /* UIScrollView+Helper.m in Sources */,
+				25E6826319C75B0300597734 /* UIView+Helper.m in Sources */,
 				25E6826419C75B0300597734 /* APCConfigurableCell.m in Sources */,
 				25E6826519C75B0300597734 /* APCCriteriaCell.m in Sources */,
 				25E6826619C75B0300597734 /* APCUserInfoCell.m in Sources */,
@@ -915,7 +915,7 @@
 				F5985F2B19C39FE100F97584 /* APCSurveyResult+AddOn.m in Sources */,
 				25E682BC19C7BACB00597734 /* APCForgotPasswordViewController.m in Sources */,
 				F54513C519BE76EE00988651 /* APCScheduler.m in Sources */,
-				25E6827F19C75DEB00597734 /* NSBundle+Category.m in Sources */,
+				25E6827F19C75DEB00597734 /* NSBundle+Helper.m in Sources */,
 				F5985F2F19C39FF200F97584 /* APCQuestionResult+AddOn.m in Sources */,
 				F5E4873419ABDEB500C86FC6 /* APCModel.xcdatamodeld in Sources */,
 				F5346FEE19C36ECD005D9DC2 /* APCScheduledTask.m in Sources */,
@@ -940,7 +940,7 @@
 				F5346FFB19C37754005D9DC2 /* APCFileResult.m in Sources */,
 				F5B39FC119BFA39700CA7B8C /* APCDBStatus.m in Sources */,
 				F5DAB56C199EC0D0008E4A8E /* APCNetworkManager.m in Sources */,
-				25E6829219C7A7DF00597734 /* UIColor+Category.m in Sources */,
+				25E6829219C7A7DF00597734 /* UIColor+Helper.m in Sources */,
 				F5B39FC419BFA3C300CA7B8C /* APCDBStatus+AddOn.m in Sources */,
 				F594B4C019AFA2ED00AD19C9 /* APCDataMonitor.m in Sources */,
 				F5346FF719C37754005D9DC2 /* APCDataResult.m in Sources */,
@@ -962,7 +962,7 @@
 				F528044319C8D1D800BE0E79 /* APCScheduledTask+AddOn.m in Sources */,
 				F5AC934119C0EBCA0062C89A /* APCDBStatus.m in Sources */,
 				F5E4872519ABDBF000C86FC6 /* APCDataSubstrate.m in Sources */,
-				255D2E8019C3A526002137F1 /* UIAlertView+Category.m in Sources */,
+				255D2E8019C3A526002137F1 /* UIAlertView+Helper.m in Sources */,
 				255D2E9919C3A526002137F1 /* APCAssertionHandler.m in Sources */,
 				F5A8F37119B0FDF8008C9F9C /* APCTask.m in Sources */,
 				F58668B819A3D0E000E9C375 /* APCNetworkManagerTest.m in Sources */,
@@ -974,7 +974,7 @@
 				F528043819C8BB7200BE0E79 /* APCSageNetworkManagerTest.m in Sources */,
 				255D2E9119C3A526002137F1 /* APCSignupViewController.m in Sources */,
 				255D2E8919C3A526002137F1 /* APCIntroVideoViewController.m in Sources */,
-				255D2E8219C3A526002137F1 /* UIView+Category.m in Sources */,
+				255D2E8219C3A526002137F1 /* UIView+Helper.m in Sources */,
 				25E682A819C7A93500597734 /* APCStepProgressBar.m in Sources */,
 				F5346FEF19C36ECD005D9DC2 /* APCScheduledTask.m in Sources */,
 				F5241C5A19ACFEE50098A4DF /* APCDataSubstrate+ResearchKit.m in Sources */,
@@ -994,10 +994,10 @@
 				255D2E8E19C3A526002137F1 /* APCSignupTouchIDViewController.m in Sources */,
 				255D2E8719C3A526002137F1 /* APCProfile.m in Sources */,
 				255D2E7C19C3A526002137F1 /* UISegmentedControl+Appearance.m in Sources */,
-				255D2E7F19C3A526002137F1 /* NSString+Category.m in Sources */,
-				255D2E8119C3A526002137F1 /* UIScrollView+Category.m in Sources */,
+				255D2E7F19C3A526002137F1 /* NSString+Helper.m in Sources */,
+				255D2E8119C3A526002137F1 /* UIScrollView+Helper.m in Sources */,
 				F560075319A7A502009F877F /* APCSageNetworkManager.m in Sources */,
-				255D2E7E19C3A526002137F1 /* NSDate+Category.m in Sources */,
+				255D2E7E19C3A526002137F1 /* NSDate+Helper.m in Sources */,
 				25E682A219C7A93500597734 /* APCSegmentControl.m in Sources */,
 				255D2E8319C3A526002137F1 /* APCConfigurableCell.m in Sources */,
 				255D2E8B19C3A526002137F1 /* APCSignInViewController.m in Sources */,

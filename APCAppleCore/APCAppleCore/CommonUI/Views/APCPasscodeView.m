@@ -7,7 +7,7 @@
 //
 
 #import "APCPasscodeView.h"
-#import "UIView+Category.h"
+#import "UIView+Helper.h"
 #import "CALayer+Appearance.h"
 
 static CGFloat const kAPCPasscodeViewPinLength = 4;

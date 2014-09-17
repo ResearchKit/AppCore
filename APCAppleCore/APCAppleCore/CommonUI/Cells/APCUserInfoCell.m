@@ -7,7 +7,7 @@
 //
 
 #import "APCUserInfoCell.h"
-#import "UIView+Category.h"
+#import "UIView+Helper.h"
 #import "APCSegmentControl.h"
 #import "UITableView+Appearance.h"
 

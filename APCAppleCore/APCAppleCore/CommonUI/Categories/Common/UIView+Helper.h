@@ -1,5 +1,5 @@
 //
-//  UIView+Category.h
+//  UIView+Helper.h
 //  APCAppleCore
 //
 //  Created by Karthik Keyan on 9/8/14.
@@ -8,7 +8,7 @@
 
 @import UIKit;
 
-@interface UIView (Category)
+@interface UIView (Helper)
 
 - (CGFloat) top;
 

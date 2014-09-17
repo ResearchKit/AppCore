@@ -1,5 +1,5 @@
 //
-//  UIAlertView+Category.h
+//  UIAlertView+Helper.h
 //  APCAppleCore
 //
 //  Created by Karthik Keyan on 9/9/14.
@@ -8,7 +8,7 @@
 
 @import UIKit;
 
-@interface UIAlertView (Category)
+@interface UIAlertView (Helper)
 
 + (UIAlertView *) showSimpleAlertWithTitle:(NSString *)title message:(NSString *)message;
 

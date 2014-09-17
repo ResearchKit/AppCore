@@ -1,5 +1,5 @@
 //
-//  UIScrollView+Category.h
+//  UIScrollView+Helper.h
 //  AappleCore
 //
 //  Created by Karthik Keyan on 9/5/14.
@@ -8,7 +8,7 @@
 
 @import UIKit;
 
-@interface UIScrollView (Category)
+@interface UIScrollView (Helper)
 
 - (void) reduceSizeForKeyboardShowNotification:(NSNotification *)notification;
 

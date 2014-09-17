@@ -1,5 +1,5 @@
 //
-//  NSDate+Category.h
+//  NSDate+Helper.h
 //  APCAppleCore
 //
 //  Created by Karthik Keyan on 9/11/14.
@@ -10,7 +10,7 @@
 
 extern NSString * const NSDateDefaultDateFormat;
 
-@interface NSDate (Category)
+@interface NSDate (Helper)
 
 /**
  * @brief convert date to give formate

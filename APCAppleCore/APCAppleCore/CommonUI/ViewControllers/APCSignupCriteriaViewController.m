@@ -8,10 +8,10 @@
 
 #import "APCAppleCore.h"
 #import "APCCriteriaCell.h"
-#import "UIView+Category.h"
-#import "NSDate+Category.h"
+#import "UIView+Helper.h"
+#import "NSDate+Helper.h"
 #import "APCTableViewItem.h"
-#import "NSBundle+Category.h"
+#import "NSBundle+Helper.h"
 #import "APCSegmentControl.h"
 #import "APCStepProgressBar.h"
 #import "APCSignupCriteriaViewController.h"

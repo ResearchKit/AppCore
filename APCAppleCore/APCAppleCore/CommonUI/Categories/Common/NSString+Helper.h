@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-@interface NSString (Category)
+@interface NSString (Helper)
 
 - (BOOL) isValidForRegex:(NSString *)regex;
 

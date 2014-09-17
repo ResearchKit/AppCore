@@ -8,7 +8,7 @@
 
 @import UIKit;
 
-@interface UIColor (Category)
+@interface UIColor (Helper)
 
 + (UIColor *) colorWith255Red:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
 

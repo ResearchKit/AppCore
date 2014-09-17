@@ -1,14 +1,14 @@
 //
-//  UIScrollView+Category.m
+//  UIScrollView+Helper.m
 //  APCAppleCore
 //
 //  Created by Karthik Keyan on 9/5/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "UIScrollView+Category.h"
+#import "UIScrollView+Helper.h"
 
-@implementation UIScrollView (Category)
+@implementation UIScrollView (Helper)
 
 - (void) reduceSizeForKeyboardShowNotification:(NSNotification *)notification {
     CGFloat duration = 0.25;

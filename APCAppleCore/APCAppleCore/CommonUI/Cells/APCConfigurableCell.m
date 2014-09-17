@@ -7,7 +7,7 @@
 //
 
 #import "APCSegmentControl.h"
-#import "NSString+Category.h"
+#import "NSString+Helper.h"
 #import "APCConfigurableCell.h"
 #import "UITableView+Appearance.h"
 

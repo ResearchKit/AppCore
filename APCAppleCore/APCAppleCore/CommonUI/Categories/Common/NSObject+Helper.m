@@ -1,14 +1,14 @@
 //
-//  NSObject+Category.m
+//  NSObject+Helper.m
 //  APCAppleCore
 //
 //  Created by Karthik Keyan B on 9/16/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "NSObject+Category.h"
+#import "NSObject+Helper.h"
 
-@implementation NSObject (Category)
+@implementation NSObject (Helper)
 
 + (BOOL) isNilOrNull:(id)obj {
     BOOL isNull = NO;

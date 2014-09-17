@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "NSString+Category.h"
+#import "NSString+Helper.h"
 
-@implementation NSString (Category)
+@implementation NSString (Helper)
 
 - (BOOL) isValidForRegex:(NSString *)regex {
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];

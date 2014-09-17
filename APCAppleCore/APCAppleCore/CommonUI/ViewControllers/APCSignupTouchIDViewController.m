@@ -8,9 +8,9 @@
 
 #import "APCProfile.h"
 #import "APCPasscodeView.h"
-#import "UIView+Category.h"
+#import "UIView+Helper.h"
 #import "APCStepProgressBar.h"
-#import "UIAlertView+Category.h"
+#import "UIAlertView+Helper.h"
 #import "APCSignupTouchIDViewController.h"
 #import "APCSignupCriteriaViewController.h"
 

@@ -1,14 +1,14 @@
 //
-//  UIView+Category.m
+//  UIView+Helper.m
 //  APCAppleCore
 //
 //  Created by Karthik Keyan on 9/8/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "UIView+Category.h"
+#import "UIView+Helper.h"
 
-@implementation UIView (Category)
+@implementation UIView (Helper)
 
 - (CGFloat) top {
     return CGRectGetMinY(self.frame);

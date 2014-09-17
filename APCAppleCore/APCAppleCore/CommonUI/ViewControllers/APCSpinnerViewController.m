@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "UIView+Category.h"
-#import "UIColor+Category.h"
-#import "NSBundle+Category.h"
+#import "UIView+Helper.h"
+#import "UIColor+Helper.h"
+#import "NSBundle+Helper.h"
 #import "APCSpinnerViewController.h"
 
 @implementation APCSpinnerViewController

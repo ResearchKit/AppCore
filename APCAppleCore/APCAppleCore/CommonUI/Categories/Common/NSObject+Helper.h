@@ -1,5 +1,5 @@
 //
-//  NSObject+Category.m
+//  NSObject+Helper.m
 //  APCAppleCore
 //
 //  Created by Karthik Keyan B on 9/16/14.
@@ -8,7 +8,7 @@
 
 @import Foundation;
 
-@interface NSObject (Category)
+@interface NSObject (Helper)
 
 + (BOOL) isNilOrNull:(id)obj;
 

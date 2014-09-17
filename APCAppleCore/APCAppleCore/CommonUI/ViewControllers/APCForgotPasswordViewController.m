@@ -1,5 +1,5 @@
 //
-//  APCSignInViewController.m
+//  APCForgotPasswordViewController.m
 //  APCAppleCore
 //
 //  Created by Karthik Keyan on 9/4/14.
