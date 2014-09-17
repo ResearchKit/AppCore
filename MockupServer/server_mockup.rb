@@ -8,6 +8,9 @@
 
 require 'sinatra'
 require 'json'
+require 'pry'
+
+require 'fileutils'
 
 base_path = '/api/v1'
 #Errors
@@ -26,6 +29,19 @@ end
 #Maintenance
 get "#{base_path}/server_maintenance" do
 	[503, {message: 'Server Under Maintenance'}.to_json]
+end
+
+#File Upload
+post "#{base_path}/upload/:filename" do
+	  binding.pry
+	  userdir = "/tmp/upload_files"
+	  FileUtils.mkdir_p(userdir)
+	  puts "#{params}"
+	  filename = File.join(userdir, params[:filename])
+	  datafile = params[:filedata]
+	  FileUtils.copy(datafile[:tempfile], filename)
+	  "wrote to #{filename}\n"
+	  200
 end
 
 #Authentication
