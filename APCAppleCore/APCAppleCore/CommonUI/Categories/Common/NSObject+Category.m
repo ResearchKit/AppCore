@@ -1,18 +1,14 @@
 //
-//  NSObject+NSObject_Extension.m
-//  parentgini
+//  NSObject+Category.m
+//  APCAppleCore
 //
-//  Created by Karthik Keyan B on 9/25/12.
-//  Copyright (c) 2012 vivekrajanna@gmail.com. All rights reserved.
+//  Created by Karthik Keyan B on 9/16/14.
+//  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "NSObject+Extension.h"
+#import "NSObject+Category.h"
 
-@implementation NSObject (Extension)
-
-+ (AppDelegate *) appDelegate {
-    return (AppDelegate *)[[UIApplication sharedApplication] delegate];
-}
+@implementation NSObject (Category)
 
 + (BOOL) isNilOrNull:(id)obj {
     BOOL isNull = NO;

@@ -1,9 +1,9 @@
 //
 //  UIColor+Extension.m
-//  Tourean
+//  APCAppleCore
 //
-//  Created by Karthik Keyan B on 10/30/12.
-//  Copyright (c) 2012 vivekrajanna@gmail.com. All rights reserved.
+//  Created by Karthik Keyan on 9/11/14.
+//  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "UIColor+Category.h"
@@ -12,60 +12,6 @@
 
 + (UIColor *) colorWith255Red:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha {
     return [UIColor colorWithRed:red/255.0 green:green/255.0 blue:blue/255.0 alpha:alpha];
-}
-
-+ (UIColor *) titleColor {
-    UIColor *color;
-    if (!color) {
-        color = [UIColor colorWith255Red:60 green:61 blue:160 alpha:1.0];
-    }
-    
-    return color;
-}
-
-+ (UIColor *) textColor {
-    UIColor *color;
-    if (!color) {
-        color = [UIColor colorWith255Red:102 green:102 blue:102 alpha:1.0];
-    }
-    
-    return color;
-}
-
-+ (UIColor *) errorTextColor {
-    UIColor *color;
-    if (!color) {
-        color = [UIColor colorWith255Red:204 green:0 blue:0 alpha:1.0];
-    }
-    
-    return color;
-}
-
-+ (UIColor *) textInputColor {
-    UIColor *color;
-    if (!color) {
-        color = [UIColor colorWith255Red:70 green:70 blue:70 alpha:1.0];
-    }
-    
-    return color;
-}
-
-+ (UIColor *) placeHolderColor {
-    UIColor *color;
-    if (!color) {
-        color = [UIColor colorWith255Red:70 green:70 blue:70 alpha:1.0];
-    }
-    
-    return color;
-}
-
-+ (UIColor *) hintTextColor {
-    UIColor *color;
-    if (!color) {
-        color = [UIColor colorWith255Red:120 green:120 blue:120 alpha:1.0];
-    }
-    
-    return color;
 }
 
 - (BOOL)isEqualToColor:(UIColor *)otherColor {

@@ -307,7 +307,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 }
 
 - (BOOL) isContentValid:(NSString **)errorMessage {
-    BOOL isContentValid = YES;
+    BOOL isContentValid = NO;
     
     if (self.tableView.tableHeaderView) {
         if (![self.firstNameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
@@ -317,6 +317,9 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
         else if (![self.lastNameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
             *errorMessage = NSLocalizedString(@"Please give a valid last name", @"");
             isContentValid = NO;
+        }
+        else {
+            isContentValid = YES;
         }
     }
     

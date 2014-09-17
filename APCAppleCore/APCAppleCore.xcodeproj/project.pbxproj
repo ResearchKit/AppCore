@@ -79,7 +79,7 @@
 		25E682B319C7AD6900597734 /* APCSpinnerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25E682B019C7AD6900597734 /* APCSpinnerViewController.xib */; };
 		25E682BB19C7BACB00597734 /* APCForgotPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25E682B919C7BACB00597734 /* APCForgotPasswordViewController.xib */; };
 		25E682BC19C7BACB00597734 /* APCForgotPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E682BA19C7BACB00597734 /* APCForgotPasswordViewController.m */; };
-		25E682C019C7BD7A00597734 /* NSObject+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E682BF19C7BD7A00597734 /* NSObject+Extension.m */; };
+		25E682C019C7BD7A00597734 /* NSObject+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E682BF19C7BD7A00597734 /* NSObject+Category.m */; };
 		25E96C2919C8E80100EB30D7 /* NSError+APCNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 25E96C2819C8E80100EB30D7 /* NSError+APCNetworkManager.m */; };
 		7BB1C79C19C76D370030D3C2 /* APCParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BB1C79A19C76D370030D3C2 /* APCParameters.m */; };
 		7BB1C79D19C76D370030D3C2 /* APCParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BB1C79A19C76D370030D3C2 /* APCParameters.m */; };
@@ -189,18 +189,18 @@
 		255D2E3A19C3A526002137F1 /* UISegmentedControl+Appearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UISegmentedControl+Appearance.m"; sourceTree = "<group>"; };
 		255D2E3B19C3A526002137F1 /* UITableView+Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+Appearance.h"; sourceTree = "<group>"; };
 		255D2E3C19C3A526002137F1 /* UITableView+Appearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Appearance.m"; sourceTree = "<group>"; };
-		255D2E3E19C3A526002137F1 /* NSDate+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Category.h"; sourceTree = "<group>"; };
-		255D2E3F19C3A526002137F1 /* NSDate+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Category.m"; sourceTree = "<group>"; };
-		255D2E4019C3A526002137F1 /* NSString+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Category.h"; sourceTree = "<group>"; };
+		255D2E3E19C3A526002137F1 /* NSDate+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSDate+Category.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		255D2E3F19C3A526002137F1 /* NSDate+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSDate+Category.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		255D2E4019C3A526002137F1 /* NSString+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSString+Category.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		255D2E4119C3A526002137F1 /* NSString+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Category.m"; sourceTree = "<group>"; };
-		255D2E4219C3A526002137F1 /* UIAlertView+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Category.h"; sourceTree = "<group>"; };
-		255D2E4319C3A526002137F1 /* UIAlertView+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Category.m"; sourceTree = "<group>"; };
+		255D2E4219C3A526002137F1 /* UIAlertView+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "UIAlertView+Category.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		255D2E4319C3A526002137F1 /* UIAlertView+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "UIAlertView+Category.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		255D2E4419C3A526002137F1 /* UIScrollView+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+Category.h"; sourceTree = "<group>"; };
-		255D2E4519C3A526002137F1 /* UIScrollView+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+Category.m"; sourceTree = "<group>"; };
-		255D2E4619C3A526002137F1 /* UIView+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Category.h"; sourceTree = "<group>"; };
-		255D2E4719C3A526002137F1 /* UIView+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Category.m"; sourceTree = "<group>"; };
-		255D2E4919C3A526002137F1 /* APCConfigurableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConfigurableCell.h; sourceTree = "<group>"; };
-		255D2E4A19C3A526002137F1 /* APCConfigurableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCConfigurableCell.m; sourceTree = "<group>"; };
+		255D2E4519C3A526002137F1 /* UIScrollView+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "UIScrollView+Category.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		255D2E4619C3A526002137F1 /* UIView+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "UIView+Category.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		255D2E4719C3A526002137F1 /* UIView+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "UIView+Category.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		255D2E4919C3A526002137F1 /* APCConfigurableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCConfigurableCell.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		255D2E4A19C3A526002137F1 /* APCConfigurableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCConfigurableCell.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		255D2E4B19C3A526002137F1 /* APCCriteriaCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCriteriaCell.h; sourceTree = "<group>"; };
 		255D2E4C19C3A526002137F1 /* APCCriteriaCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCriteriaCell.m; sourceTree = "<group>"; };
 		255D2E4D19C3A526002137F1 /* APCCriteriaCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCCriteriaCell.xib; sourceTree = "<group>"; };
@@ -252,8 +252,8 @@
 		25E682B819C7BACB00597734 /* APCForgotPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCForgotPasswordViewController.h; sourceTree = "<group>"; };
 		25E682B919C7BACB00597734 /* APCForgotPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCForgotPasswordViewController.xib; sourceTree = "<group>"; };
 		25E682BA19C7BACB00597734 /* APCForgotPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCForgotPasswordViewController.m; sourceTree = "<group>"; };
-		25E682BE19C7BD7A00597734 /* NSObject+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Extension.h"; sourceTree = "<group>"; };
-		25E682BF19C7BD7A00597734 /* NSObject+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Extension.m"; sourceTree = "<group>"; };
+		25E682BE19C7BD7A00597734 /* NSObject+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "NSObject+Category.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		25E682BF19C7BD7A00597734 /* NSObject+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "NSObject+Category.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		25E96C2019C8BD6A00EB30D7 /* APCUserInfoConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCUserInfoConstants.h; sourceTree = "<group>"; };
 		25E96C2719C8E80100EB30D7 /* NSError+APCNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+APCNetworkManager.h"; sourceTree = "<group>"; };
 		25E96C2819C8E80100EB30D7 /* NSError+APCNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+APCNetworkManager.m"; sourceTree = "<group>"; };
@@ -415,8 +415,8 @@
 		255D2E3D19C3A526002137F1 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				25E682BE19C7BD7A00597734 /* NSObject+Extension.h */,
-				25E682BF19C7BD7A00597734 /* NSObject+Extension.m */,
+				25E682BE19C7BD7A00597734 /* NSObject+Category.h */,
+				25E682BF19C7BD7A00597734 /* NSObject+Category.m */,
 				25E6829319C7A84A00597734 /* UIColor+Category.h */,
 				25E6829019C7A7DF00597734 /* UIColor+Category.m */,
 				255D2E3E19C3A526002137F1 /* NSDate+Category.h */,
@@ -898,7 +898,7 @@
 				25E6825B19C75B0300597734 /* CALayer+Appearance.m in Sources */,
 				25E6825C19C75B0300597734 /* UIBarButtonItem+Appearance.m in Sources */,
 				25E6825D19C75B0300597734 /* UISegmentedControl+Appearance.m in Sources */,
-				25E682C019C7BD7A00597734 /* NSObject+Extension.m in Sources */,
+				25E682C019C7BD7A00597734 /* NSObject+Category.m in Sources */,
 				25E6825E19C75B0300597734 /* UITableView+Appearance.m in Sources */,
 				25E6825F19C75B0300597734 /* NSDate+Category.m in Sources */,
 				25E6826019C75B0300597734 /* NSString+Category.m in Sources */,

@@ -32,7 +32,7 @@ static NSString * const kAPCGeneralInfoItemUserNameRegEx        = @"[A-Za-z0-9_.
 
 static NSString * const kAPCGeneralInfoItemEmailRegEx           = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
 
-static NSString * const kAPCMedicalInfoItemWeightRegEx          = @"[0-9]{1,3}";
+static NSString * const kAPCMedicalInfoItemWeightRegEx          = @"[0-9]{1,4}";
 
 static NSString * const kAPCMedicalInfoItemSleepTimeFormate     = @"HH:mm a";
 

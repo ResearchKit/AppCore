@@ -1,9 +1,9 @@
 //
 //  UIColor+Extension.h
-//  Tourean
+//  APCAppleCore
 //
-//  Created by Karthik Keyan B on 10/30/12.
-//  Copyright (c) 2012 vivekrajanna@gmail.com. All rights reserved.
+//  Created by Karthik Keyan on 9/11/14.
+//  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 @import UIKit;
