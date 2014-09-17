@@ -8,7 +8,6 @@
 
 require 'sinatra'
 require 'json'
-require 'pry'
 
 require 'fileutils'
 
@@ -33,7 +32,6 @@ end
 
 #File Upload
 post "#{base_path}/upload/:filename" do
-	  binding.pry
 	  userdir = "/tmp/upload_files"
 	  FileUtils.mkdir_p(userdir)
 	  puts "#{params}"
