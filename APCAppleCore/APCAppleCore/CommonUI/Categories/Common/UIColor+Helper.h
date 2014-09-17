@@ -12,6 +12,4 @@
 
 + (UIColor *) colorWith255Red:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
 
-- (BOOL) isEqualToColor:(UIColor *)otherColor;
-
 @end
