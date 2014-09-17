@@ -17,7 +17,7 @@
 #import "UITableView+Appearance.h"
 #import "APCUserInfoViewController.h"
 
-static NSString * const kAPCUserInfoFieldNameRegEx              = @"[A-Za-z]+";
+static NSString * const kAPCUserInfoFieldNameRegEx              = @"[A-Za-z\\ ]+";
 
 static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 
@@ -41,7 +41,6 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
     self.title = @"Profile";
     
     [self addTableView];
-    [self addHeaderView];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -132,11 +131,21 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
         else if ([field isKindOfClass:[APCTableViewDatePickerItem class]]) {
             APCTableViewDatePickerItem *datePickerField = (APCTableViewDatePickerItem *)field;
             
-            cell.accessoryView = cell.valueTextField;
-            
+            cell.accessoryView = nil;
             cell.valueTextField.placeholder = datePickerField.placeholder;
-            cell.valueTextField.text = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
             cell.valueTextField.inputView = cell.datePicker;
+            cell.datePicker.datePickerMode = datePickerField.datePickerMode;
+            
+            NSString *dateWithFormate = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
+            if (datePickerField.isDetailDiscloserStyle) {
+                [cell setNeedsHiddenField];
+                
+                cell.detailTextLabel.text = dateWithFormate;
+            }
+            else {
+                cell.accessoryView = cell.valueTextField;
+                cell.valueTextField.text = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
+            }
             
             if (datePickerField.date) {
                 cell.datePicker.date = datePickerField.date;
@@ -187,7 +196,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
     
     APCTableViewItem *field = self.items[indexPath.row];
     
-    if ([field isKindOfClass:[APCTableViewCustomPickerItem class]] && [(APCTableViewCustomPickerItem *)field isDetailDiscloserStyle]) {
+    if ([field isKindOfClass:[APCTableViewPickerItem class]] && [(APCTableViewPickerItem *)field isDetailDiscloserStyle]) {
         [cell.valueTextField becomeFirstResponder];
     }
 }
@@ -228,7 +237,13 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
     APCTableViewDatePickerItem *field = self.items[indexPath.row];
     field.date = date;
     
-    cell.valueTextField.text = [field.date toStringWithFormat:field.dateFormat];
+    NSString *dateWithFormate = [field.date toStringWithFormat:field.dateFormat];
+    if (field.isDetailDiscloserStyle) {
+        cell.detailTextLabel.text = dateWithFormate;
+    }
+    else {
+        cell.valueTextField.text = dateWithFormate;
+    }
 }
 
 - (void) configurableCell:(APCUserInfoCell *)cell customPickerValueChanged:(NSArray *)selectedRowIndices {
@@ -289,6 +304,26 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 
 - (Class) cellClass {
     return [APCUserInfoCell class];
+}
+
+- (BOOL) isContentValid:(NSString **)errorMessage {
+    BOOL isContentValid = NO;
+    
+    if (self.tableView.tableHeaderView) {
+        if (![self.firstNameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
+            *errorMessage = NSLocalizedString(@"Please give a valid first name", @"");
+            isContentValid = NO;
+        }
+        else if (![self.lastNameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
+            *errorMessage = NSLocalizedString(@"Please give a valid last name", @"");
+            isContentValid = NO;
+        }
+        else {
+            isContentValid = YES;
+        }
+    }
+    
+    return isContentValid;
 }
 
 

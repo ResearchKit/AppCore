@@ -1,6 +1,6 @@
 //
 //  APCUserInfoField.h
-//  UI
+//  APCAppleCore
 //
 //  Created by Karthik Keyan on 9/9/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
@@ -42,11 +42,23 @@
 
 
 
-@interface APCTableViewDatePickerItem : APCTableViewItem
+@interface APCTableViewPickerItem : APCTableViewItem
 
 @property (nonatomic, copy) NSString *placeholder;
 
+@property (nonatomic, readwrite, getter = isDetailDiscloserStyle) BOOL detailDiscloserStyle;
+
+@end
+
+
+
+@interface APCTableViewDatePickerItem : APCTableViewPickerItem
+
 @property (nonatomic, copy) NSString *dateFormat;
+
+@property (nonatomic, readwrite, getter = isDetailDiscloserStyle) BOOL detailDiscloserStyle;
+
+@property (nonatomic, readwrite) UIDatePickerMode datePickerMode;
 
 @property (nonatomic, strong) NSDate *date;
 

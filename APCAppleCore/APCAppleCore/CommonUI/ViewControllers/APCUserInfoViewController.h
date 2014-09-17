@@ -23,7 +23,11 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
+- (void) addHeaderView;
+
 - (Class) cellClass;
+
+- (BOOL) isContentValid:(NSString **)errorMessage;
 
 @end
 

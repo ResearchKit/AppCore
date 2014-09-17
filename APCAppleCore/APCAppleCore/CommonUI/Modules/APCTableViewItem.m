@@ -1,6 +1,6 @@
 //
 //  APCUserInfoField.m
-//  UI
+//  APCAppleCore
 //
 //  Created by Karthik Keyan on 9/9/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
@@ -24,7 +24,22 @@
 
 
 
+@implementation APCTableViewPickerItem
+
+@end
+
+
+
 @implementation APCTableViewDatePickerItem
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _datePickerMode = UIDatePickerModeDateAndTime;
+    }
+    return self;
+}
 
 @end
 

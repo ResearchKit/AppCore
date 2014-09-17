@@ -1,13 +1,15 @@
 //
 //  APCSignupViewController.m
-//  UI
+//  APCAppleCore
 //
 //  Created by Karthik Keyan on 9/3/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "APCProfile.h"
 #import "UIView+Category.h"
 #import "APCStepProgressBar.h"
+#import "APCUserInfoConstants.h"
 #import "APCSignupViewController.h"
 
 @interface APCSignupViewController ()
@@ -18,7 +20,7 @@
 
 @synthesize stepProgressBar;
 
-@synthesize profile;
+@synthesize profile = _profile;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -40,6 +42,17 @@
                                                                style:APCStepProgressBarStyleOnlyProgressView];
     self.stepProgressBar.numberOfSteps = 4;
     [self.view addSubview:self.stepProgressBar];
+}
+
+
+#pragma mark - Getter Methods
+
+- (APCProfile *) profile {
+    if (!_profile) {
+        _profile = [APCProfile new];
+    }
+    
+    return _profile;
 }
 
 

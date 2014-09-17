@@ -1,6 +1,6 @@
 //
 //  APCUserInfoCell.m
-//  Configuration
+//  APCAppleCore
 //
 //  Created by Karthik Keyan on 8/11/14.
 //  Copyright (c) 2014 Karthik Keyan. All rights reserved.
