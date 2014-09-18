@@ -30,8 +30,8 @@
 #import "NSError+APCAdditions.h"
 
 //Error Codes
-#define APC_ERROR_DOMAIN @"com.ymedialabs.network_error_domain"
-#define APC_ORIGINAL_ERROR_KEY @"APCOriginalErrorKey"
+static NSString *const APC_ERROR_DOMAIN = @"com.ymedialabs.error_domain";
+static NSString *const APC_ORIGINAL_ERROR_KEY = @"APCOriginalErrorKey";
 
 typedef NS_ENUM(NSInteger, APCNetworkErrorCodes)
 {
@@ -43,8 +43,7 @@ typedef NS_ENUM(NSInteger, APCNetworkErrorCodes)
     kAPCServerPreconditionNotMet = -1004
 };
 
-static NSString const *APCUserLoginNotification     = @"APCUserLoginNotification";
-
-static NSString const *APCUserLogOutNotification  = @"APCUserLogOutNotification";
+static NSString *const APCUserLoginNotification     = @"APCUserLoginNotification";
+static NSString *const APCUserLogOutNotification  = @"APCUserLogOutNotification";
 
 #endif
