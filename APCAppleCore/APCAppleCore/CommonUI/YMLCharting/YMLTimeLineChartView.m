@@ -81,13 +81,14 @@ static CGFloat const kYMLTimeLineChartPointerTopMargin          = 0.0;
 #pragma mark - Private Methods
 
 - (void) drawBottomUnits {
+    CGRect frame = CGRectMake(0, self.bounds.size.height - kYMLChartUnitsViewMinumumHeight, self.bounds.size.width, kYMLChartUnitsViewMinumumHeight);
+    
     if (!self.xAxisUnitsView) {
-        CGRect frame = CGRectMake(0, self.bounds.size.height - kYMLChartUnitsViewMinumumHeight, self.bounds.size.width, kYMLChartUnitsViewMinumumHeight);
-        
         self.xAxisUnitsView = [[YMLChartUnitsView alloc] initWithFrame:frame axisPosition:YMLChartAxisPositionBottom];
         [self addSubview:self.xAxisUnitsView];
     }
     
+    self.xAxisUnitsView.frame = frame;
     self.xAxisUnitsView.units = [self.datasource timeLineChartViewUnits:self];
     
     NSMutableArray *unitLabels = [NSMutableArray array];
@@ -188,6 +189,12 @@ static CGFloat const kYMLTimeLineChartPointerTopMargin          = 0.0;
 
 
 #pragma mark - Public Methods
+
+- (void) layoutSubviews {
+    [super layoutSubviews];
+    
+    [self redrawCanvas];
+}
 
 - (void) redrawCanvas {
     if (self.orientation == YMLChartOrientationHorizontal) {

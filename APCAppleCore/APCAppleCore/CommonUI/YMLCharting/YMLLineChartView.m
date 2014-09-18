@@ -70,6 +70,27 @@
 
 #pragma mark - Public Methods
 
+- (void) layoutSubviews {
+    [super layoutSubviews];
+    
+    {
+        CGFloat margin = kYMLChartUnitsViewMinumumHeight;
+        CGRect frame = CGRectMake(margin, self.bounds.size.height - margin, self.bounds.size.width - margin, kYMLChartUnitsViewMinumumHeight);
+        
+        self.xAxisUnitsView.frame = frame;
+    }
+    
+    {
+        CGFloat margin = kYMLChartUnitsViewMinumumWidth;
+        
+        CGRect frame = CGRectMake(0, 0, kYMLChartUnitsViewMinumumWidth, self.bounds.size.height - margin);
+        
+        self.yAxisUnitsView.frame = frame;
+    }
+    
+    [self draw];
+}
+
 - (void) draw {
     [self drawXAxis];
     [self drawYAxis];
