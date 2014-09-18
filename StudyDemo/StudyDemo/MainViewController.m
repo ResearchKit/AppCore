@@ -52,7 +52,7 @@
 
 @end
 
-@interface MainViewController ()<RKTaskViewControllerDelegate>
+@interface MainViewController ()<RKTaskViewControllerDelegate, RKConsentViewControllerDelegate>
 
 @property (nonatomic, strong) RKTaskViewController* taskVC;
 @property (nonatomic, strong) RKStudy* study;
@@ -415,24 +415,53 @@
 
 - (IBAction)showConsentButtonTapped:(id)sender{
     
+    RKConsentDocument* consent = [[RKConsentDocument alloc] init];
+    consent.title = @"Demo Consent";
+    consent.signaturePageTitle = @"Consent";
+    consent.signaturePageContent = @"I agree  to participate in this research Study.";
+    consent.investigatorNamePrinted = @"Jake Clemson";
+    consent.investigatorSignatureDate = @"9/2/14";
+    NSMutableArray* components = [NSMutableArray new];
     
-     NSMutableArray* steps = [NSMutableArray new];
-    
-    {
-        RKIntroductionStep* step = [[RKIntroductionStep alloc] initWithIdentifier:@"iid_001" name:@"intro step"];
-        step.caption = @"Demo Study";
-        step.explanation = @"We're conducting research on the different question types ResearchKit has to offer. We'd love to hear from you about what question types you use the most and what question types you want to see built. This will help us make improvements to the existing tool and prioritize new features.";
-        [steps addObject:step];
+    NSArray* scenes = @[@(RKConsentSectionTypeOverview),
+                        @(RKConsentSectionTypeActivity),
+                        @(RKConsentSectionTypeSensorData),
+                        @(RKConsentSectionTypeDeIdentification),
+                        @(RKConsentSectionTypeCombiningData),
+                        @(RKConsentSectionTypeUtilizingData),
+                        @(RKConsentSectionTypeImpactLifeTime),
+                        @(RKConsentSectionTypePotentialRiskUncomfortableQuestion),
+                        @(RKConsentSectionTypePotentialRiskSocial),
+                        @(RKConsentSectionTypeAllowWithdraw)];
+    for (NSNumber* type in scenes) {
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:type.integerValue];
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        [components addObject:c];
     }
     
     {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"printing" ofType:@"pdf"];
-        RKConsentStep* step = [[RKConsentStep alloc] initWithIdentifier:@"cid_a" name:@"Consent step" consentFile:[NSData dataWithContentsOfFile:path]];
-        [steps addObject:step];
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeCustom];
+        c.summary = @"Custom Scene summary";
+        c.title = @"Custom Scene";
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        c.customImage = [UIImage imageNamed:@"signature.png"];
+        [components addObject:c];
     }
     
-    RKTask* task = [[RKTask alloc] initWithName:@"Consent" identifier:@"ConsentTask" steps:steps];
-    [self beginTask:task];
+    {
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeOnlyInDocument];
+        c.summary = @"OnlyInDocument Scene summary";
+        c.title = @"OnlyInDocument Scene";
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        [components addObject:c];
+    }
+    
+    consent.sections = [components copy];
+    consent.investigatorSignatureImage = [UIImage imageNamed:@"signature.png"];
+   
+    RKConsentViewController* consentVC = [[RKConsentViewController alloc] initWithConsent:consent];
+    consentVC.delegate = self;
+    [self presentViewController:consentVC animated:YES completion:nil];
 }
 
 - (IBAction)showSample001ButtonTapped:(id)sender{
@@ -755,9 +784,28 @@
         }
     }];
     
-    
-    
 }
+
+#pragma mark - RKConsentViewControllerDelegate
+
+- (void)consentViewControllerDidCancel:(RKConsentViewController *)consentViewController{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)consentViewControllerDidComplete: (RKConsentViewController *)consentViewController{
+    
+    
+    [consentViewController.consent makePdfWithCompletionBlock:^(NSData *data, NSError *error) {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths firstObject];
+        NSString* path = [NSString stringWithFormat:@"%@/signedConsent.pdf", documentsDirectory];
+        BOOL write = [data writeToFile:path atomically:NO];
+        
+        NSLog(@"%d, open %@", write ,path);
+    }];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 
 

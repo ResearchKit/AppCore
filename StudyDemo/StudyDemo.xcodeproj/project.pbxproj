@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		86D6770019CB6F5400FB35DE /* signature.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D676FF19CB6F5400FB35DE /* signature.png */; };
 		B10ED37019463908005DDB3F /* StudyDemoBundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B10FAF8B193D322A005858C2 /* StudyDemoBundle.bundle */; };
 		B10FAF62193D31AD005858C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B10FAF61193D31AD005858C2 /* main.m */; };
 		B10FAF65193D31AD005858C2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B10FAF64193D31AD005858C2 /* AppDelegate.m */; };
@@ -54,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		86D676FF19CB6F5400FB35DE /* signature.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = signature.png; sourceTree = "<group>"; };
 		B10FAF5C193D31AD005858C2 /* StudyDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StudyDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B10FAF60193D31AD005858C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B10FAF61193D31AD005858C2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 				B1DEAF3F1979E12E0055143E /* DynamicTask.h */,
 				B1DEAF3D1979E12E0055143E /* DynamicTask.m */,
 				B10FAF66193D31AD005858C2 /* Images.xcassets */,
+				86D676FF19CB6F5400FB35DE /* signature.png */,
 				B10FAF5F193D31AD005858C2 /* Supporting Files */,
 			);
 			path = StudyDemo;
@@ -353,6 +356,7 @@
 			files = (
 				B1C056E41981C13500DC0362 /* printing.pdf in Resources */,
 				B10ED37019463908005DDB3F /* StudyDemoBundle.bundle in Resources */,
+				86D6770019CB6F5400FB35DE /* signature.png in Resources */,
 				B1EB16E2193E4416009AA707 /* ResearchKit.bundle in Resources */,
 				B10FAF67193D31AD005858C2 /* Images.xcassets in Resources */,
 				B1DEAF461979E23E0055143E /* investigator.pem in Resources */,
