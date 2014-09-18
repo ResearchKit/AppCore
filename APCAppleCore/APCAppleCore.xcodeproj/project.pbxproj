@@ -93,6 +93,12 @@
 		F5241CA219AD57230098A4DF /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5241CA019AD56E30098A4DF /* libbz2.dylib */; };
 		F5241CA319AD572A0098A4DF /* libarchive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5241C6E19AD3CC80098A4DF /* libarchive.dylib */; };
 		F5241CA419AD57310098A4DF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5241C7019AD3CCF0098A4DF /* libz.dylib */; };
+		F527233A19CB3C3D00AD1DB0 /* YMLChartUnitsView.m in Sources */ = {isa = PBXBuildFile; fileRef = F527233519CB3C3D00AD1DB0 /* YMLChartUnitsView.m */; };
+		F527233B19CB3C3D00AD1DB0 /* YMLChartUnitsView.m in Sources */ = {isa = PBXBuildFile; fileRef = F527233519CB3C3D00AD1DB0 /* YMLChartUnitsView.m */; };
+		F527233C19CB3C3D00AD1DB0 /* YMLLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = F527233719CB3C3D00AD1DB0 /* YMLLineChartView.m */; };
+		F527233D19CB3C3D00AD1DB0 /* YMLLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = F527233719CB3C3D00AD1DB0 /* YMLLineChartView.m */; };
+		F527233E19CB3C3D00AD1DB0 /* YMLTimeLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = F527233919CB3C3D00AD1DB0 /* YMLTimeLineChartView.m */; };
+		F527233F19CB3C3D00AD1DB0 /* YMLTimeLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = F527233919CB3C3D00AD1DB0 /* YMLTimeLineChartView.m */; };
 		F528043819C8BB7200BE0E79 /* APCSageNetworkManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F560075419A7A81E009F877F /* APCSageNetworkManagerTest.m */; };
 		F528044219C8D1D700BE0E79 /* APCScheduledTask+AddOn.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A8F38719B100E9008C9F9C /* APCScheduledTask+AddOn.m */; };
 		F528044319C8D1D800BE0E79 /* APCScheduledTask+AddOn.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A8F38719B100E9008C9F9C /* APCScheduledTask+AddOn.m */; };
@@ -266,6 +272,13 @@
 		F5241C7019AD3CCF0098A4DF /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F5241C8E19AD4CB20098A4DF /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = ResearchKit/ResearchKit.framework; sourceTree = "<group>"; };
 		F5241CA019AD56E30098A4DF /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
+		F527233319CB3C3D00AD1DB0 /* YMLChartEnumerations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLChartEnumerations.h; sourceTree = "<group>"; };
+		F527233419CB3C3D00AD1DB0 /* YMLChartUnitsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLChartUnitsView.h; sourceTree = "<group>"; };
+		F527233519CB3C3D00AD1DB0 /* YMLChartUnitsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLChartUnitsView.m; sourceTree = "<group>"; };
+		F527233619CB3C3D00AD1DB0 /* YMLLineChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLLineChartView.h; sourceTree = "<group>"; };
+		F527233719CB3C3D00AD1DB0 /* YMLLineChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLLineChartView.m; sourceTree = "<group>"; };
+		F527233819CB3C3D00AD1DB0 /* YMLTimeLineChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLTimeLineChartView.h; sourceTree = "<group>"; };
+		F527233919CB3C3D00AD1DB0 /* YMLTimeLineChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLTimeLineChartView.m; sourceTree = "<group>"; };
 		F5346FE419C35EE6005D9DC2 /* APCResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCResult.h; sourceTree = "<group>"; };
 		F5346FE519C35EE6005D9DC2 /* APCResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCResult.m; sourceTree = "<group>"; };
 		F5346FEC19C36ECD005D9DC2 /* APCScheduledTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduledTask.h; sourceTree = "<group>"; };
@@ -373,6 +386,7 @@
 		255D2E3019C3A526002137F1 /* CommonUI */ = {
 			isa = PBXGroup;
 			children = (
+				F527233219CB3C3D00AD1DB0 /* YMLCharting */,
 				255D2E3119C3A526002137F1 /* Categories */,
 				255D2E4819C3A526002137F1 /* Cells */,
 				25E6829419C7A93500597734 /* Views */,
@@ -535,6 +549,20 @@
 				7BB1C79B19C76D370030D3C2 /* parameters.json */,
 			);
 			path = Parameters;
+			sourceTree = "<group>";
+		};
+		F527233219CB3C3D00AD1DB0 /* YMLCharting */ = {
+			isa = PBXGroup;
+			children = (
+				F527233319CB3C3D00AD1DB0 /* YMLChartEnumerations.h */,
+				F527233419CB3C3D00AD1DB0 /* YMLChartUnitsView.h */,
+				F527233519CB3C3D00AD1DB0 /* YMLChartUnitsView.m */,
+				F527233619CB3C3D00AD1DB0 /* YMLLineChartView.h */,
+				F527233719CB3C3D00AD1DB0 /* YMLLineChartView.m */,
+				F527233819CB3C3D00AD1DB0 /* YMLTimeLineChartView.h */,
+				F527233919CB3C3D00AD1DB0 /* YMLTimeLineChartView.m */,
+			);
+			path = YMLCharting;
 			sourceTree = "<group>";
 		};
 		F560074A19A797CE009F877F /* Library */ = {
@@ -897,6 +925,7 @@
 				25E6826719C75B0300597734 /* APCProfile.m in Sources */,
 				25E6826819C75B0300597734 /* APCTableViewItem.m in Sources */,
 				25E6826919C75B0300597734 /* APCIntroVideoViewController.m in Sources */,
+				F527233C19CB3C3D00AD1DB0 /* YMLLineChartView.m in Sources */,
 				25E6826A19C75B0300597734 /* APCNavigationController.m in Sources */,
 				25E682B119C7AD6900597734 /* APCSpinnerViewController.m in Sources */,
 				25E6826B19C75B0300597734 /* APCSignInViewController.m in Sources */,
@@ -924,6 +953,7 @@
 				F5E4872419ABDBF000C86FC6 /* APCDataSubstrate.m in Sources */,
 				F534700719C38323005D9DC2 /* APCFileResult+AddOn.m in Sources */,
 				F5985F3719C3A08100F97584 /* APCSurveyResult.m in Sources */,
+				F527233E19CB3C3D00AD1DB0 /* YMLTimeLineChartView.m in Sources */,
 				F5A8F37019B0FDF8008C9F9C /* APCTask.m in Sources */,
 				F5A8F38C19B1011F008C9F9C /* APCResult+AddOn.m in Sources */,
 				25E682A719C7A93500597734 /* APCStepProgressBar.m in Sources */,
@@ -945,6 +975,7 @@
 				F594B4C019AFA2ED00AD19C9 /* APCDataMonitor.m in Sources */,
 				F5346FF719C37754005D9DC2 /* APCDataResult.m in Sources */,
 				F5E4871219ABB1A300C86FC6 /* APCAppDelegate.m in Sources */,
+				F527233A19CB3C3D00AD1DB0 /* YMLChartUnitsView.m in Sources */,
 				F534700319C38281005D9DC2 /* APCDataResult+AddOn.m in Sources */,
 				F560075219A7A502009F877F /* APCSageNetworkManager.m in Sources */,
 			);
@@ -983,6 +1014,7 @@
 				F5241C5E19ACFF070098A4DF /* APCDataSubstrate+CoreData.m in Sources */,
 				F58668BA19A3D99B00E9C375 /* Reachability.m in Sources */,
 				F5346FFC19C37754005D9DC2 /* APCFileResult.m in Sources */,
+				F527233D19CB3C3D00AD1DB0 /* YMLLineChartView.m in Sources */,
 				F5E4873519ABDEB500C86FC6 /* APCModel.xcdatamodeld in Sources */,
 				F534700419C38281005D9DC2 /* APCDataResult+AddOn.m in Sources */,
 				255D2E8819C3A526002137F1 /* APCTableViewItem.m in Sources */,
@@ -1000,6 +1032,7 @@
 				255D2E7E19C3A526002137F1 /* NSDate+Helper.m in Sources */,
 				25E682A219C7A93500597734 /* APCSegmentControl.m in Sources */,
 				255D2E8319C3A526002137F1 /* APCConfigurableCell.m in Sources */,
+				F527233F19CB3C3D00AD1DB0 /* YMLTimeLineChartView.m in Sources */,
 				255D2E8B19C3A526002137F1 /* APCSignInViewController.m in Sources */,
 				F5A8F36C19AFE757008C9F9C /* NSManagedObject+APCHelper.m in Sources */,
 				F528044519C8D23500BE0E79 /* APCScheduler.m in Sources */,
@@ -1010,6 +1043,7 @@
 				F5A8F36C19AFE757008C9F9C /* NSManagedObject+APCHelper.m in Sources */,
 				F5346FF819C37754005D9DC2 /* APCDataResult.m in Sources */,
 				F5B39FC519BFA3C300CA7B8C /* APCDBStatus+AddOn.m in Sources */,
+				F527233B19CB3C3D00AD1DB0 /* YMLChartUnitsView.m in Sources */,
 				F5A8F38D19B1011F008C9F9C /* APCResult+AddOn.m in Sources */,
 				F534700019C377D7005D9DC2 /* APCConsentResult+AddOn.m in Sources */,
 				F594B4C119AFA2ED00AD19C9 /* APCDataMonitor.m in Sources */,
