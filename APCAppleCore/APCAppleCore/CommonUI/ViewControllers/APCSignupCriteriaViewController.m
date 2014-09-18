@@ -40,7 +40,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
         APCTableViewSegmentItem *item = [APCTableViewSegmentItem new];
         item.detailText = NSLocalizedString(@"I am a:", @"");
         item.segments = @[ NSLocalizedString(@"Patient", @""), NSLocalizedString(@"Caregiver", @"") ];
-        item.selectedIndex = 0;
+        item.selectedIndex = -1;
         [self.criterias addObject:item];
     }
     
@@ -48,7 +48,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
         APCTableViewSegmentItem *item = [APCTableViewSegmentItem new];
         item.detailText = NSLocalizedString(@"Do you have Parkinson's Disease?", @"");
         item.segments = @[ NSLocalizedString(@"Yes", @""), NSLocalizedString(@"No", @""), NSLocalizedString(@"I don't know", @"") ];
-        item.selectedIndex = 2;
+        item.selectedIndex = -1;
         [self.criterias addObject:item];
     }
     
@@ -66,7 +66,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
         APCTableViewSegmentItem *item = [APCTableViewSegmentItem new];
         item.detailText = NSLocalizedString(@"What is the level of severity?", @"");
         item.segments = @[ NSLocalizedString(@"Mid", @""), NSLocalizedString(@"Moderate", @""), NSLocalizedString(@"Advanced", @"") ];
-        item.selectedIndex = 1;
+        item.selectedIndex = -1;
         [self.criterias addObject:item];
     }
     
@@ -142,7 +142,10 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
         cell.valueTextField.placeholder = [(APCTableViewDatePickerItem *)item placeholder];
         cell.valueTextField.textAlignment = [(APCTableViewDatePickerItem *)item textAlignnment];
         cell.valueTextField.inputView = cell.datePicker;
+        cell.valueTextField.clearButtonMode = UITextFieldViewModeNever;
+        cell.valueTextField.tintColor = [UIColor clearColor];
         
+        cell.datePicker.datePickerMode = UIDatePickerModeDate;
         cell.datePicker.date = date;
     }
     
@@ -179,6 +182,13 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 #pragma mark - Private Methods
 
 - (void) finishSignUp {
+    [self.stepProgressBar setCompletedSteps:4 animation:YES];
+    
+    // We are posting this notification after .5 seconds delay, because we need to display the progress bar completion animation
+    [self performSelector:@selector(postLoginNotification) withObject:nil afterDelay:0.5];
+}
+
+- (void) postLoginNotification {
     [[NSNotificationCenter defaultCenter] postNotificationName:(NSString *)APCUserLoginNotification object:nil];
 }
 

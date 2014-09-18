@@ -36,7 +36,7 @@
                         <constraint firstAttribute="height" constant="30" id="QYR-mz-m8D"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="LC8-5h-fD8"/>
                     </connections>
@@ -52,7 +52,7 @@
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Last Name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="7d4-X1-iif">
                     <rect key="frame" x="124" y="75" width="186" height="30"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="any-fN-vJk"/>
                     </connections>
@@ -82,7 +82,7 @@
                     <exclude reference="EUb-Fb-amL"/>
                 </mask>
             </variation>
-            <point key="canvasLocation" x="379.5" y="116.5"/>
+            <point key="canvasLocation" x="91" y="-57"/>
         </view>
     </objects>
 </document>

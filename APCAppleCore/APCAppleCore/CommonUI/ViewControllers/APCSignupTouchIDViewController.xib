@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="14A329r" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="14A361p" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
@@ -18,9 +18,11 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8Z1-8V-LmP">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Z1-8V-LmP">
                     <rect key="frame" x="44" y="106" width="233" height="63"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="63" id="YbH-bs-7pf"/>
+                    </constraints>
                     <string key="text" base64-UTF8="YES">
 U2V0IGEgcGFzc2NvZGUDIGZvciBzZWN1cmUgaWRlbnRpZmljYXRpb24
 </string>
@@ -28,10 +30,24 @@ U2V0IGEgcGFzc2NvZGUDIGZvciBzZWN1cmUgaWRlbnRpZmljYXRpb24
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ZVc-VH-i0U">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e2Z-xG-fOc" customClass="APCPasscodeView">
+                    <rect key="frame" x="68" y="187" width="184" height="64"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="184" id="I3Y-fR-gOr"/>
+                        <constraint firstAttribute="height" constant="64" id="rOb-zd-q8n"/>
+                    </constraints>
+                </view>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XRS-zY-6t9" customClass="APCPasscodeView">
+                    <rect key="frame" x="68" y="187" width="184" height="64"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZVc-VH-i0U">
                     <rect key="frame" x="0.0" y="504" width="320" height="64"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.1764705882352941" green="0.70588235294117641" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="mvr-Zh-jG9"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                     <state key="normal" title="Use Touch ID Instead">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -41,27 +57,26 @@ U2V0IGEgcGFzc2NvZGUDIGZvciBzZWN1cmUgaWRlbnRpZmljYXRpb24
                         <action selector="touchID" destination="-1" eventType="touchUpInside" id="bk5-vY-aPS"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" id="e2Z-xG-fOc" customClass="APCPasscodeView">
-                    <rect key="frame" x="68" y="187" width="184" height="64"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </view>
-                <view hidden="YES" contentMode="scaleToFill" id="XRS-zY-6t9" customClass="APCPasscodeView">
-                    <rect key="frame" x="68" y="187" width="184" height="64"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="ZVc-VH-i0U" secondAttribute="bottom" id="2og-be-L3h"/>
+                <constraint firstItem="e2Z-xG-fOc" firstAttribute="width" secondItem="XRS-zY-6t9" secondAttribute="width" id="2zv-DU-96t"/>
+                <constraint firstItem="8Z1-8V-LmP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="106" id="IfE-sn-dPD"/>
+                <constraint firstItem="e2Z-xG-fOc" firstAttribute="height" secondItem="XRS-zY-6t9" secondAttribute="height" id="JMA-VL-2ZP"/>
+                <constraint firstItem="e2Z-xG-fOc" firstAttribute="top" secondItem="8Z1-8V-LmP" secondAttribute="bottom" constant="18" id="ZOl-4e-CaM"/>
+                <constraint firstItem="8Z1-8V-LmP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="44" id="dCO-E0-E8o"/>
+                <constraint firstItem="e2Z-xG-fOc" firstAttribute="leading" secondItem="XRS-zY-6t9" secondAttribute="leading" id="fRg-OP-Yaf"/>
+                <constraint firstAttribute="centerX" secondItem="e2Z-xG-fOc" secondAttribute="centerX" id="gNf-3E-sQg"/>
+                <constraint firstItem="ZVc-VH-i0U" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="hOS-OL-dsg"/>
+                <constraint firstAttribute="trailing" secondItem="8Z1-8V-LmP" secondAttribute="trailing" constant="43" id="j1Z-Jb-OPa"/>
+                <constraint firstItem="e2Z-xG-fOc" firstAttribute="top" secondItem="XRS-zY-6t9" secondAttribute="top" id="jlH-9F-rEP"/>
+                <constraint firstAttribute="trailing" secondItem="ZVc-VH-i0U" secondAttribute="trailing" id="nNR-mi-MTV"/>
+            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <point key="canvasLocation" x="-500" y="395"/>
         </view>
     </objects>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

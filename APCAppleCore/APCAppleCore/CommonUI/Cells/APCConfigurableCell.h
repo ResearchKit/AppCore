@@ -31,7 +31,7 @@
 
 @property (nonatomic, weak) id<APCConfigurableCellDelegate> delegate;
 
-- (void) setSegments:(NSArray *)segments selectedIndex:(NSUInteger)selectedIndex;
+- (void) setSegments:(NSArray *)segments selectedIndex:(NSInteger)selectedIndex;
 
 - (void) setCustomPickerValues:(NSArray *)customPickerValues selectedRowIndices:(NSArray *)selectedRowIndices;
 
@@ -42,6 +42,8 @@
 
 @optional
 - (void) configurableCellDidBecomFirstResponder:(APCConfigurableCell *)cell;
+
+- (void) configurableCellDidReturnInputView:(APCConfigurableCell *)cell;
 
 - (void) configurableCell:(APCConfigurableCell *)cell textValueChanged:(NSString *)text;
 

@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCSegmentControl.h"
+#import "UIView+Helper.h"
 #import "NSString+Helper.h"
+#import "APCSegmentControl.h"
 #import "APCConfigurableCell.h"
 #import "UITableView+Appearance.h"
 
@@ -15,6 +16,7 @@ static CGFloat const kAPCConfigurableCellControlsMinHorizontalMargin    = 15.0;
 static CGFloat const kAPCConfigurableCellControlsMinVerticalMargin      = 7.0;
 static CGFloat const kAPCConfigurableCellTextFieldMinWidth              = 186.0;
 static CGFloat const kAPCConfigurableCellControlsMinHeight              = 30.0;
+static CGFloat const kAPCConfigurableCellValueTextFieldLeftMargin       = 124.0;
 
 @interface APCConfigurableCell ()
 
@@ -80,6 +82,16 @@ static CGFloat const kAPCConfigurableCellControlsMinHeight              = 30.0;
     return _switchView;
 }
 
+- (void) layoutSubviews {
+    [super layoutSubviews];
+    
+    CGFloat y = (self.bounds.size.height - kAPCConfigurableCellControlsMinHeight) * 0.5;
+    CGFloat width = (self.innerWidth - (kAPCConfigurableCellValueTextFieldLeftMargin + kAPCConfigurableCellControlsMinHorizontalMargin));
+    
+    CGRect frame = CGRectMake(kAPCConfigurableCellValueTextFieldLeftMargin, y, width, kAPCConfigurableCellControlsMinHeight);
+    _valueTextField.frame = frame;
+}
+
 
 #pragma mark - UIPickerViewDataSource
 
@@ -139,6 +151,10 @@ static CGFloat const kAPCConfigurableCellControlsMinHeight              = 30.0;
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     
+    if ([self.delegate respondsToSelector:@selector(configurableCellDidReturnInputView:)]) {
+        [self.delegate configurableCellDidReturnInputView:self];
+    }
+    
     return YES;
 }
 
@@ -184,14 +200,20 @@ static CGFloat const kAPCConfigurableCellControlsMinHeight              = 30.0;
 
 #pragma mark - Pubic Methods
 
-- (void) setSegments:(NSArray *)segments selectedIndex:(NSUInteger)selectedIndex {
+- (BOOL) becomeFirstResponder {
+    return [self.valueTextField becomeFirstResponder];
+}
+
+- (void) setSegments:(NSArray *)segments selectedIndex:(NSInteger)selectedIndex {
     [self.segmentControl removeAllSegments];
     
     for (int i = 0; i < segments.count; i++) {
         [self.segmentControl insertSegmentWithTitle:segments[i] atIndex:i animated:NO];
     }
     
-    [self.segmentControl setSelectedSegmentIndex:selectedIndex];
+    if (selectedIndex >= 0 && selectedIndex < segments.count) {
+        [self.segmentControl setSelectedSegmentIndex:selectedIndex];
+    }
 }
 
 - (void) setCustomPickerValues:(NSArray *)customPickerValues selectedRowIndices:(NSArray *)selectedRowIndices {

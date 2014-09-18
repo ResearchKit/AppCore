@@ -18,7 +18,7 @@
 - (instancetype) initWithContentURL:(NSURL *)contentURL {
     self = [super initWithContentURL:contentURL];
     if (self) {
-        self.moviePlayer.controlStyle = MPMovieControlStyleNone;
+        self.moviePlayer.controlStyle = MPMovieControlStyleDefault;
     }
     
     return self;
@@ -38,6 +38,8 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+    
     [self.moviePlayer play];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
@@ -45,6 +47,8 @@
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
     
     [self.moviePlayer pause];
 }
@@ -54,6 +58,15 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+#pragma mark - Notifications
+
+- (void) playbackDidFinish:(NSNotification*)notification {
+    int reason = [[[notification userInfo] valueForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
+    if (reason == MPMovieFinishReasonPlaybackEnded) {
+        [self skip];
+    }
+}
 
 
 #pragma mark - Public Methods

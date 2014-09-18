@@ -6,7 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-@import UIKit;
+#import <UIKit/UITextField.h>
+#import <UIKit/UIDatePicker.h>
+#import <UIKit/UITableViewCell.h>
 
 @interface APCTableViewItem : NSObject
 
@@ -32,6 +34,10 @@
 
 @property (nonatomic, readwrite) UIKeyboardType keyboardType;
 
+@property (nonatomic, readwrite) UIReturnKeyType returnKeyType;
+
+@property (nonatomic, readwrite) UITextFieldViewMode clearButtonMode;
+
 @property (nonatomic, readwrite, getter = isSecure) BOOL secure;
 
 @property (nonatomic, copy) NSString *placeholder;
@@ -56,8 +62,6 @@
 
 @property (nonatomic, copy) NSString *dateFormat;
 
-@property (nonatomic, readwrite, getter = isDetailDiscloserStyle) BOOL detailDiscloserStyle;
-
 @property (nonatomic, readwrite) UIDatePickerMode datePickerMode;
 
 @property (nonatomic, strong) NSDate *date;
@@ -66,9 +70,7 @@
 
 
 
-@interface APCTableViewCustomPickerItem : APCTableViewItem
-
-@property (nonatomic, readwrite, getter = isDetailDiscloserStyle) BOOL detailDiscloserStyle;
+@interface APCTableViewCustomPickerItem : APCTableViewPickerItem
 
 @property (nonatomic, strong) NSArray *selectedRowIndices;
 

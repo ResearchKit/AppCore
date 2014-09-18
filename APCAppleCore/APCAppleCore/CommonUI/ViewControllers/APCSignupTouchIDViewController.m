@@ -7,8 +7,8 @@
 //
 
 #import "APCProfile.h"
-#import "APCPasscodeView.h"
 #import "UIView+Helper.h"
+#import "APCPasscodeView.h"
 #import "APCStepProgressBar.h"
 #import "UIAlertView+Helper.h"
 #import "APCSignupTouchIDViewController.h"
@@ -118,6 +118,8 @@
             
             [self.passcodeView becomeFirstResponder];
             [self.passcodeView reset];
+            
+            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Identification", @"") message:NSLocalizedString(@"Your passcodes are not identical. Please enter it again.", @"")];
         }
     }
 }

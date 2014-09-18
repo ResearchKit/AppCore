@@ -116,7 +116,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
         cell.detailTextLabel.text = field.detailText;
         cell.valueTextField.textAlignment = field.textAlignnment;
         cell.valueTextRegularExpression = field.regularExpression;
-        
+        cell.valueTextField.clearButtonMode = UITextFieldViewModeNever;
         
         if ([field isKindOfClass:[APCTableViewTextFieldItem class]]) {
             APCTableViewTextFieldItem *textField = (APCTableViewTextFieldItem *)field;
@@ -127,6 +127,8 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
             cell.valueTextField.text = textField.value;
             cell.valueTextField.secureTextEntry = textField.isSecure;
             cell.valueTextField.keyboardType = textField.keyboardType;
+            cell.valueTextField.returnKeyType = textField.returnKeyType;
+            cell.valueTextField.clearButtonMode = textField.clearButtonMode;
         }
         else if ([field isKindOfClass:[APCTableViewDatePickerItem class]]) {
             APCTableViewDatePickerItem *datePickerField = (APCTableViewDatePickerItem *)field;
@@ -135,6 +137,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
             cell.valueTextField.placeholder = datePickerField.placeholder;
             cell.valueTextField.inputView = cell.datePicker;
             cell.datePicker.datePickerMode = datePickerField.datePickerMode;
+            cell.valueTextField.tintColor = [UIColor clearColor];
             
             NSString *dateWithFormate = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
             if (datePickerField.isDetailDiscloserStyle) {
@@ -167,6 +170,8 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
                 cell.accessoryView = cell.valueTextField;
                 cell.valueTextField.text = customPickerField.stringValue;
             }
+            
+            cell.valueTextField.tintColor = [UIColor clearColor];
         }
         else if ([field isKindOfClass:[APCTableViewSegmentItem class]]) {
             APCTableViewSegmentItem *segmentPickerField = (APCTableViewSegmentItem *)field;
@@ -202,12 +207,25 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 }
 
 
-#pragma mark - InputCellDelegate
+#pragma mark - APCConfigurableCellDelegate
 
 - (void) configurableCellDidBecomFirstResponder:(APCUserInfoCell *)cell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+}
+
+- (void) configurableCellDidReturnInputView:(APCConfigurableCell *)cell {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    NSUInteger lastRowIndex = [self.tableView numberOfRowsInSection:0] - 1;
+    
+    if (indexPath.row < lastRowIndex) {
+        NSUInteger nextRowIndex = indexPath.row + 1;
+        
+        APCUserInfoCell *cell = (APCUserInfoCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:nextRowIndex inSection:0]];
+        [cell becomeFirstResponder];
+    }
 }
 
 - (void) configurableCell:(APCUserInfoCell *)cell textValueChanged:(NSString *)text {
@@ -294,7 +312,18 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
+    if (textField == self.firstNameTextField) {
+        [self.lastNameTextField becomeFirstResponder];
+    }
+    else if (textField == self.lastNameTextField) {
+        if ([self.tableView numberOfRowsInSection:0] > 0) {
+            APCUserInfoCell *cell = (APCUserInfoCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+            [cell becomeFirstResponder];
+        }
+        else {
+            [self.lastNameTextField resignFirstResponder];
+        }
+    }
     
     return YES;
 }
@@ -311,12 +340,18 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
     
     if (self.tableView.tableHeaderView) {
         if (![self.firstNameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
-            *errorMessage = NSLocalizedString(@"Please give a valid first name", @"");
             isContentValid = NO;
+            
+            if (errorMessage) {
+                *errorMessage = NSLocalizedString(@"Please give a valid first name", @"");
+            }
         }
         else if (![self.lastNameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
-            *errorMessage = NSLocalizedString(@"Please give a valid last name", @"");
             isContentValid = NO;
+            
+            if (errorMessage) {
+                *errorMessage = NSLocalizedString(@"Please give a valid last name", @"");
+            }
         }
         else {
             isContentValid = YES;
