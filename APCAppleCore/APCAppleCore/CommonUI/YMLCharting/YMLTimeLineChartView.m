@@ -105,27 +105,50 @@ static CGFloat const kYMLTimeLineChartPointerTopMargin          = 0.0;
 }
 
 - (void) drawPointer {
-    CGFloat x = [self.xAxisUnitsView locationForUnit:[self.xAxisUnitsView.units.firstObject floatValue]];
+    if (!self.pointerLayer) {
+        CGFloat x = [self.xAxisUnitsView locationForUnit:[self.xAxisUnitsView.units.firstObject floatValue]];
+        
+        UIBezierPath *path = [UIBezierPath bezierPath];
+        [path moveToPoint:CGPointMake(x, kYMLTimeLineChartPointerTopMargin)];
+        [path addLineToPoint:CGPointMake(x, self.bounds.size.height)];
+        
+        self.pointerLayer = [CAShapeLayer layer];
+        self.pointerLayer.strokeColor = [UIColor colorWithWhite:0.0 alpha:1.0].CGColor;
+        self.pointerLayer.lineWidth = 0.5;
+        self.pointerLayer.path = path.CGPath;
+        self.pointerLayer.lineDashPattern = @[@(5)];
+        self.pointerLayer.opacity = 0.0;
+        [self.layer addSublayer:self.pointerLayer];
+    }
     
-    UIBezierPath *path = [UIBezierPath bezierPath];
-    [path moveToPoint:CGPointMake(x, kYMLTimeLineChartPointerTopMargin)];
-    [path addLineToPoint:CGPointMake(x, self.bounds.size.height)];
-    
-    self.pointerLayer = [CAShapeLayer layer];
-    self.pointerLayer.strokeColor = [UIColor colorWithWhite:0.0 alpha:1.0].CGColor;
-    self.pointerLayer.lineWidth = 0.5;
-    self.pointerLayer.path = path.CGPath;
-    self.pointerLayer.lineDashPattern = @[@(5)];
-    self.pointerLayer.opacity = 0.0;
-    [self.layer addSublayer:self.pointerLayer];
-    
-    self.pointerLabel = [UILabel new];
-    self.pointerLabel.frame = CGRectMake(0, 0, 40, 16);
-    self.pointerLabel.backgroundColor = [UIColor clearColor];
-    self.pointerLabel.font = [UIFont systemFontOfSize:10.0];
-    self.pointerLabel.alpha = 0.0;
-    [self addSubview:self.pointerLabel];
+    if (!self.pointerLabel) {
+        self.pointerLabel = [UILabel new];
+        self.pointerLabel.frame = CGRectMake(0, 0, 40, 16);
+        self.pointerLabel.backgroundColor = [UIColor clearColor];
+        self.pointerLabel.font = [UIFont systemFontOfSize:10.0];
+        self.pointerLabel.alpha = 0.0;
+        [self addSubview:self.pointerLabel];
+    }
 }
+
+- (void) plotBar:(YMLTimeLineChartBarLayer *)barLayer {
+    if (self.orientation == YMLChartOrientationHorizontal) {
+        NSUInteger numberOfBars = [self.horizontalBars indexOfObject:barLayer];
+        
+        CGFloat fromX = [self.xAxisUnitsView locationForUnit:barLayer.fromUnit];
+        CGFloat toX = [self.xAxisUnitsView locationForUnit:barLayer.toUnit];
+        
+        CGFloat y = self.bounds.size.height - self.xAxisUnitsView.frame.size.height - (self.distanceBetweenBars * (numberOfBars + 1)) - (barLayer.lineWidth * numberOfBars);
+        
+        UIBezierPath *path = [UIBezierPath bezierPath];
+        [path moveToPoint:CGPointMake(fromX, y)];
+        [path addLineToPoint:CGPointMake(toX, y)];
+        barLayer.path = path.CGPath;
+    }
+}
+
+
+#pragma mark - Gesture Methods
 
 - (BOOL) canMovePointerForGesture:(UILongPressGestureRecognizer *)gesture {
     CGPoint point = [gesture locationInView:self];
@@ -200,6 +223,10 @@ static CGFloat const kYMLTimeLineChartPointerTopMargin          = 0.0;
     if (self.orientation == YMLChartOrientationHorizontal) {
         [self drawBottomUnits];
         [self drawPointer];
+        
+        for (YMLTimeLineChartBarLayer *barLayer in self.horizontalBars) {
+            [self plotBar:barLayer];
+        }
     }
     else {
         
@@ -208,20 +235,13 @@ static CGFloat const kYMLTimeLineChartPointerTopMargin          = 0.0;
 
 - (void) addBar:(YMLTimeLineChartBarLayer *)barLayer fromUnit:(CGFloat)fromUnit toUnit:(CGFloat)toUnit animation:(BOOL)animation {
     if (self.orientation == YMLChartOrientationHorizontal) {
+        barLayer.fromUnit = fromUnit;
+        barLayer.toUnit = toUnit;
+        
         [self.layer addSublayer:barLayer];
         [self.horizontalBars addObject:barLayer];
         
-        NSUInteger numberOfBars = self.horizontalBars.count;
-        
-        CGFloat fromX = [self.xAxisUnitsView locationForUnit:fromUnit];
-        CGFloat toX = [self.xAxisUnitsView locationForUnit:toUnit];
-        
-        CGFloat y = self.bounds.size.height - self.xAxisUnitsView.frame.size.height - (self.distanceBetweenBars * numberOfBars) - (barLayer.lineWidth * numberOfBars);
-        
-        UIBezierPath *path = [UIBezierPath bezierPath];
-        [path moveToPoint:CGPointMake(fromX, y)];
-        [path addLineToPoint:CGPointMake(toX, y)];
-        barLayer.path = path.CGPath;
+        [self plotBar:barLayer];
         
         if (animation) {
             CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];

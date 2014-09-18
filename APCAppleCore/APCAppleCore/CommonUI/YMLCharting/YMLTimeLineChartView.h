@@ -57,6 +57,10 @@
 
 @interface YMLTimeLineChartBarLayer : CAShapeLayer
 
+@property (nonatomic, readwrite) CGFloat fromUnit;
+
+@property (nonatomic, readwrite) CGFloat toUnit;
+
 + (instancetype) layerWithColor: (UIColor*) color;
 
 @end
