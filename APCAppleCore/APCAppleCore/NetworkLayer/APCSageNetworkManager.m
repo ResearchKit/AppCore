@@ -9,6 +9,8 @@
 #import "APCSageNetworkManager.h"
 #import "APCAppleCore.h"
 
+#define DEMO 1
+
 @interface APCSageNetworkManager ()
 {
     NSURLProtectionSpace * _serverProtectionSpace;
@@ -70,11 +72,26 @@
 
 -(NSURLSessionDataTask *)signUp:(NSString *)email username:(NSString *)username password:(NSString *)password success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
+#ifdef DEMO
+    if (success) {
+        success(nil, @{@"message":@"Signed Up"});
+    }
+    return nil;
+#else
     return [self post:@"auth/signUp" parameters:@{@"email":email, @"username":username, @"password":password} success:success failure:failure];
+#endif
+
 }
 
 - (NSURLSessionDataTask *)signIn:(NSString *)username password:(NSString *)password success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
+    
+#ifdef DEMO
+    if (success) {
+        success(nil, @{@"message":@"Signed In"});
+    }
+    return nil;
+#else
     return [self post:@"auth/signIn" parameters:@{@"username":username, @"password":password} success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSURLCredential *credential = [NSURLCredential credentialWithUser:username password:password persistence:NSURLCredentialPersistencePermanent];
@@ -84,6 +101,8 @@
             success(task, responseObject);
         }
     }  failure:failure];
+#endif
+
 }
 
 /*********************************************************************************/
@@ -91,6 +110,12 @@
 /*********************************************************************************/
 - (NSURLSessionDataTask *)signOutWithSuccess:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
+#ifdef DEMO
+    if (success) {
+        success(nil, @{@"message":@"Signed Out"});
+    }
+    return nil;
+#else
     return [self get:@"auth/signOut" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         NSDictionary *credentials = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:_serverProtectionSpace];
         NSURLCredential *credential = [credentials.objectEnumerator nextObject];
@@ -101,6 +126,8 @@
             success(task, responseObject);
         }
     } failure:failure];
+#endif
+    
 }
 
 -(void)clearSessionToken
