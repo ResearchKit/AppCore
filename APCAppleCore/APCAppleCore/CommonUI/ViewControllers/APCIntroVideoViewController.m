@@ -18,7 +18,6 @@
 - (instancetype) initWithContentURL:(NSURL *)contentURL {
     self = [super initWithContentURL:contentURL];
     if (self) {
-        NSLog(@"%@", contentURL);
         self.moviePlayer.controlStyle = MPMovieControlStyleNone;
     }
     

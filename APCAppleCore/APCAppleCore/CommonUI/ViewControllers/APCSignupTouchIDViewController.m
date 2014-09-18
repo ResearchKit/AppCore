@@ -86,9 +86,10 @@
     else {
         self.touchIDButton.hidden = YES;
         
-        if (error) {
-            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Touch Authentication", @"") message:error.localizedDescription];
-        }
+//        if (error) {
+//            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Touch Authentication", @"") message:error.localizedDescription];
+//        }
+        NSLog(@"Touch Authentication: %@", error.localizedDescription);
     }
 }
 
