@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "NSString+Helper.h"
+#import "UIAlertView+Helper.h"
+#import "APCUserInfoConstants.h"
 #import "APCForgotPasswordViewController.h"
 
 @interface APCForgotPasswordViewController ()
@@ -24,6 +27,7 @@
     self.title = NSLocalizedString(@"Reset Password", @"");
     
     UIBarButtonItem *nextBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Send", @"") style:UIBarButtonItemStylePlain target:self action:@selector(sendPassword)];
+    nextBarButton.enabled = NO;
     self.navigationItem.rightBarButtonItem = nextBarButton;
 }
 
@@ -40,6 +44,14 @@
 
 - (void) sendPassword {
     [self.emaiTextField resignFirstResponder];
+    
+    if ([self.emaiTextField.text isValidForRegex:(NSString *)kAPCGeneralInfoItemEmailRegEx]) {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
+    else {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+        [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"General Information", @"") message:NSLocalizedString(@"Please give a valid email address", @"")];
+    }
 }
 
 @end

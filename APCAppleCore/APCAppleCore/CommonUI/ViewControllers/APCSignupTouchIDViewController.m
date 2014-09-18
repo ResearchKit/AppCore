@@ -53,6 +53,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+    [self showFirstTry];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -98,26 +100,14 @@
 
 - (void) passcodeViewDidFinish:(APCPasscodeView *)passcodeView withCode:(NSString *)code {
     if (passcodeView == self.passcodeView) {
-        self.passcodeView.hidden = YES;
-        self.retryPasscodeView.hidden = NO;
-        
-        self.titleLabel.text = NSLocalizedString(@"Re-enter your passcode", @"");
-        
-        [self.retryPasscodeView becomeFirstResponder];
-        [self.retryPasscodeView reset];
+        [self showRetry];
     }
     else {
         if ([self.passcodeView.code isEqualToString:self.retryPasscodeView.code]) {
             [self next];
         }
         else {
-            self.passcodeView.hidden = NO;
-            self.retryPasscodeView.hidden = YES;
-            
-            self.titleLabel.text = NSLocalizedString(@"Set a passcode\nfor secure identification", @"");
-            
-            [self.passcodeView becomeFirstResponder];
-            [self.passcodeView reset];
+            [self showFirstTry];
             
             [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Identification", @"") message:NSLocalizedString(@"Your passcodes are not identical. Please enter it again.", @"")];
         }
@@ -145,11 +135,27 @@
 #pragma mark - Private Methods
 
 - (void) next {
-    NSMutableArray *viewControllers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
-    [viewControllers removeLastObject];
-    [viewControllers addObject:[APCSignupCriteriaViewController new]];
+    [self.navigationController pushViewController:[APCSignupCriteriaViewController new] animated:YES];
+}
+
+- (void) showFirstTry {
+    self.passcodeView.hidden = NO;
+    self.retryPasscodeView.hidden = YES;
     
-    [self.navigationController setViewControllers:viewControllers animated:YES];
+    self.titleLabel.text = NSLocalizedString(@"Set a passcode\nfor secure identification", @"");
+    
+    [self.passcodeView becomeFirstResponder];
+    [self.passcodeView reset];
+}
+
+- (void) showRetry {
+    self.passcodeView.hidden = YES;
+    self.retryPasscodeView.hidden = NO;
+    
+    self.titleLabel.text = NSLocalizedString(@"Re-enter your passcode", @"");
+    
+    [self.retryPasscodeView becomeFirstResponder];
+    [self.retryPasscodeView reset];
 }
 
 

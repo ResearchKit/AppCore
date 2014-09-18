@@ -206,6 +206,10 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
     }
 }
 
+- (UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewCellEditingStyleNone;
+}
+
 
 #pragma mark - APCConfigurableCellDelegate
 

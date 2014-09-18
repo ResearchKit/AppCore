@@ -34,7 +34,7 @@
     APCFileResult * localAPCResult = (APCFileResult*) apcResult;
 
     NSData * data = [NSData dataWithContentsOfFile:localRKResult.fileUrl.path];
-    NSLog(@"LENGTH: %ld Read File: %@", [data length], data);
+    NSLog(@"LENGTH: %ld Read File: %@", (unsigned long)[data length], data);
     localAPCResult.file = data;
     
 }

@@ -10,6 +10,7 @@
 #define Parkinson_APHUserInfoConstants_h
 
 @import Foundation;
+@import CoreGraphics;
 
 typedef NS_ENUM(NSUInteger, APCSignUpUserInfoItem) {
     APCSignUpUserInfoItemUserName = 0,

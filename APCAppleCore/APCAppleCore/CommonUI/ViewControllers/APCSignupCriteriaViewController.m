@@ -85,6 +85,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     self.title = NSLocalizedString(@"Inclusion Criteria", @"");
     
     UIBarButtonItem *nextBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"") style:UIBarButtonItemStylePlain target:self action:@selector(finishSignUp)];
+    nextBarButton.enabled = [self isContentValid];
     self.navigationItem.rightBarButtonItem = nextBarButton;
 }
 
@@ -159,14 +160,33 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     return kAPCSignupCriteriaTableViewCellHeight;
 }
 
+- (UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewCellEditingStyleNone;
+}
+
 
 #pragma mark - APCCriteriaCellDelegate
+
+- (void)configurableCell:(APCConfigurableCell *)cell segmentIndexChanged:(NSUInteger)index {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    APCTableViewSegmentItem *criteria = self.criterias[indexPath.row];
+    criteria.selectedIndex = cell.segmentControl.selectedSegmentIndex;
+    
+    self.navigationItem.rightBarButtonItem.enabled = [self isContentValid];
+    
+    [self.tableView setEditing:YES];
+}
 
 - (void) configurableCell:(APCConfigurableCell *)cell textValueChanged:(NSString *)text {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     APCTableViewTextFieldItem *criteria = self.criterias[indexPath.row];
     criteria.value = text;
+    
+    self.navigationItem.rightBarButtonItem.enabled = [self isContentValid];
+    
+    [self.tableView setEditing:YES];
 }
 
 - (void) configurableCell:(APCConfigurableCell *)cell dateValueChanged:(NSDate *)date {
@@ -176,6 +196,10 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     criteria.date = cell.datePicker.date;
     
     cell.valueTextField.text = [cell.datePicker.date toStringWithFormat:nil];
+    
+    self.navigationItem.rightBarButtonItem.enabled = [self isContentValid];
+    
+    [self.tableView setEditing:YES];
 }
 
 
@@ -190,6 +214,26 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 - (void) postLoginNotification {
     [[NSNotificationCenter defaultCenter] postNotificationName:(NSString *)APCUserLoginNotification object:nil];
+}
+
+- (BOOL) isContentValid {
+    BOOL isContentValid = NO;
+    
+    for (APCTableViewItem *item in self.criterias) {
+        if ([item isKindOfClass:[APCTableViewSegmentItem class]]) {
+            isContentValid = ([(APCTableViewSegmentItem *)item selectedIndex] != -1);
+        }
+        else if ([item isKindOfClass:[APCTableViewDatePickerItem class]]) {
+            isContentValid = ([(APCTableViewDatePickerItem *)item date] != nil);
+        }
+        
+        // Because we need not continue the loop, if any one of the field was not answered.
+        if (!isContentValid) {
+            break;
+        }
+    }
+    
+    return isContentValid;
 }
 
 @end
