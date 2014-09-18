@@ -1,8 +1,7 @@
 //
 //  RKStudy_Private.h
-//  Itasca
+//  ResearchKit
 //
-//  Created by John Earl on 7/1/14.
 //  Copyright (c) 2014 Apple. All rights reserved.
 //
 

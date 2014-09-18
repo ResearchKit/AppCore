@@ -108,6 +108,12 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
 @property (nonatomic) BOOL continueButtonOnToolbar;
 
 /**
+ * @brief Whether to add learnMoreButton to toolbar at the bottom
+ * Default value is YES;
+ */
+@property (nonatomic) BOOL learnMoreButtonOnToolbar;
+
+/**
  * @brief Methods tell if next/prevous step is available
  */
 - (BOOL)previousStepAvailable;
