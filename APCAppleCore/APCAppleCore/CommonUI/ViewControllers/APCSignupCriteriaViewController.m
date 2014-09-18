@@ -160,10 +160,6 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     return kAPCSignupCriteriaTableViewCellHeight;
 }
 
-- (UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewCellEditingStyleNone;
-}
-
 
 #pragma mark - APCCriteriaCellDelegate
 
@@ -175,7 +171,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     
     self.navigationItem.rightBarButtonItem.enabled = [self isContentValid];
     
-    [self.tableView setEditing:YES];
+    [self.tableView endEditing:YES];
 }
 
 - (void) configurableCell:(APCConfigurableCell *)cell textValueChanged:(NSString *)text {
@@ -186,7 +182,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     
     self.navigationItem.rightBarButtonItem.enabled = [self isContentValid];
     
-    [self.tableView setEditing:YES];
+    [self.tableView endEditing:YES];
 }
 
 - (void) configurableCell:(APCConfigurableCell *)cell dateValueChanged:(NSDate *)date {
@@ -199,7 +195,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     
     self.navigationItem.rightBarButtonItem.enabled = [self isContentValid];
     
-    [self.tableView setEditing:YES];
+    [self.tableView endEditing:YES];
 }
 
 
