@@ -159,6 +159,8 @@
 		F5B39FC519BFA3C300CA7B8C /* APCDBStatus+AddOn.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B39FC319BFA3C300CA7B8C /* APCDBStatus+AddOn.m */; };
 		F5D14E3B19CC987900650FBB /* APCCircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D14E3A19CC987900650FBB /* APCCircularProgressView.m */; };
 		F5D14E3C19CC987900650FBB /* APCCircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D14E3A19CC987900650FBB /* APCCircularProgressView.m */; };
+		F5D14F3C19CC9E3300650FBB /* APCConfirmationView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D14F3B19CC9E3300650FBB /* APCConfirmationView.m */; };
+		F5D14F3D19CC9E3300650FBB /* APCConfirmationView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D14F3B19CC9E3300650FBB /* APCConfirmationView.m */; };
 		F5DAB556199EBFF6008E4A8E /* APCAppleCore.h in Copy Files */ = {isa = PBXBuildFile; fileRef = F5DAB555199EBFF6008E4A8E /* APCAppleCore.h */; };
 		F5DAB56C199EC0D0008E4A8E /* APCNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DAB56B199EC0D0008E4A8E /* APCNetworkManager.m */; };
 		F5E4871219ABB1A300C86FC6 /* APCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4871119ABB1A300C86FC6 /* APCAppDelegate.m */; };
@@ -342,6 +344,8 @@
 		F5BDD99819A401F2009921E7 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		F5D14E3919CC987900650FBB /* APCCircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCircularProgressView.h; sourceTree = "<group>"; };
 		F5D14E3A19CC987900650FBB /* APCCircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCircularProgressView.m; sourceTree = "<group>"; };
+		F5D14F3A19CC9E3300650FBB /* APCConfirmationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConfirmationView.h; sourceTree = "<group>"; };
+		F5D14F3B19CC9E3300650FBB /* APCConfirmationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCConfirmationView.m; sourceTree = "<group>"; };
 		F5DAB552199EBFF6008E4A8E /* libAPCAppleCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAPCAppleCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5DAB555199EBFF6008E4A8E /* APCAppleCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APCAppleCore.h; sourceTree = "<group>"; };
 		F5DAB55D199EBFF6008E4A8E /* APCAppleCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APCAppleCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -523,6 +527,8 @@
 		25E6829419C7A93500597734 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F5D14F3A19CC9E3300650FBB /* APCConfirmationView.h */,
+				F5D14F3B19CC9E3300650FBB /* APCConfirmationView.m */,
 				F5D14E3919CC987900650FBB /* APCCircularProgressView.h */,
 				F5D14E3A19CC987900650FBB /* APCCircularProgressView.m */,
 				25E6829519C7A93500597734 /* APCPasscodeView.h */,
@@ -957,6 +963,7 @@
 				F5346FEE19C36ECD005D9DC2 /* APCScheduledTask.m in Sources */,
 				F59C278319A3B65700596ACC /* Reachability.m in Sources */,
 				F528044619C8D27600BE0E79 /* APCSchedule.m in Sources */,
+				F5D14F3C19CC9E3300650FBB /* APCConfirmationView.m in Sources */,
 				F5E4872419ABDBF000C86FC6 /* APCDataSubstrate.m in Sources */,
 				F534700719C38323005D9DC2 /* APCFileResult+AddOn.m in Sources */,
 				F5985F3719C3A08100F97584 /* APCSurveyResult.m in Sources */,
@@ -1000,6 +1007,7 @@
 				F528044319C8D1D800BE0E79 /* APCScheduledTask+AddOn.m in Sources */,
 				F5AC934119C0EBCA0062C89A /* APCDBStatus.m in Sources */,
 				F5E4872519ABDBF000C86FC6 /* APCDataSubstrate.m in Sources */,
+				F5D14F3D19CC9E3300650FBB /* APCConfirmationView.m in Sources */,
 				255D2E8019C3A526002137F1 /* UIAlertView+Helper.m in Sources */,
 				255D2E9919C3A526002137F1 /* APCAssertionHandler.m in Sources */,
 				F5A8F37119B0FDF8008C9F9C /* APCTask.m in Sources */,
