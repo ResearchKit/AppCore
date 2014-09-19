@@ -9,7 +9,7 @@
 #import "APCUserInfoCell.h"
 #import "APCViewController.h"
 
-@interface APCUserInfoViewController : APCViewController <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, APCConfigurableCellDelegate>
+@interface APCUserInfoViewController : UITableViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, APCConfigurableCellDelegate>
 
 @property (nonatomic, strong) NSArray *items;
 
@@ -20,8 +20,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *profileImageButton;
 
 @property (weak, nonatomic) IBOutlet UIView *headerTextFieldSeparatorView;
-
-@property (nonatomic, strong) UITableView *tableView;
 
 - (void) addHeaderView;
 

@@ -27,10 +27,6 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 
 
 @implementation APCUserInfoViewController
-
-- (void) loadView {
-    self.view = [[UIView alloc] initWithFrame:UIScreen.mainScreen.bounds];
-}
             
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -40,7 +36,6 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
     
     self.title = @"Profile";
     
-    [self addTableView];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -58,20 +53,6 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 }
 
 #pragma mark - UI Methods
-
-- (void) addTableView {
-    CGRect frame = self.view.bounds;
-    
-    self.tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    self.tableView.separatorColor = [UITableView separatorColor];
-    self.tableView.separatorInset = UIEdgeInsetsZero;
-    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
-    self.tableView.contentInset = UIEdgeInsetsMake(self.navigationController.navigationBar.height + 10, 0, 0, 0);
-    [self.view addSubview:self.tableView];
-}
 
 - (void) addHeaderView {
     UIView *headerView = [[UINib nibWithNibName:@"APCUserInfoTableHeaderView" bundle:[NSBundle appleCoreBundle]] instantiateWithOwner:self options:nil][0];
