@@ -7,7 +7,6 @@
 //
 
 #import "APCConfirmationView.h"
-#import "UIColor+Parkinson.h"
 
 static  const  CGFloat  insetForBorder = 0.5;
 static  const  CGFloat  kDesignSpace   = 1000.0;
@@ -23,6 +22,17 @@ static  short  coordinates[] = {
 };
 
 @implementation APCConfirmationView
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        self.incompleteBackgroundColor = [UIColor grayColor];
+        self.completedBackgroundColor = [UIColor colorWithRed:48/255.f green:181/255.f blue:95/255.f alpha:1.0];
+        self.completedTickColor = [UIColor whiteColor];
+    }
+    return self;
+}
 
 - (void)createPath:(UIBezierPath *)path withDimension:(CGFloat)dimension
 {
@@ -64,14 +74,14 @@ static  short  coordinates[] = {
     UIBezierPath  *path = [UIBezierPath bezierPathWithOvalInRect:bounds];
     
     if (self.isCompleted == NO) {
-        [[UIColor grayColor] set];
+        [self.incompleteBackgroundColor set];
         [path stroke];
     } else {
-        [[UIColor parkinsonGreenColor] set];
+        [self.completedBackgroundColor set];
         [path fill];
         [path stroke];
         [self createPath:path withDimension:CGRectGetWidth(bounds)];
-        [[UIColor whiteColor] set];
+        [self.completedTickColor set];
         [path fill];
     }
 }

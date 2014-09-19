@@ -10,11 +10,11 @@
 
 @interface APCConfirmationView : UIView
 
-@property  (nonatomic, strong)  UIColor  *enabledTickColor;
-@property  (nonatomic, strong)  UIColor  *enabledBackgroundColor;
+@property  (nonatomic, strong)  UIColor  *completedTickColor;
+@property  (nonatomic, strong)  UIColor  *completedBackgroundColor;
 
-@property  (nonatomic, strong)  UIColor  *disabledTickColor;
-@property  (nonatomic, strong)  UIColor  *disabledBackgroundColor;
+@property  (nonatomic, strong)  UIColor  *incompleteTickColor;
+@property  (nonatomic, strong)  UIColor  *incompleteBackgroundColor;
 
 @property  (nonatomic, assign, getter = isCompleted)  BOOL  completed;
 
