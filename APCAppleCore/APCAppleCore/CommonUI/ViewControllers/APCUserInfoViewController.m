@@ -367,8 +367,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 
 
 #pragma mark - IBActions
-
-- (IBAction) profileImageViewTapped:(UITapGestureRecognizer *)sender {
+- (IBAction)profileImageViewTapped:(id)sender {
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
     imagePickerController.editing = YES;
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
