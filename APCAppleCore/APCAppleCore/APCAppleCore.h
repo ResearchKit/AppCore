@@ -2,32 +2,36 @@
 //  APCAppleCore.h
 //  APCAppleCore
 //
-//  Created by Dhanush Balachandran on 8/15/14.
+//  Created by Dhanush Balachandran on 9/22/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-#ifndef _APCAPPLECORE_
-    #define _APCAPPLECORE_
+//! Project version number for APCAppleCore.
+FOUNDATION_EXPORT double APCAppleCoreVersionNumber;
+
+//! Project version string for APCAppleCore.
+FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 
 //Headers
-#import "APCAppDelegate.h"
+#import <APCAppleCore/APCAppDelegate.h>
+#import <APCAppleCore/APCNetworkManager.h>
+#import <APCAppleCore/APCSageNetworkManager.h>
+#import <APCAppleCore/APCDataSubstrate.h>
+#import <APCAppleCore/APCDataSubstrate+ResearchKit.h>
+#import <APCAppleCore/APCDataSubstrate+CoreData.h>
+#import <APCAppleCore/APCModel.h>
+#import <APCAppleCore/APCDataMonitor.h>
+#import <APCAppleCore/APCScheduler.h>
 
-#import "APCNetworkManager.h"
-#import "APCSageNetworkManager.h"
-
-#import "APCDataSubstrate.h"
-#import "APCDataSubstrate+ResearchKit.h"
-#import "APCDataSubstrate+CoreData.h"
-#import "APCModel.h"
-
-#import "APCDataMonitor.h"
-
-#import "APCScheduler.h"
+//UI
+#import <APCAppleCore/APCSignInViewController.h>
+#import <APCAppleCore/APCUserInfoCell.h>
 
 //Categories
-#import "NSError+APCAdditions.h"
+#import <APCAppleCore/NSError+APCAdditions.h>
+#import <APCAppleCore/NSBundle+Helper.h>
 
 //Error Codes
 static NSString *const APC_ERROR_DOMAIN = @"com.ymedialabs.error_domain";
@@ -45,5 +49,3 @@ typedef NS_ENUM(NSInteger, APCNetworkErrorCodes)
 
 static NSString *const APCUserLoginNotification     = @"APCUserLoginNotification";
 static NSString *const APCUserLogOutNotification  = @"APCUserLogOutNotification";
-
-#endif
