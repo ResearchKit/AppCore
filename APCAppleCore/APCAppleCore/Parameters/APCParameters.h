@@ -10,20 +10,7 @@
 
 extern NSString *const ParametersValueChangeNotification;
 
-@class APCParameters;
-@protocol APCParametersDelegate <NSObject>
-
-- (void)parameters:(APCParameters *)parameters didFailWithError:(NSError *)error;
-- (void)parameters:(APCParameters *)parameters didFailWithValue:(id)value;
-- (void)parameters:(APCParameters *)parameters didFailWithKey:(NSString *)key;
-
-@optional
-
-- (void)parameters:(APCParameters *)parameters didFinishSaving:(id)item;
-- (void)parameters:(APCParameters *)parameters didFinishResetting:(id)item;
-
-@end
-
+@protocol APCParametersDelegate;
 
 @interface APCParameters : NSObject
 
@@ -32,6 +19,7 @@ extern NSString *const ParametersValueChangeNotification;
 - (instancetype)                        init;
 - (instancetype)                        initWithFileName:(NSString *)fileName;
 
+- (id)                                  objectForKey:(NSString*)key;
 - (NSNumber*)                           numberForKey:(NSString*)key;
 - (NSString *)                          stringForKey:(NSString*)key;
 - (BOOL)                                boolForKey:(NSString*)key;
@@ -48,5 +36,18 @@ extern NSString *const ParametersValueChangeNotification;
 
 - (NSArray *)                           allKeys;
 - (void)                                reset;
+
+@end
+
+@protocol APCParametersDelegate <NSObject>
+
+- (void)parameters:(APCParameters *)parameters didFailWithError:(NSError *)error;
+- (void)parameters:(APCParameters *)parameters didFailWithValue:(id)value;
+- (void)parameters:(APCParameters *)parameters didFailWithKey:(NSString *)key;
+
+@optional
+
+- (void)parameters:(APCParameters *)parameters didFinishSaving:(id)item;
+- (void)parameters:(APCParameters *)parameters didFinishResetting:(id)item;
 
 @end

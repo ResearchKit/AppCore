@@ -43,6 +43,9 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     return self;
 }
 
+- (id)objectForKey:(NSString *)key {
+    return [self.userDefaults objectForKey:key];
+}
 
 - (NSNumber*)numberForKey:(NSString*)key
 {
@@ -196,6 +199,8 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     
     if (![NSJSONSerialization writeJSONObject:self.userDefaults toStream:outputStream options:0 error:&error]) {
         [self didFail:error];
+    } else {
+        [self didSave:self.userDefaults];
     }
     
     [outputStream close];
@@ -285,8 +290,9 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
         [self didFail:error];
         
     } else {
-        
+        [self didReset:self.userDefaults];
         [self loadValuesFromBundle];
+
     }
 }
 

@@ -8,6 +8,7 @@
 
 #import "APCAppDelegate.h"
 #import "APCAppleCore.h"
+#import "APCDebugWindow.h"
 
 @implementation APCAppDelegate
 
@@ -26,6 +27,17 @@
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     [self.dataMonitor backgroundFetch:completionHandler];
+}
+
+- (APCDebugWindow *)window
+{
+    static APCDebugWindow *customWindow = nil;
+    if (!customWindow) customWindow = [[APCDebugWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    //TODO: remember to turn this off for production.
+    customWindow.enable = YES;
+    
+    return customWindow;
 }
 
 @end
