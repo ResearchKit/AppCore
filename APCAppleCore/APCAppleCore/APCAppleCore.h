@@ -14,6 +14,8 @@ FOUNDATION_EXPORT double APCAppleCoreVersionNumber;
 //! Project version string for APCAppleCore.
 FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 
+#import <ResearchKit/ResearchKit.h>
+
 //Headers
 #import <APCAppleCore/APCAppDelegate.h>
 #import <APCAppleCore/APCDataMonitor.h>
