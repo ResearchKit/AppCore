@@ -314,7 +314,7 @@
 				TargetAttributes = {
 					B10FAF5B193D31AD005858C2 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = 7JYUG8QGJ3;
+						DevelopmentTeam = NL3PRC58UN;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
 								enabled = 1;
@@ -323,6 +323,7 @@
 					};
 					B10FAF6B193D31AD005858C2 = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = NL3PRC58UN;
 						TestTargetID = B10FAF5B193D31AD005858C2;
 					};
 					B10FAF8A193D322A005858C2 = {
@@ -521,6 +522,7 @@
 				INFOPLIST_FILE = StudyDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -540,6 +542,7 @@
 				INFOPLIST_FILE = StudyDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
