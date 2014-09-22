@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		F5179B2F19D09128001DCCB7 /* APCAppleCore.h in Headers */ = {isa = PBXBuildFile; fileRef = F5179B2E19D09128001DCCB7 /* APCAppleCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F5179B3919D09128001DCCB7 /* APCAppleCoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179B3819D09128001DCCB7 /* APCAppleCoreTests.m */; };
 		F5179BF419D0917D001DCCB7 /* APCAssertionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = F5179B4319D0917D001DCCB7 /* APCAssertionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5179BF519D0917D001DCCB7 /* APCAssertionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179B4419D0917D001DCCB7 /* APCAssertionHandler.m */; };
 		F5179BF619D0917D001DCCB7 /* APCAssertionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179B4419D0917D001DCCB7 /* APCAssertionHandler.m */; };
@@ -263,7 +262,6 @@
 		F5179B2E19D09128001DCCB7 /* APCAppleCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APCAppleCore.h; sourceTree = "<group>"; };
 		F5179B3419D09128001DCCB7 /* APCAppleCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APCAppleCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5179B3719D09128001DCCB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F5179B3819D09128001DCCB7 /* APCAppleCoreTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = APCAppleCoreTests.m; sourceTree = "<group>"; };
 		F5179B4319D0917D001DCCB7 /* APCAssertionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAssertionHandler.h; sourceTree = "<group>"; };
 		F5179B4419D0917D001DCCB7 /* APCAssertionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAssertionHandler.m; sourceTree = "<group>"; };
 		F5179B4819D0917D001DCCB7 /* APCStepProgressBar+Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCStepProgressBar+Appearance.h"; sourceTree = "<group>"; };
@@ -510,7 +508,6 @@
 				F5179CE319D09238001DCCB7 /* APCSageNetworkManagerTest.m */,
 				F5179CE419D09238001DCCB7 /* APCSchedulerTestCase.m */,
 				F5179CE519D09238001DCCB7 /* APCNetworkManagerTest.m */,
-				F5179B3819D09128001DCCB7 /* APCAppleCoreTests.m */,
 				F5179B3619D09128001DCCB7 /* Supporting Files */,
 			);
 			path = APCAppleCoreTests;
@@ -1144,7 +1141,6 @@
 				F5179CB319D0917D001DCCB7 /* APCScheduledTask+AddOn.m in Sources */,
 				F5179BF619D0917D001DCCB7 /* APCAssertionHandler.m in Sources */,
 				F5179CAD19D0917D001DCCB7 /* APCSchedule+AddOn.m in Sources */,
-				F5179B3919D09128001DCCB7 /* APCAppleCoreTests.m in Sources */,
 				F5179C8319D0917D001DCCB7 /* APCDataSubstrate.m in Sources */,
 				F5179CC219D0917D001DCCB7 /* APCTask.m in Sources */,
 				F5179C9519D0917D001DCCB7 /* APCDBStatus.m in Sources */,
