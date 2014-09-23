@@ -252,7 +252,6 @@
 		F5179CED19D09238001DCCB7 /* APCNetworkManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179CE519D09238001DCCB7 /* APCNetworkManagerTest.m */; };
 		F5179F6019D0B443001DCCB7 /* APCModel.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = F5179BBF19D0917D001DCCB7 /* APCModel.xcdatamodeld */; };
 		F5179F6219D0B4D0001DCCB7 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6119D0B4D0001DCCB7 /* libbz2.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
-		F5179F6419D0B4EA001DCCB7 /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6319D0B4EA001DCCB7 /* ResearchKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F5179F6619D0B502001DCCB7 /* libarchive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6519D0B502001DCCB7 /* libarchive.dylib */; };
 		F5179F6819D0B50C001DCCB7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6719D0B50C001DCCB7 /* libz.dylib */; };
 /* End PBXBuildFile section */
@@ -437,7 +436,6 @@
 			files = (
 				F5179F6819D0B50C001DCCB7 /* libz.dylib in Frameworks */,
 				F5179F6619D0B502001DCCB7 /* libarchive.dylib in Frameworks */,
-				F5179F6419D0B4EA001DCCB7 /* ResearchKit.framework in Frameworks */,
 				F5179F6219D0B4D0001DCCB7 /* libbz2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1288,6 +1286,10 @@
 				INFOPLIST_FILE = APCAppleCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					ResearchKit,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1307,6 +1309,10 @@
 				INFOPLIST_FILE = APCAppleCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					ResearchKit,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};

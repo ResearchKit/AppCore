@@ -7,12 +7,12 @@
 //
 
 #import "NSBundle+Helper.h"
+static NSString *const kAPCAppleCoreBundleID = @"com.ymedialabs.APCAppleCore";
 
 @implementation NSBundle (Helper)
 
 + (NSBundle *) appleCoreBundle {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"APCAppleCoreBundle" ofType:@"bundle"];
-    NSBundle *bundle = [NSBundle bundleWithPath:path];
+    NSBundle *bundle = [NSBundle bundleWithIdentifier:kAPCAppleCoreBundleID];
     
     return bundle;
 }
