@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F5017E6019D2107400AC1F37 /* APCSetupTaskViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5017E5C19D2107400AC1F37 /* APCSetupTaskViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5017E6119D2107400AC1F37 /* APCSetupTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5017E5D19D2107400AC1F37 /* APCSetupTaskViewController.m */; };
+		F5017E6219D2107400AC1F37 /* APCStepViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5017E5E19D2107400AC1F37 /* APCStepViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5017E6319D2107400AC1F37 /* APCStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5017E5F19D2107400AC1F37 /* APCStepViewController.m */; };
 		F5179B2F19D09128001DCCB7 /* APCAppleCore.h in Headers */ = {isa = PBXBuildFile; fileRef = F5179B2E19D09128001DCCB7 /* APCAppleCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5179BF419D0917D001DCCB7 /* APCAssertionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = F5179B4319D0917D001DCCB7 /* APCAssertionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5179BF519D0917D001DCCB7 /* APCAssertionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179B4419D0917D001DCCB7 /* APCAssertionHandler.m */; };
@@ -257,6 +261,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F5017E5C19D2107400AC1F37 /* APCSetupTaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSetupTaskViewController.h; sourceTree = "<group>"; };
+		F5017E5D19D2107400AC1F37 /* APCSetupTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSetupTaskViewController.m; sourceTree = "<group>"; };
+		F5017E5E19D2107400AC1F37 /* APCStepViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStepViewController.h; sourceTree = "<group>"; };
+		F5017E5F19D2107400AC1F37 /* APCStepViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStepViewController.m; sourceTree = "<group>"; };
 		F5179B2919D09128001DCCB7 /* APCAppleCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APCAppleCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5179B2D19D09128001DCCB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5179B2E19D09128001DCCB7 /* APCAppleCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APCAppleCore.h; sourceTree = "<group>"; };
@@ -450,6 +458,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F5017E5B19D2107400AC1F37 /* TasksAndSteps */ = {
+			isa = PBXGroup;
+			children = (
+				F5017E5C19D2107400AC1F37 /* APCSetupTaskViewController.h */,
+				F5017E5D19D2107400AC1F37 /* APCSetupTaskViewController.m */,
+				F5017E5E19D2107400AC1F37 /* APCStepViewController.h */,
+				F5017E5F19D2107400AC1F37 /* APCStepViewController.m */,
+			);
+			path = TasksAndSteps;
+			sourceTree = "<group>";
+		};
 		F5179B1F19D09128001DCCB7 = {
 			isa = PBXGroup;
 			children = (
@@ -532,6 +551,7 @@
 		F5179B4519D0917D001DCCB7 /* CommonUI */ = {
 			isa = PBXGroup;
 			children = (
+				F5017E5B19D2107400AC1F37 /* TasksAndSteps */,
 				F5179B4619D0917D001DCCB7 /* Categories */,
 				F5179B6519D0917D001DCCB7 /* Cells */,
 				F5179B6D19D0917D001DCCB7 /* Modules */,
@@ -909,6 +929,8 @@
 				F5179C4E19D0917D001DCCB7 /* APCSignupViewController.h in Headers */,
 				F5179C6F19D0917D001DCCB7 /* YMLChartUnitsView.h in Headers */,
 				F5179BFD19D0917D001DCCB7 /* UIBarButtonItem+Appearance.h in Headers */,
+				F5017E6019D2107400AC1F37 /* APCSetupTaskViewController.h in Headers */,
+				F5017E6219D2107400AC1F37 /* APCStepViewController.h in Headers */,
 				F5179C6019D0917D001DCCB7 /* APCConfirmationView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1085,12 +1107,14 @@
 				F5179BF819D0917D001DCCB7 /* APCStepProgressBar+Appearance.m in Sources */,
 				F5179C7619D0917D001DCCB7 /* YMLTimeLineChartView.m in Sources */,
 				F5179C1319D0917D001DCCB7 /* NSString+Helper.m in Sources */,
+				F5017E6119D2107400AC1F37 /* APCSetupTaskViewController.m in Sources */,
 				F5179C1619D0917D001DCCB7 /* UIAlertView+Helper.m in Sources */,
 				F5179C9719D0917D001DCCB7 /* APCFileResult+AddOn.m in Sources */,
 				F5179CB219D0917D001DCCB7 /* APCScheduledTask+AddOn.m in Sources */,
 				F5179CB519D0917D001DCCB7 /* APCScheduledTask.m in Sources */,
 				F5179C5B19D0917D001DCCB7 /* APCViewController.m in Sources */,
 				F5179CA619D0917D001DCCB7 /* APCResult+AddOn.m in Sources */,
+				F5017E6319D2107400AC1F37 /* APCStepViewController.m in Sources */,
 				F5179CBB19D0917D001DCCB7 /* APCSurveyResult.m in Sources */,
 				F5179C7C19D0917D001DCCB7 /* APCDataSubstrate+CoreData.m in Sources */,
 				F5179CC919D0917D001DCCB7 /* NSManagedObject+APCHelper.m in Sources */,

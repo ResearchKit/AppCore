@@ -60,6 +60,9 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/YMLLineChartView.h>
 #import <APCAppleCore/YMLTimeLineChartView.h>
 
+#import <APCAppleCore/APCSetupTaskViewController.h>
+#import <APCAppleCore/APCStepViewController.h>
+
 //Categories
 #import <APCAppleCore/APCStepProgressBar+Appearance.h>
 #import <APCAppleCore/CALayer+Appearance.h>
