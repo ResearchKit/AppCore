@@ -2,32 +2,83 @@
 //  APCAppleCore.h
 //  APCAppleCore
 //
-//  Created by Dhanush Balachandran on 8/15/14.
+//  Created by Dhanush Balachandran on 9/22/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-#ifndef _APCAPPLECORE_
-    #define _APCAPPLECORE_
+//! Project version number for APCAppleCore.
+FOUNDATION_EXPORT double APCAppleCoreVersionNumber;
+
+//! Project version string for APCAppleCore.
+FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
+
+#import <ResearchKit/ResearchKit.h>
 
 //Headers
-#import "APCAppDelegate.h"
+#import <APCAppleCore/APCAppDelegate.h>
+#import <APCAppleCore/APCDataMonitor.h>
+#import <APCAppleCore/APCDataSubstrate.h>
+#import <APCAppleCore/APCDataSubstrate+CoreData.h>
+#import <APCAppleCore/APCDataSubstrate+ResearchKit.h>
+#import <APCAppleCore/APCModel.h>
+#import <APCAppleCore/APCNetworkManager.h>
+#import <APCAppleCore/APCSageNetworkManager.h>
+#import <APCAppleCore/APCScheduler.h>
+#import <APCAppleCore/APCScheduleInterpreter.h>
+#import <APCAppleCore/APCParameters.h>
+#import <APCAppleCore/Reachability.h>
 
-#import "APCNetworkManager.h"
-#import "APCSageNetworkManager.h"
+//UI
+#import <APCAppleCore/APCAssertionHandler.h>
+#import <APCAppleCore/APCCircularProgressView.h>
+#import <APCAppleCore/APCConfigurableCell.h>
+#import <APCAppleCore/APCConfirmationView.h>
+#import <APCAppleCore/APCCriteriaCell.h>
+#import <APCAppleCore/APCForgotPasswordViewController.h>
+#import <APCAppleCore/APCIntroVideoViewController.h>
+#import <APCAppleCore/APCNavigationController.h>
+#import <APCAppleCore/APCPasscodeView.h>
+#import <APCAppleCore/APCProfile.h>
+#import <APCAppleCore/APCSegmentControl.h>
+#import <APCAppleCore/APCSignInViewController.h>
+#import <APCAppleCore/APCSignupCriteriaViewController.h>
+#import <APCAppleCore/APCSignUpProgressing.h>
+#import <APCAppleCore/APCSignupTouchIDViewController.h>
+#import <APCAppleCore/APCSignUpUserInfoViewController.h>
+#import <APCAppleCore/APCSignupViewController.h>
+#import <APCAppleCore/APCSpinnerViewController.h>
+#import <APCAppleCore/APCStepProgressBar.h>
+#import <APCAppleCore/APCTableViewItem.h>
+#import <APCAppleCore/APCUserInfoCell.h>
+#import <APCAppleCore/APCUserInfoConstants.h>
+#import <APCAppleCore/APCUserInfoViewController.h>
+#import <APCAppleCore/APCViewController.h>
+#import <APCAppleCore/YMLChartEnumerations.h>
+#import <APCAppleCore/YMLChartUnitsView.h>
+#import <APCAppleCore/YMLLineChartView.h>
+#import <APCAppleCore/YMLTimeLineChartView.h>
 
-#import "APCDataSubstrate.h"
-#import "APCDataSubstrate+ResearchKit.h"
-#import "APCDataSubstrate+CoreData.h"
-#import "APCModel.h"
-
-#import "APCDataMonitor.h"
-
-#import "APCScheduler.h"
+#import <APCAppleCore/APCSetupTaskViewController.h>
+#import <APCAppleCore/APCStepViewController.h>
 
 //Categories
-#import "NSError+APCAdditions.h"
+#import <APCAppleCore/APCStepProgressBar+Appearance.h>
+#import <APCAppleCore/CALayer+Appearance.h>
+#import <APCAppleCore/NSBundle+Helper.h>
+#import <APCAppleCore/NSDate+Helper.h>
+#import <APCAppleCore/NSError+APCAdditions.h>
+#import <APCAppleCore/NSError+APCNetworkManager.h>
+#import <APCAppleCore/NSObject+Helper.h>
+#import <APCAppleCore/NSString+Helper.h>
+#import <APCAppleCore/UIAlertView+Helper.h>
+#import <APCAppleCore/UIBarButtonItem+Appearance.h>
+#import <APCAppleCore/UIColor+Helper.h>
+#import <APCAppleCore/UIScrollView+Helper.h>
+#import <APCAppleCore/UISegmentedControl+Appearance.h>
+#import <APCAppleCore/UITableView+Appearance.h>
+#import <APCAppleCore/UIView+Helper.h>
 
 //Error Codes
 static NSString *const APC_ERROR_DOMAIN = @"com.ymedialabs.error_domain";
@@ -45,5 +96,3 @@ typedef NS_ENUM(NSInteger, APCNetworkErrorCodes)
 
 static NSString *const APCUserLoginNotification     = @"APCUserLoginNotification";
 static NSString *const APCUserLogOutNotification  = @"APCUserLogOutNotification";
-
-#endif

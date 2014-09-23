@@ -25,9 +25,7 @@
 
 - (void) loadManagedObjectModel: (NSManagedObjectModel*) mergedModels
 {
-    NSString* bundlePath = [[NSBundle mainBundle] pathForResource:@"APCAppleCoreBundle" ofType:@"bundle"];
-    
-    NSBundle* bundle = [NSBundle bundleWithPath:bundlePath];
+    NSBundle* bundle =[NSBundle appleCoreBundle];
     
     NSString * modelPath = [bundle pathForResource:@"APCModel" ofType:@"momd"];
     NSAssert(modelPath, @"No Model Path Found!");
