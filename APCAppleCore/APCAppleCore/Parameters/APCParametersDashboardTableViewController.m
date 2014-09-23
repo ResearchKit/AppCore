@@ -7,7 +7,7 @@
 //
 
 #import "APCParametersDashboardTableViewController.h"
-#import "APCDataSubstrate.h"
+#import "APCAppleCore.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -23,7 +23,7 @@ static NSString *APCTitleOfUserDefaultsParameterSection = @"NSUserdefaults";
 static NSInteger APCParametersTableViewHeaderHeight = 70.0;
 
 
-typedef NS_ENUM(NSInteger, APCNetworkErrorCodes)
+typedef NS_ENUM(NSInteger, APCParametersEnum)
 {
     kCoreDataDefault = 0,
     kParametersDefaults = 1,
@@ -59,9 +59,9 @@ typedef NS_ENUM(NSInteger, APCNetworkErrorCodes)
     [self.parameters setDelegate:self];
     
     //Force loading of AppleCore bundle
-    NSString* bundlePath = [[NSBundle mainBundle] pathForResource:@"APCAppleCoreBundle" ofType:@"bundle"];
+
     
-    NSBundle* bundle = [NSBundle bundleWithPath:bundlePath];
+    NSBundle* bundle = [NSBundle appleCoreBundle];
     
     //Register custom nibs
     NSString *nibName = NSStringFromClass([APCParametersCell class]);
