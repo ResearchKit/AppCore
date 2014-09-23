@@ -26,33 +26,17 @@ typedef NS_OPTIONS (NSUInteger, InputCellType) {
 
 @property (weak, nonatomic) IBOutlet UIButton *resetButton;
 
-
-/************************************************/
-// Adapting Karthik's code to mine.
-/************************************************/
-
-@property (nonatomic, readonly) InputCellType type;
-
-@property (nonatomic, strong) UITextField *txtValue;
-
-@property (nonatomic, strong) UITextField *txtTitle;
-
-@property (nonatomic, strong) UISwitch *switchView;
-
-@property (nonatomic, strong) UIDatePicker *datePicker;
++ (float)heightOfCell;
 
 @property (nonatomic, weak) id<APCParametersCellDelegate> delegate;
 
-- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier type:(InputCellType)type;
-
-- (id) value;
-
-
 @end
 
+//Protocol
+/*********************************************************************************/
 @protocol APCParametersCellDelegate <NSObject>
 
 @optional
 - (void) inputCellValueChanged:(APCParametersCell *)cell;
-
 @end
+/*********************************************************************************/

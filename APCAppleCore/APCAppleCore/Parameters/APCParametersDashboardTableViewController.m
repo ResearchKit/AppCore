@@ -7,19 +7,39 @@
 //
 
 #import "APCParametersDashboardTableViewController.h"
+#import "APCDataSubstrate.h"
 
 #import <QuartzCore/QuartzCore.h>
 
 
 static NSString *APCParametersDashboardCellIdentifier = @"APCParametersCellIdentifier";
+static NSString *APCParametersCoreDataCellIdentifier = @"APCParametersCoreDataCellIdentifier";
+static NSString *APCParametersUserDefaultsCellIdentifier = @"APCParametersUserDefaultsCellIdentifier";
+
 static NSString *APCTitleOfParameterSection = @"Parameters";
-static NSInteger APCParametersCellHeight = 44.0;
+static NSString *APCTitleOfCoreDataParameterSection = @"Reset";
+static NSString *APCTitleOfUserDefaultsParameterSection = @"NSUserdefaults";
+
 static NSInteger APCParametersTableViewHeaderHeight = 70.0;
+
+
+typedef NS_ENUM(NSInteger, APCNetworkErrorCodes)
+{
+    kCoreDataDefault = 0,
+    kParametersDefaults = 1,
+    kUserDefault = 2
+};
+
 
 @interface APCParametersDashboardTableViewController ()
 
+@property (nonatomic, strong) NSArray *sections;
+
+@property  (weak, nonatomic)     APCDataSubstrate        *dataSubstrate;
+@property  (strong, nonatomic)   NSManagedObjectContext  *localMOC;
 
 @end
+
 
 @implementation APCParametersDashboardTableViewController
 
@@ -28,18 +48,39 @@ static NSInteger APCParametersTableViewHeaderHeight = 70.0;
     
     [self setupHeaderView];
     
-    //TODO parameters should be loaded at launch of application.
+    //Setup sections
+    
+    //TODO: If you want to include NSUserDefaults then uncomment the line below.
+    //self.sections = @[APCParametersDashboardCellIdentifier, APCParametersCoreDataCellIdentifier, APCParametersUserDefaultsCellIdentifier];
+    self.sections = @[APCParametersDashboardCellIdentifier, APCParametersCoreDataCellIdentifier];
+    
+    //TODO parameters should be loaded at launch of application
     self.parameters = [[APCParameters alloc] initWithFileName:@"parameters.json"];
     [self.parameters setDelegate:self];
     
-    //Force loading of AppleCore bundle.
+    //Force loading of AppleCore bundle
     NSString* bundlePath = [[NSBundle mainBundle] pathForResource:@"APCAppleCoreBundle" ofType:@"bundle"];
     
     NSBundle* bundle = [NSBundle bundleWithPath:bundlePath];
     
+    //Register custom nibs
     NSString *nibName = NSStringFromClass([APCParametersCell class]);
-    
     [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:bundle] forCellReuseIdentifier:APCParametersDashboardCellIdentifier];
+    
+    NSString *nibCoreDataCellName = NSStringFromClass([APCParametersCoreDataCell class]);
+    [self.tableView registerNib:[UINib nibWithNibName:nibCoreDataCellName bundle:bundle] forCellReuseIdentifier:APCParametersCoreDataCellIdentifier];
+
+    NSString *nibUserDefaultsCellName = NSStringFromClass([APCParametersUserDefaultCell class]);
+    [self.tableView registerNib:[UINib nibWithNibName:nibUserDefaultsCellName bundle:bundle] forCellReuseIdentifier:APCParametersUserDefaultsCellIdentifier];
+
+    
+    //Setup persistent parameter types like Core Data
+    self.coreDataParameters = [NSMutableArray new];
+    self.coreDataParameters = [@[@"Core Data Reset", @"Parameters", @"NSUserDefautls"] mutableCopy];
+    
+    //Setup NSUserDefaults
+    self.userDefaultParameters = [[[[NSUserDefaults standardUserDefaults] dictionaryRepresentation] allKeys] mutableCopy];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -50,46 +91,185 @@ static NSInteger APCParametersTableViewHeaderHeight = 70.0;
 /*********************************************************************************/
 #pragma mark - Table view data source
 /*********************************************************************************/
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+
+    // Return the number of sections.
+    return [self.sections count];
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return  [[self.parameters allKeys] count];
+    NSInteger rowCount;
+    
+    if (section == kCoreDataDefault)
+    {
+        rowCount = [self.coreDataParameters count];
+    }
+    else if (section == kParametersDefaults)
+    {
+        rowCount = [[self.parameters allKeys] count];
+    }
+    else if (section == kUserDefault)
+    {
+
+        rowCount = [self.userDefaultParameters count];
+    }
+    return  rowCount;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+
+    NSString *sectionTitle;
     
-    return APCTitleOfParameterSection;
+    if (section == kCoreDataDefault)
+    {
+        sectionTitle = APCTitleOfCoreDataParameterSection;
+    }
+    else if (section == kParametersDefaults)
+    {
+        sectionTitle = APCTitleOfParameterSection;
+    }
+    else if (section == kUserDefault)
+    {
+        sectionTitle = APCTitleOfUserDefaultsParameterSection;
+    }
+    
+    return sectionTitle;
 }
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return APCParametersCellHeight;
+
+    CGFloat height;
+    
+    if (indexPath.section == kCoreDataDefault) {
+        
+        height = [APCParametersCoreDataCell heightOfCell];
+        
+        
+    }
+    else if (indexPath.section == kParametersDefaults)
+    {
+        height = [APCParametersCell heightOfCell];
+    }
+    
+    else if (indexPath.section == kUserDefault) {
+        height = [APCParametersUserDefaultCell heightOfCell];
+    }
+    
+    return height;
 }
 
 
-- (APCParametersCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UIImage *)imageWithColor:(UIColor *)color {
+    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
     
-    NSString *key = self.parameters.allKeys[indexPath.row];
-    id value = [self.parameters objectForKey:key];
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
     
-    APCParametersCell *cell;
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
     
-    //cell = [tableView dequeueReusableCellWithIdentifier:APCParametersDashboardCellIdentifier];
-    cell = [APCParametersCell.alloc initWithStyle:UITableViewCellStyleDefault reuseIdentifier:APCParametersDashboardCellIdentifier type:InputCellTypeText];
-    cell.delegate = self;
+    return image;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (!cell) {
-        cell = [APCParametersCell.alloc initWithStyle:UITableViewCellStyleDefault reuseIdentifier:APCParametersDashboardCellIdentifier type:InputCellTypeText];
-        cell.delegate = self;
+    UITableViewCell *cell;
+    
+    if (indexPath.section == kCoreDataDefault)
+    {
+        APCParametersCoreDataCell *coreDataCell = [tableView dequeueReusableCellWithIdentifier:APCParametersCoreDataCellIdentifier];
+        [coreDataCell setDelegate:self];
+        
+        coreDataCell.resetTitle.text = [self.coreDataParameters objectAtIndex:indexPath.row];
+        [coreDataCell.resetButton setBackgroundImage:[self imageWithColor:[UIColor blueColor]] forState:UIControlStateHighlighted];
+
+        
+        if (indexPath.row == kCoreDataDefault)
+        {
+            coreDataCell.resetInstructions.text = @"This will delete all persisting object graph entities.";
+            [coreDataCell.resetButton addTarget:self action:@selector(resetCoreData) forControlEvents:UIControlEventTouchUpInside];
+
+        }
+        else if (indexPath.row == kParametersDefaults)
+        {
+            coreDataCell.resetInstructions.text = @"This will reset original Parameters.";
+            [coreDataCell.resetButton addTarget:self action:@selector(resetParameters) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else if (indexPath.row == kUserDefault)
+        {
+            coreDataCell.resetInstructions.text = @"This will delete all NSUserDefaults.";
+            [coreDataCell.resetButton addTarget:self action:@selector(resetUserDefaults) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        
+        cell = coreDataCell;
     }
     
-    cell.txtTitle.text = key;
-    
-    if ([value isKindOfClass:[NSString class]]) {
-        cell.txtValue.text = value;
+    else if (indexPath.section == kParametersDefaults)
+    {
+        
+        APCParametersCell *parametersCell = [tableView dequeueReusableCellWithIdentifier:APCParametersDashboardCellIdentifier];
+        parametersCell.delegate = self;
+        //[parametersCell.parameterTextInput setDelegate:self];
+
+        NSString *key = self.parameters.allKeys[indexPath.row];
+        id value = [self.parameters objectForKey:key];
+        
+        if (!parametersCell) {
+            parametersCell = [tableView dequeueReusableCellWithIdentifier:APCParametersDashboardCellIdentifier];
+            parametersCell.delegate = self;
+        }
+        
+        parametersCell.parameterTitle.text = key;
+        
+        if ([value isKindOfClass:[NSString class]]) {
+            parametersCell.parameterTextInput.text = value;
+            [parametersCell.parameterTextInput setKeyboardType:UIKeyboardTypeAlphabet];
+            
+        }
+        else if ([value isKindOfClass:[NSNumber class]])
+        {
+            parametersCell.parameterTextInput.text = [value stringValue];
+            [parametersCell.parameterTextInput setKeyboardType:UIKeyboardTypeDecimalPad];
+        }
+        
+        cell = parametersCell;
     }
-    else {
-        cell.txtValue.text = [value stringValue];
+    else if (indexPath.section == kUserDefault)
+    {
+        APCParametersUserDefaultCell *userDefaultCell = [tableView dequeueReusableCellWithIdentifier:APCParametersUserDefaultsCellIdentifier];
+        
+        NSString *key = [self.userDefaultParameters objectAtIndex:indexPath.row];
+        userDefaultCell.parameterTitle.text = key;
+        
+        id value = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+        if ([value isKindOfClass:[NSString class]])
+        {
+            userDefaultCell.parameterTextInput.text = (NSString *)value;
+        }
+        else if ([value isKindOfClass:[NSNumber class]])
+        {
+            userDefaultCell.parameterTextInput.text = (NSString *)[value stringValue];
+            [userDefaultCell.parameterTextInput setKeyboardType:UIKeyboardTypeDecimalPad];
+        }
+        else if ([value isKindOfClass:[NSArray class]])
+        {
+            NSLog(@"NSArray %@", value);
+        }
+        else if ([value isKindOfClass:[NSDictionary class]])
+        {
+            NSLog(@"NSDictionary %@", value);
+        }
+        else
+        {
+            NSLog(@"%@", value);
+        }
+        
+        cell = userDefaultCell;
     }
     
     return cell;
@@ -111,16 +291,6 @@ static NSInteger APCParametersTableViewHeaderHeight = 70.0;
     
     [headerView addSubview:saveButton];
     
-    
-    UIButton *resetButton = [[UIButton alloc] initWithFrame:CGRectMake(260.0, 25.0, 50, 40)];
-    [resetButton setTitle:@"Reset" forState:UIControlStateNormal];
-    [resetButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [resetButton addTarget:self action:@selector(reset) forControlEvents:UIControlEventTouchUpInside];
-    
-    [headerView addSubview:resetButton];
-    
-    
-    
     self.tableView.tableHeaderView = headerView;
 }
 
@@ -136,15 +306,35 @@ static NSInteger APCParametersTableViewHeaderHeight = 70.0;
     }];
 }
 
-- (void) reset {
+- (void) resetParameters {
     [self.tableView endEditing:YES];
     
     [self.parameters reset];
     [self.tableView reloadData];
 }
 
+- (void)resetUserDefaults {
+    [self.tableView endEditing:YES];
+    NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
+    for (NSString *key in [defaultsDictionary allKeys]) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [self.tableView reloadData];
+}
+
+- (void)resetCoreData {
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *filePath =  [documentsDirectory stringByAppendingPathComponent:@"db.sqlite"];
+    
+    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    }
+}
 /*********************************************************************************/
-#pragma mark - InputCellDelegate
+#pragma mark - CUSTOM CELL Delegate Methods
 /*********************************************************************************/
 
 - (void) inputCellValueChanged:(APCParametersCell *)cell {
@@ -155,13 +345,34 @@ static NSInteger APCParametersTableViewHeaderHeight = 70.0;
     id previousValue = [self.parameters objectForKey:key];
     
     if ([previousValue isKindOfClass:[NSString class]]) {
-        [self.parameters setString:cell.value forKey:key];
+        [self.parameters setString:cell.parameterTextInput.text forKey:key];
     }
-    else
+    else if ([previousValue isKindOfClass:[NSNumber class]])
     {
-        [self.parameters setNumber:cell.value forKey:key];
-
+        NSNumber *number = previousValue;
+        
+        CFNumberType numberType = CFNumberGetType((CFNumberRef)number);
+        
+        if (numberType == kCFNumberSInt32Type)
+        {
+            NSInteger integer = [cell.parameterTextInput.text intValue];
+            [self.parameters setInteger:integer forKey:key];
+        }
+        else if (numberType == kCFNumberSInt64Type)
+        {
+            NSInteger integer = [cell.parameterTextInput.text intValue];
+            [self.parameters setInteger:integer forKey:key];
+        }
+        else if (numberType == kCFNumberFloat64Type)
+        {
+            float floatNum = [cell.parameterTextInput.text floatValue];
+            [self.parameters setFloat:floatNum forKey:key];
+        }
     }
+}
+
+- (void) resetDidComplete:(APCParametersCoreDataCell *)cell {
+    NSLog(@"Core data did reset");
 }
 
 

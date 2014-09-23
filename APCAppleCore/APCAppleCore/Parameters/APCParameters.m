@@ -108,7 +108,7 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     
     CFNumberType numberType = CFNumberGetType((CFNumberRef)number);
     
-    if (numberType == kCFNumberSInt32Type)
+    if (numberType == kCFNumberSInt64Type)
     {
         integer = number.integerValue;
     }
@@ -144,7 +144,7 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
 {
     NSParameterAssert(value != nil);
     
-    [self.userDefaults setValue:value forKey:key];
+    [self.userDefaults setObject:value forKey:key];
     
     [self saveToFile];
 }
@@ -154,7 +154,7 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
 {
     NSParameterAssert(value != nil);
     
-    [self.userDefaults setValue:value forKey:key];
+    [self.userDefaults setObject:value forKey:key];
     
     [self saveToFile];
 }

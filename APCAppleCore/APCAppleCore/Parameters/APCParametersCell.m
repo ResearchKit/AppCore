@@ -8,7 +8,13 @@
 
 #import "APCParametersCell.h"
 
+static CGFloat cellHeight = 114.0;
+
 @interface APCParametersCell () 
+
+@property (nonatomic, strong) UIView *inputAccView;
+@property (nonatomic, strong) UIButton *btnDone;
+@property (nonatomic, strong) UITextField *currentKeyboard;
 
 @end
 
@@ -16,6 +22,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    [self.parameterTextInput setDelegate:self];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -25,55 +32,9 @@
 }
 
 
-- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier type:(InputCellType)type {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        self.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        _txtTitle = [[UITextField alloc] initWithFrame:CGRectMake(10, 7, 140, 30)];
-        _txtTitle.delegate = self;
-        _txtTitle.textAlignment = NSTextAlignmentLeft;
-        [self addSubview:_txtTitle];
-        
-        [self setType:type];
-    }
-    
-    return self;
-}
-
-
-#pragma mark - Custom Setter
-
-- (void) setType:(InputCellType)type {
-    if (_type != type) {
-        _type = type;
-        
-        switch (self.type) {
-            case InputCellTypeText:
-                [self addText];
-                break;
-                
-            case InputCellTypeSwitch:
-                [self addSwitch];
-                break;
-                
-            case InputCellTypeDatePicker:
-                [self addPicker];
-                break;
-                
-            case InputCellTypeEntity:
-                self.selectionStyle = UITableViewCellSelectionStyleDefault;
-                self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                break;
-                
-            default:
-                break;
-        }
-    }
-}
-
-
+/*********************************************************************************/
 #pragma mark - UITextFieldDelegate
+/*********************************************************************************/
 
 - (void) textFieldDidEndEditing:(UITextField *)textField {
     if ([self.delegate respondsToSelector:@selector(inputCellValueChanged:)]) {
@@ -87,106 +48,63 @@
     return YES;
 }
 
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
+    // Call the createInputAccessoryView method we created earlier.
+    // By doing that we will prepare the inputAccView.
+    [self createInputAccessoryView];
+    
+    // Now add the view as an input accessory view to the selected textfield.
+    [textField setInputAccessoryView:self.inputAccView];
+    
+    self.currentKeyboard = textField;
+    
+}
 
+/*********************************************************************************/
 #pragma mark - Private Methods
+/*********************************************************************************/
 
-- (void) addText {
-    if (!self.txtValue) {
-        self.txtValue = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 140, 30)];
-        self.txtValue.delegate = self;
-        self.txtValue.textAlignment = NSTextAlignmentRight;
-    }
+
+//Input accessory for keyboard
+-(void)createInputAccessoryView{
     
-    self.txtValue.inputView = nil;
-    self.txtValue.inputAccessoryView = nil;
+    self.inputAccView = [[UIView alloc] initWithFrame:CGRectMake(10.0, 0.0, 310.0, 40.0)];
     
-    self.accessoryView = self.txtValue;
+    // Set the view’s background color. We’ ll set it here to gray. Use any color you want.
+    [self.inputAccView setBackgroundColor:[UIColor lightGrayColor]];
+    
+    // We can play a little with transparency as well using the Alpha property. Normally
+    // you can leave it unchanged.
+    [self.inputAccView setAlpha: 0.8];
+    
+    
+    
+    
+    self.btnDone = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.btnDone setFrame:CGRectMake(240.0, 0.0f, 80.0f, 40.0f)];
+    [self.btnDone setTitle:@"Done" forState:UIControlStateNormal];
+    [self.btnDone setBackgroundColor:[UIColor greenColor]];
+    [self.btnDone setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.btnDone addTarget:self action:@selector(doneTyping) forControlEvents:UIControlEventTouchUpInside];
+    
+    // Now that our buttons are ready we just have to add them to our view.
+    [self.inputAccView addSubview:self.btnDone];
 }
 
-- (void) addSwitch {
-    if (!self.switchView) {
-        self.switchView = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
-        [self.switchView addTarget:self action:@selector(switchValueChanged) forControlEvents:UIControlEventValueChanged];
-    }
-    
-    self.accessoryView = self.switchView;
-}
-
-- (void) addPicker {
-    if (!self.txtValue) {
-        self.txtValue = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 140, 30)];
-        self.txtValue.delegate = self;
-        self.txtValue.textAlignment = NSTextAlignmentRight;
-    }
-    
-    self.accessoryView = self.txtValue;
-    
-    {
-        self.datePicker = [[UIDatePicker alloc] init];
-        self.datePicker.backgroundColor = [UIColor whiteColor];
-        self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
-        
-        self.txtValue.inputView = self.datePicker;
-    }
-    
-    {
-        UIBarButtonItem *extraSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        UIBarButtonItem *accept = [[UIBarButtonItem alloc] initWithTitle:@"Select" style:UIBarButtonItemStyleDone target:self action:@selector(datePickerValueChanged)];
-        
-        UIToolbar *keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 44)];
-        keyboardToolbar.tintColor = [UIColor whiteColor];
-        keyboardToolbar.barStyle = UIBarStyleBlackTranslucent;
-        keyboardToolbar.items = @[extraSpace, accept];
-        
-        self.txtValue.inputAccessoryView = keyboardToolbar;
-    }
-}
-
-- (void) switchValueChanged {
-    if ([self.delegate respondsToSelector:@selector(inputCellValueChanged:)]) {
-        [self.delegate inputCellValueChanged:self];
-    }
-}
-
-- (void) datePickerValueChanged {
-    [_txtValue resignFirstResponder];
-    
-    if ([self.delegate respondsToSelector:@selector(inputCellValueChanged:)]) {
-        [self.delegate inputCellValueChanged:self];
-    }
+- (void)doneTyping {
+    NSLog(@"Done typing");
+    [self.currentKeyboard resignFirstResponder];
 }
 
 
-#pragma mark - Pubic Methods
 
-- (void) prepareForReuse {
-    [super prepareForReuse];
-    
-    self.textLabel.text = nil;
-    self.detailTextLabel.text = nil;
-}
+/*********************************************************************************/
+#pragma mark - Class Methods
+/*********************************************************************************/
 
-- (id) value {
-    id value;
++ (float)heightOfCell {
     
-    switch (self.type) {
-        case InputCellTypeText:
-            value = self.txtValue.text;
-            break;
-            
-        case InputCellTypeSwitch:
-            value = @(self.switchView.isOn);
-            break;
-            
-        case InputCellTypeDatePicker:
-            value = self.datePicker.date;
-            break;
-            
-        default:
-            break;
-    }
-    
-    return value;
+    return cellHeight;
 }
 
 @end

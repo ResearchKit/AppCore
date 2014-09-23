@@ -39,6 +39,8 @@ extern NSString *const ParametersValueChangeNotification;
 
 @end
 
+//Protocol
+/*********************************************************************************/
 @protocol APCParametersDelegate <NSObject>
 
 - (void)parameters:(APCParameters *)parameters didFailWithError:(NSError *)error;
@@ -51,3 +53,4 @@ extern NSString *const ParametersValueChangeNotification;
 - (void)parameters:(APCParameters *)parameters didFinishResetting:(id)item;
 
 @end
+/*********************************************************************************/
