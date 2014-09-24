@@ -10,6 +10,6 @@
 
 @interface APCDebugWindow : UIWindow
 
-@property (assign, setter=setEnable:) BOOL enable;
+@property (assign) BOOL enableDebuggerWindow;
 
 @end

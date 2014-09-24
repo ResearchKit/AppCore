@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     self.sections = @[APCParametersDashboardCellIdentifier, APCParametersCoreDataCellIdentifier];
     
     //TODO parameters should be loaded at launch of application
-    self.parameters = [[APCParameters alloc] initWithFileName:@"parameters.json"];
+    self.parameters = [[APCParameters alloc] initWithFileName:@"APCParameters.json"];
     [self.parameters setDelegate:self];
     
     //Force loading of AppleCore bundle
@@ -214,7 +214,6 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
         
         APCParametersCell *parametersCell = [tableView dequeueReusableCellWithIdentifier:APCParametersDashboardCellIdentifier];
         parametersCell.delegate = self;
-        //[parametersCell.parameterTextInput setDelegate:self];
 
         NSString *key = self.parameters.allKeys[indexPath.row];
         id value = [self.parameters objectForKey:key];
@@ -258,10 +257,12 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
         }
         else if ([value isKindOfClass:[NSArray class]])
         {
+            //Exlicitly ignoring arrays
             NSLog(@"NSArray %@", value);
         }
         else if ([value isKindOfClass:[NSDictionary class]])
         {
+            //Exlicitly ignoring dictionaries
             NSLog(@"NSDictionary %@", value);
         }
         else
@@ -284,12 +285,18 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenRect.size.width, APCParametersTableViewHeaderHeight)];
     
-    UIButton *saveButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, 25.0, 50, 40)];
-    [saveButton setTitle:@"Done" forState:UIControlStateNormal];
-    [saveButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [saveButton addTarget:self action:@selector(dimissView) forControlEvents:UIControlEventTouchUpInside];
+    //This is set in the header view portion of table view.
+    float xValue = 10.0f;
+    float yValue = 25.0f;
+    float width = 50.0;
+    float height = 40.0;
     
-    [headerView addSubview:saveButton];
+    UIButton *doneButton = [[UIButton alloc] initWithFrame:CGRectMake(xValue, yValue, width, height)];
+    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [doneButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [doneButton addTarget:self action:@selector(dimissView) forControlEvents:UIControlEventTouchUpInside];
+    
+    [headerView addSubview:doneButton];
     
     self.tableView.tableHeaderView = headerView;
 }
@@ -325,19 +332,35 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 
 - (void)resetCoreData {
     
+    NSFileManager  *manager = [NSFileManager defaultManager];
+    
+    // the preferred way to get the apps documents directory
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *filePath =  [documentsDirectory stringByAppendingPathComponent:@"db.sqlite"];
     
-    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    // grab all the files in the documents dir
+    NSArray *allFiles = [manager contentsOfDirectoryAtPath:documentsDirectory error:nil];
+    
+    // filter the array for only sqlite files
+    NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.sqlite'"];
+    NSArray *sqliteFiles = [allFiles filteredArrayUsingPredicate:fltr];
+    
+    // use fast enumeration to iterate the array and delete the files
+    for (NSString *sqliteFile in sqliteFiles)
+    {
+        NSError *error = nil;
+        [manager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:sqliteFile] error:&error];
+        NSAssert(!error, @"Assertion: Error removing sqlite file.");
     }
 }
+
+
 /*********************************************************************************/
 #pragma mark - CUSTOM CELL Delegate Methods
 /*********************************************************************************/
 
 - (void) inputCellValueChanged:(APCParametersCell *)cell {
+    
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     NSString *key = self.parameters.allKeys[indexPath.row];
@@ -371,33 +394,34 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     }
 }
 
-- (void) resetDidComplete:(APCParametersCoreDataCell *)cell {
-    NSLog(@"Core data did reset");
-}
-
-
 /*********************************************************************************/
 #pragma mark - InputCellDelegate
 /*********************************************************************************/
 
 - (void)parameters:(APCParameters *)parameters didFailWithError:(NSError *)error {
     NSLog(@"Did fail with error %@", error);
+    NSAssert(!error, @"Assertion: An error occurred which had something to do with your .json file.");
 }
 
 - (void)parameters:(APCParameters *)parameters didFailWithValue:(id)value {
     NSLog(@"Did fail with value %@", value);
-}
 
-- (void)parameters:(APCParameters *)parameters didFailWithKey:(NSString *)key {
-    NSLog(@"Did fail with key %@", key);
-}
-
-- (void)parameters:(APCParameters *)parameters didFinishSaving:(id)item {
-    NSLog(@"Did finish saving");
-}
-
-- (void)parameters:(APCParameters *)parameters didFinishResetting:(id)item {
-    NSLog(@"Did finish resetting");    
+    UIAlertController *alertController = [[UIAlertController alloc] init];
+    
+    NSString *message = [NSString stringWithFormat:@"Warning: The value you input must conform to the previous value type that was set: %@", value];
+    [alertController setMessage:message];
+    
+    UIAlertAction *okAction = [UIAlertAction
+                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction *action)
+                               {
+                                   NSLog(@"OK action");
+                               }];
+    
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 @end

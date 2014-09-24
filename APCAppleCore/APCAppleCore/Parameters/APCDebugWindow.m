@@ -12,22 +12,13 @@
 
 @interface APCDebugWindow ()
 @property (strong, nonatomic) APCParametersDashboardTableViewController *controller;
-@property (assign) BOOL blah;
+@property (assign) BOOL toggleDebugWindow;
 @end
 
 @implementation APCDebugWindow
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
-
-
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-    if (self.enable) {
+    if (self.enableDebuggerWindow) {
         if (event.type == UIEventTypeMotion && event.subtype == UIEventSubtypeMotionShake) {
             NSLog(@"Global Shake!");
             [[NSNotificationCenter defaultCenter] postNotificationName:@"DeviceShaken" object:self];
@@ -40,16 +31,16 @@
 
 - (void)presentModalllViewController {
     
-    if (!self.blah) {
+    if (!self.toggleDebugWindow) {
         self.controller = [[APCParametersDashboardTableViewController alloc] init];
         self.controller.view.frame = [[UIScreen mainScreen] bounds];
         
         [self addSubview:self.controller.view];
-        self.blah = YES;
+        self.toggleDebugWindow = YES;
     } else {
         [self.controller.view removeFromSuperview];
         [self.controller removeFromParentViewController];
-        self.blah = NO;
+        self.toggleDebugWindow = NO;
     }
 }
 

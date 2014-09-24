@@ -35,7 +35,7 @@
     if (!customWindow) customWindow = [[APCDebugWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     //TODO: remember to turn this off for production.
-    customWindow.enable = YES;
+    customWindow.enableDebuggerWindow = YES;
     
     return customWindow;
 }

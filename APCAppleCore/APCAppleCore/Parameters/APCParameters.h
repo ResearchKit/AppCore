@@ -44,11 +44,11 @@ extern NSString *const ParametersValueChangeNotification;
 @protocol APCParametersDelegate <NSObject>
 
 - (void)parameters:(APCParameters *)parameters didFailWithError:(NSError *)error;
-- (void)parameters:(APCParameters *)parameters didFailWithValue:(id)value;
-- (void)parameters:(APCParameters *)parameters didFailWithKey:(NSString *)key;
 
 @optional
 
+- (void)parameters:(APCParameters *)parameters didFailWithValue:(id)value;
+- (void)parameters:(APCParameters *)parameters didFailWithKey:(NSString *)key;
 - (void)parameters:(APCParameters *)parameters didFinishSaving:(id)item;
 - (void)parameters:(APCParameters *)parameters didFinishResetting:(id)item;
 

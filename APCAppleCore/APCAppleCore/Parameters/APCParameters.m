@@ -108,7 +108,7 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     
     CFNumberType numberType = CFNumberGetType((CFNumberRef)number);
     
-    if (numberType == kCFNumberSInt64Type)
+    if (numberType == kCFNumberSInt64Type || numberType == kCFNumberSInt32Type)
     {
         integer = number.integerValue;
     }
@@ -187,8 +187,9 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     [self saveToFile];
 }
 
-
+/*********************************************************************************/
 #pragma mark - Private Methods
+/*********************************************************************************/
 
 - (void)saveToFile {
     NSError *error;
@@ -271,8 +272,9 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     return isNumber;
 }
 
-
+/*********************************************************************************/
 #pragma mark - Public Methods
+/*********************************************************************************/
 
 - (NSArray *) allKeys {
     return [self.userDefaults allKeys];
@@ -296,8 +298,9 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     }
 }
 
-
+/*********************************************************************************/
 #pragma mark - Delegate Methods
+/*********************************************************************************/
 
 - (void) didFail:(NSError *)error {
 

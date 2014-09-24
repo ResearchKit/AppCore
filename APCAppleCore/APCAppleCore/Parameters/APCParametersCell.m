@@ -68,20 +68,25 @@ static CGFloat cellHeight = 114.0;
 //Input accessory for keyboard
 -(void)createInputAccessoryView{
     
-    self.inputAccView = [[UIView alloc] initWithFrame:CGRectMake(10.0, 0.0, 310.0, 40.0)];
+    //This is an accessory view that I'm adding to the top of the keyboard.
+    CGRect deviceRect = [[UIScreen mainScreen] bounds];
+    float xValue = 10.0f;
+    float yValue = 0.0f;
+    float width = deviceRect.size.width;
+    float height = 40.0;
+    self.inputAccView = [[UIView alloc] initWithFrame:CGRectMake(xValue, yValue, width, height)];
     
-    // Set the view’s background color. We’ ll set it here to gray. Use any color you want.
+    // Set the view’s background color.
     [self.inputAccView setBackgroundColor:[UIColor lightGrayColor]];
     
-    // We can play a little with transparency as well using the Alpha property. Normally
-    // you can leave it unchanged.
-    [self.inputAccView setAlpha: 0.8];
-    
-    
-    
+    //This is an custom done button that I'm adding to the top of the accessory view.
+    float btnDoneWidth = 80.0f;
+    float btnDoneHeight = 40.0f;
+    float btnDoneXValue = deviceRect.size.width - btnDoneWidth;
+    float btnDoneYValue = 0.0f;
     
     self.btnDone = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.btnDone setFrame:CGRectMake(240.0, 0.0f, 80.0f, 40.0f)];
+    [self.btnDone setFrame:CGRectMake(btnDoneXValue, btnDoneYValue, btnDoneWidth, btnDoneHeight)];
     [self.btnDone setTitle:@"Done" forState:UIControlStateNormal];
     [self.btnDone setBackgroundColor:[UIColor greenColor]];
     [self.btnDone setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
