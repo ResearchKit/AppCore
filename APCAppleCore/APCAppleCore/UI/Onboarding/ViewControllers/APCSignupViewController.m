@@ -12,6 +12,8 @@
 #import "APCUserInfoConstants.h"
 #import "APCSignupViewController.h"
 
+static NSInteger kNumberOfSteps = 5;
+
 @interface APCSignupViewController ()
 
 @end
@@ -40,7 +42,7 @@
     
     self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.width, kAPCSignUpProgressBarHeight)
                                                                style:APCStepProgressBarStyleOnlyProgressView];
-    self.stepProgressBar.numberOfSteps = 4;
+    self.stepProgressBar.numberOfSteps = kNumberOfSteps;
     [self.view addSubview:self.stepProgressBar];
 }
 

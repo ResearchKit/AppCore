@@ -7,6 +7,7 @@
 //
 
 #import "APCConfirmationView.h"
+#import "UIColor+Appearance.h"
 
 static  const  CGFloat  insetForBorder = 0.5;
 static  const  CGFloat  kDesignSpace   = 1000.0;
@@ -23,15 +24,28 @@ static  short  coordinates[] = {
 
 @implementation APCConfirmationView
 
+- (instancetype)init
+{
+    if (self = [super init]) {
+        [self sharedInit];
+    }
+    return self;
+}
+
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        self.incompleteBackgroundColor = [UIColor grayColor];
-        self.completedBackgroundColor = [UIColor colorWithRed:48/255.f green:181/255.f blue:95/255.f alpha:1.0];
-        self.completedTickColor = [UIColor whiteColor];
+        [self sharedInit];
     }
     return self;
+}
+
+- (void)sharedInit
+{
+    self.incompleteBackgroundColor = [UIColor grayColor];
+    self.completedBackgroundColor = [UIColor confirmationGreenColor];
+    self.completedTickColor = [UIColor whiteColor];
 }
 
 - (void)createPath:(UIBezierPath *)path withDimension:(CGFloat)dimension

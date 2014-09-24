@@ -74,3 +74,9 @@
 @implementation APCTableViewSegmentItem
 
 @end
+
+@implementation APCTableViewPermissionsItem
+
+@synthesize permissionType = _permissionType;
+
+@end
