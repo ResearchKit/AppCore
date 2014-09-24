@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5B29CE3119D3765400E2FD62 /* UIColor+Appearance.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B29CE2F19D3765400E2FD62 /* UIColor+Appearance.h */; };
+		5B29CE3119D3765400E2FD62 /* UIColor+Appearance.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B29CE2F19D3765400E2FD62 /* UIColor+Appearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B29CE3219D3765400E2FD62 /* UIColor+Appearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B29CE3019D3765400E2FD62 /* UIColor+Appearance.m */; };
 		5B29CE3619D3767D00E2FD62 /* APCPermissionsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B29CE3419D3767D00E2FD62 /* APCPermissionsManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B29CE3719D3767D00E2FD62 /* APCPermissionsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B29CE3519D3767D00E2FD62 /* APCPermissionsManager.m */; };
