@@ -97,3 +97,20 @@
 @property (nonatomic, readwrite, getter = isOn) BOOL on;
 
 @end
+
+//Permission Types
+typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
+    kSignUpPermissionsTypeHealthKit,
+    kSignUpPermissionsTypeLocation,
+    kSignUpPermissionsTypePushNotifications,
+    
+    kSignUpPermissionsTypeCoremotion,
+};
+
+@interface APCTableViewPermissionsItem : APCTableViewItem
+
+@property (nonatomic) APCSignUpPermissionsType permissionType;
+
+@property (nonatomic, readwrite, getter=isPermissionGranted) BOOL permissionGranted;
+
+@end

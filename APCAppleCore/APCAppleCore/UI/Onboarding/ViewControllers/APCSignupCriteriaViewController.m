@@ -15,6 +15,7 @@
 #import "APCSegmentControl.h"
 #import "APCStepProgressBar.h"
 #import "APCSignupCriteriaViewController.h"
+#import "APCSignUpPermissionsViewController.h"
 
 static NSString const *kAPCSignupCriteriaTableViewCellIdentifier    =   @"Criteria";
 
@@ -84,7 +85,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 - (void) addNavigationItems {
     self.title = NSLocalizedString(@"Inclusion Criteria", @"");
     
-    UIBarButtonItem *nextBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"") style:UIBarButtonItemStylePlain target:self action:@selector(finishSignUp)];
+    UIBarButtonItem *nextBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next", @"") style:UIBarButtonItemStylePlain target:self action:@selector(next)];
     nextBarButton.enabled = [self isContentValid];
     self.navigationItem.rightBarButtonItem = nextBarButton;
 }
@@ -201,15 +202,9 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 #pragma mark - Private Methods
 
-- (void) finishSignUp {
-    [self.stepProgressBar setCompletedSteps:4 animation:YES];
+- (void) next {
     
-    // We are posting this notification after .5 seconds delay, because we need to display the progress bar completion animation
-    [self performSelector:@selector(postLoginNotification) withObject:nil afterDelay:0.5];
-}
-
-- (void) postLoginNotification {
-    [[NSNotificationCenter defaultCenter] postNotificationName:(NSString *)APCUserLoginNotification object:nil];
+    [self.navigationController pushViewController:[APCSignUpPermissionsViewController new] animated:YES];
 }
 
 - (BOOL) isContentValid {
