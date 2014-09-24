@@ -63,6 +63,10 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCSetupTaskViewController.h>
 #import <APCAppleCore/APCStepViewController.h>
 
+#import <APCAppleCore/APCActivitiesViewController.h>
+#import <APCAppleCore/APCActivitiesTableViewCell.h>
+#import <APCAppleCore/APCGroupedScheduledTask.h>
+
 //Categories
 #import <APCAppleCore/APCStepProgressBar+Appearance.h>
 #import <APCAppleCore/CALayer+Appearance.h>
