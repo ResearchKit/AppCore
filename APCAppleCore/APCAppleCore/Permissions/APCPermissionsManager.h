@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "APCAppleCore.h"
+#import "APCTableViewItem.h"
 
 typedef void(^APCPermissionsBlock)(BOOL granted, NSError *error);
 

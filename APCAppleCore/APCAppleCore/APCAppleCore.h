@@ -29,6 +29,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCScheduleInterpreter.h>
 #import <APCAppleCore/APCParameters.h>
 #import <APCAppleCore/Reachability.h>
+#import <APCAppleCore/APCPermissionsManager.h>
 
 //UI
 #import <APCAppleCore/APCAssertionHandler.h>
@@ -53,6 +54,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCStepProgressBar.h>
 #import <APCAppleCore/APCTableViewItem.h>
 #import <APCAppleCore/APCUserInfoCell.h>
+#import <APCAppleCore/APCPermissionsCell.h>
 #import <APCAppleCore/APCUserInfoConstants.h>
 #import <APCAppleCore/APCUserInfoViewController.h>
 #import <APCAppleCore/APCViewController.h>
@@ -84,6 +86,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/UISegmentedControl+Appearance.h>
 #import <APCAppleCore/UITableView+Appearance.h>
 #import <APCAppleCore/UIView+Helper.h>
+#import <APCAppleCore/UIColor+Appearance.h>
 
 //Error Codes
 static NSString *const APC_ERROR_DOMAIN = @"com.ymedialabs.error_domain";
