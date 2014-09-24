@@ -43,6 +43,9 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     return self;
 }
 
+- (id)objectForKey:(NSString *)key {
+    return [self.userDefaults objectForKey:key];
+}
 
 - (NSNumber*)numberForKey:(NSString*)key
 {
@@ -105,7 +108,7 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     
     CFNumberType numberType = CFNumberGetType((CFNumberRef)number);
     
-    if (numberType == kCFNumberSInt32Type)
+    if (numberType == kCFNumberSInt64Type || numberType == kCFNumberSInt32Type)
     {
         integer = number.integerValue;
     }
@@ -141,7 +144,7 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
 {
     NSParameterAssert(value != nil);
     
-    [self.userDefaults setValue:value forKey:key];
+    [self.userDefaults setObject:value forKey:key];
     
     [self saveToFile];
 }
@@ -151,7 +154,7 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
 {
     NSParameterAssert(value != nil);
     
-    [self.userDefaults setValue:value forKey:key];
+    [self.userDefaults setObject:value forKey:key];
     
     [self saveToFile];
 }
@@ -184,8 +187,9 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     [self saveToFile];
 }
 
-
+/*********************************************************************************/
 #pragma mark - Private Methods
+/*********************************************************************************/
 
 - (void)saveToFile {
     NSError *error;
@@ -196,6 +200,8 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     
     if (![NSJSONSerialization writeJSONObject:self.userDefaults toStream:outputStream options:0 error:&error]) {
         [self didFail:error];
+    } else {
+        [self didSave:self.userDefaults];
     }
     
     [outputStream close];
@@ -266,8 +272,9 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     return isNumber;
 }
 
-
+/*********************************************************************************/
 #pragma mark - Public Methods
+/*********************************************************************************/
 
 - (NSArray *) allKeys {
     return [self.userDefaults allKeys];
@@ -285,13 +292,15 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
         [self didFail:error];
         
     } else {
-        
+        [self didReset:self.userDefaults];
         [self loadValuesFromBundle];
+
     }
 }
 
-
+/*********************************************************************************/
 #pragma mark - Delegate Methods
+/*********************************************************************************/
 
 - (void) didFail:(NSError *)error {
 
