@@ -21,7 +21,9 @@
 /*********************************************************************************/
 #pragma mark - ResearchKit Subsystem Public Properties
 /*********************************************************************************/
-
+@property (assign) BOOL justJoined;
+@property (strong, nonatomic) NSString *logDirectory;
+@property (strong, nonatomic) RKDataLoggerManager *logManager;
 
 
 /*********************************************************************************/
