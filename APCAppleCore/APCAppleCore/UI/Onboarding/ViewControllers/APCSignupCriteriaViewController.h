@@ -10,4 +10,6 @@
 
 @interface APCSignupCriteriaViewController : APCSignupViewController
 
+- (void)startSignUp;
+
 @end

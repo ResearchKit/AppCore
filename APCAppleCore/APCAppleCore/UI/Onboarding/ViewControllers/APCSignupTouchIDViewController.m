@@ -12,7 +12,7 @@
 #import "APCStepProgressBar.h"
 #import "UIAlertView+Helper.h"
 #import "APCSignupTouchIDViewController.h"
-#import "APCSignupCriteriaViewController.h"
+#import "APCSignUpPermissionsViewController.h"
 
 @import LocalAuthentication;
 
@@ -135,7 +135,7 @@
 #pragma mark - Private Methods
 
 - (void) next {
-    [self.navigationController pushViewController:[APCSignupCriteriaViewController new] animated:YES];
+    [self.navigationController pushViewController:[APCSignUpPermissionsViewController new] animated:YES];
 }
 
 - (void) showFirstTry {

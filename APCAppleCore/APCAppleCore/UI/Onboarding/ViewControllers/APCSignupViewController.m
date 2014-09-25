@@ -29,6 +29,10 @@ static NSInteger kNumberOfSteps = 5;
     
     [self addProgressBar];
 }
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

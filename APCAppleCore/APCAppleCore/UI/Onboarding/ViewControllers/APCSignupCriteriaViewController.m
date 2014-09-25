@@ -22,7 +22,7 @@ static NSString const *kAPCSignupCriteriaTableViewCellIdentifier    =   @"Criter
 static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 
-@interface APCSignupCriteriaViewController () <UITableViewDataSource, UITableViewDelegate, APCConfigurableCellDelegate>
+@interface APCSignupCriteriaViewController () <UITableViewDataSource, UITableViewDelegate, APCConfigurableCellDelegate, RKConsentViewControllerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -76,10 +76,20 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     [self addTableView];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     [self.stepProgressBar setCompletedSteps:3 animation:YES];
+}
+
+- (UIRectEdge)edgesForExtendedLayout
+{
+    return UIRectEdgeNone;
 }
 
 - (void) addNavigationItems {
@@ -199,15 +209,66 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     [self.tableView endEditing:YES];
 }
 
-
+- (void)showConsent
+{
+    RKConsentDocument* consent = [[RKConsentDocument alloc] init];
+    consent.title = @"Demo Consent";
+    consent.signaturePageTitle = @"Consent";
+    consent.signaturePageContent = @"I agree  to participate in this research Study.";
+    consent.investigatorNamePrinted = @"Jake Clemson";
+    consent.investigatorSignatureDate = @"9/2/14";
+    NSMutableArray* components = [NSMutableArray new];
+    
+    NSArray* scenes = @[@(RKConsentSectionTypeOverview),
+                        @(RKConsentSectionTypeActivity),
+                        @(RKConsentSectionTypeSensorData),
+                        @(RKConsentSectionTypeDeIdentification),
+                        @(RKConsentSectionTypeCombiningData),
+                        @(RKConsentSectionTypeUtilizingData),
+                        @(RKConsentSectionTypeImpactLifeTime),
+                        @(RKConsentSectionTypePotentialRiskUncomfortableQuestion),
+                        @(RKConsentSectionTypePotentialRiskSocial),
+                        @(RKConsentSectionTypeAllowWithdraw)];
+    for (NSNumber* type in scenes) {
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:type.integerValue];
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        [components addObject:c];
+    }
+    
+    {
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeCustom];
+        c.summary = @"Custom Scene summary";
+        c.title = @"Custom Scene";
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        c.customImage = [UIImage imageNamed:@"signature.png"];
+        [components addObject:c];
+    }
+    
+    {
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeOnlyInDocument];
+        c.summary = @"OnlyInDocument Scene summary";
+        c.title = @"OnlyInDocument Scene";
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        [components addObject:c];
+    }
+    
+    consent.sections = [components copy];
+    consent.investigatorSignatureImage = [UIImage imageNamed:@"signature.png"];
+    
+    RKConsentViewController* consentVC = [[RKConsentViewController alloc] initWithConsent:consent];
+    consentVC.delegate = self;
+    [self presentViewController:consentVC animated:YES completion:nil];
+    
+}
 #pragma mark - Private Methods
 
-- (void) next {
-    
-    [self.navigationController pushViewController:[APCSignUpPermissionsViewController new] animated:YES];
+- (void) next
+{
+    [self showConsent];
 }
 
-- (BOOL) isContentValid {
+- (BOOL) isContentValid
+{
     BOOL isContentValid = NO;
     
     for (APCTableViewItem *item in self.criterias) {
@@ -225,6 +286,34 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     }
     
     return isContentValid;
+}
+
+#pragma mark - RKConsentViewControllerDelegate methods
+
+- (void)consentViewControllerDidComplete: (RKConsentViewController *)consentViewController
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self startSignUp];
+    }];
+}
+
+- (void)consentViewController: (RKConsentViewController *)consentViewController didFailWithError:(NSError*)error
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+}
+
+- (void)consentViewControllerDidCancel:(RKConsentViewController *)consentViewController
+{
+    
+}
+
+#pragma mark - Public Method
+
+- (void)startSignUp
+{
+    
 }
 
 @end
