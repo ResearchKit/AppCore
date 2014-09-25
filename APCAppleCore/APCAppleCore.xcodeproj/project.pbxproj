@@ -222,6 +222,7 @@
 		F588BA9D19D21F1300692473 /* YMLTimeLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA6019D21F1300692473 /* YMLTimeLineChartView.m */; };
 		F588BAA119D220AC00692473 /* APCAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA9F19D220AC00692473 /* APCAppDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BAA219D220AC00692473 /* APCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BAA019D220AC00692473 /* APCAppDelegate.m */; };
+		F59D10DA19D4C1EE00C51B72 /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F59D10D919D4C1EE00C51B72 /* BridgeSDK.framework */; };
 		F5B4212B19D23D6800F9CD69 /* APCParametersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B4212019D23D6800F9CD69 /* APCParametersCell.m */; };
 		F5B4212C19D23D6800F9CD69 /* APCParametersCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5B4212119D23D6800F9CD69 /* APCParametersCell.xib */; };
 		F5B4212D19D23D6800F9CD69 /* APCParametersCoreDataCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B4212219D23D6800F9CD69 /* APCParametersCoreDataCell.h */; };
@@ -445,6 +446,7 @@
 		F588BA6019D21F1300692473 /* YMLTimeLineChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLTimeLineChartView.m; sourceTree = "<group>"; };
 		F588BA9F19D220AC00692473 /* APCAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAppDelegate.h; sourceTree = "<group>"; };
 		F588BAA019D220AC00692473 /* APCAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAppDelegate.m; sourceTree = "<group>"; };
+		F59D10D919D4C1EE00C51B72 /* BridgeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BridgeSDK.framework; sourceTree = SOURCE_ROOT; };
 		F5B4212019D23D6800F9CD69 /* APCParametersCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCParametersCell.m; sourceTree = "<group>"; };
 		F5B4212119D23D6800F9CD69 /* APCParametersCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCParametersCell.xib; sourceTree = "<group>"; };
 		F5B4212219D23D6800F9CD69 /* APCParametersCoreDataCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCParametersCoreDataCell.h; sourceTree = "<group>"; };
@@ -486,6 +488,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F54AB72B19D36DA100986B52 /* ResearchKit.framework in Frameworks */,
+				F59D10DA19D4C1EE00C51B72 /* BridgeSDK.framework in Frameworks */,
 				F5179F6819D0B50C001DCCB7 /* libz.dylib in Frameworks */,
 				F5179F6619D0B502001DCCB7 /* libarchive.dylib in Frameworks */,
 				F5179F6219D0B4D0001DCCB7 /* libbz2.dylib in Frameworks */,
@@ -575,6 +578,7 @@
 			children = (
 				F5179F6719D0B50C001DCCB7 /* libz.dylib */,
 				F5179F6519D0B502001DCCB7 /* libarchive.dylib */,
+				F59D10D919D4C1EE00C51B72 /* BridgeSDK.framework */,
 				F5179F6319D0B4EA001DCCB7 /* ResearchKit.framework */,
 				F5179F6119D0B4D0001DCCB7 /* libbz2.dylib */,
 				F5179B2D19D09128001DCCB7 /* Info.plist */,
@@ -1424,6 +1428,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ResearchKit",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = APCAppleCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1444,6 +1449,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ResearchKit",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = APCAppleCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
