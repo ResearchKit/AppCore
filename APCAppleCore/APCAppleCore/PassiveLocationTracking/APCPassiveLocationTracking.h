@@ -11,7 +11,7 @@
 #import <ResearchKit/ResearchKit.h>
 
 /**
- Used for passive location tracking. PausesLocationUpdatesAutomatically propery is set to YES. Core Location pauses 
+ Used for passive location tracking. PausesLocationUpdatesAutomatically property is set to YES. Core Location pauses
  updates (and powers down the location hardware) whenever it makes sense to do so, such as when the user is 
  unlikely to be moving away. The – allowDeferredLocationUpdatesUntilTraveled:timeout: from CLLocationManager is 
  used to defer the delivery of updates until specified amount of time has passed: this is set at the time of initialization.
