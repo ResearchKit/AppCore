@@ -27,7 +27,7 @@ typedef NS_ENUM(NSUInteger, APCSignUpUserInfoItem) {
     APCSignUpUserInfoItemWakeUpTime
 };
 
-static CGFloat const kAPCSignUpProgressBarHeight                = 1.0f;
+static CGFloat const kAPCSignUpProgressBarHeight                = 40.0f;
 
 static NSString * const kAPCGeneralInfoItemUserNameRegEx        = @"[A-Za-z0-9_.]+";
 

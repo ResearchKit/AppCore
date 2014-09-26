@@ -72,7 +72,6 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     }
     
     [self addNavigationItems];
-    [self setupProgressBar];
     [self addTableView];
 }
 
@@ -83,8 +82,6 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    [self.stepProgressBar setCompletedSteps:3 animation:YES];
 }
 
 - (UIRectEdge)edgesForExtendedLayout
@@ -100,16 +97,9 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     self.navigationItem.rightBarButtonItem = nextBarButton;
 }
 
-- (void) setupProgressBar {
-    [self.stepProgressBar setCompletedSteps:2 animation:NO];
-
-    self.stepProgressBar.rightLabel.text = NSLocalizedString(@"Mandatory", @"");
-    [self setStepNumber:4 title:NSLocalizedString(@"Inclusion Criteria", @"")];
-}
-
 - (void) addTableView {
     CGRect frame = self.view.bounds;
-    frame.origin.y = self.stepProgressBar.bottom;
+    frame.origin.y = self.topLayoutGuide.length;
     frame.size.height -= frame.origin.y;
     
     self.tableView = [UITableView new];
@@ -264,7 +254,8 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 - (void) next
 {
-    [self showConsent];
+//    [self showConsent];
+    [self startSignUp];
 }
 
 - (BOOL) isContentValid

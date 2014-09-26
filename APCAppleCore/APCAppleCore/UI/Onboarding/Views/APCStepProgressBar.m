@@ -11,6 +11,7 @@
 #import "APCStepProgressBar+Appearance.h"
 
 static CGFloat const kAPCStepProgressBarControlsMinMargin   = 10;
+static CGFloat const kAPCStepProgressBarHeight = 14.0f;
 
 @implementation APCStepProgressBar
 
@@ -47,7 +48,7 @@ static CGFloat const kAPCStepProgressBarControlsMinMargin   = 10;
         {
             frame.size.width = availableWidth * 0.75;
             frame.origin.x = kAPCStepProgressBarControlsMinMargin;
-            
+            frame.size.height = frame.size.height - kAPCStepProgressBarHeight;
             self.leftLabel.frame = frame;
             self.leftLabel.font = [APCStepProgressBar leftLabelFont];
             self.leftLabel.textColor = [APCStepProgressBar leftLabelTextColor];
@@ -56,6 +57,7 @@ static CGFloat const kAPCStepProgressBarControlsMinMargin   = 10;
         {
             frame.origin.x = CGRectGetMaxX(frame);
             frame.size.width = availableWidth * 0.25;
+            frame.size.height = frame.size.height - kAPCStepProgressBarHeight;
             
             self.rightLabel.frame = frame;
             self.rightLabel.font = [APCStepProgressBar rightLabelFont];
@@ -68,7 +70,7 @@ static CGFloat const kAPCStepProgressBarControlsMinMargin   = 10;
         frame = self.bounds;
     }
     else {
-        frame = CGRectMake(0, self.innerHeight - 1, self.innerWidth, 1);
+        frame = CGRectMake(0, self.innerHeight - kAPCStepProgressBarHeight, self.innerWidth, kAPCStepProgressBarHeight);
     }
     
     self.progressView.frame = frame;

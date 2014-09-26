@@ -87,4 +87,42 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 {
 
 }
+
+#pragma mark - Public methods
+
+- (NSArray *)studyDetailsFromJSONFile:(NSString *)jsonFileName
+{
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
+    NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+    
+    NSError *parseError;
+    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
+    
+    NSMutableArray *studyDetailsArray = [[NSMutableArray alloc] init];
+    
+    if (!parseError) {
+        
+        self.diseaseName = jsonDictionary[@"disease_name"];
+        
+        NSArray *questions = jsonDictionary[@"questions"];
+        
+        for (NSDictionary *questionDict in questions) {
+            
+            APCStudyDetails *studyDetails = [APCStudyDetails new];
+            studyDetails.title = questionDict[@"title"];
+            studyDetails.details = questionDict[@"details"];
+            
+            [studyDetailsArray addObject:studyDetails];
+        }
+    }
+    
+    return [NSArray arrayWithArray:studyDetailsArray];
+}
+
+@end
+
+
+@implementation APCStudyDetails
+
+
 @end

@@ -45,10 +45,10 @@ static NSInteger kNumberOfSteps = 4;
 - (void) addProgressBar {
     // Need to put step progress bar just below navigation bar,
     // So the UINavigationBar's end position will be the begining of step progress bar
-    CGFloat stepProgressByYPosition = self.navigationController.navigationBar.bottom;
+    CGFloat stepProgressByYPosition = self.topLayoutGuide.length;
     
     self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.width, kAPCSignUpProgressBarHeight)
-                                                               style:APCStepProgressBarStyleOnlyProgressView];
+                                                               style:APCStepProgressBarStyleDefault];
     self.stepProgressBar.numberOfSteps = kNumberOfSteps;
     [self.view addSubview:self.stepProgressBar];
 }
