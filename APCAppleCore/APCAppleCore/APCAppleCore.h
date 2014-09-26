@@ -87,6 +87,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/UITableView+Appearance.h>
 #import <APCAppleCore/UIView+Helper.h>
 #import <APCAppleCore/UIColor+Appearance.h>
+#import <APCAppleCore/HKHealthStore+APCExtensions.h>
 
 //Error Codes
 static NSString *const APC_ERROR_DOMAIN = @"com.ymedialabs.error_domain";

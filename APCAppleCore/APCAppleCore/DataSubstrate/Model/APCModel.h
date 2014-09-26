@@ -32,4 +32,6 @@
 #import "APCQuestionResult+AddOn.h"
 #import "APCSurveyResult+AddOn.h"
 
+#import "APCStoredUserData.h"
+
 #endif

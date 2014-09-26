@@ -127,6 +127,12 @@
 		F541540D19D5F1DE00B819C9 /* APCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A63F1319D5EAD100284006 /* APCUser.m */; };
 		F541541419D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h in Headers */ = {isa = PBXBuildFile; fileRef = F541541219D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h */; };
 		F541541519D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541319D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m */; };
+		F541541819D6029C00B819C9 /* APCStoredUserData.h in Headers */ = {isa = PBXBuildFile; fileRef = F541541619D6029C00B819C9 /* APCStoredUserData.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F541541919D6029C00B819C9 /* APCStoredUserData.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541719D6029C00B819C9 /* APCStoredUserData.m */; };
+		F541541A19D6029C00B819C9 /* APCStoredUserData.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541719D6029C00B819C9 /* APCStoredUserData.m */; };
+		F541541D19D60F3400B819C9 /* HKHealthStore+APCExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = F541541B19D60F3400B819C9 /* HKHealthStore+APCExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F541541E19D60F3400B819C9 /* HKHealthStore+APCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541C19D60F3400B819C9 /* HKHealthStore+APCExtensions.m */; };
+		F541541F19D60F3400B819C9 /* HKHealthStore+APCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541C19D60F3400B819C9 /* HKHealthStore+APCExtensions.m */; };
 		F54AB72B19D36DA100986B52 /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6319D0B4EA001DCCB7 /* ResearchKit.framework */; };
 		F588B9FA19D21EFE00692473 /* APCAssertionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = F588B9D719D21EFE00692473 /* APCAssertionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588B9FB19D21EFE00692473 /* APCAssertionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F588B9D819D21EFE00692473 /* APCAssertionHandler.m */; };
@@ -355,6 +361,10 @@
 		F5179F6719D0B50C001DCCB7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F541541219D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+HealthKit.h"; sourceTree = "<group>"; };
 		F541541319D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCDataSubstrate+HealthKit.m"; sourceTree = "<group>"; };
+		F541541619D6029C00B819C9 /* APCStoredUserData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStoredUserData.h; sourceTree = "<group>"; };
+		F541541719D6029C00B819C9 /* APCStoredUserData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStoredUserData.m; sourceTree = "<group>"; };
+		F541541B19D60F3400B819C9 /* HKHealthStore+APCExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HKHealthStore+APCExtensions.h"; sourceTree = "<group>"; };
+		F541541C19D60F3400B819C9 /* HKHealthStore+APCExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HKHealthStore+APCExtensions.m"; sourceTree = "<group>"; };
 		F588B9D719D21EFE00692473 /* APCAssertionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAssertionHandler.h; sourceTree = "<group>"; };
 		F588B9D819D21EFE00692473 /* APCAssertionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAssertionHandler.m; sourceTree = "<group>"; };
 		F588B9DA19D21EFE00692473 /* APCStepProgressBar+Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCStepProgressBar+Appearance.h"; sourceTree = "<group>"; };
@@ -735,6 +745,8 @@
 		F588B9D919D21EFE00692473 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				F541541B19D60F3400B819C9 /* HKHealthStore+APCExtensions.h */,
+				F541541C19D60F3400B819C9 /* HKHealthStore+APCExtensions.m */,
 				5B29CE2F19D3765400E2FD62 /* UIColor+Appearance.h */,
 				5B29CE3019D3765400E2FD62 /* UIColor+Appearance.m */,
 				F588B9DA19D21EFE00692473 /* APCStepProgressBar+Appearance.h */,
@@ -943,6 +955,8 @@
 		F5A63F1019D5EA8700284006 /* Core Data ManagedObject Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				F541541619D6029C00B819C9 /* APCStoredUserData.h */,
+				F541541719D6029C00B819C9 /* APCStoredUserData.m */,
 				F5179BB019D0917D001DCCB7 /* APCConsentResult.h */,
 				F5179BB119D0917D001DCCB7 /* APCConsentResult.m */,
 				F5179BB419D0917D001DCCB7 /* APCDataResult.h */,
@@ -1071,6 +1085,7 @@
 				F5179CAB19D0917D001DCCB7 /* APCSchedule+AddOn.h in Headers */,
 				F5179CB119D0917D001DCCB7 /* APCScheduledTask+AddOn.h in Headers */,
 				F5179CCB19D0917D001DCCB7 /* APCNetworkManager.h in Headers */,
+				F541541819D6029C00B819C9 /* APCStoredUserData.h in Headers */,
 				F588BA6F19D21F1300692473 /* APCIntroVideoViewController.h in Headers */,
 				F588BA0219D21EFE00692473 /* NSDate+Helper.h in Headers */,
 				F588BA6119D21F1300692473 /* APCConfigurableCell.h in Headers */,
@@ -1098,6 +1113,7 @@
 				F5179CD119D0917D001DCCB7 /* APCParameters.h in Headers */,
 				F5B4213319D23D6800F9CD69 /* APCParametersUserDefaultCell.h in Headers */,
 				F5179CD919D0917D001DCCB7 /* APCScheduler.h in Headers */,
+				F541541D19D60F3400B819C9 /* HKHealthStore+APCExtensions.h in Headers */,
 				F5179CA519D0917D001DCCB7 /* APCResult+AddOn.h in Headers */,
 				F5179CB719D0917D001DCCB7 /* APCSurveyResult+AddOn.h in Headers */,
 				F5179C8719D0917D001DCCB7 /* APCConsentResult.h in Headers */,
@@ -1270,6 +1286,7 @@
 				5B29CE3C19D3769E00E2FD62 /* APCPermissionsCell.m in Sources */,
 				F588BA0319D21EFE00692473 /* NSDate+Helper.m in Sources */,
 				F588BA1319D21EFE00692473 /* UIColor+Helper.m in Sources */,
+				F541541919D6029C00B819C9 /* APCStoredUserData.m in Sources */,
 				F5B4213A19D23D7700F9CD69 /* APCDebugWindow.m in Sources */,
 				F588BA9D19D21F1300692473 /* YMLTimeLineChartView.m in Sources */,
 				F5179CCF19D0917D001DCCB7 /* APCSageNetworkManager.m in Sources */,
@@ -1316,6 +1333,7 @@
 				F5179CBB19D0917D001DCCB7 /* APCSurveyResult.m in Sources */,
 				F5179C7C19D0917D001DCCB7 /* APCDataSubstrate+CoreData.m in Sources */,
 				F588BA1519D21EFE00692473 /* UIScrollView+Helper.m in Sources */,
+				F541541E19D60F3400B819C9 /* HKHealthStore+APCExtensions.m in Sources */,
 				5B29CE3719D3767D00E2FD62 /* APCPermissionsManager.m in Sources */,
 				F588BA6919D21F1300692473 /* APCProfile.m in Sources */,
 				F5EDCC8E19D32F0A00A5E027 /* APCActivitiesTableViewCell.m in Sources */,
@@ -1344,6 +1362,7 @@
 				F5179CED19D09238001DCCB7 /* APCNetworkManagerTest.m in Sources */,
 				F5179C8019D0917D001DCCB7 /* APCDataSubstrate+ResearchKit.m in Sources */,
 				F5179CAA19D0917D001DCCB7 /* APCResult.m in Sources */,
+				F541541F19D60F3400B819C9 /* HKHealthStore+APCExtensions.m in Sources */,
 				F5179C9B19D0917D001DCCB7 /* APCFileResult.m in Sources */,
 				F5179CD019D0917D001DCCB7 /* APCSageNetworkManager.m in Sources */,
 				F5179C8C19D0917D001DCCB7 /* APCDataResult+AddOn.m in Sources */,
@@ -1358,6 +1377,7 @@
 				F5179C8F19D0917D001DCCB7 /* APCDataResult.m in Sources */,
 				F5179C7A19D0917D001DCCB7 /* APCDataMonitor.m in Sources */,
 				F5179C9E19D0917D001DCCB7 /* APCModel.xcdatamodeld in Sources */,
+				F541541A19D6029C00B819C9 /* APCStoredUserData.m in Sources */,
 				F5179CEB19D09238001DCCB7 /* APCSchedulerTestCase.m in Sources */,
 				F5179C8619D0917D001DCCB7 /* APCConsentResult+AddOn.m in Sources */,
 				F5179CDB19D0917D001DCCB7 /* APCScheduler.m in Sources */,
