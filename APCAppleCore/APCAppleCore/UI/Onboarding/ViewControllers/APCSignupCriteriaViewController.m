@@ -22,7 +22,7 @@ static NSString const *kAPCSignupCriteriaTableViewCellIdentifier    =   @"Criter
 static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 
-@interface APCSignupCriteriaViewController () <UITableViewDataSource, UITableViewDelegate, APCConfigurableCellDelegate, RKConsentViewControllerDelegate>
+@interface APCSignupCriteriaViewController ()
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -299,14 +299,14 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 - (void)consentViewController: (RKConsentViewController *)consentViewController didFailWithError:(NSError*)error
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    
 }
 
 - (void)consentViewControllerDidCancel:(RKConsentViewController *)consentViewController
 {
-    
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 
 #pragma mark - Public Method

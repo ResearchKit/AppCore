@@ -77,6 +77,8 @@
 }
 
 - (void) setupProgressBar {
+    
+    [self setStepNumber:3 title:NSLocalizedString(@"Identification", @"")];
     [self.stepProgressBar setCompletedSteps:1 animation:NO];
 }
 

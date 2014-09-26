@@ -52,6 +52,7 @@
                     </connections>
                 </button>
             </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="ns5-9y-SjR" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="CDe-wz-K60"/>
                 <constraint firstAttribute="bottom" secondItem="ns5-9y-SjR" secondAttribute="bottom" constant="8" id="NtM-u3-nZH"/>

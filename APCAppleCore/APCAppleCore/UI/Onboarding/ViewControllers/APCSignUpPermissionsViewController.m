@@ -112,7 +112,7 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self.stepProgressBar setCompletedSteps:4 animation:YES];
+    [self.stepProgressBar setCompletedSteps:3 animation:YES];
     
     [self reloadData];
 }
@@ -120,7 +120,6 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 #pragma mark - Setup
 
 - (void) addNavigationItems {
-    self.title = NSLocalizedString(@"Permissions", @"");
     
     UIBarButtonItem *nextBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"") style:UIBarButtonItemStylePlain target:self action:@selector(finishSignUp)];
     nextBarButton.enabled = [self isPermissionsGranted];
@@ -128,8 +127,8 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 }
 
 - (void) setupProgressBar {
-    [self.stepProgressBar setCompletedSteps:3 animation:NO];
-    [self setStepNumber:5 title:NSLocalizedString(@"Permissions", @"")];
+    [self.stepProgressBar setCompletedSteps:2 animation:NO];
+    [self setStepNumber:4 title:NSLocalizedString(@"Permissions", @"")];
 }
 
 - (void) addTableView {

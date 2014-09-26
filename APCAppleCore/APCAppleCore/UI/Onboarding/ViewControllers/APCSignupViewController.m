@@ -12,7 +12,7 @@
 #import "APCUserInfoConstants.h"
 #import "APCSignupViewController.h"
 
-static NSInteger kNumberOfSteps = 5;
+static NSInteger kNumberOfSteps = 4;
 
 @interface APCSignupViewController ()
 
@@ -25,7 +25,10 @@ static NSInteger kNumberOfSteps = 5;
 @synthesize profile = _profile;
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
+    
+    self.title = NSLocalizedString(@"Sign Up", nil);
     
     [self addProgressBar];
 }

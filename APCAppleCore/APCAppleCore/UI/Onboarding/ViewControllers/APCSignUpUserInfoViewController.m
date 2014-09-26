@@ -25,6 +25,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
     [self addProgressBar];
 }
 
@@ -39,7 +40,7 @@
     CGFloat stepProgressByYPosition = self.navigationController.navigationBar.bottom;
     
     self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.bounds.size.width, kAPCSignUpProgressBarHeight)
-                                                               style:APCStepProgressBarStyleOnlyProgressView];
+                                                               style:APCStepProgressBarStyleDefault];
     self.stepProgressBar.numberOfSteps = 4;
     [self.view addSubview:self.stepProgressBar];
     
