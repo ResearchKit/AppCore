@@ -11,6 +11,14 @@
 
 #import "NSManagedObject+APCHelper.h"
 
+/*********************************************************************************/
+#pragma mark - Memory Only Objects
+/*********************************************************************************/
+#import "APCUser.h"
+
+/*********************************************************************************/
+#pragma mark - Core Data Model Objects
+/*********************************************************************************/
 #import "APCTask+AddOn.h"
 #import "APCSchedule+AddOn.h"
 #import "APCScheduledTask+AddOn.h"
