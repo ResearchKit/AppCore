@@ -25,27 +25,32 @@ static NSString *APCPassiveLocationTrackingFileName = @"APCPassiveLocationTracki
 
 @implementation APCPassiveLocationTracking
 
--(instancetype)init
+-(instancetype)initWithTimeInterval:(NSTimeInterval)timeout
 {
     self = [super init];
     
     if (self)
     {
         
-        CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-        
-        if (status == kCLAuthorizationStatusNotDetermined) {
-            
-            if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-                [_locationManager requestAlwaysAuthorization];
-            }
-        }
+        _timeout = timeout;
+        _deferringUpdates = YES;
+        //TODO use the correct name of the notification identifier name.
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(kickOffPassiveLocationUpdating:)
+                                                     name:@"NotificationForConsentAndAuthorization"
+                                                   object:nil];
     }
     
     return self;
 }
 
-- (void)startWithTimeInterval:(NSTimeInterval)timeout
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+- (void)start
 {
     
     [self beginTask];
@@ -60,8 +65,7 @@ static NSString *APCPassiveLocationTrackingFileName = @"APCPassiveLocationTracki
         
         if ([CLLocationManager deferredLocationUpdatesAvailable])
         {
-            [self.locationManager allowDeferredLocationUpdatesUntilTraveled:(CLLocationDistance)0.0 timeout:(NSTimeInterval)timeout];
-            self.timeout = timeout;
+            [self.locationManager allowDeferredLocationUpdatesUntilTraveled:(CLLocationDistance)0.0 timeout:(NSTimeInterval)self.timeout];
         }
 
         //If no significant movement is being made let's pause tracking and do some work.
@@ -112,27 +116,49 @@ static NSString *APCPassiveLocationTrackingFileName = @"APCPassiveLocationTracki
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *filePath = [documentsDirectory stringByAppendingPathComponent:fileName];
     
-    NSFileManager *manager = [NSFileManager defaultManager];
+    //Set the filepath URL
+    self.fileUrl = [[NSURL alloc] initFileURLWithPath:filePath];
+    
+    NSError *error;
+    [self.taskArchive addFileWithURL:self.fileUrl contentType:@"json" metadata:nil error:&error];
+}
 
-    // 1st, This funcion could allow you to create a file with initial contents.
-    // 2nd, You could specify the attributes of values for the owner, group, and permissions.
-    // Here we use nil, which means we use default values for these attibutes.
-    // 3rd, it will return YES if NSFileManager create it successfully or it exists already.
-    if ([manager createFileAtPath:filePath contents:nil attributes:nil]) {
-        NSLog(@"Created the File Successfully.");
 
-        //Set the filepath URL
-        self.fileUrl = [[NSURL alloc] initFileURLWithPath:filePath];
-
-        NSError *error;
-        [self.taskArchive addFileWithURL:self.fileUrl contentType:@"json" metadata:nil error:&error];
-        
-        
-    } else {
-        NSLog(@"Failed to Create the File");
-
+- (void)updateArchiveDataWithLocationManager:(CLLocationManager *)manager withUpdateLocations:(NSArray *)locations {
+    
+    NSLog(@"%@", manager.location);
+    
+    //TODO store this in parameters
+    CLLocation *homeLocation = [[CLLocation alloc] initWithLatitude:37.335420 longitude: -122.012901];
+    
+    
+    //Create distance in meters from home
+    CLLocationDistance distanceFromHome = [homeLocation distanceFromLocation:manager.location];
+    
+    NSMutableDictionary *json = [NSMutableDictionary new];
+    
+    json[@"distanceFromHome"] = [NSNumber numberWithDouble:distanceFromHome];
+    json[@"timestamp"] = [NSDate date];
+    /* Type used to represent a location accuracy level in meters. The lower the value in meters, the
+     more physically precise the location is. A negative accuracy value indicates an invalid location. */
+    json[@"verticalAccuracy"] = [NSNumber numberWithDouble:manager.location.verticalAccuracy];
+    json[@"horizontalAccuracy"] = [NSNumber numberWithDouble:manager.location.horizontalAccuracy];
+    
+    NSData *data = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
+    
+    NSError *error;
+    [self.taskArchive addContentWithData:data
+                                filename:APCPassiveLocationTrackingFileName
+                             contentType:@"json"
+                               timestamp:[NSDate date]
+                                metadata:nil error:&error];
+    
+    if (error) {
+        NSLog(@"Content not added");
+        //TODO Handle error
     }
 }
+
 
 - (NSDictionary *)retreieveLocationMarkersFromLog
 {
@@ -141,29 +167,17 @@ static NSString *APCPassiveLocationTrackingFileName = @"APCPassiveLocationTracki
     return nil;
 }
 
+- (void)kickOffPassiveLocationUpdating:(NSNotification *)notification {
+    [self start];
+}
+
 /*********************************************************************************/
 #pragma mark -CLLocationManagerDelegate
 /*********************************************************************************/
-
-- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region {
-    NSLog(@"didEnterRegion");
-}
-
-- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
-{
-    NSLog(@"didExitRegion");
-}
-
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
     NSLog(@"didFailWithError: %@", error);
-}
-
-- (void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region {
     
-}
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
-    
+    //TODO error handling
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFinishDeferredUpdatesWithError:(NSError *)error {
@@ -173,13 +187,13 @@ static NSString *APCPassiveLocationTrackingFileName = @"APCPassiveLocationTracki
 }
 
 - (void)locationManagerDidResumeLocationUpdates:(CLLocationManager *)manager {
-    
+    //TODO After pausing there may be some work to do here.
 }
 
 - (void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager {
     NSLog(@"locationManagerDidPauseLocationUpdates");
     
-//TODO Upload passive data collection
+    //TODO Upload passive data collection
     
     NSError *err = nil;
     NSURL *archiveFileURL = [self.taskArchive archiveURLWithError:&err];
@@ -203,45 +217,13 @@ static NSString *APCPassiveLocationTrackingFileName = @"APCPassiveLocationTracki
     }
 }
 
-- (void)updateArchiveDataWithLocationManager:(CLLocationManager *)manager {
-    
-    //TODO store this in parameters
-    CLLocation *homeLocation = [[CLLocation alloc] initWithLatitude:37.335420 longitude: -122.012901];
-    
-    
-    //Create distance in meters from home
-    CLLocationDistance distanceFromHome = [homeLocation distanceFromLocation:manager.location];
-
-    NSMutableDictionary *json = [NSMutableDictionary new];
-
-    json[@"distanceFromHome"] = [NSNumber numberWithDouble:distanceFromHome];
-    
-    NSData *data = [NSJSONSerialization dataWithJSONObject:json
-                                                   options:NSJSONWritingPrettyPrinted
-                                                     error:nil];
-    
-    //TODO write to data archive
-    NSLog(@"Data to update %@", data);
-    
-    NSError *error;
-    [self.taskArchive addContentWithData:data
-                                filename:[self.fileUrl path]
-                             contentType:@"json"
-                               timestamp:[NSDate date]
-                                metadata:nil error:&error];
-    
-    if (error) {
-        NSLog(@"Content not added");
-    }
-}
-
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     
-   [self updateArchiveDataWithLocationManager:manager];
-    
     // Defer updates until a certain amount of time has passed.
     if (!self.deferringUpdates) {
+        
+        [self updateArchiveDataWithLocationManager:manager withUpdateLocations:locations];
 
         [self.locationManager allowDeferredLocationUpdatesUntilTraveled:(CLLocationDistance)0
                                                            timeout:self.timeout];
@@ -252,19 +234,8 @@ static NSString *APCPassiveLocationTrackingFileName = @"APCPassiveLocationTracki
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     NSLog(@"Asynchronous call failed");
-}
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
-    NSLog(@"CLLocation is working didUpdateToLocation: %@", newLocation);
-}
-
-- (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error {
-    NSLog(@"monitoringDidFailForRegion");
-}
-
-- (BOOL)locationManagerShouldDisplayHeadingCalibration:(CLLocationManager *)manager {
-    NSLog(@"locationManagerShouldDisplayHeadingCalibration");
-    return YES;
+    
+    //TODO connection failed. What to do here.
 }
 
 /*********************************************************************************/

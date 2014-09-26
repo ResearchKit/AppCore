@@ -25,19 +25,20 @@
 /**
  *  @brief Designated initializer
  *
+ *  @param timeout      The amount of time (in seconds) from the current time that must pass before
+ *                      event delivery resumes. To specify an unlimited amount of time, pass the
+ *                      CLTimeIntervalMax constant
+ *
  *  @return instancetype
  */
-- (instancetype)init;
+-(instancetype)initWithTimeInterval:(NSTimeInterval)timeout;
 
 
 /**
  *  @brief Starts updating location.
  *
- *  @param timeout      The amount of time (in seconds) from the current time that must pass before
- *                      event delivery resumes. To specify an unlimited amount of time, pass the
- *                      CLTimeIntervalMax constant
  */
-- (void)startWithTimeInterval:(NSTimeInterval)timeout;
+- (void)start;
 
 /**
  *  @brief Stop updating location
