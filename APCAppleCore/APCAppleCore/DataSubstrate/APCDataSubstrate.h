@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <ResearchKit/ResearchKit.h>
 #import <CoreData/CoreData.h>
-
+#import "APCPassiveLocationTracking.h"
 
 @interface APCDataSubstrate : NSObject <RKStudyDelegate>
 
@@ -19,12 +19,13 @@
 - (instancetype)initWithPersistentStorePath: (NSString*) storePath additionalModels:(NSManagedObjectModel *)mergedModels studyIdentifier: (NSString*) studyIdentifier;
 
 /*********************************************************************************/
-#pragma mark - ResearchKit Subsystem Public Properties
+#pragma mark - ResearchKit Subsystem Public Properties & Passive Location Tracking
 /*********************************************************************************/
 @property (assign) BOOL justJoined;
 @property (strong, nonatomic) NSString *logDirectory;
 @property (strong, nonatomic) RKDataLoggerManager *logManager;
 
+@property (strong, nonatomic) APCPassiveLocationTracking *passiveLocationTracking;
 
 /*********************************************************************************/
 #pragma mark - Core Data Subsystem Public Properties

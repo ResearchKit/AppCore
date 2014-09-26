@@ -19,7 +19,7 @@
 		7BA4BBF719D4893700BC4023 /* APCMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BA4BBF219D4893700BC4023 /* APCMapViewController.h */; };
 		7BA4BBF819D4893700BC4023 /* APCMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BA4BBF319D4893700BC4023 /* APCMapViewController.m */; };
 		7BA4BBF919D4893700BC4023 /* APCMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7BA4BBF419D4893700BC4023 /* APCMapViewController.xib */; };
-		7BA4BBFA19D4893700BC4023 /* APCPassiveLocationTracking.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BA4BBF519D4893700BC4023 /* APCPassiveLocationTracking.h */; };
+		7BA4BBFA19D4893700BC4023 /* APCPassiveLocationTracking.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BA4BBF519D4893700BC4023 /* APCPassiveLocationTracking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BA4BBFB19D4893700BC4023 /* APCPassiveLocationTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BA4BBF619D4893700BC4023 /* APCPassiveLocationTracking.m */; };
 		7BA4BC0419D490EE00BC4023 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */; };
 		F5008C0F19D32AD60011102F /* APCGroupedScheduledTask.h in Headers */ = {isa = PBXBuildFile; fileRef = F5008C0D19D32AD60011102F /* APCGroupedScheduledTask.h */; settings = {ATTRIBUTES = (Public, ); }; };

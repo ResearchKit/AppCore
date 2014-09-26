@@ -36,8 +36,8 @@ static NSString *APCPassiveLocationTrackingFileName = @"APCPassiveLocationTracki
         _deferringUpdates = YES;
         //TODO use the correct name of the notification identifier name.
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(kickOffPassiveLocationUpdating:)
-                                                     name:@"NotificationForConsentAndAuthorization"
+                                                 selector:@selector(startPassiveLocationUpdating:)
+                                                     name:@"APCNotificationForConsentAndAuthorization"
                                                    object:nil];
     }
     
@@ -138,7 +138,11 @@ static NSString *APCPassiveLocationTrackingFileName = @"APCPassiveLocationTracki
     NSMutableDictionary *json = [NSMutableDictionary new];
     
     json[@"distanceFromHome"] = [NSNumber numberWithDouble:distanceFromHome];
-    json[@"timestamp"] = [NSDate date];
+    
+    NSString *dateString = [NSDateFormatter localizedStringFromDate:[NSDate date]
+                                                          dateStyle:NSDateFormatterShortStyle
+                                                          timeStyle:NSDateFormatterFullStyle];
+    json[@"timestamp"] = dateString;
     /* Type used to represent a location accuracy level in meters. The lower the value in meters, the
      more physically precise the location is. A negative accuracy value indicates an invalid location. */
     json[@"verticalAccuracy"] = [NSNumber numberWithDouble:manager.location.verticalAccuracy];

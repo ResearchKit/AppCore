@@ -32,6 +32,8 @@ NSString *const MainStudyIdentifier                 = @"com.ymedialabs.passiveda
 /*********************************************************************************/
 - (void) setUpResearchStudy: (NSString*) studyIdentifier
 {
+    
+    
     self.logDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"ResearchKitLogs"]; // for now
     [[NSFileManager defaultManager] createDirectoryAtPath:self.logDirectory withIntermediateDirectories:YES attributes:nil error:nil];
     
