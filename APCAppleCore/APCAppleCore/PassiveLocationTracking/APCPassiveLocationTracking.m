@@ -1,3 +1,4 @@
+
 //
 //  APCLocationTrackingHeartbeat.m
 //  APCAppleCore
@@ -9,49 +10,66 @@
 #import "APCPassiveLocationTracking.h"
 
 static NSString *passiveLocationTrackingIdentifier = @"com.ymedialabs.passiveLocationTracking";
+static NSString *APCPassiveLocationTrackingFileName = @"APCPassiveLocationTracking.json";
 
 @interface APCPassiveLocationTracking ()
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
-@property (strong, nonatomic) CLLocation *lastKnownLocation;
 
 @property (nonatomic, strong) RKDataArchive *taskArchive;
+@property (nonatomic, strong) NSURL *fileUrl;
+
+@property (assign) BOOL deferringUpdates;
+@property (assign) NSTimeInterval timeout;
 @end
 
 @implementation APCPassiveLocationTracking
 
--(instancetype)initWithTimeInterval:(NSTimeInterval)timeout
+-(instancetype)init
 {
-
     self = [super init];
     
     if (self)
     {
         
-        if ([CLLocationManager locationServicesEnabled])
-        {
-            _locationManager = [[CLLocationManager alloc] init];
-
-            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+        
+        if (status == kCLAuthorizationStatusNotDetermined) {
             
-            [_locationManager setDelegate:self];
+            if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+                [_locationManager requestAlwaysAuthorization];
+            }
         }
     }
     
     return self;
 }
 
-- (void)start
+- (void)startWithTimeInterval:(NSTimeInterval)timeout
 {
     
-    if ([CLLocationManager locationServicesEnabled])
-    {
-        [self.locationManager startUpdatingLocation];
+    [self beginTask];
+    
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
+        self.locationManager = [[CLLocationManager alloc]init];
+        [self.locationManager setDelegate:self];
+        [self.locationManager requestAlwaysAuthorization];
+        [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+
+        //If no significant movement is being made let's pause tracking and do some work.
         
-    } else {
-        NSLog(@"Location services disabled");
+        if ([CLLocationManager deferredLocationUpdatesAvailable])
+        {
+            [self.locationManager allowDeferredLocationUpdatesUntilTraveled:(CLLocationDistance)0.0 timeout:(NSTimeInterval)timeout];
+            self.timeout = timeout;
+        }
+
+        //If no significant movement is being made let's pause tracking and do some work.
+        self.locationManager.pausesLocationUpdatesAutomatically = YES;
+        [self.locationManager startUpdatingLocation];
     }
 }
+
 
 - (void)stop
 {
@@ -83,6 +101,37 @@ static NSString *passiveLocationTrackingIdentifier = @"com.ymedialabs.passiveLoc
                                                     taskInstanceUUID: [NSUUID UUID]
                                                        extraMetadata: nil
                                                       fileProtection:RKFileProtectionCompleteUnlessOpen];
+    
+
+    [self createFileWithName:APCPassiveLocationTrackingFileName];
+}
+
+- (void)createFileWithName:(NSString *)fileName
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:fileName];
+    
+    NSFileManager *manager = [NSFileManager defaultManager];
+
+    // 1st, This funcion could allow you to create a file with initial contents.
+    // 2nd, You could specify the attributes of values for the owner, group, and permissions.
+    // Here we use nil, which means we use default values for these attibutes.
+    // 3rd, it will return YES if NSFileManager create it successfully or it exists already.
+    if ([manager createFileAtPath:filePath contents:nil attributes:nil]) {
+        NSLog(@"Created the File Successfully.");
+
+        //Set the filepath URL
+        self.fileUrl = [[NSURL alloc] initFileURLWithPath:filePath];
+
+        NSError *error;
+        [self.taskArchive addFileWithURL:self.fileUrl contentType:@"json" metadata:nil error:&error];
+        
+        
+    } else {
+        NSLog(@"Failed to Create the File");
+
+    }
 }
 
 - (NSDictionary *)retreieveLocationMarkersFromLog
@@ -116,9 +165,11 @@ static NSString *passiveLocationTrackingIdentifier = @"com.ymedialabs.passiveLoc
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
     
 }
+
 - (void)locationManager:(CLLocationManager *)manager didFinishDeferredUpdatesWithError:(NSError *)error {
-    NSLog(@"didFinishDeferredUpdatesWithError");
+    NSLog(@"didFinishDeferredUpdatesWithError %@ \n", error);
     
+    self.deferringUpdates = NO;
 }
 
 - (void)locationManagerDidResumeLocationUpdates:(CLLocationManager *)manager {
@@ -128,42 +179,41 @@ static NSString *passiveLocationTrackingIdentifier = @"com.ymedialabs.passiveLoc
 - (void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager {
     NSLog(@"locationManagerDidPauseLocationUpdates");
     
-    
 //TODO Upload passive data collection
     
-//    NSError *err = nil;
-//    NSURL *archiveFileURL = [self.taskArchive archiveURLWithError:&err];
-//    if (archiveFileURL)
-//    {
-//        NSURL *documents = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]];
-//        NSURL *outputUrl = [documents URLByAppendingPathComponent:[archiveFileURL lastPathComponent]];
-//        
-//        // This is where you would queue the archive for upload. In this demo, we move it
-//        // to the documents directory, where you could copy it off using iTunes, for instance.
-//        [[NSFileManager defaultManager] moveItemAtURL:archiveFileURL toURL:outputUrl error:nil];
-//        
-//        NSLog(@"outputUrl= %@", outputUrl);
-//        
-//        // When done, clean up:
-//        self.taskArchive = nil;
-//        if (archiveFileURL)
-//        {
-//            [[NSFileManager defaultManager] removeItemAtURL:archiveFileURL error:nil];
-//        }
-//    }
+    NSError *err = nil;
+    NSURL *archiveFileURL = [self.taskArchive archiveURLWithError:&err];
+    if (archiveFileURL)
+    {
+        NSURL *documents = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]];
+        NSURL *outputUrl = [documents URLByAppendingPathComponent:[archiveFileURL lastPathComponent]];
+        
+        // This is where you would queue the archive for upload. In this demo, we move it
+        // to the documents directory, where you could copy it off using iTunes, for instance.
+        [[NSFileManager defaultManager] moveItemAtURL:archiveFileURL toURL:outputUrl error:nil];
+        
+        NSLog(@"outputUrl= %@", outputUrl);
+        
+        // When done, clean up:
+        self.taskArchive = nil;
+        if (archiveFileURL)
+        {
+            [[NSFileManager defaultManager] removeItemAtURL:archiveFileURL error:nil];
+        }
+    }
 }
 
-- (void)updateLog:(CLLocationManager *)manager {
+- (void)updateArchiveDataWithLocationManager:(CLLocationManager *)manager {
     
-    //Create time stamp
-    NSTimeInterval currentTimeInMilliseconds = [[NSDate date]timeIntervalSince1970];
+    //TODO store this in parameters
+    CLLocation *homeLocation = [[CLLocation alloc] initWithLatitude:37.335420 longitude: -122.012901];
+    
     
     //Create distance in meters from home
-    CLLocationDistance distanceFromHome = [_lastKnownLocation distanceFromLocation:manager.location];
+    CLLocationDistance distanceFromHome = [homeLocation distanceFromLocation:manager.location];
 
     NSMutableDictionary *json = [NSMutableDictionary new];
 
-    json[@"timestamp"] = [NSNumber numberWithDouble:currentTimeInMilliseconds];
     json[@"distanceFromHome"] = [NSNumber numberWithDouble:distanceFromHome];
     
     NSData *data = [NSJSONSerialization dataWithJSONObject:json
@@ -172,15 +222,32 @@ static NSString *passiveLocationTrackingIdentifier = @"com.ymedialabs.passiveLoc
     
     //TODO write to data archive
     NSLog(@"Data to update %@", data);
+    
+    NSError *error;
+    [self.taskArchive addContentWithData:data
+                                filename:[self.fileUrl path]
+                             contentType:@"json"
+                               timestamp:[NSDate date]
+                                metadata:nil error:&error];
+    
+    if (error) {
+        NSLog(@"Content not added");
+    }
 }
 
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     
+   [self updateArchiveDataWithLocationManager:manager];
     
-    [self updateLog:manager];
-    
-    _lastKnownLocation = manager.location;
+    // Defer updates until a certain amount of time has passed.
+    if (!self.deferringUpdates) {
+
+        [self.locationManager allowDeferredLocationUpdatesUntilTraveled:(CLLocationDistance)0
+                                                           timeout:self.timeout];
+        self.deferringUpdates = YES;
+    }
+
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {

@@ -9,13 +9,23 @@
 #import "APCAppDelegate.h"
 #import "APCAppleCore.h"
 #import "APCDebugWindow.h"
+#import "APCPassiveLocationTracking.h"
 
+@interface APCAppDelegate ()
+@property (strong,nonatomic) APCPassiveLocationTracking *passiveLocationTracking;
+
+@end
 @implementation APCAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
+    //TODO: Figure out where this is actually going.
+    self.passiveLocationTracking = [[APCPassiveLocationTracking alloc] init];
+    [self.passiveLocationTracking startWithTimeInterval:10];
+    
     return YES;
 }
 
