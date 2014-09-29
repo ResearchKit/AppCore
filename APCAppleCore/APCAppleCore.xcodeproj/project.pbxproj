@@ -127,7 +127,7 @@
 		F541540D19D5F1DE00B819C9 /* APCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A63F1319D5EAD100284006 /* APCUser.m */; };
 		F541541419D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h in Headers */ = {isa = PBXBuildFile; fileRef = F541541219D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h */; };
 		F541541519D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541319D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m */; };
-		F541541819D6029C00B819C9 /* APCStoredUserData.h in Headers */ = {isa = PBXBuildFile; fileRef = F541541619D6029C00B819C9 /* APCStoredUserData.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F541541819D6029C00B819C9 /* APCStoredUserData.h in Headers */ = {isa = PBXBuildFile; fileRef = F541541619D6029C00B819C9 /* APCStoredUserData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F541541919D6029C00B819C9 /* APCStoredUserData.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541719D6029C00B819C9 /* APCStoredUserData.m */; };
 		F541541A19D6029C00B819C9 /* APCStoredUserData.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541719D6029C00B819C9 /* APCStoredUserData.m */; };
 		F541541D19D60F3400B819C9 /* HKHealthStore+APCExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = F541541B19D60F3400B819C9 /* HKHealthStore+APCExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
