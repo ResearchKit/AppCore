@@ -12,6 +12,8 @@
 #import "APCPassiveLocationTracking.h"
 #import <HealthKit/HealthKit.h>
 
+@class APCUser;
+
 @interface APCDataSubstrate : NSObject <RKStudyDelegate>
 
 /*********************************************************************************/

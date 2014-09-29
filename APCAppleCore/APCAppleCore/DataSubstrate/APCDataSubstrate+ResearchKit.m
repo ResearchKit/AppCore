@@ -110,47 +110,54 @@ NSString *const MainStudyIdentifier                 = @"com.ymedialabs.passiveda
     {
         NSLog(@"Error creating study %@: %@", MainStudyIdentifier, error);
         returnErrorFlag = NO;
+        goto errReturn;
     }
-    
-    HKQuantityType *quantityType = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
-    RKHealthCollector *healthCollector = [study addHealthCollectorWithSampleType:quantityType unit:[HKUnit countUnit] startDate:nil error:&error];
-    if (!healthCollector)
+
     {
-        NSLog(@"Error creating health collector: %@", error);
-        [store removeStudy:study error:nil];
-        returnErrorFlag = NO;
+        HKQuantityType *quantityType = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
+        RKHealthCollector *healthCollector = [study addHealthCollectorWithSampleType:quantityType unit:[HKUnit countUnit] startDate:nil error:&error];
+        if (!healthCollector)
+        {
+            NSLog(@"Error creating health collector: %@", error);
+            [store removeStudy:study error:nil];
+            returnErrorFlag = NO;
+            goto errReturn;
+        }
+        
+        HKQuantityType *quantityType2 = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodGlucose];
+        HKUnit *unit = [HKUnit unitFromString:@"mg/dL"];
+        RKHealthCollector *glucoseCollector = [study addHealthCollectorWithSampleType:quantityType2 unit:unit startDate:nil error:&error];
+        
+        if (!glucoseCollector)
+        {
+            NSLog(@"Error creating glucose collector: %@", error);
+            [store removeStudy:study error:nil];
+            returnErrorFlag = NO;
+            goto errReturn;
+        }
+        
+        HKCorrelationType *bpType = (HKCorrelationType *)[HKCorrelationType correlationTypeForIdentifier:HKCorrelationTypeIdentifierBloodPressure];
+        RKHealthCorrelationCollector *bpCollector = [study addHealthCorrelationCollectorWithCorrelationType:bpType sampleTypes:@[[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureDiastolic], [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic]] units:@[[HKUnit unitFromString:@"mmHg"], [HKUnit unitFromString:@"mmHg"]] startDate:nil error:&error];
+        if (!bpCollector)
+        {
+            NSLog(@"Error creating BP collector: %@", error);
+            [store removeStudy:study error:nil];
+            returnErrorFlag = NO;
+            goto errReturn;
+        }
+        
+        RKMotionActivityCollector *motionCollector = [study addMotionActivityCollectorWithStartDate:nil error:&error];
+        if (!motionCollector)
+        {
+            NSLog(@"Error creating motion collector: %@", error);
+            [store removeStudy:study error:nil];
+            returnErrorFlag = NO;
+            goto errReturn;
+        }
     }
     
-    HKQuantityType *quantityType2 = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodGlucose];
-    HKUnit *unit = [HKUnit unitFromString:@"mg/dL"];
-    RKHealthCollector *glucoseCollector = [study addHealthCollectorWithSampleType:quantityType2 unit:unit startDate:nil error:&error];
-    
-    if (!glucoseCollector)
-    {
-        NSLog(@"Error creating glucose collector: %@", error);
-        [store removeStudy:study error:nil];
-        returnErrorFlag = NO;
-    }
-    
-    HKCorrelationType *bpType = (HKCorrelationType *)[HKCorrelationType correlationTypeForIdentifier:HKCorrelationTypeIdentifierBloodPressure];
-    RKHealthCorrelationCollector *bpCollector = [study addHealthCorrelationCollectorWithCorrelationType:bpType sampleTypes:@[[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureDiastolic], [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic]] units:@[[HKUnit unitFromString:@"mmHg"], [HKUnit unitFromString:@"mmHg"]] startDate:nil error:&error];
-    if (!bpCollector)
-    {
-        NSLog(@"Error creating BP collector: %@", error);
-        [store removeStudy:study error:nil];
-        returnErrorFlag = NO;
-    }
-    
-    RKMotionActivityCollector *motionCollector = [study addMotionActivityCollectorWithStartDate:nil error:&error];
-    if (!motionCollector)
-    {
-        NSLog(@"Error creating motion collector: %@", error);
-        [store removeStudy:study error:nil];
-        returnErrorFlag = NO;
-    }
-    
-    
-    return YES;
+errReturn:
+    return returnErrorFlag;
 }
 
 
@@ -256,10 +263,11 @@ NSString *const MainStudyIdentifier                 = @"com.ymedialabs.passiveda
                                                             pendingFiles:&pendingFiles
                                                                    error:&error];
     
-    if (error)
+    if (!error)
     {
+        //TODO error handling for creating a data archive
         NSLog(@"Error creating archive from log manager: %@", error);
-        return;
+        
     } else {
         
         NSURL *url = [self makeArchiveURL];
@@ -284,6 +292,7 @@ NSString *const MainStudyIdentifier                 = @"com.ymedialabs.passiveda
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
         
+        //TODO using debug endpoint
         [self uploadFile:[url path]];
         if (taskIdentifier != UIBackgroundTaskInvalid)
         {
@@ -316,7 +325,9 @@ NSString *const MainStudyIdentifier                 = @"com.ymedialabs.passiveda
     [manager removeOldAndUploadedLogsToThreshold:manager.totalBytesThreshold/2 error:nil];
 }
 
-#pragma mark - Network upload
+/*********************************************************************************/
+#pragma mark - Network upload debug-only end point
+/*********************************************************************************/
 
 - (void) uploadFile: (NSString*) path
 {
