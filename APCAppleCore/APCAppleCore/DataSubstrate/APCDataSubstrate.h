@@ -9,14 +9,20 @@
 #import <Foundation/Foundation.h>
 #import <ResearchKit/ResearchKit.h>
 #import <CoreData/CoreData.h>
+#import <HealthKit/HealthKit.h>
 
-
+@class APCUser;
 @interface APCDataSubstrate : NSObject <RKStudyDelegate>
 
 /*********************************************************************************/
 #pragma mark - Initializer
 /*********************************************************************************/
 - (instancetype)initWithPersistentStorePath: (NSString*) storePath additionalModels:(NSManagedObjectModel *)mergedModels studyIdentifier: (NSString*) studyIdentifier;
+
+/*********************************************************************************/
+#pragma mark - Data Substrate Public Properties
+/*********************************************************************************/
+@property (nonatomic, strong) APCUser * currentUser;
 
 /*********************************************************************************/
 #pragma mark - ResearchKit Subsystem Public Properties
@@ -34,6 +40,11 @@
 //Please create a child context of persistentContext for any background processing tasks
 @property (nonatomic, strong) NSManagedObjectContext * persistentContext;
 
+/*********************************************************************************/
+#pragma mark - Healthkit Public Properties
+/*********************************************************************************/
+@property (nonatomic, strong) HKHealthStore * healthStore;
+
 
 /*********************************************************************************/
 #pragma mark - Properties & Methods meant only for Categories
@@ -45,5 +56,9 @@
 //Core Data Subsystem
 @property (nonatomic, strong) NSPersistentStoreCoordinator * persistentStoreCoordinator;
 @property (nonatomic, strong) NSManagedObjectModel * managedObjectModel;
+
+//HealthKit Subsystem
+
+
 
 @end
