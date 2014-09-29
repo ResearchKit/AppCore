@@ -10,6 +10,7 @@
 #import <ResearchKit/ResearchKit.h>
 #import <CoreData/CoreData.h>
 #import "APCPassiveLocationTracking.h"
+#import <HealthKit/HealthKit.h>
 
 @interface APCDataSubstrate : NSObject <RKStudyDelegate>
 
@@ -24,6 +25,7 @@
 @property (assign) BOOL justJoined;
 @property (strong, nonatomic) NSString *logDirectory;
 @property (strong, nonatomic) RKDataLoggerManager *logManager;
+@property (nonatomic, strong) APCUser * currentUser;
 
 @property (strong, nonatomic) APCPassiveLocationTracking *passiveLocationTracking;
 
@@ -37,6 +39,11 @@
 //Please create a child context of persistentContext for any background processing tasks
 @property (nonatomic, strong) NSManagedObjectContext * persistentContext;
 
+/*********************************************************************************/
+#pragma mark - Healthkit Public Properties
+/*********************************************************************************/
+@property (nonatomic, strong) HKHealthStore * healthStore;
+
 
 /*********************************************************************************/
 #pragma mark - Properties & Methods meant only for Categories
@@ -48,5 +55,9 @@
 //Core Data Subsystem
 @property (nonatomic, strong) NSPersistentStoreCoordinator * persistentStoreCoordinator;
 @property (nonatomic, strong) NSManagedObjectModel * managedObjectModel;
+
+//HealthKit Subsystem
+
+
 
 @end

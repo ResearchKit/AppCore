@@ -42,11 +42,15 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidRegisterForRemoteNotifications) name:APCAppDidRegisterUserNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appFailedToRegisterForRemoteNotification) name:APCAppDidFailToRegisterForRemoteNotification object:nil];
-        
-        _healthStore = [HKHealthStore new];
+
         _coreMotionPermissionStatus = kPermissionStatusNotDetermined;
     }
     return self;
+}
+
+- (HKHealthStore *)healthStore
+{
+    return [[(APCAppDelegate*) ([UIApplication sharedApplication].delegate) dataSubstrate] healthStore];
 }
 
 - (BOOL)isPermissionsGrantedForType:(APCSignUpPermissionsType)type
