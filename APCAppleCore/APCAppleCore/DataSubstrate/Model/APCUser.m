@@ -153,7 +153,7 @@ static NSString *const kMedicationsPropertyName = @"medications";
     return bloodObject.bloodType;
 }
 
-
+//Height
 - (HKQuantity *)height
 {
     
@@ -185,6 +185,7 @@ static NSString *const kMedicationsPropertyName = @"medications";
     }];
 }
 
+//Weight
 - (HKQuantity *)weight
 {
     
