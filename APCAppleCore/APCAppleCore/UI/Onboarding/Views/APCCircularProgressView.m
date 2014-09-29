@@ -8,7 +8,7 @@
 
 #import "APCCircularProgressView.h"
 
-static NSString * const APCCircularProgressViewAnimationKey = @"APCCircularProgressViewAnimationKey";
+static NSString * const kAPCCircularProgressViewAnimationKey = @"APCCircularProgressViewAnimationKey";
 
 @interface APCCircularProgressView ()
 
@@ -205,7 +205,7 @@ static NSString * const APCCircularProgressViewAnimationKey = @"APCCircularProgr
     progressAnimation.toValue = @(progress);
     progressAnimation.delegate = self;
     progressAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    [self.circularProgressLayer addAnimation:progressAnimation forKey:APCCircularProgressViewAnimationKey];
+    [self.circularProgressLayer addAnimation:progressAnimation forKey:kAPCCircularProgressViewAnimationKey];
     
 }
 

@@ -32,6 +32,13 @@ static NSInteger kNumberOfSteps = 4;
     
     [self addProgressBar];
 }
+
+- (void)viewWillLayoutSubviews
+{
+    CGFloat stepProgressByYPosition = self.topLayoutGuide.length;
+    self.stepProgressBar.frame = CGRectMake(0, stepProgressByYPosition, self.view.width, kAPCSignUpProgressBarHeight);
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [self.navigationController setNavigationBarHidden:NO animated:YES];

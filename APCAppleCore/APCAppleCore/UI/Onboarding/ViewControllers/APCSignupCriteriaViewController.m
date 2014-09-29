@@ -254,8 +254,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 - (void) next
 {
-//    [self showConsent];
-    [self startSignUp];
+    [self showConsent];
 }
 
 - (BOOL) isContentValid

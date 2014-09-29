@@ -25,7 +25,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
+    self.title = NSLocalizedString(@"Sign Up", nil);
     [self addProgressBar];
 }
 
@@ -34,12 +34,17 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillLayoutSubviews
+{
+    self.stepProgressBar.frame = CGRectMake(0, -kAPCSignUpProgressBarHeight, self.view.width, kAPCSignUpProgressBarHeight);
+}
+
 - (void) addProgressBar {
     // Need to put step progress bar just below navigation bar,
     // So the UINavigationBar's end position will be the begining of step progress bar
-    CGFloat stepProgressByYPosition = self.topLayoutGuide.length;
+//    CGFloat stepProgressByYPosition = self.topLayoutGuide.length;
     
-    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.width, kAPCSignUpProgressBarHeight)
+    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, -kAPCSignUpProgressBarHeight, self.view.width, kAPCSignUpProgressBarHeight)
                                                                style:APCStepProgressBarStyleDefault];
     self.stepProgressBar.numberOfSteps = 4;
     [self.view addSubview:self.stepProgressBar];

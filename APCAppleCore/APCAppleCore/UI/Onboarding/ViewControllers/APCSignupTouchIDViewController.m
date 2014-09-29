@@ -73,7 +73,7 @@
 }
 
 - (void) addNavigationItems {
-    self.title = NSLocalizedString(@"Identification", @"");
+    self.title = NSLocalizedString(@"Sign Up", @"");
 }
 
 - (void) setupProgressBar {
