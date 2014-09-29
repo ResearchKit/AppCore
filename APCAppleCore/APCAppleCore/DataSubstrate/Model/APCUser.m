@@ -170,6 +170,7 @@ static NSString *const kMedicationsPropertyName = @"medications";
     
     sema = NULL;
     return height;
+    
 }
 
 - (void)setHeight:(HKQuantity *)height

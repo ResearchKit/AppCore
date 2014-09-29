@@ -109,6 +109,13 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
     [self reloadData];
 }
 
+- (void)viewWillLayoutSubviews
+{
+    CGRect frame = self.view.bounds;
+    frame.origin.y = self.stepProgressBar.bottom;
+    frame.size.height -= frame.origin.y;
+    self.tableView.frame = frame;
+}
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
