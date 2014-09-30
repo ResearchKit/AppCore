@@ -137,7 +137,9 @@
 #pragma mark - Private Methods
 
 - (void) next {
-    [self.navigationController pushViewController:[APCSignUpPermissionsViewController new] animated:YES];
+    APCSignUpPermissionsViewController *permissionsViewController = [[APCSignUpPermissionsViewController alloc] init];
+    permissionsViewController.user = self.user;
+    [self.navigationController pushViewController:permissionsViewController animated:YES];
 }
 
 - (void) showFirstTry {

@@ -37,6 +37,7 @@
 
 - (void)viewWillLayoutSubviews
 {
+    //Frame.origin.y is negative to account for the tableView content Inset.
     self.stepProgressBar.frame = CGRectMake(0, -kAPCSignUpProgressBarHeight, self.view.width, kAPCSignUpProgressBarHeight);
 }
 

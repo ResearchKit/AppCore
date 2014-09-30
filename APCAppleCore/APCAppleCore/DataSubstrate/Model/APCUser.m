@@ -40,6 +40,26 @@ static NSString *const kMedicationsPropertyName = @"medications";
     return self;
 }
 
+- (NSString *)debugDescription
+{
+    return [NSString stringWithFormat:@"\
+            First Name : %@\n\
+            Last Name : %@\n\
+            Username : %@\n\
+            Email : %@\n\
+            DOB : %@\n\
+            Biological Sex : %d\n\
+            -----------------------\n\
+            Medical Conditions : %@\n\
+            Medications : %@\n\
+            Blood Type : %d\n\
+            Height : %@ \n\
+            Weight : %@ \n\
+            Wake Up Time : %@ \n\
+            Sleep time : %@ \n\
+            ", self.firstName, self.lastName, self.userName, self.email, self.birthDate, self.biologicalSex, self.medicalConditions, self.medications, self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime];
+}
+
 - (void) loadStoredUserData
 {
     NSManagedObjectContext * context = [(APCAppDelegate*) [UIApplication sharedApplication].delegate dataSubstrate].persistentContext;

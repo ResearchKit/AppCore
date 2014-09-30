@@ -105,7 +105,9 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             if (status == HKAuthorizationStatusNotDetermined) {
                 NSArray *dataTypesToRead = @[[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass],
                                              [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight],
-                                             [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate]];
+                                             [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType],
+                                             [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex],
+                                             [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth]];
                 
                 NSArray *dataTypesToWrite = @[[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass]];
                 
