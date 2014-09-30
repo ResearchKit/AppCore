@@ -202,9 +202,9 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 - (void)showConsent
 {
     RKConsentDocument* consent = [[RKConsentDocument alloc] init];
-    consent.title = @"Demo Consent";
-    consent.signaturePageTitle = @"Consent";
-    consent.signaturePageContent = @"I agree  to participate in this research Study.";
+    consent.title = NSLocalizedString(@"Demo Consent", nil);
+    consent.signaturePageTitle = NSLocalizedString(@"Consent", nil);
+    consent.signaturePageContent = NSLocalizedString(@"I agree  to participate in this research Study.", nil);
     consent.investigatorNamePrinted = @"Jake Clemson";
     consent.investigatorSignatureDate = @"9/2/14";
     NSMutableArray* components = [NSMutableArray new];
@@ -227,8 +227,8 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     
     {
         RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeCustom];
-        c.summary = @"Custom Scene summary";
-        c.title = @"Custom Scene";
+        c.summary = NSLocalizedString(@"Custom Scene summary", @"Custom Scene summary");
+        c.title = NSLocalizedString(@"Custom Scene", @"Custom Scene");
         c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
         c.customImage = [UIImage imageNamed:@"signature.png"];
         [components addObject:c];
@@ -236,8 +236,8 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     
     {
         RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeOnlyInDocument];
-        c.summary = @"OnlyInDocument Scene summary";
-        c.title = @"OnlyInDocument Scene";
+        c.summary = NSLocalizedString(@"OnlyInDocument Scene summary", @"OnlyInDocument Scene summary");
+        c.title = NSLocalizedString(@"OnlyInDocument Scene", @"OnlyInDocument Scene");
         c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
         [components addObject:c];
     }
@@ -294,9 +294,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 - (void)consentViewControllerDidCancel:(RKConsentViewController *)consentViewController
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Public Method
