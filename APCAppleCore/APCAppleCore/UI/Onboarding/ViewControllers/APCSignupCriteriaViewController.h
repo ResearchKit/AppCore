@@ -8,6 +8,8 @@
 
 #import "APCSignupViewController.h"
 
-@interface APCSignupCriteriaViewController : APCSignupViewController
+@interface APCSignupCriteriaViewController : APCViewController <UITableViewDataSource, UITableViewDelegate, APCConfigurableCellDelegate, RKConsentViewControllerDelegate>
+
+- (void)startSignUp;
 
 @end

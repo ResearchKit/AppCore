@@ -12,7 +12,7 @@
 #import "APCUserInfoConstants.h"
 #import "APCSignupViewController.h"
 
-static NSInteger kNumberOfSteps = 5;
+static NSInteger kNumberOfSteps = 4;
 
 @interface APCSignupViewController ()
 
@@ -25,9 +25,23 @@ static NSInteger kNumberOfSteps = 5;
 @synthesize profile = _profile;
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
+    self.title = NSLocalizedString(@"Sign Up", nil);
+    
     [self addProgressBar];
+}
+
+- (void)viewWillLayoutSubviews
+{
+    CGFloat stepProgressByYPosition = self.topLayoutGuide.length;
+    self.stepProgressBar.frame = CGRectMake(0, stepProgressByYPosition, self.view.width, kAPCSignUpProgressBarHeight);
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,10 +52,10 @@ static NSInteger kNumberOfSteps = 5;
 - (void) addProgressBar {
     // Need to put step progress bar just below navigation bar,
     // So the UINavigationBar's end position will be the begining of step progress bar
-    CGFloat stepProgressByYPosition = self.navigationController.navigationBar.bottom;
+    CGFloat stepProgressByYPosition = self.topLayoutGuide.length;
     
     self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.width, kAPCSignUpProgressBarHeight)
-                                                               style:APCStepProgressBarStyleOnlyProgressView];
+                                                               style:APCStepProgressBarStyleDefault];
     self.stepProgressBar.numberOfSteps = kNumberOfSteps;
     [self.view addSubview:self.stepProgressBar];
 }

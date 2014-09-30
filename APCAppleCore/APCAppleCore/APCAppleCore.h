@@ -51,6 +51,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCSignupTouchIDViewController.h>
 #import <APCAppleCore/APCSignUpUserInfoViewController.h>
 #import <APCAppleCore/APCSignupViewController.h>
+#import <APCAppleCore/APCStudyOverviewViewController.h>
 #import <APCAppleCore/APCSpinnerViewController.h>
 #import <APCAppleCore/APCStepProgressBar.h>
 #import <APCAppleCore/APCTableViewItem.h>

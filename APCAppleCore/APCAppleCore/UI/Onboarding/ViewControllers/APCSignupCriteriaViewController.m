@@ -22,7 +22,7 @@ static NSString const *kAPCSignupCriteriaTableViewCellIdentifier    =   @"Criter
 static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 
-@interface APCSignupCriteriaViewController () <UITableViewDataSource, UITableViewDelegate, APCConfigurableCellDelegate>
+@interface APCSignupCriteriaViewController ()
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -72,14 +72,21 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     }
     
     [self addNavigationItems];
-    [self setupProgressBar];
     [self addTableView];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    [self.stepProgressBar setCompletedSteps:3 animation:YES];
+}
+
+- (UIRectEdge)edgesForExtendedLayout
+{
+    return UIRectEdgeNone;
 }
 
 - (void) addNavigationItems {
@@ -90,16 +97,9 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     self.navigationItem.rightBarButtonItem = nextBarButton;
 }
 
-- (void) setupProgressBar {
-    [self.stepProgressBar setCompletedSteps:2 animation:NO];
-
-    self.stepProgressBar.rightLabel.text = NSLocalizedString(@"Mandatory", @"");
-    [self setStepNumber:4 title:NSLocalizedString(@"Inclusion Criteria", @"")];
-}
-
 - (void) addTableView {
     CGRect frame = self.view.bounds;
-    frame.origin.y = self.stepProgressBar.bottom;
+    frame.origin.y = self.topLayoutGuide.length;
     frame.size.height -= frame.origin.y;
     
     self.tableView = [UITableView new];
@@ -199,15 +199,66 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     [self.tableView endEditing:YES];
 }
 
-
+- (void)showConsent
+{
+    RKConsentDocument* consent = [[RKConsentDocument alloc] init];
+    consent.title = NSLocalizedString(@"Demo Consent", nil);
+    consent.signaturePageTitle = NSLocalizedString(@"Consent", nil);
+    consent.signaturePageContent = NSLocalizedString(@"I agree  to participate in this research Study.", nil);
+    consent.investigatorNamePrinted = @"Jake Clemson";
+    consent.investigatorSignatureDate = @"9/2/14";
+    NSMutableArray* components = [NSMutableArray new];
+    
+    NSArray* scenes = @[@(RKConsentSectionTypeOverview),
+                        @(RKConsentSectionTypeActivity),
+                        @(RKConsentSectionTypeSensorData),
+                        @(RKConsentSectionTypeDeIdentification),
+                        @(RKConsentSectionTypeCombiningData),
+                        @(RKConsentSectionTypeUtilizingData),
+                        @(RKConsentSectionTypeImpactLifeTime),
+                        @(RKConsentSectionTypePotentialRiskUncomfortableQuestion),
+                        @(RKConsentSectionTypePotentialRiskSocial),
+                        @(RKConsentSectionTypeAllowWithdraw)];
+    for (NSNumber* type in scenes) {
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:type.integerValue];
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        [components addObject:c];
+    }
+    
+    {
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeCustom];
+        c.summary = NSLocalizedString(@"Custom Scene summary", @"Custom Scene summary");
+        c.title = NSLocalizedString(@"Custom Scene", @"Custom Scene");
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        c.customImage = [UIImage imageNamed:@"signature.png"];
+        [components addObject:c];
+    }
+    
+    {
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeOnlyInDocument];
+        c.summary = NSLocalizedString(@"OnlyInDocument Scene summary", @"OnlyInDocument Scene summary");
+        c.title = NSLocalizedString(@"OnlyInDocument Scene", @"OnlyInDocument Scene");
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        [components addObject:c];
+    }
+    
+    consent.sections = [components copy];
+    consent.investigatorSignatureImage = [UIImage imageNamed:@"signature.png"];
+    
+    RKConsentViewController* consentVC = [[RKConsentViewController alloc] initWithConsent:consent];
+    consentVC.delegate = self;
+    [self presentViewController:consentVC animated:YES completion:nil];
+    
+}
 #pragma mark - Private Methods
 
-- (void) next {
-    
-    [self.navigationController pushViewController:[APCSignUpPermissionsViewController new] animated:YES];
+- (void) next
+{
+    [self showConsent];
 }
 
-- (BOOL) isContentValid {
+- (BOOL) isContentValid
+{
     BOOL isContentValid = NO;
     
     for (APCTableViewItem *item in self.criterias) {
@@ -225,6 +276,32 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     }
     
     return isContentValid;
+}
+
+#pragma mark - RKConsentViewControllerDelegate methods
+
+- (void)consentViewControllerDidComplete: (RKConsentViewController *)consentViewController
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self startSignUp];
+    }];
+}
+
+- (void)consentViewController: (RKConsentViewController *)consentViewController didFailWithError:(NSError*)error
+{
+    
+}
+
+- (void)consentViewControllerDidCancel:(RKConsentViewController *)consentViewController
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Public Method
+
+- (void)startSignUp
+{
+    
 }
 
 @end
