@@ -7,6 +7,7 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "APCAppleCore.h"
 #import "APCPassiveLocationTracking.h"
 
 static NSString *passiveLocationTrackingIdentifier = @"com.ymedialabs.passiveLocationTracking";
@@ -34,11 +35,6 @@ static NSString *APCPassiveLocationTrackingFileName = @"APCPassiveLocationTracki
         
         _timeout = timeout;
         _deferringUpdates = YES;
-        //TODO use the correct name of the notification identifier name.
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(startPassiveLocationUpdating:)
-                                                     name:@"APCNotificationForConsentAndAuthorization"
-                                                   object:nil];
     }
     
     return self;
@@ -174,6 +170,8 @@ static NSString *APCPassiveLocationTrackingFileName = @"APCPassiveLocationTracki
 - (void)kickOffPassiveLocationUpdating:(NSNotification *)notification {
     [self start];
 }
+
+
 
 /*********************************************************************************/
 #pragma mark -CLLocationManagerDelegate

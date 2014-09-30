@@ -23,8 +23,6 @@ static NSInteger const APCTotalMegaBytesThreshold = 50;
 static NSInteger const APCDataLoggerManagerMaximumInputBytes = 10;
 static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 
-NSString *const MainStudyIdentifier                 = @"com.ymedialabs.passivedatacollection.mainStudy";
-
 @implementation APCDataSubstrate (ResearchKit)
 
 /*********************************************************************************/
@@ -32,8 +30,6 @@ NSString *const MainStudyIdentifier                 = @"com.ymedialabs.passiveda
 /*********************************************************************************/
 - (void) setUpResearchStudy: (NSString*) studyIdentifier
 {
-    
-    
     self.logDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"ResearchKitLogs"]; // for now
     [[NSFileManager defaultManager] createDirectoryAtPath:self.logDirectory withIntermediateDirectories:YES attributes:nil error:nil];
     
@@ -49,13 +45,22 @@ NSString *const MainStudyIdentifier                 = @"com.ymedialabs.passiveda
     [error handle];
     [self setUpCollectors];
     
-    BOOL resuming = [self.studyStore resume];
-    NSLog(resuming ? @"Yes" : @"No");
+    [self.studyStore resume];
     
-    if (resuming) {
-        self.study = [self.studyStore studyWithIdentifier:MainStudyIdentifier];
-        [self joinStudy];
-    }
+//    if (resuming) {
+//        self.study = [self.studyStore studyWithIdentifier:studyIdentifier];
+//        [self joinStudy];
+//    }
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(userConsented)
+                                                 name:APCUserDidConsentNotification
+                                               object:nil];
+}
+
+- (void) userConsented
+{
+    [self setUpCollectors];
+    [self joinStudy];
 }
 
 -(void)joinStudy
@@ -81,84 +86,7 @@ NSString *const MainStudyIdentifier                 = @"com.ymedialabs.passiveda
 
 #pragma mark - HealthKit Permissions
 
-- (void) setUpCollectors
-{
-    
-    // delegates on the existing study objects.
-    if (! [self.studyStore studyWithIdentifier:MainStudyIdentifier])
-    {
-        [self initializeStudiesOnStore:self.studyStore];
-    }
-    else
-    {
-        for (RKStudy *study in self.studyStore.studies)
-        {
-            
-            [study setDelegate:self];
-        }
-    }
-}
-
-
--(BOOL)initializeStudiesOnStore:(RKStudyStore*)store
-{
-    NSError *error = nil;
-    BOOL returnErrorFlag = YES;
-    
-    RKStudy *study = [store addStudyWithIdentifier:MainStudyIdentifier delegate:self error:&error];
-    if (!study)
-    {
-        NSLog(@"Error creating study %@: %@", MainStudyIdentifier, error);
-        returnErrorFlag = NO;
-        goto errReturn;
-    }
-
-    {
-        HKQuantityType *quantityType = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
-        RKHealthCollector *healthCollector = [study addHealthCollectorWithSampleType:quantityType unit:[HKUnit countUnit] startDate:nil error:&error];
-        if (!healthCollector)
-        {
-            NSLog(@"Error creating health collector: %@", error);
-            [store removeStudy:study error:nil];
-            returnErrorFlag = NO;
-            goto errReturn;
-        }
-        
-        HKQuantityType *quantityType2 = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodGlucose];
-        HKUnit *unit = [HKUnit unitFromString:@"mg/dL"];
-        RKHealthCollector *glucoseCollector = [study addHealthCollectorWithSampleType:quantityType2 unit:unit startDate:nil error:&error];
-        
-        if (!glucoseCollector)
-        {
-            NSLog(@"Error creating glucose collector: %@", error);
-            [store removeStudy:study error:nil];
-            returnErrorFlag = NO;
-            goto errReturn;
-        }
-        
-        HKCorrelationType *bpType = (HKCorrelationType *)[HKCorrelationType correlationTypeForIdentifier:HKCorrelationTypeIdentifierBloodPressure];
-        RKHealthCorrelationCollector *bpCollector = [study addHealthCorrelationCollectorWithCorrelationType:bpType sampleTypes:@[[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureDiastolic], [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic]] units:@[[HKUnit unitFromString:@"mmHg"], [HKUnit unitFromString:@"mmHg"]] startDate:nil error:&error];
-        if (!bpCollector)
-        {
-            NSLog(@"Error creating BP collector: %@", error);
-            [store removeStudy:study error:nil];
-            returnErrorFlag = NO;
-            goto errReturn;
-        }
-        
-        RKMotionActivityCollector *motionCollector = [study addMotionActivityCollectorWithStartDate:nil error:&error];
-        if (!motionCollector)
-        {
-            NSLog(@"Error creating motion collector: %@", error);
-            [store removeStudy:study error:nil];
-            returnErrorFlag = NO;
-            goto errReturn;
-        }
-    }
-    
-errReturn:
-    return returnErrorFlag;
-}
+- (void) setUpCollectors {/*Blank Implementation for Subclasses to override*/ }
 
 
 /*********************************************************************************/
@@ -256,14 +184,14 @@ errReturn:
     NSArray *pendingFiles = nil;
     NSURL *archiveFile = [RKDataArchive makeArchiveFromDataLoggerManager:self.logManager
                                                           itemIdentifier:[[RKItemIdentifier alloc] initWithComponents:@[@"com",@"apple",@"ResearchKit",@"collection"]]
-                                                         studyIdentifier:MainStudyIdentifier
+                                                         studyIdentifier:self.study.studyIdentifier
                                                           fileProtection:RKFileProtectionNone
                                                        maximumInputBytes:APCDataLoggerManagerMaximumInputBytes * APCMegabyteFileSize
                                                             maximumFiles:APCDataLoggerManagerMaximumFiles
                                                             pendingFiles:&pendingFiles
                                                                    error:&error];
     
-    if (!error)
+    if (error)
     {
         //TODO error handling for creating a data archive
         NSLog(@"Error creating archive from log manager: %@", error);
