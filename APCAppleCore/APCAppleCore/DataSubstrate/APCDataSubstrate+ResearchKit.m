@@ -45,16 +45,22 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
     [error handle];
     [self setUpCollectors];
     
-    BOOL resuming = [self.studyStore resume];
+    [self.studyStore resume];
     
-    if (resuming) {
-        self.study = [self.studyStore studyWithIdentifier:studyIdentifier];
-        [self joinStudy];
-    }
+//    if (resuming) {
+//        self.study = [self.studyStore studyWithIdentifier:studyIdentifier];
+//        [self joinStudy];
+//    }
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(setUpCollectors)
+                                             selector:@selector(userConsented)
                                                  name:APCUserDidConsentNotification
                                                object:nil];
+}
+
+- (void) userConsented
+{
+    [self setUpCollectors];
+    [self joinStudy];
 }
 
 -(void)joinStudy

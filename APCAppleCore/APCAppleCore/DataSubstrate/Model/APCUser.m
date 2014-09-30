@@ -99,6 +99,7 @@ static NSString *const kMedicationsPropertyName = @"medications";
 {
     _consented = consented;
     [self updateStoredProperty:kConsentedPropertyName withValue:@(consented)];
+    [[NSNotificationCenter defaultCenter] postNotificationName:APCUserDidConsentNotification object:nil];
 }
 
 - (void) setFirstName:(NSString *)firstName
