@@ -580,8 +580,6 @@
 		F5179B1F19D09128001DCCB7 = {
 			isa = PBXGroup;
 			children = (
-				7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */,
-				F54AB72919D36D9300986B52 /* ResearchKit.bundle */,
 				F5179B2B19D09128001DCCB7 /* APCAppleCore */,
 				F5179B3519D09128001DCCB7 /* APCAppleCoreTests */,
 				F5179B2A19D09128001DCCB7 /* Products */,
@@ -621,6 +619,7 @@
 		F5179B2C19D09128001DCCB7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */,
 				F5179F6319D0B4EA001DCCB7 /* ResearchKit.framework */,
 				F5A63F0C19D5E97D00284006 /* HealthKit.framework */,
 				F5179F6719D0B50C001DCCB7 /* libz.dylib */,
@@ -1525,7 +1524,10 @@
 				INFOPLIST_FILE = APCAppleCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1545,7 +1547,10 @@
 				INFOPLIST_FILE = APCAppleCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
