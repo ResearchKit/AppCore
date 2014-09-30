@@ -517,8 +517,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+<<<<<<< HEAD
 				7BA4BC0419D490EE00BC4023 /* CoreLocation.framework in Frameworks */,
+=======
 				F5A63F0D19D5E97D00284006 /* HealthKit.framework in Frameworks */,
+>>>>>>> dev
 				F54AB72B19D36DA100986B52 /* ResearchKit.framework in Frameworks */,
 				F5179F6819D0B50C001DCCB7 /* libz.dylib in Frameworks */,
 				F5179F6619D0B502001DCCB7 /* libarchive.dylib in Frameworks */,
@@ -580,8 +583,11 @@
 		F5179B1F19D09128001DCCB7 = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
 				7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */,
 				F54AB72919D36D9300986B52 /* ResearchKit.bundle */,
+=======
+>>>>>>> dev
 				F5179B2B19D09128001DCCB7 /* APCAppleCore */,
 				F5179B3519D09128001DCCB7 /* APCAppleCoreTests */,
 				F5179B2A19D09128001DCCB7 /* Products */,

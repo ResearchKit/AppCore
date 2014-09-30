@@ -18,7 +18,17 @@
 {
     self = [super init];
     if (self) {
+        
+        //TODO check if current user has given consent and authorization
+        //if (self.currentUser.givesConsent) {
+
+        self.passiveLocationTracking = [[APCPassiveLocationTracking alloc] initWithTimeInterval:60];
+        [self.passiveLocationTracking start];
+        
         [self setUpResearchStudy:studyIdentifier];
+        
+        //}
+        
         [self setUpCoreDataStackWithPersistentStorePath:storePath additionalModels:mergedModels];
         [self setUpHealthKit];
         [self setUpCurrentUser];
