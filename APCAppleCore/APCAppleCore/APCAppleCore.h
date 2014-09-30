@@ -107,6 +107,7 @@ typedef NS_ENUM(NSInteger, APCNetworkErrorCodes)
 
 static NSString *const APCUserLoginNotification     = @"APCUserLoginNotification";
 static NSString *const APCUserLogOutNotification  = @"APCUserLogOutNotification";
+static NSString *const APCUserDidConsentNotification = @"APCUserDidConsentNotification";
 
 static NSString *const APCAppDidRegisterUserNotification            = @"APCAppDidRegisterUserNotification";
 static NSString *const APCAppDidFailToRegisterForRemoteNotification = @"APCAppDidFailToRegisterForRemoteNotifications";
