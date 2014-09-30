@@ -10,6 +10,7 @@
 
 @interface APCUser (HealthKit)
 
+/* Biologcal Sex */
 + (NSArray *) sexTypesInStringValue;
 
 + (HKBiologicalSex) sexTypeFromStringValue:(NSString *)stringValue;
@@ -19,6 +20,7 @@
 + (NSUInteger) stringIndexFromSexType:(HKBiologicalSex)sexType;
 
 
+/*Blood Type */
 + (NSArray *) bloodTypeInStringValues;
 
 + (HKBloodType) bloodTypeFromStringValue:(NSString *)stringValue;
@@ -28,6 +30,16 @@
 
 + (NSArray *) medications;
 
+/* Height */
 + (NSArray *) heights;
+
++ (double)heightInInches:(HKQuantity *)height;
+
++ (double)heightInMeters:(HKQuantity *)height;
+
+
++ (double)weightInPounds:(HKQuantity *)weight;
+
++ (double)weightInKilograms:(HKQuantity *)weight;
 
 @end

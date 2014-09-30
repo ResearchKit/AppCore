@@ -84,8 +84,33 @@
 + (NSArray *) heights {
     return @[
              @[@"1'", @"2'", @"3'", @"4'", @"5'", @"6'", @"7'", @"8'", @"9'", @"10'", @"11'", @"12'"],
-             @[@"0''", @"1''", @"2''", @"3''", @"4''", @"5''", @"6''", @"7''", @"8''", @"9''", @"10''", @"11''", @"12''"]
+             @[@"0''", @"1''", @"2''", @"3''", @"4''", @"5''", @"6''", @"7''", @"8''", @"9''", @"10''", @"11''"]
              ];
 }
+
++ (double)heightInInches:(HKQuantity *)height
+{
+    HKUnit *heightUnit = [HKUnit inchUnit];
+    return [height doubleValueForUnit:heightUnit];
+}
+
++ (double)heightInMeters:(HKQuantity *)height
+{
+    HKUnit *heightUnit = [HKUnit meterUnit];
+    return [height doubleValueForUnit:heightUnit];
+}
+
++ (double)weightInPounds:(HKQuantity *)weight
+{
+    HKUnit *weightUnit = [HKUnit poundUnit];
+    return [weight doubleValueForUnit:weightUnit];
+}
+
++ (double)weightInKilograms:(HKQuantity *)weight
+{
+    HKUnit *weightUnit = [HKUnit gramUnit];
+    return [weight doubleValueForUnit:weightUnit];
+}
+
 
 @end
