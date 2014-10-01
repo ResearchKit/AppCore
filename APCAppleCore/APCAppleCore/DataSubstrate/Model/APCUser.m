@@ -14,8 +14,12 @@ static NSString *const kLoggedInKey = @"LoggedIn";
 static NSString *const kConsentedPropertyName = @"consented";
 static NSString *const kFirstNamePropertyName = @"firstName";
 static NSString *const kLastNamePropertyName = @"lastName";
+static NSString *const kUserNamePropertyName = @"userName";
+static NSString *const kEmailPropertyName = @"email";
 static NSString *const kMedicalConditionsPropertyName = @"medicalConditions";
 static NSString *const kMedicationsPropertyName = @"medications";
+static NSString *const kWakeUpTimePropertyName = @"wakeUpTime";
+static NSString *const kSleepTimePropertyName = @"sleepTime";
 
 @interface APCUser ()
 @property (nonatomic, readonly) HKHealthStore * healthStore;
@@ -91,6 +95,10 @@ static NSString *const kMedicationsPropertyName = @"medications";
     _lastName = [storedUserData.lastName copy];
     _medicalConditions = [storedUserData.medicalConditions copy];
     _medications = [storedUserData.medications copy];
+    _userName = [storedUserData.userName copy];
+    _email = [storedUserData.email copy];
+    _wakeUpTime = [storedUserData.wakeUpTime copy];
+    _sleepTime = [storedUserData.sleepTime copy];
 }
 
 - (void) updateStoredProperty:(NSString*) propertyName withValue: (id) value
@@ -134,6 +142,18 @@ static NSString *const kMedicationsPropertyName = @"medications";
     [self updateStoredProperty:kLastNamePropertyName withValue:lastName];
 }
 
+- (void)setUserName:(NSString *)userName
+{
+    _userName = userName;
+    [self updateStoredProperty:kUserNamePropertyName withValue:userName];
+}
+
+- (void)setEmail:(NSString *)email
+{
+    _email = email;
+    [self updateStoredProperty:kEmailPropertyName withValue:email];
+}
+
 - (void)setMedicalConditions:(NSString *)medicalConditions
 {
     _medicalConditions = medicalConditions;
@@ -144,6 +164,17 @@ static NSString *const kMedicationsPropertyName = @"medications";
 {
     _medications = medications;
     [self updateStoredProperty:kMedicationsPropertyName withValue:medications];
+}
+
+- (void)setWakeUpTime:(NSDate *)wakeUpTime{
+    _wakeUpTime = wakeUpTime;
+    [self updateStoredProperty:kWakeUpTimePropertyName withValue:wakeUpTime];
+}
+
+- (void)setSleepTime:(NSDate *)sleepTime
+{
+    _sleepTime = sleepTime;
+    [self updateStoredProperty:kSleepTimePropertyName withValue:sleepTime];
 }
 
 /*********************************************************************************/

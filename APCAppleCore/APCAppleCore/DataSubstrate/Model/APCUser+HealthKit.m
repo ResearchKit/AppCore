@@ -71,8 +71,6 @@
     return type;
 }
 
-
-
 + (NSArray *) medicalConditions {
     return @[@"Not listed", @"Condition 1" , @"Condition 2"];
 }

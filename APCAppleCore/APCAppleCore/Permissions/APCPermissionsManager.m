@@ -67,18 +67,30 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             break;
         case kSignUpPermissionsTypeLocation:
         {
+#if TARGET_IPHONE_SIMULATOR
+            isGranted = YES;
+#else
             CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
             isGranted = (status == kCLAuthorizationStatusAuthorizedAlways); //TODO: Revisit the type of permissions to restrict/allow.
+#endif
         }
             break;
         case kSignUpPermissionsTypePushNotifications:
         {
+#if TARGET_IPHONE_SIMULATOR
+            isGranted = YES;
+#else
             isGranted = [[UIApplication sharedApplication] currentUserNotificationSettings].types != 0;
+#endif
         }
             break;
         case kSignUpPermissionsTypeCoremotion:
         {
+#if TARGET_IPHONE_SIMULATOR
+            isGranted = YES;
+#else
             isGranted = self.coreMotionPermissionStatus == kPermissionStatusAuthorized;
+#endif
         }
             break;
         default:{
