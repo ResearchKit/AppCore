@@ -67,18 +67,30 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             break;
         case kSignUpPermissionsTypeLocation:
         {
+#if TARGET_IPHONE_SIMULATOR
+            isGranted = YES;
+#else
             CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
             isGranted = (status == kCLAuthorizationStatusAuthorizedAlways); //TODO: Revisit the type of permissions to restrict/allow.
+#endif
         }
             break;
         case kSignUpPermissionsTypePushNotifications:
         {
+#if TARGET_IPHONE_SIMULATOR
+            isGranted = YES;
+#else
             isGranted = [[UIApplication sharedApplication] currentUserNotificationSettings].types != 0;
+#endif
         }
             break;
         case kSignUpPermissionsTypeCoremotion:
         {
+#if TARGET_IPHONE_SIMULATOR
+            isGranted = YES;
+#else
             isGranted = self.coreMotionPermissionStatus == kPermissionStatusAuthorized;
+#endif
         }
             break;
         default:{
@@ -105,7 +117,9 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             if (status == HKAuthorizationStatusNotDetermined) {
                 NSArray *dataTypesToRead = @[[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass],
                                              [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight],
-                                             [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate]];
+                                             [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType],
+                                             [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex],
+                                             [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth]];
                 
                 NSArray *dataTypesToWrite = @[[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass]];
                 

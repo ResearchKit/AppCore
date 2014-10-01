@@ -17,6 +17,8 @@
 #import "APCSignupCriteriaViewController.h"
 #import "APCSignUpPermissionsViewController.h"
 
+#define SKIP_CONSENT 0
+
 static NSString const *kAPCSignupCriteriaTableViewCellIdentifier    =   @"Criteria";
 
 static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
@@ -254,7 +256,12 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 - (void) next
 {
+#if SKIP_CONSENT
+    [self startSignUp];
+#else
     [self showConsent];
+#endif
+    
 }
 
 - (BOOL) isContentValid
