@@ -13,8 +13,12 @@
 
 @dynamic firstName;
 @dynamic lastName;
+@dynamic userName;
+@dynamic email;
 @dynamic medicalConditions;
 @dynamic medications;
 @dynamic consented;
+@dynamic wakeUpTime;
+@dynamic sleepTime;
 
 @end

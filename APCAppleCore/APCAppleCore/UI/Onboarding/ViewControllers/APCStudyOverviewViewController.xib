@@ -10,6 +10,7 @@
                 <outlet property="dateRangeLabel" destination="7be-Rv-A6r" id="wQF-Rp-eU7"/>
                 <outlet property="diseaseNameLabel" destination="3WX-MV-FQs" id="VvG-4x-bh7"/>
                 <outlet property="headerView" destination="dMv-2W-LdT" id="2rS-UI-av0"/>
+                <outlet property="logoImageView" destination="e90-Zo-8Ky" id="75X-Jn-Ohb"/>
                 <outlet property="tableView" destination="l2I-N8-mfG" id="jJl-34-XWm"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -71,7 +72,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_research_institute" translatesAutoresizingMaskIntoConstraints="NO" id="e90-Zo-8Ky">
-                    <rect key="frame" x="236" y="12" width="128" height="34"/>
+                    <rect key="frame" x="236" y="17" width="128" height="34"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="34" id="JYw-A8-iPk"/>
                         <constraint firstAttribute="width" constant="128" id="Wo3-4l-zDX"/>
@@ -106,7 +107,7 @@
                 <constraint firstItem="7be-Rv-A6r" firstAttribute="leading" secondItem="dMv-2W-LdT" secondAttribute="leading" constant="77" id="XMw-jX-R4f"/>
                 <constraint firstAttribute="trailing" secondItem="7be-Rv-A6r" secondAttribute="trailing" constant="77" id="hFV-rv-kB7"/>
                 <constraint firstItem="3WX-MV-FQs" firstAttribute="leading" secondItem="dMv-2W-LdT" secondAttribute="leading" constant="77" id="lXS-WQ-Nt9"/>
-                <constraint firstItem="e90-Zo-8Ky" firstAttribute="top" secondItem="dMv-2W-LdT" secondAttribute="top" constant="12" id="t10-az-k5p"/>
+                <constraint firstItem="e90-Zo-8Ky" firstAttribute="top" secondItem="dMv-2W-LdT" secondAttribute="top" constant="17" id="t10-az-k5p"/>
                 <constraint firstAttribute="centerX" secondItem="e90-Zo-8Ky" secondAttribute="centerX" id="zu2-qw-SOJ"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

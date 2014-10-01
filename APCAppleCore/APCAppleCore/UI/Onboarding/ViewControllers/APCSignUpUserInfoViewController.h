@@ -8,6 +8,7 @@
 
 #import "APCSignUpProgressing.h"
 #import "APCUserInfoViewController.h"
+#import "APCUser+HealthKit.h"
 
 @interface APCSignUpUserInfoViewController : APCUserInfoViewController <APCSignUpProgressing>
 

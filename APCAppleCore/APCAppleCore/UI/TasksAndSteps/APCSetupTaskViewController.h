@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <ResearchKit/ResearchKit.h>
 #import "APCAppleCore.h"
+#import "APCScheduledTask.h"
 
 @interface APCSetupTaskViewController : RKTaskViewController <RKTaskViewControllerDelegate, RKStepViewControllerDelegate>
 

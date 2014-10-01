@@ -19,6 +19,8 @@
 		5B29CE4B19D4902B00E2FD62 /* APCStudyOverviewViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B29CE4819D4902B00E2FD62 /* APCStudyOverviewViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B29CE4C19D4902B00E2FD62 /* APCStudyOverviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B29CE4919D4902B00E2FD62 /* APCStudyOverviewViewController.m */; };
 		5B29CE4D19D4902B00E2FD62 /* APCStudyOverviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B29CE4A19D4902B00E2FD62 /* APCStudyOverviewViewController.xib */; };
+		5BF5C90819D9E208007928D4 /* APCUser+HealthKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF5C90619D9E208007928D4 /* APCUser+HealthKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5BF5C90919D9E208007928D4 /* APCUser+HealthKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5C90719D9E208007928D4 /* APCUser+HealthKit.m */; };
 		7BA4BBF719D4893700BC4023 /* APCMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BA4BBF219D4893700BC4023 /* APCMapViewController.h */; };
 		7BA4BBF819D4893700BC4023 /* APCMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BA4BBF319D4893700BC4023 /* APCMapViewController.m */; };
 		7BA4BBF919D4893700BC4023 /* APCMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7BA4BBF419D4893700BC4023 /* APCMapViewController.xib */; };
@@ -291,6 +293,8 @@
 		5B29CE4819D4902B00E2FD62 /* APCStudyOverviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewViewController.h; sourceTree = "<group>"; };
 		5B29CE4919D4902B00E2FD62 /* APCStudyOverviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyOverviewViewController.m; sourceTree = "<group>"; };
 		5B29CE4A19D4902B00E2FD62 /* APCStudyOverviewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCStudyOverviewViewController.xib; sourceTree = "<group>"; };
+		5BF5C90619D9E208007928D4 /* APCUser+HealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCUser+HealthKit.h"; sourceTree = "<group>"; };
+		5BF5C90719D9E208007928D4 /* APCUser+HealthKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCUser+HealthKit.m"; sourceTree = "<group>"; };
 		7BA4BBF219D4893700BC4023 /* APCMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMapViewController.h; sourceTree = "<group>"; };
 		7BA4BBF319D4893700BC4023 /* APCMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMapViewController.m; sourceTree = "<group>"; };
 		7BA4BBF419D4893700BC4023 /* APCMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCMapViewController.xib; sourceTree = "<group>"; };
@@ -1022,6 +1026,8 @@
 			children = (
 				F5A63F1219D5EAD100284006 /* APCUser.h */,
 				F5A63F1319D5EAD100284006 /* APCUser.m */,
+				5BF5C90619D9E208007928D4 /* APCUser+HealthKit.h */,
+				5BF5C90719D9E208007928D4 /* APCUser+HealthKit.m */,
 			);
 			name = "Memory Only Objects";
 			sourceTree = "<group>";
@@ -1137,6 +1143,7 @@
 				F588BA8E19D21F1300692473 /* APCSegmentControl.h in Headers */,
 				F588BA0619D21EFE00692473 /* NSError+APCNetworkManager.h in Headers */,
 				F588BA1019D21EFE00692473 /* UIBarButtonItem+Appearance.h in Headers */,
+				5BF5C90819D9E208007928D4 /* APCUser+HealthKit.h in Headers */,
 				F588BA1419D21EFE00692473 /* UIScrollView+Helper.h in Headers */,
 				F588B9FC19D21EFE00692473 /* APCStepProgressBar+Appearance.h in Headers */,
 				F588BA9719D21F1300692473 /* YMLChartEnumerations.h in Headers */,
@@ -1311,6 +1318,7 @@
 				F5179CC119D0917D001DCCB7 /* APCTask.m in Sources */,
 				F5A63F1519D5EAD100284006 /* APCUser.m in Sources */,
 				F588BA8B19D21F1300692473 /* APCConfirmationView.m in Sources */,
+				5BF5C90919D9E208007928D4 /* APCUser+HealthKit.m in Sources */,
 				F588BA7719D21F1300692473 /* APCSignupCriteriaViewController.m in Sources */,
 				F588BA0919D21EFE00692473 /* NSManagedObject+APCHelper.m in Sources */,
 				F588BA1719D21EFE00692473 /* UISegmentedControl+Appearance.m in Sources */,
