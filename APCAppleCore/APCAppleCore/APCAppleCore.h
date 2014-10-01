@@ -24,8 +24,6 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCDataSubstrate+CoreData.h>
 #import <APCAppleCore/APCDataSubstrate+ResearchKit.h>
 #import <APCAppleCore/APCModel.h>
-#import <APCAppleCore/APCNetworkManager.h>
-#import <APCAppleCore/APCSageNetworkManager.h>
 #import <APCAppleCore/APCScheduler.h>
 #import <APCAppleCore/APCScheduleInterpreter.h>
 #import <APCAppleCore/APCPassiveLocationTracking.h>

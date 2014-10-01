@@ -107,12 +107,6 @@
 		F5179CC219D0917D001DCCB7 /* APCTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179BD819D0917D001DCCB7 /* APCTask.m */; };
 		F5179CC319D0917D001DCCB7 /* MODEL_README in Resources */ = {isa = PBXBuildFile; fileRef = F5179BD919D0917D001DCCB7 /* MODEL_README */; };
 		F5179CC419D0917D001DCCB7 /* MODEL_README in Resources */ = {isa = PBXBuildFile; fileRef = F5179BD919D0917D001DCCB7 /* MODEL_README */; };
-		F5179CCB19D0917D001DCCB7 /* APCNetworkManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F5179BE119D0917D001DCCB7 /* APCNetworkManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F5179CCC19D0917D001DCCB7 /* APCNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179BE219D0917D001DCCB7 /* APCNetworkManager.m */; };
-		F5179CCD19D0917D001DCCB7 /* APCNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179BE219D0917D001DCCB7 /* APCNetworkManager.m */; };
-		F5179CCE19D0917D001DCCB7 /* APCSageNetworkManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F5179BE319D0917D001DCCB7 /* APCSageNetworkManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F5179CCF19D0917D001DCCB7 /* APCSageNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179BE419D0917D001DCCB7 /* APCSageNetworkManager.m */; };
-		F5179CD019D0917D001DCCB7 /* APCSageNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179BE419D0917D001DCCB7 /* APCSageNetworkManager.m */; };
 		F5179CD119D0917D001DCCB7 /* APCParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = F5179BE619D0917D001DCCB7 /* APCParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5179CD219D0917D001DCCB7 /* APCParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179BE719D0917D001DCCB7 /* APCParameters.m */; };
 		F5179CD319D0917D001DCCB7 /* APCParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179BE719D0917D001DCCB7 /* APCParameters.m */; };
@@ -358,10 +352,6 @@
 		F5179BD719D0917D001DCCB7 /* APCTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTask.h; sourceTree = "<group>"; };
 		F5179BD819D0917D001DCCB7 /* APCTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTask.m; sourceTree = "<group>"; };
 		F5179BD919D0917D001DCCB7 /* MODEL_README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MODEL_README; sourceTree = "<group>"; };
-		F5179BE119D0917D001DCCB7 /* APCNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCNetworkManager.h; sourceTree = "<group>"; };
-		F5179BE219D0917D001DCCB7 /* APCNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCNetworkManager.m; sourceTree = "<group>"; };
-		F5179BE319D0917D001DCCB7 /* APCSageNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSageNetworkManager.h; sourceTree = "<group>"; };
-		F5179BE419D0917D001DCCB7 /* APCSageNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSageNetworkManager.m; sourceTree = "<group>"; };
 		F5179BE619D0917D001DCCB7 /* APCParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCParameters.h; sourceTree = "<group>"; };
 		F5179BE719D0917D001DCCB7 /* APCParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCParameters.m; sourceTree = "<group>"; };
 		F5179BEA19D0917D001DCCB7 /* APCScheduleInterpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleInterpreter.h; sourceTree = "<group>"; };
@@ -612,7 +602,6 @@
 				F5179BA319D0917D001DCCB7 /* DataMonitor */,
 				F5179BA619D0917D001DCCB7 /* DataSubstrate */,
 				F588B9D519D21EFE00692473 /* Library */,
-				F5179BE019D0917D001DCCB7 /* NetworkLayer */,
 				F5179BE519D0917D001DCCB7 /* Parameters */,
 				5B29CE3319D3767D00E2FD62 /* Permissions */,
 				F5C1DC2419D23044006527EA /* Resources */,
@@ -696,17 +685,6 @@
 				F5A63F1119D5EAAE00284006 /* Memory Only Objects */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		F5179BE019D0917D001DCCB7 /* NetworkLayer */ = {
-			isa = PBXGroup;
-			children = (
-				F5179BE119D0917D001DCCB7 /* APCNetworkManager.h */,
-				F5179BE219D0917D001DCCB7 /* APCNetworkManager.m */,
-				F5179BE319D0917D001DCCB7 /* APCSageNetworkManager.h */,
-				F5179BE419D0917D001DCCB7 /* APCSageNetworkManager.m */,
-			);
-			path = NetworkLayer;
 			sourceTree = "<group>";
 		};
 		F5179BE519D0917D001DCCB7 /* Parameters */ = {
@@ -1089,7 +1067,6 @@
 				5B29CE4019D376CA00E2FD62 /* APCSignUpPermissionsViewController.h in Headers */,
 				F5179CA219D0917D001DCCB7 /* APCQuestionResult.h in Headers */,
 				F5179CDC19D0917D001DCCB7 /* Reachability.h in Headers */,
-				F5179CCE19D0917D001DCCB7 /* APCSageNetworkManager.h in Headers */,
 				F5179C8A19D0917D001DCCB7 /* APCDataResult+AddOn.h in Headers */,
 				F5179C9019D0917D001DCCB7 /* APCDBStatus+AddOn.h in Headers */,
 				F5179B2F19D09128001DCCB7 /* APCAppleCore.h in Headers */,
@@ -1127,7 +1104,6 @@
 				F5179C8419D0917D001DCCB7 /* APCConsentResult+AddOn.h in Headers */,
 				F5179CAB19D0917D001DCCB7 /* APCSchedule+AddOn.h in Headers */,
 				F5179CB119D0917D001DCCB7 /* APCScheduledTask+AddOn.h in Headers */,
-				F5179CCB19D0917D001DCCB7 /* APCNetworkManager.h in Headers */,
 				F541541819D6029C00B819C9 /* APCStoredUserData.h in Headers */,
 				F588BA6F19D21F1300692473 /* APCIntroVideoViewController.h in Headers */,
 				F588BA0219D21EFE00692473 /* NSDate+Helper.h in Headers */,
@@ -1336,7 +1312,6 @@
 				F541541919D6029C00B819C9 /* APCStoredUserData.m in Sources */,
 				F5B4213A19D23D7700F9CD69 /* APCDebugWindow.m in Sources */,
 				F588BA9D19D21F1300692473 /* YMLTimeLineChartView.m in Sources */,
-				F5179CCF19D0917D001DCCB7 /* APCSageNetworkManager.m in Sources */,
 				F588BA6D19D21F1300692473 /* APCForgotPasswordViewController.m in Sources */,
 				F5179C7919D0917D001DCCB7 /* APCDataMonitor.m in Sources */,
 				F5179CB819D0917D001DCCB7 /* APCSurveyResult+AddOn.m in Sources */,
@@ -1364,7 +1339,6 @@
 				F588BA8F19D21F1300692473 /* APCSegmentControl.m in Sources */,
 				F588BA6B19D21F1300692473 /* APCTableViewItem.m in Sources */,
 				F5179C8E19D0917D001DCCB7 /* APCDataResult.m in Sources */,
-				F5179CCC19D0917D001DCCB7 /* APCNetworkManager.m in Sources */,
 				F588BA9B19D21F1300692473 /* YMLLineChartView.m in Sources */,
 				F5179C9719D0917D001DCCB7 /* APCFileResult+AddOn.m in Sources */,
 				F588BA6719D21F1300692473 /* APCUserInfoCell.m in Sources */,
@@ -1402,7 +1376,6 @@
 				F5179CBF19D0917D001DCCB7 /* APCTask+AddOn.m in Sources */,
 				F5179CB019D0917D001DCCB7 /* APCSchedule.m in Sources */,
 				F5179CDE19D0917D001DCCB7 /* Reachability.m in Sources */,
-				F5179CCD19D0917D001DCCB7 /* APCNetworkManager.m in Sources */,
 				F5179CA719D0917D001DCCB7 /* APCResult+AddOn.m in Sources */,
 				F5179C7D19D0917D001DCCB7 /* APCDataSubstrate+CoreData.m in Sources */,
 				F541540D19D5F1DE00B819C9 /* APCUser.m in Sources */,
@@ -1412,7 +1385,6 @@
 				F5179CAA19D0917D001DCCB7 /* APCResult.m in Sources */,
 				F541541F19D60F3400B819C9 /* HKHealthStore+APCExtensions.m in Sources */,
 				F5179C9B19D0917D001DCCB7 /* APCFileResult.m in Sources */,
-				F5179CD019D0917D001DCCB7 /* APCSageNetworkManager.m in Sources */,
 				F5179C8C19D0917D001DCCB7 /* APCDataResult+AddOn.m in Sources */,
 				F5179CBC19D0917D001DCCB7 /* APCSurveyResult.m in Sources */,
 				F5179CB319D0917D001DCCB7 /* APCScheduledTask+AddOn.m in Sources */,
