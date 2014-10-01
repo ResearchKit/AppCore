@@ -13,71 +13,11 @@
 /// Global prefix for Bridge API URLs, specific to each app. Must be set before attempting to access Bridge APIs.
 extern NSString *gSBBAppURLPrefix;
 
-/*!
- * @brief An enumeration of the available server environments.
+/**
+ *  This protocol defines the interface to the SBBAuthManager's non-constructor, non-initializer methods. The interface is
+ *  abstracted out for use in mock objects for testing, and to allow selecting among multiple implementations at runtime.
  */
-typedef NS_ENUM(NSInteger, SBBEnvironment) {
-  /// Production environment
-  SBBEnvironmentProd,
-  
-  /// Staging environment, for testing before deploying to production.
-  SBBEnvironmentStaging,
-  
-  /// Development environment, for running against the latest unreleased platform code.
-  SBBEnvironmentDev,
-  
-  /// Custom environment for testing.
-  SBBEnvironmentCustom
-};
-
-/*!
- * This class handles communication with the Bridge authentication API, as well as maintaining
- * authentication credentials obtained therefrom.
- */
-@interface SBBAuthManager : NSObject<SBBComponent>
-
-/*!
- * Return the default (shared) component of this type (SBBAuthManager), configured with the gSBBAppURLPrefix and
- * the default environment. In debug builds, this is SBBEnvironmentStaging; in release builds, SBBEnvironmentProd.
- * Also configures the component to use the default SBBNetworkManager.
- *
- * @warning gSBBAppURLPrefix *must* be set before calling this method, or it will return nil.
- * @return The default (shared) SBBAuthManager component.
- */
-+ (instancetype)defaultComponent;
-
-/*!
- * Return an SBBAuthManager component configured for the specified environment, appURLPrefix, and baseURLPath
- * with a default network manager.
- * 
- * Use this method directly only if you need to redirect your Bridge API accesses to a test server.
- *
- * @param environment The SBBEnvironment to use (prod, staging, dev).
- * @param prefix The app-specific URL prefix to use (typically set in gSBBAppURLPrefix).
- * @param baseURLPath The URL path to prefix with the appURLPrefix and environment string (e.g. @"sagebridge.org")
- * @return An SBBAuthManager component configured for an environment, appURLPrefix, and baseURLPath.
- */
-+ (instancetype)authManagerForEnvironment:(SBBEnvironment)environment appURLPrefix:(NSString *)prefix baseURLPath:(NSString *)baseURLPath;
-
-/*!
- * Return an SBBAuthManager component configured for the specified baseURL with a default network manager.
- *
- * Use this if you need to test against a custom server. Implies a custom environment for credential storage purposes.
- *
- * @param networkManager The SBBNetworkManager to use.
- * @return An SBBAuthManager component configured with a specific network manager.
- */
-+ (instancetype)authManagerWithBaseURL:(NSString *)baseURL;
-
-/*!
- * Return an SBBAuthManager component configured with the specified network manager.
- *
- * Use this if you need to run with a custom network manager. Also implies a custom environment for credential storage purposes.
- *
- * @param networkManager The SBBNetworkManager to use.
- * @return An SBBAuthManager component configured with a specific network manager.
- */
-+ (instancetype)authManagerWithNetworkManager:(SBBNetworkManager *)networkManager;
+@protocol SBBAuthManagerProtocol <NSObject>
 
 /*!
  * Sign up for an account with an email address, userName, and password. An email will be sent to the
@@ -118,5 +58,64 @@ typedef NS_ENUM(NSInteger, SBBEnvironment) {
  * @param completion A SBBNetworkManagerCompletionBlock to be called upon completion.
  */
 - (void)ensureSignedInWithCompletion:(SBBNetworkManagerCompletionBlock)completion;
+
+/**
+ *  This method is used by other API manager components to inject the session token header for authentication.
+ *
+ *  @param headers A mutable dictionary containing HTTP header key-value (string) pairs, to which to add the auth header.
+ */
+- (void)addAuthHeaderToHeaders:(NSMutableDictionary *)headers;
+
+@end
+
+/*!
+ * This class handles communication with the Bridge authentication API, as well as maintaining
+ * authentication credentials obtained therefrom.
+ */
+@interface SBBAuthManager : NSObject<SBBComponent, SBBAuthManagerProtocol>
+
+/*!
+ * Return the default (shared) component of this type (SBBAuthManager), configured with the gSBBAppURLPrefix and
+ * the default environment. In debug builds, this is SBBEnvironmentStaging; in release builds, SBBEnvironmentProd.
+ * Also configures the component to use the SBBNetworkManager currently registered the first time this is called,
+ * or the default if none was registered yet.
+ *
+ * @warning gSBBAppURLPrefix *must* be set before calling this method, or it will return nil.
+ * @return The default (shared) SBBAuthManager component.
+ */
++ (instancetype)defaultComponent;
+
+/*!
+ * Return an SBBAuthManager component configured for the specified environment, appURLPrefix, and baseURLPath
+ * with a default network manager.
+ * 
+ * Use this method directly only if you need to redirect your Bridge API accesses to a test server.
+ *
+ * @param environment The SBBEnvironment to use (prod, staging, dev).
+ * @param prefix The app-specific URL prefix to use (typically set in gSBBAppURLPrefix).
+ * @param baseURLPath The URL path to prefix with the appURLPrefix and environment string (e.g. @"sagebridge.org")
+ * @return An SBBAuthManager component configured for an environment, appURLPrefix, and baseURLPath.
+ */
++ (instancetype)authManagerForEnvironment:(SBBEnvironment)environment appURLPrefix:(NSString *)prefix baseURLPath:(NSString *)baseURLPath;
+
+/*!
+ * Return an SBBAuthManager component configured for the specified baseURL with a default network manager.
+ *
+ * Use this if you need to test against a custom server. Implies a custom environment for credential storage purposes.
+ *
+ * @param networkManager The SBBNetworkManager to use.
+ * @return An SBBAuthManager component configured with a specific network manager.
+ */
++ (instancetype)authManagerWithBaseURL:(NSString *)baseURL;
+
+/*!
+ * Return an SBBAuthManager component configured with the specified network manager.
+ *
+ * Use this if you need to run with a custom network manager. Also implies a custom environment for credential storage purposes.
+ *
+ * @param networkManager The SBBNetworkManager to use.
+ * @return An SBBAuthManager component configured with a specific network manager.
+ */
++ (instancetype)authManagerWithNetworkManager:(id<SBBNetworkManagerProtocol>)networkManager;
 
 @end

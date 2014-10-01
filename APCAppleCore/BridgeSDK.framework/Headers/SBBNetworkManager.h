@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SBBComponent.h"
 
 /**
  *  Typedef for SBBNetworkManager methods' completion block.
@@ -17,15 +18,26 @@
  */
 typedef void (^SBBNetworkManagerCompletionBlock)(NSURLSessionDataTask *task, id responseObject, NSError *error);
 
+/*!
+ * @brief An enumeration of the available server environments.
+ */
+typedef NS_ENUM(NSInteger, SBBEnvironment) {
+  /// Production environment
+  SBBEnvironmentProd,
+  
+  /// Staging environment, for testing before deploying to production.
+  SBBEnvironmentStaging,
+  
+  /// Development environment, for running against the latest unreleased platform code.
+  SBBEnvironmentDev,
+  
+  /// Custom environment for testing.
+  SBBEnvironmentCustom
+};
 
-@interface SBBNetworkManager : NSObject
+@protocol SBBNetworkManagerProtocol <NSObject>
 
-#pragma mark - Init & Accessor Methods
-
-- (instancetype) initWithBaseURL: (NSString*) baseURL;
-
-- (BOOL) isInternetConnected;
-- (BOOL) isServerReachable;
+@property (nonatomic) SBBEnvironment environment;
 
 #pragma mark - Basic HTTP Methods
 
@@ -53,5 +65,19 @@ typedef void (^SBBNetworkManagerCompletionBlock)(NSURLSessionDataTask *task, id 
                          headers:(NSDictionary *)headers
                       parameters:(id)parameters
                       completion:(SBBNetworkManagerCompletionBlock)completion;
+
+@end
+
+
+@interface SBBNetworkManager : NSObject<SBBComponent, SBBNetworkManagerProtocol>
+
++ (instancetype)networkManagerForEnvironment:(SBBEnvironment)environment appURLPrefix:(NSString *)prefix baseURLPath:(NSString *)baseURLPath;
+
+#pragma mark - Init & Accessor Methods
+
+- (instancetype) initWithBaseURL: (NSString*) baseURL;
+
+- (BOOL) isInternetConnected;
+- (BOOL) isServerReachable;
 
 @end

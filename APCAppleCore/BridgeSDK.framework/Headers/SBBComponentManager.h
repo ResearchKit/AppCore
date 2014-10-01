@@ -18,9 +18,9 @@
  *
  *  @param componentClass The class for which to retrieve the registered component instance.
  *
- *  @return The component instance registered for this class, cast to the correct type.
+ *  @return The component instance registered for this class, cast to an id implementing the corresponding protocol.
  */
-#define SBBComponent(componentClass) ((componentClass *)[SBBComponentManager component:[componentClass class]])
+#define SBBComponent(componentClass) ((id<componentClass ## Protocol>)[SBBComponentManager component:[componentClass class]])
 
 /**
  *  A convenience macro for obtaining the component instance registered for a given componentClass when that instance

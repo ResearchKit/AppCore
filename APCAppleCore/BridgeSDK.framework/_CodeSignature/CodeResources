@@ -6,11 +6,15 @@
 	<dict>
 		<key>Headers/BridgeSDK.h</key>
 		<data>
-		tbrxLLh9QyLVDhUUOd0zSeXR7ac=
+		3L9etOxQzwFDvInAicSy0rX+3PE=
 		</data>
 		<key>Headers/SBBAuthManager.h</key>
 		<data>
-		8svzqkrSDfFdf4RgP/Dd0VQd0WI=
+		Kx5MWIVC/G+Hzr/fW8ciq3G0jBU=
+		</data>
+		<key>Headers/SBBBridgeObject.h</key>
+		<data>
+		WEZQTXhrjmVlla+11fqMrKGXlZQ=
 		</data>
 		<key>Headers/SBBComponent.h</key>
 		<data>
@@ -18,7 +22,11 @@
 		</data>
 		<key>Headers/SBBComponentManager.h</key>
 		<data>
-		bGMZRVF2IiBGX0hUQ737CpATYRA=
+		Kud+JQ4WBxwgkuoHGYpHKazrhGs=
+		</data>
+		<key>Headers/SBBConsentManager.h</key>
+		<data>
+		3i2lIkivUFzEDtYP31F5B1e7wTU=
 		</data>
 		<key>Headers/SBBNetworkErrors.h</key>
 		<data>
@@ -26,7 +34,19 @@
 		</data>
 		<key>Headers/SBBNetworkManager.h</key>
 		<data>
-		nPKfb6fSRGXNQy0wrPQdB6TwKUw=
+		o8ROtMr0gbK/AIKUWBDuqnzLzqg=
+		</data>
+		<key>Headers/SBBObjectManager.h</key>
+		<data>
+		hZ1yogE5yg0MwMKYw33pdpLvfVY=
+		</data>
+		<key>Headers/SBBProfileManager.h</key>
+		<data>
+		6rnZl5rLMGA0DWxTohChDMjWhKY=
+		</data>
+		<key>Headers/SBBUserProfile.h</key>
+		<data>
+		ay20YDrtnn5SV0xBTVMjrl4kLZA=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -37,11 +57,15 @@
 	<dict>
 		<key>Headers/BridgeSDK.h</key>
 		<data>
-		tbrxLLh9QyLVDhUUOd0zSeXR7ac=
+		3L9etOxQzwFDvInAicSy0rX+3PE=
 		</data>
 		<key>Headers/SBBAuthManager.h</key>
 		<data>
-		8svzqkrSDfFdf4RgP/Dd0VQd0WI=
+		Kx5MWIVC/G+Hzr/fW8ciq3G0jBU=
+		</data>
+		<key>Headers/SBBBridgeObject.h</key>
+		<data>
+		WEZQTXhrjmVlla+11fqMrKGXlZQ=
 		</data>
 		<key>Headers/SBBComponent.h</key>
 		<data>
@@ -49,7 +73,11 @@
 		</data>
 		<key>Headers/SBBComponentManager.h</key>
 		<data>
-		bGMZRVF2IiBGX0hUQ737CpATYRA=
+		Kud+JQ4WBxwgkuoHGYpHKazrhGs=
+		</data>
+		<key>Headers/SBBConsentManager.h</key>
+		<data>
+		3i2lIkivUFzEDtYP31F5B1e7wTU=
 		</data>
 		<key>Headers/SBBNetworkErrors.h</key>
 		<data>
@@ -57,7 +85,19 @@
 		</data>
 		<key>Headers/SBBNetworkManager.h</key>
 		<data>
-		nPKfb6fSRGXNQy0wrPQdB6TwKUw=
+		o8ROtMr0gbK/AIKUWBDuqnzLzqg=
+		</data>
+		<key>Headers/SBBObjectManager.h</key>
+		<data>
+		hZ1yogE5yg0MwMKYw33pdpLvfVY=
+		</data>
+		<key>Headers/SBBProfileManager.h</key>
+		<data>
+		6rnZl5rLMGA0DWxTohChDMjWhKY=
+		</data>
+		<key>Headers/SBBUserProfile.h</key>
+		<data>
+		ay20YDrtnn5SV0xBTVMjrl4kLZA=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
