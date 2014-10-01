@@ -70,4 +70,20 @@
     NSLog(@"ERROR GENERATED: %@", self);
 }
 
+- (NSString *) message {
+    id localError = self.userInfo[APC_ORIGINAL_ERROR_KEY];
+    
+    NSString *message;
+    
+    if ([localError isKindOfClass:[NSError class]]) {
+        message = [(NSError *)localError localizedDescription];
+    }
+    else {
+        message = [localError objectForKey:@"message"];
+    }
+    
+    return message;
+}
+
+
 @end

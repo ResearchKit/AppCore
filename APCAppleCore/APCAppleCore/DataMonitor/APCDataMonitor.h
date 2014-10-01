@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class APCDataSubstrate, APCSageNetworkManager, APCScheduler;
+@class APCDataSubstrate, APCScheduler;
 
 //Assumes Network Manager is a Sage Network Manager
 
 @interface APCDataMonitor : NSObject
 
 
-- (instancetype)initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate networkManager: (APCSageNetworkManager*) networkManager scheduler: (APCScheduler*) scheduler;
+- (instancetype)initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate scheduler: (APCScheduler*) scheduler;
 
 - (void) appBecameActive;
 - (void) backgroundFetch:(void (^)(UIBackgroundFetchResult))completionHandler;

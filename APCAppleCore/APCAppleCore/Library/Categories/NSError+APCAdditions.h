@@ -21,5 +21,6 @@
 #pragma mark - Error handlers
 /*********************************************************************************/
 - (void) handle;
+- (NSString*) message;
 
 @end
