@@ -22,11 +22,11 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 
 @property (nonatomic, strong) CMMotionActivityManager *motionActivityManager;
 @property (nonatomic, strong) CLLocationManager *locationManager;
-@property (nonatomic, strong) HKHealthStore *healthStore; //TODO: Only one HKHealthStore per app. Use the centralized one later.
+@property (nonatomic, strong) HKHealthStore *healthStore;
 
 @property (nonatomic) APCPermissionStatus coreMotionPermissionStatus;
 
-@property (nonatomic, strong) APCPermissionsBlock completionBlock;
+@property (nonatomic, copy) APCPermissionsBlock completionBlock;
 
 @end
 
@@ -123,12 +123,9 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                 
                 NSArray *dataTypesToWrite = @[[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass]];
                 
-                __weak typeof(self) weakSelf = self;
-                
                 [self.healthStore requestAuthorizationToShareTypes:[NSSet setWithArray:dataTypesToWrite] readTypes:[NSSet setWithArray:dataTypesToRead] completion:^(BOOL success, NSError *error) {
-                    if (weakSelf.completionBlock) {
-                        weakSelf.completionBlock(success, error);
-                        weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(success, error);
                     }
                 }];
                 
