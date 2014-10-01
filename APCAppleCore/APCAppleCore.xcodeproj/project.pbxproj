@@ -173,7 +173,7 @@
 		F588BA6519D21F1300692473 /* APCCriteriaCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F588BA2319D21F1300692473 /* APCCriteriaCell.xib */; };
 		F588BA6619D21F1300692473 /* APCUserInfoCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA2419D21F1300692473 /* APCUserInfoCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA6719D21F1300692473 /* APCUserInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA2519D21F1300692473 /* APCUserInfoCell.m */; };
-		F588BA6819D21F1300692473 /* APCProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA2719D21F1300692473 /* APCProfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F588BA6819D21F1300692473 /* APCProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA2719D21F1300692473 /* APCProfile.h */; };
 		F588BA6919D21F1300692473 /* APCProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA2819D21F1300692473 /* APCProfile.m */; };
 		F588BA6A19D21F1300692473 /* APCTableViewItem.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA2919D21F1300692473 /* APCTableViewItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA6B19D21F1300692473 /* APCTableViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA2A19D21F1300692473 /* APCTableViewItem.m */; };

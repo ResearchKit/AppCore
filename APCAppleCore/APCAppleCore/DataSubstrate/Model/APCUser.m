@@ -61,7 +61,7 @@ static NSString *const kSleepTimePropertyName = @"sleepTime";
             Weight : %@ \n\
             Wake Up Time : %@ \n\
             Sleep time : %@ \n\
-            ", self.firstName, self.lastName, self.userName, self.email, self.birthDate, self.biologicalSex, self.medicalConditions, self.medications, self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime];
+            ", self.firstName, self.lastName, self.userName, self.email, self.birthDate, (int) self.biologicalSex, self.medicalConditions, self.medications, (int) self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime];
 }
 
 - (void) loadStoredUserData

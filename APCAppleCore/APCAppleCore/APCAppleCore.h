@@ -28,7 +28,6 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCScheduleInterpreter.h>
 #import <APCAppleCore/APCPassiveLocationTracking.h>
 #import <APCAppleCore/APCParameters.h>
-#import <APCAppleCore/Reachability.h>
 #import <APCAppleCore/APCPermissionsManager.h>
 
 //UI
@@ -76,7 +75,6 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/NSBundle+Helper.h>
 #import <APCAppleCore/NSDate+Helper.h>
 #import <APCAppleCore/NSError+APCAdditions.h>
-#import <APCAppleCore/NSError+APCNetworkManager.h>
 #import <APCAppleCore/NSObject+Helper.h>
 #import <APCAppleCore/NSString+Helper.h>
 #import <APCAppleCore/UIAlertView+Helper.h>
