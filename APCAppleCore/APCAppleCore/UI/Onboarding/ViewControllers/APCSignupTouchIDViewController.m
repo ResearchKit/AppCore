@@ -12,7 +12,7 @@
 #import "APCStepProgressBar.h"
 #import "UIAlertView+Helper.h"
 #import "APCSignupTouchIDViewController.h"
-#import "APCSignupCriteriaViewController.h"
+#import "APCSignUpPermissionsViewController.h"
 
 @import LocalAuthentication;
 
@@ -73,10 +73,12 @@
 }
 
 - (void) addNavigationItems {
-    self.title = NSLocalizedString(@"Identification", @"");
+    self.title = NSLocalizedString(@"Sign Up", @"");
 }
 
 - (void) setupProgressBar {
+    
+    [self setStepNumber:3 title:NSLocalizedString(@"Identification", @"")];
     [self.stepProgressBar setCompletedSteps:1 animation:NO];
 }
 
@@ -135,7 +137,7 @@
 #pragma mark - Private Methods
 
 - (void) next {
-    [self.navigationController pushViewController:[APCSignupCriteriaViewController new] animated:YES];
+    [self.navigationController pushViewController:[APCSignUpPermissionsViewController new] animated:YES];
 }
 
 - (void) showFirstTry {

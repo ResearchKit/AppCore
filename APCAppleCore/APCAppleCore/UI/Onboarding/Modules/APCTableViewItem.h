@@ -103,7 +103,6 @@ typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
     kSignUpPermissionsTypeHealthKit,
     kSignUpPermissionsTypeLocation,
     kSignUpPermissionsTypePushNotifications,
-    
     kSignUpPermissionsTypeCoremotion,
 };
 

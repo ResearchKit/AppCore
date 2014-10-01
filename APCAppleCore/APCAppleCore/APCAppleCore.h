@@ -28,6 +28,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCSageNetworkManager.h>
 #import <APCAppleCore/APCScheduler.h>
 #import <APCAppleCore/APCScheduleInterpreter.h>
+#import <APCAppleCore/APCPassiveLocationTracking.h>
 #import <APCAppleCore/APCParameters.h>
 #import <APCAppleCore/Reachability.h>
 #import <APCAppleCore/APCPermissionsManager.h>
@@ -51,6 +52,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCSignupTouchIDViewController.h>
 #import <APCAppleCore/APCSignUpUserInfoViewController.h>
 #import <APCAppleCore/APCSignupViewController.h>
+#import <APCAppleCore/APCStudyOverviewViewController.h>
 #import <APCAppleCore/APCSpinnerViewController.h>
 #import <APCAppleCore/APCStepProgressBar.h>
 #import <APCAppleCore/APCTableViewItem.h>
@@ -88,6 +90,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/UITableView+Appearance.h>
 #import <APCAppleCore/UIView+Helper.h>
 #import <APCAppleCore/UIColor+Appearance.h>
+#import <APCAppleCore/HKHealthStore+APCExtensions.h>
 
 //Error Codes
 static NSString *const APC_ERROR_DOMAIN = @"com.ymedialabs.error_domain";
@@ -105,6 +108,7 @@ typedef NS_ENUM(NSInteger, APCNetworkErrorCodes)
 
 static NSString *const APCUserLoginNotification     = @"APCUserLoginNotification";
 static NSString *const APCUserLogOutNotification  = @"APCUserLogOutNotification";
+static NSString *const APCUserDidConsentNotification = @"APCUserDidConsentNotification";
 
 static NSString *const APCAppDidRegisterUserNotification            = @"APCAppDidRegisterUserNotification";
 static NSString *const APCAppDidFailToRegisterForRemoteNotification = @"APCAppDidFailToRegisterForRemoteNotifications";

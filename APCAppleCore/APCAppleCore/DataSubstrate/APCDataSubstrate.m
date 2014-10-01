@@ -9,6 +9,8 @@
 #import "APCDataSubstrate.h"
 #import "APCDataSubstrate+ResearchKit.h"
 #import "APCDataSubstrate+CoreData.h"
+#import "APCDataSubstrate+HealthKit.h"
+#import "APCModel.h"
 
 @implementation APCDataSubstrate
 
@@ -16,12 +18,22 @@
 {
     self = [super init];
     if (self) {
-        [self setUpResearchStudy:studyIdentifier];
         [self setUpCoreDataStackWithPersistentStorePath:storePath additionalModels:mergedModels];
+        [self setUpCurrentUser];
+        [self setUpResearchStudy:studyIdentifier];
+        [self setUpHealthKit];
     }
     return self;
 }
 
+- (void) setUpCurrentUser
+{
+    static APCUser * sharedUser = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedUser = [[APCUser alloc] init];
+    });
+}
 
 
 @end

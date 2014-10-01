@@ -9,7 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <ResearchKit/ResearchKit.h>
 #import <CoreData/CoreData.h>
+#import "APCPassiveLocationTracking.h"
+#import <HealthKit/HealthKit.h>
 
+@class APCUser;
 
 @interface APCDataSubstrate : NSObject <RKStudyDelegate>
 
@@ -19,10 +22,14 @@
 - (instancetype)initWithPersistentStorePath: (NSString*) storePath additionalModels:(NSManagedObjectModel *)mergedModels studyIdentifier: (NSString*) studyIdentifier;
 
 /*********************************************************************************/
-#pragma mark - ResearchKit Subsystem Public Properties
+#pragma mark - ResearchKit Subsystem Public Properties & Passive Location Tracking
 /*********************************************************************************/
+@property (assign) BOOL justJoined;
+@property (strong, nonatomic) NSString *logDirectory;
+@property (strong, nonatomic) RKDataLoggerManager *logManager;
+@property (nonatomic, strong) APCUser * currentUser;
 
-
+@property (strong, nonatomic) APCPassiveLocationTracking *passiveLocationTracking;
 
 /*********************************************************************************/
 #pragma mark - Core Data Subsystem Public Properties
@@ -33,6 +40,11 @@
 //Persistent context: Parent of main context.
 //Please create a child context of persistentContext for any background processing tasks
 @property (nonatomic, strong) NSManagedObjectContext * persistentContext;
+
+/*********************************************************************************/
+#pragma mark - Healthkit Public Properties
+/*********************************************************************************/
+@property (nonatomic, strong) HKHealthStore * healthStore;
 
 
 /*********************************************************************************/
@@ -45,5 +57,9 @@
 //Core Data Subsystem
 @property (nonatomic, strong) NSPersistentStoreCoordinator * persistentStoreCoordinator;
 @property (nonatomic, strong) NSManagedObjectModel * managedObjectModel;
+
+//HealthKit Subsystem
+
+
 
 @end
