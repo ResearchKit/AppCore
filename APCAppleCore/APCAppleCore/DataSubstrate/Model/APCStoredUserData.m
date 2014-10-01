@@ -17,7 +17,8 @@
 @dynamic email;
 @dynamic medicalConditions;
 @dynamic medications;
-@dynamic consented;
+@dynamic serverConsented;
+@dynamic userConsented;
 @dynamic wakeUpTime;
 @dynamic sleepTime;
 

@@ -290,8 +290,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 - (void)consentViewControllerDidComplete: (RKConsentViewController *)consentViewController
 {
     [self dismissViewControllerAnimated:YES completion:^{
-        //TODO: Call this setter after server confirmed that user has consented
-        [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.consented = YES;
+        [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
         [self startSignUp];
     }];
 }

@@ -12,6 +12,7 @@
 
 static NSString *const kLoggedInKey = @"LoggedIn";
 static NSString *const kConsentedPropertyName = @"consented";
+static NSString *const kUserConsentedPropertyName = @"userConsented";
 static NSString *const kFirstNamePropertyName = @"firstName";
 static NSString *const kLastNamePropertyName = @"lastName";
 static NSString *const kUserNamePropertyName = @"userName";
@@ -90,7 +91,8 @@ static NSString *const kSleepTimePropertyName = @"sleepTime";
 
 - (void) copyPropertiesFromStoredUserData: (APCStoredUserData*) storedUserData
 {
-    _consented = [storedUserData.consented boolValue];
+    _consented = [storedUserData.serverConsented boolValue];
+    _userConsented = [storedUserData.userConsented boolValue];
     _firstName = [storedUserData.firstName copy];
     _lastName = [storedUserData.lastName copy];
     _medicalConditions = [storedUserData.medicalConditions copy];
@@ -128,6 +130,12 @@ static NSString *const kSleepTimePropertyName = @"sleepTime";
     _consented = consented;
     [self updateStoredProperty:kConsentedPropertyName withValue:@(consented)];
     [[NSNotificationCenter defaultCenter] postNotificationName:APCUserDidConsentNotification object:nil];
+}
+
+- (void)setUserConsented:(BOOL)userConsented
+{
+    _userConsented = userConsented;
+    [self updateStoredProperty:kUserConsentedPropertyName withValue:@(userConsented)];
 }
 
 - (void) setFirstName:(NSString *)firstName

@@ -18,7 +18,8 @@
 @property (nonatomic, retain) NSString * email;
 @property (nonatomic, retain) NSString * medicalConditions;
 @property (nonatomic, retain) NSString * medications;
-@property (nonatomic, retain) NSNumber * consented;
+@property (nonatomic, retain) NSNumber * serverConsented;
+@property (nonatomic, retain) NSNumber * userConsented;
 @property (nonatomic, retain) NSDate * wakeUpTime;
 @property (nonatomic, retain) NSDate * sleepTime;
 

@@ -101,7 +101,8 @@ typedef NS_ENUM(NSInteger, APCNetworkErrorCodes)
     kAPCServerPreconditionNotMet = -1004
 };
 
-static NSString *const APCUserLoginNotification     = @"APCUserLoginNotification";
+static NSString *const APCUserSignedUpNotification     = @"APCUserSignedUpNotification";
+static NSString *const APCUserSignedInNotification     = @"APCUserSignedInNotification";
 static NSString *const APCUserLogOutNotification  = @"APCUserLogOutNotification";
 static NSString *const APCUserDidConsentNotification = @"APCUserDidConsentNotification";
 

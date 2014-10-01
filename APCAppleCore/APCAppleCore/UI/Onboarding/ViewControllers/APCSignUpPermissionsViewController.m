@@ -19,7 +19,7 @@
 
 static NSString * const kSignUpPermissionsCellIdentifier = @"PermissonsCell";
 static CGFloat const kTableViewRowHeight                 = 165.0f;
-static NSString *const kLoggedInKey = @"LoggedIn";
+static NSString *const kSignedUpKey = @"SignedUp";
 
 @interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
 
@@ -239,9 +239,9 @@ static NSString *const kLoggedInKey = @"LoggedIn";
 
 - (void) postLoginNotification
 {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kLoggedInKey];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kSignedUpKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [[NSNotificationCenter defaultCenter] postNotificationName:(NSString *)APCUserLoginNotification object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:(NSString *)APCUserSignedUpNotification object:nil];
 }
 
 #pragma mark - Permissions
