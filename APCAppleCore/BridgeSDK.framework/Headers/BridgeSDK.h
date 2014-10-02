@@ -41,7 +41,7 @@ static SBBEnvironment gDefaultEnvironment = kDefaultEnvironment;
   
 @interface BridgeSDK : NSObject
 
-/**
+/*!
  *  Set up the Bridge SDK for the given app prefix and server environment. Usually you would only call this version
  * of the method from test suites, or if you have a non-DEBUG build configuration that you don't want running against
  * the production server environment. Otherwise call the version of the setupWithAppPrefix: method that doesn't

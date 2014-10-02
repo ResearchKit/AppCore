@@ -6,11 +6,11 @@
 	<dict>
 		<key>Headers/BridgeSDK.h</key>
 		<data>
-		3L9etOxQzwFDvInAicSy0rX+3PE=
+		QWcksxzjp+d8NpC0g4i0+VS59Ug=
 		</data>
 		<key>Headers/SBBAuthManager.h</key>
 		<data>
-		Kx5MWIVC/G+Hzr/fW8ciq3G0jBU=
+		xmCRp6YxSwI6Q8nqEuxUpGP1gKs=
 		</data>
 		<key>Headers/SBBBridgeObject.h</key>
 		<data>
@@ -22,11 +22,11 @@
 		</data>
 		<key>Headers/SBBComponentManager.h</key>
 		<data>
-		Kud+JQ4WBxwgkuoHGYpHKazrhGs=
+		LRV+3pXZB+bq0rSWMchE53bTHOo=
 		</data>
 		<key>Headers/SBBConsentManager.h</key>
 		<data>
-		3i2lIkivUFzEDtYP31F5B1e7wTU=
+		Qu+Wyp4k0EZxrRaWTOmLnzlsrJ4=
 		</data>
 		<key>Headers/SBBNetworkErrors.h</key>
 		<data>
@@ -34,15 +34,15 @@
 		</data>
 		<key>Headers/SBBNetworkManager.h</key>
 		<data>
-		o8ROtMr0gbK/AIKUWBDuqnzLzqg=
+		/bmMHVubQRaGss3hymnjSSM0xRk=
 		</data>
 		<key>Headers/SBBObjectManager.h</key>
 		<data>
-		hZ1yogE5yg0MwMKYw33pdpLvfVY=
+		QwOcuc8ui+FYv2gxPk+bMMtkc2Q=
 		</data>
 		<key>Headers/SBBProfileManager.h</key>
 		<data>
-		6rnZl5rLMGA0DWxTohChDMjWhKY=
+		Vr9+UqJRAjb4yrRxw9SmY2JVm2E=
 		</data>
 		<key>Headers/SBBUserProfile.h</key>
 		<data>
@@ -57,11 +57,11 @@
 	<dict>
 		<key>Headers/BridgeSDK.h</key>
 		<data>
-		3L9etOxQzwFDvInAicSy0rX+3PE=
+		QWcksxzjp+d8NpC0g4i0+VS59Ug=
 		</data>
 		<key>Headers/SBBAuthManager.h</key>
 		<data>
-		Kx5MWIVC/G+Hzr/fW8ciq3G0jBU=
+		xmCRp6YxSwI6Q8nqEuxUpGP1gKs=
 		</data>
 		<key>Headers/SBBBridgeObject.h</key>
 		<data>
@@ -73,11 +73,11 @@
 		</data>
 		<key>Headers/SBBComponentManager.h</key>
 		<data>
-		Kud+JQ4WBxwgkuoHGYpHKazrhGs=
+		LRV+3pXZB+bq0rSWMchE53bTHOo=
 		</data>
 		<key>Headers/SBBConsentManager.h</key>
 		<data>
-		3i2lIkivUFzEDtYP31F5B1e7wTU=
+		Qu+Wyp4k0EZxrRaWTOmLnzlsrJ4=
 		</data>
 		<key>Headers/SBBNetworkErrors.h</key>
 		<data>
@@ -85,15 +85,15 @@
 		</data>
 		<key>Headers/SBBNetworkManager.h</key>
 		<data>
-		o8ROtMr0gbK/AIKUWBDuqnzLzqg=
+		/bmMHVubQRaGss3hymnjSSM0xRk=
 		</data>
 		<key>Headers/SBBObjectManager.h</key>
 		<data>
-		hZ1yogE5yg0MwMKYw33pdpLvfVY=
+		QwOcuc8ui+FYv2gxPk+bMMtkc2Q=
 		</data>
 		<key>Headers/SBBProfileManager.h</key>
 		<data>
-		6rnZl5rLMGA0DWxTohChDMjWhKY=
+		Vr9+UqJRAjb4yrRxw9SmY2JVm2E=
 		</data>
 		<key>Headers/SBBUserProfile.h</key>
 		<data>

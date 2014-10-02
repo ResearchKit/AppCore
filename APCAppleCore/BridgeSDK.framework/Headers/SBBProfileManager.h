@@ -9,7 +9,20 @@
 #import <Foundation/Foundation.h>
 #import "SBBComponent.h"
 
+/*!
+ Completion block called when retrieving user profile from the API.
+ 
+ @param userProfile By default, an SBBUserProfile object, unless the UserProfile type has been mapped in SBBObjectManager setupMappingForType:toClass:fieldToPropertyMappings:
+ @param error       An error that occurred during execution of the method for which this is a completion block, or nil.
+ */
 typedef void (^SBBProfileManagerGetCompletionBlock)(id userProfile, NSError *error);
+
+/*!
+ Completion block called when updating user profile to the API.
+ 
+ @param responseObject JSON response from the server.
+ @param error          An error that occurred during execution of the method for which this is a completion block, or nil.
+ */
 typedef void (^SBBProfileManagerUpdateCompletionBlock)(id responseObject, NSError *error);
 
 @protocol SBBAuthManagerProtocol;
@@ -22,7 +35,7 @@ typedef void (^SBBProfileManagerUpdateCompletionBlock)(id responseObject, NSErro
  */
 @protocol SBBProfileManagerProtocol <NSObject>
 
-/**
+/*!
  *  Fetch the UserProfile from the Bridge API.
  *
  *  @param completion An SBBProfileManagerGetCompletionBlock to be called upon completion.
@@ -31,7 +44,7 @@ typedef void (^SBBProfileManagerUpdateCompletionBlock)(id responseObject, NSErro
  */
 - (NSURLSessionDataTask *)getUserProfileWithCompletion:(SBBProfileManagerGetCompletionBlock)completion;
 
-/**
+/*!
  *  Update the UserProfile to the Bridge API.
  *
  *  @param profile A client object representing the UserProfile as it should be updated.

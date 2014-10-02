@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-/**
+/*!
  *  A convenience macro for obtaining the registered or default component instance for a given componentClass.
  *
  * This is the preferred method for accessing Bridge SDK components throughout your app, both to ensure the proper
@@ -22,7 +22,7 @@
  */
 #define SBBComponent(componentClass) ((id<componentClass ## Protocol>)[SBBComponentManager component:[componentClass class]])
 
-/**
+/*!
  *  A convenience macro for obtaining the component instance registered for a given componentClass when that instance
  *  is a test mock implementation whose class interface may include additional test-configuration-related methods.
  *
@@ -33,7 +33,7 @@
  */
 #define SBBTestComponent(testClass, componentClass) ((testClass *)[SBBComponentManager component:[componentClass class]])
 
-/**
+/*!
  * This class provides a central point for managing singleton components, to simplify use of dependency injection
  * in the default case, when needing runtime selection between two or more implementations, and mocking for testing.
  *
@@ -42,7 +42,7 @@
  */
 @interface SBBComponentManager : NSObject
 
-/**
+/*!
  *  Register a specific component instance to be returned by requests for components registered to a given class.
  *
  *  This method can be used both for registering mock components for testing purposes, and for handling the
@@ -56,7 +56,7 @@
  */
 + (id)registerComponent:(id)componentInstance forClass:(Class)componentClass;
 
-/**
+/*!
  *  Return the registered instance of the component for the given class.
  *
  *  If no instance is registered, and componentClass implements the SBBComponent protocol, this method will
@@ -67,5 +67,10 @@
  *  @return The registered instance for the given componentClass.
  */
 + (id)component:(Class)componentClass;
+
+/*!
+ Clear all registered components and start fresh. Used for unit testing.
+ */
++ (void)reset;
 
 @end
