@@ -134,6 +134,8 @@
 		F541541E19D60F3400B819C9 /* HKHealthStore+APCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541C19D60F3400B819C9 /* HKHealthStore+APCExtensions.m */; };
 		F541541F19D60F3400B819C9 /* HKHealthStore+APCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541C19D60F3400B819C9 /* HKHealthStore+APCExtensions.m */; };
 		F54AB72B19D36DA100986B52 /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6319D0B4EA001DCCB7 /* ResearchKit.framework */; };
+		F567786419DDCCBE00936B9A /* APCKeychainStore.h in Headers */ = {isa = PBXBuildFile; fileRef = F567786219DDCCBE00936B9A /* APCKeychainStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F567786519DDCCBE00936B9A /* APCKeychainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F567786319DDCCBE00936B9A /* APCKeychainStore.m */; };
 		F588B9FA19D21EFE00692473 /* APCAssertionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = F588B9D719D21EFE00692473 /* APCAssertionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588B9FB19D21EFE00692473 /* APCAssertionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F588B9D819D21EFE00692473 /* APCAssertionHandler.m */; };
 		F588B9FC19D21EFE00692473 /* APCStepProgressBar+Appearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F588B9DA19D21EFE00692473 /* APCStepProgressBar+Appearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -367,6 +369,8 @@
 		F541541719D6029C00B819C9 /* APCStoredUserData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStoredUserData.m; sourceTree = "<group>"; };
 		F541541B19D60F3400B819C9 /* HKHealthStore+APCExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HKHealthStore+APCExtensions.h"; sourceTree = "<group>"; };
 		F541541C19D60F3400B819C9 /* HKHealthStore+APCExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HKHealthStore+APCExtensions.m"; sourceTree = "<group>"; };
+		F567786219DDCCBE00936B9A /* APCKeychainStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCKeychainStore.h; sourceTree = "<group>"; };
+		F567786319DDCCBE00936B9A /* APCKeychainStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCKeychainStore.m; sourceTree = "<group>"; };
 		F588B9D719D21EFE00692473 /* APCAssertionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAssertionHandler.h; sourceTree = "<group>"; };
 		F588B9D819D21EFE00692473 /* APCAssertionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAssertionHandler.m; sourceTree = "<group>"; };
 		F588B9DA19D21EFE00692473 /* APCStepProgressBar+Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCStepProgressBar+Appearance.h"; sourceTree = "<group>"; };
@@ -552,6 +556,8 @@
 			children = (
 				F5008C0D19D32AD60011102F /* APCGroupedScheduledTask.h */,
 				F5008C0E19D32AD60011102F /* APCGroupedScheduledTask.m */,
+				F567786219DDCCBE00936B9A /* APCKeychainStore.h */,
+				F567786319DDCCBE00936B9A /* APCKeychainStore.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -1070,6 +1076,7 @@
 				F588BA0419D21EFE00692473 /* NSError+APCAdditions.h in Headers */,
 				F5008C1919D32CC80011102F /* APCActivitiesViewController.h in Headers */,
 				F5179CB419D0917D001DCCB7 /* APCScheduledTask.h in Headers */,
+				F567786419DDCCBE00936B9A /* APCKeychainStore.h in Headers */,
 				F5179C8119D0917D001DCCB7 /* APCDataSubstrate.h in Headers */,
 				F5179C8419D0917D001DCCB7 /* APCConsentResult+AddOn.h in Headers */,
 				F5179CAB19D0917D001DCCB7 /* APCSchedule+AddOn.h in Headers */,
@@ -1249,6 +1256,7 @@
 				F5179CA019D0917D001DCCB7 /* APCQuestionResult+AddOn.m in Sources */,
 				F588BA0119D21EFE00692473 /* NSBundle+Helper.m in Sources */,
 				F588BA6219D21F1300692473 /* APCConfigurableCell.m in Sources */,
+				F567786519DDCCBE00936B9A /* APCKeychainStore.m in Sources */,
 				F5179CA919D0917D001DCCB7 /* APCResult.m in Sources */,
 				F588BA0D19D21EFE00692473 /* NSString+Helper.m in Sources */,
 				F588BA7F19D21F1300692473 /* APCSignupViewController.m in Sources */,
