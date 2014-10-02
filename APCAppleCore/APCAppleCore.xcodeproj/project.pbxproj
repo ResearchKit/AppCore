@@ -175,8 +175,6 @@
 		F588BA6519D21F1300692473 /* APCCriteriaCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F588BA2319D21F1300692473 /* APCCriteriaCell.xib */; };
 		F588BA6619D21F1300692473 /* APCUserInfoCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA2419D21F1300692473 /* APCUserInfoCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA6719D21F1300692473 /* APCUserInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA2519D21F1300692473 /* APCUserInfoCell.m */; };
-		F588BA6819D21F1300692473 /* APCProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA2719D21F1300692473 /* APCProfile.h */; };
-		F588BA6919D21F1300692473 /* APCProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA2819D21F1300692473 /* APCProfile.m */; };
 		F588BA6A19D21F1300692473 /* APCTableViewItem.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA2919D21F1300692473 /* APCTableViewItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA6B19D21F1300692473 /* APCTableViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA2A19D21F1300692473 /* APCTableViewItem.m */; };
 		F588BA6C19D21F1300692473 /* APCForgotPasswordViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA2C19D21F1300692473 /* APCForgotPasswordViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -410,8 +408,6 @@
 		F588BA2319D21F1300692473 /* APCCriteriaCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCCriteriaCell.xib; sourceTree = "<group>"; };
 		F588BA2419D21F1300692473 /* APCUserInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCUserInfoCell.h; sourceTree = "<group>"; };
 		F588BA2519D21F1300692473 /* APCUserInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCUserInfoCell.m; sourceTree = "<group>"; };
-		F588BA2719D21F1300692473 /* APCProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCProfile.h; sourceTree = "<group>"; };
-		F588BA2819D21F1300692473 /* APCProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCProfile.m; sourceTree = "<group>"; };
 		F588BA2919D21F1300692473 /* APCTableViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTableViewItem.h; sourceTree = "<group>"; };
 		F588BA2A19D21F1300692473 /* APCTableViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTableViewItem.m; sourceTree = "<group>"; };
 		F588BA2C19D21F1300692473 /* APCForgotPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCForgotPasswordViewController.h; sourceTree = "<group>"; };
@@ -817,8 +813,6 @@
 		F588BA2619D21F1300692473 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				F588BA2719D21F1300692473 /* APCProfile.h */,
-				F588BA2819D21F1300692473 /* APCProfile.m */,
 				F588BA2919D21F1300692473 /* APCTableViewItem.h */,
 				F588BA2A19D21F1300692473 /* APCTableViewItem.m */,
 			);
@@ -1100,7 +1094,6 @@
 				F588BA8619D21F1300692473 /* APCViewController.h in Headers */,
 				F588BA8819D21F1300692473 /* APCCircularProgressView.h in Headers */,
 				F588BA6C19D21F1300692473 /* APCForgotPasswordViewController.h in Headers */,
-				F588BA6819D21F1300692473 /* APCProfile.h in Headers */,
 				F5EDCC8D19D32F0A00A5E027 /* APCActivitiesTableViewCell.h in Headers */,
 				F541541419D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h in Headers */,
 				F5179CD619D0917D001DCCB7 /* APCScheduleInterpreter.h in Headers */,
@@ -1334,7 +1327,6 @@
 				F588BA1519D21EFE00692473 /* UIScrollView+Helper.m in Sources */,
 				F541541E19D60F3400B819C9 /* HKHealthStore+APCExtensions.m in Sources */,
 				5B29CE3719D3767D00E2FD62 /* APCPermissionsManager.m in Sources */,
-				F588BA6919D21F1300692473 /* APCProfile.m in Sources */,
 				F5EDCC8E19D32F0A00A5E027 /* APCActivitiesTableViewCell.m in Sources */,
 				F5008C1019D32AD60011102F /* APCGroupedScheduledTask.m in Sources */,
 				F588BA7A19D21F1300692473 /* APCSignupTouchIDViewController.m in Sources */,
