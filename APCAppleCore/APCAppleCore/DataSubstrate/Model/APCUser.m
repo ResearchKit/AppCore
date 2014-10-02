@@ -48,7 +48,7 @@ static NSString *const kSleepTimePropertyName = @"sleepTime";
     return self;
 }
 
-- (NSString *)debugDescription
+- (NSString *)description
 {
     return [NSString stringWithFormat:@"\
             First Name : %@\n\

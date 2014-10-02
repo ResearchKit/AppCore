@@ -28,11 +28,12 @@
 
 - (void) setUpCurrentUser
 {
-    static APCUser * sharedUser = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedUser = [[APCUser alloc] init];
-    });
+    if (!_currentUser) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            _currentUser = [[APCUser alloc] init];
+        });
+    }
 }
 
 
