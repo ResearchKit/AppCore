@@ -31,6 +31,11 @@ static NSString *_defaultService;
     return nil;
 }
 
++ (void)removeValueForKey:(NSString *)key
+{
+    [self removeItemForKey:key service:[self defaultService] accessGroup:nil];
+}
+
 +(void)resetKeyChain
 {
     [self removeAllItemsForService:[self defaultService] accessGroup:nil];
