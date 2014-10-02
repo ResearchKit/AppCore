@@ -51,6 +51,8 @@ static NSString * const kAPCStepProgressViewAnimationKey = @"APCStepProgressView
 
 - (void)sharedInit
 {
+    _numberOfSteps = 1;
+    
     [self setupProgressLayers];
     
     if (self.style == APCStepProgressBarStyleDefault) {
