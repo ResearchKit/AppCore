@@ -10,13 +10,16 @@
 #import "APCAppleCore.h"
 #import <HealthKit/HealthKit.h>
 
-static NSString *const kLoggedInKey = @"LoggedIn";
-static NSString *const kConsentedPropertyName = @"consented";
-static NSString *const kUserConsentedPropertyName = @"userConsented";
+
 static NSString *const kFirstNamePropertyName = @"firstName";
 static NSString *const kLastNamePropertyName = @"lastName";
 static NSString *const kUserNamePropertyName = @"userName";
 static NSString *const kEmailPropertyName = @"email";
+static NSString *const kPasswordPropertyName = @"password";
+
+static NSString *const kLoggedInKey = @"LoggedIn";
+static NSString *const kConsentedPropertyName = @"consented";
+static NSString *const kUserConsentedPropertyName = @"userConsented";
 static NSString *const kMedicalConditionsPropertyName = @"medicalConditions";
 static NSString *const kMedicationsPropertyName = @"medications";
 static NSString *const kWakeUpTimePropertyName = @"wakeUpTime";
@@ -93,12 +96,8 @@ static NSString *const kSleepTimePropertyName = @"sleepTime";
 {
     _consented = [storedUserData.serverConsented boolValue];
     _userConsented = [storedUserData.userConsented boolValue];
-    _firstName = [storedUserData.firstName copy];
-    _lastName = [storedUserData.lastName copy];
     _medicalConditions = [storedUserData.medicalConditions copy];
     _medications = [storedUserData.medications copy];
-    _userName = [storedUserData.userName copy];
-    _email = [storedUserData.email copy];
     _wakeUpTime = [storedUserData.wakeUpTime copy];
     _sleepTime = [storedUserData.sleepTime copy];
 }
@@ -120,6 +119,56 @@ static NSString *const kSleepTimePropertyName = @"sleepTime";
     return [[(APCAppDelegate*) ([UIApplication sharedApplication].delegate) dataSubstrate] healthStore];
 }
 
+/*********************************************************************************/
+#pragma mark - Properties from Key Chain
+/*********************************************************************************/
+
+- (NSString *)firstName
+{
+    return [APCKeychainStore stringForKey:kFirstNamePropertyName];
+}
+
+- (void)setFirstName:(NSString *)firstName
+{
+    [APCKeychainStore setString:firstName forKey:kFirstNamePropertyName];
+}
+
+- (NSString *)lastName
+{
+    return [APCKeychainStore stringForKey:kLastNamePropertyName];
+}
+
+- (void)setLastName:(NSString *)lastName
+{
+    [APCKeychainStore setString:lastName forKey:kLastNamePropertyName];
+}
+
+- (NSString *)email
+{
+      return [APCKeychainStore stringForKey:kEmailPropertyName];
+}
+
+-(void)setEmail:(NSString *)email
+{
+    [APCKeychainStore setString:email forKey:kEmailPropertyName];
+}
+
+- (NSString *)password
+{
+    return [APCKeychainStore stringForKey:kPasswordPropertyName];
+}
+
+-(void)setPassword:(NSString *)password
+{
+    [APCKeychainStore setString:[self hashIfNeeded:password] forKey:kPasswordPropertyName];
+}
+
+- (NSString*) hashIfNeeded: (NSString*) password
+{
+    //TODO: Implement hashing method
+    return password;
+}
+
 
 /*********************************************************************************/
 #pragma mark - Setters for Properties in Core Data
@@ -136,30 +185,6 @@ static NSString *const kSleepTimePropertyName = @"sleepTime";
 {
     _userConsented = userConsented;
     [self updateStoredProperty:kUserConsentedPropertyName withValue:@(userConsented)];
-}
-
-- (void) setFirstName:(NSString *)firstName
-{
-    _firstName = firstName;
-    [self updateStoredProperty:kFirstNamePropertyName withValue:firstName];
-}
-
-- (void)setLastName:(NSString *)lastName
-{
-    _lastName = lastName;
-    [self updateStoredProperty:kLastNamePropertyName withValue:lastName];
-}
-
-- (void)setUserName:(NSString *)userName
-{
-    _userName = userName;
-    [self updateStoredProperty:kUserNamePropertyName withValue:userName];
-}
-
-- (void)setEmail:(NSString *)email
-{
-    _email = email;
-    [self updateStoredProperty:kEmailPropertyName withValue:email];
 }
 
 - (void)setMedicalConditions:(NSString *)medicalConditions

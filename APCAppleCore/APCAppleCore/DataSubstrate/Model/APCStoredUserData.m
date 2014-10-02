@@ -11,10 +11,6 @@
 
 @implementation APCStoredUserData
 
-@dynamic firstName;
-@dynamic lastName;
-@dynamic userName;
-@dynamic email;
 @dynamic medicalConditions;
 @dynamic medications;
 @dynamic serverConsented;

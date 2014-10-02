@@ -54,9 +54,6 @@
         <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCTask" inverseName="schedules" inverseEntity="APCTask" syncable="YES"/>
     </entity>
     <entity name="APCStoredUserData" representedClassName="APCStoredUserData" syncable="YES">
-        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="medicalConditions" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="medications" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="serverConsented" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -88,7 +85,7 @@
         <element name="APCResult" positionX="-720" positionY="333" width="128" height="210"/>
         <element name="APCSchedule" positionX="-1161" positionY="513" width="128" height="148"/>
         <element name="APCScheduledTask" positionX="-468" positionY="449" width="128" height="163"/>
-        <element name="APCStoredUserData" positionX="-954" positionY="486" width="128" height="195"/>
+        <element name="APCStoredUserData" positionX="-954" positionY="486" width="128" height="150"/>
         <element name="APCSurveyResult" positionX="-945" positionY="495" width="128" height="58"/>
         <element name="APCTask" positionX="-965" positionY="585" width="128" height="178"/>
     </elements>
