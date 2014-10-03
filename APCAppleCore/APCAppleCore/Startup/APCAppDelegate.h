@@ -15,8 +15,6 @@ static NSString *const kDatabaseNameKey = @"DatabaseNameKey";
 static NSString *const kTasksAndSchedulesJSONFileNameKey = @"TasksAndSchedulesJSONFileNameKey";
 static NSString *const kDataSubstrateClassNameKey = @"APHDatasubstrateClassName";
 
-static NSString *const kLoggedInKey = @"LoggedIn";
-static NSString *const kSignedUpKey = @"SignedUp";
 static NSString *const kPasswordKey = @"password";
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler;
@@ -32,8 +30,6 @@ static NSString *const kPasswordKey = @"password";
 @property (nonatomic, strong) NSDictionary * initializationOptions;
 
 //For User in Subclasses
-- (BOOL) isLoggedIn;
-- (BOOL) isSignedUp;
 - (void) signedInNotification:(NSNotification *)notification;
 - (void) signedUpNotification: (NSNotification*) notification;
 - (void) logOutNotification:(NSNotification *)notification;

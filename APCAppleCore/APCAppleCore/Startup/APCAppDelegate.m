@@ -112,16 +112,6 @@
 /*********************************************************************************/
 #pragma mark - Helper Methods
 /*********************************************************************************/
-- (BOOL) isLoggedIn
-{
-    return [[NSUserDefaults standardUserDefaults] boolForKey:kLoggedInKey];
-}
-
-- (BOOL) isSignedUp
-{
-    return [[NSUserDefaults standardUserDefaults] boolForKey:kSignedUpKey];
-}
-
 - (void) clearNSUserDefaults
 {
     NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
@@ -129,13 +119,14 @@
 }
 
 #pragma mark - Notifications
-- (void) signedInNotification:(NSNotification *)notification { /*Abstract Implementation*/ }
-
 - (void) signedUpNotification:(NSNotification*) notification { /*Abstract Implementation*/ }
 
-- (void) logOutNotification:(NSNotification *)notification
+- (void) signedInNotification:(NSNotification*) notification { /*Abstract Implementation*/ }
+
+- (void) logOutNotification:(NSNotification*) notification
 {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kLoggedInKey];
+    self.dataSubstrate.currentUser.signedUp = NO;
+    self.dataSubstrate.currentUser.signedIn = NO;
     [APCKeychainStore removeValueForKey:kPasswordKey];
 }
 

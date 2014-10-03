@@ -45,8 +45,11 @@
 @property (nonatomic, strong) HKQuantity * weight;
 
 /*********************************************************************************/
-#pragma mark - Methods
+#pragma mark - NSUserDefaults Simulated Properties
 /*********************************************************************************/
-- (BOOL) isLoggedIn;
+@property (nonatomic, getter=isSignedUp) BOOL signedUp;
+@property (nonatomic, getter=isSignedIn) BOOL signedIn;
+
+- (BOOL) isLoggedOut;
 
 @end

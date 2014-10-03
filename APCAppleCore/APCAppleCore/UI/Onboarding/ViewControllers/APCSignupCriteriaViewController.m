@@ -258,6 +258,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 - (void) next
 {
 #if SKIP_CONSENT
+    [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
     [self startSignUp];
 #else
     [self showConsent];

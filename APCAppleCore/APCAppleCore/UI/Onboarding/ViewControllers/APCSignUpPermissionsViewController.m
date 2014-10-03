@@ -233,14 +233,12 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
     [self.stepProgressBar setCompletedSteps:5 animation:YES];
     
     // We are posting this notification after .5 seconds delay, because we need to display the progress bar completion animation
-    [self performSelector:@selector(postLoginNotification) withObject:nil afterDelay:0.5];
+    [self performSelector:@selector(setUserSignedUp) withObject:nil afterDelay:0.5];
 }
 
-- (void) postLoginNotification
+- (void) setUserSignedUp
 {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kSignedUpKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    [[NSNotificationCenter defaultCenter] postNotificationName:(NSString *)APCUserSignedUpNotification object:nil];
+    self.user.signedUp = YES;
 }
 
 #pragma mark - Permissions

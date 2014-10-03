@@ -7,16 +7,62 @@
 //
 
 #import "APCEmailVerifyViewController.h"
+#import "APCAppleCore.h"
 
 @interface APCEmailVerifyViewController ()
-
+@property (nonatomic, readonly) APCUser * user;
 @end
 
 @implementation APCEmailVerifyViewController
 
+- (APCUser *)user
+{
+    return ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.title = @"Verify Email";
+    [self checkSignIn];
+}
+
+- (void) checkSignIn
+{
+    __weak APCEmailVerifyViewController * weakSelf = self;
+    [self.user signInOnCompletion:^(NSError *error) {
+        if (error) {
+            if (error.code == kSBBServerPreconditionNotMet) {
+                [weakSelf getServerConsent];
+            }
+            else
+            {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    NSLog(@"Checking Server Again...");
+                    [weakSelf checkSignIn];
+                });
+            }
+        }
+        else
+        {
+            self.user.signedIn = YES;
+        }
+    }];
+}
+
+- (void) getServerConsent
+{
+    if (self.user.userConsented) {
+        [self.user sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
+            if (error) {
+                [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"User Consent Error", @"User Consent Error") message:error.message];
+            }
+            else
+            {
+                self.user.consented = YES;
+                [self checkSignIn];
+            }
+        }];
+    }
 }
 
 
