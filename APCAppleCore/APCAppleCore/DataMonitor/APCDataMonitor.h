@@ -11,8 +11,6 @@
 
 @class APCDataSubstrate, APCScheduler;
 
-//Assumes Network Manager is a Sage Network Manager
-
 @interface APCDataMonitor : NSObject
 
 

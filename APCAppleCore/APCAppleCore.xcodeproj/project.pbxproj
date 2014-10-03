@@ -139,6 +139,8 @@
 		F57329A819DF059500A85564 /* APCEmailVerify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F57329A719DF059500A85564 /* APCEmailVerify.storyboard */; };
 		F57329AB19DF065A00A85564 /* APCEmailVerifyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F57329A919DF065A00A85564 /* APCEmailVerifyViewController.h */; };
 		F57329AC19DF065A00A85564 /* APCEmailVerifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F57329AA19DF065A00A85564 /* APCEmailVerifyViewController.m */; };
+		F57329B519DF093000A85564 /* APCUser+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = F57329B319DF093000A85564 /* APCUser+Bridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F57329B619DF093000A85564 /* APCUser+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F57329B419DF093000A85564 /* APCUser+Bridge.m */; };
 		F588B9FA19D21EFE00692473 /* APCAssertionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = F588B9D719D21EFE00692473 /* APCAssertionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588B9FB19D21EFE00692473 /* APCAssertionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F588B9D819D21EFE00692473 /* APCAssertionHandler.m */; };
 		F588B9FC19D21EFE00692473 /* APCStepProgressBar+Appearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F588B9DA19D21EFE00692473 /* APCStepProgressBar+Appearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -375,6 +377,8 @@
 		F57329A719DF059500A85564 /* APCEmailVerify.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCEmailVerify.storyboard; sourceTree = "<group>"; };
 		F57329A919DF065A00A85564 /* APCEmailVerifyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCEmailVerifyViewController.h; sourceTree = "<group>"; };
 		F57329AA19DF065A00A85564 /* APCEmailVerifyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCEmailVerifyViewController.m; sourceTree = "<group>"; };
+		F57329B319DF093000A85564 /* APCUser+Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCUser+Bridge.h"; sourceTree = "<group>"; };
+		F57329B419DF093000A85564 /* APCUser+Bridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCUser+Bridge.m"; sourceTree = "<group>"; };
 		F588B9D719D21EFE00692473 /* APCAssertionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAssertionHandler.h; sourceTree = "<group>"; };
 		F588B9D819D21EFE00692473 /* APCAssertionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAssertionHandler.m; sourceTree = "<group>"; };
 		F588B9DA19D21EFE00692473 /* APCStepProgressBar+Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCStepProgressBar+Appearance.h"; sourceTree = "<group>"; };
@@ -992,6 +996,8 @@
 				F5A63F1319D5EAD100284006 /* APCUser.m */,
 				5BF5C90619D9E208007928D4 /* APCUser+HealthKit.h */,
 				5BF5C90719D9E208007928D4 /* APCUser+HealthKit.m */,
+				F57329B319DF093000A85564 /* APCUser+Bridge.h */,
+				F57329B419DF093000A85564 /* APCUser+Bridge.m */,
 			);
 			name = "Memory Only Objects";
 			sourceTree = "<group>";
@@ -1046,6 +1052,7 @@
 				F588BA1A19D21EFE00692473 /* UIView+Helper.h in Headers */,
 				F588BA6319D21F1300692473 /* APCCriteriaCell.h in Headers */,
 				F588BA0019D21EFE00692473 /* NSBundle+Helper.h in Headers */,
+				F57329B519DF093000A85564 /* APCUser+Bridge.h in Headers */,
 				F588BA8319D21F1300692473 /* APCUserInfoConstants.h in Headers */,
 				F588BA6619D21F1300692473 /* APCUserInfoCell.h in Headers */,
 				F588BA7619D21F1300692473 /* APCSignupCriteriaViewController.h in Headers */,
@@ -1287,6 +1294,7 @@
 				F588BA1719D21EFE00692473 /* UISegmentedControl+Appearance.m in Sources */,
 				5B29CE4119D376CA00E2FD62 /* APCSignUpPermissionsViewController.m in Sources */,
 				F5179C7F19D0917D001DCCB7 /* APCDataSubstrate+ResearchKit.m in Sources */,
+				F57329B619DF093000A85564 /* APCUser+Bridge.m in Sources */,
 				F5008C1A19D32CC80011102F /* APCActivitiesViewController.m in Sources */,
 				F588BA6419D21F1300692473 /* APCCriteriaCell.m in Sources */,
 				F5179C8519D0917D001DCCB7 /* APCConsentResult+AddOn.m in Sources */,

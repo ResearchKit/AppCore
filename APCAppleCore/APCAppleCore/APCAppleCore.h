@@ -89,20 +89,6 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/UIColor+Appearance.h>
 #import <APCAppleCore/HKHealthStore+APCExtensions.h>
 
-//Error Codes
-static NSString *const APC_ERROR_DOMAIN = @"com.ymedialabs.error_domain";
-static NSString *const APC_ORIGINAL_ERROR_KEY = @"APCOriginalErrorKey";
-
-typedef NS_ENUM(NSInteger, APCNetworkErrorCodes)
-{
-    kAPCUnknownError = -1,
-    kAPCInternetNotConnected = -1000,
-    kAPCServerNotReachable = -1001,
-    kAPCServerUnderMaintenance = -1002,
-    kAPCServerNotAuthenticated = -1003,
-    kAPCServerPreconditionNotMet = -1004
-};
-
 static NSString *const APCUserSignedUpNotification     = @"APCUserSignedUpNotification";
 static NSString *const APCUserSignedInNotification     = @"APCUserSignedInNotification";
 static NSString *const APCUserLogOutNotification  = @"APCUserLogOutNotification";

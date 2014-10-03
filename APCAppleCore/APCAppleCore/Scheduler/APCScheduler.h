@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class APCDataSubstrate, APCSageNetworkManager;
+@class APCDataSubstrate;
 @class APCSchedule;
 
 @interface APCScheduler : NSObject
