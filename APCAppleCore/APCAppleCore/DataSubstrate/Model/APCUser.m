@@ -17,7 +17,6 @@ static NSString *const kUserNamePropertyName = @"userName";
 static NSString *const kEmailPropertyName = @"email";
 static NSString *const kPasswordPropertyName = @"password";
 
-static NSString *const kLoggedInKey = @"LoggedIn";
 static NSString *const kConsentedPropertyName = @"consented";
 static NSString *const kUserConsentedPropertyName = @"userConsented";
 static NSString *const kMedicalConditionsPropertyName = @"medicalConditions";

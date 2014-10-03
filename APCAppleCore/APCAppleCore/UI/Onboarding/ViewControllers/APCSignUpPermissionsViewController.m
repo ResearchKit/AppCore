@@ -19,7 +19,6 @@
 
 static NSString * const kSignUpPermissionsCellIdentifier = @"PermissonsCell";
 static CGFloat const kTableViewRowHeight                 = 165.0f;
-static NSString *const kSignedUpKey = @"SignedUp";
 
 @interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
 

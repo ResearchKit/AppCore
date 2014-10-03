@@ -8,6 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+static NSString *const kStudyIdentifierKey = @"StudyIdentifierKey";
+static NSString *const kAppPrefixKey = @"AppPrefixKey";
+static NSString *const kBaseURLKey = @"BaseURLKey";
+static NSString *const kDatabaseNameKey = @"DatabaseNameKey";
+static NSString *const kTasksAndSchedulesJSONFileNameKey = @"TasksAndSchedulesJSONFileNameKey";
+static NSString *const kDataSubstrateClassNameKey = @"APHDatasubstrateClassName";
+
+static NSString *const kLoggedInKey = @"LoggedIn";
+static NSString *const kSignedUpKey = @"SignedUp";
+static NSString *const kPasswordKey = @"password";
+
 @class APCDataSubstrate, APCDataMonitor, APCScheduler;
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -17,5 +28,14 @@
 @property (strong, nonatomic) APCDataSubstrate * dataSubstrate;
 @property (strong, nonatomic) APCDataMonitor * dataMonitor;
 @property (strong, nonatomic) APCScheduler * scheduler;
+
+@property (nonatomic, strong) NSDictionary * initializationOptions;
+
+//For User in Subclasses
+- (BOOL) isLoggedIn;
+- (BOOL) isSignedUp;
+- (void) signedInNotification:(NSNotification *)notification;
+- (void) signedUpNotification: (NSNotification*) notification;
+- (void) logOutNotification:(NSNotification *)notification;
 
 @end
