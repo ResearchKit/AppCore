@@ -137,7 +137,7 @@
 		F567786419DDCCBE00936B9A /* APCKeychainStore.h in Headers */ = {isa = PBXBuildFile; fileRef = F567786219DDCCBE00936B9A /* APCKeychainStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F567786519DDCCBE00936B9A /* APCKeychainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F567786319DDCCBE00936B9A /* APCKeychainStore.m */; };
 		F57329A819DF059500A85564 /* APCEmailVerify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F57329A719DF059500A85564 /* APCEmailVerify.storyboard */; };
-		F57329AB19DF065A00A85564 /* APCEmailVerifyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F57329A919DF065A00A85564 /* APCEmailVerifyViewController.h */; };
+		F57329AB19DF065A00A85564 /* APCEmailVerifyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F57329A919DF065A00A85564 /* APCEmailVerifyViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F57329AC19DF065A00A85564 /* APCEmailVerifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F57329AA19DF065A00A85564 /* APCEmailVerifyViewController.m */; };
 		F57329B519DF093000A85564 /* APCUser+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = F57329B319DF093000A85564 /* APCUser+Bridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F57329B619DF093000A85564 /* APCUser+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F57329B419DF093000A85564 /* APCUser+Bridge.m */; };

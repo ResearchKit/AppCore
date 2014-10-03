@@ -67,8 +67,11 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 
 #import <APCAppleCore/APCActivitiesViewController.h>
 #import <APCAppleCore/APCActivitiesTableViewCell.h>
-#import <APCAppleCore/APCGroupedScheduledTask.h>
 
+#import <APCAppleCore/APCEmailVerifyViewController.h>
+
+//Objects
+#import <APCAppleCore/APCGroupedScheduledTask.h>
 #import <APCAppleCore/APCKeychainStore.h>
 
 //Categories

@@ -99,7 +99,7 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    NSInteger rowCount;
+    NSInteger rowCount = 0;
     
     if (section == kCoreDataDefault)
     {
@@ -140,7 +140,7 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    CGFloat height;
+    CGFloat height = 0;
     
     if (indexPath.section == kCoreDataDefault) {
         
