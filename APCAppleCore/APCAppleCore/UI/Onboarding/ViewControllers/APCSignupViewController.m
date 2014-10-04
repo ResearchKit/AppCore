@@ -6,7 +6,8 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCProfile.h"
+#import "APCUser.h"
+#import "APCUser+HealthKit.h"
 #import "UIView+Helper.h"
 #import "APCStepProgressBar.h"
 #import "APCUserInfoConstants.h"
@@ -22,7 +23,7 @@ static NSInteger kNumberOfSteps = 4;
 
 @synthesize stepProgressBar;
 
-@synthesize profile = _profile;
+@synthesize user = _user;
 
 - (void)viewDidLoad {
     
@@ -63,12 +64,12 @@ static NSInteger kNumberOfSteps = 4;
 
 #pragma mark - Getter Methods
 
-- (APCProfile *) profile {
-    if (!_profile) {
-        _profile = [APCProfile new];
+- (APCUser *) user {
+    if (!_user) {
+        _user = [APCUser new];
     }
     
-    return _profile;
+    return _user;
 }
 
 

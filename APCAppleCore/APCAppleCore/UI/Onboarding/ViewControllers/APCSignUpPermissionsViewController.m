@@ -16,10 +16,10 @@
 #import "APCPermissionsManager.h"
 #import <CoreMotion/CoreMotion.h>
 
-#define DEMO 0
 
 static NSString * const kSignUpPermissionsCellIdentifier = @"PermissonsCell";
 static CGFloat const kTableViewRowHeight                 = 165.0f;
+static NSString *const kLoggedInKey = @"LoggedIn";
 
 @interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
 
@@ -109,6 +109,13 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
     [self reloadData];
 }
 
+- (void)viewWillLayoutSubviews
+{
+    CGRect frame = self.view.bounds;
+    frame.origin.y = self.stepProgressBar.bottom;
+    frame.size.height -= frame.origin.y;
+    self.tableView.frame = frame;
+}
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
@@ -232,6 +239,8 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 
 - (void) postLoginNotification
 {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kLoggedInKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     [[NSNotificationCenter defaultCenter] postNotificationName:(NSString *)APCUserLoginNotification object:nil];
 }
 

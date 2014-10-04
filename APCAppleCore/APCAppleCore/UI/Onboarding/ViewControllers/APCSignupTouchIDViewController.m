@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCProfile.h"
+#import "APCUser.h"
 #import "UIView+Helper.h"
 #import "APCPasscodeView.h"
 #import "APCStepProgressBar.h"
@@ -137,7 +137,9 @@
 #pragma mark - Private Methods
 
 - (void) next {
-    [self.navigationController pushViewController:[APCSignUpPermissionsViewController new] animated:YES];
+    APCSignUpPermissionsViewController *permissionsViewController = [[APCSignUpPermissionsViewController alloc] init];
+    permissionsViewController.user = self.user;
+    [self.navigationController pushViewController:permissionsViewController animated:YES];
 }
 
 - (void) showFirstTry {

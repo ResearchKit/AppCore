@@ -19,7 +19,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Z1-8V-LmP">
-                    <rect key="frame" x="44" y="106" width="513" height="63"/>
+                    <rect key="frame" x="44" y="60" width="513" height="63"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="63" id="YbH-bs-7pf"/>
                     </constraints>
@@ -31,7 +31,7 @@ U2V0IGEgcGFzc2NvZGUDIGZvciBzZWN1cmUgaWRlbnRpZmljYXRpb24
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e2Z-xG-fOc" customClass="APCPasscodeView">
-                    <rect key="frame" x="208" y="187" width="184" height="64"/>
+                    <rect key="frame" x="208" y="141" width="184" height="64"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="184" id="I3Y-fR-gOr"/>
@@ -39,7 +39,7 @@ U2V0IGEgcGFzc2NvZGUDIGZvciBzZWN1cmUgaWRlbnRpZmljYXRpb24
                     </constraints>
                 </view>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XRS-zY-6t9" customClass="APCPasscodeView">
-                    <rect key="frame" x="208" y="187" width="184" height="64"/>
+                    <rect key="frame" x="208" y="141" width="184" height="64"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZVc-VH-i0U">
@@ -62,7 +62,7 @@ U2V0IGEgcGFzc2NvZGUDIGZvciBzZWN1cmUgaWRlbnRpZmljYXRpb24
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="ZVc-VH-i0U" secondAttribute="bottom" id="2og-be-L3h"/>
                 <constraint firstItem="e2Z-xG-fOc" firstAttribute="width" secondItem="XRS-zY-6t9" secondAttribute="width" id="2zv-DU-96t"/>
-                <constraint firstItem="8Z1-8V-LmP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="106" id="IfE-sn-dPD"/>
+                <constraint firstItem="8Z1-8V-LmP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="60" id="IfE-sn-dPD"/>
                 <constraint firstItem="e2Z-xG-fOc" firstAttribute="height" secondItem="XRS-zY-6t9" secondAttribute="height" id="JMA-VL-2ZP"/>
                 <constraint firstItem="e2Z-xG-fOc" firstAttribute="top" secondItem="8Z1-8V-LmP" secondAttribute="bottom" constant="18" id="ZOl-4e-CaM"/>
                 <constraint firstItem="8Z1-8V-LmP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="44" id="dCO-E0-E8o"/>

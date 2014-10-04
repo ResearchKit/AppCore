@@ -8,11 +8,11 @@
 
 @import Foundation;
 
-@class APCProfile, APCStepProgressBar;
+@class APCUser, APCStepProgressBar;
 
 @protocol APCSignUpProgressing <NSObject>
 
-@property (nonatomic, strong) APCProfile *profile;
+@property (nonatomic, strong) APCUser *user;
 
 @property (nonatomic, strong) APCStepProgressBar *stepProgressBar;
 

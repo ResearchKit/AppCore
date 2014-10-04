@@ -22,11 +22,11 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 
 @property (nonatomic, strong) CMMotionActivityManager *motionActivityManager;
 @property (nonatomic, strong) CLLocationManager *locationManager;
-@property (nonatomic, strong) HKHealthStore *healthStore; //TODO: Only one HKHealthStore per app. Use the centralized one later.
+@property (nonatomic, strong) HKHealthStore *healthStore;
 
 @property (nonatomic) APCPermissionStatus coreMotionPermissionStatus;
 
-@property (nonatomic, strong) APCPermissionsBlock completionBlock;
+@property (nonatomic, copy) APCPermissionsBlock completionBlock;
 
 @end
 
@@ -67,18 +67,30 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             break;
         case kSignUpPermissionsTypeLocation:
         {
+#if TARGET_IPHONE_SIMULATOR
+            isGranted = YES;
+#else
             CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
             isGranted = (status == kCLAuthorizationStatusAuthorizedAlways); //TODO: Revisit the type of permissions to restrict/allow.
+#endif
         }
             break;
         case kSignUpPermissionsTypePushNotifications:
         {
+#if TARGET_IPHONE_SIMULATOR
+            isGranted = YES;
+#else
             isGranted = [[UIApplication sharedApplication] currentUserNotificationSettings].types != 0;
+#endif
         }
             break;
         case kSignUpPermissionsTypeCoremotion:
         {
+#if TARGET_IPHONE_SIMULATOR
+            isGranted = YES;
+#else
             isGranted = self.coreMotionPermissionStatus == kPermissionStatusAuthorized;
+#endif
         }
             break;
         default:{
@@ -105,16 +117,15 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             if (status == HKAuthorizationStatusNotDetermined) {
                 NSArray *dataTypesToRead = @[[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass],
                                              [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight],
-                                             [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate]];
+                                             [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType],
+                                             [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex],
+                                             [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth]];
                 
                 NSArray *dataTypesToWrite = @[[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass]];
                 
-                __weak typeof(self) weakSelf = self;
-                
                 [self.healthStore requestAuthorizationToShareTypes:[NSSet setWithArray:dataTypesToWrite] readTypes:[NSSet setWithArray:dataTypesToRead] completion:^(BOOL success, NSError *error) {
-                    if (weakSelf.completionBlock) {
-                        weakSelf.completionBlock(success, error);
-                        weakSelf.completionBlock = nil;
+                    if (completion) {
+                        completion(success, error);
                     }
                 }];
                 
