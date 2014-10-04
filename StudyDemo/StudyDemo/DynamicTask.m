@@ -111,6 +111,12 @@
     return nil;
 }
 
+
+// Explicitly hide progress indication for some steps
+- (RKTaskProgress)progressOfCurrentStep:(RKStep *)step withSurveyResults:(NSArray *)surveyResults {
+    return (RKTaskProgress){.count = 0, .index = 0};
+}
+
 - (RKIntroductionStep *)step1{
     if (_step1 == nil) {
         _step1 = [[RKIntroductionStep alloc] initWithIdentifier:@"step1" name:@"name"];

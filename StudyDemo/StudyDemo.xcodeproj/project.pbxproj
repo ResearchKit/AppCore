@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		86BDD9A619DCD4E8002CB3C4 /* AppearanceControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BDD9A519DCD4E8002CB3C4 /* AppearanceControlViewController.m */; };
 		86D6770019CB6F5400FB35DE /* signature.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D676FF19CB6F5400FB35DE /* signature.png */; };
 		B10ED37019463908005DDB3F /* StudyDemoBundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B10FAF8B193D322A005858C2 /* StudyDemoBundle.bundle */; };
 		B10FAF62193D31AD005858C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B10FAF61193D31AD005858C2 /* main.m */; };
@@ -17,9 +18,11 @@
 		B1277E7D193D925300D8CB20 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1277E7C193D925300D8CB20 /* CoreData.framework */; };
 		B1277E7F193D925900D8CB20 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B1277E7E193D925900D8CB20 /* libbz2.dylib */; };
 		B18627E5199B1EE900E68479 /* CustomRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = B18627E4199B1EE900E68479 /* CustomRecorder.m */; };
+		B1B23AC019DCC5AD0083013F /* image_example.png in Resources */ = {isa = PBXBuildFile; fileRef = B1B23ABF19DCC5AD0083013F /* image_example.png */; };
 		B1C056E41981C13500DC0362 /* printing.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B1C056E31981C13400DC0362 /* printing.pdf */; };
 		B1C610E01942881E00252617 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1C610DF1942881E00252617 /* AVFoundation.framework */; };
 		B1C610E21942887500252617 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1C610E11942887500252617 /* Security.framework */; };
+		B1DC23B619D5DDA000A0EEAB /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1DC23B519D5DDA000A0EEAB /* LaunchScreen.xib */; };
 		B1DEAF391979E1100055143E /* libarchive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B1DEAF381979E1100055143E /* libarchive.dylib */; };
 		B1DEAF3B1979E1170055143E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B1DEAF3A1979E1170055143E /* libz.dylib */; };
 		B1DEAF421979E12E0055143E /* DynamicTask.m in Sources */ = {isa = PBXBuildFile; fileRef = B1DEAF3D1979E12E0055143E /* DynamicTask.m */; };
@@ -55,6 +58,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		86BDD9A419DCD4E8002CB3C4 /* AppearanceControlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppearanceControlViewController.h; sourceTree = "<group>"; };
+		86BDD9A519DCD4E8002CB3C4 /* AppearanceControlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppearanceControlViewController.m; sourceTree = "<group>"; };
 		86D676FF19CB6F5400FB35DE /* signature.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = signature.png; sourceTree = "<group>"; };
 		B10FAF5C193D31AD005858C2 /* StudyDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StudyDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B10FAF60193D31AD005858C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -78,9 +83,11 @@
 		B1277E7E193D925900D8CB20 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
 		B18627E3199B1EE900E68479 /* CustomRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomRecorder.h; sourceTree = "<group>"; };
 		B18627E4199B1EE900E68479 /* CustomRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomRecorder.m; sourceTree = "<group>"; };
+		B1B23ABF19DCC5AD0083013F /* image_example.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image_example.png; sourceTree = "<group>"; };
 		B1C056E31981C13400DC0362 /* printing.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = printing.pdf; sourceTree = "<group>"; };
 		B1C610DF1942881E00252617 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		B1C610E11942887500252617 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		B1DC23B519D5DDA000A0EEAB /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		B1DEAF381979E1100055143E /* libarchive.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libarchive.dylib; path = usr/lib/libarchive.dylib; sourceTree = SDKROOT; };
 		B1DEAF3A1979E1170055143E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		B1DEAF3C1979E12E0055143E /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
@@ -150,6 +157,10 @@
 		B10FAF5E193D31AD005858C2 /* StudyDemo */ = {
 			isa = PBXGroup;
 			children = (
+				86BDD9A419DCD4E8002CB3C4 /* AppearanceControlViewController.h */,
+				86BDD9A519DCD4E8002CB3C4 /* AppearanceControlViewController.m */,
+				B1B23ABF19DCC5AD0083013F /* image_example.png */,
+				B1DC23B519D5DDA000A0EEAB /* LaunchScreen.xib */,
 				B18627E3199B1EE900E68479 /* CustomRecorder.h */,
 				B18627E4199B1EE900E68479 /* CustomRecorder.m */,
 				B10FAF63193D31AD005858C2 /* AppDelegate.h */,
@@ -314,7 +325,7 @@
 				TargetAttributes = {
 					B10FAF5B193D31AD005858C2 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = NL3PRC58UN;
+						DevelopmentTeam = 7JYUG8QGJ3;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
 								enabled = 1;
@@ -323,7 +334,6 @@
 					};
 					B10FAF6B193D31AD005858C2 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = NL3PRC58UN;
 						TestTargetID = B10FAF5B193D31AD005858C2;
 					};
 					B10FAF8A193D322A005858C2 = {
@@ -357,7 +367,9 @@
 			files = (
 				B1C056E41981C13500DC0362 /* printing.pdf in Resources */,
 				B10ED37019463908005DDB3F /* StudyDemoBundle.bundle in Resources */,
+				B1B23AC019DCC5AD0083013F /* image_example.png in Resources */,
 				86D6770019CB6F5400FB35DE /* signature.png in Resources */,
+				B1DC23B619D5DDA000A0EEAB /* LaunchScreen.xib in Resources */,
 				B1EB16E2193E4416009AA707 /* ResearchKit.bundle in Resources */,
 				B10FAF67193D31AD005858C2 /* Images.xcassets in Resources */,
 				B1DEAF461979E23E0055143E /* investigator.pem in Resources */,
@@ -386,6 +398,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86BDD9A619DCD4E8002CB3C4 /* AppearanceControlViewController.m in Sources */,
 				B1DEAF421979E12E0055143E /* DynamicTask.m in Sources */,
 				B18627E5199B1EE900E68479 /* CustomRecorder.m in Sources */,
 				B10FAF65193D31AD005858C2 /* AppDelegate.m in Sources */,
@@ -510,7 +523,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = StudyDemo/StudyDemo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -522,7 +534,6 @@
 				INFOPLIST_FILE = StudyDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -530,7 +541,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = StudyDemo/StudyDemo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -542,7 +552,6 @@
 				INFOPLIST_FILE = StudyDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
