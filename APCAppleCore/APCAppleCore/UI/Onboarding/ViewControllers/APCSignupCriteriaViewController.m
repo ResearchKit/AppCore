@@ -205,11 +205,20 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 - (void)showConsent
 {
     RKConsentDocument* consent = [[RKConsentDocument alloc] init];
-    consent.title = NSLocalizedString(@"Demo Consent", nil);
-    consent.signaturePageTitle = NSLocalizedString(@"Consent", nil);
-    consent.signaturePageContent = NSLocalizedString(@"I agree  to participate in this research Study.", nil);
-    consent.investigatorNamePrinted = @"Jake Clemson";
-    consent.investigatorSignatureDate = @"9/2/14";
+    consent.title = @"Demo Consent";
+    consent.signaturePageTitle = @"Consent";
+    consent.signaturePageContent = @"I agree  to participate in this research Study.";
+    
+    
+    RKConsentSignature *participantSig = [RKConsentSignature signatureForPersonWithTitle:@"Participant" name:nil signatureImage:nil dateString:nil];
+    [consent addSignature:participantSig];
+    
+    RKConsentSignature *investigatorSig = [RKConsentSignature signatureForPersonWithTitle:@"Investigator" name:@"Jake Clemson" signatureImage:[UIImage imageNamed:@"signature.png"] dateString:@"9/2/14"];
+    [consent addSignature:investigatorSig];
+    
+    
+    
+    
     NSMutableArray* components = [NSMutableArray new];
     
     NSArray* scenes = @[@(RKConsentSectionTypeOverview),
@@ -230,26 +239,29 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     
     {
         RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeCustom];
-        c.summary = NSLocalizedString(@"Custom Scene summary", @"Custom Scene summary");
-        c.title = NSLocalizedString(@"Custom Scene", @"Custom Scene");
+        c.summary = @"Custom Scene summary";
+        c.title = @"Custom Scene";
         c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
-        c.customImage = [UIImage imageNamed:@"signature.png"];
+        c.customImage = [UIImage imageNamed:@"image_example.png"];
         [components addObject:c];
     }
     
     {
         RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeOnlyInDocument];
-        c.summary = NSLocalizedString(@"OnlyInDocument Scene summary", @"OnlyInDocument Scene summary");
-        c.title = NSLocalizedString(@"OnlyInDocument Scene", @"OnlyInDocument Scene");
+        c.summary = @"OnlyInDocument Scene summary";
+        c.title = @"OnlyInDocument Scene";
         c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
         [components addObject:c];
     }
     
     consent.sections = [components copy];
-    consent.investigatorSignatureImage = [UIImage imageNamed:@"signature.png"];
     
-    RKConsentViewController* consentVC = [[RKConsentViewController alloc] initWithConsent:consent];
-    consentVC.delegate = self;
+    RKVisualConsentStep *step = [[RKVisualConsentStep alloc] initWithDocument:consent];
+    RKConsentReviewStep *reviewStep = [[RKConsentReviewStep alloc] initWithSignature:participantSig inDocument:consent];
+    RKTask *task = [[RKTask alloc] initWithName:@"consent" identifier:@"consent" steps:@[step,reviewStep]];
+    RKTaskViewController *consentVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    
+    consentVC.taskDelegate = self;
     [self presentViewController:consentVC animated:YES completion:nil];
     
 }
@@ -287,9 +299,9 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     return isContentValid;
 }
 
-#pragma mark - RKConsentViewControllerDelegate methods
+#pragma mark - TaskViewController Delegate methods
 
-- (void)consentViewControllerDidComplete: (RKConsentViewController *)consentViewController
+- (void)taskViewControllerDidComplete: (RKTaskViewController *)taskViewController
 {
     [self dismissViewControllerAnimated:YES completion:^{
         [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
@@ -297,14 +309,10 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
     }];
 }
 
-- (void)consentViewController: (RKConsentViewController *)consentViewController didFailWithError:(NSError*)error
+- (void)taskViewControllerDidCancel:(RKTaskViewController *)taskViewController
 {
-    
-}
-
-- (void)consentViewControllerDidCancel:(RKConsentViewController *)consentViewController
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [taskViewController suspend];
+    [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Public Method

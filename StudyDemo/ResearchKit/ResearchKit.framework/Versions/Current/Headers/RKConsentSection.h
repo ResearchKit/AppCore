@@ -5,8 +5,7 @@
 //  Copyright (c) 2013-2014 Apple Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import <ResearchKit/ResearchKit.h>
 
 /**
  *  @enum RKConsentSectionType
@@ -30,7 +29,7 @@ typedef NS_ENUM(NSInteger, RKConsentSectionType) {
  *  @class RKConsentSection
  *  @abstract A section in the consent document.
  */
-@interface RKConsentSection : NSObject
+@interface RKConsentSection : NSObject<RKSerialization>
 
 /**
  *  @brief Populates predefined title and summary for all types except for type RKConsentSectionTypeCustom and RKConsentSectionTypeOnlyInDocument.

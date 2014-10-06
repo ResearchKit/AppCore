@@ -57,6 +57,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCUserInfoConstants.h>
 #import <APCAppleCore/APCUserInfoViewController.h>
 #import <APCAppleCore/APCViewController.h>
+#import <APCAppleCore/APCProfile.h>
 #import <APCAppleCore/YMLChartEnumerations.h>
 #import <APCAppleCore/YMLChartUnitsView.h>
 #import <APCAppleCore/YMLLineChartView.h>

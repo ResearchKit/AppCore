@@ -32,7 +32,7 @@
         [_button removeFromSuperview];
     }
     
-    _button = [UIButton buttonWithType:UIButtonTypeCustom];
+    _button = [UIButton buttonWithType:UIButtonTypeSystem];
     [_button setTitle:@"Tap here" forState:UIControlStateNormal];
     _button.frame = CGRectInset(_containerView.bounds, 10, 10);
     _button.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleHeight;

@@ -27,7 +27,8 @@ typedef NS_ENUM(NSInteger, RKErrorCode) {
     RKErrorException              = -100109,  // Exception caught during operation
     RKErrorArchiveFailed          = -100110,   // could not create archive
     RKErrorBackground             = -100111,
-    RKErrorMultipleErrors         = -100112
+    RKErrorMultipleErrors         = -100112,
+    RKErrorUserDeclinedSigning    = -100113
 };
 
 

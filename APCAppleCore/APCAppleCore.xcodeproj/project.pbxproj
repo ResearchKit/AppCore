@@ -121,7 +121,7 @@
 		F5179CE719D09238001DCCB7 /* APCParametersTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179CE219D09238001DCCB7 /* APCParametersTest.m */; };
 		F5179CEB19D09238001DCCB7 /* APCSchedulerTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179CE419D09238001DCCB7 /* APCSchedulerTestCase.m */; };
 		F5179F6019D0B443001DCCB7 /* APCModel.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = F5179BBF19D0917D001DCCB7 /* APCModel.xcdatamodeld */; };
-		F5179F6219D0B4D0001DCCB7 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6119D0B4D0001DCCB7 /* libbz2.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
+		F5179F6219D0B4D0001DCCB7 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6119D0B4D0001DCCB7 /* libbz2.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
 		F5179F6619D0B502001DCCB7 /* libarchive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6519D0B502001DCCB7 /* libarchive.dylib */; };
 		F5179F6819D0B50C001DCCB7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6719D0B50C001DCCB7 /* libz.dylib */; };
 		F541540D19D5F1DE00B819C9 /* APCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A63F1319D5EAD100284006 /* APCUser.m */; };

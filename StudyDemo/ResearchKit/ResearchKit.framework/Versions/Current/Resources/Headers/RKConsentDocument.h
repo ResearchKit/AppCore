@@ -5,14 +5,30 @@
 //  Copyright (c) 2013-2014 Apple Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import <ResearchKit/ResearchKit.h>
+
+@interface RKConsentSignature : NSObject<RKSerialization>
+
++ (RKConsentSignature *)signatureForPersonWithTitle:(NSString *)title name:(NSString *)name signatureImage:(UIImage *)signatureImage dateString:(NSString *)signatureDate;
+
+// Default YES
+@property (nonatomic, assign) BOOL requiresName;
+
+// Default YES
+@property (nonatomic, assign) BOOL requiresSignatureImage;
+
+@property (nonatomic, copy) NSString* title;
+@property (nonatomic, copy) NSString* name;
+@property (nonatomic, strong) UIImage* signatureImage;
+@property (nonatomic, copy) NSString* signatureDate;
+
+@end
 
 
 /**
  * @brief RKConsentDocument models elements to be presented in animated sequence and PDF document.
  */
-@interface RKConsentDocument : NSObject
+@interface RKConsentDocument : NSObject<RKSerialization>
 
 /**
  * @brief Document's title only appears in the PDF file.
@@ -38,18 +54,11 @@
 @property (nonatomic, copy) NSString* signaturePageContent;
 
 /**
- * @brief Participant related fields will be filled in by RKConsentViewController.
+ * @brief Set of signatures required or provided
+ * The signature object itself may be filled in or modified when running an RKConsentReviewStep
  */
-@property (nonatomic, copy) NSString* participantNamePrinted;
-@property (nonatomic, strong) UIImage* participantSignatureImage;
-@property (nonatomic, copy) NSString* participantSignatureDate;
-
-/**
- * @brief Investigator related fields
- */
-@property (nonatomic, copy) NSString* investigatorNamePrinted;
-@property (nonatomic, strong) UIImage* investigatorSignatureImage;
-@property (nonatomic, copy) NSString* investigatorSignatureDate;
+@property (nonatomic, copy) NSArray /* <RKConsentSignature *> */ *signatures;
+- (void)addSignature:(RKConsentSignature *)signature;
 
 /**
  * @brief Write document into a PDF file. PDF data will be returned in async block callback.

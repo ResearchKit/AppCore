@@ -11,52 +11,15 @@
 #import "DynamicTask.h"
 #import "CustomRecorder.h"
 #import "AppDelegate.h"
+#import "AppearanceControlViewController.h"
+
+// #define DEMO
 
 
-@interface PDFViewController : UIViewController
-
-@property (nonatomic, strong) UIWebView* pdfView;
-@property (nonatomic, strong) NSData *pdfData;
-
-@end
-
-@implementation PDFViewController
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    [self pdfView];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneAction:)];
-}
-
-- (UIWebView*)pdfView{
-    if (_pdfView == nil) {
-        _pdfView = [[UIWebView alloc] initWithFrame:self.view.bounds];
-        _pdfView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-        [self reloadContent];
-        [self.view addSubview:_pdfView];
-    }
-    return _pdfView;
-}
-
-- (void)reloadContent
-{
-    [_pdfView loadData:self.pdfData MIMEType:@"application/pdf" textEncodingName:nil baseURL:nil];
-}
-
-- (IBAction)doneAction:(id)sender{
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-        
-    }];
-}
-
-@end
-
-@interface MainViewController ()<RKTaskViewControllerDelegate, RKConsentViewControllerDelegate>
+@interface MainViewController ()<RKTaskViewControllerDelegate>
 
 @property (nonatomic, strong) RKTaskViewController* taskVC;
 @property (nonatomic, strong) RKStudy* study;
-@property (nonatomic, strong) NSData *signedPdfData;
 @property (nonatomic, strong) RKDataArchive *taskArchive;
 
 @end
@@ -89,88 +52,135 @@
     
     [[UIView appearance] setTintColor:[UIColor orangeColor]];
     
-    CGRect buttonFrame = CGRectMake(0, 0, 160, 40);
+    NSMutableDictionary *buttons = [NSMutableDictionary dictionary];
     
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        button.frame = buttonFrame;
-        button.center = CGPointMake(self.view.center.x-buttonFrame.size.width/2, 90);
         [button addTarget:self action:@selector(showTaskButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitle:@"Show Task" forState:UIControlStateNormal];
-        [self.view addSubview:button];
+        buttons[@"task"] = button;
     }
     
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        button.frame = buttonFrame;
-        button.center = CGPointMake(self.view.center.x+buttonFrame.size.width/2, 90);
-        [button addTarget:self action:@selector(pickDatesTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [button setTitle:@"Pick Dates" forState:UIControlStateNormal];
-        [self.view addSubview:button];
-    }
-    
-    {
-        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        button.frame = buttonFrame;
-        button.center = CGPointMake(self.view.center.x, 150);
-        [button addTarget:self action:@selector(showConsentButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [button setTitle:@"Show Consent" forState:UIControlStateNormal];
-        [self.view addSubview:button];
-    }
-    
-    {
-        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        button.frame = buttonFrame;
-        button.center = CGPointMake(self.view.center.x, 210);
-        [button addTarget:self action:@selector(showDynamicButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [button setTitle:@"Dynamic Task" forState:UIControlStateNormal];
-        [self.view addSubview:button];
-    }
-    
-    {
-        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        button.frame = buttonFrame;
-        button.center = CGPointMake(self.view.center.x, 270);
         [button addTarget:self action:@selector(showSample001ButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitle:@"EQ-5D-5L" forState:UIControlStateNormal];
-        [self.view addSubview:button];
+        buttons[@"eq5d"] = button;
+    }
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
+        [button addTarget:self action:@selector(showConsentButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Show Consent" forState:UIControlStateNormal];
+        buttons[@"consent"] = button;
+    }
+    
+#ifndef DEMO
+    
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
+        [button addTarget:self action:@selector(pickDatesTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Pick Dates" forState:UIControlStateNormal];
+        buttons[@"dates"] = button;
     }
     
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        button.frame = buttonFrame;
-        button.center = CGPointMake(self.view.center.x, 330);
+        [button addTarget:self action:@selector(showDynamicButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Dynamic Task" forState:UIControlStateNormal];
+        buttons[@"dyntask"] = button;
+    }
+    
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
         [button addTarget:self action:@selector(showGAITButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitle:@"GAIT" forState:UIControlStateNormal];
-        [self.view addSubview:button];
+        buttons[@"gait"] = button;
     }
     
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        button.frame = buttonFrame;
-        button.center = CGPointMake(self.view.center.x, 390);
         [button addTarget:self action:@selector(showInteruptTaskButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitle:@"Interruptible Task" forState:UIControlStateNormal];
-        [self.view addSubview:button];
+        buttons[@"interruptible"] = button;
     }
     
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        button.frame = buttonFrame;
-        button.center = CGPointMake(self.view.center.x-100, 450);
         [button addTarget:self action:@selector(joinStudy:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitle:@"Join Study" forState:UIControlStateNormal];
-        [self.view addSubview:button];
+        buttons[@"join"] = button;
     }
     
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        button.frame = buttonFrame;
-        button.center = CGPointMake(self.view.center.x+100, 450);
         [button addTarget:self action:@selector(leaveStudy:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitle:@"Leave Study" forState:UIControlStateNormal];
-        [self.view addSubview:button];
+        buttons[@"leave"] = button;
     }
+
+    
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
+        [button addTarget:self action:@selector(controlAppearance:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Appearance" forState:UIControlStateNormal];
+        buttons[@"appearance"] = button;
+    }
+    
+#endif
+    
+    [buttons enumerateKeysAndObjectsUsingBlock:^(id key, UIView *obj, BOOL *stop) {
+        [obj setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self.view addSubview:obj];
+    }];
+    
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:buttons[@"consent"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:buttons[@"task"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                         multiplier:1 constant:0]];
+#ifndef DEMO
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:buttons[@"join"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:buttons[@"leave"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                         multiplier:1 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:buttons[@"dates"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:buttons[@"dyntask"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                         multiplier:1 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:buttons[@"eq5d"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:buttons[@"gait"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                         multiplier:1 constant:0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:buttons[@"interruptible"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:buttons[@"appearance"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                         multiplier:1 constant:0]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[join][leave(==join)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[dates][dyntask(==dates)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[eq5d][gait(==eq5d)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[interruptible][appearance(==interruptible)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[task][dates(==task)][eq5d(==task)][interruptible(==task)][join(==task)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+#else
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[eq5d]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-100-[task]-30-[eq5d(==task)]-1@1-|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+#endif
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[consent][task(==consent)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    
+    
     
 }
 
@@ -260,6 +270,7 @@
         step.countDown = 10.0;
         step.text = @"An active test recording audio";
         step.recorderConfigurations = @[[RKAudioRecorderConfiguration new]];
+        step.useNextForSkip = YES;
         [steps addObject:step];
     }
     
@@ -268,6 +279,7 @@
         step.caption = @"Audio";
         step.countDown = 10.0;
         step.text = @"An active test recording lossless audio";
+        step.useNextForSkip = YES;
         step.recorderConfigurations = @[[[RKAudioRecorderConfiguration alloc] initWithRecorderSettings:@{AVFormatIDKey : @(kAudioFormatAppleLossless),
                                                                                                          AVNumberOfChannelsKey : @(2),
                                                                                                          AVSampleRateKey: @(44100.0)
@@ -290,6 +302,7 @@
         step.clickButtonToStartTimer = YES;
         step.countDown = 30.0;
         step.voicePrompt = @"An active test, touch collection";
+        step.useNextForSkip = YES;
         step.recorderConfigurations = @[[RKTouchRecorderConfiguration configuration]];
         [steps addObject:step];
     }
@@ -299,6 +312,7 @@
         step.caption = @"Button Tap";
         step.text = @"Please tap the orange button above when it appears.";
         step.countDown = 10.0;
+        step.useNextForSkip = YES;
         step.recorderConfigurations = @[[CustomRecorderConfiguration new]];
         [steps addObject:step];
     }
@@ -307,6 +321,7 @@
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001c" name:@"active step"];
         step.caption = @"Motion";
         step.text = @"An active test collecting device motion data";
+        step.useNextForSkip = YES;
         step.recorderConfigurations = @[ [[RKDeviceMotionRecorderConfiguration alloc] initWithFrequency:100.0]];
         [steps addObject:step];
     }
@@ -419,8 +434,17 @@
     consent.title = @"Demo Consent";
     consent.signaturePageTitle = @"Consent";
     consent.signaturePageContent = @"I agree  to participate in this research Study.";
-    consent.investigatorNamePrinted = @"Jake Clemson";
-    consent.investigatorSignatureDate = @"9/2/14";
+    
+    
+    RKConsentSignature *participantSig = [RKConsentSignature signatureForPersonWithTitle:@"Participant" name:nil signatureImage:nil dateString:nil];
+    [consent addSignature:participantSig];
+    
+    RKConsentSignature *investigatorSig = [RKConsentSignature signatureForPersonWithTitle:@"Investigator" name:@"Jake Clemson" signatureImage:[UIImage imageNamed:@"signature.png"] dateString:@"9/2/14"];
+    [consent addSignature:investigatorSig];
+    
+    
+    
+    
     NSMutableArray* components = [NSMutableArray new];
     
     NSArray* scenes = @[@(RKConsentSectionTypeOverview),
@@ -444,7 +468,7 @@
         c.summary = @"Custom Scene summary";
         c.title = @"Custom Scene";
         c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
-        c.customImage = [UIImage imageNamed:@"signature.png"];
+        c.customImage = [UIImage imageNamed:@"image_example.png"];
         [components addObject:c];
     }
     
@@ -457,10 +481,13 @@
     }
     
     consent.sections = [components copy];
-    consent.investigatorSignatureImage = [UIImage imageNamed:@"signature.png"];
    
-    RKConsentViewController* consentVC = [[RKConsentViewController alloc] initWithConsent:consent];
-    consentVC.delegate = self;
+    RKVisualConsentStep *step = [[RKVisualConsentStep alloc] initWithDocument:consent];
+    RKConsentReviewStep *reviewStep = [[RKConsentReviewStep alloc] initWithSignature:participantSig inDocument:consent];
+    RKTask *task = [[RKTask alloc] initWithName:@"consent" identifier:@"consent" steps:@[step,reviewStep]];
+    RKTaskViewController *consentVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    
+    consentVC.taskDelegate = self;
     [self presentViewController:consentVC animated:YES completion:nil];
 }
 
@@ -548,6 +575,7 @@
         step.caption = @"20 Yards Walk";
         step.text = @"Please put the phone in a pocket or armband. Then wait for voice instruction.";
         step.countDown = 8.0;
+        step.useNextForSkip = YES;
         [steps addObject:step];
     }
     
@@ -559,6 +587,7 @@
         step.vibration = YES;
         step.voicePrompt = step.text;
         step.countDown = 60.0;
+        step.useNextForSkip = YES;
         step.recorderConfigurations = @[ [[RKAccelerometerRecorderConfiguration alloc] initWithFrequency:100.0]];
         [steps addObject:step];
     }
@@ -606,6 +635,12 @@
     [self beginTask:task];
 }
 
+- (IBAction)controlAppearance:(id)sender{
+    
+    UINavigationController* navc = [[UINavigationController alloc] initWithRootViewController:[AppearanceControlViewController new]];
+    [self presentViewController:navc animated:YES completion:nil];
+}
+
 #pragma mark - Helpers
 
 -(void)sendResult:(RKResult*)result
@@ -623,7 +658,9 @@
 #pragma mark - RKTaskViewControllerDelegate
 
 - (BOOL)taskViewController:(RKTaskViewController *)taskViewController shouldShowMoreInfoOnStep:(RKStep *)step{
-    return YES;
+    static int counter = 0;
+    counter ++;
+    return ((counter % 2) > 0);
 }
 
 - (void)taskViewController:(RKTaskViewController *)taskViewController didReceiveLearnMoreEventFromStepViewController:(RKStepViewController *)stepViewController{
@@ -638,13 +675,10 @@
         RKSurveyResult* sresult = (RKSurveyResult*)result;
         
         for (RKQuestionResult* qr in sresult.surveyResults) {
-            NSLog(@"%@ = [%@] %@ ", [[qr itemIdentifier] stringValue], qr.answer.class, qr.answer);
+            NSLog(@"%@ = [%@] %@ ", [[qr itemIdentifier] stringValue], [qr.answer class], qr.answer);
         }
     }
     
-    if ([result isKindOfClass:[RKDataResult class]] && [[[result.itemIdentifier components] lastObject] isEqualToString:@"document"]) {
-        self.signedPdfData = [(RKDataResult*)result data];
-    }
     
     [self sendResult:result];
         
@@ -654,7 +688,7 @@
 {
     for (RKQuestionResult *result in surveyResults)
     {
-        if ([result isKindOfClass:[RKQuestionResult class]])
+        if (![result isKindOfClass:[RKQuestionResult class]])
         {
             continue;
         }
@@ -700,9 +734,19 @@
     if ([stepViewController.step.identifier isEqualToString:@"aid_001c"]) {
         UIView* customView = [UIView new];
         customView.backgroundColor = [UIColor cyanColor];
-        customView.frame = [(RKActiveStepViewController*)stepViewController customViewContainer].bounds;
-        customView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        [[(RKActiveStepViewController*)stepViewController customViewContainer] addSubview:customView];
+        
+        // Have the custom view request the space it needs.
+        // A little tricky because we need to let it size to fit if there's not enough space.
+        [customView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        NSArray *verticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[c(>=160)]" options:0 metrics:nil views:@{@"c":customView}];
+        for (NSLayoutConstraint *constraint in verticalConstraints)
+        {
+            constraint.priority = UILayoutPriorityFittingSizeLevel;
+        }
+        [customView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[c(>=280)]" options:0 metrics:nil views:@{@"c":customView}]];
+        [customView addConstraints:verticalConstraints];
+        
+        [(RKActiveStepViewController*)stepViewController setCustomView:customView];
         
         // Set custom button on navi bar
         stepViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Custom button"
@@ -772,20 +816,11 @@
     
     
     
-    [self dismissViewControllerAnimated:YES completion:^{
-        if (self.signedPdfData) {
-            PDFViewController* pdfVC = [[PDFViewController alloc] init];
-            pdfVC.pdfData = self.signedPdfData;
-        
-            UINavigationController* nav = [[UINavigationController alloc] initWithRootViewController:pdfVC];
-            [self presentViewController:nav animated:YES completion:^{
-                self.signedPdfData = nil;
-            }];
-        }
-    }];
+    [self dismissViewControllerAnimated:YES completion:nil];
     
 }
 
+#if 0
 #pragma mark - RKConsentViewControllerDelegate
 
 - (void)consentViewControllerDidCancel:(RKConsentViewController *)consentViewController{
@@ -805,6 +840,7 @@
     }];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+#endif
 
 
 
