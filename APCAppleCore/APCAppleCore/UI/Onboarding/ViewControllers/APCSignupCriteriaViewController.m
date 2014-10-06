@@ -17,7 +17,7 @@
 #import "APCSignupCriteriaViewController.h"
 #import "APCSignUpPermissionsViewController.h"
 
-#define SKIP_CONSENT 1
+#define SKIP_CONSENT 0
 
 static NSString const *kAPCSignupCriteriaTableViewCellIdentifier    =   @"Criteria";
 

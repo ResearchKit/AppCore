@@ -29,6 +29,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="userMessage" destination="5CD-I4-G3c" id="DS3-jq-13e"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FPk-Lw-PGP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -11,6 +11,9 @@
 
 @interface APCEmailVerifyViewController ()
 @property (nonatomic, readonly) APCUser * user;
+@property (weak, nonatomic) IBOutlet UILabel *userMessage;
+
+
 @end
 
 @implementation APCEmailVerifyViewController
@@ -23,6 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"Verify Email";
+    self.userMessage.text = @"Please verify your email...";
     [self checkSignIn];
 }
 
@@ -32,6 +36,7 @@
     [self.user signInOnCompletion:^(NSError *error) {
         if (error) {
             if (error.code == kSBBServerPreconditionNotMet) {
+                weakSelf.userMessage.text = @"Sending consent to server...";
                 [weakSelf getServerConsent];
             }
             else

@@ -42,6 +42,10 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
     if (![self.studyStore studyWithIdentifier:studyIdentifier]) {
         self.study = [self.studyStore addStudyWithIdentifier:studyIdentifier delegate:self error:&error];
     }
+    else
+    {
+        self.study =[self.studyStore studyWithIdentifier:studyIdentifier];
+    }
     [error handle];
     [self setUpCollectors];
     

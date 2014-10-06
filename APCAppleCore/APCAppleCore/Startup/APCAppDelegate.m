@@ -75,8 +75,8 @@
 - (void) initializeBridgeServerConnection
 {
     [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey]];
-    SBBAuthManager *myAuthManager = [SBBAuthManager authManagerWithBaseURL:self.initializationOptions[kBaseURLKey]];
-    [SBBComponentManager registerComponent:myAuthManager forClass:[SBBAuthManager class]];
+    SBBNetworkManager *myNetworkManager = [[SBBNetworkManager alloc] initWithBaseURL:self.initializationOptions[kBaseURLKey]];
+    [SBBComponentManager registerComponent:myNetworkManager forClass:[SBBNetworkManager class]];
 }
 
 - (void) initializeAppleCoreStack
