@@ -61,4 +61,10 @@
     return [[paths lastObject] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", [NSUUID UUID].UUIDString]];
 }
 
+/*********************************************************************************/
+#pragma mark - RKStepViewControllerDelegate
+/*********************************************************************************/
+
+- (void)stepViewControllerDidFinish:(RKStepViewController *)stepViewController navigationDirection:(RKStepViewControllerNavigationDirection)direction {/*Empty implementation to remove warning*/}
+
 @end
