@@ -29,6 +29,11 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+        if (error.code == kSBBNoCredentialsAvailable) {
+
+        }
+    }];
     [self.dataMonitor appBecameActive];
 }
 
