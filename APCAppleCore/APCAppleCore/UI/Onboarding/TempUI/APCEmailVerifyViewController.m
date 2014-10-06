@@ -51,7 +51,7 @@
 
 - (void) getServerConsent
 {
-    if (self.user.userConsented) {
+    if (self.user.isUserConsented) {
         [self.user sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
             if (error) {
                 [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"User Consent Error", @"User Consent Error") message:error.message];

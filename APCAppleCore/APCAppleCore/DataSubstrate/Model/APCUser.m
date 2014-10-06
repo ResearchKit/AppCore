@@ -38,10 +38,10 @@ static NSString *const kSignedInKey = @"SignedIn";
 #pragma mark - Initialization Methods
 /*********************************************************************************/
 
-- (instancetype)init
+- (instancetype)initWithContext: (NSManagedObjectContext*) context
 {
     self = [super init];
-    [self loadStoredUserData];
+    [self loadStoredUserData:context];
     return self;
 }
 
@@ -67,12 +67,11 @@ static NSString *const kSignedInKey = @"SignedIn";
             Weight : %@ \n\
             Wake Up Time : %@ \n\
             Sleep time : %@ \n\
-            ", self.firstName, self.lastName, self.userName, self.email, self.birthDate, (int) self.biologicalSex, @(self.isSignedUp),  @(self.isUserConsented),@(self.isSignedIn),@(self.isConsented),self.medicalConditions, self.medications, (int) self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime];
+            ", self.firstName, self.lastName, self.userName, self.email, self.birthDate, (int) self.biologicalSex, @(self.isSignedUp), @(self.isUserConsented), @(self.isSignedIn), @(self.isConsented), self.medicalConditions, self.medications, (int) self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime];
 }
 
-- (void) loadStoredUserData
+- (void) loadStoredUserData: (NSManagedObjectContext*) context
 {
-    NSManagedObjectContext * context = [(APCAppDelegate*) [UIApplication sharedApplication].delegate dataSubstrate].persistentContext;
     [context performBlockAndWait:^{
         APCStoredUserData * storedUserData = [self loadStoredUserDataInContext:context];
         [self copyPropertiesFromStoredUserData:storedUserData];

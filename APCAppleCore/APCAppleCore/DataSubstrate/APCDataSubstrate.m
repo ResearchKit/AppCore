@@ -19,19 +19,19 @@
     self = [super init];
     if (self) {
         [self setUpCoreDataStackWithPersistentStorePath:storePath additionalModels:mergedModels];
-        [self setUpCurrentUser];
+        [self setUpCurrentUser:self.persistentContext];
         [self setUpResearchStudy:studyIdentifier];
         [self setUpHealthKit];
     }
     return self;
 }
 
-- (void) setUpCurrentUser
+- (void) setUpCurrentUser: (NSManagedObjectContext*) context
 {
     if (!_currentUser) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            _currentUser = [[APCUser alloc] init];
+            _currentUser = [[APCUser alloc] initWithContext:context];
         });
     }
 }

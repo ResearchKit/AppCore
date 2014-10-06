@@ -8,8 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import <HealthKit/HealthKit.h>
+#import <CoreData/CoreData.h>
 
 @interface APCUser : NSObject
+
+/*********************************************************************************/
+#pragma mark - Designated Intializer
+/*********************************************************************************/
+- (instancetype)initWithContext: (NSManagedObjectContext*) context;
 
 /*********************************************************************************/
 #pragma mark - Stored Properties in Keychain
