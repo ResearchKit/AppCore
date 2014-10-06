@@ -8,6 +8,7 @@
 
 #import <ResearchKit/RKVersion.h>
 #import <ResearchKit/RKErrors.h>
+#import <ResearchKit/RKAppearance.h>
 #import <ResearchKit/RKItemIdentifier.h>
 
 #import <ResearchKit/RKStudyStore.h>
@@ -24,6 +25,8 @@
 #import <ResearchKit/RKIntroductionStep.h>
 #import <ResearchKit/RKMediaStep.h>
 #import <ResearchKit/RKAnswerFormat.h>
+#import <ResearchKit/RKVisualConsentStep.h>
+#import <ResearchKit/RKConsentReviewStep.h>
 
 #import <ResearchKit/RKResult.h>
 
@@ -38,7 +41,11 @@
 #import <ResearchKit/RKActiveStepViewController.h>
 #import <ResearchKit/RKQuestionStepViewController.h>
 #import <ResearchKit/RKMediaStepViewController.h>
+#import <ResearchKit/RKIntroductionStepViewController.h>
+#import <ResearchKit/RKVisualConsentStepViewController.h>
+#import <ResearchKit/RKConsentReviewStepViewController.h>
+
+#import <ResearchKit/RKCustomStepView.h>
 
 #import <ResearchKit/RKConsentDocument.h>
 #import <ResearchKit/RKConsentSection.h>
-#import <ResearchKit/RKConsentViewController.h>

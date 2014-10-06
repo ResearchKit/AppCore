@@ -9,6 +9,7 @@
 
 @class RKQuestionResult;
 @class RKQuestionStep;
+@class RKQuestionStepCustomView;
 
 /**
  * @brief The RKQuestionStepViewController class defines the attributes and behavior of a question step view controller.
@@ -23,25 +24,17 @@
 - (instancetype)initWithQuestionStep:(RKQuestionStep*)step result:(RKQuestionResult*)result;
 
 /**
- * @brief Question label
- * @discussion Its own properties are read/write. Use these properties primarily to configure the font or layout of the question.
+ * @brief Provide a custom question view
+ * If a question requires a custom control for data entry, provide a suitable
+ * custom step view. This view should provide sizeThatFits: or autolayout
+ * constraints which determine the vertical space required.
  */
-@property (nonatomic, readonly) UILabel *questionLabel;
+@property (nonatomic, strong) RKQuestionStepCustomView *customQuestionView;
 
-/**
- * @brief Prompt label
- * @discussion Its own properties are read/write. Use these properties primarily to configure the font or layout of the question.
- */
-@property (nonatomic, readonly) UILabel *promptLabel;
-
-/**
- * @brief Height of the container view of questionLabel and questionLabel
- */
-@property (nonatomic) CGFloat labelContainerViewHeight;
 
 /**
  * @brief Customizable footer view at the bottom
  */
-@property (nonatomic) UIView* footerView;
+@property (nonatomic, strong) UIView* footerView;
 
 @end

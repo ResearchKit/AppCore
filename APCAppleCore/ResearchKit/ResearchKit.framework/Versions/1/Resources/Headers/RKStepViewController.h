@@ -26,6 +26,14 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
 
 @protocol RKStepViewControllerDelegate <NSObject>
 
+@required
+
+
+/**
+ * @brief Tells the delegate that the step was completed, would like to navigate forward/backward.
+ */
+- (void)stepViewControllerDidFinish:(RKStepViewController *)stepViewController navigationDirection:(RKStepViewControllerNavigationDirection)direction;
+
 @optional
 /**
  * @brief Tells the delegate that the stepViewController is about to be displayed.
@@ -33,16 +41,15 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
 - (void)stepViewControllerWillBePresented:(RKStepViewController *)viewController;
 
 /**
- * @brief Tells the delegate that the step was completed, would like to navigate forward/backward.
- */
-- (void)stepViewControllerDidFinish:(RKStepViewController *)stepViewController navigationDirection:(RKStepViewControllerNavigationDirection)direction;
-/**
  * @brief Tells the delegate that the step was failed.
  */
 - (void)stepViewControllerDidFail:(RKStepViewController *)stepViewController withError:(NSError*)error;
 
 /**
  * @brief Tells the delegate that the step was canceled.
+ *
+ * Subclasses can use this to cause the RKTaskViewController to cancel
+ * the whole task.
  */
 - (void)stepViewControllerDidCancel:(RKStepViewController *)stepViewController;
 
@@ -95,23 +102,22 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
 
 /**
  * @brief Control buttons
+ * If the item is nil, the corresponding button will not be displayed.
+ * If the item is present, the title, target, and action will be used. Other
+ * properties are ignored (style is obtained globally, from the appearance of classes
+ * defined in RKAppearance).
+ *
+ * These are updated during view loading or when the step is set, but are safe to
+ * override in the stepViewControllerWillBePresented: delegate callback.
+ *
+ * Subclasses can safely modify these after calling [super viewWillAppear:]
  */
 @property (nonatomic, strong) UIBarButtonItem* continueButton;
 @property (nonatomic, strong) UIBarButtonItem* learnMoreButton;
+@property (nonatomic, strong) UIBarButtonItem* skipButton;
 @property (nonatomic, strong) UIBarButtonItem* backButton;
 @property (nonatomic, strong) UIBarButtonItem* cancelButton;
 
-/**
- * @brief Whether to add continueButton to toolbar at the bottom
- * Default value is YES;
- */
-@property (nonatomic) BOOL continueButtonOnToolbar;
-
-/**
- * @brief Whether to add learnMoreButton to toolbar at the bottom
- * Default value is YES;
- */
-@property (nonatomic) BOOL learnMoreButtonOnToolbar;
 
 /**
  * @brief Methods tell if next/prevous step is available

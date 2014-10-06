@@ -54,6 +54,14 @@
 @property (nonatomic) BOOL vibration;
 
 /**
+ * @brief Leave Next button continuously enabled before the step completes.
+ * At the same time, hides the skip button.
+ *
+ * Default value is NO.
+ */
+@property (nonatomic) BOOL useNextForSkip;
+
+/**
  * @brief Caption text to be displayed on the screen.
  */
 @property (nonatomic, copy) NSString *caption;

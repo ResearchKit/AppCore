@@ -12,21 +12,29 @@
  */
 @interface RKActiveStepViewController : RKStepViewController
 
+
 /**
- * The customViewContainer allows custom view to be its subview.
- * @note When RKTouchRecorder is present, its gesture recognizer attaches to customViewContainer.
+ * Add a custom view to the custom view container. The customViewContainer
+ * will expand to fit this custom view.
+ *
  */
-@property (nonatomic, strong, readonly) UIView* customViewContainer;
+@property (nonatomic, strong) UIView *customView;
 
 /**
  * @brief A image view in customViewContainer.
+ *
+ * This view is created on demand. If present the image view will be added
+ * to the custom view container, which will expand to accommodate it.
  */
 @property (nonatomic, strong, readonly) UIImageView* imageView;
 
 /**
- * The instructionLabel displays step's intruction text
+ * If the step is marked finished, Continue is enabled and Skip
+ * is hidden. When not finished, Continue is disabled and Skip
+ * is visible.
+ *
  */
-@property (nonatomic, strong, readonly) UILabel* instructionLabel;
+@property (nonatomic, assign, getter=isFinished, readonly) BOOL finished;
 
 /**
  * Override point for subclasses, called when the step has finished.
@@ -35,5 +43,7 @@
  * enabled, where it will continue automatically to the next step.
  */
 - (void)stepDidFinish;
+
+
 
 @end

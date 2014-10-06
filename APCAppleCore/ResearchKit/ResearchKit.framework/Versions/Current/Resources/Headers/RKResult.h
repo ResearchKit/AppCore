@@ -125,16 +125,17 @@
  * @brief Actual answer to the question.
  *
  * Different types of question use different types of object to store the answer.
- *      Single choice type use NSNumber to store the chosen option's index.
- *      Mutiple choice type use NSArray to store the chosen options' indexes.
- *      Text type use NSString to store user's input.
- *      Scale type use NSNumber to store marked value.
- *      Date type use NSString to store a date value in format of "yyyy-MM-dd".
- *      Time type use NSString to store a time value in format of "HH:mm:ss".
- *      DateAndTime type use NSString to store a date-time value in format of "yyyy-MM-dd'T'HH:mm:ssZ".
- *      Time Interval use NSNumber to store a time span in seconds.
+ *      Single choice type uses NSNumber to store the chosen option's index.
+ *      Multiple choice type uses NSArray to store the chosen options' indexes.
+ *      Boolean type uses NSNumber
+ *      Text type uses NSString to store user's input.
+ *      Scale type uses NSNumber to store marked value.
+ *      Date type uses NSString to store a date value in format of "yyyy-MM-dd".
+ *      Time type uses NSString to store a time value in format of "HH:mm:ss".
+ *      DateAndTime type uses NSString to store a date-time value in format of "yyyy-MM-dd'T'HH:mm:ssZ".
+ *      Time Interval uses NSNumber to store a time span in seconds.
  */
-@property (nonatomic, strong) NSObject* answer;
+@property (nonatomic, strong) id answer;
 
 + (RKQuestionResult *)nullResultForQuestionStep:(RKQuestionStep *)questionStep;
 
@@ -166,5 +167,7 @@
  * @brief An array that contains answers to the questions.
  */
 @property (nonatomic, strong) NSArray *surveyResults;
+
+- (RKQuestionResult *)resultForStep:(RKQuestionStep *)step;
 
 @end
