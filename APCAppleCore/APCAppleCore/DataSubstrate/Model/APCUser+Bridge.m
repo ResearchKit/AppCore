@@ -13,6 +13,11 @@
 
 - (void)signUpOnCompletion:(void (^)(NSError *))completionBlock
 {
+#if DEVELOPMENT
+    if (completionBlock) {
+        completionBlock(nil);
+    }
+#else
     NSParameterAssert(self.email);
     NSParameterAssert(self.userName);
     NSParameterAssert(self.password);
@@ -23,10 +28,16 @@
             }
         });
     }];
+#endif
 }
 
 - (void)signInOnCompletion:(void (^)(NSError *))completionBlock
 {
+#if DEVELOPMENT
+    if (completionBlock) {
+        completionBlock(nil);
+    }
+#else
     NSParameterAssert(self.userName);
     NSParameterAssert(self.password);
     [SBBComponent(SBBAuthManager) signInWithUsername:self.userName password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
@@ -36,10 +47,16 @@
             }
         });
     }];
+#endif
 }
 
 - (void)sendUserConsentedToBridgeOnCompletion:(void (^)(NSError *))completionBlock
 {
+#if DEVELOPMENT
+    if (completionBlock) {
+        completionBlock(nil);
+    }
+#else
     NSParameterAssert(self.firstName);
     NSParameterAssert(self.lastName);
     //TODO: Figure out what needs to be done if birthDate is nil
@@ -50,6 +67,7 @@
             }
         });
     }];
+#endif
 }
 
 
