@@ -79,6 +79,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
@@ -269,6 +270,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 - (void) next
 {
 #if SKIP_CONSENT
+    [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
     [self startSignUp];
 #else
     [self showConsent];
@@ -302,8 +304,7 @@ static CGFloat const kAPCSignupCriteriaTableViewCellHeight          =   98.0;
 - (void)taskViewControllerDidComplete: (RKTaskViewController *)taskViewController
 {
     [self dismissViewControllerAnimated:YES completion:^{
-        //TODO: Call this setter after server confirmed that user has consented
-        [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.consented = YES;
+        [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
         [self startSignUp];
     }];
 }

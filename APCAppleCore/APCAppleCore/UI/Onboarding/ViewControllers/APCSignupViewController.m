@@ -12,6 +12,7 @@
 #import "APCStepProgressBar.h"
 #import "APCUserInfoConstants.h"
 #import "APCSignupViewController.h"
+#import "APCAppleCore.h"
 
 static NSInteger kNumberOfSteps = 4;
 
@@ -42,6 +43,7 @@ static NSInteger kNumberOfSteps = 4;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
@@ -66,7 +68,7 @@ static NSInteger kNumberOfSteps = 4;
 
 - (APCUser *) user {
     if (!_user) {
-        _user = [APCUser new];
+        _user = ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
     }
     
     return _user;

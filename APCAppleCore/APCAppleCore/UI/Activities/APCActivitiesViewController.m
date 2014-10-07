@@ -15,7 +15,7 @@ static CGFloat kTableViewRowHeight = 70;
 static CGFloat kTableViewSectionHeaderHeight = 30;
 static NSInteger kNumberOfSectionsInTableView = 1;
 
-@interface APCActivitiesViewController () <RKTaskViewControllerDelegate, RKStepViewControllerDelegate>
+@interface APCActivitiesViewController () <RKTaskViewControllerDelegate>
 
 @property (strong, nonatomic) NSMutableArray *scheduledTasksArray;
 
@@ -137,12 +137,10 @@ static NSInteger kNumberOfSectionsInTableView = 1;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     id task = self.scheduledTasksArray[indexPath.row];
-    NSString *taskType;
     
     if ([task isKindOfClass:[APCGroupedScheduledTask class]]) {
         
         APCGroupedScheduledTask *groupedScheduledTask = (APCGroupedScheduledTask *)task;
-        taskType = groupedScheduledTask.taskType;
         
         NSString *taskClass = groupedScheduledTask.taskClassName;
         
@@ -179,7 +177,6 @@ static NSInteger kNumberOfSectionsInTableView = 1;
         
     } else {
         APCScheduledTask *scheduledTask = (APCScheduledTask *)task;
-        taskType = scheduledTask.task.taskType;
         
         NSString *taskClass = scheduledTask.task.taskClassName;
         

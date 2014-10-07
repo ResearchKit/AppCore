@@ -15,6 +15,7 @@ FOUNDATION_EXPORT double APCAppleCoreVersionNumber;
 FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 
 #import <ResearchKit/ResearchKit.h>
+#import <BridgeSDK/BridgeSDK.h>
 
 //Headers
 #import <APCAppleCore/APCAppDelegate.h>
@@ -23,13 +24,10 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCDataSubstrate+CoreData.h>
 #import <APCAppleCore/APCDataSubstrate+ResearchKit.h>
 #import <APCAppleCore/APCModel.h>
-#import <APCAppleCore/APCNetworkManager.h>
-#import <APCAppleCore/APCSageNetworkManager.h>
 #import <APCAppleCore/APCScheduler.h>
 #import <APCAppleCore/APCScheduleInterpreter.h>
 #import <APCAppleCore/APCPassiveLocationTracking.h>
 #import <APCAppleCore/APCParameters.h>
-#import <APCAppleCore/Reachability.h>
 #import <APCAppleCore/APCPermissionsManager.h>
 
 //UI
@@ -59,7 +57,6 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCUserInfoConstants.h>
 #import <APCAppleCore/APCUserInfoViewController.h>
 #import <APCAppleCore/APCViewController.h>
-#import <APCAppleCore/APCProfile.h>
 #import <APCAppleCore/YMLChartEnumerations.h>
 #import <APCAppleCore/YMLChartUnitsView.h>
 #import <APCAppleCore/YMLLineChartView.h>
@@ -70,7 +67,12 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 
 #import <APCAppleCore/APCActivitiesViewController.h>
 #import <APCAppleCore/APCActivitiesTableViewCell.h>
+
+#import <APCAppleCore/APCEmailVerifyViewController.h>
+
+//Objects
 #import <APCAppleCore/APCGroupedScheduledTask.h>
+#import <APCAppleCore/APCKeychainStore.h>
 
 //Categories
 #import <APCAppleCore/APCStepProgressBar+Appearance.h>
@@ -78,7 +80,6 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/NSBundle+Helper.h>
 #import <APCAppleCore/NSDate+Helper.h>
 #import <APCAppleCore/NSError+APCAdditions.h>
-#import <APCAppleCore/NSError+APCNetworkManager.h>
 #import <APCAppleCore/NSObject+Helper.h>
 #import <APCAppleCore/NSString+Helper.h>
 #import <APCAppleCore/UIAlertView+Helper.h>
@@ -91,21 +92,8 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/UIColor+Appearance.h>
 #import <APCAppleCore/HKHealthStore+APCExtensions.h>
 
-//Error Codes
-static NSString *const APC_ERROR_DOMAIN = @"com.ymedialabs.error_domain";
-static NSString *const APC_ORIGINAL_ERROR_KEY = @"APCOriginalErrorKey";
-
-typedef NS_ENUM(NSInteger, APCNetworkErrorCodes)
-{
-    kAPCUnknownError = -1,
-    kAPCInternetNotConnected = -1000,
-    kAPCServerNotReachable = -1001,
-    kAPCServerUnderMaintenance = -1002,
-    kAPCServerNotAuthenticated = -1003,
-    kAPCServerPreconditionNotMet = -1004
-};
-
-static NSString *const APCUserLoginNotification     = @"APCUserLoginNotification";
+static NSString *const APCUserSignedUpNotification     = @"APCUserSignedUpNotification";
+static NSString *const APCUserSignedInNotification     = @"APCUserSignedInNotification";
 static NSString *const APCUserLogOutNotification  = @"APCUserLogOutNotification";
 static NSString *const APCUserDidConsentNotification = @"APCUserDidConsentNotification";
 

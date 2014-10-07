@@ -19,7 +19,6 @@
 
 static NSString * const kSignUpPermissionsCellIdentifier = @"PermissonsCell";
 static CGFloat const kTableViewRowHeight                 = 165.0f;
-static NSString *const kLoggedInKey = @"LoggedIn";
 
 @interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
 
@@ -234,14 +233,12 @@ static NSString *const kLoggedInKey = @"LoggedIn";
     [self.stepProgressBar setCompletedSteps:5 animation:YES];
     
     // We are posting this notification after .5 seconds delay, because we need to display the progress bar completion animation
-    [self performSelector:@selector(postLoginNotification) withObject:nil afterDelay:0.5];
+    [self performSelector:@selector(setUserSignedUp) withObject:nil afterDelay:0.5];
 }
 
-- (void) postLoginNotification
+- (void) setUserSignedUp
 {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kLoggedInKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    [[NSNotificationCenter defaultCenter] postNotificationName:(NSString *)APCUserLoginNotification object:nil];
+    self.user.signedUp = YES;
 }
 
 #pragma mark - Permissions

@@ -11,13 +11,10 @@
 
 @implementation APCStoredUserData
 
-@dynamic firstName;
-@dynamic lastName;
-@dynamic userName;
-@dynamic email;
 @dynamic medicalConditions;
 @dynamic medications;
-@dynamic consented;
+@dynamic serverConsented;
+@dynamic userConsented;
 @dynamic wakeUpTime;
 @dynamic sleepTime;
 

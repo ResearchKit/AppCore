@@ -16,12 +16,24 @@
 {
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-        
+    
+    NSAssert(self.initializationOptions, @"Please set up initialization options");
+    
+    [self initializeBridgeServerConnection];
+    [self initializeAppleCoreStack];
+    [self loadStaticTasksAndSchedulesIfNecessary];
+    [self registerNotifications];
+    
     return YES;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+        if (error.code == kSBBNoCredentialsAvailable) {
+
+        }
+    }];
     [self.dataMonitor appBecameActive];
 }
 
@@ -55,5 +67,74 @@
     
     return customWindow;
 }
+
+/*********************************************************************************/
+#pragma mark - Helpers
+/*********************************************************************************/
+
+- (void) initializeBridgeServerConnection
+{
+    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey]];
+    SBBNetworkManager *myNetworkManager = [[SBBNetworkManager alloc] initWithBaseURL:self.initializationOptions[kBaseURLKey]];
+    [SBBComponentManager registerComponent:myNetworkManager forClass:[SBBNetworkManager class]];
+}
+
+- (void) initializeAppleCoreStack
+{
+    self.dataSubstrate = [[NSClassFromString(self.initializationOptions[kDataSubstrateClassNameKey]) alloc] initWithPersistentStorePath:[[self applicationDocumentsDirectory] stringByAppendingPathComponent:self.initializationOptions[kDatabaseNameKey]] additionalModels: nil studyIdentifier:self.initializationOptions[kStudyIdentifierKey]];
+    self.scheduler = [[APCScheduler alloc] initWithDataSubstrate:self.dataSubstrate];
+    self.dataMonitor = [[APCDataMonitor alloc] initWithDataSubstrate:self.dataSubstrate scheduler:self.scheduler];
+}
+
+- (void)loadStaticTasksAndSchedulesIfNecessary
+{
+    if (![APCDBStatus isSeedLoadedWithContext:self.dataSubstrate.persistentContext]) {
+        [APCDBStatus setSeedLoadedWithContext:self.dataSubstrate.persistentContext];
+        NSString *resource = [[NSBundle mainBundle] pathForResource:self.initializationOptions[kTasksAndSchedulesJSONFileNameKey] ofType:@"json"];
+        NSData *jsonData = [NSData dataWithContentsOfFile:resource];
+        NSError * error;
+        NSDictionary * dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+        [error handle];
+        [self.dataSubstrate loadStaticTasksAndSchedules:dictionary];
+        [self clearNSUserDefaults];
+        [APCKeychainStore resetKeyChain];
+    }
+}
+
+- (NSString *) applicationDocumentsDirectory
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? paths[0] : nil;
+    return basePath;
+}
+
+- (void) registerNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signedUpNotification:) name:(NSString *)APCUserSignedUpNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signedInNotification:) name:(NSString *)APCUserSignedInNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logOutNotification:) name:(NSString *)APCUserLogOutNotification object:nil];
+}
+
+/*********************************************************************************/
+#pragma mark - Helper Methods
+/*********************************************************************************/
+- (void) clearNSUserDefaults
+{
+    NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+}
+
+#pragma mark - Notifications
+- (void) signedUpNotification:(NSNotification*) notification { /*Abstract Implementation*/ }
+
+- (void) signedInNotification:(NSNotification*) notification { /*Abstract Implementation*/ }
+
+- (void) logOutNotification:(NSNotification*) notification
+{
+    self.dataSubstrate.currentUser.signedUp = NO;
+    self.dataSubstrate.currentUser.signedIn = NO;
+    [APCKeychainStore removeValueForKey:kPasswordKey];
+}
+
+
 
 @end

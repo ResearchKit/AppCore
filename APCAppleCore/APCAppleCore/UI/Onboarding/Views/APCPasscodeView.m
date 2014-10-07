@@ -96,6 +96,7 @@ static CGFloat const kAPCPasscodeViewPinLength = 4;
 }
 
 - (BOOL) resignFirstResponder {
+    [super resignFirstResponder];
     return [self.hiddenTextField resignFirstResponder];
 }
 

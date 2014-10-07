@@ -8,15 +8,30 @@
 
 #import <UIKit/UIKit.h>
 
-@class APCNetworkManager, APCDataSubstrate, APCDataMonitor, APCScheduler;
+static NSString *const kStudyIdentifierKey = @"StudyIdentifierKey";
+static NSString *const kAppPrefixKey = @"AppPrefixKey";
+static NSString *const kBaseURLKey = @"BaseURLKey";
+static NSString *const kDatabaseNameKey = @"DatabaseNameKey";
+static NSString *const kTasksAndSchedulesJSONFileNameKey = @"TasksAndSchedulesJSONFileNameKey";
+static NSString *const kDataSubstrateClassNameKey = @"APHDatasubstrateClassName";
+
+static NSString *const kPasswordKey = @"password";
+
+@class APCDataSubstrate, APCDataMonitor, APCScheduler;
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property  (strong, nonatomic)  UIWindow * window;
 
 //APC Related Properties & Methods
-@property (strong, nonatomic) APCNetworkManager * networkManager;
 @property (strong, nonatomic) APCDataSubstrate * dataSubstrate;
 @property (strong, nonatomic) APCDataMonitor * dataMonitor;
 @property (strong, nonatomic) APCScheduler * scheduler;
+
+@property (nonatomic, strong) NSDictionary * initializationOptions;
+
+//For User in Subclasses
+- (void) signedInNotification:(NSNotification *)notification;
+- (void) signedUpNotification: (NSNotification*) notification;
+- (void) logOutNotification:(NSNotification *)notification;
 
 @end

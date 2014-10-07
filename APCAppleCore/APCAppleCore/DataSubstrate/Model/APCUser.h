@@ -8,19 +8,31 @@
 
 #import <Foundation/Foundation.h>
 #import <HealthKit/HealthKit.h>
+#import <CoreData/CoreData.h>
 
 @interface APCUser : NSObject
 
 /*********************************************************************************/
-#pragma mark - Stored Properties in Core Data
+#pragma mark - Designated Intializer
 /*********************************************************************************/
-@property (nonatomic, getter=isConsented) BOOL consented;
+- (instancetype)initWithContext: (NSManagedObjectContext*) context;
+
+/*********************************************************************************/
+#pragma mark - Stored Properties in Keychain
+/*********************************************************************************/
 
 @property (nonatomic, strong) NSString * firstName;
 @property (nonatomic, strong) NSString * lastName;
 
 @property (nonatomic, strong) NSString * userName;
 @property (nonatomic, strong) NSString * email;
+@property (nonatomic, strong) NSString * password;
+
+/*********************************************************************************/
+#pragma mark - Stored Properties in Core Data
+/*********************************************************************************/
+@property (nonatomic, getter=isConsented) BOOL consented; //Confirmation that server is consented. Should be used in the app to test for user consent.
+@property (nonatomic, getter=isUserConsented) BOOL userConsented; //User has consented though not communicated to the server.
 
 @property (nonatomic, strong) NSString * medicalConditions;
 @property (nonatomic, strong) NSString * medications;
@@ -39,8 +51,11 @@
 @property (nonatomic, strong) HKQuantity * weight;
 
 /*********************************************************************************/
-#pragma mark - Methods
+#pragma mark - NSUserDefaults Simulated Properties
 /*********************************************************************************/
-- (BOOL) isLoggedIn;
+@property (nonatomic, getter=isSignedUp) BOOL signedUp;
+@property (nonatomic, getter=isSignedIn) BOOL signedIn;
+
+- (BOOL) isLoggedOut;
 
 @end

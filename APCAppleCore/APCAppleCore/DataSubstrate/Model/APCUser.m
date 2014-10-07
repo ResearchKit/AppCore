@@ -10,16 +10,22 @@
 #import "APCAppleCore.h"
 #import <HealthKit/HealthKit.h>
 
-static NSString *const kLoggedInKey = @"LoggedIn";
-static NSString *const kConsentedPropertyName = @"consented";
+
 static NSString *const kFirstNamePropertyName = @"firstName";
 static NSString *const kLastNamePropertyName = @"lastName";
 static NSString *const kUserNamePropertyName = @"userName";
 static NSString *const kEmailPropertyName = @"email";
+static NSString *const kPasswordPropertyName = @"password";
+
+static NSString *const kConsentedPropertyName = @"serverConsented";
+static NSString *const kUserConsentedPropertyName = @"userConsented";
 static NSString *const kMedicalConditionsPropertyName = @"medicalConditions";
 static NSString *const kMedicationsPropertyName = @"medications";
 static NSString *const kWakeUpTimePropertyName = @"wakeUpTime";
 static NSString *const kSleepTimePropertyName = @"sleepTime";
+
+static NSString *const kSignedUpKey = @"SignedUp";
+static NSString *const kSignedInKey = @"SignedIn";
 
 @interface APCUser ()
 @property (nonatomic, readonly) HKHealthStore * healthStore;
@@ -28,23 +34,18 @@ static NSString *const kSleepTimePropertyName = @"sleepTime";
 
 @implementation APCUser
 
-- (BOOL)isLoggedIn
-{
-    return [[NSUserDefaults standardUserDefaults] boolForKey:kLoggedInKey];
-}
-
 /*********************************************************************************/
 #pragma mark - Initialization Methods
 /*********************************************************************************/
 
-- (instancetype)init
+- (instancetype)initWithContext: (NSManagedObjectContext*) context
 {
     self = [super init];
-    [self loadStoredUserData];
+    [self loadStoredUserData:context];
     return self;
 }
 
-- (NSString *)debugDescription
+- (NSString *)description
 {
     return [NSString stringWithFormat:@"\
             First Name : %@\n\
@@ -54,6 +55,11 @@ static NSString *const kSleepTimePropertyName = @"sleepTime";
             DOB : %@\n\
             Biological Sex : %d\n\
             -----------------------\n\
+            SignedUp? :%@\n\
+            UserConsented? : %@\n\
+            LoggedIn? :%@\n\
+            serverConsented? : %@\n\
+            -----------------------\n\
             Medical Conditions : %@\n\
             Medications : %@\n\
             Blood Type : %d\n\
@@ -61,12 +67,11 @@ static NSString *const kSleepTimePropertyName = @"sleepTime";
             Weight : %@ \n\
             Wake Up Time : %@ \n\
             Sleep time : %@ \n\
-            ", self.firstName, self.lastName, self.userName, self.email, self.birthDate, self.biologicalSex, self.medicalConditions, self.medications, self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime];
+            ", self.firstName, self.lastName, self.userName, self.email, self.birthDate, (int) self.biologicalSex, @(self.isSignedUp), @(self.isUserConsented), @(self.isSignedIn), @(self.isConsented), self.medicalConditions, self.medications, (int) self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime];
 }
 
-- (void) loadStoredUserData
+- (void) loadStoredUserData: (NSManagedObjectContext*) context
 {
-    NSManagedObjectContext * context = [(APCAppDelegate*) [UIApplication sharedApplication].delegate dataSubstrate].persistentContext;
     [context performBlockAndWait:^{
         APCStoredUserData * storedUserData = [self loadStoredUserDataInContext:context];
         [self copyPropertiesFromStoredUserData:storedUserData];
@@ -90,13 +95,10 @@ static NSString *const kSleepTimePropertyName = @"sleepTime";
 
 - (void) copyPropertiesFromStoredUserData: (APCStoredUserData*) storedUserData
 {
-    _consented = [storedUserData.consented boolValue];
-    _firstName = [storedUserData.firstName copy];
-    _lastName = [storedUserData.lastName copy];
+    _consented = [storedUserData.serverConsented boolValue];
+    _userConsented = [storedUserData.userConsented boolValue];
     _medicalConditions = [storedUserData.medicalConditions copy];
     _medications = [storedUserData.medications copy];
-    _userName = [storedUserData.userName copy];
-    _email = [storedUserData.email copy];
     _wakeUpTime = [storedUserData.wakeUpTime copy];
     _sleepTime = [storedUserData.sleepTime copy];
 }
@@ -118,6 +120,66 @@ static NSString *const kSleepTimePropertyName = @"sleepTime";
     return [[(APCAppDelegate*) ([UIApplication sharedApplication].delegate) dataSubstrate] healthStore];
 }
 
+/*********************************************************************************/
+#pragma mark - Properties from Key Chain
+/*********************************************************************************/
+
+- (NSString *)firstName
+{
+    return [APCKeychainStore stringForKey:kFirstNamePropertyName];
+}
+
+- (void)setFirstName:(NSString *)firstName
+{
+    [APCKeychainStore setString:firstName forKey:kFirstNamePropertyName];
+}
+
+- (NSString *)lastName
+{
+    return [APCKeychainStore stringForKey:kLastNamePropertyName];
+}
+
+- (void)setLastName:(NSString *)lastName
+{
+    [APCKeychainStore setString:lastName forKey:kLastNamePropertyName];
+}
+
+- (NSString *)userName
+{
+    return [APCKeychainStore stringForKey:kUserNamePropertyName];
+}
+
+- (void)setUserName:(NSString *)userName
+{
+    [APCKeychainStore setString:userName forKey:kUserNamePropertyName];
+}
+
+- (NSString *)email
+{
+      return [APCKeychainStore stringForKey:kEmailPropertyName];
+}
+
+-(void)setEmail:(NSString *)email
+{
+    [APCKeychainStore setString:email forKey:kEmailPropertyName];
+}
+
+- (NSString *)password
+{
+    return [APCKeychainStore stringForKey:kPasswordPropertyName];
+}
+
+-(void)setPassword:(NSString *)password
+{
+    [APCKeychainStore setString:[self hashIfNeeded:password] forKey:kPasswordPropertyName];
+}
+
+- (NSString*) hashIfNeeded: (NSString*) password
+{
+    //TODO: Implement hashing method
+    return password;
+}
+
 
 /*********************************************************************************/
 #pragma mark - Setters for Properties in Core Data
@@ -130,28 +192,10 @@ static NSString *const kSleepTimePropertyName = @"sleepTime";
     [[NSNotificationCenter defaultCenter] postNotificationName:APCUserDidConsentNotification object:nil];
 }
 
-- (void) setFirstName:(NSString *)firstName
+- (void)setUserConsented:(BOOL)userConsented
 {
-    _firstName = firstName;
-    [self updateStoredProperty:kFirstNamePropertyName withValue:firstName];
-}
-
-- (void)setLastName:(NSString *)lastName
-{
-    _lastName = lastName;
-    [self updateStoredProperty:kLastNamePropertyName withValue:lastName];
-}
-
-- (void)setUserName:(NSString *)userName
-{
-    _userName = userName;
-    [self updateStoredProperty:kUserNamePropertyName withValue:userName];
-}
-
-- (void)setEmail:(NSString *)email
-{
-    _email = email;
-    [self updateStoredProperty:kEmailPropertyName withValue:email];
+    _userConsented = userConsented;
+    [self updateStoredProperty:kUserConsentedPropertyName withValue:@(userConsented)];
 }
 
 - (void)setMedicalConditions:(NSString *)medicalConditions
@@ -268,6 +312,42 @@ static NSString *const kSleepTimePropertyName = @"sleepTime";
     [self.healthStore saveObject:weightSample withCompletion:^(BOOL success, NSError *error) {
         [error handle];
     }];
+}
+
+/*********************************************************************************/
+#pragma mark - NSUserDefault Simulated Methods
+/*********************************************************************************/
+-(void)setSignedUp:(BOOL)signedUp
+{
+    [[NSUserDefaults standardUserDefaults] setBool:signedUp forKey:kSignedUpKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    if (signedUp) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:(NSString *)APCUserSignedUpNotification object:nil];
+    }
+}
+
+- (BOOL) isSignedUp
+{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:kSignedUpKey];
+}
+
+- (void)setSignedIn:(BOOL)signedIn
+{
+    [[NSUserDefaults standardUserDefaults] setBool:signedIn forKey:kSignedInKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    if (signedIn) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:(NSString *)APCUserSignedInNotification object:nil];
+    }
+}
+
+- (BOOL) isSignedIn
+{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:kSignedInKey];
+}
+
+- (BOOL)isLoggedOut
+{
+    return self.userName.length && !self.isSignedIn && !self.isSignedUp;
 }
 
 @end

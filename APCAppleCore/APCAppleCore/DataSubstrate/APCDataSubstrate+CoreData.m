@@ -47,6 +47,7 @@
 
     NSPersistentStore *persistentStore = [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:storePath] options:options error:&error];
     if (!persistentStore) {
+        //TODO: Address removing persistent store in production
         NSError* localError;
         [[NSFileManager defaultManager] removeItemAtPath:storePath error:&localError];
         [localError handle];

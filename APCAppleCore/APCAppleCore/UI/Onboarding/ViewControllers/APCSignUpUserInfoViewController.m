@@ -12,6 +12,7 @@
 #import "APCStepProgressBar.h"
 #import "APCUserInfoConstants.h"
 #import "APCSignUpUserInfoViewController.h"
+#import "APCAppleCore.h"
 
 @interface APCSignUpUserInfoViewController ()
 
@@ -64,7 +65,7 @@
 
 - (APCUser *) user {
     if (!_user) {
-        _user = [APCUser new];
+        _user = ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
     }
     
     return _user;

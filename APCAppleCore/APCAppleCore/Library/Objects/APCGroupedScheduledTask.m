@@ -40,7 +40,10 @@
 
 - (BOOL)isComplete
 {
-    return ([self completedTasksCount]/self.scheduledTasks.count);
+    if (self.scheduledTasks.count > 0) {
+        return ([self completedTasksCount]/self.scheduledTasks.count);
+    }
+    return NO;
 }
 
 @end
