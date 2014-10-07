@@ -42,12 +42,12 @@
             case RKSurveyQuestionTypeText:
             case RKSurveyQuestionTypeInteger:
             case RKSurveyQuestionTypeDecimal:
+            case RKSurveyQuestionTypeSingleChoice:
             {
                 NSAssert([localRKResult.answer isKindOfClass:[NSString class]], @"Its not a string");
                 localAPCResult.stringAnswer = (NSString*)localRKResult.answer;
             }
                 break;
-            case RKSurveyQuestionTypeSingleChoice:
             case RKSurveyQuestionTypeBoolean:
             {
                 NSAssert([localRKResult.answer isKindOfClass:[NSNumber class]], @"Its not a NSNumber");
