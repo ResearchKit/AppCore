@@ -29,11 +29,13 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+#ifndef DEVELOPMENT
     if (self.dataSubstrate.currentUser.signedIn) {
         [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
             [error handle];
         }];
     }
+#endif
 
     [self.dataMonitor appBecameActive];
 }
