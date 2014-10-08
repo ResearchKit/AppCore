@@ -83,5 +83,28 @@
 #endif
 }
 
+/*********************************************************************************/
+#pragma mark - Authmanager Delegate Protocol
+/*********************************************************************************/
+
+- (NSString *)sessionTokenForAuthManager:(id<SBBAuthManagerProtocol>)authManager
+{
+    return self.sessionToken;
+}
+
+- (void)authManager:(id<SBBAuthManagerProtocol>)authManager didGetSessionToken:(NSString *)sessionToken
+{
+    self.sessionToken = sessionToken;
+}
+
+- (NSString *)usernameForAuthManager:(id<SBBAuthManagerProtocol>)authManager
+{
+    return self.userName;
+}
+
+- (NSString *)passwordForAuthManager:(id<SBBAuthManagerProtocol>)authManager
+{
+    return self.password;
+}
 
 @end

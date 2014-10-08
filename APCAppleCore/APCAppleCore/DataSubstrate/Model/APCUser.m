@@ -16,6 +16,7 @@ static NSString *const kLastNamePropertyName = @"lastName";
 static NSString *const kUserNamePropertyName = @"userName";
 static NSString *const kEmailPropertyName = @"email";
 static NSString *const kPasswordPropertyName = @"password";
+static NSString *const kSessionTokenPropertyName = @"sessionToken";
 
 static NSString *const kConsentedPropertyName = @"serverConsented";
 static NSString *const kUserConsentedPropertyName = @"userConsented";
@@ -178,6 +179,16 @@ static NSString *const kSignedInKey = @"SignedIn";
 {
     //TODO: Implement hashing method
     return password;
+}
+
+- (NSString *)sessionToken
+{
+    return [APCKeychainStore stringForKey:kSessionTokenPropertyName];
+}
+
+- (void)setSessionToken:(NSString *)sessionToken
+{
+    [APCKeychainStore setString:sessionToken forKey:kSessionTokenPropertyName];
 }
 
 

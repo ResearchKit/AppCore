@@ -29,11 +29,12 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
-        if (error.code == kSBBNoCredentialsAvailable) {
+    if (self.dataSubstrate.currentUser.signedIn) {
+        [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+            [error handle];
+        }];
+    }
 
-        }
-    }];
     [self.dataMonitor appBecameActive];
 }
 
@@ -84,6 +85,10 @@
     self.dataSubstrate = [[NSClassFromString(self.initializationOptions[kDataSubstrateClassNameKey]) alloc] initWithPersistentStorePath:[[self applicationDocumentsDirectory] stringByAppendingPathComponent:self.initializationOptions[kDatabaseNameKey]] additionalModels: nil studyIdentifier:self.initializationOptions[kStudyIdentifierKey]];
     self.scheduler = [[APCScheduler alloc] initWithDataSubstrate:self.dataSubstrate];
     self.dataMonitor = [[APCDataMonitor alloc] initWithDataSubstrate:self.dataSubstrate scheduler:self.scheduler];
+    
+    //Setup AuthDelegate for SageSDK
+    SBBAuthManager * manager = (SBBAuthManager*) SBBComponent(SBBAuthManager);
+    manager.authDelegate = self.dataSubstrate.currentUser;
 }
 
 - (void)loadStaticTasksAndSchedulesIfNecessary
