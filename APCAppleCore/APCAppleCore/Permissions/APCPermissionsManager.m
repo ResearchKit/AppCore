@@ -119,7 +119,12 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                                              [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight],
                                              [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType],
                                              [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex],
-                                             [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth]];
+                                             [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth],
+                                             [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount],
+                                             [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate],
+                                             [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning],
+                                             [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierFlightsClimbed],
+                                             [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceCycling]];
                 
                 NSArray *dataTypesToWrite = @[[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass]];
                 
