@@ -218,18 +218,18 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     
     NSString *currentFileName = kParamentersFileName;
     
-    if (!fileExists) {
+    if (fileExists) {
         currentFileName       = self.fileName;
         
         NSArray *fileNameAndExtension = [currentFileName componentsSeparatedByString:@"."];
         
         //This is used for unit testing
-//        NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-//        NSString *bundlePath = [bundle pathForResource:fileNameAndExtension[0] ofType:fileNameAndExtension[1]];
-
+        //        NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+        //        NSString *bundlePath = [bundle pathForResource:fileNameAndExtension[0] ofType:fileNameAndExtension[1]];
+        
         NSString *bundlePath = [[NSBundle mainBundle] pathForResource:fileNameAndExtension[0] ofType:fileNameAndExtension[1]];
         
-        NSError *error;
+        NSError *error = nil;
         if (![[NSFileManager defaultManager] copyItemAtPath:bundlePath toPath:self.jsonPath error:&error]) {
             
             [self didFail:error];
@@ -239,7 +239,12 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
         }
     } else {
         
-        [self setContentOfFileToDictionary];
+        //If no file exists than we just create one.
+        NSError *error = nil;
+        if (![[NSFileManager defaultManager] createFileAtPath:self.jsonPath contents:nil attributes:nil]) {
+            
+            [self didFail:error];
+        }
     }
 }
 
