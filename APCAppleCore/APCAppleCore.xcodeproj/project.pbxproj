@@ -134,6 +134,7 @@
 		F541541E19D60F3400B819C9 /* HKHealthStore+APCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541C19D60F3400B819C9 /* HKHealthStore+APCExtensions.m */; };
 		F541541F19D60F3400B819C9 /* HKHealthStore+APCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541C19D60F3400B819C9 /* HKHealthStore+APCExtensions.m */; };
 		F54AB72B19D36DA100986B52 /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6319D0B4EA001DCCB7 /* ResearchKit.framework */; };
+		F554FF2A19E7331800BA729A /* APCParameters.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F554FF2919E7331800BA729A /* APCParameters.storyboard */; };
 		F567786419DDCCBE00936B9A /* APCKeychainStore.h in Headers */ = {isa = PBXBuildFile; fileRef = F567786219DDCCBE00936B9A /* APCKeychainStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F567786519DDCCBE00936B9A /* APCKeychainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F567786319DDCCBE00936B9A /* APCKeychainStore.m */; };
 		F57329A819DF059500A85564 /* APCEmailVerify.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F57329A719DF059500A85564 /* APCEmailVerify.storyboard */; };
@@ -238,16 +239,12 @@
 		F5A63F1419D5EAD100284006 /* APCUser.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A63F1219D5EAD100284006 /* APCUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5A63F1519D5EAD100284006 /* APCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A63F1319D5EAD100284006 /* APCUser.m */; };
 		F5B4212B19D23D6800F9CD69 /* APCParametersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B4212019D23D6800F9CD69 /* APCParametersCell.m */; };
-		F5B4212C19D23D6800F9CD69 /* APCParametersCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5B4212119D23D6800F9CD69 /* APCParametersCell.xib */; };
 		F5B4212D19D23D6800F9CD69 /* APCParametersCoreDataCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B4212219D23D6800F9CD69 /* APCParametersCoreDataCell.h */; };
 		F5B4212E19D23D6800F9CD69 /* APCParametersCoreDataCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B4212319D23D6800F9CD69 /* APCParametersCoreDataCell.m */; };
-		F5B4212F19D23D6800F9CD69 /* APCParametersCoreDataCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5B4212419D23D6800F9CD69 /* APCParametersCoreDataCell.xib */; };
 		F5B4213019D23D6800F9CD69 /* APCParametersDashboardTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B4212519D23D6800F9CD69 /* APCParametersDashboardTableViewController.h */; };
 		F5B4213119D23D6800F9CD69 /* APCParametersDashboardTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B4212619D23D6800F9CD69 /* APCParametersDashboardTableViewController.m */; };
-		F5B4213219D23D6800F9CD69 /* APCParametersDashboardTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5B4212719D23D6800F9CD69 /* APCParametersDashboardTableViewController.xib */; };
 		F5B4213319D23D6800F9CD69 /* APCParametersUserDefaultCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B4212819D23D6800F9CD69 /* APCParametersUserDefaultCell.h */; };
 		F5B4213419D23D6800F9CD69 /* APCParametersUserDefaultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B4212919D23D6800F9CD69 /* APCParametersUserDefaultCell.m */; };
-		F5B4213519D23D6800F9CD69 /* APCParametersUserDefaultCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5B4212A19D23D6800F9CD69 /* APCParametersUserDefaultCell.xib */; };
 		F5B4213919D23D7700F9CD69 /* APCDebugWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B4213619D23D7700F9CD69 /* APCDebugWindow.h */; };
 		F5B4213A19D23D7700F9CD69 /* APCDebugWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B4213719D23D7700F9CD69 /* APCDebugWindow.m */; };
 		F5B4213B19D23D7700F9CD69 /* APCParametersCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B4213819D23D7700F9CD69 /* APCParametersCell.h */; };
@@ -372,6 +369,7 @@
 		F541541719D6029C00B819C9 /* APCStoredUserData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStoredUserData.m; sourceTree = "<group>"; };
 		F541541B19D60F3400B819C9 /* HKHealthStore+APCExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HKHealthStore+APCExtensions.h"; sourceTree = "<group>"; };
 		F541541C19D60F3400B819C9 /* HKHealthStore+APCExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HKHealthStore+APCExtensions.m"; sourceTree = "<group>"; };
+		F554FF2919E7331800BA729A /* APCParameters.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCParameters.storyboard; sourceTree = "<group>"; };
 		F567786219DDCCBE00936B9A /* APCKeychainStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCKeychainStore.h; sourceTree = "<group>"; };
 		F567786319DDCCBE00936B9A /* APCKeychainStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCKeychainStore.m; sourceTree = "<group>"; };
 		F57329A719DF059500A85564 /* APCEmailVerify.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCEmailVerify.storyboard; sourceTree = "<group>"; };
@@ -476,16 +474,12 @@
 		F5A63F1219D5EAD100284006 /* APCUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCUser.h; sourceTree = "<group>"; };
 		F5A63F1319D5EAD100284006 /* APCUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCUser.m; sourceTree = "<group>"; };
 		F5B4212019D23D6800F9CD69 /* APCParametersCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCParametersCell.m; sourceTree = "<group>"; };
-		F5B4212119D23D6800F9CD69 /* APCParametersCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCParametersCell.xib; sourceTree = "<group>"; };
 		F5B4212219D23D6800F9CD69 /* APCParametersCoreDataCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCParametersCoreDataCell.h; sourceTree = "<group>"; };
 		F5B4212319D23D6800F9CD69 /* APCParametersCoreDataCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCParametersCoreDataCell.m; sourceTree = "<group>"; };
-		F5B4212419D23D6800F9CD69 /* APCParametersCoreDataCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCParametersCoreDataCell.xib; sourceTree = "<group>"; };
 		F5B4212519D23D6800F9CD69 /* APCParametersDashboardTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCParametersDashboardTableViewController.h; sourceTree = "<group>"; };
 		F5B4212619D23D6800F9CD69 /* APCParametersDashboardTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCParametersDashboardTableViewController.m; sourceTree = "<group>"; };
-		F5B4212719D23D6800F9CD69 /* APCParametersDashboardTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCParametersDashboardTableViewController.xib; sourceTree = "<group>"; };
 		F5B4212819D23D6800F9CD69 /* APCParametersUserDefaultCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCParametersUserDefaultCell.h; sourceTree = "<group>"; };
 		F5B4212919D23D6800F9CD69 /* APCParametersUserDefaultCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCParametersUserDefaultCell.m; sourceTree = "<group>"; };
-		F5B4212A19D23D6800F9CD69 /* APCParametersUserDefaultCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCParametersUserDefaultCell.xib; sourceTree = "<group>"; };
 		F5B4213619D23D7700F9CD69 /* APCDebugWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDebugWindow.h; sourceTree = "<group>"; };
 		F5B4213719D23D7700F9CD69 /* APCDebugWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDebugWindow.m; sourceTree = "<group>"; };
 		F5B4213819D23D7700F9CD69 /* APCParametersCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCParametersCell.h; sourceTree = "<group>"; };
@@ -690,20 +684,17 @@
 		F5179BE519D0917D001DCCB7 /* Parameters */ = {
 			isa = PBXGroup;
 			children = (
+				F554FF2919E7331800BA729A /* APCParameters.storyboard */,
 				F5B4213619D23D7700F9CD69 /* APCDebugWindow.h */,
 				F5B4213719D23D7700F9CD69 /* APCDebugWindow.m */,
 				F5B4213819D23D7700F9CD69 /* APCParametersCell.h */,
 				F5B4212019D23D6800F9CD69 /* APCParametersCell.m */,
-				F5B4212119D23D6800F9CD69 /* APCParametersCell.xib */,
 				F5B4212219D23D6800F9CD69 /* APCParametersCoreDataCell.h */,
 				F5B4212319D23D6800F9CD69 /* APCParametersCoreDataCell.m */,
-				F5B4212419D23D6800F9CD69 /* APCParametersCoreDataCell.xib */,
 				F5B4212519D23D6800F9CD69 /* APCParametersDashboardTableViewController.h */,
 				F5B4212619D23D6800F9CD69 /* APCParametersDashboardTableViewController.m */,
-				F5B4212719D23D6800F9CD69 /* APCParametersDashboardTableViewController.xib */,
 				F5B4212819D23D6800F9CD69 /* APCParametersUserDefaultCell.h */,
 				F5B4212919D23D6800F9CD69 /* APCParametersUserDefaultCell.m */,
-				F5B4212A19D23D6800F9CD69 /* APCParametersUserDefaultCell.xib */,
 				F5179BE619D0917D001DCCB7 /* APCParameters.h */,
 				F5179BE719D0917D001DCCB7 /* APCParameters.m */,
 			);
@@ -1219,6 +1210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5C1DC4119D23044006527EA /* tab_learn_selected@2x.png in Resources */,
+				F554FF2A19E7331800BA729A /* APCParameters.storyboard in Resources */,
 				F5C1DC3D19D23044006527EA /* tab_dashboard_selected@2x.png in Resources */,
 				F5C1DC2319D22EAF006527EA /* TabBar.storyboard in Resources */,
 				F57329A819DF059500A85564 /* APCEmailVerify.storyboard in Resources */,
@@ -1232,19 +1224,15 @@
 				F5C1DC3719D23044006527EA /* tab_activities@2x.png in Resources */,
 				F5179CC319D0917D001DCCB7 /* MODEL_README in Resources */,
 				F588BA6519D21F1300692473 /* APCCriteriaCell.xib in Resources */,
-				F5B4212F19D23D6800F9CD69 /* APCParametersCoreDataCell.xib in Resources */,
 				F5C1DC3619D23044006527EA /* tab_activities.png in Resources */,
 				F5C1DC4319D23044006527EA /* tab_profile@2x.png in Resources */,
 				F5C1DC4419D23044006527EA /* tab_profile_selected.png in Resources */,
 				F588BA7B19D21F1300692473 /* APCSignupTouchIDViewController.xib in Resources */,
-				F5B4213219D23D6800F9CD69 /* APCParametersDashboardTableViewController.xib in Resources */,
 				F5C1DC3F19D23044006527EA /* tab_learn@2x.png in Resources */,
 				5B29CE4D19D4902B00E2FD62 /* APCStudyOverviewViewController.xib in Resources */,
 				F588BA9219D21F1300692473 /* APCUserInfoTableHeaderView.xib in Resources */,
-				F5B4212C19D23D6800F9CD69 /* APCParametersCell.xib in Resources */,
 				F5C1DC4519D23044006527EA /* tab_profile_selected@2x.png in Resources */,
 				F5C1DC4219D23044006527EA /* tab_profile.png in Resources */,
-				F5B4213519D23D6800F9CD69 /* APCParametersUserDefaultCell.xib in Resources */,
 				7BA4BBF919D4893700BC4023 /* APCMapViewController.xib in Resources */,
 				F5C1DC3A19D23044006527EA /* tab_dashboard.png in Resources */,
 				F5C1DC3819D23044006527EA /* tab_activities_selected.png in Resources */,

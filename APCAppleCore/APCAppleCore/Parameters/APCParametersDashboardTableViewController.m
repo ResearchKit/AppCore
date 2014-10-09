@@ -7,6 +7,7 @@
 //
 
 #import "APCParametersDashboardTableViewController.h"
+#import "APCDebugWindow.h"
 #import "APCAppleCore.h"
 
 #import <QuartzCore/QuartzCore.h>
@@ -19,8 +20,6 @@ static NSString *APCParametersUserDefaultsCellIdentifier = @"APCParametersUserDe
 static NSString *APCTitleOfParameterSection = @"Parameters";
 static NSString *APCTitleOfCoreDataParameterSection = @"Reset";
 static NSString *APCTitleOfUserDefaultsParameterSection = @"NSUserdefaults";
-
-static NSInteger APCParametersTableViewHeaderHeight = 70.0;
 
 
 typedef NS_ENUM(NSInteger, APCParametersEnum)
@@ -46,37 +45,21 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self setupHeaderView];
+    self.title = @"Debug Screen";
     
     //Setup sections
     
     //TODO: If you want to include NSUserDefaults then uncomment the line below.
-    //self.sections = @[APCParametersDashboardCellIdentifier, APCParametersCoreDataCellIdentifier, APCParametersUserDefaultsCellIdentifier];
+//    self.sections = @[APCParametersDashboardCellIdentifier, APCParametersCoreDataCellIdentifier, APCParametersUserDefaultsCellIdentifier];
     self.sections = @[APCParametersDashboardCellIdentifier, APCParametersCoreDataCellIdentifier];
     
     //TODO parameters should be loaded at launch of application
     self.parameters = [[APCParameters alloc] initWithFileName:@"APCParameters.json"];
     [self.parameters setDelegate:self];
-    
-    //Force loading of AppleCore bundle
 
-    
-    NSBundle* bundle = [NSBundle appleCoreBundle];
-    
-    //Register custom nibs
-    NSString *nibName = NSStringFromClass([APCParametersCell class]);
-    [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:bundle] forCellReuseIdentifier:APCParametersDashboardCellIdentifier];
-    
-    NSString *nibCoreDataCellName = NSStringFromClass([APCParametersCoreDataCell class]);
-    [self.tableView registerNib:[UINib nibWithNibName:nibCoreDataCellName bundle:bundle] forCellReuseIdentifier:APCParametersCoreDataCellIdentifier];
-
-    NSString *nibUserDefaultsCellName = NSStringFromClass([APCParametersUserDefaultCell class]);
-    [self.tableView registerNib:[UINib nibWithNibName:nibUserDefaultsCellName bundle:bundle] forCellReuseIdentifier:APCParametersUserDefaultsCellIdentifier];
-
-    
     //Setup persistent parameter types like Core Data
     self.coreDataParameters = [NSMutableArray new];
-    self.coreDataParameters = [@[@"Core Data Reset", @"Parameters", @"NSUserDefautls"] mutableCopy];
+    self.coreDataParameters = [@[@"Core Data Reset", @"Parameters", @"NSUserDefaults"] mutableCopy];
     
     //Setup NSUserDefaults
     self.userDefaultParameters = [[[[NSUserDefaults standardUserDefaults] dictionaryRepresentation] allKeys] mutableCopy];
@@ -160,21 +143,6 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     return height;
 }
 
-
-- (UIImage *)imageWithColor:(UIColor *)color {
-    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, rect);
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return image;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell *cell;
@@ -185,9 +153,7 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
         [coreDataCell setDelegate:self];
         
         coreDataCell.resetTitle.text = [self.coreDataParameters objectAtIndex:indexPath.row];
-        [coreDataCell.resetButton setBackgroundImage:[self imageWithColor:[UIColor blueColor]] forState:UIControlStateHighlighted];
 
-        
         if (indexPath.row == kCoreDataDefault)
         {
             coreDataCell.resetInstructions.text = @"This will delete all persisting object graph entities.";
@@ -276,42 +242,9 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     return cell;
 }
 
-
 /*********************************************************************************/
-#pragma mark - Private methods
+#pragma mark - Reset Methods
 /*********************************************************************************/
-- (void) setupHeaderView {
-    
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenRect.size.width, APCParametersTableViewHeaderHeight)];
-    
-    //This is set in the header view portion of table view.
-    float xValue = 10.0f;
-    float yValue = 25.0f;
-    float width = 50.0;
-    float height = 40.0;
-    
-    UIButton *doneButton = [[UIButton alloc] initWithFrame:CGRectMake(xValue, yValue, width, height)];
-    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
-    [doneButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [doneButton addTarget:self action:@selector(dimissView) forControlEvents:UIControlEventTouchUpInside];
-    
-    [headerView addSubview:doneButton];
-    
-    self.tableView.tableHeaderView = headerView;
-}
-
-- (void)dimissView {
-    [self.tableView endEditing:YES];
-    
-    [UIView animateWithDuration:0.3 animations:^{
-        [self.view setAlpha:0];
-        
-    } completion:^(BOOL finished) {
-        [self removeFromParentViewController];
-        
-    }];
-}
 
 - (void) resetParameters {
     [self.tableView endEditing:YES];
@@ -423,5 +356,25 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     
     [self presentViewController:alertController animated:YES completion:nil];
 }
+
+/*********************************************************************************/
+#pragma mark - Buttons
+/*********************************************************************************/
+
+- (IBAction)donePressed:(id)sender {
+    [self.tableView endEditing:YES];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.navigationController.view setAlpha:0];
+        
+    } completion:^(BOOL finished) {
+        APCDebugWindow * window = (APCDebugWindow*) self.navigationController.view.window;
+        [self.navigationController.view removeFromSuperview];
+        [self.navigationController removeFromParentViewController];
+        window.toggleDebugWindow = NO;
+    }];
+
+}
+
 
 @end
