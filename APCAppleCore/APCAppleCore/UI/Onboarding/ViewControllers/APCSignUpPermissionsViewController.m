@@ -128,7 +128,7 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 - (void) addNavigationItems {
     
     UIBarButtonItem *nextBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"") style:UIBarButtonItemStylePlain target:self action:@selector(finishSignUp)];
-    nextBarButton.enabled = [self isPermissionsGranted];
+    nextBarButton.enabled = YES;
     self.navigationItem.rightBarButtonItem = nextBarButton;
 }
 
@@ -222,8 +222,6 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 - (void)setPermissionsGrantedCount:(NSInteger)permissionsGrantedCount
 {
     _permissionsGrantedCount = permissionsGrantedCount;
-    
-    self.navigationItem.rightBarButtonItem.enabled = [self isPermissionsGranted];
 }
 
 #pragma mark - Selectors / Button Actions
@@ -259,8 +257,6 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 {
     [self updatePermissions];
     [self.tableView reloadData];
-    
-    self.navigationItem.leftBarButtonItem.enabled = [self isPermissionsGranted];
 }
 
 

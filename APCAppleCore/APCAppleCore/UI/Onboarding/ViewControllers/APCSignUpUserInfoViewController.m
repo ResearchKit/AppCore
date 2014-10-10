@@ -6,13 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCUser.h"
-#import "APCUser+HealthKit.h"
-#import "UIView+Helper.h"
-#import "APCStepProgressBar.h"
-#import "APCUserInfoConstants.h"
-#import "APCSignUpUserInfoViewController.h"
 #import "APCAppleCore.h"
+#import "APCSignUpUserInfoViewController.h"
+
 
 @interface APCSignUpUserInfoViewController ()
 

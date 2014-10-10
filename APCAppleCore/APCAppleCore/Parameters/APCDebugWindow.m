@@ -7,12 +7,13 @@
 //
 
 #import "APCDebugWindow.h"
+#import "APCAppleCore.h"
 #import "APCParametersDashboardTableViewController.h"
 
 
 @interface APCDebugWindow ()
 @property (strong, nonatomic) APCParametersDashboardTableViewController *controller;
-@property (assign) BOOL toggleDebugWindow;
+
 @end
 
 @implementation APCDebugWindow
@@ -20,19 +21,17 @@
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
     if (self.enableDebuggerWindow) {
         if (event.type == UIEventTypeMotion && event.subtype == UIEventSubtypeMotionShake) {
-            NSLog(@"Global Shake!");
             [[NSNotificationCenter defaultCenter] postNotificationName:@"DeviceShaken" object:self];
-            
-            
-            [self presentModalllViewController];
+    
+            [self presentModalViewController];
         }
     }
 }
 
-- (void)presentModalllViewController {
+- (void)presentModalViewController {
     
     if (!self.toggleDebugWindow) {
-        self.controller = [[APCParametersDashboardTableViewController alloc] init];
+        self.controller = [[UIStoryboard storyboardWithName:@"APCParameters" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ParametersVC"];
         self.controller.view.frame = [[UIScreen mainScreen] bounds];
         
         [self addSubview:self.controller.view];

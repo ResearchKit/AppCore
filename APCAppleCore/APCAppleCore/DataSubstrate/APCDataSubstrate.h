@@ -55,6 +55,7 @@
 @property (nonatomic, strong) RKStudy * study; //Assumes only one study per app
 
 //Core Data Subsystem
+@property (nonatomic, strong) NSString * storePath;
 @property (nonatomic, strong) NSPersistentStoreCoordinator * persistentStoreCoordinator;
 @property (nonatomic, strong) NSManagedObjectModel * managedObjectModel;
 

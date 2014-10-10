@@ -10,6 +10,7 @@
 
 @interface APCDebugWindow : UIWindow
 
-@property (assign) BOOL enableDebuggerWindow;
+@property (nonatomic) BOOL enableDebuggerWindow;
+@property (nonatomic) BOOL toggleDebugWindow;
 
 @end
