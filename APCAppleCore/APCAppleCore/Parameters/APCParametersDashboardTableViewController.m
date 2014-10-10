@@ -59,7 +59,8 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 
     //Setup persistent parameter types like Core Data
     self.coreDataParameters = [NSMutableArray new];
-    self.coreDataParameters = [@[@"Core Data Reset", @"Parameters", @"NSUserDefaults"] mutableCopy];
+    self.coreDataParameters = [@[@"App Reset"] mutableCopy];
+//    self.coreDataParameters = [@[@"Core Data Reset", @"Parameters", @"NSUserDefaults"] mutableCopy];
     
     //Setup NSUserDefaults
     self.userDefaultParameters = [[[[NSUserDefaults standardUserDefaults] dictionaryRepresentation] allKeys] mutableCopy];
@@ -156,21 +157,9 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 
         if (indexPath.row == kCoreDataDefault)
         {
-            coreDataCell.resetInstructions.text = @"This will delete all persisting object graph entities.";
-            [coreDataCell.resetButton addTarget:self action:@selector(resetCoreData) forControlEvents:UIControlEventTouchUpInside];
-
+            coreDataCell.resetInstructions.text = @"Resets the app to fresh install state.";
+            [coreDataCell.resetButton addTarget:self action:@selector(resetApp) forControlEvents:UIControlEventTouchUpInside];
         }
-        else if (indexPath.row == kParametersDefaults)
-        {
-            coreDataCell.resetInstructions.text = @"This will reset original Parameters.";
-            [coreDataCell.resetButton addTarget:self action:@selector(resetParameters) forControlEvents:UIControlEventTouchUpInside];
-        }
-        else if (indexPath.row == kUserDefault)
-        {
-            coreDataCell.resetInstructions.text = @"This will delete all NSUserDefaults.";
-            [coreDataCell.resetButton addTarget:self action:@selector(resetUserDefaults) forControlEvents:UIControlEventTouchUpInside];
-        }
-        
         
         cell = coreDataCell;
     }
@@ -253,13 +242,22 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     [self.tableView reloadData];
 }
 
+- (void) resetApp
+{
+    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+    UIViewController * vc =  [[UIViewController alloc] init];
+    vc.view.backgroundColor = [UIColor whiteColor];
+    appDelegate.window.rootViewController = vc;
+    [appDelegate clearNSUserDefaults];
+    [APCKeychainStore resetKeyChain];
+    [appDelegate.dataSubstrate resetCoreData];
+    [[NSNotificationCenter defaultCenter] postNotificationName:APCUserLogOutNotification object:self];
+}
+
 - (void)resetUserDefaults {
     [self.tableView endEditing:YES];
-    NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
-    for (NSString *key in [defaultsDictionary allKeys]) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-    }
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+    [appDelegate clearNSUserDefaults];
     [self.tableView reloadData];
 }
 

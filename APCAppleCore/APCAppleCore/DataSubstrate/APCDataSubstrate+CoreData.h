@@ -14,6 +14,7 @@
 #pragma mark - Core Data Public Methods
 /*********************************************************************************/
 - (void)loadStaticTasksAndSchedules: (NSDictionary*) jsonDictionary;
+- (void) resetCoreData; //EXERCISE CAUTION IN CALLING THIS METHOD
 
 /*********************************************************************************/
 #pragma mark - Helpers - ONLY RETURNS IN NSManagedObjects in mainContext
