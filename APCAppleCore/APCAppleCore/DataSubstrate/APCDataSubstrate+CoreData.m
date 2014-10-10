@@ -39,22 +39,34 @@
 
 - (void) initializePersistentStoreCoordinator: (NSString*) storePath
 {
+    self.storePath = storePath;
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
+    [self setUpPersistentStore];
+}
+
+- (void) setUpPersistentStore
+{
     NSError * error;
     NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @(YES),
                               NSInferMappingModelAutomaticallyOption: @(YES)
                               };
-
-    NSPersistentStore *persistentStore = [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:storePath] options:options error:&error];
+    
+    NSPersistentStore *persistentStore = [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:self.storePath] options:options error:&error];
     if (!persistentStore) {
         //TODO: Address removing persistent store in production
-        NSError* localError;
-        [[NSFileManager defaultManager] removeItemAtPath:storePath error:&localError];
-        [localError handle];
-        [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:storePath] options:options error:&localError];
+        NSError * localError;
+        [self removeSqliteStore];
+        [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:self.storePath] options:options error:&localError];
         [localError handle];
     }
-    NSAssert([[NSFileManager defaultManager] fileExistsAtPath:storePath], @"Database Not Created");
+    NSAssert([[NSFileManager defaultManager] fileExistsAtPath:self.storePath], @"Database Not Created");
+}
+
+- (void) removeSqliteStore
+{
+    NSError* localError;
+    [[NSFileManager defaultManager] removeItemAtPath:self.storePath error:&localError];
+    [localError handle];
 }
 
 - (void) createManagedObjectContexts
@@ -73,6 +85,19 @@
 {
     [APCTask createTasksFromJSON:jsonDictionary[@"tasks"] inContext:self.persistentContext];
     [APCSchedule createSchedulesFromJSON:jsonDictionary[@"schedules"] inContext:self.persistentContext];
+}
+
+- (void)resetCoreData
+{
+    //EXERCISE CAUTION IN CALLING THIS METHOD
+    [self.mainContext reset];
+    [self.persistentContext reset];
+    NSError * error;
+    NSPersistentStore * persistenStore = [self.persistentStoreCoordinator persistentStores] [0];
+    [self.persistentStoreCoordinator removePersistentStore:persistenStore error:&error];
+    [error handle];
+    [self removeSqliteStore];
+    [self setUpPersistentStore];
 }
 
 /*********************************************************************************/

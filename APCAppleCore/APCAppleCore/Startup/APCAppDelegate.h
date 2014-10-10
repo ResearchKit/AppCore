@@ -29,6 +29,9 @@ static NSString *const kPasswordKey = @"password";
 
 @property (nonatomic, strong) NSDictionary * initializationOptions;
 
+- (void)loadStaticTasksAndSchedulesIfNecessary;  //For resetting app
+- (void) clearNSUserDefaults; //For resetting app
+
 //For User in Subclasses
 - (void) signedInNotification:(NSNotification *)notification;
 - (void) signedUpNotification: (NSNotification*) notification;
