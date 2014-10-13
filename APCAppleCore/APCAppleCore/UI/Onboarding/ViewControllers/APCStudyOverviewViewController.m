@@ -87,6 +87,9 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     if (!parseError) {
         
         self.diseaseName = jsonDictionary[@"disease_name"];
+        self.diseaseNameLabel.text = self.diseaseName;
+        self.dateRangeLabel.text = [jsonDictionary[@"from_date"] stringByAppendingFormat:@" - %@", jsonDictionary[@"to_date"]];
+        self.logoImageView.image = [UIImage imageNamed:jsonDictionary[@"logo_name"]];
         
         NSArray *questions = jsonDictionary[@"questions"];
         

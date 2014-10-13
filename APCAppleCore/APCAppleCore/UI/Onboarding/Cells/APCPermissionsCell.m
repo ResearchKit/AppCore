@@ -7,7 +7,7 @@
 //
 
 #import "APCPermissionsCell.h"
-#import "UIColor+Appearance.h"
+#import "UIColor+APCAppearance.h"
 
 @interface APCPermissionsCell()
 
@@ -82,7 +82,7 @@ static CGFloat kViewsPadding           = 10.f;
 {
     if (selected) {
         self.titleLabel.text = NSLocalizedString(@"Access Granted", nil);
-        [self.titleLabel setTextColor:[UIColor confirmationGreenColor]];
+        [self.titleLabel setTextColor:[UIColor confirmationColor]];
         
         self.confirmationView.completed = YES;
         self.enabled = NO;

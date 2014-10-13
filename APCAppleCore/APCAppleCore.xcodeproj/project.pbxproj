@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5B29CE3119D3765400E2FD62 /* UIColor+Appearance.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B29CE2F19D3765400E2FD62 /* UIColor+Appearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5B29CE3219D3765400E2FD62 /* UIColor+Appearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B29CE3019D3765400E2FD62 /* UIColor+Appearance.m */; };
 		5B29CE3619D3767D00E2FD62 /* APCPermissionsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B29CE3419D3767D00E2FD62 /* APCPermissionsManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B29CE3719D3767D00E2FD62 /* APCPermissionsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B29CE3519D3767D00E2FD62 /* APCPermissionsManager.m */; };
 		5B29CE3B19D3769E00E2FD62 /* APCPermissionsCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B29CE3819D3769E00E2FD62 /* APCPermissionsCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -163,8 +161,6 @@
 		F588BA0F19D21EFE00692473 /* UIAlertView+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F588B9ED19D21EFE00692473 /* UIAlertView+Helper.m */; };
 		F588BA1019D21EFE00692473 /* UIBarButtonItem+Appearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F588B9EE19D21EFE00692473 /* UIBarButtonItem+Appearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA1119D21EFE00692473 /* UIBarButtonItem+Appearance.m in Sources */ = {isa = PBXBuildFile; fileRef = F588B9EF19D21EFE00692473 /* UIBarButtonItem+Appearance.m */; };
-		F588BA1219D21EFE00692473 /* UIColor+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = F588B9F019D21EFE00692473 /* UIColor+Helper.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F588BA1319D21EFE00692473 /* UIColor+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F588B9F119D21EFE00692473 /* UIColor+Helper.m */; };
 		F588BA1419D21EFE00692473 /* UIScrollView+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = F588B9F219D21EFE00692473 /* UIScrollView+Helper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA1519D21EFE00692473 /* UIScrollView+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F588B9F319D21EFE00692473 /* UIScrollView+Helper.m */; };
 		F588BA1619D21EFE00692473 /* UISegmentedControl+Appearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F588B9F419D21EFE00692473 /* UISegmentedControl+Appearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -267,11 +263,15 @@
 		F5D1A90F19D4C6E200A03465 /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */; };
 		F5EDCC8D19D32F0A00A5E027 /* APCActivitiesTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5EDCC8B19D32F0A00A5E027 /* APCActivitiesTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5EDCC8E19D32F0A00A5E027 /* APCActivitiesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EDCC8C19D32F0A00A5E027 /* APCActivitiesTableViewCell.m */; };
+		F5FDCF8D19EC68C9002486DE /* UIColor+APCAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FDCF8919EC68C9002486DE /* UIColor+APCAppearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5FDCF8E19EC68C9002486DE /* UIColor+APCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FDCF8A19EC68C9002486DE /* UIColor+APCAppearance.m */; };
+		F5FDCF8F19EC68C9002486DE /* UIFont+APCAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FDCF8B19EC68C9002486DE /* UIFont+APCAppearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5FDCF9019EC68C9002486DE /* UIFont+APCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FDCF8C19EC68C9002486DE /* UIFont+APCAppearance.m */; };
+		F5FDCF9319EC6A17002486DE /* APCAppearanceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FDCF9119EC6A17002486DE /* APCAppearanceInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5FDCF9419EC6A17002486DE /* APCAppearanceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FDCF9219EC6A17002486DE /* APCAppearanceInfo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5B29CE2F19D3765400E2FD62 /* UIColor+Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Appearance.h"; sourceTree = "<group>"; };
-		5B29CE3019D3765400E2FD62 /* UIColor+Appearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Appearance.m"; sourceTree = "<group>"; };
 		5B29CE3419D3767D00E2FD62 /* APCPermissionsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPermissionsManager.h; sourceTree = "<group>"; };
 		5B29CE3519D3767D00E2FD62 /* APCPermissionsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPermissionsManager.m; sourceTree = "<group>"; };
 		5B29CE3819D3769E00E2FD62 /* APCPermissionsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPermissionsCell.h; sourceTree = "<group>"; };
@@ -397,8 +397,6 @@
 		F588B9ED19D21EFE00692473 /* UIAlertView+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Helper.m"; sourceTree = "<group>"; };
 		F588B9EE19D21EFE00692473 /* UIBarButtonItem+Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+Appearance.h"; sourceTree = "<group>"; };
 		F588B9EF19D21EFE00692473 /* UIBarButtonItem+Appearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Appearance.m"; sourceTree = "<group>"; };
-		F588B9F019D21EFE00692473 /* UIColor+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Helper.h"; sourceTree = "<group>"; };
-		F588B9F119D21EFE00692473 /* UIColor+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Helper.m"; sourceTree = "<group>"; };
 		F588B9F219D21EFE00692473 /* UIScrollView+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+Helper.h"; sourceTree = "<group>"; };
 		F588B9F319D21EFE00692473 /* UIScrollView+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+Helper.m"; sourceTree = "<group>"; };
 		F588B9F419D21EFE00692473 /* UISegmentedControl+Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UISegmentedControl+Appearance.h"; sourceTree = "<group>"; };
@@ -501,6 +499,12 @@
 		F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BridgeSDK.framework; sourceTree = SOURCE_ROOT; };
 		F5EDCC8B19D32F0A00A5E027 /* APCActivitiesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCActivitiesTableViewCell.h; sourceTree = "<group>"; };
 		F5EDCC8C19D32F0A00A5E027 /* APCActivitiesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCActivitiesTableViewCell.m; sourceTree = "<group>"; };
+		F5FDCF8919EC68C9002486DE /* UIColor+APCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+APCAppearance.h"; sourceTree = "<group>"; };
+		F5FDCF8A19EC68C9002486DE /* UIColor+APCAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+APCAppearance.m"; sourceTree = "<group>"; };
+		F5FDCF8B19EC68C9002486DE /* UIFont+APCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+APCAppearance.h"; sourceTree = "<group>"; };
+		F5FDCF8C19EC68C9002486DE /* UIFont+APCAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+APCAppearance.m"; sourceTree = "<group>"; };
+		F5FDCF9119EC6A17002486DE /* APCAppearanceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAppearanceInfo.h; sourceTree = "<group>"; };
+		F5FDCF9219EC6A17002486DE /* APCAppearanceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAppearanceInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -723,6 +727,7 @@
 		F588B9D519D21EFE00692473 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				F5FDCF8819EC68C9002486DE /* AppearanceHelpers */,
 				F5008C0C19D32ABC0011102F /* Objects */,
 				F588B9D619D21EFE00692473 /* AssertionHandler */,
 				F588B9D919D21EFE00692473 /* Categories */,
@@ -744,8 +749,6 @@
 			children = (
 				F541541B19D60F3400B819C9 /* HKHealthStore+APCExtensions.h */,
 				F541541C19D60F3400B819C9 /* HKHealthStore+APCExtensions.m */,
-				5B29CE2F19D3765400E2FD62 /* UIColor+Appearance.h */,
-				5B29CE3019D3765400E2FD62 /* UIColor+Appearance.m */,
 				F588B9DA19D21EFE00692473 /* APCStepProgressBar+Appearance.h */,
 				F588B9DB19D21EFE00692473 /* APCStepProgressBar+Appearance.m */,
 				F588B9DC19D21EFE00692473 /* CALayer+Appearance.h */,
@@ -766,8 +769,6 @@
 				F588B9ED19D21EFE00692473 /* UIAlertView+Helper.m */,
 				F588B9EE19D21EFE00692473 /* UIBarButtonItem+Appearance.h */,
 				F588B9EF19D21EFE00692473 /* UIBarButtonItem+Appearance.m */,
-				F588B9F019D21EFE00692473 /* UIColor+Helper.h */,
-				F588B9F119D21EFE00692473 /* UIColor+Helper.m */,
 				F588B9F219D21EFE00692473 /* UIScrollView+Helper.h */,
 				F588B9F319D21EFE00692473 /* UIScrollView+Helper.m */,
 				F588B9F419D21EFE00692473 /* UISegmentedControl+Appearance.h */,
@@ -1021,6 +1022,19 @@
 			path = ImageAssets;
 			sourceTree = "<group>";
 		};
+		F5FDCF8819EC68C9002486DE /* AppearanceHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				F5FDCF9119EC6A17002486DE /* APCAppearanceInfo.h */,
+				F5FDCF9219EC6A17002486DE /* APCAppearanceInfo.m */,
+				F5FDCF8919EC68C9002486DE /* UIColor+APCAppearance.h */,
+				F5FDCF8A19EC68C9002486DE /* UIColor+APCAppearance.m */,
+				F5FDCF8B19EC68C9002486DE /* UIFont+APCAppearance.h */,
+				F5FDCF8C19EC68C9002486DE /* UIFont+APCAppearance.m */,
+			);
+			path = AppearanceHelpers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1035,6 +1049,7 @@
 				F57329AB19DF065A00A85564 /* APCEmailVerifyViewController.h in Headers */,
 				F5179C9919D0917D001DCCB7 /* APCFileResult.h in Headers */,
 				F5179CC019D0917D001DCCB7 /* APCTask.h in Headers */,
+				F5FDCF8F19EC68C9002486DE /* UIFont+APCAppearance.h in Headers */,
 				F588BA0A19D21EFE00692473 /* NSObject+Helper.h in Headers */,
 				F5B4213919D23D7700F9CD69 /* APCDebugWindow.h in Headers */,
 				F588BA1A19D21EFE00692473 /* UIView+Helper.h in Headers */,
@@ -1046,14 +1061,15 @@
 				F588BA7619D21F1300692473 /* APCSignupCriteriaViewController.h in Headers */,
 				F5B4213B19D23D7700F9CD69 /* APCParametersCell.h in Headers */,
 				F588BA9A19D21F1300692473 /* YMLLineChartView.h in Headers */,
+				F5FDCF9319EC6A17002486DE /* APCAppearanceInfo.h in Headers */,
 				F588BA9019D21F1300692473 /* APCStepProgressBar.h in Headers */,
-				F588BA1219D21EFE00692473 /* UIColor+Helper.h in Headers */,
 				5B29CE4019D376CA00E2FD62 /* APCSignUpPermissionsViewController.h in Headers */,
 				F5179CA219D0917D001DCCB7 /* APCQuestionResult.h in Headers */,
 				F5179C8A19D0917D001DCCB7 /* APCDataResult+AddOn.h in Headers */,
 				F5179C9019D0917D001DCCB7 /* APCDBStatus+AddOn.h in Headers */,
 				F5179B2F19D09128001DCCB7 /* APCAppleCore.h in Headers */,
 				F5179C9619D0917D001DCCB7 /* APCFileResult+AddOn.h in Headers */,
+				F5FDCF8D19EC68C9002486DE /* UIColor+APCAppearance.h in Headers */,
 				F5179CA819D0917D001DCCB7 /* APCResult.h in Headers */,
 				F5179CBD19D0917D001DCCB7 /* APCTask+AddOn.h in Headers */,
 				F588BA0C19D21EFE00692473 /* NSString+Helper.h in Headers */,
@@ -1092,7 +1108,6 @@
 				F588BA6F19D21F1300692473 /* APCIntroVideoViewController.h in Headers */,
 				F588BA0219D21EFE00692473 /* NSDate+Helper.h in Headers */,
 				F588BA6119D21F1300692473 /* APCConfigurableCell.h in Headers */,
-				5B29CE3119D3765400E2FD62 /* UIColor+Appearance.h in Headers */,
 				F5B4213019D23D6800F9CD69 /* APCParametersDashboardTableViewController.h in Headers */,
 				F5A63F1419D5EAD100284006 /* APCUser.h in Headers */,
 				F588BA1819D21EFE00692473 /* UITableView+Appearance.h in Headers */,
@@ -1283,6 +1298,7 @@
 				F588BA6419D21F1300692473 /* APCCriteriaCell.m in Sources */,
 				F5179C8519D0917D001DCCB7 /* APCConsentResult+AddOn.m in Sources */,
 				F588BA9619D21F1300692473 /* APCStepViewController.m in Sources */,
+				F5FDCF9419EC6A17002486DE /* APCAppearanceInfo.m in Sources */,
 				F57329AC19DF065A00A85564 /* APCEmailVerifyViewController.m in Sources */,
 				F5179CAC19D0917D001DCCB7 /* APCSchedule+AddOn.m in Sources */,
 				F588BA7019D21F1300692473 /* APCIntroVideoViewController.m in Sources */,
@@ -1292,7 +1308,6 @@
 				F5179CAF19D0917D001DCCB7 /* APCSchedule.m in Sources */,
 				5B29CE3C19D3769E00E2FD62 /* APCPermissionsCell.m in Sources */,
 				F588BA0319D21EFE00692473 /* NSDate+Helper.m in Sources */,
-				F588BA1319D21EFE00692473 /* UIColor+Helper.m in Sources */,
 				F541541919D6029C00B819C9 /* APCStoredUserData.m in Sources */,
 				F5B4213A19D23D7700F9CD69 /* APCDebugWindow.m in Sources */,
 				F588BA9D19D21F1300692473 /* YMLTimeLineChartView.m in Sources */,
@@ -1305,7 +1320,6 @@
 				F5B4213119D23D6800F9CD69 /* APCParametersDashboardTableViewController.m in Sources */,
 				F588BA7419D21F1300692473 /* APCSignInViewController.m in Sources */,
 				F588B9FD19D21EFE00692473 /* APCStepProgressBar+Appearance.m in Sources */,
-				5B29CE3219D3765400E2FD62 /* UIColor+Appearance.m in Sources */,
 				F588BA8119D21F1300692473 /* APCSpinnerViewController.m in Sources */,
 				F5179CA319D0917D001DCCB7 /* APCQuestionResult.m in Sources */,
 				F5B4212E19D23D6800F9CD69 /* APCParametersCoreDataCell.m in Sources */,
@@ -1313,6 +1327,7 @@
 				F588BAA219D220AC00692473 /* APCAppDelegate.m in Sources */,
 				F5179CD719D0917D001DCCB7 /* APCScheduleInterpreter.m in Sources */,
 				F5179C9D19D0917D001DCCB7 /* APCModel.xcdatamodeld in Sources */,
+				F5FDCF8E19EC68C9002486DE /* UIColor+APCAppearance.m in Sources */,
 				F5179C8219D0917D001DCCB7 /* APCDataSubstrate.m in Sources */,
 				F588BA1119D21EFE00692473 /* UIBarButtonItem+Appearance.m in Sources */,
 				F5179CBE19D0917D001DCCB7 /* APCTask+AddOn.m in Sources */,
@@ -1323,6 +1338,7 @@
 				F5179C8E19D0917D001DCCB7 /* APCDataResult.m in Sources */,
 				F588BA9B19D21F1300692473 /* YMLLineChartView.m in Sources */,
 				F5179C9719D0917D001DCCB7 /* APCFileResult+AddOn.m in Sources */,
+				F5FDCF9019EC68C9002486DE /* UIFont+APCAppearance.m in Sources */,
 				F588BA6719D21F1300692473 /* APCUserInfoCell.m in Sources */,
 				F5179CB219D0917D001DCCB7 /* APCScheduledTask+AddOn.m in Sources */,
 				F588BA7219D21F1300692473 /* APCNavigationController.m in Sources */,
