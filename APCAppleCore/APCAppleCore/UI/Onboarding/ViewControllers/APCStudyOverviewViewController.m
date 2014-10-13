@@ -12,21 +12,10 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 @interface APCStudyOverviewViewController ()
 
-@property (strong, nonatomic) IBOutlet UIView *headerView;
 @end
 
 @implementation APCStudyOverviewViewController
 
-#pragma mark - 
-
-- (instancetype)init
-{
-    if(self = [super initWithNibName:self.nibName bundle:[NSBundle appleCoreBundle]]){
-        
-    }
-    
-    return self;
-}
 
 #pragma mark - Lifecycle
 
@@ -48,19 +37,8 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     // Dispose of any resources that can be recreated.
 }
 
-- (UIRectEdge)edgesForExtendedLayout
-{
-    return UIRectEdgeNone;
-}
-
-- (NSString *)nibName
-{
-    return @"APCStudyOverviewViewController";
-}
-
 - (void)setupTableView
 {
-    self.tableView.tableHeaderView = self.headerView;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 }
