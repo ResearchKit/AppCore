@@ -237,7 +237,6 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 
 - (void) resetParameters {
     [self.tableView endEditing:YES];
-    
     [self.parameters reset];
     [self.tableView reloadData];
 }
@@ -250,41 +249,10 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     appDelegate.window.rootViewController = vc;
     [appDelegate clearNSUserDefaults];
     [APCKeychainStore resetKeyChain];
+    [self.parameters reset];
     [appDelegate.dataSubstrate resetCoreData];
     [[NSNotificationCenter defaultCenter] postNotificationName:APCUserLogOutNotification object:self];
 }
-
-- (void)resetUserDefaults {
-    [self.tableView endEditing:YES];
-    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-    [appDelegate clearNSUserDefaults];
-    [self.tableView reloadData];
-}
-
-- (void)resetCoreData {
-    
-    NSFileManager  *manager = [NSFileManager defaultManager];
-    
-    // the preferred way to get the apps documents directory
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    // grab all the files in the documents dir
-    NSArray *allFiles = [manager contentsOfDirectoryAtPath:documentsDirectory error:nil];
-    
-    // filter the array for only sqlite files
-    NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.sqlite'"];
-    NSArray *sqliteFiles = [allFiles filteredArrayUsingPredicate:fltr];
-    
-    // use fast enumeration to iterate the array and delete the files
-    for (NSString *sqliteFile in sqliteFiles)
-    {
-        NSError *error = nil;
-        [manager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:sqliteFile] error:&error];
-        NSAssert(!error, @"Assertion: Error removing sqlite file.");
-    }
-}
-
 
 /*********************************************************************************/
 #pragma mark - CUSTOM CELL Delegate Methods
