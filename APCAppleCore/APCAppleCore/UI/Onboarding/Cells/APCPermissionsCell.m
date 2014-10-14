@@ -82,7 +82,7 @@ static CGFloat kViewsPadding           = 10.f;
 {
     if (selected) {
         self.titleLabel.text = NSLocalizedString(@"Access Granted", nil);
-        [self.titleLabel setTextColor:[UIColor confirmationColor]];
+        [self.titleLabel setTextColor:[UIColor appTertiaryColor1]];
         
         self.confirmationView.completed = YES;
         self.enabled = NO;

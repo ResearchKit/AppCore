@@ -10,15 +10,21 @@
 #import <UIKit/UIKit.h>
 
 //Fonts - should return UIFont
-static NSString *const kNormalFontNameKey = @"NormalFontNameKey";
-static NSString *const kBoldFontNameKey = @"BoldFontNameKey";
+static NSString *const kRegularFontNameKey = @"RegularFontNameKey";
+static NSString *const kMediumFontNameKey  = @"MediumFontNameKey";
+static NSString *const kLightFontNameKey   = @"LightFontNameKey";
 
 //Color - should return UIColor
-static NSString *const kPrimaryColorKey = @"PrimaryColorKey";
-static NSString *const kSecondaryColorKey = @"SecondaryColorKey";
-static NSString *const kTextBodyColor1Key = @"TextBodyColor1Key";
-static NSString *const kTextBodyColor2Key = @"TextBodyColor2Key";
-static NSString *const kTextBodyColor3Key = @"TextBodyColor3Key";
+static NSString *const kPrimaryAppColorKey = @"PrimaryAppColorKey";
+
+static NSString *const kSecondaryColor1Key = @"SecondaryColor1Key";
+static NSString *const kSecondaryColor2Key = @"SecondaryColor2Key";
+static NSString *const kSecondaryColor3Key = @"SecondaryColor3Key";
+static NSString *const kSecondaryColor4Key = @"SecondaryColor4Key";
+
+static NSString *const kTertiaryColor1Key = @"TertiaryColor1Key";
+static NSString *const kTertiaryColor2Key = @"TertiaryColor2Key";
+
 
 @interface APCAppearanceInfo : NSObject
 

@@ -10,7 +10,8 @@
 
 @interface UIFont (APCAppearance)
 
-+ appFontWithSize: (CGFloat) size;
-+ appBoldFontWithSize: (CGFloat) size;
++ (UIFont*) appRegularFontWithSize: (CGFloat) size;
++ (UIFont*) appMediumFontWithSize: (CGFloat) size;
++ (UIFont*) appLightFontWithSize: (CGFloat) size;
 
 @end
