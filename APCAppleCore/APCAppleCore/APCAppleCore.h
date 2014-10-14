@@ -89,6 +89,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/UITableView+Appearance.h>
 #import <APCAppleCore/UIView+Helper.h>
 #import <APCAppleCore/HKHealthStore+APCExtensions.h>
+#import <APCAppleCore/UIImage+APCHelper.h>
 
 //Appearance Helpers
 #import <APCAppleCore/APCAppearanceInfo.h>
