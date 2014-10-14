@@ -17,7 +17,7 @@ static NSDictionary * localAppearanceDictionary;
     localAppearanceDictionary = appearanceDictionary;
 }
 
-+ (NSDictionary *)appearanceDictionary
++ (NSDictionary *)defaultAppearanceDictionary
 {
     return @{
              //Fonts
@@ -36,7 +36,7 @@ static NSDictionary * localAppearanceDictionary;
 
 + (id)valueForAppearanceKey:(NSString *)key
 {
-    return localAppearanceDictionary[key] ?: [self appearanceDictionary][key];
+    return localAppearanceDictionary[key] ?: [self defaultAppearanceDictionary][key];
 }
 
 @end

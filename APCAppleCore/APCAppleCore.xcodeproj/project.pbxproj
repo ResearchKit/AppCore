@@ -121,6 +121,8 @@
 		F5179F6219D0B4D0001DCCB7 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6119D0B4D0001DCCB7 /* libbz2.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
 		F5179F6619D0B502001DCCB7 /* libarchive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6519D0B502001DCCB7 /* libarchive.dylib */; };
 		F5179F6819D0B50C001DCCB7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6719D0B50C001DCCB7 /* libz.dylib */; };
+		F52549CF19ED919600C7B7CB /* APCInclusionCriteriaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F52549CD19ED919600C7B7CB /* APCInclusionCriteriaViewController.h */; };
+		F52549D019ED919600C7B7CB /* APCInclusionCriteriaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F52549CE19ED919600C7B7CB /* APCInclusionCriteriaViewController.m */; };
 		F541540D19D5F1DE00B819C9 /* APCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A63F1319D5EAD100284006 /* APCUser.m */; };
 		F541541419D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h in Headers */ = {isa = PBXBuildFile; fileRef = F541541219D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h */; };
 		F541541519D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541319D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m */; };
@@ -361,6 +363,8 @@
 		F5179F6319D0B4EA001DCCB7 /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = ResearchKit/ResearchKit.framework; sourceTree = SOURCE_ROOT; };
 		F5179F6519D0B502001DCCB7 /* libarchive.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libarchive.dylib; path = usr/lib/libarchive.dylib; sourceTree = SDKROOT; };
 		F5179F6719D0B50C001DCCB7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		F52549CD19ED919600C7B7CB /* APCInclusionCriteriaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCInclusionCriteriaViewController.h; sourceTree = "<group>"; };
+		F52549CE19ED919600C7B7CB /* APCInclusionCriteriaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCInclusionCriteriaViewController.m; sourceTree = "<group>"; };
 		F541541219D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+HealthKit.h"; sourceTree = "<group>"; };
 		F541541319D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCDataSubstrate+HealthKit.m"; sourceTree = "<group>"; };
 		F541541619D6029C00B819C9 /* APCStoredUserData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStoredUserData.h; sourceTree = "<group>"; };
@@ -865,6 +869,8 @@
 				F588BA4519D21F1300692473 /* APCUserInfoViewController.m */,
 				F588BA4619D21F1300692473 /* APCViewController.h */,
 				F588BA4719D21F1300692473 /* APCViewController.m */,
+				F52549CD19ED919600C7B7CB /* APCInclusionCriteriaViewController.h */,
+				F52549CE19ED919600C7B7CB /* APCInclusionCriteriaViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1137,6 +1143,7 @@
 				F5179C8D19D0917D001DCCB7 /* APCDataResult.h in Headers */,
 				F5179C7819D0917D001DCCB7 /* APCDataMonitor.h in Headers */,
 				F5179C7E19D0917D001DCCB7 /* APCDataSubstrate+ResearchKit.h in Headers */,
+				F52549CF19ED919600C7B7CB /* APCInclusionCriteriaViewController.h in Headers */,
 				F5008C0F19D32AD60011102F /* APCGroupedScheduledTask.h in Headers */,
 				F5179C9F19D0917D001DCCB7 /* APCQuestionResult+AddOn.h in Headers */,
 				F5179CBA19D0917D001DCCB7 /* APCSurveyResult.h in Headers */,
@@ -1322,6 +1329,7 @@
 				F588B9FD19D21EFE00692473 /* APCStepProgressBar+Appearance.m in Sources */,
 				F588BA8119D21F1300692473 /* APCSpinnerViewController.m in Sources */,
 				F5179CA319D0917D001DCCB7 /* APCQuestionResult.m in Sources */,
+				F52549D019ED919600C7B7CB /* APCInclusionCriteriaViewController.m in Sources */,
 				F5B4212E19D23D6800F9CD69 /* APCParametersCoreDataCell.m in Sources */,
 				F588BA0F19D21EFE00692473 /* UIAlertView+Helper.m in Sources */,
 				F588BAA219D220AC00692473 /* APCAppDelegate.m in Sources */,
