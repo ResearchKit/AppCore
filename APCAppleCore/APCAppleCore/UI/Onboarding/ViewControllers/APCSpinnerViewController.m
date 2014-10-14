@@ -7,7 +7,7 @@
 //
 
 #import "UIView+Helper.h"
-#import "UIColor+Helper.h"
+#import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
 #import "APCSpinnerViewController.h"
 

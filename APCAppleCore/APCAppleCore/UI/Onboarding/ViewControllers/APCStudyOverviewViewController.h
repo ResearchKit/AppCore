@@ -8,9 +8,10 @@
 
 #import <APCAppleCore/APCAppleCore.h>
 
-@interface APCStudyOverviewViewController : APCViewController <UITableViewDelegate, UITableViewDataSource>
+@interface APCStudyOverviewViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *headerView;
 @property (weak, nonatomic) IBOutlet UILabel *diseaseNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateRangeLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *logoImageView;

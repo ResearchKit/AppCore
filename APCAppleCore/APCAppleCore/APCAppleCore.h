@@ -90,13 +90,16 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/NSString+Helper.h>
 #import <APCAppleCore/UIAlertView+Helper.h>
 #import <APCAppleCore/UIBarButtonItem+Appearance.h>
-#import <APCAppleCore/UIColor+Helper.h>
 #import <APCAppleCore/UIScrollView+Helper.h>
 #import <APCAppleCore/UISegmentedControl+Appearance.h>
 #import <APCAppleCore/UITableView+Appearance.h>
 #import <APCAppleCore/UIView+Helper.h>
-#import <APCAppleCore/UIColor+Appearance.h>
 #import <APCAppleCore/HKHealthStore+APCExtensions.h>
+
+//Appearance Helpers
+#import <APCAppleCore/APCAppearanceInfo.h>
+#import <APCAppleCore/UIFont+APCAppearance.h>
+#import <APCAppleCore/UIColor+APCAppearance.h>
 
 static NSString *const APCUserSignedUpNotification     = @"APCUserSignedUpNotification";
 static NSString *const APCUserSignedInNotification     = @"APCUserSignedInNotification";
