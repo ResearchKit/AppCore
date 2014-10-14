@@ -120,11 +120,11 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
             cell.datePicker.datePickerMode = datePickerField.datePickerMode;
             cell.valueTextField.tintColor = [UIColor clearColor];
             
-            NSString *dateWithFormate = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
+            NSString *dateWithFormat = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
             if (datePickerField.isDetailDiscloserStyle) {
                 [cell setNeedsHiddenField];
                 
-                cell.detailTextLabel.text = dateWithFormate;
+                cell.detailTextLabel.text = dateWithFormat;
             }
             else {
                 cell.accessoryView = cell.valueTextField;
@@ -240,12 +240,12 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
     APCTableViewDatePickerItem *field = self.items[indexPath.row];
     field.date = date;
     
-    NSString *dateWithFormate = [field.date toStringWithFormat:field.dateFormat];
+    NSString *dateWithFormat = [field.date toStringWithFormat:field.dateFormat];
     if (field.isDetailDiscloserStyle) {
-        cell.detailTextLabel.text = dateWithFormate;
+        cell.detailTextLabel.text = dateWithFormat;
     }
     else {
-        cell.valueTextField.text = dateWithFormate;
+        cell.valueTextField.text = dateWithFormat;
     }
 }
 
