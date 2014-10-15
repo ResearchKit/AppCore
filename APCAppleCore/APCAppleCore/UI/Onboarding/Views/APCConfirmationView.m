@@ -44,7 +44,7 @@ static  short  coordinates[] = {
 - (void)sharedInit
 {
     self.incompleteBackgroundColor = [UIColor grayColor];
-    self.completedBackgroundColor = [UIColor confirmationColor];
+    self.completedBackgroundColor = [UIColor appTertiaryColor1];
     self.completedTickColor = [UIColor whiteColor];
 }
 

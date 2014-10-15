@@ -140,6 +140,8 @@
 		F5179F6219D0B4D0001DCCB7 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6119D0B4D0001DCCB7 /* libbz2.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
 		F5179F6619D0B502001DCCB7 /* libarchive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6519D0B502001DCCB7 /* libarchive.dylib */; };
 		F5179F6819D0B50C001DCCB7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6719D0B50C001DCCB7 /* libz.dylib */; };
+		F52549D919EDD87700C7B7CB /* UIImage+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F52549D719EDD87700C7B7CB /* UIImage+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F52549DA19EDD87700C7B7CB /* UIImage+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F52549D819EDD87700C7B7CB /* UIImage+APCHelper.m */; };
 		F541540D19D5F1DE00B819C9 /* APCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A63F1319D5EAD100284006 /* APCUser.m */; };
 		F541541419D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h in Headers */ = {isa = PBXBuildFile; fileRef = F541541219D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h */; };
 		F541541519D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541319D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m */; };
@@ -207,7 +209,7 @@
 		F588BA7319D21F1300692473 /* APCSignInViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3319D21F1300692473 /* APCSignInViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA7419D21F1300692473 /* APCSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA3419D21F1300692473 /* APCSignInViewController.m */; };
 		F588BA7519D21F1300692473 /* APCSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F588BA3519D21F1300692473 /* APCSignInViewController.xib */; };
-		F588BA7619D21F1300692473 /* APCSignupCriteriaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3619D21F1300692473 /* APCSignupCriteriaViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F588BA7619D21F1300692473 /* APCSignupCriteriaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3619D21F1300692473 /* APCSignupCriteriaViewController.h */; };
 		F588BA7719D21F1300692473 /* APCSignupCriteriaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA3719D21F1300692473 /* APCSignupCriteriaViewController.m */; };
 		F588BA7819D21F1300692473 /* APCSignUpProgressing.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3819D21F1300692473 /* APCSignUpProgressing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA7919D21F1300692473 /* APCSignupTouchIDViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3919D21F1300692473 /* APCSignupTouchIDViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -286,6 +288,10 @@
 		F5FDCF9019EC68C9002486DE /* UIFont+APCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FDCF8C19EC68C9002486DE /* UIFont+APCAppearance.m */; };
 		F5FDCF9319EC6A17002486DE /* APCAppearanceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FDCF9119EC6A17002486DE /* APCAppearanceInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5FDCF9419EC6A17002486DE /* APCAppearanceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FDCF9219EC6A17002486DE /* APCAppearanceInfo.m */; };
+		F5FE18F419EDDFB900D455E6 /* APCInclusionCriteriaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FE18F219EDDFB900D455E6 /* APCInclusionCriteriaViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5FE18F519EDDFB900D455E6 /* APCInclusionCriteriaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FE18F319EDDFB900D455E6 /* APCInclusionCriteriaViewController.m */; };
+		F5FE18F819EDEE9E00D455E6 /* APCSegmentedButton.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FE18F619EDEE9E00D455E6 /* APCSegmentedButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5FE18F919EDEE9E00D455E6 /* APCSegmentedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FE18F719EDEE9E00D455E6 /* APCSegmentedButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -397,6 +403,8 @@
 		F5179F6319D0B4EA001DCCB7 /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = ResearchKit/ResearchKit.framework; sourceTree = SOURCE_ROOT; };
 		F5179F6519D0B502001DCCB7 /* libarchive.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libarchive.dylib; path = usr/lib/libarchive.dylib; sourceTree = SDKROOT; };
 		F5179F6719D0B50C001DCCB7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		F52549D719EDD87700C7B7CB /* UIImage+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+APCHelper.h"; sourceTree = "<group>"; };
+		F52549D819EDD87700C7B7CB /* UIImage+APCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+APCHelper.m"; sourceTree = "<group>"; };
 		F541541219D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+HealthKit.h"; sourceTree = "<group>"; };
 		F541541319D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCDataSubstrate+HealthKit.m"; sourceTree = "<group>"; };
 		F541541619D6029C00B819C9 /* APCStoredUserData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStoredUserData.h; sourceTree = "<group>"; };
@@ -539,6 +547,10 @@
 		F5FDCF8C19EC68C9002486DE /* UIFont+APCAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+APCAppearance.m"; sourceTree = "<group>"; };
 		F5FDCF9119EC6A17002486DE /* APCAppearanceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAppearanceInfo.h; sourceTree = "<group>"; };
 		F5FDCF9219EC6A17002486DE /* APCAppearanceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAppearanceInfo.m; sourceTree = "<group>"; };
+		F5FE18F219EDDFB900D455E6 /* APCInclusionCriteriaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCInclusionCriteriaViewController.h; sourceTree = "<group>"; };
+		F5FE18F319EDDFB900D455E6 /* APCInclusionCriteriaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCInclusionCriteriaViewController.m; sourceTree = "<group>"; };
+		F5FE18F619EDEE9E00D455E6 /* APCSegmentedButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSegmentedButton.h; sourceTree = "<group>"; };
+		F5FE18F719EDEE9E00D455E6 /* APCSegmentedButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSegmentedButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -594,6 +606,8 @@
 				F5008C0E19D32AD60011102F /* APCGroupedScheduledTask.m */,
 				F567786219DDCCBE00936B9A /* APCKeychainStore.h */,
 				F567786319DDCCBE00936B9A /* APCKeychainStore.m */,
+				F5FE18F619EDEE9E00D455E6 /* APCSegmentedButton.h */,
+				F5FE18F719EDEE9E00D455E6 /* APCSegmentedButton.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -813,6 +827,8 @@
 				F588B9F919D21EFE00692473 /* UIView+Helper.m */,
 				5B3AB7A119EC9D5500E7FC31 /* UIView+LoadXib.h */,
 				5B3AB7A219EC9D5500E7FC31 /* UIView+LoadXib.m */,
+				F52549D719EDD87700C7B7CB /* UIImage+APCHelper.h */,
+				F52549D819EDD87700C7B7CB /* UIImage+APCHelper.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -894,6 +910,8 @@
 				F588BA3319D21F1300692473 /* APCSignInViewController.h */,
 				F588BA3419D21F1300692473 /* APCSignInViewController.m */,
 				F588BA3519D21F1300692473 /* APCSignInViewController.xib */,
+				F5FE18F219EDDFB900D455E6 /* APCInclusionCriteriaViewController.h */,
+				F5FE18F319EDDFB900D455E6 /* APCInclusionCriteriaViewController.m */,
 				F588BA3619D21F1300692473 /* APCSignupCriteriaViewController.h */,
 				F588BA3719D21F1300692473 /* APCSignupCriteriaViewController.m */,
 				5B29CE3E19D376CA00E2FD62 /* APCSignUpPermissionsViewController.h */,
@@ -1120,8 +1138,10 @@
 				5B29CE4019D376CA00E2FD62 /* APCSignUpPermissionsViewController.h in Headers */,
 				F5179CA219D0917D001DCCB7 /* APCQuestionResult.h in Headers */,
 				F5179C8A19D0917D001DCCB7 /* APCDataResult+AddOn.h in Headers */,
+				F5FE18F419EDDFB900D455E6 /* APCInclusionCriteriaViewController.h in Headers */,
 				F5179C9019D0917D001DCCB7 /* APCDBStatus+AddOn.h in Headers */,
 				F5179B2F19D09128001DCCB7 /* APCAppleCore.h in Headers */,
+				F5FE18F819EDEE9E00D455E6 /* APCSegmentedButton.h in Headers */,
 				F5179C9619D0917D001DCCB7 /* APCFileResult+AddOn.h in Headers */,
 				F5FDCF8D19EC68C9002486DE /* UIColor+APCAppearance.h in Headers */,
 				F5179CA819D0917D001DCCB7 /* APCResult.h in Headers */,
@@ -1136,6 +1156,7 @@
 				F588BA7919D21F1300692473 /* APCSignupTouchIDViewController.h in Headers */,
 				F588BAA119D220AC00692473 /* APCAppDelegate.h in Headers */,
 				F588BA8419D21F1300692473 /* APCUserInfoViewController.h in Headers */,
+				F52549D919EDD87700C7B7CB /* UIImage+APCHelper.h in Headers */,
 				F588BA0E19D21EFE00692473 /* UIAlertView+Helper.h in Headers */,
 				F588BA8A19D21F1300692473 /* APCConfirmationView.h in Headers */,
 				F588BA8019D21F1300692473 /* APCSpinnerViewController.h in Headers */,
@@ -1340,6 +1361,7 @@
 				F5179CA919D0917D001DCCB7 /* APCResult.m in Sources */,
 				F588BA0D19D21EFE00692473 /* NSString+Helper.m in Sources */,
 				5B3AB78519E8908500E7FC31 /* APCProfileViewController.m in Sources */,
+				F5FE18F519EDDFB900D455E6 /* APCInclusionCriteriaViewController.m in Sources */,
 				F588BA7F19D21F1300692473 /* APCSignupViewController.m in Sources */,
 				F5179C9419D0917D001DCCB7 /* APCDBStatus.m in Sources */,
 				7BA4BBF819D4893700BC4023 /* APCMapViewController.m in Sources */,
@@ -1362,6 +1384,7 @@
 				F5179C8519D0917D001DCCB7 /* APCConsentResult+AddOn.m in Sources */,
 				F588BA9619D21F1300692473 /* APCStepViewController.m in Sources */,
 				F5FDCF9419EC6A17002486DE /* APCAppearanceInfo.m in Sources */,
+				F5FE18F919EDEE9E00D455E6 /* APCSegmentedButton.m in Sources */,
 				F57329AC19DF065A00A85564 /* APCEmailVerifyViewController.m in Sources */,
 				F5179CAC19D0917D001DCCB7 /* APCSchedule+AddOn.m in Sources */,
 				F588BA7019D21F1300692473 /* APCIntroVideoViewController.m in Sources */,
@@ -1410,6 +1433,7 @@
 				F588BA8D19D21F1300692473 /* APCPasscodeView.m in Sources */,
 				F588BA9419D21F1300692473 /* APCSetupTaskViewController.m in Sources */,
 				F588BA0B19D21EFE00692473 /* NSObject+Helper.m in Sources */,
+				F52549DA19EDD87700C7B7CB /* UIImage+APCHelper.m in Sources */,
 				F5179CB519D0917D001DCCB7 /* APCScheduledTask.m in Sources */,
 				F588B9FB19D21EFE00692473 /* APCAssertionHandler.m in Sources */,
 				F5179CA619D0917D001DCCB7 /* APCResult+AddOn.m in Sources */,

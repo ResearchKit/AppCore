@@ -15,6 +15,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *diseaseNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateRangeLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
+@property (weak, nonatomic) IBOutlet UIButton *joinButton;
+@property (weak, nonatomic) IBOutlet UIButton *loginButton;
+
 @property (strong, nonatomic) NSString *diseaseName;
 
 - (IBAction)signInTapped:(id)sender;

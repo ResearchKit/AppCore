@@ -11,14 +11,19 @@
 
 @implementation UIFont (APCAppearance)
 
-+(id)appFontWithSize:(CGFloat)size
++ (UIFont*) appRegularFontWithSize: (CGFloat) size
 {
-    return [UIFont fontWithName:[APCAppearanceInfo valueForAppearanceKey:kNormalFontNameKey] size:size];
+    return [UIFont fontWithName:[APCAppearanceInfo valueForAppearanceKey:kRegularFontNameKey] size:size];
 }
 
-+ (id)appBoldFontWithSize:(CGFloat)size
++ (UIFont*) appMediumFontWithSize: (CGFloat) size
 {
-    return [UIFont fontWithName:[APCAppearanceInfo valueForAppearanceKey:kBoldFontNameKey] size:size];
+    return [UIFont fontWithName:[APCAppearanceInfo valueForAppearanceKey:kMediumFontNameKey] size:size];
+}
+
++ (UIFont*) appLightFontWithSize: (CGFloat) size
+{
+    return [UIFont fontWithName:[APCAppearanceInfo valueForAppearanceKey:kLightFontNameKey] size:size];
 }
 
 @end

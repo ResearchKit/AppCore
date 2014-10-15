@@ -12,14 +12,13 @@
 
 //Appearance Methods
 + (UIColor*) appPrimaryColor;
-+ (UIColor*) appSecondaryColor;
 
-+ (UIColor*) appTextBodyColor1;
-+ (UIColor*) appTextBodyColor2;
-+ (UIColor*) appTextBodyColor3;
++ (UIColor*) appSecondaryColor1;
++ (UIColor*) appSecondaryColor2;
++ (UIColor*) appSecondaryColor3;
++ (UIColor*) appSecondaryColor4;
 
-//Helper Methods
-+ (UIColor *) colorWith255Red:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
-+ (UIColor *) confirmationColor;
++ (UIColor *) appTertiaryColor1;
++ (UIColor *) appTertiaryColor2;
 
 @end

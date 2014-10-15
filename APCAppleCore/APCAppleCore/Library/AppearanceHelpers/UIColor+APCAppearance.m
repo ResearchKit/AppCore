@@ -14,39 +14,36 @@
 //Appearance Methods
 + (UIColor *)appPrimaryColor
 {
-    return [APCAppearanceInfo valueForAppearanceKey:kPrimaryColorKey];
+    return [APCAppearanceInfo valueForAppearanceKey:kPrimaryAppColorKey];
 }
 
-+(UIColor *)appSecondaryColor
++ (UIColor *)appSecondaryColor1
 {
-    return [APCAppearanceInfo valueForAppearanceKey:kSecondaryColorKey];
+    return [APCAppearanceInfo valueForAppearanceKey:kSecondaryColor1Key];
 }
 
-+ (UIColor *)appTextBodyColor1
++ (UIColor *)appSecondaryColor2
 {
-    return [APCAppearanceInfo valueForAppearanceKey:kTextBodyColor1Key];
+    return [APCAppearanceInfo valueForAppearanceKey:kSecondaryColor2Key];
 }
 
-+ (UIColor *)appTextBodyColor2
++ (UIColor *)appSecondaryColor3
 {
-    return [APCAppearanceInfo valueForAppearanceKey:kTextBodyColor2Key];
+    return [APCAppearanceInfo valueForAppearanceKey:kSecondaryColor3Key];
 }
 
-+ (UIColor *)appTextBodyColor3
++ (UIColor *)appSecondaryColor4
 {
-    return [APCAppearanceInfo valueForAppearanceKey:kTextBodyColor3Key];
+    return [APCAppearanceInfo valueForAppearanceKey:kSecondaryColor4Key];
 }
 
-//Helper Methods
-+ (UIColor *) colorWith255Red:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha {
-    return [UIColor colorWithRed:red/255.0 green:green/255.0 blue:blue/255.0 alpha:alpha];
-}
-
-+ (UIColor *)confirmationColor
++ (UIColor *) appTertiaryColor1
 {
-    return [UIColor colorWithRed:68/255.0f green:210/255.0f blue:70/255.0f alpha:1.0];
+    return [APCAppearanceInfo valueForAppearanceKey:kTertiaryColor1Key];
 }
-
-
++ (UIColor *) appTertiaryColor2
+{
+    return [APCAppearanceInfo valueForAppearanceKey:kTertiaryColor2Key];
+}
 
 @end
