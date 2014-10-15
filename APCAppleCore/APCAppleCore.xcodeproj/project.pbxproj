@@ -271,7 +271,7 @@
 		F5FDCF9019EC68C9002486DE /* UIFont+APCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FDCF8C19EC68C9002486DE /* UIFont+APCAppearance.m */; };
 		F5FDCF9319EC6A17002486DE /* APCAppearanceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FDCF9119EC6A17002486DE /* APCAppearanceInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5FDCF9419EC6A17002486DE /* APCAppearanceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FDCF9219EC6A17002486DE /* APCAppearanceInfo.m */; };
-		F5FE18F419EDDFB900D455E6 /* APCInclusionCriteriaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FE18F219EDDFB900D455E6 /* APCInclusionCriteriaViewController.h */; };
+		F5FE18F419EDDFB900D455E6 /* APCInclusionCriteriaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FE18F219EDDFB900D455E6 /* APCInclusionCriteriaViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5FE18F519EDDFB900D455E6 /* APCInclusionCriteriaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FE18F319EDDFB900D455E6 /* APCInclusionCriteriaViewController.m */; };
 		F5FE18F819EDEE9E00D455E6 /* APCSegmentedButton.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FE18F619EDEE9E00D455E6 /* APCSegmentedButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5FE18F919EDEE9E00D455E6 /* APCSegmentedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FE18F719EDEE9E00D455E6 /* APCSegmentedButton.m */; };
