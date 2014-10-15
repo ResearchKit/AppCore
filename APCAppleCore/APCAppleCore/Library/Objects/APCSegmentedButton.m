@@ -46,6 +46,7 @@
             localButton.tintColor = self.normalColor;
         }
     }];
+    [self.delegate segmentedButtonPressed:button selectedIndex:self.selectedIndex];
 }
 
 
