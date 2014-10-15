@@ -16,8 +16,6 @@
 #import "APCPermissionsManager.h"
 #import <CoreMotion/CoreMotion.h>
 
-
-static NSString * const kSignUpPermissionsCellIdentifier = @"PermissonsCell";
 static CGFloat const kTableViewRowHeight                 = 165.0f;
 
 @interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
@@ -101,24 +99,22 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 {
     [super viewDidLoad];
     
-    [self addNavigationItems];
     [self setupProgressBar];
-    [self addTableView];
     
     [self reloadData];
 }
 
 - (void)viewWillLayoutSubviews
 {
-    CGRect frame = self.view.bounds;
-    frame.origin.y = self.stepProgressBar.bottom;
-    frame.size.height -= frame.origin.y;
-    self.tableView.frame = frame;
+//    CGRect frame = self.view.bounds;
+//    frame.origin.y = self.stepProgressBar.bottom;
+//    frame.size.height -= frame.origin.y;
+//    self.tableView.frame = frame;
 }
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self.stepProgressBar setCompletedSteps:3 animation:YES];
+//    [self.stepProgressBar setCompletedSteps:3 animation:YES];
     
     [self reloadData];
 }
@@ -133,25 +129,8 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 }
 
 - (void) setupProgressBar {
-    [self.stepProgressBar setCompletedSteps:2 animation:NO];
-    [self setStepNumber:4 title:NSLocalizedString(@"Permissions", @"")];
-}
-
-- (void) addTableView {
-    CGRect frame = self.view.bounds;
-    frame.origin.y = self.stepProgressBar.bottom;
-    frame.size.height -= frame.origin.y;
-    
-    self.tableView = [UITableView new];
-    self.tableView.frame = frame;
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.allowsSelection = NO;
-    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
-    [self.view addSubview:self.tableView];
-    
-    [self.tableView registerNib:[UINib nibWithNibName:@"APCPermissionsCell" bundle:[NSBundle appleCoreBundle]] forCellReuseIdentifier:kSignUpPermissionsCellIdentifier];
+//    [self.stepProgressBar setCompletedSteps:2 animation:NO];
+//    [self setStepNumber:4 title:NSLocalizedString(@"Permissions", @"")];
 }
 
 #pragma mark - UITableViewDataSource methods
@@ -163,7 +142,7 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    APCPermissionsCell *cell = (APCPermissionsCell *)[tableView dequeueReusableCellWithIdentifier:kSignUpPermissionsCellIdentifier forIndexPath:indexPath];
+    APCPermissionsCell *cell = (APCPermissionsCell *)[tableView dequeueReusableCellWithIdentifier:kSignUpPermissionsCellIdentifier];
     
     APCTableViewPermissionsItem *item = self.permissions[indexPath.row];
     

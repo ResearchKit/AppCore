@@ -35,7 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self addNavigationItems];
+//    [self addNavigationItems];
     [self setupProgressBar];
     
     self.touchContext = [LAContext new];
@@ -137,9 +137,7 @@
 #pragma mark - Private Methods
 
 - (void) next {
-    APCSignUpPermissionsViewController *permissionsViewController = [[APCSignUpPermissionsViewController alloc] init];
-    permissionsViewController.user = self.user;
-    [self.navigationController pushViewController:permissionsViewController animated:YES];
+
 }
 
 - (void) showFirstTry {

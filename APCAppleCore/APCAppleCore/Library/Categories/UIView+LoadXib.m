@@ -33,7 +33,6 @@ static int const kViewTag = 5555;
         UIView *realView = [[self class] loadInstanceFromNib];
         realView.frame = self.frame;
         realView.alpha = self.alpha;
-        realView.backgroundColor = self.backgroundColor;
         
         for (UIView *view in self.subviews) {
             [realView addSubview:view];

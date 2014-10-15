@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "APCPermissionButton.h"
 
+static NSString * const kSignUpPermissionsCellIdentifier = @"APCPermissionsCell";
+
 @class APCPermissionsCell;
 
 @protocol APCPermissionCellDelegate <NSObject>

@@ -29,6 +29,10 @@
 
 @property (weak, nonatomic) IBOutlet UIView *footerView;
 
+@property (weak, nonatomic) IBOutlet UILabel *footerLabel;
+
 - (BOOL) isContentValid:(NSString **)errorMessage;
+
+- (void)setupAppearance;
 
 @end

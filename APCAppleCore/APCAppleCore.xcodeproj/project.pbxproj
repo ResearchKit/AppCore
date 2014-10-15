@@ -214,7 +214,6 @@
 		F588BA7819D21F1300692473 /* APCSignUpProgressing.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3819D21F1300692473 /* APCSignUpProgressing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA7919D21F1300692473 /* APCSignupTouchIDViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3919D21F1300692473 /* APCSignupTouchIDViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA7A19D21F1300692473 /* APCSignupTouchIDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA3A19D21F1300692473 /* APCSignupTouchIDViewController.m */; };
-		F588BA7B19D21F1300692473 /* APCSignupTouchIDViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F588BA3B19D21F1300692473 /* APCSignupTouchIDViewController.xib */; };
 		F588BA7E19D21F1300692473 /* APCSignupViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3E19D21F1300692473 /* APCSignupViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA7F19D21F1300692473 /* APCSignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA3F19D21F1300692473 /* APCSignupViewController.m */; };
 		F588BA8019D21F1300692473 /* APCSpinnerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA4019D21F1300692473 /* APCSpinnerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -473,7 +472,6 @@
 		F588BA3819D21F1300692473 /* APCSignUpProgressing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignUpProgressing.h; sourceTree = "<group>"; };
 		F588BA3919D21F1300692473 /* APCSignupTouchIDViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignupTouchIDViewController.h; sourceTree = "<group>"; };
 		F588BA3A19D21F1300692473 /* APCSignupTouchIDViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignupTouchIDViewController.m; sourceTree = "<group>"; };
-		F588BA3B19D21F1300692473 /* APCSignupTouchIDViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSignupTouchIDViewController.xib; sourceTree = "<group>"; };
 		F588BA3E19D21F1300692473 /* APCSignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignupViewController.h; sourceTree = "<group>"; };
 		F588BA3F19D21F1300692473 /* APCSignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignupViewController.m; sourceTree = "<group>"; };
 		F588BA4019D21F1300692473 /* APCSpinnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSpinnerViewController.h; sourceTree = "<group>"; };
@@ -919,7 +917,6 @@
 				F588BA3819D21F1300692473 /* APCSignUpProgressing.h */,
 				F588BA3919D21F1300692473 /* APCSignupTouchIDViewController.h */,
 				F588BA3A19D21F1300692473 /* APCSignupTouchIDViewController.m */,
-				F588BA3B19D21F1300692473 /* APCSignupTouchIDViewController.xib */,
 				F588BA3E19D21F1300692473 /* APCSignupViewController.h */,
 				F588BA3F19D21F1300692473 /* APCSignupViewController.m */,
 				F588BA4019D21F1300692473 /* APCSpinnerViewController.h */,
@@ -1321,7 +1318,6 @@
 				F5C1DC3619D23044006527EA /* tab_activities.png in Resources */,
 				F5C1DC4319D23044006527EA /* tab_profile@2x.png in Resources */,
 				F5C1DC4419D23044006527EA /* tab_profile_selected.png in Resources */,
-				F588BA7B19D21F1300692473 /* APCSignupTouchIDViewController.xib in Resources */,
 				F5C1DC3F19D23044006527EA /* tab_learn@2x.png in Resources */,
 				F588BA9219D21F1300692473 /* APCUserInfoTableHeaderView.xib in Resources */,
 				F5C1DC4519D23044006527EA /* tab_profile_selected@2x.png in Resources */,

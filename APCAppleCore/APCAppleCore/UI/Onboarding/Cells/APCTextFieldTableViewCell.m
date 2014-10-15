@@ -21,6 +21,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    self.textField.delegate = self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -38,6 +39,7 @@
         self.textLabelWidthConstraint.constant = 183;
         self.textField.textAlignment = NSTextAlignmentRight;
     }
+    [self layoutIfNeeded];
 }
 
 #pragma mark - UITextFieldDelegate methods

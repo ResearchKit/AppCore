@@ -17,7 +17,7 @@ typedef NS_ENUM(NSUInteger, APCTextFieldCellType) {
 
 @protocol APCTextFieldTableViewCellDelegate ;
 
-@interface APCTextFieldTableViewCell : UITableViewCell
+@interface APCTextFieldTableViewCell : UITableViewCell <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *textLabel;
 

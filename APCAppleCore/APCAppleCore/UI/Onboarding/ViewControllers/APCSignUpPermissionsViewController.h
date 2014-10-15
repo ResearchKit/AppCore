@@ -8,6 +8,6 @@
 
 #import "APCSignupViewController.h"
 
-@interface APCSignUpPermissionsViewController : APCSignupViewController
+@interface APCSignUpPermissionsViewController : UITableViewController <APCSignUpProgressing>
 
 @end

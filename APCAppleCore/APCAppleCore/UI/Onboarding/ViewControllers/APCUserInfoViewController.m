@@ -327,20 +327,9 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
             isContentValid = NO;
             
             if (errorMessage) {
-                *errorMessage = NSLocalizedString(@"Please give a valid first name", @"");
+                *errorMessage = NSLocalizedString(@"Please give a valid name", @"");
             }
-        }
-        //TODO: Enable this for production
-        /*
-        else if (![self.lastNameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
-            isContentValid = NO;
-            
-            if (errorMessage) {
-                *errorMessage = NSLocalizedString(@"Please give a valid last name", @"");
-            }
-        }
-         */
-        else {
+        } else {
             isContentValid = YES;
         }
     }

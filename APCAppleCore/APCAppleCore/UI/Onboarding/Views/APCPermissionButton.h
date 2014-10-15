@@ -12,4 +12,10 @@
 
 @property (nonatomic, strong) UILabel *titleLabel;
 
+@property (nonatomic, strong) NSString *unconfirmedTitle;
+
+@property (nonatomic, strong) NSString *confirmedTitle;
+
+@property (nonatomic) BOOL shouldHighlightText;
+
 @end

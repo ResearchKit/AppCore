@@ -14,8 +14,16 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vn5-XD-F0f">
+                        <rect key="frame" x="208" y="8" width="94" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="rD4-xc-G1z"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits" keyboardAppearance="alert"/>
+                    </textField>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WSd-2U-Jty">
-                        <rect key="frame" x="15" y="12" width="183" height="21"/>
+                        <rect key="frame" x="18" y="12" width="183" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="183" id="DA6-Oe-Ev9"/>
                             <constraint firstAttribute="height" constant="21" id="Jr9-uh-Sn7"/>
@@ -24,24 +32,13 @@
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vn5-XD-F0f">
-                        <rect key="frame" x="205" y="8" width="107" height="30"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="30" id="rD4-xc-G1z"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <textInputTraits key="textInputTraits"/>
-                        <connections>
-                            <outlet property="delegate" destination="-1" id="LP1-7s-jWJ"/>
-                        </connections>
-                    </textField>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="Vn5-XD-F0f" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="RrM-OE-wNc"/>
+                    <constraint firstItem="Vn5-XD-F0f" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" constant="-10" id="RrM-OE-wNc"/>
                     <constraint firstItem="Vn5-XD-F0f" firstAttribute="leading" secondItem="WSd-2U-Jty" secondAttribute="trailing" constant="7" id="Xl4-KL-fIq"/>
                     <constraint firstAttribute="centerY" secondItem="Vn5-XD-F0f" secondAttribute="centerY" constant="-1.5" id="Y0k-yY-VA5"/>
                     <constraint firstAttribute="centerY" secondItem="WSd-2U-Jty" secondAttribute="centerY" constant="-1" id="byg-5G-oWs"/>
-                    <constraint firstItem="WSd-2U-Jty" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="7" id="li1-kd-C7g"/>
+                    <constraint firstItem="WSd-2U-Jty" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="10" id="li1-kd-C7g"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

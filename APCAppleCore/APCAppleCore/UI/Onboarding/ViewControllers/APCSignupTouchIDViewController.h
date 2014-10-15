@@ -10,4 +10,7 @@
 
 @interface APCSignupTouchIDViewController : APCSignupViewController
 
+- (void)skip;
+- (void)next;
+
 @end

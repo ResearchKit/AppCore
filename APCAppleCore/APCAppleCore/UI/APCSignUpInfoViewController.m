@@ -15,6 +15,8 @@
 #import "NSBundle+Helper.h"
 #import "NSString+Helper.h"
 #import "NSDate+Helper.h"
+#import "UIColor+APCAppearance.h"
+#import "UIFont+APCAppearance.h"
 
 @interface APCSignUpInfoViewController ()
 
@@ -34,6 +36,7 @@
     // Do any additional setup after loading the view.
     
     [self setupStepProgressBar];
+    [self setupAppearance];
     
     self.nameTextField.delegate = self;
     self.userNameTextField.delegate = self;
@@ -79,6 +82,50 @@
     self.stepProgressBar.leftLabel.attributedText = attributedString;
 }
 
+#pragma mark - Appearance
+
+- (void)setupAppearance
+{
+    [self.nameTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.nameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    
+    [self.userNameTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.userNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    
+    [self.profileImageButton.imageView.layer setCornerRadius:CGRectGetHeight(self.profileImageButton.bounds)/2];
+    
+    [self.footerLabel setTextColor:[UIColor appSecondaryColor3]];
+    [self.footerLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
+}
+
+- (void)setupPickerCellAppeareance:(APCPickerTableViewCell *)cell
+{
+
+}
+
+- (void)setupTextFieldCellAppearance:(APCTextFieldTableViewCell *)cell
+{
+    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
+    [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
+    
+    [cell.textField setFont:[UIFont appRegularFontWithSize:17.0f]];
+    [cell.textField setTextColor:[UIColor appSecondaryColor1]];
+}
+
+- (void)setupSegmentedCellAppearance:(APCSegmentedTableViewCell *)cell
+{
+    
+}
+
+- (void)setupDefaultCellAppearance:(UITableViewCell *)cell
+{
+    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
+    [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
+    
+    [cell.detailTextLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
+    [cell.detailTextLabel setTextColor:[UIColor appSecondaryColor1]];
+}
+
 #pragma mark - UITableViewDataSource methods
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -111,6 +158,7 @@
             pickerCell.datePicker.datePickerMode = datePickerField.datePickerMode;
             pickerCell.delegate = self;
             
+            [self setupPickerCellAppeareance:pickerCell];
             
         } else if ([field isKindOfClass:[APCTableViewCustomPickerItem class]]){
             
@@ -119,6 +167,8 @@
             pickerCell.pickerValues = customPickerField.pickerData;
             [pickerCell.pickerView reloadAllComponents];
             pickerCell.delegate = self;
+            
+            [self setupPickerCellAppeareance:pickerCell];
         }
         
     } else {
@@ -148,8 +198,15 @@
                 
                 textFieldCell.textLabel.text = textFieldItem.value;
                 
-                textFieldCell.type = kAPCTextFieldCellTypeRight;
+                if (field.textAlignnment == NSTextAlignmentRight) {
+                    textFieldCell.type = kAPCTextFieldCellTypeRight;
+                } else {
+                    textFieldCell.type = kAPCTextFieldCellTypeLeft;
+                }
+                
                 textFieldCell.delegate = self;
+                
+                [self setupTextFieldCellAppearance:textFieldCell];
                 
                 cell = textFieldCell;
             }
@@ -193,6 +250,8 @@
             cell.textLabel.text = field.caption;
             cell.detailTextLabel.text = field.detailText;
             
+            [self setupDefaultCellAppearance:cell];
+            
             if (self.isEditing) {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             } else{
@@ -228,9 +287,11 @@
     
     if ([field isKindOfClass:[APCTableViewCustomPickerItem class]] ||
         [field isKindOfClass:[APCTableViewDatePickerItem class]]) {
+        [self.tableView endEditing:YES];
         [self handlePickerForIndexPath:indexPath];
     } else if ([field isKindOfClass:[APCTableViewTextFieldItem class]]){
-        
+        APCTextFieldTableViewCell *cell = (APCTextFieldTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+        [cell.textField becomeFirstResponder];
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -240,7 +301,11 @@
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     
-    [textField resignFirstResponder];
+    if ((textField == self.nameTextField) && self.userNameTextField) {
+        [self.userNameTextField becomeFirstResponder];
+    } else {
+        [self nextResponderForIndexPath:nil];
+    }
     
     return YES;
 }
@@ -281,28 +346,37 @@
 - (void)textFieldTableViewCellDidReturn:(APCTextFieldTableViewCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    
+    [self nextResponderForIndexPath:indexPath];
+}
+
+- (void)nextResponderForIndexPath:(NSIndexPath *)indexPath
+{
     NSUInteger lastRowIndex = [self.tableView numberOfRowsInSection:0] - 1;
     
-    if (indexPath.row < lastRowIndex) {
+    NSInteger currentRowIndex = -1;
+    if (indexPath) {
+        currentRowIndex = indexPath.row;
+    }
+    
+    if (currentRowIndex < lastRowIndex) {
         
         NSInteger nextRowIndex = -1;
         
-        for (NSInteger i=indexPath.row+1; i<=lastRowIndex; i++) {
+        for (NSInteger i = currentRowIndex + 1; i <= lastRowIndex; i++) {
             APCTableViewItem *field = self.items[i];
-            if ([field isKindOfClass:[APCTextFieldTableViewCell class]]) {
-                nextRowIndex = 1;
+            if ([field isKindOfClass:[APCTableViewTextFieldItem class]]) {
+                nextRowIndex = i;
                 break;
             }
         }
         
         if (nextRowIndex > 0) {
             APCTextFieldTableViewCell *nextCell = (APCTextFieldTableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:nextRowIndex inSection:0]];
-            [nextCell becomeFirstResponder];
+            [nextCell.textField becomeFirstResponder];
         } else{
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
             [cell resignFirstResponder];
         }
-        
     }
 }
 

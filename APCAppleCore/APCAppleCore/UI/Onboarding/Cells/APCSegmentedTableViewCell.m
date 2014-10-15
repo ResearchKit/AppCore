@@ -15,8 +15,9 @@
     // Initialization code
     
     self.segmentControl = [APCSegmentControl new];
+//    self.segmentControl.frame = self.bounds;
     [self.segmentControl addTarget:self action:@selector(segmentIndexChanged) forControlEvents:UIControlEventValueChanged];
-    [self.contentView addSubview:self.segmentControl];
+    self.accessoryView = self.segmentControl;
     
 }
 
