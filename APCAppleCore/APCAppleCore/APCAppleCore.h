@@ -42,7 +42,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCPasscodeView.h>
 #import <APCAppleCore/APCSegmentControl.h>
 #import <APCAppleCore/APCSignInViewController.h>
-#import <APCAppleCore/APCSignupCriteriaViewController.h>
+#import <APCAppleCore/APCInclusionCriteriaViewController.h>
 #import <APCAppleCore/APCSignUpPermissionsViewController.h>
 #import <APCAppleCore/APCSignUpProgressing.h>
 #import <APCAppleCore/APCSignupTouchIDViewController.h>
@@ -73,6 +73,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 //Objects
 #import <APCAppleCore/APCGroupedScheduledTask.h>
 #import <APCAppleCore/APCKeychainStore.h>
+#import <APCAppleCore/APCSegmentedButton.h>
 
 //Categories
 #import <APCAppleCore/APCStepProgressBar+Appearance.h>

@@ -10,6 +10,8 @@
 
 @interface APCInclusionCriteriaViewController : UITableViewController
 
-//Abstract Method to be implemented by subclasses
+//Abstract Implementations
+- (void) next;
+- (BOOL) isContentValid;
 
 @end
