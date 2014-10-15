@@ -17,7 +17,6 @@
 #import "UITableView+Appearance.h"
 #import "APCUserInfoViewController.h"
 
-static NSString * const kAPCUserInfoFieldNameRegEx              = @"[A-Za-z\\ ]+";
 
 static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 

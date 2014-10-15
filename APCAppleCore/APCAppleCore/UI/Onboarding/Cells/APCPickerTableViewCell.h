@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+static NSString * const kAPCPickerTableViewCellIdentifier    = @"APCPickerTableViewCell";
+
 typedef NS_ENUM(NSUInteger, APCPickerCellType) {
     kAPCPickerCellTypeDate,
     kAPCPickerCellTypeCustom
@@ -26,6 +28,8 @@ typedef NS_ENUM(NSUInteger, APCPickerCellType) {
 @property (nonatomic) APCPickerCellType type;
 
 @property (nonatomic, weak) id <APCPickerTableViewCellDelegate> delegate;
+
+@property (nonatomic, strong) NSArray *selectedRowIndices;
 
 @end
 

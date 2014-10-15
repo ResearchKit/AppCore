@@ -71,10 +71,11 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCEmailVerifyViewController.h>
 
 #import <APCAppleCore/APCProfileViewController.h>
+#import <APCAppleCore/APCSignUpInfoViewController.h>
+
 #import <APCAppleCore/APCTextFieldTableViewCell.h>
 #import <APCAppleCore/APCPickerTableViewCell.h>
-
-
+#import <APCAppleCore/APCSegmentedTableViewCell.h>
 
 //Objects
 #import <APCAppleCore/APCGroupedScheduledTask.h>

@@ -20,10 +20,6 @@
     return self;
 }
 
-- (NSString *) identifier {
-    return @"cell";
-}
-
 @end
 
 

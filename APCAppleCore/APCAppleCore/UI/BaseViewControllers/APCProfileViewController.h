@@ -8,11 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "APCUser+HealthKit.h"
-#import "APCUserInfoCell.h"
 #import "APCTextFieldTableViewCell.h"
 #import "APCPickerTableViewCell.h"
 
-@interface APCProfileViewController : UITableViewController <APCPickerTableViewCellDelegate, APCTextFieldTableViewCellDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface APCProfileViewController : UITableViewController <APCPickerTableViewCellDelegate, APCTextFieldTableViewCellDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) NSMutableArray *items;
 

@@ -96,7 +96,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="detailsLabel" destination="m6D-GE-sYC" id="KAm-PV-6Ha"/>
-                <outlet property="permissionsButton" destination="KAb-gP-GJs" id="jQu-GV-9nS"/>
+                <outlet property="permissionsButton" destination="KAb-gP-GJs" id="tUX-4O-TZK"/>
                 <outlet property="titleLabel" destination="EUz-m2-XmJ" id="6W4-mT-h79"/>
             </connections>
             <point key="canvasLocation" x="561" y="469.5"/>

@@ -16,7 +16,6 @@
 		5B29CE4119D376CA00E2FD62 /* APCSignUpPermissionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B29CE3F19D376CA00E2FD62 /* APCSignUpPermissionsViewController.m */; };
 		5B29CE4B19D4902B00E2FD62 /* APCStudyOverviewViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B29CE4819D4902B00E2FD62 /* APCStudyOverviewViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B29CE4C19D4902B00E2FD62 /* APCStudyOverviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B29CE4919D4902B00E2FD62 /* APCStudyOverviewViewController.m */; };
-		5B29CE4D19D4902B00E2FD62 /* APCStudyOverviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B29CE4A19D4902B00E2FD62 /* APCStudyOverviewViewController.xib */; };
 		5B3AB78419E8908500E7FC31 /* APCProfileViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3AB78219E8908500E7FC31 /* APCProfileViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3AB78519E8908500E7FC31 /* APCProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3AB78319E8908500E7FC31 /* APCProfileViewController.m */; };
 		5B3AB79E19EC9BF600E7FC31 /* APCPickerTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3AB79B19EC9BF600E7FC31 /* APCPickerTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -27,6 +26,15 @@
 		5B5F178019ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B5F177D19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B5F178119ECF83A00A0E1D7 /* APCTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B5F177E19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.m */; };
 		5B5F178219ECF83A00A0E1D7 /* APCTextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B5F177F19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.xib */; };
+		5B5F178B19EDB58F00A0E1D7 /* APCPermissionButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B5F178919EDB58F00A0E1D7 /* APCPermissionButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B5F178C19EDB58F00A0E1D7 /* APCPermissionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B5F178A19EDB58F00A0E1D7 /* APCPermissionButton.m */; };
+		5B5F178F19EDB75700A0E1D7 /* APCSignUpInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B5F178D19EDB75700A0E1D7 /* APCSignUpInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B5F179019EDB75700A0E1D7 /* APCSignUpInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B5F178E19EDB75700A0E1D7 /* APCSignUpInfoViewController.m */; };
+		5B5F179419EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B5F179119EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B5F179519EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B5F179219EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.m */; };
+		5B5F179619EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B5F179319EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.xib */; };
+		5B5F179919EDD45600A0E1D7 /* APCSignUpUserInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B5F179719EDD45600A0E1D7 /* APCSignUpUserInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B5F179A19EDD45600A0E1D7 /* APCSignUpUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B5F179819EDD45600A0E1D7 /* APCSignUpUserInfoViewController.m */; };
 		5BF5C90819D9E208007928D4 /* APCUser+HealthKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF5C90619D9E208007928D4 /* APCUser+HealthKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BF5C90919D9E208007928D4 /* APCUser+HealthKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5C90719D9E208007928D4 /* APCUser+HealthKit.m */; };
 		7BA4BBF719D4893700BC4023 /* APCMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BA4BBF219D4893700BC4023 /* APCMapViewController.h */; };
@@ -205,8 +213,6 @@
 		F588BA7919D21F1300692473 /* APCSignupTouchIDViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3919D21F1300692473 /* APCSignupTouchIDViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA7A19D21F1300692473 /* APCSignupTouchIDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA3A19D21F1300692473 /* APCSignupTouchIDViewController.m */; };
 		F588BA7B19D21F1300692473 /* APCSignupTouchIDViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F588BA3B19D21F1300692473 /* APCSignupTouchIDViewController.xib */; };
-		F588BA7C19D21F1300692473 /* APCSignUpUserInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3C19D21F1300692473 /* APCSignUpUserInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F588BA7D19D21F1300692473 /* APCSignUpUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA3D19D21F1300692473 /* APCSignUpUserInfoViewController.m */; };
 		F588BA7E19D21F1300692473 /* APCSignupViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3E19D21F1300692473 /* APCSignupViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA7F19D21F1300692473 /* APCSignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA3F19D21F1300692473 /* APCSignupViewController.m */; };
 		F588BA8019D21F1300692473 /* APCSpinnerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA4019D21F1300692473 /* APCSpinnerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -292,7 +298,6 @@
 		5B29CE3F19D376CA00E2FD62 /* APCSignUpPermissionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignUpPermissionsViewController.m; sourceTree = "<group>"; };
 		5B29CE4819D4902B00E2FD62 /* APCStudyOverviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewViewController.h; sourceTree = "<group>"; };
 		5B29CE4919D4902B00E2FD62 /* APCStudyOverviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyOverviewViewController.m; sourceTree = "<group>"; };
-		5B29CE4A19D4902B00E2FD62 /* APCStudyOverviewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCStudyOverviewViewController.xib; sourceTree = "<group>"; };
 		5B3AB78219E8908500E7FC31 /* APCProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCProfileViewController.h; path = BaseViewControllers/APCProfileViewController.h; sourceTree = "<group>"; };
 		5B3AB78319E8908500E7FC31 /* APCProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCProfileViewController.m; path = BaseViewControllers/APCProfileViewController.m; sourceTree = "<group>"; };
 		5B3AB79B19EC9BF600E7FC31 /* APCPickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPickerTableViewCell.h; sourceTree = "<group>"; };
@@ -303,6 +308,15 @@
 		5B5F177D19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTextFieldTableViewCell.h; sourceTree = "<group>"; };
 		5B5F177E19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTextFieldTableViewCell.m; sourceTree = "<group>"; };
 		5B5F177F19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCTextFieldTableViewCell.xib; sourceTree = "<group>"; };
+		5B5F178919EDB58F00A0E1D7 /* APCPermissionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPermissionButton.h; sourceTree = "<group>"; };
+		5B5F178A19EDB58F00A0E1D7 /* APCPermissionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPermissionButton.m; sourceTree = "<group>"; };
+		5B5F178D19EDB75700A0E1D7 /* APCSignUpInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignUpInfoViewController.h; sourceTree = "<group>"; };
+		5B5F178E19EDB75700A0E1D7 /* APCSignUpInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignUpInfoViewController.m; sourceTree = "<group>"; };
+		5B5F179119EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSegmentedTableViewCell.h; sourceTree = "<group>"; };
+		5B5F179219EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSegmentedTableViewCell.m; sourceTree = "<group>"; };
+		5B5F179319EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSegmentedTableViewCell.xib; sourceTree = "<group>"; };
+		5B5F179719EDD45600A0E1D7 /* APCSignUpUserInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignUpUserInfoViewController.h; sourceTree = "<group>"; };
+		5B5F179819EDD45600A0E1D7 /* APCSignUpUserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignUpUserInfoViewController.m; sourceTree = "<group>"; };
 		5BF5C90619D9E208007928D4 /* APCUser+HealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCUser+HealthKit.h"; sourceTree = "<group>"; };
 		5BF5C90719D9E208007928D4 /* APCUser+HealthKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCUser+HealthKit.m"; sourceTree = "<group>"; };
 		7BA4BBF219D4893700BC4023 /* APCMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMapViewController.h; sourceTree = "<group>"; };
@@ -452,8 +466,6 @@
 		F588BA3919D21F1300692473 /* APCSignupTouchIDViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignupTouchIDViewController.h; sourceTree = "<group>"; };
 		F588BA3A19D21F1300692473 /* APCSignupTouchIDViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignupTouchIDViewController.m; sourceTree = "<group>"; };
 		F588BA3B19D21F1300692473 /* APCSignupTouchIDViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSignupTouchIDViewController.xib; sourceTree = "<group>"; };
-		F588BA3C19D21F1300692473 /* APCSignUpUserInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignUpUserInfoViewController.h; sourceTree = "<group>"; };
-		F588BA3D19D21F1300692473 /* APCSignUpUserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignUpUserInfoViewController.m; sourceTree = "<group>"; };
 		F588BA3E19D21F1300692473 /* APCSignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignupViewController.h; sourceTree = "<group>"; };
 		F588BA3F19D21F1300692473 /* APCSignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignupViewController.m; sourceTree = "<group>"; };
 		F588BA4019D21F1300692473 /* APCSpinnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSpinnerViewController.h; sourceTree = "<group>"; };
@@ -814,6 +826,8 @@
 				F588BA5919D21F1300692473 /* YMLCharting */,
 				5B3AB78219E8908500E7FC31 /* APCProfileViewController.h */,
 				5B3AB78319E8908500E7FC31 /* APCProfileViewController.m */,
+				5B5F178D19EDB75700A0E1D7 /* APCSignUpInfoViewController.h */,
+				5B5F178E19EDB75700A0E1D7 /* APCSignUpInfoViewController.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -849,6 +863,9 @@
 				5B5F177D19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h */,
 				5B5F177E19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.m */,
 				5B5F177F19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.xib */,
+				5B5F179119EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.h */,
+				5B5F179219EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.m */,
+				5B5F179319EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -865,6 +882,8 @@
 		F588BA2B19D21F1300692473 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				5B5F179719EDD45600A0E1D7 /* APCSignUpUserInfoViewController.h */,
+				5B5F179819EDD45600A0E1D7 /* APCSignUpUserInfoViewController.m */,
 				F588BA2C19D21F1300692473 /* APCForgotPasswordViewController.h */,
 				F588BA2D19D21F1300692473 /* APCForgotPasswordViewController.m */,
 				F588BA2E19D21F1300692473 /* APCForgotPasswordViewController.xib */,
@@ -883,8 +902,6 @@
 				F588BA3919D21F1300692473 /* APCSignupTouchIDViewController.h */,
 				F588BA3A19D21F1300692473 /* APCSignupTouchIDViewController.m */,
 				F588BA3B19D21F1300692473 /* APCSignupTouchIDViewController.xib */,
-				F588BA3C19D21F1300692473 /* APCSignUpUserInfoViewController.h */,
-				F588BA3D19D21F1300692473 /* APCSignUpUserInfoViewController.m */,
 				F588BA3E19D21F1300692473 /* APCSignupViewController.h */,
 				F588BA3F19D21F1300692473 /* APCSignupViewController.m */,
 				F588BA4019D21F1300692473 /* APCSpinnerViewController.h */,
@@ -915,6 +932,8 @@
 				F588BA5119D21F1300692473 /* APCStepProgressBar.h */,
 				F588BA5219D21F1300692473 /* APCStepProgressBar.m */,
 				F588BA5319D21F1300692473 /* APCUserInfoTableHeaderView.xib */,
+				5B5F178919EDB58F00A0E1D7 /* APCPermissionButton.h */,
+				5B5F178A19EDB58F00A0E1D7 /* APCPermissionButton.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1074,6 +1093,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B5F179919EDD45600A0E1D7 /* APCSignUpUserInfoViewController.h in Headers */,
 				5B29CE3B19D3769E00E2FD62 /* APCPermissionsCell.h in Headers */,
 				F5179C7B19D0917D001DCCB7 /* APCDataSubstrate+CoreData.h in Headers */,
 				F5179C9319D0917D001DCCB7 /* APCDBStatus.h in Headers */,
@@ -1095,7 +1115,7 @@
 				F588BA9A19D21F1300692473 /* YMLLineChartView.h in Headers */,
 				F5FDCF9319EC6A17002486DE /* APCAppearanceInfo.h in Headers */,
 				F588BA9019D21F1300692473 /* APCStepProgressBar.h in Headers */,
-				F588BA1219D21EFE00692473 /* UIColor+Helper.h in Headers */,
+				5B5F178F19EDB75700A0E1D7 /* APCSignUpInfoViewController.h in Headers */,
 				5B3AB7A319EC9D5500E7FC31 /* UIView+LoadXib.h in Headers */,
 				5B29CE4019D376CA00E2FD62 /* APCSignUpPermissionsViewController.h in Headers */,
 				F5179CA219D0917D001DCCB7 /* APCQuestionResult.h in Headers */,
@@ -1108,7 +1128,6 @@
 				F5179CBD19D0917D001DCCB7 /* APCTask+AddOn.h in Headers */,
 				F588BA0C19D21EFE00692473 /* NSString+Helper.h in Headers */,
 				7BA4BBF719D4893700BC4023 /* APCMapViewController.h in Headers */,
-				F588BA7C19D21F1300692473 /* APCSignUpUserInfoViewController.h in Headers */,
 				5B29CE4B19D4902B00E2FD62 /* APCStudyOverviewViewController.h in Headers */,
 				F588BA7819D21F1300692473 /* APCSignUpProgressing.h in Headers */,
 				F588B9FA19D21EFE00692473 /* APCAssertionHandler.h in Headers */,
@@ -1135,10 +1154,12 @@
 				F5179CB419D0917D001DCCB7 /* APCScheduledTask.h in Headers */,
 				F567786419DDCCBE00936B9A /* APCKeychainStore.h in Headers */,
 				F5179C8119D0917D001DCCB7 /* APCDataSubstrate.h in Headers */,
+				5B5F178B19EDB58F00A0E1D7 /* APCPermissionButton.h in Headers */,
 				F5179C8419D0917D001DCCB7 /* APCConsentResult+AddOn.h in Headers */,
 				F5179CAB19D0917D001DCCB7 /* APCSchedule+AddOn.h in Headers */,
 				F5179CB119D0917D001DCCB7 /* APCScheduledTask+AddOn.h in Headers */,
 				F541541819D6029C00B819C9 /* APCStoredUserData.h in Headers */,
+				5B5F179419EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.h in Headers */,
 				F588BA6F19D21F1300692473 /* APCIntroVideoViewController.h in Headers */,
 				F588BA0219D21EFE00692473 /* NSDate+Helper.h in Headers */,
 				F588BA6119D21F1300692473 /* APCConfigurableCell.h in Headers */,
@@ -1259,6 +1280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B3AB7A019EC9BF600E7FC31 /* APCPickerTableViewCell.xib in Resources */,
+				5B5F179619EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.xib in Resources */,
 				F5C1DC4119D23044006527EA /* tab_learn_selected@2x.png in Resources */,
 				F554FF2A19E7331800BA729A /* APCParameters.storyboard in Resources */,
 				F5C1DC3D19D23044006527EA /* tab_dashboard_selected@2x.png in Resources */,
@@ -1307,12 +1329,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F588BA7D19D21F1300692473 /* APCSignUpUserInfoViewController.m in Sources */,
 				5B3AB7A419EC9D5500E7FC31 /* UIView+LoadXib.m in Sources */,
 				F5B4213419D23D6800F9CD69 /* APCParametersUserDefaultCell.m in Sources */,
 				F588BA8719D21F1300692473 /* APCViewController.m in Sources */,
 				F5179CA019D0917D001DCCB7 /* APCQuestionResult+AddOn.m in Sources */,
 				F588BA0119D21EFE00692473 /* NSBundle+Helper.m in Sources */,
+				5B5F179019EDB75700A0E1D7 /* APCSignUpInfoViewController.m in Sources */,
 				F588BA6219D21F1300692473 /* APCConfigurableCell.m in Sources */,
 				F567786519DDCCBE00936B9A /* APCKeychainStore.m in Sources */,
 				F5179CA919D0917D001DCCB7 /* APCResult.m in Sources */,
@@ -1380,6 +1402,7 @@
 				F5179C8E19D0917D001DCCB7 /* APCDataResult.m in Sources */,
 				F588BA9B19D21F1300692473 /* YMLLineChartView.m in Sources */,
 				F5179C9719D0917D001DCCB7 /* APCFileResult+AddOn.m in Sources */,
+				5B5F179A19EDD45600A0E1D7 /* APCSignUpUserInfoViewController.m in Sources */,
 				F5FDCF9019EC68C9002486DE /* UIFont+APCAppearance.m in Sources */,
 				F588BA6719D21F1300692473 /* APCUserInfoCell.m in Sources */,
 				F5179CB219D0917D001DCCB7 /* APCScheduledTask+AddOn.m in Sources */,
@@ -1395,6 +1418,7 @@
 				F5179C7C19D0917D001DCCB7 /* APCDataSubstrate+CoreData.m in Sources */,
 				7BA4BBFB19D4893700BC4023 /* APCPassiveLocationTracking.m in Sources */,
 				F588BA1519D21EFE00692473 /* UIScrollView+Helper.m in Sources */,
+				5B5F179519EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.m in Sources */,
 				F541541E19D60F3400B819C9 /* HKHealthStore+APCExtensions.m in Sources */,
 				5B29CE3719D3767D00E2FD62 /* APCPermissionsManager.m in Sources */,
 				F5EDCC8E19D32F0A00A5E027 /* APCActivitiesTableViewCell.m in Sources */,
@@ -1403,6 +1427,7 @@
 				F588BA8519D21F1300692473 /* APCUserInfoViewController.m in Sources */,
 				5B3AB79F19EC9BF600E7FC31 /* APCPickerTableViewCell.m in Sources */,
 				F588BA0519D21EFE00692473 /* NSError+APCAdditions.m in Sources */,
+				5B5F178C19EDB58F00A0E1D7 /* APCPermissionButton.m in Sources */,
 				F5179C9119D0917D001DCCB7 /* APCDBStatus+AddOn.m in Sources */,
 				F5179CDA19D0917D001DCCB7 /* APCScheduler.m in Sources */,
 			);

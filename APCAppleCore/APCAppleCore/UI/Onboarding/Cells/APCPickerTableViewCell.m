@@ -42,6 +42,26 @@
     }
 }
 
+#pragma mark - Getter/Setter
+
+- (NSArray *)selectedRowIndices
+{
+    NSMutableArray *selectedRowIndices = [NSMutableArray array];
+    
+    for (int i = 0 ; i < self.pickerValues.count; i++) {
+        [selectedRowIndices addObject:@([self.pickerView selectedRowInComponent:i])];
+    }
+    
+    return selectedRowIndices;
+}
+
+- (void)setSelectedRowIndices:(NSArray *)selectedRowIndices
+{
+    for (int i = 0 ; i < selectedRowIndices.count; i++) {
+        [self.pickerView selectRow:[selectedRowIndices[i] integerValue] inComponent:i animated:NO];
+    }
+}
+
 #pragma mark - UIPickerViewDataSource methods
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView

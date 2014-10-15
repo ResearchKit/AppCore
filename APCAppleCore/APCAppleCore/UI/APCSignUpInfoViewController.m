@@ -1,20 +1,22 @@
 //
-//  APCProfileViewController.m
+//  APCSignUpGeneralInfoViewController.m
 //  APCAppleCore
 //
-//  Created by Ramsundar Shandilya on 10/10/14.
+//  Created by Ramsundar Shandilya on 10/14/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCProfileViewController.h"
+#import "APCSignUpInfoViewController.h"
 #import "APCTableViewItem.h"
 #import "APCAppDelegate.h"
-#import "NSDate+Helper.h"
 #import "APCUserInfoConstants.h"
+#import "UIAlertView+Helper.h"
+#import "APCStepProgressBar.h"
+#import "NSBundle+Helper.h"
+#import "NSString+Helper.h"
+#import "NSDate+Helper.h"
 
-@interface APCProfileViewController () 
-
-@property (nonatomic, getter=isEditing) BOOL editing;
+@interface APCSignUpInfoViewController ()
 
 @property (nonatomic, getter=isPickerShowing) BOOL pickerShowing;
 
@@ -22,180 +24,62 @@
 
 @end
 
-@implementation APCProfileViewController
+@implementation APCSignUpInfoViewController
+
+@synthesize stepProgressBar;
+@synthesize user = _user;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self prepareFields];
-    [self.tableView reloadData];
+    [self setupStepProgressBar];
+    
+    self.nameTextField.delegate = self;
+    self.userNameTextField.delegate = self;
 }
 
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    
-    self.tableView.tableHeaderView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 127);
-
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (void)prepareFields
+#pragma mark - Step Progress bar
+
+- (void)setupStepProgressBar
 {
-    self.items = [NSMutableArray new];
-    self.itemTypeOrder = [NSMutableArray new];
+    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, -kAPCSignUpProgressBarHeight, CGRectGetWidth(self.view.frame), kAPCSignUpProgressBarHeight)
+                                                               style:APCStepProgressBarStyleOnlyProgressView];
+    self.stepProgressBar.numberOfSteps = 4;
+    [self.view addSubview:self.stepProgressBar];
     
-    {
-        APCTableViewItem *field = [APCTableViewItem new];
-        field.caption = NSLocalizedString(@"Email", @"");
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
-        field.editable = NO;
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemEmail)];
-    }
     
-    {
-        APCTableViewItem *field = [APCTableViewItem new];
-        field.caption = NSLocalizedString(@"Birthdate", @"");
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
-        field.editable = NO;
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemDateOfBirth)];
-    }
+    // Instead of reducing table view height, we can just adjust tableview scroll insets
+    UIEdgeInsets inset = self.tableView.contentInset;
+    inset.top += CGRectGetHeight(self.stepProgressBar.frame);
     
-    {
-        APCTableViewItem *field = [APCTableViewItem new];
-        field.caption = NSLocalizedString(@"Biological Sex", @"");
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
-        field.editable = NO;
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemGender)];
-    }
-    
-    {
-        APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-        field.caption = NSLocalizedString(@"Medical Conditions", @"");
-        field.pickerData = @[[APCUser medicalConditions]];
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
-        
-        if (self.user.medications) {
-            field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:self.user.medicalConditions]) ];
-        }
-        else {
-            field.selectedRowIndices = @[ @(0) ];
-        }
-        
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemMedicalCondition)];
-    }
-    
-    {
-        APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-        field.caption = NSLocalizedString(@"Medication", @"");
-        field.pickerData = @[[APCUser medications]];
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
-        
-        if (self.user.medications) {
-            field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:self.user.medications]) ];
-        }
-        else {
-            field.selectedRowIndices = @[ @(0) ];
-        }
-        
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemMedication)];
-    }
-    
-    {
-        APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-        field.caption = NSLocalizedString(@"Height", @"");
-        field.pickerData = [APCUser heights];
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
-        
-        if (self.user.height) {
-            double heightInInches = [APCUser heightInInches:self.user.height];
-            NSString *feet = [NSString stringWithFormat:@"%d'", (int)heightInInches/12];
-            NSString *inches = [NSString stringWithFormat:@"%d''", (int)heightInInches%12];
-            
-            field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:feet]), @([field.pickerData[1] indexOfObject:inches]) ];
-        }
-        else {
-            field.selectedRowIndices = @[ @(2), @(5) ];
-        }
-        
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemHeight)];
-    }
-    
-    {
-        APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
-        field.caption = NSLocalizedString(@"Weight", @"");
-        field.placeholder = NSLocalizedString(@"lb", @"");
-        field.regularExpression = kAPCMedicalInfoItemWeightRegEx;
-        field.value = [NSString stringWithFormat:@"%.1f", [APCUser weightInPounds:self.user.weight]];
-        field.keyboardType = UIKeyboardTypeNumberPad;
-        field.textAlignnment = NSTextAlignmentRight;
-        field.identifier = kAPCTextFieldTableViewCellIdentifier;
-        
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemWeight)];
-    }
-    
-    {
-        APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-        field.selectionStyle = UITableViewCellSelectionStyleGray;
-        field.style = UITableViewCellStyleValue1;
-        field.caption = NSLocalizedString(@"What time do you wake up?", @"");
-        field.placeholder = NSLocalizedString(@"7:00 AM", @"");
-        field.identifier = kAPCPickerTableViewCellIdentifier;
-        field.datePickerMode = UIDatePickerModeTime;
-        field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;
-        field.detailDiscloserStyle = YES;
-        
-        if (self.user.sleepTime) {
-            field.date = self.user.sleepTime;
-        }
-        
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemWakeUpTime)];
-    }
-    
-    {
-        APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-        field.selectionStyle = UITableViewCellSelectionStyleGray;
-        field.style = UITableViewCellStyleValue1;
-        field.caption = NSLocalizedString(@"What time do you go to sleep?", @"");
-        field.placeholder = NSLocalizedString(@"9:30 PM", @"");
-        field.identifier = kAPCPickerTableViewCellIdentifier;
-        field.datePickerMode = UIDatePickerModeTime;
-        field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;
-        field.detailDiscloserStyle = YES;
-        
-        if (self.user.wakeUpTime) {
-            field.date = self.user.wakeUpTime;
-        }
-        
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemSleepTime)];
-    }
-    
+    self.tableView.contentInset = inset;
 }
 
-#pragma mark - Getter Methods
-
-- (APCUser *) user {
-    if (!_user) {
-        _user = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
-    }
+- (void)setStepNumber:(NSUInteger)stepNumber title:(NSString *)title
+{
+    NSString *step = [NSString stringWithFormat:NSLocalizedString(@"Step %i", @""), stepNumber];
     
-    return _user;
+    NSString *string = [NSString stringWithFormat:@"%@: %@", step, title];
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:string];
+    [attributedString setAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:14]} range:NSMakeRange(0, string.length)];
+    [attributedString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:14]} range:NSMakeRange(0, step.length)];
+    
+    self.stepProgressBar.leftLabel.attributedText = attributedString;
 }
 
-#pragma mark - UITableViewDataSource
+#pragma mark - UITableViewDataSource methods
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -214,9 +98,6 @@
     
     if (self.pickerIndexPath && self.pickerIndexPath.row == indexPath.row) {
         cell = [tableView dequeueReusableCellWithIdentifier:kAPCPickerTableViewCellIdentifier];
-        if (!cell) {
-            cell = [[APCPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kAPCPickerTableViewCellIdentifier];
-        }
         
         APCTableViewItem *field = self.items[indexPath.row - 1];
         
@@ -242,6 +123,7 @@
         
     } else {
         APCTableViewItem *field;
+        
         if (self.isPickerShowing && (indexPath.row > self.pickerIndexPath.row)) {
             field = self.items[indexPath.row - 1];
         } else{
@@ -253,10 +135,6 @@
             cell = [tableView dequeueReusableCellWithIdentifier:field.identifier];
             
             if ([field isKindOfClass:[APCTableViewTextFieldItem class]]) {
-                
-                if (!cell) {
-                    cell = [[APCTextFieldTableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
-                }
                 
                 APCTableViewTextFieldItem *textFieldItem = (APCTableViewTextFieldItem *)field;
                 APCTextFieldTableViewCell *textFieldCell = (APCTextFieldTableViewCell *)cell;
@@ -295,6 +173,16 @@
                 APCTableViewCustomPickerItem *customPickerField = (APCTableViewCustomPickerItem *)field;
                 cell.detailTextLabel.text = customPickerField.stringValue;
                 
+            } else if ([field isKindOfClass:[APCTableViewSegmentItem class]]) {
+                if (!cell) {
+                    cell = [[APCSegmentedTableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
+                }
+                
+                APCTableViewSegmentItem *segmentPickerField = (APCTableViewSegmentItem *)field;
+                APCSegmentedTableViewCell *segmentedCell = (APCSegmentedTableViewCell *)cell;
+                
+                [segmentedCell setSegments:segmentPickerField.segments selectedIndex:segmentPickerField.selectedIndex];
+                
             } else {
                 if (!cell) {
                     cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
@@ -316,8 +204,6 @@
     
     return cell;
 }
-
-#pragma mark - UITableViewDelegate methods
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -346,8 +232,17 @@
     } else if ([field isKindOfClass:[APCTableViewTextFieldItem class]]){
         
     }
-         
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - UITextFieldDelegate methods
+
+- (BOOL) textFieldShouldReturn:(UITextField *)textField {
+    
+    [textField resignFirstResponder];
+    
+    return YES;
 }
 
 #pragma mark - APCPickerTableViewCellDelegate methods
@@ -385,7 +280,40 @@
 
 - (void)textFieldTableViewCellDidReturn:(APCTextFieldTableViewCell *)cell
 {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
+    NSUInteger lastRowIndex = [self.tableView numberOfRowsInSection:0] - 1;
+    
+    if (indexPath.row < lastRowIndex) {
+        
+        NSInteger nextRowIndex = -1;
+        
+        for (NSInteger i=indexPath.row+1; i<=lastRowIndex; i++) {
+            APCTableViewItem *field = self.items[i];
+            if ([field isKindOfClass:[APCTextFieldTableViewCell class]]) {
+                nextRowIndex = 1;
+                break;
+            }
+        }
+        
+        if (nextRowIndex > 0) {
+            APCTextFieldTableViewCell *nextCell = (APCTextFieldTableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:nextRowIndex inSection:0]];
+            [nextCell becomeFirstResponder];
+        } else{
+            [cell resignFirstResponder];
+        }
+        
+    }
+}
+
+#pragma mark - APCSegmentedTableViewCellDelegate methods
+
+- (void)segmentedTableViewcell:(APCSegmentedTableViewCell *)cell didSelectSegmentAtIndex:(NSInteger)index
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    APCTableViewSegmentItem *field = self.items[indexPath.row];
+    field.selectedIndex = index;
 }
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -406,7 +334,7 @@
 }
 
 #pragma mark - Private Methods
-         
+
 - (void)handlePickerForIndexPath:(NSIndexPath *)indexPath
 {
     [self.tableView beginUpdates];
@@ -426,7 +354,7 @@
     [self.tableView endUpdates];
     
 }
-         
+
 - (void)showPickerAtIndex:(NSIndexPath *)indexPath {
     
     self.pickerShowing = YES;
@@ -464,50 +392,27 @@
     return newIndexPath;
 }
 
-#pragma mark - IBActions
+#pragma mark - Private Methods
 
-- (IBAction)signOut:(id)sender
-{
+- (BOOL) isContentValid:(NSString **)errorMessage {
+    BOOL isContentValid = YES;
     
-}
-
-- (IBAction)leaveStudy:(id)sender
-{
-    
-}
-
-- (IBAction)reviewConsent:(id)sender
-{
-    
-}
-
-- (IBAction)changeProfileImage:(id)sender
-{
-    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-    imagePickerController.editing = YES;
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-    }
-    else {
-        imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    }
-    imagePickerController.delegate = self;
-    [self presentViewController:imagePickerController animated:YES completion:nil];
-
-}
-
-- (IBAction)editFields:(UIBarButtonItem *)sender {
-    if (self.isEditing) {
-        sender.title = NSLocalizedString(@"Done", @"Done");
-        sender.style = UIBarButtonItemStyleDone;
-    } else{
-        sender.title = NSLocalizedString(@"Edit", @"Edit");
-        sender.style = UIBarButtonItemStylePlain;
+    if (self.tableView.tableHeaderView) {
+        if (![self.nameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
+            isContentValid = NO;
+            
+            if (errorMessage) {
+                *errorMessage = NSLocalizedString(@"Please give a valid first name", @"");
+            }
+        }
     }
     
-    self.editing = !self.editing;
-    
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+    return isContentValid;
 }
+
+- (void)next{
+    
+}
+
 
 @end
