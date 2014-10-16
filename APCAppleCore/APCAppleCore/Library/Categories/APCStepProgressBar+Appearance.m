@@ -7,6 +7,7 @@
 //
 
 #import "APCStepProgressBar+Appearance.h"
+#import "UIColor+APCAppearance.h"
 
 @implementation APCStepProgressBar (Appearance)
 
@@ -36,7 +37,7 @@
 }
 
 + (UIColor *) progressBarProgressTintColor {
-    return [UIColor colorWithRed:45/255.0 green:180/255.0 blue:251/255.0 alpha:1.0];
+    return [UIColor appTertiaryColor1];
 }
 
 @end

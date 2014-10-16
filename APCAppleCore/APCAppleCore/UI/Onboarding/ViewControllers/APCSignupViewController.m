@@ -14,7 +14,6 @@
 #import "APCSignupViewController.h"
 #import "APCAppleCore.h"
 
-static NSInteger kNumberOfSteps = 4;
 
 @interface APCSignupViewController ()
 

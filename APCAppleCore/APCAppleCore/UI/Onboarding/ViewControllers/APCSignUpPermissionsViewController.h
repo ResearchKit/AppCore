@@ -8,6 +8,10 @@
 
 #import "APCSignupViewController.h"
 
-@interface APCSignUpPermissionsViewController : APCSignupViewController
+@interface APCSignUpPermissionsViewController : UITableViewController <APCSignUpProgressing>
+
+@property (nonatomic, strong) NSMutableArray *permissions;
+
+- (void)finishSignUp;
 
 @end

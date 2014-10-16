@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="APCConsentResult" representedClassName="APCConsentResult" parentEntity="APCResult" syncable="YES">
         <attribute name="signatureDate" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="signatureName" optional="YES" attributeType="String" syncable="YES"/>
@@ -54,6 +54,9 @@
         <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCTask" inverseName="schedules" inverseEntity="APCTask" syncable="YES"/>
     </entity>
     <entity name="APCStoredUserData" representedClassName="APCStoredUserData" syncable="YES">
+        <attribute name="biologicalSex" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="birthDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="bloodType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="medicalConditions" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="medications" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="serverConsented" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -84,7 +87,7 @@
         <element name="APCResult" positionX="-720" positionY="333" width="128" height="210"/>
         <element name="APCSchedule" positionX="-1161" positionY="513" width="128" height="148"/>
         <element name="APCScheduledTask" positionX="-468" positionY="449" width="128" height="163"/>
-        <element name="APCStoredUserData" positionX="-954" positionY="486" width="128" height="135"/>
+        <element name="APCStoredUserData" positionX="-954" positionY="486" width="128" height="180"/>
         <element name="APCSurveyResult" positionX="-945" positionY="495" width="128" height="58"/>
         <element name="APCTask" positionX="-965" positionY="585" width="128" height="178"/>
     </elements>

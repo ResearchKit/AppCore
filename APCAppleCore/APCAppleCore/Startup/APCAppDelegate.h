@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "APCDataSubstrate.h"
 
 static NSString *const kStudyIdentifierKey = @"StudyIdentifierKey";
 static NSString *const kAppPrefixKey = @"AppPrefixKey";
@@ -18,6 +19,7 @@ static NSString *const kDataSubstrateClassNameKey = @"APHDatasubstrateClassName"
 static NSString *const kPasswordKey = @"password";
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler;
+
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property  (strong, nonatomic)  UIWindow * window;

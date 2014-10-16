@@ -17,7 +17,6 @@
 #import "UITableView+Appearance.h"
 #import "APCUserInfoViewController.h"
 
-static NSString * const kAPCUserInfoFieldNameRegEx              = @"[A-Za-z\\ ]+";
 
 static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
 
@@ -120,11 +119,11 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
             cell.datePicker.datePickerMode = datePickerField.datePickerMode;
             cell.valueTextField.tintColor = [UIColor clearColor];
             
-            NSString *dateWithFormate = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
+            NSString *dateWithFormat = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
             if (datePickerField.isDetailDiscloserStyle) {
                 [cell setNeedsHiddenField];
                 
-                cell.detailTextLabel.text = dateWithFormate;
+                cell.detailTextLabel.text = dateWithFormat;
             }
             else {
                 cell.accessoryView = cell.valueTextField;
@@ -240,12 +239,12 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
     APCTableViewDatePickerItem *field = self.items[indexPath.row];
     field.date = date;
     
-    NSString *dateWithFormate = [field.date toStringWithFormat:field.dateFormat];
+    NSString *dateWithFormat = [field.date toStringWithFormat:field.dateFormat];
     if (field.isDetailDiscloserStyle) {
-        cell.detailTextLabel.text = dateWithFormate;
+        cell.detailTextLabel.text = dateWithFormat;
     }
     else {
-        cell.valueTextField.text = dateWithFormate;
+        cell.valueTextField.text = dateWithFormat;
     }
 }
 
@@ -330,18 +329,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
             if (errorMessage) {
                 *errorMessage = NSLocalizedString(@"Please give a valid first name", @"");
             }
-        }
-        //TODO: Enable this for production
-        /*
-        else if (![self.lastNameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
-            isContentValid = NO;
-            
-            if (errorMessage) {
-                *errorMessage = NSLocalizedString(@"Please give a valid last name", @"");
-            }
-        }
-         */
-        else {
+        } else {
             isContentValid = YES;
         }
     }
