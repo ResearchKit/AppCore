@@ -40,7 +40,7 @@ static NSString * const kAPCGeneralInfoItemEmailRegEx           = @"[A-Z0-9a-z._
 
 static NSString * const kAPCMedicalInfoItemWeightRegEx          = @"[0-9]{1,4}";
 
-static NSString * const kAPCMedicalInfoItemSleepTimeFormat     = @"HH:mm a";
+static NSString * const kAPCMedicalInfoItemSleepTimeFormat     = @"hh:mm a";
 
 static NSString * const kAPCDefaultTableViewCellIdentifier = @"APCDefaultTableViewCell";
 
