@@ -12,6 +12,9 @@
 #import <CoreLocation/CoreLocation.h>
 #import <HealthKit/HealthKit.h>
 
+static NSArray *healthKitTypesToRead;
+static NSArray *healthKitTypesToWrite;
+
 static NSString * const APCPermissionsManagerErrorDomain = @"APCPermissionsManagerErrorDomain";
 
 typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
@@ -31,6 +34,16 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 @end
 
 @implementation APCPermissionsManager
+
++ (void)setHealthKitTypesToRead:(NSArray *)types
+{
+    healthKitTypesToRead = types;
+}
+
++ (void)setHealthKitTypesToWrite:(NSArray *)types
+{
+    healthKitTypesToWrite = types;
+}
 
 - (instancetype)init
 {
@@ -115,18 +128,25 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             HKAuthorizationStatus status = [self.healthStore authorizationStatusForType:weightType];
             
             if (status == HKAuthorizationStatusNotDetermined) {
-                NSArray *dataTypesToRead = @[[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass],
-                                             [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeight],
-                                             [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType],
-                                             [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex],
-                                             [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth],
-                                             [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount],
-                                             [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate],
-                                             [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning],
-                                             [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierFlightsClimbed],
-                                             [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceCycling]];
                 
-                NSArray *dataTypesToWrite = @[[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass]];
+                //------READ TYPES--------
+                NSMutableArray *dataTypesToRead = [NSMutableArray new];
+                for (NSString *typeIdentifier in healthKitTypesToRead) {
+                    [dataTypesToRead addObject:[HKQuantityType quantityTypeForIdentifier:typeIdentifier]];
+                }
+                
+                [dataTypesToRead addObjectsFromArray: @[
+                                                       [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType],
+                                                       [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex],
+                                                       [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth]
+                                                       ]];
+                
+                //-------WRITE TYPES--------
+                NSMutableArray *dataTypesToWrite = [NSMutableArray new];
+                
+                for (NSString *typeIdentifier in healthKitTypesToRead) {
+                    [dataTypesToWrite addObject:[HKQuantityType quantityTypeForIdentifier:typeIdentifier]];
+                }
                 
                 [self.healthStore requestAuthorizationToShareTypes:[NSSet setWithArray:dataTypesToWrite] readTypes:[NSSet setWithArray:dataTypesToRead] completion:^(BOOL success, NSError *error) {
                     if (completion) {
