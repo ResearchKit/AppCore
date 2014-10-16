@@ -52,7 +52,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Step Progress bar
+#pragma mark -
 
 - (void)setupStepProgressBar
 {
@@ -80,6 +80,14 @@
     [attributedString setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:14]} range:NSMakeRange(0, step.length)];
     
     self.stepProgressBar.leftLabel.attributedText = attributedString;
+}
+
+- (APCUser *) user {
+    if (!_user) {
+        _user = ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+    }
+    
+    return _user;
 }
 
 #pragma mark - Appearance

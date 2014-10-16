@@ -13,6 +13,7 @@
 #import "UIAlertView+Helper.h"
 #import "APCSignupTouchIDViewController.h"
 #import "APCSignUpPermissionsViewController.h"
+#import "APCAppDelegate.h"
 
 @import LocalAuthentication;
 
@@ -31,6 +32,10 @@
 @end
 
 @implementation APCSignupTouchIDViewController
+
+@synthesize stepProgressBar;
+
+@synthesize user = _user;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -78,8 +83,21 @@
 
 - (void) setupProgressBar {
     
-    [self setStepNumber:3 title:NSLocalizedString(@"Identification", @"")];
+    CGFloat stepProgressByYPosition = self.topLayoutGuide.length;
+    
+    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.width, kAPCSignUpProgressBarHeight)
+                                                               style:APCStepProgressBarStyleDefault];
+    self.stepProgressBar.numberOfSteps = kNumberOfSteps;
+    [self.view addSubview:self.stepProgressBar];
+    
     [self.stepProgressBar setCompletedSteps:1 animation:NO];
+}
+
+- (APCUser *) user {
+    if (!_user) {
+        _user = ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+    }
+    return _user;
 }
 
 - (void) enableTouchIDFeatureIfAvailable {
@@ -104,7 +122,7 @@
     if (passcodeView == self.passcodeView) {
         [self showRetry];
     }
-    else {
+    else if (self.passcodeView.code.length > 0) {
         if ([self.passcodeView.code isEqualToString:self.retryPasscodeView.code]) {
             [self next];
         }
@@ -201,5 +219,8 @@
     [UIView commitAnimations];
 }
 
-
+- (IBAction)skip
+{
+    
+}
 @end
