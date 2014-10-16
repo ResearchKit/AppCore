@@ -156,6 +156,36 @@ static NSString *APCPassiveLocationTrackingFileName = @"APCPassiveLocationTracki
     if (error) {
         NSLog(@"Content not added");
         //TODO Handle error
+    } else
+    {
+        NSError *err = nil;
+    
+        NSURL *archiveFileURL = [self.taskArchive archiveURLWithError:&err];
+        
+        if (err) {
+            NSLog(@"Error");
+        } else {
+            if (archiveFileURL)
+            {
+                NSURL *documents = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]];
+                NSURL *outputUrl = [documents URLByAppendingPathComponent:[archiveFileURL lastPathComponent]];
+                
+                // This is where you would queue the archive for upload. In this demo, we move it
+                // to the documents directory, where you could copy it off using iTunes, for instance.
+                [[NSFileManager defaultManager] moveItemAtURL:archiveFileURL toURL:outputUrl error:nil];
+                
+                NSLog(@"outputUrl= %@", outputUrl);
+                
+                // When done, clean up:
+                self.taskArchive = nil;
+                
+                if (archiveFileURL)
+                {
+                    [[NSFileManager defaultManager] removeItemAtURL:archiveFileURL error:nil];
+                }
+            }
+   
+        }
     }
 }
 
