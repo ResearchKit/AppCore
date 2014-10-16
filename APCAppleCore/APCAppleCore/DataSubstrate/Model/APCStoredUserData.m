@@ -11,6 +11,9 @@
 
 @implementation APCStoredUserData
 
+@dynamic birthDate;
+@dynamic biologicalSex;
+@dynamic bloodType;
 @dynamic medicalConditions;
 @dynamic medications;
 @dynamic serverConsented;
