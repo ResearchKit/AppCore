@@ -310,11 +310,8 @@
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     
     if ((textField == self.nameTextField) && self.userNameTextField) {
-        self.user.firstName = textField.text;
-        
         [self.userNameTextField becomeFirstResponder];
     } else {
-        self.user.userName = textField.text;
         [self nextResponderForIndexPath:nil];
     }
     
@@ -357,10 +354,11 @@
 - (void)textFieldTableViewCellDidReturn:(APCTextFieldTableViewCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    [self nextResponderForIndexPath:indexPath];
     
     APCTableViewTextFieldItem *textFieldItem = self.items[indexPath.row];
     textFieldItem.value = cell.textField.text;
+    
+    [self nextResponderForIndexPath:indexPath];
 }
 
 - (void)nextResponderForIndexPath:(NSIndexPath *)indexPath
