@@ -45,7 +45,7 @@ static NSInteger kNumberOfSectionsInTableView = 1;
 {
     [super viewWillAppear:animated];
     
-    [self reloadData];
+    [self updateActivities:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -193,8 +193,14 @@ static NSInteger kNumberOfSectionsInTableView = 1;
 
 - (IBAction)updateActivities:(id)sender
 {
-    [self reloadData];
-    [self.refreshControl endRefreshing];
+
+    APCAppDelegate * appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate.scheduler updateScheduledTasks];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self reloadData];
+        [self.refreshControl endRefreshing];
+    });
+
 }
 
 - (void)reloadData
