@@ -310,8 +310,11 @@
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     
     if ((textField == self.nameTextField) && self.userNameTextField) {
+        self.user.firstName = textField.text;
+        
         [self.userNameTextField becomeFirstResponder];
     } else {
+        self.user.userName = textField.text;
         [self nextResponderForIndexPath:nil];
     }
     
@@ -355,6 +358,9 @@
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     [self nextResponderForIndexPath:indexPath];
+    
+    APCTableViewTextFieldItem *textFieldItem = self.items[indexPath.row];
+    textFieldItem.value = cell.textField.text;
 }
 
 - (void)nextResponderForIndexPath:(NSIndexPath *)indexPath
@@ -485,6 +491,12 @@
             
             if (errorMessage) {
                 *errorMessage = NSLocalizedString(@"Please give a valid first name", @"");
+            }
+        } else if (![self.userNameTextField.text isValidForRegex:kAPCGeneralInfoItemUserNameRegEx]){
+            isContentValid = NO;
+            
+            if (errorMessage) {
+                *errorMessage = NSLocalizedString(@"Please give a valid Username", @"");
             }
         }
     }

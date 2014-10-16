@@ -327,7 +327,7 @@ static CGFloat const kAPCUserInfoTableViewDefaultRowHeight      = 64.0;
             isContentValid = NO;
             
             if (errorMessage) {
-                *errorMessage = NSLocalizedString(@"Please give a valid name", @"");
+                *errorMessage = NSLocalizedString(@"Please give a valid first name", @"");
             }
         } else {
             isContentValid = YES;
