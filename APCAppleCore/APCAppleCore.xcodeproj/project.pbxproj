@@ -209,8 +209,6 @@
 		F588BA7319D21F1300692473 /* APCSignInViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3319D21F1300692473 /* APCSignInViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA7419D21F1300692473 /* APCSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA3419D21F1300692473 /* APCSignInViewController.m */; };
 		F588BA7519D21F1300692473 /* APCSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F588BA3519D21F1300692473 /* APCSignInViewController.xib */; };
-		F588BA7619D21F1300692473 /* APCSignupCriteriaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3619D21F1300692473 /* APCSignupCriteriaViewController.h */; };
-		F588BA7719D21F1300692473 /* APCSignupCriteriaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA3719D21F1300692473 /* APCSignupCriteriaViewController.m */; };
 		F588BA7819D21F1300692473 /* APCSignUpProgressing.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3819D21F1300692473 /* APCSignUpProgressing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA7919D21F1300692473 /* APCSignupTouchIDViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3919D21F1300692473 /* APCSignupTouchIDViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA7A19D21F1300692473 /* APCSignupTouchIDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA3A19D21F1300692473 /* APCSignupTouchIDViewController.m */; };
@@ -471,8 +469,6 @@
 		F588BA3319D21F1300692473 /* APCSignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignInViewController.h; sourceTree = "<group>"; };
 		F588BA3419D21F1300692473 /* APCSignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignInViewController.m; sourceTree = "<group>"; };
 		F588BA3519D21F1300692473 /* APCSignInViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSignInViewController.xib; sourceTree = "<group>"; };
-		F588BA3619D21F1300692473 /* APCSignupCriteriaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignupCriteriaViewController.h; sourceTree = "<group>"; };
-		F588BA3719D21F1300692473 /* APCSignupCriteriaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignupCriteriaViewController.m; sourceTree = "<group>"; };
 		F588BA3819D21F1300692473 /* APCSignUpProgressing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignUpProgressing.h; sourceTree = "<group>"; };
 		F588BA3919D21F1300692473 /* APCSignupTouchIDViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignupTouchIDViewController.h; sourceTree = "<group>"; };
 		F588BA3A19D21F1300692473 /* APCSignupTouchIDViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignupTouchIDViewController.m; sourceTree = "<group>"; };
@@ -906,9 +902,6 @@
 			children = (
 				5B5F179719EDD45600A0E1D7 /* APCSignUpUserInfoViewController.h */,
 				5B5F179819EDD45600A0E1D7 /* APCSignUpUserInfoViewController.m */,
-				F588BA2C19D21F1300692473 /* APCForgotPasswordViewController.h */,
-				F588BA2D19D21F1300692473 /* APCForgotPasswordViewController.m */,
-				F588BA2E19D21F1300692473 /* APCForgotPasswordViewController.xib */,
 				F588BA2F19D21F1300692473 /* APCIntroVideoViewController.h */,
 				F588BA3019D21F1300692473 /* APCIntroVideoViewController.m */,
 				F588BA3119D21F1300692473 /* APCNavigationController.h */,
@@ -922,8 +915,6 @@
 				F5C98F9219EF224B001D18C9 /* APCEligibleViewController.m */,
 				F58EA05319F02BD10001C67C /* APCInEligibleViewController.h */,
 				F58EA05419F02BD10001C67C /* APCInEligibleViewController.m */,
-				F588BA3619D21F1300692473 /* APCSignupCriteriaViewController.h */,
-				F588BA3719D21F1300692473 /* APCSignupCriteriaViewController.m */,
 				5B29CE3E19D376CA00E2FD62 /* APCSignUpPermissionsViewController.h */,
 				5B29CE3F19D376CA00E2FD62 /* APCSignUpPermissionsViewController.m */,
 				F588BA2C19D21F1300692473 /* APCForgotPasswordViewController.h */,
@@ -1141,7 +1132,6 @@
 				F57329B519DF093000A85564 /* APCUser+Bridge.h in Headers */,
 				F588BA8319D21F1300692473 /* APCUserInfoConstants.h in Headers */,
 				F588BA6619D21F1300692473 /* APCUserInfoCell.h in Headers */,
-				F588BA7619D21F1300692473 /* APCSignupCriteriaViewController.h in Headers */,
 				F5B4213B19D23D7700F9CD69 /* APCParametersCell.h in Headers */,
 				F588BA9A19D21F1300692473 /* YMLLineChartView.h in Headers */,
 				F5FDCF9319EC6A17002486DE /* APCAppearanceInfo.h in Headers */,
@@ -1387,7 +1377,6 @@
 				F5A63F1519D5EAD100284006 /* APCUser.m in Sources */,
 				F588BA8B19D21F1300692473 /* APCConfirmationView.m in Sources */,
 				5BF5C90919D9E208007928D4 /* APCUser+HealthKit.m in Sources */,
-				F588BA7719D21F1300692473 /* APCSignupCriteriaViewController.m in Sources */,
 				F588BA0919D21EFE00692473 /* NSManagedObject+APCHelper.m in Sources */,
 				F58EA05619F02BD10001C67C /* APCInEligibleViewController.m in Sources */,
 				F588BA1719D21EFE00692473 /* UISegmentedControl+Appearance.m in Sources */,
