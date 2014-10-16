@@ -163,9 +163,13 @@
             APCTableViewDatePickerItem *datePickerField = (APCTableViewDatePickerItem *)field;
             
             pickerCell.type = kAPCPickerCellTypeDate;
+            if (datePickerField.date) {
+                pickerCell.datePicker.date = datePickerField.date;
+            }
+            
             pickerCell.datePicker.datePickerMode = datePickerField.datePickerMode;
             pickerCell.delegate = self;
-            
+        
             [self setupPickerCellAppeareance:pickerCell];
             
         } else if ([field isKindOfClass:[APCTableViewCustomPickerItem class]]){
@@ -245,8 +249,8 @@
                 
                 APCTableViewSegmentItem *segmentPickerField = (APCTableViewSegmentItem *)field;
                 APCSegmentedTableViewCell *segmentedCell = (APCSegmentedTableViewCell *)cell;
-                
-                [segmentedCell setSegments:segmentPickerField.segments selectedIndex:segmentPickerField.selectedIndex];
+                segmentedCell.delegate = self;
+                segmentedCell.selectedSegmentIndex = segmentPickerField.selectedIndex;
                 
             } else {
                 if (!cell) {
@@ -328,6 +332,7 @@
     field.date = date;
     
     NSString *dateWithFormat = [field.date toStringWithFormat:field.dateFormat];
+    field.detailText = dateWithFormat;
     
     UITableViewCell *dateCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section]];
     dateCell.detailTextLabel.text = dateWithFormat;

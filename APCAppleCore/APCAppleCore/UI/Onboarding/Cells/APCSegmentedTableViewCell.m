@@ -7,17 +7,21 @@
 //
 
 #import "APCSegmentedTableViewCell.h"
-#import "APCSegmentControl.h"
+#import "UIColor+APCAppearance.h"
+
+@interface APCSegmentedTableViewCell ()<APCSegmentedButtonDelegate>
+
+
+@end
 
 @implementation APCSegmentedTableViewCell
 
 - (void)awakeFromNib {
     // Initialization code
     
-    self.segmentControl = [APCSegmentControl new];
-//    self.segmentControl.frame = self.bounds;
-    [self.segmentControl addTarget:self action:@selector(segmentIndexChanged) forControlEvents:UIControlEventValueChanged];
-    self.accessoryView = self.segmentControl;
+    self.segmentedButton = [[APCSegmentedButton alloc] initWithButtons:@[self.maleButton, self.femaleButton, self.otherButton] normalColor:[UIColor appSecondaryColor3] highlightColor:[UIColor appSecondaryColor1]];
+    [self.segmentedButton setSelectedIndex:0];
+    self.segmentedButton.delegate = self;
     
 }
 
@@ -27,23 +31,20 @@
     // Configure the view for the selected state
 }
 
-- (void) segmentIndexChanged {
+- (void) segmentedButtonPressed:(UIButton*) button selectedIndex: (NSInteger) selectedIndex
+{
+    self.selectedSegmentIndex = selectedIndex;
+    
     if ([self.delegate respondsToSelector:@selector(segmentedTableViewcell:didSelectSegmentAtIndex:)]) {
-        [self.delegate segmentedTableViewcell:self didSelectSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
+        [self.delegate segmentedTableViewcell:self didSelectSegmentAtIndex:self.selectedSegmentIndex];
     }
 }
 
-- (void) setSegments:(NSArray *)segments selectedIndex:(NSInteger)selectedIndex
+- (void)setSelectedSegmentIndex:(NSInteger)selectedSegmentIndex
 {
-    [self.segmentControl removeAllSegments];
+    _selectedSegmentIndex = selectedSegmentIndex;
     
-    for (int i = 0; i < segments.count; i++) {
-        [self.segmentControl insertSegmentWithTitle:segments[i] atIndex:i animated:NO];
-    }
-    
-    if (selectedIndex >= 0 && selectedIndex < segments.count) {
-        [self.segmentControl setSelectedSegmentIndex:selectedIndex];
-    }
+    [self.segmentedButton setSelectedIndex:selectedSegmentIndex];
 }
 
 @end

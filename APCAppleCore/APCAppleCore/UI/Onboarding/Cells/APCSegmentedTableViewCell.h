@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "APCSegmentedButton.h"
 
 static NSString * const kAPCSegmentedTableViewCellIdentifier = @"APCSegmentedTableViewCell";
 
@@ -16,11 +17,15 @@ static NSString * const kAPCSegmentedTableViewCellIdentifier = @"APCSegmentedTab
 
 @interface APCSegmentedTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) APCSegmentControl *segmentControl;
+@property (weak, nonatomic) IBOutlet UIButton *maleButton;
+@property (weak, nonatomic) IBOutlet UIButton *femaleButton;
+@property (weak, nonatomic) IBOutlet UIButton *otherButton;
+
+@property (nonatomic, strong) APCSegmentedButton *segmentedButton;
+
+@property (nonatomic) NSInteger selectedSegmentIndex;
 
 @property (nonatomic, weak) id <APCSegmentedTableViewCellDelegate> delegate;
-
-- (void) setSegments:(NSArray *)segments selectedIndex:(NSInteger)selectedIndex;
 
 @end
 
