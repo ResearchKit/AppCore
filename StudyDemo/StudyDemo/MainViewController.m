@@ -17,6 +17,9 @@
 
 
 @interface MainViewController ()<RKTaskViewControllerDelegate>
+{
+    id<RKTaskDefaultResultProvider> _lastRouteResult;
+}
 
 @property (nonatomic, strong) RKTaskViewController* taskVC;
 @property (nonatomic, strong) RKStudy* study;
@@ -56,50 +59,80 @@
     
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        [button addTarget:self action:@selector(showTaskButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [button setTitle:@"Show Task" forState:UIControlStateNormal];
-        buttons[@"task"] = button;
-    }
-    
-    {
-        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        [button addTarget:self action:@selector(showSample001ButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [button setTitle:@"EQ-5D-5L" forState:UIControlStateNormal];
-        buttons[@"eq5d"] = button;
-    }
-    {
-        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        [button addTarget:self action:@selector(showConsentButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [button setTitle:@"Show Consent" forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(showConsent:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Consent" forState:UIControlStateNormal];
         buttons[@"consent"] = button;
     }
     
-#ifndef DEMO
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
+        [button addTarget:self action:@selector(showConsentSignature:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Consent Signature" forState:UIControlStateNormal];
+        buttons[@"consent_signature"] = button;
+    }
     
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        [button addTarget:self action:@selector(pickDatesTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [button setTitle:@"Pick Dates" forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(pickDates:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Date Survey" forState:UIControlStateNormal];
         buttons[@"dates"] = button;
     }
     
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        [button addTarget:self action:@selector(showDynamicButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [button setTitle:@"Dynamic Task" forState:UIControlStateNormal];
-        buttons[@"dyntask"] = button;
+        [button addTarget:self action:@selector(showAudioTask:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Audio Task" forState:UIControlStateNormal];
+        buttons[@"audio"] = button;
     }
     
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        [button addTarget:self action:@selector(showGAITButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self action:@selector(showMiniForm:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Mini Form" forState:UIControlStateNormal];
+        buttons[@"form"] = button;
+    }
+    
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
+        [button addTarget:self action:@selector(showSelectionSurvey:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Selection Survey" forState:UIControlStateNormal];
+        buttons[@"selection_survey"] = button;
+    }
+    
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
+        [button addTarget:self action:@selector(showGAIT:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitle:@"GAIT" forState:UIControlStateNormal];
         buttons[@"gait"] = button;
     }
     
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
-        [button addTarget:self action:@selector(showInteruptTaskButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self action:@selector(showEQ5D:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"EQ-5D-5L" forState:UIControlStateNormal];
+        buttons[@"eq5d"] = button;
+    }
+    
+    
+#ifndef DEMO
+    
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
+        [button addTarget:self action:@selector(showTask:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Show Task" forState:UIControlStateNormal];
+        buttons[@"task"] = button;
+    }
+    
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
+        [button addTarget:self action:@selector(showDynamicTask:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Dynamic Task" forState:UIControlStateNormal];
+        buttons[@"dyntask"] = button;
+    }
+    
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
+        [button addTarget:self action:@selector(showInteruptTask:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitle:@"Interruptible Task" forState:UIControlStateNormal];
         buttons[@"interruptible"] = button;
     }
@@ -117,7 +150,7 @@
         [button setTitle:@"Leave Study" forState:UIControlStateNormal];
         buttons[@"leave"] = button;
     }
-
+    
     
     {
         UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -134,12 +167,39 @@
     }];
     
     
+    
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:buttons[@"consent"]
                                                           attribute:NSLayoutAttributeBaseline
                                                           relatedBy:NSLayoutRelationEqual
-                                                             toItem:buttons[@"task"]
+                                                             toItem:buttons[@"consent_signature"]
                                                           attribute:NSLayoutAttributeBaseline
                                                          multiplier:1 constant:0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:buttons[@"dates"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:buttons[@"selection_survey"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                         multiplier:1 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:buttons[@"audio"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:buttons[@"form"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                         multiplier:1 constant:0]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:buttons[@"eq5d"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:buttons[@"gait"]
+                                                          attribute:NSLayoutAttributeBaseline
+                                                         multiplier:1 constant:0]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[consent][consent_signature(==consent)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[dates][selection_survey(==dates)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[eq5d][gait(==eq5d)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[audio][form(==audio)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    
 #ifndef DEMO
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:buttons[@"join"]
                                                           attribute:NSLayoutAttributeBaseline
@@ -147,16 +207,10 @@
                                                              toItem:buttons[@"leave"]
                                                           attribute:NSLayoutAttributeBaseline
                                                          multiplier:1 constant:0]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:buttons[@"dates"]
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:buttons[@"task"]
                                                           attribute:NSLayoutAttributeBaseline
                                                           relatedBy:NSLayoutRelationEqual
                                                              toItem:buttons[@"dyntask"]
-                                                          attribute:NSLayoutAttributeBaseline
-                                                         multiplier:1 constant:0]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:buttons[@"eq5d"]
-                                                          attribute:NSLayoutAttributeBaseline
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:buttons[@"gait"]
                                                           attribute:NSLayoutAttributeBaseline
                                                          multiplier:1 constant:0]];
     
@@ -168,19 +222,17 @@
                                                          multiplier:1 constant:0]];
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[join][leave(==join)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[dates][dyntask(==dates)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[eq5d][gait(==eq5d)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[task][dyntask(==task)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[interruptible][appearance(==interruptible)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[task][dates(==task)][eq5d(==task)][interruptible(==task)][join(==task)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[consent][dates(==consent)][audio(==consent)][eq5d(==consent)][task(==consent)][interruptible(==consent)][join(==consent)]-20-|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    
 #else
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[eq5d]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-100-[task]-30-[eq5d(==task)]-1@1-|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    //[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[eq5d]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-100-[consent]-30-[dates(==consent)]-30-[audio(==consent)]-30-[eq5d(==consent)]-100-|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
+    
+    
 #endif
-    
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[consent][task(==consent)]|" options:(NSLayoutFormatOptions)0 metrics:nil views:buttons]];
-    
-    
     
 }
 
@@ -218,13 +270,11 @@
     }
 }
 
-- (IBAction)pickDatesTapped:(id)sender {
+- (IBAction)pickDates:(id)sender {
     NSMutableArray* steps = [NSMutableArray new];
     {
         RKIntroductionStep* step = [[RKIntroductionStep alloc] initWithIdentifier:@"iid_001" name:@"intro step"];
-        step.caption = @"Demo Study";
-        step.instruction = @"This 12-step walkthrough will explain the study and the impact it will have on your life.";
-        step.explanation = @"You must complete the walkthough to participate in the study.";
+        step.caption = @"Date Survey";
         [steps addObject:step];
     }
     {
@@ -252,17 +302,184 @@
         [steps addObject:step];
         
     }
+    
+    {
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_006"
+                                                                     name:@"Time Interval"
+                                                                 question:@"How long did it take to fall asleep last night?"
+                                                                   answer:[RKTimeIntervalAnswerFormat timeIntervalAnswer]];
+        [steps addObject:step];
+    }
+    
     RKTask* task = [[RKTask alloc] initWithName:@"Dates" identifier:@"dates_001" steps:steps];
     
     self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
     [self beginTask:task];
 }
 
-
-- (IBAction)showTaskButtonTapped:(id)sender{
+- (IBAction)showSelectionSurvey:(id)sender{
+    NSMutableArray* steps = [NSMutableArray new];
     
+    {
+        RKIntroductionStep* step = [[RKIntroductionStep alloc] initWithIdentifier:@"iid_001" name:@"intro step"];
+        step.caption = @"Selection Survey";
+        [steps addObject:step];
+    }
+    
+    {
+        RKNumericAnswerFormat* format = [RKNumericAnswerFormat integerAnswerWithUnit:@"years"];
+        format.minimum = @(0);
+        format.maximum = @(199);
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_001" name:@"HowOld" question:@"How old are you?" answer:format];
+        [steps addObject:step];
+    }
+    
+    {
+        RKBooleanAnswerFormat* format = [RKBooleanAnswerFormat new];
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_001b" name:@"Boolean" question:@"Do you consent to a background check?" answer:format];
+        [steps addObject:step];
+    }
+    
+    {
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_003"
+                                                                     name:@"Choices ONE"
+                                                                 question:@"How many hours did you sleep last night?"
+                                                                   answer:[RKChoiceAnswerFormat choiceAnswerWithOptions:@[@"Less than seven", @"Between seven and eight", @"More than eight"] style:RKChoiceAnswerStyleSingleChoice]];
+        [steps addObject:step];
+    }
+    
+    
+    {
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_004"
+                                                                     name:@"Choices Muti"
+                                                                 question:@"Which symptoms do you have?"
+                                                                   answer:[RKChoiceAnswerFormat choiceAnswerWithOptions:@[@[@"Cough",@"A cough and/or sore throat"], @[@"Fever", @"A 100F or higher fever or feeling feverish"], @[@"Headaches",@"Headaches and/or body aches"]]  style:RKChoiceAnswerStyleMultipleChoice]];
+        
+        [steps addObject:step];
+    }
+    
+    {
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_005"
+                                                                     name:@"Text"
+                                                                 question:@"How did you feel last night?"
+                                                                   answer:[RKTextAnswerFormat textAnswer]];
+        [steps addObject:step];
+    }
+    
+    {
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_010"
+                                                                     name:@"scale "
+                                                                 question:@"On a scale of 1 to 10, how much pain do you feel?"
+                                                                   answer:[RKScaleAnswerFormat scaleAnswerWithMaxValue:10 minValue:1]];
+        [steps addObject:step];
+    }
+    {
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"fqid_health_biologicalSex"
+                                                                     name:@"Biological Sex"
+                                                                 question:@"What is your biological sex?"
+                                                                   answer:[RKHealthAnswerFormat healthAnswerFormatWithCharacteristicType:[HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex]]];
+        [steps addObject:step];
+    }
+    {
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"fqid_health_bloodType"
+                                                                     name:@"Blood Type"
+                                                                 question:@"What is your blood type?"
+                                                                   answer:[RKHealthAnswerFormat healthAnswerFormatWithCharacteristicType:[HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType]]];
+        [steps addObject:step];
+    }
+    {
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"fqid_health_dob"
+                                                                     name:@"DOB"
+                                                                 question:@"What is your date of birth?"
+                                                                   answer:[RKHealthAnswerFormat healthAnswerFormatWithCharacteristicType:[HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth]]];
+        [steps addObject:step];
+    }
+    {
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"fqid_health_weight"
+                                                                     name:@"Weight"
+                                                                 question:@"How much do you weigh?"
+                                                                   answer:[RKHealthAnswerFormat healthAnswerFormatWithQuantityType:[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass]
+                                                                                                                              unit:[HKUnit unitFromMassFormatterUnit:NSMassFormatterUnitPound]
+                                                                                                                             style:RKNumericAnswerStyleDecimal]];
+        [steps addObject:step];
+    }
+    
+    RKTask* task = [[RKTask alloc] initWithName:@"Demo" identifier:@"tid_001" steps:steps];
+    
+    self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    [self beginTask:task];
+}
+
+
+- (IBAction)showTask:(id)sender{
     
     NSMutableArray* steps = [NSMutableArray new];
+    
+    {
+        RKFormStep* step = [[RKFormStep alloc] initWithIdentifier:@"fid_001" name:@"form step" title:@"Mini Form" subtitle:@"Mini Form groups multi-entry in one page"];
+        NSMutableArray* items = [NSMutableArray new];
+        
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_001" text:@"Have headache?" answerFormat:[RKBooleanAnswerFormat new]];
+            [items addObject:item];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_002" text:@"Best Fruit?"
+                                                         answerFormat:[RKChoiceAnswerFormat choiceAnswerWithOptions:@[@"Apple", @"Orange", @"Banana"]
+                                                                                                              style:RKChoiceAnswerStyleSingleChoice]];
+            [items addObject:item];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_003" text:@"Message"
+                                                         answerFormat:[RKTextAnswerFormat textAnswer]];
+            [items addObject:item];
+        }
+        {
+            RKNumericAnswerFormat* af = [RKNumericAnswerFormat integerAnswerWithUnit:@"mm Hg"];
+            af.maximum = @(200);
+            af.minimum = @(0);
+            
+            RKFormItem* item1 = [[RKFormItem alloc] initWithIdentifier:@"fqid_004a" text:@"BP Diastolic"
+                                                         answerFormat:af];
+            [items addObject:item1];
+        
+            RKFormItem* item2 = [[RKFormItem alloc] initWithIdentifier:@"fqid_004b" text:@"BP Systolic"
+                                                         answerFormat:af];
+            [items addObject:item2];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_005" text:@"Birthdate"
+                                                         answerFormat:[RKDateAnswerFormat dateAnswer]];
+            [items addObject:item];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_006" text:@"Today sunset time?"
+                                                         answerFormat:[RKDateAnswerFormat timeAnswer]];
+            [items addObject:item];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_007" text:@"Next eclipse visible in Cupertino?"
+                                                         answerFormat:[RKDateAnswerFormat dateTimeAnswer]];
+            [items addObject:item];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_008" text:@"Wake up interval"
+                                                         answerFormat:[RKTimeIntervalAnswerFormat timeIntervalAnswer]];
+            [items addObject:item];
+        }
+        
+        [step setFormItems:items];
+        
+        [steps addObject:step];
+    }
+    
+    {
+        RKIntroductionStep* step = [[RKIntroductionStep alloc] initWithIdentifier:@"iid_001" name:@"intro step"];
+        step.caption = @"Demo Study";
+        step.instruction = @"This 12-step walkthrough will explain the study and the impact it will have on your life.";
+        step.explanation = @"You must complete the walkthough to participate in the study.";
+        [steps addObject:step];
+    }
     
     {
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001d" name:@"active step"];
@@ -288,14 +505,6 @@
     }
     
     {
-        RKIntroductionStep* step = [[RKIntroductionStep alloc] initWithIdentifier:@"iid_001" name:@"intro step"];
-        step.caption = @"Demo Study";
-        step.instruction = @"This 12-step walkthrough will explain the study and the impact it will have on your life.";
-        step.explanation = @"You must complete the walkthough to participate in the study.";
-        [steps addObject:step];
-    }
-    
-    {
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001a" name:@"active step"];
         step.caption = @"Touch";
         step.text = @"An active test, touch collection";
@@ -310,7 +519,7 @@
     {
         RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001b" name:@"active step"];
         step.caption = @"Button Tap";
-        step.text = @"Please tap the orange button above when it appears.";
+        step.text = @"Please tap the orange button when it appears in the green area below.";
         step.countDown = 10.0;
         step.useNextForSkip = YES;
         step.recorderConfigurations = @[[CustomRecorderConfiguration new]];
@@ -322,7 +531,7 @@
         step.caption = @"Motion";
         step.text = @"An active test collecting device motion data";
         step.useNextForSkip = YES;
-        step.recorderConfigurations = @[ [[RKDeviceMotionRecorderConfiguration alloc] initWithFrequency:100.0]];
+        step.recorderConfigurations = @[[[RKDeviceMotionRecorderConfiguration alloc] initWithFrequency:100.0]];
         [steps addObject:step];
     }
     
@@ -356,18 +565,18 @@
     
     {
         RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_003"
-                                                                      name:@"Choices ONE"
-                                                                  question:@"How many hours did you sleep last night?"
-                                                                    answer:[RKChoiceAnswerFormat choiceAnswerWithOptions:@[@"Less than seven", @"Between seven and eight", @"More than eight"] style:RKChoiceAnswerStyleSingleChoice]];
+                                                                     name:@"Choices ONE"
+                                                                 question:@"How many hours did you sleep last night?"
+                                                                   answer:[RKChoiceAnswerFormat choiceAnswerWithOptions:@[@"Less than seven", @"Between seven and eight", @"More than eight"] style:RKChoiceAnswerStyleSingleChoice]];
         [steps addObject:step];
     }
     
     
     {
         RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_004"
-                                                                  name:@"Choices Muti"
-                                                              question:@"Which symptoms do you have?"
-                                                                answer:[RKChoiceAnswerFormat choiceAnswerWithOptions:@[@[@"Cough",@"A cough and/or sore throat"], @[@"Fever", @"A 100F or higher fever or feeling feverish"], @[@"Headaches",@"Headaches and/or body aches"]]  style:RKChoiceAnswerStyleMultipleChoice]];
+                                                                     name:@"Choices Muti"
+                                                                 question:@"Which symptoms do you have?"
+                                                                   answer:[RKChoiceAnswerFormat choiceAnswerWithOptions:@[@[@"Cough",@"A cough and/or sore throat"], @[@"Fever", @"A 100F or higher fever or feeling feverish"], @[@"Headaches",@"Headaches and/or body aches"]]  style:RKChoiceAnswerStyleMultipleChoice]];
         
         [steps addObject:step];
     }
@@ -382,44 +591,44 @@
     
     {
         RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_006"
-                                                                  name:@"Time Interval"
-                                                              question:@"How long did it take to fall asleep last night?"
-                                                                answer:[RKTimeIntervalAnswerFormat timeIntervalAnswer]];
+                                                                     name:@"Time Interval"
+                                                                 question:@"How long did it take to fall asleep last night?"
+                                                                   answer:[RKTimeIntervalAnswerFormat timeIntervalAnswer]];
         [steps addObject:step];
     }
     
     {
         RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_007"
-                                                                      name:@"date"
-                                                                  question:@"When is your birthday?"
-                                                                    answer:[RKDateAnswerFormat dateAnswer]];
+                                                                     name:@"date"
+                                                                 question:@"When is your birthday?"
+                                                                   answer:[RKDateAnswerFormat dateAnswer]];
         
         [steps addObject:step];
     }
     
     {
         RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_008"
-                                                                      name:@"time"
-                                                                  question:@"What time do you get up?"
-                                                                    answer:[RKDateAnswerFormat timeAnswer]];
+                                                                     name:@"time"
+                                                                 question:@"What time do you get up?"
+                                                                   answer:[RKDateAnswerFormat timeAnswer]];
         [steps addObject:step];
     }
     
     {
         RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_009"
-                                                                   name:@"date & time"
-                                                               question:@"When is your next meeting?"
-                                                                 answer:[RKDateAnswerFormat dateTimeAnswer]];
+                                                                     name:@"date & time"
+                                                                 question:@"When is your next meeting?"
+                                                                   answer:[RKDateAnswerFormat dateTimeAnswer]];
         [steps addObject:step];
         
     }
     
     {
         RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"qid_010"
-                                                                   name:@"scale "
-                                                               question:@"On a scale of 1 to 10, how much pain do you feel?"
-                                                                 answer:[RKScaleAnswerFormat scaleAnswerWithMaxValue:10 minValue:1]];
-         [steps addObject:step];
+                                                                     name:@"scale "
+                                                                 question:@"On a scale of 1 to 10, how much pain do you feel?"
+                                                                   answer:[RKScaleAnswerFormat scaleAnswerWithMaxValue:10 minValue:1]];
+        [steps addObject:step];
     }
     
     RKTask* task = [[RKTask alloc] initWithName:@"Demo" identifier:@"tid_001" steps:steps];
@@ -428,60 +637,24 @@
     [self beginTask:task];
 }
 
-- (IBAction)showConsentButtonTapped:(id)sender{
-    
-    RKConsentDocument* consent = [[RKConsentDocument alloc] init];
-    consent.title = @"Demo Consent";
-    consent.signaturePageTitle = @"Consent";
-    consent.signaturePageContent = @"I agree  to participate in this research Study.";
-    
+
+
+- (IBAction)showConsentSignature:(id)sender{
     
     RKConsentSignature *participantSig = [RKConsentSignature signatureForPersonWithTitle:@"Participant" name:nil signatureImage:nil dateString:nil];
-    [consent addSignature:participantSig];
+    RKConsentReviewStep *reviewStep = [[RKConsentReviewStep alloc] initWithSignature:participantSig inDocument:[self buildConsentDocument]];
+    RKTask *task = [[RKTask alloc] initWithName:@"consent" identifier:@"consent" steps:@[reviewStep]];
+    RKTaskViewController *consentVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
     
-    RKConsentSignature *investigatorSig = [RKConsentSignature signatureForPersonWithTitle:@"Investigator" name:@"Jake Clemson" signatureImage:[UIImage imageNamed:@"signature.png"] dateString:@"9/2/14"];
-    [consent addSignature:investigatorSig];
+    consentVC.taskDelegate = self;
+    [self presentViewController:consentVC animated:YES completion:nil];
+}
+
+- (IBAction)showConsent:(id)sender{
     
+    RKConsentSignature *participantSig = [RKConsentSignature signatureForPersonWithTitle:@"Participant" name:nil signatureImage:nil dateString:nil];
+    RKConsentDocument* consent = [self buildConsentDocument];
     
-    
-    
-    NSMutableArray* components = [NSMutableArray new];
-    
-    NSArray* scenes = @[@(RKConsentSectionTypeOverview),
-                        @(RKConsentSectionTypeActivity),
-                        @(RKConsentSectionTypeSensorData),
-                        @(RKConsentSectionTypeDeIdentification),
-                        @(RKConsentSectionTypeCombiningData),
-                        @(RKConsentSectionTypeUtilizingData),
-                        @(RKConsentSectionTypeImpactLifeTime),
-                        @(RKConsentSectionTypePotentialRiskUncomfortableQuestion),
-                        @(RKConsentSectionTypePotentialRiskSocial),
-                        @(RKConsentSectionTypeAllowWithdraw)];
-    for (NSNumber* type in scenes) {
-        RKConsentSection* c = [[RKConsentSection alloc] initWithType:type.integerValue];
-        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
-        [components addObject:c];
-    }
-    
-    {
-        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeCustom];
-        c.summary = @"Custom Scene summary";
-        c.title = @"Custom Scene";
-        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
-        c.customImage = [UIImage imageNamed:@"image_example.png"];
-        [components addObject:c];
-    }
-    
-    {
-        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeOnlyInDocument];
-        c.summary = @"OnlyInDocument Scene summary";
-        c.title = @"OnlyInDocument Scene";
-        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
-        [components addObject:c];
-    }
-    
-    consent.sections = [components copy];
-   
     RKVisualConsentStep *step = [[RKVisualConsentStep alloc] initWithDocument:consent];
     RKConsentReviewStep *reviewStep = [[RKConsentReviewStep alloc] initWithSignature:participantSig inDocument:consent];
     RKTask *task = [[RKTask alloc] initWithName:@"consent" identifier:@"consent" steps:@[step,reviewStep]];
@@ -491,7 +664,147 @@
     [self presentViewController:consentVC animated:YES completion:nil];
 }
 
-- (IBAction)showSample001ButtonTapped:(id)sender{
+- (IBAction)showAudioTask:(id)sender{
+    NSMutableArray* steps = [NSMutableArray new];
+    
+    {
+        RKIntroductionStep* step = [[RKIntroductionStep alloc] initWithIdentifier:@"iid_001" name:@"intro step"];
+        step.caption = @"Audio Task";
+        [steps addObject:step];
+    }
+    {
+        RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001e" name:@"active step"];
+        step.caption = @"Audio";
+        step.countDown = 10.0;
+        step.text = @"An active test recording lossless audio";
+        step.useNextForSkip = YES;
+        step.recorderConfigurations = @[[[RKAudioRecorderConfiguration alloc] initWithRecorderSettings:@{AVFormatIDKey : @(kAudioFormatAppleLossless),
+                                                                                                         AVNumberOfChannelsKey : @(2),
+                                                                                                         AVSampleRateKey: @(44100.0)
+                                                                                                         }]];
+        [steps addObject:step];
+    }
+    
+    {
+        RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001" name:@"Mini Form"];
+        step.caption = @"Audio Task End";
+        [steps addObject:step];
+    }
+    
+    RKTask* task = [[RKTask alloc] initWithName:@"Demo" identifier:@"tid_001" steps:steps];
+    
+    self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    [self beginTask:task];
+
+}
+
+- (IBAction)showMiniForm:(id)sender{
+    NSMutableArray* steps = [NSMutableArray new];
+    
+    {
+        RKIntroductionStep* step = [[RKIntroductionStep alloc] initWithIdentifier:@"iid_001" name:@"Mini Form"];
+        step.caption = @"Mini Form";
+        [steps addObject:step];
+    }
+    
+    {
+        RKFormStep* step = [[RKFormStep alloc] initWithIdentifier:@"fid_001" name:@"form step" title:@"Mini Form" subtitle:@"Mini Form groups multi-entry in one page"];
+        NSMutableArray* items = [NSMutableArray new];
+        
+        {
+            
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_health_biologicalSex" text:@"Gender" answerFormat:[RKHealthAnswerFormat healthAnswerFormatWithCharacteristicType:[HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex]]];
+            [items addObject:item];
+        }
+        {
+            
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_health_bloodType" text:@"Blood Type" answerFormat:[RKHealthAnswerFormat healthAnswerFormatWithCharacteristicType:[HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType]]];
+            [items addObject:item];
+        }
+        {
+            
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_health_dob" text:@"Date of Birth" answerFormat:[RKHealthAnswerFormat healthAnswerFormatWithCharacteristicType:[HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth]]];
+            [items addObject:item];
+        }
+        {
+            
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_health_weight"
+                                                                 text:@"Weight"
+                                                         answerFormat:
+                                [RKHealthAnswerFormat healthAnswerFormatWithQuantityType:[HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass]
+                                                                                    unit:[HKUnit unitFromMassFormatterUnit:NSMassFormatterUnitPound]
+                                                                                   style:RKNumericAnswerStyleDecimal]];
+            [items addObject:item];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_001" text:@"Have headache?" answerFormat:[RKBooleanAnswerFormat new]];
+            [items addObject:item];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_002" text:@"Best Fruit?"
+                                                         answerFormat:[RKChoiceAnswerFormat choiceAnswerWithOptions:@[@"Apple", @"Orange", @"Banana"]
+                                                                                                              style:RKChoiceAnswerStyleSingleChoice]];
+            [items addObject:item];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_003" text:@"Message"
+                                                         answerFormat:[RKTextAnswerFormat textAnswer]];
+            item.placeholder = @"Your message";
+            [items addObject:item];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_004a" text:@"BP Diastolic"
+                                                         answerFormat:[RKNumericAnswerFormat integerAnswerWithUnit:@"mm Hg"]];
+            item.placeholder = @"Enter value";
+            [items addObject:item];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_004b" text:@"BP Systolic"
+                                                         answerFormat:[RKNumericAnswerFormat integerAnswerWithUnit:@"mm Hg"]];
+            item.placeholder = @"Enter value";
+            [items addObject:item];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_005" text:@"Birthdate"
+                                                         answerFormat:[RKDateAnswerFormat dateAnswer]];
+            item.placeholder = @"Pick a date";
+            [items addObject:item];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_006" text:@"Today sunset time?"
+                                                         answerFormat:[RKDateAnswerFormat timeAnswer]];
+            [items addObject:item];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_007" text:@"Next eclipse visible in Cupertino?"
+                                                         answerFormat:[RKDateAnswerFormat dateTimeAnswer]];
+            [items addObject:item];
+        }
+        {
+            RKFormItem* item = [[RKFormItem alloc] initWithIdentifier:@"fqid_008" text:@"Wake up interval"
+                                                         answerFormat:[RKTimeIntervalAnswerFormat timeIntervalAnswer]];
+            [items addObject:item];
+        }
+        
+        [step setFormItems:items];
+        
+        [steps addObject:step];
+    }
+    
+    {
+        RKActiveStep* step = [[RKActiveStep alloc] initWithIdentifier:@"aid_001" name:@"Mini Form"];
+        step.caption = @"Mini Form End";
+        [steps addObject:step];
+    }
+    
+    RKTask* task = [[RKTask alloc] initWithName:@"Demo" identifier:@"tid_001" steps:steps];
+    
+    self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    [self beginTask:task];
+    
+}
+
+- (IBAction)showEQ5D:(id)sender{
     
     NSArray* qlist = @[@"MOBILITY",
                        @[@[@"No Problems", @"I have no problems in walking about."], @[@"Slight Problems",@"I have slight problems in walking about."], @[@"Moderate Problems", @"I have moderate problems in walking about."],  @[@"Severe Problems",@"I have severe problems in walking about."], @[@"Unable to complete",@"I am unable to walk about."]],
@@ -513,9 +826,9 @@
         if ([object isKindOfClass:[NSString class]]) {
             index++;
             RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:[NSString stringWithFormat:@"question_%d", index]
-                                                                          name:@""
-                                                                      question:object
-                                                                        answer:[RKChoiceAnswerFormat choiceAnswerWithOptions:qlist[[qlist indexOfObject:object]+1] style:RKChoiceAnswerStyleSingleChoice]];
+                                                                         name:@""
+                                                                     question:object
+                                                                       answer:[RKChoiceAnswerFormat choiceAnswerWithOptions:qlist[[qlist indexOfObject:object]+1] style:RKChoiceAnswerStyleSingleChoice]];
             step.prompt = @"Please pick the ONE box that best describes your health TODAY";
             [steps addObject:step];
         }
@@ -536,37 +849,16 @@
     [self beginTask:task];
 }
 
-- (IBAction)showDynamicButtonTapped:(id)sender{
+- (IBAction)showDynamicTask:(id)sender{
     
     
     DynamicTask* task = DynamicTask.alloc.init;
     
-    self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    [self beginTask:task];
     
-    self.taskVC.taskDelegate = self;
-    
-    [self presentViewController:_taskVC animated:YES completion:^{
-        
-    }];
 }
 
-- (void)beginTask:(id<RKLogicalTask>)task
-{
-    if (self.taskArchive)
-    {
-        [self.taskArchive resetContent];
-    }
-    
-    self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
-    self.taskVC.taskDelegate = self;
-    
-    self.taskArchive = [[RKDataArchive alloc] initWithItemIdentifier:[RKItemIdentifier itemIdentifierForTask:task] studyIdentifier:MainStudyIdentifier taskInstanceUUID:self.taskVC.taskInstanceUUID extraMetadata:nil fileProtection:RKFileProtectionCompleteUnlessOpen];
-    
-    [self presentViewController:_taskVC animated:YES completion:nil];
-}
-
-
-- (IBAction)showGAITButtonTapped:(id)sender{
+- (IBAction)showGAIT:(id)sender{
     
     NSMutableArray* steps = [NSMutableArray new];
     
@@ -605,16 +897,16 @@
     
 }
 
-- (IBAction)showInteruptTaskButtonTapped:(id)sender{
+- (IBAction)showInteruptTask:(id)sender{
     NSMutableArray* steps = [NSMutableArray new];
     
     {
-        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"itid_001" name:@"HowOld" question:@"How old are you?" answer:[RKNumericAnswerFormat integerAnswerWithUnit:@"Years old"]];
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"itid_001" name:@"HowOld" question:@"How old are you?" answer:[RKNumericAnswerFormat integerAnswerWithUnit:@"years"]];
         [steps addObject:step];
     }
     
     {
-        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"itid_002" name:@"HowMuch" question:@"How much did you pay for your car?" answer:[RKNumericAnswerFormat decimalAnswerWithUnit:@"Dollars"]];
+        RKQuestionStep* step = [RKQuestionStep questionStepWithIdentifier:@"itid_002" name:@"HowMuch" question:@"How much did you pay for your car?" answer:[RKNumericAnswerFormat decimalAnswerWithUnit:@"USD"]];
         [steps addObject:step];
     }
     
@@ -643,6 +935,79 @@
 
 #pragma mark - Helpers
 
+- (RKConsentDocument*)buildConsentDocument{
+    RKConsentDocument* consent = [[RKConsentDocument alloc] init];
+    consent.title = @"Demo Consent";
+    consent.signaturePageTitle = @"Consent";
+    consent.signaturePageContent = @"I agree  to participate in this research Study.";
+    
+    RKConsentSignature *participantSig = [RKConsentSignature signatureForPersonWithTitle:@"Participant" name:nil signatureImage:nil dateString:nil];
+    [consent addSignature:participantSig];
+    
+    RKConsentSignature *investigatorSig = [RKConsentSignature signatureForPersonWithTitle:@"Investigator" name:@"Jake Clemson" signatureImage:[UIImage imageNamed:@"signature.png"] dateString:@"9/2/14"];
+    [consent addSignature:investigatorSig];
+    
+    NSMutableArray* components = [NSMutableArray new];
+    
+    NSArray* scenes = @[@(RKConsentSectionTypeOverview),
+                        @(RKConsentSectionTypeActivity),
+                        @(RKConsentSectionTypeSensorData),
+                        @(RKConsentSectionTypeDeIdentification),
+                        @(RKConsentSectionTypeCombiningData),
+                        @(RKConsentSectionTypeUtilizingData),
+                        @(RKConsentSectionTypeImpactLifeTime),
+                        @(RKConsentSectionTypePotentialRiskUncomfortableQuestion),
+                        @(RKConsentSectionTypePotentialRiskSocial),
+                        @(RKConsentSectionTypeAllowWithdraw)];
+    for (NSNumber* type in scenes) {
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:type.integerValue];
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        [components addObject:c];
+    }
+    
+    {
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeCustom];
+        c.summary = @"Custom Scene summary";
+        c.title = @"Custom Scene";
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        c.customImage = [UIImage imageNamed:@"image_example.png"];
+        [components addObject:c];
+    }
+    
+    {
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeOnlyInDocument];
+        c.summary = @"OnlyInDocument Scene summary";
+        c.title = @"OnlyInDocument Scene";
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        [components addObject:c];
+    }
+    
+    consent.sections = [components copy];
+    return consent;
+}
+
+- (void)beginTask:(id<RKLogicalTask>)task
+{
+    if (self.taskArchive)
+    {
+        NSLog(@"Close old archive");
+        [self.taskArchive resetContent];
+    }
+    
+    self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    self.taskVC.taskDelegate = self;
+    
+    if ([task isKindOfClass:[DynamicTask class]])
+    {
+        self.taskVC.defaultResultProvider = _lastRouteResult;
+    }
+    
+    self.taskArchive = [[RKDataArchive alloc] initWithItemIdentifier:[RKItemIdentifier itemIdentifierForTask:task] studyIdentifier:MainStudyIdentifier taskInstanceUUID:self.taskVC.taskInstanceUUID extraMetadata:nil fileProtection:RKFileProtectionCompleteUnlessOpen];
+    NSLog(@"Start new archive");
+    
+    [self presentViewController:_taskVC animated:YES completion:nil];
+}
+
 -(void)sendResult:(RKResult*)result
 {
     // In a real application, consider adding to the archive on a concurrent queue.
@@ -670,18 +1035,30 @@
 - (void)taskViewController:(RKTaskViewController *)taskViewController didProduceResult:(RKResult*)result{
     
     NSLog(@"didProduceResult = %@", result);
+    if ([taskViewController.task isKindOfClass:[DynamicTask class]] && [result isKindOfClass:[RKSurveyResult class]])
+    {
+        _lastRouteResult = (RKSurveyResult *)result;
+    }
     
     if ([result isKindOfClass:[RKSurveyResult class]]) {
         RKSurveyResult* sresult = (RKSurveyResult*)result;
         
-        for (RKQuestionResult* qr in sresult.surveyResults) {
-            NSLog(@"%@ = [%@] %@ ", [[qr itemIdentifier] stringValue], [qr.answer class], qr.answer);
+        for (RKResult* r in sresult.surveyResults) {
+            if ([r isKindOfClass:[RKQuestionResult class]])
+            {
+                RKQuestionResult *qr = (RKQuestionResult *)r;
+                NSLog(@"%@ = [%@] %@ ", [[qr itemIdentifier] stringValue], [qr.answer class], qr.answer);
+            }
+            else if ([r isKindOfClass:[RKSurveyResult class]])
+            {
+                NSLog(@"%@ = [%@] ", [[r itemIdentifier] stringValue], r.class);
+            }
         }
     }
     
     
     [self sendResult:result];
-        
+    
 }
 
 - (RKQuestionResult *)_questionResultForStepIdentifier:(NSString *)identifier fromSurveyResults:(NSArray *)surveyResults
@@ -720,7 +1097,7 @@
             [alerVC addAction:ok];
             
             [taskViewController presentViewController:alerVC animated:NO completion:^{
-
+                
             } ];
             return NO;
         }
@@ -729,7 +1106,7 @@
 }
 
 - (void)taskViewController:(RKTaskViewController *)taskViewController
-    willPresentStepViewController:(RKStepViewController *)stepViewController{
+willPresentStepViewController:(RKStepViewController *)stepViewController{
     
     if ([stepViewController.step.identifier isEqualToString:@"aid_001c"]) {
         UIView* customView = [UIView new];
@@ -751,7 +1128,7 @@
         // Set custom button on navi bar
         stepViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Custom button"
                                                                                                style:UIBarButtonItemStylePlain
-                                                                                               target:nil
+                                                                                              target:nil
                                                                                               action:nil];
     }else if ([stepViewController.step.identifier isEqualToString:@"gait_001"]) {
         stepViewController.continueButton = nil;
@@ -774,6 +1151,7 @@
 
 - (void)taskViewControllerDidFail: (RKTaskViewController *)taskViewController withError:(NSError*)error{
     
+    NSLog(@"Close archive");
     [self.taskArchive resetContent];
     self.taskArchive = nil;
     
@@ -783,6 +1161,7 @@
     
     [taskViewController suspend];
     
+    NSLog(@"Close archive");
     [self.taskArchive resetContent];
     self.taskArchive = nil;
     
@@ -793,6 +1172,8 @@
     
     [taskViewController suspend];
     
+    
+    NSLog(@"Save archive to URL");
     NSError *err = nil;
     NSURL *archiveFileURL = [self.taskArchive archiveURLWithError:&err];
     if (archiveFileURL)

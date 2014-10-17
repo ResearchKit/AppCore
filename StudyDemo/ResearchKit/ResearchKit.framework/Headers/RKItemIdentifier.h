@@ -9,6 +9,7 @@
 
 @class RKStep;
 @class RKTask;
+@class RKFormItem;
 @protocol RKLogicalTask;
 
 /**
@@ -17,8 +18,9 @@
  */
 @interface RKItemIdentifier : NSObject<NSCopying,NSSecureCoding>
 
-+ (RKItemIdentifier *)itemIdentifierForStep:(RKStep *)step;
 + (RKItemIdentifier *)itemIdentifierForTask:(id<RKLogicalTask>)task;
++ (RKItemIdentifier *)itemIdentifierForStep:(RKStep *)step;
++ (RKItemIdentifier *)itemIdentifierForFormItem:(RKFormItem *)formItem;
 
 -(instancetype)initWithString:(NSString*)string;
 

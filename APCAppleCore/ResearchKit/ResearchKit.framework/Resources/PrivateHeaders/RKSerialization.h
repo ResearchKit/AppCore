@@ -6,6 +6,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <ResearchKit/ResearchKit.h>
+#import <ResearchKit/RKPedometerRecorder.h>
 
 @protocol RKSerialization <NSObject>
 
@@ -15,3 +17,5 @@
 - (NSDictionary *)dictionaryValue;
 
 @end
+
+

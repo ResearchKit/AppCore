@@ -6,7 +6,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <ResearchKit/RKSerialization.h>
 
 @protocol RKLogicalTask;
 
@@ -16,7 +15,7 @@
  * Step is a sub unit of task, usually one task contains more than one step.
  * Step can be a question, an active test, or a simple instruction.
  */
-@interface RKStep : NSObject <RKSerialization>
+@interface RKStep : NSObject <NSSecureCoding>
 
 /**
  * @brief Designated initializer

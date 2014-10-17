@@ -81,6 +81,8 @@ willPresentStepViewController:(RKStepViewController *)stepViewController;
 
 @end
 
+@protocol RKTaskDefaultResultProvider;
+
 
 /**
  * @brief The RKTaskViewController class defines the attributes and behavior of a task view controller.
@@ -107,6 +109,14 @@ willPresentStepViewController:(RKStepViewController *)stepViewController;
  * It is an error to change the task after presenting the RKTaskViewController.
  */
 @property (nonatomic, strong) id<RKLogicalTask> task;
+
+/**
+ * @brief "Default" result provider
+ *
+ * This provider can provide "default" results, perhaps based on previous runs of
+ * the same task.
+ */
+@property (nonatomic, strong) id<RKTaskDefaultResultProvider> defaultResultProvider;
 
 /**
  * @brief Task instance UUID

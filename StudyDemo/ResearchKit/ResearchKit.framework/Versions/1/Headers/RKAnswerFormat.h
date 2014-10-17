@@ -6,7 +6,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <ResearchKit/RKSerialization.h>
 
 typedef NS_ENUM(NSInteger, RKSurveyQuestionType) {
     RKSurveyQuestionTypeScale,                  // Continuous rating scale, ask participant place a mark at an appropriate position on a continuous line.
@@ -30,11 +29,13 @@ typedef NS_ENUM(NSInteger, RKSurveyQuestionType) {
  * Allow subclasses to add additional attributes which fit specific types of question.
  * @discussion
  */
-@interface RKAnswerFormat : NSObject<RKSerialization>
+@interface RKAnswerFormat : NSObject<NSSecureCoding>
 
 - (RKSurveyQuestionType) questionType;
 
 @end
+
+
 
 /**
  * @brief The RKScaleAnswerFormat class defines the attributes for a scale type answer.
@@ -101,7 +102,7 @@ typedef NS_ENUM(NSInteger, RKChoiceAnswerStyle) {
 /**
  * @brief The RKAnswerOption class defines  brief/detailed option text for a option which can be included within RKChoiceAnswerFormat.
  */
-@interface RKAnswerOption : NSObject<RKSerialization>
+@interface RKAnswerOption : NSObject<NSSecureCoding>
 
 /**
  * @brief Designated convenience constructor
@@ -214,25 +215,49 @@ typedef NS_ENUM(NSInteger, RKDateAnswerStyle) {
  */
 @interface RKDateAnswerFormat : RKAnswerFormat
 
++ (instancetype)dateTimeAnswer;
++ (instancetype)dateAnswer;
++ (instancetype)timeAnswer;
+
 /**
  * @brief Convenience constructor for DateAndTime type.
+ * @param defaultDate Date components. Year, month, day, hour, minute, and second are observed.
+ *     Any components not provided will be replaced with components for the "relativeDate".
+ * @param relativeDate Date that default components are applied relative to. Defaults to time of presentation.
+ * @param minimum Date components for the beginning of the allowable range. If nil, no limit.
+ * @param maximum Date components for the end of the allowable range. If nil, no limit.
  */
-+ (instancetype)dateTimeAnswer;
++ (instancetype)dateTimeAnswerWithDefault:(NSDateComponents *)defaultDate relativeToDate:(NSDate *)relativeDate minimum:(NSDateComponents *)minimum maximum:(NSDateComponents *)maximum;
 
 /**
  * @brief Convenience constructor for Date type.
+ * @param defaultDate Date components. Year, month, and day are observed.
+ *     Any components not provided will be replaced with components for the "relativeDate".
+ * @param relativeDate Date that default components are applied relative to. Defaults to time of presentation.
+ * @param minimum Date components for the beginning of the allowable range. If nil, no limit.
+ * @param maximum Date components for the end of the allowable range. If nil, no limit.
  */
-+ (instancetype)dateAnswer;
++ (instancetype)dateAnswerWithDefault:(NSDateComponents *)defaultDate relativeToDate:(NSDate *)relativeDate minimum:(NSDateComponents *)minimum maximum:(NSDateComponents *)maximum;
 
 /**
  * @brief Convenience constructor for Time type.
+ * @param defaultDate Date components for the default value. Hour, minute, and second are observed.
+ *     Any components not provided will be replaced with components for the "relativeDate".
+ * @param relativeDate Date that default components are applied relative to. Defaults to time of presentation.
+ * @param minimum Date components for the beginning of the allowable range. If nil, no limit.
+ * @param maximum Date components for the end of the allowable range. If nil, no limit.
  */
-+ (instancetype)timeAnswer;
++ (instancetype)timeAnswerWithDefault:(NSDateComponents *)defaultTime relativeToDate:(NSDate *)relativeDate minimum:(NSDateComponents *)minimum maximum:(NSDateComponents *)maximum;
 
 /**
  * @brief Style of date entry
  */
 @property (nonatomic, readonly) RKDateAnswerStyle style;
+
+@property (nonatomic, readonly, copy) NSDateComponents *defaultComponents;
+@property (nonatomic, readonly, copy) NSDateComponents *minimum;
+@property (nonatomic, readonly, copy) NSDateComponents *maximum;
+@property (nonatomic, readonly, copy) NSDate *relativeToDate;
 
 @end
 
@@ -258,9 +283,18 @@ typedef NS_ENUM(NSInteger, RKDateAnswerStyle) {
  */
 @interface RKTimeIntervalAnswerFormat : RKAnswerFormat
 
++ (instancetype)timeIntervalAnswer;
+
 /**
  * @brief Convenience constructor.
+ * @param defaultInterval The initial position of the time interval picker.
+ * @param maximumInterval The maximum selectable interval. The minimum is always 0.
+ * @param step The step in the interval.
  */
-+ (instancetype)timeIntervalAnswer;
++ (instancetype)timeIntervalAnswerWithDefault:(NSTimeInterval)defaultInterval maximum:(NSTimeInterval)maximumInterval step:(NSTimeInterval)step;
+
+@property (nonatomic, readonly) NSTimeInterval maximumInterval;
+@property (nonatomic, readonly) NSTimeInterval defaultInterval;
+@property (nonatomic, readonly) NSTimeInterval step;
 
 @end
