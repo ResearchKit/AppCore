@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCViewController.h"
+#import <UIKit/UIKit.h>
 
-@interface APCSignInViewController : APCViewController <UITextFieldDelegate>
+@interface APCSignInViewController : UITableViewController <UITextFieldDelegate>
 
 @property (nonatomic, weak) IBOutlet UITextField *userHandleTextField;
 
