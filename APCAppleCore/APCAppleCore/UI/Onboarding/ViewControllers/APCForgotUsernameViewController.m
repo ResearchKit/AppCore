@@ -1,27 +1,32 @@
 //
-//  APCForgotPasswordViewController.m
+//  APCForgotUsernameViewController.m
 //  APCAppleCore
 //
-//  Created by Karthik Keyan on 9/4/14.
+//  Created by Ramsundar Shandilya on 10/17/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "APCForgotUsernameViewController.h"
+#import "UIColor+APCAppearance.h"
+#import "UIFont+APCAppearance.h"
 #import "NSString+Helper.h"
 #import "UIAlertView+Helper.h"
 #import "APCUserInfoConstants.h"
-#import "APCForgotPasswordViewController.h"
-#import "UIColor+APCAppearance.h"
-#import "UIFont+APCAppearance.h"
 
-@interface APCForgotPasswordViewController ()
+@interface APCForgotUsernameViewController ()
 
 @end
 
-@implementation APCForgotPasswordViewController
+@implementation APCForgotUsernameViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+    
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -30,15 +35,17 @@
     [self.emailTextField becomeFirstResponder];
 }
 
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
 #pragma mark - Appearance
 
 - (void)setupAppearance
 {
     [self.emailTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.emailTextField setFont:[UIFont appRegularFontWithSize:17.0f]];
-    
-    [self.usernameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.usernameTextField setFont:[UIFont appMediumFontWithSize:17.0f]];
 }
 
 #pragma mark - UITableViewDelegate method
@@ -49,8 +56,6 @@
     
     if (indexPath.row == 0) {
         [self.emailTextField becomeFirstResponder];
-    } else {
-        [self.usernameTextField becomeFirstResponder];
     }
 }
 
@@ -60,22 +65,17 @@
 {
     
     if (textField == self.emailTextField) {
-        [self.usernameTextField becomeFirstResponder];
-    } else {
-        [self sendPassword];
+        [self sendEmail];
     }
+    
+    self.navigationItem.rightBarButtonItem.enabled = [self isContentValid:nil];
     
     return YES;
 }
-
 - (BOOL) isContentValid:(NSString **)errorMessage {
     BOOL isContentValid = NO;
     
-    if (self.usernameTextField.text.length == 0) {
-        *errorMessage = NSLocalizedString(@"Please enter your Username.", @"");
-        isContentValid = NO;
-    }
-    else if (self.emailTextField.text.length == 0) {
+    if (self.emailTextField.text.length == 0) {
         *errorMessage = NSLocalizedString(@"Please enter your email address.", @"");
         isContentValid = NO;
     }
@@ -86,9 +86,12 @@
     return isContentValid;
 }
 
-#pragma mark - Public Methods
+- (IBAction)forgotUsername:(id)sender
+{
+    [self sendEmail];
+}
 
-- (void) sendPassword
+- (void)sendEmail
 {
     NSString *error;
     
@@ -101,10 +104,5 @@
     } else{
         [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Forgot Password", @"") message:error];
     }
-    
-}
-
-- (IBAction)done:(id)sender {
-    [self sendPassword];
 }
 @end

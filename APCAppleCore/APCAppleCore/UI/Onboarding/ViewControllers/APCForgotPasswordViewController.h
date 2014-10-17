@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface APCForgotPasswordViewController : UIViewController <UITextFieldDelegate>
+@interface APCForgotPasswordViewController : UITableViewController <UITextFieldDelegate>
 
-@property (nonatomic, weak) IBOutlet UITextField *emaiTextField;
+@property (nonatomic, weak) IBOutlet UITextField *emailTextField;
+
+@property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 
 - (void) sendPassword;
 

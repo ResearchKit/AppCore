@@ -16,6 +16,8 @@
 
 - (void) signIn;
 
-- (IBAction) forgotPassword;
+- (IBAction)forgotPassword;
+
+- (IBAction)forgotUsername:(id)sender;
 
 @end

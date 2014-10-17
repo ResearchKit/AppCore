@@ -20,6 +20,8 @@
 		5B3AB79F19EC9BF600E7FC31 /* APCPickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3AB79C19EC9BF600E7FC31 /* APCPickerTableViewCell.m */; };
 		5B3AB7A319EC9D5500E7FC31 /* UIView+LoadXib.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3AB7A119EC9D5500E7FC31 /* UIView+LoadXib.h */; };
 		5B3AB7A419EC9D5500E7FC31 /* UIView+LoadXib.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3AB7A219EC9D5500E7FC31 /* UIView+LoadXib.m */; };
+		5B42F25419F189F0009E87BC /* APCForgotUsernameViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B42F25219F189F0009E87BC /* APCForgotUsernameViewController.h */; };
+		5B42F25519F189F0009E87BC /* APCForgotUsernameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B42F25319F189F0009E87BC /* APCForgotUsernameViewController.m */; };
 		5B5F178019ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B5F177D19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B5F178119ECF83A00A0E1D7 /* APCTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B5F177E19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.m */; };
 		5B5F178B19EDB58F00A0E1D7 /* APCPermissionButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B5F178919EDB58F00A0E1D7 /* APCPermissionButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -196,7 +198,6 @@
 		F588BA6B19D21F1300692473 /* APCTableViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA2A19D21F1300692473 /* APCTableViewItem.m */; };
 		F588BA6C19D21F1300692473 /* APCForgotPasswordViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA2C19D21F1300692473 /* APCForgotPasswordViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA6D19D21F1300692473 /* APCForgotPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA2D19D21F1300692473 /* APCForgotPasswordViewController.m */; };
-		F588BA6E19D21F1300692473 /* APCForgotPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F588BA2E19D21F1300692473 /* APCForgotPasswordViewController.xib */; };
 		F588BA6F19D21F1300692473 /* APCIntroVideoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA2F19D21F1300692473 /* APCIntroVideoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BA7019D21F1300692473 /* APCIntroVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA3019D21F1300692473 /* APCIntroVideoViewController.m */; };
 		F588BA7319D21F1300692473 /* APCSignInViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA3319D21F1300692473 /* APCSignInViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -295,6 +296,8 @@
 		5B3AB79C19EC9BF600E7FC31 /* APCPickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPickerTableViewCell.m; sourceTree = "<group>"; };
 		5B3AB7A119EC9D5500E7FC31 /* UIView+LoadXib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+LoadXib.h"; sourceTree = "<group>"; };
 		5B3AB7A219EC9D5500E7FC31 /* UIView+LoadXib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+LoadXib.m"; sourceTree = "<group>"; };
+		5B42F25219F189F0009E87BC /* APCForgotUsernameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCForgotUsernameViewController.h; sourceTree = "<group>"; };
+		5B42F25319F189F0009E87BC /* APCForgotUsernameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCForgotUsernameViewController.m; sourceTree = "<group>"; };
 		5B5F177D19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTextFieldTableViewCell.h; sourceTree = "<group>"; };
 		5B5F177E19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTextFieldTableViewCell.m; sourceTree = "<group>"; };
 		5B5F178919EDB58F00A0E1D7 /* APCPermissionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPermissionButton.h; sourceTree = "<group>"; };
@@ -442,7 +445,6 @@
 		F588BA2A19D21F1300692473 /* APCTableViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTableViewItem.m; sourceTree = "<group>"; };
 		F588BA2C19D21F1300692473 /* APCForgotPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCForgotPasswordViewController.h; sourceTree = "<group>"; };
 		F588BA2D19D21F1300692473 /* APCForgotPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCForgotPasswordViewController.m; sourceTree = "<group>"; };
-		F588BA2E19D21F1300692473 /* APCForgotPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCForgotPasswordViewController.xib; sourceTree = "<group>"; };
 		F588BA2F19D21F1300692473 /* APCIntroVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCIntroVideoViewController.h; sourceTree = "<group>"; };
 		F588BA3019D21F1300692473 /* APCIntroVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCIntroVideoViewController.m; sourceTree = "<group>"; };
 		F588BA3319D21F1300692473 /* APCSignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignInViewController.h; sourceTree = "<group>"; };
@@ -875,32 +877,33 @@
 		F588BA2B19D21F1300692473 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				F588BA4319D21F1300692473 /* APCUserInfoConstants.h */,
 				F588BA2F19D21F1300692473 /* APCIntroVideoViewController.h */,
 				F588BA3019D21F1300692473 /* APCIntroVideoViewController.m */,
+				5B29CE4819D4902B00E2FD62 /* APCStudyOverviewViewController.h */,
+				5B29CE4919D4902B00E2FD62 /* APCStudyOverviewViewController.m */,
 				F588BA3319D21F1300692473 /* APCSignInViewController.h */,
 				F588BA3419D21F1300692473 /* APCSignInViewController.m */,
+				5B42F25219F189F0009E87BC /* APCForgotUsernameViewController.h */,
+				5B42F25319F189F0009E87BC /* APCForgotUsernameViewController.m */,
+				F588BA2C19D21F1300692473 /* APCForgotPasswordViewController.h */,
+				F588BA2D19D21F1300692473 /* APCForgotPasswordViewController.m */,
 				F5FE18F219EDDFB900D455E6 /* APCInclusionCriteriaViewController.h */,
 				F5FE18F319EDDFB900D455E6 /* APCInclusionCriteriaViewController.m */,
 				F5C98F9119EF224B001D18C9 /* APCEligibleViewController.h */,
 				F5C98F9219EF224B001D18C9 /* APCEligibleViewController.m */,
 				F58EA05319F02BD10001C67C /* APCInEligibleViewController.h */,
 				F58EA05419F02BD10001C67C /* APCInEligibleViewController.m */,
-				5B29CE3E19D376CA00E2FD62 /* APCSignUpPermissionsViewController.h */,
-				5B29CE3F19D376CA00E2FD62 /* APCSignUpPermissionsViewController.m */,
-				F588BA2C19D21F1300692473 /* APCForgotPasswordViewController.h */,
-				F588BA2D19D21F1300692473 /* APCForgotPasswordViewController.m */,
-				F588BA2E19D21F1300692473 /* APCForgotPasswordViewController.xib */,
 				F588BA3819D21F1300692473 /* APCSignUpProgressing.h */,
+				5B5F17AC19F0893900A0E1D7 /* APCSignUpInfoViewController.h */,
+				5B5F17AD19F0893900A0E1D7 /* APCSignUpInfoViewController.m */,
 				F588BA3919D21F1300692473 /* APCSignupTouchIDViewController.h */,
 				F588BA3A19D21F1300692473 /* APCSignupTouchIDViewController.m */,
+				5B29CE3E19D376CA00E2FD62 /* APCSignUpPermissionsViewController.h */,
+				5B29CE3F19D376CA00E2FD62 /* APCSignUpPermissionsViewController.m */,
 				F588BA4019D21F1300692473 /* APCSpinnerViewController.h */,
 				F588BA4119D21F1300692473 /* APCSpinnerViewController.m */,
 				F588BA4219D21F1300692473 /* APCSpinnerViewController.xib */,
-				5B29CE4819D4902B00E2FD62 /* APCStudyOverviewViewController.h */,
-				5B29CE4919D4902B00E2FD62 /* APCStudyOverviewViewController.m */,
-				5B5F17AC19F0893900A0E1D7 /* APCSignUpInfoViewController.h */,
-				5B5F17AD19F0893900A0E1D7 /* APCSignUpInfoViewController.m */,
-				F588BA4319D21F1300692473 /* APCUserInfoConstants.h */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1162,6 +1165,7 @@
 				5B3AB79E19EC9BF600E7FC31 /* APCPickerTableViewCell.h in Headers */,
 				F588BA1419D21EFE00692473 /* UIScrollView+Helper.h in Headers */,
 				F588B9FC19D21EFE00692473 /* APCStepProgressBar+Appearance.h in Headers */,
+				5B42F25419F189F0009E87BC /* APCForgotUsernameViewController.h in Headers */,
 				F588BA9719D21F1300692473 /* YMLChartEnumerations.h in Headers */,
 				F588BA8819D21F1300692473 /* APCCircularProgressView.h in Headers */,
 				F588BA6C19D21F1300692473 /* APCForgotPasswordViewController.h in Headers */,
@@ -1275,7 +1279,6 @@
 				F5C1DC4019D23044006527EA /* tab_learn_selected.png in Resources */,
 				F5C1DC3919D23044006527EA /* tab_activities_selected@2x.png in Resources */,
 				F5C1DC3E19D23044006527EA /* tab_learn.png in Resources */,
-				F588BA6E19D21F1300692473 /* APCForgotPasswordViewController.xib in Resources */,
 				F5C1DC3719D23044006527EA /* tab_activities@2x.png in Resources */,
 				F5179CC319D0917D001DCCB7 /* MODEL_README in Resources */,
 				F588BA6519D21F1300692473 /* APCCriteriaCell.xib in Resources */,
@@ -1331,6 +1334,7 @@
 				F5A63F1519D5EAD100284006 /* APCUser.m in Sources */,
 				F588BA8B19D21F1300692473 /* APCConfirmationView.m in Sources */,
 				5BF5C90919D9E208007928D4 /* APCUser+HealthKit.m in Sources */,
+				5B42F25519F189F0009E87BC /* APCForgotUsernameViewController.m in Sources */,
 				F588BA0919D21EFE00692473 /* NSManagedObject+APCHelper.m in Sources */,
 				F58EA05619F02BD10001C67C /* APCInEligibleViewController.m in Sources */,
 				F588BA1719D21EFE00692473 /* UISegmentedControl+Appearance.m in Sources */,
