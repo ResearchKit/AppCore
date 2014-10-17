@@ -29,6 +29,8 @@
 
 @property (weak, nonatomic) IBOutlet APCPasscodeView *retryPasscodeView;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *touchIdButtonBottomConstraint;
+
 @property (nonatomic, strong) LAContext *touchContext;
 
 @end
@@ -149,17 +151,7 @@
 #pragma mark - IBActions
 
 - (IBAction) touchID {
-    NSString *localizedReason = NSLocalizedString(@"Authentication", @"");
     
-    typeof(self) __weak weakSelf = self;
-    [self.touchContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:localizedReason reply:^(BOOL success, NSError *error) {
-        if (success) {
-            [weakSelf next];
-        }
-        else {
-            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Touch Authentication", @"") message:error.localizedDescription];
-        }
-    }];
 }
 
 
@@ -195,46 +187,43 @@
 
 #pragma mark - NSNotification
 
-- (void) keyboardWillShow:(NSNotification *)notification {
-    CGRect keyboardRect;
-    CGFloat duration = 0;
-    UIViewAnimationCurve curve;
+- (void) keyboardWillShow:(NSNotification *)notification
+{
+    CGFloat keyboardHeight = [[notification.userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
+    double animationDuration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
-    [UIView frame:&keyboardRect animationDuration:&duration animationCurve:&curve fromKeyboardNotification:notification];
-    
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:duration];
-    [UIView setAnimationCurve:curve];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    
-    CGRect buttonRect = self.touchIDButton.frame;
-    buttonRect.origin.y -= keyboardRect.size.height;
-    self.touchIDButton.frame = buttonRect;
-    
-    [UIView commitAnimations];
+    [UIView animateWithDuration:animationDuration delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.touchIdButtonBottomConstraint.constant = keyboardHeight;
+    } completion:nil];
 }
 
 - (void) keyboardWillHide:(NSNotification *)notification {
-    CGRect keyboardRect;
-    CGFloat duration = 0;
-    UIViewAnimationCurve curve;
     
-    [UIView frame:&keyboardRect animationDuration:&duration animationCurve:&curve fromKeyboardNotification:notification];
+    double animationDuration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:duration];
-    [UIView setAnimationCurve:curve];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    
-    CGRect buttonRect = self.touchIDButton.frame;
-    buttonRect.origin.y += keyboardRect.size.height;
-    self.touchIDButton.frame = buttonRect;
-    
-    [UIView commitAnimations];
+    [UIView animateWithDuration:animationDuration delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.touchIdButtonBottomConstraint.constant = 0;
+    } completion:nil];
 }
 
 - (IBAction)skip
 {
     
 }
+
+- (IBAction)useTouchId:(id)sender
+{
+    NSString *localizedReason = NSLocalizedString(@"Authentication", @"");
+    
+    typeof(self) __weak weakSelf = self;
+    [self.touchContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:localizedReason reply:^(BOOL success, NSError *error) {
+        if (success) {
+            [weakSelf next];
+        }
+        else {
+            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Touch Authentication", @"") message:error.localizedDescription];
+        }
+    }];
+}
+
 @end
