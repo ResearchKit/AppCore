@@ -70,7 +70,7 @@
     <entity name="APCTask" representedClassName="APCTask" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="taskClassName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="taskDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taskDescription" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="taskTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
@@ -89,6 +89,6 @@
         <element name="APCScheduledTask" positionX="-468" positionY="449" width="128" height="163"/>
         <element name="APCStoredUserData" positionX="-954" positionY="486" width="128" height="180"/>
         <element name="APCSurveyResult" positionX="-945" positionY="495" width="128" height="58"/>
-        <element name="APCTask" positionX="-965" positionY="585" width="128" height="178"/>
+        <element name="APCTask" positionX="-965" positionY="585" width="128" height="180"/>
     </elements>
 </model>

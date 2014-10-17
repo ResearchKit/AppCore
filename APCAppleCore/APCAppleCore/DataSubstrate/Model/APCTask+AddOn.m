@@ -30,9 +30,9 @@ static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
           task.taskClassName = taskDict[kTaskClassNameKey];
           
           if ([task.taskType isEqualToString:kCustomizableSurveyTaskType]) {
-              NSString *resource = [[NSBundle mainBundle] pathForResource:taskDict[kTaskFileNameKey] ofType:@"json"];
+              NSString *resource = [[NSBundle mainBundle] pathForResource:taskDict[kTaskFileNameKey] ofType:@"task"];
               NSError * error;
-              NSString *taskDescription = [NSString stringWithContentsOfFile:resource encoding:NSUTF8StringEncoding error:&error];
+              NSData *taskDescription = [NSData dataWithContentsOfFile:resource];
               [error handle];
               task.taskDescription = taskDescription;
           }
@@ -57,11 +57,11 @@ static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
 
 - (RKTask*) generateRKTaskFromTaskDescription
 {
-    NSData* data = [self.taskDescription dataUsingEncoding:NSUTF8StringEncoding];
-    NSError * error=nil;
-    id jsonData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-    [error handle];
-    RKTask *retTask = [[RKTask alloc] initWithDictionary:jsonData];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.taskDescription];
+    [unarchiver setRequiresSecureCoding: YES];
+    NSSet *userSet = [NSSet setWithObjects:[RKTask class], [NSArray class], nil];
+     RKTask *retTask = [unarchiver decodeObjectOfClasses:userSet forKey:NSKeyedArchiveRootObjectKey];
+    [unarchiver finishDecoding];
     return retTask;
 }
 
