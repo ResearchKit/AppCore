@@ -65,13 +65,15 @@
         return _step2;
     }else if (step == _step2){
         RKQuestionResult *result = [self questionResultForStep:step fromSurveyResults:surveyResults];
-        if (result == nil || result.answer == nil) {
+        if (result == nil || result.answer == nil || result.answer == [NSNull null]) {
             return nil;
         }else{
-            NSInteger index = [(NSNumber*)result.answer integerValue];
-            if (index == 0) {
+            if ([result.answer isEqualToString:@"route1"])
+            {
                 return _step3a;
-            }else if(index == 1){
+            }
+            else
+            {
                 return _step3b;
             }
         }

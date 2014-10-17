@@ -19,7 +19,7 @@
 
 @protocol RKQuestionStepCustomViewDelegate<NSObject>
 
-- (void)customQuestionStepView:(RKQuestionStepCustomView *)customQuestionStepView didChangeResult:(id)result;
+- (void)customQuestionStepView:(RKQuestionStepCustomView *)customQuestionStepView didChangeAnswer:(id)answer;
 
 @end
 
@@ -33,8 +33,8 @@
 // Custom question step view should report changes in its result
 @property (nonatomic, weak) id<RKQuestionStepCustomViewDelegate> delegate;
 
-// Result should be a JSON-serializable atomic type.
-@property (nonatomic, copy) id result;
+// Answer should be a JSON-serializable atomic type.
+@property (nonatomic, copy) id answer;
 
 @end
 

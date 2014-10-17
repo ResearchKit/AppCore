@@ -7,7 +7,6 @@
 
 #import <Foundation/Foundation.h>
 #import <ResearchKit/RKStep.h>
-#import <ResearchKit/RKSerialization.h>
 
 /**
  * Structure indicating the progress of the task.
@@ -68,6 +67,15 @@ typedef struct _RKTaskProgress {
  */
 - (RKTaskProgress)progressOfCurrentStep:(RKStep *)step withSurveyResults:(NSArray *)surveyResults;
 
+/**
+ * @brief Set of HKObjectType which would ideally be read from HealthKit during this task
+ */
+- (NSSet *)requestedHealthTypesForReading;
+/**
+ * @brief Set of HKObjectType which would ideally be written to HealthKit during this task
+ */
+- (NSSet *)requestedHealthTypesForWriting;
+
 @end
 
 
@@ -78,7 +86,7 @@ typedef struct _RKTaskProgress {
  * RKTask always make its steps appear in fixed order.
  */
 
-@interface RKTask : NSObject <RKLogicalTask, RKSerialization>
+@interface RKTask : NSObject <RKLogicalTask, NSSecureCoding>
 
 /**
  * @brief Designated initializer
