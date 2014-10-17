@@ -91,6 +91,13 @@
 @end
 
 /**
+ *  @brief Text label for units during numeric value entry
+ */
+@interface RKUnitLabel : RKLabel
+
+@end
+
+/**
  *  @brief Text label in single selection question's picker
  */
 @interface RKPickerLabel : RKLabel

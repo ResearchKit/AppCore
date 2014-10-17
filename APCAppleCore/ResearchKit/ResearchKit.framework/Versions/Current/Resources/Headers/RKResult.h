@@ -13,13 +13,28 @@
 @class RKItemIdentifier;
 @class RKStep;
 @class RKQuestionStep;
+@class RKFormItem;
+@class RKFormStep;
+@class RKSurveyResult;
+@class RKQuestionResult;
+
+
+@protocol RKTaskDefaultResultProvider<NSObject>
+
+@optional
+
+- (RKSurveyResult *)defaultResultForFormStep:(RKFormStep *)formStep;
+
+- (RKQuestionResult *)defaultResultForQuestionStep:(RKQuestionStep *)questionStep;
+
+@end
 
 /**
  * @brief The RKResult class defines the attributes of a result from one step or a group of steps.
  *
  * A result may be produced either directly in a step or task view controller, or by an RKRecorder subclass.
  */
-@interface RKResult : NSObject
+@interface RKResult : NSObject<NSCopying,NSSecureCoding>
 
 /**
  * @brief Produce a recorder with taskInstanceUUID, taskItemId, and stepItemId filled in
@@ -116,6 +131,14 @@
  */
 @interface RKQuestionResult : RKResult
 
+
+/**
+ * @brief FormItem initializer
+ * Pick up itemIdentifier/taskIdentifier/stepIdentifier from formItem object during initialization.
+ * @param formItem  The formItem produced result object.
+ */
+- (instancetype)initWithFormItem:(RKFormItem*)formItem;
+
 /**
  * @brief Question's type.
  */
@@ -130,17 +153,18 @@
  *      Boolean type uses NSNumber
  *      Text type uses NSString to store user's input.
  *      Scale type uses NSNumber to store marked value.
- *      Date type uses NSString to store a date value in format of "yyyy-MM-dd".
- *      Time type uses NSString to store a time value in format of "HH:mm:ss".
- *      DateAndTime type uses NSString to store a date-time value in format of "yyyy-MM-dd'T'HH:mm:ssZ".
+ *      Date type uses NSDateComponents to store a date value (NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay).
+ *      Time type uses NSDateComponents to store a time value (NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond).
+ *      DateAndTime type uses NSDateComponents to store a date-time value (NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond).
  *      Time Interval uses NSNumber to store a time span in seconds.
+ *  @note All NSDateComponents values are computed using Gregorian Calendar.
  */
-@property (nonatomic, strong) id answer;
+@property (nonatomic, copy) id answer;
 
 + (RKQuestionResult *)nullResultForQuestionStep:(RKQuestionStep *)questionStep;
 
-@end
 
+@end
 
 /**
  * @brief The RKConsentResult class defines the attributes of consent step result.
@@ -155,13 +179,13 @@
 /**
  * @brief A combined result for covering all survey questions in a task.
  */
-@interface RKSurveyResult : RKResult
+@interface RKSurveyResult : RKResult<RKTaskDefaultResultProvider>
 
 /**
  * @brief Designated initializer
  * @param surveyResults Array of RKQuestionResult resulting from this survey, in order of answering
  */
-- (instancetype)initWithSurveyResults:(NSArray *)surveyResults;
+- (instancetype)initWithQuestionResults:(NSArray *)surveyResults;
 
 /**
  * @brief An array that contains answers to the questions.
@@ -170,4 +194,7 @@
 
 - (RKQuestionResult *)resultForStep:(RKQuestionStep *)step;
 
+- (RKQuestionResult *)resultForFormItem:(RKFormItem *)item;
+
 @end
+
