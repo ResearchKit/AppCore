@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14A389" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="APCConsentResult" representedClassName="APCConsentResult" parentEntity="APCResult" syncable="YES">
         <attribute name="signatureDate" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="signatureName" optional="YES" attributeType="String" syncable="YES"/>
@@ -67,7 +67,7 @@
     <entity name="APCTask" representedClassName="APCTask" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="taskClassName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="taskDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taskDescription" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="taskTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
@@ -86,6 +86,6 @@
         <element name="APCScheduledTask" positionX="-468" positionY="449" width="128" height="163"/>
         <element name="APCStoredUserData" positionX="-954" positionY="486" width="128" height="135"/>
         <element name="APCSurveyResult" positionX="-945" positionY="495" width="128" height="58"/>
-        <element name="APCTask" positionX="-965" positionY="585" width="128" height="178"/>
+        <element name="APCTask" positionX="-965" positionY="585" width="128" height="180"/>
     </elements>
 </model>
