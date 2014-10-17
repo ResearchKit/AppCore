@@ -38,7 +38,6 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCCriteriaCell.h>
 #import <APCAppleCore/APCForgotPasswordViewController.h>
 #import <APCAppleCore/APCIntroVideoViewController.h>
-#import <APCAppleCore/APCNavigationController.h>
 #import <APCAppleCore/APCPasscodeView.h>
 #import <APCAppleCore/APCSegmentControl.h>
 #import <APCAppleCore/APCSignInViewController.h>
@@ -48,8 +47,6 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCSignUpPermissionsViewController.h>
 #import <APCAppleCore/APCSignUpProgressing.h>
 #import <APCAppleCore/APCSignupTouchIDViewController.h>
-#import <APCAppleCore/APCSignUpUserInfoViewController.h>
-#import <APCAppleCore/APCSignupViewController.h>
 #import <APCAppleCore/APCStudyOverviewViewController.h>
 #import <APCAppleCore/APCSpinnerViewController.h>
 #import <APCAppleCore/APCStepProgressBar.h>
@@ -57,8 +54,6 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCUserInfoCell.h>
 #import <APCAppleCore/APCPermissionsCell.h>
 #import <APCAppleCore/APCUserInfoConstants.h>
-#import <APCAppleCore/APCUserInfoViewController.h>
-#import <APCAppleCore/APCViewController.h>
 #import <APCAppleCore/YMLChartEnumerations.h>
 #import <APCAppleCore/YMLChartUnitsView.h>
 #import <APCAppleCore/YMLLineChartView.h>
