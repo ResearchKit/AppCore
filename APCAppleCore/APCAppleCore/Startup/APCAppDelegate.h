@@ -17,6 +17,7 @@ static NSString *const kTasksAndSchedulesJSONFileNameKey = @"TasksAndSchedulesJS
 static NSString *const kDataSubstrateClassNameKey = @"APHDatasubstrateClassName";
 static NSString *const kHKWritePermissionsKey = @"HKWritePermissions";
 static NSString *const kHKReadPermissionsKey = @"HKReadPermissions";
+static NSString *const kAppServicesListRequiredKey = @"AppServicesListRequired";
 
 static NSString *const kPasswordKey = @"password";
 

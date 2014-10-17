@@ -101,14 +101,6 @@
 
 @end
 
-//Permission Types
-typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
-    kSignUpPermissionsTypeHealthKit,
-    kSignUpPermissionsTypeLocation,
-    kSignUpPermissionsTypePushNotifications,
-    kSignUpPermissionsTypeCoremotion,
-};
-
 @interface APCTableViewPermissionsItem : APCTableViewItem
 
 @property (nonatomic) APCSignUpPermissionsType permissionType;

@@ -27,6 +27,13 @@ typedef NS_ENUM(NSUInteger, APCSignUpUserInfoItem) {
     APCSignUpUserInfoItemWakeUpTime
 };
 
+typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
+    kSignUpPermissionsTypeHealthKit,
+    kSignUpPermissionsTypeLocation,
+    kSignUpPermissionsTypePushNotifications,
+    kSignUpPermissionsTypeCoremotion,
+};
+
 static CGFloat const kAPCSignUpProgressBarHeight                = 14.0f;
 
 static NSInteger kNumberOfSteps = 4;
