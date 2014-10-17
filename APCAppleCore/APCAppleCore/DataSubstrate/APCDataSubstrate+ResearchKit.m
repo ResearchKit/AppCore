@@ -154,9 +154,7 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 - (void)passiveCollectionDidFinishForStudy:(RKStudy *)study
 {
     if (self.justJoined)
-    {
-        self.justJoined = NO;
-        
+    {        
         NSLog(@"First collection finished - queue an upload");
         // Create the archive.
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
