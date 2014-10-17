@@ -52,7 +52,6 @@
                 } else {
                     NSAssert(localRKResult.answer, @"Its neither an integer nor a string");
                 }
-                
             }
                 break;
             case RKSurveyQuestionTypeBoolean:

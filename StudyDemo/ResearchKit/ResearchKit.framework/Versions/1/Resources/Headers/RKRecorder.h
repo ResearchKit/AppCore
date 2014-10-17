@@ -91,14 +91,13 @@
 
 @end
 
-@protocol RKSerialization;
 /**
  * @brief RKRecorderConfiguration is a protocol to supply a real recorder instance.
  *
  * A recorder configuration stores the necessary configuration to instantiate a recorder.
  * @note To use a recorder in a step, just attach its matching configuration object to the step. 
  */
-@protocol RKRecorderConfiguration <NSObject, RKSerialization>
+@protocol RKRecorderConfiguration <NSObject, NSSecureCoding>
 
 /**
  * @brief Generates recorder instance.

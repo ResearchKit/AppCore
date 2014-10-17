@@ -24,7 +24,10 @@
 #import <ResearchKit/RKQuestionStep.h>
 #import <ResearchKit/RKIntroductionStep.h>
 #import <ResearchKit/RKMediaStep.h>
+#import <ResearchKit/RKFormStep.h>
+
 #import <ResearchKit/RKAnswerFormat.h>
+#import <ResearchKit/RKHealthAnswerFormat.h>
 #import <ResearchKit/RKVisualConsentStep.h>
 #import <ResearchKit/RKConsentReviewStep.h>
 
@@ -41,11 +44,13 @@
 #import <ResearchKit/RKActiveStepViewController.h>
 #import <ResearchKit/RKQuestionStepViewController.h>
 #import <ResearchKit/RKMediaStepViewController.h>
+
 #import <ResearchKit/RKIntroductionStepViewController.h>
 #import <ResearchKit/RKVisualConsentStepViewController.h>
 #import <ResearchKit/RKConsentReviewStepViewController.h>
-
 #import <ResearchKit/RKCustomStepView.h>
+#import <ResearchKit/RKFormStepViewController.h>
+
 
 #import <ResearchKit/RKConsentDocument.h>
 #import <ResearchKit/RKConsentSection.h>
