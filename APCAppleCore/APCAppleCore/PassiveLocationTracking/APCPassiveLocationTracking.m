@@ -137,20 +137,20 @@ static CLLocationDistance kAllowDeferredLocationUpdatesUntilTraveled = 5.0;
     //Create distance in meters from home
     CLLocationDistance distanceFromHome = [homeLocation distanceFromLocation:manager.location];
     
-    NSMutableDictionary *json = [NSMutableDictionary new];
+    NSMutableDictionary *locationJson = [NSMutableDictionary new];
     
-    json[@"distanceFromHome"] = [NSNumber numberWithDouble:distanceFromHome];
+    locationJson[@"distanceFromHome"] = [NSNumber numberWithDouble:distanceFromHome];
     
-    double dateString = [manager.location.timestamp timeIntervalSince1970];
+    double dateInterval = [manager.location.timestamp timeIntervalSince1970];
     
-    json[@"timestamp"] = [NSNumber numberWithDouble: dateString];
+    locationJson[@"timestamp"] = [NSNumber numberWithDouble: dateInterval];
     
     /* Type used to represent a location accuracy level in meters. The lower the value in meters, the
      more physically precise the location is. A negative accuracy value indicates an invalid location. */
-    json[@"verticalAccuracy"] = [NSNumber numberWithDouble:manager.location.verticalAccuracy];
-    json[@"horizontalAccuracy"] = [NSNumber numberWithDouble:manager.location.horizontalAccuracy];
+    locationJson[@"verticalAccuracy"] = [NSNumber numberWithDouble:manager.location.verticalAccuracy];
+    locationJson[@"horizontalAccuracy"] = [NSNumber numberWithDouble:manager.location.horizontalAccuracy];
     
-    NSData *data = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:locationJson options:0 error:nil];
     
     if (self.taskArchive)
     {
