@@ -15,6 +15,8 @@ static NSString *const kBaseURLKey = @"BaseURLKey";
 static NSString *const kDatabaseNameKey = @"DatabaseNameKey";
 static NSString *const kTasksAndSchedulesJSONFileNameKey = @"TasksAndSchedulesJSONFileNameKey";
 static NSString *const kDataSubstrateClassNameKey = @"APHDatasubstrateClassName";
+static NSString *const kHKWritePermissionsKey = @"HKWritePermissions";
+static NSString *const kHKReadPermissionsKey = @"HKReadPermissions";
 
 static NSString *const kPasswordKey = @"password";
 
@@ -29,10 +31,22 @@ static NSString *const kPasswordKey = @"password";
 @property (strong, nonatomic) APCDataMonitor * dataMonitor;
 @property (strong, nonatomic) APCScheduler * scheduler;
 
+//Initialization Methods
 @property (nonatomic, strong) NSDictionary * initializationOptions;
+- (NSMutableDictionary*) defaultInitializationOptions;
 
 - (void)loadStaticTasksAndSchedulesIfNecessary;  //For resetting app
 - (void) clearNSUserDefaults; //For resetting app
+
+//Show Methods
+- (void) showTabBar;
+- (void) showOnBoarding;
+- (void) showNeedsEmailVerification;
+- (void) setUpRootViewController: (UIViewController*) viewController;
+
+//SetupMethods
+- (void) setUpInitializationOptions;
+- (void) setUpAppAppearance;
 
 //For User in Subclasses
 - (void) signedInNotification:(NSNotification *)notification;
