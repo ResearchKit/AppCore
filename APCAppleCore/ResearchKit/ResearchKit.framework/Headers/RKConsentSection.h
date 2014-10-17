@@ -29,7 +29,7 @@ typedef NS_ENUM(NSInteger, RKConsentSectionType) {
  *  @class RKConsentSection
  *  @abstract A section in the consent document.
  */
-@interface RKConsentSection : NSObject<RKSerialization>
+@interface RKConsentSection : NSObject<NSSecureCoding>
 
 /**
  *  @brief Populates predefined title and summary for all types except for type RKConsentSectionTypeCustom and RKConsentSectionTypeOnlyInDocument.

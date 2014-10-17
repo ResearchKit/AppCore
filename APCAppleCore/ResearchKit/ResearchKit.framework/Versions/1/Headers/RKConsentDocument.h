@@ -7,7 +7,7 @@
 
 #import <ResearchKit/ResearchKit.h>
 
-@interface RKConsentSignature : NSObject<RKSerialization>
+@interface RKConsentSignature : NSObject<NSSecureCoding>
 
 + (RKConsentSignature *)signatureForPersonWithTitle:(NSString *)title name:(NSString *)name signatureImage:(UIImage *)signatureImage dateString:(NSString *)signatureDate;
 
@@ -28,7 +28,7 @@
 /**
  * @brief RKConsentDocument models elements to be presented in animated sequence and PDF document.
  */
-@interface RKConsentDocument : NSObject<RKSerialization>
+@interface RKConsentDocument : NSObject<NSSecureCoding>
 
 /**
  * @brief Document's title only appears in the PDF file.
