@@ -8,6 +8,8 @@
 
 #import "APCTextFieldTableViewCell.h"
 #import "NSString+Helper.h"
+#import "UIColor+APCAppearance.h"
+#import "UIFont+APCAppearance.h"
 
 @interface APCTextFieldTableViewCell ()
 
@@ -22,12 +24,23 @@
 - (void)awakeFromNib {
     // Initialization code
     self.textField.delegate = self;
+    
+    [self setupAppearance];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)setupAppearance
+{
+    [self.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
+    [self.textLabel setTextColor:[UIColor appSecondaryColor1]];
+    
+    [self.textField setFont:[UIFont appRegularFontWithSize:17.0f]];
+    [self.textField setTextColor:[UIColor appSecondaryColor1]];
 }
 
 - (void)setType:(APCTextFieldCellType)type

@@ -14,6 +14,8 @@
 #import "APCSignupTouchIDViewController.h"
 #import "APCSignUpPermissionsViewController.h"
 #import "APCAppDelegate.h"
+#import "UIColor+APCAppearance.h"
+#import "UIFont+APCAppearance.h"
 
 @import LocalAuthentication;
 
@@ -37,10 +39,11 @@
 
 @synthesize user = _user;
 
+#pragma mark - Life Cycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    [self addNavigationItems];
     [self setupProgressBar];
     
     self.touchContext = [LAContext new];
@@ -77,8 +80,16 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void) addNavigationItems {
-    self.title = NSLocalizedString(@"Sign Up", @"");
+#pragma mark - Setup
+
+- (void)setupAppearance
+{
+    [self.touchIDButton setBackgroundColor:[UIColor appPrimaryColor]];
+    [self.touchIDButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.touchIDButton.titleLabel setFont:[UIFont appMediumFontWithSize:17.0f]];
+    
+    [self.titleLabel setTextColor:[UIColor appSecondaryColor1]];
+    [self.titleLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
 }
 
 - (void) setupProgressBar {
@@ -154,11 +165,13 @@
 
 #pragma mark - Private Methods
 
-- (void) next {
-
+- (void) next
+{
+    
 }
 
-- (void) showFirstTry {
+- (void) showFirstTry
+{
     self.passcodeView.hidden = NO;
     self.retryPasscodeView.hidden = YES;
     
@@ -168,7 +181,8 @@
     [self.passcodeView reset];
 }
 
-- (void) showRetry {
+- (void) showRetry
+{
     self.passcodeView.hidden = YES;
     self.retryPasscodeView.hidden = NO;
     
