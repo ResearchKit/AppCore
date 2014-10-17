@@ -11,10 +11,11 @@
 #import <CoreData/CoreData.h>
 #import "APCPassiveLocationTracking.h"
 #import <HealthKit/HealthKit.h>
+#import "APCParameters.h"
 
 @class APCUser;
 
-@interface APCDataSubstrate : NSObject <RKStudyDelegate>
+@interface APCDataSubstrate : NSObject <RKStudyDelegate, APCParametersDelegate>
 
 /*********************************************************************************/
 #pragma mark - Initializer
@@ -60,7 +61,10 @@
 @property (nonatomic, strong) NSManagedObjectModel * managedObjectModel;
 
 //HealthKit Subsystem
-
+/*********************************************************************************/
+#pragma mark - Parameters
+/*********************************************************************************/
+@property (strong, nonatomic) APCParameters *parameters;
 
 
 @end
