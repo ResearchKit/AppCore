@@ -55,14 +55,15 @@ static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
     return retTask;
 }
 
-- (RKTask*) generateRKTaskFromTaskDescription
+- (RKTask *)rkTask
 {
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.taskDescription];
-    [unarchiver setRequiresSecureCoding: YES];
-    NSSet *userSet = [NSSet setWithObjects:[RKTask class], [NSArray class], nil];
-     RKTask *retTask = [unarchiver decodeObjectOfClasses:userSet forKey:NSKeyedArchiveRootObjectKey];
-    [unarchiver finishDecoding];
+    RKTask * retTask = [NSKeyedUnarchiver unarchiveObjectWithData:self.taskDescription];
     return retTask;
+}
+
+- (void)setRkTask:(RKTask *)rkTask
+{
+    self.taskDescription = [NSKeyedArchiver archivedDataWithRootObject:rkTask];
 }
 
 /*********************************************************************************/

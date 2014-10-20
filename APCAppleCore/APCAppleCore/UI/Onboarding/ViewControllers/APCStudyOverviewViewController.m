@@ -12,21 +12,10 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 @interface APCStudyOverviewViewController ()
 
-@property (strong, nonatomic) IBOutlet UIView *headerView;
 @end
 
 @implementation APCStudyOverviewViewController
 
-#pragma mark - 
-
-- (instancetype)init
-{
-    if(self = [super initWithNibName:self.nibName bundle:[NSBundle appleCoreBundle]]){
-        
-    }
-    
-    return self;
-}
 
 #pragma mark - Lifecycle
 
@@ -48,19 +37,8 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     // Dispose of any resources that can be recreated.
 }
 
-- (UIRectEdge)edgesForExtendedLayout
-{
-    return UIRectEdgeNone;
-}
-
-- (NSString *)nibName
-{
-    return @"APCStudyOverviewViewController";
-}
-
 - (void)setupTableView
 {
-    self.tableView.tableHeaderView = self.headerView;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 }
@@ -77,6 +55,11 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kStudyOverviewCellIdentifier forIndexPath:indexPath];
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
@@ -104,6 +87,9 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     if (!parseError) {
         
         self.diseaseName = jsonDictionary[@"disease_name"];
+        self.diseaseNameLabel.text = self.diseaseName;
+        self.dateRangeLabel.text = [jsonDictionary[@"from_date"] stringByAppendingFormat:@" - %@", jsonDictionary[@"to_date"]];
+        self.logoImageView.image = [UIImage imageNamed:jsonDictionary[@"logo_name"]];
         
         NSArray *questions = jsonDictionary[@"questions"];
         

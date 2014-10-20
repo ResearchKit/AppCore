@@ -632,19 +632,12 @@
     }
     
     RKTask* task = [[RKTask alloc] initWithName:@"Demo" identifier:@"tid_001" steps:steps];
-    NSString * path = [[self applicationDocumentsDirectory] stringByAppendingPathComponent:@"sleepSurvey.task"];
-    NSKeyedArchiver * archiver = [NSKeyedArchiver alloc] initForWritingWithMutableData:<#(NSMutableData *)#>
-    [NSKeyedArchiver archiveRootObject:task toFile:path];
+    
     self.taskVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
     [self beginTask:task];
 }
 
-- (NSString *) applicationDocumentsDirectory
-{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *basePath = ([paths count] > 0) ? paths[0] : nil;
-    return basePath;
-}
+
 
 - (IBAction)showConsentSignature:(id)sender{
     

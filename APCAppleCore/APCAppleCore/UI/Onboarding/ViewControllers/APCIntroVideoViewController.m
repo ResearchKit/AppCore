@@ -15,6 +15,8 @@
 
 @implementation APCIntroVideoViewController
 
+#pragma mark - Init
+
 - (instancetype) initWithContentURL:(NSURL *)contentURL {
     self = [super initWithContentURL:contentURL];
     if (self) {
@@ -23,6 +25,8 @@
     
     return self;
 }
+
+#pragma mark - Life Cycle
 
 - (void) viewDidLoad {
     [super viewDidLoad];

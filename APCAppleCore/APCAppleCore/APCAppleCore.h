@@ -38,16 +38,15 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCCriteriaCell.h>
 #import <APCAppleCore/APCForgotPasswordViewController.h>
 #import <APCAppleCore/APCIntroVideoViewController.h>
-#import <APCAppleCore/APCNavigationController.h>
 #import <APCAppleCore/APCPasscodeView.h>
 #import <APCAppleCore/APCSegmentControl.h>
 #import <APCAppleCore/APCSignInViewController.h>
-#import <APCAppleCore/APCSignupCriteriaViewController.h>
+#import <APCAppleCore/APCInclusionCriteriaViewController.h>
+#import <APCAppleCore/APCEligibleViewController.h>
+#import <APCAppleCore/APCInEligibleViewController.h>
 #import <APCAppleCore/APCSignUpPermissionsViewController.h>
 #import <APCAppleCore/APCSignUpProgressing.h>
 #import <APCAppleCore/APCSignupTouchIDViewController.h>
-#import <APCAppleCore/APCSignUpUserInfoViewController.h>
-#import <APCAppleCore/APCSignupViewController.h>
 #import <APCAppleCore/APCStudyOverviewViewController.h>
 #import <APCAppleCore/APCSpinnerViewController.h>
 #import <APCAppleCore/APCStepProgressBar.h>
@@ -55,8 +54,6 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCUserInfoCell.h>
 #import <APCAppleCore/APCPermissionsCell.h>
 #import <APCAppleCore/APCUserInfoConstants.h>
-#import <APCAppleCore/APCUserInfoViewController.h>
-#import <APCAppleCore/APCViewController.h>
 #import <APCAppleCore/YMLChartEnumerations.h>
 #import <APCAppleCore/YMLChartUnitsView.h>
 #import <APCAppleCore/YMLLineChartView.h>
@@ -70,9 +67,17 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 
 #import <APCAppleCore/APCEmailVerifyViewController.h>
 
+#import <APCAppleCore/APCProfileViewController.h>
+#import <APCAppleCore/APCSignUpInfoViewController.h>
+
+#import <APCAppleCore/APCTextFieldTableViewCell.h>
+#import <APCAppleCore/APCPickerTableViewCell.h>
+#import <APCAppleCore/APCSegmentedTableViewCell.h>
+
 //Objects
 #import <APCAppleCore/APCGroupedScheduledTask.h>
 #import <APCAppleCore/APCKeychainStore.h>
+#import <APCAppleCore/APCSegmentedButton.h>
 
 //Categories
 #import <APCAppleCore/APCStepProgressBar+Appearance.h>
@@ -84,13 +89,17 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/NSString+Helper.h>
 #import <APCAppleCore/UIAlertView+Helper.h>
 #import <APCAppleCore/UIBarButtonItem+Appearance.h>
-#import <APCAppleCore/UIColor+Helper.h>
 #import <APCAppleCore/UIScrollView+Helper.h>
 #import <APCAppleCore/UISegmentedControl+Appearance.h>
 #import <APCAppleCore/UITableView+Appearance.h>
 #import <APCAppleCore/UIView+Helper.h>
-#import <APCAppleCore/UIColor+Appearance.h>
 #import <APCAppleCore/HKHealthStore+APCExtensions.h>
+#import <APCAppleCore/UIImage+APCHelper.h>
+
+//Appearance Helpers
+#import <APCAppleCore/APCAppearanceInfo.h>
+#import <APCAppleCore/UIFont+APCAppearance.h>
+#import <APCAppleCore/UIColor+APCAppearance.h>
 
 static NSString *const APCUserSignedUpNotification     = @"APCUserSignedUpNotification";
 static NSString *const APCUserSignedInNotification     = @"APCUserSignedInNotification";

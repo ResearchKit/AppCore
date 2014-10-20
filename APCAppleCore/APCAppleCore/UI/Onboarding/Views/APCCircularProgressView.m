@@ -7,6 +7,7 @@
 //
 
 #import "APCCircularProgressView.h"
+#import "UIColor+APCAppearance.h"
 
 static NSString * const kAPCCircularProgressViewAnimationKey = @"APCCircularProgressViewAnimationKey";
 

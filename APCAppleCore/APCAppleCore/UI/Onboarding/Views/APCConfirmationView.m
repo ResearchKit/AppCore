@@ -7,7 +7,7 @@
 //
 
 #import "APCConfirmationView.h"
-#import "UIColor+Appearance.h"
+#import "UIColor+APCAppearance.h"
 
 static  const  CGFloat  insetForBorder = 0.5;
 static  const  CGFloat  kDesignSpace   = 1000.0;
@@ -44,7 +44,7 @@ static  short  coordinates[] = {
 - (void)sharedInit
 {
     self.incompleteBackgroundColor = [UIColor grayColor];
-    self.completedBackgroundColor = [UIColor confirmationGreenColor];
+    self.completedBackgroundColor = [UIColor appTertiaryColor1];
     self.completedTickColor = [UIColor whiteColor];
 }
 
