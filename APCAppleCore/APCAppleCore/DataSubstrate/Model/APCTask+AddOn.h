@@ -16,6 +16,7 @@
 
 + (APCTask*) taskWithTaskID: (NSString*) taskID inContext: (NSManagedObjectContext*) context;
 
-- (RKTask*) generateRKTaskFromTaskDescription;
+@property (nonatomic, strong) RKTask * rkTask;
+
 
 @end
