@@ -1,21 +1,11 @@
 //
 //  SBBUserProfile.h
-//  BridgeSDK
-//
-//  Created by Erin Mounts on 9/25/14.
-//  Copyright (c) 2014 Sage Bionetworks. All rights reserved.
+//	
+//  $Id$
 //
 
-#import "SBBBridgeObject.h"
+#import "_SBBUserProfile.h"
 
-@interface SBBUserProfile : SBBBridgeObject
-
-@property (nonatomic, strong) NSString *firstName;
-
-@property (nonatomic, strong) NSString *lastName;
-
-@property (nonatomic, strong) NSString *username;
-
-@property (nonatomic, strong) NSString *email;
-
+@interface SBBUserProfile : _SBBUserProfile <_SBBUserProfile>
+// Custom logic goes here.
 @end

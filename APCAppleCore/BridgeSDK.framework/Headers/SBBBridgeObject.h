@@ -1,15 +1,11 @@
 //
 //  SBBBridgeObject.h
-//  BridgeSDK
-//
-//  Created by Erin Mounts on 9/25/14.
-//  Copyright (c) 2014 Sage Bionetworks. All rights reserved.
+//	
+//  $Id$
 //
 
-#import <Foundation/Foundation.h>
+#import "_SBBBridgeObject.h"
 
-@interface SBBBridgeObject : NSObject
-
-@property (nonatomic, strong) NSString *type;
-
+@interface SBBBridgeObject : _SBBBridgeObject <_SBBBridgeObject>
+// Custom logic goes here.
 @end

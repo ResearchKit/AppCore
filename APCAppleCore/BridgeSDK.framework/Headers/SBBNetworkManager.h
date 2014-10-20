@@ -10,13 +10,27 @@
 #import "SBBComponent.h"
 
 /*!
- *  Typedef for SBBNetworkManager methods' completion block.
+ Session identifier for the Bridge SDK's background session.
+ */
+extern NSString * kBackgroundSessionIdentifier;
+
+/*!
+ *  Typedef for SBBNetworkManager data methods' completion block.
  *
  *  @param task           The NSURLSessionDataTask.
  *  @param responseObject The JSON object from the response, if any.
  *  @param error          Any error that occurred.
  */
 typedef void (^SBBNetworkManagerCompletionBlock)(NSURLSessionDataTask *task, id responseObject, NSError *error);
+
+/*!
+ *  Typedef for SBBNetworkManager upload completion block.
+ *
+ *  @param task           The NSURLSessionUploadTask.
+ *  @param response       The HTTP response, if any.
+ *  @param error          Any error that occurred.
+ */
+typedef void (^SBBNetworkManagerUploadCompletionBlock)(NSURLSessionUploadTask *task, NSHTTPURLResponse *response, NSError *error);
 
 /*!
  * @typedef SBBEnvironment
@@ -111,6 +125,35 @@ typedef NS_ENUM(NSInteger, SBBEnvironment) {
                       parameters:(id)parameters
                       completion:(SBBNetworkManagerCompletionBlock)completion;
 #endif
+
+/*!
+ Perform a background upload of a file to a given URL with provided HTTP headers.
+ 
+ @param fileUrl   The URL of the file to be uploaded.
+ @param headers   An NSDictionary containing the HTTP headers as key-value pairs.
+ @param urlString The URL (as a string) to which to upload the file.
+ @param completion A block to be called upon completion of the upload.
+ 
+ @return The NSURLSessionUploadTask used to make the request, so you can cancel or suspend/resume the request.
+ */
+- (NSURLSessionUploadTask *)uploadFile:(NSURL *)fileUrl httpHeaders:(NSDictionary *)headers toUrl:(NSString *)urlString completion:(SBBNetworkManagerUploadCompletionBlock)completion;
+
+/*!
+ This method should be called from your app delegate's
+ application:handleEventsForBackgroundURLSession:completionHandler: method when the identifier passed in there matches
+ kBackgroundSessionIdentifier.
+ 
+ If you are setting up and registering your own custom NetworkManager instance rather than using one of the BridgeSDK's
+ +setupWithAppPrefix: methods, you will also need to call this from your app delegate's
+ application:didFinishLaunchingWithOptions: method with kBackgroundSessionIdentifier as the identifier, and nil for the
+ completion handler.
+ 
+ @param identifier        The session identifier, as passed in to your app delegate's
+ application:handleEventsForBackgroundURLSession:completionHandler: method.
+ @param completionHandler The completion handler, as passed in to your app delegate's
+ application:handleEventsForBackgroundURLSession:completionHandler: method.
+ */
+- (void)restoreBackgroundSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler;
 
 @end
 

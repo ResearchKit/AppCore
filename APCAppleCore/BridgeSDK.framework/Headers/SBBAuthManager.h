@@ -147,7 +147,6 @@ extern NSString *gSBBAppURLPrefix;
  * Also configures the component to use the SBBNetworkManager currently registered the first time this is called,
  * or the default if none was registered yet.
  *
- * @warning gSBBAppURLPrefix *must* be set before calling this method, or it will return nil.
  * @return The default (shared) SBBAuthManager component.
  */
 + (instancetype)defaultComponent;

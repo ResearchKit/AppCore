@@ -27,9 +27,10 @@ extern const unsigned char BridgeSDKVersionString[];
 #import <BridgeSDK/SBBProfileManager.h>
 #import <BridgeSDK/SBBObjectManager.h>
 #import <BridgeSDK/SBBNetworkManager.h>
-#import <BridgeSDK/SBBNetworkErrors.h>
-#import <BridgeSDK/SBBBridgeObject.h>
-#import <BridgeSDK/SBBUserProfile.h>
+#import <BridgeSDK/SBBSurveyManager.h>
+#import <BridgeSDK/SBBUploadManager.h>
+#import <BridgeSDK/SBBErrors.h>
+#import <BridgeSDK/SBBBridgeObjects.h>
   
 // This sets the default environment at app (not SDK) compile time to Staging for debug builds and Production for non-debug.
 #if DEBUG
@@ -42,10 +43,13 @@ static SBBEnvironment gDefaultEnvironment = kDefaultEnvironment;
 @interface BridgeSDK : NSObject
 
 /*!
- *  Set up the Bridge SDK for the given app prefix and server environment. Usually you would only call this version
+ * Set up the Bridge SDK for the given app prefix and server environment. Usually you would only call this version
  * of the method from test suites, or if you have a non-DEBUG build configuration that you don't want running against
  * the production server environment. Otherwise call the version of the setupWithAppPrefix: method that doesn't
  * take an environment parameter, and let the SDK use the default environment.
+ *
+ * This will register a default SBBNetworkManager instance conigured correctly for the specified environment and app prefix.
+ * If you register a custom (or custom-configured) NetworkManager yourself, don't call this method.
  *
  *  @param appPrefix   A string prefix for your app's Bridge server URLs, assigned to you by Sage Bionetworks.
  *  @param environment Which server environment to run against.
@@ -54,7 +58,11 @@ static SBBEnvironment gDefaultEnvironment = kDefaultEnvironment;
 
 /*!
  * Set up the Bridge SDK for the given app prefix and the appropriate server environment based on whether this is
- * a debug or release build.
+ * a debug or release build. Usually you would call this at the beginning of your AppDelegate's
+ * application:didFinishLaunchingWithOptions: method.
+ *
+ * This will register a default SBBNetworkManager instance conigured correctly for the specified app prefix and appropriate
+ * server environment. If you register a custom (or custom-configured) NetworkManager yourself, don't call this method.
  *
  *  @param appPrefix   A string prefix for your app's Bridge server URLs, assigned to you by Sage Bionetworks.
  */
