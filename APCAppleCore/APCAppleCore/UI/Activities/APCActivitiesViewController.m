@@ -193,7 +193,10 @@ static NSInteger kNumberOfSectionsInTableView = 1;
 
 - (IBAction)updateActivities:(id)sender
 {
-
+    NSString * cannedSurvey = @"/api/v1/surveys/ecf7e761-c7e9-4bb6-b6e7-d6d15c53b209/2014-09-25T20:07:49.186Z";
+    [APCTask getSurveyByRef:cannedSurvey onCompletion:^(NSError *error) {
+        NSLog(@"Hurray");
+    }];
     APCAppDelegate * appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate.scheduler updateScheduledTasks];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

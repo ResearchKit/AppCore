@@ -32,9 +32,11 @@ static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
           if ([task.taskType isEqualToString:kCustomizableSurveyTaskType]) {
               NSString *resource = [[NSBundle mainBundle] pathForResource:taskDict[kTaskFileNameKey] ofType:@"task"];
               NSError * error;
-              NSData *taskDescription = [NSData dataWithContentsOfFile:resource];
-              [error handle];
-              task.taskDescription = taskDescription;
+              if ([[NSFileManager defaultManager] fileExistsAtPath:resource]) {
+                  NSData *taskDescription = [NSData dataWithContentsOfFile:resource];
+                  [error handle];
+                  task.taskDescription = taskDescription;
+              }
           }
           NSError * error;
           [task saveToPersistentStore:&error];
