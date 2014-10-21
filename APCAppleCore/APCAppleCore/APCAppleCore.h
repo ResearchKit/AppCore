@@ -37,6 +37,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCConfirmationView.h>
 #import <APCAppleCore/APCCriteriaCell.h>
 #import <APCAppleCore/APCForgotPasswordViewController.h>
+#import <APCAppleCore/APCForgotUsernameViewController.h>
 #import <APCAppleCore/APCIntroVideoViewController.h>
 #import <APCAppleCore/APCPasscodeView.h>
 #import <APCAppleCore/APCSegmentControl.h>
@@ -49,6 +50,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCSignupTouchIDViewController.h>
 #import <APCAppleCore/APCStudyOverviewViewController.h>
 #import <APCAppleCore/APCSpinnerViewController.h>
+#import <APCAppleCore/APCTermsAndConditionsViewController.h>
 #import <APCAppleCore/APCStepProgressBar.h>
 #import <APCAppleCore/APCTableViewItem.h>
 #import <APCAppleCore/APCUserInfoCell.h>
