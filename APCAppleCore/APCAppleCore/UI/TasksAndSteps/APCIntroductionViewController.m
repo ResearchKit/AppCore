@@ -33,8 +33,7 @@
     
     for (NSString  *imageName  in  self.instructionalImages) {
         
-        NSString   *imagePath = [[NSBundle mainBundle] pathForResource:imageName ofType:@"png"];
-        UIImage    *anImage = [UIImage imageWithContentsOfFile:imagePath];
+        UIImage    *anImage = [UIImage imageNamed:imageName];
         
         CGRect  frame = CGRectMake(imageIndex * CGRectGetWidth(self.imageScroller.frame), 0.0, CGRectGetWidth(self.imageScroller.frame), CGRectGetHeight(self.imageScroller.frame));
         UIImageView  *imager = [[UIImageView alloc] initWithFrame:frame];
