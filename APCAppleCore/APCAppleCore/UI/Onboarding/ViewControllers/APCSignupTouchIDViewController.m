@@ -69,7 +69,7 @@
 - (void)setupAppearance
 {
     [self.titleLabel setTextColor:[UIColor appSecondaryColor1]];
-    [self.titleLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
+    [self.titleLabel setFont:[UIFont appLightFontWithSize:17.0f]];
 }
 
 - (void) setupProgressBar {
