@@ -40,7 +40,7 @@
 		7BA4BBFA19D4893700BC4023 /* APCPassiveLocationTracking.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BA4BBF519D4893700BC4023 /* APCPassiveLocationTracking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BA4BBFB19D4893700BC4023 /* APCPassiveLocationTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BA4BBF619D4893700BC4023 /* APCPassiveLocationTracking.m */; };
 		7BA4BC0419D490EE00BC4023 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */; };
-		CFACE18119F73396006FDE12 /* APCIntroductionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = CFACE17E19F73396006FDE12 /* APCIntroductionViewController.h */; };
+		CFACE18119F73396006FDE12 /* APCIntroductionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = CFACE17E19F73396006FDE12 /* APCIntroductionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFACE18219F73396006FDE12 /* APCIntroductionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFACE17F19F73396006FDE12 /* APCIntroductionViewController.m */; };
 		CFACE18319F73396006FDE12 /* APCIntroductionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFACE18019F73396006FDE12 /* APCIntroductionViewController.xib */; };
 		F5008C0F19D32AD60011102F /* APCGroupedScheduledTask.h in Headers */ = {isa = PBXBuildFile; fileRef = F5008C0D19D32AD60011102F /* APCGroupedScheduledTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1110,7 +1110,6 @@
 				F57329B519DF093000A85564 /* APCUser+Bridge.h in Headers */,
 				F588BA8319D21F1300692473 /* APCUserInfoConstants.h in Headers */,
 				F588BA6619D21F1300692473 /* APCUserInfoCell.h in Headers */,
-				CFACE18119F73396006FDE12 /* APCIntroductionViewController.h in Headers */,
 				F5B4213B19D23D7700F9CD69 /* APCParametersCell.h in Headers */,
 				F588BA9A19D21F1300692473 /* YMLLineChartView.h in Headers */,
 				F5FDCF9319EC6A17002486DE /* APCAppearanceInfo.h in Headers */,
@@ -1188,6 +1187,7 @@
 				F5B4213319D23D6800F9CD69 /* APCParametersUserDefaultCell.h in Headers */,
 				F5179CD919D0917D001DCCB7 /* APCScheduler.h in Headers */,
 				5B5F178019ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h in Headers */,
+				CFACE18119F73396006FDE12 /* APCIntroductionViewController.h in Headers */,
 				F541541D19D60F3400B819C9 /* HKHealthStore+APCExtensions.h in Headers */,
 				F5179CA519D0917D001DCCB7 /* APCResult+AddOn.h in Headers */,
 				F5179CB719D0917D001DCCB7 /* APCSurveyResult+AddOn.h in Headers */,
