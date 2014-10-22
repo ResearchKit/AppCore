@@ -15,9 +15,10 @@ static CGFloat kTableViewRowHeight = 70;
 static CGFloat kTableViewSectionHeaderHeight = 30;
 static NSInteger kNumberOfSectionsInTableView = 1;
 
-@interface APCActivitiesViewController () <RKTaskViewControllerDelegate>
+@interface APCActivitiesViewController () <RKTaskViewControllerDelegate, NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) NSMutableArray *scheduledTasksArray;
+@property (strong, nonatomic) NSFetchedResultsController * scheduledTasksFRC;
 
 @end
 
@@ -39,18 +40,30 @@ static NSInteger kNumberOfSectionsInTableView = 1;
     [super viewDidLoad];
     
     self.navigationItem.title = NSLocalizedString(@"Activities", @"Activities");
+    [self setUpFRC];
+    [self updateActivities:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [self updateActivities:nil];
+    [self reloadData];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+
+- (void) setUpFRC
+{
+    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"dueOn" ascending:YES];
+    NSFetchRequest *request = [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate  requestForScheduledTasksForPredicate:nil sortDescriptors:@[dateSortDescriptor]];
+    self.scheduledTasksFRC = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext sectionNameKeyPath:nil cacheName:nil];
+    self.scheduledTasksFRC.delegate = self;
+    NSError * error;
+    [self.scheduledTasksFRC performFetch:&error];
+    [error handle];
 }
 
 #pragma mark - UITableViewDataSource Methods
@@ -184,38 +197,41 @@ static NSInteger kNumberOfSectionsInTableView = 1;
         
         if (class != [NSNull class]) {
             APCSetupTaskViewController *controller = [class customTaskViewController:scheduledTask];
-            [self presentViewController:controller animated:YES completion:nil];
+            if (controller) {
+                [self presentViewController:controller animated:YES completion:nil];
+            }
         }
     }
 }
 
 #pragma mark - Update methods
-
 - (IBAction)updateActivities:(id)sender
 {
     NSString * cannedSurvey = @"/api/v1/surveys/ecf7e761-c7e9-4bb6-b6e7-d6d15c53b209/2014-09-25T20:07:49.186Z";
+    NSLog(@"Starting Server Refresh");
     [APCTask getSurveyByRef:cannedSurvey onCompletion:^(NSError *error) {
-        NSLog(@"Hurray");
+        NSLog(@"Just Finished Server Refresh");
+        [((APCAppDelegate *)[UIApplication sharedApplication].delegate).scheduler updateScheduledTasks];
+        if (self.refreshControl.isRefreshing) {
+            [self.refreshControl endRefreshing];
+        }
     }];
-    APCAppDelegate * appDelegate = [UIApplication sharedApplication].delegate;
-    [appDelegate.scheduler updateScheduledTasks];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self reloadData];
-        [self.refreshControl endRefreshing];
-    });
-
 }
 
 - (void)reloadData
 {
     [self.scheduledTasksArray removeAllObjects];
-    
-    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"dueOn" ascending:YES];
-    NSArray *unsortedScheduledTasks = [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate  scheduledTasksForPredicate:nil sortDescriptors:@[dateSortDescriptor]];
-    
-    [self groupSimilarTasks:unsortedScheduledTasks];
-    
+    [self groupSimilarTasks:self.scheduledTasksFRC.fetchedObjects];
     [self.tableView reloadData];
+}
+
+/*********************************************************************************/
+#pragma mark - Fetched Results Delegate
+/*********************************************************************************/
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    [((APCAppDelegate *)[UIApplication sharedApplication].delegate).scheduler updateScheduledTasks];
+    [self reloadData];
 }
 
 #pragma mark - Sort and Group Task
@@ -250,7 +266,9 @@ static NSInteger kNumberOfSectionsInTableView = 1;
             groupedTask.taskClassName = scheduledTask.task.taskClassName;
             
             [self.scheduledTasksArray addObject:groupedTask];
-        } else{
+        }
+        else
+        {
             
             [self.scheduledTasksArray addObject:filteredTasksArray.firstObject];
         }

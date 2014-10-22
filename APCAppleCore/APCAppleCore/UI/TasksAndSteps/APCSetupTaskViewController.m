@@ -16,7 +16,7 @@
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask
 {
     RKTask  *task = [self createTask: scheduledTask];
-    APCSetupTaskViewController * controller = [[self alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    APCSetupTaskViewController * controller = task ? [[self alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]] : nil;
     controller.scheduledTask = scheduledTask;
     controller.taskDelegate = controller;
     return  controller;

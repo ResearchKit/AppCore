@@ -59,7 +59,7 @@ static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
 
 - (RKTask *)rkTask
 {
-    RKTask * retTask = [NSKeyedUnarchiver unarchiveObjectWithData:self.taskDescription];
+    RKTask * retTask = self.taskDescription ? [NSKeyedUnarchiver unarchiveObjectWithData:self.taskDescription] : nil;
     return retTask;
 }
 

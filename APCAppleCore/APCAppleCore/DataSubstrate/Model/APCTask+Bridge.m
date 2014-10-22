@@ -30,13 +30,18 @@
                 APCTask * task = [[context executeFetchRequest:request error:NULL] firstObject];
                 task.rkTask = [self rkTaskFromSBBSurvey:survey];
                 [task saveToPersistentStore:NULL];
+                [context processPendingChanges];
             }];
         }
         else
         {
             [error handle];
         }
-
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionBlock) {
+                completionBlock(error);
+            }
+        });
     }];
 #endif
 }
