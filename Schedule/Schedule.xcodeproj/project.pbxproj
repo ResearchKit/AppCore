@@ -19,8 +19,6 @@
 		74BB8A8B19C743D40074B901 /* APCSchedule.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 74BB8A8A19C743D40074B901 /* APCSchedule.h */; };
 		74BB8A8D19C743D40074B901 /* APCSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 74BB8A8C19C743D40074B901 /* APCSchedule.m */; };
 		74BB8A9319C743D40074B901 /* libSchedule.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74BB8A8719C743D40074B901 /* libSchedule.a */; };
-		74C61B0619CC872700CD4BD7 /* NSArray+Functional.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C61B0519CC872700CD4BD7 /* NSArray+Functional.m */; };
-		74C61B1E19CDAB5D00CD4BD7 /* APCTimePeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C61B1D19CDAB5D00CD4BD7 /* APCTimePeriod.m */; };
 		74CE0DE819DF5A4700255F61 /* APCScheduleEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CE0DE719DF5A4700255F61 /* APCScheduleEnumerator.m */; };
 /* End PBXBuildFile section */
 
@@ -68,10 +66,6 @@
 		74BB8A8C19C743D40074B901 /* APCSchedule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = APCSchedule.m; sourceTree = "<group>"; };
 		74BB8A9219C743D40074B901 /* ScheduleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScheduleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		74BB8A9819C743D40074B901 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		74C61B0419CC872700CD4BD7 /* NSArray+Functional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Functional.h"; sourceTree = "<group>"; };
-		74C61B0519CC872700CD4BD7 /* NSArray+Functional.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Functional.m"; sourceTree = "<group>"; };
-		74C61B1C19CDAB5D00CD4BD7 /* APCTimePeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTimePeriod.h; sourceTree = "<group>"; };
-		74C61B1D19CDAB5D00CD4BD7 /* APCTimePeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTimePeriod.m; sourceTree = "<group>"; };
 		74CE0DE619DF5A4700255F61 /* APCScheduleEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleEnumerator.h; sourceTree = "<group>"; };
 		74CE0DE719DF5A4700255F61 /* APCScheduleEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleEnumerator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -127,14 +121,10 @@
 				741D367119D2E25200839DFC /* APCPointSelector.m */,
 				7477D78719DDD837004662AF /* APCScheduleParser.h */,
 				7477D78819DDD837004662AF /* APCScheduleParser.m */,
-				74C61B1C19CDAB5D00CD4BD7 /* APCTimePeriod.h */,
-				74C61B1D19CDAB5D00CD4BD7 /* APCTimePeriod.m */,
 				74CE0DE619DF5A4700255F61 /* APCScheduleEnumerator.h */,
 				74CE0DE719DF5A4700255F61 /* APCScheduleEnumerator.m */,
 				74809A9419E82F8C00B6D281 /* APCTimeSelectorEnumerator.h */,
 				74809A9519E82F8C00B6D281 /* APCTimeSelectorEnumerator.m */,
-				74C61B0419CC872700CD4BD7 /* NSArray+Functional.h */,
-				74C61B0519CC872700CD4BD7 /* NSArray+Functional.m */,
 			);
 			path = Schedule;
 			sourceTree = "<group>";
@@ -248,13 +238,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				741D366F19D2E1F500839DFC /* APCTimeSelector.m in Sources */,
-				74C61B0619CC872700CD4BD7 /* NSArray+Functional.m in Sources */,
 				741D367519D2E2D200839DFC /* APCListSelector.m in Sources */,
 				741D367219D2E25200839DFC /* APCPointSelector.m in Sources */,
 				74809A9619E82F8C00B6D281 /* APCTimeSelectorEnumerator.m in Sources */,
 				7477D78919DDD837004662AF /* APCScheduleParser.m in Sources */,
 				74CE0DE819DF5A4700255F61 /* APCScheduleEnumerator.m in Sources */,
-				74C61B1E19CDAB5D00CD4BD7 /* APCTimePeriod.m in Sources */,
 				74BB8A8D19C743D40074B901 /* APCSchedule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

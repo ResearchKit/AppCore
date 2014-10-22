@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "APCTimePeriod.h"
 
 
 /**
@@ -92,24 +91,5 @@
  *  @return An enumerator, returns NSDate(s) that satisfies _self_
  */
 - (NSEnumerator*)enumeratorBeginningAtTime:(NSDate*)start endingAtTime:(NSDate*)end;
-
-
-/**
- *  Determines if _self_ would be active at some point within the provided _time period_
- *
- *  @param period The _time period_ to apply the schedule against
- *
- *  @return YES if schedule would be active; NO otherwise.
- */
-- (BOOL)isActiveForPeriod:(APCTimePeriod*)period;
-
-/**
- *  The _next_ date and time that satisfies the _schedule_
- *
- *  @param moment The period in time that needs to be looked past
- *
- *  @return The _next_ date and time that satisfies the _schedule_
- */
-- (NSDate*)nextMomentAfter:(NSDate*)moment;
 
 @end

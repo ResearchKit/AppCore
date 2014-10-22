@@ -7,7 +7,6 @@
 //
 
 #import "APCListSelector.h"
-#import "NSArray+Functional.h"
 #import "APCTimeSelectorEnumerator.h"
 
 
