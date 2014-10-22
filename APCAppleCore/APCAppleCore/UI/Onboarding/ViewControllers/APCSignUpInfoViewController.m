@@ -276,6 +276,8 @@
     return cell;
 }
 
+#pragma mark - UITableViewDelegate methods
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat height = tableView.rowHeight;
@@ -299,9 +301,16 @@
     
     if ([field isKindOfClass:[APCTableViewCustomPickerItem class]] ||
         [field isKindOfClass:[APCTableViewDatePickerItem class]]) {
+        
         [self.tableView endEditing:YES];
         [self handlePickerForIndexPath:indexPath];
+        
     } else if ([field isKindOfClass:[APCTableViewTextFieldItem class]]){
+        
+        if (self.pickerShowing) {
+            [self hidePickerCell];
+        }
+        
         APCTextFieldTableViewCell *cell = (APCTextFieldTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
         [cell.textField becomeFirstResponder];
     }
@@ -326,27 +335,33 @@
 
 - (void)pickerTableViewCell:(APCPickerTableViewCell *)cell datePickerValueChanged:(NSDate *)date
 {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    
-    APCTableViewDatePickerItem *field = self.items[indexPath.row - 1];
-    field.date = date;
-    
-    NSString *dateWithFormat = [field.date toStringWithFormat:field.dateFormat];
-    field.detailText = dateWithFormat;
-    
-    UITableViewCell *dateCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section]];
-    dateCell.detailTextLabel.text = dateWithFormat;
+    if (self.pickerShowing) {
+        
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        
+        APCTableViewDatePickerItem *field = self.items[indexPath.row - 1];
+        field.date = date;
+        
+        NSString *dateWithFormat = [field.date toStringWithFormat:field.dateFormat];
+        field.detailText = dateWithFormat;
+        
+        UITableViewCell *dateCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section]];
+        dateCell.detailTextLabel.text = dateWithFormat;
+    }
 }
 
 - (void)pickerTableViewCell:(APCPickerTableViewCell *)cell pickerViewDidSelectIndices:(NSArray *)selectedIndices
 {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    
-    APCTableViewCustomPickerItem *field = self.items[indexPath.row - 1];
-    field.selectedRowIndices = selectedIndices;
-    
-    UITableViewCell *dateCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section]];
-    dateCell.detailTextLabel.text = field.stringValue;
+    if (self.pickerShowing) {
+        
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        
+        APCTableViewCustomPickerItem *field = self.items[indexPath.row - 1];
+        field.selectedRowIndices = selectedIndices;
+        
+        UITableViewCell *dateCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section]];
+        dateCell.detailTextLabel.text = field.stringValue;
+    }
 }
 
 #pragma mark - APCTextFieldTableViewCellDelegate methods
@@ -401,6 +416,10 @@
 
 - (void)segmentedTableViewcell:(APCSegmentedTableViewCell *)cell didSelectSegmentAtIndex:(NSInteger)index
 {
+    if (self.pickerShowing) {
+        [self hidePickerCell];
+    }
+    
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     APCTableViewSegmentItem *field = self.items[indexPath.row];
@@ -443,7 +462,6 @@
     }
     
     [self.tableView endUpdates];
-    
 }
 
 - (void)showPickerAtIndex:(NSIndexPath *)indexPath {

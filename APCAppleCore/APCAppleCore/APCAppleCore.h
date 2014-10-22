@@ -103,9 +103,9 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/UIFont+APCAppearance.h>
 #import <APCAppleCore/UIColor+APCAppearance.h>
 
-static NSString *const APCUserSignedUpNotification     = @"APCUserSignedUpNotification";
-static NSString *const APCUserSignedInNotification     = @"APCUserSignedInNotification";
-static NSString *const APCUserLogOutNotification  = @"APCUserLogOutNotification";
+static NSString *const APCUserSignedUpNotification   = @"APCUserSignedUpNotification";
+static NSString *const APCUserSignedInNotification   = @"APCUserSignedInNotification";
+static NSString *const APCUserLogOutNotification     = @"APCUserLogOutNotification";
 static NSString *const APCUserDidConsentNotification = @"APCUserDidConsentNotification";
 
 static NSString *const APCAppDidRegisterUserNotification            = @"APCAppDidRegisterUserNotification";

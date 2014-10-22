@@ -32,6 +32,9 @@
 		5B5F17AF19F0893900A0E1D7 /* APCSignUpInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B5F17AD19F0893900A0E1D7 /* APCSignUpInfoViewController.m */; };
 		5B5F17B319F0896500A0E1D7 /* APCProfileViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B5F17B119F0896500A0E1D7 /* APCProfileViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B5F17B419F0896500A0E1D7 /* APCProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B5F17B219F0896500A0E1D7 /* APCProfileViewController.m */; };
+		5B9041B819F848E5005CFF77 /* APCPasscodeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B9041B519F848E5005CFF77 /* APCPasscodeViewController.h */; };
+		5B9041B919F848E5005CFF77 /* APCPasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B9041B619F848E5005CFF77 /* APCPasscodeViewController.m */; };
+		5B9041BA19F848E5005CFF77 /* APCPasscodeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B9041B719F848E5005CFF77 /* APCPasscodeViewController.xib */; };
 		5BB647A019F6F17800AA30AA /* APCTermsAndConditionsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB6479E19F6F17800AA30AA /* APCTermsAndConditionsViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BB647A119F6F17800AA30AA /* APCTermsAndConditionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB6479F19F6F17800AA30AA /* APCTermsAndConditionsViewController.m */; };
 		5BF5C90819D9E208007928D4 /* APCUser+HealthKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF5C90619D9E208007928D4 /* APCUser+HealthKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -310,6 +313,9 @@
 		5B5F17AD19F0893900A0E1D7 /* APCSignUpInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignUpInfoViewController.m; sourceTree = "<group>"; };
 		5B5F17B119F0896500A0E1D7 /* APCProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCProfileViewController.h; sourceTree = "<group>"; };
 		5B5F17B219F0896500A0E1D7 /* APCProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCProfileViewController.m; sourceTree = "<group>"; };
+		5B9041B519F848E5005CFF77 /* APCPasscodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPasscodeViewController.h; sourceTree = "<group>"; };
+		5B9041B619F848E5005CFF77 /* APCPasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPasscodeViewController.m; sourceTree = "<group>"; };
+		5B9041B719F848E5005CFF77 /* APCPasscodeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCPasscodeViewController.xib; sourceTree = "<group>"; };
 		5BB6479E19F6F17800AA30AA /* APCTermsAndConditionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTermsAndConditionsViewController.h; sourceTree = "<group>"; };
 		5BB6479F19F6F17800AA30AA /* APCTermsAndConditionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTermsAndConditionsViewController.m; sourceTree = "<group>"; };
 		5BF5C90619D9E208007928D4 /* APCUser+HealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCUser+HealthKit.h"; sourceTree = "<group>"; };
@@ -576,6 +582,16 @@
 			path = TabBarControllers;
 			sourceTree = "<group>";
 		};
+		5B9041B419F848E5005CFF77 /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				5B9041B519F848E5005CFF77 /* APCPasscodeViewController.h */,
+				5B9041B619F848E5005CFF77 /* APCPasscodeViewController.m */,
+				5B9041B719F848E5005CFF77 /* APCPasscodeViewController.xib */,
+			);
+			path = Others;
+			sourceTree = "<group>";
+		};
 		7BA4BBF119D4893700BC4023 /* PassiveLocationTracking */ = {
 			isa = PBXGroup;
 			children = (
@@ -825,6 +841,7 @@
 		F588BA1C19D21F1300692473 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				5B9041B419F848E5005CFF77 /* Others */,
 				5B5F17B019F0896500A0E1D7 /* TabBarControllers */,
 				F5008C1619D32CB70011102F /* Activities */,
 				F588BA1D19D21F1300692473 /* Onboarding */,
@@ -1185,6 +1202,7 @@
 				F5179CD919D0917D001DCCB7 /* APCScheduler.h in Headers */,
 				5B5F178019ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h in Headers */,
 				F541541D19D60F3400B819C9 /* HKHealthStore+APCExtensions.h in Headers */,
+				5B9041B819F848E5005CFF77 /* APCPasscodeViewController.h in Headers */,
 				F5179CA519D0917D001DCCB7 /* APCResult+AddOn.h in Headers */,
 				F5179CB719D0917D001DCCB7 /* APCSurveyResult+AddOn.h in Headers */,
 				5BB647A019F6F17800AA30AA /* APCTermsAndConditionsViewController.h in Headers */,
@@ -1280,6 +1298,7 @@
 				F554FF2A19E7331800BA729A /* APCParameters.storyboard in Resources */,
 				F5C1DC3D19D23044006527EA /* tab_dashboard_selected@2x.png in Resources */,
 				F5C1DC2319D22EAF006527EA /* TabBar.storyboard in Resources */,
+				5B9041BA19F848E5005CFF77 /* APCPasscodeViewController.xib in Resources */,
 				F57329A819DF059500A85564 /* APCEmailVerify.storyboard in Resources */,
 				F5179F6019D0B443001DCCB7 /* APCModel.xcdatamodeld in Resources */,
 				5B29CE3D19D3769E00E2FD62 /* APCPermissionsCell.xib in Resources */,
@@ -1360,6 +1379,7 @@
 				F588BA9119D21F1300692473 /* APCStepProgressBar.m in Sources */,
 				5B29CE4C19D4902B00E2FD62 /* APCStudyOverviewViewController.m in Sources */,
 				F588BA1B19D21EFE00692473 /* UIView+Helper.m in Sources */,
+				5B9041B919F848E5005CFF77 /* APCPasscodeViewController.m in Sources */,
 				F5179CAF19D0917D001DCCB7 /* APCSchedule.m in Sources */,
 				5B29CE3C19D3769E00E2FD62 /* APCPermissionsCell.m in Sources */,
 				F588BA0319D21EFE00692473 /* NSDate+Helper.m in Sources */,

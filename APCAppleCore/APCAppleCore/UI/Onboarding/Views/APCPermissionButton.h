@@ -18,4 +18,5 @@
 
 @property (nonatomic) BOOL shouldHighlightText;
 
+@property (nonatomic, getter=isSelected) BOOL selected;
 @end

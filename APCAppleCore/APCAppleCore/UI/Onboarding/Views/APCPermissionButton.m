@@ -24,6 +24,7 @@ static CGFloat kViewsPadding           = 10.f;
 @implementation APCPermissionButton
 
 @synthesize titleLabel = _titleLabel;
+@synthesize selected = _selected;
 
 - (void)awakeFromNib
 {
@@ -50,8 +51,15 @@ static CGFloat kViewsPadding           = 10.f;
     self.titleLabel.frame = CGRectMake(CGRectGetMaxX(self.confirmationView.frame) + kViewsPadding, (CGRectGetHeight(self.frame) - kTitleLabelHeight)/2, textWidth, kTitleLabelHeight);
 }
 
+- (BOOL)isSelected
+{
+    return _selected;
+}
+
 - (void)setSelected:(BOOL)selected
 {
+    _selected = selected;
+    
     if (selected) {
         self.titleLabel.text = self.confirmedTitle;
         if (self.shouldHighlightText) {

@@ -31,6 +31,8 @@
 
 @property (weak, nonatomic) IBOutlet UIView *footerView;
 
+@property (weak, nonatomic) IBOutlet UILabel *footerTitleLabel;
+
 @property (weak, nonatomic) IBOutlet UILabel *diseaseLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *dateRangeLabel;
