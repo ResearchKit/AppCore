@@ -125,7 +125,7 @@
     
 }
 
-- (void)setupDefaultCellAppearance:(UITableViewCell *)cell
+- (void)setupDefaultCellAppearance:(APCDefaultTableViewCell *)cell
 {
     [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
     [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
@@ -224,29 +224,38 @@
             }
             else if ([field isKindOfClass:[APCTableViewDatePickerItem class]]) {
                 
-                if (!cell) {
-                    cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
-                }
-                
                 APCTableViewDatePickerItem *datePickerField = (APCTableViewDatePickerItem *)field;
+                APCDefaultTableViewCell *defaultCell = (APCDefaultTableViewCell *)cell;
                 
                 NSString *dateWithFormat = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
-                cell.detailTextLabel.text = dateWithFormat;
+                defaultCell.detailTextLabel.text = dateWithFormat;
+                
+                if (field.textAlignnment == NSTextAlignmentRight) {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeRight;
+                } else {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeLeft;
+                }
+                
+                [self setupDefaultCellAppearance:defaultCell];
                 
             }
             else if ([field isKindOfClass:[APCTableViewCustomPickerItem class]]) {
-                if (!cell) {
-                    cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
+
+                APCTableViewCustomPickerItem *customPickerField = (APCTableViewCustomPickerItem *)field;
+                APCDefaultTableViewCell *defaultCell = (APCDefaultTableViewCell *)cell;
+                
+                defaultCell.detailTextLabel.text = customPickerField.stringValue;
+                
+                if (field.textAlignnment == NSTextAlignmentRight) {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeRight;
+                } else {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeLeft;
                 }
                 
-                APCTableViewCustomPickerItem *customPickerField = (APCTableViewCustomPickerItem *)field;
-                cell.detailTextLabel.text = customPickerField.stringValue;
+                [self setupDefaultCellAppearance:defaultCell];
                 
             } else if ([field isKindOfClass:[APCTableViewSegmentItem class]]) {
-                if (!cell) {
-                    cell = [[APCSegmentedTableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
-                }
-                
+
                 APCTableViewSegmentItem *segmentPickerField = (APCTableViewSegmentItem *)field;
                 APCSegmentedTableViewCell *segmentedCell = (APCSegmentedTableViewCell *)cell;
                 segmentedCell.delegate = self;
@@ -261,8 +270,6 @@
             cell.selectionStyle = field.selectionStyle;
             cell.textLabel.text = field.caption;
             cell.detailTextLabel.text = field.detailText;
-            
-            [self setupDefaultCellAppearance:cell];
             
             if (self.isEditing) {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

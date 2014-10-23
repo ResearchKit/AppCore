@@ -38,7 +38,7 @@
 {
     [super viewDidLayoutSubviews];
     
-    self.tableView.tableHeaderView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 127);
+    self.headerView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 127);
 
 }
 - (void)didReceiveMemoryWarning {
@@ -220,6 +220,10 @@
     
     [self.editLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.editLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
+    
+    [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+    [self.tableView setLayoutMargins:UIEdgeInsetsZero];
+    [self.tableView layoutIfNeeded];
 }
 
 - (void)setupPickerCellAppeareance:(APCPickerTableViewCell *)cell
@@ -336,23 +340,42 @@
             }
             else if ([field isKindOfClass:[APCTableViewDatePickerItem class]]) {
                 
-                if (!cell) {
-                    cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
-                }
-                
                 APCTableViewDatePickerItem *datePickerField = (APCTableViewDatePickerItem *)field;
+                APCDefaultTableViewCell *defaultCell = (APCDefaultTableViewCell *)cell;
                 
                 NSString *dateWithFormat = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
                 cell.detailTextLabel.text = dateWithFormat;
                 
-            }
-            else if ([field isKindOfClass:[APCTableViewCustomPickerItem class]]) {
-                if (!cell) {
-                    cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
+                if (field.textAlignnment == NSTextAlignmentRight) {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeRight;
+                } else {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeLeft;
                 }
                 
+                [self setupDefaultCellAppearance:defaultCell];
+                
+            }
+            else if ([field isKindOfClass:[APCTableViewCustomPickerItem class]]) {
+                
                 APCTableViewCustomPickerItem *customPickerField = (APCTableViewCustomPickerItem *)field;
+                APCDefaultTableViewCell *defaultCell = (APCDefaultTableViewCell *)cell;
+                
                 cell.detailTextLabel.text = customPickerField.stringValue;
+                
+                if (field.textAlignnment == NSTextAlignmentRight) {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeRight;
+                } else {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeLeft;
+                }
+                
+                [self setupDefaultCellAppearance:defaultCell];
+                
+            } else if ([field isKindOfClass:[APCTableViewSegmentItem class]]) {
+                
+                APCTableViewSegmentItem *segmentPickerField = (APCTableViewSegmentItem *)field;
+                APCSegmentedTableViewCell *segmentedCell = (APCSegmentedTableViewCell *)cell;
+                segmentedCell.delegate = self;
+                segmentedCell.selectedSegmentIndex = segmentPickerField.selectedIndex;
                 
             } else {
                 if (!cell) {
@@ -363,8 +386,6 @@
             cell.selectionStyle = field.selectionStyle;
             cell.textLabel.text = field.caption;
             cell.detailTextLabel.text = field.detailText;
-            
-            [self setupDefaultCellAppearance:cell];
             
             if (self.isEditing) {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

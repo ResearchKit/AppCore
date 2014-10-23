@@ -49,6 +49,4 @@ static NSString * const kAPCMedicalInfoItemWeightRegEx          = @"[0-9]{1,4}";
 
 static NSString * const kAPCMedicalInfoItemSleepTimeFormat     = @"hh:mm a";
 
-static NSString * const kAPCDefaultTableViewCellIdentifier = @"APCDefaultTableViewCell";
-
 #endif
