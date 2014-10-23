@@ -42,6 +42,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
     
     self.dateFormatter = [[NSDateFormatter alloc] init];
     [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+    [self.dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:-8 * 60 * 60]];
 
     self.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     
@@ -67,10 +68,10 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 {
     NSDate* nextMoment = nil;
     
-    year   = year ?: self.everyYear;
-    month  = month ?: self.everyMonth;
-    day    = day ?: self.everyDay;
-    hour   = hour ?: self.everyHour;
+    year   = year   ?: self.everyYear;
+    month  = month  ?: self.everyMonth;
+    day    = day    ?: self.everyDay;
+    hour   = hour   ?: self.everyHour;
     minute = minute ?: self.everyMinute;
     
     for (NSNumber* aYear in year)
@@ -109,7 +110,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
     }
 }
 
-- (void)testEnumeratingConstantMinutes
+- (void)testEnumerationOfConstantMinutes
 {
     NSString*       cronExpression = @"A 5 * * * *";
     APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
@@ -121,6 +122,22 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
                         hour:nil
                       minute:@[@5]
          comparingEnumerator:enumerator];
+}
+
+- (void)testBoundedEnumerationOfConstantMinutes
+{
+    NSString*       cronExpression    = @"A 5 * * * *";
+    APCSchedule*    schedule          = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    NSEnumerator*   boundedEnumerator = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]
+                                                               endingAtTime:[self.dateFormatter dateFromString:@"2014-01-01 23:59"]];
+
+    [self enumerateOverYears:@[@2014]
+                       month:@[@1]
+                         day:@[@1]
+                        hour:nil
+                      minute:@[@5]
+         comparingEnumerator:boundedEnumerator];
+    XCTAssertNil([boundedEnumerator nextObject]);
 }
 
 - (void)testEnumeratingMinuteList

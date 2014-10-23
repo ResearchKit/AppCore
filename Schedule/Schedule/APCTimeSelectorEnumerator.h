@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "APCTimeSelector.h"
 
+//  Private implementation.
+
 @interface APCTimeSelectorEnumerator : NSEnumerator
 
 @property (nonatomic, strong) APCTimeSelector* selector;

@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "APCListSelector.h"
 
+//  Private implementation.
+
 @interface APCScheduleEnumerator : NSEnumerator
 
 - (instancetype)initWithBeginningTime:(NSDate*)begin

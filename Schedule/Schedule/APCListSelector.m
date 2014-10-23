@@ -30,13 +30,13 @@
     return enumerator;
 }
 
-- (NSNumber*)firstValidValue
+- (NSNumber*)initialValue
 {
     __block NSNumber*   first;
     
     [self.subSelectors enumerateObjectsUsingBlock:^(APCTimeSelector* selector, NSUInteger ndx, BOOL* stop)
     {
-        NSNumber*   subFirst = [selector firstValidValue];
+        NSNumber*   subFirst = [selector initialValue];
         if (first == nil || [subFirst compare:first] == NSOrderedAscending)
         {
             first = subFirst;

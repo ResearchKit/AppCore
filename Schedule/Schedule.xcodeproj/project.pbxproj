@@ -52,7 +52,6 @@
 		741D367119D2E25200839DFC /* APCPointSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPointSelector.m; sourceTree = "<group>"; };
 		741D367319D2E2D200839DFC /* APCListSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCListSelector.h; sourceTree = "<group>"; };
 		741D367419D2E2D200839DFC /* APCListSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCListSelector.m; sourceTree = "<group>"; };
-		741D367919D317B200839DFC /* APCSelectorId.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APCSelectorId.h; sourceTree = "<group>"; };
 		745A41C819DEF8CB001E6542 /* APCPointSelectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPointSelectorTests.m; sourceTree = "<group>"; };
 		7477D78719DDD837004662AF /* APCScheduleParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleParser.h; sourceTree = "<group>"; };
 		7477D78819DDD837004662AF /* APCScheduleParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleParser.m; sourceTree = "<group>"; };
@@ -110,21 +109,9 @@
 		74BB8A8919C743D40074B901 /* Schedule */ = {
 			isa = PBXGroup;
 			children = (
-				741D367919D317B200839DFC /* APCSelectorId.h */,
 				74BB8A8A19C743D40074B901 /* APCSchedule.h */,
 				74BB8A8C19C743D40074B901 /* APCSchedule.m */,
-				741D366D19D2E1F500839DFC /* APCTimeSelector.h */,
-				741D366E19D2E1F500839DFC /* APCTimeSelector.m */,
-				741D367319D2E2D200839DFC /* APCListSelector.h */,
-				741D367419D2E2D200839DFC /* APCListSelector.m */,
-				741D367019D2E25200839DFC /* APCPointSelector.h */,
-				741D367119D2E25200839DFC /* APCPointSelector.m */,
-				7477D78719DDD837004662AF /* APCScheduleParser.h */,
-				7477D78819DDD837004662AF /* APCScheduleParser.m */,
-				74CE0DE619DF5A4700255F61 /* APCScheduleEnumerator.h */,
-				74CE0DE719DF5A4700255F61 /* APCScheduleEnumerator.m */,
-				74809A9419E82F8C00B6D281 /* APCTimeSelectorEnumerator.h */,
-				74809A9519E82F8C00B6D281 /* APCTimeSelectorEnumerator.m */,
+				74F4789719F98AD000BA44AE /* Internal Implementation */,
 			);
 			path = Schedule;
 			sourceTree = "<group>";
@@ -147,6 +134,25 @@
 				74BB8A9819C743D40074B901 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		74F4789719F98AD000BA44AE /* Internal Implementation */ = {
+			isa = PBXGroup;
+			children = (
+				741D366D19D2E1F500839DFC /* APCTimeSelector.h */,
+				741D366E19D2E1F500839DFC /* APCTimeSelector.m */,
+				741D367319D2E2D200839DFC /* APCListSelector.h */,
+				741D367419D2E2D200839DFC /* APCListSelector.m */,
+				741D367019D2E25200839DFC /* APCPointSelector.h */,
+				741D367119D2E25200839DFC /* APCPointSelector.m */,
+				7477D78719DDD837004662AF /* APCScheduleParser.h */,
+				7477D78819DDD837004662AF /* APCScheduleParser.m */,
+				74CE0DE619DF5A4700255F61 /* APCScheduleEnumerator.h */,
+				74CE0DE719DF5A4700255F61 /* APCScheduleEnumerator.m */,
+				74809A9419E82F8C00B6D281 /* APCTimeSelectorEnumerator.h */,
+				74809A9519E82F8C00B6D281 /* APCTimeSelectorEnumerator.m */,
+			);
+			name = "Internal Implementation";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

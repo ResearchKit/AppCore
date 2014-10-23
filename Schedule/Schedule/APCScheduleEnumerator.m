@@ -27,7 +27,6 @@ static NSInteger    kYearIndex   = 4;
 @property (nonatomic, assign) NSInteger         year;
 @property (nonatomic, strong) NSMutableArray*   enumerators;    //  array of APCTimeSelectorEnumerator
 @property (nonatomic, strong) NSMutableArray*   componenets;    //  arrray of NSNumbers
-@property (nonatomic, assign) NSInteger         componentIndex;
 
 @end
 
@@ -65,11 +64,10 @@ static NSInteger    kYearIndex   = 4;
     if (self)
     {
         NSDateComponents*   beginComponents = nil;
-        NSCalendarUnit      calendarUnits    = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
+        NSCalendarUnit      calendarUnits   = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
         
         _beginningMoment = begin;
         _endingMoment    = end;
-        _componentIndex  = 0;
         
         _calendar       = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         beginComponents = [_calendar components:calendarUnits fromDate:begin];
@@ -90,7 +88,7 @@ static NSInteger    kYearIndex   = 4;
         
 
         //  Prime the enumerators to their first valid value. If a given enumerator's first valid value is
-        //  greater than the corresponding given begin component then all lower granularity components are
+        //  greater than the corresponding given `begin` component then all lower granularity components are
         //  reset to the selector's first valid value.
         NSInteger   ndx = _enumerators.count - 1;
         do
@@ -139,7 +137,7 @@ static NSInteger    kYearIndex   = 4;
     NSDate* savedMoment = self.nextMoment;
 
     NSNumber*   nextPoint = nil;
-    NSInteger   ndx       = 0;//self.componentIndex;
+    NSInteger   ndx       = 0;
     
     do
     {
@@ -158,8 +156,13 @@ static NSInteger    kYearIndex   = 4;
         }
     } while (nextPoint == nil && ndx < self.enumerators.count);
     
-    self.componentIndex = ndx;
-    self.nextMoment     = [self componentsToDate];
+    self.nextMoment = [self componentsToDate];
+    
+    //  Have the range been exceeded?
+    if ([self.endingMoment compare:self.nextMoment] == NSOrderedAscending)
+    {
+        self.nextMoment = nil;
+    }
     
     return savedMoment;
 }
@@ -169,10 +172,10 @@ static NSInteger    kYearIndex   = 4;
     NSDateComponents*   dateComponents = [[NSDateComponents alloc] init];
     
     dateComponents.calendar = self.calendar;
-    dateComponents.year     = [self.componenets[kYearIndex] integerValue];
-    dateComponents.month    = [self.componenets[kMonthIndex] integerValue];
-    dateComponents.day      = [self.componenets[kDayIndex] integerValue];
-    dateComponents.hour     = [self.componenets[kHourIndex] integerValue];
+    dateComponents.year     = [self.componenets[kYearIndex]   integerValue];
+    dateComponents.month    = [self.componenets[kMonthIndex]  integerValue];
+    dateComponents.day      = [self.componenets[kDayIndex]    integerValue];
+    dateComponents.hour     = [self.componenets[kHourIndex]   integerValue];
     dateComponents.minute   = [self.componenets[kMinuteIndex] integerValue];
     
     return [dateComponents date];

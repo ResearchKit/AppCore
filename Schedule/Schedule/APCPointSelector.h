@@ -8,6 +8,7 @@
 
 #import "APCTimeSelector.h"
 
+//  Private implementation.
 
 typedef NS_ENUM(NSInteger, UnitType)
 {

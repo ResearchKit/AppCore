@@ -10,10 +10,24 @@
 
 
 /**
- A *schedule* represents a potentially infinite sequence of date-time events. This sequence is 
- represented by a cron expression with the addition of a _relative indicator_. The relative 
- indicator was added in order to support 24-hours periods that could begin at times other than 
- midnight.
+ 
+ The `APCSchedule` class is the public interface for scheduled backed by a modified cron expression.
+ 
+ Example usage:
+    APCSchedule*    schedule   = [[APCSchedule alloc] initWithExpression:@"A 5 * * * *" timeZero:0];
+    NSEnumerator*   enumerator = [schedule enumeratorBeginningAtTime:[dateFormatter dateFromString:@"2014-01-01 06:00"]];
+
+    NSDate* date;
+    while ((date = enumerator.nextObject))
+    {
+        NSLog(@"Date: %@", date);
+    }
+
+ 
+ A *schedule* represents a potentially infinite sequence of `moments` (date-time events). This
+ sequence is represented by a cron expression with the addition of a `relative indicator`. The
+ relative indicator was added in order to support 24-hours periods that could begin at times other
+ than midnight.
 
  The supported cron expression is as follows:
  
@@ -42,7 +56,7 @@
     *   Matches all values. Example: an ‘*’ in the Day of Month field means every day.
     ,   Separate items of a list. Example: 7,14,21 for the Day of Week field means the 7th, 14th,
         and 21st day on the month.
-    -  Ranges. Example: 9-12 for the Month field means Sept through December.
+    -   Ranges. Example: 9-12 for the Month field means Sept through December.
 
  A schedule is considered satisified if all the date and time fields match the provided date and time
  (logical conjunction). There is a partial relaxation if the Day of Week and Day of Month are restricted
@@ -57,8 +71,8 @@
  *  Designated initializer
  *
  *  @param expression A modified cron expression that identifies point in time in which the 
- *                    _schedule_ is satisfied
- *  @param timeZero   An non-negative offset from midnight that will be considered as _time zero_ 
+ *                    `schedule` is satisfied
+ *  @param timeZero   An non-negative offset from midnight that will be considered as `time zero`
  *                    for satisifing a schedule.
  *
  *  @return instancetype
@@ -68,27 +82,27 @@
 /**
  *  isValid
  *
- *  @return True if the cron expression provided was parseable.
+ *  @return True if the cron expression provided was parsable.
  */
 - (BOOL)isValid;
 
 /**
- *  An enumerator that provides an infinite sequence of NSDates that satisfies _self_, beginning at 
- *  _start date_
+ *  An enumerator that provides an infinite sequence of NSDates that satisfies `self`, beginning at
+ *  `start date`
  *
  *  @param start The point in time in which to begin the enumeration
  *
- *  @return An enumerator; returns NSDate(s) that satisfies _self_
+ *  @return An enumerator; returns NSDate(s) that satisfies `self`
  */
 - (NSEnumerator*)enumeratorBeginningAtTime:(NSDate*)start;
 
 /**
- *  An enumerator that provides a sequence of NSDates from _start_ to _end_ that satifisies _self_
+ *  An enumerator that provides a finite sequence of NSDates from `start` to `end` that satifisies `self`
  *
  *  @param start The initial date and time to begin the enumeration, inlcusive.
  *  @param end   The final date and time to end the enumeration, exclusive.
  *
- *  @return An enumerator, returns NSDate(s) that satisfies _self_
+ *  @return An enumerator, returns NSDate(s) that satisfies `self`
  */
 - (NSEnumerator*)enumeratorBeginningAtTime:(NSDate*)start endingAtTime:(NSDate*)end;
 

@@ -10,6 +10,11 @@
 
 @implementation APCTimeSelector
 
+- (NSNumber*)initialValue
+{
+    return nil;
+}
+
 - (BOOL)matches:(NSNumber*)value
 {
     return NO;
@@ -21,11 +26,6 @@
 }
 
 - (APCTimeSelectorEnumerator*)enumeratorBeginningAt:(NSNumber*)value
-{
-    return nil;
-}
-
-- (NSNumber*)firstValidValue
 {
     return nil;
 }

@@ -39,7 +39,7 @@
         
         if (beginning != nil)
         {
-            NSNumber*   first = [selector firstValidValue];
+            NSNumber*   first = [selector initialValue];
             
             if ([beginning compare:first] == NSOrderedAscending)    //  beginning < first?
             {
@@ -76,7 +76,7 @@
 
 - (NSNumber*)nextObjectAfterRollover
 {
-    NSNumber*   nextMoment = [self.selector firstValidValue];
+    NSNumber*   nextMoment = [self.selector initialValue];
     
     self.previousMoment = nextMoment;
     

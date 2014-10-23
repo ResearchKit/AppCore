@@ -35,32 +35,40 @@
                     endRange:(NSNumber*)end
                         step:(NSNumber*)step
 {
-    //  TODO: Considering initializing step to 1 if end is provided but not step.
-    //      If done, step will only by nil if not provided and end not specified.
     self = [self initWithUnit:unitType];
     
-    if (begin == nil && end == nil && step == nil)  //  Wildcard?
-    {
-        step = @1;
-    }
-
-    _begin = begin == nil ? _defaultBegin : begin;
-    if ((end == nil && begin == nil) || (end == nil && step != nil))
-    {
-        _end = _defaultEnd;
-    }
-    else
-    {
-        _end = end;
-    }
+    //  Point selector iff begin != nil && (end == nil && step == nil)
+    //  Range selector iff begin != nil && (end != nil || step != nil)
+    //  Wildcard selector iff begin == nil && end == nil && step == nil
     
-    if (step == nil && end != nil)
+    if (begin == nil && end == nil && step == nil)          // Wildcard w/o step?
     {
-        _step = @1;
+        _begin = _defaultBegin;
+        _end   = _defaultEnd;
+        _step  = @1;
+    }
+    else if (begin == nil && end == nil && step != nil)     //  Wildcard with step?
+    {
+        _begin = _defaultBegin;
+        _end   = _defaultEnd;
+        _step  = step;
+    }
+    else if (begin != nil && end == nil && step == nil)     //  Point selector?
+    {
+        _begin = begin;
+        _end   = nil;
+        _step  = nil;
+    }
+    else if (begin != nil && (end != nil || step != nil))   //  Range selector?
+    {
+        _begin = begin;
+        _end   = end   == nil ? _defaultEnd   : end;
+        _step  = step  == nil ? @1            : step;
     }
     else
     {
-        _step  = step;
+        NSLog(@"Invalid selector");
+        self = nil;
     }
     
     if (_begin.integerValue < _defaultBegin.integerValue || _end.integerValue > _defaultEnd.integerValue)
@@ -129,13 +137,15 @@
     return enumerator;
 }
 
-- (NSNumber*)firstValidValue
+- (NSNumber*)initialValue
 {
     return self.begin;
 }
 
 - (BOOL)matches:(NSNumber*)value
 {
+    NSParameterAssert(self.begin != nil);
+    
     BOOL    isMatch = NO;
     
     //  * An expression with only a _begin_ value represents a single point in time.
@@ -148,36 +158,29 @@
     //    is explicit: _end_.
     
 
-    if (self.begin != nil)
+    if (self.end != nil)
     {
-        if (self.end != nil)
+        BOOL    withinRange = self.begin.integerValue <= value.integerValue && value.integerValue <= self.end.integerValue;
+        
+        if (self.step != nil)
         {
-            if (self.step != nil)
-            {
-                isMatch = self.begin.integerValue <= value.integerValue &&
-                          value.integerValue <= self.end.integerValue   &&
-                          value.integerValue % self.step.integerValue == 0;
-            }
-            else
-            {
-                isMatch = self.begin.integerValue <= value.integerValue && value.integerValue <= self.end.integerValue;
-            }
+            isMatch = withinRange && value.integerValue % self.step.integerValue == 0;
         }
         else
         {
-            if (self.step != nil)
-            {
-                isMatch = self.begin.integerValue <= value.integerValue && value.integerValue % self.step.integerValue == 0;
-            }
-            else
-            {
-                isMatch = self.begin.integerValue == value.integerValue;
-            }
+            isMatch = withinRange;
         }
     }
     else
     {
-        //  TODO: handle exception
+        if (self.step != nil)
+        {
+            isMatch = self.begin.integerValue <= value.integerValue && value.integerValue % self.step.integerValue == 0;
+        }
+        else
+        {
+            isMatch = self.begin.integerValue == value.integerValue;
+        }
     }
     
     return isMatch;
@@ -185,13 +188,15 @@
 
 - (NSNumber*)nextMomentAfter:(NSNumber*)point
 {
-    //  if currentValue + step <= end then nextValue = currentValue + step
-    //  if currentValue + step > end then nextValue = beginValue
+    //  If currentValue + step <  begin then nextValue = begin
+    //  if currentValue + step <= end   then nextValue = currentValue + step
+    //  if currentValue + step >  end   then nextValue = nil
+    
     NSNumber*   nextPoint = nil;
     
     if (self.step != nil)
     {
-        nextPoint = @(point.integerValue -  (point.integerValue % self.step.integerValue) + self.step.integerValue);
+        nextPoint = @(point.integerValue - (point.integerValue % self.step.integerValue) + self.step.integerValue);
         
         if (nextPoint.integerValue < self.begin.integerValue)
         {
