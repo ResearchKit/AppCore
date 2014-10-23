@@ -9,6 +9,23 @@
 #import "APCTask+Bridge.h"
 #import <ResearchKit/ResearchKit.h>
 #import <BridgeSDK/BridgeSDK.h>
+#import <Foundation/Foundation.h>
+
+@class APCDummyObject;
+static APCDummyObject * _dummyObject;
+
+@interface APCDummyObject : NSObject
+
+- (RKAnswerFormat*) rkBooleanAnswerFormat: (SBBSurveyConstraints*) constraints;
+- (RKAnswerFormat*) rkDateAnswerFormat: (SBBSurveyConstraints*) constraints;
+- (RKAnswerFormat*) rkNumericAnswerFormat: (SBBSurveyConstraints*) constraints;
+- (RKAnswerFormat*) rkTimeIntervalAnswerFormat: (SBBSurveyConstraints*) constraints;
+- (RKAnswerFormat*) rkChoiceAnswerFormat: (SBBSurveyConstraints*) constraints;
+- (RKAnswerFormat*) rkTextAnswerFormat: (SBBSurveyConstraints*) constraints;
+
+@end
+
+
 
 @implementation APCTask (Bridge)
 
@@ -46,6 +63,23 @@
 #endif
 }
 
++ (NSString *) lookUpAnswerFormatMethod: (NSString*) SBBClassName
+{
+    NSDictionary * answerFormatClass = @{
+                                         @"SBBBooleanConstraints"   :   @"rkBooleanAnswerFormat:",
+                                         @"SBBDateConstraints"      :   @"rkDateAnswerFormat:",
+                                         @"SBBDateTimeConstraints"  :   @"rkDateAnswerFormat:",
+                                         @"SBBDecimalConstraints"   :   @"rkNumericAnswerFormat:",
+                                         @"SBBDurationConstraints"  :   @"rkTimeIntervalAnswerFormat:",
+                                         @"SBBIntegerConstraints"   :   @"rkNumericAnswerFormat:",
+                                         @"SBBMultiValueConstraints":   @"rkChoiceAnswerFormat:",
+                                         @"SBBTimeConstraints"      :   @"rkDateAnswerFormat:",
+                                         @"SBBStringConstraints"    :   @"rkTextAnswerFormat:"
+                                         };
+    NSAssert(answerFormatClass[SBBClassName], @"SBBClass Not Defined");
+    return answerFormatClass[SBBClassName];
+}
+
 /*********************************************************************************/
 #pragma mark - SBB to RKTask Conversion
 /*********************************************************************************/
@@ -63,13 +97,88 @@
 {
     RKQuestionStep * retStep = [[RKQuestionStep alloc] initWithIdentifier:question.guid name:question.identifier];
     retStep.question = question.prompt;
-    
-    NSMutableArray * options = [NSMutableArray array];
-    [[(SBBMultiValueConstraints*) question.constraints enumeration] enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger idx, BOOL *stop) {
-        [options addObject:option.label];
-    }];
-    RKAnswerFormat * answerFormat = [RKChoiceAnswerFormat choiceAnswerWithOptions:options style:RKChoiceAnswerStyleSingleChoice];
-    retStep.answerFormat = answerFormat;
+    retStep.answerFormat = [self rkAnswerFormatFromSBBSurveyConstraints:question.constraints];
     return retStep;
 }
+
++ (RKAnswerFormat*) rkAnswerFormatFromSBBSurveyConstraints: (SBBSurveyConstraints*) constraints
+{
+    RKAnswerFormat * retAnswer;
+    
+    if (!_dummyObject) {
+        _dummyObject = [[APCDummyObject alloc] init];
+    }
+    
+    NSString * selectorName = [self lookUpAnswerFormatMethod:NSStringFromClass([constraints class])];
+    SEL selector = NSSelectorFromString(selectorName);
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+    retAnswer = (RKAnswerFormat*) [_dummyObject performSelector:selector withObject:constraints];
+#pragma clang diagnostic pop
+
+    
+    return retAnswer;
+}
+
+@end
+
+@implementation APCDummyObject
+
+/*********************************************************************************/
+#pragma mark - Answer Format Methods
+/*********************************************************************************/
+-(RKAnswerFormat *)rkBooleanAnswerFormat:(SBBSurveyConstraints *)constraints
+{
+    RKAnswerFormat * retAnswer = [[RKBooleanAnswerFormat alloc] init];
+    return retAnswer;
+}
+
+- (RKAnswerFormat *)rkDateAnswerFormat:(SBBSurveyConstraints *)constraints
+{
+    RKAnswerFormat * retAnswer;
+    if ([constraints isKindOfClass:[SBBDateTimeConstraints class]]) {
+        retAnswer = [RKDateAnswerFormat dateTimeAnswer];
+//        SBBDateTimeConstraints * localConstraints = (SBBDateTimeConstraints*)constraints;
+    }
+    else if ([constraints isKindOfClass:[SBBDateConstraints class]]) {
+//        SBBDateConstraints * localConstraints = (SBBDateConstraints*)constraints;
+    }
+    else if ([constraints isKindOfClass:[SBBTimeConstraints class]]) {
+//        SBBTimeConstraints * localConstraints = (SBBTimeConstraints*)constraints;
+    }
+    return retAnswer;
+}
+
+- (RKAnswerFormat*) rkChoiceAnswerFormat: (SBBSurveyConstraints*) constraints
+{
+    RKAnswerFormat * retAnswer;
+    SBBMultiValueConstraints * localConstraints = (SBBMultiValueConstraints*)constraints;
+    NSMutableArray * options = [NSMutableArray array];
+    [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger idx, BOOL *stop) {
+        [options addObject:option.label];
+    }];
+    if (localConstraints.allowOtherValue) {
+        [options addObject:NSLocalizedString(@"Other", @"Spinner Option")];
+    }
+    retAnswer = [RKChoiceAnswerFormat choiceAnswerWithOptions:options style: localConstraints.allowMultipleValue ? RKChoiceAnswerStyleMultipleChoice : RKChoiceAnswerStyleSingleChoice];
+    return retAnswer;
+}
+
+- (RKAnswerFormat *)rkNumericAnswerFormat:(SBBSurveyConstraints *)constraints
+{
+    return [RKNumericAnswerFormat decimalAnswerWithUnit:nil];
+}
+
+- (RKAnswerFormat *)rkTextAnswerFormat:(SBBSurveyConstraints *)constraints
+{
+    return [RKTextAnswerFormat textAnswer];
+}
+
+- (RKAnswerFormat *)rkTimeIntervalAnswerFormat:(SBBSurveyConstraints *)constraints
+{
+    return [RKTimeIntervalAnswerFormat timeIntervalAnswer];
+}
+
+
 @end
