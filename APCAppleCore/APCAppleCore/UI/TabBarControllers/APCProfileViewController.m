@@ -56,6 +56,7 @@
         field.caption = NSLocalizedString(@"Email", @"");
         field.identifier = kAPCDefaultTableViewCellIdentifier;
         field.editable = NO;
+        field.detailText = self.user.email;
         [self.items addObject:field];
         [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemEmail)];
     }
@@ -65,6 +66,7 @@
         field.caption = NSLocalizedString(@"Birthdate", @"");
         field.identifier = kAPCDefaultTableViewCellIdentifier;
         field.editable = NO;
+        field.detailText = [self.user.birthDate toStringWithFormat:NSDateDefaultDateFormat];
         [self.items addObject:field];
         [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemDateOfBirth)];
     }
@@ -74,6 +76,7 @@
         field.caption = NSLocalizedString(@"Biological Sex", @"");
         field.identifier = kAPCDefaultTableViewCellIdentifier;
         field.editable = NO;
+        field.detailText = [APCUser stringValueFromSexType:self.user.biologicalSex];
         [self.items addObject:field];
         [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemGender)];
     }
@@ -160,6 +163,7 @@
         
         if (self.user.sleepTime) {
             field.date = self.user.sleepTime;
+            field.detailText = [field.date toStringWithFormat:kAPCMedicalInfoItemSleepTimeFormat];
         }
         
         [self.items addObject:field];
@@ -179,6 +183,7 @@
         
         if (self.user.wakeUpTime) {
             field.date = self.user.wakeUpTime;
+            field.detailText = [field.date toStringWithFormat:kAPCMedicalInfoItemSleepTimeFormat];
         }
         
         [self.items addObject:field];
@@ -221,9 +226,15 @@
     [self.editLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.editLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
     
-    [self.tableView setSeparatorInset:UIEdgeInsetsZero];
-    [self.tableView setLayoutMargins:UIEdgeInsetsZero];
-    [self.tableView layoutIfNeeded];
+    [self.diseaseLabel setTextColor:[UIColor appPrimaryColor]];
+    [self.diseaseLabel setFont:[UIFont appLightFontWithSize:16.0f]];
+    
+    [self.dateRangeLabel setTextColor:[UIColor appSecondaryColor3]];
+    [self.dateRangeLabel setFont:[UIFont appLightFontWithSize:16.0f]];
+    
+    [self.reviewConsentButton setBackgroundColor:[UIColor appPrimaryColor]];
+    [self.reviewConsentButton.titleLabel setTextColor:[UIColor whiteColor]];
+    [self.reviewConsentButton.titleLabel setFont:[UIFont appRegularFontWithSize:19.0]];
 }
 
 - (void)setupPickerCellAppeareance:(APCPickerTableViewCell *)cell
@@ -369,13 +380,6 @@
                 }
                 
                 [self setupDefaultCellAppearance:defaultCell];
-                
-            } else if ([field isKindOfClass:[APCTableViewSegmentItem class]]) {
-                
-                APCTableViewSegmentItem *segmentPickerField = (APCTableViewSegmentItem *)field;
-                APCSegmentedTableViewCell *segmentedCell = (APCSegmentedTableViewCell *)cell;
-                segmentedCell.delegate = self;
-                segmentedCell.selectedSegmentIndex = segmentPickerField.selectedIndex;
                 
             } else {
                 if (!cell) {

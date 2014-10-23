@@ -34,7 +34,7 @@
         self.textLabelWidthConstraint.constant = 100;
         self.detailTextLabel.textAlignment = NSTextAlignmentLeft;
     } else {
-        self.textLabelWidthConstraint.constant = 178;
+        self.textLabelWidthConstraint.constant = 192;
         self.detailTextLabel.textAlignment = NSTextAlignmentRight;
     }
     
