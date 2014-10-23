@@ -10,6 +10,8 @@
 
 @interface APCIntroductionViewController : UIViewController
 
-- (void)setupWithInstructionalImages:(NSArray *)images andParagraphs:(NSArray *)paragraphs;
+- (void)setupWithInstructionalImages:(NSArray *)imageNames andParagraphs:(NSArray *)paragraphs;
+
+- (UIImage *)imageOfName:(NSString *)name;
 
 @end

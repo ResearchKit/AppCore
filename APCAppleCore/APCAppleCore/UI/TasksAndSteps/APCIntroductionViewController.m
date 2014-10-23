@@ -24,6 +24,11 @@
 
 @implementation APCIntroductionViewController
 
+- (UIImage *)imageOfName:(NSString *)name
+{
+    return  nil;
+}
+
 #pragma  mark  -  Initialise Scroll View With Images
 
 - (void)initialiseImageScrollView
@@ -33,7 +38,7 @@
     
     for (NSString  *imageName  in  self.instructionalImages) {
         
-        UIImage    *anImage = [UIImage imageNamed:imageName];
+        UIImage    *anImage = [self imageOfName:imageName];
         
         CGRect  frame = CGRectMake(imageIndex * CGRectGetWidth(self.imageScroller.frame), 0.0, CGRectGetWidth(self.imageScroller.frame), CGRectGetHeight(self.imageScroller.frame));
         UIImageView  *imager = [[UIImageView alloc] initWithFrame:frame];
@@ -89,9 +94,9 @@
     self.localisedParagraphs = localised;
 }
 
-- (void)setupWithInstructionalImages:(NSArray *)images andParagraphs:(NSArray *)paragraphs
+- (void)setupWithInstructionalImages:(NSArray *)imageNames andParagraphs:(NSArray *)paragraphs
 {
-    self.instructionalImages = images;
+    self.instructionalImages = imageNames;
     
     [self initialiseImageScrollView];
     
