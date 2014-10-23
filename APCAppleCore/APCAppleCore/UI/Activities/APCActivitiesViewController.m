@@ -228,6 +228,11 @@ static NSInteger kNumberOfSectionsInTableView = 1;
 /*********************************************************************************/
 #pragma mark - Fetched Results Delegate
 /*********************************************************************************/
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+   //NULL Implementation to trigger FRC tracking
+}
+
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
     [((APCAppDelegate *)[UIApplication sharedApplication].delegate).scheduler updateScheduledTasks];
