@@ -30,166 +30,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self prepareFields];
-    [self.tableView reloadData];
+    [self setupAppearance];
 }
 
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    
-    self.headerView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 127);
-
-}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)prepareFields
-{
-    self.items = [NSMutableArray new];
-    self.itemTypeOrder = [NSMutableArray new];
-    
-    {
-        APCTableViewItem *field = [APCTableViewItem new];
-        field.caption = NSLocalizedString(@"Email", @"");
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
-        field.editable = NO;
-        field.detailText = self.user.email;
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemEmail)];
-    }
-    
-    {
-        APCTableViewItem *field = [APCTableViewItem new];
-        field.caption = NSLocalizedString(@"Birthdate", @"");
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
-        field.editable = NO;
-        field.detailText = [self.user.birthDate toStringWithFormat:NSDateDefaultDateFormat];
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemDateOfBirth)];
-    }
-    
-    {
-        APCTableViewItem *field = [APCTableViewItem new];
-        field.caption = NSLocalizedString(@"Biological Sex", @"");
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
-        field.editable = NO;
-        field.detailText = [APCUser stringValueFromSexType:self.user.biologicalSex];
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemGender)];
-    }
-    
-    {
-        APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-        field.caption = NSLocalizedString(@"Medical Conditions", @"");
-        field.pickerData = @[[APCUser medicalConditions]];
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
-        
-        if (self.user.medications) {
-            field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:self.user.medicalConditions]) ];
-        }
-        else {
-            field.selectedRowIndices = @[ @(0) ];
-        }
-        
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemMedicalCondition)];
-    }
-    
-    {
-        APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-        field.caption = NSLocalizedString(@"Medication", @"");
-        field.pickerData = @[[APCUser medications]];
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
-        
-        if (self.user.medications) {
-            field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:self.user.medications]) ];
-        }
-        else {
-            field.selectedRowIndices = @[ @(0) ];
-        }
-        
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemMedication)];
-    }
-    
-    {
-        APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-        field.caption = NSLocalizedString(@"Height", @"");
-        field.pickerData = [APCUser heights];
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
-        
-        if (self.user.height) {
-            double heightInInches = [APCUser heightInInches:self.user.height];
-            NSString *feet = [NSString stringWithFormat:@"%d'", (int)heightInInches/12];
-            NSString *inches = [NSString stringWithFormat:@"%d''", (int)heightInInches%12];
-            
-            field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:feet]), @([field.pickerData[1] indexOfObject:inches]) ];
-        }
-        else {
-            field.selectedRowIndices = @[ @(2), @(5) ];
-        }
-        
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemHeight)];
-    }
-    
-    {
-        APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
-        field.caption = NSLocalizedString(@"Weight", @"");
-        field.placeholder = NSLocalizedString(@"lb", @"");
-        field.regularExpression = kAPCMedicalInfoItemWeightRegEx;
-        field.value = [NSString stringWithFormat:@"%.1f", [APCUser weightInPounds:self.user.weight]];
-        field.keyboardType = UIKeyboardTypeNumberPad;
-        field.textAlignnment = NSTextAlignmentRight;
-        field.identifier = kAPCTextFieldTableViewCellIdentifier;
-        
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemWeight)];
-    }
-    
-    {
-        APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-        field.selectionStyle = UITableViewCellSelectionStyleGray;
-        field.style = UITableViewCellStyleValue1;
-        field.caption = NSLocalizedString(@"What time do you wake up?", @"");
-        field.placeholder = NSLocalizedString(@"7:00 AM", @"");
-        field.identifier = kAPCPickerTableViewCellIdentifier;
-        field.datePickerMode = UIDatePickerModeTime;
-        field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;
-        field.detailDiscloserStyle = YES;
-        
-        if (self.user.sleepTime) {
-            field.date = self.user.sleepTime;
-            field.detailText = [field.date toStringWithFormat:kAPCMedicalInfoItemSleepTimeFormat];
-        }
-        
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemWakeUpTime)];
-    }
-    
-    {
-        APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-        field.selectionStyle = UITableViewCellSelectionStyleGray;
-        field.style = UITableViewCellStyleValue1;
-        field.caption = NSLocalizedString(@"What time do you go to sleep?", @"");
-        field.placeholder = NSLocalizedString(@"9:30 PM", @"");
-        field.identifier = kAPCPickerTableViewCellIdentifier;
-        field.datePickerMode = UIDatePickerModeTime;
-        field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;
-        field.detailDiscloserStyle = YES;
-        
-        if (self.user.wakeUpTime) {
-            field.date = self.user.wakeUpTime;
-            field.detailText = [field.date toStringWithFormat:kAPCMedicalInfoItemSleepTimeFormat];
-        }
-        
-        [self.items addObject:field];
-        [self.itemTypeOrder addObject:@(APCSignUpUserInfoItemSleepTime)];
-    }
-    
 }
 
 #pragma mark - Getter Methods
@@ -227,14 +73,20 @@
     [self.editLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
     
     [self.diseaseLabel setTextColor:[UIColor appPrimaryColor]];
-    [self.diseaseLabel setFont:[UIFont appLightFontWithSize:16.0f]];
+    [self.diseaseLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
     
     [self.dateRangeLabel setTextColor:[UIColor appSecondaryColor3]];
     [self.dateRangeLabel setFont:[UIFont appLightFontWithSize:16.0f]];
     
     [self.reviewConsentButton setBackgroundColor:[UIColor appPrimaryColor]];
     [self.reviewConsentButton.titleLabel setTextColor:[UIColor whiteColor]];
-    [self.reviewConsentButton.titleLabel setFont:[UIFont appRegularFontWithSize:19.0]];
+    [self.reviewConsentButton.titleLabel setFont:[UIFont appMediumFontWithSize:19.0]];
+    
+    [self.signOutButton.titleLabel setTextColor:[UIColor appPrimaryColor]];
+    [self.signOutButton.titleLabel setFont:[UIFont appMediumFontWithSize:16.0]];
+    
+    [self.leaveStudyButton.titleLabel setTextColor:[UIColor appPrimaryColor]];
+    [self.leaveStudyButton.titleLabel setFont:[UIFont appMediumFontWithSize:16.0]];
 }
 
 - (void)setupPickerCellAppeareance:(APCPickerTableViewCell *)cell
@@ -252,7 +104,7 @@
 }
 
 
-- (void)setupDefaultCellAppearance:(UITableViewCell *)cell
+- (void)setupDefaultCellAppearance:(APCDefaultTableViewCell *)cell
 {
     [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
     [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
@@ -323,6 +175,10 @@
             
             cell = [tableView dequeueReusableCellWithIdentifier:field.identifier];
             
+            cell.selectionStyle = field.selectionStyle;
+            cell.textLabel.text = field.caption;
+            cell.detailTextLabel.text = field.detailText;
+            
             if ([field isKindOfClass:[APCTableViewTextFieldItem class]]) {
                 
                 APCTableViewTextFieldItem *textFieldItem = (APCTableViewTextFieldItem *)field;
@@ -334,6 +190,7 @@
                 textFieldCell.textField.keyboardType = textFieldItem.keyboardType;
                 textFieldCell.textField.returnKeyType = textFieldItem.returnKeyType;
                 textFieldCell.textField.clearButtonMode = textFieldItem.clearButtonMode;
+                textFieldCell.textField.enabled = self.isEditing;
                 
                 textFieldCell.textLabel.text = textFieldItem.value;
                 
@@ -387,11 +244,7 @@
                 }
             }
             
-            cell.selectionStyle = field.selectionStyle;
-            cell.textLabel.text = field.caption;
-            cell.detailTextLabel.text = field.detailText;
-            
-            if (self.isEditing) {
+            if (self.isEditing && field.editable) {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             } else{
                 cell.accessoryType = UITableViewCellAccessoryNone;
@@ -426,8 +279,8 @@
         field = self.items[indexPath.row];
     }
     
-    if ([field isKindOfClass:[APCTableViewCustomPickerItem class]] ||
-        [field isKindOfClass:[APCTableViewDatePickerItem class]]) {
+    if (self.isEditing && ([field isKindOfClass:[APCTableViewCustomPickerItem class]] ||
+        [field isKindOfClass:[APCTableViewDatePickerItem class]])) {
         
         [self.tableView endEditing:YES];
         [self handlePickerForIndexPath:indexPath];
@@ -438,8 +291,10 @@
             [self hidePickerCell];
         }
         
-        APCTextFieldTableViewCell *cell = (APCTextFieldTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
-        [cell.textField becomeFirstResponder];
+        if (self.isEditing) {
+            APCTextFieldTableViewCell *cell = (APCTextFieldTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+            [cell.textField becomeFirstResponder];
+        }
     }
          
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -611,6 +466,13 @@
     return newIndexPath;
 }
 
+#pragma mark - Public methods
+
+- (void)loadProfileValuesInModel
+{
+    
+}
+
 #pragma mark - IBActions
 
 - (IBAction)signOut:(id)sender
@@ -645,11 +507,13 @@
 
 - (IBAction)editFields:(UIBarButtonItem *)sender {
     if (self.isEditing) {
-        sender.title = NSLocalizedString(@"Done", @"Done");
-        sender.style = UIBarButtonItemStyleDone;
-    } else{
         sender.title = NSLocalizedString(@"Edit", @"Edit");
         sender.style = UIBarButtonItemStylePlain;
+    } else{
+        sender.title = NSLocalizedString(@"Done", @"Done");
+        sender.style = UIBarButtonItemStyleDone;
+        
+        [self loadProfileValuesInModel];
     }
     
     self.editing = !self.editing;

@@ -16,7 +16,7 @@
 
 @property (nonatomic, strong) NSMutableArray *items;
 
-@property (nonatomic, strong) NSMutableArray *itemTypeOrder;
+@property (nonatomic, strong) NSMutableArray *itemsOrder;
 
 @property (nonatomic, strong) APCUser *user;
 
@@ -55,5 +55,7 @@
 - (IBAction)changeProfileImage:(id)sender;
 
 - (IBAction)editFields:(id)sender;
+
+- (void)loadProfileValuesInModel;
 
 @end

@@ -16,6 +16,7 @@
     if (self) {
         _style = UITableViewCellStyleValue1;
         _selectionStyle = UITableViewCellSelectionStyleGray;
+        _editable = YES;
     }
     return self;
 }

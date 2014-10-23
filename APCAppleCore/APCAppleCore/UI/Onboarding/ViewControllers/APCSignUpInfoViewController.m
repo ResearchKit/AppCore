@@ -196,6 +196,10 @@
             
             cell = [tableView dequeueReusableCellWithIdentifier:field.identifier];
             
+            cell.selectionStyle = field.selectionStyle;
+            cell.textLabel.text = field.caption;
+            cell.detailTextLabel.text = field.detailText;
+            
             if ([field isKindOfClass:[APCTableViewTextFieldItem class]]) {
                 
                 APCTableViewTextFieldItem *textFieldItem = (APCTableViewTextFieldItem *)field;
@@ -266,10 +270,6 @@
                     cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
                 }
             }
-            
-            cell.selectionStyle = field.selectionStyle;
-            cell.textLabel.text = field.caption;
-            cell.detailTextLabel.text = field.detailText;
             
             if (self.isEditing) {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
