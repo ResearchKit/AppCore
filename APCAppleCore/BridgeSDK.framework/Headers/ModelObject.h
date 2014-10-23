@@ -18,12 +18,11 @@
  Created by Nikita Zhuk on 22.1.2011.
  */
 
-/**
-	Abstract superclass for all of our model classes.
- */
-
 #import <Foundation/Foundation.h>
 
+/*!
+	Abstract superclass for all of our model classes.
+ */
 @interface ModelObject : NSObject <NSCopying, NSCoding>
 {
 	NSDictionary *sourceDictionaryRepresentation;
@@ -31,15 +30,15 @@
 
 @property(nonatomic, retain) NSDictionary *sourceDictionaryRepresentation;
 
-/**
+/*!
  Reads and deserializes a ModelObject from plist at given \c filePath
- \return Newly created ModelObject or nil if any of the following occurs: file doesn't exist, file cannot be read, plist cannot be parsed.
+ @return Newly created ModelObject or nil if any of the following occurs: file doesn't exist, file cannot be read, plist cannot be parsed.
 */
 + (id)createModelObjectFromFile:(NSString *)filePath;
 
-/**
+/*!
  Serializes the receiver into binary plist and writes it to given \c filePath. Creates any intermediate directories in the path if necessary.
- \return YES on success, NO on error (binary serialization or I/O error).
+ @return YES on success, NO on error (binary serialization or I/O error).
 */
 - (BOOL)writeToFile:(NSString *)filePath;
 
@@ -50,7 +49,9 @@
 
 @end
 
-
+/*!
+ NSMutableDictionary category for PONSO model objects
+ */
 @interface NSMutableDictionary (PONSONSMutableDictionaryAdditions)
 
 - (void)setObjectIfNotNil:(id)obj forKey:(NSString *)key;

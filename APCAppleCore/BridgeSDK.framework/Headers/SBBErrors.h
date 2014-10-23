@@ -22,5 +22,6 @@ typedef NS_ENUM(NSInteger, SBBErrorCodes)
     kSBBServerPreconditionNotMet = -1004,
     kSBBNoCredentialsAvailable = -1005,
   
-    kSBBNotAFileURL = -1100
+    kSBBNotAFileURL = -1100,
+    kSBBObjectNotExpectedClass = -1101
 };

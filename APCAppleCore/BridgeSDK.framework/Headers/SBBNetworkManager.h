@@ -24,13 +24,20 @@ extern NSString * kBackgroundSessionIdentifier;
 typedef void (^SBBNetworkManagerCompletionBlock)(NSURLSessionDataTask *task, id responseObject, NSError *error);
 
 /*!
- *  Typedef for SBBNetworkManager upload completion block.
+ *  Typedef for SBBNetworkManager task completion block.
  *
- *  @param task           The NSURLSessionUploadTask.
+ *  @param task           The NSURLSessionTask.
  *  @param response       The HTTP response, if any.
  *  @param error          Any error that occurred.
  */
-typedef void (^SBBNetworkManagerUploadCompletionBlock)(NSURLSessionUploadTask *task, NSHTTPURLResponse *response, NSError *error);
+typedef void (^SBBNetworkManagerTaskCompletionBlock)(NSURLSessionTask *task, NSHTTPURLResponse *response, NSError *error);
+
+/*!
+ Typedef for SBBNetworkManager background download completion block.
+ 
+ @param file The temporary file to which the downloaded data was saved. The completion block must either open this file for reading or copy it locally before returning.
+ */
+typedef void (^SBBNetworkManagerDownloadCompletionBlock)(NSURL *file);
 
 /*!
  * @typedef SBBEnvironment
@@ -54,6 +61,8 @@ typedef NS_ENUM(NSInteger, SBBEnvironment) {
 @protocol SBBNetworkManagerProtocol <NSObject>
 
 @property (nonatomic) SBBEnvironment environment;
+
+@property (nonatomic, weak) id<NSURLSessionDataDelegate, NSURLSessionDownloadDelegate> backgroundTransferDelegate;
 
 #pragma mark - Basic HTTP Methods
 
@@ -129,14 +138,30 @@ typedef NS_ENUM(NSInteger, SBBEnvironment) {
 /*!
  Perform a background upload of a file to a given URL with provided HTTP headers.
  
- @param fileUrl   The URL of the file to be uploaded.
- @param headers   An NSDictionary containing the HTTP headers as key-value pairs.
- @param urlString The URL (as a string) to which to upload the file.
- @param completion A block to be called upon completion of the upload.
+ @param fileUrl     The URL of the file to be uploaded.
+ @param headers     An NSDictionary containing the HTTP headers as key-value pairs.
+ @param urlString   The URL (as a string) to which to upload the file.
+ @param description A string to associate with this task.
+ @param completion  SBBNetworkManagerTaskCompletionBlock to be called upon completion of the upload.
  
  @return The NSURLSessionUploadTask used to make the request, so you can cancel or suspend/resume the request.
  */
-- (NSURLSessionUploadTask *)uploadFile:(NSURL *)fileUrl httpHeaders:(NSDictionary *)headers toUrl:(NSString *)urlString completion:(SBBNetworkManagerUploadCompletionBlock)completion;
+- (NSURLSessionUploadTask *)uploadFile:(NSURL *)fileUrl httpHeaders:(NSDictionary *)headers toUrl:(NSString *)urlString taskDescription:(NSString *)description completion:(SBBNetworkManagerTaskCompletionBlock)completion;
+
+/*!
+ Perform a background download of a file from a given URL with provided method, headers, and parameters.
+ 
+ @param urlString          The URL from which to download the file. If relative, the base URL will be prepended.
+ @param httpMethod         The HTTP method to use for the request (e.g., GET, POST).
+ @param headers            HTTP headers for the request. To these will be added User-Agent, Accept-Language, and (if not specified) Content-Type will be set to application/json.
+ @param parameters         Query parameters for a GET, or body parameters for a POST.
+ @param description        A string to associate with this task.
+ @param downloadCompletion SBBNetworkManagerDownloadCompletionBlock to be called upon successful download, with the URL of the file to which the downloaded data was saved.
+ @param taskCompletion     SBBNetworkManagerTaskCompletionBlock to be called upon unsuccessful completion.
+ 
+ @return The NSURLSessionDownloadTask used to make the request, so you can cancel or suspend/resume the request.
+ */
+- (NSURLSessionDownloadTask *)downloadFileFromURLString:(NSString *)urlString method:(NSString *)httpMethod httpHeaders:(NSDictionary *)headers parameters:(NSDictionary *)parameters taskDescription:(NSString *)description downloadCompletion:(SBBNetworkManagerDownloadCompletionBlock)downloadCompletion taskCompletion:(SBBNetworkManagerTaskCompletionBlock)taskCompletion;
 
 /*!
  This method should be called from your app delegate's

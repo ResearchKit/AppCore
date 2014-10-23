@@ -13,6 +13,9 @@
 @protocol SBBNetworkManagerProtocol;
 @protocol SBBObjectManagerProtocol;
 
+/*!
+ This is the "base protocol" for Bridge API Managers.
+ */
 @protocol SBBBridgeAPIManagerProtocol <NSObject>
 
 @end
