@@ -61,15 +61,6 @@
     }
     
     {
-        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeCustom];
-        c.summary = @"Custom Scene summary";
-        c.title = @"Custom Scene";
-        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
-        c.customImage = [UIImage imageNamed:@"image_example.png"];
-        [components addObject:c];
-    }
-    
-    {
         RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeOnlyInDocument];
         c.summary = @"OnlyInDocument Scene summary";
         c.title = @"OnlyInDocument Scene";

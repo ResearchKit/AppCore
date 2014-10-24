@@ -9,6 +9,7 @@
 #import "UIView+Helper.h"
 #import "APCStepProgressBar.h"
 #import "APCStepProgressBar+Appearance.h"
+#import "UIColor+APCAppearance.h"
 
 static CGFloat const kAPCStepProgressBarControlsMinMargin   = 10;
 //static CGFloat const kAPCStepProgressBarHeight = 14.0f;
@@ -73,7 +74,7 @@ static NSString * const kAPCStepProgressViewAnimationKey = @"APCStepProgressView
     
     _stepProgressLayer = [CAShapeLayer layer];
     _stepProgressLayer.frame = self.bounds;
-    [_stepProgressLayer setFillColor:[APCStepProgressBar progressBarProgressTintColor].CGColor];
+    [_stepProgressLayer setFillColor:[UIColor appPrimaryColor].CGColor];
     [self.layer addSublayer:_stepProgressLayer];
 }
 
