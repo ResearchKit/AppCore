@@ -43,6 +43,7 @@ static CGFloat const kAPCPasscodeViewPinLength = 4;
         _hiddenTextField.delegate = self;
         _hiddenTextField.hidden = YES;
         _hiddenTextField.keyboardType = UIKeyboardTypeNumberPad;
+        _hiddenTextField.keyboardAppearance = UIKeyboardAppearanceDark;
         [self addSubview:_hiddenTextField];
     }
     

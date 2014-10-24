@@ -16,6 +16,4 @@
 
 @property (nonatomic, strong) APCStepProgressBar *stepProgressBar;
 
-- (void) setStepNumber:(NSUInteger)stepNumber title:(NSString *)title;
-
 @end

@@ -42,9 +42,8 @@
     NSParameterAssert(self.password);
     [SBBComponent(SBBAuthManager) signInWithUsername:self.userName password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
         if (error.code ==kSBBServerPreconditionNotMet) {
-            if (!self.firstName) {
-                self.firstName = @"Please enter firstname";
-                self.lastName  = @"Please enter lastname";
+            if (!self.name) {
+                self.name = @"Please enter name";
             }
             [self sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
                 [self signInOnCompletion:completionBlock];
@@ -69,11 +68,10 @@
         completionBlock(nil);
     }
 #else
-    NSParameterAssert(self.firstName);
-    NSParameterAssert(self.lastName);
+    NSParameterAssert(self.name);
     //TODO: Figure out what needs to be done if birthDate is nil
     NSDate * birthDate = self.birthDate ?: [NSDate dateWithTimeIntervalSince1970:(60*60*24*365*10)];
-    [SBBComponent(SBBConsentManager) consentSignature:[self.firstName stringByAppendingFormat:@" %@", self.lastName] birthdate:birthDate completion:^(id responseObject, NSError *error) {
+    [SBBComponent(SBBConsentManager) consentSignature:self.name birthdate:birthDate completion:^(id responseObject, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock) {
                 completionBlock(error);

@@ -13,6 +13,9 @@
 #import "UIAlertView+Helper.h"
 #import "APCSignupTouchIDViewController.h"
 #import "APCSignUpPermissionsViewController.h"
+#import "APCAppDelegate.h"
+#import "UIColor+APCAppearance.h"
+#import "UIFont+APCAppearance.h"
 
 @import LocalAuthentication;
 
@@ -26,16 +29,23 @@
 
 @property (weak, nonatomic) IBOutlet APCPasscodeView *retryPasscodeView;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *touchIdButtonBottomConstraint;
+
 @property (nonatomic, strong) LAContext *touchContext;
 
 @end
 
 @implementation APCSignupTouchIDViewController
 
+@synthesize stepProgressBar;
+
+@synthesize user = _user;
+
+#pragma mark - Life Cycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self addNavigationItems];
     [self setupProgressBar];
     
     self.touchContext = [LAContext new];
@@ -72,14 +82,35 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void) addNavigationItems {
-    self.title = NSLocalizedString(@"Sign Up", @"");
+#pragma mark - Setup
+
+- (void)setupAppearance
+{
+    [self.touchIDButton setBackgroundColor:[UIColor appPrimaryColor]];
+    [self.touchIDButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.touchIDButton.titleLabel setFont:[UIFont appMediumFontWithSize:17.0f]];
+    
+    [self.titleLabel setTextColor:[UIColor appSecondaryColor1]];
+    [self.titleLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
 }
 
 - (void) setupProgressBar {
     
-    [self setStepNumber:3 title:NSLocalizedString(@"Identification", @"")];
+    CGFloat stepProgressByYPosition = self.topLayoutGuide.length;
+    
+    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.width, kAPCSignUpProgressBarHeight)
+                                                               style:APCStepProgressBarStyleDefault];
+    self.stepProgressBar.numberOfSteps = kNumberOfSteps;
+    [self.view addSubview:self.stepProgressBar];
+    
     [self.stepProgressBar setCompletedSteps:1 animation:NO];
+}
+
+- (APCUser *) user {
+    if (!_user) {
+        _user = ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+    }
+    return _user;
 }
 
 - (void) enableTouchIDFeatureIfAvailable {
@@ -104,7 +135,7 @@
     if (passcodeView == self.passcodeView) {
         [self showRetry];
     }
-    else {
+    else if (self.passcodeView.code.length > 0) {
         if ([self.passcodeView.code isEqualToString:self.retryPasscodeView.code]) {
             [self next];
         }
@@ -120,29 +151,19 @@
 #pragma mark - IBActions
 
 - (IBAction) touchID {
-    NSString *localizedReason = NSLocalizedString(@"Authentication", @"");
     
-    typeof(self) __weak weakSelf = self;
-    [self.touchContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:localizedReason reply:^(BOOL success, NSError *error) {
-        if (success) {
-            [weakSelf next];
-        }
-        else {
-            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Touch Authentication", @"") message:error.localizedDescription];
-        }
-    }];
 }
 
 
 #pragma mark - Private Methods
 
-- (void) next {
-    APCSignUpPermissionsViewController *permissionsViewController = [[APCSignUpPermissionsViewController alloc] init];
-    permissionsViewController.user = self.user;
-    [self.navigationController pushViewController:permissionsViewController animated:YES];
+- (void) next
+{
+    
 }
 
-- (void) showFirstTry {
+- (void) showFirstTry
+{
     self.passcodeView.hidden = NO;
     self.retryPasscodeView.hidden = YES;
     
@@ -152,7 +173,8 @@
     [self.passcodeView reset];
 }
 
-- (void) showRetry {
+- (void) showRetry
+{
     self.passcodeView.hidden = YES;
     self.retryPasscodeView.hidden = NO;
     
@@ -165,43 +187,43 @@
 
 #pragma mark - NSNotification
 
-- (void) keyboardWillShow:(NSNotification *)notification {
-    CGRect keyboardRect;
-    CGFloat duration = 0;
-    UIViewAnimationCurve curve;
+- (void) keyboardWillShow:(NSNotification *)notification
+{
+    CGFloat keyboardHeight = [[notification.userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
+    double animationDuration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
-    [UIView frame:&keyboardRect animationDuration:&duration animationCurve:&curve fromKeyboardNotification:notification];
-    
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:duration];
-    [UIView setAnimationCurve:curve];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    
-    CGRect buttonRect = self.touchIDButton.frame;
-    buttonRect.origin.y -= keyboardRect.size.height;
-    self.touchIDButton.frame = buttonRect;
-    
-    [UIView commitAnimations];
+    [UIView animateWithDuration:animationDuration delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.touchIdButtonBottomConstraint.constant = keyboardHeight;
+    } completion:nil];
 }
 
 - (void) keyboardWillHide:(NSNotification *)notification {
-    CGRect keyboardRect;
-    CGFloat duration = 0;
-    UIViewAnimationCurve curve;
     
-    [UIView frame:&keyboardRect animationDuration:&duration animationCurve:&curve fromKeyboardNotification:notification];
+    double animationDuration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:duration];
-    [UIView setAnimationCurve:curve];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    
-    CGRect buttonRect = self.touchIDButton.frame;
-    buttonRect.origin.y += keyboardRect.size.height;
-    self.touchIDButton.frame = buttonRect;
-    
-    [UIView commitAnimations];
+    [UIView animateWithDuration:animationDuration delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.touchIdButtonBottomConstraint.constant = 0;
+    } completion:nil];
 }
 
+- (IBAction)skip
+{
+    
+}
+
+- (IBAction)useTouchId:(id)sender
+{
+    NSString *localizedReason = NSLocalizedString(@"Authentication", @"");
+    
+    typeof(self) __weak weakSelf = self;
+    [self.touchContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:localizedReason reply:^(BOOL success, NSError *error) {
+        if (success) {
+            [weakSelf next];
+        }
+        else {
+            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Touch Authentication", @"") message:error.localizedDescription];
+        }
+    }];
+}
 
 @end

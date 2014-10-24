@@ -9,6 +9,7 @@
 #import <UIKit/UITextField.h>
 #import <UIKit/UIDatePicker.h>
 #import <UIKit/UITableViewCell.h>
+#import "APCUserInfoConstants.h"
 
 @interface APCTableViewItem : NSObject
 
@@ -25,6 +26,8 @@
 @property (nonatomic, copy) NSString *identifier;
 
 @property (nonatomic, copy) NSString *regularExpression;
+
+@property (nonatomic, readwrite, getter=isEditable) BOOL editable;
 
 @end
 
@@ -97,14 +100,6 @@
 @property (nonatomic, readwrite, getter = isOn) BOOL on;
 
 @end
-
-//Permission Types
-typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
-    kSignUpPermissionsTypeHealthKit,
-    kSignUpPermissionsTypeLocation,
-    kSignUpPermissionsTypePushNotifications,
-    kSignUpPermissionsTypeCoremotion,
-};
 
 @interface APCTableViewPermissionsItem : APCTableViewItem
 
