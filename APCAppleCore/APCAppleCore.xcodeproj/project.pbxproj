@@ -46,6 +46,9 @@
 		7BA4BBFA19D4893700BC4023 /* APCPassiveLocationTracking.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BA4BBF519D4893700BC4023 /* APCPassiveLocationTracking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BA4BBFB19D4893700BC4023 /* APCPassiveLocationTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BA4BBF619D4893700BC4023 /* APCPassiveLocationTracking.m */; };
 		7BA4BC0419D490EE00BC4023 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */; };
+		CFACE18119F73396006FDE12 /* APCIntroductionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = CFACE17E19F73396006FDE12 /* APCIntroductionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFACE18219F73396006FDE12 /* APCIntroductionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFACE17F19F73396006FDE12 /* APCIntroductionViewController.m */; };
+		CFACE18319F73396006FDE12 /* APCIntroductionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFACE18019F73396006FDE12 /* APCIntroductionViewController.xib */; };
 		F5008C0F19D32AD60011102F /* APCGroupedScheduledTask.h in Headers */ = {isa = PBXBuildFile; fileRef = F5008C0D19D32AD60011102F /* APCGroupedScheduledTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5008C1019D32AD60011102F /* APCGroupedScheduledTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F5008C0E19D32AD60011102F /* APCGroupedScheduledTask.m */; };
 		F5008C1919D32CC80011102F /* APCActivitiesViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5008C1719D32CC80011102F /* APCActivitiesViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -321,6 +324,9 @@
 		7BA4BBF519D4893700BC4023 /* APCPassiveLocationTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPassiveLocationTracking.h; sourceTree = "<group>"; };
 		7BA4BBF619D4893700BC4023 /* APCPassiveLocationTracking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPassiveLocationTracking.m; sourceTree = "<group>"; };
 		7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		CFACE17E19F73396006FDE12 /* APCIntroductionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCIntroductionViewController.h; sourceTree = "<group>"; };
+		CFACE17F19F73396006FDE12 /* APCIntroductionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCIntroductionViewController.m; sourceTree = "<group>"; };
+		CFACE18019F73396006FDE12 /* APCIntroductionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCIntroductionViewController.xib; sourceTree = "<group>"; };
 		F5008C0D19D32AD60011102F /* APCGroupedScheduledTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCGroupedScheduledTask.h; sourceTree = "<group>"; };
 		F5008C0E19D32AD60011102F /* APCGroupedScheduledTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCGroupedScheduledTask.m; sourceTree = "<group>"; };
 		F5008C1719D32CC80011102F /* APCActivitiesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCActivitiesViewController.h; sourceTree = "<group>"; };
@@ -936,6 +942,9 @@
 		F588BA5419D21F1300692473 /* TasksAndSteps */ = {
 			isa = PBXGroup;
 			children = (
+				CFACE17E19F73396006FDE12 /* APCIntroductionViewController.h */,
+				CFACE17F19F73396006FDE12 /* APCIntroductionViewController.m */,
+				CFACE18019F73396006FDE12 /* APCIntroductionViewController.xib */,
 				F588BA5519D21F1300692473 /* APCSetupTaskViewController.h */,
 				F588BA5619D21F1300692473 /* APCSetupTaskViewController.m */,
 				F588BA5719D21F1300692473 /* APCStepViewController.h */,
@@ -1181,6 +1190,7 @@
 				F5B4213319D23D6800F9CD69 /* APCParametersUserDefaultCell.h in Headers */,
 				F5179CD919D0917D001DCCB7 /* APCScheduler.h in Headers */,
 				5B5F178019ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h in Headers */,
+				CFACE18119F73396006FDE12 /* APCIntroductionViewController.h in Headers */,
 				F541541D19D60F3400B819C9 /* HKHealthStore+APCExtensions.h in Headers */,
 				5B9041B819F848E5005CFF77 /* APCPasscodeViewController.h in Headers */,
 				F5179CA519D0917D001DCCB7 /* APCResult+AddOn.h in Headers */,
@@ -1294,6 +1304,7 @@
 				F5C1DC4519D23044006527EA /* tab_profile_selected@2x.png in Resources */,
 				F5C1DC4219D23044006527EA /* tab_profile.png in Resources */,
 				7BA4BBF919D4893700BC4023 /* APCMapViewController.xib in Resources */,
+				CFACE18319F73396006FDE12 /* APCIntroductionViewController.xib in Resources */,
 				F5C1DC3A19D23044006527EA /* tab_dashboard.png in Resources */,
 				F5C1DC3819D23044006527EA /* tab_activities_selected.png in Resources */,
 				F588BA8219D21F1300692473 /* APCSpinnerViewController.xib in Resources */,
@@ -1329,6 +1340,7 @@
 				F5FE18F519EDDFB900D455E6 /* APCInclusionCriteriaViewController.m in Sources */,
 				F5179C9419D0917D001DCCB7 /* APCDBStatus.m in Sources */,
 				7BA4BBF819D4893700BC4023 /* APCMapViewController.m in Sources */,
+				CFACE18219F73396006FDE12 /* APCIntroductionViewController.m in Sources */,
 				F5179CD219D0917D001DCCB7 /* APCParameters.m in Sources */,
 				F5179C9A19D0917D001DCCB7 /* APCFileResult.m in Sources */,
 				F5179C8B19D0917D001DCCB7 /* APCDataResult+AddOn.m in Sources */,
