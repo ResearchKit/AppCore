@@ -11,6 +11,7 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "APCForgotUsernameViewController.h"
+#import "APCEmailVerifyViewController.h"
 
 @interface APCSignInViewController ()
 
@@ -161,7 +162,14 @@
 
 - (IBAction)signIn:(id)sender
 {
-    [self signIn];
+    APCAppState state = ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:kAPCAppStateKey]).integerValue;
+    
+    if (state == kAPCAppStateConsented) {
+        [self signIn];
+    } else {
+        APCEmailVerifyViewController *emailVerifyViewController = [[UIStoryboard storyboardWithName:@"APHEmailVerify" bundle:nil] instantiateInitialViewController];
+        [self.navigationController pushViewController:emailVerifyViewController animated:YES];
+    }
 }
 
 - (IBAction)forgotUsername:(id)sender

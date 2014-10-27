@@ -49,6 +49,12 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self setUpHKPermissions];
     [self setUpAppAppearance];
     [self showAppropriateVC];
+    
+    NSNumber *appState = [[NSUserDefaults standardUserDefaults] objectForKey:kAPCAppStateKey];
+    if (!appState) {
+        [[NSUserDefaults standardUserDefaults] setObject:@(kAPCAppStateNotConsented) forKey:kAPCAppStateKey];
+    }
+    
     return YES;
 }
 
