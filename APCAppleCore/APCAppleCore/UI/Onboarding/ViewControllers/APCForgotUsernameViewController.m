@@ -27,6 +27,9 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    [self setupAppearance];
+    [self setupNavAppearance];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -46,6 +49,17 @@
 {
     [self.emailTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.emailTextField setFont:[UIFont appRegularFontWithSize:17.0f]];
+}
+
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
 }
 
 #pragma mark - UITableViewDelegate method
@@ -89,6 +103,13 @@
 - (IBAction)forgotUsername:(id)sender
 {
     [self sendEmail];
+}
+
+#pragma mark - Selectors
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)sendEmail

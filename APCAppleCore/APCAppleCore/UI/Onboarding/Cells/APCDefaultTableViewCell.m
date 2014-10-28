@@ -31,10 +31,10 @@
 - (void)setType:(APCDefaultTableViewCellType)type
 {
     if (type == kAPCDefaultTableViewCellTypeLeft) {
-        self.textLabelWidthConstraint.constant = 100;
+        self.textLabelWidthConstraint.constant = 91;
         self.detailTextLabel.textAlignment = NSTextAlignmentLeft;
     } else {
-        self.textLabelWidthConstraint.constant = 192;
+        self.textLabelWidthConstraint.constant = 180;
         self.detailTextLabel.textAlignment = NSTextAlignmentRight;
     }
     

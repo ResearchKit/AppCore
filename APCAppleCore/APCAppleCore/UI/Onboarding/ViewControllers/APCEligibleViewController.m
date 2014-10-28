@@ -18,11 +18,37 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self setUpAppearance];
+    [self setupNavAppearance];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) setUpAppearance
+{
+    self.label1.font = [UIFont appMediumFontWithSize:17];
+    self.label1.textColor = [UIColor appSecondaryColor1];
+    
+    self.label2.font = [UIFont appLightFontWithSize:17];
+    self.label2.textColor = [UIColor appSecondaryColor1];
+    
+    [self.consentButton setBackgroundImage:[UIImage imageWithColor:[UIColor appPrimaryColor]] forState:UIControlStateNormal];
+    [self.consentButton setTitleColor:[UIColor appSecondaryColor4] forState:UIControlStateNormal];
+}
+
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
 }
 
 - (void)showConsent
@@ -114,6 +140,13 @@
 - (void)startSignUp
 {
     
+}
+
+#pragma mark - Selectors
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

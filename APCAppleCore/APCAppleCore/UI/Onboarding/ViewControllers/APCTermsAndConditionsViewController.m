@@ -43,6 +43,9 @@
     [self.textView setTextContainerInset:UIEdgeInsetsMake(13, 10, 10, 10)];
     
     self.navigationBar.titleTextAttributes = @{ NSForegroundColorAttributeName : [UIColor whiteColor]};
+    
+    [self.agreeButton.titleLabel setTextColor:[UIColor appPrimaryColor]];
+    [self.agreeButton.titleLabel setFont:[UIFont appMediumFontWithSize:19.0]];
 }
 
 #pragma mark - IBActions

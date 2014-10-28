@@ -37,6 +37,7 @@
     
     [self setupStepProgressBar];
     [self setupAppearance];
+    [self setupNavAppearance];
     
     self.nameTextField.delegate = self;
     self.userNameTextField.delegate = self;
@@ -104,7 +105,21 @@
     
     [self.footerLabel setTextColor:[UIColor appSecondaryColor3]];
     [self.footerLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
+    
 }
+
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
+}
+
+#pragma mark - Custom Methods
 
 - (void)setupPickerCellAppeareance:(APCPickerTableViewCell *)cell
 {
@@ -211,8 +226,7 @@
                 textFieldCell.textField.keyboardType = textFieldItem.keyboardType;
                 textFieldCell.textField.returnKeyType = textFieldItem.returnKeyType;
                 textFieldCell.textField.clearButtonMode = textFieldItem.clearButtonMode;
-                
-                textFieldCell.textLabel.text = textFieldItem.value;
+                textFieldCell.textField.text = textFieldItem.value;
                 
                 if (field.textAlignnment == NSTextAlignmentRight) {
                     textFieldCell.type = kAPCTextFieldCellTypeRight;
@@ -231,8 +245,13 @@
                 APCTableViewDatePickerItem *datePickerField = (APCTableViewDatePickerItem *)field;
                 APCDefaultTableViewCell *defaultCell = (APCDefaultTableViewCell *)cell;
                 
-                NSString *dateWithFormat = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
-                defaultCell.detailTextLabel.text = dateWithFormat;
+                if (datePickerField.date) {
+                    NSString *dateWithFormat = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
+                    defaultCell.detailTextLabel.text = dateWithFormat;
+                } else {
+                    defaultCell.detailTextLabel.text = field.placeholder;
+                }
+                
                 
                 if (field.textAlignnment == NSTextAlignmentRight) {
                     defaultCell.type = kAPCDefaultTableViewCellTypeRight;
@@ -271,7 +290,7 @@
                 }
             }
             
-            if (self.isEditing) {
+            if (self.isEditing && field.editable) {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             } else{
                 cell.accessoryType = UITableViewCellAccessoryNone;
@@ -306,8 +325,8 @@
         field = self.items[indexPath.row];
     }
     
-    if ([field isKindOfClass:[APCTableViewCustomPickerItem class]] ||
-        [field isKindOfClass:[APCTableViewDatePickerItem class]]) {
+    if (field.isEditable && ([field isKindOfClass:[APCTableViewCustomPickerItem class]] ||
+        [field isKindOfClass:[APCTableViewDatePickerItem class]])) {
         
         [self.tableView endEditing:YES];
         [self handlePickerForIndexPath:indexPath];
@@ -536,5 +555,9 @@
     
 }
 
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 @end

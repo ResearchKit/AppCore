@@ -19,7 +19,7 @@
 
 static CGFloat kTitleLabelHeight      = 25.0f;
 static CGFloat kConfirmationViewWidth = 22.0f;
-static CGFloat kViewsPadding           = 10.f;
+static CGFloat kViewsPadding          = 10.f;
 
 @implementation APCPermissionButton
 
@@ -45,12 +45,19 @@ static CGFloat kViewsPadding           = 10.f;
     [super layoutSubviews];
     
     NSString *title = self.titleLabel.text;
+     CGFloat textWidth = [title boundingRectWithSize:CGSizeMake(310, 0) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:self.titleLabel.font} context:nil].size.width;
     
-    CGFloat textWidth = [title boundingRectWithSize:CGSizeMake(300, 0) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.titleLabel.font} context:nil].size.width;
-    CGFloat totalWidth = kConfirmationViewWidth + kViewsPadding + textWidth;
+    if (self.alignment == kAPCPermissionButtonAlignmentCenter) {
+        
+        CGFloat totalWidth = kConfirmationViewWidth + kViewsPadding + textWidth;
+        
+        self.confirmationView.frame = CGRectMake((CGRectGetWidth(self.frame) - totalWidth)/2, (CGRectGetHeight(self.frame) - kConfirmationViewWidth)/2, kConfirmationViewWidth, kConfirmationViewWidth);
+        self.titleLabel.frame = CGRectMake(CGRectGetMaxX(self.confirmationView.frame) + kViewsPadding, (CGRectGetHeight(self.frame) - kTitleLabelHeight)/2, textWidth, kTitleLabelHeight);
+    } else{
+        self.confirmationView.frame = CGRectMake(10, (CGRectGetHeight(self.frame) - kConfirmationViewWidth)/2, kConfirmationViewWidth, kConfirmationViewWidth);
+        self.titleLabel.frame = CGRectMake(CGRectGetMaxX(self.confirmationView.frame) + kViewsPadding, (CGRectGetHeight(self.frame) - kTitleLabelHeight)/2, CGRectGetWidth(self.frame) - CGRectGetMaxX(self.confirmationView.frame) - kViewsPadding, kTitleLabelHeight);
+    }
     
-    self.confirmationView.frame = CGRectMake((CGRectGetWidth(self.frame) - totalWidth)/2, (CGRectGetHeight(self.frame) - kConfirmationViewWidth)/2, kConfirmationViewWidth, kConfirmationViewWidth);
-    self.titleLabel.frame = CGRectMake(CGRectGetMaxX(self.confirmationView.frame) + kViewsPadding, (CGRectGetHeight(self.frame) - kTitleLabelHeight)/2, textWidth, kTitleLabelHeight);
 }
 
 - (BOOL)isSelected
@@ -100,6 +107,22 @@ static CGFloat kViewsPadding           = 10.f;
     if (!self.isSelected) {
         self.titleLabel.text = unconfirmedTitle;
     }
+}
+
+- (void)setAttributed:(BOOL)attributed
+{
+    _attributed = attributed;
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:self.unconfirmedTitle];
+    
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont appRegularFontWithSize:15.0] range:NSMakeRange(0, 14)];
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont appMediumFontWithSize:15.0] range:NSMakeRange(15, 20)];
+    
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor appSecondaryColor2] range:NSMakeRange(0, 14)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor appSecondaryColor1] range:NSMakeRange(15, 20)];
+    
+    
+    self.titleLabel.attributedText = attributedString;
 }
 
 @end

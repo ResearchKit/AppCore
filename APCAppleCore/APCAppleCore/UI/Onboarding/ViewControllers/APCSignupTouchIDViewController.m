@@ -48,6 +48,9 @@
     
     self.passcodeView.delegate = self;
     self.retryPasscodeView.delegate = self;
+    
+    [self setupAppearance];
+    [self setupNavAppearance];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -70,6 +73,17 @@
 {
     [self.titleLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.titleLabel setFont:[UIFont appLightFontWithSize:17.0f]];
+}
+
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
 }
 
 - (void) setupProgressBar {
@@ -137,6 +151,11 @@
     
     [self.retryPasscodeView becomeFirstResponder];
     [self.retryPasscodeView reset];
+}
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark Passcode
