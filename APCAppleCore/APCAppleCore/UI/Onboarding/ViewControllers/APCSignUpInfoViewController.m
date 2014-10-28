@@ -333,11 +333,17 @@
         
     } else if ([field isKindOfClass:[APCTableViewTextFieldItem class]]){
         
+        NSIndexPath *actualIndexPath = indexPath;
+        
         if (self.pickerShowing) {
+            if (indexPath.row > self.pickerIndexPath.row) {
+                actualIndexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+            }
+            
             [self hidePickerCell];
         }
         
-        APCTextFieldTableViewCell *cell = (APCTextFieldTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+        APCTextFieldTableViewCell *cell = (APCTextFieldTableViewCell *)[tableView cellForRowAtIndexPath:actualIndexPath];
         [cell.textField becomeFirstResponder];
     }
     
@@ -452,29 +458,10 @@
     field.selectedIndex = index;
 }
 
-#pragma mark - UIImagePickerControllerDelegate
-
-- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    UIImage *image = info[UIImagePickerControllerEditedImage];
-    if (!image) {
-        image = info[UIImagePickerControllerOriginalImage];
-    }
-    
-    [self.profileImageButton setImage:image forState:UIControlStateNormal];
-    
-    [picker dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void) imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [picker dismissViewControllerAnimated:YES completion:nil];
-}
-
 #pragma mark - Private Methods
 
 - (void)handlePickerForIndexPath:(NSIndexPath *)indexPath
 {
-    [self.tableView beginUpdates];
-    
     if (self.isPickerShowing && (self.pickerIndexPath.row - 1 == indexPath.row)) {
         [self hidePickerCell];
     } else{
@@ -486,8 +473,6 @@
         
         [self showPickerAtIndex:selectedIndexpath];
     }
-    
-    [self.tableView endUpdates];
 }
 
 - (void)showPickerAtIndex:(NSIndexPath *)indexPath {
@@ -496,16 +481,20 @@
     
     self.pickerIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:0];
     
+    [self.tableView beginUpdates];
     [self.tableView insertRowsAtIndexPaths:@[self.pickerIndexPath]
                           withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
 }
 
 - (void)hidePickerCell
 {
     self.pickerShowing = NO;
     
+    [self.tableView beginUpdates];
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.pickerIndexPath.row inSection:0]]
                           withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
     
     self.pickerIndexPath = nil;
 }

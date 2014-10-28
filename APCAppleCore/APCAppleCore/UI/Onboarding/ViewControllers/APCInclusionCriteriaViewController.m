@@ -7,7 +7,6 @@
 //
 
 #import "APCInclusionCriteriaViewController.h"
-#import "APCAppleCore.h"
 
 @implementation APCInclusionCriteriaViewController
 

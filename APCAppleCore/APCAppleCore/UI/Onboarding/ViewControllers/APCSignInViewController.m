@@ -15,8 +15,6 @@
 
 @interface APCSignInViewController ()
 
-@property (weak, nonatomic) IBOutlet UIButton *touchIdButton;
-
 @end
 
 @implementation APCSignInViewController
@@ -55,7 +53,8 @@
     if (user.userName) {
         NSString *partialUsername = [user.userName substringToIndex:3];
         
-        self.userHandleTextField.text = [NSString stringWithFormat:@"%@XXXX", partialUsername];
+        self.userHandleTextField.text = [NSString stringWithFormat:@"%@XXXXX", partialUsername];
+        self.userHandleTextField.enabled = NO;
     }
     
     [self.passwordTextField setTextColor:[UIColor appSecondaryColor1]];

@@ -7,14 +7,16 @@
 //
 
 #import "APCProfileViewController.h"
+#import "APCAppleCore.h"
 #import "APCTableViewItem.h"
 #import "APCAppDelegate.h"
-#import "NSDate+Helper.h"
 #import "APCUserInfoConstants.h"
+
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "NSDate+Helper.h"
 
-@interface APCProfileViewController () 
+@interface APCProfileViewController ()<RKTaskViewControllerDelegate>
 
 @property (nonatomic, getter=isEditing) BOOL editing;
 
@@ -192,8 +194,6 @@
                 textFieldCell.textField.clearButtonMode = textFieldItem.clearButtonMode;
                 textFieldCell.textField.enabled = self.isEditing;
                 
-                textFieldCell.textLabel.text = textFieldItem.value;
-                
                 if (field.textAlignnment == NSTextAlignmentRight) {
                     textFieldCell.type = kAPCTextFieldCellTypeRight;
                 } else {
@@ -287,12 +287,18 @@
         
     } else if ([field isKindOfClass:[APCTableViewTextFieldItem class]]){
         
+        NSIndexPath *actualIndexPath = indexPath;
+        
         if (self.pickerShowing) {
+            if (indexPath.row > self.pickerIndexPath.row) {
+                actualIndexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+            }
+            
             [self hidePickerCell];
         }
         
         if (self.isEditing) {
-            APCTextFieldTableViewCell *cell = (APCTextFieldTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+            APCTextFieldTableViewCell *cell = (APCTextFieldTableViewCell *)[tableView cellForRowAtIndexPath:actualIndexPath];
             [cell.textField becomeFirstResponder];
         }
     }
@@ -411,8 +417,6 @@
          
 - (void)handlePickerForIndexPath:(NSIndexPath *)indexPath
 {
-    [self.tableView beginUpdates];
-    
     if (self.isPickerShowing && (self.pickerIndexPath.row - 1 == indexPath.row)) {
         [self hidePickerCell];
     } else{
@@ -424,9 +428,6 @@
         
         [self showPickerAtIndex:selectedIndexpath];
     }
-    
-    [self.tableView endUpdates];
-    
 }
          
 - (void)showPickerAtIndex:(NSIndexPath *)indexPath {
@@ -435,16 +436,20 @@
     
     self.pickerIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:0];
     
+    [self.tableView beginUpdates];
     [self.tableView insertRowsAtIndexPaths:@[self.pickerIndexPath]
                           withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
 }
 
 - (void)hidePickerCell
 {
     self.pickerShowing = NO;
     
+    [self.tableView beginUpdates];
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.pickerIndexPath.row inSection:0]]
                           withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
     
     self.pickerIndexPath = nil;
 }
@@ -473,11 +478,90 @@
     
 }
 
+#pragma mark - Consent
+
+- (void)showConsent
+{
+    RKConsentDocument* consent = [[RKConsentDocument alloc] init];
+    consent.title = @"Demo Consent";
+    consent.signaturePageTitle = @"Consent";
+    consent.signaturePageContent = @"I agree  to participate in this research Study.";
+    
+    
+    RKConsentSignature *participantSig = [RKConsentSignature signatureForPersonWithTitle:@"Participant" name:nil signatureImage:nil dateString:nil];
+    [consent addSignature:participantSig];
+    
+    RKConsentSignature *investigatorSig = [RKConsentSignature signatureForPersonWithTitle:@"Investigator" name:@"Jake Clemson" signatureImage:[UIImage imageNamed:@"signature.png"] dateString:@"9/2/14"];
+    [consent addSignature:investigatorSig];
+    
+    
+    
+    
+    NSMutableArray* components = [NSMutableArray new];
+    
+    NSArray* scenes = @[@(RKConsentSectionTypeOverview),
+                        @(RKConsentSectionTypeActivity),
+                        @(RKConsentSectionTypeSensorData),
+                        @(RKConsentSectionTypeDeIdentification),
+                        @(RKConsentSectionTypeCombiningData),
+                        @(RKConsentSectionTypeUtilizingData),
+                        @(RKConsentSectionTypeImpactLifeTime),
+                        @(RKConsentSectionTypePotentialRiskUncomfortableQuestion),
+                        @(RKConsentSectionTypePotentialRiskSocial),
+                        @(RKConsentSectionTypeAllowWithdraw)];
+    for (NSNumber* type in scenes) {
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:type.integerValue];
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        [components addObject:c];
+    }
+    
+    {
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeCustom];
+        c.summary = @"Custom Scene summary";
+        c.title = @"Custom Scene";
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        c.customImage = [UIImage imageNamed:@"image_example.png"];
+        [components addObject:c];
+    }
+    
+    {
+        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeOnlyInDocument];
+        c.summary = @"OnlyInDocument Scene summary";
+        c.title = @"OnlyInDocument Scene";
+        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
+        [components addObject:c];
+    }
+    
+    consent.sections = [components copy];
+    
+    RKVisualConsentStep *step = [[RKVisualConsentStep alloc] initWithDocument:consent];
+    RKConsentReviewStep *reviewStep = [[RKConsentReviewStep alloc] initWithSignature:participantSig inDocument:consent];
+    RKTask *task = [[RKTask alloc] initWithName:@"consent" identifier:@"consent" steps:@[step,reviewStep]];
+    RKTaskViewController *consentVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    
+    consentVC.taskDelegate = self;
+    [self presentViewController:consentVC animated:YES completion:nil];
+    
+}
+
+#pragma mark - TaskViewController Delegate methods
+
+- (void)taskViewControllerDidComplete: (RKTaskViewController *)taskViewController
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)taskViewControllerDidCancel:(RKTaskViewController *)taskViewController
+{
+    [taskViewController suspend];
+    [taskViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - IBActions
 
 - (IBAction)signOut:(id)sender
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotification:APCUserLogOutNotification];
 }
 
 - (IBAction)leaveStudy:(id)sender
@@ -487,7 +571,7 @@
 
 - (IBAction)reviewConsent:(id)sender
 {
-    
+    [self showConsent];
 }
 
 - (IBAction)changeProfileImage:(id)sender

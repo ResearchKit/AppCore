@@ -38,6 +38,8 @@
 		5B9041BF19F9714D005CFF77 /* APCDefaultTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B9041BD19F9714D005CFF77 /* APCDefaultTableViewCell.m */; };
 		5BB647A019F6F17800AA30AA /* APCTermsAndConditionsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB6479E19F6F17800AA30AA /* APCTermsAndConditionsViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BB647A119F6F17800AA30AA /* APCTermsAndConditionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB6479F19F6F17800AA30AA /* APCTermsAndConditionsViewController.m */; };
+		5BE5B1391A00061900827AFE /* APCStudyDetailsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BE5B1371A00061900827AFE /* APCStudyDetailsViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5BE5B13A1A00061900827AFE /* APCStudyDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BE5B1381A00061900827AFE /* APCStudyDetailsViewController.m */; };
 		5BF5C90819D9E208007928D4 /* APCUser+HealthKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF5C90619D9E208007928D4 /* APCUser+HealthKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BF5C90919D9E208007928D4 /* APCUser+HealthKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5C90719D9E208007928D4 /* APCUser+HealthKit.m */; };
 		7BA4BBF719D4893700BC4023 /* APCMapViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BA4BBF219D4893700BC4023 /* APCMapViewController.h */; };
@@ -316,6 +318,8 @@
 		5B9041BD19F9714D005CFF77 /* APCDefaultTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDefaultTableViewCell.m; sourceTree = "<group>"; };
 		5BB6479E19F6F17800AA30AA /* APCTermsAndConditionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTermsAndConditionsViewController.h; sourceTree = "<group>"; };
 		5BB6479F19F6F17800AA30AA /* APCTermsAndConditionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTermsAndConditionsViewController.m; sourceTree = "<group>"; };
+		5BE5B1371A00061900827AFE /* APCStudyDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyDetailsViewController.h; sourceTree = "<group>"; };
+		5BE5B1381A00061900827AFE /* APCStudyDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyDetailsViewController.m; sourceTree = "<group>"; };
 		5BF5C90619D9E208007928D4 /* APCUser+HealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCUser+HealthKit.h"; sourceTree = "<group>"; };
 		5BF5C90719D9E208007928D4 /* APCUser+HealthKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCUser+HealthKit.m"; sourceTree = "<group>"; };
 		7BA4BBF219D4893700BC4023 /* APCMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMapViewController.h; sourceTree = "<group>"; };
@@ -891,6 +895,8 @@
 				F588BA3019D21F1300692473 /* APCIntroVideoViewController.m */,
 				5B29CE4819D4902B00E2FD62 /* APCStudyOverviewViewController.h */,
 				5B29CE4919D4902B00E2FD62 /* APCStudyOverviewViewController.m */,
+				5BE5B1371A00061900827AFE /* APCStudyDetailsViewController.h */,
+				5BE5B1381A00061900827AFE /* APCStudyDetailsViewController.m */,
 				F588BA3319D21F1300692473 /* APCSignInViewController.h */,
 				F588BA3419D21F1300692473 /* APCSignInViewController.m */,
 				5B42F25219F189F0009E87BC /* APCForgotUsernameViewController.h */,
@@ -1145,6 +1151,7 @@
 				F588BA8C19D21F1300692473 /* APCPasscodeView.h in Headers */,
 				F588BA0819D21EFE00692473 /* NSManagedObject+APCHelper.h in Headers */,
 				F588BA9819D21F1300692473 /* YMLChartUnitsView.h in Headers */,
+				5BE5B1391A00061900827AFE /* APCStudyDetailsViewController.h in Headers */,
 				F588BA9C19D21F1300692473 /* YMLTimeLineChartView.h in Headers */,
 				F588BA9519D21F1300692473 /* APCStepViewController.h in Headers */,
 				F588BA1619D21EFE00692473 /* UISegmentedControl+Appearance.h in Headers */,
@@ -1416,6 +1423,7 @@
 				F5B4212B19D23D6800F9CD69 /* APCParametersCell.m in Sources */,
 				F5179CBB19D0917D001DCCB7 /* APCSurveyResult.m in Sources */,
 				F5179C7C19D0917D001DCCB7 /* APCDataSubstrate+CoreData.m in Sources */,
+				5BE5B13A1A00061900827AFE /* APCStudyDetailsViewController.m in Sources */,
 				7BA4BBFB19D4893700BC4023 /* APCPassiveLocationTracking.m in Sources */,
 				F588BA1519D21EFE00692473 /* UIScrollView+Helper.m in Sources */,
 				5B5F179519EDCBBB00A0E1D7 /* APCSegmentedTableViewCell.m in Sources */,
