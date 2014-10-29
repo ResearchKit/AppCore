@@ -43,9 +43,17 @@
     self.userNameTextField.delegate = self;
 }
 
-- (void)viewDidLayoutSubviews
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidLayoutSubviews];
+    [super viewWillAppear:animated];
+    
+    if (self.headerView) {
+        CGRect headerRect = self.headerView.frame;
+        headerRect.size.height = 127.0f;
+        self.headerView.frame = headerRect;
+        
+        self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+    }    
 }
 
 - (void)didReceiveMemoryWarning {
