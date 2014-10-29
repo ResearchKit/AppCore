@@ -133,6 +133,7 @@ static CGFloat const kPopAnimationDuration  = 0.3;
     [self addSubview:_scrubberThumbView];
     
     _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+    _panGestureRecognizer.delaysTouchesBegan = YES;
     [self addGestureRecognizer:_panGestureRecognizer];
 }
 
@@ -203,6 +204,7 @@ static CGFloat const kPopAnimationDuration  = 0.3;
     
     if ([self.datasource respondsToSelector:@selector(lineGraph:numberOfPointsInPlot:)]) {
         numberOfPoints = [self.datasource lineGraph:self numberOfPointsInPlot:plotIndex];
+
     }
     
     return numberOfPoints;
@@ -510,7 +512,7 @@ static CGFloat const kPopAnimationDuration  = 0.3;
     }
     
     CGFloat x1 = ((NSNumber *)self.xAxisPoints[positionIndex - 1]).floatValue;
-    CGFloat x2 = ((NSNumber *)self.xAxisPoints[positionIndex]).floatValue;//FIXME:Crash
+    CGFloat x2 = ((NSNumber *)self.xAxisPoints[positionIndex]).floatValue;
     
     CGFloat y1 = ((NSNumber *)self.dataPoints[positionIndex - 1]).floatValue;
     CGFloat y2 = ((NSNumber *)self.dataPoints[positionIndex]).floatValue;
@@ -629,39 +631,40 @@ static CGFloat const kPopAnimationDuration  = 0.3;
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
-    CGPoint location = [gestureRecognizer locationInView:self.plotsView];
-    
-    location = CGPointMake(location.x - kAPCGraphLeftPadding, location.y);
-    
-    CGFloat maxX = CGRectGetWidth(self.plotsView.bounds);
-    CGFloat minX = 0;
-    
-    CGFloat normalizedX = MAX(MIN(location.x, maxX), minX);
-    location = CGPointMake(normalizedX, location.y);
-    
-    self.scrubberLine.center = CGPointMake(location.x + kAPCGraphLeftPadding, self.scrubberLine.center.y);
-    
-    [self.scrubberLabel setFrame:CGRectMake(CGRectGetMaxX(self.scrubberLine.frame), CGRectGetMinY(self.scrubberLine.frame), CGRectGetWidth(self.scrubberLabel.frame), CGRectGetHeight(self.scrubberLabel.frame))];
-    self.scrubberLabel.text = [NSString stringWithFormat:@"%.2f", [self valueForCanvasXPosition:location.x]];
-    
-    [self.scrubberThumbView setCenter:CGPointMake(location.x + kAPCGraphLeftPadding, [self canvasYPointForXPosition:location.x] + kAPCGraphTopPadding)];
-    
-    if ([self.delegate respondsToSelector:@selector(lineGraph:touchesMovedToXPosition:)]) {
-        [self.delegate lineGraph:self touchesMovedToXPosition:location.x];
-    }
-    
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        [self setScrubberViewsHidden:NO animated:YES];
-        if ([self.delegate respondsToSelector:@selector(lineGraphTouchesBegan:)]) {
-            [self.delegate lineGraphTouchesBegan:self];
+    if (self.dataPoints.count > 0) {
+        CGPoint location = [gestureRecognizer locationInView:self.plotsView];
+        
+        location = CGPointMake(location.x - kAPCGraphLeftPadding, location.y);
+        
+        CGFloat maxX = CGRectGetWidth(self.plotsView.bounds);
+        CGFloat minX = 0;
+        
+        CGFloat normalizedX = MAX(MIN(location.x, maxX), minX);
+        location = CGPointMake(normalizedX, location.y);
+        
+        self.scrubberLine.center = CGPointMake(location.x + kAPCGraphLeftPadding, self.scrubberLine.center.y);
+        
+        [self.scrubberLabel setFrame:CGRectMake(CGRectGetMaxX(self.scrubberLine.frame), CGRectGetMinY(self.scrubberLine.frame), CGRectGetWidth(self.scrubberLabel.frame), CGRectGetHeight(self.scrubberLabel.frame))];
+        self.scrubberLabel.text = [NSString stringWithFormat:@"%.2f", [self valueForCanvasXPosition:location.x]];
+        
+        [self.scrubberThumbView setCenter:CGPointMake(location.x + kAPCGraphLeftPadding, [self canvasYPointForXPosition:location.x] + kAPCGraphTopPadding)];
+        
+        if ([self.delegate respondsToSelector:@selector(lineGraph:touchesMovedToXPosition:)]) {
+            [self.delegate lineGraph:self touchesMovedToXPosition:location.x];
         }
-    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded){
-        [self setScrubberViewsHidden:YES animated:YES];
-        if ([self.delegate respondsToSelector:@selector(lineGraphTouchesEnded:)]) {
-            [self.delegate lineGraphTouchesEnded:self];
+        
+        if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+            [self setScrubberViewsHidden:NO animated:YES];
+            if ([self.delegate respondsToSelector:@selector(lineGraphTouchesBegan:)]) {
+                [self.delegate lineGraphTouchesBegan:self];
+            }
+        } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded){
+            [self setScrubberViewsHidden:YES animated:YES];
+            if ([self.delegate respondsToSelector:@selector(lineGraphTouchesEnded:)]) {
+                [self.delegate lineGraphTouchesEnded:self];
+            }
         }
     }
-    
 }
 
 #pragma mark - Public Methods
@@ -669,10 +672,16 @@ static CGFloat const kPopAnimationDuration  = 0.3;
 - (void)scrubReferenceLineForXPosition:(CGFloat)xPosition
 {
     self.scrubberLine.center = CGPointMake(xPosition + kAPCGraphLeftPadding, self.scrubberLine.center.y);
-    [self.scrubberLabel setFrame:CGRectMake(self.scrubberLine.frame.origin.x + 5, 0, CGRectGetWidth(self.scrubberLabel.frame), CGRectGetHeight(self.scrubberLabel.frame))];
+    [self.scrubberLabel setFrame:CGRectMake(self.scrubberLine.frame.origin.x + 5, kAPCGraphTopPadding, CGRectGetWidth(self.scrubberLabel.frame), CGRectGetHeight(self.scrubberLabel.frame))];
     self.scrubberLabel.text = [NSString stringWithFormat:@"%.2f", [self valueForCanvasXPosition:xPosition]];
     
     [self.scrubberThumbView setCenter:CGPointMake(xPosition + kAPCGraphLeftPadding, [self canvasYPointForXPosition:xPosition] + kAPCGraphTopPadding)];
 }
 
+- (void)setTintColor:(UIColor *)tintColor
+{
+    _tintColor = tintColor;
+    self.titleLabel.textColor = tintColor;
+    self.leftTintView.backgroundColor = tintColor;
+}
 @end
