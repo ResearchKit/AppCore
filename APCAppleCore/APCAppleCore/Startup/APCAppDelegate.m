@@ -25,6 +25,8 @@ static NSString *const kLearnStoryBoardKey         = @"APHLearn";
 static NSString *const kActivitiesStoryBoardKey    = @"APHActivities";
 static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
 
+static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
+
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 @property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
 @end
@@ -47,6 +49,12 @@ static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
     [self setUpHKPermissions];
     [self setUpAppAppearance];
     [self showAppropriateVC];
+    
+    NSNumber *appState = [[NSUserDefaults standardUserDefaults] objectForKey:kAPCAppStateKey];
+    if (!appState) {
+        [[NSUserDefaults standardUserDefaults] setObject:@(kAPCAppStateNotConsented) forKey:kAPCAppStateKey];
+    }
+    
     return YES;
 }
 
@@ -66,6 +74,26 @@ static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     [self.dataMonitor backgroundFetch:completionHandler];
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    NSDate *currentTime = [NSDate date];
+    [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    if (self.dataSubstrate.currentUser.isSignedIn) {
+        NSDate *lastUsedTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+        
+        if (lastUsedTime) {
+            NSTimeInterval timeDifference = [lastUsedTime timeIntervalSinceNow];
+            if (timeDifference > 5*60) {
+                //Show passcode view
+            }
+        }
+    }
 }
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings

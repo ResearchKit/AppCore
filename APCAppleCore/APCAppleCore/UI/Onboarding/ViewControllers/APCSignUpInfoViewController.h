@@ -11,6 +11,7 @@
 #import "APCTextFieldTableViewCell.h"
 #import "APCPickerTableViewCell.h"
 #import "APCSegmentedTableViewCell.h"
+#import "APCDefaultTableViewCell.h"
 #import "APCSignUpProgressing.h"
 
 @interface APCSignUpInfoViewController : UITableViewController <APCTextFieldTableViewCellDelegate, APCSegmentedTableViewCellDelegate, APCPickerTableViewCellDelegate, APCSignUpProgressing, UITextFieldDelegate>

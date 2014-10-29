@@ -66,6 +66,7 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 {
     [super viewDidLoad];
     
+    [self setupNavAppearance];
     [self setupProgressBar];
     
     [self reloadData];
@@ -85,6 +86,17 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 }
 
 #pragma mark - Setup
+
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
+}
 
 - (void) setupProgressBar {
 
@@ -191,6 +203,11 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 - (void) setUserSignedUp
 {
     self.user.signedUp = YES;
+}
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Permissions

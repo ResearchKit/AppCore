@@ -11,10 +11,9 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "APCForgotUsernameViewController.h"
+#import "APCEmailVerifyViewController.h"
 
 @interface APCSignInViewController ()
-
-@property (weak, nonatomic) IBOutlet UIButton *touchIdButton;
 
 @end
 
@@ -26,6 +25,7 @@
     [super viewDidLoad];
     
     [self setupAppearance];
+    [self setupNavAppearance];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -45,14 +45,32 @@
 
 - (void)setupAppearance
 {
-    [self.touchIdButton setBackgroundColor:[UIColor appPrimaryColor]];
-    [self.touchIdButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.touchIdButton.titleLabel setFont:[UIFont appMediumFontWithSize:17.0f]];
     [self.userHandleTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.userHandleTextField setFont:[UIFont appRegularFontWithSize:17.0f]];
     
+    APCUser * user = [self user];
+    
+    if (user.userName) {
+        NSString *partialUsername = [user.userName substringToIndex:3];
+        
+        self.userHandleTextField.text = [NSString stringWithFormat:@"%@XXXXX", partialUsername];
+        self.userHandleTextField.enabled = NO;
+    }
+    
     [self.passwordTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.passwordTextField setFont:[UIFont appMediumFontWithSize:17.0f]];
+    
+}
+
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
 }
 
 #pragma mark - UITableViewDelegate method
@@ -71,6 +89,7 @@
 #pragma mark - UITextFieldDelegate
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
+    
     if (textField == self.userHandleTextField) {
         [self.passwordTextField becomeFirstResponder];
     }
@@ -82,54 +101,57 @@
     return YES;
 }
 
+#pragma mark - Private methods
+
+- (APCUser *)user
+{
+    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+    APCUser * user = appDelegate.dataSubstrate.currentUser;
+    return user;
+}
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - Public methods
 
 - (void) signIn
 {
     NSString *errorMessage;
     if ([self isContentValid:&errorMessage]) {
+        
         APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
         [self presentViewController:spinnerController animated:YES completion:nil];
-        
-        APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-        APCUser * user = appDelegate.dataSubstrate.currentUser;
+    
+        APCUser * user = [self user];
         
         if (!user.userName) {
             user.userName = self.userHandleTextField.text;
-            user.password = self.passwordTextField.text;
-            [user signInOnCompletion:^(NSError *error) {
-                [spinnerController dismissViewControllerAnimated:YES completion:^{
-                    if (error) {
-                        [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:error.message];
-                    }
-                    else
-                    {
+        }
+        
+        user.password = self.passwordTextField.text;
+        [user signInOnCompletion:^(NSError *error) {
+            [spinnerController dismissViewControllerAnimated:YES completion:^{
+                if (error) {
+                    [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:error.message];
+                }
+                else
+                {
+                    if (!user.consented) {
+                        APCEmailVerifyViewController *emailVerifyVC = [[UIStoryboard storyboardWithName:@"APCEmailVerify" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
+                        
+                        APCAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+                        appDelegate.window.rootViewController = emailVerifyVC;
+                    } else{
                         user.signedIn = YES;
                     }
-                }];
-                
+                }
             }];
             
-        }
-        else if ([self.userHandleTextField.text isEqualToString:user.userName]) {
-            [user signInOnCompletion:^(NSError *error) {
-                [spinnerController dismissViewControllerAnimated:YES completion:^{
-                    if (error) {
-                        [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:error.message];
-                    }
-                    else
-                    {
-                        user.signedIn = YES;
-                    }
-                }];
-                
-            }];
-        }
-        else
-        {
-            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:NSLocalizedString(@"Username does not match the existing username. Please delete the app to login as new user.", @"")];
-        }
-    }
-    else {
+        }];
+    } else {
         [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:errorMessage];
     }
 }
@@ -160,7 +182,7 @@
 }
 
 - (IBAction)signIn:(id)sender
-{
+{    
     [self signIn];
 }
 

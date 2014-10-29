@@ -33,32 +33,36 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 //UI
 #import <APCAppleCore/APCAssertionHandler.h>
 #import <APCAppleCore/APCCircularProgressView.h>
-#import <APCAppleCore/APCConfigurableCell.h>
 #import <APCAppleCore/APCConfirmationView.h>
-#import <APCAppleCore/APCCriteriaCell.h>
-#import <APCAppleCore/APCForgotPasswordViewController.h>
-#import <APCAppleCore/APCIntroVideoViewController.h>
 #import <APCAppleCore/APCPasscodeView.h>
 #import <APCAppleCore/APCSegmentControl.h>
+#import <APCAppleCore/APCSignUpProgressing.h>
+
+#import <APCAppleCore/APCUserInfoConstants.h>
+#import <APCAppleCore/APCIntroVideoViewController.h>
+#import <APCAppleCore/APCStudyOverviewViewController.h>
+#import <APCAppleCore/APCStudyDetailsViewController.h>
 #import <APCAppleCore/APCSignInViewController.h>
+#import <APCAppleCore/APCForgotPasswordViewController.h>
+#import <APCAppleCore/APCForgotUsernameViewController.h>
 #import <APCAppleCore/APCInclusionCriteriaViewController.h>
 #import <APCAppleCore/APCEligibleViewController.h>
 #import <APCAppleCore/APCInEligibleViewController.h>
-#import <APCAppleCore/APCSignUpPermissionsViewController.h>
-#import <APCAppleCore/APCSignUpProgressing.h>
+#import <APCAppleCore/APCTermsAndConditionsViewController.h>
+#import <APCAppleCore/APCSignUpInfoViewController.h>
 #import <APCAppleCore/APCSignupTouchIDViewController.h>
-#import <APCAppleCore/APCStudyOverviewViewController.h>
-#import <APCAppleCore/APCSpinnerViewController.h>
+#import <APCAppleCore/APCSignUpPermissionsViewController.h>
+#import <APCAppleCore/APCEmailVerifyViewController.h>
+
 #import <APCAppleCore/APCStepProgressBar.h>
 #import <APCAppleCore/APCTableViewItem.h>
-#import <APCAppleCore/APCUserInfoCell.h>
-#import <APCAppleCore/APCPermissionsCell.h>
-#import <APCAppleCore/APCUserInfoConstants.h>
+#import <APCAppleCore/APCGraph.h>
 #import <APCAppleCore/YMLChartEnumerations.h>
 #import <APCAppleCore/YMLChartUnitsView.h>
 #import <APCAppleCore/YMLLineChartView.h>
 #import <APCAppleCore/YMLTimeLineChartView.h>
 #import <APCAppleCore/APCIntroductionViewController.h>
+#import <APCAppleCore/APCSpinnerViewController.h>
 
 #import <APCAppleCore/APCSetupTaskViewController.h>
 #import <APCAppleCore/APCStepViewController.h>
@@ -66,14 +70,13 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCActivitiesViewController.h>
 #import <APCAppleCore/APCActivitiesTableViewCell.h>
 
-#import <APCAppleCore/APCEmailVerifyViewController.h>
-
 #import <APCAppleCore/APCProfileViewController.h>
-#import <APCAppleCore/APCSignUpInfoViewController.h>
 
 #import <APCAppleCore/APCTextFieldTableViewCell.h>
 #import <APCAppleCore/APCPickerTableViewCell.h>
 #import <APCAppleCore/APCSegmentedTableViewCell.h>
+#import <APCAppleCore/APCPermissionsCell.h>
+#import <APCAppleCore/APCDefaultTableViewCell.h>
 
 //Objects
 #import <APCAppleCore/APCGroupedScheduledTask.h>
@@ -102,9 +105,9 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/UIFont+APCAppearance.h>
 #import <APCAppleCore/UIColor+APCAppearance.h>
 
-static NSString *const APCUserSignedUpNotification     = @"APCUserSignedUpNotification";
-static NSString *const APCUserSignedInNotification     = @"APCUserSignedInNotification";
-static NSString *const APCUserLogOutNotification  = @"APCUserLogOutNotification";
+static NSString *const APCUserSignedUpNotification   = @"APCUserSignedUpNotification";
+static NSString *const APCUserSignedInNotification   = @"APCUserSignedInNotification";
+static NSString *const APCUserLogOutNotification     = @"APCUserLogOutNotification";
 static NSString *const APCUserDidConsentNotification = @"APCUserDidConsentNotification";
 
 static NSString *const APCAppDidRegisterUserNotification            = @"APCAppDidRegisterUserNotification";
