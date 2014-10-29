@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A388a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="APCIntroductionViewController">
@@ -21,13 +20,15 @@
                 <scrollView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Enl-cy-plq" userLabel="Text Scroll View">
                     <rect key="frame" x="0.0" y="0.0" width="288" height="112"/>
                     <constraints>
-                        <constraint firstAttribute="width" secondItem="Enl-cy-plq" secondAttribute="height" multiplier="18:7" id="9nn-7d-Kx4"/>
+                        <constraint firstAttribute="height" constant="112" id="hfW-3F-GcC"/>
+                        <constraint firstAttribute="width" constant="288" id="rJ7-zJ-lQQ"/>
                     </constraints>
                 </scrollView>
                 <scrollView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oPZ-0g-8nN" userLabel="Image Scroll View">
                     <rect key="frame" x="0.0" y="112" width="288" height="250"/>
                     <constraints>
-                        <constraint firstAttribute="width" secondItem="oPZ-0g-8nN" secondAttribute="height" multiplier="144:125" id="Dl3-bV-q1x"/>
+                        <constraint firstAttribute="height" constant="250" id="mZh-yC-J2A"/>
+                        <constraint firstAttribute="width" constant="288" id="vOA-Ra-TbV"/>
                     </constraints>
                     <connections>
                         <outlet property="delegate" destination="-1" id="1T9-ha-MRk"/>
@@ -45,15 +46,20 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="oPZ-0g-8nN" secondAttribute="trailing" id="592-c9-ngj"/>
-                <constraint firstItem="x3P-Tr-JsT" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="3" id="E5r-Jy-x8L"/>
-                <constraint firstAttribute="trailing" secondItem="x3P-Tr-JsT" secondAttribute="trailing" constant="2" id="RFi-QM-GFC"/>
-                <constraint firstItem="Enl-cy-plq" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="RTx-jr-l7h"/>
-                <constraint firstItem="x3P-Tr-JsT" firstAttribute="top" secondItem="oPZ-0g-8nN" secondAttribute="bottom" constant="8" id="Rcx-Aw-rOh"/>
-                <constraint firstAttribute="trailing" secondItem="Enl-cy-plq" secondAttribute="trailing" id="bQQ-Ax-qG7"/>
-                <constraint firstItem="oPZ-0g-8nN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="dLB-Iv-bAL"/>
-                <constraint firstItem="Enl-cy-plq" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="gQL-6Q-e1o"/>
-                <constraint firstItem="oPZ-0g-8nN" firstAttribute="top" secondItem="Enl-cy-plq" secondAttribute="bottom" id="otR-pI-EQ1"/>
+                <constraint firstAttribute="trailing" secondItem="oPZ-0g-8nN" secondAttribute="trailing" id="DfR-pm-p7u"/>
+                <constraint firstItem="oPZ-0g-8nN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Dxl-71-Ctp"/>
+                <constraint firstAttribute="centerY" secondItem="Enl-cy-plq" secondAttribute="centerY" constant="154" id="EMK-8e-RPr"/>
+                <constraint firstItem="Enl-cy-plq" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="EUE-xK-Rx4"/>
+                <constraint firstItem="x3P-Tr-JsT" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="3" id="LTC-Uh-Yg9"/>
+                <constraint firstAttribute="trailing" secondItem="Enl-cy-plq" secondAttribute="trailing" id="PeB-26-wQF"/>
+                <constraint firstItem="Enl-cy-plq" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="WtB-Nq-f8U"/>
+                <constraint firstItem="oPZ-0g-8nN" firstAttribute="top" secondItem="Enl-cy-plq" secondAttribute="bottom" id="cSf-sl-MzO"/>
+                <constraint firstAttribute="centerX" secondItem="x3P-Tr-JsT" secondAttribute="centerX" constant="-0.5" id="eNg-Kr-gSs"/>
+                <constraint firstAttribute="centerY" secondItem="oPZ-0g-8nN" secondAttribute="centerY" constant="-27" id="kMg-IS-IV3"/>
+                <constraint firstAttribute="centerX" secondItem="Enl-cy-plq" secondAttribute="centerX" id="lUv-Z6-IL2"/>
+                <constraint firstItem="x3P-Tr-JsT" firstAttribute="top" secondItem="oPZ-0g-8nN" secondAttribute="bottom" constant="8" id="waj-IR-SUU"/>
+                <constraint firstAttribute="centerX" secondItem="oPZ-0g-8nN" secondAttribute="centerX" id="xBl-oa-4xP"/>
+                <constraint firstAttribute="trailing" secondItem="x3P-Tr-JsT" secondAttribute="trailing" constant="2" id="y80-Hn-k7K"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

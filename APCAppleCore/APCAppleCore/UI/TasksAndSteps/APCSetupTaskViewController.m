@@ -28,6 +28,15 @@
 }
 
 /*********************************************************************************/
+#pragma mark - RKStepViewControllerDelegate
+/*********************************************************************************/
+//TODO this is commented out because it prevents us from using the delegate method to navigate steps. This is also a required protocol and therefore is causing the compiler to throw a warning.
+
+//- (void)stepViewControllerDidFinish:(RKStepViewController *)stepViewController navigationDirection:(RKStepViewControllerNavigationDirection)direction {
+//    
+//}
+
+/*********************************************************************************/
 #pragma mark - RKTaskDelegate
 /*********************************************************************************/
 - (void)taskViewControllerDidComplete: (RKTaskViewController *)taskViewController
