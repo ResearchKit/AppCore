@@ -117,8 +117,6 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (void) initializeBridgeServerConnection
 {
     [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey]];
-    SBBNetworkManager *myNetworkManager = [[SBBNetworkManager alloc] initWithBaseURL:self.initializationOptions[kBaseURLKey]];
-    [SBBComponentManager registerComponent:myNetworkManager forClass:[SBBNetworkManager class]];
 }
 
 - (void) initializeAppleCoreStack
