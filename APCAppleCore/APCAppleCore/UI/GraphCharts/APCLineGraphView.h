@@ -42,6 +42,9 @@
 
 @property (nonatomic, strong) UIColor *scrubberLineColor;
 
+
+@property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
+
 - (NSInteger)numberOfPlots;
 
 - (NSInteger)numberOfPointsinPlot:(NSInteger)plotIndex;

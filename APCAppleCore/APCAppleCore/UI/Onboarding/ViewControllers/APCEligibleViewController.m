@@ -121,9 +121,8 @@
 - (void)taskViewControllerDidComplete: (RKTaskViewController *)taskViewController
 {
     [self dismissViewControllerAnimated:YES completion:^{
+        
         [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
-
-        [[NSUserDefaults standardUserDefaults] setObject:@(kAPCAppStateConsented) forKey:kAPCAppStateKey];
         
         [self startSignUp];
     }];

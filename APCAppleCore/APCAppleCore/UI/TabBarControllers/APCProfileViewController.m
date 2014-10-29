@@ -33,7 +33,21 @@
     // Do any additional setup after loading the view.
     
     [self setupAppearance];
+    
+//    [self.tableView.tableHeaderView addConstraint:[NSLayoutConstraint constraintWithItem:self.headerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:127]];
 }
+
+//- (void)viewDidLayoutSubviews
+//{
+//    [super viewDidLayoutSubviews];
+//    
+//    CGRect headerRect = self.headerView.frame;
+//    headerRect.size.height = 127.0f;
+//    self.tableView.tableHeaderView.frame = headerRect;
+//    
+//    [self.view setNeedsUpdateConstraints];
+//    [self.view layoutIfNeeded];
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

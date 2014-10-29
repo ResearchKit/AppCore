@@ -33,7 +33,6 @@ static CGFloat const kPopAnimationDuration  = 0.3;
 @property (nonatomic, strong) APCAxisView *xAxisView;
 @property (nonatomic, strong) UIView *yAxisView;
 
-@property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, strong) UIView *leftTintView;
 
 @property (nonatomic, strong) UIView *scrubberLine;
@@ -133,8 +132,8 @@ static CGFloat const kPopAnimationDuration  = 0.3;
     _scrubberThumbView.alpha = 0;
     [self addSubview:_scrubberThumbView];
     
-    _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
-    [self addGestureRecognizer:_panGesture];
+    _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+    [self addGestureRecognizer:_panGestureRecognizer];
 }
 
 - (void)setDefaults
