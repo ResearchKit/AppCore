@@ -86,6 +86,9 @@
 
 - (void)lineGraphTouchesEnded:(APCLineGraphView *)graphView;
 
+- (void)lineGraphViewDidTapExpand:(APCLineGraphView *)graphView;
+
+- (void)lineGraphViewDidTapCollapse:(APCLineGraphView *)graphView;
 
 @end
 
