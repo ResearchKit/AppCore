@@ -92,13 +92,13 @@
     [self.dateRangeLabel setFont:[UIFont appLightFontWithSize:16.0f]];
     
     [self.reviewConsentButton setBackgroundColor:[UIColor appPrimaryColor]];
-    [self.reviewConsentButton.titleLabel setTextColor:[UIColor whiteColor]];
+    [self.reviewConsentButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.reviewConsentButton.titleLabel setFont:[UIFont appMediumFontWithSize:19.0]];
     
-    [self.signOutButton.titleLabel setTextColor:[UIColor appPrimaryColor]];
+    [self.signOutButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
     [self.signOutButton.titleLabel setFont:[UIFont appMediumFontWithSize:16.0]];
     
-    [self.leaveStudyButton.titleLabel setTextColor:[UIColor appPrimaryColor]];
+    [self.leaveStudyButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
     [self.leaveStudyButton.titleLabel setFont:[UIFont appMediumFontWithSize:16.0]];
 }
 
@@ -587,16 +587,33 @@
 
 - (IBAction)changeProfileImage:(id)sender
 {
-    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-    imagePickerController.editing = YES;
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        imagePickerController.editing = YES;
         imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+        imagePickerController.delegate = self;
+        [self presentViewController:imagePickerController animated:YES completion:nil];
+    }];
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        [alertController addAction:cameraAction];
     }
-    else {
+    
+    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        imagePickerController.editing = YES;
         imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    }
-    imagePickerController.delegate = self;
-    [self presentViewController:imagePickerController animated:YES completion:nil];
+        imagePickerController.delegate = self;
+        [self presentViewController:imagePickerController animated:YES completion:nil];
+    }];
+    [alertController addAction:libraryAction];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    [alertController addAction:cancelAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 
 }
 
