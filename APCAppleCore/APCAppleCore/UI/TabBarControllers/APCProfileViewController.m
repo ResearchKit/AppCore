@@ -572,7 +572,7 @@
 
 - (IBAction)signOut:(id)sender
 {
-    [[NSNotificationCenter defaultCenter] postNotification:APCUserLogOutNotification];
+    [[NSNotificationCenter defaultCenter] postNotificationName:APCUserLogOutNotification object:self];
 }
 
 - (IBAction)leaveStudy:(id)sender
