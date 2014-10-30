@@ -22,6 +22,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self setupAppearance];
+    [self setupNavAppearance];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -39,6 +42,17 @@
     
     [self.usernameTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.usernameTextField setFont:[UIFont appMediumFontWithSize:17.0f]];
+}
+
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
 }
 
 #pragma mark - UITableViewDelegate method
@@ -104,7 +118,16 @@
     
 }
 
-- (IBAction)done:(id)sender {
+#pragma mark - Selectors / IBActions
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)done:(id)sender
+{
     [self sendPassword];
 }
+
 @end

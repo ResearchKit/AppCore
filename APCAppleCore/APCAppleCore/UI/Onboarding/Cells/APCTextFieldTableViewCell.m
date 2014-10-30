@@ -46,7 +46,7 @@
 - (void)setType:(APCTextFieldCellType)type
 {
     if (type == kAPCTextFieldCellTypeLeft) {
-        self.textLabelWidthConstraint.constant = 120;
+        self.textLabelWidthConstraint.constant = 111;
         self.textField.textAlignment = NSTextAlignmentLeft;
     } else {
         self.textLabelWidthConstraint.constant = 183;

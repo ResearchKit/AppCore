@@ -10,12 +10,13 @@
 #import "APCUser+HealthKit.h"
 #import "APCTextFieldTableViewCell.h"
 #import "APCPickerTableViewCell.h"
+#import "APCDefaultTableViewCell.h"
 
 @interface APCProfileViewController : UITableViewController <APCPickerTableViewCellDelegate, APCTextFieldTableViewCellDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) NSMutableArray *items;
 
-@property (nonatomic, strong) NSMutableArray *itemTypeOrder;
+@property (nonatomic, strong) NSMutableArray *itemsOrder;
 
 @property (nonatomic, strong) APCUser *user;
 
@@ -30,6 +31,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *editLabel;
 
 @property (weak, nonatomic) IBOutlet UIView *footerView;
+
+@property (weak, nonatomic) IBOutlet UILabel *footerTitleLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *diseaseLabel;
 
@@ -52,5 +55,7 @@
 - (IBAction)changeProfileImage:(id)sender;
 
 - (IBAction)editFields:(id)sender;
+
+- (void)loadProfileValuesInModel;
 
 @end

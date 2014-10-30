@@ -31,6 +31,21 @@
     return sexType;
 }
 
++ (HKBiologicalSex)sexTypeForIndex:(NSInteger)index
+{
+    HKBiologicalSex sexType;
+    
+    if (index == 0) {
+        sexType = HKBiologicalSexMale;
+    } else if (index == 1) {
+        sexType = HKBiologicalSexFemale;
+    } else{
+        sexType = HKBiologicalSexNotSet;
+    }
+    
+    return sexType;
+}
+
 + (NSString *) stringValueFromSexType:(HKBiologicalSex)sexType {
     NSArray *values = [APCUser sexTypesInStringValue];
     
@@ -54,7 +69,6 @@
     
     return index;
 }
-
 
 
 + (NSArray *) bloodTypeInStringValues {
@@ -84,6 +98,15 @@
              @[@"1'", @"2'", @"3'", @"4'", @"5'", @"6'", @"7'", @"8'", @"9'", @"10'", @"11'", @"12'"],
              @[@"0''", @"1''", @"2''", @"3''", @"4''", @"5''", @"6''", @"7''", @"8''", @"9''", @"10''", @"11''"]
              ];
+}
+
++ (double)heightInInchesForSelectedIndices:(NSArray *)selectedIndices
+{
+    NSInteger feet = ((NSNumber *)selectedIndices[0]).integerValue + 1;
+    NSInteger inches = ((NSNumber *)selectedIndices[1]).integerValue;
+    
+    double totalInches = (12 * feet) + inches;
+    return totalInches;
 }
 
 + (double)heightInInches:(HKQuantity *)height

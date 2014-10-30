@@ -13,6 +13,8 @@
 /* Biologcal Sex */
 + (NSArray *) sexTypesInStringValue;
 
++ (HKBiologicalSex)sexTypeForIndex:(NSInteger)index;
+
 + (HKBiologicalSex) sexTypeFromStringValue:(NSString *)stringValue;
 
 + (NSString *) stringValueFromSexType:(HKBiologicalSex)sexType;
@@ -32,6 +34,8 @@
 
 /* Height */
 + (NSArray *) heights;
+
++ (double)heightInInchesForSelectedIndices:(NSArray *)selectedIndices;
 
 + (double)heightInInches:(HKQuantity *)height;
 

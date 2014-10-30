@@ -16,12 +16,21 @@
 static NSString *APCParametersDashboardCellIdentifier = @"APCParametersCellIdentifier";
 static NSString *APCParametersCoreDataCellIdentifier = @"APCParametersCoreDataCellIdentifier";
 static NSString *APCParametersUserDefaultsCellIdentifier = @"APCParametersUserDefaultsCellIdentifier";
+static NSString *APCParametersDefaultsParameterCellIdentifier = @"APCParametersDefaultsParametersCellIdentifier";
 
-static NSString *APCTitleOfParameterSection = @"Parameters";
-static NSString *APCTitleOfCoreDataParameterSection = @"Reset";
+static NSString *APCTitleOfParameterSection = @"App Specific Parameters";
+static NSString *APCTitleOfCoreDataParameterSection = @"Choose Option";
 static NSString *APCTitleOfUserDefaultsParameterSection = @"NSUserdefaults";
 
 
+static const NSUInteger kBypassServer = 1;
+#if DEVELOPMENT
+static const NSUInteger kCoreDataReset = 0;
+static const NSUInteger kHideConsent = 2;
+#else
+static const NSUInteger kCoreDataReset = 2;
+static const NSUInteger kHideConsent = 0;
+#endif
 typedef NS_ENUM(NSInteger, APCParametersEnum)
 {
     kCoreDataDefault = 0,
@@ -54,13 +63,15 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     self.sections = @[APCParametersDashboardCellIdentifier, APCParametersCoreDataCellIdentifier];
     
     //TODO parameters should be loaded at launch of application
-    self.parameters = [[APCParameters alloc] initWithFileName:@"APCParameters.json"];
+    self.parameters =((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.parameters;
     [self.parameters setDelegate:self];
 
     //Setup persistent parameter types like Core Data
-    self.coreDataParameters = [NSMutableArray new];
+#if DEVELOPMENT
     self.coreDataParameters = [@[@"App Reset"] mutableCopy];
-//    self.coreDataParameters = [@[@"Core Data Reset", @"Parameters", @"NSUserDefaults"] mutableCopy];
+#else
+    self.coreDataParameters = [@[@"Hide Consent", @"Bypass Server", @"App Reset"] mutableCopy];
+#endif
     
     //Setup NSUserDefaults
     self.userDefaultParameters = [[[[NSUserDefaults standardUserDefaults] dictionaryRepresentation] allKeys] mutableCopy];
@@ -126,11 +137,9 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 
     CGFloat height = 0;
     
-    if (indexPath.section == kCoreDataDefault) {
-        
+    if (indexPath.section == kCoreDataDefault)
+    {
         height = [APCParametersCoreDataCell heightOfCell];
-        
-        
     }
     else if (indexPath.section == kParametersDefaults)
     {
@@ -150,18 +159,47 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     
     if (indexPath.section == kCoreDataDefault)
     {
-        APCParametersCoreDataCell *coreDataCell = [tableView dequeueReusableCellWithIdentifier:APCParametersCoreDataCellIdentifier];
-        [coreDataCell setDelegate:self];
-        
-        coreDataCell.resetTitle.text = [self.coreDataParameters objectAtIndex:indexPath.row];
+        switch (indexPath.row) {
+            case kHideConsent:
+            {
+                UITableViewCell * simpleCell = [tableView dequeueReusableCellWithIdentifier:APCParametersDefaultsParameterCellIdentifier];
+                UILabel * label = (UILabel*)[simpleCell viewWithTag:100];
+                UISwitch * localSwitch = (UISwitch*) [simpleCell viewWithTag: 200];
+                cell = simpleCell;
+                
+                label.text = @"Hide Consent";
+                localSwitch.on = self.parameters.hideConsent;
+                [localSwitch addTarget:self action:@selector(hideConsent:) forControlEvents:UIControlEventValueChanged];
 
-        if (indexPath.row == kCoreDataDefault)
-        {
-            coreDataCell.resetInstructions.text = @"Resets the app to fresh install state.";
-            [coreDataCell.resetButton addTarget:self action:@selector(resetApp) forControlEvents:UIControlEventTouchUpInside];
+            }
+                break;
+            case kBypassServer:
+            {
+                UITableViewCell * simpleCell = [tableView dequeueReusableCellWithIdentifier:APCParametersDefaultsParameterCellIdentifier];
+                UILabel * label = (UILabel*)[simpleCell viewWithTag:100];
+                UISwitch * localSwitch = (UISwitch*) [simpleCell viewWithTag: 200];
+                cell = simpleCell;
+                
+                label.text = @"Bypass Server";
+                localSwitch.on = self.parameters.bypassServer;
+                [localSwitch addTarget:self action:@selector(bypassServer:) forControlEvents:UIControlEventValueChanged];
+            }
+                break;
+            case kCoreDataReset:
+            {
+                APCParametersCoreDataCell *coreDataCell = [tableView dequeueReusableCellWithIdentifier:APCParametersCoreDataCellIdentifier];
+                [coreDataCell setDelegate:self];
+                coreDataCell.resetTitle.text = [self.coreDataParameters objectAtIndex:indexPath.row];
+                coreDataCell.resetInstructions.text = @"Resets the app to fresh install state.";
+                [coreDataCell.resetButton addTarget:self action:@selector(resetApp) forControlEvents:UIControlEventTouchUpInside];
+                cell = coreDataCell;
+            }
+                break;
+ 
+            default:
+                break;
         }
         
-        cell = coreDataCell;
     }
     
     else if (indexPath.section == kParametersDefaults)
@@ -342,5 +380,14 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 
 }
 
+-(IBAction)hideConsent:(UISwitch*)sender
+{
+    self.parameters.hideConsent = sender.on;
+}
+
+-(IBAction)bypassServer:(UISwitch*)sender
+{
+    self.parameters.bypassServer = sender.on;
+}
 
 @end

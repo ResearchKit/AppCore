@@ -27,6 +27,8 @@
 
 @property (nonatomic, copy) NSString *regularExpression;
 
+@property (nonatomic, copy) NSString *placeholder;
+
 @property (nonatomic, readwrite, getter=isEditable) BOOL editable;
 
 @end
@@ -42,8 +44,6 @@
 @property (nonatomic, readwrite) UITextFieldViewMode clearButtonMode;
 
 @property (nonatomic, readwrite, getter = isSecure) BOOL secure;
-
-@property (nonatomic, copy) NSString *placeholder;
 
 @property (nonatomic, copy) NSString *value;
 

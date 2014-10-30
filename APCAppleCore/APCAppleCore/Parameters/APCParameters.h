@@ -37,6 +37,13 @@ extern NSString *const ParametersValueChangeNotification;
 - (NSArray *)                           allKeys;
 - (void)                                reset;
 
+/*********************************************************************************/
+#pragma mark - Default Parameters
+/*********************************************************************************/
+
+@property (nonatomic) BOOL hideConsent;
+@property (nonatomic) BOOL bypassServer;
+
 @end
 
 //Protocol
