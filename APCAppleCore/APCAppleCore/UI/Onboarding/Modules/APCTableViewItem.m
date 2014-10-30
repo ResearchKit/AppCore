@@ -10,8 +10,15 @@
 
 @implementation APCTableViewItem
 
-- (NSString *) identifier {
-    return @"cell";
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _style = UITableViewCellStyleValue1;
+        _selectionStyle = UITableViewCellSelectionStyleGray;
+        _editable = YES;
+    }
+    return self;
 }
 
 @end

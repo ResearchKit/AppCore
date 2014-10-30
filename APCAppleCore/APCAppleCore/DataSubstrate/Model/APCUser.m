@@ -11,13 +11,15 @@
 #import <HealthKit/HealthKit.h>
 
 
-static NSString *const kFirstNamePropertyName = @"firstName";
-static NSString *const kLastNamePropertyName = @"lastName";
+static NSString *const kNamePropertyName = @"name";
 static NSString *const kUserNamePropertyName = @"userName";
 static NSString *const kEmailPropertyName = @"email";
 static NSString *const kPasswordPropertyName = @"password";
 static NSString *const kSessionTokenPropertyName = @"sessionToken";
 
+static NSString *const kBirthDatePropertyName = @"birthDate";
+static NSString *const kBiologicalSexPropertyName = @"BiologicalSex";
+static NSString *const kBloodTypePropertyName = @"bloodType";
 static NSString *const kConsentedPropertyName = @"serverConsented";
 static NSString *const kUserConsentedPropertyName = @"userConsented";
 static NSString *const kMedicalConditionsPropertyName = @"medicalConditions";
@@ -29,6 +31,11 @@ static NSString *const kSignedUpKey = @"SignedUp";
 static NSString *const kSignedInKey = @"SignedIn";
 
 @interface APCUser ()
+{
+    NSDate * _birthDate;
+    HKBiologicalSex _biologicalSex;
+    HKBloodType _bloodType;
+}
 @property (nonatomic, readonly) HKHealthStore * healthStore;
 @end
 
@@ -49,8 +56,7 @@ static NSString *const kSignedInKey = @"SignedIn";
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"\
-            First Name : %@\n\
-            Last Name : %@\n\
+            Name : %@\n\
             Username : %@\n\
             Email : %@\n\
             DOB : %@\n\
@@ -68,7 +74,7 @@ static NSString *const kSignedInKey = @"SignedIn";
             Weight : %@ \n\
             Wake Up Time : %@ \n\
             Sleep time : %@ \n\
-            ", self.firstName, self.lastName, self.userName, self.email, self.birthDate, (int) self.biologicalSex, @(self.isSignedUp), @(self.isUserConsented), @(self.isSignedIn), @(self.isConsented), self.medicalConditions, self.medications, (int) self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime];
+            ", self.name, self.userName, self.email, self.birthDate, (int) self.biologicalSex, @(self.isSignedUp), @(self.isUserConsented), @(self.isSignedIn), @(self.isConsented), self.medicalConditions, self.medications, (int) self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime];
 }
 
 - (void) loadStoredUserData: (NSManagedObjectContext*) context
@@ -96,6 +102,9 @@ static NSString *const kSignedInKey = @"SignedIn";
 
 - (void) copyPropertiesFromStoredUserData: (APCStoredUserData*) storedUserData
 {
+    _birthDate = [storedUserData.birthDate copy];
+    _biologicalSex = (HKBiologicalSex)[storedUserData.biologicalSex integerValue];
+    _bloodType = (HKBloodType) [storedUserData.bloodType integerValue];
     _consented = [storedUserData.serverConsented boolValue];
     _userConsented = [storedUserData.userConsented boolValue];
     _medicalConditions = [storedUserData.medicalConditions copy];
@@ -125,24 +134,14 @@ static NSString *const kSignedInKey = @"SignedIn";
 #pragma mark - Properties from Key Chain
 /*********************************************************************************/
 
-- (NSString *)firstName
+- (NSString *)name
 {
-    return [APCKeychainStore stringForKey:kFirstNamePropertyName];
+    return [APCKeychainStore stringForKey:kNamePropertyName];
 }
 
-- (void)setFirstName:(NSString *)firstName
+- (void)setName:(NSString *)name
 {
-    [APCKeychainStore setString:firstName forKey:kFirstNamePropertyName];
-}
-
-- (NSString *)lastName
-{
-    return [APCKeychainStore stringForKey:kLastNamePropertyName];
-}
-
-- (void)setLastName:(NSString *)lastName
-{
-    [APCKeychainStore setString:lastName forKey:kLastNamePropertyName];
+    [APCKeychainStore setString:name forKey:kNamePropertyName];
 }
 
 - (NSString *)userName
@@ -241,7 +240,13 @@ static NSString *const kSignedInKey = @"SignedIn";
     NSError *error;
     NSDate *dateOfBirth = [self.healthStore dateOfBirthWithError:&error];
     [error handle];
-    return dateOfBirth;
+    return dateOfBirth ?: _birthDate;
+}
+
+-(void)setBirthDate:(NSDate *)birthDate
+{
+    _birthDate = birthDate;
+    [self updateStoredProperty:kBirthDatePropertyName withValue:birthDate];
 }
 
 - (HKBiologicalSex) biologicalSex
@@ -249,7 +254,13 @@ static NSString *const kSignedInKey = @"SignedIn";
     NSError *error;
     HKBiologicalSexObject * sexObject = [self.healthStore biologicalSexWithError:&error];
     [error handle];
-    return sexObject.biologicalSex;
+    return sexObject.biologicalSex?:_biologicalSex;
+}
+
+- (void)setBiologicalSex:(HKBiologicalSex)biologicalSex
+{
+    _biologicalSex = biologicalSex;
+    [self updateStoredProperty:kBiologicalSexPropertyName withValue:@(biologicalSex)];
 }
 
 - (HKBloodType) bloodType
@@ -257,7 +268,13 @@ static NSString *const kSignedInKey = @"SignedIn";
     NSError *error;
     HKBloodTypeObject * bloodObject = [self.healthStore bloodTypeWithError:&error];
     [error handle];
-    return bloodObject.bloodType;
+    return bloodObject.bloodType?: _bloodType;
+}
+
+- (void)setBloodType:(HKBloodType)bloodType
+{
+    _bloodType = bloodType;
+    [self updateStoredProperty:kBloodTypePropertyName withValue:@(bloodType)];
 }
 
 //Height

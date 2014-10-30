@@ -7,6 +7,7 @@
 //
 
 #import "APCParametersDashboardTableViewController.h"
+#import "APCDebugWindow.h"
 #import "APCAppleCore.h"
 
 #import <QuartzCore/QuartzCore.h>
@@ -15,14 +16,21 @@
 static NSString *APCParametersDashboardCellIdentifier = @"APCParametersCellIdentifier";
 static NSString *APCParametersCoreDataCellIdentifier = @"APCParametersCoreDataCellIdentifier";
 static NSString *APCParametersUserDefaultsCellIdentifier = @"APCParametersUserDefaultsCellIdentifier";
+static NSString *APCParametersDefaultsParameterCellIdentifier = @"APCParametersDefaultsParametersCellIdentifier";
 
-static NSString *APCTitleOfParameterSection = @"Parameters";
-static NSString *APCTitleOfCoreDataParameterSection = @"Reset";
+static NSString *APCTitleOfParameterSection = @"App Specific Parameters";
+static NSString *APCTitleOfCoreDataParameterSection = @"Choose Option";
 static NSString *APCTitleOfUserDefaultsParameterSection = @"NSUserdefaults";
 
-static NSInteger APCParametersTableViewHeaderHeight = 70.0;
 
-
+static const NSUInteger kBypassServer = 1;
+#if DEVELOPMENT
+static const NSUInteger kCoreDataReset = 0;
+static const NSUInteger kHideConsent = 2;
+#else
+static const NSUInteger kCoreDataReset = 2;
+static const NSUInteger kHideConsent = 0;
+#endif
 typedef NS_ENUM(NSInteger, APCParametersEnum)
 {
     kCoreDataDefault = 0,
@@ -46,37 +54,24 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self setupHeaderView];
+    self.title = @"Debug Screen";
     
     //Setup sections
     
     //TODO: If you want to include NSUserDefaults then uncomment the line below.
-    //self.sections = @[APCParametersDashboardCellIdentifier, APCParametersCoreDataCellIdentifier, APCParametersUserDefaultsCellIdentifier];
+//    self.sections = @[APCParametersDashboardCellIdentifier, APCParametersCoreDataCellIdentifier, APCParametersUserDefaultsCellIdentifier];
     self.sections = @[APCParametersDashboardCellIdentifier, APCParametersCoreDataCellIdentifier];
     
     //TODO parameters should be loaded at launch of application
-    self.parameters = [[APCParameters alloc] initWithFileName:@"APCParameters.json"];
+    self.parameters =((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.parameters;
     [self.parameters setDelegate:self];
-    
-    //Force loading of AppleCore bundle
 
-    
-    NSBundle* bundle = [NSBundle appleCoreBundle];
-    
-    //Register custom nibs
-    NSString *nibName = NSStringFromClass([APCParametersCell class]);
-    [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:bundle] forCellReuseIdentifier:APCParametersDashboardCellIdentifier];
-    
-    NSString *nibCoreDataCellName = NSStringFromClass([APCParametersCoreDataCell class]);
-    [self.tableView registerNib:[UINib nibWithNibName:nibCoreDataCellName bundle:bundle] forCellReuseIdentifier:APCParametersCoreDataCellIdentifier];
-
-    NSString *nibUserDefaultsCellName = NSStringFromClass([APCParametersUserDefaultCell class]);
-    [self.tableView registerNib:[UINib nibWithNibName:nibUserDefaultsCellName bundle:bundle] forCellReuseIdentifier:APCParametersUserDefaultsCellIdentifier];
-
-    
     //Setup persistent parameter types like Core Data
-    self.coreDataParameters = [NSMutableArray new];
-    self.coreDataParameters = [@[@"Core Data Reset", @"Parameters", @"NSUserDefautls"] mutableCopy];
+#if DEVELOPMENT
+    self.coreDataParameters = [@[@"App Reset"] mutableCopy];
+#else
+    self.coreDataParameters = [@[@"Hide Consent", @"Bypass Server", @"App Reset"] mutableCopy];
+#endif
     
     //Setup NSUserDefaults
     self.userDefaultParameters = [[[[NSUserDefaults standardUserDefaults] dictionaryRepresentation] allKeys] mutableCopy];
@@ -142,11 +137,9 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 
     CGFloat height = 0;
     
-    if (indexPath.section == kCoreDataDefault) {
-        
+    if (indexPath.section == kCoreDataDefault)
+    {
         height = [APCParametersCoreDataCell heightOfCell];
-        
-        
     }
     else if (indexPath.section == kParametersDefaults)
     {
@@ -160,53 +153,53 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     return height;
 }
 
-
-- (UIImage *)imageWithColor:(UIColor *)color {
-    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, rect);
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return image;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell *cell;
     
     if (indexPath.section == kCoreDataDefault)
     {
-        APCParametersCoreDataCell *coreDataCell = [tableView dequeueReusableCellWithIdentifier:APCParametersCoreDataCellIdentifier];
-        [coreDataCell setDelegate:self];
-        
-        coreDataCell.resetTitle.text = [self.coreDataParameters objectAtIndex:indexPath.row];
-        [coreDataCell.resetButton setBackgroundImage:[self imageWithColor:[UIColor blueColor]] forState:UIControlStateHighlighted];
+        switch (indexPath.row) {
+            case kHideConsent:
+            {
+                UITableViewCell * simpleCell = [tableView dequeueReusableCellWithIdentifier:APCParametersDefaultsParameterCellIdentifier];
+                UILabel * label = (UILabel*)[simpleCell viewWithTag:100];
+                UISwitch * localSwitch = (UISwitch*) [simpleCell viewWithTag: 200];
+                cell = simpleCell;
+                
+                label.text = @"Hide Consent";
+                localSwitch.on = self.parameters.hideConsent;
+                [localSwitch addTarget:self action:@selector(hideConsent:) forControlEvents:UIControlEventValueChanged];
 
-        
-        if (indexPath.row == kCoreDataDefault)
-        {
-            coreDataCell.resetInstructions.text = @"This will delete all persisting object graph entities.";
-            [coreDataCell.resetButton addTarget:self action:@selector(resetCoreData) forControlEvents:UIControlEventTouchUpInside];
-
+            }
+                break;
+            case kBypassServer:
+            {
+                UITableViewCell * simpleCell = [tableView dequeueReusableCellWithIdentifier:APCParametersDefaultsParameterCellIdentifier];
+                UILabel * label = (UILabel*)[simpleCell viewWithTag:100];
+                UISwitch * localSwitch = (UISwitch*) [simpleCell viewWithTag: 200];
+                cell = simpleCell;
+                
+                label.text = @"Bypass Server";
+                localSwitch.on = self.parameters.bypassServer;
+                [localSwitch addTarget:self action:@selector(bypassServer:) forControlEvents:UIControlEventValueChanged];
+            }
+                break;
+            case kCoreDataReset:
+            {
+                APCParametersCoreDataCell *coreDataCell = [tableView dequeueReusableCellWithIdentifier:APCParametersCoreDataCellIdentifier];
+                [coreDataCell setDelegate:self];
+                coreDataCell.resetTitle.text = [self.coreDataParameters objectAtIndex:indexPath.row];
+                coreDataCell.resetInstructions.text = @"Resets the app to fresh install state.";
+                [coreDataCell.resetButton addTarget:self action:@selector(resetApp) forControlEvents:UIControlEventTouchUpInside];
+                cell = coreDataCell;
+            }
+                break;
+ 
+            default:
+                break;
         }
-        else if (indexPath.row == kParametersDefaults)
-        {
-            coreDataCell.resetInstructions.text = @"This will reset original Parameters.";
-            [coreDataCell.resetButton addTarget:self action:@selector(resetParameters) forControlEvents:UIControlEventTouchUpInside];
-        }
-        else if (indexPath.row == kUserDefault)
-        {
-            coreDataCell.resetInstructions.text = @"This will delete all NSUserDefaults.";
-            [coreDataCell.resetButton addTarget:self action:@selector(resetUserDefaults) forControlEvents:UIControlEventTouchUpInside];
-        }
         
-        
-        cell = coreDataCell;
     }
     
     else if (indexPath.section == kParametersDefaults)
@@ -276,84 +269,28 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     return cell;
 }
 
-
 /*********************************************************************************/
-#pragma mark - Private methods
+#pragma mark - Reset Methods
 /*********************************************************************************/
-- (void) setupHeaderView {
-    
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenRect.size.width, APCParametersTableViewHeaderHeight)];
-    
-    //This is set in the header view portion of table view.
-    float xValue = 10.0f;
-    float yValue = 25.0f;
-    float width = 50.0;
-    float height = 40.0;
-    
-    UIButton *doneButton = [[UIButton alloc] initWithFrame:CGRectMake(xValue, yValue, width, height)];
-    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
-    [doneButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [doneButton addTarget:self action:@selector(dimissView) forControlEvents:UIControlEventTouchUpInside];
-    
-    [headerView addSubview:doneButton];
-    
-    self.tableView.tableHeaderView = headerView;
-}
-
-- (void)dimissView {
-    [self.tableView endEditing:YES];
-    
-    [UIView animateWithDuration:0.3 animations:^{
-        [self.view setAlpha:0];
-        
-    } completion:^(BOOL finished) {
-        [self removeFromParentViewController];
-        
-    }];
-}
 
 - (void) resetParameters {
     [self.tableView endEditing:YES];
-    
     [self.parameters reset];
     [self.tableView reloadData];
 }
 
-- (void)resetUserDefaults {
-    [self.tableView endEditing:YES];
-    NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
-    for (NSString *key in [defaultsDictionary allKeys]) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-    }
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    [self.tableView reloadData];
+- (void) resetApp
+{
+    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+    UIViewController * vc =  [[UIViewController alloc] init];
+    vc.view.backgroundColor = [UIColor whiteColor];
+    appDelegate.window.rootViewController = vc;
+    [appDelegate clearNSUserDefaults];
+    [APCKeychainStore resetKeyChain];
+    [self.parameters reset];
+    [appDelegate.dataSubstrate resetCoreData];
+    [[NSNotificationCenter defaultCenter] postNotificationName:APCUserLogOutNotification object:self];
 }
-
-- (void)resetCoreData {
-    
-    NSFileManager  *manager = [NSFileManager defaultManager];
-    
-    // the preferred way to get the apps documents directory
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    
-    // grab all the files in the documents dir
-    NSArray *allFiles = [manager contentsOfDirectoryAtPath:documentsDirectory error:nil];
-    
-    // filter the array for only sqlite files
-    NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.sqlite'"];
-    NSArray *sqliteFiles = [allFiles filteredArrayUsingPredicate:fltr];
-    
-    // use fast enumeration to iterate the array and delete the files
-    for (NSString *sqliteFile in sqliteFiles)
-    {
-        NSError *error = nil;
-        [manager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:sqliteFile] error:&error];
-        NSAssert(!error, @"Assertion: Error removing sqlite file.");
-    }
-}
-
 
 /*********************************************************************************/
 #pragma mark - CUSTOM CELL Delegate Methods
@@ -422,6 +359,35 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     [alertController addAction:okAction];
     
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+/*********************************************************************************/
+#pragma mark - Buttons
+/*********************************************************************************/
+
+- (IBAction)donePressed:(id)sender {
+    [self.tableView endEditing:YES];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.navigationController.view setAlpha:0];
+        
+    } completion:^(BOOL finished) {
+        APCDebugWindow * window = (APCDebugWindow*) self.navigationController.view.window;
+        [self.navigationController.view removeFromSuperview];
+        [self.navigationController removeFromParentViewController];
+        window.toggleDebugWindow = NO;
+    }];
+
+}
+
+-(IBAction)hideConsent:(UISwitch*)sender
+{
+    self.parameters.hideConsent = sender.on;
+}
+
+-(IBAction)bypassServer:(UISwitch*)sender
+{
+    self.parameters.bypassServer = sender.on;
 }
 
 @end

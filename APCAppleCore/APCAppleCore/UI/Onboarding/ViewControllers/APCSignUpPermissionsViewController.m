@@ -14,17 +14,12 @@
 #import "APCPermissionsCell.h"
 #import "NSBundle+Helper.h"
 #import "APCPermissionsManager.h"
-#import <CoreMotion/CoreMotion.h>
 
-
-static NSString * const kSignUpPermissionsCellIdentifier = @"PermissonsCell";
 static CGFloat const kTableViewRowHeight                 = 165.0f;
 
 @interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
-
-@property (nonatomic, strong) NSMutableArray *permissions;
 
 @property (nonatomic) NSInteger permissionsGrantedCount;
 
@@ -35,6 +30,10 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 #pragma mark - Init
 
 @implementation APCSignUpPermissionsViewController
+
+@synthesize stepProgressBar;
+
+@synthesize user = _user;
 
 - (instancetype)init
 {
@@ -56,40 +55,6 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 {
     _permissions = [NSMutableArray array];
     
-    {
-        APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
-        item.permissionType = kSignUpPermissionsTypeHealthKit;
-        item.caption = NSLocalizedString(@"Health Kit", @"");
-        item.detailText = NSLocalizedString(@"Lorem ipsum dolor sit amet, etos et ya consectetur adip isicing elit, sed.", @"");
-        [self.permissions addObject:item];
-    }
-    
-    {
-        APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
-        item.permissionType = kSignUpPermissionsTypeLocation;
-        item.caption = NSLocalizedString(@"Location Services", @"");
-        item.detailText = NSLocalizedString(@"Lorem ipsum dolor sit amet, etos et ya consectetur adip isicing elit, sed.", @"");
-        [self.permissions addObject:item];
-    }
-    
-    {
-        APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
-        item.permissionType = kSignUpPermissionsTypePushNotifications;
-        item.caption = NSLocalizedString(@"Push Notifications", @"");
-        item.detailText = NSLocalizedString(@"Lorem ipsum dolor sit amet, etos et ya consectetur adip isicing elit, sed.", @"");
-        [self.permissions addObject:item];
-    }
-    
-    {
-        if ([CMMotionActivityManager isActivityAvailable]){
-            APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
-            item.permissionType = kSignUpPermissionsTypeCoremotion;
-            item.caption = NSLocalizedString(@"Core Motion", @"");
-            item.detailText = NSLocalizedString(@"Lorem ipsum dolor sit amet, etos et ya consectetur adip isicing elit, sed.", @"");
-            [self.permissions addObject:item];
-        }        
-    }
-    
     _permissionsGrantedCount = 0;
     
     _permissionsManager = [[APCPermissionsManager alloc] init];
@@ -101,20 +66,17 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 {
     [super viewDidLoad];
     
-    [self addNavigationItems];
+    [self setupNavAppearance];
     [self setupProgressBar];
-    [self addTableView];
     
     [self reloadData];
 }
 
 - (void)viewWillLayoutSubviews
 {
-    CGRect frame = self.view.bounds;
-    frame.origin.y = self.stepProgressBar.bottom;
-    frame.size.height -= frame.origin.y;
-    self.tableView.frame = frame;
+    self.stepProgressBar.frame = CGRectMake(0, -kAPCSignUpProgressBarHeight, self.view.width, kAPCSignUpProgressBarHeight);
 }
+
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
@@ -125,33 +87,37 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 
 #pragma mark - Setup
 
-- (void) addNavigationItems {
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     
-    UIBarButtonItem *nextBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"") style:UIBarButtonItemStylePlain target:self action:@selector(finishSignUp)];
-    nextBarButton.enabled = [self isPermissionsGranted];
-    self.navigationItem.rightBarButtonItem = nextBarButton;
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
 }
 
 - (void) setupProgressBar {
+
+    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, -kAPCSignUpProgressBarHeight, self.view.width, kAPCSignUpProgressBarHeight) style:APCStepProgressBarStyleDefault];
+    self.stepProgressBar.numberOfSteps = 4;
+    [self.view addSubview:self.stepProgressBar];
+    
+    // Instead of reducing table view height, we can just adjust tableview scroll insets
+    UIEdgeInsets inset = self.tableView.contentInset;
+    inset.top += self.stepProgressBar.height;
+    
+    self.tableView.contentInset = inset;
+    
     [self.stepProgressBar setCompletedSteps:2 animation:NO];
-    [self setStepNumber:4 title:NSLocalizedString(@"Permissions", @"")];
 }
 
-- (void) addTableView {
-    CGRect frame = self.view.bounds;
-    frame.origin.y = self.stepProgressBar.bottom;
-    frame.size.height -= frame.origin.y;
-    
-    self.tableView = [UITableView new];
-    self.tableView.frame = frame;
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.allowsSelection = NO;
-    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
-    [self.view addSubview:self.tableView];
-    
-    [self.tableView registerNib:[UINib nibWithNibName:@"APCPermissionsCell" bundle:[NSBundle appleCoreBundle]] forCellReuseIdentifier:kSignUpPermissionsCellIdentifier];
+- (APCUser *) user {
+    if (!_user) {
+        _user = ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+    }
+    return _user;
 }
 
 #pragma mark - UITableViewDataSource methods
@@ -163,7 +129,7 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    APCPermissionsCell *cell = (APCPermissionsCell *)[tableView dequeueReusableCellWithIdentifier:kSignUpPermissionsCellIdentifier forIndexPath:indexPath];
+    APCPermissionsCell *cell = (APCPermissionsCell *)[tableView dequeueReusableCellWithIdentifier:kSignUpPermissionsCellIdentifier];
     
     APCTableViewPermissionsItem *item = self.permissions[indexPath.row];
     
@@ -222,15 +188,13 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 - (void)setPermissionsGrantedCount:(NSInteger)permissionsGrantedCount
 {
     _permissionsGrantedCount = permissionsGrantedCount;
-    
-    self.navigationItem.rightBarButtonItem.enabled = [self isPermissionsGranted];
 }
 
 #pragma mark - Selectors / Button Actions
 
 - (void)finishSignUp
 {
-    [self.stepProgressBar setCompletedSteps:5 animation:YES];
+    [self.stepProgressBar setCompletedSteps:4 animation:YES];
     
     // We are posting this notification after .5 seconds delay, because we need to display the progress bar completion animation
     [self performSelector:@selector(setUserSignedUp) withObject:nil afterDelay:0.5];
@@ -239,6 +203,11 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 - (void) setUserSignedUp
 {
     self.user.signedUp = YES;
+}
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Permissions
@@ -259,8 +228,6 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 {
     [self updatePermissions];
     [self.tableView reloadData];
-    
-    self.navigationItem.leftBarButtonItem.enabled = [self isPermissionsGranted];
 }
 
 

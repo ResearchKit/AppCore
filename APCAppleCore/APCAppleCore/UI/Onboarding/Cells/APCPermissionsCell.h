@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "APCPermissionButton.h"
+
+static NSString * const kSignUpPermissionsCellIdentifier = @"APCPermissionsCell";
 
 @class APCPermissionsCell;
 
@@ -25,13 +28,5 @@
 @property (strong, nonatomic) NSIndexPath *indexPath;
 
 - (void)setPermissionsGranted:(BOOL)granted;
-
-@end
-
-/* ---- */
-
-@interface APCPermissionButton : UIButton
-
-@property (nonatomic, strong) UILabel *titleLabel;
 
 @end

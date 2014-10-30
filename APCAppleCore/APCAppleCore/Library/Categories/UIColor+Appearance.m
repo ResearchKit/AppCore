@@ -10,6 +10,11 @@
 
 @implementation UIColor (Appearance)
 
++ (UIColor *)titleColor
+{
+    return nil;
+}
+
 + (UIColor *)confirmationGreenColor
 {
     return [UIColor colorWithRed:68/255.0f green:210/255.0f blue:70/255.0f alpha:1.0];

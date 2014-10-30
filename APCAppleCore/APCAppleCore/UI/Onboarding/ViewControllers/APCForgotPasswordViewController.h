@@ -6,11 +6,13 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCViewController.h"
+#import <UIKit/UIKit.h>
 
-@interface APCForgotPasswordViewController : APCViewController <UITextFieldDelegate>
+@interface APCForgotPasswordViewController : UITableViewController <UITextFieldDelegate>
 
-@property (nonatomic, weak) IBOutlet UITextField *emaiTextField;
+@property (nonatomic, weak) IBOutlet UITextField *emailTextField;
+
+@property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 
 - (void) sendPassword;
 

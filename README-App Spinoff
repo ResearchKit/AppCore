@@ -1,0 +1,31 @@
+Steps for spinning off a new project
+-------------------------------------
+1) Clone the project and create a README file in "master" branch per instructions in bitbucket blank project page.
+2) Create "dev" branch and push it to origin.
+3) Add AppleCore submodule with the below command:  "git submodule add https://bitbucket.org/ymedialabs/applecore.git AppleCore"
+4) Add .gitignore from an existing project & commit.
+5) Create blank single screen xcode project in the desired name. After creation, copy the ".xcodeproj" and the main directory in the parent directory.This is to ensure that AppleCore directory resides along with ".xcodeproj".
+6) Clean out all the .h/.m files. Delete the test files and test target.
+7) Pull AppleCore project as subproject to main project, after checking out "dev" branch.
+8) Add APCAppleCore.framework & BridgeSDK.framework as embedded binary
+9) Set yes to "Allow Non-modular Includes In Framework Modules" in Build Settings
+10) Update "Framework Search Paths" to include "$(PROJECT_DIR)/AppleCore/APCAppleCore/ResearchKit"
+11) Pull app specific project files from existing project (Parkinson/Cario) into main App
+12) Add all the necessary Frameworks from other project. Add appropriate entitlements in Capabilities screen.
+13) Update main.m file to include APHAppDelegate.
+14) App should compile at this point without problem.
+15) Update AppDelegate with study identifier. 
+16) Clear custom tasks & steps unless they are common.
+17) Update JSONs appropriately in Resources/JSON directory.
+
+			------------------X  HURRAY  X------------------
+
+Adding "_dev" scheme
+---------------------
+1) Go to project to reveal "Configurations". Spinoff a new configuration called "development" using "debug" configuration.
+2) Add DEVELOPMENT=1 as preprocessor macro under development configuration.
+3) Create a new scheme with _dev suffix.
+4) Edit the new scheme to point Build Configuration to point to "development" configuration.
+5) Make the _dev scheme "shared" to share with others.
+
+			------------------X  DOUBLE HURRAY  X------------------

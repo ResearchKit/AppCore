@@ -12,6 +12,9 @@
 
 @interface APCStoredUserData : NSManagedObject
 
+@property (nonatomic, retain) NSDate * birthDate;
+@property (nonatomic, retain) NSNumber * biologicalSex;
+@property (nonatomic, retain) NSNumber * bloodType;
 @property (nonatomic, retain) NSString * medicalConditions;
 @property (nonatomic, retain) NSString * medications;
 @property (nonatomic, retain) NSNumber * serverConsented;

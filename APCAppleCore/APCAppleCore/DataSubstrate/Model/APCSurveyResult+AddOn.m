@@ -34,7 +34,7 @@
     APCSurveyResult * localAPCResult = (APCSurveyResult*) apcResult;
     
     for (RKQuestionResult * answer in localRKResult.surveyResults) {
-//        NSLog(@"TYPE: %d    Storing: %@", (int)answer.questionType,answer.answer);
+        //NSLog(@"TYPE: %d    Storing: %@", (int)answer.questionType,answer.answer);
         APCQuestionResult* apcAnswer = [APCQuestionResult storeRKResult:answer inContext:apcResult.managedObjectContext];
         apcAnswer.survey = localAPCResult;
     }

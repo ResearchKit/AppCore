@@ -13,6 +13,10 @@
 #import "UIAlertView+Helper.h"
 #import "APCSignupTouchIDViewController.h"
 #import "APCSignUpPermissionsViewController.h"
+#import "APCAppDelegate.h"
+#import "UIColor+APCAppearance.h"
+#import "UIFont+APCAppearance.h"
+#import "APCKeychainStore.h"
 
 @import LocalAuthentication;
 
@@ -20,39 +24,37 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
-@property (weak, nonatomic) IBOutlet UIButton *touchIDButton;
-
 @property (weak, nonatomic) IBOutlet APCPasscodeView *passcodeView;
 
 @property (weak, nonatomic) IBOutlet APCPasscodeView *retryPasscodeView;
 
-@property (nonatomic, strong) LAContext *touchContext;
-
 @end
 
+
 @implementation APCSignupTouchIDViewController
+
+@synthesize stepProgressBar;
+
+@synthesize user = _user;
+
+#pragma mark - Life Cycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self addNavigationItems];
     [self setupProgressBar];
-    
-    self.touchContext = [LAContext new];
-    
-    [self enableTouchIDFeatureIfAvailable];
     
     self.titleLabel.text = NSLocalizedString(@"Set a passcode\nfor secure identification", @"");
     
     self.passcodeView.delegate = self;
     self.retryPasscodeView.delegate = self;
+    
+    [self setupAppearance];
+    [self setupNavAppearance];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
     [self showFirstTry];
 }
@@ -65,36 +67,42 @@
     [self.passcodeView becomeFirstResponder];
 }
 
-- (void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+#pragma mark - Setup
+
+- (void)setupAppearance
+{
+    [self.titleLabel setTextColor:[UIColor appSecondaryColor1]];
+    [self.titleLabel setFont:[UIFont appLightFontWithSize:17.0f]];
 }
 
-- (void) addNavigationItems {
-    self.title = NSLocalizedString(@"Sign Up", @"");
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
 }
 
 - (void) setupProgressBar {
+     
+    CGFloat stepProgressByYPosition = self.topLayoutGuide.length;
     
-    [self setStepNumber:3 title:NSLocalizedString(@"Identification", @"")];
+    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.width, kAPCSignUpProgressBarHeight)
+                                                               style:APCStepProgressBarStyleDefault];
+    self.stepProgressBar.numberOfSteps = kNumberOfSteps;
+    [self.view addSubview:self.stepProgressBar];
+    
     [self.stepProgressBar setCompletedSteps:1 animation:NO];
 }
 
-- (void) enableTouchIDFeatureIfAvailable {
-    NSError *error;
-    if ([self.touchContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-        self.touchIDButton.hidden = NO;
+- (APCUser *) user {
+    if (!_user) {
+        _user = ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
     }
-    else {
-        self.touchIDButton.hidden = YES;
-        
-//        if (error) {
-//            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Touch Authentication", @"") message:error.localizedDescription];
-//        }
-        NSLog(@"Touch Authentication: %@", error.localizedDescription);
-    }
+    return _user;
 }
 
 
@@ -104,9 +112,9 @@
     if (passcodeView == self.passcodeView) {
         [self showRetry];
     }
-    else {
+    else if (self.passcodeView.code.length > 0) {
         if ([self.passcodeView.code isEqualToString:self.retryPasscodeView.code]) {
-            [self next];
+            [self savePasscode];
         }
         else {
             [self showFirstTry];
@@ -116,33 +124,15 @@
     }
 }
 
-
-#pragma mark - IBActions
-
-- (IBAction) touchID {
-    NSString *localizedReason = NSLocalizedString(@"Authentication", @"");
-    
-    typeof(self) __weak weakSelf = self;
-    [self.touchContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:localizedReason reply:^(BOOL success, NSError *error) {
-        if (success) {
-            [weakSelf next];
-        }
-        else {
-            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Touch Authentication", @"") message:error.localizedDescription];
-        }
-    }];
-}
-
-
 #pragma mark - Private Methods
 
-- (void) next {
-    APCSignUpPermissionsViewController *permissionsViewController = [[APCSignUpPermissionsViewController alloc] init];
-    permissionsViewController.user = self.user;
-    [self.navigationController pushViewController:permissionsViewController animated:YES];
+- (void) next
+{
+    
 }
 
-- (void) showFirstTry {
+- (void) showFirstTry
+{
     self.passcodeView.hidden = NO;
     self.retryPasscodeView.hidden = YES;
     
@@ -152,7 +142,8 @@
     [self.passcodeView reset];
 }
 
-- (void) showRetry {
+- (void) showRetry
+{
     self.passcodeView.hidden = YES;
     self.retryPasscodeView.hidden = NO;
     
@@ -162,45 +153,17 @@
     [self.retryPasscodeView reset];
 }
 
-
-#pragma mark - NSNotification
-
-- (void) keyboardWillShow:(NSNotification *)notification {
-    CGRect keyboardRect;
-    CGFloat duration = 0;
-    UIViewAnimationCurve curve;
-    
-    [UIView frame:&keyboardRect animationDuration:&duration animationCurve:&curve fromKeyboardNotification:notification];
-    
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:duration];
-    [UIView setAnimationCurve:curve];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    
-    CGRect buttonRect = self.touchIDButton.frame;
-    buttonRect.origin.y -= keyboardRect.size.height;
-    self.touchIDButton.frame = buttonRect;
-    
-    [UIView commitAnimations];
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void) keyboardWillHide:(NSNotification *)notification {
-    CGRect keyboardRect;
-    CGFloat duration = 0;
-    UIViewAnimationCurve curve;
-    
-    [UIView frame:&keyboardRect animationDuration:&duration animationCurve:&curve fromKeyboardNotification:notification];
-    
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:duration];
-    [UIView setAnimationCurve:curve];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    
-    CGRect buttonRect = self.touchIDButton.frame;
-    buttonRect.origin.y += keyboardRect.size.height;
-    self.touchIDButton.frame = buttonRect;
-    
-    [UIView commitAnimations];
+#pragma mark Passcode
+
+- (void)savePasscode
+{
+    [APCKeychainStore setString:self.retryPasscodeView.code forKey:kAPCPasscodeKey];
+    [self next];
 }
 
 

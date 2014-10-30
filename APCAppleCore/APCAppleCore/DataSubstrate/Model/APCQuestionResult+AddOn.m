@@ -44,8 +44,14 @@
             case RKSurveyQuestionTypeDecimal:
             case RKSurveyQuestionTypeSingleChoice:
             {
-                NSAssert([localRKResult.answer isKindOfClass:[NSString class]], @"Its not a string");
-                localAPCResult.stringAnswer = (NSString*)localRKResult.answer;
+                //Expecting either a string or an int
+                if ([localRKResult.answer isKindOfClass:[NSString class]]) {
+                    localAPCResult.stringAnswer = (NSString*)localRKResult.answer;
+                } else if ([localRKResult.answer isKindOfClass:[NSNumber class]]) {
+                    localAPCResult.integerAnswer = localRKResult.answer;
+                } else {
+                    NSAssert(localRKResult.answer, @"Its neither an integer nor a string");
+                }
             }
                 break;
             case RKSurveyQuestionTypeBoolean:

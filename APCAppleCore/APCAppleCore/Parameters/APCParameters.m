@@ -11,7 +11,8 @@
 
 // Private constants
 NSString *const kParamentersFileName                    = @"APCparameters.json";
-
+NSString *const kHideConsentProperty                    = @"hideConsent";
+NSString *const kBypassServerProperty                   = @"bypassServer";
 
 @interface APCParameters ()
 
@@ -215,30 +216,35 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     
     self.jsonPath             = [documentsPath stringByAppendingPathComponent:kParamentersFileName];
     BOOL           fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.jsonPath];
-    
+    if (!fileExists)
+    {
+        [self copyFileFromBundle];
+    }
+    [self setContentOfFileToDictionary];
+}
+
+- (void) copyFileFromBundle
+{
     NSString *currentFileName = kParamentersFileName;
+    currentFileName       = self.fileName;
     
+    NSArray *fileNameAndExtension = [currentFileName componentsSeparatedByString:@"."];
+    
+    //This is used for unit testing
+    //        NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    //        NSString *bundlePath = [bundle pathForResource:fileNameAndExtension[0] ofType:fileNameAndExtension[1]];
+    
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:fileNameAndExtension[0] ofType:fileNameAndExtension[1]];
+    
+    BOOL           fileExists = [[NSFileManager defaultManager] fileExistsAtPath:bundlePath];
     if (fileExists) {
-        currentFileName       = self.fileName;
-        
-        NSArray *fileNameAndExtension = [currentFileName componentsSeparatedByString:@"."];
-        
-        //This is used for unit testing
-        //        NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-        //        NSString *bundlePath = [bundle pathForResource:fileNameAndExtension[0] ofType:fileNameAndExtension[1]];
-        
-        NSString *bundlePath = [[NSBundle mainBundle] pathForResource:fileNameAndExtension[0] ofType:fileNameAndExtension[1]];
-        
         NSError *error = nil;
         if (![[NSFileManager defaultManager] copyItemAtPath:bundlePath toPath:self.jsonPath error:&error]) {
-            
             [self didFail:error];
-        } else {
-            
-            [self setContentOfFileToDictionary];
         }
-    } else {
-        
+    }
+    else
+    {
         //If no file exists than we just create one.
         NSError *error = nil;
         if (![[NSFileManager defaultManager] createFileAtPath:self.jsonPath contents:nil attributes:nil]) {
@@ -246,6 +252,7 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
             [self didFail:error];
         }
     }
+
 }
 
 - (void)setContentOfFileToDictionary {
@@ -260,6 +267,17 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     }
     else {
         self.userDefaults = [dict mutableCopy];
+    }
+    [self addDefaultParametersIfNeeded];
+}
+
+- (void) addDefaultParametersIfNeeded
+{
+    if (self.userDefaults[kHideConsentProperty] == nil) {
+        [self setBool:NO forKey:kHideConsentProperty];
+    }
+    if (self.userDefaults[kBypassServerProperty] == nil) {
+        [self setBool:NO forKey:kBypassServerProperty];
     }
 }
 
@@ -302,6 +320,30 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
 
     }
 }
+
+/*********************************************************************************/
+#pragma mark - Properties
+/*********************************************************************************/
+- (BOOL)hideConsent
+{
+    return [self boolForKey:kHideConsentProperty];
+}
+
+- (void)setHideConsent:(BOOL)hideConsent
+{
+    [self setBool:hideConsent forKey:kHideConsentProperty];
+}
+
+- (BOOL)bypassServer
+{
+    return [self boolForKey:kBypassServerProperty];
+}
+
+- (void)setBypassServer:(BOOL)bypassServer
+{
+    [self setBool:bypassServer forKey:kBypassServerProperty];
+}
+
 
 /*********************************************************************************/
 #pragma mark - Delegate Methods

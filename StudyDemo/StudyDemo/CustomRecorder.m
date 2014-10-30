@@ -8,6 +8,9 @@
 #import "CustomRecorder.h"
 
 @interface CustomRecorder ()
+{
+    UIView *_containerFiller;
+}
 
 @property (nonatomic, strong) UIView* containerView;
 @property (nonatomic, strong) UIButton* button;
@@ -21,6 +24,25 @@
 - (void)viewController:(UIViewController*)viewController willStartStepWithView:(UIView*)view{
     [super viewController:viewController willStartStepWithView:view];
     self.containerView = view;
+    
+    // Here we try to keep the recorder self-contained by adding our own view to the container.
+    // However, it might be better (as in, the results will be more clearly defined)
+    // to add a custom view to the active step controller, and then
+    // find that view here and attach to it.
+    //
+    // As it is, in this example we are adding constraints to "view" without
+    // really owning its constraint space.
+    [_containerFiller removeFromSuperview];
+    _containerFiller = [UIView new];
+    [_containerFiller setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.containerView addSubview:_containerFiller];
+    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[c]|" options:0 metrics:nil views:@{@"c":_containerFiller}]];
+    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[c]|" options:0 metrics:nil views:@{@"c":_containerFiller}]];
+    NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:_containerFiller attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:160];
+    heightConstraint.priority = UILayoutPriorityFittingSizeLevel;
+    [_containerFiller addConstraint:heightConstraint];
+    
+    _containerFiller.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.25];
 }
 
 - (BOOL)start:(NSError *__autoreleasing *)error{
@@ -34,12 +56,14 @@
     
     _button = [UIButton buttonWithType:UIButtonTypeSystem];
     [_button setTitle:@"Tap here" forState:UIControlStateNormal];
+    [_button setTranslatesAutoresizingMaskIntoConstraints:NO];
     _button.frame = CGRectInset(_containerView.bounds, 10, 10);
-    _button.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleHeight;
     _button.backgroundColor = [UIColor orangeColor];
     _button.hidden = YES;
     [_button addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchDown];
-    [_containerView addSubview:_button];
+    [_containerFiller addSubview:_button];
+    [_containerFiller addConstraint:[NSLayoutConstraint constraintWithItem:_button attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:_containerFiller attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+    [_containerFiller addConstraint:[NSLayoutConstraint constraintWithItem:_button attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:_containerFiller attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
     
     _records = [NSMutableArray array];
     
@@ -79,6 +103,8 @@
     [self.timer invalidate];
     [_button removeFromSuperview];
     _button = nil;
+    [_containerFiller removeFromSuperview];
+    _containerFiller = nil;
     
     if (self.records) {
         
@@ -135,24 +161,19 @@
     return [[CustomRecorder alloc] initWithStep:step taskInstanceUUID:taskInstanceUUID];
 }
 
-#pragma mark - RKSerialization
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
 
-- (instancetype)initWithDictionary:(NSDictionary *)dictionary{
-    
-    self = [self init];
-    if (self) {
-        
-    }
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super init];
     return self;
 }
 
-- (NSDictionary*)dictionaryValue{
-    
-    NSMutableDictionary* dict = [NSMutableDictionary new];
-    
-    dict[@"_class"] = NSStringFromClass([self class]);
-    
-    return dict;
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
 }
 
 @end

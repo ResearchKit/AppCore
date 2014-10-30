@@ -27,7 +27,24 @@ typedef NS_ENUM(NSUInteger, APCSignUpUserInfoItem) {
     APCSignUpUserInfoItemWakeUpTime
 };
 
-static CGFloat const kAPCSignUpProgressBarHeight                = 40.0f;
+typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
+    kSignUpPermissionsTypeHealthKit,
+    kSignUpPermissionsTypeLocation,
+    kSignUpPermissionsTypePushNotifications,
+    kSignUpPermissionsTypeCoremotion,
+};
+
+typedef NS_ENUM(NSUInteger, APCAppState) {
+    kAPCAppStateNotConsented,
+    kAPCAppStateConsented
+};
+
+static CGFloat const kAPCSignUpProgressBarHeight                = 14.0f;
+
+static NSInteger kNumberOfSteps = 4;
+
+
+static NSString * const kAPCUserInfoFieldNameRegEx              = @"[A-Za-z\\ ]+";
 
 static NSString * const kAPCGeneralInfoItemUserNameRegEx        = @"[A-Za-z0-9_.]+";
 
@@ -35,7 +52,9 @@ static NSString * const kAPCGeneralInfoItemEmailRegEx           = @"[A-Z0-9a-z._
 
 static NSString * const kAPCMedicalInfoItemWeightRegEx          = @"[0-9]{1,4}";
 
-static NSString * const kAPCMedicalInfoItemSleepTimeFormate     = @"HH:mm a";
+static NSString * const kAPCMedicalInfoItemSleepTimeFormat     = @"hh:mm a";
 
+
+static NSString * const kAPCAppStateKey = @"APCAppState";
 
 #endif

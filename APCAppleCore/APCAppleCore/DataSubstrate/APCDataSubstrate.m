@@ -22,6 +22,7 @@
         [self setUpCurrentUser:self.persistentContext];
         [self setUpResearchStudy:studyIdentifier];
         [self setUpHealthKit];
+        [self setupParameters];
     }
     return self;
 }
@@ -36,5 +37,15 @@
     }
 }
 
+- (void) setupParameters {
+    self.parameters = [[APCParameters alloc] initWithFileName:@"APCParameters.json"];
+    [self.parameters setDelegate:self];
+}
 
+/*********************************************************************************/
+#pragma mark - Properties & Methods meant only for Categories
+/*************************************************s********************************/
+- (void)parameters:(APCParameters *)parameters didFailWithError:(NSError *)error {
+    NSAssert(error, @"parameters are not loaded");
+}
 @end
