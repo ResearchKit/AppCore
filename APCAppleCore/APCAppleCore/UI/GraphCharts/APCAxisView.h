@@ -13,6 +13,8 @@
 
 @property (nonatomic, strong) UIColor *tintColor;
 
+@property (nonatomic) CGFloat leftOffset;
+
 - (void)setupLabels:(NSArray *)titles forAxisType:(APCGraphAxisType)type;
 
 @end

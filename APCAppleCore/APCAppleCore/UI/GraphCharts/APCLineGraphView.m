@@ -11,7 +11,7 @@
 #import "APCAxisView.h"
 
 static CGFloat const kYAxisPaddingFactor = 0.166f;
-static CGFloat const kAPCGraphLeftPadding = 4.f;
+static CGFloat const kAPCGraphLeftPadding = 17.f;
 static CGFloat const kTitleLeftPadding = 12.f;
 static CGFloat const kAxisMarkingRulerLength = 8.0f;
 
@@ -96,11 +96,11 @@ static CGFloat const kPopAnimationDuration  = 0.3;
 {
     CGFloat yAxisPadding = CGRectGetWidth(self.frame)*kYAxisPaddingFactor;
     
-    _leftTintView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kAPCGraphLeftPadding, CGRectGetHeight(self.bounds) - kXAxisHeight)];
+    _leftTintView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 4, CGRectGetHeight(self.bounds) - kXAxisHeight)];
     _leftTintView.backgroundColor = _tintColor;
     [self addSubview:_leftTintView];
     
-    _plotsView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_leftTintView.frame) + kTitleLeftPadding, kAPCGraphTopPadding, CGRectGetWidth(self.frame) - yAxisPadding, CGRectGetHeight(self.frame) - kXAxisHeight - kAPCGraphTopPadding)]; //TODO: Fix frame
+    _plotsView = [[UIView alloc] initWithFrame:CGRectMake(kAPCGraphLeftPadding, kAPCGraphTopPadding, CGRectGetWidth(self.frame) - yAxisPadding - kAPCGraphLeftPadding, CGRectGetHeight(self.frame) - kXAxisHeight - kAPCGraphTopPadding)]; //TODO: Fix frame
     _plotsView.backgroundColor = [UIColor clearColor];
     [self addSubview:_plotsView];
     
@@ -151,9 +151,9 @@ static CGFloat const kPopAnimationDuration  = 0.3;
     
     CGFloat yAxisPadding = CGRectGetWidth(self.frame)*kYAxisPaddingFactor;
     
-    _leftTintView.frame = CGRectMake(0, 0, kAPCGraphLeftPadding, CGRectGetHeight(self.bounds) - kXAxisHeight);
+    _leftTintView.frame = CGRectMake(0, 0, 4, CGRectGetHeight(self.bounds) - kXAxisHeight);
     
-    self.plotsView.frame = CGRectMake(CGRectGetMaxX(self.leftTintView.frame), kAPCGraphTopPadding, CGRectGetWidth(self.frame) - yAxisPadding, CGRectGetHeight(self.frame) - kXAxisHeight - kAPCGraphTopPadding);
+    self.plotsView.frame = CGRectMake(kAPCGraphLeftPadding, kAPCGraphTopPadding, CGRectGetWidth(self.frame) - yAxisPadding - kAPCGraphLeftPadding, CGRectGetHeight(self.frame) - kXAxisHeight - kAPCGraphTopPadding);
     
     self.titleLabel.frame = CGRectMake(CGRectGetMaxX(_leftTintView.frame) + kTitleLeftPadding, 0, CGRectGetWidth(self.frame)*0.75, kAPCGraphTopPadding/2);
     self.subTitleLabel.frame = CGRectMake(CGRectGetMaxX(_leftTintView.frame) + kTitleLeftPadding, kAPCGraphTopPadding/2, CGRectGetWidth(self.frame)*0.75, kAPCGraphTopPadding/2);
@@ -254,6 +254,7 @@ static CGFloat const kPopAnimationDuration  = 0.3;
     self.xAxisView = [[APCAxisView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.plotsView.frame), CGRectGetWidth(self.plotsView.frame), kXAxisHeight)];
     self.xAxisView.tintColor = self.axisTitleColor;
     [self.xAxisView setupLabels:self.xAxisTitles forAxisType:kAPCGraphAxisTypeX];
+    self.xAxisView.leftOffset = kAPCGraphLeftPadding;
     [self addSubview:self.xAxisView];
     
     UIBezierPath *xAxispath = [UIBezierPath bezierPath];
@@ -299,7 +300,7 @@ static CGFloat const kPopAnimationDuration  = 0.3;
         self.yAxisView = nil;
     }
     
-    CGFloat axisViewXPosition = kAPCGraphLeftPadding + CGRectGetWidth(self.frame) * (1 - kYAxisPaddingFactor);
+    CGFloat axisViewXPosition = CGRectGetWidth(self.frame) * (1 - kYAxisPaddingFactor);
     CGFloat axisViewWidth = CGRectGetWidth(self.frame)*kYAxisPaddingFactor;
     
     self.yAxisView = [[UIView alloc] initWithFrame:CGRectMake(axisViewXPosition, kAPCGraphTopPadding, axisViewWidth, CGRectGetHeight(self.plotsView.frame))];

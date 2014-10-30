@@ -24,6 +24,7 @@
     if (self = [super initWithFrame:frame]) {
         
         _titleLabels = [NSMutableArray new];
+        _leftOffset = 0;
     }
     
     return self;
@@ -37,7 +38,7 @@
     
     for (int i=0; i<self.titleLabels.count; i++) {
         
-        CGFloat positionX = (self.axisType == kAPCGraphAxisTypeX) ? ((i-0.5)*labelWidth) : 0;
+        CGFloat positionX = (self.axisType == kAPCGraphAxisTypeX) ? (self.leftOffset + (i-0.5)*labelWidth) : 0;
         
         UILabel *label = (UILabel *)self.titleLabels[i];
         label.frame  = CGRectMake(positionX, 0, labelWidth, labelHeight);
