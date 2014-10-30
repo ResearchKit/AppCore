@@ -51,6 +51,7 @@ static NSString * const kAPCCircularProgressViewAnimationKey = @"APCCircularProg
 
     
     self.tintColor = [UIColor appPrimaryColor];
+    self.trackColor = [UIColor colorWithWhite:217/255.0f alpha:1.0];
 }
 
 - (void)defaultValues

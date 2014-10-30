@@ -42,6 +42,7 @@
         
         CGRect  frame = CGRectMake(imageIndex * CGRectGetWidth(self.imageScroller.frame), 0.0, CGRectGetWidth(self.imageScroller.frame), CGRectGetHeight(self.imageScroller.frame));
         UIImageView  *imager = [[UIImageView alloc] initWithFrame:frame];
+        imager.contentMode = UIViewContentModeScaleAspectFit;
         imager.image = anImage;
         [self.imageScroller addSubview:imager];
         
