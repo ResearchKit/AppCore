@@ -9,6 +9,7 @@
 #import "APCLineGraphView.h"
 #import "APCCircleView.h"
 #import "APCAxisView.h"
+#import "APCResizeView.h"
 
 static CGFloat const kYAxisPaddingFactor = 0.166f;
 static CGFloat const kAPCGraphLeftPadding = 17.f;
@@ -34,6 +35,7 @@ static CGFloat const kPopAnimationDuration  = 0.3;
 @property (nonatomic, strong) UIView *yAxisView;
 
 @property (nonatomic, strong) UIView *leftTintView;
+@property (nonatomic, strong) APCResizeView *resizeView;
 
 @property (nonatomic, strong) UIView *scrubberLine;
 @property (nonatomic, strong) UILabel *scrubberLabel;
@@ -135,6 +137,14 @@ static CGFloat const kPopAnimationDuration  = 0.3;
     _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
     _panGestureRecognizer.delaysTouchesBegan = YES;
     [self addGestureRecognizer:_panGestureRecognizer];
+    
+    _resizeView = [[APCResizeView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.frame) - 10, 15, 22, 22)];
+    _resizeView.tintColor = self.tintColor;
+    [self addSubview:_resizeView];
+    
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleResize:)];
+    [_resizeView addGestureRecognizer:tapGestureRecognizer];
+    
 }
 
 - (void)setDefaults
@@ -159,6 +169,8 @@ static CGFloat const kPopAnimationDuration  = 0.3;
     self.subTitleLabel.frame = CGRectMake(CGRectGetMaxX(_leftTintView.frame) + kTitleLeftPadding, kAPCGraphTopPadding/2, CGRectGetWidth(self.frame)*0.75, kAPCGraphTopPadding/2);
     
     self.scrubberLine.frame = CGRectMake(0, kAPCGraphTopPadding, 1, CGRectGetHeight(self.plotsView.frame));
+    
+    self.resizeView.frame = CGRectMake(CGRectGetWidth(self.frame) - 10 - 22, 15, 22, 22);
     
     //Clear subviews and sublayers
     [self.plotsView.layer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
@@ -664,6 +676,19 @@ static CGFloat const kPopAnimationDuration  = 0.3;
             if ([self.delegate respondsToSelector:@selector(lineGraphTouchesEnded:)]) {
                 [self.delegate lineGraphTouchesEnded:self];
             }
+        }
+    }
+}
+
+- (void)handleResize:(UITapGestureRecognizer *)gestureRecognizer
+{
+    if (self.resizeView.type == kAPCResizeViewTypeExpand) {
+        if ([self.delegate respondsToSelector:@selector(lineGraphViewDidTapExpand:)]) {
+            [self.delegate lineGraphViewDidTapExpand:self];
+        }
+    } else {
+        if ([self.delegate respondsToSelector:@selector(lineGraphViewDidTapCollapse:)]) {
+            [self.delegate lineGraphViewDidTapCollapse:self];
         }
     }
 }
