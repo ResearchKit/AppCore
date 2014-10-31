@@ -96,10 +96,10 @@
     [self.reviewConsentButton.titleLabel setFont:[UIFont appMediumFontWithSize:19.0]];
     
     [self.signOutButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
-    [self.signOutButton.titleLabel setFont:[UIFont appMediumFontWithSize:16.0]];
+    [self.signOutButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0]];
     
     [self.leaveStudyButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
-    [self.leaveStudyButton.titleLabel setFont:[UIFont appMediumFontWithSize:16.0]];
+    [self.leaveStudyButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0]];
 }
 
 - (void)setupPickerCellAppeareance:(APCPickerTableViewCell *)cell

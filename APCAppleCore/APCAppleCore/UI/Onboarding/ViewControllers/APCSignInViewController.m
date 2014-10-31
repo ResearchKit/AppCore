@@ -12,6 +12,7 @@
 #import "UIFont+APCAppearance.h"
 #import "APCForgotUsernameViewController.h"
 #import "APCEmailVerifyViewController.h"
+#import "UIAlertController+Helper.h"
 
 @interface APCSignInViewController ()
 
@@ -135,7 +136,8 @@
         [user signInOnCompletion:^(NSError *error) {
             [spinnerController dismissViewControllerAnimated:YES completion:^{
                 if (error) {
-                    [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:error.message];
+                    UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:error.message];
+                    [self presentViewController:alert animated:YES completion:nil];
                 }
                 else
                 {
@@ -152,7 +154,8 @@
             
         }];
     } else {
-        [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:errorMessage];
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:errorMessage];
+        [self presentViewController:alert animated:YES completion:nil];
     }
 }
 

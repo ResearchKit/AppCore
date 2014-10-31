@@ -10,7 +10,7 @@
 #import "APCTableViewItem.h"
 #import "APCAppDelegate.h"
 #import "APCUserInfoConstants.h"
-#import "UIAlertView+Helper.h"
+#import "UIAlertController+Helper.h"
 #import "APCStepProgressBar.h"
 #import "NSBundle+Helper.h"
 #import "NSString+Helper.h"

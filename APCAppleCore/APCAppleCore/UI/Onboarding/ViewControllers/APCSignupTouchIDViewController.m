@@ -10,7 +10,7 @@
 #import "UIView+Helper.h"
 #import "APCPasscodeView.h"
 #import "APCStepProgressBar.h"
-#import "UIAlertView+Helper.h"
+#import "UIAlertController+Helper.h"
 #import "APCSignupTouchIDViewController.h"
 #import "APCSignUpPermissionsViewController.h"
 #import "APCAppDelegate.h"
@@ -118,8 +118,9 @@
         }
         else {
             [self showFirstTry];
-            
-            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Identification", @"") message:NSLocalizedString(@"Your passcodes are not identical. Please enter it again.", @"")];
+
+            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Identification", @"") message:NSLocalizedString(@"Your passcodes are not identical. Please enter it again.", @"")];
+            [self presentViewController:alert animated:YES completion:nil];
         }
     }
 }
