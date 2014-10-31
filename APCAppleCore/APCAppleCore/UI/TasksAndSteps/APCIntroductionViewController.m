@@ -84,9 +84,14 @@
 {
     NSMutableArray  *localised = [NSMutableArray array];
     
+    NSMutableParagraphStyle *paragrapStyle = NSMutableParagraphStyle.new;
+    paragrapStyle.alignment                = NSTextAlignmentCenter;
+
+    
     NSDictionary  *attributes = @{
-                                  NSFontAttributeName : [UIFont systemFontOfSize: 17.0],
-                                  NSForegroundColorAttributeName : [UIColor grayColor]
+                                  NSFontAttributeName : [UIFont systemFontOfSize: 16.0],
+                                  NSForegroundColorAttributeName : [UIColor grayColor],
+                                  NSParagraphStyleAttributeName:paragrapStyle
                                   };
     
     for (NSString *paragraph  in  self.nonLocalisedParagraphs) {
