@@ -10,8 +10,6 @@
 #import "APCSignUpProgressing.h"
 #import "APCUserInfoConstants.h"
 
-static NSString * const kAPCPasscodeKey = @"Passcode";
-
 @interface APCSignupTouchIDViewController : UIViewController <APCSignUpProgressing>
 
 - (void)next;

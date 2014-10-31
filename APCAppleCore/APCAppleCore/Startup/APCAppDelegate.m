@@ -9,6 +9,7 @@
 #import "APCAppDelegate.h"
 #import "APCAppleCore.h"
 #import "APCDebugWindow.h"
+#import "APCPasscodeViewController.h"
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -26,6 +27,8 @@ static NSString *const kActivitiesStoryBoardKey    = @"APHActivities";
 static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
 
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
+
+static NSInteger const kNumberOfMinutesForPasscode = 0; //TODO: Change value for production
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 @property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
@@ -89,8 +92,9 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         
         if (lastUsedTime) {
             NSTimeInterval timeDifference = [lastUsedTime timeIntervalSinceNow];
-            if (timeDifference > 5*60) {
-                //Show passcode view
+            if (fabs(timeDifference) > kNumberOfMinutesForPasscode * 60) {
+                
+                [self showPasscode];
             }
         }
     }
@@ -280,6 +284,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 {
     if (self.dataSubstrate.currentUser.isSignedIn) {
         [self showTabBar];
+        
     }
     else if (self.dataSubstrate.currentUser.isSignedUp)
     {
@@ -289,6 +294,12 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     {
         [self showOnBoarding];
     }
+}
+
+- (void)showPasscode
+{
+    APCPasscodeViewController *passcodeViewController = [[APCPasscodeViewController alloc] initWithNibName:@"APCPasscodeViewController" bundle:[NSBundle appleCoreBundle]];
+    [self.window.rootViewController presentViewController:passcodeViewController animated:YES completion:nil];
 }
 
 - (void) showOnBoarding {/*Abstract Implementation*/ }

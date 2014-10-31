@@ -57,27 +57,19 @@
 
 #pragma mark - UITextFieldDelegate methods
 
-- (BOOL) textFieldShouldBeginEditing:(UITextField *)textField {
-    if ([self.delegate respondsToSelector:@selector(textFieldTableViewCellDidBecomeFirstResponder:)]) {
-        [self.delegate textFieldTableViewCellDidBecomeFirstResponder:self];
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if ([self.delegate respondsToSelector:@selector(textFieldTableViewCellDidEndEditing:)]) {
+        [self.delegate textFieldTableViewCellDidEndEditing:self];
     }
-    
-    return YES;
 }
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    BOOL isValid = NO;
-    
-    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    if (text.length > 0 && self.valueTextRegularExpression) {
-        isValid = [text isValidForRegex:self.valueTextRegularExpression];
-    }
-    else {
-        isValid = YES;
+    if ([self.delegate respondsToSelector:@selector(textFieldTableViewCell:shouldChangeCharactersInRange:replacementString:)]) {
+        [self.delegate textFieldTableViewCell:self shouldChangeCharactersInRange:range replacementString:string];
     }
     
-    return isValid;
+    return YES;
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {

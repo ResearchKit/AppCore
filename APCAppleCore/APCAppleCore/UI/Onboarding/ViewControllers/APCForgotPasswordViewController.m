@@ -7,7 +7,7 @@
 //
 
 #import "NSString+Helper.h"
-#import "UIAlertView+Helper.h"
+#import "UIAlertController+Helper.h"
 #import "APCUserInfoConstants.h"
 #import "APCForgotPasswordViewController.h"
 #import "UIColor+APCAppearance.h"
@@ -110,12 +110,13 @@
         if ([self.emailTextField.text isValidForRegex:(NSString *)kAPCGeneralInfoItemEmailRegEx]) {
         }
         else {
-            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"General Information", @"") message:NSLocalizedString(@"Please give a valid email address", @"")];
+            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"General Information", @"") message:NSLocalizedString(@"Please give a valid email address", @"")];
+            [self presentViewController:alert animated:YES completion:nil];
         }
     } else{
-        [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Forgot Password", @"") message:error];
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Forgot Password", @"") message:error];
+        [self presentViewController:alert animated:YES completion:nil];
     }
-    
 }
 
 #pragma mark - Selectors / IBActions

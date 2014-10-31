@@ -14,7 +14,7 @@
 #import "APCDefaultTableViewCell.h"
 #import "APCSignUpProgressing.h"
 
-@interface APCSignUpInfoViewController : UITableViewController <APCTextFieldTableViewCellDelegate, APCSegmentedTableViewCellDelegate, APCPickerTableViewCellDelegate, APCSignUpProgressing, UITextFieldDelegate>
+@interface APCSignUpInfoViewController : UITableViewController <APCTextFieldTableViewCellDelegate, APCSegmentedTableViewCellDelegate, APCPickerTableViewCellDelegate, APCSignUpProgressing, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) NSMutableArray *items;
 

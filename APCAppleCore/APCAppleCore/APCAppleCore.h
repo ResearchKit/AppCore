@@ -91,7 +91,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/NSError+APCAdditions.h>
 #import <APCAppleCore/NSObject+Helper.h>
 #import <APCAppleCore/NSString+Helper.h>
-#import <APCAppleCore/UIAlertView+Helper.h>
+#import <APCAppleCore/UIAlertController+Helper.h>
 #import <APCAppleCore/UIBarButtonItem+Appearance.h>
 #import <APCAppleCore/UIScrollView+Helper.h>
 #import <APCAppleCore/UISegmentedControl+Appearance.h>

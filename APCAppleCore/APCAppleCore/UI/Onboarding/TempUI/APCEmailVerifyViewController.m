@@ -8,6 +8,7 @@
 
 #import "APCEmailVerifyViewController.h"
 #import "APCAppleCore.h"
+#import "UIAlertController+Helper.h"
 
 @interface APCEmailVerifyViewController ()
 @property (nonatomic, readonly) APCUser * user;
@@ -59,7 +60,8 @@
     if (self.user.isUserConsented) {
         [self.user sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
             if (error) {
-                [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"User Consent Error", @"User Consent Error") message:error.message];
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Consent Error", @"") message:error.message];
+                [self presentViewController:alert animated:YES completion:nil];
             }
             else
             {

@@ -57,4 +57,6 @@ static NSString * const kAPCMedicalInfoItemSleepTimeFormat     = @"hh:mm a";
 
 static NSString * const kAPCAppStateKey = @"APCAppState";
 
+static NSString * const kAPCPasscodeKey = @"APCPasscode";
+
 #endif

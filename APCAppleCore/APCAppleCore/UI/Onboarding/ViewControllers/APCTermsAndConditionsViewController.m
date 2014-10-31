@@ -44,7 +44,7 @@
     
     self.navigationBar.titleTextAttributes = @{ NSForegroundColorAttributeName : [UIColor whiteColor]};
     
-    [self.agreeButton.titleLabel setTextColor:[UIColor appPrimaryColor]];
+    [self.agreeButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
     [self.agreeButton.titleLabel setFont:[UIFont appMediumFontWithSize:19.0]];
 }
 

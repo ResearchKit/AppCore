@@ -14,6 +14,7 @@
 #import "APCPermissionsCell.h"
 #import "NSBundle+Helper.h"
 #import "APCPermissionsManager.h"
+#import "UIAlertController+Helper.h"
 
 static CGFloat const kTableViewRowHeight                 = 165.0f;
 
@@ -170,12 +171,8 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
             } else {
                 
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Permissions Denied", nil)
-                                                                    message:error.localizedDescription
-                                                                   delegate:nil
-                                                          cancelButtonTitle:@"OK"
-                                                          otherButtonTitles:nil];
-                    [alert show];
+                    UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription];
+                    [self presentViewController:alert animated:YES completion:nil];
                 });
             }            
         }];

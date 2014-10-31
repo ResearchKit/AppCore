@@ -10,7 +10,7 @@
 #import "APCTableViewItem.h"
 #import "APCAppDelegate.h"
 #import "APCUserInfoConstants.h"
-#import "UIAlertView+Helper.h"
+#import "UIAlertController+Helper.h"
 #import "APCStepProgressBar.h"
 #import "NSBundle+Helper.h"
 #import "NSString+Helper.h"
@@ -291,6 +291,7 @@
                 APCSegmentedTableViewCell *segmentedCell = (APCSegmentedTableViewCell *)cell;
                 segmentedCell.delegate = self;
                 segmentedCell.selectedSegmentIndex = segmentPickerField.selectedIndex;
+                segmentedCell.userInteractionEnabled = segmentPickerField.editable;
                 
             } else {
                 if (!cell) {
@@ -360,6 +361,28 @@
 
 #pragma mark - UITextFieldDelegate methods
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    if (textField == self.nameTextField) {
+        self.user.name = text;
+    } else if (textField == self.userNameTextField){
+        self.user.userName = text;
+    }
+    
+    return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField == self.nameTextField) {
+        self.user.name = textField.text;
+    } else if (textField == self.userNameTextField){
+        self.user.userName = textField.text;
+    }
+}
+
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     
     if ((textField == self.nameTextField) && self.userNameTextField) {
@@ -406,17 +429,27 @@
 
 #pragma mark - APCTextFieldTableViewCellDelegate methods
 
-- (void)textFieldTableViewCellDidBecomeFirstResponder:(APCTextFieldTableViewCell *)cell
+- (void)textFieldTableViewCell:(APCTextFieldTableViewCell *)cell shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
+    NSString *text = [cell.textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    APCTableViewTextFieldItem *textFieldItem = self.items[indexPath.row];
+    textFieldItem.value = text;
 }
 
-- (void)textFieldTableViewCellDidReturn:(APCTextFieldTableViewCell *)cell
+- (void)textFieldTableViewCellDidEndEditing:(APCTextFieldTableViewCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     APCTableViewTextFieldItem *textFieldItem = self.items[indexPath.row];
     textFieldItem.value = cell.textField.text;
+}
+
+- (void)textFieldTableViewCellDidReturn:(APCTextFieldTableViewCell *)cell
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     [self nextResponderForIndexPath:indexPath];
 }
