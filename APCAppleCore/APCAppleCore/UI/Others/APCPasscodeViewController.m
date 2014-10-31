@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet APCPasscodeView *passcodeView;
 @property (weak, nonatomic) IBOutlet UIButton *touchIdButton;
+@property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *touchIdButtonBottomConstraint;
 
 @end
@@ -34,6 +35,8 @@
     self.passcodeView.delegate = self;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    
+    [self setupAppearance];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -63,6 +66,8 @@
 {
     [self.titleLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.titleLabel setFont:[UIFont appLightFontWithSize:19.0f]];
+    
+    [self.logoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
 }
 
 #pragma mark - APCPasscodeViewDelegate
