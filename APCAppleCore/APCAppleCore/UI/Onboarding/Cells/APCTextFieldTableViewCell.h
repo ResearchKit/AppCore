@@ -33,6 +33,8 @@ typedef NS_ENUM(NSUInteger, APCTextFieldCellType) {
 
 @protocol APCTextFieldTableViewCellDelegate <NSObject>
 
+@optional
+
 - (void)textFieldTableViewCellDidReturn:(APCTextFieldTableViewCell *)cell;
 
 - (void)textFieldTableViewCell:(APCTextFieldTableViewCell *)cell shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
