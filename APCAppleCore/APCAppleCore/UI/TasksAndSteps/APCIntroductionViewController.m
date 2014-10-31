@@ -14,11 +14,13 @@
 @property  (nonatomic, weak)    IBOutlet  UIScrollView   *imageScroller;
 @property  (nonatomic, weak)    IBOutlet  UIPageControl  *pager;
 
+
 @property  (nonatomic, strong)  NSArray  *instructionalImages;
 @property  (nonatomic, strong)  NSArray  *nonLocalisedParagraphs;
 @property  (nonatomic, strong)  NSArray  *localisedParagraphs;
 
 @property  (nonatomic, assign, getter = wasScrolledViaPageControl)  BOOL  scrolledViaPageControl;
+- (IBAction)viewImportantDetailsHandler:(id)sender;
 
 @end
 

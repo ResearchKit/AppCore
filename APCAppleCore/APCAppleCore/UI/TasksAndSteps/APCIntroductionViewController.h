@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface APCIntroductionViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UIView *accessoryView;
 
 - (void)setupWithInstructionalImages:(NSArray *)imageNames andParagraphs:(NSArray *)paragraphs;
 

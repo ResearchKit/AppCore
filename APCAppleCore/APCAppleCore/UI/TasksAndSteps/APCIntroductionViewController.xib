@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="APCIntroductionViewController">
             <connections>
+                <outlet property="accessoryView" destination="I63-55-cIT" id="rq2-C2-Pnb"/>
                 <outlet property="imageScroller" destination="oPZ-0g-8nN" id="NWm-ws-D9H"/>
                 <outlet property="pager" destination="x3P-Tr-JsT" id="Fd0-Fu-JrZ"/>
                 <outlet property="textScroller" destination="Enl-cy-plq" id="J7W-u5-3Jg"/>
@@ -39,6 +40,10 @@
                         <action selector="pageControlChangedValue:" destination="-1" eventType="valueChanged" id="kkc-UG-Rmd"/>
                     </connections>
                 </pageControl>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I63-55-cIT" userLabel="AccessoryView">
+                    <rect key="frame" x="0.0" y="70" width="288" height="64"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
