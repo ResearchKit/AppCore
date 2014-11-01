@@ -30,11 +30,11 @@
 
 - (void) setUpAppearance
 {
-    self.label1.font = [UIFont appMediumFontWithSize:17];
+    self.label1.font = [UIFont appRegularFontWithSize:19.0f];
     self.label1.textColor = [UIColor appSecondaryColor1];
     
-    self.label2.font = [UIFont appLightFontWithSize:17];
-    self.label2.textColor = [UIColor appSecondaryColor1];
+    self.label2.font = [UIFont appLightFontWithSize:19.0];
+    self.label2.textColor = [UIColor appSecondaryColor2];
     
     [self.consentButton setBackgroundImage:[UIImage imageWithColor:[UIColor appPrimaryColor]] forState:UIControlStateNormal];
     [self.consentButton setTitleColor:[UIColor appSecondaryColor4] forState:UIControlStateNormal];

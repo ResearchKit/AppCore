@@ -12,6 +12,6 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
 @property (weak, nonatomic) IBOutlet UILabel *label;
-@property (weak, nonatomic) IBOutlet UIButton *okayButton;
 
+- (IBAction)next:(id)sender;
 @end

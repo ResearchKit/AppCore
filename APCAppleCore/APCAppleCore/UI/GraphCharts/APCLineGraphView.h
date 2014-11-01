@@ -58,7 +58,7 @@
 @protocol APCLineGraphViewDataSource <NSObject>
 
 @required
-
+ 
 - (NSInteger)lineGraph:(APCLineGraphView *)graphView numberOfPointsInPlot:(NSInteger)plotIndex;
 
 - (CGFloat)lineGraph:(APCLineGraphView *)graphView plot:(NSInteger)plotIndex valueForPointAtIndex:(NSInteger)pointIndex;

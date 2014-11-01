@@ -10,7 +10,6 @@
 #import "APCSignInViewController.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
-#import "APCForgotUsernameViewController.h"
 #import "APCEmailVerifyViewController.h"
 #import "UIAlertController+Helper.h"
 
@@ -60,6 +59,14 @@
     
     [self.passwordTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.passwordTextField setFont:[UIFont appMediumFontWithSize:17.0f]];
+    
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"Forgot your Password?"];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor appSecondaryColor3] range:NSMakeRange(0, 12)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor appSecondaryColor1] range:NSMakeRange(12, 9)];
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont appRegularFontWithSize:16.0f] range:NSMakeRange(0, attributedString.length)];
+    
+    [self.forgotPasswordButton setAttributedTitle:attributedString forState:UIControlStateNormal];
     
 }
 
@@ -179,20 +186,12 @@
 
 - (IBAction)forgotPassword
 {
-    APCForgotPasswordViewController *forgotPasswordViewController = [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"ForgotPasswordVC"];
-    [self.navigationController pushViewController:forgotPasswordViewController animated:YES];
     
 }
 
 - (IBAction)signIn:(id)sender
 {    
     [self signIn];
-}
-
-- (IBAction)forgotUsername:(id)sender
-{
-    APCForgotUsernameViewController *forgotUsernameViewController = [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"ForgotUsernameVC"];
-    [self.navigationController pushViewController:forgotUsernameViewController animated:YES];
 }
 
 @end

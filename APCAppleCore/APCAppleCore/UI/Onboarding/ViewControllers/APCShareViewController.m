@@ -18,12 +18,18 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *okayButton;
 
+@property (nonatomic, strong) NSArray *shareTitles;
+@property (nonatomic, strong) NSArray *shareImages;
+
 @end
 
 @implementation APCShareViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.shareTitles = @[@"Share on Twitter", @"Share on Facebook", @"Share via Email", @"Share via SMS"];
+    self.shareImages = @[@"twitter_icon", @"facebook_icon", @"email_icon", @"sms_icon"];
     
     [self setupAppearance];
 }
@@ -38,7 +44,30 @@
 {
     [self.messageLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.messageLabel setFont:[UIFont appRegularFontWithSize:19.0f]];
+    
+    [self.tableHeaderLabel setFont:[UIFont appLightFontWithSize:14.0f]];
+    [self.tableHeaderLabel setTextColor:[UIColor appSecondaryColor3]];
+    
+    [self.okayButton setBackgroundColor:[UIColor appPrimaryColor]];
+    [self.okayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.okayButton.titleLabel setFont:[UIFont appMediumFontWithSize:19.0f]];
 }
+
+#pragma mark - UITableViewDataSource methods
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.shareTitles.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    APCShareTableViewCell *cell = (APCShareTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kAPCShareTableViewCellIdentifier];
+    cell.textLabel.text = self.shareTitles[indexPath.row];
+    cell.imageView.image = [UIImage imageNamed:self.shareImages[indexPath.row]];
+    return cell;
+}
+
 
 #pragma mark - IBActions
 
