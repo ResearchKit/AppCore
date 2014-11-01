@@ -33,6 +33,9 @@
     // Do any additional setup after loading the view.
     
     [self setupAppearance];
+    
+    self.firstNameTextField.delegate = self;
+    self.lastNameTextField.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -65,11 +68,11 @@
 
 - (void)setupAppearance
 {
-    [self.nameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.nameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.firstNameTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.firstNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
-    [self.usernameLabel setTextColor:[UIColor appSecondaryColor1]];
-    [self.usernameLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.lastNameTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.lastNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
     [self.profileImageButton.imageView.layer setCornerRadius:CGRectGetHeight(self.profileImageButton.bounds)/2];
     
@@ -319,9 +322,33 @@
 
 #pragma mark - UITextFieldDelegate methods
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    if (textField == self.firstNameTextField) {
+        self.user.firstName = text;
+    } else if (textField == self.lastNameTextField){
+        self.user.lastName = text;
+    }
+    
+    return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField == self.firstNameTextField) {
+        self.user.firstName = textField.text;
+    } else if (textField == self.lastNameTextField){
+        self.user.lastName = textField.text;
+    }
+}
+
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     
-    if (textField == self.nameTextField) {
+    if ((textField == self.firstNameTextField) && self.lastNameTextField) {
+        [self.lastNameTextField becomeFirstResponder];
+    } else {
         [self nextResponderForIndexPath:nil];
     }
     
@@ -361,17 +388,28 @@
 
 #pragma mark - APCTextFieldTableViewCellDelegate methods
 
-- (void)textFieldTableViewCellDidBecomeFirstResponder:(APCTextFieldTableViewCell *)cell
+
+- (void)textFieldTableViewCell:(APCTextFieldTableViewCell *)cell shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
+    NSString *text = [cell.textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    APCTableViewTextFieldItem *textFieldItem = self.items[indexPath.row];
+    textFieldItem.value = text;
 }
 
-- (void)textFieldTableViewCellDidReturn:(APCTextFieldTableViewCell *)cell
+- (void)textFieldTableViewCellDidEndEditing:(APCTextFieldTableViewCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     APCTableViewTextFieldItem *textFieldItem = self.items[indexPath.row];
     textFieldItem.value = cell.textField.text;
+}
+
+- (void)textFieldTableViewCellDidReturn:(APCTextFieldTableViewCell *)cell
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     [self nextResponderForIndexPath:indexPath];
 }
@@ -618,17 +656,27 @@
 }
 
 - (IBAction)editFields:(UIBarButtonItem *)sender {
+    
     if (self.isEditing) {
+        
+        if (self.isPickerShowing) {
+            [self hidePickerCell];
+        }
+        
         sender.title = NSLocalizedString(@"Edit", @"Edit");
         sender.style = UIBarButtonItemStylePlain;
-    } else{
-        sender.title = NSLocalizedString(@"Done", @"Done");
-        sender.style = UIBarButtonItemStyleDone;
         
         [self loadProfileValuesInModel];
+    } else{
+        
+        sender.title = NSLocalizedString(@"Done", @"Done");
+        sender.style = UIBarButtonItemStyleDone;
     }
     
     self.editing = !self.editing;
+    
+    self.firstNameTextField.enabled = self.isEditing;
+    self.lastNameTextField.enabled = self.isEditing;
     
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
