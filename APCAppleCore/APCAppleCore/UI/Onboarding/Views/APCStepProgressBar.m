@@ -78,6 +78,12 @@ static NSString * const kAPCStepProgressViewAnimationKey = @"APCStepProgressView
     [self.layer addSublayer:_stepProgressLayer];
 }
 
+- (void)setProgressTintColor:(UIColor *)progressTintColor
+{
+    _progressTintColor = progressTintColor;
+    [_stepProgressLayer setFillColor:progressTintColor.CGColor];
+}
+
 - (void)setupInfoLabels
 {
     _leftLabel = [UILabel new];

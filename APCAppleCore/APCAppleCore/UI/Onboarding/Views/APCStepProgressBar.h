@@ -27,6 +27,8 @@ typedef NS_ENUM(NSUInteger, APCStepProgressBarStyle) {
 
 @property (nonatomic, readonly) UIProgressView *progressView;
 
+@property (nonatomic, strong) UIColor * progressTintColor;
+
 - (instancetype) init NS_UNAVAILABLE;
 
 - (instancetype) initWithFrame:(CGRect)frame NS_UNAVAILABLE;
