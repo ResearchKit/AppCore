@@ -4,7 +4,7 @@
 //
 //  Created by Karthik Keyan on 9/4/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
+//vgv
 
 #import <UIKit/UIKit.h>
 
@@ -14,10 +14,10 @@
 
 @property (nonatomic, weak) IBOutlet UITextField *passwordTextField;
 
+@property (weak, nonatomic) IBOutlet UIButton *forgotPasswordButton;
+
 - (void) signIn;
 
 - (IBAction)forgotPassword;
-
-- (IBAction)forgotUsername:(id)sender;
 
 @end

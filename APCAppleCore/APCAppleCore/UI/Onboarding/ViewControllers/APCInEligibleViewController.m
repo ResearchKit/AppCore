@@ -10,7 +10,7 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "UIImage+APCHelper.h"
-
+#import "APCShareViewController.h"
 @interface APCInEligibleViewController ()
 
 @end
@@ -32,10 +32,8 @@
 
 - (void) setupAppearance
 {
-    self.label.font = [UIFont appRegularFontWithSize: 17];
+    self.label.font = [UIFont appRegularFontWithSize:19.0f];
     self.label.textColor = [UIColor appSecondaryColor1];
-    [self.okayButton setBackgroundImage:[UIImage imageWithColor:[UIColor appPrimaryColor]] forState:UIControlStateNormal];
-    [self.okayButton setTitleColor:[UIColor appSecondaryColor4] forState:UIControlStateNormal];
 }
 
 - (void)setupNavAppearance
@@ -56,4 +54,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+- (IBAction)next:(id)sender {
+}
 @end

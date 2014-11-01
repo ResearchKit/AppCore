@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+static NSString * const kAPCShareTableViewCellIdentifier = @"ShareTableViewCellIdentifier";
+
 @interface APCShareTableViewCell : UITableViewCell
+
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+
 @property (weak, nonatomic) IBOutlet UILabel *textLabel;
 
 @end
