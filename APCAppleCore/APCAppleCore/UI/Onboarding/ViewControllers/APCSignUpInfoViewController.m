@@ -191,6 +191,12 @@
             }
             
             pickerCell.datePicker.datePickerMode = datePickerField.datePickerMode;
+            if (datePickerField.minimumDate) {
+                pickerCell.datePicker.minimumDate = datePickerField.minimumDate;
+            }
+            if (datePickerField.maximumDate) {
+                pickerCell.datePicker.maximumDate = datePickerField.maximumDate;
+            }
             pickerCell.delegate = self;
         
             [self setupPickerCellAppeareance:pickerCell];
