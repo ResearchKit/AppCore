@@ -43,6 +43,12 @@
 		5B55FE141A0355E5009BEE5E /* APCShareTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B55FE121A0355E5009BEE5E /* APCShareTableViewCell.m */; };
 		5B55FE261A0463D4009BEE5E /* APCImageButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B55FE241A0463D4009BEE5E /* APCImageButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B55FE271A0463D4009BEE5E /* APCImageButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B55FE251A0463D4009BEE5E /* APCImageButton.m */; };
+		5B55FE2E1A055287009BEE5E /* APCChangePasscodeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B55FE2C1A055287009BEE5E /* APCChangePasscodeViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B55FE2F1A055287009BEE5E /* APCChangePasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B55FE2D1A055287009BEE5E /* APCChangePasscodeViewController.m */; };
+		5B55FE361A056A16009BEE5E /* APCSettingsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B55FE341A056A16009BEE5E /* APCSettingsViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B55FE371A056A16009BEE5E /* APCSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B55FE351A056A16009BEE5E /* APCSettingsViewController.m */; };
+		5B55FE3D1A05A59A009BEE5E /* APCSwitchTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B55FE3B1A05A59A009BEE5E /* APCSwitchTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B55FE3E1A05A59A009BEE5E /* APCSwitchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B55FE3C1A05A59A009BEE5E /* APCSwitchTableViewCell.m */; };
 		5B5F178019ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B5F177D19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B5F178119ECF83A00A0E1D7 /* APCTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B5F177E19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.m */; };
 		5B5F178B19EDB58F00A0E1D7 /* APCPermissionButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B5F178919EDB58F00A0E1D7 /* APCPermissionButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -332,6 +338,12 @@
 		5B55FE121A0355E5009BEE5E /* APCShareTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCShareTableViewCell.m; sourceTree = "<group>"; };
 		5B55FE241A0463D4009BEE5E /* APCImageButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCImageButton.h; sourceTree = "<group>"; };
 		5B55FE251A0463D4009BEE5E /* APCImageButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCImageButton.m; sourceTree = "<group>"; };
+		5B55FE2C1A055287009BEE5E /* APCChangePasscodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCChangePasscodeViewController.h; sourceTree = "<group>"; };
+		5B55FE2D1A055287009BEE5E /* APCChangePasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCChangePasscodeViewController.m; sourceTree = "<group>"; };
+		5B55FE341A056A16009BEE5E /* APCSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSettingsViewController.h; sourceTree = "<group>"; };
+		5B55FE351A056A16009BEE5E /* APCSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSettingsViewController.m; sourceTree = "<group>"; };
+		5B55FE3B1A05A59A009BEE5E /* APCSwitchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSwitchTableViewCell.h; sourceTree = "<group>"; };
+		5B55FE3C1A05A59A009BEE5E /* APCSwitchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSwitchTableViewCell.m; sourceTree = "<group>"; };
 		5B5F177D19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTextFieldTableViewCell.h; sourceTree = "<group>"; };
 		5B5F177E19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTextFieldTableViewCell.m; sourceTree = "<group>"; };
 		5B5F178919EDB58F00A0E1D7 /* APCPermissionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPermissionButton.h; sourceTree = "<group>"; };
@@ -617,6 +629,10 @@
 			children = (
 				5B5F17B119F0896500A0E1D7 /* APCProfileViewController.h */,
 				5B5F17B219F0896500A0E1D7 /* APCProfileViewController.m */,
+				5B55FE2C1A055287009BEE5E /* APCChangePasscodeViewController.h */,
+				5B55FE2D1A055287009BEE5E /* APCChangePasscodeViewController.m */,
+				5B55FE341A056A16009BEE5E /* APCSettingsViewController.h */,
+				5B55FE351A056A16009BEE5E /* APCSettingsViewController.m */,
 			);
 			path = TabBarControllers;
 			sourceTree = "<group>";
@@ -930,6 +946,8 @@
 				5B9041BD19F9714D005CFF77 /* APCDefaultTableViewCell.m */,
 				5B55FE111A0355E5009BEE5E /* APCShareTableViewCell.h */,
 				5B55FE121A0355E5009BEE5E /* APCShareTableViewCell.m */,
+				5B55FE3B1A05A59A009BEE5E /* APCSwitchTableViewCell.h */,
+				5B55FE3C1A05A59A009BEE5E /* APCSwitchTableViewCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1177,6 +1195,7 @@
 				F588BA7819D21F1300692473 /* APCSignUpProgressing.h in Headers */,
 				F588B9FA19D21EFE00692473 /* APCAssertionHandler.h in Headers */,
 				F588BA6A19D21F1300692473 /* APCTableViewItem.h in Headers */,
+				5B55FE3D1A05A59A009BEE5E /* APCSwitchTableViewCell.h in Headers */,
 				F588BA9319D21F1300692473 /* APCSetupTaskViewController.h in Headers */,
 				F588BA7919D21F1300692473 /* APCSignupTouchIDViewController.h in Headers */,
 				F588BAA119D220AC00692473 /* APCAppDelegate.h in Headers */,
@@ -1229,6 +1248,7 @@
 				F5EDCC8D19D32F0A00A5E027 /* APCActivitiesTableViewCell.h in Headers */,
 				F541541419D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h in Headers */,
 				5B55FE131A0355E5009BEE5E /* APCShareTableViewCell.h in Headers */,
+				5B55FE2E1A055287009BEE5E /* APCChangePasscodeViewController.h in Headers */,
 				F5179CD619D0917D001DCCB7 /* APCScheduleInterpreter.h in Headers */,
 				5B29CE3619D3767D00E2FD62 /* APCPermissionsManager.h in Headers */,
 				F5179CAE19D0917D001DCCB7 /* APCSchedule.h in Headers */,
@@ -1245,6 +1265,7 @@
 				5BE5B1471A00332800827AFE /* APCCircleView.h in Headers */,
 				F5179C8719D0917D001DCCB7 /* APCConsentResult.h in Headers */,
 				F5179C8D19D0917D001DCCB7 /* APCDataResult.h in Headers */,
+				5B55FE361A056A16009BEE5E /* APCSettingsViewController.h in Headers */,
 				5B55FE0A1A031789009BEE5E /* UIAlertController+Helper.h in Headers */,
 				F5179C7819D0917D001DCCB7 /* APCDataMonitor.h in Headers */,
 				F5179C7E19D0917D001DCCB7 /* APCDataSubstrate+ResearchKit.h in Headers */,
@@ -1435,6 +1456,8 @@
 				F588B9FD19D21EFE00692473 /* APCStepProgressBar+Appearance.m in Sources */,
 				F588BA8119D21F1300692473 /* APCSpinnerViewController.m in Sources */,
 				F5179CA319D0917D001DCCB7 /* APCQuestionResult.m in Sources */,
+				5B55FE3E1A05A59A009BEE5E /* APCSwitchTableViewCell.m in Sources */,
+				5B55FE371A056A16009BEE5E /* APCSettingsViewController.m in Sources */,
 				F5B4212E19D23D6800F9CD69 /* APCParametersCoreDataCell.m in Sources */,
 				F588BAA219D220AC00692473 /* APCAppDelegate.m in Sources */,
 				5B5F178119ECF83A00A0E1D7 /* APCTextFieldTableViewCell.m in Sources */,
@@ -1481,6 +1504,7 @@
 				5B5F178C19EDB58F00A0E1D7 /* APCPermissionButton.m in Sources */,
 				F5179C9119D0917D001DCCB7 /* APCDBStatus+AddOn.m in Sources */,
 				5B9041BF19F9714D005CFF77 /* APCDefaultTableViewCell.m in Sources */,
+				5B55FE2F1A055287009BEE5E /* APCChangePasscodeViewController.m in Sources */,
 				F5179CDA19D0917D001DCCB7 /* APCScheduler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

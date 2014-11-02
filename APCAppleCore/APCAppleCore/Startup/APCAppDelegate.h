@@ -19,7 +19,8 @@ static NSString *const kHKWritePermissionsKey = @"HKWritePermissions";
 static NSString *const kHKReadPermissionsKey = @"HKReadPermissions";
 static NSString *const kAppServicesListRequiredKey = @"AppServicesListRequired";
 
-static NSString *const kPasswordKey = @"password";
+static NSString *const kPasswordKey = @"Password";
+static NSString *const kNumberOfMinutesForPasscodeKey = @"NumberOfMinutesForPasscodeKey";
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler;
 
