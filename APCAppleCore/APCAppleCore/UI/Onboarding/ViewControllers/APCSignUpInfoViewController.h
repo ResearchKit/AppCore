@@ -22,9 +22,9 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *profileImageButton;
 
-@property (weak, nonatomic) IBOutlet UITextField *nameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
 
-@property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
 
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 

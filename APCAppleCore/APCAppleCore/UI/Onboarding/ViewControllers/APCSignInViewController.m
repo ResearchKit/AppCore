@@ -50,10 +50,10 @@
     
     APCUser * user = [self user];
     
-    if (user.userName) {
-        NSString *partialUsername = [user.userName substringToIndex:3];
+    if (user.email) {
+        NSString *partialEmail = [user.email substringToIndex:3];
         
-        self.userHandleTextField.text = [NSString stringWithFormat:@"%@XXXXX", partialUsername];
+        self.userHandleTextField.text = [NSString stringWithFormat:@"%@XXXXX", partialEmail];
         self.userHandleTextField.enabled = NO;
     }
     
@@ -135,8 +135,8 @@
     
         APCUser * user = [self user];
         
-        if (!user.userName) {
-            user.userName = self.userHandleTextField.text;
+        if (!user.email) {
+            user.email = self.userHandleTextField.text;
         }
         
         user.password = self.passwordTextField.text;

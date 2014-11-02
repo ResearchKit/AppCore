@@ -39,8 +39,8 @@
     [self setupAppearance];
     [self setupNavAppearance];
     
-    self.nameTextField.delegate = self;
-    self.userNameTextField.delegate = self;
+    self.firstNameTextField.delegate = self;
+    self.lastNameTextField.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -103,11 +103,11 @@
 
 - (void)setupAppearance
 {
-    [self.nameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.nameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.firstNameTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.firstNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
-    [self.userNameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.userNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.lastNameTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.lastNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
     [self.profileImageButton.imageView.layer setCornerRadius:CGRectGetHeight(self.profileImageButton.bounds)/2];
     
@@ -365,10 +365,10 @@
 {
     NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
-    if (textField == self.nameTextField) {
-        self.user.name = text;
-    } else if (textField == self.userNameTextField){
-        self.user.userName = text;
+    if (textField == self.firstNameTextField) {
+        self.user.firstName = text;
+    } else if (textField == self.lastNameTextField){
+        self.user.lastName = text;
     }
     
     return YES;
@@ -376,17 +376,17 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    if (textField == self.nameTextField) {
-        self.user.name = textField.text;
-    } else if (textField == self.userNameTextField){
-        self.user.userName = textField.text;
+    if (textField == self.firstNameTextField) {
+        self.user.firstName = textField.text;
+    } else if (textField == self.lastNameTextField){
+        self.user.lastName = textField.text;
     }
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     
-    if ((textField == self.nameTextField) && self.userNameTextField) {
-        [self.userNameTextField becomeFirstResponder];
+    if ((textField == self.firstNameTextField) && self.lastNameTextField) {
+        [self.lastNameTextField becomeFirstResponder];
     } else {
         [self nextResponderForIndexPath:nil];
     }
@@ -563,13 +563,13 @@
     BOOL isContentValid = YES;
     
     if (self.tableView.tableHeaderView) {
-        if (![self.nameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
+        if (![self.firstNameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
             isContentValid = NO;
             
             if (errorMessage) {
                 *errorMessage = NSLocalizedString(@"Please give a valid first name", @"");
             }
-        } else if (![self.userNameTextField.text isValidForRegex:kAPCGeneralInfoItemUserNameRegEx]){
+        } else if (![self.lastNameTextField.text isValidForRegex:kAPCGeneralInfoItemUserNameRegEx]){
             isContentValid = NO;
             
             if (errorMessage) {
