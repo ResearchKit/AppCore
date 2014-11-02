@@ -71,13 +71,14 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCActivitiesTableViewCell.h>
 
 #import <APCAppleCore/APCProfileViewController.h>
-
+#import <APCAppleCore/APCSettingsViewController.h>
+#import <APCAppleCore/APCChangePasscodeViewController.h>
 #import <APCAppleCore/APCTextFieldTableViewCell.h>
 #import <APCAppleCore/APCPickerTableViewCell.h>
 #import <APCAppleCore/APCSegmentedTableViewCell.h>
 #import <APCAppleCore/APCPermissionsCell.h>
 #import <APCAppleCore/APCDefaultTableViewCell.h>
-
+#import <APCAppleCore/APCSwitchTableViewCell.h>
 #import <APCAppleCore/APCSegmentedButton.h>
 #import <APCAppleCore/APCImageButton.h>
 

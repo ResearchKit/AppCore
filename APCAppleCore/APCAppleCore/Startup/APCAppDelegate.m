@@ -28,8 +28,6 @@ static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
 
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
-static NSInteger const kNumberOfMinutesForPasscode = 0; //TODO: Change value for production
-
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 @property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
 @end
@@ -53,10 +51,12 @@ static NSInteger const kNumberOfMinutesForPasscode = 0; //TODO: Change value for
     [self setUpAppAppearance];
     [self showAppropriateVC];
     
-    NSNumber *appState = [[NSUserDefaults standardUserDefaults] objectForKey:kAPCAppStateKey];
-    if (!appState) {
-        [[NSUserDefaults standardUserDefaults] setObject:@(kAPCAppStateNotConsented) forKey:kAPCAppStateKey];
+    //set default 
+    NSNumber *numberOfMinutes = [self.dataSubstrate.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
+    if (!numberOfMinutes) {
+        [self.dataSubstrate.parameters setNumber:@5 forKey:kNumberOfMinutesForPasscodeKey];
     }
+    
     
     return YES;
 }
@@ -92,7 +92,9 @@ static NSInteger const kNumberOfMinutesForPasscode = 0; //TODO: Change value for
         
         if (lastUsedTime) {
             NSTimeInterval timeDifference = [lastUsedTime timeIntervalSinceNow];
-            if (fabs(timeDifference) > kNumberOfMinutesForPasscode * 60) {
+            NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
+            
+            if (fabs(timeDifference) > numberOfMinutes * 60) {
                 
                 [self showPasscode];
             }
