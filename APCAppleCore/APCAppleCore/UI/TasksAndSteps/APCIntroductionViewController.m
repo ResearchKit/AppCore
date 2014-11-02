@@ -14,11 +14,13 @@
 @property  (nonatomic, weak)    IBOutlet  UIScrollView   *imageScroller;
 @property  (nonatomic, weak)    IBOutlet  UIPageControl  *pager;
 
+
 @property  (nonatomic, strong)  NSArray  *instructionalImages;
 @property  (nonatomic, strong)  NSArray  *nonLocalisedParagraphs;
 @property  (nonatomic, strong)  NSArray  *localisedParagraphs;
 
 @property  (nonatomic, assign, getter = wasScrolledViaPageControl)  BOOL  scrolledViaPageControl;
+- (IBAction)viewImportantDetailsHandler:(id)sender;
 
 @end
 
@@ -82,9 +84,14 @@
 {
     NSMutableArray  *localised = [NSMutableArray array];
     
+    NSMutableParagraphStyle *paragrapStyle = NSMutableParagraphStyle.new;
+    paragrapStyle.alignment                = NSTextAlignmentCenter;
+
+    
     NSDictionary  *attributes = @{
-                                  NSFontAttributeName : [UIFont systemFontOfSize: 17.0],
-                                  NSForegroundColorAttributeName : [UIColor grayColor]
+                                  NSFontAttributeName : [UIFont systemFontOfSize: 16.0],
+                                  NSForegroundColorAttributeName : [UIColor grayColor],
+                                  NSParagraphStyleAttributeName:paragrapStyle
                                   };
     
     for (NSString *paragraph  in  self.nonLocalisedParagraphs) {
