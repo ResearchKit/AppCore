@@ -39,9 +39,6 @@
 {
     [self.emailTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.emailTextField setFont:[UIFont appRegularFontWithSize:17.0f]];
-    
-    [self.usernameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.usernameTextField setFont:[UIFont appMediumFontWithSize:17.0f]];
 }
 
 - (void)setupNavAppearance
@@ -63,8 +60,6 @@
     
     if (indexPath.row == 0) {
         [self.emailTextField becomeFirstResponder];
-    } else {
-        [self.usernameTextField becomeFirstResponder];
     }
 }
 
@@ -72,12 +67,7 @@
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField
 {
-    
-    if (textField == self.emailTextField) {
-        [self.usernameTextField becomeFirstResponder];
-    } else {
-        [self sendPassword];
-    }
+   [self sendPassword];
     
     return YES;
 }
@@ -85,11 +75,7 @@
 - (BOOL) isContentValid:(NSString **)errorMessage {
     BOOL isContentValid = NO;
     
-    if (self.usernameTextField.text.length == 0) {
-        *errorMessage = NSLocalizedString(@"Please enter your Username.", @"");
-        isContentValid = NO;
-    }
-    else if (self.emailTextField.text.length == 0) {
+    if (self.emailTextField.text.length == 0) {
         *errorMessage = NSLocalizedString(@"Please enter your email address.", @"");
         isContentValid = NO;
     }
