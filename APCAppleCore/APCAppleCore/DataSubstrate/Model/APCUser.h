@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <HealthKit/HealthKit.h>
 #import <CoreData/CoreData.h>
+#import <UIKit/UIKit.h>
 
 @interface APCUser : NSObject
 
@@ -30,6 +31,9 @@
 /*********************************************************************************/
 #pragma mark - Stored Properties in Core Data
 /*********************************************************************************/
+
+@property (nonatomic, strong) NSData *profileImage;
+
 @property (nonatomic, getter=isConsented) BOOL consented; //Confirmation that server is consented. Should be used in the app to test for user consent.
 @property (nonatomic, getter=isUserConsented) BOOL userConsented; //User has consented though not communicated to the server.
 

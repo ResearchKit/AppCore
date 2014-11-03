@@ -17,6 +17,7 @@ static NSString *const kEmailPropertyName = @"email";
 static NSString *const kPasswordPropertyName = @"password";
 static NSString *const kSessionTokenPropertyName = @"sessionToken";
 
+static NSString *const kProfileImagePropertyName = @"profileImage";
 static NSString *const kBirthDatePropertyName = @"birthDate";
 static NSString *const kBiologicalSexPropertyName = @"BiologicalSex";
 static NSString *const kBloodTypePropertyName = @"bloodType";
@@ -102,6 +103,7 @@ static NSString *const kSignedInKey = @"SignedIn";
 
 - (void) copyPropertiesFromStoredUserData: (APCStoredUserData*) storedUserData
 {
+    _profileImage = [storedUserData.profileImage copy];
     _birthDate = [storedUserData.birthDate copy];
     _biologicalSex = (HKBiologicalSex)[storedUserData.biologicalSex integerValue];
     _bloodType = (HKBloodType) [storedUserData.bloodType integerValue];
@@ -194,6 +196,12 @@ static NSString *const kSignedInKey = @"SignedIn";
 /*********************************************************************************/
 #pragma mark - Setters for Properties in Core Data
 /*********************************************************************************/
+
+- (void)setProfileImage:(NSData *)profileImage
+{
+    _profileImage = profileImage;
+    [self updateStoredProperty:kProfileImagePropertyName withValue:profileImage];
+}
 
 - (void)setConsented:(BOOL)consented
 {

@@ -9,14 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "APCGraphConstants.h"
 
-@protocol APCLineGraphViewDataSource;
-@protocol APCLineGraphViewDelegate;
+@protocol APCLineCharViewDataSource;
+@protocol APCLineChartViewDelegate;
 
 @interface APCLineGraphView : UIView
 
-@property (nonatomic, weak) IBOutlet id <APCLineGraphViewDataSource> datasource;
+@property (nonatomic, weak) IBOutlet id <APCLineCharViewDataSource> datasource;
 
-@property (nonatomic, weak) IBOutlet id <APCLineGraphViewDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <APCLineChartViewDelegate> delegate;
 
 @property (nonatomic, readonly) CGFloat minimumValue;
 
@@ -25,10 +25,6 @@
 /* Appearance */
 
 @property (nonatomic, strong) UIColor *tintColor;
-
-@property (nonatomic, strong) UILabel *titleLabel;
-
-@property (nonatomic, strong) UILabel *subTitleLabel;
 
 @property (nonatomic, strong) UIColor *axisColor;
 
@@ -42,23 +38,18 @@
 
 @property (nonatomic, strong) UIColor *scrubberLineColor;
 
-
-@property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
-
 - (NSInteger)numberOfPlots;
 
 - (NSInteger)numberOfPointsinPlot:(NSInteger)plotIndex;
 
 - (void)scrubReferenceLineForXPosition:(CGFloat)xPosition;
 
-- (void)setScrubberViewsHidden:(BOOL)hidden animated:(BOOL)animated;
-
 @end
 
-@protocol APCLineGraphViewDataSource <NSObject>
+@protocol APCLineCharViewDataSource <NSObject>
 
 @required
- 
+
 - (NSInteger)lineGraph:(APCLineGraphView *)graphView numberOfPointsInPlot:(NSInteger)plotIndex;
 
 - (CGFloat)lineGraph:(APCLineGraphView *)graphView plot:(NSInteger)plotIndex valueForPointAtIndex:(NSInteger)pointIndex;
@@ -72,7 +63,7 @@
 @end
 
 
-@protocol APCLineGraphViewDelegate <NSObject>
+@protocol APCLineChartViewDelegate <NSObject>
 
 - (CGFloat)maximumValueForLineGraph:(APCLineGraphView *)graphView;
 
@@ -80,15 +71,6 @@
 
 - (NSString *)lineGraph:(APCLineGraphView *)graphView titleForXAxisAtIndex:(NSInteger)pointIndex;
 
-- (void)lineGraphTouchesBegan:(APCLineGraphView *)graphView;
-
-- (void)lineGraph:(APCLineGraphView *)graphView touchesMovedToXPosition:(CGFloat)xPosition;
-
-- (void)lineGraphTouchesEnded:(APCLineGraphView *)graphView;
-
-- (void)lineGraphViewDidTapExpand:(APCLineGraphView *)graphView;
-
-- (void)lineGraphViewDidTapCollapse:(APCLineGraphView *)graphView;
-
+- (void)lineGraph:(APCLineGraphView *)graphView didTouchGraphWithXPosition:(CGFloat)xPosition;
 @end
 

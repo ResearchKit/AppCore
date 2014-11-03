@@ -11,6 +11,7 @@
 
 @implementation APCStoredUserData
 
+@dynamic profileImage;
 @dynamic birthDate;
 @dynamic biologicalSex;
 @dynamic bloodType;

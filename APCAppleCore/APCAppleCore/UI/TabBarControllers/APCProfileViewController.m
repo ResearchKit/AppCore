@@ -36,6 +36,7 @@
     
     self.firstNameTextField.delegate = self;
     self.lastNameTextField.delegate = self;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -260,8 +261,10 @@
             
             if (self.isEditing && field.editable) {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                cell.selectionStyle = UITableViewCellSelectionStyleGray;
             } else{
                 cell.accessoryType = UITableViewCellAccessoryNone;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
         }
         
@@ -453,6 +456,7 @@
         image = info[UIImagePickerControllerOriginalImage];
     }
     
+    self.profileImage = image;
     [self.profileImageButton setImage:image forState:UIControlStateNormal];
     
     [picker dismissViewControllerAnimated:YES completion:nil];
@@ -625,33 +629,35 @@
 
 - (IBAction)changeProfileImage:(id)sender
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-        imagePickerController.editing = YES;
-        imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-        imagePickerController.delegate = self;
-        [self presentViewController:imagePickerController animated:YES completion:nil];
-    }];
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        [alertController addAction:cameraAction];
-    }
-    
-    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-        imagePickerController.editing = YES;
-        imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        imagePickerController.delegate = self;
-        [self presentViewController:imagePickerController animated:YES completion:nil];
-    }];
-    [alertController addAction:libraryAction];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    if (self.isEditing) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+            imagePickerController.editing = YES;
+            imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+            imagePickerController.delegate = self;
+            [self presentViewController:imagePickerController animated:YES completion:nil];
+        }];
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            [alertController addAction:cameraAction];
+        }
         
-    }];
-    [alertController addAction:cancelAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
+        UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+            imagePickerController.editing = YES;
+            imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            imagePickerController.delegate = self;
+            [self presentViewController:imagePickerController animated:YES completion:nil];
+        }];
+        [alertController addAction:libraryAction];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }];
+        [alertController addAction:cancelAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+    }    
 
 }
 
