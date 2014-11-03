@@ -531,6 +531,20 @@
     
 }
 
+- (void)setupDataFromJSONFile:(NSString *)jsonFileName
+{
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
+    NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+    
+    NSError *parseError;
+    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
+    
+    if (!parseError) {
+        
+        self.diseaseLabel.text = jsonDictionary[@"disease_name"];
+    }
+}
+
 #pragma mark - Consent
 
 - (void)showConsent
