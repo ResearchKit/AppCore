@@ -249,6 +249,17 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         selectedItemIndex = [items indexOfObject:selectedItem];
     }
     
+    NSArray  *deselectedImageNames = @[ @"tab_dashboard",          @"tab_learn",          @"tab_activities",          @"tab_profile" ];
+    NSArray  *selectedImageNames   = @[ @"tab_dashboard_selected", @"tab_learn_selected", @"tab_activities_selected", @"tab_profile_selected" ];
+    NSArray  *tabBarTitles         = @[ @"Dashboard", @"Learn", @"Activities", @"Profile"];
+    
+    for (int i=0; i<items.count; i++) {
+        UITabBarItem  *item = items[i];
+        item.image = [UIImage imageNamed:deselectedImageNames[i]];
+        item.selectedImage = [[UIImage imageNamed:selectedImageNames[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        item.title = tabBarTitles[i];
+    }
+    
     NSArray  *controllers = tabBarController.viewControllers;
     [self tabBarController:tabBarController didSelectViewController:controllers[selectedItemIndex]];
 }
@@ -273,8 +284,8 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         [tabster setViewControllers:controllers animated:NO];
         tabster.tabBar.tintColor = [UIColor appPrimaryColor];
         UITabBarItem  *item = tabster.tabBar.selectedItem;
-        item.image = [UIImage imageNamed:deselectedImageNames[controllerIndex] inBundle:[NSBundle appleCoreBundle] compatibleWithTraitCollection:nil];
-        item.selectedImage = [[UIImage imageNamed:selectedImageNames[controllerIndex] inBundle:[NSBundle appleCoreBundle] compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        item.image = [UIImage imageNamed:deselectedImageNames[controllerIndex]];
+        item.selectedImage = [[UIImage imageNamed:selectedImageNames[controllerIndex]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         item.title = tabBarTitles[controllerIndex];
     }
 }

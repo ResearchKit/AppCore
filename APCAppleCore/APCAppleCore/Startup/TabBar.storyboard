@@ -40,7 +40,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Overview" image="tab_dashboard.png" id="M23-8p-PUw"/>
+                    <tabBarItem key="tabBarItem" title="Overview" image="tab_dashboard" id="M23-8p-PUw"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2WX-Mj-zrU" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -60,7 +60,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Learn" image="tab_learn.png" id="x1G-OQ-w5s"/>
+                    <tabBarItem key="tabBarItem" title="Learn" image="tab_learn" id="x1G-OQ-w5s"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n7J-UY-1nm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -110,8 +110,8 @@
     </scenes>
     <resources>
         <image name="tab_activities.png" width="24" height="23"/>
-        <image name="tab_dashboard.png" width="29" height="21"/>
-        <image name="tab_learn.png" width="25" height="22"/>
+        <image name="tab_dashboard" width="29" height="21"/>
+        <image name="tab_learn" width="25" height="22"/>
         <image name="tab_profile.png" width="24" height="24"/>
     </resources>
 </document>
