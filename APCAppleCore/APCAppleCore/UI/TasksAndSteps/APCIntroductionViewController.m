@@ -7,6 +7,7 @@
 //
 
 #import "APCIntroductionViewController.h"
+#import "APCAppleCore.h"
 
 @interface APCIntroductionViewController  ( ) <UIScrollViewDelegate>
 
@@ -55,6 +56,7 @@
     self.imageScroller.contentSize = contentSize;
     
     self.pager.numberOfPages = [self.instructionalImages count];
+    self.pager.currentPageIndicatorTintColor = [UIColor appPrimaryColor];
 }
 
 #pragma  mark  -  Initialise Scroll View With Paragraphs
