@@ -70,10 +70,10 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 -(void)joinStudy
 {
     NSError *err = nil;
-    self.justJoined = YES;
+
     if (![self.study updateParticipating:YES withJoinDate:[NSDate date] error:&err])
     {
-        NSLog(@"Could not join %@: %@", self.study, err);
+        [err handle];
     }
 }
 
@@ -81,10 +81,10 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 -(void)leaveStudy
 {
     NSError *err = nil;
-    self.justJoined = NO;
+
     if (![self.study updateParticipating:NO withJoinDate:nil error:&err])
     {
-        NSLog(@"Could not leave %@: %@", self.study, err);
+        [err handle];
     }
 }
 
@@ -153,14 +153,12 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 
 - (void)passiveCollectionDidFinishForStudy:(RKStudy *)study
 {
-    if (self.justJoined)
-    {        
-        NSLog(@"First collection finished - queue an upload");
-        // Create the archive.
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            [self createArchiveForUpload];
-        });
-    }
+    
+    NSLog(@"First collection finished - queue an upload");
+    // Create the archive.
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        [self createArchiveForUpload];
+    });
 }
 
 
