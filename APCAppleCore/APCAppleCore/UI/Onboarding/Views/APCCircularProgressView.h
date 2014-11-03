@@ -8,33 +8,33 @@
 
 #import <UIKit/UIKit.h>
 
-IB_DESIGNABLE
+
 @interface APCCircularProgressView : UIView
 
 /*
  Range is 0 to 1.
  */
-@property (nonatomic) IBInspectable CGFloat progress;
+@property (nonatomic) CGFloat progress;
 
 /*
  Color of the circular progress layer.
  */
-@property (nonatomic, strong)IBInspectable UIColor *tintColor;
+@property (nonatomic, strong) UIColor *tintColor;
 
 /*
  Color of the circular track layer.
  */
-@property (nonatomic, strong) IBInspectable UIColor *trackColor;
+@property (nonatomic, strong) UIColor *trackColor;
 
 /*
  Thickness of the progress arc. Defaults to 4.0.
  */
-@property (nonatomic) IBInspectable CGFloat lineWidth;
+@property (nonatomic) CGFloat lineWidth;
 
 /*
  Decides whether to hide the progress percentage Label. Defaults to NO.
  */
-@property (nonatomic) IBInspectable BOOL hidesProgressValue;
+@property (nonatomic) BOOL hidesProgressValue;
 
 /*
  Label which indicates the percentage of progress.

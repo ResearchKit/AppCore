@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@interface APCPresentAnimator : NSObject
+@interface APCPresentAnimator : NSObject <UIViewControllerAnimatedTransitioning>
+
+@property (nonatomic) CGRect initialFrame;
+@property (nonatomic) BOOL isPresenting;
 
 @end
