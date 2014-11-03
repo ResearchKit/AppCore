@@ -74,7 +74,7 @@ static NSString * const kAPCStepProgressViewAnimationKey = @"APCStepProgressView
     
     _stepProgressLayer = [CAShapeLayer layer];
     _stepProgressLayer.frame = self.bounds;
-    [_stepProgressLayer setFillColor:[UIColor appPrimaryColor].CGColor];
+    [_stepProgressLayer setFillColor:[UIColor appTertiaryColor1].CGColor];
     [self.layer addSublayer:_stepProgressLayer];
 }
 
