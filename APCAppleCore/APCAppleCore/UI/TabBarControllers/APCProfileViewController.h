@@ -46,6 +46,8 @@
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *rightBarButton;
 
+@property (nonatomic, strong) UIImage *profileImage;
+
 - (IBAction)signOut:(id)sender;
 
 - (IBAction)leaveStudy:(id)sender;
