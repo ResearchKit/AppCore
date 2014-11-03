@@ -69,6 +69,10 @@
 
 @property (nonatomic, strong) NSDate *date;
 
+@property (nonatomic, strong) NSDate *minimumDate;
+
+@property (nonatomic, strong) NSDate *maximumDate;
+
 @end
 
 

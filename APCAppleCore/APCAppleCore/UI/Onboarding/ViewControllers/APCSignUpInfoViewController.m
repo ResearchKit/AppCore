@@ -191,6 +191,12 @@
             }
             
             pickerCell.datePicker.datePickerMode = datePickerField.datePickerMode;
+            if (datePickerField.minimumDate) {
+                pickerCell.datePicker.minimumDate = datePickerField.minimumDate;
+            }
+            if (datePickerField.maximumDate) {
+                pickerCell.datePicker.maximumDate = datePickerField.maximumDate;
+            }
             pickerCell.delegate = self;
         
             [self setupPickerCellAppeareance:pickerCell];
@@ -256,8 +262,10 @@
                 if (datePickerField.date) {
                     NSString *dateWithFormat = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
                     defaultCell.detailTextLabel.text = dateWithFormat;
+                    defaultCell.detailTextLabel.textColor = [UIColor appSecondaryColor1];
                 } else {
                     defaultCell.detailTextLabel.text = field.placeholder;
+                    defaultCell.detailTextLabel.textColor = [UIColor appSecondaryColor3];
                 }
                 
                 
@@ -456,7 +464,7 @@
 
 - (void)nextResponderForIndexPath:(NSIndexPath *)indexPath
 {
-    NSUInteger lastRowIndex = [self.tableView numberOfRowsInSection:0] - 1;
+    NSInteger lastRowIndex = [self.tableView numberOfRowsInSection:0] - 1;
     
     NSInteger currentRowIndex = -1;
     if (indexPath) {
@@ -475,7 +483,7 @@
             }
         }
         
-        if (nextRowIndex > 0) {
+        if (nextRowIndex >= 0) {
             APCTextFieldTableViewCell *nextCell = (APCTextFieldTableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:nextRowIndex inSection:0]];
             [nextCell.textField becomeFirstResponder];
         } else{
@@ -560,6 +568,7 @@
 #pragma mark - Private Methods
 
 - (BOOL) isContentValid:(NSString **)errorMessage {
+    
     BOOL isContentValid = YES;
     
     if (self.tableView.tableHeaderView) {
@@ -567,13 +576,13 @@
             isContentValid = NO;
             
             if (errorMessage) {
-                *errorMessage = NSLocalizedString(@"Please give a valid first name", @"");
+                *errorMessage = NSLocalizedString(@"Please enter a valid first name.", @"");
             }
-        } else if (![self.lastNameTextField.text isValidForRegex:kAPCGeneralInfoItemUserNameRegEx]){
+        } else if (![self.lastNameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]){
             isContentValid = NO;
             
             if (errorMessage) {
-                *errorMessage = NSLocalizedString(@"Please give a valid Username", @"");
+                *errorMessage = NSLocalizedString(@"Please enter a valid last name.", @"");
             }
         }
     }

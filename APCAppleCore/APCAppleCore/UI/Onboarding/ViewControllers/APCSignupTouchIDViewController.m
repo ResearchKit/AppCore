@@ -156,6 +156,8 @@
 
 - (void)back
 {
+    self.passcodeView.delegate = nil;
+    self.retryPasscodeView.delegate = nil;
     [self.navigationController popViewControllerAnimated:YES];
 }
 

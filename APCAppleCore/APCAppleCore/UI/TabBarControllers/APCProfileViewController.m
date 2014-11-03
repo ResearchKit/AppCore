@@ -416,7 +416,7 @@
 
 - (void)nextResponderForIndexPath:(NSIndexPath *)indexPath
 {
-    NSUInteger lastRowIndex = [self.tableView numberOfRowsInSection:0] - 1;
+    NSInteger lastRowIndex = [self.tableView numberOfRowsInSection:0] - 1;
     
     NSInteger currentRowIndex = -1;
     if (indexPath) {
@@ -435,7 +435,7 @@
             }
         }
         
-        if (nextRowIndex > 0) {
+        if (nextRowIndex >= 0) {
             APCTextFieldTableViewCell *nextCell = (APCTextFieldTableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:nextRowIndex inSection:0]];
             [nextCell.textField becomeFirstResponder];
         } else{
