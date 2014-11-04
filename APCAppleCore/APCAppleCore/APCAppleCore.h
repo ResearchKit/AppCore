@@ -69,7 +69,6 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCStepViewController.h>
 
 #import <APCAppleCore/APCActivitiesViewController.h>
-#import <APCAppleCore/APCActivitiesTableViewCell.h>
 
 #import <APCAppleCore/APCProfileViewController.h>
 #import <APCAppleCore/APCSettingsViewController.h>

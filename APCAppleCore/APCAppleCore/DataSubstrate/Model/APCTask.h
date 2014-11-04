@@ -15,6 +15,7 @@
 
 @property (nonatomic, retain) NSDate * createdAt;
 @property (nonatomic, retain) NSString * taskClassName;
+@property (nonatomic, retain) NSString * taskCompletionTimeString;
 @property (nonatomic, retain) NSData * taskDescription;
 @property (nonatomic, retain) NSString * taskType;
 @property (nonatomic, retain) NSString * taskTitle;

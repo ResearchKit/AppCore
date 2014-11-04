@@ -14,6 +14,7 @@
 @property (strong, nonatomic) NSString *taskType;
 @property (strong, nonatomic) NSString *taskTitle;
 @property (strong, nonatomic) NSString *taskClassName;
+@property (strong, nonatomic) NSString *taskCompletionTimeString;
 @property (nonatomic, readonly) NSUInteger completedTasksCount;
 @property (nonatomic, readonly, getter=isComplete) BOOL complete;
 
