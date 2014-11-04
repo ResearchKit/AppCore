@@ -12,7 +12,7 @@
 static NSString *kTableCellReuseIdentifier = @"ActivitiesTableViewCell";
 
 static CGFloat kTableViewRowHeight = 70;
-static CGFloat kTableViewSectionHeaderHeight = 30;
+static CGFloat kTableViewSectionHeaderHeight = 45;
 static NSInteger kNumberOfSectionsInTableView = 1;
 
 @interface APCActivitiesViewController () <RKTaskViewControllerDelegate>
@@ -39,6 +39,7 @@ static NSInteger kNumberOfSectionsInTableView = 1;
     [super viewDidLoad];
     
     self.navigationItem.title = NSLocalizedString(@"Activities", @"Activities");
+    self.tableView.backgroundColor = [UIColor appSecondaryColor4];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -117,16 +118,18 @@ static NSInteger kNumberOfSectionsInTableView = 1;
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), kTableViewSectionHeaderHeight)];
+    headerView.contentView.backgroundColor = [UIColor appSecondaryColor4];
     
-    switch (section) {
-        case 0:
-            headerView.textLabel.text = NSLocalizedString(@"Today", @"Today");
-            break;
-            
-        default:{
-            NSAssert(0, @"Invalid Section");
-        }
-            break;
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:headerView.bounds];
+    headerLabel.font = [UIFont appLightFontWithSize:16.0f];
+    headerLabel.textColor = [UIColor appSecondaryColor3];
+    headerLabel.textAlignment = NSTextAlignmentCenter;
+    [headerView addSubview:headerLabel];
+    
+    if (section == 0) {
+        headerLabel.text = @"Today";
+    } else{
+        headerLabel.text = @"Past 5 Days";
     }
     
     return headerView;
