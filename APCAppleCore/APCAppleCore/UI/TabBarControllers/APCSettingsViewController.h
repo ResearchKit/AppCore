@@ -11,4 +11,5 @@
 
 @interface APCSettingsViewController : UITableViewController <APCSwitchTableViewCellDelegate>
 
+@property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 @end
