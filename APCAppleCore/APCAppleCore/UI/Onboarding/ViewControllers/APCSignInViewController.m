@@ -51,7 +51,7 @@
     APCUser * user = [self user];
     
     if (user.email) {
-        NSString *partialEmail = [user.email substringToIndex:3];
+        NSString *partialEmail = (user.email.length >=4) ? [user.email substringToIndex:3] : user.email;
         
         self.userHandleTextField.text = [NSString stringWithFormat:@"%@XXXXX", partialEmail];
         self.userHandleTextField.enabled = NO;
