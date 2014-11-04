@@ -18,6 +18,8 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 
+static CGFloat const kHeaderHeight = 127.0f;
+
 @interface APCSignUpInfoViewController ()
 
 @property (nonatomic, getter=isPickerShowing) BOOL pickerShowing;
@@ -47,10 +49,10 @@
 {
     [super viewWillAppear:animated];
     
-    if (self.headerView) {
+    if (self.headerView && (CGRectGetHeight(self.headerView.frame) != kHeaderHeight)) {
         CGRect headerRect = self.headerView.frame;
-        headerRect.size.height = 127.0f;
-        self.headerView.frame = headerRect;
+        headerRect.size.height = kHeaderHeight;
+        self.headerView.frame = headerRect; 
         
         self.tableView.tableHeaderView = self.tableView.tableHeaderView;
     }    
