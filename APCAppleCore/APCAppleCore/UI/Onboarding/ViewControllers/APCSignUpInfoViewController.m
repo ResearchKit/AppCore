@@ -437,6 +437,21 @@
 
 #pragma mark - APCTextFieldTableViewCellDelegate methods
 
+- (void)textFieldTableViewCellDidBeginEditing:(APCTextFieldTableViewCell *)cell
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    NSIndexPath *actualIndexPath = indexPath;
+    
+    if (self.pickerShowing) {
+        if (indexPath.row > self.pickerIndexPath.row) {
+            actualIndexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+        }
+        
+        [self hidePickerCell];
+    }
+}
+
 - (void)textFieldTableViewCell:(APCTextFieldTableViewCell *)cell shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];

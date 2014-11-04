@@ -41,6 +41,8 @@
     
     [self.textField setFont:[UIFont appRegularFontWithSize:17.0f]];
     [self.textField setTextColor:[UIColor appSecondaryColor1]];
+    self.textField.adjustsFontSizeToFitWidth = YES;
+    self.textField.minimumFontSize = 15.0;
 }
 
 - (void)setType:(APCTextFieldCellType)type
@@ -57,6 +59,12 @@
 
 #pragma mark - UITextFieldDelegate methods
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if ([self.delegate respondsToSelector:@selector(textFieldTableViewCellDidBeginEditing:)]) {
+        [self.delegate textFieldTableViewCellDidBeginEditing:self];
+    }
+}
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     if ([self.delegate respondsToSelector:@selector(textFieldTableViewCellDidEndEditing:)]) {
