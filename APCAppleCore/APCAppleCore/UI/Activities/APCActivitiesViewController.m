@@ -10,8 +10,9 @@
 #import "APCAppleCore.h"
 
 static NSString *kTableCellReuseIdentifier = @"ActivitiesTableViewCell";
+static NSString *kTableCellWithTimeReuseIdentifier = @"ActivitiesTableViewCellWithTime";
 
-static CGFloat kTableViewRowHeight = 70;
+static CGFloat kTableViewRowHeight = 80;
 static CGFloat kTableViewSectionHeaderHeight = 45;
 static NSInteger kNumberOfSectionsInTableView = 1;
 
@@ -68,36 +69,55 @@ static NSInteger kNumberOfSectionsInTableView = 1;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    APCActivitiesTableViewCell  *cell = (APCActivitiesTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kTableCellReuseIdentifier];
-    
     id task = self.scheduledTasksArray[indexPath.row];
     
-    if ([task isKindOfClass:[APCGroupedScheduledTask class]]) {
-        
-        cell.type = kActivitiesTableViewCellTypeSubtitle;
-        
-        APCGroupedScheduledTask *groupedScheduledTask = (APCGroupedScheduledTask *)task;
-        
-        cell.titleLabel.text = groupedScheduledTask.taskTitle;
-        
+    APCGroupedScheduledTask *groupedScheduledTask;
+    APCScheduledTask *scheduledTask;
+    NSString * taskCompletionTimeString;
+    
+    if ([task isKindOfClass:[APCGroupedScheduledTask class]])
+    {
+        groupedScheduledTask = (APCGroupedScheduledTask *)task;
+        taskCompletionTimeString = groupedScheduledTask.taskCompletionTimeString;
+    }
+    else if ([task isKindOfClass:[APCScheduledTask class]])
+    {
+        scheduledTask = (APCScheduledTask *)task;
+        taskCompletionTimeString = scheduledTask.task.taskCompletionTimeString;
+    }
+    
+    UITableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier: taskCompletionTimeString.length ? kTableCellWithTimeReuseIdentifier : kTableCellReuseIdentifier];
+
+    APCConfirmationView * confirmView = (APCConfirmationView*)[cell viewWithTag:100];
+    UILabel * titleLabel = (UILabel*)[cell viewWithTag:200];
+    UILabel * countLabel = (UILabel*)[cell viewWithTag:300];
+    UILabel * completionTimeLabel = (UILabel*)[cell viewWithTag:400];
+    
+    //Styling
+    titleLabel.font = [UIFont appRegularFontWithSize:17];
+    titleLabel.textColor = [UIColor appSecondaryColor1];
+    countLabel.font = [UIFont appRegularFontWithSize:15];
+    countLabel.textColor = [UIColor appSecondaryColor2];
+    completionTimeLabel.font = [UIFont appLightFontWithSize:14];
+    completionTimeLabel.textColor = [UIColor appSecondaryColor3];
+    
+    completionTimeLabel.text = taskCompletionTimeString;
+
+    if ([task isKindOfClass:[APCGroupedScheduledTask class]])
+    {
+        titleLabel.text = groupedScheduledTask.taskTitle;
+        taskCompletionTimeString = groupedScheduledTask.taskCompletionTimeString;
         NSUInteger tasksCount = groupedScheduledTask.scheduledTasks.count;
         NSUInteger completedTasksCount = groupedScheduledTask.completedTasksCount;
-        
-        cell.subTitleLabel.text = [NSString stringWithFormat:@"%lu/%lu %@", (unsigned long)completedTasksCount, (unsigned long)tasksCount, NSLocalizedString(@"Tasks Completed", nil)];
-        
-        cell.completed = groupedScheduledTask.complete;
-        
-    } else if ([task isKindOfClass:[APCScheduledTask class]]){
-        
-        cell.type = kActivitiesTableViewCellTypeDefault;
-        
-        APCScheduledTask *scheduledTask = (APCScheduledTask *)task;
-        
-        cell.titleLabel.text = scheduledTask.task.taskTitle;
-        cell.completed = scheduledTask.completed.boolValue;
-        
-    } else{
-        //Handle all cases in ifElse statements. May handle NSAssert here.
+        countLabel.text = [NSString stringWithFormat:@"%lu/%lu", (unsigned long)completedTasksCount, (unsigned long)tasksCount];
+        confirmView.completed = groupedScheduledTask.complete;
+    }
+    else if ([task isKindOfClass:[APCScheduledTask class]])
+    {
+        titleLabel.text = scheduledTask.task.taskTitle;
+        confirmView.completed = scheduledTask.completed.boolValue;
+        taskCompletionTimeString = scheduledTask.task.taskCompletionTimeString;
+        countLabel.text = nil;
     }
     
     return  cell;
@@ -248,6 +268,7 @@ static NSInteger kNumberOfSectionsInTableView = 1;
             groupedTask.taskType = scheduledTask.task.taskType;
             groupedTask.taskTitle = scheduledTask.task.taskTitle;
             groupedTask.taskClassName = scheduledTask.task.taskClassName;
+            groupedTask.taskCompletionTimeString = scheduledTask.task.taskCompletionTimeString;
             
             [self.scheduledTasksArray addObject:groupedTask];
         } else{

@@ -19,6 +19,8 @@
 		5B3AB79F19EC9BF600E7FC31 /* APCPickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3AB79C19EC9BF600E7FC31 /* APCPickerTableViewCell.m */; };
 		5B3AB7A319EC9D5500E7FC31 /* UIView+LoadXib.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3AB7A119EC9D5500E7FC31 /* UIView+LoadXib.h */; };
 		5B3AB7A419EC9D5500E7FC31 /* UIView+LoadXib.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3AB7A219EC9D5500E7FC31 /* UIView+LoadXib.m */; };
+		5B477A731A01C8B0006C3CDC /* APCResizeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B477A711A01C8B0006C3CDC /* APCResizeView.h */; };
+		5B477A741A01C8B0006C3CDC /* APCResizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B477A721A01C8B0006C3CDC /* APCResizeView.m */; };
 		5B55FDF51A03106E009BEE5E /* tab_activities.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B55FDE51A03106E009BEE5E /* tab_activities.png */; };
 		5B55FDF61A03106E009BEE5E /* tab_activities@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B55FDE61A03106E009BEE5E /* tab_activities@2x.png */; };
 		5B55FDF71A03106E009BEE5E /* tab_activities_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B55FDE71A03106E009BEE5E /* tab_activities_selected.png */; };
@@ -51,10 +53,6 @@
 		5B55FE3E1A05A59A009BEE5E /* APCSwitchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B55FE3C1A05A59A009BEE5E /* APCSwitchTableViewCell.m */; };
 		5B55FE481A075845009BEE5E /* APCPresentAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B55FE461A075845009BEE5E /* APCPresentAnimator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B55FE491A075845009BEE5E /* APCPresentAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B55FE471A075845009BEE5E /* APCPresentAnimator.m */; };
-		5B42F25419F189F0009E87BC /* APCForgotUsernameViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B42F25219F189F0009E87BC /* APCForgotUsernameViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5B42F25519F189F0009E87BC /* APCForgotUsernameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B42F25319F189F0009E87BC /* APCForgotUsernameViewController.m */; };
-		5B477A731A01C8B0006C3CDC /* APCResizeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B477A711A01C8B0006C3CDC /* APCResizeView.h */; };
-		5B477A741A01C8B0006C3CDC /* APCResizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B477A721A01C8B0006C3CDC /* APCResizeView.m */; };
 		5B5F178019ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B5F177D19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B5F178119ECF83A00A0E1D7 /* APCTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B5F177E19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.m */; };
 		5B5F178B19EDB58F00A0E1D7 /* APCPermissionButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B5F178919EDB58F00A0E1D7 /* APCPermissionButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -293,8 +291,6 @@
 		F5C98F9319EF224B001D18C9 /* APCEligibleViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C98F9119EF224B001D18C9 /* APCEligibleViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5C98F9419EF224B001D18C9 /* APCEligibleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C98F9219EF224B001D18C9 /* APCEligibleViewController.m */; };
 		F5D1A90F19D4C6E200A03465 /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */; };
-		F5EDCC8D19D32F0A00A5E027 /* APCActivitiesTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5EDCC8B19D32F0A00A5E027 /* APCActivitiesTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F5EDCC8E19D32F0A00A5E027 /* APCActivitiesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EDCC8C19D32F0A00A5E027 /* APCActivitiesTableViewCell.m */; };
 		F5FDCF8D19EC68C9002486DE /* UIColor+APCAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FDCF8919EC68C9002486DE /* UIColor+APCAppearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5FDCF8E19EC68C9002486DE /* UIColor+APCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FDCF8A19EC68C9002486DE /* UIColor+APCAppearance.m */; };
 		F5FDCF8F19EC68C9002486DE /* UIFont+APCAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FDCF8B19EC68C9002486DE /* UIFont+APCAppearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -320,6 +316,8 @@
 		5B3AB79C19EC9BF600E7FC31 /* APCPickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPickerTableViewCell.m; sourceTree = "<group>"; };
 		5B3AB7A119EC9D5500E7FC31 /* UIView+LoadXib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+LoadXib.h"; sourceTree = "<group>"; };
 		5B3AB7A219EC9D5500E7FC31 /* UIView+LoadXib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+LoadXib.m"; sourceTree = "<group>"; };
+		5B477A711A01C8B0006C3CDC /* APCResizeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCResizeView.h; sourceTree = "<group>"; };
+		5B477A721A01C8B0006C3CDC /* APCResizeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCResizeView.m; sourceTree = "<group>"; };
 		5B55FDE51A03106E009BEE5E /* tab_activities.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_activities.png; sourceTree = "<group>"; };
 		5B55FDE61A03106E009BEE5E /* tab_activities@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_activities@2x.png"; sourceTree = "<group>"; };
 		5B55FDE71A03106E009BEE5E /* tab_activities_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_activities_selected.png; sourceTree = "<group>"; };
@@ -352,10 +350,6 @@
 		5B55FE3C1A05A59A009BEE5E /* APCSwitchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSwitchTableViewCell.m; sourceTree = "<group>"; };
 		5B55FE461A075845009BEE5E /* APCPresentAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPresentAnimator.h; sourceTree = "<group>"; };
 		5B55FE471A075845009BEE5E /* APCPresentAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPresentAnimator.m; sourceTree = "<group>"; };
-		5B42F25219F189F0009E87BC /* APCForgotUsernameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCForgotUsernameViewController.h; sourceTree = "<group>"; };
-		5B42F25319F189F0009E87BC /* APCForgotUsernameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCForgotUsernameViewController.m; sourceTree = "<group>"; };
-		5B477A711A01C8B0006C3CDC /* APCResizeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCResizeView.h; sourceTree = "<group>"; };
-		5B477A721A01C8B0006C3CDC /* APCResizeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCResizeView.m; sourceTree = "<group>"; };
 		5B5F177D19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTextFieldTableViewCell.h; sourceTree = "<group>"; };
 		5B5F177E19ECF83A00A0E1D7 /* APCTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTextFieldTableViewCell.m; sourceTree = "<group>"; };
 		5B5F178919EDB58F00A0E1D7 /* APCPermissionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPermissionButton.h; sourceTree = "<group>"; };
@@ -565,8 +559,6 @@
 		F5C98F9119EF224B001D18C9 /* APCEligibleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCEligibleViewController.h; sourceTree = "<group>"; };
 		F5C98F9219EF224B001D18C9 /* APCEligibleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCEligibleViewController.m; sourceTree = "<group>"; };
 		F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BridgeSDK.framework; sourceTree = SOURCE_ROOT; };
-		F5EDCC8B19D32F0A00A5E027 /* APCActivitiesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCActivitiesTableViewCell.h; sourceTree = "<group>"; };
-		F5EDCC8C19D32F0A00A5E027 /* APCActivitiesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCActivitiesTableViewCell.m; sourceTree = "<group>"; };
 		F5FDCF8919EC68C9002486DE /* UIColor+APCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+APCAppearance.h"; sourceTree = "<group>"; };
 		F5FDCF8A19EC68C9002486DE /* UIColor+APCAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+APCAppearance.m"; sourceTree = "<group>"; };
 		F5FDCF8B19EC68C9002486DE /* UIFont+APCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+APCAppearance.h"; sourceTree = "<group>"; };
@@ -705,8 +697,6 @@
 			children = (
 				F5008C1719D32CC80011102F /* APCActivitiesViewController.h */,
 				F5008C1819D32CC80011102F /* APCActivitiesViewController.m */,
-				F5EDCC8B19D32F0A00A5E027 /* APCActivitiesTableViewCell.h */,
-				F5EDCC8C19D32F0A00A5E027 /* APCActivitiesTableViewCell.m */,
 			);
 			path = Activities;
 			sourceTree = "<group>";
@@ -1262,7 +1252,6 @@
 				F588BA9719D21F1300692473 /* YMLChartEnumerations.h in Headers */,
 				F588BA8819D21F1300692473 /* APCCircularProgressView.h in Headers */,
 				F588BA6C19D21F1300692473 /* APCForgotPasswordViewController.h in Headers */,
-				F5EDCC8D19D32F0A00A5E027 /* APCActivitiesTableViewCell.h in Headers */,
 				5B55FE481A075845009BEE5E /* APCPresentAnimator.h in Headers */,
 				F541541419D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h in Headers */,
 				5B55FE131A0355E5009BEE5E /* APCShareTableViewCell.h in Headers */,
@@ -1516,7 +1505,6 @@
 				F541541E19D60F3400B819C9 /* HKHealthStore+APCExtensions.m in Sources */,
 				5B29CE3719D3767D00E2FD62 /* APCPermissionsManager.m in Sources */,
 				5B55FE491A075845009BEE5E /* APCPresentAnimator.m in Sources */,
-				F5EDCC8E19D32F0A00A5E027 /* APCActivitiesTableViewCell.m in Sources */,
 				F5008C1019D32AD60011102F /* APCGroupedScheduledTask.m in Sources */,
 				F588BA7A19D21F1300692473 /* APCSignupTouchIDViewController.m in Sources */,
 				5B3AB79F19EC9BF600E7FC31 /* APCPickerTableViewCell.m in Sources */,
