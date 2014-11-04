@@ -391,6 +391,20 @@
 
 #pragma mark - APCTextFieldTableViewCellDelegate methods
 
+- (void)textFieldTableViewCellDidBeginEditing:(APCTextFieldTableViewCell *)cell
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    NSIndexPath *actualIndexPath = indexPath;
+    
+    if (self.pickerShowing) {
+        if (indexPath.row > self.pickerIndexPath.row) {
+            actualIndexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+        }
+        
+        [self hidePickerCell];
+    }
+}
 
 - (void)textFieldTableViewCell:(APCTextFieldTableViewCell *)cell shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
@@ -529,6 +543,20 @@
 - (void)loadProfileValuesInModel
 {
     
+}
+
+- (void)setupDataFromJSONFile:(NSString *)jsonFileName
+{
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
+    NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+    
+    NSError *parseError;
+    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
+    
+    if (!parseError) {
+        
+        self.diseaseLabel.text = jsonDictionary[@"disease_name"];
+    }
 }
 
 #pragma mark - Consent

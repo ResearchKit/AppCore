@@ -60,4 +60,6 @@
 
 - (void)loadProfileValuesInModel;
 
+- (void)setupDataFromJSONFile:(NSString *)jsonFileName;
+
 @end
