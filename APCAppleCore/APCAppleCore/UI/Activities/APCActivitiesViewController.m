@@ -147,9 +147,9 @@ static NSInteger kNumberOfSectionsInTableView = 1;
     [headerView addSubview:headerLabel];
     
     if (section == 0) {
-        headerLabel.text = @"Today";
+        headerLabel.text = NSLocalizedString(@"Today", @"Today");
     } else{
-        headerLabel.text = @"Past 5 Days";
+        headerLabel.text = NSLocalizedString(@"Past 5 Days", @"Past 5 Days");
     }
     
     return headerView;
