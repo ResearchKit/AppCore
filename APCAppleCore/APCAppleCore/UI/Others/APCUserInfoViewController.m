@@ -269,9 +269,9 @@
 
 - (void)pickerTableViewCell:(APCPickerTableViewCell *)cell datePickerValueChanged:(NSDate *)date
 {
-    if (self.pickerShowing) {
-        
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    if (self.pickerShowing && indexPath) {
         
         APCTableViewDatePickerItem *field = self.items[indexPath.row - 1];
         field.date = date;
