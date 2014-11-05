@@ -10,4 +10,8 @@
 
 @interface APCInEligibleViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
+@property (weak, nonatomic) IBOutlet UILabel *label;
+
+- (IBAction)next:(id)sender;
 @end

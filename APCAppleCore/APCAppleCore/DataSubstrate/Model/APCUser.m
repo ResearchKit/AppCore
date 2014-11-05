@@ -11,12 +11,13 @@
 #import <HealthKit/HealthKit.h>
 
 
-static NSString *const kNamePropertyName = @"name";
-static NSString *const kUserNamePropertyName = @"userName";
+static NSString *const kFirstNamePropertytName = @"firstName";
+static NSString *const kLastNamePropertyName = @"lastName";
 static NSString *const kEmailPropertyName = @"email";
 static NSString *const kPasswordPropertyName = @"password";
 static NSString *const kSessionTokenPropertyName = @"sessionToken";
 
+static NSString *const kProfileImagePropertyName = @"profileImage";
 static NSString *const kBirthDatePropertyName = @"birthDate";
 static NSString *const kBiologicalSexPropertyName = @"BiologicalSex";
 static NSString *const kBloodTypePropertyName = @"bloodType";
@@ -56,8 +57,8 @@ static NSString *const kSignedInKey = @"SignedIn";
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"\
-            Name : %@\n\
-            Username : %@\n\
+            First Name : %@\n\
+            Last Name : %@\n\
             Email : %@\n\
             DOB : %@\n\
             Biological Sex : %d\n\
@@ -74,7 +75,7 @@ static NSString *const kSignedInKey = @"SignedIn";
             Weight : %@ \n\
             Wake Up Time : %@ \n\
             Sleep time : %@ \n\
-            ", self.name, self.userName, self.email, self.birthDate, (int) self.biologicalSex, @(self.isSignedUp), @(self.isUserConsented), @(self.isSignedIn), @(self.isConsented), self.medicalConditions, self.medications, (int) self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime];
+            ", self.firstName, self.lastName, self.email, self.birthDate, (int) self.biologicalSex, @(self.isSignedUp), @(self.isUserConsented), @(self.isSignedIn), @(self.isConsented), self.medicalConditions, self.medications, (int) self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime];
 }
 
 - (void) loadStoredUserData: (NSManagedObjectContext*) context
@@ -102,6 +103,7 @@ static NSString *const kSignedInKey = @"SignedIn";
 
 - (void) copyPropertiesFromStoredUserData: (APCStoredUserData*) storedUserData
 {
+    _profileImage = [storedUserData.profileImage copy];
     _birthDate = [storedUserData.birthDate copy];
     _biologicalSex = (HKBiologicalSex)[storedUserData.biologicalSex integerValue];
     _bloodType = (HKBloodType) [storedUserData.bloodType integerValue];
@@ -134,24 +136,24 @@ static NSString *const kSignedInKey = @"SignedIn";
 #pragma mark - Properties from Key Chain
 /*********************************************************************************/
 
-- (NSString *)name
+- (NSString *)firstName
 {
-    return [APCKeychainStore stringForKey:kNamePropertyName];
+    return [APCKeychainStore stringForKey:kFirstNamePropertytName];
 }
 
-- (void)setName:(NSString *)name
+- (void)setFirstName:(NSString *)firstName
 {
-    [APCKeychainStore setString:name forKey:kNamePropertyName];
+    [APCKeychainStore setString:firstName forKey:kFirstNamePropertytName];
 }
 
-- (NSString *)userName
+- (NSString *)lastName
 {
-    return [APCKeychainStore stringForKey:kUserNamePropertyName];
+    return [APCKeychainStore stringForKey:kLastNamePropertyName];
 }
 
-- (void)setUserName:(NSString *)userName
+- (void)setLastName:(NSString *)lastName
 {
-    [APCKeychainStore setString:userName forKey:kUserNamePropertyName];
+    [APCKeychainStore setString:lastName forKey:kLastNamePropertyName];
 }
 
 - (NSString *)email
@@ -194,6 +196,12 @@ static NSString *const kSignedInKey = @"SignedIn";
 /*********************************************************************************/
 #pragma mark - Setters for Properties in Core Data
 /*********************************************************************************/
+
+- (void)setProfileImage:(NSData *)profileImage
+{
+    _profileImage = profileImage;
+    [self updateStoredProperty:kProfileImagePropertyName withValue:profileImage];
+}
 
 - (void)setConsented:(BOOL)consented
 {
@@ -375,7 +383,7 @@ static NSString *const kSignedInKey = @"SignedIn";
 
 - (BOOL)isLoggedOut
 {
-    return self.userName.length && !self.isSignedIn && !self.isSignedUp;
+    return self.email.length && !self.isSignedIn && !self.isSignedUp;
 }
 
 @end

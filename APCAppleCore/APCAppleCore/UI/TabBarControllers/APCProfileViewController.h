@@ -10,12 +10,13 @@
 #import "APCUser+HealthKit.h"
 #import "APCTextFieldTableViewCell.h"
 #import "APCPickerTableViewCell.h"
+#import "APCDefaultTableViewCell.h"
 
 @interface APCProfileViewController : UITableViewController <APCPickerTableViewCellDelegate, APCTextFieldTableViewCellDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) NSMutableArray *items;
 
-@property (nonatomic, strong) NSMutableArray *itemTypeOrder;
+@property (nonatomic, strong) NSMutableArray *itemsOrder;
 
 @property (nonatomic, strong) APCUser *user;
 
@@ -23,13 +24,15 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *profileImageButton;
 
-@property (weak, nonatomic) IBOutlet UITextField *nameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
 
-@property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
+@property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
 
 @property (weak, nonatomic) IBOutlet UILabel *editLabel;
 
 @property (weak, nonatomic) IBOutlet UIView *footerView;
+
+@property (weak, nonatomic) IBOutlet UILabel *footerTitleLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *diseaseLabel;
 
@@ -43,6 +46,8 @@
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *rightBarButton;
 
+@property (nonatomic, strong) UIImage *profileImage;
+
 - (IBAction)signOut:(id)sender;
 
 - (IBAction)leaveStudy:(id)sender;
@@ -52,5 +57,9 @@
 - (IBAction)changeProfileImage:(id)sender;
 
 - (IBAction)editFields:(id)sender;
+
+- (void)loadProfileValuesInModel;
+
+- (void)setupDataFromJSONFile:(NSString *)jsonFileName;
 
 @end

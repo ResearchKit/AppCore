@@ -11,74 +11,88 @@
 
 @implementation APCUser (Bridge)
 
-- (void)signUpOnCompletion:(void (^)(NSError *))completionBlock
+- (BOOL) serverDisabled
 {
 #if DEVELOPMENT
-    if (completionBlock) {
-        completionBlock(nil);
-    }
+    return YES;
 #else
-    NSParameterAssert(self.email);
-    NSParameterAssert(self.userName);
-    NSParameterAssert(self.password);
-    [SBBComponent(SBBAuthManager) signUpWithEmail:self.email username:self.userName password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionBlock) {
-                completionBlock(error);
-            }
-        });
-    }];
+    return ((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.parameters.bypassServer;
 #endif
 }
 
-- (void)signInOnCompletion:(void (^)(NSError *))completionBlock
+- (void)signUpOnCompletion:(void (^)(NSError *))completionBlock
 {
-#if DEVELOPMENT
-    if (completionBlock) {
-        completionBlock(nil);
-    }
-#else
-    NSParameterAssert(self.userName);
-    NSParameterAssert(self.password);
-    [SBBComponent(SBBAuthManager) signInWithUsername:self.userName password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
-        if (error.code ==kSBBServerPreconditionNotMet) {
-            if (!self.name) {
-                self.name = @"Please enter name";
-            }
-            [self sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
-                [self signInOnCompletion:completionBlock];
-            }];
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
         }
-        else
-        {
+    }
+    else
+    {
+        NSParameterAssert(self.email);
+        NSParameterAssert(self.password);
+        [SBBComponent(SBBAuthManager) signUpWithEmail:self.email username:@"" password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completionBlock) {
                     completionBlock(error);
                 }
             });
+        }];
+    }
+}
+
+- (void)signInOnCompletion:(void (^)(NSError *))completionBlock
+{
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
         }
-    }];
-#endif
+    }
+    else
+    {
+        
+        NSParameterAssert(self.password);
+        [SBBComponent(SBBAuthManager) signInWithUsername:@"" password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+            if (error.code ==kSBBServerPreconditionNotMet) {
+                if (!self.firstName) {
+                    self.firstName = @"Please enter first name";
+                }
+                [self sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
+                    [self signInOnCompletion:completionBlock];
+                }];
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completionBlock) {
+                        completionBlock(error);
+                    }
+                });
+            }
+        }];
+    }
 }
 
 - (void)sendUserConsentedToBridgeOnCompletion:(void (^)(NSError *))completionBlock
 {
-#if DEVELOPMENT
-    if (completionBlock) {
-        completionBlock(nil);
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
     }
-#else
-    NSParameterAssert(self.name);
-    //TODO: Figure out what needs to be done if birthDate is nil
-    NSDate * birthDate = self.birthDate ?: [NSDate dateWithTimeIntervalSince1970:(60*60*24*365*10)];
-    [SBBComponent(SBBConsentManager) consentSignature:self.name birthdate:birthDate completion:^(id responseObject, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionBlock) {
-                completionBlock(error);
-            }
-        });
-    }];
-#endif
+    else
+    {
+        NSParameterAssert(self.firstName);
+        //TODO: Figure out what needs to be done if birthDate is nil
+        NSDate * birthDate = self.birthDate ?: [NSDate dateWithTimeIntervalSince1970:(60*60*24*365*10)];
+        [SBBComponent(SBBConsentManager) consentSignature:self.firstName birthdate:birthDate completion:^(id responseObject, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            });
+        }];
+    }
 }
 
 /*********************************************************************************/
@@ -97,7 +111,7 @@
 
 - (NSString *)usernameForAuthManager:(id<SBBAuthManagerProtocol>)authManager
 {
-    return self.userName;
+    return @"";
 }
 
 - (NSString *)passwordForAuthManager:(id<SBBAuthManagerProtocol>)authManager
@@ -106,3 +120,7 @@
 }
 
 @end
+
+
+//TODO: For Dhanush
+//Figure out what is to be replaced with username

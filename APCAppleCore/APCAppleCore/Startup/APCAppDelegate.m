@@ -9,6 +9,7 @@
 #import "APCAppDelegate.h"
 #import "APCAppleCore.h"
 #import "APCDebugWindow.h"
+#import "APCPasscodeViewController.h"
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -24,6 +25,8 @@ static NSString *const kDashBoardStoryBoardKey     = @"APHDashboard";
 static NSString *const kLearnStoryBoardKey         = @"APHLearn";
 static NSString *const kActivitiesStoryBoardKey    = @"APHActivities";
 static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
+
+static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 @property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
@@ -47,6 +50,14 @@ static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
     [self setUpHKPermissions];
     [self setUpAppAppearance];
     [self showAppropriateVC];
+    
+    //set default 
+    NSNumber *numberOfMinutes = [self.dataSubstrate.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
+    if (!numberOfMinutes) {
+        [self.dataSubstrate.parameters setNumber:@5 forKey:kNumberOfMinutesForPasscodeKey];
+    }
+    
+    
     return YES;
 }
 
@@ -66,6 +77,29 @@ static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     [self.dataMonitor backgroundFetch:completionHandler];
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    NSDate *currentTime = [NSDate date];
+    [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    if (self.dataSubstrate.currentUser.isSignedIn) {
+        NSDate *lastUsedTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+        
+        if (lastUsedTime) {
+            NSTimeInterval timeDifference = [lastUsedTime timeIntervalSinceNow];
+            NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
+            
+            if (fabs(timeDifference) > numberOfMinutes * 60) {
+                
+                [self showPasscode];
+            }
+        }
+    }
 }
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
@@ -89,8 +123,6 @@ static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
 - (void) initializeBridgeServerConnection
 {
     [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey]];
-    SBBNetworkManager *myNetworkManager = [[SBBNetworkManager alloc] initWithBaseURL:self.initializationOptions[kBaseURLKey]];
-    [SBBComponentManager registerComponent:myNetworkManager forClass:[SBBNetworkManager class]];
 }
 
 - (void) initializeAppleCoreStack
@@ -217,6 +249,17 @@ static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
         selectedItemIndex = [items indexOfObject:selectedItem];
     }
     
+    NSArray  *deselectedImageNames = @[ @"tab_dashboard",          @"tab_learn",          @"tab_activities",          @"tab_profile" ];
+    NSArray  *selectedImageNames   = @[ @"tab_dashboard_selected", @"tab_learn_selected", @"tab_activities_selected", @"tab_profile_selected" ];
+    NSArray  *tabBarTitles         = @[ @"Dashboard", @"Learn", @"Activities", @"Profile"];
+    
+    for (int i=0; i<items.count; i++) {
+        UITabBarItem  *item = items[i];
+        item.image = [UIImage imageNamed:deselectedImageNames[i]];
+        item.selectedImage = [[UIImage imageNamed:selectedImageNames[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        item.title = tabBarTitles[i];
+    }
+    
     NSArray  *controllers = tabBarController.viewControllers;
     [self tabBarController:tabBarController didSelectViewController:controllers[selectedItemIndex]];
 }
@@ -241,8 +284,8 @@ static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
         [tabster setViewControllers:controllers animated:NO];
         tabster.tabBar.tintColor = [UIColor appPrimaryColor];
         UITabBarItem  *item = tabster.tabBar.selectedItem;
-        item.image = [UIImage imageNamed:deselectedImageNames[controllerIndex] inBundle:[NSBundle appleCoreBundle] compatibleWithTraitCollection:nil];
-        item.selectedImage = [[UIImage imageNamed:selectedImageNames[controllerIndex] inBundle:[NSBundle appleCoreBundle] compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        item.image = [UIImage imageNamed:deselectedImageNames[controllerIndex]];
+        item.selectedImage = [[UIImage imageNamed:selectedImageNames[controllerIndex]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         item.title = tabBarTitles[controllerIndex];
     }
 }
@@ -254,6 +297,7 @@ static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
 {
     if (self.dataSubstrate.currentUser.isSignedIn) {
         [self showTabBar];
+        
     }
     else if (self.dataSubstrate.currentUser.isSignedUp)
     {
@@ -263,6 +307,12 @@ static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
     {
         [self showOnBoarding];
     }
+}
+
+- (void)showPasscode
+{
+    APCPasscodeViewController *passcodeViewController = [[APCPasscodeViewController alloc] initWithNibName:@"APCPasscodeViewController" bundle:[NSBundle appleCoreBundle]];
+    [self.window.rootViewController presentViewController:passcodeViewController animated:YES completion:nil];
 }
 
 - (void) showOnBoarding {/*Abstract Implementation*/ }

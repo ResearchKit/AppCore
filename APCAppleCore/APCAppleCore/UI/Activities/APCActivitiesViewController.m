@@ -10,15 +10,15 @@
 #import "APCAppleCore.h"
 
 static NSString *kTableCellReuseIdentifier = @"ActivitiesTableViewCell";
+static NSString *kTableCellWithTimeReuseIdentifier = @"ActivitiesTableViewCellWithTime";
 
-static CGFloat kTableViewRowHeight = 70;
-static CGFloat kTableViewSectionHeaderHeight = 30;
+static CGFloat kTableViewRowHeight = 80;
+static CGFloat kTableViewSectionHeaderHeight = 45;
 static NSInteger kNumberOfSectionsInTableView = 1;
 
-@interface APCActivitiesViewController () <RKTaskViewControllerDelegate, NSFetchedResultsControllerDelegate>
+@interface APCActivitiesViewController () <RKTaskViewControllerDelegate>
 
 @property (strong, nonatomic) NSMutableArray *scheduledTasksArray;
-@property (strong, nonatomic) NSFetchedResultsController * scheduledTasksFRC;
 
 @end
 
@@ -40,30 +40,19 @@ static NSInteger kNumberOfSectionsInTableView = 1;
     [super viewDidLoad];
     
     self.navigationItem.title = NSLocalizedString(@"Activities", @"Activities");
-    [self setUpFRC];
-    [self updateActivities:nil];
+    self.tableView.backgroundColor = [UIColor appSecondaryColor4];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self reloadData];
+    
+    [self updateActivities:nil];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-}
-
-- (void) setUpFRC
-{
-    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"dueOn" ascending:YES];
-    NSFetchRequest *request = [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate  requestForScheduledTasksForPredicate:nil sortDescriptors:@[dateSortDescriptor]];
-    self.scheduledTasksFRC = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext sectionNameKeyPath:nil cacheName:nil];
-    self.scheduledTasksFRC.delegate = self;
-    NSError * error;
-    [self.scheduledTasksFRC performFetch:&error];
-    [error handle];
 }
 
 #pragma mark - UITableViewDataSource Methods
@@ -80,36 +69,55 @@ static NSInteger kNumberOfSectionsInTableView = 1;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    APCActivitiesTableViewCell  *cell = (APCActivitiesTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kTableCellReuseIdentifier];
-    
     id task = self.scheduledTasksArray[indexPath.row];
     
-    if ([task isKindOfClass:[APCGroupedScheduledTask class]]) {
-        
-        cell.type = kActivitiesTableViewCellTypeSubtitle;
-        
-        APCGroupedScheduledTask *groupedScheduledTask = (APCGroupedScheduledTask *)task;
-        
-        cell.titleLabel.text = groupedScheduledTask.taskTitle;
-        
+    APCGroupedScheduledTask *groupedScheduledTask;
+    APCScheduledTask *scheduledTask;
+    NSString * taskCompletionTimeString;
+    
+    if ([task isKindOfClass:[APCGroupedScheduledTask class]])
+    {
+        groupedScheduledTask = (APCGroupedScheduledTask *)task;
+        taskCompletionTimeString = groupedScheduledTask.taskCompletionTimeString;
+    }
+    else if ([task isKindOfClass:[APCScheduledTask class]])
+    {
+        scheduledTask = (APCScheduledTask *)task;
+        taskCompletionTimeString = scheduledTask.task.taskCompletionTimeString;
+    }
+    
+    UITableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier: taskCompletionTimeString.length ? kTableCellWithTimeReuseIdentifier : kTableCellReuseIdentifier];
+
+    APCConfirmationView * confirmView = (APCConfirmationView*)[cell viewWithTag:100];
+    UILabel * titleLabel = (UILabel*)[cell viewWithTag:200];
+    UILabel * countLabel = (UILabel*)[cell viewWithTag:300];
+    UILabel * completionTimeLabel = (UILabel*)[cell viewWithTag:400];
+    
+    //Styling
+    titleLabel.font = [UIFont appRegularFontWithSize:17];
+    titleLabel.textColor = [UIColor appSecondaryColor1];
+    countLabel.font = [UIFont appRegularFontWithSize:15];
+    countLabel.textColor = [UIColor appSecondaryColor2];
+    completionTimeLabel.font = [UIFont appLightFontWithSize:14];
+    completionTimeLabel.textColor = [UIColor appSecondaryColor3];
+    
+    completionTimeLabel.text = taskCompletionTimeString;
+
+    if ([task isKindOfClass:[APCGroupedScheduledTask class]])
+    {
+        titleLabel.text = groupedScheduledTask.taskTitle;
+        taskCompletionTimeString = groupedScheduledTask.taskCompletionTimeString;
         NSUInteger tasksCount = groupedScheduledTask.scheduledTasks.count;
         NSUInteger completedTasksCount = groupedScheduledTask.completedTasksCount;
-        
-        cell.subTitleLabel.text = [NSString stringWithFormat:@"%lu/%lu %@", (unsigned long)completedTasksCount, (unsigned long)tasksCount, NSLocalizedString(@"Tasks Completed", nil)];
-        
-        cell.completed = groupedScheduledTask.complete;
-        
-    } else if ([task isKindOfClass:[APCScheduledTask class]]){
-        
-        cell.type = kActivitiesTableViewCellTypeDefault;
-        
-        APCScheduledTask *scheduledTask = (APCScheduledTask *)task;
-        
-        cell.titleLabel.text = scheduledTask.task.taskTitle;
-        cell.completed = scheduledTask.completed.boolValue;
-        
-    } else{
-        //Handle all cases in ifElse statements. May handle NSAssert here.
+        countLabel.text = [NSString stringWithFormat:@"%lu/%lu", (unsigned long)completedTasksCount, (unsigned long)tasksCount];
+        confirmView.completed = groupedScheduledTask.complete;
+    }
+    else if ([task isKindOfClass:[APCScheduledTask class]])
+    {
+        titleLabel.text = scheduledTask.task.taskTitle;
+        confirmView.completed = scheduledTask.completed.boolValue;
+        taskCompletionTimeString = scheduledTask.task.taskCompletionTimeString;
+        countLabel.text = nil;
     }
     
     return  cell;
@@ -130,16 +138,18 @@ static NSInteger kNumberOfSectionsInTableView = 1;
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), kTableViewSectionHeaderHeight)];
+    headerView.contentView.backgroundColor = [UIColor appSecondaryColor4];
     
-    switch (section) {
-        case 0:
-            headerView.textLabel.text = NSLocalizedString(@"Today", @"Today");
-            break;
-            
-        default:{
-            NSAssert(0, @"Invalid Section");
-        }
-            break;
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:headerView.bounds];
+    headerLabel.font = [UIFont appLightFontWithSize:16.0f];
+    headerLabel.textColor = [UIColor appSecondaryColor3];
+    headerLabel.textAlignment = NSTextAlignmentCenter;
+    [headerView addSubview:headerLabel];
+    
+    if (section == 0) {
+        headerLabel.text = NSLocalizedString(@"Today", @"Today");
+    } else{
+        headerLabel.text = NSLocalizedString(@"Past 5 Days", @"Past 5 Days");
     }
     
     return headerView;
@@ -159,32 +169,22 @@ static NSInteger kNumberOfSectionsInTableView = 1;
         
         Class  class = [NSClassFromString(taskClass) class];
         
-        if (class != [NSNull class]) {
-            
-            
-            //            NSDate *currentDate = [NSDate date];
+        if (class != [NSNull class])
+        {
             NSInteger taskIndex = -1;
             
             for (int i =0; i<groupedScheduledTask.scheduledTasks.count; i++) {
                 APCScheduledTask *scheduledTask = groupedScheduledTask.scheduledTasks[i];
-                
-                //                if ([currentDate compare:scheduledTask.dueOn] == NSOrderedAscending) {
-                //                    taskIndex = i;
-                //                    break;
-                //                }else {
-                //                    NSLog(@"The dueOn date for this task is older than the current time. Ignore this task.");
-                //                }
                 if (!scheduledTask.completed.boolValue) {
                     taskIndex = i;
                     break;
                 }
             }
-            
-            if (taskIndex != -1) {
-                APCSetupTaskViewController *controller = [class customTaskViewController:groupedScheduledTask.scheduledTasks[taskIndex]];
+            APCScheduledTask * taskToPerform = (taskIndex != -1) ? groupedScheduledTask.scheduledTasks[taskIndex] : [groupedScheduledTask.scheduledTasks lastObject];
+            if (taskToPerform)
+            {
+                APCSetupTaskViewController *controller = [class customTaskViewController:taskToPerform];
                 [self presentViewController:controller animated:YES completion:nil];
-            } else {
-                //TODO: The user has tapped on an old task for the day (dueOn date is earlier than current time). May present alert.
             }
         }
         
@@ -197,46 +197,35 @@ static NSInteger kNumberOfSectionsInTableView = 1;
         
         if (class != [NSNull class]) {
             APCSetupTaskViewController *controller = [class customTaskViewController:scheduledTask];
-            if (controller) {
-                [self presentViewController:controller animated:YES completion:nil];
-            }
+            [self presentViewController:controller animated:YES completion:nil];
         }
     }
 }
 
 #pragma mark - Update methods
+
 - (IBAction)updateActivities:(id)sender
 {
-    NSString * cannedSurvey = @"/api/v1/surveys/ecf7e761-c7e9-4bb6-b6e7-d6d15c53b209/2014-09-25T20:07:49.186Z";
-    NSLog(@"Starting Server Refresh");
-    [APCTask getSurveyByRef:cannedSurvey onCompletion:^(NSError *error) {
-        NSLog(@"Just Finished Server Refresh");
-        [((APCAppDelegate *)[UIApplication sharedApplication].delegate).scheduler updateScheduledTasks];
-        if (self.refreshControl.isRefreshing) {
-            [self.refreshControl endRefreshing];
-        }
-    }];
+
+    APCAppDelegate * appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate.scheduler updateScheduledTasks];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self reloadData];
+        [self.refreshControl endRefreshing];
+    });
+
 }
 
 - (void)reloadData
 {
     [self.scheduledTasksArray removeAllObjects];
-    [self groupSimilarTasks:self.scheduledTasksFRC.fetchedObjects];
+    
+    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"dueOn" ascending:YES];
+    NSArray *unsortedScheduledTasks = [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate  scheduledTasksForPredicate:nil sortDescriptors:@[dateSortDescriptor]];
+    
+    [self groupSimilarTasks:unsortedScheduledTasks];
+    
     [self.tableView reloadData];
-}
-
-/*********************************************************************************/
-#pragma mark - Fetched Results Delegate
-/*********************************************************************************/
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
-{
-   //NULL Implementation to trigger FRC tracking
-}
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    [((APCAppDelegate *)[UIApplication sharedApplication].delegate).scheduler updateScheduledTasks];
-    [self reloadData];
 }
 
 #pragma mark - Sort and Group Task
@@ -269,11 +258,10 @@ static NSInteger kNumberOfSectionsInTableView = 1;
             groupedTask.taskType = scheduledTask.task.taskType;
             groupedTask.taskTitle = scheduledTask.task.taskTitle;
             groupedTask.taskClassName = scheduledTask.task.taskClassName;
+            groupedTask.taskCompletionTimeString = scheduledTask.task.taskCompletionTimeString;
             
             [self.scheduledTasksArray addObject:groupedTask];
-        }
-        else
-        {
+        } else{
             
             [self.scheduledTasksArray addObject:filteredTasksArray.firstObject];
         }

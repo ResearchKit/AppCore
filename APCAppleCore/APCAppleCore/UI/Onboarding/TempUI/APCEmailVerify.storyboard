@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="GkR-YS-M1C">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A388b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="GkR-YS-M1C">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Email Verify View Controller-->
@@ -16,17 +17,48 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="KKu-Ul-oii">
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="KKu-Ul-oii">
                                 <rect key="frame" x="150" y="120" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="20" id="ZPx-xk-agn"/>
+                                    <constraint firstAttribute="height" constant="20" id="b41-id-jwr"/>
+                                </constraints>
                             </activityIndicatorView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Please verify your email" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5CD-I4-G3c">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please verify your email" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5CD-I4-G3c">
                                 <rect key="frame" x="56" y="212" width="208" height="144"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="144" id="Hu0-Ng-dBV"/>
+                                    <constraint firstAttribute="width" constant="208" id="rhs-fi-hPT"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Hw-gM-zIp">
+                                <rect key="frame" x="44" y="504" width="233" height="37"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="37" id="7Zz-cY-uT1"/>
+                                    <constraint firstAttribute="width" constant="233" id="cBD-7d-RGH"/>
+                                </constraints>
+                                <state key="normal" title="Skip to Dashboard">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="skip:" destination="GkR-YS-M1C" eventType="touchUpInside" id="Nz5-KS-oXe"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="KKu-Ul-oii" secondAttribute="centerX" id="HMv-Hv-Rft"/>
+                            <constraint firstAttribute="centerX" secondItem="5CD-I4-G3c" secondAttribute="centerX" id="QdA-g3-m9Y"/>
+                            <constraint firstItem="eKo-K4-wLe" firstAttribute="top" secondItem="6Hw-gM-zIp" secondAttribute="bottom" constant="27" id="STn-cS-eGp"/>
+                            <constraint firstAttribute="centerY" secondItem="5CD-I4-G3c" secondAttribute="centerY" id="TIP-Yv-WK7"/>
+                            <constraint firstItem="6Hw-gM-zIp" firstAttribute="leading" secondItem="iai-v0-AsB" secondAttribute="leadingMargin" constant="28" id="XAg-gf-FvG"/>
+                            <constraint firstItem="KKu-Ul-oii" firstAttribute="top" secondItem="b2J-Vw-2Hw" secondAttribute="bottom" constant="100" id="gvs-tg-KFY"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="6Hw-gM-zIp" secondAttribute="trailing" constant="27" id="itW-re-Q8T"/>
+                        </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>

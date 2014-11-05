@@ -11,9 +11,10 @@
 #import "APCTextFieldTableViewCell.h"
 #import "APCPickerTableViewCell.h"
 #import "APCSegmentedTableViewCell.h"
+#import "APCDefaultTableViewCell.h"
 #import "APCSignUpProgressing.h"
 
-@interface APCSignUpInfoViewController : UITableViewController <APCTextFieldTableViewCellDelegate, APCSegmentedTableViewCellDelegate, APCPickerTableViewCellDelegate, APCSignUpProgressing, UITextFieldDelegate>
+@interface APCSignUpInfoViewController : UITableViewController <APCTextFieldTableViewCellDelegate, APCSegmentedTableViewCellDelegate, APCPickerTableViewCellDelegate, APCSignUpProgressing, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) NSMutableArray *items;
 
@@ -21,9 +22,9 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *profileImageButton;
 
-@property (weak, nonatomic) IBOutlet UITextField *nameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
 
-@property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
 
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 

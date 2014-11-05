@@ -7,7 +7,7 @@
 //
 
 #import "NSString+Helper.h"
-#import "UIAlertView+Helper.h"
+#import "UIAlertController+Helper.h"
 #import "APCUserInfoConstants.h"
 #import "APCForgotPasswordViewController.h"
 #import "UIColor+APCAppearance.h"
@@ -22,6 +22,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self setupAppearance];
+    [self setupNavAppearance];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -36,9 +39,17 @@
 {
     [self.emailTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.emailTextField setFont:[UIFont appRegularFontWithSize:17.0f]];
+}
+
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.usernameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.usernameTextField setFont:[UIFont appMediumFontWithSize:17.0f]];
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
 }
 
 #pragma mark - UITableViewDelegate method
@@ -49,8 +60,6 @@
     
     if (indexPath.row == 0) {
         [self.emailTextField becomeFirstResponder];
-    } else {
-        [self.usernameTextField becomeFirstResponder];
     }
 }
 
@@ -58,12 +67,7 @@
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField
 {
-    
-    if (textField == self.emailTextField) {
-        [self.usernameTextField becomeFirstResponder];
-    } else {
-        [self sendPassword];
-    }
+   [self sendPassword];
     
     return YES;
 }
@@ -71,11 +75,7 @@
 - (BOOL) isContentValid:(NSString **)errorMessage {
     BOOL isContentValid = NO;
     
-    if (self.usernameTextField.text.length == 0) {
-        *errorMessage = NSLocalizedString(@"Please enter your Username.", @"");
-        isContentValid = NO;
-    }
-    else if (self.emailTextField.text.length == 0) {
+    if (self.emailTextField.text.length == 0) {
         *errorMessage = NSLocalizedString(@"Please enter your email address.", @"");
         isContentValid = NO;
     }
@@ -96,15 +96,25 @@
         if ([self.emailTextField.text isValidForRegex:(NSString *)kAPCGeneralInfoItemEmailRegEx]) {
         }
         else {
-            [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"General Information", @"") message:NSLocalizedString(@"Please give a valid email address", @"")];
+            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"General Information", @"") message:NSLocalizedString(@"Please give a valid email address", @"")];
+            [self presentViewController:alert animated:YES completion:nil];
         }
     } else{
-        [UIAlertView showSimpleAlertWithTitle:NSLocalizedString(@"Forgot Password", @"") message:error];
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Forgot Password", @"") message:error];
+        [self presentViewController:alert animated:YES completion:nil];
     }
-    
 }
 
-- (IBAction)done:(id)sender {
+#pragma mark - Selectors / IBActions
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)done:(id)sender
+{
     [self sendPassword];
 }
+
 @end

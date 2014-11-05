@@ -18,11 +18,37 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self setUpAppearance];
+    [self setupNavAppearance];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) setUpAppearance
+{
+    self.label1.font = [UIFont appRegularFontWithSize:19.0f];
+    self.label1.textColor = [UIColor appSecondaryColor1];
+    
+    self.label2.font = [UIFont appLightFontWithSize:19.0];
+    self.label2.textColor = [UIColor appSecondaryColor2];
+    
+    [self.consentButton setBackgroundImage:[UIImage imageWithColor:[UIColor appPrimaryColor]] forState:UIControlStateNormal];
+    [self.consentButton setTitleColor:[UIColor appSecondaryColor4] forState:UIControlStateNormal];
+}
+
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
 }
 
 - (void)showConsent
@@ -61,15 +87,6 @@
     }
     
     {
-        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeCustom];
-        c.summary = @"Custom Scene summary";
-        c.title = @"Custom Scene";
-        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
-        c.customImage = [UIImage imageNamed:@"image_example.png"];
-        [components addObject:c];
-    }
-    
-    {
         RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeOnlyInDocument];
         c.summary = @"OnlyInDocument Scene summary";
         c.title = @"OnlyInDocument Scene";
@@ -95,7 +112,9 @@
 - (void)taskViewControllerDidComplete: (RKTaskViewController *)taskViewController
 {
     [self dismissViewControllerAnimated:YES completion:^{
+        
         [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
+        
         [self startSignUp];
     }];
 }
@@ -111,6 +130,13 @@
 - (void)startSignUp
 {
     
+}
+
+#pragma mark - Selectors
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

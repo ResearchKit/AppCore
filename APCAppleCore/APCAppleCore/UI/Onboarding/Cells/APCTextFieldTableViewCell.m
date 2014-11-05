@@ -41,12 +41,14 @@
     
     [self.textField setFont:[UIFont appRegularFontWithSize:17.0f]];
     [self.textField setTextColor:[UIColor appSecondaryColor1]];
+    self.textField.adjustsFontSizeToFitWidth = YES;
+    self.textField.minimumFontSize = 15.0;
 }
 
 - (void)setType:(APCTextFieldCellType)type
 {
     if (type == kAPCTextFieldCellTypeLeft) {
-        self.textLabelWidthConstraint.constant = 120;
+        self.textLabelWidthConstraint.constant = 111;
         self.textField.textAlignment = NSTextAlignmentLeft;
     } else {
         self.textLabelWidthConstraint.constant = 183;
@@ -57,27 +59,25 @@
 
 #pragma mark - UITextFieldDelegate methods
 
-- (BOOL) textFieldShouldBeginEditing:(UITextField *)textField {
-    if ([self.delegate respondsToSelector:@selector(textFieldTableViewCellDidBecomeFirstResponder:)]) {
-        [self.delegate textFieldTableViewCellDidBecomeFirstResponder:self];
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if ([self.delegate respondsToSelector:@selector(textFieldTableViewCellDidBeginEditing:)]) {
+        [self.delegate textFieldTableViewCellDidBeginEditing:self];
     }
-    
-    return YES;
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if ([self.delegate respondsToSelector:@selector(textFieldTableViewCellDidEndEditing:)]) {
+        [self.delegate textFieldTableViewCellDidEndEditing:self];
+    }
 }
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    BOOL isValid = NO;
-    
-    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    if (text.length > 0 && self.valueTextRegularExpression) {
-        isValid = [text isValidForRegex:self.valueTextRegularExpression];
-    }
-    else {
-        isValid = YES;
+    if ([self.delegate respondsToSelector:@selector(textFieldTableViewCell:shouldChangeCharactersInRange:replacementString:)]) {
+        [self.delegate textFieldTableViewCell:self shouldChangeCharactersInRange:range replacementString:string];
     }
     
-    return isValid;
+    return YES;
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {

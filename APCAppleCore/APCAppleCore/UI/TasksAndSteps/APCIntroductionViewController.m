@@ -7,6 +7,7 @@
 //
 
 #import "APCIntroductionViewController.h"
+#import "APCAppleCore.h"
 
 @interface APCIntroductionViewController  ( ) <UIScrollViewDelegate>
 
@@ -14,11 +15,13 @@
 @property  (nonatomic, weak)    IBOutlet  UIScrollView   *imageScroller;
 @property  (nonatomic, weak)    IBOutlet  UIPageControl  *pager;
 
+
 @property  (nonatomic, strong)  NSArray  *instructionalImages;
 @property  (nonatomic, strong)  NSArray  *nonLocalisedParagraphs;
 @property  (nonatomic, strong)  NSArray  *localisedParagraphs;
 
 @property  (nonatomic, assign, getter = wasScrolledViaPageControl)  BOOL  scrolledViaPageControl;
+- (IBAction)viewImportantDetailsHandler:(id)sender;
 
 @end
 
@@ -42,6 +45,7 @@
         
         CGRect  frame = CGRectMake(imageIndex * CGRectGetWidth(self.imageScroller.frame), 0.0, CGRectGetWidth(self.imageScroller.frame), CGRectGetHeight(self.imageScroller.frame));
         UIImageView  *imager = [[UIImageView alloc] initWithFrame:frame];
+        imager.contentMode = UIViewContentModeScaleAspectFit;
         imager.image = anImage;
         [self.imageScroller addSubview:imager];
         
@@ -52,6 +56,7 @@
     self.imageScroller.contentSize = contentSize;
     
     self.pager.numberOfPages = [self.instructionalImages count];
+    self.pager.currentPageIndicatorTintColor = [UIColor appPrimaryColor];
 }
 
 #pragma  mark  -  Initialise Scroll View With Paragraphs
@@ -81,9 +86,14 @@
 {
     NSMutableArray  *localised = [NSMutableArray array];
     
+    NSMutableParagraphStyle *paragrapStyle = NSMutableParagraphStyle.new;
+    paragrapStyle.alignment                = NSTextAlignmentCenter;
+
+    
     NSDictionary  *attributes = @{
-                                  NSFontAttributeName : [UIFont systemFontOfSize: 17.0],
-                                  NSForegroundColorAttributeName : [UIColor grayColor]
+                                  NSFontAttributeName : [UIFont systemFontOfSize: 16.0],
+                                  NSForegroundColorAttributeName : [UIColor grayColor],
+                                  NSParagraphStyleAttributeName:paragrapStyle
                                   };
     
     for (NSString *paragraph  in  self.nonLocalisedParagraphs) {

@@ -7,7 +7,10 @@
 //
 
 #import "APCInEligibleViewController.h"
-
+#import "UIColor+APCAppearance.h"
+#import "UIFont+APCAppearance.h"
+#import "UIImage+APCHelper.h"
+#import "APCShareViewController.h"
 @interface APCInEligibleViewController ()
 
 @end
@@ -17,6 +20,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self setupAppearance];
+    [self setupNavAppearance];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -24,14 +30,31 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void) setupAppearance
+{
+    self.label.font = [UIFont appRegularFontWithSize:19.0f];
+    self.label.textColor = [UIColor appSecondaryColor1];
 }
-*/
 
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
+}
+
+#pragma mark - Selectors
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+- (IBAction)next:(id)sender {
+}
 @end

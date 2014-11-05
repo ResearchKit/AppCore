@@ -12,7 +12,6 @@
 
 @interface APCSignupTouchIDViewController : UIViewController <APCSignUpProgressing>
 
-- (IBAction)skip;
 - (void)next;
 
 @end

@@ -11,7 +11,8 @@
 
 // Private constants
 NSString *const kParamentersFileName                    = @"APCparameters.json";
-
+NSString *const kHideConsentProperty                    = @"hideConsent";
+NSString *const kBypassServerProperty                   = @"bypassServer";
 
 @interface APCParameters ()
 
@@ -267,6 +268,17 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
     else {
         self.userDefaults = [dict mutableCopy];
     }
+    [self addDefaultParametersIfNeeded];
+}
+
+- (void) addDefaultParametersIfNeeded
+{
+    if (self.userDefaults[kHideConsentProperty] == nil) {
+        [self setBool:NO forKey:kHideConsentProperty];
+    }
+    if (self.userDefaults[kBypassServerProperty] == nil) {
+        [self setBool:NO forKey:kBypassServerProperty];
+    }
 }
 
 
@@ -308,6 +320,30 @@ NSString *const kParamentersFileName                    = @"APCparameters.json";
 
     }
 }
+
+/*********************************************************************************/
+#pragma mark - Properties
+/*********************************************************************************/
+- (BOOL)hideConsent
+{
+    return [self boolForKey:kHideConsentProperty];
+}
+
+- (void)setHideConsent:(BOOL)hideConsent
+{
+    [self setBool:hideConsent forKey:kHideConsentProperty];
+}
+
+- (BOOL)bypassServer
+{
+    return [self boolForKey:kBypassServerProperty];
+}
+
+- (void)setBypassServer:(BOOL)bypassServer
+{
+    [self setBool:bypassServer forKey:kBypassServerProperty];
+}
+
 
 /*********************************************************************************/
 #pragma mark - Delegate Methods

@@ -34,6 +34,11 @@ typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
     kSignUpPermissionsTypeCoremotion,
 };
 
+typedef NS_ENUM(NSUInteger, APCAppState) {
+    kAPCAppStateNotConsented,
+    kAPCAppStateConsented
+};
+
 static CGFloat const kAPCSignUpProgressBarHeight                = 14.0f;
 
 static NSInteger kNumberOfSteps = 4;
@@ -49,6 +54,9 @@ static NSString * const kAPCMedicalInfoItemWeightRegEx          = @"[0-9]{1,4}";
 
 static NSString * const kAPCMedicalInfoItemSleepTimeFormat     = @"hh:mm a";
 
-static NSString * const kAPCDefaultTableViewCellIdentifier = @"APCDefaultTableViewCell";
+
+static NSString * const kAPCAppStateKey = @"APCAppState";
+
+static NSString * const kAPCPasscodeKey = @"APCPasscode";
 
 #endif

@@ -10,13 +10,15 @@
 #import "APCTableViewItem.h"
 #import "APCAppDelegate.h"
 #import "APCUserInfoConstants.h"
-#import "UIAlertView+Helper.h"
+#import "UIAlertController+Helper.h"
 #import "APCStepProgressBar.h"
 #import "NSBundle+Helper.h"
 #import "NSString+Helper.h"
 #import "NSDate+Helper.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+
+static CGFloat const kHeaderHeight = 127.0f;
 
 @interface APCSignUpInfoViewController ()
 
@@ -37,14 +39,23 @@
     
     [self setupStepProgressBar];
     [self setupAppearance];
+    [self setupNavAppearance];
     
-    self.nameTextField.delegate = self;
-    self.userNameTextField.delegate = self;
+    self.firstNameTextField.delegate = self;
+    self.lastNameTextField.delegate = self;
 }
 
-- (void)viewDidLayoutSubviews
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidLayoutSubviews];
+    [super viewWillAppear:animated];
+    
+    if (self.headerView && (CGRectGetHeight(self.headerView.frame) != kHeaderHeight)) {
+        CGRect headerRect = self.headerView.frame;
+        headerRect.size.height = kHeaderHeight;
+        self.headerView.frame = headerRect; 
+        
+        self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+    }    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -94,17 +105,31 @@
 
 - (void)setupAppearance
 {
-    [self.nameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.nameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.firstNameTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.firstNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
-    [self.userNameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.userNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.lastNameTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.lastNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
     [self.profileImageButton.imageView.layer setCornerRadius:CGRectGetHeight(self.profileImageButton.bounds)/2];
     
     [self.footerLabel setTextColor:[UIColor appSecondaryColor3]];
     [self.footerLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
+    
 }
+
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
+}
+
+#pragma mark - Custom Methods
 
 - (void)setupPickerCellAppeareance:(APCPickerTableViewCell *)cell
 {
@@ -125,7 +150,7 @@
     
 }
 
-- (void)setupDefaultCellAppearance:(UITableViewCell *)cell
+- (void)setupDefaultCellAppearance:(APCDefaultTableViewCell *)cell
 {
     [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
     [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
@@ -168,6 +193,12 @@
             }
             
             pickerCell.datePicker.datePickerMode = datePickerField.datePickerMode;
+            if (datePickerField.minimumDate) {
+                pickerCell.datePicker.minimumDate = datePickerField.minimumDate;
+            }
+            if (datePickerField.maximumDate) {
+                pickerCell.datePicker.maximumDate = datePickerField.maximumDate;
+            }
             pickerCell.delegate = self;
         
             [self setupPickerCellAppeareance:pickerCell];
@@ -196,6 +227,10 @@
             
             cell = [tableView dequeueReusableCellWithIdentifier:field.identifier];
             
+            cell.selectionStyle = field.selectionStyle;
+            cell.textLabel.text = field.caption;
+            cell.detailTextLabel.text = field.detailText;
+            
             if ([field isKindOfClass:[APCTableViewTextFieldItem class]]) {
                 
                 APCTableViewTextFieldItem *textFieldItem = (APCTableViewTextFieldItem *)field;
@@ -207,8 +242,7 @@
                 textFieldCell.textField.keyboardType = textFieldItem.keyboardType;
                 textFieldCell.textField.returnKeyType = textFieldItem.returnKeyType;
                 textFieldCell.textField.clearButtonMode = textFieldItem.clearButtonMode;
-                
-                textFieldCell.textLabel.text = textFieldItem.value;
+                textFieldCell.textField.text = textFieldItem.value;
                 
                 if (field.textAlignnment == NSTextAlignmentRight) {
                     textFieldCell.type = kAPCTextFieldCellTypeRight;
@@ -224,33 +258,50 @@
             }
             else if ([field isKindOfClass:[APCTableViewDatePickerItem class]]) {
                 
-                if (!cell) {
-                    cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
+                APCTableViewDatePickerItem *datePickerField = (APCTableViewDatePickerItem *)field;
+                APCDefaultTableViewCell *defaultCell = (APCDefaultTableViewCell *)cell;
+                
+                if (datePickerField.date) {
+                    NSString *dateWithFormat = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
+                    defaultCell.detailTextLabel.text = dateWithFormat;
+                    defaultCell.detailTextLabel.textColor = [UIColor appSecondaryColor1];
+                } else {
+                    defaultCell.detailTextLabel.text = field.placeholder;
+                    defaultCell.detailTextLabel.textColor = [UIColor appSecondaryColor3];
                 }
                 
-                APCTableViewDatePickerItem *datePickerField = (APCTableViewDatePickerItem *)field;
                 
-                NSString *dateWithFormat = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
-                cell.detailTextLabel.text = dateWithFormat;
+                if (field.textAlignnment == NSTextAlignmentRight) {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeRight;
+                } else {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeLeft;
+                }
+                
+                [self setupDefaultCellAppearance:defaultCell];
                 
             }
             else if ([field isKindOfClass:[APCTableViewCustomPickerItem class]]) {
-                if (!cell) {
-                    cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
+
+                APCTableViewCustomPickerItem *customPickerField = (APCTableViewCustomPickerItem *)field;
+                APCDefaultTableViewCell *defaultCell = (APCDefaultTableViewCell *)cell;
+                
+                defaultCell.detailTextLabel.text = customPickerField.stringValue;
+                
+                if (field.textAlignnment == NSTextAlignmentRight) {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeRight;
+                } else {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeLeft;
                 }
                 
-                APCTableViewCustomPickerItem *customPickerField = (APCTableViewCustomPickerItem *)field;
-                cell.detailTextLabel.text = customPickerField.stringValue;
+                [self setupDefaultCellAppearance:defaultCell];
                 
             } else if ([field isKindOfClass:[APCTableViewSegmentItem class]]) {
-                if (!cell) {
-                    cell = [[APCSegmentedTableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
-                }
-                
+
                 APCTableViewSegmentItem *segmentPickerField = (APCTableViewSegmentItem *)field;
                 APCSegmentedTableViewCell *segmentedCell = (APCSegmentedTableViewCell *)cell;
                 segmentedCell.delegate = self;
                 segmentedCell.selectedSegmentIndex = segmentPickerField.selectedIndex;
+                segmentedCell.userInteractionEnabled = segmentPickerField.editable;
                 
             } else {
                 if (!cell) {
@@ -258,13 +309,7 @@
                 }
             }
             
-            cell.selectionStyle = field.selectionStyle;
-            cell.textLabel.text = field.caption;
-            cell.detailTextLabel.text = field.detailText;
-            
-            [self setupDefaultCellAppearance:cell];
-            
-            if (self.isEditing) {
+            if (self.isEditing && field.editable) {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             } else{
                 cell.accessoryType = UITableViewCellAccessoryNone;
@@ -275,6 +320,8 @@
     
     return cell;
 }
+
+#pragma mark - UITableViewDelegate methods
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -297,12 +344,25 @@
         field = self.items[indexPath.row];
     }
     
-    if ([field isKindOfClass:[APCTableViewCustomPickerItem class]] ||
-        [field isKindOfClass:[APCTableViewDatePickerItem class]]) {
+    if (field.isEditable && ([field isKindOfClass:[APCTableViewCustomPickerItem class]] ||
+        [field isKindOfClass:[APCTableViewDatePickerItem class]])) {
+        
         [self.tableView endEditing:YES];
         [self handlePickerForIndexPath:indexPath];
+        
     } else if ([field isKindOfClass:[APCTableViewTextFieldItem class]]){
-        APCTextFieldTableViewCell *cell = (APCTextFieldTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+        
+        NSIndexPath *actualIndexPath = indexPath;
+        
+        if (self.pickerShowing) {
+            if (indexPath.row > self.pickerIndexPath.row) {
+                actualIndexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+            }
+            
+            [self hidePickerCell];
+        }
+        
+        APCTextFieldTableViewCell *cell = (APCTextFieldTableViewCell *)[tableView cellForRowAtIndexPath:actualIndexPath];
         [cell.textField becomeFirstResponder];
     }
     
@@ -311,10 +371,32 @@
 
 #pragma mark - UITextFieldDelegate methods
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    if (textField == self.firstNameTextField) {
+        self.user.firstName = text;
+    } else if (textField == self.lastNameTextField){
+        self.user.lastName = text;
+    }
+    
+    return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField == self.firstNameTextField) {
+        self.user.firstName = textField.text;
+    } else if (textField == self.lastNameTextField){
+        self.user.lastName = textField.text;
+    }
+}
+
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     
-    if ((textField == self.nameTextField) && self.userNameTextField) {
-        [self.userNameTextField becomeFirstResponder];
+    if ((textField == self.firstNameTextField) && self.lastNameTextField) {
+        [self.lastNameTextField becomeFirstResponder];
     } else {
         [self nextResponderForIndexPath:nil];
     }
@@ -326,49 +408,80 @@
 
 - (void)pickerTableViewCell:(APCPickerTableViewCell *)cell datePickerValueChanged:(NSDate *)date
 {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    
-    APCTableViewDatePickerItem *field = self.items[indexPath.row - 1];
-    field.date = date;
-    
-    NSString *dateWithFormat = [field.date toStringWithFormat:field.dateFormat];
-    field.detailText = dateWithFormat;
-    
-    UITableViewCell *dateCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section]];
-    dateCell.detailTextLabel.text = dateWithFormat;
+    if (self.pickerShowing) {
+        
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        
+        APCTableViewDatePickerItem *field = self.items[indexPath.row - 1];
+        field.date = date;
+        
+        NSString *dateWithFormat = [field.date toStringWithFormat:field.dateFormat];
+        field.detailText = dateWithFormat;
+        
+        UITableViewCell *dateCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section]];
+        dateCell.detailTextLabel.text = dateWithFormat;
+    }
 }
 
 - (void)pickerTableViewCell:(APCPickerTableViewCell *)cell pickerViewDidSelectIndices:(NSArray *)selectedIndices
 {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    
-    APCTableViewCustomPickerItem *field = self.items[indexPath.row - 1];
-    field.selectedRowIndices = selectedIndices;
-    
-    UITableViewCell *dateCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section]];
-    dateCell.detailTextLabel.text = field.stringValue;
+    if (self.pickerShowing) {
+        
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        
+        APCTableViewCustomPickerItem *field = self.items[indexPath.row - 1];
+        field.selectedRowIndices = selectedIndices;
+        
+        UITableViewCell *dateCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section]];
+        dateCell.detailTextLabel.text = field.stringValue;
+    }
 }
 
 #pragma mark - APCTextFieldTableViewCellDelegate methods
 
-- (void)textFieldTableViewCellDidBecomeFirstResponder:(APCTextFieldTableViewCell *)cell
+- (void)textFieldTableViewCellDidBeginEditing:(APCTextFieldTableViewCell *)cell
 {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
+    NSIndexPath *actualIndexPath = indexPath;
+    
+    if (self.pickerShowing) {
+        if (indexPath.row > self.pickerIndexPath.row) {
+            actualIndexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+        }
+        
+        [self hidePickerCell];
+    }
+}
+
+- (void)textFieldTableViewCell:(APCTextFieldTableViewCell *)cell shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    NSString *text = [cell.textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    APCTableViewTextFieldItem *textFieldItem = self.items[indexPath.row];
+    textFieldItem.value = text;
+}
+
+- (void)textFieldTableViewCellDidEndEditing:(APCTextFieldTableViewCell *)cell
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    APCTableViewTextFieldItem *textFieldItem = self.items[indexPath.row];
+    textFieldItem.value = cell.textField.text;
 }
 
 - (void)textFieldTableViewCellDidReturn:(APCTextFieldTableViewCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    APCTableViewTextFieldItem *textFieldItem = self.items[indexPath.row];
-    textFieldItem.value = cell.textField.text;
-    
     [self nextResponderForIndexPath:indexPath];
 }
 
 - (void)nextResponderForIndexPath:(NSIndexPath *)indexPath
 {
-    NSUInteger lastRowIndex = [self.tableView numberOfRowsInSection:0] - 1;
+    NSInteger lastRowIndex = [self.tableView numberOfRowsInSection:0] - 1;
     
     NSInteger currentRowIndex = -1;
     if (indexPath) {
@@ -387,7 +500,7 @@
             }
         }
         
-        if (nextRowIndex > 0) {
+        if (nextRowIndex >= 0) {
             APCTextFieldTableViewCell *nextCell = (APCTextFieldTableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:nextRowIndex inSection:0]];
             [nextCell.textField becomeFirstResponder];
         } else{
@@ -401,35 +514,20 @@
 
 - (void)segmentedTableViewcell:(APCSegmentedTableViewCell *)cell didSelectSegmentAtIndex:(NSInteger)index
 {
+    if (self.pickerShowing) {
+        [self hidePickerCell];
+    }
+    
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     APCTableViewSegmentItem *field = self.items[indexPath.row];
     field.selectedIndex = index;
 }
 
-#pragma mark - UIImagePickerControllerDelegate
-
-- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    UIImage *image = info[UIImagePickerControllerEditedImage];
-    if (!image) {
-        image = info[UIImagePickerControllerOriginalImage];
-    }
-    
-    [self.profileImageButton setImage:image forState:UIControlStateNormal];
-    
-    [picker dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void) imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [picker dismissViewControllerAnimated:YES completion:nil];
-}
-
 #pragma mark - Private Methods
 
 - (void)handlePickerForIndexPath:(NSIndexPath *)indexPath
 {
-    [self.tableView beginUpdates];
-    
     if (self.isPickerShowing && (self.pickerIndexPath.row - 1 == indexPath.row)) {
         [self hidePickerCell];
     } else{
@@ -441,9 +539,6 @@
         
         [self showPickerAtIndex:selectedIndexpath];
     }
-    
-    [self.tableView endUpdates];
-    
 }
 
 - (void)showPickerAtIndex:(NSIndexPath *)indexPath {
@@ -452,16 +547,20 @@
     
     self.pickerIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:0];
     
+    [self.tableView beginUpdates];
     [self.tableView insertRowsAtIndexPaths:@[self.pickerIndexPath]
                           withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
 }
 
 - (void)hidePickerCell
 {
     self.pickerShowing = NO;
     
+    [self.tableView beginUpdates];
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.pickerIndexPath.row inSection:0]]
                           withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
     
     self.pickerIndexPath = nil;
 }
@@ -486,20 +585,21 @@
 #pragma mark - Private Methods
 
 - (BOOL) isContentValid:(NSString **)errorMessage {
+    
     BOOL isContentValid = YES;
     
     if (self.tableView.tableHeaderView) {
-        if (![self.nameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
+        if (![self.firstNameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
             isContentValid = NO;
             
             if (errorMessage) {
-                *errorMessage = NSLocalizedString(@"Please give a valid first name", @"");
+                *errorMessage = NSLocalizedString(@"Please enter a valid first name.", @"");
             }
-        } else if (![self.userNameTextField.text isValidForRegex:kAPCGeneralInfoItemUserNameRegEx]){
+        } else if (![self.lastNameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]){
             isContentValid = NO;
             
             if (errorMessage) {
-                *errorMessage = NSLocalizedString(@"Please give a valid Username", @"");
+                *errorMessage = NSLocalizedString(@"Please enter a valid last name.", @"");
             }
         }
     }
@@ -511,5 +611,9 @@
     
 }
 
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 @end

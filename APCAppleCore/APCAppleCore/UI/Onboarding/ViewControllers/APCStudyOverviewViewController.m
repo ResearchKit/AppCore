@@ -24,6 +24,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     // Do any additional setup after loading the view from its nib.
     
     [self setupTableView];
+    [self setUpAppearance];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -41,6 +42,23 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+}
+
+- (void)setUpAppearance
+{    
+    [self.joinButton setBackgroundImage:[UIImage imageWithColor:[UIColor appPrimaryColor]] forState:UIControlStateNormal];
+    [self.joinButton setTitleColor:[UIColor appSecondaryColor4] forState:UIControlStateNormal];
+    [self.loginButton setBackgroundImage:[UIImage imageWithColor:[UIColor appSecondaryColor2]] forState:UIControlStateNormal];
+    [self.loginButton setTitleColor:[UIColor appSecondaryColor4] forState:UIControlStateNormal];
+    
+    self.diseaseNameLabel.font = [UIFont appMediumFontWithSize:19];
+    self.diseaseNameLabel.textColor = [UIColor appSecondaryColor1];
+    self.diseaseNameLabel.adjustsFontSizeToFitWidth = YES;
+    self.diseaseNameLabel.minimumScaleFactor = 0.5;
+    
+    self.dateRangeLabel.font = [UIFont appLightFontWithSize:16];
+    self.dateRangeLabel.textColor = [UIColor appSecondaryColor3];
+    
 }
 
 #pragma mark - UITableViewDataSource methods

@@ -15,6 +15,7 @@
 
 @dynamic createdAt;
 @dynamic taskClassName;
+@dynamic taskCompletionTimeString;
 @dynamic taskDescription;
 @dynamic taskType;
 @dynamic taskTitle;

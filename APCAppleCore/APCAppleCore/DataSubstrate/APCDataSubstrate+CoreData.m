@@ -134,4 +134,19 @@
     return [self.mainContext executeFetchRequest:[self requestForScheduledTasksForPredicate:predicate sortDescriptors:sortDescriptors] error:&error];
 }
 
+- (NSUInteger)allScheduledTasksForToday
+{
+    NSFetchRequest * request = [APCScheduledTask request];
+    NSError* error;
+    return [self.mainContext countForFetchRequest:request error:&error];
+}
+
+- (NSUInteger)completedScheduledTasksForToday
+{
+    NSFetchRequest * request = [APCScheduledTask request];
+    request.predicate = [NSPredicate predicateWithFormat:@"completed == %@", @YES];
+    NSError* error;
+    return [self.mainContext countForFetchRequest:request error:&error];
+}
+
 @end

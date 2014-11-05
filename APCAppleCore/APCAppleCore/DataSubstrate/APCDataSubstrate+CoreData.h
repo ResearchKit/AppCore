@@ -23,6 +23,8 @@
 - (NSArray *)scheduledTasksDueFrom:(NSDate *)fromDate toDate:(NSDate *)toDate sortDescriptors: (NSArray*) sortDescriptors; //NOTE: Excludes toDate
 - (NSFetchRequest*) requestForScheduledTasksForPredicate:(NSPredicate *)predicate sortDescriptors: (NSArray*) sortDescriptors;
 - (NSArray *)scheduledTasksForPredicate:(NSPredicate *)predicate sortDescriptors: (NSArray*) sortDescriptors;
+- (NSUInteger) allScheduledTasksForToday;
+- (NSUInteger) completedScheduledTasksForToday;
 
 
 /*********************************************************************************/

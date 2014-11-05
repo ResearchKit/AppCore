@@ -14,6 +14,7 @@
 #import "APCPermissionsCell.h"
 #import "NSBundle+Helper.h"
 #import "APCPermissionsManager.h"
+#import "UIAlertController+Helper.h"
 
 static CGFloat const kTableViewRowHeight                 = 165.0f;
 
@@ -66,6 +67,7 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 {
     [super viewDidLoad];
     
+    [self setupNavAppearance];
     [self setupProgressBar];
     
     [self reloadData];
@@ -85,6 +87,17 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 }
 
 #pragma mark - Setup
+
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
+}
 
 - (void) setupProgressBar {
 
@@ -158,12 +171,8 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
             } else {
                 
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Permissions Denied", nil)
-                                                                    message:error.localizedDescription
-                                                                   delegate:nil
-                                                          cancelButtonTitle:@"OK"
-                                                          otherButtonTitles:nil];
-                    [alert show];
+                    UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription];
+                    [self presentViewController:alert animated:YES completion:nil];
                 });
             }            
         }];
@@ -191,6 +200,11 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 - (void) setUserSignedUp
 {
     self.user.signedUp = YES;
+}
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Permissions
