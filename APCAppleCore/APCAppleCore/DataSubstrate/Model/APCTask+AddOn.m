@@ -14,6 +14,7 @@ static NSString * const kTaskIDKey = @"taskID";
 static NSString * const kTaskTypeKey = @"taskType";
 static NSString * const kTaskTitleKey = @"taskTitle";
 static NSString * const kTaskClassNameKey = @"taskClassName";
+static NSString * const kTaskCompletionTimeStringKey = @"taskCompletionTimeString";
 static NSString * const kTaskFileNameKey = @"fileName";
 static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
 
@@ -28,6 +29,9 @@ static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
           task.taskType = taskDict[kTaskTypeKey];
           task.taskTitle = taskDict[kTaskTitleKey];
           task.taskClassName = taskDict[kTaskClassNameKey];
+          if ([taskDict[kTaskCompletionTimeStringKey] length]) {
+              task.taskCompletionTimeString = taskDict[kTaskCompletionTimeStringKey];
+          }
           
           if ([task.taskType isEqualToString:kCustomizableSurveyTaskType]) {
               NSString *resource = [[NSBundle mainBundle] pathForResource:taskDict[kTaskFileNameKey] ofType:@"task"];
