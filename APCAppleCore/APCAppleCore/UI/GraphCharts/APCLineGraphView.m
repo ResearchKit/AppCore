@@ -281,8 +281,8 @@ static CGFloat const kPopAnimationDuration  = 0.3;
     [self.xAxisTitles removeAllObjects];
     
     for (int i=0; i<self.numberOfXAxisTitles; i++) {
-        if ([self.delegate respondsToSelector:@selector(lineGraph:titleForXAxisAtIndex:)]) {
-            NSString *title = [self.delegate lineGraph:self titleForXAxisAtIndex:i];
+        if ([self.datasource respondsToSelector:@selector(lineGraph:titleForXAxisAtIndex:)]) {
+            NSString *title = [self.datasource lineGraph:self titleForXAxisAtIndex:i];
             
             [self.xAxisTitles addObject:title];
             
@@ -465,8 +465,8 @@ static CGFloat const kPopAnimationDuration  = 0.3;
     [self setDefaults];
     
     //Min
-    if ([self.delegate respondsToSelector:@selector(minimumValueForLineGraph:)]) {
-        self.minimumValue = [self.delegate minimumValueForLineGraph:self];
+    if ([self.datasource respondsToSelector:@selector(minimumValueForLineGraph:)]) {
+        self.minimumValue = [self.datasource minimumValueForLineGraph:self];
     } else {
         for (NSNumber *num in self.dataPoints) {
             if (num.floatValue < self.minimumValue) {
@@ -476,8 +476,8 @@ static CGFloat const kPopAnimationDuration  = 0.3;
     }
     
     //Max
-    if ([self.delegate respondsToSelector:@selector(maximumValueForLineGraph:)]) {
-        self.maximumValue = [self.delegate maximumValueForLineGraph:self];
+    if ([self.datasource respondsToSelector:@selector(maximumValueForLineGraph:)]) {
+        self.maximumValue = [self.datasource maximumValueForLineGraph:self];
     } else {
         for (NSNumber *num in self.dataPoints) {
             if (num.floatValue > self.maximumValue) {
