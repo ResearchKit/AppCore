@@ -69,22 +69,24 @@
 
 - (NSInteger)numberOfDivisionsInXAxisForGraph:(APCLineGraphView *)graphView;
 
-@end
-
-
-@protocol APCLineGraphViewDelegate <NSObject>
-
 - (CGFloat)maximumValueForLineGraph:(APCLineGraphView *)graphView;
 
 - (CGFloat)minimumValueForLineGraph:(APCLineGraphView *)graphView;
 
 - (NSString *)lineGraph:(APCLineGraphView *)graphView titleForXAxisAtIndex:(NSInteger)pointIndex;
 
+@end
+
+
+@protocol APCLineGraphViewDelegate <NSObject>
+
 - (void)lineGraphTouchesBegan:(APCLineGraphView *)graphView;
 
 - (void)lineGraph:(APCLineGraphView *)graphView touchesMovedToXPosition:(CGFloat)xPosition;
 
 - (void)lineGraphTouchesEnded:(APCLineGraphView *)graphView;
+
+@optional
 
 - (void)lineGraphViewDidTapExpand:(APCLineGraphView *)graphView;
 
