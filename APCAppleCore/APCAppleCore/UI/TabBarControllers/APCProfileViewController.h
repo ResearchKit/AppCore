@@ -8,15 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "APCUser+HealthKit.h"
-#import "APCTextFieldTableViewCell.h"
-#import "APCPickerTableViewCell.h"
-#import "APCDefaultTableViewCell.h"
+#import "APCUserInfoViewController.h"
 
-@interface APCProfileViewController : UITableViewController <APCPickerTableViewCellDelegate, APCTextFieldTableViewCellDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
-
-@property (nonatomic, strong) NSMutableArray *items;
-
-@property (nonatomic, strong) NSMutableArray *itemsOrder;
+@interface APCProfileViewController : APCUserInfoViewController <APCPickerTableViewCellDelegate, APCTextFieldTableViewCellDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,UITextFieldDelegate>
 
 @property (nonatomic, strong) APCUser *user;
 
