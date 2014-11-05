@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/BridgeSDK.h</key>
 		<data>
-		AuVvhX/yiVnz3HgXcagyzCI2OFI=
+		rCUYk+JZsYBhlbdCNfdZVIznTtI=
 		</data>
 		<key>Headers/ModelObject.h</key>
 		<data>
@@ -30,7 +30,7 @@
 		</data>
 		<key>Headers/SBBBridgeObjects.h</key>
 		<data>
-		uapCT2iy43nClWiuWwCQie1athI=
+		EqXA83TirPP59mUCFnO2ut8o1+0=
 		</data>
 		<key>Headers/SBBComponent.h</key>
 		<data>
@@ -87,6 +87,18 @@
 		<key>Headers/SBBProfileManager.h</key>
 		<data>
 		ByVLmLbbN/XZqrIODQuxhO/jRxc=
+		</data>
+		<key>Headers/SBBResourceList.h</key>
+		<data>
+		lnX+Qfr8RYAlguP3efCpS8nj+R4=
+		</data>
+		<key>Headers/SBBSchedule.h</key>
+		<data>
+		W6nIJxzMEdFK971GDdN+zUqXvHM=
+		</data>
+		<key>Headers/SBBScheduleManager.h</key>
+		<data>
+		Y8LwABxcrNc1Aye5WNZWrLEgGi0=
 		</data>
 		<key>Headers/SBBStringConstraints.h</key>
 		<data>
@@ -180,6 +192,14 @@
 		<data>
 		O3ZW00HcMRhiABML85U3BDX8/3I=
 		</data>
+		<key>Headers/_SBBResourceList.h</key>
+		<data>
+		Snp6QzBSgMUgAl5bvLN80BqHsOw=
+		</data>
+		<key>Headers/_SBBSchedule.h</key>
+		<data>
+		3OkTBmU0q98G4S0Rjdz2Kb0QuK0=
+		</data>
 		<key>Headers/_SBBStringConstraints.h</key>
 		<data>
 		Xn56I55G4G4WKV5i/jyldv0AwlI=
@@ -190,7 +210,7 @@
 		</data>
 		<key>Headers/_SBBSurveyAnswer.h</key>
 		<data>
-		2pazQKKAl03koEvtVydZNmTTfII=
+		nd0BXt3ohkUB/JDCTyuaiCaOmsQ=
 		</data>
 		<key>Headers/_SBBSurveyConstraints.h</key>
 		<data>
@@ -202,7 +222,7 @@
 		</data>
 		<key>Headers/_SBBSurveyQuestionOption.h</key>
 		<data>
-		Dnln6KoInt9pLxp3JMZ7rvdpqOQ=
+		G7R0cCd2qSkaqRX241WbYK1Ec7s=
 		</data>
 		<key>Headers/_SBBSurveyResponse.h</key>
 		<data>
@@ -238,18 +258,18 @@
 		</data>
 		<key>SBBDataModel.momd/SBBDataModel.mom</key>
 		<data>
-		fXhUjoZWiWKnBHP+Ie+I2DGTq10=
+		A2a/vIxWDTM/s8H2c9k8B3FzJwQ=
 		</data>
 		<key>SBBDataModel.momd/VersionInfo.plist</key>
 		<data>
-		Sqwx8WyzidOGoGnDO8mHddc3JjY=
+		vmRv86Tc+z040v17S+JUyef4F2Y=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
 		<key>Headers/BridgeSDK.h</key>
 		<data>
-		AuVvhX/yiVnz3HgXcagyzCI2OFI=
+		rCUYk+JZsYBhlbdCNfdZVIznTtI=
 		</data>
 		<key>Headers/ModelObject.h</key>
 		<data>
@@ -273,7 +293,7 @@
 		</data>
 		<key>Headers/SBBBridgeObjects.h</key>
 		<data>
-		uapCT2iy43nClWiuWwCQie1athI=
+		EqXA83TirPP59mUCFnO2ut8o1+0=
 		</data>
 		<key>Headers/SBBComponent.h</key>
 		<data>
@@ -330,6 +350,18 @@
 		<key>Headers/SBBProfileManager.h</key>
 		<data>
 		ByVLmLbbN/XZqrIODQuxhO/jRxc=
+		</data>
+		<key>Headers/SBBResourceList.h</key>
+		<data>
+		lnX+Qfr8RYAlguP3efCpS8nj+R4=
+		</data>
+		<key>Headers/SBBSchedule.h</key>
+		<data>
+		W6nIJxzMEdFK971GDdN+zUqXvHM=
+		</data>
+		<key>Headers/SBBScheduleManager.h</key>
+		<data>
+		Y8LwABxcrNc1Aye5WNZWrLEgGi0=
 		</data>
 		<key>Headers/SBBStringConstraints.h</key>
 		<data>
@@ -423,6 +455,14 @@
 		<data>
 		O3ZW00HcMRhiABML85U3BDX8/3I=
 		</data>
+		<key>Headers/_SBBResourceList.h</key>
+		<data>
+		Snp6QzBSgMUgAl5bvLN80BqHsOw=
+		</data>
+		<key>Headers/_SBBSchedule.h</key>
+		<data>
+		3OkTBmU0q98G4S0Rjdz2Kb0QuK0=
+		</data>
 		<key>Headers/_SBBStringConstraints.h</key>
 		<data>
 		Xn56I55G4G4WKV5i/jyldv0AwlI=
@@ -433,7 +473,7 @@
 		</data>
 		<key>Headers/_SBBSurveyAnswer.h</key>
 		<data>
-		2pazQKKAl03koEvtVydZNmTTfII=
+		nd0BXt3ohkUB/JDCTyuaiCaOmsQ=
 		</data>
 		<key>Headers/_SBBSurveyConstraints.h</key>
 		<data>
@@ -445,7 +485,7 @@
 		</data>
 		<key>Headers/_SBBSurveyQuestionOption.h</key>
 		<data>
-		Dnln6KoInt9pLxp3JMZ7rvdpqOQ=
+		G7R0cCd2qSkaqRX241WbYK1Ec7s=
 		</data>
 		<key>Headers/_SBBSurveyResponse.h</key>
 		<data>
@@ -477,11 +517,11 @@
 		</data>
 		<key>SBBDataModel.momd/SBBDataModel.mom</key>
 		<data>
-		fXhUjoZWiWKnBHP+Ie+I2DGTq10=
+		A2a/vIxWDTM/s8H2c9k8B3FzJwQ=
 		</data>
 		<key>SBBDataModel.momd/VersionInfo.plist</key>
 		<data>
-		Sqwx8WyzidOGoGnDO8mHddc3JjY=
+		vmRv86Tc+z040v17S+JUyef4F2Y=
 		</data>
 	</dict>
 	<key>rules</key>

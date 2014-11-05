@@ -17,7 +17,7 @@
 
 @interface _SBBSurveyAnswer : SBBBridgeObject
 
-@property (nonatomic, strong) id answer;
+@property (nonatomic, strong) NSString* answer;
 
 @property (nonatomic, strong) NSDate* answeredOn;
 

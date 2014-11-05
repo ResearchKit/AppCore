@@ -7,6 +7,8 @@
 #import "SBBGuidHolder.h"
 #import "SBBIntegerConstraints.h"
 #import "SBBMultiValueConstraints.h"
+#import "SBBResourceList.h"
+#import "SBBSchedule.h"
 #import "SBBStringConstraints.h"
 #import "SBBSurvey.h"
 #import "SBBSurveyAnswer.h"

@@ -19,6 +19,6 @@
 
 @property (nonatomic, strong) NSString* label;
 
-@property (nonatomic, strong) id value;
+@property (nonatomic, strong) NSString* value;
 
 @end
