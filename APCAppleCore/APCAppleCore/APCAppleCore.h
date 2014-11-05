@@ -39,6 +39,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCSignUpProgressing.h>
 
 #import <APCAppleCore/APCUserInfoConstants.h>
+#import <APCAppleCore/APCUserInfoViewController.h>
 #import <APCAppleCore/APCIntroVideoViewController.h>
 #import <APCAppleCore/APCStudyOverviewViewController.h>
 #import <APCAppleCore/APCStudyDetailsViewController.h>
