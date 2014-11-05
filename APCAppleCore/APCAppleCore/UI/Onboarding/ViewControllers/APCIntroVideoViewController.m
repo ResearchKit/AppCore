@@ -49,7 +49,7 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
 
-    [self.moviePlayer setControlStyle:MPMovieControlStyleFullscreen];
+    [self.moviePlayer setControlStyle:MPMovieControlStyleNone];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
