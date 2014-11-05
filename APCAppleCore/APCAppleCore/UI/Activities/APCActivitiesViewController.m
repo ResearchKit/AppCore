@@ -169,32 +169,22 @@ static NSInteger kNumberOfSectionsInTableView = 1;
         
         Class  class = [NSClassFromString(taskClass) class];
         
-        if (class != [NSNull class]) {
-            
-            
-            //            NSDate *currentDate = [NSDate date];
+        if (class != [NSNull class])
+        {
             NSInteger taskIndex = -1;
             
             for (int i =0; i<groupedScheduledTask.scheduledTasks.count; i++) {
                 APCScheduledTask *scheduledTask = groupedScheduledTask.scheduledTasks[i];
-                
-                //                if ([currentDate compare:scheduledTask.dueOn] == NSOrderedAscending) {
-                //                    taskIndex = i;
-                //                    break;
-                //                }else {
-                //                    NSLog(@"The dueOn date for this task is older than the current time. Ignore this task.");
-                //                }
                 if (!scheduledTask.completed.boolValue) {
                     taskIndex = i;
                     break;
                 }
             }
-            
-            if (taskIndex != -1) {
-                APCSetupTaskViewController *controller = [class customTaskViewController:groupedScheduledTask.scheduledTasks[taskIndex]];
+            APCScheduledTask * taskToPerform = (taskIndex != -1) ? groupedScheduledTask.scheduledTasks[taskIndex] : [groupedScheduledTask.scheduledTasks lastObject];
+            if (taskToPerform)
+            {
+                APCSetupTaskViewController *controller = [class customTaskViewController:taskToPerform];
                 [self presentViewController:controller animated:YES completion:nil];
-            } else {
-                //TODO: The user has tapped on an old task for the day (dueOn date is earlier than current time). May present alert.
             }
         }
         
