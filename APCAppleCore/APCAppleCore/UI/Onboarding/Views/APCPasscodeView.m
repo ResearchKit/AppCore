@@ -8,7 +8,6 @@
 
 #import "APCPasscodeView.h"
 #import "UIView+Helper.h"
-#import "CALayer+Appearance.h"
 
 static CGFloat const kAPCPasscodeViewPinLength = 4;
 
@@ -184,7 +183,7 @@ static CGFloat const kAPCPasscodeDigitViewLayerMargin   = 10;
 - (void) occupied {
     self.path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(self.bounds, kAPCPasscodeDigitViewLayerMargin, kAPCPasscodeDigitViewLayerMargin) cornerRadius:self.innerWidth/2];
     
-    self.shapeLayer.strokeColor = [CALayer lineColor];
+    self.shapeLayer.strokeColor = [UIColor colorWithRed:45/255.0f green:180/255.0f blue:251/255.0f alpha:1.0].CGColor;
     self.shapeLayer.lineWidth = 2.0;
     self.shapeLayer.path = self.path.CGPath;
 }

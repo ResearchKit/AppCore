@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "APCUserInfoViewController.h"
 #import "APCSignUpProgressing.h"
-#import "APCUser+HealthKit.h"
 
 @interface APCSignUpInfoViewController : APCUserInfoViewController <APCSignUpProgressing, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 

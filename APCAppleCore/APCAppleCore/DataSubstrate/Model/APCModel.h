@@ -14,7 +14,7 @@
 /*********************************************************************************/
 #pragma mark - Memory Only Objects
 /*********************************************************************************/
-#import "APCUser+HealthKit.h"
+#import "APCUser+UserData.h"
 #import "APCUser+Bridge.h"
 
 

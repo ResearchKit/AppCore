@@ -11,8 +11,6 @@
 
 static NSString * const kAPCSegmentedTableViewCellIdentifier = @"APCSegmentedTableViewCell";
 
-@class APCSegmentControl;
-
 @protocol APCSegmentedTableViewCellDelegate;
 
 @interface APCSegmentedTableViewCell : UITableViewCell
@@ -31,6 +29,6 @@ static NSString * const kAPCSegmentedTableViewCellIdentifier = @"APCSegmentedTab
 
 @protocol APCSegmentedTableViewCellDelegate <NSObject>
 
-- (void)segmentedTableViewcell:(APCSegmentedTableViewCell *)cell didSelectSegmentAtIndex:(NSInteger)index;
+- (void)segmentedTableViewCell:(APCSegmentedTableViewCell *)cell didSelectSegmentAtIndex:(NSInteger)index;
 
 @end

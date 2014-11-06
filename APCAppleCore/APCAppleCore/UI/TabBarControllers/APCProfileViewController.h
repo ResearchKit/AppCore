@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "APCUser+HealthKit.h"
 #import "APCUserInfoViewController.h"
 
 @interface APCProfileViewController : APCUserInfoViewController <APCPickerTableViewCellDelegate, APCTextFieldTableViewCellDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,UITextFieldDelegate>

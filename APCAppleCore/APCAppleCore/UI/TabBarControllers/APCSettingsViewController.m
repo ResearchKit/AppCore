@@ -26,67 +26,13 @@ static NSString *const kAPCBasicCellIdentifier       = @"APCBasicCellIdentifier"
     NSString *build = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     self.versionLabel.text = [NSString stringWithFormat:@"Version: %@ (Build %@)", version, build];
+    
+    self.editing = YES;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - UITableViewDataSource methods
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger rows;
-    
-    if (section == 0) {
-        rows = 3;
-    } else {
-        rows = 2;
-    }
-    
-    return rows;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell;
-    
-    if (indexPath.section == 0) {
-        
-        if (indexPath.row == 0) {
-            cell = [tableView dequeueReusableCellWithIdentifier:kAPCRightDetailCellIdentifier];
-            cell.textLabel.text = NSLocalizedString(@"Auto-Lock", nil);
-            
-            NSInteger numberOfMinutes = [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.parameters numberForKey:kNumberOfMinutesForPasscodeKey].integerValue;
-            
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld %@", (long)numberOfMinutes, NSLocalizedString(@"minutes", nil)];
-        } else if (indexPath.row == 1){
-            cell = [tableView dequeueReusableCellWithIdentifier:kAPCBasicCellIdentifier];
-            cell.textLabel.text = NSLocalizedString(@"Change Passcode", @"");
-        } else if (indexPath.row == 2){
-            cell = [tableView dequeueReusableCellWithIdentifier:kAPCBasicCellIdentifier];
-            cell.textLabel.text = NSLocalizedString(@"Change Password", @"");
-        }
-        
-    } else {
-        if (indexPath.row == 0) {
-//            APCSwitchTableViewCell *cell = (APCSwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kAPCSwitchCellIdentifier];
-//            cell.textLabel.text = NSLocalizedString(@"Push Notifications", @"");
-//            cell.cellSwich.on = YES;
-//            cell.delegate = self;
-//            
-            cell = [tableView dequeueReusableCellWithIdentifier:kAPCBasicCellIdentifier];
-            cell.textLabel.text = NSLocalizedString(@"Push Notifications", @"");
-        }else {
-            cell = [tableView dequeueReusableCellWithIdentifier:kAPCRightDetailCellIdentifier];
-            cell.textLabel.text = NSLocalizedString(@"Devices", @"");
-        }
-    }
-    
-    return cell;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -109,11 +55,11 @@ static NSString *const kAPCBasicCellIdentifier       = @"APCBasicCellIdentifier"
     return headerView;
 }
 
-#pragma mark - APCSwitchTableViewCellDelegate methods
+#pragma mark - Getter
 
-- (void)switchTableViewCell:(APCSwitchTableViewCell *)cell switchValueChanged:(BOOL)on
+- (APCParameters *)parameters
 {
-    
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.parameters;
 }
 
 @end

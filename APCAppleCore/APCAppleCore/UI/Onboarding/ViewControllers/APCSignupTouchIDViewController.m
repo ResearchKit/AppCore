@@ -7,7 +7,6 @@
 //
 
 #import "APCUser.h"
-#import "UIView+Helper.h"
 #import "APCPasscodeView.h"
 #import "APCStepProgressBar.h"
 #import "UIAlertController+Helper.h"
@@ -17,6 +16,7 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "APCKeychainStore.h"
+#import "UIView+Helper.h"
 
 @import LocalAuthentication;
 

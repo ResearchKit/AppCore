@@ -11,11 +11,15 @@
 #import "APCPickerTableViewCell.h"
 #import "APCSegmentedTableViewCell.h"
 #import "APCDefaultTableViewCell.h"
-#import "APCUser+HealthKit.h"
+#import "APCSwitchTableViewCell.h"
+#import "APCUser+UserData.h"
 #import "APCTableViewItem.h"
 
-@interface APCUserInfoViewController : UITableViewController <APCTextFieldTableViewCellDelegate, APCSegmentedTableViewCellDelegate, APCPickerTableViewCellDelegate, UITextFieldDelegate>
+@interface APCUserInfoViewController : UITableViewController <APCTextFieldTableViewCellDelegate, APCSegmentedTableViewCellDelegate, APCPickerTableViewCellDelegate, APCSwitchTableViewCellDelegate, UITextFieldDelegate>
 
+/*
+ Items is an Array of Array of APCTableViewItem
+ */
 @property (nonatomic, strong) NSMutableArray *items;
 
 @property (nonatomic, strong) NSMutableArray *itemsOrder;
@@ -41,5 +45,9 @@
 - (void)showPickerAtIndex:(NSIndexPath *)indexPath;
 
 - (void)hidePickerCell;
+
+- (APCTableViewItem *)itemForIndexPath:(NSIndexPath *)indexPath;
+
+- (APCTableViewItemType)itemTypeForIndexPath:(NSIndexPath *)indexPath;
 
 @end

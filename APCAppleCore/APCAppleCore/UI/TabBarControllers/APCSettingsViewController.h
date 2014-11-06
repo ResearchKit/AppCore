@@ -7,9 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "APCSwitchTableViewCell.h"
+#import "APCUserInfoViewController.h"
+#import "APCParameters+Settings.h"
 
-@interface APCSettingsViewController : UITableViewController <APCSwitchTableViewCellDelegate>
+@interface APCSettingsViewController : APCUserInfoViewController
 
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
+
+@property (nonatomic, strong) APCParameters *parameters;
+
 @end

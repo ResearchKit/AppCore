@@ -2,16 +2,16 @@
 //  APCUserInfoViewController.m
 //  APCAppleCore
 //
-//  Created by Ramsundar Shandilya on 11/4/14.
+//  Created by Ramsundar Shandilya on 11/4/14.0
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCUserInfoViewController.h"
-#import "APCAppDelegate.h"
-#import "APCUserInfoConstants.h"
 #import "NSDate+Helper.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+
+static CGFloat const kPickerCellHeight = 164.0f;
 
 @interface APCUserInfoViewController ()
 
@@ -22,6 +22,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.items = [NSMutableArray new];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -52,11 +54,18 @@
 
 #pragma mark - UITableViewDataSource methods
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return self.items.count;
+}
+
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger count = self.items.count;
+    APCTableViewSection *itemsSection = self.items[section];
     
-    if (self.isPickerShowing) {
+    NSInteger count = itemsSection.rows.count;
+    
+    if (self.isPickerShowing && self.pickerIndexPath.section == section) {
         count ++;
     }
     
@@ -67,10 +76,11 @@
 {
     UITableViewCell *cell;
     
-    if (self.pickerIndexPath && self.pickerIndexPath.row == indexPath.row) {
+    if (self.pickerIndexPath && [self.pickerIndexPath isEqual:indexPath]) {
         cell = [tableView dequeueReusableCellWithIdentifier:kAPCPickerTableViewCellIdentifier];
         
-        APCTableViewItem *field = self.items[indexPath.row - 1];
+        NSIndexPath *actualIndexPath = [NSIndexPath indexPathForRow:(indexPath.row - 1) inSection:indexPath.section];
+        APCTableViewItem *field = [self itemForIndexPath:actualIndexPath];
         
         APCPickerTableViewCell *pickerCell = (APCPickerTableViewCell *)cell;
         
@@ -106,13 +116,8 @@
         }
         
     } else {
-        APCTableViewItem *field;
         
-        if (self.isPickerShowing && (indexPath.row > self.pickerIndexPath.row)) {
-            field = self.items[indexPath.row - 1];
-        } else{
-            field = self.items[indexPath.row];
-        }
+        APCTableViewItem *field = [self itemForIndexPath:indexPath];
         
         if (field) {
             
@@ -195,6 +200,14 @@
                 segmentedCell.selectedSegmentIndex = segmentPickerField.selectedIndex;
                 segmentedCell.userInteractionEnabled = segmentPickerField.editable;
                 
+            } else if ([field isKindOfClass:[APCTableViewSwitchItem class]]) {
+                
+                APCTableViewSwitchItem *switchField = (APCTableViewSwitchItem *)field;
+                APCSwitchTableViewCell *switchCell = (APCSwitchTableViewCell *)cell;
+                switchCell.textLabel.text = switchField.caption;
+                switchCell.cellSwitch.on = switchField.on;
+                switchCell.delegate = self;
+                
             } else {
                 if (!cell) {
                     cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
@@ -221,8 +234,8 @@
 {
     CGFloat height = tableView.rowHeight;
     
-    if (self.isPickerShowing && (indexPath.row == self.pickerIndexPath.row)) {
-        height = 164;
+    if (self.isPickerShowing && [indexPath isEqual:self.pickerIndexPath]) {
+        height = kPickerCellHeight;
     }
     
     return height;
@@ -230,13 +243,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    APCTableViewItem *field;
-    
-    if (self.isPickerShowing && (indexPath.row > self.pickerIndexPath.row)) {
-        field = self.items[indexPath.row - 1];
-    } else{
-        field = self.items[indexPath.row];
-    }
+    APCTableViewItem *field = [self itemForIndexPath:indexPath];
     
     if (self.isEditing && field.isEditable && ([field isKindOfClass:[APCTableViewCustomPickerItem class]] ||
                              [field isKindOfClass:[APCTableViewDatePickerItem class]])) {
@@ -249,7 +256,7 @@
         NSIndexPath *actualIndexPath = indexPath;
         
         if (self.pickerShowing) {
-            if (indexPath.row > self.pickerIndexPath.row) {
+            if ((indexPath.row > self.pickerIndexPath.row) && (indexPath.section == self.pickerIndexPath.section)) {
                 actualIndexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
             }
             
@@ -259,6 +266,10 @@
         if (self.isEditing) {
             APCTextFieldTableViewCell *cell = (APCTextFieldTableViewCell *)[tableView cellForRowAtIndexPath:actualIndexPath];
             [cell.textField becomeFirstResponder];
+        }
+    } else{
+        if (self.pickerShowing) {
+            [self hidePickerCell];
         }
     }
     
@@ -273,7 +284,7 @@
     
     if (self.pickerShowing && indexPath) {
         
-        APCTableViewDatePickerItem *field = self.items[indexPath.row - 1];
+        APCTableViewDatePickerItem *field = (APCTableViewDatePickerItem *)[self itemForIndexPath:indexPath];
         field.date = date;
         
         NSString *dateWithFormat = [field.date toStringWithFormat:field.dateFormat];
@@ -290,7 +301,7 @@
         
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
         
-        APCTableViewCustomPickerItem *field = self.items[indexPath.row - 1];
+        APCTableViewCustomPickerItem *field = (APCTableViewCustomPickerItem *)[self itemForIndexPath:indexPath];
         field.selectedRowIndices = selectedIndices;
         
         UITableViewCell *dateCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section]];
@@ -302,15 +313,7 @@
 
 - (void)textFieldTableViewCellDidBeginEditing:(APCTextFieldTableViewCell *)cell
 {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    
-    NSIndexPath *actualIndexPath = indexPath;
-    
     if (self.pickerShowing) {
-        if (indexPath.row > self.pickerIndexPath.row) {
-            actualIndexPath = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
-        }
-        
         [self hidePickerCell];
     }
 }
@@ -321,7 +324,7 @@
     
     NSString *text = [cell.textField.text stringByReplacingCharactersInRange:range withString:string];
     
-    APCTableViewTextFieldItem *textFieldItem = self.items[indexPath.row];
+    APCTableViewTextFieldItem *textFieldItem = (APCTableViewTextFieldItem *)[self itemForIndexPath:indexPath];
     textFieldItem.value = text;
 }
 
@@ -329,7 +332,7 @@
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    APCTableViewTextFieldItem *textFieldItem = self.items[indexPath.row];
+    APCTableViewTextFieldItem *textFieldItem = (APCTableViewTextFieldItem *)[self itemForIndexPath:indexPath];
     textFieldItem.value = cell.textField.text;
 }
 
@@ -342,7 +345,7 @@
 
 - (void)nextResponderForIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger lastRowIndex = [self.tableView numberOfRowsInSection:0] - 1;
+    NSInteger lastRowIndex = [self.tableView numberOfRowsInSection:indexPath.section] - 1;
     
     NSInteger currentRowIndex = -1;
     if (indexPath) {
@@ -354,7 +357,8 @@
         NSInteger nextRowIndex = -1;
         
         for (NSInteger i = currentRowIndex + 1; i <= lastRowIndex; i++) {
-            APCTableViewItem *field = self.items[i];
+            NSIndexPath *nextIndexPath = [NSIndexPath indexPathForRow:i inSection:indexPath.section];
+            APCTableViewItem *field = [self itemForIndexPath:nextIndexPath];
             if ([field isKindOfClass:[APCTableViewTextFieldItem class]]) {
                 nextRowIndex = i;
                 break;
@@ -373,7 +377,7 @@
 
 #pragma mark - APCSegmentedTableViewCellDelegate methods
 
-- (void)segmentedTableViewcell:(APCSegmentedTableViewCell *)cell didSelectSegmentAtIndex:(NSInteger)index
+- (void)segmentedTableViewCell:(APCSegmentedTableViewCell *)cell didSelectSegmentAtIndex:(NSInteger)index
 {
     if (self.pickerShowing) {
         [self hidePickerCell];
@@ -381,15 +385,28 @@
     
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    APCTableViewSegmentItem *field = self.items[indexPath.row];
+    APCTableViewSegmentItem *field = (APCTableViewSegmentItem *)[self itemForIndexPath:indexPath];
     field.selectedIndex = index;
+}
+
+#pragma mark - APCSwitchTableViewCellDelegate methods
+
+- (void)switchTableViewCell:(APCSwitchTableViewCell *)cell switchValueChanged:(BOOL)on
+{
+    if (self.pickerShowing) {
+        [self hidePickerCell];
+    }
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    APCTableViewSwitchItem *field = (APCTableViewSwitchItem *)[self itemForIndexPath:indexPath];
+    field.on = on;
 }
 
 #pragma mark - Private Methods
 
 - (void)handlePickerForIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.isPickerShowing && (self.pickerIndexPath.row - 1 == indexPath.row)) {
+    if (self.isPickerShowing && (self.pickerIndexPath.row - 1 == indexPath.row) && (indexPath.section == self.pickerIndexPath.section)) {
         [self hidePickerCell];
     } else{
         NSIndexPath *selectedIndexpath = [self actualSelectedIndexPath:indexPath];
@@ -404,10 +421,9 @@
 
 - (void)showPickerAtIndex:(NSIndexPath *)indexPath
 {
-    
     self.pickerShowing = YES;
     
-    self.pickerIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:0];
+    self.pickerIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
     
     [self.tableView beginUpdates];
     [self.tableView insertRowsAtIndexPaths:@[self.pickerIndexPath]
@@ -420,7 +436,7 @@
     self.pickerShowing = NO;
     
     [self.tableView beginUpdates];
-    [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.pickerIndexPath.row inSection:0]]
+    [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.pickerIndexPath.row inSection:self.pickerIndexPath.section]]
                           withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView endUpdates];
     
@@ -431,17 +447,33 @@
     
     NSIndexPath *newIndexPath;
     
-    if (self.isPickerShowing && (self.pickerIndexPath.row < selectedIndexPath.row)){
-        
-        newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row - 1 inSection:0];
-        
+    if (self.isPickerShowing && (self.pickerIndexPath.row <= selectedIndexPath.row) && (self.pickerIndexPath.section == selectedIndexPath.section)){
+        newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row - 1 inSection:selectedIndexPath.section];
     }else {
-        
-        newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row  inSection:0];
-        
+        newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row  inSection:selectedIndexPath.section];
     }
     
     return newIndexPath;
+}
+
+- (APCTableViewItem *)itemForIndexPath:(NSIndexPath *)indexPath
+{
+    NSIndexPath *actualIndexPath = [self actualSelectedIndexPath:indexPath];
+    
+    APCTableViewSection *itemSection = self.items[actualIndexPath.section];
+    APCTableViewRow *itemRow = itemSection.rows[actualIndexPath.row];
+    
+    return itemRow.item;
+}
+
+- (APCTableViewItemType)itemTypeForIndexPath:(NSIndexPath *)indexPath
+{
+    NSIndexPath *actualIndexPath = [self actualSelectedIndexPath:indexPath];
+    
+    APCTableViewSection *itemSection = self.items[actualIndexPath.section];
+    APCTableViewRow *itemRow = itemSection.rows[actualIndexPath.row];
+    
+    return itemRow.itemType;
 }
 
 @end

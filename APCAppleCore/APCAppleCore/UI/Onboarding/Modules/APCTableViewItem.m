@@ -87,3 +87,17 @@
 @synthesize permissionType = _permissionType;
 
 @end
+
+@implementation APCTableViewSwitchItem
+
+
+@end
+
+@implementation APCTableViewSection
+
+@end
+
+
+@implementation APCTableViewRow
+
+@end
