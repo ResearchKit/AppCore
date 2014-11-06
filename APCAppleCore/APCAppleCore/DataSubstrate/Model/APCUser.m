@@ -27,6 +27,7 @@ static NSString *const kMedicalConditionsPropertyName = @"medicalConditions";
 static NSString *const kMedicationsPropertyName = @"medications";
 static NSString *const kWakeUpTimePropertyName = @"wakeUpTime";
 static NSString *const kSleepTimePropertyName = @"sleepTime";
+static NSString *const kEthnicityPropertyName = @"ethnicity";
 
 static NSString *const kSignedUpKey = @"SignedUp";
 static NSString *const kSignedInKey = @"SignedIn";
@@ -237,6 +238,12 @@ static NSString *const kSignedInKey = @"SignedIn";
 {
     _sleepTime = sleepTime;
     [self updateStoredProperty:kSleepTimePropertyName withValue:sleepTime];
+}
+
+- (void)setEthnicity:(NSString *)ethnicity
+{
+    _ethnicity = ethnicity;
+    [self updateStoredProperty:kEthnicityPropertyName withValue:ethnicity];
 }
 
 /*********************************************************************************/

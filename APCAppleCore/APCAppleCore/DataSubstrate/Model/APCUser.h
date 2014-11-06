@@ -39,6 +39,7 @@
 
 @property (nonatomic, strong) NSString * medicalConditions;
 @property (nonatomic, strong) NSString * medications;
+@property (nonatomic, strong) NSString *ethnicity;
 
 @property (nonatomic, strong) NSDate *sleepTime;
 @property (nonatomic, strong) NSDate *wakeUpTime;
