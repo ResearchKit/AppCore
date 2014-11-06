@@ -357,6 +357,36 @@ static NSString *const kSignedInKey = @"SignedIn";
     }];
 }
 
+// Systolic Blood Pressure
+- (HKQuantity *)systolicBloodPressure
+{
+    HKQuantityType *bloodPressureType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic];
+    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+    __block HKQuantity *systolicBloodPressure;
+    [self.healthStore mostRecentQuantitySampleOfType:bloodPressureType predicate:nil completion:^(HKQuantity *mostRecentQuantity, NSError *error) {
+        [error handle];
+        systolicBloodPressure = mostRecentQuantity;
+        dispatch_semaphore_signal(sema);
+    }];
+    
+    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+    
+    sema = NULL;
+    return systolicBloodPressure;
+}
+
+- (void)setSystolicBloodPressure:(HKQuantity *)systolicBloodPressure
+{
+    HKQuantityType *bloodPressureType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic];
+    NSDate *now = [NSDate date];
+    
+    HKQuantitySample *systolicBloodPressureSample = [HKQuantitySample quantitySampleWithType:bloodPressureType quantity:systolicBloodPressure startDate:now endDate:now];
+    
+    [self.healthStore saveObject:systolicBloodPressureSample withCompletion:^(BOOL success, NSError *error) {
+        [error handle];
+    }];
+}
+
 /*********************************************************************************/
 #pragma mark - NSUserDefault Simulated Methods
 /*********************************************************************************/

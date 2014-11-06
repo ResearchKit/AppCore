@@ -54,6 +54,8 @@
 @property (nonatomic, strong) HKQuantity * height;
 @property (nonatomic, strong) HKQuantity * weight;
 
+@property (nonatomic, strong) HKQuantity *systolicBloodPressure;
+
 /*********************************************************************************/
 #pragma mark - NSUserDefaults Simulated Properties
 /*********************************************************************************/
