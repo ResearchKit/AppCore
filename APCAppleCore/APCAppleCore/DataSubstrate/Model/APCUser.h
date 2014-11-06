@@ -39,6 +39,7 @@
 
 @property (nonatomic, strong) NSString * medicalConditions;
 @property (nonatomic, strong) NSString * medications;
+@property (nonatomic, strong) NSString *ethnicity;
 
 @property (nonatomic, strong) NSDate *sleepTime;
 @property (nonatomic, strong) NSDate *wakeUpTime;
@@ -52,6 +53,8 @@
 
 @property (nonatomic, strong) HKQuantity * height;
 @property (nonatomic, strong) HKQuantity * weight;
+
+@property (nonatomic, strong) HKQuantity *systolicBloodPressure;
 
 /*********************************************************************************/
 #pragma mark - NSUserDefaults Simulated Properties
