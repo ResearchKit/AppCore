@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14A389" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14A388a" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="APCConsentResult" representedClassName="APCConsentResult" parentEntity="APCResult" syncable="YES">
         <attribute name="signatureDate" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="signatureName" optional="YES" attributeType="String" syncable="YES"/>
@@ -57,6 +57,7 @@
         <attribute name="biologicalSex" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="birthDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="bloodType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="ethnicity" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="medicalConditions" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="medications" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="profileImage" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
@@ -89,7 +90,7 @@
         <element name="APCResult" positionX="-720" positionY="333" width="128" height="210"/>
         <element name="APCSchedule" positionX="-1161" positionY="513" width="128" height="148"/>
         <element name="APCScheduledTask" positionX="-468" positionY="449" width="128" height="163"/>
-        <element name="APCStoredUserData" positionX="-954" positionY="486" width="128" height="195"/>
+        <element name="APCStoredUserData" positionX="-954" positionY="486" width="128" height="210"/>
         <element name="APCSurveyResult" positionX="-945" positionY="495" width="128" height="58"/>
         <element name="APCTask" positionX="-965" positionY="585" width="128" height="195"/>
     </elements>
