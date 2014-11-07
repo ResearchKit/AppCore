@@ -39,12 +39,12 @@
 {
     [self.buttons enumerateObjectsUsingBlock:^(UIButton* localButton, NSUInteger idx, BOOL *stop) {
         if ([localButton isEqual:button]) {
-            localButton.selected = YES;
             self.selectedIndex = idx;
+            localButton.tintColor = self.highlightColor;
         }
         else
         {
-            localButton.selected = NO;
+            localButton.tintColor = self.normalColor;
         }
     }];
     
@@ -61,9 +61,9 @@
     for (int i=0; i<self.buttons.count; i++) {
         UIButton *button = self.buttons[i];
         if (i == selectedIndex) {
-            button.selected = YES;
+            button.tintColor = self.normalColor;
         } else {
-            button.selected = NO;
+            button.tintColor = self.normalColor;
         }
     }
     
