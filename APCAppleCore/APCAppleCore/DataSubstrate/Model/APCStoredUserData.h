@@ -22,5 +22,6 @@
 @property (nonatomic, retain) NSNumber * userConsented;
 @property (nonatomic, retain) NSDate * wakeUpTime;
 @property (nonatomic, retain) NSDate * sleepTime;
+@property (nonatomic, retain) NSString * ethnicity;
 
 @end
