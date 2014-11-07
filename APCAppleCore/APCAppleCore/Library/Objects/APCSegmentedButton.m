@@ -61,7 +61,7 @@
     for (int i=0; i<self.buttons.count; i++) {
         UIButton *button = self.buttons[i];
         if (i == selectedIndex) {
-            button.tintColor = self.normalColor;
+            button.tintColor = self.highlightColor;
         } else {
             button.tintColor = self.normalColor;
         }
