@@ -119,6 +119,14 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/UIFont+APCAppearance.h>
 #import <APCAppleCore/UIColor+APCAppearance.h>
 
+/* -------------------------
+ YML Chart Components
+ ------------------------- */
+#import <APCAppleCore/YMLChartEnumerations.h>
+#import <APCAppleCore/YMLChartUnitsView.h>
+#import <APCAppleCore/YMLLineChartView.h>
+#import <APCAppleCore/YMLTimeLineChartView.h>
+
 
 /* -------------------------
  Constants
