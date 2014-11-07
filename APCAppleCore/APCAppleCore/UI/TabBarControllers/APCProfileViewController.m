@@ -31,7 +31,8 @@
     
     self.firstNameTextField.delegate = self;
     self.lastNameTextField.delegate = self;
-
+    
+    [self.profileImageButton.imageView setContentMode:UIViewContentModeScaleAspectFill];
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -42,6 +42,8 @@ static CGFloat const kHeaderHeight = 127.0f;
     
     self.editing = YES;
     self.signUp = YES;
+    
+    [self.profileImageButton.imageView setContentMode:UIViewContentModeScaleAspectFill];
 }
 
 - (void)viewWillAppear:(BOOL)animated
