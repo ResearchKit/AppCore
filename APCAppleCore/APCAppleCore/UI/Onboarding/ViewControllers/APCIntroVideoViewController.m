@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "UIView+Helper.h"
 #import "APCIntroVideoViewController.h"
 
 @interface APCIntroVideoViewController ()
@@ -33,7 +32,7 @@
     // Do any additional setup after loading the view.
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame = CGRectMake(self.view.innerWidth - 70, 10, 60, 44);
+    button.frame = CGRectMake(CGRectGetWidth(self.view.frame) - 70, 10, 60, 44);
     [button setTitle:NSLocalizedString(@"Skip", @"") forState:UIControlStateNormal];
     [button addTarget:self action:@selector(skip) forControlEvents:UIControlEventTouchUpInside];
 

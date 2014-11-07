@@ -54,7 +54,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     //set default 
     NSNumber *numberOfMinutes = [self.dataSubstrate.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
     if (!numberOfMinutes) {
-        [self.dataSubstrate.parameters setNumber:@5 forKey:kNumberOfMinutesForPasscodeKey];
+        [self.dataSubstrate.parameters setNumber:[APCParameters autoLockValues][0] forKey:kNumberOfMinutesForPasscodeKey];
     }
     
     

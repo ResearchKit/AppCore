@@ -7,18 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "APCUser+HealthKit.h"
-#import "APCTextFieldTableViewCell.h"
-#import "APCPickerTableViewCell.h"
-#import "APCSegmentedTableViewCell.h"
-#import "APCDefaultTableViewCell.h"
+#import "APCUserInfoViewController.h"
 #import "APCSignUpProgressing.h"
 
-@interface APCSignUpInfoViewController : UITableViewController <APCTextFieldTableViewCellDelegate, APCSegmentedTableViewCellDelegate, APCPickerTableViewCellDelegate, APCSignUpProgressing, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface APCSignUpInfoViewController : APCUserInfoViewController <APCSignUpProgressing, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
-@property (nonatomic, strong) NSMutableArray *items;
-
-@property (nonatomic, strong) NSMutableArray *itemsOrder;
 
 @property (weak, nonatomic) IBOutlet UIButton *profileImageButton;
 

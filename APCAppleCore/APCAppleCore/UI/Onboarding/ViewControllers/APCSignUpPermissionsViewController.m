@@ -10,11 +10,11 @@
 #import "APCSignUpPermissionsViewController.h"
 #import "APCTableViewItem.h"
 #import "APCStepProgressBar.h"
-#import "UIView+Helper.h"
 #import "APCPermissionsCell.h"
 #import "NSBundle+Helper.h"
 #import "APCPermissionsManager.h"
 #import "UIAlertController+Helper.h"
+#import "UIView+Helper.h"
 
 static CGFloat const kTableViewRowHeight                 = 165.0f;
 

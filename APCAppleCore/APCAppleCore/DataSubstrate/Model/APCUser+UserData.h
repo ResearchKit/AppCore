@@ -1,5 +1,5 @@
 //
-//  APCUser+HealthKit.h
+//  APCUser+UserData.h
 //  APCAppleCore
 //
 //  Created by Ramsundar Shandilya on 9/29/14.
@@ -8,7 +8,7 @@
 
 #import "APCUser.h"
 
-@interface APCUser (HealthKit)
+@interface APCUser (UserData)
 
 /* Biologcal Sex */
 + (NSArray *) sexTypesInStringValue;

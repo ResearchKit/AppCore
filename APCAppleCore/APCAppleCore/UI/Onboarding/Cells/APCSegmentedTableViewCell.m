@@ -53,8 +53,8 @@
 {
     self.selectedSegmentIndex = selectedIndex;
     
-    if ([self.delegate respondsToSelector:@selector(segmentedTableViewcell:didSelectSegmentAtIndex:)]) {
-        [self.delegate segmentedTableViewcell:self didSelectSegmentAtIndex:self.selectedSegmentIndex];
+    if ([self.delegate respondsToSelector:@selector(segmentedTableViewCell:didSelectSegmentAtIndex:)]) {
+        [self.delegate segmentedTableViewCell:self didSelectSegmentAtIndex:self.selectedSegmentIndex];
     }
 }
 

@@ -16,7 +16,7 @@ static NSString *const kAPCSwitchCellIdentifier = @"APCSwitchTableViewCell";
 
 @property (weak, nonatomic) IBOutlet UILabel *textLabel;
 
-@property (nonatomic, weak) IBOutlet UISwitch *cellSwich;
+@property (nonatomic, weak) IBOutlet UISwitch *cellSwitch;
 
 @property (nonatomic, weak) id <APCSwitchTableViewCellDelegate> delegate;
 

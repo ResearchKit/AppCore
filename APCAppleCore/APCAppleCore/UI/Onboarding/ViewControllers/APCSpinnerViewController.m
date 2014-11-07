@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "UIView+Helper.h"
 #import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
 #import "APCSpinnerViewController.h"

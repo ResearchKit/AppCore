@@ -6,11 +6,13 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCUser+HealthKit.h"
+#import "APCUser+UserData.h"
 
-@implementation APCUser (HealthKit)
+@implementation APCUser (UserData)
 
-
+/***************
+ Biologial Sex 
+ ****************/
 + (NSArray *) sexTypesInStringValue {
     return @[ NSLocalizedString(@"Male", @""), NSLocalizedString(@"Female", @""), NSLocalizedString(@"Others", @"") ];
 }
@@ -70,7 +72,9 @@
     return index;
 }
 
-
+/**********
+ Blood Type
+ ***********/
 + (NSArray *) bloodTypeInStringValues {
     return @[@" ", @"A+", @"A-", @"B+", @"B-", @"AB+", @"AB-", @"O+", @"O-"];
 }
@@ -85,6 +89,10 @@
     return type;
 }
 
+/***********************************
+ Medical Conidtions and Medications
+ **********************************/
+
 + (NSArray *) medicalConditions {
     return @[@"Not listed", @"Condition 1" , @"Condition 2"];
 }
@@ -93,6 +101,9 @@
     return @[@"Not listed", @"Medication 1" , @"Medication 2"];
 }
 
+/*******
+ Height
+ *******/
 + (NSArray *) heights {
     return @[
              @[@"1'", @"2'", @"3'", @"4'", @"5'", @"6'", @"7'", @"8'"],
@@ -120,6 +131,10 @@
     HKUnit *heightUnit = [HKUnit meterUnit];
     return [height doubleValueForUnit:heightUnit];
 }
+
+/***************
+ Weight
+ ****************/
 
 + (double)weightInPounds:(HKQuantity *)weight
 {
