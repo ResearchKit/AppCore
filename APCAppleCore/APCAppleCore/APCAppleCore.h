@@ -74,6 +74,8 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCProfileViewController.h>
 #import <APCAppleCore/APCSettingsViewController.h>
 #import <APCAppleCore/APCChangePasscodeViewController.h>
+#import <APCAppleCore/APCWithdrawSurveyViewController.h>
+#import <APCAppleCore/APCWithdrawCompleteViewController.h>
 
 /* -------------------------
  Views
@@ -96,6 +98,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCDefaultTableViewCell.h>
 #import <APCAppleCore/APCSwitchTableViewCell.h>
 #import <APCAppleCore/APCTintedTableViewCell.h>
+#import <APCAppleCore/APCCheckTableViewCell.h>
 
 /* -------------------------
  Objects
