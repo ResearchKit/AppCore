@@ -19,3 +19,4 @@ typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
     RKFileProtectionCompleteUnlessOpen,
     RKFileProtectionComplete
 };
+

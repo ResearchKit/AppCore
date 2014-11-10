@@ -8,10 +8,9 @@
 #import <Foundation/Foundation.h>
 #import <ResearchKit/RKStep.h>
 
-/**
- * Structure indicating the progress of the task.
- * Setting count to 0 will disable progress display.
- */
+@protocol RKSurveyResultProvider;
+
+
 typedef struct _RKTaskProgress {
     NSUInteger index;
     NSUInteger count;
@@ -19,85 +18,73 @@ typedef struct _RKTaskProgress {
 
 
 /**
- * @brief The RKLogicalTask protocol defines necessary methods describing a task object.
+ * @brief The RKLogicalTask protocol defines a task to be carried out by a participant
+ *   in a research study.
  *
- * RKLogicalTask supplies identifier, name , and steps to RKtaskViewController.
  * @note Implement this protocol to enable dynamic selection of the steps for a given task.
+ *   For simple linear tasks, RKTask implements this protocol.
  */
 @protocol RKLogicalTask <NSObject>
 
 @required
 /**
- * @brief Task unique identifier
+ * @brief Task identifier.
+ * @discussion This should be a short string which identifies the task. It will be composed
+ * with the step's identifier in "." separated format (<taskId>.<stepId>) when producing
+ * an identifier for the results of a step.
  */
 - (NSString *)identifier;
 
 /**
- * @brief Task's name
- */
-- (NSString *)name;
-
-/**
- * @brief Supply one step after a step, if there is any.
- * @param step    Reference step.
- * @param surveyResults   Collected survey results til now, which assist dynamic selection of the steps.
+ * @brief Supply the step after a step, if there is any.
+ * @param step             Reference step.
+ * @param resultProvider   Provider of the current set of editable results, for context.
  * @discussion Use surveyResults to determine next step.
- * @return A step after reference step, if there is none return nil.
+ * @return The step after the reference step, or nil if none.
  */
-- (RKStep *)stepAfterStep:(RKStep *)step withSurveyResults:(NSArray *)surveyResults;
+- (RKStep *)stepAfterStep:(RKStep *)step withResultProvider:(id<RKSurveyResultProvider>)resultProvider;
 
 /**
- * @brief Supply one step before a step, if there is any.
- * @param step    Reference step.
- * @param surveyResults   Collected survey results til now, which assist dynamic selection of the steps.
- * @discussion Return nil can prevent user to revisit previous step.
- * @return A step before reference step, if there is none return nil.
+ * @brief Supply the step before a step.
+ * @param step             Reference step.
+ * @param resultProvider   Provider of the current set of editable results, for context.
+ * @discussion Returning nil can prevent user to revisit previous step.
+ * @return The step before the reference step, or nil if none.
  */
-- (RKStep *)stepBeforeStep:(RKStep *)step withSurveyResults:(NSArray *)surveyResults;
+- (RKStep *)stepBeforeStep:(RKStep *)step withResultProvider:(id<RKSurveyResultProvider>)resultProvider;
 
 @optional
 
 /**
  * @brief Progress of current step.
- * @param step    Reference step.
- * @param surveyResults   Collected survey results til now, which assist dynamic selection of the steps.
- * @discussion If this method is not implemented, the progress label will not show. If the returned progress has a count of
- * 0, progress will not be displayed.
+ * @param step            Reference step.
+ * @param resultProvider  Provider of the current set of editable results, for context.
+ * @discussion If this method is not implemented, the progress label will not show. If the returned progress has a count of 0, progress will not be displayed.
  * @return Current step's index and total number of steps.
  */
-- (RKTaskProgress)progressOfCurrentStep:(RKStep *)step withSurveyResults:(NSArray *)surveyResults;
+- (RKTaskProgress)progressOfCurrentStep:(RKStep *)step withResultProvider:(id<RKSurveyResultProvider>)resultProvider;
 
 /**
- * @brief Set of HKObjectType which would ideally be read from HealthKit during this task
+ * @brief Set of HKObjectType to request for reading from HealthKit during this task.
  */
 - (NSSet *)requestedHealthTypesForReading;
-/**
- * @brief Set of HKObjectType which would ideally be written to HealthKit during this task
- */
-- (NSSet *)requestedHealthTypesForWriting;
 
 @end
 
 
 /**
- * @brief Default implementation of RKLogicalTask.
- *
- * RKTask can be preconfigured with name, identifier, and an array of steps in fixed order.
- * RKTask always make its steps appear in fixed order.
+ * @brief Simple implementation of RKLogicalTask, where all steps are presented in order.
  */
-
 @interface RKTask : NSObject <RKLogicalTask, NSSecureCoding>
 
 /**
  * @brief Designated initializer
- * @param name    Task's name.
  * @param identifier  Task's unique indentifier.
- * @param steps   An array of steps in fixed order.
+ * @param steps       An array of steps in fixed order.
  */
 
--(instancetype)initWithName:(NSString *)name
-                 identifier:(NSString *)identifier
-                      steps:(NSArray *)steps;
+-(instancetype)initWithIdentifier:(NSString *)identifier
+                            steps:(NSArray *)steps;
 
 @property (nonatomic, copy, readonly) NSArray *steps;
 

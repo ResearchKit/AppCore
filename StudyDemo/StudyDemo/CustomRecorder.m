@@ -6,6 +6,7 @@
 //
 
 #import "CustomRecorder.h"
+#import <ResearchKit/ResearchKit_Private.h>
 
 @interface CustomRecorder ()
 {
@@ -45,8 +46,8 @@
     _containerFiller.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.25];
 }
 
-- (BOOL)start:(NSError *__autoreleasing *)error{
-    BOOL ret = [super start:error];
+- (void)start {
+    [super start];
     
     NSAssert(self.containerView != nil, @"No container view attached.");
     
@@ -74,8 +75,6 @@
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
     });
-    
-    return ret;
 }
 
 
@@ -97,48 +96,51 @@
     
 }
 
-- (BOOL)stop:(NSError *__autoreleasing *)error{
-    BOOL ret = [super stop:error];
+- (void)stop {
+    [self _doStopRecording];
     
+    NSError* error = nil;
+    RKDataResult* result = nil;
+    if (self.records) {
+        NSLog(@"%@", self.records);
+        result = [[RKDataResult alloc] initWithStep:self.step];
+        result.contentType = [self mimeType];
+        result.data = [NSJSONSerialization dataWithJSONObject:self.records options:(NSJSONWritingOptions)0 error:&error];
+        result.filename = self.fileName;
+        self.records = nil;
+    } else {
+        error = [NSError errorWithDomain:NSCocoaErrorDomain
+                                    code:NSFileNoSuchFileError
+                                userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Records object is nil.", nil)}];
+    }
+    
+    
+    id<RKRecorderDelegate> localDelegate = self.delegate;
+    if (! error)
+    {
+        if (localDelegate && [localDelegate respondsToSelector:@selector(recorder:didCompleteWithResult:)]) {
+            [localDelegate recorder:self didCompleteWithResult:result];
+        }
+    } else {
+        [self finishRecordingWithError:error];
+    }
+    
+    [super stop];
+}
+
+- (void)_doStopRecording
+{
     [self.timer invalidate];
     [_button removeFromSuperview];
     _button = nil;
     [_containerFiller removeFromSuperview];
     _containerFiller = nil;
-    
-    if (self.records) {
-        
-        NSLog(@"%@", self.records);
-        
-        id<RKRecorderDelegate> localDelegate = self.delegate;
-        if (localDelegate && [localDelegate respondsToSelector:@selector(recorder:didCompleteWithResult:)]) {
-            RKDataResult* result = [[RKDataResult alloc] initWithStep:self.step];
-            result.contentType = [self mimeType];
-            NSError* err;
-            result.data = [NSJSONSerialization dataWithJSONObject:self.records options:(NSJSONWritingOptions)0 error:&err];
-            
-            if (err) {
-                if (error) {
-                    *error = err;
-                }
-                return NO;
-            }
-            
-            result.filename = self.fileName;
-            [localDelegate recorder:self didCompleteWithResult:result];
-            self.records = nil;
-        }
-    }else{
-        if (error) {
-            *error = [NSError errorWithDomain:RKErrorDomain
-                                         code:RKErrorObjectNotFound
-                                     userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Records object is nil.", nil)}];
-        }
-        ret = NO;
-    }
-    
-    
-    return ret;
+}
+
+- (void)finishRecordingWithError:(NSError *)error
+{
+    [self _doStopRecording];
+    [super finishRecordingWithError:error];
 }
 
 - (NSString*)dataType{
@@ -161,19 +163,15 @@
     return [[CustomRecorder alloc] initWithStep:step taskInstanceUUID:taskInstanceUUID];
 }
 
-+ (BOOL)supportsSecureCoding
-{
-    return YES;
-}
-
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    self = [super init];
+    self = [super initWithCoder:aDecoder];
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
+    [super encodeWithCoder:aCoder];
 }
 
 @end

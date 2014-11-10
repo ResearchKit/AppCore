@@ -17,15 +17,15 @@
 @class RKFormStep;
 @class RKSurveyResult;
 @class RKQuestionResult;
+@class RKFormResult;
 
-
-@protocol RKTaskDefaultResultProvider<NSObject>
+@protocol RKSurveyResultProvider<NSObject>
 
 @optional
 
-- (RKSurveyResult *)defaultResultForFormStep:(RKFormStep *)formStep;
+- (RKFormResult *)resultForFormStep:(RKFormStep *)formStep;
 
-- (RKQuestionResult *)defaultResultForQuestionStep:(RKQuestionStep *)questionStep;
+- (RKQuestionResult *)resultForQuestionStep:(RKQuestionStep *)questionStep;
 
 @end
 
@@ -37,70 +37,52 @@
 @interface RKResult : NSObject<NSCopying,NSSecureCoding>
 
 /**
- * @brief Produce a recorder with taskInstanceUUID, taskItemId, and stepItemId filled in
- *
+ * @brief Convenience initializer.
+ * @discussion Picks up the itemIdentifier from step object during initialization.
+ * @param step The step that produced the result object.
  */
-+ (instancetype)resultForRecorder:(RKRecorder*)recorder;
-
-/**
- * @brief Step initializer
- * Pick up itemIdentifier/taskIdentifier from step object during initialization.
- * @param step    The step produced result object.
- */
-- (instancetype)initWithStep:(RKStep*)step;
+- (instancetype)initWithStep:(RKStep *)step;
 
 /**
  * @brief Unique task instance identifier.
  * 
- * Each time a task is presented to participant, a new task instance identifier is generated to identify task events.
+ * Each time a task is presented to participant, a new task instance
+ * identifier is generated to identify task events.
  */
-@property (nonatomic, strong) NSUUID* taskInstanceUUID;
+@property (nonatomic, copy) NSUUID *taskInstanceUUID;
 
 /**
- * @brief Timestamp of result's generation.
+ * @brief Timestamp for result's generation.
  */
-@property (nonatomic, copy) NSDate* timestamp;
+@property (nonatomic, copy) NSDate *timestamp;
 
 /**
- * @brief Item identifier describing the result
+ * @brief Item identifier describing the result.
+ * @note Composed in "." separated format from task, step, and possible
+ * subsidiary identifiers.
  */
-@property (nonatomic, copy) RKItemIdentifier* itemIdentifier;
+@property (nonatomic, copy) NSString *itemIdentifier;
 
 /**
  * @brief Result's contentType.
  */
-@property (nonatomic, copy) NSString* contentType;
-
-/**
- * @brief Device hardware information.
- */
-@property (nonatomic, copy, readonly) NSString* deviceHardware;
+@property (nonatomic, copy) NSString *contentType;
 
 /**
  * @brief Metadata about the conditions in which this result was acquired
  */
 @property (nonatomic, copy) NSDictionary *metadata;
 
-- (BOOL)addToArchive:(RKDataArchive *)archive error:(NSError * __autoreleasing *)error;
 
 @end
 
 /**
- * @brief The RKDataResult contains result data in NSData format.
+ * @brief Kind of result that may be changed as the task continues.
  */
-@interface RKDataResult : RKResult
-
-/**
- * @brief filename to use when archiving
- */
-@property (nonatomic, copy) NSString *filename;
-
-/**
- * @brief Data object attached to the result.
- */
-@property (nonatomic, copy) NSData* data;
+@interface RKEditableResult : RKResult
 
 @end
+
 
 @interface RKFileResult : RKResult
 
@@ -126,21 +108,17 @@
 @end
 
 
+@interface RKQuestionResult : RKEditableResult
+
+
 /**
- * @brief The RKQuestionResult class defines the attributes of a question result.
+ * @brief Convenience initializer.
+ * @param formItem  The formItem that produced result object.
  */
-@interface RKQuestionResult : RKResult
-
-
-/**
- * @brief FormItem initializer
- * Pick up itemIdentifier/taskIdentifier/stepIdentifier from formItem object during initialization.
- * @param formItem  The formItem produced result object.
- */
-- (instancetype)initWithFormItem:(RKFormItem*)formItem;
+- (instancetype)initWithFormItem:(RKFormItem *)formItem ;
 
 /**
- * @brief Question's type.
+ * @brief The question's type.
  */
 @property (nonatomic) RKSurveyQuestionType questionType;
 
@@ -151,8 +129,8 @@
  *      Single choice type uses NSNumber to store the chosen option's index.
  *      Multiple choice type uses NSArray to store the chosen options' indexes.
  *      Boolean type uses NSNumber
- *      Text type uses NSString to store user's input.
- *      Scale type uses NSNumber to store marked value.
+ *      Text type uses NSString to store the user's input.
+ *      Scale type uses NSNumber to store the marked value.
  *      Date type uses NSDateComponents to store a date value (NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay).
  *      Time type uses NSDateComponents to store a time value (NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond).
  *      DateAndTime type uses NSDateComponents to store a date-time value (NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond).
@@ -161,40 +139,40 @@
  */
 @property (nonatomic, copy) id answer;
 
-+ (RKQuestionResult *)nullResultForQuestionStep:(RKQuestionStep *)questionStep;
-
-
 @end
 
-/**
- * @brief The RKConsentResult class defines the attributes of consent step result.
- */
-@interface RKConsentResult : RKResult
 
-@property (nonatomic, copy) NSString* signatureName;
-@property (nonatomic, copy) NSString* signatureDate;
-
-@end
-
-/**
- * @brief A combined result for covering all survey questions in a task.
- */
-@interface RKSurveyResult : RKResult<RKTaskDefaultResultProvider>
+@interface RKFormResult : RKEditableResult
 
 /**
  * @brief Designated initializer
- * @param surveyResults Array of RKQuestionResult resulting from this survey, in order of answering
+ * @param questionResults Array of RKQuestionResult resulting from this form
  */
-- (instancetype)initWithQuestionResults:(NSArray *)surveyResults;
+- (instancetype)initWithQuestionResults:(NSArray /* <RKQuestionResult> */ *)questionResults;
+
+@property (nonatomic, copy) NSArray /* <RKQuestionResult> */ *formResults;
+
+/// Convenience to look up the result for a specific form item.
+- (RKQuestionResult *)resultForFormItem:(RKFormItem *)item;
+
+@end
+
 
 /**
- * @brief An array that contains answers to the questions.
+ * @brief A combined result covering all the editable results in a task.
  */
-@property (nonatomic, strong) NSArray *surveyResults;
+@interface RKSurveyResult : RKResult<RKSurveyResultProvider>
 
-- (RKQuestionResult *)resultForStep:(RKQuestionStep *)step;
+/**
+ * @brief Designated initializer
+ * @param editableResults Array of RKEditableResult resulting from this survey, in order of answering
+ */
+- (instancetype)initWithEditableResults:(NSArray /* <RKEditableResult> */ *)editableResults;
 
-- (RKQuestionResult *)resultForFormItem:(RKFormItem *)item;
+@property (nonatomic, strong) NSArray /* <RKEditableResult> */ *editableResults;
+
+/// Convenience to look up the result for a specific step.
+- (RKEditableResult *)resultForStep:(RKStep *)step;
 
 @end
 

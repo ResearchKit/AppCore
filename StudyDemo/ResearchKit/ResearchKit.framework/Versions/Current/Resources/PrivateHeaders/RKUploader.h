@@ -76,7 +76,7 @@
  *
  */
 - (BOOL)queueData:(NSData *)data
-  itemIdentifier:(RKItemIdentifier *)itemIdentifier
+  itemIdentifier:(NSString *)itemIdentifier
 taskInstanceUUID:(NSUUID*)taskInstanceUUID
         mimeType:(NSString *)mimeType
            error:(NSError * __autoreleasing *)errorOut;
