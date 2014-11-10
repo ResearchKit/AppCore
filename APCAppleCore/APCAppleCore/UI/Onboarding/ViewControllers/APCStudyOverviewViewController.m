@@ -122,7 +122,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = studyDetails;
-            
+            row.itemType = kAPCStudyItemTypeStudyDetails;
             [rowItems addObject:row];
         }
         

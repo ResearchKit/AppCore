@@ -32,6 +32,8 @@
     self.shareImages = @[@"twitter_icon", @"facebook_icon", @"email_icon", @"sms_icon"];
     
     [self setupAppearance];
+    
+    self.okayButton.hidden = self.hidesOkayButton;
 }
 
 - (void)didReceiveMemoryWarning {
