@@ -31,7 +31,7 @@
     {
         NSParameterAssert(self.email);
         NSParameterAssert(self.password);
-        [SBBComponent(SBBAuthManager) signUpWithEmail:self.email username:@"" password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+        [SBBComponent(SBBAuthManager) signUpWithEmail:self.email username:self.email password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completionBlock) {
                     completionBlock(error);
@@ -52,7 +52,7 @@
     {
         
         NSParameterAssert(self.password);
-        [SBBComponent(SBBAuthManager) signInWithUsername:@"" password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+        [SBBComponent(SBBAuthManager) signInWithUsername:self.email password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
             if (error.code ==kSBBServerPreconditionNotMet) {
                 if (!self.firstName) {
                     self.firstName = @"Please enter first name";
@@ -111,7 +111,7 @@
 
 - (NSString *)usernameForAuthManager:(id<SBBAuthManagerProtocol>)authManager
 {
-    return @"";
+    return self.email;
 }
 
 - (NSString *)passwordForAuthManager:(id<SBBAuthManagerProtocol>)authManager

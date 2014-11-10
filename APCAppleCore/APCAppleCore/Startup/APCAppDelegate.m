@@ -10,6 +10,8 @@
 #import "APCAppleCore.h"
 #import "APCDebugWindow.h"
 #import "APCPasscodeViewController.h"
+#import <AVFoundation/AVFoundation.h>
+#import <AudioToolbox/AudioToolbox.h>
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -38,7 +40,21 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 /*********************************************************************************/
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
+    
+    //Setting the Audio Session Category for voice prompts when device is locked
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    
+    NSError *setCategoryError = nil;
+    BOOL success = [audioSession setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
+    if (!success) { /* handle the error condition */ }
+    
+    NSError *activationError = nil;
+    success = [audioSession setActive:YES error:&activationError];
+    
     
     [self setUpInitializationOptions];
     NSAssert(self.initializationOptions, @"Please set up initialization options");
@@ -57,6 +73,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         [self.dataSubstrate.parameters setNumber:[APCParameters autoLockValues][0] forKey:kNumberOfMinutesForPasscodeKey];
     }
     
+    [self showPasscodeIfNecessary];
     
     return YES;
 }
@@ -87,19 +104,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    if (self.dataSubstrate.currentUser.isSignedIn) {
-        NSDate *lastUsedTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
-        
-        if (lastUsedTime) {
-            NSTimeInterval timeDifference = [lastUsedTime timeIntervalSinceNow];
-            NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
-            
-            if (fabs(timeDifference) > numberOfMinutes * 60) {
-                
-                [self showPasscode];
-            }
-        }
-    }
+    [self showPasscodeIfNecessary];
 }
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
@@ -306,6 +311,23 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     else
     {
         [self showOnBoarding];
+    }
+}
+
+- (void)showPasscodeIfNecessary
+{
+    if (self.dataSubstrate.currentUser.isSignedIn) {
+        NSDate *lastUsedTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+        
+        if (lastUsedTime) {
+            NSTimeInterval timeDifference = [lastUsedTime timeIntervalSinceNow];
+            NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
+            
+            if (fabs(timeDifference) > numberOfMinutes * 60) {
+                
+                [self showPasscode];
+            }
+        }
     }
 }
 

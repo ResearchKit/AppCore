@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *tableHeaderLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *okayButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableBottomConstraint;
 
 @property (nonatomic, strong) NSArray *shareTitles;
 @property (nonatomic, strong) NSArray *shareImages;
@@ -34,6 +35,10 @@
     [self setupAppearance];
     
     self.okayButton.hidden = self.hidesOkayButton;
+    if (self.okayButton.hidden) {
+        self.tableBottomConstraint.constant = 0;
+        [self.view layoutIfNeeded];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
