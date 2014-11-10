@@ -10,6 +10,7 @@
 #import "APCAppleCore.h"
 #import "APCDebugWindow.h"
 #import "APCPasscodeViewController.h"
+#import <AVFoundation/AVFoundation.h>
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -38,7 +39,22 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 /*********************************************************************************/
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
+    NSError *error = NULL;
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    [session setCategory:AVAudioSessionCategoryPlayback error:&error];
+    if(error) {
+        // Do some error handling
+    }
+    [session setActive:YES error:&error];
+    if (error) {
+        // Do some error handling
+    }
+    
+    
     
     [self setUpInitializationOptions];
     NSAssert(self.initializationOptions, @"Please set up initialization options");
