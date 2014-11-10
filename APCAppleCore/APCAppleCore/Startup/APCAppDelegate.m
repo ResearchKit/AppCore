@@ -307,7 +307,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
             NSTimeInterval timeDifference = [lastUsedTime timeIntervalSinceNow];
             NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
             
-            if (fabs(timeDifference) > numberOfMinutes * 60 * 0) {
+            if (fabs(timeDifference) > numberOfMinutes * 60) {
                 
                 [self showPasscode];
             }
