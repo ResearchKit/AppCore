@@ -11,7 +11,6 @@
 @interface RKFormStep : RKStep
 
 - (instancetype)initWithIdentifier:(NSString *)identifier
-                              name:(NSString *)name
                              title:(NSString *)title
                           subtitle:(NSString*) subtitle;
 
@@ -19,7 +18,7 @@
  * @brief Allow user to skip current step with no answer.
  * @note Default value is YES.
  */
-@property (nonatomic) BOOL optional;
+@property (nonatomic,getter=isOptional) BOOL optional;
 
 /**
  * @brief Form's title.
@@ -27,9 +26,9 @@
 @property (nonatomic, copy) NSString *title;
 
 /**
- * @brief Form's SubTitle.
+ * @brief Form's detail text.
  */
-@property (nonatomic, copy) NSString *subtitle;
+@property (nonatomic, copy) NSString *text;
 
 /**
  * @brief Form's question item.
@@ -49,7 +48,7 @@
 @property (nonatomic, copy, readonly) NSString* identifier;
 
 /**
- * @brief Short text about this from item.
+ * @brief Text describing this form item.
  */
 @property (nonatomic, copy, readonly) NSString *text;
 

@@ -10,25 +10,26 @@
 @protocol RKLogicalTask;
 
 /**
- * @brief The RKStep class defines the attributes and behavior of a step appears in RKStepViewController.
+ * @brief Base class for the steps that compose a task.
  *
- * Step is a sub unit of task, usually one task contains more than one step.
- * Step can be a question, an active test, or a simple instruction.
+ * @discussion A step can be a question, an active test, or a simple instruction, and
+ * is normally presented using RKStepViewController.
  */
 @interface RKStep : NSObject <NSSecureCoding>
 
 /**
  * @brief Designated initializer
  * @param identifier   Step's unique indentifier.
- * @param name    Step's name.
  */
-- (instancetype)initWithIdentifier:(NSString *)identifier name :(NSString *)name;
+- (instancetype)initWithIdentifier:(NSString *)identifier;
 
 @property (nonatomic, copy, readonly) NSString *identifier;
-@property (nonatomic, copy, readonly) NSString *name;
 
 /**
- * @brief Weak reference to task object, enable program to access task's infomation from a step object.
+ * @brief Weak reference to the parent task object.
+ * @discussion This is normally set when a step is added to RKTask. When
+ * implementing a custom logical task, it may be helpful to set that task
+ * here, to ensure that results correctly include the task's identifier.
  */
 @property (nonatomic, weak) id<RKLogicalTask> task;
 
