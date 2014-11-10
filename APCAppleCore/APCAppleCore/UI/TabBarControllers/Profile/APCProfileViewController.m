@@ -244,7 +244,18 @@ static CGFloat kSectionHeaderHeight = 40.f;
 
 - (IBAction)signOut:(id)sender
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:APCUserLogOutNotification object:self];
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Out", @"") message:NSLocalizedString(@"Are you sure you want to sign out?", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Sign Out", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:APCUserLogOutNotification object:self];
+    }];
+    [alertContorller addAction:yesAction];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+       
+    }];
+    [alertContorller addAction:cancelAction];
+    
+    [self.navigationController presentViewController:alertContorller animated:YES completion:nil];
+    
 }
 
 - (IBAction)leaveStudy:(id)sender
