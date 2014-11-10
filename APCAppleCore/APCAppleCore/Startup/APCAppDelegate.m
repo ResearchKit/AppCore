@@ -11,6 +11,7 @@
 #import "APCDebugWindow.h"
 #import "APCPasscodeViewController.h"
 #import <AVFoundation/AVFoundation.h>
+#import <AudioToolbox/AudioToolbox.h>
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -43,17 +44,16 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
-    NSError *error = NULL;
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    [session setCategory:AVAudioSessionCategoryPlayback error:&error];
-    if(error) {
-        // Do some error handling
-    }
-    [session setActive:YES error:&error];
-    if (error) {
-        // Do some error handling
-    }
     
+    //Setting the Audio Session Category for voice prompts when device is locked
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    
+    NSError *setCategoryError = nil;
+    BOOL success = [audioSession setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
+    if (!success) { /* handle the error condition */ }
+    
+    NSError *activationError = nil;
+    success = [audioSession setActive:YES error:&activationError];
     
     
     [self setUpInitializationOptions];
