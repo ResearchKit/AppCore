@@ -73,6 +73,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         [self.dataSubstrate.parameters setNumber:[APCParameters autoLockValues][0] forKey:kNumberOfMinutesForPasscodeKey];
     }
     
+    [self showPasscodeIfNecessary];
     
     return YES;
 }
@@ -103,19 +104,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    if (self.dataSubstrate.currentUser.isSignedIn) {
-        NSDate *lastUsedTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
-        
-        if (lastUsedTime) {
-            NSTimeInterval timeDifference = [lastUsedTime timeIntervalSinceNow];
-            NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
-            
-            if (fabs(timeDifference) > numberOfMinutes * 60) {
-                
-                [self showPasscode];
-            }
-        }
-    }
+    [self showPasscodeIfNecessary];
 }
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
@@ -322,6 +311,23 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     else
     {
         [self showOnBoarding];
+    }
+}
+
+- (void)showPasscodeIfNecessary
+{
+    if (self.dataSubstrate.currentUser.isSignedIn) {
+        NSDate *lastUsedTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+        
+        if (lastUsedTime) {
+            NSTimeInterval timeDifference = [lastUsedTime timeIntervalSinceNow];
+            NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
+            
+            if (fabs(timeDifference) > numberOfMinutes * 60) {
+                
+                [self showPasscode];
+            }
+        }
     }
 }
 

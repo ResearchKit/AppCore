@@ -114,7 +114,7 @@
                 APCTableViewStudyDetailsItem *studyDetails = [APCTableViewStudyDetailsItem new];
                 studyDetails.caption = rowItemDict[@"title"];
                 studyDetails.detailText = rowItemDict[@"details"];
-                studyDetails.iconImage = [UIImage imageNamed:rowItemDict[@"icon_image"]];
+                studyDetails.iconImage = [[UIImage imageNamed:rowItemDict[@"icon_image"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 studyDetails.tintColor = [UIColor tertiaryColorForString:rowItemDict[@"tint_color"]];
                 
                 rowItem.item = studyDetails;

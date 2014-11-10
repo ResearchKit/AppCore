@@ -38,11 +38,12 @@
     self.textLabel.font = [UIFont appRegularFontWithSize:16];
     self.textLabel.textColor = [UIColor appSecondaryColor1];
 }
+
 - (void)setTintColor:(UIColor *)tintColor
 {
     _tintColor = tintColor;
-    _tintView.backgroundColor = tintColor;
-    
+    self.tintView.backgroundColor = tintColor;
+    self.imageView.tintColor = tintColor;
 }
 
 @end
