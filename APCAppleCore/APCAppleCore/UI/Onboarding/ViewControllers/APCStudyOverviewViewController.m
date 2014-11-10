@@ -117,7 +117,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
             APCTableViewStudyDetailsItem *studyDetails = [APCTableViewStudyDetailsItem new];
             studyDetails.caption = questionDict[@"title"];
             studyDetails.detailText = questionDict[@"details"];
-            studyDetails.iconImage = [UIImage imageNamed:questionDict[@"icon_image"]];
+            studyDetails.iconImage = [[UIImage imageNamed:questionDict[@"icon_image"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             studyDetails.tintColor = [UIColor tertiaryColorForString:questionDict[@"tint_color"]];
             
             APCTableViewRow *row = [APCTableViewRow new];
