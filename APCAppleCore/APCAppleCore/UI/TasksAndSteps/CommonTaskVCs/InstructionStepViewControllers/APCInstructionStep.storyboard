@@ -17,12 +17,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tests for Speech Difficulties" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D7S-0C-A4A">
-                                <rect key="frame" x="54" y="34" width="213" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Xt-cT-6jD">
                                 <rect key="frame" x="0.0" y="528" width="320" height="40"/>
                                 <constraints>
@@ -46,13 +40,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="centerX" secondItem="D7S-0C-A4A" secondAttribute="centerX" id="0R5-kP-g9q"/>
                             <constraint firstItem="5Xt-cT-6jD" firstAttribute="leading" secondItem="cmE-ys-dpE" secondAttribute="leading" id="1Cb-Ft-UYq"/>
                             <constraint firstAttribute="bottom" secondItem="5Xt-cT-6jD" secondAttribute="bottom" id="8Fr-g8-ghe"/>
                             <constraint firstAttribute="centerY" secondItem="wTC-zL-7qS" secondAttribute="centerY" id="IJE-EK-bSV"/>
                             <constraint firstAttribute="trailing" secondItem="5Xt-cT-6jD" secondAttribute="trailing" id="O5k-d7-NyR"/>
                             <constraint firstAttribute="centerX" secondItem="wTC-zL-7qS" secondAttribute="centerX" id="Se9-Yj-SC7"/>
-                            <constraint firstItem="wTC-zL-7qS" firstAttribute="top" secondItem="D7S-0C-A4A" secondAttribute="bottom" constant="19" id="fRY-oL-HNb"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
