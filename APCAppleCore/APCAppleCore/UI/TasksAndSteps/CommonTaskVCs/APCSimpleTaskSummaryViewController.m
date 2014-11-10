@@ -9,6 +9,8 @@
 #import "APCSimpleTaskSummaryViewController.h"
 #import "APCAppleCore.h"
 
+static NSString *const kCheckImageName = @"Completion-Check";
+
 @interface APCSimpleTaskSummaryViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *label1;
@@ -18,6 +20,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *label5;
 
 @property (weak, nonatomic) IBOutlet UIView *circularProgressBar;
+
+@property (weak, nonatomic) IBOutlet UIImageView *checkImage;
+
 
 @property (nonatomic, strong) APCCircularProgressView *circularProgress;
 
@@ -31,7 +36,7 @@
     UIColor *viewBackgroundColor = [UIColor appSecondaryColor4];
     self.label1.textColor = [UIColor appSecondaryColor3];
     [self.view setBackgroundColor:viewBackgroundColor];
-    self.navigationItem.title = NSLocalizedString(@"Complete", @"Complete");
+    self.navigationController.navigationBar.topItem.title = NSLocalizedString(@"Complete", @"Complete");
     self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.hidesBackButton = YES;
     
@@ -46,6 +51,20 @@
     [self.circularProgressBar addSubview:self.circularProgress];
     
     self.label3.text = [NSString stringWithFormat:@"%lu/%lu", completedScheduledTasks, allScheduledTasks];
+    
+    self.checkImage.image = [UIImage imageNamed:kCheckImageName];
+    
+    [self setUpAppearance];
+}
+
+- (void) setUpAppearance
+{
+    self.label1.font = [UIFont appLightFontWithSize:17];
+    self.label1.textColor = [UIColor appSecondaryColor3];
+    
+    self.label3.textColor = [UIColor appSecondaryColor3];
+    
+    self.label5.textColor = [UIColor appSecondaryColor2];
 }
 
 - (void)viewDidLayoutSubviews {
