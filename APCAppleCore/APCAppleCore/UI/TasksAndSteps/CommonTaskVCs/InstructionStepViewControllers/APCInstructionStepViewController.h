@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import <APCAppleCore/APCAppleCore.h>
+#import "APCStepViewController.h"
 
 @interface APCInstructionStepViewController : APCStepViewController
 

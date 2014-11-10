@@ -63,6 +63,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
  Activities ViewControllers
  -------------------------*/
 #import <APCAppleCore/APCIntroductionViewController.h>
+#import <APCAppleCore/APCInstructionStepViewController.h>
 #import <APCAppleCore/APCSpinnerViewController.h>
 #import <APCAppleCore/APCSetupTaskViewController.h>
 #import <APCAppleCore/APCBaseWithProgressTaskViewController.h>
