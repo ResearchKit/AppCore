@@ -21,7 +21,6 @@
 @property  (nonatomic, strong)  NSArray  *localisedParagraphs;
 
 @property  (nonatomic, assign, getter = wasScrolledViaPageControl)  BOOL  scrolledViaPageControl;
-- (IBAction)viewImportantDetailsHandler:(id)sender;
 
 @end
 
