@@ -13,6 +13,4 @@
 
 - (void)setupWithInstructionalImages:(NSArray *)imageNames andParagraphs:(NSArray *)paragraphs;
 
-- (UIImage *)imageOfName:(NSString *)name;
-
 @end

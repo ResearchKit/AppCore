@@ -26,6 +26,9 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="getStartedWasTapped:" destination="jFC-QS-AwW" eventType="touchUpInside" id="N4f-on-dRh"/>
+                                </connections>
                             </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wTC-zL-7qS">
                                 <rect key="frame" x="16" y="74" width="288" height="420"/>
@@ -34,7 +37,7 @@
                                     <constraint firstAttribute="height" constant="420" id="gdj-rG-4na"/>
                                 </constraints>
                                 <connections>
-                                    <segue destination="W7E-mW-1q2" kind="embed" id="NPP-ED-u1Y"/>
+                                    <segue destination="W7E-mW-1q2" kind="embed" identifier="embeddedScroller" id="NPP-ED-u1Y"/>
                                 </connections>
                             </containerView>
                         </subviews>
@@ -48,15 +51,18 @@
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="gettingStartedButton" destination="5Xt-cT-6jD" id="iU4-sq-PCl"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a31-vH-wyc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="498" y="431"/>
         </scene>
-        <!--View Controller-->
+        <!--Introduction View Controller-->
         <scene sceneID="qK0-aB-dg9">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="W7E-mW-1q2" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="W7E-mW-1q2" customClass="APCIntroductionViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sgv-yl-feV"/>
                         <viewControllerLayoutGuide type="bottom" id="Enb-Kk-KAi"/>
@@ -76,11 +82,17 @@
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="nNS-6q-lI5" secondAttribute="height" multiplier="72:61" id="4j8-5l-18p"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="W7E-mW-1q2" id="qjU-q0-Y27"/>
+                                </connections>
                             </scrollView>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="10" translatesAutoresizingMaskIntoConstraints="NO" id="Mr0-uz-c6U">
                                 <rect key="frame" x="3" y="370" width="283" height="37"/>
                                 <color key="pageIndicatorTintColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <color key="currentPageIndicatorTintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="pageControlChangedValue:" destination="W7E-mW-1q2" eventType="valueChanged" id="suH-vw-y9y"/>
+                                </connections>
                             </pageControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JNo-Pr-A1O" userLabel="AccessoryView">
                                 <rect key="frame" x="0.0" y="98" width="288" height="25"/>
@@ -107,6 +119,11 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
+                    <connections>
+                        <outlet property="imageScroller" destination="nNS-6q-lI5" id="E0f-0c-JP6"/>
+                        <outlet property="pager" destination="Mr0-uz-c6U" id="77n-RQ-D8u"/>
+                        <outlet property="textScroller" destination="Gwx-lg-rch" id="9Gm-qO-xg2"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P0q-yl-f85" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

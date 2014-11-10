@@ -10,6 +10,11 @@
 
 @interface APCInstructionStepViewController : APCStepViewController
 
+@property (nonatomic, strong) NSArray * imagesArray;
+@property (nonatomic, strong) NSArray * headingsArray;
+@property (nonatomic, strong) NSArray * messagesArray;
+
+@property (weak, nonatomic) IBOutlet UIButton *gettingStartedButton;
 
 
 @end

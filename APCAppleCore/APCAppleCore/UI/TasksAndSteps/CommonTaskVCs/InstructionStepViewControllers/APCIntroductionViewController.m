@@ -26,11 +26,6 @@
 
 @implementation APCIntroductionViewController
 
-- (UIImage *)imageOfName:(NSString *)name
-{
-    return  nil;
-}
-
 #pragma  mark  -  Initialise Scroll View With Images
 
 - (void)initialiseImageScrollView
@@ -40,7 +35,7 @@
     
     for (NSString  *imageName  in  self.instructionalImages) {
         
-        UIImage    *anImage = [self imageOfName:imageName];
+        UIImage    *anImage = [UIImage imageNamed:imageName];
         
         CGRect  frame = CGRectMake(imageIndex * CGRectGetWidth(self.imageScroller.frame), 0.0, CGRectGetWidth(self.imageScroller.frame), CGRectGetHeight(self.imageScroller.frame));
         UIImageView  *imager = [[UIImageView alloc] initWithFrame:frame];
@@ -55,6 +50,7 @@
     self.imageScroller.contentSize = contentSize;
     
     self.pager.numberOfPages = [self.instructionalImages count];
+    self.pager.tintColor = [UIColor appSecondaryColor3];
     self.pager.currentPageIndicatorTintColor = [UIColor appPrimaryColor];
 }
 
