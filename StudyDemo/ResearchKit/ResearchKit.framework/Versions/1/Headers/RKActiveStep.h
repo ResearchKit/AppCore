@@ -62,19 +62,19 @@
 @property (nonatomic) BOOL useNextForSkip;
 
 /**
- * @brief Caption text to be displayed on the screen.
+ * @brief Title text
  */
-@property (nonatomic, copy) NSString *caption;
+@property (nonatomic, copy) NSString *title;
 
 /**
- * @brief Instructional text to be displayed on the screen.
+ * @brief Instructional text
  */
 @property (nonatomic, copy) NSString *text;
 
 /**
  * @brief Instruction voice prompt.
  *
- * Instructional speech begins at the beginning of the step.
+ * Instructional speech begins when the step starts.
  */
 @property (nonatomic, copy) NSString *voicePrompt;
 
@@ -91,12 +91,5 @@
  */
 @property (nonatomic, copy) NSArray *recorderConfigurations; // <RKRecorderConfiguration>
 
-/**
- * @brief Convenience methods.
- */
-- (BOOL)hasCountDown;
-- (BOOL)hasCaption;
-- (BOOL)hasText;
-- (BOOL)hasVoice;
 
 @end

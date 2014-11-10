@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger, RKSurveyQuestionType) {
     RKSurveyQuestionTypeScale,                  // Continuous rating scale, ask participant place a mark at an appropriate position on a continuous line.
@@ -21,6 +22,7 @@ typedef NS_ENUM(NSInteger, RKSurveyQuestionType) {
     RKSurveyQuestionTypeTimeInterval,           // TimeInterval question type can be used to ask for a certain time span, can be chosen from a picker.
     RKSurveyQuestionTypeCustom                  // Other types not defined in the framework.
 };
+
 
 /**
  * @brief The RKAnswerFormat class contains details about answer.
@@ -85,7 +87,7 @@ typedef NS_ENUM(NSInteger, RKChoiceAnswerStyle) {
 @property (nonatomic, readonly) RKChoiceAnswerStyle style;
 
 /**
- * @brief An list of RKAnswerOption objects.
+ * @brief An list of <RKAnswerOption> objects.
  */
 @property (nonatomic, readonly, copy) NSArray *options;
 
@@ -100,24 +102,14 @@ typedef NS_ENUM(NSInteger, RKChoiceAnswerStyle) {
 @end
 
 /**
- * @brief The RKAnswerOption class defines  brief/detailed option text for a option which can be included within RKChoiceAnswerFormat.
+ * @brief The RKAnswerOption protocol defines brief option text for a option which can be included within RKChoiceAnswerFormat.
  */
-@interface RKAnswerOption : NSObject<NSSecureCoding>
-
-/**
- * @brief Designated convenience constructor
- */
-+ (instancetype)optionWithShortText:(NSString*)shortText longText:(NSString*)longText value:(id)value;
+@protocol RKAnswerOption <NSObject>
 
 /**
  * @brief Brief option text.
  */
-@property (nonatomic, readonly, copy) NSString* shortText;
-
-/**
- * @brief Detailed option text.
- */
-@property (nonatomic, readonly, copy) NSString* longText;
+- (NSString*)text;
 
 /**
  * @brief The value to be returned if this option is selected.
@@ -125,10 +117,53 @@ typedef NS_ENUM(NSInteger, RKChoiceAnswerStyle) {
  * Expected to be a scalar type serializable to JSON, e.g. NSNumber or NSString.
  * If no value is provided, the index of the option in the RKChoiceAnswerFormat options list will be used.
  */
-@property (nonatomic, readonly, copy) id value;
+- (id)value;
 
 @end
 
+/**
+ * @brief The RKTextAnswerOption class defines brief option text for a option which can be included within RKChoiceAnswerFormat.
+ */
+@interface RKTextAnswerOption : NSObject <RKAnswerOption, NSSecureCoding>
+
+/**
+ * @brief Designated convenience constructor
+ */
++ (instancetype)optionWithText:(NSString*)text detailText:(NSString*)detailText value:(id)value;
+
+/**
+ * @brief Designated convenience constructor
+ */
++ (instancetype)optionWithText:(NSString*)text value:(id)value;
+
+/**
+  * @brief Detailed option text.
+  */
+@property (nonatomic, readonly, copy) NSString* detailText;
+
+@end
+
+/**
+  * @brief The RKAnswerImageOption class defines  brief/detailed option text for a option which can be included within RKChoiceAnswerFormat.
+  */
+@interface RKImageAnswerOption : NSObject <RKAnswerOption, NSSecureCoding>
+
+/**
+ * @brief Designated convenience constructor
+ */
++ (instancetype)optionWithNormalImage:(UIImage*)normal selectedImage:(UIImage*)selected text:(NSString*)text value:(id)value;
+/**
+ * @brief Image for when option is unselected.
+ */
+@property (nonatomic, readonly, strong) UIImage* normalStateImage;
+
+/**
+  * @brief Image for when option is selected.
+  */
+@property (nonatomic, readonly, strong) UIImage* selectedStateImage;
+
+
+@end
 
 
 typedef NS_ENUM(NSInteger, RKNumericAnswerStyle) {
@@ -273,6 +308,14 @@ typedef NS_ENUM(NSInteger, RKDateAnswerStyle) {
  * @brief Convenience constructor.
  */
 + (instancetype)textAnswer;
+
++ (instancetype)textAnswerWithMaximumLength:(NSNumber*)maximumLength;
+
+/**
+ * @brief  Maximum length of the text to be allowed. 
+ *  Default is nil, not limited.
+ */
+@property (nonatomic, readonly, copy) NSNumber *maximumLength;
 
 @end
 

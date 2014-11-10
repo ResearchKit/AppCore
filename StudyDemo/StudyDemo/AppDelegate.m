@@ -7,7 +7,7 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
-#import <ResearchKit/ResearchKit.h>
+#import <ResearchKit/ResearchKit_Private.h>
 #import <HealthKit/HealthKit.h>
 #import <CoreMotion/CoreMotion.h>
 
@@ -162,7 +162,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     NSError *err = nil;
     NSArray *pendingFiles = nil;
     NSURL *archiveFile = [RKDataArchive makeArchiveFromDataLoggerManager:_logManager
-                                                          itemIdentifier:[[RKItemIdentifier alloc] initWithComponents:@[@"com",@"apple",@"ResearchKit",@"collection"]]
+                                                          itemIdentifier:@"com.apple.ResearchKit.collection"
                                                          studyIdentifier:MainStudyIdentifier
                                                           fileProtection:RKFileProtectionNone
                                                        maximumInputBytes:1024*1024*10

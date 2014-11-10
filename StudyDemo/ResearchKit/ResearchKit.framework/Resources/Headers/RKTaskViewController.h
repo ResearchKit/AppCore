@@ -13,94 +13,87 @@
 @class RKResult;
 @class RKTaskViewController;
 
-/**
- *  @brief The RKTaskViewControllerDelegate protocol defines methods that allow you to receive events from RKTaskViewController. 
- *  
- *  The methods of this protocol are all optional.
- */
+
 @protocol RKTaskViewControllerDelegate <NSObject>
 
 @optional
 /**
- * @brief Tells the delegate that the task completed.
+ * @brief Successful completion of a step that has no steps after it.
  */
-- (void)taskViewControllerDidComplete: (RKTaskViewController *)taskViewController;
+- (void)taskViewControllerDidComplete:(RKTaskViewController *)taskViewController;
 
 /**
- * @brief Tells the delegate that the task failed.
+ * @brief Reports an error during the task.
  */
-- (void)taskViewController: (RKTaskViewController *)taskViewController didFailWithError:(NSError*)error;
+- (void)taskViewController:(RKTaskViewController *)taskViewController didFailWithError:(NSError *)error;
 
 /**
- * @brief Tells the delegate that the task was cancelled by participant or the developer.
+ * @brief The task was cancelled by participant or the developer.
  */
 - (void)taskViewControllerDidCancel:(RKTaskViewController *)taskViewController;
 
 /**
- * @brief Asks the delegate should display a more info button at the bottom of a step view.
- *
- * The learn more button would not show through the task if this delegate method is not implemented.
+ * @brief Check whether there is "Learn More" content for this step
+ * @return NO if there is no additional content to display.
  */
-- (BOOL)taskViewController:(RKTaskViewController *)taskViewController shouldShowMoreInfoOnStep:(RKStep *)step;
+- (BOOL)taskViewController:(RKTaskViewController *)taskViewController hasLearnMoreForStep:(RKStep *)step;
 
 /**
- * @brief Tells the delegate that the learn more button was tapped.
+ * @brief The user has tapped the "Learn More" button no the step.
+ * @discussion Present a dialog or modal view controller containing the
+ * "Learn More" content for this step.
  */
-- (void)taskViewController:(RKTaskViewController *)taskViewController didReceiveLearnMoreEventFromStepViewController:(RKStepViewController *)stepViewController;
+- (void)taskViewController:(RKTaskViewController *)taskViewController learnMoreForStep:(RKStepViewController *)stepViewController;
 
 /**
- * @brief Ask the delegate to supply a view controller of a given step.
- * 
- * The delegate should provide a step view controller implementation for any custom steps. 
- * If the delegate provides a controller for RKStepViewController's default mapping, return nil.
+ * @brief Supply a custom view controller for a given step.
+ * @discussion The delegate should provide a step view controller implementation for any custom step.
+ * @return A custom view controller, or nil to use the default step controller for this step.
  */
-- (RKStepViewController*)taskViewController:(RKTaskViewController *)taskViewController
-                      viewControllerForStep:(RKStep*)step;
+- (RKStepViewController*)taskViewController:(RKTaskViewController *)taskViewController viewControllerForStep:(RKStep *)step;
 
 /**
- * @brief Asks the delegate should present a step.
- *
- * Provides an opportunity to stop leaving current step.
+ * @brief Control whether the task controller proceeds to the next or previous step.
+ * @return YES, if navigation can proceed to the specified step.
  */
-- (BOOL)taskViewController:(RKTaskViewController *)taskViewController shouldPresentStep:(RKStep*)step;
+- (BOOL)taskViewController:(RKTaskViewController *)taskViewController shouldPresentStep:(RKStep *)step;
 
 /**
  * @brief Tells the delegate that a stepViewController is about to be displayed.
- *
- * Provides an opportunity to modify the step view controller before presentation.
+ * @discussion Provides an opportunity to modify the step view controller before presentation.
  */
-- (void)taskViewController:(RKTaskViewController *)taskViewController
-willPresentStepViewController:(RKStepViewController *)stepViewController;
+- (void)taskViewController:(RKTaskViewController *)taskViewController stepViewControllerWillAppear:(RKStepViewController *)stepViewController;
 
 /**
  * @brief Tells the delegate that a result object has been produced.
- *
- * The result could then be saved, or serialized and uploaded. For example, the serialized data could be sent via the study's RKUploader.
+ * @discussion Results from data recording during "active" steps are "produced"
+ * immediately when the step completes. Editable results (from survey questions)
+ * are composed into a single RKSurveyResult which is "produced" at the end of
+ * the task.
  */
-- (void)taskViewController:(RKTaskViewController *)taskViewController didProduceResult:(RKResult*)result;
+- (void)taskViewController:(RKTaskViewController *)taskViewController didProduceResult:(RKResult *)result;
 
 @end
 
-@protocol RKTaskDefaultResultProvider;
+@protocol RKSurveyResultProvider;
 
 
 /**
- * @brief The RKTaskViewController class defines the attributes and behavior of a task view controller.
- * @note RKStepViewController objects are managed by RKTaskViewController, 
+ * @brief View controller that can "play" an RKTask or RKLogicalTask.
+ * @disucssion A task is composed of a sequence of steps that the user must complete.
+ * This is intended for modal presentation, so the user can cancel participation in
+ * the task at any time.
  */
 @interface RKTaskViewController : UINavigationController
 
 
 /**
  * @brief Designated initializer
- * @param task    The task to be presented.
+ * @param task             The task to be presented.
  * @param taskInstanceUUID The UUID of this instance of the task
  */
--(instancetype)initWithTask:(id<RKLogicalTask>)task  taskInstanceUUID:(NSUUID*)taskInstanceUUID;
+-(instancetype)initWithTask:(id<RKLogicalTask>)task taskInstanceUUID:(NSUUID *)taskInstanceUUID;
 
-/**
- * @brief The object that acts as view controller's delegate.
- */
 @property (nonatomic, weak) id<RKTaskViewControllerDelegate> taskDelegate;
 
 /**
@@ -112,39 +105,57 @@ willPresentStepViewController:(RKStepViewController *)stepViewController;
 
 /**
  * @brief "Default" result provider
- *
- * This provider can provide "default" results, perhaps based on previous runs of
- * the same task.
+ * @discussion This provider can provide "default" results, perhaps based on previous runs of
+ * the same task, which will be used to pre-fill Question and Form items.
  */
-@property (nonatomic, strong) id<RKTaskDefaultResultProvider> defaultResultProvider;
+@property (nonatomic, strong) id<RKSurveyResultProvider> defaultResultProvider;
 
 /**
  * @brief Task instance UUID
  * 
- * Unique identifier for this run of the task controller. All results produced by this
+ * @discussion Unique identifier for this run of the task controller. All results produced by this
  * instance will be tagged with this UUID.
  *
- * It is an error to set the taskInstanceUUID after the first time the task VC is presented.
+ * @note It is an error to set the taskInstanceUUID after the first time the task VC is presented.
  */
 @property (nonatomic, copy) NSUUID *taskInstanceUUID;
 
 
 /**
- * @brief Survey question results received by RKTaskViewController
+ * @brief Current state of survey results
  *
- * RKQuestionResult objects in the order the questions were completed.
- * If the user uses the back button to go back through the steps, the
- * results forward of the current position are not included in this array.
+ * @discussion If the user uses the back button to go back through the steps, the
+ * results forward of the current position are not included.
  */
-@property (nonatomic, copy, readonly) NSArray *surveyResults;
+- (id<RKSurveyResultProvider>)currentSurveyResults;
 
 
 /**
- * @brief Controls whether progress is shown in the navigation bar
+ * @brief Controls whether progress is shown in the navigation bar.
  *
- * Defaults to YES. Set to NO to disable showing progress in the navigation bar.
+ * @note Defaults to YES. Set to NO to disable showing progress in the navigation bar.
  */
 @property (nonatomic, assign) BOOL showsProgressInNavigationBar;
+
+/**
+ * @brief Current presented step view controller.
+ */
+@property (nonatomic, strong, readonly) RKStepViewController *currentStepViewController;
+
+/**
+ * @brief Force navigation to next step.
+ */
+- (void)goForward;
+
+/**
+ * @brief Force navigation to previous step.
+ */
+- (void)goBackward;
+
+
+@end
+
+@interface RKTaskViewController(ActiveTaskSupport)
 
 /**
  * @brief Stop current running step.
@@ -152,7 +163,7 @@ willPresentStepViewController:(RKStepViewController *)stepViewController;
 - (void)suspend;
 
 /**
- * @brief Make current step start running after suspended.
+ * @brief Make current step resume running after suspended.
  */
 - (void)resume;
 
