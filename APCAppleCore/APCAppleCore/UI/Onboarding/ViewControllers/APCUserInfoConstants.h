@@ -30,6 +30,12 @@ typedef NS_ENUM(APCTableViewItemType, APCUserInfoItemType) {
     kAPCUserInfoItemTypeWakeUpTime
 };
 
+typedef NS_ENUM(APCTableViewItemType, APCStudyItemType) {
+    kAPCStudyItemTypeStudyDetails,
+    kAPCStudyItemTypeShare,
+    kAPCStudyItemTypeReviewConsent
+};
+
 typedef NS_ENUM(APCTableViewItemType, APCSettingsItemType) {
     kAPCSettingsItemTypeAutoLock,
     kAPCSettingsItemTypePasscode,

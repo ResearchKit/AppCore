@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "APCTableViewItem.h"
 
 @interface APCStudyDetailsViewController : UIViewController
 
@@ -15,5 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
 
 @property (weak, nonatomic) IBOutlet UITextView *textView;
+
+@property (nonatomic, strong) APCTableViewStudyDetailsItem *studyDetails;
 
 @end

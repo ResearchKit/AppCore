@@ -10,4 +10,6 @@
 
 @interface APCShareViewController : UIViewController
 
+@property (nonatomic) BOOL hidesOkayButton;
+
 @end

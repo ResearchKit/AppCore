@@ -37,6 +37,8 @@
     return [APCAppearanceInfo valueForAppearanceKey:kSecondaryColor4Key];
 }
 
+
+
 + (UIColor *) appTertiaryColor1
 {
     return [APCAppearanceInfo valueForAppearanceKey:kTertiaryColor1Key];
@@ -45,5 +47,38 @@
 {
     return [APCAppearanceInfo valueForAppearanceKey:kTertiaryColor2Key];
 }
+
+
+
++ (UIColor *)appTertiaryGreenColor
+{
+    return [APCAppearanceInfo valueForAppearanceKey:kTertiaryGreenColorKey];
+}
+
++ (UIColor *)appTertiaryBlueColor
+{
+    return [APCAppearanceInfo valueForAppearanceKey:kTertiaryBlueColorKey];
+}
+
++ (UIColor *)appTertiaryRedColor
+{
+    return [APCAppearanceInfo valueForAppearanceKey:kTertiaryRedColorKey];
+}
+
++ (UIColor *)appTertiaryYellowColor
+{
+    return [APCAppearanceInfo valueForAppearanceKey:kTertiaryYellowColorKey];
+}
+
++ (UIColor *)appTertiaryPurpleColor
+{
+    return [APCAppearanceInfo valueForAppearanceKey:kTertiaryPurpleColorKey];
+}
+
++(UIColor *)appTertiaryGrayColor
+{
+    return [APCAppearanceInfo valueForAppearanceKey:kTertiaryGrayColorKey];
+}
+
 
 @end

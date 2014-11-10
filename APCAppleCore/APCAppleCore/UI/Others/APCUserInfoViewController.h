@@ -18,11 +18,9 @@
 @interface APCUserInfoViewController : UITableViewController <APCTextFieldTableViewCellDelegate, APCSegmentedTableViewCellDelegate, APCPickerTableViewCellDelegate, APCSwitchTableViewCellDelegate, UITextFieldDelegate>
 
 /*
- Items is an Array of Array of APCTableViewItem
+ Items is an Array of APCTableViewSection
  */
 @property (nonatomic, strong) NSMutableArray *items;
-
-@property (nonatomic, strong) NSMutableArray *itemsOrder;
 
 @property (nonatomic, getter=isPickerShowing) BOOL pickerShowing;
 

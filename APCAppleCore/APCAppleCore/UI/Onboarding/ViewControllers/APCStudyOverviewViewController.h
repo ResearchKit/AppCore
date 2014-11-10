@@ -6,7 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import <APCAppleCore/APCAppleCore.h>
+#import <UIKit/UIKit.h>
+#import "APCTableViewItem.h"
+#import "APCTintedTableViewCell.h"
 
 @interface APCStudyOverviewViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
@@ -14,22 +16,18 @@
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 @property (weak, nonatomic) IBOutlet UILabel *diseaseNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateRangeLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
 @property (weak, nonatomic) IBOutlet UIButton *joinButton;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 
 @property (strong, nonatomic) NSString *diseaseName;
 
+@property (nonatomic, strong) NSMutableArray *items;
+
 - (IBAction)signInTapped:(id)sender;
 - (IBAction)signUpTapped:(id)sender;
 
-- (NSArray *)studyDetailsFromJSONFile:(NSString *)jsonFileName;
+- (void)studyDetailsFromJSONFile:(NSString *)jsonFileName;
 
-@end
-
-@interface APCStudyDetails : NSObject
-
-@property (nonatomic, strong) NSString *title;
-@property (nonatomic, strong) NSString *details;
+- (APCTableViewStudyDetailsItem *)itemForIndexPath:(NSIndexPath *)indexPath;
 
 @end

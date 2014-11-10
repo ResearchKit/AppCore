@@ -21,6 +21,9 @@
     // Do any additional setup after loading the view.
     
     [self setupAppearance];
+    
+    self.iconImageView.image = self.studyDetails.iconImage;
+    self.title = self.studyDetails.caption;
 }
 
 - (void)viewWillAppear:(BOOL)animated
