@@ -36,7 +36,14 @@ static NSDictionary * localAppearanceDictionary;
              kSecondaryColor4Key                : [UIColor colorWithWhite:0.973 alpha:1.000],                       //#f8f8f8
              
              kTertiaryColor1Key                 : [UIColor colorWithRed:0.267 green:0.824 blue:0.306 alpha:1.000],  //#44d24e
-             kTertiaryColor2Key                 : [UIColor blackColor]                                              //#ff0000
+             kTertiaryColor2Key                 : [UIColor blackColor], //#ff0000
+             
+             kTertiaryGreenColorKey : [UIColor colorWithRed:0.195 green:0.830 blue:0.443 alpha:1.000],
+             kTertiaryBlueColorKey : [UIColor colorWithRed:0.132 green:0.684 blue:0.959 alpha:1.000],
+             kTertiaryRedColorKey : [UIColor colorWithRed:0.919 green:0.226 blue:0.342 alpha:1.000],
+             kTertiaryYellowColorKey : [UIColor colorWithRed:0.994 green:0.709 blue:0.278 alpha:1.000],
+             kTertiaryPurpleColorKey : [UIColor colorWithRed:0.574 green:0.252 blue:0.829 alpha:1.000],
+             kTertiaryGrayColorKey : [UIColor colorWithRed:157/255.0f green:157/255.0f blue:157/255.0f alpha:1.000]
              };
 }
 

@@ -21,4 +21,11 @@
 + (UIColor *) appTertiaryColor1;
 + (UIColor *) appTertiaryColor2;
 
++ (UIColor *) appTertiaryGreenColor;
++ (UIColor *) appTertiaryPurpleColor;
++ (UIColor *) appTertiaryBlueColor;
++ (UIColor *) appTertiaryRedColor;
++ (UIColor *) appTertiaryYellowColor;
++ (UIColor *) appTertiaryGrayColor;
+
 @end

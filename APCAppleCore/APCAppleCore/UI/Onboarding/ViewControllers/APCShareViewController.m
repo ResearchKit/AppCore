@@ -32,10 +32,18 @@
     self.shareImages = @[@"twitter_icon", @"facebook_icon", @"email_icon", @"sms_icon"];
     
     [self setupAppearance];
+    
+    self.okayButton.hidden = self.hidesOkayButton;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 #pragma mark - Setup
