@@ -115,6 +115,19 @@
 
 @end
 
+@interface APCTableViewStudyDetailsItem : APCTableViewItem
+
+@property (nonatomic, strong) NSString *imageName;
+
+@property (nonatomic, strong) NSString *videoName;
+
+@property (nonatomic, strong) UIImage *iconImage;
+
+@property (nonatomic, strong) UIColor *tintColor;
+
+@end
+
+/* ----------------------------------------------- */
 
 @interface APCTableViewSection : NSObject
 

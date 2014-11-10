@@ -93,6 +93,12 @@
 
 @end
 
+@implementation APCTableViewStudyDetailsItem
+
+@end
+
+/* ----------------------------- */
+
 @implementation APCTableViewSection
 
 @end
