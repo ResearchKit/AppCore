@@ -52,8 +52,6 @@
     self.imageScroller.contentSize = contentSize;
     
     self.pager.numberOfPages = [self.instructionalImages count];
-    self.pager.pageIndicatorTintColor = [UIColor colorWithWhite:0.850 alpha:1.000];
-    self.pager.currentPageIndicatorTintColor = [UIColor appPrimaryColor];
 }
 
 #pragma  mark  -  Initialise Scroll View With Paragraphs
@@ -200,6 +198,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.pager.pageIndicatorTintColor = [UIColor colorWithWhite:0.850 alpha:1.000];
+    self.pager.currentPageIndicatorTintColor = [UIColor appPrimaryColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated
