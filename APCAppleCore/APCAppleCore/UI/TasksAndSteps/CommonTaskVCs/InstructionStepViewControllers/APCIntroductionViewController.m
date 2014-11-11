@@ -34,6 +34,9 @@
 {
     CGSize  contentSize = CGSizeMake(0.0, CGRectGetHeight(self.imageScroller.frame));
     NSUInteger  imageIndex = 0;
+    [self.imageScroller.subviews enumerateObjectsUsingBlock:^(UIView * view, NSUInteger idx, BOOL *stop) {
+        [view removeFromSuperview];
+    }];
     
     for (NSString  *imageName  in  self.instructionalImages) {
         
@@ -60,12 +63,18 @@
 {
     CGSize  contentSize = CGSizeMake(0.0, CGRectGetHeight(self.textScroller.frame));
     NSUInteger  paragraphIndex = 0;
+    
+    [self.textScroller.subviews enumerateObjectsUsingBlock:^(UIView * view, NSUInteger idx, BOOL *stop) {
+        [view removeFromSuperview];
+    }];
 
     for (NSAttributedString  *string  in  self.localisedParagraphs) {
         
         CGRect  frame = CGRectMake(paragraphIndex * CGRectGetWidth(self.textScroller.frame), 0.0, CGRectGetWidth(self.textScroller.frame), CGRectGetHeight(self.textScroller.frame));
-        UITextView  *texter = [[UITextView alloc] initWithFrame:frame];
+        UILabel  *texter = [[UILabel alloc] initWithFrame:frame];
+        texter.numberOfLines = 0;
         texter.attributedText = string;
+        texter.backgroundColor = [UIColor clearColor];
         [self.textScroller addSubview:texter];
         
         contentSize.width = contentSize.width + CGRectGetWidth(self.textScroller.frame);
