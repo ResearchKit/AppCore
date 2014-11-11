@@ -186,7 +186,7 @@
 		F5179F6819D0B50C001DCCB7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6719D0B50C001DCCB7 /* libz.dylib */; };
 		F52549D919EDD87700C7B7CB /* UIImage+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F52549D719EDD87700C7B7CB /* UIImage+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F52549DA19EDD87700C7B7CB /* UIImage+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F52549D819EDD87700C7B7CB /* UIImage+APCHelper.m */; };
-		F53AD4761A1292B2004446BC /* APCSimpleTaskSummaryViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F53AD4731A1292B2004446BC /* APCSimpleTaskSummaryViewController.h */; };
+		F53AD4761A1292B2004446BC /* APCSimpleTaskSummaryViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F53AD4731A1292B2004446BC /* APCSimpleTaskSummaryViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F53AD4771A1292B2004446BC /* APCSimpleTaskSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53AD4741A1292B2004446BC /* APCSimpleTaskSummaryViewController.m */; };
 		F53AD4781A1292B2004446BC /* APCSimpleTaskSummaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F53AD4751A1292B2004446BC /* APCSimpleTaskSummaryViewController.xib */; };
 		F541540D19D5F1DE00B819C9 /* APCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A63F1319D5EAD100284006 /* APCUser.m */; };
