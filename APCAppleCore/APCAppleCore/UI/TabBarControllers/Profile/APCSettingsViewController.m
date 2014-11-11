@@ -28,6 +28,12 @@ static NSString *const kAPCBasicCellIdentifier       = @"APCBasicCellIdentifier"
     self.versionLabel.text = [NSString stringWithFormat:@"Version: %@ (Build %@)", version, build];
     
     self.editing = YES;
+    
+    // Added for testing purposes. In case the QA chose to Reset the app, the screen shouldn't crash
+    NSNumber *numberOfMinutes = [self.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
+    if (!numberOfMinutes) {
+        [self.parameters setNumber:[APCParameters autoLockValues][0] forKey:kNumberOfMinutesForPasscodeKey];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
