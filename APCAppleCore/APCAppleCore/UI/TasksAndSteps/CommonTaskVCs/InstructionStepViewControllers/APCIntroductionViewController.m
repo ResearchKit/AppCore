@@ -121,12 +121,12 @@
 {
     self.instructionalImages = imageNames;
     
-    [self initialiseImageScrollView];
+//    [self initialiseImageScrollView]; 
     
     self.nonLocalisedParagraphs = paragraphs;
     self.nonLocalisedHeadlines = headlines;
     [self initialiseInstructionalParagraphs];
-    [self initialiseParagraphsScrollView];
+//    [self initialiseParagraphsScrollView];
 }
 
 
@@ -200,6 +200,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    [self initialiseImageScrollView];
+    [self initialiseParagraphsScrollView];
 }
 
 @end

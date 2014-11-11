@@ -186,6 +186,9 @@
 		F5179F6819D0B50C001DCCB7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6719D0B50C001DCCB7 /* libz.dylib */; };
 		F52549D919EDD87700C7B7CB /* UIImage+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F52549D719EDD87700C7B7CB /* UIImage+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F52549DA19EDD87700C7B7CB /* UIImage+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F52549D819EDD87700C7B7CB /* UIImage+APCHelper.m */; };
+		F53AD4761A1292B2004446BC /* APCSimpleTaskSummaryViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F53AD4731A1292B2004446BC /* APCSimpleTaskSummaryViewController.h */; };
+		F53AD4771A1292B2004446BC /* APCSimpleTaskSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53AD4741A1292B2004446BC /* APCSimpleTaskSummaryViewController.m */; };
+		F53AD4781A1292B2004446BC /* APCSimpleTaskSummaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F53AD4751A1292B2004446BC /* APCSimpleTaskSummaryViewController.xib */; };
 		F541540D19D5F1DE00B819C9 /* APCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A63F1319D5EAD100284006 /* APCUser.m */; };
 		F541541419D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h in Headers */ = {isa = PBXBuildFile; fileRef = F541541219D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h */; };
 		F541541519D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F541541319D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m */; };
@@ -259,9 +262,6 @@
 		F588BAA219D220AC00692473 /* APCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BAA019D220AC00692473 /* APCAppDelegate.m */; };
 		F58EA05519F02BD10001C67C /* APCInEligibleViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F58EA05319F02BD10001C67C /* APCInEligibleViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F58EA05619F02BD10001C67C /* APCInEligibleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F58EA05419F02BD10001C67C /* APCInEligibleViewController.m */; };
-		F59C29651A1148390038790F /* APCSimpleTaskSummaryViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F59C295B1A1148390038790F /* APCSimpleTaskSummaryViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F59C29661A1148390038790F /* APCSimpleTaskSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F59C295C1A1148390038790F /* APCSimpleTaskSummaryViewController.m */; };
-		F59C29671A1148390038790F /* APCSimpleTaskSummaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F59C295D1A1148390038790F /* APCSimpleTaskSummaryViewController.xib */; };
 		F59C29681A1148390038790F /* APCInstructionStep.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F59C295F1A1148390038790F /* APCInstructionStep.storyboard */; };
 		F59C29691A1148390038790F /* APCInstructionStepViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F59C29601A1148390038790F /* APCInstructionStepViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F59C296A1A1148390038790F /* APCInstructionStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F59C29611A1148390038790F /* APCInstructionStepViewController.m */; };
@@ -454,6 +454,9 @@
 		F5179F6719D0B50C001DCCB7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F52549D719EDD87700C7B7CB /* UIImage+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+APCHelper.h"; sourceTree = "<group>"; };
 		F52549D819EDD87700C7B7CB /* UIImage+APCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+APCHelper.m"; sourceTree = "<group>"; };
+		F53AD4731A1292B2004446BC /* APCSimpleTaskSummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSimpleTaskSummaryViewController.h; sourceTree = "<group>"; };
+		F53AD4741A1292B2004446BC /* APCSimpleTaskSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSimpleTaskSummaryViewController.m; sourceTree = "<group>"; };
+		F53AD4751A1292B2004446BC /* APCSimpleTaskSummaryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSimpleTaskSummaryViewController.xib; sourceTree = "<group>"; };
 		F541541219D5F22B00B819C9 /* APCDataSubstrate+HealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+HealthKit.h"; sourceTree = "<group>"; };
 		F541541319D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCDataSubstrate+HealthKit.m"; sourceTree = "<group>"; };
 		F541541619D6029C00B819C9 /* APCStoredUserData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStoredUserData.h; sourceTree = "<group>"; };
@@ -523,9 +526,6 @@
 		F588BAA019D220AC00692473 /* APCAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAppDelegate.m; sourceTree = "<group>"; };
 		F58EA05319F02BD10001C67C /* APCInEligibleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCInEligibleViewController.h; sourceTree = "<group>"; };
 		F58EA05419F02BD10001C67C /* APCInEligibleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCInEligibleViewController.m; sourceTree = "<group>"; };
-		F59C295B1A1148390038790F /* APCSimpleTaskSummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSimpleTaskSummaryViewController.h; sourceTree = "<group>"; };
-		F59C295C1A1148390038790F /* APCSimpleTaskSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSimpleTaskSummaryViewController.m; sourceTree = "<group>"; };
-		F59C295D1A1148390038790F /* APCSimpleTaskSummaryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSimpleTaskSummaryViewController.xib; sourceTree = "<group>"; };
 		F59C295F1A1148390038790F /* APCInstructionStep.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCInstructionStep.storyboard; sourceTree = "<group>"; };
 		F59C29601A1148390038790F /* APCInstructionStepViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCInstructionStepViewController.h; sourceTree = "<group>"; };
 		F59C29611A1148390038790F /* APCInstructionStepViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCInstructionStepViewController.m; sourceTree = "<group>"; };
@@ -835,6 +835,16 @@
 			path = Scheduler;
 			sourceTree = "<group>";
 		};
+		F53AD4721A1292B2004446BC /* SimpleSummaryViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F53AD4731A1292B2004446BC /* APCSimpleTaskSummaryViewController.h */,
+				F53AD4741A1292B2004446BC /* APCSimpleTaskSummaryViewController.m */,
+				F53AD4751A1292B2004446BC /* APCSimpleTaskSummaryViewController.xib */,
+			);
+			path = SimpleSummaryViewController;
+			sourceTree = "<group>";
+		};
 		F57329A219DF054800A85564 /* TempUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -1055,10 +1065,8 @@
 		F59C295A1A1148390038790F /* CommonTaskVCs */ = {
 			isa = PBXGroup;
 			children = (
-				F59C295B1A1148390038790F /* APCSimpleTaskSummaryViewController.h */,
-				F59C295C1A1148390038790F /* APCSimpleTaskSummaryViewController.m */,
-				F59C295D1A1148390038790F /* APCSimpleTaskSummaryViewController.xib */,
 				F59C295E1A1148390038790F /* InstructionStepViewControllers */,
+				F53AD4721A1292B2004446BC /* SimpleSummaryViewController */,
 			);
 			path = CommonTaskVCs;
 			sourceTree = "<group>";
@@ -1234,6 +1242,7 @@
 				5B0159931A0C1CF100F28439 /* APCParameters+Settings.h in Headers */,
 				5BE5B1391A00061900827AFE /* APCStudyDetailsViewController.h in Headers */,
 				F59C29701A1148540038790F /* APCBaseWithProgressTaskViewController.h in Headers */,
+				F53AD4761A1292B2004446BC /* APCSimpleTaskSummaryViewController.h in Headers */,
 				F588BA9C19D21F1300692473 /* YMLTimeLineChartView.h in Headers */,
 				F588BA9519D21F1300692473 /* APCStepViewController.h in Headers */,
 				5B424C761A098D54009EDF11 /* APCUserInfoViewController.h in Headers */,
@@ -1281,7 +1290,6 @@
 				5B5F178019ECF83A00A0E1D7 /* APCTextFieldTableViewCell.h in Headers */,
 				F541541D19D60F3400B819C9 /* HKHealthStore+APCExtensions.h in Headers */,
 				5B9041B819F848E5005CFF77 /* APCPasscodeViewController.h in Headers */,
-				F59C29651A1148390038790F /* APCSimpleTaskSummaryViewController.h in Headers */,
 				F5179CA519D0917D001DCCB7 /* APCResult+AddOn.h in Headers */,
 				F5179CB719D0917D001DCCB7 /* APCSurveyResult+AddOn.h in Headers */,
 				5BB647A019F6F17800AA30AA /* APCTermsAndConditionsViewController.h in Headers */,
@@ -1386,8 +1394,8 @@
 				F59C29681A1148390038790F /* APCInstructionStep.storyboard in Resources */,
 				F588BA9219D21F1300692473 /* APCUserInfoTableHeaderView.xib in Resources */,
 				F59C296D1A1148390038790F /* APCIntroductionViewController.xib in Resources */,
-				F59C29671A1148390038790F /* APCSimpleTaskSummaryViewController.xib in Resources */,
 				F588BA8219D21F1300692473 /* APCSpinnerViewController.xib in Resources */,
+				F53AD4781A1292B2004446BC /* APCSimpleTaskSummaryViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1439,7 +1447,7 @@
 				F5FE18F919EDEE9E00D455E6 /* APCSegmentedButton.m in Sources */,
 				F57329AC19DF065A00A85564 /* APCEmailVerifyViewController.m in Sources */,
 				F5179CAC19D0917D001DCCB7 /* APCSchedule+AddOn.m in Sources */,
-				F59C29661A1148390038790F /* APCSimpleTaskSummaryViewController.m in Sources */,
+				F53AD4771A1292B2004446BC /* APCSimpleTaskSummaryViewController.m in Sources */,
 				F588BA7019D21F1300692473 /* APCIntroVideoViewController.m in Sources */,
 				5B09156E1A11450A003D12E7 /* APCSettingsViewController.m in Sources */,
 				F588BA9119D21F1300692473 /* APCStepProgressBar.m in Sources */,
