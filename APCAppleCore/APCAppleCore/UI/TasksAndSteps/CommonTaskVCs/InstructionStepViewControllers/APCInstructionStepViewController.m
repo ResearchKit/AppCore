@@ -28,7 +28,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.introVC setupWithInstructionalImages:self.imagesArray andParagraphs:self.messagesArray];
+    [self.introVC setupWithInstructionalImages:self.imagesArray headlines:self.headingsArray andParagraphs:self.messagesArray];
 
 }
 

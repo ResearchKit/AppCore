@@ -31,10 +31,10 @@
                                 </connections>
                             </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wTC-zL-7qS">
-                                <rect key="frame" x="16" y="74" width="288" height="420"/>
+                                <rect key="frame" x="5" y="64" width="310" height="440"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="288" id="17d-hY-kze"/>
-                                    <constraint firstAttribute="height" constant="420" id="gdj-rG-4na"/>
+                                    <constraint firstAttribute="width" constant="310" id="17d-hY-kze"/>
+                                    <constraint firstAttribute="height" constant="440" id="gdj-rG-4na"/>
                                 </constraints>
                                 <connections>
                                     <segue destination="W7E-mW-1q2" kind="embed" identifier="embeddedScroller" id="NPP-ED-u1Y"/>
@@ -68,17 +68,17 @@
                         <viewControllerLayoutGuide type="bottom" id="Enb-Kk-KAi"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="rYr-tU-JO9">
-                        <rect key="frame" x="0.0" y="0.0" width="288" height="420"/>
+                        <rect key="frame" x="0.0" y="0.0" width="310" height="440"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gwx-lg-rch" userLabel="Text Scroll View">
-                                <rect key="frame" x="0.0" y="0.0" width="288" height="100"/>
+                                <rect key="frame" x="0.0" y="0.0" width="310" height="107.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Gwx-lg-rch" secondAttribute="height" multiplier="72:25" id="u1i-ww-Rd0"/>
                                 </constraints>
                             </scrollView>
                             <scrollView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nNS-6q-lI5" userLabel="Image Scroll View">
-                                <rect key="frame" x="0.0" y="123" width="288" height="244"/>
+                                <rect key="frame" x="0.0" y="132" width="310" height="263"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="nNS-6q-lI5" secondAttribute="height" multiplier="72:61" id="4j8-5l-18p"/>
                                 </constraints>
@@ -87,7 +87,7 @@
                                 </connections>
                             </scrollView>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="10" translatesAutoresizingMaskIntoConstraints="NO" id="Mr0-uz-c6U">
-                                <rect key="frame" x="3" y="370" width="283" height="37"/>
+                                <rect key="frame" x="3" y="398" width="305" height="37"/>
                                 <color key="pageIndicatorTintColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <color key="currentPageIndicatorTintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -95,7 +95,7 @@
                                 </connections>
                             </pageControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JNo-Pr-A1O" userLabel="AccessoryView">
-                                <rect key="frame" x="0.0" y="98" width="288" height="25"/>
+                                <rect key="frame" x="0.0" y="105" width="310" height="27"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="JNo-Pr-A1O" secondAttribute="height" multiplier="288:25" id="uBK-2g-BZS"/>
