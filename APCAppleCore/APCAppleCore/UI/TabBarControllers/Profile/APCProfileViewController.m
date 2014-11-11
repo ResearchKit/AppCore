@@ -308,11 +308,15 @@ static CGFloat kSectionHeaderHeight = 40.f;
         sender.title = NSLocalizedString(@"Edit", @"Edit");
         sender.style = UIBarButtonItemStylePlain;
         
+        self.navigationItem.leftBarButtonItem.enabled = YES;
+        
         [self loadProfileValuesInModel];
     } else{
         
         sender.title = NSLocalizedString(@"Done", @"Done");
         sender.style = UIBarButtonItemStyleDone;
+        
+        self.navigationItem.leftBarButtonItem.enabled = NO;
     }
     
     self.editing = !self.editing;
