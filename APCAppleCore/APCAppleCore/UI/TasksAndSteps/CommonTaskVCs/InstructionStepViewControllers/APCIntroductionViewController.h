@@ -12,7 +12,6 @@
 @property (weak, nonatomic) IBOutlet UIView *accessoryView;
 
 - (void)setupWithInstructionalImages:(NSArray *)imageNames andParagraphs:(NSArray *)paragraphs;
-
-- (UIImage *)imageOfName:(NSString *)name;
+- (void)setupWithInstructionalImages:(NSArray *)imageNames headlines: (NSArray*) headlines andParagraphs:(NSArray *)paragraphs;
 
 @end

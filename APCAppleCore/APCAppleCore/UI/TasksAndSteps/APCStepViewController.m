@@ -7,6 +7,7 @@
 //
 
 #import "APCStepViewController.h"
+#import "APCAppleCore.h"
 
 @interface APCStepViewController ()
 

@@ -18,19 +18,15 @@
 
 @property  (nonatomic, strong)  NSArray  *instructionalImages;
 @property  (nonatomic, strong)  NSArray  *nonLocalisedParagraphs;
+@property  (nonatomic, strong)  NSArray  *nonLocalisedHeadlines;
 @property  (nonatomic, strong)  NSArray  *localisedParagraphs;
+@property  (nonatomic, strong)  NSArray  *localisedHeadlines;
 
 @property  (nonatomic, assign, getter = wasScrolledViaPageControl)  BOOL  scrolledViaPageControl;
-- (IBAction)viewImportantDetailsHandler:(id)sender;
 
 @end
 
 @implementation APCIntroductionViewController
-
-- (UIImage *)imageOfName:(NSString *)name
-{
-    return  nil;
-}
 
 #pragma  mark  -  Initialise Scroll View With Images
 
@@ -41,7 +37,7 @@
     
     for (NSString  *imageName  in  self.instructionalImages) {
         
-        UIImage    *anImage = [self imageOfName:imageName];
+        UIImage    *anImage = [UIImage imageNamed:imageName];
         
         CGRect  frame = CGRectMake(imageIndex * CGRectGetWidth(self.imageScroller.frame), 0.0, CGRectGetWidth(self.imageScroller.frame), CGRectGetHeight(self.imageScroller.frame));
         UIImageView  *imager = [[UIImageView alloc] initWithFrame:frame];
@@ -56,6 +52,7 @@
     self.imageScroller.contentSize = contentSize;
     
     self.pager.numberOfPages = [self.instructionalImages count];
+    self.pager.pageIndicatorTintColor = [UIColor colorWithWhite:0.850 alpha:1.000];
     self.pager.currentPageIndicatorTintColor = [UIColor appPrimaryColor];
 }
 
@@ -89,30 +86,53 @@
     NSMutableParagraphStyle *paragrapStyle = NSMutableParagraphStyle.new;
     paragrapStyle.alignment                = NSTextAlignmentCenter;
 
+    NSDictionary  *headlineAttributes = @{
+                                           NSFontAttributeName : [UIFont appRegularFontWithSize: 18.0],
+                                           NSForegroundColorAttributeName : [UIColor appSecondaryColor1],
+                                           NSParagraphStyleAttributeName:paragrapStyle
+                                           };
     
-    NSDictionary  *attributes = @{
-                                  NSFontAttributeName : [UIFont systemFontOfSize: 16.0],
-                                  NSForegroundColorAttributeName : [UIColor grayColor],
+    NSDictionary  *paragraphAttributes = @{
+                                  NSFontAttributeName : [UIFont appLightFontWithSize: 16.0],
+                                  NSForegroundColorAttributeName : [UIColor appSecondaryColor2],
                                   NSParagraphStyleAttributeName:paragrapStyle
                                   };
     
-    for (NSString *paragraph  in  self.nonLocalisedParagraphs) {
+    [self.nonLocalisedParagraphs enumerateObjectsUsingBlock:^(NSString * paragraph, NSUInteger idx, BOOL *stop) {
+        NSMutableAttributedString * attributedHeadline;
+        if (self.nonLocalisedHeadlines.count && self.nonLocalisedHeadlines.count >= idx) {
+            NSString * headline = self.nonLocalisedHeadlines[idx];
+            NSString * translatedHeadline = NSLocalizedString(headline, nil);
+            attributedHeadline = [[NSMutableAttributedString alloc] initWithString:[translatedHeadline stringByAppendingString:@"\n"] attributes:headlineAttributes];
+        }
         NSString  *translated = NSLocalizedString(paragraph, nil);
-        NSAttributedString  *styled = [[NSAttributedString alloc] initWithString:translated attributes:attributes];
+        NSAttributedString  *styled = [[NSAttributedString alloc] initWithString:translated attributes:paragraphAttributes];
+        if (attributedHeadline) {
+            [attributedHeadline appendAttributedString:styled];
+            styled = attributedHeadline;
+        }
+        
         [localised addObject:styled];
-    }
+    }];
     self.localisedParagraphs = localised;
 }
 
-- (void)setupWithInstructionalImages:(NSArray *)imageNames andParagraphs:(NSArray *)paragraphs
+- (void)setupWithInstructionalImages:(NSArray *)imageNames headlines:(NSArray *)headlines andParagraphs:(NSArray *)paragraphs
 {
     self.instructionalImages = imageNames;
     
     [self initialiseImageScrollView];
     
     self.nonLocalisedParagraphs = paragraphs;
+    self.nonLocalisedHeadlines = headlines;
     [self initialiseInstructionalParagraphs];
     [self initialiseParagraphsScrollView];
+}
+
+
+- (void)setupWithInstructionalImages:(NSArray *)imageNames andParagraphs:(NSArray *)paragraphs
+{
+    [self setupWithInstructionalImages:imageNames headlines:nil andParagraphs:paragraphs];
 }
 
 #pragma  mark  -  Page Control Action Methods
