@@ -3,6 +3,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Instruction Step View Controller-->
@@ -20,7 +21,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Xt-cT-6jD">
                                 <rect key="frame" x="0.0" y="528" width="320" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="5Xt-cT-6jD" secondAttribute="height" multiplier="8:1" id="vt7-5A-iPz"/>
+                                    <constraint firstAttribute="height" constant="40" id="hAR-8F-r49"/>
                                 </constraints>
                                 <state key="normal" title="Get Started">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -31,10 +32,9 @@
                                 </connections>
                             </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wTC-zL-7qS">
-                                <rect key="frame" x="5" y="64" width="310" height="440"/>
+                                <rect key="frame" x="5" y="53" width="310" height="434"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="310" id="17d-hY-kze"/>
-                                    <constraint firstAttribute="height" constant="440" id="gdj-rG-4na"/>
+                                    <constraint firstAttribute="width" secondItem="wTC-zL-7qS" secondAttribute="height" multiplier="5:7" id="1t5-LG-f7C"/>
                                 </constraints>
                                 <connections>
                                     <segue destination="W7E-mW-1q2" kind="embed" identifier="embeddedScroller" id="NPP-ED-u1Y"/>
@@ -44,10 +44,14 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="5Xt-cT-6jD" firstAttribute="leading" secondItem="cmE-ys-dpE" secondAttribute="leading" id="1Cb-Ft-UYq"/>
+                            <constraint firstItem="5Xt-cT-6jD" firstAttribute="leading" secondItem="cmE-ys-dpE" secondAttribute="leading" id="5Ce-Gh-Iq9"/>
                             <constraint firstAttribute="bottom" secondItem="5Xt-cT-6jD" secondAttribute="bottom" id="8Fr-g8-ghe"/>
-                            <constraint firstAttribute="centerY" secondItem="wTC-zL-7qS" secondAttribute="centerY" id="IJE-EK-bSV"/>
+                            <constraint firstAttribute="centerX" secondItem="wTC-zL-7qS" secondAttribute="centerX" id="AsL-ad-cto"/>
+                            <constraint firstAttribute="trailing" secondItem="5Xt-cT-6jD" secondAttribute="trailing" id="Lu9-1f-HAv"/>
                             <constraint firstAttribute="trailing" secondItem="5Xt-cT-6jD" secondAttribute="trailing" id="O5k-d7-NyR"/>
-                            <constraint firstAttribute="centerX" secondItem="wTC-zL-7qS" secondAttribute="centerX" id="Se9-Yj-SC7"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="wTC-zL-7qS" secondAttribute="trailing" constant="-11" id="agr-PI-wEq"/>
+                            <constraint firstAttribute="centerY" secondItem="wTC-zL-7qS" secondAttribute="centerY" constant="14" id="bzO-8T-ETA"/>
+                            <constraint firstItem="wTC-zL-7qS" firstAttribute="leading" secondItem="cmE-ys-dpE" secondAttribute="leadingMargin" constant="-11" id="qh7-bq-lbf"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
@@ -57,7 +61,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a31-vH-wyc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="498" y="431"/>
+            <point key="canvasLocation" x="498" y="414"/>
         </scene>
         <!--Introduction View Controller-->
         <scene sceneID="qK0-aB-dg9">
@@ -68,11 +72,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Enb-Kk-KAi"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="rYr-tU-JO9">
-                        <rect key="frame" x="0.0" y="0.0" width="310" height="440"/>
+                        <rect key="frame" x="0.0" y="0.0" width="310" height="434"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gwx-lg-rch" userLabel="Text Scroll View">
-                                <rect key="frame" x="0.0" y="0.0" width="310" height="107.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="310" height="108"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Gwx-lg-rch" secondAttribute="height" multiplier="72:25" id="u1i-ww-Rd0"/>
                                 </constraints>
@@ -86,14 +90,6 @@
                                     <outlet property="delegate" destination="W7E-mW-1q2" id="qjU-q0-Y27"/>
                                 </connections>
                             </scrollView>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="10" translatesAutoresizingMaskIntoConstraints="NO" id="Mr0-uz-c6U">
-                                <rect key="frame" x="3" y="398" width="305" height="37"/>
-                                <color key="pageIndicatorTintColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                <color key="currentPageIndicatorTintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <action selector="pageControlChangedValue:" destination="W7E-mW-1q2" eventType="valueChanged" id="suH-vw-y9y"/>
-                                </connections>
-                            </pageControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JNo-Pr-A1O" userLabel="AccessoryView">
                                 <rect key="frame" x="0.0" y="105" width="310" height="27"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -101,17 +97,25 @@
                                     <constraint firstAttribute="width" secondItem="JNo-Pr-A1O" secondAttribute="height" multiplier="288:25" id="uBK-2g-BZS"/>
                                 </constraints>
                             </view>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="10" translatesAutoresizingMaskIntoConstraints="NO" id="Mr0-uz-c6U">
+                                <rect key="frame" x="5" y="389" width="305" height="37"/>
+                                <color key="pageIndicatorTintColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <color key="currentPageIndicatorTintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="pageControlChangedValue:" destination="W7E-mW-1q2" eventType="valueChanged" id="suH-vw-y9y"/>
+                                </connections>
+                            </pageControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="nNS-6q-lI5" firstAttribute="leading" secondItem="rYr-tU-JO9" secondAttribute="leading" id="0C9-3Z-NpH"/>
                             <constraint firstItem="JNo-Pr-A1O" firstAttribute="leading" secondItem="rYr-tU-JO9" secondAttribute="leading" id="2oi-M0-1qr"/>
                             <constraint firstAttribute="trailing" secondItem="nNS-6q-lI5" secondAttribute="trailing" id="4He-QI-KhT"/>
+                            <constraint firstItem="Mr0-uz-c6U" firstAttribute="top" secondItem="nNS-6q-lI5" secondAttribute="bottom" constant="-6" id="5Ow-6w-pCV"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Mr0-uz-c6U" secondAttribute="trailing" constant="-16" id="BQa-5X-Xpc"/>
+                            <constraint firstItem="Mr0-uz-c6U" firstAttribute="leading" secondItem="rYr-tU-JO9" secondAttribute="leadingMargin" constant="-11" id="DjZ-kc-1AJ"/>
                             <constraint firstItem="nNS-6q-lI5" firstAttribute="top" secondItem="JNo-Pr-A1O" secondAttribute="bottom" id="K9b-Ft-h3N"/>
                             <constraint firstItem="Gwx-lg-rch" firstAttribute="top" secondItem="rYr-tU-JO9" secondAttribute="top" id="Opb-rS-mGu"/>
-                            <constraint firstAttribute="trailing" secondItem="Mr0-uz-c6U" secondAttribute="trailing" constant="2" id="PY2-1S-ShG"/>
-                            <constraint firstItem="Mr0-uz-c6U" firstAttribute="leading" secondItem="rYr-tU-JO9" secondAttribute="leading" constant="3" id="Y4B-TM-LMq"/>
-                            <constraint firstItem="Mr0-uz-c6U" firstAttribute="top" secondItem="nNS-6q-lI5" secondAttribute="bottom" constant="3" id="daA-fR-TFp"/>
                             <constraint firstAttribute="trailing" secondItem="JNo-Pr-A1O" secondAttribute="trailing" id="dqS-Vx-ZiB"/>
                             <constraint firstItem="JNo-Pr-A1O" firstAttribute="top" secondItem="Gwx-lg-rch" secondAttribute="bottom" constant="-2" id="q6R-SW-YCg"/>
                             <constraint firstItem="Gwx-lg-rch" firstAttribute="leading" secondItem="rYr-tU-JO9" secondAttribute="leading" id="qS7-Ls-tPq"/>
