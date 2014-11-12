@@ -23,6 +23,8 @@ static CGFloat const kFadeAnimationDuration = 0.8;
 static CGFloat const kGrowAnimationDuration = 1.5;
 static CGFloat const kPopAnimationDuration  = 0.3;
 
+static CGFloat const kSnappingClosenessFactor = 0.35f;
+
 @interface APCLineGraphView ()
 
 @property (nonatomic, strong) NSMutableArray *dataPoints;//actual data
@@ -564,6 +566,21 @@ static CGFloat const kPopAnimationDuration  = 0.3;
     return canvasYPosition;
 }
 
+- (CGFloat)snappedXPosition:(CGFloat)xPosition
+{
+    CGFloat widthBetweenPoints = CGRectGetWidth(self.plotsView.frame)/self.xAxisPoints.count;
+    
+    NSInteger positionIndex;
+    for (positionIndex = 0; positionIndex<self.xAxisPoints.count; positionIndex++) {
+        CGFloat num = ((NSNumber *)self.xAxisPoints[positionIndex]).floatValue;
+        if (fabs(num - xPosition) < (widthBetweenPoints * kSnappingClosenessFactor)) {
+            xPosition = num;
+        }
+    }
+    
+    return xPosition;
+}
+
 #pragma mark - Animations
 
 - (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType
@@ -655,12 +672,13 @@ static CGFloat const kPopAnimationDuration  = 0.3;
         CGFloat normalizedX = MAX(MIN(location.x, maxX), minX);
         location = CGPointMake(normalizedX, location.y);
         
-        self.scrubberLine.center = CGPointMake(location.x + kAPCGraphLeftPadding, self.scrubberLine.center.y);
+        CGFloat snappedXPosition = [self snappedXPosition:location.x];
+        self.scrubberLine.center = CGPointMake(snappedXPosition + kAPCGraphLeftPadding, self.scrubberLine.center.y);
         
         [self.scrubberLabel setFrame:CGRectMake(CGRectGetMaxX(self.scrubberLine.frame), CGRectGetMinY(self.scrubberLine.frame), CGRectGetWidth(self.scrubberLabel.frame), CGRectGetHeight(self.scrubberLabel.frame))];
-        self.scrubberLabel.text = [NSString stringWithFormat:@"%.2f", [self valueForCanvasXPosition:location.x]];
+        self.scrubberLabel.text = [NSString stringWithFormat:@"%.2f", [self valueForCanvasXPosition:(snappedXPosition)]];
         
-        [self.scrubberThumbView setCenter:CGPointMake(location.x + kAPCGraphLeftPadding, [self canvasYPointForXPosition:location.x] + kAPCGraphTopPadding)];
+        [self.scrubberThumbView setCenter:CGPointMake(snappedXPosition + kAPCGraphLeftPadding, [self canvasYPointForXPosition:snappedXPosition] + kAPCGraphTopPadding)];
         
         if ([self.delegate respondsToSelector:@selector(lineGraph:touchesMovedToXPosition:)]) {
             [self.delegate lineGraph:self touchesMovedToXPosition:location.x];
@@ -710,4 +728,5 @@ static CGFloat const kPopAnimationDuration  = 0.3;
     self.titleLabel.textColor = tintColor;
     self.leftTintView.backgroundColor = tintColor;
 }
+
 @end
