@@ -50,7 +50,7 @@ static NSString *const kCheckImageName = @"Completion-Check";
     self.circularProgress.tintColor = [UIColor appTertiaryColor1];
     [self.circularProgressBar addSubview:self.circularProgress];
     
-    self.label3.text = [NSString stringWithFormat:@"%lu/%lu", completedScheduledTasks, allScheduledTasks];
+    self.label3.text = [NSString stringWithFormat:@"%lu/%lu", (unsigned long)completedScheduledTasks, (unsigned long)allScheduledTasks];
     
     self.checkImage.image = [UIImage imageNamed:kCheckImageName];
     
