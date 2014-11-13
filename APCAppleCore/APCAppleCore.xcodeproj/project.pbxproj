@@ -258,6 +258,8 @@
 		F588BA9D19D21F1300692473 /* YMLTimeLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BA6019D21F1300692473 /* YMLTimeLineChartView.m */; };
 		F588BAA119D220AC00692473 /* APCAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = F588BA9F19D220AC00692473 /* APCAppDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588BAA219D220AC00692473 /* APCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F588BAA019D220AC00692473 /* APCAppDelegate.m */; };
+		F58CE80E1A156BFB0082B629 /* APCUser+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F58CE80C1A156BFB0082B629 /* APCUser+Bridge.m */; };
+		F58CE80F1A156BFB0082B629 /* APCUser+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = F58CE80D1A156BFB0082B629 /* APCUser+Bridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F58EA05519F02BD10001C67C /* APCInEligibleViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F58EA05319F02BD10001C67C /* APCInEligibleViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F58EA05619F02BD10001C67C /* APCInEligibleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F58EA05419F02BD10001C67C /* APCInEligibleViewController.m */; };
 		F59C29681A1148390038790F /* APCInstructionStep.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F59C295F1A1148390038790F /* APCInstructionStep.storyboard */; };
@@ -285,8 +287,6 @@
 		F5C98F9319EF224B001D18C9 /* APCEligibleViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C98F9119EF224B001D18C9 /* APCEligibleViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5C98F9419EF224B001D18C9 /* APCEligibleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C98F9219EF224B001D18C9 /* APCEligibleViewController.m */; };
 		F5D1A90F19D4C6E200A03465 /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */; };
-		F5E61AB01A0AB1A800BEFF46 /* APCUser+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = F5E61AAE1A0AB1A800BEFF46 /* APCUser+Bridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F5E61AB11A0AB1A800BEFF46 /* APCUser+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E61AAF1A0AB1A800BEFF46 /* APCUser+Bridge.m */; };
 		F5E61AB41A0AB1D600BEFF46 /* APCTask+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = F5E61AB21A0AB1D600BEFF46 /* APCTask+Bridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5E61AB51A0AB1D600BEFF46 /* APCTask+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E61AB31A0AB1D600BEFF46 /* APCTask+Bridge.m */; };
 		F5FDCF8D19EC68C9002486DE /* UIColor+APCAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FDCF8919EC68C9002486DE /* UIColor+APCAppearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -524,6 +524,8 @@
 		F588BA6019D21F1300692473 /* YMLTimeLineChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLTimeLineChartView.m; sourceTree = "<group>"; };
 		F588BA9F19D220AC00692473 /* APCAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAppDelegate.h; sourceTree = "<group>"; };
 		F588BAA019D220AC00692473 /* APCAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAppDelegate.m; sourceTree = "<group>"; };
+		F58CE80C1A156BFB0082B629 /* APCUser+Bridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCUser+Bridge.m"; sourceTree = "<group>"; };
+		F58CE80D1A156BFB0082B629 /* APCUser+Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCUser+Bridge.h"; sourceTree = "<group>"; };
 		F58EA05319F02BD10001C67C /* APCInEligibleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCInEligibleViewController.h; sourceTree = "<group>"; };
 		F58EA05419F02BD10001C67C /* APCInEligibleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCInEligibleViewController.m; sourceTree = "<group>"; };
 		F59C295F1A1148390038790F /* APCInstructionStep.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCInstructionStep.storyboard; sourceTree = "<group>"; };
@@ -551,8 +553,6 @@
 		F5C98F9119EF224B001D18C9 /* APCEligibleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCEligibleViewController.h; sourceTree = "<group>"; };
 		F5C98F9219EF224B001D18C9 /* APCEligibleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCEligibleViewController.m; sourceTree = "<group>"; };
 		F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BridgeSDK.framework; sourceTree = SOURCE_ROOT; };
-		F5E61AAE1A0AB1A800BEFF46 /* APCUser+Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCUser+Bridge.h"; sourceTree = "<group>"; };
-		F5E61AAF1A0AB1A800BEFF46 /* APCUser+Bridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCUser+Bridge.m"; sourceTree = "<group>"; };
 		F5E61AB21A0AB1D600BEFF46 /* APCTask+Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCTask+Bridge.h"; sourceTree = "<group>"; };
 		F5E61AB31A0AB1D600BEFF46 /* APCTask+Bridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCTask+Bridge.m"; sourceTree = "<group>"; };
 		F5FDCF8919EC68C9002486DE /* UIColor+APCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+APCAppearance.h"; sourceTree = "<group>"; };
@@ -1153,8 +1153,8 @@
 				F5A63F1319D5EAD100284006 /* APCUser.m */,
 				5BF5C90619D9E208007928D4 /* APCUser+UserData.h */,
 				5BF5C90719D9E208007928D4 /* APCUser+UserData.m */,
-				F57329B319DF093000A85564 /* APCUser+Bridge.h */,
-				F57329B419DF093000A85564 /* APCUser+Bridge.m */,
+				F58CE80D1A156BFB0082B629 /* APCUser+Bridge.h */,
+				F58CE80C1A156BFB0082B629 /* APCUser+Bridge.m */,
 			);
 			name = "Memory Only Objects";
 			sourceTree = "<group>";
@@ -1229,6 +1229,7 @@
 				5B29CE4B19D4902B00E2FD62 /* APCStudyOverviewViewController.h in Headers */,
 				F588BA7819D21F1300692473 /* APCSignUpProgressing.h in Headers */,
 				F588B9FA19D21EFE00692473 /* APCAssertionHandler.h in Headers */,
+				F58CE80F1A156BFB0082B629 /* APCUser+Bridge.h in Headers */,
 				F588BA6A19D21F1300692473 /* APCTableViewItem.h in Headers */,
 				5B55FE3D1A05A59A009BEE5E /* APCSwitchTableViewCell.h in Headers */,
 				F588BA9319D21F1300692473 /* APCSetupTaskViewController.h in Headers */,
@@ -1253,7 +1254,6 @@
 				5B424C761A098D54009EDF11 /* APCUserInfoViewController.h in Headers */,
 				7BA4BBFA19D4893700BC4023 /* APCPassiveLocationTracking.h in Headers */,
 				F5B4212D19D23D6800F9CD69 /* APCParametersCoreDataCell.h in Headers */,
-				F5E61AB01A0AB1A800BEFF46 /* APCUser+Bridge.h in Headers */,
 				F588BA0419D21EFE00692473 /* NSError+APCAdditions.h in Headers */,
 				F5008C1919D32CC80011102F /* APCActivitiesViewController.h in Headers */,
 				F5179CB419D0917D001DCCB7 /* APCScheduledTask.h in Headers */,
@@ -1446,6 +1446,7 @@
 				F59C296C1A1148390038790F /* APCIntroductionViewController.m in Sources */,
 				F5179C7F19D0917D001DCCB7 /* APCDataSubstrate+ResearchKit.m in Sources */,
 				5B55FE141A0355E5009BEE5E /* APCShareTableViewCell.m in Sources */,
+				F58CE80E1A156BFB0082B629 /* APCUser+Bridge.m in Sources */,
 				F5E61AB51A0AB1D600BEFF46 /* APCTask+Bridge.m in Sources */,
 				F5008C1A19D32CC80011102F /* APCActivitiesViewController.m in Sources */,
 				F5179C8519D0917D001DCCB7 /* APCConsentResult+AddOn.m in Sources */,
@@ -1461,7 +1462,6 @@
 				F59C296A1A1148390038790F /* APCInstructionStepViewController.m in Sources */,
 				5B0915701A11450A003D12E7 /* APCWithdrawCompleteViewController.m in Sources */,
 				5B29CE4C19D4902B00E2FD62 /* APCStudyOverviewViewController.m in Sources */,
-				F588BA1B19D21EFE00692473 /* UIView+Helper.m in Sources */,
 				5B9041B919F848E5005CFF77 /* APCPasscodeViewController.m in Sources */,
 				F5179CAF19D0917D001DCCB7 /* APCSchedule.m in Sources */,
 				5B29CE3C19D3769E00E2FD62 /* APCPermissionsCell.m in Sources */,
