@@ -25,6 +25,12 @@ static NSString *const kSecondaryColor4Key = @"SecondaryColor4Key";
 static NSString *const kTertiaryColor1Key = @"TertiaryColor1Key";
 static NSString *const kTertiaryColor2Key = @"TertiaryColor2Key";
 
+static NSString *const kTertiaryGreenColorKey  = @"TertiaryGreenColorKey";
+static NSString *const kTertiaryBlueColorKey   = @"TertiaryBlueColorKey";
+static NSString *const kTertiaryRedColorKey    = @"TertiaryRedColorKey";
+static NSString *const kTertiaryYellowColorKey = @"TertiaryYellowColorKey";
+static NSString *const kTertiaryPurpleColorKey = @"TertiaryPurpleColorKey";
+static NSString *const kTertiaryGrayColorKey   = @"TertiaryGrayColorKey";
 
 @interface APCAppearanceInfo : NSObject
 

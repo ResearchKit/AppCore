@@ -27,6 +27,7 @@ static NSString *const kMedicalConditionsPropertyName = @"medicalConditions";
 static NSString *const kMedicationsPropertyName = @"medications";
 static NSString *const kWakeUpTimePropertyName = @"wakeUpTime";
 static NSString *const kSleepTimePropertyName = @"sleepTime";
+static NSString *const kEthnicityPropertyName = @"ethnicity";
 
 static NSString *const kSignedUpKey = @"SignedUp";
 static NSString *const kSignedInKey = @"SignedIn";
@@ -239,6 +240,12 @@ static NSString *const kSignedInKey = @"SignedIn";
     [self updateStoredProperty:kSleepTimePropertyName withValue:sleepTime];
 }
 
+- (void)setEthnicity:(NSString *)ethnicity
+{
+    _ethnicity = ethnicity;
+    [self updateStoredProperty:kEthnicityPropertyName withValue:ethnicity];
+}
+
 /*********************************************************************************/
 #pragma mark - Simulated Properties using HealthKit
 /*********************************************************************************/
@@ -346,6 +353,36 @@ static NSString *const kSignedInKey = @"SignedIn";
     HKQuantitySample *weightSample = [HKQuantitySample quantitySampleWithType:weightType quantity:weight startDate:now endDate:now];
     
     [self.healthStore saveObject:weightSample withCompletion:^(BOOL success, NSError *error) {
+        [error handle];
+    }];
+}
+
+// Systolic Blood Pressure
+- (HKQuantity *)systolicBloodPressure
+{
+    HKQuantityType *bloodPressureType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic];
+    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+    __block HKQuantity *systolicBloodPressure;
+    [self.healthStore mostRecentQuantitySampleOfType:bloodPressureType predicate:nil completion:^(HKQuantity *mostRecentQuantity, NSError *error) {
+        [error handle];
+        systolicBloodPressure = mostRecentQuantity;
+        dispatch_semaphore_signal(sema);
+    }];
+    
+    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+    
+    sema = NULL;
+    return systolicBloodPressure;
+}
+
+- (void)setSystolicBloodPressure:(HKQuantity *)systolicBloodPressure
+{
+    HKQuantityType *bloodPressureType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic];
+    NSDate *now = [NSDate date];
+    
+    HKQuantitySample *systolicBloodPressureSample = [HKQuantitySample quantitySampleWithType:bloodPressureType quantity:systolicBloodPressure startDate:now endDate:now];
+    
+    [self.healthStore saveObject:systolicBloodPressureSample withCompletion:^(BOOL success, NSError *error) {
         [error handle];
     }];
 }

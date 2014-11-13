@@ -68,6 +68,8 @@
     [self.titleLabel setFont:[UIFont appLightFontWithSize:19.0f]];
     
     [self.logoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
+    
+    [self.touchIdButton setBackgroundColor:[UIColor appPrimaryColor]];
 }
 
 #pragma mark - APCPasscodeViewDelegate

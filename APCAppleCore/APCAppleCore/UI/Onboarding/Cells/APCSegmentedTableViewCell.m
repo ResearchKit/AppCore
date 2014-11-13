@@ -35,26 +35,17 @@
 
 - (void)setupAppearance
 {
-    [self.maleButton setTitleColor:[UIColor appSecondaryColor3] forState:UIControlStateNormal];
-    [self.maleButton setTitleColor:[UIColor appSecondaryColor1] forState:UIControlStateSelected];
     [self.maleButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0]];
-    
-    [self.femaleButton setTitleColor:[UIColor appSecondaryColor3] forState:UIControlStateNormal];
-    [self.femaleButton setTitleColor:[UIColor appSecondaryColor1] forState:UIControlStateSelected];
     [self.femaleButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0]];
-    
-    [self.otherButton setTitleColor:[UIColor appSecondaryColor3] forState:UIControlStateNormal];
-    [self.otherButton setTitleColor:[UIColor appSecondaryColor1] forState:UIControlStateSelected];
     [self.otherButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0]];
-    
 }
 
 - (void) segmentedButtonPressed:(UIButton*) button selectedIndex: (NSInteger) selectedIndex
 {
     self.selectedSegmentIndex = selectedIndex;
     
-    if ([self.delegate respondsToSelector:@selector(segmentedTableViewcell:didSelectSegmentAtIndex:)]) {
-        [self.delegate segmentedTableViewcell:self didSelectSegmentAtIndex:self.selectedSegmentIndex];
+    if ([self.delegate respondsToSelector:@selector(segmentedTableViewCell:didSelectSegmentAtIndex:)]) {
+        [self.delegate segmentedTableViewCell:self didSelectSegmentAtIndex:self.selectedSegmentIndex];
     }
 }
 

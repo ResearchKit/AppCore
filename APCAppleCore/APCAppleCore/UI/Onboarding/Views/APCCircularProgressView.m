@@ -95,9 +95,9 @@ static NSString * const kAPCCircularProgressViewAnimationKey = @"APCCircularProg
     _progressLabel.adjustsFontSizeToFitWidth = YES;
     [_progressLabel setTextColor:[UIColor darkGrayColor]];
     [self addSubview:_progressLabel];
-    self.progressLabel.text = @"0 %";
     
     _progressLabel.backgroundColor = [UIColor clearColor];
+    [self setProgressLabelText:0];
 }
 
 #pragma mark - View Layout
@@ -166,6 +166,18 @@ static NSString * const kAPCCircularProgressViewAnimationKey = @"APCCircularProg
 
 #pragma mark - Progress
 
+- (void)setProgressLabelText:(CGFloat)progress
+{
+    NSUInteger progressPercent = progress * 100;
+    
+    NSString *progressText = [NSString stringWithFormat:@"%lu%%", (unsigned long)progressPercent];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:progressText];
+    NSUInteger length = attributedString.length;
+    [attributedString setAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"Helvetica" size:14.0f]} range:NSMakeRange(length-1, 1)];
+    [attributedString setAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"Helvetica" size:39.0f]} range:NSMakeRange(0, length-1)];
+    _progressLabel.attributedText = attributedString;
+}
+
 - (void)setProgress:(CGFloat)progress
 {
     [self setProgress:progress animated:NO];
@@ -184,8 +196,10 @@ static NSString * const kAPCCircularProgressViewAnimationKey = @"APCCircularProg
             [self updateStrokeEndForProgress:progress];
             _progress = progress;
             
-            NSUInteger progressPercent = progress * 100;
-            self.progressLabel.text = [NSString stringWithFormat:@"%lu%%", (unsigned long)progressPercent];
+            [self setProgressLabelText:progress];
+            
+            
+           
         }
     }
 }
@@ -217,9 +231,8 @@ static NSString * const kAPCCircularProgressViewAnimationKey = @"APCCircularProg
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
 {
     [self updateStrokeEndForProgress:_progress];
-    
-    NSUInteger progressPercent = _progress * 100;
-    self.progressLabel.text = [NSString stringWithFormat:@"%lu%%", (unsigned long)progressPercent];
+
+    [self setProgressLabelText:_progress];
 }
 
 @end

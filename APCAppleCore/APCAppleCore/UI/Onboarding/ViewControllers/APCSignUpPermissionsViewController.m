@@ -10,11 +10,11 @@
 #import "APCSignUpPermissionsViewController.h"
 #import "APCTableViewItem.h"
 #import "APCStepProgressBar.h"
-#import "UIView+Helper.h"
 #import "APCPermissionsCell.h"
 #import "NSBundle+Helper.h"
 #import "APCPermissionsManager.h"
 #import "UIAlertController+Helper.h"
+#import "UIView+Helper.h"
 
 static CGFloat const kTableViewRowHeight                 = 165.0f;
 
@@ -92,11 +92,14 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 {
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     backButton.frame = CGRectMake(0, 0, 44, 44);
-    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton setImage:[[UIImage imageNamed:@"back_button"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    backButton.tintColor = [UIColor appPrimaryColor];
     [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     [self.navigationItem setLeftBarButtonItem:backBarButton];
+    
+    self.navigationItem.rightBarButtonItem.enabled = NO;
 }
 
 - (void) setupProgressBar {
@@ -225,6 +228,12 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 {
     [self updatePermissions];
     [self.tableView reloadData];
+    
+#if DEVELOPMENT
+    self.navigationItem.rightBarButtonItem.enabled = YES;
+#else
+    self.navigationItem.rightBarButtonItem.enabled = [self isPermissionsGranted];
+#endif
 }
 
 

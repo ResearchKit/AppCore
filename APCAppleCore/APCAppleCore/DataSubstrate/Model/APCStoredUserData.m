@@ -21,5 +21,6 @@
 @dynamic userConsented;
 @dynamic wakeUpTime;
 @dynamic sleepTime;
+@dynamic ethnicity;
 
 @end

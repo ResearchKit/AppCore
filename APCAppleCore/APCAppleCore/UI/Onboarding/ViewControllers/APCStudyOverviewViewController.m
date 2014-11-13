@@ -7,6 +7,10 @@
 //
 
 #import "APCStudyOverviewViewController.h"
+#import "UIColor+APCAppearance.h"
+#import "UIFont+APCAppearance.h"
+#import "UIImage+APCHelper.h"
+#import "UIColor+TertiaryColors.h"
 
 static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
 
@@ -23,14 +27,10 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    self.items = [NSMutableArray new];
+    
     [self setupTableView];
     [self setUpAppearance];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -63,14 +63,26 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 #pragma mark - UITableViewDataSource methods
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return self.items.count;
+}
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    APCTableViewSection *sectionItem = self.items[section];
+    
+    return sectionItem.rows.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kStudyOverviewCellIdentifier forIndexPath:indexPath];
+    APCTableViewStudyDetailsItem *studyDetailsItem = [self itemForIndexPath:indexPath];
+    
+    APCTintedTableViewCell *cell = (APCTintedTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kAPCTintedTableViewCellIdentifier];
+    
+    cell.textLabel.text = studyDetailsItem.caption;
+    cell.imageView.image = studyDetailsItem.iconImage;
+    cell.tintColor = studyDetailsItem.tintColor;
     
     return cell;
 }
@@ -80,19 +92,9 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-
-- (IBAction)signInTapped:(id)sender
-{
-    
-}
-- (IBAction)signUpTapped:(id)sender
-{
-
-}
-
 #pragma mark - Public methods
 
-- (NSArray *)studyDetailsFromJSONFile:(NSString *)jsonFileName
+- (void)studyDetailsFromJSONFile:(NSString *)jsonFileName
 {
     NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
     NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
@@ -100,34 +102,53 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     NSError *parseError;
     NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
     
-    NSMutableArray *studyDetailsArray = [[NSMutableArray alloc] init];
-    
     if (!parseError) {
         
         self.diseaseName = jsonDictionary[@"disease_name"];
         self.diseaseNameLabel.text = self.diseaseName;
         self.dateRangeLabel.text = [jsonDictionary[@"from_date"] stringByAppendingFormat:@" - %@", jsonDictionary[@"to_date"]];
-        self.logoImageView.image = [UIImage imageNamed:jsonDictionary[@"logo_name"]];
         
         NSArray *questions = jsonDictionary[@"questions"];
         
+        NSMutableArray *rowItems = [NSMutableArray new];
+        
         for (NSDictionary *questionDict in questions) {
             
-            APCStudyDetails *studyDetails = [APCStudyDetails new];
-            studyDetails.title = questionDict[@"title"];
-            studyDetails.details = questionDict[@"details"];
+            APCTableViewStudyDetailsItem *studyDetails = [APCTableViewStudyDetailsItem new];
+            studyDetails.caption = questionDict[@"title"];
+            studyDetails.detailText = questionDict[@"details"];
+            studyDetails.iconImage = [[UIImage imageNamed:questionDict[@"icon_image"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            studyDetails.tintColor = [UIColor tertiaryColorForString:questionDict[@"tint_color"]];
             
-            [studyDetailsArray addObject:studyDetails];
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = studyDetails;
+            row.itemType = kAPCStudyItemTypeStudyDetails;
+            [rowItems addObject:row];
         }
+        
+        APCTableViewSection *section = [APCTableViewSection new];
+        section.rows = [NSArray arrayWithArray:rowItems];
+        [self.items addObject:section];
     }
-    
-    return [NSArray arrayWithArray:studyDetailsArray];
 }
 
-@end
+- (IBAction)signInTapped:(id)sender
+{
+    
+}
+- (IBAction)signUpTapped:(id)sender
+{
+    
+}
 
-
-@implementation APCStudyDetails
-
+- (APCTableViewStudyDetailsItem *)itemForIndexPath:(NSIndexPath *)indexPath
+{
+    APCTableViewSection *sectionItem = self.items[indexPath.section];
+    APCTableViewRow *rowItem = sectionItem.rows[indexPath.row];
+    
+    APCTableViewStudyDetailsItem *studyDetailsItem = (APCTableViewStudyDetailsItem *)rowItem.item;
+    
+    return studyDetailsItem;
+}
 
 @end

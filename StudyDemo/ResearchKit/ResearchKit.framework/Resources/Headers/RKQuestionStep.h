@@ -18,29 +18,28 @@
 /**
  * @brief Designated convenience constructor
  * @param identifier    Step's unique indentifier.
- * @param name          Step's name.
  * @param question      Text of the question.
  * @param answerFormat  AnswerFormat object contains details about answer.
  */
 
 + (instancetype)questionStepWithIdentifier:(NSString *)identifier
-                                      name:(NSString *)name
-                                  question:(NSString *)question answer:(RKAnswerFormat *)answerFormat;
+                                     title:(NSString *)title
+                                    answer:(RKAnswerFormat *)answerFormat;
 /**
  * @brief Allow user to skip current step with no answer.
  * @note Default value is YES.
  */
-@property (nonatomic) BOOL optional;
+@property (nonatomic,getter=isOptional) BOOL optional;
 
 /**
- * @brief Text of the question.
+ * @brief Primary text of the question.
  */
-@property (nonatomic, copy) NSString *question;
+@property (nonatomic, copy) NSString *title;
 
 /**
- * @brief Prompt is text block that appears under the question, which provide addtional instruction for the user.
+ * @brief Additional instructional text for the question.
  */
-@property (nonatomic, copy) NSString *prompt;
+@property (nonatomic, copy) NSString *text;
 
 /**
  * @brief AnswerFormat object contains detailed information about an answer.

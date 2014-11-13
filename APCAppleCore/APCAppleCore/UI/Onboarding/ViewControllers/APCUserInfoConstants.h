@@ -12,19 +12,36 @@
 @import Foundation;
 @import CoreGraphics;
 
-typedef NS_ENUM(NSUInteger, APCSignUpUserInfoItem) {
-    APCSignUpUserInfoItemUserName = 0,
-    APCSignUpUserInfoItemEmail,
-    APCSignUpUserInfoItemPassword,
-    APCSignUpUserInfoItemDateOfBirth,
-    APCSignUpUserInfoItemMedicalCondition,
-    APCSignUpUserInfoItemMedication,
-    APCSignUpUserInfoItemBloodType,
-    APCSignUpUserInfoItemWeight,
-    APCSignUpUserInfoItemHeight,
-    APCSignUpUserInfoItemGender,
-    APCSignUpUserInfoItemSleepTime,
-    APCSignUpUserInfoItemWakeUpTime
+typedef NSUInteger APCTableViewItemType;
+
+typedef NS_ENUM(APCTableViewItemType, APCUserInfoItemType) {
+    kAPCUserInfoItemTypeFirstName = 0,
+    kAPCUserInfoItemTypeLastName,
+    kAPCUserInfoItemTypeEmail,
+    kAPCUserInfoItemTypePassword,
+    kAPCUserInfoItemTypeDateOfBirth,
+    kAPCUserInfoItemTypeMedicalCondition,
+    kAPCUserInfoItemTypeMedication,
+    kAPCUserInfoItemTypeBloodType,
+    kAPCUserInfoItemTypeWeight,
+    kAPCUserInfoItemTypeHeight,
+    kAPCUserInfoItemTypeBiologicalSex,
+    kAPCUserInfoItemTypeSleepTime,
+    kAPCUserInfoItemTypeWakeUpTime
+};
+
+typedef NS_ENUM(APCTableViewItemType, APCStudyItemType) {
+    kAPCStudyItemTypeStudyDetails,
+    kAPCStudyItemTypeShare,
+    kAPCStudyItemTypeReviewConsent
+};
+
+typedef NS_ENUM(APCTableViewItemType, APCSettingsItemType) {
+    kAPCSettingsItemTypeAutoLock,
+    kAPCSettingsItemTypePasscode,
+    kAPCSettingsItemTypePassword,
+    kAPCSettingsItemTypePushNotifications,
+    kAPCSettingsItemTypeDevices
 };
 
 typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
@@ -42,6 +59,8 @@ typedef NS_ENUM(NSUInteger, APCAppState) {
 static CGFloat const kAPCSignUpProgressBarHeight                = 14.0f;
 
 static NSInteger kNumberOfSteps = 4;
+
+static NSInteger kAPCPasswordMinimumLength = 2;
 
 
 static NSString * const kAPCUserInfoFieldNameRegEx              = @"[A-Za-z\\ ]+";

@@ -7,7 +7,6 @@
 //
 
 #import "APCUser.h"
-#import "UIView+Helper.h"
 #import "APCPasscodeView.h"
 #import "APCStepProgressBar.h"
 #import "UIAlertController+Helper.h"
@@ -17,6 +16,7 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "APCKeychainStore.h"
+#import "UIView+Helper.h"
 
 @import LocalAuthentication;
 
@@ -79,7 +79,8 @@
 {
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     backButton.frame = CGRectMake(0, 0, 44, 44);
-    [backButton setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [backButton setImage:[[UIImage imageNamed:@"back_button"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    backButton.tintColor = [UIColor appPrimaryColor];
     [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];

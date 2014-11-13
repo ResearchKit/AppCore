@@ -105,6 +105,8 @@
 
 @end
 
+
+
 @interface APCTableViewPermissionsItem : APCTableViewItem
 
 @property (nonatomic) APCSignUpPermissionsType permissionType;
@@ -112,3 +114,35 @@
 @property (nonatomic, readwrite, getter=isPermissionGranted) BOOL permissionGranted;
 
 @end
+
+@interface APCTableViewStudyDetailsItem : APCTableViewItem
+
+@property (nonatomic, strong) NSString *imageName;
+
+@property (nonatomic, strong) NSString *videoName;
+
+@property (nonatomic, strong) UIImage *iconImage;
+
+@property (nonatomic, strong) UIColor *tintColor;
+
+@end
+
+/* ----------------------------------------------- */
+
+@interface APCTableViewSection : NSObject
+
+@property (nonatomic, strong) NSArray *rows;
+
+@property (nonatomic, strong) NSString *sectionTitle;
+
+@end
+
+@interface APCTableViewRow : NSObject
+
+@property (nonatomic, strong) APCTableViewItem *item;
+
+@property (nonatomic, readwrite) APCTableViewItemType itemType;
+
+@end
+
+

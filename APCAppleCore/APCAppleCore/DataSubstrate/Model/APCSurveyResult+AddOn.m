@@ -33,10 +33,20 @@
     RKSurveyResult * localRKResult = (RKSurveyResult*) rkResult;
     APCSurveyResult * localAPCResult = (APCSurveyResult*) apcResult;
     
-    for (RKQuestionResult * answer in localRKResult.surveyResults) {
-        //NSLog(@"TYPE: %d    Storing: %@", (int)answer.questionType,answer.answer);
-        APCQuestionResult* apcAnswer = [APCQuestionResult storeRKResult:answer inContext:apcResult.managedObjectContext];
-        apcAnswer.survey = localAPCResult;
+    for (id answer in localRKResult.surveyResults) {
+        if ([answer isKindOfClass:[RKQuestionResult class]]) {
+            APCQuestionResult* apcAnswer = [APCQuestionResult storeRKResult:answer inContext:apcResult.managedObjectContext];
+            apcAnswer.survey = localAPCResult;
+        }
+        else if([answer isKindOfClass:[RKSurveyResult class]])
+        {
+            RKSurveyResult * localSurveyResult = (RKSurveyResult*) answer;
+            for (RKQuestionResult * localAnswer in localSurveyResult.surveyResults) {
+                APCQuestionResult* apcAnswer = [APCQuestionResult storeRKResult:localAnswer inContext:apcResult.managedObjectContext];
+                apcAnswer.survey = localAPCResult;
+            }
+        }
+        
     }
 }
 

@@ -5,7 +5,7 @@
 //
 
 #import "AppearanceControlViewController.h"
-#import <ResearchKit/ResearchKit.h>
+#import <ResearchKit/ResearchKit_Private.h>
 
 @interface AppearanceControlViewController ()
 

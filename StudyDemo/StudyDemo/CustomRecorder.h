@@ -11,7 +11,7 @@
 
 @end
 
-@interface CustomRecorderConfiguration : NSObject <RKRecorderConfiguration>
+@interface CustomRecorderConfiguration : RKRecorderConfiguration
 
 
 
