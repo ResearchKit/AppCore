@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "APCSchedule.h"
+#import "APCScheduleExpression.h"
 
 @interface APCScheduleTests : XCTestCase
 
@@ -113,7 +113,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumerationOfConstantMinutes
 {
     NSString*       cronExpression = @"A 5 * * * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
     
     [self enumerateOverYears:nil
@@ -127,7 +127,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testBoundedEnumerationOfConstantMinutes
 {
     NSString*       cronExpression    = @"A 5 * * * *";
-    APCSchedule*    schedule          = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule          = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   boundedEnumerator = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]
                                                                endingAtTime:[self.dateFormatter dateFromString:@"2014-01-01 23:59"]];
 
@@ -143,7 +143,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingMinuteList
 {
     NSString*       cronExpression = @"A 15,30,45 * * * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
     
     [self enumerateOverYears:nil
@@ -157,7 +157,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingMinuteRange
 {
     NSString*       cronExpression = @"A 15-30 * * * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
     
     [self enumerateOverYears:nil
@@ -171,7 +171,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingMinuteStep
 {
     NSString*       cronExpression = @"A */15 * * * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
     
     [self enumerateOverYears:nil
@@ -185,7 +185,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingMinuteRangeAndStep
 {
     NSString*       cronExpression = @"A 15-30/5 * * * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
     
     [self enumerateOverYears:nil
@@ -199,7 +199,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingMinuteListedRange
 {
     NSString*       cronExpression = @"A 10-12,20-22 * * * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
     
     [self enumerateOverYears:nil
@@ -213,7 +213,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingConstantHour
 {
     NSString*       cronExpression = @"A * 10 * * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 08:00"]];
     
     [self enumerateOverYears:nil
@@ -227,7 +227,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingHourList
 {
     NSString*       cronExpression = @"A * 8,12,16 * * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 08:00"]];
     
     [self enumerateOverYears:nil
@@ -241,7 +241,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingHourRange
 {
     NSString*       cronExpression = @"A * 8-17 * * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 08:00"]];
     
     [self enumerateOverYears:nil
@@ -255,7 +255,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingHourStep
 {
     NSString*       cronExpression = @"A * 8/4 * * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 08:00"]];
     
     [self enumerateOverYears:nil
@@ -269,7 +269,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingConstantDayOfMonth
 {
     NSString*       cronExpression = @"A * * 15 * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
     
     [self enumerateOverYears:nil
@@ -283,7 +283,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingDayOfMonthList
 {
     NSString*       cronExpression = @"A * * 15,30 * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
     
     [self enumerateOverYears:nil
@@ -297,7 +297,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingDayOfMonthRange
 {
     NSString*       cronExpression = @"A * * 1-14 * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
     
     [self enumerateOverYears:nil
@@ -311,7 +311,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingDayOfMonthStep
 {
     NSString*       cronExpression = @"A * * 10/5 * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
     
     [self enumerateOverYears:nil
@@ -325,7 +325,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingConstantMonth
 {
     NSString*       cronExpression = @"A * * * 4 *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
     
     [self enumerateOverYears:nil
@@ -339,7 +339,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingMonthList
 {
     NSString*       cronExpression = @"A * * * 2,4,6,8 *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
 
     [self enumerateOverYears:nil
@@ -353,7 +353,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingMonthRange
 {
     NSString*       cronExpression = @"A * * * 6-9 *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
     
     [self enumerateOverYears:nil
@@ -367,7 +367,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingMonthStep
 {
     NSString*       cronExpression = @"A * * * 4/2 *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
     
     [self enumerateOverYears:nil
@@ -404,7 +404,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingMinutesAndHours
 {
     NSString*       cronExpression = @"A 5 10 * * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
     
     [self enumerateOverYears:nil
@@ -418,7 +418,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingMinutesHoursAndDay
 {
     NSString*       cronExpression = @"A 5 10 20 * *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
     
     [self enumerateOverYears:nil month:nil day:@[@20] hour:@[@10] minute:@[@5] comparingEnumerator:enumerator];
@@ -427,7 +427,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 - (void)testEnumeratingMinutesHoursDayAndMonth
 {
     NSString*       cronExpression = @"A 5 10 20 9 *";
-    APCSchedule*    schedule       = [[APCSchedule alloc] initWithExpression:cronExpression timeZero:0];
+    APCScheduleExpression*    schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
     NSEnumerator*   enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
     
     [self enumerateOverYears:nil month:@[@9] day:@[@20] hour:@[@10] minute:@[@5] comparingEnumerator:enumerator];

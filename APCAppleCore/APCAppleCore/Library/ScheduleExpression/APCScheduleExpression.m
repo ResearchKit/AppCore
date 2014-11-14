@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCSchedule.h"
+#import "APCScheduleExpression.h"
 #import "APCScheduleParser.h"
 #import "APCTimeSelectorEnumerator.h"
 #import "APCScheduleEnumerator.h"
 
 
-@interface APCSchedule ()
+@interface APCScheduleExpression ()
 
 @property (nonatomic, strong) APCScheduleParser*    parser;
 @property (nonatomic, strong) NSArray*              selectors;
@@ -28,7 +28,7 @@
 @end
 
 
-@implementation APCSchedule
+@implementation APCScheduleExpression
 
 - (instancetype)initWithExpression:(NSString*)expression timeZero:(NSTimeInterval)timeZero
 {

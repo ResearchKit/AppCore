@@ -1,5 +1,5 @@
 //
-//  APCSchedule.h
+//  APCScheduleExpression.h
 //  Schedule
 //
 //  Created by Edward Cessna on 9/15/14.
@@ -11,10 +11,10 @@
 
 /**
  
- The `APCSchedule` class is the public interface for scheduled backed by a modified cron expression.
+ The `APCScheduleExpression` class is the public interface for scheduled backed by a modified cron expression.
  
  Example usage:
-    APCSchedule*    schedule   = [[APCSchedule alloc] initWithExpression:@"A 5 * * * *" timeZero:0];
+    APCScheduleExpression*    schedule   = [[APCScheduleExpression alloc] initWithExpression:@"A 5 * * * *" timeZero:0];
     NSEnumerator*   enumerator = [schedule enumeratorBeginningAtTime:[dateFormatter dateFromString:@"2014-01-01 06:00"]];
 
     NSDate* date;
@@ -65,7 +65,7 @@
  */
 
 
-@interface APCSchedule : NSObject
+@interface APCScheduleExpression : NSObject
 
 /**
  *  Designated initializer
