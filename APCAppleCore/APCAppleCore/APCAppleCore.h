@@ -36,6 +36,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 /* -------------------------
  Onboarding ViewControllers
  ------------------------- */
+#import <APCAppleCore/APCConstants.h>
 #import <APCAppleCore/APCUserInfoConstants.h>
 #import <APCAppleCore/APCUserInfoViewController.h>
 #import <APCAppleCore/APCIntroVideoViewController.h>
@@ -52,6 +53,12 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCSignupTouchIDViewController.h>
 #import <APCAppleCore/APCSignUpPermissionsViewController.h>
 #import <APCAppleCore/APCEmailVerifyViewController.h>
+
+/*--------------------------
+ Dashboard ViewControllers
+ -------------------------*/
+#import <APCAppleCore/APCDashboardViewController.h>
+#import <APCAppleCore/APCDashboardEditViewController.h>
 
 /*--------------------------
  Learn ViewControllers
@@ -102,6 +109,9 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCSwitchTableViewCell.h>
 #import <APCAppleCore/APCTintedTableViewCell.h>
 #import <APCAppleCore/APCCheckTableViewCell.h>
+#import <APCAppleCore/APCDashboardGraphTableViewCell.h>
+#import <APCAppleCore/APCDashboardMessageTableViewCell.h>
+#import <APCAppleCore/APCDashboardProgressTableViewCell.h>
 
 /* -------------------------
  Objects
@@ -135,10 +145,10 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 /* -------------------------
  YML Chart Components
  ------------------------- */
-#import <APCAppleCore/YMLChartEnumerations.h>
-#import <APCAppleCore/YMLChartUnitsView.h>
-#import <APCAppleCore/YMLLineChartView.h>
-#import <APCAppleCore/YMLTimeLineChartView.h>
+//#import <APCAppleCore/YMLChartEnumerations.h>
+//#import <APCAppleCore/YMLChartUnitsView.h>
+//#import <APCAppleCore/YMLLineChartView.h>
+//#import <APCAppleCore/YMLTimeLineChartView.h>
 
 
 /* -------------------------

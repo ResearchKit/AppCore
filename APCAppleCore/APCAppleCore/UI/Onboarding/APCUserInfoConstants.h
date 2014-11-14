@@ -30,25 +30,10 @@ typedef NS_ENUM(APCTableViewItemType, APCUserInfoItemType) {
     kAPCUserInfoItemTypeWakeUpTime
 };
 
-typedef NS_ENUM(APCTableViewItemType, APCStudyItemType) {
-    kAPCStudyItemTypeStudyDetails,
-    kAPCStudyItemTypeShare,
-    kAPCStudyItemTypeReviewConsent
-};
-
-typedef NS_ENUM(APCTableViewItemType, APCSettingsItemType) {
-    kAPCSettingsItemTypeAutoLock,
-    kAPCSettingsItemTypePasscode,
-    kAPCSettingsItemTypePassword,
-    kAPCSettingsItemTypePushNotifications,
-    kAPCSettingsItemTypeDevices
-};
-
-typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
-    kSignUpPermissionsTypeHealthKit,
-    kSignUpPermissionsTypeLocation,
-    kSignUpPermissionsTypePushNotifications,
-    kSignUpPermissionsTypeCoremotion,
+typedef NS_ENUM(APCTableViewItemType, APCTableViewStudyItemType) {
+    kAPCTableViewStudyItemTypeStudyDetails,
+    kAPCTableViewStudyItemTypeShare,
+    kAPCTableViewStudyItemTypeReviewConsent
 };
 
 typedef NS_ENUM(NSUInteger, APCAppState) {

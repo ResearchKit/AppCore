@@ -99,6 +99,21 @@
 
 /* ----------------------------- */
 
+@implementation APCTableViewDashboardProgressItem
+
+@end
+
+@implementation APCTableViewDashboardGraphItem
+
+@end
+
+@implementation APCTableViewDashboardMessageItem
+
+@end
+
+
+/* ----------------------------- */
+
 @implementation APCTableViewSection
 
 @end

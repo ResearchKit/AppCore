@@ -10,6 +10,7 @@
 #import <UIKit/UIDatePicker.h>
 #import <UIKit/UITableViewCell.h>
 #import "APCUserInfoConstants.h"
+#import "APCConstants.h"
 
 @interface APCTableViewItem : NSObject
 
@@ -115,6 +116,7 @@
 
 @end
 
+
 @interface APCTableViewStudyDetailsItem : APCTableViewItem
 
 @property (nonatomic, strong) NSString *imageName;
@@ -124,6 +126,32 @@
 @property (nonatomic, strong) UIImage *iconImage;
 
 @property (nonatomic, strong) UIColor *tintColor;
+
+@end
+
+/* ----------------------------------------------- */
+
+@interface APCTableViewDashboardProgressItem : APCTableViewItem
+
+@property (nonatomic) CGFloat progress;
+
+@end
+
+
+@interface APCTableViewDashboardGraphItem : APCTableViewItem
+
+@property (nonatomic) id graphData; //TODO: Set class later
+
+@property (nonatomic) APCDashboardGraphType graphType;
+
+@property (nonatomic, strong) UIColor *tintColor;
+
+@end
+
+
+@interface APCTableViewDashboardMessageItem : APCTableViewItem
+
+@property (nonatomic) APCDashboardMessageType messageType;
 
 @end
 
