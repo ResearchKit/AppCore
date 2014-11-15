@@ -105,6 +105,13 @@
 @end
 
 /**
+ *  @brief Text label under image answer option icon
+ */
+@interface RKImageAnswerOptionLabel : RKLabel
+
+@end
+
+/**
  *  @brief Answer's text field.
  */
 @interface RKAnswerTextField : UITextField
@@ -120,9 +127,7 @@
  */
 @interface RKFormTextField : RKAnswerTextField
 
-@property (nonatomic ,strong) UIFont* fieldFont UI_APPEARANCE_SELECTOR;
-
-@property (nonatomic ,strong) UIColor* fieldTextColor UI_APPEARANCE_SELECTOR;
+// No new properties, but provided so that appearance properties can be set specifically for this field.
 
 @end
 
@@ -134,6 +139,13 @@
 @property (nonatomic ,strong) UIFont* fieldFont UI_APPEARANCE_SELECTOR;
 
 @property (nonatomic ,strong) UIColor* fieldTextColor UI_APPEARANCE_SELECTOR;
+
+@end
+
+/**
+ *  @brief Text view for use in forms
+ */
+@interface RKFormTextView : RKAnswerTextView
 
 @end
 

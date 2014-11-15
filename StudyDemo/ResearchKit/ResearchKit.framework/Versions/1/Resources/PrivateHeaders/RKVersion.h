@@ -7,6 +7,8 @@
 
 #import <ResearchKit/RKDefines.h>
 
+
+
 RK_EXTERN const double RKVersionNumber;
 
 #define RKVersionNumber_Internal_1 0.04
@@ -16,3 +18,4 @@ RK_EXTERN const double RKVersionNumber;
 #define RKVersionNumber_Internal_8 0.08
 #define RKVersionNumber_Internal_9 0.09
 #define RKVersionNumber_Internal_10 0.10
+#define RKVersionNumber_Internal_11 0.11

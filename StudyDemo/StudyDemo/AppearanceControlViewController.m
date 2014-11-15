@@ -20,21 +20,21 @@
 
     self.title = @"Appearance status";
     
-    _classes =  @[[RKHeadlineLabel class],
-                 [RKSubheadlineLabel class],
-                 [RKCaption1Label class],
-                 [RKCaption2Label class],
-                 [RKSelectionTitleLabel class],
-                 [RKSelectionSubTitleLabel class],
-                 [RKScaleRangeLabel class],
-                 [RKScaleValueLabel class],
-                 [RKPickerLabel class],
-                 [RKAnswerTextField class],
-                 [RKAnswerTextView class],
-                 [RKTextButton class],
-                 [RKBoldTextCell class],
-                 [RKRegularTextCell class],
-                 [RKCountdownLabel class]];
+    _classes =  @[[RKSTHeadlineLabel class],
+                 [RKSTSubheadlineLabel class],
+                 [RKSTCaption1Label class],
+                 [RKSTCaption2Label class],
+                 [RKSTSelectionTitleLabel class],
+                 [RKSTSelectionSubTitleLabel class],
+                 [RKSTScaleRangeLabel class],
+                 [RKSTScaleValueLabel class],
+                 [RKSTPickerLabel class],
+                 [RKSTAnswerTextField class],
+                 [RKSTAnswerTextView class],
+                 [RKSTTextButton class],
+                 [RKSTBoldTextCell class],
+                 [RKSTRegularTextCell class],
+                 [RKSTCountdownLabel class]];
     
     self.tableView.allowsSelection = NO;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(cancel)];
@@ -52,7 +52,7 @@
     
     UIFont* font = [UIFont italicSystemFontOfSize:10];
     
-    if ([class isSubclassOfClass:[RKLabel class]] || [class isSubclassOfClass:[UITableViewCell class]]) {
+    if ([class isSubclassOfClass:[RKSTLabel class]] || [class isSubclassOfClass:[UITableViewCell class]]) {
         
         if (switchControl.isOn) {
             [[class appearance] setLabelFont:font];
@@ -99,24 +99,24 @@
     view.frame = cell.bounds;
     
     BOOL fontSet = NO;
-    if ([class isSubclassOfClass:[RKCountdownLabel class]]) {
+    if ([class isSubclassOfClass:[RKSTCountdownLabel class]]) {
         fontSet = [[class appearance] labelFont]?YES:NO;
-        [(RKLabel*)view setTextAlignment:NSTextAlignmentCenter];
-    }else if ([class isSubclassOfClass:[RKLabel class]]) {
-        [(RKLabel*)view setText:className];
-         [(RKLabel*)view setTextAlignment:NSTextAlignmentCenter];
+        [(RKSTLabel*)view setTextAlignment:NSTextAlignmentCenter];
+    }else if ([class isSubclassOfClass:[RKSTLabel class]]) {
+        [(RKSTLabel*)view setText:className];
+         [(RKSTLabel*)view setTextAlignment:NSTextAlignmentCenter];
         fontSet = [[class appearance] labelFont]?YES:NO;
     }else if ([class isSubclassOfClass:[UITextField class]]) {
-        [(RKAnswerTextField*)view setText:className];
-        [(RKAnswerTextField*)view setTextAlignment:NSTextAlignmentCenter];
+        [(RKSTAnswerTextField*)view setText:className];
+        [(RKSTAnswerTextField*)view setTextAlignment:NSTextAlignmentCenter];
         fontSet = [[class appearance] fieldFont]?YES:NO;
     }else if ([class isSubclassOfClass:[UITextView class]]) {
-        [(RKAnswerTextView*)view setText:className];
-        [(RKAnswerTextView*)view setTextAlignment:NSTextAlignmentCenter];
+        [(RKSTAnswerTextView*)view setText:className];
+        [(RKSTAnswerTextView*)view setTextAlignment:NSTextAlignmentCenter];
         fontSet = [[class appearance] fieldFont]?YES:NO;
-    }else if ([class isSubclassOfClass:[RKTextButton class]]) {
-        view = [RKTextButton buttonWithType:UIButtonTypeSystem];
-        [(RKTextButton*)view setTitle:className forState:UIControlStateNormal];
+    }else if ([class isSubclassOfClass:[RKSTTextButton class]]) {
+        view = [RKSTTextButton buttonWithType:UIButtonTypeSystem];
+        [(RKSTTextButton*)view setTitle:className forState:UIControlStateNormal];
         fontSet = [[class appearance] titleFont]?YES:NO;
     }else if ([class isSubclassOfClass:[UITableViewCell class]]) {
         [[(UITableViewCell*)view textLabel] setText:className];
@@ -158,7 +158,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row == [_classes indexOfObject:[RKCountdownLabel class]]) {
+    if (indexPath.row == [_classes indexOfObject:[RKSTCountdownLabel class]]) {
         return 90;
     }
     

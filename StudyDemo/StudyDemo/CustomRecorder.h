@@ -5,13 +5,13 @@
 //  Copyright (c) 2014 Apple. All rights reserved.
 //
 
-#import <ResearchKit/ResearchKit.h>
+#import <ResearchKit/ResearchKit_Private.h>
 
-@interface CustomRecorder : RKRecorder
+@interface CustomRecorder : RKSTRecorder
 
 @end
 
-@interface CustomRecorderConfiguration : RKRecorderConfiguration
+@interface CustomRecorderConfiguration : RKSTRecorderConfiguration
 
 
 

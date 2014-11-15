@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class RKStudyStore;
+@class RKSTStudyStore;
 
 extern NSString *const MainStudyIdentifier;
 
@@ -15,7 +15,7 @@ extern NSString *const MainStudyIdentifier;
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (strong, nonatomic) RKStudyStore *studyStore;
+@property (strong, nonatomic) RKSTStudyStore *studyStore;
 
 @property (assign, nonatomic) BOOL justJoined;
 

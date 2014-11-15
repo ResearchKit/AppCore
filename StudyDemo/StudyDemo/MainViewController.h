@@ -7,10 +7,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class RKStudy;
+@class RKSTStudy;
 
 @interface MainViewController : UIViewController
 
--(instancetype)initWithStudy:(RKStudy*)study;
+-(instancetype)initWithStudy:(RKSTStudy*)study;
 
 @end

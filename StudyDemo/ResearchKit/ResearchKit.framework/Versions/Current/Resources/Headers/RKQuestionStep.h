@@ -25,21 +25,6 @@
 + (instancetype)questionStepWithIdentifier:(NSString *)identifier
                                      title:(NSString *)title
                                     answer:(RKAnswerFormat *)answerFormat;
-/**
- * @brief Allow user to skip current step with no answer.
- * @note Default value is YES.
- */
-@property (nonatomic,getter=isOptional) BOOL optional;
-
-/**
- * @brief Primary text of the question.
- */
-@property (nonatomic, copy) NSString *title;
-
-/**
- * @brief Additional instructional text for the question.
- */
-@property (nonatomic, copy) NSString *text;
 
 /**
  * @brief AnswerFormat object contains detailed information about an answer.

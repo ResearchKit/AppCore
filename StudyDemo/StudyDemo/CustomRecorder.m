@@ -100,10 +100,10 @@
     [self _doStopRecording];
     
     NSError* error = nil;
-    RKDataResult* result = nil;
+    RKSTDataResult* result = nil;
     if (self.records) {
         NSLog(@"%@", self.records);
-        result = [[RKDataResult alloc] initWithStep:self.step];
+        result = [[RKSTDataResult alloc] init];
         result.contentType = [self mimeType];
         result.data = [NSJSONSerialization dataWithJSONObject:self.records options:(NSJSONWritingOptions)0 error:&error];
         result.filename = self.fileName;
@@ -115,7 +115,7 @@
     }
     
     
-    id<RKRecorderDelegate> localDelegate = self.delegate;
+    id<RKSTRecorderDelegate> localDelegate = self.delegate;
     if (! error)
     {
         if (localDelegate && [localDelegate respondsToSelector:@selector(recorder:didCompleteWithResult:)]) {
@@ -159,8 +159,10 @@
 
 @implementation CustomRecorderConfiguration
 
-- (RKRecorder*)recorderForStep:(RKStep*)step taskInstanceUUID:(NSUUID*)taskInstanceUUID{
-    return [[CustomRecorder alloc] initWithStep:step taskInstanceUUID:taskInstanceUUID];
+- (RKSTRecorder*)recorderForStep:(RKSTStep*)step
+    outputDirectory:(NSURL*)outputDirectory{
+    return [[CustomRecorder alloc] initWithStep:step
+                     outputDirectory:outputDirectory];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder

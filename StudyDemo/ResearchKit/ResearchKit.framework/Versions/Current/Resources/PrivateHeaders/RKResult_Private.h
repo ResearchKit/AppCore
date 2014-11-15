@@ -13,6 +13,11 @@
 @interface RKDataResult : RKResult
 
 /**
+ * @brief Result's contentType.
+ */
+@property (nonatomic, copy) NSString *contentType;
+
+/**
  * @brief filename to use when archiving
  */
 @property (nonatomic, copy) NSString *filename;
@@ -26,9 +31,9 @@
 
 @interface RKResult(Archiving)
 
-+ (instancetype)resultForRecorder:(RKRecorder *)recorder;
-
 - (BOOL)addToArchive:(RKDataArchive *)archive error:(NSError * __autoreleasing *)error;
+
+- (NSMutableDictionary *)_serializableDictionary;
 
 @end
 
@@ -38,8 +43,11 @@
 
 @end
 
-@interface RKEditableResult(Internal)
+@interface RKDateAnswer(Internal)
 
-- (NSMutableDictionary *)_serializableDictionary;
++ (RKDateAnswer *)_dateAnswerFromPicker:(UIDatePicker *)picker withFormat:(RKDateAnswerFormat *)format;
+
+- (NSDictionary *)_serializableDictionaryWithQuestionType:(RKSurveyQuestionType)questionType;
 
 @end
+

@@ -8,6 +8,6 @@
 #import <UIKit/UIKit.h>
 #import <ResearchKit/ResearchKit.h>
 
-@interface DynamicTask : NSObject<RKLogicalTask>
+@interface DynamicTask : NSObject<RKSTTask>
 
 @end

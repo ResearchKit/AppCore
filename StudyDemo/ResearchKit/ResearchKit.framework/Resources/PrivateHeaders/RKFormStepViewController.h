@@ -13,11 +13,5 @@
  */
 @interface RKFormStepViewController : RKStepViewController
 
-/**
- * @brief Designated initializer
- * @param step    The step to be presented.
- * @param result    Previously generated result, used to recover existing answer.
- */
-- (instancetype)initWithFormStep:(RKFormStep *)step result:(RKFormResult *)result;
 
 @end

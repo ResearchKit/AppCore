@@ -5,6 +5,7 @@
 //  Copyright (c) 2013-2014 Apple Inc. All rights reserved.
 //
 
+#import <ResearchKit/RKDefines.h>
 
 #import <ResearchKit/RKTask.h>
 #import <ResearchKit/RKStep.h>
@@ -24,7 +25,5 @@
 #import <ResearchKit/RKVisualConsentStep.h>
 #import <ResearchKit/RKConsentReviewStep.h>
 
-// Active step support
-#import <ResearchKit/RKActiveStep.h>
-#import <ResearchKit/RKActiveStepViewController.h>
-#import <ResearchKit/RKRecorder.h>
+#import <ResearchKit/RKDataSecurity.h>
+

@@ -34,7 +34,8 @@
 /**
  * Designated initializer.
  */
-- (instancetype)initWithStep:(RKStep*)step taskInstanceUUID:(NSUUID*)taskInstanceUUID;
+- (instancetype)initWithStep:(RKStep*)step
+             outputDirectory:(NSURL *)outputDirectory;
 
 
 /**
@@ -72,7 +73,9 @@
  * @brief Designated initializer
  * @param frequency    Accelerometer data collection frequency, unit is hertz (Hz).
  */
-- (instancetype)initWithFrequency:(double)frequency step:(RKStep*)step taskInstanceUUID:(NSUUID*)taskInstanceUUID;
+- (instancetype)initWithFrequency:(double)frequency
+                             step:(RKStep*)step
+                  outputDirectory:(NSURL *)outputDirectory;
 
 @end
 
@@ -105,7 +108,9 @@
  * @brief Designated initializer
  * @param recorderSettings Settings for the recording session.
  */
-- (instancetype)initWithRecorderSettings:(NSDictionary *)recorderSettings step:(RKStep*)step taskInstanceUUID:(NSUUID*)taskInstanceUUID;
+- (instancetype)initWithRecorderSettings:(NSDictionary *)recorderSettings
+                                    step:(RKStep*)step
+                         outputDirectory:(NSURL *)outputDirectory;
 
 
 @end
@@ -143,7 +148,9 @@
  * @brief Designated initializer
  * @param frequency    Accelerometer data collection frequency in Hz
  */
-- (instancetype)initWithFrequency:(double)frequency step:(RKStep*)step taskInstanceUUID:(NSUUID*)taskInstanceUUID;
+- (instancetype)initWithFrequency:(double)frequency
+                             step:(RKStep*)step
+                  outputDirectory:(NSURL *)outputDirectory;
 
 @end
 
@@ -165,7 +172,9 @@
  * @brief Designated initializer
  * @param frequency    Accelerometer data collection frequency in Hz
  */
-- (instancetype)initWithFrequency:(double)frequency step:(RKStep*)step taskInstanceUUID:(NSUUID*)taskInstanceUUID;
+- (instancetype)initWithFrequency:(double)frequency
+                             step:(RKStep*)step
+                  outputDirectory:(NSURL *)outputDirectory;
 
 @end
 
