@@ -7,6 +7,7 @@
 //
 
 #import "APCTableViewItem.h"
+#import "UIColor+APCAppearance.h"
 
 @implementation APCTableViewItem
 
@@ -98,6 +99,19 @@
 @end
 
 /* ----------------------------- */
+
+@implementation APCTableViewDashboardItem
+
+- (UIColor *)tintColor
+{
+    if (!_tintColor) {
+        _tintColor = [UIColor appTertiaryGrayColor];
+    }
+    
+    return _tintColor;
+}
+
+@end
 
 @implementation APCTableViewDashboardProgressItem
 

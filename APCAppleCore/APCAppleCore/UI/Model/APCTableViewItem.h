@@ -131,25 +131,29 @@
 
 /* ----------------------------------------------- */
 
-@interface APCTableViewDashboardProgressItem : APCTableViewItem
+@interface APCTableViewDashboardItem : APCTableViewItem
+
+@property (nonatomic, strong) UIColor *tintColor;
+
+@end
+
+@interface APCTableViewDashboardProgressItem : APCTableViewDashboardItem
 
 @property (nonatomic) CGFloat progress;
 
 @end
 
 
-@interface APCTableViewDashboardGraphItem : APCTableViewItem
+@interface APCTableViewDashboardGraphItem : APCTableViewDashboardItem
 
 @property (nonatomic) id graphData; //TODO: Set class later
 
 @property (nonatomic) APCDashboardGraphType graphType;
 
-@property (nonatomic, strong) UIColor *tintColor;
-
 @end
 
 
-@interface APCTableViewDashboardMessageItem : APCTableViewItem
+@interface APCTableViewDashboardMessageItem : APCTableViewDashboardItem
 
 @property (nonatomic) APCDashboardMessageType messageType;
 

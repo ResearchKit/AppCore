@@ -15,126 +15,128 @@
 		5B01599D1A0C222900F28439 /* UIView+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B01599B1A0C222900F28439 /* UIView+Helper.m */; };
 		5B29CE3619D3767D00E2FD62 /* APCPermissionsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B29CE3419D3767D00E2FD62 /* APCPermissionsManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B29CE3719D3767D00E2FD62 /* APCPermissionsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B29CE3519D3767D00E2FD62 /* APCPermissionsManager.m */; };
-		5B3B5FD81A15645E006B2346 /* APCCircularProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F4A1A15645E006B2346 /* APCCircularProgressView.h */; };
+		5B3B5FD81A15645E006B2346 /* APCCircularProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F4A1A15645E006B2346 /* APCCircularProgressView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B5FD91A15645E006B2346 /* APCCircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5F4B1A15645E006B2346 /* APCCircularProgressView.m */; };
-		5B3B5FDA1A15645E006B2346 /* APCConfirmationView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F4C1A15645E006B2346 /* APCConfirmationView.h */; };
+		5B3B5FDA1A15645E006B2346 /* APCConfirmationView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F4C1A15645E006B2346 /* APCConfirmationView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B5FDB1A15645E006B2346 /* APCConfirmationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5F4D1A15645E006B2346 /* APCConfirmationView.m */; };
-		5B3B5FDC1A15645E006B2346 /* APCStepProgressBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F4E1A15645E006B2346 /* APCStepProgressBar.h */; };
+		5B3B5FDC1A15645E006B2346 /* APCStepProgressBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F4E1A15645E006B2346 /* APCStepProgressBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B5FDD1A15645E006B2346 /* APCStepProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5F4F1A15645E006B2346 /* APCStepProgressBar.m */; };
-		5B3B5FDE1A15645E006B2346 /* APCAxisView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F511A15645E006B2346 /* APCAxisView.h */; };
+		5B3B5FDE1A15645E006B2346 /* APCAxisView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F511A15645E006B2346 /* APCAxisView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B5FDF1A15645E006B2346 /* APCAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5F521A15645E006B2346 /* APCAxisView.m */; };
-		5B3B5FE01A15645E006B2346 /* APCCircleView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F531A15645E006B2346 /* APCCircleView.h */; };
+		5B3B5FE01A15645E006B2346 /* APCCircleView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F531A15645E006B2346 /* APCCircleView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B5FE11A15645E006B2346 /* APCCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5F541A15645E006B2346 /* APCCircleView.m */; };
-		5B3B5FE21A15645E006B2346 /* APCGraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F551A15645E006B2346 /* APCGraph.h */; };
-		5B3B5FE31A15645E006B2346 /* APCGraphConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F561A15645E006B2346 /* APCGraphConstants.h */; };
-		5B3B5FE41A15645E006B2346 /* APCLineGraphView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F571A15645E006B2346 /* APCLineGraphView.h */; };
+		5B3B5FE21A15645E006B2346 /* APCGraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F551A15645E006B2346 /* APCGraph.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B3B5FE31A15645E006B2346 /* APCGraphConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F561A15645E006B2346 /* APCGraphConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B3B5FE41A15645E006B2346 /* APCLineGraphView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F571A15645E006B2346 /* APCLineGraphView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B5FE51A15645E006B2346 /* APCLineGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5F581A15645E006B2346 /* APCLineGraphView.m */; };
-		5B3B5FE61A15645E006B2346 /* APCPresentAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F591A15645E006B2346 /* APCPresentAnimator.h */; };
+		5B3B5FE61A15645E006B2346 /* APCPresentAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F591A15645E006B2346 /* APCPresentAnimator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B5FE71A15645E006B2346 /* APCPresentAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5F5A1A15645E006B2346 /* APCPresentAnimator.m */; };
-		5B3B5FE81A15645E006B2346 /* APCResizeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F5B1A15645E006B2346 /* APCResizeView.h */; };
+		5B3B5FE81A15645E006B2346 /* APCResizeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F5B1A15645E006B2346 /* APCResizeView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B5FE91A15645E006B2346 /* APCResizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5F5C1A15645E006B2346 /* APCResizeView.m */; };
-		5B3B5FEA1A15645E006B2346 /* APCTableViewItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F5E1A15645E006B2346 /* APCTableViewItem.h */; };
+		5B3B5FEA1A15645E006B2346 /* APCTableViewItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F5E1A15645E006B2346 /* APCTableViewItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B5FEB1A15645E006B2346 /* APCTableViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5F5F1A15645E006B2346 /* APCTableViewItem.m */; };
-		5B3B600F1A15645E006B2346 /* APCActivitiesViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F881A15645E006B2346 /* APCActivitiesViewController.h */; };
+		5B3B600F1A15645E006B2346 /* APCActivitiesViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F881A15645E006B2346 /* APCActivitiesViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60101A15645E006B2346 /* APCActivitiesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5F891A15645E006B2346 /* APCActivitiesViewController.m */; };
-		5B3B60191A15645E006B2346 /* APCLearnMasterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F971A15645E006B2346 /* APCLearnMasterViewController.h */; };
+		5B3B60191A15645E006B2346 /* APCLearnMasterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F971A15645E006B2346 /* APCLearnMasterViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B601A1A15645E006B2346 /* APCLearnMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5F981A15645E006B2346 /* APCLearnMasterViewController.m */; };
-		5B3B601B1A15645E006B2346 /* APCChangePasscodeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F9A1A15645E006B2346 /* APCChangePasscodeViewController.h */; };
+		5B3B601B1A15645E006B2346 /* APCChangePasscodeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F9A1A15645E006B2346 /* APCChangePasscodeViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B601C1A15645E006B2346 /* APCChangePasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5F9B1A15645E006B2346 /* APCChangePasscodeViewController.m */; };
-		5B3B601D1A15645E006B2346 /* APCProfileViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F9C1A15645E006B2346 /* APCProfileViewController.h */; };
+		5B3B601D1A15645E006B2346 /* APCProfileViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F9C1A15645E006B2346 /* APCProfileViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B601E1A15645E006B2346 /* APCProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5F9D1A15645E006B2346 /* APCProfileViewController.m */; };
-		5B3B601F1A15645E006B2346 /* APCSettingsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F9E1A15645E006B2346 /* APCSettingsViewController.h */; };
+		5B3B601F1A15645E006B2346 /* APCSettingsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5F9E1A15645E006B2346 /* APCSettingsViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60201A15645E006B2346 /* APCSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5F9F1A15645E006B2346 /* APCSettingsViewController.m */; };
-		5B3B60211A15645E006B2346 /* APCWithdrawCompleteViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FA01A15645E006B2346 /* APCWithdrawCompleteViewController.h */; };
+		5B3B60211A15645E006B2346 /* APCWithdrawCompleteViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FA01A15645E006B2346 /* APCWithdrawCompleteViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60221A15645E006B2346 /* APCWithdrawCompleteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FA11A15645E006B2346 /* APCWithdrawCompleteViewController.m */; };
-		5B3B60231A15645E006B2346 /* APCWithdrawSurveyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FA21A15645E006B2346 /* APCWithdrawSurveyViewController.h */; };
+		5B3B60231A15645E006B2346 /* APCWithdrawSurveyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FA21A15645E006B2346 /* APCWithdrawSurveyViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60241A15645E006B2346 /* APCWithdrawSurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FA31A15645E006B2346 /* APCWithdrawSurveyViewController.m */; };
-		5B3B60251A15645E006B2346 /* APCCheckTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FA51A15645E006B2346 /* APCCheckTableViewCell.h */; };
+		5B3B60251A15645E006B2346 /* APCCheckTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FA51A15645E006B2346 /* APCCheckTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60261A15645E006B2346 /* APCCheckTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FA61A15645E006B2346 /* APCCheckTableViewCell.m */; };
-		5B3B60271A15645E006B2346 /* APCDefaultTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FA71A15645E006B2346 /* APCDefaultTableViewCell.h */; };
+		5B3B60271A15645E006B2346 /* APCDefaultTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FA71A15645E006B2346 /* APCDefaultTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60281A15645E006B2346 /* APCDefaultTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FA81A15645E006B2346 /* APCDefaultTableViewCell.m */; };
-		5B3B60291A15645E006B2346 /* APCPermissionsCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FA91A15645E006B2346 /* APCPermissionsCell.h */; };
+		5B3B60291A15645E006B2346 /* APCPermissionsCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FA91A15645E006B2346 /* APCPermissionsCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B602A1A15645E006B2346 /* APCPermissionsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FAA1A15645E006B2346 /* APCPermissionsCell.m */; };
-		5B3B602B1A15645E006B2346 /* APCPickerTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FAB1A15645E006B2346 /* APCPickerTableViewCell.h */; };
+		5B3B602B1A15645E006B2346 /* APCPickerTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FAB1A15645E006B2346 /* APCPickerTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B602C1A15645E006B2346 /* APCPickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FAC1A15645E006B2346 /* APCPickerTableViewCell.m */; };
-		5B3B602D1A15645E006B2346 /* APCSegmentedTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FAD1A15645E006B2346 /* APCSegmentedTableViewCell.h */; };
+		5B3B602D1A15645E006B2346 /* APCSegmentedTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FAD1A15645E006B2346 /* APCSegmentedTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B602E1A15645E006B2346 /* APCSegmentedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FAE1A15645E006B2346 /* APCSegmentedTableViewCell.m */; };
-		5B3B602F1A15645E006B2346 /* APCShareTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FAF1A15645E006B2346 /* APCShareTableViewCell.h */; };
+		5B3B602F1A15645E006B2346 /* APCShareTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FAF1A15645E006B2346 /* APCShareTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60301A15645E006B2346 /* APCShareTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FB01A15645E006B2346 /* APCShareTableViewCell.m */; };
-		5B3B60311A15645E006B2346 /* APCSwitchTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FB11A15645E006B2346 /* APCSwitchTableViewCell.h */; };
+		5B3B60311A15645E006B2346 /* APCSwitchTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FB11A15645E006B2346 /* APCSwitchTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60321A15645E006B2346 /* APCSwitchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FB21A15645E006B2346 /* APCSwitchTableViewCell.m */; };
-		5B3B60331A15645E006B2346 /* APCTextFieldTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FB31A15645E006B2346 /* APCTextFieldTableViewCell.h */; };
+		5B3B60331A15645E006B2346 /* APCTextFieldTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FB31A15645E006B2346 /* APCTextFieldTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60341A15645E006B2346 /* APCTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FB41A15645E006B2346 /* APCTextFieldTableViewCell.m */; };
-		5B3B60351A15645E006B2346 /* APCTintedTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FB51A15645E006B2346 /* APCTintedTableViewCell.h */; };
+		5B3B60351A15645E006B2346 /* APCTintedTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FB51A15645E006B2346 /* APCTintedTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60361A15645E006B2346 /* APCTintedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FB61A15645E006B2346 /* APCTintedTableViewCell.m */; };
-		5B3B60371A15645E006B2346 /* APCBaseWithProgressTaskViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FB81A15645E006B2346 /* APCBaseWithProgressTaskViewController.h */; };
+		5B3B60371A15645E006B2346 /* APCBaseWithProgressTaskViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FB81A15645E006B2346 /* APCBaseWithProgressTaskViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60381A15645E006B2346 /* APCBaseWithProgressTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FB91A15645E006B2346 /* APCBaseWithProgressTaskViewController.m */; };
-		5B3B60391A15645E006B2346 /* APCSetupTaskViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FBA1A15645E006B2346 /* APCSetupTaskViewController.h */; };
+		5B3B60391A15645E006B2346 /* APCSetupTaskViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FBA1A15645E006B2346 /* APCSetupTaskViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B603A1A15645E006B2346 /* APCSetupTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FBB1A15645E006B2346 /* APCSetupTaskViewController.m */; };
-		5B3B603B1A15645E006B2346 /* APCStepViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FBC1A15645E006B2346 /* APCStepViewController.h */; };
+		5B3B603B1A15645E006B2346 /* APCStepViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FBC1A15645E006B2346 /* APCStepViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B603C1A15645E006B2346 /* APCStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FBD1A15645E006B2346 /* APCStepViewController.m */; };
 		5B3B603D1A15645E006B2346 /* APCInstructionStep.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B5FC01A15645E006B2346 /* APCInstructionStep.storyboard */; };
-		5B3B603E1A15645E006B2346 /* APCInstructionStepViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FC11A15645E006B2346 /* APCInstructionStepViewController.h */; };
+		5B3B603E1A15645E006B2346 /* APCInstructionStepViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FC11A15645E006B2346 /* APCInstructionStepViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B603F1A15645E006B2346 /* APCInstructionStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FC21A15645E006B2346 /* APCInstructionStepViewController.m */; };
-		5B3B60401A15645E006B2346 /* APCIntroductionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FC31A15645E006B2346 /* APCIntroductionViewController.h */; };
+		5B3B60401A15645E006B2346 /* APCIntroductionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FC31A15645E006B2346 /* APCIntroductionViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60411A15645E006B2346 /* APCIntroductionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FC41A15645E006B2346 /* APCIntroductionViewController.m */; };
 		5B3B60421A15645E006B2346 /* APCIntroductionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B5FC51A15645E006B2346 /* APCIntroductionViewController.xib */; };
-		5B3B60431A15645E006B2346 /* APCSimpleTaskSummaryViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FC71A15645E006B2346 /* APCSimpleTaskSummaryViewController.h */; };
+		5B3B60431A15645E006B2346 /* APCSimpleTaskSummaryViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FC71A15645E006B2346 /* APCSimpleTaskSummaryViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60441A15645E006B2346 /* APCSimpleTaskSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FC81A15645E006B2346 /* APCSimpleTaskSummaryViewController.m */; };
 		5B3B60451A15645E006B2346 /* APCSimpleTaskSummaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B5FC91A15645E006B2346 /* APCSimpleTaskSummaryViewController.xib */; };
-		5B3B60461A15645E006B2346 /* APCPasscodeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FCB1A15645E006B2346 /* APCPasscodeViewController.h */; };
+		5B3B60461A15645E006B2346 /* APCPasscodeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FCB1A15645E006B2346 /* APCPasscodeViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60471A15645E006B2346 /* APCPasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FCC1A15645E006B2346 /* APCPasscodeViewController.m */; };
 		5B3B60481A15645E006B2346 /* APCPasscodeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B5FCD1A15645E006B2346 /* APCPasscodeViewController.xib */; };
-		5B3B60491A15645E006B2346 /* APCUserInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FCE1A15645E006B2346 /* APCUserInfoViewController.h */; };
+		5B3B60491A15645E006B2346 /* APCUserInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FCE1A15645E006B2346 /* APCUserInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B604A1A15645E006B2346 /* APCUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FCF1A15645E006B2346 /* APCUserInfoViewController.m */; };
-		5B3B604B1A15645E006B2346 /* APCImageButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FD11A15645E006B2346 /* APCImageButton.h */; };
+		5B3B604B1A15645E006B2346 /* APCImageButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FD11A15645E006B2346 /* APCImageButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B604C1A15645E006B2346 /* APCImageButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FD21A15645E006B2346 /* APCImageButton.m */; };
-		5B3B604D1A15645E006B2346 /* APCPasscodeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FD31A15645E006B2346 /* APCPasscodeView.h */; };
+		5B3B604D1A15645E006B2346 /* APCPasscodeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FD31A15645E006B2346 /* APCPasscodeView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B604E1A15645E006B2346 /* APCPasscodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FD41A15645E006B2346 /* APCPasscodeView.m */; };
-		5B3B604F1A15645E006B2346 /* APCPermissionButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FD51A15645E006B2346 /* APCPermissionButton.h */; };
+		5B3B604F1A15645E006B2346 /* APCPermissionButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B5FD51A15645E006B2346 /* APCPermissionButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60501A15645E006B2346 /* APCPermissionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B5FD61A15645E006B2346 /* APCPermissionButton.m */; };
 		5B3B60511A15645E006B2346 /* APCUserInfoTableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B5FD71A15645E006B2346 /* APCUserInfoTableHeaderView.xib */; };
-		5B3B60761A156495006B2346 /* APCEligibleViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60521A156495006B2346 /* APCEligibleViewController.h */; };
+		5B3B60761A156495006B2346 /* APCEligibleViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60521A156495006B2346 /* APCEligibleViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60771A156495006B2346 /* APCEligibleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B60531A156495006B2346 /* APCEligibleViewController.m */; };
-		5B3B60781A156495006B2346 /* APCForgotPasswordViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60541A156495006B2346 /* APCForgotPasswordViewController.h */; };
+		5B3B60781A156495006B2346 /* APCForgotPasswordViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60541A156495006B2346 /* APCForgotPasswordViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60791A156495006B2346 /* APCForgotPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B60551A156495006B2346 /* APCForgotPasswordViewController.m */; };
-		5B3B607A1A156495006B2346 /* APCInclusionCriteriaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60561A156495006B2346 /* APCInclusionCriteriaViewController.h */; };
+		5B3B607A1A156495006B2346 /* APCInclusionCriteriaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60561A156495006B2346 /* APCInclusionCriteriaViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B607B1A156495006B2346 /* APCInclusionCriteriaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B60571A156495006B2346 /* APCInclusionCriteriaViewController.m */; };
-		5B3B607C1A156495006B2346 /* APCInEligibleViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60581A156495006B2346 /* APCInEligibleViewController.h */; };
+		5B3B607C1A156495006B2346 /* APCInEligibleViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60581A156495006B2346 /* APCInEligibleViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B607D1A156495006B2346 /* APCInEligibleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B60591A156495006B2346 /* APCInEligibleViewController.m */; };
-		5B3B607E1A156495006B2346 /* APCIntroVideoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B605A1A156495006B2346 /* APCIntroVideoViewController.h */; };
+		5B3B607E1A156495006B2346 /* APCIntroVideoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B605A1A156495006B2346 /* APCIntroVideoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B607F1A156495006B2346 /* APCIntroVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B605B1A156495006B2346 /* APCIntroVideoViewController.m */; };
-		5B3B60801A156495006B2346 /* APCShareViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B605C1A156495006B2346 /* APCShareViewController.h */; };
+		5B3B60801A156495006B2346 /* APCShareViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B605C1A156495006B2346 /* APCShareViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60811A156495006B2346 /* APCShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B605D1A156495006B2346 /* APCShareViewController.m */; };
-		5B3B60821A156495006B2346 /* APCSignInViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B605E1A156495006B2346 /* APCSignInViewController.h */; };
+		5B3B60821A156495006B2346 /* APCSignInViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B605E1A156495006B2346 /* APCSignInViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60831A156495006B2346 /* APCSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B605F1A156495006B2346 /* APCSignInViewController.m */; };
-		5B3B60841A156495006B2346 /* APCSignUpInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60601A156495006B2346 /* APCSignUpInfoViewController.h */; };
+		5B3B60841A156495006B2346 /* APCSignUpInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60601A156495006B2346 /* APCSignUpInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60851A156495006B2346 /* APCSignUpInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B60611A156495006B2346 /* APCSignUpInfoViewController.m */; };
-		5B3B60861A156495006B2346 /* APCSignUpPermissionsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60621A156495006B2346 /* APCSignUpPermissionsViewController.h */; };
+		5B3B60861A156495006B2346 /* APCSignUpPermissionsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60621A156495006B2346 /* APCSignUpPermissionsViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60871A156495006B2346 /* APCSignUpPermissionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B60631A156495006B2346 /* APCSignUpPermissionsViewController.m */; };
-		5B3B60881A156495006B2346 /* APCSignUpProgressing.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60641A156495006B2346 /* APCSignUpProgressing.h */; };
-		5B3B60891A156495006B2346 /* APCSignupTouchIDViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60651A156495006B2346 /* APCSignupTouchIDViewController.h */; };
+		5B3B60881A156495006B2346 /* APCSignUpProgressing.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60641A156495006B2346 /* APCSignUpProgressing.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B3B60891A156495006B2346 /* APCSignupTouchIDViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60651A156495006B2346 /* APCSignupTouchIDViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B608A1A156495006B2346 /* APCSignupTouchIDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B60661A156495006B2346 /* APCSignupTouchIDViewController.m */; };
-		5B3B608B1A156495006B2346 /* APCSpinnerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60671A156495006B2346 /* APCSpinnerViewController.h */; };
+		5B3B608B1A156495006B2346 /* APCSpinnerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60671A156495006B2346 /* APCSpinnerViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B608C1A156495006B2346 /* APCSpinnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B60681A156495006B2346 /* APCSpinnerViewController.m */; };
 		5B3B608D1A156495006B2346 /* APCSpinnerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B60691A156495006B2346 /* APCSpinnerViewController.xib */; };
-		5B3B608E1A156495006B2346 /* APCStudyDetailsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B606A1A156495006B2346 /* APCStudyDetailsViewController.h */; };
+		5B3B608E1A156495006B2346 /* APCStudyDetailsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B606A1A156495006B2346 /* APCStudyDetailsViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B608F1A156495006B2346 /* APCStudyDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B606B1A156495006B2346 /* APCStudyDetailsViewController.m */; };
-		5B3B60901A156495006B2346 /* APCStudyOverviewViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B606C1A156495006B2346 /* APCStudyOverviewViewController.h */; };
+		5B3B60901A156495006B2346 /* APCStudyOverviewViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B606C1A156495006B2346 /* APCStudyOverviewViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60911A156495006B2346 /* APCStudyOverviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B606D1A156495006B2346 /* APCStudyOverviewViewController.m */; };
 		5B3B60921A156495006B2346 /* APCStudyOverviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B606E1A156495006B2346 /* APCStudyOverviewViewController.xib */; };
-		5B3B60931A156495006B2346 /* APCTermsAndConditionsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B606F1A156495006B2346 /* APCTermsAndConditionsViewController.h */; };
+		5B3B60931A156495006B2346 /* APCTermsAndConditionsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B606F1A156495006B2346 /* APCTermsAndConditionsViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60941A156495006B2346 /* APCTermsAndConditionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B60701A156495006B2346 /* APCTermsAndConditionsViewController.m */; };
 		5B3B60951A156495006B2346 /* APCUserInfoConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60711A156495006B2346 /* APCUserInfoConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5B3B60971A156495006B2346 /* APCEmailVerifyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60741A156495006B2346 /* APCEmailVerifyViewController.h */; };
-		5B3B609C1A15652D006B2346 /* APCDashboardViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B609A1A15652D006B2346 /* APCDashboardViewController.h */; };
+		5B3B60971A156495006B2346 /* APCEmailVerifyViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60741A156495006B2346 /* APCEmailVerifyViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B3B609C1A15652D006B2346 /* APCDashboardViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B609A1A15652D006B2346 /* APCDashboardViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B609D1A15652D006B2346 /* APCDashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B609B1A15652D006B2346 /* APCDashboardViewController.m */; };
-		5B3B60A41A156538006B2346 /* APCDashboardGraphTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B609E1A156538006B2346 /* APCDashboardGraphTableViewCell.h */; };
+		5B3B60A41A156538006B2346 /* APCDashboardGraphTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B609E1A156538006B2346 /* APCDashboardGraphTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60A51A156538006B2346 /* APCDashboardGraphTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B609F1A156538006B2346 /* APCDashboardGraphTableViewCell.m */; };
-		5B3B60A61A156538006B2346 /* APCDashboardMessageTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60A01A156538006B2346 /* APCDashboardMessageTableViewCell.h */; };
+		5B3B60A61A156538006B2346 /* APCDashboardMessageTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60A01A156538006B2346 /* APCDashboardMessageTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60A71A156538006B2346 /* APCDashboardMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B60A11A156538006B2346 /* APCDashboardMessageTableViewCell.m */; };
-		5B3B60A81A156538006B2346 /* APCDashboardProgressTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60A21A156538006B2346 /* APCDashboardProgressTableViewCell.h */; };
+		5B3B60A81A156538006B2346 /* APCDashboardProgressTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60A21A156538006B2346 /* APCDashboardProgressTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60A91A156538006B2346 /* APCDashboardProgressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B60A31A156538006B2346 /* APCDashboardProgressTableViewCell.m */; };
+		5B447A4D1A15E54B0099FC7F /* APCDashboardEditTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B447A4B1A15E54B0099FC7F /* APCDashboardEditTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B447A4E1A15E54B0099FC7F /* APCDashboardEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B447A4C1A15E54B0099FC7F /* APCDashboardEditTableViewCell.m */; };
 		5B46337A1A15842600E68B82 /* APCConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B4633791A15838C00E68B82 /* APCConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B4633811A1590D200E68B82 /* APCDashboardEditViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B46337F1A1590D200E68B82 /* APCDashboardEditViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B4633821A1590D200E68B82 /* APCDashboardEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B4633801A1590D200E68B82 /* APCDashboardEditViewController.m */; };
@@ -433,6 +435,8 @@
 		5B3B60A11A156538006B2346 /* APCDashboardMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDashboardMessageTableViewCell.m; sourceTree = "<group>"; };
 		5B3B60A21A156538006B2346 /* APCDashboardProgressTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardProgressTableViewCell.h; sourceTree = "<group>"; };
 		5B3B60A31A156538006B2346 /* APCDashboardProgressTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDashboardProgressTableViewCell.m; sourceTree = "<group>"; };
+		5B447A4B1A15E54B0099FC7F /* APCDashboardEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardEditTableViewCell.h; sourceTree = "<group>"; };
+		5B447A4C1A15E54B0099FC7F /* APCDashboardEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDashboardEditTableViewCell.m; sourceTree = "<group>"; };
 		5B4633791A15838C00E68B82 /* APCConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APCConstants.h; sourceTree = "<group>"; };
 		5B46337F1A1590D200E68B82 /* APCDashboardEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardEditViewController.h; sourceTree = "<group>"; };
 		5B4633801A1590D200E68B82 /* APCDashboardEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDashboardEditViewController.m; sourceTree = "<group>"; };
@@ -776,6 +780,8 @@
 				5B3B5FB41A15645E006B2346 /* APCTextFieldTableViewCell.m */,
 				5B3B5FB51A15645E006B2346 /* APCTintedTableViewCell.h */,
 				5B3B5FB61A15645E006B2346 /* APCTintedTableViewCell.m */,
+				5B447A4B1A15E54B0099FC7F /* APCDashboardEditTableViewCell.h */,
+				5B447A4C1A15E54B0099FC7F /* APCDashboardEditTableViewCell.m */,
 			);
 			path = TableViewCells;
 			sourceTree = "<group>";
@@ -1221,6 +1227,7 @@
 				5B3B607C1A156495006B2346 /* APCInEligibleViewController.h in Headers */,
 				F57329B519DF093000A85564 /* APCUser+Bridge.h in Headers */,
 				F5B4213B19D23D7700F9CD69 /* APCParametersCell.h in Headers */,
+				5B447A4D1A15E54B0099FC7F /* APCDashboardEditTableViewCell.h in Headers */,
 				F5FDCF9319EC6A17002486DE /* APCAppearanceInfo.h in Headers */,
 				F5179CA219D0917D001DCCB7 /* APCQuestionResult.h in Headers */,
 				5B46337A1A15842600E68B82 /* APCConstants.h in Headers */,
@@ -1440,6 +1447,7 @@
 				F588BA0D19D21EFE00692473 /* NSString+Helper.m in Sources */,
 				5B3B608C1A156495006B2346 /* APCSpinnerViewController.m in Sources */,
 				5B3B5FE11A15645E006B2346 /* APCCircleView.m in Sources */,
+				5B447A4E1A15E54B0099FC7F /* APCDashboardEditTableViewCell.m in Sources */,
 				F5179C9419D0917D001DCCB7 /* APCDBStatus.m in Sources */,
 				F5179CD219D0917D001DCCB7 /* APCParameters.m in Sources */,
 				5B3B60791A156495006B2346 /* APCForgotPasswordViewController.m in Sources */,

@@ -27,6 +27,4 @@ typedef NS_ENUM(APCTableViewItemType, APCTableViewDashboardItemType) {
 
 - (APCTableViewItemType)itemTypeForIndexPath:(NSIndexPath *)indexPath;
 
-- (IBAction)editRows:(id)sender;
-
 @end

@@ -23,6 +23,7 @@
     [super viewDidLoad];
     
     self.lineCharts = [NSMutableArray new];
+    self.items = [NSMutableArray new];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -63,7 +64,7 @@
         
         if (graphItem.graphType == kAPCDashboardGraphTypeLine) {
             APCLineGraphView *lineGraphView = [[APCLineGraphView alloc] initWithFrame:graphCell.graphContainerView.frame];
-//            lineGraphView.datasource = self.heartRateScore;
+            lineGraphView.datasource = graphItem.graphData;
             lineGraphView.delegate = self;
             lineGraphView.titleLabel.text = graphItem.caption;
             lineGraphView.subTitleLabel.text = graphItem.detailText;
@@ -118,6 +119,41 @@
     }
     
     return headerView;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat height;
+    
+    APCTableViewItem *dashboardItem = [self itemForIndexPath:indexPath];
+    
+    if ([dashboardItem isKindOfClass:[APCTableViewDashboardProgressItem class]]) {
+        
+        height = 163.0f;
+        
+    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardGraphItem class]]){
+        
+        APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)dashboardItem;
+        
+        if (graphItem.graphType == kAPCDashboardGraphTypeLine) {
+            height = 204.0f;
+            
+        } else if (graphItem.graphType == kAPCDashboardGraphTypePie) {
+            height = 204.0f;
+            
+        } else if (graphItem.graphType == kAPCDashboardGraphTypeTimeline) {
+            height = 204.0f;
+            
+        }
+        
+    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardMessageItem class]]){
+        
+        height = 123.0f;
+    } else {
+        height = 65.0f;
+    }
+    
+    return height;
 }
 
 #pragma mark - APCLineGraphViewDelegate methods
@@ -182,7 +218,6 @@
     return dashboardItemType;
 }
 
-- (IBAction)editRows:(id)sender {
-}
+
 
 @end
