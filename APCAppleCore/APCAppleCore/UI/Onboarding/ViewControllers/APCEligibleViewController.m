@@ -59,7 +59,7 @@
     consent.signaturePageTitle = @"Consent";
     consent.signaturePageContent = @"I agree  to participate in this research Study.";
     
-    
+    //TODO:Check the identifier
     RKSTConsentSignature *participantSig = [RKSTConsentSignature signatureForPersonWithTitle:@"Participant" dateFormatString:@"yyyy-MM-dd 'at' HH:mm" identifier:@"com.ymedia.participant"];
     [consent addSignature:participantSig];
     
