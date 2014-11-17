@@ -17,7 +17,6 @@ static CLLocationDistance kAllowDeferredLocationUpdatesUntilTraveled = 5.0;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
-@property (nonatomic, strong) RKDataArchive *taskArchive;
 @property (nonatomic, strong) NSURL *fileUrl;
 
 @property (assign) BOOL deferringUpdates;
@@ -92,9 +91,9 @@ static CLLocationDistance kAllowDeferredLocationUpdatesUntilTraveled = 5.0;
 //        [self.taskArchive resetContent];
 //    }
 //    
-//    RKTask* task = [[RKTask alloc] initWithName:@"PassiveLocationTracking" identifier:@"passiveLocationTracking" steps:nil];
+//    RKSTTask* task = [[RKSTTask alloc] initWithName:@"PassiveLocationTracking" identifier:@"passiveLocationTracking" steps:nil];
 //    
-//    self.taskArchive = [[RKDataArchive alloc] initWithItemIdentifier:[RKItemIdentifier itemIdentifierForTask:task]
+//    self.taskArchive = [[RKSTDataArchive alloc] initWithItemIdentifier:[RKItemIdentifier itemIdentifierForTask:task]
 //                                                     studyIdentifier:passiveLocationTrackingIdentifier
 //                                                    taskInstanceUUID: [NSUUID UUID]
 //                                                       extraMetadata: nil
@@ -149,64 +148,6 @@ static CLLocationDistance kAllowDeferredLocationUpdatesUntilTraveled = 5.0;
      more physically precise the location is. A negative accuracy value indicates an invalid location. */
     locationJson[@"verticalAccuracy"] = [NSNumber numberWithDouble:manager.location.verticalAccuracy];
     locationJson[@"horizontalAccuracy"] = [NSNumber numberWithDouble:manager.location.horizontalAccuracy];
-    
-    NSData *data = [NSJSONSerialization dataWithJSONObject:locationJson options:0 error:nil];
-    
-    if (self.taskArchive)
-    {
-        [self.taskArchive resetContent];
-    }
-    
-    RKTask* task = [[RKTask alloc] initWithName:@"PassiveLocationTracking" identifier:@"passiveLocationTracking" steps:nil];
-    
-    self.taskArchive = [[RKDataArchive alloc] initWithItemIdentifier:[RKItemIdentifier itemIdentifierForTask:task]
-                                                     studyIdentifier:kPassiveLocationTrackingIdentifier
-                                                    taskInstanceUUID: [NSUUID UUID]
-                                                       extraMetadata: nil
-                                                      fileProtection:RKFileProtectionCompleteUnlessOpen];
-    
-    NSError *addFileError = nil;
-    [self.taskArchive addFileWithURL:[self makeArchiveURL] contentType:@"json" metadata:nil error:&addFileError];
-
-    NSError *error;
-    [self.taskArchive addContentWithData:data
-                                filename:kAPCPassiveLocationTrackingFileName
-                             contentType:@"json"
-                               timestamp:[NSDate date]
-                                metadata:nil error:&error];
-    
-    if (error) {
-        NSLog(@"Content not added");
-        //TODO Handle error
-    } else
-    {
-        NSError *err = nil;
-    
-        NSURL *archiveFileURL = [self.taskArchive archiveURLWithError:&err];
-        
-        if (err) {
-            NSLog(@"Error");
-        } else if (archiveFileURL)
-        {
-            NSURL *documents = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]];
-            NSURL *outputUrl = [documents URLByAppendingPathComponent:[archiveFileURL lastPathComponent]];
-            
-            // This is where you would queue the archive for upload. In this demo, we move it
-            // to the documents directory, where you could copy it off using iTunes, for instance.
-            [[NSFileManager defaultManager] moveItemAtURL:archiveFileURL toURL:outputUrl error:nil];
-            
-            //TODO this is here because it's convenient.
-            //NSLog(@"passive location data outputUrl= %@", outputUrl);
-            
-            // When done, clean up:
-            self.taskArchive = nil;
-            
-            if (archiveFileURL)
-            {
-                [[NSFileManager defaultManager] removeItemAtURL:archiveFileURL error:nil];
-            }
-        }
-    }
 }
 
 - (NSDictionary *)retreieveLocationMarkersFromLog

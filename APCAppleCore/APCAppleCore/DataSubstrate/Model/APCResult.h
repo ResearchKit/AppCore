@@ -17,11 +17,8 @@
 @property (nonatomic, retain) NSString * uid;
 @property (nonatomic, retain) NSDate * updatedAt;
 @property (nonatomic, retain) NSNumber * uploaded;
-@property (nonatomic, retain) NSString * rkTaskInstanceUUID;
-@property (nonatomic, retain) NSDate * rkTimeStamp;
-@property (nonatomic, retain) NSString * rkItemIdentifier;
+@property (nonatomic, retain) NSString * rkIdentifier;
 @property (nonatomic, retain) NSString * rkContentType;
-@property (nonatomic, retain) NSString * rkDeviceHardware;
 @property (nonatomic, retain) NSString * rkMetadata;
 @property (nonatomic, retain) APCScheduledTask *scheduledTask;
 

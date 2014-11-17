@@ -10,9 +10,9 @@
 
 @implementation APCGenericSurveyTaskViewController
 
-+ (RKTask *)createTask: (APCScheduledTask*) scheduledTask
++ (RKSTTask *)createTask: (APCScheduledTask*) scheduledTask
 {
-    RKTask * task = [scheduledTask.task rkTask];
+    RKSTTask * task = [scheduledTask.task rkTask];
     return  task;
 }
 
