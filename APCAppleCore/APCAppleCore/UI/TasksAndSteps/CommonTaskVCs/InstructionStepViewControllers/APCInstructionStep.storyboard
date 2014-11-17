@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wTC-zL-7qS">
-                                <rect key="frame" x="10" y="67" width="300" height="434"/>
+                                <rect key="frame" x="10" y="57" width="300" height="434"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="wTC-zL-7qS" secondAttribute="height" multiplier="5:7" constant="-10" id="1t5-LG-f7C"/>
                                 </constraints>
@@ -50,7 +50,7 @@
                             <constraint firstAttribute="trailing" secondItem="5Xt-cT-6jD" secondAttribute="trailing" id="Lu9-1f-HAv"/>
                             <constraint firstAttribute="trailing" secondItem="5Xt-cT-6jD" secondAttribute="trailing" id="O5k-d7-NyR"/>
                             <constraint firstAttribute="trailingMargin" secondItem="wTC-zL-7qS" secondAttribute="trailing" constant="-6" id="agr-PI-wEq"/>
-                            <constraint firstAttribute="centerY" secondItem="wTC-zL-7qS" secondAttribute="centerY" id="bzO-8T-ETA"/>
+                            <constraint firstAttribute="centerY" secondItem="wTC-zL-7qS" secondAttribute="centerY" constant="10" id="bzO-8T-ETA"/>
                             <constraint firstItem="wTC-zL-7qS" firstAttribute="leading" secondItem="cmE-ys-dpE" secondAttribute="leadingMargin" constant="-6" id="qh7-bq-lbf"/>
                         </constraints>
                     </view>
