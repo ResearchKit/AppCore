@@ -10,7 +10,6 @@
 #import <ResearchKit/RKErrors.h>
 
 @class RKStudy;
-@class RKItemIdentifier;
 @class RKDataArchive;
 
 /**
@@ -67,7 +66,7 @@
  *
  * @param data The data to send.
  * @param itemId An identifier for the task, step, or collector the data was collected for.
- * @param taskInstanceUUID UUID identifying the task instance for which this item was collected. Can be nil.
+ * @param taskRunUUID UUID identifying the task instance for which this item was collected. Can be nil.
  * @param mimeType The MIME type of the collected data
  * @param error Indication of any error queueing the data to send
  *
@@ -76,8 +75,8 @@
  *
  */
 - (BOOL)queueData:(NSData *)data
-  itemIdentifier:(RKItemIdentifier *)itemIdentifier
-taskInstanceUUID:(NSUUID*)taskInstanceUUID
+  itemIdentifier:(NSString *)itemIdentifier
+taskRunUUID:(NSUUID*)taskRunUUID
         mimeType:(NSString *)mimeType
            error:(NSError * __autoreleasing *)errorOut;
 
