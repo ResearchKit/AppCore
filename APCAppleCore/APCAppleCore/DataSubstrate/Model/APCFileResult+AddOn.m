@@ -12,12 +12,12 @@
 
 @implementation APCFileResult (AddOn)
 
-+ (instancetype) storeRKResult:(RKResult*) rkResult inContext: (NSManagedObjectContext*) context
++ (instancetype) storeRKSTResult:(RKSTResult*) rkResult inContext: (NSManagedObjectContext*) context
 {
     __block APCFileResult * result;
     [context performBlockAndWait:^{
         result = [APCFileResult newObjectForContext:context];
-        [self mapRKResult:rkResult toAPCResult:result];
+        [self mapRKSTResult:rkResult toAPCResult:result];
         NSError * saveError;
         [result saveToPersistentStore:&saveError];
         [saveError handle];
@@ -25,15 +25,15 @@
     return result;
 }
 
-+(void) mapRKResult:(RKResult *)rkResult toAPCResult:(APCResult *)apcResult
++(void) mapRKSTResult:(RKSTResult *)rkResult toAPCResult:(APCResult *)apcResult
 {
-    [super mapRKResult:rkResult toAPCResult:apcResult];
+    [super mapRKSTResult:rkResult toAPCResult:apcResult];
     
-    NSParameterAssert([rkResult isKindOfClass:[RKFileResult class]]);
-    RKFileResult * localRKResult = (RKFileResult*) rkResult;
+    NSParameterAssert([rkResult isKindOfClass:[RKSTFileResult class]]);
+    RKSTFileResult * localRKSTResult = (RKSTFileResult*) rkResult;
     APCFileResult * localAPCResult = (APCFileResult*) apcResult;
 
-    NSData * data = [NSData dataWithContentsOfFile:localRKResult.fileUrl.path];
+    NSData * data = [NSData dataWithContentsOfFile:localRKSTResult.fileUrl.path];
     localAPCResult.file = data;
     
 }

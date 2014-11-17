@@ -16,11 +16,7 @@
 @dynamic uid;
 @dynamic updatedAt;
 @dynamic uploaded;
-@dynamic rkTaskInstanceUUID;
-@dynamic rkTimeStamp;
-@dynamic rkItemIdentifier;
-@dynamic rkContentType;
-@dynamic rkDeviceHardware;
+@dynamic rkTaskIdentifier;
 @dynamic rkMetadata;
 @dynamic scheduledTask;
 

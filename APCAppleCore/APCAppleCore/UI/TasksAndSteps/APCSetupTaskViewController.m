@@ -15,31 +15,31 @@
 #pragma  mark  -  Instance Initialisation
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask
 {
-    RKTask  *task = [self createTask: scheduledTask];
-    APCSetupTaskViewController * controller = task ? [[self alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]] : nil;
+    RKSTOrderedTask  *task = [self createTask: scheduledTask];
+    APCSetupTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:[NSUUID UUID]] : nil;
     controller.scheduledTask = scheduledTask;
     controller.taskDelegate = controller;
     return  controller;
 }
 
-+ (RKTask *)createTask: (APCScheduledTask*) scheduledTask
++ (RKSTOrderedTask *)createTask: (APCScheduledTask*) scheduledTask
 {
     return  nil;
 }
 
 /*********************************************************************************/
-#pragma mark - RKStepViewControllerDelegate
+#pragma mark - RKSTStepViewControllerDelegate
 /*********************************************************************************/
 //TODO this is commented out because it prevents us from using the delegate method to navigate steps. This is also a required protocol and therefore is causing the compiler to throw a warning.
 
-//- (void)stepViewControllerDidFinish:(RKStepViewController *)stepViewController navigationDirection:(RKStepViewControllerNavigationDirection)direction {
+//- (void)stepViewControllerDidFinish:(RKSTStepViewController *)stepViewController navigationDirection:(RKSTStepViewControllerNavigationDirection)direction {
 //    
 //}
 
 /*********************************************************************************/
-#pragma mark - RKTaskDelegate
+#pragma mark - RKSTOrderedTaskDelegate
 /*********************************************************************************/
-- (void)taskViewControllerDidComplete: (RKTaskViewController *)taskViewController
+- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
 {
     self.scheduledTask.completed = @YES;
     NSError * saveError;
@@ -48,16 +48,21 @@
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewControllerDidCancel:(RKTaskViewController *)taskViewController
+- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
 {
-    [taskViewController suspend];
+    [taskViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
+{
+    //TODO: Figure out what to do if it fails
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 //Universal Did Produce Result
-- (void)taskViewController:(RKTaskViewController *)taskViewController didProduceResult:(RKResult *)result
+- (void)taskViewController:(RKSTTaskViewController *)taskViewController didProduceResult:(RKSTResult *)result
 {
-    APCResult * apcResult = [APCResult storeRKResult:result inContext:((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext];
+    APCResult * apcResult = [APCResult storeRKSTResult:result inContext:((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext];
     apcResult.scheduledTask = self.scheduledTask;
     NSError * saveError;
     [apcResult saveToPersistentStore:&saveError];

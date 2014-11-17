@@ -18,7 +18,7 @@
 
 static CGFloat kSectionHeaderHeight = 40.f;
 
-@interface APCProfileViewController ()<RKTaskViewControllerDelegate>
+@interface APCProfileViewController ()
 
 
 @end

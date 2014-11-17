@@ -18,6 +18,5 @@
 @property (nonatomic, retain) NSString * stringAnswer;
 @property (nonatomic, retain) NSNumber * integerAnswer;
 @property (nonatomic, retain) NSNumber * floatAnswer;
-@property (nonatomic, retain) APCSurveyResult *survey;
 
 @end

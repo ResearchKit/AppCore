@@ -7,8 +7,6 @@
 //
 
 #import "APCQuestionResult.h"
-#import "APCSurveyResult.h"
-
 
 @implementation APCQuestionResult
 
@@ -16,6 +14,5 @@
 @dynamic stringAnswer;
 @dynamic integerAnswer;
 @dynamic floatAnswer;
-@dynamic survey;
 
 @end

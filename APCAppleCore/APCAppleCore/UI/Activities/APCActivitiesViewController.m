@@ -16,7 +16,7 @@ static CGFloat kTableViewRowHeight = 80;
 static CGFloat kTableViewSectionHeaderHeight = 45;
 static NSInteger kNumberOfSectionsInTableView = 1;
 
-@interface APCActivitiesViewController () <RKTaskViewControllerDelegate>
+@interface APCActivitiesViewController () <RKSTTaskViewControllerDelegate>
 
 @property (strong, nonatomic) NSMutableArray *scheduledTasksArray;
 

@@ -12,12 +12,12 @@
 
 @implementation APCQuestionResult (AddOn)
 
-+ (instancetype) storeRKResult:(RKResult*) rkResult inContext: (NSManagedObjectContext*) context
++ (instancetype) storeRKSTResult:(RKSTResult*) rkResult inContext: (NSManagedObjectContext*) context
 {
     __block APCQuestionResult * result;
     [context performBlockAndWait:^{
         result = [APCQuestionResult newObjectForContext:context];
-        [self mapRKResult:rkResult toAPCResult:result];
+        [self mapRKSTResult:rkResult toAPCResult:result];
         NSError * saveError;
         [result saveToPersistentStore:&saveError];
         [saveError handle];
@@ -25,17 +25,17 @@
     return result;
 }
 
-+(void) mapRKResult:(RKResult *)rkResult toAPCResult:(APCResult *)apcResult
++(void) mapRKSTResult:(RKSTResult *)rkResult toAPCResult:(APCResult *)apcResult
 {
-    [super mapRKResult:rkResult toAPCResult:apcResult];
+    [super mapRKSTResult:rkResult toAPCResult:apcResult];
     
-    NSParameterAssert([rkResult isKindOfClass:[RKQuestionResult class]]);
-    RKQuestionResult * localRKResult = (RKQuestionResult*) rkResult;
+    NSParameterAssert([rkResult isKindOfClass:[RKSTQuestionResult class]]);
+    RKSTQuestionResult * localRKSTResult = (RKSTQuestionResult*) rkResult;
     APCQuestionResult * localAPCResult = (APCQuestionResult*) apcResult;
 
-    localAPCResult.questionTypeStore = [NSNumber numberWithInteger:localRKResult.questionType];
-    if (localRKResult.answer) {
-        switch (localRKResult.questionType) {
+    localAPCResult.questionTypeStore = [NSNumber numberWithInteger:localRKSTResult.questionType];
+    if (localRKSTResult.answer) {
+        switch (localRKSTResult.questionType) {
             case RKSurveyQuestionTypeDate:
             case RKSurveyQuestionTypeTime:
             case RKSurveyQuestionTypeDateAndTime:
@@ -45,39 +45,38 @@
             case RKSurveyQuestionTypeSingleChoice:
             {
                 //Expecting either a string or an int
-                if ([localRKResult.answer isKindOfClass:[NSString class]]) {
-                    localAPCResult.stringAnswer = (NSString*)localRKResult.answer;
-                } else if ([localRKResult.answer isKindOfClass:[NSNumber class]]) {
-                    localAPCResult.integerAnswer = localRKResult.answer;
+                if ([localRKSTResult.answer isKindOfClass:[NSString class]]) {
+                    localAPCResult.stringAnswer = (NSString*)localRKSTResult.answer;
+                } else if ([localRKSTResult.answer isKindOfClass:[NSNumber class]]) {
+                    localAPCResult.integerAnswer = localRKSTResult.answer;
                 } else {
-                    NSAssert(localRKResult.answer, @"Its neither an integer nor a string");
+                    NSAssert(localRKSTResult.answer, @"Its neither an integer nor a string");
                 }
             }
                 break;
             case RKSurveyQuestionTypeBoolean:
             {
-                NSAssert([localRKResult.answer isKindOfClass:[NSNumber class]], @"Its not a NSNumber");
-                localAPCResult.integerAnswer = (NSNumber*)localRKResult.answer;
+                NSAssert([localRKSTResult.answer isKindOfClass:[NSNumber class]], @"Its not a NSNumber");
+                localAPCResult.integerAnswer = (NSNumber*)localRKSTResult.answer;
             }
                 break;
             case RKSurveyQuestionTypeTimeInterval:
             case RKSurveyQuestionTypeScale:
             {
-                NSAssert([localRKResult.answer isKindOfClass:[NSNumber class]], @"Its not an NSNumber");
-                localAPCResult.floatAnswer = (NSNumber*)localRKResult.answer;
+                NSAssert([localRKSTResult.answer isKindOfClass:[NSNumber class]], @"Its not an NSNumber");
+                localAPCResult.floatAnswer = (NSNumber*)localRKSTResult.answer;
             }
                 break;
                 
             case RKSurveyQuestionTypeMultipleChoice:
             {
-                NSAssert([localRKResult.answer isKindOfClass:[NSArray class]], @"Its not NSArray");
+                NSAssert([localRKSTResult.answer isKindOfClass:[NSArray class]], @"Its not NSArray");
                 NSError * serializationError;
-                NSData * data =  [NSJSONSerialization dataWithJSONObject:localRKResult.answer options:NSJSONWritingPrettyPrinted error:&serializationError];
+                NSData * data =  [NSJSONSerialization dataWithJSONObject:localRKSTResult.answer options:NSJSONWritingPrettyPrinted error:&serializationError];
                 [serializationError handle];
                 localAPCResult.stringAnswer = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             }
                 break;
-            case RKSurveyQuestionTypeCustom:
             default:
             {
                 NSAssert(NO, @"Should not come here");
@@ -126,7 +125,6 @@
             retObject =  [NSJSONSerialization JSONObjectWithData:[self.stringAnswer dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&serializationError];
             [serializationError handle];
         }
-        case RKSurveyQuestionTypeCustom:
         default:
         {
             NSAssert(NO, @"Should not come here");
