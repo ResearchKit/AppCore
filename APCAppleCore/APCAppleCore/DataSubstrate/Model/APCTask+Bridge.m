@@ -16,12 +16,12 @@ static APCDummyObject * _dummyObject;
 
 @interface APCDummyObject : NSObject
 
-- (RKSTAnswerFormat*) rkBooleanAnswerFormat: (SBBSurveyConstraints*) constraints;
-- (RKSTAnswerFormat*) rkDateAnswerFormat: (SBBSurveyConstraints*) constraints;
-- (RKSTAnswerFormat*) rkNumericAnswerFormat: (SBBSurveyConstraints*) constraints;
-- (RKSTAnswerFormat*) rkTimeIntervalAnswerFormat: (SBBSurveyConstraints*) constraints;
-- (RKSTAnswerFormat*) rkChoiceAnswerFormat: (SBBSurveyConstraints*) constraints;
-- (RKSTAnswerFormat*) rkTextAnswerFormat: (SBBSurveyConstraints*) constraints;
+- (RKAnswerFormat*) rkBooleanAnswerFormat: (SBBSurveyConstraints*) constraints;
+- (RKAnswerFormat*) rkDateAnswerFormat: (SBBSurveyConstraints*) constraints;
+- (RKAnswerFormat*) rkNumericAnswerFormat: (SBBSurveyConstraints*) constraints;
+- (RKAnswerFormat*) rkTimeIntervalAnswerFormat: (SBBSurveyConstraints*) constraints;
+- (RKAnswerFormat*) rkChoiceAnswerFormat: (SBBSurveyConstraints*) constraints;
+- (RKAnswerFormat*) rkTextAnswerFormat: (SBBSurveyConstraints*) constraints;
 
 @end
 
@@ -81,27 +81,29 @@ static APCDummyObject * _dummyObject;
 }
 
 /*********************************************************************************/
-#pragma mark - SBB to RKSTTask Conversion
+#pragma mark - SBB to RKTask Conversion
 /*********************************************************************************/
-+ (RKSTOrderedTask*) rkTaskFromSBBSurvey: (SBBSurvey*) survey
++ (RKTask*) rkTaskFromSBBSurvey: (SBBSurvey*) survey
 {
     NSMutableArray * stepsArray = [NSMutableArray array];
     [survey.questions enumerateObjectsUsingBlock:^(SBBSurveyQuestion* obj, NSUInteger idx, BOOL *stop) {
         [stepsArray addObject:[self rkStepFromSBBSurveyQuestion:obj]];
     }];
-    RKSTOrderedTask * retTask = [[RKSTOrderedTask alloc] initWithIdentifier:survey.identifier steps:stepsArray];
+    RKTask * retTask = [[RKTask alloc] initWithName:survey.name identifier:survey.identifier steps:stepsArray];
     return retTask;
 }
 
-+ (RKSTQuestionStep*) rkStepFromSBBSurveyQuestion: (SBBSurveyQuestion*) question
++ (RKQuestionStep*) rkStepFromSBBSurveyQuestion: (SBBSurveyQuestion*) question
 {
-    RKSTQuestionStep * retStep = [RKSTQuestionStep questionStepWithIdentifier:question.guid title:question.prompt answer:[self rkAnswerFormatFromSBBSurveyConstraints:question.constraints]];
+    RKQuestionStep * retStep = [[RKQuestionStep alloc] initWithIdentifier:question.guid name:question.identifier];
+    retStep.question = question.prompt;
+    retStep.answerFormat = [self rkAnswerFormatFromSBBSurveyConstraints:question.constraints];
     return retStep;
 }
 
-+ (RKSTAnswerFormat*) rkAnswerFormatFromSBBSurveyConstraints: (SBBSurveyConstraints*) constraints
++ (RKAnswerFormat*) rkAnswerFormatFromSBBSurveyConstraints: (SBBSurveyConstraints*) constraints
 {
-    RKSTAnswerFormat * retAnswer;
+    RKAnswerFormat * retAnswer;
     
     if (!_dummyObject) {
         _dummyObject = [[APCDummyObject alloc] init];
@@ -112,7 +114,7 @@ static APCDummyObject * _dummyObject;
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-    retAnswer = (RKSTAnswerFormat*) [_dummyObject performSelector:selector withObject:constraints];
+    retAnswer = (RKAnswerFormat*) [_dummyObject performSelector:selector withObject:constraints];
 #pragma clang diagnostic pop
 
     
@@ -126,17 +128,17 @@ static APCDummyObject * _dummyObject;
 /*********************************************************************************/
 #pragma mark - Answer Format Methods
 /*********************************************************************************/
--(RKSTAnswerFormat *)rkBooleanAnswerFormat:(SBBSurveyConstraints *)constraints
+-(RKAnswerFormat *)rkBooleanAnswerFormat:(SBBSurveyConstraints *)constraints
 {
-    RKSTAnswerFormat * retAnswer = [[RKSTBooleanAnswerFormat alloc] init];
+    RKAnswerFormat * retAnswer = [[RKBooleanAnswerFormat alloc] init];
     return retAnswer;
 }
 
-- (RKSTAnswerFormat *)rkDateAnswerFormat:(SBBSurveyConstraints *)constraints
+- (RKAnswerFormat *)rkDateAnswerFormat:(SBBSurveyConstraints *)constraints
 {
-    RKSTAnswerFormat * retAnswer;
+    RKAnswerFormat * retAnswer;
     if ([constraints isKindOfClass:[SBBDateTimeConstraints class]]) {
-        retAnswer = [RKSTDateAnswerFormat dateTimeAnswer];
+        retAnswer = [RKDateAnswerFormat dateTimeAnswer];
 //        SBBDateTimeConstraints * localConstraints = (SBBDateTimeConstraints*)constraints;
     }
     else if ([constraints isKindOfClass:[SBBDateConstraints class]]) {
@@ -148,9 +150,9 @@ static APCDummyObject * _dummyObject;
     return retAnswer;
 }
 
-- (RKSTAnswerFormat*) rkChoiceAnswerFormat: (SBBSurveyConstraints*) constraints
+- (RKAnswerFormat*) rkChoiceAnswerFormat: (SBBSurveyConstraints*) constraints
 {
-    RKSTAnswerFormat * retAnswer;
+    RKAnswerFormat * retAnswer;
     SBBMultiValueConstraints * localConstraints = (SBBMultiValueConstraints*)constraints;
     NSMutableArray * options = [NSMutableArray array];
     [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger idx, BOOL *stop) {
@@ -159,23 +161,23 @@ static APCDummyObject * _dummyObject;
     if (localConstraints.allowOtherValue) {
         [options addObject:NSLocalizedString(@"Other", @"Spinner Option")];
     }
-    retAnswer = [RKSTChoiceAnswerFormat choiceAnswerWithTextOptions:options style: localConstraints.allowMultipleValue ? RKChoiceAnswerStyleMultipleChoice : RKChoiceAnswerStyleSingleChoice];
+    retAnswer = [RKChoiceAnswerFormat choiceAnswerWithOptions:options style: localConstraints.allowMultipleValue ? RKChoiceAnswerStyleMultipleChoice : RKChoiceAnswerStyleSingleChoice];
     return retAnswer;
 }
 
-- (RKSTAnswerFormat *)rkNumericAnswerFormat:(SBBSurveyConstraints *)constraints
+- (RKAnswerFormat *)rkNumericAnswerFormat:(SBBSurveyConstraints *)constraints
 {
-    return [RKSTNumericAnswerFormat decimalAnswerWithUnit:nil];
+    return [RKNumericAnswerFormat decimalAnswerWithUnit:nil];
 }
 
-- (RKSTAnswerFormat *)rkTextAnswerFormat:(SBBSurveyConstraints *)constraints
+- (RKAnswerFormat *)rkTextAnswerFormat:(SBBSurveyConstraints *)constraints
 {
-    return [RKSTTextAnswerFormat textAnswer];
+    return [RKTextAnswerFormat textAnswer];
 }
 
-- (RKSTAnswerFormat *)rkTimeIntervalAnswerFormat:(SBBSurveyConstraints *)constraints
+- (RKAnswerFormat *)rkTimeIntervalAnswerFormat:(SBBSurveyConstraints *)constraints
 {
-    return [RKSTTimeIntervalAnswerFormat timeIntervalAnswer];
+    return [RKTimeIntervalAnswerFormat timeIntervalAnswer];
 }
 
 

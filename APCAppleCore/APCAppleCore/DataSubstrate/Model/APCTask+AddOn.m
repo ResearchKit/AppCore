@@ -61,13 +61,13 @@ static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
     return retTask;
 }
 
-- (RKSTOrderedTask *)rkTask
+- (RKTask *)rkTask
 {
-    RKSTOrderedTask * retTask = self.taskDescription ? [NSKeyedUnarchiver unarchiveObjectWithData:self.taskDescription] : nil;
+    RKTask * retTask = self.taskDescription ? [NSKeyedUnarchiver unarchiveObjectWithData:self.taskDescription] : nil;
     return retTask;
 }
 
-- (void)setRkTask:(RKSTOrderedTask *)rkTask
+- (void)setRkTask:(RKTask *)rkTask
 {
     self.taskDescription = [NSKeyedArchiver archivedDataWithRootObject:rkTask];
 }

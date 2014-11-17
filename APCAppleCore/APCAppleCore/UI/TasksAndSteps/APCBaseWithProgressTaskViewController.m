@@ -26,7 +26,7 @@ static  CGFloat  kAPCStepProgressBarHeight = 8.0;
     
     APCStepProgressBar  *tempProgressor = [[APCStepProgressBar alloc] initWithFrame:progressorFrame style:APCStepProgressBarStyleOnlyProgressView];
     
-    RKSTOrderedTask * task = (RKSTOrderedTask*) self.task;
+    RKTask * task = (RKTask*) self.task;
     NSArray  *steps = task.steps;
     tempProgressor.numberOfSteps = [steps count];
     [tempProgressor setCompletedSteps: 1 animation:NO];
@@ -35,19 +35,19 @@ static  CGFloat  kAPCStepProgressBarHeight = 8.0;
     self.progressor = tempProgressor;
     
     self.showsProgressInNavigationBar = NO;
-    self.navigationBar.topItem.title = NSLocalizedString(self.task.identifier, nil);
+    self.navigationBar.topItem.title = NSLocalizedString(self.task.name, nil);
 }
 
 /*********************************************************************************/
 #pragma mark - StepViewController Delegate Methods
 /*********************************************************************************/
 
-- (void)stepViewControllerDidFinish:(RKSTStepViewController *)stepViewController navigationDirection:(RKSTStepViewControllerNavigationDirection)direction
+- (void)stepViewControllerDidFinish:(RKStepViewController *)stepViewController navigationDirection:(RKStepViewControllerNavigationDirection)direction
 {
     [super stepViewControllerDidFinish:stepViewController navigationDirection:direction];
     
     NSInteger  completedSteps = self.progressor.completedSteps;
-    if (direction == RKSTStepViewControllerNavigationDirectionForward) {
+    if (direction == RKStepViewControllerNavigationDirectionForward) {
         completedSteps = completedSteps + 1;
     } else {
         completedSteps = completedSteps - 1;

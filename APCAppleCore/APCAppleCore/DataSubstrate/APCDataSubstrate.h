@@ -15,7 +15,7 @@
 
 @class APCUser;
 
-@interface APCDataSubstrate : NSObject <APCParametersDelegate>
+@interface APCDataSubstrate : NSObject <RKStudyDelegate, APCParametersDelegate>
 
 /*********************************************************************************/
 #pragma mark - Initializer
@@ -26,6 +26,8 @@
 #pragma mark - ResearchKit Subsystem Public Properties & Passive Location Tracking
 /*********************************************************************************/
 @property (assign) BOOL justJoined;
+@property (strong, nonatomic) NSString *logDirectory;
+@property (strong, nonatomic) RKDataLoggerManager *logManager;
 @property (nonatomic, strong) APCUser * currentUser;
 
 @property (strong, nonatomic) APCPassiveLocationTracking *passiveLocationTracking;
@@ -49,6 +51,9 @@
 /*********************************************************************************/
 #pragma mark - Properties & Methods meant only for Categories
 /*********************************************************************************/
+//ResearchKit Subsystem
+@property (nonatomic, strong) RKStudyStore * studyStore;
+@property (nonatomic, strong) RKStudy * study; //Assumes only one study per app
 
 //Core Data Subsystem
 @property (nonatomic, strong) NSString * storePath;

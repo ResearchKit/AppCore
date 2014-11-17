@@ -8,7 +8,7 @@
 
 #import "APCDataSubstrate.h"
 
-@interface APCDataSubstrate (ResearchKit)
+@interface APCDataSubstrate (ResearchKit) <RKDataLoggerManagerDelegate>
 
 /*********************************************************************************/
 #pragma mark - Public Methods

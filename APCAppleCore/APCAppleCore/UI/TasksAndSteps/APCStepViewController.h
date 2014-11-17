@@ -8,6 +8,6 @@
 
 #import <ResearchKit/ResearchKit.h>
 
-@interface APCStepViewController : RKSTStepViewController
+@interface APCStepViewController : RKStepViewController
 
 @end

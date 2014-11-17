@@ -7,11 +7,11 @@
 //
 
 #import "APCResult.h"
-@class RKSTResult;
+@class RKResult;
 @interface APCResult (AddOn)
 
 //Creates it synchronously
-+ (instancetype) storeRKSTResult:(RKSTResult*) rkResult inContext: (NSManagedObjectContext*) context;
-+ (void) mapRKSTResult:(RKSTResult*) rkResult toAPCResult: (APCResult*) apcResult;
++ (instancetype) storeRKResult:(RKResult*) rkResult inContext: (NSManagedObjectContext*) context;
++ (void) mapRKResult:(RKResult*) rkResult toAPCResult: (APCResult*) apcResult;
 
 @end
