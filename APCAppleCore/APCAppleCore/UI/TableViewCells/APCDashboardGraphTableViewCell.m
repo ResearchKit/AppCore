@@ -10,8 +10,11 @@
 
 @implementation APCDashboardGraphTableViewCell
 
+@synthesize tintColor = _tintColor;
+
 - (void)awakeFromNib {
-    // Initialization code
+    
+    [self.resizeButton setImage:[[UIImage imageNamed:@"expand_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -35,4 +38,9 @@
     }
 }
 
+- (void)setTintColor:(UIColor *)tintColor
+{
+    _tintColor = tintColor;
+    [self.resizeButton.imageView setTintColor:tintColor];
+}
 @end

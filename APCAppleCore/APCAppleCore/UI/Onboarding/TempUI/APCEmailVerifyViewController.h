@@ -10,4 +10,6 @@
 
 @interface APCEmailVerifyViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UILabel *userMessage;
+
 @end

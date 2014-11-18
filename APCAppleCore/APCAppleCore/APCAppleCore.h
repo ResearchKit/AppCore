@@ -59,6 +59,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
  -------------------------*/
 #import <APCAppleCore/APCDashboardViewController.h>
 #import <APCAppleCore/APCDashboardEditViewController.h>
+#import <APCAppleCore/APCLineGraphViewController.h>
 
 /*--------------------------
  Learn ViewControllers

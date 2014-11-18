@@ -26,6 +26,13 @@
     self.items = [NSMutableArray new];
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    [self.view layoutIfNeeded];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
@@ -68,9 +75,14 @@
             lineGraphView.delegate = self;
             lineGraphView.titleLabel.text = graphItem.caption;
             lineGraphView.subTitleLabel.text = graphItem.detailText;
-            [graphCell.graphContainerView addSubview:lineGraphView];
             lineGraphView.tintColor = graphItem.tintColor;
             lineGraphView.panGestureRecognizer.delegate = self;
+            lineGraphView.titleLabel.font = [UIFont appRegularFontWithSize:19.0f];
+            lineGraphView.subTitleLabel.font = [UIFont appRegularFontWithSize:16.0f];
+            
+            [graphCell.graphContainerView addSubview:lineGraphView];
+            graphCell.tintColor = graphItem.tintColor;
+            graphCell.delegate = self;
             
             [self.lineCharts addObject:lineGraphView];
             
@@ -218,6 +230,12 @@
     return dashboardItemType;
 }
 
+#pragma mark - APCDashboardGraphTableViewCellDelegate methods
+
+- (void)dashboardGraphViewCellDidTapExpandForCell:(APCDashboardGraphTableViewCell *)cell
+{
+    
+}
 
 
 @end

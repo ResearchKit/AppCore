@@ -22,6 +22,8 @@
 
 @property (nonatomic, readonly) CGFloat maximumValue;
 
+@property (nonatomic, getter=isLandscapeMode) BOOL landscapeMode;
+
 /* Appearance */
 
 @property (nonatomic, strong) UIColor *tintColor;
@@ -87,10 +89,6 @@
 - (void)lineGraphTouchesEnded:(APCLineGraphView *)graphView;
 
 @optional
-
-- (void)lineGraphViewDidTapExpand:(APCLineGraphView *)graphView;
-
-- (void)lineGraphViewDidTapCollapse:(APCLineGraphView *)graphView;
 
 @end
 

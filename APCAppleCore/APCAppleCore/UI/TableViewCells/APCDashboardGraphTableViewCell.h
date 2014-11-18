@@ -16,6 +16,10 @@ static NSString * const kAPCDashboardGraphTableViewCellIdentifier = @"APCDashboa
 
 @property (weak, nonatomic) IBOutlet UIView *graphContainerView;
 
+@property (weak, nonatomic) IBOutlet UIButton *resizeButton;
+
+@property (strong, nonatomic) UIColor *tintColor;
+
 @property (weak, nonatomic) id <APCDashboardGraphTableViewCellDelegate> delegate;
 
 @end

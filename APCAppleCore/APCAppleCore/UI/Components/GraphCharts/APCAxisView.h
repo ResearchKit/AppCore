@@ -11,6 +11,8 @@
 
 @interface APCAxisView : UIView
 
+@property (nonatomic, getter=isLandscapeMode) BOOL landscapeMode;
+
 @property (nonatomic, strong) UIColor *tintColor;
 
 @property (nonatomic) CGFloat leftOffset;
