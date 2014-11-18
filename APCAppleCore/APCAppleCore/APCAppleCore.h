@@ -53,6 +53,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCSignupTouchIDViewController.h>
 #import <APCAppleCore/APCSignUpPermissionsViewController.h>
 #import <APCAppleCore/APCEmailVerifyViewController.h>
+#import <APCAppleCore/APCPasscodeViewController.h>
 
 /*--------------------------
  Dashboard ViewControllers
@@ -98,6 +99,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCCircularProgressView.h>
 #import <APCAppleCore/APCConfirmationView.h>
 #import <APCAppleCore/APCPasscodeView.h>
+#import <APCAppleCore/APCResizeView.h>
 
 /* -------------------------
  Cells
@@ -113,6 +115,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCDashboardGraphTableViewCell.h>
 #import <APCAppleCore/APCDashboardMessageTableViewCell.h>
 #import <APCAppleCore/APCDashboardProgressTableViewCell.h>
+#import <APCAppleCore/APCShareTableViewCell.h>
 
 /* -------------------------
  Objects
