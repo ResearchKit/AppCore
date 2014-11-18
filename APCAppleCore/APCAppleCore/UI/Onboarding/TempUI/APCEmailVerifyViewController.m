@@ -14,7 +14,8 @@
 
 @interface APCEmailVerifyViewController ()
 @property (nonatomic, readonly) APCUser * user;
-@property (weak, nonatomic) IBOutlet UILabel *userMessage;
+
+
 
 
 @end
