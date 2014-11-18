@@ -14,7 +14,6 @@ FOUNDATION_EXPORT double APCAppleCoreVersionNumber;
 //! Project version string for APCAppleCore.
 FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 
-#import <ResearchKit/ResearchKit.h>
 #import <ResearchKit/ResearchKit_Private.h>
 #import <BridgeSDK/BridgeSDK.h>
 
@@ -66,7 +65,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCIntroductionViewController.h>
 #import <APCAppleCore/APCInstructionStepViewController.h>
 #import <APCAppleCore/APCSpinnerViewController.h>
-#import <APCAppleCore/APCSetupTaskViewController.h>
+#import <APCAppleCore/APCBaseTaskViewController.h>
 #import <APCAppleCore/APCBaseWithProgressTaskViewController.h>
 #import <APCAppleCore/APCStepViewController.h>
 #import <APCAppleCore/APCActivitiesViewController.h>

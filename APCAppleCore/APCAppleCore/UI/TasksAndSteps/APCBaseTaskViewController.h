@@ -10,7 +10,7 @@
 #import <ResearchKit/ResearchKit.h>
 #import "APCScheduledTask.h"
 
-@interface APCSetupTaskViewController : RKSTTaskViewController <RKSTTaskViewControllerDelegate, RKSTStepViewControllerDelegate>
+@interface APCBaseTaskViewController : RKSTTaskViewController <RKSTTaskViewControllerDelegate, RKSTStepViewControllerDelegate>
 
 @property  (nonatomic, strong)  APCScheduledTask  *scheduledTask;
 
