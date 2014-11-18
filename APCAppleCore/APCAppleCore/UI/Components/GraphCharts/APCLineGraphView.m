@@ -9,7 +9,6 @@
 #import "APCLineGraphView.h"
 #import "APCCircleView.h"
 #import "APCAxisView.h"
-#import "APCResizeView.h"
 
 static CGFloat const kYAxisPaddingFactor = 0.166f;
 static CGFloat const kAPCGraphLeftPadding = 17.f;
@@ -37,7 +36,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 @property (nonatomic, strong) UIView *yAxisView;
 
 @property (nonatomic, strong) UIView *leftTintView;
-@property (nonatomic, strong) APCResizeView *resizeView;
 
 @property (nonatomic, strong) UIView *scrubberLine;
 @property (nonatomic, strong) UILabel *scrubberLabel;
@@ -98,38 +96,44 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 
 - (void)setupViews
 {
-    CGFloat yAxisPadding = CGRectGetWidth(self.frame)*kYAxisPaddingFactor;
-    
-    _leftTintView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 4, CGRectGetHeight(self.bounds) - kXAxisHeight)];
+    /* ----------------- */
+    /* Basic Views */
+    /* ----------------- */
+    _leftTintView = [UIView new];
     _leftTintView.backgroundColor = _tintColor;
     [self addSubview:_leftTintView];
     
-    _plotsView = [[UIView alloc] initWithFrame:CGRectMake(kAPCGraphLeftPadding, kAPCGraphTopPadding, CGRectGetWidth(self.frame) - yAxisPadding - kAPCGraphLeftPadding, CGRectGetHeight(self.frame) - kXAxisHeight - kAPCGraphTopPadding)]; //TODO: Fix frame
+    _plotsView = [UIView new];
     _plotsView.backgroundColor = [UIColor clearColor];
     [self addSubview:_plotsView];
     
-    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_leftTintView.frame) + kTitleLeftPadding, 0, CGRectGetWidth(self.frame)*0.75, kAPCGraphTopPadding/2)];
+    /* ----------------- */
+    /* Labels */
+    /* ----------------- */
+    _titleLabel = [UILabel new];
     _titleLabel.textColor = _tintColor;
     _titleLabel.font = [UIFont fontWithName:@"Helvetica" size:19.0f];
     [self addSubview:_titleLabel];
     
-    _subTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_leftTintView.frame), kAPCGraphTopPadding/2, CGRectGetWidth(self.frame)*0.75, kAPCGraphTopPadding/2)];
+    _subTitleLabel = [UILabel new];
     _subTitleLabel.textColor = [UIColor colorWithWhite:0.65 alpha:1.0];
     _subTitleLabel.font = [UIFont fontWithName:@"Helvetica-Light" size:16.0f];
     [self addSubview:_subTitleLabel];
     
-    _scrubberLine = [[UIView alloc] initWithFrame:CGRectMake(0, kAPCGraphTopPadding, 1, CGRectGetHeight(self.plotsView.frame))];
+    /* ----------------- */
+    /* Scrubber Views */
+    /* ----------------- */
+    _scrubberLine = [UIView new];
     _scrubberLine.backgroundColor = _scrubberLineColor;
     _scrubberLine.alpha = 0;
     [self addSubview:_scrubberLine];
     
-    _scrubberLabel = [[UILabel alloc] initWithFrame:CGRectMake(2, 0, 100, 20)];
+    _scrubberLabel = [UILabel new];
     _scrubberLabel.font = [UIFont fontWithName:@"Helvetica-Light" size:12.0f];
     _scrubberLabel.alpha = 0;
     [self addSubview:_scrubberLabel];
     
-    _scrubberThumbView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
-    _scrubberThumbView.layer.cornerRadius = _scrubberThumbView.bounds.size.height/2;
+    _scrubberThumbView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [self scrubberThumbSize].width, [self scrubberThumbSize].height)];
     _scrubberThumbView.layer.borderWidth = 1.0;
     _scrubberThumbView.backgroundColor = _scrubberThumbColor;
     _scrubberThumbView.layer.borderColor = [UIColor darkGrayColor].CGColor;
@@ -139,14 +143,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
     _panGestureRecognizer.delaysTouchesBegan = YES;
     [self addGestureRecognizer:_panGestureRecognizer];
-    
-    _resizeView = [[APCResizeView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.frame) - 10, 15, 22, 22)];
-    _resizeView.tintColor = self.tintColor;
-    [self addSubview:_resizeView];
-    
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleResize:)];
-    [_resizeView addGestureRecognizer:tapGestureRecognizer];
-    
 }
 
 - (void)setDefaults
@@ -154,6 +150,69 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     _minimumValue = MAXFLOAT;
     _maximumValue = -MAXFLOAT;
 }
+
+#pragma mark - Appearance
+
+- (void)updateTitleLabel
+{
+    
+    if (self.isLandscapeMode) {
+        
+        self.titleLabel.font = [UIFont fontWithName:self.titleLabel.font.familyName size:24.0];
+        
+        CGFloat textWidth = [self.titleLabel.text boundingRectWithSize:CGSizeMake(CGRectGetWidth(self.frame)*0.40, kAPCGraphTopPadding) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:self.titleLabel.font} context:nil].size.width;
+        
+        self.titleLabel.frame = CGRectMake(CGRectGetMaxX(_leftTintView.frame) + kTitleLeftPadding, 0, textWidth, kAPCGraphTopPadding);
+        
+    } else {
+        self.titleLabel.font = [UIFont fontWithName:self.titleLabel.font.familyName size:19.0];
+        self.titleLabel.frame = CGRectMake(CGRectGetMaxX(_leftTintView.frame) + kTitleLeftPadding, 0, CGRectGetWidth(self.frame)*0.75, kAPCGraphTopPadding/2);
+    }
+
+}
+
+- (void)updateSubTitleLabel
+{
+    
+    if (self.isLandscapeMode) {
+        
+        self.subTitleLabel.font = [UIFont fontWithName:self.subTitleLabel.font.familyName size:16.0];
+        
+        CGFloat textWidth = [self.subTitleLabel.text boundingRectWithSize:CGSizeMake(CGRectGetWidth(self.frame)*0.40, kAPCGraphTopPadding) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:self.subTitleLabel.font} context:nil].size.width;
+        
+        self.subTitleLabel.frame = CGRectMake(CGRectGetMaxX(self.titleLabel.frame) + kTitleLeftPadding, 0, textWidth, kAPCGraphTopPadding);
+        
+    } else {
+        self.subTitleLabel.font = [UIFont fontWithName:self.subTitleLabel.font.familyName size:16.0];
+        self.subTitleLabel.frame = CGRectMake(CGRectGetMaxX(_leftTintView.frame) + kTitleLeftPadding, kAPCGraphTopPadding/2, CGRectGetWidth(self.frame)*0.75, kAPCGraphTopPadding/2);
+    }
+    
+}
+
+- (void)updateScrubberLabel
+{
+    if (self.isLandscapeMode) {
+        self.scrubberLabel.font = [UIFont fontWithName:self.scrubberLabel.font.familyName size:14.0f];
+        self.scrubberLabel.frame = CGRectMake(2, 0, 100, 20);
+    } else {
+        self.scrubberLabel.font = [UIFont fontWithName:self.scrubberLabel.font.familyName size:12.0f];
+        self.scrubberLabel.frame = CGRectMake(2, 0, 100, 20);
+    }
+}
+
+- (CGSize)scrubberThumbSize
+{
+    CGSize thumbSize;
+    
+    if (self.isLandscapeMode) {
+        thumbSize = CGSizeMake(15, 15);
+    } else{
+        thumbSize = CGSizeMake(10, 10);
+    }
+    
+    return thumbSize;
+}
+
 
 #pragma mark - View Layout
 
@@ -163,25 +222,29 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     
     CGFloat yAxisPadding = CGRectGetWidth(self.frame)*kYAxisPaddingFactor;
     
+    //Basic Views
     _leftTintView.frame = CGRectMake(0, 0, 4, CGRectGetHeight(self.bounds) - kXAxisHeight);
     
     self.plotsView.frame = CGRectMake(kAPCGraphLeftPadding, kAPCGraphTopPadding, CGRectGetWidth(self.frame) - yAxisPadding - kAPCGraphLeftPadding, CGRectGetHeight(self.frame) - kXAxisHeight - kAPCGraphTopPadding);
     
-    self.titleLabel.frame = CGRectMake(CGRectGetMaxX(_leftTintView.frame) + kTitleLeftPadding, 0, CGRectGetWidth(self.frame)*0.75, kAPCGraphTopPadding/2);
-    self.subTitleLabel.frame = CGRectMake(CGRectGetMaxX(_leftTintView.frame) + kTitleLeftPadding, kAPCGraphTopPadding/2, CGRectGetWidth(self.frame)*0.75, kAPCGraphTopPadding/2);
+    //Title Labels
+    [self updateTitleLabel];
+    [self updateSubTitleLabel];
     
+    //Scrubber Views
     self.scrubberLine.frame = CGRectMake(0, kAPCGraphTopPadding, 1, CGRectGetHeight(self.plotsView.frame));
-    
-    self.resizeView.frame = CGRectMake(CGRectGetWidth(self.frame) - 10 - 22, 15, 22, 22);
+    [self updateScrubberLabel];
+    self.scrubberThumbView.frame = CGRectMake(0, 0, [self scrubberThumbSize].width, [self scrubberThumbSize].height);
+    self.scrubberThumbView.layer.cornerRadius = self.scrubberThumbView.bounds.size.height/2;
     
     //Clear subviews and sublayers
     [self.plotsView.layer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     
-    for (UIView *subView in [self.plotsView subviews]) {
-        if (subView != self.scrubberLine && subView != _scrubberLabel) {
-            [subView removeFromSuperview];
-        }
-    }
+//    for (UIView *subView in [self.plotsView subviews]) {
+//        if (subView != self.scrubberLine && subView != _scrubberLabel) {
+//            [subView removeFromSuperview];
+//        }
+//    }
     
     [self drawXAxis];
     [self drawYAxis];
@@ -266,6 +329,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     }
     
     self.xAxisView = [[APCAxisView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.plotsView.frame), CGRectGetWidth(self.plotsView.frame), kXAxisHeight)];
+    self.xAxisView.landscapeMode = YES;
     self.xAxisView.tintColor = self.axisTitleColor;
     [self.xAxisView setupLabels:self.xAxisTitles forAxisType:kAPCGraphAxisTypeX];
     self.xAxisView.leftOffset = kAPCGraphLeftPadding;
@@ -322,7 +386,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     
     [self calculateMinAndMaxPoints];
     
-    CGFloat rulerXPosition = CGRectGetWidth(self.yAxisView.bounds) - kAxisMarkingRulerLength;
+    CGFloat rulerXPosition = CGRectGetWidth(self.yAxisView.bounds) - kAxisMarkingRulerLength + 2;
     
     for (int i =0; i<yAxisLabelFactors.count; i++) {
         
@@ -348,7 +412,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         axisTitleLabel.backgroundColor = [UIColor clearColor];
         axisTitleLabel.textColor = self.axisTitleColor;
         axisTitleLabel.textAlignment = NSTextAlignmentRight;
-        axisTitleLabel.font = self.axisTitleFont;
+        axisTitleLabel.font = self.isLandscapeMode ? [UIFont fontWithName:self.axisTitleFont.familyName size:16.0f] : self.axisTitleFont;
         axisTitleLabel.minimumScaleFactor = 0.8;
         [self.yAxisView addSubview:axisTitleLabel];//TODO: Add to Axis View
     }
@@ -363,7 +427,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     CAShapeLayer *referenceLineLayer = [CAShapeLayer layer];
     referenceLineLayer.strokeColor = self.referenceLineColor.CGColor;
     referenceLineLayer.path = referenceLinePath.CGPath;
-    referenceLineLayer.lineDashPattern = @[@5];
+    referenceLineLayer.lineDashPattern = self.isLandscapeMode ? @[@12, @7] : @[@6, @4];
     [self.layer addSublayer:referenceLineLayer];
     
     referenceLineLayer.opacity = 0;
@@ -383,7 +447,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         CAShapeLayer *referenceLineLayer = [CAShapeLayer layer];
         referenceLineLayer.strokeColor = self.referenceLineColor.CGColor;
         referenceLineLayer.path = referenceLinePath.CGPath;
-        referenceLineLayer.lineDashPattern = @[@5];
+        referenceLineLayer.lineDashPattern = self.isLandscapeMode ? @[@12, @7] : @[@6, @4];
         [self.plotsView.layer addSublayer:referenceLineLayer];
         
         CGFloat delay = 0.3 + i/10.f;
@@ -409,7 +473,8 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         
         CGFloat positionOnYAxis = ((NSNumber*)self.yAxisPoints[i]).floatValue;
         
-        APCCircleView *point = [[APCCircleView alloc] initWithFrame:CGRectMake(0, 0, 7, 7)];
+        CGFloat pointSize = self.isLandscapeMode ? 9.0f : 7.0f;
+        APCCircleView *point = [[APCCircleView alloc] initWithFrame:CGRectMake(0, 0, pointSize, pointSize)];
         point.tintColor = (plotIndex == 0) ? self.tintColor : self.referenceLineColor;
         point.center = CGPointMake(positionOnXAxis, positionOnYAxis);
         [self.plotsView addSubview:point];
@@ -429,7 +494,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     [fillPath moveToPoint:CGPointMake(CGRectGetWidth(self.plotsView.frame), CGRectGetHeight(self.plotsView.frame))];
     [fillPath addLineToPoint:CGPointMake(0, CGRectGetHeight(self.plotsView.frame))];
     
-    [plotLinePath moveToPoint:CGPointMake(0, CGRectGetHeight(self.plotsView.frame))];
+//    [plotLinePath moveToPoint:CGPointMake(0, CGRectGetHeight(self.plotsView.frame))];
     
     for (int i=0; i<self.yAxisPoints.count; i++) {
         
@@ -437,12 +502,16 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         CGFloat positionOnYAxis = ((NSNumber*)self.yAxisPoints[i]).floatValue;
         
         [fillPath addLineToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
-        [plotLinePath addLineToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
+        if (i == 0) {
+            [plotLinePath moveToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
+        } else {
+          [plotLinePath addLineToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
+        }
     }
     
     CAShapeLayer *fillLayer = [CAShapeLayer layer];
     fillLayer.path = fillPath.CGPath;
-    fillLayer.fillColor = (plotIndex == 0) ? [self.tintColor colorWithAlphaComponent:0.2].CGColor : [self.referenceLineColor colorWithAlphaComponent:0.2].CGColor;
+    fillLayer.fillColor = (plotIndex == 0) ? [self.tintColor colorWithAlphaComponent:0.4].CGColor : [self.referenceLineColor colorWithAlphaComponent:0.2].CGColor;
     [self.plotsView.layer addSublayer:fillLayer];
     
     fillLayer.opacity = 0;
@@ -454,6 +523,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     plotLineLayer.strokeColor = (plotIndex == 0) ? self.tintColor.CGColor : self.referenceLineColor.CGColor;
     plotLineLayer.lineJoin = kCALineJoinRound;
     plotLineLayer.lineCap = kCALineCapRound;
+    plotLineLayer.lineWidth = self.isLandscapeMode ? 3.0 : 2.0;
     [self.plotsView.layer addSublayer:plotLineLayer];
     
     plotLineLayer.strokeEnd = 0;
@@ -694,19 +764,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
             if ([self.delegate respondsToSelector:@selector(lineGraphTouchesEnded:)]) {
                 [self.delegate lineGraphTouchesEnded:self];
             }
-        }
-    }
-}
-
-- (void)handleResize:(UITapGestureRecognizer *)gestureRecognizer
-{
-    if (self.resizeView.type == kAPCResizeViewTypeExpand) {
-        if ([self.delegate respondsToSelector:@selector(lineGraphViewDidTapExpand:)]) {
-            [self.delegate lineGraphViewDidTapExpand:self];
-        }
-    } else {
-        if ([self.delegate respondsToSelector:@selector(lineGraphViewDidTapCollapse:)]) {
-            [self.delegate lineGraphViewDidTapCollapse:self];
         }
     }
 }

@@ -12,6 +12,6 @@
 @interface APCPresentAnimator : NSObject <UIViewControllerAnimatedTransitioning>
 
 @property (nonatomic) CGRect initialFrame;
-@property (nonatomic) BOOL isPresenting;
+@property (nonatomic, getter=isPresenting) BOOL presenting;
 
 @end

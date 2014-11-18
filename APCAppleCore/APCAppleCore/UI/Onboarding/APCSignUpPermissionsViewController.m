@@ -202,7 +202,11 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 
 - (void) setUserSignedUp
 {
+#if DEVELOPMENT
+    self.user.signedIn = YES;
+#else   
     self.user.signedUp = YES;
+#endif
 }
 
 - (void)back
