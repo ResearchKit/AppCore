@@ -11,7 +11,7 @@
 #import "APCAxisView.h"
 
 static CGFloat const kYAxisPaddingFactor = 0.166f;
-static CGFloat const kAPCGraphLeftPadding = 17.f;
+static CGFloat const kAPCGraphLeftPadding = 4.f;
 static CGFloat const kTitleLeftPadding = 12.f;
 static CGFloat const kAxisMarkingRulerLength = 8.0f;
 
@@ -239,13 +239,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     
     //Clear subviews and sublayers
     [self.plotsView.layer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
-    
-//    for (UIView *subView in [self.plotsView subviews]) {
-//        if (subView != self.scrubberLine && subView != _scrubberLabel) {
-//            [subView removeFromSuperview];
-//        }
-//    }
-    
+
     [self drawXAxis];
     [self drawYAxis];
     [self drawhorizontalReferenceLines];
@@ -263,6 +257,14 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 }
 
 #pragma mark - Data
+
+- (void)setDatasource:(id<APCLineGraphViewDataSource>)datasource
+{
+    if (datasource != _datasource) {
+        _datasource = datasource;
+        [self layoutSubviews];
+    }    
+}
 
 - (NSInteger)numberOfPlots
 {
@@ -477,7 +479,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         APCCircleView *point = [[APCCircleView alloc] initWithFrame:CGRectMake(0, 0, pointSize, pointSize)];
         point.tintColor = (plotIndex == 0) ? self.tintColor : self.referenceLineColor;
         point.center = CGPointMake(positionOnXAxis, positionOnYAxis);
-        [self.plotsView addSubview:point];
+        [self.plotsView.layer addSublayer:point.layer];
         
         CGFloat delay = 0.8 + i/5.f;
         point.alpha = 0;
@@ -751,7 +753,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         [self.scrubberThumbView setCenter:CGPointMake(snappedXPosition + kAPCGraphLeftPadding, [self canvasYPointForXPosition:snappedXPosition] + kAPCGraphTopPadding)];
         
         if ([self.delegate respondsToSelector:@selector(lineGraph:touchesMovedToXPosition:)]) {
-            [self.delegate lineGraph:self touchesMovedToXPosition:location.x];
+            [self.delegate lineGraph:self touchesMovedToXPosition:snappedXPosition];
         }
         
         if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {

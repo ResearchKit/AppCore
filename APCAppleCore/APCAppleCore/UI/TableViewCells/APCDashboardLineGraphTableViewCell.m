@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCDashboardGraphTableViewCell.h"
+#import "APCDashboardLineGraphTableViewCell.h"
 
-@implementation APCDashboardGraphTableViewCell
+@implementation APCDashboardLineGraphTableViewCell
 
 @synthesize tintColor = _tintColor;
 
@@ -33,8 +33,8 @@
 -(void)layoutSubviews
 {
     [super layoutSubviews];
-    for (UIView *subview in self.graphContainerView.subviews) {
-        subview.frame = self.graphContainerView.bounds;
+    for (UIView *subview in self.subviews) {
+        [subview layoutSubviews];
     }
 }
 

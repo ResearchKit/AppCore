@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "APCTableViewItem.h"
-#import "APCDashboardGraphTableViewCell.h"
+#import "APCDashboardLineGraphTableViewCell.h"
 #import "APCDashboardMessageTableViewCell.h"
 #import "APCDashboardProgressTableViewCell.h"
 #import "APCGraph.h"

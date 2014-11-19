@@ -7,14 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+@class APCLineGraphView;
 
-static NSString * const kAPCDashboardGraphTableViewCellIdentifier = @"APCDashboardGraphTableViewCell";
+static NSString * const kAPCDashboardGraphTableViewCellIdentifier = @"APCDashboardLineGraphTableViewCell";
 
 @protocol APCDashboardGraphTableViewCellDelegate;
 
-@interface APCDashboardGraphTableViewCell : UITableViewCell
+@interface APCDashboardLineGraphTableViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UIView *graphContainerView;
+@property (weak, nonatomic) IBOutlet APCLineGraphView *graphView;
 
 @property (weak, nonatomic) IBOutlet UIButton *resizeButton;
 
@@ -28,6 +29,6 @@ static NSString * const kAPCDashboardGraphTableViewCellIdentifier = @"APCDashboa
 
 @required
 
-- (void)dashboardGraphViewCellDidTapExpandForCell:(APCDashboardGraphTableViewCell *)cell;
+- (void)dashboardGraphViewCellDidTapExpandForCell:(APCDashboardLineGraphTableViewCell *)cell;
 
 @end
