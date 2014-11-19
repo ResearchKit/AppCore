@@ -10,6 +10,8 @@
 #import "APCAppDelegate.h"
 #import "APCAppleCore.h"
 
+NSString *const kCertFileName = @"rsacert";
+
 @implementation APCBaseTaskViewController
 
 #pragma  mark  -  Instance Initialisation
@@ -60,6 +62,12 @@
 
 - (void) processTaskResult
 {
+    [self createArchive];
+    [self storeInCoreData];
+}
+
+- (void) createArchive
+{
     //Archive
     RKSTDataArchive * archive = [[RKSTDataArchive alloc] initWithItemIdentifier:self.task.identifier
                                                                 studyIdentifier:((APCAppDelegate*)[UIApplication sharedApplication].delegate).defaultInitializationOptions[kStudyIdentifierKey]
@@ -75,17 +83,47 @@
             [archiveError handle];
         }];
     }];
-    NSError * archiveError;
-    [archiveError handle];
-    NSURL * url = [archive archiveURLWithError:&archiveError];
-    NSLog(@"URL for archive: %@", url);
     
+    NSError * archiveError;
+    NSData * certFile = [self readPEM];
+    NSData * data = (certFile) ? [archive archiveDataEncryptedWithIdentity:[self readPEM] error:&archiveError] : [archive archiveDataWithError:&archiveError];
+    NSString * fileName = (certFile) ? @"encrypted.zip" : @"unencrypted.zip";
+    [self writeData:data toFileName:fileName];
+}
+
+- (void) writeData: (NSData*) data toFileName: (NSString*) fileName
+{
+    if (![[NSFileManager defaultManager] fileExistsAtPath:self.taskResultsFilePath]) {
+        NSError * fileError;
+        [[NSFileManager defaultManager] createDirectoryAtPath:self.taskResultsFilePath withIntermediateDirectories:YES attributes:nil error:&fileError];
+        [fileError handle];
+    }
+    
+    NSString * filePath = [self.taskResultsFilePath stringByAppendingPathComponent:fileName];
+    if (![data writeToFile: filePath atomically:YES]) {
+        NSLog(@"%@ Not written", fileName);
+    }
+    else
+    {
+        NSLog(@"URL for encryptedArchive: %@", filePath);
+    }
+}
+
+- (void) storeInCoreData
+{
     //Store in CoreData
     APCResult * apcResult = [APCResult storeRKSTResult:self.result inContext:((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext];
     apcResult.scheduledTask = self.scheduledTask;
     NSError * saveError;
     [apcResult saveToPersistentStore:&saveError];
     [saveError handle];
+}
+
+- (NSData*) readPEM
+{
+    NSString * path = [[NSBundle appleCoreBundle] pathForResource:kCertFileName ofType:@"pem"];
+    NSData * data = [NSData dataWithContentsOfFile:path];
+    return data;
 }
 
 @end
