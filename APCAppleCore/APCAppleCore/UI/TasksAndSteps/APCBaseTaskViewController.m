@@ -70,7 +70,9 @@
     NSArray * array = self.result.results;
     [array enumerateObjectsUsingBlock:^(RKSTStepResult *stepResult, NSUInteger idx, BOOL *stop) {
         [stepResult.results enumerateObjectsUsingBlock:^(RKSTResult *result, NSUInteger idx, BOOL *stop) {
-            [result addToArchive:archive error:NULL];
+            NSError * archiveError;
+            [result addToArchive:archive error:&archiveError];
+            [archiveError handle];
         }];
     }];
     NSError * archiveError;
