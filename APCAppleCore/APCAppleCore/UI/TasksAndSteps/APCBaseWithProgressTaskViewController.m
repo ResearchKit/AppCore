@@ -29,7 +29,7 @@ static  CGFloat  kAPCStepProgressBarHeight = 8.0;
     CGRect  navigationBarFrame = self.navigationBar.frame;
     CGRect  progressorFrame = CGRectMake(0.0, CGRectGetHeight(navigationBarFrame) - kAPCStepProgressBarHeight, CGRectGetWidth(navigationBarFrame), kAPCStepProgressBarHeight);
     
-    APCStepProgressBar  *tempProgressor = [[APCStepProgressBar alloc] initWithFrame:progressorFrame style:APCStepProgressBarStyleDefault];
+    APCStepProgressBar  *tempProgressor = [[APCStepProgressBar alloc] initWithFrame:progressorFrame style:APCStepProgressBarStyleOnlyProgressView];
     
     RKSTOrderedTask * task = (RKSTOrderedTask*) self.task;
     NSArray  *steps = task.steps;
@@ -41,7 +41,6 @@ static  CGFloat  kAPCStepProgressBarHeight = 8.0;
     
     self.showsProgressInNavigationBar = NO;
     self.navigationBar.topItem.title = NSLocalizedString(self.task.identifier, nil);
-    
 }
 
 /*********************************************************************************/
