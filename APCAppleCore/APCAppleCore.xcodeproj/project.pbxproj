@@ -254,6 +254,7 @@
 		F567786519DDCCBE00936B9A /* APCKeychainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F567786319DDCCBE00936B9A /* APCKeychainStore.m */; };
 		F57329B519DF093000A85564 /* APCUser+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = F57329B319DF093000A85564 /* APCUser+Bridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F57329B619DF093000A85564 /* APCUser+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F57329B419DF093000A85564 /* APCUser+Bridge.m */; };
+		F58475191A1CFA5500553525 /* APCEmailVerifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B60751A156495006B2346 /* APCEmailVerifyViewController.m */; };
 		F588B9FA19D21EFE00692473 /* APCAssertionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = F588B9D719D21EFE00692473 /* APCAssertionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F588B9FB19D21EFE00692473 /* APCAssertionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F588B9D819D21EFE00692473 /* APCAssertionHandler.m */; };
 		F588BA0019D21EFE00692473 /* NSBundle+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = F588B9DE19D21EFE00692473 /* NSBundle+Helper.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -287,7 +288,6 @@
 		F5B4213B19D23D7700F9CD69 /* APCParametersCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B4213819D23D7700F9CD69 /* APCParametersCell.h */; };
 		F5C1DC2319D22EAF006527EA /* TabBar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5C1DC2219D22EAF006527EA /* TabBar.storyboard */; };
 		F5D1A90F19D4C6E200A03465 /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */; };
-		F5E04D8E1A1C1F5400F0FDE3 /* rsacert.pem in Resources */ = {isa = PBXBuildFile; fileRef = F5E04D8D1A1C1F5400F0FDE3 /* rsacert.pem */; };
 		F5FDCF8D19EC68C9002486DE /* UIColor+APCAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FDCF8919EC68C9002486DE /* UIColor+APCAppearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5FDCF8E19EC68C9002486DE /* UIColor+APCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FDCF8A19EC68C9002486DE /* UIColor+APCAppearance.m */; };
 		F5FDCF8F19EC68C9002486DE /* UIFont+APCAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FDCF8B19EC68C9002486DE /* UIFont+APCAppearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -555,7 +555,6 @@
 		F5B4213819D23D7700F9CD69 /* APCParametersCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCParametersCell.h; sourceTree = "<group>"; };
 		F5C1DC2219D22EAF006527EA /* TabBar.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TabBar.storyboard; sourceTree = "<group>"; };
 		F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BridgeSDK.framework; sourceTree = SOURCE_ROOT; };
-		F5E04D8D1A1C1F5400F0FDE3 /* rsacert.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rsacert.pem; sourceTree = "<group>"; };
 		F5FDCF8919EC68C9002486DE /* UIColor+APCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+APCAppearance.h"; sourceTree = "<group>"; };
 		F5FDCF8A19EC68C9002486DE /* UIColor+APCAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+APCAppearance.m"; sourceTree = "<group>"; };
 		F5FDCF8B19EC68C9002486DE /* UIFont+APCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+APCAppearance.h"; sourceTree = "<group>"; };
@@ -1162,7 +1161,6 @@
 		F5E04D861A1C19DC00F0FDE3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				F5E04D8D1A1C1F5400F0FDE3 /* rsacert.pem */,
 			);
 			name = Resources;
 			path = APCAppleCore/Resources;
@@ -1395,7 +1393,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F554FF2A19E7331800BA729A /* APCParameters.storyboard in Resources */,
-				F5E04D8E1A1C1F5400F0FDE3 /* rsacert.pem in Resources */,
 				F5C1DC2319D22EAF006527EA /* TabBar.storyboard in Resources */,
 				5B3B60921A156495006B2346 /* APCStudyOverviewViewController.xib in Resources */,
 				5B3B608D1A156495006B2346 /* APCSpinnerViewController.xib in Resources */,
@@ -1502,6 +1499,7 @@
 				F5179CBE19D0917D001DCCB7 /* APCTask+AddOn.m in Sources */,
 				5B3B60101A15645E006B2346 /* APCActivitiesViewController.m in Sources */,
 				F5179C8E19D0917D001DCCB7 /* APCDataResult.m in Sources */,
+				F58475191A1CFA5500553525 /* APCEmailVerifyViewController.m in Sources */,
 				5B3B5FDD1A15645E006B2346 /* APCStepProgressBar.m in Sources */,
 				F5179C9719D0917D001DCCB7 /* APCFileResult+AddOn.m in Sources */,
 				5B3B60441A15645E006B2346 /* APCSimpleTaskSummaryViewController.m in Sources */,
