@@ -67,10 +67,10 @@
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardGraphItem class]]){
         
         APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)dashboardItem;
-        APCDashboardGraphTableViewCell *graphCell = (APCDashboardGraphTableViewCell *)cell;
+        APCDashboardLineGraphTableViewCell *graphCell = (APCDashboardLineGraphTableViewCell *)cell;
         
         if (graphItem.graphType == kAPCDashboardGraphTypeLine) {
-            APCLineGraphView *lineGraphView = [[APCLineGraphView alloc] initWithFrame:graphCell.graphContainerView.frame];
+            APCLineGraphView *lineGraphView = graphCell.graphView;
             lineGraphView.datasource = graphItem.graphData;
             lineGraphView.delegate = self;
             lineGraphView.titleLabel.text = graphItem.caption;
@@ -80,7 +80,6 @@
             lineGraphView.titleLabel.font = [UIFont appRegularFontWithSize:19.0f];
             lineGraphView.subTitleLabel.font = [UIFont appRegularFontWithSize:16.0f];
             
-            [graphCell.graphContainerView addSubview:lineGraphView];
             graphCell.tintColor = graphItem.tintColor;
             graphCell.delegate = self;
             
@@ -232,7 +231,7 @@
 
 #pragma mark - APCDashboardGraphTableViewCellDelegate methods
 
-- (void)dashboardGraphViewCellDidTapExpandForCell:(APCDashboardGraphTableViewCell *)cell
+- (void)dashboardGraphViewCellDidTapExpandForCell:(APCDashboardLineGraphTableViewCell *)cell
 {
     
 }
