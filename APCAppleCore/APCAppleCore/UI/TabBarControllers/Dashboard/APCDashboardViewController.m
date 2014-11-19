@@ -56,7 +56,7 @@
     APCTableViewItem *dashboardItem = [self itemForIndexPath:indexPath];
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:dashboardItem.identifier];
-    
+
     if ([dashboardItem isKindOfClass:[APCTableViewDashboardProgressItem class]]) {
         
         APCTableViewDashboardProgressItem *progressItem = (APCTableViewDashboardProgressItem *)dashboardItem;
@@ -98,6 +98,9 @@
         
         messageCell.type = messageItem.messageType;
         messageCell.messageLabel.text = messageItem.detailText;
+    } else {
+        cell.textLabel.text = dashboardItem.caption;
+        cell.detailTextLabel.text = dashboardItem.detailText;
     }
     
     return cell;
