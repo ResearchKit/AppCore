@@ -8,6 +8,7 @@
 
 #import "APCScheduledTask.h"
 
+@class RKSTTaskResult;
 @interface APCScheduledTask (AddOn)
 
 @end

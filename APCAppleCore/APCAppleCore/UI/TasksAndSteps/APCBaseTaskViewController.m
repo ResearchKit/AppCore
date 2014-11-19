@@ -9,8 +9,7 @@
 #import "APCBaseTaskViewController.h"
 #import "APCAppDelegate.h"
 #import "APCAppleCore.h"
-
-NSString *const kCertFileName = @"rsacert";
+#import "RKSTTaskResult+Archiver.h"
 
 @implementation APCBaseTaskViewController
 
@@ -26,9 +25,15 @@ NSString *const kCertFileName = @"rsacert";
 
 + (RKSTOrderedTask *)createTask: (APCScheduledTask*) scheduledTask
 {
+    //To be overridden by child classes
     return  nil;
 }
 
+- (NSString *) createResultSummary
+{
+    //To be overridden by child classes
+    return nil;
+}
 /*********************************************************************************/
 #pragma mark - RKSTOrderedTaskDelegate
 /*********************************************************************************/
@@ -62,72 +67,17 @@ NSString *const kCertFileName = @"rsacert";
 
 - (void) processTaskResult
 {
-    [self createArchive];
-    [self storeInCoreData];
+    NSString * resultSummary = [self createResultSummary];
+    NSString * archiveFileName = [self.result archiveWithFilePath:self.taskResultsFilePath];
+    [self storeInCoreDataWithFileName:archiveFileName resultSummary:resultSummary];
 }
 
-- (void) createArchive
+- (void) storeInCoreDataWithFileName: (NSString *) fileName resultSummary: (NSString *) resultSummary
 {
-    //Archive
-    RKSTDataArchive * archive = [[RKSTDataArchive alloc] initWithItemIdentifier:self.task.identifier
-                                                                studyIdentifier:((APCAppDelegate*)[UIApplication sharedApplication].delegate).defaultInitializationOptions[kStudyIdentifierKey]
-                                                                    taskRunUUID:self.taskRunUUID
-                                                                  extraMetadata:nil
-                                                                 fileProtection:RKFileProtectionCompleteUnlessOpen];
-    
-    NSArray * array = self.result.results;
-    [array enumerateObjectsUsingBlock:^(RKSTStepResult *stepResult, NSUInteger idx, BOOL *stop) {
-        [stepResult.results enumerateObjectsUsingBlock:^(RKSTResult *result, NSUInteger idx, BOOL *stop) {
-            if (!result.startDate) {
-                result.startDate = stepResult.startDate;
-                result.endDate = stepResult.endDate;
-            }
-            NSError * archiveError;
-            [result addToArchive:archive error:&archiveError];
-            [archiveError handle];
-        }];
-    }];
-    
-    NSError * archiveError;
-    NSData * certFile = [self readPEM];
-    NSData * data = (certFile) ? [archive archiveDataEncryptedWithIdentity:[self readPEM] error:&archiveError] : [archive archiveDataWithError:&archiveError];
-    NSString * fileName = (certFile) ? @"encrypted.zip" : @"unencrypted.zip";
-    [self writeData:data toFileName:fileName];
-}
-
-- (void) writeData: (NSData*) data toFileName: (NSString*) fileName
-{
-    if (![[NSFileManager defaultManager] fileExistsAtPath:self.taskResultsFilePath]) {
-        NSError * fileError;
-        [[NSFileManager defaultManager] createDirectoryAtPath:self.taskResultsFilePath withIntermediateDirectories:YES attributes:nil error:&fileError];
-        [fileError handle];
-    }
-    
-    NSString * filePath = [self.taskResultsFilePath stringByAppendingPathComponent:fileName];
-    if (![data writeToFile: filePath atomically:YES]) {
-        NSLog(@"%@ Not written", fileName);
-    }
-    else
-    {
-        NSLog(@"Archive filePath: %@", filePath);
-    }
-}
-
-- (void) storeInCoreData
-{
-    //Store in CoreData
-    APCResult * apcResult = [APCResult storeRKSTResult:self.result inContext:((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext];
-    apcResult.scheduledTask = self.scheduledTask;
-    NSError * saveError;
-    [apcResult saveToPersistentStore:&saveError];
-    [saveError handle];
-}
-
-- (NSData*) readPEM
-{
-    NSString * path = [[NSBundle appleCoreBundle] pathForResource:kCertFileName ofType:@"pem"];
-    NSData * data = [NSData dataWithContentsOfFile:path];
-    return data;
+    NSManagedObjectContext * context = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext;
+    NSManagedObjectID * objectID = [APCResult storeTaskResult:self.result inContext:context];
+    APCResult * result = (APCResult*)[context objectWithID:objectID];
+    result.scheduledTask = self.scheduledTask;
 }
 
 @end

@@ -17,7 +17,6 @@
 #import "APCUser+UserData.h"
 #import "APCUser+Bridge.h"
 
-
 /*********************************************************************************/
 #pragma mark - Core Data Model Objects
 /*********************************************************************************/
@@ -29,9 +28,6 @@
 
 //Results Cluster
 #import "APCResult+AddOn.h"
-#import "APCDataResult+AddOn.h"
-#import "APCFileResult+AddOn.h"
-#import "APCQuestionResult+AddOn.h"
 
 #import "APCStoredUserData.h"
 
