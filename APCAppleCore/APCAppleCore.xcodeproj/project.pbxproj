@@ -143,7 +143,6 @@
 		5B4633821A1590D200E68B82 /* APCDashboardEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B4633801A1590D200E68B82 /* APCDashboardEditViewController.m */; };
 		5B55FE0A1A031789009BEE5E /* UIAlertController+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B55FE081A031789009BEE5E /* UIAlertController+Helper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B55FE0B1A031789009BEE5E /* UIAlertController+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B55FE091A031789009BEE5E /* UIAlertController+Helper.m */; };
-		5B8E6B651A1D19CC0033733A /* APCEmailVerifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B60751A156495006B2346 /* APCEmailVerifyViewController.m */; };
 		5BB2BA8C1A100BC300684CCE /* UIColor+TertiaryColors.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB2BA8A1A100BC300684CCE /* UIColor+TertiaryColors.h */; };
 		5BB2BA8D1A100BC300684CCE /* UIColor+TertiaryColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB2BA8B1A100BC300684CCE /* UIColor+TertiaryColors.m */; };
 		5BF5C90819D9E208007928D4 /* APCUser+UserData.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF5C90619D9E208007928D4 /* APCUser+UserData.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1511,7 +1510,6 @@
 				5B0159991A0C21F900F28439 /* APCStepProgressBar+Appearance.m in Sources */,
 				F5179CB219D0917D001DCCB7 /* APCScheduledTask+AddOn.m in Sources */,
 				5B3B5FE51A15645E006B2346 /* APCLineGraphView.m in Sources */,
-				5B8E6B651A1D19CC0033733A /* APCEmailVerifyViewController.m in Sources */,
 				5B3B602E1A15645E006B2346 /* APCSegmentedTableViewCell.m in Sources */,
 				5B3B607F1A156495006B2346 /* APCIntroVideoViewController.m in Sources */,
 				F588BA0B19D21EFE00692473 /* NSObject+Helper.m in Sources */,
