@@ -438,9 +438,10 @@ static CGFloat const kPickerCellHeight = 164.0f;
     [self.tableView beginUpdates];
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.pickerIndexPath.row inSection:self.pickerIndexPath.section]]
                           withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView endUpdates];
+    
     
     self.pickerIndexPath = nil;
+    [self.tableView endUpdates];
 }
 
 - (NSIndexPath *)actualSelectedIndexPath:(NSIndexPath *)selectedIndexPath {

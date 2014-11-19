@@ -22,7 +22,9 @@
     
     [self setupAppearance];
     
-    self.iconImageView.image = self.studyDetails.iconImage;
+    self.iconImageView.image = [self.studyDetails.iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.iconImageView.tintColor = self.studyDetails.tintColor;
+    
     self.title = self.studyDetails.caption;
 }
 

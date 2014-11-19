@@ -171,7 +171,7 @@
     BOOL isContentValid = NO;
     
     if (self.userHandleTextField.text.length == 0) {
-        *errorMessage = NSLocalizedString(@"Please enter your user name", @"");
+        *errorMessage = NSLocalizedString(@"Please enter your email", @"");
         isContentValid = NO;
     }
     else if (self.passwordTextField.text.length == 0) {
