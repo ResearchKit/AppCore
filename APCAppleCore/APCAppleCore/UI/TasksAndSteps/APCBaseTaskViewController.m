@@ -52,14 +52,33 @@
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (NSString *)filePath
+- (NSString *)taskResultsFilePath
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    return [[paths lastObject] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", [NSUUID UUID].UUIDString]];
+    return [[paths lastObject] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", self.taskRunUUID.UUIDString]];
 }
 
 - (void) processTaskResult
 {
+    //Archive
+    RKSTDataArchive * archive = [[RKSTDataArchive alloc] initWithItemIdentifier:self.task.identifier
+                                                                studyIdentifier:((APCAppDelegate*)[UIApplication sharedApplication].delegate).defaultInitializationOptions[kStudyIdentifierKey]
+                                                                    taskRunUUID:self.taskRunUUID
+                                                                  extraMetadata:nil
+                                                                 fileProtection:RKFileProtectionCompleteUnlessOpen];
+    
+    NSArray * array = self.result.results;
+    [array enumerateObjectsUsingBlock:^(RKSTStepResult *stepResult, NSUInteger idx, BOOL *stop) {
+        [stepResult.results enumerateObjectsUsingBlock:^(RKSTResult *result, NSUInteger idx, BOOL *stop) {
+            [result addToArchive:archive error:NULL];
+        }];
+    }];
+    NSError * archiveError;
+    [archiveError handle];
+    NSURL * url = [archive archiveURLWithError:&archiveError];
+    NSLog(@"URL for archive: %@", url);
+    
+    //Store in CoreData
     APCResult * apcResult = [APCResult storeRKSTResult:self.result inContext:((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext];
     apcResult.scheduledTask = self.scheduledTask;
     NSError * saveError;
