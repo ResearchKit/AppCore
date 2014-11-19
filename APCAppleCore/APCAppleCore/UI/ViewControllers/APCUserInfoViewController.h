@@ -38,6 +38,10 @@
 
 - (void)setupSegmentedCellAppearance:(APCSegmentedTableViewCell *)cell;
 
+- (void)setupSwitchCellAppearance:(APCSwitchTableViewCell *)cell;
+
+- (void)setupBasicCellAppearance:(UITableViewCell *)cell;
+
 - (void)nextResponderForIndexPath:(NSIndexPath *)indexPath;
 
 - (void)showPickerAtIndex:(NSIndexPath *)indexPath;

@@ -33,23 +33,20 @@ static CGFloat const kPickerCellHeight = 164.0f;
 
 #pragma mark - Custom Methods
 
-- (void)setupPickerCellAppeareance:(APCPickerTableViewCell *)cell
-{
-    
-}
+- (void)setupPickerCellAppeareance:(APCPickerTableViewCell *)cell{}
 
-- (void)setupTextFieldCellAppearance:(APCTextFieldTableViewCell *)cell
-{
-}
+- (void)setupTextFieldCellAppearance:(APCTextFieldTableViewCell *)cell{}
 
-- (void)setupSegmentedCellAppearance:(APCSegmentedTableViewCell *)cell
-{
-    
-}
+- (void)setupSegmentedCellAppearance:(APCSegmentedTableViewCell *)cell{}
 
-- (void)setupDefaultCellAppearance:(APCDefaultTableViewCell *)cell
+- (void)setupDefaultCellAppearance:(APCDefaultTableViewCell *)cell{}
+
+- (void)setupSwitchCellAppearance:(APCSwitchTableViewCell *)cell{}
+
+- (void)setupBasicCellAppearance:(UITableViewCell *)cell
 {
-    
+    [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
+    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
 }
 
 #pragma mark - UITableViewDataSource methods
@@ -208,10 +205,12 @@ static CGFloat const kPickerCellHeight = 164.0f;
                 switchCell.cellSwitch.on = switchField.on;
                 switchCell.delegate = self;
                 
+                [self setupSwitchCellAppearance:switchCell];
             } else {
                 if (!cell) {
                     cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
                 }
+                [self setupBasicCellAppearance:cell];
             }
             
             if (self.isEditing && field.editable && !self.signUp) {
