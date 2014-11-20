@@ -19,3 +19,4 @@ RK_EXTERN const double RKSTVersionNumber;
 #define RKSTVersionNumber_Internal_9 0.09
 #define RKSTVersionNumber_Internal_10 0.10
 #define RKSTVersionNumber_Internal_11 0.11
+#define RKSTVersionNumber_Internal_12 0.12

@@ -32,11 +32,19 @@ NSString *const kCertFileName = @"rsacert";
             
             if ([result isKindOfClass:[RKSTDataResult class]])
             {
-                
+                //TODO: Figure out contentType & metaData
+                RKSTDataResult * dataResult = (RKSTDataResult*) result;
+                NSError * archiveError;
+                [archive addContentWithData:dataResult.data filename:[dataResult.identifier stringByAppendingString:@"_data"] contentType:@"data" timestamp:dataResult.endDate metadata:nil error:&archiveError];
+                [archiveError handle];
             }
             else if ([result isKindOfClass:[RKSTFileResult class]])
             {
-                
+                //TODO: Figure out contentType & metaData
+                RKSTFileResult * fileResult = (RKSTFileResult*) result;
+                NSError * archiveError;
+                [archive addFileWithURL:fileResult.fileUrl contentType:@"data" metadata:nil error:&archiveError];
+                [archiveError handle];
             }
             else
             {

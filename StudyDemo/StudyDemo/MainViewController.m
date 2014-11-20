@@ -945,7 +945,10 @@
     NSMutableArray* steps = [NSMutableArray new];
     
     {
-        RKSTQuestionStep* step = [RKSTQuestionStep questionStepWithIdentifier:@"itid_001" title:@"How old are you?" answer:[RKSTNumericAnswerFormat integerAnswerWithUnit:@"years"]];
+        RKSTNumericAnswerFormat *format = [RKSTNumericAnswerFormat integerAnswerWithUnit:@"years"];
+        format.minimum = @(5);
+        format.maximum = @(90);
+        RKSTQuestionStep* step = [RKSTQuestionStep questionStepWithIdentifier:@"itid_001" title:@"How old are you?" answer:format];
         [steps addObject:step];
     }
     
