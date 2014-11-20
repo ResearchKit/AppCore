@@ -7,6 +7,7 @@
 //
 
 #import <ResearchKit/ResearchKit_Private.h>
+#import <AVFoundation/AVFoundation.h>
 
 
 @class RKSTResult;
@@ -112,6 +113,8 @@
                                     step:(RKSTStep*)step
                          outputDirectory:(NSURL *)outputDirectory;
 
+
+@property (nonatomic, strong, readonly) AVAudioRecorder *audioRecorder;
 
 @end
 

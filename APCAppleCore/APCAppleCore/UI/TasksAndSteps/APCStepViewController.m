@@ -15,12 +15,4 @@
 
 @implementation APCStepViewController
 
-- (NSString *)resultDirectoryPath
-{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString * taskResultPath = [[paths lastObject] stringByAppendingPathComponent:self.taskViewController.taskRunUUID.UUIDString];
-    NSString * stepResultPath = [taskResultPath stringByAppendingPathComponent:self.step.identifier];
-    return stepResultPath;
-}
-
 @end

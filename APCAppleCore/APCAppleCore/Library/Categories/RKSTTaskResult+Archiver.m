@@ -32,11 +32,19 @@ NSString *const kCertFileName = @"rsacert";
             
             if ([result isKindOfClass:[RKSTDataResult class]])
             {
-                
+                //TODO: Figure out contentType & metaData
+                RKSTDataResult * dataResult = (RKSTDataResult*) result;
+                NSError * archiveError;
+                [archive addContentWithData:dataResult.data filename:[dataResult.identifier stringByAppendingString:@"_data"] contentType:@"data" timestamp:dataResult.endDate metadata:nil error:&archiveError];
+                [archiveError handle];
             }
             else if ([result isKindOfClass:[RKSTFileResult class]])
             {
-                
+                //TODO: Figure out contentType & metaData
+                RKSTFileResult * fileResult = (RKSTFileResult*) result;
+                NSError * archiveError;
+                [archive addFileWithURL:fileResult.fileUrl contentType:@"data" metadata:nil error:&archiveError];
+                [archiveError handle];
             }
             else
             {
@@ -63,21 +71,20 @@ NSString *const kCertFileName = @"rsacert";
         [fileError handle];
     }
     NSString * fullFilePath = [filePath stringByAppendingPathComponent:fileName];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:fullFilePath]) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:fullFilePath]) {
         NSError * fileError;
         [[NSFileManager defaultManager] removeItemAtPath:fullFilePath error:&fileError];
         [fileError handle];
     }
     
     BOOL retValue = NO;
-    if (![data writeToFile: filePath atomically:YES]) {
-        NSLog(@"%@ Not written", fileName);
+    if ([data writeToFile: fullFilePath atomically:YES]) {
         retValue = YES;
     }
     else
     {
         retValue = NO;
-        NSLog(@"Archive filePath: %@", filePath);
+        NSLog(@"Archive Not Written!!");
     }
     return retValue;
     

@@ -62,12 +62,12 @@ typedef void (^SBBSurveyManagerEditResponseCompletionBlock)(id responseObject, N
  Fetch a survey from the Bridge API by guid and version number.
  
  @param guid       The survey's guid.
- @param versionedOn    The date-time-versioned-on of the survey to fetch.
+ @param createdOn    The creation date and time of the version of the survey to fetch.
  @param completion An SBBSurveyManagerGetCompletionBlock to be called upon completion.
  
  @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
  */
-- (NSURLSessionDataTask *)getSurveyByGuid:(NSString *)guid versionedOn:(NSDate *)versionedOn completion:(SBBSurveyManagerGetCompletionBlock)completion;
+- (NSURLSessionDataTask *)getSurveyByGuid:(NSString *)guid createdOn:(NSDate *)createdOn completion:(SBBSurveyManagerGetCompletionBlock)completion;
 
 /*!
  Submit a set of answers to a survey by the survey's activityRef (href).
@@ -85,12 +85,12 @@ typedef void (^SBBSurveyManagerEditResponseCompletionBlock)(id responseObject, N
  
  @param surveyAnswers An NSArray of survey answer objects for the questions answered.
  @param guid       The survey's guid.
- @param versionedOn    The date-time-versioned-on of the survey being answered.
+ @param createdOn    The creation date and time of the version of the survey being answered.
  @param completion An SBBSurveyManagerSubmitAnswersCompletionBlock to be called upon completion. The guidHolder passed in contains the guid of the survey response created by submitting these answers.
  
  @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
  */
-- (NSURLSessionDataTask *)submitAnswers:(NSArray *)surveyAnswers toSurveyByGuid:(NSString *)guid versionedOn:(NSDate *)versionedOn completion:(SBBSurveyManagerSubmitAnswersCompletionBlock)completion;
+- (NSURLSessionDataTask *)submitAnswers:(NSArray *)surveyAnswers toSurveyByGuid:(NSString *)guid createdOn:(NSDate *)createdOn completion:(SBBSurveyManagerSubmitAnswersCompletionBlock)completion;
 
 /*!
  Fetch a previously-started survey response from the Bridge API.

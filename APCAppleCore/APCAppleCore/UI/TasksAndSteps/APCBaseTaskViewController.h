@@ -11,9 +11,7 @@
 #import "APCScheduledTask.h"
 
 @interface APCBaseTaskViewController : RKSTTaskViewController <RKSTTaskViewControllerDelegate, RKSTStepViewControllerDelegate>
-
 @property  (nonatomic, strong)  APCScheduledTask  *scheduledTask;
-@property (nonatomic, readonly) NSString * taskResultsFilePath;
 
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask;
 
