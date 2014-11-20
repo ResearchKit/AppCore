@@ -22,8 +22,7 @@ NSString *const kCertFileName = @"rsacert";
                                                                   extraMetadata:nil
                                                                  fileProtection:RKFileProtectionCompleteUnlessOpen];
     
-    NSArray * array = self.results;
-    [array enumerateObjectsUsingBlock:^(RKSTStepResult *stepResult, NSUInteger idx, BOOL *stop) {
+    [self.results enumerateObjectsUsingBlock:^(RKSTStepResult *stepResult, NSUInteger idx, BOOL *stop) {
         [stepResult.results enumerateObjectsUsingBlock:^(RKSTResult *result, NSUInteger idx, BOOL *stop) {
             //Update date if needed
             if (!result.startDate) {
@@ -61,6 +60,12 @@ NSString *const kCertFileName = @"rsacert";
     if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         NSError * fileError;
         [[NSFileManager defaultManager] createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:&fileError];
+        [fileError handle];
+    }
+    NSString * fullFilePath = [filePath stringByAppendingPathComponent:fileName];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:fullFilePath]) {
+        NSError * fileError;
+        [[NSFileManager defaultManager] removeItemAtPath:fullFilePath error:&fileError];
         [fileError handle];
     }
     

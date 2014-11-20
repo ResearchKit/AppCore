@@ -15,16 +15,12 @@
 
 @implementation APCStepViewController
 
-#pragma  mark  -  View Controller Methods
-
-- (void)viewDidLoad
+- (NSString *)resultDirectoryPath
 {
-    [super viewDidLoad];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * taskResultPath = [[paths lastObject] stringByAppendingPathComponent:self.taskViewController.taskRunUUID.UUIDString];
+    NSString * stepResultPath = [taskResultPath stringByAppendingPathComponent:self.step.identifier];
+    return stepResultPath;
 }
 
 @end

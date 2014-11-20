@@ -34,6 +34,12 @@
     //To be overridden by child classes
     return nil;
 }
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.outputDirectory = [NSURL fileURLWithPath:self.taskResultsFilePath];
+}
 /*********************************************************************************/
 #pragma mark - RKSTOrderedTaskDelegate
 /*********************************************************************************/
