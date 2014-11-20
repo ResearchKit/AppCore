@@ -26,6 +26,7 @@
     self.iconImageView.tintColor = self.studyDetails.tintColor;
     
     self.title = self.studyDetails.caption;
+    self.textView.text = self.studyDetails.detailText;
 }
 
 - (void)viewWillAppear:(BOOL)animated
