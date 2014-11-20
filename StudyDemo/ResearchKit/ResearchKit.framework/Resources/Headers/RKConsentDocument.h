@@ -7,11 +7,17 @@
 
 #import <ResearchKit/ResearchKit.h>
 
-@interface RKConsentSignature : NSObject<NSSecureCoding>
+@interface RKConsentSignature : NSObject<NSSecureCoding,NSCopying>
 
-+ (RKConsentSignature *)signatureForPersonWithTitle:(NSString *)title name:(NSString *)name signatureImage:(UIImage *)signatureImage dateString:(NSString *)signatureDate;
++ (RKConsentSignature *)signatureForPersonWithTitle:(NSString *)title
+                                               name:(NSString *)name
+                                     signatureImage:(UIImage *)signatureImage
+                                         dateString:(NSString *)signatureDate
+                                         identifier:(NSString *)identifier;
 
-+ (RKConsentSignature *)signatureForPersonWithTitle:(NSString *)title dateFormatString:(NSString *)dateFormatString;
++ (RKConsentSignature *)signatureForPersonWithTitle:(NSString *)title
+                                   dateFormatString:(NSString *)dateFormatString
+                                         identifier:(NSString *)identifier;
 
 // Default YES
 @property (nonatomic, assign) BOOL requiresName;
@@ -19,9 +25,14 @@
 // Default YES
 @property (nonatomic, assign) BOOL requiresSignatureImage;
 
+/**
+ * @brief Unique identifier
+ */
+@property (nonatomic, copy) NSString* identifier;
+
 @property (nonatomic, copy) NSString* title;
 @property (nonatomic, copy) NSString* name;
-@property (nonatomic, strong) UIImage* signatureImage;
+@property (nonatomic, copy) UIImage* signatureImage;
 @property (nonatomic, copy) NSString* signatureDate;
 
 /**
@@ -36,7 +47,7 @@
 /**
  * @brief RKConsentDocument models elements to be presented in animated sequence and PDF document.
  */
-@interface RKConsentDocument : NSObject<NSSecureCoding>
+@interface RKConsentDocument : NSObject<NSSecureCoding,NSCopying>
 
 /**
  * @brief Document's title only appears in the PDF file.
@@ -98,7 +109,7 @@ typedef NS_ENUM(NSInteger, RKConsentSectionType) {
  *  @class RKConsentSection
  *  @abstract A section in the consent document.
  */
-@interface RKConsentSection : NSObject<NSSecureCoding>
+@interface RKConsentSection : NSObject<NSSecureCoding,NSCopying>
 
 /**
  *  @brief Populates predefined title and summary for all types except for type RKConsentSectionTypeCustom and RKConsentSectionTypeOnlyInDocument.
@@ -130,7 +141,7 @@ typedef NS_ENUM(NSInteger, RKConsentSectionType) {
 /**
  *  @brief User defined custom image to be displayed in the corresponding scene in the animated consent sequence. Ignored unless type is RKConsentSectionTypeCustom.
  */
-@property (nonatomic, strong) UIImage* customImage;
+@property (nonatomic, copy) UIImage* customImage;
 
 @end
 

@@ -7,6 +7,11 @@
 
 #import <ResearchKit/ResearchKit.h>
 
+typedef NS_ENUM(NSInteger, RKInstructionStepViewControllerLayoutStyle) {
+    RKInstructionStepViewControllerLayoutStyleButtonBelowTitle,
+    RKInstructionStepViewControllerLayoutStyleButtonAtBottom
+};
+
 @interface RKInstructionStepViewController : RKStepViewController
 
 
@@ -16,5 +21,7 @@
  *
  */
 @property (nonatomic, strong) UIView *customView;
+
+@property (nonatomic) RKInstructionStepViewControllerLayoutStyle layoutStyle;
 
 @end

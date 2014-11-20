@@ -9,4 +9,6 @@
 
 @interface RKConsentReviewStepViewController : RKStepViewController
 
+- (instancetype)initWithConsentReviewStep:(RKConsentReviewStep *)step result:(RKConsentSignatureResult *)result;
+
 @end

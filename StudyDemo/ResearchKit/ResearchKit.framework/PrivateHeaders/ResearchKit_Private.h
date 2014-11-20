@@ -7,38 +7,43 @@
 
 #import <ResearchKit/ResearchKit.h>
 
-#import <ResearchKit/RKVersion.h>
+#import <ResearchKit/RKSTVersion.h>
 
-// Helper
-#import <ResearchKit/RKItemIdentifier.h>
+
+// Active step support
+#import <ResearchKit/RKSTActiveStep.h>
+#import <ResearchKit/RKSTActiveStepViewController.h>
+#import <ResearchKit/RKSTRecorder.h>
+#import <ResearchKit/RKSTTaskViewController_Private.h>
+#import <ResearchKit/RKSTStepViewController_Private.h>
 
 // Appearance customization
-#import <ResearchKit/RKAppearance.h>
+#import <ResearchKit/RKSTAppearance.h>
 
 // Passive data collection
-#import <ResearchKit/RKErrors.h>
-#import <ResearchKit/RKStudyStore.h>
-#import <ResearchKit/RKStudy.h>
-#import <ResearchKit/RKCollector.h>
-#import <ResearchKit/RKDataLogger.h>
+#import <ResearchKit/RKSTErrors.h>
+#import <ResearchKit/RKSTStudyStore.h>
+#import <ResearchKit/RKSTStudy.h>
+#import <ResearchKit/RKSTCollector.h>
+#import <ResearchKit/RKSTDataLogger.h>
 
 // Step view controllers (useful for appearance, customization by subclassing)
-#import <ResearchKit/RKQuestionStepViewController.h>
-#import <ResearchKit/RKInstructionStepViewController.h>
-#import <ResearchKit/RKVisualConsentStepViewController.h>
-#import <ResearchKit/RKConsentReviewStepViewController.h>
-#import <ResearchKit/RKFormStepViewController.h>
+#import <ResearchKit/RKSTQuestionStepViewController.h>
+#import <ResearchKit/RKSTInstructionStepViewController.h>
+#import <ResearchKit/RKSTVisualConsentStepViewController.h>
+#import <ResearchKit/RKSTConsentReviewStepViewController.h>
+#import <ResearchKit/RKSTFormStepViewController.h>
 
 // Custom steps
-#import <ResearchKit/RKCustomStepView.h>
+#import <ResearchKit/RKSTCustomStepView.h>
 
 // Media step
-#import <ResearchKit/RKMediaStep.h>
-#import <ResearchKit/RKMediaStepViewController.h>
+#import <ResearchKit/RKSTMediaStep.h>
+#import <ResearchKit/RKSTMediaStepViewController.h>
 
 // Potentially to remove
-#import <ResearchKit/RKResult_Private.h>
-#import <ResearchKit/RKQuestionStepViewController_Private.h>
-#import <ResearchKit/RKRecorder_Private.h>
+#import <ResearchKit/RKSTResult_Private.h>
+#import <ResearchKit/RKSTQuestionStepViewController_Private.h>
+#import <ResearchKit/RKSTRecorder_Private.h>
 
 

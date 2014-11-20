@@ -6,7 +6,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <ResearchKit/RKDefines.h>
+
+
+typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
+    RKFileProtectionNone = 0,
+    RKFileProtectionCompleteUntilFirstUserAuthentication,
+    RKFileProtectionCompleteUnlessOpen,
+    RKFileProtectionComplete
+};
 
 @class RKDataLogger;
 @class HKUnit;

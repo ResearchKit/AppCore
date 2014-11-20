@@ -9,8 +9,13 @@
 
 #import <ResearchKit/RKVersion.h>
 
-// Helper
-#import <ResearchKit/RKItemIdentifier.h>
+
+// Active step support
+#import <ResearchKit/RKActiveStep.h>
+#import <ResearchKit/RKActiveStepViewController.h>
+#import <ResearchKit/RKRecorder.h>
+#import <ResearchKit/RKTaskViewController_Private.h>
+#import <ResearchKit/RKStepViewController_Private.h>
 
 // Appearance customization
 #import <ResearchKit/RKAppearance.h>

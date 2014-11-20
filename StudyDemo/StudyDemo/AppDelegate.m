@@ -19,20 +19,20 @@
 
 NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
 
-@interface AppDelegate ()<RKStudyDelegate,RKDataLoggerManagerDelegate>
+@interface AppDelegate ()<RKSTStudyDelegate,RKSTDataLoggerManagerDelegate>
 {
     NSString *_logDirectory;
-    RKDataLoggerManager *_logManager;
+    RKSTDataLoggerManager *_logManager;
 }
 
 @end
 
 @implementation AppDelegate
 
--(BOOL)initializeStudiesOnStore:(RKStudyStore*)store
+-(BOOL)initializeStudiesOnStore:(RKSTStudyStore*)store
 {
     NSError *error = nil;
-    RKStudy *study = [store addStudyWithIdentifier:MainStudyIdentifier delegate:self error:&error];
+    RKSTStudy *study = [store addStudyWithIdentifier:MainStudyIdentifier delegate:self error:&error];
     if (!study)
     {
         NSLog(@"Error creating study %@: %@", MainStudyIdentifier, error);
@@ -42,7 +42,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     // NSData *identity = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"investigator" ofType:@"pem"]];
     
     HKQuantityType *quantityType = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
-    RKHealthCollector *healthCollector = [study addHealthCollectorWithSampleType:quantityType unit:[HKUnit countUnit] startDate:nil error:&error];
+    RKSTHealthCollector *healthCollector = [study addHealthCollectorWithSampleType:quantityType unit:[HKUnit countUnit] startDate:nil error:&error];
     if (!healthCollector)
     {
         NSLog(@"Error creating health collector: %@", error);
@@ -52,7 +52,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     
     HKQuantityType *quantityType2 = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodGlucose];
     HKUnit *unit = [HKUnit unitFromString:@"mg/dL"];
-    RKHealthCollector *glucoseCollector = [study addHealthCollectorWithSampleType:quantityType2 unit:unit startDate:nil error:&error];
+    RKSTHealthCollector *glucoseCollector = [study addHealthCollectorWithSampleType:quantityType2 unit:unit startDate:nil error:&error];
     if (!glucoseCollector)
     {
         NSLog(@"Error creating glucose collector: %@", error);
@@ -61,7 +61,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     }
     
     HKCorrelationType *bpType = (HKCorrelationType *)[HKCorrelationType correlationTypeForIdentifier:HKCorrelationTypeIdentifierBloodPressure];
-    RKHealthCorrelationCollector *bpCollector = [study addHealthCorrelationCollectorWithCorrelationType:bpType sampleTypes:@[[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureDiastolic], [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic]] units:@[[HKUnit unitFromString:@"mmHg"], [HKUnit unitFromString:@"mmHg"]] startDate:nil error:&error];
+    RKSTHealthCorrelationCollector *bpCollector = [study addHealthCorrelationCollectorWithCorrelationType:bpType sampleTypes:@[[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureDiastolic], [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic]] units:@[[HKUnit unitFromString:@"mmHg"], [HKUnit unitFromString:@"mmHg"]] startDate:nil error:&error];
     if (!bpCollector)
     {
         NSLog(@"Error creating BP collector: %@", error);
@@ -69,7 +69,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
         return NO;
     }
     
-    RKMotionActivityCollector *motionCollector = [study addMotionActivityCollectorWithStartDate:nil error:&error];
+    RKSTMotionActivityCollector *motionCollector = [study addMotionActivityCollectorWithStartDate:nil error:&error];
     if (!motionCollector)
     {
         NSLog(@"Error creating motion collector: %@", error);
@@ -81,17 +81,16 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     return YES;
 }
 
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     _logDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"ResearchKitLogs"]; // for now
     [[NSFileManager defaultManager] createDirectoryAtPath:_logDirectory withIntermediateDirectories:YES attributes:nil error:nil];
     
-    _logManager = [[RKDataLoggerManager alloc] initWithDirectory:[NSURL fileURLWithPath:_logDirectory] delegate:self];
+    _logManager = [[RKSTDataLoggerManager alloc] initWithDirectory:[NSURL fileURLWithPath:_logDirectory] delegate:self];
     _logManager.pendingUploadBytesThreshold = 5 * 1024 * 1024; // 5 MB
     _logManager.totalBytesThreshold = 50 * 1024 * 1024; // 50 MB
     
-    RKStudyStore *studyStore = [RKStudyStore sharedStudyStore];
+    RKSTStudyStore *studyStore = [RKSTStudyStore sharedStudyStore];
     
     
     self.studyStore = studyStore;
@@ -99,7 +98,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
 #define CLEAR_OLD_STUDY 0
 #if CLEAR_OLD_STUDY
     // Sometimes it's helpful to be able to clear an old study
-    RKStudy *oldStudy = [studyStore studyWithIdentifier:MainStudyIdentifier];
+    RKSTStudy *oldStudy = [studyStore studyWithIdentifier:MainStudyIdentifier];
     if (oldStudy)
     {
         // Remove the old study!
@@ -115,7 +114,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     }
     else
     {
-        for (RKStudy *study in studyStore.studies)
+        for (RKSTStudy *study in studyStore.studies)
         {
             [study setDelegate:self];
         }
@@ -123,8 +122,8 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     
     // Resume data collection
     [studyStore resume];
+
     
-        
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
@@ -137,11 +136,25 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
 }
 
 
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    
+    return YES;
+}
+
+
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
 }
 
+- (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder {
+    return YES;
+}
 
 // Generate a unique archive URL in the documents directory
 - (NSURL *)_makeArchiveURL
@@ -161,7 +174,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     }];
     NSError *err = nil;
     NSArray *pendingFiles = nil;
-    NSURL *archiveFile = [RKDataArchive makeArchiveFromDataLoggerManager:_logManager
+    NSURL *archiveFile = [RKSTDataArchive makeArchiveFromDataLoggerManager:_logManager
                                                           itemIdentifier:@"com.apple.ResearchKit.collection"
                                                          studyIdentifier:MainStudyIdentifier
                                                           fileProtection:RKFileProtectionNone
@@ -198,7 +211,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     }
 }
 
-- (void)dataLoggerManager:(RKDataLoggerManager*)manager pendingUploadBytesReachedThreshold:(unsigned long long)pendingUploadBytes
+- (void)dataLoggerManager:(RKSTDataLoggerManager*)manager pendingUploadBytesReachedThreshold:(unsigned long long)pendingUploadBytes
 {
     NSLog(@"Pending bytes threshold reached");
     // Create the archive.
@@ -210,20 +223,20 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     });
 }
 
-- (void)dataLoggerManager:(RKDataLoggerManager*)manager totalBytesReachedThreshold:(unsigned long long)totalBytes
+- (void)dataLoggerManager:(RKSTDataLoggerManager*)manager totalBytesReachedThreshold:(unsigned long long)totalBytes
 {
     NSLog(@"Total bytes threshold reached");
     // Throw out old files
     [manager removeOldAndUploadedLogsToThreshold:manager.totalBytesThreshold/2 error:nil];
 }
 
-#pragma mark RKStudyDelegate
+#pragma mark RKSTStudyDelegate
 
 
-- (BOOL)study:(RKStudy *)study healthCollector:(RKHealthCollector *)collector anchor:(NSNumber *)anchor didCollectObjects:(NSArray /* <HKSample> */ *)objects
+- (BOOL)study:(RKSTStudy *)study healthCollector:(RKSTHealthCollector *)collector anchor:(NSNumber *)anchor didCollectObjects:(NSArray /* <HKSample> */ *)objects
 {
     NSString *identifier = [[collector sampleType] identifier];
-    RKDataLogger *logger = [_logManager dataLoggerForLogName:identifier];
+    RKSTDataLogger *logger = [_logManager dataLoggerForLogName:identifier];
     if (! logger)
     {
         logger = [_logManager addJSONDataLoggerForLogName:identifier];
@@ -234,10 +247,10 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     return success;
 }
 
-- (BOOL)study:(RKStudy *)study healthCorrelationCollector:(RKHealthCorrelationCollector *)collector anchor:(NSNumber *)anchor didCollectObjects:(NSArray /* <HKCorrelation> */ *)objects
+- (BOOL)study:(RKSTStudy *)study healthCorrelationCollector:(RKSTHealthCorrelationCollector *)collector anchor:(NSNumber *)anchor didCollectObjects:(NSArray /* <HKCorrelation> */ *)objects
 {
     NSString *identifier = [[collector correlationType] identifier];
-    RKDataLogger *logger = [_logManager dataLoggerForLogName:identifier];
+    RKSTDataLogger *logger = [_logManager dataLoggerForLogName:identifier];
     if (! logger)
     {
         logger = [_logManager addJSONDataLoggerForLogName:identifier];
@@ -248,10 +261,10 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
     return success;
 }
 
-- (BOOL)study:(RKStudy *)study motionActivityCollector:(RKMotionActivityCollector *)collector startDate:(NSDate *)startDate didCollectObjects:(NSArray /* <CMMotionActivity> */ *)objects
+- (BOOL)study:(RKSTStudy *)study motionActivityCollector:(RKSTMotionActivityCollector *)collector startDate:(NSDate *)startDate didCollectObjects:(NSArray /* <CMMotionActivity> */ *)objects
 {
     NSString *logName = @"RKMotionActivity";
-    RKDataLogger *logger = [_logManager dataLoggerForLogName:logName];
+    RKSTDataLogger *logger = [_logManager dataLoggerForLogName:logName];
     if (! logger)
     {
         logger = [_logManager addJSONDataLoggerForLogName:logName];
@@ -263,7 +276,7 @@ NSString *const MainStudyIdentifier = @"com.apple.studyDemo.mainStudy";
 }
 
 
-- (void)passiveCollectionDidFinishForStudy:(RKStudy *)study
+- (void)passiveCollectionDidFinishForStudy:(RKSTStudy *)study
 {
     if (self.justJoined)
     {

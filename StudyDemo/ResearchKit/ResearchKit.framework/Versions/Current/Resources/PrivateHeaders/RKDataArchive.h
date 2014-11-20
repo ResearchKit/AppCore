@@ -7,11 +7,10 @@
 
 #import <Foundation/Foundation.h>
 #import <ResearchKit/RKErrors.h>
+#import <ResearchKit/RKDataLogger.h>
 
 
-@class RKItemIdentifier;
 @class RKCMS;
-@class RKDataLoggerManager;
 
 /**
  * Helper for creating a zip archive containing one or more data files
@@ -30,12 +29,12 @@
  * @param itemIdentifier   Identifier of the step, task or passive data collection
  *      for which this data was collected
  * @param studyIdentifier  current study
- * @param taskInstanceUUID UUID of the specific instance of the task
+ * @param taskRunUUID UUID of the specific instance of the task
  * @param extraMetadata    Extra metadata being produced
  */
 - (instancetype)initWithItemIdentifier:(NSString *)itemIdentifier
                        studyIdentifier:(NSString *)studyIdentifier
-                      taskInstanceUUID:(NSUUID *)taskInstanceUUID
+                      taskRunUUID:(NSUUID *)taskRunUUID
                          extraMetadata:(NSDictionary *)extraMetadata
                         fileProtection:(RKFileProtectionMode)fileProtection;
 
@@ -84,7 +83,7 @@
 @property (copy) NSDictionary *extraMetadata;
 @property (copy) NSString *studyIdentifier;
 @property (copy) NSString *itemIdentifier;
-@property (copy) NSUUID *taskInstanceUUID;
+@property (copy) NSUUID *taskRunUUID;
 
 @property (readonly) unsigned long long totalArchivedBytes;
 

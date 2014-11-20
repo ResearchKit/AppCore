@@ -18,16 +18,6 @@
 @interface RKInstructionStep : RKStep
 
 /**
- * @brief The title of the instruction.
- */
-@property (nonatomic, copy) NSString* title;
-
-/**
- * @brief The primary instruction content.
- */
-@property (nonatomic, copy) NSString* text;
-
-/**
  * @brief Any detailed explanation for the instruction.
  */
 @property (nonatomic, copy) NSString* detailText;

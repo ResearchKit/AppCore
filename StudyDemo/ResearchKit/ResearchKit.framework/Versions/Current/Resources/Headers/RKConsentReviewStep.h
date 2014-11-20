@@ -17,10 +17,5 @@
 @property (nonatomic, strong, readonly) RKConsentDocument *consentDocument;
 @property (nonatomic, strong, readonly) RKConsentSignature *signature;
 
-/// Title to be shown on the consent review screen
-@property (nonatomic, copy) NSString *title;
-
-/// Text shown below the title on the consent review screen
-@property (nonatomic, copy) NSString *text;
 
 @end

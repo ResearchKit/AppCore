@@ -18,7 +18,6 @@
 @class RKHealthCollector;
 @class RKHealthCorrelationCollector;
 @class RKMotionActivityCollector;
-@class RKItemIdentifier;
 @class RKStudy;
 
 /**

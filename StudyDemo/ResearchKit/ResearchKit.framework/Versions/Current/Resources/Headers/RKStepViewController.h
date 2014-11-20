@@ -12,6 +12,7 @@
 @class RKEditableResult;
 @class RKStepViewController;
 @class RKTaskViewController;
+@class RKStepResult;
 
 typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
     RKStepViewControllerNavigationDirectionForward,
@@ -27,6 +28,11 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
  * @brief Indicates the step has completed, and the desired direction of navigation.
  */
 - (void)stepViewControllerDidFinish:(RKStepViewController *)stepViewController navigationDirection:(RKStepViewControllerNavigationDirection)direction;
+
+/**
+ * @brief Result chanegd.
+ */
+- (void)stepViewController:(RKStepViewController *)stepViewController didChangeResult:(RKStepResult*)stepResult;
 
 @optional
 
@@ -47,20 +53,6 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
 
 @end
 
-@protocol RKResultCollector <NSObject>
-
-/**
- * @brief An editable result has been modified during this step.
- */
--(void)didEditResult:(RKEditableResult *)result forStep:(RKStep *)step;
-
-/**
- * @brief A final version of a result has been produced during this step.
- */
--(void)didProduceResult:(RKResult *)result forStep:(RKStep *)step;
-
-@end
-
 /**
  * @brief Base class for view controllers for steps in a task.
  */
@@ -72,6 +64,7 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
  */
 - (instancetype)initWithStep:(RKStep*)step;
 
+
 /**
  * @brief The step to be presented.
  * 
@@ -82,8 +75,6 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
 @property (nonatomic, strong) RKStep* step;
 
 @property (nonatomic, weak) id<RKStepViewControllerDelegate> delegate;
-
-@property (nonatomic, weak) id<RKResultCollector> resultCollector;
 
 /**
  * @brief Control buttons
@@ -102,6 +93,11 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
 @property (nonatomic, strong) UIBarButtonItem *skipButton;
 @property (nonatomic, strong) UIBarButtonItem *backButton;
 @property (nonatomic, strong) UIBarButtonItem *cancelButton;
+
+/**
+ * @brief Current state of result
+ */
+@property (nonatomic, copy, readonly) RKStepResult *result;
 
 
 - (BOOL)previousStepAvailable;
@@ -124,18 +120,5 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
 
 @end
 
-@interface RKStepViewController(ActiveTaskSupport)
 
-/**
- * @brief Stop running step.
- */
-- (void)suspend;
-
-/**
- * @brief Make step start running after suspended.
- */
-- (void)resume;
-
-
-@end
 

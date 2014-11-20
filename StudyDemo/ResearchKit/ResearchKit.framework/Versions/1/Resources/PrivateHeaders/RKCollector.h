@@ -13,18 +13,16 @@
 @class RKCollector;
 @class RKHealthCollector;
 @class RKMotionActivityCollector;
-@class RKItemIdentifier;
-
 
 @interface RKCollector : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;
 
 /**
- * @brief itemIdentifier to be provided to an uploader.
+ * @brief identifier to be provided to an uploader.
  *
  */
-@property (copy, readonly) RKItemIdentifier *itemIdentifier;
+@property (copy, readonly) NSString *identifier;
 
 
 /**
