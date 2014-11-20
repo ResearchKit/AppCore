@@ -38,6 +38,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:self.taskResultsFilePath]) {
+        NSError * fileError;
+        [[NSFileManager defaultManager] createDirectoryAtPath:self.taskResultsFilePath withIntermediateDirectories:YES attributes:nil error:&fileError];
+        [fileError handle];
+    }
     self.outputDirectory = [NSURL fileURLWithPath:self.taskResultsFilePath];
 }
 /*********************************************************************************/
