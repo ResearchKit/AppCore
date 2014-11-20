@@ -25,13 +25,26 @@ NSString *const kCertFileName = @"rsacert";
     NSArray * array = self.results;
     [array enumerateObjectsUsingBlock:^(RKSTStepResult *stepResult, NSUInteger idx, BOOL *stop) {
         [stepResult.results enumerateObjectsUsingBlock:^(RKSTResult *result, NSUInteger idx, BOOL *stop) {
+            //Update date if needed
             if (!result.startDate) {
                 result.startDate = stepResult.startDate;
                 result.endDate = stepResult.endDate;
             }
-            NSError * archiveError;
-            [result addToArchive:archive error:&archiveError];
-            [archiveError handle];
+            
+            if ([result isKindOfClass:[RKSTDataResult class]])
+            {
+                
+            }
+            else if ([result isKindOfClass:[RKSTFileResult class]])
+            {
+                
+            }
+            else
+            {
+                NSError * archiveError;
+                [result addToArchive:archive error:&archiveError];
+                [archiveError handle];
+            }
         }];
     }];
     
