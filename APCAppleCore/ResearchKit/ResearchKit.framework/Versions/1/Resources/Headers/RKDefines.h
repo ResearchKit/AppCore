@@ -13,9 +13,4 @@
 #define RK_EXTERN extern __attribute__((visibility("default")))
 #endif
 
-typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
-    RKFileProtectionNone = 0,
-    RKFileProtectionCompleteUntilFirstUserAuthentication,
-    RKFileProtectionCompleteUnlessOpen,
-    RKFileProtectionComplete
-};
+

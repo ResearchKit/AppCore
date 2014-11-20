@@ -6,8 +6,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger, RKSurveyQuestionType) {
+    RKSurveyQuestionTypeNone,                   // No question.
     RKSurveyQuestionTypeScale,                  // Continuous rating scale, ask participant place a mark at an appropriate position on a continuous line.
     RKSurveyQuestionTypeSingleChoice,           // Single choice questions are those where the participant can only pick a single predefined answer option.
     RKSurveyQuestionTypeMultipleChoice,         // Multiple choice questions are those where the participant can pick one or more predefined answer options.
@@ -18,9 +20,9 @@ typedef NS_ENUM(NSInteger, RKSurveyQuestionType) {
     RKSurveyQuestionTypeDateAndTime,            // DateAndTime question type ask for a time or a combination of date and time, can be chosen from a picker.
     RKSurveyQuestionTypeTime,                   // Time question type can be used to ask for a certain time, can be chosen from a picker.
     RKSurveyQuestionTypeDate,                   // Date question type can be used to ask for a certain date, can be chosen from a picker.
-    RKSurveyQuestionTypeTimeInterval,           // TimeInterval question type can be used to ask for a certain time span, can be chosen from a picker.
-    RKSurveyQuestionTypeCustom                  // Other types not defined in the framework.
+    RKSurveyQuestionTypeTimeInterval            // TimeInterval question type can be used to ask for a certain time span, can be chosen from a picker.
 };
+
 
 /**
  * @brief The RKAnswerFormat class contains details about answer.
@@ -29,7 +31,7 @@ typedef NS_ENUM(NSInteger, RKSurveyQuestionType) {
  * Allow subclasses to add additional attributes which fit specific types of question.
  * @discussion
  */
-@interface RKAnswerFormat : NSObject<NSSecureCoding>
+@interface RKAnswerFormat : NSObject<NSSecureCoding,NSCopying>
 
 - (RKSurveyQuestionType) questionType;
 
@@ -67,26 +69,26 @@ typedef NS_ENUM(NSInteger, RKChoiceAnswerStyle) {
 };
 
 /**
- * @brief The RKChoiceAnswerFormat class defines predefined answer options for a choice type answer.
- * Choice question type are those where the participant can pick from predefined answer options.
+ * @brief Format for a multiple or single choice question with a fixed set of options.
  */
 @interface RKChoiceAnswerFormat : RKAnswerFormat
 
 /**
- * @brief Designated convenience constructor
- * @param options             A list of predefined options.
- * @param style               Answer style of the multiple-choice question
+ * @brief Create a choice answer format to select from a set of text options.
+ * @param options             Array of RKTextAnswerOption.
+ * @param style               Whether single or multiple-choice.
  */
-+ (instancetype)choiceAnswerWithOptions:(NSArray /* <RKAnswerOption> */ *)options style:(RKChoiceAnswerStyle)style;
++ (instancetype)choiceAnswerWithTextOptions:(NSArray *)options style:(RKChoiceAnswerStyle)style;
 
 /**
- * @brief Style of answer desired
+ * @brief Create a choice answer format to select on an image scale.
+ * @param options             Array of RKImageAnswerOption
+ * @param style               Whether single or multiple-choice.
  */
++ (instancetype)choiceAnswerWithImageOptions:(NSArray *)options style:(RKChoiceAnswerStyle)style;
+
 @property (nonatomic, readonly) RKChoiceAnswerStyle style;
 
-/**
- * @brief An list of RKAnswerOption objects.
- */
 @property (nonatomic, readonly, copy) NSArray *options;
 
 @end
@@ -100,35 +102,75 @@ typedef NS_ENUM(NSInteger, RKChoiceAnswerStyle) {
 @end
 
 /**
- * @brief The RKAnswerOption class defines  brief/detailed option text for a option which can be included within RKChoiceAnswerFormat.
+ * @brief The RKTextAnswerOption class defines brief option text for a option which can be included within RKChoiceAnswerFormat.
  */
-@interface RKAnswerOption : NSObject<NSSecureCoding>
+@interface RKTextAnswerOption : NSObject <NSSecureCoding,NSCopying>
 
 /**
  * @brief Designated convenience constructor
  */
-+ (instancetype)optionWithShortText:(NSString*)shortText longText:(NSString*)longText value:(id)value;
++ (instancetype)optionWithText:(NSString *)text detailText:(NSString *)detailText value:(id)value;
+
+/**
+ * @brief Designated convenience constructor
+ */
++ (instancetype)optionWithText:(NSString *)text value:(id)value;
+
 
 /**
  * @brief Brief option text.
  */
-@property (nonatomic, readonly, copy) NSString* shortText;
-
-/**
- * @brief Detailed option text.
- */
-@property (nonatomic, readonly, copy) NSString* longText;
+@property (nonatomic, readonly, copy) NSString *text;
 
 /**
  * @brief The value to be returned if this option is selected.
  *
- * Expected to be a scalar type serializable to JSON, e.g. NSNumber or NSString.
+ * Expected to be a scalar property list type, e.g. NSNumber or NSString.
+ * If no value is provided, the index of the option in the RKChoiceAnswerFormat options list is used.
+ */
+@property (nonatomic, readonly, copy) id value;
+
+/**
+  * @brief Detailed option text.
+  */
+@property (nonatomic, readonly, copy) NSString *detailText;
+
+@end
+
+/**
+  * @brief The RKAnswerImageOption class defines  brief/detailed option text for a option which can be included within RKChoiceAnswerFormat.
+  */
+@interface RKImageAnswerOption : NSObject <NSSecureCoding,NSCopying>
+
+/**
+ * @brief Designated convenience constructor
+ */
++ (instancetype)optionWithNormalImage:(UIImage *)normal selectedImage:(UIImage *)selected text:(NSString *)text value:(id)value;
+/**
+ * @brief Image for when option is unselected.
+ */
+@property (nonatomic, readonly, strong) UIImage *normalStateImage;
+
+/**
+  * @brief Image for when option is selected.
+  */
+@property (nonatomic, readonly, strong) UIImage *selectedStateImage;
+
+/**
+ * @brief Optional text.
+ */
+@property (nonatomic, readonly, copy) NSString *text;
+
+/**
+ * @brief The value to be returned if this option is selected.
+ *
+ * Expected to be a scalar property list type, e.g. NSNumber or NSString.
  * If no value is provided, the index of the option in the RKChoiceAnswerFormat options list will be used.
  */
 @property (nonatomic, readonly, copy) id value;
 
-@end
 
+@end
 
 
 typedef NS_ENUM(NSInteger, RKNumericAnswerStyle) {
@@ -221,33 +263,77 @@ typedef NS_ENUM(NSInteger, RKDateAnswerStyle) {
 
 /**
  * @brief Convenience constructor for DateAndTime type.
- * @param defaultDate Date components. Year, month, day, hour, minute, and second are observed.
- *     Any components not provided will be replaced with components for the "relativeDate".
- * @param relativeDate Date that default components are applied relative to. Defaults to time of presentation.
- * @param minimum Date components for the beginning of the allowable range. If nil, no limit.
- * @param maximum Date components for the end of the allowable range. If nil, no limit.
+ *
+ * @param default       Date components. Era, year, month, day, hour, minute, and second are observed.
+ *     Any components provided override those components on the "referenceDate".
+ *     If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param defaultDate   Date that default components are applied to.
+ *                      If nil, time of presentation is used.
+ *
+ * @param minimum Date components for the beginning of the allowable range.
+ *                If nil, no limit.
+ *                If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param maximum Date components for the end of the allowable range.
+ *                If nil, no limit.
+ *                If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param calendar Calendar to use when selecting date and time.
+ *                 If nil, use user's default calendar.
  */
-+ (instancetype)dateTimeAnswerWithDefault:(NSDateComponents *)defaultDate relativeToDate:(NSDate *)relativeDate minimum:(NSDateComponents *)minimum maximum:(NSDateComponents *)maximum;
++ (instancetype)dateTimeAnswerWithDefault:(NSDateComponents *)defaultComponents
+                              defaultDate:(NSDate *)defaultDate
+                                  minimum:(NSDateComponents *)minimum
+                                  maximum:(NSDateComponents *)maximum
+                                 calendar:(NSCalendar *)calendar;
 
 /**
  * @brief Convenience constructor for Date type.
- * @param defaultDate Date components. Year, month, and day are observed.
- *     Any components not provided will be replaced with components for the "relativeDate".
- * @param relativeDate Date that default components are applied relative to. Defaults to time of presentation.
- * @param minimum Date components for the beginning of the allowable range. If nil, no limit.
- * @param maximum Date components for the end of the allowable range. If nil, no limit.
+ *
+ * @param default       Date components. Era, year, month, and day are observed.
+ *     Any components provided override those components on the "referenceDate".
+ *     If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param defaultDate   Date that default components are applied to.
+ *                      If nil, time of presentation is used.
+ *
+ * @param minimum Date components for the beginning of the allowable range.
+ *                If nil, no limit.
+ *                If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param maximum Date components for the end of the allowable range.
+ *                If nil, no limit.
+ *                If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param calendar Calendar to use when selecting date and time.
+ *                 If nil, use user's default calendar.
  */
-+ (instancetype)dateAnswerWithDefault:(NSDateComponents *)defaultDate relativeToDate:(NSDate *)relativeDate minimum:(NSDateComponents *)minimum maximum:(NSDateComponents *)maximum;
++ (instancetype)dateAnswerWithDefault:(NSDateComponents *)defaultComponents defaultDate:(NSDate *)defaultDate minimum:(NSDateComponents *)minimum maximum:(NSDateComponents *)maximum calendar:(NSCalendar *)calendar;
 
 /**
  * @brief Convenience constructor for Time type.
- * @param defaultDate Date components for the default value. Hour, minute, and second are observed.
- *     Any components not provided will be replaced with components for the "relativeDate".
- * @param relativeDate Date that default components are applied relative to. Defaults to time of presentation.
- * @param minimum Date components for the beginning of the allowable range. If nil, no limit.
- * @param maximum Date components for the end of the allowable range. If nil, no limit.
+ 
+ *
+ * @param default       Date components. Hour, minute, and second are observed.
+ *     Any components provided override those components on the "referenceDate".
+ *     If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param defaultDate   Date that default components are applied to.
+ *                      If nil, time of presentation is used.
+ *
+ * @param minimum Date components for the beginning of the allowable range.
+ *                If nil, no limit.
+ *                If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param maximum Date components for the end of the allowable range.
+ *                If nil, no limit.
+ *                If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param calendar Calendar to use when selecting date and time.
+ *                 If nil, use user's default calendar.
  */
-+ (instancetype)timeAnswerWithDefault:(NSDateComponents *)defaultTime relativeToDate:(NSDate *)relativeDate minimum:(NSDateComponents *)minimum maximum:(NSDateComponents *)maximum;
++ (instancetype)timeAnswerWithDefault:(NSDateComponents *)defaultComponents defaultDate:(NSDate *)defaultDate minimum:(NSDateComponents *)minimum maximum:(NSDateComponents *)maximum calendar:(NSCalendar *)calendar;
 
 /**
  * @brief Style of date entry
@@ -257,7 +343,8 @@ typedef NS_ENUM(NSInteger, RKDateAnswerStyle) {
 @property (nonatomic, readonly, copy) NSDateComponents *defaultComponents;
 @property (nonatomic, readonly, copy) NSDateComponents *minimum;
 @property (nonatomic, readonly, copy) NSDateComponents *maximum;
-@property (nonatomic, readonly, copy) NSDate *relativeToDate;
+@property (nonatomic, readonly, copy) NSDate *defaultDate;
+@property (nonatomic, readonly, copy) NSCalendar *calendar;
 
 @end
 
@@ -273,6 +360,14 @@ typedef NS_ENUM(NSInteger, RKDateAnswerStyle) {
  * @brief Convenience constructor.
  */
 + (instancetype)textAnswer;
+
++ (instancetype)textAnswerWithMaximumLength:(NSNumber*)maximumLength;
+
+/**
+ * @brief  Maximum length of the text to be allowed. 
+ *  Default is nil, not limited.
+ */
+@property (nonatomic, readonly, copy) NSNumber *maximumLength;
 
 @end
 
