@@ -29,38 +29,49 @@ static APCDummyObject * _dummyObject;
 
 @implementation APCTask (Bridge)
 
++ (BOOL) serverDisabled
+{
+#if DEVELOPMENT
+    return YES;
+#else
+    return ((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.parameters.bypassServer;
+#endif
+}
+
 +(void)getSurveyByRef:(NSString *)ref onCompletion:(void (^)(NSError *))completionBlock
 {
-#ifdef DEVELOPMENT
-    if (completionBlock) {
-        completionBlock(nil);
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
     }
-#else
-    [SBBComponent(SBBSurveyManager) getSurveyByRef:ref completion:^(id survey, NSError *error) {
-        if (!error)
-        {
-            NSManagedObjectContext * context = [(APCAppDelegate*) [UIApplication sharedApplication].delegate dataSubstrate].persistentContext;
-            SBBSurvey * sbbSurvey = (SBBSurvey*) survey;
-            [context performBlockAndWait:^{
-                NSFetchRequest * request = [APCTask request];
-                request.predicate = [NSPredicate predicateWithFormat:@"uid == %@", sbbSurvey.identifier];
-                APCTask * task = [[context executeFetchRequest:request error:NULL] firstObject];
-                task.rkTask = [self rkTaskFromSBBSurvey:survey];
-                [task saveToPersistentStore:NULL];
-                [context processPendingChanges];
-            }];
-        }
-        else
-        {
-            [error handle];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionBlock) {
-                completionBlock(error);
+    else
+    {
+        [SBBComponent(SBBSurveyManager) getSurveyByRef:ref completion:^(id survey, NSError *error) {
+            if (!error)
+            {
+                NSManagedObjectContext * context = [(APCAppDelegate*) [UIApplication sharedApplication].delegate dataSubstrate].persistentContext;
+                SBBSurvey * sbbSurvey = (SBBSurvey*) survey;
+                [context performBlockAndWait:^{
+                    NSFetchRequest * request = [APCTask request];
+                    request.predicate = [NSPredicate predicateWithFormat:@"uid == %@", sbbSurvey.identifier];
+                    APCTask * task = [[context executeFetchRequest:request error:NULL] firstObject];
+                    task.rkTask = [self rkTaskFromSBBSurvey:survey];
+                    [task saveToPersistentStore:NULL];
+                    [context processPendingChanges];
+                }];
             }
-        });
-    }];
-#endif
+            else
+            {
+                [error handle];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            });
+        }];
+    }
 }
 
 + (NSString *) lookUpAnswerFormatMethod: (NSString*) SBBClassName

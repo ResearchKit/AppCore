@@ -99,7 +99,18 @@
     NSManagedObjectContext * context = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext;
     NSManagedObjectID * objectID = [APCResult storeTaskResult:self.result inContext:context];
     APCResult * result = (APCResult*)[context objectWithID:objectID];
+    result.archiveFilename = fileName;
+    result.resultSummary = resultSummary;
     result.scheduledTask = self.scheduledTask;
+    NSError * error;
+    [result saveToPersistentStore:&error];
+    [error handle];
+    [result uploadToBridgeOnCompletion:^(NSError *error) {
+        [error handle];
+        if (!error) {
+            NSLog(@"Oohooo! Upload Success");
+        }
+    }];
 }
 
 @end
