@@ -28,6 +28,7 @@
 
 //Results Cluster
 #import "APCResult+AddOn.h"
+#import "APCResult+Bridge.h"
 
 #import "APCStoredUserData.h"
 
