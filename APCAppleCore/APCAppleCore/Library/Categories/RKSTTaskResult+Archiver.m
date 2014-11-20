@@ -63,21 +63,20 @@ NSString *const kCertFileName = @"rsacert";
         [fileError handle];
     }
     NSString * fullFilePath = [filePath stringByAppendingPathComponent:fileName];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:fullFilePath]) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:fullFilePath]) {
         NSError * fileError;
         [[NSFileManager defaultManager] removeItemAtPath:fullFilePath error:&fileError];
         [fileError handle];
     }
     
     BOOL retValue = NO;
-    if (![data writeToFile: filePath atomically:YES]) {
-        NSLog(@"%@ Not written", fileName);
+    if ([data writeToFile: fullFilePath atomically:YES]) {
         retValue = YES;
     }
     else
     {
         retValue = NO;
-        NSLog(@"Archive filePath: %@", filePath);
+        NSLog(@"Archive Not Written!!");
     }
     return retValue;
     

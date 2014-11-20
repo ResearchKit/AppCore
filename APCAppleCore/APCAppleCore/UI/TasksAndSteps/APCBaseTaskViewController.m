@@ -17,7 +17,8 @@
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask
 {
     RKSTOrderedTask  *task = [self createTask: scheduledTask];
-    APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:[NSUUID UUID]] : nil;
+    NSUUID * taskRunUUID = [NSUUID UUID];
+    APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
     controller.scheduledTask = scheduledTask;
     controller.taskDelegate = controller;
     return  controller;
@@ -35,15 +36,16 @@
     return nil;
 }
 
-- (void)viewDidLoad
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidLoad];
     if (![[NSFileManager defaultManager] fileExistsAtPath:self.taskResultsFilePath]) {
         NSError * fileError;
         [[NSFileManager defaultManager] createDirectoryAtPath:self.taskResultsFilePath withIntermediateDirectories:YES attributes:nil error:&fileError];
         [fileError handle];
     }
+    
     self.outputDirectory = [NSURL fileURLWithPath:self.taskResultsFilePath];
+    [super viewWillAppear:animated];
 }
 /*********************************************************************************/
 #pragma mark - RKSTOrderedTaskDelegate
@@ -72,8 +74,17 @@
 
 - (NSString *)taskResultsFilePath
 {
+
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    return [[paths lastObject] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", self.taskRunUUID.UUIDString]];
+    NSString * path = [[paths lastObject] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", self.taskRunUUID.UUIDString]];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        NSError * fileError;
+        [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&fileError];
+        [fileError handle];
+    }
+    
+    return path;
 }
 
 - (void) processTaskResult
