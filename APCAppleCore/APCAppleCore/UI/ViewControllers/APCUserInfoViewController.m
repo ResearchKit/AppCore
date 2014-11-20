@@ -296,7 +296,9 @@ static CGFloat const kPickerCellHeight = 164.0f;
 
 - (void)pickerTableViewCell:(APCPickerTableViewCell *)cell pickerViewDidSelectIndices:(NSArray *)selectedIndices
 {
-    if (self.pickerShowing) {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    if (self.pickerShowing && indexPath) {
         
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
         
