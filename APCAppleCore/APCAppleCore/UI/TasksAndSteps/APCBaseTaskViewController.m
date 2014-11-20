@@ -108,7 +108,7 @@
     [result uploadToBridgeOnCompletion:^(NSError *error) {
         [error handle];
         if (!error) {
-            NSLog(@"Oohooo! Upload Success");
+            NSLog(@"DataArchive uploaded For Task: \"%@\"  RunID: \"%@\"", self.task.identifier, self.taskRunUUID.UUIDString);
         }
     }];
 }

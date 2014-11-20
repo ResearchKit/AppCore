@@ -17,11 +17,6 @@ static  CGFloat  kAPCStepProgressBarHeight = 8.0;
 
 @implementation APCBaseWithProgressTaskViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -40,7 +35,12 @@ static  CGFloat  kAPCStepProgressBarHeight = 8.0;
     self.progressor = tempProgressor;
     
     self.showsProgressInNavigationBar = NO;
-    self.navigationBar.topItem.title = NSLocalizedString(self.task.identifier, nil);
+    self.navigationBar.topItem.title = NSLocalizedString(self.taskName, nil);
+}
+
+- (NSString *)taskName
+{
+    return self.scheduledTask.task.taskTitle;
 }
 
 /*********************************************************************************/
