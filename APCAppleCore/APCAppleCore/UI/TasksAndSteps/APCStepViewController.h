@@ -10,6 +10,4 @@
 
 @interface APCStepViewController : RKSTStepViewController
 
-@property (nonatomic, readonly) NSString * resultDirectoryPath;
-
 @end
