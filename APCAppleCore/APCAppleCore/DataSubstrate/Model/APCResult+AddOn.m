@@ -33,10 +33,13 @@ static NSDictionary * lookupDictionary;
 {
     apcResult.taskRunID = taskResult.taskRunUUID.UUIDString;
     apcResult.rkTaskIdentifier = taskResult.identifier;
-    NSError * error;
-    NSData * data = [NSJSONSerialization dataWithJSONObject:taskResult.metadata options:NSJSONWritingPrettyPrinted error:&error];
-    [error handle];
-    apcResult.rkMetadata = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    if (taskResult.metadata) {
+        NSError * error;
+        NSData * data = [NSJSONSerialization dataWithJSONObject:taskResult.metadata options:NSJSONWritingPrettyPrinted error:&error];
+        [error handle];
+        apcResult.rkMetadata = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    }
+
 }
 
 /*********************************************************************************/
