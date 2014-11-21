@@ -61,6 +61,27 @@ static NSString *const kAPCBasicCellIdentifier       = @"APCBasicCellIdentifier"
     return headerView;
 }
 
+- (void)setupDefaultCellAppearance:(APCDefaultTableViewCell *)cell
+{
+    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
+    [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
+    
+    [cell.detailTextLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [cell.detailTextLabel setTextColor:[UIColor appSecondaryColor2]];
+    
+}
+
+- (void)setupSwitchCellAppearance:(APCSwitchTableViewCell *)cell
+{
+    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
+    [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
+}
+
+- (void)setupBasicCellAppearance:(UITableViewCell *)cell
+{
+    [cell.textLabel setTextColor:[UIColor appPrimaryColor]];
+}
+
 #pragma mark - Getter
 
 - (APCParameters *)parameters
