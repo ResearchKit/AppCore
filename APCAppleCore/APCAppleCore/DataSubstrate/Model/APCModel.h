@@ -17,22 +17,18 @@
 #import "APCUser+UserData.h"
 #import "APCUser+Bridge.h"
 
-
 /*********************************************************************************/
 #pragma mark - Core Data Model Objects
 /*********************************************************************************/
 #import "APCTask+AddOn.h"
+#import "APCTask+Bridge.h"
 #import "APCSchedule+AddOn.h"
 #import "APCScheduledTask+AddOn.h"
 #import "APCDBStatus+AddOn.h"
 
 //Results Cluster
 #import "APCResult+AddOn.h"
-#import "APCConsentResult+AddOn.h"
-#import "APCDataResult+AddOn.h"
-#import "APCFileResult+AddOn.h"
-#import "APCQuestionResult+AddOn.h"
-#import "APCSurveyResult+AddOn.h"
+#import "APCResult+Bridge.h"
 
 #import "APCStoredUserData.h"
 

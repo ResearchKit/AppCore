@@ -16,7 +16,7 @@ static CGFloat kTableViewRowHeight = 80;
 static CGFloat kTableViewSectionHeaderHeight = 45;
 static NSInteger kNumberOfSectionsInTableView = 1;
 
-@interface APCActivitiesViewController () <RKTaskViewControllerDelegate>
+@interface APCActivitiesViewController ()
 
 @property (strong, nonatomic) NSMutableArray *scheduledTasksArray;
 
@@ -183,7 +183,7 @@ static NSInteger kNumberOfSectionsInTableView = 1;
             APCScheduledTask * taskToPerform = (taskIndex != -1) ? groupedScheduledTask.scheduledTasks[taskIndex] : [groupedScheduledTask.scheduledTasks lastObject];
             if (taskToPerform)
             {
-                APCSetupTaskViewController *controller = [class customTaskViewController:taskToPerform];
+                APCBaseTaskViewController *controller = [class customTaskViewController:taskToPerform];
                 [self presentViewController:controller animated:YES completion:nil];
             }
         }
@@ -196,7 +196,7 @@ static NSInteger kNumberOfSectionsInTableView = 1;
         Class  class = [NSClassFromString(taskClass) class];
         
         if (class != [NSNull class]) {
-            APCSetupTaskViewController *controller = [class customTaskViewController:scheduledTask];
+            APCBaseTaskViewController *controller = [class customTaskViewController:scheduledTask];
             [self presentViewController:controller animated:YES completion:nil];
         }
     }

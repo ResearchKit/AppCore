@@ -11,25 +11,8 @@
 @interface RKFormStep : RKStep
 
 - (instancetype)initWithIdentifier:(NSString *)identifier
-                              name:(NSString *)name
                              title:(NSString *)title
                           subtitle:(NSString*) subtitle;
-
-/**
- * @brief Allow user to skip current step with no answer.
- * @note Default value is YES.
- */
-@property (nonatomic) BOOL optional;
-
-/**
- * @brief Form's title.
- */
-@property (nonatomic, copy) NSString *title;
-
-/**
- * @brief Form's SubTitle.
- */
-@property (nonatomic, copy) NSString *subtitle;
 
 /**
  * @brief Form's question item.
@@ -39,9 +22,9 @@
 @end
 
 
-@interface RKFormItem : NSObject <NSSecureCoding>
+@interface RKFormItem : NSObject <NSSecureCoding,NSCopying>
 
-- (instancetype)initWithIdentifier:(NSString*)identifier text:(NSString*)text answerFormat: (RKAnswerFormat*) answerFormat;
+- (instancetype)initWithIdentifier:(NSString *)identifier text:(NSString *)text answerFormat:(RKAnswerFormat *) answerFormat;
 
 /**
  * @brief Question's identifier.
@@ -49,7 +32,7 @@
 @property (nonatomic, copy, readonly) NSString* identifier;
 
 /**
- * @brief Short text about this from item.
+ * @brief Text describing this form item.
  */
 @property (nonatomic, copy, readonly) NSString *text;
 
@@ -63,6 +46,6 @@
  * @brief AnswerFormat object contains detailed information about an answer.
  * e.g. type, constraints, and choices.
  */
-@property (nonatomic, strong, readonly) RKAnswerFormat* answerFormat;
+@property (nonatomic, copy, readonly) RKAnswerFormat* answerFormat;
 
 @end

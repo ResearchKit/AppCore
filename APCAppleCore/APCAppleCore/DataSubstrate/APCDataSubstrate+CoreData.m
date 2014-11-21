@@ -105,22 +105,33 @@
 /*********************************************************************************/
 #pragma mark - Helpers - ONLY RETURNS IN NSManagedObjects in mainContext
 /*********************************************************************************/
-- (NSArray *)scheduledTasksDueFrom:(NSDate *)fromDate toDate:(NSDate *)toDate sortDescriptors: (NSArray*) sortDescriptors
+
+- (NSFetchRequest*) requestForScheduledTasksDueFrom:(NSDate *)fromDate toDate:(NSDate *)toDate sortDescriptors: (NSArray*) sortDescriptors
 {
     NSFetchRequest * request = [APCScheduledTask request];
     request.predicate = [NSPredicate predicateWithFormat:@"dueOn >= %@ and dueOn < %@", fromDate, toDate];
     request.sortDescriptors = sortDescriptors;
-    NSError* error;
-    return [self.mainContext executeFetchRequest:request error:&error];
+    return request;
 }
 
-- (NSArray *)scheduledTasksForPredicate:(NSPredicate *)predicate sortDescriptors: (NSArray*) sortDescriptors
+- (NSArray *)scheduledTasksDueFrom:(NSDate *)fromDate toDate:(NSDate *)toDate sortDescriptors: (NSArray*) sortDescriptors
+{
+    NSError* error;
+    return [self.mainContext executeFetchRequest:[self requestForScheduledTasksDueFrom:fromDate toDate:toDate sortDescriptors:sortDescriptors] error:&error];
+}
+
+- (NSFetchRequest*) requestForScheduledTasksForPredicate:(NSPredicate *)predicate sortDescriptors: (NSArray*) sortDescriptors
 {
     NSFetchRequest * request = [APCScheduledTask request];
     request.predicate = predicate;
     request.sortDescriptors = sortDescriptors;
+    return request;
+}
+
+- (NSArray *)scheduledTasksForPredicate:(NSPredicate *)predicate sortDescriptors: (NSArray*) sortDescriptors
+{
     NSError* error;
-    return [self.mainContext executeFetchRequest:request error:&error];
+    return [self.mainContext executeFetchRequest:[self requestForScheduledTasksForPredicate:predicate sortDescriptors:sortDescriptors] error:&error];
 }
 
 - (NSUInteger)allScheduledTasksForToday

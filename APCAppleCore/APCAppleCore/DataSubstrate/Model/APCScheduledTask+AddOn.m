@@ -7,6 +7,7 @@
 //
 
 #import "APCScheduledTask+AddOn.h"
+#import "APCAppleCore.h"
 
 @implementation APCScheduledTask (AddOn)
 

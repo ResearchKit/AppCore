@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <ResearchKit/ResearchKit.h>
+#import <ResearchKit/ResearchKit_Private.h>
 #import <CoreData/CoreData.h>
 #import "APCPassiveLocationTracking.h"
 #import <HealthKit/HealthKit.h>
@@ -15,7 +16,7 @@
 
 @class APCUser;
 
-@interface APCDataSubstrate : NSObject <RKStudyDelegate, APCParametersDelegate>
+@interface APCDataSubstrate : NSObject <RKSTStudyDelegate, APCParametersDelegate>
 
 /*********************************************************************************/
 #pragma mark - Initializer
@@ -27,7 +28,7 @@
 /*********************************************************************************/
 @property (assign) BOOL justJoined;
 @property (strong, nonatomic) NSString *logDirectory;
-@property (strong, nonatomic) RKDataLoggerManager *logManager;
+@property (strong, nonatomic) RKSTDataLoggerManager *logManager;
 @property (nonatomic, strong) APCUser * currentUser;
 
 @property (strong, nonatomic) APCPassiveLocationTracking *passiveLocationTracking;
@@ -52,8 +53,8 @@
 #pragma mark - Properties & Methods meant only for Categories
 /*********************************************************************************/
 //ResearchKit Subsystem
-@property (nonatomic, strong) RKStudyStore * studyStore;
-@property (nonatomic, strong) RKStudy * study; //Assumes only one study per app
+@property (nonatomic, strong) RKSTStudyStore * studyStore;
+@property (nonatomic, strong) RKSTStudy * study; //Assumes only one study per app
 
 //Core Data Subsystem
 @property (nonatomic, strong) NSString * storePath;

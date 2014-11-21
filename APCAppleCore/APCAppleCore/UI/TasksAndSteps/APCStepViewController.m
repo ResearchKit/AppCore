@@ -15,16 +15,4 @@
 
 @implementation APCStepViewController
 
-#pragma  mark  -  View Controller Methods
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-}
-
 @end

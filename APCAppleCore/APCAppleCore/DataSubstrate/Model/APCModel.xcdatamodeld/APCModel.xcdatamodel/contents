@@ -1,35 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14A388a" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="APCConsentResult" representedClassName="APCConsentResult" parentEntity="APCResult" syncable="YES">
-        <attribute name="signatureDate" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="signatureName" optional="YES" attributeType="String" syncable="YES"/>
-    </entity>
-    <entity name="APCDataResult" representedClassName="APCDataResult" parentEntity="APCResult" syncable="YES">
-        <attribute name="data" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" storedInTruthFile="YES" syncable="YES"/>
-        <attribute name="fileName" optional="YES" attributeType="String" syncable="YES"/>
-    </entity>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14B25" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="APCDBStatus" representedClassName="APCDBStatus" syncable="YES">
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="APCFileResult" representedClassName="APCFileResult" parentEntity="APCResult" syncable="YES">
-        <attribute name="file" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" storedInTruthFile="YES" syncable="YES"/>
-    </entity>
-    <entity name="APCQuestionResult" representedClassName="APCQuestionResult" parentEntity="APCResult" syncable="YES">
-        <attribute name="floatAnswer" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="integerAnswer" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="questionTypeStore" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="stringAnswer" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="survey" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCSurveyResult" inverseName="surveyResults" inverseEntity="APCSurveyResult" syncable="YES"/>
-    </entity>
     <entity name="APCResult" representedClassName="APCResult" syncable="YES">
+        <attribute name="archiveFilename" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="rkContentType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="rkDeviceHardware" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="rkItemIdentifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="endDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="resultSummary" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rkMetadata" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="rkTaskInstanceUUID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="rkTimeStamp" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rkTaskIdentifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="taskRunID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="uploaded" optional="YES" attributeType="Boolean" syncable="YES"/>
         <relationship name="scheduledTask" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCScheduledTask" inverseName="results" inverseEntity="APCScheduledTask" syncable="YES"/>
@@ -66,9 +48,6 @@
         <attribute name="userConsented" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="wakeUpTime" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
-    <entity name="APCSurveyResult" representedClassName="APCSurveyResult" parentEntity="APCResult" syncable="YES">
-        <relationship name="surveyResults" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCQuestionResult" inverseName="survey" inverseEntity="APCQuestionResult" syncable="YES"/>
-    </entity>
     <entity name="APCTask" representedClassName="APCTask" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="taskClassName" optional="YES" attributeType="String" syncable="YES"/>
@@ -82,16 +61,11 @@
         <relationship name="schedules" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="APCScheduledTask" inverseName="task" inverseEntity="APCScheduledTask" syncable="YES"/>
     </entity>
     <elements>
-        <element name="APCConsentResult" positionX="-954" positionY="486" width="128" height="73"/>
-        <element name="APCDataResult" positionX="-945" positionY="495" width="128" height="73"/>
         <element name="APCDBStatus" positionX="-954" positionY="486" width="128" height="58"/>
-        <element name="APCFileResult" positionX="-936" positionY="504" width="128" height="58"/>
-        <element name="APCQuestionResult" positionX="-954" positionY="486" width="128" height="118"/>
-        <element name="APCResult" positionX="-720" positionY="333" width="128" height="210"/>
+        <element name="APCResult" positionX="-720" positionY="333" width="128" height="208"/>
         <element name="APCSchedule" positionX="-1161" positionY="513" width="128" height="148"/>
         <element name="APCScheduledTask" positionX="-468" positionY="449" width="128" height="163"/>
         <element name="APCStoredUserData" positionX="-954" positionY="486" width="128" height="210"/>
-        <element name="APCSurveyResult" positionX="-945" positionY="495" width="128" height="58"/>
         <element name="APCTask" positionX="-965" positionY="585" width="128" height="195"/>
     </elements>
 </model>

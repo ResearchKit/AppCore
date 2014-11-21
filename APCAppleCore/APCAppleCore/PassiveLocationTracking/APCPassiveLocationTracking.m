@@ -17,7 +17,7 @@ static CLLocationDistance kAllowDeferredLocationUpdatesUntilTraveled = 5.0;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
-@property (nonatomic, strong) RKDataArchive *taskArchive;
+@property (nonatomic, strong) RKSTDataArchive *taskArchive;
 @property (nonatomic, strong) NSURL *fileUrl;
 
 @property (assign) BOOL deferringUpdates;
@@ -92,9 +92,9 @@ static CLLocationDistance kAllowDeferredLocationUpdatesUntilTraveled = 5.0;
 //        [self.taskArchive resetContent];
 //    }
 //    
-//    RKTask* task = [[RKTask alloc] initWithName:@"PassiveLocationTracking" identifier:@"passiveLocationTracking" steps:nil];
+//    RKSTOrderedTask* task = [[RKSTOrderedTask alloc] initWithName:@"PassiveLocationTracking" identifier:@"passiveLocationTracking" steps:nil];
 //    
-//    self.taskArchive = [[RKDataArchive alloc] initWithItemIdentifier:[RKItemIdentifier itemIdentifierForTask:task]
+//    self.taskArchive = [[RKSTDataArchive alloc] initWithItemIdentifier:[RKItemIdentifier itemIdentifierForTask:task]
 //                                                     studyIdentifier:passiveLocationTrackingIdentifier
 //                                                    taskInstanceUUID: [NSUUID UUID]
 //                                                       extraMetadata: nil
@@ -157,11 +157,12 @@ static CLLocationDistance kAllowDeferredLocationUpdatesUntilTraveled = 5.0;
         [self.taskArchive resetContent];
     }
     
-    RKTask* task = [[RKTask alloc] initWithName:@"PassiveLocationTracking" identifier:@"passiveLocationTracking" steps:nil];
+    RKSTOrderedTask* task = [[RKSTOrderedTask alloc] initWithIdentifier:@"passiveLocationTracking" steps:nil];
     
-    self.taskArchive = [[RKDataArchive alloc] initWithItemIdentifier:[RKItemIdentifier itemIdentifierForTask:task]
+    //TODO: Check the identifier below
+    self.taskArchive = [[RKSTDataArchive alloc] initWithItemIdentifier:task.identifier
                                                      studyIdentifier:kPassiveLocationTrackingIdentifier
-                                                    taskInstanceUUID: [NSUUID UUID]
+                                                    taskRunUUID: [NSUUID UUID]
                                                        extraMetadata: nil
                                                       fileProtection:RKFileProtectionCompleteUnlessOpen];
     

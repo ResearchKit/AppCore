@@ -6,93 +6,10 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		741D366F19D2E1F500839DFC /* APCTimeSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 741D366E19D2E1F500839DFC /* APCTimeSelector.m */; };
-		741D367219D2E25200839DFC /* APCPointSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 741D367119D2E25200839DFC /* APCPointSelector.m */; };
-		741D367519D2E2D200839DFC /* APCListSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 741D367419D2E2D200839DFC /* APCListSelector.m */; };
-		745A41C919DEF8CB001E6542 /* APCPointSelectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 745A41C819DEF8CB001E6542 /* APCPointSelectorTests.m */; };
-		7477D78919DDD837004662AF /* APCScheduleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7477D78819DDD837004662AF /* APCScheduleParser.m */; };
-		7477D78D19DDDF1C004662AF /* APCScheduleParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7477D78C19DDDF1C004662AF /* APCScheduleParserTests.m */; };
-		74809A9619E82F8C00B6D281 /* APCTimeSelectorEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 74809A9519E82F8C00B6D281 /* APCTimeSelectorEnumerator.m */; };
-		7484E14F19E5A6AA0034A967 /* APCScheduleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7484E14E19E5A6AA0034A967 /* APCScheduleTests.m */; };
-		749E02C419DF02E2003DBFC3 /* APCListSelectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 749E02C319DF02E2003DBFC3 /* APCListSelectorTests.m */; };
-		74BB8A8B19C743D40074B901 /* APCSchedule.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 74BB8A8A19C743D40074B901 /* APCSchedule.h */; };
-		74BB8A8D19C743D40074B901 /* APCSchedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 74BB8A8C19C743D40074B901 /* APCSchedule.m */; };
-		74BB8A9319C743D40074B901 /* libSchedule.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74BB8A8719C743D40074B901 /* libSchedule.a */; };
-		74CE0DE819DF5A4700255F61 /* APCScheduleEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 74CE0DE719DF5A4700255F61 /* APCScheduleEnumerator.m */; };
-/* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		74BB8A9419C743D40074B901 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 74BB8A7F19C743D40074B901 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 74BB8A8619C743D40074B901;
-			remoteInfo = Schedule;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		74BB8A8519C743D40074B901 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-				74BB8A8B19C743D40074B901 /* APCSchedule.h in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
-/* Begin PBXFileReference section */
-		741D366D19D2E1F500839DFC /* APCTimeSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTimeSelector.h; sourceTree = "<group>"; };
-		741D366E19D2E1F500839DFC /* APCTimeSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTimeSelector.m; sourceTree = "<group>"; };
-		741D367019D2E25200839DFC /* APCPointSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPointSelector.h; sourceTree = "<group>"; };
-		741D367119D2E25200839DFC /* APCPointSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPointSelector.m; sourceTree = "<group>"; };
-		741D367319D2E2D200839DFC /* APCListSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCListSelector.h; sourceTree = "<group>"; };
-		741D367419D2E2D200839DFC /* APCListSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCListSelector.m; sourceTree = "<group>"; };
-		745A41C819DEF8CB001E6542 /* APCPointSelectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPointSelectorTests.m; sourceTree = "<group>"; };
-		7477D78719DDD837004662AF /* APCScheduleParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleParser.h; sourceTree = "<group>"; };
-		7477D78819DDD837004662AF /* APCScheduleParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleParser.m; sourceTree = "<group>"; };
-		7477D78C19DDDF1C004662AF /* APCScheduleParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleParserTests.m; sourceTree = "<group>"; };
-		74809A9419E82F8C00B6D281 /* APCTimeSelectorEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTimeSelectorEnumerator.h; sourceTree = "<group>"; };
-		74809A9519E82F8C00B6D281 /* APCTimeSelectorEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTimeSelectorEnumerator.m; sourceTree = "<group>"; };
-		7484E14E19E5A6AA0034A967 /* APCScheduleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleTests.m; sourceTree = "<group>"; };
-		749E02C319DF02E2003DBFC3 /* APCListSelectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCListSelectorTests.m; sourceTree = "<group>"; };
-		74BB8A8719C743D40074B901 /* libSchedule.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSchedule.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		74BB8A8A19C743D40074B901 /* APCSchedule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APCSchedule.h; sourceTree = "<group>"; };
-		74BB8A8C19C743D40074B901 /* APCSchedule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = APCSchedule.m; sourceTree = "<group>"; };
-		74BB8A9219C743D40074B901 /* ScheduleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScheduleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		74BB8A9819C743D40074B901 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		74CE0DE619DF5A4700255F61 /* APCScheduleEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleEnumerator.h; sourceTree = "<group>"; };
-		74CE0DE719DF5A4700255F61 /* APCScheduleEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleEnumerator.m; sourceTree = "<group>"; };
-/* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		74BB8A8419C743D40074B901 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		74BB8A8F19C743D40074B901 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				74BB8A9319C743D40074B901 /* libSchedule.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
 /* Begin PBXGroup section */
 		74BB8A7E19C743D40074B901 = {
 			isa = PBXGroup;
 			children = (
-				74BB8A8919C743D40074B901 /* Schedule */,
-				74BB8A9619C743D40074B901 /* ScheduleTests */,
 				74BB8A8819C743D40074B901 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -100,100 +17,11 @@
 		74BB8A8819C743D40074B901 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				74BB8A8719C743D40074B901 /* libSchedule.a */,
-				74BB8A9219C743D40074B901 /* ScheduleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		74BB8A8919C743D40074B901 /* Schedule */ = {
-			isa = PBXGroup;
-			children = (
-				74BB8A8A19C743D40074B901 /* APCSchedule.h */,
-				74BB8A8C19C743D40074B901 /* APCSchedule.m */,
-				74F4789719F98AD000BA44AE /* Internal Implementation */,
-			);
-			path = Schedule;
-			sourceTree = "<group>";
-		};
-		74BB8A9619C743D40074B901 /* ScheduleTests */ = {
-			isa = PBXGroup;
-			children = (
-				74BB8A9719C743D40074B901 /* Supporting Files */,
-				7477D78C19DDDF1C004662AF /* APCScheduleParserTests.m */,
-				745A41C819DEF8CB001E6542 /* APCPointSelectorTests.m */,
-				749E02C319DF02E2003DBFC3 /* APCListSelectorTests.m */,
-				7484E14E19E5A6AA0034A967 /* APCScheduleTests.m */,
-			);
-			path = ScheduleTests;
-			sourceTree = "<group>";
-		};
-		74BB8A9719C743D40074B901 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				74BB8A9819C743D40074B901 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		74F4789719F98AD000BA44AE /* Internal Implementation */ = {
-			isa = PBXGroup;
-			children = (
-				741D366D19D2E1F500839DFC /* APCTimeSelector.h */,
-				741D366E19D2E1F500839DFC /* APCTimeSelector.m */,
-				741D367319D2E2D200839DFC /* APCListSelector.h */,
-				741D367419D2E2D200839DFC /* APCListSelector.m */,
-				741D367019D2E25200839DFC /* APCPointSelector.h */,
-				741D367119D2E25200839DFC /* APCPointSelector.m */,
-				7477D78719DDD837004662AF /* APCScheduleParser.h */,
-				7477D78819DDD837004662AF /* APCScheduleParser.m */,
-				74CE0DE619DF5A4700255F61 /* APCScheduleEnumerator.h */,
-				74CE0DE719DF5A4700255F61 /* APCScheduleEnumerator.m */,
-				74809A9419E82F8C00B6D281 /* APCTimeSelectorEnumerator.h */,
-				74809A9519E82F8C00B6D281 /* APCTimeSelectorEnumerator.m */,
-			);
-			name = "Internal Implementation";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
-
-/* Begin PBXNativeTarget section */
-		74BB8A8619C743D40074B901 /* Schedule */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 74BB8A9B19C743D40074B901 /* Build configuration list for PBXNativeTarget "Schedule" */;
-			buildPhases = (
-				74BB8A8319C743D40074B901 /* Sources */,
-				74BB8A8419C743D40074B901 /* Frameworks */,
-				74BB8A8519C743D40074B901 /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Schedule;
-			productName = Schedule;
-			productReference = 74BB8A8719C743D40074B901 /* libSchedule.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		74BB8A9119C743D40074B901 /* ScheduleTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 74BB8A9E19C743D40074B901 /* Build configuration list for PBXNativeTarget "ScheduleTests" */;
-			buildPhases = (
-				74BB8A8E19C743D40074B901 /* Sources */,
-				74BB8A8F19C743D40074B901 /* Frameworks */,
-				74BB8A9019C743D40074B901 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				74BB8A9519C743D40074B901 /* PBXTargetDependency */,
-			);
-			name = ScheduleTests;
-			productName = ScheduleTests;
-			productReference = 74BB8A9219C743D40074B901 /* ScheduleTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-/* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		74BB8A7F19C743D40074B901 /* Project object */ = {
@@ -201,14 +29,6 @@
 			attributes = {
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "Y Media Labs";
-				TargetAttributes = {
-					74BB8A8619C743D40074B901 = {
-						CreatedOnToolsVersion = 6.1;
-					};
-					74BB8A9119C743D40074B901 = {
-						CreatedOnToolsVersion = 6.1;
-					};
-				};
 			};
 			buildConfigurationList = 74BB8A8219C743D40074B901 /* Build configuration list for PBXProject "Schedule" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -222,57 +42,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				74BB8A8619C743D40074B901 /* Schedule */,
-				74BB8A9119C743D40074B901 /* ScheduleTests */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXResourcesBuildPhase section */
-		74BB8A9019C743D40074B901 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
-/* Begin PBXSourcesBuildPhase section */
-		74BB8A8319C743D40074B901 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				741D366F19D2E1F500839DFC /* APCTimeSelector.m in Sources */,
-				741D367519D2E2D200839DFC /* APCListSelector.m in Sources */,
-				741D367219D2E25200839DFC /* APCPointSelector.m in Sources */,
-				74809A9619E82F8C00B6D281 /* APCTimeSelectorEnumerator.m in Sources */,
-				7477D78919DDD837004662AF /* APCScheduleParser.m in Sources */,
-				74CE0DE819DF5A4700255F61 /* APCScheduleEnumerator.m in Sources */,
-				74BB8A8D19C743D40074B901 /* APCSchedule.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		74BB8A8E19C743D40074B901 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				749E02C419DF02E2003DBFC3 /* APCListSelectorTests.m in Sources */,
-				7484E14F19E5A6AA0034A967 /* APCScheduleTests.m in Sources */,
-				7477D78D19DDDF1C004662AF /* APCScheduleParserTests.m in Sources */,
-				745A41C919DEF8CB001E6542 /* APCPointSelectorTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		74BB8A9519C743D40074B901 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 74BB8A8619C743D40074B901 /* Schedule */;
-			targetProxy = 74BB8A9419C743D40074B901 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		74BB8A9919C743D40074B901 /* Debug */ = {
@@ -349,56 +121,6 @@
 			};
 			name = Release;
 		};
-		74BB8A9C19C743D40074B901 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		74BB8A9D19C743D40074B901 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		74BB8A9F19C743D40074B901 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = ScheduleTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		74BB8AA019C743D40074B901 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				INFOPLIST_FILE = ScheduleTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -407,24 +129,6 @@
 			buildConfigurations = (
 				74BB8A9919C743D40074B901 /* Debug */,
 				74BB8A9A19C743D40074B901 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		74BB8A9B19C743D40074B901 /* Build configuration list for PBXNativeTarget "Schedule" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				74BB8A9C19C743D40074B901 /* Debug */,
-				74BB8A9D19C743D40074B901 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		74BB8A9E19C743D40074B901 /* Build configuration list for PBXNativeTarget "ScheduleTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				74BB8A9F19C743D40074B901 /* Debug */,
-				74BB8AA019C743D40074B901 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
