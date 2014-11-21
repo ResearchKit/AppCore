@@ -290,6 +290,8 @@
 		F5B4213A19D23D7700F9CD69 /* APCDebugWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B4213719D23D7700F9CD69 /* APCDebugWindow.m */; };
 		F5B4213B19D23D7700F9CD69 /* APCParametersCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B4213819D23D7700F9CD69 /* APCParametersCell.h */; };
 		F5C1DC2319D22EAF006527EA /* TabBar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5C1DC2219D22EAF006527EA /* TabBar.storyboard */; };
+		F5C8DA031A1FF5CD006933F5 /* APCSchedule+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C8DA011A1FF5CD006933F5 /* APCSchedule+Bridge.h */; };
+		F5C8DA041A1FF5CD006933F5 /* APCSchedule+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C8DA021A1FF5CD006933F5 /* APCSchedule+Bridge.m */; };
 		F5D1A90F19D4C6E200A03465 /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */; };
 		F5E6AB881A1D49730087551B /* RKSTTaskResult+Archiver.h in Headers */ = {isa = PBXBuildFile; fileRef = F5E6AB861A1D49730087551B /* RKSTTaskResult+Archiver.h */; };
 		F5E6AB891A1D49730087551B /* RKSTTaskResult+Archiver.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6AB871A1D49730087551B /* RKSTTaskResult+Archiver.m */; };
@@ -569,6 +571,8 @@
 		F5B4213719D23D7700F9CD69 /* APCDebugWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDebugWindow.m; sourceTree = "<group>"; };
 		F5B4213819D23D7700F9CD69 /* APCParametersCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCParametersCell.h; sourceTree = "<group>"; };
 		F5C1DC2219D22EAF006527EA /* TabBar.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TabBar.storyboard; sourceTree = "<group>"; };
+		F5C8DA011A1FF5CD006933F5 /* APCSchedule+Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCSchedule+Bridge.h"; sourceTree = "<group>"; };
+		F5C8DA021A1FF5CD006933F5 /* APCSchedule+Bridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCSchedule+Bridge.m"; sourceTree = "<group>"; };
 		F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BridgeSDK.framework; sourceTree = SOURCE_ROOT; };
 		F5E6AB861A1D49730087551B /* RKSTTaskResult+Archiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RKSTTaskResult+Archiver.h"; sourceTree = "<group>"; };
 		F5E6AB871A1D49730087551B /* RKSTTaskResult+Archiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RKSTTaskResult+Archiver.m"; sourceTree = "<group>"; };
@@ -1215,6 +1219,8 @@
 				F5219F481A1BD78F006E1245 /* APCTask+Bridge.m */,
 				F54B66931A1EA0A700495AC9 /* APCResult+Bridge.h */,
 				F54B66941A1EA0A700495AC9 /* APCResult+Bridge.m */,
+				F5C8DA011A1FF5CD006933F5 /* APCSchedule+Bridge.h */,
+				F5C8DA021A1FF5CD006933F5 /* APCSchedule+Bridge.m */,
 			);
 			name = Bridge;
 			sourceTree = "<group>";
@@ -1360,6 +1366,7 @@
 				5B3B60231A15645E006B2346 /* APCWithdrawSurveyViewController.h in Headers */,
 				5B3B601D1A15645E006B2346 /* APCProfileViewController.h in Headers */,
 				F5179CA519D0917D001DCCB7 /* APCResult+AddOn.h in Headers */,
+				F5C8DA031A1FF5CD006933F5 /* APCSchedule+Bridge.h in Headers */,
 				F5219F491A1BD78F006E1245 /* APCTask+Bridge.h in Headers */,
 				F560E8C91A1BD72F005B287B /* APCBaseTaskViewController.h in Headers */,
 				5B0159981A0C21F900F28439 /* APCStepProgressBar+Appearance.h in Headers */,
@@ -1557,6 +1564,7 @@
 				5B3B60871A156495006B2346 /* APCSignUpPermissionsViewController.m in Sources */,
 				F5179C8219D0917D001DCCB7 /* APCDataSubstrate.m in Sources */,
 				5B447A971A195FEB0099FC7F /* APCLineGraphViewController.m in Sources */,
+				F5C8DA041A1FF5CD006933F5 /* APCSchedule+Bridge.m in Sources */,
 				F5179CBE19D0917D001DCCB7 /* APCTask+AddOn.m in Sources */,
 				F5A670341A1D3DC300920A82 /* APCResult.m in Sources */,
 				5B3B60101A15645E006B2346 /* APCActivitiesViewController.m in Sources */,
