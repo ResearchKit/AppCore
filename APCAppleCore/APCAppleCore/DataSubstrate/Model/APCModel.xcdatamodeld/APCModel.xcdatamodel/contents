@@ -53,6 +53,7 @@
         <attribute name="taskClassName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskCompletionTimeString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskDescription" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="taskHRef" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taskType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
@@ -66,6 +67,6 @@
         <element name="APCSchedule" positionX="-1161" positionY="513" width="128" height="148"/>
         <element name="APCScheduledTask" positionX="-468" positionY="449" width="128" height="163"/>
         <element name="APCStoredUserData" positionX="-954" positionY="486" width="128" height="210"/>
-        <element name="APCTask" positionX="-965" positionY="585" width="128" height="195"/>
+        <element name="APCTask" positionX="-965" positionY="585" width="128" height="210"/>
     </elements>
 </model>

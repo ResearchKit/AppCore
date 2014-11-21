@@ -56,9 +56,13 @@ static APCDummyObject * _dummyObject;
                     NSFetchRequest * request = [APCTask request];
                     request.predicate = [NSPredicate predicateWithFormat:@"uid == %@", sbbSurvey.identifier];
                     APCTask * task = [[context executeFetchRequest:request error:NULL] firstObject];
+                    if (!task) {
+                        task = [APCTask newObjectForContext:context];
+                    }
+                    task.uid = sbbSurvey.identifier;
                     task.rkTask = [self rkTaskFromSBBSurvey:survey];
+                    task.taskHRef = ref;
                     [task saveToPersistentStore:NULL];
-                    [context processPendingChanges];
                 }];
             }
             else

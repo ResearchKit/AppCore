@@ -184,7 +184,10 @@ static NSInteger kNumberOfSectionsInTableView = 1;
             if (taskToPerform)
             {
                 APCBaseTaskViewController *controller = [class customTaskViewController:taskToPerform];
-                [self presentViewController:controller animated:YES completion:nil];
+                if (controller) {
+                    [self presentViewController:controller animated:YES completion:nil];
+                }
+
             }
         }
         
@@ -197,7 +200,10 @@ static NSInteger kNumberOfSectionsInTableView = 1;
         
         if (class != [NSNull class]) {
             APCBaseTaskViewController *controller = [class customTaskViewController:scheduledTask];
-            [self presentViewController:controller animated:YES completion:nil];
+            if (controller) {
+                [self presentViewController:controller animated:YES completion:nil];
+            }
+
         }
     }
 }

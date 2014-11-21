@@ -17,6 +17,7 @@
 @dynamic taskClassName;
 @dynamic taskCompletionTimeString;
 @dynamic taskDescription;
+@dynamic taskHRef;
 @dynamic taskType;
 @dynamic taskTitle;
 @dynamic uid;
