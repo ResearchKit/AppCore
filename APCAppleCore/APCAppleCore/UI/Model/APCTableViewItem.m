@@ -121,6 +121,10 @@
 
 @end
 
+@implementation APCTableViewDashboardBadgesItem
+
+@end
+
 @implementation APCTableViewDashboardMessageItem
 
 @end

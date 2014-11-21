@@ -96,6 +96,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCSegmentedButton.h>
 #import <APCAppleCore/APCImageButton.h>
 #import <APCAppleCore/APCCircularProgressView.h>
+#import <APCAppleCore/APCConcentricProgressView.h>
 #import <APCAppleCore/APCConfirmationView.h>
 #import <APCAppleCore/APCPasscodeView.h>
 
@@ -111,6 +112,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCTintedTableViewCell.h>
 #import <APCAppleCore/APCCheckTableViewCell.h>
 #import <APCAppleCore/APCDashboardLineGraphTableViewCell.h>
+#import <APCAppleCore/APCDashboardBadgesTableViewCell.h>
 #import <APCAppleCore/APCDashboardMessageTableViewCell.h>
 #import <APCAppleCore/APCDashboardProgressTableViewCell.h>
 

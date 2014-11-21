@@ -11,6 +11,7 @@
 #import "APCDashboardLineGraphTableViewCell.h"
 #import "APCDashboardMessageTableViewCell.h"
 #import "APCDashboardProgressTableViewCell.h"
+#import "APCDashboardBadgesTableViewCell.h"
 #import "APCGraph.h"
 
 typedef NS_ENUM(APCTableViewItemType, APCTableViewDashboardItemType) {
