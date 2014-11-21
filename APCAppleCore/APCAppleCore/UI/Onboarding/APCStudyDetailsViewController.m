@@ -10,7 +10,7 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 
-@interface APCStudyDetailsViewController ()
+@interface APCStudyDetailsViewController () <UIWebViewDelegate>
 
 @end
 
@@ -22,11 +22,13 @@
     
     [self setupAppearance];
     
-    self.iconImageView.image = [self.studyDetails.iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    self.iconImageView.tintColor = self.studyDetails.tintColor;
-    
     self.title = self.studyDetails.caption;
-    self.textView.text = self.studyDetails.detailText;
+    
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:self.studyDetails.detailText ofType:@"pdf"];
+    NSURL *targetURL = [NSURL URLWithString:filePath];
+    NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
+    self.webView.delegate = self;
+    [self.webView loadRequest:request];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -40,12 +42,28 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)viewDidLayoutSubviews {
+    
+    [super viewDidLayoutSubviews];
+    
+    // A Hack to get rid of the black border surrounding the PDF in the UIWebView
+    UIView *view = self.webView;
+    while (view) {
+        view.backgroundColor = [UIColor whiteColor];
+        view = [view.subviews firstObject];
+    }
+}
+
 #pragma mark - Setup
 
 - (void)setupAppearance
 {
-    [self.textView setTextColor:[UIColor appSecondaryColor1]];
-    [self.textView setFont:[UIFont appLightFontWithSize:17.0f]];
+    
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    return YES;
 }
 
 @end

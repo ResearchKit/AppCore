@@ -216,7 +216,7 @@ static NSString * const kAPCCircularProgressViewAnimationKey = @"APCCircularProg
 
 - (void)animateLayerForProgress:(CGFloat)progress
 {
-    CABasicAnimation *progressAnimation = [CABasicAnimation animationWithKeyPath:@"stokeEnd"];
+    CABasicAnimation *progressAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
     progressAnimation.duration = self.animationDuration;
     progressAnimation.fromValue = @(self.progress);
     progressAnimation.toValue = @(progress);

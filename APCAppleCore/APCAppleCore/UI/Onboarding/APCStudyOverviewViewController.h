@@ -29,5 +29,6 @@
 - (void)studyDetailsFromJSONFile:(NSString *)jsonFileName;
 
 - (APCTableViewStudyDetailsItem *)itemForIndexPath:(NSIndexPath *)indexPath;
+- (APCTableViewStudyItemType)itemTypeForIndexPath:(NSIndexPath *)indexPath;
 
 @end
