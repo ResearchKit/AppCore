@@ -10,8 +10,9 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "APCConstants.h"
+#import "APCConcentricProgressView.h"
 
-@interface APCDashboardViewController ()<UIGestureRecognizerDelegate>
+@interface APCDashboardViewController ()<UIGestureRecognizerDelegate, APCConcentricProgressViewDataSource>
 
 @property (nonatomic, strong) NSMutableArray *lineCharts;
 
@@ -70,26 +71,34 @@
         APCDashboardLineGraphTableViewCell *graphCell = (APCDashboardLineGraphTableViewCell *)cell;
         
         if (graphItem.graphType == kAPCDashboardGraphTypeLine) {
-            APCLineGraphView *lineGraphView = graphCell.graphView;
-            lineGraphView.datasource = graphItem.graphData;
-            lineGraphView.delegate = self;
-            lineGraphView.titleLabel.text = graphItem.caption;
-            lineGraphView.subTitleLabel.text = graphItem.detailText;
-            lineGraphView.tintColor = graphItem.tintColor;
-            lineGraphView.panGestureRecognizer.delegate = self;
-            lineGraphView.titleLabel.font = [UIFont appRegularFontWithSize:19.0f];
-            lineGraphView.subTitleLabel.font = [UIFont appRegularFontWithSize:16.0f];
+            
+            graphCell.graphView.datasource = graphItem.graphData;
+            graphCell.graphView.delegate = self;
+            graphCell.graphView.titleLabel.text = graphItem.caption;
+            graphCell.graphView.subTitleLabel.text = graphItem.detailText;
+            graphCell.graphView.tintColor = graphItem.tintColor;
+            graphCell.graphView.panGestureRecognizer.delegate = self;
+            graphCell.graphView.titleLabel.font = [UIFont appRegularFontWithSize:19.0f];
+            graphCell.graphView.subTitleLabel.font = [UIFont appRegularFontWithSize:16.0f];
             
             graphCell.tintColor = graphItem.tintColor;
             graphCell.delegate = self;
             
-            [self.lineCharts addObject:lineGraphView];
+            [self.lineCharts addObject:graphCell.graphView];
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypePie) {
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypeTimeline) {
             
         }
+        
+    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardBadgesItem class]]) {
+        
+        APCTableViewDashboardBadgesItem *badgeItem = (APCTableViewDashboardBadgesItem *)dashboardItem;
+        APCDashboardBadgesTableViewCell *badgeCell = (APCDashboardBadgesTableViewCell *)cell;
+        
+        badgeCell.concentricProgressView.datasource = self;
+        
         
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardMessageItem class]]){
         
@@ -160,6 +169,9 @@
             
         }
         
+    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardBadgesItem class]]){
+        
+        height = 400.0f;
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardMessageItem class]]){
         
         height = 123.0f;
@@ -239,5 +251,23 @@
     
 }
 
+#pragma mark - APCConcentricProgressViewDataSource methods
+
+- (NSUInteger)numberOfComponentsInConcentricProgressView
+{
+    return 4;
+}
+
+- (CGFloat)concentricProgressView:(APCConcentricProgressView *)concentricProgressView valueForComponentAtIndex:(NSUInteger)index
+{
+    return (arc4random()%7 + 1)/10.0f;
+}
+
+- (UIColor *)concentricProgressView:(APCConcentricProgressView *)concentricProgressView colorForComponentAtIndex:(NSUInteger)index
+{
+    NSArray *colors = @[[UIColor appTertiaryBlueColor], [UIColor appTertiaryPurpleColor], [UIColor appTertiaryGreenColor], [UIColor appTertiaryYellowColor]];
+    
+    return colors[index];
+}
 
 @end

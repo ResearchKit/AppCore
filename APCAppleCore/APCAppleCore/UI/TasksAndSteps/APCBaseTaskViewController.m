@@ -44,7 +44,9 @@
         [fileError handle];
     }
     
-    self.outputDirectory = [NSURL fileURLWithPath:self.taskResultsFilePath];
+    if (self.outputDirectory) {
+        self.outputDirectory = [NSURL fileURLWithPath:self.taskResultsFilePath];
+    }
     [super viewWillAppear:animated];
 }
 /*********************************************************************************/
