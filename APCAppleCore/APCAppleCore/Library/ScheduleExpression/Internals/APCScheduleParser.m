@@ -242,24 +242,6 @@ parseError:
     return listSelector;
 }
 
-- (void)relativeProduction
-{
-    if (self.next == kRelativeSmallToken || self.next == kRelativeLargeToken)
-    {
-        self.isRelative = YES;
-        [self consume];
-    }
-    else if (self.next == kAbsoluteSmallToken || self.next == kAbsoluteLargeToken)
-    {
-        self.isRelative = NO;
-        [self consume];
-    }
-    else
-    {
-        [self error];
-    }
-}
-
 - (APCListSelector*)yearProduction:(UnitType)unitType
 {
     //  The parser doesn't currently support Year products but a default selector is provided to help
@@ -273,17 +255,8 @@ parseError:
 
 - (void)fieldsProduction
 {
-    //  fields :: relatvie minutesList hoursList dayOfMonthList monthList dayOfWeekList
+    //  fields :: minutesList hoursList dayOfMonthList monthList dayOfWeekList
     
-    [self relativeProduction];
-    if (self.errorEncountered)
-    {
-        NSLog(@"Invalid Relative token");
-        goto parseError;
-    }
-    
-    [self fieldSeparatorProduction];
-
     self.minuteSelector = [self listProductionForType:kMinutes];
     if (self.errorEncountered)
     {
