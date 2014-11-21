@@ -77,12 +77,6 @@ static NSString *const kAPCBasicCellIdentifier       = @"APCBasicCellIdentifier"
     [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
 }
 
-- (void)setupBasicCellAppearance:(UITableViewCell *)cell
-{
-    [cell.textLabel setTextColor:[UIColor appPrimaryColor]];
-    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
-}
-
 #pragma mark - Getter
 
 - (APCParameters *)parameters
