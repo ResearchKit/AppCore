@@ -129,7 +129,7 @@ static APCDummyObject * _dummyObject;
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     retAnswer = (RKSTAnswerFormat*) [_dummyObject performSelector:selector withObject:constraints];
 #pragma clang diagnostic pop
-
+    NSLog(@"RETAnswer: %@", retAnswer);
     
     return retAnswer;
 }
@@ -155,9 +155,11 @@ static APCDummyObject * _dummyObject;
 //        SBBDateTimeConstraints * localConstraints = (SBBDateTimeConstraints*)constraints;
     }
     else if ([constraints isKindOfClass:[SBBDateConstraints class]]) {
+        retAnswer = [RKSTDateAnswerFormat dateAnswer];
 //        SBBDateConstraints * localConstraints = (SBBDateConstraints*)constraints;
     }
     else if ([constraints isKindOfClass:[SBBTimeConstraints class]]) {
+        retAnswer = [RKSTDateAnswerFormat timeAnswer];
 //        SBBTimeConstraints * localConstraints = (SBBTimeConstraints*)constraints;
     }
     return retAnswer;
