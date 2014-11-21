@@ -152,6 +152,9 @@
 
 @end
 
+@interface APCTableViewDashboardBadgesItem : APCTableViewDashboardItem
+
+@end
 
 @interface APCTableViewDashboardMessageItem : APCTableViewDashboardItem
 
