@@ -68,7 +68,7 @@ static NSString *const kAPCBasicCellIdentifier       = @"APCBasicCellIdentifier"
     
     [cell.detailTextLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
     [cell.detailTextLabel setTextColor:[UIColor appSecondaryColor2]];
-    
+
 }
 
 - (void)setupSwitchCellAppearance:(APCSwitchTableViewCell *)cell
@@ -80,6 +80,7 @@ static NSString *const kAPCBasicCellIdentifier       = @"APCBasicCellIdentifier"
 - (void)setupBasicCellAppearance:(UITableViewCell *)cell
 {
     [cell.textLabel setTextColor:[UIColor appPrimaryColor]];
+    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
 }
 
 #pragma mark - Getter
