@@ -11,11 +11,7 @@
 
 @interface APCStudyDetailsViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UIImageView *videoImageView;
-
-@property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
-
-@property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet UIWebView *webView;
 
 @property (nonatomic, strong) APCTableViewStudyDetailsItem *studyDetails;
 

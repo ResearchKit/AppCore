@@ -151,4 +151,14 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     return studyDetailsItem;
 }
 
+- (APCTableViewStudyItemType)itemTypeForIndexPath:(NSIndexPath *)indexPath
+{
+    APCTableViewSection *sectionItem = self.items[indexPath.section];
+    APCTableViewRow *rowItem = sectionItem.rows[indexPath.row];
+    
+    APCTableViewStudyItemType *studyItemType = (APCTableViewStudyItemType *)rowItem.itemType;
+    
+    return studyItemType;
+}
+
 @end
