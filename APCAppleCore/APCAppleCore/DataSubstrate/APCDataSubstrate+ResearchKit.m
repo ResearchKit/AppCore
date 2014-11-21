@@ -33,11 +33,11 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
     self.logDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"ResearchKitLogs"]; // for now
     [[NSFileManager defaultManager] createDirectoryAtPath:self.logDirectory withIntermediateDirectories:YES attributes:nil error:nil];
     
-    self.logManager = [[RKDataLoggerManager alloc] initWithDirectory:[NSURL fileURLWithPath:self.logDirectory] delegate:self];
+    self.logManager = [[RKSTDataLoggerManager alloc] initWithDirectory:[NSURL fileURLWithPath:self.logDirectory] delegate:self];
     self.logManager.pendingUploadBytesThreshold = APCPendingUploadMegaBytesThreshold * APCMegabyteFileSize; // 5 MB
     self.logManager.totalBytesThreshold = APCTotalMegaBytesThreshold * APCMegabyteFileSize; // 50 MB
     
-    self.studyStore = [RKStudyStore sharedStudyStore];
+    self.studyStore = [RKSTStudyStore sharedStudyStore];
     NSError * error;
     if (![self.studyStore studyWithIdentifier:studyIdentifier]) {
         self.study = [self.studyStore addStudyWithIdentifier:studyIdentifier delegate:self error:&error];
@@ -94,13 +94,13 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 
 
 /*********************************************************************************/
-#pragma mark - Research Kit RKStudyDelegate
+#pragma mark - Research Kit RKSTStudyDelegate
 /*********************************************************************************/
-- (BOOL)study:(RKStudy *)study healthCollector:(RKHealthCollector *)collector anchor:(NSNumber *)anchor didCollectObjects:(NSArray /* <HKSample> */ *)objects
+- (BOOL)study:(RKSTStudy *)study healthCollector:(RKSTHealthCollector *)collector anchor:(NSNumber *)anchor didCollectObjects:(NSArray /* <HKSample> */ *)objects
 {
     NSString *identifier = [[collector sampleType] identifier];
     
-    RKDataLogger *logger = [self.logManager dataLoggerForLogName:identifier];
+    RKSTDataLogger *logger = [self.logManager dataLoggerForLogName:identifier];
     if (! logger)
     {
         logger = [self.logManager addJSONDataLoggerForLogName:identifier];
@@ -112,11 +112,11 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 }
 
 
-- (BOOL)study:(RKStudy *)study healthCorrelationCollector:(RKHealthCorrelationCollector *)collector anchor:(NSNumber *)anchor didCollectObjects:(NSArray /* <HKCorrelation> */ *)objects
+- (BOOL)study:(RKSTStudy *)study healthCorrelationCollector:(RKSTHealthCorrelationCollector *)collector anchor:(NSNumber *)anchor didCollectObjects:(NSArray /* <HKCorrelation> */ *)objects
 {
     
     NSString *identifier = [[collector correlationType] identifier];
-    RKDataLogger *logger = [self.logManager dataLoggerForLogName:identifier];
+    RKSTDataLogger *logger = [self.logManager dataLoggerForLogName:identifier];
     if (! logger)
     {
         logger = [self.logManager addJSONDataLoggerForLogName:identifier];
@@ -130,10 +130,10 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 }
 
 
-- (BOOL)study:(RKStudy *)study motionActivityCollector:(RKMotionActivityCollector *)collector startDate:(NSDate *)startDate didCollectObjects:(NSArray /* <CMMotionActivity> */ *)objects
+- (BOOL)study:(RKSTStudy *)study motionActivityCollector:(RKSTMotionActivityCollector *)collector startDate:(NSDate *)startDate didCollectObjects:(NSArray /* <CMMotionActivity> */ *)objects
 {
     NSString *logName = @"RKMotionActivity";
-    RKDataLogger *logger = [self.logManager dataLoggerForLogName:logName];
+    RKSTDataLogger *logger = [self.logManager dataLoggerForLogName:logName];
     if (! logger)
     {
         logger = [self.logManager addJSONDataLoggerForLogName:logName];
@@ -145,13 +145,13 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 }
 
 
-- (BOOL)passiveCollectionShouldBeginForStudy:(RKStudy *)study {
+- (BOOL)passiveCollectionShouldBeginForStudy:(RKSTStudy *)study {
     
     return YES;
 }
 
 
-- (void)passiveCollectionDidFinishForStudy:(RKStudy *)study
+- (void)passiveCollectionDidFinishForStudy:(RKSTStudy *)study
 {
     
     NSLog(@"First collection finished - queue an upload");
@@ -182,8 +182,9 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
     
     NSError *error = nil;
     NSArray *pendingFiles = nil;
-    NSURL *archiveFile = [RKDataArchive makeArchiveFromDataLoggerManager:self.logManager
-                                                          itemIdentifier:[[RKItemIdentifier alloc] initWithComponents:@[@"com",@"apple",@"ResearchKit",@"collection"]]
+    //TODO: Check itemIdentifier
+    NSURL *archiveFile = [RKSTDataArchive makeArchiveFromDataLoggerManager:self.logManager
+                                                          itemIdentifier:@"com.ymedialabs.researchkit.collection"
                                                          studyIdentifier:self.study.studyIdentifier
                                                           fileProtection:RKFileProtectionNone
                                                        maximumInputBytes:APCDataLoggerManagerMaximumInputBytes * APCMegabyteFileSize
@@ -232,7 +233,7 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 /*********************************************************************************/
 #pragma mark - Research Kit RKDataManagerDelegate
 /*********************************************************************************/
-- (void)dataLoggerManager:(RKDataLoggerManager*)manager pendingUploadBytesReachedThreshold:(unsigned long long)pendingUploadBytes
+- (void)dataLoggerManager:(RKSTDataLoggerManager*)manager pendingUploadBytesReachedThreshold:(unsigned long long)pendingUploadBytes
 {
     NSLog(@"Pending bytes threshold reached");
     // Create the archive.
@@ -245,7 +246,7 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 }
 
 
-- (void)dataLoggerManager:(RKDataLoggerManager*)manager totalBytesReachedThreshold:(unsigned long long)totalBytes
+- (void)dataLoggerManager:(RKSTDataLoggerManager*)manager totalBytesReachedThreshold:(unsigned long long)totalBytes
 {
     
     NSLog(@"Total bytes threshold reached");

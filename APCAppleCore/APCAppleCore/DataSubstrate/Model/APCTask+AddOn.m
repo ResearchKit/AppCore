@@ -36,9 +36,11 @@ static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
           if ([task.taskType isEqualToString:kCustomizableSurveyTaskType]) {
               NSString *resource = [[NSBundle mainBundle] pathForResource:taskDict[kTaskFileNameKey] ofType:@"task"];
               NSError * error;
-              NSData *taskDescription = [NSData dataWithContentsOfFile:resource];
-              [error handle];
-              task.taskDescription = taskDescription;
+              if ([[NSFileManager defaultManager] fileExistsAtPath:resource]) {
+                  NSData *taskDescription = [NSData dataWithContentsOfFile:resource];
+                  [error handle];
+                  task.taskDescription = taskDescription;
+              }
           }
           NSError * error;
           [task saveToPersistentStore:&error];
@@ -59,13 +61,13 @@ static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
     return retTask;
 }
 
-- (RKTask *)rkTask
+- (RKSTOrderedTask *)rkTask
 {
-    RKTask * retTask = [NSKeyedUnarchiver unarchiveObjectWithData:self.taskDescription];
+    RKSTOrderedTask * retTask = self.taskDescription ? [NSKeyedUnarchiver unarchiveObjectWithData:self.taskDescription] : nil;
     return retTask;
 }
 
-- (void)setRkTask:(RKTask *)rkTask
+- (void)setRkTask:(RKSTOrderedTask *)rkTask
 {
     self.taskDescription = [NSKeyedArchiver archivedDataWithRootObject:rkTask];
 }

@@ -14,10 +14,6 @@
 
 @interface APCEmailVerifyViewController ()
 @property (nonatomic, readonly) APCUser * user;
-
-
-
-
 @end
 
 @implementation APCEmailVerifyViewController

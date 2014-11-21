@@ -1,0 +1,395 @@
+//
+//  RKSTAnswerFormat.h
+//  ResearchKit
+//
+//  Copyright (c) 2013-2014 Apple Inc. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+typedef NS_ENUM(NSInteger, RKSurveyQuestionType) {
+    RKSurveyQuestionTypeNone,                   // No question.
+    RKSurveyQuestionTypeScale,                  // Continuous rating scale, ask participant place a mark at an appropriate position on a continuous line.
+    RKSurveyQuestionTypeSingleChoice,           // Single choice questions are those where the participant can only pick a single predefined answer option.
+    RKSurveyQuestionTypeMultipleChoice,         // Multiple choice questions are those where the participant can pick one or more predefined answer options.
+    RKSurveyQuestionTypeDecimal,                // Decimal question type asks the participant to enter a decimal number.
+    RKSurveyQuestionTypeInteger,                // Integer question type asks the participant to enter a integer number.
+    RKSurveyQuestionTypeBoolean,                // Boolean type question collects a response of "Yes" or "No" from the participant.
+    RKSurveyQuestionTypeText,                   // Text question type collects multiple lines of text input.
+    RKSurveyQuestionTypeDateAndTime,            // DateAndTime question type ask for a time or a combination of date and time, can be chosen from a picker.
+    RKSurveyQuestionTypeTime,                   // Time question type can be used to ask for a certain time, can be chosen from a picker.
+    RKSurveyQuestionTypeDate,                   // Date question type can be used to ask for a certain date, can be chosen from a picker.
+    RKSurveyQuestionTypeTimeInterval            // TimeInterval question type can be used to ask for a certain time span, can be chosen from a picker.
+};
+
+
+/**
+ * @brief The RKSTAnswerFormat class contains details about answer.
+ *
+ * RKSTAnswerFormat contains the question type
+ * Allow subclasses to add additional attributes which fit specific types of question.
+ * @discussion
+ */
+@interface RKSTAnswerFormat : NSObject<NSSecureCoding,NSCopying>
+
+- (RKSurveyQuestionType) questionType;
+
+@end
+
+
+
+/**
+ * @brief The RKSTScaleAnswerFormat class defines the attributes for a scale type answer.
+ * Continuous rating scale, ask participant place a mark at an appropriate position on a continuous line.
+ */
+@interface RKSTScaleAnswerFormat : RKSTAnswerFormat
+
+/**
+ * @brief Convenience constructor.
+ */
++ (instancetype)scaleAnswerWithMaxValue:(double)scaleMax
+                               minValue:(double)scaleMin;
+
+/**
+ * @brief Upper bound of the scale.
+ */
+@property (nonatomic, readonly) double scaleMax;
+
+/**
+ * @brief Lower bound of the scale.
+ */
+@property (nonatomic, readonly) double scaleMin;
+
+@end
+
+typedef NS_ENUM(NSInteger, RKChoiceAnswerStyle) {
+    RKChoiceAnswerStyleSingleChoice,           // Single choice questions are those where the participant can only pick a single predefined answer option.
+    RKChoiceAnswerStyleMultipleChoice          // Multiple choice questions are those where the participant can pick one or more predefined answer options.
+};
+
+/**
+ * @brief Format for a multiple or single choice question with a fixed set of options.
+ */
+@interface RKSTChoiceAnswerFormat : RKSTAnswerFormat
+
+/**
+ * @brief Create a choice answer format to select from a set of text options.
+ * @param options             Array of RKSTTextAnswerOption.
+ * @param style               Whether single or multiple-choice.
+ */
++ (instancetype)choiceAnswerWithTextOptions:(NSArray *)options style:(RKChoiceAnswerStyle)style;
+
+/**
+ * @brief Create a choice answer format to select on an image scale.
+ * @param options             Array of RKSTImageAnswerOption
+ * @param style               Whether single or multiple-choice.
+ */
++ (instancetype)choiceAnswerWithImageOptions:(NSArray *)options style:(RKChoiceAnswerStyle)style;
+
+@property (nonatomic, readonly) RKChoiceAnswerStyle style;
+
+@property (nonatomic, readonly, copy) NSArray *options;
+
+@end
+
+/**
+ * @brief The RKSTBooleanAnswerFormat class allow participant pick from Yes or No from answer options.
+ */
+@interface RKSTBooleanAnswerFormat : RKSTAnswerFormat
+
+
+@end
+
+/**
+ * @brief The RKSTTextAnswerOption class defines brief option text for a option which can be included within RKSTChoiceAnswerFormat.
+ */
+@interface RKSTTextAnswerOption : NSObject <NSSecureCoding,NSCopying>
+
+/**
+ * @brief Designated convenience constructor
+ */
++ (instancetype)optionWithText:(NSString *)text detailText:(NSString *)detailText value:(id)value;
+
+/**
+ * @brief Designated convenience constructor
+ */
++ (instancetype)optionWithText:(NSString *)text value:(id)value;
+
+
+/**
+ * @brief Brief option text.
+ */
+@property (nonatomic, readonly, copy) NSString *text;
+
+/**
+ * @brief The value to be returned if this option is selected.
+ *
+ * Expected to be a scalar property list type, e.g. NSNumber or NSString.
+ * If no value is provided, the index of the option in the RKSTChoiceAnswerFormat options list is used.
+ */
+@property (nonatomic, readonly, copy) id value;
+
+/**
+  * @brief Detailed option text.
+  */
+@property (nonatomic, readonly, copy) NSString *detailText;
+
+@end
+
+/**
+  * @brief The RKAnswerImageOption class defines  brief/detailed option text for a option which can be included within RKSTChoiceAnswerFormat.
+  */
+@interface RKSTImageAnswerOption : NSObject <NSSecureCoding,NSCopying>
+
+/**
+ * @brief Designated convenience constructor
+ */
++ (instancetype)optionWithNormalImage:(UIImage *)normal selectedImage:(UIImage *)selected text:(NSString *)text value:(id)value;
+/**
+ * @brief Image for when option is unselected.
+ */
+@property (nonatomic, readonly, strong) UIImage *normalStateImage;
+
+/**
+  * @brief Image for when option is selected.
+  */
+@property (nonatomic, readonly, strong) UIImage *selectedStateImage;
+
+/**
+ * @brief Optional text.
+ */
+@property (nonatomic, readonly, copy) NSString *text;
+
+/**
+ * @brief The value to be returned if this option is selected.
+ *
+ * Expected to be a scalar property list type, e.g. NSNumber or NSString.
+ * If no value is provided, the index of the option in the RKSTChoiceAnswerFormat options list will be used.
+ */
+@property (nonatomic, readonly, copy) id value;
+
+
+@end
+
+
+typedef NS_ENUM(NSInteger, RKNumericAnswerStyle) {
+    RKNumericAnswerStyleDecimal,           // Decimal question type asks the participant to enter a decimal number.
+    RKNumericAnswerStyleInteger            // Integer question type asks the participant to enter a integer number.
+};
+
+/**
+ * @brief The RKSTNumericAnswerFormat class defines the attributes for a numeric type answer.
+ *
+ * Numeric question type asks the participant to enter a numeric value.
+ */
+@interface RKSTNumericAnswerFormat : RKSTAnswerFormat
+
+/**
+ * @brief Convenience constructor for time decimal type answer.
+ */
++ (instancetype)decimalAnswerWithUnit:(NSString*)unit;
+
+/**
+ * @brief Convenience constructor for time integer type answer.
+ */
++ (instancetype)integerAnswerWithUnit:(NSString*)unit;
+
+/**
+ * @brief Style of numeric entry
+ */
+@property (nonatomic, readonly) RKNumericAnswerStyle style;
+
+/**
+ * @brief Unit in text for the numeric value.
+ * For example, days / lbs / times.
+ */
+@property (nonatomic, readonly, copy) NSString *unit;
+
+/**
+ * @brief Minimum qualified value.
+ */
+@property (copy) NSNumber *minimum;
+
+/**
+ * @brief Maximum qualified value.
+ */
+@property (copy) NSNumber *maximum;
+
+/**
+ * @brief Rounding mode.
+ * Default value is NSNumberFormatterRoundHalfEven
+ */
+@property NSNumberFormatterRoundingMode roundingMode;
+
+/**
+ * @brief Rounding increment.
+ * Default value is nil, rounding will not be applied.
+ */
+@property (nonatomic, copy) NSNumber *roundingIncrement;
+
+/**
+ * @brief Manage the number of fraction digits.
+ * Default value is nil, 0 will be used in actual formatting.
+ */
+@property (nonatomic, copy) NSNumber *minimumFractionDigits;
+
+/**
+ * @brief Manage the number of fraction digits.
+ * Default value is nil, 42 will be used in actual formatting.
+ */
+@property (nonatomic, copy) NSNumber *maximumFractionDigits;
+
+
+@end
+
+
+typedef NS_ENUM(NSInteger, RKSTDateAnswerStyle) {
+    RKSTDateAnswerStyleDateAndTime,            // DateAndTime question type ask for a time or a combination of date and time, can be chosen from a picker.
+    RKSTDateAnswerStyleTime,                   // Time question type can be used to ask for a certain time, can be chosen from a picker.
+    RKSTDateAnswerStyleDate                    // Date question type can be used to ask for a certain date, can be chosen from a picker.
+};
+
+/**
+ * @brief The RKSTDateAnswerFormat class defines the attributes for a date/time type answer.
+ *
+ * Ask for a time or a date or a combination of date and time, can be chosen from a picker.
+ */
+@interface RKSTDateAnswerFormat : RKSTAnswerFormat
+
++ (instancetype)dateTimeAnswer;
++ (instancetype)dateAnswer;
++ (instancetype)timeAnswer;
+
+/**
+ * @brief Convenience constructor for DateAndTime type.
+ *
+ * @param default       Date components. Era, year, month, day, hour, minute, and second are observed.
+ *     Any components provided override those components on the "referenceDate".
+ *     If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param defaultDate   Date that default components are applied to.
+ *                      If nil, time of presentation is used.
+ *
+ * @param minimum Date components for the beginning of the allowable range.
+ *                If nil, no limit.
+ *                If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param maximum Date components for the end of the allowable range.
+ *                If nil, no limit.
+ *                If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param calendar Calendar to use when selecting date and time.
+ *                 If nil, use user's default calendar.
+ */
++ (instancetype)dateTimeAnswerWithDefault:(NSDateComponents *)defaultComponents
+                              defaultDate:(NSDate *)defaultDate
+                                  minimum:(NSDateComponents *)minimum
+                                  maximum:(NSDateComponents *)maximum
+                                 calendar:(NSCalendar *)calendar;
+
+/**
+ * @brief Convenience constructor for Date type.
+ *
+ * @param default       Date components. Era, year, month, and day are observed.
+ *     Any components provided override those components on the "referenceDate".
+ *     If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param defaultDate   Date that default components are applied to.
+ *                      If nil, time of presentation is used.
+ *
+ * @param minimum Date components for the beginning of the allowable range.
+ *                If nil, no limit.
+ *                If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param maximum Date components for the end of the allowable range.
+ *                If nil, no limit.
+ *                If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param calendar Calendar to use when selecting date and time.
+ *                 If nil, use user's default calendar.
+ */
++ (instancetype)dateAnswerWithDefault:(NSDateComponents *)defaultComponents defaultDate:(NSDate *)defaultDate minimum:(NSDateComponents *)minimum maximum:(NSDateComponents *)maximum calendar:(NSCalendar *)calendar;
+
+/**
+ * @brief Convenience constructor for Time type.
+ 
+ *
+ * @param default       Date components. Hour, minute, and second are observed.
+ *     Any components provided override those components on the "referenceDate".
+ *     If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param defaultDate   Date that default components are applied to.
+ *                      If nil, time of presentation is used.
+ *
+ * @param minimum Date components for the beginning of the allowable range.
+ *                If nil, no limit.
+ *                If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param maximum Date components for the end of the allowable range.
+ *                If nil, no limit.
+ *                If calendar is nil, these components are assumed to be in the Gregorian calendar.
+ *
+ * @param calendar Calendar to use when selecting date and time.
+ *                 If nil, use user's default calendar.
+ */
++ (instancetype)timeAnswerWithDefault:(NSDateComponents *)defaultComponents defaultDate:(NSDate *)defaultDate minimum:(NSDateComponents *)minimum maximum:(NSDateComponents *)maximum calendar:(NSCalendar *)calendar;
+
+/**
+ * @brief Style of date entry
+ */
+@property (nonatomic, readonly) RKSTDateAnswerStyle style;
+
+@property (nonatomic, readonly, copy) NSDateComponents *defaultComponents;
+@property (nonatomic, readonly, copy) NSDateComponents *minimum;
+@property (nonatomic, readonly, copy) NSDateComponents *maximum;
+@property (nonatomic, readonly, copy) NSDate *defaultDate;
+@property (nonatomic, readonly, copy) NSCalendar *calendar;
+
+@end
+
+
+/**
+ * @brief The RKSTTextAnswerFormat class defines the attributes for a text type answer.
+ *
+ * Text question type collects multiple lines of text input.
+ */
+@interface RKSTTextAnswerFormat : RKSTAnswerFormat
+
+/**
+ * @brief Convenience constructor.
+ */
++ (instancetype)textAnswer;
+
++ (instancetype)textAnswerWithMaximumLength:(NSNumber*)maximumLength;
+
+/**
+ * @brief  Maximum length of the text to be allowed. 
+ *  Default is nil, not limited.
+ */
+@property (nonatomic, readonly, copy) NSNumber *maximumLength;
+
+@end
+
+/**
+ * @brief The RKSTTimeIntervalAnswerFormat class defines the attributes for a time interval type answer.
+ *
+ * Can be used to ask for a certain time span chosen from a picker.
+ */
+@interface RKSTTimeIntervalAnswerFormat : RKSTAnswerFormat
+
++ (instancetype)timeIntervalAnswer;
+
+/**
+ * @brief Convenience constructor.
+ * @param defaultInterval The initial position of the time interval picker.
+ * @param maximumInterval The maximum selectable interval. The minimum is always 0.
+ * @param step The step in the interval.
+ */
++ (instancetype)timeIntervalAnswerWithDefault:(NSTimeInterval)defaultInterval maximum:(NSTimeInterval)maximumInterval step:(NSTimeInterval)step;
+
+@property (nonatomic, readonly) NSTimeInterval maximumInterval;
+@property (nonatomic, readonly) NSTimeInterval defaultInterval;
+@property (nonatomic, readonly) NSTimeInterval step;
+
+@end

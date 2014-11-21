@@ -14,7 +14,7 @@ FOUNDATION_EXPORT double APCAppleCoreVersionNumber;
 //! Project version string for APCAppleCore.
 FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 
-#import <ResearchKit/ResearchKit.h>
+#import <ResearchKit/ResearchKit_Private.h>
 #import <BridgeSDK/BridgeSDK.h>
 
 //Headers
@@ -53,6 +53,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCSignupTouchIDViewController.h>
 #import <APCAppleCore/APCSignUpPermissionsViewController.h>
 #import <APCAppleCore/APCEmailVerifyViewController.h>
+#import <APCAppleCore/APCPasscodeViewController.h>
 
 /*--------------------------
  Dashboard ViewControllers
@@ -73,9 +74,10 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCIntroductionViewController.h>
 #import <APCAppleCore/APCInstructionStepViewController.h>
 #import <APCAppleCore/APCSpinnerViewController.h>
-#import <APCAppleCore/APCSetupTaskViewController.h>
+#import <APCAppleCore/APCBaseTaskViewController.h>
 #import <APCAppleCore/APCBaseWithProgressTaskViewController.h>
 #import <APCAppleCore/APCStepViewController.h>
+#import <APCAppleCore/APCActiveStepViewController.h>
 #import <APCAppleCore/APCActivitiesViewController.h>
 #import <APCAppleCore/APCSimpleTaskSummaryViewController.h>
 
@@ -96,8 +98,10 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCSegmentedButton.h>
 #import <APCAppleCore/APCImageButton.h>
 #import <APCAppleCore/APCCircularProgressView.h>
+#import <APCAppleCore/APCConcentricProgressView.h>
 #import <APCAppleCore/APCConfirmationView.h>
 #import <APCAppleCore/APCPasscodeView.h>
+#import <APCAppleCore/APCResizeView.h>
 
 /* -------------------------
  Cells
@@ -111,8 +115,10 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCTintedTableViewCell.h>
 #import <APCAppleCore/APCCheckTableViewCell.h>
 #import <APCAppleCore/APCDashboardLineGraphTableViewCell.h>
+#import <APCAppleCore/APCDashboardBadgesTableViewCell.h>
 #import <APCAppleCore/APCDashboardMessageTableViewCell.h>
 #import <APCAppleCore/APCDashboardProgressTableViewCell.h>
+#import <APCAppleCore/APCShareTableViewCell.h>
 
 /* -------------------------
  Objects

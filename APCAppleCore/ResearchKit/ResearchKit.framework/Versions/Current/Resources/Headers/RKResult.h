@@ -9,25 +9,16 @@
 #import <ResearchKit/RKAnswerFormat.h>
 
 @class RKRecorder;
-@class RKDataArchive;
-@class RKItemIdentifier;
 @class RKStep;
 @class RKQuestionStep;
 @class RKFormItem;
 @class RKFormStep;
-@class RKSurveyResult;
+@class RKConsentReviewStep;
 @class RKQuestionResult;
-
-
-@protocol RKTaskDefaultResultProvider<NSObject>
-
-@optional
-
-- (RKSurveyResult *)defaultResultForFormStep:(RKFormStep *)formStep;
-
-- (RKQuestionResult *)defaultResultForQuestionStep:(RKQuestionStep *)questionStep;
-
-@end
+@class RKConsentSignature;
+@class RKConsentDocument;
+@class RKConsentSignatureResult;
+@class RKStepResult;
 
 /**
  * @brief The RKResult class defines the attributes of a result from one step or a group of steps.
@@ -36,84 +27,42 @@
  */
 @interface RKResult : NSObject<NSCopying,NSSecureCoding>
 
-/**
- * @brief Produce a recorder with taskInstanceUUID, taskItemId, and stepItemId filled in
- *
- */
-+ (instancetype)resultForRecorder:(RKRecorder*)recorder;
+- (instancetype)initWithIdentifier:(NSString *)identifier;
 
 /**
- * @brief Step initializer
- * Pick up itemIdentifier/taskIdentifier from step object during initialization.
- * @param step    The step produced result object.
+ * @brief A meaningful identifier for this particular result.
+ * @discussion RKTaskResult receives identifier from RKTask, RKStepResult receives identifier from RKStep,
+ * and RKQuestionResult receives identifier from RKStep or RKFormItem, etc.
  */
-- (instancetype)initWithStep:(RKStep*)step;
+@property (nonatomic, copy) NSString *identifier;
 
 /**
- * @brief Unique task instance identifier.
- * 
- * Each time a task is presented to participant, a new task instance identifier is generated to identify task events.
+ * @brief Time when the task, step, or data collection began.
+ * @note For instantaneous items, startDate and endDate will be the same.
  */
-@property (nonatomic, strong) NSUUID* taskInstanceUUID;
+@property (nonatomic, copy) NSDate *startDate;
 
 /**
- * @brief Timestamp of result's generation.
+ * @brief Time when the task, step, or data collection stop. 
+ * @note For instantaneous items, startDate and endDate will be the same.
  */
-@property (nonatomic, copy) NSDate* timestamp;
+@property (nonatomic, copy) NSDate *endDate;
 
 /**
- * @brief Item identifier describing the result
- */
-@property (nonatomic, copy) RKItemIdentifier* itemIdentifier;
-
-/**
- * @brief Result's contentType.
- */
-@property (nonatomic, copy) NSString* contentType;
-
-/**
- * @brief Device hardware information.
- */
-@property (nonatomic, copy, readonly) NSString* deviceHardware;
-
-/**
- * @brief Metadata about the conditions in which this result was acquired
+ * @brief Metadata about the conditions in which this result was acquired.
  */
 @property (nonatomic, copy) NSDictionary *metadata;
 
-- (BOOL)addToArchive:(RKDataArchive *)archive error:(NSError * __autoreleasing *)error;
 
 @end
 
-/**
- * @brief The RKDataResult contains result data in NSData format.
- */
-@interface RKDataResult : RKResult
-
-/**
- * @brief filename to use when archiving
- */
-@property (nonatomic, copy) NSString *filename;
-
-/**
- * @brief Data object attached to the result.
- */
-@property (nonatomic, copy) NSData* data;
-
-@end
 
 @interface RKFileResult : RKResult
 
 /**
- * If ownsContainingDirectory is set, the directory containing the file will
- * be removed on dealloc.
+ * @brief Result's contentType.
  */
-@property (nonatomic) BOOL ownsContainingDirectory;
-
-/**
- * If ownsFile is set, the file will be removed on dealloc.
- */
-@property (nonatomic) BOOL ownsFile;
+@property (nonatomic, copy) NSString *contentType;
 
 /**
  * @brief URL of the file produced.
@@ -125,22 +74,20 @@
 
 @end
 
+@interface RKDateAnswer : NSObject<NSCopying,NSSecureCoding>
 
-/**
- * @brief The RKQuestionResult class defines the attributes of a question result.
- */
+- (instancetype)initWithDateComponents:(NSDateComponents *)dateComponents calendar:(NSCalendar *)calendar;
+
+@property (nonatomic, copy, readonly) NSDateComponents *dateComponents;
+@property (nonatomic, copy, readonly) NSCalendar *calendar;
+
+@end
+
+
 @interface RKQuestionResult : RKResult
 
-
 /**
- * @brief FormItem initializer
- * Pick up itemIdentifier/taskIdentifier/stepIdentifier from formItem object during initialization.
- * @param formItem  The formItem produced result object.
- */
-- (instancetype)initWithFormItem:(RKFormItem*)formItem;
-
-/**
- * @brief Question's type.
+ * @brief The question's type.
  */
 @property (nonatomic) RKSurveyQuestionType questionType;
 
@@ -148,53 +95,109 @@
  * @brief Actual answer to the question.
  *
  * Different types of question use different types of object to store the answer.
- *      Single choice type uses NSNumber to store the chosen option's index.
- *      Multiple choice type uses NSArray to store the chosen options' indexes.
- *      Boolean type uses NSNumber
- *      Text type uses NSString to store user's input.
- *      Scale type uses NSNumber to store marked value.
- *      Date type uses NSDateComponents to store a date value (NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay).
- *      Time type uses NSDateComponents to store a time value (NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond).
- *      DateAndTime type uses NSDateComponents to store a date-time value (NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond).
- *      Time Interval uses NSNumber to store a time span in seconds.
- *  @note All NSDateComponents values are computed using Gregorian Calendar.
+ *      Single choice: the selected RKAnswerOption's `value` property.
+ *      Multiple choice: array of values from selected RKAnswerOptions' `value` properties.
+ *      Boolean: NSNumber
+ *      Text: NSString
+ *      Scale: NSNumber
+ *      Date: RKDateAnswer with date components having (NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay).
+ *      Time: RKDateAnswer with date components having (NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond).
+ *      DateAndTime: RKDateAnswer with date components having (NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond).
+ *      Time Interval: NSNumber, containing a time span in seconds.
  */
 @property (nonatomic, copy) id answer;
 
-+ (RKQuestionResult *)nullResultForQuestionStep:(RKQuestionStep *)questionStep;
+@end
 
+
+/**
+ * @brief Result containing a completed signature.
+ */
+@interface RKConsentSignatureResult : RKResult
+
+@property (nonatomic, copy) RKConsentSignature *signature;
+
+// Apply the signature to the document.
+- (void)applyToDocument:(RKConsentDocument *)document;
+
+@end
+
+
+
+@interface RKCollectionResult : RKResult
+
+/**
+ *  @brief An array of RKResult objects.
+ *  @discussion For RKTaskResult, it is an array of RKStepResult objects.
+ *  For RKStepResult it is an array of concrete result objects like: RKFileResult/RKQuestionResult.
+ */
+@property (nonatomic, copy) NSArray /* <RKResult> */ *results;
+
+/**
+ *  @brief Convenience method to lookup a result with a particular identifer.
+ */
+- (RKResult *)resultForIdentifier:(NSString *)identifier;
+
+/**
+ *  @brief Convenience method to get first result object from results array, if there is one.
+ */
+- (RKResult *)firstResult;
+
+@end
+
+
+@protocol RKTaskResultSource <NSObject>
+
+/**
+ *  @brief Return the result for the specified step, or nil for none.
+ */
+- (RKStepResult *)stepResultForStepIdentifier:(NSString *)stepIdentifier;
 
 @end
 
 /**
- * @brief The RKConsentResult class defines the attributes of consent step result.
+ * @brief RKTaskResult containing all results generated from one run of RKTaskViewController.
  */
-@interface RKConsentResult : RKResult
+@interface RKTaskResult: RKCollectionResult <RKTaskResultSource>
 
-@property (nonatomic, copy) NSString* signatureName;
-@property (nonatomic, copy) NSString* signatureDate;
+
+- (instancetype)initWithTaskIdentifier:(NSString *)identifier
+                           taskRunUUID:(NSUUID *)taskRunUUID
+                       outputDirectory:(NSURL *)outputDirectory;
+
+/**
+ * @brief Task instance UUID
+ *
+ * @discussion Unique identifier for a run of the task controller.
+ *
+ */
+@property (nonatomic, copy, readonly) NSUUID *taskRunUUID;
+
+/**
+ * @brief Designated directory to store generated data files.
+ */
+@property (nonatomic, copy, readonly) NSURL *outputDirectory;
+
+
 
 @end
 
-/**
- * @brief A combined result for covering all survey questions in a task.
- */
-@interface RKSurveyResult : RKResult<RKTaskDefaultResultProvider>
 
 /**
- * @brief Designated initializer
- * @param surveyResults Array of RKQuestionResult resulting from this survey, in order of answering
+ * @brief RKStepResult containing all results from one step.
  */
-- (instancetype)initWithQuestionResults:(NSArray *)surveyResults;
+@interface RKStepResult: RKCollectionResult
 
-/**
- * @brief An array that contains answers to the questions.
- */
-@property (nonatomic, strong) NSArray *surveyResults;
 
-- (RKQuestionResult *)resultForStep:(RKQuestionStep *)step;
+- (instancetype)initWithStepIdentifier:(NSString *)stepIdentifier results:(NSArray *)results;
 
-- (RKQuestionResult *)resultForFormItem:(RKFormItem *)item;
 
 @end
+
+
+
+
+
+
+
 

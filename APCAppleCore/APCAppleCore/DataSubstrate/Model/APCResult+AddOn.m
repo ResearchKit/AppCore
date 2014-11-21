@@ -14,56 +14,32 @@ static NSDictionary * lookupDictionary;
 
 @implementation APCResult (AddOn)
 
-+ (Class) lookUpAPCResultClassForRKResult: (RKResult*) rkResult
++ (NSManagedObjectID*) storeTaskResult:(RKSTTaskResult*) taskResult inContext: (NSManagedObjectContext*) context
 {
-    if (!lookupDictionary) {
-        lookupDictionary = @{
-                             @"RKResult"          :  @"APCResult",
-                             @"RKConsentResult"   :  @"APCConsentResult",
-                             @"RKDataResult"      :  @"APCDataResult",
-                             @"RKFileResult"      :  @"APCFileResult",
-                             @"RKSurveyResult"    :  @"APCSurveyResult"
-                             };
-    }
-    
-    NSString * rkResultClassName = NSStringFromClass([rkResult class]);
-    NSString * apcResultClassname = lookupDictionary[rkResultClassName];
-    Class localClass = apcResultClassname ? NSClassFromString(apcResultClassname) : nil;
-    return localClass;
+    NSAssert([taskResult isKindOfClass:[RKSTTaskResult class]], @"Should be of type RKSTTaskResult");
+    __block NSManagedObjectID * objectID;
+    [context performBlockAndWait:^{
+        APCResult * result = [APCResult newObjectForContext:context];
+        [self mapRKSTResult:taskResult toAPCResult:result];
+        NSError * saveError;
+        [result saveToPersistentStore:&saveError];
+        [saveError handle];
+        objectID = result.objectID;
+    }];
+    return objectID;
 }
 
-+ (instancetype) storeRKResult:(RKResult*) rkResult inContext: (NSManagedObjectContext*) context
++ (void) mapRKSTResult:(RKSTTaskResult*) taskResult toAPCResult: (APCResult*) apcResult
 {
-    __block APCResult * result;
-    if ([rkResult isMemberOfClass:[RKResult class]]) {
-        [context performBlockAndWait:^{
-            result = [APCResult newObjectForContext:context];
-            [self mapRKResult:rkResult toAPCResult:result];
-            NSError * saveError;
-            [result saveToPersistentStore:&saveError];
-            [saveError handle];
-        }];
+    apcResult.taskRunID = taskResult.taskRunUUID.UUIDString;
+    apcResult.rkTaskIdentifier = taskResult.identifier;
+    if (taskResult.metadata) {
+        NSError * error;
+        NSData * data = [NSJSONSerialization dataWithJSONObject:taskResult.metadata options:NSJSONWritingPrettyPrinted error:&error];
+        [error handle];
+        apcResult.rkMetadata = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     }
-    else
-    {
-        result = [[self lookUpAPCResultClassForRKResult:rkResult] storeRKResult:rkResult inContext:context];
-    }
-    return result;
 
-}
-
-+ (void) mapRKResult:(RKResult*) rkResult toAPCResult: (APCResult*) apcResult
-{
-    apcResult.uid = [NSUUID UUID].UUIDString;
-    apcResult.rkTaskInstanceUUID = rkResult.taskInstanceUUID.UUIDString;
-    apcResult.rkTimeStamp = rkResult.timestamp;
-    apcResult.rkItemIdentifier = rkResult.itemIdentifier.stringValue;
-    apcResult.rkContentType = rkResult.contentType;
-    apcResult.rkDeviceHardware = rkResult.deviceHardware;
-    NSError * error;
-    NSData * data = [NSJSONSerialization dataWithJSONObject:rkResult.metadata options:NSJSONWritingPrettyPrinted error:&error];
-    [error handle];
-    apcResult.rkMetadata = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
 
 /*********************************************************************************/

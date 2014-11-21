@@ -8,8 +8,8 @@
 
 
 #import <UIKit/UIKit.h>
-#import "APCSetupTaskViewController.h"
+#import "APCBaseTaskViewController.h"
 
-@interface APCBaseWithProgressTaskViewController : APCSetupTaskViewController
+@interface APCBaseWithProgressTaskViewController : APCBaseTaskViewController
 
 @end

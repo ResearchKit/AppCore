@@ -9,7 +9,7 @@
 #import "APCEligibleViewController.h"
 #import "APCAppleCore.h"
 
-@interface APCEligibleViewController () <RKTaskViewControllerDelegate>
+@interface APCEligibleViewController () <RKSTTaskViewControllerDelegate>
 
 @end
 
@@ -54,16 +54,16 @@
 
 - (void)showConsent
 {
-    RKConsentDocument* consent = [[RKConsentDocument alloc] init];
+    RKSTConsentDocument* consent = [[RKSTConsentDocument alloc] init];
     consent.title = @"Demo Consent";
     consent.signaturePageTitle = @"Consent";
     consent.signaturePageContent = @"I agree  to participate in this research Study.";
     
-    
-    RKConsentSignature *participantSig = [RKConsentSignature signatureForPersonWithTitle:@"Participant" name:nil signatureImage:nil dateString:nil];
+    //TODO:Check the identifier
+    RKSTConsentSignature *participantSig = [RKSTConsentSignature signatureForPersonWithTitle:@"Participant" dateFormatString:@"yyyy-MM-dd 'at' HH:mm" identifier:@"com.ymedia.participant"];
     [consent addSignature:participantSig];
     
-    RKConsentSignature *investigatorSig = [RKConsentSignature signatureForPersonWithTitle:@"Investigator" name:@"Jake Clemson" signatureImage:[UIImage imageNamed:@"signature.png"] dateString:@"9/2/14"];
+    RKSTConsentSignature *investigatorSig = [RKSTConsentSignature signatureForPersonWithTitle:@"Investigator" dateFormatString:@"yyyy-MM-dd 'at' HH:mm" identifier:@"com.ymedia.participant"];
     [consent addSignature:investigatorSig];
     
     
@@ -71,24 +71,24 @@
     
     NSMutableArray* components = [NSMutableArray new];
     
-    NSArray* scenes = @[@(RKConsentSectionTypeOverview),
-                        @(RKConsentSectionTypeActivity),
-                        @(RKConsentSectionTypeSensorData),
-                        @(RKConsentSectionTypeDeIdentification),
-                        @(RKConsentSectionTypeCombiningData),
-                        @(RKConsentSectionTypeUtilizingData),
-                        @(RKConsentSectionTypeImpactLifeTime),
-                        @(RKConsentSectionTypePotentialRiskUncomfortableQuestion),
-                        @(RKConsentSectionTypePotentialRiskSocial),
-                        @(RKConsentSectionTypeAllowWithdraw)];
+    NSArray* scenes = @[@(RKSTConsentSectionTypeOverview),
+                        @(RKSTConsentSectionTypeActivity),
+                        @(RKSTConsentSectionTypeSensorData),
+                        @(RKSTConsentSectionTypeDeIdentification),
+                        @(RKSTConsentSectionTypeCombiningData),
+                        @(RKSTConsentSectionTypeUtilizingData),
+                        @(RKSTConsentSectionTypeImpactLifeTime),
+                        @(RKSTConsentSectionTypePotentialRiskUncomfortableQuestion),
+                        @(RKSTConsentSectionTypePotentialRiskSocial),
+                        @(RKSTConsentSectionTypeAllowWithdraw)];
     for (NSNumber* type in scenes) {
-        RKConsentSection* c = [[RKConsentSection alloc] initWithType:type.integerValue];
+        RKSTConsentSection* c = [[RKSTConsentSection alloc] initWithType:type.integerValue];
         c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
         [components addObject:c];
     }
     
     {
-        RKConsentSection* c = [[RKConsentSection alloc] initWithType:RKConsentSectionTypeOnlyInDocument];
+        RKSTConsentSection* c = [[RKSTConsentSection alloc] initWithType:RKSTConsentSectionTypeOnlyInDocument];
         c.summary = @"OnlyInDocument Scene summary";
         c.title = @"OnlyInDocument Scene";
         c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
@@ -97,10 +97,10 @@
     
     consent.sections = [components copy];
     
-    RKVisualConsentStep *step = [[RKVisualConsentStep alloc] initWithDocument:consent];
-    RKConsentReviewStep *reviewStep = [[RKConsentReviewStep alloc] initWithSignature:participantSig inDocument:consent];
-    RKTask *task = [[RKTask alloc] initWithName:@"consent" identifier:@"consent" steps:@[step,reviewStep]];
-    RKTaskViewController *consentVC = [[RKTaskViewController alloc] initWithTask:task taskInstanceUUID:[NSUUID UUID]];
+    RKSTVisualConsentStep *step = [[RKSTVisualConsentStep alloc] initWithDocument:consent];
+    RKSTConsentReviewStep *reviewStep = [[RKSTConsentReviewStep alloc] initWithSignature:participantSig inDocument:consent];
+    RKSTOrderedTask *task = [[RKSTOrderedTask alloc] initWithIdentifier:@"consent" steps:@[step,reviewStep]];
+    RKSTTaskViewController *consentVC = [[RKSTTaskViewController alloc] initWithTask:task taskRunUUID:[NSUUID UUID]];
     
     consentVC.taskDelegate = self;
     [self presentViewController:consentVC animated:YES completion:nil];
@@ -110,7 +110,7 @@
 
 #pragma mark - TaskViewController Delegate methods
 
-- (void)taskViewControllerDidComplete: (RKTaskViewController *)taskViewController
+- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
 {
     [self dismissViewControllerAnimated:YES completion:^{
         
@@ -120,9 +120,14 @@
     }];
 }
 
-- (void)taskViewControllerDidCancel:(RKTaskViewController *)taskViewController
+- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
 {
-    [taskViewController suspend];
+    [taskViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
+{
+    //TODO: Figure out what to do if it fails
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
