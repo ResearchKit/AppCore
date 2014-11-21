@@ -258,13 +258,16 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 
 #pragma mark - Data
 
-- (void)setDatasource:(id<APCLineGraphViewDataSource>)datasource
-{
-    if (datasource != _datasource) {
-        _datasource = datasource;
-        [self layoutSubviews];
-    }    
-}
+//TODO: Commenting out as it is drawing an unwanted horizontal ref. line.
+//Investigate.
+
+//- (void)setDatasource:(id<APCLineGraphViewDataSource>)datasource
+//{
+//    if (datasource != _datasource) {
+//        _datasource = datasource;
+//        [self layoutSubviews];
+//    }    
+//}
 
 - (NSInteger)numberOfPlots
 {
