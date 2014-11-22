@@ -126,6 +126,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCGroupedScheduledTask.h>
 #import <APCAppleCore/APCKeychainStore.h>
 #import <APCAppleCore/APCPresentAnimator.h>
+#import <APCAppleCore/APCScheduleExpression.h>
 
 /* -------------------------
  Categories
@@ -147,14 +148,6 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCAppearanceInfo.h>
 #import <APCAppleCore/UIFont+APCAppearance.h>
 #import <APCAppleCore/UIColor+APCAppearance.h>
-
-/* -------------------------
- YML Chart Components
- ------------------------- */
-//#import <APCAppleCore/YMLChartEnumerations.h>
-//#import <APCAppleCore/YMLChartUnitsView.h>
-//#import <APCAppleCore/YMLLineChartView.h>
-//#import <APCAppleCore/YMLTimeLineChartView.h>
 
 
 /* -------------------------

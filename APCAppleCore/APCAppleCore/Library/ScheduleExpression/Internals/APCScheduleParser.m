@@ -17,10 +17,10 @@ static unichar kStepSeparatorToken  = '/';
 static unichar kWildCardToken       = '*';
 static unichar kRangeSeparatorToken = '-';
 static unichar kFieldSeparatorToken = ' ';
-static unichar kRelativeSmallToken  = 'r';
-static unichar kRelativeLargeToken  = 'R';
-static unichar kAbsoluteSmallToken  = 'a';
-static unichar kAbsoluteLargeToken  = 'A';
+//static unichar kRelativeSmallToken  = 'r';
+//static unichar kRelativeLargeToken  = 'R';
+//static unichar kAbsoluteSmallToken  = 'a';
+//static unichar kAbsoluteLargeToken  = 'A';
 
 
 @interface APCScheduleParser ()

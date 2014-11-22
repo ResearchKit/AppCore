@@ -151,7 +151,7 @@
 		5BB2BA8D1A100BC300684CCE /* UIColor+TertiaryColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB2BA8B1A100BC300684CCE /* UIColor+TertiaryColors.m */; };
 		5BF5C90819D9E208007928D4 /* APCUser+UserData.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF5C90619D9E208007928D4 /* APCUser+UserData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BF5C90919D9E208007928D4 /* APCUser+UserData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5C90719D9E208007928D4 /* APCUser+UserData.m */; };
-		748DD74C1A1FE41700EE9969 /* APCScheduleExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 748DD73D1A1FE41700EE9969 /* APCScheduleExpression.h */; };
+		748DD74C1A1FE41700EE9969 /* APCScheduleExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 748DD73D1A1FE41700EE9969 /* APCScheduleExpression.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		748DD74D1A1FE41700EE9969 /* APCScheduleExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 748DD73E1A1FE41700EE9969 /* APCScheduleExpression.m */; };
 		748DD74E1A1FE41700EE9969 /* APCListSelector.h in Headers */ = {isa = PBXBuildFile; fileRef = 748DD7401A1FE41700EE9969 /* APCListSelector.h */; };
 		748DD74F1A1FE41700EE9969 /* APCListSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 748DD7411A1FE41700EE9969 /* APCListSelector.m */; };
