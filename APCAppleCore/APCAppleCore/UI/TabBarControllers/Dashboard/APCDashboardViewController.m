@@ -93,8 +93,8 @@
         }
         
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardBadgesItem class]]) {
-        
-        APCTableViewDashboardBadgesItem *badgeItem = (APCTableViewDashboardBadgesItem *)dashboardItem;
+//        
+//        APCTableViewDashboardBadgesItem *badgeItem = (APCTableViewDashboardBadgesItem *)dashboardItem;
         APCDashboardBadgesTableViewCell *badgeCell = (APCDashboardBadgesTableViewCell *)cell;
         
         badgeCell.concentricProgressView.datasource = self;
