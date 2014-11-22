@@ -10,6 +10,7 @@
 #import "APCAppleCore.h"
 
 static  CGFloat  kAPCStepProgressBarHeight = 8.0;
+static NSString *const kFinishedProperty = @"finished";
 
 @interface APCBaseWithProgressTaskViewController ()
 @property  (nonatomic, weak)  APCStepProgressBar  *progressor;
@@ -58,6 +59,44 @@ static  CGFloat  kAPCStepProgressBarHeight = 8.0;
         completedSteps = completedSteps - 1;
     }
     [self.progressor setCompletedSteps:completedSteps animation:YES];
+}
+
+
+- (void)taskViewController:(RKSTTaskViewController *)taskViewController stepViewControllerWillAppear:(RKSTStepViewController *)stepViewController
+{
+    if ([stepViewController isKindOfClass:[RKSTActiveStepViewController class]] && [self advanceArrayContainsStep:stepViewController.step])
+    {
+        [stepViewController addObserver:self forKeyPath:kFinishedProperty options:NSKeyValueObservingOptionNew context:NULL];
+    }
+}
+
+- (BOOL) advanceArrayContainsStep: (RKSTStep*) step
+{
+    __block BOOL retValue = NO;
+    [self.stepsToAutomaticallyAdvanceOnTimer enumerateObjectsUsingBlock:^(NSString* stepID, NSUInteger idx, BOOL *stop) {
+        if([step.identifier isEqualToString:stepID])
+        {
+            retValue = YES;
+        }
+    }];
+    return retValue;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+    if ([keyPath isEqualToString:kFinishedProperty]) {
+        if ([object isFinished]) {
+            RKSTStepViewController * vc = object;
+            [vc.delegate stepViewControllerDidFinish:vc navigationDirection:RKSTStepViewControllerNavigationDirectionForward];
+            @try {
+                [object removeObserver:self forKeyPath:kFinishedProperty];
+            }
+            @catch (NSException * __unused exception) {}
+        }
+    }
 }
 
 @end
