@@ -12,4 +12,6 @@
 
 @interface APCBaseWithProgressTaskViewController : APCBaseTaskViewController
 
+@property (nonatomic, strong) NSArray * stepsToAutomaticallyAdvanceOnTimer; //Provide step identifiers. Would work only with RKSTActiveStepViewController
+
 @end

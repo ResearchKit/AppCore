@@ -31,28 +31,24 @@
 
  The supported cron expression is as follows:
  
- * * * * * *  task id
- │ │ │ │ │ │
- │ │ │ │ │ │
- │ │ │ │ │ └──────── day of week
- │ │ │ │ └────────── month
- │ │ │ └──────────── day of month
- │ │ └────────────── hour
- │ └──────────────── minutes
- └────────────────── relative indicator
+ * * * * *  task id
+ │ │ │ │ │
+ │ │ │ │ │
+ │ │ │ │ └──────── day of week
+ │ │ │ └────────── month
+ │ │ └──────────── day of month
+ │ └────────────── hour
+ └──────────────── minutes
  
                                 Allowed     Special
     Index   Field Name          Values      Characters      Note
     ------------------------------------------------------------------------------------------------
-    0:      Relative indicator  A, R                        A: absolute, R: relative
-    1:      Minutes             0-59        * , -
-    2:      Hours               0-23        * , -
-    3:      Day of month        1-31        * , -
-    4:      Month               1-12        * , -           1: Jan, 2: Feb, ..,, 12: Dec
-    5:      Day of week         0-6         * , -           0: Sun, 1: Mon, ..., 6: Sat
+    0:      Minutes             0-59        * , -
+    1:      Hours               0-23        * , -
+    2:      Day of month        1-31        * , -
+    3:      Month               1-12        * , -           1: Jan, 2: Feb, ..,, 12: Dec
+    4:      Day of week         0-6         * , -           0: Sun, 1: Mon, ..., 6: Sat
 
-    A   If hours or minutes are specified, they are absolute
-    R   If hours or minutes are specified, they are relative to the user’s general wake time
     *   Matches all values. Example: an ‘*’ in the Day of Month field means every day.
     ,   Separate items of a list. Example: 7,14,21 for the Day of Week field means the 7th, 14th,
         and 21st day on the month.
