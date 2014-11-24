@@ -60,6 +60,8 @@
 
 - (NSEnumerator*)enumeratorBeginningAtTime:(NSDate*)start
 {
+    NSParameterAssert(start != nil);
+    
     return [[APCScheduleEnumerator alloc] initWithBeginningTime:start
                                                  minuteSelector:self.minuteSelector
                                                    hourSelector:self.hourSelector
@@ -71,6 +73,9 @@
 
 - (NSEnumerator*)enumeratorBeginningAtTime:(NSDate*)start endingAtTime:(NSDate*)end
 {
+    NSParameterAssert(start != nil);
+    NSParameterAssert(end != nil);
+    
     return [[APCScheduleEnumerator alloc] initWithBeginningTime:start
                                                      endingTime:end
                                                  minuteSelector:self.minuteSelector

@@ -14,6 +14,7 @@ static NSString *const kFinishedProperty = @"finished";
 
 @interface APCBaseWithProgressTaskViewController ()
 @property  (nonatomic, weak)  APCStepProgressBar  *progressor;
+@property  (nonatomic, weak)  RKSTStepViewController * observedVC;
 @end
 
 @implementation APCBaseWithProgressTaskViewController
@@ -51,7 +52,7 @@ static NSString *const kFinishedProperty = @"finished";
 - (void)stepViewControllerDidFinish:(RKSTStepViewController *)stepViewController navigationDirection:(RKSTStepViewControllerNavigationDirection)direction
 {
     [super stepViewControllerDidFinish:stepViewController navigationDirection:direction];
-    
+    [self removeKVOIfNeeded];
     NSInteger  completedSteps = self.progressor.completedSteps;
     if (direction == RKSTStepViewControllerNavigationDirectionForward) {
         completedSteps = completedSteps + 1;
@@ -62,13 +63,7 @@ static NSString *const kFinishedProperty = @"finished";
 }
 
 
-- (void)taskViewController:(RKSTTaskViewController *)taskViewController stepViewControllerWillAppear:(RKSTStepViewController *)stepViewController
-{
-    if ([stepViewController isKindOfClass:[RKSTActiveStepViewController class]] && [self advanceArrayContainsStep:stepViewController.step])
-    {
-        [stepViewController addObserver:self forKeyPath:kFinishedProperty options:NSKeyValueObservingOptionNew context:NULL];
-    }
-}
+
 
 - (BOOL) advanceArrayContainsStep: (RKSTStep*) step
 {
@@ -90,13 +85,47 @@ static NSString *const kFinishedProperty = @"finished";
     if ([keyPath isEqualToString:kFinishedProperty]) {
         if ([object isFinished]) {
             RKSTStepViewController * vc = object;
+            [self removeKVOIfNeeded];
             [vc.delegate stepViewControllerDidFinish:vc navigationDirection:RKSTStepViewControllerNavigationDirectionForward];
-            @try {
-                [object removeObserver:self forKeyPath:kFinishedProperty];
-            }
-            @catch (NSException * __unused exception) {}
         }
     }
+}
+
+- (void) removeKVOIfNeeded
+{
+    if (self.observedVC) {
+        @try {
+            [self.observedVC removeObserver:self forKeyPath:kFinishedProperty];
+            self.observedVC = nil;
+        }
+        @catch (NSException * __unused exception) {}
+    }
+
+}
+
+/*********************************************************************************/
+#pragma mark - TaskViewController Delegate
+/*********************************************************************************/
+
+- (void)taskViewController:(RKSTTaskViewController *)taskViewController stepViewControllerWillAppear:(RKSTStepViewController *)stepViewController
+{
+    if ([stepViewController isKindOfClass:[RKSTActiveStepViewController class]] && [self advanceArrayContainsStep:stepViewController.step])
+    {
+        self.observedVC = stepViewController;
+        [stepViewController addObserver:self forKeyPath:kFinishedProperty options:NSKeyValueObservingOptionNew context:NULL];
+    }
+}
+
+- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
+{
+    [self removeKVOIfNeeded];
+    [super taskViewControllerDidCancel:taskViewController];
+}
+
+- (void)taskViewControllerDidComplete:(RKSTTaskViewController *)taskViewController
+{
+    [self removeKVOIfNeeded];
+    [super taskViewControllerDidComplete:taskViewController];
 }
 
 @end
