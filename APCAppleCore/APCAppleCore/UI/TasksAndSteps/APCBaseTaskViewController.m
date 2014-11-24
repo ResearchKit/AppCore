@@ -71,7 +71,6 @@
 - (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
 {
     [error handle];
-    [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (NSString *)taskResultsFilePath

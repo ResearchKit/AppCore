@@ -168,8 +168,8 @@
 		7BA4BBFA19D4893700BC4023 /* APCPassiveLocationTracking.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BA4BBF519D4893700BC4023 /* APCPassiveLocationTracking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BA4BBFB19D4893700BC4023 /* APCPassiveLocationTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BA4BBF619D4893700BC4023 /* APCPassiveLocationTracking.m */; };
 		7BA4BC0419D490EE00BC4023 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */; };
-		CF3B0F211A1E8D310001E6D5 /* APCActiveStepViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = CF3B0F1F1A1E8D310001E6D5 /* APCActiveStepViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		CF3B0F221A1E8D310001E6D5 /* APCActiveStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3B0F201A1E8D310001E6D5 /* APCActiveStepViewController.m */; };
+		CFF8E6941A22F5B500D4A919 /* APCActiveStepViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = CFF8E6921A22F5B500D4A919 /* APCActiveStepViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFF8E6951A22F5B500D4A919 /* APCActiveStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF8E6931A22F5B500D4A919 /* APCActiveStepViewController.m */; };
 		F5008C0F19D32AD60011102F /* APCGroupedScheduledTask.h in Headers */ = {isa = PBXBuildFile; fileRef = F5008C0D19D32AD60011102F /* APCGroupedScheduledTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5008C1019D32AD60011102F /* APCGroupedScheduledTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F5008C0E19D32AD60011102F /* APCGroupedScheduledTask.m */; };
 		F5179B2F19D09128001DCCB7 /* APCAppleCore.h in Headers */ = {isa = PBXBuildFile; fileRef = F5179B2E19D09128001DCCB7 /* APCAppleCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -466,8 +466,8 @@
 		7BA4BBF519D4893700BC4023 /* APCPassiveLocationTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPassiveLocationTracking.h; sourceTree = "<group>"; };
 		7BA4BBF619D4893700BC4023 /* APCPassiveLocationTracking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPassiveLocationTracking.m; sourceTree = "<group>"; };
 		7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		CF3B0F1F1A1E8D310001E6D5 /* APCActiveStepViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCActiveStepViewController.h; sourceTree = "<group>"; };
-		CF3B0F201A1E8D310001E6D5 /* APCActiveStepViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCActiveStepViewController.m; sourceTree = "<group>"; };
+		CFF8E6921A22F5B500D4A919 /* APCActiveStepViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCActiveStepViewController.h; sourceTree = "<group>"; };
+		CFF8E6931A22F5B500D4A919 /* APCActiveStepViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCActiveStepViewController.m; sourceTree = "<group>"; };
 		F5008C0D19D32AD60011102F /* APCGroupedScheduledTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCGroupedScheduledTask.h; sourceTree = "<group>"; };
 		F5008C0E19D32AD60011102F /* APCGroupedScheduledTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCGroupedScheduledTask.m; sourceTree = "<group>"; };
 		F5179B2919D09128001DCCB7 /* APCAppleCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APCAppleCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -806,8 +806,8 @@
 				5B3B5FB91A15645E006B2346 /* APCBaseWithProgressTaskViewController.m */,
 				5B3B5FBC1A15645E006B2346 /* APCStepViewController.h */,
 				5B3B5FBD1A15645E006B2346 /* APCStepViewController.m */,
-				CF3B0F1F1A1E8D310001E6D5 /* APCActiveStepViewController.h */,
-				CF3B0F201A1E8D310001E6D5 /* APCActiveStepViewController.m */,
+				CFF8E6921A22F5B500D4A919 /* APCActiveStepViewController.h */,
+				CFF8E6931A22F5B500D4A919 /* APCActiveStepViewController.m */,
 				5B3B5FBE1A15645E006B2346 /* CommonTaskVCs */,
 			);
 			path = TasksAndSteps;
@@ -1314,7 +1314,6 @@
 				748DD7501A1FE41700EE9969 /* APCPointSelector.h in Headers */,
 				5B3B5FE21A15645E006B2346 /* APCGraph.h in Headers */,
 				5B3B601B1A15645E006B2346 /* APCChangePasscodeViewController.h in Headers */,
-				CF3B0F211A1E8D310001E6D5 /* APCActiveStepViewController.h in Headers */,
 				F588BA0419D21EFE00692473 /* NSError+APCAdditions.h in Headers */,
 				F5179CB419D0917D001DCCB7 /* APCScheduledTask.h in Headers */,
 				748DD7561A1FE41700EE9969 /* APCTimeSelector.h in Headers */,
@@ -1350,6 +1349,7 @@
 				5B29CE3619D3767D00E2FD62 /* APCPermissionsManager.h in Headers */,
 				5B3B602F1A15645E006B2346 /* APCShareTableViewCell.h in Headers */,
 				5B3B5FE31A15645E006B2346 /* APCGraphConstants.h in Headers */,
+				CFF8E6941A22F5B500D4A919 /* APCActiveStepViewController.h in Headers */,
 				F5179CAE19D0917D001DCCB7 /* APCSchedule.h in Headers */,
 				F5179CD119D0917D001DCCB7 /* APCParameters.h in Headers */,
 				5B3B60901A156495006B2346 /* APCStudyOverviewViewController.h in Headers */,
@@ -1529,6 +1529,7 @@
 				F5E6AB891A1D49730087551B /* RKSTTaskResult+Archiver.m in Sources */,
 				F588BA0319D21EFE00692473 /* NSDate+Helper.m in Sources */,
 				F541541919D6029C00B819C9 /* APCStoredUserData.m in Sources */,
+				CFF8E6951A22F5B500D4A919 /* APCActiveStepViewController.m in Sources */,
 				5B55FE0B1A031789009BEE5E /* UIAlertController+Helper.m in Sources */,
 				5B3B60851A156495006B2346 /* APCSignUpInfoViewController.m in Sources */,
 				F5B4213A19D23D7700F9CD69 /* APCDebugWindow.m in Sources */,
@@ -1588,7 +1589,6 @@
 				748DD7531A1FE41700EE9969 /* APCScheduleEnumerator.m in Sources */,
 				F5179C7C19D0917D001DCCB7 /* APCDataSubstrate+CoreData.m in Sources */,
 				5B3B609D1A15652D006B2346 /* APCDashboardViewController.m in Sources */,
-				CF3B0F221A1E8D310001E6D5 /* APCActiveStepViewController.m in Sources */,
 				5B3B60221A15645E006B2346 /* APCWithdrawCompleteViewController.m in Sources */,
 				7BA4BBFB19D4893700BC4023 /* APCPassiveLocationTracking.m in Sources */,
 				5B0159941A0C1CF100F28439 /* APCParameters+Settings.m in Sources */,

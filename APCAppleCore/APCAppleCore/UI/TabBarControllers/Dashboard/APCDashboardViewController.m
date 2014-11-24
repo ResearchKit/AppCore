@@ -11,6 +11,7 @@
 #import "UIFont+APCAppearance.h"
 #import "APCConstants.h"
 #import "APCConcentricProgressView.h"
+#import "UIFont+APCAppearance.h"
 
 @interface APCDashboardViewController ()<UIGestureRecognizerDelegate, APCConcentricProgressViewDataSource>
 
@@ -93,8 +94,8 @@
         }
         
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardBadgesItem class]]) {
-        
-        APCTableViewDashboardBadgesItem *badgeItem = (APCTableViewDashboardBadgesItem *)dashboardItem;
+//        
+//        APCTableViewDashboardBadgesItem *badgeItem = (APCTableViewDashboardBadgesItem *)dashboardItem;
         APCDashboardBadgesTableViewCell *badgeCell = (APCDashboardBadgesTableViewCell *)cell;
         
         badgeCell.concentricProgressView.datasource = self;
@@ -174,7 +175,10 @@
         height = 400.0f;
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardMessageItem class]]){
         
-        height = 123.0f;
+        CGFloat basicCellHeight = 47.0f;
+        CGFloat contentHeight = [dashboardItem.detailText boundingRectWithSize:CGSizeMake(284, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:[UIFont appLightFontWithSize:16.0f]} context:nil].size.height;
+        height = contentHeight + basicCellHeight;
+        
     } else {
         height = 65.0f;
     }

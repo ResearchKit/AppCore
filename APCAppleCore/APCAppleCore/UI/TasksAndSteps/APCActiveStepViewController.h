@@ -1,5 +1,5 @@
 //
-//  APHStepViewController.h
+//  APCActiveStepViewController.h
 //  Parkinson
 //
 //  Created by Henry McGilton on 11/20/14.

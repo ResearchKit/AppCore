@@ -1,5 +1,5 @@
 //
-//  APHStepViewController.m
+//  APCActiveStepViewController.m
 //  Parkinson
 //
 //  Created by Henry McGilton on 11/20/14.
@@ -16,8 +16,9 @@
 @implementation APCActiveStepViewController
 
     //
-    //    override RKSTActiveStepViewController stepDidFinish
+    //    over-ride for stepDidFinish
     //
+
 - (void)stepDidFinish
 {
     if (self.delegate != nil) {
