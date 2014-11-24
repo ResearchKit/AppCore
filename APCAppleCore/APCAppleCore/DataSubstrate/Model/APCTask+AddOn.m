@@ -11,7 +11,6 @@
 #import <ResearchKit/ResearchKit.h>
 
 static NSString * const kTaskIDKey = @"taskID";
-static NSString * const kTaskTypeKey = @"taskType";
 static NSString * const kTaskTitleKey = @"taskTitle";
 static NSString * const kTaskClassNameKey = @"taskClassName";
 static NSString * const kTaskCompletionTimeStringKey = @"taskCompletionTimeString";
@@ -27,10 +26,9 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
           task.taskID = taskDict[kTaskIDKey];
           task.taskTitle = taskDict[kTaskTitleKey];
           task.taskClassName = taskDict[kTaskClassNameKey];
-          if ([taskDict[kTaskCompletionTimeStringKey] length]) {
-              task.taskCompletionTimeString = taskDict[kTaskCompletionTimeStringKey];
-          }
+          task.taskCompletionTimeString = taskDict[kTaskCompletionTimeStringKey];
           
+          //TODO: For Dhanush, Add loading Survey JSON
           NSError * error;
           [task saveToPersistentStore:&error];
           [error handle];

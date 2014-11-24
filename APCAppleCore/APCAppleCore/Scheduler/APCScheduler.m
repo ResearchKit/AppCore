@@ -9,7 +9,6 @@
 
 #import "APCScheduler.h"
 #import "APCAppleCore.h"
-#import "APCScheduleInterpreter.h"
 
 
 static NSInteger kMinutes = 60;
@@ -28,7 +27,6 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
 
 @property  (nonatomic, strong)   NSArray                 *schedules;
 @property  (weak, nonatomic)     APCDataSubstrate        *dataSubstrate;
-@property  (strong, nonatomic)   APCScheduleInterpreter  *scheduleInterpreter;
 @property  (strong, nonatomic)   NSManagedObjectContext  *localMOC;
 
 @end
@@ -41,7 +39,6 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
     self = [super init];
     if (self) {
         self.dataSubstrate = dataSubstrate;
-        self.scheduleInterpreter = [[APCScheduleInterpreter alloc] init];
     }
     return self;
 }
@@ -53,19 +50,14 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
     self.localMOC.parentContext = self.dataSubstrate.persistentContext;
     
     [self.localMOC performBlock:^{
-        
         //Get APCSchedules from Core Data
         self.schedules = [self schedule];
-        
-        for(APCSchedule *schedule in self.schedules) {
-            
+        for(APCSchedule *schedule in self.schedules)
+        {
             //Make sure scheduled task is not already created and then create scheduled task
             BOOL isUpdated = [self scheduleUpdated:schedule];
-            
             if (!isUpdated) {
-                
                 [self createScheduledTask:schedule];
-                
             }
         }
     }];
@@ -74,13 +66,8 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
 
 - (BOOL)scheduleUpdated:(APCSchedule *)schedule {
     
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"APCScheduledTask"
-                                              inManagedObjectContext:self.localMOC ];
-    [request setEntity:entity];
-    
-    NSMutableArray *dates = [self.scheduleInterpreter taskDates:schedule.scheduleString];
+    NSFetchRequest *request = [APCScheduledTask request];
+    NSMutableArray *dates = nil;
     
     NSDate *dueOn =[dates objectAtIndex:0];
     
@@ -96,11 +83,7 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
 
 
 - (NSArray *)schedule {
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"APCSchedule"
-                                              inManagedObjectContext:self.localMOC];
-    [request setEntity:entity];
+    NSFetchRequest *request = [APCSchedule request];
     
     NSError *error;
     NSArray *array = [self.localMOC executeFetchRequest:request error:&error];
@@ -113,9 +96,8 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
 
 - (void)createScheduledTask:(APCSchedule *)schedule {
     
-    NSString *scheduleExpression = schedule.scheduleString;
     
-    NSMutableArray *dates = [self.scheduleInterpreter taskDates:scheduleExpression];
+    NSMutableArray *dates = nil;
     
     for (NSDate *date in dates) {
      

@@ -284,8 +284,6 @@
 		F5C1DC2319D22EAF006527EA /* TabBar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5C1DC2219D22EAF006527EA /* TabBar.storyboard */; };
 		F5C8DA031A1FF5CD006933F5 /* APCSchedule+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C8DA011A1FF5CD006933F5 /* APCSchedule+Bridge.h */; };
 		F5C8DA041A1FF5CD006933F5 /* APCSchedule+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C8DA021A1FF5CD006933F5 /* APCSchedule+Bridge.m */; };
-		F5C8E03D1A23BA690004587D /* APCScheduleInterpreter.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C8E03B1A23BA690004587D /* APCScheduleInterpreter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F5C8E03E1A23BA690004587D /* APCScheduleInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C8E03C1A23BA690004587D /* APCScheduleInterpreter.m */; };
 		F5D1A90F19D4C6E200A03465 /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */; };
 		F5E6AB881A1D49730087551B /* RKSTTaskResult+Archiver.h in Headers */ = {isa = PBXBuildFile; fileRef = F5E6AB861A1D49730087551B /* RKSTTaskResult+Archiver.h */; };
 		F5E6AB891A1D49730087551B /* RKSTTaskResult+Archiver.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6AB871A1D49730087551B /* RKSTTaskResult+Archiver.m */; };
@@ -563,8 +561,6 @@
 		F5C1DC2219D22EAF006527EA /* TabBar.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TabBar.storyboard; sourceTree = "<group>"; };
 		F5C8DA011A1FF5CD006933F5 /* APCSchedule+Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCSchedule+Bridge.h"; sourceTree = "<group>"; };
 		F5C8DA021A1FF5CD006933F5 /* APCSchedule+Bridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCSchedule+Bridge.m"; sourceTree = "<group>"; };
-		F5C8E03B1A23BA690004587D /* APCScheduleInterpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleInterpreter.h; sourceTree = "<group>"; };
-		F5C8E03C1A23BA690004587D /* APCScheduleInterpreter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleInterpreter.m; sourceTree = "<group>"; };
 		F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BridgeSDK.framework; sourceTree = SOURCE_ROOT; };
 		F5E6AB861A1D49730087551B /* RKSTTaskResult+Archiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RKSTTaskResult+Archiver.h"; sourceTree = "<group>"; };
 		F5E6AB871A1D49730087551B /* RKSTTaskResult+Archiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RKSTTaskResult+Archiver.m"; sourceTree = "<group>"; };
@@ -1073,8 +1069,6 @@
 		F5179BE919D0917D001DCCB7 /* Scheduler */ = {
 			isa = PBXGroup;
 			children = (
-				F5C8E03B1A23BA690004587D /* APCScheduleInterpreter.h */,
-				F5C8E03C1A23BA690004587D /* APCScheduleInterpreter.m */,
 				F5179BEC19D0917D001DCCB7 /* APCScheduler.h */,
 				F5179BED19D0917D001DCCB7 /* APCScheduler.m */,
 			);
@@ -1321,7 +1315,6 @@
 				F57FB4981A23C88100811F56 /* APCSchedule.h in Headers */,
 				5B3B602D1A15645E006B2346 /* APCSegmentedTableViewCell.h in Headers */,
 				F5179C8119D0917D001DCCB7 /* APCDataSubstrate.h in Headers */,
-				F5C8E03D1A23BA690004587D /* APCScheduleInterpreter.h in Headers */,
 				5B447A961A195FEB0099FC7F /* APCLineGraphViewController.h in Headers */,
 				5B3B60801A156495006B2346 /* APCShareViewController.h in Headers */,
 				F5179CAB19D0917D001DCCB7 /* APCSchedule+AddOn.h in Headers */,
@@ -1553,7 +1546,6 @@
 				5B3B5FEB1A15645E006B2346 /* APCTableViewItem.m in Sources */,
 				5B3B60871A156495006B2346 /* APCSignUpPermissionsViewController.m in Sources */,
 				F5179C8219D0917D001DCCB7 /* APCDataSubstrate.m in Sources */,
-				F5C8E03E1A23BA690004587D /* APCScheduleInterpreter.m in Sources */,
 				5B447A971A195FEB0099FC7F /* APCLineGraphViewController.m in Sources */,
 				F5C8DA041A1FF5CD006933F5 /* APCSchedule+Bridge.m in Sources */,
 				F5179CBE19D0917D001DCCB7 /* APCTask+AddOn.m in Sources */,

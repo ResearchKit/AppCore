@@ -11,7 +11,7 @@
 
 static NSString * const kScheduleReminderKey = @"reminder";
 static NSString * const kTaskIDKey = @"taskID";
-static NSString * const kScheduleExpressionKey = @"schedule";
+static NSString * const kScheduleExpressionKey = @"scheduleString";
 
 @implementation APCSchedule (AddOn)
 
