@@ -80,12 +80,11 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
                                               inManagedObjectContext:self.localMOC ];
     [request setEntity:entity];
     
-    NSMutableArray *dates = [self.scheduleInterpreter taskDates:schedule.scheduleExpression];
+    NSMutableArray *dates = [self.scheduleInterpreter taskDates:schedule.scheduleString];
     
-    NSDate *dueOn = [dates objectAtIndex:0];
-    APCTask *task = schedule.task;
+    NSDate *dueOn =[dates objectAtIndex:0];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"( dueOn == %@ ) AND ( task.uid == %@ )", dueOn, task.uid];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"( dueOn == %@ ) AND ( task.uid == %@ )", dueOn, schedule.taskID];
     [request setPredicate:predicate];
     NSError *error;
     NSArray *array = [self.localMOC executeFetchRequest:request error:&error];
@@ -114,7 +113,7 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
 
 - (void)createScheduledTask:(APCSchedule *)schedule {
     
-    NSString *scheduleExpression = schedule.scheduleExpression;
+    NSString *scheduleExpression = schedule.scheduleString;
     
     NSMutableArray *dates = [self.scheduleInterpreter taskDates:scheduleExpression];
     
@@ -123,20 +122,20 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
         APCScheduledTask * scheduledTask = [APCScheduledTask newObjectForContext:self.localMOC];
         
         scheduledTask.completed = [NSNumber numberWithInteger:APCScheduledTaskNotComplete];
-        scheduledTask.dueOn = date;
-        scheduledTask.task = schedule.task;
+        scheduledTask.endOn = date;
+        scheduledTask.task = [APCTask taskWithTaskID:schedule.taskID inContext:self.localMOC];
         
         //Get the APCScheduledTask ID to reference
         NSString *objectId = [[scheduledTask.objectID URIRepresentation] absoluteString];
         
         //Set a local notification at time of event
-        [self scheduleLocalNotification:schedule.notificationMessage withDate:date withTaskType:schedule.task.taskType withAPCScheduleTaskId:objectId andReminder:APCScheduleReminderNo];
+        [self scheduleLocalNotification:schedule.notificationMessage withDate:date withAPCScheduleTaskId:objectId andReminder:APCScheduleReminderNo];
         
         //TODO may have to interpret a cron expression, however, for now I'll just set reminders 15 mintues before
         if (schedule.reminder) {
 
             //Set a local reminder notification at time of event
-            [self scheduleLocalNotification:schedule.notificationMessage withDate:date withTaskType:schedule.task.taskType withAPCScheduleTaskId:objectId andReminder:APCScheduleReminderYES];
+            [self scheduleLocalNotification:schedule.notificationMessage withDate:date withAPCScheduleTaskId:objectId andReminder:APCScheduleReminderYES];
         }
         
         [scheduledTask saveToPersistentStore:NULL];
@@ -144,7 +143,7 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
 }
 
 
-- (void)scheduleLocalNotification:(NSString *)message withDate:(NSDate *)dueOn withTaskType:(NSString *)taskType withAPCScheduleTaskId:(NSString *)APCScheduledTaskId andReminder:(int)reminder  {
+- (void)scheduleLocalNotification:(NSString *)message withDate:(NSDate *)dueOn withAPCScheduleTaskId:(NSString *)APCScheduledTaskId andReminder:(int)reminder  {
 
     // Schedule the notification
     UILocalNotification* localNotification = [[UILocalNotification alloc] init];
@@ -155,7 +154,6 @@ typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
     //localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
     
     NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
-    notificationInfo[@"taskType"] = taskType;
     notificationInfo[@"APCScheduledTaskId"] = APCScheduledTaskId;
     
     if (reminder) {

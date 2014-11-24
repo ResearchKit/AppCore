@@ -243,7 +243,7 @@ static NSInteger kNumberOfSectionsInTableView = 1;
     /* Get the list of task Ids to group */
     
     for (APCScheduledTask *scheduledTask in unsortedScheduledTasks) {
-        NSString *taskId = scheduledTask.task.uid;
+        NSString *taskId = scheduledTask.task.taskID;
         
         if (![taskTypesArray containsObject:taskId]) {
             [taskTypesArray addObject:taskId];
@@ -261,7 +261,6 @@ static NSInteger kNumberOfSectionsInTableView = 1;
             APCScheduledTask *scheduledTask = filteredTasksArray.firstObject;
             APCGroupedScheduledTask *groupedTask = [[APCGroupedScheduledTask alloc] init];
             groupedTask.scheduledTasks = [NSMutableArray arrayWithArray:filteredTasksArray];
-            groupedTask.taskType = scheduledTask.task.taskType;
             groupedTask.taskTitle = scheduledTask.task.taskTitle;
             groupedTask.taskClassName = scheduledTask.task.taskClassName;
             groupedTask.taskCompletionTimeString = scheduledTask.task.taskCompletionTimeString;

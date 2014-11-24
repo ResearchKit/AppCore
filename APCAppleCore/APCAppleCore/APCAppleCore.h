@@ -26,6 +26,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCModel.h>
 #import <APCAppleCore/APCScheduler.h>
 #import <APCAppleCore/APCScheduleInterpreter.h>
+#import <APCAppleCore/APCScheduleExpression.h>
 #import <APCAppleCore/APCPassiveLocationTracking.h>
 #import <APCAppleCore/APCParameters.h>
 #import <APCAppleCore/APCPermissionsManager.h>
@@ -126,7 +127,6 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCGroupedScheduledTask.h>
 #import <APCAppleCore/APCKeychainStore.h>
 #import <APCAppleCore/APCPresentAnimator.h>
-#import <APCAppleCore/APCScheduleExpression.h>
 
 /* -------------------------
  Categories

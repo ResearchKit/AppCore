@@ -2,22 +2,27 @@
 //  APCSchedule.m
 //  APCAppleCore
 //
-//  Created by Dhanush Balachandran on 8/29/14.
+//  Created by Dhanush Balachandran on 11/24/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCSchedule.h"
-#import "APCTask.h"
 
 
 @implementation APCSchedule
 
+@dynamic active;
 @dynamic createdAt;
-@dynamic uid;
-@dynamic updatedAt;
+@dynamic endsOn;
+@dynamic expires;
 @dynamic notificationMessage;
-@dynamic scheduleExpression;
 @dynamic reminder;
-@dynamic task;
+@dynamic scheduleString;
+@dynamic scheduleType;
+@dynamic source;
+@dynamic startsOn;
+@dynamic taskID;
+@dynamic scheduleID;
+@dynamic updatedAt;
 
 @end

@@ -2,12 +2,11 @@
 //  APCTask.m
 //  APCAppleCore
 //
-//  Created by Dhanush Balachandran on 8/29/14.
+//  Created by Dhanush Balachandran on 11/24/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCTask.h"
-#import "APCSchedule.h"
 #import "APCScheduledTask.h"
 
 
@@ -15,14 +14,12 @@
 
 @dynamic createdAt;
 @dynamic taskClassName;
-@dynamic taskCompletionTimeString;
 @dynamic taskDescription;
 @dynamic taskHRef;
-@dynamic taskType;
+@dynamic taskID;
 @dynamic taskTitle;
-@dynamic uid;
 @dynamic updatedAt;
+@dynamic taskCompletionTimeString;
 @dynamic schedules;
-@dynamic schedule_unused;
 
 @end

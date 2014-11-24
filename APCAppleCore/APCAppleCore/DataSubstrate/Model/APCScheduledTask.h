@@ -2,7 +2,7 @@
 //  APCScheduledTask.h
 //  APCAppleCore
 //
-//  Created by Dhanush Balachandran on 9/12/14.
+//  Created by Dhanush Balachandran on 11/24/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
@@ -15,10 +15,11 @@
 
 @property (nonatomic, retain) NSNumber * completed;
 @property (nonatomic, retain) NSDate * createdAt;
-@property (nonatomic, retain) NSDate * dueOn;
+@property (nonatomic, retain) NSDate * startOn;
 @property (nonatomic, retain) NSString * notificationUID;
 @property (nonatomic, retain) NSString * reminderUID;
 @property (nonatomic, retain) NSDate * updatedAt;
+@property (nonatomic, retain) NSDate * endOn;
 @property (nonatomic, retain) NSSet *results;
 @property (nonatomic, retain) APCTask *task;
 @end

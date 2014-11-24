@@ -21,9 +21,9 @@ static NSString * const kScheduleExpressionKey = @"schedule";
         for(NSDictionary *scheduleDict in schedulesArray) {
             
             APCSchedule * schedule = [APCSchedule newObjectForContext:context];
-            schedule.scheduleExpression = [scheduleDict objectForKey:kScheduleExpressionKey];
+            schedule.scheduleString = [scheduleDict objectForKey:kScheduleExpressionKey];
             schedule.reminder = [scheduleDict objectForKey:kScheduleReminderKey];
-            schedule.task = [APCTask taskWithTaskID:scheduleDict[kTaskIDKey] inContext:context];
+            schedule.taskID = scheduleDict[kTaskIDKey];
             
             [schedule saveToPersistentStore:NULL];
         }

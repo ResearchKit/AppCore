@@ -53,13 +53,12 @@ static APCDummyObject * _dummyObject;
                 NSManagedObjectContext * context = [(APCAppDelegate*) [UIApplication sharedApplication].delegate dataSubstrate].persistentContext;
                 SBBSurvey * sbbSurvey = (SBBSurvey*) survey;
                 [context performBlockAndWait:^{
-                    NSFetchRequest * request = [APCTask request];
-                    request.predicate = [NSPredicate predicateWithFormat:@"uid == %@", sbbSurvey.identifier];
-                    APCTask * task = [[context executeFetchRequest:request error:NULL] firstObject];
+                    APCTask * task = [APCTask taskWithTaskID:sbbSurvey.identifier inContext:context];
                     if (!task) {
                         task = [APCTask newObjectForContext:context];
+                        task.taskID = sbbSurvey.identifier;
                     }
-                    task.uid = sbbSurvey.identifier;
+
                     task.rkTask = [self rkTaskFromSBBSurvey:survey];
                     task.taskHRef = ref;
                     [task saveToPersistentStore:NULL];
