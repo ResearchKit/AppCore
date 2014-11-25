@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @class APCPieGraphView;
 
-static NSString * const kAPCDashboardPieGraphTableViewCell = @"APCDashboardPieGraphTableViewCell";
+static NSString * const kAPCDashboardPieGraphTableViewCellIdentifier = @"APCDashboardPieGraphTableViewCell";
 
 @interface APCDashboardPieGraphTableViewCell : UITableViewCell
 
