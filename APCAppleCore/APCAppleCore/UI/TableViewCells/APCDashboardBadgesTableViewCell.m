@@ -17,8 +17,6 @@
 - (void)awakeFromNib {
     // Initialization code
     
-    [self.resizeButton setImage:[[UIImage imageNamed:@"expand_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    
     [self setupAppearance];
 }
 
@@ -54,19 +52,11 @@
     [self.AsthmaFreePercentLabel setFont:[UIFont appRegularFontWithSize:19.0f]];
 }
 
-- (IBAction)expand:(id)sender
-{
-    if([self.delegate respondsToSelector:@selector(dashboardBadgesTableViewCellDidExpand:)]){
-        [self.delegate dashboardBadgesTableViewCellDidExpand:self];
-    }
-}
-
 - (void)setTintColor:(UIColor *)tintColor
 {
     _tintColor = tintColor;
-    [self.resizeButton.imageView setTintColor:tintColor];
     [self.tintView setBackgroundColor:tintColor];
-    
+    self.titleLabel.textColor = tintColor;
 }
 
 
