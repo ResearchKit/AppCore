@@ -225,7 +225,7 @@ static NSInteger kNumberOfSectionsInTableView = 1;
     APCAppDelegate * appDelegate = [UIApplication sharedApplication].delegate;
     [self.scheduledTasksArray removeAllObjects];
     
-    NSArray *unsortedScheduledTasks = [APCScheduledTask allScheduledTasksInContext:appDelegate.dataSubstrate.mainContext];
+    NSArray *unsortedScheduledTasks = [APCScheduledTask allScheduledTasksForTodayInContext:appDelegate.dataSubstrate.mainContext];
     
     [self groupSimilarTasks:unsortedScheduledTasks];
     

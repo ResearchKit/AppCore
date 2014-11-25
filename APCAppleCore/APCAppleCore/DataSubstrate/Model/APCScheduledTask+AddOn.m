@@ -44,13 +44,27 @@
     [saveError handle];
 }
 
-+ (NSArray *)allScheduledTasksInContext: (NSManagedObjectContext*) context
++ (NSArray *)allScheduledTasksForTodayInContext: (NSManagedObjectContext*) context
 {
     NSFetchRequest * request = [APCScheduledTask request];
+    //Support multiday
+    request.predicate = [NSPredicate predicateWithFormat:@"startOn >= %@ && endOn < %@", [NSDate todayAtMidnight], [NSDate tomorrowAtMidnight]];
+    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startOn" ascending:YES];
+    request.sortDescriptors = @[dateSortDescriptor];
     NSError * error;
     NSArray * array = [context executeFetchRequest:request error:&error];
     [error handle];
     return array.count ? array : nil;
+}
+
++ (instancetype) scheduledTaskForStartOnDate: (NSDate *) startOn schedule: (APCSchedule*) schedule inContext: (NSManagedObjectContext*) context
+{
+    NSFetchRequest * request = [APCScheduledTask request];
+    request.predicate = [NSPredicate predicateWithFormat:@"startOn == %@ && generatedSchedule == %@", startOn, schedule];
+    NSError * error;
+    NSArray * array = [context executeFetchRequest:request error:&error];
+    [error handle];
+    return array.count ? [array firstObject] : nil;
 }
 
 

@@ -14,7 +14,7 @@
         <attribute name="taskRunID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="uploaded" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <relationship name="scheduledTask" maxCount="1" deletionRule="Nullify" destinationEntity="APCScheduledTask" inverseName="results" inverseEntity="APCScheduledTask" syncable="YES"/>
+        <relationship name="scheduledTask" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCScheduledTask" inverseName="results" inverseEntity="APCScheduledTask" syncable="YES"/>
     </entity>
     <entity name="APCSchedule" representedClassName="APCSchedule" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>

@@ -38,11 +38,6 @@
         [self updateScheduledTasks];
     }
 }
-- (void)setReferenceDate:(NSDate *)referenceDate
-{
-    _referenceDate = referenceDate;
-    NSLog(@"REFERENCE DATE FOR Scheduler: %@", referenceDate);
-}
 
 - (void) updateScheduledTasks
 {
@@ -56,6 +51,8 @@
         
         //STEP 3: Generate new scheduledTasks based on the active schedules
         [self generateScheduledTasksBasedOnActiveSchedules];
+        
+        self.isUpdating = NO;
     }];
 }
 
@@ -83,7 +80,8 @@
 {
     NSFetchRequest * request = [APCScheduledTask request];
     NSDate * startOfDay = [NSDate startOfDay:self.referenceDate];
-    request.predicate = [NSPredicate predicateWithFormat:@"(completed == nil || completed == %@) && startOn >= %@", @(NO), startOfDay];
+    NSDate * endOfDay = [NSDate endOfDay:self.referenceDate];
+    request.predicate = [NSPredicate predicateWithFormat:@"(completed == nil || completed == %@) && startOn >= %@ && startOn <= %@", @(NO), startOfDay, endOfDay];
     NSError * error;
     NSMutableArray * mutableArray = [[self.scheduleMOC executeFetchRequest:request error:&error] mutableCopy];
     [error handle];
@@ -97,7 +95,6 @@
 - (void) generateScheduledTasksBasedOnActiveSchedules
 {
     NSArray * activeSchedules = [self readActiveSchedules];
-    NSLog(@"Active Schedules: %@", activeSchedules);
     [activeSchedules enumerateObjectsUsingBlock:^(APCSchedule * schedule, NSUInteger idx, BOOL *stop) {
         [self generateScheduledTasksForSchedule:schedule];
     }];
@@ -136,17 +133,20 @@
 
 - (void) createScheduledTask:(APCSchedule*) schedule task: (APCTask*) task startOn: (NSDate*) startOn
 {
-    APCScheduledTask * createdScheduledTask = [APCScheduledTask newObjectForContext:self.scheduleMOC];
-    createdScheduledTask.startOn = startOn;
-    
-    //TODO: Change the end on date
-    createdScheduledTask.endOn = [NSDate endOfDay:self.referenceDate];
-    createdScheduledTask.generatedSchedule = schedule;
-    createdScheduledTask.task = task;
-    NSLog(@"Created: %@", createdScheduledTask);
-    NSError * saveError;
-    [createdScheduledTask saveToPersistentStore:&saveError];
-    [saveError handle];
+    //Don't create duplicates
+    if (! [APCScheduledTask scheduledTaskForStartOnDate:startOn schedule:schedule inContext:self.scheduleMOC]) {
+        APCScheduledTask * createdScheduledTask = [APCScheduledTask newObjectForContext:self.scheduleMOC];
+        createdScheduledTask.startOn = startOn;
+        
+        //TODO: Change the end on date
+        createdScheduledTask.endOn = [NSDate endOfDay:self.referenceDate];
+        createdScheduledTask.generatedSchedule = schedule;
+        createdScheduledTask.task = task;
+        NSError * saveError;
+        [createdScheduledTask saveToPersistentStore:&saveError];
+        [saveError handle];
+    }
+
 }
 
 @end
