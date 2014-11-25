@@ -9,20 +9,17 @@
 #import "APCSimpleTaskSummaryViewController.h"
 #import "APCAppleCore.h"
 
-static NSString *const kCheckImageName = @"Completion-Check";
-
 @interface APCSimpleTaskSummaryViewController ()
 
-@property (weak, nonatomic) IBOutlet UILabel *label1;
-@property (weak, nonatomic) IBOutlet UILabel *label2;
-@property (weak, nonatomic) IBOutlet UILabel *label3;
-@property (weak, nonatomic) IBOutlet UILabel *label4;
-@property (weak, nonatomic) IBOutlet UILabel *label5;
+@property (weak, nonatomic) IBOutlet UILabel *completingActivitiesMessage;
+@property (weak, nonatomic) IBOutlet UILabel *todaysActivitiesMessage;
+@property (weak, nonatomic) IBOutlet UILabel *numberOfActivitiesCompleted;
+@property (weak, nonatomic) IBOutlet UILabel *thankYouBanner;
+@property (weak, nonatomic) IBOutlet UILabel *youCanCompareMessage;
 
-@property (weak, nonatomic) IBOutlet UIView *circularProgressBar;
+@property (weak, nonatomic) IBOutlet UIView  *circularProgressBar;
 
-@property (weak, nonatomic) IBOutlet UIImageView *checkImage;
-
+@property (weak, nonatomic) IBOutlet APCConfirmationView *confirmation;
 
 @property (nonatomic, strong) APCCircularProgressView *circularProgress;
 
@@ -34,7 +31,7 @@ static NSString *const kCheckImageName = @"Completion-Check";
     [super viewDidLoad];
     
     UIColor *viewBackgroundColor = [UIColor appSecondaryColor4];
-    self.label1.textColor = [UIColor appSecondaryColor3];
+    self.completingActivitiesMessage.textColor = [UIColor appSecondaryColor3];
     [self.view setBackgroundColor:viewBackgroundColor];
     self.navigationController.navigationBar.topItem.title = NSLocalizedString(@"Complete", @"Complete");
     self.navigationItem.leftBarButtonItem = nil;
@@ -50,21 +47,21 @@ static NSString *const kCheckImageName = @"Completion-Check";
     self.circularProgress.tintColor = [UIColor appTertiaryColor1];
     [self.circularProgressBar addSubview:self.circularProgress];
     
-    self.label3.text = [NSString stringWithFormat:@"%lu/%lu", (unsigned long)completedScheduledTasks, (unsigned long)allScheduledTasks];
+    self.numberOfActivitiesCompleted.text = [NSString stringWithFormat:@"%lu/%lu", (unsigned long)completedScheduledTasks, (unsigned long)allScheduledTasks];
     
-    self.checkImage.image = [UIImage imageNamed:kCheckImageName];
+    self.confirmation.completed = YES;
     
     [self setUpAppearance];
 }
 
 - (void) setUpAppearance
 {
-    self.label1.font = [UIFont appLightFontWithSize:17];
-    self.label1.textColor = [UIColor appSecondaryColor3];
+    self.completingActivitiesMessage.font = [UIFont appLightFontWithSize:17];
+    self.completingActivitiesMessage.textColor = [UIColor appSecondaryColor3];
     
-    self.label3.textColor = [UIColor appSecondaryColor3];
+    self.numberOfActivitiesCompleted.textColor = [UIColor appSecondaryColor3];
     
-    self.label5.textColor = [UIColor appSecondaryColor2];
+    self.youCanCompareMessage.textColor = [UIColor appSecondaryColor2];
 }
 
 - (void)viewDidLayoutSubviews {
