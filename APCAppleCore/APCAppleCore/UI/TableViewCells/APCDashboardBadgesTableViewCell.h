@@ -36,6 +36,6 @@ static NSString * const kAPCDashboardBadgesTableViewCellIdentifier = @"APCDashbo
 
 @property (weak, nonatomic) IBOutlet UILabel *asthmaFreeDaysLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *asthmaFreeDaysImageView;
-@property (weak, nonatomic) IBOutlet UILabel *AsthmaFreePercentLabel;
+@property (weak, nonatomic) IBOutlet UILabel *asthmaFreePercentLabel;
 
 @end
