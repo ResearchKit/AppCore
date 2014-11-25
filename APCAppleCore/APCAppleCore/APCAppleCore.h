@@ -18,6 +18,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <BridgeSDK/BridgeSDK.h>
 
 //Headers
+#import <APCAppleCore/APCConstants.h>
 #import <APCAppleCore/APCAppDelegate.h>
 #import <APCAppleCore/APCDataMonitor.h>
 #import <APCAppleCore/APCDataSubstrate.h>
@@ -36,7 +37,6 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 /* -------------------------
  Onboarding ViewControllers
  ------------------------- */
-#import <APCAppleCore/APCConstants.h>
 #import <APCAppleCore/APCUserInfoConstants.h>
 #import <APCAppleCore/APCUserInfoViewController.h>
 #import <APCAppleCore/APCIntroVideoViewController.h>
@@ -149,16 +149,3 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCAppearanceInfo.h>
 #import <APCAppleCore/UIFont+APCAppearance.h>
 #import <APCAppleCore/UIColor+APCAppearance.h>
-
-
-/* -------------------------
- Constants
- ------------------------- */
-
-static NSString *const APCUserSignedUpNotification   = @"APCUserSignedUpNotification";
-static NSString *const APCUserSignedInNotification   = @"APCUserSignedInNotification";
-static NSString *const APCUserLogOutNotification     = @"APCUserLogOutNotification";
-static NSString *const APCUserDidConsentNotification = @"APCUserDidConsentNotification";
-
-static NSString *const APCAppDidRegisterUserNotification            = @"APCAppDidRegisterUserNotification";
-static NSString *const APCAppDidFailToRegisterForRemoteNotification = @"APCAppDidFailToRegisterForRemoteNotifications";

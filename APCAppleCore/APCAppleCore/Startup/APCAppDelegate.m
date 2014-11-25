@@ -127,13 +127,12 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 /*********************************************************************************/
 - (void) initializeBridgeServerConnection
 {
-    //TODO: Update environment to production
-    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment:SBBEnvironmentStaging];
+    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment:(SBBEnvironment)[self.initializationOptions[kBridgeEnvironmentKey] integerValue]];
 }
 
 - (void) initializeAppleCoreStack
 {
-    self.dataSubstrate = [[NSClassFromString(self.initializationOptions[kDataSubstrateClassNameKey]) alloc] initWithPersistentStorePath:[[self applicationDocumentsDirectory] stringByAppendingPathComponent:self.initializationOptions[kDatabaseNameKey]] additionalModels: nil studyIdentifier:self.initializationOptions[kStudyIdentifierKey]];
+    self.dataSubstrate = [[APCDataSubstrate alloc] initWithPersistentStorePath:[[self applicationDocumentsDirectory] stringByAppendingPathComponent:self.initializationOptions[kDatabaseNameKey]] additionalModels: nil studyIdentifier:self.initializationOptions[kStudyIdentifierKey]];
     self.scheduler = [[APCScheduler alloc] initWithDataSubstrate:self.dataSubstrate];
     self.dataMonitor = [[APCDataMonitor alloc] initWithDataSubstrate:self.dataSubstrate scheduler:self.scheduler];
     
@@ -202,7 +201,6 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     return [@{
               kDatabaseNameKey                     : kDatabaseName,
               kTasksAndSchedulesJSONFileNameKey    : kTasksAndSchedulesJSONFileName,
-              kDataSubstrateClassNameKey           : kDataSubstrateClassName
               } mutableCopy];
 }
 

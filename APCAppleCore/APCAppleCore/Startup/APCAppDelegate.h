@@ -9,19 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "APCDataSubstrate.h"
 
-static NSString *const kStudyIdentifierKey = @"StudyIdentifierKey";
-static NSString *const kAppPrefixKey = @"AppPrefixKey";
-static NSString *const kBaseURLKey = @"BaseURLKey";
-static NSString *const kDatabaseNameKey = @"DatabaseNameKey";
-static NSString *const kTasksAndSchedulesJSONFileNameKey = @"TasksAndSchedulesJSONFileNameKey";
-static NSString *const kDataSubstrateClassNameKey = @"APHDatasubstrateClassName";
-static NSString *const kHKWritePermissionsKey = @"HKWritePermissions";
-static NSString *const kHKReadPermissionsKey = @"HKReadPermissions";
-static NSString *const kAppServicesListRequiredKey = @"AppServicesListRequired";
-
-static NSString *const kPasswordKey = @"Password";
-static NSString *const kNumberOfMinutesForPasscodeKey = @"NumberOfMinutesForPasscodeKey";
-
 @class APCDataSubstrate, APCDataMonitor, APCScheduler;
 
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate>

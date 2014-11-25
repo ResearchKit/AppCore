@@ -8,6 +8,7 @@
 
 #import "UIColor+APCAppearance.h"
 #import "APCAppearanceInfo.h"
+#import "APCConstants.h"
 
 @implementation UIColor (APCAppearance)
 
