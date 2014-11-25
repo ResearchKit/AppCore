@@ -26,4 +26,45 @@ NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
     return formattedString;
 }
 
++ (instancetype) startOfDay: (NSDate*) date
+{
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
+    return [cal dateFromComponents:components];
+}
+
++ (instancetype) endOfDay: (NSDate*) date
+{
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
+    components.hour = 23;
+    components.minute = 59;
+    components.second = 59;
+    return [cal dateFromComponents:components];
+}
+
++ (instancetype) startOfTomorrow: (NSDate*) date
+{
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
+    [components setDay:[components day] + 1];
+    return [cal dateFromComponents:components];
+}
+
++(instancetype)todayAtMidnight
+{
+    NSDate *today = [NSDate date];
+    return [self startOfDay:today];
+}
+
++(instancetype)tomorrowAtMidnight
+{
+    NSDate *today = [NSDate date];
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:today];
+    [components setDay:[components day] + 1];
+    return [cal dateFromComponents:components];
+}
+
+
 @end

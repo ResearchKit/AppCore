@@ -8,6 +8,7 @@
 
 #import "APCScheduledTask.h"
 #import "APCResult.h"
+#import "APCSchedule.h"
 #import "APCTask.h"
 
 
@@ -15,12 +16,13 @@
 
 @dynamic completed;
 @dynamic createdAt;
-@dynamic startOn;
+@dynamic endOn;
 @dynamic notificationUID;
 @dynamic reminderUID;
+@dynamic startOn;
 @dynamic updatedAt;
-@dynamic endOn;
 @dynamic results;
 @dynamic task;
+@dynamic generatedSchedule;
 
 @end

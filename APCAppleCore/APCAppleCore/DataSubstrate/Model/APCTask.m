@@ -14,12 +14,12 @@
 
 @dynamic createdAt;
 @dynamic taskClassName;
+@dynamic taskCompletionTimeString;
 @dynamic taskDescription;
 @dynamic taskHRef;
 @dynamic taskID;
 @dynamic taskTitle;
 @dynamic updatedAt;
-@dynamic taskCompletionTimeString;
-@dynamic schedules;
+@dynamic scheduledTasks_unused;
 
 @end

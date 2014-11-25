@@ -224,8 +224,8 @@ static NSInteger kNumberOfSectionsInTableView = 1;
 {
     [self.scheduledTasksArray removeAllObjects];
     
-    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"dueOn" ascending:YES];
-    NSArray *unsortedScheduledTasks = [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate  scheduledTasksForPredicate:nil sortDescriptors:@[dateSortDescriptor]];
+//    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"dueOn" ascending:YES];
+    NSArray *unsortedScheduledTasks = nil;//[((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate  scheduledTasksForPredicate:nil sortDescriptors:@[dateSortDescriptor]];
     
     [self groupSimilarTasks:unsortedScheduledTasks];
     

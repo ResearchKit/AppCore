@@ -15,10 +15,10 @@
 @dynamic archiveFilename;
 @dynamic createdAt;
 @dynamic endDate;
-@dynamic resultSummary;
 @dynamic metaData;
-@dynamic taskID;
+@dynamic resultSummary;
 @dynamic startDate;
+@dynamic taskID;
 @dynamic taskRunID;
 @dynamic updatedAt;
 @dynamic uploaded;

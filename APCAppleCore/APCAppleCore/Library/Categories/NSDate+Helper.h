@@ -18,4 +18,11 @@ extern NSString * const NSDateDefaultDateFormat;
  */
 - (NSString *) toStringWithFormat:(NSString *)format;
 
++ (instancetype) startOfDay: (NSDate*) date;
++ (instancetype) endOfDay: (NSDate*) date;
++ (instancetype) startOfTomorrow: (NSDate*) date;
+
++(instancetype) todayAtMidnight;
++(instancetype) tomorrowAtMidnight;
+
 @end

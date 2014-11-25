@@ -16,7 +16,7 @@
 
 - (instancetype) initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate;
 
-- (void)updateScheduledTasksIfNotUpdating: (BOOL) today;
+- (void)updateScheduledTasksIfNotUpdating: (BOOL) today; //If today is not set, it will always update tasks for tomorrow
 
 @end
 

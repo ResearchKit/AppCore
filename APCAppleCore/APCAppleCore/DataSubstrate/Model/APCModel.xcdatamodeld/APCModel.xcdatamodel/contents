@@ -24,13 +24,13 @@
         <attribute name="reminderMessage" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="reminderOffset" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="remoteUpdatable" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="scheduleID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="scheduleString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="scheduleType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="shouldRemind" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="startsOn" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="taskID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="scheduledTasks_unused" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCScheduledTask" inverseName="generatedSchedule" inverseEntity="APCScheduledTask" syncable="YES"/>
     </entity>
     <entity name="APCScheduledTask" representedClassName="APCScheduledTask" syncable="YES">
         <attribute name="completed" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -40,8 +40,9 @@
         <attribute name="reminderUID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="startOn" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="generatedSchedule" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCSchedule" inverseName="scheduledTasks_unused" inverseEntity="APCSchedule" syncable="YES"/>
         <relationship name="results" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCResult" inverseName="scheduledTask" inverseEntity="APCResult" syncable="YES"/>
-        <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCTask" inverseName="schedules" inverseEntity="APCTask" syncable="YES"/>
+        <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCTask" inverseName="scheduledTasks_unused" inverseEntity="APCTask" syncable="YES"/>
     </entity>
     <entity name="APCStoredUserData" representedClassName="APCStoredUserData" syncable="YES">
         <attribute name="biologicalSex" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -65,13 +66,13 @@
         <attribute name="taskID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="taskTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <relationship name="schedules" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="APCScheduledTask" inverseName="task" inverseEntity="APCScheduledTask" syncable="YES"/>
+        <relationship name="scheduledTasks_unused" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="APCScheduledTask" inverseName="task" inverseEntity="APCScheduledTask" syncable="YES"/>
     </entity>
     <elements>
         <element name="APCDBStatus" positionX="-954" positionY="486" width="128" height="58"/>
         <element name="APCResult" positionX="-720" positionY="333" width="128" height="210"/>
         <element name="APCSchedule" positionX="-1161" positionY="513" width="128" height="253"/>
-        <element name="APCScheduledTask" positionX="-468" positionY="449" width="128" height="178"/>
+        <element name="APCScheduledTask" positionX="-468" positionY="449" width="128" height="193"/>
         <element name="APCStoredUserData" positionX="-954" positionY="486" width="128" height="210"/>
         <element name="APCTask" positionX="-965" positionY="585" width="128" height="178"/>
     </elements>

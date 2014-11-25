@@ -7,23 +7,24 @@
 //
 
 #import "APCSchedule.h"
+#import "APCScheduledTask.h"
 
 
 @implementation APCSchedule
 
-@dynamic inActive;
 @dynamic createdAt;
 @dynamic endsOn;
 @dynamic expires;
+@dynamic inActive;
 @dynamic reminderMessage;
-@dynamic shouldRemind;
-@dynamic scheduleID;
+@dynamic reminderOffset;
+@dynamic remoteUpdatable;
 @dynamic scheduleString;
 @dynamic scheduleType;
+@dynamic shouldRemind;
 @dynamic startsOn;
 @dynamic taskID;
 @dynamic updatedAt;
-@dynamic remoteUpdatable;
-@dynamic reminderOffset;
+@dynamic scheduledTasks_unused;
 
 @end

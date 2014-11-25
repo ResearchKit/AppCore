@@ -10,13 +10,11 @@
 #import "APCScheduler.h"
 #import "APCAppleCore.h"
 
-static NSInteger kReminderMinutesBeforeTask = -15;
-static NSInteger kMinutes = 60;
-
 @interface APCScheduler()
 @property  (weak, nonatomic)     APCDataSubstrate        *dataSubstrate;
 @property  (strong, nonatomic)   NSManagedObjectContext  *scheduleMOC;
 @property  (nonatomic) BOOL isUpdating;
+@property  (nonatomic, strong) NSDate * referenceDate;
 @end
 
 @implementation APCScheduler
@@ -36,91 +34,67 @@ static NSInteger kMinutes = 60;
 {
     if (!self.isUpdating) {
         self.isUpdating = YES;
-        [self updateScheduledTasks: today];
+        self.referenceDate = today ? [NSDate todayAtMidnight] : [NSDate tomorrowAtMidnight];
+        [self updateScheduledTasks];
     }
 }
+- (void)setReferenceDate:(NSDate *)referenceDate
+{
+    _referenceDate = referenceDate;
+    NSLog(@"REFERENCE DATE FOR Scheduler: %@", referenceDate);
+}
 
-- (void) updateScheduledTasks: (BOOL) today
+- (void) updateScheduledTasks
 {
     [self.scheduleMOC performBlock:^{
         
         //STEP 1: Update inActive property of schedules based on endOn date.
+        [self updateSchedulesAsInactiveIfNecessary];
         
         //STEP 2: Read active schedules: inActive == NO && (startOn == nil || startOn <= currentTime)
+//        NSArray * activeSchedules = [self readActiveSchedules];
         
-        //STEP 3: Delete all incomplete tasks for TOMORROW (along with clearing notifications)
+        //STEP 3: Delete all incomplete tasks for based on reference date (along with clearing notifications)
         
         //STEP 4: Generate new scheduledTasks based on the active schedules
         
     }];
 }
 
-
 /*********************************************************************************/
-#pragma mark - Local Notification Logic
+#pragma mark - Methods Inside MOC
 /*********************************************************************************/
 
-- (void)scheduleLocalNotification:(NSString *)message withDate:(NSDate *)dueOn withAPCScheduleTaskId:(NSString *)APCScheduledTaskId andReminder:(int)reminder  {
-
-    // Schedule the notification
-    UILocalNotification* localNotification = [[UILocalNotification alloc] init];
-    localNotification.fireDate = dueOn;
-    localNotification.alertBody = message;
-    
-    //TODO: figure out how the badge numbers are going to be set.
-    //localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
-    
-    NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
-    notificationInfo[@"APCScheduledTaskId"] = APCScheduledTaskId;
-    
-    if (reminder) {
-        
-        NSTimeInterval reminderInterval = kReminderMinutesBeforeTask * kMinutes;
-        
-        [dueOn dateByAddingTimeInterval:reminderInterval];
-        notificationInfo[@"reminder"] = @"reminder";
-    }
-    
-    localNotification.userInfo = notificationInfo;
-    
-    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+- (void) updateSchedulesAsInactiveIfNecessary
+{
+    NSFetchRequest * request = [APCSchedule request];
+    NSDate * lastEndOnDate = [NSDate startOfDay:self.referenceDate];
+    request.predicate = [NSPredicate predicateWithFormat:@"endOn <= %@", lastEndOnDate];
+    NSError * error;
+    NSArray * array = [self.scheduleMOC executeFetchRequest:request error:&error];
+    [error handle];
+    [array enumerateObjectsUsingBlock:^(APCSchedule * schedule, NSUInteger idx, BOOL *stop) {
+        schedule.inActive = @(YES);
+        NSError * saveError;
+        [schedule saveToPersistentStore:&saveError];
+        [saveError handle];
+    }];
 }
 
-
-- (void)clearAllScheduledTaskNotifications {
-    
-    UIApplication *app = [UIApplication sharedApplication];
-    NSArray *eventArray = [app scheduledLocalNotifications];
-    
-    for (int i=0; i<[eventArray count]; i++) {
-        UILocalNotification* oneEvent = [eventArray objectAtIndex:i];
-        
-        NSDictionary *userInfoCurrent = oneEvent.userInfo;
-        
-        //If scheduled task identification exists then it was issued by scheduler and can be deleted
-        
-        if ( userInfoCurrent[@"scheduledTaskId"] ) {
-            [app cancelLocalNotification:oneEvent];
-        }
-    }
+- (NSArray*) readActiveSchedules
+{
+    NSFetchRequest * request = [APCSchedule request];
+    NSDate * lastStartOnDate = [NSDate startOfTomorrow:self.referenceDate];
+    request.predicate = [NSPredicate predicateWithFormat:@"(inActive == nil || inActive == %@) && (startOn == nil || startOn < %@)", @(NO), lastStartOnDate];
+    NSError * error;
+    NSArray * array = [self.scheduleMOC executeFetchRequest:request error:&error];
+    [error handle];
+    return array.count ? array : nil;
 }
 
-
-- (void)clearNotificationActivityType:(NSString *)taskType {
+- (void) deleteAllIncompleteScheduledTasksForReferenceDate
+{
     
-    UIApplication *app = [UIApplication sharedApplication];
-    NSArray *eventArray = [app scheduledLocalNotifications];
-    
-    for (int i=0; i<[eventArray count]; i++) {
-        UILocalNotification* oneEvent = [eventArray objectAtIndex:i];
-        
-        NSDictionary *userInfoCurrent = oneEvent.userInfo;
-        
-        //If scheduled task activity exists then delete
-        if ([userInfoCurrent[@"taskType"] isEqualToString:taskType]) {
-            [app cancelLocalNotification:oneEvent];
-        }
-    }
 }
 
 @end

@@ -127,7 +127,8 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 /*********************************************************************************/
 - (void) initializeBridgeServerConnection
 {
-    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey]];
+    //TODO: Update environment to production
+    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment:SBBEnvironmentStaging];
 }
 
 - (void) initializeAppleCoreStack

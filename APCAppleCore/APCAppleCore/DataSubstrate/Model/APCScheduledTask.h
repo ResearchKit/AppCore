@@ -9,19 +9,20 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class APCResult, APCTask;
+@class APCResult, APCSchedule, APCTask;
 
 @interface APCScheduledTask : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * completed;
 @property (nonatomic, retain) NSDate * createdAt;
-@property (nonatomic, retain) NSDate * startOn;
+@property (nonatomic, retain) NSDate * endOn;
 @property (nonatomic, retain) NSString * notificationUID;
 @property (nonatomic, retain) NSString * reminderUID;
+@property (nonatomic, retain) NSDate * startOn;
 @property (nonatomic, retain) NSDate * updatedAt;
-@property (nonatomic, retain) NSDate * endOn;
 @property (nonatomic, retain) NSSet *results;
 @property (nonatomic, retain) APCTask *task;
+@property (nonatomic, retain) APCSchedule *generatedSchedule;
 @end
 
 @interface APCScheduledTask (CoreDataGeneratedAccessors)
