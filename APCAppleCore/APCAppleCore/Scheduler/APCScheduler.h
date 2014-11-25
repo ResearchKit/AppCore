@@ -14,13 +14,9 @@
 
 @interface APCScheduler : NSObject
 
-- (instancetype)initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate;
-- (void)updateScheduledTasks;
+- (instancetype) initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate;
 
-- (void)clearNotificationActivityType:(NSString *)taskType;
-- (void)clearAllScheduledTaskNotifications;
-- (BOOL)scheduleUpdated:(APCSchedule *)schedule;
-- (void)createScheduledTask:(APCSchedule *)schedule;
+- (void)updateScheduledTasksIfNotUpdating: (BOOL) today;
 
 @end
 

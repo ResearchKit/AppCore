@@ -9,9 +9,14 @@
 #import "APCSchedule+AddOn.h"
 #import "APCModel.h"
 
-static NSString * const kScheduleReminderKey = @"reminder";
+static NSString * const kScheduleShouldRemindKey = @"shouldRemind";
+static NSString * const kScheduleReminderOffsetKey = @"reminderOffset";
+static NSString * const kScheduleReminderMessageKey = @"reminderMessage";
+
 static NSString * const kTaskIDKey = @"taskID";
-static NSString * const kScheduleExpressionKey = @"scheduleString";
+static NSString * const kScheduleStringKey = @"scheduleString";
+static NSString * const kScheduleTypeKey = @"scheduleType";
+static NSString * const kRemoteUpdatable = @"remoteUpdatable";
 
 @implementation APCSchedule (AddOn)
 
@@ -21,9 +26,15 @@ static NSString * const kScheduleExpressionKey = @"scheduleString";
         for(NSDictionary *scheduleDict in schedulesArray) {
             
             APCSchedule * schedule = [APCSchedule newObjectForContext:context];
-            schedule.scheduleString = [scheduleDict objectForKey:kScheduleExpressionKey];
-            schedule.reminder = [scheduleDict objectForKey:kScheduleReminderKey];
+            
+            schedule.scheduleType = [scheduleDict objectForKey:kScheduleTypeKey];
+            schedule.scheduleString = [scheduleDict objectForKey:kScheduleStringKey];
             schedule.taskID = scheduleDict[kTaskIDKey];
+            schedule.remoteUpdatable = scheduleDict[kRemoteUpdatable];
+            
+            schedule.shouldRemind = [scheduleDict objectForKey:kScheduleShouldRemindKey];
+            schedule.reminderOffset = [scheduleDict objectForKey:kScheduleReminderOffsetKey];
+            schedule.reminderMessage = [scheduleDict objectForKey:kScheduleReminderMessageKey];
             
             [schedule saveToPersistentStore:NULL];
         }

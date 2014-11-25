@@ -10,120 +10,55 @@
 #import "APCScheduler.h"
 #import "APCAppleCore.h"
 
-
-static NSInteger kMinutes = 60;
-static NSInteger APCScheduledTaskNotComplete = 0;
-
-//TODO grab this default 'advance' notification from Parameters
 static NSInteger kReminderMinutesBeforeTask = -15;
-
-typedef NS_ENUM(NSInteger, APCScheduleReminderNotification)
-{
-    APCScheduleReminderNo = 0,
-    APCScheduleReminderYES = 1
-};
+static NSInteger kMinutes = 60;
 
 @interface APCScheduler()
-
-@property  (nonatomic, strong)   NSArray                 *schedules;
 @property  (weak, nonatomic)     APCDataSubstrate        *dataSubstrate;
-@property  (strong, nonatomic)   NSManagedObjectContext  *localMOC;
-
+@property  (strong, nonatomic)   NSManagedObjectContext  *scheduleMOC;
+@property  (nonatomic) BOOL isUpdating;
 @end
-
 
 @implementation APCScheduler
 
-- (instancetype)initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate {
-    
+- (instancetype)initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate
+{
     self = [super init];
     if (self) {
         self.dataSubstrate = dataSubstrate;
+        self.scheduleMOC = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        self.scheduleMOC.parentContext = self.dataSubstrate.persistentContext;
     }
     return self;
 }
 
+- (void)updateScheduledTasksIfNotUpdating: (BOOL) today
+{
+    if (!self.isUpdating) {
+        self.isUpdating = YES;
+        [self updateScheduledTasks: today];
+    }
+}
 
-- (void)updateScheduledTasks {
-    
-    self.localMOC = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-    self.localMOC.parentContext = self.dataSubstrate.persistentContext;
-    
-    [self.localMOC performBlock:^{
-        //Get APCSchedules from Core Data
-        self.schedules = [self schedule];
-        for(APCSchedule *schedule in self.schedules)
-        {
-            //Make sure scheduled task is not already created and then create scheduled task
-            BOOL isUpdated = [self scheduleUpdated:schedule];
-            if (!isUpdated) {
-                [self createScheduledTask:schedule];
-            }
-        }
+- (void) updateScheduledTasks: (BOOL) today
+{
+    [self.scheduleMOC performBlock:^{
+        
+        //STEP 1: Update inActive property of schedules based on endOn date.
+        
+        //STEP 2: Read active schedules: inActive == NO && (startOn == nil || startOn <= currentTime)
+        
+        //STEP 3: Delete all incomplete tasks for TOMORROW (along with clearing notifications)
+        
+        //STEP 4: Generate new scheduledTasks based on the active schedules
+        
     }];
 }
 
 
-- (BOOL)scheduleUpdated:(APCSchedule *)schedule {
-    
-    NSFetchRequest *request = [APCScheduledTask request];
-    NSMutableArray *dates = nil;
-    
-    NSDate *dueOn =[dates objectAtIndex:0];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"( dueOn == %@ ) AND ( task.uid == %@ )", dueOn, schedule.taskID];
-    [request setPredicate:predicate];
-    NSError *error;
-    NSArray *array = [self.localMOC executeFetchRequest:request error:&error];
-    
-    NSAssert(array, @"Core data did not return an array on requesting fetch");
-    
-    return [array count] != 0;
-}
-
-
-- (NSArray *)schedule {
-    NSFetchRequest *request = [APCSchedule request];
-    
-    NSError *error;
-    NSArray *array = [self.localMOC executeFetchRequest:request error:&error];
-    
-    NSAssert(array, @"Core data did not return an array on requesting APCSchedule entities");
-    
-    return array;
-}
-
-
-- (void)createScheduledTask:(APCSchedule *)schedule {
-    
-    
-    NSMutableArray *dates = nil;
-    
-    for (NSDate *date in dates) {
-     
-        APCScheduledTask * scheduledTask = [APCScheduledTask newObjectForContext:self.localMOC];
-        
-        scheduledTask.completed = [NSNumber numberWithInteger:APCScheduledTaskNotComplete];
-        scheduledTask.endOn = date;
-        scheduledTask.task = [APCTask taskWithTaskID:schedule.taskID inContext:self.localMOC];
-        
-        //Get the APCScheduledTask ID to reference
-        NSString *objectId = [[scheduledTask.objectID URIRepresentation] absoluteString];
-        
-        //Set a local notification at time of event
-        [self scheduleLocalNotification:schedule.notificationMessage withDate:date withAPCScheduleTaskId:objectId andReminder:APCScheduleReminderNo];
-        
-        //TODO may have to interpret a cron expression, however, for now I'll just set reminders 15 mintues before
-        if (schedule.reminder) {
-
-            //Set a local reminder notification at time of event
-            [self scheduleLocalNotification:schedule.notificationMessage withDate:date withAPCScheduleTaskId:objectId andReminder:APCScheduleReminderYES];
-        }
-        
-        [scheduledTask saveToPersistentStore:NULL];
-    }
-}
-
+/*********************************************************************************/
+#pragma mark - Local Notification Logic
+/*********************************************************************************/
 
 - (void)scheduleLocalNotification:(NSString *)message withDate:(NSDate *)dueOn withAPCScheduleTaskId:(NSString *)APCScheduledTaskId andReminder:(int)reminder  {
 

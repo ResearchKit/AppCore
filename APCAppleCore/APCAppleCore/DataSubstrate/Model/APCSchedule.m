@@ -11,18 +11,19 @@
 
 @implementation APCSchedule
 
-@dynamic active;
+@dynamic inActive;
 @dynamic createdAt;
 @dynamic endsOn;
 @dynamic expires;
-@dynamic notificationMessage;
-@dynamic reminder;
+@dynamic reminderMessage;
+@dynamic shouldRemind;
+@dynamic scheduleID;
 @dynamic scheduleString;
 @dynamic scheduleType;
-@dynamic source;
 @dynamic startsOn;
 @dynamic taskID;
-@dynamic scheduleID;
 @dynamic updatedAt;
+@dynamic remoteUpdatable;
+@dynamic reminderOffset;
 
 @end

@@ -30,7 +30,7 @@
 
 - (void)appBecameActive
 {
-    [self.scheduler updateScheduledTasks];
+    [self.scheduler updateScheduledTasksIfNotUpdating:NO];
 }
 
 - (void)backgroundFetch:(void (^)(UIBackgroundFetchResult))completionHandler

@@ -212,14 +212,12 @@ static NSInteger kNumberOfSectionsInTableView = 1;
 
 - (IBAction)updateActivities:(id)sender
 {
-
     APCAppDelegate * appDelegate = [UIApplication sharedApplication].delegate;
-    [appDelegate.scheduler updateScheduledTasks];
+    [appDelegate.scheduler updateScheduledTasksIfNotUpdating:YES];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self reloadData];
         [self.refreshControl endRefreshing];
     });
-
 }
 
 - (void)reloadData
