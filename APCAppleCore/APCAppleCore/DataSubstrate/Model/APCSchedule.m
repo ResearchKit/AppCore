@@ -25,6 +25,6 @@
 @dynamic startsOn;
 @dynamic taskID;
 @dynamic updatedAt;
-@dynamic scheduledTasks_unused;
+@dynamic scheduledTasks;
 
 @end

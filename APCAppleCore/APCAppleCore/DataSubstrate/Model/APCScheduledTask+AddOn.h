@@ -7,8 +7,13 @@
 //
 
 #import "APCScheduledTask.h"
-
-@class RKSTTaskResult;
 @interface APCScheduledTask (AddOn)
+
+- (void) completeScheduledTask;
+- (void) createLocalNotification;
+- (void) deleteLocalNotification;
+- (void) deleteScheduledTask; //Also clears local notification
+
++ (NSArray *)allScheduledTasksInContext: (NSManagedObjectContext*) context;
 
 @end

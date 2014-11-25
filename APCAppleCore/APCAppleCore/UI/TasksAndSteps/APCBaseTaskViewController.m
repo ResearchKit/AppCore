@@ -56,10 +56,7 @@
 {
     [self processTaskResult];
     
-    NSError * saveError;
-    self.scheduledTask.completed = @YES;
-    [self.scheduledTask saveToPersistentStore:&saveError];
-    [saveError handle];
+    [self.scheduledTask completeScheduledTask];
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

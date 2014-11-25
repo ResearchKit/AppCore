@@ -41,7 +41,7 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
     __block APCTask * retTask;
     [context performBlockAndWait:^{
         NSFetchRequest * request = [APCTask request];
-        request.predicate = [NSPredicate predicateWithFormat:@"uid == %@",taskID];
+        request.predicate = [NSPredicate predicateWithFormat:@"taskID == %@",taskID];
         NSError * error;
         retTask = [[context executeFetchRequest:request error:&error]firstObject];
     }];

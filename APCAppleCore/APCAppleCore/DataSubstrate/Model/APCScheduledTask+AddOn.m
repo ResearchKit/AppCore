@@ -11,6 +11,48 @@
 
 @implementation APCScheduledTask (AddOn)
 
+- (void)completeScheduledTask
+{
+    self.completed = @(YES);
+    
+    //Turn off one time schedule
+    if ([self.generatedSchedule isOneTimeSchedule])
+    {
+        self.generatedSchedule.inActive = @(YES);
+    }
+    NSError * saveError;
+    [self saveToPersistentStore:&saveError];
+    [saveError handle];
+}
+
+- (void) createLocalNotification
+{
+    //TODO: to be done
+}
+
+- (void) deleteLocalNotification
+{
+    //TODO: to be done
+}
+
+- (void) deleteScheduledTask
+{
+    [self deleteLocalNotification];
+    [self.managedObjectContext deleteObject:self];
+    NSError * saveError;
+    [self saveToPersistentStore:&saveError];
+    [saveError handle];
+}
+
++ (NSArray *)allScheduledTasksInContext: (NSManagedObjectContext*) context
+{
+    NSFetchRequest * request = [APCScheduledTask request];
+    NSError * error;
+    NSArray * array = [context executeFetchRequest:request error:&error];
+    [error handle];
+    return array.count ? array : nil;
+}
+
 
 /*********************************************************************************/
 #pragma mark - Life Cycle Methods

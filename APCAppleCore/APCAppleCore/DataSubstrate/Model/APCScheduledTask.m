@@ -21,8 +21,8 @@
 @dynamic reminderUID;
 @dynamic startOn;
 @dynamic updatedAt;
+@dynamic generatedSchedule;
 @dynamic results;
 @dynamic task;
-@dynamic generatedSchedule;
 
 @end

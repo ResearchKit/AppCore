@@ -20,9 +20,9 @@
 @property (nonatomic, retain) NSString * reminderUID;
 @property (nonatomic, retain) NSDate * startOn;
 @property (nonatomic, retain) NSDate * updatedAt;
+@property (nonatomic, retain) APCSchedule *generatedSchedule;
 @property (nonatomic, retain) NSSet *results;
 @property (nonatomic, retain) APCTask *task;
-@property (nonatomic, retain) APCSchedule *generatedSchedule;
 @end
 
 @interface APCScheduledTask (CoreDataGeneratedAccessors)

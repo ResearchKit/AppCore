@@ -18,6 +18,8 @@ static NSString * const kScheduleStringKey = @"scheduleString";
 static NSString * const kScheduleTypeKey = @"scheduleType";
 static NSString * const kRemoteUpdatable = @"remoteUpdatable";
 
+static NSString * const kOneTimeSchedule = @"once";
+
 @implementation APCSchedule (AddOn)
 
 +(void)createSchedulesFromJSON:(NSArray *)schedulesArray inContext:(NSManagedObjectContext *)context
@@ -39,6 +41,17 @@ static NSString * const kRemoteUpdatable = @"remoteUpdatable";
             [schedule saveToPersistentStore:NULL];
         }
     }];
+}
+
+- (BOOL)isOneTimeSchedule
+{
+    return [self.scheduleType isEqualToString:kOneTimeSchedule];
+}
+
+- (APCScheduleExpression *)scheduleExpression
+{
+    //TODO: Schedule interval is 0
+    return [[APCScheduleExpression alloc] initWithExpression:self.scheduleString timeZero:0];
 }
 
 /*********************************************************************************/

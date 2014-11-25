@@ -26,6 +26,14 @@
 @property (nonatomic, retain) NSDate * startsOn;
 @property (nonatomic, retain) NSString * taskID;
 @property (nonatomic, retain) NSDate * updatedAt;
-@property (nonatomic, retain) APCScheduledTask *scheduledTasks_unused;
+@property (nonatomic, retain) NSSet *scheduledTasks;
+@end
+
+@interface APCSchedule (CoreDataGeneratedAccessors)
+
+- (void)addScheduledTasksObject:(APCScheduledTask *)value;
+- (void)removeScheduledTasksObject:(APCScheduledTask *)value;
+- (void)addScheduledTasks:(NSSet *)values;
+- (void)removeScheduledTasks:(NSSet *)values;
 
 @end

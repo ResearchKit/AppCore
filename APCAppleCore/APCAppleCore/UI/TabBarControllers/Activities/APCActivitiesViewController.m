@@ -222,10 +222,10 @@ static NSInteger kNumberOfSectionsInTableView = 1;
 
 - (void)reloadData
 {
+    APCAppDelegate * appDelegate = [UIApplication sharedApplication].delegate;
     [self.scheduledTasksArray removeAllObjects];
     
-//    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"dueOn" ascending:YES];
-    NSArray *unsortedScheduledTasks = nil;//[((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate  scheduledTasksForPredicate:nil sortDescriptors:@[dateSortDescriptor]];
+    NSArray *unsortedScheduledTasks = [APCScheduledTask allScheduledTasksInContext:appDelegate.dataSubstrate.mainContext];
     
     [self groupSimilarTasks:unsortedScheduledTasks];
     
@@ -251,7 +251,7 @@ static NSInteger kNumberOfSectionsInTableView = 1;
     /* group tasks by task Id */
     for (NSString *taskId in taskTypesArray) {
         
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"task.uid == %@", taskId];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"task.taskID == %@", taskId];
         
         NSArray *filteredTasksArray = [unsortedScheduledTasks filteredArrayUsingPredicate:predicate];
         
