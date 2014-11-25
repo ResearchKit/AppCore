@@ -33,7 +33,7 @@
     UIColor *viewBackgroundColor = [UIColor appSecondaryColor4];
     self.completingActivitiesMessage.textColor = [UIColor appSecondaryColor3];
     [self.view setBackgroundColor:viewBackgroundColor];
-    self.navigationController.navigationBar.topItem.title = NSLocalizedString(@"Complete", @"Complete");
+    self.navigationController.navigationBar.topItem.title = NSLocalizedString(@"Activity Complete", @"Activity Complete");
     self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.hidesBackButton = YES;
     
