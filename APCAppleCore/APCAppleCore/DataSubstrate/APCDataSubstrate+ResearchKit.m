@@ -47,14 +47,10 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
         self.study =[self.studyStore studyWithIdentifier:studyIdentifier];
     }
     [error handle];
-    [self setUpCollectors];
+    [self.delegate setUpCollectors];
     
     [self.studyStore resume];
     
-//    if (resuming) {
-//        self.study = [self.studyStore studyWithIdentifier:studyIdentifier];
-//        [self joinStudy];
-//    }
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(userConsented)
                                                  name:APCUserDidConsentNotification
@@ -63,7 +59,7 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 
 - (void) userConsented
 {
-    [self setUpCollectors];
+    [self.delegate setUpCollectors];
     [self joinStudy];
 }
 
@@ -87,11 +83,6 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
         [err handle];
     }
 }
-
-#pragma mark - HealthKit Permissions
-
-- (void) setUpCollectors {/*Blank Implementation for Subclasses to override*/ }
-
 
 /*********************************************************************************/
 #pragma mark - Research Kit RKSTStudyDelegate

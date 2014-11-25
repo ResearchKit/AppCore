@@ -11,7 +11,7 @@
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler;
 
-@interface APCAppDelegate : UIResponder <UIApplicationDelegate>
+@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCDataSubstrateProtocol>
 
 @property  (strong, nonatomic)  UIWindow * window;
 
@@ -41,5 +41,8 @@
 - (void) signedInNotification:(NSNotification *)notification;
 - (void) signedUpNotification: (NSNotification*) notification;
 - (void) logOutNotification:(NSNotification *)notification;
+
+//Datasubstrate Delegate
+- (void) setUpCollectors;
 
 @end

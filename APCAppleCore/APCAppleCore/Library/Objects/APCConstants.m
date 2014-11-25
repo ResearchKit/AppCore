@@ -27,6 +27,7 @@ NSString *const kTasksAndSchedulesJSONFileNameKey    = @"TasksAndSchedulesJSONFi
 NSString *const kHKWritePermissionsKey               = @"HKWritePermissions";
 NSString *const kHKReadPermissionsKey                = @"HKReadPermissions";
 NSString *const kAppServicesListRequiredKey          = @"AppServicesListRequired";
+NSString *const kVideoURLKey                         = @"VideoURLKey";
 
 NSString *const kPasswordKey                         = @"Password";
 NSString *const kNumberOfMinutesForPasscodeKey       = @"NumberOfMinutesForPasscodeKey";

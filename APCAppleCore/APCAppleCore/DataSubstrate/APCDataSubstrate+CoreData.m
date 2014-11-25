@@ -98,7 +98,7 @@
     [error handle];
     [self removeSqliteStore];
     [self setUpPersistentStore];
-    APCAppDelegate * appDelegate = [UIApplication sharedApplication].delegate;
+    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
     [appDelegate loadStaticTasksAndSchedulesIfNecessary];
 }
 

@@ -152,7 +152,7 @@
                     if (!user.consented) {
                         APCEmailVerifyViewController *emailVerifyVC = [[UIStoryboard storyboardWithName:@"APCEmailVerify" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
                         
-                        APCAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+                        APCAppDelegate *appDelegate = (APCAppDelegate*)[[UIApplication sharedApplication] delegate];
                         appDelegate.window.rootViewController = emailVerifyVC;
                     } else{
                         user.signedIn = YES;

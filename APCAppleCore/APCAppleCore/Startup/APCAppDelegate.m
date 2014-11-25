@@ -41,9 +41,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
-    
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-    
     
     //Setting the Audio Session Category for voice prompts when device is locked
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
@@ -54,6 +52,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     
     NSError *activationError = nil;
     success = [audioSession setActive:YES error:&activationError];
+    [activationError handle];
     
     
     [self setUpInitializationOptions];
@@ -133,6 +132,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (void) initializeAppleCoreStack
 {
     self.dataSubstrate = [[APCDataSubstrate alloc] initWithPersistentStorePath:[[self applicationDocumentsDirectory] stringByAppendingPathComponent:self.initializationOptions[kDatabaseNameKey]] additionalModels: nil studyIdentifier:self.initializationOptions[kStudyIdentifierKey]];
+    self.dataSubstrate.delegate = self;
     self.scheduler = [[APCScheduler alloc] initWithDataSubstrate:self.dataSubstrate];
     self.dataMonitor = [[APCDataMonitor alloc] initWithDataSubstrate:self.dataSubstrate scheduler:self.scheduler];
     
@@ -191,6 +191,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 #pragma mark - Other Abstract Implmentations
 - (void) setUpInitializationOptions {/*Abstract Implementation*/}
 - (void) setUpAppAppearance {/*Abstract Implementation*/}
+- (void) setUpCollectors {/*Abstract Implementation*/}
 
 /*********************************************************************************/
 #pragma mark - Public Helpers

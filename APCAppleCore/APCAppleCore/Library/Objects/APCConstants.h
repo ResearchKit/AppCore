@@ -42,6 +42,7 @@ FOUNDATION_EXPORT NSString *const kTasksAndSchedulesJSONFileNameKey;
 FOUNDATION_EXPORT NSString *const kHKWritePermissionsKey;
 FOUNDATION_EXPORT NSString *const kHKReadPermissionsKey;
 FOUNDATION_EXPORT NSString *const kAppServicesListRequiredKey;
+FOUNDATION_EXPORT NSString *const kVideoURLKey;
 
 FOUNDATION_EXPORT NSString *const kPasswordKey;
 FOUNDATION_EXPORT NSString *const kNumberOfMinutesForPasscodeKey;

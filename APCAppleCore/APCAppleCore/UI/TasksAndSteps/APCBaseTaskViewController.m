@@ -57,7 +57,7 @@
     [self processTaskResult];
     
     [self.scheduledTask completeScheduledTask];
-    APCAppDelegate * appDelegate = [UIApplication sharedApplication].delegate;
+    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
     [appDelegate.scheduler updateScheduledTasksIfNotUpdating:NO];
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }

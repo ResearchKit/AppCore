@@ -11,12 +11,6 @@
 @interface APCDataSubstrate (ResearchKit) <RKSTDataLoggerManagerDelegate>
 
 /*********************************************************************************/
-#pragma mark - Public Methods
-/*********************************************************************************/
-//Abstract Methods with blank implementations
-- (void) setUpCollectors;
-
-/*********************************************************************************/
 #pragma mark - Methods meant only for Categories
 /*********************************************************************************/
 - (void) setUpResearchStudy: (NSString*) studyIdentifier;
