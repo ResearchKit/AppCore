@@ -170,7 +170,9 @@ static APCDummyObject * _dummyObject;
     SBBMultiValueConstraints * localConstraints = (SBBMultiValueConstraints*)constraints;
     NSMutableArray * options = [NSMutableArray array];
     [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger idx, BOOL *stop) {
-        [options addObject:option.label];
+        //TODO: Fix this KLUDGE
+        [options addObject:@[[NSString stringWithFormat:@"Answer %ld", idx+1], option.label]];
+//        [options addObject:option.label];
     }];
     if (localConstraints.allowOtherValue) {
         [options addObject:NSLocalizedString(@"Other", @"Spinner Option")];
