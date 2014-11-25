@@ -14,7 +14,9 @@
 - (void) deleteLocalNotification;
 - (void) deleteScheduledTask; //Also clears local notification
 
-+ (NSArray *)allScheduledTasksForTodayInContext: (NSManagedObjectContext*) context;
+@property (nonatomic, readonly) NSString * completeByDateString;
+
++ (NSArray*) APCActivityVCScheduledTasks: (BOOL) tomorrow inContext: (NSManagedObjectContext*) context;
 + (instancetype) scheduledTaskForStartOnDate: (NSDate *) startOn schedule: (APCSchedule*) schedule inContext: (NSManagedObjectContext*) context;
 
 @end

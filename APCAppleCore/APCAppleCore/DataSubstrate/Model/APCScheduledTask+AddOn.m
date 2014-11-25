@@ -44,11 +44,60 @@
     [saveError handle];
 }
 
+- (NSString *)completeByDateString
+{
+    return [self.endOn friendlyDescription];
+}
+
++ (NSArray*) APCActivityVCScheduledTasks: (BOOL) tomorrow inContext: (NSManagedObjectContext*) context
+{
+    NSArray * array1 =  tomorrow ? [self allScheduledTasksForTomorrowInContext:context] : [self allScheduledTasksForTodayInContext:context];
+    NSArray * array2 = [self allIncompleteTasksForPastWeekFrom:tomorrow InContext:context];
+    NSMutableArray * finalArray = [NSMutableArray array];
+    if (array1.count) {
+        [finalArray addObjectsFromArray:array1];
+    }
+    if (array2.count) {
+        [finalArray addObjectsFromArray:array2];
+    }
+    return finalArray.count ? finalArray : nil;
+}
+
 + (NSArray *)allScheduledTasksForTodayInContext: (NSManagedObjectContext*) context
 {
     NSFetchRequest * request = [APCScheduledTask request];
-    //Support multiday
+    
+    //TODO: Support multiday
     request.predicate = [NSPredicate predicateWithFormat:@"startOn >= %@ && endOn < %@", [NSDate todayAtMidnight], [NSDate tomorrowAtMidnight]];
+    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startOn" ascending:YES];
+    request.sortDescriptors = @[dateSortDescriptor];
+    NSError * error;
+    NSArray * array = [context executeFetchRequest:request error:&error];
+    [error handle];
+    return array.count ? array : nil;
+}
+
++ (NSArray *)allScheduledTasksForTomorrowInContext: (NSManagedObjectContext*) context
+{
+    NSFetchRequest * request = [APCScheduledTask request];
+    
+    //TODO: Support multiday
+    request.predicate = [NSPredicate predicateWithFormat:@"startOn >= %@ && endOn < %@", [NSDate tomorrowAtMidnight], [NSDate startOfTomorrow:[NSDate tomorrowAtMidnight]]];
+    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startOn" ascending:YES];
+    request.sortDescriptors = @[dateSortDescriptor];
+    NSError * error;
+    NSArray * array = [context executeFetchRequest:request error:&error];
+    [error handle];
+    return array.count ? array : nil;
+}
+
++ (NSArray* ) allIncompleteTasksForPastWeekFrom: (BOOL) tomorrow InContext: (NSManagedObjectContext*) context
+{
+    NSFetchRequest * request = [APCScheduledTask request];
+    NSDate * startDate = tomorrow ? [[NSDate tomorrowAtMidnight] dateByAddingDays:-7] : [[NSDate todayAtMidnight] dateByAddingDays:-7];
+    NSDate * endDate = tomorrow ? [NSDate tomorrowAtMidnight] : [NSDate todayAtMidnight];
+    //TODO: Support multiday
+    request.predicate = [NSPredicate predicateWithFormat:@"(completed == nil || completed == %@) && (endOn > %@ && endOn <= %@)", @(NO), startDate, endDate];
     NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startOn" ascending:YES];
     request.sortDescriptors = @[dateSortDescriptor];
     NSError * error;
