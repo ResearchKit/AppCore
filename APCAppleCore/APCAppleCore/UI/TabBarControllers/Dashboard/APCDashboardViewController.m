@@ -93,14 +93,6 @@
             
         }
         
-    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardBadgesItem class]]) {
-//        
-//        APCTableViewDashboardBadgesItem *badgeItem = (APCTableViewDashboardBadgesItem *)dashboardItem;
-        APCDashboardBadgesTableViewCell *badgeCell = (APCDashboardBadgesTableViewCell *)cell;
-        
-        badgeCell.concentricProgressView.datasource = self;
-        
-        
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardMessageItem class]]){
         
         APCTableViewDashboardMessageItem *messageItem = (APCTableViewDashboardMessageItem *)dashboardItem;
@@ -170,9 +162,6 @@
             
         }
         
-    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardBadgesItem class]]){
-        
-        height = 400.0f;
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardMessageItem class]]){
         
         CGFloat basicCellHeight = 47.0f;
@@ -253,25 +242,6 @@
 - (void)dashboardGraphViewCellDidTapExpandForCell:(APCDashboardLineGraphTableViewCell *)cell
 {
     
-}
-
-#pragma mark - APCConcentricProgressViewDataSource methods
-
-- (NSUInteger)numberOfComponentsInConcentricProgressView
-{
-    return 4;
-}
-
-- (CGFloat)concentricProgressView:(APCConcentricProgressView *)concentricProgressView valueForComponentAtIndex:(NSUInteger)index
-{
-    return (arc4random()%7 + 1)/10.0f;
-}
-
-- (UIColor *)concentricProgressView:(APCConcentricProgressView *)concentricProgressView colorForComponentAtIndex:(NSUInteger)index
-{
-    NSArray *colors = @[[UIColor appTertiaryBlueColor], [UIColor appTertiaryPurpleColor], [UIColor appTertiaryGreenColor], [UIColor appTertiaryYellowColor]];
-    
-    return colors[index];
 }
 
 @end

@@ -93,6 +93,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
  Views
  ------------------------- */
 #import <APCAppleCore/APCGraph.h>
+#import <APCAppleCore/APCPieGraphView.h>
 #import <APCAppleCore/APCStepProgressBar.h>
 #import <APCAppleCore/APCSegmentedButton.h>
 #import <APCAppleCore/APCImageButton.h>
@@ -117,6 +118,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCDashboardBadgesTableViewCell.h>
 #import <APCAppleCore/APCDashboardMessageTableViewCell.h>
 #import <APCAppleCore/APCDashboardProgressTableViewCell.h>
+#import <APCAppleCore/APCDashboardPieGraphTableViewCell.h>
 #import <APCAppleCore/APCShareTableViewCell.h>
 
 /* -------------------------

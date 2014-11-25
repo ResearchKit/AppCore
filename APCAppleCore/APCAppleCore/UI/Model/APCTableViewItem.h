@@ -152,10 +152,6 @@
 
 @end
 
-@interface APCTableViewDashboardBadgesItem : APCTableViewDashboardItem
-
-@end
-
 @interface APCTableViewDashboardMessageItem : APCTableViewDashboardItem
 
 @property (nonatomic) APCDashboardMessageType messageType;
