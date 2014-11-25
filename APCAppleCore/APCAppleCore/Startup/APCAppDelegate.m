@@ -25,7 +25,7 @@ static NSString *const kTasksAndSchedulesJSONFileName = @"APHTasksAndSchedules";
 /*********************************************************************************/
 static NSString *const kDashBoardStoryBoardKey     = @"APHDashboard";
 static NSString *const kLearnStoryBoardKey         = @"APHLearn";
-static NSString *const kActivitiesStoryBoardKey    = @"APHActivities";
+static NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
 static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
 
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
@@ -229,10 +229,10 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 {
     if (!_storyboardIdInfo) {
         _storyboardIdInfo = @[
-                              kDashBoardStoryBoardKey,
-                              kLearnStoryBoardKey,
-                              kActivitiesStoryBoardKey,
-                              kHealthProfileStoryBoardKey
+                              @{@"name": kDashBoardStoryBoardKey, @"bundle" : [NSBundle mainBundle]},
+                              @{@"name": kLearnStoryBoardKey, @"bundle" : [NSBundle mainBundle]},
+                              @{@"name": kActivitiesStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
+                              @{@"name": kHealthProfileStoryBoardKey, @"bundle" : [NSBundle mainBundle]}
                               ];
     }
     return _storyboardIdInfo;
@@ -281,8 +281,8 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         NSMutableArray  *controllers = [tabBarController.viewControllers mutableCopy];
         NSUInteger  controllerIndex = [controllers indexOfObject:viewController];
         
-        NSString  *name = [self.storyboardIdInfo objectAtIndex:controllerIndex];
-        UIStoryboard  *storyboard = [UIStoryboard storyboardWithName:name bundle:nil];
+        NSString  *name = [self.storyboardIdInfo objectAtIndex:controllerIndex][@"name"];
+        UIStoryboard  *storyboard = [UIStoryboard storyboardWithName:name bundle:[self.storyboardIdInfo objectAtIndex:controllerIndex][@"bundle"]];
         UIViewController  *controller = [storyboard instantiateInitialViewController];
         [controllers replaceObjectAtIndex:controllerIndex withObject:controller];
         

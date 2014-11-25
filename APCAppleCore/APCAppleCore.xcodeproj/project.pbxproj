@@ -173,6 +173,7 @@
 		7BA4BC0419D490EE00BC4023 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */; };
 		F5008C0F19D32AD60011102F /* APCGroupedScheduledTask.h in Headers */ = {isa = PBXBuildFile; fileRef = F5008C0D19D32AD60011102F /* APCGroupedScheduledTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5008C1019D32AD60011102F /* APCGroupedScheduledTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F5008C0E19D32AD60011102F /* APCGroupedScheduledTask.m */; };
+		F5177D151A25476F008BFA3B /* APCActivities.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5177D141A25476F008BFA3B /* APCActivities.storyboard */; };
 		F5179B2F19D09128001DCCB7 /* APCAppleCore.h in Headers */ = {isa = PBXBuildFile; fileRef = F5179B2E19D09128001DCCB7 /* APCAppleCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5179C7819D0917D001DCCB7 /* APCDataMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = F5179BA419D0917D001DCCB7 /* APCDataMonitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5179C7919D0917D001DCCB7 /* APCDataMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = F5179BA519D0917D001DCCB7 /* APCDataMonitor.m */; };
@@ -470,6 +471,7 @@
 		7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		F5008C0D19D32AD60011102F /* APCGroupedScheduledTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCGroupedScheduledTask.h; sourceTree = "<group>"; };
 		F5008C0E19D32AD60011102F /* APCGroupedScheduledTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCGroupedScheduledTask.m; sourceTree = "<group>"; };
+		F5177D141A25476F008BFA3B /* APCActivities.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCActivities.storyboard; sourceTree = "<group>"; };
 		F5179B2919D09128001DCCB7 /* APCAppleCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APCAppleCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5179B2D19D09128001DCCB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5179B2E19D09128001DCCB7 /* APCAppleCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APCAppleCore.h; sourceTree = "<group>"; };
@@ -733,6 +735,7 @@
 		5B3B5F871A15645E006B2346 /* Activities */ = {
 			isa = PBXGroup;
 			children = (
+				F5177D141A25476F008BFA3B /* APCActivities.storyboard */,
 				5B3B5F881A15645E006B2346 /* APCActivitiesViewController.h */,
 				5B3B5F891A15645E006B2346 /* APCActivitiesViewController.m */,
 			);
@@ -1457,6 +1460,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5177D151A25476F008BFA3B /* APCActivities.storyboard in Resources */,
 				F554FF2A19E7331800BA729A /* APCParameters.storyboard in Resources */,
 				F5C1DC2319D22EAF006527EA /* TabBar.storyboard in Resources */,
 				5B3B60921A156495006B2346 /* APCStudyOverviewViewController.xib in Resources */,
