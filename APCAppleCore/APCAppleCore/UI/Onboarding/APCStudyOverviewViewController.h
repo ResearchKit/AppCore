@@ -21,7 +21,7 @@
 
 @property (strong, nonatomic) NSString *diseaseName;
 
-@property (nonatomic, strong) NSMutableArray *items;
+@property (nonatomic, strong) NSArray *items;
 
 @property (nonatomic) BOOL showShareRow;
 
@@ -30,7 +30,8 @@
 - (IBAction)signInTapped:(id)sender;
 - (IBAction)signUpTapped:(id)sender;
 
-- (void)studyDetailsFromJSONFile:(NSString *)jsonFileName;
+- (NSArray *)prepareContent;
+- (NSArray *)studyDetailsFromJSONFile:(NSString *)jsonFileName;
 
 - (APCTableViewStudyDetailsItem *)itemForIndexPath:(NSIndexPath *)indexPath;
 - (APCTableViewStudyItemType)itemTypeForIndexPath:(NSIndexPath *)indexPath;

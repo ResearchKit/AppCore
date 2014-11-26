@@ -20,7 +20,7 @@
 /*
  Items is an Array of APCTableViewSection
  */
-@property (nonatomic, strong) NSMutableArray *items;
+@property (nonatomic, strong) NSArray *items;
 
 @property (nonatomic, getter=isPickerShowing) BOOL pickerShowing;
 

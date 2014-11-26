@@ -28,7 +28,9 @@ static CGFloat kSectionHeaderHeight = 40.f;
     // Do any additional setup after loading the view.
     self.items = [NSMutableArray new];
     
-    [self prepareContent];
+    self.items = [self prepareContent];
+    
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -36,10 +38,9 @@ static CGFloat kSectionHeaderHeight = 40.f;
     // Dispose of any resources that can be recreated.
 }
 
-- (void)prepareContent
+- (NSArray *)prepareContent
 {
-    [self studyDetailsFromJSONFile:@"Learn"];
-    [self.tableView reloadData];
+    return [self studyDetailsFromJSONFile:@"Learn"];
 }
 
 
@@ -137,13 +138,15 @@ static CGFloat kSectionHeaderHeight = 40.f;
 
 #pragma mark - Public methods
 
-- (void)studyDetailsFromJSONFile:(NSString *)jsonFileName
+- (NSArray *)studyDetailsFromJSONFile:(NSString *)jsonFileName
 {
     NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
     NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     
     NSError *parseError;
     NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
+    
+    NSMutableArray *learnItems = [NSMutableArray new];
     
     if (!parseError) {
         
@@ -176,9 +179,11 @@ static CGFloat kSectionHeaderHeight = 40.f;
             
             section.rows = [NSArray arrayWithArray:rowItems];
             
-            [self.items addObject:section];
+            [learnItems addObject:section];
         }
     }
+    
+    return [NSArray arrayWithArray:learnItems];
 }
 
 - (APCTableViewStudyDetailsItem *)itemForIndexPath:(NSIndexPath *)indexPath

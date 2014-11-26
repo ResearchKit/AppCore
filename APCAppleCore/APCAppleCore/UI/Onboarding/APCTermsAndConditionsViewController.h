@@ -16,6 +16,8 @@
 
 @property (weak, nonatomic) id <APCTermsAndConditionsViewControllerDelegate> delegate;
 
+- (NSString *)prepareContent;
+
 - (IBAction)agree:(id)sender;
 
 - (IBAction)close:(id)sender;

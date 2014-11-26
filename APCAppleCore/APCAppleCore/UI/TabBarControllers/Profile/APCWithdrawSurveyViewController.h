@@ -18,9 +18,11 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *withdrawButton;
 
-@property (nonatomic, strong) NSMutableArray *items;
+@property (nonatomic, strong) NSArray *items;
 
-- (void)surveyFromJSONFile:(NSString *)jsonFileName;
+- (NSArray *)prepareContent;
+
+- (NSArray *)surveyFromJSONFile:(NSString *)jsonFileName;
 
 - (IBAction)cancel:(id)sender;
 @end

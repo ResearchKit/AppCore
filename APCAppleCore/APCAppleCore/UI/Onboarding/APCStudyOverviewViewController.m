@@ -33,7 +33,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     
     [self setupTableView];
     [self setUpAppearance];
-    [self prepareContent];
+    self.items = [self prepareContent];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -42,9 +42,9 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
-- (void)prepareContent
+- (NSArray *)prepareContent
 {
-    [self studyDetailsFromJSONFile:@"StudyOverview"];
+    NSMutableArray *items = [NSMutableArray arrayWithArray:[self studyDetailsFromJSONFile:@"StudyOverview"]];
     
     if (self.showShareRow){
         
@@ -56,7 +56,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
         APCTableViewRow *rowItem = [APCTableViewRow new];
         rowItem.item = shareStudyItem;
         rowItem.itemType = kAPCTableViewStudyItemTypeShare;
-        APCTableViewSection *section = [self.items firstObject];
+        APCTableViewSection *section = [items firstObject];
         NSMutableArray *rowItems = [NSMutableArray arrayWithArray:section.rows];
         [rowItems addObject:rowItem];
         section.rows = [NSArray arrayWithArray:rowItems];
@@ -72,11 +72,13 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
         APCTableViewRow *rowItem = [APCTableViewRow new];
         rowItem.item = reviewConsentItem;
         
-        APCTableViewSection *section = [self.items firstObject];
+        APCTableViewSection *section = [items firstObject];
         NSMutableArray *rowItems = [NSMutableArray arrayWithArray:section.rows];
         [rowItems addObject:rowItem];
         section.rows = [NSArray arrayWithArray:rowItems];
     }
+    
+    return [NSArray arrayWithArray:items];
 }
 
 - (void)setupTableView
@@ -161,13 +163,15 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 #pragma mark - Public methods
 
-- (void)studyDetailsFromJSONFile:(NSString *)jsonFileName
+- (NSArray *)studyDetailsFromJSONFile:(NSString *)jsonFileName
 {
     NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
     NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     
     NSError *parseError;
     NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
+    
+    NSMutableArray *items = [NSMutableArray new];
     
     if (!parseError) {
         
@@ -195,18 +199,12 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
         
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
-        [self.items addObject:section];
+        [items addObject:section];
     }
+    
+    return [NSArray arrayWithArray:items];
 }
 
-- (IBAction)signInTapped:(id)sender
-{
-    
-}
-- (IBAction)signUpTapped:(id)sender
-{
-    
-}
 
 - (APCTableViewStudyDetailsItem *)itemForIndexPath:(NSIndexPath *)indexPath
 {
@@ -227,5 +225,17 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     
     return studyItemType;
 }
+
+- (void)signInTapped:(id)sender
+{
+    APCForgotPasswordViewController *signInViewController = [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"SignInVC"];
+    [self.navigationController pushViewController:signInViewController animated:YES];
+}
+
+- (void)signUpTapped:(id)sender
+{
+    [self.navigationController pushViewController: [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"InclusionCriteriaVC"] animated:YES];
+}
+
 
 @end
