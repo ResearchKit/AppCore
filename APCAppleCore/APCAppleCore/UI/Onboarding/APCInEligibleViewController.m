@@ -56,6 +56,9 @@
 }
 
 
-- (IBAction)next:(id)sender {
+- (IBAction)next:(id)sender
+{
+    APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"ShareVC"];
+    [self.navigationController pushViewController:shareViewController animated:YES];
 }
 @end

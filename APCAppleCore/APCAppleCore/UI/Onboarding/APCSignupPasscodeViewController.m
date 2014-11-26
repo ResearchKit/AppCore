@@ -10,7 +10,7 @@
 #import "APCPasscodeView.h"
 #import "APCStepProgressBar.h"
 #import "UIAlertController+Helper.h"
-#import "APCSignupTouchIDViewController.h"
+#import "APCSignupPasscodeViewController.h"
 #import "APCSignUpPermissionsViewController.h"
 #import "APCAppDelegate.h"
 #import "UIColor+APCAppearance.h"
@@ -20,7 +20,7 @@
 
 @import LocalAuthentication;
 
-@interface APCSignupTouchIDViewController () <APCPasscodeViewDelegate>
+@interface APCSignupPasscodeViewController () <APCPasscodeViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
@@ -31,7 +31,7 @@
 @end
 
 
-@implementation APCSignupTouchIDViewController
+@implementation APCSignupPasscodeViewController
 
 @synthesize stepProgressBar;
 
@@ -130,7 +130,9 @@
 
 - (void) next
 {
-    
+    APHSignUpPermissionsViewController *permissionsVC = [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"PermissionsVC"];
+    permissionsVC.user = self.user;
+    [self.navigationController pushViewController:permissionsVC animated:YES];
 }
 
 - (void) showFirstTry

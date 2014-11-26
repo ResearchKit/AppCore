@@ -8,6 +8,8 @@
 
 #import "APCIntroVideoViewController.h"
 
+static NSString *const kVideoShownKey = @"VideoShown";
+
 @interface APCIntroVideoViewController ()
 
 @end
@@ -44,6 +46,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
     [self.moviePlayer play];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    self.moviePlayer.scalingMode = MPMovieScalingModeAspectFill;
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -52,6 +56,14 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
     
     [self.moviePlayer pause];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kVideoShownKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -73,6 +85,7 @@
 #pragma mark - Public Methods
 
 - (void) skip {
+    APHStudyOverviewViewController * vc = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"StudyOverviewVC"];
+    [self.navigationController pushViewController:vc animated:YES];
 }
-
 @end

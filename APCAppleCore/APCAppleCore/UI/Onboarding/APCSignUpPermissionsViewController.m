@@ -16,6 +16,8 @@
 #import "UIAlertController+Helper.h"
 #import "UIView+Helper.h"
 
+#import <CoreMotion/CoreMotion.h>
+
 static CGFloat const kTableViewRowHeight                 = 165.0f;
 
 @interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
@@ -70,6 +72,7 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
     [self setupNavAppearance];
     [self setupProgressBar];
     
+    self.permissions = [self prepareData];
     [self reloadData];
 }
 
@@ -85,6 +88,68 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
     
     [self reloadData];
 }
+
+#pragma mark - Prepare Content
+
+- (NSArray *)prepareData
+{
+    NSMutableArray *items = [NSMutableArray new];
+    
+    NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
+    NSArray *servicesArray = initialOptions[kAppServicesListRequiredKey];
+    
+    for (NSNumber *type in servicesArray) {
+        
+        APCSignUpPermissionsType permissionType = type.integerValue;
+        
+        switch (permissionType) {
+            case kSignUpPermissionsTypeHealthKit:
+            {
+                APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
+                item.permissionType = kSignUpPermissionsTypeHealthKit;
+                item.caption = NSLocalizedString(@"Health Kit", @"");
+                item.detailText = NSLocalizedString(@"Lorem ipsum dolor sit amet, etos et ya consectetur adip isicing elit, sed.", @"");
+                [items addObject:item];
+            }
+                break;
+            case kSignUpPermissionsTypeLocation:
+            {
+                APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
+                item.permissionType = kSignUpPermissionsTypeLocation;
+                item.caption = NSLocalizedString(@"Location Services", @"");
+                item.detailText = NSLocalizedString(@"Lorem ipsum dolor sit amet, etos et ya consectetur adip isicing elit, sed.", @"");
+                [items addObject:item];
+            }
+                break;
+            case kSignUpPermissionsTypeCoremotion:
+            {
+                if ([CMMotionActivityManager isActivityAvailable]){
+                    APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
+                    item.permissionType = kSignUpPermissionsTypeCoremotion;
+                    item.caption = NSLocalizedString(@"Core Motion", @"");
+                    item.detailText = NSLocalizedString(@"Lorem ipsum dolor sit amet, etos et ya consectetur adip isicing elit, sed.", @"");
+                    [items addObject:item];
+                }
+            }
+                break;
+            case kSignUpPermissionsTypePushNotifications:
+            {
+                APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
+                item.permissionType = kSignUpPermissionsTypePushNotifications;
+                item.caption = NSLocalizedString(@"Push Notifications", @"");
+                item.detailText = NSLocalizedString(@"Lorem ipsum dolor sit amet, etos et ya consectetur adip isicing elit, sed.", @"");
+                [items addObject:item];
+            }
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    return items;
+}
+
 
 #pragma mark - Setup
 
@@ -244,6 +309,10 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 - (BOOL)isPermissionsGranted
 {
     return (self.permissionsGrantedCount == self.permissions.count);
+}
+
+- (IBAction)next:(id)sender {
+    [self finishSignUp];
 }
 
 @end

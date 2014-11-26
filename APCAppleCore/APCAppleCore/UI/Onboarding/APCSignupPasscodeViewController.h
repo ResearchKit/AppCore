@@ -10,7 +10,7 @@
 #import "APCSignUpProgressing.h"
 #import "APCUserInfoConstants.h"
 
-@interface APCSignupTouchIDViewController : UIViewController <APCSignUpProgressing>
+@interface APCSignupPasscodeViewController : UIViewController <APCSignUpProgressing>
 
 - (void)next;
 

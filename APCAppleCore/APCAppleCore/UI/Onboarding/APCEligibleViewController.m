@@ -131,18 +131,33 @@
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - Public Method
-
-- (void)startSignUp
-{
-    
-}
-
 #pragma mark - Selectors
 
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void) startSignUp
+{
+    APHSignUpGeneralInfoViewController *signUpVC = [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"SignUpGeneralInfoVC"];
+    [self.navigationController pushViewController:signUpVC animated:YES];
+}
+
+- (IBAction)startConsentTapped:(id)sender
+{
+#if DEVELOPMENT
+    [self startSignUp];
+#else
+    if (((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.parameters.hideConsent)
+    {
+        [self startSignUp];
+    }
+    else
+    {
+        [self showConsent];
+    }
+#endif
 }
 
 @end
