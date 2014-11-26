@@ -30,4 +30,9 @@
     return nil;
 }
 
+- (BOOL) isWildcard
+{
+	return NO;
+}
+
 @end

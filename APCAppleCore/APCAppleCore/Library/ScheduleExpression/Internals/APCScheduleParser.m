@@ -9,6 +9,7 @@
 #import "APCScheduleParser.h"
 #import "APCListSelector.h"
 #import "APCPointSelector.h"
+#import "APCDayOfMonthSelector.h"
 
 
 static unichar kEndToken            = '\0';
@@ -17,10 +18,6 @@ static unichar kStepSeparatorToken  = '/';
 static unichar kWildCardToken       = '*';
 static unichar kRangeSeparatorToken = '-';
 static unichar kFieldSeparatorToken = ' ';
-//static unichar kRelativeSmallToken  = 'r';
-//static unichar kRelativeLargeToken  = 'R';
-//static unichar kAbsoluteSmallToken  = 'a';
-//static unichar kAbsoluteLargeToken  = 'A';
 
 
 @interface APCScheduleParser ()
@@ -58,7 +55,7 @@ static unichar kFieldSeparatorToken = ' ';
     return nextToken;
 }
 
-- (void)consume
+- (void)consumeOneChar
 {
     if (self.expression.length > 0)
     {
@@ -66,7 +63,7 @@ static unichar kFieldSeparatorToken = ' ';
     }
 }
 
-- (void)error
+- (void)recordError
 {
     self.errorEncountered = YES;
 }
@@ -78,11 +75,11 @@ static unichar kFieldSeparatorToken = ' ';
     if ([self next] == c)
     {
         expectation = YES;
-        [self consume];
+        [self consumeOneChar];
     }
     else
     {
-        [self error];
+        [self recordError];
     }
     
     return expectation;
@@ -92,7 +89,7 @@ static unichar kFieldSeparatorToken = ' ';
 {
     while (self.next == kFieldSeparatorToken)
     {
-        [self consume];
+        [self consumeOneChar];
     }
 }
 
@@ -114,13 +111,13 @@ static unichar kFieldSeparatorToken = ' ';
         }
         else
         {
-            [self error];
+            [self recordError];
         }
     }
     else
     {
         //  Found unexpected non-numeric characters
-        [self error];
+        [self recordError];
     }
     
     return number;
@@ -128,7 +125,12 @@ static unichar kFieldSeparatorToken = ' ';
 
 - (NSArray*)rangeProduction
 {
-    //  range :: number ( '-' number ) ?
+	//
+	// Production rule:
+	//
+	//		range :: number ( '-' number ) ?
+	//
+
     NSMutableArray* range = [NSMutableArray array];
 
     if (isnumber(self.next))
@@ -137,7 +139,7 @@ static unichar kFieldSeparatorToken = ' ';
         
         if (self.next == kRangeSeparatorToken)
         {
-            [self consume];
+            [self consumeOneChar];
             
             NSNumber*   rangeEnd = [self numberProduction];
             if (rangeEnd != nil)
@@ -148,7 +150,7 @@ static unichar kFieldSeparatorToken = ' ';
     }
     else
     {
-        [self error];
+        [self recordError];
     }
     
     return range;
@@ -156,19 +158,28 @@ static unichar kFieldSeparatorToken = ' ';
 
 - (NSNumber*)stepsProduction
 {
-    //  steps :: number
+	//
+	// Production rule:
+	//
+	//		steps :: number
+	//
     
     return [self numberProduction];
 }
 
 - (NSArray*)numspecProduction
 {
-    //  numspec :: '*' | range
+	//
+	// Production rule:
+	//
+	//		numspec :: '*' | range
+	//
+
     NSArray*    numSpec = nil;
 
     if (self.next == kWildCardToken)
     {
-        [self consume];
+        [self consumeOneChar];
         //  By defaults, selectors are initialized with min-max values corresponding with the selector's unit type
     }
     else if (isnumber(self.next) == YES)
@@ -177,7 +188,7 @@ static unichar kFieldSeparatorToken = ' ';
     }
     else
     {
-        [self error];
+        [self recordError];
     }
     
     return numSpec;
@@ -185,23 +196,36 @@ static unichar kFieldSeparatorToken = ' ';
 
 - (APCPointSelector*)exprProductionForType:(UnitType)unitType
 {
-    //  expr :: numspec ( '/' steps ) ?
+	//
+	// Production rule:
+	//
+    //		expr :: numspec ( '/' steps ) ?
+	//
+
     NSArray*            numSpec  = [self numspecProduction];
     NSNumber*           step     = nil;
     
     if (self.next == kStepSeparatorToken)
     {
-        [self consume];
+        [self consumeOneChar];
         step = [self stepsProduction];
     }
 
     NSNumber*           begin    = numSpec.count > 0 ? numSpec[0] : nil;
     NSNumber*           end      = numSpec.count > 1 ? numSpec[1] : nil;
-    APCPointSelector*   selector = [[APCPointSelector alloc] initWithUnit:unitType beginRange:begin endRange:end step:step];
+
+	/*
+	 Ron:  this is where the "point selector" -- the date range generator -- gets created.
+	 */
+	
+    APCPointSelector*   selector = [[APCPointSelector alloc] initWithUnit:unitType
+															   beginRange:begin
+																 endRange:end
+																	 step:step];
     
     if (selector == nil)
     {
-        [self error];
+        [self recordError];
     }
     
     return selector;
@@ -209,12 +233,22 @@ static unichar kFieldSeparatorToken = ' ';
 
 - (APCListSelector*)listProductionForType:(UnitType)unitType
 {
-    //  list :: expr ( ',' expr ) *
+	//
+	// Production rule:
+	//
+	//		list :: expr ( ',' expr ) *
+	//
+
     NSMutableArray*     subSelectors = [NSMutableArray array];
     APCListSelector*    listSelector = nil;
     
     while (self.next != kEndToken && self.next != kFieldSeparatorToken)
     {
+
+		//
+		// Ron:  about to follow dayOfMonth production through here...
+		//
+
         APCPointSelector*   pointSelector = [self exprProductionForType:unitType];
         
         if (self.errorEncountered)
@@ -227,11 +261,11 @@ static unichar kFieldSeparatorToken = ' ';
             
             if (self.next == kListSeparatorToken)
             {
-                [self consume];
+                [self consumeOneChar];
             }
             else if (self.next != kEndToken && self.next != kFieldSeparatorToken)
             {
-                [self error];
+                [self recordError];
             }
         }
     }
@@ -255,7 +289,14 @@ parseError:
 
 - (void)fieldsProduction
 {
-    //  fields :: minutesList hoursList dayOfMonthList monthList dayOfWeekList
+	//
+	// Production rule:
+	//
+	//		fields :: relatvie minutesList hoursList dayOfMonthList monthList dayOfWeekList
+	//
+
+	APCListSelector* rawDayOfMonthSelector = nil;
+	APCListSelector* rawDayOfWeekSelector = nil;
     
     self.minuteSelector = [self listProductionForType:kMinutes];
     if (self.errorEncountered)
@@ -275,8 +316,8 @@ parseError:
     }
     
     [self fieldSeparatorProduction];
-    
-    self.dayOfMonthSelector = [self listProductionForType:kDayOfMonth];
+
+	rawDayOfMonthSelector = [self listProductionForType:kDayOfMonth];
     if (self.errorEncountered)
     {
         NSLog(@"Invalid Day of Month selector");
@@ -293,8 +334,8 @@ parseError:
     }
     
     [self fieldSeparatorProduction];
-    
-    self.dayOfWeekSelector = [self listProductionForType:kDayOfWeek];
+
+	rawDayOfWeekSelector = [self listProductionForType:kDayOfWeek];
     if (self.errorEncountered)
     {
         NSLog(@"Invalid Day of Week selector");
@@ -304,6 +345,14 @@ parseError:
     [self expect: kEndToken];
     
     self.yearSelector = [self yearProduction:kYear];
+
+
+	/*
+	 Now that we know there are no errors:  create a
+	 wrapper around the day-of-month and day-of-week
+	 selector we just generated.
+	 */
+	self.dayOfMonthSelector = [[APCDayOfMonthSelector alloc] initWithFreshlyParsedDayOfMonthSelector: rawDayOfMonthSelector andDayOfWeekSelector: rawDayOfWeekSelector];
 
 parseError:
     return;

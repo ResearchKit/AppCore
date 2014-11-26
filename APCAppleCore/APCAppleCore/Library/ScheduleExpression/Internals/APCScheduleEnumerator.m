@@ -1,4 +1,4 @@
-//
+	//
 //  APCScheduleEnumerator.m
 //  Schedule
 //
@@ -8,6 +8,7 @@
 
 #import "APCScheduleEnumerator.h"
 #import "APCTimeSelectorEnumerator.h"
+#import "APCDayOfMonthSelector.h"
 
 static NSInteger    kMinuteIndex = 0;
 static NSInteger    kHourIndex   = 1;
@@ -22,11 +23,25 @@ static NSInteger    kYearIndex   = 4;
 @property (nonatomic, strong) NSDate*       endingMoment;
 @property (nonatomic, strong) NSDate*       nextMoment;
 
+@property (nonatomic, strong) NSString*		originalCronExpression;		// for debug-printouts only.
 
 @property (nonatomic, strong) NSCalendar*       calendar;
 @property (nonatomic, assign) NSInteger         year;
-@property (nonatomic, strong) NSMutableArray*   enumerators;    //  array of APCTimeSelectorEnumerator
+
+/**
+ These two variables must be the same length and contain
+ corresponding items in the same sequence.
+ */
+@property (nonatomic, strong) NSArray*          enumerators;    //  array of APCTimeSelectorEnumerator
 @property (nonatomic, strong) NSMutableArray*   componenets;    //  arrray of NSNumbers
+
+/**
+ These variables let us figure out if we just rolled over
+ the month or year, so we can then recompute the days.
+ */
+@property (nonatomic, strong) APCTimeSelectorEnumerator *dayEnumerator;
+@property (nonatomic, strong) APCTimeSelectorEnumerator *monthEnumerator;
+@property (nonatomic, strong) APCTimeSelectorEnumerator *yearEnumerator;
 
 @end
 
@@ -38,7 +53,6 @@ static NSInteger    kYearIndex   = 4;
                          hourSelector:(APCTimeSelector*)hourSelector
                    dayOfMonthSelector:(APCTimeSelector*)dayOfMonthSelector
                         monthSelector:(APCTimeSelector*)monthSelector
-                    dayOfWeekSelector:(APCTimeSelector*)dayOfWeekSelector
                          yearSelector:(APCTimeSelector*)yearSelector
 {
     return [self initWithBeginningTime:begin
@@ -47,7 +61,6 @@ static NSInteger    kYearIndex   = 4;
                           hourSelector:hourSelector
                     dayOfMonthSelector:dayOfMonthSelector
                          monthSelector:monthSelector
-                     dayOfWeekSelector:dayOfMonthSelector
                           yearSelector:yearSelector];
 }
 
@@ -57,7 +70,6 @@ static NSInteger    kYearIndex   = 4;
                          hourSelector:(APCTimeSelector*)hourSelector
                    dayOfMonthSelector:(APCTimeSelector*)dayOfMonthSelector
                         monthSelector:(APCTimeSelector*)monthSelector
-                    dayOfWeekSelector:(APCTimeSelector*)dayOfWeekSelector
                          yearSelector:(APCTimeSelector*)yearSelector
 {
     self = [super init];
@@ -78,13 +90,19 @@ static NSInteger    kYearIndex   = 4;
                                                            @(beginComponents.month),
                                                            @(beginComponents.year)]];
         
-        APCTimeSelectorEnumerator*   minuteEnumerator = [minuteSelector     enumeratorBeginningAt:@(beginComponents.minute)];
-        APCTimeSelectorEnumerator*   hourEnumerator   = [hourSelector       enumeratorBeginningAt:@(beginComponents.hour)];
-        APCTimeSelectorEnumerator*   dayEnumerator    = [dayOfMonthSelector enumeratorBeginningAt:@(beginComponents.day)];
-        APCTimeSelectorEnumerator*   monthEnumerator  = [monthSelector      enumeratorBeginningAt:@(beginComponents.month)];
-        APCTimeSelectorEnumerator*   yearEnumerator   = [yearSelector       enumeratorBeginningAt:@(beginComponents.year)];
-        
-        _enumerators = [NSMutableArray arrayWithArray:@[minuteEnumerator, hourEnumerator, dayEnumerator, monthEnumerator, yearEnumerator]];
+        APCTimeSelectorEnumerator* minuteEnumerator = [minuteSelector enumeratorBeginningAt:@(beginComponents.minute)];
+        APCTimeSelectorEnumerator* hourEnumerator   = [hourSelector   enumeratorBeginningAt:@(beginComponents.hour)];
+
+
+		// Track these three enumerators individually, so that
+		// when we roll over the month or year, we can recompute
+		// the days of the month specified by our weekday selector.
+        self.dayEnumerator   = [dayOfMonthSelector enumeratorBeginningAt:@(beginComponents.day)];
+        self.monthEnumerator = [monthSelector      enumeratorBeginningAt:@(beginComponents.month)];
+        self.yearEnumerator  = [yearSelector       enumeratorBeginningAt:@(beginComponents.year)];
+
+		
+        _enumerators = @[minuteEnumerator, hourEnumerator, self.dayEnumerator, self.monthEnumerator, self.yearEnumerator];
         
 
         //  Prime the enumerators to their first valid value. If a given enumerator's first valid value is
@@ -126,35 +144,85 @@ static NSInteger    kYearIndex   = 4;
             }
         } while (ndx >= 0);
         
+
+		// Now compute the days of the month for the actual, specified
+		// month and year.  We do the same thing each time through
+		// -nextObject, below.
+		[self recomputeDaysAfterRollingOverMonthOrYear];
+
+
         _nextMoment = [self componentsToDate];
     }
     
     return self;
 }
 
+
+/**
+ Ron:  this method seems to contain the core of how iteration
+ happens.  E.g., this is where we say:
+ -	roll over to the next minute
+
+ -	if we've gotten to the last minute -- if the minute
+	iterator returns nil -- "reset" that enumerator (a
+	custom method) and roll the next-outermost enumerator
+	to its next object
+ */
 - (NSDate*)nextObject
 {
-    NSDate* savedMoment = self.nextMoment;
+    NSDate*   savedMoment		= self.nextMoment;
+    NSNumber* nextPoint			= nil;
+    NSInteger enumeratorIndex	= 0;
 
-    NSNumber*   nextPoint = nil;
-    NSInteger   ndx       = 0;
-    
+
+	/*
+	 The point:  each time we hit this method, increment the "minutes"
+	 field to the next legal minute.  If that rolls over (from 59 to 0,
+	 say), reset it to its starting point, and increment the "hours"
+	 field.  If "hours" rolls over, increment "days."  And so on, up 
+	 through "years."
+	 
+	 The catch:  when we roll over the "day" iterator, that actually
+	 means we just moved from one month to the next month (and, if
+	 it was December, the next year).  One of our optional "day" specifiers
+	 is "weekdays."  If the weekday specifier says something like "every
+	 Tuesday," that means different dates for March 2014 and April 2014.
+	 So after we roll over a month and/or year, we'll feed the new month
+	 and year to our day-of-month enumerator, to make sure that the next
+	 time we iterate through it, it gives us the right dates for
+	 "Tuesday" (or whatever weekdays it represents).
+	 
+	 Ed wrote the code for paragraph 1.
+	 Ron amended it to support paragraph 2.
+	 */
     do
     {
-        nextPoint = [self.enumerators[ndx] nextObject];
+		APCTimeSelectorEnumerator *enumerator = self.enumerators [enumeratorIndex];
+        nextPoint = [enumerator nextObject];
         
         if (nextPoint != nil)
         {
-            self.componenets[ndx] = nextPoint;
+            self.componenets[enumeratorIndex] = nextPoint;
+
+			/*
+			 If we rolled over the month or year, tell the day iterator
+			 about it, so it can figure out what the "days of the week"
+			 mean for this month and year.
+			 */
+			if (enumerator == self.monthEnumerator || enumerator == self.yearEnumerator)
+			{
+				[self recomputeDaysAfterRollingOverMonthOrYear];
+			}
         }
         else
         {
             //  Rollover the current enumerator and move to the next one.
-            //  Enumerators (0 ... ndx - 1) have already been rollover at this point.
-            self.componenets[ndx] = [self.enumerators[ndx] nextObjectAfterRollover];
-            ++ndx;
+            //  Enumerators (0 ... ndx - 1) have already been rolled over
+			//  at this point.
+            self.componenets[enumeratorIndex] = [enumerator nextObjectAfterRollover];
+            ++enumeratorIndex;
         }
-    } while (nextPoint == nil && ndx < self.enumerators.count);
+    } while (nextPoint == nil && enumeratorIndex < self.enumerators.count);
     
     self.nextMoment = [self componentsToDate];
     
@@ -165,6 +233,20 @@ static NSInteger    kYearIndex   = 4;
     }
     
     return savedMoment;
+}
+
+- (void) recomputeDaysAfterRollingOverMonthOrYear
+{
+	APCDayOfMonthSelector *selector = (APCDayOfMonthSelector *) self.dayEnumerator.selector;
+
+	NSNumber *month = self.componenets [kMonthIndex];
+	NSNumber *year  = self.componenets [kYearIndex];
+
+	[selector recomputeDaysBasedOnCalendar: self.calendar
+									 month: month
+									  year: year];
+
+	self.componenets [kDayIndex] = self.dayEnumerator.nextObjectAfterRollover;
 }
 
 - (NSDate*)componentsToDate
