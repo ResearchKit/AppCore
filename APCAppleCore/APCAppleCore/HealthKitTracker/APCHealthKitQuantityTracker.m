@@ -68,12 +68,14 @@ NSString *const kNotificationName                  = @"APCQuantityTypeIdentifier
                 
                 [self.healthStore mostRecentQuantitySampleOfType:self.quantityType predicate:nil completion:^(HKQuantity *mostRecentQuantity, NSError *error) {
                     
-                    self.lastUpdate = [NSDate date];
-                    self.totalUpdates++;
-                    NSDictionary *quantityDict = @{@"mostRecentQuantity": mostRecentQuantity, @"timestamp" : self.lastUpdate};
-                    NSLog(@"%@", mostRecentQuantity);
-                    if (![self.notificationName isEqualToString:@""] && !self.notificationName) {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationName object:self userInfo:quantityDict];
+                    if (mostRecentQuantity != nil) {
+                        self.lastUpdate = [NSDate date];
+                        self.totalUpdates++;
+                        NSDictionary *quantityDict = @{@"mostRecentQuantity": mostRecentQuantity, @"timestamp" : self.lastUpdate};
+                        NSLog(@"%@", mostRecentQuantity);
+                        if (![self.notificationName isEqualToString:@""] && !self.notificationName) {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationName object:self userInfo:quantityDict];
+                        }
                     }
                 }];
                 
