@@ -169,6 +169,8 @@
 		748DD7571A1FE41700EE9969 /* APCTimeSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 748DD7491A1FE41700EE9969 /* APCTimeSelector.m */; };
 		748DD7581A1FE41700EE9969 /* APCTimeSelectorEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 748DD74A1A1FE41700EE9969 /* APCTimeSelectorEnumerator.h */; };
 		748DD7591A1FE41700EE9969 /* APCTimeSelectorEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 748DD74B1A1FE41700EE9969 /* APCTimeSelectorEnumerator.m */; };
+		7B8EBE981A2565C4001747EB /* APCHealthKitQuantityTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B8EBE941A2565C4001747EB /* APCHealthKitQuantityTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7B8EBE991A2565C4001747EB /* APCHealthKitQuantityTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B8EBE951A2565C4001747EB /* APCHealthKitQuantityTracker.m */; };
 		7BA4BBFA19D4893700BC4023 /* APCPassiveLocationTracking.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BA4BBF519D4893700BC4023 /* APCPassiveLocationTracking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BA4BBFB19D4893700BC4023 /* APCPassiveLocationTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BA4BBF619D4893700BC4023 /* APCPassiveLocationTracking.m */; };
 		7BA4BC0419D490EE00BC4023 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */; };
@@ -471,6 +473,8 @@
 		748DD7491A1FE41700EE9969 /* APCTimeSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTimeSelector.m; sourceTree = "<group>"; };
 		748DD74A1A1FE41700EE9969 /* APCTimeSelectorEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTimeSelectorEnumerator.h; sourceTree = "<group>"; };
 		748DD74B1A1FE41700EE9969 /* APCTimeSelectorEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTimeSelectorEnumerator.m; sourceTree = "<group>"; };
+		7B8EBE941A2565C4001747EB /* APCHealthKitQuantityTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCHealthKitQuantityTracker.h; path = APCAppleCore/HealthKitTracker/APCHealthKitQuantityTracker.h; sourceTree = SOURCE_ROOT; };
+		7B8EBE951A2565C4001747EB /* APCHealthKitQuantityTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCHealthKitQuantityTracker.m; path = APCAppleCore/HealthKitTracker/APCHealthKitQuantityTracker.m; sourceTree = SOURCE_ROOT; };
 		7BA4BBF519D4893700BC4023 /* APCPassiveLocationTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPassiveLocationTracking.h; sourceTree = "<group>"; };
 		7BA4BBF619D4893700BC4023 /* APCPassiveLocationTracking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPassiveLocationTracking.m; sourceTree = "<group>"; };
 		7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -935,6 +939,16 @@
 			path = Internals;
 			sourceTree = "<group>";
 		};
+		7B8EBE851A250C2E001747EB /* HealthKitTracker */ = {
+			isa = PBXGroup;
+			children = (
+				7B8EBE941A2565C4001747EB /* APCHealthKitQuantityTracker.h */,
+				7B8EBE951A2565C4001747EB /* APCHealthKitQuantityTracker.m */,
+			);
+			name = HealthKitTracker;
+			path = fitnessTracker;
+			sourceTree = "<group>";
+		};
 		7BA4BBF119D4893700BC4023 /* PassiveLocationTracking */ = {
 			isa = PBXGroup;
 			children = (
@@ -979,6 +993,7 @@
 			isa = PBXGroup;
 			children = (
 				F5179B2E19D09128001DCCB7 /* APCAppleCore.h */,
+				7B8EBE851A250C2E001747EB /* HealthKitTracker */,
 				7BA4BBF119D4893700BC4023 /* PassiveLocationTracking */,
 				F5179BA319D0917D001DCCB7 /* DataMonitor */,
 				F5179BA619D0917D001DCCB7 /* DataSubstrate */,
@@ -1256,6 +1271,7 @@
 				F54B66951A1EA0A700495AC9 /* APCResult+Bridge.h in Headers */,
 				5B3B60291A15645E006B2346 /* APCPermissionsCell.h in Headers */,
 				748DD7581A1FE41700EE9969 /* APCTimeSelectorEnumerator.h in Headers */,
+				7B8EBE981A2565C4001747EB /* APCHealthKitQuantityTracker.h in Headers */,
 				F5179C7B19D0917D001DCCB7 /* APCDataSubstrate+CoreData.h in Headers */,
 				748DD74C1A1FE41700EE9969 /* APCScheduleExpression.h in Headers */,
 				F5179C9319D0917D001DCCB7 /* APCDBStatus.h in Headers */,
@@ -1599,6 +1615,7 @@
 				5B3B601E1A15645E006B2346 /* APCProfileViewController.m in Sources */,
 				5B3B60281A15645E006B2346 /* APCDefaultTableViewCell.m in Sources */,
 				5B908A891A245D1F00F9E907 /* APCPieGraphView.m in Sources */,
+				7B8EBE991A2565C4001747EB /* APCHealthKitQuantityTracker.m in Sources */,
 				F5B4212B19D23D6800F9CD69 /* APCParametersCell.m in Sources */,
 				5B3B60261A15645E006B2346 /* APCCheckTableViewCell.m in Sources */,
 				748DD7531A1FE41700EE9969 /* APCScheduleEnumerator.m in Sources */,
