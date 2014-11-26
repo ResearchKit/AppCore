@@ -41,6 +41,10 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
+    self.healthKitTracker = [[APCHealthKitQuantityTracker alloc] initWithIdentifier:HKQuantityTypeIdentifierHeartRate withNotificationName:@"APCHeartRateUpdated"];
+    
+    [self.healthKitTracker start];
+    
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
     //Setting the Audio Session Category for voice prompts when device is locked
