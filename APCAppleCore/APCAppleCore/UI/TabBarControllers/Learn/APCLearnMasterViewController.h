@@ -18,4 +18,6 @@
 
 - (APCTableViewStudyDetailsItem *)itemForIndexPath:(NSIndexPath *)indexPath;
 
+- (void)prepareContent;
+
 @end

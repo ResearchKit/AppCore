@@ -121,7 +121,6 @@
 		5B3B608F1A156495006B2346 /* APCStudyDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B606B1A156495006B2346 /* APCStudyDetailsViewController.m */; };
 		5B3B60901A156495006B2346 /* APCStudyOverviewViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B606C1A156495006B2346 /* APCStudyOverviewViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60911A156495006B2346 /* APCStudyOverviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B606D1A156495006B2346 /* APCStudyOverviewViewController.m */; };
-		5B3B60921A156495006B2346 /* APCStudyOverviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B3B606E1A156495006B2346 /* APCStudyOverviewViewController.xib */; };
 		5B3B60931A156495006B2346 /* APCTermsAndConditionsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B606F1A156495006B2346 /* APCTermsAndConditionsViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B3B60941A156495006B2346 /* APCTermsAndConditionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B60701A156495006B2346 /* APCTermsAndConditionsViewController.m */; };
 		5B3B60951A156495006B2346 /* APCUserInfoConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3B60711A156495006B2346 /* APCUserInfoConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -150,6 +149,7 @@
 		5B908A891A245D1F00F9E907 /* APCPieGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B908A871A245D1F00F9E907 /* APCPieGraphView.m */; };
 		5B908A8C1A245FD400F9E907 /* APCDashboardPieGraphTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B908A8A1A245FD400F9E907 /* APCDashboardPieGraphTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B908A8D1A245FD400F9E907 /* APCDashboardPieGraphTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B908A8B1A245FD400F9E907 /* APCDashboardPieGraphTableViewCell.m */; };
+		5B908AA01A254F9D00F9E907 /* APCLearn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B908A9F1A254F9D00F9E907 /* APCLearn.storyboard */; };
 		5BB2BA8C1A100BC300684CCE /* UIColor+TertiaryColors.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB2BA8A1A100BC300684CCE /* UIColor+TertiaryColors.h */; };
 		5BB2BA8D1A100BC300684CCE /* UIColor+TertiaryColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB2BA8B1A100BC300684CCE /* UIColor+TertiaryColors.m */; };
 		5BF5C90819D9E208007928D4 /* APCUser+UserData.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF5C90619D9E208007928D4 /* APCUser+UserData.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -418,7 +418,6 @@
 		5B3B606B1A156495006B2346 /* APCStudyDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyDetailsViewController.m; sourceTree = "<group>"; };
 		5B3B606C1A156495006B2346 /* APCStudyOverviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewViewController.h; sourceTree = "<group>"; };
 		5B3B606D1A156495006B2346 /* APCStudyOverviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyOverviewViewController.m; sourceTree = "<group>"; };
-		5B3B606E1A156495006B2346 /* APCStudyOverviewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCStudyOverviewViewController.xib; sourceTree = "<group>"; };
 		5B3B606F1A156495006B2346 /* APCTermsAndConditionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTermsAndConditionsViewController.h; sourceTree = "<group>"; };
 		5B3B60701A156495006B2346 /* APCTermsAndConditionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTermsAndConditionsViewController.m; sourceTree = "<group>"; };
 		5B3B60711A156495006B2346 /* APCUserInfoConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCUserInfoConstants.h; sourceTree = "<group>"; };
@@ -448,6 +447,7 @@
 		5B908A871A245D1F00F9E907 /* APCPieGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPieGraphView.m; sourceTree = "<group>"; };
 		5B908A8A1A245FD400F9E907 /* APCDashboardPieGraphTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardPieGraphTableViewCell.h; sourceTree = "<group>"; };
 		5B908A8B1A245FD400F9E907 /* APCDashboardPieGraphTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDashboardPieGraphTableViewCell.m; sourceTree = "<group>"; };
+		5B908A9F1A254F9D00F9E907 /* APCLearn.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCLearn.storyboard; sourceTree = "<group>"; };
 		5BB2BA8A1A100BC300684CCE /* UIColor+TertiaryColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+TertiaryColors.h"; sourceTree = "<group>"; };
 		5BB2BA8B1A100BC300684CCE /* UIColor+TertiaryColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+TertiaryColors.m"; sourceTree = "<group>"; };
 		5BF5C90619D9E208007928D4 /* APCUser+UserData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCUser+UserData.h"; sourceTree = "<group>"; };
@@ -712,7 +712,6 @@
 				5B3B606B1A156495006B2346 /* APCStudyDetailsViewController.m */,
 				5B3B606C1A156495006B2346 /* APCStudyOverviewViewController.h */,
 				5B3B606D1A156495006B2346 /* APCStudyOverviewViewController.m */,
-				5B3B606E1A156495006B2346 /* APCStudyOverviewViewController.xib */,
 				5B3B606F1A156495006B2346 /* APCTermsAndConditionsViewController.h */,
 				5B3B60701A156495006B2346 /* APCTermsAndConditionsViewController.m */,
 				5B3B60711A156495006B2346 /* APCUserInfoConstants.h */,
@@ -747,6 +746,7 @@
 			children = (
 				5B3B5F971A15645E006B2346 /* APCLearnMasterViewController.h */,
 				5B3B5F981A15645E006B2346 /* APCLearnMasterViewController.m */,
+				5B908A9F1A254F9D00F9E907 /* APCLearn.storyboard */,
 			);
 			path = Learn;
 			sourceTree = "<group>";
@@ -1462,8 +1462,8 @@
 			files = (
 				F5177D151A25476F008BFA3B /* APCActivities.storyboard in Resources */,
 				F554FF2A19E7331800BA729A /* APCParameters.storyboard in Resources */,
+				5B908AA01A254F9D00F9E907 /* APCLearn.storyboard in Resources */,
 				F5C1DC2319D22EAF006527EA /* TabBar.storyboard in Resources */,
-				5B3B60921A156495006B2346 /* APCStudyOverviewViewController.xib in Resources */,
 				5B3B608D1A156495006B2346 /* APCSpinnerViewController.xib in Resources */,
 				5B3B60421A15645E006B2346 /* APCIntroductionViewController.xib in Resources */,
 				F5179F6019D0B443001DCCB7 /* APCModel.xcdatamodeld in Resources */,

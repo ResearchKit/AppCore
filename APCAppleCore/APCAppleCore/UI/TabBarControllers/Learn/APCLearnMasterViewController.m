@@ -11,6 +11,11 @@
 #import "UIColor+TertiaryColors.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "NSBundle+Helper.h"
+#import "APCStudyDetailsViewController.h"
+#import "APCStudyOverviewViewController.h"
+
+static CGFloat kSectionHeaderHeight = 40.f;
 
 @interface APCLearnMasterViewController ()
 
@@ -22,12 +27,21 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.items = [NSMutableArray new];
+    
+    [self prepareContent];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void)prepareContent
+{
+    [self studyDetailsFromJSONFile:@"Learn"];
+    [self.tableView reloadData];
+}
+
 
 #pragma mark - UITableViewDataSource methods
 
@@ -56,11 +70,6 @@
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *headerView;
@@ -81,6 +90,49 @@
     }
     
     return headerView;
+}
+
+#pragma mark UITableViewDelegate methods
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    APCTableViewStudyDetailsItem *item = [self itemForIndexPath:indexPath];
+    
+    APCTableViewLearnItemType itemType = [self itemTypeForIndexPath:indexPath];
+    
+    switch (itemType) {
+        case kAPCTableViewLearnItemTypeStudyDetails:
+        {
+            APCStudyOverviewViewController *detailViewController = [[UIStoryboard storyboardWithName:@"APCLearn" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"StudyDetailsVC"];
+            [self.navigationController pushViewController:detailViewController animated:YES];
+        }
+            break;
+        case kAPCTableViewLearnItemTypeOtherDetails:
+        {
+            APCStudyDetailsViewController *detailViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"StudyDetailsVC"];
+            detailViewController.studyDetails = item;
+            [self.navigationController pushViewController:detailViewController animated:YES];
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    CGFloat height;
+    
+    if (section == 0) {
+        height = 0;
+    } else {
+        height = kSectionHeaderHeight;
+    }
+    
+    return height;
 }
 
 #pragma mark - Public methods
@@ -118,6 +170,7 @@
                 studyDetails.tintColor = [UIColor tertiaryColorForString:rowItemDict[@"tint_color"]];
                 
                 rowItem.item = studyDetails;
+                rowItem.itemType = kAPCTableViewLearnItemTypeOtherDetails;
                 [rowItems addObject:rowItem];
             }
             
@@ -138,5 +191,14 @@
     return studyDetailsItem;
 }
 
+- (APCTableViewLearnItemType)itemTypeForIndexPath:(NSIndexPath *)indexPath
+{
+    APCTableViewSection *sectionItem = self.items[indexPath.section];
+    APCTableViewRow *rowItem = sectionItem.rows[indexPath.row];
+    
+    APCTableViewLearnItemType learnItemType = rowItem.itemType;
+    
+    return learnItemType;
+}
 
 @end

@@ -23,6 +23,10 @@
 
 @property (nonatomic, strong) NSMutableArray *items;
 
+@property (nonatomic) BOOL showShareRow;
+
+@property (nonatomic) BOOL showConsentRow;
+
 - (IBAction)signInTapped:(id)sender;
 - (IBAction)signUpTapped:(id)sender;
 

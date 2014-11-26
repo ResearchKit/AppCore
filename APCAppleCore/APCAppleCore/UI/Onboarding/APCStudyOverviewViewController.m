@@ -11,6 +11,8 @@
 #import "UIFont+APCAppearance.h"
 #import "UIImage+APCHelper.h"
 #import "UIColor+TertiaryColors.h"
+#import "APCStudyDetailsViewController.h"
+#import "APCShareViewController.h"
 
 static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
 
@@ -31,11 +33,50 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     
     [self setupTableView];
     [self setUpAppearance];
+    [self prepareContent];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+
+- (void)prepareContent
+{
+    [self studyDetailsFromJSONFile:@"StudyOverview"];
+    
+    if (self.showShareRow){
+        
+        APCTableViewStudyDetailsItem *shareStudyItem = [APCTableViewStudyDetailsItem new];
+        shareStudyItem.caption = NSLocalizedString(@"Share this Study", nil);
+        shareStudyItem.iconImage = [UIImage imageNamed:@"share_icon"];
+        shareStudyItem.tintColor = [UIColor appTertiaryGreenColor];
+
+        APCTableViewRow *rowItem = [APCTableViewRow new];
+        rowItem.item = shareStudyItem;
+        rowItem.itemType = kAPCTableViewStudyItemTypeShare;
+        APCTableViewSection *section = [self.items firstObject];
+        NSMutableArray *rowItems = [NSMutableArray arrayWithArray:section.rows];
+        [rowItems addObject:rowItem];
+        section.rows = [NSArray arrayWithArray:rowItems];
+    }
+    
+    if (self.showConsentRow) {
+        
+        APCTableViewStudyDetailsItem *reviewConsentItem = [APCTableViewStudyDetailsItem new];
+        reviewConsentItem.caption = NSLocalizedString(@"Review Consent", nil);
+        reviewConsentItem.iconImage = [UIImage imageNamed:@"consent_icon"];
+        reviewConsentItem.tintColor = [UIColor appTertiaryPurpleColor];
+        
+        APCTableViewRow *rowItem = [APCTableViewRow new];
+        rowItem.item = reviewConsentItem;
+        
+        APCTableViewSection *section = [self.items firstObject];
+        NSMutableArray *rowItems = [NSMutableArray arrayWithArray:section.rows];
+        [rowItems addObject:rowItem];
+        section.rows = [NSArray arrayWithArray:rowItems];
+    }
 }
 
 - (void)setupTableView
@@ -87,8 +128,34 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     return cell;
 }
 
+#pragma mark - UITableViewDelegate methods
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    APCTableViewStudyDetailsItem *studyDetails = [self itemForIndexPath:indexPath];
+    
+    APCTableViewStudyItemType itemType = [self itemTypeForIndexPath:indexPath];
+    
+    switch (itemType) {
+        case kAPCTableViewStudyItemTypeStudyDetails:
+        {
+            APCStudyDetailsViewController *detailsViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"StudyDetailsVC"];
+            detailsViewController.studyDetails = studyDetails;
+            [self.navigationController pushViewController:detailsViewController animated:YES];
+        }
+            break;
+        case kAPCTableViewStudyItemTypeShare:
+        {
+            APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"ShareVC"];
+            shareViewController.hidesOkayButton = YES;
+            [self.navigationController pushViewController:shareViewController animated:YES];
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
