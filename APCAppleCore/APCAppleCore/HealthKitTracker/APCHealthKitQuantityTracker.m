@@ -5,9 +5,10 @@
 //  Created by Justin Warmkessel on 11/25/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
+
+#import "APCAppleCore.h"
 #import <HealthKit/HealthKit.h>
 #import "APCHealthKitQuantityTracker.h"
-#import "APCAppleCore.h"
 
 NSString *const kIdentifierName                    = @"HKQuantityTypeIdentifierStepCount";
 NSString *const kNotificationName                  = @"APCQuantityTypeIdentifierUpdated";
@@ -23,38 +24,37 @@ NSString *const kNotificationName                  = @"APCQuantityTypeIdentifier
 
 - (instancetype) init {
 
-    self = [self initWithIdentifier:kIdentifierName withNotificationName:kNotificationName applicationDelegate:[UIApplication sharedApplication].delegate];
+    self = [self initWithIdentifier:kIdentifierName withNotificationName:kNotificationName];
 
     return self;
 }
 
-- (instancetype) initWithIdentifier:(NSString *)identifier withNotificationName:(NSString *)name applicationDelegate:(UIResponder *)appDelegate {
+- (instancetype) initWithIdentifier:(NSString *)healthKitQuantityTypeIdentifier withNotificationName:(NSString *)name {
     self = [super init];
     
     if (self) {
-        APCAppDelegate * localAppDelegate = (APCAppDelegate *) appDelegate;
         self.healthStore = [HKHealthStore new];
-        self.quantityType = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:identifier];
+        self.quantityType = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:healthKitQuantityTypeIdentifier];
         self.notificationName = name;
     }
     
     return self;
 }
 
-- (instancetype) initWithIdentifier:(NSString *)identifier applicationDelegate:(UIResponder *)appDelegate{
+- (instancetype) initWithIdentifier:(NSString *)healthKitQuantityTypeIdentifier {
     self = [super init];
     
     if (self) {
-        APCAppDelegate * localAppDelegate = (APCAppDelegate *) appDelegate;
         self.healthStore = [HKHealthStore new];
-        self.quantityType = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:identifier];
-        self.totalUpdates = 0;
+        self.quantityType = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:healthKitQuantityTypeIdentifier];
     }
     
     return self;
 }
 
 - (void)start {
+    
+    self.totalUpdates = 0;
     
     //This is here as a fallback in case developer forgets to get permissions.
     NSSet *readTypes = [[NSSet alloc] initWithArray:@[self.quantityType]];
@@ -93,7 +93,6 @@ NSString *const kNotificationName                  = @"APCQuantityTypeIdentifier
 - (void)stop {
     [self.healthStore stopQuery:self.observerQuery];
     self.lastUpdate = nil;
-    self.totalUpdates = 0;
 }
 
 @end

@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-@class APCAppDelegate;
 
 @interface APCHealthKitQuantityTracker : NSObject
 
@@ -18,12 +17,11 @@
 @property (strong, nonatomic) HKQuantityType *quantityType;
 @property (strong, nonatomic) NSString *notificationName;
 
-- (instancetype) initWithIdentifier:(NSString *)identifier
-               withNotificationName:(NSString *)name
-                applicationDelegate:(APCAppDelegate *)appDelegate;
+- (instancetype) initWithIdentifier:(NSString *)healthKitQuantityTypeIdentifier
+               withNotificationName:(NSString *)name;
 
-- (instancetype) initWithIdentifier:(NSString *)identifier
-                applicationDelegate:(APCAppDelegate *)appDelegate;
+- (instancetype) initWithIdentifier:(NSString *)healthKitQuantityTypeIdentifier;
+
 - (void)start;
 
 - (void)stop;
