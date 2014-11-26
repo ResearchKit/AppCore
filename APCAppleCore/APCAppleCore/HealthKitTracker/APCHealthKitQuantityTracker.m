@@ -5,9 +5,9 @@
 //  Created by Justin Warmkessel on 11/25/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
-
-#import "APCAppleCore.h"
+#import <HealthKit/HealthKit.h>
 #import "APCHealthKitQuantityTracker.h"
+#import "APCAppleCore.h"
 
 NSString *const kIdentifierName                    = @"HKQuantityTypeIdentifierStepCount";
 NSString *const kNotificationName                  = @"APCQuantityTypeIdentifierUpdated";
@@ -32,8 +32,8 @@ NSString *const kNotificationName                  = @"APCQuantityTypeIdentifier
     self = [super init];
     
     if (self) {
-        APCAppDelegate * appDelegate = [UIApplication sharedApplication].delegate;
-        self.healthStore = appDelegate.dataSubstrate.healthStore;
+        APCAppDelegate * localAppDelegate = (APCAppDelegate *) appDelegate;
+        self.healthStore = [HKHealthStore new];
         self.quantityType = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:identifier];
         self.notificationName = name;
     }
@@ -45,8 +45,8 @@ NSString *const kNotificationName                  = @"APCQuantityTypeIdentifier
     self = [super init];
     
     if (self) {
-        APCAppDelegate * appDelegate = [UIApplication sharedApplication].delegate;
-        self.healthStore = appDelegate.dataSubstrate.healthStore;
+        APCAppDelegate * localAppDelegate = (APCAppDelegate *) appDelegate;
+        self.healthStore = [HKHealthStore new];
         self.quantityType = (HKQuantityType*)[HKObjectType quantityTypeForIdentifier:identifier];
         self.totalUpdates = 0;
     }
@@ -71,7 +71,7 @@ NSString *const kNotificationName                  = @"APCQuantityTypeIdentifier
                     self.lastUpdate = [NSDate date];
                     self.totalUpdates++;
                     NSDictionary *quantityDict = @{@"mostRecentQuantity": mostRecentQuantity, @"timestamp" : self.lastUpdate};
-                    
+                    NSLog(@"%@", mostRecentQuantity);
                     if (![self.notificationName isEqualToString:@""] && !self.notificationName) {
                         [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationName object:self userInfo:quantityDict];
                     }

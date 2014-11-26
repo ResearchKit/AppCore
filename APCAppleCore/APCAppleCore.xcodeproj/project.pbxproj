@@ -169,10 +169,10 @@
 		748DD7571A1FE41700EE9969 /* APCTimeSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 748DD7491A1FE41700EE9969 /* APCTimeSelector.m */; };
 		748DD7581A1FE41700EE9969 /* APCTimeSelectorEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 748DD74A1A1FE41700EE9969 /* APCTimeSelectorEnumerator.h */; };
 		748DD7591A1FE41700EE9969 /* APCTimeSelectorEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 748DD74B1A1FE41700EE9969 /* APCTimeSelectorEnumerator.m */; };
-		7B8EBE8C1A253B94001747EB /* APCHealthKitQuantityTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B8EBE8A1A253B94001747EB /* APCHealthKitQuantityTracker.h */; };
-		7B8EBE8D1A253B94001747EB /* APCHealthKitQuantityTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B8EBE8B1A253B94001747EB /* APCHealthKitQuantityTracker.m */; };
-		7B8EBE901A256065001747EB /* APCHealthKitPassiveDataCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B8EBE8E1A256065001747EB /* APCHealthKitPassiveDataCollector.h */; };
-		7B8EBE911A256065001747EB /* APCHealthKitPassiveDataCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B8EBE8F1A256065001747EB /* APCHealthKitPassiveDataCollector.m */; };
+		7B8EBE961A2565C4001747EB /* APCHealthKitPassiveDataCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B8EBE921A2565C4001747EB /* APCHealthKitPassiveDataCollector.h */; };
+		7B8EBE971A2565C4001747EB /* APCHealthKitPassiveDataCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B8EBE931A2565C4001747EB /* APCHealthKitPassiveDataCollector.m */; };
+		7B8EBE981A2565C4001747EB /* APCHealthKitQuantityTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B8EBE941A2565C4001747EB /* APCHealthKitQuantityTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7B8EBE991A2565C4001747EB /* APCHealthKitQuantityTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B8EBE951A2565C4001747EB /* APCHealthKitQuantityTracker.m */; };
 		7BA4BBFA19D4893700BC4023 /* APCPassiveLocationTracking.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BA4BBF519D4893700BC4023 /* APCPassiveLocationTracking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BA4BBFB19D4893700BC4023 /* APCPassiveLocationTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BA4BBF619D4893700BC4023 /* APCPassiveLocationTracking.m */; };
 		7BA4BC0419D490EE00BC4023 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */; };
@@ -475,10 +475,10 @@
 		748DD7491A1FE41700EE9969 /* APCTimeSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTimeSelector.m; sourceTree = "<group>"; };
 		748DD74A1A1FE41700EE9969 /* APCTimeSelectorEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTimeSelectorEnumerator.h; sourceTree = "<group>"; };
 		748DD74B1A1FE41700EE9969 /* APCTimeSelectorEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTimeSelectorEnumerator.m; sourceTree = "<group>"; };
-		7B8EBE8A1A253B94001747EB /* APCHealthKitQuantityTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHealthKitQuantityTracker.h; sourceTree = "<group>"; };
-		7B8EBE8B1A253B94001747EB /* APCHealthKitQuantityTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHealthKitQuantityTracker.m; sourceTree = "<group>"; };
-		7B8EBE8E1A256065001747EB /* APCHealthKitPassiveDataCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHealthKitPassiveDataCollector.h; sourceTree = "<group>"; };
-		7B8EBE8F1A256065001747EB /* APCHealthKitPassiveDataCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHealthKitPassiveDataCollector.m; sourceTree = "<group>"; };
+		7B8EBE921A2565C4001747EB /* APCHealthKitPassiveDataCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCHealthKitPassiveDataCollector.h; path = APCAppleCore/HealthKitTracker/APCHealthKitPassiveDataCollector.h; sourceTree = SOURCE_ROOT; };
+		7B8EBE931A2565C4001747EB /* APCHealthKitPassiveDataCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCHealthKitPassiveDataCollector.m; path = APCAppleCore/HealthKitTracker/APCHealthKitPassiveDataCollector.m; sourceTree = SOURCE_ROOT; };
+		7B8EBE941A2565C4001747EB /* APCHealthKitQuantityTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCHealthKitQuantityTracker.h; path = APCAppleCore/HealthKitTracker/APCHealthKitQuantityTracker.h; sourceTree = SOURCE_ROOT; };
+		7B8EBE951A2565C4001747EB /* APCHealthKitQuantityTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCHealthKitQuantityTracker.m; path = APCAppleCore/HealthKitTracker/APCHealthKitQuantityTracker.m; sourceTree = SOURCE_ROOT; };
 		7BA4BBF519D4893700BC4023 /* APCPassiveLocationTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPassiveLocationTracking.h; sourceTree = "<group>"; };
 		7BA4BBF619D4893700BC4023 /* APCPassiveLocationTracking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPassiveLocationTracking.m; sourceTree = "<group>"; };
 		7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -943,14 +943,15 @@
 			path = Internals;
 			sourceTree = "<group>";
 		};
-		7B8EBE851A250C2E001747EB /* fitnessTracker */ = {
+		7B8EBE851A250C2E001747EB /* HealthKitTracker */ = {
 			isa = PBXGroup;
 			children = (
-				7B8EBE8A1A253B94001747EB /* APCHealthKitQuantityTracker.h */,
-				7B8EBE8B1A253B94001747EB /* APCHealthKitQuantityTracker.m */,
-				7B8EBE8E1A256065001747EB /* APCHealthKitPassiveDataCollector.h */,
-				7B8EBE8F1A256065001747EB /* APCHealthKitPassiveDataCollector.m */,
+				7B8EBE921A2565C4001747EB /* APCHealthKitPassiveDataCollector.h */,
+				7B8EBE931A2565C4001747EB /* APCHealthKitPassiveDataCollector.m */,
+				7B8EBE941A2565C4001747EB /* APCHealthKitQuantityTracker.h */,
+				7B8EBE951A2565C4001747EB /* APCHealthKitQuantityTracker.m */,
 			);
+			name = HealthKitTracker;
 			path = fitnessTracker;
 			sourceTree = "<group>";
 		};
@@ -998,7 +999,7 @@
 			isa = PBXGroup;
 			children = (
 				F5179B2E19D09128001DCCB7 /* APCAppleCore.h */,
-				7B8EBE851A250C2E001747EB /* fitnessTracker */,
+				7B8EBE851A250C2E001747EB /* HealthKitTracker */,
 				7BA4BBF119D4893700BC4023 /* PassiveLocationTracking */,
 				F5179BA319D0917D001DCCB7 /* DataMonitor */,
 				F5179BA619D0917D001DCCB7 /* DataSubstrate */,
@@ -1276,6 +1277,7 @@
 				F54B66951A1EA0A700495AC9 /* APCResult+Bridge.h in Headers */,
 				5B3B60291A15645E006B2346 /* APCPermissionsCell.h in Headers */,
 				748DD7581A1FE41700EE9969 /* APCTimeSelectorEnumerator.h in Headers */,
+				7B8EBE981A2565C4001747EB /* APCHealthKitQuantityTracker.h in Headers */,
 				F5179C7B19D0917D001DCCB7 /* APCDataSubstrate+CoreData.h in Headers */,
 				748DD74C1A1FE41700EE9969 /* APCScheduleExpression.h in Headers */,
 				F5179C9319D0917D001DCCB7 /* APCDBStatus.h in Headers */,
@@ -1313,7 +1315,6 @@
 				F5179C9019D0917D001DCCB7 /* APCDBStatus+AddOn.h in Headers */,
 				5B3B5FE61A15645E006B2346 /* APCPresentAnimator.h in Headers */,
 				F5179B2F19D09128001DCCB7 /* APCAppleCore.h in Headers */,
-				7B8EBE8C1A253B94001747EB /* APCHealthKitQuantityTracker.h in Headers */,
 				F5FE18F819EDEE9E00D455E6 /* APCSegmentedButton.h in Headers */,
 				748DD7521A1FE41700EE9969 /* APCScheduleEnumerator.h in Headers */,
 				F5FDCF8D19EC68C9002486DE /* UIColor+APCAppearance.h in Headers */,
@@ -1324,6 +1325,7 @@
 				5B3B60A81A156538006B2346 /* APCDashboardProgressTableViewCell.h in Headers */,
 				5B3B5FE41A15645E006B2346 /* APCLineGraphView.h in Headers */,
 				748DD7541A1FE41700EE9969 /* APCScheduleParser.h in Headers */,
+				7B8EBE961A2565C4001747EB /* APCHealthKitPassiveDataCollector.h in Headers */,
 				F5179CBD19D0917D001DCCB7 /* APCTask+AddOn.h in Headers */,
 				F588BA0C19D21EFE00692473 /* NSString+Helper.h in Headers */,
 				F588B9FA19D21EFE00692473 /* APCAssertionHandler.h in Headers */,
@@ -1368,7 +1370,6 @@
 				5B3B60951A156495006B2346 /* APCUserInfoConstants.h in Headers */,
 				5B3B5FD81A15645E006B2346 /* APCCircularProgressView.h in Headers */,
 				5B3B608B1A156495006B2346 /* APCSpinnerViewController.h in Headers */,
-				7B8EBE901A256065001747EB /* APCHealthKitPassiveDataCollector.h in Headers */,
 				5B3B603E1A15645E006B2346 /* APCInstructionStepViewController.h in Headers */,
 				F5A63F1419D5EAD100284006 /* APCUser.h in Headers */,
 				5B3B60761A156495006B2346 /* APCEligibleViewController.h in Headers */,
@@ -1570,7 +1571,6 @@
 				5B3B60851A156495006B2346 /* APCSignUpInfoViewController.m in Sources */,
 				F5B4213A19D23D7700F9CD69 /* APCDebugWindow.m in Sources */,
 				5B3B60A71A156538006B2346 /* APCDashboardMessageTableViewCell.m in Sources */,
-				7B8EBE911A256065001747EB /* APCHealthKitPassiveDataCollector.m in Sources */,
 				F5179C7919D0917D001DCCB7 /* APCDataMonitor.m in Sources */,
 				F541541519D5F22B00B819C9 /* APCDataSubstrate+HealthKit.m in Sources */,
 				F5B4213119D23D6800F9CD69 /* APCParametersDashboardTableViewController.m in Sources */,
@@ -1589,7 +1589,6 @@
 				5B3B60941A156495006B2346 /* APCTermsAndConditionsViewController.m in Sources */,
 				F5FDCF8E19EC68C9002486DE /* UIColor+APCAppearance.m in Sources */,
 				5B3B60811A156495006B2346 /* APCShareViewController.m in Sources */,
-				7B8EBE8D1A253B94001747EB /* APCHealthKitQuantityTracker.m in Sources */,
 				5B3B5FD91A15645E006B2346 /* APCCircularProgressView.m in Sources */,
 				5B3B60361A15645E006B2346 /* APCTintedTableViewCell.m in Sources */,
 				5B3B5FEB1A15645E006B2346 /* APCTableViewItem.m in Sources */,
@@ -1618,11 +1617,13 @@
 				F52549DA19EDD87700C7B7CB /* UIImage+APCHelper.m in Sources */,
 				5B3B60A91A156538006B2346 /* APCDashboardProgressTableViewCell.m in Sources */,
 				F5179CB519D0917D001DCCB7 /* APCScheduledTask.m in Sources */,
+				7B8EBE971A2565C4001747EB /* APCHealthKitPassiveDataCollector.m in Sources */,
 				F588B9FB19D21EFE00692473 /* APCAssertionHandler.m in Sources */,
 				F5179CA619D0917D001DCCB7 /* APCResult+AddOn.m in Sources */,
 				5B3B601E1A15645E006B2346 /* APCProfileViewController.m in Sources */,
 				5B3B60281A15645E006B2346 /* APCDefaultTableViewCell.m in Sources */,
 				5B908A891A245D1F00F9E907 /* APCPieGraphView.m in Sources */,
+				7B8EBE991A2565C4001747EB /* APCHealthKitQuantityTracker.m in Sources */,
 				F5B4212B19D23D6800F9CD69 /* APCParametersCell.m in Sources */,
 				5B3B60261A15645E006B2346 /* APCCheckTableViewCell.m in Sources */,
 				748DD7531A1FE41700EE9969 /* APCScheduleEnumerator.m in Sources */,

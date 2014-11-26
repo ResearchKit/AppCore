@@ -41,6 +41,9 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
+    self.healthKitTracker = [[APCHealthKitQuantityTracker alloc] initWithIdentifier:HKQuantityTypeIdentifierHeartRate withNotificationName:@"APCHeartRateUpdated" applicationDelegate:self];
+    
+    [self.healthKitTracker start];
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
