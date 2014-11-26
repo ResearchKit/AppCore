@@ -18,7 +18,8 @@
                          hourSelector:(APCTimeSelector*)hourSelector
                    dayOfMonthSelector:(APCTimeSelector*)dayOfMonthSelector
                         monthSelector:(APCTimeSelector*)monthSelector
-                         yearSelector:(APCTimeSelector*)yearSelector;
+						 yearSelector:(APCTimeSelector*)yearSelector
+			   originalCronExpression:(NSString*)cronExpression;
 
 - (instancetype)initWithBeginningTime:(NSDate*)begin
                            endingTime:(NSDate*)end
@@ -26,6 +27,9 @@
                          hourSelector:(APCTimeSelector*)hourSelector
                    dayOfMonthSelector:(APCTimeSelector*)dayOfMonthSelector
                         monthSelector:(APCTimeSelector*)monthSelector
-                         yearSelector:(APCTimeSelector*)yearSelector;
+						 yearSelector:(APCTimeSelector*)yearSelector
+			   originalCronExpression:(NSString*)cronExpression;
+
+- (void) recomputeDaysAfterRollingOverMonthOrYear;
 
 @end

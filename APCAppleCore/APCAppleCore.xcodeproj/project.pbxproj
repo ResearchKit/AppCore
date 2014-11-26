@@ -169,6 +169,8 @@
 		748DD7571A1FE41700EE9969 /* APCTimeSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 748DD7491A1FE41700EE9969 /* APCTimeSelector.m */; };
 		748DD7581A1FE41700EE9969 /* APCTimeSelectorEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 748DD74A1A1FE41700EE9969 /* APCTimeSelectorEnumerator.h */; };
 		748DD7591A1FE41700EE9969 /* APCTimeSelectorEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 748DD74B1A1FE41700EE9969 /* APCTimeSelectorEnumerator.m */; };
+		7B8EBE981A2565C4001747EB /* APCHealthKitQuantityTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B8EBE941A2565C4001747EB /* APCHealthKitQuantityTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7B8EBE991A2565C4001747EB /* APCHealthKitQuantityTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B8EBE951A2565C4001747EB /* APCHealthKitQuantityTracker.m */; };
 		7BA4BBFA19D4893700BC4023 /* APCPassiveLocationTracking.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BA4BBF519D4893700BC4023 /* APCPassiveLocationTracking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BA4BBFB19D4893700BC4023 /* APCPassiveLocationTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BA4BBF619D4893700BC4023 /* APCPassiveLocationTracking.m */; };
 		7BA4BC0419D490EE00BC4023 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */; };
@@ -223,6 +225,8 @@
 		F5179F6219D0B4D0001DCCB7 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6119D0B4D0001DCCB7 /* libbz2.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
 		F5179F6619D0B502001DCCB7 /* libarchive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6519D0B502001DCCB7 /* libarchive.dylib */; };
 		F5179F6819D0B50C001DCCB7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6719D0B50C001DCCB7 /* libz.dylib */; };
+		F5218B7F1A264A66004DF7EA /* APCDayOfMonthSelector.h in Headers */ = {isa = PBXBuildFile; fileRef = F5218B7D1A264A66004DF7EA /* APCDayOfMonthSelector.h */; };
+		F5218B801A264A66004DF7EA /* APCDayOfMonthSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5218B7E1A264A66004DF7EA /* APCDayOfMonthSelector.m */; };
 		F5219F491A1BD78F006E1245 /* APCTask+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = F5219F471A1BD78F006E1245 /* APCTask+Bridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5219F4A1A1BD78F006E1245 /* APCTask+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F5219F481A1BD78F006E1245 /* APCTask+Bridge.m */; };
 		F52549D919EDD87700C7B7CB /* UIImage+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F52549D719EDD87700C7B7CB /* UIImage+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -468,6 +472,8 @@
 		748DD7491A1FE41700EE9969 /* APCTimeSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTimeSelector.m; sourceTree = "<group>"; };
 		748DD74A1A1FE41700EE9969 /* APCTimeSelectorEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTimeSelectorEnumerator.h; sourceTree = "<group>"; };
 		748DD74B1A1FE41700EE9969 /* APCTimeSelectorEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTimeSelectorEnumerator.m; sourceTree = "<group>"; };
+		7B8EBE941A2565C4001747EB /* APCHealthKitQuantityTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCHealthKitQuantityTracker.h; path = APCAppleCore/HealthKitTracker/APCHealthKitQuantityTracker.h; sourceTree = SOURCE_ROOT; };
+		7B8EBE951A2565C4001747EB /* APCHealthKitQuantityTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCHealthKitQuantityTracker.m; path = APCAppleCore/HealthKitTracker/APCHealthKitQuantityTracker.m; sourceTree = SOURCE_ROOT; };
 		7BA4BBF519D4893700BC4023 /* APCPassiveLocationTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPassiveLocationTracking.h; sourceTree = "<group>"; };
 		7BA4BBF619D4893700BC4023 /* APCPassiveLocationTracking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPassiveLocationTracking.m; sourceTree = "<group>"; };
 		7BA4BC0319D490EE00BC4023 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -512,6 +518,8 @@
 		F5179F6319D0B4EA001DCCB7 /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = ResearchKit/ResearchKit.framework; sourceTree = SOURCE_ROOT; };
 		F5179F6519D0B502001DCCB7 /* libarchive.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libarchive.dylib; path = usr/lib/libarchive.dylib; sourceTree = SDKROOT; };
 		F5179F6719D0B50C001DCCB7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		F5218B7D1A264A66004DF7EA /* APCDayOfMonthSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDayOfMonthSelector.h; sourceTree = "<group>"; };
+		F5218B7E1A264A66004DF7EA /* APCDayOfMonthSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDayOfMonthSelector.m; sourceTree = "<group>"; };
 		F5219F471A1BD78F006E1245 /* APCTask+Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCTask+Bridge.h"; sourceTree = "<group>"; };
 		F5219F481A1BD78F006E1245 /* APCTask+Bridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCTask+Bridge.m"; sourceTree = "<group>"; };
 		F52549D719EDD87700C7B7CB /* UIImage+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+APCHelper.h"; sourceTree = "<group>"; };
@@ -916,6 +924,8 @@
 		748DD73F1A1FE41700EE9969 /* Internals */ = {
 			isa = PBXGroup;
 			children = (
+				F5218B7D1A264A66004DF7EA /* APCDayOfMonthSelector.h */,
+				F5218B7E1A264A66004DF7EA /* APCDayOfMonthSelector.m */,
 				748DD7401A1FE41700EE9969 /* APCListSelector.h */,
 				748DD7411A1FE41700EE9969 /* APCListSelector.m */,
 				748DD7421A1FE41700EE9969 /* APCPointSelector.h */,
@@ -930,6 +940,16 @@
 				748DD74B1A1FE41700EE9969 /* APCTimeSelectorEnumerator.m */,
 			);
 			path = Internals;
+			sourceTree = "<group>";
+		};
+		7B8EBE851A250C2E001747EB /* HealthKitTracker */ = {
+			isa = PBXGroup;
+			children = (
+				7B8EBE941A2565C4001747EB /* APCHealthKitQuantityTracker.h */,
+				7B8EBE951A2565C4001747EB /* APCHealthKitQuantityTracker.m */,
+			);
+			name = HealthKitTracker;
+			path = fitnessTracker;
 			sourceTree = "<group>";
 		};
 		7BA4BBF119D4893700BC4023 /* PassiveLocationTracking */ = {
@@ -978,6 +998,7 @@
 			isa = PBXGroup;
 			children = (
 				F5179B2E19D09128001DCCB7 /* APCAppleCore.h */,
+				7B8EBE851A250C2E001747EB /* HealthKitTracker */,
 				7BA4BBF119D4893700BC4023 /* PassiveLocationTracking */,
 				F5179BA319D0917D001DCCB7 /* DataMonitor */,
 				F5179BA619D0917D001DCCB7 /* DataSubstrate */,
@@ -1255,6 +1276,7 @@
 				F54B66951A1EA0A700495AC9 /* APCResult+Bridge.h in Headers */,
 				5B3B60291A15645E006B2346 /* APCPermissionsCell.h in Headers */,
 				748DD7581A1FE41700EE9969 /* APCTimeSelectorEnumerator.h in Headers */,
+				7B8EBE981A2565C4001747EB /* APCHealthKitQuantityTracker.h in Headers */,
 				F5179C7B19D0917D001DCCB7 /* APCDataSubstrate+CoreData.h in Headers */,
 				748DD74C1A1FE41700EE9969 /* APCScheduleExpression.h in Headers */,
 				F5179C9319D0917D001DCCB7 /* APCDBStatus.h in Headers */,
@@ -1274,6 +1296,7 @@
 				5B01599C1A0C222900F28439 /* UIView+Helper.h in Headers */,
 				5B908A881A245D1F00F9E907 /* APCPieGraphView.h in Headers */,
 				F5B4213919D23D7700F9CD69 /* APCDebugWindow.h in Headers */,
+				F5218B7F1A264A66004DF7EA /* APCDayOfMonthSelector.h in Headers */,
 				5B8E6BE41A1E95950033733A /* APCDashboardBadgesTableViewCell.h in Headers */,
 				5B3B602B1A15645E006B2346 /* APCPickerTableViewCell.h in Headers */,
 				F588BA0019D21EFE00692473 /* NSBundle+Helper.h in Headers */,
@@ -1577,6 +1600,7 @@
 				F5179CBE19D0917D001DCCB7 /* APCTask+AddOn.m in Sources */,
 				5B3B60101A15645E006B2346 /* APCActivitiesViewController.m in Sources */,
 				5B8E6BE51A1E95950033733A /* APCDashboardBadgesTableViewCell.m in Sources */,
+				F5218B801A264A66004DF7EA /* APCDayOfMonthSelector.m in Sources */,
 				F58475191A1CFA5500553525 /* APCEmailVerifyViewController.m in Sources */,
 				5B3B5FDD1A15645E006B2346 /* APCStepProgressBar.m in Sources */,
 				5B3B60441A15645E006B2346 /* APCSimpleTaskSummaryViewController.m in Sources */,
@@ -1599,6 +1623,7 @@
 				5B3B601E1A15645E006B2346 /* APCProfileViewController.m in Sources */,
 				5B3B60281A15645E006B2346 /* APCDefaultTableViewCell.m in Sources */,
 				5B908A891A245D1F00F9E907 /* APCPieGraphView.m in Sources */,
+				7B8EBE991A2565C4001747EB /* APCHealthKitQuantityTracker.m in Sources */,
 				F5B4212B19D23D6800F9CD69 /* APCParametersCell.m in Sources */,
 				5B3B60261A15645E006B2346 /* APCCheckTableViewCell.m in Sources */,
 				748DD7531A1FE41700EE9969 /* APCScheduleEnumerator.m in Sources */,

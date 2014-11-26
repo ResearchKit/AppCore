@@ -1,5 +1,5 @@
 //
-//  APCScheduleExpression.h
+//  APCSchedule.h
 //  Schedule
 //
 //  Created by Edward Cessna on 9/15/14.
@@ -11,10 +11,10 @@
 
 /**
  
- The `APCScheduleExpression` class is the public interface for scheduled backed by a modified cron expression.
+ The `APCSchedule` class is the public interface for scheduled backed by a modified cron expression.
  
  Example usage:
-    APCScheduleExpression*    schedule   = [[APCScheduleExpression alloc] initWithExpression:@"A 5 * * * *" timeZero:0];
+    APCSchedule*    schedule   = [[APCSchedule alloc] initWithExpression:@"A 5 * * * *" timeZero:0];
     NSEnumerator*   enumerator = [schedule enumeratorBeginningAtTime:[dateFormatter dateFromString:@"2014-01-01 06:00"]];
 
     NSDate* date;
@@ -31,24 +31,28 @@
 
  The supported cron expression is as follows:
  
- * * * * *  task id
- │ │ │ │ │
- │ │ │ │ │
- │ │ │ │ └──────── day of week
- │ │ │ └────────── month
- │ │ └──────────── day of month
- │ └────────────── hour
- └──────────────── minutes
+ * * * * * *  task id
+ │ │ │ │ │ │
+ │ │ │ │ │ │
+ │ │ │ │ │ └──────── day of week
+ │ │ │ │ └────────── month
+ │ │ │ └──────────── day of month
+ │ │ └────────────── hour
+ │ └──────────────── minutes
+ └────────────────── relative indicator
  
                                 Allowed     Special
     Index   Field Name          Values      Characters      Note
     ------------------------------------------------------------------------------------------------
-    0:      Minutes             0-59        * , -
-    1:      Hours               0-23        * , -
-    2:      Day of month        1-31        * , -
-    3:      Month               1-12        * , -           1: Jan, 2: Feb, ..,, 12: Dec
-    4:      Day of week         0-6         * , -           0: Sun, 1: Mon, ..., 6: Sat
+    0:      Relative indicator  A, R                        A: absolute, R: relative
+    1:      Minutes             0-59        * , -
+    2:      Hours               0-23        * , -
+    3:      Day of month        1-31        * , -
+    4:      Month               1-12        * , -           1: Jan, 2: Feb, ..,, 12: Dec
+    5:      Day of week         0-6         * , -           0: Sun, 1: Mon, ..., 6: Sat
 
+    A   If hours or minutes are specified, they are absolute
+    R   If hours or minutes are specified, they are relative to the user’s general wake time
     *   Matches all values. Example: an ‘*’ in the Day of Month field means every day.
     ,   Separate items of a list. Example: 7,14,21 for the Day of Week field means the 7th, 14th,
         and 21st day on the month.
@@ -101,5 +105,16 @@
  *  @return An enumerator, returns NSDate(s) that satisfies `self`
  */
 - (NSEnumerator*)enumeratorBeginningAtTime:(NSDate*)start endingAtTime:(NSDate*)end;
+
+//	/**
+//	 *  Lets you update my daySelector to reflect the days in the
+//	 *  specified month and year, specifically in case that daySelector
+//	 *  has weekdays specified.
+//	 *
+//	 *  Ron:  I'm not at ALL sure this is a good idea.  :-)
+//	 *  I'm still trying to make this work at all.
+//	 *  Very much in progress.
+//	 */
+//	- (void) recomputeDaysAfterRollingOverMonthOrYearInEnumerator: (id) scheduleEnumerator;
 
 @end

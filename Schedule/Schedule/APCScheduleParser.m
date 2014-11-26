@@ -18,6 +18,10 @@ static unichar kStepSeparatorToken  = '/';
 static unichar kWildCardToken       = '*';
 static unichar kRangeSeparatorToken = '-';
 static unichar kFieldSeparatorToken = ' ';
+static unichar kRelativeSmallToken  = 'r';
+static unichar kRelativeLargeToken  = 'R';
+static unichar kAbsoluteSmallToken  = 'a';
+static unichar kAbsoluteLargeToken  = 'A';
 
 
 @interface APCScheduleParser ()
@@ -276,6 +280,24 @@ parseError:
     return listSelector;
 }
 
+- (void)relativeProduction
+{
+    if (self.next == kRelativeSmallToken || self.next == kRelativeLargeToken)
+    {
+        self.isRelative = YES;
+        [self consumeOneChar];
+    }
+    else if (self.next == kAbsoluteSmallToken || self.next == kAbsoluteLargeToken)
+    {
+        self.isRelative = NO;
+        [self consumeOneChar];
+    }
+    else
+    {
+        [self recordError];
+    }
+}
+
 - (APCListSelector*)yearProduction:(UnitType)unitType
 {
     //  The parser doesn't currently support Year products but a default selector is provided to help
@@ -297,7 +319,16 @@ parseError:
 
 	APCListSelector* rawDayOfMonthSelector = nil;
 	APCListSelector* rawDayOfWeekSelector = nil;
+
+    [self relativeProduction];
+    if (self.errorEncountered)
+    {
+        NSLog(@"Invalid Relative token");
+        goto parseError;
+    }
     
+    [self fieldSeparatorProduction];
+
     self.minuteSelector = [self listProductionForType:kMinutes];
     if (self.errorEncountered)
     {

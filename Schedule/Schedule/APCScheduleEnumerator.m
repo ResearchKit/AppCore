@@ -54,6 +54,7 @@ static NSInteger    kYearIndex   = 4;
                    dayOfMonthSelector:(APCTimeSelector*)dayOfMonthSelector
                         monthSelector:(APCTimeSelector*)monthSelector
                          yearSelector:(APCTimeSelector*)yearSelector
+			   originalCronExpression:(NSString*)cronExpression
 {
     return [self initWithBeginningTime:begin
                             endingTime:nil
@@ -61,20 +62,28 @@ static NSInteger    kYearIndex   = 4;
                           hourSelector:hourSelector
                     dayOfMonthSelector:dayOfMonthSelector
                          monthSelector:monthSelector
-                          yearSelector:yearSelector];
+						  yearSelector:yearSelector
+				originalCronExpression:cronExpression];
 }
 
+
+/**
+ Ron:  Ed said, "I never liked this"
+ */
 - (instancetype)initWithBeginningTime:(NSDate*)begin
                            endingTime:(NSDate*)end
                        minuteSelector:(APCTimeSelector*)minuteSelector
                          hourSelector:(APCTimeSelector*)hourSelector
                    dayOfMonthSelector:(APCTimeSelector*)dayOfMonthSelector
                         monthSelector:(APCTimeSelector*)monthSelector
-                         yearSelector:(APCTimeSelector*)yearSelector
+						 yearSelector:(APCTimeSelector*)yearSelector
+			   originalCronExpression:(NSString*)cronExpression
 {
     self = [super init];
     if (self)
     {
+		self.originalCronExpression = cronExpression;	// for debug-printouts only.
+
         NSDateComponents*   beginComponents = nil;
         NSCalendarUnit      calendarUnits   = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
         
@@ -167,6 +176,20 @@ static NSInteger    kYearIndex   = 4;
 	iterator returns nil -- "reset" that enumerator (a
 	custom method) and roll the next-outermost enumerator
 	to its next object
+ 
+ (Thinking through the bottom part of the loop...)
+
+ nextPoint == nil.  This means the next lower-level enumerator
+ has reached its end.  Thus:  reset that enumerator, and call
+ nextObject on the next higher-level enumerator.
+
+ Example:  we've been iterating through the available minutes
+ within a given hour.  We reached the last legal minute.  So
+ we move to the next hour in the list of available hours, and
+ reset the minute iterator to the beginning.
+ 
+ TODO:  why does this return the previous nextMoment, not the
+ actual next one?
  */
 - (NSDate*)nextObject
 {
@@ -261,6 +284,19 @@ static NSInteger    kYearIndex   = 4;
     dateComponents.minute   = [self.componenets[kMinuteIndex] integerValue];
     
     return [dateComponents date];
+}
+
+- (NSString *) description
+{
+	return [NSString stringWithFormat: @"%@ 0x%x [%@]",
+			NSStringFromClass([self class]),
+			(unsigned int) self,
+			self.originalCronExpression];
+}
+
+- (NSString *) debugDescription
+{
+	return self.description;
 }
 
 @end

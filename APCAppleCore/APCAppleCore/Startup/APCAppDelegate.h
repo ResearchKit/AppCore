@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "APCDataSubstrate.h"
+#import "APCHealthKitQuantityTracker.h"
+
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler;
 
@@ -19,7 +21,7 @@
 @property (strong, nonatomic) APCDataSubstrate * dataSubstrate;
 @property (strong, nonatomic) APCDataMonitor * dataMonitor;
 @property (strong, nonatomic) APCScheduler * scheduler;
-
+@property (strong, nonatomic) APCHealthKitQuantityTracker *healthKitTracker;
 //Initialization Methods
 @property (nonatomic, strong) NSDictionary * initializationOptions;
 - (NSMutableDictionary*) defaultInitializationOptions;

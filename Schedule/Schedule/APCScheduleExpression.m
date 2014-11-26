@@ -16,6 +16,7 @@
 
 @property (nonatomic, strong) APCScheduleParser*    parser;
 @property (nonatomic, strong) NSArray*              selectors;
+@property (nonatomic, strong) NSString*				originalCronExpression;
 
 @property (nonatomic, assign) BOOL                  validExpression;
 @property (nonatomic, strong) APCTimeSelector*      minuteSelector;
@@ -34,12 +35,18 @@
     self = [self init];
     if (self)
     {
+		self.originalCronExpression = expression;		// debugging only --ron
+		
         APCScheduleParser* parser = [[APCScheduleParser alloc] initWithExpression:expression];
         
         _validExpression = [parser parse];
         
         if (_validExpression)
         {
+			/*
+			 Ron: (1) Why not just remember the parser, instead of remembering the individual components?
+			 */
+			
             _minuteSelector     = parser.minuteSelector;
             _hourSelector       = parser.hourSelector;
             _dayOfMonthSelector = parser.dayOfMonthSelector;
@@ -58,30 +65,50 @@
 
 - (NSEnumerator*)enumeratorBeginningAtTime:(NSDate*)start
 {
-    NSParameterAssert(start != nil);
-    
     return [[APCScheduleEnumerator alloc] initWithBeginningTime:start
                                                  minuteSelector:self.minuteSelector
                                                    hourSelector:self.hourSelector
                                              dayOfMonthSelector:self.dayOfMonthSelector
                                                   monthSelector:self.monthSelector
-                                                   yearSelector:self.yearSelector];
+												   yearSelector:self.yearSelector
+										 originalCronExpression:self.originalCronExpression];
 }
 
 - (NSEnumerator*)enumeratorBeginningAtTime:(NSDate*)start endingAtTime:(NSDate*)end
 {
-    NSParameterAssert(start != nil);
-    NSParameterAssert(end != nil);
-    
     return [[APCScheduleEnumerator alloc] initWithBeginningTime:start
                                                      endingTime:end
                                                  minuteSelector:self.minuteSelector
                                                    hourSelector:self.hourSelector
                                              dayOfMonthSelector:self.dayOfMonthSelector
                                                   monthSelector:self.monthSelector
-                                                   yearSelector:self.yearSelector];
+												   yearSelector:self.yearSelector
+										 originalCronExpression:self.originalCronExpression];
 }
 
+//	- (void) recomputeDaysAfterRollingOverMonthOrYearInEnumerator: (id) scheduleEnumerator
+//	{
+//		if ([scheduleEnumerator isKindOfClass: [APCScheduleEnumerator class]])
+//		{
+//			APCScheduleEnumerator *enumerator = (APCScheduleEnumerator *) scheduleEnumerator;
+//	
+//			[enumerator recomputeDaysAfterRollingOverMonthOrYear];
+//		}
+//	}
+
+
+- (NSString *) description
+{
+	return [NSString stringWithFormat: @"%@ 0x%x [%@]",
+			NSStringFromClass([self class]),
+			(unsigned int) self,
+			self.originalCronExpression];
+}
+
+- (NSString *) debugDescription
+{
+	return self.description;
+}
 
 @end
 
