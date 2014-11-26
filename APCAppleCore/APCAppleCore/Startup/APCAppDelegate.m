@@ -192,6 +192,11 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self showOnBoarding];
 }
 
+- (NSString *)certificateFileName
+{
+    return ([self.initializationOptions[kBridgeEnvironmentKey] integerValue] == SBBEnvironmentStaging) ? [self.initializationOptions[kAppPrefixKey] stringByAppendingString:@"-staging"] :self.initializationOptions[kAppPrefixKey];
+}
+
 #pragma mark - Other Abstract Implmentations
 - (void) setUpInitializationOptions {/*Abstract Implementation*/}
 - (void) setUpAppAppearance {/*Abstract Implementation*/}

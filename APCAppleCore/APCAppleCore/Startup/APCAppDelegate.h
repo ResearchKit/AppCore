@@ -22,12 +22,15 @@
 @property (strong, nonatomic) APCDataMonitor * dataMonitor;
 @property (strong, nonatomic) APCScheduler * scheduler;
 @property (strong, nonatomic) APCHealthKitQuantityTracker *healthKitTracker;
+
 //Initialization Methods
 @property (nonatomic, strong) NSDictionary * initializationOptions;
 - (NSMutableDictionary*) defaultInitializationOptions;
 
 - (void)loadStaticTasksAndSchedulesIfNecessary;  //For resetting app
 - (void) clearNSUserDefaults; //For resetting app
+
+- (NSString*) certificateFileName;
 
 //Show Methods
 - (void) showTabBar;

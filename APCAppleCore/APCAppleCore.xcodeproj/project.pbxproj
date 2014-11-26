@@ -232,6 +232,7 @@
 		F5179F6819D0B50C001DCCB7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5179F6719D0B50C001DCCB7 /* libz.dylib */; };
 		F5218B7F1A264A66004DF7EA /* APCDayOfMonthSelector.h in Headers */ = {isa = PBXBuildFile; fileRef = F5218B7D1A264A66004DF7EA /* APCDayOfMonthSelector.h */; };
 		F5218B801A264A66004DF7EA /* APCDayOfMonthSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5218B7E1A264A66004DF7EA /* APCDayOfMonthSelector.m */; };
+		F5218B781A263D4B004DF7EA /* update_version.sh in Resources */ = {isa = PBXBuildFile; fileRef = F5218B771A263D4B004DF7EA /* update_version.sh */; };
 		F5219F491A1BD78F006E1245 /* APCTask+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = F5219F471A1BD78F006E1245 /* APCTask+Bridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5219F4A1A1BD78F006E1245 /* APCTask+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F5219F481A1BD78F006E1245 /* APCTask+Bridge.m */; };
 		F52549D919EDD87700C7B7CB /* UIImage+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F52549D719EDD87700C7B7CB /* UIImage+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -530,6 +531,7 @@
 		F5179F6719D0B50C001DCCB7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F5218B7D1A264A66004DF7EA /* APCDayOfMonthSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDayOfMonthSelector.h; sourceTree = "<group>"; };
 		F5218B7E1A264A66004DF7EA /* APCDayOfMonthSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDayOfMonthSelector.m; sourceTree = "<group>"; };
+		F5218B771A263D4B004DF7EA /* update_version.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = update_version.sh; sourceTree = "<group>"; };
 		F5219F471A1BD78F006E1245 /* APCTask+Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCTask+Bridge.h"; sourceTree = "<group>"; };
 		F5219F481A1BD78F006E1245 /* APCTask+Bridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCTask+Bridge.m"; sourceTree = "<group>"; };
 		F52549D719EDD87700C7B7CB /* UIImage+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+APCHelper.h"; sourceTree = "<group>"; };
@@ -1246,6 +1248,7 @@
 		F5E04D861A1C19DC00F0FDE3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F5218B771A263D4B004DF7EA /* update_version.sh */,
 			);
 			name = Resources;
 			path = APCAppleCore/Resources;
@@ -1517,6 +1520,7 @@
 				5B3B60451A15645E006B2346 /* APCSimpleTaskSummaryViewController.xib in Resources */,
 				5B1D9D311A1AC715000F4AD6 /* APCEmailVerify.storyboard in Resources */,
 				5B3B60511A15645E006B2346 /* APCUserInfoTableHeaderView.xib in Resources */,
+				F5218B781A263D4B004DF7EA /* update_version.sh in Resources */,
 				5B3B60481A15645E006B2346 /* APCPasscodeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
