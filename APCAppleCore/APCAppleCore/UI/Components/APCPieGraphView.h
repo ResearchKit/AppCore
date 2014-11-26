@@ -36,6 +36,10 @@
 
 @property (nonatomic) BOOL hidesCenterLabels;
 
+@property (nonatomic) UILabel *titleLabel;
+
+@property (nonatomic) UILabel *valueLabel;
+
 @end
 
 @protocol APCPieGraphViewDatasource <NSObject>

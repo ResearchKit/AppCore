@@ -48,8 +48,8 @@
     
     [self.asthmaFreeDaysLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.asthmaFreeDaysLabel setFont:[UIFont appLightFontWithSize:16.0f]];
-    [self.AsthmaFreePercentLabel setTextColor:[UIColor appTertiaryYellowColor]];
-    [self.AsthmaFreePercentLabel setFont:[UIFont appRegularFontWithSize:19.0f]];
+    [self.asthmaFreePercentLabel setTextColor:[UIColor appTertiaryYellowColor]];
+    [self.asthmaFreePercentLabel setFont:[UIFont appRegularFontWithSize:19.0f]];
 }
 
 - (void)setTintColor:(UIColor *)tintColor

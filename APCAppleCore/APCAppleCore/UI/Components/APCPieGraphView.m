@@ -51,13 +51,13 @@ static CGFloat const kAnimationDuration = 0.35f;
 {
     _legendPaddingHeight = CGRectGetHeight(self.frame) * 0.3;
     _plotRegionHeight = (CGRectGetHeight(self.frame) - _legendPaddingHeight);
-    _pieGraphRadius = _plotRegionHeight * 0.55 * 0.5; //The 0.5 is to get radius form diameter
+    _pieGraphRadius = _plotRegionHeight * 0.55 * 0.5; //The 0.5 is to get radius from diameter
     
     _lineWidth = CGRectGetHeight(self.frame)/20.0f;
     
     _circleLayer = [CAShapeLayer layer];
     _circleLayer.fillColor = [UIColor clearColor].CGColor;
-    _circleLayer.strokeColor = [UIColor colorWithWhite:0.836 alpha:1.000].CGColor;
+    _circleLayer.strokeColor = [UIColor colorWithWhite:0.96 alpha:1.000].CGColor;
     _circleLayer.lineWidth = _lineWidth;
     
     _legendDotRadius = 9;
@@ -69,7 +69,17 @@ static CGFloat const kAnimationDuration = 0.35f;
     _sumOfValues = 0;
     
     _legendFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f];
-    _percentageFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f];;
+    _percentageFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f];
+    
+    _titleLabel = [UILabel new];
+    [_titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:_pieGraphRadius/6.0f]];
+    [_titleLabel setTextColor:[UIColor colorWithWhite:0.55 alpha:1.0]];
+    [_titleLabel setTextAlignment:NSTextAlignmentCenter];
+    
+    _valueLabel = [UILabel new];
+    [_valueLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:_pieGraphRadius/3.0f]];
+    [_valueLabel setTextColor:[UIColor colorWithWhite:0.17 alpha:1.0]];
+    [_valueLabel setTextAlignment:NSTextAlignmentCenter];
 }
 
 
@@ -82,6 +92,8 @@ static CGFloat const kAnimationDuration = 0.35f;
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.layer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     
+    [self updateValues];
+    
     self.circleLayer.frame = CGRectMake(CGRectGetWidth(self.frame)/2 - self.pieGraphRadius, _plotRegionHeight/2 - self.pieGraphRadius, self.pieGraphRadius * 2, self.pieGraphRadius * 2);
     self.circleLayer.path = [self circularPath].CGPath;
     [self.layer addSublayer:self.circleLayer];
@@ -92,9 +104,24 @@ static CGFloat const kAnimationDuration = 0.35f;
     
     [self normalizeActualValues];
     
+    [self drawTitleLabels];
+    
     [self drawPieGraph];
     [self drawPercentageLabels];
     [self drawLegend];
+    
+    
+}
+
+- (void)updateValues
+{
+    _plotRegionHeight = (CGRectGetHeight(self.frame) - _legendPaddingHeight);
+    
+    _pieGraphRadius = _plotRegionHeight * 0.55 * 0.5;
+    
+    [_titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:_pieGraphRadius/6.0f]];
+    
+    [_valueLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:_pieGraphRadius/3.0f]];
 }
 
 - (UIBezierPath *)circularPath
@@ -306,6 +333,20 @@ static CGFloat const kAnimationDuration = 0.35f;
             [textLabel.layer addAnimation:textAnimation forKey:@"textAnimation"];
         }
     }
+}
+
+- (void)drawTitleLabels
+{
+    CGFloat labelWidth = self.pieGraphRadius * 1.2;
+    
+    CGFloat labelXPos = CGRectGetMidX(self.circleLayer.frame) - labelWidth/2;
+    CGFloat labelYPos = CGRectGetMidY(self.circleLayer.frame);
+    
+    [self.valueLabel setFrame:CGRectMake(labelXPos, labelYPos, labelWidth, self.pieGraphRadius*0.4)];
+    [self addSubview:self.valueLabel];
+    
+    [self.titleLabel setFrame:CGRectMake(labelXPos, CGRectGetMaxY(self.valueLabel.frame), labelWidth, CGRectGetHeight(self.valueLabel.frame)*0.6)];
+    [self addSubview:self.titleLabel];    
 }
 
 #pragma mark - Data Normalization
