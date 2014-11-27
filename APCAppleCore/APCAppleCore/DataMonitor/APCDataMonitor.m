@@ -31,11 +31,12 @@
 
 - (void)appBecameActive
 {
-    if (self.dataSubstrate.currentUser.isUserConsented) {
+//    if (self.dataSubstrate.currentUser.isConsented) {
         [APCSchedule updateSchedulesOnCompletion:^(NSError *error) {
+            [APCTask refreshSurveys];
             [self.scheduler updateScheduledTasksIfNotUpdating:NO];
         }];
-    }
+//    }
 }
 
 - (void)backgroundFetch:(void (^)(UIBackgroundFetchResult))completionHandler

@@ -29,6 +29,9 @@ static APCDummyObject * _dummyObject;
 
 @implementation APCTask (Bridge)
 
+/*********************************************************************************/
+#pragma mark - Surveys
+/*********************************************************************************/
 + (BOOL) serverDisabled
 {
 #if DEVELOPMENT
@@ -38,30 +41,38 @@ static APCDummyObject * _dummyObject;
 #endif
 }
 
-+(void)getSurveyByRef:(NSString *)ref onCompletion:(void (^)(NSError *))completionBlock
++ (void)refreshSurveys
 {
-    if ([self serverDisabled]) {
-        if (completionBlock) {
-            completionBlock(nil);
-        }
+    NSManagedObjectContext * context = ((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.persistentContext;
+    NSFetchRequest * request = [APCTask request];
+    request.predicate = [NSPredicate predicateWithFormat:@"taskDescription == nil && taskHRef != nil"];
+    NSError * error;
+    NSArray * unloadedSurveyTasks = [context executeFetchRequest:request error:&error];
+    [error handle];
+    [unloadedSurveyTasks enumerateObjectsUsingBlock:^(APCTask * task, NSUInteger idx, BOOL *stop) {
+        [task loadSurveyOnCompletion:NULL];
+    }];
+}
+
+- (void) loadSurveyOnCompletion: (void (^)(NSError * error)) completionBlock
+{
+    if ([APCTask serverDisabled] || self.taskDescription) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionBlock) {
+                completionBlock(nil);
+            }
+        });
     }
     else
     {
-        [SBBComponent(SBBSurveyManager) getSurveyByRef:ref completion:^(id survey, NSError *error) {
+        [SBBComponent(SBBSurveyManager) getSurveyByRef:self.taskHRef completion:^(id survey, NSError *error) {
             if (!error)
             {
-                NSManagedObjectContext * context = [(APCAppDelegate*) [UIApplication sharedApplication].delegate dataSubstrate].persistentContext;
                 SBBSurvey * sbbSurvey = (SBBSurvey*) survey;
-                [context performBlockAndWait:^{
-                    APCTask * task = [APCTask taskWithTaskID:sbbSurvey.identifier inContext:context];
-                    if (!task) {
-                        task = [APCTask newObjectForContext:context];
-                        task.taskID = sbbSurvey.identifier;
-                    }
-
-                    task.rkTask = [self rkTaskFromSBBSurvey:survey];
-                    task.taskHRef = ref;
-                    [task saveToPersistentStore:NULL];
+                [self.managedObjectContext performBlockAndWait:^{
+                    self.taskTitle = sbbSurvey.name;
+                    self.rkTask = [APCTask rkTaskFromSBBSurvey:survey];
+                    [self saveToPersistentStore:NULL];
                 }];
             }
             else

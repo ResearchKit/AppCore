@@ -12,28 +12,52 @@
 NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController";
 
 @implementation APCSchedule (Bridge)
+
++ (BOOL) serverDisabled
+{
+#if DEVELOPMENT
+    return YES;
+#else
+    return ((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.parameters.bypassServer;
+#endif
+}
+
 + (void) updateSchedulesOnCompletion: (void (^)(NSError * error)) completionBlock
 {
-    [SBBComponent(SBBScheduleManager) getSchedulesWithCompletion:^(id schedulesList, NSError *error) {
-        [error handle];
-        if (!error) {
-            SBBResourceList *list = (SBBResourceList *)schedulesList;
-            NSArray * schedules = list.items;
-            NSManagedObjectContext * context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-            context.parentContext = ((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.persistentContext;
-            [self clearAllRemoteUpdatableSchedules:context];
-            [context performBlockAndWait:^{
-                [schedules enumerateObjectsUsingBlock:^(SBBSchedule* schedule, NSUInteger idx, BOOL *stop) {
-                    APCSchedule * apcSchedule = [APCSchedule newObjectForContext:context];
-                    [self mapSBBSchedule:schedule APCSchedule:apcSchedule];
-                    NSError * error;
-                    [apcSchedule saveToPersistentStore:&error];
-                    [error handle];
+    if (![self serverDisabled]) {
+        [SBBComponent(SBBScheduleManager) getSchedulesWithCompletion:^(id schedulesList, NSError *error) {
+            [error handle];
+            if (!error) {
+                SBBResourceList *list = (SBBResourceList *)schedulesList;
+                NSArray * schedules = list.items;
+                NSManagedObjectContext * context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+                context.parentContext = ((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.persistentContext;
+                [self clearAllRemoteUpdatableSchedules:context];
+                [context performBlockAndWait:^{
+                    [schedules enumerateObjectsUsingBlock:^(SBBSchedule* schedule, NSUInteger idx, BOOL *stop) {
+                        APCSchedule * apcSchedule = [APCSchedule newObjectForContext:context];
+                        [self mapSBBSchedule:schedule APCSchedule:apcSchedule];
+                        NSError * error;
+                        [apcSchedule saveToPersistentStore:&error];
+                        [error handle];
+                    }];
                 }];
-            }];
-
-        }
-    }];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completionBlock) {
+                        completionBlock(error);
+                    }
+                });
+            }
+        }];
+    }
+    else
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionBlock) {
+                completionBlock(nil);
+            }
+        });
+    }
 }
 
 + (void) clearAllRemoteUpdatableSchedules: (NSManagedObjectContext*) context
@@ -59,7 +83,8 @@ NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController
 {
     apcSchedule.remoteUpdatable = @(YES);
     apcSchedule.scheduleType = sbbSchedule.scheduleType;
-    apcSchedule.scheduleString = sbbSchedule.cronTrigger;
+#warning Temporary Kludge
+    apcSchedule.scheduleString = sbbSchedule.cronTrigger ? @"0 5 * * *" : nil;
     apcSchedule.expires = sbbSchedule.expires;
     apcSchedule.startsOn = sbbSchedule.startsOn;
     apcSchedule.endsOn = sbbSchedule.endsOn;
