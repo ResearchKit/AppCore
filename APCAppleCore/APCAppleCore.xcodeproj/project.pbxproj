@@ -308,6 +308,8 @@
 		F5D1A90F19D4C6E200A03465 /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */; };
 		F5E6AB881A1D49730087551B /* RKSTTaskResult+Archiver.h in Headers */ = {isa = PBXBuildFile; fileRef = F5E6AB861A1D49730087551B /* RKSTTaskResult+Archiver.h */; };
 		F5E6AB891A1D49730087551B /* RKSTTaskResult+Archiver.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6AB871A1D49730087551B /* RKSTTaskResult+Archiver.m */; };
+		F5F403E41A26A16900471393 /* SBBSchedule+APCAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F403E21A26A16900471393 /* SBBSchedule+APCAdditions.h */; };
+		F5F403E51A26A16900471393 /* SBBSchedule+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F403E31A26A16900471393 /* SBBSchedule+APCAdditions.m */; };
 		F5FDCF8D19EC68C9002486DE /* UIColor+APCAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FDCF8919EC68C9002486DE /* UIColor+APCAppearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5FDCF8E19EC68C9002486DE /* UIColor+APCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FDCF8A19EC68C9002486DE /* UIColor+APCAppearance.m */; };
 		F5FDCF8F19EC68C9002486DE /* UIFont+APCAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FDCF8B19EC68C9002486DE /* UIFont+APCAppearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -606,6 +608,8 @@
 		F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BridgeSDK.framework; sourceTree = SOURCE_ROOT; };
 		F5E6AB861A1D49730087551B /* RKSTTaskResult+Archiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RKSTTaskResult+Archiver.h"; sourceTree = "<group>"; };
 		F5E6AB871A1D49730087551B /* RKSTTaskResult+Archiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RKSTTaskResult+Archiver.m"; sourceTree = "<group>"; };
+		F5F403E21A26A16900471393 /* SBBSchedule+APCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SBBSchedule+APCAdditions.h"; sourceTree = "<group>"; };
+		F5F403E31A26A16900471393 /* SBBSchedule+APCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SBBSchedule+APCAdditions.m"; sourceTree = "<group>"; };
 		F5FDCF8919EC68C9002486DE /* UIColor+APCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+APCAppearance.h"; sourceTree = "<group>"; };
 		F5FDCF8A19EC68C9002486DE /* UIColor+APCAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+APCAppearance.m"; sourceTree = "<group>"; };
 		F5FDCF8B19EC68C9002486DE /* UIFont+APCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+APCAppearance.h"; sourceTree = "<group>"; };
@@ -1196,6 +1200,8 @@
 				5B55FE091A031789009BEE5E /* UIAlertController+Helper.m */,
 				F5E6AB861A1D49730087551B /* RKSTTaskResult+Archiver.h */,
 				F5E6AB871A1D49730087551B /* RKSTTaskResult+Archiver.m */,
+				F5F403E21A26A16900471393 /* SBBSchedule+APCAdditions.h */,
+				F5F403E31A26A16900471393 /* SBBSchedule+APCAdditions.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1408,6 +1414,7 @@
 				F5A63F1419D5EAD100284006 /* APCUser.h in Headers */,
 				5B3B60761A156495006B2346 /* APCEligibleViewController.h in Headers */,
 				5BF5C90819D9E208007928D4 /* APCUser+UserData.h in Headers */,
+				F5F403E41A26A16900471393 /* SBBSchedule+APCAdditions.h in Headers */,
 				5B4633811A1590D200E68B82 /* APCDashboardEditViewController.h in Headers */,
 				5B3B60331A15645E006B2346 /* APCTextFieldTableViewCell.h in Headers */,
 				F588BA1419D21EFE00692473 /* UIScrollView+Helper.h in Headers */,
@@ -1644,6 +1651,7 @@
 				5B3B5FDD1A15645E006B2346 /* APCStepProgressBar.m in Sources */,
 				5B3B60441A15645E006B2346 /* APCSimpleTaskSummaryViewController.m in Sources */,
 				5B3B603F1A15645E006B2346 /* APCInstructionStepViewController.m in Sources */,
+				F5F403E51A26A16900471393 /* SBBSchedule+APCAdditions.m in Sources */,
 				5B3B604A1A15645E006B2346 /* APCUserInfoViewController.m in Sources */,
 				5B3B607B1A156495006B2346 /* APCInclusionCriteriaViewController.m in Sources */,
 				F5FDCF9019EC68C9002486DE /* UIFont+APCAppearance.m in Sources */,
