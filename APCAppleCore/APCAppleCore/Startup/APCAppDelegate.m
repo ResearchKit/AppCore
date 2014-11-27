@@ -346,7 +346,13 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self.window.rootViewController presentViewController:passcodeViewController animated:YES completion:nil];
 }
 
-- (void) showOnBoarding {/*Abstract Implementation*/ }
+- (void) showOnBoarding
+{
+    if (!self.onboarding) {
+        self.onboarding = [APCOnboarding new];
+    }
+    
+}
 
 - (void) showNeedsEmailVerification
 {

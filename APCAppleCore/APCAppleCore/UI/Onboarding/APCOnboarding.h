@@ -11,20 +11,8 @@
 #import "APCSignUpTask.h"
 #import <ResearchKit/ResearchKit.h>
 
-typedef NS_ENUM(NSUInteger, APCOnboardingScreenType) {
-    kAPCOnboardingScreenTypeStudyOverview,
-    kAPCOnboardingScreenTypeStudyDetails,
-    kAPCOnboardingScreenTypeSignIn,
-    kAPCOnboardingScreenTypeForgotPassword,
-    kAPCOnboardingScreenTypeInclusionCriteria,
-    kAPCOnboardingScreenTypeEligible,
-    kAPCOnboardingScreenTypeIneligible,
-    kAPCOnboardingScreenTypeShare,
-    kAPCOnboardingScreenTypeGeneralInfo,
-    kAPCOnboardingScreenTypeMedicalInfo,
-    kAPCOnboardingScreenTypePasscode,
-    kAPCOnboardingScreenTypePermissions
-};
+@protocol APCOnboardingDelegate;
+@class APCScene;
 
 @interface APCOnboarding : NSObject
 
@@ -32,12 +20,36 @@ typedef NS_ENUM(NSUInteger, APCOnboardingScreenType) {
 
 @property (nonatomic, strong) RKSTStep *currentStep;
 
-@property (nonatomic, strong) NSArray *order;
+@property (nonatomic, strong) NSMutableDictionary *scenes;
 
-- (UIViewController *)viewControllerForScreenType:(APCOnboardingScreenType)screenType;
+@property (nonatomic, weak) id <APCOnboardingDelegate> delegate;
 
-- (void)setViewControllerWithScreenType:(APCOnboardingScreenType)screenType fromStoryboard:(UIStoryboard *)stodyboard inBundle:(NSBundle *)bundle;
+- (UIViewController *)viewControllerForSceneIdentifier:(NSString *)identifier;
+
+- (void)setScene:(APCScene *)scene forIdentifier:(NSString *)identifier;
 
 - (UIViewController *)nextScreen;
+
+@end
+
+@protocol APCOnboardingDelegate <NSObject>
+
+@required
+
+- (APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)onboarding;
+
+@optional
+
+- (APCScene *)customInfoSceneForOnboarding:(APCOnboarding *)onboarding;
+
+@end
+
+/*************************************/
+
+@interface APCScene : NSObject
+
+@property (nonatomic, strong) NSString *name; //Refers to StoryboardID
+@property (nonatomic, strong) NSString *storyboardName;
+@property (nonatomic, strong) NSBundle *bundle;
 
 @end

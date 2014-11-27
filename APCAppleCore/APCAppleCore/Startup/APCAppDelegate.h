@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "APCDataSubstrate.h"
 #import "APCHealthKitQuantityTracker.h"
-
+#import "APCOnboarding.h"
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler;
 
@@ -26,6 +26,8 @@
 //Initialization Methods
 @property (nonatomic, strong) NSDictionary * initializationOptions;
 - (NSMutableDictionary*) defaultInitializationOptions;
+
+@property (nonatomic, strong) APCOnboarding *onboarding;
 
 - (void)loadStaticTasksAndSchedulesIfNecessary;  //For resetting app
 - (void) clearNSUserDefaults; //For resetting app
