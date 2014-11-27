@@ -29,7 +29,12 @@
 {
     [super viewWillAppear:animated];
     [self.introVC setupWithInstructionalImages:self.imagesArray headlines:self.headingsArray andParagraphs:self.messagesArray];
-
+    if (self.accessoryContent != nil) {
+        CGRect  frame = self.introVC.accessoryView.frame;
+        frame.origin = CGPointMake(0.0, 0.0);
+        self.accessoryContent.frame = frame;
+        [self.introVC.accessoryView addSubview:self.accessoryContent];
+    }
 }
 
 - (IBAction)getStartedWasTapped:(id)sender
