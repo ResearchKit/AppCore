@@ -7,6 +7,7 @@
 //
 
 #import "APCAppleCore.h"
+#import "APCSchedule+Bridge.h"
 
 @interface APCDataMonitor ()
 
@@ -30,7 +31,11 @@
 
 - (void)appBecameActive
 {
-    [self.scheduler updateScheduledTasksIfNotUpdating:NO];
+    if (self.dataSubstrate.currentUser.isUserConsented) {
+        [APCSchedule updateSchedulesOnCompletion:^(NSError *error) {
+            [self.scheduler updateScheduledTasksIfNotUpdating:NO];
+        }];
+    }
 }
 
 - (void)backgroundFetch:(void (^)(UIBackgroundFetchResult))completionHandler
