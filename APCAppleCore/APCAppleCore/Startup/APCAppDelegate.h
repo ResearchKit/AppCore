@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "APCDataSubstrate.h"
+#import "APCHealthKitQuantityTracker.h"
+
 
 static NSString *const kStudyIdentifierKey = @"StudyIdentifierKey";
 static NSString *const kAppPrefixKey = @"AppPrefixKey";
@@ -32,7 +34,7 @@ static NSString *const kNumberOfMinutesForPasscodeKey = @"NumberOfMinutesForPass
 @property (strong, nonatomic) APCDataSubstrate * dataSubstrate;
 @property (strong, nonatomic) APCDataMonitor * dataMonitor;
 @property (strong, nonatomic) APCScheduler * scheduler;
-
+@property (strong, nonatomic) APCHealthKitQuantityTracker *healthKitTracker;
 //Initialization Methods
 @property (nonatomic, strong) NSDictionary * initializationOptions;
 - (NSMutableDictionary*) defaultInitializationOptions;
