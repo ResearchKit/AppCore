@@ -19,11 +19,12 @@ static NSString * const kOnboardingStoryboardName = @"APCOnboarding";
 
 @implementation APCOnboarding
 
-- (instancetype)init
+- (instancetype)initWithDelegate:(id)object
 {
     self = [super init];
     if (self) {
         _signUpTask = [APCSignUpTask new];
+        _delegate = object;
         _scenes = [self prepareScenes];
     }
     
@@ -115,5 +116,15 @@ static NSString * const kOnboardingStoryboardName = @"APCOnboarding";
     UIViewController *viewController = [[UIStoryboard storyboardWithName:scene.storyboardName bundle:scene.bundle] instantiateViewControllerWithIdentifier:scene.name];
     return viewController;
 }
+
+- (void)setScene:(APCScene *)scene forIdentifier:(NSString *)identifier
+{
+    [self.scenes setObject:scene forKey:identifier];
+}
+
+@end
+
+
+@implementation APCScene
 
 @end

@@ -15,6 +15,7 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "NSDate+Helper.h"
+#import "NSBundle+Helper.h"
 
 static CGFloat kSectionHeaderHeight = 40.f;
 
@@ -354,7 +355,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
     switch (type) {
         case kAPCTableViewStudyItemTypeShare:
         {
-            APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"ShareVC"];
+            APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ShareVC"];
             shareViewController.hidesOkayButton = YES;
             [self.navigationController pushViewController:shareViewController animated:YES];
         }

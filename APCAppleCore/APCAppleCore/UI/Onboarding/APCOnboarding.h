@@ -24,6 +24,8 @@
 
 @property (nonatomic, weak) id <APCOnboardingDelegate> delegate;
 
+- (instancetype)initWithDelegate:(id)object;
+
 - (UIViewController *)viewControllerForSceneIdentifier:(NSString *)identifier;
 
 - (void)setScene:(APCScene *)scene forIdentifier:(NSString *)identifier;

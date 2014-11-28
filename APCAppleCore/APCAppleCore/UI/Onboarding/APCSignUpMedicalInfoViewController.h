@@ -11,6 +11,6 @@
 
 @interface APCSignUpMedicalInfoViewController : APCSignUpInfoViewController
 
-- (NSArray *)prepareContent;;
+- (NSArray *)prepareContent;
 
 @end

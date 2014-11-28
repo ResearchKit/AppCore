@@ -11,9 +11,9 @@
 #import "APCHealthKitQuantityTracker.h"
 #import "APCOnboarding.h"
 
-@class APCDataSubstrate, APCDataMonitor, APCScheduler;
+@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding;
 
-@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCDataSubstrateProtocol>
+@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCDataSubstrateProtocol, APCOnboardingDelegate>
 
 @property  (strong, nonatomic)  UIWindow * window;
 

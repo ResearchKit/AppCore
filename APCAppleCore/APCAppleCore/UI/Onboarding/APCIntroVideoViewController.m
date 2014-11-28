@@ -7,6 +7,8 @@
 //
 
 #import "APCIntroVideoViewController.h"
+#import "APCStudyOverviewViewController.h"
+#import "NSBundle+Helper.h"
 
 static NSString *const kVideoShownKey = @"VideoShown";
 
@@ -85,7 +87,7 @@ static NSString *const kVideoShownKey = @"VideoShown";
 #pragma mark - Public Methods
 
 - (void) skip {
-    APHStudyOverviewViewController * vc = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"StudyOverviewVC"];
+    APCStudyOverviewViewController * vc = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"StudyOverviewVC"];
     [self.navigationController pushViewController:vc animated:YES];
 }
 @end

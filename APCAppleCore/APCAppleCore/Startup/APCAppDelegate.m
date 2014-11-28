@@ -12,6 +12,7 @@
 #import "APCPasscodeViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import "APCOnboarding.h"
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -24,9 +25,9 @@ static NSString *const kTasksAndSchedulesJSONFileName = @"APHTasksAndSchedules";
 #pragma mark - Tab bar Constants
 /*********************************************************************************/
 static NSString *const kDashBoardStoryBoardKey     = @"APHDashboard";
-static NSString *const kLearnStoryBoardKey         = @"APHLearn";
+static NSString *const kLearnStoryBoardKey         = @"APCLearn";
 static NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
-static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
+static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
@@ -239,9 +240,9 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     if (!_storyboardIdInfo) {
         _storyboardIdInfo = @[
                               @{@"name": kDashBoardStoryBoardKey, @"bundle" : [NSBundle mainBundle]},
-                              @{@"name": kLearnStoryBoardKey, @"bundle" : [NSBundle mainBundle]},
+                              @{@"name": kLearnStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
                               @{@"name": kActivitiesStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
-                              @{@"name": kHealthProfileStoryBoardKey, @"bundle" : [NSBundle mainBundle]}
+                              @{@"name": kHealthProfileStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]}
                               ];
     }
     return _storyboardIdInfo;
@@ -349,7 +350,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (void) showOnBoarding
 {
     if (!self.onboarding) {
-        self.onboarding = [APCOnboarding new];
+        self.onboarding = [[APCOnboarding alloc] initWithDelegate:self];
     }
     
 }

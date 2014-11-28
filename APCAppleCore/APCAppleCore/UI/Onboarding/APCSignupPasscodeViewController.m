@@ -106,6 +106,10 @@
     return _user;
 }
 
+- (APCOnboarding *)onboarding
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+}
 
 #pragma mark - APCPasscodeViewDelegate
 
@@ -130,9 +134,8 @@
 
 - (void) next
 {
-    APHSignUpPermissionsViewController *permissionsVC = [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"PermissionsVC"];
-    permissionsVC.user = self.user;
-    [self.navigationController pushViewController:permissionsVC animated:YES];
+    UIViewController *viewController = [[self onboarding] nextScreen];
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 - (void) showFirstTry

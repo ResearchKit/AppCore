@@ -52,6 +52,11 @@
     [self.navigationItem setLeftBarButtonItem:backBarButton];
 }
 
+- (APCOnboarding *)onboarding
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+}
+
 - (void)showConsent
 {
     RKSTConsentDocument* consent = [[RKSTConsentDocument alloc] init];
@@ -140,8 +145,8 @@
 
 - (void) startSignUp
 {
-    APHSignUpGeneralInfoViewController *signUpVC = [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"SignUpGeneralInfoVC"];
-    [self.navigationController pushViewController:signUpVC animated:YES];
+    UIViewController *viewController = [[self onboarding] nextScreen];
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 - (IBAction)startConsentTapped:(id)sender

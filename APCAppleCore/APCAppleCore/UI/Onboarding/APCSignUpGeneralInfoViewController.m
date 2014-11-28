@@ -164,6 +164,11 @@
     return [NSArray arrayWithArray:items];
 }
 
+- (APCOnboarding *)onboarding
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+}
+
 #pragma mark - UITextFieldDelegate methods
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField
@@ -426,7 +431,7 @@
 
 - (IBAction)termsAndConditions:(UIButton *)sender
 {
-    APCTermsAndConditionsViewController *termsViewController =  [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"TermsVC"];
+    APCTermsAndConditionsViewController *termsViewController =  [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"TermsVC"];
     termsViewController.delegate = self;
     [self.navigationController presentViewController:termsViewController animated:YES completion:nil];
 }
@@ -482,10 +487,9 @@
         
         [self loadProfileValuesInModel];
         
-        APHSignUpMedicalInfoViewController *medicalInfoViewController =  [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"SignUpMedicalInfoVC"];
-        medicalInfoViewController.user = self.user;
+        UIViewController *viewController = [[self onboarding] nextScreen];
+        [self.navigationController pushViewController:viewController animated:YES];
         
-        [self.navigationController pushViewController:medicalInfoViewController animated:YES];
     } else{
         UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"General Information", @"") message:error];
         [self presentViewController:alert animated:YES completion:nil];

@@ -11,6 +11,8 @@
 #import "UIFont+APCAppearance.h"
 #import "UIImage+APCHelper.h"
 #import "APCShareViewController.h"
+#import "NSBundle+Helper.h"
+
 @interface APCInEligibleViewController ()
 
 @end
@@ -58,7 +60,7 @@
 
 - (IBAction)next:(id)sender
 {
-    APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"ShareVC"];
+    APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ShareVC"];
     [self.navigationController pushViewController:shareViewController animated:YES];
 }
 @end

@@ -187,7 +187,7 @@
 
 - (IBAction)forgotPassword
 {
-    APCForgotPasswordViewController *forgotPasswordViewController = [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"ForgotPasswordVC"];
+    APCForgotPasswordViewController *forgotPasswordViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ForgotPasswordVC"];
     [self.navigationController pushViewController:forgotPasswordViewController animated:YES];
     
 }

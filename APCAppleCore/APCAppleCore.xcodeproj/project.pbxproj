@@ -158,9 +158,9 @@
 		5BB2BA8D1A100BC300684CCE /* UIColor+TertiaryColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB2BA8B1A100BC300684CCE /* UIColor+TertiaryColors.m */; };
 		5BC7D6DD1A2660A900B90589 /* APCSignUpMedicalInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BC7D6DB1A2660A900B90589 /* APCSignUpMedicalInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BC7D6DE1A2660A900B90589 /* APCSignUpMedicalInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC7D6DC1A2660A900B90589 /* APCSignUpMedicalInfoViewController.m */; };
-		5BC7D6E11A26671C00B90589 /* APCOnboarding.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BC7D6DF1A26671C00B90589 /* APCOnboarding.h */; };
+		5BC7D6E11A26671C00B90589 /* APCOnboarding.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BC7D6DF1A26671C00B90589 /* APCOnboarding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BC7D6E21A26671C00B90589 /* APCOnboarding.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC7D6E01A26671C00B90589 /* APCOnboarding.m */; };
-		5BC7D6E51A26757400B90589 /* APCSignUpTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BC7D6E31A26757400B90589 /* APCSignUpTask.h */; };
+		5BC7D6E51A26757400B90589 /* APCSignUpTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BC7D6E31A26757400B90589 /* APCSignUpTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BC7D6E61A26757400B90589 /* APCSignUpTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC7D6E41A26757400B90589 /* APCSignUpTask.m */; };
 		5BF5C90819D9E208007928D4 /* APCUser+UserData.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF5C90619D9E208007928D4 /* APCUser+UserData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BF5C90919D9E208007928D4 /* APCUser+UserData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5C90719D9E208007928D4 /* APCUser+UserData.m */; };
@@ -719,16 +719,16 @@
 			isa = PBXGroup;
 			children = (
 				5B908AA71A265D5E00F9E907 /* APCOnboarding.storyboard */,
-				5B3B60521A156495006B2346 /* APCEligibleViewController.h */,
-				5B3B60531A156495006B2346 /* APCEligibleViewController.m */,
-				5B3B60541A156495006B2346 /* APCForgotPasswordViewController.h */,
-				5B3B60551A156495006B2346 /* APCForgotPasswordViewController.m */,
-				5B3B60561A156495006B2346 /* APCInclusionCriteriaViewController.h */,
-				5B3B60571A156495006B2346 /* APCInclusionCriteriaViewController.m */,
-				5B3B60581A156495006B2346 /* APCInEligibleViewController.h */,
-				5B3B60591A156495006B2346 /* APCInEligibleViewController.m */,
 				5B3B605A1A156495006B2346 /* APCIntroVideoViewController.h */,
 				5B3B605B1A156495006B2346 /* APCIntroVideoViewController.m */,
+				5B3B60561A156495006B2346 /* APCInclusionCriteriaViewController.h */,
+				5B3B60571A156495006B2346 /* APCInclusionCriteriaViewController.m */,
+				5B3B60521A156495006B2346 /* APCEligibleViewController.h */,
+				5B3B60531A156495006B2346 /* APCEligibleViewController.m */,
+				5B3B60581A156495006B2346 /* APCInEligibleViewController.h */,
+				5B3B60591A156495006B2346 /* APCInEligibleViewController.m */,
+				5B3B60541A156495006B2346 /* APCForgotPasswordViewController.h */,
+				5B3B60551A156495006B2346 /* APCForgotPasswordViewController.m */,
 				5B3B605C1A156495006B2346 /* APCShareViewController.h */,
 				5B3B605D1A156495006B2346 /* APCShareViewController.m */,
 				5B3B605E1A156495006B2346 /* APCSignInViewController.h */,
@@ -739,11 +739,11 @@
 				5B908AAD1A265F1F00F9E907 /* APCSignUpGeneralInfoViewController.m */,
 				5BC7D6DB1A2660A900B90589 /* APCSignUpMedicalInfoViewController.h */,
 				5BC7D6DC1A2660A900B90589 /* APCSignUpMedicalInfoViewController.m */,
+				5B3B60651A156495006B2346 /* APCSignupPasscodeViewController.h */,
+				5B3B60661A156495006B2346 /* APCSignupPasscodeViewController.m */,
 				5B3B60621A156495006B2346 /* APCSignUpPermissionsViewController.h */,
 				5B3B60631A156495006B2346 /* APCSignUpPermissionsViewController.m */,
 				5B3B60641A156495006B2346 /* APCSignUpProgressing.h */,
-				5B3B60651A156495006B2346 /* APCSignupPasscodeViewController.h */,
-				5B3B60661A156495006B2346 /* APCSignupPasscodeViewController.m */,
 				5B3B60671A156495006B2346 /* APCSpinnerViewController.h */,
 				5B3B60681A156495006B2346 /* APCSpinnerViewController.m */,
 				5B3B60691A156495006B2346 /* APCSpinnerViewController.xib */,

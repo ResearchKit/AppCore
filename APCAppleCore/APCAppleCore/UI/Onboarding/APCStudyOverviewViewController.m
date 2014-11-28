@@ -13,6 +13,9 @@
 #import "UIColor+TertiaryColors.h"
 #import "APCStudyDetailsViewController.h"
 #import "APCShareViewController.h"
+#import "APCAppDelegate.h"
+#import "APCOnboarding.h"
+#import "NSBundle+Helper.h"
 
 static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
 
@@ -104,6 +107,11 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     
 }
 
+- (APCOnboarding *)onboarding
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+}
+
 #pragma mark - UITableViewDataSource methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -141,14 +149,14 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     switch (itemType) {
         case kAPCTableViewStudyItemTypeStudyDetails:
         {
-            APCStudyDetailsViewController *detailsViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"StudyDetailsVC"];
+            APCStudyDetailsViewController *detailsViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"StudyDetailsVC"];
             detailsViewController.studyDetails = studyDetails;
             [self.navigationController pushViewController:detailsViewController animated:YES];
         }
             break;
         case kAPCTableViewStudyItemTypeShare:
         {
-            APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"ShareVC"];
+            APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ShareVC"];
             shareViewController.hidesOkayButton = YES;
             [self.navigationController pushViewController:shareViewController animated:YES];
         }
@@ -228,13 +236,14 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 - (void)signInTapped:(id)sender
 {
-    APCForgotPasswordViewController *signInViewController = [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"SignInVC"];
-    [self.navigationController pushViewController:signInViewController animated:YES];
+    UIViewController *viewController = [[self onboarding] nextScreen];
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 - (void)signUpTapped:(id)sender
 {
-    [self.navigationController pushViewController: [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"InclusionCriteriaVC"] animated:YES];
+    UIViewController *viewController = [[self onboarding] nextScreen];
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 

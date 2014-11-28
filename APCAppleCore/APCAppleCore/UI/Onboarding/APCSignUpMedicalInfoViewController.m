@@ -8,6 +8,10 @@
 
 #import "APCSignUpMedicalInfoViewController.h"
 #import "APCSpinnerViewController.h"
+#import "APCStepProgressBar.h"
+#import "UIAlertController+Helper.h"
+#import "APCUser+Bridge.h"
+#import "APCAppDelegate.h"
 
 @interface APCSignUpMedicalInfoViewController ()
 
@@ -197,7 +201,10 @@
     return [NSArray arrayWithArray:items];
 }
 
-
+- (APCOnboarding *)onboarding
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+}
 
 #pragma mark - UIMethods
 
@@ -282,7 +289,7 @@
     [self.user signUpOnCompletion:^(NSError *error) {
         if (error) {
             [spinnerController dismissViewControllerAnimated:NO completion:^{
-                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Up", @"") message:error.message];
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Up", @"") message:error.localizedDescription];
                 [self presentViewController:alert animated:YES completion:nil];
             }];
         }
@@ -299,10 +306,8 @@
 - (IBAction) next {
     [self loadProfileValuesInModel];
     
-    APHSignUpGlucoseViewController *glucoseViewController = [[UIStoryboard storyboardWithName:@"APHOnboarding" bundle:nil] instantiateViewControllerWithIdentifier:@"GlucoseLevels"];
-    glucoseViewController.user = self.user;
-    
-    [self.navigationController pushViewController:glucoseViewController animated:YES];
+    UIViewController *viewController = [[self onboarding] nextScreen];
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 @end
