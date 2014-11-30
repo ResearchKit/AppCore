@@ -28,6 +28,7 @@ static NSString *const kMedicationsPropertyName = @"medications";
 static NSString *const kWakeUpTimePropertyName = @"wakeUpTime";
 static NSString *const kSleepTimePropertyName = @"sleepTime";
 static NSString *const kEthnicityPropertyName = @"ethnicity";
+static NSString *const kGlucoseLevelsPropertyName = @"glucoseLevels";
 
 static NSString *const kSignedUpKey = @"SignedUp";
 static NSString *const kSignedInKey = @"SignedIn";
@@ -114,6 +115,8 @@ static NSString *const kSignedInKey = @"SignedIn";
     _medications = [storedUserData.medications copy];
     _wakeUpTime = [storedUserData.wakeUpTime copy];
     _sleepTime = [storedUserData.sleepTime copy];
+    _ethnicity = [storedUserData.ethnicity copy];
+    _glucoseLevels = [storedUserData.glucoseLevels copy];
 }
 
 - (void) updateStoredProperty:(NSString*) propertyName withValue: (id) value
@@ -244,6 +247,12 @@ static NSString *const kSignedInKey = @"SignedIn";
 {
     _ethnicity = ethnicity;
     [self updateStoredProperty:kEthnicityPropertyName withValue:ethnicity];
+}
+
+- (void)setGlucoseLevels:(NSString *)glucoseLevels
+{
+    _glucoseLevels = glucoseLevels;
+    [self updateStoredProperty:kGlucoseLevelsPropertyName withValue:glucoseLevels];
 }
 
 /*********************************************************************************/

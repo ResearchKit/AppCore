@@ -2,7 +2,7 @@
 //  APCStoredUserData.h
 //  APCAppleCore
 //
-//  Created by Dhanush Balachandran on 9/26/14.
+//  Created by Farhan Ahmed on 11/28/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
@@ -12,16 +12,17 @@
 
 @interface APCStoredUserData : NSManagedObject
 
-@property (nonatomic, retain) NSData *profileImage;
-@property (nonatomic, retain) NSDate * birthDate;
 @property (nonatomic, retain) NSNumber * biologicalSex;
+@property (nonatomic, retain) NSDate * birthDate;
 @property (nonatomic, retain) NSNumber * bloodType;
+@property (nonatomic, retain) NSString * ethnicity;
 @property (nonatomic, retain) NSString * medicalConditions;
 @property (nonatomic, retain) NSString * medications;
+@property (nonatomic, retain) NSData * profileImage;
 @property (nonatomic, retain) NSNumber * serverConsented;
+@property (nonatomic, retain) NSDate * sleepTime;
 @property (nonatomic, retain) NSNumber * userConsented;
 @property (nonatomic, retain) NSDate * wakeUpTime;
-@property (nonatomic, retain) NSDate * sleepTime;
-@property (nonatomic, retain) NSString * ethnicity;
+@property (nonatomic, retain) NSString * glucoseLevels;
 
 @end
