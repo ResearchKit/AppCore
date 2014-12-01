@@ -139,7 +139,6 @@ static APCDummyObject * _dummyObject;
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     retAnswer = (RKSTAnswerFormat*) [_dummyObject performSelector:selector withObject:constraints];
 #pragma clang diagnostic pop
-    NSLog(@"RETAnswer: %@", retAnswer);
     
     return retAnswer;
 }
