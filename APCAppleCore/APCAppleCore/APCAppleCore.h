@@ -56,6 +56,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCSignupPasscodeViewController.h>
 #import <APCAppleCore/APCSignUpPermissionsViewController.h>
 #import <APCAppleCore/APCEmailVerifyViewController.h>
+#import <APCAppleCore/APCChangeEmailViewController.h>
 #import <APCAppleCore/APCPasscodeViewController.h>
 
 /*--------------------------

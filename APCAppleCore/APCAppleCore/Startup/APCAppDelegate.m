@@ -385,6 +385,12 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
                     completion:nil];
 }
 
+- (RKSTTaskViewController *)consentViewController
+{
+     NSAssert(FALSE, @"Override this method to return a valid Consent Task View Controller.");
+    return nil;
+}
+
 /*********************************************************************************/
 #pragma mark - Private Helper Methods
 /*********************************************************************************/
@@ -394,5 +400,15 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     NSString *basePath = ([paths count] > 0) ? paths[0] : nil;
     return basePath;
 }
+
+#pragma mark - APCOnboarding Protocol
+
+- (APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)onboarding
+{
+    NSAssert(FALSE, @"Cannot retun nil. Override this delegate method to return a valid APCScene.");
+    
+    return nil;
+}
+
 
 @end
