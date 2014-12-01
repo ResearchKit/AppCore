@@ -24,11 +24,12 @@
     
     self.title = self.studyDetails.caption;
     
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:self.studyDetails.detailText ofType:@"pdf"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:self.studyDetails.detailText ofType:@"html" inDirectory:@"HTMLContent"];
     NSURL *targetURL = [NSURL URLWithString:filePath];
     NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
     self.webView.delegate = self;
     [self.webView loadRequest:request];
+    [self.webView setDataDetectorTypes:UIDataDetectorTypeAll];
 }
 
 - (void)viewWillAppear:(BOOL)animated

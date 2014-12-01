@@ -562,7 +562,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
 
 - (IBAction)leaveStudy:(id)sender
 {
-    UINavigationController *withdrawViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:nil] instantiateViewControllerWithIdentifier:@"WithdrawSurveyNC"];
+    UINavigationController *withdrawViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"WithdrawSurveyNC"];
     [self.navigationController presentViewController:withdrawViewController animated:YES completion:nil];
 }
 

@@ -141,11 +141,13 @@
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
+    
+    [[self onboarding] popScene];
 }
 
 - (void) startSignUp
 {
-    UIViewController *viewController = [[self onboarding] nextScreen];
+    UIViewController *viewController = [[self onboarding] nextScene];
     [self.navigationController pushViewController:viewController animated:YES];
 }
 

@@ -365,7 +365,14 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 {
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
     navController.navigationBar.translucent = NO;
-    self.window.rootViewController = navController;
+    
+    [UIView transitionWithView:self.window
+                      duration:0.6
+                       options:UIViewAnimationOptionTransitionFlipFromLeft
+                    animations:^{
+                        self.window.rootViewController = navController;
+                    }
+                    completion:nil];
 }
 
 /*********************************************************************************/

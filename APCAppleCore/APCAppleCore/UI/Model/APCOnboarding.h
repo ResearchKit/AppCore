@@ -30,7 +30,9 @@
 
 - (void)setScene:(APCScene *)scene forIdentifier:(NSString *)identifier;
 
-- (UIViewController *)nextScreen;
+- (UIViewController *)nextScene;
+
+- (void)popScene;
 
 @end
 

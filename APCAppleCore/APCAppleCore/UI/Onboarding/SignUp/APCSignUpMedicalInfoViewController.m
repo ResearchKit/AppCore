@@ -306,7 +306,7 @@
 - (IBAction) next {
     [self loadProfileValuesInModel];
     
-    UIViewController *viewController = [[self onboarding] nextScreen];
+    UIViewController *viewController = [[self onboarding] nextScene];
     [self.navigationController pushViewController:viewController animated:YES];
 }
 

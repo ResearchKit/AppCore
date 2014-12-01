@@ -18,6 +18,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *dateRangeLabel;
 @property (weak, nonatomic) IBOutlet UIButton *joinButton;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
+@property (weak, nonatomic) IBOutlet UIImageView *diseaseLogoImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *researchInstituteImageView;
 
 @property (strong, nonatomic) NSString *diseaseName;
 

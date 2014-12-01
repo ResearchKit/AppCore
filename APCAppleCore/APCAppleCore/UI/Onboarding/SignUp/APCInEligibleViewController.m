@@ -12,6 +12,7 @@
 #import "UIImage+APCHelper.h"
 #import "APCShareViewController.h"
 #import "NSBundle+Helper.h"
+#import "APCAppDelegate.h"
 
 @interface APCInEligibleViewController ()
 
@@ -50,11 +51,18 @@
     [self.navigationItem setLeftBarButtonItem:backBarButton];
 }
 
+- (APCOnboarding *)onboarding
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+}
+
 #pragma mark - Selectors
 
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
+    
+    [[self onboarding] popScene];
 }
 
 

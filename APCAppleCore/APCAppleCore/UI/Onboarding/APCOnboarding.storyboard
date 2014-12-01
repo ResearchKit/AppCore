@@ -193,10 +193,12 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="dateRangeLabel" destination="iT0-aA-VLs" id="GhM-tE-mX9"/>
+                        <outlet property="diseaseLogoImageView" destination="9Ej-fF-Eyy" id="4eK-0y-tl3"/>
                         <outlet property="diseaseNameLabel" destination="lDJ-SH-lam" id="xk7-Rb-Leb"/>
                         <outlet property="headerView" destination="GU1-92-eRt" id="RP1-IZ-a5L"/>
                         <outlet property="joinButton" destination="JU2-ai-Tcq" id="Prl-cR-P7s"/>
                         <outlet property="loginButton" destination="tbW-Ox-hif" id="7nf-04-FCv"/>
+                        <outlet property="researchInstituteImageView" destination="2EN-Xb-Xbf" id="Hzx-sw-Hzo"/>
                         <outlet property="tableView" destination="Yxr-9O-dV7" id="vAe-vG-UKs"/>
                     </connections>
                 </viewController>

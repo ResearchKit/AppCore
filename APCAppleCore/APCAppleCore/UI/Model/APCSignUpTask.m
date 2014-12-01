@@ -56,7 +56,7 @@ NSString *const kAPCSignUpPermissionsStepIdentifier       = @"Permissions";
     } else if ([step.identifier isEqualToString:kAPCSignUpGeneralInfoStepIdentifier]) {
         nextStep = self.medicalInfoStep;
     } else if ([step.identifier isEqualToString:kAPCSignUpMedicalInfoStepIdentifier]) {
-        if (self.customInfoStep) {
+        if (self.customStepIncluded) {
             nextStep = self.customInfoStep;
         } else{
             nextStep = self.passcodeStep;
@@ -68,6 +68,35 @@ NSString *const kAPCSignUpPermissionsStepIdentifier       = @"Permissions";
     }
     
     return nextStep;
+}
+
+- (RKSTStep *)stepBeforeStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
+{
+    RKSTStep *prevStep;
+    
+    if ([step.identifier isEqualToString:kAPCSignUpInclusionCriteriaStepIdentifier]) {
+        prevStep = nil;
+    } else if ([step.identifier isEqualToString:kAPCSignUpEligibleStepIdentifier]) {
+        prevStep = self.inclusionCriteriaStep;
+    } else if ([step.identifier isEqualToString:kAPCSignUpIneligibleStepIdentifier]) {
+        prevStep = self.inclusionCriteriaStep;
+    } else if ([step.identifier isEqualToString:kAPCSignUpGeneralInfoStepIdentifier]) {
+        prevStep = self.eligibleStep;
+    } else if ([step.identifier isEqualToString:kAPCSignUpMedicalInfoStepIdentifier]) {
+        prevStep = self.generalInfoStep;
+    } else if ([step.identifier isEqualToString:kAPCSignUpCustomInfoStepIdentifier]) {
+        prevStep = self.medicalInfoStep;
+    } else if ([step.identifier isEqualToString:kAPCSignUpPasscodeStepIdentifier]) {
+        if (self.customStepIncluded) {
+            prevStep = self.customInfoStep;
+        } else {
+            prevStep = self.medicalInfoStep;
+        }
+    } else if ([step.identifier isEqualToString:kAPCSignUpPermissionsStepIdentifier]) {
+        prevStep = self.passcodeStep;
+    }
+    
+    return prevStep;
 }
 
 - (RKSTStep *)inclusionCriteriaStep

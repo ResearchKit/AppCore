@@ -1,26 +1,25 @@
 //
-//  APCForgotPasswordViewController.m
+//  APCChangeEmailViewController.m
 //  APCAppleCore
 //
-//  Created by Karthik Keyan on 9/4/14.
+//  Created by Ramsundar Shandilya on 11/30/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
+#import "APCChangeEmailViewController.h"
+#import "UIFont+APCAppearance.h"
+#import "UIColor+APCAppearance.h"
+#import "APCUserInfoConstants.h"
 #import "NSString+Helper.h"
 #import "UIAlertController+Helper.h"
-#import "APCUserInfoConstants.h"
-#import "APCForgotPasswordViewController.h"
-#import "UIColor+APCAppearance.h"
-#import "UIFont+APCAppearance.h"
 
-@interface APCForgotPasswordViewController ()
+@interface APCChangeEmailViewController ()
 
 @end
 
-@implementation APCForgotPasswordViewController
+@implementation APCChangeEmailViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     [self setupAppearance];
@@ -32,7 +31,6 @@
     [super viewDidAppear:animated];
     [self.emailTextField becomeFirstResponder];
 }
-
 #pragma mark - Appearance
 
 - (void)setupAppearance
@@ -68,7 +66,7 @@
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField
 {
-   [self sendPassword];
+    [self updateEmailAddress];
     
     return YES;
 }
@@ -89,15 +87,16 @@
 
 #pragma mark - Public Methods
 
-- (void) sendPassword
+- (void)updateEmailAddress
 {
     NSString *error;
     
     if ([self isContentValid:&error]) {
         if ([self.emailTextField.text isValidForRegex:(NSString *)kAPCGeneralInfoItemEmailRegEx]) {
+            
         }
         else {
-            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"General Information", @"") message:NSLocalizedString(@"Please give a valid email address", @"")];
+            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Change Email", @"") message:NSLocalizedString(@"Please enter a valid email address", @"")];
             [self presentViewController:alert animated:YES completion:nil];
         }
     } else{
@@ -115,7 +114,8 @@
 
 - (IBAction)done:(id)sender
 {
-    [self sendPassword];
+    [self updateEmailAddress];
 }
+
 
 @end

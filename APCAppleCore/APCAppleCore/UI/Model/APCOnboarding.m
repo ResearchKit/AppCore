@@ -78,6 +78,7 @@ static NSString * const kOnboardingStoryboardName = @"APCOnboarding";
         if ([self.delegate respondsToSelector:@selector(customInfoSceneForOnboarding:)]) {
             APCScene *scene = [self.delegate customInfoSceneForOnboarding:self];
             [scenes setObject:scene forKey:kAPCSignUpCustomInfoStepIdentifier];
+            self.signUpTask.customStepIncluded = YES;
         }
     }
     {
@@ -100,13 +101,18 @@ static NSString * const kOnboardingStoryboardName = @"APCOnboarding";
     return scenes;
 }
 
-- (UIViewController *)nextScreen
+- (UIViewController *)nextScene
 {
     self.currentStep = [self.signUpTask stepAfterStep:self.currentStep withResult:nil];
     
     UIViewController *nextViewController = [self viewControllerForSceneIdentifier:self.currentStep.identifier];
     
     return nextViewController;
+}
+
+- (void)popScene
+{
+    self.currentStep = [self.signUpTask stepBeforeStep:self.currentStep withResult:nil];
 }
 
 - (UIViewController *)viewControllerForSceneIdentifier:(NSString *)identifier

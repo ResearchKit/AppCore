@@ -54,6 +54,8 @@
     } else{
         self.items = [self prepareContent];
     }
+    
+    [self.profileImageButton setImage:[UIImage imageNamed:@"profilePlaceholder"] forState:UIControlStateNormal];
 }
 
 - (void)setupAppearance
@@ -397,6 +399,7 @@
 - (void)termsAndConditionsViewControllerDidAgree
 {
     [self.permissionButton setSelected:YES];
+    
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         [self.nextBarButton setEnabled:[self isContentValid:nil]];
     }];
@@ -431,7 +434,7 @@
 
 - (IBAction)termsAndConditions:(UIButton *)sender
 {
-    APCTermsAndConditionsViewController *termsViewController =  [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"TermsVC"];
+    APCTermsAndConditionsViewController *termsViewController =  [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCTermsAndConditionsViewController"];
     termsViewController.delegate = self;
     [self.navigationController presentViewController:termsViewController animated:YES completion:nil];
 }
@@ -487,7 +490,7 @@
         
         [self loadProfileValuesInModel];
         
-        UIViewController *viewController = [[self onboarding] nextScreen];
+        UIViewController *viewController = [[self onboarding] nextScene];
         [self.navigationController pushViewController:viewController animated:YES];
         
     } else{

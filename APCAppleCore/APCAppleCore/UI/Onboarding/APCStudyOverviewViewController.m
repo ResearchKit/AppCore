@@ -16,6 +16,7 @@
 #import "APCAppDelegate.h"
 #import "APCOnboarding.h"
 #import "NSBundle+Helper.h"
+#import "APCSignInViewController.h"
 
 static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
 
@@ -88,6 +89,9 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    
+    [self.diseaseLogoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
+    [self.researchInstituteImageView setImage:[UIImage imageNamed:@"logo_researchInstitute"]];
 }
 
 - (void)setUpAppearance
@@ -236,13 +240,13 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 - (void)signInTapped:(id)sender
 {
-    UIViewController *viewController = [[self onboarding] nextScreen];
-    [self.navigationController pushViewController:viewController animated:YES];
+    APCSignInViewController *signInViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSignInViewController"];
+    [self.navigationController pushViewController:signInViewController animated:YES];
 }
 
 - (void)signUpTapped:(id)sender
 {
-    UIViewController *viewController = [[self onboarding] nextScreen];
+    UIViewController *viewController = [[self onboarding] nextScene];
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
