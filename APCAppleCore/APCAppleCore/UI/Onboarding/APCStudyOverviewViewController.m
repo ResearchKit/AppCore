@@ -20,7 +20,7 @@
 
 static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
 
-@interface APCStudyOverviewViewController ()
+@interface APCStudyOverviewViewController () <RKSTTaskViewControllerDelegate>
 
 @end
 
@@ -60,6 +60,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
         APCTableViewRow *rowItem = [APCTableViewRow new];
         rowItem.item = shareStudyItem;
         rowItem.itemType = kAPCTableViewStudyItemTypeShare;
+        
         APCTableViewSection *section = [items firstObject];
         NSMutableArray *rowItems = [NSMutableArray arrayWithArray:section.rows];
         [rowItems addObject:rowItem];
@@ -75,6 +76,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
         
         APCTableViewRow *rowItem = [APCTableViewRow new];
         rowItem.item = reviewConsentItem;
+        rowItem.itemType = kAPCTableViewStudyItemTypeReviewConsent;
         
         APCTableViewSection *section = [items firstObject];
         NSMutableArray *rowItems = [NSMutableArray arrayWithArray:section.rows];
@@ -166,11 +168,46 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
         }
             break;
             
+        case kAPCTableViewStudyItemTypeReviewConsent:
+        {
+            [self showConsent];
+        }
+            break;
+            
         default:
             break;
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Consent
+
+- (void)showConsent
+{
+    RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    
+    consentVC.taskDelegate = self;
+    [self presentViewController:consentVC animated:YES completion:nil];
+    
+}
+
+#pragma mark - TaskViewController Delegate methods
+
+- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
+{
+    [taskViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
+{
+    //TODO: Figure out what to do if it fails
+    [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Public methods

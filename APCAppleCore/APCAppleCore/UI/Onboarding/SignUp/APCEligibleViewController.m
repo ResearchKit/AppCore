@@ -21,6 +21,8 @@
     
     [self setUpAppearance];
     [self setupNavAppearance];
+    
+    [self.logoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -59,53 +61,7 @@
 
 - (void)showConsent
 {
-    RKSTConsentDocument* consent = [[RKSTConsentDocument alloc] init];
-    consent.title = @"Demo Consent";
-    consent.signaturePageTitle = @"Consent";
-    consent.signaturePageContent = @"I agree  to participate in this research Study.";
-    
-    //TODO:Check the identifier
-    RKSTConsentSignature *participantSig = [RKSTConsentSignature signatureForPersonWithTitle:@"Participant" dateFormatString:@"yyyy-MM-dd 'at' HH:mm" identifier:@"com.ymedia.participant"];
-    [consent addSignature:participantSig];
-    
-    RKSTConsentSignature *investigatorSig = [RKSTConsentSignature signatureForPersonWithTitle:@"Investigator" dateFormatString:@"yyyy-MM-dd 'at' HH:mm" identifier:@"com.ymedia.participant"];
-    [consent addSignature:investigatorSig];
-    
-    
-    
-    
-    NSMutableArray* components = [NSMutableArray new];
-    
-    NSArray* scenes = @[@(RKSTConsentSectionTypeOverview),
-                        @(RKSTConsentSectionTypeActivity),
-                        @(RKSTConsentSectionTypeSensorData),
-                        @(RKSTConsentSectionTypeDeIdentification),
-                        @(RKSTConsentSectionTypeCombiningData),
-                        @(RKSTConsentSectionTypeUtilizingData),
-                        @(RKSTConsentSectionTypeImpactLifeTime),
-                        @(RKSTConsentSectionTypePotentialRiskUncomfortableQuestion),
-                        @(RKSTConsentSectionTypePotentialRiskSocial),
-                        @(RKSTConsentSectionTypeAllowWithdraw)];
-    for (NSNumber* type in scenes) {
-        RKSTConsentSection* c = [[RKSTConsentSection alloc] initWithType:type.integerValue];
-        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
-        [components addObject:c];
-    }
-    
-    {
-        RKSTConsentSection* c = [[RKSTConsentSection alloc] initWithType:RKSTConsentSectionTypeOnlyInDocument];
-        c.summary = @"OnlyInDocument Scene summary";
-        c.title = @"OnlyInDocument Scene";
-        c.content = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam adhuc, meo fortasse vitio, quid ego quaeram non perspicis. Plane idem, inquit, et maxima quidem, qua fieri nulla maior potest. Quonam, inquit, modo? An potest, inquit ille, quicquam esse suavius quam nihil dolere? Cave putes quicquam esse verius. Quonam, inquit, modo?";
-        [components addObject:c];
-    }
-    
-    consent.sections = [components copy];
-    
-    RKSTVisualConsentStep *step = [[RKSTVisualConsentStep alloc] initWithDocument:consent];
-    RKSTConsentReviewStep *reviewStep = [[RKSTConsentReviewStep alloc] initWithSignature:participantSig inDocument:consent];
-    RKSTOrderedTask *task = [[RKSTOrderedTask alloc] initWithIdentifier:@"consent" steps:@[step,reviewStep]];
-    RKSTTaskViewController *consentVC = [[RKSTTaskViewController alloc] initWithTask:task taskRunUUID:[NSUUID UUID]];
+    RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
     
     consentVC.taskDelegate = self;
     [self presentViewController:consentVC animated:YES completion:nil];

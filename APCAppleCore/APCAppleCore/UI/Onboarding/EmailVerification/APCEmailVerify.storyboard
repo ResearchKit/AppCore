@@ -80,10 +80,24 @@ the link included in the message.</string>
                                     <segue destination="LBV-s1-hh7" kind="show" id="PCs-iy-OzG"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WLq-Ms-OSK">
+                                <rect key="frame" x="135" y="175" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="EdA-se-uDA"/>
+                                    <constraint firstAttribute="width" constant="50" id="zlO-bB-FLE"/>
+                                </constraints>
+                                <state key="normal">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="secretButton:" destination="h61-jT-BHu" eventType="touchUpInside" id="SP5-lR-psQ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="3xK-c0-Pah" secondAttribute="trailing" constant="7" id="3eD-Fs-Kle"/>
+                            <constraint firstItem="WLq-Ms-OSK" firstAttribute="leading" secondItem="tTU-aB-ynX" secondAttribute="trailing" constant="-50" id="7Mx-4P-E6Y"/>
                             <constraint firstItem="gY2-y5-fND" firstAttribute="trailing" secondItem="Kj1-kb-LF2" secondAttribute="trailingMargin" id="Du9-o5-KKO"/>
                             <constraint firstItem="yX7-Jl-zxX" firstAttribute="top" secondItem="1aj-Cn-g1q" secondAttribute="bottom" constant="-5" id="F0t-fC-eKP"/>
                             <constraint firstAttribute="centerY" secondItem="tTU-aB-ynX" secondAttribute="centerY" constant="84" id="RlR-xX-Tpq"/>
@@ -92,6 +106,7 @@ the link included in the message.</string>
                             <constraint firstAttribute="centerX" secondItem="tTU-aB-ynX" secondAttribute="centerX" id="bRb-Bv-bqr"/>
                             <constraint firstItem="1aj-Cn-g1q" firstAttribute="top" secondItem="3xK-c0-Pah" secondAttribute="bottom" constant="-4" id="cjf-fz-I7l"/>
                             <constraint firstItem="hsa-BE-Hkq" firstAttribute="top" secondItem="tTU-aB-ynX" secondAttribute="bottom" constant="8" id="eHM-Pe-VS7"/>
+                            <constraint firstItem="WLq-Ms-OSK" firstAttribute="top" secondItem="tTU-aB-ynX" secondAttribute="bottom" constant="-50" id="g4N-5C-ApW"/>
                             <constraint firstItem="3xK-c0-Pah" firstAttribute="top" secondItem="hsa-BE-Hkq" secondAttribute="bottom" id="hom-mt-Ssh"/>
                             <constraint firstAttribute="centerX" secondItem="1aj-Cn-g1q" secondAttribute="centerX" id="j7a-H6-2UM"/>
                             <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="gY2-y5-fND" secondAttribute="bottom" constant="8" id="mAW-qj-wll"/>

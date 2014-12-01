@@ -69,7 +69,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
  Learn ViewControllers
  -------------------------*/
 #import <APCAppleCore/APCLearnMasterViewController.h>
-
+#import <APCAppleCore/APCLearnStudyDetailsViewController.h>
 
 /*--------------------------
  Activities ViewControllers

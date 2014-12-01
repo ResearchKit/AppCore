@@ -13,7 +13,7 @@
 #import "UIFont+APCAppearance.h"
 #import "NSBundle+Helper.h"
 #import "APCStudyDetailsViewController.h"
-#import "APCStudyOverviewViewController.h"
+#import "APCLearnStudyDetailsViewController.h"
 
 static CGFloat kSectionHeaderHeight = 40.f;
 
@@ -104,7 +104,8 @@ static CGFloat kSectionHeaderHeight = 40.f;
     switch (itemType) {
         case kAPCTableViewLearnItemTypeStudyDetails:
         {
-            APCStudyOverviewViewController *detailViewController = [[UIStoryboard storyboardWithName:@"APCLearn" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"StudyDetailsVC"];
+            APCLearnStudyDetailsViewController *detailViewController = [[UIStoryboard storyboardWithName:@"APCLearn" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCLearnStudyDetailsViewController"];
+            detailViewController.showConsentRow = YES;
             [self.navigationController pushViewController:detailViewController animated:YES];
         }
             break;
@@ -152,6 +153,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
         
         NSArray *items = jsonDictionary[@"items"];
         
+        
         for (NSDictionary *sectionDict in items) {
             
             APCTableViewSection *section = [APCTableViewSection new];
@@ -173,7 +175,11 @@ static CGFloat kSectionHeaderHeight = 40.f;
                 studyDetails.tintColor = [UIColor tertiaryColorForString:rowItemDict[@"tint_color"]];
                 
                 rowItem.item = studyDetails;
-                rowItem.itemType = kAPCTableViewLearnItemTypeOtherDetails;
+                if ([studyDetails.detailText isEqualToString:@"study_details"]) {
+                    rowItem.itemType = kAPCTableViewLearnItemTypeStudyDetails;
+                } else {
+                    rowItem.itemType = kAPCTableViewLearnItemTypeOtherDetails;
+                }
                 [rowItems addObject:rowItem];
             }
             

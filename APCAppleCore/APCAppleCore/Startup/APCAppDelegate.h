@@ -27,7 +27,7 @@
 @property (nonatomic, strong) NSDictionary * initializationOptions;
 - (NSMutableDictionary*) defaultInitializationOptions;
 
-@property (nonatomic, strong) APCOnboarding *onboarding;
+@property (strong, nonatomic) APCOnboarding *onboarding;
 
 - (void)loadStaticTasksAndSchedulesIfNecessary;  //For resetting app
 - (void) clearNSUserDefaults; //For resetting app
@@ -51,5 +51,7 @@
 
 //Datasubstrate Delegate
 - (void) setUpCollectors;
+
+- (RKSTTaskViewController *)consentViewController;
 
 @end

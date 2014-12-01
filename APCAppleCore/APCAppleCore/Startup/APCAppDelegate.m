@@ -100,6 +100,12 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self.dataMonitor backgroundFetch:completionHandler];
 }
 
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    NSDate *currentTime = [NSDate date];
+    [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+}
+
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     NSDate *currentTime = [NSDate date];
@@ -343,7 +349,8 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void)showPasscode
 {
-    APCPasscodeViewController *passcodeViewController = [[APCPasscodeViewController alloc] initWithNibName:@"APCPasscodeViewController" bundle:[NSBundle appleCoreBundle]];
+    APCPasscodeViewController *passcodeViewController = [[UIStoryboard storyboardWithName:@"APCPasscode" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
+    
     [self.window.rootViewController presentViewController:passcodeViewController animated:YES completion:nil];
 }
 

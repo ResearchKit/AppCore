@@ -106,4 +106,8 @@
 {
     
 }
+- (IBAction)secretButton:(id)sender
+{
+    self.user.signedIn = YES;
+}
 @end

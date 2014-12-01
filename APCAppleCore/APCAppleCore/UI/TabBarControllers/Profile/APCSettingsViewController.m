@@ -25,6 +25,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self setupNavAppearance];
+    
     NSString *build = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     self.versionLabel.text = [NSString stringWithFormat:@"Version: %@ (Build %@)", version, build];
@@ -152,6 +154,20 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     return headerView;
 }
 
+#pragma mark - Setup
+
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[[UIImage imageNamed:@"back_button"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    backButton.tintColor = [UIColor appPrimaryColor];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
+}
+
 #pragma mark - UITableViewDelegate methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -208,4 +224,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.parameters;
 }
 
+#pragma mark - Selectors / IBActions
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 @end

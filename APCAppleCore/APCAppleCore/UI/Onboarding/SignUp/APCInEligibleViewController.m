@@ -26,6 +26,8 @@
     
     [self setupAppearance];
     [self setupNavAppearance];
+    
+    [self.logoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
 }
 
 - (void)didReceiveMemoryWarning {

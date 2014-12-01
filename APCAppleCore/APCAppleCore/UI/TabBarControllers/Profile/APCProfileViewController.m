@@ -47,7 +47,12 @@ static CGFloat kSectionHeaderHeight = 40.f;
     self.lastNameTextField.enabled = NO;
     
     self.profileImage = [UIImage imageWithData:self.user.profileImage];
-    [self.profileImageButton setImage:self.profileImage forState:UIControlStateNormal];
+    if (self.profileImage) {
+        [self.profileImageButton setImage:self.profileImage forState:UIControlStateNormal];
+    } else {
+        [self.profileImageButton setImage:[UIImage imageNamed:@"profilePlaceholder"] forState:UIControlStateNormal];
+    }
+    
     
     [self setupDataFromJSONFile:@"StudyOverview"];
 }
@@ -355,9 +360,9 @@ static CGFloat kSectionHeaderHeight = 40.f;
     switch (type) {
         case kAPCTableViewStudyItemTypeShare:
         {
-            APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ShareVC"];
-            shareViewController.hidesOkayButton = YES;
-            [self.navigationController pushViewController:shareViewController animated:YES];
+//            APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCShareViewController"];
+//            shareViewController.hidesOkayButton = YES;
+//            [self.navigationController pushViewController:shareViewController animated:YES];
         }
             break;
             

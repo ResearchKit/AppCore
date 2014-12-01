@@ -33,16 +33,15 @@
     self.shareImages = @[@"twitter_icon", @"facebook_icon", @"email_icon", @"sms_icon"];
     
     [self setupAppearance];
+    [self setupNavAppearance];
     
     self.okayButton.hidden = self.hidesOkayButton;
     if (self.okayButton.hidden) {
         self.tableBottomConstraint.constant = 0;
         [self.view layoutIfNeeded];
     }
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+    
+    [self.logoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -66,6 +65,18 @@
     [self.okayButton.titleLabel setFont:[UIFont appMediumFontWithSize:19.0f]];
 }
 
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[[UIImage imageNamed:@"back_button"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    backButton.tintColor = [UIColor appPrimaryColor];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
+}
+
 #pragma mark - UITableViewDataSource methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -81,12 +92,15 @@
     return cell;
 }
 
-
-#pragma mark - IBActions
+#pragma mark - Selectors / IBActions
 
 - (IBAction)okayTapped:(id)sender
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 @end
