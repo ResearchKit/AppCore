@@ -39,6 +39,8 @@ NSString *const kAPCSignUpPermissionsStepIdentifier       = @"Permissions";
 
 @implementation APCSignUpTask
 
+#pragma mark - RKSTTask methods
+
 - (RKSTStep *)stepAfterStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
 {
     RKSTStep *nextStep;
@@ -98,6 +100,13 @@ NSString *const kAPCSignUpPermissionsStepIdentifier       = @"Permissions";
     
     return prevStep;
 }
+
+- (NSString *)identifier
+{
+    return @"SignUpTask";
+}
+
+#pragma mark - Getter methods
 
 - (RKSTStep *)inclusionCriteriaStep
 {
