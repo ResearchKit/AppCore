@@ -12,6 +12,7 @@
 #import "APCConstants.h"
 #import "APCConcentricProgressView.h"
 #import "UIFont+APCAppearance.h"
+#import "APCAppDelegate.h"
 
 @interface APCDashboardViewController ()<UIGestureRecognizerDelegate, APCConcentricProgressViewDataSource>
 
@@ -26,6 +27,8 @@
     
     self.lineCharts = [NSMutableArray new];
     self.items = [NSMutableArray new];
+    
+    [((APCAppDelegate *)[[UIApplication sharedApplication] delegate]) showPasscodeIfNecessary];
 }
 
 - (void)viewDidLayoutSubviews
