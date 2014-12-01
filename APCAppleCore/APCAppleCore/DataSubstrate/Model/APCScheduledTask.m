@@ -2,7 +2,7 @@
 //  APCScheduledTask.m
 //  APCAppleCore
 //
-//  Created by Dhanush Balachandran on 11/24/14.
+//  Created by Dhanush Balachandran on 12/1/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
@@ -17,10 +17,9 @@
 @dynamic completed;
 @dynamic createdAt;
 @dynamic endOn;
-@dynamic notificationUID;
-@dynamic reminderUID;
 @dynamic startOn;
 @dynamic updatedAt;
+@dynamic uid;
 @dynamic generatedSchedule;
 @dynamic results;
 @dynamic task;
