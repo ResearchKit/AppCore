@@ -364,8 +364,11 @@ static CGFloat const kAnimationDuration = 0.35f;
     }
     
     for (int idx=0; idx < [self numberOfSegments]; idx++) {
+        CGFloat value = 0;
         
-        CGFloat value = ((NSNumber *)self.actualValues[idx]).floatValue/self.sumOfValues;
+        if (self.sumOfValues != 0) {
+            value = ((NSNumber *)self.actualValues[idx]).floatValue/self.sumOfValues;
+        }
         
         [self.normalizedValues addObject:@(value)];
     }
