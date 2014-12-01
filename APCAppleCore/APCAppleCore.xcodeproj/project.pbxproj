@@ -306,6 +306,8 @@
 		F5B4213A19D23D7700F9CD69 /* APCDebugWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B4213719D23D7700F9CD69 /* APCDebugWindow.m */; };
 		F5B4213B19D23D7700F9CD69 /* APCParametersCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B4213819D23D7700F9CD69 /* APCParametersCell.h */; };
 		F5C1DC2319D22EAF006527EA /* TabBar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5C1DC2219D22EAF006527EA /* TabBar.storyboard */; };
+		F5C2EC341A26C01C00C9CB87 /* APCGenericSurveyTaskViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C2EC321A26C01C00C9CB87 /* APCGenericSurveyTaskViewController.h */; };
+		F5C2EC351A26C01C00C9CB87 /* APCGenericSurveyTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C2EC331A26C01C00C9CB87 /* APCGenericSurveyTaskViewController.m */; };
 		F5C8DA031A1FF5CD006933F5 /* APCSchedule+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C8DA011A1FF5CD006933F5 /* APCSchedule+Bridge.h */; };
 		F5C8DA041A1FF5CD006933F5 /* APCSchedule+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C8DA021A1FF5CD006933F5 /* APCSchedule+Bridge.m */; };
 		F5D1A90F19D4C6E200A03465 /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */; };
@@ -609,6 +611,8 @@
 		F5B4213719D23D7700F9CD69 /* APCDebugWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDebugWindow.m; sourceTree = "<group>"; };
 		F5B4213819D23D7700F9CD69 /* APCParametersCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCParametersCell.h; sourceTree = "<group>"; };
 		F5C1DC2219D22EAF006527EA /* TabBar.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TabBar.storyboard; sourceTree = "<group>"; };
+		F5C2EC321A26C01C00C9CB87 /* APCGenericSurveyTaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCGenericSurveyTaskViewController.h; sourceTree = "<group>"; };
+		F5C2EC331A26C01C00C9CB87 /* APCGenericSurveyTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCGenericSurveyTaskViewController.m; sourceTree = "<group>"; };
 		F5C8DA011A1FF5CD006933F5 /* APCSchedule+Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCSchedule+Bridge.h"; sourceTree = "<group>"; };
 		F5C8DA021A1FF5CD006933F5 /* APCSchedule+Bridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCSchedule+Bridge.m"; sourceTree = "<group>"; };
 		F5D1A90E19D4C6E200A03465 /* BridgeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BridgeSDK.framework; sourceTree = SOURCE_ROOT; };
@@ -854,6 +858,7 @@
 			isa = PBXGroup;
 			children = (
 				5B3B5FBF1A15645E006B2346 /* InstructionStepViewControllers */,
+				F5C2EC311A26BFF700C9CB87 /* GenericSurveyTaskViewController */,
 				5B3B5FC61A15645E006B2346 /* SimpleSummaryViewController */,
 			);
 			path = CommonTaskVCs;
@@ -1288,6 +1293,15 @@
 			name = "Memory Only Objects";
 			sourceTree = "<group>";
 		};
+		F5C2EC311A26BFF700C9CB87 /* GenericSurveyTaskViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F5C2EC321A26C01C00C9CB87 /* APCGenericSurveyTaskViewController.h */,
+				F5C2EC331A26C01C00C9CB87 /* APCGenericSurveyTaskViewController.m */,
+			);
+			path = GenericSurveyTaskViewController;
+			sourceTree = "<group>";
+		};
 		F5E04D861A1C19DC00F0FDE3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -1374,6 +1388,7 @@
 				5B3B60251A15645E006B2346 /* APCCheckTableViewCell.h in Headers */,
 				5B79BDDB1A2C0C3600E461B2 /* APCEligibleViewController.h in Headers */,
 				5B3B5FDA1A15645E006B2346 /* APCConfirmationView.h in Headers */,
+				F5C2EC341A26C01C00C9CB87 /* APCGenericSurveyTaskViewController.h in Headers */,
 				F5179C9019D0917D001DCCB7 /* APCDBStatus+AddOn.h in Headers */,
 				5B3B5FE61A15645E006B2346 /* APCPresentAnimator.h in Headers */,
 				F5179B2F19D09128001DCCB7 /* APCAppleCore.h in Headers */,
@@ -1598,6 +1613,7 @@
 				5B3B608C1A156495006B2346 /* APCSpinnerViewController.m in Sources */,
 				5B3B5FE11A15645E006B2346 /* APCCircleView.m in Sources */,
 				5B447A4E1A15E54B0099FC7F /* APCDashboardEditTableViewCell.m in Sources */,
+				F5C2EC351A26C01C00C9CB87 /* APCGenericSurveyTaskViewController.m in Sources */,
 				F5179C9419D0917D001DCCB7 /* APCDBStatus.m in Sources */,
 				5B79BDE61A2C0C3600E461B2 /* APCSignUpMedicalInfoViewController.m in Sources */,
 				F5179CD219D0917D001DCCB7 /* APCParameters.m in Sources */,

@@ -32,11 +32,29 @@
         NSParameterAssert(self.email);
         NSParameterAssert(self.password);
         [SBBComponent(SBBAuthManager) signUpWithEmail:self.email username:self.email password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completionBlock) {
-                    completionBlock(error);
-                }
-            });
+            if (!error) {
+                SBBUserProfile *profile = [SBBUserProfile new];
+                profile.email = self.email;
+                profile.username = self.email;
+                profile.firstName = self.firstName;
+                profile.lastName = self.lastName;
+                
+                [SBBComponent(SBBProfileManager) updateUserProfileWithProfile:profile completion:^(id responseObject, NSError *error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (completionBlock) {
+                            completionBlock(error);
+                        }
+                    });
+                }];
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completionBlock) {
+                        completionBlock(error);
+                    }
+                });
+            }
         }];
     }
 }
@@ -50,18 +68,37 @@
     }
     else
     {
-        
         NSParameterAssert(self.password);
         [SBBComponent(SBBAuthManager) signInWithUsername:self.email password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
-            if (error.code ==kSBBServerPreconditionNotMet) {
-                if (!self.firstName) {
-                    self.firstName = @"Please enter first name";
-                }
-                [self sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
-                    [self signInOnCompletion:completionBlock];
+            if (!error || error.code ==kSBBServerPreconditionNotMet) {
+                [SBBComponent(SBBProfileManager) getUserProfileWithCompletion:^(id userProfile, NSError *error) {
+                    if (userProfile) {
+                        SBBUserProfile *profile = userProfile;
+                        self.email = profile.email;
+                        self.firstName = profile.firstName;
+                        self.lastName = profile.lastName;
+                    }
+                    if (error.code == kSBBServerPreconditionNotMet) {
+                        [self sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
+                            [self signInOnCompletion:completionBlock];
+                        }];
+                    }
+                    else
+                    {
+                        if (!error) {
+                            self.userConsented = YES;
+                            self.consented = YES;
+                        }
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (completionBlock) {
+                                completionBlock(error);
+                            }
+                        });
+                    }
+                    
                 }];
             }
-            else
+            else if (error)
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (completionBlock) {
