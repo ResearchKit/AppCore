@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "APCDataSubstrate.h"
 #import "APCHealthKitQuantityTracker.h"
+#import "APCOnboarding.h"
 
+@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding;
 
-@class APCDataSubstrate, APCDataMonitor, APCScheduler;
-
-@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCDataSubstrateProtocol>
+@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCDataSubstrateProtocol, APCOnboardingDelegate>
 
 @property  (strong, nonatomic)  UIWindow * window;
 
@@ -26,6 +26,8 @@
 //Initialization Methods
 @property (nonatomic, strong) NSDictionary * initializationOptions;
 - (NSMutableDictionary*) defaultInitializationOptions;
+
+@property (strong, nonatomic) APCOnboarding *onboarding;
 
 - (void)loadStaticTasksAndSchedulesIfNecessary;  //For resetting app
 - (void) clearNSUserDefaults; //For resetting app
@@ -49,5 +51,9 @@
 
 //Datasubstrate Delegate
 - (void) setUpCollectors;
+
+- (void)showPasscodeIfNecessary;
+
+- (RKSTTaskViewController *)consentViewController;
 
 @end

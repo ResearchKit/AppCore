@@ -12,6 +12,7 @@
 #import "APCPasscodeViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import "APCOnboarding.h"
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -24,9 +25,9 @@ static NSString *const kTasksAndSchedulesJSONFileName = @"APHTasksAndSchedules";
 #pragma mark - Tab bar Constants
 /*********************************************************************************/
 static NSString *const kDashBoardStoryBoardKey     = @"APHDashboard";
-static NSString *const kLearnStoryBoardKey         = @"APHLearn";
+static NSString *const kLearnStoryBoardKey         = @"APCLearn";
 static NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
-static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
+static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
@@ -76,8 +77,6 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         [self.dataSubstrate.parameters setNumber:[APCParameters autoLockValues][0] forKey:kNumberOfMinutesForPasscodeKey];
     }
     
-    [self showPasscodeIfNecessary];
-    
     return YES;
 }
 
@@ -99,10 +98,21 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self.dataMonitor backgroundFetch:completionHandler];
 }
 
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    if (self.dataSubstrate.currentUser.signedIn) {
+        NSDate *currentTime = [NSDate date];
+        [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+    }
+    
+}
+
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    NSDate *currentTime = [NSDate date];
-    [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+    if (self.dataSubstrate.currentUser.signedIn) {
+        NSDate *currentTime = [NSDate date];
+        [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -239,9 +249,9 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     if (!_storyboardIdInfo) {
         _storyboardIdInfo = @[
                               @{@"name": kDashBoardStoryBoardKey, @"bundle" : [NSBundle mainBundle]},
-                              @{@"name": kLearnStoryBoardKey, @"bundle" : [NSBundle mainBundle]},
+                              @{@"name": kLearnStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
                               @{@"name": kActivitiesStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
-                              @{@"name": kHealthProfileStoryBoardKey, @"bundle" : [NSBundle mainBundle]}
+                              @{@"name": kHealthProfileStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]}
                               ];
     }
     return _storyboardIdInfo;
@@ -342,11 +352,18 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void)showPasscode
 {
-    APCPasscodeViewController *passcodeViewController = [[APCPasscodeViewController alloc] initWithNibName:@"APCPasscodeViewController" bundle:[NSBundle appleCoreBundle]];
+    APCPasscodeViewController *passcodeViewController = [[UIStoryboard storyboardWithName:@"APCPasscode" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
+    
     [self.window.rootViewController presentViewController:passcodeViewController animated:YES completion:nil];
 }
 
-- (void) showOnBoarding {/*Abstract Implementation*/ }
+- (void) showOnBoarding
+{
+    if (!self.onboarding) {
+        self.onboarding = [[APCOnboarding alloc] initWithDelegate:self];
+    }
+    
+}
 
 - (void) showNeedsEmailVerification
 {
@@ -358,7 +375,14 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 {
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
     navController.navigationBar.translucent = NO;
-    self.window.rootViewController = navController;
+    
+    [UIView transitionWithView:self.window
+                      duration:0.6
+                       options:UIViewAnimationOptionTransitionFlipFromLeft
+                    animations:^{
+                        self.window.rootViewController = navController;
+                    }
+                    completion:nil];
 }
 
 /*********************************************************************************/

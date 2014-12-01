@@ -42,6 +42,11 @@
     [self.navigationItem setLeftBarButtonItem:backBarButton];
 }
 
+- (APCOnboarding *)onboarding
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+}
+
 /*********************************************************************************/
 #pragma mark - Abstract Implementations
 /*********************************************************************************/
@@ -51,6 +56,8 @@
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
+    
+    [[self onboarding] popScene];
 }
 
 

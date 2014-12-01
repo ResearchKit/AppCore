@@ -10,7 +10,7 @@
 #import "APCPasscodeView.h"
 #import "APCStepProgressBar.h"
 #import "UIAlertController+Helper.h"
-#import "APCSignupTouchIDViewController.h"
+#import "APCSignupPasscodeViewController.h"
 #import "APCSignUpPermissionsViewController.h"
 #import "APCAppDelegate.h"
 #import "UIColor+APCAppearance.h"
@@ -20,7 +20,7 @@
 
 @import LocalAuthentication;
 
-@interface APCSignupTouchIDViewController () <APCPasscodeViewDelegate>
+@interface APCSignupPasscodeViewController () <APCPasscodeViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
@@ -31,7 +31,7 @@
 @end
 
 
-@implementation APCSignupTouchIDViewController
+@implementation APCSignupPasscodeViewController
 
 @synthesize stepProgressBar;
 
@@ -62,7 +62,7 @@
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self.stepProgressBar setCompletedSteps:2 animation:YES];
+    [self.stepProgressBar setCompletedSteps:(2 + [self onboarding].signUpTask.customStepIncluded) animation:YES];
     
     [self.passcodeView becomeFirstResponder];
 }
@@ -93,10 +93,10 @@
     
     self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.width, kAPCSignUpProgressBarHeight)
                                                                style:APCStepProgressBarStyleDefault];
-    self.stepProgressBar.numberOfSteps = kNumberOfSteps;
+    self.stepProgressBar.numberOfSteps = kNumberOfSteps + [self onboarding].signUpTask.customStepIncluded;
     [self.view addSubview:self.stepProgressBar];
     
-    [self.stepProgressBar setCompletedSteps:1 animation:NO];
+    [self.stepProgressBar setCompletedSteps:(1 + [self onboarding].signUpTask.customStepIncluded) animation:NO];
 }
 
 - (APCUser *) user {
@@ -106,6 +106,10 @@
     return _user;
 }
 
+- (APCOnboarding *)onboarding
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+}
 
 #pragma mark - APCPasscodeViewDelegate
 
@@ -130,7 +134,8 @@
 
 - (void) next
 {
-    
+    UIViewController *viewController = [[self onboarding] nextScene];
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 - (void) showFirstTry
@@ -160,6 +165,8 @@
     self.passcodeView.delegate = nil;
     self.retryPasscodeView.delegate = nil;
     [self.navigationController popViewControllerAnimated:YES];
+    
+    [[self onboarding] popScene];
 }
 
 #pragma mark Passcode

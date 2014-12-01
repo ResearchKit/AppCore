@@ -11,7 +11,7 @@
 
 @interface APCSignUpPermissionsViewController : UITableViewController <APCSignUpProgressing>
 
-@property (nonatomic, strong) NSMutableArray *permissions;
+@property (nonatomic, strong) NSArray *permissions;
 
 - (void)finishSignUp;
 

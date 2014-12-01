@@ -12,10 +12,12 @@
 
 @interface APCLearnMasterViewController : UITableViewController
 
-@property (nonatomic, strong) NSMutableArray *items;
+@property (nonatomic, strong) NSArray *items;
 
-- (void)studyDetailsFromJSONFile:(NSString *)jsonFileName;
+- (NSArray *)studyDetailsFromJSONFile:(NSString *)jsonFileName;
 
 - (APCTableViewStudyDetailsItem *)itemForIndexPath:(NSIndexPath *)indexPath;
+
+- (NSArray *)prepareContent;
 
 @end

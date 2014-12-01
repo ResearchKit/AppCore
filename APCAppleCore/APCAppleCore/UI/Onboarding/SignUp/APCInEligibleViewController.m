@@ -11,6 +11,9 @@
 #import "UIFont+APCAppearance.h"
 #import "UIImage+APCHelper.h"
 #import "APCShareViewController.h"
+#import "NSBundle+Helper.h"
+#import "APCAppDelegate.h"
+
 @interface APCInEligibleViewController ()
 
 @end
@@ -23,6 +26,8 @@
     
     [self setupAppearance];
     [self setupNavAppearance];
+    
+    [self.logoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,14 +53,24 @@
     [self.navigationItem setLeftBarButtonItem:backBarButton];
 }
 
+- (APCOnboarding *)onboarding
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+}
+
 #pragma mark - Selectors
 
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
+    
+    [[self onboarding] popScene];
 }
 
 
-- (IBAction)next:(id)sender {
+- (IBAction)next:(id)sender
+{
+    APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ShareVC"];
+    [self.navigationController pushViewController:shareViewController animated:YES];
 }
 @end

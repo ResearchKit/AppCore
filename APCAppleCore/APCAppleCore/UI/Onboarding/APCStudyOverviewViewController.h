@@ -18,15 +18,22 @@
 @property (weak, nonatomic) IBOutlet UILabel *dateRangeLabel;
 @property (weak, nonatomic) IBOutlet UIButton *joinButton;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
+@property (weak, nonatomic) IBOutlet UIImageView *diseaseLogoImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *researchInstituteImageView;
 
 @property (strong, nonatomic) NSString *diseaseName;
 
-@property (nonatomic, strong) NSMutableArray *items;
+@property (nonatomic, strong) NSArray *items;
+
+@property (nonatomic) BOOL showShareRow;
+
+@property (nonatomic) BOOL showConsentRow;
 
 - (IBAction)signInTapped:(id)sender;
 - (IBAction)signUpTapped:(id)sender;
 
-- (void)studyDetailsFromJSONFile:(NSString *)jsonFileName;
+- (NSArray *)prepareContent;
+- (NSArray *)studyDetailsFromJSONFile:(NSString *)jsonFileName;
 
 - (APCTableViewStudyDetailsItem *)itemForIndexPath:(NSIndexPath *)indexPath;
 - (APCTableViewStudyItemType)itemTypeForIndexPath:(NSIndexPath *)indexPath;

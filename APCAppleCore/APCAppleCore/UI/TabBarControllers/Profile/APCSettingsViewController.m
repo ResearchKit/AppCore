@@ -7,12 +7,14 @@
 //
 
 #import "APCSettingsViewController.h"
+#import "APCChangePasscodeViewController.h"
 #import "APCAppDelegate.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 
-static NSString *const kAPCRightDetailCellIdentifier = @"APCRightDetailCellIdentifier";
-static NSString *const kAPCBasicCellIdentifier       = @"APCBasicCellIdentifier";
+
+static NSString * const kAPCBasicTableViewCellIdentifier = @"APCBasicTableViewCell";
+static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetailTableViewCell";
 
 @interface APCSettingsViewController ()
 
@@ -22,6 +24,8 @@ static NSString *const kAPCBasicCellIdentifier       = @"APCBasicCellIdentifier"
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self setupNavAppearance];
     
     NSString *build = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
@@ -34,11 +38,100 @@ static NSString *const kAPCBasicCellIdentifier       = @"APCBasicCellIdentifier"
     if (!numberOfMinutes) {
         [self.parameters setNumber:[APCParameters autoLockValues][0] forKey:kNumberOfMinutesForPasscodeKey];
     }
+    
+    self.items = [self prepareContent];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (NSArray *)prepareContent
+{
+    NSMutableArray *items = [NSMutableArray new];
+    
+    {
+        NSMutableArray *rowItems = [NSMutableArray new];
+        
+        {
+            APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
+            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.selectionStyle = UITableViewCellSelectionStyleGray;
+            field.caption = NSLocalizedString(@"Auto-Lock", @"");
+            field.detailDiscloserStyle = YES;
+            field.textAlignnment = NSTextAlignmentRight;
+            field.pickerData = @[[APCParameters autoLockOptionStrings]];
+            
+            NSNumber *numberOfMinutes = [self.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
+            NSInteger index = [[APCParameters autoLockValues] indexOfObject:numberOfMinutes];
+            field.selectedRowIndices = @[@(index)];
+            
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = field;
+            row.itemType = kAPCSettingsItemTypeAutoLock;
+            [rowItems addObject:row];
+        }
+        
+        {
+            APCTableViewItem *field = [APCTableViewItem new];
+            field.caption = NSLocalizedString(@"Change Passcode", @"");
+            field.identifier = kAPCBasicTableViewCellIdentifier;
+            field.textAlignnment = NSTextAlignmentRight;
+            field.editable = NO;
+            
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = field;
+            row.itemType = kAPCSettingsItemTypePasscode;
+            [rowItems addObject:row];
+        }
+        
+        {
+            APCTableViewItem *field = [APCTableViewItem new];
+            field.caption = NSLocalizedString(@"Change Password", @"");
+            field.identifier = kAPCBasicTableViewCellIdentifier;
+            field.textAlignnment = NSTextAlignmentRight;
+            field.editable = NO;
+            
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = field;
+            row.itemType = kAPCSettingsItemTypePassword;
+            [rowItems addObject:row];
+        }
+        
+        APCTableViewSection *section = [APCTableViewSection new];
+        section.rows = [NSArray arrayWithArray:rowItems];
+        [items addObject:section];
+    }
+    
+    {
+        NSMutableArray *rowItems = [NSMutableArray new];
+        
+        {
+            APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
+            field.caption = NSLocalizedString(@"Push Notifications", @"");
+            field.identifier = kAPCSwitchCellIdentifier;
+            field.editable = NO;
+            
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = field;
+            row.itemType = kAPCSettingsItemTypePushNotifications;
+            [rowItems addObject:row];
+        }
+        
+        {
+            APCTableViewItem *field = [APCTableViewItem new];
+            field.caption = NSLocalizedString(@"Devices", @"");
+            field.identifier = kAPCRightDetailTableViewCellIdentifier;
+            field.textAlignnment = NSTextAlignmentRight;
+            
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = field;
+            row.itemType = kAPCSettingsItemTypeDevices;
+            [rowItems addObject:row];
+        }
+        
+        APCTableViewSection *section = [APCTableViewSection new];
+        section.rows = [NSArray arrayWithArray:rowItems];
+        [items addObject:section];
+    }
+    
+    return [NSArray arrayWithArray:items];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -59,6 +152,53 @@ static NSString *const kAPCBasicCellIdentifier       = @"APCBasicCellIdentifier"
     }
     
     return headerView;
+}
+
+#pragma mark - Setup
+
+- (void)setupNavAppearance
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[[UIImage imageNamed:@"back_button"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    backButton.tintColor = [UIColor appPrimaryColor];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
+}
+
+#pragma mark - UITableViewDelegate methods
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    APCTableViewItemType itemType = [self itemTypeForIndexPath:indexPath];
+    
+    switch (itemType) {
+        case kAPCSettingsItemTypePasscode:
+        {
+            APCChangePasscodeViewController *changePasscodeViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ChangePasscodeVC"];
+            [self.navigationController presentViewController:changePasscodeViewController animated:YES completion:nil];
+        }
+            break;
+            
+        default:
+            [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+            break;
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - APCPickerTableViewCellDelegate methods
+
+- (void)pickerTableViewCell:(APCPickerTableViewCell *)cell pickerViewDidSelectIndices:(NSArray *)selectedIndices
+{
+    [super pickerTableViewCell:cell pickerViewDidSelectIndices:selectedIndices];
+    
+    NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
+    
+    [self.parameters setNumber:[APCParameters autoLockValues][index] forKey:kNumberOfMinutesForPasscodeKey];
 }
 
 - (void)setupDefaultCellAppearance:(APCDefaultTableViewCell *)cell
@@ -84,4 +224,10 @@ static NSString *const kAPCBasicCellIdentifier       = @"APCBasicCellIdentifier"
     return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.parameters;
 }
 
+#pragma mark - Selectors / IBActions
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 @end

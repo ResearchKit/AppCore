@@ -11,6 +11,11 @@
 #import "UIColor+TertiaryColors.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "NSBundle+Helper.h"
+#import "APCStudyDetailsViewController.h"
+#import "APCLearnStudyDetailsViewController.h"
+
+static CGFloat kSectionHeaderHeight = 40.f;
 
 @interface APCLearnMasterViewController ()
 
@@ -22,12 +27,22 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.items = [NSMutableArray new];
+    
+    self.items = [self prepareContent];
+    
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (NSArray *)prepareContent
+{
+    return [self studyDetailsFromJSONFile:@"Learn"];
+}
+
 
 #pragma mark - UITableViewDataSource methods
 
@@ -56,11 +71,6 @@
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *headerView;
@@ -83,9 +93,53 @@
     return headerView;
 }
 
+#pragma mark UITableViewDelegate methods
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    APCTableViewStudyDetailsItem *item = [self itemForIndexPath:indexPath];
+    
+    APCTableViewLearnItemType itemType = [self itemTypeForIndexPath:indexPath];
+    
+    switch (itemType) {
+        case kAPCTableViewLearnItemTypeStudyDetails:
+        {
+            APCLearnStudyDetailsViewController *detailViewController = [[UIStoryboard storyboardWithName:@"APCLearn" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCLearnStudyDetailsViewController"];
+            detailViewController.showConsentRow = YES;
+            [self.navigationController pushViewController:detailViewController animated:YES];
+        }
+            break;
+        case kAPCTableViewLearnItemTypeOtherDetails:
+        {
+            APCStudyDetailsViewController *detailViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"StudyDetailsVC"];
+            detailViewController.studyDetails = item;
+            [self.navigationController pushViewController:detailViewController animated:YES];
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    CGFloat height;
+    
+    if (section == 0) {
+        height = 0;
+    } else {
+        height = kSectionHeaderHeight;
+    }
+    
+    return height;
+}
+
 #pragma mark - Public methods
 
-- (void)studyDetailsFromJSONFile:(NSString *)jsonFileName
+- (NSArray *)studyDetailsFromJSONFile:(NSString *)jsonFileName
 {
     NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
     NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
@@ -93,9 +147,12 @@
     NSError *parseError;
     NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
     
+    NSMutableArray *learnItems = [NSMutableArray new];
+    
     if (!parseError) {
         
         NSArray *items = jsonDictionary[@"items"];
+        
         
         for (NSDictionary *sectionDict in items) {
             
@@ -118,14 +175,21 @@
                 studyDetails.tintColor = [UIColor tertiaryColorForString:rowItemDict[@"tint_color"]];
                 
                 rowItem.item = studyDetails;
+                if ([studyDetails.detailText isEqualToString:@"study_details"]) {
+                    rowItem.itemType = kAPCTableViewLearnItemTypeStudyDetails;
+                } else {
+                    rowItem.itemType = kAPCTableViewLearnItemTypeOtherDetails;
+                }
                 [rowItems addObject:rowItem];
             }
             
             section.rows = [NSArray arrayWithArray:rowItems];
             
-            [self.items addObject:section];
+            [learnItems addObject:section];
         }
     }
+    
+    return [NSArray arrayWithArray:learnItems];
 }
 
 - (APCTableViewStudyDetailsItem *)itemForIndexPath:(NSIndexPath *)indexPath
@@ -138,5 +202,14 @@
     return studyDetailsItem;
 }
 
+- (APCTableViewLearnItemType)itemTypeForIndexPath:(NSIndexPath *)indexPath
+{
+    APCTableViewSection *sectionItem = self.items[indexPath.section];
+    APCTableViewRow *rowItem = sectionItem.rows[indexPath.row];
+    
+    APCTableViewLearnItemType learnItemType = rowItem.itemType;
+    
+    return learnItemType;
+}
 
 @end

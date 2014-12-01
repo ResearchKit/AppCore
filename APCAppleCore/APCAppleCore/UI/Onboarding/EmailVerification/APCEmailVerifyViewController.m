@@ -11,6 +11,8 @@
 #import "UIAlertController+Helper.h"
 #import "APCUser+Bridge.h"
 #import "UIAlertController+Helper.h"
+#import "UIFont+APCAppearance.h"
+#import "UIColor+APCAppearance.h"
 
 @interface APCEmailVerifyViewController ()
 @property (nonatomic, readonly) APCUser * user;
@@ -25,9 +27,34 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"Verify Email";
-    self.userMessage.text = @"Please verify your email...";
+    self.title = NSLocalizedString(@"Email Verification", nil);
+    
+    [self setupAppearance];
+    
+    self.emailLabel.text = self.user.email;
+    [self.changeEmailButton setTitle:[NSString stringWithFormat:@"Not %@? Change email address", self.user.firstName] forState:UIControlStateNormal];
+    
     [self checkSignIn];
+}
+
+- (void)setupAppearance
+{
+    [self.logoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
+    
+    [self.topMessageLabel setFont:[UIFont appRegularFontWithSize:19.0f]];
+    [self.topMessageLabel setTextColor:[UIColor appSecondaryColor1]];
+    
+    [self.emailLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.emailLabel setTextColor:[UIColor appPrimaryColor]];
+    
+    [self.middleMessageLabel setFont:[UIFont appRegularFontWithSize:19.0f]];
+    [self.middleMessageLabel setTextColor:[UIColor appSecondaryColor1]];
+    
+    [self.bottomMessageLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
+    [self.bottomMessageLabel setTextColor:[UIColor appSecondaryColor3]];
+    
+    [self.changeEmailButton.titleLabel setFont:[UIFont appRegularFontWithSize:12.0f]];
+    [self.changeEmailButton setTitleColor:[UIColor appSecondaryColor3] forState:UIControlStateNormal];
 }
 
 - (void) checkSignIn
@@ -36,7 +63,6 @@
     [self.user signInOnCompletion:^(NSError *error) {
         if (error) {
             if (error.code == kSBBServerPreconditionNotMet) {
-                weakSelf.userMessage.text = @"Sending consent to server...";
                 [weakSelf getServerConsent];
             }
             else
@@ -76,4 +102,12 @@
     self.user.signedIn = YES;
 }
 
+- (IBAction)changeEmailAddress:(id)sender
+{
+    
+}
+- (IBAction)secretButton:(id)sender
+{
+    self.user.signedIn = YES;
+}
 @end

@@ -13,6 +13,7 @@
 #import "NSString+Helper.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "APCAppDelegate.h"
 
 static CGFloat const kHeaderHeight = 127.0f;
 
@@ -59,18 +60,13 @@ static CGFloat const kHeaderHeight = 127.0f;
     }    
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark -
 
 - (void)setupStepProgressBar
 {
     self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, -kAPCSignUpProgressBarHeight, CGRectGetWidth(self.view.frame), kAPCSignUpProgressBarHeight)
                                                                style:APCStepProgressBarStyleOnlyProgressView];
-    self.stepProgressBar.numberOfSteps = 4;
+    self.stepProgressBar.numberOfSteps = kNumberOfSteps + [self onboarding].signUpTask.customStepIncluded;
     [self.view addSubview:self.stepProgressBar];
     
     
@@ -100,6 +96,11 @@ static CGFloat const kHeaderHeight = 127.0f;
     }
     
     return _user;
+}
+
+- (APCOnboarding *)onboarding
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
 }
 
 #pragma mark - Appearance
@@ -229,6 +230,7 @@ static CGFloat const kHeaderHeight = 127.0f;
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
+    [[self onboarding] popScene];
 }
 
 @end
