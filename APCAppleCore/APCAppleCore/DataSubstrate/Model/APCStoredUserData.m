@@ -2,7 +2,7 @@
 //  APCStoredUserData.m
 //  APCAppleCore
 //
-//  Created by Dhanush Balachandran on 9/26/14.
+//  Created by Farhan Ahmed on 11/28/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
@@ -11,16 +11,17 @@
 
 @implementation APCStoredUserData
 
-@dynamic profileImage;
-@dynamic birthDate;
 @dynamic biologicalSex;
+@dynamic birthDate;
 @dynamic bloodType;
+@dynamic ethnicity;
 @dynamic medicalConditions;
 @dynamic medications;
+@dynamic profileImage;
 @dynamic serverConsented;
+@dynamic sleepTime;
 @dynamic userConsented;
 @dynamic wakeUpTime;
-@dynamic sleepTime;
-@dynamic ethnicity;
+@dynamic glucoseLevels;
 
 @end
