@@ -44,6 +44,8 @@
 @property (nonatomic, strong) NSDate *sleepTime;
 @property (nonatomic, strong) NSDate *wakeUpTime;
 
+@property (nonatomic, strong) NSString *glucoseLevels;
+
 /*********************************************************************************/
 #pragma mark - Simulated Properties using HealthKit
 /*********************************************************************************/

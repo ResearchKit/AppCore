@@ -15,6 +15,6 @@
 @property (nonatomic, strong) NSArray * messagesArray;
 
 @property (weak, nonatomic) IBOutlet UIButton *gettingStartedButton;
-
+@property (strong, nonatomic)        UIView   *accessoryContent;
 
 @end
