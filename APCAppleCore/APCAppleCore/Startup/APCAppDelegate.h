@@ -52,6 +52,8 @@
 //Datasubstrate Delegate
 - (void) setUpCollectors;
 
+- (void)showPasscodeIfNecessary;
+
 - (RKSTTaskViewController *)consentViewController;
 
 @end

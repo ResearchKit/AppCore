@@ -77,8 +77,6 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         [self.dataSubstrate.parameters setNumber:[APCParameters autoLockValues][0] forKey:kNumberOfMinutesForPasscodeKey];
     }
     
-    [self showPasscodeIfNecessary];
-    
     return YES;
 }
 
@@ -102,14 +100,19 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    NSDate *currentTime = [NSDate date];
-    [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+    if (self.dataSubstrate.currentUser.signedIn) {
+        NSDate *currentTime = [NSDate date];
+        [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+    }
+    
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    NSDate *currentTime = [NSDate date];
-    [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+    if (self.dataSubstrate.currentUser.signedIn) {
+        NSDate *currentTime = [NSDate date];
+        [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
