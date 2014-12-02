@@ -46,6 +46,10 @@
 
 @property (nonatomic, strong) NSString *glucoseLevels;
 
+@property (nonatomic, strong) NSString *homeLocationAddress;
+@property (nonatomic, strong) NSNumber *homeLocationLat;
+@property (nonatomic, strong) NSNumber *homeLocationLong;
+
 /*********************************************************************************/
 #pragma mark - Simulated Properties using HealthKit
 /*********************************************************************************/
