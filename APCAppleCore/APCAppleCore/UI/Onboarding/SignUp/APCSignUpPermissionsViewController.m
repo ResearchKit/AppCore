@@ -273,11 +273,24 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 
 - (void) setUserSignedUp
 {
-#if DEVELOPMENT
-    self.user.signedIn = YES;
-#else   
-    self.user.signedUp = YES;
-#endif
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    [self presentViewController:spinnerController animated:YES completion:nil];
+    
+    typeof(self) __weak weakSelf = self;
+    [self.user signUpOnCompletion:^(NSError *error) {
+        if (error) {
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Up", @"") message:error.localizedDescription];
+                [self presentViewController:alert animated:YES completion:nil];
+            }];
+        }
+        else
+        {
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                weakSelf.user.signedUp = YES;
+            }];
+        }
+    }];
 }
 
 - (void)back
