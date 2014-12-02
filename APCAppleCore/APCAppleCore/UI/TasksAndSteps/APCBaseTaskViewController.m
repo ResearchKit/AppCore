@@ -56,10 +56,9 @@
 {
     [self processTaskResult];
     
-    NSError * saveError;
-    self.scheduledTask.completed = @YES;
-    [self.scheduledTask saveToPersistentStore:&saveError];
-    [saveError handle];
+    [self.scheduledTask completeScheduledTask];
+    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
+    [appDelegate.scheduler updateScheduledTasksIfNotUpdating:NO];
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

@@ -1,5 +1,5 @@
 //
-//  APCSchedule.m
+//  APCScheduleExpression.m
 //  Schedule
 //
 //  Created by Edward Cessna on 9/15/14.
@@ -21,7 +21,6 @@
 @property (nonatomic, strong) APCTimeSelector*      minuteSelector;
 @property (nonatomic, strong) APCTimeSelector*      dayOfMonthSelector;
 @property (nonatomic, strong) APCTimeSelector*      hourSelector;
-@property (nonatomic, strong) APCTimeSelector*      dayOfWeekSelector;
 @property (nonatomic, strong) APCTimeSelector*      monthSelector;
 @property (nonatomic, strong) APCTimeSelector*      yearSelector;
 
@@ -45,7 +44,6 @@
             _hourSelector       = parser.hourSelector;
             _dayOfMonthSelector = parser.dayOfMonthSelector;
             _monthSelector      = parser.monthSelector;
-            _dayOfWeekSelector  = parser.dayOfWeekSelector;
             _yearSelector       = parser.yearSelector;
         }
     }
@@ -67,7 +65,6 @@
                                                    hourSelector:self.hourSelector
                                              dayOfMonthSelector:self.dayOfMonthSelector
                                                   monthSelector:self.monthSelector
-                                              dayOfWeekSelector:self.dayOfWeekSelector
                                                    yearSelector:self.yearSelector];
 }
 
@@ -82,8 +79,18 @@
                                                    hourSelector:self.hourSelector
                                              dayOfMonthSelector:self.dayOfMonthSelector
                                                   monthSelector:self.monthSelector
-                                              dayOfWeekSelector:self.dayOfWeekSelector
                                                    yearSelector:self.yearSelector];
 }
 
+
 @end
+
+
+
+
+
+
+
+
+
+

@@ -57,7 +57,7 @@ NSString *const kCertFileName = @"rsacert";
     
     NSError * archiveError;
     NSData * certFile = [self readPEM];
-    NSData * data = (certFile) ? [archive archiveDataEncryptedWithIdentity:[self readPEM] error:&archiveError] : [archive archiveDataWithError:&archiveError];
+    NSData * data = (certFile) ? [archive archiveDataEncryptedWithIdentity:certFile error:&archiveError] : [archive archiveDataWithError:&archiveError];
     NSString * fileName = (certFile) ? @"encrypted.zip" : @"unencrypted.zip";
     NSString * retValue = [self writeData:data toFileName:fileName inPath:filePath] ? fileName : nil;
     return retValue;
@@ -92,7 +92,8 @@ NSString *const kCertFileName = @"rsacert";
 
 - (NSData*) readPEM
 {
-    NSString * path = [[NSBundle appleCoreBundle] pathForResource:kCertFileName ofType:@"pem"];
+    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
+    NSString * path = [[NSBundle mainBundle] pathForResource:appDelegate.certificateFileName ofType:@"pem"];
     NSData * data = [NSData dataWithContentsOfFile:path];
     return data;
 }

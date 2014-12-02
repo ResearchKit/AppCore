@@ -22,12 +22,14 @@
     [self setupTableView];
     [self setupAppearance];
     
-    self.items = [NSMutableArray new];
+    self.items = [self prepareContent];
+    
+    [self.tableView reloadData];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (NSArray *)prepareContent
+{
+     return [self surveyFromJSONFile:@"WithdrawStudy"];
 }
 
 - (void)setupTableView
@@ -83,13 +85,15 @@
 
 #pragma mark - Public methods
 
-- (void)surveyFromJSONFile:(NSString *)jsonFileName
+- (NSArray *)surveyFromJSONFile:(NSString *)jsonFileName
 {
     NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
     NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     
     NSError *parseError;
     NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
+    
+    NSMutableArray *items = [NSMutableArray new];
     
     if (!parseError) {
         
@@ -109,8 +113,10 @@
         
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
-        [self.items addObject:section];
+        [items addObject:section];
     }
+    
+    return [NSArray arrayWithArray:items];
 }
 
 - (IBAction)cancel:(id)sender

@@ -86,6 +86,8 @@ static CGFloat kViewsPadding          = 10.f;
         self.enabled = YES;
     }
     
+    [self setAttributed:_attributed];
+    
     [self layoutSubviews];
 }
 
@@ -113,16 +115,18 @@ static CGFloat kViewsPadding          = 10.f;
 {
     _attributed = attributed;
     
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:self.unconfirmedTitle];
-    
-    [attributedString addAttribute:NSFontAttributeName value:[UIFont appRegularFontWithSize:15.0] range:NSMakeRange(0, 14)];
-    [attributedString addAttribute:NSFontAttributeName value:[UIFont appMediumFontWithSize:15.0] range:NSMakeRange(15, 20)];
-    
-    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor appSecondaryColor2] range:NSMakeRange(0, 14)];
-    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor appSecondaryColor1] range:NSMakeRange(15, 20)];
-    
-    
-    self.titleLabel.attributedText = attributedString;
+    if (attributed) {
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:self.unconfirmedTitle];
+        
+        [attributedString addAttribute:NSFontAttributeName value:[UIFont appRegularFontWithSize:15.0] range:NSMakeRange(0, 14)];
+        [attributedString addAttribute:NSFontAttributeName value:[UIFont appMediumFontWithSize:15.0] range:NSMakeRange(15, 20)];
+        
+        [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor appSecondaryColor2] range:NSMakeRange(0, 14)];
+        [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor appSecondaryColor1] range:NSMakeRange(15, 20)];
+        
+        
+        self.titleLabel.attributedText = attributedString;
+    }
 }
 
 @end

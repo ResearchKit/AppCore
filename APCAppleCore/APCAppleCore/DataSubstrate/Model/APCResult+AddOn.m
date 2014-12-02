@@ -32,12 +32,12 @@ static NSDictionary * lookupDictionary;
 + (void) mapRKSTResult:(RKSTTaskResult*) taskResult toAPCResult: (APCResult*) apcResult
 {
     apcResult.taskRunID = taskResult.taskRunUUID.UUIDString;
-    apcResult.rkTaskIdentifier = taskResult.identifier;
+    apcResult.taskID = taskResult.identifier;
     if (taskResult.metadata) {
         NSError * error;
         NSData * data = [NSJSONSerialization dataWithJSONObject:taskResult.metadata options:NSJSONWritingPrettyPrinted error:&error];
         [error handle];
-        apcResult.rkMetadata = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        apcResult.metaData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     }
 
 }

@@ -9,24 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "APCDataSubstrate.h"
 #import "APCHealthKitQuantityTracker.h"
+#import "APCOnboarding.h"
 
+@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding;
 
-static NSString *const kStudyIdentifierKey = @"StudyIdentifierKey";
-static NSString *const kAppPrefixKey = @"AppPrefixKey";
-static NSString *const kBaseURLKey = @"BaseURLKey";
-static NSString *const kDatabaseNameKey = @"DatabaseNameKey";
-static NSString *const kTasksAndSchedulesJSONFileNameKey = @"TasksAndSchedulesJSONFileNameKey";
-static NSString *const kDataSubstrateClassNameKey = @"APHDatasubstrateClassName";
-static NSString *const kHKWritePermissionsKey = @"HKWritePermissions";
-static NSString *const kHKReadPermissionsKey = @"HKReadPermissions";
-static NSString *const kAppServicesListRequiredKey = @"AppServicesListRequired";
-
-static NSString *const kPasswordKey = @"Password";
-static NSString *const kNumberOfMinutesForPasscodeKey = @"NumberOfMinutesForPasscodeKey";
-
-@class APCDataSubstrate, APCDataMonitor, APCScheduler;
-
-@interface APCAppDelegate : UIResponder <UIApplicationDelegate>
+@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCDataSubstrateProtocol, APCOnboardingDelegate>
 
 @property  (strong, nonatomic)  UIWindow * window;
 
@@ -35,12 +22,17 @@ static NSString *const kNumberOfMinutesForPasscodeKey = @"NumberOfMinutesForPass
 @property (strong, nonatomic) APCDataMonitor * dataMonitor;
 @property (strong, nonatomic) APCScheduler * scheduler;
 @property (strong, nonatomic) APCHealthKitQuantityTracker *healthKitTracker;
+
 //Initialization Methods
 @property (nonatomic, strong) NSDictionary * initializationOptions;
 - (NSMutableDictionary*) defaultInitializationOptions;
 
+@property (strong, nonatomic) APCOnboarding *onboarding;
+
 - (void)loadStaticTasksAndSchedulesIfNecessary;  //For resetting app
 - (void) clearNSUserDefaults; //For resetting app
+
+- (NSString*) certificateFileName;
 
 //Show Methods
 - (void) showTabBar;
@@ -56,5 +48,12 @@ static NSString *const kNumberOfMinutesForPasscodeKey = @"NumberOfMinutesForPass
 - (void) signedInNotification:(NSNotification *)notification;
 - (void) signedUpNotification: (NSNotification*) notification;
 - (void) logOutNotification:(NSNotification *)notification;
+
+//Datasubstrate Delegate
+- (void) setUpCollectors;
+
+- (void)showPasscodeIfNecessary;
+
+- (RKSTTaskViewController *)consentViewController;
 
 @end

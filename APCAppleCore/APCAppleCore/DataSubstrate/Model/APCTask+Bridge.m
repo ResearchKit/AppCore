@@ -29,6 +29,9 @@ static APCDummyObject * _dummyObject;
 
 @implementation APCTask (Bridge)
 
+/*********************************************************************************/
+#pragma mark - Surveys
+/*********************************************************************************/
 + (BOOL) serverDisabled
 {
 #if DEVELOPMENT
@@ -38,27 +41,38 @@ static APCDummyObject * _dummyObject;
 #endif
 }
 
-+(void)getSurveyByRef:(NSString *)ref onCompletion:(void (^)(NSError *))completionBlock
++ (void)refreshSurveys
 {
-    if ([self serverDisabled]) {
-        if (completionBlock) {
-            completionBlock(nil);
-        }
+    NSManagedObjectContext * context = ((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.persistentContext;
+    NSFetchRequest * request = [APCTask request];
+    request.predicate = [NSPredicate predicateWithFormat:@"taskDescription == nil && taskHRef != nil"];
+    NSError * error;
+    NSArray * unloadedSurveyTasks = [context executeFetchRequest:request error:&error];
+    [error handle];
+    [unloadedSurveyTasks enumerateObjectsUsingBlock:^(APCTask * task, NSUInteger idx, BOOL *stop) {
+        [task loadSurveyOnCompletion:NULL];
+    }];
+}
+
+- (void) loadSurveyOnCompletion: (void (^)(NSError * error)) completionBlock
+{
+    if ([APCTask serverDisabled] || self.taskDescription) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionBlock) {
+                completionBlock(nil);
+            }
+        });
     }
     else
     {
-        [SBBComponent(SBBSurveyManager) getSurveyByRef:ref completion:^(id survey, NSError *error) {
+        [SBBComponent(SBBSurveyManager) getSurveyByRef:self.taskHRef completion:^(id survey, NSError *error) {
             if (!error)
             {
-                NSManagedObjectContext * context = [(APCAppDelegate*) [UIApplication sharedApplication].delegate dataSubstrate].persistentContext;
                 SBBSurvey * sbbSurvey = (SBBSurvey*) survey;
-                [context performBlockAndWait:^{
-                    NSFetchRequest * request = [APCTask request];
-                    request.predicate = [NSPredicate predicateWithFormat:@"uid == %@", sbbSurvey.identifier];
-                    APCTask * task = [[context executeFetchRequest:request error:NULL] firstObject];
-                    task.rkTask = [self rkTaskFromSBBSurvey:survey];
-                    [task saveToPersistentStore:NULL];
-                    [context processPendingChanges];
+                [self.managedObjectContext performBlockAndWait:^{
+                    self.taskTitle = sbbSurvey.name;
+                    self.rkTask = [APCTask rkTaskFromSBBSurvey:survey];
+                    [self saveToPersistentStore:NULL];
                 }];
             }
             else
@@ -125,7 +139,6 @@ static APCDummyObject * _dummyObject;
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     retAnswer = (RKSTAnswerFormat*) [_dummyObject performSelector:selector withObject:constraints];
 #pragma clang diagnostic pop
-
     
     return retAnswer;
 }
@@ -151,9 +164,11 @@ static APCDummyObject * _dummyObject;
 //        SBBDateTimeConstraints * localConstraints = (SBBDateTimeConstraints*)constraints;
     }
     else if ([constraints isKindOfClass:[SBBDateConstraints class]]) {
+        retAnswer = [RKSTDateAnswerFormat dateAnswer];
 //        SBBDateConstraints * localConstraints = (SBBDateConstraints*)constraints;
     }
     else if ([constraints isKindOfClass:[SBBTimeConstraints class]]) {
+        retAnswer = [RKSTDateAnswerFormat timeAnswer];
 //        SBBTimeConstraints * localConstraints = (SBBTimeConstraints*)constraints;
     }
     return retAnswer;
@@ -165,7 +180,9 @@ static APCDummyObject * _dummyObject;
     SBBMultiValueConstraints * localConstraints = (SBBMultiValueConstraints*)constraints;
     NSMutableArray * options = [NSMutableArray array];
     [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger idx, BOOL *stop) {
-        [options addObject:option.label];
+        //TODO: Fix this KLUDGE
+        [options addObject:@[[NSString stringWithFormat:@"Answer %ld", idx+1], option.label]];
+//        [options addObject:option.label];
     }];
     if (localConstraints.allowOtherValue) {
         [options addObject:NSLocalizedString(@"Other", @"Spinner Option")];

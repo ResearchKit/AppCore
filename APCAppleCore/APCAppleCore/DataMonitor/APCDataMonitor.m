@@ -7,6 +7,7 @@
 //
 
 #import "APCAppleCore.h"
+#import "APCSchedule+Bridge.h"
 
 @interface APCDataMonitor ()
 
@@ -24,18 +25,45 @@
     if (self) {
         self.dataSubstrate = dataSubstrate;
         self.scheduler = scheduler;
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(userConsented)
+                                                     name:APCUserDidConsentNotification
+                                                   object:nil];
     }
     return self;
 }
 
 - (void)appBecameActive
 {
-    [self.scheduler updateScheduledTasks];
+    [self refreshFromServer];
+}
+
+- (void) refreshFromServer
+{
+    if (self.dataSubstrate.currentUser.isConsented) {
+        [APCSchedule updateSchedulesOnCompletion:^(NSError *error) {
+            [APCTask refreshSurveys];
+            [self.scheduler updateScheduledTasksIfNotUpdating:NO];
+        }];
+    }
 }
 
 - (void)backgroundFetch:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     completionHandler(UIBackgroundFetchResultNoData);
+}
+
+
+- (void) userConsented
+{
+    [self.dataSubstrate.delegate setUpCollectors];
+    [self.dataSubstrate joinStudy];
+    [self refreshFromServer];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 

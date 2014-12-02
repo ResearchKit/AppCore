@@ -18,7 +18,6 @@
                          hourSelector:(APCTimeSelector*)hourSelector
                    dayOfMonthSelector:(APCTimeSelector*)dayOfMonthSelector
                         monthSelector:(APCTimeSelector*)monthSelector
-                    dayOfWeekSelector:(APCTimeSelector*)dayOfWeekSelector
                          yearSelector:(APCTimeSelector*)yearSelector;
 
 - (instancetype)initWithBeginningTime:(NSDate*)begin
@@ -27,7 +26,6 @@
                          hourSelector:(APCTimeSelector*)hourSelector
                    dayOfMonthSelector:(APCTimeSelector*)dayOfMonthSelector
                         monthSelector:(APCTimeSelector*)monthSelector
-                    dayOfWeekSelector:(APCTimeSelector*)dayOfWeekSelector
                          yearSelector:(APCTimeSelector*)yearSelector;
 
 @end

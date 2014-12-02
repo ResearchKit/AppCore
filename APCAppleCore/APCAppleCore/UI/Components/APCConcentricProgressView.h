@@ -22,7 +22,7 @@
 
 
 @protocol APCConcentricProgressViewDataSource <NSObject>
-
+@optional
 - (NSUInteger)numberOfComponentsInConcentricProgressView;
 
 - (CGFloat)concentricProgressView:(APCConcentricProgressView *)concentricProgressView valueForComponentAtIndex:(NSUInteger)index;

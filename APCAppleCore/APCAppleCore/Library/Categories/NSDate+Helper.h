@@ -18,4 +18,15 @@ extern NSString * const NSDateDefaultDateFormat;
  */
 - (NSString *) toStringWithFormat:(NSString *)format;
 
+- (NSString *) friendlyDescription;
+- (NSDate *) dateByAddingDays:(NSInteger)inDays;
+
++ (instancetype) startOfDay: (NSDate*) date;
++ (instancetype) endOfDay: (NSDate*) date;
++ (instancetype) startOfTomorrow: (NSDate*) date;
+
++(instancetype) todayAtMidnight;
++(instancetype) tomorrowAtMidnight;
++(instancetype) weekAgoAtMidnight;
+
 @end

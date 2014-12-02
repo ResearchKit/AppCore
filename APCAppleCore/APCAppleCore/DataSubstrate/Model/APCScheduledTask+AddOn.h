@@ -8,7 +8,26 @@
 
 #import "APCScheduledTask.h"
 
-@class RKSTTaskResult;
+@class UILocalNotification;
 @interface APCScheduledTask (AddOn)
+
+- (void) completeScheduledTask;
+- (void) createLocalNotification;
+- (void) deleteLocalNotification;
+- (void) deleteScheduledTask; //Also clears local notification
+
+@property (nonatomic, readonly) NSString * completeByDateString;
+
++ (NSArray*) APCActivityVCScheduledTasks: (BOOL) tomorrow inContext: (NSManagedObjectContext*) context;
++ (instancetype) scheduledTaskForStartOnDate: (NSDate *) startOn schedule: (APCSchedule*) schedule inContext: (NSManagedObjectContext*) context;
+
+/*********************************************************************************/
+#pragma mark - Reminder 
+/*********************************************************************************/
+- (void)scheduleReminderIfNecessary;
+- (void)clearCurrentReminderIfNecessary;
+- (UILocalNotification *) currentReminder;
+
++ (void)clearAllReminders;
 
 @end

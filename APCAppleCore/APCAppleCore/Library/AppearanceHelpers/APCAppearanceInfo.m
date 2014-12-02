@@ -8,6 +8,7 @@
 
 #import "APCAppearanceInfo.h"
 #import "UIColor+APCAppearance.h"
+#import "APCConstants.h"
 
 static NSDictionary * localAppearanceDictionary;
 

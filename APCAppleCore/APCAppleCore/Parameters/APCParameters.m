@@ -7,6 +7,8 @@
 //
 
 #import "APCParameters.h"
+#import "APCConstants.h"
+#import "APCParameters+Settings.h"
 
 
 // Private constants
@@ -64,7 +66,6 @@ NSString *const kBypassServerProperty                   = @"bypassServer";
     
     return number;
 }
-
 
 - (NSString *)stringForKey:(NSString*)key
 {
@@ -252,7 +253,6 @@ NSString *const kBypassServerProperty                   = @"bypassServer";
             [self didFail:error];
         }
     }
-
 }
 
 - (void)setContentOfFileToDictionary {
@@ -279,15 +279,16 @@ NSString *const kBypassServerProperty                   = @"bypassServer";
     if (self.userDefaults[kBypassServerProperty] == nil) {
         [self setBool:NO forKey:kBypassServerProperty];
     }
+    if (self.userDefaults[kNumberOfMinutesForPasscodeKey] == nil) {
+        [self setNumber:[APCParameters autoLockValues][0] forKey:kNumberOfMinutesForPasscodeKey];
+    }
 }
-
 
 - (BOOL) isString:(id)value {
     BOOL isString = [value isKindOfClass:[NSString class]];
 
     return isString;
 }
-
 
 - (BOOL) isNumber:(id)value {
     BOOL isNumber = [value isKindOfClass:[NSNumber class]];
@@ -298,11 +299,9 @@ NSString *const kBypassServerProperty                   = @"bypassServer";
 /*********************************************************************************/
 #pragma mark - Public Methods
 /*********************************************************************************/
-
 - (NSArray *) allKeys {
     return [self.userDefaults allKeys];
 }
-
 
 - (void) reset {
     

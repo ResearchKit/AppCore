@@ -12,6 +12,7 @@
 #import "APCPasscodeViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import "APCOnboarding.h"
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -24,9 +25,9 @@ static NSString *const kTasksAndSchedulesJSONFileName = @"APHTasksAndSchedules";
 #pragma mark - Tab bar Constants
 /*********************************************************************************/
 static NSString *const kDashBoardStoryBoardKey     = @"APHDashboard";
-static NSString *const kLearnStoryBoardKey         = @"APHLearn";
-static NSString *const kActivitiesStoryBoardKey    = @"APHActivities";
-static NSString *const kHealthProfileStoryBoardKey = @"APHProfile";
+static NSString *const kLearnStoryBoardKey         = @"APCLearn";
+static NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
+static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
@@ -40,24 +41,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 /*********************************************************************************/
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
-    self.healthKitTracker = [[APCHealthKitQuantityTracker alloc] initWithIdentifier:HKQuantityTypeIdentifierHeartRate withNotificationName:@"APCHeartRateUpdated"];
-    
-    [self.healthKitTracker start];
-    
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-    
-    
-    //Setting the Audio Session Category for voice prompts when device is locked
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    
-    NSError *setCategoryError = nil;
-    BOOL success = [audioSession setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
-    if (!success) { /* handle the error condition */ }
-    
-    NSError *activationError = nil;
-    success = [audioSession setActive:YES error:&activationError];
-    
     
     [self setUpInitializationOptions];
     NSAssert(self.initializationOptions, @"Please set up initialization options");
@@ -69,14 +53,6 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self setUpHKPermissions];
     [self setUpAppAppearance];
     [self showAppropriateVC];
-    
-    //set default 
-    NSNumber *numberOfMinutes = [self.dataSubstrate.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
-    if (!numberOfMinutes) {
-        [self.dataSubstrate.parameters setNumber:[APCParameters autoLockValues][0] forKey:kNumberOfMinutesForPasscodeKey];
-    }
-    
-    [self showPasscodeIfNecessary];
     
     return YES;
 }
@@ -99,10 +75,21 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self.dataMonitor backgroundFetch:completionHandler];
 }
 
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    if (self.dataSubstrate.currentUser.signedIn) {
+        NSDate *currentTime = [NSDate date];
+        [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+    }
+    
+}
+
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    NSDate *currentTime = [NSDate date];
-    [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+    if (self.dataSubstrate.currentUser.signedIn) {
+        NSDate *currentTime = [NSDate date];
+        [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -130,12 +117,13 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 /*********************************************************************************/
 - (void) initializeBridgeServerConnection
 {
-    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey]];
+    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment:(SBBEnvironment)[self.initializationOptions[kBridgeEnvironmentKey] integerValue]];
 }
 
 - (void) initializeAppleCoreStack
 {
-    self.dataSubstrate = [[NSClassFromString(self.initializationOptions[kDataSubstrateClassNameKey]) alloc] initWithPersistentStorePath:[[self applicationDocumentsDirectory] stringByAppendingPathComponent:self.initializationOptions[kDatabaseNameKey]] additionalModels: nil studyIdentifier:self.initializationOptions[kStudyIdentifierKey]];
+    self.dataSubstrate = [[APCDataSubstrate alloc] initWithPersistentStorePath:[[self applicationDocumentsDirectory] stringByAppendingPathComponent:self.initializationOptions[kDatabaseNameKey]] additionalModels: nil studyIdentifier:self.initializationOptions[kStudyIdentifierKey]];
+    self.dataSubstrate.delegate = self;
     self.scheduler = [[APCScheduler alloc] initWithDataSubstrate:self.dataSubstrate];
     self.dataMonitor = [[APCDataMonitor alloc] initWithDataSubstrate:self.dataSubstrate scheduler:self.scheduler];
     
@@ -191,9 +179,35 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self showOnBoarding];
 }
 
+- (NSString *)certificateFileName
+{
+    return ([self.initializationOptions[kBridgeEnvironmentKey] integerValue] == SBBEnvironmentStaging) ? [self.initializationOptions[kAppPrefixKey] stringByAppendingString:@"-staging"] :self.initializationOptions[kAppPrefixKey];
+}
+
 #pragma mark - Other Abstract Implmentations
 - (void) setUpInitializationOptions {/*Abstract Implementation*/}
 - (void) setUpAppAppearance {/*Abstract Implementation*/}
+/*********************************************************************************/
+#pragma mark - Default Collectors Implementations
+/*********************************************************************************/
+- (void) setUpCollectors
+{
+    
+    self.healthKitTracker = [[APCHealthKitQuantityTracker alloc] initWithIdentifier:HKQuantityTypeIdentifierHeartRate withNotificationName:@"APCHeartRateUpdated"];
+    [self.healthKitTracker start];
+    
+    //Setting the Audio Session Category for voice prompts when device is locked
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    
+    NSError *setCategoryError = nil;
+    BOOL success = [audioSession setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
+    if (!success) { /* handle the error condition */ }
+    
+    NSError *activationError = nil;
+    success = [audioSession setActive:YES error:&activationError];
+    [activationError handle];
+}
+
 
 /*********************************************************************************/
 #pragma mark - Public Helpers
@@ -204,7 +218,6 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     return [@{
               kDatabaseNameKey                     : kDatabaseName,
               kTasksAndSchedulesJSONFileNameKey    : kTasksAndSchedulesJSONFileName,
-              kDataSubstrateClassNameKey           : kDataSubstrateClassName
               } mutableCopy];
 }
 
@@ -232,10 +245,10 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 {
     if (!_storyboardIdInfo) {
         _storyboardIdInfo = @[
-                              kDashBoardStoryBoardKey,
-                              kLearnStoryBoardKey,
-                              kActivitiesStoryBoardKey,
-                              kHealthProfileStoryBoardKey
+                              @{@"name": kDashBoardStoryBoardKey, @"bundle" : [NSBundle mainBundle]},
+                              @{@"name": kLearnStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
+                              @{@"name": kActivitiesStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
+                              @{@"name": kHealthProfileStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]}
                               ];
     }
     return _storyboardIdInfo;
@@ -284,8 +297,8 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         NSMutableArray  *controllers = [tabBarController.viewControllers mutableCopy];
         NSUInteger  controllerIndex = [controllers indexOfObject:viewController];
         
-        NSString  *name = [self.storyboardIdInfo objectAtIndex:controllerIndex];
-        UIStoryboard  *storyboard = [UIStoryboard storyboardWithName:name bundle:nil];
+        NSString  *name = [self.storyboardIdInfo objectAtIndex:controllerIndex][@"name"];
+        UIStoryboard  *storyboard = [UIStoryboard storyboardWithName:name bundle:[self.storyboardIdInfo objectAtIndex:controllerIndex][@"bundle"]];
         UIViewController  *controller = [storyboard instantiateInitialViewController];
         [controllers replaceObjectAtIndex:controllerIndex withObject:controller];
         
@@ -336,11 +349,18 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void)showPasscode
 {
-    APCPasscodeViewController *passcodeViewController = [[APCPasscodeViewController alloc] initWithNibName:@"APCPasscodeViewController" bundle:[NSBundle appleCoreBundle]];
+    APCPasscodeViewController *passcodeViewController = [[UIStoryboard storyboardWithName:@"APCPasscode" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
+    
     [self.window.rootViewController presentViewController:passcodeViewController animated:YES completion:nil];
 }
 
-- (void) showOnBoarding {/*Abstract Implementation*/ }
+- (void) showOnBoarding
+{
+    if (!self.onboarding) {
+        self.onboarding = [[APCOnboarding alloc] initWithDelegate:self];
+    }
+    
+}
 
 - (void) showNeedsEmailVerification
 {
@@ -352,7 +372,20 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 {
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
     navController.navigationBar.translucent = NO;
-    self.window.rootViewController = navController;
+    
+    [UIView transitionWithView:self.window
+                      duration:0.6
+                       options:UIViewAnimationOptionTransitionFlipFromLeft
+                    animations:^{
+                        self.window.rootViewController = navController;
+                    }
+                    completion:nil];
+}
+
+- (RKSTTaskViewController *)consentViewController
+{
+     NSAssert(FALSE, @"Override this method to return a valid Consent Task View Controller.");
+    return nil;
 }
 
 /*********************************************************************************/
@@ -364,5 +397,15 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     NSString *basePath = ([paths count] > 0) ? paths[0] : nil;
     return basePath;
 }
+
+#pragma mark - APCOnboarding Protocol
+
+- (APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)onboarding
+{
+    NSAssert(FALSE, @"Cannot retun nil. Override this delegate method to return a valid APCScene.");
+    
+    return nil;
+}
+
 
 @end

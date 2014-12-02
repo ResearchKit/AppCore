@@ -7,10 +7,14 @@
 //
 
 #import "APCSchedule.h"
+#import "APCScheduleExpression.h"
 
 @interface APCSchedule (AddOn)
 
 //Synchronous Method Call
 + (void) createSchedulesFromJSON: (NSArray*) schedulesArray inContext: (NSManagedObjectContext*) context;
+
+- (BOOL) isOneTimeSchedule;
+@property (nonatomic, readonly) APCScheduleExpression * scheduleExpression;
 
 @end

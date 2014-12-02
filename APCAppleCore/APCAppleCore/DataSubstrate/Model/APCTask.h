@@ -2,14 +2,14 @@
 //  APCTask.h
 //  APCAppleCore
 //
-//  Created by Dhanush Balachandran on 8/29/14.
+//  Created by Dhanush Balachandran on 11/24/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class APCSchedule, APCScheduledTask;
+@class APCScheduledTask;
 
 @interface APCTask : NSManagedObject
 
@@ -17,19 +17,18 @@
 @property (nonatomic, retain) NSString * taskClassName;
 @property (nonatomic, retain) NSString * taskCompletionTimeString;
 @property (nonatomic, retain) NSData * taskDescription;
-@property (nonatomic, retain) NSString * taskType;
+@property (nonatomic, retain) NSString * taskHRef;
+@property (nonatomic, retain) NSString * taskID;
 @property (nonatomic, retain) NSString * taskTitle;
-@property (nonatomic, retain) NSString * uid;
 @property (nonatomic, retain) NSDate * updatedAt;
-@property (nonatomic, retain) NSSet *schedules;
-@property (nonatomic, retain) APCSchedule *schedule_unused;
+@property (nonatomic, retain) NSSet *scheduledTasks_unused;
 @end
 
 @interface APCTask (CoreDataGeneratedAccessors)
 
-- (void)addSchedulesObject:(APCScheduledTask *)value;
-- (void)removeSchedulesObject:(APCScheduledTask *)value;
-- (void)addSchedules:(NSSet *)values;
-- (void)removeSchedules:(NSSet *)values;
+- (void)addScheduledTasks_unusedObject:(APCScheduledTask *)value;
+- (void)removeScheduledTasks_unusedObject:(APCScheduledTask *)value;
+- (void)addScheduledTasks_unused:(NSSet *)values;
+- (void)removeScheduledTasks_unused:(NSSet *)values;
 
 @end

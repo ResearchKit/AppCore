@@ -10,6 +10,7 @@
 
 @interface APCTask (Bridge)
 
-+ (void) getSurveyByRef: (NSString*) ref onCompletion: (void (^)(NSError * error)) completionBlock;
-
++ (void) refreshSurveys;
+- (void) loadSurveyOnCompletion: (void (^)(NSError * error)) completionBlock;
++ (RKSTOrderedTask*) rkTaskFromSBBSurvey: (SBBSurvey*) survey;
 @end

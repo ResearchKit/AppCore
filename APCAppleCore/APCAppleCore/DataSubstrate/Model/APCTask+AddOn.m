@@ -11,12 +11,10 @@
 #import <ResearchKit/ResearchKit.h>
 
 static NSString * const kTaskIDKey = @"taskID";
-static NSString * const kTaskTypeKey = @"taskType";
 static NSString * const kTaskTitleKey = @"taskTitle";
 static NSString * const kTaskClassNameKey = @"taskClassName";
 static NSString * const kTaskCompletionTimeStringKey = @"taskCompletionTimeString";
-static NSString * const kTaskFileNameKey = @"fileName";
-static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
+static NSString * const kTaskFileNameKey = @"taskFileName";
 
 @implementation APCTask (AddOn)
 
@@ -25,23 +23,12 @@ static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
   [context performBlockAndWait:^{
       for (NSDictionary * taskDict in tasksArray) {
           APCTask * task = [APCTask newObjectForContext:context];
-          task.uid = taskDict[kTaskIDKey];
-          task.taskType = taskDict[kTaskTypeKey];
+          task.taskID = taskDict[kTaskIDKey];
           task.taskTitle = taskDict[kTaskTitleKey];
           task.taskClassName = taskDict[kTaskClassNameKey];
-          if ([taskDict[kTaskCompletionTimeStringKey] length]) {
-              task.taskCompletionTimeString = taskDict[kTaskCompletionTimeStringKey];
-          }
+          task.taskCompletionTimeString = taskDict[kTaskCompletionTimeStringKey];
           
-          if ([task.taskType isEqualToString:kCustomizableSurveyTaskType]) {
-              NSString *resource = [[NSBundle mainBundle] pathForResource:taskDict[kTaskFileNameKey] ofType:@"task"];
-              NSError * error;
-              if ([[NSFileManager defaultManager] fileExistsAtPath:resource]) {
-                  NSData *taskDescription = [NSData dataWithContentsOfFile:resource];
-                  [error handle];
-                  task.taskDescription = taskDescription;
-              }
-          }
+          //TODO: For Dhanush, Add loading Survey JSON
           NSError * error;
           [task saveToPersistentStore:&error];
           [error handle];
@@ -54,7 +41,7 @@ static NSString * const kCustomizableSurveyTaskType =@"APHCustomizableSurvey";
     __block APCTask * retTask;
     [context performBlockAndWait:^{
         NSFetchRequest * request = [APCTask request];
-        request.predicate = [NSPredicate predicateWithFormat:@"uid == %@",taskID];
+        request.predicate = [NSPredicate predicateWithFormat:@"taskID == %@",taskID];
         NSError * error;
         retTask = [[context executeFetchRequest:request error:&error]firstObject];
     }];

@@ -37,6 +37,11 @@ typedef NS_ENUM(APCTableViewItemType, APCTableViewStudyItemType) {
     kAPCTableViewStudyItemTypeReviewConsent
 };
 
+typedef NS_ENUM(APCTableViewItemType, APCTableViewLearnItemType) {
+    kAPCTableViewLearnItemTypeStudyDetails,
+    kAPCTableViewLearnItemTypeOtherDetails
+};
+
 typedef NS_ENUM(NSUInteger, APCAppState) {
     kAPCAppStateNotConsented,
     kAPCAppStateConsented

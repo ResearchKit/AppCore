@@ -14,14 +14,9 @@
 
 @interface APCScheduler : NSObject
 
-- (instancetype)initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate;
-- (void)updateScheduledTasks;
+- (instancetype) initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate;
 
-- (void)clearNotificationActivityType:(NSString *)taskType;
-- (void)clearAllScheduledTaskNotifications;
-- (BOOL)scheduleUpdated:(APCSchedule *)schedule;
-- (void)createScheduledTask:(APCSchedule *)schedule;
-- (void)scheduleLocalNotification:(NSString *)message withDate:(NSDate *)dueOn withTaskType:(NSString *)taskType withAPCScheduleTaskId:(NSString *)objectUID andReminder:(int)reminder;
+- (void)updateScheduledTasksIfNotUpdating: (BOOL) today; //If today is not set, it will always update tasks for tomorrow
 
 @end
 

@@ -66,7 +66,7 @@
 /**
  *  Designated initializer
  *
- *  @param expression A modified cron expression that identifies point in time in which the 
+ *  @param expression A modified cron expression that identifies points in time at which the
  *                    `schedule` is satisfied
  *  @param timeZero   An non-negative offset from midnight that will be considered as `time zero`
  *                    for satisifing a schedule.

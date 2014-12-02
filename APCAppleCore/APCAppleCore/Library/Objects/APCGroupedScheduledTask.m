@@ -20,6 +20,17 @@
     return self;
 }
 
+- (NSDate *)startOn
+{
+    APCScheduledTask * scheduledTask = [self.scheduledTasks firstObject];
+    return scheduledTask.startOn;
+}
+- (NSString *)completeByDateString
+{
+    APCScheduledTask * scheduledTask = [self.scheduledTasks firstObject];
+    return scheduledTask.completeByDateString;
+}
+
 - (NSString *)debugDescription
 {
     return [NSString stringWithFormat:@"Task Title : %@\nTask Type : %@\nTasks : %@", self.taskTitle, self.taskType, self.scheduledTasks];

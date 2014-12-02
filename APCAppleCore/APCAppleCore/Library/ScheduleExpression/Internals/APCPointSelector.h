@@ -10,6 +10,30 @@
 
 //  Private implementation.
 
+
+//    /**
+//     Ron:  I've seen this format for Objective-C enums.  I think
+//     it's easier to read, alphabetize, use in switch() statements,
+//     etc.  It's also supported directly by Xcode:  type "enum" and
+//     it auto-generates this template.
+//
+//     I won't check this in (yet?) -- it's functionally identical to
+//     the existing code, could introduce bugs, and would make the
+//     commit very confusing for other people to review.
+//
+//     ...or maybe I'll check it in immediately after my functional
+//     work.  I just want to remember to discuss it with Ed.
+//     */
+//    typedef enum : NSInteger {
+//        APCScheduleUnitMinute,
+//        APCScheduleUnitHour,
+//        APCScheduleUnitDayOfMonth,
+//        APCScheduleUnitMonth,
+//        APCScheduleUnitDayOfWeek,
+//        APCScheduleUnitYear,
+//        APCScheduleUnitUnknown
+//    }	APCScheduleUnit;
+
 typedef NS_ENUM(NSInteger, UnitType)
 {
     kMinutes,
@@ -39,3 +63,13 @@ typedef NS_ENUM(NSInteger, UnitType)
 - (NSNumber*)defaultEndPeriod;
 
 @end
+
+
+
+
+
+
+
+
+
+

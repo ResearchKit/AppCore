@@ -11,10 +11,16 @@
 #import "UIFont+APCAppearance.h"
 #import "UIImage+APCHelper.h"
 #import "UIColor+TertiaryColors.h"
+#import "APCStudyDetailsViewController.h"
+#import "APCShareViewController.h"
+#import "APCAppDelegate.h"
+#import "APCOnboarding.h"
+#import "NSBundle+Helper.h"
+#import "APCSignInViewController.h"
 
 static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
 
-@interface APCStudyOverviewViewController ()
+@interface APCStudyOverviewViewController () <RKSTTaskViewControllerDelegate>
 
 @end
 
@@ -31,17 +37,63 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     
     [self setupTableView];
     [self setUpAppearance];
+    self.items = [self prepareContent];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+
+- (NSArray *)prepareContent
+{
+    NSMutableArray *items = [NSMutableArray arrayWithArray:[self studyDetailsFromJSONFile:@"StudyOverview"]];
+    
+    if (self.showShareRow){
+        
+        APCTableViewStudyDetailsItem *shareStudyItem = [APCTableViewStudyDetailsItem new];
+        shareStudyItem.caption = NSLocalizedString(@"Share this Study", nil);
+        shareStudyItem.iconImage = [UIImage imageNamed:@"share_icon"];
+        shareStudyItem.tintColor = [UIColor appTertiaryGreenColor];
+
+        APCTableViewRow *rowItem = [APCTableViewRow new];
+        rowItem.item = shareStudyItem;
+        rowItem.itemType = kAPCTableViewStudyItemTypeShare;
+        
+        APCTableViewSection *section = [items firstObject];
+        NSMutableArray *rowItems = [NSMutableArray arrayWithArray:section.rows];
+        [rowItems addObject:rowItem];
+        section.rows = [NSArray arrayWithArray:rowItems];
+    }
+    
+    if (self.showConsentRow) {
+        
+        APCTableViewStudyDetailsItem *reviewConsentItem = [APCTableViewStudyDetailsItem new];
+        reviewConsentItem.caption = NSLocalizedString(@"Review Consent", nil);
+        reviewConsentItem.iconImage = [UIImage imageNamed:@"consent_icon"];
+        reviewConsentItem.tintColor = [UIColor appTertiaryPurpleColor];
+        
+        APCTableViewRow *rowItem = [APCTableViewRow new];
+        rowItem.item = reviewConsentItem;
+        rowItem.itemType = kAPCTableViewStudyItemTypeReviewConsent;
+        
+        APCTableViewSection *section = [items firstObject];
+        NSMutableArray *rowItems = [NSMutableArray arrayWithArray:section.rows];
+        [rowItems addObject:rowItem];
+        section.rows = [NSArray arrayWithArray:rowItems];
+    }
+    
+    return [NSArray arrayWithArray:items];
 }
 
 - (void)setupTableView
 {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    
+    [self.diseaseLogoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
+    [self.researchInstituteImageView setImage:[UIImage imageNamed:@"logo_researchInstitute"]];
 }
 
 - (void)setUpAppearance
@@ -59,6 +111,11 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     self.dateRangeLabel.font = [UIFont appLightFontWithSize:16];
     self.dateRangeLabel.textColor = [UIColor appSecondaryColor3];
     
+}
+
+- (APCOnboarding *)onboarding
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
 }
 
 #pragma mark - UITableViewDataSource methods
@@ -87,20 +144,83 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     return cell;
 }
 
+#pragma mark - UITableViewDelegate methods
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    APCTableViewStudyDetailsItem *studyDetails = [self itemForIndexPath:indexPath];
+    
+    APCTableViewStudyItemType itemType = [self itemTypeForIndexPath:indexPath];
+    
+    switch (itemType) {
+        case kAPCTableViewStudyItemTypeStudyDetails:
+        {
+            APCStudyDetailsViewController *detailsViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"StudyDetailsVC"];
+            detailsViewController.studyDetails = studyDetails;
+            [self.navigationController pushViewController:detailsViewController animated:YES];
+        }
+            break;
+        case kAPCTableViewStudyItemTypeShare:
+        {
+            APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ShareVC"];
+            shareViewController.hidesOkayButton = YES;
+            [self.navigationController pushViewController:shareViewController animated:YES];
+        }
+            break;
+            
+        case kAPCTableViewStudyItemTypeReviewConsent:
+        {
+            [self showConsent];
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Consent
+
+- (void)showConsent
+{
+    RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    
+    consentVC.taskDelegate = self;
+    [self presentViewController:consentVC animated:YES completion:nil];
+    
+}
+
+#pragma mark - TaskViewController Delegate methods
+
+- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
+{
+    [taskViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
+{
+    //TODO: Figure out what to do if it fails
+    [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Public methods
 
-- (void)studyDetailsFromJSONFile:(NSString *)jsonFileName
+- (NSArray *)studyDetailsFromJSONFile:(NSString *)jsonFileName
 {
     NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
     NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
     
     NSError *parseError;
     NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
+    
+    NSMutableArray *items = [NSMutableArray new];
     
     if (!parseError) {
         
@@ -128,18 +248,12 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
         
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
-        [self.items addObject:section];
+        [items addObject:section];
     }
+    
+    return [NSArray arrayWithArray:items];
 }
 
-- (IBAction)signInTapped:(id)sender
-{
-    
-}
-- (IBAction)signUpTapped:(id)sender
-{
-    
-}
 
 - (APCTableViewStudyDetailsItem *)itemForIndexPath:(NSIndexPath *)indexPath
 {
@@ -160,5 +274,18 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     
     return studyItemType;
 }
+
+- (void)signInTapped:(id)sender
+{
+    APCSignInViewController *signInViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSignInViewController"];
+    [self.navigationController pushViewController:signInViewController animated:YES];
+}
+
+- (void)signUpTapped:(id)sender
+{
+    UIViewController *viewController = [[self onboarding] nextScene];
+    [self.navigationController pushViewController:viewController animated:YES];
+}
+
 
 @end

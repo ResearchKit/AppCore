@@ -32,11 +32,29 @@
         NSParameterAssert(self.email);
         NSParameterAssert(self.password);
         [SBBComponent(SBBAuthManager) signUpWithEmail:self.email username:self.email password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completionBlock) {
-                    completionBlock(error);
-                }
-            });
+            if (!error) {
+                SBBUserProfile *profile = [SBBUserProfile new];
+                profile.email = self.email;
+                profile.username = self.email;
+                profile.firstName = self.firstName;
+                profile.lastName = self.lastName;
+                
+                [SBBComponent(SBBProfileManager) updateUserProfileWithProfile:profile completion:^(id responseObject, NSError *error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (completionBlock) {
+                            completionBlock(error);
+                        }
+                    });
+                }];
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completionBlock) {
+                        completionBlock(error);
+                    }
+                });
+            }
         }];
     }
 }
@@ -50,22 +68,51 @@
     }
     else
     {
-        
         NSParameterAssert(self.password);
-        [SBBComponent(SBBAuthManager) signInWithUsername:self.email password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
-            if (error.code ==kSBBServerPreconditionNotMet) {
-                if (!self.firstName) {
-                    self.firstName = @"Please enter first name";
-                }
-                [self sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
-                    [self signInOnCompletion:completionBlock];
+        [SBBComponent(SBBAuthManager) signInWithUsername:self.email password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *signInError) {
+            if (!signInError || signInError.code == kSBBServerPreconditionNotMet) {
+                [SBBComponent(SBBProfileManager) getUserProfileWithCompletion:^(id userProfile, NSError *error) {
+                    if (userProfile) {
+                        SBBUserProfile *profile = userProfile;
+                        self.email = profile.email;
+                        self.firstName = profile.firstName;
+                        self.lastName = profile.lastName;
+                    }
+                    if (signInError.code == kSBBServerPreconditionNotMet) {
+                        [self sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
+                            if (error) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    if (completionBlock) {
+                                        completionBlock(error);
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                [self signInOnCompletion:completionBlock];
+                            }
+                        }];
+                    }
+                    else
+                    {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (!error) {
+                                self.userConsented = YES;
+                                self.consented = YES;
+                            }
+                            if (completionBlock) {
+                                completionBlock(error);
+                            }
+                        });
+                    }
+                    
                 }];
             }
-            else
+            else if (signInError)
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (completionBlock) {
-                        completionBlock(error);
+                        completionBlock(signInError);
                     }
                 });
             }
@@ -82,10 +129,9 @@
     }
     else
     {
-        NSParameterAssert(self.firstName);
-        //TODO: Figure out what needs to be done if birthDate is nil
+        NSString * name = self.firstName.length? self.firstName : @"FirstName";
         NSDate * birthDate = self.birthDate ?: [NSDate dateWithTimeIntervalSince1970:(60*60*24*365*10)];
-        [SBBComponent(SBBConsentManager) consentSignature:self.firstName birthdate:birthDate completion:^(id responseObject, NSError *error) {
+        [SBBComponent(SBBConsentManager) consentSignature:name birthdate:birthDate completion:^(id responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completionBlock) {
                     completionBlock(error);
