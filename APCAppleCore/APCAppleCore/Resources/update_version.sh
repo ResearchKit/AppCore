@@ -8,7 +8,7 @@
 set -o nounset	# Script exits if an undeclared variable is used
 set -o errexit	# Script exits if a command fails
 
-VERSION=`git describe --tags --always --dirty | sed -e "s/^[^0-9]*//"`
+VERSION=`git describe --tags --always --dirty`
 BUILD=`git rev-list HEAD | wc -l | tr -d ' '`
 
 echo "     Updating version to: ${VERSION}"
