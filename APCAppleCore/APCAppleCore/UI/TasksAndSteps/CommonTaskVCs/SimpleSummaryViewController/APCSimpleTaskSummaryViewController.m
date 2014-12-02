@@ -74,6 +74,8 @@
                                                                                            target:self
                                                                                            action:@selector(doneButtonTapped:)];
 
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] init];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated

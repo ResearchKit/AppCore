@@ -16,7 +16,7 @@
 
 - (void) handle
 {
-    NSLog(@"ERROR GENERATED: %@", self);
+    NSLog(@"APPCORE ERROR: %@", self.localizedDescription?:self);
 }
 
 - (NSString *) message {

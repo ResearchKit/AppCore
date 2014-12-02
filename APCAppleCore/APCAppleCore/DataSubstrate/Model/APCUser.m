@@ -221,7 +221,10 @@ static NSString *const kSignedInKey = @"SignedIn";
 {
     _consented = consented;
     [self updateStoredProperty:kConsentedPropertyName withValue:@(consented)];
-    [[NSNotificationCenter defaultCenter] postNotificationName:APCUserDidConsentNotification object:nil];
+    if (consented) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:APCUserDidConsentNotification object:nil];
+    }
+
 }
 
 - (void)setUserConsented:(BOOL)userConsented

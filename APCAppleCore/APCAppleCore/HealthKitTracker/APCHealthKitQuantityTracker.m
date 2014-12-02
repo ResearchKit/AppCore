@@ -63,10 +63,12 @@ NSString *const kNotificationName                  = @"APCQuantityTypeIdentifier
     
     if ([HKHealthStore isHealthDataAvailable]) {
         
-        self.observerQuery = [[HKObserverQuery alloc] initWithSampleType:self.quantityType predicate:nil updateHandler:^(HKObserverQuery *query, HKObserverQueryCompletionHandler completionHandler, NSError *error) {
+        NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:[NSDate date] endDate:nil options:HKQueryOptionNone];
+        
+        self.observerQuery = [[HKObserverQuery alloc] initWithSampleType:self.quantityType predicate:predicate updateHandler:^(HKObserverQuery *query, HKObserverQueryCompletionHandler completionHandler, NSError *error) {
             if (!error) {
                 
-                [self.healthStore mostRecentQuantitySampleOfType:self.quantityType predicate:nil completion:^(HKQuantity *mostRecentQuantity, NSError *error) {
+                [self.healthStore mostRecentQuantitySampleOfType:self.quantityType predicate:predicate completion:^(HKQuantity *mostRecentQuantity, NSError *error) {
                     
                     if (mostRecentQuantity != nil) {
                         self.lastUpdate = [NSDate date];

@@ -41,24 +41,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 /*********************************************************************************/
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
-    self.healthKitTracker = [[APCHealthKitQuantityTracker alloc] initWithIdentifier:HKQuantityTypeIdentifierHeartRate withNotificationName:@"APCHeartRateUpdated"];
-    
-    [self.healthKitTracker start];
-    
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-    
-    //Setting the Audio Session Category for voice prompts when device is locked
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    
-    NSError *setCategoryError = nil;
-    BOOL success = [audioSession setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
-    if (!success) { /* handle the error condition */ }
-    
-    NSError *activationError = nil;
-    success = [audioSession setActive:YES error:&activationError];
-    [activationError handle];
-    
     
     [self setUpInitializationOptions];
     NSAssert(self.initializationOptions, @"Please set up initialization options");
@@ -70,12 +53,6 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self setUpHKPermissions];
     [self setUpAppAppearance];
     [self showAppropriateVC];
-    
-    //set default 
-    NSNumber *numberOfMinutes = [self.dataSubstrate.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
-    if (!numberOfMinutes) {
-        [self.dataSubstrate.parameters setNumber:[APCParameters autoLockValues][0] forKey:kNumberOfMinutesForPasscodeKey];
-    }
     
     return YES;
 }
@@ -210,7 +187,27 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 #pragma mark - Other Abstract Implmentations
 - (void) setUpInitializationOptions {/*Abstract Implementation*/}
 - (void) setUpAppAppearance {/*Abstract Implementation*/}
-- (void) setUpCollectors {/*Abstract Implementation*/}
+/*********************************************************************************/
+#pragma mark - Default Collectors Implementations
+/*********************************************************************************/
+- (void) setUpCollectors
+{
+    
+    self.healthKitTracker = [[APCHealthKitQuantityTracker alloc] initWithIdentifier:HKQuantityTypeIdentifierHeartRate withNotificationName:@"APCHeartRateUpdated"];
+    [self.healthKitTracker start];
+    
+    //Setting the Audio Session Category for voice prompts when device is locked
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    
+    NSError *setCategoryError = nil;
+    BOOL success = [audioSession setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
+    if (!success) { /* handle the error condition */ }
+    
+    NSError *activationError = nil;
+    [audioSession setActive:YES error:&activationError];
+    [activationError handle];
+}
+
 
 /*********************************************************************************/
 #pragma mark - Public Helpers

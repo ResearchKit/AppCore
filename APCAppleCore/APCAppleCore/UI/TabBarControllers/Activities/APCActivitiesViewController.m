@@ -135,7 +135,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     if ([task isKindOfClass:[APCGroupedScheduledTask class]])
     {
         titleLabel.text = groupedScheduledTask.taskTitle;
-        taskCompletionTimeString = groupedScheduledTask.taskCompletionTimeString;
         NSUInteger tasksCount = groupedScheduledTask.scheduledTasks.count;
         NSUInteger completedTasksCount = groupedScheduledTask.completedTasksCount;
         countLabel.text = [NSString stringWithFormat:@"%lu/%lu", (unsigned long)completedTasksCount, (unsigned long)tasksCount];
@@ -145,7 +144,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     {
         titleLabel.text = scheduledTask.task.taskTitle;
         confirmView.completed = scheduledTask.completed.boolValue;
-        taskCompletionTimeString = scheduledTask.task.taskCompletionTimeString;
         countLabel.text = nil;
     }
     

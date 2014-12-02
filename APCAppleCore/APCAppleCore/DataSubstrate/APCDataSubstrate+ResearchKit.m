@@ -50,18 +50,8 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
     [self.delegate setUpCollectors];
     
     [self.studyStore resume];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(userConsented)
-                                                 name:APCUserDidConsentNotification
-                                               object:nil];
 }
 
-- (void) userConsented
-{
-    [self.delegate setUpCollectors];
-    [self joinStudy];
-}
 
 -(void)joinStudy
 {
