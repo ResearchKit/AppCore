@@ -23,5 +23,8 @@
 @dynamic userConsented;
 @dynamic wakeUpTime;
 @dynamic glucoseLevels;
+@dynamic homeLocationAddress;
+@dynamic homeLocationLat;
+@dynamic homeLocationLong;
 
 @end

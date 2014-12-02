@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B23" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -97,7 +97,7 @@
                                             <constraint firstAttribute="height" constant="1" id="nsj-Mg-nDx"/>
                                         </constraints>
                                     </view>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9Ej-fF-Eyy">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_disease" translatesAutoresizingMaskIntoConstraints="NO" id="9Ej-fF-Eyy">
                                         <rect key="frame" x="78" y="28" width="38" height="38"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="38" id="19n-H4-vxT"/>
@@ -112,7 +112,7 @@
                                             <constraint firstAttribute="height" constant="38" id="iBm-9J-uaO"/>
                                         </constraints>
                                     </view>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2EN-Xb-Xbf">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_researchInstitute" translatesAutoresizingMaskIntoConstraints="NO" id="2EN-Xb-Xbf">
                                         <rect key="frame" x="144" y="28" width="95" height="38"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="95" id="4IJ-LU-J3k"/>
@@ -262,7 +262,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6YN-e1-J5I">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_disease" translatesAutoresizingMaskIntoConstraints="NO" id="6YN-e1-J5I">
                                 <rect key="frame" x="138" y="182" width="45" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="ONf-7w-P58"/>
@@ -344,7 +344,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="na1-y1-IGE">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_disease" translatesAutoresizingMaskIntoConstraints="NO" id="na1-y1-IGE">
                                 <rect key="frame" x="138" y="194" width="45" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="45" id="jZP-L8-bsa"/>
@@ -393,7 +393,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I6w-K3-YLb">
                                 <rect key="frame" x="0.0" y="64" width="320" height="135"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2E2-Yo-FnM">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_disease" translatesAutoresizingMaskIntoConstraints="NO" id="2E2-Yo-FnM">
                                         <rect key="frame" x="138" y="22" width="45" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="45" id="Are-Jc-oiJ"/>
@@ -1332,7 +1332,7 @@
                     <navigationItem key="navigationItem" title="Medical Information" id="gou-Uc-1H7">
                         <barButtonItem key="rightBarButtonItem" title="Next" id="FsH-Bl-UEj">
                             <connections>
-                                <action selector="next" destination="Plg-FM-GW9" id="TZy-Yc-sa9"/>
+                                <action selector="next" destination="Plg-FM-GW9" id="5cr-h0-nBB"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1535,6 +1535,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="logo_disease" width="89" height="85"/>
+        <image name="logo_researchInstitute" width="570" height="212"/>
         <image name="profilePlaceholder" width="150" height="150"/>
         <image name="twitter_icon" width="56" height="56"/>
     </resources>
