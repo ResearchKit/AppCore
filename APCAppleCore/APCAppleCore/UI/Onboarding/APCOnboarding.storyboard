@@ -1535,8 +1535,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="logo_disease" width="92" height="92"/>
-        <image name="logo_researchInstitute" width="361" height="74"/>
+        <image name="logo_disease" width="89" height="85"/>
+        <image name="logo_researchInstitute" width="570" height="212"/>
         <image name="profilePlaceholder" width="150" height="150"/>
         <image name="twitter_icon" width="56" height="56"/>
     </resources>

@@ -29,6 +29,9 @@ static NSString *const kWakeUpTimePropertyName = @"wakeUpTime";
 static NSString *const kSleepTimePropertyName = @"sleepTime";
 static NSString *const kEthnicityPropertyName = @"ethnicity";
 static NSString *const kGlucoseLevelsPropertyName = @"glucoseLevels";
+static NSString *const kHomeLocationAddressPropertyName = @"homeLocationAddress";
+static NSString *const kHomeLocationLatPropertyName = @"homeLocationLat";
+static NSString *const kHomeLocationLongPropertyName = @"homeLocationLong";
 
 static NSString *const kSignedUpKey = @"SignedUp";
 static NSString *const kSignedInKey = @"SignedIn";
@@ -77,7 +80,10 @@ static NSString *const kSignedInKey = @"SignedIn";
             Weight : %@ \n\
             Wake Up Time : %@ \n\
             Sleep time : %@ \n\
-            ", self.firstName, self.lastName, self.email, self.birthDate, (int) self.biologicalSex, @(self.isSignedUp), @(self.isUserConsented), @(self.isSignedIn), @(self.isConsented), self.medicalConditions, self.medications, (int) self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime];
+            Home Address : %@ \n\
+            Home Location Lat : %@ \n\
+            Home Location Long : %@ \n\
+            ", self.firstName, self.lastName, self.email, self.birthDate, (int) self.biologicalSex, @(self.isSignedUp), @(self.isUserConsented), @(self.isSignedIn), @(self.isConsented), self.medicalConditions, self.medications, (int) self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime, self.homeLocationAddress, self.homeLocationLat, self.homeLocationLong];
 }
 
 - (void) loadStoredUserData: (NSManagedObjectContext*) context
@@ -117,6 +123,10 @@ static NSString *const kSignedInKey = @"SignedIn";
     _sleepTime = [storedUserData.sleepTime copy];
     _ethnicity = [storedUserData.ethnicity copy];
     _glucoseLevels = [storedUserData.glucoseLevels copy];
+    _homeLocationAddress = [storedUserData.homeLocationAddress copy];
+    _homeLocationLat = [storedUserData.homeLocationLat copy];
+    _homeLocationLong = [storedUserData.homeLocationLong copy];
+    
 }
 
 - (void) updateStoredProperty:(NSString*) propertyName withValue: (id) value
@@ -253,6 +263,25 @@ static NSString *const kSignedInKey = @"SignedIn";
 {
     _glucoseLevels = glucoseLevels;
     [self updateStoredProperty:kGlucoseLevelsPropertyName withValue:glucoseLevels];
+}
+
+- (void)setHomeLocationAddress:(NSString *)homeLocationAddress
+{
+    _homeLocationAddress = homeLocationAddress;
+    [self updateStoredProperty:kHomeLocationAddressPropertyName withValue:homeLocationAddress];
+}
+
+- (void)setHomeLocationLat:(NSNumber *)homeLocationLat
+{
+    _homeLocationLat = homeLocationLat;
+    [self updateStoredProperty:kHomeLocationLatPropertyName withValue:homeLocationLat];
+}
+
+- (void)setHomeLocationLong:(NSNumber *)homeLocationLong
+{
+    _homeLocationLong = homeLocationLong;
+    [self updateStoredProperty:kHomeLocationLongPropertyName withValue:homeLocationLong];
+    
 }
 
 /*********************************************************************************/

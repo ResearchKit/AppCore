@@ -24,5 +24,8 @@
 @property (nonatomic, retain) NSNumber * userConsented;
 @property (nonatomic, retain) NSDate * wakeUpTime;
 @property (nonatomic, retain) NSString * glucoseLevels;
+@property (nonatomic, retain) NSString * homeLocationAddress;
+@property (nonatomic, retain) NSNumber *homeLocationLat;
+@property (nonatomic, retain) NSNumber *homeLocationLong;
 
 @end
