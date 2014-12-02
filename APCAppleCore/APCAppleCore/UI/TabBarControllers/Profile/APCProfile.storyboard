@@ -678,7 +678,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_disease" translatesAutoresizingMaskIntoConstraints="NO" id="J3v-f8-Ygf">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="J3v-f8-Ygf">
                                 <rect key="frame" x="138" y="233" width="44" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="Ic4-e5-B7D"/>
@@ -861,7 +861,6 @@ IHRoYXQgeW91IGNvdWxkIG5vdCBjb250aW51ZS4
         </scene>
     </scenes>
     <resources>
-        <image name="logo_disease" width="92" height="78"/>
         <image name="profilePlaceholder" width="150" height="150"/>
     </resources>
 </document>

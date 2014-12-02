@@ -105,11 +105,9 @@
     NSError * error;
     [result saveToPersistentStore:&error];
     [error handle];
-    [result uploadToBridgeOnCompletion:^(NSError *error) {
+    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
+    [appDelegate.dataMonitor batchUploadDataToBridgeOnCompletion:^(NSError *error) {
         [error handle];
-        if (!error) {
-            NSLog(@"DataArchive uploaded For Task: \"%@\"  RunID: \"%@\"", self.task.identifier, self.taskRunUUID.UUIDString);
-        }
     }];
 }
 

@@ -240,12 +240,13 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 {
     self.taskSelectionDisabled = YES;
     APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-    [appDelegate.scheduler updateScheduledTasksIfNotUpdating:YES];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self reloadData];
-        [self.refreshControl endRefreshing];
-        self.taskSelectionDisabled = NO;
-    });
+    __weak APCActivitiesViewController * weakSelf = self;
+    [appDelegate.dataMonitor refreshFromBridgeOnCompletion:^(NSError *error) {
+        [appDelegate.scheduler updateScheduledTasksIfNotUpdating:YES];
+        [weakSelf reloadData];
+        [weakSelf.refreshControl endRefreshing];
+        weakSelf.taskSelectionDisabled = NO;
+    }];
 }
 
 - (void)reloadData
@@ -293,7 +294,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 {
     return [self arrayWithSectionName:self.sectionsArray[sectionNumber] from:self.scheduledTasksArray];
 }
-
 
 - (NSArray*)groupSimilarTasks:(NSArray *)ungroupedScheduledTasks
 {

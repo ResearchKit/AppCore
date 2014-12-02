@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_disease" translatesAutoresizingMaskIntoConstraints="NO" id="tTU-aB-ynX">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tTU-aB-ynX">
                                 <rect key="frame" x="135" y="175" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Fvr-eQ-ARB"/>
@@ -227,7 +227,4 @@ the link included in the message.</string>
             <point key="canvasLocation" x="1428" y="591"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="logo_disease" width="92" height="78"/>
-    </resources>
 </document>
