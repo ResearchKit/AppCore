@@ -252,6 +252,8 @@ static CGFloat kSectionHeaderHeight = 40.f;
         [items addObject:section];
     }
     
+    /*
+     Share is disabled for now.
     {
         NSMutableArray *rowItems = [NSMutableArray new];
         
@@ -272,7 +274,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
         section.sectionTitle = NSLocalizedString(@"Help us Spread the Word", @"");
         [items addObject:section];
     }
-    
+    */
     return [NSArray arrayWithArray:items];
 }
 
