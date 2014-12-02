@@ -13,6 +13,7 @@
 #import "UIAlertController+Helper.h"
 #import "UIFont+APCAppearance.h"
 #import "UIColor+APCAppearance.h"
+#import "NSError+APCAdditions.h"
 
 @interface APCEmailVerifyViewController ()
 @property (nonatomic, readonly) APCUser * user;
@@ -76,6 +77,9 @@
         else
         {
             self.user.signedIn = YES;
+            [self.user updateProfileOnCompletion:^(NSError *error) {
+                [error handle];
+            }];
         }
     }];
 }

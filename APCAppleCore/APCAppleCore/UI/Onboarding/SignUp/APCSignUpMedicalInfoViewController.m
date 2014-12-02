@@ -276,12 +276,8 @@
     
 }
 
-- (void) signup {
-    
-#if DEMO
-    [self next];
-#else
-    
+- (IBAction) signup
+{
     APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
     [self presentViewController:spinnerController animated:YES completion:nil];
     
@@ -300,7 +296,6 @@
             }];
         }
     }];
-#endif
 }
 
 - (IBAction) next {
