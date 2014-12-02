@@ -204,7 +204,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     if (!success) { /* handle the error condition */ }
     
     NSError *activationError = nil;
-    success = [audioSession setActive:YES error:&activationError];
+    [audioSession setActive:YES error:&activationError];
     [activationError handle];
 }
 

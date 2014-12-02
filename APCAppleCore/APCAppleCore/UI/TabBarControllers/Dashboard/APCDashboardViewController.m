@@ -142,7 +142,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat height;
+    CGFloat height = 0;
     
     APCTableViewItem *dashboardItem = [self itemForIndexPath:indexPath];
     
