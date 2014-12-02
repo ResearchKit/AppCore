@@ -276,28 +276,6 @@
     
 }
 
-- (IBAction) signup
-{
-    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
-    [self presentViewController:spinnerController animated:YES completion:nil];
-    
-    typeof(self) __weak weakSelf = self;
-    [self.user signUpOnCompletion:^(NSError *error) {
-        if (error) {
-            [spinnerController dismissViewControllerAnimated:NO completion:^{
-                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Up", @"") message:error.localizedDescription];
-                [self presentViewController:alert animated:YES completion:nil];
-            }];
-        }
-        else
-        {
-            [spinnerController dismissViewControllerAnimated:NO completion:^{
-                [weakSelf next];
-            }];
-        }
-    }];
-}
-
 - (IBAction) next {
     [self loadProfileValuesInModel];
     

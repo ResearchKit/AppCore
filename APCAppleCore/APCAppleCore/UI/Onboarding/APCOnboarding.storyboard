@@ -1332,7 +1332,7 @@
                     <navigationItem key="navigationItem" title="Medical Information" id="gou-Uc-1H7">
                         <barButtonItem key="rightBarButtonItem" title="Next" id="FsH-Bl-UEj">
                             <connections>
-                                <action selector="signup" destination="Plg-FM-GW9" id="mKx-5Z-Vq9"/>
+                                <action selector="next" destination="Plg-FM-GW9" id="TZy-Yc-sa9"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
