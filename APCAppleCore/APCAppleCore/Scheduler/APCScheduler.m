@@ -15,6 +15,7 @@
 @property  (strong, nonatomic)   NSManagedObjectContext  *scheduleMOC;
 @property  (nonatomic) BOOL isUpdating;
 @property  (nonatomic, strong) NSDate * referenceDate;
+@property (nonatomic, copy) void (^completionBlock)(NSError * error);
 @end
 
 @implementation APCScheduler
@@ -24,14 +25,14 @@
     self = [super init];
     if (self) {
         self.dataSubstrate = dataSubstrate;
-        self.scheduleMOC = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        self.scheduleMOC.parentContext = self.dataSubstrate.persistentContext;
+        self.scheduleMOC = self.dataSubstrate.persistentContext;
     }
     return self;
 }
 
-- (void)updateScheduledTasksIfNotUpdating: (BOOL) today
+- (void)updateScheduledTasksIfNotUpdating: (BOOL) today OnCompletion:(void (^)(NSError * error))completionBlock
 {
+    self.completionBlock = completionBlock;
     if (!self.isUpdating) {
         self.isUpdating = YES;
         self.referenceDate = today ? [NSDate todayAtMidnight] : [NSDate tomorrowAtMidnight];
@@ -53,13 +54,18 @@
         [self generateScheduledTasksBasedOnActiveSchedules];
         
         self.isUpdating = NO;
+        if (self.completionBlock) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.completionBlock(nil);
+            });
+        }
+        
     }];
 }
 
 /*********************************************************************************/
 #pragma mark - Methods Inside MOC
 /*********************************************************************************/
-
 - (void) updateSchedulesAsInactiveIfNecessary
 {
     NSFetchRequest * request = [APCSchedule request];

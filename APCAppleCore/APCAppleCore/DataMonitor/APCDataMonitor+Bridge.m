@@ -17,10 +17,11 @@
     if (self.dataSubstrate.currentUser.isConsented) {
         [APCSchedule updateSchedulesOnCompletion:^(NSError *error) {
             [APCTask refreshSurveys];
-            [self.scheduler updateScheduledTasksIfNotUpdating:NO];
-            if (completionBlock) {
-                completionBlock(error);
-            }
+            [self.scheduler updateScheduledTasksIfNotUpdating:NO OnCompletion:^(NSError * error) {
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            }];
         }];
     }
 }

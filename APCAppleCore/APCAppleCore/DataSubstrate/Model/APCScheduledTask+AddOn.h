@@ -12,9 +12,7 @@
 @interface APCScheduledTask (AddOn)
 
 - (void) completeScheduledTask;
-- (void) createLocalNotification;
-- (void) deleteLocalNotification;
-- (void) deleteScheduledTask; //Also clears local notification
+- (void) deleteScheduledTask;
 
 @property (nonatomic, readonly) NSString * completeByDateString;
 

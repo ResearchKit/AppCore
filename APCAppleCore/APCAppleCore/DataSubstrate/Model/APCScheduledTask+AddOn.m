@@ -30,19 +30,9 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     [saveError handle];
 }
 
-- (void) createLocalNotification
-{
-    //TODO: to be done
-}
-
-- (void) deleteLocalNotification
-{
-    //TODO: to be done
-}
-
 - (void) deleteScheduledTask
 {
-    [self deleteLocalNotification];
+    [self clearCurrentReminderIfNecessary];
     [self.managedObjectContext deleteObject:self];
     NSError * saveError;
     [self saveToPersistentStore:&saveError];
@@ -179,7 +169,9 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
 {
     UILocalNotification * currentReminder = [self currentReminder];
     UIApplication *app = [UIApplication sharedApplication];
-    [app cancelLocalNotification:currentReminder];
+    if (currentReminder) {
+        [app cancelLocalNotification:currentReminder];
+    }
 }
 
 - (UILocalNotification *) currentReminder

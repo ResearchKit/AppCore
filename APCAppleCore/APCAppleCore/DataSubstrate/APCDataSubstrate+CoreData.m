@@ -137,6 +137,7 @@
 - (NSUInteger)countOfAllScheduledTasksForToday
 {
     NSFetchRequest * request = [APCScheduledTask request];
+    request.predicate = [NSPredicate predicateWithFormat:@"startOn >= %@ && endOn < %@", [NSDate todayAtMidnight], [NSDate tomorrowAtMidnight]];
     NSError* error;
     return [self.mainContext countForFetchRequest:request error:&error];
 }
@@ -144,7 +145,7 @@
 - (NSUInteger) countOfCompletedScheduledTasksForToday
 {
     NSFetchRequest * request = [APCScheduledTask request];
-    request.predicate = [NSPredicate predicateWithFormat:@"completed == %@", @YES];
+    request.predicate = [NSPredicate predicateWithFormat:@"startOn >= %@ && endOn < %@ && completed == %@", [NSDate todayAtMidnight], [NSDate tomorrowAtMidnight], @YES];
     NSError* error;
     return [self.mainContext countForFetchRequest:request error:&error];
 }
