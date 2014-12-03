@@ -1,11 +1,10 @@
-//
-//  APCTintedTableViewCell.m
-//  APCAppCore
-//
-//  Created by Ramsundar Shandilya on 11/9/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCTintedTableViewCell.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCTintedTableViewCell.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"

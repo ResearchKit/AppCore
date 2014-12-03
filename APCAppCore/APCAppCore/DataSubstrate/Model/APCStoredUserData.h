@@ -1,11 +1,10 @@
-//
-//  APCStoredUserData.h
-//  APCAppCore
-//
-//  Created by Farhan Ahmed on 11/28/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCStoredUserData.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 

@@ -1,11 +1,10 @@
-//
-//  APCSchedule.m
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 11/24/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCSchedule.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCSchedule.h"
 #import "APCScheduledTask.h"
 

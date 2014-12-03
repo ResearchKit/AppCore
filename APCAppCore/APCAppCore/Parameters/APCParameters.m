@@ -1,11 +1,10 @@
-//
-//  APCParameters.m
-//  APCAppCore
-//
-//  Created by Justin Warmkessel on 8/14/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCParameters.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCParameters.h"
 #import "APCConstants.h"
 #import "APCParameters+Settings.h"

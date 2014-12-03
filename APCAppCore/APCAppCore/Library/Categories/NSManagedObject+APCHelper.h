@@ -1,11 +1,10 @@
-//
-//  NSManagedObject+APCHelper.h
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 8/28/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  NSManagedObject+APCHelper.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import <CoreData/CoreData.h>
 
 @interface NSManagedObject (APCHelper)

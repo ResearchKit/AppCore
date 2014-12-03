@@ -1,11 +1,10 @@
-//
-//  APCKeychainStore.m
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 10/2/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCKeychainStore.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCKeychainStore.h"
 
 static NSString *_defaultService;

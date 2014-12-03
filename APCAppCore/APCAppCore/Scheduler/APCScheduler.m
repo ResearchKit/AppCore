@@ -1,11 +1,10 @@
-//
-//  Scheduler.m
-//  APCAppCore
-//
-//  Created by Justin Warmkessel on 8/27/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCScheduler.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 
 #import "APCScheduler.h"
 #import "APCAppCore.h"

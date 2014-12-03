@@ -1,11 +1,10 @@
-//
-//  APCSpinnerView.m
-//  APCAppCore
-//
-//  Created by Karthik Keyan on 9/8/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCSpinnerViewController.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
 #import "APCSpinnerViewController.h"

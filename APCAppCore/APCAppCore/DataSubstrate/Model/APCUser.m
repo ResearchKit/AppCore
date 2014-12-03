@@ -1,11 +1,10 @@
-//
-//  APCUser.m
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 9/26/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCUser.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCUser.h"
 #import "APCAppCore.h"
 #import <HealthKit/HealthKit.h>

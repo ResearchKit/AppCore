@@ -1,11 +1,10 @@
-//
-//  APCGraph.h
-//  YMLCharts
-//
-//  Created by Ramsundar Shandilya on 10/6/14.
-//  Copyright (c) 2014 Ramsundar Shandilya. All rights reserved.
-//
-
+// 
+//  APCGraphConstants.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 typedef NS_ENUM(NSUInteger, APCGraphAnimationType) {
     kAPCGraphAnimationTypeNone,
     kAPCGraphAnimationTypeFade,

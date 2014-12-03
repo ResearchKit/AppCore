@@ -1,11 +1,10 @@
-//
-//  APCInEligibleViewController.h
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 10/16/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCInEligibleViewController.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import <UIKit/UIKit.h>
 
 @interface APCInEligibleViewController : UIViewController

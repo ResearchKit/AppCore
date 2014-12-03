@@ -1,11 +1,10 @@
-//
-//  APHSetupTaskViewController.m
-//  Parkinson
-//
-//  Created by Henry McGilton on 9/3/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCBaseTaskViewController.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCBaseTaskViewController.h"
 #import "APCAppDelegate.h"
 #import "APCAppCore.h"

@@ -1,11 +1,10 @@
-//
-//  APCUserInfoViewController.m
-//  APCAppCore
-//
-//  Created by Ramsundar Shandilya on 11/4/14.0
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCUserInfoViewController.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCUserInfoViewController.h"
 #import "NSDate+Helper.h"
 #import "UIColor+APCAppearance.h"

@@ -1,11 +1,10 @@
-//
-//  APCScheduleParser.m
-//  Schedule
-//
-//  Created by Edward Cessna on 10/2/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCScheduleParser.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCScheduleParser.h"
 #import "APCListSelector.h"
 #import "APCPointSelector.h"

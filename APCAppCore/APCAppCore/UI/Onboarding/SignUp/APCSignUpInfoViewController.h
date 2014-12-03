@@ -1,11 +1,10 @@
-//
-//  APCSignUpGeneralInfoViewController.h
-//  APCAppCore
-//
-//  Created by Ramsundar Shandilya on 10/14/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCSignUpInfoViewController.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import <UIKit/UIKit.h>
 #import "APCUserInfoViewController.h"
 #import "APCSignUpProgressing.h"
