@@ -1,0 +1,56 @@
+//
+//  APCDashboardMessageTableViewCell.m
+//  APCAppCore
+//
+//  Created by Ramsundar Shandilya on 11/13/14.
+//  Copyright (c) 2014 Y Media Labs. All rights reserved.
+//
+
+#import "APCDashboardMessageTableViewCell.h"
+#import "UIColor+APCAppearance.h"
+#import "UIFont+APCAppearance.h"
+
+@implementation APCDashboardMessageTableViewCell
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    // Initialization code
+    [self setupAppearance];
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+    
+    // Configure the view for the selected state
+}
+
+- (void)setupAppearance
+{
+    self.titleLabel.font = [UIFont appLightFontWithSize:19.0f];
+    self.titleLabel.textColor = [UIColor appSecondaryColor1];
+    
+    self.messageLabel.font = [UIFont appLightFontWithSize:16.0f];
+    self.messageLabel.textColor = [UIColor appSecondaryColor2];
+}
+
+- (void)setType:(APCDashboardMessageType)type
+{
+    switch (type) {
+        case kAPCDashboardMessageTypeAlert:
+        {
+            self.titleLabel.text = NSLocalizedString(@"Alert",nil);
+        }
+            break;
+        case kAPCDashboardMessageTypeInsight:
+        {
+            self.titleLabel.text = NSLocalizedString(@"Insight", nil);
+        }
+            break;
+        default:{
+            NSAssert(0, @"Invalid Cell Type");
+        }
+            break;
+    }
+}
+
+@end
