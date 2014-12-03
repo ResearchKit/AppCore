@@ -9,6 +9,8 @@
 #import "APCPermissionsCell.h"
 #import "UIColor+APCAppearance.h"
 
+NSString * const kSignUpPermissionsCellIdentifier = @"APCPermissionsCell";
+
 @interface APCPermissionsCell()
 
 @property (weak, nonatomic) IBOutlet APCPermissionButton *permissionsButton;

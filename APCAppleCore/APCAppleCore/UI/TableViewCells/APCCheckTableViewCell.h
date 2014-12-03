@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "APCConfirmationView.h"
 
-static NSString *const kAPCCheckTableViewCellIdentifier = @"APCCheckTableViewCell";
+FOUNDATION_EXPORT NSString *const kAPCCheckTableViewCellIdentifier;
 
 @interface APCCheckTableViewCell : UITableViewCell
 

@@ -10,6 +10,8 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 
+NSString * const kAPCShareTableViewCellIdentifier = @"ShareTableViewCellIdentifier";
+
 @implementation APCShareTableViewCell
 
 @synthesize imageView = _imageView;

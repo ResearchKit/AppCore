@@ -10,6 +10,8 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 
+NSString *const kAPCTintedTableViewCellIdentifier = @"APCTintedTableViewCell";
+
 @interface APCTintedTableViewCell ()
 
 @property (weak, nonatomic) IBOutlet UIView *tintView;

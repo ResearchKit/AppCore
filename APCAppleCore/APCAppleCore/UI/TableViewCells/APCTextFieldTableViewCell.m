@@ -11,6 +11,8 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 
+NSString * const kAPCTextFieldTableViewCellIdentifier = @"APCTextFieldTableViewCell";
+
 @interface APCTextFieldTableViewCell ()
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textLabelWidthConstraint;

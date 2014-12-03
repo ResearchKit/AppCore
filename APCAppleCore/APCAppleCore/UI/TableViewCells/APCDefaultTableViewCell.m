@@ -8,6 +8,8 @@
 
 #import "APCDefaultTableViewCell.h"
 
+NSString * const kAPCDefaultTableViewCellIdentifier = @"APCDefaultTableViewCell";
+
 @interface APCDefaultTableViewCell ()
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textLabelWidthConstraint;

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-static NSString * const kAPCPickerTableViewCellIdentifier    = @"APCPickerTableViewCell";
+FOUNDATION_EXPORT NSString * const kAPCPickerTableViewCellIdentifier;
 
 typedef NS_ENUM(NSUInteger, APCPickerCellType) {
     kAPCPickerCellTypeDate,

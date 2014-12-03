@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-static NSString * const kAPCShareTableViewCellIdentifier = @"ShareTableViewCellIdentifier";
+FOUNDATION_EXPORT NSString * const kAPCShareTableViewCellIdentifier;
 
 @interface APCShareTableViewCell : UITableViewCell
 

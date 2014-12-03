@@ -10,8 +10,9 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 
-@interface APCSegmentedTableViewCell ()<APCSegmentedButtonDelegate>
+NSString * const kAPCSegmentedTableViewCellIdentifier = @"APCSegmentedTableViewCell";
 
+@interface APCSegmentedTableViewCell ()<APCSegmentedButtonDelegate>
 
 @end
 

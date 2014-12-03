@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-static NSString * const kAPCDefaultTableViewCellIdentifier = @"APCDefaultTableViewCell";
+FOUNDATION_EXPORT NSString * const kAPCDefaultTableViewCellIdentifier;
 
 typedef NS_ENUM(NSUInteger, APCDefaultTableViewCellType) {
     kAPCDefaultTableViewCellTypeLeft,

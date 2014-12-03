@@ -8,6 +8,8 @@
 
 #import "APCSwitchTableViewCell.h"
 
+NSString *const kAPCSwitchCellIdentifier = @"APCSwitchTableViewCell";
+
 @implementation APCSwitchTableViewCell
 
 @synthesize textLabel = _textLabel;

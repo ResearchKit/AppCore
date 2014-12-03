@@ -10,6 +10,8 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 
+NSString *const kAPCCheckTableViewCellIdentifier = @"APCCheckTableViewCell";
+
 @implementation APCCheckTableViewCell
 
 @synthesize textLabel = _textLabel;

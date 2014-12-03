@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-static NSString *const kAPCTintedTableViewCellIdentifier = @"APCTintedTableViewCell";
+FOUNDATION_EXPORT NSString *const kAPCTintedTableViewCellIdentifier;
 
 @interface APCTintedTableViewCell : UITableViewCell
 
