@@ -22,6 +22,8 @@
 
 @property (nonatomic) BOOL shouldAnimate;
 
+@property (nonatomic) BOOL shouldAnimateLegend;
+
 @property (nonatomic) CGFloat animationDuration;
 
 @property (nonatomic, strong) UIFont *legendFont;

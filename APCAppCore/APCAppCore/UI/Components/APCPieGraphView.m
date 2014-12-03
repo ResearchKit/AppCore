@@ -63,6 +63,7 @@ static CGFloat const kAnimationDuration = 0.35f;
     _legendDotRadius = 9;
     
     _shouldAnimate = YES;
+    _shouldAnimateLegend = YES;
     
     _actualValues = [NSMutableArray new];
     _normalizedValues = [NSMutableArray new];
@@ -310,7 +311,7 @@ static CGFloat const kAnimationDuration = 0.35f;
         textLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         [self addSubview:textLabel];
 
-        if (self.shouldAnimate) {
+        if (self.shouldAnimateLegend) {
             
             CABasicAnimation *dotAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
             dotAnimation.fromValue = [NSValue valueWithCGPoint:self.circleLayer.position];
