@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-static NSString *const kAPCSwitchCellIdentifier = @"APCSwitchTableViewCell";
+FOUNDATION_EXPORT NSString *const kAPCSwitchCellIdentifier;
 
 @protocol APCSwitchTableViewCellDelegate;
 

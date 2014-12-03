@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "APCPermissionButton.h"
 
-static NSString * const kSignUpPermissionsCellIdentifier = @"APCPermissionsCell";
+FOUNDATION_EXPORT NSString * const kSignUpPermissionsCellIdentifier;
 
 @class APCPermissionsCell;
 

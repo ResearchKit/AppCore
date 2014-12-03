@@ -8,6 +8,8 @@
 
 #import "APCPickerTableViewCell.h"
 
+NSString * const kAPCPickerTableViewCellIdentifier = @"APCPickerTableViewCell";
+
 @implementation APCPickerTableViewCell
 
 - (void)awakeFromNib {

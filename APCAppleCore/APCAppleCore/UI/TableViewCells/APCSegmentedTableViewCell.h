@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "APCSegmentedButton.h"
 
-static NSString * const kAPCSegmentedTableViewCellIdentifier = @"APCSegmentedTableViewCell";
+FOUNDATION_EXPORT NSString * const kAPCSegmentedTableViewCellIdentifier;
 
 @protocol APCSegmentedTableViewCellDelegate;
 

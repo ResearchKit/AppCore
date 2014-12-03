@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-static NSString * const kAPCTextFieldTableViewCellIdentifier = @"APCTextFieldTableViewCell";
+FOUNDATION_EXPORT NSString * const kAPCTextFieldTableViewCellIdentifier;
 
 typedef NS_ENUM(NSUInteger, APCTextFieldCellType) {
     kAPCTextFieldCellTypeLeft,
