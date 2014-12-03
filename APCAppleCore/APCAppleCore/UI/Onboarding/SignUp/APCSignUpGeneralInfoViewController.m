@@ -32,8 +32,8 @@
     [self setupNavigationItems];
     self.items = [self prepareContent];
     
-    self.permissionButton.unconfirmedTitle = NSLocalizedString(@"I agree to the Terms and Conditions", @"");
-    self.permissionButton.confirmedTitle = NSLocalizedString(@"I agree to the Terms and Conditions", @"");
+    self.permissionButton.unconfirmedTitle = NSLocalizedString(@"Enter the study and contribute your data", @"");
+    self.permissionButton.confirmedTitle = NSLocalizedString(@"Enter the study and contribute your data", @"");
     self.permissionButton.attributed = NO;
     self.permissionButton.alignment = kAPCPermissionButtonAlignmentLeft;
     
