@@ -1,11 +1,10 @@
-//
-//  APCAxisView.m
-//  YMLCharts
-//
-//  Created by Ramsundar Shandilya on 10/9/14.
-//  Copyright (c) 2014 Ramsundar Shandilya. All rights reserved.
-//
-
+// 
+//  APCAxisView.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCAxisView.h"
 
 

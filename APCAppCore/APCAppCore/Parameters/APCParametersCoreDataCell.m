@@ -1,11 +1,10 @@
-//
-//  APCParametersCoreDataCell.m
-//  APCAppCore
-//
-//  Created by Justin Warmkessel on 9/23/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCParametersCoreDataCell.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCParametersCoreDataCell.h"
 
 static CGFloat cellHeight = 87;

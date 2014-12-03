@@ -1,11 +1,10 @@
-//
-//  SBBSchedule+APCAdditions.h
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 11/26/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  SBBSchedule+APCAdditions.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import <BridgeSDK/BridgeSDK.h>
 
 @interface SBBSchedule (APCAdditions)

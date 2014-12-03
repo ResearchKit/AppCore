@@ -1,11 +1,10 @@
-//
-//  APCScheduledTask+AddOn.h
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 8/29/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCScheduledTask+AddOn.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCScheduledTask.h"
 
 @class UILocalNotification;

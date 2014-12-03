@@ -1,11 +1,10 @@
-//
-//  APCDataSubstrate+HealthKit.m
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 9/26/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCDataSubstrate+HealthKit.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCDataSubstrate+HealthKit.h"
 #import <HealthKit/HealthKit.h>
 

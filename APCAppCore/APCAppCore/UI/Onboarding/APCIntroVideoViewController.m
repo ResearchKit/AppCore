@@ -1,11 +1,10 @@
-//
-//  OnBoardingVideoViewController.m
-//  OnBoarding
-//
-//  Created by Karthik Keyan on 9/2/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCIntroVideoViewController.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCIntroVideoViewController.h"
 #import "APCStudyOverviewViewController.h"
 #import "NSBundle+Helper.h"

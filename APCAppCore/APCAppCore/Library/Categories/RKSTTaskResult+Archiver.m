@@ -1,11 +1,10 @@
-//
-//  RKSTTaskResult+Archiver.m
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 11/19/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  RKSTTaskResult+Archiver.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "RKSTTaskResult+Archiver.h"
 #import "APCAppCore.h"
 

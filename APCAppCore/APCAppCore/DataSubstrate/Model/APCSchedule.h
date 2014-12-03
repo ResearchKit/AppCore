@@ -1,11 +1,10 @@
-//
-//  APCSchedule.h
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 11/24/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCSchedule.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 

@@ -1,11 +1,10 @@
-	//
-//  APCScheduleEnumerator.m
-//  Schedule
-//
-//  Created by Edward Cessna on 10/3/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCScheduleEnumerator.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCScheduleEnumerator.h"
 #import "APCTimeSelectorEnumerator.h"
 #import "APCDayOfMonthSelector.h"

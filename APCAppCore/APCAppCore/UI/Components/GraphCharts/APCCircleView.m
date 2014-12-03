@@ -1,11 +1,10 @@
-//
-//  APCCircleView.m
-//  YMLCharts
-//
-//  Created by Ramsundar Shandilya on 10/2/14.
-//  Copyright (c) 2014 Ramsundar Shandilya. All rights reserved.
-//
-
+// 
+//  APCCircleView.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCCircleView.h"
 
 @implementation APCCircleView

@@ -1,11 +1,10 @@
-//
-//  APCKeychainStore.h
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 10/2/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCKeychainStore.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import <Foundation/Foundation.h>
 
 @interface APCKeychainStore : NSObject

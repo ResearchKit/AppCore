@@ -1,11 +1,10 @@
-//
-//  APCPasscodeViewController.m
-//  APCAppCore
-//
-//  Created by Ramsundar Shandilya on 10/22/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCPasscodeViewController.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCPasscodeViewController.h"
 #import <LocalAuthentication/LocalAuthentication.h>
 #import "UIAlertController+Helper.h"

@@ -1,11 +1,10 @@
-//
-//  HKHealthStore+APCExtensions.h
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 9/26/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  HKHealthStore+APCExtensions.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 @import HealthKit;
 
 @interface HKHealthStore (APCExtensions)

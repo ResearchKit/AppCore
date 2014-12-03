@@ -1,11 +1,10 @@
-//
-//  APCUser+Bridge.m
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 10/3/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCUser+Bridge.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCUser+Bridge.h"
 #import "APCAppCore.h"
 

@@ -1,11 +1,10 @@
-//
-//  APCPieGraphView.m
-//  PieChart
-//
-//  Created by Ramsundar Shandilya on 11/24/14.
-//  Copyright (c) 2014 Ramsundar Shandilya. All rights reserved.
-//
-
+// 
+//  APCPieGraphView.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCPieGraphView.h"
 
 static CGFloat const kAnimationDuration = 0.35f;

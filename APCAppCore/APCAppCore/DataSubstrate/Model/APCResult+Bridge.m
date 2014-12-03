@@ -1,11 +1,10 @@
-//
-//  APCResult+Bridge.m
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 11/20/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCResult+Bridge.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCResult+Bridge.h"
 
 @implementation APCResult (Bridge)
