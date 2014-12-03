@@ -71,10 +71,16 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
                 [passcodeView becomeFirstResponder];
                 self.entryType = kAPCPasscodeEntryTypeNew;
             } else{
-                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Wrong Passcode", nil) message:@"Please enter again."];
-                [self presentViewController:alert animated:YES completion:nil];
-                [passcodeView reset];
-                [passcodeView becomeFirstResponder];
+                
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Wrong Passcode", nil) message:NSLocalizedString(@"Please enter again.", nil) preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *okayAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    [passcodeView reset];
+                    [passcodeView becomeFirstResponder];
+                }];
+                [alertController addAction:okayAction];
+                
+                [self presentViewController:alertController animated:YES completion:nil];
             }
         }
             break;
