@@ -100,7 +100,7 @@
             [self presentViewController:alert animated:YES completion:nil];
         }
     } else{
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Forgot Password", @"") message:error];
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Change Email", @"") message:error];
         [self presentViewController:alert animated:YES completion:nil];
     }
 }
