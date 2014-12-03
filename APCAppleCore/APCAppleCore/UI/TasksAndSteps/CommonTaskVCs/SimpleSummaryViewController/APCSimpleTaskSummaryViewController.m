@@ -43,7 +43,7 @@
     NSUInteger completedScheduledTasks = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.countOfCompletedScheduledTasksForToday;
     
     APCBaseTaskViewController * tvc = (APCBaseTaskViewController*)self.taskViewController;
-    completedScheduledTasks = [tvc.scheduledTask.completed boolValue] ? completedScheduledTasks : MIN(allScheduledTasks, completedScheduledTasks+1);
+    completedScheduledTasks = [tvc.scheduledTask.completed boolValue] ? completedScheduledTasks : completedScheduledTasks+1;
     CGFloat percent = (CGFloat) completedScheduledTasks / (CGFloat) allScheduledTasks;
     [self.circularProgress setProgress:percent];
     self.circularProgress.tintColor = [UIColor appTertiaryColor1];
