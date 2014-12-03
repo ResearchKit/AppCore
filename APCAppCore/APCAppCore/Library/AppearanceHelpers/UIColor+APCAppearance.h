@@ -28,4 +28,6 @@
 + (UIColor *) appTertiaryYellowColor;
 + (UIColor *) appTertiaryGrayColor;
 
++ (UIColor *)tertiaryColorForString:(NSString *)colorName;
+
 @end

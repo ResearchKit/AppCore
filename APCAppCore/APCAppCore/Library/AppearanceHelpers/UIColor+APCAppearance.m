@@ -81,5 +81,26 @@
     return [APCAppearanceInfo valueForAppearanceKey:kTertiaryGrayColorKey];
 }
 
++ (UIColor *)tertiaryColorForString:(NSString *)colorName
+{
+    UIColor *color;
+    
+    if ([colorName isEqualToString:@"blue"]) {
+        color = [UIColor appTertiaryBlueColor];
+    } else if ([colorName isEqualToString:@"red"]){
+        color = [UIColor appTertiaryRedColor];
+    } else if ([colorName isEqualToString:@"green"]){
+        color = [UIColor appTertiaryGreenColor];
+    } else if ([colorName isEqualToString:@"yellow"]){
+        color = [UIColor appTertiaryYellowColor];
+    } else if ([colorName isEqualToString:@"purple"]){
+        color = [UIColor appTertiaryPurpleColor];
+    } else {
+        color = [UIColor appTertiaryGrayColor];
+    }
+    
+    return color;
+}
+
 
 @end

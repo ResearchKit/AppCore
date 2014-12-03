@@ -63,8 +63,6 @@
 		F5F12A171A2F78490015982C /* APCAppearanceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128C01A2F78490015982C /* APCAppearanceInfo.m */; };
 		F5F12A181A2F78490015982C /* UIColor+APCAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128C11A2F78490015982C /* UIColor+APCAppearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A191A2F78490015982C /* UIColor+APCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128C21A2F78490015982C /* UIColor+APCAppearance.m */; };
-		F5F12A1A1A2F78490015982C /* UIColor+TertiaryColors.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128C31A2F78490015982C /* UIColor+TertiaryColors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F5F12A1B1A2F78490015982C /* UIColor+TertiaryColors.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128C41A2F78490015982C /* UIColor+TertiaryColors.m */; };
 		F5F12A1C1A2F78490015982C /* UIFont+APCAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128C51A2F78490015982C /* UIFont+APCAppearance.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A1D1A2F78490015982C /* UIFont+APCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128C61A2F78490015982C /* UIFont+APCAppearance.m */; };
 		F5F12A1E1A2F78490015982C /* APCAssertionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128C81A2F78490015982C /* APCAssertionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -121,20 +119,20 @@
 		F5F12A521A2F78490015982C /* APCTimeSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129001A2F78490015982C /* APCTimeSelector.m */; };
 		F5F12A531A2F78490015982C /* APCTimeSelectorEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129011A2F78490015982C /* APCTimeSelectorEnumerator.h */; };
 		F5F12A541A2F78490015982C /* APCTimeSelectorEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129021A2F78490015982C /* APCTimeSelectorEnumerator.m */; };
-		F5F12A551A2F78490015982C /* APCDebugWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129041A2F78490015982C /* APCDebugWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5F12A551A2F78490015982C /* APCDebugWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129041A2F78490015982C /* APCDebugWindow.h */; };
 		F5F12A561A2F78490015982C /* APCDebugWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129051A2F78490015982C /* APCDebugWindow.m */; };
 		F5F12A571A2F78490015982C /* APCParameters+Settings.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129061A2F78490015982C /* APCParameters+Settings.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A581A2F78490015982C /* APCParameters+Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129071A2F78490015982C /* APCParameters+Settings.m */; };
 		F5F12A591A2F78490015982C /* APCParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129081A2F78490015982C /* APCParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A5A1A2F78490015982C /* APCParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129091A2F78490015982C /* APCParameters.m */; };
 		F5F12A5B1A2F78490015982C /* APCParameters.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5F1290A1A2F78490015982C /* APCParameters.storyboard */; };
-		F5F12A5C1A2F78490015982C /* APCParametersCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F1290B1A2F78490015982C /* APCParametersCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5F12A5C1A2F78490015982C /* APCParametersCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F1290B1A2F78490015982C /* APCParametersCell.h */; };
 		F5F12A5D1A2F78490015982C /* APCParametersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F1290C1A2F78490015982C /* APCParametersCell.m */; };
-		F5F12A5E1A2F78490015982C /* APCParametersCoreDataCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F1290D1A2F78490015982C /* APCParametersCoreDataCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5F12A5E1A2F78490015982C /* APCParametersCoreDataCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F1290D1A2F78490015982C /* APCParametersCoreDataCell.h */; };
 		F5F12A5F1A2F78490015982C /* APCParametersCoreDataCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F1290E1A2F78490015982C /* APCParametersCoreDataCell.m */; };
-		F5F12A601A2F78490015982C /* APCParametersDashboardTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F1290F1A2F78490015982C /* APCParametersDashboardTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5F12A601A2F78490015982C /* APCParametersDashboardTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F1290F1A2F78490015982C /* APCParametersDashboardTableViewController.h */; };
 		F5F12A611A2F78490015982C /* APCParametersDashboardTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129101A2F78490015982C /* APCParametersDashboardTableViewController.m */; };
-		F5F12A621A2F78490015982C /* APCParametersUserDefaultCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129111A2F78490015982C /* APCParametersUserDefaultCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5F12A621A2F78490015982C /* APCParametersUserDefaultCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129111A2F78490015982C /* APCParametersUserDefaultCell.h */; };
 		F5F12A631A2F78490015982C /* APCParametersUserDefaultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129121A2F78490015982C /* APCParametersUserDefaultCell.m */; };
 		F5F12A641A2F78490015982C /* APCPassiveLocationTracking.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129141A2F78490015982C /* APCPassiveLocationTracking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A651A2F78490015982C /* APCPassiveLocationTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129151A2F78490015982C /* APCPassiveLocationTracking.m */; };
@@ -378,8 +376,6 @@
 		F5F128C01A2F78490015982C /* APCAppearanceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCAppearanceInfo.m; sourceTree = "<group>"; };
 		F5F128C11A2F78490015982C /* UIColor+APCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+APCAppearance.h"; sourceTree = "<group>"; };
 		F5F128C21A2F78490015982C /* UIColor+APCAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+APCAppearance.m"; sourceTree = "<group>"; };
-		F5F128C31A2F78490015982C /* UIColor+TertiaryColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+TertiaryColors.h"; sourceTree = "<group>"; };
-		F5F128C41A2F78490015982C /* UIColor+TertiaryColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+TertiaryColors.m"; sourceTree = "<group>"; };
 		F5F128C51A2F78490015982C /* UIFont+APCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+APCAppearance.h"; sourceTree = "<group>"; };
 		F5F128C61A2F78490015982C /* UIFont+APCAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+APCAppearance.m"; sourceTree = "<group>"; };
 		F5F128C81A2F78490015982C /* APCAssertionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAssertionHandler.h; sourceTree = "<group>"; };
@@ -799,8 +795,6 @@
 				F5F128C01A2F78490015982C /* APCAppearanceInfo.m */,
 				F5F128C11A2F78490015982C /* UIColor+APCAppearance.h */,
 				F5F128C21A2F78490015982C /* UIColor+APCAppearance.m */,
-				F5F128C31A2F78490015982C /* UIColor+TertiaryColors.h */,
-				F5F128C41A2F78490015982C /* UIColor+TertiaryColors.m */,
 				F5F128C51A2F78490015982C /* UIFont+APCAppearance.h */,
 				F5F128C61A2F78490015982C /* UIFont+APCAppearance.m */,
 			);
@@ -1416,7 +1410,6 @@
 				F5F12A751A2F78490015982C /* APCPieGraphView.h in Headers */,
 				F5F12A0E1A2F78490015982C /* APCUser+UserData.h in Headers */,
 				F5F129FC1A2F78490015982C /* APCSchedule+Bridge.h in Headers */,
-				F5F12A1A1A2F78490015982C /* UIColor+TertiaryColors.h in Headers */,
 				F5F12AA41A2F78490015982C /* APCSignInViewController.h in Headers */,
 				F5F12AA01A2F78490015982C /* APCLocationInfoViewController.h in Headers */,
 				F5F12A601A2F78490015982C /* APCParametersDashboardTableViewController.h in Headers */,
@@ -1648,7 +1641,6 @@
 				F5F12A781A2F78490015982C /* APCStepProgressBar.m in Sources */,
 				F5F12A501A2F78490015982C /* APCScheduleParser.m in Sources */,
 				F5F12AF71A2F78490015982C /* APCStepViewController.m in Sources */,
-				F5F12A1B1A2F78490015982C /* UIColor+TertiaryColors.m in Sources */,
 				F5F12AFE1A2F78490015982C /* APCIntroductionViewController.m in Sources */,
 				F5F12ADD1A2F78490015982C /* APCSegmentedTableViewCell.m in Sources */,
 				F5F12A311A2F78490015982C /* RKSTTaskResult+Archiver.m in Sources */,

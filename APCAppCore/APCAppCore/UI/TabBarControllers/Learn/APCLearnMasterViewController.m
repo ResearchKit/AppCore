@@ -8,8 +8,6 @@
 
 #import "APCLearnMasterViewController.h"
 #import "UIColor+APCAppearance.h"
-#import "UIColor+TertiaryColors.h"
-#import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "NSBundle+Helper.h"
 #import "APCStudyDetailsViewController.h"

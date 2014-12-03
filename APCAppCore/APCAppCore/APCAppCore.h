@@ -25,6 +25,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDataSubstrate.h>
 #import <APCAppCore/APCDataSubstrate+CoreData.h>
 #import <APCAppCore/APCDataSubstrate+ResearchKit.h>
+#import <APCAppCore/APCDataSubstrate+HealthKit.h>
 #import <APCAppCore/APCModel.h>
 #import <APCAppCore/APCScheduler.h>
 #import <APCAppCore/APCScheduleExpression.h>
@@ -59,6 +60,8 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCEmailVerifyViewController.h>
 #import <APCAppCore/APCChangeEmailViewController.h>
 #import <APCAppCore/APCPasscodeViewController.h>
+#import <APCAppCore/APCHomeLocationViewController.h>
+#import <APCAppCore/APCLocationInfoViewController.h>
 
 /*--------------------------
  Dashboard ViewControllers
@@ -84,6 +87,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCStepViewController.h>
 #import <APCAppCore/APCActivitiesViewController.h>
 #import <APCAppCore/APCSimpleTaskSummaryViewController.h>
+#import <APCAppCore/APCGenericSurveyTaskViewController.h>
 
 /* -------------------------
  Profile ViewControllers
@@ -125,6 +129,8 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDashboardProgressTableViewCell.h>
 #import <APCAppCore/APCDashboardPieGraphTableViewCell.h>
 #import <APCAppCore/APCShareTableViewCell.h>
+#import <APCAppCore/APCAddressTableViewCell.h>
+
 
 /* -------------------------
  Objects
@@ -147,6 +153,9 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/HKHealthStore+APCExtensions.h>
 #import <APCAppCore/UIImage+APCHelper.h>
 #import <APCAppCore/APCParameters+Settings.h>
+#import <APCAppCore/RKSTTaskResult+Archiver.h>
+#import <APCAppCore/SBBSchedule+APCAdditions.h>
+#import <APCAppCore/UIView+Helper.h>
 
 /* -------------------------
  Appearance
@@ -154,3 +163,4 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCAppearanceInfo.h>
 #import <APCAppCore/UIFont+APCAppearance.h>
 #import <APCAppCore/UIColor+APCAppearance.h>
+#import <APCAppCore/APCStepProgressBar+Appearance.h>

@@ -10,7 +10,6 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "UIImage+APCHelper.h"
-#import "UIColor+TertiaryColors.h"
 #import "APCStudyDetailsViewController.h"
 #import "APCShareViewController.h"
 #import "APCAppDelegate.h"
