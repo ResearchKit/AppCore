@@ -240,6 +240,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 {
     self.taskSelectionDisabled = YES;
     APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
+    [appDelegate.scheduler updateScheduledTasksIfNotUpdating:YES];
     __weak APCActivitiesViewController * weakSelf = self;
     [appDelegate.dataMonitor refreshFromBridgeOnCompletion:^(NSError *error) {
         [appDelegate.scheduler updateScheduledTasksIfNotUpdating:YES];

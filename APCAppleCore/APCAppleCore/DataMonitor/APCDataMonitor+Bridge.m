@@ -11,6 +11,7 @@
 #import "APCAppleCore.h"
 
 @implementation APCDataMonitor (Bridge)
+
 - (void) refreshFromBridgeOnCompletion: (void (^)(NSError * error)) completionBlock
 {
     if (self.dataSubstrate.currentUser.isConsented) {
@@ -30,7 +31,7 @@
         NSManagedObjectContext * context = self.dataSubstrate.persistentContext;
         [context performBlock:^{
             NSFetchRequest * request = [APCResult request];
-            request.predicate = [NSPredicate predicateWithFormat:@"uploaded == %@", @(NO)];
+            request.predicate = [NSPredicate predicateWithFormat:@"uploaded == nil || uploaded == %@", @(NO)];
             NSError * error;
             NSArray * unUploadedResults = [context executeFetchRequest:request error:&error];
             for (APCResult * result in unUploadedResults) {

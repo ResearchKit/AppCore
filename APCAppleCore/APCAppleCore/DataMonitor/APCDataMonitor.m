@@ -34,6 +34,9 @@
 {
     [self refreshFromBridgeOnCompletion:^(NSError *error) {
         [error handle];
+        [self batchUploadDataToBridgeOnCompletion:^(NSError *error) {
+            [error handle];
+        }];
     }];
 }
 
@@ -48,6 +51,9 @@
     [self.dataSubstrate joinStudy];
     [self refreshFromBridgeOnCompletion:^(NSError *error) {
         [error handle];
+        [self batchUploadDataToBridgeOnCompletion:^(NSError *error) {
+            [error handle];
+        }];
     }];
 }
 
