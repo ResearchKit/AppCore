@@ -8,12 +8,9 @@
 
 #import "APCAppleCore.h"
 #import "APCSchedule+Bridge.h"
+#import "APCDataMonitor+Bridge.h"
 
 @interface APCDataMonitor ()
-
-//Declaring as weak so as not to hold on to below objects
-@property (weak, nonatomic) APCDataSubstrate * dataSubstrate;
-@property (weak, nonatomic) APCScheduler * scheduler;
 
 @end
 
@@ -35,17 +32,12 @@
 
 - (void)appBecameActive
 {
-    [self refreshFromServer];
-}
-
-- (void) refreshFromServer
-{
-    if (self.dataSubstrate.currentUser.isConsented) {
-        [APCSchedule updateSchedulesOnCompletion:^(NSError *error) {
-            [APCTask refreshSurveys];
-            [self.scheduler updateScheduledTasksIfNotUpdating:NO];
+    [self refreshFromBridgeOnCompletion:^(NSError *error) {
+        [error handle];
+        [self batchUploadDataToBridgeOnCompletion:^(NSError *error) {
+            [error handle];
         }];
-    }
+    }];
 }
 
 - (void)backgroundFetch:(void (^)(UIBackgroundFetchResult))completionHandler
@@ -53,12 +45,16 @@
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
-
 - (void) userConsented
 {
     [self.dataSubstrate.delegate setUpCollectors];
     [self.dataSubstrate joinStudy];
-    [self refreshFromServer];
+    [self refreshFromBridgeOnCompletion:^(NSError *error) {
+        [error handle];
+        [self batchUploadDataToBridgeOnCompletion:^(NSError *error) {
+            [error handle];
+        }];
+    }];
 }
 
 - (void)dealloc

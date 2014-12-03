@@ -21,6 +21,7 @@ FOUNDATION_EXPORT const unsigned char APCAppleCoreVersionString[];
 #import <APCAppleCore/APCConstants.h>
 #import <APCAppleCore/APCAppDelegate.h>
 #import <APCAppleCore/APCDataMonitor.h>
+#import <APCAppleCore/APCDataMonitor+Bridge.h>
 #import <APCAppleCore/APCDataSubstrate.h>
 #import <APCAppleCore/APCDataSubstrate+CoreData.h>
 #import <APCAppleCore/APCDataSubstrate+ResearchKit.h>

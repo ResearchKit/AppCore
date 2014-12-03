@@ -19,4 +19,12 @@
 - (void) appBecameActive;
 - (void) backgroundFetch:(void (^)(UIBackgroundFetchResult))completionHandler;
 
+/*********************************************************************************/
+#pragma mark - For Categories Only
+/*********************************************************************************/
+
+//Declaring as weak so as not to hold on to below objects
+@property (weak, nonatomic) APCDataSubstrate * dataSubstrate;
+@property (weak, nonatomic) APCScheduler * scheduler;
+
 @end

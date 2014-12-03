@@ -29,6 +29,10 @@
     else
     {
         [SBBComponent(SBBUploadManager) uploadFileToBridge:self.archiveURL contentType:@"application/zip" completion:^(NSError *error) {
+            self.uploaded = @(YES);
+            NSError * saveError;
+            [self saveToPersistentStore:&saveError];
+            [saveError handle];
             if (completionBlock) {
                 completionBlock(error);
             }
