@@ -66,43 +66,30 @@
     {
         NSParameterAssert(self.password);
         [SBBComponent(SBBAuthManager) signInWithUsername:self.email password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *signInError) {
-            if (!signInError || signInError.code == kSBBServerPreconditionNotMet) {
-                [SBBComponent(SBBProfileManager) getUserProfileWithCompletion:^(id userProfile, NSError *error) {
-                    if (userProfile) {
-                        SBBUserProfile *profile = userProfile;
-                        self.email = profile.email;
-                        self.firstName = profile.firstName;
-                        self.lastName = profile.lastName;
+            if (!signInError) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.userConsented = YES;
+                    self.consented = YES;
+                    if (completionBlock) {
+                        completionBlock(signInError);
                     }
-                    if (signInError.code == kSBBServerPreconditionNotMet) {
-                        [self sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
-                            if (error) {
-                                dispatch_async(dispatch_get_main_queue(), ^{
-                                    if (completionBlock) {
-                                        completionBlock(error);
-                                    }
-                                });
-                            }
-                            else
-                            {
-                                [self signInOnCompletion:completionBlock];
-                            }
-                        }];
-                    }
-                    else
-                    {
+                });
+            } else if (signInError.code == kSBBServerPreconditionNotMet){
+                
+                [self sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
+                    if (error) {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            if (!error) {
-                                self.userConsented = YES;
-                                self.consented = YES;
-                            }
                             if (completionBlock) {
                                 completionBlock(error);
                             }
                         });
                     }
-                    
+                    else
+                    {
+                        [self signInOnCompletion:completionBlock];
+                    }
                 }];
+                
             }
             else if (signInError)
             {
