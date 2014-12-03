@@ -8,7 +8,7 @@
 
 #import "APCParametersDashboardTableViewController.h"
 #import "APCDebugWindow.h"
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 
 #import <QuartzCore/QuartzCore.h>
 

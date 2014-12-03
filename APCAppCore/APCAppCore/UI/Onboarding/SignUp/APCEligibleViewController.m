@@ -1,13 +1,13 @@
 //
 //  APCEligibleViewController.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Dhanush Balachandran on 10/15/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCEligibleViewController.h"
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 
 @interface APCEligibleViewController () <RKSTTaskViewControllerDelegate>
 

@@ -1,13 +1,13 @@
 //
 //  APCDebugWindow.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Justin Warmkessel on 9/22/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCDebugWindow.h"
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 #import "APCParametersDashboardTableViewController.h"
 
 

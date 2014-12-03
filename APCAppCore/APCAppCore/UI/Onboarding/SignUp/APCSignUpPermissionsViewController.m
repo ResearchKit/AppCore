@@ -1,12 +1,12 @@
 //
 //  APCSignUpPermissionsViewController.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Ramsundar Shandilya on 9/19/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 #import "APCSignUpPermissionsViewController.h"
 #import "APCTableViewItem.h"
 #import "APCStepProgressBar.h"

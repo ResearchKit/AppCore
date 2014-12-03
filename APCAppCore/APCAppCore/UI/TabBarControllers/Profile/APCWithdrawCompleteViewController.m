@@ -1,13 +1,13 @@
 //
 //  APCWithdrawCompleteViewController.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Ramsundar Shandilya on 11/10/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCWithdrawCompleteViewController.h"
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 

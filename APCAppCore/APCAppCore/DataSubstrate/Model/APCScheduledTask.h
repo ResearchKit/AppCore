@@ -1,6 +1,6 @@
 //
 //  APCScheduledTask.h
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Dhanush Balachandran on 12/1/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.

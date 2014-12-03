@@ -1,6 +1,6 @@
 //
 //  APCStoredUserData.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Farhan Ahmed on 11/28/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.

@@ -1,13 +1,13 @@
 //
 //  APCUser+Bridge.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Dhanush Balachandran on 10/3/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCUser+Bridge.h"
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 
 @implementation APCUser (Bridge)
 

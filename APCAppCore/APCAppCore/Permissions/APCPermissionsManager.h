@@ -1,13 +1,13 @@
 //
 //  APCPermissionsManager.h
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Ramsundar Shandilya on 9/22/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 #import "APCConstants.h"
 
 typedef void(^APCPermissionsBlock)(BOOL granted, NSError *error);

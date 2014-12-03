@@ -1,13 +1,13 @@
 //
 //  APCDataSubstrate+CoreData.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Dhanush Balachandran on 8/26/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCDataSubstrate+CoreData.h"
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 #import <CoreData/CoreData.h>
 
 @implementation APCDataSubstrate (CoreData)

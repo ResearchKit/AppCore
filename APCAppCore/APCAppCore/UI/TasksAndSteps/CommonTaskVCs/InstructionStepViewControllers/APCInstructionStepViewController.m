@@ -1,6 +1,6 @@
 //
 //  APCInstructionStepViewController.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Dhanush Balachandran on 11/10/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
@@ -8,7 +8,7 @@
 
 #import "APCInstructionStepViewController.h"
 #import "APCIntroductionViewController.h"
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 
 @interface APCInstructionStepViewController ()
 

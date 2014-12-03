@@ -1,12 +1,12 @@
 //
 //  APCSignInViewController.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Karthik Keyan on 9/4/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 #import "APCSignInViewController.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"

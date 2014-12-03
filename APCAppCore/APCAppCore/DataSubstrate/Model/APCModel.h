@@ -1,13 +1,13 @@
 //
 //  APCModel.h
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Dhanush Balachandran on 8/28/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#ifndef APCAppleCore_APCModel_h
-#define APCAppleCore_APCModel_h
+#ifndef APCAppCore_APCModel_h
+#define APCAppCore_APCModel_h
 
 #import "NSManagedObject+APCHelper.h"
 

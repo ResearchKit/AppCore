@@ -1,6 +1,6 @@
 //
 //  APCSignUpGeneralInfoViewController.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Ramsundar Shandilya on 11/26/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.

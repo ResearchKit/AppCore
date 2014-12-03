@@ -1,13 +1,13 @@
 //
 //  APCActivitiesViewController.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Dhanush Balachandran on 9/24/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCActivitiesViewController.h"
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 
 static NSString *kTableCellReuseIdentifier = @"ActivitiesTableViewCell";
 static NSString *kTableCellWithTimeReuseIdentifier = @"ActivitiesTableViewCellWithTime";

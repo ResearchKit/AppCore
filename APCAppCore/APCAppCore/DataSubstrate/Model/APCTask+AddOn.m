@@ -1,13 +1,13 @@
 //
 //  APCTask+AddOn.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Dhanush Balachandran on 8/28/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCTask+AddOn.h"
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 #import <ResearchKit/ResearchKit.h>
 
 static NSString * const kTaskIDKey = @"taskID";

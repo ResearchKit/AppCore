@@ -1,13 +1,13 @@
 //
 //  APCBaseWithProgressTaskViewController.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Dhanush Balachandran on 11/10/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCBaseWithProgressTaskViewController.h"
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 
 static  CGFloat  kAPCStepProgressBarHeight = 8.0;
 static NSString *const kFinishedProperty = @"finished";

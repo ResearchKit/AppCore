@@ -1,13 +1,13 @@
 //
 //  APCDBStatus+AddOn.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Dhanush Balachandran on 9/9/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCDBStatus+AddOn.h"
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 
 @implementation APCDBStatus (AddOn)
 

@@ -1,13 +1,13 @@
 //
 //  RKSTTaskResult+Archiver.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Dhanush Balachandran on 11/19/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "RKSTTaskResult+Archiver.h"
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 
 NSString *const kCertFileName = @"rsacert";
 

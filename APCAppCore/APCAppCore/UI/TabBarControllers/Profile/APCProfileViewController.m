@@ -1,13 +1,13 @@
 //
 //  APCProfileViewController.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Ramsundar Shandilya on 10/10/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCProfileViewController.h"
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 #import "APCTableViewItem.h"
 #import "APCAppDelegate.h"
 #import "APCUserInfoConstants.h"

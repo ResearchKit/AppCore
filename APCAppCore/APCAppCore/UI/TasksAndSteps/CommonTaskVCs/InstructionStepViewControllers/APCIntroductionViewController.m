@@ -1,13 +1,13 @@
 //
 //  APCIntroductionViewController.m
-//  APCAppleCore
+//  APCAppCore
 //
 //  Created by Henry McGilton on 10/3/14.
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "APCIntroductionViewController.h"
-#import "APCAppleCore.h"
+#import "APCAppCore.h"
 
 @interface APCIntroductionViewController  ( ) <UIScrollViewDelegate>
 
