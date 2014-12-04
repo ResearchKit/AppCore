@@ -507,6 +507,28 @@
 //		 comparingEnumerator: enumerator];
 }
 
+- (void) testQuestionMark_partOfJiraApple424
+{
+	NSString* cronExpression = @"0 5 ? ? *";			// Every day at 5am.  "?" == "*".
+	NSString *startDateString = @"2014-11-26 00:00";	//
+	NSString *endDateString = @"2014-11-27 00:00";		//
+
+	NSDate *startDate				= [self.dateFormatter dateFromString: startDateString];
+	NSDate *endDate					= [self.dateFormatter dateFromString: endDateString];
+	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
+	NSEnumerator* enumerator		= [schedule enumeratorBeginningAtTime: startDate  endingAtTime: endDate];
+
+	[self enumerateOverYears: nil
+				  daysOfWeek: nil
+					  months: nil
+				 daysOfMonth: nil
+					   hours: @[@5]
+					 minutes: @[@0]
+			  startingOnDate: startDate
+				endingOnDate: endDate
+		 comparingEnumerator: enumerator];
+}
+
 
 
 // =========================================================
