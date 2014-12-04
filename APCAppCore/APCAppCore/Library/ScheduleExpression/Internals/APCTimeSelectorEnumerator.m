@@ -31,7 +31,6 @@
 - (instancetype)initWithSelector:(APCTimeSelector*)selector beginningAtMoment:(NSNumber*)beginning
 {
     self = [self initWithSelector:selector];
-    
     if (self)
     {
         _selector        = selector;

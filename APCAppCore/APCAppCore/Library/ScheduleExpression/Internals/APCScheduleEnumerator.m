@@ -31,8 +31,8 @@ static NSInteger    kYearIndex   = 4;
  These two variables must be the same length and contain
  corresponding items in the same sequence.
  */
-@property (nonatomic, strong) NSArray*          enumerators;    //  array of APCTimeSelectorEnumerator
-@property (nonatomic, strong) NSMutableArray*   componenets;    //  arrray of NSNumbers
+@property (nonatomic, strong) NSMutableArray*   enumerators;    //  array of APCTimeSelectorEnumerator
+@property (nonatomic, strong) NSMutableArray*   calendarComponents;    //  arrray of NSNumbers
 
 /**
  These variables let us figure out if we just rolled over
@@ -71,129 +71,146 @@ static NSInteger    kYearIndex   = 4;
                         monthSelector:(APCTimeSelector*)monthSelector
                          yearSelector:(APCTimeSelector*)yearSelector
 {
-    self = [super init];
-    if (self)
-    {
-        NSDateComponents*   beginComponents = nil;
-        NSCalendarUnit      calendarUnits   = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
-        
-        _beginningMoment = begin;
-        _endingMoment    = end;
-        
-        _calendar       = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        beginComponents = [_calendar components:calendarUnits fromDate:begin];
-        _year           = beginComponents.year;
-        _componenets    = [NSMutableArray arrayWithArray:@[@(beginComponents.minute),
-                                                           @(beginComponents.hour),
-                                                           @(beginComponents.day),
-                                                           @(beginComponents.month),
-                                                           @(beginComponents.year)]];
-        
-        APCTimeSelectorEnumerator* minuteEnumerator = [minuteSelector enumeratorBeginningAt:@(beginComponents.minute)];
-        APCTimeSelectorEnumerator* hourEnumerator   = [hourSelector   enumeratorBeginningAt:@(beginComponents.hour)];
+	self = [super init];
+
+	if (self)
+	{
+		NSDateComponents*   beginComponents = nil;
+		NSCalendarUnit      calendarUnits   = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
+		
+		_beginningMoment	= begin;
+		_endingMoment		= end;
+		_calendar			= [[NSCalendar alloc] initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
+
+		beginComponents		= [_calendar components: calendarUnits
+										   fromDate: begin];
+
+		_year				= beginComponents.year;
+
+		APCTimeSelectorEnumerator* minuteEnumerator = [minuteSelector enumeratorBeginningAt:@(beginComponents.minute)];
+		APCTimeSelectorEnumerator* hourEnumerator   = [hourSelector   enumeratorBeginningAt:@(beginComponents.hour)];
 
 
 		// Track these three enumerators individually, so that
 		// when we roll over the month or year, we can recompute
 		// the days of the month specified by our weekday selector.
-        self.dayEnumerator   = [dayOfMonthSelector enumeratorBeginningAt:@(beginComponents.day)];
-        self.monthEnumerator = [monthSelector      enumeratorBeginningAt:@(beginComponents.month)];
-        self.yearEnumerator  = [yearSelector       enumeratorBeginningAt:@(beginComponents.year)];
+		self.dayEnumerator   = [dayOfMonthSelector enumeratorBeginningAt:@(beginComponents.day)];
+		self.monthEnumerator = [monthSelector      enumeratorBeginningAt:@(beginComponents.month)];
+		self.yearEnumerator  = [yearSelector       enumeratorBeginningAt:@(beginComponents.year)];
 
+		/*
+		 Creating these arrays in the SAME ORDER:  kMinuteIndex, kHourIndex, kDayIndex, kMonthIndex, kYearIndex.
+		 */
+		_calendarComponents	= [ @[ @(beginComponents.minute),
+								   @(beginComponents.hour),
+								   @(beginComponents.day),
+								   @(beginComponents.month),
+								   @(beginComponents.year)] mutableCopy];
+
+		_enumerators = [ @[ minuteEnumerator,
+						    hourEnumerator,
+						    self.dayEnumerator,
+						    self.monthEnumerator,
+						    self.yearEnumerator] mutableCopy];
 		
-        _enumerators = @[minuteEnumerator, hourEnumerator, self.dayEnumerator, self.monthEnumerator, self.yearEnumerator];
-        
 
-        //  Prime the enumerators to their first valid value. If a given enumerator's first valid value is
-        //  greater than the corresponding given `begin` component then all lower granularity components are
-        //  reset to the selector's first valid value.
-        NSInteger   ndx = _enumerators.count - 1;
-        do
-        {
-            NSNumber*   value = [_enumerators[ndx] nextObject];
-            
-            if (value == nil)
-            {
-                //  No valid values for the enumeration sequence
-                self = nil;
-                break;
-            }
-            else
-            {
-                NSComparisonResult  comparison = [value compare:_componenets[ndx]];
-                if (comparison == NSOrderedSame)
-                {
-                    _componenets[ndx] = value;
-                    --ndx;
-                }
-                else if (comparison == NSOrderedDescending)
-                {
-                    _componenets[ndx] = value;
-                    for (--ndx; ndx >= 0; --ndx)
-                    {
-                        _componenets[ndx] = [_enumerators[ndx] reset];
-                    }
-                }
-                else
-                {
-                    //  Exception: shouldn't happen.
-                    self = nil;
-                    break;
-                }
-            }
-        } while (ndx >= 0);
-        
+		//  Prime the enumerators to their first valid value. If a given enumerator's first valid value is
+		//  greater than the corresponding given `begin` component then all lower granularity components are
+		//  reset to the selector's first valid value.
+		//
+		//	Start with the year enumerator; end with the minute enumerator.
+		NSInteger index = kYearIndex;
+		do
+		{
+			APCTimeSelectorEnumerator* enumerator = _enumerators [index];
+			NSNumber* firstEnumeratedValue = enumerator.nextObject;
+
+			if (firstEnumeratedValue == nil)
+			{
+				// No valid values for the enumeration sequence.
+				// This is an exception -- it should never happen.
+				self = nil;
+				break;
+			}
+			
+			else
+			{
+				NSNumber* thisCalendarComponent = _calendarComponents [index];
+				NSComparisonResult comparison = [firstEnumeratedValue compare: thisCalendarComponent];
+				BOOL enumeratorValueIsCalendarStartValue = (comparison == NSOrderedSame);
+				BOOL enumeratorValueIsLaterThanCalendarValue = (comparison == NSOrderedDescending);
+
+				if (enumeratorValueIsCalendarStartValue)
+				{
+					--index;
+				}
+
+				else if (enumeratorValueIsLaterThanCalendarValue)
+				{
+					_calendarComponents [index] = firstEnumeratedValue;
+
+					for (--index; index >= kMinuteIndex; --index)
+					{
+						enumerator = _enumerators [index];
+						firstEnumeratedValue = [enumerator reset];
+						_calendarComponents [index] = firstEnumeratedValue;
+					}
+				}
+
+				else
+				{
+					// Enumerator value is earlier than calendar value.
+					// This is an exception -- it should never happen.
+					self = nil;
+					break;
+				}
+			}
+		} while (index >= kMinuteIndex);
+		
 
 		// Now compute the days of the month for the actual, specified
 		// month and year.  We do the same thing each time through
 		// -nextObject, below.
-		[self recomputeDaysAfterRollingOverMonthOrYear];
+		[self recomputeDaysAfterRollingOverMonthOrYearStartingOnDay: @(beginComponents.day)];
 
 
-        _nextMoment = [self componentsToDate];
-    }
-    
-    return self;
+		self.nextMoment = [self componentsToDate];
+	}
+	
+	return self;
 }
 
 
 /**
- Ron:  this method seems to contain the core of how iteration
- happens.  E.g., this is where we say:
- -	roll over to the next minute
+ This method is the core of how iteration happens.  Each
+ time we hit this method, increment the "minutes" field to
+ the next legal minute.  If that rolls over (from 59 to 0,
+ say, by returning "nil"), reset it to its starting point,
+ and increment the "hours" field.  If "hours" rolls over,
+ increment "days."  And so on, up through "years."
 
- -	if we've gotten to the last minute -- if the minute
-	iterator returns nil -- "reset" that enumerator (a
-	custom method) and roll the next-outermost enumerator
-	to its next object
+ The catch:  when we roll over a month or year, we have to
+ recompute all the days in the new month-and-year
+ combination.  It might not matter, except that:
+
+ - the day-of-month selector might specify days up through
+   31, even if the current month only has 28, 29, or 30 days
+
+ - the day-of-week selector specifies weekdays (Monday,
+   Friday, etc.), but we need a list of actual dates, and
+   those change every month
+ 
+ So after we roll over a month and/or year, we'll feed the
+ new month and year to our day-of-month enumerator, so that
+ the next time we iterate through it, it gives us the right
+ dates for "Tuesday" (or whatever weekdays it represents).
  */
-- (NSDate*)nextObject
+- (NSDate*) nextObject
 {
     NSDate*   savedMoment		= self.nextMoment;
     NSNumber* nextPoint			= nil;
-    NSInteger enumeratorIndex	= 0;
+    NSInteger enumeratorIndex	= kMinuteIndex;
 
-
-	/*
-	 The point:  each time we hit this method, increment the "minutes"
-	 field to the next legal minute.  If that rolls over (from 59 to 0,
-	 say), reset it to its starting point, and increment the "hours"
-	 field.  If "hours" rolls over, increment "days."  And so on, up 
-	 through "years."
-	 
-	 The catch:  when we roll over the "day" iterator, that actually
-	 means we just moved from one month to the next month (and, if
-	 it was December, the next year).  One of our optional "day" specifiers
-	 is "weekdays."  If the weekday specifier says something like "every
-	 Tuesday," that means different dates for March 2014 and April 2014.
-	 So after we roll over a month and/or year, we'll feed the new month
-	 and year to our day-of-month enumerator, to make sure that the next
-	 time we iterate through it, it gives us the right dates for
-	 "Tuesday" (or whatever weekdays it represents).
-	 
-	 Ed wrote the code for paragraph 1.
-	 Ron amended it to support paragraph 2.
-	 */
     do
     {
 		APCTimeSelectorEnumerator *enumerator = self.enumerators [enumeratorIndex];
@@ -201,7 +218,7 @@ static NSInteger    kYearIndex   = 4;
         
         if (nextPoint != nil)
         {
-            self.componenets[enumeratorIndex] = nextPoint;
+            self.calendarComponents [enumeratorIndex] = nextPoint;
 
 			/*
 			 If we rolled over the month or year, tell the day iterator
@@ -210,23 +227,36 @@ static NSInteger    kYearIndex   = 4;
 			 */
 			if (enumerator == self.monthEnumerator || enumerator == self.yearEnumerator)
 			{
-				[self recomputeDaysAfterRollingOverMonthOrYear];
+				/*
+				 The "nil" parameter means:  roll over to the first
+				 legal day in the next month.  (The alternative is to
+				 skip through that month until we find a particular
+				 day; we do that during initialization.)
+				 */
+				[self recomputeDaysAfterRollingOverMonthOrYearStartingOnDay: nil];
 			}
+
+			/*
+			 Aaaaaaand we're done:  we found a dateComponent
+			 we could increment, so we've found a nextMoment,
+			 and can stop looking.
+			 */
         }
         else
         {
             //  Rollover the current enumerator and move to the next one.
             //  Enumerators (0 ... ndx - 1) have already been rolled over
 			//  at this point.
-            self.componenets[enumeratorIndex] = [enumerator nextObjectAfterRollover];
+			NSNumber* firstMomentForThisEnumerator = [enumerator nextObjectAfterRollover];
+            self.calendarComponents [enumeratorIndex] = firstMomentForThisEnumerator;
             ++enumeratorIndex;
         }
-    } while (nextPoint == nil && enumeratorIndex < self.enumerators.count);
+    } while (nextPoint == nil && enumeratorIndex <= kYearIndex);
     
     self.nextMoment = [self componentsToDate];
     
     //  Have the range been exceeded?
-    if ([self.endingMoment compare:self.nextMoment] == NSOrderedAscending)
+	if ([self.nextMoment compare:self.endingMoment] == NSOrderedDescending)  // meaning:  if (self.next > self.end) { ... }
     {
         self.nextMoment = nil;
     }
@@ -234,18 +264,37 @@ static NSInteger    kYearIndex   = 4;
     return savedMoment;
 }
 
-- (void) recomputeDaysAfterRollingOverMonthOrYear
+- (void) recomputeDaysAfterRollingOverMonthOrYearStartingOnDay: (NSNumber *) startDay
 {
 	APCDayOfMonthSelector *selector = (APCDayOfMonthSelector *) self.dayEnumerator.selector;
 
-	NSNumber *month = self.componenets [kMonthIndex];
-	NSNumber *year  = self.componenets [kYearIndex];
+	NSNumber *month = self.calendarComponents [kMonthIndex];
+	NSNumber *year  = self.calendarComponents [kYearIndex];
 
 	[selector recomputeDaysBasedOnCalendar: self.calendar
 									 month: month
 									  year: year];
 
-	self.componenets [kDayIndex] = self.dayEnumerator.nextObjectAfterRollover;
+
+
+	// Create and prime a new enumerator, as we did during -init.
+	self.dayEnumerator = [selector enumeratorBeginningAt: startDay];
+	self.enumerators [kDayIndex] = self.dayEnumerator;
+	[self.dayEnumerator nextObject];
+
+
+	NSNumber *day = nil;
+
+	if (startDay == nil)
+		day = self.dayEnumerator.nextObjectAfterRollover;
+
+	else if ([selector matches: startDay])
+		day = startDay;
+
+	else
+		day = [selector nextMomentAfter: startDay];
+
+	self.calendarComponents [kDayIndex] = day;
 }
 
 - (NSDate*)componentsToDate
@@ -253,11 +302,11 @@ static NSInteger    kYearIndex   = 4;
     NSDateComponents*   dateComponents = [[NSDateComponents alloc] init];
     
     dateComponents.calendar = self.calendar;
-    dateComponents.year     = [self.componenets[kYearIndex]   integerValue];
-    dateComponents.month    = [self.componenets[kMonthIndex]  integerValue];
-    dateComponents.day      = [self.componenets[kDayIndex]    integerValue];
-    dateComponents.hour     = [self.componenets[kHourIndex]   integerValue];
-    dateComponents.minute   = [self.componenets[kMinuteIndex] integerValue];
+    dateComponents.year     = [self.calendarComponents [kYearIndex]   integerValue];
+    dateComponents.month    = [self.calendarComponents [kMonthIndex]  integerValue];
+    dateComponents.day      = [self.calendarComponents [kDayIndex]    integerValue];
+    dateComponents.hour     = [self.calendarComponents [kHourIndex]   integerValue];
+    dateComponents.minute   = [self.calendarComponents [kMinuteIndex] integerValue];
     
     return [dateComponents date];
 }

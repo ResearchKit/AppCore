@@ -69,15 +69,21 @@
 {
 	NSNumber *result = nil;
 
-	NSInteger thisIndex = [self.computedDaysToEnumerate indexOfObject: point];
+	/*
+	 My values are sorted from smallest to largest.
 
-	if (thisIndex != NSNotFound)
+	 Find the moment just AFTER the specified point.
+	 (If we find a moment EQUAL to that point, skip it.)
+	 This lets us handle start dates that fall randomly in the
+	 range we're handling, as well as points that came from my
+	 own enumerator.
+	 */
+	for (NSNumber *thisMoment in self.computedDaysToEnumerate)
 	{
-		thisIndex ++;
-
-		if (thisIndex < self.computedDaysToEnumerate.count)
+		if ([thisMoment compare: point] == NSOrderedDescending)  // meaning:  if (thisMoment > point) { ... }
 		{
-			result = self.computedDaysToEnumerate [thisIndex];
+			result = thisMoment;
+			break;
 		}
 	}
 
@@ -101,6 +107,7 @@
 	return super.isWildcard;
 }
 
+
 - (void) recomputeDaysBasedOnCalendar: (NSCalendar *) calendar
 								month: (NSNumber *) month
 								 year: (NSNumber *) year
@@ -123,7 +130,7 @@
 	 */
 	if (self.calendar == nil || self.month == nil || self.year == nil)
 	{
-		computedDays = [self allDaysInMonth];
+		computedDays = [self allDaysInCurrentMonthAndYear];
 	}
 
 
@@ -131,7 +138,7 @@
 	// Add all days of the month.
 	else if (monthdaySelectorIsWildcard && weekdaySelectorIsWildcard)
 	{
-		computedDays = [self allDaysInMonth];
+		computedDays = [self allDaysInCurrentMonthAndYear];
 	}
 
 
@@ -196,22 +203,46 @@
 #pragma mark - Internal Calculations
 // ---------------------------------------------------------
 
-/*
- TODO: (Maybe.)  Find the right number of days for this month.
- Not yet doing it because I want to do this in both the test
- harness and this class simultaneously.
- */
-- (NSMutableArray *) allDaysInMonth
-
-//- (NSMutableArray *) allDaysForMonth: (NSNumber *) month
-//							 andYear: (NSNumber *) year
-
+- (NSMutableArray *) allDaysInCurrentMonthAndYear
 {
 	NSMutableArray *computedDays = [NSMutableArray new];
+	NSCalendar *calendar = nil;
+	NSInteger year = -1;
+	NSInteger month = -1;
 
-	for (NSInteger day = 1; day <= 31; day++)
+	if (self.calendar == nil || self.month == nil || self.year == nil)
 	{
-		[computedDays addObject: @(day)];
+		/*
+		 This only happens during initialization.  It'll be
+		 overwritten the first time we actually iterate through
+		 a month.  For now, pick an arbitrary 31-day month.
+		 */
+		calendar	= [NSCalendar currentCalendar];
+		year		= 2001;
+		month		= 1;
+	}
+	else
+	{
+		calendar	= self.calendar;
+		year		= self.year.integerValue;
+		month		= self.month.integerValue;
+	}
+
+	NSDateComponents *components	= [NSDateComponents new];
+	components.calendar				= calendar;
+	components.year					= year;
+	components.month				= month;
+	NSDate *theDate					= components.date;
+
+	NSRange legalDaysInMonth		= [calendar rangeOfUnit: NSCalendarUnitDay
+											         inUnit: NSCalendarUnitMonth
+													forDate: theDate];
+
+	for (NSInteger thisDay = legalDaysInMonth.location;
+		 thisDay < legalDaysInMonth.location + legalDaysInMonth.length;
+		 thisDay ++)
+	{
+		[computedDays addObject: @(thisDay)];
 	}
 
 	return computedDays;
@@ -219,25 +250,21 @@
 
 /**
  Gather all the days-of-month days from the underlying day-of-month
- selector.
- 
- TODO: (Maybe.) Constrain the specified days-of-the-month to
- the actual, available days in this specific month and year.
- Not yet doing it because I want to do this in both the test
- harness and this class simultaneously.
+ selector, filtering out the ones that aren't in the current actual
+ month and year.
  */
-
-//	- (NSMutableArray *) specificMonthDaysForMonth: (NSNumber *) month
-//										   andYear: (NSNumber *) year
-
 - (NSMutableArray *) specificMonthDays
 {
 	NSMutableArray *computedDays = [NSMutableArray new];
 	NSNumber *day = self.underlyingDayOfMonthSelector.initialValue;
+	NSArray *allDaysInMonth = [self allDaysInCurrentMonthAndYear];
 
 	while (day != nil)
 	{
-		[computedDays addObject: day];
+		if ([allDaysInMonth containsObject: day])
+		{
+			[computedDays addObject: day];
+		}
 
 		day = [self.underlyingDayOfMonthSelector nextMomentAfter: day];
 	}
@@ -255,19 +282,9 @@
 							ignoringTheseDays: (NSArray *) precomputedDaysInMonth
 {
 	/*
-	 TODO:  Do NOT check in this NSAssert().
-	 This is to make sure I don't set up a bad
-	 situation while I'm writing the code.
-
-	 --ron
-	 */
-	NSAssert (month != nil && year != nil, @"-[APCDayOfMonthSelector specificWeekdaysForMonth:] :  Got nil month or year.  Should this have happened?  --ron");
-
-
-	/*
-	 Gather all the days of the week we care about:
-	 Sunday through Saturday, not the days-of-the-month
-	 those weekdays correspond to.
+	 Gather all the days of the week we care about --
+	 meaning Sunday through Saturday, not the days-of-the-month
+	 those weekdays correspond to.  (We'll do that in a moment.)
 	 */
 	NSMutableArray *legalCronDaysOfWeek = [NSMutableArray new];
 	NSNumber *day = self.underlyingDayOfWeekSelector.initialValue;
@@ -280,29 +297,21 @@
 	}
 
 
-	//
-	// Find every individual day of the month those days-of-the-week
-	// correspond to.  If we didn't already generate it when looking
-	// at the legal days of the month, include it.
-	//
-
+	/*
+	 Find every individual day of the month those days-of-the-week
+	 correspond to.  If we didn't already generate it when looking
+	 at the legal days of the month, include it.
+	 */
 	NSMutableArray *computedDays = [NSMutableArray new];
+	NSArray *allLegalDaysInMonth = [self allDaysInCurrentMonthAndYear];
 	NSDateComponents *components = [NSDateComponents new];
 	components.calendar = self.calendar;
 	components.year = self.year.integerValue;
 	components.month = self.month.integerValue;
-	NSDate *firstDateInMonth = components.date;
-	NSRange legalDaysInMonth = [self.calendar rangeOfUnit: NSCalendarUnitDay
-												   inUnit: NSCalendarUnitMonth
-												  forDate: firstDateInMonth];
 
-	for (NSInteger thisDay = legalDaysInMonth.location;
-		 thisDay < legalDaysInMonth.location + legalDaysInMonth.length;
-		 thisDay ++)
+	for (NSNumber *thisDay in allLegalDaysInMonth)
 	{
-		NSNumber *dayObject = @(thisDay);
-
-		if (! [precomputedDaysInMonth containsObject: dayObject])
+		if (! [precomputedDaysInMonth containsObject: thisDay])
 		{
 			/*
 			 Generate a date, and then generate a weekday from
@@ -310,7 +319,7 @@
 			 existing Components object -- it's undefined
 			 (actually NSDateComponentUndefined).
 			 */
-			components.day = thisDay;
+			components.day = thisDay.integerValue;
 			NSDate *thisDate = components.date;
 			NSInteger nsdateOneBasedDayOfWeek = [self.calendar component: NSCalendarUnitWeekday
 																fromDate: thisDate];
@@ -347,7 +356,7 @@
 
 			if ([legalCronDaysOfWeek containsObject: cronDayOfWeekObject])
 			{
-				[computedDays addObject: dayObject];
+				[computedDays addObject: thisDay];
 			}
 			
 		}  // if (this day hasn't already been computed)
