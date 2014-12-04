@@ -86,7 +86,7 @@
             
             graphCell.tintColor = graphItem.tintColor;
             graphCell.delegate = self;
-            
+            [graphCell.graphView layoutSubviews];
             [self.lineCharts addObject:graphCell.graphView];
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypePie) {
