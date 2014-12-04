@@ -272,12 +272,12 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
                                            }
                                        }];
             [self dataIsAvailableFromHealthKit:queryDataset];
-            dispatch_semaphore_signal(sema);
+//            dispatch_semaphore_signal(sema);
         }
     };
 
     [self.healthStore executeQuery:query];
-    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+//    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
     sema = NULL;
 }
 
