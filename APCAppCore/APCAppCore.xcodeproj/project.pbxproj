@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		36A9BE1E1A2FF2B200B14ADD /* APCScheduleExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128F31A2F78490015982C /* APCScheduleExpression.m */; };
+		36A9BE1F1A2FF2B200B14ADD /* APCDayOfMonthSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128F61A2F78490015982C /* APCDayOfMonthSelector.m */; };
+		36A9BE201A2FF2B200B14ADD /* APCListSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128F81A2F78490015982C /* APCListSelector.m */; };
+		36A9BE211A2FF2B200B14ADD /* APCPointSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128FA1A2F78490015982C /* APCPointSelector.m */; };
+		36A9BE221A2FF2B200B14ADD /* APCScheduleEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128FC1A2F78490015982C /* APCScheduleEnumerator.m */; };
+		36A9BE231A2FF2B200B14ADD /* APCScheduleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128FE1A2F78490015982C /* APCScheduleParser.m */; };
+		36A9BE241A2FF2B200B14ADD /* APCTimeSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129001A2F78490015982C /* APCTimeSelector.m */; };
+		36A9BE251A2FF2B200B14ADD /* APCTimeSelectorEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129021A2F78490015982C /* APCTimeSelectorEnumerator.m */; };
 		F5F129E11A2F78490015982C /* APCAppCore.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128831A2F78490015982C /* APCAppCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F129E21A2F78490015982C /* APCDataMonitor+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128851A2F78490015982C /* APCDataMonitor+Bridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F129E31A2F78490015982C /* APCDataMonitor+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128861A2F78490015982C /* APCDataMonitor+Bridge.m */; };
@@ -302,12 +310,10 @@
 		F5F12B0B1A2F78490015982C /* APCPasscodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129D61A2F78490015982C /* APCPasscodeView.m */; };
 		F5F12B0C1A2F78490015982C /* APCPermissionButton.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129D71A2F78490015982C /* APCPermissionButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12B0D1A2F78490015982C /* APCPermissionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129D81A2F78490015982C /* APCPermissionButton.m */; };
-		F5F12B151A2F78870015982C /* APCListSelectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DA1A2F78490015982C /* APCListSelectorTests.m */; };
-		F5F12B161A2F78870015982C /* APCParametersTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DB1A2F78490015982C /* APCParametersTest.m */; };
-		F5F12B171A2F78870015982C /* APCPointSelectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DC1A2F78490015982C /* APCPointSelectorTests.m */; };
-		F5F12B181A2F78870015982C /* APCScheduleParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DD1A2F78490015982C /* APCScheduleParserTests.m */; };
-		F5F12B191A2F78870015982C /* APCSchedulerTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DE1A2F78490015982C /* APCSchedulerTestCase.m */; };
-		F5F12B1A1A2F78870015982C /* APCScheduleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DF1A2F78490015982C /* APCScheduleTests.m */; };
+		F5F12B151A2F78870015982C /* APCScheduleExpressionListSelectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DA1A2F78490015982C /* APCScheduleExpressionListSelectorTests.m */; };
+		F5F12B171A2F78870015982C /* APCScheduleExpressionPointSelectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DC1A2F78490015982C /* APCScheduleExpressionPointSelectorTests.m */; };
+		F5F12B181A2F78870015982C /* APCScheduleExpressionParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DD1A2F78490015982C /* APCScheduleExpressionParserTests.m */; };
+		F5F12B1A1A2F78870015982C /* APCScheduleExpressionEnumeratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DF1A2F78490015982C /* APCScheduleExpressionEnumeratorTests.m */; };
 		F5F12B231A2F861F0015982C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B221A2F861F0015982C /* CoreLocation.framework */; };
 		F5F12B251A2F86280015982C /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B241A2F86280015982C /* HealthKit.framework */; };
 		F5F12B271A2F86350015982C /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B261A2F86350015982C /* BridgeSDK.framework */; };
@@ -616,12 +622,12 @@
 		F5F129D61A2F78490015982C /* APCPasscodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPasscodeView.m; sourceTree = "<group>"; };
 		F5F129D71A2F78490015982C /* APCPermissionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPermissionButton.h; sourceTree = "<group>"; };
 		F5F129D81A2F78490015982C /* APCPermissionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPermissionButton.m; sourceTree = "<group>"; };
-		F5F129DA1A2F78490015982C /* APCListSelectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCListSelectorTests.m; sourceTree = "<group>"; };
+		F5F129DA1A2F78490015982C /* APCScheduleExpressionListSelectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionListSelectorTests.m; sourceTree = "<group>"; };
 		F5F129DB1A2F78490015982C /* APCParametersTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCParametersTest.m; sourceTree = "<group>"; };
-		F5F129DC1A2F78490015982C /* APCPointSelectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPointSelectorTests.m; sourceTree = "<group>"; };
-		F5F129DD1A2F78490015982C /* APCScheduleParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleParserTests.m; sourceTree = "<group>"; };
+		F5F129DC1A2F78490015982C /* APCScheduleExpressionPointSelectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionPointSelectorTests.m; sourceTree = "<group>"; };
+		F5F129DD1A2F78490015982C /* APCScheduleExpressionParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionParserTests.m; sourceTree = "<group>"; };
 		F5F129DE1A2F78490015982C /* APCSchedulerTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSchedulerTestCase.m; sourceTree = "<group>"; };
-		F5F129DF1A2F78490015982C /* APCScheduleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleTests.m; sourceTree = "<group>"; };
+		F5F129DF1A2F78490015982C /* APCScheduleExpressionEnumeratorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionEnumeratorTests.m; sourceTree = "<group>"; };
 		F5F129E01A2F78490015982C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5F12B1B1A2F78AE0015982C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5F12B221A2F861F0015982C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -658,6 +664,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		36EE894E1A2FEFC600AEA9E6 /* (Not Currently Used) */ = {
+			isa = PBXGroup;
+			children = (
+				F5F129DE1A2F78490015982C /* APCSchedulerTestCase.m */,
+				F5F129DB1A2F78490015982C /* APCParametersTest.m */,
+			);
+			name = "(Not Currently Used)";
+			sourceTree = "<group>";
+		};
+		36EE894F1A2FEFD700AEA9E6 /* ScheduleExpressionTests */ = {
+			isa = PBXGroup;
+			children = (
+				F5F129DF1A2F78490015982C /* APCScheduleExpressionEnumeratorTests.m */,
+				F5F129DA1A2F78490015982C /* APCScheduleExpressionListSelectorTests.m */,
+				F5F129DD1A2F78490015982C /* APCScheduleExpressionParserTests.m */,
+				F5F129DC1A2F78490015982C /* APCScheduleExpressionPointSelectorTests.m */,
+			);
+			name = ScheduleExpressionTests;
+			sourceTree = "<group>";
+		};
 		F5179B1F19D09128001DCCB7 = {
 			isa = PBXGroup;
 			children = (
@@ -1304,12 +1330,8 @@
 		F5F129D91A2F78490015982C /* APCAppCoreTests */ = {
 			isa = PBXGroup;
 			children = (
-				F5F129DA1A2F78490015982C /* APCListSelectorTests.m */,
-				F5F129DB1A2F78490015982C /* APCParametersTest.m */,
-				F5F129DC1A2F78490015982C /* APCPointSelectorTests.m */,
-				F5F129DD1A2F78490015982C /* APCScheduleParserTests.m */,
-				F5F129DE1A2F78490015982C /* APCSchedulerTestCase.m */,
-				F5F129DF1A2F78490015982C /* APCScheduleTests.m */,
+				36EE894F1A2FEFD700AEA9E6 /* ScheduleExpressionTests */,
+				36EE894E1A2FEFC600AEA9E6 /* (Not Currently Used) */,
 				F5F129E01A2F78490015982C /* Info.plist */,
 			);
 			path = APCAppCoreTests;
@@ -1737,12 +1759,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5F12B191A2F78870015982C /* APCSchedulerTestCase.m in Sources */,
-				F5F12B1A1A2F78870015982C /* APCScheduleTests.m in Sources */,
-				F5F12B181A2F78870015982C /* APCScheduleParserTests.m in Sources */,
-				F5F12B161A2F78870015982C /* APCParametersTest.m in Sources */,
-				F5F12B171A2F78870015982C /* APCPointSelectorTests.m in Sources */,
-				F5F12B151A2F78870015982C /* APCListSelectorTests.m in Sources */,
+				F5F12B1A1A2F78870015982C /* APCScheduleExpressionEnumeratorTests.m in Sources */,
+				F5F12B181A2F78870015982C /* APCScheduleExpressionParserTests.m in Sources */,
+				36A9BE1F1A2FF2B200B14ADD /* APCDayOfMonthSelector.m in Sources */,
+				F5F12B171A2F78870015982C /* APCScheduleExpressionPointSelectorTests.m in Sources */,
+				36A9BE231A2FF2B200B14ADD /* APCScheduleParser.m in Sources */,
+				36A9BE211A2FF2B200B14ADD /* APCPointSelector.m in Sources */,
+				36A9BE221A2FF2B200B14ADD /* APCScheduleEnumerator.m in Sources */,
+				36A9BE201A2FF2B200B14ADD /* APCListSelector.m in Sources */,
+				36A9BE251A2FF2B200B14ADD /* APCTimeSelectorEnumerator.m in Sources */,
+				36A9BE241A2FF2B200B14ADD /* APCTimeSelector.m in Sources */,
+				36A9BE1E1A2FF2B200B14ADD /* APCScheduleExpression.m in Sources */,
+				F5F12B151A2F78870015982C /* APCScheduleExpressionListSelectorTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1895,7 +1923,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = APCAppleCoreTests/Info.plist;
+				INFOPLIST_FILE = APCAppCoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = APCAppCoreTests;
 			};
@@ -1908,7 +1936,7 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = APCAppleCoreTests/Info.plist;
+				INFOPLIST_FILE = APCAppCoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = APCAppCoreTests;
 			};
@@ -1999,7 +2027,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = APCAppleCoreTests/Info.plist;
+				INFOPLIST_FILE = APCAppCoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = APCAppCoreTests;
 			};
