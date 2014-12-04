@@ -46,7 +46,7 @@
 
 - (void) userConsented
 {
-    [self.dataSubstrate.delegate setUpCollectors];
+    [(APCAppDelegate*)[UIApplication sharedApplication].delegate setUpCollectors];
     [self.dataSubstrate joinStudy];
     [self refreshFromBridgeOnCompletion:^(NSError *error) {
         [error handle];

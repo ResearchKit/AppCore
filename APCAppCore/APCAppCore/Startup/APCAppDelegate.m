@@ -122,7 +122,6 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (void) initializeAppleCoreStack
 {
     self.dataSubstrate = [[APCDataSubstrate alloc] initWithPersistentStorePath:[[self applicationDocumentsDirectory] stringByAppendingPathComponent:self.initializationOptions[kDatabaseNameKey]] additionalModels: nil studyIdentifier:self.initializationOptions[kStudyIdentifierKey]];
-    self.dataSubstrate.delegate = self;
     self.scheduler = [[APCScheduler alloc] initWithDataSubstrate:self.dataSubstrate];
     self.dataMonitor = [[APCDataMonitor alloc] initWithDataSubstrate:self.dataSubstrate scheduler:self.scheduler];
     
