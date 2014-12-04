@@ -56,6 +56,8 @@
     [super viewDidAppear:animated];
     
     [self.stepProgressBar setCompletedSteps:2 animation:YES];
+    
+    [self.searchTextField becomeFirstResponder];
 }
 
 #pragma mark - Setup
