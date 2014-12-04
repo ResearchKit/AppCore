@@ -15,20 +15,12 @@
 
 @class APCUser;
 
-@protocol APCDataSubstrateProtocol <NSObject>
-
-- (void) setUpCollectors;
-
-@end
-
 @interface APCDataSubstrate : NSObject <RKSTStudyDelegate, APCParametersDelegate>
 
 /*********************************************************************************/
 #pragma mark - Initializer
 /*********************************************************************************/
 - (instancetype)initWithPersistentStorePath: (NSString*) storePath additionalModels:(NSManagedObjectModel *)mergedModels studyIdentifier: (NSString*) studyIdentifier;
-
-@property (nonatomic, weak) id<APCDataSubstrateProtocol> delegate;
 
 /*********************************************************************************/
 #pragma mark - ResearchKit Subsystem Public Properties & Passive Location Tracking
