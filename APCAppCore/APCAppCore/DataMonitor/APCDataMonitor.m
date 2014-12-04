@@ -48,10 +48,12 @@
 {
     [(APCAppDelegate*)[UIApplication sharedApplication].delegate setUpCollectors];
     [self.dataSubstrate joinStudy];
-    [self refreshFromBridgeOnCompletion:^(NSError *error) {
-        [error handle];
-        [self batchUploadDataToBridgeOnCompletion:^(NSError *error) {
+    [self.scheduler updateScheduledTasksIfNotUpdating:YES OnCompletion:^(NSError *error) {
+        [self refreshFromBridgeOnCompletion:^(NSError *error) {
             [error handle];
+            [self batchUploadDataToBridgeOnCompletion:^(NSError *error) {
+                [error handle];
+            }];
         }];
     }];
 }
