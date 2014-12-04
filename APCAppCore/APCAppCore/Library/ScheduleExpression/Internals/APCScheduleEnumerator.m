@@ -175,8 +175,14 @@ static NSInteger    kYearIndex   = 4;
 
 
 		self.nextMoment = [self componentsToDate];
+
+		// Have we passed the end date?
+		if ([self.nextMoment compare:self.endingMoment] == NSOrderedDescending)  // meaning:  if (self.next > self.end) { ... }
+		{
+			self.nextMoment = nil;
+		}
 	}
-	
+
 	return self;
 }
 
@@ -255,7 +261,7 @@ static NSInteger    kYearIndex   = 4;
     
     self.nextMoment = [self componentsToDate];
     
-    //  Have the range been exceeded?
+	// Have we passed the end date?
 	if ([self.nextMoment compare:self.endingMoment] == NSOrderedDescending)  // meaning:  if (self.next > self.end) { ... }
     {
         self.nextMoment = nil;

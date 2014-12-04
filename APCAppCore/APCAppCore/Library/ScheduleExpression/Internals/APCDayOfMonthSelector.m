@@ -350,11 +350,10 @@
 			 only place I'm consuming those numbers, which means I don't
 			 have to change any of the existing, working logic anywhere else.
 			 */
-			NSInteger cronZeroBasedDay = nsdateOneBasedDayOfWeek - 1;
-			if (cronZeroBasedDay < 1) cronZeroBasedDay += 7;
-			NSNumber* cronDayOfWeekObject = @(cronZeroBasedDay);
+			NSInteger cronZeroBasedDayOfWeek = nsdateOneBasedDayOfWeek - 1;
+			if (cronZeroBasedDayOfWeek < 1) cronZeroBasedDayOfWeek += 7;
 
-			if ([legalCronDaysOfWeek containsObject: cronDayOfWeekObject])
+			if ([legalCronDaysOfWeek containsObject: @(cronZeroBasedDayOfWeek)])
 			{
 				[computedDays addObject: thisDay];
 			}

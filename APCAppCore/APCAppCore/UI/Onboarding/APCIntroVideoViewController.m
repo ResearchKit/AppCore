@@ -36,8 +36,9 @@ static NSString *const kVideoShownKey = @"VideoShown";
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     button.frame = CGRectMake(CGRectGetWidth(self.view.frame) - 70, 10, 60, 44);
-    [button setTitle:NSLocalizedString(@"Skip", @"") forState:UIControlStateNormal];
+    [button setTitle:NSLocalizedString(@"SKIP", @"") forState:UIControlStateNormal];
     [button addTarget:self action:@selector(skip) forControlEvents:UIControlEventTouchUpInside];
+    [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
 
     [self.view addSubview:button];
 }
@@ -47,8 +48,6 @@ static NSString *const kVideoShownKey = @"VideoShown";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
     [self.moviePlayer play];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    
-    self.moviePlayer.scalingMode = MPMovieScalingModeAspectFill;
 }
 
 - (void) viewWillDisappear:(BOOL)animated {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B23" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -360,13 +360,7 @@
                             <constraint firstAttribute="centerY" secondItem="OEh-rs-UeO" secondAttribute="centerY" id="hzT-Nx-Yg8"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Eligibility" id="alz-yR-DVn">
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="XqE-3J-QMy">
-                            <connections>
-                                <action selector="next:" destination="hN3-1j-osP" id="G4K-if-RVI"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Eligibility" id="alz-yR-DVn"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
@@ -633,7 +627,7 @@
                                         <constraint firstAttribute="width" constant="77" id="VG1-qE-dFh"/>
                                         <constraint firstAttribute="height" constant="77" id="ZHd-Eb-WB3"/>
                                     </constraints>
-                                    <state key="normal" backgroundImage="profilePlaceholder">
+                                    <state key="normal">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                     <connections>
@@ -695,7 +689,7 @@
                                 </mask>
                             </variation>
                         </view>
-                        <view key="tableFooterView" contentMode="scaleToFill" id="lnS-1T-Hjt">
+                        <view key="tableFooterView" hidden="YES" contentMode="scaleToFill" id="lnS-1T-Hjt">
                             <rect key="frame" x="0.0" y="214" width="320" height="105"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -991,7 +985,7 @@
                                                         <constraint firstAttribute="height" constant="35" id="HCo-O6-5eJ"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardAppearance="alert" returnKeyType="next"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" keyboardAppearance="alert" returnKeyType="next"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="dLU-jN-G7r" id="Qn2-Af-cuV"/>
                                                     </connections>
@@ -1535,7 +1529,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="profilePlaceholder" width="150" height="150"/>
         <image name="twitter_icon" width="56" height="56"/>
     </resources>
 </document>
