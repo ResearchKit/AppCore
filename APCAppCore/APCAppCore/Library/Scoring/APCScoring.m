@@ -56,22 +56,11 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
     if (!dateFormatter) {
         dateFormatter = [[NSDateFormatter alloc] init];
     }
-    
-    if ([HKHealthStore isHealthDataAvailable]) {
-        _healthStore = [[HKHealthStore alloc] init];
-        
-        NSSet *readDataTypes = [self healthKitDataTypesToRead];
-        
-        [_healthStore requestAuthorizationToShareTypes:nil
-                                             readTypes:readDataTypes
-                                            completion:^(BOOL success, NSError *error) {
-                                                if (!success) {
-                                                    NSLog(@"You didn't allow HealthKit to access these read/write data types. In your app, try to handle this error gracefully when a user decides not to provide access. The error was: %@. If you're using a simulator, try it on a device.", error);
-                                                    
-                                                    return;
-                                                }
-                                            }];
-    }
+}
+
+- (HKHealthStore *)healthStore
+{
+    return ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.healthStore;
 }
 
 /**
@@ -109,17 +98,24 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
  *                          from past and positive will yeild future days.
  *
  */
-- (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType numberOfDays:(NSUInteger)numberOfDays
+- (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType  unit: (HKUnit *) unit numberOfDays:(NSUInteger)numberOfDays
 {
     self = [super init];
     
     if (self) {
         [self sharedInit];
-        [self statsCollectionQueryForQuantityType:quantityType forDays:numberOfDays];
+        [self statsCollectionQueryForQuantityType:quantityType unit:unit forDays:numberOfDays];
     }
     
     return self;
 }
+
+- (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
+                                 numberOfDays:(NSUInteger)numberOfDays
+{
+    self = [self initWithHealthKitQuantityType:quantityType  unit: [HKUnit meterUnit] numberOfDays:numberOfDays];
+    return self;
+ }
 
 #pragma mark - Queries
 #pragma mark Core Data
@@ -216,7 +212,7 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
 
 #pragma mark HealthKit
 
-- (void)statsCollectionQueryForQuantityType:(HKQuantityType *)quantityType forDays:(NSInteger)days
+- (void)statsCollectionQueryForQuantityType:(HKQuantityType *)quantityType unit: (HKUnit*) unit forDays:(NSInteger)days
 {
     NSMutableArray *queryDataset = [NSMutableArray array];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
@@ -227,8 +223,6 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
                                                                  second:0
                                                                  ofDate:[self dateForSpan:days]
                                                                 options:0];
-    
-    NSLog(@"Week Start/End: %@/%@", startDate, [NSDate date]);
     
     NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:[NSDate date] options:HKQueryOptionStrictStartDate];
     
@@ -247,6 +241,7 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
                                                                                            options:queryOptions
                                                                                         anchorDate:startDate
                                                                                 intervalComponents:interval];
+    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
     // set the results handler
     query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
         if (error) {
@@ -266,7 +261,7 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
                                            
                                            if (quantity) {
                                                NSDate *date = result.startDate;
-                                               double value = [quantity doubleValueForUnit:[HKUnit meterUnit]];
+                                               double value = [quantity doubleValueForUnit:[HKUnit countUnit]];
                                                
                                                NSDictionary *dataPoint = @{
                                                                            kDatasetDateKey: [dateFormatter stringFromDate:date],
@@ -277,10 +272,13 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
                                            }
                                        }];
             [self dataIsAvailableFromHealthKit:queryDataset];
+            dispatch_semaphore_signal(sema);
         }
     };
-    
+
     [self.healthStore executeQuery:query];
+    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+    sema = NULL;
 }
 
 - (void)dataIsAvailableFromHealthKit:(NSArray *)dataset
@@ -346,16 +344,6 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
     return nextCorrelatedPoint;
 }
 
-#pragma mark - Helpers
-
-- (NSSet *)healthKitDataTypesToRead {
-    HKQuantityType *steps = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
-    HKQuantityType *carbs = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDietaryCarbohydrates];
-    HKQuantityType *sugar = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDietarySugar];
-    
-    return [NSSet setWithObjects:steps, carbs, sugar, nil];
-}
-
 #pragma mark - Graph Datasource
 
 - (NSInteger)lineGraph:(APCLineGraphView *)graphView numberOfPointsInPlot:(NSInteger)plotIndex
@@ -367,7 +355,6 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
     } else {
         numberOfPoints = [self.correlateDataPoints count];
     }
-    
     return numberOfPoints;
 }
 
@@ -402,7 +389,6 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
         NSDictionary *correlatedPoint = [self nextCorrelatedObject];
         value = [[correlatedPoint valueForKey:kDatasetValueKey] doubleValue];
     }
-    
     return value;
 }
 
