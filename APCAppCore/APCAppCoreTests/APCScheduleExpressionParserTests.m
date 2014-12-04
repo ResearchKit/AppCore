@@ -1,9 +1,8 @@
 //
-//  APCScheduleParserTests.m
-//  Schedule
+//  APCScheduleExpressionParserTests.m
+//  AppCore
 //
-//  Created by Edward Cessna on 10/2/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
+//  Copyright (c) 2014 Apple Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
