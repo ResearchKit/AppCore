@@ -172,7 +172,7 @@ static unichar kFieldSeparatorToken = ' ';
 	//
 	// Production rule:
 	//
-	//		numspec :: '*' | range
+	//		numspec :: '*' | '?' | range
 	//
 
     NSArray*    numSpec = nil;

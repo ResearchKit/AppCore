@@ -30,7 +30,7 @@
      7.  number  :: digit+ | dow+
      6.  steps   :: number
      5.  range   :: number ( '-' number ) ?
-     4.  numspec :: '*' | range
+     4.  numspec :: '*' | '?' | range
      3.  expr    :: numspec ( '/' steps ) ?
      2.  list    :: expr ( ',' expr ) *
      1.  fields  :: minutesList hoursList dayOfMonthList monthList dayOfWeekList
