@@ -27,7 +27,15 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
           task.taskClassName = taskDict[kTaskClassNameKey];
           task.taskCompletionTimeString = taskDict[kTaskCompletionTimeStringKey];
           
-          //TODO: For Dhanush, Add loading Survey JSON
+          if (taskDict[kTaskFileNameKey]) {
+              NSString *resource = [[NSBundle mainBundle] pathForResource:taskDict[kTaskFileNameKey] ofType:@"json"];
+              NSData *jsonData = [NSData dataWithContentsOfFile:resource];
+              NSError * error;
+              NSDictionary * dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+              id manager = SBBComponent(SBBSurveyManager);
+              SBBSurvey * survey = [[manager objectManager] objectFromBridgeJSON:dictionary];
+              task.rkTask = [APCTask rkTaskFromSBBSurvey:survey];
+          }
           NSError * error;
           [task saveToPersistentStore:&error];
           [error handle];

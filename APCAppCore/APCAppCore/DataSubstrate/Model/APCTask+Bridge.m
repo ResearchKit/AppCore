@@ -192,7 +192,28 @@ static APCDummyObject * _dummyObject;
 
 - (RKSTAnswerFormat *)rkNumericAnswerFormat:(SBBSurveyConstraints *)constraints
 {
-    return [RKSTNumericAnswerFormat decimalAnswerWithUnit:nil];
+    RKSTAnswerFormat * retValue;
+    if ([constraints isKindOfClass:[SBBIntegerConstraints class]]) {
+        SBBIntegerConstraints * integerConstraint = (SBBIntegerConstraints*) constraints;
+        if (integerConstraint.maxValue && integerConstraint.minValue) {
+            retValue = [RKSTScaleAnswerFormat scaleAnswerWithMaxValue:integerConstraint.maxValueValue minValue:integerConstraint.minValueValue];
+        }
+        else
+        {
+            retValue = [RKSTNumericAnswerFormat integerAnswerWithUnit:nil];
+        }
+    }
+    else if ([constraints isKindOfClass:[SBBDecimalConstraints class]]) {
+        SBBDecimalConstraints * decimalConstraint = (SBBDecimalConstraints*) constraints;
+        if (decimalConstraint.maxValue && decimalConstraint.minValue) {
+            retValue = [RKSTScaleAnswerFormat scaleAnswerWithMaxValue:decimalConstraint.maxValueValue minValue:decimalConstraint.minValueValue];
+        }
+        else
+        {
+            retValue = [RKSTNumericAnswerFormat decimalAnswerWithUnit:nil];
+        }
+    }
+    return retValue;
 }
 
 - (RKSTAnswerFormat *)rkTextAnswerFormat:(SBBSurveyConstraints *)constraints
