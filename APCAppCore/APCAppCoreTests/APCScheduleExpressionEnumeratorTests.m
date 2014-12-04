@@ -12,10 +12,10 @@
 
 /**
  The test cases in this file print errors (and fail the test)
- if our test-harness-generated dates do not match the
+ if our test-harness-generated dates do NOT match the
  ScheduleExpression-generated dates.  This #define says:
  in addition, print every case where the dates DO match.
- Very helpful for debugging.
+ Helpful for debugging.
  */
 #define DEBUG__PRINT_HAPPY_TEST_CASES  NO
 
@@ -23,26 +23,16 @@
 @interface APCScheduleExpressionEnumeratorTests : XCTestCase
 
 @property (nonatomic, strong) NSDateFormatter*  dateFormatter;
+@property (nonatomic, strong) NSDateFormatter*  dayOfWeekFormatter;
 @property (nonatomic, strong) NSCalendar*       calendar;
-
-@property (nonatomic, strong) NSArray*   everyYear;
-@property (nonatomic, strong) NSArray*   everyMonth;
-@property (nonatomic, strong) NSArray*   everyDay;
-@property (nonatomic, strong) NSArray*   everyHour;
-@property (nonatomic, strong) NSArray*   everyMinute;
+@property (nonatomic, strong) NSArray*			everyYear;
+@property (nonatomic, strong) NSArray*			everyMonth;
+@property (nonatomic, strong) NSArray*			everyDay;
+@property (nonatomic, strong) NSArray*			everyHour;
+@property (nonatomic, strong) NSArray*			everyMinute;
 
 @end
 
-NSArray*    NumericSequence(NSInteger begin, NSInteger end)
-{
-	NSMutableArray* data = [NSMutableArray arrayWithCapacity:end - begin + 1];
-
-	for (NSInteger ndx = begin; ndx <= end; ++ndx)
-	{
-		[data addObject:@(ndx)];
-	}
-	return [data copy];
-}
 
 @implementation APCScheduleExpressionEnumeratorTests
 
@@ -52,36 +42,54 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 #pragma mark - Setup
 // ---------------------------------------------------------
 
-- (void)setUp
+- (void) setUp
 {
 	[super setUp];
 
-	self.dateFormatter = [[NSDateFormatter alloc] init];
+	self.dateFormatter = [NSDateFormatter new];
 	[self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-
 	[self.dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:-8 * 60 * 60]];
 //	[NSTimeZone setDefaultTimeZone: [NSTimeZone timeZoneForSecondsFromGMT:-8 * 60 * 60]];
 
+	self.dayOfWeekFormatter = [NSDateFormatter new];
+	[self.dayOfWeekFormatter setDateFormat: @"EEE yyyy-MM-dd HH:mm"];
+	[self.dayOfWeekFormatter setTimeZone: self.dateFormatter.timeZone];
+
 	self.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
 
-	self.everyYear   = NumericSequence(2014, 2017);
-	self.everyMonth  = NumericSequence(1, 12);
-	self.everyDay    = NumericSequence(1, 31);
-	self.everyHour   = NumericSequence(0, 23);
-	self.everyMinute = NumericSequence(0, 59);
+	self.everyYear   = [self numericSequenceFrom: 2014	to: 2017];
+	self.everyMonth  = [self numericSequenceFrom: 1		to: 12];
+	self.everyDay    = [self numericSequenceFrom: 1		to: 31];
+	self.everyHour   = [self numericSequenceFrom: 0		to: 23];
+	self.everyMinute = [self numericSequenceFrom: 0		to: 59];
 }
 
-- (void)tearDown
+- (void) tearDown
 {
 	// Put teardown code here. This method is called after the invocation of each test method in the class.
 	[super tearDown];
 }
 
+/**
+ Returns an NSArray of integers, from "begin" to "end."
+ */
+- (NSArray *) numericSequenceFrom: (NSInteger) begin
+							   to: (NSInteger) end
+{
+	NSMutableArray* data = [NSMutableArray arrayWithCapacity:end - begin + 1];
+
+	for (NSInteger index = begin; index <= end; ++index)
+	{
+		[data addObject: @(index)];
+	}
+
+	return [NSArray arrayWithArray: data];
+}
 
 
 
 // ---------------------------------------------------------
-#pragma mark - Core of the test harness
+#pragma mark - Core of the test harness -
 // ---------------------------------------------------------
 
 /**
@@ -155,6 +163,11 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 	testHarnessDateComponents.calendar = self.calendar;
 	NSDate* testHarnessDate = nil;
 
+	// So we print out the days of the week.
+	NSDateFormatter* dayOfWeekFormatter = [[NSDateFormatter alloc] init];
+	[dayOfWeekFormatter setDateFormat: @"EEE yyyy-MM-dd HH:mm"];
+	[dayOfWeekFormatter setTimeZone: self.dateFormatter.timeZone];
+
 
 	// We'll calculate the real days-in-each-month shortly.
 	// In the meantime:
@@ -192,43 +205,26 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 						// Meaning:                           testHarnessDate    <     startDate
 						BOOL tooEarly = (startDate != nil && [testHarnessDate compare: startDate] == NSOrderedAscending);
 
-						// Meaning:                        testHarnessDate    >     endDate
-						BOOL tooLate = (endDate != nil && [testHarnessDate compare: endDate] == NSOrderedDescending);
+						// Meaning:                           testHarnessDate    >     endDate
+						BOOL tooLate  = (endDate != nil   && [testHarnessDate compare: endDate  ] == NSOrderedDescending);
 
 
 						if (! tooEarly && ! tooLate)
 						{
 							enumeratorDate = [enumerator nextObject];
 
-							NSDateComponents *enumeratorDateComponents = [self.calendar components: (NSCalendarUnitYear |
-																									 NSCalendarUnitMonth |
-																									 NSCalendarUnitDay |
-																									 NSCalendarUnitHour |
-																									 NSCalendarUnitMinute)
-																						  fromDate: enumeratorDate];
-
-							if ([testHarnessDate isEqualToDate: enumeratorDate])
+							if (! [testHarnessDate isEqualToDate: enumeratorDate])
 							{
-								if (DEBUG__PRINT_HAPPY_TEST_CASES)
-								{
-									NSLog (@"MATCH:     testHarness %02d.%02d.%02d %02d:%02d == enumerator %02d.%02d.%02d %02d:%02d",
-										   aYear.intValue, aMonth.intValue, aDay.intValue, aHour.intValue, aMinute.intValue,
-										   (int) enumeratorDateComponents.year,
-										   (int) enumeratorDateComponents.month,
-										   (int) enumeratorDateComponents.day,
-										   (int) enumeratorDateComponents.hour,
-										   (int) enumeratorDateComponents.minute);
-								}
+								NSLog (@"NO MATCH:  testHarness %@ != enumerator %@",
+									   [dayOfWeekFormatter stringFromDate: testHarnessDate],
+									   [dayOfWeekFormatter stringFromDate: enumeratorDate]);
 							}
-							else
+
+							else if (DEBUG__PRINT_HAPPY_TEST_CASES)
 							{
-								NSLog (@"NO MATCH:  testHarness %02d.%02d.%02d %02d:%02d != enumerator %02d.%02d.%02d %02d:%02d",
-									   aYear.intValue, aMonth.intValue, aDay.intValue, aHour.intValue, aMinute.intValue,
-									   (int) enumeratorDateComponents.year,
-									   (int) enumeratorDateComponents.month,
-									   (int) enumeratorDateComponents.day,
-									   (int) enumeratorDateComponents.hour,
-									   (int) enumeratorDateComponents.minute);
+								NSLog (@"MATCH:     testHarness %@ == enumerator %@",
+									   [dayOfWeekFormatter stringFromDate: testHarnessDate],
+									   [dayOfWeekFormatter stringFromDate: enumeratorDate]);
 							}
 
 							XCTAssertEqualObjects (testHarnessDate, enumeratorDate);
@@ -465,6 +461,52 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 		 comparingEnumerator: enumerator];
 }
 
+- (void) testDayOfWeekPlusSmallDateRangeYieldsNoDates_jiraApple577_Dhanush2014Dec04
+{
+	NSString*				cronExpression	= @"0 5 * * 1";		// Every day at 5am, only on Mondays.
+
+	NSDate*					startDate		= [self.dateFormatter dateFromString: @"2014-12-04 00:00"];		// a Thursday, at midnight
+	NSDate*					endDate			= [self.dateFormatter dateFromString: @"2014-12-05 00:00"];		// a Friday, at midnight
+
+	APCScheduleExpression*	schedule		= [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
+	NSEnumerator*			enumerator		= [schedule enumeratorBeginningAtTime: startDate  endingAtTime: endDate];
+
+
+
+	/*
+	 This loop should print out the exact dates and times you expect.
+	 
+	 Note:  either run this loop or run the later stuff in
+	 this method.  Once this runs, we've advanced the enumerator,
+	 so any future tests will fail.
+	 */
+
+//	NSDate * enumeratedDate = nil;
+//	while ((enumeratedDate = enumerator.nextObject) != nil)
+//	{
+//		NSLog (@"Date: %@", [self.dayOfWeekFormatter stringFromDate: enumeratedDate]);
+//	}
+
+
+	/*
+	 This particular test is:  the enumerator should have no objects,
+	 because there are no Mondays in the specified date range.
+	 */
+	XCTAssertNil (enumerator.nextObject);
+
+
+	// This enumeration method doesn't handle enumerators with no values.
+//	[self enumerateOverYears: nil
+//				  daysOfWeek: nil
+//					  months: nil
+//				 daysOfMonth: nil
+//					   hours: @[@5]
+//					 minutes: @[@0]
+//			  startingOnDate: startDate
+//				endingOnDate: endDate
+//		 comparingEnumerator: enumerator];
+}
+
 
 
 // =========================================================
@@ -535,7 +577,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 					  months:nil
 				 daysOfMonth:nil
 					   hours:nil
-					 minutes:NumericSequence(15, 30)
+					 minutes:[self numericSequenceFrom:15 to:30]
 		 comparingEnumerator:enumerator];
 }
 
@@ -630,7 +672,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 				  daysOfWeek:nil
 					  months:nil
 				 daysOfMonth:nil
-					   hours:NumericSequence(8, 17)
+					   hours:[self numericSequenceFrom:8 to:17]
 					 minutes:nil
 		 comparingEnumerator:enumerator];
 }
@@ -703,7 +745,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
 					  months:nil
-				 daysOfMonth:NumericSequence(1, 14)
+				 daysOfMonth:[self numericSequenceFrom:1 to:14]
 					   hours:nil
 					 minutes:nil
 		 comparingEnumerator:enumerator];
@@ -804,7 +846,7 @@ NSArray*    NumericSequence(NSInteger begin, NSInteger end)
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
-					  months:NumericSequence(6, 9)
+					  months:[self numericSequenceFrom:6 to:9]
 				 daysOfMonth:nil
 					   hours:nil
 					 minutes:nil
