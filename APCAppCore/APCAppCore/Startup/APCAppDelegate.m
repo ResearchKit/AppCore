@@ -173,6 +173,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     self.dataSubstrate.currentUser.signedUp = NO;
     self.dataSubstrate.currentUser.signedIn = NO;
     [APCKeychainStore removeValueForKey:kPasswordKey];
+    [APCKeychainStore removeValueForKey:kSessionTokenKey];
     
     [self showOnBoarding];
 }
