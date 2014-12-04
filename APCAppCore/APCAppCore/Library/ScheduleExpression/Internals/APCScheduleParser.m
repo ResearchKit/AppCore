@@ -15,6 +15,7 @@ static unichar kEndToken            = '\0';
 static unichar kListSeparatorToken  = ',';
 static unichar kStepSeparatorToken  = '/';
 static unichar kWildCardToken       = '*';
+static unichar kOtherWildCardToken  = '?';
 static unichar kRangeSeparatorToken = '-';
 static unichar kFieldSeparatorToken = ' ';
 
@@ -176,7 +177,7 @@ static unichar kFieldSeparatorToken = ' ';
 
     NSArray*    numSpec = nil;
 
-    if (self.next == kWildCardToken)
+    if (self.next == kWildCardToken || self.next == kOtherWildCardToken)
     {
         [self consumeOneChar];
         //  By defaults, selectors are initialized with min-max values corresponding with the selector's unit type
