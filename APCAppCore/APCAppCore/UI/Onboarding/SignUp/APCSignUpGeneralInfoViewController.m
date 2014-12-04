@@ -323,9 +323,11 @@
         
     }
     
-    if (isContentValid) {
-        isContentValid = self.permissionButton.isSelected;
-    }
+    //Commented as Terms & Conditions is disabled for now.
+    
+//    if (isContentValid) {
+//        isContentValid = self.permissionButton.isSelected;
+//    }
     
     return isContentValid;
 }

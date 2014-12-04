@@ -118,45 +118,45 @@ static CGFloat kSectionHeaderHeight = 40.f;
             [rowItems addObject:row];
         }
         
-        {
-            APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-            field.caption = NSLocalizedString(@"Medical Conditions", @"");
-            field.pickerData = @[[APCUser medicalConditions]];
-            field.textAlignnment = NSTextAlignmentRight;
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
-            
-            if (self.user.medications) {
-                field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:self.user.medicalConditions]) ];
-            }
-            else {
-                field.selectedRowIndices = @[ @(0) ];
-            }
-            
-            APCTableViewRow *row = [APCTableViewRow new];
-            row.item = field;
-            row.itemType = kAPCUserInfoItemTypeMedicalCondition;
-            [rowItems addObject:row];
-        }
-        
-        {
-            APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-            field.caption = NSLocalizedString(@"Medications", @"");
-            field.pickerData = @[[APCUser medications]];
-            field.textAlignnment = NSTextAlignmentRight;
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
-            
-            if (self.user.medications) {
-                field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:self.user.medications]) ];
-            }
-            else {
-                field.selectedRowIndices = @[ @(0) ];
-            }
-            
-            APCTableViewRow *row = [APCTableViewRow new];
-            row.item = field;
-            row.itemType = kAPCUserInfoItemTypeMedication;
-            [rowItems addObject:row];
-        }
+//        {
+//            APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
+//            field.caption = NSLocalizedString(@"Medical Conditions", @"");
+//            field.pickerData = @[[APCUser medicalConditions]];
+//            field.textAlignnment = NSTextAlignmentRight;
+//            field.identifier = kAPCDefaultTableViewCellIdentifier;
+//            
+//            if (self.user.medications) {
+//                field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:self.user.medicalConditions]) ];
+//            }
+//            else {
+//                field.selectedRowIndices = @[ @(0) ];
+//            }
+//            
+//            APCTableViewRow *row = [APCTableViewRow new];
+//            row.item = field;
+//            row.itemType = kAPCUserInfoItemTypeMedicalCondition;
+//            [rowItems addObject:row];
+//        }
+//        
+//        {
+//            APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
+//            field.caption = NSLocalizedString(@"Medications", @"");
+//            field.pickerData = @[[APCUser medications]];
+//            field.textAlignnment = NSTextAlignmentRight;
+//            field.identifier = kAPCDefaultTableViewCellIdentifier;
+//            
+//            if (self.user.medications) {
+//                field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:self.user.medications]) ];
+//            }
+//            else {
+//                field.selectedRowIndices = @[ @(0) ];
+//            }
+//            
+//            APCTableViewRow *row = [APCTableViewRow new];
+//            row.item = field;
+//            row.itemType = kAPCUserInfoItemTypeMedication;
+//            [rowItems addObject:row];
+//        }
         
         {
             APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
