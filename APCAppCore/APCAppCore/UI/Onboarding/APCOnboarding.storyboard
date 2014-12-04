@@ -360,13 +360,7 @@
                             <constraint firstAttribute="centerY" secondItem="OEh-rs-UeO" secondAttribute="centerY" id="hzT-Nx-Yg8"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Eligibility" id="alz-yR-DVn">
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="XqE-3J-QMy">
-                            <connections>
-                                <action selector="next:" destination="hN3-1j-osP" id="G4K-if-RVI"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Eligibility" id="alz-yR-DVn"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
