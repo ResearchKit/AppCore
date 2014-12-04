@@ -44,6 +44,7 @@ FOUNDATION_EXPORT NSString *const kAppServicesListRequiredKey;
 FOUNDATION_EXPORT NSString *const kVideoURLKey;
 
 FOUNDATION_EXPORT NSString *const kPasswordKey;
+FOUNDATION_EXPORT NSString *const kSessionTokenKey;
 FOUNDATION_EXPORT NSString *const kNumberOfMinutesForPasscodeKey;
 
 FOUNDATION_EXPORT NSString *const kRegularFontNameKey;

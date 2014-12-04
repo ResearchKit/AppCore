@@ -29,6 +29,7 @@ NSString *const kAppServicesListRequiredKey          = @"AppServicesListRequired
 NSString *const kVideoURLKey                         = @"VideoURLKey";
 
 NSString *const kPasswordKey                         = @"Password";
+NSString *const kSessionTokenKey                     = @"sessionToken";
 NSString *const kNumberOfMinutesForPasscodeKey       = @"NumberOfMinutesForPasscodeKey";
 
 
