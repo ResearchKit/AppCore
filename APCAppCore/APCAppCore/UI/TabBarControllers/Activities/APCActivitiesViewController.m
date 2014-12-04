@@ -60,13 +60,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [self updateActivities:nil];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
+    [self reloadData];
 }
 
 #pragma mark - Misc
