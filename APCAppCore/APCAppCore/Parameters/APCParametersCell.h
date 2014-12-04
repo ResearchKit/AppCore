@@ -1,11 +1,10 @@
-//
-//  APCParametersCellTableViewCell.h
-//  ParametersDashboard
-//
-//  Created by Justin Warmkessel on 9/19/14.
-//  Copyright (c) 2014 Justin Warmkessel. All rights reserved.
-//
-
+// 
+//  APCParametersCell.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import <UIKit/UIKit.h>
 
 typedef NS_OPTIONS (NSUInteger, InputCellType) {

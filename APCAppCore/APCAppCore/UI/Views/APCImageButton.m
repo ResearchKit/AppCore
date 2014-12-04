@@ -1,11 +1,10 @@
-//
-//  APCImageButton.m
-//  APCAppCore
-//
-//  Created by Ramsundar Shandilya on 10/31/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCImageButton.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCImageButton.h"
 
 @implementation APCImageButton

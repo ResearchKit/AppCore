@@ -1,11 +1,10 @@
-//
-//  APCHealthKitQuantityTypeTracker.m
-//  APCAppCore
-//
-//  Created by Justin Warmkessel on 11/25/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCHealthKitQuantityTracker.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCAppCore.h"
 #import <HealthKit/HealthKit.h>
 #import "APCHealthKitQuantityTracker.h"

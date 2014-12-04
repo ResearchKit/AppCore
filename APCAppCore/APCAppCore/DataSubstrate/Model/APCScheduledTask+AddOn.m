@@ -1,11 +1,10 @@
-//
-//  APCScheduledTask+AddOn.m
-//  APCAppCore
-//
-//  Created by Dhanush Balachandran on 8/29/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCScheduledTask+AddOn.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCScheduledTask+AddOn.h"
 #import "APCAppCore.h"
 

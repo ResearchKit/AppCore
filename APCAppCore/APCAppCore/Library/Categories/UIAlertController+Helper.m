@@ -1,11 +1,10 @@
-//
-//  UIAlertController+Helper.m
-//  APCAppCore
-//
-//  Created by Ramsundar Shandilya on 10/30/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  UIAlertController+Helper.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "UIAlertController+Helper.h"
 
 @implementation UIAlertController (Helper)

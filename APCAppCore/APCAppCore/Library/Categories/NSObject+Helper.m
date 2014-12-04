@@ -1,11 +1,10 @@
-//
-//  NSObject+Helper.m
-//  APCAppCore
-//
-//  Created by Karthik Keyan B on 9/16/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  NSObject+Helper.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "NSObject+Helper.h"
 
 @implementation NSObject (Helper)

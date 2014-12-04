@@ -1,11 +1,10 @@
-//
-//  APCDashboardMessageTableViewCell.m
-//  APCAppCore
-//
-//  Created by Ramsundar Shandilya on 11/13/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCDashboardMessageTableViewCell.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCDashboardMessageTableViewCell.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"

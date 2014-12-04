@@ -1,11 +1,10 @@
-//
-//  APCStudyDetailsViewController.m
-//  APCAppCore
-//
-//  Created by Ramsundar Shandilya on 10/28/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCStudyDetailsViewController.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCStudyDetailsViewController.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"

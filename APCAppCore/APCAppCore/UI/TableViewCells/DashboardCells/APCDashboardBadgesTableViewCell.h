@@ -1,11 +1,10 @@
-//
-//  APCDashboardBadgesTableViewCell.h
-//  APCAppCore
-//
-//  Created by Ramsundar Shandilya on 11/20/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCDashboardBadgesTableViewCell.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import <UIKit/UIKit.h>
 
 static NSString * const kAPCDashboardBadgesTableViewCellIdentifier = @"APCDashboardBadgesTableViewCell";

@@ -1,11 +1,10 @@
-//
-//  APCPermissionsCell.m
-//  APCAppCore
-//
-//  Created by Ramsundar Shandilya on 9/19/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCPermissionsCell.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCPermissionsCell.h"
 #import "UIColor+APCAppearance.h"
 

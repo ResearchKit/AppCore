@@ -1,11 +1,10 @@
-//
-//  APCTimeSelector.m
-//  Schedule
-//
-//  Created by Edward Cessna on 9/24/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCTimeSelector.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCTimeSelector.h"
 
 @implementation APCTimeSelector

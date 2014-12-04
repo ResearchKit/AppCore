@@ -1,11 +1,10 @@
-//
-//  APCPermissionsManager.h
-//  APCAppCore
-//
-//  Created by Ramsundar Shandilya on 9/22/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCPermissionsManager.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import <Foundation/Foundation.h>
 #import "APCAppCore.h"
 #import "APCConstants.h"

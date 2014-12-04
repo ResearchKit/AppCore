@@ -1,11 +1,10 @@
-//
-//  APCLearnMasterViewController.h
-//  APCAppCore
-//
-//  Created by Ramsundar Shandilya on 11/9/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCLearnMasterViewController.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import <UIKit/UIKit.h>
 #import "APCTableViewItem.h"
 #import "APCTintedTableViewCell.h"

@@ -1,11 +1,10 @@
-//
-//  APCParametersDashboardTableViewController.m
-//  ParametersDashboard
-//
-//  Created by Justin Warmkessel on 9/19/14.
-//  Copyright (c) 2014 Justin Warmkessel. All rights reserved.
-//
-
+// 
+//  APCParametersDashboardTableViewController.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCParametersDashboardTableViewController.h"
 #import "APCDebugWindow.h"
 #import "APCAppCore.h"

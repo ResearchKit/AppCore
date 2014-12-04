@@ -1,11 +1,10 @@
-//
-//  APCDayOfMonthSelector.m
-//  Schedule
-//
-//  Created by Ron Conescu on 11/19/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCDayOfMonthSelector.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCDayOfMonthSelector.h"
 #import "APCTimeSelectorEnumerator.h"
 

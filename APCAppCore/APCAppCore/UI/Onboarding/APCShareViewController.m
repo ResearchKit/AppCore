@@ -1,11 +1,10 @@
-//
-//  APCShareViewController.m
-//  APCAppCore
-//
-//  Created by Ramsundar Shandilya on 10/30/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCShareViewController.m 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCShareViewController.h"
 #import "APCShareTableViewCell.h"
 #import "UIColor+APCAppearance.h"

@@ -1,11 +1,10 @@
-//
-//  APCAppDelegate.h
-//  APCAppCore`
-//
-//  Created by Dhanush Balachandran on 8/25/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
-//
-
+// 
+//  APCAppDelegate.h 
+//  AppCore 
+// 
+//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+// 
+ 
 #import <UIKit/UIKit.h>
 #import "APCDataSubstrate.h"
 #import "APCHealthKitQuantityTracker.h"
