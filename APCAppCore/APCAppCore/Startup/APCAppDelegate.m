@@ -41,6 +41,12 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+ 
+#warning temporary code that must be removed
+    //TODO remove this code. Here temporarily.
+    self.healthKitTracker = [[APCHealthKitQuantityTracker alloc] initWithIdentifier:HKQuantityTypeIdentifierHeartRate withNotificationName:@"APCHeartRateUpdated"];
+    [self.healthKitTracker start];
+    
     
     [self setUpInitializationOptions];
     NSAssert(self.initializationOptions, @"Please set up initialization options");
@@ -191,9 +197,11 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 /*********************************************************************************/
 - (void) setUpCollectors
 {
-    
-    self.healthKitTracker = [[APCHealthKitQuantityTracker alloc] initWithIdentifier:HKQuantityTypeIdentifierHeartRate withNotificationName:@"APCHeartRateUpdated"];
-    [self.healthKitTracker start];
+
+#warning temporary code to uncomment
+    //TODO Uncomment out this code. Temporarily moved to did finish for testing.
+//    self.healthKitTracker = [[APCHealthKitQuantityTracker alloc] initWithIdentifier:HKQuantityTypeIdentifierHeartRate withNotificationName:@"APCHeartRateUpdated"];
+//    [self.healthKitTracker start];
     
     //Setting the Audio Session Category for voice prompts when device is locked
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
