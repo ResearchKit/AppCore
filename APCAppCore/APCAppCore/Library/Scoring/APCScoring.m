@@ -166,7 +166,7 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
                     if (nestedData) {
                         [self.dataPoints addObject:@{
                                                      kDatasetDateKey: task.startOn,
-                                                     kDatasetValueKey: [taskResult valueForKey:valueKey]
+                                                     kDatasetValueKey: [nestedData valueForKey:valueKey]
                                                      }];
                     }
                 }
