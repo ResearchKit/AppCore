@@ -15,6 +15,8 @@ NSString *const APCUserSignedInNotification   = @"APCUserSignedInNotification";
 NSString *const APCUserLogOutNotification     = @"APCUserLogOutNotification";
 NSString *const APCUserDidConsentNotification = @"APCUserDidConsentNotification";
 
+NSString *const APCScheduleUpdatedNotification = @"APCScheduleUpdatedNotification";
+
 NSString *const APCAppDidRegisterUserNotification            = @"APCAppDidRegisterUserNotification";
 NSString *const APCAppDidFailToRegisterForRemoteNotification = @"APCAppDidFailToRegisterForRemoteNotifications";
 
@@ -27,6 +29,11 @@ NSString *const kHKWritePermissionsKey               = @"HKWritePermissions";
 NSString *const kHKReadPermissionsKey                = @"HKReadPermissions";
 NSString *const kAppServicesListRequiredKey          = @"AppServicesListRequired";
 NSString *const kVideoURLKey                         = @"VideoURLKey";
+
+NSString *const kHKQuantityTypeKey                   = @"HKQuantityType";
+NSString *const kHKCategoryTypeKey                   = @"HKCategoryType";
+NSString *const kHKCharacteristicTypeKey             = @"HKCharacteristicType";
+NSString *const kHKCorrelationTypeKey                = @"HKCorrelationType";
 
 NSString *const kPasswordKey                         = @"Password";
 NSString *const kSessionTokenKey                     = @"sessionToken";

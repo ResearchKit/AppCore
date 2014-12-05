@@ -8,7 +8,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ModelObject.h"
 #import "SBBBridgeObject.h"
 
 @protocol _SBBUserProfile
