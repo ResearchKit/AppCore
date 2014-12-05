@@ -30,11 +30,6 @@ NSString *const kHKReadPermissionsKey                = @"HKReadPermissions";
 NSString *const kAppServicesListRequiredKey          = @"AppServicesListRequired";
 NSString *const kVideoURLKey                         = @"VideoURLKey";
 
-NSString *const kHKQuantityTypeKey                   = @"HKQuantityType";
-NSString *const kHKCategoryTypeKey                   = @"HKCategoryType";
-NSString *const kHKCharacteristicTypeKey             = @"HKCharacteristicType";
-NSString *const kHKCorrelationTypeKey                = @"HKCorrelationType";
-
 NSString *const kPasswordKey                         = @"Password";
 NSString *const kSessionTokenKey                     = @"sessionToken";
 NSString *const kNumberOfMinutesForPasscodeKey       = @"NumberOfMinutesForPasscodeKey";
