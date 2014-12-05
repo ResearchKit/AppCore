@@ -19,8 +19,15 @@ FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsStepIdentifier;
 
 @interface APCSignUpTask : NSObject <RKSTTask>
 
-@property BOOL eligible;
+@property (nonatomic) BOOL eligible;
 
-@property BOOL customStepIncluded;
+@property (nonatomic) BOOL customStepIncluded;
+
+/**
+ *  When the list of Services required in zero, we can skip
+ */
+@property (nonatomic) BOOL permissionScreenSkipped;
+
+@property (nonatomic) NSInteger numberOfSteps;
 
 @end
