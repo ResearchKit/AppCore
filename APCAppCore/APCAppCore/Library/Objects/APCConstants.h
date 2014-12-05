@@ -45,6 +45,12 @@ FOUNDATION_EXPORT NSString *const kHKReadPermissionsKey;
 FOUNDATION_EXPORT NSString *const kAppServicesListRequiredKey;
 FOUNDATION_EXPORT NSString *const kVideoURLKey;
 
+FOUNDATION_EXPORT NSString *const kHKQuantityTypeKey;
+FOUNDATION_EXPORT NSString *const kHKCategoryTypeKey;
+FOUNDATION_EXPORT NSString *const kHKCharacteristicTypeKey;
+FOUNDATION_EXPORT NSString *const kHKCorrelationTypeKey;
+FOUNDATION_EXPORT NSString *const kHKWorkoutTypeKey;
+
 FOUNDATION_EXPORT NSString *const kPasswordKey;
 FOUNDATION_EXPORT NSString *const kSessionTokenKey;
 FOUNDATION_EXPORT NSString *const kNumberOfMinutesForPasscodeKey;
