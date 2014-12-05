@@ -9,7 +9,7 @@
 #import "APCSignInTask.h"
 #import "APCUser.h"
 
-static NSInteger const kMinimumNumberOfSteps = 3; //MedicalInfo + Passcode
+static NSInteger const kMinimumNumberOfSteps = 2; //MedicalInfo + Passcode
 
 @interface APCSignInTask ()
 

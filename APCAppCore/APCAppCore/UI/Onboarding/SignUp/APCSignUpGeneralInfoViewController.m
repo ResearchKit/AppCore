@@ -41,13 +41,14 @@
     
     self.permissionGranted = [self.permissionManager isPermissionsGrantedForType:kSignUpPermissionsTypeHealthKit];
     
+    __weak typeof(self) weakSelf = self;
     if (!self.permissionGranted) {
         [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError *error) {
             if (granted) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.permissionGranted = YES;
-                    self.items = [self prepareContent];
-                    [self.tableView reloadData];
+                    weakSelf.permissionGranted = YES;
+                    weakSelf.items = [self prepareContent];
+                    [weakSelf.tableView reloadData];
                 });
             }
         }];

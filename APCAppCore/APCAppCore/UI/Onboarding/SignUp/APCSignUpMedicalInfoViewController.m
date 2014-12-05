@@ -11,8 +11,13 @@
 #import "UIAlertController+Helper.h"
 #import "APCUser+Bridge.h"
 #import "APCAppDelegate.h"
+#import "APCPermissionButton.h"
+#import "APCPermissionsManager.h"
 
 @interface APCSignUpMedicalInfoViewController ()
+
+@property (nonatomic, strong) APCPermissionsManager *permissionManager;
+@property (nonatomic) BOOL permissionGranted;
 
 @end
 
@@ -29,6 +34,23 @@
     [self setupProgressBar];
     
     self.navigationItem.hidesBackButton = YES;
+    
+    self.permissionManager = [[APCPermissionsManager alloc] init];
+    
+    self.permissionGranted = [self.permissionManager isPermissionsGrantedForType:kSignUpPermissionsTypeHealthKit];
+    
+    __weak typeof(self) weakSelf = self;
+    if (!self.permissionGranted) {
+        [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError *error) {
+            if (granted) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    weakSelf.permissionGranted = YES;
+                    weakSelf.items = [self prepareContent];
+                    [weakSelf.tableView reloadData];
+                });
+            }
+        }];
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated {

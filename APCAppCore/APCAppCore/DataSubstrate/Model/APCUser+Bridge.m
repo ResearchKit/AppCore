@@ -65,6 +65,30 @@
     }
 }
 
+- (void) getProfileOnCompletion:(void (^)(NSError *))completionBlock
+{
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+    }
+    else
+    {
+        [SBBComponent(SBBProfileManager) getUserProfileWithCompletion:^(id userProfile, NSError *error) {
+            SBBUserProfile *profile = (SBBUserProfile *)userProfile;
+            self.email = profile.email;
+            self.firstName = profile.firstName;
+            self.lastName = profile.lastName;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            });
+        }];
+    }
+}
+
 - (void)signInOnCompletion:(void (^)(NSError *))completionBlock
 {
     if ([self serverDisabled]) {

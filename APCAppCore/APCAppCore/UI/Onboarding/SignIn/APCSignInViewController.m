@@ -148,6 +148,8 @@
         [user signInOnCompletion:^(NSError *error) {
             [spinnerController dismissViewControllerAnimated:YES completion:^{
                 if (error) {
+                    [error handle];
+                    
                     UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:error.message];
                     [self presentViewController:alert animated:YES completion:nil];
                 }
@@ -159,6 +161,10 @@
                         APCAppDelegate *appDelegate = (APCAppDelegate*)[[UIApplication sharedApplication] delegate];
                         appDelegate.window.rootViewController = emailVerifyVC;
                     } else{
+                        
+                        [user getProfileOnCompletion:^(NSError *error) {
+                            [error handle];
+                        }];
                         
                         if (user.isSecondaryInfoSaved) {
                             user.signedIn = YES;
