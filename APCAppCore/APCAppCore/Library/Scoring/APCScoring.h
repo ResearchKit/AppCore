@@ -12,10 +12,7 @@
 @interface APCScoring : NSEnumerator <APCLineGraphViewDataSource>
 
 - (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
-                                         unit: (HKUnit *) unit
-                                 numberOfDays:(NSUInteger)numberOfDays;
-
-- (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
+                                         unit:(HKUnit *)unit
                                  numberOfDays:(NSUInteger)numberOfDays;
 
 - (instancetype)initWithTask:(NSString *)taskId

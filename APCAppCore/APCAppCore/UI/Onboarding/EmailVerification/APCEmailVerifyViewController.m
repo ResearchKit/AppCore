@@ -65,12 +65,18 @@
             if (error.code == kSBBServerPreconditionNotMet) {
                 [weakSelf getServerConsent];
             }
-            else
+            else if (error.code == 404)
             {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     NSLog(@"Checking Server Again...");
                     [weakSelf checkSignIn];
                 });
+            }
+            else
+            {
+                [error handle];
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Sign In Error", @"") message:error.localizedDescription];
+                [self presentViewController:alert animated:YES completion:nil];
             }
         }
         else

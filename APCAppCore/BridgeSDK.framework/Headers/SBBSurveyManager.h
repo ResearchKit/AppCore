@@ -21,10 +21,10 @@ typedef void (^SBBSurveyManagerGetCompletionBlock)(id survey, NSError *error);
 /*!
  Completion block called when submitting answers to a survey to the API.
  
- @param guidHolder By default, an SBBGuidHolder object, unless the GuidHolder type has been mapped in SBBObjectManager setupMappingForType:toClass:fieldToPropertyMappings:. The guid in question is the guid of the SurveyResponse object created by submitting this set of answers, which can be used to later amend or delete the answers to this instance of taking the survey.
- @param error          An error that occurred during execution of the method for which this is a completion block, or nil.
+ @param identifierHolder By default, an SBBIdentifierHolder object, unless the IdentifierHolder type has been mapped in SBBObjectManager setupMappingForType:toClass:fieldToPropertyMappings:. The identifier in question is the identifier of the SurveyResponse object created by submitting this set of answers, which can be used to later amend or delete the answers to this instance of taking the survey.
+ @param error            An error that occurred during execution of the method for which this is a completion block, or nil.
  */
-typedef void (^SBBSurveyManagerSubmitAnswersCompletionBlock)(id guidHolder, NSError *error);
+typedef void (^SBBSurveyManagerSubmitAnswersCompletionBlock)(id identifierHolder, NSError *error);
 
 /*!
  Completion block called when retrieving a survey response from the API.
@@ -74,11 +74,23 @@ typedef void (^SBBSurveyManagerEditResponseCompletionBlock)(id responseObject, N
  
  @param surveyAnswers An NSArray of survey answer objects for the questions answered.
  @param ref           The href identifying the survey being answered, obtained e.g. from the Schedules or Activities API.
- @param completion An SBBSurveyManagerSubmitAnswersCompletionBlock to be called upon completion. The guidHolder passed in contains the guid of the survey response created by submitting these answers.
+ @param completion    An SBBSurveyManagerSubmitAnswersCompletionBlock to be called upon completion. The identifierHolder passed in contains an identifier assigned by the server to the survey response created by submitting these answers.
  
  @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
  */
 - (NSURLSessionDataTask *)submitAnswers:(NSArray *)surveyAnswers toSurveyByRef:(NSString *)ref completion:(SBBSurveyManagerSubmitAnswersCompletionBlock)completion;
+
+/*!
+ Submit a set of answers to a survey by the survey's activityRef (href), and specify an identifier for the SurveyResponse object to create as a result.
+ 
+ @param surveyAnswers An NSArray of survey answer objects for the questions answered.
+ @param ref           The href identifying the survey being answered, obtained e.g. from the Schedules or Activities API.
+ @param identifier    An identifier to use for the SurveyResponse created as a result of submitting these answers. If nil, this behaves the same as calling submitAnswers:toSurveyByRef:completion:.
+ @param completion    An SBBSurveyManagerSubmitAnswersCompletionBlock to be called upon completion. The identifierHolder passed in contains the identifier of the survey response created by submitting these answers, which will match what you sent in the identifier parameter (unless you sent nil).
+ 
+ @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
+ */
+- (NSURLSessionDataTask *)submitAnswers:(NSArray *)surveyAnswers toSurveyByRef:(NSString *)ref withResponseIdentifier:(NSString *)identifier completion:(SBBSurveyManagerSubmitAnswersCompletionBlock)completion;
 
 /*!
  Submit a set of answers to a survey by the survey's guid and version number.
@@ -93,14 +105,27 @@ typedef void (^SBBSurveyManagerEditResponseCompletionBlock)(id responseObject, N
 - (NSURLSessionDataTask *)submitAnswers:(NSArray *)surveyAnswers toSurveyByGuid:(NSString *)guid createdOn:(NSDate *)createdOn completion:(SBBSurveyManagerSubmitAnswersCompletionBlock)completion;
 
 /*!
+ Submit a set of answers to a survey by the survey's guid and version number, and specify an identifier for the SurveyResponse object to create.
+ 
+ @param surveyAnswers An NSArray of survey answer objects for the questions answered.
+ @param surveyGuid    The survey's guid.
+ @param createdOn     The creation date and time of the version of the survey being answered.
+ @param responseIdentifier  An identifier to use for the SurveyResponse created as a result of submitting these answers. If nil, this behaves the same as calling submitAnswers:toSurveyByGuid:createdOn:completion:.
+ @param completion    An SBBSurveyManagerSubmitAnswersCompletionBlock to be called upon completion. The identifierHolder passed in contains the identifier of the survey response created by submitting these answers, which will match what you sent in the identifier parameter (unless you sent nil).
+ 
+ @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
+ */
+- (NSURLSessionDataTask *)submitAnswers:(NSArray *)surveyAnswers toSurveyByGuid:(NSString *)surveyGuid createdOn:(NSDate *)createdOn withResponseIdentifier:(NSString *)responseIdentifier completion:(SBBSurveyManagerSubmitAnswersCompletionBlock)completion;
+
+/*!
  Fetch a previously-started survey response from the Bridge API.
  
- @param guid       The guid of the desired survey response.
+ @param identifier The identifier of the desired survey response.
  @param completion An SBBSurveyManagerGetResponseCompletionBlock to be called upon completion.
  
  @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
  */
-- (NSURLSessionDataTask *)getSurveyResponse:(NSString *)guid completion:(SBBSurveyManagerGetResponseCompletionBlock)completion;
+- (NSURLSessionDataTask *)getSurveyResponse:(NSString *)identifier completion:(SBBSurveyManagerGetResponseCompletionBlock)completion;
 
 /*!
  Add answers to an existing survey response.
