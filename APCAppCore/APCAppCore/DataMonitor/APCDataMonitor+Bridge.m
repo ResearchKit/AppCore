@@ -11,6 +11,7 @@
 
 @implementation APCDataMonitor (Bridge)
 
+
 - (void) refreshFromBridgeOnCompletion: (void (^)(NSError * error)) completionBlock
 {
     if (self.dataSubstrate.currentUser.isConsented) {
@@ -27,7 +28,8 @@
 
 - (void) batchUploadDataToBridgeOnCompletion: (void (^)(NSError * error)) completionBlock
 {
-    if (self.dataSubstrate.currentUser.isConsented) {
+    if (self.dataSubstrate.currentUser.isConsented && !self.batchUploadingInProgress) {
+        self.batchUploadingInProgress = YES;
         NSManagedObjectContext * context = self.dataSubstrate.persistentContext;
         [context performBlock:^{
             NSFetchRequest * request = [APCResult request];
@@ -39,9 +41,17 @@
                     [error handle];
                 }];
             }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.batchUploadingInProgress = NO;
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            });
         }];
     }
 }
+
+
 
 
 @end

@@ -42,16 +42,27 @@
 
 - (void) updateProfileOnCompletion:(void (^)(NSError *))completionBlock
 {
-    SBBUserProfile *profile = [SBBUserProfile new];
-    profile.email = self.email;
-    profile.username = self.email;
-    profile.firstName = self.firstName;
-    profile.lastName = self.lastName;
-    
-    [SBBComponent(SBBProfileManager) updateUserProfileWithProfile:profile completion:^(id responseObject, NSError *error) {
-        NSLog(@"%@", responseObject);
-        NSLog(@"Error: %@", error);
-    }];
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+    }
+    else
+    {
+        SBBUserProfile *profile = [SBBUserProfile new];
+        profile.email = self.email;
+        profile.username = self.email;
+        profile.firstName = self.firstName;
+        profile.lastName = self.lastName;
+        
+        [SBBComponent(SBBProfileManager) updateUserProfileWithProfile:profile completion:^(id responseObject, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            });
+        }];
+    }
 }
 
 - (void)signInOnCompletion:(void (^)(NSError *))completionBlock
@@ -148,7 +159,3 @@
 }
 
 @end
-
-
-//TODO: For Dhanush
-//Figure out what is to be replaced with username

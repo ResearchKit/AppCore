@@ -15,6 +15,8 @@ NSString *const APCUserSignedInNotification   = @"APCUserSignedInNotification";
 NSString *const APCUserLogOutNotification     = @"APCUserLogOutNotification";
 NSString *const APCUserDidConsentNotification = @"APCUserDidConsentNotification";
 
+NSString *const APCScheduleUpdatedNotification = @"APCScheduleUpdatedNotification";
+
 NSString *const APCAppDidRegisterUserNotification            = @"APCAppDidRegisterUserNotification";
 NSString *const APCAppDidFailToRegisterForRemoteNotification = @"APCAppDidFailToRegisterForRemoteNotifications";
 
