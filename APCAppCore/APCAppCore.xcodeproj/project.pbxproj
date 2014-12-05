@@ -17,6 +17,8 @@
 		36A9BE231A2FF2B200B14ADD /* APCScheduleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128FE1A2F78490015982C /* APCScheduleParser.m */; };
 		36A9BE241A2FF2B200B14ADD /* APCTimeSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129001A2F78490015982C /* APCTimeSelector.m */; };
 		36A9BE251A2FF2B200B14ADD /* APCTimeSelectorEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129021A2F78490015982C /* APCTimeSelectorEnumerator.m */; };
+		5B04329F1A318AA2000DC9ED /* APCSignInTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B04329D1A318AA2000DC9ED /* APCSignInTask.h */; };
+		5B0432A01A318AA2000DC9ED /* APCSignInTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B04329E1A318AA2000DC9ED /* APCSignInTask.m */; };
 		F5F129E11A2F78490015982C /* APCAppCore.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128831A2F78490015982C /* APCAppCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F129E21A2F78490015982C /* APCDataMonitor+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128851A2F78490015982C /* APCDataMonitor+Bridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F129E31A2F78490015982C /* APCDataMonitor+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128861A2F78490015982C /* APCDataMonitor+Bridge.m */; };
@@ -328,6 +330,8 @@
 /* Begin PBXFileReference section */
 		0830A3471A30FA8D00F7D0E4 /* APCScoring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScoring.h; sourceTree = "<group>"; };
 		0830A3481A30FA8D00F7D0E4 /* APCScoring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScoring.m; sourceTree = "<group>"; };
+		5B04329D1A318AA2000DC9ED /* APCSignInTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignInTask.h; sourceTree = "<group>"; };
+		5B04329E1A318AA2000DC9ED /* APCSignInTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignInTask.m; sourceTree = "<group>"; };
 		F5179B2919D09128001DCCB7 /* APCAppCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APCAppCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5179B3419D09128001DCCB7 /* APCAppCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APCAppCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5F128831A2F78490015982C /* APCAppCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAppCore.h; sourceTree = "<group>"; };
@@ -1060,6 +1064,8 @@
 				F5F129401A2F78490015982C /* APCSignUpTask.m */,
 				F5F129411A2F78490015982C /* APCTableViewItem.h */,
 				F5F129421A2F78490015982C /* APCTableViewItem.m */,
+				5B04329D1A318AA2000DC9ED /* APCSignInTask.h */,
+				5B04329E1A318AA2000DC9ED /* APCSignInTask.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1512,6 +1518,7 @@
 				F5F12A101A2F78490015982C /* APCUser.h in Headers */,
 				F5F12A6A1A2F78490015982C /* APCScheduler.h in Headers */,
 				F5F12AA81A2F78490015982C /* APCInclusionCriteriaViewController.h in Headers */,
+				5B04329F1A318AA2000DC9ED /* APCSignInTask.h in Headers */,
 				F5F12A2C1A2F78490015982C /* NSObject+Helper.h in Headers */,
 				F5F129F61A2F78490015982C /* APCResult+Bridge.h in Headers */,
 				F5F12A9B1A2F78490015982C /* APCEmailVerifyViewController.h in Headers */,
@@ -1654,6 +1661,7 @@
 				F5F12AF31A2F78490015982C /* APCBaseTaskViewController.m in Sources */,
 				F5F12AE11A2F78490015982C /* APCSwitchTableViewCell.m in Sources */,
 				F5F12A171A2F78490015982C /* APCAppearanceInfo.m in Sources */,
+				5B0432A01A318AA2000DC9ED /* APCSignInTask.m in Sources */,
 				F5F12A1D1A2F78490015982C /* UIFont+APCAppearance.m in Sources */,
 				F5F12A0F1A2F78490015982C /* APCUser+UserData.m in Sources */,
 				F5F12AC11A2F78490015982C /* APCLineGraphViewController.m in Sources */,

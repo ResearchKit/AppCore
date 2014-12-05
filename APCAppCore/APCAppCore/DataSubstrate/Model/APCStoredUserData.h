@@ -26,5 +26,6 @@
 @property (nonatomic, retain) NSString * homeLocationAddress;
 @property (nonatomic, retain) NSNumber *homeLocationLat;
 @property (nonatomic, retain) NSNumber *homeLocationLong;
+@property (nonatomic, retain) NSNumber *secondaryInfoSaved;
 
 @end

@@ -49,6 +49,8 @@
 @property (nonatomic, strong) NSNumber *homeLocationLat;
 @property (nonatomic, strong) NSNumber *homeLocationLong;
 
+@property (nonatomic, getter=isSecondaryInfoSaved) BOOL secondaryInfoSaved;
+
 /*********************************************************************************/
 #pragma mark - Simulated Properties using HealthKit
 /*********************************************************************************/
