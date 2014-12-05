@@ -250,7 +250,7 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
                                                                                            options:queryOptions
                                                                                         anchorDate:startDate
                                                                                 intervalComponents:interval];
-    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+    
     // set the results handler
     query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
         if (error) {
@@ -281,13 +281,10 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
                                            }
                                        }];
             [self dataIsAvailableFromHealthKit:queryDataset];
-//            dispatch_semaphore_signal(sema);
         }
     };
 
     [self.healthStore executeQuery:query];
-//    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-    sema = NULL;
 }
 
 - (void)dataIsAvailableFromHealthKit:(NSArray *)dataset
