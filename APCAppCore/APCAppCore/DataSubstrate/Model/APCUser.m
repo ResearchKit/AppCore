@@ -442,7 +442,6 @@ static NSString *const kSignedInKey = @"SignedIn";
     [[NSUserDefaults standardUserDefaults] setBool:signedUp forKey:kSignedUpKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     if (signedUp) {
-        self.secondaryInfoSaved = YES;
         [[NSNotificationCenter defaultCenter] postNotificationName:(NSString *)APCUserSignedUpNotification object:nil];
     }
 }

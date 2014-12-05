@@ -27,12 +27,14 @@
     
     self.items = [self prepareContent];
     [self setupProgressBar];
+    
+    self.navigationItem.hidesBackButton = YES;
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self.stepProgressBar setCompletedSteps:1 animation:YES];
+    [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
 }
 
 - (NSArray *)prepareContent {
@@ -208,7 +210,7 @@
 #pragma mark - UIMethods
 
 - (void) setupProgressBar {
-    [self.stepProgressBar setCompletedSteps:0 animation:NO];
+    [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 2) animation:NO];
 }
 
 

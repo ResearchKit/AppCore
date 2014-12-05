@@ -7,16 +7,11 @@
 //
 
 #import "APCSignInTask.h"
+#import "APCUser.h"
+
+static NSInteger const kMinimumNumberOfSteps = 3; //MedicalInfo + Passcode
 
 @interface APCSignInTask ()
-
-@property (nonatomic, strong) RKSTStep *medicalInfoStep;
-
-@property (nonatomic, strong) RKSTStep *customInfoStep;
-
-@property (nonatomic, strong) RKSTStep *passcodeStep;
-
-@property (nonatomic, strong) RKSTStep *permissionsStep;
 
 @end
 
@@ -29,21 +24,34 @@
     RKSTStep *nextStep;
     
     if (!step) {
-        if (!self.secondaryInfoSaved) {
-            nextStep = self.medicalInfoStep;
+        nextStep = self.signInStep;
+    } else if ([step.identifier isEqualToString:kAPCSignInStepIdentifier]) {
+        if (self.user.isSecondaryInfoSaved) {
+            nextStep = nil;
         } else{
-            nextStep = self.passcodeStep;
+            nextStep = self.medicalInfoStep;
+            self.currentStepNumber += 1;
         }
+        
     } else if ([step.identifier isEqualToString:kAPCSignUpMedicalInfoStepIdentifier]) {
         if (self.customStepIncluded) {
             nextStep = self.customInfoStep;
         } else{
             nextStep = self.passcodeStep;
+            self.user.secondaryInfoSaved = YES;
         }
+        self.currentStepNumber += 1;
     } else if ([step.identifier isEqualToString:kAPCSignUpCustomInfoStepIdentifier]) {
         nextStep = self.passcodeStep;
+        self.user.secondaryInfoSaved = YES;
+        self.currentStepNumber += 1;
     } else if ([step.identifier isEqualToString:kAPCSignUpPasscodeStepIdentifier]) {
-        nextStep = self.permissionsStep;
+        if (self.permissionScreenSkipped) {
+            nextStep = nil;
+        } else {
+            nextStep = self.permissionsStep;
+            self.currentStepNumber += 1;
+        }
     }
     
     return nextStep;
@@ -57,18 +65,17 @@
         prevStep = nil;
     } else if ([step.identifier isEqualToString:kAPCSignUpCustomInfoStepIdentifier]) {
         prevStep = self.medicalInfoStep;
+        self.currentStepNumber -= 1;
     } else if ([step.identifier isEqualToString:kAPCSignUpPasscodeStepIdentifier]) {
-        if (!self.secondaryInfoSaved) {
-            if (self.customStepIncluded) {
-                prevStep = self.customInfoStep;
-            } else {
-                prevStep = self.medicalInfoStep;
-            }
+        if (self.customStepIncluded) {
+            prevStep = self.customInfoStep;
         } else {
-            prevStep = nil;
+            prevStep = self.medicalInfoStep;
         }
+        self.currentStepNumber -= 1;
     } else if ([step.identifier isEqualToString:kAPCSignUpPermissionsStepIdentifier]) {
         prevStep = self.passcodeStep;
+        self.currentStepNumber -= 1;
     }
     
     return prevStep;
@@ -79,42 +86,20 @@
     return @"SignInTask";
 }
 
-#pragma mark - Getter methods
+#pragma mark - Overriden Methods
 
-- (RKSTStep *)medicalInfoStep
+- (NSInteger)numberOfSteps
 {
-    if (!_medicalInfoStep) {
-        _medicalInfoStep = [[RKSTStep alloc] initWithIdentifier:kAPCSignUpMedicalInfoStepIdentifier];
+    NSInteger count = kMinimumNumberOfSteps;
+    
+    if (self.customStepIncluded) {
+        count += 1;
+    }
+    if (!self.permissionScreenSkipped) {
+        count += 1;
     }
     
-    return _medicalInfoStep;
-}
-
-- (RKSTStep *)customInfoStep
-{
-    if (!_customInfoStep) {
-        _customInfoStep = [[RKSTStep alloc] initWithIdentifier:kAPCSignUpCustomInfoStepIdentifier];
-    }
-    
-    return _customInfoStep;
-}
-
-- (RKSTStep *)passcodeStep
-{
-    if (!_passcodeStep) {
-        _passcodeStep = [[RKSTStep alloc] initWithIdentifier:kAPCSignUpPasscodeStepIdentifier];
-    }
-    
-    return _passcodeStep;
-}
-
-- (RKSTStep *)permissionsStep
-{
-    if (!_permissionsStep) {
-        _permissionsStep = [[RKSTStep alloc] initWithIdentifier:kAPCSignUpPermissionsStepIdentifier];
-    }
-    
-    return _permissionsStep;
+    return count;
 }
 
 @end

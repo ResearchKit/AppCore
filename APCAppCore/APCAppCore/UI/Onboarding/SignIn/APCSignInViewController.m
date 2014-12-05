@@ -118,6 +118,11 @@
     return user;
 }
 
+- (APCOnboarding *)onboarding
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+}
+
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
@@ -154,7 +159,14 @@
                         APCAppDelegate *appDelegate = (APCAppDelegate*)[[UIApplication sharedApplication] delegate];
                         appDelegate.window.rootViewController = emailVerifyVC;
                     } else{
-                        user.signedIn = YES;
+                        
+                        if (user.isSecondaryInfoSaved) {
+                            user.signedIn = YES;
+                        } else{
+                            UIViewController *viewController = [[self onboarding] nextScene];
+                            [self.navigationController pushViewController:viewController animated:YES];
+                        }
+                        
                     }
                 }
             }];

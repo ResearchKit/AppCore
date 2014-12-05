@@ -55,7 +55,7 @@
 {
     [super viewDidAppear:animated];
     
-    [self.stepProgressBar setCompletedSteps:2 animation:YES];
+    [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
     
     [self.searchTextField becomeFirstResponder];
 }
@@ -109,10 +109,10 @@
     
     self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.width, kAPCSignUpProgressBarHeight)
                                                                style:APCStepProgressBarStyleDefault];
-    self.stepProgressBar.numberOfSteps = kNumberOfSteps + [self onboarding].signUpTask.customStepIncluded;
+    self.stepProgressBar.numberOfSteps = [self onboarding].onboardingTask.numberOfSteps;
     [self.view addSubview:self.stepProgressBar];
     
-    [self.stepProgressBar setCompletedSteps:1 animation:NO];
+    [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 2) animation:NO];
 }
 
 - (APCOnboarding *)onboarding

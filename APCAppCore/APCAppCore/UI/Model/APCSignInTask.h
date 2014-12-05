@@ -6,10 +6,9 @@
 //  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
-#import <APCAppCore/APCAppCore.h>
+#import "APCOnboardingTask.h"
 
-@interface APCSignInTask : APCSignUpTask
+@interface APCSignInTask : APCOnboardingTask
 
-@property (nonatomic) BOOL secondaryInfoSaved;
 
 @end

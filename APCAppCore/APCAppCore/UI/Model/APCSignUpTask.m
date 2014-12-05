@@ -6,35 +6,9 @@
 // 
  
 #import "APCSignUpTask.h"
+#import "APCUser.h"
 
-NSString *const kAPCSignUpInclusionCriteriaStepIdentifier = @"InclusionCriteria";
-NSString *const kAPCSignUpEligibleStepIdentifier          = @"Eligible";
-NSString *const kAPCSignUpIneligibleStepIdentifier        = @"Ineligible";
-NSString *const kAPCSignUpGeneralInfoStepIdentifier       = @"GeneralInfo";
-NSString *const kAPCSignUpMedicalInfoStepIdentifier       = @"MedicalInfo";
-NSString *const kAPCSignUpCustomInfoStepIdentifier        = @"CustomInfo";
-NSString *const kAPCSignUpPasscodeStepIdentifier          = @"Passcode";
-NSString *const kAPCSignUpPermissionsStepIdentifier       = @"Permissions";
-
-@interface APCSignUpTask ()
-
-@property (nonatomic, strong) RKSTStep *inclusionCriteriaStep;
-
-@property (nonatomic, strong) RKSTStep *eligibleStep;
-
-@property (nonatomic, strong) RKSTStep *ineligibleStep;
-
-@property (nonatomic, strong) RKSTStep *generalInfoStep;
-
-@property (nonatomic, strong) RKSTStep *medicalInfoStep;
-
-@property (nonatomic, strong) RKSTStep *customInfoStep;
-
-@property (nonatomic, strong) RKSTStep *passcodeStep;
-
-@property (nonatomic, strong) RKSTStep *permissionsStep;
-
-@end
+static NSInteger const kMinimumNumberOfSteps = 3; //Gen Info + MedicalInfo + Passcode
 
 @implementation APCSignUpTask
 
@@ -53,19 +27,32 @@ NSString *const kAPCSignUpPermissionsStepIdentifier       = @"Permissions";
             nextStep = self.ineligibleStep;
         }
     } else if ([step.identifier isEqualToString:kAPCSignUpEligibleStepIdentifier]) {
+        self.currentStepNumber += 1;
         nextStep = self.generalInfoStep;
+        
     } else if ([step.identifier isEqualToString:kAPCSignUpGeneralInfoStepIdentifier]) {
+        self.currentStepNumber += 1;
         nextStep = self.medicalInfoStep;
+        
     } else if ([step.identifier isEqualToString:kAPCSignUpMedicalInfoStepIdentifier]) {
         if (self.customStepIncluded) {
             nextStep = self.customInfoStep;
         } else{
             nextStep = self.passcodeStep;
+            self.user.secondaryInfoSaved = YES;
         }
+        self.currentStepNumber += 1;
     } else if ([step.identifier isEqualToString:kAPCSignUpCustomInfoStepIdentifier]) {
         nextStep = self.passcodeStep;
+        self.user.secondaryInfoSaved = YES;
+        self.currentStepNumber += 1;
     } else if ([step.identifier isEqualToString:kAPCSignUpPasscodeStepIdentifier]) {
-        nextStep = self.permissionsStep;
+        if (self.permissionScreenSkipped) {
+            nextStep = nil;
+        } else {
+            nextStep = self.permissionsStep;
+            self.currentStepNumber += 1;
+        }
     }
     
     return nextStep;
@@ -85,16 +72,20 @@ NSString *const kAPCSignUpPermissionsStepIdentifier       = @"Permissions";
         prevStep = self.eligibleStep;
     } else if ([step.identifier isEqualToString:kAPCSignUpMedicalInfoStepIdentifier]) {
         prevStep = self.generalInfoStep;
+        self.currentStepNumber -= 1;
     } else if ([step.identifier isEqualToString:kAPCSignUpCustomInfoStepIdentifier]) {
         prevStep = self.medicalInfoStep;
+        self.currentStepNumber -= 1;
     } else if ([step.identifier isEqualToString:kAPCSignUpPasscodeStepIdentifier]) {
         if (self.customStepIncluded) {
             prevStep = self.customInfoStep;
         } else {
             prevStep = self.medicalInfoStep;
         }
+        self.currentStepNumber -= 1;
     } else if ([step.identifier isEqualToString:kAPCSignUpPermissionsStepIdentifier]) {
         prevStep = self.passcodeStep;
+        self.currentStepNumber -= 1;
     }
     
     return prevStep;
@@ -105,78 +96,20 @@ NSString *const kAPCSignUpPermissionsStepIdentifier       = @"Permissions";
     return @"SignUpTask";
 }
 
-#pragma mark - Getter methods
+#pragma mark - Overriden Methods
 
-- (RKSTStep *)inclusionCriteriaStep
+- (NSInteger)numberOfSteps
 {
-    if (!_inclusionCriteriaStep) {
-        _inclusionCriteriaStep = [[RKSTStep alloc] initWithIdentifier:kAPCSignUpInclusionCriteriaStepIdentifier];
+    NSInteger count = kMinimumNumberOfSteps;
+    
+    if (self.customStepIncluded) {
+        count += 1;
+    }
+    if (!self.permissionScreenSkipped) {
+        count += 1;
     }
     
-    return _inclusionCriteriaStep;
-}
-
-- (RKSTStep *)eligibleStep
-{
-    if (!_eligibleStep) {
-        _eligibleStep = [[RKSTStep alloc] initWithIdentifier:kAPCSignUpEligibleStepIdentifier];
-    }
-    
-    return _eligibleStep;
-}
-
-- (RKSTStep *)ineligibleStep
-{
-    if (!_ineligibleStep) {
-        _ineligibleStep = [[RKSTStep alloc] initWithIdentifier:kAPCSignUpIneligibleStepIdentifier];
-    }
-    
-    return _ineligibleStep;
-}
-
-- (RKSTStep *)generalInfoStep
-{
-    if (!_generalInfoStep) {
-        _generalInfoStep = [[RKSTStep alloc] initWithIdentifier:kAPCSignUpGeneralInfoStepIdentifier];
-    }
-    
-    return _generalInfoStep;
-}
-
-- (RKSTStep *)medicalInfoStep
-{
-    if (!_medicalInfoStep) {
-        _medicalInfoStep = [[RKSTStep alloc] initWithIdentifier:kAPCSignUpMedicalInfoStepIdentifier];
-    }
-    
-    return _medicalInfoStep;
-}
-
-- (RKSTStep *)customInfoStep
-{
-    if (!_customInfoStep) {
-        _customInfoStep = [[RKSTStep alloc] initWithIdentifier:kAPCSignUpCustomInfoStepIdentifier];
-    }
-    
-    return _customInfoStep;
-}
-
-- (RKSTStep *)passcodeStep
-{
-    if (!_passcodeStep) {
-        _passcodeStep = [[RKSTStep alloc] initWithIdentifier:kAPCSignUpPasscodeStepIdentifier];
-    }
-    
-    return _passcodeStep;
-}
-
-- (RKSTStep *)permissionsStep
-{
-    if (!_permissionsStep) {
-        _permissionsStep = [[RKSTStep alloc] initWithIdentifier:kAPCSignUpPermissionsStepIdentifier];
-    }
-    
-    return _permissionsStep;
+    return count;
 }
 
 @end

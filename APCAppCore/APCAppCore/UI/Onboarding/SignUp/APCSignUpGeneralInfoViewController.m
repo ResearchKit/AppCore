@@ -28,7 +28,8 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    [self setupNavigationItems];
+    [self setupNavAppearance];
+    
     self.items = [self prepareContent];
     
     self.permissionButton.unconfirmedTitle = NSLocalizedString(@"Enter the study and contribute your data", @"");
@@ -62,8 +63,17 @@
     [super setupAppearance];
 }
 
-- (void)setupNavigationItems
+- (void)setupNavAppearance
 {
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImage:[[UIImage imageNamed:@"back_button"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    backButton.tintColor = [UIColor appPrimaryColor];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    [self.navigationItem setLeftBarButtonItem:backBarButton];
+    
     self.nextBarButton.enabled = NO;
     
     //#if DEVELOPMENT
@@ -491,8 +501,28 @@
         
         [self loadProfileValuesInModel];
         
-        UIViewController *viewController = [[self onboarding] nextScene];
-        [self.navigationController pushViewController:viewController animated:YES];
+        APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+        [self presentViewController:spinnerController animated:YES completion:nil];
+        
+        typeof(self) __weak weakSelf = self;
+        [self.user signUpOnCompletion:^(NSError *error) {
+            if (error) {
+                [spinnerController dismissViewControllerAnimated:NO completion:^{
+                    UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Up", @"") message:error.localizedDescription];
+                    [self presentViewController:alert animated:YES completion:nil];
+                }];
+            }
+            else
+            {
+                [spinnerController dismissViewControllerAnimated:NO completion:^{
+
+                    UIViewController *viewController = [[self onboarding] nextScene];
+                    [weakSelf.navigationController pushViewController:viewController animated:YES];
+                }];
+            }
+        }];
+        
+        
         
     } else{
         UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"General Information", @"") message:error];
@@ -535,6 +565,12 @@
     [alertController addAction:cancelAction];
     
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
+    [[self onboarding] popScene];
 }
 
 @end

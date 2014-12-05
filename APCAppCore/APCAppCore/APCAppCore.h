@@ -34,6 +34,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCAssertionHandler.h>
 #import <APCAppCore/APCSignUpProgressing.h>
 #import <APCAppCore/APCHealthKitQuantityTracker.h>
+#import <APCAppCore/APCOnboarding.h>
 
 /* UI */
 /* -------------------------
