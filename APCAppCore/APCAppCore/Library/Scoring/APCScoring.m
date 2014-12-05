@@ -336,9 +336,7 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
     
     if (self.current < [self.dataPoints count]) {
         nextPoint = [self.dataPoints objectAtIndex:self.current++];
-    }
-    else
-    {
+    } else {
         self.current = 0;
         nextPoint = [self.dataPoints objectAtIndex:self.current++]; 
     }
