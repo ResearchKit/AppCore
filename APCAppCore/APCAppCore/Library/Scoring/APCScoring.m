@@ -270,7 +270,7 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
                                            
                                            if (quantity) {
                                                NSDate *date = result.startDate;
-                                               double value = [quantity doubleValueForUnit:[HKUnit countUnit]];
+                                               double value = [quantity doubleValueForUnit:unit];
                                                
                                                NSDictionary *dataPoint = @{
                                                                            kDatasetDateKey: [NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle],
