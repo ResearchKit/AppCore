@@ -15,10 +15,10 @@
 //Constants being used configuring the log manager
 static NSInteger const APCFileAllocationBlockSize = 1024;
 static NSInteger const APCMegabyteFileSize = APCFileAllocationBlockSize * APCFileAllocationBlockSize;
-static NSInteger const APCPendingUploadMegaBytesThreshold = 5;
+static NSInteger const APCPendingUploadMegaBytesThreshold = 0.5;
 
 //Constants being used for creating the archive from the data logger manager
-static NSInteger const APCTotalMegaBytesThreshold = 50;
+static NSInteger const APCTotalMegaBytesThreshold = 5;
 static NSInteger const APCDataLoggerManagerMaximumInputBytes = 10;
 static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 
@@ -33,8 +33,8 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
     [[NSFileManager defaultManager] createDirectoryAtPath:self.logDirectory withIntermediateDirectories:YES attributes:nil error:nil];
     
     self.logManager = [[RKSTDataLoggerManager alloc] initWithDirectory:[NSURL fileURLWithPath:self.logDirectory] delegate:self];
-    self.logManager.pendingUploadBytesThreshold = APCPendingUploadMegaBytesThreshold * APCMegabyteFileSize; // 5 MB
-    self.logManager.totalBytesThreshold = APCTotalMegaBytesThreshold * APCMegabyteFileSize; // 50 MB
+    self.logManager.pendingUploadBytesThreshold = APCPendingUploadMegaBytesThreshold * APCMegabyteFileSize; // 0.5 MB
+    self.logManager.totalBytesThreshold = APCTotalMegaBytesThreshold * APCMegabyteFileSize; // 5 MB
     
     self.studyStore = [RKSTStudyStore sharedStudyStore];
     NSError * error;
@@ -46,9 +46,6 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
         self.study =[self.studyStore studyWithIdentifier:studyIdentifier];
     }
     [error handle];
-    
-    [(APCAppDelegate*)[UIApplication sharedApplication].delegate setUpCollectors];
-    
     [self.studyStore resume];
 }
 
@@ -88,14 +85,12 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
         logger.fileProtectionMode = RKFileProtectionCompleteUnlessOpen;
     }
     BOOL success = [logger appendObjects:[collector serializableObjectsForObjects:objects] error:nil];
-    NSLog(@"Health log (%d)", success);
     return success;
 }
 
 
 - (BOOL)study:(RKSTStudy *)study healthCorrelationCollector:(RKSTHealthCorrelationCollector *)collector anchor:(NSNumber *)anchor didCollectObjects:(NSArray /* <HKCorrelation> */ *)objects
 {
-    
     NSString *identifier = [[collector correlationType] identifier];
     RKSTDataLogger *logger = [self.logManager dataLoggerForLogName:identifier];
     if (! logger)
@@ -103,10 +98,8 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
         logger = [self.logManager addJSONDataLoggerForLogName:identifier];
         logger.fileProtectionMode = RKFileProtectionCompleteUnlessOpen;
     }
-    
-    
+
     BOOL success = [logger appendObjects:[collector serializableObjectsForObjects:objects] error:nil];
-    NSLog(@"Health log (%d)", success);
     return success;
 }
 
@@ -121,7 +114,6 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
         logger.fileProtectionMode = RKFileProtectionCompleteUnlessOpen;
     }
     BOOL success = [logger appendObjects:[collector serializableObjectsForObjects:objects] error:nil];
-    NSLog(@"Motion log (%d)", success);
     return success;
 }
 
@@ -131,17 +123,12 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
     return YES;
 }
 
-
 - (void)passiveCollectionDidFinishForStudy:(RKSTStudy *)study
 {
-    
-    NSLog(@"First collection finished - queue an upload");
-    // Create the archive.
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         [self createArchiveForUpload];
     });
 }
-
 
 // Generate a unique archive URL in the documents directory
 - (NSURL *)makeArchiveURL
@@ -151,16 +138,8 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
     return [NSURL fileURLWithPath:zipPath];
 }
 
-
 - (void)createArchiveForUpload
 {
-    // Wrap archive creation in a background task, so that the archive can be created
-    // and queued, even if
-    __block UIBackgroundTaskIdentifier taskIdentifier = UIBackgroundTaskInvalid;
-    taskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        taskIdentifier = UIBackgroundTaskInvalid;
-    }];
-    
     NSError *error = nil;
     NSArray *pendingFiles = nil;
     //TODO: Check itemIdentifier
@@ -175,8 +154,7 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
     
     if (error)
     {
-        //TODO error handling for creating a data archive
-        NSLog(@"Error creating archive from log manager: %@", error);
+        [error handle];
         
     } else {
         
@@ -202,12 +180,7 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
         
-        //TODO using debug endpoint
-        [self uploadFile:[url path]];
-        if (taskIdentifier != UIBackgroundTaskInvalid)
-        {
-            [[UIApplication sharedApplication] endBackgroundTask:taskIdentifier];
-        }
+        [self uploadFileToBridge:url onCompletion:NULL];
     }
 }
 
@@ -216,7 +189,6 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 /*********************************************************************************/
 - (void)dataLoggerManager:(RKSTDataLoggerManager*)manager pendingUploadBytesReachedThreshold:(unsigned long long)pendingUploadBytes
 {
-    NSLog(@"Pending bytes threshold reached");
     // Create the archive.
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         while (manager.pendingUploadBytes >= manager.pendingUploadBytesThreshold)
@@ -226,94 +198,44 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
     });
 }
 
-
 - (void)dataLoggerManager:(RKSTDataLoggerManager*)manager totalBytesReachedThreshold:(unsigned long long)totalBytes
 {
     
     NSLog(@"Total bytes threshold reached");
-    // Throw out old files
     [manager removeOldAndUploadedLogsToThreshold:manager.totalBytesThreshold/2 error:nil];
 }
 
 /*********************************************************************************/
-#pragma mark - Network upload debug-only end point
+#pragma mark - Bridge Call
 /*********************************************************************************/
 
-- (void) uploadFile: (NSString*) path
+- (BOOL) serverDisabled
 {
-    NSURL * url = [NSURL URLWithString:@"http://127.0.0.1:4567/api/v1/upload/passive_data_collection"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request setHTTPMethod:@"POST"];
-    NSString *boundary = [self boundaryString];
-    [request addValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
-    
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
-    
-    NSData *fileData = [NSData dataWithContentsOfFile:path];
-    NSData *data = [self createBodyWithBoundary:boundary data:fileData filename:[path lastPathComponent]];
-    
-    NSURLSessionUploadTask *task = [session uploadTaskWithRequest:request fromData:data completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        
-        if (error) {
-            //NSAssert(!error, @"%s: uploadTaskWithRequest error: %@", __FUNCTION__, error);
+#if DEVELOPMENT
+    return YES;
+#else
+    return ((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.parameters.bypassServer;
+#endif
+}
+
+- (void) uploadFileToBridge:(NSURL *)url onCompletion:(void (^)(NSError *))completionBlock
+{
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
         }
-        // parse and interpret the response `NSData` however is appropriate for your app
-    }];
-    [task resume];
-}
-
-- (NSString *)boundaryString
-{
-    // generate boundary string
-    //
-    // adapted from http://developer.apple.com/library/ios/#samplecode/SimpleURLConnections
-    
-    CFUUIDRef  uuid;
-    NSString  *uuidStr;
-    
-    uuid = CFUUIDCreate(NULL);
-    assert(uuid != NULL);
-    
-    uuidStr = CFBridgingRelease(CFUUIDCreateString(NULL, uuid));
-    assert(uuidStr != NULL);
-    
-    CFRelease(uuid);
-    
-    return [NSString stringWithFormat:@"Boundary-%@", uuidStr];
-}
-
-- (NSString *)mimeTypeForPath:(NSString *)path
-{
-    // get a mime type for an extension using MobileCoreServices.framework
-    
-    CFStringRef extension = (__bridge CFStringRef)[path pathExtension];
-    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, extension, NULL);
-    assert(UTI != NULL);
-    
-    NSString *mimetype = CFBridgingRelease(UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType));
-    assert(mimetype != NULL);
-    CFRelease(UTI);
-    
-    return mimetype;
-}
-
-- (NSData *) createBodyWithBoundary:(NSString *)boundary data:(NSData*)data filename:(NSString *)filename
-{
-    NSMutableData *body = [NSMutableData data];
-    
-    if (data) {
-        //only send these methods when transferring data as well as username and password
-        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"filedata\"; filename=\"%@\"\r\n", filename] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", [self mimeTypeForPath:filename]] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:data];
-        [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    else
+    {
+        NSAssert(url, @"URL Missing");
+        [SBBComponent(SBBUploadManager) uploadFileToBridge:url contentType:@"application/zip" completion:^(NSError *error) {
+            [error handle];
+            if (completionBlock) {
+                completionBlock(error);
+            }
+        }];
     }
     
-    [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    return body;
 }
 
 

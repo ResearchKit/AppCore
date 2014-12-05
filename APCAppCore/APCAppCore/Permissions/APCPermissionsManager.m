@@ -130,21 +130,34 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                 
                 //------READ TYPES--------
                 NSMutableArray *dataTypesToRead = [NSMutableArray new];
-                for (NSString *typeIdentifier in healthKitTypesToRead) {
-                    [dataTypesToRead addObject:[HKQuantityType quantityTypeForIdentifier:typeIdentifier]];
+                for (id typeIdentifier in healthKitTypesToRead) {
+                    if ([typeIdentifier isKindOfClass:[NSString class]]) {
+                        [dataTypesToRead addObject:[HKQuantityType quantityTypeForIdentifier:typeIdentifier]];
+                    }
+                    else if ([typeIdentifier isKindOfClass:[NSDictionary class]])
+                    {
+                        [dataTypesToRead addObject:[self objectTypeFromDictionary:typeIdentifier]];
+                    }
+
                 }
                 
                 [dataTypesToRead addObjectsFromArray: @[
-                                                       [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType],
-                                                       [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex],
-                                                       [HKQuantityType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth]
+                                                       [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType],
+                                                       [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex],
+                                                       [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth]
                                                        ]];
                 
                 //-------WRITE TYPES--------
                 NSMutableArray *dataTypesToWrite = [NSMutableArray new];
                 
-                for (NSString *typeIdentifier in healthKitTypesToRead) {
-                    [dataTypesToWrite addObject:[HKQuantityType quantityTypeForIdentifier:typeIdentifier]];
+                for (id typeIdentifier in healthKitTypesToRead) {
+                    if ([typeIdentifier isKindOfClass:[NSString class]]) {
+                        [dataTypesToRead addObject:[HKQuantityType quantityTypeForIdentifier:typeIdentifier]];
+                    }
+                    else if ([typeIdentifier isKindOfClass:[NSDictionary class]])
+                    {
+                        [dataTypesToRead addObject:[self objectTypeFromDictionary:typeIdentifier]];
+                    }
                 }
                 
                 [self.healthStore requestAuthorizationToShareTypes:[NSSet setWithArray:dataTypesToWrite] readTypes:[NSSet setWithArray:dataTypesToRead] completion:^(BOOL success, NSError *error) {
@@ -217,6 +230,29 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         default:
             break;
     }
+}
+
+- (HKObjectType*) objectTypeFromDictionary: (NSDictionary*) dictionary
+{
+    NSString * key = [[dictionary allKeys] firstObject];
+    HKObjectType * retValue;
+    if ([key isEqualToString:kHKQuantityTypeKey])
+    {
+        retValue = [HKQuantityType quantityTypeForIdentifier:dictionary[key]];
+    }
+    else if ([key isEqualToString:kHKCategoryTypeKey])
+    {
+        retValue = [HKCategoryType categoryTypeForIdentifier:dictionary[key]];
+    }
+    else if ([key isEqualToString:kHKCharacteristicTypeKey])
+    {
+        retValue = [HKCharacteristicType characteristicTypeForIdentifier:dictionary[key]];
+    }
+    else if ([key isEqualToString:kHKCorrelationTypeKey])
+    {
+        retValue = [HKCorrelationType correlationTypeForIdentifier:dictionary[key]];
+    }
+    return retValue;
 }
 
 - (NSError *)permissionDeniedErrorForType:(APCSignUpPermissionsType)type

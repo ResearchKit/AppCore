@@ -9,7 +9,6 @@
 
 #import <Foundation/Foundation.h>
 #import "ModelObject.h"
-#import "ModelObject.h"
 
 @protocol _SBBBridgeObject
 
