@@ -150,13 +150,13 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                 //-------WRITE TYPES--------
                 NSMutableArray *dataTypesToWrite = [NSMutableArray new];
                 
-                for (id typeIdentifier in healthKitTypesToRead) {
+                for (id typeIdentifier in healthKitTypesToWrite) {
                     if ([typeIdentifier isKindOfClass:[NSString class]]) {
-                        [dataTypesToRead addObject:[HKQuantityType quantityTypeForIdentifier:typeIdentifier]];
+                        [dataTypesToWrite addObject:[HKQuantityType quantityTypeForIdentifier:typeIdentifier]];
                     }
                     else if ([typeIdentifier isKindOfClass:[NSDictionary class]])
                     {
-                        [dataTypesToRead addObject:[self objectTypeFromDictionary:typeIdentifier]];
+                        [dataTypesToWrite addObject:[self objectTypeFromDictionary:typeIdentifier]];
                     }
                 }
                 
