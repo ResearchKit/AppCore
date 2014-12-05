@@ -92,35 +92,42 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
 /**
  * @brief   Returns an instance of APHScoring.
  *
- * @param   quantityType    The HealthKit quantity type
+ * @param   quantityType    The HealthKit quantity type.
+ *
+ * @param   unit            The unit that is compatible with the the quantity type that is provided.
  *
  * @param   numberOfDays    Number of days that the data is needed. Negative will produce data
  *                          from past and positive will yeild future days.
  *
  */
-- (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType  unit: (HKUnit *) unit numberOfDays:(NSUInteger)numberOfDays
+- (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
+                                         unit:(HKUnit *)unit
+                                 numberOfDays:(NSUInteger)numberOfDays
 {
     self = [super init];
     
     if (self) {
         [self sharedInit];
-        [self statsCollectionQueryForQuantityType:quantityType unit:unit forDays:numberOfDays];
+        
+        // The very first thing that we need to make sure is that
+        // the unit and quantity types are compatible
+        if ([quantityType isCompatibleWithUnit:unit]) {
+            [self statsCollectionQueryForQuantityType:quantityType unit:unit forDays:numberOfDays];
+        } else {
+            NSAssert([quantityType isCompatibleWithUnit:unit], @"The quantity and the unit must be compatible");
+        }
     }
     
     return self;
 }
 
-- (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
-                                 numberOfDays:(NSUInteger)numberOfDays
-{
-    self = [self initWithHealthKitQuantityType:quantityType  unit: [HKUnit meterUnit] numberOfDays:numberOfDays];
-    return self;
- }
-
 #pragma mark - Queries
 #pragma mark Core Data
 
-- (void)queryTaskId:(NSString *)taskId forDays:(NSUInteger)days valueKey:(NSString *)valueKey dataKey:(NSString *)dataKey
+- (void)queryTaskId:(NSString *)taskId
+            forDays:(NSUInteger)days
+           valueKey:(NSString *)valueKey
+            dataKey:(NSString *)dataKey
 {
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -212,7 +219,9 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
 
 #pragma mark HealthKit
 
-- (void)statsCollectionQueryForQuantityType:(HKQuantityType *)quantityType unit: (HKUnit*) unit forDays:(NSInteger)days
+- (void)statsCollectionQueryForQuantityType:(HKQuantityType *)quantityType
+                                       unit:(HKUnit *)unit
+                                    forDays:(NSInteger)days
 {
     NSMutableArray *queryDataset = [NSMutableArray array];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
@@ -241,7 +250,7 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
                                                                                            options:queryOptions
                                                                                         anchorDate:startDate
                                                                                 intervalComponents:interval];
-    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+    
     // set the results handler
     query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
         if (error) {
@@ -261,7 +270,7 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
                                            
                                            if (quantity) {
                                                NSDate *date = result.startDate;
-                                               double value = [quantity doubleValueForUnit:[HKUnit countUnit]];
+                                               double value = [quantity doubleValueForUnit:unit];
                                                
                                                NSDictionary *dataPoint = @{
                                                                            kDatasetDateKey: [NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle],
@@ -271,14 +280,13 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
                                                [queryDataset addObject:dataPoint];
                                            }
                                        }];
-            [self dataIsAvailableFromHealthKit:queryDataset];
-//            dispatch_semaphore_signal(sema);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self dataIsAvailableFromHealthKit:queryDataset];
+            });
         }
     };
 
     [self.healthStore executeQuery:query];
-//    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-    sema = NULL;
 }
 
 - (void)dataIsAvailableFromHealthKit:(NSArray *)dataset
@@ -328,9 +336,7 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
     
     if (self.current < [self.dataPoints count]) {
         nextPoint = [self.dataPoints objectAtIndex:self.current++];
-    }
-    else
-    {
+    } else {
         self.current = 0;
         nextPoint = [self.dataPoints objectAtIndex:self.current++]; 
     }
