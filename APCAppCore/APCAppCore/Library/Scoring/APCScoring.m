@@ -280,7 +280,9 @@ static NSString *const kDatasetValueKey = @"datasetValueKey";
                                                [queryDataset addObject:dataPoint];
                                            }
                                        }];
-            [self dataIsAvailableFromHealthKit:queryDataset];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self dataIsAvailableFromHealthKit:queryDataset];
+            });
         }
     };
 
