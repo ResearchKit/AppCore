@@ -4,7 +4,7 @@
 #import "SBBDateTimeConstraints.h"
 #import "SBBDecimalConstraints.h"
 #import "SBBDurationConstraints.h"
-#import "SBBGuidHolder.h"
+#import "SBBIdentifierHolder.h"
 #import "SBBIntegerConstraints.h"
 #import "SBBMultiValueConstraints.h"
 #import "SBBResourceList.h"

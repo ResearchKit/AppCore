@@ -124,13 +124,17 @@
     {
         NSString * name = self.firstName.length? [self.firstName stringByAppendingFormat:@" %@", self.lastName] : @"FirstName";
         NSDate * birthDate = self.birthDate ?: [NSDate dateWithTimeIntervalSince1970:(60*60*24*365*10)];
-        [SBBComponent(SBBConsentManager) consentSignature:name birthdate:birthDate completion:^(id responseObject, NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completionBlock) {
-                    completionBlock(error);
-                }
-            });
-        }];
+#warning upload signature photo
+        [SBBComponent(SBBConsentManager) consentSignature:name
+                                                birthdate:birthDate
+                                           signatureImage:nil
+                                               completion:^(id responseObject, NSError *error) {
+                                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                                       if (completionBlock) {
+                                                           completionBlock(error);
+                                                       }
+                                                   });
+                                               }];
     }
 }
 

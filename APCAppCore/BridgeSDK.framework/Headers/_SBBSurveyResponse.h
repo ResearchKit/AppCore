@@ -8,7 +8,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ModelObject.h"
 #import "SBBBridgeObject.h"
 
 #import "SBBSurvey.h"
@@ -23,7 +22,7 @@
 
 @property (nonatomic, strong) NSDate* completedOn;
 
-@property (nonatomic, strong) NSString* guid;
+@property (nonatomic, strong) NSString* identifier;
 
 @property (nonatomic, strong) NSDate* startedOn;
 
