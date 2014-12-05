@@ -39,22 +39,16 @@
     
     self.permissionManager = [[APCPermissionsManager alloc] init];
     
-    self.permissionGranted = [self.permissionManager isPermissionsGrantedForType:kSignUpPermissionsTypeHealthKit];
-    
     __weak typeof(self) weakSelf = self;
-    if (!self.permissionGranted) {
-        [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError *error) {
-            if (granted) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    weakSelf.permissionGranted = YES;
-                    weakSelf.items = [self prepareContent];
-                    [weakSelf.tableView reloadData];
-                });
-            }
-        }];
-    } else{
-        self.items = [self prepareContent];
-    }
+    [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError *error) {
+        if (granted) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakSelf.permissionGranted = YES;
+                weakSelf.items = [self prepareContent];
+                [weakSelf.tableView reloadData];
+            });
+        }
+    }];
     
     [self.profileImageButton setImage:[UIImage imageNamed:@"profilePlaceholder"] forState:UIControlStateNormal];
 }
@@ -508,8 +502,9 @@
         typeof(self) __weak weakSelf = self;
         [self.user signUpOnCompletion:^(NSError *error) {
             if (error) {
+                [error handle];
                 [spinnerController dismissViewControllerAnimated:NO completion:^{
-                    UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Up", @"") message:error.localizedDescription];
+                    UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Up", @"") message:error.message];
                     [self presentViewController:alert animated:YES completion:nil];
                 }];
             }
