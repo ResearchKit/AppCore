@@ -30,6 +30,7 @@
     self.webView.delegate = self;
     [self.webView loadRequest:request];
     [self.webView setDataDetectorTypes:UIDataDetectorTypeAll];
+    self.webView.scalesPageToFit = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated

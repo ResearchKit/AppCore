@@ -49,6 +49,10 @@
 @property (nonatomic, strong) NSNumber *homeLocationLat;
 @property (nonatomic, strong) NSNumber *homeLocationLong;
 
+@property (nonatomic, strong) NSString *consentSignatureName;
+@property (nonatomic, strong) NSDate *consentSignatureDate;
+@property (nonatomic, strong) NSData *consentSignatureImage;
+
 @property (nonatomic, getter=isSecondaryInfoSaved) BOOL secondaryInfoSaved;
 
 /*********************************************************************************/
