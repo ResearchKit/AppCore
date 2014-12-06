@@ -170,12 +170,13 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void) signedInNotification:(NSNotification*) notification
 {
+    [self.dataMonitor userConsented];
     [self showTabBar];
 }
 
 - (void) userConsented:(NSNotification*) notification
 {
-    [self.dataMonitor userConsented];
+
 }
 
 - (void) logOutNotification:(NSNotification*) notification
