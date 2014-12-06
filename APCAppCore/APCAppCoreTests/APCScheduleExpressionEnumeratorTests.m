@@ -23,8 +23,8 @@
 
 @interface APCScheduleExpressionEnumeratorTests : XCTestCase
 
-@property (nonatomic, strong) NSDateFormatter*  dateFormatter;
-@property (nonatomic, strong) NSDateFormatter*  dayOfWeekFormatter;
+@property (nonatomic, strong) NSDateFormatter*  dateFormatterInGregorianUTC;
+@property (nonatomic, strong) NSDateFormatter*  dayOfWeekFormatterInGregorianUTC;
 @property (nonatomic, strong) NSArray*			everyYear;
 @property (nonatomic, strong) NSArray*			everyMonth;
 @property (nonatomic, strong) NSArray*			everyDay;
@@ -53,15 +53,15 @@
 	// calendar objects everywhere:
 	NSDateComponents* components = [NSDateComponents componentsInGregorianUTC];
 
-	self.dateFormatter = [NSDateFormatter new];
-	self.dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
-	self.dateFormatter.calendar = components.calendar;
-	self.dateFormatter.timeZone = components.timeZone;
+	self.dateFormatterInGregorianUTC = [NSDateFormatter new];
+	self.dateFormatterInGregorianUTC.dateFormat = @"yyyy-MM-dd HH:mm";
+	self.dateFormatterInGregorianUTC.calendar = components.calendar;
+	self.dateFormatterInGregorianUTC.timeZone = components.timeZone;
 
-	self.dayOfWeekFormatter = [NSDateFormatter new];
-	self.dayOfWeekFormatter.dateFormat = @"EEE yyyy-MM-dd HH:mm";
-	self.dayOfWeekFormatter.calendar = components.calendar;
-	self.dayOfWeekFormatter.timeZone = components.timeZone;
+	self.dayOfWeekFormatterInGregorianUTC = [NSDateFormatter new];
+	self.dayOfWeekFormatterInGregorianUTC.dateFormat = @"EEE yyyy-MM-dd HH:mm";
+	self.dayOfWeekFormatterInGregorianUTC.calendar = components.calendar;
+	self.dayOfWeekFormatterInGregorianUTC.timeZone = components.timeZone;
 
 	self.everyYear   = [self numericSequenceFrom: 2014	to: 2017];
 	self.everyMonth  = [self numericSequenceFrom: 1		to: 12];
@@ -215,15 +215,15 @@
 							if (! [testHarnessDate isEqualToDate: enumeratorDate])
 							{
 								NSLog (@"NO MATCH:  testHarness %@ != enumerator %@",
-									   [self.dayOfWeekFormatter stringFromDate: testHarnessDate],
-									   [self.dayOfWeekFormatter stringFromDate: enumeratorDate]);
+									   [self.dayOfWeekFormatterInGregorianUTC stringFromDate: testHarnessDate],
+									   [self.dayOfWeekFormatterInGregorianUTC stringFromDate: enumeratorDate]);
 							}
 
 							else if (DEBUG__PRINT_HAPPY_TEST_CASES)
 							{
 								NSLog (@"MATCH:     testHarness %@ == enumerator %@",
-									   [self.dayOfWeekFormatter stringFromDate: testHarnessDate],
-									   [self.dayOfWeekFormatter stringFromDate: enumeratorDate]);
+									   [self.dayOfWeekFormatterInGregorianUTC stringFromDate: testHarnessDate],
+									   [self.dayOfWeekFormatterInGregorianUTC stringFromDate: enumeratorDate]);
 							}
 
 							XCTAssertEqualObjects (testHarnessDate, enumeratorDate);
@@ -354,8 +354,8 @@
 //	NSString *endDateString = @"2016-07-02 00:00";		//
 
 	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
-	NSDate *startDate				= [self.dateFormatter dateFromString: startDateString];
-	NSDate *endDate					= [self.dateFormatter dateFromString: endDateString];
+	NSDate *startDate				= [self.dateFormatterInGregorianUTC dateFromString: startDateString];
+	NSDate *endDate					= [self.dateFormatterInGregorianUTC dateFromString: endDateString];
 	NSEnumerator* enumerator		= [schedule enumeratorBeginningAtTime: startDate  endingAtTime: endDate];
 
 
@@ -386,8 +386,8 @@
 {
 	NSString*				cronExpression	= @"0 5 * * 1";		// Every day at 5am, only on Mondays.
 
-	NSDate*					startDate		= [self.dateFormatter dateFromString: @"2014-12-04 00:00"];		// a Thursday, at midnight
-	NSDate*					endDate			= [self.dateFormatter dateFromString: @"2014-12-05 00:00"];		// a Friday, at midnight
+	NSDate*					startDate		= [self.dateFormatterInGregorianUTC dateFromString: @"2014-12-04 00:00"];		// a Thursday, at midnight
+	NSDate*					endDate			= [self.dateFormatterInGregorianUTC dateFromString: @"2014-12-05 00:00"];		// a Friday, at midnight
 
 	APCScheduleExpression*	schedule		= [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
 	NSEnumerator*			enumerator		= [schedule enumeratorBeginningAtTime: startDate  endingAtTime: endDate];
@@ -443,7 +443,7 @@
 {
 	NSString*				cronExpression = @"5 * * * *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:01"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -458,8 +458,8 @@
 {
 	NSString*				cronExpression    = @"5 * * * *";
 	APCScheduleExpression*	schedule          = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			boundedEnumerator = [schedule enumeratorBeginningAtTime: [self.dateFormatter dateFromString: @"2014-01-01 00:00"]
-											                           endingAtTime: [self.dateFormatter dateFromString: @"2014-01-01 23:59"]];
+	NSEnumerator*			boundedEnumerator = [schedule enumeratorBeginningAtTime: [self.dateFormatterInGregorianUTC dateFromString: @"2014-01-01 00:00"]
+											                           endingAtTime: [self.dateFormatterInGregorianUTC dateFromString: @"2014-01-01 23:59"]];
 
 	[self enumerateOverYears: @[@2014]
 				  daysOfWeek: nil
@@ -476,7 +476,7 @@
 {
 	NSString*				cronExpression = @"15,30,45 * * * *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:01"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -491,7 +491,7 @@
 {
 	NSString*				cronExpression = @"15-30 * * * *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:01"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -506,7 +506,7 @@
 {
 	NSString*				cronExpression = @"*/15 * * * *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -521,7 +521,7 @@
 {
 	NSString*				cronExpression = @"15-30/5 * * * *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:01"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -536,7 +536,7 @@
 {
 	NSString*				cronExpression = @"10-12,20-22 * * * *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:01"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -557,7 +557,7 @@
 {
 	NSString*				cronExpression = @"* 10 * * *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 08:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 08:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -572,7 +572,7 @@
 {
 	NSString*				cronExpression = @"* 8,12,16 * * *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 08:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 08:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -587,7 +587,7 @@
 {
 	NSString*				cronExpression = @"* 8-17 * * *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 08:00"]];
+	NSEnumerator*			enumerator = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 08:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -602,7 +602,7 @@
 {
 	NSString*				cronExpression = @"* 8/4 * * *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 08:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 08:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -625,7 +625,7 @@
 //	NSString*				cronExpression = @"0 1,13 15 * *";	// so I don't have to iterate so much in the debugger.
 
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -644,7 +644,7 @@
 //	NSString*				cronExpression = @"5 10 15,30 * *";		// so I don't have to iterate so much in the debugger.
 
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -661,7 +661,7 @@
 {
 	NSString*				cronExpression = @"* * 1-14 * *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -676,7 +676,7 @@
 {
 	NSString*				cronExpression = @"* * 10/5 * *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -733,7 +733,7 @@
 {
 	NSString*				cronExpression = @"* * * 4 *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -748,7 +748,7 @@
 {
 	NSString*				cronExpression = @"* * * 2,4,6,8 *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -763,7 +763,7 @@
 {
 	NSString*				cronExpression = @"* * * 6-9 *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -778,7 +778,7 @@
 {
 	NSString*				cronExpression = @"* * * 4/2 *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -804,8 +804,8 @@
 	NSString *startDateString	= @"2014-11-26 00:00";	//
 	NSString *endDateString		= @"2014-11-27 00:00";	//
 
-	NSDate *startDate				= [self.dateFormatter dateFromString: startDateString];
-	NSDate *endDate					= [self.dateFormatter dateFromString: endDateString];
+	NSDate *startDate				= [self.dateFormatterInGregorianUTC dateFromString: startDateString];
+	NSDate *endDate					= [self.dateFormatterInGregorianUTC dateFromString: endDateString];
 	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
 	NSEnumerator* enumerator		= [schedule enumeratorBeginningAtTime: startDate  endingAtTime: endDate];
 
@@ -878,15 +878,15 @@
 	NSString* startDateString		= @"2014-11-01 00:00";	// Saturday
 	NSString* endDateString			= @"2015-01-31 00:00";	// Saturday
 
-	NSDate *startDate				= [self.dateFormatter dateFromString: startDateString];
-	NSDate *endDate					= [self.dateFormatter dateFromString: endDateString];
+	NSDate *startDate				= [self.dateFormatterInGregorianUTC dateFromString: startDateString];
+	NSDate *endDate					= [self.dateFormatterInGregorianUTC dateFromString: endDateString];
 	
 	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
 	NSEnumerator* enumerator		= [schedule enumeratorBeginningAtTime: startDate  endingAtTime: endDate];
 
-	XCTAssertEqualObjects (enumerator.nextObject, [self.dateFormatter dateFromString: @"2014-11-03 00:00"]);
-	XCTAssertEqualObjects (enumerator.nextObject, [self.dateFormatter dateFromString: @"2014-12-01 00:00"]);
-	XCTAssertEqualObjects (enumerator.nextObject, [self.dateFormatter dateFromString: @"2015-01-05 00:00"]);
+	XCTAssertEqualObjects (enumerator.nextObject, [self.dateFormatterInGregorianUTC dateFromString: @"2014-11-03 00:00"]);
+	XCTAssertEqualObjects (enumerator.nextObject, [self.dateFormatterInGregorianUTC dateFromString: @"2014-12-01 00:00"]);
+	XCTAssertEqualObjects (enumerator.nextObject, [self.dateFormatterInGregorianUTC dateFromString: @"2015-01-05 00:00"]);
 	XCTAssertNil		  (enumerator.nextObject);
 }
 
@@ -901,17 +901,17 @@
 	NSString* startDateString	= @"2014-11-01 00:00";	// Saturday
 	NSString* endDateString		= @"2015-01-31 00:00";	// Saturday
 
-	NSDate *startDate				= [self.dateFormatter dateFromString: startDateString];
-	NSDate *endDate					= [self.dateFormatter dateFromString: endDateString];
+	NSDate *startDate				= [self.dateFormatterInGregorianUTC dateFromString: startDateString];
+	NSDate *endDate					= [self.dateFormatterInGregorianUTC dateFromString: endDateString];
 	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
 	NSEnumerator* enumerator		= [schedule enumeratorBeginningAtTime: startDate  endingAtTime: endDate];
 
-	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatter dateFromString: @"2014-11-03 00:00"] );
-	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatter dateFromString: @"2014-11-17 00:00"] );
-	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatter dateFromString: @"2014-12-01 00:00"] );
-	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatter dateFromString: @"2014-12-15 00:00"] );
-	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatter dateFromString: @"2015-01-05 00:00"] );
-	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatter dateFromString: @"2015-01-19 00:00"] );
+	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatterInGregorianUTC dateFromString: @"2014-11-03 00:00"] );
+	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatterInGregorianUTC dateFromString: @"2014-11-17 00:00"] );
+	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatterInGregorianUTC dateFromString: @"2014-12-01 00:00"] );
+	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatterInGregorianUTC dateFromString: @"2014-12-15 00:00"] );
+	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatterInGregorianUTC dateFromString: @"2015-01-05 00:00"] );
+	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatterInGregorianUTC dateFromString: @"2015-01-19 00:00"] );
 	XCTAssertNil          ( enumerator.nextObject );
 }
 
@@ -927,8 +927,8 @@
 	NSString* startDateString	= @"2014-11-01 00:00";
 	NSString* endDateString		= @"2015-01-31 00:00";
 
-	NSDate *startDate				= [self.dateFormatter dateFromString: startDateString];
-	NSDate *endDate					= [self.dateFormatter dateFromString: endDateString];
+	NSDate *startDate				= [self.dateFormatterInGregorianUTC dateFromString: startDateString];
+	NSDate *endDate					= [self.dateFormatterInGregorianUTC dateFromString: endDateString];
 	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
 	NSEnumerator* enumerator		= [schedule enumeratorBeginningAtTime: startDate  endingAtTime: endDate];
 
@@ -961,7 +961,7 @@
 	for (NSString *dateString in expectedDates)
 	{
 		NSDate *enumeratorDate = enumerator.nextObject;
-		NSDate *testHarnessDate = [self.dateFormatter dateFromString: dateString];
+		NSDate *testHarnessDate = [self.dateFormatterInGregorianUTC dateFromString: dateString];
 		XCTAssertEqualObjects (enumeratorDate, testHarnessDate);
 	}
 
@@ -992,7 +992,7 @@
 {
 	NSString*				cronExpression = @"* * * * 2";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime: [self.dateFormatter dateFromString: @"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime: [self.dateFormatterInGregorianUTC dateFromString: @"2014-01-01 00:00"]];
 
 	[self enumerateOverYears: nil
 				  daysOfWeek: @[@2]
@@ -1008,7 +1008,7 @@
 //	NSString*				cronExpression = @"* * * * 2,4,6,7";
 	NSString*				cronExpression = @"0 0 * * 2,4,6";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime: [self.dateFormatter dateFromString: @"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime: [self.dateFormatterInGregorianUTC dateFromString: @"2014-01-01 00:00"]];
 
 	[self enumerateOverYears: nil
 //				  daysOfWeek: @[@2, @4, @6, @7]			// the real test
@@ -1024,7 +1024,7 @@
 {
 	NSString*				cronExpression = @"* * * * 3-6";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime: [self.dateFormatter dateFromString: @"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime: [self.dateFormatterInGregorianUTC dateFromString: @"2014-01-01 00:00"]];
 
 	[self enumerateOverYears: nil
 				  daysOfWeek: @[@3, @4, @5, @6]
@@ -1039,7 +1039,7 @@
 {
 	NSString*				cronExpression = @"* * * * 1/2";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:@[@1, @3, @5]
@@ -1055,7 +1055,7 @@
 //	NSString*				cronExpression = @"* * * * 2/2";		// the real test
 	NSString*				cronExpression = @"0 0 * * 2/2";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:@[@2, @4, @6]
@@ -1073,7 +1073,7 @@
 //	NSString*				cronExpression = @"* * * * 3/2";		// the real test
 	NSString*				cronExpression = @"0 0 * * 3/2";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:@[@3, @5]
@@ -1088,7 +1088,7 @@
 {
 	NSString*				cronExpression = @"* * * * 4/2";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:@[@4, @6]
@@ -1103,7 +1103,7 @@
 {
 	NSString*				cronExpression = @"* * * * 1-4/2";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:00"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:@[@1, @3]
@@ -1124,7 +1124,7 @@
 {
 	NSString*				cronExpression = @"5 10 * * *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:01"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -1139,7 +1139,7 @@
 {
 	NSString*				cronExpression = @"5 10 20 * *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:01"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -1154,7 +1154,7 @@
 {
 	NSString*				cronExpression = @"5 10 20 9 *";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:01"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:nil
@@ -1169,7 +1169,7 @@
 {
 	NSString*				cronExpression = @"5 10 20 9 4";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
-	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:01"]];
+	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatterInGregorianUTC dateFromString:@"2014-01-01 00:01"]];
 
 	[self enumerateOverYears:nil
 				  daysOfWeek:@[@4]
@@ -1178,6 +1178,93 @@
 					   hours:@[@10]
 					 minutes:@[@5]
 		 comparingEnumerator:enumerator];
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Realistic tests
+// ---------------------------------------------------------
+
+/**
+ In Jira: part of APPLE-424, APPLE-598
+
+ Goal: make sure the dates that come out of the enumerator
+ are in the user's time zone.
+
+ The real-life situation this test represents:  The user
+ is looking at a list of stuff to do.  The list contains
+ exactly one, two, or three days:
+ - today only (whatever "today" is)
+ - today and tomorrow
+ - yesterday, today, and tomorrow
+ 
+ The point is that the user needs to know what the doctors
+ need him or her to do on those days:  check blood
+ pressure, do jumping jacks, etc.  The user isn't looking
+ a week into the future or the past -- that makes no
+ real-life sense.
+ 
+ However:  since that 3-day span can be any 3 days, we need
+ to make sure that the dates and times coming out of the
+ enumerator are correct days, even if
+ - the 3 days span a daylight-savings boundary
+ - the user is in different time zones on different days
+ - the days are in different months
+ 
+ So this test will check those various time ranges, and
+ ensure that the times coming out of the enumerator
+ are indeed the expected times on each day.
+ 
+ In addition, all our internal calculations are done in
+ UTC (Greenwich Mean Time, without daylight-savings added).
+ The cron expressions, though, are phrased in the user's
+ local time zone.  Let's make sure that's what we're
+ delivering.
+ */
+- (void) testCorrectTimeZone
+{
+	NSString* cronExpression		= @"0 12,17 * * 1";		// noon and 5pm every Monday
+	NSString* startDateString		= @"2014-11-01 00:00";
+	NSString* endDateString			= @"2014-12-01 00:00";
+
+	NSTimeInterval userWakeupTimeOffset	= 0;
+
+	NSDate *startDateInPacificTime = [self.dateFormatterInGregorianUTC dateFromString: startDateString];
+	NSDate *endDateInPacificTime   = [self.dateFormatterInGregorianUTC dateFromString: endDateString];
+
+	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression
+																			   timeZero: userWakeupTimeOffset];
+
+	NSEnumerator* enumerator = [schedule enumeratorBeginningAtTime: startDateInPacificTime
+													  endingAtTime: endDateInPacificTime];
+
+	NSArray *expectedDates = @[
+							   @"2014-11-03 12:00",
+							   @"2014-11-03 17:00",
+							   @"2014-11-10 12:00",
+							   @"2014-11-10 17:00",
+							   @"2014-11-17 12:00",
+							   @"2014-11-17 17:00",
+							   @"2014-11-24 12:00",
+							   @"2014-11-24 17:00",
+							   ];
+
+
+	// This is part of the realistic test:  loop through, extract every value, create something useful from it.
+
+	NSDate *testHarnessDate = nil;
+	NSDate *enumeratorDate = nil;
+
+	for (NSString *testHarnessDateString in expectedDates)
+	{
+		testHarnessDate = [self.dateFormatterInGregorianUTC dateFromString: testHarnessDateString];
+		enumeratorDate = enumerator.nextObject;
+
+		XCTAssertEqualObjects (enumeratorDate, testHarnessDate);
+	}
+
+	XCTAssertNil (enumerator.nextObject);
 }
 
 

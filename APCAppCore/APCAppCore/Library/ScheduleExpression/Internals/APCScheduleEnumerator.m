@@ -79,7 +79,8 @@ static NSInteger    kYearIndex   = 4;
 									@(NSCalendarUnitHour),
 									@(NSCalendarUnitMinute),
 									@(NSCalendarUnitTimeZone),
-									@(NSCalendarUnitCalendar) ];
+									@(NSCalendarUnitCalendar),
+									];
 
 		NSDateComponents* beginComponents = [NSDateComponents components: calendarUnits
 												  inGregorianUTCFromDate: begin];
@@ -251,9 +252,19 @@ static NSInteger    kYearIndex   = 4;
         }
         else
         {
-            //  Rollover the current enumerator and move to the next one.
-            //  Enumerators (0 ... ndx - 1) have already been rolled over
-			//  at this point.
+            /*
+			 Rollover the current enumerator and move to the next one.
+			 Enumerators (0 ... index - 1) have already been rolled over
+			 at this point.
+
+			 Note that if the enumerator we're about to roll over is the
+			 dayOfMonth enumerator, its "rolled over" value will be wrong,
+			 by definition:  we're rolling over into a new month, and any
+			 rules for calculating days of the month (like "every other
+			 Monday") will have to be reevaluated.  We'll do that shortly,
+			 in the above part of this "if" statement, after rolling over
+			 to the new month or year.
+			 */
 			NSNumber* firstMomentForThisEnumerator = [enumerator nextObjectAfterRollover];
             self.calendarComponents [enumeratorIndex] = firstMomentForThisEnumerator;
             ++enumeratorIndex;
