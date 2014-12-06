@@ -13,6 +13,7 @@
 #import "UIFont+APCAppearance.h"
 #import "APCKeychainStore.h"
 #import "APCUserInfoConstants.h"
+#import "UIImage+APCHelper.h"
 
 @interface APCPasscodeViewController ()<APCPasscodeViewDelegate>
 
@@ -68,7 +69,7 @@
     
     [self.logoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
     
-    [self.touchIdButton setBackgroundColor:[UIColor appPrimaryColor]];
+    [self.touchIdButton setBackgroundImage:[UIImage imageWithColor:[UIColor appPrimaryColor]] forState:UIControlStateNormal];
 }
 
 #pragma mark - APCPasscodeViewDelegate

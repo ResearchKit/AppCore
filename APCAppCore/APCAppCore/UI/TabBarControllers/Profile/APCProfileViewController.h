@@ -34,8 +34,6 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *leaveStudyButton;
 
-@property (weak, nonatomic) IBOutlet UIButton *reviewConsentButton;
-
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *rightBarButton;
 
 @property (nonatomic, strong) UIImage *profileImage;
