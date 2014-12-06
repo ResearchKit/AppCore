@@ -27,4 +27,8 @@
 @dynamic homeLocationLong;
 @dynamic secondaryInfoSaved;
 
+@dynamic consentSignatureName;
+@dynamic consentSignatureDate;
+@dynamic consentSignatureImage;
+
 @end
