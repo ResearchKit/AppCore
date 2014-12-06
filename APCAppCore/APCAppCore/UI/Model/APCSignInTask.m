@@ -1,16 +1,21 @@
-// 
-//  APCSignUpTask.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
- 
-#import "APCSignUpTask.h"
+//
+//  APCSignInTask.m
+//  APCAppCore
+//
+//  Created by Ramsundar Shandilya on 12/4/14.
+//  Copyright (c) 2014 Y Media Labs. All rights reserved.
+//
+
+#import "APCSignInTask.h"
 #import "APCUser.h"
 
-static NSInteger const kMinimumNumberOfSteps = 3; //Gen Info + MedicalInfo + Passcode
+static NSInteger const kMinimumNumberOfSteps = 2; //MedicalInfo + Passcode
 
-@implementation APCSignUpTask
+@interface APCSignInTask ()
+
+@end
+
+@implementation APCSignInTask
 
 #pragma mark - RKSTTask methods
 
@@ -19,20 +24,14 @@ static NSInteger const kMinimumNumberOfSteps = 3; //Gen Info + MedicalInfo + Pas
     RKSTStep *nextStep;
     
     if (!step) {
-        nextStep = self.inclusionCriteriaStep;
-    } else if ([step.identifier isEqualToString:kAPCSignUpInclusionCriteriaStepIdentifier]) {
-        if (self.eligible) {
-            nextStep = self.eligibleStep;
+        nextStep = self.signInStep;
+    } else if ([step.identifier isEqualToString:kAPCSignInStepIdentifier]) {
+        if (self.user.isSecondaryInfoSaved) {
+            nextStep = nil;
         } else{
-            nextStep = self.ineligibleStep;
+            nextStep = self.medicalInfoStep;
+            self.currentStepNumber += 1;
         }
-    } else if ([step.identifier isEqualToString:kAPCSignUpEligibleStepIdentifier]) {
-        self.currentStepNumber += 1;
-        nextStep = self.generalInfoStep;
-        
-    } else if ([step.identifier isEqualToString:kAPCSignUpGeneralInfoStepIdentifier]) {
-        self.currentStepNumber += 1;
-        nextStep = self.medicalInfoStep;
         
     } else if ([step.identifier isEqualToString:kAPCSignUpMedicalInfoStepIdentifier]) {
         if (self.customStepIncluded) {
@@ -62,17 +61,8 @@ static NSInteger const kMinimumNumberOfSteps = 3; //Gen Info + MedicalInfo + Pas
 {
     RKSTStep *prevStep;
     
-    if ([step.identifier isEqualToString:kAPCSignUpInclusionCriteriaStepIdentifier]) {
+    if ([step.identifier isEqualToString:kAPCSignUpMedicalInfoStepIdentifier]) {
         prevStep = nil;
-    } else if ([step.identifier isEqualToString:kAPCSignUpEligibleStepIdentifier]) {
-        prevStep = self.inclusionCriteriaStep;
-    } else if ([step.identifier isEqualToString:kAPCSignUpIneligibleStepIdentifier]) {
-        prevStep = self.inclusionCriteriaStep;
-    } else if ([step.identifier isEqualToString:kAPCSignUpGeneralInfoStepIdentifier]) {
-        prevStep = self.eligibleStep;
-    } else if ([step.identifier isEqualToString:kAPCSignUpMedicalInfoStepIdentifier]) {
-        prevStep = self.generalInfoStep;
-        self.currentStepNumber -= 1;
     } else if ([step.identifier isEqualToString:kAPCSignUpCustomInfoStepIdentifier]) {
         prevStep = self.medicalInfoStep;
         self.currentStepNumber -= 1;
@@ -93,7 +83,7 @@ static NSInteger const kMinimumNumberOfSteps = 3; //Gen Info + MedicalInfo + Pas
 
 - (NSString *)identifier
 {
-    return @"SignUpTask";
+    return @"SignInTask";
 }
 
 #pragma mark - Overriden Methods

@@ -118,6 +118,11 @@
     return user;
 }
 
+- (APCOnboarding *)onboarding
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+}
+
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
@@ -143,6 +148,8 @@
         [user signInOnCompletion:^(NSError *error) {
             [spinnerController dismissViewControllerAnimated:YES completion:^{
                 if (error) {
+                    [error handle];
+                    
                     UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:error.message];
                     [self presentViewController:alert animated:YES completion:nil];
                 }
@@ -154,7 +161,18 @@
                         APCAppDelegate *appDelegate = (APCAppDelegate*)[[UIApplication sharedApplication] delegate];
                         appDelegate.window.rootViewController = emailVerifyVC;
                     } else{
-                        user.signedIn = YES;
+                        
+                        [user getProfileOnCompletion:^(NSError *error) {
+                            [error handle];
+                        }];
+                        
+                        if (user.isSecondaryInfoSaved) {
+                            user.signedIn = YES;
+                        } else{
+                            UIViewController *viewController = [[self onboarding] nextScene];
+                            [self.navigationController pushViewController:viewController animated:YES];
+                        }
+                        
                     }
                 }
             }];

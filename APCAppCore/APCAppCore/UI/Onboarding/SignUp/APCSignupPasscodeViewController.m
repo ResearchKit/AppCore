@@ -61,7 +61,7 @@
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self.stepProgressBar setCompletedSteps:(2 + [self onboarding].signUpTask.customStepIncluded) animation:YES];
+    [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
     
     [self.passcodeView becomeFirstResponder];
 }
@@ -84,6 +84,8 @@
     
     UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     [self.navigationItem setLeftBarButtonItem:backBarButton];
+    
+    
 }
 
 - (void) setupProgressBar {
@@ -92,10 +94,10 @@
     
     self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.width, kAPCSignUpProgressBarHeight)
                                                                style:APCStepProgressBarStyleDefault];
-    self.stepProgressBar.numberOfSteps = kNumberOfSteps + [self onboarding].signUpTask.customStepIncluded;
+    self.stepProgressBar.numberOfSteps = [self onboarding].onboardingTask.numberOfSteps;
     [self.view addSubview:self.stepProgressBar];
     
-    [self.stepProgressBar setCompletedSteps:(1 + [self onboarding].signUpTask.customStepIncluded) animation:NO];
+    [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 2) animation:NO];
 }
 
 - (APCUser *) user {
@@ -133,8 +135,13 @@
 
 - (void) next
 {
-    UIViewController *viewController = [[self onboarding] nextScene];
-    [self.navigationController pushViewController:viewController animated:YES];
+    if ([self onboarding].onboardingTask.permissionScreenSkipped) {
+        [self finishOnboarding];
+    }else {
+        UIViewController *viewController = [[self onboarding] nextScene];
+        [self.navigationController pushViewController:viewController animated:YES];
+    }
+    
 }
 
 - (void) showFirstTry
@@ -176,5 +183,29 @@
     [self next];
 }
 
+#pragma mark - Selectors
+
+- (void)finishOnboarding
+{
+    [self.stepProgressBar setCompletedSteps:[self onboarding].onboardingTask.currentStepNumber animation:YES];
+    
+    if ([self onboarding].taskType == kAPCOnboardingTaskTypeSignIn) {
+        // We are posting this notification after .4 seconds delay, because we need to display the progress bar completion animation
+        [self performSelector:@selector(setUserSignedIn) withObject:nil afterDelay:0.4];
+    } else{
+        [self performSelector:@selector(setUserSignedUp) withObject:nil afterDelay:0.4];
+    }
+    
+}
+
+- (void) setUserSignedUp
+{
+    self.user.signedUp = YES;
+}
+
+- (void)setUserSignedIn
+{
+    self.user.signedIn = YES;
+}
 
 @end

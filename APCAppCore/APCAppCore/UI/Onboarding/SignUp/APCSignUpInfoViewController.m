@@ -35,7 +35,6 @@ static CGFloat const kHeaderHeight = 127.0f;
     
     [self setupStepProgressBar];
     [self setupAppearance];
-    [self setupNavAppearance];
     
     self.firstNameTextField.delegate = self;
     self.lastNameTextField.delegate = self;
@@ -50,13 +49,16 @@ static CGFloat const kHeaderHeight = 127.0f;
 {
     [super viewWillAppear:animated];
     
+    UIEdgeInsets inset = self.tableView.contentInset;
+    self.tableView.contentInset = inset;
+    
     if (self.headerView && (CGRectGetHeight(self.headerView.frame) != kHeaderHeight)) {
         CGRect headerRect = self.headerView.frame;
         headerRect.size.height = kHeaderHeight;
         self.headerView.frame = headerRect; 
         
         self.tableView.tableHeaderView = self.tableView.tableHeaderView;
-    }    
+    }
 }
 
 #pragma mark -
@@ -65,7 +67,7 @@ static CGFloat const kHeaderHeight = 127.0f;
 {
     self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, -kAPCSignUpProgressBarHeight, CGRectGetWidth(self.view.frame), kAPCSignUpProgressBarHeight)
                                                                style:APCStepProgressBarStyleOnlyProgressView];
-    self.stepProgressBar.numberOfSteps = kNumberOfSteps + [self onboarding].signUpTask.customStepIncluded;
+    self.stepProgressBar.numberOfSteps = [self onboarding].onboardingTask.numberOfSteps;
     [self.view addSubview:self.stepProgressBar];
     
     
@@ -117,18 +119,6 @@ static CGFloat const kHeaderHeight = 127.0f;
     [self.footerLabel setTextColor:[UIColor appSecondaryColor3]];
     [self.footerLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
     
-}
-
-- (void)setupNavAppearance
-{
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    backButton.frame = CGRectMake(0, 0, 44, 44);
-    [backButton setImage:[[UIImage imageNamed:@"back_button"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    backButton.tintColor = [UIColor appPrimaryColor];
-    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backBarButton];
 }
 
 #pragma mark - Custom Methods
@@ -226,10 +216,5 @@ static CGFloat const kHeaderHeight = 127.0f;
     
 }
 
-- (void)back
-{
-    [self.navigationController popViewControllerAnimated:YES];
-    [[self onboarding] popScene];
-}
 
 @end

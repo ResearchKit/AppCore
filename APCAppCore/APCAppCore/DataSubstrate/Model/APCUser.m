@@ -31,6 +31,7 @@ static NSString *const kGlucoseLevelsPropertyName = @"glucoseLevels";
 static NSString *const kHomeLocationAddressPropertyName = @"homeLocationAddress";
 static NSString *const kHomeLocationLatPropertyName = @"homeLocationLat";
 static NSString *const kHomeLocationLongPropertyName = @"homeLocationLong";
+static NSString *const kSecondaryInfoSavedPropertyName = @"secondaryInfoSaved";
 
 static NSString *const kSignedUpKey = @"SignedUp";
 static NSString *const kSignedInKey = @"SignedIn";
@@ -125,7 +126,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     _homeLocationAddress = [storedUserData.homeLocationAddress copy];
     _homeLocationLat = [storedUserData.homeLocationLat copy];
     _homeLocationLong = [storedUserData.homeLocationLong copy];
-    
+    _secondaryInfoSaved = [storedUserData.secondaryInfoSaved boolValue];
 }
 
 - (void) updateStoredProperty:(NSString*) propertyName withValue: (id) value
@@ -284,6 +285,12 @@ static NSString *const kSignedInKey = @"SignedIn";
     _homeLocationLong = homeLocationLong;
     [self updateStoredProperty:kHomeLocationLongPropertyName withValue:homeLocationLong];
     
+}
+
+- (void)setSecondaryInfoSaved:(BOOL)secondaryInfoSaved
+{
+    _secondaryInfoSaved = secondaryInfoSaved;
+    [self updateStoredProperty:kSecondaryInfoSavedPropertyName withValue:@(secondaryInfoSaved)];
 }
 
 /*********************************************************************************/

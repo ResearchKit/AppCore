@@ -41,12 +41,6 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
- 
-#warning temporary code that must be removed
-    //TODO remove this code. Here temporarily.
-    self.healthKitTracker = [[APCHealthKitQuantityTracker alloc] initWithIdentifier:HKQuantityTypeIdentifierHeartRate withNotificationName:@"APCHeartRateUpdated"];
-    [self.healthKitTracker start];
-    
     
     [self setUpInitializationOptions];
     NSAssert(self.initializationOptions, @"Please set up initialization options");
@@ -58,6 +52,8 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self setUpHKPermissions];
     [self setUpAppAppearance];
     [self showAppropriateVC];
+    
+    [self.dataMonitor appFinishedLaunching];
     
     return YES;
 }
@@ -77,7 +73,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    [self.dataMonitor backgroundFetch:completionHandler];
+    completionHandler(UIBackgroundFetchResultNoData);
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -157,11 +153,14 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [APCPermissionsManager setHealthKitTypesToWrite:self.initializationOptions[kHKWritePermissionsKey]];
 }
 
-#pragma mark - Notifications
+/*********************************************************************************/
+#pragma mark - Respond to Notifications
+/*********************************************************************************/
 - (void) registerNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signedUpNotification:) name:(NSString *)APCUserSignedUpNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signedInNotification:) name:(NSString *)APCUserSignedInNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logOutNotification:) name:(NSString *)APCUserLogOutNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userConsented:) name:APCUserDidConsentNotification object:nil];
 }
 
 - (void) signedUpNotification:(NSNotification*) notification
@@ -171,7 +170,13 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void) signedInNotification:(NSNotification*) notification
 {
+    [self.dataMonitor userConsented];
     [self showTabBar];
+}
+
+- (void) userConsented:(NSNotification*) notification
+{
+
 }
 
 - (void) logOutNotification:(NSNotification*) notification
@@ -184,6 +189,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self showOnBoarding];
 }
 
+#pragma mark - Misc
 - (NSString *)certificateFileName
 {
     return ([self.initializationOptions[kBridgeEnvironmentKey] integerValue] == SBBEnvironmentStaging) ? [self.initializationOptions[kAppPrefixKey] stringByAppendingString:@"-staging"] :self.initializationOptions[kAppPrefixKey];
@@ -192,29 +198,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 #pragma mark - Other Abstract Implmentations
 - (void) setUpInitializationOptions {/*Abstract Implementation*/}
 - (void) setUpAppAppearance {/*Abstract Implementation*/}
-/*********************************************************************************/
-#pragma mark - Default Collectors Implementations
-/*********************************************************************************/
-- (void) setUpCollectors
-{
-
-#warning temporary code to uncomment
-    //TODO Uncomment out this code. Temporarily moved to did finish for testing.
-//    self.healthKitTracker = [[APCHealthKitQuantityTracker alloc] initWithIdentifier:HKQuantityTypeIdentifierHeartRate withNotificationName:@"APCHeartRateUpdated"];
-//    [self.healthKitTracker start];
-    
-    //Setting the Audio Session Category for voice prompts when device is locked
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    
-    NSError *setCategoryError = nil;
-    BOOL success = [audioSession setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
-    if (!success) { /* handle the error condition */ }
-    
-    NSError *activationError = nil;
-    [audioSession setActive:YES error:&activationError];
-    [activationError handle];
-}
-
+- (void) setUpCollectors {/*Abstract Implementation*/}
 
 /*********************************************************************************/
 #pragma mark - Public Helpers
@@ -363,10 +347,6 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void) showOnBoarding
 {
-    if (!self.onboarding) {
-        self.onboarding = [[APCOnboarding alloc] initWithDelegate:self];
-    }
-    
 }
 
 - (void) showNeedsEmailVerification
@@ -389,6 +369,16 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
                     completion:nil];
 }
 
+- (void)instantiateOnboardingForType:(APCOnboardingTaskType)type
+{
+    if (self.onboarding) {
+        self.onboarding = nil;
+        self.onboarding.delegate = nil;
+    }
+    
+    self.onboarding = [[APCOnboarding alloc] initWithDelegate:self taskType:type];
+}
+
 - (RKSTTaskViewController *)consentViewController
 {
      NSAssert(FALSE, @"Override this method to return a valid Consent Task View Controller.");
@@ -405,7 +395,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     return basePath;
 }
 
-#pragma mark - APCOnboarding Protocol
+#pragma mark - APCOnboardingDelegate methods
 
 - (APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)onboarding
 {
@@ -414,5 +404,19 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     return nil;
 }
 
+#pragma mark - APCOnboardingTaskDelegate methods
+
+- (APCUser *)userForOnboardingTask:(APCOnboardingTask *)task
+{
+    return self.dataSubstrate.currentUser;
+}
+
+- (NSInteger)numberOfServicesInPermissionsListForOnboardingTask:(APCOnboardingTask *)task
+{
+    NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
+    NSArray *servicesArray = initialOptions[kAppServicesListRequiredKey];
+    
+    return servicesArray.count;
+}
 
 @end

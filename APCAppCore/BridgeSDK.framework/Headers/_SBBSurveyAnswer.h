@@ -8,7 +8,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ModelObject.h"
 #import "SBBBridgeObject.h"
 
 @protocol _SBBSurveyAnswer
@@ -20,6 +19,8 @@
 @property (nonatomic, strong) NSString* answer;
 
 @property (nonatomic, strong) NSDate* answeredOn;
+
+@property (nonatomic, strong) NSArray* answers;
 
 @property (nonatomic, strong) NSString* client;
 

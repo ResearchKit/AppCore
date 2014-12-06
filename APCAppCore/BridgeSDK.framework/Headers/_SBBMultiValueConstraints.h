@@ -8,7 +8,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ModelObject.h"
 #import "SBBSurveyConstraints.h"
 
 @protocol _SBBMultiValueConstraints

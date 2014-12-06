@@ -15,8 +15,9 @@
 
 - (instancetype)initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate scheduler: (APCScheduler*) scheduler;
 
+- (void) appFinishedLaunching;
 - (void) appBecameActive;
-- (void) backgroundFetch:(void (^)(UIBackgroundFetchResult))completionHandler;
+- (void) userConsented;
 
 /*********************************************************************************/
 #pragma mark - For Categories Only
@@ -25,5 +26,6 @@
 //Declaring as weak so as not to hold on to below objects
 @property (weak, nonatomic) APCDataSubstrate * dataSubstrate;
 @property (weak, nonatomic) APCScheduler * scheduler;
+@property (nonatomic) BOOL batchUploadingInProgress;
 
 @end

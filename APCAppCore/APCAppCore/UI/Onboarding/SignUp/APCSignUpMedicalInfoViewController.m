@@ -11,8 +11,13 @@
 #import "UIAlertController+Helper.h"
 #import "APCUser+Bridge.h"
 #import "APCAppDelegate.h"
+#import "APCPermissionButton.h"
+#import "APCPermissionsManager.h"
 
 @interface APCSignUpMedicalInfoViewController ()
+
+@property (nonatomic, strong) APCPermissionsManager *permissionManager;
+@property (nonatomic) BOOL permissionGranted;
 
 @end
 
@@ -27,12 +32,31 @@
     
     self.items = [self prepareContent];
     [self setupProgressBar];
+    
+    self.navigationItem.hidesBackButton = YES;
+    
+    self.permissionManager = [[APCPermissionsManager alloc] init];
+    
+    self.permissionGranted = [self.permissionManager isPermissionsGrantedForType:kSignUpPermissionsTypeHealthKit];
+    
+    __weak typeof(self) weakSelf = self;
+    if (!self.permissionGranted) {
+        [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError *error) {
+            if (granted) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    weakSelf.permissionGranted = YES;
+                    weakSelf.items = [self prepareContent];
+                    [weakSelf.tableView reloadData];
+                });
+            }
+        }];
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self.stepProgressBar setCompletedSteps:1 animation:YES];
+    [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
 }
 
 - (NSArray *)prepareContent {
@@ -208,7 +232,7 @@
 #pragma mark - UIMethods
 
 - (void) setupProgressBar {
-    [self.stepProgressBar setCompletedSteps:0 animation:NO];
+    [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 2) animation:NO];
 }
 
 

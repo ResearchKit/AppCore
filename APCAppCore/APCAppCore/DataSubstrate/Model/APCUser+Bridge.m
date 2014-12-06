@@ -42,16 +42,51 @@
 
 - (void) updateProfileOnCompletion:(void (^)(NSError *))completionBlock
 {
-    SBBUserProfile *profile = [SBBUserProfile new];
-    profile.email = self.email;
-    profile.username = self.email;
-    profile.firstName = self.firstName;
-    profile.lastName = self.lastName;
-    
-    [SBBComponent(SBBProfileManager) updateUserProfileWithProfile:profile completion:^(id responseObject, NSError *error) {
-        NSLog(@"%@", responseObject);
-        NSLog(@"Error: %@", error);
-    }];
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+    }
+    else
+    {
+        SBBUserProfile *profile = [SBBUserProfile new];
+        profile.email = self.email;
+        profile.username = self.email;
+        profile.firstName = self.firstName;
+        profile.lastName = self.lastName;
+        
+        [SBBComponent(SBBProfileManager) updateUserProfileWithProfile:profile completion:^(id responseObject, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            });
+        }];
+    }
+}
+
+- (void) getProfileOnCompletion:(void (^)(NSError *))completionBlock
+{
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+    }
+    else
+    {
+        [SBBComponent(SBBProfileManager) getUserProfileWithCompletion:^(id userProfile, NSError *error) {
+            SBBUserProfile *profile = (SBBUserProfile *)userProfile;
+            self.email = profile.email;
+            self.firstName = profile.firstName;
+            self.lastName = profile.lastName;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            });
+        }];
+    }
 }
 
 - (void)signInOnCompletion:(void (^)(NSError *))completionBlock
@@ -113,13 +148,16 @@
     {
         NSString * name = self.firstName.length? [self.firstName stringByAppendingFormat:@" %@", self.lastName] : @"FirstName";
         NSDate * birthDate = self.birthDate ?: [NSDate dateWithTimeIntervalSince1970:(60*60*24*365*10)];
-        [SBBComponent(SBBConsentManager) consentSignature:name birthdate:birthDate completion:^(id responseObject, NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completionBlock) {
-                    completionBlock(error);
-                }
-            });
-        }];
+        [SBBComponent(SBBConsentManager) consentSignature:name
+                                                birthdate:birthDate
+                                           signatureImage:nil
+                                               completion:^(id responseObject, NSError *error) {
+                                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                                       if (completionBlock) {
+                                                           completionBlock(error);
+                                                       }
+                                                   });
+                                               }];
     }
 }
 
@@ -147,8 +185,10 @@
     return self.password;
 }
 
+#pragma mark - Error Messages
+
+- (NSString *)noInternetString
+{
+    return NSLocalizedString(@"No network connection. Please connect to the internet and try again.", @"No Internet");
+}
 @end
-
-
-//TODO: For Dhanush
-//Figure out what is to be replaced with username

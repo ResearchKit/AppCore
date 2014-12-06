@@ -275,12 +275,16 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 - (void)signInTapped:(id)sender
 {
-    APCSignInViewController *signInViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSignInViewController"];
-    [self.navigationController pushViewController:signInViewController animated:YES];
+    [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignIn];
+    
+    UIViewController *viewController = [[self onboarding] nextScene];
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 - (void)signUpTapped:(id)sender
 {
+    [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignUp];
+    
     UIViewController *viewController = [[self onboarding] nextScene];
     [self.navigationController pushViewController:viewController animated:YES];
 }

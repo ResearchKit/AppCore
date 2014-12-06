@@ -30,6 +30,8 @@ FOUNDATION_EXPORT NSString *const APCUserSignedInNotification;
 FOUNDATION_EXPORT NSString *const APCUserLogOutNotification;
 FOUNDATION_EXPORT NSString *const APCUserDidConsentNotification;
 
+FOUNDATION_EXPORT NSString *const APCScheduleUpdatedNotification;
+
 FOUNDATION_EXPORT NSString *const APCAppDidRegisterUserNotification;
 FOUNDATION_EXPORT NSString *const APCAppDidFailToRegisterForRemoteNotification;
 
@@ -42,6 +44,12 @@ FOUNDATION_EXPORT NSString *const kHKWritePermissionsKey;
 FOUNDATION_EXPORT NSString *const kHKReadPermissionsKey;
 FOUNDATION_EXPORT NSString *const kAppServicesListRequiredKey;
 FOUNDATION_EXPORT NSString *const kVideoURLKey;
+
+FOUNDATION_EXPORT NSString *const kHKQuantityTypeKey;
+FOUNDATION_EXPORT NSString *const kHKCategoryTypeKey;
+FOUNDATION_EXPORT NSString *const kHKCharacteristicTypeKey;
+FOUNDATION_EXPORT NSString *const kHKCorrelationTypeKey;
+FOUNDATION_EXPORT NSString *const kHKWorkoutTypeKey;
 
 FOUNDATION_EXPORT NSString *const kPasswordKey;
 FOUNDATION_EXPORT NSString *const kSessionTokenKey;

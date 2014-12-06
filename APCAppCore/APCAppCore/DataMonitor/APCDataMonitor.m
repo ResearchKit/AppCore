@@ -21,14 +21,17 @@
     if (self) {
         self.dataSubstrate = dataSubstrate;
         self.scheduler = scheduler;
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(userConsented)
-                                                     name:APCUserDidConsentNotification
-                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateScheduledTasks) name:APCScheduleUpdatedNotification object:nil];
     }
     return self;
 }
 
+- (void) appFinishedLaunching
+{
+    if (self.dataSubstrate.currentUser.isConsented) {
+        [(APCAppDelegate*)[UIApplication sharedApplication].delegate setUpCollectors];
+    }
+}
 - (void)appBecameActive
 {
     [self refreshFromBridgeOnCompletion:^(NSError *error) {
@@ -39,11 +42,6 @@
     }];
 }
 
-- (void)backgroundFetch:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-    completionHandler(UIBackgroundFetchResultNoData);
-}
-
 - (void) userConsented
 {
     [(APCAppDelegate*)[UIApplication sharedApplication].delegate setUpCollectors];
@@ -51,10 +49,15 @@
     [self.scheduler updateScheduledTasksIfNotUpdating:YES OnCompletion:^(NSError *error) {
         [self refreshFromBridgeOnCompletion:^(NSError *error) {
             [error handle];
-            [self batchUploadDataToBridgeOnCompletion:^(NSError *error) {
-                [error handle];
-            }];
+            [self batchUploadDataToBridgeOnCompletion:NULL];
         }];
+    }];
+}
+
+- (void) updateScheduledTasks
+{
+    [self.scheduler updateScheduledTasksIfNotUpdating:YES OnCompletion:^(NSError *error) {
+        [self.scheduler updateScheduledTasksIfNotUpdating:NO OnCompletion:NULL];
     }];
 }
 

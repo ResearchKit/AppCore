@@ -23,11 +23,16 @@
     
     NSString *message;
     
-    if ([localError isKindOfClass:[NSError class]]) {
-        message = [(NSError *)localError localizedDescription];
+    if (self.code < kSBBUnknownError) {
+        message = self.localizedDescription;
     }
     else {
-        message = [localError objectForKey:@"message"];
+        if ([localError isKindOfClass:[NSError class]]) {
+            message = [(NSError *)localError localizedDescription];
+        }
+        else {
+            message = [localError objectForKey:@"message"];
+        }
     }
     
     return message;

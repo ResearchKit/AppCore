@@ -81,13 +81,13 @@
 
 @protocol APCLineGraphViewDelegate <NSObject>
 
+@optional
+
 - (void)lineGraphTouchesBegan:(APCLineGraphView *)graphView;
 
 - (void)lineGraph:(APCLineGraphView *)graphView touchesMovedToXPosition:(CGFloat)xPosition;
 
 - (void)lineGraphTouchesEnded:(APCLineGraphView *)graphView;
-
-@optional
 
 @end
 

@@ -48,8 +48,6 @@ typedef NS_ENUM(NSUInteger, APCAppState) {
 
 static CGFloat const kAPCSignUpProgressBarHeight                = 14.0f;
 
-static NSInteger kNumberOfSteps = 4;
-
 static NSInteger kAPCPasswordMinimumLength = 2;
 
 

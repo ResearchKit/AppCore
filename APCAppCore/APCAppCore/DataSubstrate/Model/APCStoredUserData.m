@@ -25,5 +25,6 @@
 @dynamic homeLocationAddress;
 @dynamic homeLocationLat;
 @dynamic homeLocationLong;
+@dynamic secondaryInfoSaved;
 
 @end

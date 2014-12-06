@@ -24,16 +24,22 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonTapped:)];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self.introVC setupWithInstructionalImages:self.imagesArray headlines:self.headingsArray andParagraphs:self.messagesArray];
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
     if (self.accessoryContent != nil) {
         CGRect  frame = self.introVC.accessoryView.frame;
         frame.origin = CGPointMake(0.0, 0.0);
         self.accessoryContent.frame = frame;
         [self.introVC.accessoryView addSubview:self.accessoryContent];
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.introVC setupWithInstructionalImages:self.imagesArray headlines:self.headingsArray andParagraphs:self.messagesArray];
+
 }
 
 - (IBAction)getStartedWasTapped:(id)sender
