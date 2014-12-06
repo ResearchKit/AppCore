@@ -14,7 +14,7 @@
 
 @interface APCDayOfMonthSelector ()
 
-/** The thing we carfe about. */
+/** The thing we care about. */
 @property (nonatomic, strong) NSArray *computedDaysToEnumerate;
 
 /* Tools for figuring that out. */
@@ -23,8 +23,8 @@
 @property (nonatomic, strong) NSArray *dayOfWeekPositionSelectors;
 @property (nonatomic, assign) BOOL monthdaySelectorIsWildcard;
 @property (nonatomic, assign) BOOL weekdaySelectorIsWildcard;
-@property (nonatomic, strong) NSNumber*   month;
-@property (nonatomic, strong) NSNumber*   year;
+@property (nonatomic, strong) NSNumber* month;
+@property (nonatomic, strong) NSNumber* year;
 
 @end
 
