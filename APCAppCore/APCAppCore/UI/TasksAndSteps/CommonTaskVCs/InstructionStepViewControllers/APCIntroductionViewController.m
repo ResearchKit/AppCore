@@ -109,7 +109,7 @@
         if (self.nonLocalisedHeadlines.count && self.nonLocalisedHeadlines.count >= idx) {
             NSString * headline = self.nonLocalisedHeadlines[idx];
             NSString * translatedHeadline = NSLocalizedString(headline, nil);
-            attributedHeadline = [[NSMutableAttributedString alloc] initWithString:[translatedHeadline stringByAppendingString:@"\n"] attributes:headlineAttributes];
+            attributedHeadline = [[NSMutableAttributedString alloc] initWithString:[translatedHeadline stringByAppendingString:@"\n\n"] attributes:headlineAttributes];
         }
         NSString  *translated = NSLocalizedString(paragraph, nil);
         NSAttributedString  *styled = [[NSAttributedString alloc] initWithString:translated attributes:paragraphAttributes];
