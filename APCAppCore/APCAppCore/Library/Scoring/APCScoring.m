@@ -281,9 +281,7 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
     
     // set the results handler
     query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
-        if (error) {
-            NSLog(@"Error: %@", error.localizedDescription);
-        } else {
+        if (!error) {
             NSDate *endDate = [[NSCalendar currentCalendar] dateBySettingHour:23
                                                                        minute:59
                                                                        second:59
@@ -358,7 +356,6 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
 
 - (NSNumber *)averageDataPoint
 {
-    NSLog(@"Avg. %lu", [[self.dataPoints valueForKeyPath:@"@avg.datasetValueKey"] integerValue]);
     return [self.dataPoints valueForKeyPath:@"@avg.datasetValueKey"];
 }
 
