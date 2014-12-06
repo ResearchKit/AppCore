@@ -888,7 +888,7 @@ IHRoYXQgeW91IGNvdWxkIG5vdCBjb250aW51ZS4
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Change Passcode" id="tbR-5e-7V1">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="jpH-7h-Ihj">
+                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="jpH-7h-Ihj">
                             <connections>
                                 <action selector="cancel:" destination="RpA-3o-Su2" id="GEh-06-kTe"/>
                             </connections>
