@@ -20,6 +20,8 @@ NSString *const APCScheduleUpdatedNotification = @"APCScheduleUpdatedNotificatio
 NSString *const APCAppDidRegisterUserNotification            = @"APCAppDidRegisterUserNotification";
 NSString *const APCAppDidFailToRegisterForRemoteNotification = @"APCAppDidFailToRegisterForRemoteNotifications";
 
+NSString *const APCScoringHealthKitDataIsAvailableNotification = @"APCScoringHealthKitDataIsAvailableNotification";
+
 NSString *const kStudyIdentifierKey                  = @"StudyIdentifierKey";
 NSString *const kAppPrefixKey                        = @"AppPrefixKey";
 NSString *const kBridgeEnvironmentKey                = @"BridgeEnvironmentKey";

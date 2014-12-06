@@ -1,9 +1,8 @@
 //
 //  APHScoring.h
-//  CardioHealth
+//  AppCore
 //
-//  Created by Farhan Ahmed on 10/29/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
+//  Copyright (c) 2014 Apple Inc. All rights reserved.
 //
 
 #import <HealthKit/HealthKit.h>
@@ -17,8 +16,18 @@
 
 - (instancetype)initWithTask:(NSString *)taskId
                 numberOfDays:(NSUInteger)numberOfDays
+                    valueKey:(NSString *)valueKey;
+
+- (instancetype)initWithTask:(NSString *)taskId
+                numberOfDays:(NSUInteger)numberOfDays
                     valueKey:(NSString *)valueKey
                      dataKey:(NSString *)dataKey;
+
+- (instancetype)initWithTask:(NSString *)taskId
+                numberOfDays:(NSUInteger)numberOfDays
+                    valueKey:(NSString *)valueKey
+                     dataKey:(NSString *)dataKey
+                     sortKey:(NSString *)sortKey;
 
 - (NSNumber *)minimumDataPoint;
 - (NSNumber *)maximumDataPoint;

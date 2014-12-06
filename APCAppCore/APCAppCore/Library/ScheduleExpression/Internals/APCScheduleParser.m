@@ -214,10 +214,6 @@ static unichar kFieldSeparatorToken = ' ';
     NSNumber*           begin    = numSpec.count > 0 ? numSpec[0] : nil;
     NSNumber*           end      = numSpec.count > 1 ? numSpec[1] : nil;
 
-	/*
-	 Ron:  this is where the "point selector" -- the date range generator -- gets created.
-	 */
-	
     APCPointSelector*   selector = [[APCPointSelector alloc] initWithUnit:unitType
 															   beginRange:begin
 																 endRange:end
@@ -244,11 +240,6 @@ static unichar kFieldSeparatorToken = ' ';
     
     while (self.next != kEndToken && self.next != kFieldSeparatorToken)
     {
-
-		//
-		// Ron:  about to follow dayOfMonth production through here...
-		//
-
         APCPointSelector*   pointSelector = [self exprProductionForType:unitType];
         
         if (self.errorEncountered)

@@ -35,6 +35,8 @@ FOUNDATION_EXPORT NSString *const APCScheduleUpdatedNotification;
 FOUNDATION_EXPORT NSString *const APCAppDidRegisterUserNotification;
 FOUNDATION_EXPORT NSString *const APCAppDidFailToRegisterForRemoteNotification;
 
+FOUNDATION_EXPORT NSString *const APCScoringHealthKitDataIsAvailableNotification;
+
 FOUNDATION_EXPORT NSString *const kStudyIdentifierKey;
 FOUNDATION_EXPORT NSString *const kAppPrefixKey;
 FOUNDATION_EXPORT NSString *const kBridgeEnvironmentKey;
