@@ -1,8 +1,8 @@
 //
 //  APHScoring.m
-//  CardioHealth
+//  AppCore
 //
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
+//  Copyright (c) 2014 Apple Inc. All rights reserved.
 //
 
 #import "APCScoring.h"
