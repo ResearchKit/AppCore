@@ -97,16 +97,10 @@
 	return enumerator;
 }
 
-/**
- I'm choosing not to implement this, because I'm not sure
- it's meaningful here (yet).  Simply returns -[super isWildcard].
- --ron
- */
 - (BOOL) isWildcard
 {
 	return super.isWildcard;
 }
-
 
 - (void) recomputeDaysBasedOnCalendar: (NSCalendar *) calendar
 								month: (NSNumber *) month
