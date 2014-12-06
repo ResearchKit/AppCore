@@ -21,8 +21,7 @@
 - (id) initWithFreshlyParsedDayOfMonthSelector: (APCTimeSelector *) dayOfMonthSelector
 						  andDayOfWeekSelector: (APCTimeSelector *) dayOfWeekSelector;
 
-- (void) recomputeDaysBasedOnCalendar: (NSCalendar *) calendar
-								month: (NSNumber *) month
-								 year: (NSNumber *) year;
+- (void) recomputeDaysBasedOnMonth: (NSNumber *) month
+							  year: (NSNumber *) year;
 
 @end

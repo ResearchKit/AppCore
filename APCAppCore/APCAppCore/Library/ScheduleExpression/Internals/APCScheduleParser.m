@@ -11,13 +11,14 @@
 #import "APCDayOfMonthSelector.h"
 
 
-static unichar kEndToken            = '\0';
-static unichar kListSeparatorToken  = ',';
-static unichar kStepSeparatorToken  = '/';
-static unichar kWildCardToken       = '*';
-static unichar kOtherWildCardToken  = '?';
-static unichar kRangeSeparatorToken = '-';
-static unichar kFieldSeparatorToken = ' ';
+static unichar kEndToken					= '\0';
+static unichar kListSeparatorToken		= ',';
+static unichar kStepSeparatorToken		= '/';
+static unichar kPositionSeparatorToken	= '#';
+static unichar kWildCardToken			= '*';
+static unichar kOtherWildCardToken		= '?';
+static unichar kRangeSeparatorToken		= '-';
+static unichar kFieldSeparatorToken		= ' ';
 
 
 @interface APCScheduleParser ()
@@ -156,6 +157,17 @@ static unichar kFieldSeparatorToken = ' ';
     return range;
 }
 
+- (NSNumber *) positionProduction
+{
+	//
+	// Production rule:
+	//
+	//		position :: number
+	//
+
+	return [self numberProduction];
+}
+
 - (NSNumber*)stepsProduction
 {
 	//
@@ -194,35 +206,47 @@ static unichar kFieldSeparatorToken = ' ';
     return numSpec;
 }
 
-- (APCPointSelector*)exprProductionForType:(UnitType)unitType
+- (APCPointSelector*) exprProductionForType: (UnitType) unitType
 {
 	//
 	// Production rule:
 	//
-    //		expr :: numspec ( '/' steps ) ?
+    //		expr :: numspec ( '/' steps | '#' position ) ?
 	//
 
-    NSArray*            numSpec  = [self numspecProduction];
-    NSNumber*           step     = nil;
-    
-    if (self.next == kStepSeparatorToken)
-    {
-        [self consumeOneChar];
-        step = [self stepsProduction];
+	APCPointSelector *selector = nil;
+	NSArray *numSpec = [self numspecProduction];
+
+	if (self.next == kPositionSeparatorToken)
+	{
+		NSNumber *dayOfWeekToFind = numSpec [0];
+
+		[self consumeOneChar];
+		NSNumber *position = [self positionProduction];
+
+		selector = [[APCPointSelector alloc] initWithUnit: unitType
+													value: dayOfWeekToFind
+												 position: position];
+	}
+
+	else
+	{
+		NSNumber *begin		= numSpec.count > 0 ? numSpec[0] : nil;
+		NSNumber *end		= numSpec.count > 1 ? numSpec[1] : nil;
+		NSNumber *step		= nil;
+
+		if (self.next == kStepSeparatorToken)
+		{
+			[self consumeOneChar];
+			step = [self stepsProduction];
+		}
+
+		selector = [[APCPointSelector alloc] initWithUnit: unitType
+											   beginRange: begin
+												 endRange: end
+													 step: step];
     }
 
-    NSNumber*           begin    = numSpec.count > 0 ? numSpec[0] : nil;
-    NSNumber*           end      = numSpec.count > 1 ? numSpec[1] : nil;
-
-	/*
-	 Ron:  this is where the "point selector" -- the date range generator -- gets created.
-	 */
-	
-    APCPointSelector*   selector = [[APCPointSelector alloc] initWithUnit:unitType
-															   beginRange:begin
-																 endRange:end
-																	 step:step];
-    
     if (selector == nil)
     {
         [self recordError];
@@ -244,11 +268,6 @@ static unichar kFieldSeparatorToken = ' ';
     
     while (self.next != kEndToken && self.next != kFieldSeparatorToken)
     {
-
-		//
-		// Ron:  about to follow dayOfMonth production through here...
-		//
-
         APCPointSelector*   pointSelector = [self exprProductionForType:unitType];
         
         if (self.errorEncountered)

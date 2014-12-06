@@ -7,16 +7,22 @@
  
 #import "APCDayOfMonthSelector.h"
 #import "APCTimeSelectorEnumerator.h"
+#import "APCPointSelector.h"
+#import "APCListSelector.h"
+#import "NSDateComponents+Helper.h"
 
 
 @interface APCDayOfMonthSelector ()
 
-@property (nonatomic, strong) APCTimeSelector *underlyingDayOfMonthSelector;
-@property (nonatomic, strong) APCTimeSelector *underlyingDayOfWeekSelector;
-
+/** The thing we carfe about. */
 @property (nonatomic, strong) NSArray *computedDaysToEnumerate;
 
-@property (nonatomic, strong) NSCalendar* calendar;
+/* Tools for figuring that out. */
+@property (nonatomic, strong) APCTimeSelector *underlyingDayOfMonthSelector;
+@property (nonatomic, strong) NSArray *dayOfWeekRangeSelectors;
+@property (nonatomic, strong) NSArray *dayOfWeekPositionSelectors;
+@property (nonatomic, assign) BOOL monthdaySelectorIsWildcard;
+@property (nonatomic, assign) BOOL weekdaySelectorIsWildcard;
 @property (nonatomic, strong) NSNumber*   month;
 @property (nonatomic, strong) NSNumber*   year;
 
@@ -24,7 +30,6 @@
 
 
 @implementation APCDayOfMonthSelector
-
 
 
 // ---------------------------------------------------------
@@ -39,14 +44,40 @@
 	if (self)
 	{
 		self.underlyingDayOfMonthSelector = dayOfMonthSelector;
-		self.underlyingDayOfWeekSelector  = dayOfWeekSelector;
+		self.monthdaySelectorIsWildcard = self.underlyingDayOfMonthSelector.isWildcard;
 
-		// We'll get real values at iteration time.  For now,
-		// use 31 days.
-		[self recomputeDaysBasedOnCalendar: nil month: nil year: nil];
+		[self splitWeekSelectorIntoDaysAndPositions: dayOfWeekSelector];
+
+		// We'll get real values at iteration time.  For now, use 31 days.
+		[self recomputeDaysBasedOnMonth: nil year: nil];
 	}
 
 	return self;
+}
+
+- (void) splitWeekSelectorIntoDaysAndPositions: (APCTimeSelector *) dayOfWeekSelector
+{
+	APCListSelector *realWeekSelector = (APCListSelector *) dayOfWeekSelector;
+	NSMutableArray *rangeSelectors = [NSMutableArray new];
+	NSMutableArray *positionSelectors = [NSMutableArray new];
+	self.weekdaySelectorIsWildcard = YES;
+
+	for (APCPointSelector *pointSelector in realWeekSelector.subSelectors)
+	{
+		if (pointSelector.position != nil)
+			[positionSelectors addObject: pointSelector];
+		else
+			[rangeSelectors addObject: pointSelector];
+
+		// And, whichever type it is:
+		if (! pointSelector.isWildcard)
+		{
+			self.weekdaySelectorIsWildcard = NO;
+		}
+	}
+
+	self.dayOfWeekRangeSelectors = rangeSelectors;
+	self.dayOfWeekPositionSelectors = positionSelectors;
 }
 
 
@@ -97,29 +128,21 @@
 	return enumerator;
 }
 
-/**
- I'm choosing not to implement this, because I'm not sure
- it's meaningful here (yet).  Simply returns -[super isWildcard].
- --ron
- */
 - (BOOL) isWildcard
 {
-	return super.isWildcard;
+	return self.weekdaySelectorIsWildcard && self.monthdaySelectorIsWildcard;
 }
 
 
-- (void) recomputeDaysBasedOnCalendar: (NSCalendar *) calendar
-								month: (NSNumber *) month
-								 year: (NSNumber *) year
+- (void) recomputeDaysBasedOnMonth: (NSNumber *) month
+							  year: (NSNumber *) year
 {
-	self.calendar = calendar;
 	self.month = month;
 	self.year = year;
 
+	NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: month year: year];
+	NSArray *allDaysInMonth = components.allDaysInMonth;
 	NSMutableArray *computedDays = nil;
-	BOOL monthdaySelectorIsWildcard = self.underlyingDayOfMonthSelector.isWildcard;
-	BOOL weekdaySelectorIsWildcard = self.underlyingDayOfWeekSelector.isWildcard;
-
 
 	/*
 	 TODO:  Hack?  This always happens when this object is initialized:
@@ -128,29 +151,29 @@
 	 matters, we'll only get here after getting a month and year.
 	 (Um, right?)
 	 */
-	if (self.calendar == nil || self.month == nil || self.year == nil)
+	if (self.month == nil || self.year == nil)
 	{
-		computedDays = [self allDaysInCurrentMonthAndYear];
+		computedDays = allDaysInMonth.mutableCopy;
 	}
 
 
 	// Both of my underlying selectors are wildcards.
 	// Add all days of the month.
-	else if (monthdaySelectorIsWildcard && weekdaySelectorIsWildcard)
+	else if (self.monthdaySelectorIsWildcard && self.weekdaySelectorIsWildcard)
 	{
-		computedDays = [self allDaysInCurrentMonthAndYear];
+		computedDays = allDaysInMonth.mutableCopy;
 	}
 
 
 	// Month is fixed, week is wildcard.  Extract the month days.
-	else if ( (! monthdaySelectorIsWildcard) && weekdaySelectorIsWildcard)
+	else if ( (! self.monthdaySelectorIsWildcard) && self.weekdaySelectorIsWildcard)
 	{
 		computedDays = [self specificMonthDays];
 	}
 
 
 	// Week is fixed, month is wildcard.  Extract the week days.
-	else if (monthdaySelectorIsWildcard && ! weekdaySelectorIsWildcard)
+	else if (self.monthdaySelectorIsWildcard && ! self.weekdaySelectorIsWildcard)
 	{
 		computedDays = [self specificWeekdaysForMonth: month
 											  andYear: year
@@ -186,14 +209,15 @@
 																andYear: year
 													  ignoringTheseDays: computedDays];
 
-		[computedDays addObjectsFromArray: monthDaysFromWeekdays];
-
-		[computedDays sortUsingComparator: ^NSComparisonResult (NSNumber *day1, NSNumber *day2) {
-			return [day1 compare: day2];
-		}];
-
+		for (NSNumber *monthDayFromWeekday in monthDaysFromWeekdays)
+			if (! [computedDays containsObject: monthDayFromWeekday])
+				[computedDays addObject: monthDayFromWeekday];
 	}
-	
+
+	[computedDays sortUsingComparator: ^NSComparisonResult (NSNumber *day1, NSNumber *day2) {
+		return [day1 compare: day2];
+	}];
+
 	self.computedDaysToEnumerate = computedDays;
 }
 
@@ -202,51 +226,6 @@
 // ---------------------------------------------------------
 #pragma mark - Internal Calculations
 // ---------------------------------------------------------
-
-- (NSMutableArray *) allDaysInCurrentMonthAndYear
-{
-	NSMutableArray *computedDays = [NSMutableArray new];
-	NSCalendar *calendar = nil;
-	NSInteger year = -1;
-	NSInteger month = -1;
-
-	if (self.calendar == nil || self.month == nil || self.year == nil)
-	{
-		/*
-		 This only happens during initialization.  It'll be
-		 overwritten the first time we actually iterate through
-		 a month.  For now, pick an arbitrary 31-day month.
-		 */
-		calendar	= [NSCalendar currentCalendar];
-		year		= 2001;
-		month		= 1;
-	}
-	else
-	{
-		calendar	= self.calendar;
-		year		= self.year.integerValue;
-		month		= self.month.integerValue;
-	}
-
-	NSDateComponents *components	= [NSDateComponents new];
-	components.calendar				= calendar;
-	components.year					= year;
-	components.month				= month;
-	NSDate *theDate					= components.date;
-
-	NSRange legalDaysInMonth		= [calendar rangeOfUnit: NSCalendarUnitDay
-											         inUnit: NSCalendarUnitMonth
-													forDate: theDate];
-
-	for (NSInteger thisDay = legalDaysInMonth.location;
-		 thisDay < legalDaysInMonth.location + legalDaysInMonth.length;
-		 thisDay ++)
-	{
-		[computedDays addObject: @(thisDay)];
-	}
-
-	return computedDays;
-}
 
 /**
  Gather all the days-of-month days from the underlying day-of-month
@@ -257,7 +236,8 @@
 {
 	NSMutableArray *computedDays = [NSMutableArray new];
 	NSNumber *day = self.underlyingDayOfMonthSelector.initialValue;
-	NSArray *allDaysInMonth = [self allDaysInCurrentMonthAndYear];
+	NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: self.month year: self.year];
+	NSArray *allDaysInMonth = components.allDaysInMonth;
 
 	while (day != nil)
 	{
@@ -281,19 +261,35 @@
 									  andYear: (NSNumber *) year
 							ignoringTheseDays: (NSArray *) precomputedDaysInMonth
 {
+
+	NSMutableArray *computedDays = [NSMutableArray new];
+
+
 	/*
 	 Gather all the days of the week we care about --
-	 meaning Sunday through Saturday, not the days-of-the-month
+	 meaning, Sunday through Saturday, not the days-of-the-month
 	 those weekdays correspond to.  (We'll do that in a moment.)
+
+	 Note that the selectors might specify overlapping
+	 days of the week:  e.g., one might be a range of days (Tuesday
+	 through Thursday), while another might be a specific day
+	 (like Wednesday).
 	 */
-	NSMutableArray *legalCronDaysOfWeek = [NSMutableArray new];
-	NSNumber *day = self.underlyingDayOfWeekSelector.initialValue;
+	NSMutableArray *userSpecifiedCronDaysOfWeek = [NSMutableArray new];
 
-	while (day != nil)
+	for (APCPointSelector *pointSelector in self.dayOfWeekRangeSelectors)
 	{
-		[legalCronDaysOfWeek addObject: day];
+		NSNumber *day = pointSelector.initialValue;
 
-		day = [self.underlyingDayOfWeekSelector nextMomentAfter: day];
+		while (day != nil)
+		{
+			if (! [userSpecifiedCronDaysOfWeek containsObject: day])
+			{
+				[userSpecifiedCronDaysOfWeek addObject: day];
+			}
+
+			day = [pointSelector nextMomentAfter: day];
+		}
 	}
 
 
@@ -301,67 +297,120 @@
 	 Find every individual day of the month those days-of-the-week
 	 correspond to.  If we didn't already generate it when looking
 	 at the legal days of the month, include it.
+
+	 This also means:  generate a date, and then generate a weekday
+	 from that date.  I can't just read the weekday from the existing
+	 Components object; it's undefined (NSDateComponentUndefined).
+	 As a result, I wrote several helper methods on NSDateComponents
+	 and NSDate, which I use here and elsewhere.
 	 */
-	NSMutableArray *computedDays = [NSMutableArray new];
-	NSArray *allLegalDaysInMonth = [self allDaysInCurrentMonthAndYear];
-	NSDateComponents *components = [NSDateComponents new];
-	components.calendar = self.calendar;
-	components.year = self.year.integerValue;
-	components.month = self.month.integerValue;
-
-	for (NSNumber *thisDay in allLegalDaysInMonth)
+	if (userSpecifiedCronDaysOfWeek.count)
 	{
-		if (! [precomputedDaysInMonth containsObject: thisDay])
+		NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: self.month
+																					  year: self.year];
+
+		for (NSNumber *thisDay in components.allDaysInMonth)
 		{
-			/*
-			 Generate a date, and then generate a weekday from
-			 that date.  I can't just read the weekday from the
-			 existing Components object -- it's undefined
-			 (actually NSDateComponentUndefined).
-			 */
-			components.day = thisDay.integerValue;
-			NSDate *thisDate = components.date;
-			NSInteger nsdateOneBasedDayOfWeek = [self.calendar component: NSCalendarUnitWeekday
-																fromDate: thisDate];
-
-
-			/*
-			 TODO:  decide where to translate between our 1-based days
-			 and cron's zero-based days.  (This is NOT the test-harness
-			 problem; this is one of the underlying real problems.)
-			 Ideas:
-
-			 -	Translate them in the existing PointSelector.  This means
-				adding "if" statements and translations in a bunch of
-				places, but it's "cleaner" than putting it here.
-
-			 -	Translate them here, where we're using them.  This really
-				means:  translate them EVERY time we use them.  If this
-				is the only place we EVER do that, no problem.  If not,
-				it becomes much harder to remember, and thus maintain.
-
-			 -	Write a PointSelector subclass for every UnitType, instead
-				of using UnitType.  This would mean we could encapsulate
-				the cron-to-NSDate translation in a DayOfWeekPointSelector.
-				Cleanest object-oriented implementation, but it means we
-				have to maintain another two-to-ten source-code files.
-			 
-			 For the moment, I'm doing it here:  3 lines of code, in the
-			 only place I'm consuming those numbers, which means I don't
-			 have to change any of the existing, working logic anywhere else.
-			 */
-			NSInteger cronZeroBasedDayOfWeek = nsdateOneBasedDayOfWeek - 1;
-			if (cronZeroBasedDayOfWeek < 1) cronZeroBasedDayOfWeek += 7;
-
-			if ([legalCronDaysOfWeek containsObject: @(cronZeroBasedDayOfWeek)])
+			if (! [precomputedDaysInMonth containsObject: thisDay])
 			{
-				[computedDays addObject: thisDay];
+				NSNumber *cronDayOfWeek = [components cronDayOfWeekAsNSNumberForDay: thisDay];
+
+				if ([userSpecifiedCronDaysOfWeek containsObject: cronDayOfWeek])
+				{
+					[computedDays addObject: thisDay];
+				}
 			}
-			
-		}  // if (this day hasn't already been computed)
-	}  // for (all days in month)
+		}
+	}
+
+	for (APCPointSelector *pointSelector in self.dayOfWeekPositionSelectors)
+	{
+		NSNumber *day = [self dayInCurrentMonthMatchingSelector: pointSelector];
+
+		if (! [computedDays containsObject: day])
+		{
+			[computedDays addObject: day];
+		}
+	}
 
 	return computedDays;
+}
+
+/**
+ Assumes the pointSelector contains exactly ONE day of
+ the week, appearing exactly ONCE in the month, like
+ this:
+ 
+		5#3			(The third Friday in the current month)
+ 
+ Does NOT accept ranges of either one, such as:
+ 
+		4-5#2-3		(The second and third Thursday, and the second and third Friday, in the current month)
+ 
+ We'll add that, of course, as needed.
+ */
+- (NSNumber *) dayInCurrentMonthMatchingSelector: (APCPointSelector *) pointSelector
+{
+	NSNumber* result = nil;
+
+	if (pointSelector.position)
+	{
+		NSInteger foundDay				= -1;
+		NSInteger currentInstanceOfDay	= 1;
+		NSInteger requestedDayOfWeek	= pointSelector.initialValue.integerValue;
+		NSInteger requestedIntanceOfDay	= pointSelector.position.integerValue;
+		NSDateComponents *components    = [NSDateComponents componentsInGregorianUTCWithMonth: self.month
+																					     year: self.year];
+
+		// Find the first nth day of the month -- e.g., the first
+		// Friday, if we're looking for Fridays.  Then we can add
+		// 7 until we run out of days in the month or until we
+		// find the desired day.
+
+		NSInteger firstRequestedDayInMonth = -1;
+		NSInteger lastDayOfMonth = components.lastDayOfMonth;
+
+		for (NSInteger day = 1; day <= lastDayOfMonth; day++)
+		{
+			NSInteger cronDayOfWeek = [components cronDayOfWeekForDay: day];
+
+			if (cronDayOfWeek == requestedDayOfWeek)
+			{
+				firstRequestedDayInMonth = day;
+				break;
+			}
+		}
+
+		if (requestedIntanceOfDay <= 1)
+		{
+			foundDay = firstRequestedDayInMonth;
+		}
+
+		else
+		{
+			for (NSInteger day = firstRequestedDayInMonth + 7; day <= lastDayOfMonth; day += 7)
+			{
+				currentInstanceOfDay ++;
+
+				if (currentInstanceOfDay == requestedIntanceOfDay)
+				{
+					foundDay = day;
+					break;
+				}
+
+				else
+				{
+					// Continue until we run out of days.
+					// If that happens, no problem; we'll
+					// return nil.
+				}
+			}
+		}
+
+		result = foundDay == -1 ? nil : @(foundDay);
+	}
+
+	return result;
 }
 
 @end

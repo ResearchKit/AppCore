@@ -8,6 +8,7 @@
 #import "APCScheduleEnumerator.h"
 #import "APCTimeSelectorEnumerator.h"
 #import "APCDayOfMonthSelector.h"
+#import "NSDateComponents+Helper.h"
 
 static NSInteger    kMinuteIndex = 0;
 static NSInteger    kHourIndex   = 1;
@@ -21,17 +22,14 @@ static NSInteger    kYearIndex   = 4;
 @property (nonatomic, strong) NSDate*       beginningMoment;
 @property (nonatomic, strong) NSDate*       endingMoment;
 @property (nonatomic, strong) NSDate*       nextMoment;
-
 @property (nonatomic, strong) NSString*		originalCronExpression;		// for debug-printouts only.
-
-@property (nonatomic, strong) NSCalendar*       calendar;
-@property (nonatomic, assign) NSInteger         year;
+@property (nonatomic, assign) NSInteger     year;
 
 /**
  These two variables must be the same length and contain
  corresponding items in the same sequence.
  */
-@property (nonatomic, strong) NSMutableArray*   enumerators;    //  array of APCTimeSelectorEnumerator
+@property (nonatomic, strong) NSMutableArray*   enumerators;           //  array of APCTimeSelectorEnumerator
 @property (nonatomic, strong) NSMutableArray*   calendarComponents;    //  arrray of NSNumbers
 
 /**
@@ -75,16 +73,19 @@ static NSInteger    kYearIndex   = 4;
 
 	if (self)
 	{
-		NSDateComponents*   beginComponents = nil;
-		NSCalendarUnit      calendarUnits   = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
-		
+		NSArray* calendarUnits = @[ @(NSCalendarUnitYear),
+									@(NSCalendarUnitMonth),
+									@(NSCalendarUnitDay),
+									@(NSCalendarUnitHour),
+									@(NSCalendarUnitMinute),
+									@(NSCalendarUnitTimeZone),
+									@(NSCalendarUnitCalendar) ];
+
+		NSDateComponents* beginComponents = [NSDateComponents components: calendarUnits
+												  inGregorianUTCFromDate: begin];
+
 		_beginningMoment	= begin;
 		_endingMoment		= end;
-		_calendar			= [[NSCalendar alloc] initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
-
-		beginComponents		= [_calendar components: calendarUnits
-										   fromDate: begin];
-
 		_year				= beginComponents.year;
 
 		APCTimeSelectorEnumerator* minuteEnumerator = [minuteSelector enumeratorBeginningAt:@(beginComponents.minute)];
@@ -277,17 +278,14 @@ static NSInteger    kYearIndex   = 4;
 	NSNumber *month = self.calendarComponents [kMonthIndex];
 	NSNumber *year  = self.calendarComponents [kYearIndex];
 
-	[selector recomputeDaysBasedOnCalendar: self.calendar
-									 month: month
-									  year: year];
-
+	[selector recomputeDaysBasedOnMonth: month
+								   year: year];
 
 
 	// Create and prime a new enumerator, as we did during -init.
 	self.dayEnumerator = [selector enumeratorBeginningAt: startDay];
 	self.enumerators [kDayIndex] = self.dayEnumerator;
 	[self.dayEnumerator nextObject];
-
 
 	NSNumber *day = nil;
 
@@ -303,18 +301,16 @@ static NSInteger    kYearIndex   = 4;
 	self.calendarComponents [kDayIndex] = day;
 }
 
-- (NSDate*)componentsToDate
+- (NSDate*) componentsToDate
 {
-    NSDateComponents*   dateComponents = [[NSDateComponents alloc] init];
+	NSDateComponents *components = [NSDateComponents componentsInGregorianUTC];
+	components.year     = [self.calendarComponents [kYearIndex]   integerValue];
+    components.month    = [self.calendarComponents [kMonthIndex]  integerValue];
+    components.day      = [self.calendarComponents [kDayIndex]    integerValue];
+    components.hour     = [self.calendarComponents [kHourIndex]   integerValue];
+    components.minute   = [self.calendarComponents [kMinuteIndex] integerValue];
     
-    dateComponents.calendar = self.calendar;
-    dateComponents.year     = [self.calendarComponents [kYearIndex]   integerValue];
-    dateComponents.month    = [self.calendarComponents [kMonthIndex]  integerValue];
-    dateComponents.day      = [self.calendarComponents [kDayIndex]    integerValue];
-    dateComponents.hour     = [self.calendarComponents [kHourIndex]   integerValue];
-    dateComponents.minute   = [self.calendarComponents [kMinuteIndex] integerValue];
-    
-    return [dateComponents date];
+    return [components date];
 }
 
 @end

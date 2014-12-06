@@ -26,9 +26,36 @@
         [self setUnit:unitType];
         _unitType = unitType;
 		_isWildcard_private = NO;
+		_position = nil;
     }
     
     return self;
+}
+
+/**
+ Used for days-of-the-week when specifying, say, the 3rd
+ Friday in a month.
+ */
+- (instancetype)initWithUnit:(UnitType)unitType
+					   value:(NSNumber *)value
+					position:(NSNumber *)position
+{
+	self = [self initWithUnit:unitType];
+
+	if (self)
+	{
+		_begin = value;
+		_end = nil;
+		_position = position;
+
+		if (_begin.integerValue < _defaultBegin.integerValue)
+		{
+			//  TODO: Invalid values
+			self = nil;
+		}
+	}
+
+	return self;
 }
 
 - (instancetype)initWithUnit:(UnitType)unitType

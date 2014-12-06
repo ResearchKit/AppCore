@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import "APCScheduleExpression.h"
+#import "NSDateComponents+Helper.h"
 
 
 /**
@@ -24,7 +25,6 @@
 
 @property (nonatomic, strong) NSDateFormatter*  dateFormatter;
 @property (nonatomic, strong) NSDateFormatter*  dayOfWeekFormatter;
-@property (nonatomic, strong) NSCalendar*       calendar;
 @property (nonatomic, strong) NSArray*			everyYear;
 @property (nonatomic, strong) NSArray*			everyMonth;
 @property (nonatomic, strong) NSArray*			everyDay;
@@ -46,16 +46,22 @@
 {
 	[super setUp];
 
+	// All my calculations are based on Universal Coordinated Time
+	// in the Gregorian calendar.  Since I do a lot of those calculations
+	// using a DateComponents object, I have this convenience method,
+	// which also lets me make sure I'm using the same timeZone and
+	// calendar objects everywhere:
+	NSDateComponents* components = [NSDateComponents componentsInGregorianUTC];
+
 	self.dateFormatter = [NSDateFormatter new];
-	[self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-	[self.dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:-8 * 60 * 60]];
-//	[NSTimeZone setDefaultTimeZone: [NSTimeZone timeZoneForSecondsFromGMT:-8 * 60 * 60]];
+	self.dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm";
+	self.dateFormatter.calendar = components.calendar;
+	self.dateFormatter.timeZone = components.timeZone;
 
 	self.dayOfWeekFormatter = [NSDateFormatter new];
-	[self.dayOfWeekFormatter setDateFormat: @"EEE yyyy-MM-dd HH:mm"];
-	[self.dayOfWeekFormatter setTimeZone: self.dateFormatter.timeZone];
-
-	self.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+	self.dayOfWeekFormatter.dateFormat = @"EEE yyyy-MM-dd HH:mm";
+	self.dayOfWeekFormatter.calendar = components.calendar;
+	self.dayOfWeekFormatter.timeZone = components.timeZone;
 
 	self.everyYear   = [self numericSequenceFrom: 2014	to: 2017];
 	self.everyMonth  = [self numericSequenceFrom: 1		to: 12];
@@ -159,15 +165,8 @@
 {
 	NSDate* enumeratorDate = nil;
 
-	NSDateComponents *testHarnessDateComponents = [[NSDateComponents alloc] init];
-	testHarnessDateComponents.calendar = self.calendar;
+	NSDateComponents *testHarnessDateComponents = [NSDateComponents componentsInGregorianUTC];
 	NSDate* testHarnessDate = nil;
-
-	// So we print out the days of the week.
-	NSDateFormatter* dayOfWeekFormatter = [[NSDateFormatter alloc] init];
-	[dayOfWeekFormatter setDateFormat: @"EEE yyyy-MM-dd HH:mm"];
-	[dayOfWeekFormatter setTimeZone: self.dateFormatter.timeZone];
-
 
 	// We'll calculate the real days-in-each-month shortly.
 	// In the meantime:
@@ -216,15 +215,15 @@
 							if (! [testHarnessDate isEqualToDate: enumeratorDate])
 							{
 								NSLog (@"NO MATCH:  testHarness %@ != enumerator %@",
-									   [dayOfWeekFormatter stringFromDate: testHarnessDate],
-									   [dayOfWeekFormatter stringFromDate: enumeratorDate]);
+									   [self.dayOfWeekFormatter stringFromDate: testHarnessDate],
+									   [self.dayOfWeekFormatter stringFromDate: enumeratorDate]);
 							}
 
 							else if (DEBUG__PRINT_HAPPY_TEST_CASES)
 							{
 								NSLog (@"MATCH:     testHarness %@ == enumerator %@",
-									   [dayOfWeekFormatter stringFromDate: testHarnessDate],
-									   [dayOfWeekFormatter stringFromDate: enumeratorDate]);
+									   [self.dayOfWeekFormatter stringFromDate: testHarnessDate],
+									   [self.dayOfWeekFormatter stringFromDate: enumeratorDate]);
 							}
 
 							XCTAssertEqualObjects (testHarnessDate, enumeratorDate);
@@ -294,27 +293,10 @@
 {
 	NSMutableArray *computedDaysInMonth	= [NSMutableArray new];
 
-	NSDateComponents* dateComponents	= [NSDateComponents new];
-	dateComponents.calendar				= self.calendar;
+	NSDateComponents* dateComponents	= [NSDateComponents componentsInGregorianUTC];
 	dateComponents.year					= year.integerValue;
 	dateComponents.month				= month.integerValue;
-
-
-	//
-	// Figure out what days are actually in this month (1..31, 1..28, etc.).
-	//
-	NSRange rangeOfLegalDaysInMonth = [self.calendar rangeOfUnit: NSCalendarUnitDay
-														  inUnit: NSCalendarUnitMonth
-														 forDate: dateComponents.date];
-
-	NSMutableArray *legalDaysInMonth = [NSMutableArray new];
-
-	for (NSInteger day = rangeOfLegalDaysInMonth.location;
-		 day < rangeOfLegalDaysInMonth.location + rangeOfLegalDaysInMonth.length;
-		 day ++)
-	{
-		[legalDaysInMonth addObject: @(day)];
-	}
+	NSArray *legalDaysInMonth			= dateComponents.allDaysInMonth;
 
 
 	//
@@ -364,21 +346,11 @@
 		{
 			for (NSNumber* legalDayInMonth in legalDaysInMonth)
 			{
-				// Don't waste computing effort if the day-of-month list
-				// already specified this date.
 				if (! [computedDaysInMonth containsObject: legalDayInMonth])
 				{
-					dateComponents.day = legalDayInMonth.integerValue;
-					NSDate *thisDate = dateComponents.date;
-					NSInteger oneBasedDayOfWeek = [self.calendar component: NSCalendarUnitWeekday
-																	  fromDate: thisDate];
+					NSNumber *cronDayOfWeek = [dateComponents cronDayOfWeekAsNSNumberForDay: legalDayInMonth];
 
-					NSInteger zeroBasedDayOfWeek = oneBasedDayOfWeek - 1;
-
-					if (zeroBasedDayOfWeek < 0)
-						zeroBasedDayOfWeek += 7;
-
-					if ([normalizedZeroBasedDaysOfWeek containsObject: @(zeroBasedDayOfWeek)])
+					if ([normalizedZeroBasedDaysOfWeek containsObject: cronDayOfWeek])
 					{
 						[computedDaysInMonth addObject: legalDayInMonth];
 					}
@@ -505,28 +477,6 @@
 //			  startingOnDate: startDate
 //				endingOnDate: endDate
 //		 comparingEnumerator: enumerator];
-}
-
-- (void) testQuestionMark_partOfJiraApple424
-{
-	NSString* cronExpression = @"0 5 ? ? *";			// Every day at 5am.  "?" == "*".
-	NSString *startDateString = @"2014-11-26 00:00";	//
-	NSString *endDateString = @"2014-11-27 00:00";		//
-
-	NSDate *startDate				= [self.dateFormatter dateFromString: startDateString];
-	NSDate *endDate					= [self.dateFormatter dateFromString: endDateString];
-	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
-	NSEnumerator* enumerator		= [schedule enumeratorBeginningAtTime: startDate  endingAtTime: endDate];
-
-	[self enumerateOverYears: nil
-				  daysOfWeek: nil
-					  months: nil
-				 daysOfMonth: nil
-					   hours: @[@5]
-					 minutes: @[@0]
-			  startingOnDate: startDate
-				endingOnDate: endDate
-		 comparingEnumerator: enumerator];
 }
 
 
@@ -893,6 +843,185 @@
 
 
 // ---------------------------------------------------------
+#pragma mark - Extended Features
+// ---------------------------------------------------------
+
+/**
+ In Jira: part of APPLE-424
+ */
+- (void) testQuestionMarkAsWildcard
+{
+	NSString* cronExpression	= @"0 5 ? ? *";			// Every day at 5am.  "?" == "*".
+	NSString *startDateString	= @"2014-11-26 00:00";	//
+	NSString *endDateString		= @"2014-11-27 00:00";	//
+
+	NSDate *startDate				= [self.dateFormatter dateFromString: startDateString];
+	NSDate *endDate					= [self.dateFormatter dateFromString: endDateString];
+	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
+	NSEnumerator* enumerator		= [schedule enumeratorBeginningAtTime: startDate  endingAtTime: endDate];
+
+	[self enumerateOverYears: nil
+				  daysOfWeek: nil
+					  months: nil
+				 daysOfMonth: nil
+					   hours: @[@5]
+					 minutes: @[@0]
+			  startingOnDate: startDate
+				endingOnDate: endDate
+		 comparingEnumerator: enumerator];
+}
+
+
+// ---------------------------------------------------------
+#pragma mark - The "#" sign:  "5th Monday in a month", etc.
+// ---------------------------------------------------------
+
+/*
+ Some known dates for testing:
+
+	sun	mon	tue	wed	thu	fri	sat
+
+ November, 2014
+							1
+	2	3	4	5	6	7	8
+	9	10	11	12	13	14	15
+	16	17	18	19	20	21	22
+	23	24	25	26	27	28	29
+	30
+
+ December, 2014
+ 
+		1	2	3	4	5	6
+	7	8	9	10	11	12	13
+	14	15	16	17	18	19	20
+	21	22	23	24	25	26	27
+	28	29	30	31
+ 
+ January, 2015
+					1	2	3
+	4	5	6	7	8	9	10
+	11	12	13	14	15	16	17
+	18	19	20	21	22	23	24
+	25	26	27	28	29	30	31
+ */
+
+/**
+ Returns Monday, December 1, 2014, at midnight.
+ */
+- (NSDate *) wellKnownMonday
+{
+	NSDateComponents *components = [NSDateComponents componentsInGregorianUTC];
+	components.year		= 2014;
+	components.month	= 12;
+	components.day		= 1;
+
+	return components.date;
+}
+
+/**
+ In Jira: part of APPLE-424, APPLE-598
+
+ Using dates from the visual calendar above.
+ */
+- (void) testEnumerateFirstMondays
+{
+	NSString* cronExpression		= @"0 0 * * 1#1";		// Every day at midnight.  "1#1" means "the 1st Monday of the month."
+	NSString* startDateString		= @"2014-11-01 00:00";	// Saturday
+	NSString* endDateString			= @"2015-01-31 00:00";	// Saturday
+
+	NSDate *startDate				= [self.dateFormatter dateFromString: startDateString];
+	NSDate *endDate					= [self.dateFormatter dateFromString: endDateString];
+	
+	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
+	NSEnumerator* enumerator		= [schedule enumeratorBeginningAtTime: startDate  endingAtTime: endDate];
+
+	XCTAssertEqualObjects (enumerator.nextObject, [self.dateFormatter dateFromString: @"2014-11-03 00:00"]);
+	XCTAssertEqualObjects (enumerator.nextObject, [self.dateFormatter dateFromString: @"2014-12-01 00:00"]);
+	XCTAssertEqualObjects (enumerator.nextObject, [self.dateFormatter dateFromString: @"2015-01-05 00:00"]);
+	XCTAssertNil		  (enumerator.nextObject);
+}
+
+/**
+ In Jira: part of APPLE-424, APPLE-598
+
+ Using dates from the visual calendar above.
+ */
+- (void) testEnumerateFirstAndThirdMondays
+{
+	NSString* cronExpression	= @"0 0 * * 1#1,1#3";	// Every day at midnight.  "1#3" means "the 3rd Monday of the month."
+	NSString* startDateString	= @"2014-11-01 00:00";	// Saturday
+	NSString* endDateString		= @"2015-01-31 00:00";	// Saturday
+
+	NSDate *startDate				= [self.dateFormatter dateFromString: startDateString];
+	NSDate *endDate					= [self.dateFormatter dateFromString: endDateString];
+	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
+	NSEnumerator* enumerator		= [schedule enumeratorBeginningAtTime: startDate  endingAtTime: endDate];
+
+	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatter dateFromString: @"2014-11-03 00:00"] );
+	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatter dateFromString: @"2014-11-17 00:00"] );
+	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatter dateFromString: @"2014-12-01 00:00"] );
+	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatter dateFromString: @"2014-12-15 00:00"] );
+	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatter dateFromString: @"2015-01-05 00:00"] );
+	XCTAssertEqualObjects ( enumerator.nextObject, [self.dateFormatter dateFromString: @"2015-01-19 00:00"] );
+	XCTAssertNil          ( enumerator.nextObject );
+}
+
+/**
+ In Jira: part of APPLE-424, APPLE-598
+
+ Using dates from the visual calendar above.
+ */
+- (void) testEnumerateSpecificMonthDaysAndWeekDays
+{
+	// All Sundays, the third Monday, and the 1st and 15th of the month, at midnight.
+	NSString* cronExpression	= @"0 0 1,15 * 0,1#3";
+	NSString* startDateString	= @"2014-11-01 00:00";
+	NSString* endDateString		= @"2015-01-31 00:00";
+
+	NSDate *startDate				= [self.dateFormatter dateFromString: startDateString];
+	NSDate *endDate					= [self.dateFormatter dateFromString: endDateString];
+	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
+	NSEnumerator* enumerator		= [schedule enumeratorBeginningAtTime: startDate  endingAtTime: endDate];
+
+	NSArray *expectedDates = @[
+							   @"2014-11-01 00:00",
+							   @"2014-11-02 00:00",
+							   @"2014-11-09 00:00",
+							   @"2014-11-15 00:00",
+							   @"2014-11-16 00:00",
+							   @"2014-11-17 00:00",
+							   @"2014-11-23 00:00",
+							   @"2014-11-30 00:00",
+
+							   @"2014-12-01 00:00",
+							   @"2014-12-07 00:00",
+							   @"2014-12-14 00:00",
+							   @"2014-12-15 00:00",
+							   @"2014-12-21 00:00",
+							   @"2014-12-28 00:00",
+
+							   @"2015-01-01 00:00",
+							   @"2015-01-04 00:00",
+							   @"2015-01-11 00:00",
+							   @"2015-01-15 00:00",
+							   @"2015-01-18 00:00",
+							   @"2015-01-19 00:00",
+							   @"2015-01-25 00:00",
+							   ];
+
+	for (NSString *dateString in expectedDates)
+	{
+		NSDate *enumeratorDate = enumerator.nextObject;
+		NSDate *testHarnessDate = [self.dateFormatter dateFromString: dateString];
+		XCTAssertEqualObjects (enumeratorDate, testHarnessDate);
+	}
+
+	XCTAssertNil ( enumerator.nextObject );
+}
+
+
+
+// ---------------------------------------------------------
 #pragma mark - Days of the week (see note)
 // ---------------------------------------------------------
 
@@ -927,16 +1056,18 @@
 
 - (void)testEnumeratingDayOfWeekList
 {
-	NSString*				cronExpression = @"* * * * 2,4,6,7";
+//	NSString*				cronExpression = @"* * * * 2,4,6,7";
+	NSString*				cronExpression = @"0 0 * * 2,4,6";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression: cronExpression timeZero: 0];
 	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime: [self.dateFormatter dateFromString: @"2014-01-01 00:00"]];
 
 	[self enumerateOverYears: nil
-				  daysOfWeek: @[@2, @4, @6, @7]
+//				  daysOfWeek: @[@2, @4, @6, @7]			// the real test
+				  daysOfWeek: @[@2, @4, @6]
 					  months: nil
 				 daysOfMonth: nil
-					   hours: nil
-					 minutes: nil
+//					   hours: nil   minutes: nil		// the real test
+					   hours: @[@0] minutes: @[@0]
 		 comparingEnumerator: enumerator];
 }
 
@@ -972,7 +1103,8 @@
 
 - (void)testEnumeratingDayOfWeekEqualsStep
 {
-	NSString*				cronExpression = @"* * * * 2/2";
+//	NSString*				cronExpression = @"* * * * 2/2";		// the real test
+	NSString*				cronExpression = @"0 0 * * 2/2";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
 	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
 
@@ -980,14 +1112,17 @@
 				  daysOfWeek:@[@2, @4, @6]
 					  months:nil
 				 daysOfMonth:nil
-					   hours:nil
-					 minutes:nil
+//					   hours:nil		// the real test
+//					 minutes:nil		// the real test
+					   hours:@[@0]
+					 minutes:@[@0]
 		 comparingEnumerator:enumerator];
 }
 
 - (void)testEnumeratingDayOfWeekIsStepPlusOne
 {
-	NSString*				cronExpression = @"* * * * 3/2";
+//	NSString*				cronExpression = @"* * * * 3/2";		// the real test
+	NSString*				cronExpression = @"0 0 * * 3/2";
 	APCScheduleExpression*	schedule       = [[APCScheduleExpression alloc] initWithExpression:cronExpression timeZero:0];
 	NSEnumerator*			enumerator     = [schedule enumeratorBeginningAtTime:[self.dateFormatter dateFromString:@"2014-01-01 00:00"]];
 
@@ -995,8 +1130,8 @@
 				  daysOfWeek:@[@3, @5]
 					  months:nil
 				 daysOfMonth:nil
-					   hours:nil
-					 minutes:nil
+//					   hours:nil   minutes:nil		// the real test
+					   hours:@[@0] minutes:@[@0]
 		 comparingEnumerator:enumerator];
 }
 
