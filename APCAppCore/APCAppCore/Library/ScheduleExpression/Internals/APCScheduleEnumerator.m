@@ -278,8 +278,16 @@ static NSInteger    kYearIndex   = 4;
     {
         self.nextMoment = nil;
     }
-    
-    return savedMoment;
+
+	// The catch:  the user is expecting dates in local time.
+	// Our calculations have been in UTC (London, without
+	// daylight savings).  Convert.  (Eventually:  make this
+	// an init parameter?)
+	NSTimeZone *zone = [NSTimeZone localTimeZone];
+	NSTimeInterval timeZoneOffset = [zone secondsFromGMTForDate: savedMoment];
+	NSDate *localDate = [NSDate dateWithTimeIntervalSince1970: savedMoment.timeIntervalSince1970 - timeZoneOffset];
+
+    return localDate;
 }
 
 - (void) recomputeDaysAfterRollingOverMonthOrYearStartingOnDay: (NSNumber *) startDay
