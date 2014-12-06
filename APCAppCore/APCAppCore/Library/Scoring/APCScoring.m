@@ -12,7 +12,6 @@ static NSDateFormatter *dateFormatter = nil;
 
 static NSString *const kDatasetDateKey  = @"datasetDateKey";
 static NSString *const kDatasetValueKey = @"datasetValueKey";
-static NSString *const kDatasetSortKey = @"datasetSortKey";
 
 @interface APCScoring()
 
@@ -56,7 +55,6 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
     
     if (!dateFormatter) {
         dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
     }
 }
 
@@ -80,13 +78,12 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
                 numberOfDays:(NSUInteger)numberOfDays
                     valueKey:(NSString *)valueKey
                      dataKey:(NSString *)dataKey
-                     sortKey:(NSString *)sortKey
 {
     self = [super init];
     
     if (self) {
         [self sharedInit];
-        [self queryTaskId:taskId forDays:numberOfDays valueKey:valueKey dataKey:dataKey sortKey:sortKey];
+        [self queryTaskId:taskId forDays:numberOfDays valueKey:valueKey dataKey:dataKey];
     }
     
     return self;
@@ -131,7 +128,6 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
             forDays:(NSUInteger)days
            valueKey:(NSString *)valueKey
             dataKey:(NSString *)dataKey
-            sortKey:(NSString *)sortKey
 {
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -169,8 +165,7 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
                 if (!dataKey) {
                     [self.dataPoints addObject:@{
                                          kDatasetDateKey: task.startOn,
-                                         kDatasetValueKey: [taskResult valueForKey:valueKey],
-                                         kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null]
+                                         kDatasetValueKey: [taskResult valueForKey:valueKey]
                                         }];
                 } else {
                     NSDictionary *nestedData = [taskResult valueForKey:dataKey];
@@ -178,20 +173,12 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
                     if (nestedData) {
                         [self.dataPoints addObject:@{
                                                      kDatasetDateKey: task.startOn,
-                                                     kDatasetValueKey: [nestedData valueForKey:valueKey],
-                                                     kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null]
+                                                     kDatasetValueKey: [nestedData valueForKey:valueKey]
                                                      }];
                     }
                 }
             }
         }
-    }
-    
-    if (sortKey) {
-        NSSortDescriptor *sortBy = [[NSSortDescriptor alloc] initWithKey:kDatasetSortKey ascending:YES];
-        NSArray *sortedDataPoints = [self.dataPoints sortedArrayUsingDescriptors:@[sortBy]];
-        
-        self.dataPoints = [sortedDataPoints mutableCopy];
     }
 }
 
@@ -203,7 +190,7 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
     // sort the results in a decsending order,
     // in case there are more than one result for a meal time.
     NSSortDescriptor *sortByCreateAtDescending = [[NSSortDescriptor alloc] initWithKey:@"createdAt"
-                                                                             ascending:YES];
+                                                                             ascending:NO];
     
     NSArray *sortedScheduleTaskresults = [scheduledTaskResults sortedArrayUsingDescriptors:@[sortByCreateAtDescending]];
     
@@ -253,7 +240,7 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
     HKStatisticsOptions queryOptions;
     
     if (isDecreteQuantity) {
-        queryOptions = HKStatisticsOptionDiscreteAverage;
+        queryOptions = HKStatisticsOptionNone;
     } else {
         queryOptions = HKStatisticsOptionCumulativeSum;
     }
@@ -293,8 +280,9 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
                                                [queryDataset addObject:dataPoint];
                                            }
                                        }];
-            
-            [self dataIsAvailableFromHealthKit:queryDataset];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self dataIsAvailableFromHealthKit:queryDataset];
+            });
         }
     };
 
@@ -303,11 +291,7 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
 
 - (void)dataIsAvailableFromHealthKit:(NSArray *)dataset
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.dataPoints = [dataset mutableCopy];
-        [[NSNotificationCenter defaultCenter] postNotificationName:APCScoringHealthKitDataIsAvailableNotification
-                                                            object:self.dataPoints];
-    });
+    self.dataPoints = [dataset mutableCopy];
 }
 
 /**
@@ -343,7 +327,6 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
 
 - (NSNumber *)averageDataPoint
 {
-    NSLog(@"Avg. %lu", [[self.dataPoints valueForKeyPath:@"@avg.datasetValueKey"] integerValue]);
     return [self.dataPoints valueForKeyPath:@"@avg.datasetValueKey"];
 }
 

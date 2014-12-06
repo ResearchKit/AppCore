@@ -17,8 +17,7 @@
 - (instancetype)initWithTask:(NSString *)taskId
                 numberOfDays:(NSUInteger)numberOfDays
                     valueKey:(NSString *)valueKey
-                     dataKey:(NSString *)dataKey
-                     sortKey:(NSString *)sortKey;
+                     dataKey:(NSString *)dataKey;
 
 - (NSNumber *)minimumDataPoint;
 - (NSNumber *)maximumDataPoint;
