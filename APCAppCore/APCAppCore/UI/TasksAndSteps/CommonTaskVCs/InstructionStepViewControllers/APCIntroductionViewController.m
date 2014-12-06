@@ -213,6 +213,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if (self.title) {
+        self.navigationController.navigationBar.topItem.title = self.title;
+    }
 }
 
 - (void)viewDidLayoutSubviews

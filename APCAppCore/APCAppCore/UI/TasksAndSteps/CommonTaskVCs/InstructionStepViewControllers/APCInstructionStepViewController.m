@@ -39,7 +39,11 @@
 {
     [super viewWillAppear:animated];
     [self.introVC setupWithInstructionalImages:self.imagesArray headlines:self.headingsArray andParagraphs:self.messagesArray];
-
+    
+    if (self.title) {
+        self.navigationController.navigationBar.topItem.title = self.title;
+        self.introVC.title = self.title;
+    }
 }
 
 - (IBAction)getStartedWasTapped:(id)sender
