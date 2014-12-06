@@ -89,6 +89,25 @@
     }
 }
 
+- (void) withdrawStudyOnCompletion:(void (^)(NSError *))completionBlock
+{
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+    }
+    else
+    {
+        [SBBComponent(SBBConsentManager) suspendConsentWithCompletion:^(id responseObject, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            });
+        }];
+    }
+}
+
 - (void)signInOnCompletion:(void (^)(NSError *))completionBlock
 {
     if ([self serverDisabled]) {
