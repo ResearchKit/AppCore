@@ -1,8 +1,9 @@
 //
 //  NSDateComponents+Helper.m
-//  AppCore
+//  APCAppCore
 //
-//  Copyright (c) 2014 Apple Inc. All rights reserved.
+//  Created by Ron Conescu on 12/5/14.
+//  Copyright (c) 2014 Y Media Labs. All rights reserved.
 //
 
 #import "NSDateComponents+Helper.h"

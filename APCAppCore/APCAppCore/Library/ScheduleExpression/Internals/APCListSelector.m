@@ -87,6 +87,10 @@
 
 -(BOOL) isWildcard
 {
+	/*
+	 There are more compact and efficient ways to write
+	 this, but I wanted to spell out the logic.  --ron
+	 */
 	BOOL iHaveNoKids = self.subSelectors.count == 0;
 
 	BOOL allMyKidsAreWildcards = YES;

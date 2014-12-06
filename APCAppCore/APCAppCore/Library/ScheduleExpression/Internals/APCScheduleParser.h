@@ -10,8 +10,9 @@
 #import "APCPointSelector.h"
 
 /*
- This the parser grammar.  Precedence matters:  Higher in the
- list means higher precedence in the parser.
+ Ron:  Ed says:  This the parser grammar.  Precedence
+ matters:  Higher in the list means higher precedence
+ in the parser.
  
  For example, reading from bottom to top:
  - lists (rule 2)...

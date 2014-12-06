@@ -646,8 +646,10 @@
 		F5F129D71A2F78490015982C /* APCPermissionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPermissionButton.h; sourceTree = "<group>"; };
 		F5F129D81A2F78490015982C /* APCPermissionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPermissionButton.m; sourceTree = "<group>"; };
 		F5F129DA1A2F78490015982C /* APCScheduleExpressionListSelectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionListSelectorTests.m; sourceTree = "<group>"; };
+		F5F129DB1A2F78490015982C /* APCParametersTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCParametersTest.m; sourceTree = "<group>"; };
 		F5F129DC1A2F78490015982C /* APCScheduleExpressionPointSelectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionPointSelectorTests.m; sourceTree = "<group>"; };
 		F5F129DD1A2F78490015982C /* APCScheduleExpressionParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionParserTests.m; sourceTree = "<group>"; };
+		F5F129DE1A2F78490015982C /* APCSchedulerTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSchedulerTestCase.m; sourceTree = "<group>"; };
 		F5F129DF1A2F78490015982C /* APCScheduleExpressionEnumeratorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionEnumeratorTests.m; sourceTree = "<group>"; };
 		F5F129E01A2F78490015982C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5F12B1B1A2F78AE0015982C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -700,6 +702,15 @@
 				36DE37001A329FAF00E919DB /* NSDateComponentsHelperTests.m */,
 			);
 			name = NSDateComponentsHelperTests;
+			sourceTree = "<group>";
+		};
+		36EE894E1A2FEFC600AEA9E6 /* (Not Currently Used) */ = {
+			isa = PBXGroup;
+			children = (
+				F5F129DE1A2F78490015982C /* APCSchedulerTestCase.m */,
+				F5F129DB1A2F78490015982C /* APCParametersTest.m */,
+			);
+			name = "(Not Currently Used)";
 			sourceTree = "<group>";
 		};
 		36EE894F1A2FEFD700AEA9E6 /* ScheduleExpressionTests */ = {
@@ -1370,6 +1381,7 @@
 			children = (
 				36DE36FF1A329F9900E919DB /* NSDateComponentsHelperTests */,
 				36EE894F1A2FEFD700AEA9E6 /* ScheduleExpressionTests */,
+				36EE894E1A2FEFC600AEA9E6 /* (Not Currently Used) */,
 				F5F129E01A2F78490015982C /* Info.plist */,
 			);
 			path = APCAppCoreTests;
