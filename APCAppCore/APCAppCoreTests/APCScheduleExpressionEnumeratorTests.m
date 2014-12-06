@@ -235,57 +235,6 @@
 	}
 }
 
-/**
- TODO:  Figure out where to put the test-harness logic which
- translates days of the week to dates-in-a-month, and which
- optionally translates cron's zero-based days to NSDate's
- one-based days.
-
- Issues:
- 1)	The logic to convert weekdays (like "Tuesday") to
-	days in a month (like "March 7, 14, 21, and 28")
-	is potentially complex.
-
- 2) cron's weekdays are zero-based, while NSDate's weekdays
-	are one-based.  We have to translate between those.
-	That's complex enough to be worth thinking about --
-	not fundamentally difficult, but easy to make mistakes
-	with.
-
- 3)	Given all that:  do we put that logic in the code being
-	tested, and use it from here?  Or duplicate it in the
-	test harness, and run the risk of inducing bugs in both
-	places, having to maintain that, and having to test
-	our test-harness code?
-
-
- Some solutions and problems with them all:
- a)	If we specify cron's zero-based days as input to the test
-	harness, we have to translate from zero-based to one-
-	based.  This is an easy source of bugs in BOTH places --
-	the harness and the code we're trying to test.
-
- b)	If we specify NSDate's one-based days into the test harness,
-	it's much harder to verify that that logic is indeed the same
-	in both places -- to verify that we're testing the right thing.
-
- c)	The code we're testing already HAS all this logic, here:
-
-		-[APCDayOfMonthSelector recomputeDaysForCalendar:]
-		-[APCDayOfMonthSelector specificWeekdaysForMonth:]
-
-	So we could just expose that.  But that means using
-	the code-being-tested as the stuff we're testing
-	AGAINST -- which seems like it invalidates the test;
-	we'd just be proving that 1 == 1.
-
- Ideas?
-
- For now, I'm doing option (a):  recreating the logic from
- (c), using cron's zero-based days.
-
- --ron
- */
 - (NSArray *) calculateRealDaysInMonth: (NSNumber *) month
 							   andYear: (NSNumber *) year
 					   givenTheseDates: (NSArray *) daysInMonth
@@ -340,7 +289,7 @@
 		 E.g., if the days of the week == @[@1] ("Monday"), extract all
 		 days of this month that fall on a Monday.
 
-		 This same logic (or verrrrrrry similar) is in the ScheduleEnumerator.
+		 Similar logic is in the ScheduleEnumerator.
 		 */
 		if (normalizedZeroBasedDaysOfWeek.count)
 		{
@@ -373,17 +322,17 @@
 #pragma mark - Testing specific bugs we found
 // =========================================================
 
-- (void) test_Dhanush2014nov26_jiraApple491
+- (void) test_2014nov26_jiraApple491
 {
 	NSString* cronExpression = @"0 5 * * *";			// Every day at 5am.
 //	NSString* cronExpression = @"0 5,10 * * *";			// Every day at 5 and 10am.
 //	NSString* cronExpression = @"0/5 5,10 * * *";		// Every day at 5 and 10am, every 5 mins within those hours.
 
-	NSString *startDateString = @"2014-11-26 00:00";	// Dhanush's original start date
+	NSString *startDateString = @"2014-11-26 00:00";	// original bug start date
 //	NSString *startDateString = @"2015-11-26 00:00";	// testing rolling over a leap year
 
 //	NSString *endDateString = @"2014-11-26 06:00";		//
-	NSString *endDateString = @"2014-11-27 00:00";		// Dhanush's original end date
+	NSString *endDateString = @"2014-11-27 00:00";		// original bug end date
 //	NSString *endDateString = @"2014-11-27 06:00";		//
 //	NSString *endDateString = @"2014-11-28 00:00";		//
 //	NSString *endDateString = @"2014-11-30 00:00";		//
@@ -411,7 +360,7 @@
 
 
 	/*
-	 This is Dhanush's original test.  It should print out exactly
+	 This is the test from the original bug.  It should print out exactly
 	 the dates you expect to see.  Make sure you use the formatter
 	 to print the dates, or it'll look wrong (it'll be in GMT, not PST).
 	 */

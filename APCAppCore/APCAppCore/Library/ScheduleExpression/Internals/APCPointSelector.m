@@ -12,7 +12,7 @@
 
 @property (nonatomic, assign) NSNumber* defaultBegin;
 @property (nonatomic, assign) NSNumber* defaultEnd;
-@property (nonatomic, assign) BOOL isWildcard_private;		// Note:  I use the in-line "_" to mean "sub-concept."  Details available.  --ron
+@property (nonatomic, assign) BOOL isWildcard_private;
 
 @end
 

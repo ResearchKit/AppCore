@@ -11,7 +11,7 @@
 #import "APCDayOfMonthSelector.h"
 
 
-static unichar kEndToken					= '\0';
+static unichar kEndToken				= '\0';
 static unichar kListSeparatorToken		= ',';
 static unichar kStepSeparatorToken		= '/';
 static unichar kPositionSeparatorToken	= '#';
