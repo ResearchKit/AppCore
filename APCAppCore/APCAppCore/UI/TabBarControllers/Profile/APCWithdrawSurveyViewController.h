@@ -15,7 +15,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *headerLabel;
 
-@property (weak, nonatomic) IBOutlet UIButton *withdrawButton;
+@property (weak, nonatomic) IBOutlet UIButton *submitButton;
 
 @property (nonatomic, strong) NSArray *items;
 
@@ -23,5 +23,6 @@
 
 - (NSArray *)surveyFromJSONFile:(NSString *)jsonFileName;
 
-- (IBAction)cancel:(id)sender;
+- (IBAction)submit:(id)sender;
+
 @end
