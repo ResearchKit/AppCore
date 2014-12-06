@@ -58,6 +58,11 @@
     return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
 }
 
+- (APCUser *) user {
+    return ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;;
+}
+
+
 - (void)showConsent
 {
     RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
@@ -72,6 +77,17 @@
 
 - (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
 {
+    RKSTConsentSignatureResult *consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
+    
+    APCUser *user = [self user];
+    user.consentSignatureName = consentResult.signature.name;
+    user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
+    
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
+    user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
+    
+    
     [self dismissViewControllerAnimated:YES completion:^{
         
         [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;

@@ -165,11 +165,13 @@
     }
     else
     {
-        NSString * name = self.firstName.length? [self.firstName stringByAppendingFormat:@" %@", self.lastName] : @"FirstName";
+        NSString * name = self.consentSignatureName.length ? self.consentSignatureName : @"FirstName LastName";
         NSDate * birthDate = self.birthDate ?: [NSDate dateWithTimeIntervalSince1970:(60*60*24*365*10)];
+        UIImage *consentImage = [UIImage imageWithData:self.consentSignatureImage];
+        
         [SBBComponent(SBBConsentManager) consentSignature:name
                                                 birthdate:birthDate
-                                           signatureImage:nil
+                                           signatureImage:consentImage
                                                completion:^(id responseObject, NSError *error) {
                                                    dispatch_async(dispatch_get_main_queue(), ^{
                                                        if (completionBlock) {

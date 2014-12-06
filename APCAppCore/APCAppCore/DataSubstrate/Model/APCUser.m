@@ -28,10 +28,16 @@ static NSString *const kWakeUpTimePropertyName = @"wakeUpTime";
 static NSString *const kSleepTimePropertyName = @"sleepTime";
 static NSString *const kEthnicityPropertyName = @"ethnicity";
 static NSString *const kGlucoseLevelsPropertyName = @"glucoseLevels";
+
 static NSString *const kHomeLocationAddressPropertyName = @"homeLocationAddress";
 static NSString *const kHomeLocationLatPropertyName = @"homeLocationLat";
 static NSString *const kHomeLocationLongPropertyName = @"homeLocationLong";
+
 static NSString *const kSecondaryInfoSavedPropertyName = @"secondaryInfoSaved";
+
+static NSString *const kConsentSignatureNamePropertyName = @"consentSignatureName";
+static NSString *const kConsentSignatureDatePropertyName = @"consentSignatureDate";
+static NSString *const kConsentSignatureImagePropertyName = @"consentSignatureImage";
 
 static NSString *const kSignedUpKey = @"SignedUp";
 static NSString *const kSignedInKey = @"SignedIn";
@@ -127,6 +133,11 @@ static NSString *const kSignedInKey = @"SignedIn";
     _homeLocationLat = [storedUserData.homeLocationLat copy];
     _homeLocationLong = [storedUserData.homeLocationLong copy];
     _secondaryInfoSaved = [storedUserData.secondaryInfoSaved boolValue];
+    
+    _consentSignatureName = [storedUserData.consentSignatureName copy];
+    _consentSignatureDate = [storedUserData.consentSignatureDate copy];
+    _consentSignatureImage = [storedUserData.consentSignatureImage copy];
+    
 }
 
 - (void) updateStoredProperty:(NSString*) propertyName withValue: (id) value
@@ -291,6 +302,24 @@ static NSString *const kSignedInKey = @"SignedIn";
 {
     _secondaryInfoSaved = secondaryInfoSaved;
     [self updateStoredProperty:kSecondaryInfoSavedPropertyName withValue:@(secondaryInfoSaved)];
+}
+
+- (void)setConsentSignatureName:(NSString *)consentSignatureName
+{
+    _consentSignatureName = consentSignatureName;
+    [self updateStoredProperty:kConsentSignatureNamePropertyName withValue:consentSignatureName];
+}
+
+- (void)setConsentSignatureDate:(NSDate *)consentSignatureDate
+{
+    _consentSignatureDate = consentSignatureDate;
+    [self updateStoredProperty:kConsentSignatureDatePropertyName withValue:consentSignatureDate];
+}
+
+- (void)setConsentSignatureImage:(NSData *)consentSignatureImage
+{
+    _consentSignatureImage = consentSignatureImage;
+    [self updateStoredProperty:kConsentSignatureImagePropertyName withValue:consentSignatureImage];
 }
 
 /*********************************************************************************/

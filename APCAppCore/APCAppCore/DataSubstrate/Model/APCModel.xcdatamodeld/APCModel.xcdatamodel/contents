@@ -47,6 +47,9 @@
         <attribute name="biologicalSex" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="birthDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="bloodType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="consentSignatureDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="consentSignatureImage" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="consentSignatureName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="ethnicity" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="glucoseLevels" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="homeLocationAddress" optional="YES" attributeType="String" syncable="YES"/>
@@ -77,7 +80,7 @@
         <element name="APCResult" positionX="-720" positionY="333" width="128" height="208"/>
         <element name="APCSchedule" positionX="-1161" positionY="513" width="128" height="148"/>
         <element name="APCScheduledTask" positionX="-468" positionY="449" width="128" height="178"/>
-        <element name="APCStoredUserData" positionX="-956" positionY="261" width="128" height="285"/>
+        <element name="APCStoredUserData" positionX="-956" positionY="261" width="128" height="328"/>
         <element name="APCTask" positionX="-956" positionY="558" width="128" height="195"/>
     </elements>
 </model>
