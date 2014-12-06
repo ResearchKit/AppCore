@@ -1191,6 +1191,11 @@
 
  Goal: make sure the dates that come out of the enumerator
  are in the user's time zone.
+ 
+ This is used by
+	-[APCScheduler generateScheduledTasksForSchedule],
+ which calls
+	-[APCScheduler createScheduleTask:task:starOn:].
 
  The real-life situation this test represents:  The user
  is looking at a list of stuff to do.  The list contains
