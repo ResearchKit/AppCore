@@ -545,7 +545,7 @@
         <!--Withdrawal Survey-->
         <scene sceneID="lMh-gQ-bcV">
             <objects>
-                <viewController storyboardIdentifier="WithdrawSurveyVC" id="EMw-TM-xWF" customClass="APCWithdrawSurveyViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="APCWithdrawSurveyViewController" id="EMw-TM-xWF" customClass="APCWithdrawSurveyViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Fu4-lu-SfL"/>
                         <viewControllerLayoutGuide type="bottom" id="NvP-cA-e45"/>
@@ -623,16 +623,15 @@
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o0S-br-ebJ">
                                 <rect key="frame" x="0.0" y="503" width="320" height="65"/>
-                                <color key="backgroundColor" red="0.01176470588" green="0.62352941179999999" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="65" id="iKN-qt-Dee"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                <state key="normal" title="Withdraw from Study">
+                                <state key="normal" title="Submit">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="jQn-Js-QVg" kind="presentation" id="Ocu-mb-6G2"/>
+                                    <action selector="submit:" destination="EMw-TM-xWF" eventType="touchUpInside" id="Wzg-c4-9Bb"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -647,29 +646,112 @@
                             <constraint firstItem="NvP-cA-e45" firstAttribute="top" secondItem="Ju2-WN-ZuL" secondAttribute="bottom" constant="65" id="oF9-SJ-rdn"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Withdrawal Survey" id="kM7-G5-UuZ">
-                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="t0k-ey-Eld">
-                            <connections>
-                                <action selector="cancel:" destination="EMw-TM-xWF" id="UkY-O7-VQI"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Withdrawal Survey" id="kM7-G5-UuZ"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="headerLabel" destination="w0A-pl-Wzd" id="tpz-EF-MTE"/>
+                        <outlet property="submitButton" destination="o0S-br-ebJ" id="v1s-Di-L3g"/>
                         <outlet property="tableView" destination="Ju2-WN-ZuL" id="I9L-nH-8b0"/>
-                        <outlet property="withdrawButton" destination="o0S-br-ebJ" id="bmJ-4c-u9r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2x0-Ra-dm4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2576" y="1168"/>
         </scene>
+        <!--Withdrawal Survey-->
+        <scene sceneID="5cF-F0-cSR">
+            <objects>
+                <viewController storyboardIdentifier="APCWithdrawDescriptionViewController" id="f5S-nA-hza" customClass="APCWithdrawDescriptionViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="XSu-0t-4Z1"/>
+                        <viewControllerLayoutGuide type="bottom" id="l5J-P9-0pr"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="BGX-h4-ttl">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C4N-xE-nAQ">
+                                <rect key="frame" x="0.0" y="64" width="320" height="48"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Describe why you are withdrawing in your own words." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="17V-e9-oMl">
+                                        <rect key="frame" x="7" y="4" width="306" height="40"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="17V-e9-oMl" secondAttribute="trailing" constant="7" id="BKb-yG-POU"/>
+                                    <constraint firstItem="17V-e9-oMl" firstAttribute="leading" secondItem="C4N-xE-nAQ" secondAttribute="leading" constant="7" id="Uuw-JO-wV9"/>
+                                    <constraint firstItem="17V-e9-oMl" firstAttribute="top" secondItem="C4N-xE-nAQ" secondAttribute="top" constant="4" id="aYD-Nh-3is"/>
+                                    <constraint firstAttribute="bottom" secondItem="17V-e9-oMl" secondAttribute="bottom" constant="4" id="bKe-AC-32H"/>
+                                    <constraint firstAttribute="height" constant="48" id="ezd-OL-4Mq"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="roj-Aw-erm">
+                                <rect key="frame" x="0.0" y="505" width="320" height="63"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="63" id="Jkn-PE-egZ"/>
+                                </constraints>
+                                <state key="normal" title="Done">
+                                    <color key="titleColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="done:" destination="f5S-nA-hza" eventType="touchUpInside" id="BGZ-XK-VQs"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GaU-t1-TAd">
+                                <rect key="frame" x="0.0" y="112" width="320" height="166"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <connections>
+                                    <outlet property="delegate" destination="f5S-nA-hza" id="4gR-VY-akl"/>
+                                </connections>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="C4N-xE-nAQ" firstAttribute="leading" secondItem="BGX-h4-ttl" secondAttribute="leadingMargin" constant="-16" id="3bk-kT-pQO"/>
+                            <constraint firstAttribute="trailing" secondItem="roj-Aw-erm" secondAttribute="trailing" id="4S3-zw-w14"/>
+                            <constraint firstItem="l5J-P9-0pr" firstAttribute="top" secondItem="GaU-t1-TAd" secondAttribute="bottom" constant="290" id="6Rb-jo-B50"/>
+                            <constraint firstItem="roj-Aw-erm" firstAttribute="leading" secondItem="BGX-h4-ttl" secondAttribute="leading" id="8tD-B0-8ji"/>
+                            <constraint firstItem="GaU-t1-TAd" firstAttribute="leading" secondItem="BGX-h4-ttl" secondAttribute="leadingMargin" constant="-16" id="KVN-Pe-Zgp"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="GaU-t1-TAd" secondAttribute="trailing" constant="-16" id="dJR-nt-56I"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="C4N-xE-nAQ" secondAttribute="trailing" constant="-16" id="eXC-1j-buG"/>
+                            <constraint firstItem="C4N-xE-nAQ" firstAttribute="top" secondItem="XSu-0t-4Z1" secondAttribute="bottom" id="fvh-iv-ycb"/>
+                            <constraint firstItem="l5J-P9-0pr" firstAttribute="top" secondItem="roj-Aw-erm" secondAttribute="bottom" id="kyR-Gu-FeP"/>
+                            <constraint firstItem="GaU-t1-TAd" firstAttribute="top" secondItem="C4N-xE-nAQ" secondAttribute="bottom" id="mIk-Re-MNs"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Withdrawal Survey" id="mj3-6G-awB">
+                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="EKn-46-DOj">
+                            <connections>
+                                <action selector="cancel:" destination="f5S-nA-hza" id="EUg-sS-kWI"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="doneButton" destination="roj-Aw-erm" id="Eo3-w2-zLp"/>
+                        <outlet property="doneButtonBottomLayoutConstraint" destination="kyR-Gu-FeP" id="9uP-GN-AyO"/>
+                        <outlet property="messageLabel" destination="17V-e9-oMl" id="n4C-QD-6eJ"/>
+                        <outlet property="textView" destination="GaU-t1-TAd" id="XOH-qv-jJs"/>
+                        <outlet property="textViewBottomLayoutConstraint" destination="6Rb-jo-B50" id="JuF-3q-auA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Uqu-57-4qX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2983" y="1168"/>
+        </scene>
         <!--Withdrawal Complete-->
         <scene sceneID="Een-et-Hbl">
             <objects>
-                <viewController storyboardIdentifier="WithdrawCompleteVC" id="UaO-e7-70o" customClass="APCWithdrawCompleteViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="APCWithdrawCompleteViewController" id="UaO-e7-70o" customClass="APCWithdrawCompleteViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8V4-Qc-gt3"/>
                         <viewControllerLayoutGuide type="bottom" id="vVm-aP-4qX"/>
@@ -678,18 +760,54 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="J3v-f8-Ygf">
-                                <rect key="frame" x="138" y="233" width="44" height="44"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please help us improve by filling out a survey" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fz7-NV-sxF">
+                                <rect key="frame" x="23" y="381" width="275" height="56"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="Ic4-e5-B7D"/>
-                                    <constraint firstAttribute="width" constant="44" id="qRh-3X-fMf"/>
+                                    <constraint firstAttribute="height" constant="56" id="CFw-92-y8N"/>
+                                    <constraint firstAttribute="width" constant="275" id="FoE-NV-yiW"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GLS-pp-w0E">
+                                <rect key="frame" x="0.0" y="451" width="320" height="63"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="63" id="mCh-aO-KMp"/>
+                                </constraints>
+                                <state key="normal" title="Take Survey">
+                                    <color key="titleColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="takeSurvey:" destination="UaO-e7-70o" eventType="touchUpInside" id="kps-jD-4zB"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LoM-ah-GGy">
+                                <rect key="frame" x="73" y="524" width="174" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="174" id="hqe-n4-O4U"/>
+                                    <constraint firstAttribute="height" constant="30" id="mD4-jA-hoT"/>
+                                </constraints>
+                                <state key="normal" title="No Thanks">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="noThanks:" destination="UaO-e7-70o" eventType="touchUpInside" id="vXV-Z6-L7b"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="J3v-f8-Ygf">
+                                <rect key="frame" x="135" y="181" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="MHN-J9-Vwj"/>
+                                    <constraint firstAttribute="height" constant="50" id="ZpL-Fq-2JU"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BcC-vd-hvB">
-                                <rect key="frame" x="23" y="279" width="275" height="91"/>
+                                <rect key="frame" x="23" y="239" width="275" height="91"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="91" id="CEA-XI-aZs"/>
-                                    <constraint firstAttribute="width" constant="275" id="t7j-hf-9aX"/>
+                                    <constraint firstAttribute="width" constant="275" id="IlI-Kw-SNe"/>
+                                    <constraint firstAttribute="height" constant="91" id="cMK-Eb-jfr"/>
                                 </constraints>
                                 <string key="text" base64-UTF8="YES">
 VGhhbmsgeW91IGZvciB5b3VyIGNvbnRyaWJ1dGlvbiADdG8gdGhpcyBzdHVkeS4gV2UgYXJlIHNvcnJ5
@@ -702,28 +820,33 @@ IHRoYXQgeW91IGNvdWxkIG5vdCBjb250aW51ZS4
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="centerX" secondItem="BcC-vd-hvB" secondAttribute="centerX" constant="-0.5" id="E43-ML-FtD"/>
-                            <constraint firstAttribute="centerX" secondItem="J3v-f8-Ygf" secondAttribute="centerX" id="Qje-8W-rSc"/>
-                            <constraint firstItem="BcC-vd-hvB" firstAttribute="top" secondItem="J3v-f8-Ygf" secondAttribute="bottom" constant="2" id="oG9-T3-SxH"/>
-                            <constraint firstAttribute="centerY" secondItem="J3v-f8-Ygf" secondAttribute="centerY" constant="29" id="upD-Iv-7j5"/>
+                            <constraint firstAttribute="centerX" secondItem="J3v-f8-Ygf" secondAttribute="centerX" id="63k-Nw-hQS"/>
+                            <constraint firstItem="vVm-aP-4qX" firstAttribute="top" secondItem="LoM-ah-GGy" secondAttribute="bottom" constant="14" id="DCz-6b-AQG"/>
+                            <constraint firstItem="GLS-pp-w0E" firstAttribute="top" secondItem="fz7-NV-sxF" secondAttribute="bottom" constant="14" id="J2l-xN-iHG"/>
+                            <constraint firstItem="GLS-pp-w0E" firstAttribute="leading" secondItem="33e-NJ-cC0" secondAttribute="leading" id="KAP-2O-nfN"/>
+                            <constraint firstItem="LoM-ah-GGy" firstAttribute="top" secondItem="GLS-pp-w0E" secondAttribute="bottom" constant="10" id="RJd-w6-5d3"/>
+                            <constraint firstItem="BcC-vd-hvB" firstAttribute="top" secondItem="J3v-f8-Ygf" secondAttribute="bottom" constant="8" id="VbI-ak-gYJ"/>
+                            <constraint firstAttribute="trailing" secondItem="GLS-pp-w0E" secondAttribute="trailing" id="dEa-d4-FSJ"/>
+                            <constraint firstAttribute="centerX" secondItem="fz7-NV-sxF" secondAttribute="centerX" constant="-0.5" id="fiu-aP-9gG"/>
+                            <constraint firstAttribute="centerX" secondItem="BcC-vd-hvB" secondAttribute="centerX" constant="-0.5" id="hmQ-vz-7hU"/>
+                            <constraint firstAttribute="centerY" secondItem="J3v-f8-Ygf" secondAttribute="centerY" constant="78" id="ian-yL-4GH"/>
+                            <constraint firstAttribute="centerX" secondItem="LoM-ah-GGy" secondAttribute="centerX" id="tlP-9Z-wEk"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Withdrawal Complete" id="rLJ-rs-VCY">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="muE-Gj-uml">
-                            <connections>
-                                <action selector="withdrawComplete:" destination="UaO-e7-70o" id="jbh-nY-fdQ"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Withdrawal Complete" id="rLJ-rs-VCY"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="logoImageVIew" destination="J3v-f8-Ygf" id="nPT-xn-WRV"/>
                         <outlet property="messageLabel" destination="BcC-vd-hvB" id="HPF-7h-LUh"/>
+                        <outlet property="noThanksButton" destination="LoM-ah-GGy" id="xd3-Dz-Pqe"/>
+                        <outlet property="surveyLabel" destination="fz7-NV-sxF" id="CRM-yN-1UH"/>
+                        <outlet property="takeSurveyButton" destination="GLS-pp-w0E" id="Nl6-Ig-32e"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Em-Bi-FOU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2576" y="1837"/>
+            <point key="canvasLocation" x="2186" y="1168"/>
         </scene>
         <!--Change Passcode-->
         <scene sceneID="KLW-wC-q0A">
@@ -820,44 +943,6 @@ IHRoYXQgeW91IGNvdWxkIG5vdCBjb250aW51ZS4
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JfQ-II-IhU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2186" y="486"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="I92-zH-lpE">
-            <objects>
-                <navigationController storyboardIdentifier="WithdrawSurveyNC" automaticallyAdjustsScrollViewInsets="NO" id="otT-ps-dr5" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="eYI-oA-X9J">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="EMw-TM-xWF" kind="relationship" relationship="rootViewController" id="b2c-xA-qQq"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Gqh-NI-ph7" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2186" y="1168"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="WkK-ab-phb">
-            <objects>
-                <navigationController storyboardIdentifier="WithdrawCompleteNC" automaticallyAdjustsScrollViewInsets="NO" id="jQn-Js-QVg" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="roH-Hn-FBD">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="UaO-e7-70o" kind="relationship" relationship="rootViewController" id="3t8-At-abY"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="iFT-nq-F8e" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2186" y="1837"/>
         </scene>
     </scenes>
     <resources>

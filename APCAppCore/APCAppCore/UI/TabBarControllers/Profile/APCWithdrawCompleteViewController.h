@@ -1,4 +1,4 @@
-// 
+//
 //  APCWithdrawCompleteViewController.h 
 //  AppCore 
 // 
@@ -10,5 +10,14 @@
 @interface APCWithdrawCompleteViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UILabel *messageLabel;
-- (IBAction)withdrawComplete:(id)sender;
+@property (weak, nonatomic) IBOutlet UILabel *surveyLabel;
+
+@property (weak, nonatomic) IBOutlet UIImageView *logoImageVIew;
+
+@property (weak, nonatomic) IBOutlet UIButton *takeSurveyButton;
+@property (weak, nonatomic) IBOutlet UIButton *noThanksButton;
+
+- (IBAction)takeSurvey:(id)sender;
+- (IBAction)noThanks:(id)sender;
+
 @end

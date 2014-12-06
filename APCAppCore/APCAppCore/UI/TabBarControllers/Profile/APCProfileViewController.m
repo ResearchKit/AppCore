@@ -15,6 +15,7 @@
 #import "UIFont+APCAppearance.h"
 #import "NSDate+Helper.h"
 #import "NSBundle+Helper.h"
+#import "APCWithdrawCompleteViewController.h"
 
 static CGFloat kSectionHeaderHeight = 40.f;
 
@@ -548,6 +549,30 @@ static CGFloat kSectionHeaderHeight = 40.f;
     }
 }
 
+- (void)withdraw
+{
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    [self presentViewController:spinnerController animated:YES completion:nil];
+    
+    typeof(self) __weak weakSelf = self;
+    
+    [self.user withdrawStudyOnCompletion:^(NSError *error) {
+        if (error) {
+            [error handle];
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Withdraw", @"") message:error.message];
+                [weakSelf presentViewController:alert animated:YES completion:nil];
+            }];
+        } else {
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                APCWithdrawCompleteViewController *viewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWithdrawCompleteViewController"];
+                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+                [weakSelf.navigationController presentViewController:navController animated:YES completion:nil];
+            }];
+        }
+    }];
+}
+
 #pragma mark - IBActions
 
 - (IBAction)signOut:(id)sender
@@ -568,8 +593,18 @@ static CGFloat kSectionHeaderHeight = 40.f;
 
 - (IBAction)leaveStudy:(id)sender
 {
-    UINavigationController *withdrawViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"WithdrawSurveyNC"];
-    [self.navigationController presentViewController:withdrawViewController animated:YES completion:nil];
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Withdraw", @"") message:NSLocalizedString(@"Are you sure you want to withdraw from the study?\nThis action cannot be undone.", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Withdraw", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self withdraw];
+    }];
+    [alertContorller addAction:yesAction];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    [alertContorller addAction:cancelAction];
+    
+    [self.navigationController presentViewController:alertContorller animated:YES completion:nil];
 }
 
 - (IBAction)changeProfileImage:(id)sender
