@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "APCScheduleExpression.h"
 #import "NSDateComponents+Helper.h"
+#import "NSDate+Helper.h"
 
 
 /**
@@ -1270,6 +1271,56 @@
 	}
 
 	XCTAssertNil (enumerator.nextObject);
+}
+
+- (void) testRealTestCase
+{
+    NSString* cronExpression		= @"0 5 * * *";		// noon and 5pm every Monday
+    
+    NSDateFormatter * dateFormatterInGregorianUTC = [NSDateFormatter new];
+    dateFormatterInGregorianUTC.dateFormat = @"yyyy-MM-dd HH:mm";
+    dateFormatterInGregorianUTC.calendar = [NSCalendar currentCalendar];
+    dateFormatterInGregorianUTC.timeZone = [NSTimeZone localTimeZone];
+    
+    NSTimeInterval userWakeupTimeOffset	= 0;
+    APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression
+                                                                               timeZero: userWakeupTimeOffset];
+    
+    NSEnumerator* enumerator = [schedule enumeratorBeginningAtTime: [NSDate todayAtMidnight]
+                                                      endingAtTime: [NSDate tomorrowAtMidnight]];
+    NSDate * startOnDate;
+    
+    while ((startOnDate = enumerator.nextObject))
+    {
+        NSLog(@"DATE: %@", [dateFormatterInGregorianUTC stringFromDate:startOnDate]);
+    }
+    
+//    NSArray *expectedDates = @[
+//                               @"2014-11-03 12:00",
+//                               @"2014-11-03 17:00",
+//                               @"2014-11-10 12:00",
+//                               @"2014-11-10 17:00",
+//                               @"2014-11-17 12:00",
+//                               @"2014-11-17 17:00",
+//                               @"2014-11-24 12:00",
+//                               @"2014-11-24 17:00",
+//                               ];
+//    
+//    
+//    // This is part of the realistic test:  loop through, extract every value, create something useful from it.
+//    
+//    NSDate *testHarnessDate = nil;
+//    NSDate *enumeratorDate = nil;
+//    
+//    for (NSString *testHarnessDateString in expectedDates)
+//    {
+//        testHarnessDate = [self.dateFormatterInGregorianUTC dateFromString: testHarnessDateString];
+//        enumeratorDate = enumerator.nextObject;
+//        
+//        XCTAssertEqualObjects (enumeratorDate, testHarnessDate);
+//    }
+//    
+//    XCTAssertNil (enumerator.nextObject);
 }
 
 

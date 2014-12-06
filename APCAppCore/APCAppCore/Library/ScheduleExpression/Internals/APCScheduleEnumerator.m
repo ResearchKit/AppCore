@@ -283,9 +283,14 @@ static NSInteger    kYearIndex   = 4;
 	// Our calculations have been in UTC (London, without
 	// daylight savings).  Convert.  (Eventually:  make this
 	// an init parameter?)
-	NSTimeZone *zone = [NSTimeZone localTimeZone];
-	NSTimeInterval timeZoneOffset = [zone secondsFromGMTForDate: savedMoment];
-	NSDate *localDate = [NSDate dateWithTimeIntervalSince1970: savedMoment.timeIntervalSince1970 - timeZoneOffset];
+    NSDate* localDate = nil;
+    
+    if (savedMoment != nil)
+    {
+        NSTimeZone *zone = [NSTimeZone localTimeZone];
+        NSTimeInterval timeZoneOffset = [zone secondsFromGMTForDate: savedMoment];
+        localDate = [NSDate dateWithTimeIntervalSince1970: savedMoment.timeIntervalSince1970 - timeZoneOffset];
+    }
 
     return localDate;
 }
