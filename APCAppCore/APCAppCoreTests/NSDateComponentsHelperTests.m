@@ -1,9 +1,8 @@
 //
 //  NSDateComponentsHelperTests.m
-//  APCAppCore
+//  AppCore
 //
-//  Created by Ron Conescu on 12/5/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
+//  Copyright (c) 2014 Apple Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
