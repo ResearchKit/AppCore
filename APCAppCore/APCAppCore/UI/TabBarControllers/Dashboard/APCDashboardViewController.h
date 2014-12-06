@@ -27,4 +27,7 @@ typedef NS_ENUM(APCTableViewItemType, APCTableViewDashboardItemType) {
 
 - (APCTableViewItemType)itemTypeForIndexPath:(NSIndexPath *)indexPath;
 
+//For overriding if necessary
+- (void)updateVisibleRowsInTableView:(NSNotification *)notification;
+
 @end
