@@ -346,10 +346,6 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void) showOnBoarding
 {
-    if (!self.onboarding) {
-        self.onboarding = [[APCOnboarding alloc] initWithDelegate:self];
-    }
-    
 }
 
 - (void) showNeedsEmailVerification
@@ -372,6 +368,16 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
                     completion:nil];
 }
 
+- (void)instantiateOnboardingForType:(APCOnboardingTaskType)type
+{
+    if (self.onboarding) {
+        self.onboarding = nil;
+        self.onboarding.delegate = nil;
+    }
+    
+    self.onboarding = [[APCOnboarding alloc] initWithDelegate:self taskType:type];
+}
+
 - (RKSTTaskViewController *)consentViewController
 {
      NSAssert(FALSE, @"Override this method to return a valid Consent Task View Controller.");
@@ -388,7 +394,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     return basePath;
 }
 
-#pragma mark - APCOnboarding Protocol
+#pragma mark - APCOnboardingDelegate methods
 
 - (APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)onboarding
 {
@@ -397,5 +403,19 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     return nil;
 }
 
+#pragma mark - APCOnboardingTaskDelegate methods
+
+- (APCUser *)userForOnboardingTask:(APCOnboardingTask *)task
+{
+    return self.dataSubstrate.currentUser;
+}
+
+- (NSInteger)numberOfServicesInPermissionsListForOnboardingTask:(APCOnboardingTask *)task
+{
+    NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
+    NSArray *servicesArray = initialOptions[kAppServicesListRequiredKey];
+    
+    return servicesArray.count;
+}
 
 @end

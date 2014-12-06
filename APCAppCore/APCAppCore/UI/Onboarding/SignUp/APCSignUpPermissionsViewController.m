@@ -84,7 +84,7 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self.stepProgressBar setCompletedSteps:(3 + [self onboarding].signUpTask.customStepIncluded) animation:YES];
+    [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
     
     [self reloadData];
 }
@@ -170,7 +170,7 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 - (void) setupProgressBar {
 
     self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, -kAPCSignUpProgressBarHeight, self.view.width, kAPCSignUpProgressBarHeight) style:APCStepProgressBarStyleDefault];
-    self.stepProgressBar.numberOfSteps = kNumberOfSteps + [self onboarding].signUpTask.customStepIncluded;
+    self.stepProgressBar.numberOfSteps = [self onboarding].onboardingTask.numberOfSteps;
     [self.view addSubview:self.stepProgressBar];
     
     // Instead of reducing table view height, we can just adjust tableview scroll insets
@@ -179,7 +179,7 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
     
     self.tableView.contentInset = inset;
     
-    [self.stepProgressBar setCompletedSteps:(2 + [self onboarding].signUpTask.customStepIncluded) animation:NO];
+    [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 2) animation:NO];
 }
 
 - (APCUser *) user {
@@ -262,34 +262,26 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 
 #pragma mark - Selectors / Button Actions
 
-- (void)finishSignUp
+- (void)finishOnboarding
 {
-    [self.stepProgressBar setCompletedSteps:(4 + [self onboarding].signUpTask.customStepIncluded) animation:YES];
+    [self.stepProgressBar setCompletedSteps:[self onboarding].onboardingTask.currentStepNumber animation:YES];
     
-    // We are posting this notification after .5 seconds delay, because we need to display the progress bar completion animation
-    [self performSelector:@selector(setUserSignedUp) withObject:nil afterDelay:0.5];
+    if ([self onboarding].taskType == kAPCOnboardingTaskTypeSignIn) {
+        // We are posting this notification after .4 seconds delay, because we need to display the progress bar completion animation
+        [self performSelector:@selector(setUserSignedIn) withObject:nil afterDelay:0.4];
+    } else{
+        [self performSelector:@selector(setUserSignedUp) withObject:nil afterDelay:0.4];
+    }
 }
 
 - (void) setUserSignedUp
 {
-    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
-    [self presentViewController:spinnerController animated:YES completion:nil];
-    
-    typeof(self) __weak weakSelf = self;
-    [self.user signUpOnCompletion:^(NSError *error) {
-        if (error) {
-            [spinnerController dismissViewControllerAnimated:NO completion:^{
-                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Up", @"") message:error.localizedDescription];
-                [self presentViewController:alert animated:YES completion:nil];
-            }];
-        }
-        else
-        {
-            [spinnerController dismissViewControllerAnimated:NO completion:^{
-                weakSelf.user.signedUp = YES;
-            }];
-        }
-    }];
+    self.user.signedUp = YES;
+}
+
+- (void)setUserSignedIn
+{
+    self.user.signedIn = YES;
 }
 
 - (void)back
@@ -331,7 +323,7 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 }
 
 - (IBAction)next:(id)sender {
-    [self finishSignUp];
+    [self finishOnboarding];
 }
 
 @end

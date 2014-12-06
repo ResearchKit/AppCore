@@ -12,6 +12,6 @@
 
 @property (nonatomic, strong) NSArray *permissions;
 
-- (void)finishSignUp;
+- (void)finishOnboarding;
 
 @end

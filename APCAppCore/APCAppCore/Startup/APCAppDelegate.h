@@ -12,7 +12,7 @@
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding;
 
-@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate>
+@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate>
 
 @property  (strong, nonatomic)  UIWindow * window;
 
@@ -54,5 +54,7 @@
 - (void)showPasscodeIfNecessary;
 
 - (RKSTTaskViewController *)consentViewController;
+
+- (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
 
 @end

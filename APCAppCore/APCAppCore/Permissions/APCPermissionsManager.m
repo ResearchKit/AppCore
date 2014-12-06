@@ -72,8 +72,9 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     switch (type) {
         case kSignUpPermissionsTypeHealthKit:
         {
-            HKObjectType *weightType = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
-            HKAuthorizationStatus status = [self.healthStore authorizationStatusForType:weightType];
+            HKCharacteristicType *dateOfBirth = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth];
+            HKAuthorizationStatus status = [self.healthStore authorizationStatusForType:dateOfBirth];
+
             isGranted = (status == HKAuthorizationStatusSharingAuthorized);
         }
             break;
@@ -123,11 +124,14 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     switch (type) {
         case kSignUpPermissionsTypeHealthKit:
         {
-            HKObjectType *weightType = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
-            HKAuthorizationStatus status = [self.healthStore authorizationStatusForType:weightType];
             
-            if (status == HKAuthorizationStatusNotDetermined) {
-                
+            //Commenting out 
+            
+//            HKCharacteristicType *dateOfBirth = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth];
+//            HKAuthorizationStatus status = [self.healthStore authorizationStatusForType:dateOfBirth];
+//
+//            if (status == HKAuthorizationStatusNotDetermined) {
+            
                 //------READ TYPES--------
                 NSMutableArray *dataTypesToRead = [NSMutableArray new];
                 for (id typeIdentifier in healthKitTypesToRead) {
@@ -166,12 +170,12 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                     }
                 }];
                 
-            } else {
-                if (self.completionBlock) {
-                    self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeHealthKit]);
-                    self.completionBlock = nil;
-                }
-            }
+//            } else {
+//                if (self.completionBlock) {
+//                    self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeHealthKit]);
+//                    self.completionBlock = nil;
+//                }
+//            }
             
         }
             break;

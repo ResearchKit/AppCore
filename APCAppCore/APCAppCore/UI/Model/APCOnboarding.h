@@ -7,15 +7,22 @@
  
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "APCSignUpTask.h"
 #import <ResearchKit/ResearchKit.h>
+
+#import "APCSignUpTask.h"
+#import "APCSignInTask.h"
+
+typedef NS_ENUM(NSUInteger, APCOnboardingTaskType) {
+    kAPCOnboardingTaskTypeSignUp,
+    kAPCOnboardingTaskTypeSignIn,
+};
 
 @protocol APCOnboardingDelegate;
 @class APCScene;
 
 @interface APCOnboarding : NSObject
 
-@property (nonatomic, strong) APCSignUpTask *signUpTask;
+@property (nonatomic, readonly) APCOnboardingTask *onboardingTask;
 
 @property (nonatomic, strong) RKSTStep *currentStep;
 
@@ -23,7 +30,9 @@
 
 @property (nonatomic, weak) id <APCOnboardingDelegate> delegate;
 
-- (instancetype)initWithDelegate:(id)object;
+@property (nonatomic, readonly) APCOnboardingTaskType taskType;
+
+- (instancetype)initWithDelegate:(id)object taskType:(APCOnboardingTaskType)taskType;
 
 - (UIViewController *)viewControllerForSceneIdentifier:(NSString *)identifier;
 
