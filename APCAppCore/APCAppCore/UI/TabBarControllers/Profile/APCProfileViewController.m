@@ -318,10 +318,6 @@ static CGFloat kSectionHeaderHeight = 40.f;
     [self.dateRangeLabel setTextColor:[UIColor appSecondaryColor3]];
     [self.dateRangeLabel setFont:[UIFont appLightFontWithSize:16.0f]];
     
-    [self.reviewConsentButton setBackgroundColor:[UIColor appPrimaryColor]];
-    [self.reviewConsentButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.reviewConsentButton.titleLabel setFont:[UIFont appMediumFontWithSize:19.0]];
-    
     [self.signOutButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
     [self.signOutButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0]];
     

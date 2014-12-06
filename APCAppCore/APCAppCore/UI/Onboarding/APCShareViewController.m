@@ -9,6 +9,7 @@
 #import "APCShareTableViewCell.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "UIImage+APCHelper.h"
 
 @interface APCShareViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
@@ -59,7 +60,7 @@
     [self.tableHeaderLabel setFont:[UIFont appLightFontWithSize:14.0f]];
     [self.tableHeaderLabel setTextColor:[UIColor appSecondaryColor3]];
     
-    [self.okayButton setBackgroundColor:[UIColor appPrimaryColor]];
+    [self.okayButton setBackgroundImage:[UIImage imageWithColor:[UIColor appPrimaryColor]] forState:UIControlStateNormal];
     [self.okayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.okayButton.titleLabel setFont:[UIFont appMediumFontWithSize:19.0f]];
 }
