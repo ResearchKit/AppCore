@@ -57,14 +57,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ygh-IW-MBW" firstAttribute="leading" secondItem="MAj-Wy-kJa" secondAttribute="leadingMargin" constant="-16" id="36S-gx-RqB"/>
+                            <constraint firstItem="ygh-IW-MBW" firstAttribute="leading" secondItem="MAj-Wy-kJa" secondAttribute="leading" id="36S-gx-RqB"/>
                             <constraint firstItem="cKG-bB-Ib1" firstAttribute="top" secondItem="Cr6-0R-lJe" secondAttribute="bottom" constant="35" id="9c6-8y-rdu"/>
                             <constraint firstItem="aK3-gJ-vS8" firstAttribute="top" secondItem="cKG-bB-Ib1" secondAttribute="bottom" constant="20" id="ShE-ol-A7j"/>
                             <constraint firstItem="Cr6-0R-lJe" firstAttribute="top" secondItem="445-jw-ZAP" secondAttribute="bottom" constant="20" id="Ulo-o4-xDE"/>
                             <constraint firstItem="cKG-bB-Ib1" firstAttribute="leading" secondItem="MAj-Wy-kJa" secondAttribute="leadingMargin" constant="13" id="VqT-z2-DCt"/>
                             <constraint firstAttribute="centerX" secondItem="aK3-gJ-vS8" secondAttribute="centerX" id="WCk-vE-JxC"/>
                             <constraint firstItem="fZn-Rb-vDa" firstAttribute="top" secondItem="ygh-IW-MBW" secondAttribute="bottom" id="aDN-tl-Z7H"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="ygh-IW-MBW" secondAttribute="trailing" constant="-16" id="bOj-hf-Yga"/>
+                            <constraint firstAttribute="trailing" secondItem="ygh-IW-MBW" secondAttribute="trailing" id="bOj-hf-Yga"/>
                             <constraint firstAttribute="centerX" secondItem="Cr6-0R-lJe" secondAttribute="centerX" id="ilQ-JB-VGR"/>
                             <constraint firstAttribute="trailingMargin" secondItem="cKG-bB-Ib1" secondAttribute="trailing" constant="12" id="xlr-kq-iLO"/>
                         </constraints>
