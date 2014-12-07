@@ -84,7 +84,7 @@
 			self = nil;
 		}
 		
-		if (_begin.integerValue < _defaultBegin.integerValue || _end.integerValue > _defaultEnd.integerValue)
+		if (self != nil && (_begin.integerValue < _defaultBegin.integerValue || _end.integerValue > _defaultEnd.integerValue))
 		{
 			//  TODO: Invalid values
 			self = nil;
