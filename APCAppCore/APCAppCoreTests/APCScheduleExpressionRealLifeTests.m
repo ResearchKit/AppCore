@@ -44,18 +44,35 @@
 	[super tearDown];
 }
 
-//	- (void)testExample {
-//		// This is an example of a functional test case.
-//		XCTAssert(YES, @"Pass");
-//	}
-//
-//	- (void)testPerformanceExample {
-//		// This is an example of a performance test case.
-//		[self measureBlock:^{
-//			// Put the code you want to measure the time of here.
-//		}];
-//	}
 
+/*
+ Some known dates for testing:
+
+	sun	mon	tue	wed	thu	fri	sat
+
+ November, 2014
+ 1
+	2	3	4	5	6	7	8
+	9	10	11	12	13	14	15
+	16	17	18	19	20	21	22
+	23	24	25	26	27	28	29
+	30
+
+ December, 2014
+
+ 1	2	3	4	5	6
+	7	8	9	10	11	12	13
+	14	15	16	17	18	19	20
+	21	22	23	24	25	26	27
+	28	29	30	31
+
+ January, 2015
+ 1	2	3
+	4	5	6	7	8	9	10
+	11	12	13	14	15	16	17
+	18	19	20	21	22	23	24
+	25	26	27	28	29	30	31
+ */
 
 
 
@@ -68,9 +85,13 @@
 //	NSString* cronExpression = @"0 5,10,12,17,20 * * *";	// several every day
 //	NSString* cronExpression = @"0 5,10,12,17,20 * * 1";	// several only on Mondays
 //	NSString* cronExpression = @"0 0 5 * * * *";			// 7 fields:  5am every day
-	NSString* cronExpression = @"0 0 5 * * 1 *";			// 7 fields:  5am every Monday
+//	NSString* cronExpression = @"0 0 5 * * 1 *";			// 7 fields:  5am every Monday
 //	NSString* cronExpression = @"0 0 6 ? 1/1 THU#1 *";		// from Sage
 //	NSString* cronExpression = @"0 0 6 ? * FRI *";			// from Sage
+	NSString* cronExpression = @"0 5 * DEC,NOV,JUL THU,FRI,MON#1,TUE#2";				// Replacing strings with numbers
+//	NSString* cronExpression = @"   0  5  *  DEC,NOV,JUL   THU,FRI,MON#1,TUE#2   ";		// replacing lots of whitespace (doesn't work yet)
+
+
 
 	NSTimeInterval userWakeupTimeOffset	= 0;
 	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression

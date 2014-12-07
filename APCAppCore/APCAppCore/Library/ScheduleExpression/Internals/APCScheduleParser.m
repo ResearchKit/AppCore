@@ -43,18 +43,16 @@ static unichar kFieldSeparatorToken		= ' ';
     return self;
 }
 
-- (BOOL)isValidParse
-{
-    return self.next == kEndToken && self.errorEncountered == NO;
-}
 
-- (unichar)next
-{
-    //  Returns the _next_ token or '\0' if no tokens remain. The input stream is not modified.
-    unichar nextToken = self.expression.length > 0 ? [self.expression characterAtIndex:0] : 0;
-    
-    return nextToken;
-}
+
+// ---------------------------------------------------------
+#pragma mark - "Preprocessor" methods
+// ---------------------------------------------------------
+
+/*
+ Before the parser kicks in, we pre-process the string
+ to eliminate or convert specific items.
+ */
 
 - (void) enforceFiveFields
 {
@@ -87,6 +85,67 @@ static unichar kFieldSeparatorToken		= ' ';
 	{
 		self.expression = newString;
 	}
+}
+
+- (void) convertDayAndMonthNamesToNumbers
+{
+	NSMutableString *newString = self.expression.mutableCopy;
+
+	// We'll do a case-insensitive search.
+	NSDictionary *stringsToReplace = @{
+									   @"sun": @0,
+									   @"mon": @1,
+									   @"tue": @2,
+									   @"wed": @3,
+									   @"thu": @4,
+									   @"fri": @5,
+									   @"sat": @6,
+
+									   @"jan": @1,
+									   @"feb": @2,
+									   @"mar": @3,
+									   @"apr": @4,
+									   @"may": @5,
+									   @"jun": @6,
+									   @"jul": @7,
+									   @"aug": @8,
+									   @"sep": @9,
+									   @"oct": @10,
+									   @"nov": @11,
+									   @"dec": @12,
+									   };
+
+	for (NSString *monthOrWeekday in stringsToReplace.allKeys)
+	{
+		NSNumber *number = stringsToReplace [monthOrWeekday];
+		NSString *digit = number.stringValue;
+
+		[newString replaceOccurrencesOfString: monthOrWeekday
+								   withString: digit
+									  options: NSCaseInsensitiveSearch
+										range: NSMakeRange(0, newString.length)];
+	}
+
+	self.expression = newString;
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - The Parser
+// ---------------------------------------------------------
+
+- (BOOL)isValidParse
+{
+    return self.next == kEndToken && self.errorEncountered == NO;
+}
+
+- (unichar)next
+{
+    //  Returns the _next_ token or '\0' if no tokens remain. The input stream is not modified.
+    unichar nextToken = self.expression.length > 0 ? [self.expression characterAtIndex:0] : 0;
+    
+    return nextToken;
 }
 
 - (void)consumeOneChar
@@ -347,14 +406,6 @@ parseError:
 	//		fields :: minutesList hoursList dayOfMonthList monthList dayOfWeekList
 	//
 
-	/*
-	 However, sometimes, the field list has SEVEN fields:  seconds
-	 on the left, years on the right.  We really don't care about
-	 those, so I'll strip them.
-	 */
-	[self enforceFiveFields];
-
-
 	APCListSelector* rawDayOfMonthSelector = nil;
 	APCListSelector* rawDayOfWeekSelector = nil;
     
@@ -420,6 +471,23 @@ parseError:
 
 - (BOOL)parse
 {
+	/*
+	 Sometimes, the field list has SEVEN fields:  seconds on the left,
+	 years on the right.  In practice, we ignore those:  "minutes" is
+	 plenty of resolution, and we work in 3-day-increments, not years.
+	 So strip those fields.
+	 */
+	[self enforceFiveFields];
+
+
+	/*
+	 Convert days of months and weekdays to their numeric
+	 equivalents.
+	 */
+	[self convertDayAndMonthNamesToNumbers];
+
+
+	// Ok.  Parse it.
     [self fieldsProduction];
     
     return !self.errorEncountered;
