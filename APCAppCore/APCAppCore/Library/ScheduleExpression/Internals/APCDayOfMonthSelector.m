@@ -123,6 +123,8 @@
 
 - (APCTimeSelectorEnumerator*) enumeratorBeginningAt: (NSNumber*) value
 {
+	if (value == nil) value = self.initialValue;
+
 	APCTimeSelectorEnumerator* enumerator = [[APCTimeSelectorEnumerator alloc] initWithSelector:self beginningAtMoment:value];
 
 	return enumerator;

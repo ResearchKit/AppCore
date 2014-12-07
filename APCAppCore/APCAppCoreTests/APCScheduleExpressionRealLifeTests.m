@@ -62,7 +62,8 @@
 - (void) testRealisticTests
 {
 //	NSString* cronExpression = @"0 5 * * *";				// 5am every day
-	NSString* cronExpression = @"0 5 * * 1";				// 5am every Monday
+//	NSString* cronExpression = @"0 5 * * 1";				// 5am every Monday
+	NSString* cronExpression = @"0 5 * * 1#1";				// 5am, only first Monday
 //	NSString* cronExpression = @"0 5 * * 1#2";				// 5am, only second Monday
 //	NSString* cronExpression = @"0 5,10,12,17,20 * * *";	// several every day
 //	NSString* cronExpression = @"0 5,10,12,17,20 * * 1";	// several only on Mondays
@@ -74,9 +75,9 @@
 																			   timeZero: userWakeupTimeOffset];
 
 	NSDate *start = [NSDate todayAtMidnight];
-	NSDate *end   = [NSDate tomorrowAtMidnight];
+//	NSDate *end   = [NSDate tomorrowAtMidnight];
 //	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 3];
-//	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 14];
+	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 14];
 
 	NSEnumerator* enumerator = [schedule enumeratorBeginningAtTime: start
 													  endingAtTime: end];
@@ -87,7 +88,6 @@
 
 	NSLog (@"------------------------ look here -------------------------");
 	NSLog (@"               start date :  %@", [formatter stringFromDate: start]);
-	NSLog (@"                 end date :  %@", [formatter stringFromDate: end]);
 	NSLog (@" ");
 
 	NSDate *date = nil;
@@ -96,6 +96,8 @@
 		NSLog (@"LOOK HERE ENUMERATOR DATE :  %@", [formatter stringFromDate:date]);
 	}
 
+	NSLog (@" ");
+	NSLog (@"                 end date :  %@", [formatter stringFromDate: end]);
 	NSLog (@"---------------------- ok, we're done ----------------------");
 }
 
