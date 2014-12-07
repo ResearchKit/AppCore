@@ -90,7 +90,7 @@ static CGFloat const kAnimationDuration = 0.35f;
     [super layoutSubviews];
     
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [self.layer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
+    [self.circleLayer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     
     [self updateValues];
     
