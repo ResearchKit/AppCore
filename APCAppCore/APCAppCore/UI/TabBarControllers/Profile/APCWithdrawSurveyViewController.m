@@ -193,7 +193,7 @@
 - (IBAction)submit:(id)sender
 {
     //TODO: Submit API Call
-    [[NSNotificationCenter defaultCenter] postNotificationName:APCUserLogOutNotification object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:APCUserWithdrawStudyNotification object:self];
 }
 
 @end

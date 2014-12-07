@@ -163,6 +163,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signedInNotification:) name:(NSString *)APCUserSignedInNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logOutNotification:) name:(NSString *)APCUserLogOutNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userConsented:) name:APCUserDidConsentNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withdrawStudy:) name:APCUserWithdrawStudyNotification object:nil];
 }
 
 - (void) signedUpNotification:(NSNotification*) notification
@@ -187,6 +188,15 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     self.dataSubstrate.currentUser.signedIn = NO;
     [APCKeychainStore removeValueForKey:kPasswordKey];
     [APCKeychainStore removeValueForKey:kSessionTokenKey];
+    
+    [self showOnBoarding];
+}
+
+- (void)withdrawStudy:(NSNotification *)notification
+{
+    [self clearNSUserDefaults];
+    [APCKeychainStore resetKeyChain];
+    [self.dataSubstrate resetCoreData];
     
     [self showOnBoarding];
 }
