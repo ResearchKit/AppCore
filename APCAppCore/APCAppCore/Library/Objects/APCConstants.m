@@ -13,6 +13,7 @@
 NSString *const APCUserSignedUpNotification   = @"APCUserSignedUpNotification";
 NSString *const APCUserSignedInNotification   = @"APCUserSignedInNotification";
 NSString *const APCUserLogOutNotification     = @"APCUserLogOutNotification";
+NSString *const APCUserWithdrawStudyNotification     = @"APCUserWithdrawStudyNotification";
 NSString *const APCUserDidConsentNotification = @"APCUserDidConsentNotification";
 
 NSString *const APCScheduleUpdatedNotification = @"APCScheduleUpdatedNotification";
