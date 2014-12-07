@@ -108,6 +108,25 @@
     }
 }
 
+- (void) resumeStudyOnCompletion:(void (^)(NSError *))completionBlock
+{
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+    }
+    else
+    {
+        [SBBComponent(SBBConsentManager) resumeConsentWithCompletion:^(id responseObject, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            });
+        }];
+    }
+}
+
 - (void)signInOnCompletion:(void (^)(NSError *))completionBlock
 {
     if ([self serverDisabled]) {
@@ -119,39 +138,11 @@
     {
         NSParameterAssert(self.password);
         [SBBComponent(SBBAuthManager) signInWithUsername:self.email password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *signInError) {
-            if (!signInError) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.userConsented = YES;
-                    self.consented = YES;
-                    if (completionBlock) {
-                        completionBlock(signInError);
-                    }
-                });
-            } else if (signInError.code == kSBBServerPreconditionNotMet){
-                
-                [self sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
-                    if (error) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if (completionBlock) {
-                                completionBlock(error);
-                            }
-                        });
-                    }
-                    else
-                    {
-                        [self signInOnCompletion:completionBlock];
-                    }
-                }];
-                
-            }
-            else if (signInError)
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (completionBlock) {
-                        completionBlock(signInError);
-                    }
-                });
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completionBlock) {
+                    completionBlock(signInError);
+                }
+            });
         }];
     }
 }
@@ -179,6 +170,37 @@
                                                        }
                                                    });
                                                }];
+    }
+}
+
+- (void)retrieveConsentOnCompletion:(void (^)(NSError *))completionBlock
+{
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+    }
+    else
+    {
+        [SBBComponent(SBBConsentManager) retrieveConsentSignatureWithCompletion:^(NSString *name, NSString *birthdate, UIImage *signatureImage, NSError *error) {
+            
+            if (error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completionBlock) {
+                        completionBlock(error);
+                    }
+                });
+            } else {
+                self.consentSignatureName = name;
+                self.consentSignatureImage = UIImagePNGRepresentation(signatureImage);
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completionBlock) {
+                        completionBlock(error);
+                    }
+                });
+            }
+        }];
     }
 }
 

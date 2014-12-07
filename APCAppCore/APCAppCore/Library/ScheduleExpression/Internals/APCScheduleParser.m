@@ -11,13 +11,14 @@
 #import "APCDayOfMonthSelector.h"
 
 
-static unichar kEndToken            = '\0';
-static unichar kListSeparatorToken  = ',';
-static unichar kStepSeparatorToken  = '/';
-static unichar kWildCardToken       = '*';
-static unichar kOtherWildCardToken  = '?';
-static unichar kRangeSeparatorToken = '-';
-static unichar kFieldSeparatorToken = ' ';
+static unichar kEndToken				= '\0';
+static unichar kListSeparatorToken		= ',';
+static unichar kStepSeparatorToken		= '/';
+static unichar kPositionSeparatorToken	= '#';
+static unichar kWildCardToken			= '*';
+static unichar kOtherWildCardToken		= '?';
+static unichar kRangeSeparatorToken		= '-';
+static unichar kFieldSeparatorToken		= ' ';
 
 
 @interface APCScheduleParser ()
@@ -41,6 +42,111 @@ static unichar kFieldSeparatorToken = ' ';
     
     return self;
 }
+
+
+
+// ---------------------------------------------------------
+#pragma mark - "Preprocessor" methods
+// ---------------------------------------------------------
+
+/*
+ Before the parser kicks in, we pre-process the string
+ to eliminate or convert specific items.
+ */
+
+- (void) trimAndNormalizeSpaces
+{
+	NSMutableString *newString = self.expression.mutableCopy;
+
+	[newString replaceOccurrencesOfString: @"\\s+"
+							   withString: @" "
+								  options: NSRegularExpressionSearch
+									range: NSMakeRange (0, newString.length)];
+
+	newString = [[newString stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]] mutableCopy];
+
+	self.expression = newString;
+}
+
+- (void) enforceFiveFields
+{
+	NSMutableString *newString = nil;
+
+	NSMutableArray *pieces = [[self.expression componentsSeparatedByCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]] mutableCopy];
+
+	if (pieces.count == 7)
+	{
+		[pieces removeObjectAtIndex: 0];
+		[pieces removeLastObject];
+		newString = [[pieces componentsJoinedByString: @" "] mutableCopy];
+	}
+
+	else if (pieces.count == 5)
+	{
+		// Happy case.  Ignore.
+	}
+
+	else
+	{
+		// This is an error.  (It isn't happening in practice.)
+		NSLog (@"-[APCScheduleParser enforceFiveFields] ERROR: Don't know how to parse an expression with [%d] components.", (int) pieces.count);
+
+		[self recordError];
+	}
+
+	if (newString != nil)
+	{
+		self.expression = newString;
+	}
+}
+
+- (void) convertDayAndMonthNamesToNumbers
+{
+	NSMutableString *newString = self.expression.mutableCopy;
+
+	// We'll do a case-insensitive search.
+	NSDictionary *stringsToReplace = @{
+									   @"sun": @0,
+									   @"mon": @1,
+									   @"tue": @2,
+									   @"wed": @3,
+									   @"thu": @4,
+									   @"fri": @5,
+									   @"sat": @6,
+
+									   @"jan": @1,
+									   @"feb": @2,
+									   @"mar": @3,
+									   @"apr": @4,
+									   @"may": @5,
+									   @"jun": @6,
+									   @"jul": @7,
+									   @"aug": @8,
+									   @"sep": @9,
+									   @"oct": @10,
+									   @"nov": @11,
+									   @"dec": @12,
+									   };
+
+	for (NSString *monthOrWeekday in stringsToReplace.allKeys)
+	{
+		NSNumber *number = stringsToReplace [monthOrWeekday];
+		NSString *digit = number.stringValue;
+
+		[newString replaceOccurrencesOfString: monthOrWeekday
+								   withString: digit
+									  options: NSCaseInsensitiveSearch
+										range: NSMakeRange(0, newString.length)];
+	}
+
+	self.expression = newString;
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - The Parser
+// ---------------------------------------------------------
 
 - (BOOL)isValidParse
 {
@@ -156,6 +262,17 @@ static unichar kFieldSeparatorToken = ' ';
     return range;
 }
 
+- (NSNumber *) positionProduction
+{
+	//
+	// Production rule:
+	//
+	//		position :: number
+	//
+
+	return [self numberProduction];
+}
+
 - (NSNumber*)stepsProduction
 {
 	//
@@ -172,7 +289,7 @@ static unichar kFieldSeparatorToken = ' ';
 	//
 	// Production rule:
 	//
-	//		numspec :: '*' | range
+	//		numspec :: '*' | '?' | range
 	//
 
     NSArray*    numSpec = nil;
@@ -194,31 +311,47 @@ static unichar kFieldSeparatorToken = ' ';
     return numSpec;
 }
 
-- (APCPointSelector*)exprProductionForType:(UnitType)unitType
+- (APCPointSelector*) exprProductionForType: (UnitType) unitType
 {
 	//
 	// Production rule:
 	//
-    //		expr :: numspec ( '/' steps ) ?
+    //		expr :: numspec ( '/' steps | '#' position ) ?
 	//
 
-    NSArray*            numSpec  = [self numspecProduction];
-    NSNumber*           step     = nil;
-    
-    if (self.next == kStepSeparatorToken)
-    {
-        [self consumeOneChar];
-        step = [self stepsProduction];
+	APCPointSelector *selector = nil;
+	NSArray *numSpec = [self numspecProduction];
+
+	if (self.next == kPositionSeparatorToken)
+	{
+		NSNumber *dayOfWeekToFind = numSpec [0];
+
+		[self consumeOneChar];
+		NSNumber *position = [self positionProduction];
+
+		selector = [[APCPointSelector alloc] initWithUnit: unitType
+													value: dayOfWeekToFind
+												 position: position];
+	}
+
+	else
+	{
+		NSNumber *begin		= numSpec.count > 0 ? numSpec[0] : nil;
+		NSNumber *end		= numSpec.count > 1 ? numSpec[1] : nil;
+		NSNumber *step		= nil;
+
+		if (self.next == kStepSeparatorToken)
+		{
+			[self consumeOneChar];
+			step = [self stepsProduction];
+		}
+
+		selector = [[APCPointSelector alloc] initWithUnit: unitType
+											   beginRange: begin
+												 endRange: end
+													 step: step];
     }
 
-    NSNumber*           begin    = numSpec.count > 0 ? numSpec[0] : nil;
-    NSNumber*           end      = numSpec.count > 1 ? numSpec[1] : nil;
-
-    APCPointSelector*   selector = [[APCPointSelector alloc] initWithUnit:unitType
-															   beginRange:begin
-																 endRange:end
-																	 step:step];
-    
     if (selector == nil)
     {
         [self recordError];
@@ -283,7 +416,7 @@ parseError:
 	//
 	// Production rule:
 	//
-	//		fields :: relatvie minutesList hoursList dayOfMonthList monthList dayOfWeekList
+	//		fields :: minutesList hoursList dayOfMonthList monthList dayOfWeekList
 	//
 
 	APCListSelector* rawDayOfMonthSelector = nil;
@@ -351,6 +484,25 @@ parseError:
 
 - (BOOL)parse
 {
+	[self trimAndNormalizeSpaces];
+
+	/*
+	 Sometimes, the field list has SEVEN fields:  seconds on the left,
+	 years on the right.  In practice, we ignore those:  "minutes" is
+	 plenty of resolution, and we work in 3-day-increments, not years.
+	 So strip those fields.
+	 */
+	[self enforceFiveFields];
+
+
+	/*
+	 Convert days of months and weekdays to their numeric
+	 equivalents.
+	 */
+	[self convertDayAndMonthNamesToNumbers];
+
+
+	// Ok.  Parse it.
     [self fieldsProduction];
     
     return !self.errorEncountered;

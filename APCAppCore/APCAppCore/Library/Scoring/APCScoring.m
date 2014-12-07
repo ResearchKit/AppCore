@@ -292,7 +292,13 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
             [results enumerateStatisticsFromDate:beginDate
                                           toDate:endDate
                                        withBlock:^(HKStatistics *result, BOOL *stop) {
-                                           HKQuantity *quantity = result.sumQuantity;
+                                           HKQuantity *quantity;
+                                           
+                                           if (isDecreteQuantity) {
+                                               quantity = result.averageQuantity;
+                                           } else {
+                                               quantity = result.sumQuantity;
+                                           }
                                            
                                            if (quantity) {
                                                NSDate *date = result.startDate;

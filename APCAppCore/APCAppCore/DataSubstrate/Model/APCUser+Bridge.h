@@ -15,6 +15,8 @@
 - (void) updateProfileOnCompletion:(void (^)(NSError * error))completionBlock;
 - (void) getProfileOnCompletion:(void (^)(NSError *error))completionBlock;
 - (void) sendUserConsentedToBridgeOnCompletion: (void (^)(NSError * error))completionBlock;
+- (void)retrieveConsentOnCompletion:(void (^)(NSError *error))completionBlock;
 - (void) withdrawStudyOnCompletion:(void (^)(NSError *error))completionBlock;
+- (void) resumeStudyOnCompletion:(void (^)(NSError *error))completionBlock;
 
 @end

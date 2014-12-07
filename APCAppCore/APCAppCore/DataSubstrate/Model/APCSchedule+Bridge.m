@@ -82,8 +82,7 @@ NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController
 {
     apcSchedule.remoteUpdatable = @(YES);
     apcSchedule.scheduleType = sbbSchedule.scheduleType;
-#warning Temporary Kludge
-    apcSchedule.scheduleString = sbbSchedule.cronTrigger ? @"0 5 * * *" : nil;
+    apcSchedule.scheduleString = sbbSchedule.cronTrigger;
     apcSchedule.expires = sbbSchedule.expires;
     apcSchedule.startsOn = sbbSchedule.startsOn;
     apcSchedule.endsOn = sbbSchedule.endsOn;
