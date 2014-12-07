@@ -78,19 +78,19 @@
 
 - (void) testRealisticTests
 {
-//	NSString* cronExpression = @"0 5 * * *";				// 5am every day
-//	NSString* cronExpression = @"0 5 * * 1";				// 5am every Monday
-//	NSString* cronExpression = @"0 5 * * 1#1";				// 5am, only first Monday
-//	NSString* cronExpression = @"0 5 * * 1#2";				// 5am, only second Monday
-//	NSString* cronExpression = @"0 5,10,12,17,20 * * *";	// several every day
-//	NSString* cronExpression = @"0 5,10,12,17,20 * * 1";	// several only on Mondays
-//	NSString* cronExpression = @"0 0 5 * * * *";			// 7 fields:  5am every day
-//	NSString* cronExpression = @"0 0 5 * * 1 *";			// 7 fields:  5am every Monday
-//	NSString* cronExpression = @"0 0 6 ? 1/1 THU#1 *";		// from Sage
-//	NSString* cronExpression = @"0 0 6 ? * FRI *";			// from Sage
-	NSString* cronExpression = @"0 5 * DEC,NOV,JUL THU,FRI,MON#1,TUE#2";				// Replacing strings with numbers
-//	NSString* cronExpression = @"   0  5  *  DEC,NOV,JUL   THU,FRI,MON#1,TUE#2   ";		// replacing lots of whitespace (doesn't work yet)
-
+//	NSString* cronExpression = @"0 5 * * *";											// 5am every day
+//	NSString* cronExpression = @"0 5 * * 1";											// 5am every Monday
+//	NSString* cronExpression = @"0 5 * * 1#1";											// 5am, only first Monday
+//	NSString* cronExpression = @"0 5 * * 1#2";											// 5am, only second Monday
+//	NSString* cronExpression = @"0 5,10,12,17,20 * * *";								// several every day
+//	NSString* cronExpression = @"0 5,10,12,17,20 * * 1";								// several only on Mondays
+//	NSString* cronExpression = @"0 0 5 * * * *";										// 7 fields:  5am every day
+//	NSString* cronExpression = @"0 0 5 * * 1 *";										// 7 fields:  5am every Monday
+//	NSString* cronExpression = @"0 0 6 ? 1/1 THU#1 *";									// from Sage
+//	NSString* cronExpression = @"0 0 6 ? * FRI *";										// from Sage
+//	NSString* cronExpression = @"0 5 * DEC,NOV,JUL THU,FRI,MON#1,TUE#2";				// Replacing strings with numbers
+	NSString* cronExpression = @"   0  5  *  DEC,NOV,JUL   THU,FRI,MON#1,TUE#2   ";		// replacing lots of whitespace
+//	NSString* cronExpression = @"  0	\n 5  *   * \r  *		  ";					// 5am every day, with spaces, tabs, hidden tabs, and newlines
 
 
 	NSTimeInterval userWakeupTimeOffset	= 0;

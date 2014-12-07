@@ -49,6 +49,20 @@ static unichar kFieldSeparatorToken		= ' ';
 #pragma mark - "Preprocessor" methods
 // ---------------------------------------------------------
 
+- (void) trimAndNormalizeSpaces
+{
+	NSMutableString *newString = self.expression.mutableCopy;
+
+	[newString replaceOccurrencesOfString: @"\\s+"
+							   withString: @" "
+								  options: NSRegularExpressionSearch
+									range: NSMakeRange (0, newString.length)];
+
+	newString = [[newString stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]] mutableCopy];
+
+	self.expression = newString;
+}
+
 /*
  Before the parser kicks in, we pre-process the string
  to eliminate or convert specific items.
@@ -76,7 +90,7 @@ static unichar kFieldSeparatorToken		= ' ';
 	{
 		// This is an error.  It isn't happening in practice,
 		// so, for now, ignore it.
-		NSLog (@"-[APCScheduleParser enforceFiveFields] ERROR: Don't know how to parse a %d-component expression.", (int) pieces.count);
+		NSLog (@"-[APCScheduleParser enforceFiveFields] ERROR: Don't know how to parse an expression with [%d] components.", (int) pieces.count);
 
 		[self recordError];
 	}
@@ -471,6 +485,8 @@ parseError:
 
 - (BOOL)parse
 {
+	[self trimAndNormalizeSpaces];
+
 	/*
 	 Sometimes, the field list has SEVEN fields:  seconds on the left,
 	 years on the right.  In practice, we ignore those:  "minutes" is
