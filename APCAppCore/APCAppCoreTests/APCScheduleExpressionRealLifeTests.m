@@ -48,36 +48,41 @@
 /*
  Some known dates for testing:
 
-	sun	mon	tue	wed	thu	fri	sat
-
- November, 2014
- 1
-	2	3	4	5	6	7	8
-	9	10	11	12	13	14	15
-	16	17	18	19	20	21	22
-	23	24	25	26	27	28	29
-	30
-
- December, 2014
-
- 1	2	3	4	5	6
-	7	8	9	10	11	12	13
-	14	15	16	17	18	19	20
-	21	22	23	24	25	26	27
-	28	29	30	31
-
- January, 2015
- 1	2	3
-	4	5	6	7	8	9	10
-	11	12	13	14	15	16	17
-	18	19	20	21	22	23	24
-	25	26	27	28	29	30	31
+ -		sun	mon	tue	wed	thu	fri	sat
+ -
+ -	November, 2014
+ -								1
+ -		2	3	4	5	6	7	8
+ -		9	10	11	12	13	14	15
+ -		16	17	18	19	20	21	22
+ -		23	24	25	26	27	28	29
+ -		30
+ -
+ -	December, 2014
+ -
+ -			1	2	3	4	5	6
+ -		7	8	9	10	11	12	13
+ -		14	15	16	17	18	19	20
+ -		21	22	23	24	25	26	27
+ -		28	29	30	31
+ -
+ -	January, 2015
+ -						1	2	3
+ -		4	5	6	7	8	9	10
+ -		11	12	13	14	15	16	17
+ -		18	19	20	21	22	23	24
+ -		25	26	27	28	29	30	31
  */
 
 
 
 - (void) testRealisticTests
 {
+	/*
+	 All of these should work with every combination of start
+	 and end dates, below.
+	 */
+
 //	NSString* cronExpression = @"0 5 * * *";											// 5am every day
 //	NSString* cronExpression = @"0 5 * * 1";											// 5am every Monday
 //	NSString* cronExpression = @"0 5 * * 1#1";											// 5am, only first Monday
@@ -106,7 +111,7 @@
 													  endingAtTime: end];
 
 	NSDateFormatter *formatter = self.dateFormatterInGregorianPacificTime;
-//	NSDateFormatter *formatter = self.dateFormatterInGregorianUTC;
+//	NSDateFormatter *formatter = self.dateFormatterInGregorianUTC;			// please leave this here.
 
 
 	NSLog (@"------------------------ look here -------------------------");
