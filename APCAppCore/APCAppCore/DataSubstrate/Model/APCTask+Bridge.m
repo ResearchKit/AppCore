@@ -180,7 +180,7 @@ static APCDummyObject * _dummyObject;
     NSMutableArray * options = [NSMutableArray array];
     [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger idx, BOOL *stop) {
         //TODO: Fix this KLUDGE
-        [options addObject:@[[NSString stringWithFormat:@"Answer %ld", idx+1], option.label]];
+        [options addObject:@[[NSString stringWithFormat:@"Answer %lu", (unsigned long)(idx+1)], option.label]];
 //        [options addObject:option.label];
     }];
     if (localConstraints.allowOtherValue) {
