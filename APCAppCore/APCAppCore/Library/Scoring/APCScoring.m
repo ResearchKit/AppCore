@@ -184,7 +184,7 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
                 if (!dataKey) {
                     [self.dataPoints addObject:@{
                                                  kDatasetDateKey: task.startOn,
-                                                 kDatasetValueKey: [taskResult valueForKey:valueKey],
+                                                 kDatasetValueKey: [taskResult valueForKey:valueKey]?:@(0),
                                                  kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null]
                                                  }];
                 } else {
