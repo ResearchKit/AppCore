@@ -56,6 +56,39 @@ static unichar kFieldSeparatorToken		= ' ';
     return nextToken;
 }
 
+- (void) enforceFiveFields
+{
+	NSMutableString *newString = nil;
+
+	NSMutableArray *pieces = [[self.expression componentsSeparatedByCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]] mutableCopy];
+
+	if (pieces.count == 7)
+	{
+		[pieces removeObjectAtIndex: 0];
+		[pieces removeLastObject];
+		newString = [[pieces componentsJoinedByString: @" "] mutableCopy];
+	}
+
+	else if (pieces.count == 5)
+	{
+		// Happy case.  Ignore.
+	}
+
+	else
+	{
+		// This is an error.  It isn't happening in practice,
+		// so, for now, ignore it.
+		NSLog (@"-[APCScheduleParser enforceFiveFields] ERROR: Don't know how to parse a %d-component expression.", (int) pieces.count);
+
+		[self recordError];
+	}
+
+	if (newString != nil)
+	{
+		self.expression = newString;
+	}
+}
+
 - (void)consumeOneChar
 {
     if (self.expression.length > 0)
@@ -311,8 +344,16 @@ parseError:
 	//
 	// Production rule:
 	//
-	//		fields :: relatvie minutesList hoursList dayOfMonthList monthList dayOfWeekList
+	//		fields :: minutesList hoursList dayOfMonthList monthList dayOfWeekList
 	//
+
+	/*
+	 However, sometimes, the field list has SEVEN fields:  seconds
+	 on the left, years on the right.  We really don't care about
+	 those, so I'll strip them.
+	 */
+	[self enforceFiveFields];
+
 
 	APCListSelector* rawDayOfMonthSelector = nil;
 	APCListSelector* rawDayOfWeekSelector = nil;
