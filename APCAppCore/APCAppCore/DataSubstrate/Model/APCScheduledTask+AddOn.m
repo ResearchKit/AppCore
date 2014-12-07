@@ -43,6 +43,21 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     return [self.endOn friendlyDescription];
 }
 
+- (APCResult *)lastResult
+{
+    APCResult * retValue = nil;
+    if (self.results.count == 1) {
+        retValue = [self.results anyObject];
+    }
+    else if(self.results.count > 1)
+    {
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"updatedAt" ascending:NO];
+        NSArray * sortedArray = [self.results sortedArrayUsingDescriptors:@[sortDescriptor]];
+        retValue = [sortedArray firstObject];
+    }
+    return  retValue;
+}
+
 + (NSArray*) APCActivityVCScheduledTasks: (BOOL) tomorrow inContext: (NSManagedObjectContext*) context
 {
     NSArray * array1 =  tomorrow ? [self allScheduledTasksForTomorrowInContext:context] : [self allScheduledTasksForTodayInContext:context];

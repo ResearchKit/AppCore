@@ -180,7 +180,7 @@ static APCDummyObject * _dummyObject;
     NSMutableArray * options = [NSMutableArray array];
     [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger idx, BOOL *stop) {
         //TODO: Address this issue with Apple
-        [options addObject: [RKSTTextAnswerOption optionWithText:[NSString stringWithFormat:@"Answer %ld", idx+1] detailText:option.label value:option.value]];
+        [options addObject: [RKSTTextAnswerOption optionWithText:[NSString stringWithFormat:@"Answer %lu", idx+1] detailText:option.label value:option.value]];
     }];
     if (localConstraints.allowOtherValue) {
         [options addObject:NSLocalizedString(@"Other", @"Spinner Option")];

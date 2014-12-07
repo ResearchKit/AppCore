@@ -10,5 +10,6 @@
 @interface NSDictionary (APCAdditions)
 
 - (NSString*) JSONString;
++ (instancetype) dictionaryWithJSONString: (NSString *) string;
 
 @end
