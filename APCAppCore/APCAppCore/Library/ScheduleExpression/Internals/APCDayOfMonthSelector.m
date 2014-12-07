@@ -142,6 +142,7 @@
 	self.month = month;
 	self.year = year;
 
+	// Please leave this line here, as a reminder of this implementation decision.
 //	NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: month year: year];
 	NSDateComponents *components = [NSDateComponents componentsInGregorianLocalWithMonth: month year: year];
 	NSArray *allDaysInMonth = components.allDaysInMonth;
@@ -207,8 +208,12 @@
 													  ignoringTheseDays: computedDays];
 
 		for (NSNumber *monthDayFromWeekday in monthDaysFromWeekdays)
+		{
 			if (! [computedDays containsObject: monthDayFromWeekday])
+			{
 				[computedDays addObject: monthDayFromWeekday];
+			}
+		}
 	}
 
 	// They're all NSNumbers, so we can sort them using their own -compare: method.
@@ -232,6 +237,8 @@
 {
 	NSMutableArray *computedDays = [NSMutableArray new];
 	NSNumber *day = self.underlyingDayOfMonthSelector.initialValue;
+
+	// Please leave this line here, as a reminder of this implementation decision.
 //	NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: self.month year: self.year];
 	NSDateComponents *components = [NSDateComponents componentsInGregorianLocalWithMonth: self.month year: self.year];
 	NSArray *allDaysInMonth = components.allDaysInMonth;
@@ -303,6 +310,7 @@
 	 */
 	if (userSpecifiedCronDaysOfWeek.count)
 	{
+		// Please leave this line here, as a reminder of this implementation decision.
 //		NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: self.month year: self.year];
 		NSDateComponents *components = [NSDateComponents componentsInGregorianLocalWithMonth: self.month year: self.year];
 
@@ -356,6 +364,8 @@
 		NSInteger currentInstanceOfDay	= 1;
 		NSInteger requestedDayOfWeek	= pointSelector.initialValue.integerValue;
 		NSInteger requestedIntanceOfDay	= pointSelector.position.integerValue;
+
+		// Please leave this line here, as a reminder of this implementation decision.
 //		NSDateComponents *components    = [NSDateComponents componentsInGregorianUTCWithMonth: self.month year: self.year];
 		NSDateComponents *components    = [NSDateComponents componentsInGregorianLocalWithMonth: self.month year: self.year];
 

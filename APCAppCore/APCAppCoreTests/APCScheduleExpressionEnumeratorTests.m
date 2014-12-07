@@ -48,6 +48,7 @@
 	[super setUp];
 
 	// All my calculations are based on Universal Coordinated Time
+	// (er, for now, I mean the user's local time zone; this is evolving)
 	// in the Gregorian calendar.  Since I do a lot of those calculations
 	// using a DateComponents object, I have this convenience method,
 	// which also lets me make sure I'm using the same timeZone and
@@ -167,6 +168,7 @@
 {
 	NSDate* enumeratorDate = nil;
 
+	// Please leave these lines here, as a reminder of this implementation decision.
 //	NSDateComponents *testHarnessDateComponents = [NSDateComponents componentsInGregorianUTC];
 	NSDateComponents *testHarnessDateComponents = [NSDateComponents componentsInGregorianLocal];
 	NSDate* testHarnessDate = nil;
@@ -245,6 +247,7 @@
 {
 	NSMutableArray *computedDaysInMonth	= [NSMutableArray new];
 
+	// Please leave these lines here, as a reminder of this implementation decision.
 //	NSDateComponents* dateComponents	= [NSDateComponents componentsInGregorianUTC];
 	NSDateComponents* dateComponents	= [NSDateComponents componentsInGregorianLocal];
 	dateComponents.year					= year.integerValue;
@@ -863,6 +866,7 @@
  */
 - (NSDate *) wellKnownMonday
 {
+	// Please leave these lines here, as a reminder of this implementation decision.
 //	NSDateComponents *components = [NSDateComponents componentsInGregorianUTC];
 	NSDateComponents *components = [NSDateComponents componentsInGregorianLocal];
 	components.year		= 2014;

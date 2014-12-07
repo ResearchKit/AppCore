@@ -12,7 +12,7 @@
 
 
 /** We may make this a parameter, at some point. */
-#define CONVERT_TO_LOCAL_TIME_ZONE_WHEN_EMITTING_ENUMERATED_DATES  NO
+static const BOOL CONVERT_TO_LOCAL_TIME_ZONE_WHEN_EMITTING_ENUMERATED_DATES = NO;
 
 
 static NSInteger    kMinuteIndex = 0;

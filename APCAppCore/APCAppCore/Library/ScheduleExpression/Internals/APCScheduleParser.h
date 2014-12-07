@@ -85,7 +85,7 @@
 
 
 /*
- Private, but we sometimes call these from the test haress.
+ Private, but we sometimes call these from the test harness.
  So, um, please don't use these.
  */
 - (NSNumber*)numberProduction;

@@ -22,9 +22,9 @@
 
     if (self)
     {
-		self.selector = selector;
-		self.previousMoment = nil;
-		self.beginningMoment = nil;
+		_selector = selector;
+		_previousMoment = nil;
+		_beginningMoment = nil;
     }
     
     return self;
@@ -37,12 +37,12 @@
 
     if (self)
     {
-		self.beginningMoment = selector.initialValue;
+		_beginningMoment = selector.initialValue;
 
 		if ([selector matches: beginning])
-			self.beginningMoment = beginning;
+			_beginningMoment = beginning;
 		else
-			self.beginningMoment = [selector nextMomentAfter: beginning];
+			_beginningMoment = [selector nextMomentAfter: beginning];
     }
     
     return self;

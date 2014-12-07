@@ -49,6 +49,11 @@ static unichar kFieldSeparatorToken		= ' ';
 #pragma mark - "Preprocessor" methods
 // ---------------------------------------------------------
 
+/*
+ Before the parser kicks in, we pre-process the string
+ to eliminate or convert specific items.
+ */
+
 - (void) trimAndNormalizeSpaces
 {
 	NSMutableString *newString = self.expression.mutableCopy;
@@ -62,11 +67,6 @@ static unichar kFieldSeparatorToken		= ' ';
 
 	self.expression = newString;
 }
-
-/*
- Before the parser kicks in, we pre-process the string
- to eliminate or convert specific items.
- */
 
 - (void) enforceFiveFields
 {
@@ -88,8 +88,7 @@ static unichar kFieldSeparatorToken		= ' ';
 
 	else
 	{
-		// This is an error.  It isn't happening in practice,
-		// so, for now, ignore it.
+		// This is an error.  (It isn't happening in practice.)
 		NSLog (@"-[APCScheduleParser enforceFiveFields] ERROR: Don't know how to parse an expression with [%d] components.", (int) pieces.count);
 
 		[self recordError];
