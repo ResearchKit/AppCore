@@ -12,7 +12,9 @@
 #import "APCEmailVerifyViewController.h"
 #import "UIAlertController+Helper.h"
 
-@interface APCSignInViewController ()
+static NSString * const kServerInvalidEmailErrorString = @"Invalid username or password.";
+
+@interface APCSignInViewController () <RKSTTaskViewControllerDelegate>
 
 @end
 
@@ -49,12 +51,7 @@
     
     APCUser * user = [self user];
     
-    if (user.email) {
-        NSString *partialEmail = (user.email.length >=4) ? [user.email substringToIndex:3] : user.email;
-        
-        self.userHandleTextField.text = [NSString stringWithFormat:@"%@XXXXX", partialEmail];
-        self.userHandleTextField.enabled = NO;
-    }
+    self.userHandleTextField.text = user.email;
     
     [self.passwordTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.passwordTextField setFont:[UIFont appMediumFontWithSize:17.0f]];
@@ -140,9 +137,7 @@
     
         APCUser * user = [self user];
         
-        if (!user.email) {
-            user.email = self.userHandleTextField.text;
-        }
+        user.email = self.userHandleTextField.text;
         
         user.password = self.passwordTextField.text;
         [user signInOnCompletion:^(NSError *error) {
@@ -150,30 +145,38 @@
                 if (error) {
                     [error handle];
                     
-                    UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:error.message];
-                    [self presentViewController:alert animated:YES completion:nil];
-                }
-                else
-                {
-                    if (!user.consented) {
-                        APCEmailVerifyViewController *emailVerifyVC = [[UIStoryboard storyboardWithName:@"APCEmailVerify" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
+                    if (error.code == kSBBServerPreconditionNotMet) {
+                        [self showConsent];
                         
-                        APCAppDelegate *appDelegate = (APCAppDelegate*)[[UIApplication sharedApplication] delegate];
-                        appDelegate.window.rootViewController = emailVerifyVC;
-                    } else{
+                    } else {
+                        NSString *errorMessage = [error message];
+                        errorMessage = [errorMessage isEqualToString:kServerInvalidEmailErrorString] ? NSLocalizedString(@"Invalid email or password.\n\nIn case you have not verified your account, please do so by clicking the link in the email we have sent you.", @"EmailError") : errorMessage;
                         
-                        [user getProfileOnCompletion:^(NSError *error) {
-                            [error handle];
-                        }];
-                        
-                        if (user.isSecondaryInfoSaved) {
-                            user.signedIn = YES;
-                        } else{
-                            UIViewController *viewController = [[self onboarding] nextScene];
-                            [self.navigationController pushViewController:viewController animated:YES];
-                        }
+                        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:errorMessage];
+                        [self presentViewController:alert animated:YES completion:nil];
                         
                     }
+                    
+                } else
+                {
+                    [user retrieveConsentOnCompletion:^(NSError *error) {
+                        if (error) {
+                            [error handle];
+                            
+                            if (error.code == kSBBServerPreconditionNotMet) {
+                                [self showConsent];
+                            } else {
+                                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:error.message];
+                                [self presentViewController:alert animated:YES completion:nil];
+                            }
+                            
+                        } else {
+                            user.consented = YES;
+                            user.userConsented = YES;
+                            [self signInSuccess];
+                        }
+                    }];
+                    
                 }
             }];
             
@@ -183,6 +186,121 @@
         [self presentViewController:alert animated:YES completion:nil];
     }
 }
+
+#pragma mark - Custom methods
+
+- (void)signInSuccess
+{
+    APCUser *user = [self user];
+    
+    [user getProfileOnCompletion:^(NSError *error) {
+        [error handle];
+    }];
+    
+    if (user.isSecondaryInfoSaved) {
+        user.signedIn = YES;
+    } else{
+        UIViewController *viewController = [[self onboarding] nextScene];
+        [self.navigationController pushViewController:viewController animated:YES];
+    }
+}
+
+- (void)showConsent
+{
+    RKSTTaskViewController *consentViewController = [((APCAppDelegate*)[UIApplication sharedApplication].delegate) consentViewController];
+    consentViewController.taskDelegate = self;
+    [self.navigationController presentViewController:consentViewController animated:YES completion:nil];
+}
+
+- (void)sendConsent
+{
+    APCUser *user = [self user];
+    
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    [self presentViewController:spinnerController animated:YES completion:nil];
+    
+    [user sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
+        [spinnerController dismissViewControllerAnimated:YES completion:^{
+            
+            if (error) {
+                if (error.code == 409) {
+                    [self handleConsentConflict];
+                }
+            } else {
+                user.consented = YES;
+                [self signInSuccess];
+            }
+        }];
+        
+    }];
+}
+
+- (void)handleConsentConflict
+{
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign In", @"") message:NSLocalizedString(@"You have previously withdrawn from this Study. Do you wish to rejoin?", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Rejoin", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self rejoinStudy];
+    }];
+    [alertContorller addAction:yesAction];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    [alertContorller addAction:cancelAction];
+    
+    [self.navigationController presentViewController:alertContorller animated:YES completion:nil];
+}
+
+- (void)rejoinStudy
+{
+    APCUser *user = [self user];
+    
+    [user resumeStudyOnCompletion:^(NSError *error) {
+        if (error) {
+            [error handle];
+            
+            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:error.message];
+            [self presentViewController:alert animated:YES completion:nil];
+        } else {
+            user.consented = YES;
+            [self signInSuccess];
+        }
+    }];
+}
+
+#pragma mark - RKSTTaskViewControllerDelegate methods
+
+- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
+{
+    APCUser *user = [self user];
+    user.userConsented = YES;
+    
+    RKSTConsentSignatureResult *consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
+    
+    user.consentSignatureName = consentResult.signature.name;
+    user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
+    
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
+    user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
+    
+    [taskViewController dismissViewControllerAnimated:YES completion:^{
+        [self sendConsent];
+    }];
+}
+
+- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
+{
+    [taskViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
+{
+    //TODO: Figure out what to do if it fails
+    [taskViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - IBActions 
 
 - (BOOL) isContentValid:(NSString **)errorMessage {
     BOOL isContentValid = NO;
@@ -201,6 +319,7 @@
     
     return isContentValid;
 }
+
 
 - (IBAction)forgotPassword
 {
