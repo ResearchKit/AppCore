@@ -79,7 +79,9 @@
     if (self.passcodeView.code.length > 0) {
         if ([self.passcodeView.code isEqualToString:[APCKeychainStore stringForKey:kAPCPasscodeKey]]) {
             //Authenticate
-            [self dismissViewControllerAnimated:YES completion:nil];
+            if ([self.delegate respondsToSelector:@selector(passcodeViewControllerDidSucceed:)]) {
+                [self.delegate passcodeViewControllerDidSucceed:self];
+            }
         } else {
             
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Wrong Passcode" message:@"Please enter again." preferredStyle:UIAlertControllerStyleAlert];
@@ -111,7 +113,9 @@
                                         
                                         if (success) {
                                             dispatch_async(dispatch_get_main_queue(), ^{
-                                                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                                                if ([weakSelf.delegate respondsToSelector:@selector(passcodeViewControllerDidSucceed:)]) {
+                                                    [weakSelf.delegate passcodeViewControllerDidSucceed:weakSelf];
+                                                }
                                             });
                                             
                                         } else {

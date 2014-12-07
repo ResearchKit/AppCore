@@ -9,10 +9,11 @@
 #import "APCDataSubstrate.h"
 #import "APCHealthKitQuantityTracker.h"
 #import "APCOnboarding.h"
+#import "APCPasscodeViewController.h"
 
-@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding;
+@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController;
 
-@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate>
+@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
 
 @property  (strong, nonatomic)  UIWindow * window;
 
