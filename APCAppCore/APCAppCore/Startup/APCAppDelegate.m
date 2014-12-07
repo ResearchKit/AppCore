@@ -32,6 +32,8 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 @property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
+@property (nonatomic) BOOL isPasscodeShowing;
+
 @end
 
 @implementation APCAppDelegate
@@ -78,7 +80,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    if (self.dataSubstrate.currentUser.signedIn) {
+    if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
         NSDate *currentTime = [NSDate date];
         [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
     }
@@ -87,7 +89,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    if (self.dataSubstrate.currentUser.signedIn) {
+    if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
         NSDate *currentTime = [NSDate date];
         [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
     }
@@ -341,8 +343,10 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (void)showPasscode
 {
     APCPasscodeViewController *passcodeViewController = [[UIStoryboard storyboardWithName:@"APCPasscode" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
+    passcodeViewController.delegate = self;
     
     [self.window.rootViewController presentViewController:passcodeViewController animated:YES completion:nil];
+    self.isPasscodeShowing = YES;
 }
 
 - (void) showOnBoarding
@@ -417,6 +421,14 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     NSArray *servicesArray = initialOptions[kAppServicesListRequiredKey];
     
     return servicesArray.count;
+}
+
+#pragma mark - APCPasscodeViewControllerDelegate methods
+
+- (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *)viewController
+{
+    [viewController dismissViewControllerAnimated:YES completion:nil];
+    self.isPasscodeShowing = NO;
 }
 
 @end
