@@ -30,7 +30,7 @@
 
 - (NSString *)prepareContent
 {
-    return [self surveyFromJSONFile:@"TermsAndConditions"];
+    return [self surveyFromJSONFile:@"LocationInfo"];
 }
 
 #pragma mark - Setup
@@ -43,6 +43,7 @@
     [self.textView setTextContainerInset:UIEdgeInsetsMake(13, 10, 10, 10)];
     
     self.navigationBar.titleTextAttributes = @{ NSForegroundColorAttributeName : [UIColor whiteColor]};
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
 }
 
 - (NSString *)surveyFromJSONFile:(NSString *)jsonFileName
@@ -57,7 +58,7 @@
     
     if (!parseError) {
         
-        termsString = jsonDictionary[@"terms"];
+        termsString = jsonDictionary[@"info"];
     }
     
     return termsString;

@@ -261,7 +261,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 
 - (NSError *)permissionDeniedErrorForType:(APCSignUpPermissionsType)type
 {
-    NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleNameKey];
+    NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
     NSString *message;
     
     switch (type) {

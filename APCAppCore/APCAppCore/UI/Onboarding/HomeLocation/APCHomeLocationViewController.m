@@ -19,6 +19,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 
+static CGFloat const kTableFooterHeight = 80.0f;
+
 @interface APCHomeLocationViewController ()
 
 @property (nonatomic, strong) NSArray *placemarks;
@@ -32,6 +34,7 @@
 @property (nonatomic, strong) MKPlacemark *marker;
 
 @property (weak, nonatomic) IBOutlet UIImageView *searchImageView;
+
 @end
 
 @implementation APCHomeLocationViewController
@@ -70,8 +73,8 @@
 
 - (void)prepareContent
 {
-    NSString *prefix = @"Your address will be used only for Lorem Ipsum\n and el intuit for";
-    NSString *moreInfo = @"more information.";
+    NSString *prefix = NSLocalizedString(@"Your address will be used to estimate how much you travel each day as a measure of life activity. You address will not be shared with our servers or anyone else - tap here for", @"LocationInfoPrefix");
+    NSString *moreInfo = NSLocalizedString(@"more information.", @"LocationInfoSuffix");
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ %@", prefix, moreInfo]];
     
@@ -187,7 +190,7 @@
     [self.searchTextField resignFirstResponder];
     
     // Animation Stuff
-    [tableView setContentOffset:CGPointMake(0, tableView.contentSize.height - 60) animated:YES];
+    [tableView setContentOffset:CGPointMake(0, tableView.contentSize.height - kTableFooterHeight) animated:YES];
     [UIView animateWithDuration:0.3 animations:^{
         self.mapView.alpha = 1;
     }];
@@ -249,7 +252,7 @@
                     self.messageLabel.alpha = 0;
                 }];
             } else {
-                [weakSelf.tableView setContentOffset:CGPointMake(0, weakSelf.tableView.contentSize.height - 60) animated:YES];
+                [weakSelf.tableView setContentOffset:CGPointMake(0, weakSelf.tableView.contentSize.height - kTableFooterHeight) animated:YES];
                 [UIView animateWithDuration:0.2 animations:^{
                     self.messageLabel.alpha = 1;
                 }];
