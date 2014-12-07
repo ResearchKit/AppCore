@@ -127,10 +127,10 @@
     {
         APCScheduleExpression * scheduleExpression = schedule.scheduleExpression;
         NSEnumerator*   enumerator = [scheduleExpression enumeratorBeginningAtTime:[NSDate startOfDay:self.referenceDate] endingAtTime:[NSDate startOfTomorrow:self.referenceDate]];
-        NSDate * starOnDate;
-        while ((starOnDate = enumerator.nextObject))
+        NSDate * startOnDate;
+        while ((startOnDate = enumerator.nextObject))
         {
-            [self createScheduledTask:schedule task:task startOn:starOnDate];
+            [self createScheduledTask:schedule task:task startOn:startOnDate];
         }
     }
 

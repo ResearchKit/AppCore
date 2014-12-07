@@ -18,4 +18,15 @@
     return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
 
++ (instancetype)dictionaryWithJSONString:(NSString *)string
+{
+    NSData *resultData = [string dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error = nil;
+    NSDictionary * retValue = [NSJSONSerialization JSONObjectWithData:resultData
+                                             options:NSJSONReadingAllowFragments
+                                               error:&error];
+    [error handle];
+    return retValue;
+}
+
 @end

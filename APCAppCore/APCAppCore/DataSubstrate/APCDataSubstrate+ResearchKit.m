@@ -162,10 +162,9 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
         
         NSError *fileManagerError = nil;
         // directory so you can see it in iTunes.
-        NSLog(@"Moving archive file to %@", [url path]);
         if (![[NSFileManager defaultManager] moveItemAtURL:archiveFile toURL:url error:&fileManagerError])
         {
-            NSLog(@"Error moving file %@", fileManagerError);
+            [error handle];
             
             // If the upload fails, unmark the files as uploaded.
             [self.logManager unmarkUploadedFiles:pendingFiles error:NULL];
