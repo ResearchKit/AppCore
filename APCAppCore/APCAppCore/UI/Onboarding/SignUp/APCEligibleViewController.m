@@ -73,7 +73,7 @@
 }
 
 
-#pragma mark - TaskViewController Delegate methods
+#pragma mark - RKSTTaskViewControllerDelegate methods
 
 - (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
 {
