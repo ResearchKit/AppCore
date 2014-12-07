@@ -15,6 +15,8 @@
 #import "APCOnboarding.h"
 #import "NSBundle+Helper.h"
 #import "APCSignInViewController.h"
+#import "APCUser.h"
+#import "UIAlertController+Helper.h"
 
 static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
 
@@ -114,6 +116,11 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 - (APCOnboarding *)onboarding
 {
     return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+}
+
+- (APCUser *)user
+{
+    return ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
 }
 
 #pragma mark - UITableViewDataSource methods
@@ -283,10 +290,16 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 - (void)signUpTapped:(id)sender
 {
-    [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignUp];
+    if ([self user].consented) {
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Account already exists", @"") message:@"You have already signed up with an account.\n\nIf you wish to sign up with an an other account, please delete and re-install the app."];
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignUp];
+        
+        UIViewController *viewController = [[self onboarding] nextScene];
+        [self.navigationController pushViewController:viewController animated:YES];
+    }
     
-    UIViewController *viewController = [[self onboarding] nextScene];
-    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 
