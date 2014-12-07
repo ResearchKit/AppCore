@@ -13,5 +13,6 @@
 @property  (nonatomic, strong)  APCScheduledTask  *scheduledTask;
 
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask;
+- (NSString *) createResultSummary;
 
 @end
