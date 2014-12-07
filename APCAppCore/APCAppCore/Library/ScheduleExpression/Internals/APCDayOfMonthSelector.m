@@ -214,9 +214,8 @@
 				[computedDays addObject: monthDayFromWeekday];
 	}
 
-	[computedDays sortUsingComparator: ^NSComparisonResult (NSNumber *day1, NSNumber *day2) {
-		return [day1 compare: day2];
-	}];
+	// They're all NSNumbers, so we can sort them using their own -compare: method.
+	[computedDays sortUsingSelector: @selector(compare:)];
 
 	self.computedDaysToEnumerate = computedDays;
 }

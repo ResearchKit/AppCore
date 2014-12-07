@@ -1236,8 +1236,15 @@
 
 	NSTimeInterval userWakeupTimeOffset	= 0;
 
-	NSDate *startDateInPacificTime = [self.dateFormatterInGregorianUTC dateFromString: startDateString];
-	NSDate *endDateInPacificTime   = [self.dateFormatterInGregorianUTC dateFromString: endDateString];
+	NSDateFormatter *dateFormatterInGregorianPacificTime = [NSDateFormatter new];
+	dateFormatterInGregorianPacificTime.dateFormat = @"yyyy-MM-dd HH:mm";
+	dateFormatterInGregorianPacificTime.calendar = [NSCalendar currentCalendar];
+
+	NSTimeZone *zoneWhereRunningThisTest = [NSTimeZone localTimeZone];
+	dateFormatterInGregorianPacificTime.timeZone = zoneWhereRunningThisTest;
+
+	NSDate *startDateInPacificTime = [dateFormatterInGregorianPacificTime dateFromString: startDateString];
+	NSDate *endDateInPacificTime   = [dateFormatterInGregorianPacificTime dateFromString: endDateString];
 
 	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression
 																			   timeZero: userWakeupTimeOffset];
@@ -1264,7 +1271,10 @@
 
 	for (NSString *testHarnessDateString in expectedDates)
 	{
-		testHarnessDate = [self.dateFormatterInGregorianUTC dateFromString: testHarnessDateString];
+		testHarnessDate = [dateFormatterInGregorianPacificTime dateFromString: testHarnessDateString];
+		NSTimeInterval offset = [zoneWhereRunningThisTest secondsFromGMTForDate: testHarnessDate];
+		testHarnessDate = [testHarnessDate dateByAddingTimeInterval: offset];
+
 		enumeratorDate = enumerator.nextObject;
 
 		XCTAssertEqualObjects (enumeratorDate, testHarnessDate);
@@ -1275,52 +1285,60 @@
 
 - (void) testRealTestCase
 {
-    NSString* cronExpression		= @"0 5 * * *";		// noon and 5pm every Monday
-    
-    NSDateFormatter * dateFormatterInGregorianUTC = [NSDateFormatter new];
-    dateFormatterInGregorianUTC.dateFormat = @"yyyy-MM-dd HH:mm";
-    dateFormatterInGregorianUTC.calendar = [NSCalendar currentCalendar];
-    dateFormatterInGregorianUTC.timeZone = [NSTimeZone localTimeZone];
-    
-    NSTimeInterval userWakeupTimeOffset	= 0;
-    APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression
-                                                                               timeZero: userWakeupTimeOffset];
-    
-    NSEnumerator* enumerator = [schedule enumeratorBeginningAtTime: [NSDate todayAtMidnight]
-                                                      endingAtTime: [NSDate tomorrowAtMidnight]];
-    NSDate * startOnDate;
-    
-    while ((startOnDate = enumerator.nextObject))
-    {
-        NSLog(@"DATE: %@", [dateFormatterInGregorianUTC stringFromDate:startOnDate]);
-    }
-    
-//    NSArray *expectedDates = @[
-//                               @"2014-11-03 12:00",
-//                               @"2014-11-03 17:00",
-//                               @"2014-11-10 12:00",
-//                               @"2014-11-10 17:00",
-//                               @"2014-11-17 12:00",
-//                               @"2014-11-17 17:00",
-//                               @"2014-11-24 12:00",
-//                               @"2014-11-24 17:00",
-//                               ];
-//    
-//    
-//    // This is part of the realistic test:  loop through, extract every value, create something useful from it.
-//    
-//    NSDate *testHarnessDate = nil;
-//    NSDate *enumeratorDate = nil;
-//    
-//    for (NSString *testHarnessDateString in expectedDates)
-//    {
-//        testHarnessDate = [self.dateFormatterInGregorianUTC dateFromString: testHarnessDateString];
-//        enumeratorDate = enumerator.nextObject;
-//        
-//        XCTAssertEqualObjects (enumeratorDate, testHarnessDate);
-//    }
-//    
-//    XCTAssertNil (enumerator.nextObject);
+	NSString* cronExpression = @"0 5 * * *";		// noon and 5pm every Monday
+
+	NSDateFormatter * dateFormatterInGregorianPacificTime = [NSDateFormatter new];
+	dateFormatterInGregorianPacificTime.dateFormat = @"yyyy-MM-dd HH:mm";
+	dateFormatterInGregorianPacificTime.calendar = [NSCalendar currentCalendar];
+	dateFormatterInGregorianPacificTime.timeZone = [NSTimeZone localTimeZone];
+
+	NSTimeInterval userWakeupTimeOffset	= 0;
+	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression
+																			   timeZero: userWakeupTimeOffset];
+
+	NSDate *todayAtMidnight = [NSDate todayAtMidnight];
+	NSDate *tomorrowAtMidnight = [NSDate tomorrowAtMidnight];
+
+	NSLog (@"Today    at midnight : %@", [dateFormatterInGregorianPacificTime stringFromDate: todayAtMidnight]);
+	NSLog (@"Tomorrow at midnight : %@", [dateFormatterInGregorianPacificTime stringFromDate: tomorrowAtMidnight]);
+
+	NSEnumerator* enumerator = [schedule enumeratorBeginningAtTime: todayAtMidnight
+													  endingAtTime: tomorrowAtMidnight];
+
+	NSDate *date = nil;
+	while ((date = enumerator.nextObject) != nil)
+	{
+		NSLog (@"Enumerator date      : %@", [dateFormatterInGregorianPacificTime stringFromDate:date]);
+	}
+}
+
+- (void) testRealTestCase2
+{
+	NSString* cronExpression = @"0 5 * * 1";		// noon and 5pm every Monday
+
+	NSDateFormatter * dateFormatterInGregorianPacificTime = [NSDateFormatter new];
+	dateFormatterInGregorianPacificTime.dateFormat = @"yyyy-MM-dd HH:mm";
+	dateFormatterInGregorianPacificTime.calendar = [NSCalendar currentCalendar];
+	dateFormatterInGregorianPacificTime.timeZone = [NSTimeZone localTimeZone];
+
+	NSTimeInterval userWakeupTimeOffset	= 0;
+	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression
+																			   timeZero: userWakeupTimeOffset];
+
+	NSDate *lastWeekAtMidnight = [NSDate weekAgoAtMidnight];
+	NSDate *tomorrowAtMidnight = [NSDate tomorrowAtMidnight];
+
+	NSLog (@"Week ago at midnight : %@", [dateFormatterInGregorianPacificTime stringFromDate: lastWeekAtMidnight]);
+	NSLog (@"Tomorrow at midnight : %@", [dateFormatterInGregorianPacificTime stringFromDate: tomorrowAtMidnight]);
+
+	NSEnumerator* enumerator = [schedule enumeratorBeginningAtTime: lastWeekAtMidnight
+													  endingAtTime: tomorrowAtMidnight];
+
+	NSDate * date = nil;
+	while ((date = enumerator.nextObject) != nil)
+	{
+		NSLog (@"Enumerator date      : %@", [dateFormatterInGregorianPacificTime stringFromDate: date]);
+	}
 }
 
 

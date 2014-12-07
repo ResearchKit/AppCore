@@ -16,39 +16,34 @@
 
 @implementation APCTimeSelectorEnumerator
 
-- (instancetype)initWithSelector:(APCTimeSelector*)selector
+- (instancetype) initWithSelector: (APCTimeSelector*) selector
 {
     self = [super init];
+
     if (self)
     {
-        _selector       = selector;
-        _previousMoment = nil;
+		self.selector = selector;
+		self.previousMoment = nil;
     }
     
     return self;
 }
 
-- (instancetype)initWithSelector:(APCTimeSelector*)selector beginningAtMoment:(NSNumber*)beginning
+- (instancetype) initWithSelector: (APCTimeSelector*) selector
+				beginningAtMoment: (NSNumber*) beginning
 {
-    self = [self initWithSelector:selector];
+    self = [self initWithSelector: selector];
+
     if (self)
     {
-        _selector        = selector;
-        _previousMoment  = nil;
-        
-        if (beginning != nil)
-        {
-            NSNumber*   first = [selector initialValue];
-            
-            if ([beginning compare:first] == NSOrderedAscending)    //  beginning < first?
-            {
-                _beginningMoment = first;
-            }
-            else
-            {
-                _beginningMoment = beginning;
-            }
-        }
+		self.selector = selector;
+		self.previousMoment = nil;
+		self.beginningMoment = selector.initialValue;
+
+		if ([beginning compare: self.beginningMoment] == NSOrderedDescending)	// "beginning" > initialValue
+		{
+			self.beginningMoment = beginning;
+		}
     }
     
     return self;

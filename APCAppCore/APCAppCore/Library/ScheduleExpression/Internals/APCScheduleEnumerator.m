@@ -10,6 +10,11 @@
 #import "APCDayOfMonthSelector.h"
 #import "NSDateComponents+Helper.h"
 
+
+/** We may make this a parameter, at some point. */
+#define CONVERT_TO_LOCAL_TIME_ZONE_WHEN_EMITTING_ENUMERATED_DATES YES
+
+
 static NSInteger    kMinuteIndex = 0;
 static NSInteger    kHourIndex   = 1;
 static NSInteger    kDayIndex    = 2;
@@ -23,7 +28,6 @@ static NSInteger    kYearIndex   = 4;
 @property (nonatomic, strong) NSDate*       endingMoment;
 @property (nonatomic, strong) NSDate*       nextMoment;
 @property (nonatomic, strong) NSString*		originalCronExpression;		// for debug-printouts only.
-@property (nonatomic, assign) NSInteger     year;
 
 /**
  These two variables must be the same length and contain
@@ -39,6 +43,16 @@ static NSInteger    kYearIndex   = 4;
 @property (nonatomic, strong) APCTimeSelectorEnumerator *dayEnumerator;
 @property (nonatomic, strong) APCTimeSelectorEnumerator *monthEnumerator;
 @property (nonatomic, strong) APCTimeSelectorEnumerator *yearEnumerator;
+@property (nonatomic, strong) APCTimeSelectorEnumerator *hourEnumerator;
+@property (nonatomic, strong) APCTimeSelectorEnumerator *minuteEnumerator;
+
+/**
+ If we're converting to the user's local time zone (or any other
+ time zone), this will contain the offset.  We'll use this
+ both to convert the incoming start/stop dates and the outbound
+ enumerated dates.
+ */
+@property (nonatomic, assign) NSTimeInterval timeZoneOffset;
 
 @end
 
@@ -73,6 +87,29 @@ static NSInteger    kYearIndex   = 4;
 
 	if (self)
 	{
+		/*
+		 If we're going to convert internal dates to the user's
+		 local time zone when we emit them, we can also expect
+		 the inbound dates to be in the user's local time zone.
+		 So:  Convert them to UTC.
+		 */
+		self.timeZoneOffset = 0;
+
+		if (CONVERT_TO_LOCAL_TIME_ZONE_WHEN_EMITTING_ENUMERATED_DATES)
+		{
+			NSDate *referenceDate = begin ?: [NSDate date];
+			NSTimeZone *zone = [NSTimeZone localTimeZone];
+			NSTimeInterval timeZoneOffset = [zone secondsFromGMTForDate: referenceDate];
+
+			self.timeZoneOffset = timeZoneOffset;
+
+			if (begin != nil)
+				begin = [NSDate dateWithTimeIntervalSince1970: begin.timeIntervalSince1970 + timeZoneOffset];
+
+			if (end != nil)
+				end = [NSDate dateWithTimeIntervalSince1970: end.timeIntervalSince1970 + timeZoneOffset];
+		}
+
 		NSArray* calendarUnits = @[ @(NSCalendarUnitYear),
 									@(NSCalendarUnitMonth),
 									@(NSCalendarUnitDay),
@@ -87,21 +124,30 @@ static NSInteger    kYearIndex   = 4;
 
 		_beginningMoment	= begin;
 		_endingMoment		= end;
-		_year				= beginComponents.year;
-
-		APCTimeSelectorEnumerator* minuteEnumerator = [minuteSelector enumeratorBeginningAt:@(beginComponents.minute)];
-		APCTimeSelectorEnumerator* hourEnumerator   = [hourSelector   enumeratorBeginningAt:@(beginComponents.hour)];
 
 
 		// Track these three enumerators individually, so that
 		// when we roll over the month or year, we can recompute
 		// the days of the month specified by our weekday selector.
-		self.dayEnumerator   = [dayOfMonthSelector enumeratorBeginningAt:@(beginComponents.day)];
-		self.monthEnumerator = [monthSelector      enumeratorBeginningAt:@(beginComponents.month)];
-		self.yearEnumerator  = [yearSelector       enumeratorBeginningAt:@(beginComponents.year)];
+		self.yearEnumerator		= [yearSelector		enumeratorBeginningAt: @(beginComponents.year)];
+		self.monthEnumerator	= [monthSelector	enumeratorBeginningAt: @(beginComponents.month)];
+		self.hourEnumerator		= [hourSelector		enumeratorBeginningAt: @(beginComponents.hour)];
+		self.minuteEnumerator	= [minuteSelector	enumeratorBeginningAt: @(beginComponents.minute)];
 
+
+		// The day-of-month selector is special:  it needs to know
+		// the month and year.
+		APCDayOfMonthSelector *realDayOfMonthSelector = (APCDayOfMonthSelector *) dayOfMonthSelector;
+
+		[realDayOfMonthSelector recomputeDaysBasedOnMonth: @(beginComponents.month)
+													 year: @(beginComponents.year)];
+
+		self.dayEnumerator   = [dayOfMonthSelector enumeratorBeginningAt: @(beginComponents.day)];
+
+		
 		/*
-		 Creating these arrays in the SAME ORDER:  kMinuteIndex, kHourIndex, kDayIndex, kMonthIndex, kYearIndex.
+		 Creating these arrays in the SAME ORDER: 
+		 kMinuteIndex, kHourIndex, kDayIndex, kMonthIndex, kYearIndex.
 		 */
 		_calendarComponents	= [ @[ @(beginComponents.minute),
 								   @(beginComponents.hour),
@@ -109,8 +155,8 @@ static NSInteger    kYearIndex   = 4;
 								   @(beginComponents.month),
 								   @(beginComponents.year)] mutableCopy];
 
-		_enumerators = [ @[ minuteEnumerator,
-						    hourEnumerator,
+		_enumerators = [ @[ self.minuteEnumerator,
+						    self.hourEnumerator,
 						    self.dayEnumerator,
 						    self.monthEnumerator,
 						    self.yearEnumerator] mutableCopy];
@@ -168,13 +214,6 @@ static NSInteger    kYearIndex   = 4;
 				}
 			}
 		} while (index >= kMinuteIndex);
-		
-
-		// Now compute the days of the month for the actual, specified
-		// month and year.  We do the same thing each time through
-		// -nextObject, below.
-		[self recomputeDaysAfterRollingOverMonthOrYearStartingOnDay: @(beginComponents.day)];
-
 
 		self.nextMoment = [self componentsToDate];
 
@@ -229,19 +268,21 @@ static NSInteger    kYearIndex   = 4;
             self.calendarComponents [enumeratorIndex] = nextPoint;
 
 			/*
-			 If we rolled over the month or year, tell the day iterator
-			 about it, so it can figure out what the "days of the week"
-			 mean for this month and year.
+			 If we rolled over the month or year, recompute the
+			 days we care about for this month and year.
 			 */
-			if (enumerator == self.monthEnumerator || enumerator == self.yearEnumerator)
+			if (enumeratorIndex == kMonthIndex || enumeratorIndex == kYearIndex)
 			{
-				/*
-				 The "nil" parameter means:  roll over to the first
-				 legal day in the next month.  (The alternative is to
-				 skip through that month until we find a particular
-				 day; we do that during initialization.)
-				 */
-				[self recomputeDaysAfterRollingOverMonthOrYearStartingOnDay: nil];
+				APCDayOfMonthSelector *selector = (APCDayOfMonthSelector *) self.dayEnumerator.selector;
+
+				[selector recomputeDaysBasedOnMonth: self.calendarComponents [kMonthIndex]
+											   year: self.calendarComponents [kYearIndex]];
+
+				self.dayEnumerator = [selector enumeratorBeginningAt: nil];
+				self.enumerators [kDayIndex] = self.dayEnumerator;
+
+				NSNumber *nextDay = [self.dayEnumerator nextObject];
+				self.calendarComponents [kDayIndex] = nextDay;
 			}
 
 			/*
@@ -283,19 +324,21 @@ static NSInteger    kYearIndex   = 4;
 	// Our calculations have been in UTC (London, without
 	// daylight savings).  Convert.  (Eventually:  make this
 	// an init parameter?)
-    NSDate* localDate = nil;
+    NSDate* localDate = savedMoment;
     
-    if (savedMoment != nil)
+    if (localDate != nil && CONVERT_TO_LOCAL_TIME_ZONE_WHEN_EMITTING_ENUMERATED_DATES)
     {
-        NSTimeZone *zone = [NSTimeZone localTimeZone];
-        NSTimeInterval timeZoneOffset = [zone secondsFromGMTForDate: savedMoment];
-        localDate = [NSDate dateWithTimeIntervalSince1970: savedMoment.timeIntervalSince1970 - timeZoneOffset];
+		localDate = [NSDate dateWithTimeIntervalSince1970: localDate.timeIntervalSince1970 - self.timeZoneOffset];
     }
 
     return localDate;
 }
 
-- (void) recomputeDaysAfterRollingOverMonthOrYearStartingOnDay: (NSNumber *) startDay
+/**
+ Retruns the next legal day after the rollover.
+ If the start day is past that day, returns nil.
+ */
+- (NSNumber *) recomputeDaysAfterRollingOverMonthOrYearStartingOnDay: (NSNumber *) startDay
 {
 	APCDayOfMonthSelector *selector = (APCDayOfMonthSelector *) self.dayEnumerator.selector;
 
@@ -314,15 +357,19 @@ static NSInteger    kYearIndex   = 4;
 	NSNumber *day = nil;
 
 	if (startDay == nil)
-		day = self.dayEnumerator.nextObjectAfterRollover;
+		day = self.dayEnumerator.nextObjectAfterRollover;		// i.e., selector.initialValue
 
 	else if ([selector matches: startDay])
 		day = startDay;
 
 	else
+	{
+		// If the startDay is after the last legal day in this month,
+		// this will return nil.  That's fine.
 		day = [selector nextMomentAfter: startDay];
+	}
 
-	self.calendarComponents [kDayIndex] = day;
+	return day;
 }
 
 - (NSDate*) componentsToDate
