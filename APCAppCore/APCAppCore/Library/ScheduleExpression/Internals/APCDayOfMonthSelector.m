@@ -140,7 +140,8 @@
 	self.month = month;
 	self.year = year;
 
-	NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: month year: year];
+//	NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: month year: year];
+	NSDateComponents *components = [NSDateComponents componentsInGregorianLocalWithMonth: month year: year];
 	NSArray *allDaysInMonth = components.allDaysInMonth;
 	NSMutableArray *computedDays = nil;
 
@@ -235,7 +236,8 @@
 {
 	NSMutableArray *computedDays = [NSMutableArray new];
 	NSNumber *day = self.underlyingDayOfMonthSelector.initialValue;
-	NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: self.month year: self.year];
+//	NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: self.month year: self.year];
+	NSDateComponents *components = [NSDateComponents componentsInGregorianLocalWithMonth: self.month year: self.year];
 	NSArray *allDaysInMonth = components.allDaysInMonth;
 
 	while (day != nil)
@@ -305,8 +307,8 @@
 	 */
 	if (userSpecifiedCronDaysOfWeek.count)
 	{
-		NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: self.month
-																					  year: self.year];
+//		NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: self.month year: self.year];
+		NSDateComponents *components = [NSDateComponents componentsInGregorianLocalWithMonth: self.month year: self.year];
 
 		for (NSNumber *thisDay in components.allDaysInMonth)
 		{
@@ -358,8 +360,8 @@
 		NSInteger currentInstanceOfDay	= 1;
 		NSInteger requestedDayOfWeek	= pointSelector.initialValue.integerValue;
 		NSInteger requestedIntanceOfDay	= pointSelector.position.integerValue;
-		NSDateComponents *components    = [NSDateComponents componentsInGregorianUTCWithMonth: self.month
-																					     year: self.year];
+//		NSDateComponents *components    = [NSDateComponents componentsInGregorianUTCWithMonth: self.month year: self.year];
+		NSDateComponents *components    = [NSDateComponents componentsInGregorianLocalWithMonth: self.month year: self.year];
 
 		// Find the first nth day of the month -- e.g., the first
 		// Friday, if we're looking for Fridays.  Then we can add

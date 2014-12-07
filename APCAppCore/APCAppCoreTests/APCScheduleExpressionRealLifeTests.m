@@ -61,9 +61,11 @@
 
 - (void) testRealisticTests
 {
-	NSString* cronExpression = @"0 5 * * *";				// 5am every day
-//	NSString* cronExpression = @"0 5 * * 1";				// 5am every Monday
+//	NSString* cronExpression = @"0 5 * * *";				// 5am every day
+	NSString* cronExpression = @"0 5 * * 1";				// 5am every Monday
+//	NSString* cronExpression = @"0 5 * * 1#2";				// 5am, only second Monday
 //	NSString* cronExpression = @"0 5,10,12,17,20 * * *";	// several every day
+//	NSString* cronExpression = @"0 5,10,12,17,20 * * 1";	// several only on Mondays
 //	NSString* cronExpression = @"0 0 6 ? 1/1 THU#1 *";		// from Sage
 //	NSString* cronExpression = @"0 0 6 ? * FRI *";			// from Sage
 

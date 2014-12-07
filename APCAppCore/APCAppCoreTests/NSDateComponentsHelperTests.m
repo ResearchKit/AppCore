@@ -34,7 +34,8 @@
 - (void) testLengthOfMonth
 {
 	// Using February in a non-leap year.
-	NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: @(2) year: @(2015)];
+//	NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: @(2) year: @(2015)];
+	NSDateComponents *components = [NSDateComponents componentsInGregorianLocalWithMonth: @(2) year: @(2015)];
 
 	XCTAssertEqual(28, components.lastDayOfMonth);
 }
@@ -42,7 +43,8 @@
 - (void) testArrayOfDaysInMonth
 {
 	// Using February in a non-leap year.
-	NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: @(2) year: @(2015)];
+//	NSDateComponents *components = [NSDateComponents componentsInGregorianUTCWithMonth: @(2) year: @(2015)];
+	NSDateComponents *components = [NSDateComponents componentsInGregorianLocalWithMonth: @(2) year: @(2015)];
 
 	XCTAssertEqual(28, components.allDaysInMonth.count);
 }

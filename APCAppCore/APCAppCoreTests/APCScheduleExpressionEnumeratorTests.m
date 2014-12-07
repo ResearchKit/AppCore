@@ -52,7 +52,8 @@
 	// using a DateComponents object, I have this convenience method,
 	// which also lets me make sure I'm using the same timeZone and
 	// calendar objects everywhere:
-	NSDateComponents* components = [NSDateComponents componentsInGregorianUTC];
+//	NSDateComponents* components = [NSDateComponents componentsInGregorianUTC];
+	NSDateComponents* components = [NSDateComponents componentsInGregorianLocal];
 
 	self.dateFormatterInGregorianUTC = [NSDateFormatter new];
 	self.dateFormatterInGregorianUTC.dateFormat = @"yyyy-MM-dd HH:mm";
@@ -166,7 +167,8 @@
 {
 	NSDate* enumeratorDate = nil;
 
-	NSDateComponents *testHarnessDateComponents = [NSDateComponents componentsInGregorianUTC];
+//	NSDateComponents *testHarnessDateComponents = [NSDateComponents componentsInGregorianUTC];
+	NSDateComponents *testHarnessDateComponents = [NSDateComponents componentsInGregorianLocal];
 	NSDate* testHarnessDate = nil;
 
 	// We'll calculate the real days-in-each-month shortly.
@@ -243,7 +245,8 @@
 {
 	NSMutableArray *computedDaysInMonth	= [NSMutableArray new];
 
-	NSDateComponents* dateComponents	= [NSDateComponents componentsInGregorianUTC];
+//	NSDateComponents* dateComponents	= [NSDateComponents componentsInGregorianUTC];
+	NSDateComponents* dateComponents	= [NSDateComponents componentsInGregorianLocal];
 	dateComponents.year					= year.integerValue;
 	dateComponents.month				= month.integerValue;
 	NSArray *legalDaysInMonth			= dateComponents.allDaysInMonth;
@@ -860,7 +863,8 @@
  */
 - (NSDate *) wellKnownMonday
 {
-	NSDateComponents *components = [NSDateComponents componentsInGregorianUTC];
+//	NSDateComponents *components = [NSDateComponents componentsInGregorianUTC];
+	NSDateComponents *components = [NSDateComponents componentsInGregorianLocal];
 	components.year		= 2014;
 	components.month	= 12;
 	components.day		= 1;
