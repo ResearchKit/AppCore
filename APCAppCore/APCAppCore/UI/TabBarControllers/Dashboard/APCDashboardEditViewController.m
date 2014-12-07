@@ -79,6 +79,11 @@
     return UITableViewCellEditingStyleNone;
 }
 
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
+
 #pragma mark - IB Actions
 
 - (IBAction)done:(id)sender
