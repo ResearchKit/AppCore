@@ -147,13 +147,7 @@
 	NSArray *allDaysInMonth = components.allDaysInMonth;
 	NSMutableArray *computedDays = nil;
 
-	/*
-	 TODO:  Hack?  This always happens when this object is initialized:
-	 we don't have a year and month, yet.  No problem:  just pretend
-	 we'll use all days in this month.  In every (ahem) situation that
-	 matters, we'll only get here after getting a month and year.
-	 (Um, right?)
-	 */
+
 	if (self.month == nil || self.year == nil)
 	{
 		computedDays = allDaysInMonth.mutableCopy;
