@@ -203,32 +203,32 @@
 
 #pragma mark - APCLineGraphViewDelegate methods
 
-//- (void)lineGraphTouchesBegan:(APCLineGraphView *)graphView
-//{
-//    for (APCLineGraphView *lineGraph in self.lineCharts) {
-//        if (lineGraph != graphView) {
-//            [lineGraph setScrubberViewsHidden:NO animated:YES];
-//        }
-//    }
-//}
-//
-//- (void)lineGraph:(APCLineGraphView *)graphView touchesMovedToXPosition:(CGFloat)xPosition
-//{
-//    for (APCLineGraphView *lineGraph in self.lineCharts) {
-//        if (lineGraph != graphView) {
-//            [lineGraph scrubReferenceLineForXPosition:xPosition];
-//        }
-//    }
-//}
-//
-//- (void)lineGraphTouchesEnded:(APCLineGraphView *)graphView
-//{
-//    for (APCLineGraphView *lineGraph in self.lineCharts) {
-//        if (lineGraph != graphView) {
-//            [lineGraph setScrubberViewsHidden:YES animated:YES];
-//        }
-//    }
-//}
+- (void)lineGraphTouchesBegan:(APCLineGraphView *)graphView
+{
+    for (APCLineGraphView *lineGraph in self.lineCharts) {
+        if (lineGraph != graphView) {
+            [lineGraph setScrubberViewsHidden:NO animated:YES];
+        }
+    }
+}
+
+- (void)lineGraph:(APCLineGraphView *)graphView touchesMovedToXPosition:(CGFloat)xPosition
+{
+    for (APCLineGraphView *lineGraph in self.lineCharts) {
+        if (lineGraph != graphView) {
+            [lineGraph scrubReferenceLineForXPosition:xPosition];
+        }
+    }
+}
+
+- (void)lineGraphTouchesEnded:(APCLineGraphView *)graphView
+{
+    for (APCLineGraphView *lineGraph in self.lineCharts) {
+        if (lineGraph != graphView) {
+            [lineGraph setScrubberViewsHidden:YES animated:YES];
+        }
+    }
+}
 
 #pragma mark - UIGestureRecognizerDelegate methods
 

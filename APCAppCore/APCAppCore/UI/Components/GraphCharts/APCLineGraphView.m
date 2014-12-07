@@ -715,20 +715,21 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 
 - (void)setScrubberViewsHidden:(BOOL)hidden animated:(BOOL)animated
 {
-    CGFloat alpha = hidden ? 0 : 1;
-    
-    if (animated) {
-        [UIView animateWithDuration:0.2 animations:^{
+    if (self.dataPoints.count > 1) {
+        CGFloat alpha = hidden ? 0 : 1;
+        
+        if (animated) {
+            [UIView animateWithDuration:0.2 animations:^{
+                self.scrubberThumbView.alpha = alpha;
+                self.scrubberLine.alpha = alpha;
+                self.scrubberLabel.alpha = alpha;
+            }];
+        } else {
             self.scrubberThumbView.alpha = alpha;
             self.scrubberLine.alpha = alpha;
             self.scrubberLabel.alpha = alpha;
-        }];
-    } else {
-        self.scrubberThumbView.alpha = alpha;
-        self.scrubberLine.alpha = alpha;
-        self.scrubberLabel.alpha = alpha;
+        }
     }
-    
 }
 
 #pragma mark - Touch
@@ -775,12 +776,15 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 #pragma mark - Public Methods
 
 - (void)scrubReferenceLineForXPosition:(CGFloat)xPosition
-{
-    self.scrubberLine.center = CGPointMake(xPosition + kAPCGraphLeftPadding, self.scrubberLine.center.y);
-    [self.scrubberLabel setFrame:CGRectMake(self.scrubberLine.frame.origin.x + 5, kAPCGraphTopPadding, CGRectGetWidth(self.scrubberLabel.frame), CGRectGetHeight(self.scrubberLabel.frame))];
-    self.scrubberLabel.text = [NSString stringWithFormat:@"%.2f", [self valueForCanvasXPosition:xPosition]];
+{    
+    if (self.dataPoints.count > 1) {
+        self.scrubberLine.center = CGPointMake(xPosition + kAPCGraphLeftPadding, self.scrubberLine.center.y);
+        [self.scrubberLabel setFrame:CGRectMake(self.scrubberLine.frame.origin.x + 5, kAPCGraphTopPadding, CGRectGetWidth(self.scrubberLabel.frame), CGRectGetHeight(self.scrubberLabel.frame))];
+        self.scrubberLabel.text = [NSString stringWithFormat:@"%.2f", [self valueForCanvasXPosition:xPosition]];
+        
+        [self.scrubberThumbView setCenter:CGPointMake(xPosition + kAPCGraphLeftPadding, [self canvasYPointForXPosition:xPosition] + kAPCGraphTopPadding)];
+    }
     
-    [self.scrubberThumbView setCenter:CGPointMake(xPosition + kAPCGraphLeftPadding, [self canvasYPointForXPosition:xPosition] + kAPCGraphTopPadding)];
 }
 
 - (void)setTintColor:(UIColor *)tintColor
