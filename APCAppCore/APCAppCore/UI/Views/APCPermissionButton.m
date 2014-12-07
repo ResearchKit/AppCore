@@ -34,6 +34,7 @@ static CGFloat kViewsPadding          = 10.f;
     
     self.confirmationView = [[APCConfirmationView alloc] init];
     self.confirmationView.backgroundColor = [UIColor clearColor];
+    self.confirmationView.userInteractionEnabled = NO;
     [self addSubview:self.confirmationView];
     
     self.imageView.hidden = YES;

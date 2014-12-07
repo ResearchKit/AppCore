@@ -32,6 +32,8 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 @property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
+@property (nonatomic) BOOL isPasscodeShowing;
+
 @end
 
 @implementation APCAppDelegate
@@ -78,7 +80,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    if (self.dataSubstrate.currentUser.signedIn) {
+    if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
         NSDate *currentTime = [NSDate date];
         [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
     }
@@ -87,7 +89,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    if (self.dataSubstrate.currentUser.signedIn) {
+    if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
         NSDate *currentTime = [NSDate date];
         [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
     }
@@ -161,6 +163,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(signedInNotification:) name:(NSString *)APCUserSignedInNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logOutNotification:) name:(NSString *)APCUserLogOutNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userConsented:) name:APCUserDidConsentNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withdrawStudy:) name:APCUserWithdrawStudyNotification object:nil];
 }
 
 - (void) signedUpNotification:(NSNotification*) notification
@@ -185,6 +188,15 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     self.dataSubstrate.currentUser.signedIn = NO;
     [APCKeychainStore removeValueForKey:kPasswordKey];
     [APCKeychainStore removeValueForKey:kSessionTokenKey];
+    
+    [self showOnBoarding];
+}
+
+- (void)withdrawStudy:(NSNotification *)notification
+{
+    [self clearNSUserDefaults];
+    [APCKeychainStore resetKeyChain];
+    [self.dataSubstrate resetCoreData];
     
     [self showOnBoarding];
 }
@@ -341,8 +353,10 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (void)showPasscode
 {
     APCPasscodeViewController *passcodeViewController = [[UIStoryboard storyboardWithName:@"APCPasscode" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
+    passcodeViewController.delegate = self;
     
     [self.window.rootViewController presentViewController:passcodeViewController animated:YES completion:nil];
+    self.isPasscodeShowing = YES;
 }
 
 - (void) showOnBoarding
@@ -417,6 +431,14 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     NSArray *servicesArray = initialOptions[kAppServicesListRequiredKey];
     
     return servicesArray.count;
+}
+
+#pragma mark - APCPasscodeViewControllerDelegate methods
+
+- (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *)viewController
+{
+    [viewController dismissViewControllerAnimated:YES completion:nil];
+    self.isPasscodeShowing = NO;
 }
 
 @end

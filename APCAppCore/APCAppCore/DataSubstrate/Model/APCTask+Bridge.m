@@ -179,9 +179,8 @@ static APCDummyObject * _dummyObject;
     SBBMultiValueConstraints * localConstraints = (SBBMultiValueConstraints*)constraints;
     NSMutableArray * options = [NSMutableArray array];
     [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger idx, BOOL *stop) {
-        //TODO: Fix this KLUDGE
-        [options addObject:@[[NSString stringWithFormat:@"Answer %ld", idx+1], option.label]];
-//        [options addObject:option.label];
+        //TODO: Address this issue with Apple
+        [options addObject: [RKSTTextAnswerOption optionWithText:[NSString stringWithFormat:@"Answer %lu", idx+1] detailText:option.label value:option.value]];
     }];
     if (localConstraints.allowOtherValue) {
         [options addObject:NSLocalizedString(@"Other", @"Spinner Option")];

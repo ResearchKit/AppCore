@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CKi-5c-cuQ">
-                                <rect key="frame" x="16" y="209" width="288" height="150"/>
+                                <rect key="frame" x="16" y="194" width="288" height="150"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="fca-1V-MYe"/>
                                 </constraints>
@@ -101,14 +101,14 @@
                                     <outlet property="delegate" destination="21d-vz-hUP" id="Ruv-Ib-gEW"/>
                                 </connections>
                             </mapView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="y6v-Aq-K1y">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="y6v-Aq-K1y">
                                 <rect key="frame" x="40" y="78" width="280" height="60"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="Tve-Kg-HAD"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="go"/>
                                 <connections>
                                     <outlet property="delegate" destination="21d-vz-hUP" id="YJT-yI-Is7"/>
                                 </connections>
@@ -116,7 +116,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UoY-rK-Urc">
                                 <rect key="frame" x="0.0" y="78" width="40" height="60"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="search_icon" translatesAutoresizingMaskIntoConstraints="NO" id="H6a-0E-uBT">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="H6a-0E-uBT">
                                         <rect key="frame" x="8" y="17" width="25" height="25"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -138,7 +138,7 @@
                         <constraints>
                             <constraint firstItem="gSw-vI-zgU" firstAttribute="leading" secondItem="c0G-d2-Tbb" secondAttribute="leadingMargin" constant="-16" id="6jb-9W-f9k"/>
                             <constraint firstItem="UoY-rK-Urc" firstAttribute="top" secondItem="Cgn-yG-oV1" secondAttribute="bottom" constant="14" id="Lj8-kc-VVc"/>
-                            <constraint firstAttribute="centerY" secondItem="CKi-5c-cuQ" secondAttribute="centerY" id="N5a-Cp-NS9"/>
+                            <constraint firstAttribute="centerY" secondItem="CKi-5c-cuQ" secondAttribute="centerY" constant="15" id="N5a-Cp-NS9"/>
                             <constraint firstItem="y6v-Aq-K1y" firstAttribute="top" secondItem="Cgn-yG-oV1" secondAttribute="bottom" constant="14" id="QfK-et-HuW"/>
                             <constraint firstItem="GaP-DD-ePi" firstAttribute="top" secondItem="gSw-vI-zgU" secondAttribute="bottom" id="QgA-MX-gDV"/>
                             <constraint firstAttribute="trailingMargin" secondItem="y6v-Aq-K1y" secondAttribute="trailing" constant="-16" id="RFA-pR-F3P"/>
@@ -237,7 +237,4 @@
             <point key="canvasLocation" x="850" y="522"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="search_icon" width="38" height="39"/>
-    </resources>
 </document>

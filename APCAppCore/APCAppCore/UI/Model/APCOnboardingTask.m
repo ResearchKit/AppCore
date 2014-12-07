@@ -60,7 +60,7 @@ NSString *const kAPCSignInStepIdentifier                  = @"SignIn";
 
 - (BOOL)permissionScreenSkipped
 {
-    BOOL skip;
+    BOOL skip = NO;
     
     if ([self.delegate respondsToSelector:@selector(numberOfServicesInPermissionsListForOnboardingTask:)]) {
         NSInteger count = [self.delegate numberOfServicesInPermissionsListForOnboardingTask:self];

@@ -49,6 +49,12 @@
     [self prepareContent];
     
     self.geocoder = [[CLGeocoder alloc] init];
+    if (self.user.homeLocationAddress) {
+        [self geocodeForAddress:self.user.homeLocationAddress];
+        self.searchTextField.text = self.user.homeLocationAddress;
+    }
+    
+    [self.searchTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 }
 
  -(void)viewDidAppear:(BOOL)animated
@@ -138,29 +144,27 @@
     }];
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+- (void)textFieldDidChange:(UITextField *)textField
 {
-    NSString *searchText = [self.searchTextField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    [self.geocoder geocodeAddressString:searchText completionHandler:^(NSArray *placemarks, NSError *error) {
-        
-        self.placemarks = placemarks;
-        self.tableView.scrollEnabled = YES;
-        
-        __weak typeof(self) weakSelf = self;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.tableView reloadData];
-        });
-    }];
+    [self geocodeForAddress:textField.text];
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField
+{
+    self.navigationItem.rightBarButtonItem.enabled = NO;
     
     return YES;
 }
-
 #pragma mark - UITableViewDataSource methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.placemarks.count;
+    NSInteger count = 0;
+    
+    if (self.placemarks) {
+        count = self.placemarks.count;
+    }
+    return count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -193,8 +197,13 @@
 
     [self.mapView setRegion:MKCoordinateRegionMake(placemark.location.coordinate, MKCoordinateSpanMake(0.02, 0.02)) animated:NO];
     
+    [self.mapView removeAnnotation:self.marker];
     self.marker = [[MKPlacemark alloc] initWithCoordinate:placemark.location.coordinate addressDictionary:nil];
     [self.mapView addAnnotation:self.marker];
+    
+    NSArray *lines = placemark.addressDictionary[ @"FormattedAddressLines"];
+    NSString *addressString = [lines componentsJoinedByString:@" "];
+    self.searchTextField.text = addressString;
     
     [self loadLocationInModelForPlace:placemark];
     
@@ -213,7 +222,7 @@
 {
     MKPinAnnotationView *pinAnnotation = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"annotation"];
     pinAnnotation.pinColor = MKPinAnnotationColorGreen;
-    pinAnnotation.animatesDrop = YES;
+    pinAnnotation.animatesDrop = NO;
     pinAnnotation.canShowCallout = NO;
     pinAnnotation.image = [UIImage imageNamed:@"annotation_pin"];
     [pinAnnotation setSelected:YES animated:YES];
@@ -222,6 +231,33 @@
 }
 
 #pragma mark - Custom methods
+
+- (void)geocodeForAddress:(NSString *)address
+{
+    __weak typeof(self) weakSelf = self;
+    
+    [self.geocoder geocodeAddressString:address completionHandler:^(NSArray *placemarks, NSError *error) {
+        
+        self.placemarks = placemarks;
+        self.tableView.scrollEnabled = YES;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.tableView reloadData];
+            if ([weakSelf.tableView numberOfRowsInSection:0]>0) {
+                [weakSelf.tableView scrollsToTop];
+                [UIView animateWithDuration:0.2 animations:^{
+                    self.messageLabel.alpha = 0;
+                }];
+            } else {
+                [weakSelf.tableView setContentOffset:CGPointMake(0, weakSelf.tableView.contentSize.height - 60) animated:YES];
+                [UIView animateWithDuration:0.2 animations:^{
+                    self.messageLabel.alpha = 1;
+                }];
+            }
+            
+        });
+    }];
+}
 
 - (void)loadLocationInModelForPlace:(CLPlacemark *)placemark
 {

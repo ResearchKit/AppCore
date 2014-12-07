@@ -13,6 +13,7 @@
 #import "UIFont+APCAppearance.h"
 #import "APCKeychainStore.h"
 #import "APCUserInfoConstants.h"
+#import "UIImage+APCHelper.h"
 
 @interface APCPasscodeViewController ()<APCPasscodeViewDelegate>
 
@@ -56,6 +57,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 }
 
@@ -68,7 +70,7 @@
     
     [self.logoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
     
-    [self.touchIdButton setBackgroundColor:[UIColor appPrimaryColor]];
+    [self.touchIdButton setBackgroundImage:[UIImage imageWithColor:[UIColor appPrimaryColor]] forState:UIControlStateNormal];
 }
 
 #pragma mark - APCPasscodeViewDelegate
@@ -78,7 +80,9 @@
     if (self.passcodeView.code.length > 0) {
         if ([self.passcodeView.code isEqualToString:[APCKeychainStore stringForKey:kAPCPasscodeKey]]) {
             //Authenticate
-            [self dismissViewControllerAnimated:YES completion:nil];
+            if ([self.delegate respondsToSelector:@selector(passcodeViewControllerDidSucceed:)]) {
+                [self.delegate passcodeViewControllerDidSucceed:self];
+            }
         } else {
             
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Wrong Passcode" message:@"Please enter again." preferredStyle:UIAlertControllerStyleAlert];
@@ -110,7 +114,9 @@
                                         
                                         if (success) {
                                             dispatch_async(dispatch_get_main_queue(), ^{
-                                                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                                                if ([weakSelf.delegate respondsToSelector:@selector(passcodeViewControllerDidSucceed:)]) {
+                                                    [weakSelf.delegate passcodeViewControllerDidSucceed:weakSelf];
+                                                }
                                             });
                                             
                                         } else {

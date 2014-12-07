@@ -52,6 +52,6 @@
 
 - (IBAction)noThanks:(id)sender
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:APCUserLogOutNotification object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:APCUserWithdrawStudyNotification object:self];
 }
 @end
