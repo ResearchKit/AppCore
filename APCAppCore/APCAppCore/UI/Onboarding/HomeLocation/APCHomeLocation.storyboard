@@ -31,11 +31,11 @@
                                 <rect key="frame" x="0.0" y="138" width="320" height="430"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="ziY-PU-5Ny">
-                                    <rect key="frame" x="0.0" y="66" width="320" height="60"/>
+                                    <rect key="frame" x="0.0" y="61" width="320" height="80"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dd2-JR-1tm">
-                                            <rect key="frame" x="13" y="8" width="293" height="44"/>
+                                            <rect key="frame" x="13" y="10" width="293" height="64"/>
                                             <state key="normal" title="Your address will be used only for Lorem Ipsum  and el intuit for more information">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
@@ -46,10 +46,10 @@
                                     </subviews>
                                     <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="Dd2-JR-1tm" secondAttribute="trailing" constant="14" id="2gz-PF-NZz"/>
-                                        <constraint firstItem="Dd2-JR-1tm" firstAttribute="top" secondItem="ziY-PU-5Ny" secondAttribute="top" constant="8" id="ARa-ux-3v6"/>
-                                        <constraint firstItem="Dd2-JR-1tm" firstAttribute="leading" secondItem="ziY-PU-5Ny" secondAttribute="leading" constant="13" id="Fwn-59-vdn"/>
-                                        <constraint firstAttribute="bottom" secondItem="Dd2-JR-1tm" secondAttribute="bottom" constant="8" id="euS-ka-bHO"/>
+                                        <constraint firstAttribute="bottom" secondItem="Dd2-JR-1tm" secondAttribute="bottom" constant="6" id="QGP-dS-VBU"/>
+                                        <constraint firstItem="Dd2-JR-1tm" firstAttribute="top" secondItem="ziY-PU-5Ny" secondAttribute="top" constant="10" id="Umx-gD-cSV"/>
+                                        <constraint firstItem="Dd2-JR-1tm" firstAttribute="leading" secondItem="ziY-PU-5Ny" secondAttribute="leading" constant="13" id="nPL-Lq-lqU"/>
+                                        <constraint firstAttribute="trailing" secondItem="Dd2-JR-1tm" secondAttribute="trailing" constant="14" id="vU1-xV-I6D"/>
                                     </constraints>
                                 </view>
                                 <prototypes>
