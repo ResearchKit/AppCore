@@ -24,6 +24,7 @@
     {
 		self.selector = selector;
 		self.previousMoment = nil;
+		self.beginningMoment = nil;
     }
     
     return self;
@@ -36,14 +37,12 @@
 
     if (self)
     {
-		self.selector = selector;
-		self.previousMoment = nil;
 		self.beginningMoment = selector.initialValue;
 
-		if ([beginning compare: self.beginningMoment] == NSOrderedDescending)	// "beginning" > initialValue
-		{
+		if ([selector matches: beginning])
 			self.beginningMoment = beginning;
-		}
+		else
+			self.beginningMoment = [selector nextMomentAfter: beginning];
     }
     
     return self;

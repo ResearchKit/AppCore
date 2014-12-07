@@ -12,7 +12,7 @@
 
 
 /** We may make this a parameter, at some point. */
-#define CONVERT_TO_LOCAL_TIME_ZONE_WHEN_EMITTING_ENUMERATED_DATES YES
+#define CONVERT_TO_LOCAL_TIME_ZONE_WHEN_EMITTING_ENUMERATED_DATES  NO
 
 
 static NSInteger    kMinuteIndex = 0;
@@ -119,8 +119,7 @@ static NSInteger    kYearIndex   = 4;
 									@(NSCalendarUnitCalendar),
 									];
 
-		NSDateComponents* beginComponents = [NSDateComponents components: calendarUnits
-												  inGregorianUTCFromDate: begin];
+		NSDateComponents *beginComponents = [NSDateComponents components: calendarUnits inGregorianLocalFromDate: begin];
 
 		_beginningMoment	= begin;
 		_endingMoment		= end;
@@ -142,7 +141,7 @@ static NSInteger    kYearIndex   = 4;
 		[realDayOfMonthSelector recomputeDaysBasedOnMonth: @(beginComponents.month)
 													 year: @(beginComponents.year)];
 
-		self.dayEnumerator   = [dayOfMonthSelector enumeratorBeginningAt: @(beginComponents.day)];
+		self.dayEnumerator = [dayOfMonthSelector enumeratorBeginningAt: @(beginComponents.day)];
 
 		
 		/*
@@ -374,7 +373,8 @@ static NSInteger    kYearIndex   = 4;
 
 - (NSDate*) componentsToDate
 {
-	NSDateComponents *components = [NSDateComponents componentsInGregorianUTC];
+	NSDateComponents *components = [NSDateComponents componentsInGregorianLocal];
+	
 	components.year     = [self.calendarComponents [kYearIndex]   integerValue];
     components.month    = [self.calendarComponents [kMonthIndex]  integerValue];
     components.day      = [self.calendarComponents [kDayIndex]    integerValue];

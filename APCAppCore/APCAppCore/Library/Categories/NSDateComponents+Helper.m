@@ -10,6 +10,7 @@
 
 static NSCalendar *_gregorianCalendar = nil;
 static NSTimeZone *_utcTimeZone = nil;
+static NSTimeZone *_localTimeZone = nil;
 
 
 @implementation NSDateComponents (Helper)
@@ -30,22 +31,46 @@ static NSTimeZone *_utcTimeZone = nil;
 	return _utcTimeZone;
 }
 
-+ (instancetype) componentsInGregorianUTC
++ (NSTimeZone *) localTimeZone
+{
+	if (_localTimeZone == nil)
+		_localTimeZone = [NSTimeZone localTimeZone];
+
+	return _localTimeZone;
+}
+
+
+
+
++ (instancetype) componentsInGregorianWithTimeZone: (NSTimeZone *) timeZone
 {
 	NSDateComponents *components = [self new];
 
-	components.timeZone = [self utcTimeZone];
+	components.timeZone = timeZone;
 	components.calendar = [self gregorianCalendar];
 
 	return components;
 }
 
-+ (instancetype) componentsInGregorianUTCWithMonth: (NSNumber *) month
++ (instancetype) componentsInGregorianUTC
+{
+	return [self componentsInGregorianWithTimeZone: self.utcTimeZone];
+}
+
++ (instancetype) componentsInGregorianLocal
+{
+	return [self componentsInGregorianWithTimeZone: self.localTimeZone];
+}
+
+
+
++ (instancetype) componentsInGregorianWithTimeZone: (NSTimeZone *) timeZone
+											 month: (NSNumber *) month
 											  year: (NSNumber *) year
 {
 	NSDateComponents *components = [self new];
 
-	components.timeZone = [self utcTimeZone];
+	components.timeZone = timeZone;
 	components.calendar = [self gregorianCalendar];
 	components.year		= year.integerValue;
 	components.month	= month.integerValue;
@@ -53,11 +78,29 @@ static NSTimeZone *_utcTimeZone = nil;
 	return components;
 }
 
++ (instancetype) componentsInGregorianUTCWithMonth: (NSNumber *) month
+											  year: (NSNumber *) year
+{
+	return [self componentsInGregorianWithTimeZone: self.utcTimeZone
+											 month: month
+											  year: year];
+}
+
++ (instancetype) componentsInGregorianLocalWithMonth: (NSNumber *) month
+												year: (NSNumber *) year
+{
+	return [self componentsInGregorianWithTimeZone: self.localTimeZone
+											 month: month
+											  year: year];
+}
+
+
+
 + (instancetype) components: (NSArray *) arrayOfNSCalendarUnits
-	 inGregorianUTCFromDate: (NSDate *) date
+	inGregorianWithTimeZone: (NSTimeZone *) timeZone
+				   fromDate: (NSDate *) date
 {
 	NSCalendar *calendar = [self gregorianCalendar];
-	NSTimeZone *timeZone = [self utcTimeZone];
 
 	NSDateComponents *allComponents = [calendar componentsInTimeZone: timeZone fromDate: date];
 
@@ -86,6 +129,23 @@ static NSTimeZone *_utcTimeZone = nil;
 
 	return desiredComponents;
 }
+
++ (instancetype) components: (NSArray *) arrayOfNSCalendarUnits
+	 inGregorianUTCFromDate: (NSDate *) date
+{
+	return [self components: arrayOfNSCalendarUnits
+	inGregorianWithTimeZone: self.utcTimeZone
+				   fromDate: date];
+}
+
++ (instancetype) components: (NSArray *) arrayOfNSCalendarUnits inGregorianLocalFromDate: (NSDate *) date
+{
+	return [self components: arrayOfNSCalendarUnits
+	inGregorianWithTimeZone: self.localTimeZone
+				   fromDate: date];
+}
+
+
 
 - (NSInteger) cronDayOfWeekForDay: (NSInteger) dayInCurrentMonthYearAndCalendar
 {
