@@ -92,8 +92,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    [self.diseaseLogoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
-    [self.researchInstituteImageView setImage:[UIImage imageNamed:@"logo_researchInstitute"]];
+    [self.researchInstituteImageView setImage:[UIImage imageNamed:@"logo_disease_researchInstitute"]];
 }
 
 - (void)setUpAppearance
