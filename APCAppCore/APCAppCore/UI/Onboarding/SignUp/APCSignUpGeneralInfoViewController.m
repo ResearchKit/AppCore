@@ -70,12 +70,6 @@
     [self.navigationItem setLeftBarButtonItem:backBarButton];
     
     self.nextBarButton.enabled = NO;
-    
-    //#if DEVELOPMENT
-    UIBarButtonItem *hiddenButton = [[UIBarButtonItem alloc] initWithTitle:@"   " style:UIBarButtonItemStylePlain target:self action:@selector(secretButton)];
-    
-    [self.navigationItem setRightBarButtonItems:@[self.nextBarButton, hiddenButton]];
-    //#endif
 }
 
 - (NSArray *)prepareContent {
