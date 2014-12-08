@@ -422,6 +422,8 @@ static CGFloat const kPickerCellHeight = 164.0f;
     [self.tableView insertRowsAtIndexPaths:@[self.pickerIndexPath]
                           withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView endUpdates];
+    
+    [self.tableView scrollToRowAtIndexPath:self.pickerIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (void)hidePickerCell
