@@ -1407,18 +1407,18 @@
         <scene sceneID="feY-9J-9za">
             <objects>
                 <tableViewController storyboardIdentifier="APCSignUpPermissionsViewController" id="gi8-ng-0fk" customClass="APCSignUpPermissionsViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="bQj-Om-9lG">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="195" sectionHeaderHeight="22" sectionFooterHeight="22" id="bQj-Om-9lG">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCPermissionsCell" rowHeight="165" id="vFr-f4-IcR" customClass="APCPermissionsCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCPermissionsCell" rowHeight="195" id="vFr-f4-IcR" customClass="APCPermissionsCell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vFr-f4-IcR" id="bw5-W3-q7w">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cma-w1-IDc">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="159"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="189"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Permissions Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T8y-cm-IGj">
                                                     <rect key="frame" x="8" y="13" width="304" height="25"/>
@@ -1429,17 +1429,18 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lorem ipsum dolor sit amet, etos et ya consectetur adip isicing elit, sed." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Akn-CY-9hP">
-                                                    <rect key="frame" x="8" y="46" width="304" height="49"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Akn-CY-9hP">
+                                                    <rect key="frame" x="8" y="44" width="304" height="79"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="49" id="ArM-kx-xZf"/>
+                                                        <constraint firstAttribute="height" constant="79" id="ArM-kx-xZf"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <string key="text">Using the motion co-processor allows the app to determine your activity, helping the study better understand how activity level may influence disease.</string>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                                                     <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.5568627451" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X94-Hr-vqz" customClass="APCPermissionButton">
-                                                    <rect key="frame" x="8" y="103" width="304" height="48"/>
+                                                    <rect key="frame" x="8" y="133" width="304" height="48"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="48" id="Wwv-Ra-XlR"/>
@@ -1456,7 +1457,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="X94-Hr-vqz" secondAttribute="trailing" constant="8" id="Unv-sm-eBv"/>
                                                 <constraint firstItem="Akn-CY-9hP" firstAttribute="leading" secondItem="cma-w1-IDc" secondAttribute="leading" constant="8" id="duT-Yz-lDY"/>
                                                 <constraint firstItem="X94-Hr-vqz" firstAttribute="leading" secondItem="cma-w1-IDc" secondAttribute="leading" constant="8" id="hMi-wE-7j7"/>
-                                                <constraint firstItem="Akn-CY-9hP" firstAttribute="top" secondItem="cma-w1-IDc" secondAttribute="top" constant="46" id="qvm-rA-qil"/>
+                                                <constraint firstItem="Akn-CY-9hP" firstAttribute="top" secondItem="cma-w1-IDc" secondAttribute="top" constant="44" id="qvm-rA-qil"/>
                                                 <constraint firstAttribute="trailing" secondItem="T8y-cm-IGj" secondAttribute="trailing" constant="8" id="tlg-0I-cGS"/>
                                                 <constraint firstItem="T8y-cm-IGj" firstAttribute="leading" secondItem="cma-w1-IDc" secondAttribute="leading" constant="8" id="y17-LF-5rR"/>
                                                 <constraint firstItem="T8y-cm-IGj" firstAttribute="top" secondItem="cma-w1-IDc" secondAttribute="top" constant="13" id="ygw-ra-hng"/>
@@ -1470,14 +1471,14 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wY7-uW-7a1">
-                                            <rect key="frame" x="0.0" y="96" width="320" height="1"/>
+                                            <rect key="frame" x="0.0" y="129" width="320" height="1"/>
                                             <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="ZSd-yB-e4C"/>
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ap2-xK-rfg">
-                                            <rect key="frame" x="0.0" y="159" width="320" height="1"/>
+                                            <rect key="frame" x="0.0" y="189" width="320" height="1"/>
                                             <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="xdg-io-4ys"/>
@@ -1491,8 +1492,8 @@
                                         <constraint firstAttribute="bottomMargin" secondItem="ap2-xK-rfg" secondAttribute="bottom" constant="-3" id="ThD-Nj-kdS"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="qTA-mX-Y1w" secondAttribute="trailing" constant="-8" id="UGK-Qp-D2C"/>
                                         <constraint firstItem="wY7-uW-7a1" firstAttribute="leading" secondItem="bw5-W3-q7w" secondAttribute="leadingMargin" constant="-8" id="VJD-u0-MXc"/>
-                                        <constraint firstItem="wY7-uW-7a1" firstAttribute="top" secondItem="bw5-W3-q7w" secondAttribute="topMargin" constant="88" id="Zmq-Gg-Cw7"/>
                                         <constraint firstItem="ap2-xK-rfg" firstAttribute="leading" secondItem="bw5-W3-q7w" secondAttribute="leadingMargin" constant="-8" id="bks-op-O3u"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="wY7-uW-7a1" secondAttribute="bottom" constant="57" id="hVf-Bx-CF7"/>
                                         <constraint firstItem="cma-w1-IDc" firstAttribute="top" secondItem="bw5-W3-q7w" secondAttribute="topMargin" constant="-8" id="hzQ-0A-MzK"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="ap2-xK-rfg" secondAttribute="trailing" constant="-8" id="is2-Sw-n4m"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="cma-w1-IDc" secondAttribute="trailing" constant="-8" id="s0y-bq-mr3"/>
