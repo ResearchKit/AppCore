@@ -54,14 +54,14 @@
     NSError *parseError;
     NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
     
-    NSString *termsString = @"";
+    NSString *detailsString = @"";
     
     if (!parseError) {
         
-        termsString = jsonDictionary[@"info"];
+        detailsString = jsonDictionary[@"details"];
     }
     
-    return termsString;
+    return detailsString;
 }
 
 #pragma mark - IBActions
