@@ -51,10 +51,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     
     self.navigationItem.title = NSLocalizedString(@"Activities", @"Activities");
     self.tableView.backgroundColor = [UIColor appSecondaryColor4];
-    
-    
-    UIBarButtonItem *toggleBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Tomorrow" style:UIBarButtonItemStylePlain target:self action:@selector(toggle:)];
-    self.navigationItem.leftBarButtonItem = toggleBarButtonItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated
