@@ -48,6 +48,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 {
     [self.userHandleTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.userHandleTextField setFont:[UIFont appRegularFontWithSize:17.0f]];
+    [self.userHandleTextField setTintColor:[UIColor appPrimaryColor]];
     
     APCUser * user = [self user];
     
@@ -55,7 +56,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     
     [self.passwordTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.passwordTextField setFont:[UIFont appMediumFontWithSize:17.0f]];
-    
+    [self.passwordTextField setTintColor:[UIColor appPrimaryColor]];
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"Forgot your Password?"];
     [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor appSecondaryColor3] range:NSMakeRange(0, 12)];

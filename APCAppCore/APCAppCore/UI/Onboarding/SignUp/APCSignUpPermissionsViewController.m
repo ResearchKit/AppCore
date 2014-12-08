@@ -18,7 +18,7 @@
 
 #import <CoreMotion/CoreMotion.h>
 
-static CGFloat const kTableViewRowHeight                 = 165.0f;
+static CGFloat const kTableViewRowHeight                 = 195.0f;
 
 @interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
 
@@ -117,7 +117,7 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeLocation;
                 item.caption = NSLocalizedString(@"Location Services", @"");
-                item.detailText = NSLocalizedString(@"Lorem ipsum dolor sit amet, etos et ya consectetur adip isicing elit, sed.", @"");
+                item.detailText = NSLocalizedString(@"Using your GPS will allow the app to accurately determine distances travelled. Your actual location shared will never be shared.", @"");
                 [items addObject:item];
             }
                 break;
@@ -126,8 +126,8 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
                 if ([CMMotionActivityManager isActivityAvailable]){
                     APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                     item.permissionType = kSignUpPermissionsTypeCoremotion;
-                    item.caption = NSLocalizedString(@"Core Motion", @"");
-                    item.detailText = NSLocalizedString(@"Lorem ipsum dolor sit amet, etos et ya consectetur adip isicing elit, sed.", @"");
+                    item.caption = NSLocalizedString(@"Motion Activity", @"");
+                    item.detailText = NSLocalizedString(@"Using the motion co-processor allows the app to determine your activity, helping the study better understand how activity level may influence disease.", @"");
                     [items addObject:item];
                 }
             }
@@ -307,6 +307,7 @@ static CGFloat const kTableViewRowHeight                 = 165.0f;
 - (void)reloadData
 {
     [self updatePermissions];
+
     [self.tableView reloadData];
     
 #if DEVELOPMENT
