@@ -96,7 +96,7 @@
                                 </connections>
                             </tableView>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="gSw-vI-zgU">
-                                <rect key="frame" x="0.0" y="203" width="320" height="365"/>
+                                <rect key="frame" x="0.0" y="218" width="320" height="350"/>
                                 <connections>
                                     <outlet property="delegate" destination="21d-vz-hUP" id="Ruv-Ib-gEW"/>
                                 </connections>
@@ -142,7 +142,7 @@
                             <constraint firstItem="y6v-Aq-K1y" firstAttribute="top" secondItem="Cgn-yG-oV1" secondAttribute="bottom" constant="14" id="QfK-et-HuW"/>
                             <constraint firstItem="GaP-DD-ePi" firstAttribute="top" secondItem="gSw-vI-zgU" secondAttribute="bottom" id="QgA-MX-gDV"/>
                             <constraint firstAttribute="trailingMargin" secondItem="y6v-Aq-K1y" secondAttribute="trailing" constant="-16" id="RFA-pR-F3P"/>
-                            <constraint firstItem="gSw-vI-zgU" firstAttribute="top" secondItem="Cgn-yG-oV1" secondAttribute="bottom" constant="139" id="SDO-c0-bmN"/>
+                            <constraint firstItem="gSw-vI-zgU" firstAttribute="top" secondItem="Cgn-yG-oV1" secondAttribute="bottom" constant="154" id="SDO-c0-bmN"/>
                             <constraint firstItem="y6v-Aq-K1y" firstAttribute="leading" secondItem="c0G-d2-Tbb" secondAttribute="leadingMargin" constant="24" id="WJE-iT-jll"/>
                             <constraint firstAttribute="trailingMargin" secondItem="gSw-vI-zgU" secondAttribute="trailing" constant="-16" id="ZEv-2S-5oC"/>
                             <constraint firstItem="GaP-DD-ePi" firstAttribute="top" secondItem="e0s-wc-gu7" secondAttribute="bottom" id="e4Q-WQ-DhB"/>

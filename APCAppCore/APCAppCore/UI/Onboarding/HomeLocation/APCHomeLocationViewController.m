@@ -73,8 +73,19 @@ static CGFloat const kTableFooterHeight = 80.0f;
 
 - (void)prepareContent
 {
-    NSString *prefix = NSLocalizedString(@"Your address will be used to estimate how much you travel each day as a measure of life activity. You address will not be shared with our servers or anyone else - tap here for", @"LocationInfoPrefix");
-    NSString *moreInfo = NSLocalizedString(@"more information.", @"LocationInfoSuffix");
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"LocationInfo" ofType:@"json"];
+    NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+    
+    NSError *parseError;
+    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
+    
+    NSString *prefix = @"";
+    NSString *moreInfo = @"";
+    
+    if (!parseError) {
+        prefix = jsonDictionary[@"info"];
+        moreInfo = jsonDictionary[@"link"];
+    }    
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ %@", prefix, moreInfo]];
     
