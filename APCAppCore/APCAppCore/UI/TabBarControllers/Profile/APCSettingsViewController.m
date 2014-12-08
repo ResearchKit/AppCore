@@ -73,7 +73,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             row.itemType = kAPCSettingsItemTypePasscode;
             [rowItems addObject:row];
         }
-        
+       /* Temporarily removing this row
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedString(@"Change Password", @"");
@@ -86,12 +86,13 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             row.itemType = kAPCSettingsItemTypePassword;
             [rowItems addObject:row];
         }
-        
+        */
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
         [items addObject:section];
     }
     
+    /* Temporarily removing this section
     {
         NSMutableArray *rowItems = [NSMutableArray new];
         
@@ -118,11 +119,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             row.itemType = kAPCSettingsItemTypeDevices;
             [rowItems addObject:row];
         }
-        
+     
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
         [items addObject:section];
     }
+    */
     
     return [NSArray arrayWithArray:items];
 }
