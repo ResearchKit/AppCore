@@ -97,28 +97,6 @@
                                             <constraint firstAttribute="height" constant="1" id="nsj-Mg-nDx"/>
                                         </constraints>
                                     </view>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9Ej-fF-Eyy">
-                                        <rect key="frame" x="78" y="28" width="38" height="38"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="38" id="19n-H4-vxT"/>
-                                            <constraint firstAttribute="height" constant="38" id="wlH-tl-SrM"/>
-                                        </constraints>
-                                    </imageView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rde-AL-xc8">
-                                        <rect key="frame" x="131" y="28" width="1" height="38"/>
-                                        <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="1" id="CAr-PT-KzZ"/>
-                                            <constraint firstAttribute="height" constant="38" id="iBm-9J-uaO"/>
-                                        </constraints>
-                                    </view>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2EN-Xb-Xbf">
-                                        <rect key="frame" x="144" y="28" width="95" height="38"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="95" id="4IJ-LU-J3k"/>
-                                            <constraint firstAttribute="height" constant="38" id="EPc-Q5-OZ1"/>
-                                        </constraints>
-                                    </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="January 1st - June 1st 2014" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="iT0-aA-VLs">
                                         <rect key="frame" x="38" y="100" width="245" height="18"/>
                                         <constraints>
@@ -137,24 +115,27 @@
                                         <color key="textColor" white="0.253" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2EN-Xb-Xbf">
+                                        <rect key="frame" x="84" y="22" width="152" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="6qZ-yY-nZJ"/>
+                                            <constraint firstAttribute="width" constant="152" id="IzR-Na-xfY"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="centerX" secondItem="9Ej-fF-Eyy" secondAttribute="centerX" constant="63" id="1ql-Ed-hUS"/>
                                     <constraint firstItem="lDJ-SH-lam" firstAttribute="leading" secondItem="GU1-92-eRt" secondAttribute="leading" constant="46" id="9XT-3W-a3a"/>
                                     <constraint firstAttribute="trailing" secondItem="iT0-aA-VLs" secondAttribute="trailing" constant="37" id="9ie-Un-fYa"/>
-                                    <constraint firstItem="2EN-Xb-Xbf" firstAttribute="top" secondItem="GU1-92-eRt" secondAttribute="top" constant="28" id="Ahf-hK-1kI"/>
                                     <constraint firstAttribute="trailing" secondItem="CGX-F0-36t" secondAttribute="trailing" id="GZz-fP-LDh"/>
                                     <constraint firstAttribute="bottom" secondItem="CGX-F0-36t" secondAttribute="bottom" id="Jmu-LB-EkA"/>
                                     <constraint firstItem="iT0-aA-VLs" firstAttribute="leading" secondItem="GU1-92-eRt" secondAttribute="leading" constant="38" id="Nhx-d1-sl8"/>
-                                    <constraint firstAttribute="centerX" secondItem="2EN-Xb-Xbf" secondAttribute="centerX" constant="-31.5" id="UeT-eg-GMW"/>
                                     <constraint firstAttribute="height" constant="132" id="W87-is-w93"/>
+                                    <constraint firstAttribute="centerX" secondItem="2EN-Xb-Xbf" secondAttribute="centerX" id="XF1-Jc-npu"/>
                                     <constraint firstItem="lDJ-SH-lam" firstAttribute="top" secondItem="GU1-92-eRt" secondAttribute="top" constant="70" id="Zzp-ak-Jva"/>
                                     <constraint firstAttribute="bottom" secondItem="iT0-aA-VLs" secondAttribute="bottom" constant="14" id="d6v-R5-E2d"/>
-                                    <constraint firstAttribute="centerX" secondItem="rde-AL-xc8" secondAttribute="centerX" constant="28.5" id="qZQ-T5-KWU"/>
-                                    <constraint firstItem="9Ej-fF-Eyy" firstAttribute="top" secondItem="GU1-92-eRt" secondAttribute="top" constant="28" id="tSQ-YD-Stg"/>
+                                    <constraint firstItem="2EN-Xb-Xbf" firstAttribute="top" secondItem="GU1-92-eRt" secondAttribute="top" constant="22" id="sYP-Fd-ktY"/>
                                     <constraint firstAttribute="trailing" secondItem="lDJ-SH-lam" secondAttribute="trailing" constant="46" id="tcd-Lk-Edt"/>
-                                    <constraint firstItem="rde-AL-xc8" firstAttribute="top" secondItem="GU1-92-eRt" secondAttribute="top" constant="28" id="yav-6F-Yn3"/>
                                     <constraint firstItem="CGX-F0-36t" firstAttribute="leading" secondItem="GU1-92-eRt" secondAttribute="leading" id="zFh-Qy-M8j"/>
                                 </constraints>
                             </view>
@@ -193,7 +174,6 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="dateRangeLabel" destination="iT0-aA-VLs" id="GhM-tE-mX9"/>
-                        <outlet property="diseaseLogoImageView" destination="9Ej-fF-Eyy" id="4eK-0y-tl3"/>
                         <outlet property="diseaseNameLabel" destination="lDJ-SH-lam" id="xk7-Rb-Leb"/>
                         <outlet property="headerView" destination="GU1-92-eRt" id="RP1-IZ-a5L"/>
                         <outlet property="joinButton" destination="JU2-ai-Tcq" id="Prl-cR-P7s"/>
