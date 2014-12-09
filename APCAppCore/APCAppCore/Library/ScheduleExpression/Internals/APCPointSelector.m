@@ -35,7 +35,7 @@
 		_defaultEnd = nil;
 		_isWildcard_private = NO;
 
-		switch (unitType)
+		switch (unitType) 
 		{
 			case kMinutes:
 				_defaultBegin = @0;
