@@ -17,6 +17,7 @@
 #import "APCSignInViewController.h"
 #import "APCUser.h"
 #import "UIAlertController+Helper.h"
+#import "APCDeviceHardware+APCHelper.h"
 
 static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
 
@@ -279,24 +280,41 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     return studyItemType;
 }
 
+- (void)handleOlderDevices
+{
+    UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Incompatible Device", @"") message:NSLocalizedString(@"The application is supported for iPhone 5S or newer.", @"Incompatible device error")];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 - (void)signInTapped:(id)sender
 {
-    [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignIn];
+    if ([APCDeviceHardware isiPhone5SOrNewer]) {
+        [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignIn];
+        
+        UIViewController *viewController = [[self onboarding] nextScene];
+        [self.navigationController pushViewController:viewController animated:YES];
+    } else {
+        [self handleOlderDevices];
+    }
     
-    UIViewController *viewController = [[self onboarding] nextScene];
-    [self.navigationController pushViewController:viewController animated:YES];
+    
 }
 
 - (void)signUpTapped:(id)sender
 {
-    if ([self user].consented) {
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Account already exists", @"") message:@"You have already signed up with an account.\n\nIf you wish to sign up with an an other account, please delete and re-install the app."];
-        [self presentViewController:alert animated:YES completion:nil];
-    } else {
-        [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignUp];
+    if ([APCDeviceHardware isiPhone5SOrNewer]) {
+        if ([self user].consented) {
+            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Account already exists", @"") message:@"You have already signed up with an account.\n\nIf you wish to sign up with a different account, please delete and re-install the app."];
+            [self presentViewController:alert animated:YES completion:nil];
+        } else {
+            [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignUp];
+            
+            UIViewController *viewController = [[self onboarding] nextScene];
+            [self.navigationController pushViewController:viewController animated:YES];
+        }
         
-        UIViewController *viewController = [[self onboarding] nextScene];
-        [self.navigationController pushViewController:viewController animated:YES];
+    } else {
+        [self handleOlderDevices];
     }
     
 }
