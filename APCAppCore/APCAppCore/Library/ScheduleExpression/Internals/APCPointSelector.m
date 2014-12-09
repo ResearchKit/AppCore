@@ -24,7 +24,7 @@
 
     if (self)
     {
-		_unitType = unitType;
+		_unitType = unitType; 
 
 		_begin = nil;
 		_end = nil;
