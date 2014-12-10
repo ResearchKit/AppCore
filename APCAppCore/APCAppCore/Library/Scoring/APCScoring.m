@@ -79,14 +79,14 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
 
 - (instancetype)initWithTask:(NSString *)taskId numberOfDays:(NSUInteger)numberOfDays valueKey:(NSString *)valueKey
 {
-    self = [self initWithTask:taskId numberOfDays:numberOfDays valueKey:valueKey dataKey:nil sortKey:nil];
+    self = [self initWithTask:taskId numberOfDays:numberOfDays valueKey:valueKey dataKey:nil sortKey:nil groupByDay:NO];
     
     return self;
 }
 
 - (instancetype)initWithTask:(NSString *)taskId numberOfDays:(NSUInteger)numberOfDays valueKey:(NSString *)valueKey dataKey:(NSString *)dataKey
 {
-    self = [self initWithTask:taskId numberOfDays:numberOfDays valueKey:valueKey dataKey:dataKey sortKey:nil];
+    self = [self initWithTask:taskId numberOfDays:numberOfDays valueKey:valueKey dataKey:dataKey sortKey:nil groupByDay:NO];
     
     return self;
 }
@@ -101,7 +101,24 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
     
     if (self) {
         [self sharedInit];
-        [self queryTaskId:taskId forDays:numberOfDays valueKey:valueKey dataKey:dataKey sortKey:sortKey];
+        [self queryTaskId:taskId forDays:numberOfDays valueKey:valueKey dataKey:dataKey sortKey:sortKey groupByDay:NO];
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithTask:(NSString *)taskId
+                numberOfDays:(NSUInteger)numberOfDays
+                    valueKey:(NSString *)valueKey
+                     dataKey:(NSString *)dataKey
+                     sortKey:(NSString *)sortKey
+                  groupByDay:(BOOL)groupByDay
+{
+    self = [super init];
+    
+    if (self) {
+        [self sharedInit];
+        [self queryTaskId:taskId forDays:numberOfDays valueKey:valueKey dataKey:dataKey sortKey:sortKey groupByDay:groupByDay];
     }
     
     return self;
@@ -147,6 +164,7 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
            valueKey:(NSString *)valueKey
             dataKey:(NSString *)dataKey
             sortKey:(NSString *)sortKey
+         groupByDay:(BOOL)groupByDay
 {
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -180,10 +198,13 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
         if ([task.completed boolValue]) {
             NSDictionary *taskResult = [self retrieveResultSummaryFromResults:task.results];
             
+            // remove the time from the startOn date
+            [dateFormatter setDateFormat:@"YYYY-MM-dd"];
+            
             if (taskResult) {
                 if (!dataKey) {
                     [self.dataPoints addObject:@{
-                                                 kDatasetDateKey: task.startOn,
+                                                 kDatasetDateKey: [dateFormatter stringFromDate:task.startOn],
                                                  kDatasetValueKey: [taskResult valueForKey:valueKey]?:@(0),
                                                  kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null]
                                                  }];
@@ -207,6 +228,10 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
         NSArray *sortedDataPoints = [self.dataPoints sortedArrayUsingDescriptors:@[sortBy]];
         
         self.dataPoints = [sortedDataPoints mutableCopy];
+    }
+    
+    if (groupByDay) {
+        [self groupDatasetByDay];
     }
 }
 
@@ -243,6 +268,39 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
     }
     
     return result;
+}
+
+- (void)groupDatasetByDay //WithStartDate:(NSDate *)startDate toEndDate:(NSDate *)endDate
+{
+    NSMutableArray *groupedDataset = [NSMutableArray array];
+    NSArray *days = [self.dataPoints valueForKeyPath:@"@distinctUnionOfObjects.datasetDateKey"];
+    
+    for (NSString *day in days) {
+        NSMutableDictionary *entry = [NSMutableDictionary dictionary];
+        [entry setObject:day forKey:kDatasetDateKey];
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", kDatasetDateKey, day];
+        NSArray *groupItems = [self.dataPoints filteredArrayUsingPredicate:predicate];
+        double itemSum = 0;
+        double dayAverage = 0;
+        
+        for (NSDictionary *item in groupItems) {
+            NSNumber *value = [item valueForKey:kDatasetValueKey];
+            
+            itemSum += [value doubleValue];
+        }
+        
+        if (groupItems.count != 0) {
+            dayAverage = itemSum / groupItems.count;
+        }
+        
+        [entry setObject:@(dayAverage) forKey:kDatasetValueKey];
+        
+        [groupedDataset addObject:entry];
+    }
+    
+    [self.dataPoints removeAllObjects];
+    [self.dataPoints addObjectsFromArray:groupedDataset];
 }
 
 #pragma mark HealthKit
