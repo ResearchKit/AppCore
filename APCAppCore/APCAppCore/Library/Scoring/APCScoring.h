@@ -29,6 +29,13 @@
                      dataKey:(NSString *)dataKey
                      sortKey:(NSString *)sortKey;
 
+- (instancetype)initWithTask:(NSString *)taskId
+                numberOfDays:(NSUInteger)numberOfDays
+                    valueKey:(NSString *)valueKey
+                     dataKey:(NSString *)dataKey
+                     sortKey:(NSString *)sortKey
+                  groupByDay:(BOOL)groupByDay;
+
 - (NSNumber *)minimumDataPoint;
 - (NSNumber *)maximumDataPoint;
 - (NSNumber *)averageDataPoint;
