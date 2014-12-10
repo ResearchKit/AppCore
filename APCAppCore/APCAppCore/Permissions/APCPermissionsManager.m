@@ -146,7 +146,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                 }
                 
                 [dataTypesToRead addObjectsFromArray: @[
-                                                       [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType],
                                                        [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex],
                                                        [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth]
                                                        ]];
