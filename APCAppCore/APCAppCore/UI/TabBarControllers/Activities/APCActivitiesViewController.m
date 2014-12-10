@@ -165,6 +165,18 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     headerLabel.text = self.sectionsArray[section];
     if (section != 0) {
         headerLabel.text = [headerLabel.text stringByAppendingString:@" - Incomplete Tasks"];
+    } else if (section == 0){
+        
+        NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:[NSDate date]];
+        NSInteger day = [components day];
+        NSInteger month = [components month];
+        
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        NSString *monthName = [[df monthSymbols] objectAtIndex:(month-1)];
+        
+        NSString *dateWithComponents = [NSString stringWithFormat:@", %@ %ld", monthName, (long)day];
+        
+        headerLabel.text = [headerLabel.text stringByAppendingString:dateWithComponents];
     }
     
     return headerView;
