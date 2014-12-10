@@ -717,6 +717,13 @@
 			name = "NSDateComponents+HelperTests";
 			sourceTree = "<group>";
 		};
+		360C769A1A38D85500B47C78 /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Logging;
+			sourceTree = "<group>";
+		};
 		36EE894F1A2FEFD700AEA9E6 /* ScheduleExpressionTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -850,6 +857,7 @@
 		F5F128BD1A2F78490015982C /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				360C769A1A38D85500B47C78 /* Logging */,
 				0830A3461A30FA8D00F7D0E4 /* Scoring */,
 				F5F128BE1A2F78490015982C /* AppearanceHelpers */,
 				F5F128C71A2F78490015982C /* AssertionHandler */,
