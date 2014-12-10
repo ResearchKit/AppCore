@@ -16,6 +16,7 @@
 - (void) handle
 {
     NSLog(@"APPCORE ERROR: %@", self.localizedDescription?:self);
+    APCErrorLog(@"%@",self.localizedDescription?:self);
 }
 
 - (NSString *) message {

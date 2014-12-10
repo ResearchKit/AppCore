@@ -79,6 +79,15 @@ FOUNDATION_EXPORT NSString *const kTertiaryYellowColorKey;
 FOUNDATION_EXPORT NSString *const kTertiaryPurpleColorKey;
 FOUNDATION_EXPORT NSString *const kTertiaryGrayColorKey;
 
+
+#define APCErrorLog(...) NSLog(@"@ %@:%@ %@:%@",@(__FILE__).lastPathComponent,@(__LINE__), @"  APC_ERROR", [NSString stringWithFormat:__VA_ARGS__])
+#define APCDebugLog(...) NSLog(@"@ %@:%@ %@:%@",@(__FILE__).lastPathComponent,@(__LINE__), @"  APC_DEBUG", [NSString stringWithFormat:__VA_ARGS__])
+
+#define APCEventLog(...) NSLog(@"@ %@:%@ %@:%@",@(__FILE__).lastPathComponent,@(__LINE__), @"  APC_EVENT", [NSString stringWithFormat:__VA_ARGS__])
+#define APCEventLogWithDictionary(eventName, eventDictionary) NSLog(@"%@: %@", eventName, eventDictionary);
+
+#define APCViewControllerLog()  NSLog(@"@ %@:%@ %@:%@",@(__FILE__).lastPathComponent,@(__LINE__), @"  APC_DEBUG", NSStringFromClass([self class]))
+
 @interface APCConstants : NSObject
 
 @end

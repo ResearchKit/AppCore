@@ -748,6 +748,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		F58FF4371A39022D00863F48 /* Logger */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Logger;
+			sourceTree = "<group>";
+		};
 		F5F128821A2F78490015982C /* APCAppCore */ = {
 			isa = PBXGroup;
 			children = (
@@ -850,6 +857,7 @@
 		F5F128BD1A2F78490015982C /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				F58FF4371A39022D00863F48 /* Logger */,
 				0830A3461A30FA8D00F7D0E4 /* Scoring */,
 				F5F128BE1A2F78490015982C /* AppearanceHelpers */,
 				F5F128C71A2F78490015982C /* AssertionHandler */,
