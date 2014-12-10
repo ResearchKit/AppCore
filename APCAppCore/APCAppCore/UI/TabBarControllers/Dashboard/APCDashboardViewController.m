@@ -107,6 +107,7 @@
             graphCell.graphView.panGestureRecognizer.delegate = self;
             graphCell.graphView.titleLabel.font = [UIFont appRegularFontWithSize:19.0f];
             graphCell.graphView.subTitleLabel.font = [UIFont appRegularFontWithSize:16.0f];
+            graphCell.graphView.axisTitleFont = [UIFont appRegularFontWithSize:14.0f];
             
             graphCell.tintColor = graphItem.tintColor;
             graphCell.delegate = self;
