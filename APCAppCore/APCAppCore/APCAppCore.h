@@ -140,6 +140,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCKeychainStore.h>
 #import <APCAppCore/APCPresentAnimator.h>
 #import <APCAppCore/APCScoring.h>
+#import <APCAppCore/APCDeviceHardware.h>
 
 /* -------------------------
  Categories
@@ -158,6 +159,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/SBBSchedule+APCAdditions.h>
 #import <APCAppCore/UIView+Helper.h>
 #import <APCAppCore/NSDictionary+APCAdditions.h>
+#import <APCAppCore/APCDeviceHardware+APCHelper.h>
 
 /* -------------------------
  Appearance
