@@ -13,6 +13,8 @@ static NSDateFormatter *dateFormatter = nil;
 static NSString *const kDatasetDateKey  = @"datasetDateKey";
 static NSString *const kDatasetValueKey = @"datasetValueKey";
 static NSString *const kDatasetSortKey = @"datasetSortKey";
+static NSString *const kDatasetValueKindKey = @"datasetValueKindKey";
+static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
 
 @interface APCScoring()
 
@@ -316,10 +318,10 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
     NSDate *startDate = [[NSCalendar currentCalendar] dateBySettingHour:0
                                                                  minute:0
                                                                  second:0
-                                                                 ofDate:[self dateForSpan:days]
+                                                                 ofDate:[self dateForSpan:days + 1]
                                                                 options:0];
     
-    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:[NSDate date] options:HKQueryOptionStrictStartDate];
+    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:[NSDate date] options:HKQueryOptionStrictEndDate];
     
     BOOL isDecreteQuantity = ([quantityType aggregationStyle] == HKQuantityAggregationStyleDiscrete);
     
@@ -358,17 +360,16 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
                                                quantity = result.sumQuantity;
                                            }
                                            
-                                           if (quantity) {
-                                               NSDate *date = result.startDate;
-                                               double value = [quantity doubleValueForUnit:unit];
-                                               
-                                               NSDictionary *dataPoint = @{
-                                                                           kDatasetDateKey: [NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle],
-                                                                           kDatasetValueKey: [NSNumber numberWithDouble:value]
-                                                                           };
-                                               
-                                               [queryDataset addObject:dataPoint];
-                                           }
+                                           NSDate *date = result.startDate;
+                                           double value = [quantity doubleValueForUnit:unit];
+                                           
+                                           NSDictionary *dataPoint = @{
+                                                                       kDatasetDateKey: date,
+                                                                       kDatasetValueKey: [NSNumber numberWithDouble:value],
+                                                                       kDatasetValueNoDataKey: (isDecreteQuantity) ? @(YES) : @(NO)
+                                                                       };
+                                           
+                                           [queryDataset addObject:dataPoint];
                                        }];
             
             [self dataIsAvailableFromHealthKit:queryDataset];
@@ -494,6 +495,17 @@ static NSString *const kDatasetSortKey = @"datasetSortKey";
         value = [[correlatedPoint valueForKey:kDatasetValueKey] doubleValue];
     }
     return value;
+}
+
+- (NSString *)lineGraph:(APCLineGraphView *)graphView titleForXAxisAtIndex:(NSInteger)pointIndex
+{
+    NSDate *titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
+    
+    [dateFormatter setDateFormat:@"MMM d"];
+    
+    NSString *xAxisTitle = [dateFormatter stringFromDate:titleDate];
+                            
+    return xAxisTitle;
 }
 
 
