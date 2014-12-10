@@ -21,6 +21,17 @@
 		36A9BE231A2FF2B200B14ADD /* APCScheduleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128FE1A2F78490015982C /* APCScheduleParser.m */; };
 		36A9BE241A2FF2B200B14ADD /* APCTimeSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129001A2F78490015982C /* APCTimeSelector.m */; };
 		36A9BE251A2FF2B200B14ADD /* APCTimeSelectorEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129021A2F78490015982C /* APCTimeSelectorEnumerator.m */; };
+		36B1AAE31A38DDFB00CE7DB5 /* APCLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 36C8B3E01A38D93D0051096B /* APCLog.m */; };
+		36B1AAE41A38DE7200CE7DB5 /* libFlurry_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3E81A38D9C80051096B /* libFlurry_5.4.0.a */; };
+		36B1AAE51A38DEA800CE7DB5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3EB1A38D9FF0051096B /* Security.framework */; };
+		36B1AAE61A38DEAF00CE7DB5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */; };
+		36C8B3E11A38D93D0051096B /* APCLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 36C8B3DF1A38D93D0051096B /* APCLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		36C8B3E21A38D93D0051096B /* APCLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 36C8B3E01A38D93D0051096B /* APCLog.m */; };
+		36C8B3E51A38D95A0051096B /* APCLogTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36C8B3E41A38D95A0051096B /* APCLogTests.m */; };
+		36C8B3E91A38D9C80051096B /* Flurry.h in Headers */ = {isa = PBXBuildFile; fileRef = 36C8B3E71A38D9C80051096B /* Flurry.h */; };
+		36C8B3EA1A38D9C80051096B /* libFlurry_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3E81A38D9C80051096B /* libFlurry_5.4.0.a */; };
+		36C8B3EC1A38D9FF0051096B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3EB1A38D9FF0051096B /* Security.framework */; };
+		36C8B3EE1A38DA4C0051096B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */; };
 		36E06F1C1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E06F1B1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m */; };
 		5B04329F1A318AA2000DC9ED /* APCSignInTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B04329D1A318AA2000DC9ED /* APCSignInTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B0432A01A318AA2000DC9ED /* APCSignInTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B04329E1A318AA2000DC9ED /* APCSignInTask.m */; };
@@ -349,6 +360,13 @@
 		360C63CA1A339700002EC86C /* NSDateComponents+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateComponents+Helper.h"; sourceTree = "<group>"; };
 		360C63CB1A339700002EC86C /* NSDateComponents+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateComponents+Helper.m"; sourceTree = "<group>"; };
 		360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateComponentsHelperTests.m; sourceTree = "<group>"; };
+		36C8B3DF1A38D93D0051096B /* APCLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCLog.h; sourceTree = "<group>"; };
+		36C8B3E01A38D93D0051096B /* APCLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLog.m; sourceTree = "<group>"; };
+		36C8B3E41A38D95A0051096B /* APCLogTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLogTests.m; sourceTree = "<group>"; };
+		36C8B3E71A38D9C80051096B /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
+		36C8B3E81A38D9C80051096B /* libFlurry_5.4.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurry_5.4.0.a; sourceTree = "<group>"; };
+		36C8B3EB1A38D9FF0051096B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		36E06F1B1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionRealLifeTests.m; sourceTree = "<group>"; };
 		5B04329D1A318AA2000DC9ED /* APCSignInTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignInTask.h; sourceTree = "<group>"; };
 		5B04329E1A318AA2000DC9ED /* APCSignInTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignInTask.m; sourceTree = "<group>"; };
@@ -687,6 +705,9 @@
 				F5F12B271A2F86350015982C /* BridgeSDK.framework in Frameworks */,
 				F5F12B251A2F86280015982C /* HealthKit.framework in Frameworks */,
 				F5F12B231A2F861F0015982C /* CoreLocation.framework in Frameworks */,
+				36C8B3EC1A38D9FF0051096B /* Security.framework in Frameworks */,
+				36C8B3EE1A38DA4C0051096B /* SystemConfiguration.framework in Frameworks */,
+				36C8B3EA1A38D9C80051096B /* libFlurry_5.4.0.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -694,6 +715,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36B1AAE41A38DE7200CE7DB5 /* libFlurry_5.4.0.a in Frameworks */,
+				36B1AAE51A38DEA800CE7DB5 /* Security.framework in Frameworks */,
+				36B1AAE61A38DEAF00CE7DB5 /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -717,14 +741,35 @@
 			name = "NSDateComponents+HelperTests";
 			sourceTree = "<group>";
 		};
-		360C769A1A38D85500B47C78 /* Logging */ = {
+		36C8B3DE1A38D93D0051096B /* Logging and Analytics */ = {
 			isa = PBXGroup;
 			children = (
+				36C8B3DF1A38D93D0051096B /* APCLog.h */,
+				36C8B3E01A38D93D0051096B /* APCLog.m */,
+				36C8B3E61A38D9C80051096B /* Flurry */,
 			);
-			name = Logging;
+			name = "Logging and Analytics";
+			path = Logging;
 			sourceTree = "<group>";
 		};
-		36EE894F1A2FEFD700AEA9E6 /* ScheduleExpressionTests */ = {
+		36C8B3E31A38D94F0051096B /* APCLogTests */ = {
+			isa = PBXGroup;
+			children = (
+				36C8B3E41A38D95A0051096B /* APCLogTests.m */,
+			);
+			name = APCLogTests;
+			sourceTree = "<group>";
+		};
+		36C8B3E61A38D9C80051096B /* Flurry */ = {
+			isa = PBXGroup;
+			children = (
+				36C8B3E71A38D9C80051096B /* Flurry.h */,
+				36C8B3E81A38D9C80051096B /* libFlurry_5.4.0.a */,
+			);
+			path = Flurry;
+			sourceTree = "<group>";
+		};
+		36EE894F1A2FEFD700AEA9E6 /* APCScheduleExpressionTests */ = {
 			isa = PBXGroup;
 			children = (
 				F5F129DF1A2F78490015982C /* APCScheduleExpressionEnumeratorTests.m */,
@@ -733,7 +778,7 @@
 				F5F129DC1A2F78490015982C /* APCScheduleExpressionPointSelectorTests.m */,
 				36E06F1B1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m */,
 			);
-			name = ScheduleExpressionTests;
+			name = APCScheduleExpressionTests;
 			sourceTree = "<group>";
 		};
 		F5179B1F19D09128001DCCB7 = {
@@ -857,13 +902,13 @@
 		F5F128BD1A2F78490015982C /* Library */ = {
 			isa = PBXGroup;
 			children = (
-				360C769A1A38D85500B47C78 /* Logging */,
-				0830A3461A30FA8D00F7D0E4 /* Scoring */,
 				F5F128BE1A2F78490015982C /* AppearanceHelpers */,
 				F5F128C71A2F78490015982C /* AssertionHandler */,
 				F5F128CA1A2F78490015982C /* Categories */,
+				36C8B3DE1A38D93D0051096B /* Logging and Analytics */,
 				F5F128E81A2F78490015982C /* Objects */,
 				F5F128F11A2F78490015982C /* ScheduleExpression */,
+				0830A3461A30FA8D00F7D0E4 /* Scoring */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -1398,9 +1443,10 @@
 		F5F129D91A2F78490015982C /* APCAppCoreTests */ = {
 			isa = PBXGroup;
 			children = (
-				360C63CF1A33971B002EC86C /* NSDateComponents+HelperTests */,
-				36EE894F1A2FEFD700AEA9E6 /* ScheduleExpressionTests */,
+				36C8B3E31A38D94F0051096B /* APCLogTests */,
+				36EE894F1A2FEFD700AEA9E6 /* APCScheduleExpressionTests */,
 				F5F129E01A2F78490015982C /* Info.plist */,
+				360C63CF1A33971B002EC86C /* NSDateComponents+HelperTests */,
 			);
 			path = APCAppCoreTests;
 			sourceTree = "<group>";
@@ -1408,6 +1454,8 @@
 		F5F12B211A2F85FF0015982C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */,
+				36C8B3EB1A38D9FF0051096B /* Security.framework */,
 				F5F12B2E1A2F86600015982C /* libbz2.dylib */,
 				F5F12B2C1A2F86550015982C /* libarchive.dylib */,
 				F5F12B2A1A2F864B0015982C /* libz.dylib */,
@@ -1446,6 +1494,7 @@
 				F5F12ADA1A2F78490015982C /* APCPickerTableViewCell.h in Headers */,
 				F5F12B041A2F78490015982C /* APCPasscodeViewController.h in Headers */,
 				F5F12A181A2F78490015982C /* UIColor+APCAppearance.h in Headers */,
+				36C8B3E11A38D93D0051096B /* APCLog.h in Headers */,
 				F5F12A791A2F78490015982C /* APCAxisView.h in Headers */,
 				F5F12A2E1A2F78490015982C /* NSString+Helper.h in Headers */,
 				F5F12A661A2F78490015982C /* APCPermissionsManager.h in Headers */,
@@ -1488,6 +1537,7 @@
 				F5F12B001A2F78490015982C /* APCSimpleTaskSummaryViewController.h in Headers */,
 				F5F12A931A2F78490015982C /* APCStudyDetailsViewController.h in Headers */,
 				F5F12AEC1A2F78490015982C /* APCDashboardMessageTableViewCell.h in Headers */,
+				36C8B3E91A38D9C80051096B /* Flurry.h in Headers */,
 				F5F12A731A2F78490015982C /* APCConfirmationView.h in Headers */,
 				F5F12ACA1A2F78490015982C /* APCProfileViewController.h in Headers */,
 				F5F12AE61A2F78490015982C /* APCDashboardBadgesTableViewCell.h in Headers */,
@@ -1769,6 +1819,7 @@
 				F5F12A461A2F78490015982C /* APCScheduleExpression.m in Sources */,
 				F5F12A991A2F78490015982C /* APCChangeEmailViewController.m in Sources */,
 				F5F12AA71A2F78490015982C /* APCEligibleViewController.m in Sources */,
+				36C8B3E21A38D93D0051096B /* APCLog.m in Sources */,
 				F5F129F31A2F78490015982C /* APCModel.xcdatamodeld in Sources */,
 				F5F129E51A2F78490015982C /* APCDataMonitor.m in Sources */,
 				F5F129E91A2F78490015982C /* APCDataSubstrate+HealthKit.m in Sources */,
@@ -1856,8 +1907,10 @@
 				36A9BE221A2FF2B200B14ADD /* APCScheduleEnumerator.m in Sources */,
 				36A9BE201A2FF2B200B14ADD /* APCListSelector.m in Sources */,
 				36A9BE251A2FF2B200B14ADD /* APCTimeSelectorEnumerator.m in Sources */,
+				36B1AAE31A38DDFB00CE7DB5 /* APCLog.m in Sources */,
 				36A9BE241A2FF2B200B14ADD /* APCTimeSelector.m in Sources */,
 				36A9BE1E1A2FF2B200B14ADD /* APCScheduleExpression.m in Sources */,
+				36C8B3E51A38D95A0051096B /* APCLogTests.m in Sources */,
 				F5F12B151A2F78870015982C /* APCScheduleExpressionListSelectorTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1966,6 +2019,10 @@
 				INFOPLIST_FILE = "$(SRCROOT)/APCAppCore/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -1991,6 +2048,10 @@
 				INFOPLIST_FILE = "$(SRCROOT)/APCAppCore/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -2013,6 +2074,10 @@
 				);
 				INFOPLIST_FILE = APCAppCoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
+				);
 				PRODUCT_NAME = APCAppCoreTests;
 			};
 			name = Debug;
@@ -2026,6 +2091,10 @@
 				);
 				INFOPLIST_FILE = APCAppCoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
+				);
 				PRODUCT_NAME = APCAppCoreTests;
 			};
 			name = Release;
@@ -2095,6 +2164,10 @@
 				INFOPLIST_FILE = "$(SRCROOT)/APCAppCore/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -2117,6 +2190,10 @@
 				);
 				INFOPLIST_FILE = APCAppCoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
+				);
 				PRODUCT_NAME = APCAppCoreTests;
 			};
 			name = Development;

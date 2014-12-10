@@ -56,6 +56,9 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self showAppropriateVC];
     
     [self.dataMonitor appFinishedLaunching];
+
+	// Start logging.  Also starts connection to logging server, if possible.
+	[APCLog start];
     
     return YES;
 }
