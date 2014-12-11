@@ -12,6 +12,7 @@
 
 static NSDateFormatter *dateFormatter = nil;
 
+
 /**
  Apple says they use these formatting codes:
  http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns
@@ -19,14 +20,99 @@ static NSDateFormatter *dateFormatter = nil;
 static NSString *LOG_DATE_FORMAT = @"yyyy-MM-dd HH:mm:ss.SSS ZZZZ";
 
 /**
- TODO:  Remove this comment.  This is just to discuss with Ed and Dhanush.
-
- From Ron's personal signup key for application "Test"
+ This is hard-coded to one of the developers' test accounts,
+ and an application named "Test".  We'll fix that shortly.
  */
 static NSString *FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";
 
 
 @implementation APCLog
+
+
+// ---------------------------------------------------------
+#pragma mark - Macro:  converting varArgs into a string
+// ---------------------------------------------------------
+
+/**
+ This macro converts a bunch of "..." arguments into an NSString.
+
+ Note that this macro requires ARC.  (To use it without ARC,
+ edit the macro to call "autorelease" on formattedMessage before
+ returning it.)
+
+
+ To use it: 
+ 
+ First, create a method that ENDS with a "...", like this:
+ 
+		- (void) printMyStuff: (NSString *) messageFormat, ...
+		{
+		}
+ 
+ Inside that method, call this macro, passing it the string
+ you want to use as a formatting string.  Using the above
+ example, it might be:
+ 
+		- (void) printMyStuff: (NSString *) messageFormat, ...
+		{
+			NSString extractedString = stringFromVariadicArgumentsAndFormat(messageFormat);
+ 
+			//
+			// now use the extractedString.  For example:
+			//
+			NSLog (@"That string was: %@", extractedString);
+		}
+
+ Behind the scenes, this macro extracts the parameters from
+ that "...", takes your formatting string, and passes them
+ all to +[NSString stringWithFormat], giving you a normally-
+ formatted string as a result.
+ 
+ This is identical to typing the following mess into the
+ same method:
+ 
+	va_list arguments;
+	va_start (arguments, format);
+	NSString *formattedMessage = [[NSString alloc] initWithFormat: format
+													    arguments: arguments];
+	va_end (arguments);
+ 
+ ...and then using the string "formattedMessage" somewhere.
+ 
+ If you're interested:  this macro "returns" a value by wrapping
+ the whole thing in a ({ ... }) and them simply putting the value
+ on a line by itself at the end.
+ 
+ References:
+
+ -	Extracting the variadic arguments (the "..." parameter) into an array we pass to NSString:
+	http://stackoverflow.com/questions/1420421/how-to-pass-on-a-variable-number-of-arguments-to-nsstrings-stringwithformat
+
+ -	"Returning" a value from a macro:
+	http://stackoverflow.com/questions/2679182/have-macro-return-a-value
+
+ -	More ways to get to the variadic arguments arguments:
+	https://developer.apple.com/library/mac/qa/qa1405/_index.html
+ 
+ @author Ron
+ @date December 10, 2014
+ */
+#define NSStringFromVariadicArgumentsAndFormat(formatString)				\
+	({																		\
+		NSString *formattedMessage = nil;									\
+		va_list arguments;													\
+		va_start (arguments, formatString);									\
+		formattedMessage = [[NSString alloc] initWithFormat: formatString	\
+												  arguments: arguments];	\
+		va_end (arguments);													\
+		formattedMessage;													\
+	})
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Setup
+// ---------------------------------------------------------
 
 + (void) start
 {
@@ -42,66 +128,27 @@ static NSString *FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";
 	}
 }
 
-//	/**
-//	 In progress:  learning how to convert the "..." into
-//	 an NSString in a portable way.
-//	 */
-//	#define VARARGS_INTO_FORMATTING_STRING( nameOfFormattingStringVariable )							\
-//		va_list dotDotDotArguments;																		\
-//		va_start( dotDotDotArguments, nameOfFormattingStringVariable );									\
-//		NSString *formattedMessage = [[NSString alloc] initWithFormat: nameOfFormattingStringVariable	\
-//															arguments: dotDotDotArguments];				\
-//		va_end( dotDotDotArguments );
 
+
+// ---------------------------------------------------------
+#pragma mark - Logging Methods
+// ---------------------------------------------------------
 
 + (void) log: (NSString *) format, ...
 {
-	/*
-	 ----- extracting the "..." arguments -----
-
-	 Extract the variadic arguments (the "..." parameter)
-	 into an array we can then pass to NSString.  From:
-	 http://stackoverflow.com/questions/1420421/how-to-pass-on-a-variable-number-of-arguments-to-nsstrings-stringwithformat
-
-	 More ways to get to those arguments:
-	 https://developer.apple.com/library/mac/qa/qa1405/_index.html
-	 */
-	va_list arguments;
-	va_start (arguments, format);
-	NSString *formattedMessage = [[NSString alloc] initWithFormat: format
-														arguments: arguments];
-	va_end (arguments);
-	// ----- end extraction -----
-
-
 	NSDate *now = [NSDate date];
 	NSString *dateString = [dateFormatter stringFromDate: now];
-	NSString *output = [NSString stringWithFormat: @"%@: %@", dateString, formattedMessage];
+	NSString *output = [NSString stringWithFormat: @"%@: %@", dateString, NSStringFromVariadicArgumentsAndFormat (format)];
 	NSLog (@"%@", output);
 }
 
 + (void) logException: (NSException *) exception
 			   format: (NSString *) messageOrFormattingString, ...
 {
-	NSString *formattedMessage = nil;
-
-	/* ----- extracting the "..." arguments -----
-
-	 I haven't yet figured out how to wrap this in a function
-	 or macro, since it contains macros that have to be expanded
-	 in the same method where the "..." appears.  (I think.)
-	 */
-	{
-		va_list arguments;
-		va_start (arguments, messageOrFormattingString);
-		formattedMessage = [[NSString alloc] initWithFormat: messageOrFormattingString
-												  arguments: arguments];
-		va_end (arguments);
-	}
-	// ----- end extraction -----
-
-
-	[self log: @"EXCEPTION: %@ Exception text: %@  Stack trace:\n%@", formattedMessage, exception, exception.callStackSymbols];
+	[self log: @"EXCEPTION: %@ Exception text: %@  Stack trace:\n%@",
+	 NSStringFromVariadicArgumentsAndFormat (messageOrFormattingString),
+	 exception,
+	 exception.callStackSymbols];
 }
 
 + (void) logException: (NSException *) exception
@@ -109,4 +156,26 @@ static NSString *FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";
 	[self log: @"EXCEPTION: [%@]. Stack trace:\n%@", exception, exception.callStackSymbols];
 }
 
++ (void) file: (NSString *) fileName
+		 line: (NSInteger) lineNumber
+	   method: (NSString *) classAndMethodName
+	   format: (NSString *) messageFormat, ...
+{
+	NSLog (@"%@ [%@:%d] %@ %@",
+		   [dateFormatter stringFromDate: [NSDate date]],
+		   fileName,
+		   (int) lineNumber,
+		   classAndMethodName,
+		   NSStringFromVariadicArgumentsAndFormat (messageFormat));
+}
+
 @end
+
+
+
+
+
+
+
+
+

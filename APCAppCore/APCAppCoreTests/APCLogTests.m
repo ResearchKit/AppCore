@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import <APCAppCore/APCLog.h>
+#import "APCLog.h"
 
 @interface APCLogTests : XCTestCase
 
@@ -75,4 +75,49 @@
 	@throw testException;
 }
 
+- (void) testMacros
+{
+	//
+	// Objective-C logging
+	//
+
+	[APCLog log: @"generic message"];
+
+	[APCLog file: @(__FILE__).lastPathComponent
+			line: (NSInteger) __LINE__
+		  method: @(__PRETTY_FUNCTION__)
+		  format: @"message with manual file and line"];
+
+
+	//
+	// Objective-C logging + macro-based __FILE__, __LINE__,
+	// and __PRETTY_FUNCTION__
+	//
+
+	[APCLogF format: @"message with magic file and line"];
+
+	[APCLogF format: @"message with magic file, line, and parameters: [%@], [%d]", @"my name", 47];
+
+
+	//
+	// from Dhanush, modified by Ron:  standard-looking
+	// logging methods/macros
+	//
+
+	APCLogError (@"The error message is: %@, age %@", @"Ron", @47);
+
+	APCLogDebug (@"The debug message is: %@, age %@", @"Ron", @47);
+
+	APCLogEventWithData (@"RonEventName", (@{ @"eventName": @"truth", @"eventId": @12}) );
+
+	APCLogMethod();
+
+	APCLogViewController();
+}
+
 @end
+
+
+
+
+
