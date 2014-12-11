@@ -497,16 +497,24 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     return value;
 }
 
-- (NSString *)lineGraph:(APCLineGraphView *)graphView titleForXAxisAtIndex:(NSInteger)pointIndex
-{
-    NSDate *titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
-    
-    [dateFormatter setDateFormat:@"MMM d"];
-    
-    NSString *xAxisTitle = [dateFormatter stringFromDate:titleDate];
-                            
-    return xAxisTitle;
-}
+//- (NSString *)lineGraph:(APCLineGraphView *)graphView titleForXAxisAtIndex:(NSInteger)pointIndex
+//{
+//    id titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
+//    NSDate *xaxisDate = nil;
+//    
+//    if ([titleDate isKindOfClass:[NSString class]]) {
+//        [dateFormatter setDateFormat:@"YYYY-MM-dd"];
+//        xaxisDate = [dateFormatter dateFromString:titleDate];
+//    } else {
+//        xaxisDate = (NSDate *)titleDate;
+//    }
+//    
+//    [dateFormatter setDateFormat:@"MMM d"];
+//    
+//    NSString *xAxisTitle = [dateFormatter stringFromDate:xaxisDate];
+//                            
+//    return xAxisTitle;
+//}
 
 
 @end
