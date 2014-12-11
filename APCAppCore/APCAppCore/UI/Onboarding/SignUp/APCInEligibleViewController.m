@@ -12,6 +12,7 @@
 #import "APCShareViewController.h"
 #import "NSBundle+Helper.h"
 #import "APCAppDelegate.h"
+#import "APCAppCore.h"
 
 @interface APCInEligibleViewController ()
 
@@ -27,6 +28,12 @@
     [self setupNavAppearance];
     
     [self.logoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    APCLogViewController();
 }
 
 - (void)didReceiveMemoryWarning {

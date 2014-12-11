@@ -40,6 +40,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     [super viewDidAppear:animated];
     
     [self.userHandleTextField becomeFirstResponder];
+    APCLogViewController();
 }
 
 #pragma mark - Appearance

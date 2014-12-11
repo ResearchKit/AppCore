@@ -11,6 +11,7 @@
 #import "APCUserInfoConstants.h"
 #import "NSString+Helper.h"
 #import "UIAlertController+Helper.h"
+#import "APCAppCore.h"
 
 @interface APCChangeEmailViewController ()
 
@@ -29,6 +30,7 @@
 {
     [super viewDidAppear:animated];
     [self.emailTextField becomeFirstResponder];
+    APCLogViewController();
 }
 #pragma mark - Appearance
 

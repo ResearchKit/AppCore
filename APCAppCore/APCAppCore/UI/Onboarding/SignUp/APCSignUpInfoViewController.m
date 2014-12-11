@@ -13,6 +13,7 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "APCAppDelegate.h"
+#import "APCAppCore.h"
 
 static CGFloat const kHeaderHeight = 127.0f;
 
@@ -59,6 +60,7 @@ static CGFloat const kHeaderHeight = 127.0f;
         
         self.tableView.tableHeaderView = self.tableView.tableHeaderView;
     }
+    APCLogViewController();
 }
 
 #pragma mark -

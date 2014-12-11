@@ -8,6 +8,7 @@
 #import "APCStudyDetailsViewController.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "APCAppCore.h"
 
 @interface APCStudyDetailsViewController () <UIWebViewDelegate>
 
@@ -37,6 +38,7 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    APCLogViewController();
 }
 
 -(void)viewDidLayoutSubviews {

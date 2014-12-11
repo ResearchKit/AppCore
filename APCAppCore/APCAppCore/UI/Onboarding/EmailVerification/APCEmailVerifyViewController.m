@@ -13,6 +13,7 @@
 #import "UIFont+APCAppearance.h"
 #import "UIColor+APCAppearance.h"
 #import "NSError+APCAdditions.h"
+#import "APCAppCore.h"
 
 @interface APCEmailVerifyViewController ()
 @property (nonatomic, readonly) APCUser * user;
@@ -35,6 +36,12 @@
     [self.changeEmailButton setTitle:[NSString stringWithFormat:@"Not %@? Change email address", self.user.firstName] forState:UIControlStateNormal];
     
     [self checkSignIn];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    APCLogViewController();
 }
 
 - (void)setupAppearance
