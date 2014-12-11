@@ -115,6 +115,16 @@
 	APCLogViewController();
 }
 
+- (void) testMacrosFromWithinAFunction
+{
+	sampleLoggingFunction();
+}
+
+void sampleLoggingFunction ()
+{
+	APCLogDebug(@"Testing the printout from within a C function call.");
+}
+
 @end
 
 
