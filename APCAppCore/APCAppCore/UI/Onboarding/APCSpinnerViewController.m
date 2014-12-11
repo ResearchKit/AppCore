@@ -8,6 +8,7 @@
 #import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
 #import "APCSpinnerViewController.h"
+#import "APCAppCore.h"
 
 @implementation APCSpinnerViewController
 
@@ -45,6 +46,7 @@
     [super viewDidDisappear:animated];
     
     [self.activityIndicatorView stopAnimating];
+  APCLogViewControllerAppeared();
 }
 
 @end

@@ -56,6 +56,9 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self showAppropriateVC];
     
     [self.dataMonitor appFinishedLaunching];
+
+	// Start logging.  Also starts connection to logging server, if possible.
+	[APCLog start];
     
     return YES;
 }
@@ -65,7 +68,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 #ifndef DEVELOPMENT
     if (self.dataSubstrate.currentUser.signedIn) {
         [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
-            [error handle];
+            APCLogError2 (error);
         }];
     }
 #endif
@@ -142,7 +145,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         NSData *jsonData = [NSData dataWithContentsOfFile:resource];
         NSError * error;
         NSDictionary * dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-        [error handle];
+        APCLogError2 (error);
         [self.dataSubstrate loadStaticTasksAndSchedules:dictionary];
         [self clearNSUserDefaults];
         [APCKeychainStore resetKeyChain];

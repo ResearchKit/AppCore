@@ -10,6 +10,7 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "UIImage+APCHelper.h"
+#import "APCAppCore.h"
 
 @interface APCShareViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
@@ -48,6 +49,7 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Setup

@@ -17,7 +17,7 @@
         NSFetchRequest * request = [APCDBStatus request];
         NSError * error;
         array = [context executeFetchRequest:request error:&error];
-        [error handle];
+        APCLogError2 (error);
     }];
     return (array.count > 0);
 
@@ -31,7 +31,7 @@
         NSError * error;
         status.status = @"Seed Loaded";
         [status saveToPersistentStore:&error];
-        [error handle];
+        APCLogError2 (error);
     }];
 }
 @end

@@ -8,6 +8,7 @@
 #import "APCLocationInfoViewController.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "APCAppCore.h"
 
 @interface APCLocationInfoViewController ()
 
@@ -24,6 +25,12 @@
     self.textView.text = [self prepareContent];
     
     [self setupAppearance];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Prepare content

@@ -13,6 +13,7 @@
 #import "UIFont+APCAppearance.h"
 #import "UIColor+APCAppearance.h"
 #import "NSError+APCAdditions.h"
+#import "APCAppCore.h"
 
 @interface APCEmailVerifyViewController ()
 @property (nonatomic, readonly) APCUser * user;
@@ -35,6 +36,12 @@
     [self.changeEmailButton setTitle:[NSString stringWithFormat:@"Not %@? Change email address", self.user.firstName] forState:UIControlStateNormal];
     
     [self checkSignIn];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+  APCLogViewControllerAppeared();
 }
 
 - (void)setupAppearance
@@ -74,7 +81,7 @@
             }
             else
             {
-                [error handle];
+                APCLogError2 (error);
                 UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Sign In Error", @"") message:error.localizedDescription];
                 [self presentViewController:alert animated:YES completion:nil];
             }
@@ -83,7 +90,7 @@
         {
             self.user.signedIn = YES;
             [self.user updateProfileOnCompletion:^(NSError *error) {
-                [error handle];
+                APCLogError2 (error);
             }];
         }
     }];

@@ -55,6 +55,12 @@
     [self setUpAppearance];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+  APCLogViewControllerAppeared();
+}
+
 - (void) setUpAppearance
 {
     self.completingActivitiesMessage.font = [UIFont appLightFontWithSize:17];
@@ -79,12 +85,6 @@
 
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-
-//    [self.progressBar setCompletedSteps:6 animation:YES];
-}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

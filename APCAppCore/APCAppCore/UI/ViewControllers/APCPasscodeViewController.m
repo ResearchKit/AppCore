@@ -14,6 +14,7 @@
 #import "APCKeychainStore.h"
 #import "APCUserInfoConstants.h"
 #import "UIImage+APCHelper.h"
+#import "APCAppCore.h"
 
 @interface APCPasscodeViewController ()<APCPasscodeViewDelegate>
 
@@ -46,6 +47,7 @@
     if (![self.touchContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
         self.touchIdButton.hidden = YES;
     }
+  APCLogViewControllerAppeared();
 }
 
 - (void)viewDidAppear:(BOOL)animated

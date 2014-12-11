@@ -57,6 +57,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 {
     [super viewWillAppear:animated];
     [self reloadData];
+  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Misc

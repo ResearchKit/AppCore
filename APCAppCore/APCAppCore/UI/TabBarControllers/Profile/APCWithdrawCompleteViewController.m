@@ -26,6 +26,12 @@
     self.navigationItem.hidesBackButton = YES;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+  APCLogViewControllerAppeared();
+}
+
 - (void)setupAppearance
 {
     [self.messageLabel setTextColor:[UIColor appSecondaryColor1]];

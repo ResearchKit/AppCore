@@ -17,6 +17,7 @@
 
 - (void) appFinishedLaunching;
 - (void) appBecameActive;
+- (void) addDidEnterBackground;
 - (void) userConsented;
 
 /*********************************************************************************/

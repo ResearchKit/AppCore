@@ -13,6 +13,7 @@
 #import "APCAppDelegate.h"
 #import "APCPermissionButton.h"
 #import "APCPermissionsManager.h"
+#import "APCAppCore.h"
 
 @interface APCSignUpMedicalInfoViewController ()
 
@@ -57,6 +58,8 @@
     [super viewDidAppear:animated];
     
     [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
+  APCLogViewControllerAppeared();
+    
 }
 
 - (NSArray *)prepareContent {

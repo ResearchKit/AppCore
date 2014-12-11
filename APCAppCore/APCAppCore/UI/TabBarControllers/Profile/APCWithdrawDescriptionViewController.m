@@ -9,6 +9,7 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "UIImage+APCHelper.h"
+#import "APCAppCore.h"
 
 @interface APCWithdrawDescriptionViewController ()
 
@@ -38,6 +39,7 @@
     [super viewDidAppear:animated];
     
     [self.textView becomeFirstResponder];
+  APCLogViewControllerAppeared();
 }
 
 - (void)viewDidDisappear:(BOOL)animated

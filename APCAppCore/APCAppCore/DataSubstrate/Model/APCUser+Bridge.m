@@ -32,6 +32,7 @@
         NSParameterAssert(self.password);
         [SBBComponent(SBBAuthManager) signUpWithEmail:self.email username:self.email password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed Up"}));
                 if (completionBlock) {
                     completionBlock(error);
                 }
@@ -57,6 +58,7 @@
         
         [SBBComponent(SBBProfileManager) updateUserProfileWithProfile:profile completion:^(id responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Profile Updated To Bridge"}));
                 if (completionBlock) {
                     completionBlock(error);
                 }
@@ -81,6 +83,7 @@
             self.lastName = profile.lastName;
             
             dispatch_async(dispatch_get_main_queue(), ^{
+                APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Profile Received From Bridge"}));
                 if (completionBlock) {
                     completionBlock(error);
                 }
@@ -100,6 +103,7 @@
     {
         [SBBComponent(SBBConsentManager) suspendConsentWithCompletion:^(id responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Suspended Consent"}));
                 if (completionBlock) {
                     completionBlock(error);
                 }
@@ -119,6 +123,7 @@
     {
         [SBBComponent(SBBConsentManager) resumeConsentWithCompletion:^(id responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Resumed Consent"}));
                 if (completionBlock) {
                     completionBlock(error);
                 }
@@ -139,6 +144,7 @@
         NSParameterAssert(self.password);
         [SBBComponent(SBBAuthManager) signInWithUsername:self.email password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *signInError) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed In"}));
                 if (completionBlock) {
                     completionBlock(signInError);
                 }
@@ -165,6 +171,7 @@
                                            signatureImage:consentImage
                                                completion:^(id responseObject, NSError *error) {
                                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                                       APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Consent Sent To Bridge"}));
                                                        if (completionBlock) {
                                                            completionBlock(error);
                                                        }
@@ -195,6 +202,7 @@
                 self.consentSignatureImage = UIImagePNGRepresentation(signatureImage);
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Consent Signature Received From Bridge"}));
                     if (completionBlock) {
                         completionBlock(error);
                     }

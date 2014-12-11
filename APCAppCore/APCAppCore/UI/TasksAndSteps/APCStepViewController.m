@@ -14,4 +14,10 @@
 
 @implementation APCStepViewController
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+  APCLogViewControllerAppeared();
+}
+
 @end

@@ -9,6 +9,7 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "UIImage+APCHelper.h"
+#import "APCAppCore.h"
 
 @interface APCLineGraphViewController ()
 
@@ -27,6 +28,12 @@
     self.graphView.landscapeMode = YES;
     
     [self setupAppearance];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+  APCLogViewControllerAppeared();
 }
 
 - (void)didReceiveMemoryWarning {
