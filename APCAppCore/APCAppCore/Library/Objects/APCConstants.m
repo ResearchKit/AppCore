@@ -64,6 +64,15 @@ NSString *const kTertiaryYellowColorKey = @"TertiaryYellowColorKey";
 NSString *const kTertiaryPurpleColorKey = @"TertiaryPurpleColorKey";
 NSString *const kTertiaryGrayColorKey   = @"TertiaryGrayColorKey";
 
+
+/*********************************************************************************/
+#pragma mark - Events
+/*********************************************************************************/
+NSString *const kAppStateChangedEvent   = @"AppStateChanged";
+NSString *const kNetworkEvent           = @"NetworkEvent";
+NSString *const kSchedulerEvent         = @"SchedulerEvent";
+
+
 @implementation APCConstants
 
 @end

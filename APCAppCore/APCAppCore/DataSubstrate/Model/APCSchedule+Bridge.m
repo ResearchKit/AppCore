@@ -42,6 +42,7 @@ NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController
                     }];
                 }];
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    APCLogEventWithData(kNetworkEvent, @{@"event_detail":@"schedule updated"});
                     if (completionBlock) {
                         completionBlock(error);
                     }

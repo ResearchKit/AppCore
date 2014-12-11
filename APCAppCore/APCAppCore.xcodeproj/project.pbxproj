@@ -24,8 +24,6 @@
 		36B1AAE41A38DE7200CE7DB5 /* libFlurry_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3E81A38D9C80051096B /* libFlurry_5.4.0.a */; };
 		36B1AAE51A38DEA800CE7DB5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3EB1A38D9FF0051096B /* Security.framework */; };
 		36B1AAE61A38DEAF00CE7DB5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */; };
-		36C8B3E11A38D93D0051096B /* APCLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 36C8B3DF1A38D93D0051096B /* APCLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		36C8B3E21A38D93D0051096B /* APCLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 36C8B3E01A38D93D0051096B /* APCLog.m */; };
 		36C8B3E51A38D95A0051096B /* APCLogTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36C8B3E41A38D95A0051096B /* APCLogTests.m */; };
 		36C8B3E91A38D9C80051096B /* Flurry.h in Headers */ = {isa = PBXBuildFile; fileRef = 36C8B3E71A38D9C80051096B /* Flurry.h */; };
 		36C8B3EA1A38D9C80051096B /* libFlurry_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3E81A38D9C80051096B /* libFlurry_5.4.0.a */; };
@@ -363,8 +361,6 @@
 		360C63CA1A339700002EC86C /* NSDateComponents+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateComponents+Helper.h"; sourceTree = "<group>"; };
 		360C63CB1A339700002EC86C /* NSDateComponents+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateComponents+Helper.m"; sourceTree = "<group>"; };
 		360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateComponentsHelperTests.m; sourceTree = "<group>"; };
-		36C8B3DF1A38D93D0051096B /* APCLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCLog.h; sourceTree = "<group>"; };
-		36C8B3E01A38D93D0051096B /* APCLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLog.m; sourceTree = "<group>"; };
 		36C8B3E41A38D95A0051096B /* APCLogTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLogTests.m; sourceTree = "<group>"; };
 		36C8B3E71A38D9C80051096B /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
 		36C8B3E81A38D9C80051096B /* libFlurry_5.4.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurry_5.4.0.a; sourceTree = "<group>"; };
@@ -788,13 +784,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		F58FF4371A39022D00863F48 /* Logger */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Logger;
-			sourceTree = "<group>";
-		};
 		F5EC85F81A3A227C00068495 /* Logging */ = {
 			isa = PBXGroup;
 			children = (
@@ -917,7 +906,6 @@
 			isa = PBXGroup;
 			children = (
 				F5EC85F81A3A227C00068495 /* Logging */,
-				F58FF4371A39022D00863F48 /* Logger */,
 				0830A3461A30FA8D00F7D0E4 /* Scoring */,
 				F5F128BE1A2F78490015982C /* AppearanceHelpers */,
 				F5F128C71A2F78490015982C /* AssertionHandler */,
@@ -1509,7 +1497,6 @@
 				F5F12ADA1A2F78490015982C /* APCPickerTableViewCell.h in Headers */,
 				F5F12B041A2F78490015982C /* APCPasscodeViewController.h in Headers */,
 				F5F12A181A2F78490015982C /* UIColor+APCAppearance.h in Headers */,
-				36C8B3E11A38D93D0051096B /* APCLog.h in Headers */,
 				F5F12A791A2F78490015982C /* APCAxisView.h in Headers */,
 				F5F12A2E1A2F78490015982C /* NSString+Helper.h in Headers */,
 				F5F12A661A2F78490015982C /* APCPermissionsManager.h in Headers */,
@@ -1837,7 +1824,6 @@
 				F5F12A461A2F78490015982C /* APCScheduleExpression.m in Sources */,
 				F5F12A991A2F78490015982C /* APCChangeEmailViewController.m in Sources */,
 				F5F12AA71A2F78490015982C /* APCEligibleViewController.m in Sources */,
-				36C8B3E21A38D93D0051096B /* APCLog.m in Sources */,
 				F5F129F31A2F78490015982C /* APCModel.xcdatamodeld in Sources */,
 				F5F129E51A2F78490015982C /* APCDataMonitor.m in Sources */,
 				F5F129E91A2F78490015982C /* APCDataSubstrate+HealthKit.m in Sources */,

@@ -31,6 +31,7 @@
     if (self.dataSubstrate.currentUser.isConsented) {
         [(APCAppDelegate*)[UIApplication sharedApplication].delegate setUpCollectors];
     }
+    APCLogEventWithData(kAppStateChangedEvent, @{@"state":@"App Launched"});
 }
 - (void)appBecameActive
 {
@@ -40,6 +41,12 @@
             [error handle];
         }];
     }];
+    APCLogEventWithData(kAppStateChangedEvent, @{@"state":@"App Became Active"});
+}
+
+- (void) addDidEnterBackground
+{
+    APCLogEventWithData(kAppStateChangedEvent, @{@"state":@"App Did Enter Background"});
 }
 
 - (void) userConsented

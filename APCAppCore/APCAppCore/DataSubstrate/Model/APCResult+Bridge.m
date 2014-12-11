@@ -28,6 +28,7 @@
     else
     {
         [SBBComponent(SBBUploadManager) uploadFileToBridge:self.archiveURL contentType:@"application/zip" completion:^(NSError *error) {
+            APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"Uploaded Task: %@    RunID: %@", self.taskID, self.taskRunID]}));
             self.uploaded = @(YES);
             NSError * saveError;
             [self saveToPersistentStore:&saveError];

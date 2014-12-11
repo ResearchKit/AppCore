@@ -55,6 +55,7 @@
         self.isUpdating = NO;
         if (self.completionBlock) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Updated Schedule For %@", self.referenceDate]}));
                 self.completionBlock(nil);
             });
         }
