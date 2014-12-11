@@ -45,6 +45,13 @@
             _monthSelector      = parser.monthSelector;
             _yearSelector       = parser.yearSelector;
         }
+
+		else
+		{
+			NSLog (@"[APCScheduleExpression initWithExpression:timeZero:] ERROR: Received invalid cron expression [%@].  Returning 'nil' for the ScheduleExpression.", expression);
+
+			self = nil;
+		}
     }
     
     return self;

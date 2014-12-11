@@ -18,12 +18,14 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
 
 @interface APCScoring()
 
+@property (nonatomic, strong) HKHealthStore *healthStore;
 @property (nonatomic, strong) NSMutableArray *dataPoints;
 @property (nonatomic, strong) NSMutableArray *correlateDataPoints;
+
 @property (nonatomic) NSUInteger current;
 @property (nonatomic) NSUInteger correlatedCurrent;
 @property (nonatomic) BOOL hasCorrelateDataPoints;
-@property (nonatomic, strong) HKHealthStore *healthStore;
+
 
 @end
 
@@ -79,14 +81,14 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
  *
  */
 
-- (instancetype)initWithTask:(NSString *)taskId numberOfDays:(NSUInteger)numberOfDays valueKey:(NSString *)valueKey
+- (instancetype)initWithTask:(NSString *)taskId numberOfDays:(NSInteger)numberOfDays valueKey:(NSString *)valueKey
 {
     self = [self initWithTask:taskId numberOfDays:numberOfDays valueKey:valueKey dataKey:nil sortKey:nil groupByDay:NO];
     
     return self;
 }
 
-- (instancetype)initWithTask:(NSString *)taskId numberOfDays:(NSUInteger)numberOfDays valueKey:(NSString *)valueKey dataKey:(NSString *)dataKey
+- (instancetype)initWithTask:(NSString *)taskId numberOfDays:(NSInteger)numberOfDays valueKey:(NSString *)valueKey dataKey:(NSString *)dataKey
 {
     self = [self initWithTask:taskId numberOfDays:numberOfDays valueKey:valueKey dataKey:dataKey sortKey:nil groupByDay:NO];
     
@@ -94,7 +96,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
 }
 
 - (instancetype)initWithTask:(NSString *)taskId
-                numberOfDays:(NSUInteger)numberOfDays
+                numberOfDays:(NSInteger)numberOfDays
                     valueKey:(NSString *)valueKey
                      dataKey:(NSString *)dataKey
                      sortKey:(NSString *)sortKey
@@ -110,7 +112,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
 }
 
 - (instancetype)initWithTask:(NSString *)taskId
-                numberOfDays:(NSUInteger)numberOfDays
+                numberOfDays:(NSInteger)numberOfDays
                     valueKey:(NSString *)valueKey
                      dataKey:(NSString *)dataKey
                      sortKey:(NSString *)sortKey
@@ -120,7 +122,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     
     if (self) {
         [self sharedInit];
-        [self queryTaskId:taskId forDays:numberOfDays valueKey:valueKey dataKey:dataKey sortKey:sortKey groupByDay:groupByDay];
+        [self queryTaskId:taskId forDays:numberOfDays + 1 valueKey:valueKey dataKey:dataKey sortKey:sortKey groupByDay:groupByDay];
     }
     
     return self;
@@ -139,7 +141,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
  */
 - (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
                                          unit:(HKUnit *)unit
-                                 numberOfDays:(NSUInteger)numberOfDays
+                                 numberOfDays:(NSInteger)numberOfDays
 {
     self = [super init];
     
@@ -149,7 +151,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         // The very first thing that we need to make sure is that
         // the unit and quantity types are compatible
         if ([quantityType isCompatibleWithUnit:unit]) {
-            [self statsCollectionQueryForQuantityType:quantityType unit:unit forDays:numberOfDays];
+            [self statsCollectionQueryForQuantityType:quantityType unit:unit forDays:numberOfDays + 1];
         } else {
             NSAssert([quantityType isCompatibleWithUnit:unit], @"The quantity and the unit must be compatible");
         }
@@ -162,7 +164,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
 #pragma mark Core Data
 
 - (void)queryTaskId:(NSString *)taskId
-            forDays:(NSUInteger)days
+            forDays:(NSInteger)days
            valueKey:(NSString *)valueKey
             dataKey:(NSString *)dataKey
             sortKey:(NSString *)sortKey
@@ -318,7 +320,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     NSDate *startDate = [[NSCalendar currentCalendar] dateBySettingHour:0
                                                                  minute:0
                                                                  second:0
-                                                                 ofDate:[self dateForSpan:days + 1]
+                                                                 ofDate:[self dateForSpan:days]
                                                                 options:0];
     
     NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:[NSDate date] options:HKQueryOptionStrictEndDate];
@@ -496,25 +498,5 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     }
     return value;
 }
-
-//- (NSString *)lineGraph:(APCLineGraphView *)graphView titleForXAxisAtIndex:(NSInteger)pointIndex
-//{
-//    id titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
-//    NSDate *xaxisDate = nil;
-//    
-//    if ([titleDate isKindOfClass:[NSString class]]) {
-//        [dateFormatter setDateFormat:@"YYYY-MM-dd"];
-//        xaxisDate = [dateFormatter dateFromString:titleDate];
-//    } else {
-//        xaxisDate = (NSDate *)titleDate;
-//    }
-//    
-//    [dateFormatter setDateFormat:@"MMM d"];
-//    
-//    NSString *xAxisTitle = [dateFormatter stringFromDate:xaxisDate];
-//                            
-//    return xAxisTitle;
-//}
-
 
 @end
