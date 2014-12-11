@@ -555,7 +555,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
     
     [self.user withdrawStudyOnCompletion:^(NSError *error) {
         if (error) {
-            [error handle];
+            APCLogError2 (error);
             [spinnerController dismissViewControllerAnimated:NO completion:^{
                 UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Withdraw", @"") message:error.message];
                 [weakSelf presentViewController:alert animated:YES completion:nil];

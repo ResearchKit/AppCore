@@ -145,7 +145,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
         [user signInOnCompletion:^(NSError *error) {
             [spinnerController dismissViewControllerAnimated:YES completion:^{
                 if (error) {
-                    [error handle];
+                    APCLogError2 (error);
                     
                     if (error.code == kSBBServerPreconditionNotMet) {
                         [self showConsent];
@@ -163,7 +163,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
                 {
                     [user retrieveConsentOnCompletion:^(NSError *error) {
                         if (error) {
-                            [error handle];
+                            APCLogError2 (error);
                             
                             if (error.code == kSBBServerPreconditionNotMet) {
                                 [self showConsent];
@@ -196,7 +196,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     APCUser *user = [self user];
     
     [user getProfileOnCompletion:^(NSError *error) {
-        [error handle];
+        APCLogError2 (error);
     }];
     
     if (user.isSecondaryInfoSaved) {
@@ -259,7 +259,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     
     [user resumeStudyOnCompletion:^(NSError *error) {
         if (error) {
-            [error handle];
+            APCLogError2 (error);
             
             UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:error.message];
             [self presentViewController:alert animated:YES completion:nil];

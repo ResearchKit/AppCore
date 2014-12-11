@@ -14,7 +14,7 @@
 {
     NSError * error;
     NSData *data = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:&error];
-    [error handle];
+    APCLogError2 (error);
     return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
 
@@ -25,7 +25,7 @@
     NSDictionary * retValue = [NSJSONSerialization JSONObjectWithData:resultData
                                              options:NSJSONReadingAllowFragments
                                                error:&error];
-    [error handle];
+    APCLogError2 (error);
     return retValue;
 }
 

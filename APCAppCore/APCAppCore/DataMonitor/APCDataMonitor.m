@@ -36,9 +36,9 @@
 - (void)appBecameActive
 {
     [self refreshFromBridgeOnCompletion:^(NSError *error) {
-        [error handle];
+        APCLogError2 (error);
         [self batchUploadDataToBridgeOnCompletion:^(NSError *error) {
-            [error handle];
+            APCLogError2 (error);
         }];
     }];
     APCLogEventWithData(kAppStateChangedEvent, @{@"state":@"App Became Active"});
@@ -55,7 +55,7 @@
     [self.dataSubstrate joinStudy];
     [self.scheduler updateScheduledTasksIfNotUpdating:YES OnCompletion:^(NSError *error) {
         [self refreshFromBridgeOnCompletion:^(NSError *error) {
-            [error handle];
+            APCLogError2 (error);
             [self batchUploadDataToBridgeOnCompletion:NULL];
         }];
     }];

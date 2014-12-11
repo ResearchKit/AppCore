@@ -38,7 +38,7 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
           }
           NSError * error;
           [task saveToPersistentStore:&error];
-          [error handle];
+          APCLogError2 (error);
       }
   }];
 }

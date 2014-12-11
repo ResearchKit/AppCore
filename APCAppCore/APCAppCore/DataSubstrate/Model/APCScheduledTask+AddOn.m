@@ -26,7 +26,7 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     }
     NSError * saveError;
     [self saveToPersistentStore:&saveError];
-    [saveError handle];
+    APCLogError2 (saveError);
 }
 
 - (void) deleteScheduledTask
@@ -35,7 +35,7 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     [self.managedObjectContext deleteObject:self];
     NSError * saveError;
     [self saveToPersistentStore:&saveError];
-    [saveError handle];
+    APCLogError2 (saveError);
 }
 
 - (NSString *)completeByDateString
@@ -83,7 +83,7 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     request.sortDescriptors = @[dateSortDescriptor, uidDescriptor];
     NSError * error;
     NSArray * array = [context executeFetchRequest:request error:&error];
-    [error handle];
+    APCLogError2 (error);
     return array.count ? array : nil;
 }
 
@@ -98,7 +98,7 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     request.sortDescriptors = @[dateSortDescriptor, uidDescriptor];
     NSError * error;
     NSArray * array = [context executeFetchRequest:request error:&error];
-    [error handle];
+    APCLogError2 (error);
     return array.count ? array : nil;
 }
 
@@ -113,7 +113,7 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     request.sortDescriptors = @[dateSortDescriptor];
     NSError * error;
     NSArray * array = [context executeFetchRequest:request error:&error];
-    [error handle];
+    APCLogError2 (error);
     return array.count ? array : nil;
 }
 
@@ -123,7 +123,7 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     request.predicate = [NSPredicate predicateWithFormat:@"startOn == %@ && generatedSchedule == %@", startOn, schedule];
     NSError * error;
     NSArray * array = [context executeFetchRequest:request error:&error];
-    [error handle];
+    APCLogError2 (error);
     return array.count ? [array firstObject] : nil;
 }
 

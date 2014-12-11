@@ -38,7 +38,7 @@
             NSArray * unUploadedResults = [context executeFetchRequest:request error:&error];
             for (APCResult * result in unUploadedResults) {
                 [result uploadToBridgeOnCompletion:^(NSError *error) {
-                    [error handle];
+                    APCLogError2 (error);
                 }];
             }
             dispatch_async(dispatch_get_main_queue(), ^{

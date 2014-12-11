@@ -105,12 +105,12 @@ static NSString *const kSignedInKey = @"SignedIn";
     NSFetchRequest * request = [APCStoredUserData request];
     NSError * error;
     APCStoredUserData * storedUserData = [[context executeFetchRequest:request error:&error] firstObject];
-    [error handle];
+    APCLogError2 (error);
     if (!storedUserData) {
         storedUserData = [APCStoredUserData newObjectForContext:context];
         NSError * saveError;
         [storedUserData saveToPersistentStore:&saveError];
-        [saveError handle];
+        APCLogError2 (saveError);
     }
     return storedUserData;
 }
@@ -148,7 +148,7 @@ static NSString *const kSignedInKey = @"SignedIn";
         [storedUserData setValue:value forKey:propertyName];
         NSError * saveError;
         [storedUserData saveToPersistentStore:&saveError];
-        [saveError handle];
+        APCLogError2 (saveError);
     }];
 }
 
@@ -330,7 +330,7 @@ static NSString *const kSignedInKey = @"SignedIn";
 {
     NSError *error;
     NSDate *dateOfBirth = [self.healthStore dateOfBirthWithError:&error];
-    [error handle];
+    APCLogError2 (error);
     return dateOfBirth ?: _birthDate;
 }
 
@@ -344,7 +344,7 @@ static NSString *const kSignedInKey = @"SignedIn";
 {
     NSError *error;
     HKBiologicalSexObject * sexObject = [self.healthStore biologicalSexWithError:&error];
-    [error handle];
+    APCLogError2 (error);
     return sexObject.biologicalSex?:_biologicalSex;
 }
 
@@ -358,7 +358,7 @@ static NSString *const kSignedInKey = @"SignedIn";
 {
     NSError *error;
     HKBloodTypeObject * bloodObject = [self.healthStore bloodTypeWithError:&error];
-    [error handle];
+    APCLogError2 (error);
     return bloodObject.bloodType?: _bloodType;
 }
 
@@ -376,7 +376,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     dispatch_semaphore_t sema = dispatch_semaphore_create(0);
     __block HKQuantity * height;
     [self.healthStore mostRecentQuantitySampleOfType:heightType predicate:nil completion:^(HKQuantity *mostRecentQuantity, NSError *error) {
-        [error handle];
+        APCLogError2 (error);
         height = mostRecentQuantity;
         dispatch_semaphore_signal(sema);
     }];
@@ -397,7 +397,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     HKQuantitySample *heightSample = [HKQuantitySample quantitySampleWithType:heightType quantity:height startDate:now endDate:now];
     
     [self.healthStore saveObject:heightSample withCompletion:^(BOOL success, NSError *error) {
-        [error handle];
+        APCLogError2 (error);
     }];
 }
 
@@ -409,7 +409,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     dispatch_semaphore_t sema = dispatch_semaphore_create(0);
     __block HKQuantity * weight;
     [self.healthStore mostRecentQuantitySampleOfType:weightType predicate:nil completion:^(HKQuantity *mostRecentQuantity, NSError *error) {
-        [error handle];
+        APCLogError2 (error);
         weight = mostRecentQuantity;
         dispatch_semaphore_signal(sema);
     }];
@@ -429,7 +429,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     HKQuantitySample *weightSample = [HKQuantitySample quantitySampleWithType:weightType quantity:weight startDate:now endDate:now];
     
     [self.healthStore saveObject:weightSample withCompletion:^(BOOL success, NSError *error) {
-        [error handle];
+        APCLogError2 (error);
     }];
 }
 
@@ -440,7 +440,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     dispatch_semaphore_t sema = dispatch_semaphore_create(0);
     __block HKQuantity *systolicBloodPressure;
     [self.healthStore mostRecentQuantitySampleOfType:bloodPressureType predicate:nil completion:^(HKQuantity *mostRecentQuantity, NSError *error) {
-        [error handle];
+        APCLogError2 (error);
         systolicBloodPressure = mostRecentQuantity;
         dispatch_semaphore_signal(sema);
     }];
@@ -459,7 +459,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     HKQuantitySample *systolicBloodPressureSample = [HKQuantitySample quantitySampleWithType:bloodPressureType quantity:systolicBloodPressure startDate:now endDate:now];
     
     [self.healthStore saveObject:systolicBloodPressureSample withCompletion:^(BOOL success, NSError *error) {
-        [error handle];
+        APCLogError2 (error);
     }];
 }
 

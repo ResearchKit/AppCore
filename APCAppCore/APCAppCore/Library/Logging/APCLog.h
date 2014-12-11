@@ -60,13 +60,20 @@
 // ---------------------------------------------------------
 #pragma mark - Dhanush's API (Ron's version)
 // ---------------------------------------------------------
-
 #define APCLogError(...)							\
 	NSLog (@"APC_ERROR  %@:%d  %s  => %@",			\
 		@(__FILE__).lastPathComponent,				\
 		(int) __LINE__,								\
 		__PRETTY_FUNCTION__,						\
 		[NSString stringWithFormat: __VA_ARGS__]	\
+	)
+
+#define APCLogError2(...)							\
+	NSLog (@"APC_ERROR  %@:%d  %s  => %@",			\
+		@(__FILE__).lastPathComponent,				\
+		(int) __LINE__,								\
+		__PRETTY_FUNCTION__,						\
+		[NSString stringWithFormat: @"%@", __VA_ARGS__]	\
 	)
 
 #define APCLogDebug(...)							\

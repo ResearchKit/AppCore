@@ -73,12 +73,12 @@
     request.predicate = [NSPredicate predicateWithFormat:@"endsOn <= %@", lastEndOnDate];
     NSError * error;
     NSArray * array = [self.scheduleMOC executeFetchRequest:request error:&error];
-    [error handle];
+    APCLogError2 (error);
     [array enumerateObjectsUsingBlock:^(APCSchedule * schedule, NSUInteger idx, BOOL *stop) {
         schedule.inActive = @(YES);
         NSError * saveError;
         [schedule saveToPersistentStore:&saveError];
-        [saveError handle];
+        APCLogError2 (saveError);
     }];
 }
 
@@ -90,7 +90,7 @@
     request.predicate = [NSPredicate predicateWithFormat:@"(completed == nil || completed == %@) && startOn >= %@ && startOn <= %@", @(NO), startOfDay, endOfDay];
     NSError * error;
     NSMutableArray * mutableArray = [[self.scheduleMOC executeFetchRequest:request error:&error] mutableCopy];
-    [error handle];
+    APCLogError2 (error);
     while (mutableArray.count) {
         APCScheduledTask * task = [mutableArray lastObject];
         [mutableArray removeLastObject];
@@ -113,7 +113,7 @@
     request.predicate = [NSPredicate predicateWithFormat:@"(inActive == nil || inActive == %@) && (startsOn == nil || startsOn < %@)", @(NO), lastStartOnDate];
     NSError * error;
     NSArray * array = [self.scheduleMOC executeFetchRequest:request error:&error];
-    [error handle];
+    APCLogError2 (error);
     return array.count ? array : nil;
 }
 
@@ -150,7 +150,7 @@
         createdScheduledTask.task = task;
         NSError * saveError;
         [createdScheduledTask saveToPersistentStore:&saveError];
-        [saveError handle];
+        APCLogError2 (saveError);
     }
 
 }

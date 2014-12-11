@@ -25,7 +25,7 @@ NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController
 {
     if (![self serverDisabled]) {
         [SBBComponent(SBBScheduleManager) getSchedulesWithCompletion:^(id schedulesList, NSError *error) {
-            [error handle];
+            APCLogError2 (error);
             if (!error) {
                 SBBResourceList *list = (SBBResourceList *)schedulesList;
                 NSArray * schedules = list.items;
@@ -38,7 +38,7 @@ NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController
                         [self mapSBBSchedule:schedule APCSchedule:apcSchedule];
                         NSError * error;
                         [apcSchedule saveToPersistentStore:&error];
-                        [error handle];
+                        APCLogError2 (error);
                     }];
                 }];
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -67,7 +67,7 @@ NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController
         request.predicate = [NSPredicate predicateWithFormat:@"remoteUpdatable == %@", @(YES)];
         NSError * error;
         NSMutableArray * mutableArray = [[context executeFetchRequest:request error:&error] mutableCopy];
-        [error handle];
+        APCLogError2 (error);
         APCSchedule * handle = [mutableArray lastObject];
         while (mutableArray.count) {
             APCSchedule * schedule = [mutableArray lastObject];
@@ -75,7 +75,7 @@ NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController
             [context deleteObject:schedule];
         }
         [handle saveToPersistentStore:&error];
-        [error handle];
+        APCLogError2 (error);
     }];
 }
 

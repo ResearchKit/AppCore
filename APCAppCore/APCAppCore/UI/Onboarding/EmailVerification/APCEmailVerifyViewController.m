@@ -81,7 +81,7 @@
             }
             else
             {
-                [error handle];
+                APCLogError2 (error);
                 UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Sign In Error", @"") message:error.localizedDescription];
                 [self presentViewController:alert animated:YES completion:nil];
             }
@@ -90,7 +90,7 @@
         {
             self.user.signedIn = YES;
             [self.user updateProfileOnCompletion:^(NSError *error) {
-                [error handle];
+                APCLogError2 (error);
             }];
         }
     }];

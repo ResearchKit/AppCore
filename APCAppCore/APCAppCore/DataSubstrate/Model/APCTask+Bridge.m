@@ -47,7 +47,7 @@ static APCDummyObject * _dummyObject;
     request.predicate = [NSPredicate predicateWithFormat:@"taskDescription == nil && taskHRef != nil"];
     NSError * error;
     NSArray * unloadedSurveyTasks = [context executeFetchRequest:request error:&error];
-    [error handle];
+    APCLogError2 (error);
     [unloadedSurveyTasks enumerateObjectsUsingBlock:^(APCTask * task, NSUInteger idx, BOOL *stop) {
         [task loadSurveyOnCompletion:NULL];
     }];
@@ -76,7 +76,7 @@ static APCDummyObject * _dummyObject;
             }
             else
             {
-                [error handle];
+                APCLogError2 (error);
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"Loaded Survey %@", self.taskHRef]}));

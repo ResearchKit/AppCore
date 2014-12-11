@@ -84,7 +84,7 @@ NSString *const kNotificationName                  = @"APCQuantityTypeIdentifier
                 
             } else {
                 
-                [error handle];
+                APCLogError2 (error);
             }
         }];
         

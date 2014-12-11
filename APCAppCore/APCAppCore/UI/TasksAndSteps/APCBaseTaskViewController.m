@@ -40,7 +40,7 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:self.taskResultsFilePath]) {
         NSError * fileError;
         [[NSFileManager defaultManager] createDirectoryAtPath:self.taskResultsFilePath withIntermediateDirectories:YES attributes:nil error:&fileError];
-        [fileError handle];
+        APCLogError2 (fileError);
     }
     
     if (self.outputDirectory) {
@@ -69,7 +69,7 @@
 
 - (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
 {
-    [error handle];
+    APCLogError2 (error);
 }
 
 - (NSString *)taskResultsFilePath
@@ -81,7 +81,7 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
         NSError * fileError;
         [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&fileError];
-        [fileError handle];
+        APCLogError2 (fileError);
     }
     
     return path;
@@ -104,10 +104,10 @@
     result.scheduledTask = self.scheduledTask;
     NSError * error;
     [result saveToPersistentStore:&error];
-    [error handle];
+    APCLogError2 (error);
     APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
     [appDelegate.dataMonitor batchUploadDataToBridgeOnCompletion:^(NSError *error) {
-        [error handle];
+        APCLogError2 (error);
     }];
 }
 

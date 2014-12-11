@@ -32,7 +32,7 @@
             self.uploaded = @(YES);
             NSError * saveError;
             [self saveToPersistentStore:&saveError];
-            [saveError handle];
+            APCLogError2 (saveError);
             if (completionBlock) {
                 completionBlock(error);
             }
