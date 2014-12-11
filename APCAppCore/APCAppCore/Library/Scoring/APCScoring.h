@@ -12,25 +12,25 @@
 
 - (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
                                          unit:(HKUnit *)unit
-                                 numberOfDays:(NSUInteger)numberOfDays;
+                                 numberOfDays:(NSInteger)numberOfDays;
 
 - (instancetype)initWithTask:(NSString *)taskId
-                numberOfDays:(NSUInteger)numberOfDays
+                numberOfDays:(NSInteger)numberOfDays
                     valueKey:(NSString *)valueKey;
 
 - (instancetype)initWithTask:(NSString *)taskId
-                numberOfDays:(NSUInteger)numberOfDays
+                numberOfDays:(NSInteger)numberOfDays
                     valueKey:(NSString *)valueKey
                      dataKey:(NSString *)dataKey;
 
 - (instancetype)initWithTask:(NSString *)taskId
-                numberOfDays:(NSUInteger)numberOfDays
+                numberOfDays:(NSInteger)numberOfDays
                     valueKey:(NSString *)valueKey
                      dataKey:(NSString *)dataKey
                      sortKey:(NSString *)sortKey;
 
 - (instancetype)initWithTask:(NSString *)taskId
-                numberOfDays:(NSUInteger)numberOfDays
+                numberOfDays:(NSInteger)numberOfDays
                     valueKey:(NSString *)valueKey
                      dataKey:(NSString *)dataKey
                      sortKey:(NSString *)sortKey
