@@ -62,7 +62,7 @@
 // ---------------------------------------------------------
 
 #define APCLogError(...)							\
-	NSLog (@"APC_ERROR  %@:%d  %s  %@",				\
+	NSLog (@"APC_ERROR  %@:%d  %s  => %@",			\
 		@(__FILE__).lastPathComponent,				\
 		(int) __LINE__,								\
 		__PRETTY_FUNCTION__,						\
@@ -70,7 +70,7 @@
 	)
 
 #define APCLogDebug(...)							\
-	NSLog (@"APC_DEBUG  %@:%d  %s  %@",				\
+	NSLog (@"APC_DEBUG  %@:%d  %s  => %@",			\
 		@(__FILE__).lastPathComponent,				\
 		(int) __LINE__,								\
 		__PRETTY_FUNCTION__,						\
@@ -78,7 +78,7 @@
 	)
 
 #define APCLogEvent(...)							\
-	NSLog (@"APC_EVENT  %@:%d  %s  %@",				\
+	NSLog (@"APC_EVENT  %@:%d  %s  => %@",			\
 		@(__FILE__).lastPathComponent,				\
 		(int) __LINE__,								\
 		__PRETTY_FUNCTION__,						\
@@ -86,7 +86,7 @@
 	)
 
 #define APCLogEventWithData(eventName, eventDictionary)  \
-	NSLog (@"APC_DATA   %@:%d  %s  %@:%@",			\
+	NSLog (@"APC_DATA   %@:%d  %s  => %@:%@",		\
 		@(__FILE__).lastPathComponent,				\
 		(int) __LINE__,								\
 		__PRETTY_FUNCTION__,						\
@@ -95,15 +95,21 @@
 	);
 
 
-//
-// I think APCLogMethod(), below, describes what this is doing better.
-//
-//	#define APCLogViewController()						\
-//		NSLog (@"APC_VIEW_CONTROLLER  %@:%d  %@",		\
-//			@(__FILE__).lastPathComponent,				\
-//			(NSInteger) __LINE__,						\
-//			NSStringFromClass ([self class])			\
-//		)
+/**
+ Represents when a view controller APPEARS on the screen.
+
+ There's a semantic difference between this macro
+ and APCLogMethod(), but, currently, they do the same
+ thing.  We'll evolve this.
+ 
+ Original code:
+		#define APCLogViewController()
+			NSLog (@"APC_VIEW_CONTROLLER  %@:%d  %@",
+			@(__FILE__).lastPathComponent,
+			(NSInteger) __LINE__,
+			NSStringFromClass ([self class])
+		)
+ */
 #define APCLogViewController() APCLogMethod()
 
 
