@@ -12,6 +12,7 @@
 #import "APCConcentricProgressView.h"
 #import "UIFont+APCAppearance.h"
 #import "APCAppDelegate.h"
+#import "APCAppCore.h"
 
 @interface APCDashboardViewController ()<UIGestureRecognizerDelegate, APCConcentricProgressViewDataSource>
 
@@ -45,6 +46,7 @@
                                              selector:@selector(updateVisibleRowsInTableView:)
                                                  name:APCScoringHealthKitDataIsAvailableNotification
                                                object:nil];
+    APCLogViewController();
 }
 
 - (void)viewWillDisappear:(BOOL)animated

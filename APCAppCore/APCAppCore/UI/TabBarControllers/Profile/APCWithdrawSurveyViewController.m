@@ -11,6 +11,7 @@
 #import "APCWithdrawDescriptionViewController.h"
 #import "NSBundle+Helper.h"
 #import "UIImage+APCHelper.h"
+#import "APCAppCore.h"
 
 @interface APCWithdrawSurveyViewController ()<APCWithdrawDescriptionViewControllerDelegate>
 
@@ -32,6 +33,12 @@
     self.submitButton.enabled = NO;
     
     [self.tableView reloadData];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    APCLogViewController();
 }
 
 - (NSArray *)prepareContent

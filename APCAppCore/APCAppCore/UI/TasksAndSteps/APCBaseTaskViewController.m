@@ -47,6 +47,7 @@
         self.outputDirectory = [NSURL fileURLWithPath:self.taskResultsFilePath];
     }
     [super viewWillAppear:animated];
+    APCLogViewController();
 }
 /*********************************************************************************/
 #pragma mark - RKSTOrderedTaskDelegate

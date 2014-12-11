@@ -55,6 +55,12 @@
     [self setUpAppearance];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    APCLogViewController();
+}
+
 - (void) setUpAppearance
 {
     self.completingActivitiesMessage.font = [UIFont appLightFontWithSize:17];

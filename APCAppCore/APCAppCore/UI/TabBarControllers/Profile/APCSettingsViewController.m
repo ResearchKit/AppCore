@@ -35,6 +35,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     self.items = [self prepareContent];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    APCLogViewController();
+}
+
 - (NSArray *)prepareContent
 {
     NSMutableArray *items = [NSMutableArray new];

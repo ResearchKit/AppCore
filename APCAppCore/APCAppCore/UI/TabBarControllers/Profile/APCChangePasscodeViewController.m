@@ -11,6 +11,7 @@
 #import "APCKeychainStore.h"
 #import "APCUserInfoConstants.h"
 #import "UIAlertController+Helper.h"
+#import "APCAppCore.h"
 
 typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
     kAPCPasscodeEntryTypeOld,
@@ -42,6 +43,7 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
     [super viewDidAppear:animated];
     
     [self.passcodeView becomeFirstResponder];
+    APCLogViewController();
 }
 
 - (void)didReceiveMemoryWarning {

@@ -7,6 +7,7 @@
  
 #import "APCLearnStudyDetailsViewController.h"
 #import "UIColor+APCAppearance.h"
+#import "APCAppCore.h"
 
 @interface APCLearnStudyDetailsViewController ()
 
@@ -24,6 +25,7 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    APCLogViewController();
 }
 
 - (void)setupNavAppearance

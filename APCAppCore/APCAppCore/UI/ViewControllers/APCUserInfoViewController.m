@@ -23,6 +23,12 @@ static CGFloat const kPickerCellHeight = 164.0f;
     // Do any additional setup after loading the view.
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    APCLogViewController();
+}
+
 #pragma mark - Custom Methods
 
 - (void)setupPickerCellAppeareance:(APCPickerTableViewCell *)cell{}
