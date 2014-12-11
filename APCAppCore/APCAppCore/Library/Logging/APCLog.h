@@ -68,12 +68,13 @@
 		[NSString stringWithFormat: __VA_ARGS__]	\
 	)
 
-#define APCLogError2(...)							\
+#define APCLogError2(x)                             \
+    if(x)                                           \
 	NSLog (@"APC_ERROR  %@:%d  %s  => %@",			\
 		@(__FILE__).lastPathComponent,				\
 		(int) __LINE__,								\
 		__PRETTY_FUNCTION__,						\
-		[NSString stringWithFormat: @"%@", __VA_ARGS__]	\
+		[NSString stringWithFormat: @"%@", [x localizedDescription]?:x] \
 	)
 
 #define APCLogDebug(...)							\
