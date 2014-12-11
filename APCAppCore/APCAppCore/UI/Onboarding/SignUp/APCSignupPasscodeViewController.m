@@ -65,7 +65,7 @@
     [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
     
     [self.passcodeView becomeFirstResponder];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Setup

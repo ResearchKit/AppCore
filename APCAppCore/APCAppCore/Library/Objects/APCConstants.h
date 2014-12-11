@@ -85,7 +85,7 @@ FOUNDATION_EXPORT NSString *const kTertiaryGrayColorKey;
 FOUNDATION_EXPORT NSString *const kAppStateChangedEvent;
 FOUNDATION_EXPORT NSString *const kNetworkEvent;
 FOUNDATION_EXPORT NSString *const kSchedulerEvent;
-
+FOUNDATION_EXPORT NSString *const kTaskEvent;
 
 @interface APCConstants : NSObject
 

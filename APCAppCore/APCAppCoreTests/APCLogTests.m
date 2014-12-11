@@ -112,7 +112,7 @@
 
 	APCLogMethod();
 
-	APCLogViewController();
+	APCLogViewControllerAppeared();
 }
 
 - (void) testMacrosFromWithinAFunction

@@ -66,7 +66,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
     self.headerView.frame = headerRect;
     
     self.tableView.tableHeaderView = self.tableView.tableHeaderView;
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Prepare Content

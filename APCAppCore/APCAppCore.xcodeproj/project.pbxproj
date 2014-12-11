@@ -21,12 +21,10 @@
 		36A9BE231A2FF2B200B14ADD /* APCScheduleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128FE1A2F78490015982C /* APCScheduleParser.m */; };
 		36A9BE241A2FF2B200B14ADD /* APCTimeSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129001A2F78490015982C /* APCTimeSelector.m */; };
 		36A9BE251A2FF2B200B14ADD /* APCTimeSelectorEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129021A2F78490015982C /* APCTimeSelectorEnumerator.m */; };
-		36B1AAE41A38DE7200CE7DB5 /* libFlurry_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3E81A38D9C80051096B /* libFlurry_5.4.0.a */; };
 		36B1AAE51A38DEA800CE7DB5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3EB1A38D9FF0051096B /* Security.framework */; };
 		36B1AAE61A38DEAF00CE7DB5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */; };
 		36C8B3E51A38D95A0051096B /* APCLogTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36C8B3E41A38D95A0051096B /* APCLogTests.m */; };
 		36C8B3E91A38D9C80051096B /* Flurry.h in Headers */ = {isa = PBXBuildFile; fileRef = 36C8B3E71A38D9C80051096B /* Flurry.h */; };
-		36C8B3EA1A38D9C80051096B /* libFlurry_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3E81A38D9C80051096B /* libFlurry_5.4.0.a */; };
 		36C8B3EC1A38D9FF0051096B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3EB1A38D9FF0051096B /* Security.framework */; };
 		36C8B3EE1A38DA4C0051096B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */; };
 		36E06F1C1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E06F1B1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m */; };
@@ -40,6 +38,8 @@
 		5BBDAF311A378E840047DF87 /* APCDeviceHardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBDAF2F1A378E840047DF87 /* APCDeviceHardware.m */; };
 		5BBDAF381A3795460047DF87 /* APCDeviceHardware+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBDAF361A3795460047DF87 /* APCDeviceHardware+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BBDAF391A3795460047DF87 /* APCDeviceHardware+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBDAF371A3795460047DF87 /* APCDeviceHardware+APCHelper.m */; };
+		F50084921A3A511500821CB5 /* APCLog.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EC85FA1A3A227C00068495 /* APCLog.m */; };
+		F50084931A3A51C000821CB5 /* libFlurry_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5EC85FD1A3A227C00068495 /* libFlurry_5.4.0.a */; };
 		F5B1F1A41A33BC8F00C377FB /* NSDictionary+APCAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B1F1A21A33BC8F00C377FB /* NSDictionary+APCAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5B1F1A51A33BC8F00C377FB /* NSDictionary+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B1F1A31A33BC8F00C377FB /* NSDictionary+APCAdditions.m */; };
 		F5B1F1AE1A33C71E00C377FB /* NSDate+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128D21A2F78490015982C /* NSDate+Helper.m */; };
@@ -363,7 +363,6 @@
 		360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateComponentsHelperTests.m; sourceTree = "<group>"; };
 		36C8B3E41A38D95A0051096B /* APCLogTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLogTests.m; sourceTree = "<group>"; };
 		36C8B3E71A38D9C80051096B /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
-		36C8B3E81A38D9C80051096B /* libFlurry_5.4.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurry_5.4.0.a; sourceTree = "<group>"; };
 		36C8B3EB1A38D9FF0051096B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		36E06F1B1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionRealLifeTests.m; sourceTree = "<group>"; };
@@ -711,7 +710,6 @@
 				F5F12B231A2F861F0015982C /* CoreLocation.framework in Frameworks */,
 				36C8B3EC1A38D9FF0051096B /* Security.framework in Frameworks */,
 				36C8B3EE1A38DA4C0051096B /* SystemConfiguration.framework in Frameworks */,
-				36C8B3EA1A38D9C80051096B /* libFlurry_5.4.0.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -719,9 +717,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36B1AAE41A38DE7200CE7DB5 /* libFlurry_5.4.0.a in Frameworks */,
 				36B1AAE51A38DEA800CE7DB5 /* Security.framework in Frameworks */,
 				36B1AAE61A38DEAF00CE7DB5 /* SystemConfiguration.framework in Frameworks */,
+				F50084931A3A51C000821CB5 /* libFlurry_5.4.0.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1911,6 +1909,7 @@
 				36A9BE221A2FF2B200B14ADD /* APCScheduleEnumerator.m in Sources */,
 				36A9BE201A2FF2B200B14ADD /* APCListSelector.m in Sources */,
 				36A9BE251A2FF2B200B14ADD /* APCTimeSelectorEnumerator.m in Sources */,
+				F50084921A3A511500821CB5 /* APCLog.m in Sources */,
 				36A9BE241A2FF2B200B14ADD /* APCTimeSelector.m in Sources */,
 				36A9BE1E1A2FF2B200B14ADD /* APCScheduleExpression.m in Sources */,
 				36C8B3E51A38D95A0051096B /* APCLogTests.m in Sources */,

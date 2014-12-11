@@ -47,7 +47,7 @@
     if (![self.touchContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
         self.touchIdButton.hidden = YES;
     }
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 - (void)viewDidAppear:(BOOL)animated

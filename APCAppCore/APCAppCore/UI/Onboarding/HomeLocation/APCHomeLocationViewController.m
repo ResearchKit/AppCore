@@ -68,7 +68,7 @@ static CGFloat const kTableFooterHeight = 80.0f;
     [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
     
     [self.searchTextField becomeFirstResponder];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Setup

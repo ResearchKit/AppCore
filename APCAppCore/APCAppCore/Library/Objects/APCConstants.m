@@ -71,6 +71,7 @@ NSString *const kTertiaryGrayColorKey   = @"TertiaryGrayColorKey";
 NSString *const kAppStateChangedEvent   = @"AppStateChanged";
 NSString *const kNetworkEvent           = @"NetworkEvent";
 NSString *const kSchedulerEvent         = @"SchedulerEvent";
+NSString *const kTaskEvent              = @"TaskEvent";
 
 
 @implementation APCConstants

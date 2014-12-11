@@ -58,7 +58,7 @@
     [super viewDidAppear:animated];
     
     [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
     
 }
 

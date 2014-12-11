@@ -60,7 +60,7 @@ static CGFloat const kHeaderHeight = 127.0f;
         
         self.tableView.tableHeaderView = self.tableView.tableHeaderView;
     }
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 #pragma mark -

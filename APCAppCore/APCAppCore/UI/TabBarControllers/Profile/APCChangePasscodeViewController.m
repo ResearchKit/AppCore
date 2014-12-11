@@ -43,7 +43,7 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
     [super viewDidAppear:animated];
     
     [self.passcodeView becomeFirstResponder];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 - (void)didReceiveMemoryWarning {

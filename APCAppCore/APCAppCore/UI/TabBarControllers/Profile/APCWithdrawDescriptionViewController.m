@@ -39,7 +39,7 @@
     [super viewDidAppear:animated];
     
     [self.textView becomeFirstResponder];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 - (void)viewDidDisappear:(BOOL)animated

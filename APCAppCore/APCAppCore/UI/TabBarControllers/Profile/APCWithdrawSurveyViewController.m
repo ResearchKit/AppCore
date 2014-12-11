@@ -38,7 +38,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 - (NSArray *)prepareContent

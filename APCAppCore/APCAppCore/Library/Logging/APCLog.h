@@ -110,15 +110,20 @@
  thing.  We'll evolve this.
  
  Original code:
-		#define APCLogViewController()
+		#defineAPCLogViewControllerAppeared()()
 			NSLog (@"APC_VIEW_CONTROLLER  %@:%d  %@",
 			@(__FILE__).lastPathComponent,
 			(NSInteger) __LINE__,
 			NSStringFromClass ([self class])
 		)
  */
-#define APCLogViewController() APCLogMethod()
-
+#define APCLogViewControllerAppeared()		\
+	NSLog (@"APC_VIEW   %@:%d  %s  => %@ appeared.",	\
+		@(__FILE__).lastPathComponent,		\
+		(int) __LINE__,						\
+		__PRETTY_FUNCTION__,				\
+        NSStringFromClass (self.class)      \
+	)
 
 
 // ---------------------------------------------------------

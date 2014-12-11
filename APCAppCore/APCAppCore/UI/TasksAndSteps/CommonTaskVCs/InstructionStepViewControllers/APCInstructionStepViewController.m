@@ -44,7 +44,7 @@
         self.navigationController.navigationBar.topItem.title = self.title;
         self.introVC.title = self.title;
     }
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 - (IBAction)getStartedWasTapped:(id)sender

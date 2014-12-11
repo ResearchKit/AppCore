@@ -46,7 +46,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 - (NSArray *)prepareContent

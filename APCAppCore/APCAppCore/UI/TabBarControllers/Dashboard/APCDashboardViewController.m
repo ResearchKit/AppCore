@@ -46,7 +46,7 @@
                                              selector:@selector(updateVisibleRowsInTableView:)
                                                  name:APCScoringHealthKitDataIsAvailableNotification
                                                object:nil];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 - (void)viewWillDisappear:(BOOL)animated

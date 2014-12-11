@@ -87,7 +87,7 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
     [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
     
     [self reloadData];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Prepare Content

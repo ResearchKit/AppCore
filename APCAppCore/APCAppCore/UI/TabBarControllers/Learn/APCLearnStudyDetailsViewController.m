@@ -25,7 +25,7 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 - (void)setupNavAppearance

@@ -31,7 +31,7 @@
 {
     [super viewDidAppear:animated];
     [self.emailTextField becomeFirstResponder];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Appearance

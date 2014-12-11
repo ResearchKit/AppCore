@@ -47,7 +47,12 @@
         self.outputDirectory = [NSURL fileURLWithPath:self.taskResultsFilePath];
     }
     [super viewWillAppear:animated];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
+    APCLogEventWithData(kTaskEvent, (@{
+                                       @"task_status":@"Started",
+                                       @"task_title": self.scheduledTask.task.taskTitle,
+                                       @"task_view_controller":NSStringFromClass([self class])
+                                       }));
 }
 /*********************************************************************************/
 #pragma mark - RKSTOrderedTaskDelegate
@@ -60,21 +65,35 @@
     APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
     [appDelegate.scheduler updateScheduledTasksIfNotUpdating:NO OnCompletion:NULL];
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
+    APCLogEventWithData(kTaskEvent, (@{
+                                       @"task_status":@"Completed",
+                                       @"task_title": self.scheduledTask.task.taskTitle,
+                                       @"task_view_controller":NSStringFromClass([self class])
+                                       }));
 }
 
 - (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
 {
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
+    APCLogEventWithData(kTaskEvent, (@{
+                                       @"task_status":@"Cancelled",
+                                       @"task Title": self.scheduledTask.task.taskTitle,
+                                       @"task_view_controller":NSStringFromClass([self class])
+                                       }));
 }
 
 - (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
 {
     APCLogError2 (error);
+    APCLogEventWithData(kTaskEvent, (@{
+                                       @"task_status":@"Failed",
+                                       @"task Title": self.scheduledTask.task.taskTitle,
+                                       @"task_view_controller":NSStringFromClass([self class])
+                                       }));
 }
 
 - (NSString *)taskResultsFilePath
 {
-
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * path = [[paths lastObject] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", self.taskRunUUID.UUIDString]];
     

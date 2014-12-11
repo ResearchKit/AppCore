@@ -12,7 +12,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 + (RKSTOrderedTask *)createTask:(APCScheduledTask*) scheduledTask

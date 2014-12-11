@@ -31,7 +31,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Prepare content

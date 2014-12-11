@@ -46,7 +46,7 @@
     [super viewDidDisappear:animated];
     
     [self.activityIndicatorView stopAnimating];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 @end

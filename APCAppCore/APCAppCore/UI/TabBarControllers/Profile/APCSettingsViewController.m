@@ -38,7 +38,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 - (NSArray *)prepareContent

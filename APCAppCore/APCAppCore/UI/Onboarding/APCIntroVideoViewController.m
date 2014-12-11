@@ -49,7 +49,7 @@ static NSString *const kVideoShownKey = @"VideoShown";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playbackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
     [self.moviePlayer play];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 - (void) viewWillDisappear:(BOOL)animated {

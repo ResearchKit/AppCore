@@ -11,6 +11,7 @@
 #import "NSBundle+Helper.h"
 #import "APCStudyDetailsViewController.h"
 #import "APCLearnStudyDetailsViewController.h"
+#import "APCAppCore.h"
 
 static CGFloat kSectionHeaderHeight = 40.f;
 
@@ -33,7 +34,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    APCLogViewController();
+  APCLogViewControllerAppeared();
 }
 
 - (void)didReceiveMemoryWarning {
