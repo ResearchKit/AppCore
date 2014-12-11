@@ -14,6 +14,18 @@ static NSDateFormatter *dateFormatter = nil;
 
 
 /**
+ I'm not sure what happens if Flurry is unavailable,
+ and, in this branch, my Flurry-start code runs when
+ the app launches, from:
+ 
+	-[APCAppDelegate application:didFinishLaunchingWithOptions:]
+ 
+ So this turns it off until I have a chance to test it.
+ */
+#define DEBUG_USE_FLURRY  NO
+
+
+/**
  Apple says they use these formatting codes:
  http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns
  */
@@ -114,9 +126,23 @@ static NSString *FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";
 #pragma mark - Setup
 // ---------------------------------------------------------
 
+/**
+ Called by -[APCAppDelegate application:didFinishLaunchingWithOptions:],
+ in AppCore.
+ */
 + (void) start
 {
-	[Flurry startSession: FLURRY_API_KEY];
+	if (DEBUG_USE_FLURRY)
+	{
+		APCLogDebug (@"Starting Flurry session.");
+
+		[Flurry startSession: FLURRY_API_KEY];
+	}
+
+	else
+	{
+		APCLogDebug (@"Flurry integration is disabled (macro DEBUG_USE_FLURRY).  Not connecting to Flurry.");
+	}
 }
 
 + (void) initialize
