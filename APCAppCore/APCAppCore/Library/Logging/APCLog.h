@@ -39,6 +39,11 @@
  This macro calls the method +[APCLog file:line:format:],
  passing it the __FILE__, __LINE__, and __PRETTY_FUNCTION__
  (class and method name) from which you called it.
+ Use this like so:
+ 
+		[APCLogF format: @"blah blah blah", ...]
+ 
+ just the way you use NSLog() or [APCLog log:].
  */
 #define APCLogF APCLog file: @(__FILE__).lastPathComponent line: (NSInteger) __LINE__  method: @(__PRETTY_FUNCTION__)
 
