@@ -27,7 +27,7 @@ static NSDateFormatter *dateFormatter = nil;
 #endif
 
 /** Um...  why doesn't this work from the test harness, even with a "release" build defined? */
-#define DEBUG_PRINT_LOGGING_STATEMENTS  IS_DEBUG_DEFINED
+#define DEBUG_PRINT_LOGGING_STATEMENTS  YES	// IS_DEBUG_DEFINED
 
 
 /**
