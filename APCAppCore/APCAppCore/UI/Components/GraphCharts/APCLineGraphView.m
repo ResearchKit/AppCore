@@ -264,7 +264,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     [self.xAxisView layoutSubviews];
     
     if (self.shouldAnimate) {
-        [self performSelector:@selector(animateLayersSequentially) withObject:nil afterDelay:0.4];
+        [self performSelector:@selector(animateLayersSequentially) withObject:nil afterDelay:0.2];
         
     }
 }
@@ -347,7 +347,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     }
     
     self.xAxisView = [[APCAxisView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.plotsView.frame), CGRectGetWidth(self.plotsView.frame), kXAxisHeight)];
-    self.xAxisView.landscapeMode = YES;
+    self.xAxisView.landscapeMode = self.landscapeMode;
     self.xAxisView.tintColor = self.axisTitleColor;
     [self.xAxisView setupLabels:self.xAxisTitles forAxisType:kAPCGraphAxisTypeX];
     self.xAxisView.leftOffset = kAPCGraphLeftPadding;
@@ -775,7 +775,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeGrow startDelay:delay];
     }
     
-    delay += 0.2;
     [self animateLayer:self.fillPathLayer withAnimationType:kAPCGraphAnimationTypeFade startDelay:delay];
     
     self.shouldAnimate = NO;
