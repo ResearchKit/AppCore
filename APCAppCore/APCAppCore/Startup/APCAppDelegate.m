@@ -31,7 +31,6 @@ static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
-@property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
 @property (nonatomic) BOOL isPasscodeShowing;
 
 @end

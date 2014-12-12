@@ -38,6 +38,8 @@
 
 @property (nonatomic, strong) UIImage *profileImage;
 
+- (IBAction)showSettings:(id)sender;
+
 - (IBAction)signOut:(id)sender;
 
 - (IBAction)leaveStudy:(id)sender;
@@ -49,5 +51,7 @@
 - (void)loadProfileValuesInModel;
 
 - (void)setupDataFromJSONFile:(NSString *)jsonFileName;
+
+- (NSArray *)prepareContent;
 
 @end
