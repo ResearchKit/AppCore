@@ -57,8 +57,10 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     
     [self.dataMonitor appFinishedLaunching];
 
-	// Start logging.  Also starts connection to logging server, if possible.
-	[APCLog start];
+	// Setup analytics options (and, conceptually, all logging options).
+	[APCLog setupTurningFlurryOn: [self.initializationOptions [kAnalyticsOnOffKey] boolValue]
+					flurryApiKey: self.initializationOptions [kAnalyticsFlurryAPIKeyKey]
+	 ];
     
     return YES;
 }
