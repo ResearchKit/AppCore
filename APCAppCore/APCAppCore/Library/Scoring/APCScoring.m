@@ -65,6 +65,8 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     }
     
     _timeline = [self configureTimelineForDays:days];
+    
+    [self generateEmptyDataset];
 }
 
 - (HKHealthStore *)healthStore
@@ -550,7 +552,13 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
 
 - (NSString *)lineGraph:(APCLineGraphView *)graphView titleForXAxisAtIndex:(NSInteger)pointIndex
 {
-    NSDate *titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
+    NSDate *titleDate;
+    
+    if ([self.dataPoints count] == 0) {
+        titleDate = [self.timeline objectAtIndex:pointIndex];
+    } else {
+        titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
+    }
     
     [dateFormatter setDateFormat:@"MMM d"];
     
