@@ -16,15 +16,40 @@
 
 @implementation APCLogTests
 
-- (void)setUp {
+
+
+// ---------------------------------------------------------
+#pragma mark - Setup
+// ---------------------------------------------------------
+
+/**
+ Put setup code here. This method is called before
+ the invocation of each test method in the class.
+ */
+- (void) setUp
+{
 	[super setUp];
-	// Put setup code here. This method is called before the invocation of each test method in the class.
+
+	if ([APCLog isFlurryEnabled])
+	{
+		[APCLog start];
+	}
 }
 
-- (void)tearDown {
-	// Put teardown code here. This method is called after the invocation of each test method in the class.
+/**
+ Put teardown code here. This method is called after
+ the invocation of each test method in the class.
+ */
+- (void) tearDown
+{
 	[super tearDown];
 }
+
+
+
+// ---------------------------------------------------------
+#pragma mark - first-pass ideas
+// ---------------------------------------------------------
 
 - (void) testBasicLog
 {
@@ -75,7 +100,7 @@
 	@throw testException;
 }
 
-- (void) testMacros
+- (void) testRonOriginalMacros
 {
 	//
 	// Objective-C logging
@@ -97,27 +122,98 @@
 	[APCLogF format: @"message with magic file and line"];
 
 	[APCLogF format: @"message with magic file, line, and parameters: [%@], [%d]", @"my name", 47];
+}
 
 
-	//
-	// from Dhanush, modified by Ron:  standard-looking
-	// logging methods/macros
-	//
 
+// ---------------------------------------------------------
+#pragma mark - Testing the Macros
+// ---------------------------------------------------------
+
+- (void) testLogErrorMessage
+{
 	APCLogError (@"The error message is: %@, age %@", @"Ron", @47);
+}
 
-	APCLogDebug (@"The debug message is: %@, age %@", @"Ron", @47);
-
-	APCLogEventWithData (@"RonEventName", (@{ @"eventName": @"truth", @"eventId": @12}) );
-
-	APCLogViewControllerAppeared();
-
+- (void) testLogErrorObject
+{
 	NSError *error = [NSError errorWithDomain: @"Whatever, dude"
 										 code: 15
 									 userInfo: @{@"some custom value": @"woo-hoo!"}
 					  ];
 
 	APCLogError2 (error);
+}
+
+- (void) testLogExceptionObject
+{
+	@try
+	{
+		[self sampleExceptionThrowerFunctionStackItem2];
+	}
+
+	@catch (NSException *exception)
+	{
+		APCLogDebug (@"(divider line)\n\n"
+					 "-------------------------------------------------------------------------\n"
+					 "------------- THIS EXCEPTION PRINTOUT IS PART OF THE TEST. --------------\n"
+					 "-------------------------------------------------------------------------"
+					 );
+
+		APCLogException (exception);
+
+		APCLogDebug (@"(another divider line)\n"
+					 "-------------------------------------------------------------------------\n"
+					 "----------------- done with the purposeful exceptions. ------------------\n"
+					 "-------------------------------------------------------------------------\n\n"
+					 );
+	}
+	@finally
+	{
+	}
+}
+
+- (void) testFromWithinClassMethod
+{
+	[[self class] sampleClassMethod];
+}
+
++ (void) sampleClassMethod
+{
+	APCLogDebug(@"This is a test from some class method or other.");
+}
+
+- (void) testLogDebug
+{
+	APCLogDebug (@"Simple log message");
+
+	APCLogDebug (@"Log message with parameters:  name %@, age %@", @"Ron", @47);
+
+	APCLogDebug (nil);
+}
+
+- (void) testLogEvent
+{
+	APCLogEvent (@"Simple log message");
+
+	APCLogEvent (@"Log message with parameters:  name %@, age %@", @"Ron", @47);
+
+	APCLogEvent (nil);
+}
+
+- (void) testLogEventWithData
+{
+	APCLogEventWithData ( @"RonEventName",
+						  (@{
+								@"eventName": @"truth",
+								@"eventId": @12
+							})
+						);
+}
+
+- (void) testLogViewControllerAppeared
+{
+	APCLogViewControllerAppeared();
 }
 
 - (void) testMacrosFromWithinAFunction
@@ -128,6 +224,18 @@
 void sampleLoggingFunction ()
 {
 	APCLogDebug(@"Testing the printout from within a C function call.");
+}
+
+- (void) sampleExceptionThrowerFunctionStackItem2
+{
+	[self sampleExceptionThrowerFunctionStackItem3];
+}
+
+- (void) sampleExceptionThrowerFunctionStackItem3
+{
+	NSException *testException = [NSException exceptionWithName: @"Test Exception" reason: @"Just seeing if I can log exceptions correctly" userInfo: nil];
+
+	@throw testException;
 }
 
 @end

@@ -31,6 +31,7 @@
 - (instancetype)initWithExpression:(NSString*)expression timeZero:(NSTimeInterval)timeZero
 {
     self = [self init];
+	
     if (self)
     {
         APCScheduleParser* parser = [[APCScheduleParser alloc] initWithExpression:expression];

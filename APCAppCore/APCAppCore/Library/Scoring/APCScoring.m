@@ -21,6 +21,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
 @property (nonatomic, strong) HKHealthStore *healthStore;
 @property (nonatomic, strong) NSMutableArray *dataPoints;
 @property (nonatomic, strong) NSMutableArray *correlateDataPoints;
+@property (nonatomic, strong) NSArray *timeline;
 
 @property (nonatomic) NSUInteger current;
 @property (nonatomic) NSUInteger correlatedCurrent;
@@ -52,7 +53,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
  *   }
  */
 
-- (void)sharedInit
+- (void)sharedInit:(NSInteger)days
 {
     _dataPoints = [NSMutableArray array];
     _correlateDataPoints = [NSMutableArray array];
@@ -62,6 +63,8 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
     }
+    
+    _timeline = [self configureTimelineForDays:days];
 }
 
 - (HKHealthStore *)healthStore
@@ -104,8 +107,9 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     self = [super init];
     
     if (self) {
-        [self sharedInit];
-        [self queryTaskId:taskId forDays:numberOfDays valueKey:valueKey dataKey:dataKey sortKey:sortKey groupByDay:NO];
+        NSInteger days = numberOfDays + 1;
+        [self sharedInit:days];
+        [self queryTaskId:taskId forDays:days valueKey:valueKey dataKey:dataKey sortKey:sortKey groupByDay:NO];
     }
     
     return self;
@@ -121,8 +125,9 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     self = [super init];
     
     if (self) {
-        [self sharedInit];
-        [self queryTaskId:taskId forDays:numberOfDays + 1 valueKey:valueKey dataKey:dataKey sortKey:sortKey groupByDay:groupByDay];
+        NSInteger days = numberOfDays + 1;
+        [self sharedInit:days];
+        [self queryTaskId:taskId forDays:days valueKey:valueKey dataKey:dataKey sortKey:sortKey groupByDay:groupByDay];
     }
     
     return self;
@@ -146,18 +151,46 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     self = [super init];
     
     if (self) {
-        [self sharedInit];
+        NSInteger days = numberOfDays + 1;
+        [self sharedInit:days];
         
         // The very first thing that we need to make sure is that
         // the unit and quantity types are compatible
         if ([quantityType isCompatibleWithUnit:unit]) {
-            [self statsCollectionQueryForQuantityType:quantityType unit:unit forDays:numberOfDays + 1];
+            [self statsCollectionQueryForQuantityType:quantityType unit:unit forDays:days];
         } else {
             NSAssert([quantityType isCompatibleWithUnit:unit], @"The quantity and the unit must be compatible");
         }
     }
     
     return self;
+}
+
+#pragma mark - Helpers
+
+- (NSArray *)configureTimelineForDays:(NSInteger)days
+{
+    NSMutableArray *timeline = [NSMutableArray array];
+    
+//    [dateFormatter setDateFormat:@"MMM dd"];
+    
+    for (NSInteger day = days; day <= 0; day++) {
+        NSDate *timelineDate = [self dateForSpan:day];
+        [timeline addObject:timelineDate];
+    }
+    
+    return timeline;
+}
+
+- (void)generateEmptyDataset
+{
+    for (NSDate *day in self.timeline) {
+        [self.dataPoints addObject:@{
+                                     kDatasetDateKey: day,
+                                     kDatasetValueKey: @(0),
+                                     kDatasetValueNoDataKey: @(NO)
+                                     }];
+    }
 }
 
 #pragma mark - Queries
@@ -227,15 +260,19 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         }
     }
     
-    if (sortKey) {
-        NSSortDescriptor *sortBy = [[NSSortDescriptor alloc] initWithKey:kDatasetSortKey ascending:YES];
-        NSArray *sortedDataPoints = [self.dataPoints sortedArrayUsingDescriptors:@[sortBy]];
+    if ([self.dataPoints count] != 0) {
+        if (sortKey) {
+            NSSortDescriptor *sortBy = [[NSSortDescriptor alloc] initWithKey:kDatasetSortKey ascending:YES];
+            NSArray *sortedDataPoints = [self.dataPoints sortedArrayUsingDescriptors:@[sortBy]];
+            
+            self.dataPoints = [sortedDataPoints mutableCopy];
+        }
         
-        self.dataPoints = [sortedDataPoints mutableCopy];
-    }
-    
-    if (groupByDay) {
-        [self groupDatasetByDay];
+        if (groupByDay) {
+            [self groupDatasetByDay];
+        }
+    } else {
+        [self generateEmptyDataset];
     }
 }
 
@@ -383,8 +420,13 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
 
 - (void)dataIsAvailableFromHealthKit:(NSArray *)dataset
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    if ([dataset count] == 0) {
+        [self generateEmptyDataset];
+    } else {
         self.dataPoints = [dataset mutableCopy];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:APCScoringHealthKitDataIsAvailableNotification
                                                             object:self.dataPoints];
     });
@@ -436,7 +478,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         self.current = 0;
         nextPoint = [self.dataPoints objectAtIndex:self.current++];
     }
-    
+
     return nextPoint;
 }
 
@@ -458,7 +500,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     NSInteger numberOfPoints = 0;
     
     if (plotIndex == 0) {
-        numberOfPoints = [self.dataPoints count];
+        numberOfPoints = [self.timeline count]; //[self.dataPoints count];
     } else {
         numberOfPoints = [self.correlateDataPoints count];
     }

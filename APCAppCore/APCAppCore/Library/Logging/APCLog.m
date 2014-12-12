@@ -1,28 +1,16 @@
 //
 //  APCLog.m
-//  APCAppCore
+//  AppCore
 //
-//  Created by Ron Conescu on 12/7/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
+//  Copyright (c) 2014 Apple Inc. All rights reserved.
 //
 
 #import "APCLog.h"
 #import "Flurry.h"
+#import "APCLog_Settings.h"
 
 
 static NSDateFormatter *dateFormatter = nil;
-
-
-/**
- I'm not sure what happens if Flurry is unavailable,
- and, in this branch, my Flurry-start code runs when
- the app launches, from:
- 
-	-[APCAppDelegate application:didFinishLaunchingWithOptions:]
- 
- So this turns it off until I have a chance to test it.
- */
-#define DEBUG_USE_FLURRY  NO
 
 
 /**
@@ -31,11 +19,7 @@ static NSDateFormatter *dateFormatter = nil;
  */
 static NSString *LOG_DATE_FORMAT = @"yyyy-MM-dd HH:mm:ss.SSS ZZZZ";
 
-/**
- This is hard-coded to one of the developers' test accounts,
- and an application named "Test".  We'll fix that shortly.
- */
-static NSString *FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";
+
 
 
 @implementation APCLog
@@ -132,7 +116,7 @@ static NSString *FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";
  */
 + (void) start
 {
-	if (DEBUG_USE_FLURRY)
+	if (APCLOG_USE_FLURRY)
 	{
 		APCLogDebug (@"Starting Flurry session.");
 
@@ -152,6 +136,17 @@ static NSString *FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";
 		dateFormatter = [NSDateFormatter new];
 		dateFormatter.dateFormat = LOG_DATE_FORMAT;
 	}
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Status
+// ---------------------------------------------------------
+
++ (BOOL) isFlurryEnabled
+{
+	return (APCLOG_USE_FLURRY);
 }
 
 
@@ -193,6 +188,148 @@ static NSString *FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";
 		   (int) lineNumber,
 		   classAndMethodName,
 		   NSStringFromVariadicArgumentsAndFormat (messageFormat));
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - New Logging Methods.  No, really.
+// ---------------------------------------------------------
+
++ (void) methodInfo: (NSString *) apcLogMethodInfo
+	   errorMessage: (NSString *) formatString, ...
+{
+	if (formatString == nil)
+	{
+		formatString = @"(no message)";
+	}
+
+	NSString *formattedMessage = NSStringFromVariadicArgumentsAndFormat(formatString);
+
+	[self logInternal_tag: @"APC_ERROR"
+				   method: apcLogMethodInfo
+				  message: formattedMessage];
+}
+
++ (void) methodInfo: (NSString *) apcLogMethodData
+			  error: (NSError *) error
+{
+	if (error != nil)
+	{
+		NSString *description = (error.localizedDescription ?:
+								 error.description ?:
+								 [NSString stringWithFormat: @"%@", error]);
+
+		if (APCLOG_USE_FLURRY)
+		{
+			[Flurry logError: description message: nil error: error];
+		}
+
+		[self logInternal_tag: @"APC_ERROR"
+					   method: apcLogMethodData
+					  message: description];
+	}
+}
+
++ (void) methodInfo: (NSString *) apcLogMethodData
+		  exception: (NSException *) exception
+{
+	if (exception != nil)
+	{
+		NSString *description = (exception.name ?:
+								 [NSString stringWithFormat: @"%@", exception]);
+
+		NSString *printout = [NSString stringWithFormat: @"EXCEPTION: [%@]. Stack trace:\n%@", exception, exception.callStackSymbols];
+
+
+		if (APCLOG_USE_FLURRY)
+		{
+			[Flurry logError: description message: nil exception: exception];
+		}
+
+		[self logInternal_tag: @"APC_ERROR"
+					   method: apcLogMethodData
+					  message: printout];
+	}
+}
+
++ (void) methodInfo: (NSString *) apcLogMethodData
+			  debug: (NSString *) formatString, ...
+{
+	if (formatString == nil)
+	{
+		formatString = @"(no message)";
+	}
+
+	NSString *formattedMessage = NSStringFromVariadicArgumentsAndFormat(formatString);
+
+	[self logInternal_tag: @"APC_DEBUG"
+				   method: apcLogMethodData
+				  message: formattedMessage];
+}
+
++ (void) methodInfo: (NSString *) apcLogMethodData
+			  event: (NSString *) formatString, ...
+{
+	if (formatString == nil)
+	{
+		formatString = @"(no message)";
+	}
+
+	NSString *formattedMessage = NSStringFromVariadicArgumentsAndFormat(formatString);
+
+	if (APCLOG_USE_FLURRY)
+	{
+		[Flurry logEvent: formattedMessage];
+	}
+
+	[self logInternal_tag: @"APC_EVENT"
+				   method: apcLogMethodData
+				  message: formattedMessage];
+}
+
++ (void) methodInfo: (NSString *) apcLogMethodData
+		  eventName: (NSString *) eventName
+			   data: (NSDictionary *) eventDictionary
+{
+	NSString *message = [NSString stringWithFormat: @"%@: %@", eventName, eventDictionary];
+
+	if (APCLOG_USE_FLURRY)
+	{
+		[Flurry logEvent: eventName withParameters: eventDictionary];
+	}
+
+	[self logInternal_tag: @" APC_DATA"
+				   method: apcLogMethodData
+				  message: message];
+}
+
++ (void)        methodInfo: (NSString *) apcLogMethodData
+	viewControllerAppeared: (NSObject *) viewController
+{
+	NSString *message = [NSString stringWithFormat: @"%@ appeared.", NSStringFromClass (viewController.class)];
+
+	[self logInternal_tag: @" APC_VIEW"
+				   method: apcLogMethodData
+				  message: message];
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - The centralized, internal logging method
+// ---------------------------------------------------------
+
++ (void) logInternal_tag: (NSString *) tag
+				  method: (NSString *) methodInfo
+				 message: (NSString *) message
+{
+	// Um...  why isn't this "if" statement doing anything
+	// in the test harness?  (It works fine in Diabetes.)
+	if (APCLOG_PRINT_LOGGING_STATEMENTS == YES)
+	{
+		NSLog (@"%@ %@ => %@", tag, methodInfo, message);
+	}
 }
 
 @end

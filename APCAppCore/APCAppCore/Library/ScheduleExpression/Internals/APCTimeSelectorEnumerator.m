@@ -40,9 +40,13 @@
 		_beginningMoment = selector.initialValue;
 
 		if ([selector matches: beginning])
+		{
 			_beginningMoment = beginning;
+		}
 		else
+		{
 			_beginningMoment = [selector nextMomentAfter: beginning];
+		}
     }
     
     return self;
