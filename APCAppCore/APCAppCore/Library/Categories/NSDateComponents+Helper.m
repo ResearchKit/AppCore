@@ -18,7 +18,9 @@ static NSTimeZone *_localTimeZone = nil;
 + (NSCalendar *) gregorianCalendar
 {
 	if (_gregorianCalendar == nil)
+	{
 		_gregorianCalendar = [NSCalendar calendarWithIdentifier: NSCalendarIdentifierGregorian];
+	}
 
 	return _gregorianCalendar;
 }
@@ -26,7 +28,9 @@ static NSTimeZone *_localTimeZone = nil;
 + (NSTimeZone *) utcTimeZone
 {
 	if (_utcTimeZone == nil)
+	{
 		_utcTimeZone = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
+	}
 
 	return _utcTimeZone;
 }
@@ -34,7 +38,9 @@ static NSTimeZone *_localTimeZone = nil;
 + (NSTimeZone *) localTimeZone
 {
 	if (_localTimeZone == nil)
+	{
 		_localTimeZone = [NSTimeZone localTimeZone];
+	}
 
 	return _localTimeZone;
 }
@@ -146,12 +152,13 @@ static NSTimeZone *_localTimeZone = nil;
 }
 
 
-
+/**
+ Again -- we're modifying this DateComponents object, by design.
+ This is a shortcut for allocating an NSDateComponents object
+ and then setting all its fields.
+ */
 - (NSInteger) cronDayOfWeekForDay: (NSInteger) dayInCurrentMonthYearAndCalendar
 {
-	// I'm modifying this DateComponents object, by design.
-	// This is a shortcut for allocating an NSDateComponents object
-	// and then setting all its fields.
 	self.day = dayInCurrentMonthYearAndCalendar;
 	
 	NSDate *myDate = self.date;
@@ -159,7 +166,10 @@ static NSTimeZone *_localTimeZone = nil;
 	NSInteger zeroBasedDayOfWeek = oneBasedDayOfWeek - 1;
 
 	// Convert 1..7 to 0..6 .
-	if (zeroBasedDayOfWeek < 0) zeroBasedDayOfWeek += 7;
+	if (zeroBasedDayOfWeek < 0)
+	{
+		zeroBasedDayOfWeek += 7;
+	}
 
 	// And just to clarify:
 	NSInteger cronDayOfWeek = zeroBasedDayOfWeek;
@@ -190,13 +200,19 @@ static NSTimeZone *_localTimeZone = nil;
 	NSMutableArray *computedDays = [NSMutableArray new];
 
 	if (self.calendar == nil)
+	{
 		self.calendar = [NSCalendar currentCalendar];
+	}
 
 	if (self.year == NSDateComponentUndefined)
+	{
 		self.year = [self.calendar component: NSCalendarUnitYear fromDate: [NSDate date]];
+	}
 
 	if (self.month == NSDateComponentUndefined)
+	{
 		self.month = [self.calendar component: NSCalendarUnitMonth fromDate: [NSDate date]];
+	}
 
 	NSInteger lastDayOfMonth = self.lastDayOfMonth;
 

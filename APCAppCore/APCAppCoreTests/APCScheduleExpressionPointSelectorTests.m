@@ -198,9 +198,13 @@
 		NSNumber *nextPoint = [selector nextMomentAfter: @(movingPoint)];
 
 		if (expected > end.integerValue)
+		{
 			XCTAssertNil (nextPoint);
+		}
 		else
+		{
 			XCTAssertEqualObjects (nextPoint, @(expected));
+		}
 	}
 	
 	XCTAssertNil([selector nextMomentAfter:end]);

@@ -421,42 +421,70 @@ parseError:
 
 	APCListSelector* rawDayOfMonthSelector = nil;
 	APCListSelector* rawDayOfWeekSelector = nil;
+
+
+	//
+	// Extract minutes.
+	//
     
     self.minuteSelector = [self listProductionForType:kMinutes];
+
     if (self.errorEncountered)
     {
         NSLog(@"Invalid Minute selector");
         goto parseError;
     }
     
+
+	//
+	// Extract hours.
+	//
+
     [self fieldSeparatorProduction];
-    
-    
+
     self.hourSelector = [self listProductionForType:kHours];
+
     if (self.errorEncountered)
     {
         NSLog(@"Invalid Hour selector");
         goto parseError;
     }
     
+
+	//
+	// Extract days of the month.
+	//
+
     [self fieldSeparatorProduction];
 
 	rawDayOfMonthSelector = [self listProductionForType:kDayOfMonth];
+
     if (self.errorEncountered)
     {
         NSLog(@"Invalid Day of Month selector");
         goto parseError;
     }
-    
+
+
+	//
+	// Extract months.
+	//
+
     [self fieldSeparatorProduction];
     
     self.monthSelector = [self listProductionForType:kMonth];
+
     if (self.errorEncountered)
     {
         NSLog(@"Invalid Month selector");
         goto parseError;
     }
     
+
+	//
+	// Extract days of the week.
+	//
+
     [self fieldSeparatorProduction];
 
 	rawDayOfWeekSelector = [self listProductionForType:kDayOfWeek];
@@ -466,17 +494,28 @@ parseError:
         goto parseError;
     }
     
+
+	//
+	// Extract (or maybe delete) years.
+	//
+
     [self expect: kEndToken];
     
     self.yearSelector = [self yearProduction:kYear];
 
 
-	/*
-	 Now that we know there are no errors:  create a
-	 wrapper around the day-of-month and day-of-week
-	 selector we just generated.
-	 */
+	//
+	// Now that we know there are no errors:  create a
+	// wrapper around the day-of-month and day-of-week
+	// selector we just generated.
+	//
+
 	self.dayOfMonthSelector = [[APCDayOfMonthSelector alloc] initWithFreshlyParsedDayOfMonthSelector: rawDayOfMonthSelector andDayOfWeekSelector: rawDayOfWeekSelector];
+
+
+	//
+	// Bug out.
+	//
 
 parseError:
     return;
