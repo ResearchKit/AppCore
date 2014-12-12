@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B23" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -794,57 +794,38 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="za5-xM-hxy">
-                                            <rect key="frame" x="106" y="1" width="106" height="63"/>
+                                            <rect key="frame" x="169" y="2" width="143" height="63"/>
                                             <state key="normal" title="Female"/>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUo-2d-SFc">
-                                            <rect key="frame" x="213" y="1" width="107" height="63"/>
-                                            <state key="normal" title="Other"/>
-                                        </button>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A6D-nI-0bR">
-                                            <rect key="frame" x="108" y="0.0" width="1" height="65"/>
+                                            <rect key="frame" x="160" y="-1" width="1" height="66"/>
                                             <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="1" id="jYm-d2-tBH"/>
-                                            </constraints>
-                                        </view>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W5m-uJ-OSl">
-                                            <rect key="frame" x="211" y="0.0" width="1" height="65"/>
-                                            <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="1" id="7yw-QS-7AV"/>
+                                                <constraint firstAttribute="width" constant="1" id="n6o-Kg-rf0"/>
+                                                <constraint firstAttribute="height" constant="65" id="wg5-E8-0k1"/>
                                             </constraints>
                                         </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S02-oT-YCu">
-                                            <rect key="frame" x="0.0" y="1" width="107" height="63"/>
+                                            <rect key="frame" x="8" y="1" width="144" height="62"/>
                                             <state key="normal" title="Male"/>
                                         </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="A6D-nI-0bR" firstAttribute="top" secondItem="BUy-yw-Oxz" secondAttribute="topMargin" constant="-8" id="3d5-7D-FvD"/>
-                                        <constraint firstItem="W5m-uJ-OSl" firstAttribute="trailing" secondItem="DUo-2d-SFc" secondAttribute="leading" constant="-1" id="4UG-eI-Cb3"/>
-                                        <constraint firstItem="S02-oT-YCu" firstAttribute="trailing" secondItem="za5-xM-hxy" secondAttribute="leading" constant="1" id="Aa4-nx-9b2"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="S02-oT-YCu" secondAttribute="bottom" constant="-8" id="CNg-vj-xuj"/>
-                                        <constraint firstItem="DUo-2d-SFc" firstAttribute="leading" secondItem="za5-xM-hxy" secondAttribute="trailing" constant="1" id="Kw3-3I-KMS"/>
-                                        <constraint firstItem="S02-oT-YCu" firstAttribute="top" secondItem="BUy-yw-Oxz" secondAttribute="topMargin" constant="-7" id="OJw-fF-rjx"/>
-                                        <constraint firstItem="za5-xM-hxy" firstAttribute="top" secondItem="BUy-yw-Oxz" secondAttribute="topMargin" constant="-7" id="OwI-Uy-p9k"/>
-                                        <constraint firstItem="S02-oT-YCu" firstAttribute="leading" secondItem="BUy-yw-Oxz" secondAttribute="leadingMargin" constant="-8" id="Ru4-fA-gzR"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="W5m-uJ-OSl" secondAttribute="bottom" constant="-9" id="Uaq-Tb-45x"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="DUo-2d-SFc" secondAttribute="trailing" constant="-8" id="VDG-OB-Mx8"/>
-                                        <constraint firstItem="W5m-uJ-OSl" firstAttribute="top" secondItem="BUy-yw-Oxz" secondAttribute="topMargin" constant="-8" id="Wl9-Ho-dLB"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="za5-xM-hxy" secondAttribute="bottom" constant="-8" id="XHJ-27-FjW"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="DUo-2d-SFc" secondAttribute="bottom" constant="-8" id="eFi-EL-oaa"/>
-                                        <constraint firstItem="A6D-nI-0bR" firstAttribute="leading" secondItem="S02-oT-YCu" secondAttribute="trailing" constant="1" id="g9V-F8-oPg"/>
-                                        <constraint firstItem="za5-xM-hxy" firstAttribute="width" secondItem="S02-oT-YCu" secondAttribute="width" id="maq-f9-oFr"/>
-                                        <constraint firstItem="DUo-2d-SFc" firstAttribute="top" secondItem="BUy-yw-Oxz" secondAttribute="topMargin" constant="-7" id="n5a-Kj-5WD"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="A6D-nI-0bR" secondAttribute="bottom" constant="-9" id="rAR-rn-jT4"/>
-                                        <constraint firstItem="DUo-2d-SFc" firstAttribute="width" secondItem="za5-xM-hxy" secondAttribute="width" id="vCp-Qc-UrU"/>
+                                        <constraint firstAttribute="centerX" secondItem="A6D-nI-0bR" secondAttribute="centerX" constant="-0.5" id="0du-wt-jAZ"/>
+                                        <constraint firstItem="S02-oT-YCu" firstAttribute="top" secondItem="BUy-yw-Oxz" secondAttribute="topMargin" constant="-7" id="CE8-1e-Wat"/>
+                                        <constraint firstAttribute="centerY" secondItem="A6D-nI-0bR" secondAttribute="centerY" id="JEi-b4-FfL"/>
+                                        <constraint firstItem="A6D-nI-0bR" firstAttribute="leading" secondItem="S02-oT-YCu" secondAttribute="trailing" constant="8" id="MVY-ov-6aX"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="S02-oT-YCu" secondAttribute="bottom" constant="-7" id="PiJ-8c-jZP"/>
+                                        <constraint firstItem="za5-xM-hxy" firstAttribute="trailing" secondItem="BUy-yw-Oxz" secondAttribute="trailingMargin" id="YR6-LJ-yOw"/>
+                                        <constraint firstItem="za5-xM-hxy" firstAttribute="top" secondItem="BUy-yw-Oxz" secondAttribute="topMargin" constant="-6" id="ZEp-a3-0hc"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="za5-xM-hxy" secondAttribute="bottom" constant="-9" id="c4S-Vq-Fw3"/>
+                                        <constraint firstItem="za5-xM-hxy" firstAttribute="leading" secondItem="A6D-nI-0bR" secondAttribute="trailing" constant="8" id="gTn-Om-bQi"/>
+                                        <constraint firstItem="S02-oT-YCu" firstAttribute="leading" secondItem="BUy-yw-Oxz" secondAttribute="leadingMargin" id="l5Q-UD-bRq"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="femaleButton" destination="za5-xM-hxy" id="t5P-sp-SIK"/>
                                     <outlet property="maleButton" destination="S02-oT-YCu" id="BGu-r2-3K8"/>
-                                    <outlet property="otherButton" destination="DUo-2d-SFc" id="bpd-LF-irC"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCPickerTableViewCell" rowHeight="164" id="3nR-eU-2lq" customClass="APCPickerTableViewCell">
@@ -911,7 +892,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cUR-La-tOR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-156" y="1714"/>
+            <point key="canvasLocation" x="-156" y="1710"/>
         </scene>
         <!--Sign In-->
         <scene sceneID="bj4-GF-1Cl">
