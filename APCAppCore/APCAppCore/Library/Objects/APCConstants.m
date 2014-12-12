@@ -42,6 +42,8 @@ NSString *const kPasswordKey                         = @"Password";
 NSString *const kSessionTokenKey                     = @"sessionToken";
 NSString *const kNumberOfMinutesForPasscodeKey       = @"NumberOfMinutesForPasscodeKey";
 
+NSString *const kAnalyticsOnOffKey					 = @"AnalyticsOnOffKey";
+NSString *const kAnalyticsFlurryAPIKeyKey			 = @"AnalyticsFlurryAPIKeyKey";
 
 NSString *const kRegularFontNameKey = @"RegularFontNameKey";
 NSString *const kMediumFontNameKey  = @"MediumFontNameKey";

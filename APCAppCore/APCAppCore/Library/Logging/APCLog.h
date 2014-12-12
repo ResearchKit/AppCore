@@ -1,9 +1,8 @@
 //
 //  APCLog.h
-//  APCAppCore
+//  AppCore
 //
-//  Created by Ron Conescu on 12/7/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
+//  Copyright (c) 2014 Apple Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -18,7 +17,8 @@
 #pragma mark - Flurry integration
 // ---------------------------------------------------------
 
-+ (void) start;
++ (void) setupTurningFlurryOn: (BOOL) shouldTurnFlurryOn
+				 flurryApiKey: (NSString *) flurryApiKey;
 
 
 
@@ -72,22 +72,33 @@
  */
 
 /** Please call APCLogError() instead. */
-+ (void) methodInfo: (NSString *) apcLogMethodInfo  errorMessage           : (NSString *) formatString, ... ;
++ (void) methodInfo: (NSString *) apcLogMethodInfo
+	   errorMessage: (NSString *) formatString, ... ;
 
 /** Please call APCLogError2() instead. */
-+ (void) methodInfo: (NSString *) apcLogMethodInfo  error                  : (NSError *)  error;
++ (void) methodInfo: (NSString *) apcLogMethodInfo
+			  error: (NSError *) error;
+
+/** Please call APCLogException() instead. */
++ (void) methodInfo: (NSString *) apcLogMethodInfo
+		  exception: (NSException *) exception;
 
 /** Please call APCLogDebug() instead. */
-+ (void) methodInfo: (NSString *) apcLogMethodInfo  log                    : (NSString *) formatString, ... ;
++ (void) methodInfo: (NSString *) apcLogMethodInfo
+			  debug: (NSString *) formatString, ... ;
 
 /** Please call APCLogEvent() instead. */
-+ (void) methodInfo: (NSString *) apcLogMethodInfo  event                  : (NSString *) formatString, ... ;
++ (void) methodInfo: (NSString *) apcLogMethodInfo
+			  event: (NSString *) formatString, ... ;
 
 /** Please call APCLogEventWithData() instead. */
-+ (void) methodInfo: (NSString *) apcLogMethodInfo  eventName              : (NSString *) name  data: (NSDictionary *) eventDictionary;
++ (void) methodInfo: (NSString *) apcLogMethodInfo
+		  eventName: (NSString *) name
+			   data: (NSDictionary *) eventDictionary;
 
 /** Please call APCLogViewControllerAppeared() instead. */
-+ (void) methodInfo: (NSString *) apcLogMethodInfo  viewControllerAppeared : (NSObject *) viewController;
++ (void)        methodInfo: (NSString *) apcLogMethodInfo
+	viewControllerAppeared: (NSObject *) viewController;
 
 
 
@@ -97,7 +108,8 @@
 
 #define APCLogError( ... )						[APCLog methodInfo: APCLogMethodInfo ()  errorMessage: __VA_ARGS__]
 #define APCLogError2( nsErrorObject )			[APCLog methodInfo: APCLogMethodInfo ()  error: nsErrorObject]
-#define APCLogDebug( ... )						[APCLog methodInfo: APCLogMethodInfo ()  log: __VA_ARGS__]
+#define APCLogException( nsException )			[APCLog methodInfo: APCLogMethodInfo ()  exception: nsException]
+#define APCLogDebug( ... )						[APCLog methodInfo: APCLogMethodInfo ()  debug: __VA_ARGS__]
 #define APCLogEvent( ... )						[APCLog methodInfo: APCLogMethodInfo ()  event: __VA_ARGS__]
 #define APCLogEventWithData( name, dictionary )	[APCLog methodInfo: APCLogMethodInfo ()  eventName: name  data: dictionary]
 #define APCLogViewControllerAppeared()			[APCLog methodInfo: APCLogMethodInfo ()  viewControllerAppeared: self]

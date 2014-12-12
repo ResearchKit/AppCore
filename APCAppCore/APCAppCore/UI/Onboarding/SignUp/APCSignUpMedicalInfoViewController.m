@@ -110,28 +110,7 @@
 //        row.itemType = kAPCUserInfoItemTypeMedication;
 //        [rowItems addObject:row];
 //    }
-    
-    {
-        APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-        field.caption = NSLocalizedString(@"Blood Type", @"");
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
-        field.selectionStyle = UITableViewCellSelectionStyleGray;
-        field.detailDiscloserStyle = YES;
         
-        if (self.user.bloodType) {
-            field.selectedRowIndices = @[ @(self.user.bloodType) ];
-            field.editable = NO;
-        }
-        
-        field.textAlignnment = NSTextAlignmentRight;
-        field.pickerData = @[ [APCUser bloodTypeInStringValues] ];
-        
-        APCTableViewRow *row = [APCTableViewRow new];
-        row.item = field;
-        row.itemType = kAPCUserInfoItemTypeBloodType;
-        [rowItems addObject:row];
-    }
-    
     {
         APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
         field.caption = NSLocalizedString(@"Height", @"");
