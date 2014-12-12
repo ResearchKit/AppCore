@@ -16,15 +16,40 @@
 
 @implementation APCLogTests
 
-- (void)setUp {
+
+
+// ---------------------------------------------------------
+#pragma mark - Setup
+// ---------------------------------------------------------
+
+/**
+ Put setup code here. This method is called before
+ the invocation of each test method in the class.
+ */
+- (void) setUp
+{
 	[super setUp];
-	// Put setup code here. This method is called before the invocation of each test method in the class.
+
+	if ([APCLog isFlurryEnabled])
+	{
+		[APCLog start];
+	}
 }
 
-- (void)tearDown {
-	// Put teardown code here. This method is called after the invocation of each test method in the class.
+/**
+ Put teardown code here. This method is called after
+ the invocation of each test method in the class.
+ */
+- (void) tearDown
+{
 	[super tearDown];
 }
+
+
+
+// ---------------------------------------------------------
+#pragma mark - first-pass ideas
+// ---------------------------------------------------------
 
 - (void) testBasicLog
 {
@@ -99,6 +124,12 @@
 	[APCLogF format: @"message with magic file, line, and parameters: [%@], [%d]", @"my name", 47];
 }
 
+
+
+// ---------------------------------------------------------
+#pragma mark - Testing the Macros
+// ---------------------------------------------------------
+
 - (void) testLogErrorMessage
 {
 	APCLogError (@"The error message is: %@, age %@", @"Ron", @47);
@@ -112,6 +143,34 @@
 					  ];
 
 	APCLogError2 (error);
+}
+
+- (void) testLogExceptionObject
+{
+	@try
+	{
+		[self sampleExceptionThrowerFunctionStackItem2];
+	}
+
+	@catch (NSException *exception)
+	{
+		APCLogDebug (@"(divider line)\n\n"
+					 "-------------------------------------------------------------------------\n"
+					 "------------- THIS EXCEPTION PRINTOUT IS PART OF THE TEST. --------------\n"
+					 "-------------------------------------------------------------------------"
+					 );
+
+		APCLogException (exception);
+
+		APCLogDebug (@"(another divider line)\n"
+					 "-------------------------------------------------------------------------\n"
+					 "----------------- done with the purposeful exceptions. ------------------\n"
+					 "-------------------------------------------------------------------------\n\n"
+					 );
+	}
+	@finally
+	{
+	}
 }
 
 - (void) testFromWithinClassMethod
@@ -165,6 +224,18 @@
 void sampleLoggingFunction ()
 {
 	APCLogDebug(@"Testing the printout from within a C function call.");
+}
+
+- (void) sampleExceptionThrowerFunctionStackItem2
+{
+	[self sampleExceptionThrowerFunctionStackItem3];
+}
+
+- (void) sampleExceptionThrowerFunctionStackItem3
+{
+	NSException *testException = [NSException exceptionWithName: @"Test Exception" reason: @"Just seeing if I can log exceptions correctly" userInfo: nil];
+
+	@throw testException;
 }
 
 @end
