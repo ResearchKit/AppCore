@@ -13,7 +13,7 @@
  Biologial Sex 
  ****************/
 + (NSArray *) sexTypesInStringValue {
-    return @[ NSLocalizedString(@"Male", @""), NSLocalizedString(@"Female", @""), NSLocalizedString(@"Others", @"") ];
+    return @[ NSLocalizedString(@"Male", @""), NSLocalizedString(@"Female", @"")];
 }
 
 + (HKBiologicalSex) sexTypeFromStringValue:(NSString *)stringValue {
@@ -51,21 +51,18 @@
     NSArray *values = [APCUser sexTypesInStringValue];
     
     NSUInteger index = [APCUser stringIndexFromSexType:sexType];
-    
-    return values[index];
+
+    return (index == NSNotFound)? nil : values[index];
 }
 
 + (NSUInteger) stringIndexFromSexType:(HKBiologicalSex)sexType {
-    NSUInteger index;
+    NSUInteger index = NSNotFound;
     
     if (sexType == HKBiologicalSexMale) {
         index = 0;
     }
     else if (sexType == HKBiologicalSexFemale) {
         index = 1;
-    }
-    else {
-        index = 2;
     }
     
     return index;

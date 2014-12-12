@@ -30,10 +30,9 @@
 {
 	[super setUp];
 
-	if ([APCLog isFlurryEnabled])
-	{
-		[APCLog start];
-	}
+	// Turn on Flurry.
+	[APCLog setupTurningFlurryOn: YES
+					flurryApiKey: @"N6Y52H6HPN6ZJ9DGN2JV"];		 // App "Test", developer's personal Flurry account
 }
 
 /**
