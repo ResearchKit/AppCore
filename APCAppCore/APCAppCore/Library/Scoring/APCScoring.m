@@ -492,11 +492,28 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     if (plotIndex == 0) {
         NSDictionary *point = [self nextObject];
         value = [[point valueForKey:kDatasetValueKey] doubleValue];
+        
+        if ([[point valueForKey:kDatasetValueNoDataKey] boolValue] && value == 0) {
+            value = NSNotFound;
+        }
     } else {
         NSDictionary *correlatedPoint = [self nextCorrelatedObject];
         value = [[correlatedPoint valueForKey:kDatasetValueKey] doubleValue];
     }
+    
     return value;
 }
+
+- (NSString *)lineGraph:(APCLineGraphView *)graphView titleForXAxisAtIndex:(NSInteger)pointIndex
+{
+    NSDate *titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
+    
+    [dateFormatter setDateFormat:@"MMM d"];
+    
+    NSString *xAxisTitle = [dateFormatter stringFromDate:titleDate];
+                            
+    return xAxisTitle;
+}
+
 
 @end
