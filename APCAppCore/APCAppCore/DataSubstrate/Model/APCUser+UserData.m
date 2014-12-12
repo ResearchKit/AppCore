@@ -51,12 +51,12 @@
     NSArray *values = [APCUser sexTypesInStringValue];
     
     NSUInteger index = [APCUser stringIndexFromSexType:sexType];
-    
-    return values[index];
+
+    return (index == NSNotFound)? nil : values[index];
 }
 
 + (NSUInteger) stringIndexFromSexType:(HKBiologicalSex)sexType {
-    NSUInteger index;
+    NSUInteger index = NSNotFound;
     
     if (sexType == HKBiologicalSexMale) {
         index = 0;
