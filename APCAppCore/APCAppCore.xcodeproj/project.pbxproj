@@ -1676,8 +1676,9 @@
 		F5179B2019D09128001DCCB7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = APC;
 				LastUpgradeCheck = 0610;
-				ORGANIZATIONNAME = "Y Media Labs";
+				ORGANIZATIONNAME = "Apple, Inc.";
 				TargetAttributes = {
 					F5179B2819D09128001DCCB7 = {
 						CreatedOnToolsVersion = 6.0.1;
