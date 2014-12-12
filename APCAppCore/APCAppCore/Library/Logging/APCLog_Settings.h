@@ -6,6 +6,13 @@
 //
 
 
+/*
+ This file contains common logging settings, so you can
+ adjust them without having to wade through the code
+ to find them.
+ */
+
+
 
 // ---------------------------------------------------------
 #pragma mark - Flurry:  API keys
