@@ -111,6 +111,8 @@
 //        [rowItems addObject:row];
 //    }
     
+    //Commenting out as Institute doesnt want it
+    /*
     {
         APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
         field.caption = NSLocalizedString(@"Blood Type", @"");
@@ -131,6 +133,7 @@
         row.itemType = kAPCUserInfoItemTypeBloodType;
         [rowItems addObject:row];
     }
+    */
     
     {
         APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];

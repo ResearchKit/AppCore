@@ -92,6 +92,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
             [rowItems addObject:row];
         }
         
+        /*
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedString(@"Birthdate", @"");
@@ -105,6 +106,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
             row.itemType = kAPCUserInfoItemTypeDateOfBirth;
             [rowItems addObject:row];
         }
+         */
         
         {
             APCTableViewItem *field = [APCTableViewItem new];
