@@ -60,82 +60,65 @@
 // ---------------------------------------------------------
 #pragma mark - Dhanush's API (Ron's version)
 // ---------------------------------------------------------
-#define APCLogError(...)							\
-	NSLog (@"APC_ERROR  %@:%d  %s  => %@",			\
-		@(__FILE__).lastPathComponent,				\
-		(int) __LINE__,								\
-		__PRETTY_FUNCTION__,						\
-		[NSString stringWithFormat: __VA_ARGS__]	\
-	)
-
-#define APCLogError2(x)                             \
-    if(x)                                           \
-	NSLog (@"APC_ERROR  %@:%d  %s  => %@",			\
-		@(__FILE__).lastPathComponent,				\
-		(int) __LINE__,								\
-		__PRETTY_FUNCTION__,						\
-		[NSString stringWithFormat: @"%@", [x localizedDescription]?:x] \
-	)
-
-#define APCLogDebug(...)							\
-	NSLog (@"APC_DEBUG  %@:%d  %s  => %@",			\
-		@(__FILE__).lastPathComponent,				\
-		(int) __LINE__,								\
-		__PRETTY_FUNCTION__,						\
-		[NSString stringWithFormat: __VA_ARGS__]	\
-	)
-
-#define APCLogEvent(...)							\
-	NSLog (@"APC_EVENT  %@:%d  %s  => %@",			\
-		@(__FILE__).lastPathComponent,				\
-		(int) __LINE__,								\
-		__PRETTY_FUNCTION__,						\
-		[NSString stringWithFormat: __VA_ARGS__]	\
-	)
-
-#define APCLogEventWithData(eventName, eventDictionary)  \
-	NSLog (@"APC_DATA   %@:%d  %s  => %@:%@",		\
-		@(__FILE__).lastPathComponent,				\
-		(int) __LINE__,								\
-		__PRETTY_FUNCTION__,						\
-		eventName,									\
-		eventDictionary								\
-	);
-
 
 /**
- Represents when a view controller APPEARS on the screen.
-
- There's a semantic difference between this macro
- and APCLogMethod(), but, currently, they do the same
- thing.  We'll evolve this.
+ Generates an NSString with the current filename,
+ line number, class name, and method name.  You can
+ use this by itself.  All our logging macros also
+ use it.
  
- Original code:
-		#defineAPCLogViewControllerAppeared()()
-			NSLog (@"APC_VIEW_CONTROLLER  %@:%d  %@",
-			@(__FILE__).lastPathComponent,
-			(NSInteger) __LINE__,
-			NSStringFromClass ([self class])
-		)
+ This macro requires parentheses just for readability,
+ so we realize it's doing work (allocating an NSString).
  */
-#define APCLogViewControllerAppeared()		\
-	NSLog (@"APC_VIEW   %@:%d  %s  => %@ appeared.",	\
-		@(__FILE__).lastPathComponent,		\
-		(int) __LINE__,						\
-		__PRETTY_FUNCTION__,				\
-        NSStringFromClass (self.class)      \
+#define APCLogGetMethodCallData()						\
+	[NSString stringWithFormat: @"in %s at %@:%d =>",	\
+		__PRETTY_FUNCTION__,							\
+		@(__FILE__).lastPathComponent,					\
+		(int) __LINE__									\
+	]
+
+#define APCLogError(...)								\
+	NSLog (@"APC_ERROR %@ %@",							\
+		APCLogGetMethodCallData (),						\
+		[NSString stringWithFormat: __VA_ARGS__]		\
 	)
 
+#define APCLogError2( nsErrorObject )					\
+    if (nsErrorObject != nil)							\
+	{													\
+		NSString *description = (nsErrorObject.localizedDescription ?:					\
+								 nsErrorObject.description ?:							\
+								 [NSString stringWithFormat: @"%@", nsErrorObject]);	\
+														\
+		NSLog (@"APC_ERROR %@ %@",						\
+			APCLogGetMethodCallData (),					\
+			description									\
+		);												\
+	}
 
-// ---------------------------------------------------------
-#pragma mark - ...and running with that...
-// ---------------------------------------------------------
+#define APCLogDebug(...)								\
+	NSLog (@"APC_DEBUG %@ %@",							\
+		APCLogGetMethodCallData (),						\
+		[NSString stringWithFormat: __VA_ARGS__]		\
+	)
 
-#define APCLogMethod()						\
-	NSLog (@"%@:%d  %s",					\
-		@(__FILE__).lastPathComponent,		\
-		(int) __LINE__,						\
-		__PRETTY_FUNCTION__					\
+#define APCLogEvent(...)								\
+	NSLog (@"APC_EVENT %@ %@",							\
+		APCLogGetMethodCallData (),						\
+		[NSString stringWithFormat: __VA_ARGS__]		\
+	)
+
+#define APCLogEventWithData(eventName, eventDictionary)	\
+	NSLog (@" APC_DATA %@ %@:%@",						\
+		APCLogGetMethodCallData (),						\
+		eventName,										\
+		eventDictionary									\
+	);
+
+#define APCLogViewControllerAppeared()					\
+	NSLog (@" APC_VIEW %@ %@ appeared.",				\
+		APCLogGetMethodCallData (),						\
+        NSStringFromClass (self.class)					\
 	)
 
 

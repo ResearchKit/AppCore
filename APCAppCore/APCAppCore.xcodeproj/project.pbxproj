@@ -903,13 +903,13 @@
 		F5F128BD1A2F78490015982C /* Library */ = {
 			isa = PBXGroup;
 			children = (
-				F5EC85F81A3A227C00068495 /* Logging */,
-				0830A3461A30FA8D00F7D0E4 /* Scoring */,
 				F5F128BE1A2F78490015982C /* AppearanceHelpers */,
 				F5F128C71A2F78490015982C /* AssertionHandler */,
 				F5F128CA1A2F78490015982C /* Categories */,
+				F5EC85F81A3A227C00068495 /* Logging */,
 				F5F128E81A2F78490015982C /* Objects */,
 				F5F128F11A2F78490015982C /* ScheduleExpression */,
+				0830A3461A30FA8D00F7D0E4 /* Scoring */,
 			);
 			path = Library;
 			sourceTree = "<group>";

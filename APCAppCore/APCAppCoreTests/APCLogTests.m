@@ -110,9 +110,14 @@
 
 	APCLogEventWithData (@"RonEventName", (@{ @"eventName": @"truth", @"eventId": @12}) );
 
-	APCLogMethod();
-
 	APCLogViewControllerAppeared();
+
+	NSError *error = [NSError errorWithDomain: @"Whatever, dude"
+										 code: 15
+									 userInfo: @{@"some custom value": @"woo-hoo!"}
+					  ];
+
+	APCLogError2 (error);
 }
 
 - (void) testMacrosFromWithinAFunction
