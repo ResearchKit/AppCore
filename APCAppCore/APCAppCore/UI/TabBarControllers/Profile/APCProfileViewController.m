@@ -92,22 +92,6 @@ static CGFloat kSectionHeaderHeight = 40.f;
             [rowItems addObject:row];
         }
         
-        /*
-        {
-            APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = NSLocalizedString(@"Birthdate", @"");
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
-            field.editable = NO;
-            field.textAlignnment = NSTextAlignmentRight;
-            field.detailText = [self.user.birthDate toStringWithFormat:NSDateDefaultDateFormat];
-            
-            APCTableViewRow *row = [APCTableViewRow new];
-            row.item = field;
-            row.itemType = kAPCUserInfoItemTypeDateOfBirth;
-            [rowItems addObject:row];
-        }
-         */
-        
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedString(@"Biological Sex", @"");
