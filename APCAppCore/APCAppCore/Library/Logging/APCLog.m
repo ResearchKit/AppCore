@@ -221,7 +221,10 @@ static NSString *FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";
 + (void) methodInfo: (NSString *) apcLogMethodInfo
 	   errorMessage: (NSString *) formatString, ...
 {
-	if (formatString == nil) formatString = @"(no message)";
+	if (formatString == nil)
+	{
+		formatString = @"(no message)";
+	}
 
 	NSString *formattedMessage = NSStringFromVariadicArgumentsAndFormat(formatString);
 
