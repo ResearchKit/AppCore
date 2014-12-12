@@ -65,9 +65,13 @@
 	for (APCPointSelector *pointSelector in realWeekSelector.subSelectors)
 	{
 		if (pointSelector.position != nil)
+		{
 			[positionSelectors addObject: pointSelector];
+		}
 		else
+		{
 			[rangeSelectors addObject: pointSelector];
+		}
 
 		// And, whichever type it is:
 		if (! pointSelector.isWildcard)
@@ -123,7 +127,10 @@
 
 - (APCTimeSelectorEnumerator*) enumeratorBeginningAt: (NSNumber*) value
 {
-	if (value == nil) value = self.initialValue;
+	if (value == nil)
+	{
+		value = self.initialValue;
+	}
 
 	APCTimeSelectorEnumerator* enumerator = [[APCTimeSelectorEnumerator alloc] initWithSelector:self beginningAtMoment:value];
 

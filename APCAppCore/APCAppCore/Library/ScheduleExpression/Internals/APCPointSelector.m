@@ -279,9 +279,13 @@
 
 		// If the next point isn't on a step, we just went past it.
 		if (nextPointInt > endInt)
+		{
 			nextPoint = nil;
+		}
 		else
+		{
 			nextPoint = @(nextPointInt);
+		}
 	}
 
     return nextPoint;

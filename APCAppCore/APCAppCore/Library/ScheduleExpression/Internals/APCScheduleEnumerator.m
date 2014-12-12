@@ -104,10 +104,14 @@ static NSInteger    kYearIndex   = 4;
 			self.timeZoneOffset = timeZoneOffset;
 
 			if (begin != nil)
+			{
 				begin = [NSDate dateWithTimeIntervalSince1970: begin.timeIntervalSince1970 + timeZoneOffset];
+			}
 
 			if (end != nil)
+			{
 				end = [NSDate dateWithTimeIntervalSince1970: end.timeIntervalSince1970 + timeZoneOffset];
+			}
 		}
 
 		NSArray* calendarUnits = @[ @(NSCalendarUnitYear),
@@ -356,11 +360,13 @@ static NSInteger    kYearIndex   = 4;
 	NSNumber *day = nil;
 
 	if (startDay == nil)
+	{
 		day = self.dayEnumerator.nextObjectAfterRollover;		// i.e., selector.initialValue
-
+	}
 	else if ([selector matches: startDay])
+	{
 		day = startDay;
-
+	}
 	else
 	{
 		// If the startDay is after the last legal day in this month,

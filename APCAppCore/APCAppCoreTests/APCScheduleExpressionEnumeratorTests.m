@@ -263,11 +263,16 @@
 	NSMutableArray *normalizedZeroBasedDaysOfWeek = [NSMutableArray new];
 
 	for (NSNumber *dayOfWeek in zeroBasedDaysOfWeek)
+	{
 		if (dayOfWeek.integerValue == 7)
+		{
 			[normalizedZeroBasedDaysOfWeek addObject: @0];
+		}
 		else
+		{
 			[normalizedZeroBasedDaysOfWeek addObject: dayOfWeek];
-
+		}
+	}
 
 	if (daysInMonth.count == 0 && normalizedZeroBasedDaysOfWeek.count == 0)
 	{

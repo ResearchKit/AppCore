@@ -14,6 +14,7 @@
 - (instancetype)initWithSubSelectors:(NSArray*)subSelectors
 {
     self = [super init];
+	
     if (self)
     {
         _subSelectors = subSelectors == nil ? @[] : subSelectors;
