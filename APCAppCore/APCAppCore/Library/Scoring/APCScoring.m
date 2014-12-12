@@ -243,7 +243,8 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                     [self.dataPoints addObject:@{
                                                  kDatasetDateKey: [dateFormatter stringFromDate:task.startOn],
                                                  kDatasetValueKey: [taskResult valueForKey:valueKey]?:@(0),
-                                                 kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null]
+                                                 kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
+                                                 kDatasetValueNoDataKey: @(YES)
                                                  }];
                 } else {
                     NSDictionary *nestedData = [taskResult valueForKey:dataKey];
@@ -252,7 +253,8 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                         [self.dataPoints addObject:@{
                                                      kDatasetDateKey: task.startOn,
                                                      kDatasetValueKey: [nestedData valueForKey:valueKey],
-                                                     kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null]
+                                                     kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
+                                                     kDatasetValueNoDataKey: @(YES)
                                                      }];
                     }
                 }
