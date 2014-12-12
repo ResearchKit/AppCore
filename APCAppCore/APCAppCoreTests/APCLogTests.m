@@ -75,7 +75,7 @@
 	@throw testException;
 }
 
-- (void) testMacros
+- (void) testRonOriginalMacros
 {
 	//
 	// Objective-C logging
@@ -97,27 +97,64 @@
 	[APCLogF format: @"message with magic file and line"];
 
 	[APCLogF format: @"message with magic file, line, and parameters: [%@], [%d]", @"my name", 47];
+}
 
-
-	//
-	// from Dhanush, modified by Ron:  standard-looking
-	// logging methods/macros
-	//
-
+- (void) testLogErrorMessage
+{
 	APCLogError (@"The error message is: %@, age %@", @"Ron", @47);
+}
 
-	APCLogDebug (@"The debug message is: %@, age %@", @"Ron", @47);
-
-	APCLogEventWithData (@"RonEventName", (@{ @"eventName": @"truth", @"eventId": @12}) );
-
-	APCLogViewControllerAppeared();
-
+- (void) testLogErrorObject
+{
 	NSError *error = [NSError errorWithDomain: @"Whatever, dude"
 										 code: 15
 									 userInfo: @{@"some custom value": @"woo-hoo!"}
 					  ];
 
 	APCLogError2 (error);
+}
+
+- (void) testFromWithinClassMethod
+{
+	[[self class] sampleClassMethod];
+}
+
++ (void) sampleClassMethod
+{
+	APCLogDebug(@"This is a test from some class method or other.");
+}
+
+- (void) testLogDebug
+{
+	APCLogDebug (@"Simple log message");
+
+	APCLogDebug (@"Log message with parameters:  name %@, age %@", @"Ron", @47);
+
+	APCLogDebug (nil);
+}
+
+- (void) testLogEvent
+{
+	APCLogEvent (@"Simple log message");
+
+	APCLogEvent (@"Log message with parameters:  name %@, age %@", @"Ron", @47);
+
+	APCLogEvent (nil);
+}
+
+- (void) testLogEventWithData
+{
+	APCLogEventWithData ( @"RonEventName",
+						  (@{
+								@"eventName": @"truth",
+								@"eventId": @12
+							})
+						);
+}
+
+- (void) testLogViewControllerAppeared
+{
+	APCLogViewControllerAppeared();
 }
 
 - (void) testMacrosFromWithinAFunction

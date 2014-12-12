@@ -13,6 +13,23 @@
 static NSDateFormatter *dateFormatter = nil;
 
 
+
+/**
+ Enables or disables all logging, according to the 
+ global DEBUG setting (i.e., whether we're in a
+ "debug" or "release" configuration, as defined
+ in the current Xcode "scheme").
+ */
+#ifdef DEBUG
+	#define IS_DEBUG_DEFINED YES
+#else
+	#define IS_DEBUG_DEFINED NO
+#endif
+
+/** Um...  why doesn't this work from the test harness, even with a "release" build defined? */
+#define DEBUG_PRINT_LOGGING_STATEMENTS  IS_DEBUG_DEFINED
+
+
 /**
  I'm not sure what happens if Flurry is unavailable,
  and, in this branch, my Flurry-start code runs when
@@ -193,6 +210,102 @@ static NSString *FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";
 		   (int) lineNumber,
 		   classAndMethodName,
 		   NSStringFromVariadicArgumentsAndFormat (messageFormat));
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - New Logging Methods.  No, really.
+// ---------------------------------------------------------
+
++ (void) methodInfo: (NSString *) apcLogMethodInfo
+	   errorMessage: (NSString *) formatString, ...
+{
+	if (formatString == nil) formatString = @"(no message)";
+
+	NSString *formattedMessage = NSStringFromVariadicArgumentsAndFormat(formatString);
+
+	[self logInternal_tag: @"APC_ERROR"
+				   method: apcLogMethodInfo
+				  message: formattedMessage];
+}
+
++ (void) methodInfo: (NSString *) apcLogMethodData
+			  error: (NSError *) error
+{
+	if (error != nil)
+	{
+		NSString *description = (error.localizedDescription ?:
+								 error.description ?:
+								 [NSString stringWithFormat: @"%@", error]);
+
+		[self logInternal_tag: @"APC_ERROR"
+					   method: apcLogMethodData
+					  message: description];
+	}
+}
+
++ (void) methodInfo: (NSString *) apcLogMethodData
+				log: (NSString *) formatString, ...
+{
+	if (formatString == nil) formatString = @"(no message)";
+
+	NSString *formattedMessage = NSStringFromVariadicArgumentsAndFormat(formatString);
+
+	[self logInternal_tag: @"APC_DEBUG"
+				   method: apcLogMethodData
+				  message: formattedMessage];
+}
+
++ (void) methodInfo: (NSString *) apcLogMethodData
+			  event: (NSString *) formatString, ...
+{
+	if (formatString == nil) formatString = @"(no message)";
+
+	NSString *formattedMessage = NSStringFromVariadicArgumentsAndFormat(formatString);
+
+	[self logInternal_tag: @"APC_EVENT"
+				   method: apcLogMethodData
+				  message: formattedMessage];
+}
+
++ (void) methodInfo: (NSString *) apcLogMethodData
+		  eventName: (NSString *) eventName
+			   data: (NSDictionary *) eventDictionary
+{
+	NSString *message = [NSString stringWithFormat: @"%@: %@", eventName, eventDictionary];
+
+	[self logInternal_tag: @" APC_DATA"
+				   method: apcLogMethodData
+				  message: message];
+}
+
++ (void)        methodInfo: (NSString *) apcLogMethodData
+	viewControllerAppeared: (NSObject *) viewController
+{
+	NSString *message = [NSString stringWithFormat: @"%@ appeared.", NSStringFromClass (viewController.class)];
+
+	[self logInternal_tag: @" APC_VIEW"
+				   method: apcLogMethodData
+				  message: message];
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - The centralized, internal logging method
+// ---------------------------------------------------------
+
++ (void) logInternal_tag: (NSString *) tag
+				  method: (NSString *) methodInfo
+				 message: (NSString *) message
+{
+	// Um...  why isn't this "if" statement doing anything
+	// in the test harness?  (It works fine in Diabetes.)
+	if (DEBUG_PRINT_LOGGING_STATEMENTS == YES)
+	{
+		NSLog (@"%@ %@ => %@", tag, methodInfo, message);
+	}
 }
 
 @end
