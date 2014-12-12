@@ -79,6 +79,14 @@ FOUNDATION_EXPORT NSString *const kTertiaryYellowColorKey;
 FOUNDATION_EXPORT NSString *const kTertiaryPurpleColorKey;
 FOUNDATION_EXPORT NSString *const kTertiaryGrayColorKey;
 
+/*********************************************************************************/
+#pragma mark - Events
+/*********************************************************************************/
+FOUNDATION_EXPORT NSString *const kAppStateChangedEvent;
+FOUNDATION_EXPORT NSString *const kNetworkEvent;
+FOUNDATION_EXPORT NSString *const kSchedulerEvent;
+FOUNDATION_EXPORT NSString *const kTaskEvent;
+
 @interface APCConstants : NSObject
 
 @end

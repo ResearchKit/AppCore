@@ -16,6 +16,7 @@
 #import "UIFont+APCAppearance.h"
 #import "APCKeychainStore.h"
 #import "UIView+Helper.h"
+#import "APCAppCore.h"
 
 @import LocalAuthentication;
 
@@ -64,6 +65,7 @@
     [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
     
     [self.passcodeView becomeFirstResponder];
+  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Setup

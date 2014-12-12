@@ -9,6 +9,7 @@
 #import "NSDate+Helper.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "APCAppCore.h"
 
 static CGFloat const kPickerCellHeight = 164.0f;
 
@@ -21,6 +22,12 @@ static CGFloat const kPickerCellHeight = 164.0f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Custom Methods

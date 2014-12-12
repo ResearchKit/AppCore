@@ -12,6 +12,7 @@
 #import "APCConcentricProgressView.h"
 #import "UIFont+APCAppearance.h"
 #import "APCAppDelegate.h"
+#import "APCAppCore.h"
 
 @interface APCDashboardViewController ()<UIGestureRecognizerDelegate, APCConcentricProgressViewDataSource>
 
@@ -45,6 +46,7 @@
                                              selector:@selector(updateVisibleRowsInTableView:)
                                                  name:APCScoringHealthKitDataIsAvailableNotification
                                                object:nil];
+  APCLogViewControllerAppeared();
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -107,6 +109,7 @@
             graphCell.graphView.panGestureRecognizer.delegate = self;
             graphCell.graphView.titleLabel.font = [UIFont appRegularFontWithSize:19.0f];
             graphCell.graphView.subTitleLabel.font = [UIFont appRegularFontWithSize:16.0f];
+            graphCell.graphView.axisTitleFont = [UIFont appRegularFontWithSize:14.0f];
             
             graphCell.tintColor = graphItem.tintColor;
             graphCell.delegate = self;

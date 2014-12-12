@@ -36,6 +36,12 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCHealthKitQuantityTracker.h>
 #import <APCAppCore/APCOnboarding.h>
 
+/* -------------------------
+ Logging
+ ------------------------- */
+#import <APCAppCore/APCLog.h>
+
+
 /* UI */
 /* -------------------------
  Onboarding ViewControllers

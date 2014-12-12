@@ -53,6 +53,12 @@
     [self.profileImageButton setImage:[UIImage imageNamed:@"profilePlaceholder"] forState:UIControlStateNormal];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+  APCLogViewControllerAppeared();
+}
+
 - (void)setupAppearance
 {
     [super setupAppearance];
@@ -496,7 +502,7 @@
         typeof(self) __weak weakSelf = self;
         [self.user signUpOnCompletion:^(NSError *error) {
             if (error) {
-                [error handle];
+                APCLogError2 (error);
                 [spinnerController dismissViewControllerAnimated:NO completion:^{
                     UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Up", @"") message:error.message];
                     [self presentViewController:alert animated:YES completion:nil];

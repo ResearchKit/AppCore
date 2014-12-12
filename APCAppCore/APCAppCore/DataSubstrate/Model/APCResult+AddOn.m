@@ -22,7 +22,7 @@ static NSDictionary * lookupDictionary;
         [self mapRKSTResult:taskResult toAPCResult:result];
         NSError * saveError;
         [result saveToPersistentStore:&saveError];
-        [saveError handle];
+        APCLogError2 (saveError);
         objectID = result.objectID;
     }];
     return objectID;
@@ -35,7 +35,7 @@ static NSDictionary * lookupDictionary;
     if (taskResult.metadata) {
         NSError * error;
         NSData * data = [NSJSONSerialization dataWithJSONObject:taskResult.metadata options:NSJSONWritingPrettyPrinted error:&error];
-        [error handle];
+        APCLogError2 (error);
         apcResult.metaData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     }
 

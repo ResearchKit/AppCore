@@ -11,6 +11,7 @@
 #import "APCForgotPasswordViewController.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "APCAppCore.h"
 
 @interface APCForgotPasswordViewController ()
 
@@ -30,6 +31,7 @@
 {
     [super viewDidAppear:animated];
     [self.emailTextField becomeFirstResponder];
+  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Appearance

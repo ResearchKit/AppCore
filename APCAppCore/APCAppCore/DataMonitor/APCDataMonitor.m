@@ -31,15 +31,22 @@
     if (self.dataSubstrate.currentUser.isConsented) {
         [(APCAppDelegate*)[UIApplication sharedApplication].delegate setUpCollectors];
     }
+    APCLogEventWithData(kAppStateChangedEvent, @{@"state":@"App Launched"});
 }
 - (void)appBecameActive
 {
     [self refreshFromBridgeOnCompletion:^(NSError *error) {
-        [error handle];
+        APCLogError2 (error);
         [self batchUploadDataToBridgeOnCompletion:^(NSError *error) {
-            [error handle];
+            APCLogError2 (error);
         }];
     }];
+    APCLogEventWithData(kAppStateChangedEvent, @{@"state":@"App Became Active"});
+}
+
+- (void) addDidEnterBackground
+{
+    APCLogEventWithData(kAppStateChangedEvent, @{@"state":@"App Did Enter Background"});
 }
 
 - (void) userConsented
@@ -48,7 +55,7 @@
     [self.dataSubstrate joinStudy];
     [self.scheduler updateScheduledTasksIfNotUpdating:YES OnCompletion:^(NSError *error) {
         [self refreshFromBridgeOnCompletion:^(NSError *error) {
-            [error handle];
+            APCLogError2 (error);
             [self batchUploadDataToBridgeOnCompletion:NULL];
         }];
     }];

@@ -18,6 +18,7 @@
 #import "APCUser.h"
 #import "UIAlertController+Helper.h"
 #import "APCDeviceHardware+APCHelper.h"
+#import "APCAppCore.h"
 
 static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
 
@@ -45,6 +46,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+  APCLogViewControllerAppeared();
 }
 
 - (NSArray *)prepareContent

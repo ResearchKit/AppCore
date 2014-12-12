@@ -35,7 +35,7 @@ NSString *const kCertFileName = @"rsacert";
                 RKSTDataResult * dataResult = (RKSTDataResult*) result;
                 NSError * archiveError;
                 [archive addContentWithData:dataResult.data filename:[dataResult.identifier stringByAppendingString:@"_data"] contentType:@"data" timestamp:dataResult.endDate metadata:nil error:&archiveError];
-                [archiveError handle];
+                APCLogError2 (archiveError);
             }
             else if ([result isKindOfClass:[RKSTFileResult class]])
             {
@@ -43,13 +43,13 @@ NSString *const kCertFileName = @"rsacert";
                 RKSTFileResult * fileResult = (RKSTFileResult*) result;
                 NSError * archiveError;
                 [archive addFileWithURL:fileResult.fileUrl contentType:@"data" metadata:nil error:&archiveError];
-                [archiveError handle];
+                APCLogError2 (archiveError);
             }
             else
             {
                 NSError * archiveError;
                 [result addToArchive:archive error:&archiveError];
-                [archiveError handle];
+                APCLogError2 (archiveError);
             }
         }];
     }];
@@ -67,13 +67,13 @@ NSString *const kCertFileName = @"rsacert";
     if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         NSError * fileError;
         [[NSFileManager defaultManager] createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:&fileError];
-        [fileError handle];
+        APCLogError2 (fileError);
     }
     NSString * fullFilePath = [filePath stringByAppendingPathComponent:fileName];
     if ([[NSFileManager defaultManager] fileExistsAtPath:fullFilePath]) {
         NSError * fileError;
         [[NSFileManager defaultManager] removeItemAtPath:fullFilePath error:&fileError];
-        [fileError handle];
+        APCLogError2 (fileError);
     }
     
     BOOL retValue = NO;

@@ -45,7 +45,7 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
     {
         self.study =[self.studyStore studyWithIdentifier:studyIdentifier];
     }
-    [error handle];
+    APCLogError2 (error);
     [self.studyStore resume];
 }
 
@@ -56,7 +56,7 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 
     if (![self.study updateParticipating:YES withJoinDate:[NSDate date] error:&err])
     {
-        [err handle];
+        APCLogError2 (err);
     }
 }
 
@@ -67,7 +67,7 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 
     if (![self.study updateParticipating:NO withJoinDate:nil error:&err])
     {
-        [err handle];
+        APCLogError2 (err);
     }
 }
 
@@ -154,7 +154,7 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
     
     if (error)
     {
-        [error handle];
+        APCLogError2 (error);
         
     } else {
         
@@ -164,7 +164,7 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
         // directory so you can see it in iTunes.
         if (![[NSFileManager defaultManager] moveItemAtURL:archiveFile toURL:url error:&fileManagerError])
         {
-            [error handle];
+            APCLogError2 (error);
             
             // If the upload fails, unmark the files as uploaded.
             [self.logManager unmarkUploadedFiles:pendingFiles error:NULL];
@@ -228,7 +228,7 @@ static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
     {
         NSAssert(url, @"URL Missing");
         [SBBComponent(SBBUploadManager) uploadFileToBridge:url contentType:@"application/zip" completion:^(NSError *error) {
-            [error handle];
+            APCLogError2 (error);
             if (completionBlock) {
                 completionBlock(error);
             }

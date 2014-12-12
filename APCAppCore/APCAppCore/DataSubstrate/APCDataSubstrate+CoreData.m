@@ -56,7 +56,7 @@
         NSError * localError;
         [self removeSqliteStore];
         [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:self.storePath] options:options error:&localError];
-        [localError handle];
+        APCLogError2 (localError);
     }
     NSAssert([[NSFileManager defaultManager] fileExistsAtPath:self.storePath], @"Database Not Created");
 }
@@ -65,7 +65,7 @@
 {
     NSError* localError;
     [[NSFileManager defaultManager] removeItemAtPath:self.storePath error:&localError];
-    [localError handle];
+    APCLogError2 (localError);
 }
 
 - (void) createManagedObjectContexts
@@ -94,7 +94,7 @@
     NSError * error;
     NSPersistentStore * persistenStore = [self.persistentStoreCoordinator persistentStores] [0];
     [self.persistentStoreCoordinator removePersistentStore:persistenStore error:&error];
-    [error handle];
+    APCLogError2 (error);
     [self removeSqliteStore];
     [self setUpPersistentStore];
     APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;

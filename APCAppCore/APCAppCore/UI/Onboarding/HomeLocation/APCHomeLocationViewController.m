@@ -15,6 +15,7 @@
 #import "APCStepProgressBar.h"
 #import "APCUserInfoConstants.h"
 #import "UIView+Helper.h"
+#import "APCAppCore.h"
 
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
@@ -67,6 +68,7 @@ static CGFloat const kTableFooterHeight = 80.0f;
     [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
     
     [self.searchTextField becomeFirstResponder];
+  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Setup
