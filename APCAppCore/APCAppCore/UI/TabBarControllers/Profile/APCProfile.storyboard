@@ -319,7 +319,7 @@
                     <navigationItem key="navigationItem" title="Profile" id="soI-ZX-7k6">
                         <barButtonItem key="leftBarButtonItem" title="Settings" id="npQ-7g-95F">
                             <connections>
-                                <segue destination="O5T-S5-ng7" kind="show" id="oq8-nt-7Wg"/>
+                                <action selector="showSettings:" destination="3ca-8Q-UW8" id="6OV-FW-nhv"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Edit" id="fF4-PR-bA8">
@@ -350,7 +350,7 @@
         <!--Settings-->
         <scene sceneID="eA4-QB-iF4">
             <objects>
-                <tableViewController id="O5T-S5-ng7" customClass="APCSettingsViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="APCSettingsViewController" id="O5T-S5-ng7" customClass="APCSettingsViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="65" sectionHeaderHeight="40" sectionFooterHeight="22" id="v8X-VI-tRW">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

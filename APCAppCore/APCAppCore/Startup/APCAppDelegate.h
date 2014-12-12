@@ -29,6 +29,8 @@
 
 @property (strong, nonatomic) APCOnboarding *onboarding;
 
+@property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
+
 - (void)loadStaticTasksAndSchedulesIfNecessary;  //For resetting app
 - (void) clearNSUserDefaults; //For resetting app
 
