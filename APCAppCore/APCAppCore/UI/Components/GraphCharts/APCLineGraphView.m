@@ -17,8 +17,8 @@ static CGFloat const kAxisMarkingRulerLength = 8.0f;
 static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";
 static NSString * const kGrowAnimationKey = @"LayerGrowAnimation";
 
-static CGFloat const kFadeAnimationDuration = 0.3;
-static CGFloat const kGrowAnimationDuration = 0.4;
+static CGFloat const kFadeAnimationDuration = 0.2;
+static CGFloat const kGrowAnimationDuration = 0.2;
 static CGFloat const kPopAnimationDuration  = 0.3;
 
 static CGFloat const kSnappingClosenessFactor = 0.35f;
@@ -264,8 +264,8 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     [self.xAxisView layoutSubviews];
     
     if (self.shouldAnimate) {
-        [self animateLayersSequentially];
-        //        self.shouldAnimate = NO;
+        [self performSelector:@selector(animateLayersSequentially) withObject:nil afterDelay:0.4];
+        
     }
 }
 
@@ -519,10 +519,12 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 
 - (void)drawLinesForPlotIndex:(NSInteger)plotIndex
 {
-    UIBezierPath *plotLinePath = [UIBezierPath bezierPath];
+    [self.pathLines removeAllObjects];
+    
     UIBezierPath *fillPath = [UIBezierPath bezierPath];
     
-    CGFloat positionOnXAxis = 0;
+    CGFloat positionOnXAxis = CGFLOAT_MAX;
+    CGFloat positionOnYAxis = CGFLOAT_MAX;
     
     BOOL emptyDataPresent = NO;
     
@@ -531,41 +533,52 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         CGFloat dataPointVal = [self.dataPoints[i] floatValue];
         
         if (dataPointVal != NSNotFound) {
-            positionOnXAxis = [self.xAxisPoints[i] floatValue];
-            CGFloat positionOnYAxis = [self.yAxisPoints[i] floatValue];
             
-            if (plotLinePath.isEmpty) {
+            UIBezierPath *plotLinePath = [UIBezierPath bezierPath];
+            
+            if (positionOnXAxis != CGFLOAT_MAX) {
+                //Prev point exists
                 [plotLinePath moveToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
-                [fillPath moveToPoint:CGPointMake(positionOnXAxis, CGRectGetHeight(self.plotsView.frame))];
-            } else {
-                [plotLinePath addLineToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
+                if ([fillPath isEmpty]) {
+                    [fillPath moveToPoint:CGPointMake(positionOnXAxis, CGRectGetHeight(self.plotsView.frame))];
+                }
+                [fillPath addLineToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
             }
+            positionOnXAxis = [self.xAxisPoints[i] floatValue];
+            positionOnYAxis = [self.yAxisPoints[i] floatValue];
             
-            [fillPath addLineToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
             
-            CAShapeLayer *plotLineLayer = [CAShapeLayer layer];
-            plotLineLayer.path = plotLinePath.CGPath;
-            plotLineLayer.fillColor = [UIColor clearColor].CGColor;
-            plotLineLayer.strokeColor = (plotIndex == 0) ? self.tintColor.CGColor : self.referenceLineColor.CGColor;
-            plotLineLayer.lineJoin = kCALineJoinRound;
-            plotLineLayer.lineCap = kCALineCapRound;
-            plotLineLayer.lineWidth = self.isLandscapeMode ? 3.0 : 2.0;
             
-            if (emptyDataPresent) {
-                plotLineLayer.lineDashPattern = self.isLandscapeMode ? @[@12, @7] : @[@12, @6];
+            if (![plotLinePath isEmpty]) {
+                [plotLinePath addLineToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
+                [fillPath addLineToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
+                
+                CAShapeLayer *plotLineLayer = [CAShapeLayer layer];
+                plotLineLayer.path = plotLinePath.CGPath;
+                plotLineLayer.fillColor = [UIColor clearColor].CGColor;
+                plotLineLayer.strokeColor = (plotIndex == 0) ? self.tintColor.CGColor : self.referenceLineColor.CGColor;
+                plotLineLayer.lineJoin = kCALineJoinRound;
+                plotLineLayer.lineCap = kCALineCapRound;
+                plotLineLayer.lineWidth = self.isLandscapeMode ? 3.0 : 2.0;
+                
+                if (emptyDataPresent) {
+                    plotLineLayer.lineDashPattern = self.isLandscapeMode ? @[@12, @7] : @[@12, @6];
+                    emptyDataPresent = NO;
+                }
+                
+                [self.plotsView.layer addSublayer:plotLineLayer];
+                
+                if (self.shouldAnimate) {
+                    plotLineLayer.strokeEnd = 0;
+                }
+                [self.pathLines addObject:plotLineLayer];
+            } else {
                 emptyDataPresent = NO;
             }
             
-            [self.plotsView.layer addSublayer:plotLineLayer];
-            
-            if (self.shouldAnimate) {
-                plotLineLayer.strokeEnd = 0;
-            }
-            [self.pathLines addObject:plotLineLayer];
         } else {
             emptyDataPresent = YES;
         }
-        
     }
     
     [fillPath addLineToPoint:CGPointMake(positionOnXAxis, CGRectGetHeight(self.plotsView.frame))];
@@ -758,12 +771,14 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     
     for (int i=0; i<self.pathLines.count; i++) {
         CAShapeLayer *layer = self.pathLines[i];
-        delay += 0.1;
+        delay += kGrowAnimationDuration;
         [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeGrow startDelay:delay];
     }
     
     delay += 0.2;
     [self animateLayer:self.fillPathLayer withAnimationType:kAPCGraphAnimationTypeFade startDelay:delay];
+    
+    self.shouldAnimate = NO;
 }
 
 - (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType
