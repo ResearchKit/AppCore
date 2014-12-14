@@ -378,7 +378,6 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                                        unit:(HKUnit *)unit
                                     forDays:(NSInteger)days
 {
-    NSMutableArray *queryDataset = [NSMutableArray array];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
     interval.day = 1;
     
