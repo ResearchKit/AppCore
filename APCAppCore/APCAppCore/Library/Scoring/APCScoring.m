@@ -263,13 +263,10 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         if ([task.completed boolValue]) {
             NSDictionary *taskResult = [self retrieveResultSummaryFromResults:task.results];
             
-            // remove the time from the startOn date
-            [dateFormatter setDateFormat:@"YYYY-MM-dd"];
-            
             if (taskResult) {
                 if (!dataKey) {
                     [self addDataPointToTimeline:@{
-                                                    kDatasetDateKey: [dateFormatter stringFromDate:task.startOn],
+                                                    kDatasetDateKey: task.startOn,
                                                     kDatasetValueKey: [taskResult valueForKey:valueKey]?:@(0),
                                                     kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
                                                     kDatasetValueNoDataKey: @(YES)
