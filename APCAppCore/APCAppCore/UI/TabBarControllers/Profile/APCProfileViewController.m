@@ -16,6 +16,7 @@
 #import "NSDate+Helper.h"
 #import "NSBundle+Helper.h"
 #import "APCWithdrawCompleteViewController.h"
+#import "APCSettingsViewController.h"
 
 static CGFloat kSectionHeaderHeight = 40.f;
 
@@ -557,6 +558,12 @@ static CGFloat kSectionHeaderHeight = 40.f;
 }
 
 #pragma mark - IBActions
+
+- (IBAction)showSettings:(id)sender
+{
+    APCSettingsViewController *settingsViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSettingsViewController"];
+    [self.navigationController pushViewController:settingsViewController animated:YES];
+}
 
 - (IBAction)signOut:(id)sender
 {

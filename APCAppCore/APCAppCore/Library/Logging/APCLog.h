@@ -17,8 +17,8 @@
 #pragma mark - Flurry integration
 // ---------------------------------------------------------
 
-+ (void) start;
-+ (BOOL) isFlurryEnabled;
++ (void) setupTurningFlurryOn: (BOOL) shouldTurnFlurryOn
+				 flurryApiKey: (NSString *) flurryApiKey;
 
 
 
