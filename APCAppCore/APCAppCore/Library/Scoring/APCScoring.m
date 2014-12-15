@@ -193,7 +193,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         [self.dataPoints addObject:@{
                                      kDatasetDateKey: timelineDay,
                                      kDatasetValueKey: @(0),
-                                     kDatasetValueNoDataKey: @(NO)
+                                     kDatasetValueNoDataKey: @(YES)
                                      }];
     }
 }
@@ -263,13 +263,10 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         if ([task.completed boolValue]) {
             NSDictionary *taskResult = [self retrieveResultSummaryFromResults:task.results];
             
-            // remove the time from the startOn date
-            [dateFormatter setDateFormat:@"YYYY-MM-dd"];
-            
             if (taskResult) {
                 if (!dataKey) {
                     [self addDataPointToTimeline:@{
-                                                    kDatasetDateKey: [dateFormatter stringFromDate:task.startOn],
+                                                    kDatasetDateKey: task.startOn,
                                                     kDatasetValueKey: [taskResult valueForKey:valueKey]?:@(0),
                                                     kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
                                                     kDatasetValueNoDataKey: @(YES)
@@ -378,7 +375,6 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                                        unit:(HKUnit *)unit
                                     forDays:(NSInteger)days
 {
-    NSMutableArray *queryDataset = [NSMutableArray array];
     NSDateComponents *interval = [[NSDateComponents alloc] init];
     interval.day = 1;
     
@@ -557,7 +553,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         NSDictionary *point = [self nextObject];
         value = [[point valueForKey:kDatasetValueKey] doubleValue];
         
-        if ([[point valueForKey:kDatasetValueNoDataKey] boolValue] && value == 0) {
+        if (value == 0) {
             value = NSNotFound;
         }
     } else {
