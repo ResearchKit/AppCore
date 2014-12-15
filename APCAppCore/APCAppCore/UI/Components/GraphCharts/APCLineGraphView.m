@@ -17,8 +17,8 @@ static CGFloat const kAxisMarkingRulerLength = 8.0f;
 static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";
 static NSString * const kGrowAnimationKey = @"LayerGrowAnimation";
 
-static CGFloat const kFadeAnimationDuration = 0.2;
-static CGFloat const kGrowAnimationDuration = 0.2;
+static CGFloat const kFadeAnimationDuration = 0.3;
+static CGFloat const kGrowAnimationDuration = 0.3;
 static CGFloat const kPopAnimationDuration  = 0.3;
 
 static CGFloat const kSnappingClosenessFactor = 0.35f;
@@ -774,6 +774,8 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         delay += kGrowAnimationDuration;
         [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeGrow startDelay:delay];
     }
+    
+    delay += 0.2;
     
     [self animateLayer:self.fillPathLayer withAnimationType:kAPCGraphAnimationTypeFade startDelay:delay];
     
