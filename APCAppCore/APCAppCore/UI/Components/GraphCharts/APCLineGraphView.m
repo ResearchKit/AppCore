@@ -838,7 +838,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 
 - (void)setScrubberViewsHidden:(BOOL)hidden animated:(BOOL)animated
 {
-    if (self.dataPoints.count > 1) {
+    if ([self numberOfValidValues] > 0) {
         CGFloat alpha = hidden ? 0 : 1;
         
         if (animated) {
@@ -859,7 +859,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
-    if ((self.dataPoints.count > 0) && [self numberOfValidValues] > 1) {
+    if ((self.dataPoints.count > 0) && [self numberOfValidValues] > 0) {
         CGPoint location = [gestureRecognizer locationInView:self.plotsView];
         
         location = CGPointMake(location.x - kAPCGraphLeftPadding, location.y);
