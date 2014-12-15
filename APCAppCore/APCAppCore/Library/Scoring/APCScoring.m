@@ -267,7 +267,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                 if (!dataKey) {
                     [self addDataPointToTimeline:@{
                                                     kDatasetDateKey: task.startOn,
-                                                    kDatasetValueKey: [taskResult valueForKey:valueKey]?:@(0),
+                                                    kDatasetValueKey: [taskResult valueForKey:valueKey]?:@(NSNotFound),
                                                     kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
                                                     kDatasetValueNoDataKey: @(YES)
                                                   }];
@@ -277,7 +277,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                     if (nestedData) {
                         [self addDataPointToTimeline:@{
                                                         kDatasetDateKey: task.startOn,
-                                                        kDatasetValueKey: [nestedData valueForKey:valueKey],
+                                                        kDatasetValueKey: [nestedData valueForKey:valueKey]?: @(NSNotFound),
                                                         kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
                                                         kDatasetValueNoDataKey: @(YES)
                                                       }];
@@ -428,7 +428,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                                            
                                            NSDictionary *dataPoint = @{
                                                                        kDatasetDateKey: date,
-                                                                       kDatasetValueKey: [NSNumber numberWithDouble:value],
+                                                                       kDatasetValueKey: (!quantity) ? @(NSNotFound) : @(value),
                                                                        kDatasetValueNoDataKey: (isDecreteQuantity) ? @(YES) : @(NO)
                                                                        };
                                            
@@ -552,10 +552,6 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     if (plotIndex == 0) {
         NSDictionary *point = [self nextObject];
         value = [[point valueForKey:kDatasetValueKey] doubleValue];
-        
-        if (value == 0) {
-            value = NSNotFound;
-        }
     } else {
         NSDictionary *correlatedPoint = [self nextCorrelatedObject];
         value = [[correlatedPoint valueForKey:kDatasetValueKey] doubleValue];
