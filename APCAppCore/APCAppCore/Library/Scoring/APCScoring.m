@@ -192,7 +192,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                                                                       options:0];
         [self.dataPoints addObject:@{
                                      kDatasetDateKey: timelineDay,
-                                     kDatasetValueKey: @(0),
+                                     kDatasetValueKey: @(NSNotFound),
                                      kDatasetValueNoDataKey: @(YES)
                                      }];
     }
@@ -267,7 +267,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                 if (!dataKey) {
                     [self addDataPointToTimeline:@{
                                                     kDatasetDateKey: task.startOn,
-                                                    kDatasetValueKey: [taskResult valueForKey:valueKey]?:@(0),
+                                                    kDatasetValueKey: [taskResult valueForKey:valueKey]?:@(NSNotFound),
                                                     kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
                                                     kDatasetValueNoDataKey: @(YES)
                                                   }];
@@ -277,7 +277,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                     if (nestedData) {
                         [self addDataPointToTimeline:@{
                                                         kDatasetDateKey: task.startOn,
-                                                        kDatasetValueKey: [nestedData valueForKey:valueKey],
+                                                        kDatasetValueKey: [nestedData valueForKey:valueKey]?: @(NSNotFound),
                                                         kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
                                                         kDatasetValueNoDataKey: @(YES)
                                                       }];
@@ -428,7 +428,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                                            
                                            NSDictionary *dataPoint = @{
                                                                        kDatasetDateKey: date,
-                                                                       kDatasetValueKey: [NSNumber numberWithDouble:value],
+                                                                       kDatasetValueKey: (!quantity) ? @(NSNotFound) : @(value),
                                                                        kDatasetValueNoDataKey: (isDecreteQuantity) ? @(YES) : @(NO)
                                                                        };
                                            
@@ -473,17 +473,32 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
 
 - (NSNumber *)minimumDataPoint
 {
-    return [self.dataPoints valueForKeyPath:@"@min.datasetValueKey"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
+    NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
+    
+    NSNumber *minValue = [filteredArray valueForKeyPath:@"@min.datasetValueKey"];
+    
+    return minValue;
 }
 
 - (NSNumber *)maximumDataPoint
 {
-    return [self.dataPoints valueForKeyPath:@"@max.datasetValueKey"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
+    NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
+    
+    NSNumber *maxValue = [filteredArray valueForKeyPath:@"@max.datasetValueKey"];
+    
+    return maxValue;
 }
 
 - (NSNumber *)averageDataPoint
 {
-    return [self.dataPoints valueForKeyPath:@"@avg.datasetValueKey"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
+    NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
+    
+    NSNumber *avgValue = [filteredArray valueForKeyPath:@"@avg.datasetValueKey"];
+    
+    return avgValue;
 }
 
 - (id)nextObject
@@ -552,10 +567,6 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     if (plotIndex == 0) {
         NSDictionary *point = [self nextObject];
         value = [[point valueForKey:kDatasetValueKey] doubleValue];
-        
-        if (value == 0) {
-            value = NSNotFound;
-        }
     } else {
         NSDictionary *correlatedPoint = [self nextCorrelatedObject];
         value = [[correlatedPoint valueForKey:kDatasetValueKey] doubleValue];
