@@ -142,7 +142,15 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
                 [items addObject:item];
             }
                 break;
-                
+            case kSignUpPermissionsTypeMicrophone:
+            {
+                APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
+                item.permissionType = kSignUpPermissionsTypeMicrophone;
+                item.caption = NSLocalizedString(@"Microphone", @"");
+                item.detailText = NSLocalizedString(@"Lorem ipsum dolor sit amet, etos et ya consectetur adip isicing elit, sed.", @"");
+                [items addObject:item];
+            }
+                break;
             default:
                 break;
         }
