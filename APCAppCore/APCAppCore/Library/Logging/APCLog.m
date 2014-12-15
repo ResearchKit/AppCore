@@ -7,7 +7,6 @@
 
 #import "APCLog.h"
 #import "Flurry.h"
-#import "APCLog_Settings.h"
 
 
 static NSDateFormatter *dateFormatter = nil;
@@ -19,7 +18,17 @@ static NSDateFormatter *dateFormatter = nil;
  */
 static NSString *LOG_DATE_FORMAT = @"yyyy-MM-dd HH:mm:ss.SSS ZZZZ";
 
+/**
+ Set by each application when it starts up.
+ */
+static BOOL _isFlurryOn = NO;
 
+/**
+ Set (or not) by each application when it starts up.
+ */
+static NSString *_flurryApiKey = nil;
+
+static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," developer personal account
 
 
 @implementation APCLog
@@ -110,31 +119,36 @@ static NSString *LOG_DATE_FORMAT = @"yyyy-MM-dd HH:mm:ss.SSS ZZZZ";
 #pragma mark - Setup
 // ---------------------------------------------------------
 
-/**
- Called by -[APCAppDelegate application:didFinishLaunchingWithOptions:],
- in AppCore.
- */
-+ (void) start
-{
-	if (APCLOG_USE_FLURRY)
-	{
-		APCLogDebug (@"Starting Flurry session.");
-
-		[Flurry startSession: FLURRY_API_KEY];
-	}
-
-	else
-	{
-		APCLogDebug (@"Flurry integration is disabled (macro DEBUG_USE_FLURRY).  Not connecting to Flurry.");
-	}
-}
-
 + (void) initialize
 {
 	if (dateFormatter == nil)
 	{
 		dateFormatter = [NSDateFormatter new];
 		dateFormatter.dateFormat = LOG_DATE_FORMAT;
+	}
+}
+
+/**
+ Called by -[APCAppDelegate application:didFinishLaunchingWithOptions:],
+ in AppCore.
+ */
++ (void) setupTurningFlurryOn: (BOOL) shouldTurnFlurryOn
+				 flurryApiKey: (NSString *) flurryApiKey
+{
+	_isFlurryOn = shouldTurnFlurryOn;
+	_flurryApiKey = flurryApiKey;
+
+	if (_isFlurryOn)
+	{
+		APCLogDebug (@"Starting Flurry session.");
+
+//		[Flurry setLogLevel: FlurryLogLevelAll];
+		[Flurry startSession: _flurryApiKey];
+	}
+
+	else
+	{
+		APCLogDebug (@"Flurry integration is disabled (using +setupTurningFlurryOn:flurryApiKey:).  Not connecting to Flurry.");
 	}
 }
 
@@ -146,7 +160,12 @@ static NSString *LOG_DATE_FORMAT = @"yyyy-MM-dd HH:mm:ss.SSS ZZZZ";
 
 + (BOOL) isFlurryEnabled
 {
-	return (APCLOG_USE_FLURRY);
+	return (_isFlurryOn);
+}
+
++ (NSString *) flurryApiKey
+{
+	return _flurryApiKey;
 }
 
 
@@ -220,7 +239,7 @@ static NSString *LOG_DATE_FORMAT = @"yyyy-MM-dd HH:mm:ss.SSS ZZZZ";
 								 error.description ?:
 								 [NSString stringWithFormat: @"%@", error]);
 
-		if (APCLOG_USE_FLURRY)
+		if (self.isFlurryEnabled)
 		{
 			[Flurry logError: description message: nil error: error];
 		}
@@ -242,7 +261,7 @@ static NSString *LOG_DATE_FORMAT = @"yyyy-MM-dd HH:mm:ss.SSS ZZZZ";
 		NSString *printout = [NSString stringWithFormat: @"EXCEPTION: [%@]. Stack trace:\n%@", exception, exception.callStackSymbols];
 
 
-		if (APCLOG_USE_FLURRY)
+		if (self.isFlurryEnabled)
 		{
 			[Flurry logError: description message: nil exception: exception];
 		}
@@ -278,7 +297,7 @@ static NSString *LOG_DATE_FORMAT = @"yyyy-MM-dd HH:mm:ss.SSS ZZZZ";
 
 	NSString *formattedMessage = NSStringFromVariadicArgumentsAndFormat(formatString);
 
-	if (APCLOG_USE_FLURRY)
+	if (self.isFlurryEnabled)
 	{
 		[Flurry logEvent: formattedMessage];
 	}
@@ -294,7 +313,7 @@ static NSString *LOG_DATE_FORMAT = @"yyyy-MM-dd HH:mm:ss.SSS ZZZZ";
 {
 	NSString *message = [NSString stringWithFormat: @"%@: %@", eventName, eventDictionary];
 
-	if (APCLOG_USE_FLURRY)
+	if (self.isFlurryEnabled)
 	{
 		[Flurry logEvent: eventName withParameters: eventDictionary];
 	}
@@ -324,12 +343,9 @@ static NSString *LOG_DATE_FORMAT = @"yyyy-MM-dd HH:mm:ss.SSS ZZZZ";
 				  method: (NSString *) methodInfo
 				 message: (NSString *) message
 {
-	// Um...  why isn't this "if" statement doing anything
-	// in the test harness?  (It works fine in Diabetes.)
-	if (APCLOG_PRINT_LOGGING_STATEMENTS == YES)
-	{
-		NSLog (@"%@ %@ => %@", tag, methodInfo, message);
-	}
+	// Objective-C disables all NSLog() statements in
+	// a "release" build.
+	NSLog (@"%@ %@ => %@", tag, methodInfo, message);
 }
 
 @end

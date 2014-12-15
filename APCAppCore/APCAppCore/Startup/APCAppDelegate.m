@@ -31,7 +31,6 @@ static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
-@property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
 @property (nonatomic) BOOL isPasscodeShowing;
 
 @end
@@ -57,8 +56,10 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     
     [self.dataMonitor appFinishedLaunching];
 
-	// Start logging.  Also starts connection to logging server, if possible.
-	[APCLog start];
+	// Setup analytics options (and, conceptually, all logging options).
+	[APCLog setupTurningFlurryOn: [self.initializationOptions [kAnalyticsOnOffKey] boolValue]
+					flurryApiKey: self.initializationOptions [kAnalyticsFlurryAPIKeyKey]
+	 ];
     
     return YES;
 }

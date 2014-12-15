@@ -49,6 +49,9 @@ FOUNDATION_EXPORT NSString *const kHKReadPermissionsKey;
 FOUNDATION_EXPORT NSString *const kAppServicesListRequiredKey;
 FOUNDATION_EXPORT NSString *const kVideoURLKey;
 
+FOUNDATION_EXPORT NSString *const kAnalyticsOnOffKey;
+FOUNDATION_EXPORT NSString *const kAnalyticsFlurryAPIKeyKey;	// Really. The NSDictionary key for something known as a "key."
+
 FOUNDATION_EXPORT NSString *const kHKQuantityTypeKey;
 FOUNDATION_EXPORT NSString *const kHKCategoryTypeKey;
 FOUNDATION_EXPORT NSString *const kHKCharacteristicTypeKey;

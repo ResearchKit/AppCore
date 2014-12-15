@@ -20,7 +20,7 @@ NSString * const kAPCSegmentedTableViewCellIdentifier = @"APCSegmentedTableViewC
 - (void)awakeFromNib {
     // Initialization code
     
-    self.segmentedButton = [[APCSegmentedButton alloc] initWithButtons:@[self.maleButton, self.femaleButton, self.otherButton] normalColor:[UIColor appSecondaryColor3] highlightColor:[UIColor appSecondaryColor1]];
+    self.segmentedButton = [[APCSegmentedButton alloc] initWithButtons:@[self.maleButton, self.femaleButton] normalColor:[UIColor appSecondaryColor3] highlightColor:[UIColor appSecondaryColor1]];
     [self.segmentedButton setSelectedIndex:0];
     self.segmentedButton.delegate = self;
     
@@ -37,7 +37,6 @@ NSString * const kAPCSegmentedTableViewCellIdentifier = @"APCSegmentedTableViewC
 {
     [self.maleButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0]];
     [self.femaleButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0]];
-    [self.otherButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0]];
 }
 
 - (void) segmentedButtonPressed:(UIButton*) button selectedIndex: (NSInteger) selectedIndex

@@ -16,7 +16,6 @@ FOUNDATION_EXPORT NSString * const kAPCSegmentedTableViewCellIdentifier;
 
 @property (weak, nonatomic) IBOutlet UIButton *maleButton;
 @property (weak, nonatomic) IBOutlet UIButton *femaleButton;
-@property (weak, nonatomic) IBOutlet UIButton *otherButton;
 
 @property (nonatomic, strong) APCSegmentedButton *segmentedButton;
 

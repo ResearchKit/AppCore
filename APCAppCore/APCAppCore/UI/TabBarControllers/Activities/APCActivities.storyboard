@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="hzw-2n-SwF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A388a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="hzw-2n-SwF">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -28,7 +28,7 @@
         <scene sceneID="vNR-3U-gfD">
             <objects>
                 <tableViewController id="v3n-LY-Arx" customClass="APCActivitiesViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="PnQ-ER-saX">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="1" id="PnQ-ER-saX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -58,7 +58,7 @@
                                             </constraints>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="200" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timed Walking " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.75" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O5H-qy-8ZK">
-                                            <rect key="frame" x="54" y="11" width="198" height="62"/>
+                                            <rect key="frame" x="54" y="7.5" width="198" height="62.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="62" id="7sd-t6-lvz"/>
                                             </constraints>
@@ -68,7 +68,7 @@
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="centerY" secondItem="O5H-qy-8ZK" secondAttribute="centerY" constant="-2" id="12Q-gH-SEu"/>
+                                        <constraint firstAttribute="centerY" secondItem="O5H-qy-8ZK" secondAttribute="centerY" constant="1" id="12Q-gH-SEu"/>
                                         <constraint firstItem="MKz-GI-eCU" firstAttribute="leading" secondItem="O5H-qy-8ZK" secondAttribute="trailing" constant="14" id="7jJ-tA-pq4"/>
                                         <constraint firstItem="MKz-GI-eCU" firstAttribute="bottom" secondItem="AaU-zH-a4G" secondAttribute="bottomMargin" id="CrD-pf-jPw"/>
                                         <constraint firstItem="MKz-GI-eCU" firstAttribute="top" secondItem="AaU-zH-a4G" secondAttribute="topMargin" constant="2" id="T50-Hc-o8k"/>

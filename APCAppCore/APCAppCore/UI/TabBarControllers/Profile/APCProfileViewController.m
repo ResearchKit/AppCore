@@ -16,6 +16,7 @@
 #import "NSDate+Helper.h"
 #import "NSBundle+Helper.h"
 #import "APCWithdrawCompleteViewController.h"
+#import "APCSettingsViewController.h"
 
 static CGFloat kSectionHeaderHeight = 40.f;
 
@@ -89,20 +90,6 @@ static CGFloat kSectionHeaderHeight = 40.f;
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
             row.itemType = kAPCUserInfoItemTypeEmail;
-            [rowItems addObject:row];
-        }
-        
-        {
-            APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = NSLocalizedString(@"Birthdate", @"");
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
-            field.editable = NO;
-            field.textAlignnment = NSTextAlignmentRight;
-            field.detailText = [self.user.birthDate toStringWithFormat:NSDateDefaultDateFormat];
-            
-            APCTableViewRow *row = [APCTableViewRow new];
-            row.item = field;
-            row.itemType = kAPCUserInfoItemTypeDateOfBirth;
             [rowItems addObject:row];
         }
         
@@ -571,6 +558,12 @@ static CGFloat kSectionHeaderHeight = 40.f;
 }
 
 #pragma mark - IBActions
+
+- (IBAction)showSettings:(id)sender
+{
+    APCSettingsViewController *settingsViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSettingsViewController"];
+    [self.navigationController pushViewController:settingsViewController animated:YES];
+}
 
 - (IBAction)signOut:(id)sender
 {
