@@ -245,12 +245,26 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
             } else {
                 
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription];
-                    [self presentViewController:alert animated:YES completion:nil];
+                    [self presentSettingsAlert:error];
                 });
             }            
         }];
     }
+}
+
+- (void)presentSettingsAlert:(NSError *)error
+{
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+    }];
+    [alertContorller addAction:dismiss];
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }];
+    [alertContorller addAction:settings];
+    
+    [self.navigationController presentViewController:alertContorller animated:YES completion:nil];
 }
 
 

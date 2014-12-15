@@ -269,15 +269,15 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         }
             break;
         case kSignUpPermissionsTypePushNotifications:{
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Please go to Settings -> Notification Center -> %@ to re-enable push notifications.", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Notifications and enable 'Allow Notifications'", nil), appName];
         }
             break;
         case kSignUpPermissionsTypeLocation:{
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Please go to Settings -> Privacy -> Location -> %@ to re-enable Location services.", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Location and check 'Always'", nil), appName];
         }
             break;
         case kSignUpPermissionsTypeCoremotion:{
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Please go to Settings -> %@ -> Privacy to re-enable.", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Motion Activity.", nil), appName];
         }
             break;
             
