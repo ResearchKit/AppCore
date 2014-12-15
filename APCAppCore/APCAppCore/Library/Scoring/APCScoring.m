@@ -193,7 +193,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         [self.dataPoints addObject:@{
                                      kDatasetDateKey: timelineDay,
                                      kDatasetValueKey: @(0),
-                                     kDatasetValueNoDataKey: @(NO)
+                                     kDatasetValueNoDataKey: @(YES)
                                      }];
     }
 }
@@ -553,7 +553,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         NSDictionary *point = [self nextObject];
         value = [[point valueForKey:kDatasetValueKey] doubleValue];
         
-        if ([[point valueForKey:kDatasetValueNoDataKey] boolValue] && value == 0) {
+        if (value == 0) {
             value = NSNotFound;
         }
     } else {
