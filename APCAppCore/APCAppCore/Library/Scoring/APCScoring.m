@@ -473,33 +473,30 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
 
 - (NSNumber *)minimumDataPoint
 {
-    NSNumber *minValue = [self.dataPoints valueForKeyPath:@"@min.datasetValueKey"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
+    NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
     
-    if ([minValue integerValue] == NSNotFound) {
-        minValue = @(0);
-    }
+    NSNumber *minValue = [filteredArray valueForKeyPath:@"@min.datasetValueKey"];
     
     return minValue;
 }
 
 - (NSNumber *)maximumDataPoint
 {
-    NSNumber *maxValue = [self.dataPoints valueForKeyPath:@"@max.datasetValueKey"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
+    NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
     
-    if ([maxValue integerValue] == NSNotFound) {
-        maxValue = @(0);
-    }
+    NSNumber *maxValue = [filteredArray valueForKeyPath:@"@max.datasetValueKey"];
     
     return maxValue;
 }
 
 - (NSNumber *)averageDataPoint
 {
-    NSNumber *avgValue = [self.dataPoints valueForKeyPath:@"@avg.datasetValueKey"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
+    NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
     
-    if ([avgValue integerValue] == NSNotFound) {
-        avgValue = @(0);
-    }
+    NSNumber *avgValue = [filteredArray valueForKeyPath:@"@avg.datasetValueKey"];
     
     return avgValue;
 }
