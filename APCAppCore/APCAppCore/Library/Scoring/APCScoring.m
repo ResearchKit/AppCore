@@ -192,7 +192,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                                                                       options:0];
         [self.dataPoints addObject:@{
                                      kDatasetDateKey: timelineDay,
-                                     kDatasetValueKey: @(0),
+                                     kDatasetValueKey: @(NSNotFound),
                                      kDatasetValueNoDataKey: @(YES)
                                      }];
     }
@@ -473,17 +473,35 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
 
 - (NSNumber *)minimumDataPoint
 {
-    return [self.dataPoints valueForKeyPath:@"@min.datasetValueKey"];
+    NSNumber *minValue = [self.dataPoints valueForKeyPath:@"@min.datasetValueKey"];
+    
+    if ([minValue integerValue] == NSNotFound) {
+        minValue = @(0);
+    }
+    
+    return minValue;
 }
 
 - (NSNumber *)maximumDataPoint
 {
-    return [self.dataPoints valueForKeyPath:@"@max.datasetValueKey"];
+    NSNumber *maxValue = [self.dataPoints valueForKeyPath:@"@max.datasetValueKey"];
+    
+    if ([maxValue integerValue] == NSNotFound) {
+        maxValue = @(0);
+    }
+    
+    return maxValue;
 }
 
 - (NSNumber *)averageDataPoint
 {
-    return [self.dataPoints valueForKeyPath:@"@avg.datasetValueKey"];
+    NSNumber *avgValue = [self.dataPoints valueForKeyPath:@"@avg.datasetValueKey"];
+    
+    if ([avgValue integerValue] == NSNotFound) {
+        avgValue = @(0);
+    }
+    
+    return avgValue;
 }
 
 - (id)nextObject
