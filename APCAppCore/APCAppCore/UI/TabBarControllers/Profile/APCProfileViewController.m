@@ -20,7 +20,8 @@
 #import "APCSettingsViewController.h"
 #import "APCUser+UserData.h"
 
-static CGFloat kSectionHeaderHeight = 40.f;
+static CGFloat const kSectionHeaderHeight = 40.f;
+static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 @interface APCProfileViewController ()
 
@@ -583,7 +584,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
             self.dateRangeLabel.text = [fromDate stringByAppendingFormat:@" - %@", jsonDictionary[@"to_date"]];
         } else {
             self.dateRangeLabel.hidden = YES;
-            self.studyDetailsViewHeightConstraint.constant = 48.0f;
+            self.studyDetailsViewHeightConstraint.constant = kStudyDetailsViewHeightConstant;
             self.studyLabelCenterYConstraint.constant = 0.f;
             [self.tableView layoutIfNeeded];
         }
