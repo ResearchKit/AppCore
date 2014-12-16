@@ -22,6 +22,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 @property (strong, nonatomic) NSMutableArray *sectionsArray;
 @property (strong, nonatomic) NSMutableArray *scheduledTasksArray;
 
+@property (strong, nonatomic) UILabel *noTasksLabel;
 @end
 
 @implementation APCActivitiesViewController
@@ -256,6 +257,18 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 {
     [self reloadTableArray];
     [self.tableView reloadData];
+    
+    if (self.sectionsArray.count == 0) {
+        self.noTasksLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 300, 300, 60)];
+        [self.noTasksLabel setCenter:self.tableView.center];
+        self.noTasksLabel.text = @"You Have No Tasks To Complete";
+        self.noTasksLabel.textAlignment = NSTextAlignmentCenter;
+        [self.tableView addSubview:self.noTasksLabel];
+    } else {
+        if (self.noTasksLabel) {
+            [self.noTasksLabel removeFromSuperview];
+        }
+    }
 }
 
 #pragma mark - Sort and Group Task
