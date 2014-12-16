@@ -102,12 +102,15 @@
     else
     {
         [SBBComponent(SBBConsentManager) suspendConsentWithCompletion:^(id responseObject, NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Suspended Consent"}));
-                if (completionBlock) {
-                    completionBlock(error);
-                }
-            });
+            APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Suspended Consent"}));
+            [self signOutOnCompletion:^(NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completionBlock) {
+                        completionBlock(error);
+                    }
+                });
+            }];
+            
         }];
     }
 }
@@ -147,6 +150,28 @@
                 APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed In"}));
                 if (completionBlock) {
                     completionBlock(signInError);
+                }
+            });
+        }];
+    }
+}
+
+
+- (void)signOutOnCompletion:(void (^)(NSError *))completionBlock
+{
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+    }
+    else
+    {
+        NSParameterAssert(self.password);
+        [SBBComponent(SBBAuthManager) signOutWithCompletion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed Out"}));
+                if (completionBlock) {
+                    completionBlock(error);
                 }
             });
         }];

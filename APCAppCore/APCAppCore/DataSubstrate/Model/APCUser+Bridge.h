@@ -12,6 +12,7 @@
 
 - (void) signUpOnCompletion:(void (^)(NSError * error))completionBlock;
 - (void) signInOnCompletion:(void (^)(NSError * error))completionBlock;
+- (void) signOutOnCompletion:(void (^)(NSError * error))completionBlock;
 - (void) updateProfileOnCompletion:(void (^)(NSError * error))completionBlock;
 - (void) getProfileOnCompletion:(void (^)(NSError *error))completionBlock;
 - (void) sendUserConsentedToBridgeOnCompletion: (void (^)(NSError * error))completionBlock;
