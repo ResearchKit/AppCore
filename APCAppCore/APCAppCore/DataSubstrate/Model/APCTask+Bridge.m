@@ -79,7 +79,9 @@ static APCDummyObject * _dummyObject;
                 APCLogError2 (error);
             }
             dispatch_async(dispatch_get_main_queue(), ^{
-                APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"Loaded Survey %@", self.taskHRef]}));
+                if (!error) {
+                    APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"Loaded Survey %@", self.taskHRef]}));
+                }
                 if (completionBlock) {
                     completionBlock(error);
                 }
