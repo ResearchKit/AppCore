@@ -13,4 +13,6 @@
 
 + (NSString *) platformString;
 
++ (BOOL)isMotionActivityAvailable;
+
 @end
