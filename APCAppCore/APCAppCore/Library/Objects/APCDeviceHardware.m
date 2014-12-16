@@ -9,6 +9,7 @@
 #import "APCDeviceHardware.h"
 #include <sys/types.h>
 #include <sys/sysctl.h>
+#import <CoreMotion/CoreMotion.h>
 
 @implementation APCDeviceHardware
 
@@ -72,5 +73,12 @@
     
     return platform;
 }
+
++ (BOOL)isMotionActivityAvailable
+{
+    return [CMMotionActivityManager isActivityAvailable];
+}
+
+
 
 @end

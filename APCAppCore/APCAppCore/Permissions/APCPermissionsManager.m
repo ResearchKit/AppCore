@@ -10,6 +10,7 @@
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
 #import <HealthKit/HealthKit.h>
+#import <AVFoundation/AVFoundation.h>
 
 static NSArray *healthKitTypesToRead;
 static NSArray *healthKitTypesToWrite;
@@ -106,6 +107,16 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 #endif
         }
             break;
+        case kSignUpPermissionsTypeMicrophone:
+        {
+#if TARGET_IPHONE_SIMULATOR
+            isGranted = YES;
+#else
+            isGranted = ([[AVAudioSession sharedInstance] recordPermission] == AVAudioSessionRecordPermissionGranted);
+#endif
+        }
+            break;
+            
         default:{
             isGranted = NO;
         }
@@ -230,6 +241,22 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             
         }
             break;
+        case kSignUpPermissionsTypeMicrophone:
+        {
+            __weak typeof(self) weakSelf = self;
+            
+            [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+                if (granted) {
+                    weakSelf.completionBlock(YES, nil);
+                    weakSelf.completionBlock = nil;
+                } else {
+                    if (weakSelf.completionBlock) {
+                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeMicrophone]);
+                        weakSelf.completionBlock = nil;
+                    }
+                }
+            }];
+        }
         default:
             break;
     }
@@ -269,15 +296,19 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         }
             break;
         case kSignUpPermissionsTypePushNotifications:{
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Please go to Settings -> Notification Center -> %@ to re-enable push notifications.", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Notifications and enable 'Allow Notifications'", nil), appName];
         }
             break;
         case kSignUpPermissionsTypeLocation:{
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Please go to Settings -> Privacy -> Location -> %@ to re-enable Location services.", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Location and check 'Always'", nil), appName];
         }
             break;
         case kSignUpPermissionsTypeCoremotion:{
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Please go to Settings -> %@ -> Privacy to re-enable.", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Motion Activity.", nil), appName];
+        }
+            break;
+        case kSignUpPermissionsTypeMicrophone:{
+            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Microphone", nil), appName];
         }
             break;
             
