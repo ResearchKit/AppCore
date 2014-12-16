@@ -108,11 +108,11 @@
     else
     {
         [SBBComponent(SBBConsentManager) suspendConsentWithCompletion:^(id responseObject, NSError *error) {
-            if(!error) {
-                APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Suspended Consent"}));
-            }
             [self signOutOnCompletion:^(NSError *error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    if(!error) {
+                        APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Suspended Consent"}));
+                    }
                     if (completionBlock) {
                         completionBlock(error);
                     }
