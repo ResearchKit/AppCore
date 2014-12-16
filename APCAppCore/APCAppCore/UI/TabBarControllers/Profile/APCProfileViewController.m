@@ -578,6 +578,29 @@ static CGFloat kSectionHeaderHeight = 40.f;
     }
 }
 
+- (void)logOut
+{
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    [self presentViewController:spinnerController animated:YES completion:nil];
+    
+    typeof(self) __weak weakSelf = self;
+    
+    [self.user signOutOnCompletion:^(NSError *error) {
+        if (error) {
+            APCLogError2 (error);
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Withdraw", @"") message:error.message];
+                [weakSelf presentViewController:alert animated:YES completion:nil];
+            }];
+        } else {
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:APCUserLogOutNotification object:self];
+            }];
+        }
+    }];
+    
+}
+
 - (void)withdraw
 {
     APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
@@ -612,11 +635,11 @@ static CGFloat kSectionHeaderHeight = 40.f;
 
 - (IBAction)signOut:(id)sender
 {
-    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Out", @"") message:NSLocalizedString(@"Are you sure you want to sign out?", nil) preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Sign Out", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:APCUserLogOutNotification object:self];
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Out", @"") message:NSLocalizedString(@"Are you sure you want to sign out?", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *signOutAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Sign Out", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        [self logOut];
     }];
-    [alertContorller addAction:yesAction];
+    [alertContorller addAction:signOutAction];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
        
     }];
@@ -628,11 +651,11 @@ static CGFloat kSectionHeaderHeight = 40.f;
 
 - (IBAction)leaveStudy:(id)sender
 {
-    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Withdraw", @"") message:NSLocalizedString(@"Are you sure you want to withdraw from the study?\nThis action cannot be undone.", nil) preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Withdraw", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Withdraw", @"") message:NSLocalizedString(@"Are you sure you want to withdraw from the study?\nThis action cannot be undone.", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Withdraw", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
         [self withdraw];
     }];
-    [alertContorller addAction:yesAction];
+    [alertContorller addAction:withdrawAction];
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
