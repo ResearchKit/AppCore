@@ -187,7 +187,8 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (!self.taskSelectionDisabled) {
-        id task = self.scheduledTasksArray[indexPath.row];
+        
+        id task = [self arrayWithSectionNumber:indexPath.section][indexPath.row];
         
         if ([task isKindOfClass:[APCGroupedScheduledTask class]]) {
             
