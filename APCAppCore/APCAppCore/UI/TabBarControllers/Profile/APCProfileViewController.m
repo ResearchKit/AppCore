@@ -574,7 +574,13 @@ static CGFloat kSectionHeaderHeight = 40.f;
     if (!parseError) {
         
         self.diseaseLabel.text = jsonDictionary[@"disease_name"];
-        self.dateRangeLabel.text = [jsonDictionary[@"from_date"] stringByAppendingFormat:@" - %@", jsonDictionary[@"to_date"]];
+        
+        NSString *fromDate = jsonDictionary[@"from_date"];
+        if (fromDate.length > 0) {
+            self.dateRangeLabel.text = [fromDate stringByAppendingFormat:@" - %@", jsonDictionary[@"to_date"]];
+        } else {
+            self.dateRangeLabel.hidden = YES;
+        }
     }
 }
 

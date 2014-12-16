@@ -233,7 +233,13 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
         
         self.diseaseName = jsonDictionary[@"disease_name"];
         self.diseaseNameLabel.text = self.diseaseName;
-        self.dateRangeLabel.text = [jsonDictionary[@"from_date"] stringByAppendingFormat:@" - %@", jsonDictionary[@"to_date"]];
+        
+        NSString *fromDate = jsonDictionary[@"from_date"];
+        if (fromDate.length > 0) {
+            self.dateRangeLabel.text = [fromDate stringByAppendingFormat:@" - %@", jsonDictionary[@"to_date"]];
+        } else {
+            self.dateRangeLabel.hidden = YES;
+        }
         
         NSArray *questions = jsonDictionary[@"questions"];
         
