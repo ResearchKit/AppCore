@@ -43,6 +43,8 @@
 		F5B1F1A41A33BC8F00C377FB /* NSDictionary+APCAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B1F1A21A33BC8F00C377FB /* NSDictionary+APCAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5B1F1A51A33BC8F00C377FB /* NSDictionary+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B1F1A31A33BC8F00C377FB /* NSDictionary+APCAdditions.m */; };
 		F5B1F1AE1A33C71E00C377FB /* NSDate+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128D21A2F78490015982C /* NSDate+Helper.m */; };
+		F5C363601A40E21000113129 /* APCSmartSurveyTask.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C3635E1A40E21000113129 /* APCSmartSurveyTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5C363611A40E21000113129 /* APCSmartSurveyTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C3635F1A40E21000113129 /* APCSmartSurveyTask.m */; };
 		F5EC85FE1A3A227C00068495 /* APCLog.h in Headers */ = {isa = PBXBuildFile; fileRef = F5EC85F91A3A227C00068495 /* APCLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5EC85FF1A3A227C00068495 /* APCLog.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EC85FA1A3A227C00068495 /* APCLog.m */; };
 		F5EC86001A3A227C00068495 /* Flurry.h in Headers */ = {isa = PBXBuildFile; fileRef = F5EC85FC1A3A227C00068495 /* Flurry.h */; };
@@ -380,6 +382,8 @@
 		F5179B3419D09128001DCCB7 /* APCAppCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APCAppCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B1F1A21A33BC8F00C377FB /* NSDictionary+APCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+APCAdditions.h"; sourceTree = "<group>"; };
 		F5B1F1A31A33BC8F00C377FB /* NSDictionary+APCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+APCAdditions.m"; sourceTree = "<group>"; };
+		F5C3635E1A40E21000113129 /* APCSmartSurveyTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSmartSurveyTask.h; sourceTree = "<group>"; };
+		F5C3635F1A40E21000113129 /* APCSmartSurveyTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSmartSurveyTask.m; sourceTree = "<group>"; };
 		F5EC85F91A3A227C00068495 /* APCLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCLog.h; sourceTree = "<group>"; };
 		F5EC85FA1A3A227C00068495 /* APCLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLog.m; sourceTree = "<group>"; };
 		F5EC85FC1A3A227C00068495 /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
@@ -887,6 +891,8 @@
 				F5F128B61A2F78490015982C /* APCUser.h */,
 				F5F128B71A2F78490015982C /* APCUser.m */,
 				F5F128B81A2F78490015982C /* MODEL_README */,
+				F5C3635E1A40E21000113129 /* APCSmartSurveyTask.h */,
+				F5C3635F1A40E21000113129 /* APCSmartSurveyTask.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1614,6 +1620,7 @@
 				F5F12B081A2F78490015982C /* APCImageButton.h in Headers */,
 				F5F12AC01A2F78490015982C /* APCLineGraphViewController.h in Headers */,
 				F5F12AAE1A2F78490015982C /* APCSignUpInfoViewController.h in Headers */,
+				F5C363601A40E21000113129 /* APCSmartSurveyTask.h in Headers */,
 				F5F12AB41A2F78490015982C /* APCSignUpPermissionsViewController.h in Headers */,
 				F5F12A1C1A2F78490015982C /* UIFont+APCAppearance.h in Headers */,
 				F5F12A711A2F78490015982C /* APCConcentricProgressView.h in Headers */,
@@ -1798,6 +1805,7 @@
 				F5F12AFE1A2F78490015982C /* APCIntroductionViewController.m in Sources */,
 				F5F12ADD1A2F78490015982C /* APCSegmentedTableViewCell.m in Sources */,
 				F5F12A311A2F78490015982C /* RKSTTaskResult+Archiver.m in Sources */,
+				F5C363611A40E21000113129 /* APCSmartSurveyTask.m in Sources */,
 				F5F12A3E1A2F78490015982C /* APCConstants.m in Sources */,
 				F5F12A581A2F78490015982C /* APCParameters+Settings.m in Sources */,
 				F5F12AF51A2F78490015982C /* APCBaseWithProgressTaskViewController.m in Sources */,

@@ -31,5 +31,6 @@
 #import "APCResult+Bridge.h"
 
 #import "APCStoredUserData.h"
+#import "APCSmartSurveyTask.h"
 
 #endif

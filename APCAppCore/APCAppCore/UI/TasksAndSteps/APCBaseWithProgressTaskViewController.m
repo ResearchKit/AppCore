@@ -27,8 +27,9 @@ static NSString *const kFinishedProperty = @"finished";
     
     APCStepProgressBar  *tempProgressor = [[APCStepProgressBar alloc] initWithFrame:progressorFrame style:APCStepProgressBarStyleOnlyProgressView];
     
-    RKSTOrderedTask * task = (RKSTOrderedTask*) self.task;
-    NSArray  *steps = task.steps;
+    id<RKSTTask> task = self.task;
+    
+    NSArray  *steps = ([task respondsToSelector:@selector(steps)]) ? [task performSelector:@selector(steps)] : nil;
     tempProgressor.numberOfSteps = [steps count];
     [tempProgressor setCompletedSteps: 1 animation:NO];
     tempProgressor.progressTintColor = [UIColor appTertiaryColor1];
