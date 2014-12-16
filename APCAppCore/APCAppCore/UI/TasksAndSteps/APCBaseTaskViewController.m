@@ -15,7 +15,7 @@
 #pragma  mark  -  Instance Initialisation
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask
 {
-    RKSTOrderedTask  *task = [self createTask: scheduledTask];
+    id<RKSTTask> task = [self createTask: scheduledTask];
     NSUUID * taskRunUUID = [NSUUID UUID];
     APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
     controller.scheduledTask = scheduledTask;
@@ -23,7 +23,7 @@
     return  controller;
 }
 
-+ (RKSTOrderedTask *)createTask: (APCScheduledTask*) scheduledTask
++ (id<RKSTTask>)createTask: (APCScheduledTask*) scheduledTask
 {
     //To be overridden by child classes
     return  nil;
