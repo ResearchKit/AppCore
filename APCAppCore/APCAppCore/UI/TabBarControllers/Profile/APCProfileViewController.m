@@ -25,6 +25,9 @@ static CGFloat kSectionHeaderHeight = 40.f;
 @interface APCProfileViewController ()
 
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyDetailsViewHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyLabelCenterYConstraint;
+
 @end
 
 @implementation APCProfileViewController
@@ -580,6 +583,9 @@ static CGFloat kSectionHeaderHeight = 40.f;
             self.dateRangeLabel.text = [fromDate stringByAppendingFormat:@" - %@", jsonDictionary[@"to_date"]];
         } else {
             self.dateRangeLabel.hidden = YES;
+            self.studyDetailsViewHeightConstraint.constant = 48.0f;
+            self.studyLabelCenterYConstraint.constant = 0.f;
+            [self.tableView layoutIfNeeded];
         }
     }
 }
