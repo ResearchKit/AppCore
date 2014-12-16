@@ -20,10 +20,14 @@
 #import "APCSettingsViewController.h"
 #import "APCUser+UserData.h"
 
-static CGFloat kSectionHeaderHeight = 40.f;
+static CGFloat const kSectionHeaderHeight = 40.f;
+static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 @interface APCProfileViewController ()
 
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyDetailsViewHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyLabelCenterYConstraint;
 
 @end
 
@@ -574,7 +578,16 @@ static CGFloat kSectionHeaderHeight = 40.f;
     if (!parseError) {
         
         self.diseaseLabel.text = jsonDictionary[@"disease_name"];
-        self.dateRangeLabel.text = [jsonDictionary[@"from_date"] stringByAppendingFormat:@" - %@", jsonDictionary[@"to_date"]];
+        
+        NSString *fromDate = jsonDictionary[@"from_date"];
+        if (fromDate.length > 0) {
+            self.dateRangeLabel.text = [fromDate stringByAppendingFormat:@" - %@", jsonDictionary[@"to_date"]];
+        } else {
+            self.dateRangeLabel.hidden = YES;
+            self.studyDetailsViewHeightConstraint.constant = kStudyDetailsViewHeightConstant;
+            self.studyLabelCenterYConstraint.constant = 0.f;
+            [self.tableView layoutIfNeeded];
+        }
     }
 }
 
