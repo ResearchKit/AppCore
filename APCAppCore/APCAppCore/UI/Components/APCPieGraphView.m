@@ -240,40 +240,43 @@ static CGFloat const kAnimationDuration = 0.35f;
     for (NSInteger idx = 0; idx < [self numberOfSegments]; idx++) {
         CGFloat value = ((NSNumber *)self.normalizedValues[idx]).floatValue;
         
-        CGFloat angle = (value/2 + cumulativeValue) * M_PI * 2;
         
-        NSInteger offset = self.lineWidth/2 + 20;
-        
-        CGPoint labelCenter = CGPointMake(cos(angle - M_PI_2) * (self.pieGraphRadius + offset) + boundingBox.size.width/2,
-                                          sin(angle - M_PI_2) * (self.pieGraphRadius + offset) + boundingBox.size.height/2);
-        
-        NSString *text = [NSString stringWithFormat:@"%0.0f%%", value * 100];
-        CATextLayer *textLayer = [CATextLayer layer];
-        textLayer.string = text;
-        textLayer.fontSize = 14.0;
-        textLayer.foregroundColor = [self colorForSegmentAtIndex:idx].CGColor;
-        
-        CGFloat textWidth = [text boundingRectWithSize:CGSizeMake(100, 21) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue" size:textLayer.fontSize]} context:nil].size.width;
-        
-        textLayer.frame = CGRectMake(0, 0, textWidth, 21);
-        textLayer.position = labelCenter;
-        textLayer.alignmentMode = @"center";
-        textLayer.contentsScale = [[UIScreen mainScreen] scale];
-        
-        [self.circleLayer addSublayer:textLayer];
-        
-        cumulativeValue += value;
-        
-        if (self.shouldAnimate) {
+        if (value != 0) {
+            CGFloat angle = (value/2 + cumulativeValue) * M_PI * 2;
             
-            CABasicAnimation *textAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-            textAnimation.fromValue = @0;
-            textAnimation.toValue = @1;
-            textAnimation.duration = 0.3;
-            textAnimation.removedOnCompletion = NO;
-            textAnimation.fillMode = kCAFillModeForwards;
-            textAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-            [textLayer addAnimation:textAnimation forKey:@"textAnimation"];
+            NSInteger offset = self.lineWidth/2 + 20;
+            
+            CGPoint labelCenter = CGPointMake(cos(angle - M_PI_2) * (self.pieGraphRadius + offset) + boundingBox.size.width/2,
+                                              sin(angle - M_PI_2) * (self.pieGraphRadius + offset) + boundingBox.size.height/2);
+            
+            NSString *text = [NSString stringWithFormat:@"%0.0f%%", value * 100];
+            CATextLayer *textLayer = [CATextLayer layer];
+            textLayer.string = text;
+            textLayer.fontSize = 14.0;
+            textLayer.foregroundColor = [self colorForSegmentAtIndex:idx].CGColor;
+            
+            CGFloat textWidth = [text boundingRectWithSize:CGSizeMake(100, 21) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue" size:textLayer.fontSize]} context:nil].size.width;
+            
+            textLayer.frame = CGRectMake(0, 0, textWidth, 21);
+            textLayer.position = labelCenter;
+            textLayer.alignmentMode = @"center";
+            textLayer.contentsScale = [[UIScreen mainScreen] scale];
+            
+            [self.circleLayer addSublayer:textLayer];
+            
+            cumulativeValue += value;
+            
+            if (self.shouldAnimate) {
+                
+                CABasicAnimation *textAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+                textAnimation.fromValue = @0;
+                textAnimation.toValue = @1;
+                textAnimation.duration = 0.3;
+                textAnimation.removedOnCompletion = NO;
+                textAnimation.fillMode = kCAFillModeForwards;
+                textAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                [textLayer addAnimation:textAnimation forKey:@"textAnimation"];
+            }
         }
     }
     
