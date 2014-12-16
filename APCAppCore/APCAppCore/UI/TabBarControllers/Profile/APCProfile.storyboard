@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B23" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="u6G-bF-12V">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="u6G-bF-12V">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -133,7 +133,7 @@
                                         <constraint firstAttribute="trailing" secondItem="MvD-8y-vPS" secondAttribute="trailing" constant="8" id="PwG-Jn-a1T"/>
                                         <constraint firstAttribute="trailing" secondItem="eRz-FJ-3tf" secondAttribute="trailing" constant="8" id="ROa-l5-my6"/>
                                         <constraint firstItem="MvD-8y-vPS" firstAttribute="leading" secondItem="eZ0-Ol-zUa" secondAttribute="leading" constant="8" id="kOZ-c6-kQ9"/>
-                                        <constraint firstAttribute="centerY" secondItem="eRz-FJ-3tf" secondAttribute="centerY" constant="12.5" id="tKc-0k-I7J"/>
+                                        <constraint firstAttribute="centerY" secondItem="eRz-FJ-3tf" secondAttribute="centerY" constant="12" id="tKc-0k-I7J"/>
                                     </constraints>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uz4-o8-elN">
@@ -176,11 +176,13 @@
                             <constraints>
                                 <constraint firstItem="eZ0-Ol-zUa" firstAttribute="leading" secondItem="kyI-F5-60O" secondAttribute="leading" id="0P0-iM-aAl"/>
                                 <constraint firstItem="HAN-E2-ARi" firstAttribute="top" secondItem="kyI-F5-60O" secondAttribute="top" constant="117" id="1zW-f2-NmB"/>
+                                <constraint firstItem="HAN-E2-ARi" firstAttribute="top" secondItem="eZ0-Ol-zUa" secondAttribute="bottom" constant="5" id="9a6-24-ulm"/>
                                 <constraint firstItem="uz4-o8-elN" firstAttribute="trailing" secondItem="HAN-E2-ARi" secondAttribute="leading" constant="-1" id="EVW-tY-nEl"/>
                                 <constraint firstAttribute="trailing" secondItem="eZ0-Ol-zUa" secondAttribute="trailing" id="Lww-ba-9ZM"/>
                                 <constraint firstItem="eZ0-Ol-zUa" firstAttribute="top" secondItem="kyI-F5-60O" secondAttribute="top" constant="40" id="PKH-ck-eNH"/>
                                 <constraint firstItem="uz4-o8-elN" firstAttribute="leading" secondItem="kyI-F5-60O" secondAttribute="leading" id="SrV-Nv-vAq"/>
                                 <constraint firstItem="HAN-E2-ARi" firstAttribute="width" secondItem="uz4-o8-elN" secondAttribute="width" id="TIw-rx-VIh"/>
+                                <constraint firstItem="uz4-o8-elN" firstAttribute="top" secondItem="eZ0-Ol-zUa" secondAttribute="bottom" constant="5" id="Uia-Dz-Rgd"/>
                                 <constraint firstItem="cnn-sn-BBo" firstAttribute="top" secondItem="kyI-F5-60O" secondAttribute="top" constant="8" id="Wxc-S9-IeN"/>
                                 <constraint firstItem="uz4-o8-elN" firstAttribute="top" secondItem="kyI-F5-60O" secondAttribute="top" constant="117" id="YMU-4V-qZD"/>
                                 <constraint firstAttribute="trailing" secondItem="HAN-E2-ARi" secondAttribute="trailing" id="YvU-iM-2Ne"/>
@@ -190,7 +192,9 @@
                             </constraints>
                             <variation key="default">
                                 <mask key="constraints">
+                                    <exclude reference="YMU-4V-qZD"/>
                                     <exclude reference="aHg-06-PNx"/>
+                                    <exclude reference="1zW-f2-NmB"/>
                                 </mask>
                             </variation>
                         </view>
@@ -341,6 +345,8 @@
                         <outlet property="profileImageButton" destination="wbP-3z-2pl" id="hp2-iW-hH9"/>
                         <outlet property="rightBarButton" destination="fF4-PR-bA8" id="Fyo-HO-yHb"/>
                         <outlet property="signOutButton" destination="uz4-o8-elN" id="OEM-cU-4L5"/>
+                        <outlet property="studyDetailsViewHeightConstraint" destination="9OY-Ut-XHm" id="Ipl-1n-h4A"/>
+                        <outlet property="studyLabelCenterYConstraint" destination="tKc-0k-I7J" id="he7-sl-2kS"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aWv-Ad-c3Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
