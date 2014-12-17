@@ -24,6 +24,8 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 @interface APCStudyOverviewViewController () <RKSTTaskViewControllerDelegate>
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *joinButtonLeadingConstraint;
+
 @end
 
 @implementation APCStudyOverviewViewController
@@ -90,6 +92,15 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     return [NSArray arrayWithArray:items];
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    if ([self user].consented) {
+        self.joinButtonLeadingConstraint.constant = CGRectGetWidth(self.view.frame)/2;
+        [self.view layoutIfNeeded];
+    }
+}
 - (void)setupTableView
 {
     self.tableView.delegate = self;
@@ -299,15 +310,10 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 - (void)signUpTapped:(id)sender
 {
-    if ([self user].consented) {
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Account already exists", @"") message:@"You have already signed up with an account.\n\nIf you wish to sign up with a different account, please delete and re-install the app."];
-        [self presentViewController:alert animated:YES completion:nil];
-    } else {
-        [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignUp];
-        
-        UIViewController *viewController = [[self onboarding] nextScene];
-        [self.navigationController pushViewController:viewController animated:YES];
-    }
+    [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignUp];
+    
+    UIViewController *viewController = [[self onboarding] nextScene];
+    [self.navigationController pushViewController:viewController animated:YES];
     
 }
 
