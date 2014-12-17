@@ -365,6 +365,11 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         [groupedDataset addObject:entry];
     }
     
+    // resort the grouped dataset by date
+    NSSortDescriptor *sortByDate = [[NSSortDescriptor alloc] initWithKey:kDatasetDateKey
+                                                               ascending:YES];
+    [groupedDataset sortUsingDescriptors:@[sortByDate]];
+    
     [self.dataPoints removeAllObjects];
     [self.dataPoints addObjectsFromArray:groupedDataset];
 }
