@@ -10,5 +10,6 @@
 @interface RKSTTaskResult (Archiver)
 
 - (NSString *) archiveWithFilePath: (NSString*) filePath;
+- (NSString *)archiveResults:(NSArray *)results WithFilePath:(NSString *)filePath;
 
 @end
