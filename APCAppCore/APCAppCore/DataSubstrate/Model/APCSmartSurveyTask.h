@@ -10,7 +10,5 @@
 
 @class SBBSurvey;
 @interface APCSmartSurveyTask : NSObject <RKSTTask>
-
 -(instancetype)initWithIdentifier: (NSString*) identifier survey:(SBBSurvey *)survey;
-- (NSArray *) steps;
 @end

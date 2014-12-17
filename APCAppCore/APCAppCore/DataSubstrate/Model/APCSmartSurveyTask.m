@@ -28,7 +28,9 @@ static APCDummyObject * _dummyObject;
 @interface APCSmartSurveyTask () <NSSecureCoding, NSCopying>
 
 @property (nonatomic, strong) NSString * identifier;
-@property (nonatomic, strong) RKSTOrderedTask * orderedTask;
+@property (nonatomic, strong) NSMutableDictionary * rkSteps;
+@property (nonatomic, strong) NSMutableDictionary * rules; //[stepID : [rules]]
+@property (nonatomic, strong) NSMutableArray * stepIdentifiers;
 
 @end
 
@@ -39,38 +41,67 @@ static APCDummyObject * _dummyObject;
     self = [super init];
     if (self) {
         self.identifier = identifier;
-        NSMutableArray * stepsArray = [NSMutableArray array];
+        self.rules = [NSMutableDictionary dictionary];
+        self.rkSteps = [NSMutableDictionary dictionary];
+        self.stepIdentifiers = [NSMutableArray array];
         [survey.questions enumerateObjectsUsingBlock:^(SBBSurveyQuestion* obj, NSUInteger idx, BOOL *stop) {
-            [stepsArray addObject:[APCSmartSurveyTask rkStepFromSBBSurveyQuestion:obj]];
+            
+            self.rkSteps[obj.identifier] = [APCSmartSurveyTask rkStepFromSBBSurveyQuestion:obj];
+            
+            [self.stepIdentifiers addObject:obj.identifier];
+            
+            NSArray * rulesArray = [[obj constraints] rules];
+            if (rulesArray) {
+                self.rules[obj.identifier] = rulesArray;
+            }
+
         }];
-        self.orderedTask = [[RKSTOrderedTask alloc] initWithIdentifier:self.identifier steps:stepsArray];
     }
     return self;
 }
 
+- (NSString *) nextStepIdentifier: (BOOL) after currentIdentifier: (NSString*) currentIdentifier
+{
+    if (currentIdentifier == nil && after) {
+        return self.stepIdentifiers[0];
+    }
+    NSInteger currentIndex = [self.stepIdentifiers indexOfObject: currentIdentifier];
+    NSAssert(currentIndex != NSNotFound, @"Step Not Found. Should not get here.");
+    NSInteger newIndex = NSNotFound;
+    if (after) {
+        if (currentIndex+1 < self.stepIdentifiers.count) {
+            newIndex = currentIndex + 1;
+        }
+    }
+    else
+    {
+        if ((currentIndex - 1) >= 0) {
+            newIndex = currentIndex -1;
+        }
+    }
+    return (newIndex != NSNotFound) ? self.stepIdentifiers[newIndex] : nil;
+}
+
 - (RKSTStep *)stepAfterStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
 {
-    return [self.orderedTask stepAfterStep:step withResult:result];
+    NSString * nextStepIdentifier = [self nextStepIdentifier:YES currentIdentifier:step.identifier];
+    return nextStepIdentifier? self.rkSteps[nextStepIdentifier] : nil;
 }
 
 - (RKSTStep *)stepBeforeStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
 {
-    return [self.orderedTask stepBeforeStep:step withResult:result];
+    NSString * nextStepIdentifier = [self nextStepIdentifier:NO currentIdentifier:step.identifier];
+    return nextStepIdentifier? self.rkSteps[nextStepIdentifier] : nil;
 }
 
 - (RKSTTaskProgress)progressOfCurrentStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
 {
-    if ([self.orderedTask respondsToSelector:@selector(progressOfCurrentStep:withResult:)]) {
-        return [self.orderedTask progressOfCurrentStep:step withResult:result];
-    }
-    return RKSTTaskProgressMake(0, 0);
+    return RKSTTaskProgressMake([self.stepIdentifiers indexOfObject: step.identifier] + 1, self.stepIdentifiers.count);
 }
 
-
-- (NSArray *)steps
-{
-    return self.orderedTask.steps;
-}
+/*********************************************************************************/
+#pragma mark - Conversion of SBBSurvey to RKSTTask
+/*********************************************************************************/
 
 + (NSString *) lookUpAnswerFormatMethod: (NSString*) SBBClassName
 {
@@ -91,7 +122,7 @@ static APCDummyObject * _dummyObject;
 
 + (RKSTQuestionStep*) rkStepFromSBBSurveyQuestion: (SBBSurveyQuestion*) question
 {
-    RKSTQuestionStep * retStep =[RKSTQuestionStep questionStepWithIdentifier:question.guid title:question.prompt answer:[self rkAnswerFormatFromSBBSurveyConstraints:question.constraints]];
+    RKSTQuestionStep * retStep =[RKSTQuestionStep questionStepWithIdentifier:question.identifier title:question.prompt answer:[self rkAnswerFormatFromSBBSurveyConstraints:question.constraints]];
     return retStep;
 }
 
@@ -122,16 +153,20 @@ static APCDummyObject * _dummyObject;
 {
     self = [super init];
     if (self) {
-        self.orderedTask = [aDecoder decodeObjectForKey:@"orderedTask"];
         self.identifier = [aDecoder decodeObjectForKey:@"identifier"];
+        self.rules = [aDecoder decodeObjectForKey:@"rules"];
+        self.rkSteps = [aDecoder decodeObjectForKey:@"rkSteps"];
+        self.stepIdentifiers = [aDecoder decodeObjectForKey:@"stepIdentifiers"];
     }
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:self.orderedTask forKey:@"orderedTask"];
     [aCoder encodeObject:self.identifier forKey:@"identifier"];
+    [aCoder encodeObject:self.rules forKey:@"rules"];
+    [aCoder encodeObject:self.rkSteps forKey:@"rkSteps"];
+    [aCoder encodeObject:self.stepIdentifiers forKey:@"stepIdentifiers"];
 }
 
 + (BOOL)supportsSecureCoding
@@ -144,8 +179,10 @@ static APCDummyObject * _dummyObject;
     id copy = [[[self class] alloc] init];
     
     if (copy) {
-        [copy setOrderedTask:[self.orderedTask copyWithZone:zone]];
         [copy setIdentifier:[self.identifier copyWithZone:zone]];
+        [copy setRules:[self.rules copyWithZone:zone]];
+        [copy setRkSteps:[self.rkSteps copyWithZone:zone]];
+        [copy setStepIdentifiers:[self.stepIdentifiers copyWithZone:zone]];
     }
     
     return copy;

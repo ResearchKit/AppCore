@@ -77,7 +77,7 @@
 
 
 /*********************************************************************************/
-#pragma mark - SBB to RKSTOrderedTask Conversion
+#pragma mark - SBB to APCSmartSurvey Conversion
 /*********************************************************************************/
 + (id<RKSTTask>) rkTaskFromSBBSurvey: (SBBSurvey*) survey
 {
