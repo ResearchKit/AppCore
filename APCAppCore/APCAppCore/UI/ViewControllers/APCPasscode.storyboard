@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B23" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="aU5-mj-CXc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="aU5-mj-CXc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -48,7 +48,7 @@
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Cr6-0R-lJe">
-                                <rect key="frame" x="135" y="40" width="50" height="50"/>
+                                <rect key="frame" x="135" y="50" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="B3I-lW-f74"/>
                                     <constraint firstAttribute="width" constant="50" id="YEo-WP-kzx"/>
@@ -58,9 +58,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="ygh-IW-MBW" firstAttribute="leading" secondItem="MAj-Wy-kJa" secondAttribute="leading" id="36S-gx-RqB"/>
-                            <constraint firstItem="cKG-bB-Ib1" firstAttribute="top" secondItem="Cr6-0R-lJe" secondAttribute="bottom" constant="35" id="9c6-8y-rdu"/>
+                            <constraint firstItem="cKG-bB-Ib1" firstAttribute="top" secondItem="Cr6-0R-lJe" secondAttribute="bottom" constant="25" id="9c6-8y-rdu"/>
                             <constraint firstItem="aK3-gJ-vS8" firstAttribute="top" secondItem="cKG-bB-Ib1" secondAttribute="bottom" constant="20" id="ShE-ol-A7j"/>
-                            <constraint firstItem="Cr6-0R-lJe" firstAttribute="top" secondItem="445-jw-ZAP" secondAttribute="bottom" constant="20" id="Ulo-o4-xDE"/>
+                            <constraint firstItem="Cr6-0R-lJe" firstAttribute="top" secondItem="445-jw-ZAP" secondAttribute="bottom" constant="30" id="Ulo-o4-xDE"/>
                             <constraint firstItem="cKG-bB-Ib1" firstAttribute="leading" secondItem="MAj-Wy-kJa" secondAttribute="leadingMargin" constant="13" id="VqT-z2-DCt"/>
                             <constraint firstAttribute="centerX" secondItem="aK3-gJ-vS8" secondAttribute="centerX" id="WCk-vE-JxC"/>
                             <constraint firstItem="fZn-Rb-vDa" firstAttribute="top" secondItem="ygh-IW-MBW" secondAttribute="bottom" id="aDN-tl-Z7H"/>
