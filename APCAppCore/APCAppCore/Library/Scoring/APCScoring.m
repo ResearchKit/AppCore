@@ -264,23 +264,28 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
             NSDictionary *taskResult = [self retrieveResultSummaryFromResults:task.results];
             
             if (taskResult) {
+                NSDate *pointDate = [[NSCalendar currentCalendar] dateBySettingHour:0
+                                                                             minute:0
+                                                                             second:0
+                                                                             ofDate:task.startOn
+                                                                            options:0];
                 if (!dataKey) {
-                    [self addDataPointToTimeline:@{
-                                                    kDatasetDateKey: task.startOn,
-                                                    kDatasetValueKey: [taskResult valueForKey:valueKey]?:@(NSNotFound),
-                                                    kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
-                                                    kDatasetValueNoDataKey: @(YES)
-                                                  }];
+                    [self.dataPoints addObject:@{
+                                                 kDatasetDateKey: pointDate,
+                                                 kDatasetValueKey: [taskResult valueForKey:valueKey]?:@(NSNotFound),
+                                                 kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
+                                                 kDatasetValueNoDataKey: @(YES)
+                                                 }];
                 } else {
                     NSDictionary *nestedData = [taskResult valueForKey:dataKey];
                     
                     if (nestedData) {
-                        [self addDataPointToTimeline:@{
-                                                        kDatasetDateKey: task.startOn,
-                                                        kDatasetValueKey: [nestedData valueForKey:valueKey]?: @(NSNotFound),
-                                                        kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
-                                                        kDatasetValueNoDataKey: @(YES)
-                                                      }];
+                        [self.dataPoints addObject:@{
+                                                     kDatasetDateKey: pointDate,
+                                                     kDatasetValueKey: [nestedData valueForKey:valueKey]?: @(NSNotFound),
+                                                     kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
+                                                     kDatasetValueNoDataKey: @(YES)
+                                                     }];
                     }
                 }
             }
@@ -336,7 +341,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     return result;
 }
 
-- (void)groupDatasetByDay //WithStartDate:(NSDate *)startDate toEndDate:(NSDate *)endDate
+- (void)groupDatasetByDay
 {
     NSMutableArray *groupedDataset = [NSMutableArray array];
     NSArray *days = [self.dataPoints valueForKeyPath:@"@distinctUnionOfObjects.datasetDateKey"];
@@ -345,7 +350,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         NSMutableDictionary *entry = [NSMutableDictionary dictionary];
         [entry setObject:day forKey:kDatasetDateKey];
         
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", kDatasetDateKey, day];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K = %@) and (%K <> %@)", kDatasetDateKey, day, kDatasetValueKey, @(NSNotFound)];
         NSArray *groupItems = [self.dataPoints filteredArrayUsingPredicate:predicate];
         double itemSum = 0;
         double dayAverage = 0;
@@ -353,11 +358,17 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         for (NSDictionary *item in groupItems) {
             NSNumber *value = [item valueForKey:kDatasetValueKey];
             
-            itemSum += [value doubleValue];
+            if ([value integerValue] != NSNotFound) {
+                itemSum += [value doubleValue];
+            }
         }
         
         if (groupItems.count != 0) {
             dayAverage = itemSum / groupItems.count;
+        }
+        
+        if (dayAverage == 0) {
+            dayAverage = NSNotFound;
         }
         
         [entry setObject:@(dayAverage) forKey:kDatasetValueKey];
