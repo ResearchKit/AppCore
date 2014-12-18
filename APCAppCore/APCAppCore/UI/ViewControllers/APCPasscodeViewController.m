@@ -38,15 +38,20 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     
     [self setupAppearance];
+    
+    if ([self.touchContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
+        self.passcodeView.alpha = 0;
+        self.titleLabel.alpha = 0;
+        self.touchIdButton.alpha = 0;
+    } else {
+        self.touchIdButton.hidden = YES;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    if (![self.touchContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
-        self.touchIdButton.hidden = YES;
-    }
+
   APCLogViewControllerAppeared();
 }
 
@@ -54,7 +59,15 @@
 {
     [super viewDidAppear:animated];
     
-    [self.passcodeView becomeFirstResponder];
+    if (![self.touchContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
+        [self.passcodeView becomeFirstResponder];
+    } else {
+        self.passcodeView.alpha = 0;
+        self.titleLabel.alpha = 0;
+        self.touchIdButton.alpha = 0;
+        [self promptTouchId];
+    }
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -102,6 +115,11 @@
 
 - (IBAction)useTouchId:(id)sender
 {
+    [self promptTouchId];
+}
+
+- (void)promptTouchId
+{
     NSError *error = nil;
     
     if ([self.touchContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
@@ -124,6 +142,8 @@
                                         } else {
                                             if (error.code == kLAErrorUserFallback) {
                                                 //Passcode
+                                                
+                                                
                                             } else if (error.code == kLAErrorUserCancel) {
                                                 //cancel
                                             } else {
@@ -133,11 +153,23 @@
                                                     [self presentViewController:alert animated:YES completion:nil];
                                                 });
                                             }
+                                            
+                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                
+                                                [UIView animateWithDuration:0.3 animations:^{
+                                                    self.passcodeView.alpha = 1;
+                                                    self.titleLabel.alpha = 1;
+                                                    self.touchIdButton.alpha = 1;
+                                                }];
+                                                
+                                                [self.passcodeView becomeFirstResponder];
+                                            });
+                                            
                                         }
                                     }];
-    }    
+    }
+    
 }
-
 #pragma mark - Keyboard Notifications
 
 - (void)keyboardWillShow:(NSNotification *)notifcation
