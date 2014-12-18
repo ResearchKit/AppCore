@@ -81,6 +81,7 @@ static NSString *const kFinishedProperty = @"finished";
         RKSTTaskProgress progress = [self.task progressOfCurrentStep:viewController.step withResult:self.result];
         [self.progressor setCompletedSteps:progress.current animation:YES];
     }
+    self.navigationBar.topItem.title = NSLocalizedString(self.taskName, nil);
 }
 
 - (BOOL) advanceArrayContainsStep: (RKSTStep*) step

@@ -8,6 +8,7 @@
 #import "APCSmartSurveyTask.h"
 #import <ResearchKit/ResearchKit.h>
 #import <BridgeSDK/BridgeSDK.h>
+#import "APCAppCore.h"
 
 
 
@@ -30,7 +31,11 @@ static APCDummyObject * _dummyObject;
 @property (nonatomic, strong) NSString * identifier;
 @property (nonatomic, strong) NSMutableDictionary * rkSteps;
 @property (nonatomic, strong) NSMutableDictionary * rules; //[stepID : [rules]]
-@property (nonatomic, strong) NSMutableArray * stepIdentifiers;
+
+@property (nonatomic, strong) NSMutableArray * staticStepIdentifiers;
+@property (nonatomic, strong) NSMutableArray * dynamicStepIdentifiers;
+
+@property (nonatomic, strong) NSMutableSet * setOfIdentifiers; //For checking identifier duplication
 
 @end
 
@@ -43,12 +48,14 @@ static APCDummyObject * _dummyObject;
         self.identifier = identifier;
         self.rules = [NSMutableDictionary dictionary];
         self.rkSteps = [NSMutableDictionary dictionary];
-        self.stepIdentifiers = [NSMutableArray array];
+        self.staticStepIdentifiers = [NSMutableArray array];
+        self.setOfIdentifiers = [NSMutableSet set];
         [survey.questions enumerateObjectsUsingBlock:^(SBBSurveyQuestion* obj, NSUInteger idx, BOOL *stop) {
             
             self.rkSteps[obj.identifier] = [APCSmartSurveyTask rkStepFromSBBSurveyQuestion:obj];
             
-            [self.stepIdentifiers addObject:obj.identifier];
+            [self.staticStepIdentifiers addObject:obj.identifier];
+            [self.setOfIdentifiers addObject:obj.identifier];
             
             NSArray * rulesArray = [[obj constraints] rules];
             if (rulesArray) {
@@ -56,6 +63,11 @@ static APCDummyObject * _dummyObject;
             }
 
         }];
+        NSAssert((self.staticStepIdentifiers.count == self.setOfIdentifiers.count), @"Duplicate Identifiers in Survey! Please rename them!");
+        //For Debugging duplicates. Copy paste below commented line in lldb to look for duplicates
+        //[self.staticStepIdentifiers sortedArrayUsingSelector: @selector(localizedCaseInsensitiveCompare:)];
+        
+        self.dynamicStepIdentifiers = [self.staticStepIdentifiers mutableCopy];
     }
     return self;
 }
@@ -63,13 +75,13 @@ static APCDummyObject * _dummyObject;
 - (NSString *) nextStepIdentifier: (BOOL) after currentIdentifier: (NSString*) currentIdentifier
 {
     if (currentIdentifier == nil && after) {
-        return self.stepIdentifiers[0];
+        return self.staticStepIdentifiers[0];
     }
-    NSInteger currentIndex = [self.stepIdentifiers indexOfObject: currentIdentifier];
+    NSInteger currentIndex = [self.staticStepIdentifiers indexOfObject: currentIdentifier];
     NSAssert(currentIndex != NSNotFound, @"Step Not Found. Should not get here.");
     NSInteger newIndex = NSNotFound;
     if (after) {
-        if (currentIndex+1 < self.stepIdentifiers.count) {
+        if (currentIndex+1 < self.staticStepIdentifiers.count) {
             newIndex = currentIndex + 1;
         }
     }
@@ -79,11 +91,15 @@ static APCDummyObject * _dummyObject;
             newIndex = currentIndex -1;
         }
     }
-    return (newIndex != NSNotFound) ? self.stepIdentifiers[newIndex] : nil;
+    return (newIndex != NSNotFound) ? self.staticStepIdentifiers[newIndex] : nil;
 }
 
 - (RKSTStep *)stepAfterStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
 {
+    //STEP 1: Refill dynamic Array from current step forward
+//    [self refillDynamicStepIdentifiersWithCurrentStepIdentifier:step.identifier];
+    
+    //STEP 2: Remove unnecessary steps
     NSString * nextStepIdentifier = [self nextStepIdentifier:YES currentIdentifier:step.identifier];
     return nextStepIdentifier? self.rkSteps[nextStepIdentifier] : nil;
 }
@@ -96,8 +112,28 @@ static APCDummyObject * _dummyObject;
 
 - (RKSTTaskProgress)progressOfCurrentStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
 {
-    return RKSTTaskProgressMake([self.stepIdentifiers indexOfObject: step.identifier] + 1, self.stepIdentifiers.count);
+    return RKSTTaskProgressMake([self.staticStepIdentifiers indexOfObject: step.identifier] + 1, self.staticStepIdentifiers.count);
 }
+
+
+- (void) refillDynamicStepIdentifiersWithCurrentStepIdentifier: (NSString*) stepIdentifier
+{
+    //Remove till end in dynamic
+    NSUInteger currentIndexInDynamic = [self.dynamicStepIdentifiers indexOfObject:stepIdentifier];
+    currentIndexInDynamic = currentIndexInDynamic == NSNotFound ? 0 : currentIndexInDynamic;
+    NSRange rangeInDynamic = NSMakeRange(currentIndexInDynamic, self.dynamicStepIdentifiers.count - currentIndexInDynamic);
+    [self.dynamicStepIdentifiers removeObjectsInRange:rangeInDynamic];
+    
+    //Add array from static
+    NSUInteger currentIndexInStatic = [self.staticStepIdentifiers indexOfObject:stepIdentifier];
+    currentIndexInStatic = currentIndexInStatic == NSNotFound ? 0 : currentIndexInStatic;
+    NSRange rangeInStatic = NSMakeRange(currentIndexInStatic, self.staticStepIdentifiers.count - currentIndexInStatic);
+    NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:rangeInStatic];
+    NSArray * subArray = [self.staticStepIdentifiers objectsAtIndexes:indexSet];
+    
+    [self.dynamicStepIdentifiers addObjectsFromArray:subArray];
+}
+
 
 /*********************************************************************************/
 #pragma mark - Conversion of SBBSurvey to RKSTTask
@@ -156,7 +192,8 @@ static APCDummyObject * _dummyObject;
         self.identifier = [aDecoder decodeObjectForKey:@"identifier"];
         self.rules = [aDecoder decodeObjectForKey:@"rules"];
         self.rkSteps = [aDecoder decodeObjectForKey:@"rkSteps"];
-        self.stepIdentifiers = [aDecoder decodeObjectForKey:@"stepIdentifiers"];
+        self.staticStepIdentifiers = [aDecoder decodeObjectForKey:@"staticStepIdentifiers"];
+        self.dynamicStepIdentifiers = [self.staticStepIdentifiers mutableCopy];
     }
     return self;
 }
@@ -166,7 +203,7 @@ static APCDummyObject * _dummyObject;
     [aCoder encodeObject:self.identifier forKey:@"identifier"];
     [aCoder encodeObject:self.rules forKey:@"rules"];
     [aCoder encodeObject:self.rkSteps forKey:@"rkSteps"];
-    [aCoder encodeObject:self.stepIdentifiers forKey:@"stepIdentifiers"];
+    [aCoder encodeObject:self.staticStepIdentifiers forKey:@"staticStepIdentifiers"];
 }
 
 + (BOOL)supportsSecureCoding
@@ -177,14 +214,12 @@ static APCDummyObject * _dummyObject;
 - (id)copyWithZone:(NSZone *)zone
 {
     id copy = [[[self class] alloc] init];
-    
     if (copy) {
         [copy setIdentifier:[self.identifier copyWithZone:zone]];
         [copy setRules:[self.rules copyWithZone:zone]];
         [copy setRkSteps:[self.rkSteps copyWithZone:zone]];
-        [copy setStepIdentifiers:[self.stepIdentifiers copyWithZone:zone]];
+        [copy setStaticStepIdentifiers:[self.staticStepIdentifiers copyWithZone:zone]];
     }
-    
     return copy;
 }
 @end
