@@ -37,6 +37,8 @@ static APCDummyObject * _dummyObject;
 
 @property (nonatomic, strong) NSMutableSet * setOfIdentifiers; //For checking identifier duplication
 
+@property (nonatomic, strong) NSString * currentStep;
+
 @end
 
 @implementation APCSmartSurveyTask
@@ -96,16 +98,27 @@ static APCDummyObject * _dummyObject;
 
 - (RKSTStep *)stepAfterStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
 {
-    //STEP 1: Refill dynamic Array from current step forward
-//    [self refillDynamicStepIdentifiersWithCurrentStepIdentifier:step.identifier];
+    APCLogDebug(@"AFTER     :  Step Identifier: %@", step.identifier);
+    if (step.identifier && ![self.currentStep isEqualToString:step.identifier]) {
+        self.currentStep = step.identifier;
+        //STEP 1: Refill dynamic Array from current step forward
+        [self refillDynamicStepIdentifiersWithCurrentStepIdentifier:step.identifier];
+        
+        //STEP 2: Remove unnecessary steps
+//        RKSTResult * stepResult = [result resultForIdentifier:step.identifier];
+//        APCLogDebug(@"Step Identifier: %@ StepResult: %@", step.identifier, stepResult);
+    }
+
     
-    //STEP 2: Remove unnecessary steps
+    //STEP 3:
     NSString * nextStepIdentifier = [self nextStepIdentifier:YES currentIdentifier:step.identifier];
     return nextStepIdentifier? self.rkSteps[nextStepIdentifier] : nil;
 }
 
 - (RKSTStep *)stepBeforeStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
 {
+    APCLogDebug(@"BEFORE    : Step Identifier: %@", step.identifier);
+    self.currentStep = step.identifier;
     NSString * nextStepIdentifier = [self nextStepIdentifier:NO currentIdentifier:step.identifier];
     return nextStepIdentifier? self.rkSteps[nextStepIdentifier] : nil;
 }
