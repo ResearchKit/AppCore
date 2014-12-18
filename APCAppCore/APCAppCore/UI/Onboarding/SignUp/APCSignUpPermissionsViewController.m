@@ -147,7 +147,7 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeMicrophone;
                 item.caption = NSLocalizedString(@"Microphone", @"");
-                item.detailText = NSLocalizedString(@"Access to microphone is required for your Voice Recording Actvity.", @"");
+                item.detailText = NSLocalizedString(@"Access to microphone is required for your Voice Recording Activity.", @"");
                 [items addObject:item];
             }
                 break;
