@@ -70,7 +70,6 @@
 @property (nonatomic, strong) APCTimeSelector*    dayOfMonthSelector;
 @property (nonatomic, strong) APCTimeSelector*    monthSelector;
 @property (nonatomic, strong) APCTimeSelector*    yearSelector;
-@property (nonatomic, assign) BOOL                isRelative;
 
 - (instancetype)initWithExpression:(NSString*)expression;
 
