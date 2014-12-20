@@ -234,7 +234,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     if (!customWindow) customWindow = [[APCDebugWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     //TODO: remember to turn this off for production.
-    customWindow.enableDebuggerWindow = NO;
+    customWindow.enableDebuggerWindow = YES;
     
     return customWindow;
 }

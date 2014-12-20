@@ -23,6 +23,9 @@ static CGFloat const kHeaderHeight = 127.0f;
 
 @property (nonatomic, strong) NSIndexPath *pickerIndexPath;
 
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *email;
+
 @end
 
 @implementation APCSignUpInfoViewController
@@ -37,8 +40,8 @@ static CGFloat const kHeaderHeight = 127.0f;
     [self setupStepProgressBar];
     [self setupAppearance];
     
-    self.firstNameTextField.delegate = self;
-    self.lastNameTextField.delegate = self;
+    self.nameTextField.delegate = self;
+    self.emailTextField.delegate = self;
     
     self.editing = YES;
     self.signUp = YES;
@@ -110,11 +113,11 @@ static CGFloat const kHeaderHeight = 127.0f;
 
 - (void)setupAppearance
 {
-    [self.firstNameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.firstNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.nameTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.nameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
-    [self.lastNameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.lastNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.emailTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.emailTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
     [self.profileImageButton.imageView.layer setCornerRadius:CGRectGetHeight(self.profileImageButton.bounds)/2];
     
@@ -159,10 +162,10 @@ static CGFloat const kHeaderHeight = 127.0f;
 {
     NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
-    if (textField == self.firstNameTextField) {
-        self.user.firstName = text;
-    } else if (textField == self.lastNameTextField){
-        self.user.lastName = text;
+    if (textField == self.nameTextField) {
+        self.name = text;
+    } else if (textField == self.emailTextField){
+        self.email = text;
     }
     
     return YES;
@@ -170,17 +173,17 @@ static CGFloat const kHeaderHeight = 127.0f;
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    if (textField == self.firstNameTextField) {
-        self.user.firstName = textField.text;
-    } else if (textField == self.lastNameTextField){
-        self.user.lastName = textField.text;
+    if (textField == self.nameTextField) {
+        self.name = textField.text;
+    } else if (textField == self.emailTextField){
+        self.email = textField.text;
     }
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     
-    if ((textField == self.firstNameTextField) && self.lastNameTextField) {
-        [self.lastNameTextField becomeFirstResponder];
+    if ((textField == self.nameTextField) && self.emailTextField) {
+        [self.emailTextField becomeFirstResponder];
     } else {
         [self nextResponderForIndexPath:nil];
     }
@@ -196,17 +199,17 @@ static CGFloat const kHeaderHeight = 127.0f;
     BOOL isContentValid = YES;
     
     if (self.tableView.tableHeaderView) {
-        if (![self.firstNameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
+        if (![self.nameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
             isContentValid = NO;
             
             if (errorMessage) {
                 *errorMessage = NSLocalizedString(@"Please enter a valid first name.", @"");
             }
-        } else if (![self.lastNameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]){
+        } else if (![self.emailTextField.text isValidForRegex:kAPCGeneralInfoItemEmailRegEx]){
             isContentValid = NO;
             
             if (errorMessage) {
-                *errorMessage = NSLocalizedString(@"Please enter a valid last name.", @"");
+                *errorMessage = NSLocalizedString(@"Please enter a valid email address.", @"");
             }
         }
     }

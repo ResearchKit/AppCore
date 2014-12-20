@@ -39,19 +39,18 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     
     [self setupAppearance];
     
-    self.firstNameTextField.delegate = self;
-    self.lastNameTextField.delegate = self;
+    self.nameTextField.delegate = self;
     
     [self.profileImageButton.imageView setContentMode:UIViewContentModeScaleAspectFill];
     
     self.items = [self prepareContent];
     [self.tableView reloadData];
     
-    self.firstNameTextField.text = self.user.firstName;
-    self.firstNameTextField.enabled = NO;
+    self.nameTextField.text = self.user.name;
+    self.nameTextField.enabled = NO;
     
-    self.lastNameTextField.text = self.user.lastName;
-    self.lastNameTextField.enabled = NO;
+    self.emailTextField.text = self.user.email;
+    self.emailTextField.enabled = NO;
     
     self.profileImage = [UIImage imageWithData:self.user.profileImage];
     if (self.profileImage) {
@@ -328,11 +327,11 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 - (void)setupAppearance
 {
-    [self.firstNameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.firstNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.nameTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.nameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
-    [self.lastNameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.lastNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.emailTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.emailTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
     [self.profileImageButton.imageView.layer setCornerRadius:CGRectGetHeight(self.profileImageButton.bounds)/2];
     
@@ -448,10 +447,8 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 {
     NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
-    if (textField == self.firstNameTextField) {
-        self.user.firstName = text;
-    } else if (textField == self.lastNameTextField){
-        self.user.lastName = text;
+    if (textField == self.nameTextField) {
+        self.user.name = text;
     }
     
     return YES;
@@ -459,18 +456,14 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    if (textField == self.firstNameTextField) {
-        self.user.firstName = textField.text;
-    } else if (textField == self.lastNameTextField){
-        self.user.lastName = textField.text;
+    if (textField == self.nameTextField) {
+        self.user.name = textField.text;
     }
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     
-    if ((textField == self.firstNameTextField) && self.lastNameTextField) {
-        [self.lastNameTextField becomeFirstResponder];
-    } else {
+    if ((textField == self.nameTextField) && self.emailTextField) {
         [self nextResponderForIndexPath:nil];
     }
     
@@ -500,8 +493,8 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 - (void)loadProfileValuesInModel
 {
-    self.user.firstName = self.firstNameTextField.text;
-    self.user.lastName = self.lastNameTextField.text;
+    self.user.name = self.nameTextField.text;
+    self.user.email = self.emailTextField.text;
     
     if (self.profileImage) {
         self.user.profileImage = UIImageJPEGRepresentation(self.profileImage, 1.0);
@@ -557,7 +550,6 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
                     break;
                     
                 default:
-                    //#warning ASSERT_MESSAGE Require
                     NSAssert(itemType <= kAPCUserInfoItemTypeWakeUpTime, @"ASSER_MESSAGE");
                     break;
             }
@@ -736,8 +728,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     
     self.editing = !self.editing;
     
-    self.firstNameTextField.enabled = self.isEditing;
-    self.lastNameTextField.enabled = self.isEditing;
+    self.nameTextField.enabled = self.isEditing;
     
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 }

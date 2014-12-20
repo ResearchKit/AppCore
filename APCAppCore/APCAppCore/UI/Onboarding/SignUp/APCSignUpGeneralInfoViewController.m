@@ -9,13 +9,16 @@
 #import "APCPermissionButton.h"
 #import "APCPermissionsManager.h"
 
-@interface APCSignUpGeneralInfoViewController () <APCTermsAndConditionsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+
+@interface APCSignUpGeneralInfoViewController () <APCTermsAndConditionsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, APCFormTextFieldDelegate>
 
 @property (nonatomic, strong) APCPermissionsManager *permissionManager;
 @property (nonatomic) BOOL permissionGranted;
 @property (weak, nonatomic) IBOutlet APCPermissionButton *permissionButton;
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *nextBarButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *alertLabelBottomConstraint;
+@property (weak, nonatomic) IBOutlet UILabel *alertLabel;
 
 @property (nonatomic, strong) UIImage *profileImage;
 
@@ -50,7 +53,15 @@
         }
     }];
     
+    //Set Default Values
     [self.profileImageButton setImage:[UIImage imageNamed:@"profilePlaceholder"] forState:UIControlStateNormal];
+    self.nameTextField.text = self.user.consentSignatureName;
+    if (self.nameTextField.text.length > 0){
+        self.nameTextField.valid = YES;
+    }
+    
+    self.nameTextField.validationDelegate = self;
+    self.emailTextField.validationDelegate = self;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -62,6 +73,9 @@
 - (void)setupAppearance
 {
     [super setupAppearance];
+    
+    self.alertLabel.alpha = 0;
+    [self.alertLabel setFont:[UIFont appRegularFontWithSize:15.0f]];
 }
 
 - (void)setupNavAppearance
@@ -80,25 +94,12 @@
 
 - (NSArray *)prepareContent {
     
+    NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
+    NSArray *profileElementsList = initialOptions[kAppProfileElementsListKey];
+    
     NSMutableArray *items = [NSMutableArray new];
     NSMutableArray *rowItems = [NSMutableArray new];
-    
-    {
-        APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
-        field.caption = NSLocalizedString(@"Email", @"");
-        field.placeholder = NSLocalizedString(@"add email", @"");
-        field.keyboardType = UIKeyboardTypeEmailAddress;
-        field.returnKeyType = UIReturnKeyNext;
-        field.clearButtonMode = UITextFieldViewModeWhileEditing;
-        field.identifier = kAPCTextFieldTableViewCellIdentifier;
-        field.style = UITableViewCellStyleValue1;
-        
-        APCTableViewRow *row = [APCTableViewRow new];
-        row.item = field;
-        row.itemType = kAPCUserInfoItemTypeEmail;
-        [rowItems addObject:row];
-    }
-    
+
     {
         APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
         field.caption = NSLocalizedString(@"Password", @"");
@@ -106,7 +107,6 @@
         field.secure = YES;
         field.keyboardType = UIKeyboardTypeDefault;
         field.returnKeyType = UIReturnKeyNext;
-        field.clearButtonMode = UITextFieldViewModeWhileEditing;
         field.identifier = kAPCTextFieldTableViewCellIdentifier;
         field.style = UITableViewCellStyleValue1;
         
@@ -116,51 +116,63 @@
         [rowItems addObject:row];
     }
     
-    {
-        APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-        field.caption = NSLocalizedString(@"Birthdate", @"");
-        field.placeholder = NSLocalizedString(@"add birthdate", @"");
-        field.datePickerMode = UIDatePickerModeDate;
-        field.style = UITableViewCellStyleValue1;
-        field.selectionStyle = UITableViewCellSelectionStyleGray;
-        field.identifier = kAPCDefaultTableViewCellIdentifier;
-        
-        NSCalendar * gregorian = [[NSCalendar alloc] initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
-        NSDate * currentDate = [NSDate date];
-        NSDateComponents * comps = [[NSDateComponents alloc] init];
-        [comps setYear: -18];
-        NSDate * maxDate = [gregorian dateByAddingComponents: comps toDate: currentDate options: 0];
-        field.maximumDate = maxDate;
-        
-        if (self.permissionGranted && self.user.birthDate) {
-            field.date = self.user.birthDate;
-            field.detailText = [field.date toStringWithFormat:field.dateFormat];
-            field.editable = NO;
-        } else{
-            field.date = maxDate;
-        }
-        
-        APCTableViewRow *row = [APCTableViewRow new];
-        row.item = field;
-        row.itemType = kAPCUserInfoItemTypeDateOfBirth;
-        [rowItems addObject:row];
-    }
     
-    {
-        APCTableViewSegmentItem *field = [APCTableViewSegmentItem new];
-        field.style = UITableViewCellStyleValue1;
-        field.segments = [APCUser sexTypesInStringValue];
-        field.identifier = kAPCSegmentedTableViewCellIdentifier;
+    for (NSNumber *type in profileElementsList) {
         
-        if (self.permissionGranted && self.user.biologicalSex) {
-            field.selectedIndex = [APCUser stringIndexFromSexType:self.user.biologicalSex];
-            field.editable = NO;
+        APCUserInfoItemType itemType = type.integerValue;
+        switch (itemType) {
+            case kAPCUserInfoItemTypeDateOfBirth:
+            {
+                APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
+                field.caption = NSLocalizedString(@"Birthdate", @"");
+                field.placeholder = NSLocalizedString(@"add birthdate", @"");
+                field.datePickerMode = UIDatePickerModeDate;
+                field.style = UITableViewCellStyleValue1;
+                field.selectionStyle = UITableViewCellSelectionStyleGray;
+                field.identifier = kAPCDefaultTableViewCellIdentifier;
+                
+                NSCalendar * gregorian = [[NSCalendar alloc] initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
+                NSDate * currentDate = [NSDate date];
+                NSDateComponents * comps = [[NSDateComponents alloc] init];
+                [comps setYear: -18];
+                NSDate * maxDate = [gregorian dateByAddingComponents: comps toDate: currentDate options: 0];
+                field.maximumDate = maxDate;
+                
+                if (self.permissionGranted && self.user.birthDate) {
+                    field.date = self.user.birthDate;
+                    field.detailText = [field.date toStringWithFormat:field.dateFormat];
+                    field.editable = NO;
+                } else{
+                    field.date = maxDate;
+                }
+                
+                APCTableViewRow *row = [APCTableViewRow new];
+                row.item = field;
+                row.itemType = kAPCUserInfoItemTypeDateOfBirth;
+                [rowItems addObject:row];
+            }
+                break;
+            case kAPCUserInfoItemTypeBiologicalSex:
+            {
+                APCTableViewSegmentItem *field = [APCTableViewSegmentItem new];
+                field.style = UITableViewCellStyleValue1;
+                field.segments = [APCUser sexTypesInStringValue];
+                field.identifier = kAPCSegmentedTableViewCellIdentifier;
+                
+                if (self.permissionGranted && self.user.biologicalSex) {
+                    field.selectedIndex = [APCUser stringIndexFromSexType:self.user.biologicalSex];
+                    field.editable = NO;
+                }
+                
+                APCTableViewRow *row = [APCTableViewRow new];
+                row.item = field;
+                row.itemType = kAPCUserInfoItemTypeBiologicalSex;
+                [rowItems addObject:row];
+            }
+                break;
+            default:
+                break;
         }
-        
-        APCTableViewRow *row = [APCTableViewRow new];
-        row.item = field;
-        row.itemType = kAPCUserInfoItemTypeBiologicalSex;
-        [rowItems addObject:row];
     }
     
     APCTableViewSection *section = [APCTableViewSection new];
@@ -188,11 +200,46 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    [UIView animateWithDuration:0.3 animations:^{
+        self.alertLabel.alpha = 0;
+    }];
+    
     return [super textField:textField shouldChangeCharactersInRange:range replacementString:string];
 }
+
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    [self.nextBarButton setEnabled:[self isContentValid:nil]];
+    self.nextBarButton.enabled = [self isContentValid:nil];
+    
+    [self validateFieldForTextField:textField];
+}
+
+#pragma mark - APCFormTextFieldDelegate methods
+
+- (void)formTextFieldDidTapValidButton:(APCFormTextField *)textField
+{
+    [self validateFieldForTextField:textField];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        self.alertLabel.alpha = 1.0;
+    } completion:nil];
+}
+
+- (void)validateFieldForTextField:(UITextField *)textField
+{
+    NSString *errorMessage = @"";
+    
+    if (textField == self.emailTextField) {
+        
+        BOOL valid = [self isFieldValid:nil forType:kAPCUserInfoItemTypeEmail errorMessage:&errorMessage];
+        self.emailTextField.valid = valid;
+        
+    } else if (textField == self.nameTextField) {
+        BOOL valid = [self isFieldValid:nil forType:kAPCUserInfoItemTypeName errorMessage:&errorMessage];
+        self.nameTextField.valid = valid;
+    }
+    
+    self.alertLabel.text = errorMessage;
 }
 
 #pragma mark - APCPickerTableViewCellDelegate methods
@@ -214,6 +261,8 @@
     [super textFieldTableViewCellDidEndEditing:cell];
     
     self.nextBarButton.enabled = [self isContentValid:nil];
+    
+    [self validateFieldForCell:cell];
 }
 
 - (void)textFieldTableViewCell:(APCTextFieldTableViewCell *)cell shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -221,36 +270,44 @@
     [super textFieldTableViewCell:cell shouldChangeCharactersInRange:range replacementString:string];
     
     self.nextBarButton.enabled = [self isContentValid:nil];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        self.alertLabel.alpha = 0;
+    }];
 }
 
 - (void)textFieldTableViewCellDidReturn:(APCTextFieldTableViewCell *)cell
 {
     [super textFieldTableViewCellDidReturn:cell];
     
+    self.nextBarButton.enabled = [self isContentValid:nil];
+}
+
+- (void)textFieldTableViewCellDidTapValidationButton:(APCTextFieldTableViewCell *)cell
+{
+    [self validateFieldForCell:cell];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        self.alertLabel.alpha = 1.0;
+    } completion:nil];
+}
+
+- (void)validateFieldForCell:(APCTextFieldTableViewCell *)cell
+{
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     APCTableViewTextFieldItem *item = (APCTableViewTextFieldItem *)[self itemForIndexPath:indexPath];
     APCTableViewItemType itemType = [self itemTypeForIndexPath:indexPath];
     
-    if (itemType == kAPCUserInfoItemTypePassword) {
-        if (item.value.length == 0) {
-            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"General Information", @"") message:NSLocalizedString(@"Please give a valid Password", nil)];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
-        else if (item.value.length < kAPCPasswordMinimumLength) {
-            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"General Information", @"") message:[NSString stringWithFormat:NSLocalizedString(@"Password should be at least %d characters", ), kAPCPasswordMinimumLength]];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
-    }
-    else if (itemType == kAPCUserInfoItemTypeEmail) {
-        if (![item.value isValidForRegex:kAPCGeneralInfoItemEmailRegEx]) {
-            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"General Information", @"") message:@"Please give a valid email address"];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
+    NSString *errorMessage = @"";
+    
+    BOOL valid = [self isFieldValid:item forType:itemType errorMessage:&errorMessage];
+    
+    if ([cell.textField isKindOfClass:[APCFormTextField class]]) {
+        ((APCFormTextField *)cell.textField).valid = valid;
     }
     
-    self.nextBarButton.enabled = [self isContentValid:nil];
-    
+    self.alertLabel.text = errorMessage;
 }
 
 #pragma mark - APCSegmentedTableViewCellDelegate methods
@@ -310,10 +367,7 @@
                     }
                         break;
                         
-                        
-                        
                     default:
-                        //#warning ASSERT_MESSAGE Require
                         NSAssert(itemType <= kAPCUserInfoItemTypeWakeUpTime, @"ASSER_MESSAGE");
                         break;
                 }
@@ -337,11 +391,64 @@
     return isContentValid;
 }
 
+- (BOOL)isFieldValid:(APCTableViewTextFieldItem *)item forType:(APCTableViewItemType)type errorMessage:(NSString **)errorMessage
+{
+    BOOL fieldValid = NO;
+    
+    if (type == kAPCUserInfoItemTypeEmail) {
+        
+        if (self.emailTextField.text.length > 0) {
+            fieldValid = [self.emailTextField.text isValidForRegex:kAPCGeneralInfoItemEmailRegEx];
+            
+            if (errorMessage && !fieldValid) {
+                *errorMessage = NSLocalizedString(@"Please enter a valid email address.", @"");
+            }
+        } else {
+            if (errorMessage && !fieldValid) {
+                *errorMessage = NSLocalizedString(@"Email address cannot be left empty.", @"");
+            }
+        }
+        
+    } else if (type == kAPCUserInfoItemTypeName) {
+        
+        if (self.nameTextField.text.length == 0) {
+            if (errorMessage && !fieldValid) {
+                *errorMessage = NSLocalizedString(@"Name cannot be left empty.", @"");
+            }
+        } else {
+            fieldValid = YES;
+        }
+    } else {
+        switch (type) {
+            case kAPCUserInfoItemTypePassword:
+                if ([[item value] length] == 0) {
+                    
+                    if (errorMessage) {
+                        *errorMessage = NSLocalizedString(@"Please enter a Password.", @"");
+                    }
+                } else if ([[item value] length] < kAPCPasswordMinimumLength) {
+                    
+                    if (errorMessage) {
+                        *errorMessage = [NSString stringWithFormat:NSLocalizedString(@"Password should be at least %d characters", ), kAPCPasswordMinimumLength];
+                    }
+                } else {
+                    fieldValid = YES;
+                }
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    return fieldValid;
+}
+
 - (void) loadProfileValuesInModel {
     
     if (self.tableView.tableHeaderView) {
-        self.user.firstName = self.firstNameTextField.text;
-        self.user.lastName = self.lastNameTextField.text;
+        self.user.name = self.nameTextField.text;
+        self.user.email = self.emailTextField.text;
         
         if (self.profileImage) {
             self.user.profileImage = UIImageJPEGRepresentation(self.profileImage, 1.0);
@@ -364,10 +471,6 @@
                     
                 case kAPCUserInfoItemTypePassword:
                     self.user.password = [(APCTableViewTextFieldItem *)item value];
-                    break;
-                    
-                case kAPCUserInfoItemTypeEmail:
-                    self.user.email = [(APCTableViewTextFieldItem *)item value];
                     break;
                     
                 case kAPCUserInfoItemTypeBiologicalSex:{
@@ -447,10 +550,10 @@
 
 - (void) secretButton
 {
-    self.firstNameTextField.text = @"John";
-    self.lastNameTextField.text = @"Appleseed";
+    self.nameTextField.text = @"John Appleseed";
     
     NSUInteger randomInteger = arc4random();
+    self.emailTextField.text = [NSString stringWithFormat:@"dhanush.balachandran+%@@ymedialabs.com", @(randomInteger)];
     
     for (int j=0; j<self.items.count; j++) {
         
@@ -466,10 +569,6 @@
             switch (itemType) {
                 case kAPCUserInfoItemTypePassword:
                     item.value = @"Password123";
-                    break;
-                    
-                case kAPCUserInfoItemTypeEmail:
-                    item.value = [NSString stringWithFormat:@"dhanush.balachandran+%@@ymedialabs.com", @(randomInteger)];
                     break;
                     
                 default:
@@ -490,9 +589,8 @@
 
 - (IBAction)next
 {
-    NSString *error;
     
-    if ([self isContentValid:&error]) {
+    if ([self isContentValid:nil]) {
         
         [self loadProfileValuesInModel];
         
@@ -517,14 +615,7 @@
                 }];
             }
         }];
-        
-        
-        
-    } else{
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"General Information", @"") message:error];
-        [self presentViewController:alert animated:YES completion:nil];
     }
-    
 }
 
 - (IBAction)cancel:(id)sender

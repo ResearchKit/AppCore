@@ -9,10 +9,11 @@
 #import "NSString+Helper.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "APCFormTextField.h"
 
 NSString * const kAPCTextFieldTableViewCellIdentifier = @"APCTextFieldTableViewCell";
 
-@interface APCTextFieldTableViewCell ()
+@interface APCTextFieldTableViewCell () <APCFormTextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textLabelWidthConstraint;
 
@@ -26,6 +27,9 @@ NSString * const kAPCTextFieldTableViewCellIdentifier = @"APCTextFieldTableViewC
     // Initialization code
     self.textField.delegate = self;
     
+    if ([self.textField isKindOfClass:[APCFormTextField class]]) {
+        ((APCFormTextField *)self.textField).validationDelegate = self;
+    }
     [self setupAppearance];
 }
 
@@ -89,6 +93,13 @@ NSString * const kAPCTextFieldTableViewCellIdentifier = @"APCTextFieldTableViewC
     }
     
     return YES;
+}
+
+- (void)formTextFieldDidTapValidButton:(APCFormTextField *)textField
+{
+    if ([self.delegate respondsToSelector:@selector(textFieldTableViewCellDidTapValidationButton:)]) {
+        [self.delegate textFieldTableViewCellDidTapValidationButton:self];
+    }
 }
 
 @end

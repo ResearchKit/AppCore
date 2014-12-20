@@ -42,4 +42,6 @@ typedef NS_ENUM(NSUInteger, APCTextFieldCellType) {
 
 - (void)textFieldTableViewCellDidEndEditing:(APCTextFieldTableViewCell *)cell;
 
+- (void)textFieldTableViewCellDidTapValidationButton:(APCTextFieldTableViewCell *)cell;
+
 @end

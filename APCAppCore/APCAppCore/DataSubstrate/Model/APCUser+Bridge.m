@@ -53,8 +53,8 @@
         SBBUserProfile *profile = [SBBUserProfile new];
         profile.email = self.email;
         profile.username = self.email;
-        profile.firstName = self.firstName;
-        profile.lastName = self.lastName;
+        
+        profile.firstName = self.name;
         
         [SBBComponent(SBBProfileManager) updateUserProfileWithProfile:profile completion:^(id responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -79,8 +79,7 @@
         [SBBComponent(SBBProfileManager) getUserProfileWithCompletion:^(id userProfile, NSError *error) {
             SBBUserProfile *profile = (SBBUserProfile *)userProfile;
             self.email = profile.email;
-            self.firstName = profile.firstName;
-            self.lastName = profile.lastName;
+            self.name = profile.firstName;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Profile Received From Bridge"}));
