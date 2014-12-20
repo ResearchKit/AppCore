@@ -9,7 +9,7 @@
 #import "APCAppCore.h"
 #import <HealthKit/HealthKit.h>
 
-
+static NSString *const kNamePropertytName = @"name";
 static NSString *const kFirstNamePropertytName = @"firstName";
 static NSString *const kLastNamePropertyName = @"lastName";
 static NSString *const kEmailPropertyName = @"email";
@@ -68,8 +68,7 @@ static NSString *const kSignedInKey = @"SignedIn";
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"\
-            First Name : %@\n\
-            Last Name : %@\n\
+            Name : %@\n\
             Email : %@\n\
             DOB : %@\n\
             Biological Sex : %d\n\
@@ -89,7 +88,7 @@ static NSString *const kSignedInKey = @"SignedIn";
             Home Address : %@ \n\
             Home Location Lat : %@ \n\
             Home Location Long : %@ \n\
-            ", self.firstName, self.lastName, self.email, self.birthDate, (int) self.biologicalSex, @(self.isSignedUp), @(self.isUserConsented), @(self.isSignedIn), @(self.isConsented), self.medicalConditions, self.medications, (int) self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime, self.homeLocationAddress, self.homeLocationLat, self.homeLocationLong];
+            ", self.name, self.email, self.birthDate, (int) self.biologicalSex, @(self.isSignedUp), @(self.isUserConsented), @(self.isSignedIn), @(self.isConsented), self.medicalConditions, self.medications, (int) self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime, self.homeLocationAddress, self.homeLocationLat, self.homeLocationLong];
 }
 
 - (void) loadStoredUserData: (NSManagedObjectContext*) context
@@ -160,6 +159,16 @@ static NSString *const kSignedInKey = @"SignedIn";
 /*********************************************************************************/
 #pragma mark - Properties from Key Chain
 /*********************************************************************************/
+
+- (NSString *)name
+{
+    return [APCKeychainStore stringForKey:kNamePropertytName];
+}
+
+- (void)setName:(NSString *)name
+{
+    [APCKeychainStore setString:name forKey:kNamePropertytName];
+}
 
 - (NSString *)firstName
 {

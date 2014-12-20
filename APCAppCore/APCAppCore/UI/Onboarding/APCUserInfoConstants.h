@@ -14,8 +14,7 @@
 typedef NSUInteger APCTableViewItemType;
 
 typedef NS_ENUM(APCTableViewItemType, APCUserInfoItemType) {
-    kAPCUserInfoItemTypeFirstName = 0,
-    kAPCUserInfoItemTypeLastName,
+    kAPCUserInfoItemTypeName = 0,
     kAPCUserInfoItemTypeEmail,
     kAPCUserInfoItemTypePassword,
     kAPCUserInfoItemTypeDateOfBirth,

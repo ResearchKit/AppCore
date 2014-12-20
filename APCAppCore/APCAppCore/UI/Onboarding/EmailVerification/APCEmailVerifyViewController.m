@@ -33,7 +33,7 @@
     [self setupAppearance];
     
     self.emailLabel.text = self.user.email;
-    [self.changeEmailButton setTitle:[NSString stringWithFormat:@"Not %@? Change email address", self.user.firstName] forState:UIControlStateNormal];
+    [self.changeEmailButton setTitle:[NSString stringWithFormat:@"Not %@? Change email address", self.user.name] forState:UIControlStateNormal];
     
     [self checkSignIn];
 }
