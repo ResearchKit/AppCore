@@ -92,21 +92,6 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
             APCUserInfoItemType itemType = type.integerValue;
             
             switch (itemType) {
-                case kAPCUserInfoItemTypeEmail:
-                {
-                    APCTableViewItem *field = [APCTableViewItem new];
-                    field.caption = NSLocalizedString(@"Email", @"");
-                    field.identifier = kAPCDefaultTableViewCellIdentifier;
-                    field.editable = NO;
-                    field.textAlignnment = NSTextAlignmentLeft;
-                    field.detailText = self.user.email;
-                    
-                    APCTableViewRow *row = [APCTableViewRow new];
-                    row.item = field;
-                    row.itemType = kAPCUserInfoItemTypeEmail;
-                    [rowItems addObject:row];
-                }
-                    break;
                 case kAPCUserInfoItemTypeBiologicalSex:
                 {
                     APCTableViewItem *field = [APCTableViewItem new];
