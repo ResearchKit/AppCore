@@ -197,7 +197,7 @@ static CGFloat const kTableFooterHeight = 80.0f;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSUInteger count = 0;
+    NSInteger count = 0;
     
     if (self.placemarks) {
         count = self.placemarks.count;
