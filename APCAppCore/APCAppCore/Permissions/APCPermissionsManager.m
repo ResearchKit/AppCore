@@ -11,6 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <HealthKit/HealthKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 static NSArray *healthKitTypesToRead;
 static NSArray *healthKitTypesToWrite;
@@ -116,7 +117,21 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 #endif
         }
             break;
-            
+        case kSignUpPermissionsTypeCamera:
+        {
+#if TARGET_IPHONE_SIMULATOR
+            isGranted = YES;
+#else
+            AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+            isGranted = status == AVAuthorizationStatusAuthorized;  
+#endif
+        }
+            break;
+        case kSignUpPermissionsTypePhotoLibrary:
+        {
+            ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
+            isGranted = status == ALAuthorizationStatusAuthorized;
+        }
         default:{
             isGranted = NO;
         }
@@ -264,6 +279,48 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                 }
             }];
         }
+            break;
+        case kSignUpPermissionsTypeCamera:
+        {
+            __weak typeof(self) weakSelf = self;
+            
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+                if(granted){
+                    weakSelf.completionBlock(YES, nil);
+                    weakSelf.completionBlock = nil;
+                } else {
+                    if (weakSelf.completionBlock) {
+                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeCamera]);
+                        weakSelf.completionBlock = nil;
+                    }
+                }
+            }];
+        }
+            break;
+        case kSignUpPermissionsTypePhotoLibrary:
+        {
+            __weak typeof(self) weakSelf = self;
+            
+            ALAssetsLibrary *lib = [[ALAssetsLibrary alloc] init];
+            
+            [lib enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+                if (group == nil) {
+                    // end of enumeration
+                    weakSelf.completionBlock(YES, nil);
+                    weakSelf.completionBlock = nil;
+                }
+                
+            } failureBlock:^(NSError *error) {
+                if (error.code == ALAssetsLibraryAccessUserDeniedError) {
+                    if (weakSelf.completionBlock) {
+                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypePhotoLibrary]);
+                        weakSelf.completionBlock = nil;
+                    }
+                }
+            }];
+            
+        }
+            break;
         default:
             break;
     }
@@ -316,6 +373,14 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             break;
         case kSignUpPermissionsTypeMicrophone:{
             message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Microphone", nil), appName];
+        }
+            break;
+        case kSignUpPermissionsTypeCamera:{
+            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Camera", nil), appName];
+        }
+            break;
+        case kSignUpPermissionsTypePhotoLibrary:{
+            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Photos", nil), appName];
         }
             break;
             

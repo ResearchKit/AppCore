@@ -19,6 +19,7 @@
 #import "APCWithdrawCompleteViewController.h"
 #import "APCSettingsViewController.h"
 #import "APCUser+UserData.h"
+#import "APCPermissionsManager.h"
 
 static CGFloat const kSectionHeaderHeight = 40.f;
 static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
@@ -28,6 +29,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyDetailsViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyLabelCenterYConstraint;
+@property (strong, nonatomic) APCPermissionsManager *permissionManager;
 
 @end
 
@@ -59,6 +61,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
         [self.profileImageButton setImage:[UIImage imageNamed:@"profilePlaceholder"] forState:UIControlStateNormal];
     }
     
+    self.permissionManager = [[APCPermissionsManager alloc] init];
     
     [self setupDataFromJSONFile:@"StudyOverview"];
 }
@@ -657,37 +660,83 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 - (IBAction)changeProfileImage:(id)sender
 {
-    if (self.isEditing) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-            imagePickerController.editing = YES;
-            imagePickerController.allowsEditing = YES;
-            imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-            imagePickerController.delegate = self;
-            [self presentViewController:imagePickerController animated:YES completion:nil];
-        }];
-        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-            [alertController addAction:cameraAction];
-        }
+    __weak typeof(self) weakSelf = self;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         
-        UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-            imagePickerController.editing = YES;
-            imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-            imagePickerController.delegate = self;
-            [self presentViewController:imagePickerController animated:YES completion:nil];
+        [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
+            if (granted) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf openCamera];
+                });
+            }else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf presentSettingsAlert:error];
+                });
+            }
         }];
-        [alertController addAction:libraryAction];
-        
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-            
+    }];
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        [alertController addAction:cameraAction];
+    }
+    
+    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
+            if (granted) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf openPhotoLibrary];
+                });
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf presentSettingsAlert:error];
+                });
+            }
         }];
-        [alertController addAction:cancelAction];
+    }];
+    [alertController addAction:libraryAction];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
-        [self presentViewController:alertController animated:YES completion:nil];
-    }    
+    }];
+    [alertController addAction:cancelAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
 
+- (void)openCamera
+{
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.editing = YES;
+    imagePickerController.allowsEditing = YES;
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+    imagePickerController.delegate = self;
+    [self presentViewController:imagePickerController animated:YES completion:nil];
+}
+
+- (void)openPhotoLibrary
+{
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.editing = YES;
+    imagePickerController.allowsEditing = YES;
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    imagePickerController.delegate = self;
+    [self presentViewController:imagePickerController animated:YES completion:nil];
+}
+
+- (void)presentSettingsAlert:(NSError *)error
+{
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+    }];
+    [alertContorller addAction:dismiss];
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }];
+    [alertContorller addAction:settings];
+    
+    [self.navigationController presentViewController:alertContorller animated:YES completion:nil];
 }
 
 - (IBAction)editFields:(UIBarButtonItem *)sender {

@@ -12,7 +12,9 @@ typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
     kSignUpPermissionsTypeLocation,
     kSignUpPermissionsTypePushNotifications,
     kSignUpPermissionsTypeCoremotion,
-    kSignUpPermissionsTypeMicrophone
+    kSignUpPermissionsTypeMicrophone,
+    kSignUpPermissionsTypeCamera,
+    kSignUpPermissionsTypePhotoLibrary
 };
 
 typedef NS_ENUM(NSUInteger, APCDashboardMessageType) {
