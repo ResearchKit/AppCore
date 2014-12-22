@@ -629,6 +629,7 @@
     UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
         imagePickerController.editing = YES;
+        imagePickerController.allowsEditing = YES;
         imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
         imagePickerController.delegate = self;
         [self presentViewController:imagePickerController animated:YES completion:nil];
