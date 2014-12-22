@@ -332,7 +332,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     [self.editLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.editLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
     
-    [self.diseaseLabel setTextColor:[UIColor appPrimaryColor]];
+    [self.diseaseLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.diseaseLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
     
     [self.dateRangeLabel setTextColor:[UIColor appSecondaryColor3]];
