@@ -46,7 +46,7 @@
                                         <constraint firstAttribute="height" constant="1" id="JFT-xY-7oD"/>
                                     </constraints>
                                 </view>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Johnny" placeholder="First Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8hk-Wz-D1n">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Johnny" placeholder="Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8hk-Wz-D1n">
                                     <rect key="frame" x="110" y="17" width="202" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="0dJ-3R-h28"/>
@@ -64,7 +64,7 @@
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Appleseed" placeholder="Last Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oda-Xp-kW9">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Appleseed" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oda-Xp-kW9">
                                     <rect key="frame" x="110" y="80" width="202" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="vdR-ov-Bge"/>
@@ -336,12 +336,12 @@
                         <outlet property="dateRangeLabel" destination="MvD-8y-vPS" id="FGI-Yo-8Fb"/>
                         <outlet property="diseaseLabel" destination="eRz-FJ-3tf" id="9Wd-qR-yNJ"/>
                         <outlet property="editLabel" destination="Gvf-JT-xq5" id="98C-2t-CaD"/>
-                        <outlet property="firstNameTextField" destination="8hk-Wz-D1n" id="qsP-Un-XjJ"/>
+                        <outlet property="emailTextField" destination="oda-Xp-kW9" id="npF-oS-uYe"/>
                         <outlet property="footerTitleLabel" destination="cnn-sn-BBo" id="hMb-Rc-KVL"/>
                         <outlet property="footerView" destination="kyI-F5-60O" id="O81-cM-urG"/>
                         <outlet property="headerView" destination="kqd-X8-uFF" id="mtL-hI-3F7"/>
-                        <outlet property="lastNameTextField" destination="oda-Xp-kW9" id="0n3-Gp-DOj"/>
                         <outlet property="leaveStudyButton" destination="HAN-E2-ARi" id="BV4-u5-Vdt"/>
+                        <outlet property="nameTextField" destination="8hk-Wz-D1n" id="WWf-nf-0BV"/>
                         <outlet property="profileImageButton" destination="wbP-3z-2pl" id="hp2-iW-hH9"/>
                         <outlet property="rightBarButton" destination="fF4-PR-bA8" id="Fyo-HO-yHb"/>
                         <outlet property="signOutButton" destination="uz4-o8-elN" id="OEM-cU-4L5"/>

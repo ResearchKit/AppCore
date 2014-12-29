@@ -34,6 +34,8 @@
 		5B0432A81A322BEE000DC9ED /* APCOnboardingTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0432A61A322BEE000DC9ED /* APCOnboardingTask.m */; };
 		5B234E141A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B234E121A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h */; };
 		5B234E151A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B234E131A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m */; };
+		5B7EA0231A44C21200924DEE /* APCFormTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B7EA0211A44C21200924DEE /* APCFormTextField.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B7EA0241A44C21200924DEE /* APCFormTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7EA0221A44C21200924DEE /* APCFormTextField.m */; };
 		5BBDAF301A378E840047DF87 /* APCDeviceHardware.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBDAF2E1A378E840047DF87 /* APCDeviceHardware.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BBDAF311A378E840047DF87 /* APCDeviceHardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBDAF2F1A378E840047DF87 /* APCDeviceHardware.m */; };
 		5BBDAF381A3795460047DF87 /* APCDeviceHardware+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBDAF361A3795460047DF87 /* APCDeviceHardware+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -374,6 +376,8 @@
 		5B0432A61A322BEE000DC9ED /* APCOnboardingTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCOnboardingTask.m; sourceTree = "<group>"; };
 		5B234E121A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCWithdrawDescriptionViewController.h; sourceTree = "<group>"; };
 		5B234E131A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCWithdrawDescriptionViewController.m; sourceTree = "<group>"; };
+		5B7EA0211A44C21200924DEE /* APCFormTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFormTextField.h; sourceTree = "<group>"; };
+		5B7EA0221A44C21200924DEE /* APCFormTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFormTextField.m; sourceTree = "<group>"; };
 		5BBDAF2E1A378E840047DF87 /* APCDeviceHardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDeviceHardware.h; sourceTree = "<group>"; };
 		5BBDAF2F1A378E840047DF87 /* APCDeviceHardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDeviceHardware.m; sourceTree = "<group>"; };
 		5BBDAF361A3795460047DF87 /* APCDeviceHardware+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDeviceHardware+APCHelper.h"; sourceTree = "<group>"; };
@@ -1443,6 +1447,8 @@
 				F5F129D61A2F78490015982C /* APCPasscodeView.m */,
 				F5F129D71A2F78490015982C /* APCPermissionButton.h */,
 				F5F129D81A2F78490015982C /* APCPermissionButton.m */,
+				5B7EA0211A44C21200924DEE /* APCFormTextField.h */,
+				5B7EA0221A44C21200924DEE /* APCFormTextField.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1624,6 +1630,7 @@
 				F5F12AB41A2F78490015982C /* APCSignUpPermissionsViewController.h in Headers */,
 				F5F12A1C1A2F78490015982C /* UIFont+APCAppearance.h in Headers */,
 				F5F12A711A2F78490015982C /* APCConcentricProgressView.h in Headers */,
+				5B7EA0231A44C21200924DEE /* APCFormTextField.h in Headers */,
 				F5F12A7F1A2F78490015982C /* APCLineGraphView.h in Headers */,
 				F5F12AD61A2F78490015982C /* APCDefaultTableViewCell.h in Headers */,
 				F5F12A431A2F78490015982C /* APCSegmentedButton.h in Headers */,
@@ -1760,6 +1767,7 @@
 				F5F12A861A2F78490015982C /* APCOnboarding.m in Sources */,
 				F5F12AB31A2F78490015982C /* APCSignupPasscodeViewController.m in Sources */,
 				F5F12A651A2F78490015982C /* APCPassiveLocationTracking.m in Sources */,
+				5B7EA0241A44C21200924DEE /* APCFormTextField.m in Sources */,
 				F5F129F91A2F78490015982C /* APCResult.m in Sources */,
 				F5F129FD1A2F78490015982C /* APCSchedule+Bridge.m in Sources */,
 				F5F12A0D1A2F78490015982C /* APCUser+Bridge.m in Sources */,

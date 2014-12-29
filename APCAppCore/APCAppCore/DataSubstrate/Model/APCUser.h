@@ -20,8 +20,11 @@
 /*********************************************************************************/
 #pragma mark - Stored Properties in Keychain
 /*********************************************************************************/
-@property (nonatomic, strong) NSString * firstName;
-@property (nonatomic, strong) NSString * lastName;
+
+@property (nonatomic, strong) NSString * name;
+
+@property (nonatomic, strong) NSString * firstName DEPRECATED_ATTRIBUTE;
+@property (nonatomic, strong) NSString * lastName DEPRECATED_ATTRIBUTE;
 
 @property (nonatomic, strong) NSString * email;
 @property (nonatomic, strong) NSString * password;
