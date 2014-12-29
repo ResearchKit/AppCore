@@ -117,6 +117,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCConfirmationView.h>
 #import <APCAppCore/APCPasscodeView.h>
 #import <APCAppCore/APCResizeView.h>
+#import <APCAppCore/APCFormTextField.h>
 
 /* -------------------------
  Cells

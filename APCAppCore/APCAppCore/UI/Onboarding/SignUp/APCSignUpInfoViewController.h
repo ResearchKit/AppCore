@@ -8,15 +8,16 @@
 #import <UIKit/UIKit.h>
 #import "APCUserInfoViewController.h"
 #import "APCSignUpProgressing.h"
+#import "APCFormTextField.h"
 
 @interface APCSignUpInfoViewController : APCUserInfoViewController <APCSignUpProgressing, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 
 @property (weak, nonatomic) IBOutlet UIButton *profileImageButton;
 
-@property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
+@property (weak, nonatomic) IBOutlet APCFormTextField *nameTextField;
 
-@property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
+@property (weak, nonatomic) IBOutlet APCFormTextField *emailTextField;
 
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 

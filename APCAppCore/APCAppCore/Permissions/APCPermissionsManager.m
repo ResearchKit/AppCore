@@ -11,6 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <HealthKit/HealthKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 static NSArray *healthKitTypesToRead;
 static NSArray *healthKitTypesToWrite;
@@ -116,7 +117,21 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 #endif
         }
             break;
-            
+        case kSignUpPermissionsTypeCamera:
+        {
+#if TARGET_IPHONE_SIMULATOR
+            isGranted = YES;
+#else
+            AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+            isGranted = status == AVAuthorizationStatusAuthorized;  
+#endif
+        }
+            break;
+        case kSignUpPermissionsTypePhotoLibrary:
+        {
+            ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
+            isGranted = status == ALAuthorizationStatusAuthorized;
+        }
         default:{
             isGranted = NO;
         }
@@ -135,57 +150,64 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     switch (type) {
         case kSignUpPermissionsTypeHealthKit:
         {
+    
+            //------READ TYPES--------
+            NSMutableArray *dataTypesToRead = [NSMutableArray new];
             
-            //Commenting out 
+            // Add Characteristic types
+            NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
+            NSArray *profileElementsList = initialOptions[kAppProfileElementsListKey];
             
-//            HKCharacteristicType *dateOfBirth = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth];
-//            HKAuthorizationStatus status = [self.healthStore authorizationStatusForType:dateOfBirth];
-//
-//            if (status == HKAuthorizationStatusNotDetermined) {
+            for (NSNumber *profileType in profileElementsList) {
+                APCUserInfoItemType type = profileType.integerValue;
+                switch (type) {
+                    case kAPCUserInfoItemTypeBiologicalSex:
+                        [dataTypesToRead addObject:[HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex]];
+                        break;
+                    case kAPCUserInfoItemTypeDateOfBirth:
+                        [dataTypesToRead addObject:[HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth]];
+                        break;
+                    case kAPCUserInfoItemTypeBloodType:
+                        [dataTypesToRead addObject:[HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType]];
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
             
-                //------READ TYPES--------
-                NSMutableArray *dataTypesToRead = [NSMutableArray new];
-                for (id typeIdentifier in healthKitTypesToRead) {
-                    if ([typeIdentifier isKindOfClass:[NSString class]]) {
-                        [dataTypesToRead addObject:[HKQuantityType quantityTypeForIdentifier:typeIdentifier]];
-                    }
-                    else if ([typeIdentifier isKindOfClass:[NSDictionary class]])
-                    {
-                        [dataTypesToRead addObject:[self objectTypeFromDictionary:typeIdentifier]];
-                    }
+            //Add other quantity types
+            
+            for (id typeIdentifier in healthKitTypesToRead) {
+                if ([typeIdentifier isKindOfClass:[NSString class]]) {
+                    [dataTypesToRead addObject:[HKQuantityType quantityTypeForIdentifier:typeIdentifier]];
+                }
+                else if ([typeIdentifier isKindOfClass:[NSDictionary class]])
+                {
+                    [dataTypesToRead addObject:[self objectTypeFromDictionary:typeIdentifier]];
+                }
+                
+            }
+            
+            //-------WRITE TYPES--------
+            NSMutableArray *dataTypesToWrite = [NSMutableArray new];
+            
+            for (id typeIdentifier in healthKitTypesToWrite) {
+                if ([typeIdentifier isKindOfClass:[NSString class]]) {
+                    [dataTypesToWrite addObject:[HKQuantityType quantityTypeForIdentifier:typeIdentifier]];
+                }
+                else if ([typeIdentifier isKindOfClass:[NSDictionary class]])
+                {
+                    [dataTypesToWrite addObject:[self objectTypeFromDictionary:typeIdentifier]];
+                }
+            }
+            
+            [self.healthStore requestAuthorizationToShareTypes:[NSSet setWithArray:dataTypesToWrite] readTypes:[NSSet setWithArray:dataTypesToRead] completion:^(BOOL success, NSError *error) {
+                if (completion) {
+                    completion(success, error);
+                }
+            }];
 
-                }
-                
-                [dataTypesToRead addObjectsFromArray: @[
-                                                       [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBiologicalSex],
-                                                       [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth]
-                                                       ]];
-                
-                //-------WRITE TYPES--------
-                NSMutableArray *dataTypesToWrite = [NSMutableArray new];
-                
-                for (id typeIdentifier in healthKitTypesToWrite) {
-                    if ([typeIdentifier isKindOfClass:[NSString class]]) {
-                        [dataTypesToWrite addObject:[HKQuantityType quantityTypeForIdentifier:typeIdentifier]];
-                    }
-                    else if ([typeIdentifier isKindOfClass:[NSDictionary class]])
-                    {
-                        [dataTypesToWrite addObject:[self objectTypeFromDictionary:typeIdentifier]];
-                    }
-                }
-                
-                [self.healthStore requestAuthorizationToShareTypes:[NSSet setWithArray:dataTypesToWrite] readTypes:[NSSet setWithArray:dataTypesToRead] completion:^(BOOL success, NSError *error) {
-                    if (completion) {
-                        completion(success, error);
-                    }
-                }];
-                
-//            } else {
-//                if (self.completionBlock) {
-//                    self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeHealthKit]);
-//                    self.completionBlock = nil;
-//                }
-//            }
             
         }
             break;
@@ -257,6 +279,48 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                 }
             }];
         }
+            break;
+        case kSignUpPermissionsTypeCamera:
+        {
+            __weak typeof(self) weakSelf = self;
+            
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+                if(granted){
+                    weakSelf.completionBlock(YES, nil);
+                    weakSelf.completionBlock = nil;
+                } else {
+                    if (weakSelf.completionBlock) {
+                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeCamera]);
+                        weakSelf.completionBlock = nil;
+                    }
+                }
+            }];
+        }
+            break;
+        case kSignUpPermissionsTypePhotoLibrary:
+        {
+            __weak typeof(self) weakSelf = self;
+            
+            ALAssetsLibrary *lib = [[ALAssetsLibrary alloc] init];
+            
+            [lib enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+                if (group == nil) {
+                    // end of enumeration
+                    weakSelf.completionBlock(YES, nil);
+                    weakSelf.completionBlock = nil;
+                }
+                
+            } failureBlock:^(NSError *error) {
+                if (error.code == ALAssetsLibraryAccessUserDeniedError) {
+                    if (weakSelf.completionBlock) {
+                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypePhotoLibrary]);
+                        weakSelf.completionBlock = nil;
+                    }
+                }
+            }];
+            
+        }
+            break;
         default:
             break;
     }
@@ -309,6 +373,14 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             break;
         case kSignUpPermissionsTypeMicrophone:{
             message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Microphone", nil), appName];
+        }
+            break;
+        case kSignUpPermissionsTypeCamera:{
+            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Camera", nil), appName];
+        }
+            break;
+        case kSignUpPermissionsTypePhotoLibrary:{
+            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Photos", nil), appName];
         }
             break;
             

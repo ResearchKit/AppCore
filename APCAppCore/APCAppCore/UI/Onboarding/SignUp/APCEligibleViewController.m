@@ -30,11 +30,6 @@
   APCLogViewControllerAppeared();
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void) setUpAppearance
 {
     self.label1.font = [UIFont appRegularFontWithSize:19.0f];

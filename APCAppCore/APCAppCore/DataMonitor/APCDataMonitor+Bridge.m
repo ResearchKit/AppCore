@@ -9,19 +9,35 @@
 #import "APCSchedule+Bridge.h"
 #import "APCAppCore.h"
 
-@implementation APCDataMonitor (Bridge)
+NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
 
+@implementation APCDataMonitor (Bridge)
 
 - (void) refreshFromBridgeOnCompletion: (void (^)(NSError * error)) completionBlock
 {
     if (self.dataSubstrate.currentUser.isConsented) {
         [APCSchedule updateSchedulesOnCompletion:^(NSError *error) {
             [APCTask refreshSurveys];
-            [self.scheduler updateScheduledTasksIfNotUpdating:NO OnCompletion:^(NSError * error) {
-                if (completionBlock) {
-                    completionBlock(error);
-                }
-            }];
+            BOOL refreshToday = ![[NSUserDefaults standardUserDefaults] boolForKey:kFirstTimeRefreshToday];
+            if (refreshToday) {
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kFirstTimeRefreshToday];
+                [self.scheduler updateScheduledTasksIfNotUpdating:YES OnCompletion:^(NSError * error) {
+                    [self.scheduler updateScheduledTasksIfNotUpdating:NO OnCompletion:^(NSError * error) {
+                        if (completionBlock) {
+                            completionBlock(error);
+                        }
+                    }];
+                }];
+            }
+            else
+            {
+                [self.scheduler updateScheduledTasksIfNotUpdating:NO OnCompletion:^(NSError * error) {
+                    if (completionBlock) {
+                        completionBlock(error);
+                    }
+                }];
+            }
+
         }];
     }
 }

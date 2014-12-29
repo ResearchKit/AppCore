@@ -171,6 +171,28 @@ static CGFloat const kTableFooterHeight = 80.0f;
     
     return YES;
 }
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    BOOL  answer = NO;
+    
+    NSString  *text = [textField text];
+    text = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if ([text length] > 0) {
+        answer = YES;
+        [textField resignFirstResponder];
+    }
+    return  answer;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if ((self.placemarks != nil) && ([self.placemarks count] > 0)) {
+        [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    }
+}
+
+
 #pragma mark - UITableViewDataSource methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

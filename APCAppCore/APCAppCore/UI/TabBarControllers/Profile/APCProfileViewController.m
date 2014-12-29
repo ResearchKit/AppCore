@@ -19,6 +19,7 @@
 #import "APCWithdrawCompleteViewController.h"
 #import "APCSettingsViewController.h"
 #import "APCUser+UserData.h"
+#import "APCPermissionsManager.h"
 
 static CGFloat const kSectionHeaderHeight = 40.f;
 static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
@@ -28,6 +29,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyDetailsViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyLabelCenterYConstraint;
+@property (strong, nonatomic) APCPermissionsManager *permissionManager;
 
 @end
 
@@ -39,19 +41,18 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     
     [self setupAppearance];
     
-    self.firstNameTextField.delegate = self;
-    self.lastNameTextField.delegate = self;
+    self.nameTextField.delegate = self;
     
     [self.profileImageButton.imageView setContentMode:UIViewContentModeScaleAspectFill];
     
     self.items = [self prepareContent];
     [self.tableView reloadData];
     
-    self.firstNameTextField.text = self.user.firstName;
-    self.firstNameTextField.enabled = NO;
+    self.nameTextField.text = self.user.name;
+    self.nameTextField.enabled = NO;
     
-    self.lastNameTextField.text = self.user.lastName;
-    self.lastNameTextField.enabled = NO;
+    self.emailTextField.text = self.user.email;
+    self.emailTextField.enabled = NO;
     
     self.profileImage = [UIImage imageWithData:self.user.profileImage];
     if (self.profileImage) {
@@ -60,6 +61,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
         [self.profileImageButton setImage:[UIImage imageNamed:@"profilePlaceholder"] forState:UIControlStateNormal];
     }
     
+    self.permissionManager = [[APCPermissionsManager alloc] init];
     
     [self setupDataFromJSONFile:@"StudyOverview"];
 }
@@ -93,21 +95,6 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
             APCUserInfoItemType itemType = type.integerValue;
             
             switch (itemType) {
-                case kAPCUserInfoItemTypeEmail:
-                {
-                    APCTableViewItem *field = [APCTableViewItem new];
-                    field.caption = NSLocalizedString(@"Email", @"");
-                    field.identifier = kAPCDefaultTableViewCellIdentifier;
-                    field.editable = NO;
-                    field.textAlignnment = NSTextAlignmentLeft;
-                    field.detailText = self.user.email;
-                    
-                    APCTableViewRow *row = [APCTableViewRow new];
-                    row.item = field;
-                    row.itemType = kAPCUserInfoItemTypeEmail;
-                    [rowItems addObject:row];
-                }
-                    break;
                 case kAPCUserInfoItemTypeBiologicalSex:
                 {
                     APCTableViewItem *field = [APCTableViewItem new];
@@ -328,11 +315,11 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 - (void)setupAppearance
 {
-    [self.firstNameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.firstNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.nameTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.nameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
-    [self.lastNameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.lastNameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.emailTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.emailTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
     [self.profileImageButton.imageView.layer setCornerRadius:CGRectGetHeight(self.profileImageButton.bounds)/2];
     
@@ -348,7 +335,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     [self.editLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.editLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
     
-    [self.diseaseLabel setTextColor:[UIColor appPrimaryColor]];
+    [self.diseaseLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.diseaseLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
     
     [self.dateRangeLabel setTextColor:[UIColor appSecondaryColor3]];
@@ -448,10 +435,8 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 {
     NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
-    if (textField == self.firstNameTextField) {
-        self.user.firstName = text;
-    } else if (textField == self.lastNameTextField){
-        self.user.lastName = text;
+    if (textField == self.nameTextField) {
+        self.user.name = text;
     }
     
     return YES;
@@ -459,18 +444,14 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    if (textField == self.firstNameTextField) {
-        self.user.firstName = textField.text;
-    } else if (textField == self.lastNameTextField){
-        self.user.lastName = textField.text;
+    if (textField == self.nameTextField) {
+        self.user.name = textField.text;
     }
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     
-    if ((textField == self.firstNameTextField) && self.lastNameTextField) {
-        [self.lastNameTextField becomeFirstResponder];
-    } else {
+    if ((textField == self.nameTextField) && self.emailTextField) {
         [self nextResponderForIndexPath:nil];
     }
     
@@ -500,8 +481,8 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 - (void)loadProfileValuesInModel
 {
-    self.user.firstName = self.firstNameTextField.text;
-    self.user.lastName = self.lastNameTextField.text;
+    self.user.name = self.nameTextField.text;
+    self.user.email = self.emailTextField.text;
     
     if (self.profileImage) {
         self.user.profileImage = UIImageJPEGRepresentation(self.profileImage, 1.0);
@@ -557,7 +538,6 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
                     break;
                     
                 default:
-                    //#warning ASSERT_MESSAGE Require
                     NSAssert(itemType <= kAPCUserInfoItemTypeWakeUpTime, @"ASSER_MESSAGE");
                     break;
             }
@@ -680,36 +660,83 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 - (IBAction)changeProfileImage:(id)sender
 {
-    if (self.isEditing) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-            imagePickerController.editing = YES;
-            imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-            imagePickerController.delegate = self;
-            [self presentViewController:imagePickerController animated:YES completion:nil];
-        }];
-        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-            [alertController addAction:cameraAction];
-        }
+    __weak typeof(self) weakSelf = self;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         
-        UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-            imagePickerController.editing = YES;
-            imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-            imagePickerController.delegate = self;
-            [self presentViewController:imagePickerController animated:YES completion:nil];
+        [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
+            if (granted) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf openCamera];
+                });
+            }else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf presentSettingsAlert:error];
+                });
+            }
         }];
-        [alertController addAction:libraryAction];
-        
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-            
+    }];
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        [alertController addAction:cameraAction];
+    }
+    
+    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
+            if (granted) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf openPhotoLibrary];
+                });
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf presentSettingsAlert:error];
+                });
+            }
         }];
-        [alertController addAction:cancelAction];
+    }];
+    [alertController addAction:libraryAction];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
-        [self presentViewController:alertController animated:YES completion:nil];
-    }    
+    }];
+    [alertController addAction:cancelAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
 
+- (void)openCamera
+{
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.editing = YES;
+    imagePickerController.allowsEditing = YES;
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+    imagePickerController.delegate = self;
+    [self presentViewController:imagePickerController animated:YES completion:nil];
+}
+
+- (void)openPhotoLibrary
+{
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.editing = YES;
+    imagePickerController.allowsEditing = YES;
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    imagePickerController.delegate = self;
+    [self presentViewController:imagePickerController animated:YES completion:nil];
+}
+
+- (void)presentSettingsAlert:(NSError *)error
+{
+    UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+    }];
+    [alertContorller addAction:dismiss];
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }];
+    [alertContorller addAction:settings];
+    
+    [self.navigationController presentViewController:alertContorller animated:YES completion:nil];
 }
 
 - (IBAction)editFields:(UIBarButtonItem *)sender {
@@ -736,8 +763,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     
     self.editing = !self.editing;
     
-    self.firstNameTextField.enabled = self.isEditing;
-    self.lastNameTextField.enabled = self.isEditing;
+    self.nameTextField.enabled = self.isEditing;
     
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
