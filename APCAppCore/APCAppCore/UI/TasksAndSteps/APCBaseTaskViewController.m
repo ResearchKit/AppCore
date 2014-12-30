@@ -37,17 +37,11 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    if (![[NSFileManager defaultManager] fileExistsAtPath:self.taskResultsFilePath]) {
-        NSError * fileError;
-        [[NSFileManager defaultManager] createDirectoryAtPath:self.taskResultsFilePath withIntermediateDirectories:YES attributes:nil error:&fileError];
-        APCLogError2 (fileError);
-    }
-    
-    if (self.outputDirectory) {
+    if (self.outputDirectory != nil) {
         self.outputDirectory = [NSURL fileURLWithPath:self.taskResultsFilePath];
     }
     [super viewWillAppear:animated];
-  APCLogViewControllerAppeared();
+    APCLogViewControllerAppeared();
     APCLogEventWithData(kTaskEvent, (@{
                                        @"task_status":@"Started",
                                        @"task_title": self.scheduledTask.task.taskTitle,
