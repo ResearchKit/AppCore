@@ -6,7 +6,6 @@
 // 
  
 #import "APCSchedule+Bridge.h"
-#import "SBBSchedule+APCAdditions.h"
 
 NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController";
 
@@ -41,13 +40,15 @@ NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController
                         APCLogError2 (error);
                     }];
                 }];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    APCLogEventWithData(kNetworkEvent, @{@"event_detail":@"schedule updated"});
-                    if (completionBlock) {
-                        completionBlock(error);
-                    }
-                });
             }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (!error) {
+                    APCLogEventWithData(kNetworkEvent, @{@"event_detail":@"schedule updated"});
+                }
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            });
         }];
     }
     else
@@ -89,23 +90,27 @@ NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController
     apcSchedule.endsOn = sbbSchedule.endsOn;
     apcSchedule.reminderMessage = sbbSchedule.label;
     
-    //APCTask 
-    if ([sbbSchedule.activityType isEqualToString:@"survey"]) {
-        APCTask * task = [APCTask taskWithTaskID:sbbSchedule.taskID inContext:apcSchedule.managedObjectContext];
-        if (!task) {
-            task = [APCTask newObjectForContext:apcSchedule.managedObjectContext];
-            task.taskID = sbbSchedule.taskID;
-            task.taskHRef = sbbSchedule.activityRef;
-            task.taskClassName = kSurveyTaskViewController;
+    SBBActivity * activity = [sbbSchedule.activities firstObject];
+    if(activity != nil) {
+        //APCTask
+        if ([activity.activityType isEqualToString:@"survey"]) {
+            APCTask * task = [APCTask taskWithTaskID:activity.survey.uniqueID inContext:apcSchedule.managedObjectContext];
+            if (!task) {
+                task = [APCTask newObjectForContext:apcSchedule.managedObjectContext];
+                task.taskID = activity.survey.uniqueID;
+                task.taskHRef = activity.ref;
+                task.taskClassName = kSurveyTaskViewController;
+            }
+            apcSchedule.taskID = activity.survey.uniqueID;
         }
-        apcSchedule.taskID = sbbSchedule.taskID;
+        else
+        {
+            APCTask * task = [APCTask taskWithTaskID:sbbSchedule.taskID inContext:apcSchedule.managedObjectContext];
+            NSAssert(task, @"Task not found!");
+            apcSchedule.taskID = sbbSchedule.taskID;
+        }
     }
-    else
-    {
-        APCTask * task = [APCTask taskWithTaskID:sbbSchedule.taskID inContext:apcSchedule.managedObjectContext];
-        NSAssert(task, @"Task not found!");
-        apcSchedule.taskID = sbbSchedule.taskID;
-    }
+
 
 }
 @end
