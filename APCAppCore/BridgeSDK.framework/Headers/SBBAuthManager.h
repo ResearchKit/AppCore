@@ -125,6 +125,28 @@ extern NSString *gSBBAppURLPrefix;
 - (void)ensureSignedInWithCompletion:(SBBNetworkManagerCompletionBlock)completion;
 
 /*!
+ Request that the password be reset for the account associated with the given email address. An email will be sent
+ to that address with instructions for choosing a new password.
+ 
+ @param email The email address associated with the account whose password is to be reset.
+ @param completion A SBBNetworkManagerCompletionBlock to be called upon completion.
+ 
+ @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
+ */
+- (NSURLSessionDataTask *)requestPasswordResetForEmail:(NSString *)email completion:(SBBNetworkManagerCompletionBlock)completion;
+
+/*!
+ Reset the password for this user's account.
+ 
+ @param password The new password for this user's account.
+ @param token    The sptoken sent to the user's email address in response to a requestPasswordResetForEmail: call.
+ @param completion A SBBNetworkManagerCompletionBlock to be called upon completion.
+ 
+ @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
+ */
+- (NSURLSessionDataTask *)resetPasswordToNewPassword:(NSString *)password resetToken:(NSString *)token completion:(SBBNetworkManagerCompletionBlock)completion;
+
+/*!
  *  This method is used by other API manager components to inject the session token header for authentication.
  *
  *  @param headers A mutable dictionary containing HTTP header key-value (string) pairs, to which to add the auth header.

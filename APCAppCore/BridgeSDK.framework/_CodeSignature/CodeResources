@@ -12,9 +12,13 @@
 		<data>
 		srJY5Sl3TFIWMOfzuWpj1Yqqf0w=
 		</data>
+		<key>Headers/SBBActivity.h</key>
+		<data>
+		MYA28FRl9EFxw6GzxSUa9mT244k=
+		</data>
 		<key>Headers/SBBAuthManager.h</key>
 		<data>
-		vbY2VH+xW188akYwm9hrvNw0nHk=
+		bqz4M4r8/V7QLR7+DXlSE9U/ppw=
 		</data>
 		<key>Headers/SBBBooleanConstraints.h</key>
 		<data>
@@ -30,7 +34,7 @@
 		</data>
 		<key>Headers/SBBBridgeObjects.h</key>
 		<data>
-		yaKSq9pqCDKBfOmEXPZopUJ5KYo=
+		+UDe1UdSWrS4K4SBJahtcRCip3s=
 		</data>
 		<key>Headers/SBBComponent.h</key>
 		<data>
@@ -63,6 +67,10 @@
 		<key>Headers/SBBErrors.h</key>
 		<data>
 		IdTs7xFRsN3Zq+uk6uObX0fyDGg=
+		</data>
+		<key>Headers/SBBGuidCreatedOnVersionHolder.h</key>
+		<data>
+		gGapPobbTSYfcHGKSAKSfygsr94=
 		</data>
 		<key>Headers/SBBIdentifierHolder.h</key>
 		<data>
@@ -156,6 +164,10 @@
 		<data>
 		F0vlwtdoIXi5sVUYebsVPLfRlfg=
 		</data>
+		<key>Headers/_SBBActivity.h</key>
+		<data>
+		nShD7t/UqCUZIhnMHJJnWTPmuDo=
+		</data>
 		<key>Headers/_SBBBooleanConstraints.h</key>
 		<data>
 		R1VwYB4UDbmBC7V6FXJoFea6ph4=
@@ -180,6 +192,10 @@
 		<data>
 		8IWuR6QIo+wMluZJMSpa+YyRoww=
 		</data>
+		<key>Headers/_SBBGuidCreatedOnVersionHolder.h</key>
+		<data>
+		L9kH6Pjg+7dzBH4FRDWCO4NFAVQ=
+		</data>
 		<key>Headers/_SBBIdentifierHolder.h</key>
 		<data>
 		TU+j05Tk4M6G+SDJh+kjryteEqE=
@@ -198,7 +214,7 @@
 		</data>
 		<key>Headers/_SBBSchedule.h</key>
 		<data>
-		/5hn+yZ0DmggNXN30j0nz1jk9rc=
+		EsY7LVj3o5udwDV3nmIviXqAFco=
 		</data>
 		<key>Headers/_SBBStringConstraints.h</key>
 		<data>
@@ -258,11 +274,11 @@
 		</data>
 		<key>SBBDataModel.momd/SBBDataModel.mom</key>
 		<data>
-		E2niz0VNUdzi4JWyYN5lI8FtWO0=
+		qt2kZ/2NrSQ948d32YpOkOL+mJQ=
 		</data>
 		<key>SBBDataModel.momd/VersionInfo.plist</key>
 		<data>
-		4WYdLQUN7OhMUUzxlCgu1EJqvlI=
+		Kz9dOGbxydQ4bSPIQG6w5rfSbSU=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -275,9 +291,13 @@
 		<data>
 		srJY5Sl3TFIWMOfzuWpj1Yqqf0w=
 		</data>
+		<key>Headers/SBBActivity.h</key>
+		<data>
+		MYA28FRl9EFxw6GzxSUa9mT244k=
+		</data>
 		<key>Headers/SBBAuthManager.h</key>
 		<data>
-		vbY2VH+xW188akYwm9hrvNw0nHk=
+		bqz4M4r8/V7QLR7+DXlSE9U/ppw=
 		</data>
 		<key>Headers/SBBBooleanConstraints.h</key>
 		<data>
@@ -293,7 +313,7 @@
 		</data>
 		<key>Headers/SBBBridgeObjects.h</key>
 		<data>
-		yaKSq9pqCDKBfOmEXPZopUJ5KYo=
+		+UDe1UdSWrS4K4SBJahtcRCip3s=
 		</data>
 		<key>Headers/SBBComponent.h</key>
 		<data>
@@ -326,6 +346,10 @@
 		<key>Headers/SBBErrors.h</key>
 		<data>
 		IdTs7xFRsN3Zq+uk6uObX0fyDGg=
+		</data>
+		<key>Headers/SBBGuidCreatedOnVersionHolder.h</key>
+		<data>
+		gGapPobbTSYfcHGKSAKSfygsr94=
 		</data>
 		<key>Headers/SBBIdentifierHolder.h</key>
 		<data>
@@ -419,6 +443,10 @@
 		<data>
 		F0vlwtdoIXi5sVUYebsVPLfRlfg=
 		</data>
+		<key>Headers/_SBBActivity.h</key>
+		<data>
+		nShD7t/UqCUZIhnMHJJnWTPmuDo=
+		</data>
 		<key>Headers/_SBBBooleanConstraints.h</key>
 		<data>
 		R1VwYB4UDbmBC7V6FXJoFea6ph4=
@@ -443,6 +471,10 @@
 		<data>
 		8IWuR6QIo+wMluZJMSpa+YyRoww=
 		</data>
+		<key>Headers/_SBBGuidCreatedOnVersionHolder.h</key>
+		<data>
+		L9kH6Pjg+7dzBH4FRDWCO4NFAVQ=
+		</data>
 		<key>Headers/_SBBIdentifierHolder.h</key>
 		<data>
 		TU+j05Tk4M6G+SDJh+kjryteEqE=
@@ -461,7 +493,7 @@
 		</data>
 		<key>Headers/_SBBSchedule.h</key>
 		<data>
-		/5hn+yZ0DmggNXN30j0nz1jk9rc=
+		EsY7LVj3o5udwDV3nmIviXqAFco=
 		</data>
 		<key>Headers/_SBBStringConstraints.h</key>
 		<data>
@@ -517,11 +549,11 @@
 		</data>
 		<key>SBBDataModel.momd/SBBDataModel.mom</key>
 		<data>
-		E2niz0VNUdzi4JWyYN5lI8FtWO0=
+		qt2kZ/2NrSQ948d32YpOkOL+mJQ=
 		</data>
 		<key>SBBDataModel.momd/VersionInfo.plist</key>
 		<data>
-		4WYdLQUN7OhMUUzxlCgu1EJqvlI=
+		Kz9dOGbxydQ4bSPIQG6w5rfSbSU=
 		</data>
 	</dict>
 	<key>rules</key>

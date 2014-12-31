@@ -246,10 +246,20 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
     __weak APCActivitiesViewController * weakSelf = self;
     [appDelegate.dataMonitor refreshFromBridgeOnCompletion:^(NSError *error) {
-        [appDelegate.scheduler updateScheduledTasksIfNotUpdating:YES OnCompletion:NULL];
-        [weakSelf reloadData];
-        [weakSelf.refreshControl endRefreshing];
-        weakSelf.taskSelectionDisabled = NO;
+        if (error != nil) {
+            UIAlertController * alert = [UIAlertController simpleAlertWithTitle:@"Error" message:error.message];
+            [self presentViewController:alert animated:YES completion:nil];
+            [weakSelf.refreshControl endRefreshing];
+            weakSelf.taskSelectionDisabled = NO;
+        }
+        else
+        {
+            [appDelegate.scheduler updateScheduledTasksIfNotUpdating:YES OnCompletion:^(NSError *error) {
+                [weakSelf reloadData];
+                [weakSelf.refreshControl endRefreshing];
+                weakSelf.taskSelectionDisabled = NO;
+            }];
+        }
     }];
 }
 
