@@ -2,8 +2,7 @@
 //  APCScheduleExpressionRealLifeTests.m
 //  APCAppCore
 //
-//  Created by Ron Conescu on 12/6/14.
-//  Copyright (c) 2014 Y Media Labs. All rights reserved.
+//  Copyright (c) 2014 Apple, Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
