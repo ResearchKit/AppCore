@@ -269,10 +269,20 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                                                                              second:0
                                                                              ofDate:task.startOn
                                                                             options:0];
+                
+                id taskResultValue = [taskResult valueForKey:valueKey];
+                NSNumber *taskValue = nil;
+                
+                if ([taskResultValue isKindOfClass:[NSNull class]] || !taskResultValue) {
+                    taskValue = @(NSNotFound);
+                } else {
+                    taskValue = (NSNumber *)taskResultValue;
+                }
+                
                 if (!dataKey) {
                     [self.dataPoints addObject:@{
                                                  kDatasetDateKey: pointDate,
-                                                 kDatasetValueKey: [taskResult valueForKey:valueKey]?:@(NSNotFound),
+                                                 kDatasetValueKey: taskValue,
                                                  kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
                                                  kDatasetValueNoDataKey: @(YES)
                                                  }];
@@ -282,7 +292,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                     if (nestedData) {
                         [self.dataPoints addObject:@{
                                                      kDatasetDateKey: pointDate,
-                                                     kDatasetValueKey: [nestedData valueForKey:valueKey]?: @(NSNotFound),
+                                                     kDatasetValueKey: taskValue,
                                                      kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
                                                      kDatasetValueNoDataKey: @(YES)
                                                      }];
