@@ -586,6 +586,11 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 	}
 }
 
+- (void) forgetToken
+{
+	self.nextToken = nil;
+}
+
 - (void)recordError
 {
     self.errorEncountered = YES;
@@ -645,6 +650,19 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 	if (self.nextToken.isFieldSeparator)
 	{
 		[self consumeOneToken];
+	}
+	else
+	{
+		/*
+		 This method was called when a field separator
+		 was expected.  If we *didn't* get a field separator,
+		 we got something *else*.  The next method to ask
+		 for a token might not want this -- but no one else
+		 has consumed it, yet.  So we'll just pretend
+		 we were never here, enabling the next method to
+		 make its own decisions.
+		 */
+		[self forgetToken];
 	}
 }
 
@@ -1270,6 +1288,14 @@ parseError:
 
 
 	//
+	// Remove any leading spaces.
+	//
+
+	[self fieldSeparatorProduction_usingTokens];
+
+
+
+	//
 	// Extract minutes.
 	//
     
@@ -1342,11 +1368,10 @@ parseError:
     
 
 	//
-	// Extract (or maybe delete) years.
+	// Ignore everything else.
+	// Generate a "*" for the Year field.
 	//
 
-    [self expect: kEndToken];
-    
     self.yearSelector = [self yearProduction:kYear];
 
 
