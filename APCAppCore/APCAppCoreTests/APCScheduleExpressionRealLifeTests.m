@@ -58,7 +58,6 @@
  -		30
  -
  -	December, 2014
- -
  -			1	2	3	4	5	6
  -		7	8	9	10	11	12	13
  -		14	15	16	17	18	19	20
@@ -71,6 +70,19 @@
  -		11	12	13	14	15	16	17
  -		18	19	20	21	22	23	24
  -		25	26	27	28	29	30	31
+ -
+ -	February, 2015
+ -		1	2	3	4	5	6	7
+ -		8	9	10	11	12	13	14
+ -		15	16	17	18	19	20	21
+ -		22	23	24	25	26	27	28
+ -
+ -	March, 2015
+ -		1	2	3	4	5	6	7
+ -		8	9	10	11	12	13	14
+ -		15	16	17	18	19	20	21
+ -		22	23	24	25	26	27	28
+ -		29	30	31
  */
 
 
@@ -98,7 +110,8 @@
 
 
 	// Ron:  testing new versions
-	NSString* cronExpression = @"0 5 * SEP,JUL,OCT/2,JAN-MAR THU,FRI,MON#1,TUE#2";				// Replacing strings with numbers
+	NSString* cronExpression = @"0 5 * SEP,JUL,OCT/2,JAN-MAR THU,FRI,MON#1,TUE#2";
+//	NSString* cronExpression = @"   0    5    *    SEP,JUL,OCT/2,JAN-MAR     THU,FRI,MON#1,TUE#2    ";
 
 
 
@@ -107,9 +120,11 @@
 																			   timeZero: userWakeupTimeOffset];
 
 	NSDate *start = [NSDate todayAtMidnight];
+//	NSDate *start = [[NSDate tomorrowAtMidnight] dateByAddingDays: 2];
 //	NSDate *end   = [NSDate tomorrowAtMidnight];
-	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 3];
-//	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 14];
+//	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 3];
+	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 14];
+//	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 60];
 
 	NSEnumerator* enumerator = [schedule enumeratorBeginningAtTime: start
 													  endingAtTime: end];

@@ -1074,16 +1074,30 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 	NSNumber* end				= weekdayRangeSpec.count > 1 ? weekdayRangeSpec[1] : nil;
 	NSNumber* step				= nil;
 
-	if (self.nextToken.isStepSeparator)
+	if (self.nextToken.isPositionSeparator)
 	{
 		[self consumeOneToken];
-		step = [self stepsProduction];
+
+		NSNumber *position = [self positionProduction];
+
+		selector = [[APCPointSelector alloc] initWithUnit: kDayOfWeek
+													value: begin
+												 position: position];
 	}
 
-	selector = [[APCPointSelector alloc] initWithUnit: kDayOfWeek
-										   beginRange: begin
-											 endRange: end
-												 step: step];
+	else
+	{
+		if (self.nextToken.isStepSeparator)
+		{
+			[self consumeOneToken];
+			step = [self stepsProduction];
+		}
+
+		selector = [[APCPointSelector alloc] initWithUnit: kDayOfWeek
+											   beginRange: begin
+												 endRange: end
+													 step: step];
+	}
 
 	if (selector == nil)
 	{
