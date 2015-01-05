@@ -335,20 +335,6 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
  to eliminate or convert specific items.
  */
 
-- (void) trimAndNormalizeSpaces
-{
-	NSMutableString *newString = self.expression.mutableCopy;
-
-	[newString replaceOccurrencesOfString: @"\\s+"
-							   withString: @" "
-								  options: NSRegularExpressionSearch
-									range: NSMakeRange (0, newString.length)];
-
-	newString = [[newString stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]] mutableCopy];
-
-	self.expression = newString;
-}
-
 - (void) enforceFiveFields
 {
 	NSMutableString *newString = nil;
@@ -379,48 +365,6 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 	{
 		self.expression = newString;
 	}
-}
-
-- (void) convertDayAndMonthNamesToNumbers
-{
-	NSMutableString *newString = self.expression.mutableCopy;
-
-	// We'll do a case-insensitive search.
-	NSDictionary *stringsToReplace = @{
-									   @"sun": @0,
-									   @"mon": @1,
-									   @"tue": @2,
-									   @"wed": @3,
-									   @"thu": @4,
-									   @"fri": @5,
-									   @"sat": @6,
-
-									   @"jan": @1,
-									   @"feb": @2,
-									   @"mar": @3,
-									   @"apr": @4,
-									   @"may": @5,
-									   @"jun": @6,
-									   @"jul": @7,
-									   @"aug": @8,
-									   @"sep": @9,
-									   @"oct": @10,
-									   @"nov": @11,
-									   @"dec": @12,
-									   };
-
-	for (NSString *monthOrWeekday in stringsToReplace.allKeys)
-	{
-		NSNumber *number = stringsToReplace [monthOrWeekday];
-		NSString *digit = number.stringValue;
-
-		[newString replaceOccurrencesOfString: monthOrWeekday
-								   withString: digit
-									  options: NSCaseInsensitiveSearch
-										range: NSMakeRange(0, newString.length)];
-	}
-
-	self.expression = newString;
 }
 
 
@@ -1394,8 +1338,6 @@ parseError:
 
 - (BOOL)parse
 {
-//	[self trimAndNormalizeSpaces];
-
 	/*
 	 Sometimes, the field list has SEVEN fields:  seconds on the left,
 	 years on the right.  In practice, we ignore those:  "minutes" is
@@ -1403,13 +1345,6 @@ parseError:
 	 So strip those fields.
 	 */
 //	[self enforceFiveFields];
-
-
-//	/*
-//	 Convert days of months and weekdays to their numeric
-//	 equivalents.
-//	 */
-//	[self convertDayAndMonthNamesToNumbers];
 
 
 	// Ok.  Parse it.
