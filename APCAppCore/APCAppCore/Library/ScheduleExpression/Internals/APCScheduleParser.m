@@ -20,24 +20,263 @@ static unichar kOtherWildCardToken		= '?';
 static unichar kRangeSeparatorToken		= '-';
 static unichar kFieldSeparatorToken		= ' ';
 
+static NSArray *kWildcardTokens = nil;
+static NSDictionary *kWeekdayNamesAndNumbers = nil;
+static NSDictionary *kMonthNamesAndNumbers = nil;
+
+
+static NSString* kListSeparatorTokenString		= @",";
+static NSString* kStepSeparatorTokenString		= @"/";
+static NSString* kPositionSeparatorTokenString	= @"#";
+static NSString* kWildCardTokenString			= @"*";
+static NSString* kOtherWildCardTokenString		= @"?";
+static NSString* kRangeSeparatorTokenString		= @"-";
+
+static NSCharacterSet* kDigitsCharacterSet = nil;
+static NSCharacterSet* kAlphaCharacterSet = nil;
+static NSCharacterSet* kFieldSeparatorCharacterSet = nil;
+static NSCharacterSet* kSpecialCronCharactersCharacterSet = nil;
+static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
+
+
+
+// ---------------------------------------------------------
+#pragma mark - VarArgs macro
+// ---------------------------------------------------------
+
+/**
+ Doesn't work.
+
+ Another attempt:
+ 		va_list args;
+		va_start(args, stringOrCharacterSet);
+		for (id arg = stringOrCharacterSet; arg != nil; arg = va_arg(args, id))
+		{
+			[parameters addObject: arg];
+		}
+		va_end(args);
+
+ based on http://www.cocoawithlove.com/2009/05/variable-argument-lists-in-cocoa.html
+ 
+ but that crashes, too.  :-(
+ this isn't core to what I need to do, so...  never mind.
+ */
+//#define NSArrayFromVariadicArguments( parameterToLeftOfEllipsis )	\
+//	({																\
+//		NSArray *nsarrayOfVarArgs = nil;							\
+//		va_list arguments;											\
+//		va_start (arguments, parameterToLeftOfEllipsis);			\
+//		nsarrayOfVarArgs = [[NSArray alloc] initWithObjects:		\
+//								parameterToLeftOfEllipsis,			\
+//								arguments,							\
+//								nil];								\
+//		va_end (arguments);											\
+//																	\
+//		/* By mentioning this variable as the last item				\
+//		   inside the ({...}), we effectively "return" a value		\
+//		   from this macro. */										\
+//		nsarrayOfVarArgs;											\
+//	})
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Tokens
+// ---------------------------------------------------------
+
+@interface APCScheduleParserToken : NSObject
+
+// Stuff we might scan
+@property (nonatomic, assign) NSNumber* scannedInteger;
+@property (nonatomic, strong) NSString* scannedText;
+@property (nonatomic, assign) NSInteger countOfScannedCharacters;
+
+// Recording what happened when scanning the above
+@property (nonatomic, assign) BOOL isFieldSeparator;
+@property (nonatomic, assign) BOOL isInteger;
+@property (nonatomic, assign) BOOL isText;
+@property (nonatomic, assign) BOOL isSpecialChar;
+@property (nonatomic, assign) BOOL isUnrecognizedToken;
+
+// Interpreting what happened with numbers and special chars
+@property (readonly) BOOL isListSeparator;
+@property (readonly) BOOL isStepSeparator;
+@property (readonly) BOOL isPositionSeparator;
+@property (readonly) BOOL isWildcard;
+@property (readonly) BOOL isRangeSeparator;
+
+@property (readonly) BOOL isMonth;
+@property (readonly) NSNumber *month;
+
+@end
+
+@implementation APCScheduleParserToken
+
+- (id) init
+{
+	self = [super init];
+
+	if (self)
+	{
+		_scannedInteger = nil;
+		_scannedText = nil;
+		_countOfScannedCharacters = 0;
+
+		_isFieldSeparator = NO;
+		_isInteger = NO;
+		_isText = NO;
+		_isSpecialChar = NO;
+		_isUnrecognizedToken = NO;
+	}
+
+	return self;
+}
+
+- (BOOL) isWildcard
+{
+	BOOL result = self.isSpecialChar && [kWildcardTokens containsObject: self.scannedText];
+
+	return result;
+}
+
+- (BOOL) isListSeparator
+{
+	BOOL result = self.isSpecialChar && [self.scannedText isEqualToString: kListSeparatorTokenString];
+
+	return result;
+}
+
+- (BOOL) isStepSeparator
+{
+	BOOL result = self.isSpecialChar && [self.scannedText isEqualToString: kStepSeparatorTokenString];
+
+	return result;
+}
+
+- (BOOL) isPositionSeparator
+{
+	BOOL result = self.isSpecialChar && [self.scannedText isEqualToString: kPositionSeparatorTokenString];
+
+	return result;
+}
+
+- (BOOL) isRangeSeparator
+{
+	BOOL result = self.isSpecialChar && [self.scannedText isEqualToString: kRangeSeparatorTokenString];
+
+	return result;
+}
+
+- (BOOL) isMonth
+{
+	BOOL result = ((self.isInteger && [kMonthNamesAndNumbers.allValues containsObject: self.scannedInteger]) ||
+				   (self.isText    && [kMonthNamesAndNumbers.allKeys   containsObject:   self.scannedText  ]) );
+
+	return result;
+}
+
+- (NSNumber *) month
+{
+	NSNumber *month = nil;
+
+	if (self.isMonth)
+	{
+		if (self.isInteger)
+		{
+			month = self.scannedInteger;
+		}
+
+		else
+		{
+			month = kMonthNamesAndNumbers [self.scannedText];
+		}
+	}
+
+	return month;
+}
+
+@end
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Parser
+// ---------------------------------------------------------
 
 @interface APCScheduleParser ()
-
 @property (nonatomic, strong) NSMutableString*  expression;
 @property (nonatomic, assign) BOOL              errorEncountered;
-
+@property (nonatomic, strong) APCScheduleParserToken *nextToken;
 @end
 
 
 @implementation APCScheduleParser
 
-- (instancetype)initWithExpression:(NSString*)expression
++ (void) initialize
+{
+	if (kWildcardTokens == nil)
+	{
+		kWildcardTokens = @[ kWildCardTokenString, kOtherWildCardTokenString ];
+
+		kWeekdayNamesAndNumbers = @{ @"sun": @0,
+									 @"mon": @1,
+									 @"tue": @2,
+									 @"wed": @3,
+									 @"thu": @4,
+									 @"fri": @5,
+									 @"sat": @6,
+									 @"sun": @7,		// both 0 and 7 are legal, but we'll use 0
+									 };
+
+		kMonthNamesAndNumbers = @{ @"jan": @1,
+								   @"feb": @2,
+								   @"mar": @3,
+								   @"apr": @4,
+								   @"may": @5,
+								   @"jun": @6,
+								   @"jul": @7,
+								   @"aug": @8,
+								   @"sep": @9,
+								   @"oct": @10,
+								   @"nov": @11,
+								   @"dec": @12,
+								   };
+
+		kDigitsCharacterSet = [NSCharacterSet decimalDigitCharacterSet];
+		kFieldSeparatorCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+
+		NSMutableCharacterSet *alpha = [NSMutableCharacterSet new];
+		[alpha formUnionWithCharacterSet: [NSCharacterSet lowercaseLetterCharacterSet]];
+		[alpha formUnionWithCharacterSet: [NSCharacterSet uppercaseLetterCharacterSet]];
+		kAlphaCharacterSet = alpha;
+
+		NSMutableCharacterSet *nonAlpha = [NSMutableCharacterSet new];
+		[nonAlpha addCharactersInString: kListSeparatorTokenString];
+		[nonAlpha addCharactersInString: kStepSeparatorTokenString];
+		[nonAlpha addCharactersInString: kPositionSeparatorTokenString];
+		[nonAlpha addCharactersInString: kWildCardTokenString];
+		[nonAlpha addCharactersInString: kOtherWildCardTokenString];
+		[nonAlpha addCharactersInString: kRangeSeparatorTokenString];
+		kSpecialCronCharactersCharacterSet = nonAlpha;
+
+		NSMutableCharacterSet *allCharsWeRecognize = [[NSMutableCharacterSet alloc] init];
+		[allCharsWeRecognize formUnionWithCharacterSet: kDigitsCharacterSet];
+		[allCharsWeRecognize formUnionWithCharacterSet: kAlphaCharacterSet];
+		[allCharsWeRecognize formUnionWithCharacterSet: kFieldSeparatorCharacterSet];
+		[allCharsWeRecognize formUnionWithCharacterSet: kSpecialCronCharactersCharacterSet];
+		kAllCharsWeRecognizeCharacterSet = allCharsWeRecognize;
+	}
+}
+
+- (instancetype) initWithExpression: (NSString*) expression
 {
     self = [super init];
+
     if (self)
     {
         _expression       = [expression mutableCopy];
         _errorEncountered = NO;
+		_nextToken        = nil;
     }
     
     return self;
@@ -46,7 +285,7 @@ static unichar kFieldSeparatorToken		= ' ';
 
 
 // ---------------------------------------------------------
-#pragma mark - "Preprocessor" methods
+#pragma mark - "Preprocessor" methods (being deprecated right now)
 // ---------------------------------------------------------
 
 /*
@@ -145,12 +384,21 @@ static unichar kFieldSeparatorToken		= ' ';
 
 
 // ---------------------------------------------------------
-#pragma mark - The Parser
+#pragma mark - (mostly) Scanning for Tokens
 // ---------------------------------------------------------
 
 - (BOOL)isValidParse
 {
     return self.next == kEndToken && self.errorEncountered == NO;
+}
+
+- (BOOL)isValidParse_withTokens
+{
+	// not yet sure when I'll need this, so I'll crash,
+	// to make sure I see it:
+	NSAssert (NO, @"Hey, neat! I'm actually using -isValidParse_withTokens !");
+
+	return self.nextToken == nil && self.errorEncountered == NO;
 }
 
 - (unichar)next
@@ -161,12 +409,140 @@ static unichar kFieldSeparatorToken		= ' ';
     return nextToken;
 }
 
+/**
+ Returns the next token in the incoming stream, scanning for it
+ if not already captured.  Once captured, keeps returning that
+ token until -consumeOneToken is called.  This method does NOT
+ consume the token (if only to be compatible with the existing
+ one-char-per-token code, which performs this "next" concept by
+ simply looking at the next char in the incoming stream).
+ 
+ Note that this overrides the standard "get" method for the
+ "nextToken" property.  As such, it reads and writes _nextToken.
+ */
+- (APCScheduleParserToken *) nextToken
+{
+	APCScheduleParserToken *token = _nextToken;
+
+	// If we've already scanned for a token, we'll return
+	// that.  Otherwise, scan for the next one.
+	if ((token == nil || token.countOfScannedCharacters == 0) &&
+		(self.expression.length > 0))
+	{
+		token = [APCScheduleParserToken new];
+		NSInteger scannedInteger = 0;
+		NSString *scannedText = nil;
+		NSScanner* scanner = [NSScanner scannerWithString: self.expression];
+
+		/*
+		 It seems standard to put "whitespace and newlines" here.
+		 However, for us, whitespace and newlines matter:  they're
+		 the "field delimiter".
+		 */
+		scanner.charactersToBeSkipped = nil;
+
+		/*
+		 All the text we care about is case-insensitive.
+		 */
+		scanner.caseSensitive = NO;
+
+
+		// Now find the next token.
+		if ([scanner scanCharactersFromSet: kFieldSeparatorCharacterSet intoString: &scannedText])
+		{
+			token.isFieldSeparator = YES;
+			token.scannedText = scannedText;
+			token.countOfScannedCharacters = scanner.scanLocation;
+		}
+
+		else if ([scanner scanCharactersFromSet: kDigitsCharacterSet intoString: &scannedText])
+		{
+			token.isInteger = YES;
+			token.scannedText = scannedText;
+			token.scannedInteger = @(scannedText.integerValue);
+			token.countOfScannedCharacters = scanner.scanLocation;
+		}
+
+		else if ([scanner scanCharactersFromSet: kAlphaCharacterSet intoString: &scannedText])
+		{
+			token.isText = YES;
+			token.scannedText = scannedText.lowercaseString;
+			token.countOfScannedCharacters = scanner.scanLocation;
+		}
+
+		else if ([scanner scanCharactersFromSet: kSpecialCronCharactersCharacterSet intoString: &scannedText])
+		{
+			token.isSpecialChar = YES;
+			token.scannedText = scannedText;
+			token.countOfScannedCharacters = scanner.scanLocation;
+		}
+
+		/*
+		 If we get here, it's not any of the characters we recognize.
+		 So scan until we find a character we DO recognize, and report
+		 an error for the string of unrecognized characters.
+		 */
+		else if ([scanner scanUpToCharactersFromSet: kAllCharsWeRecognizeCharacterSet intoString: &scannedText])
+		{
+			token.isUnrecognizedToken = YES;
+			token.scannedText = scannedText;
+			token.countOfScannedCharacters = scanner.scanLocation;
+
+			NSLog (@"WARNING: Couldn't understand token [%@] in schedule expression.", scannedText);
+
+			[self recordError];
+		}
+
+		/*
+		 We should literally never get to this "else" statement:
+		 we've scanned for every possible physical character.
+		 */
+		else
+		{
+			NSLog (@"WARNING: Something very odd happened when trying to scan the cron expression -- didn't find any recognized OR UNRECOGNIZED characters.");
+
+			token = nil;
+
+			[self recordError];
+		}
+
+
+		// Record what happened.
+		// This token will be consumed at the next call to -consume.
+		_nextToken = token;
+	}
+
+	return token;
+}
+
 - (void)consumeOneChar
 {
     if (self.expression.length > 0)
     {
         [self.expression deleteCharactersInRange:NSMakeRange(0, 1)];
     }
+}
+
+- (void) consumeOneToken
+{
+	if (self.expression.length > 0 && self.nextToken.countOfScannedCharacters > 0)
+	{
+		NSInteger numCharsToConsume = self.nextToken.countOfScannedCharacters;
+
+		if (numCharsToConsume > self.expression.length)
+		{
+			NSAssert (NO, @"Somehow, we seem to have scanned past the end of the string. How was that possible?");
+		}
+
+		else
+		{
+			NSRange charsToConsume = NSMakeRange (0, numCharsToConsume);
+			[self.expression deleteCharactersInRange: charsToConsume];
+		}
+
+		// This tells -nextToken to actually scan for the next token.
+		self.nextToken = nil;
+	}
 }
 
 - (void)recordError
@@ -191,6 +567,27 @@ static unichar kFieldSeparatorToken		= ' ';
     return expectation;
 }
 
+- (BOOL) expectToken: (APCScheduleParserToken *) token
+{
+	// not yet sure when I'll need this, so, for now, always crash,
+	// so I can see it:
+	NSAssert (NO, @"Ron:  not yet handling -expectToken:.");
+
+	BOOL expectation = NO;
+
+	if ([self.nextToken isEqual: token])
+	{
+		expectation = YES;
+		[self consumeOneToken];
+	}
+	else
+	{
+		[self recordError];
+	}
+
+	return expectation;
+}
+
 - (void)fieldSeparatorProduction
 {
     while (self.next == kFieldSeparatorToken)
@@ -198,6 +595,23 @@ static unichar kFieldSeparatorToken		= ' ';
         [self consumeOneChar];
     }
 }
+
+- (void) fieldSeparatorProduction_usingTokens
+{
+	// no need for a while() loop; the scanner already got
+	// all tokens considered part of the field separator,
+	// i.e., all whitespace
+	if (self.nextToken.isFieldSeparator)
+	{
+		[self consumeOneToken];
+	}
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Production Rules
+// ---------------------------------------------------------
 
 - (NSNumber*)numberProduction
 {
@@ -229,6 +643,38 @@ static unichar kFieldSeparatorToken		= ' ';
     return number;
 }
 
+- (NSNumber *) monthProduction  // equiavlent to numberProduction, but for months.
+{
+	NSNumber *month = nil;
+
+	/*
+	 Scan up to the next month, throw that stuff away, and then
+	 scan the month.  This make the scan-by-token code operate
+	 the same way as the scan-by-char code.
+	 
+	 Presumes the string has been advanced to some stuff
+	 immediately preceding a month.
+	 */
+	if (! self.nextToken.isMonth)
+	{
+		[self consumeOneToken];
+	}
+
+	if (self.nextToken.isMonth)
+	{
+		month = self.nextToken.month;	// converts names or numbers to month-numbers.
+		[self consumeOneToken];
+	}
+	else
+	{
+		NSLog (@"WARNING:  I was expecting a month, and got something else: [%@].", self.nextToken.scannedText);
+
+		[self recordError];
+	}
+
+	return month;
+}
+
 - (NSArray*)rangeProduction
 {
 	//
@@ -252,7 +698,15 @@ static unichar kFieldSeparatorToken		= ' ';
             {
                 [range addObject:rangeEnd];
             }
+			else
+			{
+				// Open-ended range, which is we consider legal.
+			}
         }
+		else
+		{
+			// Next token is not part of this range, which is fine.
+		}
     }
     else
     {
@@ -260,6 +714,49 @@ static unichar kFieldSeparatorToken		= ' ';
     }
     
     return range;
+}
+
+- (NSArray*) monthRangeProduction  // equivalent to rangeProduction, but for months.
+{
+	//
+	// Production rule:
+	//
+	//		monthRange :: month ( '-' month ) ?
+	//
+
+	NSMutableArray* range = [NSMutableArray array];
+
+	if (self.nextToken.isMonth)
+	{
+		[range addObject: [self monthProduction]];
+
+		if (self.nextToken.isRangeSeparator)
+		{
+			[self consumeOneToken];
+
+			NSNumber *rangeEnd = [self monthProduction];
+
+			if (rangeEnd != nil)
+			{
+				// Could this ever happen, given the logic in -monthProduction?
+				[range addObject: rangeEnd];
+			}
+			else
+			{
+				// Open-ended range, which is legal.
+			}
+		}
+		else
+		{
+			// Next token is not part of this range, which is fine.
+		}
+	}
+	else
+	{
+		[self recordError];
+	}
+
+	return range;
 }
 
 - (NSNumber *) positionProduction
@@ -297,7 +794,7 @@ static unichar kFieldSeparatorToken		= ' ';
     if (self.next == kWildCardToken || self.next == kOtherWildCardToken)
     {
         [self consumeOneChar];
-        //  By defaults, selectors are initialized with min-max values corresponding with the selector's unit type
+        //  By default, selectors are initialized with min-max values corresponding with the selector's unit type, so it's safe to return nil, here.  Just eat the next token.
     }
     else if (isnumber(self.next) == YES)
     {
@@ -309,6 +806,33 @@ static unichar kFieldSeparatorToken		= ' ';
     }
     
     return numSpec;
+}
+
+- (NSArray*) monthRangeSpecProduction  // equivalent to numspecProduction for months
+{
+	//
+	// Production rule:
+	//
+	//		monthRangeSpec :: wildcard | monthRange
+	//
+
+	NSArray* monthRangeSpec = nil;
+
+	if (self.nextToken.isWildcard)
+	{
+		[self consumeOneToken];
+		//  By default, selectors are initialized with min-max values corresponding with the selector's unit type, so it's safe to return nil, here.  Just eat the next token.
+	}
+	else if (self.nextToken.isMonth)
+	{
+		monthRangeSpec = [self monthRangeProduction];
+	}
+	else
+	{
+		[self recordError];
+	}
+
+	return monthRangeSpec;
 }
 
 - (APCPointSelector*) exprProductionForType: (UnitType) unitType
@@ -360,12 +884,45 @@ static unichar kFieldSeparatorToken		= ' ';
     return selector;
 }
 
+- (APCPointSelector*) exprProductionForMonth
+{
+	//
+	// Production rule:
+	//
+	//		monthExpr :: monthRangeSpec ( '/' steps ) ?
+	//
+
+	APCPointSelector* selector	= nil;
+	NSArray*  monthRangeSpec	= [self monthRangeSpecProduction];
+	NSNumber* begin				= monthRangeSpec.count > 0 ? monthRangeSpec[0] : nil;
+	NSNumber* end				= monthRangeSpec.count > 1 ? monthRangeSpec[1] : nil;
+	NSNumber* step				= nil;
+
+	if (self.nextToken.isStepSeparator)
+	{
+		[self consumeOneToken];
+		step = [self stepsProduction];
+	}
+
+	selector = [[APCPointSelector alloc] initWithUnit: kMonth
+										   beginRange: begin
+											 endRange: end
+												 step: step];
+
+	if (selector == nil)
+	{
+		[self recordError];
+	}
+
+	return selector;
+}
+
 - (APCListSelector*)listProductionForType:(UnitType)unitType
 {
 	//
 	// Production rule:
 	//
-	//		list :: expr ( ',' expr ) *
+	//		genericList :: genericExpr ( ',' genericExpr) *
 	//
 
     NSMutableArray*     subSelectors = [NSMutableArray array];
@@ -391,6 +948,11 @@ static unichar kFieldSeparatorToken		= ' ';
             {
                 [self recordError];
             }
+			else
+			{
+				// End of the string, or end of the list of <unitType>.
+				// We'll exit the loop in a moment.
+			}
         }
     }
     
@@ -398,6 +960,51 @@ static unichar kFieldSeparatorToken		= ' ';
     
 parseError:
     return listSelector;
+}
+
+- (APCListSelector*) listProductionForMonthList
+{
+	//
+	// Production rule:
+	//
+	//		monthList :: monthExpr (',' monthExpr) *
+	//
+
+	NSMutableArray*  subSelectors = [NSMutableArray array];
+	APCListSelector* listSelector = nil;
+
+	while (self.nextToken != nil && ! self.nextToken.isFieldSeparator)
+	{
+		APCPointSelector* pointSelector = [self exprProductionForMonth];
+
+		if (self.errorEncountered)
+		{
+			goto parseError;
+		}
+		else
+		{
+			[subSelectors addObject:pointSelector];
+
+			if (self.nextToken.isListSeparator)
+			{
+				[self consumeOneToken];
+			}
+			else if (self.nextToken != nil && ! self.nextToken.isFieldSeparator)
+			{
+				[self recordError];
+			}
+			else
+			{
+				// End of the string, or end of the list of months.
+				// We'll exit the loop in a moment.
+			}
+		}
+	}
+
+	listSelector = [[APCListSelector alloc] initWithSubSelectors:subSelectors];
+
+parseError:
+	return listSelector;
 }
 
 - (APCListSelector*)yearProduction:(UnitType)unitType
@@ -410,6 +1017,10 @@ parseError:
     
     return listSelector;
 }
+
+// ---------------------------------------------------------
+#pragma mark - Extract all fields (conceptual "main()" for this file)
+// ---------------------------------------------------------
 
 - (void)fieldsProduction
 {
@@ -470,9 +1081,9 @@ parseError:
 	// Extract months.
 	//
 
-    [self fieldSeparatorProduction];
+    [self fieldSeparatorProduction_usingTokens];
     
-    self.monthSelector = [self listProductionForType:kMonth];
+    self.monthSelector = [self listProductionForMonthList];
 
     if (self.errorEncountered)
     {
@@ -523,7 +1134,7 @@ parseError:
 
 - (BOOL)parse
 {
-	[self trimAndNormalizeSpaces];
+//	[self trimAndNormalizeSpaces];
 
 	/*
 	 Sometimes, the field list has SEVEN fields:  seconds on the left,
@@ -531,14 +1142,14 @@ parseError:
 	 plenty of resolution, and we work in 3-day-increments, not years.
 	 So strip those fields.
 	 */
-	[self enforceFiveFields];
+//	[self enforceFiveFields];
 
 
-	/*
-	 Convert days of months and weekdays to their numeric
-	 equivalents.
-	 */
-	[self convertDayAndMonthNamesToNumbers];
+//	/*
+//	 Convert days of months and weekdays to their numeric
+//	 equivalents.
+//	 */
+//	[self convertDayAndMonthNamesToNumbers];
 
 
 	// Ok.  Parse it.

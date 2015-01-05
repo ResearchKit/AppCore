@@ -10,57 +10,71 @@
 #import "APCPointSelector.h"
 
 /*
- This the parser grammar.  Precedence matters:  Higher in
- the list means higher precedence in the parser.
+ This the parser grammar.  It also represents the
+ precedence:  higher in the list means higher precedence
+ in the parser.
  
  For example, reading from bottom to top:
- - lists (rule 2)...
- - ...can contain ranges (rule 5)...
- - ...which might contain steps (rule 6)...
- - which probably contain digits (rule 9).
- 
+ - LISTs...
+ - can contain RANGEs...
+ - which might contain STEPs...
+ - which must contain DIGITs.
+
  There's nothing automatic about this.  We manually
- call functions to perform each of these rules in the
+ call methods to perform each of these rules in the
  appropriate places.  I.e., we've hand-written a parser
  that implements these rules.
  
- Current version:
-	10.	digit		:: '0'..'9'
-	9.	dow			:: 'a'..'z'
-	8.	number		:: digit+ | dow+
-	7.	position	:: number
-	6.	steps		:: number
-	5.	range		:: number ( '-' number ) ?
-	4.	numspec		:: '*' | '?' | range
-	3.	expr		:: numspec ( '/' steps | '#' position ) ?
-	2.	list		:: expr ( ',' expr ) *
-	1.	fields		:: minutesList hoursList dayOfMonthList monthList dayOfWeekList
+ Special characters roughly follow the conventions for "regular expressions":
+	?		 means  "0 or 1 of the preceding item"
+	+		 means  "1 or more of the preceding item"
+	*		 means  "0 or more of the preceding item"
+	|		 means  "either the stuff on the left or the right, but not both"
+	( ... )  means  "consider all this stuff as a group"
+ 
+ Enough hemming and hawing.  Here's the grammar:
 
- Thinking about the more complex, upcoming one:
- 	x.	digit			::	[0-9]
- 	x.	letter			::	[a-zA-Z]
- 	x.	nameOfMonth		::	letter{3}
- 	x.	dayOfWeek		::	letter{3}
- 	x.	number			::	digit+
- 	x.	nameOrNumber	::	number | dayOfWeek | nameOfMonth
- 	x.	steps			::	number
- 	x.	range			::	nameOrNumber ( '-' nameOrNumber ) ?
- 	x.	rangeSpec		::	'*' | '?' | range
- 	x.	rangeWithSteps	::	rangeSpec ( '/' steps ) ?
- 	x.	nthInstance		::	nameOrNumber '#' number
- 	x.	expr			::	rangeWithSteps | nthInstance
- 	x.	list			::	expr ( ',' expr ) *
- 	x.	whitespace		::	[\s\t\r\n]+
- 	x.	years			::	list
- 	x.	daysOfWeek		::	list
- 	x.	months			::	list
- 	x.	daysOfMonth		::	list
- 	x.	hours			::	list
- 	x.	minutes			::	list
- 	x.	seconds			::	list
- 	x.	fields			::	seconds whitespace minutes whitespace	\
- 								hours whitespace daysOfMonth whitespace	\
- 								months whitespace daysOfWeek whitespace years
+	digit				:: '0'..'9'
+	wildcard			:: '*' | '?'
+	whitespace			:: ' ' | '\t' | '\n' | '\r' | (other non-printing chars)
+	monthName			:: "jan".."dec"  (case-insensitive)
+	weekdayName			:: "sun".."sat"  (case-insensitive)
+
+	rangeSeparator		:: '-'
+	positionSeparator	:: '#'
+	stepSeparator		:: '/'
+	listSeparator		:: ','
+	fieldSeparator		:: whitespace
+
+	number				:: digit +
+	position			:: number
+	steps				:: number
+	month				:: number | monthName
+	weekday				:: number | weekdayName
+                    	
+	range				:: number  ( rangeSeparator number ) ?
+	monthRange			:: month   ( rangeSeparator month  ) ?
+	weekdayRange		:: weekday ( rangeSeparator weekday ) ?
+                    	
+	numspec				:: wildcard | range
+	monthSpec			:: wildcard | monthRange
+	weekdaySpec			:: wildcard | weekdayRange
+                    	
+	expr				:: numspec     ( stepSeparator steps ) ?
+	monthExpr			:: monthSpec   ( stepSeparator steps ) ?
+	weekdayExpr			:: weekdaySpec ( stepSeparator steps | positionSeparator position ) ?
+                    	
+	list				:: expr        ( listSeparator expr ) *
+	monthList			:: monthExpr   ( listSeparator monthExpr ) *
+	weekdayList			:: weekdayExpr ( listSeparator weekdayExpr ) *
+                    	
+	yearList			:: list
+	dayOfMonthList		:: list
+	hoursList			:: list
+	minutesList			:: list
+	secondsList			:: list
+ 
+	fields				:: (whitespace ?) secondsList fieldSeparator minutesList fieldSeparator hoursList fieldSeparator dayOfMonthList fieldSeparator monthList dayOfWeekList fieldSeparator yearList (whitespace ?)
  */
 
 @interface APCScheduleParser : NSObject

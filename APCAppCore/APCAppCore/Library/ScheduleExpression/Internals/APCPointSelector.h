@@ -12,7 +12,8 @@
 
 typedef NS_ENUM(NSInteger, UnitType)
 {
-    kMinutes,
+	kSeconds,
+	kMinutes,
     kHours,
     kDayOfMonth,
     kMonth,

@@ -94,8 +94,13 @@
 //	NSString* cronExpression = @"0 0 6 ? 1/1 THU#1 *";									// from Sage
 //	NSString* cronExpression = @"0 0 6 ? * FRI *";										// from Sage
 //	NSString* cronExpression = @"0 5 * DEC,NOV,JUL THU,FRI,MON#1,TUE#2";				// Replacing strings with numbers
-	NSString* cronExpression = @"   0  5  *  DEC,NOV,JUL   THU,FRI,MON#1,TUE#2   ";		// replacing lots of whitespace
+//	NSString* cronExpression = @"   0  5  *  DEC,NOV,JUL   THU,FRI,MON#1,TUE#2   ";		// replacing lots of whitespace
 //	NSString* cronExpression = @"  0	\n 5  *   * \r  *		  ";					// 5am every day, with spaces, tabs, hidden tabs, and newlines
+
+
+	// Ron:  testing new versions
+	NSString* cronExpression = @"0 5 * SEP,JUL,OCT/2,JAN-MAR THU,FRI,MON#1,TUE#2";				// Replacing strings with numbers
+
 
 
 	NSTimeInterval userWakeupTimeOffset	= 0;
