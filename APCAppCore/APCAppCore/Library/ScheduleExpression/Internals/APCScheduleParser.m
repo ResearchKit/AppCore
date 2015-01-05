@@ -108,6 +108,9 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 @property (readonly) BOOL isMonth;
 @property (readonly) NSNumber *month;
 
+@property (readonly) BOOL isWeekday;
+@property (readonly) NSNumber *weekday;
+
 @end
 
 @implementation APCScheduleParserToken
@@ -177,22 +180,62 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 
 - (NSNumber *) month
 {
-	NSNumber *month = nil;
+	NSNumber *monthValue = nil;
 
 	if (self.isMonth)
 	{
 		if (self.isInteger)
 		{
-			month = self.scannedInteger;
+			monthValue = self.scannedInteger;
 		}
 
 		else
 		{
-			month = kMonthNamesAndNumbers [self.scannedText];
+			monthValue = kMonthNamesAndNumbers [self.scannedText];
 		}
 	}
 
-	return month;
+	return monthValue;
+}
+
+- (BOOL) isWeekday
+{
+	BOOL result = ((self.isInteger &&
+					self.scannedInteger.integerValue >= 0 &&
+					self.scannedInteger.integerValue <= 7)
+				   ||
+				   (self.isText &&
+					[kWeekdayNamesAndNumbers.allKeys containsObject: self.scannedText])
+				   );
+
+	return result;
+}
+
+- (NSNumber *) weekday
+{
+	NSNumber *weekdayValue = nil;
+
+	if (self.isWeekday)
+	{
+		if (self.isInteger)
+		{
+			weekdayValue = self.scannedInteger;
+
+			// Either 0 or 7 is legal cron-speak for "Sunday,"
+			// but we consistently use 0 in our code.
+			if (weekdayValue.integerValue == 7)
+			{
+				weekdayValue = @(0);
+			}
+		}
+
+		else
+		{
+			weekdayValue = kWeekdayNamesAndNumbers [self.scannedText];
+		}
+	}
+
+	return weekdayValue;
 }
 
 @end
@@ -225,7 +268,6 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 									 @"thu": @4,
 									 @"fri": @5,
 									 @"sat": @6,
-									 @"sun": @7,		// both 0 and 7 are legal, but we'll use 0
 									 };
 
 		kMonthNamesAndNumbers = @{ @"jan": @1,
@@ -430,7 +472,6 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 		(self.expression.length > 0))
 	{
 		token = [APCScheduleParserToken new];
-		NSInteger scannedInteger = 0;
 		NSString *scannedText = nil;
 		NSScanner* scanner = [NSScanner scannerWithString: self.expression];
 
@@ -675,6 +716,38 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 	return month;
 }
 
+- (NSNumber *) weekdayProduction  // equiavlent to numberProduction, but for weekdays.
+{
+	NSNumber *weekday = nil;
+
+	/*
+	 Scan up to the next month, throw that stuff away, and then
+	 scan the month.  This make the scan-by-token code operate
+	 the same way as the scan-by-char code.
+
+	 Presumes the string has been advanced to some stuff
+	 immediately preceding a month.
+	 */
+	if (! self.nextToken.isWeekday)
+	{
+		[self consumeOneToken];
+	}
+
+	if (self.nextToken.isWeekday)
+	{
+		weekday = self.nextToken.weekday;	// converts names or numbers to weekday-numbers.
+		[self consumeOneToken];
+	}
+	else
+	{
+		NSLog (@"WARNING:  I was expecting a weekday, and got something else: [%@].", self.nextToken.scannedText);
+
+		[self recordError];
+	}
+
+	return weekday;
+}
+
 - (NSArray*)rangeProduction
 {
 	//
@@ -739,6 +812,49 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 			if (rangeEnd != nil)
 			{
 				// Could this ever happen, given the logic in -monthProduction?
+				[range addObject: rangeEnd];
+			}
+			else
+			{
+				// Open-ended range, which is legal.
+			}
+		}
+		else
+		{
+			// Next token is not part of this range, which is fine.
+		}
+	}
+	else
+	{
+		[self recordError];
+	}
+
+	return range;
+}
+
+- (NSArray*) weekdayRangeProduction  // equivalent to rangeProduction, but for weekdays.
+{
+	//
+	// Production rule:
+	//
+	//		weekdayRange :: weekday ( '-' weekday ) ?
+	//
+
+	NSMutableArray* range = [NSMutableArray array];
+
+	if (self.nextToken.isWeekday)
+	{
+		[range addObject: [self weekdayProduction]];
+
+		if (self.nextToken.isRangeSeparator)
+		{
+			[self consumeOneToken];
+
+			NSNumber *rangeEnd = [self weekdayProduction];
+
+			if (rangeEnd != nil)
+			{
+				// Could this ever happen, given the logic in -weekdayProduction?
 				[range addObject: rangeEnd];
 			}
 			else
@@ -835,6 +951,33 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 	return monthRangeSpec;
 }
 
+- (NSArray*) weekdayRangeSpecProduction  // equivalent to numspecProduction for weekdays
+{
+	//
+	// Production rule:
+	//
+	//		weekdayRangeSpec :: wildcard | weekdayRange
+	//
+
+	NSArray* weekdayRangeSpec = nil;
+
+	if (self.nextToken.isWildcard)
+	{
+		[self consumeOneToken];
+		//  By default, selectors are initialized with min-max values corresponding with the selector's unit type, so it's safe to return nil, here.  Just eat the next token.
+	}
+	else if (self.nextToken.isWeekday)
+	{
+		weekdayRangeSpec = [self weekdayRangeProduction];
+	}
+	else
+	{
+		[self recordError];
+	}
+
+	return weekdayRangeSpec;
+}
+
 - (APCPointSelector*) exprProductionForType: (UnitType) unitType
 {
 	//
@@ -905,6 +1048,39 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 	}
 
 	selector = [[APCPointSelector alloc] initWithUnit: kMonth
+										   beginRange: begin
+											 endRange: end
+												 step: step];
+
+	if (selector == nil)
+	{
+		[self recordError];
+	}
+
+	return selector;
+}
+
+- (APCPointSelector*) exprProductionForWeekdays
+{
+	//
+	// Production rule:
+	//
+	//		weekdayExpr :: weekdayRangeSpec ( '/' steps | '#' position ) ?
+	//
+
+	APCPointSelector* selector	= nil;
+	NSArray*  weekdayRangeSpec	= [self weekdayRangeSpecProduction];
+	NSNumber* begin				= weekdayRangeSpec.count > 0 ? weekdayRangeSpec[0] : nil;
+	NSNumber* end				= weekdayRangeSpec.count > 1 ? weekdayRangeSpec[1] : nil;
+	NSNumber* step				= nil;
+
+	if (self.nextToken.isStepSeparator)
+	{
+		[self consumeOneToken];
+		step = [self stepsProduction];
+	}
+
+	selector = [[APCPointSelector alloc] initWithUnit: kDayOfWeek
 										   beginRange: begin
 											 endRange: end
 												 step: step];
@@ -1007,6 +1183,51 @@ parseError:
 	return listSelector;
 }
 
+- (APCListSelector*) listProductionForWeekdayList
+{
+	//
+	// Production rule:
+	//
+	//		weekdayList :: weekdayExpr (',' weekdayExpr) *
+	//
+
+	NSMutableArray*  subSelectors = [NSMutableArray array];
+	APCListSelector* listSelector = nil;
+
+	while (self.nextToken != nil && ! self.nextToken.isFieldSeparator)
+	{
+		APCPointSelector* pointSelector = [self exprProductionForWeekdays];
+
+		if (self.errorEncountered)
+		{
+			goto parseError;
+		}
+		else
+		{
+			[subSelectors addObject:pointSelector];
+
+			if (self.nextToken.isListSeparator)
+			{
+				[self consumeOneToken];
+			}
+			else if (self.nextToken != nil && ! self.nextToken.isFieldSeparator)
+			{
+				[self recordError];
+			}
+			else
+			{
+				// End of the string, or end of the list of weekdays.
+				// We'll exit the loop in a moment.
+			}
+		}
+	}
+
+	listSelector = [[APCListSelector alloc] initWithSubSelectors:subSelectors];
+
+parseError:
+	return listSelector;
+}
+
 - (APCListSelector*)yearProduction:(UnitType)unitType
 {
     //  The parser doesn't currently support Year products but a default selector is provided to help
@@ -1096,9 +1317,9 @@ parseError:
 	// Extract days of the week.
 	//
 
-    [self fieldSeparatorProduction];
+    [self fieldSeparatorProduction_usingTokens];
 
-	rawDayOfWeekSelector = [self listProductionForType:kDayOfWeek];
+	rawDayOfWeekSelector = [self listProductionForWeekdayList];
     if (self.errorEncountered)
     {
         NSLog(@"Invalid Day of Week selector");
