@@ -104,8 +104,7 @@
         APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
         field.caption = NSLocalizedString(@"Password", @"");
         field.placeholder = NSLocalizedString(@"add password", @"");
-        field.secure = YES;
-        field.keyboardType = UIKeyboardTypeDefault;
+        field.keyboardType = UIKeyboardTypeASCIICapable;
         field.returnKeyType = UIReturnKeyNext;
         field.identifier = kAPCTextFieldTableViewCellIdentifier;
         field.style = UITableViewCellStyleValue1;
