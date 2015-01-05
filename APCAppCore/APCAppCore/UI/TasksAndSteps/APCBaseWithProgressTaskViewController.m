@@ -27,10 +27,19 @@ static NSString *const kFinishedProperty = @"finished";
     
     APCStepProgressBar  *tempProgressor = [[APCStepProgressBar alloc] initWithFrame:progressorFrame style:APCStepProgressBarStyleOnlyProgressView];
     
-    RKSTOrderedTask * task = (RKSTOrderedTask*) self.task;
-    NSArray  *steps = task.steps;
-    tempProgressor.numberOfSteps = [steps count];
-    [tempProgressor setCompletedSteps: 1 animation:NO];
+    id<RKSTTask> task = self.task;
+    
+    NSArray  *steps;
+    if ([task respondsToSelector:@selector(steps)]) {
+        tempProgressor.numberOfSteps = [steps count];
+        [tempProgressor setCompletedSteps: 1 animation:NO];
+    }
+    else if([task respondsToSelector:@selector(progressOfCurrentStep:withResult:)])
+    {
+        RKSTTaskProgress progress = [task progressOfCurrentStep:nil withResult:self.result];
+        tempProgressor.numberOfSteps = progress.total;
+        [tempProgressor setCompletedSteps: 1 animation:NO];
+    }
     tempProgressor.progressTintColor = [UIColor appTertiaryColor1];
     [self.navigationBar addSubview:tempProgressor];
     self.progressor = tempProgressor;
@@ -52,17 +61,28 @@ static NSString *const kFinishedProperty = @"finished";
 {
     [super stepViewControllerDidFinish:stepViewController navigationDirection:direction];
     [self removeKVOIfNeeded];
-    NSInteger  completedSteps = self.progressor.completedSteps;
-    if (direction == RKSTStepViewControllerNavigationDirectionForward) {
-        completedSteps = completedSteps + 1;
-    } else {
-        completedSteps = completedSteps - 1;
+
+    if (![self.task respondsToSelector:@selector(progressOfCurrentStep:withResult:)]) {
+        NSInteger  completedSteps = self.progressor.completedSteps;
+        if (direction == RKSTStepViewControllerNavigationDirectionForward) {
+            completedSteps = completedSteps + 1;
+        } else {
+            completedSteps = completedSteps - 1;
+        }
+        [self.progressor setCompletedSteps:completedSteps animation:YES];
     }
-    [self.progressor setCompletedSteps:completedSteps animation:YES];
 }
 
-
-
+- (void)stepViewControllerWillAppear:(RKSTStepViewController *)viewController
+{
+    [super stepViewControllerWillAppear:viewController];
+    if([self.task respondsToSelector:@selector(progressOfCurrentStep:withResult:)])
+    {
+        RKSTTaskProgress progress = [self.task progressOfCurrentStep:viewController.step withResult:self.result];
+        [self.progressor setCompletedSteps:progress.current animation:YES];
+    }
+    self.navigationBar.topItem.title = NSLocalizedString(self.taskName, nil);
+}
 
 - (BOOL) advanceArrayContainsStep: (RKSTStep*) step
 {

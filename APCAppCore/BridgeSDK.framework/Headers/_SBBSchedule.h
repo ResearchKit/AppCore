@@ -16,6 +16,8 @@
 
 @interface _SBBSchedule : SBBBridgeObject
 
+@property (nonatomic, strong) NSArray* activities;
+
 @property (nonatomic, strong) NSString* activityRef;
 
 @property (nonatomic, strong) NSString* activityType;

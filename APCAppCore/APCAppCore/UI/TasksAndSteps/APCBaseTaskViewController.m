@@ -15,7 +15,7 @@
 #pragma  mark  -  Instance Initialisation
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask
 {
-    RKSTOrderedTask  *task = [self createTask: scheduledTask];
+    id<RKSTTask> task = [self createTask: scheduledTask];
     NSUUID * taskRunUUID = [NSUUID UUID];
     APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
     controller.scheduledTask = scheduledTask;
@@ -23,7 +23,7 @@
     return  controller;
 }
 
-+ (RKSTOrderedTask *)createTask: (APCScheduledTask*) scheduledTask
++ (id<RKSTTask>)createTask: (APCScheduledTask*) scheduledTask
 {
     //To be overridden by child classes
     return  nil;
@@ -37,17 +37,11 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    if (![[NSFileManager defaultManager] fileExistsAtPath:self.taskResultsFilePath]) {
-        NSError * fileError;
-        [[NSFileManager defaultManager] createDirectoryAtPath:self.taskResultsFilePath withIntermediateDirectories:YES attributes:nil error:&fileError];
-        APCLogError2 (fileError);
-    }
-    
-    if (self.outputDirectory) {
+    if (self.outputDirectory != nil) {
         self.outputDirectory = [NSURL fileURLWithPath:self.taskResultsFilePath];
     }
     [super viewWillAppear:animated];
-  APCLogViewControllerAppeared();
+    APCLogViewControllerAppeared();
     APCLogEventWithData(kTaskEvent, (@{
                                        @"task_status":@"Started",
                                        @"task_title": self.scheduledTask.task.taskTitle,

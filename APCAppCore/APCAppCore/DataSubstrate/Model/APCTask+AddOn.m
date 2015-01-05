@@ -55,13 +55,13 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
     return retTask;
 }
 
-- (RKSTOrderedTask *)rkTask
+- (id<RKSTTask>)rkTask
 {
     RKSTOrderedTask * retTask = self.taskDescription ? [NSKeyedUnarchiver unarchiveObjectWithData:self.taskDescription] : nil;
     return retTask;
 }
 
-- (void)setRkTask:(RKSTOrderedTask *)rkTask
+- (void)setRkTask:(id<RKSTTask>)rkTask
 {
     self.taskDescription = [NSKeyedArchiver archivedDataWithRootObject:rkTask];
 }
