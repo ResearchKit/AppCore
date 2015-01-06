@@ -331,7 +331,13 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 }
 
 - (IBAction)signIn:(id)sender
-{    
+{
+    if ([self.userHandleTextField isFirstResponder]) {
+        [self.userHandleTextField resignFirstResponder];
+    } else if ([self.passwordTextField isFirstResponder]){
+        [self.passwordTextField resignFirstResponder];
+    }
+    
     [self signIn];
 }
 
