@@ -163,7 +163,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/UIImage+APCHelper.h>
 #import <APCAppCore/APCParameters+Settings.h>
 #import <APCAppCore/RKSTTaskResult+Archiver.h>
-#import <APCAppCore/SBBSchedule+APCAdditions.h>
 #import <APCAppCore/SBBGuidCreatedOnVersionHolder+APCAdditions.h>
 #import <APCAppCore/UIView+Helper.h>
 #import <APCAppCore/NSDictionary+APCAdditions.h>

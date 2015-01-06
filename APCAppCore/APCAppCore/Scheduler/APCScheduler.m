@@ -9,6 +9,8 @@
 #import "APCScheduler.h"
 #import "APCAppCore.h"
 
+static NSString * const kOneTimeSchedule = @"once";
+
 @interface APCScheduler()
 @property  (weak, nonatomic)     APCDataSubstrate        *dataSubstrate;
 @property  (strong, nonatomic)   NSManagedObjectContext  *scheduleMOC;
@@ -46,10 +48,13 @@
         //STEP 1: Update inActive property of schedules based on endOn date.
         [self updateSchedulesAsInactiveIfNecessary];
         
-        //STEP 2: Delete all incomplete tasks for based on reference date
+        //STEP 2: Disable one time tasks if they are already completed
+        [self disableOneTimeTasksIfAlreadyCompleted];
+        
+        //STEP 3: Delete all incomplete tasks for based on reference date
         [self deleteAllIncompleteScheduledTasksForReferenceDate];
         
-        //STEP 3: Generate new scheduledTasks based on the active schedules
+        //STEP 4: Generate new scheduledTasks based on the active schedules
         [self generateScheduledTasksBasedOnActiveSchedules];
         
         self.isUpdating = NO;
@@ -80,6 +85,33 @@
         [schedule saveToPersistentStore:&saveError];
         APCLogError2 (saveError);
     }];
+}
+
+- (void) disableOneTimeTasksIfAlreadyCompleted
+{
+    //List remoteupdatable, one time tasks
+    NSFetchRequest * request = [APCSchedule request];
+    request.predicate = [NSPredicate predicateWithFormat:@"remoteUpdatable == %@ && scheduleType == %@", @(YES), kOneTimeSchedule];
+    NSError * error;
+    NSArray * scheduleArray = [self.scheduleMOC executeFetchRequest:request error:&error];
+    APCLogDebug(@"%@", scheduleArray);
+    APCLogError2 (error);
+    
+    //Get completed scheduled tasks with that one time task. If they exist make the schedule inactive
+    [scheduleArray enumerateObjectsUsingBlock:^(APCSchedule * obj, NSUInteger idx, BOOL *stop) {
+        NSFetchRequest * request = [APCScheduledTask request];
+        request.predicate = [NSPredicate predicateWithFormat:@"completed == %@ && task.taskID == %@", @(YES), obj.taskID];
+        NSError * error;
+        NSArray * scheduledTaskArray = [self.scheduleMOC executeFetchRequest:request error:&error];
+        if (scheduledTaskArray.count > 0) { obj.inActive = @(YES);}
+        APCLogDebug(@"%@", scheduledTaskArray);
+        APCLogError2 (error);
+    }];
+    
+    APCSchedule * lastSchedule = [scheduleArray lastObject];
+    NSError * saveError;
+    [lastSchedule saveToPersistentStore:&saveError];
+    APCLogError2 (saveError);
 }
 
 - (void) deleteAllIncompleteScheduledTasksForReferenceDate
@@ -148,6 +180,10 @@
         createdScheduledTask.endOn = [NSDate endOfDay:self.referenceDate];
         createdScheduledTask.generatedSchedule = schedule;
         createdScheduledTask.task = task;
+        NSDateFormatter * formatter = [NSDateFormatter new];
+        [formatter setDateStyle:NSDateFormatterMediumStyle];
+        [formatter setTimeStyle:NSDateFormatterMediumStyle];
+        APCLogDebug(@"Created ScheduledTask: [%@] to start on [%@]", createdScheduledTask.task.taskTitle, [formatter stringFromDate:createdScheduledTask.startOn]);
         NSError * saveError;
         [createdScheduledTask saveToPersistentStore:&saveError];
         APCLogError2 (saveError);

@@ -94,6 +94,8 @@
         color = [UIColor appTertiaryYellowColor];
     } else if ([colorName isEqualToString:@"purple"]){
         color = [UIColor appTertiaryPurpleColor];
+    } else if ([colorName isEqualToString:@"appColor"]){
+        color = [UIColor appPrimaryColor];
     } else {
         color = [UIColor appTertiaryGrayColor];
     }

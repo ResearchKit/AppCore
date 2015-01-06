@@ -105,9 +105,9 @@ NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController
         }
         else
         {
-            APCTask * task = [APCTask taskWithTaskID:sbbSchedule.taskID inContext:apcSchedule.managedObjectContext];
+            APCTask * task = [APCTask taskWithTaskID:activity.survey.uniqueID inContext:apcSchedule.managedObjectContext];
             NSAssert(task, @"Task not found!");
-            apcSchedule.taskID = sbbSchedule.taskID;
+            apcSchedule.taskID = activity.survey.uniqueID;
         }
     }
 
