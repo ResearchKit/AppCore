@@ -199,13 +199,7 @@ static CGFloat const kHeaderHeight = 127.0f;
     BOOL isContentValid = YES;
     
     if (self.tableView.tableHeaderView) {
-        if (![self.nameTextField.text isValidForRegex:kAPCUserInfoFieldNameRegEx]) {
-            isContentValid = NO;
-            
-            if (errorMessage) {
-                *errorMessage = NSLocalizedString(@"Please enter a valid first name.", @"");
-            }
-        } else if (![self.emailTextField.text isValidForRegex:kAPCGeneralInfoItemEmailRegEx]){
+        if (![self.emailTextField.text isValidForRegex:kAPCGeneralInfoItemEmailRegEx]){
             isContentValid = NO;
             
             if (errorMessage) {
