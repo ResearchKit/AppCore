@@ -660,48 +660,50 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 - (IBAction)changeProfileImage:(id)sender
 {
-    __weak typeof(self) weakSelf = self;
-    
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    if (self.isEditing) {
+        __weak typeof(self) weakSelf = self;
         
-        [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
-            if (granted) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf openCamera];
-                });
-            }else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf presentSettingsAlert:error];
-                });
-            }
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            
+            [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
+                if (granted) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf openCamera];
+                    });
+                }else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf presentSettingsAlert:error];
+                    });
+                }
+            }];
         }];
-    }];
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        [alertController addAction:cameraAction];
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            [alertController addAction:cameraAction];
+        }
+        
+        UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
+                if (granted) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf openPhotoLibrary];
+                    });
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf presentSettingsAlert:error];
+                    });
+                }
+            }];
+        }];
+        [alertController addAction:libraryAction];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }];
+        [alertController addAction:cancelAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
     }
-    
-    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
-            if (granted) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf openPhotoLibrary];
-                });
-            } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf presentSettingsAlert:error];
-                });
-            }
-        }];
-    }];
-    [alertController addAction:libraryAction];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        
-    }];
-    [alertController addAction:cancelAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)openCamera
