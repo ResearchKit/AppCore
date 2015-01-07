@@ -476,7 +476,8 @@
                     self.user.biologicalSex = [APCUser sexTypeForIndex:((APCTableViewSegmentItem *)item).selectedIndex];
                 }
                     break;
-                    
+                case kAPCUserInfoItemTypeDateOfBirth:
+                    self.user.birthDate = [(APCTableViewDatePickerItem *)item date];
                 default:
                 {
                     //Do nothing for some types as they are readonly attributes
