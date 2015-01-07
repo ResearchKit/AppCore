@@ -10,71 +10,118 @@
 
 static NSString *kPassiveLocationTrackingIdentifier = @"com.ymedialabs.passiveLocationTracking";
 static NSString *kAPCPassiveLocationTrackingFileName = @"APCPassiveLocationTracking.json";
-static CLLocationDistance kAllowDeferredLocationUpdatesUntilTraveled = 5.0;
+
+//static CLLocationDistance kAllowDeferredLocationUpdatesUntilTraveled = 500.0;        //  metres
+static CLLocationDistance kAllowDistanceFilterAmount                 = 500.0;        //  metres
+
+static  NSString  *kPassiveLocationTrackingTaskIdentifier    = @"passiveLocationTracking";
+
+static  NSString  *kLocationJsonDistanceFromHomeLocation     = @"distanceFromHomeLocation";
+static  NSString  *kLocationJsonDistanceFromPreviousLocation = @"distanceFromPreviousLocation";
+static  NSString  *kLocationJsonTimeStamp                    = @"timestamp";
+static  NSString  *kLocationJsonDateStamp                    = @"datestamp";
+static  NSString  *kLocationJsonVerticalAccuracy             = @"verticalAccuracy";
+static  NSString  *kLocationJsonHorizontalAccuracy           = @"horizontalAccuracy";
+
 @interface APCPassiveLocationTracking ()
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
-@property (nonatomic, strong) RKSTDataArchive *taskArchive;
-@property (nonatomic, strong) NSURL *fileUrl;
+@property (nonatomic, strong) RKSTDataArchive  *taskArchive;
+@property (nonatomic, strong) NSString         *documentsDirectoryPath;
+@property (nonatomic, strong) NSURL            *fileUrl;
 
-@property (assign) BOOL deferringUpdates;
-@property (assign) NSTimeInterval timeout;
+//@property (nonatomic, assign) BOOL              deferringUpdates;
+@property (nonatomic, assign) NSTimeInterval    deferredUpdatesTimeout;
+
+    //
+    //    determines whether there is a user's home location
+    //        APCPassiveLocationTrackingHomeLocationAvailable  or
+    //        APCPassiveLocationTrackingHomeLocationUnavailable
+    //
+@property (nonatomic, assign) APCPassiveLocationTrackingHomeLocation  homeLocationStatus;
+
+    //
+    //    when there is a user's home location, baseTrackingLocation
+    //        maintains the position of the user's home location
+    //
+    //    when there is not a user's home location, baseTrackingLocation
+    //        maintains the position of the most recent but one recorded location
+    //
+@property (nonatomic, strong) CLLocation  *baseTrackingLocation;
+
+    //
+    //    used in the case where there is not a user's home location,
+    //        this records the most recent location update
+    //
+@property (nonatomic, strong) CLLocation  *mostRecentUpdatedLocation;
+
 @end
 
 @implementation APCPassiveLocationTracking
 
--(instancetype)initWithTimeInterval:(NSTimeInterval)timeout
+- (instancetype)initWithDeferredUpdatesTimeout:(NSTimeInterval)anUpdateTimeout andHomeLocationStatus:(APCPassiveLocationTrackingHomeLocation)aHomeLocationStatus
 {
     self = [super init];
     
-    if (self)
-    {
-        
-        _timeout = timeout;
-        _deferringUpdates = YES;
+    if (self != nil) {
+        _deferredUpdatesTimeout = anUpdateTimeout;
+//        _deferringUpdates = YES;
+        _homeLocationStatus = aHomeLocationStatus;
+        [self setupInitialLocationParameters];
     }
     
     return self;
 }
 
-
-- (void)dealloc {
+- (void)dealloc
+{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)setupInitialLocationParameters
+{
+    if (_homeLocationStatus == APCPassiveLocationTrackingHomeLocationAvailable) {
+        APCUser  *user = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+        CLLocationDegrees homeLocationLatitude  = [user.homeLocationLat doubleValue];
+        CLLocationDegrees homeLocationLongitude = [user.homeLocationLong doubleValue];
+        _baseTrackingLocation = [[CLLocation alloc] initWithLatitude:homeLocationLatitude longitude:homeLocationLongitude];
+    } else {
+        _baseTrackingLocation       = [[CLLocation alloc] initWithLatitude:0.0 longitude:0.0];
+        _mostRecentUpdatedLocation  = [[CLLocation alloc] initWithLatitude:0.0 longitude:0.0];
+    }
+}
 
 - (void)start
 {
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
-        self.locationManager = [[CLLocationManager alloc]init];
+        self.locationManager = [[CLLocationManager alloc] init];
         [self.locationManager setDelegate:self];
         [self.locationManager requestAlwaysAuthorization];
-        [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+        [self.locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
+        self.locationManager.distanceFilter = kAllowDistanceFilterAmount;
 
-        //If no significant movement is being made let's pause tracking and do some work.
-        
-        if ([CLLocationManager deferredLocationUpdatesAvailable])
-        {
-            [self.locationManager allowDeferredLocationUpdatesUntilTraveled:kAllowDeferredLocationUpdatesUntilTraveled timeout:self.timeout];
-        }
-
-        //TODO I really think is going to be reliable but I don't know how to trigger it properly.
-        //If no significant movement is being made let's pause tracking and do some work.
 //        self.locationManager.pausesLocationUpdatesAutomatically = YES;
-        [self.locationManager startUpdatingLocation];
+        if ([CLLocationManager significantLocationChangeMonitoringAvailable] == NO) {
+            [self.locationManager startUpdatingLocation];
+        } else {
+            [self.locationManager startMonitoringSignificantLocationChanges];
+        }
     }
 }
 
 
 - (void)stop
 {
-    if ([CLLocationManager locationServicesEnabled])
-    {
-        [self.locationManager stopUpdatingLocation];
-        
+    if ([CLLocationManager locationServicesEnabled] == NO) {
+        APCLogDebug(@"Location services disabled");
     } else {
-        NSLog(@"Location services disabled");
+        if ([CLLocationManager significantLocationChangeMonitoringAvailable] == NO) {
+            [self.locationManager stopUpdatingLocation];
+        } else {
+//            [self.locationManager stopUpdatingLocation];
+            [self.locationManager stopMonitoringSignificantLocationChanges];
+        }
     }
 }
 
@@ -116,93 +163,137 @@ static CLLocationDistance kAllowDeferredLocationUpdatesUntilTraveled = 5.0;
 //}
 
 // Generate a unique archive URL in the documents directory
-- (NSURL *)makeArchiveURL
+
+- (NSString *)makeDocumentsDirectoryPath
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *zipPath = [[paths lastObject] stringByAppendingPathComponent:[[[NSUUID UUID] UUIDString] stringByAppendingString:@".zip"]];
+    NSString  *documentsPath = nil;
     
-    
-    return [NSURL fileURLWithPath:zipPath];
+    if (self.documentsDirectoryPath != nil) {
+        documentsPath = self.documentsDirectoryPath;
+    } else {
+        NSArray  *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        documentsPath = [paths lastObject];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:documentsPath] == NO) {
+            NSError  *fileError;
+            [[NSFileManager defaultManager] createDirectoryAtPath:documentsPath withIntermediateDirectories:YES attributes:nil error:&fileError];
+            APCLogError2(fileError);
+        }
+        self.documentsDirectoryPath = documentsPath;
+    }
+    return  self.documentsDirectoryPath;
 }
 
+- (NSURL *)makeArchiveURL
+{
+    NSString  *documentsPath = [self makeDocumentsDirectoryPath];
+    NSString  *zipFilePath = [documentsPath stringByAppendingPathComponent:[[[NSUUID UUID] UUIDString] stringByAppendingPathExtension:@"zip"]];
+    NSURL  *zipFileUrl = [NSURL fileURLWithPath:zipFilePath];
+    return  zipFileUrl;
+}
 
-- (void)updateArchiveDataWithLocationManager:(CLLocationManager *)manager withUpdateLocations:(NSArray *)locations {
-    
-    //TODO store this in parameters
-    CLLocation *homeLocation = [[CLLocation alloc] initWithLatitude:37.335420 longitude: -122.012901];
-    
-    
-    //Create distance in meters from home
-    CLLocationDistance distanceFromHome = [homeLocation distanceFromLocation:manager.location];
-    
-    NSMutableDictionary *locationJson = [NSMutableDictionary new];
-    
-    locationJson[@"distanceFromHome"] = [NSNumber numberWithDouble:distanceFromHome];
-    
-    double dateInterval = [manager.location.timestamp timeIntervalSince1970];
-    
-    locationJson[@"timestamp"] = [NSNumber numberWithDouble: dateInterval];
-    
-    /* Type used to represent a location accuracy level in meters. The lower the value in meters, the
-     more physically precise the location is. A negative accuracy value indicates an invalid location. */
-    locationJson[@"verticalAccuracy"] = [NSNumber numberWithDouble:manager.location.verticalAccuracy];
-    locationJson[@"horizontalAccuracy"] = [NSNumber numberWithDouble:manager.location.horizontalAccuracy];
-    
-    NSData *data = [NSJSONSerialization dataWithJSONObject:locationJson options:0 error:nil];
-    
-    if (self.taskArchive)
-    {
-        [self.taskArchive resetContent];
+- (NSDictionary *)locationDictionaryWithLocationManager:(CLLocationManager *)manager andDistanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
+{
+    NSLog(@"locationDictionaryWithLocationManager called");
+    NSDictionary  *locationDictionary = nil;
+    NSDateFormatter  *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateStyle = NSDateFormatterShortStyle;
+    formatter.timeStyle = NSDateFormatterMediumStyle;
+    NSTimeInterval  timestamp = [manager.location.timestamp timeIntervalSince1970];
+    NSDate  *date = [NSDate dateWithTimeIntervalSince1970:timestamp];
+    NSString  *formatted = [formatter stringFromDate:date];
+    if (self.homeLocationStatus == APCPassiveLocationTrackingHomeLocationAvailable) {
+        locationDictionary = @{
+                              kLocationJsonDistanceFromHomeLocation : [NSNumber numberWithDouble:distanceFromReferencePoint],
+                              kLocationJsonTimeStamp                : [NSNumber numberWithDouble:[manager.location.timestamp timeIntervalSince1970]],
+                              kLocationJsonDateStamp                : formatted,
+                              kLocationJsonHorizontalAccuracy       : [NSNumber numberWithDouble:manager.location.horizontalAccuracy],
+                              kLocationJsonVerticalAccuracy         : [NSNumber numberWithDouble:manager.location.verticalAccuracy],
+                            };
+    } else {
+        locationDictionary = @{
+                               kLocationJsonDistanceFromPreviousLocation : [NSNumber numberWithDouble:distanceFromReferencePoint],
+                               kLocationJsonTimeStamp                    : [NSNumber numberWithDouble:[manager.location.timestamp timeIntervalSince1970]],
+                               kLocationJsonDateStamp                    : formatted,
+                               kLocationJsonHorizontalAccuracy           : [NSNumber numberWithDouble:manager.location.horizontalAccuracy],
+                               kLocationJsonVerticalAccuracy             : [NSNumber numberWithDouble:manager.location.verticalAccuracy],
+                               };
     }
-    
-    RKSTOrderedTask* task = [[RKSTOrderedTask alloc] initWithIdentifier:@"passiveLocationTracking" steps:nil];
-    
-    //TODO: Check the identifier below
-    self.taskArchive = [[RKSTDataArchive alloc] initWithItemIdentifier:task.identifier
-                                                     studyIdentifier:kPassiveLocationTrackingIdentifier
-                                                    taskRunUUID: [NSUUID UUID]
-                                                       extraMetadata: nil
-                                                      fileProtection:RKFileProtectionCompleteUnlessOpen];
-    
-    NSError *addFileError = nil;
-    [self.taskArchive addFileWithURL:[self makeArchiveURL] contentType:@"json" metadata:nil error:&addFileError];
+    return  locationDictionary;
+}
 
-    NSError *error;
-    [self.taskArchive addContentWithData:data
-                                filename:kAPCPassiveLocationTrackingFileName
-                             contentType:@"json"
-                               timestamp:[NSDate date]
-                                metadata:nil error:&error];
+- (void)updateArchiveDataWithLocationManager:(CLLocationManager *)manager withUpdateLocations:(NSArray *)locations
+{
+    NSDictionary  *locationJson = nil;
     
-    if (error) {
-        NSLog(@"Content not added");
-        //TODO Handle error
-    } else
-    {
-        NSError *err = nil;
-    
-        NSURL *archiveFileURL = [self.taskArchive archiveURLWithError:&err];
+    if (self.homeLocationStatus == APCPassiveLocationTrackingHomeLocationAvailable) {
+        CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
+        locationJson = [self locationDictionaryWithLocationManager:manager andDistanceFromReferencePoint:distanceFromReferencePoint];
+    } else {
+        if ((self.baseTrackingLocation.coordinate.latitude == 0.0) && (self.baseTrackingLocation.coordinate.longitude == 0.0)) {
+            self.baseTrackingLocation = [locations firstObject];
+            if ([locations count] > 1) {
+                CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
+                locationJson = [self locationDictionaryWithLocationManager:manager andDistanceFromReferencePoint:distanceFromReferencePoint];
+            }
+        } else {
+            self.baseTrackingLocation = self.mostRecentUpdatedLocation;
+            self.mostRecentUpdatedLocation = manager.location;
+            CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
+            locationJson = [self locationDictionaryWithLocationManager:manager andDistanceFromReferencePoint:distanceFromReferencePoint];
+        }
+    }
+    if (locationJson != nil) {
+        NSLog(@"locationJson exists = %@", locationJson);
+        NSData *data = [NSJSONSerialization dataWithJSONObject:locationJson options:0 error:nil];
         
-        if (err) {
-            NSLog(@"Error");
-        } else if (archiveFileURL)
-        {
-            NSURL *documents = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]];
-            NSURL *outputUrl = [documents URLByAppendingPathComponent:[archiveFileURL lastPathComponent]];
+        if (self.taskArchive != nil) {
+            [self.taskArchive resetContent];
+        }
+        RKSTOrderedTask  *task = [[RKSTOrderedTask alloc] initWithIdentifier:kPassiveLocationTrackingTaskIdentifier steps:nil];
+        
+        //TODO: Check the identifier below
+        self.taskArchive = [[RKSTDataArchive alloc] initWithItemIdentifier:task.identifier
+                                                         studyIdentifier:kPassiveLocationTrackingIdentifier
+                                                        taskRunUUID: [NSUUID UUID]
+                                                           extraMetadata: nil
+                                                          fileProtection:RKFileProtectionCompleteUnlessOpen];
+        
+        NSError  *addFileError = nil;
+        [self.taskArchive addFileWithURL:[self makeArchiveURL] contentType:@"json" metadata:nil error:&addFileError];
+
+        NSError  *error = nil;
+        [self.taskArchive addContentWithData:data
+                                    filename:kAPCPassiveLocationTrackingFileName
+                                 contentType:@"json"
+                                   timestamp:[NSDate date]
+                                    metadata:nil error:&error];
+        
+        if (error != nil) {
+            APCLogError2(error);
+        } else {
+            NSError  *err = nil;
+            NSURL  *archiveFileURL = [self.taskArchive archiveURLWithError:&err];
             
-            // This is where you would queue the archive for upload. In this demo, we move it
-            // to the documents directory, where you could copy it off using iTunes, for instance.
-            [[NSFileManager defaultManager] moveItemAtURL:archiveFileURL toURL:outputUrl error:nil];
-            
-            //TODO this is here because it's convenient.
-            //NSLog(@"passive location data outputUrl= %@", outputUrl);
-            
-            // When done, clean up:
-            self.taskArchive = nil;
-            
-            if (archiveFileURL)
-            {
-                [[NSFileManager defaultManager] removeItemAtURL:archiveFileURL error:nil];
+            if (err != nil) {
+                APCLogError2(err);
+            } else if (archiveFileURL != nil) {
+                NSString  *outputFilePath = [self makeDocumentsDirectoryPath];
+                NSURL  *outputFileURL = [NSURL fileURLWithPath:outputFilePath];
+                NSURL  *outputUrl = [outputFileURL URLByAppendingPathComponent:[archiveFileURL lastPathComponent]];
+                
+                // This is where you would queue the archive for upload. In this demo, we move it
+                // to the documents directory, where you could copy it off using iTunes, for instance.
+                [[NSFileManager defaultManager] moveItemAtURL:archiveFileURL toURL:outputUrl error:nil];
+                
+                //TODO this is here because it's convenient.
+                //NSLog(@"passive location data outputUrl= %@", outputUrl);
+                
+                // When done, clean up:
+                self.taskArchive = nil;
+                
+                if (archiveFileURL != nil) {
+                    [[NSFileManager defaultManager] removeItemAtURL:archiveFileURL error:nil];
+                }
             }
         }
     }
@@ -210,7 +301,6 @@ static CLLocationDistance kAllowDeferredLocationUpdatesUntilTraveled = 5.0;
 
 - (NSDictionary *)retreieveLocationMarkersFromLog
 {
-    
     //TODO Return any geocoordinate data that has not been uploaded
     return nil;
 }
@@ -220,50 +310,52 @@ static CLLocationDistance kAllowDeferredLocationUpdatesUntilTraveled = 5.0;
 }
 
 
-
 /*********************************************************************************/
 #pragma mark -CLLocationManagerDelegate
 /*********************************************************************************/
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
-    NSLog(@"didFailWithError: %@", error);
-    
-    //TODO error handling
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    APCLogError2(error);
 }
 
-- (void)locationManager:(CLLocationManager *)manager didFinishDeferredUpdatesWithError:(NSError *)error {
-    
-    if (error) {
-        NSLog(@"didFinishDeferredUpdatesWithError %@ \n", error);
+- (void)locationManager:(CLLocationManager *)manager didFinishDeferredUpdatesWithError:(NSError *)error
+{
+    if (error != nil) {
+        APCLogError(@"didFinishDeferredUpdatesWithError %@ \n", error);
     }
-    
-    self.deferringUpdates = NO;
+//    self.deferringUpdates = NO;
 }
 
-- (void)locationManagerDidResumeLocationUpdates:(CLLocationManager *)manager {
+- (void)locationManagerDidResumeLocationUpdates:(CLLocationManager *)manager
+{
     //TODO After pausing there may be some work to do here.
 }
 
-- (void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager {
-    NSLog(@"locationManagerDidPauseLocationUpdates");
+- (void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager
+{
+    APCLogDebug(@"locationManagerDidPauseLocationUpdates");
 }
 
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    APCLogDebug(@"locationManager didUpdateLocations DeferredUpdatesTimeout = %.2f", self.deferredUpdatesTimeout);
     // Defer updates until a certain amount of time has passed.
-    if (!self.deferringUpdates) {
-        
+//    if (self.deferringUpdates == NO) {
+    
         [self updateArchiveDataWithLocationManager:manager withUpdateLocations:locations];
 
-        [self.locationManager allowDeferredLocationUpdatesUntilTraveled:(CLLocationDistance)0
-                                                           timeout:self.timeout];
-        self.deferringUpdates = YES;
-    }
+//        [self.locationManager allowDeferredLocationUpdatesUntilTraveled:(CLLocationDistance)0
+//                                                           timeout:self.deferredUpdatesTimeout];
+//        self.deferringUpdates = YES;
+//    }
 
 }
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    NSLog(@"Asynchronous call failed");
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    APCLogError(@"Asynchronous call failed with error %@", error);
     
     //TODO connection failed. What to do here.
 }

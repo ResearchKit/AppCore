@@ -16,6 +16,12 @@
  used to defer the delivery of updates until specified amount of time has passed: this is set at the time of initialization.
  **/
 
+typedef  enum  _APCPassiveLocationTrackingHomeLocation
+{
+    APCPassiveLocationTrackingHomeLocationAvailable,
+    APCPassiveLocationTrackingHomeLocationUnavailable
+}  APCPassiveLocationTrackingHomeLocation;
+
 @protocol APCLocationTrackingHeartbeatDelegate;
 
 @interface APCPassiveLocationTracking : NSObject <CLLocationManagerDelegate>
@@ -30,8 +36,7 @@
  *
  *  @return instancetype
  */
--(instancetype)initWithTimeInterval:(NSTimeInterval)timeout;
-
+- (instancetype)initWithDeferredUpdatesTimeout:(NSTimeInterval)anUpdateTimeout andHomeLocationStatus:(APCPassiveLocationTrackingHomeLocation)aHomeLocationStatus;
 
 /**
  *  @brief Starts updating location.
