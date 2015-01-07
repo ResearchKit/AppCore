@@ -1,30 +1,44 @@
 // 
-//  APCScheduleParser.h 
+//  APCScheduleExpressionParser.h 
 //  AppCore 
 // 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+//  Copyright (c) 2015 Apple Inc. All rights reserved. 
 // 
 
 #import <Foundation/Foundation.h>
 #import "APCListSelector.h"
 #import "APCPointSelector.h"
 
-/*
- This the parser grammar.  It also represents the
- precedence:  higher in the list means higher precedence
- in the parser.
+/**
+ Interprets a cron-style schedule-expression string
+ as a set of useful fields:  hours, minutes, days,
+ months, years, etc.  For example, "* 12 * * *" means
+ "every day at noon."
  
- For example, reading from bottom to top:
+ Conceptually, a parser verifies whether a string conforms
+ to a set of rules, called a "grammar."  The parser can
+ also return items in groups, or in a tree, representing
+ the stuff that was successfully identified as matching
+ that grammar.  The parser does not, and should not, know
+ anything (or much) about how that stuff will be used,
+ though.
+ 
+ The grammar is below.
+
+ There's nothing automatic about this.  The class
+ manually calls methods to perform each of these rules
+ in the appropriate places.  I.e., we've hand-written
+ a parser that implements these rules.
+ 
+ Read the rules from bottom to top.  Lower items in the
+ list of rules are lower in precedence; higher items are
+ higher in precedence.  For example, reading from bottom
+ to top:
  - LISTs...
  - can contain RANGEs...
  - which might contain STEPs...
  - which must contain DIGITs.
 
- There's nothing automatic about this.  We manually
- call methods to perform each of these rules in the
- appropriate places.  I.e., we've hand-written a parser
- that implements these rules.
- 
  Special characters roughly follow the conventions for "regular expressions":
 	?		 means  "0 or 1 of the preceding item"
 	+		 means  "1 or more of the preceding item"
@@ -37,8 +51,8 @@
 	digit				:: '0'..'9'
 	wildcard			:: '*' | '?'
 	whitespace			:: ' ' | '\t' | '\n' | '\r' | (other non-printing chars)
-	monthName			:: "jan".."dec"  (case-insensitive)
-	weekdayName			:: "sun".."sat"  (case-insensitive)
+	monthName			:: "jan" through "dec", case-insensitive
+	weekdayName			:: "sun" through "sat", case-insensitive
 
 	rangeSeparator		:: '-'
 	positionSeparator	:: '#'
@@ -74,10 +88,9 @@
 	minutesList			:: list
 	secondsList			:: list
  
-	fields				:: (whitespace ?) secondsList fieldSeparator minutesList fieldSeparator hoursList fieldSeparator dayOfMonthList fieldSeparator monthList dayOfWeekList fieldSeparator yearList (whitespace ?)
+	fields				:: ( whitespace ? ) ( secondsList fieldSeparator ) ? minutesList fieldSeparator hoursList fieldSeparator dayOfMonthList fieldSeparator monthList dayOfWeekList fieldSeparator yearList ( whitespace ? )
  */
-
-@interface APCScheduleParser : NSObject
+@interface APCScheduleExpressionParser : NSObject
 
 @property (nonatomic, strong) APCTimeSelector*    minuteSelector;
 @property (nonatomic, strong) APCTimeSelector*    hourSelector;

@@ -1,14 +1,16 @@
 // 
-//  APCScheduleParser.m 
+//  APCScheduleExpressionParser.m 
 //  AppCore 
 // 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
+//  Copyright (c) 2015 Apple Inc. All rights reserved. 
 // 
  
-#import "APCScheduleParser.h"
+#import "APCScheduleExpressionParser.h"
 #import "APCListSelector.h"
 #import "APCPointSelector.h"
 #import "APCDayOfMonthSelector.h"
+#import "APCScheduleExpressionToken.h"
+#import "APCScheduleExpressionTokenizer.h"
 
 
 static unichar kEndToken				= '\0';
@@ -20,23 +22,8 @@ static unichar kOtherWildCardToken		= '?';
 static unichar kRangeSeparatorToken		= '-';
 static unichar kFieldSeparatorToken		= ' ';
 
-static NSArray *kWildcardTokens = nil;
-static NSDictionary *kWeekdayNamesAndNumbers = nil;
-static NSDictionary *kMonthNamesAndNumbers = nil;
-
-
-static NSString* kListSeparatorTokenString		= @",";
-static NSString* kStepSeparatorTokenString		= @"/";
-static NSString* kPositionSeparatorTokenString	= @"#";
-static NSString* kWildCardTokenString			= @"*";
-static NSString* kOtherWildCardTokenString		= @"?";
-static NSString* kRangeSeparatorTokenString		= @"-";
-
-static NSCharacterSet* kDigitsCharacterSet = nil;
-static NSCharacterSet* kAlphaCharacterSet = nil;
-static NSCharacterSet* kFieldSeparatorCharacterSet = nil;
-static NSCharacterSet* kSpecialCronCharactersCharacterSet = nil;
-static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
+static NSArray* kMonthNames				= nil;
+static NSArray* kWeekdayNames			= nil;
 
 
 
@@ -81,233 +68,26 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 
 
 // ---------------------------------------------------------
-#pragma mark - Tokens
-// ---------------------------------------------------------
-
-@interface APCScheduleParserToken : NSObject
-
-// Stuff we might scan
-@property (nonatomic, assign) NSNumber* scannedInteger;
-@property (nonatomic, strong) NSString* scannedText;
-@property (nonatomic, assign) NSInteger countOfScannedCharacters;
-
-// Recording what happened when scanning the above
-@property (nonatomic, assign) BOOL isFieldSeparator;
-@property (nonatomic, assign) BOOL isInteger;
-@property (nonatomic, assign) BOOL isText;
-@property (nonatomic, assign) BOOL isSpecialChar;
-@property (nonatomic, assign) BOOL isUnrecognizedToken;
-
-// Interpreting what happened with numbers and special chars
-@property (readonly) BOOL isListSeparator;
-@property (readonly) BOOL isStepSeparator;
-@property (readonly) BOOL isPositionSeparator;
-@property (readonly) BOOL isWildcard;
-@property (readonly) BOOL isRangeSeparator;
-
-@property (readonly) BOOL isMonth;
-@property (readonly) NSNumber *month;
-
-@property (readonly) BOOL isWeekday;
-@property (readonly) NSNumber *weekday;
-
-@end
-
-@implementation APCScheduleParserToken
-
-- (id) init
-{
-	self = [super init];
-
-	if (self)
-	{
-		_scannedInteger = nil;
-		_scannedText = nil;
-		_countOfScannedCharacters = 0;
-
-		_isFieldSeparator = NO;
-		_isInteger = NO;
-		_isText = NO;
-		_isSpecialChar = NO;
-		_isUnrecognizedToken = NO;
-	}
-
-	return self;
-}
-
-- (BOOL) isWildcard
-{
-	BOOL result = self.isSpecialChar && [kWildcardTokens containsObject: self.scannedText];
-
-	return result;
-}
-
-- (BOOL) isListSeparator
-{
-	BOOL result = self.isSpecialChar && [self.scannedText isEqualToString: kListSeparatorTokenString];
-
-	return result;
-}
-
-- (BOOL) isStepSeparator
-{
-	BOOL result = self.isSpecialChar && [self.scannedText isEqualToString: kStepSeparatorTokenString];
-
-	return result;
-}
-
-- (BOOL) isPositionSeparator
-{
-	BOOL result = self.isSpecialChar && [self.scannedText isEqualToString: kPositionSeparatorTokenString];
-
-	return result;
-}
-
-- (BOOL) isRangeSeparator
-{
-	BOOL result = self.isSpecialChar && [self.scannedText isEqualToString: kRangeSeparatorTokenString];
-
-	return result;
-}
-
-- (BOOL) isMonth
-{
-	BOOL result = ((self.isInteger && [kMonthNamesAndNumbers.allValues containsObject: self.scannedInteger]) ||
-				   (self.isText    && [kMonthNamesAndNumbers.allKeys   containsObject:   self.scannedText  ]) );
-
-	return result;
-}
-
-- (NSNumber *) month
-{
-	NSNumber *monthValue = nil;
-
-	if (self.isMonth)
-	{
-		if (self.isInteger)
-		{
-			monthValue = self.scannedInteger;
-		}
-
-		else
-		{
-			monthValue = kMonthNamesAndNumbers [self.scannedText];
-		}
-	}
-
-	return monthValue;
-}
-
-- (BOOL) isWeekday
-{
-	BOOL result = ((self.isInteger &&
-					self.scannedInteger.integerValue >= 0 &&
-					self.scannedInteger.integerValue <= 7)
-				   ||
-				   (self.isText &&
-					[kWeekdayNamesAndNumbers.allKeys containsObject: self.scannedText])
-				   );
-
-	return result;
-}
-
-- (NSNumber *) weekday
-{
-	NSNumber *weekdayValue = nil;
-
-	if (self.isWeekday)
-	{
-		if (self.isInteger)
-		{
-			weekdayValue = self.scannedInteger;
-
-			// Either 0 or 7 is legal cron-speak for "Sunday,"
-			// but we consistently use 0 in our code.
-			if (weekdayValue.integerValue == 7)
-			{
-				weekdayValue = @(0);
-			}
-		}
-
-		else
-		{
-			weekdayValue = kWeekdayNamesAndNumbers [self.scannedText];
-		}
-	}
-
-	return weekdayValue;
-}
-
-@end
-
-
-
-// ---------------------------------------------------------
 #pragma mark - Parser
 // ---------------------------------------------------------
 
-@interface APCScheduleParser ()
+@interface APCScheduleExpressionParser ()
 @property (nonatomic, strong) NSMutableString*  expression;
 @property (nonatomic, assign) BOOL              errorEncountered;
-@property (nonatomic, strong) APCScheduleParserToken *nextToken;
+@property (nonatomic, strong) APCScheduleExpressionToken *nextToken;
+@property (nonatomic, strong) APCScheduleExpressionTokenizer *tokenizer;
 @end
 
 
-@implementation APCScheduleParser
+@implementation APCScheduleExpressionParser
 
 + (void) initialize
 {
-	if (kWildcardTokens == nil)
-	{
-		kWildcardTokens = @[ kWildCardTokenString, kOtherWildCardTokenString ];
+	kMonthNames = @[@"jan", @"feb", @"mar", @"apr", @"may", @"jun", @"jul", @"aug", @"sep", @"oct", @"nov", @"dec"];
 
-		kWeekdayNamesAndNumbers = @{ @"sun": @0,
-									 @"mon": @1,
-									 @"tue": @2,
-									 @"wed": @3,
-									 @"thu": @4,
-									 @"fri": @5,
-									 @"sat": @6,
-									 };
-
-		kMonthNamesAndNumbers = @{ @"jan": @1,
-								   @"feb": @2,
-								   @"mar": @3,
-								   @"apr": @4,
-								   @"may": @5,
-								   @"jun": @6,
-								   @"jul": @7,
-								   @"aug": @8,
-								   @"sep": @9,
-								   @"oct": @10,
-								   @"nov": @11,
-								   @"dec": @12,
-								   };
-
-		kDigitsCharacterSet = [NSCharacterSet decimalDigitCharacterSet];
-		kFieldSeparatorCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-
-		NSMutableCharacterSet *alpha = [NSMutableCharacterSet new];
-		[alpha formUnionWithCharacterSet: [NSCharacterSet lowercaseLetterCharacterSet]];
-		[alpha formUnionWithCharacterSet: [NSCharacterSet uppercaseLetterCharacterSet]];
-		kAlphaCharacterSet = alpha;
-
-		NSMutableCharacterSet *nonAlpha = [NSMutableCharacterSet new];
-		[nonAlpha addCharactersInString: kListSeparatorTokenString];
-		[nonAlpha addCharactersInString: kStepSeparatorTokenString];
-		[nonAlpha addCharactersInString: kPositionSeparatorTokenString];
-		[nonAlpha addCharactersInString: kWildCardTokenString];
-		[nonAlpha addCharactersInString: kOtherWildCardTokenString];
-		[nonAlpha addCharactersInString: kRangeSeparatorTokenString];
-		kSpecialCronCharactersCharacterSet = nonAlpha;
-
-		NSMutableCharacterSet *allCharsWeRecognize = [[NSMutableCharacterSet alloc] init];
-		[allCharsWeRecognize formUnionWithCharacterSet: kDigitsCharacterSet];
-		[allCharsWeRecognize formUnionWithCharacterSet: kAlphaCharacterSet];
-		[allCharsWeRecognize formUnionWithCharacterSet: kFieldSeparatorCharacterSet];
-		[allCharsWeRecognize formUnionWithCharacterSet: kSpecialCronCharactersCharacterSet];
-		kAllCharsWeRecognizeCharacterSet = allCharsWeRecognize;
-	}
+	// Order matters: "Sunday" is either 0 or 7 in cron-speak,
+	// and we normalize all Sundays to 0.
+	kWeekdayNames = @[@"sun", @"mon", @"tue", @"wed", @"thu", @"fri", @"sat"];
 }
 
 - (instancetype) initWithExpression: (NSString*) expression
@@ -316,9 +96,10 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 
     if (self)
     {
-        _expression       = [expression mutableCopy];
-        _errorEncountered = NO;
-		_nextToken        = nil;
+        _expression			= [expression mutableCopy];
+        _errorEncountered	= NO;
+		_nextToken			= nil;
+		_tokenizer			= [APCScheduleExpressionTokenizer new];
     }
     
     return self;
@@ -378,14 +159,14 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
     return self.next == kEndToken && self.errorEncountered == NO;
 }
 
-- (BOOL)isValidParse_withTokens
-{
-	// not yet sure when I'll need this, so I'll crash,
-	// to make sure I see it:
-	NSAssert (NO, @"Hey, neat! I'm actually using -isValidParse_withTokens !");
-
-	return self.nextToken == nil && self.errorEncountered == NO;
-}
+//	/**
+//	 Writing this method for completeness -- to be compatible
+//	 with the character-based scanner -- but I don't yet need it.
+//	 */
+//	- (BOOL)isValidParse_withTokens
+//	{
+//		return self.nextToken == nil && self.errorEncountered == NO;
+//	}
 
 - (unichar)next
 {
@@ -406,94 +187,24 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
  Note that this overrides the standard "get" method for the
  "nextToken" property.  As such, it reads and writes _nextToken.
  */
-- (APCScheduleParserToken *) nextToken
+- (APCScheduleExpressionToken *) nextToken
 {
-	APCScheduleParserToken *token = _nextToken;
+	APCScheduleExpressionToken *token = _nextToken;
 
 	// If we've already scanned for a token, we'll return
 	// that.  Otherwise, scan for the next one.
-	if ((token == nil || token.countOfScannedCharacters == 0) &&
-		(self.expression.length > 0))
+	if (token.countOfScannedCharacters == 0 && self.expression.length > 0)
 	{
-		token = [APCScheduleParserToken new];
-		NSString *scannedText = nil;
-		NSScanner* scanner = [NSScanner scannerWithString: self.expression];
+		token = [self.tokenizer nextTokenFromString: self.expression];
 
-		/*
-		 It seems standard to put "whitespace and newlines" here.
-		 However, for us, whitespace and newlines matter:  they're
-		 the "field delimiter".
-		 */
-		scanner.charactersToBeSkipped = nil;
-
-		/*
-		 All the text we care about is case-insensitive.
-		 */
-		scanner.caseSensitive = NO;
-
-
-		// Now find the next token.
-		if ([scanner scanCharactersFromSet: kFieldSeparatorCharacterSet intoString: &scannedText])
+		if (token.didEncounterError)
 		{
-			token.isFieldSeparator = YES;
-			token.scannedText = scannedText;
-			token.countOfScannedCharacters = scanner.scanLocation;
-		}
-
-		else if ([scanner scanCharactersFromSet: kDigitsCharacterSet intoString: &scannedText])
-		{
-			token.isInteger = YES;
-			token.scannedText = scannedText;
-			token.scannedInteger = @(scannedText.integerValue);
-			token.countOfScannedCharacters = scanner.scanLocation;
-		}
-
-		else if ([scanner scanCharactersFromSet: kAlphaCharacterSet intoString: &scannedText])
-		{
-			token.isText = YES;
-			token.scannedText = scannedText.lowercaseString;
-			token.countOfScannedCharacters = scanner.scanLocation;
-		}
-
-		else if ([scanner scanCharactersFromSet: kSpecialCronCharactersCharacterSet intoString: &scannedText])
-		{
-			token.isSpecialChar = YES;
-			token.scannedText = scannedText;
-			token.countOfScannedCharacters = scanner.scanLocation;
-		}
-
-		/*
-		 If we get here, it's not any of the characters we recognize.
-		 So scan until we find a character we DO recognize, and report
-		 an error for the string of unrecognized characters.
-		 */
-		else if ([scanner scanUpToCharactersFromSet: kAllCharsWeRecognizeCharacterSet intoString: &scannedText])
-		{
-			token.isUnrecognizedToken = YES;
-			token.scannedText = scannedText;
-			token.countOfScannedCharacters = scanner.scanLocation;
-
-			NSLog (@"WARNING: Couldn't understand token [%@] in schedule expression.", scannedText);
-
-			[self recordError];
-		}
-
-		/*
-		 We should literally never get to this "else" statement:
-		 we've scanned for every possible physical character.
-		 */
-		else
-		{
-			NSLog (@"WARNING: Something very odd happened when trying to scan the cron expression -- didn't find any recognized OR UNRECOGNIZED characters.");
-
+			NSLog (@"WARNING: %@", token.errorMessage);
 			token = nil;
-
 			[self recordError];
 		}
 
-
-		// Record what happened.
-		// This token will be consumed at the next call to -consume.
+		// Record what happened.  This token will be consumed at the next call to -consume.
 		_nextToken = token;
 	}
 
@@ -525,8 +236,8 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 			[self.expression deleteCharactersInRange: charsToConsume];
 		}
 
-		// This tells -nextToken to actually scan for the next token.
-		self.nextToken = nil;
+		// This tells -nextToken to re-scan for the next token.
+		[self forgetToken];
 	}
 }
 
@@ -557,26 +268,26 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
     return expectation;
 }
 
-- (BOOL) expectToken: (APCScheduleParserToken *) token
-{
-	// not yet sure when I'll need this, so, for now, always crash,
-	// so I can see it:
-	NSAssert (NO, @"Ron:  not yet handling -expectToken:.");
-
-	BOOL expectation = NO;
-
-	if ([self.nextToken isEqual: token])
-	{
-		expectation = YES;
-		[self consumeOneToken];
-	}
-	else
-	{
-		[self recordError];
-	}
-
-	return expectation;
-}
+//	/**
+//	 Writing this method for completeness -- to be compatible
+//	 with the character-based scanner -- but I don't yet need it.
+//	 */
+//	- (BOOL) expectToken: (APCScheduleExpressionToken *) token
+//	{
+//		BOOL expectation = NO;
+//
+//		if ([self.nextToken isEqual: token])
+//		{
+//			expectation = YES;
+//			[self consumeOneToken];
+//		}
+//		else
+//		{
+//			[self recordError];
+//		}
+//
+//		return expectation;
+//	}
 
 - (void)fieldSeparatorProduction
 {
@@ -648,7 +359,7 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 
 - (NSNumber *) monthProduction  // equiavlent to numberProduction, but for months.
 {
-	NSNumber *month = nil;
+	NSInteger month = kAPCScheduleExpressionTokenIntegerValueNotSet;
 
 	/*
 	 Scan up to the next month, throw that stuff away, and then
@@ -658,29 +369,30 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 	 Presumes the string has been advanced to some stuff
 	 immediately preceding a month.
 	 */
-	if (! self.nextToken.isMonth)
+	if (! [self isMonthToken: self.nextToken])
 	{
 		[self consumeOneToken];
 	}
 
-	if (self.nextToken.isMonth)
+	if ([self isMonthToken: self.nextToken])
 	{
-		month = self.nextToken.month;	// converts names or numbers to month-numbers.
+		month = [self monthFromToken: self.nextToken];
+
 		[self consumeOneToken];
 	}
 	else
 	{
-		NSLog (@"WARNING:  I was expecting a month, and got something else: [%@].", self.nextToken.scannedText);
+		NSLog (@"WARNING:  I was expecting a month, and got something else: [%@].", self.nextToken.stringValue);
 
 		[self recordError];
 	}
 
-	return month;
+	return @(month);
 }
 
 - (NSNumber *) weekdayProduction  // equiavlent to numberProduction, but for weekdays.
 {
-	NSNumber *weekday = nil;
+	NSInteger weekday = kAPCScheduleExpressionTokenIntegerValueNotSet;
 
 	/*
 	 Scan up to the next month, throw that stuff away, and then
@@ -690,24 +402,24 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 	 Presumes the string has been advanced to some stuff
 	 immediately preceding a month.
 	 */
-	if (! self.nextToken.isWeekday)
+	if (! [self isWeekdayToken: self.nextToken])
 	{
 		[self consumeOneToken];
 	}
 
-	if (self.nextToken.isWeekday)
+	if ([self isWeekdayToken: self.nextToken])
 	{
-		weekday = self.nextToken.weekday;	// converts names or numbers to weekday-numbers.
+		weekday = [self weekdayFromToken: self.nextToken];
 		[self consumeOneToken];
 	}
 	else
 	{
-		NSLog (@"WARNING:  I was expecting a weekday, and got something else: [%@].", self.nextToken.scannedText);
+		NSLog (@"WARNING:  I was expecting a weekday, and got something else: [%@].", self.nextToken.stringValue);
 
 		[self recordError];
 	}
 
-	return weekday;
+	return @(weekday);
 }
 
 - (NSArray*)rangeProduction
@@ -761,7 +473,7 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 
 	NSMutableArray* range = [NSMutableArray array];
 
-	if (self.nextToken.isMonth)
+	if ([self isMonthToken: self.nextToken])
 	{
 		[range addObject: [self monthProduction]];
 
@@ -804,7 +516,7 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 
 	NSMutableArray* range = [NSMutableArray array];
 
-	if (self.nextToken.isWeekday)
+	if ([self isWeekdayToken: self.nextToken])
 	{
 		[range addObject: [self weekdayProduction]];
 
@@ -901,7 +613,7 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 		[self consumeOneToken];
 		//  By default, selectors are initialized with min-max values corresponding with the selector's unit type, so it's safe to return nil, here.  Just eat the next token.
 	}
-	else if (self.nextToken.isMonth)
+	else if ([self isMonthToken: self.nextToken])
 	{
 		monthRangeSpec = [self monthRangeProduction];
 	}
@@ -928,7 +640,7 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 		[self consumeOneToken];
 		//  By default, selectors are initialized with min-max values corresponding with the selector's unit type, so it's safe to return nil, here.  Just eat the next token.
 	}
-	else if (self.nextToken.isWeekday)
+	else if ([self isWeekdayToken: self.nextToken])
 	{
 		weekdayRangeSpec = [self weekdayRangeProduction];
 	}
@@ -1214,6 +926,107 @@ parseError:
     
     return listSelector;
 }
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Utilities:  interpreting stuff as "months," etc.
+// ---------------------------------------------------------
+
+- (BOOL) isMonthToken: (APCScheduleExpressionToken *) token
+{
+	NSInteger month = [self monthFromToken: token];
+	BOOL isMonth = (month != kAPCScheduleExpressionTokenIntegerValueNotSet);
+	return isMonth;
+}
+
+- (NSInteger) monthFromToken: (APCScheduleExpressionToken *) token
+{
+	NSInteger month = kAPCScheduleExpressionTokenIntegerValueNotSet;
+	BOOL isMonth = NO;
+
+	if (token.isNumber)
+	{
+		NSInteger maybeMonth = token.integerValue;
+
+		isMonth = (maybeMonth >= 1 && maybeMonth <= 12);
+
+		if (isMonth)
+		{
+			month = maybeMonth;
+		}
+	}
+
+	else if (token.isWord)
+	{
+		NSString *word = token.stringValue.lowercaseString;
+
+		isMonth = [kMonthNames containsObject: word];
+
+		if (isMonth)
+		{
+			// CAREFUL!  Months are 1-based, not 0-based.
+			month = [kMonthNames indexOfObject: word] + 1;
+		}
+	}
+
+	return month;
+}
+
+- (BOOL) isWeekdayToken: (APCScheduleExpressionToken *) token
+{
+	NSInteger weekday = [self weekdayFromToken: token];
+	BOOL isWeekday = (weekday != kAPCScheduleExpressionTokenIntegerValueNotSet);
+	return isWeekday;
+}
+
+- (NSInteger) weekdayFromToken: (APCScheduleExpressionToken *) token
+{
+	NSInteger weekday = kAPCScheduleExpressionTokenIntegerValueNotSet;
+	BOOL isWeekday = NO;
+
+	if (token.isNumber)
+	{
+		NSInteger maybeWeekday = token.integerValue;
+
+		/*
+		 In cron-speak, "Sunday" is both 0 and 7. 
+		 We'll normalize to 0.
+		 */
+		isWeekday = (maybeWeekday >= 0 && maybeWeekday <= 7);
+
+		if (isWeekday)
+		{
+			weekday = maybeWeekday;
+
+			if (weekday == 7) weekday = 0;
+		}
+	}
+
+	else if (token.isWord)
+	{
+		NSString *word = token.stringValue.lowercaseString;
+
+		isWeekday = [kWeekdayNames containsObject: word];
+
+		if (isWeekday)
+		{
+			/*
+			 Weekday names are set up with these values:
+			 Sunday == 0, Saturday == 6.
+			 
+			 In cron-speak, Sunday can be either 0 or 7.
+			 We normalize to 0.
+			 */
+			weekday = [kWeekdayNames indexOfObject: word];
+		}
+	}
+
+	return weekday;
+}
+
+
+
 
 // ---------------------------------------------------------
 #pragma mark - Extract all fields (conceptual "main()" for this file)

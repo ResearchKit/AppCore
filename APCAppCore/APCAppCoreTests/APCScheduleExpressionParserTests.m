@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "APCScheduleParser.h"
+#import "APCScheduleExpressionParser.h"
 
 @interface APCScheduleExpressionParserTests : XCTestCase
 
@@ -18,7 +18,7 @@
 - (void)testNumberParsing
 {
 	NSString*           cronExpression = @"10";
-	APCScheduleParser*  parser         = [[APCScheduleParser alloc] initWithExpression:cronExpression];
+	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	
 	APCListSelector*  listSelector = [parser listProductionForType:kMinutes];
 	
@@ -36,7 +36,7 @@
 - (void)testWildcardParsing
 {
 	NSString*           cronExpression = @"*";
-	APCScheduleParser*  parser         = [[APCScheduleParser alloc] initWithExpression:cronExpression];
+	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	
 	APCListSelector* listSelector = [parser listProductionForType:kMinutes];
 	
@@ -54,7 +54,7 @@
 - (void)testRangeParsing
 {
 	NSString*           cronExpression = @"25-50";
-	APCScheduleParser*  parser         = [[APCScheduleParser alloc] initWithExpression:cronExpression];
+	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	
 	APCListSelector* listSelector = [parser listProductionForType:kMinutes];
 	
@@ -72,7 +72,7 @@
 - (void)testListParsing
 {
 	NSString*           cronExpression = @"10,20,30";
-	APCScheduleParser*  parser         = [[APCScheduleParser alloc] initWithExpression:cronExpression];
+	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	
 	APCListSelector* selector = [parser listProductionForType:kMinutes];
 	
@@ -104,7 +104,7 @@
 - (void)testNumberWithStepParsing
 {
 	NSString*           cronExpression = @"0/5";
-	APCScheduleParser*  parser         = [[APCScheduleParser alloc] initWithExpression:cronExpression];
+	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	
 	APCListSelector* selector = [parser listProductionForType:kMinutes];
 	
@@ -122,7 +122,7 @@
 - (void)testWildcardWithStepParsing
 {
 	NSString*           cronExpression = @"*/5";
-	APCScheduleParser*  parser         = [[APCScheduleParser alloc] initWithExpression:cronExpression];
+	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	
 	APCListSelector* selector = [parser listProductionForType:kMinutes];
 	
@@ -140,7 +140,7 @@
 - (void)testRangeWithStepParsing
 {
 	NSString*           cronExpression = @"25-50/5";
-	APCScheduleParser*  parser         = [[APCScheduleParser alloc] initWithExpression:cronExpression];
+	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	
 	APCListSelector* selector = [parser listProductionForType:kMinutes];
 	
@@ -158,7 +158,7 @@
 - (void)testParsingExpressionWithWildcards
 {
 	NSString*           cronExpression = @"* * * * *";
-	APCScheduleParser*  parser         = [[APCScheduleParser alloc] initWithExpression:cronExpression];
+	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	BOOL                validParse     = [parser parse];
 	
 	XCTAssertTrue(validParse);
@@ -171,7 +171,7 @@
 - (void)testParsingExpressionWithNumbers
 {
 	NSString*           cronExpression = @"1 2 3 4 5";
-	APCScheduleParser*  parser         = [[APCScheduleParser alloc] initWithExpression:cronExpression];
+	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	BOOL                validParse     = [parser parse];
 	
 	XCTAssertTrue(validParse);
@@ -184,7 +184,7 @@
 - (void)testParsingExpressionsWithSteps
 {
 	NSString*           cronExpression = @"1/5 2/5 3/5 4/5 5/5";
-	APCScheduleParser*  parser         = [[APCScheduleParser alloc] initWithExpression:cronExpression];
+	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	BOOL                validParse     = [parser parse];
 	
 	XCTAssertTrue(validParse);
@@ -197,7 +197,7 @@
 - (void)testParsingExpressionsWithRangesAndSteps
 {
 	NSString*           cronExpression = @"1-10/5 2-20/5 3-31/2 4-12/2 2-6/2";
-	APCScheduleParser*  parser         = [[APCScheduleParser alloc] initWithExpression:cronExpression];
+	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	BOOL                validParse     = [parser parse];
 	
 	XCTAssertTrue(validParse);
@@ -210,7 +210,7 @@
 - (void)testParsingLongFieldSeparator
 {
 	NSString*           cronExpression = @"1  2   3    4     5";
-	APCScheduleParser*  parser         = [[APCScheduleParser alloc] initWithExpression:cronExpression];
+	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	BOOL                validParse     = [parser parse];
 	
 	XCTAssertTrue(validParse);

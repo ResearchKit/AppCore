@@ -110,8 +110,8 @@
 
 
 	// Ron:  testing new versions
-//	NSString* cronExpression = @"0 5 * SEP,JUL,OCT/2,JAN-MAR THU,FRI,MON#1,TUE#2";
-	NSString* cronExpression = @"   0    5    *    SEP,JUL,OCT/2,JAN-MAR     THU,FRI,MON#1,TUE#2    ";
+	NSString* cronExpression = @"0 5 * SEP,JUL,OCT/2,JAN-MAR THU,FRI,MON#1,TUE#2";
+//	NSString* cronExpression = @"   0    5    *    SEP,JUL,OCT/2,JAN-MAR     THU,FRI,MON#1,TUE#2    ";
 
 
 
@@ -134,6 +134,7 @@
 
 
 	NSLog (@"------------------------ look here -------------------------");
+	NSLog (@"           the expression :  %@", cronExpression);
 	NSLog (@"               start date :  %@", [formatter stringFromDate: start]);
 	NSLog (@" ");
 
