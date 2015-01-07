@@ -31,6 +31,7 @@ static NSString *const kFinishedProperty = @"finished";
     
     NSArray  *steps;
     if ([task respondsToSelector:@selector(steps)]) {
+        steps = [task performSelector:@selector(steps)];
         tempProgressor.numberOfSteps = [steps count];
         [tempProgressor setCompletedSteps: 1 animation:NO];
     }
