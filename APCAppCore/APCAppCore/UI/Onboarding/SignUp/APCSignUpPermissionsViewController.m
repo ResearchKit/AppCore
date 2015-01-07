@@ -172,8 +172,6 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
     
     UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     [self.navigationItem setLeftBarButtonItem:backBarButton];
-    
-    self.navigationItem.rightBarButtonItem.enabled = NO;
 }
 
 - (void) setupProgressBar {
@@ -332,18 +330,6 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
     [self updatePermissions];
 
     [self.tableView reloadData];
-    
-#if DEVELOPMENT
-    self.navigationItem.rightBarButtonItem.enabled = YES;
-#else
-    self.navigationItem.rightBarButtonItem.enabled = [self isPermissionsGranted];
-#endif
-}
-
-
-- (BOOL)isPermissionsGranted
-{
-    return (self.permissionsGrantedCount == self.permissions.count);
 }
 
 - (IBAction)next:(id)sender {
