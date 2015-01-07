@@ -97,6 +97,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         NSDate *currentTime = [NSDate date];
         [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
     }
+    self.dataSubstrate.currentUser.sessionToken = nil;
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -191,7 +192,6 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     self.dataSubstrate.currentUser.signedUp = NO;
     self.dataSubstrate.currentUser.signedIn = NO;
     [APCKeychainStore removeValueForKey:kPasswordKey];
-    [APCKeychainStore removeValueForKey:kSessionTokenKey];
     
     [self showOnBoarding];
 }

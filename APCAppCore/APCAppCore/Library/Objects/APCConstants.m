@@ -40,7 +40,6 @@ NSString *const kHKCharacteristicTypeKey             = @"HKCharacteristicType";
 NSString *const kHKCorrelationTypeKey                = @"HKCorrelationType";
 
 NSString *const kPasswordKey                         = @"Password";
-NSString *const kSessionTokenKey                     = @"sessionToken";
 NSString *const kNumberOfMinutesForPasscodeKey       = @"NumberOfMinutesForPasscodeKey";
 
 NSString *const kAnalyticsOnOffKey					 = @"AnalyticsOnOffKey";
