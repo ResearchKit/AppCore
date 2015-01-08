@@ -7,6 +7,7 @@
  
 #import "APCActivitiesViewController.h"
 #import "APCAppCore.h"
+#import "APCActivitiesViewWithNoTask.h"
 
 static NSString *kTableCellReuseIdentifier = @"ActivitiesTableViewCell";
 static NSString *kTableCellWithTimeReuseIdentifier = @"ActivitiesTableViewCellWithTime";
@@ -22,7 +23,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 @property (strong, nonatomic) NSMutableArray *sectionsArray;
 @property (strong, nonatomic) NSMutableArray *scheduledTasksArray;
 
-@property (strong, nonatomic) UILabel *noTasksLabel;
+@property (strong, nonatomic) APCActivitiesViewWithNoTask *noTasksView;
 @end
 
 @implementation APCActivitiesViewController
@@ -78,12 +79,12 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return  self.sectionsArray.count;
+    return self.sectionsArray.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return  [self arrayWithSectionNumber:section].count;
+    return [self arrayWithSectionNumber:section].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -268,17 +269,72 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     [self reloadTableArray];
     [self.tableView reloadData];
     
+    //Display a custom view announcing that there are no activities if there are none.
     if (self.sectionsArray.count == 0) {
-        self.noTasksLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 300, 300, 60)];
-        [self.noTasksLabel setCenter:self.tableView.center];
-        self.noTasksLabel.text = @"You Have No Tasks To Complete";
-        self.noTasksLabel.textAlignment = NSTextAlignmentCenter;
-        [self.tableView addSubview:self.noTasksLabel];
+        [self addCustomNoTaskView];
     } else {
-        if (self.noTasksLabel) {
-            [self.noTasksLabel removeFromSuperview];
+        if (self.noTasksView) {
+            [self.noTasksView removeFromSuperview];
         }
     }
+}
+
+- (void) addCustomNoTaskView {
+    
+    UINib *nib = [UINib nibWithNibName:@"APCActivitiesViewWithNoTask" bundle:[NSBundle appleCoreBundle]];
+    self.noTasksView = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
+    
+    [self.view addSubview:self.noTasksView];
+    
+    UIImage *image = [UIImage imageNamed:@"activitieshome_emptystate_asset"];
+    
+    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    
+    [self.noTasksView.imgView setTintColor:[UIColor appPrimaryColor]];
+    
+    [self.noTasksView.imgView setImage:image];
+    
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:[NSDate date]];
+    NSInteger day = [components day];
+    NSInteger month = [components month];
+    
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    NSString *monthName = [[df monthSymbols] objectAtIndex:(month-1)];
+    
+    self.noTasksView.todaysDate.text = [NSString stringWithFormat:@"Today, %@ %ld", monthName, (long)day];
+    
+    [self.noTasksView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    [self.tableView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView
+                                                               attribute:NSLayoutAttributeTop
+                                                               relatedBy:NSLayoutRelationEqual
+                                                                  toItem:self.noTasksView
+                                                               attribute:NSLayoutAttributeTop
+                                                              multiplier:1
+                                                                constant:0]];
+    
+    [self.tableView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView
+                                                               attribute:NSLayoutAttributeLeft
+                                                               relatedBy:NSLayoutRelationEqual
+                                                                  toItem:self.noTasksView
+                                                               attribute:NSLayoutAttributeLeft
+                                                              multiplier:1
+                                                                constant:0]];
+    
+    [self.tableView addConstraint:[NSLayoutConstraint constraintWithItem:self.noTasksView
+                                                               attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
+                                                                  toItem:self.tableView
+                                                               attribute:NSLayoutAttributeHeight
+                                                              multiplier:1
+                                                                constant:0]];
+    
+    [self.tableView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView
+                                                               attribute:NSLayoutAttributeWidth
+                                                               relatedBy:NSLayoutRelationEqual
+                                                                  toItem:self.noTasksView
+                                                               attribute:NSLayoutAttributeWidth
+                                                              multiplier:1
+                                                                constant:0.0]];
 }
 
 #pragma mark - Sort and Group Task
