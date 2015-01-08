@@ -14,7 +14,8 @@ typedef NS_ENUM(APCTableViewItemType, APCSettingsItemType) {
     kAPCSettingsItemTypePasscode,
     kAPCSettingsItemTypePassword,
     kAPCSettingsItemTypePushNotifications,
-    kAPCSettingsItemTypeDevices
+    kAPCSettingsItemTypeDevices,
+    kAPCSettingsItemTypePermissions
 };
 
 @interface APCSettingsViewController : APCUserInfoViewController
