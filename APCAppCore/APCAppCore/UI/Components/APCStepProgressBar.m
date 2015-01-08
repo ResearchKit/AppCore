@@ -165,9 +165,9 @@ static NSString * const kAPCStepProgressViewAnimationKey = @"APCStepProgressView
             progressAnimation.fillMode = kCAFillModeForwards;
             progressAnimation.removedOnCompletion = NO;
             [self.stepProgressLayer addAnimation:progressAnimation forKey:kAPCStepProgressViewAnimationKey];
-        } else {
-            self.stepProgressLayer.path = newPath.CGPath;
         }
+            self.stepProgressLayer.path = newPath.CGPath;
+        
     }    
 }
 
