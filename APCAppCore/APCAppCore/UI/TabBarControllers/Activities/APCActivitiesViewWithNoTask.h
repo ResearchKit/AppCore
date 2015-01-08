@@ -2,7 +2,6 @@
 //  APCActivitiesViewWithNoTask.h
 //  APCAppCore
 //
-//  Created by Justin Warmkessel on 1/8/15.
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
