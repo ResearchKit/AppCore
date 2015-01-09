@@ -188,6 +188,13 @@
 
 #pragma mark - UITextFieldDelegate methods
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        self.alertLabel.alpha = 0;
+    }];
+}
+
 - (BOOL) textFieldShouldReturn:(UITextField *)textField
 {
     [super textFieldShouldReturn:textField];
@@ -254,6 +261,13 @@
 }
 
 #pragma mark - APCTextFieldTableViewCellDelegate methods
+
+- (void)textFieldTableViewCellDidBeginEditing:(APCTextFieldTableViewCell *)cell
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        self.alertLabel.alpha = 0;
+    }];
+}
 
 - (void)textFieldTableViewCellDidEndEditing:(APCTextFieldTableViewCell *)cell
 {
