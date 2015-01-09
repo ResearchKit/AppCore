@@ -594,29 +594,42 @@
         
         [self loadProfileValuesInModel];
         
-        APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
-        [self presentViewController:spinnerController animated:YES completion:nil];
+        [self sendCredentials];
         
-        typeof(self) __weak weakSelf = self;
-        [self.user signUpOnCompletion:^(NSError *error) {
-            if (error) {
-                APCLogError2 (error);
-                [spinnerController dismissViewControllerAnimated:NO completion:^{
-                    UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Up", @"") message:error.message];
-                    [self presentViewController:alert animated:YES completion:nil];
-                }];
-            }
-            else
-            {
-                [spinnerController dismissViewControllerAnimated:NO completion:^{
-
-                    UIViewController *viewController = [[self onboarding] nextScene];
-                    [weakSelf.navigationController pushViewController:viewController animated:YES];
-                }];
-            }
-        }];
     }
 }
+
+-(void) sendCredentials{
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    [self presentViewController:spinnerController animated:YES completion:nil];
+    
+    typeof(self) __weak weakSelf = self;
+    [self.user signUpOnCompletion:^(NSError *error) {
+        if (error) {
+            
+            APCLogError2 (error);
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                
+                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Sign Up", @"")
+                                                                   message:error.message
+                                                                  delegate:self
+                                                         cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                                         otherButtonTitles:NSLocalizedString(@"Try Again", nil), nil];
+                [alertView show];
+                
+            }];
+        }
+        else
+        {
+            [spinnerController dismissViewControllerAnimated:NO completion:^{
+                
+                UIViewController *viewController = [[self onboarding] nextScene];
+                [weakSelf.navigationController pushViewController:viewController animated:YES];
+            }];
+        }
+    }];
+}
+
 
 - (IBAction)cancel:(id)sender
 {
@@ -709,5 +722,21 @@
     [self.navigationController popViewControllerAnimated:YES];
     [[self onboarding] popScene];
 }
+
+#pragma mark AlertView delegate
+
+-(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    if (buttonIndex == 0) {
+        NSLog(@"canceled");
+    }else{
+        //try again
+        NSLog(@"Trying again");
+        [self sendCredentials];
+    }
+    
+}
+
+
 
 @end
