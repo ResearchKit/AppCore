@@ -15,7 +15,7 @@
 
 - (instancetype) initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate;
 
-- (void)updateScheduledTasksIfNotUpdating: (BOOL) today OnCompletion:(void (^)(NSError * error))completionBlock; //If today is not set, it will always update tasks for tomorrow
+- (void)updateScheduledTasksIfNotUpdating: (BOOL) today;
 
 @end
 
