@@ -318,11 +318,11 @@ static CGFloat const kPickerCellHeight = 164.0f;
     }
 }
 
-- (void)textFieldTableViewCell:(APCTextFieldTableViewCell *)cell shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+- (void)textFieldTableViewCellDidChangeText:(APCTextFieldTableViewCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
-    NSString *text = [cell.textField.text stringByReplacingCharactersInRange:range withString:string];
+    NSString *text = cell.textField.text;
     
     APCTableViewTextFieldItem *textFieldItem = (APCTableViewTextFieldItem *)[self itemForIndexPath:indexPath];
     textFieldItem.value = text;
