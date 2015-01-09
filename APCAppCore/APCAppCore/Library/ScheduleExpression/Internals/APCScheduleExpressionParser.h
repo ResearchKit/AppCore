@@ -51,8 +51,6 @@
 	digit				:: '0'..'9'
 	wildcard			:: '*' | '?'
 	whitespace			:: ' ' | '\t' | '\n' | '\r' | (other non-printing chars)
-	monthName			:: "jan" through "dec", case-insensitive
-	weekdayName			:: "sun" through "sat", case-insensitive
 
 	rangeSeparator		:: '-'
 	positionSeparator	:: '#'
@@ -60,33 +58,37 @@
 	listSeparator		:: ','
 	fieldSeparator		:: whitespace
 
+	monthName			:: "jan" through "dec", case-insensitive
+	weekdayName			:: "sun" through "sat", case-insensitive
 	number				:: digit +
-	position			:: number
-	steps				:: number
-	month				:: number | monthName
-	weekday				:: number | weekdayName
-                    	
-	range				:: number  ( rangeSeparator number ) ?
-	monthRange			:: month   ( rangeSeparator month  ) ?
-	weekdayRange		:: weekday ( rangeSeparator weekday ) ?
-                    	
-	numspec				:: wildcard | range
-	monthSpec			:: wildcard | monthRange
-	weekdaySpec			:: wildcard | weekdayRange
-                    	
-	expr				:: numspec     ( stepSeparator steps ) ?
-	monthExpr			:: monthSpec   ( stepSeparator steps ) ?
-	weekdayExpr			:: weekdaySpec ( stepSeparator steps | positionSeparator position ) ?
-                    	
-	list				:: expr        ( listSeparator expr ) *
-	monthList			:: monthExpr   ( listSeparator monthExpr ) *
-	weekdayList			:: weekdayExpr ( listSeparator weekdayExpr ) *
-                    	
-	yearList			:: list
-	dayOfMonthList		:: list
-	hoursList			:: list
-	minutesList			:: list
-	secondsList			:: list
+
+	positionIdentifier	:: number
+	stepCount			:: number
+
+	secondsNumber		:: number, 0-59
+	minuteNumber		:: number, 0-59
+	hourNumber			:: number, 0-59
+	dayNumber			:: number, 1-31
+	monthNumber			:: number, 1-12
+	weekdayNumber		:: number, 0-7    (because both 0 and 7 are legal cron-speak for "Sunday")
+	yearNumber			:: number
+
+	itemName			:: monthName     | weekdayName
+	itemNumber			:: secondsNumber | minuteNumber | hourHumber | dayNumber | monthNumber | weekdayNumber | yearNumber
+	item				:: itemNumber    | itemName
+
+	range				:: item ( rangeSeparator item ) ?
+	expression			:: (wildcard | range) ( stepSeparator stepCount | positionSeparator positionIdentifier ) ?
+
+	list				:: expression ( listSeparator expr ) *
+
+	yearList			:: list		\
+	weekdayList			:: list		|	We'll gather as many lists as we have.
+	monthList			:: list		|	Then we'll do some careful analysis to
+	dayOfMonthList		:: list		|	figure out which lists are the monthList
+	hoursList			:: list		|	and weekdayList, delete the secondList and
+	minutesList			:: list		|	yearList, and assign the rest accordingly.
+	secondsList			:: list		/
  
 	fields				:: ( whitespace ? ) ( secondsList fieldSeparator ) ? minutesList fieldSeparator hoursList fieldSeparator dayOfMonthList fieldSeparator monthList dayOfWeekList fieldSeparator yearList ( whitespace ? )
  */
