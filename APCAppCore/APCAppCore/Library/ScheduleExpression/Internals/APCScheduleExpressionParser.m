@@ -11,6 +11,7 @@
 #import "APCDayOfMonthSelector.h"
 #import "APCScheduleExpressionToken.h"
 #import "APCScheduleExpressionTokenizer.h"
+#import "APCScheduleExpressionToken+DatesAndTimes.h"
 
 
 static unichar kEndToken				= '\0';
@@ -21,9 +22,6 @@ static unichar kWildCardToken			= '*';
 static unichar kOtherWildCardToken		= '?';
 static unichar kRangeSeparatorToken		= '-';
 static unichar kFieldSeparatorToken		= ' ';
-
-static NSArray* kMonthNames				= nil;
-static NSArray* kWeekdayNames			= nil;
 
 
 
@@ -80,15 +78,6 @@ static NSArray* kWeekdayNames			= nil;
 
 
 @implementation APCScheduleExpressionParser
-
-+ (void) initialize
-{
-	kMonthNames = @[@"jan", @"feb", @"mar", @"apr", @"may", @"jun", @"jul", @"aug", @"sep", @"oct", @"nov", @"dec"];
-
-	// Order matters: "Sunday" is either 0 or 7 in cron-speak,
-	// and we normalize all Sundays to 0.
-	kWeekdayNames = @[@"sun", @"mon", @"tue", @"wed", @"thu", @"fri", @"sat"];
-}
 
 - (instancetype) initWithExpression: (NSString*) expression
 {
@@ -227,7 +216,10 @@ static NSArray* kWeekdayNames			= nil;
 
 		if (numCharsToConsume > self.expression.length)
 		{
-			NSAssert (NO, @"Somehow, we seem to have scanned past the end of the string. How was that possible?");
+			NSString *errorMessage = @"-[APCSchedulExpressionParser consumeOneToken] Somehow, we seem to have scanned past the end of the string. How was that possible?";
+
+//			NSAssert (NO, errorMessage);
+			NSLog (@"%@", errorMessage);
 		}
 
 		else
@@ -369,14 +361,14 @@ static NSArray* kWeekdayNames			= nil;
 	 Presumes the string has been advanced to some stuff
 	 immediately preceding a month.
 	 */
-	if (! [self isMonthToken: self.nextToken])
+	if (! self.nextToken.canInterpretAsMonth)
 	{
 		[self consumeOneToken];
 	}
 
-	if ([self isMonthToken: self.nextToken])
+	if (self.nextToken.canInterpretAsMonth)
 	{
-		month = [self monthFromToken: self.nextToken];
+		month = self.nextToken.interpretAsMonth;
 
 		[self consumeOneToken];
 	}
@@ -402,14 +394,14 @@ static NSArray* kWeekdayNames			= nil;
 	 Presumes the string has been advanced to some stuff
 	 immediately preceding a month.
 	 */
-	if (! [self isWeekdayToken: self.nextToken])
+	if (! self.nextToken.canInterpretAsWeekday)
 	{
 		[self consumeOneToken];
 	}
 
-	if ([self isWeekdayToken: self.nextToken])
+	if (self.nextToken.canInterpretAsWeekday)
 	{
-		weekday = [self weekdayFromToken: self.nextToken];
+		weekday = self.nextToken.interpretAsWeekday;
 		[self consumeOneToken];
 	}
 	else
@@ -473,7 +465,7 @@ static NSArray* kWeekdayNames			= nil;
 
 	NSMutableArray* range = [NSMutableArray array];
 
-	if ([self isMonthToken: self.nextToken])
+	if (self.nextToken.canInterpretAsMonth)
 	{
 		[range addObject: [self monthProduction]];
 
@@ -516,7 +508,7 @@ static NSArray* kWeekdayNames			= nil;
 
 	NSMutableArray* range = [NSMutableArray array];
 
-	if ([self isWeekdayToken: self.nextToken])
+	if (self.nextToken.canInterpretAsWeekday)
 	{
 		[range addObject: [self weekdayProduction]];
 
@@ -613,7 +605,7 @@ static NSArray* kWeekdayNames			= nil;
 		[self consumeOneToken];
 		//  By default, selectors are initialized with min-max values corresponding with the selector's unit type, so it's safe to return nil, here.  Just eat the next token.
 	}
-	else if ([self isMonthToken: self.nextToken])
+	else if (self.nextToken.canInterpretAsMonth)
 	{
 		monthRangeSpec = [self monthRangeProduction];
 	}
@@ -640,7 +632,7 @@ static NSArray* kWeekdayNames			= nil;
 		[self consumeOneToken];
 		//  By default, selectors are initialized with min-max values corresponding with the selector's unit type, so it's safe to return nil, here.  Just eat the next token.
 	}
-	else if ([self isWeekdayToken: self.nextToken])
+	else if (self.nextToken.canInterpretAsWeekday)
 	{
 		weekdayRangeSpec = [self weekdayRangeProduction];
 	}
@@ -925,104 +917,6 @@ parseError:
     APCListSelector*    listSelector  = [[APCListSelector alloc] initWithSubSelectors:@[pointSelector]];
     
     return listSelector;
-}
-
-
-
-// ---------------------------------------------------------
-#pragma mark - Utilities:  interpreting stuff as "months," etc.
-// ---------------------------------------------------------
-
-- (BOOL) isMonthToken: (APCScheduleExpressionToken *) token
-{
-	NSInteger month = [self monthFromToken: token];
-	BOOL isMonth = (month != kAPCScheduleExpressionTokenIntegerValueNotSet);
-	return isMonth;
-}
-
-- (NSInteger) monthFromToken: (APCScheduleExpressionToken *) token
-{
-	NSInteger month = kAPCScheduleExpressionTokenIntegerValueNotSet;
-	BOOL isMonth = NO;
-
-	if (token.isNumber)
-	{
-		NSInteger maybeMonth = token.integerValue;
-
-		isMonth = (maybeMonth >= 1 && maybeMonth <= 12);
-
-		if (isMonth)
-		{
-			month = maybeMonth;
-		}
-	}
-
-	else if (token.isWord)
-	{
-		NSString *word = token.stringValue.lowercaseString;
-
-		isMonth = [kMonthNames containsObject: word];
-
-		if (isMonth)
-		{
-			// CAREFUL!  Months are 1-based, not 0-based.
-			month = [kMonthNames indexOfObject: word] + 1;
-		}
-	}
-
-	return month;
-}
-
-- (BOOL) isWeekdayToken: (APCScheduleExpressionToken *) token
-{
-	NSInteger weekday = [self weekdayFromToken: token];
-	BOOL isWeekday = (weekday != kAPCScheduleExpressionTokenIntegerValueNotSet);
-	return isWeekday;
-}
-
-- (NSInteger) weekdayFromToken: (APCScheduleExpressionToken *) token
-{
-	NSInteger weekday = kAPCScheduleExpressionTokenIntegerValueNotSet;
-	BOOL isWeekday = NO;
-
-	if (token.isNumber)
-	{
-		NSInteger maybeWeekday = token.integerValue;
-
-		/*
-		 In cron-speak, "Sunday" is both 0 and 7. 
-		 We'll normalize to 0.
-		 */
-		isWeekday = (maybeWeekday >= 0 && maybeWeekday <= 7);
-
-		if (isWeekday)
-		{
-			weekday = maybeWeekday;
-
-			if (weekday == 7) weekday = 0;
-		}
-	}
-
-	else if (token.isWord)
-	{
-		NSString *word = token.stringValue.lowercaseString;
-
-		isWeekday = [kWeekdayNames containsObject: word];
-
-		if (isWeekday)
-		{
-			/*
-			 Weekday names are set up with these values:
-			 Sunday == 0, Saturday == 6.
-			 
-			 In cron-speak, Sunday can be either 0 or 7.
-			 We normalize to 0.
-			 */
-			weekday = [kWeekdayNames indexOfObject: word];
-		}
-	}
-
-	return weekday;
 }
 
 

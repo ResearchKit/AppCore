@@ -190,6 +190,14 @@ typedef enum : NSUInteger {
  APCScheduleExpressionTokenType, and
  APCScheduleExpressionParser.h for the possible types
  of tokens and how they're used.
+
+ Note that we also have a category on this class:
+ APCScheduleExpressionToken(DatesAndTimes).
+ The reason:  this class, by itself, represents tokens
+ without any sense of meaning.  The category is used much
+ later in the interpretation process, and helps us
+ understand and extract the meaning of the token in a
+ given context.
  */
 @interface APCScheduleExpressionToken : NSObject
 
