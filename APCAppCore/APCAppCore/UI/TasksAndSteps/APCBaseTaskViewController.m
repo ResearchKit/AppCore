@@ -37,6 +37,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    self.showsProgressInNavigationBar = NO;
+    
     if (self.outputDirectory == nil) {
         self.outputDirectory = [NSURL fileURLWithPath:self.taskResultsFilePath];
     }
