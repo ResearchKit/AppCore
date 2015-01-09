@@ -126,7 +126,7 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeLocation;
                 item.caption = NSLocalizedString(@"Location Services", @"");
-                item.detailText = NSLocalizedString(@"Using your GPS will allow the app to accurately determine distances travelled. Your actual location shared will never be shared.", @"");
+                item.detailText = NSLocalizedString(@"Using your GPS will allow the app to accurately determine distances travelled. Your actual location will never be shared.", @"");
                 [items addObject:item];
             }
                 break;
