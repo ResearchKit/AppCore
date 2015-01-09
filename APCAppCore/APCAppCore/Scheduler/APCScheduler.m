@@ -16,7 +16,7 @@ static NSString * const kOneTimeSchedule = @"once";
 @property  (strong, nonatomic)   NSManagedObjectContext  *scheduleMOC;
 @property  (nonatomic) BOOL isUpdating;
 @property  (nonatomic, strong) NSDate * referenceDate;
-@property (nonatomic, copy) void (^completionBlock)(NSError * error);
+
 @end
 
 @implementation APCScheduler
@@ -31,9 +31,8 @@ static NSString * const kOneTimeSchedule = @"once";
     return self;
 }
 
-- (void)updateScheduledTasksIfNotUpdating: (BOOL) today OnCompletion:(void (^)(NSError * error))completionBlock
+- (void)updateScheduledTasksIfNotUpdating: (BOOL) today
 {
-    self.completionBlock = completionBlock;
     if (!self.isUpdating) {
         self.isUpdating = YES;
         self.referenceDate = today ? [NSDate todayAtMidnight] : [NSDate tomorrowAtMidnight];
@@ -43,7 +42,8 @@ static NSString * const kOneTimeSchedule = @"once";
 
 - (void) updateScheduledTasks
 {
-    [self.scheduleMOC performBlock:^{
+    APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Updated Schedule For %@", self.referenceDate]}));
+    [self.scheduleMOC performBlockAndWait:^{
         
         //STEP 1: Update inActive property of schedules based on endOn date.
         [self updateSchedulesAsInactiveIfNecessary];
@@ -58,13 +58,6 @@ static NSString * const kOneTimeSchedule = @"once";
         [self generateScheduledTasksBasedOnActiveSchedules];
         
         self.isUpdating = NO;
-        if (self.completionBlock) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Updated Schedule For %@", self.referenceDate]}));
-                self.completionBlock(nil);
-            });
-        }
-        
     }];
 }
 

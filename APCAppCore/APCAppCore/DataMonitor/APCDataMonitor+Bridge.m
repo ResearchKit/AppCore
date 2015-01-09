@@ -22,21 +22,15 @@ NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
                 BOOL refreshToday = ![[NSUserDefaults standardUserDefaults] boolForKey:kFirstTimeRefreshToday];
                 if (refreshToday) {
                     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kFirstTimeRefreshToday];
-                    [self.scheduler updateScheduledTasksIfNotUpdating:YES OnCompletion:^(NSError * error) {
-                        [self.scheduler updateScheduledTasksIfNotUpdating:NO OnCompletion:^(NSError * error) {
-                            if (completionBlock) {
-                                completionBlock(error);
-                            }
-                        }];
-                    }];
+                    [self.scheduler updateScheduledTasksIfNotUpdating:YES];
+                    [self.scheduler updateScheduledTasksIfNotUpdating:NO];
                 }
                 else
                 {
-                    [self.scheduler updateScheduledTasksIfNotUpdating:NO OnCompletion:^(NSError * error) {
-                        if (completionBlock) {
-                            completionBlock(error);
-                        }
-                    }];
+                     [self.scheduler updateScheduledTasksIfNotUpdating:NO];
+                }
+                if (completionBlock) {
+                    completionBlock(error);
                 }
             }
             else {
