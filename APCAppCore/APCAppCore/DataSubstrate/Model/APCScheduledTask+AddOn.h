@@ -16,7 +16,7 @@
 
 @property (nonatomic, readonly) NSString * completeByDateString;
 
-+ (NSArray*) APCActivityVCScheduledTasks: (BOOL) tomorrow inContext: (NSManagedObjectContext*) context;
++ (NSArray*) APCActivityVCScheduledTasksInContext: (NSManagedObjectContext*) context;
 + (instancetype) scheduledTaskForStartOnDate: (NSDate *) startOn schedule: (APCSchedule*) schedule inContext: (NSManagedObjectContext*) context;
 
 /*********************************************************************************/

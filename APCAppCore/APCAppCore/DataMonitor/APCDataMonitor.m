@@ -53,19 +53,17 @@
 {
     [(APCAppDelegate*)[UIApplication sharedApplication].delegate setUpCollectors];
     [self.dataSubstrate joinStudy];
-    [self.scheduler updateScheduledTasksIfNotUpdating:YES OnCompletion:^(NSError *error) {
-        [self refreshFromBridgeOnCompletion:^(NSError *error) {
-            APCLogError2 (error);
-            [self batchUploadDataToBridgeOnCompletion:NULL];
-        }];
+    [self.scheduler updateScheduledTasksIfNotUpdating:YES];
+    [self refreshFromBridgeOnCompletion:^(NSError *error) {
+        APCLogError2 (error);
+        [self batchUploadDataToBridgeOnCompletion:NULL];
     }];
 }
 
 - (void) updateScheduledTasks
 {
-    [self.scheduler updateScheduledTasksIfNotUpdating:YES OnCompletion:^(NSError *error) {
-        [self.scheduler updateScheduledTasksIfNotUpdating:NO OnCompletion:NULL];
-    }];
+    [self.scheduler updateScheduledTasksIfNotUpdating:YES];
+    [self.scheduler updateScheduledTasksIfNotUpdating:NO];
 }
 
 - (void)dealloc

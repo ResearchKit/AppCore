@@ -17,7 +17,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 
 @interface APCActivitiesViewController ()
 
-@property (nonatomic) BOOL showTomorrow;
 @property (nonatomic) BOOL taskSelectionDisabled;
 
 @property (strong, nonatomic) NSMutableArray *sectionsArray;
@@ -60,19 +59,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     [super viewWillAppear:animated];
     [self reloadData];
   APCLogViewControllerAppeared();
-}
-
-#pragma mark - Misc
-- (void)setShowTomorrow:(BOOL)showTomorrow
-{
-    _showTomorrow = showTomorrow;
-    if (showTomorrow) {
-        self.taskSelectionDisabled = YES;
-    }
-    else
-    {
-        self.taskSelectionDisabled = self.refreshControl.isRefreshing;
-    }
 }
 
 #pragma mark - UITableViewDataSource Methods
@@ -166,9 +152,9 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     [headerView addSubview:headerLabel];
     
     headerLabel.text = self.sectionsArray[section];
-    if (section != 0) {
+    if (section != 0 || ![headerLabel.text isEqualToString:@"Today"] ) {
         headerLabel.text = [headerLabel.text stringByAppendingString:@" - Incomplete Tasks"];
-    } else if (section == 0){
+    } else if (section == 0 && [headerLabel.text isEqualToString:@"Today"]){
         
         NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:[NSDate date]];
         NSInteger day = [components day];
@@ -250,17 +236,14 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
         if (error != nil) {
             UIAlertController * alert = [UIAlertController simpleAlertWithTitle:@"Error" message:error.message];
             [self presentViewController:alert animated:YES completion:nil];
-            [weakSelf.refreshControl endRefreshing];
-            weakSelf.taskSelectionDisabled = NO;
         }
         else
         {
-            [appDelegate.scheduler updateScheduledTasksIfNotUpdating:YES OnCompletion:^(NSError *error) {
-                [weakSelf reloadData];
-                [weakSelf.refreshControl endRefreshing];
-                weakSelf.taskSelectionDisabled = NO;
-            }];
+            [appDelegate.scheduler updateScheduledTasksIfNotUpdating:YES];
+            [weakSelf reloadData];
         }
+        [weakSelf.refreshControl endRefreshing];
+        weakSelf.taskSelectionDisabled = NO;
     }];
 }
 
@@ -344,7 +327,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     [self.scheduledTasksArray removeAllObjects];
     [self.sectionsArray removeAllObjects];
     
-    NSArray *scheduledTasks = [APCScheduledTask APCActivityVCScheduledTasks:self.showTomorrow inContext:((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext];
+    NSArray *scheduledTasks = [APCScheduledTask APCActivityVCScheduledTasksInContext:((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext];
     
     //create sections
     for (APCScheduledTask *scheduledTask in scheduledTasks)
@@ -413,19 +396,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
         }
     }
     return returnArray;
-}
-
-/*********************************************************************************/
-#pragma mark - Misc
-/*********************************************************************************/
-
-- (IBAction)toggle:(UIBarButtonItem*)sender
-{
-    self.showTomorrow = !self.showTomorrow;
-    sender.title = self.showTomorrow ? @"Today" : @"Tomorrow";
-    sender.tintColor = self.showTomorrow ? [UIColor redColor] : nil;
-    [self reloadTableArray];
-    [self.tableView reloadData];
 }
 
 @end

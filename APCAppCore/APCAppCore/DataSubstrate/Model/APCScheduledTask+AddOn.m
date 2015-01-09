@@ -58,13 +58,19 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     return  retValue;
 }
 
-+ (NSArray*) APCActivityVCScheduledTasks: (BOOL) tomorrow inContext: (NSManagedObjectContext*) context
++ (NSArray*) APCActivityVCScheduledTasksInContext: (NSManagedObjectContext*) context
 {
-    NSArray * array1 =  tomorrow ? [self allScheduledTasksForTomorrowInContext:context] : [self allScheduledTasksForTodayInContext:context];
-    NSArray * array2 = [self allIncompleteTasksForPastWeekFrom:tomorrow InContext:context];
+    NSArray * array1 = [self allScheduledTasksForTodayInContext:context];
+    NSArray * array2 = [self allIncompleteTasksForPastWeekFrom:NO InContext:context];
     NSMutableArray * finalArray = [NSMutableArray array];
     if (array1.count) {
         [finalArray addObjectsFromArray:array1];
+    }
+    else
+    {
+        [((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataMonitor.scheduler updateScheduledTasksIfNotUpdating:YES];
+        array1 = [self allScheduledTasksForTodayInContext:context];
+        if (array1.count) [finalArray addObjectsFromArray:array1];
     }
     if (array2.count) {
         [finalArray addObjectsFromArray:array2];
@@ -109,7 +115,7 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     NSDate * endDate = tomorrow ? [NSDate tomorrowAtMidnight] : [NSDate todayAtMidnight];
     //TODO: Support multiday
     request.predicate = [NSPredicate predicateWithFormat:@"(completed == nil || completed == %@) && (endOn > %@ && endOn <= %@)", @(NO), startDate, endDate];
-    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startOn" ascending:YES];
+    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startOn" ascending:NO];
     request.sortDescriptors = @[dateSortDescriptor];
     NSError * error;
     NSArray * array = [context executeFetchRequest:request error:&error];

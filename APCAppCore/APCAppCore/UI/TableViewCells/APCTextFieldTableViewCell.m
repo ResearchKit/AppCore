@@ -30,6 +30,9 @@ NSString * const kAPCTextFieldTableViewCellIdentifier = @"APCTextFieldTableViewC
     if ([self.textField isKindOfClass:[APCFormTextField class]]) {
         ((APCFormTextField *)self.textField).validationDelegate = self;
     }
+    
+    [self.textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
     [self setupAppearance];
 }
 
@@ -99,6 +102,13 @@ NSString * const kAPCTextFieldTableViewCellIdentifier = @"APCTextFieldTableViewC
 {
     if ([self.delegate respondsToSelector:@selector(textFieldTableViewCellDidTapValidationButton:)]) {
         [self.delegate textFieldTableViewCellDidTapValidationButton:self];
+    }
+}
+
+- (void)textFieldDidChange:(UITextField *)textField
+{
+    if ([self.delegate respondsToSelector:@selector(textFieldTableViewCellDidChangeText:)]) {
+        [self.delegate textFieldTableViewCellDidChangeText:self];
     }
 }
 
