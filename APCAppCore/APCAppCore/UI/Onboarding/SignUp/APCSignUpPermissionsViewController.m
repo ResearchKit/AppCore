@@ -88,6 +88,14 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
     
     [self reloadData];
   APCLogViewControllerAppeared();
+
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 #pragma mark - Prepare Content
@@ -172,8 +180,6 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
     
     UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     [self.navigationItem setLeftBarButtonItem:backBarButton];
-    
-    self.navigationItem.rightBarButtonItem.enabled = NO;
 }
 
 - (void) setupProgressBar {
@@ -313,6 +319,13 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
     [[self onboarding] popScene];
 }
 
+#pragma mark - UIApplication notification methods
+
+- (void)appDidBecomeActive:(NSNotification *)notification
+{
+    [self reloadData];
+}
+
 #pragma mark - Permissions
 
 - (void)updatePermissions
@@ -332,21 +345,10 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
     [self updatePermissions];
 
     [self.tableView reloadData];
-    
-#if DEVELOPMENT
-    self.navigationItem.rightBarButtonItem.enabled = YES;
-#else
-    self.navigationItem.rightBarButtonItem.enabled = [self isPermissionsGranted];
-#endif
-}
-
-
-- (BOOL)isPermissionsGranted
-{
-    return (self.permissionsGrantedCount == self.permissions.count);
 }
 
 - (IBAction)next:(id)sender {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self finishOnboarding];
 }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B23" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="h61-jT-BHu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="h61-jT-BHu">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -93,10 +93,21 @@ the link included in the message.</string>
                                     <action selector="secretButton:" destination="h61-jT-BHu" eventType="touchUpInside" id="SP5-lR-psQ"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Remember to check your spam filter if you haven't received it within 30 minutes)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gTc-ni-boB">
+                                <rect key="frame" x="24" y="410" width="273" height="51"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="51" id="HfR-QQ-771"/>
+                                    <constraint firstAttribute="width" constant="273" id="bey-AN-64d"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="3xK-c0-Pah" secondAttribute="trailing" constant="7" id="3eD-Fs-Kle"/>
+                            <constraint firstItem="gTc-ni-boB" firstAttribute="top" secondItem="yX7-Jl-zxX" secondAttribute="bottom" constant="8" id="6bZ-BZ-HfF"/>
                             <constraint firstItem="WLq-Ms-OSK" firstAttribute="leading" secondItem="tTU-aB-ynX" secondAttribute="trailing" constant="-50" id="7Mx-4P-E6Y"/>
                             <constraint firstItem="gY2-y5-fND" firstAttribute="trailing" secondItem="Kj1-kb-LF2" secondAttribute="trailingMargin" id="Du9-o5-KKO"/>
                             <constraint firstItem="yX7-Jl-zxX" firstAttribute="top" secondItem="1aj-Cn-g1q" secondAttribute="bottom" constant="-5" id="F0t-fC-eKP"/>
@@ -104,6 +115,7 @@ the link included in the message.</string>
                             <constraint firstItem="gY2-y5-fND" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" id="SAb-hw-iLw"/>
                             <constraint firstAttribute="centerX" secondItem="yX7-Jl-zxX" secondAttribute="centerX" id="b2a-oT-iil"/>
                             <constraint firstAttribute="centerX" secondItem="tTU-aB-ynX" secondAttribute="centerX" id="bRb-Bv-bqr"/>
+                            <constraint firstAttribute="centerX" secondItem="gTc-ni-boB" secondAttribute="centerX" constant="-0.5" id="cZr-4m-yZb"/>
                             <constraint firstItem="1aj-Cn-g1q" firstAttribute="top" secondItem="3xK-c0-Pah" secondAttribute="bottom" constant="-4" id="cjf-fz-I7l"/>
                             <constraint firstItem="hsa-BE-Hkq" firstAttribute="top" secondItem="tTU-aB-ynX" secondAttribute="bottom" constant="8" id="eHM-Pe-VS7"/>
                             <constraint firstItem="WLq-Ms-OSK" firstAttribute="top" secondItem="tTU-aB-ynX" secondAttribute="bottom" constant="-50" id="g4N-5C-ApW"/>

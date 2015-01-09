@@ -216,16 +216,6 @@ static NSString *const kSignedInKey = @"SignedIn";
     return password;
 }
 
-- (NSString *)sessionToken
-{
-    return [APCKeychainStore stringForKey:kSessionTokenPropertyName];
-}
-
-- (void)setSessionToken:(NSString *)sessionToken
-{
-    [APCKeychainStore setString:sessionToken forKey:kSessionTokenPropertyName];
-}
-
 
 /*********************************************************************************/
 #pragma mark - Setters for Properties in Core Data

@@ -93,8 +93,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         */
+        
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
+        section.sectionTitle = @"Security";
         [items addObject:section];
     }
     
@@ -132,6 +134,29 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }
     */
     
+    
+    {
+        NSMutableArray *rowItems = [NSMutableArray new];
+        
+        {
+            APCTableViewItem *field = [APCTableViewItem new];
+            field.caption = NSLocalizedString(@"Permissions", @"");
+            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.textAlignnment = NSTextAlignmentRight;
+            field.editable = NO;
+            
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = field;
+            row.itemType = kAPCSettingsItemTypePermissions;
+            [rowItems addObject:row];
+        }
+        
+        APCTableViewSection *section = [APCTableViewSection new];
+        section.rows = [NSArray arrayWithArray:rowItems];
+        section.sectionTitle = @"";
+        [items addObject:section];
+    }
+    
     return [NSArray arrayWithArray:items];
 }
 
@@ -146,11 +171,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     headerLabel.textAlignment = NSTextAlignmentCenter;
     [headerView addSubview:headerLabel];
     
-    if (section == 0) {
-        headerLabel.text = @"Security";
-    } else{
-        headerLabel.text = @"General";
-    }
+    APCTableViewSection *sectionItem = self.items[section];
+    headerLabel.text = sectionItem.sectionTitle;
     
     return headerView;
 }
@@ -182,7 +204,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [self.navigationController presentViewController:changePasscodeViewController animated:YES completion:nil];
         }
             break;
-            
+        case kAPCSettingsItemTypePermissions:
+        {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+        }
+            break;
         default:
             [super tableView:tableView didSelectRowAtIndexPath:indexPath];
             break;
