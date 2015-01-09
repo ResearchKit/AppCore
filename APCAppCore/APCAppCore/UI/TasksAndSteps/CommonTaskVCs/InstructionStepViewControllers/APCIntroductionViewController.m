@@ -93,7 +93,7 @@
     paragrapStyle.alignment                = NSTextAlignmentCenter;
 
     NSDictionary  *headlineAttributes = @{
-                                           NSFontAttributeName : [UIFont appRegularFontWithSize: 18.0],
+                                           NSFontAttributeName : [UIFont appRegularFontWithSize: 17.0],
                                            NSForegroundColorAttributeName : [UIColor appSecondaryColor1],
                                            NSParagraphStyleAttributeName:paragrapStyle
                                            };
