@@ -61,7 +61,10 @@
     }
     
     self.nameTextField.validationDelegate = self;
+    [self.nameTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
     self.emailTextField.validationDelegate = self;
+    [self.emailTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -204,13 +207,15 @@
     return YES;
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+- (void)textFieldDidChange:(UITextField *)textField
 {
     [UIView animateWithDuration:0.3 animations:^{
         self.alertLabel.alpha = 0;
     }];
     
-    return [super textField:textField shouldChangeCharactersInRange:range replacementString:string];
+    [self validateFieldForTextField:textField];
+    
+    [self.nextBarButton setEnabled:[self isContentValid:nil]];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
@@ -278,15 +283,19 @@
     [self validateFieldForCell:cell];
 }
 
-- (void)textFieldTableViewCell:(APCTextFieldTableViewCell *)cell shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+- (void)textFieldTableViewCellDidChangeText:(APCTextFieldTableViewCell *)cell
 {
-    [super textFieldTableViewCell:cell shouldChangeCharactersInRange:range replacementString:string];
+    [super textFieldTableViewCellDidChangeText:cell];
     
     self.nextBarButton.enabled = [self isContentValid:nil];
     
     [UIView animateWithDuration:0.3 animations:^{
         self.alertLabel.alpha = 0;
     }];
+    
+    [self validateFieldForCell:cell];
+    
+    [self.nextBarButton setEnabled:[self isContentValid:nil]];
 }
 
 - (void)textFieldTableViewCellDidReturn:(APCTextFieldTableViewCell *)cell
