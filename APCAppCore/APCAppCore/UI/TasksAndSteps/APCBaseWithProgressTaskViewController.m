@@ -21,6 +21,7 @@ static NSString *const kFinishedProperty = @"finished";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.showsProgressInNavigationBar = NO;
     
     CGRect  navigationBarFrame = self.navigationBar.frame;
     CGRect  progressorFrame = CGRectMake(0.0, CGRectGetHeight(navigationBarFrame) - kAPCStepProgressBarHeight, CGRectGetWidth(navigationBarFrame), kAPCStepProgressBarHeight);
@@ -45,7 +46,6 @@ static NSString *const kFinishedProperty = @"finished";
     [self.navigationBar addSubview:tempProgressor];
     self.progressor = tempProgressor;
     
-    self.showsProgressInNavigationBar = NO;
     self.navigationBar.topItem.title = NSLocalizedString(self.taskName, nil);
 }
 
