@@ -43,8 +43,10 @@
         self.passcodeView.alpha = 0;
         self.titleLabel.alpha = 0;
         self.touchIdButton.alpha = 0;
+        self.titleLabel.text = NSLocalizedString(@"Touch ID or Enter Passcode", nil);
     } else {
         self.touchIdButton.hidden = YES;
+        self.titleLabel.text = NSLocalizedString(@"Enter Passcode", nil);
     }
 }
 
