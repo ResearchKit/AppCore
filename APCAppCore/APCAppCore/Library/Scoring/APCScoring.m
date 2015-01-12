@@ -10,23 +10,36 @@
 
 static NSDateFormatter *dateFormatter = nil;
 
-static NSString *const kDatasetDateKey  = @"datasetDateKey";
-static NSString *const kDatasetValueKey = @"datasetValueKey";
-static NSString *const kDatasetSortKey = @"datasetSortKey";
-static NSString *const kDatasetValueKindKey = @"datasetValueKindKey";
+static NSString *const kDatasetDateKey        = @"datasetDateKey";
+static NSString *const kDatasetValueKey       = @"datasetValueKey";
+static NSString *const kDatasetSortKey        = @"datasetSortKey";
+static NSString *const kDatasetValueKindKey   = @"datasetValueKindKey";
 static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
+static NSString *const kDatasetGroupByDay     = @"datasetGroupByDay";
+static NSString *const kDatasetGroupByWeek    = @"datasetGroupByWeek";
+static NSString *const kDatasetGroupByMonth   = @"datasetGroupByMonth";
+static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 @interface APCScoring()
 
 @property (nonatomic, strong) HKHealthStore *healthStore;
 @property (nonatomic, strong) NSMutableArray *dataPoints;
+@property (nonatomic, strong) NSMutableArray *updatedDataPoints;
 @property (nonatomic, strong) NSMutableArray *correlateDataPoints;
 @property (nonatomic, strong) NSArray *timeline;
 
 @property (nonatomic) NSUInteger current;
 @property (nonatomic) NSUInteger correlatedCurrent;
 @property (nonatomic) BOOL hasCorrelateDataPoints;
+@property (nonatomic) BOOL usesHealthKitData;
 
+@property (nonatomic, strong) NSString *taskId;
+@property (nonatomic, strong) NSString *valueKey;
+@property (nonatomic, strong) NSString *dataKey;
+@property (nonatomic, strong) NSString *sortKey;
+
+@property (nonatomic, strong) HKQuantityType *quantityType;
+@property (nonatomic, strong) HKUnit *hkUnit;
 
 @end
 
@@ -56,15 +69,25 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
 - (void)sharedInit:(NSInteger)days
 {
     _dataPoints = [NSMutableArray array];
+    _updatedDataPoints = [NSMutableArray array];
     _correlateDataPoints = [NSMutableArray array];
-    _hasCorrelateDataPoints = NO; //(correlateKind != APHDataKindNone);
+    _hasCorrelateDataPoints = NO;
+    _usesHealthKitData = YES;
+    
+    _quantityType = nil;
+    _hkUnit = nil;
+    
+    _taskId = nil;
+    _valueKey = nil;
+    _dataKey = nil;
+    _sortKey = nil;
     
     if (!dateFormatter) {
         dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
     }
     
-    _timeline = [self configureTimelineForDays:days];
+    _timeline = [self configureTimelineForDays:days groupBy:APHTimelineGroupDay]; //[self configureTimelineForDays:days];
     
     [self generateEmptyDataset];
 }
@@ -88,14 +111,14 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
 
 - (instancetype)initWithTask:(NSString *)taskId numberOfDays:(NSInteger)numberOfDays valueKey:(NSString *)valueKey
 {
-    self = [self initWithTask:taskId numberOfDays:numberOfDays valueKey:valueKey dataKey:nil sortKey:nil groupByDay:NO];
+    self = [self initWithTask:taskId numberOfDays:numberOfDays valueKey:valueKey dataKey:nil sortKey:nil groupBy:APHTimelineGroupDay];
     
     return self;
 }
 
 - (instancetype)initWithTask:(NSString *)taskId numberOfDays:(NSInteger)numberOfDays valueKey:(NSString *)valueKey dataKey:(NSString *)dataKey
 {
-    self = [self initWithTask:taskId numberOfDays:numberOfDays valueKey:valueKey dataKey:dataKey sortKey:nil groupByDay:NO];
+    self = [self initWithTask:taskId numberOfDays:numberOfDays valueKey:valueKey dataKey:dataKey sortKey:nil groupBy:APHTimelineGroupDay];
     
     return self;
 }
@@ -106,13 +129,12 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                      dataKey:(NSString *)dataKey
                      sortKey:(NSString *)sortKey
 {
-    self = [super init];
-    
-    if (self) {
-        NSInteger days = numberOfDays + 1;
-        [self sharedInit:days];
-        [self queryTaskId:taskId forDays:days valueKey:valueKey dataKey:dataKey sortKey:sortKey groupByDay:NO];
-    }
+    self = [self initWithTask:taskId
+                 numberOfDays:numberOfDays
+                     valueKey:valueKey
+                      dataKey:dataKey
+                      sortKey:sortKey
+                   groupBy:APHTimelineGroupDay];
     
     return self;
 }
@@ -122,14 +144,22 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                     valueKey:(NSString *)valueKey
                      dataKey:(NSString *)dataKey
                      sortKey:(NSString *)sortKey
-                  groupByDay:(BOOL)groupByDay
+                  groupBy:(APHTimelineGroups)groupBy
 {
     self = [super init];
     
     if (self) {
         NSInteger days = numberOfDays + 1;
         [self sharedInit:days];
-        [self queryTaskId:taskId forDays:days valueKey:valueKey dataKey:dataKey sortKey:sortKey groupByDay:groupByDay];
+        
+        _usesHealthKitData = NO;
+        
+        _taskId = taskId;
+        _valueKey = valueKey;
+        _dataKey = dataKey;
+        _sortKey = sortKey;
+        
+        [self queryTaskId:taskId forDays:days valueKey:valueKey dataKey:dataKey sortKey:sortKey groupBy:groupBy];
     }
     
     return self;
@@ -150,6 +180,18 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                                          unit:(HKUnit *)unit
                                  numberOfDays:(NSInteger)numberOfDays
 {
+    self = [self initWithHealthKitQuantityType:quantityType
+                                          unit:unit
+                                  numberOfDays:numberOfDays
+                                       groupBy:APHTimelineGroupDay];
+    return self;
+}
+
+- (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
+                                         unit:(HKUnit *)unit
+                                 numberOfDays:(NSInteger)numberOfDays
+                                      groupBy:(APHTimelineGroups)groupBy
+{
     self = [super init];
     
     if (self) {
@@ -159,6 +201,8 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         // The very first thing that we need to make sure is that
         // the unit and quantity types are compatible
         if ([quantityType isCompatibleWithUnit:unit]) {
+            _quantityType = quantityType;
+            _hkUnit = unit;
             [self statsCollectionQueryForQuantityType:quantityType unit:unit forDays:days];
         } else {
             NSAssert([quantityType isCompatibleWithUnit:unit], @"The quantity and the unit must be compatible");
@@ -166,6 +210,35 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     }
     
     return self;
+}
+
+- (void)updatePeriodForDays:(NSInteger)numberOfDays
+                    groupBy:(APHTimelineGroups)groupBy
+      withCompletionHandler:(void (^)(void))completion
+{
+    NSInteger days = numberOfDays + 1;
+    
+    if (self.usesHealthKitData) {
+        if ([self.quantityType isCompatibleWithUnit:self.hkUnit]) {
+            
+            [self updateStatsCollectionForQuantityType:self.quantityType
+                                                  unit:self.hkUnit
+                                               forDays:days
+                                               groupBy:groupBy
+                                            completion:completion];
+        } else {
+            NSAssert([self.quantityType isCompatibleWithUnit:self.hkUnit], @"The quantity and the unit must be compatible");
+        }
+    } else {
+        self.timeline = [self configureTimelineForDays:numberOfDays groupBy:groupBy];
+        
+        [self queryTaskId:self.taskId
+                    forDays:days
+                 valueKey:self.valueKey
+                  dataKey:self.dataKey
+                  sortKey:self.sortKey
+                  groupBy:groupBy];
+    }
 }
 
 #pragma mark - Helpers
@@ -182,6 +255,35 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     return timeline;
 }
 
+- (NSArray *)configureTimelineForDays:(NSInteger)days groupBy:(NSUInteger)groupBy
+{
+    NSMutableArray *timeline = [NSMutableArray array];
+    
+    if (groupBy == APHTimelineGroupDay) {
+        for (NSInteger day = days; day <= 0; day++) {
+            NSDate *timelineDate = [self dateForSpan:day];
+            [timeline addObject:timelineDate];
+        }
+    } else if (groupBy == APHTimelineGroupWeek) {
+        for (NSInteger day = days; day <= 0; day += 7) {
+            NSDate *timelineDate = [self dateForSpan:day];
+            [timeline addObject:timelineDate];
+        }
+    } else if (groupBy == APHTimelineGroupMonth) {
+        for (NSInteger day = days; day <= 0; day += 30) {
+            NSDate *timelineDate = [self dateForSpan:day];
+            [timeline addObject:timelineDate];
+        }
+    } else {
+        for (NSInteger day = days; day <= 0; day += 365) {
+            NSDate *timelineDate = [self dateForSpan:day];
+            [timeline addObject:timelineDate];
+        }
+    }
+    
+    return timeline;
+}
+
 - (void)generateEmptyDataset
 {
     for (NSDate *day in self.timeline) {
@@ -190,12 +292,30 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                                                                        second:0
                                                                        ofDate:day
                                                                       options:0];
-        [self.dataPoints addObject:@{
-                                     kDatasetDateKey: timelineDay,
-                                     kDatasetValueKey: @(NSNotFound),
-                                     kDatasetValueNoDataKey: @(YES)
-                                     }];
+        
+        [self.dataPoints addObject:[self generateDataPointForDate:timelineDay
+                                                        withValue:@(NSNotFound)
+                                                      noDataValue:YES]];
     }
+}
+
+- (NSDictionary *)generateDataPointForDate:(NSDate *)pointDate
+                                 withValue:(NSNumber *)pointValue
+                               noDataValue:(BOOL)noDataValue
+{
+    NSInteger weekNumber  = [[[NSCalendar currentCalendar] components:NSCalendarUnitWeekOfYear fromDate:pointDate] weekOfYear];
+    NSInteger monthNumber = [[[NSCalendar currentCalendar] components:NSCalendarUnitMonth fromDate:pointDate] month];
+    NSInteger yearNumber  = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:pointDate] year];
+    
+    return @{
+             kDatasetDateKey: pointDate,
+             kDatasetValueKey: pointValue,
+             kDatasetValueNoDataKey: @(noDataValue),
+             kDatasetGroupByDay: pointDate,
+             kDatasetGroupByWeek: @(weekNumber),
+             kDatasetGroupByMonth: @(monthNumber),
+             kDatasetGroupByYear: @(yearNumber)
+             };
 }
 
 - (void)addDataPointToTimeline:(NSDictionary *)dataPoint
@@ -209,7 +329,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", kDatasetDateKey, pointDate];
         NSArray *matches = [self.dataPoints filteredArrayUsingPredicate:predicate];
         
-        if (matches) {
+        if ([matches count] > 0) {
             NSUInteger pointIndex = [self.dataPoints indexOfObject:[matches firstObject]];
             NSMutableDictionary *point = [[self.dataPoints objectAtIndex:pointIndex] mutableCopy];
             
@@ -229,7 +349,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
            valueKey:(NSString *)valueKey
             dataKey:(NSString *)dataKey
             sortKey:(NSString *)sortKey
-         groupByDay:(BOOL)groupByDay
+         groupBy:(APHTimelineGroups)groupBy
 {
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -280,22 +400,22 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
                 }
                 
                 if (!dataKey) {
-                    [self.dataPoints addObject:@{
-                                                 kDatasetDateKey: pointDate,
-                                                 kDatasetValueKey: taskValue,
-                                                 kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
-                                                 kDatasetValueNoDataKey: @(YES)
-                                                 }];
+                    NSMutableDictionary *dataPoint = [[self generateDataPointForDate:pointDate
+                                                                           withValue:taskValue
+                                                                         noDataValue:YES] mutableCopy];
+                    dataPoint[kDatasetSortKey] = (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null];
+                    
+                    [self.dataPoints addObject:dataPoint];
                 } else {
                     NSDictionary *nestedData = [taskResult valueForKey:dataKey];
                     
                     if (nestedData) {
-                        [self.dataPoints addObject:@{
-                                                     kDatasetDateKey: pointDate,
-                                                     kDatasetValueKey: taskValue,
-                                                     kDatasetSortKey: (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null],
-                                                     kDatasetValueNoDataKey: @(YES)
-                                                     }];
+                        NSMutableDictionary *dataPoint = [[self generateDataPointForDate:pointDate
+                                                                               withValue:taskValue
+                                                                             noDataValue:YES] mutableCopy];
+                        dataPoint[kDatasetSortKey] = (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null];
+                        
+                        [self.dataPoints addObject:dataPoint];
                     }
                 }
             }
@@ -310,7 +430,7 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
             self.dataPoints = [sortedDataPoints mutableCopy];
         }
         
-        if (groupByDay) {
+        if (groupBy == APHTimelineGroupDay) {
             [self groupDatasetByDay];
         }
     }
@@ -468,6 +588,106 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
     [self.healthStore executeQuery:query];
 }
 
+- (void)updateStatsCollectionForQuantityType:(HKQuantityType *)quantityType
+                                        unit:(HKUnit *)unit
+                                     forDays:(NSInteger)days
+                                     groupBy:(APHTimelineGroups)groupBy
+                                  completion:(void (^)(void))completion
+{
+    [self.updatedDataPoints removeAllObjects];
+    
+    NSDateComponents *interval = [[NSDateComponents alloc] init];
+    
+    // 5D, 1W, 1M, 3M, 6M, 1Y
+    if (groupBy == APHTimelineGroupDay) {
+        interval.day = 1;
+    } else if (groupBy == APHTimelineGroupWeek) {
+        interval.day = 7;
+    } else if (groupBy == APHTimelineGroupMonth) {
+        interval.month = 1;
+    } else {
+        interval.year = 1;
+    }
+    
+    NSDate *startDate = [[NSCalendar currentCalendar] dateBySettingHour:0
+                                                                 minute:0
+                                                                 second:0
+                                                                 ofDate:[self dateForSpan:days]
+                                                                options:0];
+    
+    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:[NSDate date] options:HKQueryOptionStrictEndDate];
+    
+    BOOL isDecreteQuantity = ([quantityType aggregationStyle] == HKQuantityAggregationStyleDiscrete);
+    
+    HKStatisticsOptions queryOptions;
+    
+    if (isDecreteQuantity) {
+        queryOptions = HKStatisticsOptionDiscreteAverage;
+    } else {
+        queryOptions = HKStatisticsOptionCumulativeSum;
+    }
+    
+    HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:quantityType
+                                                                           quantitySamplePredicate:predicate
+                                                                                           options:queryOptions
+                                                                                        anchorDate:startDate
+                                                                                intervalComponents:interval];
+    
+    // set the results handler
+    query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
+        if (!error) {
+            NSDate *endDate = [[NSCalendar currentCalendar] dateBySettingHour:23
+                                                                       minute:59
+                                                                       second:59
+                                                                       ofDate:[NSDate date]
+                                                                      options:0];
+            NSDate *beginDate = startDate;
+            
+            [results enumerateStatisticsFromDate:beginDate
+                                          toDate:endDate
+                                       withBlock:^(HKStatistics *result, BOOL *stop) {
+                                           HKQuantity *quantity;
+                                           
+                                           if (isDecreteQuantity) {
+                                               quantity = result.averageQuantity;
+                                           } else {
+                                               quantity = result.sumQuantity;
+                                           }
+                                           
+                                           NSDate *date = result.startDate;
+                                           double value = [quantity doubleValueForUnit:unit];
+                                           
+                                           NSDictionary *dataPoint = @{
+                                                                       kDatasetDateKey: date,
+                                                                       kDatasetValueKey: (!quantity) ? @(NSNotFound) : @(value),
+                                                                       kDatasetValueNoDataKey: (isDecreteQuantity) ? @(YES) : @(NO)
+                                                                       };
+                                           
+                                           //[self addDataPointToTimeline:dataPoint];
+                                           [self.updatedDataPoints addObject:dataPoint];
+                                       }];
+            
+            [self.dataPoints removeAllObjects];
+            
+            // Redo the timeline
+            NSMutableArray *updatedTimeline = [NSMutableArray new];
+            
+            for (NSDictionary *point in self.updatedDataPoints) {
+                [updatedTimeline addObject:[point valueForKey:kDatasetDateKey]];
+            }
+            
+            self.timeline = updatedTimeline;
+            [self.dataPoints addObjectsFromArray:self.updatedDataPoints];
+            
+            if (completion) {
+                completion();
+            }
+        }
+    };
+    
+    [self.healthStore executeQuery:query];
+}
+
 - (void)dataIsAvailableFromHealthKit
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -603,7 +823,9 @@ static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
 
 - (NSString *)lineGraph:(APCLineGraphView *)graphView titleForXAxisAtIndex:(NSInteger)pointIndex
 {
-    NSDate *titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
+    NSDate *titleDate = nil;
+    
+    titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
 
     [dateFormatter setDateFormat:@"MMM d"];
     

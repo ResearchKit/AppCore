@@ -10,6 +10,7 @@
 #import <UIKit/UITableViewCell.h>
 #import "APCUserInfoConstants.h"
 #import "APCConstants.h"
+#import "APCScoring.h"
 
 @interface APCTableViewItem : NSObject
 
@@ -145,7 +146,7 @@
 
 @interface APCTableViewDashboardGraphItem : APCTableViewDashboardItem
 
-@property (nonatomic) id graphData; //TODO: Set class later
+@property (nonatomic) APCScoring *graphData;
 
 @property (nonatomic) APCDashboardGraphType graphType;
 

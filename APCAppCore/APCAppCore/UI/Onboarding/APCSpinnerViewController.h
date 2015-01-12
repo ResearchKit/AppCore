@@ -13,4 +13,6 @@
 
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicatorView;
 
+@property (nonatomic) BOOL landscape;
+
 @end
