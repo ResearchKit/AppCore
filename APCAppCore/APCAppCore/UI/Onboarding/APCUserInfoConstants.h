@@ -37,7 +37,8 @@ typedef NS_ENUM(APCTableViewItemType, APCTableViewStudyItemType) {
 
 typedef NS_ENUM(APCTableViewItemType, APCTableViewLearnItemType) {
     kAPCTableViewLearnItemTypeStudyDetails,
-    kAPCTableViewLearnItemTypeOtherDetails
+    kAPCTableViewLearnItemTypeOtherDetails,
+    kAPCTableViewLearnItemTypeReviewConsent
 };
 
 typedef NS_ENUM(NSUInteger, APCAppState) {
