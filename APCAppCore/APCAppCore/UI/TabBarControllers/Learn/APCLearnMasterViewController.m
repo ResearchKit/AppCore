@@ -113,6 +113,12 @@ static CGFloat kSectionHeaderHeight = 40.f;
             [self.navigationController pushViewController:detailViewController animated:YES];
         }
             break;
+        case kAPCTableViewLearnItemTypeReviewConsent:
+        {
+            [self showConsent];
+        }
+            break;
+            
         case kAPCTableViewLearnItemTypeOtherDetails:
         {
             APCStudyDetailsViewController *detailViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"StudyDetailsVC"];
@@ -139,6 +145,35 @@ static CGFloat kSectionHeaderHeight = 40.f;
     }
     
     return height;
+}
+
+#pragma mark - Consent
+
+- (void)showConsent
+{
+    RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    
+    consentVC.taskDelegate = self;
+    [self presentViewController:consentVC animated:YES completion:nil];
+    
+}
+
+#pragma mark - TaskViewController Delegate methods
+
+- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
+{
+    [taskViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
+{
+    //TODO: Figure out what to do if it fails
+    [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Public methods
@@ -181,7 +216,9 @@ static CGFloat kSectionHeaderHeight = 40.f;
                 rowItem.item = studyDetails;
                 if ([studyDetails.detailText isEqualToString:@"study_details"]) {
                     rowItem.itemType = kAPCTableViewLearnItemTypeStudyDetails;
-                } else {
+                } else if ([studyDetails.detailText isEqualToString:@"consent"]){
+                    rowItem.itemType = kAPCTableViewLearnItemTypeReviewConsent;
+                }else {
                     rowItem.itemType = kAPCTableViewLearnItemTypeOtherDetails;
                 }
                 [rowItems addObject:rowItem];
