@@ -84,9 +84,9 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     
     //TODO: Support multiday
     request.predicate = [NSPredicate predicateWithFormat:@"startOn >= %@ && endOn < %@", [NSDate todayAtMidnight], [NSDate tomorrowAtMidnight]];
-    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startOn" ascending:YES];
-    NSSortDescriptor * uidDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES];
-    request.sortDescriptors = @[dateSortDescriptor, uidDescriptor];
+    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"task.taskTitle" ascending:YES];
+    NSSortDescriptor * uidDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"completed" ascending:YES];
+    request.sortDescriptors = @[uidDescriptor, dateSortDescriptor];
     NSError * error;
     NSArray * array = [context executeFetchRequest:request error:&error];
     APCLogError2 (error);
