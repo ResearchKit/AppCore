@@ -44,11 +44,17 @@
 
 - (NSString *) description
 {
-	return [NSString stringWithFormat: @"Token { string: %@, integer: %d, isError: %@ }",
+	return [NSString stringWithFormat: @"Token { string: [%@], integer: %d, isNumber: %@, isError: %@ }",
 			self.stringValue,
 			(int) self.integerValue,
+			self.isNumber ? @"YES" : @"NO",
 			self.didEncounterError ? @"YES" : @"NO"
 			];
+}
+
+- (NSString *)debugDescription
+{
+	return self.description;
 }
 
 @end

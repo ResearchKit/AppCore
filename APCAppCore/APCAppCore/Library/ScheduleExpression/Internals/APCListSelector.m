@@ -103,6 +103,10 @@
 
 	return iHaveNoKids || allMyKidsAreWildcards;
 }
+- (NSString *) description
+{
+	return [NSString stringWithFormat: @"ListSelector { %@ }", self.subSelectors];
+}
 
 @end
 

@@ -13,16 +13,6 @@
 #import "APCScheduleExpressionTokenizer.h"
 
 
-static unichar kEndToken				= '\0';
-static unichar kListSeparatorToken		= ',';
-static unichar kStepSeparatorToken		= '/';
-static unichar kPositionSeparatorToken	= '#';
-static unichar kWildCardToken			= '*';
-static unichar kOtherWildCardToken		= '?';
-static unichar kRangeSeparatorToken		= '-';
-static unichar kFieldSeparatorToken		= ' ';
-
-
 
 // ---------------------------------------------------------
 #pragma mark - VarArgs macro
@@ -69,8 +59,9 @@ static unichar kFieldSeparatorToken		= ' ';
 // ---------------------------------------------------------
 
 @interface APCScheduleExpressionParser ()
-@property (nonatomic, strong) NSMutableString*  expression;
-@property (nonatomic, assign) BOOL              errorEncountered;
+@property (nonatomic, strong) NSMutableString* expression;
+@property (nonatomic, strong) NSString* originalExpression;
+@property (nonatomic, assign) BOOL errorEncountered;
 @property (nonatomic, strong) APCScheduleExpressionToken *nextToken;
 @property (nonatomic, strong) APCScheduleExpressionTokenizer *tokenizer;
 @end
@@ -85,6 +76,7 @@ static unichar kFieldSeparatorToken		= ' ';
     if (self)
     {
         _expression			= [expression mutableCopy];
+		_originalExpression = expression;
         _errorEncountered	= NO;
 		_nextToken			= nil;
 		_tokenizer			= [APCScheduleExpressionTokenizer new];
@@ -101,24 +93,7 @@ static unichar kFieldSeparatorToken		= ' ';
 
 - (BOOL)isValidParse
 {
-    return self.next == kEndToken && self.errorEncountered == NO;
-}
-
-//	/**
-//	 Writing this method for completeness -- to be compatible
-//	 with the character-based scanner -- but I don't yet need it.
-//	 */
-//	- (BOOL)isValidParse_withTokens
-//	{
-//		return self.nextToken == nil && self.errorEncountered == NO;
-//	}
-
-- (unichar)next
-{
-    //  Returns the _next_ token or '\0' if no tokens remain. The input stream is not modified.
-    unichar nextToken = self.expression.length > 0 ? [self.expression characterAtIndex:0] : 0;
-    
-    return nextToken;
+    return self.nextToken == nil && self.errorEncountered == NO;
 }
 
 /**
@@ -156,14 +131,6 @@ static unichar kFieldSeparatorToken		= ' ';
 	return token;
 }
 
-- (void)consumeOneChar
-{
-    if (self.expression.length > 0)
-    {
-        [self.expression deleteCharactersInRange:NSMakeRange(0, 1)];
-    }
-}
-
 - (void) consumeOneToken
 {
 	if (self.expression.length > 0 && self.nextToken.countOfScannedCharacters > 0)
@@ -199,19 +166,8 @@ static unichar kFieldSeparatorToken		= ' ';
     self.errorEncountered = YES;
 }
 
-- (void)fieldSeparatorProduction
+- (void) fieldSeparatorProduction
 {
-    while (self.next == kFieldSeparatorToken)
-    {
-        [self consumeOneChar];
-    }
-}
-
-- (void) fieldSeparatorProduction_usingTokens
-{
-	// no need for a while() loop; the scanner already got
-	// all tokens considered part of the field separator,
-	// i.e., all whitespace
 	if (self.nextToken.isFieldSeparator)
 	{
 		[self consumeOneToken];
@@ -239,25 +195,13 @@ static unichar kFieldSeparatorToken		= ' ';
 
 - (NSNumber*)numberProduction
 {
-    NSNumber*       number  = nil;
-    NSScanner*      scanner = [NSScanner scannerWithString:self.expression];
-    NSCharacterSet* digits  = [NSCharacterSet decimalDigitCharacterSet];
-    
-    if ([scanner scanUpToCharactersFromSet:digits intoString:NULL] == NO)   //  Check for non-digit characters at head of string
-    {
-        NSString*   numberString;
-        BOOL        foundNumber = [scanner scanCharactersFromSet:digits intoString:&numberString];
-        
-        if (foundNumber == YES)
-        {
-            number = [NSNumber numberWithInteger:[numberString integerValue]];
-            [self.expression deleteCharactersInRange:NSMakeRange(0, scanner.scanLocation)];
-        }
-        else
-        {
-            [self recordError];
-        }
-    }
+    NSNumber* number = nil;
+
+	if (self.nextToken.isNumber)
+	{
+		number = @(self.nextToken.integerValue);
+		[self consumeOneToken];
+	}
     else
     {
         //  Found unexpected non-numeric characters
@@ -277,34 +221,21 @@ static unichar kFieldSeparatorToken		= ' ';
 
     NSMutableArray* range = [NSMutableArray array];
 
-	// Make sure we don't have any cached tokens from an earlier run.
-	// (Doing so would be a programming error, but I'm still phasing
-	// this in...)
-	[self forgetToken];
-
-	/*
-	 The tokenization process currently converts words
-	 to numbers, because that's actually sufficient for
-	 our needs.  Is that legal, in tokenization theory?
-	 */
-	[self nextToken];
-
 	if (self.nextToken.isNumber)
     {
 		NSInteger rangeStart = self.nextToken.integerValue;
 		[range addObject: @(rangeStart)];
 		[self consumeOneToken];
 
-        if (self.next == kRangeSeparatorToken)
+        if (self.nextToken.isRangeSeparator)
         {
-            [self consumeOneChar];
-
-			[self nextToken];
+            [self consumeOneToken];
 
 			if (self.nextToken.isNumber)
 			{
 				NSInteger rangeEnd = self.nextToken.integerValue;
 				[range addObject: @(rangeEnd)];
+
 				[self consumeOneToken];
 			}
 			else
@@ -357,10 +288,15 @@ static unichar kFieldSeparatorToken		= ' ';
 
     NSArray* rangeSpec = nil;
 
-    if (self.next == kWildCardToken || self.next == kOtherWildCardToken)
+    if (self.nextToken.isWildcard)
     {
-        [self consumeOneChar];
-        //  By default, selectors are initialized with min-max values corresponding with the selector's unit type, so it's safe to return nil, here.  Just eat the next token.
+		/*
+		 By default, selectors are initialized with min-max
+		 values corresponding to the selector's unit type,
+		 so it's safe to return nil, here.  Just eat the
+		 next token.
+		 */
+        [self consumeOneToken];
     }
 
 	else
@@ -384,13 +320,13 @@ static unichar kFieldSeparatorToken		= ' ';
 	APCPointSelector *selector = nil;
 	NSArray *rangeSpec = [self rangeSpecProduction];
 
-	if (self.next == kPositionSeparatorToken)
+	if (self.nextToken.isPositionSeparator)
 	{
-		NSNumber *dayOfWeekToFind = rangeSpec [0];
+		[self consumeOneToken];
 
-		[self consumeOneChar];
 		NSNumber *position = [self positionProduction];
 
+		NSNumber *dayOfWeekToFind = rangeSpec [0];
 		selector = [[APCPointSelector alloc] initWithValue: dayOfWeekToFind
 												  position: position];
 	}
@@ -401,9 +337,10 @@ static unichar kFieldSeparatorToken		= ' ';
 		NSNumber *end	= rangeSpec.count > 1 ? rangeSpec[1] : nil;
 		NSNumber *step	= nil;
 
-		if (self.next == kStepSeparatorToken)
+		if (self.nextToken.isStepSeparator)
 		{
-			[self consumeOneChar];
+			[self consumeOneToken];
+
 			step = [self stepsProduction];
 		}
 
@@ -430,8 +367,8 @@ static unichar kFieldSeparatorToken		= ' ';
 
     NSMutableArray*  subSelectors = [NSMutableArray array];
     APCListSelector* listSelector = nil;
-    
-    while (self.next != kEndToken && self.next != kFieldSeparatorToken)
+
+	while (self.nextToken != nil && ! self.nextToken.isFieldSeparator)
     {
         APCPointSelector* pointSelector = [self expressionProduction];
         
@@ -443,14 +380,14 @@ static unichar kFieldSeparatorToken		= ' ';
         {
             [subSelectors addObject:pointSelector];
             
-            if (self.next == kListSeparatorToken)
+            if (self.nextToken.isListSeparator)
             {
-                [self consumeOneChar];
+                [self consumeOneToken];
             }
-            else if (self.next != kEndToken && self.next != kFieldSeparatorToken)
-            {
-                [self recordError];
-            }
+//			else if (self.nextToken != nil && ! self.nextToken.isFieldSeparator)
+//			{
+//				[self recordError];
+//			}
 			else
 			{
 				// End of the string, or end of the list of <unitType>.
@@ -514,7 +451,9 @@ parseError:
 	id expression = _expression;
 
 	stuff [@"nextToken"] = nextToken;
+	stuff [@"nextToken.description"] = [nextToken description];
 	stuff [@"expression"] = expression;
+	stuff [@"originalExpression"] = self.originalExpression;
 
 	return stuff;
 }
@@ -536,7 +475,7 @@ parseError:
 	NSMutableArray* incomingSelectors = [NSMutableArray new];
 	APCListSelector* thisSelector = nil;
 
-	[self fieldSeparatorProduction_usingTokens];
+	[self fieldSeparatorProduction];
 
 	// Slurp in all selectors.  We'll assume they're in
 	// the right order.  We'll set type-specific time/date
@@ -545,10 +484,6 @@ parseError:
 	while (self.nextToken)
 	{
 		thisSelector = [self listProduction];
-
-		// THIS SHOULD GO IN THE PRODUCTIONS, but some of the
-		// productions are still character-based.
-		[self consumeOneToken];
 
 		if (self.errorEncountered)
 		{
@@ -560,7 +495,7 @@ parseError:
 		{
 			[incomingSelectors addObject: thisSelector];
 
-			[self fieldSeparatorProduction_usingTokens];
+			[self fieldSeparatorProduction];
 		}
 	}
 
@@ -608,3 +543,15 @@ parseError:
 }
 
 @end
+
+
+
+
+
+
+
+
+
+
+
+

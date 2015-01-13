@@ -52,11 +52,15 @@
 		_end = nil;
 		_position = position;
 
-		if (_begin.integerValue < _defaultBegin.integerValue)
-		{
-			//  TODO: Invalid values
-			self = nil;
-		}
+		/*
+		 Note:  Previously, we had a sanity check here:  if
+		 begin was < defaultBegin, or end was > defaultEnd,
+		 assume something went wrong.  Now, though, the
+		 defaults won't get set until we set this object's
+		 type, and because of how the parser logic works,
+		 this happens later.  So we'll do that sanity check
+		 when we set the type.
+		 */
 	}
 
 	return self;
@@ -109,12 +113,16 @@
 			NSLog(@"Invalid selector");
 			self = nil;
 		}
-		
-		if (self != nil && (_begin.integerValue < _defaultBegin.integerValue || _end.integerValue > _defaultEnd.integerValue))
-		{
-			//  TODO: Invalid values
-			self = nil;
-		}
+
+		/*
+		 Note:  Previously, we had a sanity check here:  if 
+		 begin was < defaultBegin, or end was > defaultEnd,
+		 assume something went wrong.  Now, though, the
+		 defaults won't get set until we set this object's
+		 type, and because of how the parser logic works,
+		 this happens later.  So we'll do that sanity check
+		 when we set the type.
+		 */
 	}
 
     return self;
@@ -171,6 +179,13 @@
 			// for defaultBegin and defaultEnd should be fine.
 			break;
 	}
+
+	// TODO: Sanity check.  This should never fail.  Ahem.
+//	if (self != nil && (_begin.integerValue < _defaultBegin.integerValue || _end.integerValue > _defaultEnd.integerValue))
+//	{
+//		//  TODO: Invalid values
+//		self = nil;
+//	}
 }
 
 - (NSNumber*)defaultBeginPeriod
@@ -294,6 +309,17 @@
 - (BOOL) isWildcard
 {
 	return self.isWildcard_private;
+}
+
+- (NSString *) description
+{
+	return [NSString stringWithFormat: @"PointSelector { begin: %@, end: %@, step: %@, position: %@, isWildcard: %@ }",
+			self.begin,
+			self.end,
+			self.step,
+			self.position,
+			self.isWildcard ? @"YES" : @"NO"
+			];
 }
 
 @end
