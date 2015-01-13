@@ -58,18 +58,28 @@
 - (void) splitWeekSelectorIntoDaysAndPositions: (APCTimeSelector *) dayOfWeekSelector
 {
 	APCListSelector *realWeekSelector = (APCListSelector *) dayOfWeekSelector;
-	NSMutableArray *rangeSelectors = [NSMutableArray new];
-	NSMutableArray *positionSelectors = [NSMutableArray new];
+	NSMutableArray *rangeSelectors = nil;
+	NSMutableArray *positionSelectors = nil;
 	self.weekdaySelectorIsWildcard = YES;
 
 	for (APCPointSelector *pointSelector in realWeekSelector.subSelectors)
 	{
 		if (pointSelector.position != nil)
 		{
+			if (positionSelectors == nil)
+			{
+				positionSelectors = [NSMutableArray new];
+			}
+
 			[positionSelectors addObject: pointSelector];
 		}
 		else
 		{
+			if (rangeSelectors == nil)
+			{
+				rangeSelectors = [NSMutableArray new];
+			}
+
 			[rangeSelectors addObject: pointSelector];
 		}
 
