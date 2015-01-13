@@ -102,7 +102,7 @@
 //	NSString* cronExpression = @"0 5,10,12,17,20 * * 1";								// several only on Mondays
 //	NSString* cronExpression = @"0 0 5 * * * *";										// 7 fields:  5am every day
 //	NSString* cronExpression = @"0 0 5 * * 1 *";										// 7 fields:  5am every Monday
-//	NSString* cronExpression = @"0 0 6 ? 1/1 THU#1 *";									// from Sage
+	NSString* cronExpression = @"0 0 6 ? 1/1 THU#1 *";									// from Sage
 //	NSString* cronExpression = @"0 0 6 ? * FRI *";										// from Sage
 //	NSString* cronExpression = @"0 5 * DEC,NOV,JUL THU,FRI,MON#1,TUE#2";				// Replacing strings with numbers
 //	NSString* cronExpression = @"   0  5  *  DEC,NOV,JUL   THU,FRI,MON#1,TUE#2   ";		// replacing lots of whitespace
@@ -111,7 +111,7 @@
 
 	// Ron:  testing new versions
 //	NSString* cronExpression = @"0 5 * SEP,JUL,OCT/2,JAN-MAR THU,FRI,MON#1,TUE#2";
-	NSString* cronExpression = @"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,FRI,MON#1,TUE#2";
+//	NSString* cronExpression = @"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,FRI,MON#1,TUE#2";
 //	NSString* cronExpression = @"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,duuuude,MON#1,TUE#2";
 //	NSString* cronExpression = @"   0    5    *    SEP,JUL,OCT/2,JAN-MAR     THU,FRI,MON#1,TUE#2    ";
 
@@ -125,7 +125,8 @@
 //	NSDate *start = [[NSDate tomorrowAtMidnight] dateByAddingDays: 2];
 //	NSDate *end   = [NSDate tomorrowAtMidnight];
 //	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 3];
-	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 14];
+//	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 14];
+	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 32];
 //	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 60];
 
 	NSEnumerator* enumerator = [schedule enumeratorBeginningAtTime: start

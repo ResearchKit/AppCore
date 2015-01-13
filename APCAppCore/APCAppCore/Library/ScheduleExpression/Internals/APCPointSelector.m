@@ -180,12 +180,26 @@
 			break;
 	}
 
-	// TODO: Sanity check.  This should never fail.  Ahem.
-//	if (self != nil && (_begin.integerValue < _defaultBegin.integerValue || _end.integerValue > _defaultEnd.integerValue))
-//	{
-//		//  TODO: Invalid values
-//		self = nil;
-//	}
+	// And now apply those default ranges to our actual ranges.
+	// If the actual ranges are already set, make sure they're
+	// reasonable.
+	if (self.begin == nil)
+	{
+		self.begin = self.defaultBegin;
+	}
+	else if (self.begin.integerValue < self.defaultBegin.integerValue)
+	{
+		NSAssert (NO, @"PointSelector: beginValue of %@ is less than default value of %@.", self.begin, self.defaultBegin);
+	}
+
+	if (self.end == nil)
+	{
+		self.end = self.defaultEnd;
+	}
+	else if (self.end.integerValue > self.end.integerValue)
+	{
+		NSAssert (NO, @"PointSelector: endValue of %@ is greater than default value of %@.", self.end, self.defaultEnd);
+	}
 }
 
 - (NSNumber*)defaultBeginPeriod
