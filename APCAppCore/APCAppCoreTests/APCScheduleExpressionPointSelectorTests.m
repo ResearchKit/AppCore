@@ -20,10 +20,11 @@
 {
 	NSNumber*           expectedBegin = @0;
 	NSNumber*           expectedEnd   = @59;
-	APCPointSelector*   selector      = [[APCPointSelector alloc] initWithUnit:kMinutes
-																	beginRange:expectedBegin
-																	  endRange:expectedEnd
-																		  step:nil];
+	APCPointSelector*   selector      = [[APCPointSelector alloc] initWithRangeStart: expectedBegin
+																			rangeEnd: expectedEnd
+																				step: nil];
+
+	selector.unitType = kMinutes;
 	
 	XCTAssertEqual(selector.defaultBeginPeriod, expectedBegin);
 	XCTAssertEqual(selector.defaultEndPeriod, expectedEnd);
@@ -35,10 +36,10 @@
 {
 	NSNumber*           expectedBegin = @0;
 	NSNumber*           expectedEnd   = @23;
-	APCPointSelector*   selector      = [[APCPointSelector alloc] initWithUnit:kHours
-																	beginRange:expectedBegin
-																	  endRange:expectedEnd
-																		  step:nil];
+	APCPointSelector*   selector      = [[APCPointSelector alloc] initWithRangeStart: expectedBegin
+																			rangeEnd: expectedEnd
+																				step: nil];
+	selector.unitType = kHours;
 	
 	XCTAssertEqual(selector.defaultBeginPeriod, expectedBegin);
 	XCTAssertEqual(selector.defaultEndPeriod, expectedEnd);
@@ -50,10 +51,10 @@
 {
 	NSNumber*           expectedBegin = @1;
 	NSNumber*           expectedEnd   = @31;
-	APCPointSelector*   selector      = [[APCPointSelector alloc] initWithUnit:kDayOfMonth
-																	beginRange:expectedBegin
-																	  endRange:expectedEnd
-																		  step:nil];
+	APCPointSelector*   selector      = [[APCPointSelector alloc] initWithRangeStart: expectedBegin
+																			rangeEnd: expectedEnd
+																				step: nil];
+	selector.unitType = kDayOfMonth;
 	
 	XCTAssertEqual(selector.defaultBeginPeriod, expectedBegin);
 	XCTAssertEqual(selector.defaultEndPeriod, expectedEnd);
@@ -65,10 +66,10 @@
 {
 	NSNumber*           expectedBegin = @1;
 	NSNumber*           expectedEnd   = @12;
-	APCPointSelector*   selector      = [[APCPointSelector alloc] initWithUnit:kMonth
-																	beginRange:expectedBegin
-																	  endRange:expectedEnd
-																		  step:nil];
+	APCPointSelector*   selector      = [[APCPointSelector alloc] initWithRangeStart: expectedBegin
+																			rangeEnd: expectedEnd
+																				step: nil];
+	selector.unitType = kMonth;
 	
 	XCTAssertEqual(selector.defaultBeginPeriod, expectedBegin);
 	XCTAssertEqual(selector.defaultEndPeriod, expectedEnd);
@@ -80,10 +81,10 @@
 {
 	NSNumber*           expectedBegin = @0;
 	NSNumber*           expectedEnd   = @6;
-	APCPointSelector*   selector      = [[APCPointSelector alloc] initWithUnit:kDayOfWeek
-																	beginRange:expectedBegin
-																	  endRange:expectedEnd
-																		  step:nil];
+	APCPointSelector*   selector      = [[APCPointSelector alloc] initWithRangeStart: expectedBegin
+																			rangeEnd: expectedEnd
+																				step: nil];
+	selector.unitType = kDayOfWeek;
 	
 	XCTAssertEqual(selector.defaultBeginPeriod, expectedBegin);
 	XCTAssertEqual(selector.defaultEndPeriod, expectedEnd);
@@ -94,10 +95,10 @@
 
 - (void)testPointSelector
 {
-	APCPointSelector*  selector = [[APCPointSelector alloc] initWithUnit:kMinutes
-															  beginRange:@0
-																endRange:nil
-																	step:nil];
+	APCPointSelector* selector = [[APCPointSelector alloc] initWithRangeStart: @0
+																	 rangeEnd: nil
+																		 step: nil];
+	selector.unitType = kMinutes;
 	
 	XCTAssertTrue([selector matches:@0]);
 	XCTAssertFalse([selector matches:@1]);
@@ -107,10 +108,10 @@
 {
 	NSNumber*           testBegin = @5;
 	NSNumber*           testEnd   = @10;
-	APCPointSelector*   selector  = [[APCPointSelector alloc] initWithUnit:kMinutes
-																beginRange:testBegin
-																  endRange:testEnd
-																	  step:nil];
+	APCPointSelector*   selector  = [[APCPointSelector alloc] initWithRangeStart: testBegin
+																		rangeEnd: testEnd
+																			step: nil];
+	selector.unitType = kMinutes;
 	
 	for (NSInteger ndx = testBegin.integerValue; ndx <= testEnd.integerValue; ++ndx)
 	{
@@ -126,10 +127,10 @@
 	NSNumber*           testBegin = @5;
 	NSNumber*           testEnd   = @59;
 	NSNumber*           testStep  = @5;
-	APCPointSelector*   selector  = [[APCPointSelector alloc] initWithUnit:kMinutes
-																beginRange:testBegin
-																  endRange:testEnd
-																	  step:testStep];
+	APCPointSelector*   selector  = [[APCPointSelector alloc] initWithRangeStart: testBegin
+																		rangeEnd: testEnd
+																			step: testStep];
+	selector.unitType = kMinutes;
 	
 	for (NSInteger ndx = testBegin.integerValue; ndx < testEnd.integerValue; ++ndx)
 	{
@@ -152,10 +153,10 @@
 	NSNumber*           testBegin = @5;
 	NSNumber*           testEnd   = @20;
 	NSNumber*           testStep  = @5;
-	APCPointSelector*   selector  = [[APCPointSelector alloc] initWithUnit:kMinutes
-																beginRange:testBegin
-																  endRange:testEnd
-																	  step:testStep];
+	APCPointSelector*   selector  = [[APCPointSelector alloc] initWithRangeStart: testBegin
+																		rangeEnd: testEnd
+																			step: testStep];
+	selector.unitType = kMinutes;
 	
 	for (NSInteger ndx = testBegin.integerValue; ndx <= 20; ++ndx)
 	{
@@ -176,7 +177,10 @@
 - (void)testPointAfterPoint
 {
 	NSNumber*           point    = @10;
-	APCPointSelector*   selector = [[APCPointSelector alloc] initWithUnit:kMinutes beginRange:point endRange:nil step:nil];
+	APCPointSelector*   selector = [[APCPointSelector alloc] initWithRangeStart: point
+																		rangeEnd: nil
+																			step: nil];
+	selector.unitType = kMinutes;
 	
 	XCTAssertEqualObjects([selector nextMomentAfter:@0],  point);
 	XCTAssertEqualObjects([selector nextMomentAfter:@9],  point);
@@ -187,7 +191,10 @@
 {
 	NSNumber*           point    = @10;
 	NSNumber*           step     = @5;
-	APCPointSelector*   selector = [[APCPointSelector alloc] initWithUnit:kMinutes beginRange:point endRange:nil step:step];
+	APCPointSelector*   selector = [[APCPointSelector alloc] initWithRangeStart: point
+																	   rangeEnd: nil
+																		   step: step];
+	selector.unitType = kMinutes;
 	NSNumber*           end      = selector.end;
 	
 	XCTAssertEqualObjects([selector nextMomentAfter:@0], point);
@@ -214,7 +221,10 @@
 {
 	NSNumber*           begin    = @10;
 	NSNumber*           end      = @50;
-	APCPointSelector*   selector = [[APCPointSelector alloc] initWithUnit:kMinutes beginRange:begin endRange:end step:nil];
+	APCPointSelector*   selector = [[APCPointSelector alloc] initWithRangeStart: begin
+																	   rangeEnd: end
+																		   step: nil];
+	selector.unitType = kMinutes;
 	
 	XCTAssertEqualObjects([selector nextMomentAfter:@0], begin);
 	
@@ -231,7 +241,10 @@
 	NSNumber*           begin    = @10;
 	NSNumber*           end      = @50;
 	NSNumber*           step     = @5;
-	APCPointSelector*   selector = [[APCPointSelector alloc] initWithUnit:kMinutes beginRange:begin endRange:end step:step];
+	APCPointSelector*   selector = [[APCPointSelector alloc] initWithRangeStart: begin
+																	   rangeEnd: end
+																		   step: step];
+	selector.unitType = kMinutes;
 	
 	XCTAssertEqualObjects([selector nextMomentAfter:@0], begin);
 	

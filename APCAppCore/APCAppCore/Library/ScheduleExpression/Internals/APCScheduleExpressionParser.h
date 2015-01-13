@@ -76,11 +76,10 @@
 	itemName			:: monthName     | weekdayName
 	itemNumber			:: secondsNumber | minuteNumber | hourHumber | dayNumber | monthNumber | weekdayNumber | yearNumber
 	item				:: itemNumber    | itemName
-
 	range				:: item ( rangeSeparator item ) ?
-	expression			:: (wildcard | range) ( stepSeparator stepCount | positionSeparator positionIdentifier ) ?
-
-	list				:: expression ( listSeparator expr ) *
+	rangeSpec			:: wildcard | range
+	expression			:: rangeSpec ( stepSeparator stepCount | positionSeparator positionIdentifier ) ?
+	list				:: expression ( listSeparator expression ) *
 
 	yearList			:: list		\
 	weekdayList			:: list		|	We'll gather as many lists as we have.
@@ -116,12 +115,10 @@
  Private, but we sometimes call these from the test harness.
  So, um, please don't use these.
  */
-- (NSNumber*)numberProduction;
 - (NSArray*)rangeProduction;
 - (NSNumber*)stepsProduction;
-- (NSArray*)numspecProduction;
-- (APCPointSelector*)exprProductionForType:(UnitType)unitType;
-- (APCListSelector*)listProductionForType:(UnitType)unitType;
+- (APCListSelector*)listProduction;
+- (void)coerceSelector:(APCListSelector *)list intoType:(UnitType)type;
 
 @end
 

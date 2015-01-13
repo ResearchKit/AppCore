@@ -120,7 +120,7 @@
 	NSTimeInterval userWakeupTimeOffset	= 0;
 	APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression
 																			   timeZero: userWakeupTimeOffset];
-
+ 
 	NSDate *start = [NSDate todayAtMidnight];
 //	NSDate *start = [[NSDate tomorrowAtMidnight] dateByAddingDays: 2];
 //	NSDate *end   = [NSDate tomorrowAtMidnight];

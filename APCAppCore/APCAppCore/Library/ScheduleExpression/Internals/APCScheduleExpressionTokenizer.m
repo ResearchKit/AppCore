@@ -19,6 +19,9 @@ static NSCharacterSet* kRangeSeparatorCharacterSet = nil;
 static NSCharacterSet* kPositionSeparatorCharacterSet = nil;
 static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 
+static NSArray* kMonthNames = nil;
+static NSArray* kWeekdayNames = nil;
+
 
 @implementation APCScheduleExpressionTokenizer
 
@@ -49,6 +52,16 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 		[allCharsWeRecognize formUnionWithCharacterSet: kRangeSeparatorCharacterSet];
 		[allCharsWeRecognize formUnionWithCharacterSet: kPositionSeparatorCharacterSet];
 		kAllCharsWeRecognizeCharacterSet = allCharsWeRecognize;
+
+		// These will be interpreted as having indices 1 through 12.
+		kMonthNames = @[@"jan", @"feb", @"mar", @"apr", @"may", @"jun",
+						@"jul", @"aug", @"sep", @"oct", @"nov", @"dec"];
+
+		// Order matters: "Sunday" is either 0 or 7 in cron-speak,
+		// and we normalize all Sundays to 0.
+		//
+		// (...but, of course, we don't know that in this file.  Ahem.)
+		kWeekdayNames = @[@"sun", @"mon", @"tue", @"wed", @"thu", @"fri", @"sat"];
 	}
 }
 
@@ -112,6 +125,25 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 
 	switch (token.type)
 	{
+		case APCScheduleExpressionTokenTypeWord:
+		{
+			NSInteger value = [self numberValueForWord: token.stringValue];
+
+			if (value == kAPCScheduleExpressionTokenIntegerValueNotSet)
+			{
+				token.type = APCScheduleExpressionTokenTypeUnrecognized;
+				token.didEncounterError = YES;
+				token.errorMessage = [NSString stringWithFormat: @"Couldn't convert token [%@] to a number.", scannedText];
+			}
+			else
+			{
+				token.type = APCScheduleExpressionTokenTypeNumber;
+				token.integerValue = value;
+			}
+
+			break;
+		}
+
 		case APCScheduleExpressionTokenTypeNumber:
 			token.integerValue = scannedText.integerValue;
 			break;
@@ -137,6 +169,37 @@ static NSCharacterSet* kAllCharsWeRecognizeCharacterSet = nil;
 	}
 
 	return token;
+}
+
+/**
+ As I understand it, it's legal in the world of tokenization
+ to convert words to numbers, as long as we don't know what
+ they MEAN or why we're doing it -- it's a mechanical replacement.
+ 
+ In real life, this works because the only text we care about
+ is for month names or weekday names.  If we start handling other
+ text characters, we'll have to do this differently.  But in the
+ mean time, it makes a lot of things easier.
+ */
+- (NSInteger) numberValueForWord: (NSString*) word
+{
+	NSInteger value = kAPCScheduleExpressionTokenIntegerValueNotSet;
+
+	word = word.lowercaseString;
+
+	if ([kMonthNames containsObject: word])
+	{
+		// Is this legal, in tokenization theory?  This is pretty
+		// specific to how we're using month names.
+		value = [kMonthNames indexOfObject: word] + 1;
+	}
+
+	else if ([kWeekdayNames containsObject: word])
+	{
+		value = [kWeekdayNames indexOfObject: word];
+	}
+
+	return value;
 }
 
 @end

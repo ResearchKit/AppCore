@@ -42,4 +42,13 @@
 - (BOOL) isUnrecognized			{ return self.type == APCScheduleExpressionTokenTypeUnrecognized; }
 - (BOOL) isScanningError		{ return self.type == APCScheduleExpressionTokenTypeScanningError; }
 
+- (NSString *) description
+{
+	return [NSString stringWithFormat: @"Token { string: %@, integer: %d, isError: %@ }",
+			self.stringValue,
+			(int) self.integerValue,
+			self.didEncounterError ? @"YES" : @"NO"
+			];
+}
+
 @end

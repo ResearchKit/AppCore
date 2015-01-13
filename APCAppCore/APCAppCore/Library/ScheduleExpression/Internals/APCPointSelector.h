@@ -30,16 +30,12 @@ typedef NS_ENUM(NSInteger, UnitType)
 @property (nonatomic, strong) NSNumber* step;
 @property (nonatomic, strong) NSNumber* position;
 
-- (instancetype)initWithUnit:(UnitType)unitType;
+- (instancetype) initWithRangeStart: (NSNumber*) begin
+						   rangeEnd: (NSNumber*) end
+							   step: (NSNumber*) step;
 
-- (instancetype)initWithUnit:(UnitType)unitType
-				  beginRange:(NSNumber*)begin
-					endRange:(NSNumber*)end
-						step:(NSNumber*)step;
-
-- (instancetype)initWithUnit:(UnitType)unitType
-					   value:(NSNumber*)value
-					position:(NSNumber*)position;
+- (instancetype) initWithValue: (NSNumber*) value
+					  position: (NSNumber*) position;
 
 - (NSNumber*)defaultBeginPeriod;
 - (NSNumber*)defaultEndPeriod;

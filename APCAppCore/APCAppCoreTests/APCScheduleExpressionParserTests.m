@@ -20,7 +20,8 @@
 	NSString*           cronExpression = @"10";
 	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	
-	APCListSelector*  listSelector = [parser listProductionForType:kMinutes];
+	APCListSelector*  listSelector = [parser listProduction];
+	[parser coerceSelector: listSelector intoType: kMinutes];
 	
 	XCTAssertTrue(parser.isValidParse);
 	XCTAssertNotNil(listSelector);
@@ -38,7 +39,8 @@
 	NSString*           cronExpression = @"*";
 	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	
-	APCListSelector* listSelector = [parser listProductionForType:kMinutes];
+	APCListSelector* listSelector = [parser listProduction];
+	[parser coerceSelector: listSelector intoType: kMinutes];
 	
 	XCTAssertTrue(parser.isValidParse);
 	XCTAssertNotNil(listSelector);
@@ -56,7 +58,8 @@
 	NSString*           cronExpression = @"25-50";
 	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	
-	APCListSelector* listSelector = [parser listProductionForType:kMinutes];
+	APCListSelector* listSelector = [parser listProduction];
+	[parser coerceSelector: listSelector intoType: kMinutes];
 	
 	XCTAssertTrue(parser.isValidParse);
 	XCTAssertNotNil(listSelector);
@@ -74,7 +77,8 @@
 	NSString*           cronExpression = @"10,20,30";
 	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	
-	APCListSelector* selector = [parser listProductionForType:kMinutes];
+	APCListSelector* selector = [parser listProduction];
+	[parser coerceSelector: selector intoType: kMinutes];
 	
 	XCTAssertTrue(parser.isValidParse);
 	XCTAssertNotNil(selector);
@@ -106,7 +110,8 @@
 	NSString*           cronExpression = @"0/5";
 	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	
-	APCListSelector* selector = [parser listProductionForType:kMinutes];
+	APCListSelector* selector = [parser listProduction];
+	[parser coerceSelector: selector intoType: kMinutes];
 	
 	XCTAssertTrue(parser.isValidParse);
 	XCTAssertNotNil(selector);
@@ -124,7 +129,8 @@
 	NSString*           cronExpression = @"*/5";
 	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	
-	APCListSelector* selector = [parser listProductionForType:kMinutes];
+	APCListSelector* selector = [parser listProduction];
+	[parser coerceSelector: selector intoType: kMinutes];
 	
 	XCTAssertTrue(parser.isValidParse);
 	XCTAssertNotNil(selector);
@@ -142,7 +148,8 @@
 	NSString*           cronExpression = @"25-50/5";
 	APCScheduleExpressionParser*  parser         = [[APCScheduleExpressionParser alloc] initWithExpression:cronExpression];
 	
-	APCListSelector* selector = [parser listProductionForType:kMinutes];
+	APCListSelector* selector = [parser listProduction];
+	[parser coerceSelector: selector intoType: kMinutes];
 	
 	XCTAssertTrue(parser.isValidParse);
 	XCTAssertNotNil(selector);

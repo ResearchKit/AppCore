@@ -11,7 +11,6 @@
 #import "APCDayOfMonthSelector.h"
 #import "APCScheduleExpressionToken.h"
 #import "APCScheduleExpressionTokenizer.h"
-#import "APCScheduleExpressionToken+DatesAndTimes.h"
 
 
 static unichar kEndToken				= '\0';
@@ -92,49 +91,6 @@ static unichar kFieldSeparatorToken		= ' ';
     }
     
     return self;
-}
-
-
-
-// ---------------------------------------------------------
-#pragma mark - "Preprocessor" methods (being deprecated right now)
-// ---------------------------------------------------------
-
-/*
- Before the parser kicks in, we pre-process the string
- to eliminate or convert specific items.
- */
-
-- (void) enforceFiveFields
-{
-	NSMutableString *newString = nil;
-
-	NSMutableArray *pieces = [[self.expression componentsSeparatedByCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]] mutableCopy];
-
-	if (pieces.count == 7)
-	{
-		[pieces removeObjectAtIndex: 0];
-		[pieces removeLastObject];
-		newString = [[pieces componentsJoinedByString: @" "] mutableCopy];
-	}
-
-	else if (pieces.count == 5)
-	{
-		// Happy case.  Ignore.
-	}
-
-	else
-	{
-		// This is an error.  (It isn't happening in practice.)
-		NSLog (@"-[APCScheduleParser enforceFiveFields] ERROR: Don't know how to parse an expression with [%d] components.", (int) pieces.count);
-
-		[self recordError];
-	}
-
-	if (newString != nil)
-	{
-		self.expression = newString;
-	}
 }
 
 
@@ -243,44 +199,6 @@ static unichar kFieldSeparatorToken		= ' ';
     self.errorEncountered = YES;
 }
 
-- (BOOL)expect:(unichar)c
-{
-    BOOL    expectation = NO;
-    
-    if ([self next] == c)
-    {
-        expectation = YES;
-        [self consumeOneChar];
-    }
-    else
-    {
-        [self recordError];
-    }
-    
-    return expectation;
-}
-
-//	/**
-//	 Writing this method for completeness -- to be compatible
-//	 with the character-based scanner -- but I don't yet need it.
-//	 */
-//	- (BOOL) expectToken: (APCScheduleExpressionToken *) token
-//	{
-//		BOOL expectation = NO;
-//
-//		if ([self.nextToken isEqual: token])
-//		{
-//			expectation = YES;
-//			[self consumeOneToken];
-//		}
-//		else
-//		{
-//			[self recordError];
-//		}
-//
-//		return expectation;
-//	}
-
 - (void)fieldSeparatorProduction
 {
     while (self.next == kFieldSeparatorToken)
@@ -349,185 +267,51 @@ static unichar kFieldSeparatorToken		= ' ';
     return number;
 }
 
-- (NSNumber *) monthProduction  // equiavlent to numberProduction, but for months.
-{
-	NSInteger month = kAPCScheduleExpressionTokenIntegerValueNotSet;
-
-	/*
-	 Scan up to the next month, throw that stuff away, and then
-	 scan the month.  This make the scan-by-token code operate
-	 the same way as the scan-by-char code.
-	 
-	 Presumes the string has been advanced to some stuff
-	 immediately preceding a month.
-	 */
-	if (! self.nextToken.canInterpretAsMonth)
-	{
-		[self consumeOneToken];
-	}
-
-	if (self.nextToken.canInterpretAsMonth)
-	{
-		month = self.nextToken.interpretAsMonth;
-
-		[self consumeOneToken];
-	}
-	else
-	{
-		NSLog (@"WARNING:  I was expecting a month, and got something else: [%@].", self.nextToken.stringValue);
-
-		[self recordError];
-	}
-
-	return @(month);
-}
-
-- (NSNumber *) weekdayProduction  // equiavlent to numberProduction, but for weekdays.
-{
-	NSInteger weekday = kAPCScheduleExpressionTokenIntegerValueNotSet;
-
-	/*
-	 Scan up to the next month, throw that stuff away, and then
-	 scan the month.  This make the scan-by-token code operate
-	 the same way as the scan-by-char code.
-
-	 Presumes the string has been advanced to some stuff
-	 immediately preceding a month.
-	 */
-	if (! self.nextToken.canInterpretAsWeekday)
-	{
-		[self consumeOneToken];
-	}
-
-	if (self.nextToken.canInterpretAsWeekday)
-	{
-		weekday = self.nextToken.interpretAsWeekday;
-		[self consumeOneToken];
-	}
-	else
-	{
-		NSLog (@"WARNING:  I was expecting a weekday, and got something else: [%@].", self.nextToken.stringValue);
-
-		[self recordError];
-	}
-
-	return @(weekday);
-}
-
 - (NSArray*)rangeProduction
 {
 	//
 	// Production rule:
 	//
-	//		range :: number ( '-' number ) ?
+	//		range :: item ( rangeSeparator item ) ?
 	//
 
     NSMutableArray* range = [NSMutableArray array];
 
-    if (isnumber(self.next))
+	// Make sure we don't have any cached tokens from an earlier run.
+	// (Doing so would be a programming error, but I'm still phasing
+	// this in...)
+	[self forgetToken];
+
+	/*
+	 The tokenization process currently converts words
+	 to numbers, because that's actually sufficient for
+	 our needs.  Is that legal, in tokenization theory?
+	 */
+	[self nextToken];
+
+	if (self.nextToken.isNumber)
     {
-        [range addObject:[self numberProduction]];
-        
+		NSInteger rangeStart = self.nextToken.integerValue;
+		[range addObject: @(rangeStart)];
+		[self consumeOneToken];
+
         if (self.next == kRangeSeparatorToken)
         {
             [self consumeOneChar];
-            
-            NSNumber*   rangeEnd = [self numberProduction];
-            if (rangeEnd != nil)
-            {
-                [range addObject:rangeEnd];
-            }
+
+			[self nextToken];
+
+			if (self.nextToken.isNumber)
+			{
+				NSInteger rangeEnd = self.nextToken.integerValue;
+				[range addObject: @(rangeEnd)];
+				[self consumeOneToken];
+			}
 			else
 			{
 				// Open-ended range, which is we consider legal.
 			}
         }
-		else
-		{
-			// Next token is not part of this range, which is fine.
-		}
-    }
-    else
-    {
-        [self recordError];
-    }
-    
-    return range;
-}
-
-- (NSArray*) monthRangeProduction  // equivalent to rangeProduction, but for months.
-{
-	//
-	// Production rule:
-	//
-	//		monthRange :: month ( '-' month ) ?
-	//
-
-	NSMutableArray* range = [NSMutableArray array];
-
-	if (self.nextToken.canInterpretAsMonth)
-	{
-		[range addObject: [self monthProduction]];
-
-		if (self.nextToken.isRangeSeparator)
-		{
-			[self consumeOneToken];
-
-			NSNumber *rangeEnd = [self monthProduction];
-
-			if (rangeEnd != nil)
-			{
-				// Could this ever happen, given the logic in -monthProduction?
-				[range addObject: rangeEnd];
-			}
-			else
-			{
-				// Open-ended range, which is legal.
-			}
-		}
-		else
-		{
-			// Next token is not part of this range, which is fine.
-		}
-	}
-	else
-	{
-		[self recordError];
-	}
-
-	return range;
-}
-
-- (NSArray*) weekdayRangeProduction  // equivalent to rangeProduction, but for weekdays.
-{
-	//
-	// Production rule:
-	//
-	//		weekdayRange :: weekday ( '-' weekday ) ?
-	//
-
-	NSMutableArray* range = [NSMutableArray array];
-
-	if (self.nextToken.canInterpretAsWeekday)
-	{
-		[range addObject: [self weekdayProduction]];
-
-		if (self.nextToken.isRangeSeparator)
-		{
-			[self consumeOneToken];
-
-			NSNumber *rangeEnd = [self weekdayProduction];
-
-			if (rangeEnd != nil)
-			{
-				// Could this ever happen, given the logic in -weekdayProduction?
-				[range addObject: rangeEnd];
-			}
-			else
-			{
-				// Open-ended range, which is legal.
-			}
-		}
 		else
 		{
 			// Next token is not part of this range, which is fine.
@@ -563,115 +347,59 @@ static unichar kFieldSeparatorToken		= ' ';
     return [self numberProduction];
 }
 
-- (NSArray*)numspecProduction
+- (NSArray*) rangeSpecProduction
 {
 	//
 	// Production rule:
 	//
-	//		numspec :: '*' | '?' | range
+	//		rangeSpec :: '*' | '?' | range
 	//
 
-    NSArray*    numSpec = nil;
+    NSArray* rangeSpec = nil;
 
     if (self.next == kWildCardToken || self.next == kOtherWildCardToken)
     {
         [self consumeOneChar];
         //  By default, selectors are initialized with min-max values corresponding with the selector's unit type, so it's safe to return nil, here.  Just eat the next token.
     }
-    else if (isnumber(self.next) == YES)
-    {
-        numSpec = [self rangeProduction];
-    }
-    else
-    {
-        [self recordError];
-    }
+
+	else
+	{
+		// RangeProduction will raise an error
+		// if the next thing encountered isn't legal.
+		rangeSpec = [self rangeProduction];
+	}
     
-    return numSpec;
+    return rangeSpec;
 }
 
-- (NSArray*) monthRangeSpecProduction  // equivalent to numspecProduction for months
+- (APCPointSelector*) expressionProduction
 {
 	//
 	// Production rule:
 	//
-	//		monthRangeSpec :: wildcard | monthRange
-	//
-
-	NSArray* monthRangeSpec = nil;
-
-	if (self.nextToken.isWildcard)
-	{
-		[self consumeOneToken];
-		//  By default, selectors are initialized with min-max values corresponding with the selector's unit type, so it's safe to return nil, here.  Just eat the next token.
-	}
-	else if (self.nextToken.canInterpretAsMonth)
-	{
-		monthRangeSpec = [self monthRangeProduction];
-	}
-	else
-	{
-		[self recordError];
-	}
-
-	return monthRangeSpec;
-}
-
-- (NSArray*) weekdayRangeSpecProduction  // equivalent to numspecProduction for weekdays
-{
-	//
-	// Production rule:
-	//
-	//		weekdayRangeSpec :: wildcard | weekdayRange
-	//
-
-	NSArray* weekdayRangeSpec = nil;
-
-	if (self.nextToken.isWildcard)
-	{
-		[self consumeOneToken];
-		//  By default, selectors are initialized with min-max values corresponding with the selector's unit type, so it's safe to return nil, here.  Just eat the next token.
-	}
-	else if (self.nextToken.canInterpretAsWeekday)
-	{
-		weekdayRangeSpec = [self weekdayRangeProduction];
-	}
-	else
-	{
-		[self recordError];
-	}
-
-	return weekdayRangeSpec;
-}
-
-- (APCPointSelector*) exprProductionForType: (UnitType) unitType
-{
-	//
-	// Production rule:
-	//
-    //		expr :: numspec ( '/' steps | '#' position ) ?
+    //		expression :: rangeSpec ( '/' steps | '#' position ) ?
 	//
 
 	APCPointSelector *selector = nil;
-	NSArray *numSpec = [self numspecProduction];
+	NSArray *rangeSpec = [self rangeSpecProduction];
 
 	if (self.next == kPositionSeparatorToken)
 	{
-		NSNumber *dayOfWeekToFind = numSpec [0];
+		NSNumber *dayOfWeekToFind = rangeSpec [0];
 
 		[self consumeOneChar];
 		NSNumber *position = [self positionProduction];
 
-		selector = [[APCPointSelector alloc] initWithUnit: unitType
-													value: dayOfWeekToFind
-												 position: position];
+		selector = [[APCPointSelector alloc] initWithValue: dayOfWeekToFind
+												  position: position];
 	}
 
-	else
+	else  // either: (a) stepSeparator or (b) not-in-this-expression
 	{
-		NSNumber *begin		= numSpec.count > 0 ? numSpec[0] : nil;
-		NSNumber *end		= numSpec.count > 1 ? numSpec[1] : nil;
-		NSNumber *step		= nil;
+		NSNumber *begin	= rangeSpec.count > 0 ? rangeSpec[0] : nil;
+		NSNumber *end	= rangeSpec.count > 1 ? rangeSpec[1] : nil;
+		NSNumber *step	= nil;
 
 		if (self.next == kStepSeparatorToken)
 		{
@@ -679,10 +407,9 @@ static unichar kFieldSeparatorToken		= ' ';
 			step = [self stepsProduction];
 		}
 
-		selector = [[APCPointSelector alloc] initWithUnit: unitType
-											   beginRange: begin
-												 endRange: end
-													 step: step];
+		selector = [[APCPointSelector alloc] initWithRangeStart: begin
+													   rangeEnd: end
+														   step: step];
     }
 
     if (selector == nil)
@@ -693,87 +420,7 @@ static unichar kFieldSeparatorToken		= ' ';
     return selector;
 }
 
-- (APCPointSelector*) exprProductionForMonth
-{
-	//
-	// Production rule:
-	//
-	//		monthExpr :: monthRangeSpec ( '/' steps ) ?
-	//
-
-	APCPointSelector* selector	= nil;
-	NSArray*  monthRangeSpec	= [self monthRangeSpecProduction];
-	NSNumber* begin				= monthRangeSpec.count > 0 ? monthRangeSpec[0] : nil;
-	NSNumber* end				= monthRangeSpec.count > 1 ? monthRangeSpec[1] : nil;
-	NSNumber* step				= nil;
-
-	if (self.nextToken.isStepSeparator)
-	{
-		[self consumeOneToken];
-		step = [self stepsProduction];
-	}
-
-	selector = [[APCPointSelector alloc] initWithUnit: kMonth
-										   beginRange: begin
-											 endRange: end
-												 step: step];
-
-	if (selector == nil)
-	{
-		[self recordError];
-	}
-
-	return selector;
-}
-
-- (APCPointSelector*) exprProductionForWeekdays
-{
-	//
-	// Production rule:
-	//
-	//		weekdayExpr :: weekdayRangeSpec ( '/' steps | '#' position ) ?
-	//
-
-	APCPointSelector* selector	= nil;
-	NSArray*  weekdayRangeSpec	= [self weekdayRangeSpecProduction];
-	NSNumber* begin				= weekdayRangeSpec.count > 0 ? weekdayRangeSpec[0] : nil;
-	NSNumber* end				= weekdayRangeSpec.count > 1 ? weekdayRangeSpec[1] : nil;
-	NSNumber* step				= nil;
-
-	if (self.nextToken.isPositionSeparator)
-	{
-		[self consumeOneToken];
-
-		NSNumber *position = [self positionProduction];
-
-		selector = [[APCPointSelector alloc] initWithUnit: kDayOfWeek
-													value: begin
-												 position: position];
-	}
-
-	else
-	{
-		if (self.nextToken.isStepSeparator)
-		{
-			[self consumeOneToken];
-			step = [self stepsProduction];
-		}
-
-		selector = [[APCPointSelector alloc] initWithUnit: kDayOfWeek
-											   beginRange: begin
-												 endRange: end
-													 step: step];
-	}
-
-	if (selector == nil)
-	{
-		[self recordError];
-	}
-
-	return selector;
-}
-
-- (APCListSelector*)listProductionForType:(UnitType)unitType
+- (APCListSelector*) listProduction
 {
 	//
 	// Production rule:
@@ -781,12 +428,12 @@ static unichar kFieldSeparatorToken		= ' ';
 	//		genericList :: genericExpr ( ',' genericExpr) *
 	//
 
-    NSMutableArray*     subSelectors = [NSMutableArray array];
-    APCListSelector*    listSelector = nil;
+    NSMutableArray*  subSelectors = [NSMutableArray array];
+    APCListSelector* listSelector = nil;
     
     while (self.next != kEndToken && self.next != kFieldSeparatorToken)
     {
-        APCPointSelector*   pointSelector = [self exprProductionForType:unitType];
+        APCPointSelector* pointSelector = [self expressionProduction];
         
         if (self.errorEncountered)
         {
@@ -809,51 +456,6 @@ static unichar kFieldSeparatorToken		= ' ';
 				// End of the string, or end of the list of <unitType>.
 				// We'll exit the loop in a moment.
 			}
-        }
-    }
-    
-    listSelector = [[APCListSelector alloc] initWithSubSelectors:subSelectors];
-    
-parseError:
-    return listSelector;
-}
-
-- (APCListSelector*) listProductionForMonthList
-{
-	//
-	// Production rule:
-	//
-	//		monthList :: monthExpr (',' monthExpr) *
-	//
-
-	NSMutableArray*  subSelectors = [NSMutableArray array];
-	APCListSelector* listSelector = nil;
-
-	while (self.nextToken != nil && ! self.nextToken.isFieldSeparator)
-	{
-		APCPointSelector* pointSelector = [self exprProductionForMonth];
-
-		if (self.errorEncountered)
-		{
-			goto parseError;
-		}
-		else
-		{
-			[subSelectors addObject:pointSelector];
-
-			if (self.nextToken.isListSeparator)
-			{
-				[self consumeOneToken];
-			}
-			else if (self.nextToken != nil && ! self.nextToken.isFieldSeparator)
-			{
-				[self recordError];
-			}
-			else
-			{
-				// End of the string, or end of the list of months.
-				// We'll exit the loop in a moment.
-			}
 		}
 	}
 
@@ -863,62 +465,59 @@ parseError:
 	return listSelector;
 }
 
-- (APCListSelector*) listProductionForWeekdayList
+- (APCListSelector*)yearProduction
 {
-	//
-	// Production rule:
-	//
-	//		weekdayList :: weekdayExpr (',' weekdayExpr) *
-	//
+    /*
+	 The parser doesn't currently support Year products.
+	 However, we'll provide a year selector with default
+	 settings, so we can roll over from year to year.
+	 */
+    APCPointSelector* pointSelector = [[APCPointSelector alloc] initWithRangeStart: nil
+																		  rangeEnd: nil
+																			  step: nil];
+	pointSelector.unitType = kYear;
 
-	NSMutableArray*  subSelectors = [NSMutableArray array];
-	APCListSelector* listSelector = nil;
-
-	while (self.nextToken != nil && ! self.nextToken.isFieldSeparator)
-	{
-		APCPointSelector* pointSelector = [self exprProductionForWeekdays];
-
-		if (self.errorEncountered)
-		{
-			goto parseError;
-		}
-		else
-		{
-			[subSelectors addObject:pointSelector];
-
-			if (self.nextToken.isListSeparator)
-			{
-				[self consumeOneToken];
-			}
-			else if (self.nextToken != nil && ! self.nextToken.isFieldSeparator)
-			{
-				[self recordError];
-			}
-			else
-			{
-				// End of the string, or end of the list of weekdays.
-				// We'll exit the loop in a moment.
-			}
-		}
-	}
-
-	listSelector = [[APCListSelector alloc] initWithSubSelectors:subSelectors];
-
-parseError:
-	return listSelector;
-}
-
-- (APCListSelector*)yearProduction:(UnitType)unitType
-{
-    //  The parser doesn't currently support Year products but a default selector is provided to help
-    //  rollover from year to year.
-    //  Defaulting to a wildcard selector
-    APCPointSelector*   pointSelector = [[APCPointSelector alloc] initWithUnit:unitType beginRange:nil endRange:nil step:nil];
-    APCListSelector*    listSelector  = [[APCListSelector alloc] initWithSubSelectors:@[pointSelector]];
+    APCListSelector* listSelector = [[APCListSelector alloc] initWithSubSelectors:@[pointSelector]];
     
     return listSelector;
 }
 
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Set date/time ranges for the selectors we parsed
+// ---------------------------------------------------------
+
+- (void) coerceSelector: (APCListSelector *) list
+			   intoType: (UnitType) type
+{
+	for (APCPointSelector *point in list.subSelectors)
+	{
+		point.unitType = type;
+	}
+}
+
+/**
+ Because -nextToken scans for a new token,
+ we can't use the debugger to inspect that *property*
+ without messing up the logic in the code.  (...which
+ may mean I can't make -nextToken generate a new
+ token.)  This method returns the ivars I need to
+ inspect.
+ */
+- (id) debugHelper
+{
+	NSMutableDictionary* stuff = [NSMutableDictionary new];
+
+	id nextToken = (_nextToken == nil ? [NSNull null] : _nextToken);
+	id expression = _expression;
+
+	stuff [@"nextToken"] = nextToken;
+	stuff [@"expression"] = expression;
+
+	return stuff;
+}
 
 
 
@@ -934,127 +533,75 @@ parseError:
 	//		fields :: minutesList hoursList dayOfMonthList monthList dayOfWeekList
 	//
 
-	APCListSelector* rawDayOfMonthSelector = nil;
-	APCListSelector* rawDayOfWeekSelector = nil;
-
-
-	//
-	// Remove any leading spaces.
-	//
+	NSMutableArray* incomingSelectors = [NSMutableArray new];
+	APCListSelector* thisSelector = nil;
 
 	[self fieldSeparatorProduction_usingTokens];
 
+	// Slurp in all selectors.  We'll assume they're in
+	// the right order.  We'll set type-specific time/date
+	// limits afterwards, once we know which selector
+	// is which.
+	while (self.nextToken)
+	{
+		thisSelector = [self listProduction];
 
+		// THIS SHOULD GO IN THE PRODUCTIONS, but some of the
+		// productions are still character-based.
+		[self consumeOneToken];
 
-	//
-	// Extract minutes.
-	//
-    
-    self.minuteSelector = [self listProductionForType:kMinutes];
+		if (self.errorEncountered)
+		{
+			NSAssert (NO, @"You should probably print something useful, here.");
+			break;
+		}
 
-    if (self.errorEncountered)
-    {
-        NSLog(@"Invalid Minute selector");
-        goto parseError;
-    }
-    
+		else
+		{
+			[incomingSelectors addObject: thisSelector];
 
-	//
-	// Extract hours.
-	//
+			[self fieldSeparatorProduction_usingTokens];
+		}
+	}
 
-    [self fieldSeparatorProduction];
+	if (! self.errorEncountered)
+	{
+		// If we have "seconds" and/or "years," remove "seconds."
+		// We'll ignore "years."
+		if (incomingSelectors.count > 5)
+		{
+			[incomingSelectors removeObjectAtIndex: 0];
+		}
 
-    self.hourSelector = [self listProductionForType:kHours];
+		APCListSelector* maybeMinuteSelector	= incomingSelectors [0];
+		APCListSelector* maybeHourSelector		= incomingSelectors [1];
+		APCListSelector* maybeDaySelector		= incomingSelectors [2];
+		APCListSelector* maybeMonthSelector		= incomingSelectors [3];
+		APCListSelector* maybeWeekdaySelector	= incomingSelectors [4];
+		APCListSelector* maybeYearSelector		= [self yearProduction];
 
-    if (self.errorEncountered)
-    {
-        NSLog(@"Invalid Hour selector");
-        goto parseError;
-    }
-    
+		// Set their types.  This blatantly ignores whether they
+		// might contain special characters for the wrong type.
+		[self coerceSelector: maybeMinuteSelector	intoType: kMinutes];
+		[self coerceSelector: maybeHourSelector		intoType: kHours];
+		[self coerceSelector: maybeDaySelector		intoType: kDayOfMonth];
+		[self coerceSelector: maybeMonthSelector	intoType: kMonth];
+		[self coerceSelector: maybeWeekdaySelector	intoType: kDayOfWeek];
 
-	//
-	// Extract days of the month.
-	//
+		if (! self.errorEncountered)
+		{
+			self.minuteSelector	= maybeMinuteSelector;
+			self.hourSelector	= maybeHourSelector;
+			self.monthSelector	= maybeMonthSelector;
+			self.yearSelector	= maybeYearSelector;
 
-    [self fieldSeparatorProduction];
-
-	rawDayOfMonthSelector = [self listProductionForType:kDayOfMonth];
-
-    if (self.errorEncountered)
-    {
-        NSLog(@"Invalid Day of Month selector");
-        goto parseError;
-    }
-
-
-	//
-	// Extract months.
-	//
-
-    [self fieldSeparatorProduction_usingTokens];
-    
-    self.monthSelector = [self listProductionForMonthList];
-
-    if (self.errorEncountered)
-    {
-        NSLog(@"Invalid Month selector");
-        goto parseError;
-    }
-    
-
-	//
-	// Extract days of the week.
-	//
-
-    [self fieldSeparatorProduction_usingTokens];
-
-	rawDayOfWeekSelector = [self listProductionForWeekdayList];
-    if (self.errorEncountered)
-    {
-        NSLog(@"Invalid Day of Week selector");
-        goto parseError;
-    }
-    
-
-	//
-	// Ignore everything else.
-	// Generate a "*" for the Year field.
-	//
-
-    self.yearSelector = [self yearProduction:kYear];
-
-
-	//
-	// Now that we know there are no errors:  create a
-	// wrapper around the day-of-month and day-of-week
-	// selector we just generated.
-	//
-
-	self.dayOfMonthSelector = [[APCDayOfMonthSelector alloc] initWithFreshlyParsedDayOfMonthSelector: rawDayOfMonthSelector andDayOfWeekSelector: rawDayOfWeekSelector];
-
-
-	//
-	// Bug out.
-	//
-
-parseError:
-    return;
+			self.dayOfMonthSelector = [[APCDayOfMonthSelector alloc] initWithFreshlyParsedDayOfMonthSelector: maybeDaySelector andDayOfWeekSelector: maybeWeekdaySelector];
+		}
+	}
 }
 
 - (BOOL)parse
 {
-	/*
-	 Sometimes, the field list has SEVEN fields:  seconds on the left,
-	 years on the right.  In practice, we ignore those:  "minutes" is
-	 plenty of resolution, and we work in 3-day-increments, not years.
-	 So strip those fields.
-	 */
-//	[self enforceFiveFields];
-
-
-	// Ok.  Parse it.
     [self fieldsProduction];
     
     return !self.errorEncountered;

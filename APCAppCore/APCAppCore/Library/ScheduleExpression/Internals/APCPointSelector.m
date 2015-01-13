@@ -18,81 +18,33 @@
 
 @implementation APCPointSelector
 
-- (instancetype) initWithUnit: (UnitType) unitType
+- (instancetype) init
 {
-    self = [super init];
+	self = [super init];
 
-    if (self)
-    {
-		_unitType = unitType; 
-
+	if (self)
+	{
+		_unitType = kUnknown;
 		_begin = nil;
 		_end = nil;
 		_step = nil;
 		_position = nil;
-
 		_defaultBegin = nil;
 		_defaultEnd = nil;
 		_isWildcard_private = NO;
-
-		switch (unitType) 
-		{
-			case kMinutes:
-				_defaultBegin = @0;
-				_defaultEnd   = @59;
-				break;
-
-			case kHours:
-				_defaultBegin = @0;
-				_defaultEnd   = @23;
-				break;
-
-			case kDayOfMonth:
-				_defaultBegin = @1;
-				_defaultEnd   = @31;
-				break;
-
-			case kMonth:
-				//  1: Jan, 2: Feb, ..., 12: Dec
-				_defaultBegin = @1;
-				_defaultEnd   = @12;
-				break;
-
-			case kDayOfWeek:
-				//  0: Sun, 1: Mon, ..., 6: Sat
-				_defaultBegin = @0;
-				_defaultEnd   = @6;
-				break;
-
-			case kYear:
-			{
-				NSDate* now = [NSDate date];
-				NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
-				NSDateComponents* components = [calendar components:NSCalendarUnitYear fromDate:now];
-
-				_defaultBegin = @(components.year);
-				_defaultEnd   = @9999;
-			}
-
-			default:
-				// Time ranges we don't care about.  Using "nil"
-				// for defaultBegin and defaultEnd should be fine.
-				break;
-		}
 	}
 
-    return self;
+	return self;
 }
 
 /**
  Used for days-of-the-week when specifying, say, the 3rd
  Friday in a month.
  */
-- (instancetype)initWithUnit:(UnitType)unitType
-					   value:(NSNumber *)value
-					position:(NSNumber *)position
+- (instancetype) initWithValue: (NSNumber *) value
+					  position: (NSNumber *) position
 {
-	self = [self initWithUnit:unitType];
+	self = [self init];
 
 	if (self)
 	{
@@ -110,16 +62,11 @@
 	return self;
 }
 
-- (instancetype)initWithUnit:(UnitType)unitType
-                  beginRange:(NSNumber*)begin
-                    endRange:(NSNumber*)end
-                        step:(NSNumber*)step
+- (instancetype) initWithRangeStart: (NSNumber *) begin
+						   rangeEnd: (NSNumber *) end
+							   step: (NSNumber *) step
 {
-	//
-	// Grab the default range of values for the specified type.
-	// Note that daysOfMonth ALWAYS uses 31 days, at the moment.
-	//
-    self = [self initWithUnit:unitType];
+    self = [self init];
 
 	if (self)
 	{
@@ -171,6 +118,59 @@
 	}
 
     return self;
+}
+
+- (void) setUnitType: (UnitType) unitType
+{
+	_unitType = unitType;
+
+	self.defaultBegin = nil;
+	self.defaultEnd = nil;
+
+	switch (unitType)
+	{
+		case kMinutes:
+			self.defaultBegin = @0;
+			self.defaultEnd   = @59;
+			break;
+
+		case kHours:
+			self.defaultBegin = @0;
+			self.defaultEnd   = @23;
+			break;
+
+		case kDayOfMonth:
+			self.defaultBegin = @1;
+			self.defaultEnd   = @31;
+			break;
+
+		case kMonth:
+			//  1: Jan, 2: Feb, ..., 12: Dec
+			self.defaultBegin = @1;
+			self.defaultEnd   = @12;
+			break;
+
+		case kDayOfWeek:
+			//  0: Sun, 1: Mon, ..., 6: Sat
+			self.defaultBegin = @0;
+			self.defaultEnd   = @6;
+			break;
+
+		case kYear:
+		{
+			NSDate* now = [NSDate date];
+			NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
+			NSDateComponents* components = [calendar components:NSCalendarUnitYear fromDate:now];
+
+			self.defaultBegin = @(components.year);
+			self.defaultEnd   = @9999;
+		}
+
+		default:
+			// Time ranges we don't care about.  Using "nil"
+			// for defaultBegin and defaultEnd should be fine.
+			break;
+	}
 }
 
 - (NSNumber*)defaultBeginPeriod
