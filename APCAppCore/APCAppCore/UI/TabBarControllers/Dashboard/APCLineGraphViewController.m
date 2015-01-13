@@ -36,11 +36,6 @@
   APCLogViewControllerAppeared();
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Appearance
 
 - (void)setupAppearance
@@ -86,6 +81,94 @@
 - (BOOL)prefersStatusBarHidden
 {
     return YES;
+}
+
+#pragma mark - IBActions
+
+- (IBAction)segmentControlChanged:(UISegmentedControl *)sender
+{
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    spinnerController.landscape = YES;
+    [self presentViewController:spinnerController animated:YES completion:nil];
+    
+    switch (sender.selectedSegmentIndex) {
+        case 0:
+        {
+            //Last 5 days
+            [self.graphItem.graphData updatePeriodForDays:-5 groupBy:APHTimelineGroupDay withCompletionHandler:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    [spinnerController dismissViewControllerAnimated:YES completion:^{
+                        [self.graphView layoutSubviews];
+                    }];
+                    
+                });
+            }];
+        }
+            break;
+        case 1:
+        {
+            //Last 1 week (7 days)
+            [self.graphItem.graphData updatePeriodForDays:-7 groupBy:APHTimelineGroupDay withCompletionHandler:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [spinnerController dismissViewControllerAnimated:YES completion:^{
+                        [self.graphView layoutSubviews];
+                    }];
+                });
+            }];
+        }
+            break;
+        case 2:
+        {
+            //Last 1 Month (30 days)
+            [self.graphItem.graphData updatePeriodForDays:-30 groupBy:APHTimelineGroupWeek withCompletionHandler:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [spinnerController dismissViewControllerAnimated:YES completion:^{
+                        [self.graphView layoutSubviews];
+                    }];
+                });
+            }];
+        }
+            break;
+        case 3:
+        {
+            //Last 3 Months (90 days)
+            [self.graphItem.graphData updatePeriodForDays:-90 groupBy:APHTimelineGroupWeek withCompletionHandler:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [spinnerController dismissViewControllerAnimated:YES completion:^{
+                        [self.graphView layoutSubviews];
+                    }];
+                });
+            }];
+        }
+            break;
+        case 4:
+        {
+            //Last 6 Months (180 days)
+            [self.graphItem.graphData updatePeriodForDays:-180 groupBy:APHTimelineGroupMonth withCompletionHandler:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [spinnerController dismissViewControllerAnimated:YES completion:^{
+                        [self.graphView layoutSubviews];
+                    }];
+                });
+            }];
+        }
+            break;
+        case 5:
+        {
+            //Last 1 year (365 days)
+            [self.graphItem.graphData updatePeriodForDays:-365 groupBy:APHTimelineGroupMonth withCompletionHandler:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [spinnerController dismissViewControllerAnimated:YES completion:^{
+                        [self.graphView layoutSubviews];
+                    }];
+                });
+            }];
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 @end
