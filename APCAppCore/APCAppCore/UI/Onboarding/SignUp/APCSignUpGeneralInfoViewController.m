@@ -140,14 +140,13 @@
                 NSDate * maxDate = [gregorian dateByAddingComponents: comps toDate: currentDate options: 0];
                 field.maximumDate = maxDate;
                 
-                if (self.permissionGranted && self.user.birthDate) {
+                if (self.user.birthDate) {
                     field.date = self.user.birthDate;
-                    field.detailText = [field.date toStringWithFormat:field.dateFormat];
-                    field.editable = NO;
                 } else{
                     field.date = maxDate;
                 }
                 
+                field.detailText = [field.date toStringWithFormat:field.dateFormat];
                 APCTableViewRow *row = [APCTableViewRow new];
                 row.item = field;
                 row.itemType = kAPCUserInfoItemTypeDateOfBirth;

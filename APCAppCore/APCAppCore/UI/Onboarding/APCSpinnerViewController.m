@@ -19,6 +19,7 @@
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        _landscape = NO;
         self.modalPresentationStyle = UIModalPresentationOverFullScreen;
         self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     }
@@ -47,6 +48,23 @@
     
     [self.activityIndicatorView stopAnimating];
   APCLogViewControllerAppeared();
+}
+
+#pragma mark - Orientation methods
+
+- (BOOL)shouldAutorotate
+{
+    return !self.landscape;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return self.landscape ? UIInterfaceOrientationMaskLandscape : UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return self.landscape ? UIInterfaceOrientationLandscapeLeft : UIInterfaceOrientationPortrait;
 }
 
 @end

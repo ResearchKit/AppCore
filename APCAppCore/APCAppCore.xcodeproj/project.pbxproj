@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0830A3491A30FA8D00F7D0E4 /* APCScoring.h in Headers */ = {isa = PBXBuildFile; fileRef = 0830A3471A30FA8D00F7D0E4 /* APCScoring.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0830A34A1A30FA8D00F7D0E4 /* APCScoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 0830A3481A30FA8D00F7D0E4 /* APCScoring.m */; };
+		089E2E831A6051F600A8FBF3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B241A2F86280015982C /* HealthKit.framework */; };
 		360C63CC1A339700002EC86C /* NSDateComponents+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 360C63CA1A339700002EC86C /* NSDateComponents+Helper.h */; };
 		360C63CD1A339700002EC86C /* NSDateComponents+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63CB1A339700002EC86C /* NSDateComponents+Helper.m */; };
 		360C63CE1A339707002EC86C /* NSDateComponents+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63CB1A339700002EC86C /* NSDateComponents+Helper.m */; };
@@ -741,6 +742,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				089E2E831A6051F600A8FBF3 /* HealthKit.framework in Frameworks */,
 				36B1AAE51A38DEA800CE7DB5 /* Security.framework in Frameworks */,
 				36B1AAE61A38DEAF00CE7DB5 /* SystemConfiguration.framework in Frameworks */,
 				F50084931A3A51C000821CB5 /* libFlurry_5.4.0.a in Frameworks */,
