@@ -57,6 +57,17 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    // Update the badge
+    NSUInteger allScheduledTasks = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.countOfAllScheduledTasksForToday;
+    NSUInteger completedScheduledTasks = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.countOfCompletedScheduledTasksForToday;
+    APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    NSNumber *remainingTasks = @(allScheduledTasks - completedScheduledTasks);
+    
+    UITabBarItem *activitiesTab = appDelegate.tabster.tabBar.selectedItem;
+    activitiesTab.badgeValue = [remainingTasks stringValue];
+    
     [self reloadData];
   APCLogViewControllerAppeared();
 }
