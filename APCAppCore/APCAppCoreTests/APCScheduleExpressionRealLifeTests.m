@@ -153,9 +153,92 @@
 	NSLog (@"---------------------- ok, we're done ----------------------");
 }
 
+- (void) testAllRealisticTestsTogether
+{
+	/*
+	 All of these should work with every combination of start
+	 and end dates, below.
+	 */
+	NSArray* expressionsToTest =
+	@[
+		@"0 5 * * *",											// 5am every day
+		@"0 5 * * 1",											// 5am every Monday
+		@"0 5 * * 1#1",											// 5am, only first Monday
+		@"0 5 * * wed#3",										// 5am, only third Wednesday
+		@"0 5 * * 1#2",											// 5am, only second Monday
+		@"0 5,10,12,17,20 * * *",								// several every day
+		@"0 5,10,12,17,20 * * 1",								// several only on Mondays
+		@"0 0 5 * * * *",										// 7 fields:  5am every day
+		@"0 0 5 * * 1 *",										// 7 fields:  5am every Monday
+		@"0 0 6 ? 1/1 THU#1 *",									// from Sage
+		@"0 0 6 ? * FRI *",										// from Sage
+		@"0 5 * DEC,NOV,JUL THU,FRI,MON#1,TUE#2",				// Replacing strings with numbers
+		@"   0  5  *  DEC,NOV,JUL   THU,FRI,MON#1,TUE#2   ",	// replacing lots of whitespace
+		@"  0	\n 5  *   * \r  *		  ",					// 5am every day, with spaces, tabs, hidden tabs, and newlines
+		@"0 5 * SEP,JUL,OCT/2,JAN-MAR THU,FRI,MON#1,TUE#2",
+		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,FRI,MON#1,TUE#2",
+//		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,duuuude,MON#1,TUE#2",
+		@"   0    5    *    SEP,JUL,OCT/2,JAN-MAR     THU,FRI,MON#1,TUE#2    ",
+		];
 
+	NSArray* startDates = @[
+							[NSDate todayAtMidnight],
+							[[NSDate tomorrowAtMidnight] dateByAddingDays: 2],
+							[[NSDate todayAtMidnight] dateByAddingDays: -7],
+							];
 
+	NSArray *endDates = @[
+						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 3],
+						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 14],
+						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 32],
+						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 60],
+						  ];
 
+	NSDateFormatter *formatter = self.dateFormatterInGregorianPacificTime;
+	//	NSDateFormatter *formatter = self.dateFormatterInGregorianUTC;			// please leave this here.
+
+	NSDate *thisDate = nil;
+	NSTimeInterval userWakeupTimeOffset	= 0;
+
+	for (NSDate* startDate in startDates)
+	{
+		NSLog (@"++++++++++++++++++++ change start date +++++++++++++++++++++");
+
+		for (NSDate* endDate in endDates)
+		{
+			NSLog (@"===================== change end date ======================");
+
+			for (NSString* cronExpression in expressionsToTest)
+			{
+				NSLog (@"------------------ change cron expression ------------------");
+				NSLog (@"           the expression :  [%@]", cronExpression);
+				NSLog (@"               start date :  %@", [formatter stringFromDate: startDate]);
+				NSLog (@" ");
+
+				APCScheduleExpression* schedule	= [[APCScheduleExpression alloc] initWithExpression: cronExpression
+																						   timeZero: userWakeupTimeOffset];
+
+				NSEnumerator* enumerator = [schedule enumeratorBeginningAtTime: startDate
+																  endingAtTime: endDate];
+
+				while ((thisDate = enumerator.nextObject) != nil)
+				{
+					NSLog (@"LOOK HERE ENUMERATOR DATE :  %@", [formatter stringFromDate:thisDate]);
+				}
+
+				NSLog (@" ");
+				NSLog (@"                 end date :  %@", [formatter stringFromDate: endDate]);
+				NSLog (@"---------------------- ok, we're done ----------------------");
+			}
+
+			NSLog (@"================== end of that end date ====================");
+			NSLog (@" ");
+		}
+
+		NSLog (@"+++++++++++++++++ end of that start date +++++++++++++++++++");
+		NSLog (@" ");
+	}
+}
 
 - (void) test_originalTestWorkingOnDeveloperMachine
 {
