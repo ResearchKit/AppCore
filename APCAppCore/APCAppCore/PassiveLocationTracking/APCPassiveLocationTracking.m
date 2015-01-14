@@ -210,7 +210,6 @@ static  NSString  *kLocationJsonHorizontalAccuracy           = @"horizontalAccur
         }
     }
     if (locationJson != nil) {
-        NSLog(@"locationJson exists = %@", locationJson);
         NSData *data = [NSJSONSerialization dataWithJSONObject:locationJson options:0 error:nil];
         
         if (self.taskArchive != nil) {
