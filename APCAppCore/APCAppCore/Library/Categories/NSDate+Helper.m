@@ -125,5 +125,28 @@ NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
     return [cal dateFromComponents:components];
 }
 
+- (BOOL) isEarlierThanDate: (NSDate*) otherDate
+{
+	BOOL result = [self compare: otherDate] == NSOrderedAscending;
+	return result;
+}
+
+- (BOOL) isLaterThanDate: (NSDate*) otherDate
+{
+	BOOL result = [self compare: otherDate] == NSOrderedDescending;
+	return result;
+}
+
+- (BOOL) isEarlierOrEqualToDate: (NSDate*) otherDate
+{
+	BOOL result = [self compare: otherDate] != NSOrderedDescending;
+	return result;
+}
+
+- (BOOL) isLaterThanOrEqualToDate: (NSDate*) otherDate
+{
+	BOOL result = [self compare: otherDate] != NSOrderedAscending;
+	return result;
+}
 
 @end

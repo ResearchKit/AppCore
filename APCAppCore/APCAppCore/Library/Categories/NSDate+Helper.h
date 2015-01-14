@@ -28,4 +28,9 @@ extern NSString * const NSDateDefaultDateFormat;
 +(instancetype) tomorrowAtMidnight;
 +(instancetype) weekAgoAtMidnight;
 
+- (BOOL) isEarlierThanDate: (NSDate*) otherDate;
+- (BOOL) isLaterThanDate: (NSDate*) otherDate;
+- (BOOL) isEarlierOrEqualToDate: (NSDate*) otherDate;
+- (BOOL) isLaterThanOrEqualToDate: (NSDate*) otherDate;
+
 @end

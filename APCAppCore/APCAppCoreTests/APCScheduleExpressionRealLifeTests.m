@@ -96,7 +96,8 @@
 
 //	NSString* cronExpression = @"0 5 * * *";											// 5am every day
 //	NSString* cronExpression = @"0 5 * * 1";											// 5am every Monday
-	NSString* cronExpression = @"0 5 * * 1#1";											// 5am, only first Monday
+//	NSString* cronExpression = @"0 5 * * 1#1";											// 5am, only first Monday
+//	NSString* cronExpression = @"0 5 * * wed#3";										// 5am, only third Wednesday
 //	NSString* cronExpression = @"0 5 * * 1#2";											// 5am, only second Monday
 //	NSString* cronExpression = @"0 5,10,12,17,20 * * *";								// several every day
 //	NSString* cronExpression = @"0 5,10,12,17,20 * * 1";								// several only on Mondays
@@ -113,7 +114,7 @@
 //	NSString* cronExpression = @"0 5 * SEP,JUL,OCT/2,JAN-MAR THU,FRI,MON#1,TUE#2";
 //	NSString* cronExpression = @"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,FRI,MON#1,TUE#2";
 //	NSString* cronExpression = @"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,duuuude,MON#1,TUE#2";
-//	NSString* cronExpression = @"   0    5    *    SEP,JUL,OCT/2,JAN-MAR     THU,FRI,MON#1,TUE#2    ";
+	NSString* cronExpression = @"   0    5    *    SEP,JUL,OCT/2,JAN-MAR     THU,FRI,MON#1,TUE#2    ";
 
 
 
@@ -124,9 +125,9 @@
 	NSDate *start = [NSDate todayAtMidnight];
 //	NSDate *start = [[NSDate tomorrowAtMidnight] dateByAddingDays: 2];
 //	NSDate *end   = [NSDate tomorrowAtMidnight];
-//	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 3];
+	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 3];
 //	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 14];
-	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 32];
+//	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 32];
 //	NSDate *end   = [[NSDate tomorrowAtMidnight] dateByAddingDays: 60];
 
 	NSEnumerator* enumerator = [schedule enumeratorBeginningAtTime: start
