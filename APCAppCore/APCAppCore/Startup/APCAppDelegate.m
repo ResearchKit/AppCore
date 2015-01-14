@@ -280,11 +280,19 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     NSArray  *selectedImageNames   = @[ @"tab_dashboard_selected", @"tab_learn_selected", @"tab_activities_selected", @"tab_profile_selected" ];
     NSArray  *tabBarTitles         = @[ @"Dashboard", @"Learn", @"Activities", @"Profile"];
     
+    NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
+    NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
+    NSNumber *activitiesBadgeValue = @(allScheduledTasks - completedScheduledTasks);
+    
     for (int i=0; i<items.count; i++) {
         UITabBarItem  *item = items[i];
         item.image = [UIImage imageNamed:deselectedImageNames[i]];
         item.selectedImage = [[UIImage imageNamed:selectedImageNames[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         item.title = tabBarTitles[i];
+        
+        if ((i == 2) && ([activitiesBadgeValue integerValue] != 0)) {
+            item.badgeValue = [activitiesBadgeValue stringValue];
+        }
     }
     
     NSArray  *controllers = tabBarController.viewControllers;
@@ -293,7 +301,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
-    UITabBarController  *tabster = (UITabBarController  *)self.window.rootViewController;
+    self.tabster = (UITabBarController  *)self.window.rootViewController;
     NSArray  *deselectedImageNames = @[ @"tab_dashboard",          @"tab_learn",          @"tab_activities",          @"tab_profile" ];
     NSArray  *selectedImageNames   = @[ @"tab_dashboard_selected", @"tab_learn_selected", @"tab_activities_selected", @"tab_profile_selected" ];
     NSArray  *tabBarTitles         = @[ @"Dashboard", @"Learn", @"Activities", @"Profile"];
@@ -308,12 +316,20 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         UIViewController  *controller = [storyboard instantiateInitialViewController];
         [controllers replaceObjectAtIndex:controllerIndex withObject:controller];
         
-        [tabster setViewControllers:controllers animated:NO];
-        tabster.tabBar.tintColor = [UIColor appPrimaryColor];
-        UITabBarItem  *item = tabster.tabBar.selectedItem;
+        [self.tabster setViewControllers:controllers animated:NO];
+        self.tabster.tabBar.tintColor = [UIColor appPrimaryColor];
+        UITabBarItem  *item = self.tabster.tabBar.selectedItem;
         item.image = [UIImage imageNamed:deselectedImageNames[controllerIndex]];
         item.selectedImage = [[UIImage imageNamed:selectedImageNames[controllerIndex]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         item.title = tabBarTitles[controllerIndex];
+        
+        NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
+        NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
+        NSNumber *activitiesBadgeValue = @(allScheduledTasks - completedScheduledTasks);
+        
+        if ((controllerIndex == 2) && ([activitiesBadgeValue integerValue] != 0)) {
+            item.badgeValue = [activitiesBadgeValue stringValue];
+        }
     }
 }
 
