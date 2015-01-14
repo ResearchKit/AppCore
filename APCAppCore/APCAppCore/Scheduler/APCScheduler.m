@@ -159,7 +159,6 @@ static NSString * const kOneTimeSchedule = @"once";
             [self createScheduledTask:schedule task:task startOn:startOnDate];
         }
     }
-
 }
 
 - (void) createScheduledTask:(APCSchedule*) schedule task: (APCTask*) task startOn: (NSDate*) startOn
