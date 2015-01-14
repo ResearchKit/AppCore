@@ -487,7 +487,8 @@ parseError:
 
 		if (self.errorEncountered)
 		{
-			NSAssert (NO, @"You should probably print something useful, here.");
+//			NSAssert (NO, @"You should probably print something useful, here.");
+			NSLog (@"Something broke during the parsing process.  Returning nil for the ScheduleExpression.");
 			break;
 		}
 

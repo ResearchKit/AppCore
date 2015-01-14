@@ -177,8 +177,13 @@
 		@"  0	\n 5  *   * \r  *		  ",					// 5am every day, with spaces, tabs, hidden tabs, and newlines
 		@"0 5 * SEP,JUL,OCT/2,JAN-MAR THU,FRI,MON#1,TUE#2",
 		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,FRI,MON#1,TUE#2",
-//		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,duuuude,MON#1,TUE#2",
 		@"   0    5    *    SEP,JUL,OCT/2,JAN-MAR     THU,FRI,MON#1,TUE#2    ",
+
+		// Things that break:
+		@"0 5 * whatever dude",
+		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,duuuude,MON#1,TUE#2",
+//		@"whatever",		// ooooooh, these cause real crashes.  Good.
+//		@"0 0 * *",
 		];
 
 	NSArray* startDates = @[
