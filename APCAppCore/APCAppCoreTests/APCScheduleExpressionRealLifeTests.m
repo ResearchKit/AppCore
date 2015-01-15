@@ -92,29 +92,29 @@
 	 */
 	NSArray* expressionsToTest =
 	@[
-//		@"0 5 * * *",											// 5am every day
-//		@"0 5 * * 1",											// 5am every Monday
-//		@"0 5 * * 1#1",											// 5am, only first Monday
-//		@"0 5 * * wed#3",										// 5am, only third Wednesday
-//		@"0 5 * * 1#2",											// 5am, only second Monday
-//		@"0 5,10,12,17,20 * * *",								// several every day
-//		@"0 5,10,12,17,20 * * 1",								// several only on Mondays
-//		@"0 0 5 * * * *",										// 7 fields:  5am every day
-//		@"0 0 5 * * 1 *",										// 7 fields:  5am every Monday
-//		@"0 0 6 ? 1/1 THU#1 *",									// from Sage
-//		@"0 0 6 ? * FRI *",										// from Sage
-//		@"0 5 * DEC,NOV,JUL THU,FRI,MON#1,TUE#2",				// Replacing strings with numbers
-//		@"   0  5  *  DEC,NOV,JUL   THU,FRI,MON#1,TUE#2   ",	// replacing lots of whitespace
-//		@"  0	\n 5  *   * \r  *		  ",					// 5am every day, with spaces, tabs, hidden tabs, and newlines
-//		@"0 5 * SEP,JUL,OCT/2,JAN-MAR THU,FRI,MON#1,TUE#2",
-//		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,FRI,MON#1,TUE#2",
-//		@"   0    5    *    SEP,JUL,OCT/2,JAN-MAR     THU,FRI,MON#1,TUE#2    ",
-//
-//		// Things that break:
-//		@"0 5 * whatever dude",										// 5 fields, 2 with garbage
-//		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,duuuude,MON#1,TUE#2",		// 5 fields, 1 with garbage
-//		@"0 0 * *",					// 4 fields, not 5 or 7
-//		@"whatever",				// 1 field (with garbage in it)
+		@"0 5 * * *",											// 5am every day
+		@"0 5 * * 1",											// 5am every Monday
+		@"0 5 * * 1#1",											// 5am, only first Monday
+		@"0 5 * * wed#3",										// 5am, only third Wednesday
+		@"0 5 * * 1#2",											// 5am, only second Monday
+		@"0 5,10,12,17,20 * * *",								// several every day
+		@"0 5,10,12,17,20 * * 1",								// several only on Mondays
+		@"0 0 5 * * * *",										// 7 fields:  5am every day
+		@"0 0 5 * * 1 *",										// 7 fields:  5am every Monday
+		@"0 0 6 ? 1/1 THU#1 *",									// from Sage
+		@"0 0 6 ? * FRI *",										// from Sage
+		@"0 5 * DEC,NOV,JUL THU,FRI,MON#1,TUE#2",				// Replacing strings with numbers
+		@"   0  5  *  DEC,NOV,JUL   THU,FRI,MON#1,TUE#2   ",	// replacing lots of whitespace
+		@"  0	\n 5  *   * \r  *		  ",					// 5am every day, with spaces, tabs, hidden tabs, and newlines
+		@"0 5 * SEP,JUL,OCT/2,JAN-MAR THU,FRI,MON#1,TUE#2",
+		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,FRI,MON#1,TUE#2",
+		@"   0    5    *    SEP,JUL,OCT/2,JAN-MAR     THU,FRI,MON#1,TUE#2    ",
+
+		// Things that break:
+		@"0 5 * whatever dude",										// 5 fields, 2 with garbage
+		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,duuuude,MON#1,TUE#2",		// 5 fields, 1 with garbage
+		@"0 0 * *",					// 4 fields, not 5 or 7
+		@"whatever",				// 1 field (with garbage in it)
 		@"0 5, 6, 7 * * *",			// spaces after commas
 		@"0 6, 12, 18, * * *",		// spaces after commas, generating illegal month number
 		@"0 5 - 7 * * *",			// spaces around hyphen
@@ -127,8 +127,8 @@
 							];
 
 	NSArray *endDates = @[
-						  [NSDate tomorrowAtMidnight],
-//						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 3],
+//						  [NSDate tomorrowAtMidnight],
+						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 3],
 //						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 14],
 //						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 32],
 //						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 60],
@@ -139,7 +139,6 @@
 
 	NSDate *thisDate = nil;
 	NSTimeInterval userWakeupTimeOffset	= 0;
-	NSInteger printoutWidth = 60;
 
 	for (NSDate* startDate in startDates)
 	{
