@@ -111,10 +111,13 @@
 //		@"   0    5    *    SEP,JUL,OCT/2,JAN-MAR     THU,FRI,MON#1,TUE#2    ",
 //
 //		// Things that break:
-//		@"0 5 * whatever dude",
-//		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,duuuude,MON#1,TUE#2",
-		@"0 0 * *",
-		@"whatever",		// ooooooh, these cause real crashes.  Good.
+//		@"0 5 * whatever dude",										// 5 fields, 2 with garbage
+//		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,duuuude,MON#1,TUE#2",		// 5 fields, 1 with garbage
+//		@"0 0 * *",					// 4 fields, not 5 or 7
+//		@"whatever",				// 1 field (with garbage in it)
+		@"0 5, 6, 7 * * *",			// spaces after commas
+		@"0 6, 12, 18, * * *",		// spaces after commas, generating illegal month number
+		@"0 5 - 7 * * *",			// spaces around hyphen
 		];
 
 	NSArray* startDates = @[
@@ -124,7 +127,8 @@
 							];
 
 	NSArray *endDates = @[
-						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 3],
+						  [NSDate tomorrowAtMidnight],
+//						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 3],
 //						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 14],
 //						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 32],
 //						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 60],
