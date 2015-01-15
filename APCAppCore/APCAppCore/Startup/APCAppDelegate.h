@@ -16,6 +16,7 @@
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
 
 @property  (strong, nonatomic)  UIWindow * window;
+@property (strong, nonatomic) UITabBarController *tabster;
 
 //APC Related Properties & Methods
 @property (strong, nonatomic) APCDataSubstrate * dataSubstrate;
