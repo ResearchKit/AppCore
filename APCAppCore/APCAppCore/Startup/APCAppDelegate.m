@@ -280,18 +280,20 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     NSArray  *selectedImageNames   = @[ @"tab_dashboard_selected", @"tab_learn_selected", @"tab_activities_selected", @"tab_profile_selected" ];
     NSArray  *tabBarTitles         = @[ @"Dashboard", @"Learn", @"Activities", @"Profile"];
     
-    NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
-    NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
-    NSNumber *activitiesBadgeValue = @(allScheduledTasks - completedScheduledTasks);
-    
     for (int i=0; i<items.count; i++) {
         UITabBarItem  *item = items[i];
         item.image = [UIImage imageNamed:deselectedImageNames[i]];
         item.selectedImage = [[UIImage imageNamed:selectedImageNames[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         item.title = tabBarTitles[i];
         
-        if ((i == 2) && ([activitiesBadgeValue integerValue] != 0)) {
-            item.badgeValue = [activitiesBadgeValue stringValue];
+        if (i == 2) {
+            NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
+            NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
+            NSNumber *activitiesBadgeValue = @(allScheduledTasks - completedScheduledTasks);
+            
+            if ([activitiesBadgeValue integerValue] != 0) {
+                item.badgeValue = [activitiesBadgeValue stringValue];
+            }
         }
     }
     
@@ -323,12 +325,14 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         item.selectedImage = [[UIImage imageNamed:selectedImageNames[controllerIndex]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         item.title = tabBarTitles[controllerIndex];
         
-        NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
-        NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
-        NSNumber *activitiesBadgeValue = @(allScheduledTasks - completedScheduledTasks);
-        
-        if ((controllerIndex == 2) && ([activitiesBadgeValue integerValue] != 0)) {
-            item.badgeValue = [activitiesBadgeValue stringValue];
+        if (controllerIndex == 2) {
+            NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
+            NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
+            NSNumber *remainingTasks = @(allScheduledTasks - completedScheduledTasks);
+            
+            if ([remainingTasks integerValue] != 0) {
+                item.badgeValue = [remainingTasks stringValue];
+            }
         }
     }
 }
