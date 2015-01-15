@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="u6G-bF-12V">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="u6G-bF-12V">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -564,20 +564,25 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="503"/>
                                 <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="TzR-95-2rt">
-                                    <rect key="frame" x="0.0" y="64" width="320" height="50"/>
+                                    <rect key="frame" x="0.0" y="64" width="320" height="70"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please help us make our study better by explaining the reasons of your withdrawal." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w0A-pl-Wzd">
-                                            <rect key="frame" x="17" y="4" width="289" height="42"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please help us make our study better by explaining the reasons for your withdrawal." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w0A-pl-Wzd">
+                                            <rect key="frame" x="17" y="4" width="289" height="36"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" white="0.59879032258064513" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select all that apply." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cpP-7K-8Bb">
+                                            <rect key="frame" x="17" y="44" width="289" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" white="0.60212953629032262" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                    <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstItem="w0A-pl-Wzd" firstAttribute="leading" secondItem="TzR-95-2rt" secondAttribute="leading" constant="17" id="98I-qJ-Yfu"/>
-                                        <constraint firstAttribute="bottom" secondItem="w0A-pl-Wzd" secondAttribute="bottom" constant="4" id="ayq-VL-ahk"/>
+                                        <constraint firstAttribute="bottom" secondItem="w0A-pl-Wzd" secondAttribute="bottom" constant="30" id="ayq-VL-ahk"/>
                                         <constraint firstAttribute="trailing" secondItem="w0A-pl-Wzd" secondAttribute="trailing" constant="14" id="dfa-6k-gtL"/>
                                         <constraint firstItem="w0A-pl-Wzd" firstAttribute="top" secondItem="TzR-95-2rt" secondAttribute="top" constant="4" id="nxG-xv-fla"/>
                                     </constraints>
@@ -657,6 +662,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="headerLabel" destination="w0A-pl-Wzd" id="tpz-EF-MTE"/>
+                        <outlet property="selectAllLabel" destination="cpP-7K-8Bb" id="7Il-ft-nPE"/>
                         <outlet property="submitButton" destination="o0S-br-ebJ" id="v1s-Di-L3g"/>
                         <outlet property="tableView" destination="Ju2-WN-ZuL" id="I9L-nH-8b0"/>
                     </connections>

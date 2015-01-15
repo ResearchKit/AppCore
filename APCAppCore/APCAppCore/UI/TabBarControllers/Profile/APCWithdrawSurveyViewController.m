@@ -56,6 +56,8 @@
 {
     [self.headerLabel setTextColor:[UIColor appSecondaryColor2]];
     [self.headerLabel setFont:[UIFont appLightFontWithSize:14.0f]];
+    [self.selectAllLabel setTextColor:[UIColor appSecondaryColor2]];
+    [self.selectAllLabel setFont:[UIFont appLightFontWithSize:14.0f]];
     
     [self.submitButton.titleLabel setFont:[UIFont appMediumFontWithSize:19.0f]];
     [self.submitButton setBackgroundImage:[UIImage imageWithColor:[UIColor appPrimaryColor]] forState:UIControlStateNormal];
