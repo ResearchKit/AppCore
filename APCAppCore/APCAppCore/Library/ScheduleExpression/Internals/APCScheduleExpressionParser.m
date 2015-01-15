@@ -488,7 +488,7 @@ parseError:
 		if (self.errorEncountered)
 		{
 //			NSAssert (NO, @"You should probably print something useful, here.");
-			NSLog (@"Something broke during the parsing process.  Returning nil for the ScheduleExpression.");
+			NSLog (@"WARNING: Something broke during the parsing process.  Returning nil for the ScheduleExpression.");
 			break;
 		}
 
@@ -500,15 +500,25 @@ parseError:
 		}
 	}
 
+	// Problem in the incoming expression.
+	if (incomingSelectors.count < 5)
+	{
+		NSLog (@"WARNING: Couldn't identify five fields in the incoming string (minutes, hours, days, months, days of the week).  Returning nil for the ScheduleExpression.");
+		[self recordError];
+	}
+
+	// If more than 5 fields, we'll assume the 1st field is
+	// seconds, assume the next 5 are the ones we expect,
+	// and ignore anything after that.
+	else if (incomingSelectors.count > 5)
+	{
+		[incomingSelectors removeObjectAtIndex: 0];
+	}
+
 	if (! self.errorEncountered)
 	{
 		// If we have "seconds" and/or "years," remove "seconds."
 		// We'll ignore "years."
-		if (incomingSelectors.count > 5)
-		{
-			[incomingSelectors removeObjectAtIndex: 0];
-		}
-
 		APCListSelector* maybeMinuteSelector	= incomingSelectors [0];
 		APCListSelector* maybeHourSelector		= incomingSelectors [1];
 		APCListSelector* maybeDaySelector		= incomingSelectors [2];

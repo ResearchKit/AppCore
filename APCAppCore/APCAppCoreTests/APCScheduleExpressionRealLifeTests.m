@@ -92,60 +92,70 @@
 	 */
 	NSArray* expressionsToTest =
 	@[
-		@"0 5 * * *",											// 5am every day
-		@"0 5 * * 1",											// 5am every Monday
-		@"0 5 * * 1#1",											// 5am, only first Monday
-		@"0 5 * * wed#3",										// 5am, only third Wednesday
-		@"0 5 * * 1#2",											// 5am, only second Monday
-		@"0 5,10,12,17,20 * * *",								// several every day
-		@"0 5,10,12,17,20 * * 1",								// several only on Mondays
-		@"0 0 5 * * * *",										// 7 fields:  5am every day
-		@"0 0 5 * * 1 *",										// 7 fields:  5am every Monday
-		@"0 0 6 ? 1/1 THU#1 *",									// from Sage
-		@"0 0 6 ? * FRI *",										// from Sage
-		@"0 5 * DEC,NOV,JUL THU,FRI,MON#1,TUE#2",				// Replacing strings with numbers
-		@"   0  5  *  DEC,NOV,JUL   THU,FRI,MON#1,TUE#2   ",	// replacing lots of whitespace
-		@"  0	\n 5  *   * \r  *		  ",					// 5am every day, with spaces, tabs, hidden tabs, and newlines
-		@"0 5 * SEP,JUL,OCT/2,JAN-MAR THU,FRI,MON#1,TUE#2",
-		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,FRI,MON#1,TUE#2",
-		@"   0    5    *    SEP,JUL,OCT/2,JAN-MAR     THU,FRI,MON#1,TUE#2    ",
-
-		// Things that break:
-		@"0 5 * whatever dude",
-		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,duuuude,MON#1,TUE#2",
-//		@"whatever",		// ooooooh, these cause real crashes.  Good.
-//		@"0 0 * *",
+//		@"0 5 * * *",											// 5am every day
+//		@"0 5 * * 1",											// 5am every Monday
+//		@"0 5 * * 1#1",											// 5am, only first Monday
+//		@"0 5 * * wed#3",										// 5am, only third Wednesday
+//		@"0 5 * * 1#2",											// 5am, only second Monday
+//		@"0 5,10,12,17,20 * * *",								// several every day
+//		@"0 5,10,12,17,20 * * 1",								// several only on Mondays
+//		@"0 0 5 * * * *",										// 7 fields:  5am every day
+//		@"0 0 5 * * 1 *",										// 7 fields:  5am every Monday
+//		@"0 0 6 ? 1/1 THU#1 *",									// from Sage
+//		@"0 0 6 ? * FRI *",										// from Sage
+//		@"0 5 * DEC,NOV,JUL THU,FRI,MON#1,TUE#2",				// Replacing strings with numbers
+//		@"   0  5  *  DEC,NOV,JUL   THU,FRI,MON#1,TUE#2   ",	// replacing lots of whitespace
+//		@"  0	\n 5  *   * \r  *		  ",					// 5am every day, with spaces, tabs, hidden tabs, and newlines
+//		@"0 5 * SEP,JUL,OCT/2,JAN-MAR THU,FRI,MON#1,TUE#2",
+//		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,FRI,MON#1,TUE#2",
+//		@"   0    5    *    SEP,JUL,OCT/2,JAN-MAR     THU,FRI,MON#1,TUE#2    ",
+//
+//		// Things that break:
+//		@"0 5 * whatever dude",
+//		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,duuuude,MON#1,TUE#2",
+		@"0 0 * *",
+		@"whatever",		// ooooooh, these cause real crashes.  Good.
 		];
 
 	NSArray* startDates = @[
 							[NSDate todayAtMidnight],
-							[[NSDate tomorrowAtMidnight] dateByAddingDays: 2],
-							[[NSDate todayAtMidnight] dateByAddingDays: -7],
+//							[[NSDate tomorrowAtMidnight] dateByAddingDays: 2],
+//							[[NSDate todayAtMidnight]    dateByAddingDays: -7],
 							];
 
 	NSArray *endDates = @[
 						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 3],
-						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 14],
-						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 32],
-						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 60],
+//						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 14],
+//						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 32],
+//						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 60],
 						  ];
 
 	NSDateFormatter *formatter = self.dateFormatterInGregorianPacificTime;
-	//	NSDateFormatter *formatter = self.dateFormatterInGregorianUTC;			// please leave this here.
+//	NSDateFormatter *formatter = self.dateFormatterInGregorianUTC;			// please leave this here.
 
 	NSDate *thisDate = nil;
 	NSTimeInterval userWakeupTimeOffset	= 0;
+	NSInteger printoutWidth = 60;
 
 	for (NSDate* startDate in startDates)
 	{
+		NSLog (@" ");
+		NSLog (@"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		NSLog (@"++++++++++++++++++++ change start date +++++++++++++++++++++");
+		NSLog (@"               start date :  %@", [formatter stringFromDate: startDate]);
+		NSLog (@"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
 		for (NSDate* endDate in endDates)
 		{
+			NSLog (@" ");
+			NSLog (@"============================================================");
 			NSLog (@"===================== change end date ======================");
+			NSLog (@"                 end date :  %@", [formatter stringFromDate: endDate]);
+			NSLog (@"============================================================");
 
 			for (NSString* cronExpression in expressionsToTest)
 			{
+				NSLog (@" ");
 				NSLog (@"------------------ change cron expression ------------------");
 				NSLog (@"           the expression :  [%@]", cronExpression);
 				NSLog (@"               start date :  %@", [formatter stringFromDate: startDate]);
@@ -168,11 +178,9 @@
 			}
 
 			NSLog (@"================== end of that end date ====================");
-			NSLog (@" ");
 		}
 
 		NSLog (@"+++++++++++++++++ end of that start date +++++++++++++++++++");
-		NSLog (@" ");
 	}
 }
 
