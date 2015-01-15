@@ -28,4 +28,9 @@
 
 + (void)clearAllReminders;
 
+/*********************************************************************************/
+#pragma mark - Multiday Tasks
+/*********************************************************************************/
+@property (nonatomic, readonly) BOOL isMultiDayTask;
+
 @end

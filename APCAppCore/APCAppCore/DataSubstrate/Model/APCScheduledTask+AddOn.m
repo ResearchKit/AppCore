@@ -210,4 +210,12 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     return retValue;
 }
 
+/*********************************************************************************/
+#pragma mark - Multiday Tasks
+/*********************************************************************************/
+- (BOOL) isMultiDayTask {
+    NSTimeInterval interval = [self.endOn timeIntervalSinceDate:self.startOn];
+    return (interval > (24 * 60 * 60) + 3);
+}
+
 @end
