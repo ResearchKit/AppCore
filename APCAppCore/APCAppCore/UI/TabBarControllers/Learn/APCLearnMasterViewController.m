@@ -15,7 +15,7 @@
 
 static CGFloat kSectionHeaderHeight = 40.f;
 
-@interface APCLearnMasterViewController ()
+@interface APCLearnMasterViewController () <RKSTTaskViewControllerDelegate>
 
 @end
 

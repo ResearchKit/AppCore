@@ -167,7 +167,13 @@ static NSString *const kSignedInKey = @"SignedIn";
 
 - (void)setName:(NSString *)name
 {
-    [APCKeychainStore setString:name forKey:kNamePropertytName];
+    if (name != nil) {
+        [APCKeychainStore setString:name forKey:kNamePropertytName];
+    }
+    else {
+        [APCKeychainStore removeValueForKey:kNamePropertytName];
+    }
+
 }
 
 - (NSString *)firstName
@@ -177,7 +183,12 @@ static NSString *const kSignedInKey = @"SignedIn";
 
 - (void)setFirstName:(NSString *)firstName
 {
-    [APCKeychainStore setString:firstName forKey:kFirstNamePropertytName];
+    if (firstName != nil) {
+        [APCKeychainStore setString:firstName forKey:kFirstNamePropertytName];
+    }
+    else {
+        [APCKeychainStore removeValueForKey:kFirstNamePropertytName];
+    }
 }
 
 - (NSString *)lastName
@@ -187,7 +198,12 @@ static NSString *const kSignedInKey = @"SignedIn";
 
 - (void)setLastName:(NSString *)lastName
 {
-    [APCKeychainStore setString:lastName forKey:kLastNamePropertyName];
+    if (lastName != nil) {
+        [APCKeychainStore setString:lastName forKey:kLastNamePropertyName];
+    }
+    else {
+        [APCKeychainStore removeValueForKey:kLastNamePropertyName];
+    }
 }
 
 - (NSString *)email
