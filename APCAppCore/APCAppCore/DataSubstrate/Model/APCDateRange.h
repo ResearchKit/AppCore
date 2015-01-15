@@ -7,11 +7,19 @@
 
 #import <Foundation/Foundation.h>
 
-@interface APCTimeRange : NSObject
+typedef NS_ENUM(NSUInteger, APCDateRangeComparison) {
+    kAPCDateRangeComparisonSameRange,
+    kAPCDateRangeComparisonWithinRange,
+    kAPCDateRangeComparisonOutOfRange
+};
+
+@interface APCDateRange : NSObject
 
 @property (nonatomic, strong) NSDate * startDate;
 @property (nonatomic, strong) NSDate * endDate;
 
 - (instancetype) initWithStartDate: (NSDate*) startDate endDate: (NSDate*) endDate;
+- (void) adjustEndDateToEndofDay;
+- (APCDateRangeComparison) compare: (APCDateRange*) range;
 
 @end

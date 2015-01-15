@@ -28,4 +28,6 @@ extern NSString * const NSDateDefaultDateFormat;
 +(instancetype) tomorrowAtMidnight;
 +(instancetype) weekAgoAtMidnight;
 
++ (NSTimeInterval) parseISO8601DurationString: (NSString*) duration ;
+
 @end
