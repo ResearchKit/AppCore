@@ -123,7 +123,6 @@ static NSString * const kOneTimeSchedule = @"once";
     request.predicate = [NSPredicate predicateWithFormat:@"remoteUpdatable == %@ && scheduleType == %@", @(YES), kOneTimeSchedule];
     NSError * error;
     NSArray * scheduleArray = [self.scheduleMOC executeFetchRequest:request error:&error];
-    APCLogDebug(@"%@", scheduleArray);
     APCLogError2 (error);
     
     //Get completed scheduled tasks with that one time task. If they exist make the schedule inactive
@@ -190,7 +189,6 @@ static NSString * const kOneTimeSchedule = @"once";
     {
         APCScheduleExpression * scheduleExpression = schedule.scheduleExpression;
         NSDate * beginningTime = (schedule.expires !=nil) ? [self.referenceRange.startDate dateByAddingTimeInterval:(-1*schedule.expiresInterval)] : self.referenceRange.startDate;
-        APCLogDebug(@"Beginning Time: %@", beginningTime);
         
         NSEnumerator*   enumerator = [scheduleExpression enumeratorBeginningAtTime:beginningTime endingAtTime:self.referenceRange.endDate];
         NSDate * startOnDate;
@@ -227,7 +225,7 @@ static NSString * const kOneTimeSchedule = @"once";
     
     if (scheduledTasksArray.count == 0) {
         //One time not created, create it
-        NSDate * startOnDate = self.referenceRange.startDate;
+        NSDate * startOnDate = [NSDate yesterdayAtMidnight]; //Hard coded to yesterday at midnight
         NSDate * endDate = (schedule.expires !=nil) ? [startOnDate dateByAddingTimeInterval:schedule.expiresInterval] : [startOnDate dateByAddingTimeInterval:[NSDate parseISO8601DurationString:@"P2Y"]];
         endDate = [NSDate endOfDay:endDate];
         [self createScheduledTask:schedule task:task dateRange:[[APCDateRange alloc] initWithStartDate:startOnDate endDate:endDate]];
