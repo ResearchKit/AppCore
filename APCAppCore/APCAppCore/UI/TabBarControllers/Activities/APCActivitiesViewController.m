@@ -59,9 +59,10 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     [super viewWillAppear:animated];
     
     // Update the badge
-    NSUInteger allScheduledTasks = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.countOfAllScheduledTasksForToday;
-    NSUInteger completedScheduledTasks = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.countOfCompletedScheduledTasksForToday;
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    NSUInteger allScheduledTasks = appDelegate.dataSubstrate.countOfAllScheduledTasksForToday;
+    NSUInteger completedScheduledTasks = appDelegate.dataSubstrate.countOfCompletedScheduledTasksForToday;
     
     NSNumber *remainingTasks = @(allScheduledTasks - completedScheduledTasks);
     
@@ -69,7 +70,8 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     activitiesTab.badgeValue = [remainingTasks stringValue];
     
     [self reloadData];
-  APCLogViewControllerAppeared();
+    
+    APCLogViewControllerAppeared();
 }
 
 #pragma mark - UITableViewDataSource Methods
