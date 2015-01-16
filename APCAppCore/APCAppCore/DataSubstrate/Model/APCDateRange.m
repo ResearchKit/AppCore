@@ -40,11 +40,6 @@
     return self;
 }
 
-- (void) adjustEndDateToEndofDay
-{
-    self.endDate = [NSDate endOfDay:self.endDate];
-}
-
 - (APCDateRangeComparison) compare: (APCDateRange*) range {
     APCDateRangeComparison retValue;
     
@@ -67,6 +62,13 @@
     }
     
     return retValue;
+}
+
+- (NSString *)description {
+    NSDateFormatter * _dateFormatter = [NSDateFormatter new];
+    [_dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [_dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    return [NSString stringWithFormat:@"Start Date: [%@] End Date: [%@]", [_dateFormatter stringFromDate:self.startDate], [_dateFormatter stringFromDate:self.endDate]];
 }
 
 /*********************************************************************************/

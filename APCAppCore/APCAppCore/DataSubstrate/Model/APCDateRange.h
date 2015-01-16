@@ -22,7 +22,6 @@ typedef NS_ENUM(NSUInteger, APCDateRangeComparison) {
 - (instancetype) initWithStartDate:(NSDate *)startDate durationString: (NSString*) durationString;
 - (instancetype) initWithStartDate:(NSDate *)startDate durationInterval: (NSTimeInterval) durationInterval;
 
-- (void) adjustEndDateToEndofDay;
 - (APCDateRangeComparison) compare: (APCDateRange*) range;
 
 + (instancetype) todayRange;

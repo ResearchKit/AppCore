@@ -18,9 +18,24 @@ static NSString * const kOneTimeSchedule = @"once";
 @property  (nonatomic) BOOL isUpdating;
 @property (nonatomic, strong) APCDateRange * referenceRange;
 
+@property (nonatomic, strong) NSDateFormatter * dateFormatter;
+
+//Properties that need to be cleaned after every upate
+@property (nonatomic, strong) NSMutableArray * allScheduledTasksForReferenceDate;
+@property (nonatomic, strong) NSMutableArray * validatedScheduledTasksForReferenceDate;
+
 @end
 
 @implementation APCScheduler
+
+- (NSDateFormatter *)dateFormatter {
+    if (_dateFormatter == nil) {
+        _dateFormatter = [NSDateFormatter new];
+        [_dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+        [_dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    }
+    return _dateFormatter;
+}
 
 - (instancetype)initWithDataSubstrate: (APCDataSubstrate*) dataSubstrate
 {
@@ -68,15 +83,14 @@ static NSString * const kOneTimeSchedule = @"once";
         //STEP 2: Disable one time tasks if they are already completed
         [self disableOneTimeTasksIfAlreadyCompleted];
         
-        //STEP 3: Update one time scheduled tasks
+        //STEP 3: Get all the current scheduled tasks relevant to reference daterange
+        [self filterIncompleteScheduledTasksForReferenceDateRange];
         
-        //STEP 4: Update recurring scheduled tasks
+        //STEP 3: Update scheduled tasks
+        [self updateScheduledTasksBasedOnActiveSchedules];
         
-//        //STEP 3: Delete all incomplete tasks for based on reference date
-//        [self deleteAllIncompleteScheduledTasksForReferenceDate];
-//        
-//        //STEP 4: Generate new scheduledTasks based on the active schedules
-//        [self generateScheduledTasksBasedOnActiveSchedules];
+        //STEP 4: Delete non-validated schedules
+        [self deleteAllNonvalidatedScheduledTasks];
         
         self.isUpdating = NO;
     }];
@@ -88,8 +102,9 @@ static NSString * const kOneTimeSchedule = @"once";
 - (void) updateSchedulesAsInactiveIfNecessary
 {
     NSFetchRequest * request = [APCSchedule request];
-    NSDate * lastEndOnDate = [NSDate startOfDay:self.referenceRange.startDate];
-    request.predicate = [NSPredicate predicateWithFormat:@"endsOn <= %@", lastEndOnDate];
+    NSDate * lastEndOnDate = [NSDate yesterdayAtMidnight];
+    NSDate * earliestStartOnDate = [NSDate endOfDay:[NSDate tomorrowAtMidnight]];
+    request.predicate = [NSPredicate predicateWithFormat:@"(endsOn <= %@) || (startsOn > %@)", lastEndOnDate, earliestStartOnDate];
     NSError * error;
     NSArray * array = [self.scheduleMOC executeFetchRequest:request error:&error];
     APCLogError2 (error);
@@ -128,27 +143,28 @@ static NSString * const kOneTimeSchedule = @"once";
     APCLogError2 (saveError);
 }
 
-- (void) deleteAllIncompleteScheduledTasksForReferenceDate
-{
+- (void) filterIncompleteScheduledTasksForReferenceDateRange {
     NSFetchRequest * request = [APCScheduledTask request];
     NSDate * startOfDay = [NSDate startOfDay:self.referenceRange.startDate];
-    NSDate * endOfDay = [NSDate endOfDay:self.referenceRange.startDate];
-    request.predicate = [NSPredicate predicateWithFormat:@"(completed == nil || completed == %@) && startOn >= %@ && startOn <= %@", @(NO), startOfDay, endOfDay];
+    request.predicate = [NSPredicate predicateWithFormat:@"(completed == nil || completed == %@) && endOn > %@", @(NO), startOfDay];
     NSError * error;
-    NSMutableArray * mutableArray = [[self.scheduleMOC executeFetchRequest:request error:&error] mutableCopy];
+    NSArray * array = [self.scheduleMOC executeFetchRequest:request error:&error];
     APCLogError2 (error);
-    while (mutableArray.count) {
-        APCScheduledTask * task = [mutableArray lastObject];
-        [mutableArray removeLastObject];
-        [task deleteScheduledTask];
+    NSMutableArray * filteredArray = [NSMutableArray array];
+    
+    for (APCScheduledTask * scheduledTask in array) {
+        if ([scheduledTask.dateRange compare:self.referenceRange] != kAPCDateRangeComparisonOutOfRange) {
+            [filteredArray addObject:scheduledTask];
+        }
     }
+    self.allScheduledTasksForReferenceDate = filteredArray;
 }
 
-- (void) generateScheduledTasksBasedOnActiveSchedules
+- (void) updateScheduledTasksBasedOnActiveSchedules
 {
     NSArray * activeSchedules = [self readActiveSchedules];
     [activeSchedules enumerateObjectsUsingBlock:^(APCSchedule * schedule, NSUInteger idx, BOOL *stop) {
-        [self generateScheduledTasksForSchedule:schedule];
+        [self updateScheduledTasksForSchedule:schedule];
     }];
 }
 
@@ -163,43 +179,127 @@ static NSString * const kOneTimeSchedule = @"once";
     return array.count ? array : nil;
 }
 
-- (void) generateScheduledTasksForSchedule: (APCSchedule*) schedule
+- (void) updateScheduledTasksForSchedule: (APCSchedule*) schedule
 {
     APCTask * task = [APCTask taskWithTaskID:schedule.taskID inContext:self.scheduleMOC];
     NSAssert(task,@"Task is nil");
     if (schedule.isOneTimeSchedule) {
-        [self createScheduledTask:schedule task:task startOn:[NSDate startOfDay:self.referenceRange.startDate]];
+        [self findOrCreateOneTimeScheduledTask:schedule task:task];
     }
     else
     {
         APCScheduleExpression * scheduleExpression = schedule.scheduleExpression;
-        NSEnumerator*   enumerator = [scheduleExpression enumeratorBeginningAtTime:[NSDate startOfDay:self.referenceRange.startDate] endingAtTime:[NSDate startOfTomorrow:self.referenceRange.startDate]];
+        NSDate * beginningTime = (schedule.expires !=nil) ? [self.referenceRange.startDate dateByAddingTimeInterval:(-1*schedule.expiresInterval)] : self.referenceRange.startDate;
+        APCLogDebug(@"Beginning Time: %@", beginningTime);
+        
+        NSEnumerator*   enumerator = [scheduleExpression enumeratorBeginningAtTime:beginningTime endingAtTime:self.referenceRange.endDate];
         NSDate * startOnDate;
         while ((startOnDate = enumerator.nextObject))
         {
-            [self createScheduledTask:schedule task:task startOn:startOnDate];
+            APCDateRange * range;
+            BOOL doFindOrCreate = NO;
+            if (schedule.expires != nil) {
+                range = [[APCDateRange alloc] initWithStartDate:startOnDate durationInterval:schedule.expiresInterval];
+                if ([range compare:self.referenceRange] != kAPCDateRangeComparisonOutOfRange) {
+                    doFindOrCreate = YES;
+                }
+                else {
+                    APCLogDebug(@"Created out of range dateRange: %@ for %@", range, task.taskTitle);
+                }
+            }
+            else {
+                range = [[APCDateRange alloc] initWithStartDate:startOnDate endDate:self.referenceRange.endDate];
+                doFindOrCreate = YES;
+            }
+            if (doFindOrCreate) {
+                [self findOrCreateRecurringScheduledTask:schedule task:task dateRange:range];
+            }
         }
     }
 }
 
-- (void) createScheduledTask:(APCSchedule*) schedule task: (APCTask*) task startOn: (NSDate*) startOn
+/*********************************************************************************/
+#pragma mark - One Time Task Find Or Create
+/*********************************************************************************/
+- (void) findOrCreateOneTimeScheduledTask:(APCSchedule *) schedule task: (APCTask*) task {
+    
+    NSArray * scheduledTasksArray = [self.allScheduledTasksForReferenceDate filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"task == %@", task]];
+    
+    if (scheduledTasksArray.count == 0) {
+        //One time not created, create it
+        NSDate * startOnDate = self.referenceRange.startDate;
+        NSDate * endDate = (schedule.expires !=nil) ? [startOnDate dateByAddingTimeInterval:schedule.expiresInterval] : [startOnDate dateByAddingTimeInterval:[NSDate parseISO8601DurationString:@"P2Y"]];
+        endDate = [NSDate endOfDay:endDate];
+        [self createScheduledTask:schedule task:task dateRange:[[APCDateRange alloc] initWithStartDate:startOnDate endDate:endDate]];
+    } else if (scheduledTasksArray.count == 1) {
+        //One time task already scheduled
+        APCScheduledTask * validatedTask = scheduledTasksArray.firstObject;
+        [self validateScheduledTask:validatedTask];
+        APCLogDebug(@"Found Already ScheduledTask: [%@] to start on [%@] ends on [%@]", validatedTask.task.taskTitle, [self.dateFormatter stringFromDate:validatedTask.startOn], [self.dateFormatter stringFromDate:validatedTask.endOn]);
+    }
+    else {
+        //Many one time tasks found
+        NSAssert(NO, @"Many one time scheduled tasks should not be present");
+    }
+}
+
+/*********************************************************************************/
+#pragma mark - Recurring Task Find or Create
+/*********************************************************************************/
+- (void) findOrCreateRecurringScheduledTask: (APCSchedule*) schedule task: (APCTask*) task dateRange: (APCDateRange*) range {
+    
+    NSArray * scheduledTasksArray = [self.allScheduledTasksForReferenceDate filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"task == %@", task]];
+    
+    NSMutableArray * filteredArray = [NSMutableArray array];
+    [scheduledTasksArray enumerateObjectsUsingBlock:^(APCScheduledTask * scheduledTask, NSUInteger idx, BOOL *stop) {
+        if ([scheduledTask.dateRange compare:range] == kAPCDateRangeComparisonSameRange) {
+            [filteredArray addObject:scheduledTask];
+        }
+    }];
+    
+    if (filteredArray.count == 0) {
+        //Schedule not created, create it
+        [self createScheduledTask:schedule task:task dateRange:range];
+    }
+    else if (filteredArray.count == 1) {
+        APCScheduledTask * validatedTask = filteredArray.firstObject;
+        [self validateScheduledTask:validatedTask];
+        APCLogDebug(@"Found Already ScheduledTask: [%@] to start on [%@] ends on [%@]", validatedTask.task.taskTitle, [self.dateFormatter stringFromDate:validatedTask.startOn], [self.dateFormatter stringFromDate:validatedTask.endOn]);
+    }
+    else {
+        APCLogDebug(@"Many recurring scheduled tasks %@ present with the exact same range: %@", task.taskTitle, range);
+    }
+}
+
+/*********************************************************************************/
+#pragma mark - Helpers
+/*********************************************************************************/
+- (void) createScheduledTask:(APCSchedule*) schedule task: (APCTask*) task dateRange: (APCDateRange*) dateRange
 {
-    //Don't create duplicates
-    if (! [APCScheduledTask scheduledTaskForStartOnDate:startOn schedule:schedule inContext:self.scheduleMOC]) {
-        APCScheduledTask * createdScheduledTask = [APCScheduledTask newObjectForContext:self.scheduleMOC];
-        createdScheduledTask.startOn = startOn;
-        
-        //TODO: Change the end on date
-        createdScheduledTask.endOn = [NSDate endOfDay:self.referenceRange.startDate];
-        createdScheduledTask.generatedSchedule = schedule;
-        createdScheduledTask.task = task;
-        NSDateFormatter * formatter = [NSDateFormatter new];
-        [formatter setDateStyle:NSDateFormatterMediumStyle];
-        [formatter setTimeStyle:NSDateFormatterMediumStyle];
-        APCLogDebug(@"Created ScheduledTask: [%@] to start on [%@]", createdScheduledTask.task.taskTitle, [formatter stringFromDate:createdScheduledTask.startOn]);
-        NSError * saveError;
-        [createdScheduledTask saveToPersistentStore:&saveError];
-        APCLogError2 (saveError);
+    APCScheduledTask * createdScheduledTask = [APCScheduledTask newObjectForContext:self.scheduleMOC];
+    createdScheduledTask.startOn = dateRange.startDate;
+    createdScheduledTask.endOn = dateRange.endDate;
+    createdScheduledTask.generatedSchedule = schedule;
+    createdScheduledTask.task = task;
+    APCLogDebug(@"Created ScheduledTask: [%@] to start on [%@] ends on [%@]", createdScheduledTask.task.taskTitle, [self.dateFormatter stringFromDate:createdScheduledTask.startOn],  [self.dateFormatter stringFromDate:createdScheduledTask.endOn]);
+    NSError * saveError;
+    [createdScheduledTask saveToPersistentStore:&saveError];
+    APCLogError2 (saveError);
+    
+    //Validate the task
+    [self.validatedScheduledTasksForReferenceDate addObject:createdScheduledTask];
+}
+
+- (void) validateScheduledTask: (APCScheduledTask*) scheduledTask {
+    [self.validatedScheduledTasksForReferenceDate addObject:scheduledTask];
+    [self.allScheduledTasksForReferenceDate removeObject:scheduledTask];
+}
+
+- (void) deleteAllNonvalidatedScheduledTasks {
+    while (self.allScheduledTasksForReferenceDate.count) {
+        APCScheduledTask * task = [self.allScheduledTasksForReferenceDate lastObject];
+        [self.allScheduledTasksForReferenceDate removeLastObject];
+        [task deleteScheduledTask];
     }
 }
 
