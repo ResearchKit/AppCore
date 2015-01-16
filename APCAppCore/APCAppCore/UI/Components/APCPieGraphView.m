@@ -249,7 +249,7 @@ static CGFloat const kAnimationDuration = 0.35f;
             CGPoint labelCenter = CGPointMake(cos(angle - M_PI_2) * (self.pieGraphRadius + offset) + boundingBox.size.width/2,
                                               sin(angle - M_PI_2) * (self.pieGraphRadius + offset) + boundingBox.size.height/2);
             
-            NSString *text = [NSString stringWithFormat:@"%0.0f%%", value * 100];
+            NSString *text = [NSString stringWithFormat:@"%0.0f%%", (value < .01) ? 1 :value * 100];
             CATextLayer *textLayer = [CATextLayer layer];
             textLayer.string = text;
             textLayer.fontSize = 14.0;
