@@ -66,8 +66,10 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     
     NSNumber *remainingTasks = @(allScheduledTasks - completedScheduledTasks);
     
-    UITabBarItem *activitiesTab = appDelegate.tabster.tabBar.selectedItem;
-    activitiesTab.badgeValue = [remainingTasks stringValue];
+    if ([remainingTasks integerValue] != 0) {
+        UITabBarItem *activitiesTab = appDelegate.tabster.tabBar.selectedItem;
+        activitiesTab.badgeValue = [remainingTasks stringValue];
+    }
     
     [self reloadData];
     
