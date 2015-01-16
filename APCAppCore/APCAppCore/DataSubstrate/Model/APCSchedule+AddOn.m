@@ -55,6 +55,10 @@ static NSString * const kOneTimeSchedule = @"once";
     return [[APCScheduleExpression alloc] initWithExpression:self.scheduleString timeZero:0];
 }
 
+- (NSTimeInterval) expiresInterval {
+    return [NSDate parseISO8601DurationString:self.expires];
+}
+
 /*********************************************************************************/
 #pragma mark - Life Cycle Methods
 /*********************************************************************************/

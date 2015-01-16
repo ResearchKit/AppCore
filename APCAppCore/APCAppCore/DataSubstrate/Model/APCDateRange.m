@@ -29,7 +29,14 @@
     NSParameterAssert(durationString);
     
     NSTimeInterval delta = [NSDate parseISO8601DurationString: durationString];
-    self = [self initWithStartDate:startDate endDate:[startDate dateByAddingTimeInterval:delta]];
+    self = [self initWithStartDate:startDate durationInterval:delta];
+    return self;
+}
+
+- (instancetype) initWithStartDate:(NSDate *)startDate durationInterval: (NSTimeInterval) durationInterval {
+    NSParameterAssert(startDate);
+    
+    self = [self initWithStartDate:startDate endDate:[startDate dateByAddingTimeInterval:durationInterval]];
     return self;
 }
 
@@ -60,6 +67,28 @@
     }
     
     return retValue;
+}
+
+/*********************************************************************************/
+#pragma mark - Convenience Methods
+/*********************************************************************************/
+
++ (instancetype) todayRange {
+    NSDate * startDate = [NSDate todayAtMidnight];
+    NSDate * endDate = [NSDate endOfDay:startDate];
+    return [[self alloc] initWithStartDate:startDate endDate:endDate];
+}
+
++ (instancetype) tomorrowRange {
+    NSDate * startDate = [NSDate tomorrowAtMidnight];
+    NSDate * endDate = [NSDate endOfDay:startDate];
+    return [[self alloc] initWithStartDate:startDate endDate:endDate];
+}
+
++ (instancetype) yesterdayRange {
+    NSDate * startDate = [NSDate yesterdayAtMidnight];
+    NSDate * endDate = [NSDate endOfDay:startDate];
+    return [[self alloc] initWithStartDate:startDate endDate:endDate];
 }
 
 @end

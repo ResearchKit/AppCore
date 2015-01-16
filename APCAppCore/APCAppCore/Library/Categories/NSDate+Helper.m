@@ -115,6 +115,15 @@ NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
     return [cal dateFromComponents:components];
 }
 
++(instancetype)yesterdayAtMidnight
+{
+    NSDate *today = [NSDate date];
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:today];
+    [components setDay:[components day] - 1];
+    return [cal dateFromComponents:components];
+}
+
 
 +(instancetype)weekAgoAtMidnight
 {

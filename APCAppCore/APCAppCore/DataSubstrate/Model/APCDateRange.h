@@ -19,7 +19,14 @@ typedef NS_ENUM(NSUInteger, APCDateRangeComparison) {
 @property (nonatomic, strong) NSDate * endDate;
 
 - (instancetype) initWithStartDate: (NSDate*) startDate endDate: (NSDate*) endDate;
+- (instancetype) initWithStartDate:(NSDate *)startDate durationString: (NSString*) durationString;
+- (instancetype) initWithStartDate:(NSDate *)startDate durationInterval: (NSTimeInterval) durationInterval;
+
 - (void) adjustEndDateToEndofDay;
 - (APCDateRangeComparison) compare: (APCDateRange*) range;
+
++ (instancetype) todayRange;
++ (instancetype) tomorrowRange;
++ (instancetype) yesterdayRange;
 
 @end

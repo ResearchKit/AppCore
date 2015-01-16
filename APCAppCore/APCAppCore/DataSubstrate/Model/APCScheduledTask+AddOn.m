@@ -7,6 +7,7 @@
  
 #import "APCScheduledTask+AddOn.h"
 #import "APCAppCore.h"
+#import "APCDateRange.h"
 
 static NSInteger kSecondsPerMinute = 60;
 static NSInteger kDefaultReminderOffset = -15;
@@ -216,6 +217,18 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
 - (BOOL) isMultiDayTask {
     NSTimeInterval interval = [self.endOn timeIntervalSinceDate:self.startOn];
     return (interval > (24 * 60 * 60) + 3);
+}
+
+- (APCDateRange*) dateRange {
+    if (self.startOn == nil || self.endOn == nil) {
+        return nil;
+    }
+    return [[APCDateRange alloc] initWithStartDate:self.startOn endDate:self.endOn];
+}
+
+- (void)setDateRange:(APCDateRange *)dateRange {
+    self.startOn = dateRange.startDate;
+    self.endOn = dateRange.endDate;
 }
 
 @end

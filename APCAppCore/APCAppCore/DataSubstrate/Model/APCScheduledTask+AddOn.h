@@ -7,7 +7,7 @@
  
 #import "APCScheduledTask.h"
 
-@class UILocalNotification;
+@class UILocalNotification, APCDateRange;
 @interface APCScheduledTask (AddOn)
 
 - (void) completeScheduledTask;
@@ -32,5 +32,6 @@
 #pragma mark - Multiday Tasks
 /*********************************************************************************/
 @property (nonatomic, readonly) BOOL isMultiDayTask;
+@property (nonatomic, strong) APCDateRange * dateRange;
 
 @end

@@ -8,6 +8,7 @@
 
 #import "APCScheduler.h"
 #import "APCAppCore.h"
+#import "APCDateRange.h"
 
 static NSString * const kOneTimeSchedule = @"once";
 
@@ -15,7 +16,7 @@ static NSString * const kOneTimeSchedule = @"once";
 @property  (weak, nonatomic)     APCDataSubstrate        *dataSubstrate;
 @property  (strong, nonatomic)   NSManagedObjectContext  *scheduleMOC;
 @property  (nonatomic) BOOL isUpdating;
-@property  (nonatomic, strong) NSDate * referenceDate;
+@property (nonatomic, strong) APCDateRange * referenceRange;
 
 @end
 
@@ -33,16 +34,32 @@ static NSString * const kOneTimeSchedule = @"once";
 
 - (void)updateScheduledTasksIfNotUpdating: (BOOL) today
 {
+    [self updateScheduledTasksIfNotUpdatingWithRange:today? kAPCSchedulerDateRangeToday : kAPCSchedulerDateRangeTomorrow];
+}
+
+-(void)updateScheduledTasksIfNotUpdatingWithRange:(APCSchedulerDateRange)range
+{
     if (!self.isUpdating) {
         self.isUpdating = YES;
-        self.referenceDate = today ? [NSDate todayAtMidnight] : [NSDate tomorrowAtMidnight];
+        switch (range) {
+            case kAPCSchedulerDateRangeYesterday:
+                self.referenceRange = [APCDateRange yesterdayRange];
+                break;
+            case kAPCSchedulerDateRangeToday:
+                self.referenceRange = [APCDateRange todayRange];
+                break;
+                
+            case kAPCSchedulerDateRangeTomorrow:
+                self.referenceRange = [APCDateRange tomorrowRange];
+                break;
+        }
         [self updateScheduledTasks];
     }
 }
 
 - (void) updateScheduledTasks
 {
-    APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Updated Schedule For %@", self.referenceDate]}));
+    APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Updated Schedule For %@", self.referenceRange.startDate]}));
     [self.scheduleMOC performBlockAndWait:^{
         
         //STEP 1: Update inActive property of schedules based on endOn date.
@@ -51,11 +68,15 @@ static NSString * const kOneTimeSchedule = @"once";
         //STEP 2: Disable one time tasks if they are already completed
         [self disableOneTimeTasksIfAlreadyCompleted];
         
-        //STEP 3: Delete all incomplete tasks for based on reference date
-        [self deleteAllIncompleteScheduledTasksForReferenceDate];
+        //STEP 3: Update one time scheduled tasks
         
-        //STEP 4: Generate new scheduledTasks based on the active schedules
-        [self generateScheduledTasksBasedOnActiveSchedules];
+        //STEP 4: Update recurring scheduled tasks
+        
+//        //STEP 3: Delete all incomplete tasks for based on reference date
+//        [self deleteAllIncompleteScheduledTasksForReferenceDate];
+//        
+//        //STEP 4: Generate new scheduledTasks based on the active schedules
+//        [self generateScheduledTasksBasedOnActiveSchedules];
         
         self.isUpdating = NO;
     }];
@@ -67,7 +88,7 @@ static NSString * const kOneTimeSchedule = @"once";
 - (void) updateSchedulesAsInactiveIfNecessary
 {
     NSFetchRequest * request = [APCSchedule request];
-    NSDate * lastEndOnDate = [NSDate startOfDay:self.referenceDate];
+    NSDate * lastEndOnDate = [NSDate startOfDay:self.referenceRange.startDate];
     request.predicate = [NSPredicate predicateWithFormat:@"endsOn <= %@", lastEndOnDate];
     NSError * error;
     NSArray * array = [self.scheduleMOC executeFetchRequest:request error:&error];
@@ -110,8 +131,8 @@ static NSString * const kOneTimeSchedule = @"once";
 - (void) deleteAllIncompleteScheduledTasksForReferenceDate
 {
     NSFetchRequest * request = [APCScheduledTask request];
-    NSDate * startOfDay = [NSDate startOfDay:self.referenceDate];
-    NSDate * endOfDay = [NSDate endOfDay:self.referenceDate];
+    NSDate * startOfDay = [NSDate startOfDay:self.referenceRange.startDate];
+    NSDate * endOfDay = [NSDate endOfDay:self.referenceRange.startDate];
     request.predicate = [NSPredicate predicateWithFormat:@"(completed == nil || completed == %@) && startOn >= %@ && startOn <= %@", @(NO), startOfDay, endOfDay];
     NSError * error;
     NSMutableArray * mutableArray = [[self.scheduleMOC executeFetchRequest:request error:&error] mutableCopy];
@@ -134,7 +155,7 @@ static NSString * const kOneTimeSchedule = @"once";
 - (NSArray*) readActiveSchedules
 {
     NSFetchRequest * request = [APCSchedule request];
-    NSDate * lastStartOnDate = [NSDate startOfTomorrow:self.referenceDate];
+    NSDate * lastStartOnDate = [NSDate startOfTomorrow:self.referenceRange.startDate];
     request.predicate = [NSPredicate predicateWithFormat:@"(inActive == nil || inActive == %@) && (startsOn == nil || startsOn < %@)", @(NO), lastStartOnDate];
     NSError * error;
     NSArray * array = [self.scheduleMOC executeFetchRequest:request error:&error];
@@ -147,12 +168,12 @@ static NSString * const kOneTimeSchedule = @"once";
     APCTask * task = [APCTask taskWithTaskID:schedule.taskID inContext:self.scheduleMOC];
     NSAssert(task,@"Task is nil");
     if (schedule.isOneTimeSchedule) {
-        [self createScheduledTask:schedule task:task startOn:[NSDate startOfDay:self.referenceDate]];
+        [self createScheduledTask:schedule task:task startOn:[NSDate startOfDay:self.referenceRange.startDate]];
     }
     else
     {
         APCScheduleExpression * scheduleExpression = schedule.scheduleExpression;
-        NSEnumerator*   enumerator = [scheduleExpression enumeratorBeginningAtTime:[NSDate startOfDay:self.referenceDate] endingAtTime:[NSDate startOfTomorrow:self.referenceDate]];
+        NSEnumerator*   enumerator = [scheduleExpression enumeratorBeginningAtTime:[NSDate startOfDay:self.referenceRange.startDate] endingAtTime:[NSDate startOfTomorrow:self.referenceRange.startDate]];
         NSDate * startOnDate;
         while ((startOnDate = enumerator.nextObject))
         {
@@ -169,7 +190,7 @@ static NSString * const kOneTimeSchedule = @"once";
         createdScheduledTask.startOn = startOn;
         
         //TODO: Change the end on date
-        createdScheduledTask.endOn = [NSDate endOfDay:self.referenceDate];
+        createdScheduledTask.endOn = [NSDate endOfDay:self.referenceRange.startDate];
         createdScheduledTask.generatedSchedule = schedule;
         createdScheduledTask.task = task;
         NSDateFormatter * formatter = [NSDateFormatter new];
@@ -180,7 +201,6 @@ static NSString * const kOneTimeSchedule = @"once";
         [createdScheduledTask saveToPersistentStore:&saveError];
         APCLogError2 (saveError);
     }
-
 }
 
 @end
