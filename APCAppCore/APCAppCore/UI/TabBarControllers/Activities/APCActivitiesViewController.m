@@ -57,19 +57,9 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    // Update the badge
-    NSUInteger allScheduledTasks = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.countOfAllScheduledTasksForToday;
-    NSUInteger completedScheduledTasks = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.countOfCompletedScheduledTasksForToday;
-    APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    NSNumber *remainingTasks = @(allScheduledTasks - completedScheduledTasks);
-    
-    UITabBarItem *activitiesTab = appDelegate.tabster.tabBar.selectedItem;
-    activitiesTab.badgeValue = [remainingTasks stringValue];
-    
     [self reloadData];
-  APCLogViewControllerAppeared();
+    
+    APCLogViewControllerAppeared();
 }
 
 #pragma mark - UITableViewDataSource Methods
@@ -270,6 +260,24 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
         if (self.noTasksView) {
             [self.noTasksView removeFromSuperview];
         }
+    }
+    
+    // Update the badge
+    APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    NSUInteger allScheduledTasks = appDelegate.dataSubstrate.countOfAllScheduledTasksForToday;
+    NSUInteger completedScheduledTasks = appDelegate.dataSubstrate.countOfCompletedScheduledTasksForToday;
+    
+    NSNumber *remainingTasks = @(allScheduledTasks - completedScheduledTasks);
+    
+    UITabBarItem *activitiesTab = appDelegate.tabster.tabBar.selectedItem;
+    
+    NSLog(@"Remaining Tasks: %@", remainingTasks);
+    
+    if ([remainingTasks integerValue] != 0) {
+        activitiesTab.badgeValue = [remainingTasks stringValue];
+    } else {
+        activitiesTab.badgeValue = nil;
     }
 }
 
