@@ -61,36 +61,53 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
 
 + (NSDictionary*) APCActivityVCScheduledTasksInContext: (NSManagedObjectContext*) context
 {
-    //Ask tasks for today and yesterday range
-    NSArray * array1 = [self allScheduledTasksForDateRange:[APCDateRange todayRange] completed:nil inContext:context];
-    NSArray * array2 = [self allScheduledTasksForDateRange:[APCDateRange yesterdayRange] completed:@NO inContext:context];
+    NSArray * array1 = [self getTodaysTaskInContext:context];
+    NSArray * array2 = [self getYesterdaysIncompleteTaskInContext:context];
     
     NSMutableDictionary * finalDict = [NSMutableDictionary dictionary];
-    
-    //If there are no today's activities, generate them
     if (array1.count) {
         finalDict[@"today"] = array1;
     }
-    else
-    {
-        [((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataMonitor.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeToday];
-        array1 = [self allScheduledTasksForDateRange:[APCDateRange todayRange] completed:nil inContext:context];
-        if (array1.count) finalDict[@"today"] = array1;
-    }
-    
-    //If there are not yesterday's activities and there are completed activities in the past, generate yesterday's activities
     if (array2.count) {
         finalDict[@"yesterday"] = array2;
     }
-    else
-    {
+    return finalDict.count ? finalDict : nil;
+}
+
++ (NSArray *) getTodaysTaskInContext: (NSManagedObjectContext*) context {
+    NSArray * array = [self allScheduledTasksForDateRange:[APCDateRange todayRange] completed:nil inContext:context];
+    //If there are no today's activities, generate them
+    if (array.count == 0) {
+        [((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataMonitor.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeToday];
+        array = [self allScheduledTasksForDateRange:[APCDateRange todayRange] completed:nil inContext:context];
+    }
+    return array.count ? array : nil;
+    
+}
+
++ (NSArray*) getYesterdaysIncompleteTaskInContext: (NSManagedObjectContext*) context {
+    NSArray * array = [self allScheduledTasksForDateRange:[APCDateRange yesterdayRange] completed:@NO inContext:context];
+    //If there are no yesterday's activities and there are completed activities in the past, generate yesterday's activities
+    if (array.count == 0) {
         if ([self userHasCompletedActivitiesInThePastInContext:context]) {
             [((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataMonitor.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeYesterday];
-            array2 = [self allScheduledTasksForDateRange:[APCDateRange yesterdayRange] completed:@NO inContext:context];
-            if (array2.count) finalDict[@"yesterday"] = array2;
+            array = [self allScheduledTasksForDateRange:[APCDateRange yesterdayRange] completed:@NO inContext:context];
         }
     }
-    return finalDict.count ? finalDict : nil;
+    NSArray * filteredArray = [self filterYesterdayIncompleteScheduledTasksByEndDate:array];
+    return filteredArray.count ? filteredArray : nil;
+}
+
++ (NSArray*) filterYesterdayIncompleteScheduledTasksByEndDate: (NSArray*) scheduledTasksArray {
+    
+    NSMutableArray * filteredArray = [NSMutableArray array];
+    NSDate * yesterdaysEndDate = [NSDate endOfDay:[NSDate yesterdayAtMidnight]];
+    for (APCScheduledTask * scheduledTask in scheduledTasksArray) {
+        if (scheduledTask.endOn <= yesterdaysEndDate) {
+            [filteredArray addObject:scheduledTask];
+        }
+    }
+    return filteredArray.count ? filteredArray : nil;
 }
 
 //If completed is nil then no filtering on completion, else the result will be filtered by completed value
@@ -144,6 +161,19 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     NSArray * array = [context executeFetchRequest:request error:&error];
     APCLogError2 (error);
     return array.count ? [array firstObject] : nil;
+}
+
+/*********************************************************************************/
+#pragma mark - Counts
+/*********************************************************************************/
++ (NSUInteger)countOfAllScheduledTasksTodayInContext: (NSManagedObjectContext*) context {
+    NSArray * array = [self allScheduledTasksForDateRange:[APCDateRange todayRange] completed:nil inContext:context];
+    return array.count;
+}
+
++ (NSUInteger)countOfAllCompletedTasksTodayInContext: (NSManagedObjectContext*) context {
+    NSArray * array = [self allScheduledTasksForDateRange:[APCDateRange todayRange] completed:@YES inContext:context];
+    return array.count;
 }
 
 

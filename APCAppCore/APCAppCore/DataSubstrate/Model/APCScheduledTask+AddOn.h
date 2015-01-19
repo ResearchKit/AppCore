@@ -20,6 +20,12 @@
 + (instancetype) scheduledTaskForStartOnDate: (NSDate *) startOn schedule: (APCSchedule*) schedule inContext: (NSManagedObjectContext*) context;
 
 /*********************************************************************************/
+#pragma mark - Counts
+/*********************************************************************************/
++ (NSUInteger)countOfAllScheduledTasksTodayInContext: (NSManagedObjectContext*) context;
++ (NSUInteger)countOfAllCompletedTasksTodayInContext: (NSManagedObjectContext*) context;
+
+/*********************************************************************************/
 #pragma mark - Reminder 
 /*********************************************************************************/
 - (void)scheduleReminderIfNecessary;

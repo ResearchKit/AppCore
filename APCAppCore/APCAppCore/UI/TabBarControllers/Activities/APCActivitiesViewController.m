@@ -162,7 +162,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (!self.taskSelectionDisabled) {
         
-        id task = [self arrayWithSectionNumber:indexPath.section][indexPath.row];
+        id task = ((NSArray*)self.scheduledTasksArray[indexPath.section])[indexPath.row];
         
         if ([task isKindOfClass:[APCGroupedScheduledTask class]]) {
             
@@ -357,17 +357,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     NSString *monthName = [[df monthSymbols] objectAtIndex:(month-1)];
     
     return [NSString stringWithFormat:@"Today, %@ %ld", monthName, (long)day];
-}
-
-- (NSArray*) arrayWithSectionName: (NSString*) sectionName from: (NSArray*) fromArray
-{
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"completeByDateString == %@", sectionName];
-    return [fromArray filteredArrayUsingPredicate:predicate];
-}
-
-- (NSArray*) arrayWithSectionNumber: (NSUInteger) sectionNumber
-{
-    return [self arrayWithSectionName:self.sectionsArray[sectionNumber] from:self.scheduledTasksArray];
 }
 
 - (NSArray*)groupSimilarTasks:(NSArray *)ungroupedScheduledTasks
