@@ -25,6 +25,8 @@
     
     [self setupAppearance];
     [self setupNavAppearance];
+    
+    self.emailMessageLabel.alpha = 0;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -96,14 +98,49 @@
     
     if ([self isContentValid:&error]) {
         if ([self.emailTextField.text isValidForRegex:(NSString *)kAPCGeneralInfoItemEmailRegEx]) {
+            
+            
+            NSString *emailAddress = self.emailTextField.text;
+            
+            if (emailAddress.length) {
+                
+                APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+                [self presentViewController:spinnerController animated:YES completion:nil];
+
+                [SBBComponent(SBBAuthManager) requestPasswordResetForEmail:emailAddress completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+                    
+                    [spinnerController dismissViewControllerAnimated:YES completion:^{
+                        UIAlertController *alert = nil;
+                        
+                        if (error) {
+                            alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Forgot Password", @"")  message:[[error.userInfo valueForKey:@"SBBOriginalErrorKey"] valueForKey:@"message"]];
+                        } else {
+                            
+                            [UIView animateWithDuration:0.2 animations:^{
+                                self.emailMessageLabel.text = NSLocalizedString(@"An email has been sent.", @"");
+                                self.emailMessageLabel.alpha = 1;
+                            }];
+                            
+                        }
+                    
+                        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                            
+                            if (alert) {
+                                [self presentViewController:alert animated:YES completion:nil];
+                            }
+                            
+                        }];
+                    }];
+
+                }];
+            }
         }
         else {
-            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Forgot Password", @"") message:NSLocalizedString(@"Please enter a valid email address", @"")];
-            [self presentViewController:alert animated:YES completion:nil];
+            [UIView animateWithDuration:0.2 animations:^{
+                self.emailMessageLabel.text = NSLocalizedString(@"Please enter a valid email address", @"");
+                self.emailMessageLabel.alpha = 1;
+            }];
         }
-    } else{
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Forgot Password", @"") message:error];
-        [self presentViewController:alert animated:YES completion:nil];
     }
 }
 
