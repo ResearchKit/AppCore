@@ -71,13 +71,13 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self arrayWithSectionNumber:section].count;
+    return ((NSArray*)self.scheduledTasksArray[section]).count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    id task = [self arrayWithSectionNumber:indexPath.section][indexPath.row];
+    id task = ((NSArray*)self.scheduledTasksArray[indexPath.section])[indexPath.row];
     
     APCGroupedScheduledTask *groupedScheduledTask;
     APCScheduledTask *scheduledTask;
@@ -153,22 +153,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     [headerView addSubview:headerLabel];
     
     headerLabel.text = self.sectionsArray[section];
-    if (section != 0 || ![headerLabel.text isEqualToString:@"Today"] ) {
-        headerLabel.text = [headerLabel.text stringByAppendingString:@" - Incomplete Tasks"];
-    } else if (section == 0 && [headerLabel.text isEqualToString:@"Today"]){
-        
-        NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:[NSDate date]];
-        NSInteger day = [components day];
-        NSInteger month = [components month];
-        
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        NSString *monthName = [[df monthSymbols] objectAtIndex:(month-1)];
-        
-        NSString *dateWithComponents = [NSString stringWithFormat:@", %@ %ld", monthName, (long)day];
-        
-        headerLabel.text = [headerLabel.text stringByAppendingString:dateWithComponents];
-    }
-    
+
     return headerView;
 }
 
@@ -177,7 +162,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (!self.taskSelectionDisabled) {
         
-        id task = [self arrayWithSectionNumber:indexPath.section][indexPath.row];
+        id task = ((NSArray*)self.scheduledTasksArray[indexPath.section])[indexPath.row];
         
         if ([task isKindOfClass:[APCGroupedScheduledTask class]]) {
             
@@ -272,7 +257,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     
     UITabBarItem *activitiesTab = appDelegate.tabster.tabBar.selectedItem;
     
-    NSLog(@"Remaining Tasks: %@", remainingTasks);
+    APCLogDebug(@"Remaining Tasks: %@", remainingTasks);
     
     if ([remainingTasks integerValue] != 0) {
         activitiesTab.badgeValue = [remainingTasks stringValue];
@@ -346,37 +331,32 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     [self.scheduledTasksArray removeAllObjects];
     [self.sectionsArray removeAllObjects];
     
-    NSArray *scheduledTasks = [APCScheduledTask APCActivityVCScheduledTasksInContext:((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext];
+    NSDictionary *scheduledTasksDict = [APCScheduledTask APCActivityVCScheduledTasksInContext:((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext];
     
     //create sections
-    for (APCScheduledTask *scheduledTask in scheduledTasks)
-    {
-        NSString *sectionName = scheduledTask.completeByDateString;
-        if (![self.sectionsArray containsObject:sectionName]) {
-            [self.sectionsArray addObject:sectionName];
-        }
+    if (((NSArray*)scheduledTasksDict[@"today"]).count > 0) {
+        [self.sectionsArray addObject:[self formattedTodaySection]];
+        NSArray * groupedArray = [self groupSimilarTasks:((NSArray*)scheduledTasksDict[@"today"])];
+        [self.scheduledTasksArray addObject:groupedArray];
     }
     
-    //Group scheduled tasks with same taskIDs within each section
-    for (NSString * section in self.sectionsArray) {
-        NSArray * unGroupedArray = [self arrayWithSectionName:section from:scheduledTasks];
-        NSArray * groupedArray = [self groupSimilarTasks:unGroupedArray];
-//        NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startOn" ascending:YES];
-//        NSArray * sortedArray = [groupedArray sortedArrayUsingDescriptors:@[dateSortDescriptor]];
-//        [self.scheduledTasksArray addObjectsFromArray:sortedArray];
-        [self.scheduledTasksArray addObjectsFromArray:groupedArray];
+    if (((NSArray*)scheduledTasksDict[@"yesterday"]).count > 0) {
+        [self.sectionsArray addObject:@"Yesterday - Incomplete Tasks"];
+        NSArray * groupedArray = [self groupSimilarTasks:((NSArray*)scheduledTasksDict[@"yesterday"])];
+        [self.scheduledTasksArray addObject:groupedArray];
     }
 }
 
-- (NSArray*) arrayWithSectionName: (NSString*) sectionName from: (NSArray*) fromArray
+- (NSString*) formattedTodaySection
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"completeByDateString == %@", sectionName];
-    return [fromArray filteredArrayUsingPredicate:predicate];
-}
-
-- (NSArray*) arrayWithSectionNumber: (NSUInteger) sectionNumber
-{
-    return [self arrayWithSectionName:self.sectionsArray[sectionNumber] from:self.scheduledTasksArray];
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:[NSDate date]];
+    NSInteger day = [components day];
+    NSInteger month = [components month];
+    
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    NSString *monthName = [[df monthSymbols] objectAtIndex:(month-1)];
+    
+    return [NSString stringWithFormat:@"Today, %@ %ld", monthName, (long)day];
 }
 
 - (NSArray*)groupSimilarTasks:(NSArray *)ungroupedScheduledTasks
