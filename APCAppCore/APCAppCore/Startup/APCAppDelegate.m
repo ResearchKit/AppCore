@@ -293,6 +293,8 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
             
             if ([activitiesBadgeValue integerValue] != 0) {
                 item.badgeValue = [activitiesBadgeValue stringValue];
+            } else {
+                item.badgeValue = nil;
             }
         }
     }
@@ -332,6 +334,8 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
             
             if ([remainingTasks integerValue] != 0) {
                 item.badgeValue = [remainingTasks stringValue];
+            } else {
+                item.badgeValue = nil;
             }
         }
     }
