@@ -16,6 +16,7 @@ static NSString * const kTaskIDKey = @"taskID";
 static NSString * const kScheduleStringKey = @"scheduleString";
 static NSString * const kScheduleTypeKey = @"scheduleType";
 static NSString * const kRemoteUpdatable = @"remoteUpdatable";
+static NSString * const kExpires = @"expires";
 
 static NSString * const kOneTimeSchedule = @"once";
 
@@ -32,6 +33,7 @@ static NSString * const kOneTimeSchedule = @"once";
             schedule.scheduleString = [scheduleDict objectForKey:kScheduleStringKey];
             schedule.taskID = scheduleDict[kTaskIDKey];
             schedule.remoteUpdatable = scheduleDict[kRemoteUpdatable];
+            schedule.expires = scheduleDict[kExpires];
             
             schedule.shouldRemind = [scheduleDict objectForKey:kScheduleShouldRemindKey];
             schedule.reminderOffset = [scheduleDict objectForKey:kScheduleReminderOffsetKey];
@@ -51,6 +53,10 @@ static NSString * const kOneTimeSchedule = @"once";
 {
     //TODO: Schedule interval is 0
     return [[APCScheduleExpression alloc] initWithExpression:self.scheduleString timeZero:0];
+}
+
+- (NSTimeInterval) expiresInterval {
+    return [NSDate parseISO8601DurationString:self.expires];
 }
 
 /*********************************************************************************/
