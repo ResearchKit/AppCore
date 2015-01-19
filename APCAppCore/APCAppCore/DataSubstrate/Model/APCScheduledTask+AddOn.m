@@ -124,9 +124,9 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     NSPredicate * finalPredicate = completionPrediate ? [NSCompoundPredicate andPredicateWithSubpredicates:@[datePredicate, completionPrediate]] : datePredicate;
     request.predicate = finalPredicate;
     
-    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"task.taskTitle" ascending:YES];
-    NSSortDescriptor * uidDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"completed" ascending:YES];
-    request.sortDescriptors = @[uidDescriptor, dateSortDescriptor];
+    NSSortDescriptor *titleSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"task.taskTitle" ascending:YES];
+    NSSortDescriptor * completedSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"completed" ascending:YES];
+    request.sortDescriptors = @[completedSortDescriptor, titleSortDescriptor];
     
     NSError * error;
     NSArray * array = [context executeFetchRequest:request error:&error];

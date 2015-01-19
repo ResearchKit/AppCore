@@ -257,7 +257,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     
     UITabBarItem *activitiesTab = appDelegate.tabster.tabBar.selectedItem;
     
-    NSLog(@"Remaining Tasks: %@", remainingTasks);
+    APCLogDebug(@"Remaining Tasks: %@", remainingTasks);
     
     if ([remainingTasks integerValue] != 0) {
         activitiesTab.badgeValue = [remainingTasks stringValue];
