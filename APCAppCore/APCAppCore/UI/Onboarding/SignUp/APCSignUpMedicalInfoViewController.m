@@ -200,7 +200,7 @@
                 case kAPCUserInfoItemTypeWakeUpTime:
                 {
                     APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-                    field.caption = NSLocalizedString(@"What time do you wake up?", @"");
+                    field.caption = NSLocalizedString(@"What time do you generally wake up?", @"");
                     field.placeholder = @"--:--";
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
                     field.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -223,7 +223,7 @@
                 case kAPCUserInfoItemTypeSleepTime:
                 {
                     APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-                    field.caption = NSLocalizedString(@"What time do you go to sleep?", @"");
+                    field.caption = NSLocalizedString(@"What time do you generally go to sleep?", @"");
                     field.placeholder = @"--:--";
                     field.style = UITableViewCellStyleValue1;
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
