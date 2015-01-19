@@ -85,13 +85,13 @@ static NSString * const kOneTimeSchedule = @"once";
         //STEP 3: Get all the current scheduled tasks relevant to reference daterange
         [self filterAllScheduledTasksInReferenceDate];
         
-        //STEP 3: Update scheduled tasks
+        //STEP 4: Update scheduled tasks
         [self updateScheduledTasksBasedOnActiveSchedules];
         
-        //STEP 4: Validate all completed tasks
+        //STEP 5: Validate all completed tasks
         [self validateAllCompletedTasks];
         
-        //STEP 5: Delete non-validated schedules
+        //STEP 6: Delete non-validated schedules
         [self deleteAllNonvalidatedScheduledTasks];
         
         self.isUpdating = NO;
