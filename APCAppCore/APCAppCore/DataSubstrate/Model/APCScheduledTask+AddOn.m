@@ -59,38 +59,38 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     return  retValue;
 }
 
-+ (NSArray*) APCActivityVCScheduledTasksInContext: (NSManagedObjectContext*) context
++ (NSDictionary*) APCActivityVCScheduledTasksInContext: (NSManagedObjectContext*) context
 {
     //Ask tasks for today and yesterday range
     NSArray * array1 = [self allScheduledTasksForDateRange:[APCDateRange todayRange] completed:nil inContext:context];
     NSArray * array2 = [self allScheduledTasksForDateRange:[APCDateRange yesterdayRange] completed:@NO inContext:context];
     
-    NSMutableArray * finalArray = [NSMutableArray array];
+    NSMutableDictionary * finalDict = [NSMutableDictionary dictionary];
     
     //If there are no today's activities, generate them
     if (array1.count) {
-        [finalArray addObjectsFromArray:array1];
+        finalDict[@"today"] = array1;
     }
     else
     {
         [((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataMonitor.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeToday];
         array1 = [self allScheduledTasksForDateRange:[APCDateRange todayRange] completed:nil inContext:context];
-        if (array1.count) [finalArray addObjectsFromArray:array1];
+        if (array1.count) finalDict[@"today"] = array1;
     }
     
     //If there are not yesterday's activities and there are completed activities in the past, generate yesterday's activities
     if (array2.count) {
-        [finalArray addObjectsFromArray:array2];
+        finalDict[@"yesterday"] = array2;
     }
     else
     {
         if ([self userHasCompletedActivitiesInThePastInContext:context]) {
             [((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataMonitor.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeYesterday];
             array2 = [self allScheduledTasksForDateRange:[APCDateRange yesterdayRange] completed:@NO inContext:context];
-            if (array2.count) [finalArray addObjectsFromArray:array2];
+            if (array2.count) finalDict[@"yesterday"] = array2;
         }
     }
-    return finalArray.count ? finalArray : nil;
+    return finalDict.count ? finalDict : nil;
 }
 
 //If completed is nil then no filtering on completion, else the result will be filtered by completed value

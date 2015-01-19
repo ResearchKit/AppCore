@@ -74,7 +74,6 @@ static NSString * const kOneTimeSchedule = @"once";
 
 - (void) updateScheduledTasks
 {
-    APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Updated Schedule For %@", self.referenceRange.startDate]}));
     [self.scheduleMOC performBlockAndWait:^{
         
         //STEP 1: Update inActive property of schedules based on endOn date.
@@ -93,6 +92,7 @@ static NSString * const kOneTimeSchedule = @"once";
         [self deleteAllNonvalidatedScheduledTasks];
         
         self.isUpdating = NO;
+        APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Updated Schedule For %@", self.referenceRange.startDate]}));
     }];
 }
 
