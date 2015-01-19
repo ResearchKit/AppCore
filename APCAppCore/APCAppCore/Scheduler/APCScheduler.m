@@ -83,12 +83,15 @@ static NSString * const kOneTimeSchedule = @"once";
         [self disableOneTimeTasksIfAlreadyCompleted];
         
         //STEP 3: Get all the current scheduled tasks relevant to reference daterange
-        [self filterIncompleteScheduledTasksForReferenceDateRange];
+        [self filterAllScheduledTasksInReferenceDate];
         
         //STEP 3: Update scheduled tasks
         [self updateScheduledTasksBasedOnActiveSchedules];
         
-        //STEP 4: Delete non-validated schedules
+        //STEP 4: Validate all completed tasks
+        [self validateAllCompletedTasks];
+        
+        //STEP 5: Delete non-validated schedules
         [self deleteAllNonvalidatedScheduledTasks];
         
         self.isUpdating = NO;
@@ -142,10 +145,10 @@ static NSString * const kOneTimeSchedule = @"once";
     APCLogError2 (saveError);
 }
 
-- (void) filterIncompleteScheduledTasksForReferenceDateRange {
+- (void) filterAllScheduledTasksInReferenceDate {
     NSFetchRequest * request = [APCScheduledTask request];
     NSDate * startOfDay = [NSDate startOfDay:self.referenceRange.startDate];
-    request.predicate = [NSPredicate predicateWithFormat:@"(completed == nil || completed == %@) && endOn > %@", @(NO), startOfDay];
+    request.predicate = [NSPredicate predicateWithFormat:@"endOn > %@", startOfDay];
     NSError * error;
     NSArray * array = [self.scheduleMOC executeFetchRequest:request error:&error];
     APCLogError2 (error);
@@ -214,6 +217,14 @@ static NSString * const kOneTimeSchedule = @"once";
             }
         }
     }
+}
+
+- (void) validateAllCompletedTasks
+{
+    NSArray * filteredArray = [self.allScheduledTasksForReferenceDate filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"completed == %@", @YES]];
+    
+    [self.validatedScheduledTasksForReferenceDate addObjectsFromArray:filteredArray];
+    [self.allScheduledTasksForReferenceDate removeObjectsInArray:filteredArray];
 }
 
 /*********************************************************************************/
