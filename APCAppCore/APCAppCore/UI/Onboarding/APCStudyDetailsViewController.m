@@ -84,4 +84,12 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+#pragma mark - WebView Delegates
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    // Disable user selection
+    [webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.style.webkitUserSelect='none';"];
+}
+
 @end
