@@ -11,6 +11,7 @@
 
 @property (nonatomic, weak) IBOutlet UITextField *emailTextField;
 
+@property (weak, nonatomic) IBOutlet UILabel *emailMessageLabel;
 - (void) sendPassword;
 
 @end
