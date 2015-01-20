@@ -114,17 +114,15 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     if ([task isKindOfClass:[APCGroupedScheduledTask class]])
     {
         titleLabel.text = groupedScheduledTask.taskTitle;
-        NSUInteger tasksCount = groupedScheduledTask.scheduledTasks.count;
-        NSUInteger completedTasksCount = groupedScheduledTask.completedTasksCount;
-        countLabel.text = [NSString stringWithFormat:@"%lu/%lu", (unsigned long)completedTasksCount, (unsigned long)tasksCount];
         confirmView.completed = groupedScheduledTask.complete;
     }
     else if ([task isKindOfClass:[APCScheduledTask class]])
     {
         titleLabel.text = scheduledTask.task.taskTitle;
         confirmView.completed = scheduledTask.completed.boolValue;
-        countLabel.text = nil;
     }
+    
+    countLabel.text = nil;
     
     return  cell;
 }
