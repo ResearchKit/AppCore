@@ -66,11 +66,11 @@
 
 - (void)cancelButtonTapped:(id)sender
 {
-    if (self.delegate != nil) {
-        if ([self.delegate respondsToSelector:@selector(stepViewControllerDidCancel:)] == YES) {
-            [self.delegate stepViewControllerDidCancel:self];
-        }
-    }
+//    if (self.delegate != nil) {
+//        if ([self.delegate respondsToSelector:@selector(stepViewControllerDidCancel:)] == YES) {
+//            [self.delegate stepViewControllerDidCancel:self];
+//        }
+//    }
 }
 
 @end

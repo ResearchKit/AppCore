@@ -10,5 +10,10 @@
 
 @class SBBSurvey;
 @interface APCSmartSurveyTask : NSObject <RKSTTask>
+
+@property (nonatomic, copy, readonly) NSString * identifier;
+
 -(instancetype)initWithIdentifier: (NSString*) identifier survey:(SBBSurvey *)survey;
+
+
 @end

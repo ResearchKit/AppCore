@@ -210,7 +210,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 - (void)showConsent
 {
     RKSTTaskViewController *consentViewController = [((APCAppDelegate*)[UIApplication sharedApplication].delegate) consentViewController];
-    consentViewController.taskDelegate = self;
+    consentViewController.delegate = self;
     [self.navigationController presentViewController:consentViewController animated:YES completion:nil];
 }
 
@@ -279,7 +279,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     
     RKSTConsentSignatureResult *consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
     
-    user.consentSignatureName = consentResult.signature.name;
+    user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@", consentResult.signature.lastName ];
     user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];

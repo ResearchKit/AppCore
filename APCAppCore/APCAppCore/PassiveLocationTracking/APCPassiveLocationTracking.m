@@ -26,7 +26,6 @@ static  NSString  *kLocationJsonHorizontalAccuracy           = @"horizontalAccur
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
-@property (nonatomic, strong) RKSTDataArchive  *taskArchive;
 @property (nonatomic, strong) NSString         *documentsDirectoryPath;
 @property (nonatomic, strong) NSURL            *fileUrl;
 
@@ -210,36 +209,36 @@ static  NSString  *kLocationJsonHorizontalAccuracy           = @"horizontalAccur
         }
     }
     if (locationJson != nil) {
-        NSData *data = [NSJSONSerialization dataWithJSONObject:locationJson options:0 error:nil];
-        
-        if (self.taskArchive != nil) {
-            [self.taskArchive resetContent];
-        }
-        RKSTOrderedTask  *task = [[RKSTOrderedTask alloc] initWithIdentifier:kPassiveLocationTrackingTaskIdentifier steps:nil];
+//        NSData *data = [NSJSONSerialization dataWithJSONObject:locationJson options:0 error:nil];
+//        
+////        if (self.taskArchive != nil) {
+////            [self.taskArchive resetContent];
+////        }
+//        RKSTOrderedTask  *task = [[RKSTOrderedTask alloc] initWithIdentifier:kPassiveLocationTrackingTaskIdentifier steps:nil];
         
 #pragma mark TODO  Check the identifier below
 
-        self.taskArchive = [[RKSTDataArchive alloc] initWithItemIdentifier:task.identifier
-                                                         studyIdentifier:kPassiveLocationTrackingIdentifier
-                                                        taskRunUUID: [NSUUID UUID]
-                                                           extraMetadata: nil
-                                                          fileProtection:RKFileProtectionCompleteUnlessOpen];
+//        self.taskArchive = [[RKSTDataArchive alloc] initWithItemIdentifier:task.identifier
+//                                                         studyIdentifier:kPassiveLocationTrackingIdentifier
+//                                                        taskRunUUID: [NSUUID UUID]
+//                                                           extraMetadata: nil
+//                                                          fileProtection:RKFileProtectionCompleteUnlessOpen];
         
-        NSError  *addFileError = nil;
-        [self.taskArchive addFileWithURL:[self makeArchiveURL] contentType:@"json" metadata:nil error:&addFileError];
+//        NSError  *addFileError = nil;
+//        [self.taskArchive addFileWithURL:[self makeArchiveURL] contentType:@"json" metadata:nil error:&addFileError];
 
         NSError  *error = nil;
-        [self.taskArchive addContentWithData:data
-                                    filename:kAPCPassiveLocationTrackingFileName
-                                 contentType:@"json"
-                                   timestamp:[NSDate date]
-                                    metadata:nil error:&error];
+//        [self.taskArchive addContentWithData:data
+//                                    filename:kAPCPassiveLocationTrackingFileName
+//                                 contentType:@"json"
+//                                   timestamp:[NSDate date]
+//                                    metadata:nil error:&error];
         
         if (error != nil) {
             APCLogError2(error);
         } else {
             NSError  *err = nil;
-            NSURL  *archiveFileURL = [self.taskArchive archiveURLWithError:&err];
+            NSURL  *archiveFileURL = nil;//[self.taskArchive archiveURLWithError:&err];
             
             if (err != nil) {
                 APCLogError2(err);
@@ -257,11 +256,11 @@ static  NSString  *kLocationJsonHorizontalAccuracy           = @"horizontalAccur
                     //NSLog(@"passive location data outputUrl= %@", outputUrl);
                 
                 // When done, clean up:
-                self.taskArchive = nil;
+//                self.taskArchive = nil;
                 
-                if (archiveFileURL != nil) {
-                    [[NSFileManager defaultManager] removeItemAtURL:archiveFileURL error:nil];
-                }
+//                if (archiveFileURL != nil) {
+//                    [[NSFileManager defaultManager] removeItemAtURL:archiveFileURL error:nil];
+//                }
             }
         }
     }

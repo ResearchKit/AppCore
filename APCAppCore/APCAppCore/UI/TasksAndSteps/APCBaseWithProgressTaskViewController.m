@@ -130,7 +130,7 @@ static NSString *const kFinishedProperty = @"finished";
 
 - (void)taskViewController:(RKSTTaskViewController *)taskViewController stepViewControllerWillAppear:(RKSTStepViewController *)stepViewController
 {
-    if ([stepViewController isKindOfClass:[RKSTActiveStepViewController class]] && [self advanceArrayContainsStep:stepViewController.step])
+    if ([self advanceArrayContainsStep:stepViewController.step])
     {
         self.observedVC = stepViewController;
         [stepViewController addObserver:self forKeyPath:kFinishedProperty options:NSKeyValueObservingOptionNew context:NULL];

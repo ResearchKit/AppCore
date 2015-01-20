@@ -68,7 +68,7 @@
 {
     RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
     
-    consentVC.taskDelegate = self;
+    consentVC.delegate = self;
     [self presentViewController:consentVC animated:YES completion:nil];
     
 }
@@ -81,7 +81,7 @@
     RKSTConsentSignatureResult *consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
     
     APCUser *user = [self user];
-    user.consentSignatureName = consentResult.signature.name;
+    user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@",consentResult.signature.lastName];
     user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];

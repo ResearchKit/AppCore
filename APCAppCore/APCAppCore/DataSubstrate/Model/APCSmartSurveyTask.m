@@ -39,7 +39,7 @@ static APCDummyObject * _dummyObject;
 
 @interface APCSmartSurveyTask () <NSSecureCoding, NSCopying>
 
-@property (nonatomic, strong) NSString * identifier;
+@property (nonatomic, copy) NSString * identifier;
 @property (nonatomic, strong) NSMutableDictionary * rkSteps;
 @property (nonatomic, strong) NSMutableDictionary * rules; //[stepID : [rules]]
 
@@ -448,13 +448,13 @@ static APCDummyObject * _dummyObject;
 {
     RKSTAnswerFormat * retAnswer;
     if ([constraints isKindOfClass:[SBBDateTimeConstraints class]]) {
-        retAnswer = [RKSTDateAnswerFormat dateTimeAnswer];
+        retAnswer = [RKSTDateAnswerFormat dateTimeAnswerFormat];
     }
     else if ([constraints isKindOfClass:[SBBDateConstraints class]]) {
-        retAnswer = [RKSTDateAnswerFormat dateAnswer];
+        retAnswer = [RKSTDateAnswerFormat dateAnswerFormat];
     }
     else if ([constraints isKindOfClass:[SBBTimeConstraints class]]) {
-        retAnswer = [RKSTDateAnswerFormat timeAnswer];
+        retAnswer = [RKSTTimeOfDayAnswerFormat timeOfDayAnswerFormat];
     }
     return retAnswer;
 }
@@ -466,12 +466,14 @@ static APCDummyObject * _dummyObject;
     NSMutableArray * options = [NSMutableArray array];
     [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger idx, BOOL *stop) {
         //TODO: Address this issue with Apple
-        [options addObject: [RKSTTextAnswerOption optionWithText:[NSString stringWithFormat:@"Answer %lu", idx+1] detailText:option.label value:option.value]];
+        RKSTTextChoice * choice = [RKSTTextChoice choiceWithText:option.label detailText:nil value:option.value];
+        [options addObject: choice];
     }];
     if (localConstraints.allowOtherValue) {
         [options addObject:NSLocalizedString(@"Other", @"Spinner Option")];
     }
-    retAnswer = [RKSTChoiceAnswerFormat choiceAnswerWithTextOptions:options style: localConstraints.allowMultipleValue ? RKChoiceAnswerStyleMultipleChoice : RKChoiceAnswerStyleSingleChoice];
+    retAnswer = [RKSTAnswerFormat choiceAnswerFormatWithStyle:localConstraints.allowMultipleValue ? RKChoiceAnswerStyleMultipleChoice : RKChoiceAnswerStyleSingleChoice textChoices:options];
+    //[RKSTChoiceAnswerFormat choiceAnswerWithTextOptions:options style: localConstraints.allowMultipleValue ? RKChoiceAnswerStyleMultipleChoice : RKChoiceAnswerStyleSingleChoice];
     return retAnswer;
 }
 
@@ -481,34 +483,28 @@ static APCDummyObject * _dummyObject;
     if ([constraints isKindOfClass:[SBBIntegerConstraints class]]) {
         SBBIntegerConstraints * integerConstraint = (SBBIntegerConstraints*) constraints;
         if (integerConstraint.maxValue && integerConstraint.minValue) {
-            retValue = [RKSTScaleAnswerFormat scaleAnswerWithMaxValue:integerConstraint.maxValueValue minValue:integerConstraint.minValueValue];
+            retValue = [RKSTScaleAnswerFormat scaleAnswerFormatWithMaxValue:integerConstraint.maxValueValue minValue:integerConstraint.minValueValue step:integerConstraint.stepValue > 0 ? integerConstraint.stepValue : 1 defaultValue:0];
         }
         else
         {
-            retValue = [RKSTNumericAnswerFormat integerAnswerWithUnit:nil];
+            retValue = [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:nil];
         }
     }
     else if ([constraints isKindOfClass:[SBBDecimalConstraints class]]) {
-        SBBDecimalConstraints * decimalConstraint = (SBBDecimalConstraints*) constraints;
-        if (decimalConstraint.maxValue && decimalConstraint.minValue) {
-            retValue = [RKSTScaleAnswerFormat scaleAnswerWithMaxValue:decimalConstraint.maxValueValue minValue:decimalConstraint.minValueValue];
-        }
-        else
-        {
-            retValue = [RKSTNumericAnswerFormat decimalAnswerWithUnit:nil];
-        }
+        retValue = [RKSTNumericAnswerFormat decimalAnswerFormatWithUnit:nil];
+
     }
     return retValue;
 }
 
 - (RKSTAnswerFormat *)rkTextAnswerFormat:(SBBSurveyConstraints *)constraints
 {
-    return [RKSTTextAnswerFormat textAnswer];
+    return [RKSTTextAnswerFormat textAnswerFormat];
 }
 
 - (RKSTAnswerFormat *)rkTimeIntervalAnswerFormat:(SBBSurveyConstraints *)constraints
 {
-    return [RKSTTimeIntervalAnswerFormat timeIntervalAnswer];
+    return [RKSTTimeIntervalAnswerFormat timeIntervalAnswerFormat];
 }
 
 

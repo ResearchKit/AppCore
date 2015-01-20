@@ -135,8 +135,6 @@
 		F5F12A2D1A2F78490015982C /* NSObject+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128D81A2F78490015982C /* NSObject+Helper.m */; };
 		F5F12A2E1A2F78490015982C /* NSString+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128D91A2F78490015982C /* NSString+Helper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A2F1A2F78490015982C /* NSString+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128DA1A2F78490015982C /* NSString+Helper.m */; };
-		F5F12A301A2F78490015982C /* RKSTTaskResult+Archiver.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128DB1A2F78490015982C /* RKSTTaskResult+Archiver.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F5F12A311A2F78490015982C /* RKSTTaskResult+Archiver.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128DC1A2F78490015982C /* RKSTTaskResult+Archiver.m */; };
 		F5F12A341A2F78490015982C /* UIAlertController+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128DF1A2F78490015982C /* UIAlertController+Helper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A351A2F78490015982C /* UIAlertController+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128E01A2F78490015982C /* UIAlertController+Helper.m */; };
 		F5F12A371A2F78490015982C /* UIImage+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128E21A2F78490015982C /* UIImage+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -481,8 +479,6 @@
 		F5F128D81A2F78490015982C /* NSObject+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Helper.m"; sourceTree = "<group>"; };
 		F5F128D91A2F78490015982C /* NSString+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Helper.h"; sourceTree = "<group>"; };
 		F5F128DA1A2F78490015982C /* NSString+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Helper.m"; sourceTree = "<group>"; };
-		F5F128DB1A2F78490015982C /* RKSTTaskResult+Archiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RKSTTaskResult+Archiver.h"; sourceTree = "<group>"; };
-		F5F128DC1A2F78490015982C /* RKSTTaskResult+Archiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RKSTTaskResult+Archiver.m"; sourceTree = "<group>"; };
 		F5F128DF1A2F78490015982C /* UIAlertController+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Helper.h"; sourceTree = "<group>"; };
 		F5F128E01A2F78490015982C /* UIAlertController+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Helper.m"; sourceTree = "<group>"; };
 		F5F128E21A2F78490015982C /* UIImage+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+APCHelper.h"; sourceTree = "<group>"; };
@@ -1015,8 +1011,6 @@
 				F5F128D81A2F78490015982C /* NSObject+Helper.m */,
 				F5F128D91A2F78490015982C /* NSString+Helper.h */,
 				F5F128DA1A2F78490015982C /* NSString+Helper.m */,
-				F5F128DB1A2F78490015982C /* RKSTTaskResult+Archiver.h */,
-				F5F128DC1A2F78490015982C /* RKSTTaskResult+Archiver.m */,
 				F5F128DF1A2F78490015982C /* UIAlertController+Helper.h */,
 				F5F128E01A2F78490015982C /* UIAlertController+Helper.m */,
 				F5F128E21A2F78490015982C /* UIImage+APCHelper.h */,
@@ -1563,7 +1557,6 @@
 				F5F12A161A2F78490015982C /* APCAppearanceInfo.h in Headers */,
 				F5F12AF61A2F78490015982C /* APCStepViewController.h in Headers */,
 				5B234E141A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h in Headers */,
-				F5F12A301A2F78490015982C /* RKSTTaskResult+Archiver.h in Headers */,
 				F5F12AFB1A2F78490015982C /* APCInstructionStepViewController.h in Headers */,
 				F5F12A471A2F78490015982C /* APCDayOfMonthSelector.h in Headers */,
 				F5F12A8B1A2F78490015982C /* APCIntroVideoViewController.h in Headers */,
@@ -1866,7 +1859,6 @@
 				F5F12AF71A2F78490015982C /* APCStepViewController.m in Sources */,
 				F5F12AFE1A2F78490015982C /* APCIntroductionViewController.m in Sources */,
 				F5F12ADD1A2F78490015982C /* APCSegmentedTableViewCell.m in Sources */,
-				F5F12A311A2F78490015982C /* RKSTTaskResult+Archiver.m in Sources */,
 				F50738C11A682E12004CF100 /* APCDateRange.m in Sources */,
 				F5C363611A40E21000113129 /* APCSmartSurveyTask.m in Sources */,
 				F5F12A3E1A2F78490015982C /* APCConstants.m in Sources */,
