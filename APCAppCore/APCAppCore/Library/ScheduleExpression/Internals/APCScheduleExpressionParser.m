@@ -11,52 +11,9 @@
 #import "APCDayOfMonthSelector.h"
 #import "APCScheduleExpressionToken.h"
 #import "APCScheduleExpressionTokenizer.h"
+#import "APCLog.h"
 
 
-
-// ---------------------------------------------------------
-#pragma mark - VarArgs macro
-// ---------------------------------------------------------
-
-/**
- Doesn't work.
-
- Another attempt:
- 		va_list args;
-		va_start(args, stringOrCharacterSet);
-		for (id arg = stringOrCharacterSet; arg != nil; arg = va_arg(args, id))
-		{
-			[parameters addObject: arg];
-		}
-		va_end(args);
-
- based on http://www.cocoawithlove.com/2009/05/variable-argument-lists-in-cocoa.html
- 
- but that crashes, too.  :-(
- this isn't core to what I need to do, so...  never mind.
- */
-//#define NSArrayFromVariadicArguments( parameterToLeftOfEllipsis )	\
-//	({																\
-//		NSArray *nsarrayOfVarArgs = nil;							\
-//		va_list arguments;											\
-//		va_start (arguments, parameterToLeftOfEllipsis);			\
-//		nsarrayOfVarArgs = [[NSArray alloc] initWithObjects:		\
-//								parameterToLeftOfEllipsis,			\
-//								arguments,							\
-//								nil];								\
-//		va_end (arguments);											\
-//																	\
-//		/* By mentioning this variable as the last item				\
-//		   inside the ({...}), we effectively "return" a value		\
-//		   from this macro. */										\
-//		nsarrayOfVarArgs;											\
-//	})
-
-
-
-// ---------------------------------------------------------
-#pragma mark - Parser
-// ---------------------------------------------------------
 
 @interface APCScheduleExpressionParser ()
 @property (nonatomic, strong) NSMutableString* expression;
@@ -141,7 +98,7 @@
 		{
 			NSString *errorMessage = @"-[APCSchedulExpressionParser consumeOneToken] Somehow, we seem to have scanned past the end of the string. How was that possible?";
 
-//			NSAssert (NO, errorMessage);
+			// During development:  NSAssert (NO, errorMessage);
 			NSLog (@"%@", errorMessage);
 		}
 
@@ -384,10 +341,6 @@
             {
                 [self consumeOneToken];
             }
-//			else if (self.nextToken != nil && ! self.nextToken.isFieldSeparator)
-//			{
-//				[self recordError];
-//			}
 			else
 			{
 				// End of the string, or end of the list of <unitType>.
@@ -487,7 +440,6 @@ parseError:
 
 		if (self.errorEncountered)
 		{
-//			NSAssert (NO, @"You should probably print something useful, here.");
 			NSLog (@"WARNING: Something broke during the parsing process.  Returning nil for the ScheduleExpression.");
 			break;
 		}
@@ -503,7 +455,17 @@ parseError:
 	// Problem in the incoming expression.
 	if (incomingSelectors.count < 5)
 	{
-		NSLog (@"WARNING: Couldn't identify five fields in the incoming string (minutes, hours, days, months, days of the week).  Returning nil for the ScheduleExpression.");
+		/*
+		 Thanks to http://nshipster.com/nserror/ for help in constructing this.
+		 */
+		NSString* errorMessage = [NSString stringWithFormat: @"Couldn't identify five fields (minutes, hours, days, months, weekdays) in the cron string [%@]. Returning nil for the ScheduleExpression.", self.originalExpression];
+
+		NSError *error = [NSError errorWithDomain: @"APCScheduleParser"
+											 code: -1
+										 userInfo: @{ NSLocalizedDescriptionKey: errorMessage }];
+
+		APCLogError2 (error);
+
 		[self recordError];
 	}
 

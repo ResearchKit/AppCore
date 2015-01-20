@@ -94,10 +94,10 @@
 	@[
 //		@"0 5 * * *",											// 5am every day
 //		@"0 5 * * 1",											// 5am every Monday
-//		@"0 5 * * 1#1",											// 5am, only first Monday
-//		@"0 5 * * wed#3",										// 5am, only third Wednesday
+		@"0 5 * * 1#1",											// 5am, only first Monday
+		@"0 5 * * wed#3",										// 5am, only third Wednesday
 //		@"0 5 * * 1#2",											// 5am, only second Monday
-		@"0 5,10,12,17,20 * * *",								// several every day
+//		@"0 5,10,12,17,20 * * *",								// several every day
 //		@"0 5,10,12,17,20 * * 1",								// several only on Mondays
 //		@"0 0 5 * * * *",										// 7 fields:  5am every day
 //		@"0 0 5 * * 1 *",										// 7 fields:  5am every Monday
@@ -113,7 +113,7 @@
 		// Things that break:
 //		@"0 5 * whatever dude",										// 5 fields, 2 with garbage
 //		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,duuuude,MON#1,TUE#2",		// 5 fields, 1 with garbage
-//		@"0 0 * *",					// 4 fields, not 5 or 7
+		@"0 0 * *",					// 4 fields, not 5 or 7
 //		@"whatever",				// 1 field (with garbage in it)
 //		@"0 5, 6, 7 * * *",			// spaces after commas
 //		@"0 6, 12, 18, * * *",		// spaces after commas, generating illegal month number

@@ -11,12 +11,6 @@
 #import "NSDate+Helper.h"
 
 
-//static NSInteger    kMinuteIndex = 0;
-//static NSInteger    kHourIndex   = 1;
-//static NSInteger    kDayIndex    = 2;
-//static NSInteger    kMonthIndex  = 3;
-//static NSInteger    kYearIndex   = 4;
-
 /**
  This enum gives names to the order of items in the -selectors
  -calendarComponents arrays.

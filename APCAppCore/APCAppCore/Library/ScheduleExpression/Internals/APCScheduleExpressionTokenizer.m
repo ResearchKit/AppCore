@@ -125,6 +125,18 @@ static NSArray* kWeekdayNames = nil;
 
 	switch (token.type)
 	{
+		//
+		// For these cases, we've already done all
+		// the processing we need to do.
+		//
+		case APCScheduleExpressionTokenTypeWildcard:
+		case APCScheduleExpressionTokenTypeListSeparator:
+		case APCScheduleExpressionTokenTypeStepSeparator:
+		case APCScheduleExpressionTokenTypeFieldSeparator:
+		case APCScheduleExpressionTokenTypeRangeSeparator:
+		case APCScheduleExpressionTokenTypePositionSeparator:
+			break;
+
 		case APCScheduleExpressionTokenTypeWord:
 		{
 			NSInteger value = [self numberValueForWord: token.stringValue];
@@ -164,7 +176,13 @@ static NSArray* kWeekdayNames = nil;
 			break;
 
 		default:
-			// Everything else has already been handled.
+			/*
+			 Everything else has already been handled, including
+			 the "real error" situation.  So we're going to
+			 consciously ship this production code with an NSAssert:
+			 if this situation occurs, something ultra-bad is happening.
+			 */
+			NSAssert (NO, @"Something is seriously wrong: we have a token type [%d] that doesn't exist. Has RAM been corrupted?", (int) token.type);
 			break;
 	}
 
