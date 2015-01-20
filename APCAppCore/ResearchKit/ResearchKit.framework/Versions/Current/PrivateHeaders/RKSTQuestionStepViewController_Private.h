@@ -19,9 +19,4 @@
 @property (nonatomic, strong) RKSTQuestionStepCustomView *customQuestionView;
 
 
-/**
- * @brief Customizable footer view at the bottom
- */
-@property (nonatomic, strong) UIView* footerView;
-
 @end

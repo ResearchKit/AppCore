@@ -8,12 +8,14 @@
 #import <Foundation/Foundation.h>
 #import <HealthKit/HealthKit.h>
 #import <ResearchKit/RKSTErrors.h>
+#import <ResearchKit/RKSTDefines.h>
 
 @class RKSTStudy;
 @class RKSTCollector;
 @class RKSTHealthCollector;
 @class RKSTMotionActivityCollector;
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTCollector : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;
@@ -43,6 +45,7 @@
 @end
 
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTHealthCollector : RKSTCollector
 
 @property (copy, readonly) HKSampleType *sampleType;
@@ -55,6 +58,7 @@
 
 @end
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTHealthCorrelationCollector : RKSTCollector
 
 @property (copy, readonly) HKCorrelationType *correlationType;
@@ -69,6 +73,7 @@
 
 
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTMotionActivityCollector : RKSTCollector
 
 @property (copy, readonly) NSDate *startDate;

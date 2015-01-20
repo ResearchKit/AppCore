@@ -8,11 +8,12 @@
 #import <ResearchKit/ResearchKit.h>
 
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKFormStep : RKStep
 
 - (instancetype)initWithIdentifier:(NSString *)identifier
                              title:(NSString *)title
-                          subtitle:(NSString*) subtitle;
+                              text:(NSString *)text;
 
 /**
  * @brief Form's question item.
@@ -22,14 +23,20 @@
 @end
 
 
-@interface RKFormItem : NSObject <NSSecureCoding,NSCopying>
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKFormItem : NSObject <NSSecureCoding, NSCopying>
 
-- (instancetype)initWithIdentifier:(NSString *)identifier text:(NSString *)text answerFormat:(RKAnswerFormat *) answerFormat;
+- (instancetype)initWithIdentifier:(NSString *)identifier text:(NSString *)text answerFormat:(RKAnswerFormat *)answerFormat;
+
+/**
+ * @brief A section title is the title of on the section header. Also it is  a indication of begining of a new table section.
+ */
+- (instancetype)initWithSectionTitle:(NSString *)sectionTitle;
 
 /**
  * @brief Question's identifier.
  */
-@property (nonatomic, copy, readonly) NSString* identifier;
+@property (nonatomic, copy, readonly) NSString *identifier;
 
 /**
  * @brief Text describing this form item.
@@ -38,7 +45,7 @@
 
 /**
  * @brief Place holder for its field.
- * @warning Not applicable for boolean answer format.
+ * @warning Not applicable for boolean, single choice, and multiple choice answer format.
  */
 @property (nonatomic, copy) NSString *placeholder;
 
@@ -46,6 +53,6 @@
  * @brief AnswerFormat object contains detailed information about an answer.
  * e.g. type, constraints, and choices.
  */
-@property (nonatomic, copy, readonly) RKAnswerFormat* answerFormat;
+@property (nonatomic, copy, readonly) RKAnswerFormat *answerFormat;
 
 @end

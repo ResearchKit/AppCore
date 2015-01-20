@@ -7,21 +7,10 @@
 
 #import <ResearchKit/ResearchKit.h>
 
-typedef NS_ENUM(NSInteger, RKInstructionStepViewControllerLayoutStyle) {
-    RKInstructionStepViewControllerLayoutStyleButtonBelowTitle,
-    RKInstructionStepViewControllerLayoutStyleButtonAtBottom
-};
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKInstructionStepViewController : RKStepViewController
 
 
-/**
- * Add a custom view to the step. Use constraints or sizeThatFits:
- * to request the size needed.
- *
- */
-@property (nonatomic, strong) UIView *customView;
-
-@property (nonatomic) RKInstructionStepViewControllerLayoutStyle layoutStyle;
 
 @end

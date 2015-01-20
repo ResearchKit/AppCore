@@ -6,6 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <ResearchKit/RKDefines.h>
 
 @class RKStep;
 @class RKResult;
@@ -17,7 +18,7 @@
 typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
     RKStepViewControllerNavigationDirectionForward,
     RKStepViewControllerNavigationDirectionReverse
-};
+} RK_ENUM_AVAILABLE_IOS(8_3);
 
 
 @protocol RKStepViewControllerDelegate <NSObject>
@@ -27,12 +28,19 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
 /**
  * @brief Indicates the step has completed, and the desired direction of navigation.
  */
-- (void)stepViewControllerDidFinish:(RKStepViewController *)stepViewController navigationDirection:(RKStepViewControllerNavigationDirection)direction;
+- (void)stepViewController:(RKStepViewController *)stepViewController didFinishWithNavigationDirection:(RKStepViewControllerNavigationDirection)direction;
 
 /**
- * @brief Result chanegd.
+ * @brief Result changed.
+ * Subclasses should override -result to provide the current result.
  */
-- (void)stepViewController:(RKStepViewController *)stepViewController didChangeResult:(RKStepResult*)stepResult;
+- (void)stepViewControllerResultDidChange:(RKStepViewController *)stepViewController;
+
+/**
+ * @brief An error has been detected during the step.
+ */
+- (void)stepViewControllerDidFail:(RKStepViewController *)stepViewController withError:(NSError *)error;
+
 
 @optional
 
@@ -42,28 +50,36 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
 - (void)stepViewControllerWillAppear:(RKStepViewController *)viewController;
 
 /**
- * @brief An error has been detected during the step.
+ * @brief Controls behavior of the Back button.
+ * Return YES if the back button should be visible (because there is a previous step in the task)
+ * If not implemented, defaults to NO.
  */
-- (void)stepViewControllerDidFail:(RKStepViewController *)stepViewController withError:(NSError *)error;
+- (BOOL)stepViewControllerHasPreviousStep:(RKStepViewController *)stepViewController;
 
 /**
- * @brief The step was cancelled.
+ * @brief Controls behavior of the Continue button.
+ * Return YES for Continue, or NO for Done.
+ * If not implemented, defaults to NO.
  */
-- (void)stepViewControllerDidCancel:(RKStepViewController *)stepViewController;
+- (BOOL)stepViewControllerHasNextStep:(RKStepViewController *)stepViewController;
 
 @end
 
 /**
  * @brief Base class for view controllers for steps in a task.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKStepViewController : UIViewController
 
 /**
- * @brief Designated initializer
+ * @brief Initialize a step view controller
  * @param step    The step to be presented.
  */
-- (instancetype)initWithStep:(RKStep*)step;
+- (instancetype)initWithStep:(RKStep *)step NS_DESIGNATED_INITIALIZER;
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
 
 /**
  * @brief The step to be presented.
@@ -72,12 +88,20 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
  * Modifying the step after the controller has been presented is an error and
  * may have undefined results.
  */
-@property (nonatomic, strong) RKStep* step;
+@property (nonatomic, strong) RKStep *step;
 
 @property (nonatomic, weak) id<RKStepViewControllerDelegate> delegate;
 
+
 /**
- * @brief Control buttons
+ * @brief Modify the title of continue button, skip button, or learn more button
+ */
+@property (nonatomic, copy) NSString *continueButtonTitle;
+@property (nonatomic, copy) NSString *learnMoreButtonTitle;
+@property (nonatomic, copy) NSString *skipButtonTitle;
+
+/**
+ * @brief Back button and Cancel button
  * If the item is nil, the corresponding button will not be displayed.
  * If the item is present, the title, target, and action will be used. Other
  * properties are ignored (style is obtained globally, from the appearance of classes
@@ -88,11 +112,8 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
  *
  * Subclasses can safely modify these after calling [super viewWillAppear:]
  */
-@property (nonatomic, strong) UIBarButtonItem *continueButton;
-@property (nonatomic, strong) UIBarButtonItem *learnMoreButton;
-@property (nonatomic, strong) UIBarButtonItem *skipButton;
-@property (nonatomic, strong) UIBarButtonItem *backButton;
-@property (nonatomic, strong) UIBarButtonItem *cancelButton;
+@property (nonatomic, strong) UIBarButtonItem *backButtonItem;
+@property (nonatomic, strong) UIBarButtonItem *cancelButtonItem;
 
 /**
  * @brief Current state of result
@@ -100,13 +121,13 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
 @property (nonatomic, copy, readonly) RKStepResult *result;
 
 
-- (BOOL)previousStepAvailable;
-- (BOOL)nextStepAvailable;
+- (BOOL)hasPreviousStep;
+- (BOOL)hasNextStep;
 
 /**
  * @brief Method access to the presenting task view controller.
  */
-- (RKTaskViewController *)taskViewController;
+@property (nonatomic, strong, readonly) RKTaskViewController *taskViewController;
 
 /**
  * @brief Go to next step.
@@ -117,6 +138,7 @@ typedef NS_ENUM(NSInteger, RKStepViewControllerNavigationDirection) {
  * @brief Go to previous step.
  */
 - (void)goBackward;
+
 
 @end
 
