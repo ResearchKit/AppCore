@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="APCSimpleTaskSummaryViewController">
@@ -22,18 +21,19 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thank you!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="qUF-6z-e5c">
-                            <rect key="frame" x="28" y="216" width="264" height="30"/>
+                            <rect key="frame" x="28" y="231" width="264" height="22.5"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="264" id="7Uh-fU-x4H"/>
+                                <constraint firstAttribute="width" constant="264" id="3ZZ-ce-h0k"/>
                             </constraints>
                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="19"/>
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can now compare this data with your performance trends." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LVd-bV-L6N">
-                            <rect key="frame" x="28" y="254" width="264" height="48"/>
+                            <rect key="frame" x="28" y="261" width="264" height="48"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="264" id="Q2S-cQ-uiU"/>
+                                <constraint firstAttribute="height" constant="48" id="eUC-SG-yco"/>
+                                <constraint firstAttribute="width" constant="264" id="gCO-dw-Suq"/>
                             </constraints>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="19"/>
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -41,32 +41,31 @@
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O8j-a6-hzd" customClass="APCConfirmationView">
                             <rect key="frame" x="138" y="163" width="45" height="45"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstAttribute="width" secondItem="O8j-a6-hzd" secondAttribute="height" multiplier="1:1" id="vYB-pO-KY5"/>
+                                <constraint firstAttribute="width" constant="45" id="VO1-qq-jpS"/>
+                                <constraint firstAttribute="height" constant="45" id="XjT-Ss-UkW"/>
                             </constraints>
                         </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="LVd-bV-L6N" firstAttribute="top" secondItem="qUF-6z-e5c" secondAttribute="bottom" constant="8" id="1UT-En-MNG"/>
-                        <constraint firstItem="qUF-6z-e5c" firstAttribute="top" secondItem="O8j-a6-hzd" secondAttribute="bottom" constant="8" id="6Qu-dT-Lj4"/>
-                        <constraint firstAttribute="centerY" secondItem="O8j-a6-hzd" secondAttribute="centerY" constant="66.5" id="HO4-vW-9UE"/>
-                        <constraint firstItem="O8j-a6-hzd" firstAttribute="top" secondItem="5fR-Pw-oic" secondAttribute="top" constant="163" id="mju-8h-TwT"/>
-                        <constraint firstAttribute="centerY" secondItem="qUF-6z-e5c" secondAttribute="centerY" constant="21" id="nDQ-mS-Y2f"/>
-                        <constraint firstAttribute="centerX" secondItem="qUF-6z-e5c" secondAttribute="centerX" id="qWE-Pi-VeV"/>
-                        <constraint firstAttribute="centerX" secondItem="O8j-a6-hzd" secondAttribute="centerX" constant="-0.5" id="qyy-tQ-ajA"/>
-                        <constraint firstAttribute="centerY" secondItem="LVd-bV-L6N" secondAttribute="centerY" constant="-26" id="vsI-EN-jCR"/>
-                        <constraint firstAttribute="centerX" secondItem="LVd-bV-L6N" secondAttribute="centerX" id="vyc-mh-7FE"/>
+                        <constraint firstAttribute="centerY" secondItem="qUF-6z-e5c" secondAttribute="centerY" constant="9.75" id="1M8-j0-Q20"/>
+                        <constraint firstAttribute="centerX" secondItem="O8j-a6-hzd" secondAttribute="centerX" constant="-0.5" id="Csc-AL-6zj"/>
+                        <constraint firstAttribute="centerX" secondItem="qUF-6z-e5c" secondAttribute="centerX" id="IIK-Xb-TBT"/>
+                        <constraint firstAttribute="centerY" secondItem="O8j-a6-hzd" secondAttribute="centerY" constant="66.5" id="qOJ-kK-89I"/>
+                        <constraint firstAttribute="centerY" secondItem="LVd-bV-L6N" secondAttribute="centerY" constant="-33" id="roc-ol-olr"/>
+                        <constraint firstAttribute="centerX" secondItem="LVd-bV-L6N" secondAttribute="centerX" id="s0q-q3-BBS"/>
+                        <constraint firstItem="LVd-bV-L6N" firstAttribute="top" secondItem="qUF-6z-e5c" secondAttribute="bottom" constant="7.5" id="ynm-dV-FAX"/>
                     </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" red="0.96470594409999999" green="0.96862751250000001" blue="0.87843143940000001" alpha="1" colorSpace="deviceRGB"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="5fR-Pw-oic" secondAttribute="trailing" id="6si-nl-jNo"/>
-                <constraint firstItem="5fR-Pw-oic" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="ILo-Fs-rIZ"/>
-                <constraint firstAttribute="bottom" secondItem="5fR-Pw-oic" secondAttribute="bottom" id="qnx-qL-dgb"/>
-                <constraint firstItem="5fR-Pw-oic" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="yCR-mO-aGQ"/>
+                <constraint firstItem="5fR-Pw-oic" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="e2P-rZ-3IW"/>
+                <constraint firstAttribute="trailing" secondItem="5fR-Pw-oic" secondAttribute="trailing" id="rnc-sb-lON"/>
+                <constraint firstItem="5fR-Pw-oic" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="xRu-Px-L7G"/>
+                <constraint firstAttribute="bottom" secondItem="5fR-Pw-oic" secondAttribute="bottom" id="yhH-sW-JJJ"/>
             </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
