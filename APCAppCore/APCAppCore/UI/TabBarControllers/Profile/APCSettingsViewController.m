@@ -100,13 +100,13 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         [items addObject:section];
     }
     
-    /* Temporarily removing this section
+    // Temporarily removing this section
     {
         NSMutableArray *rowItems = [NSMutableArray new];
         
         {
             APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
-            field.caption = NSLocalizedString(@"Push Notifications", @"");
+            field.caption = NSLocalizedString(@"Reminder", @"");
             field.identifier = kAPCSwitchCellIdentifier;
             field.editable = NO;
             
@@ -117,11 +117,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         }
         
         {
-            APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = NSLocalizedString(@"Devices", @"");
-            field.identifier = kAPCRightDetailTableViewCellIdentifier;
+            APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
+            field.caption = NSLocalizedString(@"Reminder Times", @"");
+            field.pickerData = @[@[@"9:00AM", @"9:00PM"]];
             field.textAlignnment = NSTextAlignmentRight;
-            
+            field.identifier = kAPCDefaultTableViewCellIdentifier;
+
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
             row.itemType = kAPCSettingsItemTypeDevices;
@@ -129,10 +130,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         }
      
         APCTableViewSection *section = [APCTableViewSection new];
+        section.sectionTitle = NSLocalizedString(@"Reminder", @"");
         section.rows = [NSArray arrayWithArray:rowItems];
         [items addObject:section];
     }
-    */
+    
     
     
     {
