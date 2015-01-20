@@ -58,10 +58,10 @@ static NSString *const kFinishedProperty = @"finished";
 #pragma mark - StepViewController Delegate Methods
 /*********************************************************************************/
 
-- (void)stepViewControllerDidFinish:(RKSTStepViewController *)stepViewController navigationDirection:(RKSTStepViewControllerNavigationDirection)direction
+- (void)stepViewController:(RKSTStepViewController *)stepViewController didFinishWithNavigationDirection:(RKSTStepViewControllerNavigationDirection)direction
 {
     if (!(self.progressor.completedSteps == 1 && direction == RKSTStepViewControllerNavigationDirectionReverse)) {
-        [super stepViewControllerDidFinish:stepViewController navigationDirection:direction];
+        [super stepViewController:stepViewController didFinishWithNavigationDirection:direction];
     }
     [self removeKVOIfNeeded];
 
@@ -107,7 +107,7 @@ static NSString *const kFinishedProperty = @"finished";
         if ([object isFinished]) {
             RKSTStepViewController * vc = object;
             [self removeKVOIfNeeded];
-            [vc.delegate stepViewControllerDidFinish:vc navigationDirection:RKSTStepViewControllerNavigationDirectionForward];
+            [vc.delegate stepViewController:vc didFinishWithNavigationDirection: RKSTStepViewControllerNavigationDirectionForward];
         }
     }
 }

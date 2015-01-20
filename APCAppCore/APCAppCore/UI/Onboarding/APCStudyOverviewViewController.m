@@ -205,7 +205,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 {
     RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
     
-    consentVC.taskDelegate = self;
+    consentVC.delegate = self;
     [self presentViewController:consentVC animated:YES completion:nil];
     
 }

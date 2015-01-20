@@ -7,13 +7,10 @@
  
 #import "APCDataSubstrate.h"
 
-@interface APCDataSubstrate (ResearchKit) <RKSTDataLoggerManagerDelegate>
+@interface APCDataSubstrate (ResearchKit)
 
 /*********************************************************************************/
 #pragma mark - Methods meant only for Categories
 /*********************************************************************************/
-- (void) setUpResearchStudy: (NSString*) studyIdentifier;
-- (void) joinStudy;
-- (void) leaveStudy;
 
 @end

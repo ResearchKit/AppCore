@@ -19,7 +19,7 @@
     NSUUID * taskRunUUID = [NSUUID UUID];
     APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
     controller.scheduledTask = scheduledTask;
-    controller.taskDelegate = controller;
+    controller.delegate = controller;
     return  controller;
 }
 

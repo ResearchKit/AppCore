@@ -13,7 +13,6 @@ FOUNDATION_EXPORT double APCAppCoreVersionNumber;
 //! Project version string for APCAppCore.
 FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 
-#import <ResearchKit/ResearchKit_Private.h>
 #import <BridgeSDK/BridgeSDK.h>
 
 //Headers
