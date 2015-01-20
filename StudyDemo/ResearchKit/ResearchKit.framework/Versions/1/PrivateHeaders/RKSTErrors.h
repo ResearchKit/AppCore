@@ -9,9 +9,9 @@
 #import <ResearchKit/RKSTDefines.h>
 
 
-RK_EXTERN NSString * const RKSTErrorDomain;
-RK_EXTERN NSString * const RKSTInvalidArgumentException;
-RK_EXTERN NSString * const RKSTAbstractMethodException;
+RK_EXTERN NSString * const RKErrorDomain RKST_AVAILABLE_IOS(8_3);
+RK_EXTERN NSString * const RKInvalidArgumentException RKST_AVAILABLE_IOS(8_3);
+RK_EXTERN NSString * const RKAbstractMethodException RKST_AVAILABLE_IOS(8_3);
 
 typedef NS_ENUM(NSInteger, RKErrorCode) {
     RKNoError = 0,
@@ -29,6 +29,6 @@ typedef NS_ENUM(NSInteger, RKErrorCode) {
     RKErrorBackground             = -100111,
     RKErrorMultipleErrors         = -100112,
     RKErrorUserDeclinedSigning    = -100113
-};
+} RK_ENUM_AVAILABLE_IOS(8_3);
 
 

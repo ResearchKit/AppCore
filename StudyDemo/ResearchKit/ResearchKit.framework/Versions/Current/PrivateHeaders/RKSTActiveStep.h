@@ -12,16 +12,22 @@
  *
  * An active test is a kind of step interacts with participant to collect data.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTActiveStep : RKSTStep
 
 /**
- * @brief The value in seconds for count down timer.
- * Default value is 0.
- *
- * @note If countDown > 0, RKSTActiveStepViewController displays count down timer in the step view.
- * When timer is down to zero, step view transit to next one.
+ * @brief The duration of the step in seconds.
+ * Default value is 0 (no built in step timer).
  */
-@property (nonatomic) NSTimeInterval countDownInterval;
+@property (nonatomic) NSTimeInterval stepDuration;
+
+/**
+ * @brief Whether to show a view with the default timer
+ * Defaults to YES.
+ * This property is ignored if stepDuration == 0.
+ *
+ */
+@property (nonatomic) BOOL shouldShowDefaultTimer;
 
 /**
  * @brief During timer countdown, counts down the last few seconds with voice
@@ -46,6 +52,13 @@
 @property (nonatomic) BOOL shouldPlaySoundOnStart;
 
 /**
+ * @brief Whether to play a default sound on step finish.
+ *
+ * Default value is NO.
+ */
+@property (nonatomic) BOOL shouldPlaySoundOnFinish;
+
+/**
  * @brief Whether to vibrate when the step starts.
  *
  * Default value is NO.
@@ -61,12 +74,23 @@
 @property (nonatomic) BOOL shouldUseNextAsSkipButton;
 
 /**
+ * @brief Whether to transition automatically when the step finishes.
+ *
+ * Default value is NO.
+ */
+@property (nonatomic) BOOL shouldContinueOnFinish;
+
+/**
  * @brief Instructional voice prompt.
  *
  * Instructional speech begins when the step starts.
  */
 @property (nonatomic, copy) NSString *spokenInstruction;
 
+/**
+ * @brief Image to be displayed below instructions.
+ */
+@property (nonatomic, strong) UIImage *image;
 
 /**
  * @brief Recorder configurations.
@@ -76,6 +100,9 @@
  *
  */
 @property (nonatomic, copy) NSArray *recorderConfigurations;
+
+@property (nonatomic, readonly) NSSet *requestedHealthKitTypesForReading;
+@property (nonatomic, readonly) RKPermissionMask requestedPermissions;
 
 
 @end

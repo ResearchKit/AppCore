@@ -7,7 +7,9 @@
 
 #import <ResearchKit/ResearchKit.h>
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTVisualConsentStepViewController : RKSTStepViewController
 
+@property (nonatomic, strong) UIView *animationView;
 
 @end

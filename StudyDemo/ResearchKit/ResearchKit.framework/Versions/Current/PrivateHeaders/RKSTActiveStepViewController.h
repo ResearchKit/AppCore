@@ -6,11 +6,13 @@
 //
 
 #import <ResearchKit/RKSTStepViewController.h>
+#import <ResearchKit/RKSTRecorder.h>
 
 /**
  * @brief Step view controller for an RKSTActiveStep.
  */
-@interface RKSTActiveStepViewController : RKSTStepViewController
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTActiveStepViewController : RKSTStepViewController<RKSTRecorderDelegate>
 
 
 /**
@@ -52,6 +54,11 @@
  */
 - (void)stepDidFinish;
 
+/**
+ * @brief Recorders currently in use by the active step.
+ *
+ */
+@property (nonatomic, strong, readonly) NSArray *recorders;
 
 
 @end

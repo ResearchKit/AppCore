@@ -10,12 +10,23 @@
 @class RKSTConsentDocument;
 @class RKSTConsentSignature;
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTConsentReviewStep : RKSTStep
 
-- (instancetype)initWithSignature:(RKSTConsentSignature *)signature inDocument:(RKSTConsentDocument *)consentDocument;
+- (instancetype)initWithIdentifier:(NSString *)identifier
+                         signature:(RKSTConsentSignature *)signature
+                        inDocument:(RKSTConsentDocument *)consentDocument;
 
 @property (nonatomic, strong, readonly) RKSTConsentDocument *consentDocument;
 @property (nonatomic, strong, readonly) RKSTConsentSignature *signature;
 
+/**
+ * @brief User-visible description of reason for agreeing to consent.
+ * 
+ * @discussion This is presented in the confirmation dialog when obtaining
+ * consent.
+ *
+ */
+@property (nonatomic, copy) NSString *reasonForConsent;
 
 @end

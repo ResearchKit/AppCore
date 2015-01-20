@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.apple.$(PRODUCT_NAME:rfc1034identifier)</string>
+	<string>com.ymedia.$(PRODUCT_NAME:rfc1034identifier)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -22,8 +22,11 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location track will be recorded during this task and saved for research purposes.</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>location</string>
 		<string>audio</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

@@ -1,0 +1,3377 @@
+{
+   "guid":"9e948494-491d-48c5-b465-7398c727da5e",
+   "createdOn":"2014-11-26T21:40:52.183Z",
+   "modifiedOn":"2014-11-26T21:40:52.676Z",
+   "version":2,
+   "name":"BCS Enrollment Survey",
+   "identifier":"bcs-enrollment",
+   "published":true,
+   "questions":[
+      {
+         "guid":"f50c327d-f956-4598-846f-711cd17b3f8b",
+         "identifier":"q1",
+         "prompt":"What is your birth date?",
+         "constraints":{
+            "dataType":"date",
+            "rules":[
+
+            ],
+            "allowFuture":false,
+            "type":"DateConstraints"
+         },
+         "uiHint":"datepicker",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"f282dcdb-38cf-4eed-a128-8d302d36fb7a",
+         "identifier":"q2",
+         "prompt":"What category below best describes your racial/ethnic background?",
+         "text":"If you are of mixed racial/ethnic background, choose the category with which you most closely identify.",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"White",
+                  "value":"White",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"African American/Black",
+                  "value":"African American/Black",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Asian (Chinese, Japanese, Korean, South East Asian, Filipino)",
+                  "value":"Asian (Chinese, Japanese, Korean, South East Asian, Filipino)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Native Hawaiian or Other Pacific Islander",
+                  "value":"Native Hawaiian or Other Pacific Islander",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Native American/Alaska Native (American Indian, Aleutian, Eskimo)",
+                  "value":"Native American/Alaska Native (American Indian, Aleutian, Eskimo)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Indian Subcontinent",
+                  "value":"Indian Subcontinent",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Don’t know",
+                  "value":"Don’t know",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":true,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"ec64da24-0a82-43c9-8b67-827e3c99079a",
+         "identifier":"q3",
+         "prompt":"Are you Hispanic or Latina?",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"a84dbdeb-f11e-4c1b-89d5-773d1b85a9de",
+         "identifier":"q4",
+         "prompt":"What is your current marital/relationship status?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Married",
+                  "value":"Married",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Divorced",
+                  "value":"Divorced",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Widowed",
+                  "value":"Widowed",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Legally separated",
+                  "value":"Legally separated",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Married but not living with spouse",
+                  "value":"Married but not living with spouse",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Committed relationship (partner opposite sex)",
+                  "value":"Committed relationship (partner opposite sex)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Committed relationship (partner same sex)",
+                  "value":"Committed relationship (partner same sex)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Single (never married)",
+                  "value":"Single (never married)",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"b6af5fb1-cc22-45b9-aa41-85c4539d7088",
+         "identifier":"q5",
+         "prompt":"What category below best describes the highest level of formal education you have completed?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Grade school  (1-8 years)",
+                  "value":"Grade school  (1-8 years)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Some high school  (9-11 years)",
+                  "value":"Some high school  (9-11 years)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"High school graduate or GED  (12 years)",
+                  "value":"High school graduate or GED  (12 years)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Vocational or training school after high school graduation",
+                  "value":"Vocational or training school after high school graduation",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Some college",
+                  "value":"Some college",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Associate Degree (A.D. or A.A.)",
+                  "value":"Associate Degree (A.D. or A.A.)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"College graduate (B.A. or B.S.)",
+                  "value":"College graduate (B.A. or B.S.)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Some college or professional school after college graduation",
+                  "value":"Some college or professional school after college graduation",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Completed Master’s Degree (M.A., M.S., M.P.H., M.S.W., M.Div., etc.)",
+                  "value":"Completed Master’s Degree (M.A., M.S., M.P.H., M.S.W., M.Div., etc.)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Completed Doctoral Degree (Ph.D., M.D., D.D.S., J.D., etc.)",
+                  "value":"Completed Doctoral Degree (Ph.D., M.D., D.D.S., J.D., etc.)",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"de0f613a-cb64-418f-8e06-f52136af8efd",
+         "identifier":"q6",
+         "prompt":"What is your current employment status?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Employed full-time (including self-employed)",
+                  "value":"Employed full-time (including self-employed)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Employed part-time (including self-employed)",
+                  "value":"Employed part-time (including self-employed)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Full-time homemaker",
+                  "value":"Full-time homemaker",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Full-time or part-time volunteer",
+                  "value":"Full-time or part-time volunteer",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Full-time or part-time student",
+                  "value":"Full-time or part-time student",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"On temporary medical leave",
+                  "value":"On temporary medical leave",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Retired",
+                  "value":"Retired",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Unemployed",
+                  "value":"Unemployed",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Permanently disabled",
+                  "value":"Permanently disabled",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"b7cb1fec-cab4-46af-b105-5c94714583f5",
+         "identifier":"q7",
+         "prompt":"Check one income range that best describes your family's total income before taxes for the previous year.",
+         "text":"Include salaries, wages, tips, social security, welfare and any other income.",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Under $15,000",
+                  "value":"Under $15,000",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"$15,001 - $30,000",
+                  "value":"$15,001 - $30,000",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"$30,001 - $60,000",
+                  "value":"$30,001 - $60,000",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"$60,001 - $100,000",
+                  "value":"$60,001 - $100,000",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Over $100,000",
+                  "value":"Over $100,000",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"64d5f88f-f54a-4a40-9f8b-b268311a60f4",
+         "identifier":"q8",
+         "prompt":"Have you been treated for breast cancer?",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+               {
+                  "operator":"ne",
+                  "value":"true",
+                  "skipTo":"q17",
+                  "type":"SurveyRule"
+               },
+               {
+                  "operator":"de",
+                  "skipTo":"q17",
+                  "type":"SurveyRule"
+               }
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"5472efee-ed03-4996-96e4-913de05d032d",
+         "identifier":"q9",
+         "prompt":"What was the month and year of your initial breast cancer diagnosis (date of 1st cancer biopsy)?",
+         "constraints":{
+            "dataType":"date",
+            "rules":[
+
+            ],
+            "allowFuture":false,
+            "type":"DateConstraints"
+         },
+         "uiHint":"datepicker",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"c699fbcc-f2c9-49ac-a2cd-daaf0eec636b",
+         "identifier":"q10",
+         "prompt":"In which breast(s) was your cancer diagnosed?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Right",
+                  "value":"Right",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Left",
+                  "value":"Left",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Both",
+                  "value":"Both",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"7cdf4ae0-503f-499d-9953-060af747ce27",
+         "identifier":"q11a",
+         "prompt":"Did you have a lupectomy?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Left Breast",
+                  "value":"Left Breast",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Right Breast",
+                  "value":"Right Breast",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"No",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"e63d08dd-2e78-447b-8cb2-5e9e0bcad850",
+         "identifier":"q11b",
+         "prompt":"Did you have a sentinel node biopsy?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Left Breast",
+                  "value":"Left Breast",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Right Breast",
+                  "value":"Right Breast",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"No",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"07049d45-1571-4474-8a33-d0f0e8fca20e",
+         "identifier":"q11c",
+         "prompt":"Did you have an axillary node dissection?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Left Breast",
+                  "value":"Left Breast",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Right Breast",
+                  "value":"Right Breast",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"No",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"a0be3169-9642-4368-a5d5-b5793667052e",
+         "identifier":"q11d",
+         "prompt":"Did you have a mastectomy?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Left Breast",
+                  "value":"Left Breast",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Right Breast",
+                  "value":"Right Breast",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"No",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"eac9b648-cae6-49e2-8e69-398e3fe33ef9",
+         "identifier":"q11e",
+         "prompt":"Did you have a mastectomy with immediate reconstruction?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Left Breast",
+                  "value":"Left Breast",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Right Breast",
+                  "value":"Right Breast",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"No",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"5c3ca10e-dd7c-4ab3-9800-c1a7e2ad7001",
+         "identifier":"q11f",
+         "prompt":"Did you have an expander with later breast reconstruction planned?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Left Breast",
+                  "value":"Left Breast",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Right Breast",
+                  "value":"Right Breast",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"No",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"f5a4c31d-8eb9-476a-a333-912a1f68aac8",
+         "identifier":"q12",
+         "prompt":"Did you receive chemotherapy after your breast cancer diagnosis or surgery?",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+               {
+                  "operator":"ne",
+                  "value":"true",
+                  "skipTo":"q13",
+                  "type":"SurveyRule"
+               },
+               {
+                  "operator":"de",
+                  "skipTo":"q13",
+                  "type":"SurveyRule"
+               }
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"16abb4e4-e783-43ac-8a73-284a9e20e073",
+         "identifier":"q12a",
+         "prompt":"When did you last have chemotherapy?",
+         "constraints":{
+            "dataType":"date",
+            "rules":[
+
+            ],
+            "allowFuture":false,
+            "type":"DateConstraints"
+         },
+         "uiHint":"datepicker",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"d0d62d09-1151-45ff-b30a-4b99313a736d",
+         "identifier":"q12b",
+         "prompt":"What kind of chemotherapy treatment did you have?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"TC (Taxotere and Cytoxan)",
+                  "value":"TC (Taxotere and Cytoxan)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"TAC (Taxotere, Adriamycin, and Cytoxan)",
+                  "value":"TAC (Taxotere, Adriamycin, and Cytoxan)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"CMF (Cytoxan, Methotrexate and 5FU)",
+                  "value":"CMF (Cytoxan, Methotrexate and 5FU)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"CMF+A (Cytoxan, Methotrexate, 5FU and Adriamycin)",
+                  "value":"CMF+A (Cytoxan, Methotrexate, 5FU and Adriamycin)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"AC (Adriamycin and Cytoxan)",
+                  "value":"AC (Adriamycin and Cytoxan)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"FAC or CAF (Cytoxan, Adriamycin and 5FU)",
+                  "value":"FAC or CAF (Cytoxan, Adriamycin and 5FU)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"AC+Taxol (Adriamycin, Cytoxan and Taxol)",
+                  "value":"AC+Taxol (Adriamycin, Cytoxan and Taxol)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"CEF or FEC (5FU, Epirubicin and Cytoxan)",
+                  "value":"CEF or FEC (5FU, Epirubicin and Cytoxan)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"TC (Taxotere and Carboplatin)",
+                  "value":"TC (Taxotere and Carboplatin)",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":true,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"885c432f-8493-4aed-a210-8809892fd766",
+         "identifier":"q13",
+         "prompt":"Did you receive or are you currently receiving Herceptin (trastuzumab) or some other form of therapy that targets HER2 overexpression in your tumor?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes, Herceptin",
+                  "value":"Yes, Herceptin",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Yes, some other therapy",
+                  "value":"Yes, some other therapy",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"No",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"2d16d269-7570-473a-ba25-2968e4ba3b45",
+         "identifier":"q14",
+         "prompt":"Did you receive radiation as part of your breast cancer treatment?",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+               {
+                  "operator":"ne",
+                  "value":"true",
+                  "skipTo":"q15",
+                  "type":"SurveyRule"
+               },
+               {
+                  "operator":"de",
+                  "skipTo":"q15",
+                  "type":"SurveyRule"
+               }
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"5e39c55b-7b07-4ac5-b21a-d081b3518d48",
+         "identifier":"q14a",
+         "prompt":"When did you last have radiation?",
+         "constraints":{
+            "dataType":"date",
+            "rules":[
+
+            ],
+            "allowFuture":false,
+            "type":"DateConstraints"
+         },
+         "uiHint":"datepicker",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"42e7c261-2e8d-4dd1-b484-66f98765d3a9",
+         "identifier":"q15",
+         "prompt":"Are you receiving any of the following endocrine therapies for breast cancer?",
+         "text":"Tamoxifen, Femara (letrozole), Anastrozole (arimidex), or Aromasin (exemestane).",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"Yes",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"No",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Don't know",
+                  "value":"Don't know",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"fe683cda-421f-4bd0-8b4c-652c075a8fb0",
+         "identifier":"q16",
+         "prompt":"Have you ever taken hormone replacement therapy (estrogen in any form, other than birth control pills)?",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+               {
+                  "operator":"ne",
+                  "value":"true",
+                  "skipTo":"q17",
+                  "type":"SurveyRule"
+               },
+               {
+                  "operator":"de",
+                  "skipTo":"q17",
+                  "type":"SurveyRule"
+               }
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"eef3e845-35fd-4921-b114-6bef522b1187",
+         "identifier":"q16a",
+         "prompt":"When did you last have hormone replacement therapy?",
+         "constraints":{
+            "dataType":"date",
+            "rules":[
+
+            ],
+            "allowFuture":false,
+            "type":"DateConstraints"
+         },
+         "uiHint":"datepicker",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"84d1ceba-5825-4829-814f-13c807ef3d5d",
+         "identifier":"q17",
+         "prompt":"Do you currently have any of the following conditions?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Allergies",
+                  "value":"Allergies",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Arthritis",
+                  "value":"Arthritis",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Asthma",
+                  "value":"Asthma",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Diabetes",
+                  "value":"Diabetes",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Glaucoma",
+                  "value":"Glaucoma",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Frequent headaches/migraines",
+                  "value":"Frequent headaches/migraines",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Heart disease (heart attack, angina, heart failure)",
+                  "value":"Heart disease (heart attack, angina, heart failure)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"High blood pressure",
+                  "value":"High blood pressure",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Osteopenia or osteoporosis requiring medication",
+                  "value":"Osteopenia or osteoporosis requiring medication",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Thyroid problems",
+                  "value":"Thyroid problems",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderate to severe psychological difficulties (such as depression, anxiety, recent suicide attempts, or recent mental health hospitalization)",
+                  "value":"Moderate to severe psychological difficulties (such as depression, anxiety, recent suicide attempts, or recent mental health hospitalization)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Problems with alcohol",
+                  "value":"Problems with alcohol",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Problems with drug use or dependence (either prescription or street drugs)",
+                  "value":"Problems with drug use or dependence (either prescription or street drugs)",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"I do not have any of these conditions",
+                  "value":"I do not have any of these conditions",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":true,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"list",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"ce7bea17-0e24-4064-a8e4-78069e80dedc",
+         "identifier":"q18",
+         "prompt":"Do you feel pain in your chest at rest, during your daily activities of living, OR when you do physical activity?",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"83e73120-e626-42e0-9a46-40351a44744f",
+         "identifier":"q19",
+         "prompt":"Do you lose balance because of dizziness OR have you lost consciousness in the last 12 months?",
+         "text":"Please answer no if your dizziness was associated with over-breathing (including during vigorous exercise).",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"c608bc5b-677c-4d97-9675-f6bf4f4f4f3d",
+         "identifier":"q20",
+         "prompt":"Do you have a bone or joint problem that could be made worse by becoming more physically active?",
+         "text":"Please answer no if you had a joint problem in the past, but it does not limit your current ability to be physically active",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"4f19fd89-e8aa-4c69-9ab2-54cb3ee777cf",
+         "identifier":"q21",
+         "prompt":"Has your doctor ever said that you should only do medically supervised physical activity?",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"2e6515ae-008b-42a5-86e9-568401ac601e",
+         "identifier":"q22",
+         "prompt":"In general, would you say your health is: ",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Excellent",
+                  "value":"Excellent",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Very Good",
+                  "value":"Very Good",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Good",
+                  "value":"Good",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Fair",
+                  "value":"Fair",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Poor",
+                  "value":"Poor",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"cab6331b-a2b8-441e-acc9-415466e9ef76",
+         "identifier":"q23",
+         "prompt":"Compared to one year ago, how would you rate your health in general now?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Much better now than one year ago",
+                  "value":"Much better now than one year ago",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Somewhat better now than one year ago",
+                  "value":"Somewhat better now than one year ago",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"About the same",
+                  "value":"About the same",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Somewhat worse than one year ago",
+                  "value":"Somewhat worse than one year ago",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Much worse than one year ago",
+                  "value":"Much worse than one year ago",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"bedc559b-d3f9-4583-a453-fd9ae16c6915",
+         "identifier":"q24",
+         "prompt":"In a typical day, does your health now limit vigorous activities?",
+         "text":"Such as running, lifting heavy objects, participating in strenuous sports?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes, limited a lot",
+                  "value":"Yes, limited a lot",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Yes, limited a little",
+                  "value":"Yes, limited a little",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No, not limited at all",
+                  "value":"No, not limited at all",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"75e69506-c9a8-4f7b-91cd-c1ceb184266a",
+         "identifier":"q25",
+         "prompt":"In a typical day, does your health now limit moderate activities?",
+         "text":"Such as moving a table, pushing a vacuum cleaner, bowling, or playing golf.",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes, limited a lot",
+                  "value":"Yes, limited a lot",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Yes, limited a little",
+                  "value":"Yes, limited a little",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No, not limited at all",
+                  "value":"No, not limited at all",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"23fde6c7-a52a-4e5e-bdbc-614fec8f467c",
+         "identifier":"q26",
+         "prompt":"In a typical day, does your health now limit lifting or carrying groceries?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes, limited a lot",
+                  "value":"Yes, limited a lot",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Yes, limited a little",
+                  "value":"Yes, limited a little",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No, not limited at all",
+                  "value":"No, not limited at all",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"196a103e-0698-4607-a212-55ce320c09c8",
+         "identifier":"q27",
+         "prompt":"In a typical day, does your health now limit climbing several flights of stairs?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes, limited a lot",
+                  "value":"Yes, limited a lot",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Yes, limited a little",
+                  "value":"Yes, limited a little",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No, not limited at all",
+                  "value":"No, not limited at all",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"3ab17374-3e80-4125-a238-c397d5f5f15f",
+         "identifier":"q28",
+         "prompt":"In a typical day, does your health now limit climbing one flight of stairs?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes, limited a lot",
+                  "value":"Yes, limited a lot",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Yes, limited a little",
+                  "value":"Yes, limited a little",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No, not limited at all",
+                  "value":"No, not limited at all",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"db1fccfa-1859-4d4d-b2ca-2e2d15fa4484",
+         "identifier":"q29",
+         "prompt":"In a typical day, does your health now limit bending, kneeling, or stooping?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes, limited a lot",
+                  "value":"Yes, limited a lot",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Yes, limited a little",
+                  "value":"Yes, limited a little",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No, not limited at all",
+                  "value":"No, not limited at all",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"3f26a1b5-da5a-4c60-bc66-a8cb9a5a46b0",
+         "identifier":"q30",
+         "prompt":"In a typical day, does your health now limit walking more than a mile?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes, limited a lot",
+                  "value":"Yes, limited a lot",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Yes, limited a little",
+                  "value":"Yes, limited a little",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No, not limited at all",
+                  "value":"No, not limited at all",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"ffee9f6e-9b4d-43cd-b098-ac14bce983c2",
+         "identifier":"q31",
+         "prompt":"In a typical day, does your health now limit walking several blocks?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes, limited a lot",
+                  "value":"Yes, limited a lot",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Yes, limited a little",
+                  "value":"Yes, limited a little",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No, not limited at all",
+                  "value":"No, not limited at all",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"ff661230-be9d-488c-82af-3e43c97962f9",
+         "identifier":"q32",
+         "prompt":"In a typical day, does your health now limit walking one block?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes, limited a lot",
+                  "value":"Yes, limited a lot",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Yes, limited a little",
+                  "value":"Yes, limited a little",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No, not limited at all",
+                  "value":"No, not limited at all",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"628fb1c2-055a-49f4-9cde-1691e3ea1e19",
+         "identifier":"q33",
+         "prompt":"In a typical day, does your health now limit bathing or dressing yourself?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes, limited a lot",
+                  "value":"Yes, limited a lot",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Yes, limited a little",
+                  "value":"Yes, limited a little",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No, not limited at all",
+                  "value":"No, not limited at all",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"f184f841-c7ef-42de-8a48-09b8a98e1959",
+         "identifier":"q34",
+         "prompt":"During the past 4 weeks, has your PHYSICAL health meant that you cut down the amount of time you spent on work or other activities?",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"635e4849-2685-4eba-8fdc-1f660c06ca1d",
+         "identifier":"q35",
+         "prompt":"During the past 4 weeks, has your PHYSICAL health meant that you accomplished less than you would like?",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"e7a3c582-904a-4493-9c5e-7d1df5dcf1f2",
+         "identifier":"q36",
+         "prompt":"During the past 4 weeks, has your PHYSICAL health meant that you were limited in the kind of work or other activities?",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"9dedb903-8732-40a1-bac3-e26082cf1fd5",
+         "identifier":"q37",
+         "prompt":"During the past 4 weeks, has your PHYSICAL health meant that you had difficulty performing the work or other activities (for example, it took extra effort)?",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"b89ca799-b04e-471c-b15b-39527c71d92c",
+         "identifier":"q38",
+         "prompt":"During the past 4 weeks, have EMOTIONAL problems meant that you cut down the amount of time you spent on work or other activities?",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"5cbf7759-1aec-4728-bd74-232829e2f6e7",
+         "identifier":"q39",
+         "prompt":"During the past 4 weeks, have EMOTIONAL problems meant that you accomplished less than you would like?",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"edd4c4f6-ee46-4650-b95c-86fe954f0dc6",
+         "identifier":"q40",
+         "prompt":"During the past 4 weeks, have EMOTIONAL problems meant that you didn't do work or other activities as carefully as usual?",
+         "constraints":{
+            "dataType":"boolean",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Yes",
+                  "value":"true",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"No",
+                  "value":"false",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"c1370c7c-fa83-4807-a4a3-ef45e9dfd272",
+         "identifier":"q41",
+         "prompt":"During the past 4 weeks, to what extent has your physical health or emotional problems interfered with your normal social activities with family, friends, neighbors, or groups?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"6f2273ed-94b4-48eb-a216-cc328a02cf10",
+         "identifier":"q42",
+         "prompt":"How much bodily pain have you had during the past 4 weeks?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"None",
+                  "value":"None",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Very mild",
+                  "value":"Very mild",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Mild",
+                  "value":"Mild",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderate",
+                  "value":"Moderate",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Severe",
+                  "value":"Severe",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Very severe",
+                  "value":"Very severe",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"6c1a96c5-e73c-429f-b678-aae2fa347cac",
+         "identifier":"q43",
+         "prompt":"During the past 4 weeks, how much did pain interfere with your normal work (including both work outside the home and housework)?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A little bit",
+                  "value":"A little bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"cb3dd873-557b-4924-9951-47ff42a08918",
+         "identifier":"q44",
+         "prompt":"In the past four weeks, how much of the time did you feel full of pep?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"All of the time",
+                  "value":"All of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Most of the time",
+                  "value":"Most of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A good bit of the time",
+                  "value":"A good bit of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Some of the time",
+                  "value":"Some of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A little of the time",
+                  "value":"A little of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"None of the time",
+                  "value":"None of the time",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"09a23a66-0680-4390-a976-d1ca56809b34",
+         "identifier":"q45",
+         "prompt":"In the past four weeks, how much of the time have you been a very nervous person?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"All of the time",
+                  "value":"All of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Most of the time",
+                  "value":"Most of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A good bit of the time",
+                  "value":"A good bit of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Some of the time",
+                  "value":"Some of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A little of the time",
+                  "value":"A little of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"None of the time",
+                  "value":"None of the time",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"1db8762e-e169-482e-810a-1ac7d633e994",
+         "identifier":"q46",
+         "prompt":"In the past four weeks, how much of the time have you felt so down in the dumps that nothing could cheer you up?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"All of the time",
+                  "value":"All of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Most of the time",
+                  "value":"Most of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A good bit of the time",
+                  "value":"A good bit of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Some of the time",
+                  "value":"Some of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A little of the time",
+                  "value":"A little of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"None of the time",
+                  "value":"None of the time",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"d7ba0baa-705e-4d54-a8a4-56883d563850",
+         "identifier":"q47",
+         "prompt":"In the past four weeks, how much of the time have you felt calm and peaceful?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"All of the time",
+                  "value":"All of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Most of the time",
+                  "value":"Most of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A good bit of the time",
+                  "value":"A good bit of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Some of the time",
+                  "value":"Some of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A little of the time",
+                  "value":"A little of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"None of the time",
+                  "value":"None of the time",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"d5934d35-b026-4e32-b678-5407ca5fd0bd",
+         "identifier":"q48",
+         "prompt":"In the past four weeks, how much of the time did you have a lot of energy?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"All of the time",
+                  "value":"All of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Most of the time",
+                  "value":"Most of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A good bit of the time",
+                  "value":"A good bit of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Some of the time",
+                  "value":"Some of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A little of the time",
+                  "value":"A little of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"None of the time",
+                  "value":"None of the time",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"eafb3a3b-1cec-4d01-b3f4-8058df015198",
+         "identifier":"q49",
+         "prompt":"In the past four weeks, how much of the time have you felt downhearted and blue?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"All of the time",
+                  "value":"All of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Most of the time",
+                  "value":"Most of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A good bit of the time",
+                  "value":"A good bit of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Some of the time",
+                  "value":"Some of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A little of the time",
+                  "value":"A little of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"None of the time",
+                  "value":"None of the time",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"1ced5184-9451-4730-8e6e-14d3e65bb7c6",
+         "identifier":"q50",
+         "prompt":"In the past four weeks, how much of the time did you feel worn out?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"All of the time",
+                  "value":"All of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Most of the time",
+                  "value":"Most of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A good bit of the time",
+                  "value":"A good bit of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Some of the time",
+                  "value":"Some of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A little of the time",
+                  "value":"A little of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"None of the time",
+                  "value":"None of the time",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"0393d879-09ed-408d-921c-854adddf2d55",
+         "identifier":"q51",
+         "prompt":"In the past four weeks, how much of the time have you been a happy person?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"All of the time",
+                  "value":"All of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Most of the time",
+                  "value":"Most of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A good bit of the time",
+                  "value":"A good bit of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Some of the time",
+                  "value":"Some of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A little of the time",
+                  "value":"A little of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"None of the time",
+                  "value":"None of the time",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"8d2e35d7-dc9e-4309-94ed-77fca6bc8cbc",
+         "identifier":"q52",
+         "prompt":"In the past four weeks, how much of the time did you feel tired?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"All of the time",
+                  "value":"All of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Most of the time",
+                  "value":"Most of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A good bit of the time",
+                  "value":"A good bit of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Some of the time",
+                  "value":"Some of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A little of the time",
+                  "value":"A little of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"None of the time",
+                  "value":"None of the time",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"fa9a2252-819a-45f7-9a43-6f9a1eb6aca7",
+         "identifier":"q53",
+         "prompt":"During the past 4 weeks, how much of the time have your physical health or emotional problems interfered with your social activities (like visiting with your friends, relatives, etc?)",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"All of the time",
+                  "value":"All of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Most of the time",
+                  "value":"Most of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A good bit of the time",
+                  "value":"A good bit of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Some of the time",
+                  "value":"Some of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"A little of the time",
+                  "value":"A little of the time",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"None of the time",
+                  "value":"None of the time",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"e7353304-431e-4c0f-895a-ae7155c77046",
+         "identifier":"q54",
+         "prompt":"I seem to get sick a little easier than other people.",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Definitely True",
+                  "value":"Definitely True",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Mostly True",
+                  "value":"Mostly True",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Don’t Know",
+                  "value":"Don’t Know",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Mostly False",
+                  "value":"Mostly False",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Definitely False",
+                  "value":"Definitely False",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"a69425d9-7483-47cb-818c-a1292b99d322",
+         "identifier":"q55",
+         "prompt":"I am as healthy as anybody I know.",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Definitely True",
+                  "value":"Definitely True",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Mostly True",
+                  "value":"Mostly True",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Don’t Know",
+                  "value":"Don’t Know",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Mostly False",
+                  "value":"Mostly False",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Definitely False",
+                  "value":"Definitely False",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"ef28877e-aed0-4833-8dee-93ba5a1b868d",
+         "identifier":"q56",
+         "prompt":"I expect my health to get worse.",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Definitely True",
+                  "value":"Definitely True",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Mostly True",
+                  "value":"Mostly True",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Don’t Know",
+                  "value":"Don’t Know",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Mostly False",
+                  "value":"Mostly False",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Definitely False",
+                  "value":"Definitely False",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"b7e97351-fa57-4992-b429-d2141b2c57f4",
+         "identifier":"q57",
+         "prompt":"My health is excellent.",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Definitely True",
+                  "value":"Definitely True",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Mostly True",
+                  "value":"Mostly True",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Don’t Know",
+                  "value":"Don’t Know",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Mostly False",
+                  "value":"Mostly False",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Definitely False",
+                  "value":"Definitely False",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"c8977f82-34bc-4d31-b0d8-049d317c434b",
+         "identifier":"q58a",
+         "prompt":"Have hot flashes bothered you in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"2a636ff8-a305-4a29-926b-e0be536d3e14",
+         "identifier":"q58b",
+         "prompt":"Has nausea bothered you in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"42c2d830-8197-4202-8f1f-0e71b3d55057",
+         "identifier":"q58c",
+         "prompt":"Has vomiting bothered you in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"b860c388-c088-431e-bdbb-2609ac6da956",
+         "identifier":"q58d",
+         "prompt":"Have you had difficulty with bladder control when laughing or crying in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"3b2b6772-e74a-444e-bc8d-197ddc3fffc3",
+         "identifier":"q58e",
+         "prompt":"Have you had difficulty with bladder control at other times in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"a5f7ad2c-9cfc-4383-bbe1-ec94e39ba09c",
+         "identifier":"q58f",
+         "prompt":"Have you had vaginal dryness in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"2cd474b4-26db-4ef3-ab52-f3186ac93ea6",
+         "identifier":"q58g",
+         "prompt":"Have you had pain with intercourse in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"f0460656-6151-422c-92d1-79882a567da7",
+         "identifier":"q58h",
+         "prompt":"Have you had general aches and pains in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"b6edfd25-1ef5-426e-9efc-57c7b4290d4b",
+         "identifier":"q58i",
+         "prompt":"Have you had joint pains in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"812d96f3-56d2-45b5-a047-424cb8e79d4f",
+         "identifier":"q58j",
+         "prompt":"Have you had muscle stiffness in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"9481d2a6-d837-402d-ad09-9043f324b777",
+         "identifier":"q58k",
+         "prompt":"Have you had weight gain in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"45d943a0-e0a7-499c-bde6-c79074b21d23",
+         "identifier":"q58l",
+         "prompt":"Have you been unhappy with the appearance of your body in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"b66a0c74-7655-470e-902f-d35699f3a823",
+         "identifier":"q58m",
+         "prompt":"Have you experienced forgetfullness in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"e85ebdb4-82ab-4452-aa94-1551769d4746",
+         "identifier":"q58n",
+         "prompt":"Have you had night sweats in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"4e0d9aa4-e697-45e3-b72b-ddd27ffea4a2",
+         "identifier":"q58o",
+         "prompt":"Have you had difficulty concentrating in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"3191623c-808b-4ff9-9bc7-8d9cc47960f6",
+         "identifier":"q58p",
+         "prompt":"Have you been easily distracted in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"ab1d2f17-efd8-4ca0-b216-d657a86d78bb",
+         "identifier":"q58q",
+         "prompt":"Have you had a lack of interest in sex in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"88fb9960-ff6c-4176-bf2d-0e164474c810",
+         "identifier":"q58r",
+         "prompt":"Have you experienced low sexual enjoyment in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"22712d21-9a0c-4ffe-83bf-4ea55223deb9",
+         "identifier":"q58s",
+         "prompt":"Have you had arm swelling (lymphedema) in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      },
+      {
+         "guid":"e2ffab7f-1aa3-4b94-9bee-9ea21e622608",
+         "identifier":"q58t",
+         "prompt":"Have you had decreased range of motion in arm on surgey side in the last week?",
+         "constraints":{
+            "dataType":"string",
+            "rules":[
+
+            ],
+            "enumeration":[
+               {
+                  "label":"Not at all",
+                  "value":"Not at all",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Slightly",
+                  "value":"Slightly",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Moderately",
+                  "value":"Moderately",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Quite a bit",
+                  "value":"Quite a bit",
+                  "type":"SurveyQuestionOption"
+               },
+               {
+                  "label":"Extremely",
+                  "value":"Extremely",
+                  "type":"SurveyQuestionOption"
+               }
+            ],
+            "allowOther":false,
+            "allowMultiple":false,
+            "type":"MultiValueConstraints"
+         },
+         "uiHint":"radiobutton",
+         "type":"SurveyQuestion"
+      }
+   ],
+   "type":"Survey"
+}

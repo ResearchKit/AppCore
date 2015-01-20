@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <ResearchKit/RKErrors.h>
 #import <ResearchKit/RKDataLogger.h>
+#import <ResearchKit/RKDefines.h>
 
 
 @class RKCMS;
@@ -21,6 +22,7 @@
  * they are added directly to the zip. When the archive data or archive URL
  * are requested, the metadata is also written out and the zip is closed.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKDataArchive : NSObject
 
 /**
