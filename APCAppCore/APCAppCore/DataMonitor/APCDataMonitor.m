@@ -53,7 +53,8 @@
 {
     [(APCAppDelegate*)[UIApplication sharedApplication].delegate setUpCollectors];
     [self.dataSubstrate joinStudy];
-    [self.scheduler updateScheduledTasksIfNotUpdating:YES];
+    [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeToday];
+    [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeTomorrow];
     [self refreshFromBridgeOnCompletion:^(NSError *error) {
         APCLogError2 (error);
         [self batchUploadDataToBridgeOnCompletion:NULL];
@@ -62,8 +63,8 @@
 
 - (void) updateScheduledTasks
 {
-    [self.scheduler updateScheduledTasksIfNotUpdating:YES];
-    [self.scheduler updateScheduledTasksIfNotUpdating:NO];
+    [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeToday];
+    [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeTomorrow];
 }
 
 - (void)dealloc

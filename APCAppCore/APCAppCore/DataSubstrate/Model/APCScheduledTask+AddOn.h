@@ -7,7 +7,7 @@
  
 #import "APCScheduledTask.h"
 
-@class UILocalNotification;
+@class UILocalNotification, APCDateRange;
 @interface APCScheduledTask (AddOn)
 
 - (void) completeScheduledTask;
@@ -16,8 +16,14 @@
 
 @property (nonatomic, readonly) NSString * completeByDateString;
 
-+ (NSArray*) APCActivityVCScheduledTasksInContext: (NSManagedObjectContext*) context;
++ (NSDictionary*) APCActivityVCScheduledTasksInContext: (NSManagedObjectContext*) context;
 + (instancetype) scheduledTaskForStartOnDate: (NSDate *) startOn schedule: (APCSchedule*) schedule inContext: (NSManagedObjectContext*) context;
+
+/*********************************************************************************/
+#pragma mark - Counts
+/*********************************************************************************/
++ (NSUInteger)countOfAllScheduledTasksTodayInContext: (NSManagedObjectContext*) context;
++ (NSUInteger)countOfAllCompletedTasksTodayInContext: (NSManagedObjectContext*) context;
 
 /*********************************************************************************/
 #pragma mark - Reminder 
@@ -27,5 +33,11 @@
 - (UILocalNotification *) currentReminder;
 
 + (void)clearAllReminders;
+
+/*********************************************************************************/
+#pragma mark - Multiday Tasks
+/*********************************************************************************/
+@property (nonatomic, readonly) BOOL isMultiDayTask;
+@property (nonatomic, strong) APCDateRange * dateRange;
 
 @end

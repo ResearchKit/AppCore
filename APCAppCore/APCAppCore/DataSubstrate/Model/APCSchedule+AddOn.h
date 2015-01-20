@@ -15,5 +15,6 @@
 
 - (BOOL) isOneTimeSchedule;
 @property (nonatomic, readonly) APCScheduleExpression * scheduleExpression;
+- (NSTimeInterval) expiresInterval;
 
 @end

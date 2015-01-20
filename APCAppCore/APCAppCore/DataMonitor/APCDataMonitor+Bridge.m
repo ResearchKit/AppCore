@@ -19,16 +19,8 @@ NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
         [APCSchedule updateSchedulesOnCompletion:^(NSError *error) {
             if (!error) {
                 [APCTask refreshSurveys];
-                BOOL refreshToday = ![[NSUserDefaults standardUserDefaults] boolForKey:kFirstTimeRefreshToday];
-                if (refreshToday) {
-                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kFirstTimeRefreshToday];
-                    [self.scheduler updateScheduledTasksIfNotUpdating:YES];
-                    [self.scheduler updateScheduledTasksIfNotUpdating:NO];
-                }
-                else
-                {
-                     [self.scheduler updateScheduledTasksIfNotUpdating:NO];
-                }
+                [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeToday];
+                [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeTomorrow];
                 if (completionBlock) {
                     completionBlock(error);
                 }

@@ -163,6 +163,25 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     _maximumValue = -MAXFLOAT;
 }
 
+- (NSString *)formatNumber:(NSNumber *)value
+{
+    NSString *formattedNumber = nil;
+    NSString *suffix = @"k";
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    numberFormatter.numberStyle = NSNumberFormatterDecimalStyle;
+    
+    if ([value doubleValue] < 1000) {
+        [numberFormatter setMaximumFractionDigits:0];
+        formattedNumber = [numberFormatter stringFromNumber:value];
+    } else {
+        NSNumber *divdedValue = @([value doubleValue]/1000);
+        [numberFormatter setMaximumFractionDigits:2];
+        formattedNumber =  [NSString stringWithFormat:@"%@%@", [numberFormatter stringFromNumber:divdedValue], suffix];
+    }
+    
+    return formattedNumber;
+}
+
 #pragma mark - Appearance
 
 - (void)updateTitleLabel
@@ -423,7 +442,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         CGFloat yValue = self.minimumValue + (self.maximumValue - self.minimumValue)*factor;
         
         UILabel *axisTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelYPosition, CGRectGetWidth(self.yAxisView.frame) - kAxisMarkingRulerLength, labelHeight)];
-        axisTitleLabel.text = [NSString stringWithFormat:@"%.1f  ", yValue];
+        axisTitleLabel.text = [self formatNumber:@(yValue)]; //[NSString stringWithFormat:@"%.1f  ", yValue];
         axisTitleLabel.backgroundColor = [UIColor clearColor];
         axisTitleLabel.textColor = self.axisTitleColor;
         axisTitleLabel.textAlignment = NSTextAlignmentRight;

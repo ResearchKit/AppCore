@@ -7,6 +7,7 @@
  
 #import "APCScheduledTask+AddOn.h"
 #import "APCAppCore.h"
+#import "APCDateRange.h"
 
 static NSInteger kSecondsPerMinute = 60;
 static NSInteger kDefaultReminderOffset = -15;
@@ -58,69 +59,98 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     return  retValue;
 }
 
-+ (NSArray*) APCActivityVCScheduledTasksInContext: (NSManagedObjectContext*) context
++ (NSDictionary*) APCActivityVCScheduledTasksInContext: (NSManagedObjectContext*) context
 {
-    NSArray * array1 = [self allScheduledTasksForTodayInContext:context];
-    NSArray * array2 = [self allIncompleteTasksForPastWeekFrom:NO InContext:context];
-    NSMutableArray * finalArray = [NSMutableArray array];
+    NSArray * array1 = [self getTodaysTaskInContext:context];
+    NSArray * array2 = [self getYesterdaysIncompleteTaskInContext:context];
+    
+    NSMutableDictionary * finalDict = [NSMutableDictionary dictionary];
     if (array1.count) {
-        [finalArray addObjectsFromArray:array1];
-    }
-    else
-    {
-        [((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataMonitor.scheduler updateScheduledTasksIfNotUpdating:YES];
-        array1 = [self allScheduledTasksForTodayInContext:context];
-        if (array1.count) [finalArray addObjectsFromArray:array1];
+        finalDict[@"today"] = array1;
     }
     if (array2.count) {
-        [finalArray addObjectsFromArray:array2];
+        finalDict[@"yesterday"] = array2;
     }
-    return finalArray.count ? finalArray : nil;
+    return finalDict.count ? finalDict : nil;
 }
 
-+ (NSArray *)allScheduledTasksForTodayInContext: (NSManagedObjectContext*) context
++ (NSArray *) getTodaysTaskInContext: (NSManagedObjectContext*) context {
+    NSArray * array = [self allScheduledTasksForDateRange:[APCDateRange todayRange] completed:nil inContext:context];
+    //If there are no today's activities, generate them
+    if (array.count == 0) {
+        [((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataMonitor.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeToday];
+        array = [self allScheduledTasksForDateRange:[APCDateRange todayRange] completed:nil inContext:context];
+    }
+    return array.count ? array : nil;
+    
+}
+
++ (NSArray*) getYesterdaysIncompleteTaskInContext: (NSManagedObjectContext*) context {
+    NSArray * array = [self allScheduledTasksForDateRange:[APCDateRange yesterdayRange] completed:@NO inContext:context];
+    //If there are no yesterday's activities and there are completed activities in the past, generate yesterday's activities
+    if (array.count == 0) {
+        if ([self userHasCompletedActivitiesInThePastInContext:context]) {
+            [((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataMonitor.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeYesterday];
+            array = [self allScheduledTasksForDateRange:[APCDateRange yesterdayRange] completed:@NO inContext:context];
+        }
+    }
+    NSArray * filteredArray = [self filterYesterdayIncompleteScheduledTasksByEndDate:array];
+    return filteredArray.count ? filteredArray : nil;
+}
+
++ (NSArray*) filterYesterdayIncompleteScheduledTasksByEndDate: (NSArray*) scheduledTasksArray {
+    
+    NSMutableArray * filteredArray = [NSMutableArray array];
+    NSDate * yesterdaysEndDate = [NSDate endOfDay:[NSDate yesterdayAtMidnight]];
+    for (APCScheduledTask * scheduledTask in scheduledTasksArray) {
+        if (scheduledTask.endOn <= yesterdaysEndDate) {
+            [filteredArray addObject:scheduledTask];
+        }
+    }
+    return filteredArray.count ? filteredArray : nil;
+}
+
+//If completed is nil then no filtering on completion, else the result will be filtered by completed value
++ (NSArray *)allScheduledTasksForDateRange: (APCDateRange*) dateRange completed: (NSNumber*) completed inContext: (NSManagedObjectContext*) context
 {
     NSFetchRequest * request = [APCScheduledTask request];
     
-    //TODO: Support multiday
-    request.predicate = [NSPredicate predicateWithFormat:@"startOn >= %@ && endOn < %@", [NSDate todayAtMidnight], [NSDate tomorrowAtMidnight]];
-    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"task.taskTitle" ascending:YES];
-    NSSortDescriptor * uidDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"completed" ascending:YES];
-    request.sortDescriptors = @[uidDescriptor, dateSortDescriptor];
-    NSError * error;
-    NSArray * array = [context executeFetchRequest:request error:&error];
-    APCLogError2 (error);
-    return array.count ? array : nil;
-}
-
-+ (NSArray *)allScheduledTasksForTomorrowInContext: (NSManagedObjectContext*) context
-{
-    NSFetchRequest * request = [APCScheduledTask request];
+    NSPredicate * datePredicate = [NSPredicate predicateWithFormat:@"endOn > %@", dateRange.startDate];
+    NSPredicate * completionPrediate = nil;
+    if (completed != nil) {
+        completionPrediate = [completed isEqualToNumber:@YES] ? [NSPredicate predicateWithFormat:@"completed == %@", completed] :[NSPredicate predicateWithFormat:@"completed == nil ||  completed == %@", completed] ;
+    }
     
-    //TODO: Support multiday
-    request.predicate = [NSPredicate predicateWithFormat:@"startOn >= %@ && endOn < %@", [NSDate tomorrowAtMidnight], [NSDate startOfTomorrow:[NSDate tomorrowAtMidnight]]];
-    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startOn" ascending:YES];
-    NSSortDescriptor * uidDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES];
-    request.sortDescriptors = @[dateSortDescriptor, uidDescriptor];
+    NSPredicate * finalPredicate = completionPrediate ? [NSCompoundPredicate andPredicateWithSubpredicates:@[datePredicate, completionPrediate]] : datePredicate;
+    request.predicate = finalPredicate;
+    
+    NSSortDescriptor *titleSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"task.taskTitle" ascending:YES];
+    NSSortDescriptor * completedSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"completed" ascending:YES];
+    request.sortDescriptors = @[completedSortDescriptor, titleSortDescriptor];
+    
     NSError * error;
     NSArray * array = [context executeFetchRequest:request error:&error];
     APCLogError2 (error);
-    return array.count ? array : nil;
+
+    
+    NSMutableArray * filteredArray = [NSMutableArray array];
+    
+    for (APCScheduledTask * scheduledTask in array) {
+        if ([scheduledTask.dateRange compare:dateRange] != kAPCDateRangeComparisonOutOfRange) {
+            [filteredArray addObject:scheduledTask];
+        }
+    }
+    return filteredArray.count ? filteredArray : nil;
 }
 
-+ (NSArray* ) allIncompleteTasksForPastWeekFrom: (BOOL) tomorrow InContext: (NSManagedObjectContext*) context
-{
++ (BOOL) userHasCompletedActivitiesInThePastInContext: (NSManagedObjectContext*) context {
+    
     NSFetchRequest * request = [APCScheduledTask request];
-    NSDate * startDate = tomorrow ? [[NSDate tomorrowAtMidnight] dateByAddingDays:-7] : [[NSDate todayAtMidnight] dateByAddingDays:-7];
-    NSDate * endDate = tomorrow ? [NSDate tomorrowAtMidnight] : [NSDate todayAtMidnight];
-    //TODO: Support multiday
-    request.predicate = [NSPredicate predicateWithFormat:@"(completed == nil || completed == %@) && (endOn > %@ && endOn <= %@)", @(NO), startDate, endDate];
-    NSSortDescriptor *dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startOn" ascending:NO];
-    request.sortDescriptors = @[dateSortDescriptor];
+    request.predicate = [NSPredicate predicateWithFormat:@"completed == %@ && endOn > %@", @YES, [NSDate yesterdayAtMidnight]];
     NSError * error;
-    NSArray * array = [context executeFetchRequest:request error:&error];
+    NSUInteger count = [context countForFetchRequest:request error:&error];
     APCLogError2 (error);
-    return array.count ? array : nil;
+    return (count > 0) ? YES : NO;
 }
 
 + (instancetype) scheduledTaskForStartOnDate: (NSDate *) startOn schedule: (APCSchedule*) schedule inContext: (NSManagedObjectContext*) context
@@ -131,6 +161,19 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     NSArray * array = [context executeFetchRequest:request error:&error];
     APCLogError2 (error);
     return array.count ? [array firstObject] : nil;
+}
+
+/*********************************************************************************/
+#pragma mark - Counts
+/*********************************************************************************/
++ (NSUInteger)countOfAllScheduledTasksTodayInContext: (NSManagedObjectContext*) context {
+    NSArray * array = [self allScheduledTasksForDateRange:[APCDateRange todayRange] completed:nil inContext:context];
+    return array.count;
+}
+
++ (NSUInteger)countOfAllCompletedTasksTodayInContext: (NSManagedObjectContext*) context {
+    NSArray * array = [self allScheduledTasksForDateRange:[APCDateRange todayRange] completed:@YES inContext:context];
+    return array.count;
 }
 
 
@@ -208,6 +251,26 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
         }
     }];
     return retValue;
+}
+
+/*********************************************************************************/
+#pragma mark - Multiday Tasks
+/*********************************************************************************/
+- (BOOL) isMultiDayTask {
+    NSTimeInterval interval = [self.endOn timeIntervalSinceDate:self.startOn];
+    return (interval > (24 * 60 * 60) + 3);
+}
+
+- (APCDateRange*) dateRange {
+    if (self.startOn == nil || self.endOn == nil) {
+        return nil;
+    }
+    return [[APCDateRange alloc] initWithStartDate:self.startOn endDate:self.endOn];
+}
+
+- (void)setDateRange:(APCDateRange *)dateRange {
+    self.startOn = dateRange.startDate;
+    self.endOn = dateRange.endDate;
 }
 
 @end

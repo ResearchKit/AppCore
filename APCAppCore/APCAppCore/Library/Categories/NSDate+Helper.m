@@ -115,6 +115,15 @@ NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
     return [cal dateFromComponents:components];
 }
 
++(instancetype)yesterdayAtMidnight
+{
+    NSDate *today = [NSDate date];
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:today];
+    [components setDay:[components day] - 1];
+    return [cal dateFromComponents:components];
+}
+
 
 +(instancetype)weekAgoAtMidnight
 {
@@ -129,6 +138,61 @@ NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
 {
 	BOOL result = [self compare: otherDate] == NSOrderedAscending;
 	return result;
+}
++ (NSTimeInterval) parseISO8601DurationString: (NSString*) duration {
+    
+    float i = 0, years = 0, months = 0, weeks = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
+    BOOL timeStarted = NO;
+    
+    while(i < duration.length)
+    {
+        NSString *str = [duration substringWithRange:NSMakeRange(i, duration.length-i)];
+        
+        i++;
+        
+        if([str hasPrefix:@"P"]) continue;
+        
+        if ([str hasPrefix:@"T"]) {
+            timeStarted = YES;
+            continue;
+        }
+        
+        
+        NSScanner *sc = [NSScanner scannerWithString:str];
+        float value = 0;
+        
+        if ([sc scanFloat:&value])
+        {
+            i += [sc scanLocation]-1;
+            
+            str = [duration substringWithRange:NSMakeRange(i, duration.length-i)];
+            
+            i++;
+            
+            if([str hasPrefix:@"Y"])
+                years = value;
+            else if([str hasPrefix:@"M"] && !timeStarted)
+                months = value;
+            else if([str hasPrefix:@"W"])
+                weeks = value;
+            else if([str hasPrefix:@"D"])
+                days = value;
+            else if([str hasPrefix:@"H"])
+                hours = value;
+            else if([str hasPrefix:@"M"] && timeStarted)
+                minutes = value;
+            else if([str hasPrefix:@"S"])
+                seconds = value;
+        }
+    }
+    
+//    NSLog(@"%@", [NSString stringWithFormat:@"%0.2f years, %0.2f months, %0.2f weeks, %0.2f days, %0.2f hours, %0.2f mins, %0.2f seconds", years, months, weeks, days, hours, minutes, seconds]);
+    NSTimeInterval interval = 0;
+    interval = years * 365 + months * 30 + weeks * 7 + days; //Days
+    interval = (interval * 24) + hours; //Hours
+    interval = (interval * 60) + minutes; //Minutes
+    interval = (interval * 60) + seconds; //Seconds
+    return interval;
 }
 
 - (BOOL) isLaterThanDate: (NSDate*) otherDate
