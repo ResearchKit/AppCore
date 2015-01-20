@@ -13,14 +13,14 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 
 //Constants being used configuring the log manager
-static NSInteger const APCFileAllocationBlockSize = 1024;
-static NSInteger const APCMegabyteFileSize = APCFileAllocationBlockSize * APCFileAllocationBlockSize;
-static NSInteger const APCPendingUploadMegaBytesThreshold = 0.5;
+//static NSInteger const APCFileAllocationBlockSize = 1024;
+//static NSInteger const APCMegabyteFileSize = APCFileAllocationBlockSize * APCFileAllocationBlockSize;
+//static NSInteger const APCPendingUploadMegaBytesThreshold = 0.5;
 
 //Constants being used for creating the archive from the data logger manager
-static NSInteger const APCTotalMegaBytesThreshold = 5;
-static NSInteger const APCDataLoggerManagerMaximumInputBytes = 10;
-static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
+//static NSInteger const APCTotalMegaBytesThreshold = 5;
+//static NSInteger const APCDataLoggerManagerMaximumInputBytes = 10;
+//static NSInteger const APCDataLoggerManagerMaximumFiles = 0;
 
 @implementation APCDataSubstrate (ResearchKit)
 

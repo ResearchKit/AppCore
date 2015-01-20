@@ -483,7 +483,8 @@ static APCDummyObject * _dummyObject;
     if ([constraints isKindOfClass:[SBBIntegerConstraints class]]) {
         SBBIntegerConstraints * integerConstraint = (SBBIntegerConstraints*) constraints;
         if (integerConstraint.maxValue && integerConstraint.minValue) {
-            retValue = [RKSTScaleAnswerFormat scaleAnswerFormatWithMaxValue:integerConstraint.maxValueValue minValue:integerConstraint.minValueValue step:integerConstraint.stepValue > 0 ? integerConstraint.stepValue : 1 defaultValue:0];
+            NSInteger stepValue = (integerConstraint.step != nil && [integerConstraint.step integerValue] > 0) ? [integerConstraint.step integerValue] : 1;
+            retValue = [RKSTScaleAnswerFormat scaleAnswerFormatWithMaxValue:[integerConstraint.maxValue integerValue] minValue:[integerConstraint.minValue integerValue] step:stepValue defaultValue:0];
         }
         else
         {
