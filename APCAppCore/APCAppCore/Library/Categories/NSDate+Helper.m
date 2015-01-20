@@ -124,7 +124,6 @@ NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
     return [cal dateFromComponents:components];
 }
 
-
 +(instancetype)weekAgoAtMidnight
 {
     NSDate *today = [NSDate date];
@@ -139,6 +138,25 @@ NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
 	BOOL result = [self compare: otherDate] == NSOrderedAscending;
 	return result;
 }
+
+- (BOOL) isLaterThanDate: (NSDate*) otherDate
+{
+	BOOL result = [self compare: otherDate] == NSOrderedDescending;
+	return result;
+}
+
+- (BOOL) isEarlierOrEqualToDate: (NSDate*) otherDate
+{
+	BOOL result = [self compare: otherDate] != NSOrderedDescending;
+	return result;
+}
+
+- (BOOL) isLaterThanOrEqualToDate: (NSDate*) otherDate
+{
+	BOOL result = [self compare: otherDate] != NSOrderedAscending;
+	return result;
+}
+
 + (NSTimeInterval) parseISO8601DurationString: (NSString*) duration {
     
     float i = 0, years = 0, months = 0, weeks = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
@@ -193,24 +211,6 @@ NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
     interval = (interval * 60) + minutes; //Minutes
     interval = (interval * 60) + seconds; //Seconds
     return interval;
-}
-
-- (BOOL) isLaterThanDate: (NSDate*) otherDate
-{
-	BOOL result = [self compare: otherDate] == NSOrderedDescending;
-	return result;
-}
-
-- (BOOL) isEarlierOrEqualToDate: (NSDate*) otherDate
-{
-	BOOL result = [self compare: otherDate] != NSOrderedDescending;
-	return result;
-}
-
-- (BOOL) isLaterThanOrEqualToDate: (NSDate*) otherDate
-{
-	BOOL result = [self compare: otherDate] != NSOrderedAscending;
-	return result;
 }
 
 @end
