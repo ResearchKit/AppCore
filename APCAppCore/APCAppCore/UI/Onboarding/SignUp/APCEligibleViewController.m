@@ -78,7 +78,7 @@
 
 - (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
 {
-    RKSTConsentSignatureResult *consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
+    RKSTConsentSignatureResult *consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[0] results] firstObject];
     
     APCUser *user = [self user];
     user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@",consentResult.signature.lastName];
