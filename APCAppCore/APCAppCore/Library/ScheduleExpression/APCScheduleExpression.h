@@ -24,11 +24,7 @@
     }
 
  
- A *schedule* represents a potentially infinite sequence of `moments` (date-time events). This
- sequence is represented by a cron expression with the addition of a `relative indicator`. The
- relative indicator was added in order to support 24-hours periods that could begin at times other
- than midnight.
-
+ A *schedule* represents a potentially infinite sequence of `moments` (date-time events).
  The supported cron expression is as follows:
  
  * * * * *  task id

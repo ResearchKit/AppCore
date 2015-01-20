@@ -124,7 +124,6 @@ NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
     return [cal dateFromComponents:components];
 }
 
-
 +(instancetype)weekAgoAtMidnight
 {
     NSDate *today = [NSDate date];
@@ -132,6 +131,30 @@ NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
     NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:today];
     [components setDay:[components day] - 7];
     return [cal dateFromComponents:components];
+}
+
+- (BOOL) isEarlierThanDate: (NSDate*) otherDate
+{
+	BOOL result = [self compare: otherDate] == NSOrderedAscending;
+	return result;
+}
+
+- (BOOL) isLaterThanDate: (NSDate*) otherDate
+{
+	BOOL result = [self compare: otherDate] == NSOrderedDescending;
+	return result;
+}
+
+- (BOOL) isEarlierOrEqualToDate: (NSDate*) otherDate
+{
+	BOOL result = [self compare: otherDate] != NSOrderedDescending;
+	return result;
+}
+
+- (BOOL) isLaterThanOrEqualToDate: (NSDate*) otherDate
+{
+	BOOL result = [self compare: otherDate] != NSOrderedAscending;
+	return result;
 }
 
 + (NSTimeInterval) parseISO8601DurationString: (NSString*) duration {

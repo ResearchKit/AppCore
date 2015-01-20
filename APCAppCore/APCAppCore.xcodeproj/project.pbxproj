@@ -14,12 +14,18 @@
 		360C63CD1A339700002EC86C /* NSDateComponents+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63CB1A339700002EC86C /* NSDateComponents+Helper.m */; };
 		360C63CE1A339707002EC86C /* NSDateComponents+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63CB1A339700002EC86C /* NSDateComponents+Helper.m */; };
 		360C63D11A339746002EC86C /* NSDateComponentsHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */; };
+		3667CA951A5C7F1B00B614F3 /* APCScheduleExpressionToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 3667CA931A5C7F1B00B614F3 /* APCScheduleExpressionToken.h */; };
+		3667CA961A5C7F1B00B614F3 /* APCScheduleExpressionToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 3667CA941A5C7F1B00B614F3 /* APCScheduleExpressionToken.m */; };
+		3667CA971A5C7F1B00B614F3 /* APCScheduleExpressionToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 3667CA941A5C7F1B00B614F3 /* APCScheduleExpressionToken.m */; };
+		3667CA9A1A5C7F3500B614F3 /* APCScheduleExpressionTokenizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3667CA981A5C7F3500B614F3 /* APCScheduleExpressionTokenizer.h */; };
+		3667CA9B1A5C7F3500B614F3 /* APCScheduleExpressionTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3667CA991A5C7F3500B614F3 /* APCScheduleExpressionTokenizer.m */; };
+		3667CA9C1A5C7F3500B614F3 /* APCScheduleExpressionTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3667CA991A5C7F3500B614F3 /* APCScheduleExpressionTokenizer.m */; };
 		36A9BE1E1A2FF2B200B14ADD /* APCScheduleExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128F31A2F78490015982C /* APCScheduleExpression.m */; };
 		36A9BE1F1A2FF2B200B14ADD /* APCDayOfMonthSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128F61A2F78490015982C /* APCDayOfMonthSelector.m */; };
 		36A9BE201A2FF2B200B14ADD /* APCListSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128F81A2F78490015982C /* APCListSelector.m */; };
 		36A9BE211A2FF2B200B14ADD /* APCPointSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128FA1A2F78490015982C /* APCPointSelector.m */; };
 		36A9BE221A2FF2B200B14ADD /* APCScheduleEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128FC1A2F78490015982C /* APCScheduleEnumerator.m */; };
-		36A9BE231A2FF2B200B14ADD /* APCScheduleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128FE1A2F78490015982C /* APCScheduleParser.m */; };
+		36A9BE231A2FF2B200B14ADD /* APCScheduleExpressionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128FE1A2F78490015982C /* APCScheduleExpressionParser.m */; };
 		36A9BE241A2FF2B200B14ADD /* APCTimeSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129001A2F78490015982C /* APCTimeSelector.m */; };
 		36A9BE251A2FF2B200B14ADD /* APCTimeSelectorEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129021A2F78490015982C /* APCTimeSelectorEnumerator.m */; };
 		36B1AAE51A38DEA800CE7DB5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3EB1A38D9FF0051096B /* Security.framework */; };
@@ -164,8 +170,8 @@
 		F5F12A4C1A2F78490015982C /* APCPointSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128FA1A2F78490015982C /* APCPointSelector.m */; };
 		F5F12A4D1A2F78490015982C /* APCScheduleEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128FB1A2F78490015982C /* APCScheduleEnumerator.h */; };
 		F5F12A4E1A2F78490015982C /* APCScheduleEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128FC1A2F78490015982C /* APCScheduleEnumerator.m */; };
-		F5F12A4F1A2F78490015982C /* APCScheduleParser.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128FD1A2F78490015982C /* APCScheduleParser.h */; };
-		F5F12A501A2F78490015982C /* APCScheduleParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128FE1A2F78490015982C /* APCScheduleParser.m */; };
+		F5F12A4F1A2F78490015982C /* APCScheduleExpressionParser.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128FD1A2F78490015982C /* APCScheduleExpressionParser.h */; };
+		F5F12A501A2F78490015982C /* APCScheduleExpressionParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128FE1A2F78490015982C /* APCScheduleExpressionParser.m */; };
 		F5F12A511A2F78490015982C /* APCTimeSelector.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128FF1A2F78490015982C /* APCTimeSelector.h */; };
 		F5F12A521A2F78490015982C /* APCTimeSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129001A2F78490015982C /* APCTimeSelector.m */; };
 		F5F12A531A2F78490015982C /* APCTimeSelectorEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129011A2F78490015982C /* APCTimeSelectorEnumerator.h */; };
@@ -372,6 +378,10 @@
 		360C63CA1A339700002EC86C /* NSDateComponents+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateComponents+Helper.h"; sourceTree = "<group>"; };
 		360C63CB1A339700002EC86C /* NSDateComponents+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateComponents+Helper.m"; sourceTree = "<group>"; };
 		360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateComponentsHelperTests.m; sourceTree = "<group>"; };
+		3667CA931A5C7F1B00B614F3 /* APCScheduleExpressionToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleExpressionToken.h; sourceTree = "<group>"; };
+		3667CA941A5C7F1B00B614F3 /* APCScheduleExpressionToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionToken.m; sourceTree = "<group>"; };
+		3667CA981A5C7F3500B614F3 /* APCScheduleExpressionTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleExpressionTokenizer.h; sourceTree = "<group>"; };
+		3667CA991A5C7F3500B614F3 /* APCScheduleExpressionTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionTokenizer.m; sourceTree = "<group>"; };
 		36C8B3E41A38D95A0051096B /* APCLogTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLogTests.m; sourceTree = "<group>"; };
 		36C8B3E71A38D9C80051096B /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
 		36C8B3EB1A38D9FF0051096B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -510,8 +520,8 @@
 		F5F128FA1A2F78490015982C /* APCPointSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPointSelector.m; sourceTree = "<group>"; };
 		F5F128FB1A2F78490015982C /* APCScheduleEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleEnumerator.h; sourceTree = "<group>"; };
 		F5F128FC1A2F78490015982C /* APCScheduleEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleEnumerator.m; sourceTree = "<group>"; };
-		F5F128FD1A2F78490015982C /* APCScheduleParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleParser.h; sourceTree = "<group>"; };
-		F5F128FE1A2F78490015982C /* APCScheduleParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleParser.m; sourceTree = "<group>"; };
+		F5F128FD1A2F78490015982C /* APCScheduleExpressionParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCScheduleExpressionParser.h; sourceTree = "<group>"; };
+		F5F128FE1A2F78490015982C /* APCScheduleExpressionParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionParser.m; sourceTree = "<group>"; };
 		F5F128FF1A2F78490015982C /* APCTimeSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTimeSelector.h; sourceTree = "<group>"; };
 		F5F129001A2F78490015982C /* APCTimeSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTimeSelector.m; sourceTree = "<group>"; };
 		F5F129011A2F78490015982C /* APCTimeSelectorEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTimeSelectorEnumerator.h; sourceTree = "<group>"; };
@@ -764,6 +774,20 @@
 				360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */,
 			);
 			name = "NSDateComponents+HelperTests";
+			sourceTree = "<group>";
+		};
+		3667CA9D1A5C7F6E00B614F3 /* Parsing */ = {
+			isa = PBXGroup;
+			children = (
+				F5F128FD1A2F78490015982C /* APCScheduleExpressionParser.h */,
+				F5F128FE1A2F78490015982C /* APCScheduleExpressionParser.m */,
+				3667CA981A5C7F3500B614F3 /* APCScheduleExpressionTokenizer.h */,
+				3667CA991A5C7F3500B614F3 /* APCScheduleExpressionTokenizer.m */,
+				3667CA931A5C7F1B00B614F3 /* APCScheduleExpressionToken.h */,
+				3667CA941A5C7F1B00B614F3 /* APCScheduleExpressionToken.m */,
+			);
+			name = Parsing;
+			path = Internals;
 			sourceTree = "<group>";
 		};
 		36C8B3E31A38D94F0051096B /* APCLogTests */ = {
@@ -1057,12 +1081,13 @@
 			children = (
 				F5F128F21A2F78490015982C /* APCScheduleExpression.h */,
 				F5F128F31A2F78490015982C /* APCScheduleExpression.m */,
-				F5F128F41A2F78490015982C /* Internals */,
+				F5F128F41A2F78490015982C /* Enumerating */,
+				3667CA9D1A5C7F6E00B614F3 /* Parsing */,
 			);
 			path = ScheduleExpression;
 			sourceTree = "<group>";
 		};
-		F5F128F41A2F78490015982C /* Internals */ = {
+		F5F128F41A2F78490015982C /* Enumerating */ = {
 			isa = PBXGroup;
 			children = (
 				F5F128F51A2F78490015982C /* APCDayOfMonthSelector.h */,
@@ -1073,13 +1098,12 @@
 				F5F128FA1A2F78490015982C /* APCPointSelector.m */,
 				F5F128FB1A2F78490015982C /* APCScheduleEnumerator.h */,
 				F5F128FC1A2F78490015982C /* APCScheduleEnumerator.m */,
-				F5F128FD1A2F78490015982C /* APCScheduleParser.h */,
-				F5F128FE1A2F78490015982C /* APCScheduleParser.m */,
 				F5F128FF1A2F78490015982C /* APCTimeSelector.h */,
 				F5F129001A2F78490015982C /* APCTimeSelector.m */,
 				F5F129011A2F78490015982C /* APCTimeSelectorEnumerator.h */,
 				F5F129021A2F78490015982C /* APCTimeSelectorEnumerator.m */,
 			);
+			name = Enumerating;
 			path = Internals;
 			sourceTree = "<group>";
 		};
@@ -1559,6 +1583,7 @@
 				F5F12ABA1A2F78490015982C /* APCActivitiesViewController.h in Headers */,
 				F5F12ADA1A2F78490015982C /* APCPickerTableViewCell.h in Headers */,
 				F5F12B041A2F78490015982C /* APCPasscodeViewController.h in Headers */,
+				3667CA9A1A5C7F3500B614F3 /* APCScheduleExpressionTokenizer.h in Headers */,
 				F5F12A181A2F78490015982C /* UIColor+APCAppearance.h in Headers */,
 				F5F12A791A2F78490015982C /* APCAxisView.h in Headers */,
 				F5F12A2E1A2F78490015982C /* NSString+Helper.h in Headers */,
@@ -1583,6 +1608,7 @@
 				F5F12A281A2F78490015982C /* NSError+APCAdditions.h in Headers */,
 				F5F129EA1A2F78490015982C /* APCDataSubstrate+ResearchKit.h in Headers */,
 				F5F12A341A2F78490015982C /* UIAlertController+Helper.h in Headers */,
+				3667CA951A5C7F1B00B614F3 /* APCScheduleExpressionToken.h in Headers */,
 				360C63CC1A339700002EC86C /* NSDateComponents+Helper.h in Headers */,
 				F5F12A0C1A2F78490015982C /* APCUser+Bridge.h in Headers */,
 				F5F12A6C1A2F78490015982C /* APCAppDelegate.h in Headers */,
@@ -1666,7 +1692,7 @@
 				F5F12A531A2F78490015982C /* APCTimeSelectorEnumerator.h in Headers */,
 				F5F12ACC1A2F78490015982C /* APCSettingsViewController.h in Headers */,
 				F5F12A061A2F78490015982C /* APCTask+AddOn.h in Headers */,
-				F5F12A4F1A2F78490015982C /* APCScheduleParser.h in Headers */,
+				F5F12A4F1A2F78490015982C /* APCScheduleExpressionParser.h in Headers */,
 				F5F129F81A2F78490015982C /* APCResult.h in Headers */,
 				F5F129EC1A2F78490015982C /* APCDataSubstrate.h in Headers */,
 				F5F129F01A2F78490015982C /* APCDBStatus.h in Headers */,
@@ -1865,7 +1891,7 @@
 				F5F12AD71A2F78490015982C /* APCDefaultTableViewCell.m in Sources */,
 				F5F12A4E1A2F78490015982C /* APCScheduleEnumerator.m in Sources */,
 				F5F12A781A2F78490015982C /* APCStepProgressBar.m in Sources */,
-				F5F12A501A2F78490015982C /* APCScheduleParser.m in Sources */,
+				F5F12A501A2F78490015982C /* APCScheduleExpressionParser.m in Sources */,
 				F5F12AF71A2F78490015982C /* APCStepViewController.m in Sources */,
 				F5F12AFE1A2F78490015982C /* APCIntroductionViewController.m in Sources */,
 				F5F12ADD1A2F78490015982C /* APCSegmentedTableViewCell.m in Sources */,
@@ -1876,6 +1902,7 @@
 				F5F12AF51A2F78490015982C /* APCBaseWithProgressTaskViewController.m in Sources */,
 				F5F12B0D1A2F78490015982C /* APCPermissionButton.m in Sources */,
 				F5F129FB1A2F78490015982C /* APCSchedule+AddOn.m in Sources */,
+				3667CA961A5C7F1B00B614F3 /* APCScheduleExpressionToken.m in Sources */,
 				F5F12AFC1A2F78490015982C /* APCInstructionStepViewController.m in Sources */,
 				F5F12AA31A2F78490015982C /* APCForgotPasswordViewController.m in Sources */,
 				F5F12A1F1A2F78490015982C /* APCAssertionHandler.m in Sources */,
@@ -1939,6 +1966,7 @@
 				F5F12A271A2F78490015982C /* NSDate+Helper.m in Sources */,
 				F5F129F71A2F78490015982C /* APCResult+Bridge.m in Sources */,
 				F5F12A031A2F78490015982C /* APCScheduledTask.m in Sources */,
+				3667CA9B1A5C7F3500B614F3 /* APCScheduleExpressionTokenizer.m in Sources */,
 				F5F12A421A2F78490015982C /* APCKeychainStore.m in Sources */,
 				F5F12A841A2F78490015982C /* APCResizeView.m in Sources */,
 				F5F12A881A2F78490015982C /* APCSignUpTask.m in Sources */,
@@ -1975,9 +2003,11 @@
 				F5F12B171A2F78870015982C /* APCScheduleExpressionPointSelectorTests.m in Sources */,
 				360C63D11A339746002EC86C /* NSDateComponentsHelperTests.m in Sources */,
 				360C63CE1A339707002EC86C /* NSDateComponents+Helper.m in Sources */,
+				3667CA9C1A5C7F3500B614F3 /* APCScheduleExpressionTokenizer.m in Sources */,
 				F5B1F1AE1A33C71E00C377FB /* NSDate+Helper.m in Sources */,
+				3667CA971A5C7F1B00B614F3 /* APCScheduleExpressionToken.m in Sources */,
 				36E06F1C1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m in Sources */,
-				36A9BE231A2FF2B200B14ADD /* APCScheduleParser.m in Sources */,
+				36A9BE231A2FF2B200B14ADD /* APCScheduleExpressionParser.m in Sources */,
 				36A9BE211A2FF2B200B14ADD /* APCPointSelector.m in Sources */,
 				36A9BE221A2FF2B200B14ADD /* APCScheduleEnumerator.m in Sources */,
 				36A9BE201A2FF2B200B14ADD /* APCListSelector.m in Sources */,

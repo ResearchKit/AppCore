@@ -6,22 +6,21 @@
 // 
  
 #import "APCScheduleExpression.h"
-#import "APCScheduleParser.h"
+#import "APCScheduleExpressionParser.h"
 #import "APCTimeSelectorEnumerator.h"
 #import "APCScheduleEnumerator.h"
 
 
 @interface APCScheduleExpression ()
 
-@property (nonatomic, strong) APCScheduleParser*    parser;
-@property (nonatomic, strong) NSArray*              selectors;
-
-@property (nonatomic, assign) BOOL                  validExpression;
-@property (nonatomic, strong) APCTimeSelector*      minuteSelector;
-@property (nonatomic, strong) APCTimeSelector*      dayOfMonthSelector;
-@property (nonatomic, strong) APCTimeSelector*      hourSelector;
-@property (nonatomic, strong) APCTimeSelector*      monthSelector;
-@property (nonatomic, strong) APCTimeSelector*      yearSelector;
+@property (nonatomic, strong) APCScheduleExpressionParser*	parser;
+@property (nonatomic, strong) NSArray*						selectors;
+@property (nonatomic, assign) BOOL							validExpression;
+@property (nonatomic, strong) APCTimeSelector*				minuteSelector;
+@property (nonatomic, strong) APCTimeSelector*				dayOfMonthSelector;
+@property (nonatomic, strong) APCTimeSelector*				hourSelector;
+@property (nonatomic, strong) APCTimeSelector*				monthSelector;
+@property (nonatomic, strong) APCTimeSelector*				yearSelector;
 
 @end
 
@@ -34,7 +33,7 @@
 	
     if (self)
     {
-        APCScheduleParser* parser = [[APCScheduleParser alloc] initWithExpression:expression];
+        APCScheduleExpressionParser* parser = [[APCScheduleExpressionParser alloc] initWithExpression:expression];
         
         _validExpression = [parser parse];
         

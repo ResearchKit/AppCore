@@ -18,81 +18,33 @@
 
 @implementation APCPointSelector
 
-- (instancetype) initWithUnit: (UnitType) unitType
+- (instancetype) init
 {
-    self = [super init];
+	self = [super init];
 
-    if (self)
-    {
-		_unitType = unitType; 
-
+	if (self)
+	{
+		_unitType = kUnknown;
 		_begin = nil;
 		_end = nil;
 		_step = nil;
 		_position = nil;
-
 		_defaultBegin = nil;
 		_defaultEnd = nil;
 		_isWildcard_private = NO;
-
-		switch (unitType) 
-		{
-			case kMinutes:
-				_defaultBegin = @0;
-				_defaultEnd   = @59;
-				break;
-
-			case kHours:
-				_defaultBegin = @0;
-				_defaultEnd   = @23;
-				break;
-
-			case kDayOfMonth:
-				_defaultBegin = @1;
-				_defaultEnd   = @31;
-				break;
-
-			case kMonth:
-				//  1: Jan, 2: Feb, ..., 12: Dec
-				_defaultBegin = @1;
-				_defaultEnd   = @12;
-				break;
-
-			case kDayOfWeek:
-				//  0: Sun, 1: Mon, ..., 6: Sat
-				_defaultBegin = @0;
-				_defaultEnd   = @6;
-				break;
-
-			case kYear:
-			{
-				NSDate* now = [NSDate date];
-				NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
-				NSDateComponents* components = [calendar components:NSCalendarUnitYear fromDate:now];
-
-				_defaultBegin = @(components.year);
-				_defaultEnd   = @9999;
-			}
-
-			default:
-				// Time ranges we don't care about.  Using "nil"
-				// for defaultBegin and defaultEnd should be fine.
-				break;
-		}
 	}
 
-    return self;
+	return self;
 }
 
 /**
  Used for days-of-the-week when specifying, say, the 3rd
  Friday in a month.
  */
-- (instancetype)initWithUnit:(UnitType)unitType
-					   value:(NSNumber *)value
-					position:(NSNumber *)position
+- (instancetype) initWithValue: (NSNumber *) value
+					  position: (NSNumber *) position
 {
-	self = [self initWithUnit:unitType];
+	self = [self init];
 
 	if (self)
 	{
@@ -100,26 +52,25 @@
 		_end = nil;
 		_position = position;
 
-		if (_begin.integerValue < _defaultBegin.integerValue)
-		{
-			//  TODO: Invalid values
-			self = nil;
-		}
+		/*
+		 Note:  Previously, we had a sanity check here:  if
+		 begin was < defaultBegin, or end was > defaultEnd,
+		 assume something went wrong.  Now, though, the
+		 defaults won't get set until we set this object's
+		 type, and because of how the parser logic works,
+		 this happens later.  So we'll do that sanity check
+		 when we set the type.
+		 */
 	}
 
 	return self;
 }
 
-- (instancetype)initWithUnit:(UnitType)unitType
-                  beginRange:(NSNumber*)begin
-                    endRange:(NSNumber*)end
-                        step:(NSNumber*)step
+- (instancetype) initWithRangeStart: (NSNumber *) begin
+						   rangeEnd: (NSNumber *) end
+							   step: (NSNumber *) step
 {
-	//
-	// Grab the default range of values for the specified type.
-	// Note that daysOfMonth ALWAYS uses 31 days, at the moment.
-	//
-    self = [self initWithUnit:unitType];
+    self = [self init];
 
 	if (self)
 	{
@@ -162,15 +113,93 @@
 			NSLog(@"Invalid selector");
 			self = nil;
 		}
-		
-		if (self != nil && (_begin.integerValue < _defaultBegin.integerValue || _end.integerValue > _defaultEnd.integerValue))
-		{
-			//  TODO: Invalid values
-			self = nil;
-		}
+
+		/*
+		 Note:  Previously, we had a sanity check here:  if 
+		 begin was < defaultBegin, or end was > defaultEnd,
+		 assume something went wrong.  Now, though, the
+		 defaults won't get set until we set this object's
+		 type, and because of how the parser logic works,
+		 this happens later.  So we'll do that sanity check
+		 when we set the type.
+		 */
 	}
 
     return self;
+}
+
+- (void) setUnitType: (UnitType) unitType
+{
+	_unitType = unitType;
+
+	self.defaultBegin = nil;
+	self.defaultEnd = nil;
+
+	switch (unitType)
+	{
+		case kMinutes:
+			self.defaultBegin = @0;
+			self.defaultEnd   = @59;
+			break;
+
+		case kHours:
+			self.defaultBegin = @0;
+			self.defaultEnd   = @23;
+			break;
+
+		case kDayOfMonth:
+			self.defaultBegin = @1;
+			self.defaultEnd   = @31;
+			break;
+
+		case kMonth:
+			//  1: Jan, 2: Feb, ..., 12: Dec
+			self.defaultBegin = @1;
+			self.defaultEnd   = @12;
+			break;
+
+		case kDayOfWeek:
+			//  0: Sun, 1: Mon, ..., 6: Sat
+			self.defaultBegin = @0;
+			self.defaultEnd   = @6;
+			break;
+
+		case kYear:
+		{
+			NSDate* now = [NSDate date];
+			NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
+			NSDateComponents* components = [calendar components:NSCalendarUnitYear fromDate:now];
+
+			self.defaultBegin = @(components.year);
+			self.defaultEnd   = @9999;
+		}
+
+		default:
+			// Time ranges we don't care about.  Using "nil"
+			// for defaultBegin and defaultEnd should be fine.
+			break;
+	}
+
+	// And now apply those default ranges to our actual ranges.
+	// If the actual ranges are already set, make sure they're
+	// reasonable.
+	if (self.begin == nil)
+	{
+		self.begin = self.defaultBegin;
+	}
+	else if (self.begin.integerValue < self.defaultBegin.integerValue)
+	{
+		NSAssert (NO, @"PointSelector: beginValue of %@ is less than default value of %@.", self.begin, self.defaultBegin);
+	}
+
+	if (self.end == nil)
+	{
+		self.end = self.defaultEnd;
+	}
+	else if (self.end.integerValue > self.end.integerValue)
+	{
+		NSAssert (NO, @"PointSelector: endValue of %@ is greater than default value of %@.", self.end, self.defaultEnd);
+	}
 }
 
 - (NSNumber*)defaultBeginPeriod
@@ -294,6 +323,17 @@
 - (BOOL) isWildcard
 {
 	return self.isWildcard_private;
+}
+
+- (NSString *) description
+{
+	return [NSString stringWithFormat: @"PointSelector { begin: %@, end: %@, step: %@, position: %@, isWildcard: %@ }",
+			self.begin,
+			self.end,
+			self.step,
+			self.position,
+			self.isWildcard ? @"YES" : @"NO"
+			];
 }
 
 @end

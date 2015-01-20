@@ -26,7 +26,9 @@
 
 - (void)testListSelectorWithOneSubSelector
 {
-	APCPointSelector*   pointSelector = [[APCPointSelector alloc] initWithUnit:kMinutes beginRange:nil endRange:nil step:nil];
+	APCPointSelector*   pointSelector = [[APCPointSelector alloc] initWithRangeStart: nil rangeEnd: nil step: nil];
+	pointSelector.unitType = kMinutes;
+
 	APCListSelector*    listSelector  = [[APCListSelector alloc] initWithSubSelectors:@[ pointSelector ]];
 	
 	XCTAssertEqual(listSelector.subSelectors.count, 1);
@@ -35,8 +37,11 @@
 
 - (void)testListSelectorWithTwoSubSelectors
 {
-	APCPointSelector*   pointSelector1 = [[APCPointSelector alloc] initWithUnit:kMinutes beginRange:@5 endRange:nil step:nil];
-	APCPointSelector*   pointSelector2 = [[APCPointSelector alloc] initWithUnit:kMinutes beginRange:@10 endRange:nil step:nil];
+	APCPointSelector*   pointSelector1 = [[APCPointSelector alloc] initWithRangeStart: @5 rangeEnd: nil step: nil];
+	APCPointSelector*	pointSelector2 = [[APCPointSelector alloc] initWithRangeStart: @10 rangeEnd: nil step: nil];
+	pointSelector1.unitType = kMinutes;
+	pointSelector2.unitType = kMinutes;
+
 	APCListSelector*    listSelector   = [[APCListSelector alloc] initWithSubSelectors:@[ pointSelector1, pointSelector2 ]];
 		
 	XCTAssertEqual(listSelector.subSelectors.count, 2);
@@ -47,8 +52,11 @@
 
 - (void)testPointAfter
 {
-	APCPointSelector*   pointSelector1 = [[APCPointSelector alloc] initWithUnit:kMinutes beginRange:@5 endRange:nil step:nil];
-	APCPointSelector*   pointSelector2 = [[APCPointSelector alloc] initWithUnit:kMinutes beginRange:@10 endRange:nil step:nil];
+	APCPointSelector*   pointSelector1 = [[APCPointSelector alloc] initWithRangeStart: @5 rangeEnd: nil step: nil];
+	APCPointSelector*	pointSelector2 = [[APCPointSelector alloc] initWithRangeStart: @10 rangeEnd: nil step: nil];
+	pointSelector1.unitType = kMinutes;
+	pointSelector2.unitType = kMinutes;
+
 	APCListSelector*    listSelector   = [[APCListSelector alloc] initWithSubSelectors:@[ pointSelector1, pointSelector2 ]];
 	
 	XCTAssertEqualObjects([listSelector nextMomentAfter:@0], @5);
@@ -58,8 +66,11 @@
 
 - (void)testPointAfterRange
 {
-	APCPointSelector*   pointSelector1 = [[APCPointSelector alloc] initWithUnit:kMinutes beginRange:@5 endRange:@10 step:nil];
-	APCPointSelector*   pointSelector2 = [[APCPointSelector alloc] initWithUnit:kMinutes beginRange:@20 endRange:@30 step:nil];
+	APCPointSelector*   pointSelector1 = [[APCPointSelector alloc] initWithRangeStart: @5 rangeEnd: @10 step: nil];
+	APCPointSelector*	pointSelector2 = [[APCPointSelector alloc] initWithRangeStart: @20 rangeEnd: @30 step: nil];
+	pointSelector1.unitType = kMinutes;
+	pointSelector2.unitType = kMinutes;
+
 	APCListSelector*    listSelector   = [[APCListSelector alloc] initWithSubSelectors:@[ pointSelector1, pointSelector2 ]];
 	
 	XCTAssertEqualObjects([listSelector nextMomentAfter:@0], @5);
@@ -75,8 +86,11 @@
 
 - (void)testPointAfterRangeWithStep
 {
-	APCPointSelector*   pointSelector1 = [[APCPointSelector alloc] initWithUnit:kMinutes beginRange:@5 endRange:@15 step:@5];
-	APCPointSelector*   pointSelector2 = [[APCPointSelector alloc] initWithUnit:kMinutes beginRange:@20 endRange:@50 step:@10];
+	APCPointSelector*   pointSelector1 = [[APCPointSelector alloc] initWithRangeStart: @5 rangeEnd: @15 step: @5];
+	APCPointSelector*	pointSelector2 = [[APCPointSelector alloc] initWithRangeStart: @20 rangeEnd: @50 step: @10];
+	pointSelector1.unitType = kMinutes;
+	pointSelector2.unitType = kMinutes;
+
 	APCListSelector*    listSelector   = [[APCListSelector alloc] initWithSubSelectors:@[ pointSelector1, pointSelector2 ]];
 
 	XCTAssertEqualObjects([listSelector nextMomentAfter:@0], @5);
