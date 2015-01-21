@@ -32,13 +32,6 @@ static NSDictionary * lookupDictionary;
 {
     apcResult.taskRunID = taskResult.taskRunUUID.UUIDString;
     apcResult.taskID = taskResult.identifier;
-    if (taskResult.metadata) {
-        NSError * error;
-        NSData * data = [NSJSONSerialization dataWithJSONObject:taskResult.metadata options:NSJSONWritingPrettyPrinted error:&error];
-        APCLogError2 (error);
-        apcResult.metaData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    }
-
 }
 
 /*********************************************************************************/

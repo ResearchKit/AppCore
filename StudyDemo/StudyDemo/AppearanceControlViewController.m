@@ -23,7 +23,6 @@
     _classes =  @[[RKSTHeadlineLabel class],
                  [RKSTSubheadlineLabel class],
                  [RKSTCaption1Label class],
-                 [RKSTCaption2Label class],
                  [RKSTSelectionTitleLabel class],
                  [RKSTSelectionSubTitleLabel class],
                  [RKSTScaleRangeLabel class],
@@ -32,8 +31,6 @@
                  [RKSTAnswerTextField class],
                  [RKSTAnswerTextView class],
                  [RKSTTextButton class],
-                 [RKSTBoldTextCell class],
-                 [RKSTRegularTextCell class],
                  [RKSTCountdownLabel class]];
     
     self.tableView.allowsSelection = NO;

@@ -13,7 +13,6 @@ FOUNDATION_EXPORT double APCAppCoreVersionNumber;
 //! Project version string for APCAppCore.
 FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 
-#import <ResearchKit/ResearchKit_Private.h>
 #import <BridgeSDK/BridgeSDK.h>
 
 //Headers
@@ -162,7 +161,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/HKHealthStore+APCExtensions.h>
 #import <APCAppCore/UIImage+APCHelper.h>
 #import <APCAppCore/APCParameters+Settings.h>
-#import <APCAppCore/RKSTTaskResult+Archiver.h>
 #import <APCAppCore/SBBGuidCreatedOnVersionHolder+APCAdditions.h>
 #import <APCAppCore/UIView+Helper.h>
 #import <APCAppCore/NSDictionary+APCAdditions.h>

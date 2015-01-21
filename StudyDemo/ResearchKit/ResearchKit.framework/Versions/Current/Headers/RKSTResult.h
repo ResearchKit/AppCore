@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <ResearchKit/RKSTAnswerFormat.h>
+#import <ResearchKit/RKSTDefines.h>
 
 @class RKSTRecorder;
 @class RKSTStep;
@@ -25,7 +26,8 @@
  *
  * A result may be produced either directly in a step or task view controller, or by an RKSTRecorder subclass.
  */
-@interface RKSTResult : NSObject<NSCopying,NSSecureCoding>
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTResult : NSObject<NSCopying, NSSecureCoding>
 
 - (instancetype)initWithIdentifier:(NSString *)identifier;
 
@@ -51,12 +53,59 @@
 /**
  * @brief Metadata about the conditions in which this result was acquired.
  */
-@property (nonatomic, copy) NSDictionary *metadata;
+@property (nonatomic, copy) NSDictionary *userInfo;
 
 
 @end
 
 
+
+typedef NS_ENUM(NSInteger, RKTappingButtonIdentifier) {
+    RKTappingButtonIdentifierNone,                  // Touch hit outside the two buttons.
+    RKTappingButtonIdentifierLeft,
+    RKTappingButtonIdentifierRight
+} RK_ENUM_AVAILABLE_IOS(8_3);
+
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTTappingSample : NSObject<NSCopying, NSSecureCoding>
+
+/**
+ * @brief Between 0 and duration end.
+ */
+@property (nonatomic, assign) NSTimeInterval timestamp;
+
+@property (nonatomic, assign) RKTappingButtonIdentifier buttonIdentifier;
+
+/**
+ * @brief Tapping location in step's view
+ */
+@property (nonatomic, assign) CGPoint location;
+
+@end
+
+/**
+ * @brief The RKSTTappingIntervalResult contains result data from tapping interval test.
+ */
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTTappingIntervalResult : RKSTResult
+
+/**
+ * @brief Collected samples, each item is a RKSTTappingSample object represents a tapping event.
+ */
+@property (nonatomic, copy) NSArray *samples;
+
+/**
+ * @brief button's rectangles and base view's size
+ */
+@property (nonatomic) CGSize stepViewSize;
+
+@property (nonatomic) CGRect buttonRect1;
+
+@property (nonatomic) CGRect buttonRect2;
+
+@end
+
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTFileResult : RKSTResult
 
 /**
@@ -70,42 +119,95 @@
  * It is the responsibility of the receiver of the result object to delete
  * the file when it is no longer needed.
  */
-@property (nonatomic, copy) NSURL *fileUrl;
-
-@end
-
-@interface RKSTDateAnswer : NSObject<NSCopying,NSSecureCoding>
-
-- (instancetype)initWithDateComponents:(NSDateComponents *)dateComponents calendar:(NSCalendar *)calendar;
-
-@property (nonatomic, copy, readonly) NSDateComponents *dateComponents;
-@property (nonatomic, copy, readonly) NSCalendar *calendar;
+@property (nonatomic, copy) NSURL *fileURL;
 
 @end
 
 
+/**
+ * @brief Base class for leaf results from an item with an RKSTAnswerFormat.
+ * @seealso RKSTQuestionStep, RKSTFormItem.
+ */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTQuestionResult : RKSTResult
 
-/**
- * @brief The question's type.
- */
-@property (nonatomic) RKSurveyQuestionType questionType;
+@property (nonatomic) RKQuestionType questionType;
+
+@end
+
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTScaleQuestionResult : RKSTQuestionResult
+
+@property (nonatomic, copy) NSNumber *scaleAnswer;
+
+@end
+
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTChoiceQuestionResult : RKSTQuestionResult
 
 /**
- * @brief Actual answer to the question.
- *
- * Different types of question use different types of object to store the answer.
- *      Single choice: the selected RKAnswerOption's `value` property.
- *      Multiple choice: array of values from selected RKAnswerOptions' `value` properties.
- *      Boolean: NSNumber
- *      Text: NSString
- *      Scale: NSNumber
- *      Date: RKSTDateAnswer with date components having (NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay).
- *      Time: RKSTDateAnswer with date components having (NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond).
- *      DateAndTime: RKSTDateAnswer with date components having (NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond).
- *      Time Interval: NSNumber, containing a time span in seconds.
+ * @brief Array of selected values, from RKAnswerOption's `value` property.
+ * For single choice, the array will have only one entry.
  */
-@property (nonatomic, copy) id answer;
+@property (nonatomic, copy) NSArray *choiceAnswers;
+
+@end
+
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTBooleanQuestionResult : RKSTQuestionResult
+
+@property (nonatomic, copy) NSNumber *booleanAnswer;
+
+@end
+
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTTextQuestionResult : RKSTQuestionResult
+
+@property (nonatomic, copy) NSString *textAnswer;
+
+@end
+
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTNumericQuestionResult : RKSTQuestionResult
+
+@property (nonatomic, copy) NSNumber *numericAnswer;
+
+/**
+ * @brief Unit string displayed to the user as the value was entered
+ */
+@property (nonatomic, copy) NSString *unit;
+
+@end
+
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTTimeOfDayQuestionResult : RKSTQuestionResult
+
+@property (nonatomic, copy) NSDateComponents *dateComponentsAnswer;
+
+@end
+
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTTimeIntervalQuestionResult : RKSTQuestionResult
+
+@property (nonatomic, copy) NSNumber *intervalAnswer; // Interval in seconds
+
+@end
+
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTDateQuestionResult : RKSTQuestionResult
+
+@property (nonatomic, copy) NSDate *dateAnswer;
+
+/**
+ * @brief Calendar used when selecting date and time.
+ *  If developer specified nil in RKSTAnswerFormat, this calendar is user's default.
+ */
+@property (nonatomic, copy) NSCalendar *calendar;
+
+/**
+ * @brief User's time zone when selecting date and time.
+ */
+@property (nonatomic, copy) NSTimeZone *timeZone;
 
 @end
 
@@ -113,17 +215,18 @@
 /**
  * @brief Result containing a completed signature.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTConsentSignatureResult : RKSTResult
 
 @property (nonatomic, copy) RKSTConsentSignature *signature;
 
-// Apply the signature to the document.
 - (void)applyToDocument:(RKSTConsentDocument *)document;
 
 @end
 
 
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTCollectionResult : RKSTResult
 
 /**
@@ -155,15 +258,20 @@
 
 @end
 
+
+
+
 /**
  * @brief RKSTTaskResult containing all results generated from one run of RKSTTaskViewController.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTTaskResult: RKSTCollectionResult <RKSTTaskResultSource>
 
 
 - (instancetype)initWithTaskIdentifier:(NSString *)identifier
                            taskRunUUID:(NSUUID *)taskRunUUID
                        outputDirectory:(NSURL *)outputDirectory;
+
 
 /**
  * @brief Task instance UUID
@@ -186,6 +294,7 @@
 /**
  * @brief RKSTStepResult containing all results from one step.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTStepResult: RKSTCollectionResult
 
 

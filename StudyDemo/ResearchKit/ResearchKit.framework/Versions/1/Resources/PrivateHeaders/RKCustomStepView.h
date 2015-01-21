@@ -28,6 +28,7 @@
  They should implement sizeThatFits:, or include internal constraints or report
  an intrinsic content size to be allocated the space they require.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKQuestionStepCustomView : UIView
 
 // Custom question step view should report changes in its result

@@ -13,6 +13,6 @@
 @property (nonatomic, strong) RKSelectionTitleLabel* shortLabel;
 @property (nonatomic, strong) RKSelectionSubTitleLabel* longLabel;
 
-+ (CGFloat)suggestedCellHeightForLongText:(NSString*)text;
++ (CGFloat)suggestedCellHeightForShortText:(NSString*)shortText LongText:(NSString*)longText inTableView:(UITableView*)tableView;
 
 @end

@@ -20,6 +20,7 @@
  * @note To use a recorder, add its configuration to the RKActiveStep's recorderConfigurations
  * list.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKRecorderConfiguration : NSObject<NSSecureCoding>
 
 - (instancetype)init NS_UNAVAILABLE;
@@ -30,12 +31,15 @@
  */
 - (RKRecorder*)recorderForStep:(RKStep*)step outputDirectory:(NSURL *)outputDirectory;
 
+- (NSSet *)requestedHealthKitTypesForReading;
+
 @end
 
 
 /**
  * @brief Collects raw accelerometer data
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKAccelerometerRecorderConfiguration : RKRecorderConfiguration
 
 /**
@@ -44,10 +48,11 @@
 @property (nonatomic, readonly) double frequency;
 
 /**
- * @brief Designated initializer
  * @param frequency Accelerometer data collection frequency in Hz.
  */
-- (instancetype)initWithFrequency:(double)freq;
+- (instancetype)initWithFrequency:(double)freq NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -55,6 +60,7 @@
 /**
  * @brief Collects audio data
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKAudioRecorderConfiguration : RKRecorderConfiguration
 
 /**
@@ -67,11 +73,12 @@
 @property (nonatomic, readonly) NSDictionary *recorderSettings;
 
 /**
- * @brief Designated initializer
  * @param recorderSettings Settings for the recording session.
  * @note For information on the settings available for an audio recorder, see "AV Foundation Audio Settings Constants".
  */
-- (instancetype)initWithRecorderSettings:(NSDictionary *)recorderSettings;
+- (instancetype)initWithRecorderSettings:(NSDictionary *)recorderSettings NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -79,6 +86,7 @@
 /**
  * @brief Collects device motion data. See CMMotionManager.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKDeviceMotionRecorderConfiguration : RKRecorderConfiguration
 
 /**
@@ -87,32 +95,53 @@
 @property (nonatomic, readonly) double frequency;
 
 /**
- * @brief Designated initializer
  * @param frequency    Accelerometer data collection frequency, unit is hertz (Hz).
  */
-- (instancetype)initWithFrequency:(double)freq;
+- (instancetype)initWithFrequency:(double)freq NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
 
 @end
+
 
 
 /**
  * @brief Collects pedometer data. See CMPedometer.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKPedometerRecorderConfiguration : RKRecorderConfiguration
 
-/**
- * @brief pedometer data collection frequency, unit is hertz (Hz).
- */
-@property (nonatomic, readonly) double frequency;
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
 
-/**
- * @brief Designated initializer
- * @param frequency    Accelerometer data collection frequency, unit is hertz (Hz).
- */
-- (instancetype)initWithFrequency:(double)freq;
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
 
 @end
 
+/**
+ * @brief Configuration for location data collection
+ */
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKLocationRecorderConfiguration : RKRecorderConfiguration
+
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
+
+@end
+
+/**
+ * @brief Configuration for location data collection
+ */
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKHealthQuantityTypeRecorderConfiguration : RKRecorderConfiguration
+
+- (instancetype)initWithHealthQuantityType:(HKQuantityType *)quantityType unit:(HKUnit *)unit NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
+
+@property (nonatomic, readonly, copy) HKQuantityType *quantityType;
+@property (nonatomic, readonly, copy) HKUnit *unit;
+
+@end
 
 @protocol RKRecorderDelegate <NSObject>
 
@@ -130,6 +159,7 @@
 @end
 
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKRecorder : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;

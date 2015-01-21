@@ -5,18 +5,19 @@
 //  Copyright (c) 2013-2014 Apple Inc. All rights reserved.
 //
 
-#import "RKStep.h"
-#import "RKAnswerFormat.h"
+#import <ResearchKit/RKDefines.h>
+#import <ResearchKit/RKStep.h>
+#import <ResearchKit/RKAnswerFormat.h>
 
 /**
  * @brief The RKQuestionStep class defines the attributes of a question step.
  *
  * Question step usually defines question and the format or answer.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKQuestionStep : RKStep
 
 /**
- * @brief Designated convenience constructor
  * @param identifier    Step's unique indentifier.
  * @param question      Text of the question.
  * @param answerFormat  AnswerFormat object contains details about answer.
@@ -27,14 +28,20 @@
                                     answer:(RKAnswerFormat *)answerFormat;
 
 /**
- * @brief AnswerFormat object contains detailed information about an answer.
- * e.g. type, constraints, and choices.
+ * @brief The answer format contains detailed information about an answer.
+ * For example, type, constraints, and choices.
  */
 @property (nonatomic, strong) RKAnswerFormat *answerFormat;
 
 /**
- * @brief Convenience method to get questionType from answerFormat object.
+ * @brief The question type (derived from the answer format).
  */
-- (RKSurveyQuestionType)questionType;
+@property (nonatomic, readonly) RKQuestionType questionType;
+
+/**
+ * @brief Place holder for its field.
+ * @warning Only applicable to RKNumericAnswerFormat and RKTextAnswerFormat.
+ */
+@property (nonatomic, copy) NSString *placeholder;
 
 @end

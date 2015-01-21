@@ -7,6 +7,7 @@
 
 #import <ResearchKit/ResearchKit.h>
 
+#import <ResearchKit/RKSTDefines_Private.h>
 #import <ResearchKit/RKSTVersion.h>
 
 

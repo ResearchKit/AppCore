@@ -10,6 +10,7 @@
 /**
  * @brief The RKDataResult contains result data in NSData format.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKDataResult : RKResult
 
 /**
@@ -37,17 +38,14 @@
 
 @end
 
-@interface RKQuestionResult(Internal)
+@interface RKQuestionResult()
 
-+ (RKQuestionResult *)nullResultForQuestionStep:(RKQuestionStep *)questionStep;
++ (Class)answerClass;
 
-@end
-
-@interface RKDateAnswer(Internal)
-
-+ (RKDateAnswer *)_dateAnswerFromPicker:(UIDatePicker *)picker withFormat:(RKDateAnswerFormat *)format;
-
-- (NSDictionary *)_serializableDictionaryWithQuestionType:(RKSurveyQuestionType)questionType;
+// For type invariant answer
+- (void)setAnswer:(id)answer;
+- (id)answer;
 
 @end
+
 

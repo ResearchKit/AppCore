@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <ResearchKit/RKErrors.h>
+#import <ResearchKit/RKDefines.h>
 
 @class RKStudy;
 @class RKUploader;
@@ -26,6 +27,7 @@
  * Automatic data collection begins once
  *
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKStudyStore : NSObject
 
 /**

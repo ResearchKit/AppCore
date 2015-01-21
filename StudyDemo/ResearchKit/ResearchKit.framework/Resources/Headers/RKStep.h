@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <ResearchKit/RKDefines.h>
 
 @protocol RKTask;
 
@@ -15,21 +16,31 @@
  * @discussion A step can be a question, an active test, or a simple instruction, and
  * is normally presented using RKStepViewController.
  */
-@interface RKStep : NSObject <NSSecureCoding,NSCopying>
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKStep : NSObject <NSSecureCoding, NSCopying>
+
 
 /**
- * @brief Designated initializer
+ * @brief Create a new step
  * @param identifier   Step's unique indentifier.
  */
-- (instancetype)initWithIdentifier:(NSString *)identifier;
+- (instancetype)initWithIdentifier:(NSString *)identifier NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
 
 @property (nonatomic, copy, readonly) NSString *identifier;
+
+/**
+ * @brief Controls whether a task can be restored to this step during state restoration.
+ * @note YES by default, but subclasses may override.
+ */
+@property (nonatomic, readonly, getter=isRestorable) BOOL restorable;
 
 /**
  * @brief Allow user to skip current step with no answer.
  * @note Default value is YES.
  */
-@property (nonatomic,getter=isOptional) BOOL optional;
+@property (nonatomic, getter=isOptional) BOOL optional;
 
 /**
  * @brief Primary text of the step.

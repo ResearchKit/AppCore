@@ -7,6 +7,7 @@
 
 #import <ResearchKit/ResearchKit.h>
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTConsentReviewStepViewController : RKSTStepViewController
 
 - (instancetype)initWithConsentReviewStep:(RKSTConsentReviewStep *)step result:(RKSTConsentSignatureResult *)result;

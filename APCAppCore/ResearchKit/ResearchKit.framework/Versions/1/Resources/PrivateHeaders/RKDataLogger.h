@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <ResearchKit/RKDefines.h>
 
 
 typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
@@ -13,7 +14,7 @@ typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
     RKFileProtectionCompleteUntilFirstUserAuthentication,
     RKFileProtectionCompleteUnlessOpen,
     RKFileProtectionComplete
-};
+} RK_ENUM_AVAILABLE_IOS(8_3);
 
 @class RKDataLogger;
 @class HKUnit;
@@ -55,6 +56,7 @@ typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
  * The user is responsible for managing the historic log files, but the RKDataLogger
  * provides tools for enumerating them (in sorted order).
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKDataLogger : NSObject
 
 /**
@@ -67,8 +69,7 @@ typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
  */
 + (RKDataLogger *)JSONDataLoggerWithDirectory:(NSURL *)url logName:(NSString *)logName delegate:(id<RKDataLoggerDelegate>)delegate;
 
-// Designated initializer.
-- (instancetype)initWithDirectory:(NSURL *)url logName:(NSString *)logName formatter:(RKLogFormatter *)formatter delegate:(id<RKDataLoggerDelegate>)delegate;
+- (instancetype)initWithDirectory:(NSURL *)url logName:(NSString *)logName formatter:(RKLogFormatter *)formatter delegate:(id<RKDataLoggerDelegate>)delegate NS_DESIGNATED_INITIALIZER;
 
 @property (weak) id<RKDataLoggerDelegate> delegate;
 
@@ -201,6 +202,7 @@ typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
  * In addition to NSDictionary, also accepts CMMotionActivity and HKSample, converting
  * these to a dictionary before output.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKJSONLogFormatter : RKLogFormatter
 
 @end
@@ -210,6 +212,7 @@ typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
 @class RKDataLoggerManager;
 
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @protocol RKDataLoggerManagerDelegate <NSObject>
 
 /**
@@ -248,10 +251,10 @@ typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
  * threshold is no longer exceeded. Use -removeOldAndUploadedLogsToThreshold:error:
  *
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKDataLoggerManager : NSObject<RKDataLoggerDelegate>
 
-/// Designated initializer.
-- (instancetype)initWithDirectory:(NSURL *)directory delegate:(id<RKDataLoggerManagerDelegate>)delegate;
+- (instancetype)initWithDirectory:(NSURL *)directory delegate:(id<RKDataLoggerManagerDelegate>)delegate NS_DESIGNATED_INITIALIZER;
 
 @property (weak) id<RKDataLoggerManagerDelegate> delegate;
 

@@ -51,8 +51,8 @@
 {
     [self.gettingStartedButton setEnabled:NO];
     if (self.delegate != nil) {
-        if ([self.delegate respondsToSelector:@selector(stepViewControllerDidFinish:navigationDirection:)] == YES) {
-            [self.delegate stepViewControllerDidFinish:self navigationDirection:RKSTStepViewControllerNavigationDirectionForward];
+        if ([self.delegate respondsToSelector:@selector(stepViewController:didFinishWithNavigationDirection:)] == YES) {
+            [self.delegate stepViewController:self didFinishWithNavigationDirection: RKSTStepViewControllerNavigationDirectionForward];
         }
     }
 }
@@ -66,11 +66,11 @@
 
 - (void)cancelButtonTapped:(id)sender
 {
-    if (self.delegate != nil) {
-        if ([self.delegate respondsToSelector:@selector(stepViewControllerDidCancel:)] == YES) {
-            [self.delegate stepViewControllerDidCancel:self];
-        }
-    }
+//    if (self.delegate != nil) {
+//        if ([self.delegate respondsToSelector:@selector(stepViewControllerDidCancel:)] == YES) {
+//            [self.delegate stepViewControllerDidCancel:self];
+//        }
+//    }
 }
 
 @end

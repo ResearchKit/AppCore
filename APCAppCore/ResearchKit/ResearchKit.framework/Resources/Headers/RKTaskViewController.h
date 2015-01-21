@@ -82,17 +82,22 @@
  * This is intended for modal presentation, so the user can cancel participation in
  * the task at any time.
  */
-@interface RKTaskViewController : UINavigationController<RKStepViewControllerDelegate>
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKTaskViewController : UIViewController<RKStepViewControllerDelegate>
 
 
 /**
- * @brief Designated initializer
+ * @brief Create a new task view controller
  * @param task             The task to be presented.
  * @param taskRunUUID The UUID of this instance of the task
  */
--(instancetype)initWithTask:(id<RKTask>)task taskRunUUID:(NSUUID *)taskRunUUID;
+-(instancetype)initWithTask:(id<RKTask>)task taskRunUUID:(NSUUID *)taskRunUUID  NS_DESIGNATED_INITIALIZER;
 
-@property (nonatomic, weak) id<RKTaskViewControllerDelegate> taskDelegate;
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
+
+@property (nonatomic, weak) id<RKTaskViewControllerDelegate> delegate;
 
 /**
  * @brief Task data source
@@ -155,6 +160,9 @@
  */
 - (void)goBackward;
 
+@property (nonatomic, getter=isNavigationBarHidden) BOOL navigationBarHidden;
+- (void)setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated;
+@property (nonatomic, readonly) UINavigationBar *navigationBar;
 
 @end
 

@@ -34,10 +34,6 @@
     return @"DynamicTask01";
 }
 
-- (NSString *)name{
-    return @"DynamicTask";
-}
-
 - (RKSTStep *)stepAfterStep:(RKSTStep *)step withResult:(id<RKSTTaskResultSource>)result {
     
     NSString *ident = step.identifier;
@@ -51,7 +47,7 @@
         if (result == nil || result.answer == nil || result.answer == [NSNull null]) {
             return nil;
         } else {
-            if ([result.answer isEqualToString:@"route1"])
+            if ([[(NSArray *)result.answer firstObject] isEqualToString:@"route1"])
             {
                 return self.step3a;
             }
@@ -117,7 +113,7 @@
         _step2 = [[RKSTQuestionStep alloc] initWithIdentifier:@"step2"];
         _step2.title = @"Which route do you prefer?";
         _step2.text = @"Please choose from the options below:";
-        _step2.answerFormat = [RKSTChoiceAnswerFormat choiceAnswerWithTextOptions:@[@"route1", @"route2"] style:RKChoiceAnswerStyleSingleChoice];
+        _step2.answerFormat = [RKSTAnswerFormat choiceAnswerFormatWithStyle:RKChoiceAnswerStyleSingleChoice textChoices:@[@"route1", @"route2"]];
         _step2.optional = NO;
     }
     
