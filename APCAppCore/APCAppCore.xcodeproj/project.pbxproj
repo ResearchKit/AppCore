@@ -56,7 +56,7 @@
 		F50738C11A682E12004CF100 /* APCDateRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F50738BF1A682E12004CF100 /* APCDateRange.m */; };
 		F55653B21A6F08E0003E0B0C /* libMobileGestalt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */; };
 		F55653B31A6F0918003E0B0C /* libMobileGestalt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */; };
-		F55654071A6F1364003E0B0C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F55654061A6F1364003E0B0C /* Localizable.strings */; };
+		F556549B1A701337003E0B0C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F556549A1A701337003E0B0C /* Localizable.strings */; };
 		F56BFC8E1A5457000090F4A7 /* SBBGuidCreatedOnVersionHolder+APCAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F56BFC8C1A5457000090F4A7 /* SBBGuidCreatedOnVersionHolder+APCAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F56BFC8F1A5457000090F4A7 /* SBBGuidCreatedOnVersionHolder+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F56BFC8D1A5457000090F4A7 /* SBBGuidCreatedOnVersionHolder+APCAdditions.m */; };
 		F5B1F1A41A33BC8F00C377FB /* NSDictionary+APCAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B1F1A21A33BC8F00C377FB /* NSDictionary+APCAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -407,7 +407,7 @@
 		F5179B2919D09128001DCCB7 /* APCAppCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APCAppCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5179B3419D09128001DCCB7 /* APCAppCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APCAppCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMobileGestalt.dylib; path = usr/lib/libMobileGestalt.dylib; sourceTree = SDKROOT; };
-		F55654061A6F1364003E0B0C /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		F556549A1A701337003E0B0C /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		F56BFC8C1A5457000090F4A7 /* SBBGuidCreatedOnVersionHolder+APCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SBBGuidCreatedOnVersionHolder+APCAdditions.h"; sourceTree = "<group>"; };
 		F56BFC8D1A5457000090F4A7 /* SBBGuidCreatedOnVersionHolder+APCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SBBGuidCreatedOnVersionHolder+APCAdditions.m"; sourceTree = "<group>"; };
 		F5B1F1A21A33BC8F00C377FB /* NSDictionary+APCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+APCAdditions.h"; sourceTree = "<group>"; };
@@ -917,7 +917,6 @@
 		F5F128821A2F78490015982C /* APCAppCore */ = {
 			isa = PBXGroup;
 			children = (
-				F55654061A6F1364003E0B0C /* Localizable.strings */,
 				F5F128831A2F78490015982C /* APCAppCore.h */,
 				F5F128841A2F78490015982C /* DataMonitor */,
 				F5F128891A2F78490015982C /* DataSubstrate */,
@@ -1150,6 +1149,7 @@
 		F5F1291A1A2F78490015982C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F556549A1A701337003E0B0C /* Localizable.strings */,
 				F5F12B1B1A2F78AE0015982C /* Info.plist */,
 				F5F1291B1A2F78490015982C /* update_version.sh */,
 			);
@@ -1818,7 +1818,7 @@
 				F5F12AC21A2F78490015982C /* APCLearn.storyboard in Resources */,
 				F5F12A6E1A2F78490015982C /* TabBar.storyboard in Resources */,
 				F5F12AFF1A2F78490015982C /* APCIntroductionViewController.xib in Resources */,
-				F55654071A6F1364003E0B0C /* Localizable.strings in Resources */,
+				F556549B1A701337003E0B0C /* Localizable.strings in Resources */,
 				F5F12A5B1A2F78490015982C /* APCParameters.storyboard in Resources */,
 				F5F12A921A2F78490015982C /* APCSpinnerViewController.xib in Resources */,
 			);
