@@ -98,6 +98,19 @@ extern NSString *gSBBAppURLPrefix;
 - (NSURLSessionDataTask *)signUpWithEmail:(NSString *)email username:(NSString *)username password:(NSString *)password completion:(SBBNetworkManagerCompletionBlock)completion;
 
 /*!
+ Request Bridge to re-send the email verification link to the specified email address.
+ 
+ A 404 Not Found HTTP status indicates there is no pending verification for that email address,
+ either because it was not used to sign up for an account, or because it has already been verified.
+ 
+ @param email      The email address for which to re-send the verification link.
+ @param completion A SBBNetworkManagerCompletionBlock to be called upon completion.
+ 
+ @return An NSURLSessionDataTask object so you can cancel or suspend/resume the request.
+ */
+- (NSURLSessionDataTask *)resendEmailVerification:(NSString *)email completion:(SBBNetworkManagerCompletionBlock)completion;
+
+/*!
  * Sign in to an existing account with a userName and password.
  *
  * @param username The username of the account being signed into.
