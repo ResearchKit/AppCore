@@ -19,5 +19,6 @@
 - (void)retrieveConsentOnCompletion:(void (^)(NSError *error))completionBlock;
 - (void) withdrawStudyOnCompletion:(void (^)(NSError *error))completionBlock;
 - (void) resumeStudyOnCompletion:(void (^)(NSError *error))completionBlock;
+- (void) resendEmailVerificationOnCompletion:(void (^)(NSError *))completionBlock;
 
 @end

@@ -255,6 +255,33 @@
     }
 }
 
+- (void) resendEmailVerificationOnCompletion:(void (^)(NSError *))completionBlock
+{
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+    }
+    else
+    {
+        if (self.email.length > 0) {
+            [SBBComponent(SBBAuthManager) resendEmailVerification:self.email completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+                if (!error) {
+                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"Bridge Server Aked to resend email verficiation email"}));
+                }
+                if (completionBlock) {
+                    completionBlock(error);
+                }
+            }];
+        }
+        else {
+            if (completionBlock) {
+                completionBlock([NSError errorWithDomain:@"APCAppCoreErrorDomain" code:-100 userInfo:@{NSLocalizedDescriptionKey : @"User email empty"}]);
+            }
+        }
+    }
+}
+
 /*********************************************************************************/
 #pragma mark - Authmanager Delegate Protocol
 /*********************************************************************************/
