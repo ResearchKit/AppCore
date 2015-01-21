@@ -54,6 +54,9 @@
 		F50084931A3A51C000821CB5 /* libFlurry_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5EC85FD1A3A227C00068495 /* libFlurry_5.4.0.a */; };
 		F50738C01A682E12004CF100 /* APCDateRange.h in Headers */ = {isa = PBXBuildFile; fileRef = F50738BE1A682E12004CF100 /* APCDateRange.h */; };
 		F50738C11A682E12004CF100 /* APCDateRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F50738BF1A682E12004CF100 /* APCDateRange.m */; };
+		F55653B21A6F08E0003E0B0C /* libMobileGestalt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */; };
+		F55653B31A6F0918003E0B0C /* libMobileGestalt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */; };
+		F556549B1A701337003E0B0C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F556549A1A701337003E0B0C /* Localizable.strings */; };
 		F56BFC8E1A5457000090F4A7 /* SBBGuidCreatedOnVersionHolder+APCAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F56BFC8C1A5457000090F4A7 /* SBBGuidCreatedOnVersionHolder+APCAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F56BFC8F1A5457000090F4A7 /* SBBGuidCreatedOnVersionHolder+APCAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F56BFC8D1A5457000090F4A7 /* SBBGuidCreatedOnVersionHolder+APCAdditions.m */; };
 		F5B1F1A41A33BC8F00C377FB /* NSDictionary+APCAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B1F1A21A33BC8F00C377FB /* NSDictionary+APCAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -141,8 +144,6 @@
 		F5F12A2D1A2F78490015982C /* NSObject+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128D81A2F78490015982C /* NSObject+Helper.m */; };
 		F5F12A2E1A2F78490015982C /* NSString+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128D91A2F78490015982C /* NSString+Helper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A2F1A2F78490015982C /* NSString+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128DA1A2F78490015982C /* NSString+Helper.m */; };
-		F5F12A301A2F78490015982C /* RKSTTaskResult+Archiver.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128DB1A2F78490015982C /* RKSTTaskResult+Archiver.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F5F12A311A2F78490015982C /* RKSTTaskResult+Archiver.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128DC1A2F78490015982C /* RKSTTaskResult+Archiver.m */; };
 		F5F12A341A2F78490015982C /* UIAlertController+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128DF1A2F78490015982C /* UIAlertController+Helper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A351A2F78490015982C /* UIAlertController+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128E01A2F78490015982C /* UIAlertController+Helper.m */; };
 		F5F12A371A2F78490015982C /* UIImage+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128E21A2F78490015982C /* UIImage+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -405,6 +406,8 @@
 		F50738BF1A682E12004CF100 /* APCDateRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDateRange.m; sourceTree = "<group>"; };
 		F5179B2919D09128001DCCB7 /* APCAppCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APCAppCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5179B3419D09128001DCCB7 /* APCAppCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APCAppCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMobileGestalt.dylib; path = usr/lib/libMobileGestalt.dylib; sourceTree = SDKROOT; };
+		F556549A1A701337003E0B0C /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		F56BFC8C1A5457000090F4A7 /* SBBGuidCreatedOnVersionHolder+APCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SBBGuidCreatedOnVersionHolder+APCAdditions.h"; sourceTree = "<group>"; };
 		F56BFC8D1A5457000090F4A7 /* SBBGuidCreatedOnVersionHolder+APCAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SBBGuidCreatedOnVersionHolder+APCAdditions.m"; sourceTree = "<group>"; };
 		F5B1F1A21A33BC8F00C377FB /* NSDictionary+APCAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+APCAdditions.h"; sourceTree = "<group>"; };
@@ -491,8 +494,6 @@
 		F5F128D81A2F78490015982C /* NSObject+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Helper.m"; sourceTree = "<group>"; };
 		F5F128D91A2F78490015982C /* NSString+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Helper.h"; sourceTree = "<group>"; };
 		F5F128DA1A2F78490015982C /* NSString+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Helper.m"; sourceTree = "<group>"; };
-		F5F128DB1A2F78490015982C /* RKSTTaskResult+Archiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RKSTTaskResult+Archiver.h"; sourceTree = "<group>"; };
-		F5F128DC1A2F78490015982C /* RKSTTaskResult+Archiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RKSTTaskResult+Archiver.m"; sourceTree = "<group>"; };
 		F5F128DF1A2F78490015982C /* UIAlertController+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Helper.h"; sourceTree = "<group>"; };
 		F5F128E01A2F78490015982C /* UIAlertController+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Helper.m"; sourceTree = "<group>"; };
 		F5F128E21A2F78490015982C /* UIImage+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+APCHelper.h"; sourceTree = "<group>"; };
@@ -729,6 +730,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F55653B31A6F0918003E0B0C /* libMobileGestalt.dylib in Frameworks */,
 				F5F12B2F1A2F86600015982C /* libbz2.dylib in Frameworks */,
 				F5F12B2D1A2F86550015982C /* libarchive.dylib in Frameworks */,
 				F5F12B2B1A2F864B0015982C /* libz.dylib in Frameworks */,
@@ -746,6 +748,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F55653B21A6F08E0003E0B0C /* libMobileGestalt.dylib in Frameworks */,
 				089E2E831A6051F600A8FBF3 /* HealthKit.framework in Frameworks */,
 				36B1AAE51A38DEA800CE7DB5 /* Security.framework in Frameworks */,
 				36B1AAE61A38DEAF00CE7DB5 /* SystemConfiguration.framework in Frameworks */,
@@ -1039,8 +1042,6 @@
 				F5F128D81A2F78490015982C /* NSObject+Helper.m */,
 				F5F128D91A2F78490015982C /* NSString+Helper.h */,
 				F5F128DA1A2F78490015982C /* NSString+Helper.m */,
-				F5F128DB1A2F78490015982C /* RKSTTaskResult+Archiver.h */,
-				F5F128DC1A2F78490015982C /* RKSTTaskResult+Archiver.m */,
 				F5F128DF1A2F78490015982C /* UIAlertController+Helper.h */,
 				F5F128E01A2F78490015982C /* UIAlertController+Helper.m */,
 				F5F128E21A2F78490015982C /* UIImage+APCHelper.h */,
@@ -1148,6 +1149,7 @@
 		F5F1291A1A2F78490015982C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F556549A1A701337003E0B0C /* Localizable.strings */,
 				F5F12B1B1A2F78AE0015982C /* Info.plist */,
 				F5F1291B1A2F78490015982C /* update_version.sh */,
 			);
@@ -1540,6 +1542,7 @@
 		F5F12B211A2F85FF0015982C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */,
 				36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */,
 				36C8B3EB1A38D9FF0051096B /* Security.framework */,
 				F5F12B2E1A2F86600015982C /* libbz2.dylib */,
@@ -1588,7 +1591,6 @@
 				F5F12A161A2F78490015982C /* APCAppearanceInfo.h in Headers */,
 				F5F12AF61A2F78490015982C /* APCStepViewController.h in Headers */,
 				5B234E141A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h in Headers */,
-				F5F12A301A2F78490015982C /* RKSTTaskResult+Archiver.h in Headers */,
 				F5F12AFB1A2F78490015982C /* APCInstructionStepViewController.h in Headers */,
 				F5F12A471A2F78490015982C /* APCDayOfMonthSelector.h in Headers */,
 				F5F12A8B1A2F78490015982C /* APCIntroVideoViewController.h in Headers */,
@@ -1816,6 +1818,7 @@
 				F5F12AC21A2F78490015982C /* APCLearn.storyboard in Resources */,
 				F5F12A6E1A2F78490015982C /* TabBar.storyboard in Resources */,
 				F5F12AFF1A2F78490015982C /* APCIntroductionViewController.xib in Resources */,
+				F556549B1A701337003E0B0C /* Localizable.strings in Resources */,
 				F5F12A5B1A2F78490015982C /* APCParameters.storyboard in Resources */,
 				F5F12A921A2F78490015982C /* APCSpinnerViewController.xib in Resources */,
 			);
@@ -1892,7 +1895,6 @@
 				F5F12AF71A2F78490015982C /* APCStepViewController.m in Sources */,
 				F5F12AFE1A2F78490015982C /* APCIntroductionViewController.m in Sources */,
 				F5F12ADD1A2F78490015982C /* APCSegmentedTableViewCell.m in Sources */,
-				F5F12A311A2F78490015982C /* RKSTTaskResult+Archiver.m in Sources */,
 				F50738C11A682E12004CF100 /* APCDateRange.m in Sources */,
 				F5C363611A40E21000113129 /* APCSmartSurveyTask.m in Sources */,
 				F5F12A3E1A2F78490015982C /* APCConstants.m in Sources */,
@@ -2059,6 +2061,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"$(OTHER_LDFLAGS)",
+				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2097,6 +2103,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"$(OTHER_LDFLAGS)",
+				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2240,6 +2250,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"$(OTHER_LDFLAGS)",
+				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";

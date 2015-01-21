@@ -19,7 +19,6 @@
     if (self) {
         [self setUpCoreDataStackWithPersistentStorePath:storePath additionalModels:mergedModels];
         [self setUpCurrentUser:self.persistentContext];
-        [self setUpResearchStudy:studyIdentifier];
         [self setUpHealthKit];
         [self setupParameters];
     }

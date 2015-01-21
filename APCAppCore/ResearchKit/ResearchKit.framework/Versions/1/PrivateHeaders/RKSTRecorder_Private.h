@@ -8,6 +8,7 @@
 
 #import <ResearchKit/ResearchKit_Private.h>
 #import <AVFoundation/AVFoundation.h>
+#import <ResearchKit/RKSTRecorder.h>
 
 
 @class RKSTResult;
@@ -21,6 +22,7 @@
 /**
  * @brief RKSTTouchRecorderConfiguration implements RKSTRecorderConfiguration and able to generate RKSTTouchRecorder instance.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTTouchRecorderConfiguration: RKSTRecorderConfiguration
 
 + (instancetype)configuration;
@@ -32,9 +34,6 @@
 
 - (instancetype)_init;
 
-/**
- * Designated initializer.
- */
 - (instancetype)initWithStep:(RKSTStep*)step
              outputDirectory:(NSURL *)outputDirectory;
 
@@ -52,9 +51,14 @@
 
 @end
 
+
 @interface RKSTRecorderConfiguration()
 
 - (instancetype)_init;
+
+- (RKPermissionMask)requestedPermissionMask;
+
+
 @end
 
 /**
@@ -63,6 +67,7 @@
  * The accelerometer recorder continues to record if the application enters the
  * background using UIApplication's background task support.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTAccelerometerRecorder : RKSTRecorder
 
 /**
@@ -71,12 +76,11 @@
 @property (nonatomic, readonly) double frequency;
 
 /**
- * @brief Designated initializer
  * @param frequency    Accelerometer data collection frequency, unit is hertz (Hz).
  */
 - (instancetype)initWithFrequency:(double)frequency
                              step:(RKSTStep*)step
-                  outputDirectory:(NSURL *)outputDirectory;
+                  outputDirectory:(NSURL *)outputDirectory NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -86,6 +90,7 @@
  * To ensure audio recording continues if a task enters the background, the
  * application should add the "audio" tag to UIBackgroundModes in its Info.plist.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTAudioRecorder : RKSTRecorder
 
 /**
@@ -106,12 +111,11 @@
 @property (nonatomic, copy, readonly) NSDictionary *recorderSettings;
 
 /**
- * @brief Designated initializer
  * @param recorderSettings Settings for the recording session.
  */
 - (instancetype)initWithRecorderSettings:(NSDictionary *)recorderSettings
                                     step:(RKSTStep*)step
-                         outputDirectory:(NSURL *)outputDirectory;
+                         outputDirectory:(NSURL *)outputDirectory NS_DESIGNATED_INITIALIZER;
 
 
 @property (nonatomic, strong, readonly) AVAudioRecorder *audioRecorder;
@@ -123,6 +127,7 @@
  *
  * Just add its customView to view hierarchy to allow the recorder to receive touch events.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTTouchRecorder : RKSTRecorder
 
 /**
@@ -133,6 +138,50 @@
 
 @end
 
+/**
+ * @brief A recorder for collecting location from CoreLocation
+ *
+ * Location data is identifying information and special care should be taken
+ * in handling it or to remove or otherwise prepare it for a
+ * de-identified data set.
+ *
+ * The accuracy of location data may also be limited indoors.
+ */
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTLocationRecorder : RKSTRecorder
+
+
+@end
+
+
+@class RKSTHealthQuantityTypeRecorder;
+
+@protocol RKSTHealthQuantityTypeRecorderDelegate <RKSTRecorderDelegate>
+
+@optional
+
+- (void)healthQuantityTypeRecorderDidUpdate:(RKSTHealthQuantityTypeRecorder *)healthQuantityTypeRecorder;
+
+@end
+
+/**
+ * @brief A recorder for collecting real time sample data from HealthKit during
+ * an active task. (e.g. heart-rate)
+ */
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTHealthQuantityTypeRecorder : RKSTRecorder
+
+@property (nonatomic, readonly, copy) HKQuantityType *quantityType;
+@property (nonatomic, readonly, copy) HKUnit *unit;
+@property (nonatomic, readonly, copy) HKQuantitySample *lastSample;
+
+- (instancetype)initWithHealthQuantityType:(HKQuantityType *)quantityType
+                                      unit:(HKUnit *)unit
+                                      step:(RKSTStep *)step
+                           outputDirectory:(NSURL *)outputDirectory NS_DESIGNATED_INITIALIZER;
+
+@end
+
 
 /**
  * @brief A recorder that requests and collects device motion data from CoreMotion at a fixed frequency.
@@ -140,6 +189,7 @@
  * The motion recorder continues to record if the application enters the
  * background using UIApplication's background task support.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTDeviceMotionRecorder : RKSTRecorder
 
 /**
@@ -148,15 +198,23 @@
 @property (nonatomic, readonly) double frequency;
 
 /**
- * @brief Designated initializer
  * @param frequency    Accelerometer data collection frequency in Hz
  */
 - (instancetype)initWithFrequency:(double)frequency
                              step:(RKSTStep*)step
-                  outputDirectory:(NSURL *)outputDirectory;
+                  outputDirectory:(NSURL *)outputDirectory NS_DESIGNATED_INITIALIZER;
 
 @end
 
+@class RKSTPedometerRecorder;
+
+@protocol RKSTPedometerRecorderDelegate <RKSTRecorderDelegate>
+
+@optional
+
+- (void)pedometerRecorderDidUpdate:(RKSTPedometerRecorder *)pedometerRecorder;
+
+@end
 
 /**
  * @brief A recorder that requests and collects device motion data from CoreMotion at a fixed frequency.
@@ -164,20 +222,15 @@
  * The accelerometer recorder continues to record if the application enters the
  * background using UIApplication's background task support.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTPedometerRecorder : RKSTRecorder
 
-/**
- * @brief Accelerometer data collection frequency from CoreMotion in Hz.
- */
-@property (nonatomic, readonly) double frequency;
+@property (nonatomic, readonly) NSDate *lastUpdateDate;
+@property (nonatomic, readonly) NSInteger totalNumberOfSteps;
+@property (nonatomic, readonly) NSInteger totalDistance; // negative for invalid value
 
-/**
- * @brief Designated initializer
- * @param frequency    Accelerometer data collection frequency in Hz
- */
-- (instancetype)initWithFrequency:(double)frequency
-                             step:(RKSTStep*)step
-                  outputDirectory:(NSURL *)outputDirectory;
+- (instancetype)initWithStep:(RKSTStep*)step
+             outputDirectory:(NSURL *)outputDirectory NS_DESIGNATED_INITIALIZER;
 
 @end
 

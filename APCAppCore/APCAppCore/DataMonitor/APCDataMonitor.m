@@ -52,7 +52,6 @@
 - (void) userConsented
 {
     [(APCAppDelegate*)[UIApplication sharedApplication].delegate setUpCollectors];
-    [self.dataSubstrate joinStudy];
     [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeToday];
     [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeTomorrow];
     [self refreshFromBridgeOnCompletion:^(NSError *error) {

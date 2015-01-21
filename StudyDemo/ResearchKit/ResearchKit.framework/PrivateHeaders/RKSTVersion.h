@@ -9,7 +9,7 @@
 
 
 
-RK_EXTERN const double RKSTVersionNumber;
+RK_EXTERN const double RKSTVersionNumber RKST_AVAILABLE_IOS(8_3);
 
 #define RKSTVersionNumber_Internal_1 0.04
 #define RKSTVersionNumber_Internal_5 0.05
@@ -20,3 +20,5 @@ RK_EXTERN const double RKSTVersionNumber;
 #define RKSTVersionNumber_Internal_10 0.10
 #define RKSTVersionNumber_Internal_11 0.11
 #define RKSTVersionNumber_Internal_12 0.12
+
+#define RKSTVersionNumber_Internal_20 0.20

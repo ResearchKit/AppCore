@@ -9,9 +9,10 @@
 
 @class RKConsentDocument;
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKVisualConsentStep : RKStep
 
-- (instancetype)initWithDocument:(RKConsentDocument *)consentDocument;
+- (instancetype)initWithIdentifier:(NSString *)identifier document:(RKConsentDocument *)consentDocument;
 
 @property (nonatomic, strong) RKConsentDocument *consentDocument;
 

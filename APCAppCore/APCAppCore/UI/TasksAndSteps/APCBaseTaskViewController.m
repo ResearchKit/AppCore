@@ -8,7 +8,6 @@
 #import "APCBaseTaskViewController.h"
 #import "APCAppDelegate.h"
 #import "APCAppCore.h"
-#import "RKSTTaskResult+Archiver.h"
 
 @implementation APCBaseTaskViewController
 
@@ -19,7 +18,7 @@
     NSUUID * taskRunUUID = [NSUUID UUID];
     APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
     controller.scheduledTask = scheduledTask;
-    controller.taskDelegate = controller;
+    controller.delegate = controller;
     return  controller;
 }
 
@@ -104,9 +103,9 @@
 
 - (void) processTaskResult
 {
-    NSString * resultSummary = [self createResultSummary];
-    NSString * archiveFileName = [self.result archiveWithFilePath:self.taskResultsFilePath];
-    [self storeInCoreDataWithFileName:archiveFileName resultSummary:resultSummary];
+//    NSString * resultSummary = [self createResultSummary];
+//    NSString * archiveFileName = nil;//[self.result archiveWithFilePath:self.taskResultsFilePath];
+//    [self storeInCoreDataWithFileName:archiveFileName resultSummary:resultSummary];
 }
 
 - (void) storeInCoreDataWithFileName: (NSString *) fileName resultSummary: (NSString *) resultSummary

@@ -15,11 +15,17 @@
  * of a task, or for a final message at the completion of a task to suggest
  * next steps.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKInstructionStep : RKStep
 
 /**
  * @brief Any detailed explanation for the instruction.
  */
-@property (nonatomic, copy) NSString* detailText;
+@property (nonatomic, copy) NSString *detailText;
+
+/**
+ * @brief An image providing visual context to the instruction.
+ */
+@property (nonatomic, copy) UIImage *image;
 
 @end

@@ -9,6 +9,7 @@
 #import <HealthKit/HealthKit.h>
 #import <ResearchKit/RKErrors.h>
 #import <ResearchKit/RKDataArchive.h>
+#import <ResearchKit/RKDefines.h>
 
 
 
@@ -76,6 +77,7 @@
  * and zero or more background data collectors.
  *
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKStudy : NSObject
 
 /**

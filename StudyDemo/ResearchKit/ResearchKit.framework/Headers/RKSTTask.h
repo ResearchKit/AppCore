@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <ResearchKit/RKSTDefines.h>
 #import <ResearchKit/RKSTStep.h>
 #import <ResearchKit/RKSTResult.h>
 
@@ -13,9 +14,9 @@
 typedef struct _RKSTTaskProgress {
     NSUInteger current;
     NSUInteger total;
-} RKSTTaskProgress;
+} RKSTTaskProgress RKST_AVAILABLE_IOS(8_3);
 
-RKSTTaskProgress RKSTTaskProgressMake(NSUInteger current, NSUInteger total);
+RKSTTaskProgress RKSTTaskProgressMake(NSUInteger current, NSUInteger total) RKST_AVAILABLE_IOS(8_3);
 
 /**
  * @brief The RKSTTask protocol defines a task to be carried out by a participant
@@ -24,6 +25,7 @@ RKSTTaskProgress RKSTTaskProgressMake(NSUInteger current, NSUInteger total);
  * @note Implement this protocol to enable dynamic selection of the steps for a given task.
  *   For simple sequential tasks, RKSTOrderedTask implements this protocol.
  */
+RKST_AVAILABLE_IOS(8_3)
 @protocol RKSTTask <NSObject>
 
 @required
@@ -33,13 +35,13 @@ RKSTTaskProgress RKSTTaskProgressMake(NSUInteger current, NSUInteger total);
  * with the step's identifier in "." separated format (<taskId>.<stepId>) when producing
  * an identifier for the results of a step.
  */
-- (NSString *)identifier;
+@property (nonatomic, copy, readonly) NSString *identifier;
 
 /**
  * @brief Supply the step after a step, if there is any.
  * @param step             Reference step.
  * @param result   Snapshot of the current set of results, for context.
- * @discussion Use surveyResults to determine next step.
+ * @discussion Use the result to determine the next step.
  * @return The step after the reference step, or nil if none.
  */
 - (RKSTStep *)stepAfterStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result;
@@ -56,6 +58,16 @@ RKSTTaskProgress RKSTTaskProgressMake(NSUInteger current, NSUInteger total);
 @optional
 
 /**
+ * @brief Supply the step matching the provided identifier.
+ * @param identifier  The identifier of the step to return.
+ * @discussion Implementing this method allows state restoration of a task
+ * to the particular step. Without this, RKSTTaskViewController will restore
+ * to the first step of the task.
+ * @return The step matching the provided identifier.
+ */
+- (RKSTStep *)stepWithIdentifier:(NSString *)identifier;
+
+/**
  * @brief Progress of current step.
  * @param step            Reference step.
  * @param result  Snapshot of the current set of results, for context.
@@ -67,7 +79,8 @@ RKSTTaskProgress RKSTTaskProgressMake(NSUInteger current, NSUInteger total);
 /**
  * @brief Set of HKObjectType to request for reading from HealthKit during this task.
  */
-- (NSSet *)requestedHealthKitTypesForReading;
+@property (nonatomic, copy, readonly) NSSet *requestedHealthKitTypesForReading;
+
 
 @end
 
@@ -75,16 +88,19 @@ RKSTTaskProgress RKSTTaskProgressMake(NSUInteger current, NSUInteger total);
 /**
  * @brief Simple implementation of RKSTTask, where all steps are presented in order.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTOrderedTask : NSObject <RKSTTask, NSSecureCoding, NSCopying>
 
 /**
- * @brief Designated initializer
+ * @brief Initialize a task
  * @param identifier  Task's unique indentifier.
  * @param steps       An array of steps in fixed order.
  */
 
--(instancetype)initWithIdentifier:(NSString *)identifier
-                            steps:(NSArray *)steps;
+- (instancetype)initWithIdentifier:(NSString *)identifier
+                             steps:(NSArray *)steps NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
 
 @property (nonatomic, copy, readonly) NSArray *steps;
 
@@ -96,7 +112,7 @@ RKSTTaskProgress RKSTTaskProgressMake(NSUInteger current, NSUInteger total);
 typedef NS_OPTIONS(NSUInteger, RKPredefinedTaskOption) {
     RKPredefinedTaskOptionNone = 0,
     
-    RKPredefinedTaskOptionExcludeInstructions = (1),
+    RKPredefinedTaskOptionExcludeInstructions = (1 << 0),
     RKPredefinedTaskOptionExcludeConclusion = (1 << 1),
     
     RKPredefinedTaskOptionExcludeAccelerometer = (1 << 2),
@@ -105,7 +121,7 @@ typedef NS_OPTIONS(NSUInteger, RKPredefinedTaskOption) {
     RKPredefinedTaskOptionExcludeLocation = (1 << 5),
     RKPredefinedTaskOptionExcludeHeartRate = (1 << 6),
     RKPredefinedTaskOptionExcludeAudio = (1 << 7)
-};
+} RK_ENUM_AVAILABLE_IOS(8_3);
 
 
 @interface RKSTOrderedTask(Predefined)
@@ -157,21 +173,27 @@ typedef NS_OPTIONS(NSUInteger, RKPredefinedTaskOption) {
  Data collected: accelerometer, device motion, pedometer.
  
  @param identifier    Task identifier to use for this task, appropriate to the study
- @param intendedUse   Localized string describing the intended use of the data collected.
+ 
+ @param intendedUseDescription   Localized string describing the intended use of the data collected.
  If nil, the default text will be displayed.
- @param numberOfTurns Number of times the user should turn around
+ 
  @param numberOfSteps Number of steps the participant should be asked to walk.
  On devices where pedometer is unavailable, a distance will be suggested
  and a suitable countdown timer is displayed instead for each leg.
+ 
+ @param restDuration  If non-zero, when the turn sequence has been completed, the
+ user is asked to stand still for a period in order to collect baseline data.
+ 
  @param options       Options affecting the features of the predefined task.
+ 
  @return An active task which can be presented with RKSTTaskViewController.
  
  */
 + (RKSTOrderedTask *)shortWalkTaskWithIdentifier:(NSString *)identifier
-                 intendedUseDescription:(NSString *)intendedUseDescription
-                          numberOfTurns:(NSInteger)numberOfTurns
-                    numberOfStepsPerLeg:(NSInteger)numberOfSteps
-                                options:(RKPredefinedTaskOption)options;
+                        intendedUseDescription:(NSString *)intendedUseDescription
+                           numberOfStepsPerLeg:(NSInteger)numberOfStepsPerLeg
+                                  restDuration:(NSTimeInterval)restDuration
+                                       options:(RKPredefinedTaskOption)options;
 
 
 /**
@@ -188,19 +210,21 @@ typedef NS_OPTIONS(NSUInteger, RKPredefinedTaskOption) {
  @param identifier        Task identifier to use for this task, appropriate to the study.
  @param intendedUse       Localized string describing the intended use of the data collected.
  @param speechInstruction Instruction describing what kind of sound to make.
- @param speechExampleFileURL File URL to an audio file giving an example of speech.
+ @param shortSpeechInstruction  Short instruction to be displayed while sound is being collected.
  @param duration          Length of the countdown timer while collecting audio data.
+ @param recordingSettings See "AV Foundation Audio Settings Constants".
  @param options           Options affecting the features of the predefined task.
  @return An active task which can be presented with RKSTTaskViewController.
  
  */
 
 + (RKSTOrderedTask *)audioTaskWithIdentifier:(NSString *)identifier
-             intendedUseDescription:(NSString *)intendedUseDescription
-                  speechInstruction:(NSString *)speechInstruction
-               speechExampleFileURL:(NSURL *)speechExampleFileURL
-                           duration:(NSTimeInterval)duration
-                            options:(RKPredefinedTaskOption)options;
+                    intendedUseDescription:(NSString *)intendedUseDescription
+                         speechInstruction:(NSString *)speechInstruction
+                    shortSpeechInstruction:(NSString *)shortSpeechInstruction
+                                  duration:(NSTimeInterval)duration
+                         recordingSettings:(NSDictionary *)recordingSettings
+                                   options:(RKPredefinedTaskOption)options;
 
 
 /**
@@ -221,10 +245,10 @@ typedef NS_OPTIONS(NSUInteger, RKPredefinedTaskOption) {
  @return An active task which can be presented with RKSTTaskViewController.
  
  */
-+ (RKSTOrderedTask *)twoFingerTappingTaskWithIdentifier:(NSString *)identifier
-                        intendedUseDescription:(NSString *)intendedUseDescription
-                                      duration:(NSTimeInterval)duration
-                                       options:(RKPredefinedTaskOption)options;
++ (RKSTOrderedTask *)twoFingerTappingIntervalTaskWithIdentifier:(NSString *)identifier
+                                       intendedUseDescription:(NSString *)intendedUseDescription
+                                                     duration:(NSTimeInterval)duration
+                                                      options:(RKPredefinedTaskOption)options;
 
 /**
  @brief Predefined task - Spatial span memory

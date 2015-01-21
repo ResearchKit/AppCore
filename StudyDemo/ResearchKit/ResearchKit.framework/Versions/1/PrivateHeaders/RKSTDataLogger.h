@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <ResearchKit/RKSTDefines.h>
 
 
 typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
@@ -13,7 +14,7 @@ typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
     RKFileProtectionCompleteUntilFirstUserAuthentication,
     RKFileProtectionCompleteUnlessOpen,
     RKFileProtectionComplete
-};
+} RK_ENUM_AVAILABLE_IOS(8_3);
 
 @class RKSTDataLogger;
 @class HKUnit;
@@ -55,6 +56,7 @@ typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
  * The user is responsible for managing the historic log files, but the RKSTDataLogger
  * provides tools for enumerating them (in sorted order).
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTDataLogger : NSObject
 
 /**
@@ -67,8 +69,7 @@ typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
  */
 + (RKSTDataLogger *)JSONDataLoggerWithDirectory:(NSURL *)url logName:(NSString *)logName delegate:(id<RKSTDataLoggerDelegate>)delegate;
 
-// Designated initializer.
-- (instancetype)initWithDirectory:(NSURL *)url logName:(NSString *)logName formatter:(RKSTLogFormatter *)formatter delegate:(id<RKSTDataLoggerDelegate>)delegate;
+- (instancetype)initWithDirectory:(NSURL *)url logName:(NSString *)logName formatter:(RKSTLogFormatter *)formatter delegate:(id<RKSTDataLoggerDelegate>)delegate NS_DESIGNATED_INITIALIZER;
 
 @property (weak) id<RKSTDataLoggerDelegate> delegate;
 
@@ -201,6 +202,7 @@ typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
  * In addition to NSDictionary, also accepts CMMotionActivity and HKSample, converting
  * these to a dictionary before output.
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTJSONLogFormatter : RKSTLogFormatter
 
 @end
@@ -210,6 +212,7 @@ typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
 @class RKSTDataLoggerManager;
 
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @protocol RKSTDataLoggerManagerDelegate <NSObject>
 
 /**
@@ -248,10 +251,10 @@ typedef NS_ENUM(NSInteger, RKFileProtectionMode) {
  * threshold is no longer exceeded. Use -removeOldAndUploadedLogsToThreshold:error:
  *
  */
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTDataLoggerManager : NSObject<RKSTDataLoggerDelegate>
 
-/// Designated initializer.
-- (instancetype)initWithDirectory:(NSURL *)directory delegate:(id<RKSTDataLoggerManagerDelegate>)delegate;
+- (instancetype)initWithDirectory:(NSURL *)directory delegate:(id<RKSTDataLoggerManagerDelegate>)delegate NS_DESIGNATED_INITIALIZER;
 
 @property (weak) id<RKSTDataLoggerManagerDelegate> delegate;
 

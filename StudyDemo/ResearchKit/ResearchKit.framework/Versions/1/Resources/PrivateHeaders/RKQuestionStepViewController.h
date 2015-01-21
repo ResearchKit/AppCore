@@ -6,12 +6,14 @@
 //
 
 #import <ResearchKit/RKStepViewController.h>
+#import <ResearchKit/RKDefines.h>
 
 @class RKQuestionResult;
 @class RKQuestionStep;
 @class RKQuestionStepCustomView;
 
 
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKQuestionStepViewController : RKStepViewController
 
 
