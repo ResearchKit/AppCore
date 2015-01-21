@@ -18,7 +18,7 @@
 		</data>
 		<key>Headers/SBBAuthManager.h</key>
 		<data>
-		bqz4M4r8/V7QLR7+DXlSE9U/ppw=
+		4EAVp9+15nkzLs2tti1LhEo+rhM=
 		</data>
 		<key>Headers/SBBBooleanConstraints.h</key>
 		<data>
@@ -262,7 +262,7 @@
 		</data>
 		<key>Headers/_SBBUserProfile.h</key>
 		<data>
-		ef5Y+BqKemG4KwPqjPyFgCpiXaU=
+		hF8pJZaXkulosXTY6ErNrM4OhpU=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -274,11 +274,11 @@
 		</data>
 		<key>SBBDataModel.momd/SBBDataModel.mom</key>
 		<data>
-		qt2kZ/2NrSQ948d32YpOkOL+mJQ=
+		+WcQV/d+rNMgZsrzgnfWiI+HrWA=
 		</data>
 		<key>SBBDataModel.momd/VersionInfo.plist</key>
 		<data>
-		Kz9dOGbxydQ4bSPIQG6w5rfSbSU=
+		5nQsuc4aP2uzqVyAbUyq7z9hoxc=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -297,7 +297,7 @@
 		</data>
 		<key>Headers/SBBAuthManager.h</key>
 		<data>
-		bqz4M4r8/V7QLR7+DXlSE9U/ppw=
+		4EAVp9+15nkzLs2tti1LhEo+rhM=
 		</data>
 		<key>Headers/SBBBooleanConstraints.h</key>
 		<data>
@@ -541,7 +541,7 @@
 		</data>
 		<key>Headers/_SBBUserProfile.h</key>
 		<data>
-		ef5Y+BqKemG4KwPqjPyFgCpiXaU=
+		hF8pJZaXkulosXTY6ErNrM4OhpU=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -549,11 +549,11 @@
 		</data>
 		<key>SBBDataModel.momd/SBBDataModel.mom</key>
 		<data>
-		qt2kZ/2NrSQ948d32YpOkOL+mJQ=
+		+WcQV/d+rNMgZsrzgnfWiI+HrWA=
 		</data>
 		<key>SBBDataModel.momd/VersionInfo.plist</key>
 		<data>
-		Kz9dOGbxydQ4bSPIQG6w5rfSbSU=
+		5nQsuc4aP2uzqVyAbUyq7z9hoxc=
 		</data>
 	</dict>
 	<key>rules</key>

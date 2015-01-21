@@ -62,6 +62,9 @@
     
     [self.changeEmailButton.titleLabel setFont:[UIFont appRegularFontWithSize:12.0f]];
     [self.changeEmailButton setTitleColor:[UIColor appSecondaryColor3] forState:UIControlStateNormal];
+    
+    [self.resendEmailButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.resendEmailButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
 }
 
 - (void) checkSignIn
@@ -122,8 +125,19 @@
 {
     
 }
+
 - (IBAction)secretButton:(id)sender
 {
     self.user.signedIn = YES;
 }
+
+- (IBAction)resendEmail:(id)sender
+{
+    [self.user resendEmailVerificationOnCompletion:^(NSError *error) {
+        if (error != nil) {
+            APCLogError2 (error);
+        }
+     }];
+}
+
 @end
