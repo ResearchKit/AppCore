@@ -16,4 +16,6 @@
 
 @interface _SBBDurationConstraints : SBBSurveyConstraints
 
+@property (nonatomic, strong) NSString* unit;
+
 @end
