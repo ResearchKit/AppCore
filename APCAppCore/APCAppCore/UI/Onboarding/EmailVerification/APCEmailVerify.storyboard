@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="h61-jT-BHu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="h61-jT-BHu">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -103,12 +103,27 @@ the link included in the message.</string>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cVc-Jw-LIH">
+                                <rect key="frame" x="24" y="480" width="273" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="emJ-QS-ca3"/>
+                                    <constraint firstAttribute="width" constant="273" id="rkR-Zp-gnM"/>
+                                </constraints>
+                                <state key="normal" title="Tap to Resend Verification E-Mail">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="resendEmail:" destination="h61-jT-BHu" eventType="touchUpInside" id="QrR-zk-AgC"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="3xK-c0-Pah" secondAttribute="trailing" constant="7" id="3eD-Fs-Kle"/>
                             <constraint firstItem="gTc-ni-boB" firstAttribute="top" secondItem="yX7-Jl-zxX" secondAttribute="bottom" constant="8" id="6bZ-BZ-HfF"/>
                             <constraint firstItem="WLq-Ms-OSK" firstAttribute="leading" secondItem="tTU-aB-ynX" secondAttribute="trailing" constant="-50" id="7Mx-4P-E6Y"/>
+                            <constraint firstItem="cVc-Jw-LIH" firstAttribute="top" secondItem="gTc-ni-boB" secondAttribute="bottom" constant="19" id="9ue-GP-Hsm"/>
+                            <constraint firstAttribute="centerX" secondItem="cVc-Jw-LIH" secondAttribute="centerX" constant="-0.5" id="A2m-L2-YjN"/>
                             <constraint firstItem="gY2-y5-fND" firstAttribute="trailing" secondItem="Kj1-kb-LF2" secondAttribute="trailingMargin" id="Du9-o5-KKO"/>
                             <constraint firstItem="yX7-Jl-zxX" firstAttribute="top" secondItem="1aj-Cn-g1q" secondAttribute="bottom" constant="-5" id="F0t-fC-eKP"/>
                             <constraint firstAttribute="centerY" secondItem="tTU-aB-ynX" secondAttribute="centerY" constant="84" id="RlR-xX-Tpq"/>
@@ -135,6 +150,7 @@ the link included in the message.</string>
                         <outlet property="emailLabel" destination="3xK-c0-Pah" id="JpR-EY-Kpw"/>
                         <outlet property="logoImageView" destination="tTU-aB-ynX" id="xhh-SA-ugB"/>
                         <outlet property="middleMessageLabel" destination="1aj-Cn-g1q" id="8Lq-Yw-1So"/>
+                        <outlet property="resendEmailButton" destination="cVc-Jw-LIH" id="lPI-nw-88V"/>
                         <outlet property="topMessageLabel" destination="hsa-BE-Hkq" id="0Mn-zg-XPa"/>
                     </connections>
                 </viewController>

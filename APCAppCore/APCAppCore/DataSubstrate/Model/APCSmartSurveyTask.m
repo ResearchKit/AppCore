@@ -484,6 +484,8 @@ static APCDummyObject * _dummyObject;
         SBBIntegerConstraints * integerConstraint = (SBBIntegerConstraints*) constraints;
         if (integerConstraint.maxValue && integerConstraint.minValue) {
             NSInteger stepValue = (integerConstraint.step != nil && [integerConstraint.step integerValue] > 0) ? [integerConstraint.step integerValue] : 1;
+            NSInteger newStepValue = (NSInteger)((double)[integerConstraint.maxValue integerValue] - (double)[integerConstraint.minValue integerValue]) / 10.0;
+            stepValue = MAX(newStepValue, stepValue);
             retValue = [RKSTScaleAnswerFormat scaleAnswerFormatWithMaxValue:[integerConstraint.maxValue integerValue] minValue:[integerConstraint.minValue integerValue] step:stepValue defaultValue:0];
         }
         else

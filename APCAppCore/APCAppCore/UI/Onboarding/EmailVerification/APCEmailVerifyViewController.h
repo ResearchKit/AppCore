@@ -22,6 +22,8 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *changeEmailButton;
 
+@property (weak, nonatomic) IBOutlet UIButton *resendEmailButton;
+
 - (IBAction)changeEmailAddress:(id)sender;
 
 @end

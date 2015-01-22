@@ -62,6 +62,9 @@
     
     [self.changeEmailButton.titleLabel setFont:[UIFont appRegularFontWithSize:12.0f]];
     [self.changeEmailButton setTitleColor:[UIColor appSecondaryColor3] forState:UIControlStateNormal];
+    
+    [self.resendEmailButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.resendEmailButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
 }
 
 - (void) checkSignIn
@@ -75,7 +78,8 @@
             else if (error.code == 404)
             {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    NSLog(@"Checking Server Again...");
+                    APCLogDebug(@"Checking Server Again");
+                    APCLogEventWithData(kNetworkEvent, @{@"event_detail":@"Checking Bridgeserver for email verification of current user"});
                     [weakSelf checkSignIn];
                 });
             }
@@ -122,8 +126,19 @@
 {
     
 }
+
 - (IBAction)secretButton:(id)sender
 {
     self.user.signedIn = YES;
 }
+
+- (IBAction)resendEmail:(id)sender
+{
+    [self.user resendEmailVerificationOnCompletion:^(NSError *error) {
+        if (error != nil) {
+            APCLogError2 (error);
+        }
+     }];
+}
+
 @end

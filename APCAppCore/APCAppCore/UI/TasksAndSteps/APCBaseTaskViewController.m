@@ -103,9 +103,9 @@
 
 - (void) processTaskResult
 {
-//    NSString * resultSummary = [self createResultSummary];
+    NSString * resultSummary = [self createResultSummary];
 //    NSString * archiveFileName = nil;//[self.result archiveWithFilePath:self.taskResultsFilePath];
-//    [self storeInCoreDataWithFileName:archiveFileName resultSummary:resultSummary];
+    [self storeInCoreDataWithFileName:@"" resultSummary:resultSummary];
 }
 
 - (void) storeInCoreDataWithFileName: (NSString *) fileName resultSummary: (NSString *) resultSummary
