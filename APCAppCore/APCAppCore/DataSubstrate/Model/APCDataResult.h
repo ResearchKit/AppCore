@@ -9,6 +9,5 @@
 
 @interface APCDataResult : RKSTResult
 
-@property (nonatomic, copy) NSData *data;
-
+@property (nonatomic, strong) NSData *data;
 @end
