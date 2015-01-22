@@ -504,7 +504,7 @@ static APCDummyObject * _dummyObject;
             retValue = [RKSTScaleAnswerFormat scaleAnswerFormatWithMaxValue:[integerConstraint.maxValue integerValue] minValue:[integerConstraint.minValue integerValue] step:stepValue defaultValue:0];
             }
             else {
-                RKSTNumericAnswerFormat * format = [RKSTNumericAnswerFormat integerAnswerWithUnit:nil];
+                RKSTNumericAnswerFormat * format = (integerConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat integerAnswerWithUnit:integerConstraint.unit] : [RKSTNumericAnswerFormat integerAnswerWithUnit:nil];
                 format.maximum = integerConstraint.maxValue;
                 format.minimum = integerConstraint.minValue;
                 retValue = format;
@@ -513,20 +513,20 @@ static APCDummyObject * _dummyObject;
         }
         else
         {
-            retValue = [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:nil];
+            retValue = (integerConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat integerAnswerWithUnit:integerConstraint.unit] : [RKSTNumericAnswerFormat integerAnswerWithUnit:nil];
         }
     }
     else if ([constraints isKindOfClass:[SBBDecimalConstraints class]]) {
         SBBDecimalConstraints * decimalConstraint = (SBBDecimalConstraints*) constraints;
         if (decimalConstraint.maxValue && decimalConstraint.minValue) {
-            RKSTNumericAnswerFormat * format = [RKSTNumericAnswerFormat decimalAnswerWithUnit:nil];
+            RKSTNumericAnswerFormat * format = (decimalConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat decimalAnswerWithUnit:decimalConstraint.unit] : [RKSTNumericAnswerFormat decimalAnswerWithUnit:nil];
             format.maximum = decimalConstraint.maxValue;
             format.minimum = decimalConstraint.minValue;
             retValue = format;
         }
         else
         {
-            retValue = [RKSTNumericAnswerFormat decimalAnswerWithUnit:nil];
+            retValue = (decimalConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat decimalAnswerWithUnit:decimalConstraint.unit] : [RKSTNumericAnswerFormat decimalAnswerWithUnit:nil];
         }
     }
     return retValue;
