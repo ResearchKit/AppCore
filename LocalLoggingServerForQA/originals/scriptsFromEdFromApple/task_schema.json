@@ -1,0 +1,197 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title" : "RKTask",
+    "description" : "A ResearchKit task",
+    "type": "object",
+    
+    "definitions": {
+	"RKAnswerOption" : {
+	    "type" : "object",
+	    "required" : [ "_class" ],
+	    "properties" : {
+		"_class" : {
+		    "type" : "string",
+		    "pattern" : "RKAnswerOption"
+		},
+		"shortText" : { "type" : "string" },
+		"longText" : { "type" : "string" }
+	    }
+	},
+	"RKTextAnswerFormat" : {
+	    "type" : "object",
+	    "required" : [ "_class" ],
+	    "properties" : {
+		"_class" : {
+		    "type" : "string",
+		    "pattern" : "RKTextAnswerFormat"
+		}
+	    }
+	},
+	"RKTimeIntervalAnswerFormat" : {
+	    "type" : "object",
+	    "required" : [ "_class" ],
+	    "properties" : {
+		"_class" : {
+		    "type" : "string",
+		    "pattern" : "RKTimeIntervalAnswerFormat"
+		}
+	    }
+	},
+	"RKScaleAnswerFormat" : {
+	    "type" : "object",
+	    "required" : [ "_class" ],
+	    "properties" : {
+		"_class" : {
+		    "type" : "string",
+		    "pattern" : "RKScaleAnswerFormat"
+		},
+		"scaleMax" : { "type" : "number" },
+		"scaleMin" : { "type" : "number" }
+	    }
+	},
+	"RKNumericAnswerFormat" : {
+	    "type" : "object",
+	    "required" : [ "_class" ],
+	    "properties" : {
+		"_class" : {
+		    "type" : "string",
+		    "pattern" : "RKNumericAnswerFormat"
+		},
+		"style" : {
+		    "type" : "string",
+		    "pattern" : "(decimal|integer)"
+		},
+		"unit" : { "type" : "string" }
+	    }
+	},
+	"RKDateAnswerFormat" : {
+	    "type" : "object",
+	    "required" : [ "_class" ],
+	    "properties" : {
+		"_class" : {
+		    "type" : "string",
+		    "pattern" : "RKDateAnswerFormat"
+		},
+		"style" : {
+		    "type" : "string",
+		    "pattern" : "(dateTime|time|date)"
+		}
+	    }
+	},
+	"RKChoiceAnswerFormat" : {
+	    "type" : "object",
+	    "required" : [ "_class", "style" ],
+	    "properties" : {
+		"_class" : {
+		    "type" : "string",
+		    "pattern" : "RKChoiceAnswerFormat"
+		},
+		"style" : {
+		    "type" : "string",
+		    "pattern" : "(multipleChoice|singleChoice)"
+		},
+		"options" : {
+		    "type" : "array",
+		    "items" : { "$ref" : "#/definitions/RKAnswerOption" }
+		}
+	    }
+	},
+	"RKAnswerFormat" : {
+	    "type" : "object",
+	    "oneOf" : [
+		{ "$ref" : "#/definitions/RKScaleAnswerFormat" },
+		{ "$ref" : "#/definitions/RKChoiceAnswerFormat" },
+		{ "$ref" : "#/definitions/RKNumericAnswerFormat" },
+		{ "$ref" : "#/definitions/RKTextAnswerFormat" },
+		{ "$ref" : "#/definitions/RKTimeIntervalAnswerFormat" },
+		{ "$ref" : "#/definitions/RKDateAnswerFormat" }
+	    ]
+	},
+	"RKRecorderConfiguration" : {
+	    "type" : "object",
+	    "required" : [ "_class" ],
+	    "properties" : {
+		"_class" : {
+		    "type" : "string",
+		    "pattern" : "(RKTouchRecorderConfiguration|RKAudioRecorderConfiguration|RKAccelerometerRecorderConfiguration)"
+		},
+		"frequency" : { "type" : "number" }
+	    }
+	},
+	"RKQuestionStep" : {
+	    "type" : "object",
+	    "required" : [ "_class", "identifier" ],
+	    "properties" : {
+		"_class" : {
+		    "type" : "string",
+		    "pattern" : "RKQuestionStep"
+		},
+		"identifier" : { "type" : "string" },
+		"optional" : { "type" : "boolean" },
+		"question" : { "type" : "string" },
+		"prompt" : { "type" : "string" },
+		"answerFormat" : { "$ref" : "#/definitions/RKAnswerFormat" }
+	    }
+	},
+	"RKActiveStep" : {
+	    "type" : "object",
+	    "required" : [ "_class", "identifier" ],
+	    "properties" : {
+		"_class" : {
+		    "type" : "string",
+		    "pattern" : "RKActiveStep"
+		},
+		"identifier" : { "type" : "string" },
+		"recorderConfigurations" : {
+		    "type" : "array",
+		    "items" : { "$ref" : "#/definitions/RKRecorderConfiguration" }
+		},
+		"countDown" : { "type" : "integer" },
+		"voicePrompt" : { "type" : "string" },
+		"vibration" : { "type" : "boolean" },
+		"buzz" : { "type" : "boolean" }
+	    }
+	},
+	"RKConsentStep" : {
+	    "type" : "object",
+	    "required" : [ "_class", "identifier" ],
+	    "properties" : {
+		"_class" : {
+		    "type" : "string",
+		    "pattern" : "RKConsentStep"
+		}
+	    }
+	},
+	"RKStep" : {
+	    "type" : "object",
+	    "oneOf" : [
+		{ "$ref" : "#/definitions/RKQuestionStep" },
+		{ "$ref" : "#/definitions/RKActiveStep" },
+		{ "$ref" : "#/definitions/RKConsentStep" }
+	    ]
+	}
+    },
+    
+    "required" : [ "_class", "identifier" ],
+    "properties": {
+	"_class" : {
+	    "type" : "string",
+	    "minLength" : 1,
+	    "pattern" : "RKTask"
+	},
+	"name" : {
+	    "type" : "string"
+	},
+	"identifier" : {
+	    "type" : "string",
+	    "minLength" : 1
+	},
+	"steps" : {
+	    "type" : "array",
+	    "items" : {
+		"$ref" : "#/definitions/RKStep"
+	    }
+	}
+    }
+}
+

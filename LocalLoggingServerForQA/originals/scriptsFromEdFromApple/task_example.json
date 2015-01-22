@@ -1,0 +1,41 @@
+{
+  "name" : "name",
+  "_class" : "RKTask",
+  "steps" : [
+    {
+      "countDown" : 100,
+      "recorderConfigurations" : [
+        {
+          "frequency" : 11,
+          "_class" : "RKAccelerometerRecorderConfiguration"
+        },
+        {
+          "_class" : "RKTouchRecorderConfiguration"
+        },
+        {
+          "_class" : "RKAudioRecorderConfiguration"
+        }
+      ],
+      "name" : "name",
+      "_class" : "RKActiveStep",
+      "vibration" : true,
+      "identifier" : "id",
+      "buzz" : true
+    },
+    {
+      "name" : "name",
+      "answerFormat" : {
+        "options" : [
+
+        ],
+        "style" : "multipleChoice",
+        "_class" : "RKChoiceAnswerFormat"
+      },
+      "_class" : "RKQuestionStep",
+      "optional" : true,
+      "identifier" : "id",
+      "question" : "question"
+    }
+  ],
+  "identifier" : "id"
+}
