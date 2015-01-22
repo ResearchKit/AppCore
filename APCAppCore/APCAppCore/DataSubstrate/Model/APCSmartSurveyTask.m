@@ -504,7 +504,7 @@ static APCDummyObject * _dummyObject;
             retValue = [RKSTScaleAnswerFormat scaleAnswerFormatWithMaxValue:[integerConstraint.maxValue integerValue] minValue:[integerConstraint.minValue integerValue] step:stepValue defaultValue:0];
             }
             else {
-                RKSTNumericAnswerFormat * format = (integerConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat integerAnswerWithUnit:integerConstraint.unit] : [RKSTNumericAnswerFormat integerAnswerWithUnit:nil];
+                RKSTNumericAnswerFormat * format = (integerConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:integerConstraint.unit] : [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:nil];
                 format.maximum = integerConstraint.maxValue;
                 format.minimum = integerConstraint.minValue;
                 retValue = format;
@@ -513,20 +513,20 @@ static APCDummyObject * _dummyObject;
         }
         else
         {
-            retValue = (integerConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat integerAnswerWithUnit:integerConstraint.unit] : [RKSTNumericAnswerFormat integerAnswerWithUnit:nil];
+            retValue = (integerConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:integerConstraint.unit] : [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:nil];
         }
     }
     else if ([constraints isKindOfClass:[SBBDecimalConstraints class]]) {
         SBBDecimalConstraints * decimalConstraint = (SBBDecimalConstraints*) constraints;
         if (decimalConstraint.maxValue && decimalConstraint.minValue) {
-            RKSTNumericAnswerFormat * format = (decimalConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat decimalAnswerWithUnit:decimalConstraint.unit] : [RKSTNumericAnswerFormat decimalAnswerWithUnit:nil];
+            RKSTNumericAnswerFormat * format = (decimalConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat decimalAnswerFormatWithUnit:decimalConstraint.unit] : [RKSTNumericAnswerFormat decimalAnswerFormatWithUnit:nil];
             format.maximum = decimalConstraint.maxValue;
             format.minimum = decimalConstraint.minValue;
             retValue = format;
         }
         else
         {
-            retValue = (decimalConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat decimalAnswerWithUnit:decimalConstraint.unit] : [RKSTNumericAnswerFormat decimalAnswerWithUnit:nil];
+            retValue = (decimalConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat decimalAnswerFormatWithUnit:decimalConstraint.unit] : [RKSTNumericAnswerFormat decimalAnswerFormatWithUnit:nil];
         }
     }
     return retValue;
