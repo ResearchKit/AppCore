@@ -15,7 +15,7 @@ require 'fileutils'
 disable :logging
 set :bind, '0.0.0.0'
 base_url_path = '/api/v1'
-destination_directory = "~/Desktop/localLoggingServerOutput"
+destination_directory = File.expand_path("~/Desktop/localLoggingServerOutput")
 output_logging_filename = "output.txt"
 
 #
@@ -78,6 +78,31 @@ end
 
 
 #
+# Experimenting
+#
+
+post "#{base_url_path}/ronTest/:content" do
+	FileUtils.mkdir_p(destination_directory)
+	# puts "#{params}"
+	
+	filename = File.join(destination_directory, output_logging_filename)
+	datafile = params[:content]
+	
+	# FileUtils.append(datafile, filename)	
+	# FileUtils.copy(datafile[:tempfile], filename)
+	# file = File.open (filename, "a")	# append-only, creates if not there
+	# File.write (filename, "test string", null, {mode: "a"})
+	
+	File.open(filename, "a") { |theFile|
+		theFile.write("here is some text\n")
+	}
+	
+	# "wrote to #{filename}\n"
+	[200, {results: "wrote to #{filename}"}.to_json]
+end
+
+
+#
 # Catch All
 #
 
@@ -101,26 +126,11 @@ end
 # if this rule goes first, the other rules don't
 # run.
 get "*" do
-	[200, {error: "I didn't understand that command."}.to_json]
+	[200, {error: "I didn't understand that GET request."}.to_json]
 end
 
-
-#
-# Experimenting
-#
-
-# Doesn't work yet.
-get "#{base_url_path}/testWrite/:content" do
-	FileUtils.mkdir_p(destination_directory)
-	puts "#{params}"
-	filename = File.join(destination_directory, output_logging_filename)
-	datafile = params[:content]
-	FileUtils.append(datafile[:tempfile], filename)
-	"wrote to #{filename}\n"
-	200
+post "*" do
+	[200, {error: "I didn't understand that POST command."}.to_json]
 end
-
-
-
 
 
