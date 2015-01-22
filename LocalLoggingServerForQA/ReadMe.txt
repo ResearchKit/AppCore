@@ -1,3 +1,18 @@
+------------
+Tracking what works.
+------------
+
+Sinatra help files:  http://www.sinatrarb.com/intro.html
+Accessing the Request object:  http://www.sinatrarb.com/intro.html#Accessing%20the%20Request%20Object
+
+using curl to post a file with a specified name: http://stackoverflow.com/questions/3007253/send-post-xml-file-using-curl-command-line
+
+
+
+
+------------
+The ReadMe file, in progress
+------------
 Hello, friendly QA people!  Ron here.
 
 Here's how to use this server.

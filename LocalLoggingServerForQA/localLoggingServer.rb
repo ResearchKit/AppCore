@@ -2,8 +2,11 @@
 # Hacked up by Ron Conescu on 2015-Jan-22.
 # Copyright (c) 2015 Y Media Labs. All rights reserved.
 #
-# To install Sinatra, type this at the command line:
+# To install Sinatra, type these at the command line:
 # 	$ sudo gem install sinatra
+# 	# sudo gem install thin
+#
+# ("thin" is the web server that Sinatra prefers.)
 #
 # Then to run this program, simply type
 # 	$ ruby server_mockup.rb
@@ -81,12 +84,24 @@ end
 # Experimenting
 #
 
+
+# Yay!  Ok.  When I use curl to transmit a specific file (in my local directory) with the name "ronCustomFileContents", as follows:
+# 		curl "http://localhost:4567/api/v1/ronTest/:whatever?one=1&two=2" -F ronCustomFileContents=@simpleFileToUpload.txt
+#
+# ...I can then extract it to a string with the code below:
+# 		data = params[:ronCustomFileContents][:tempfile].read
+#
+# ...and when I use tail -f on the file "filename" (below),
+# the results are indeed the contents of the file I wanted
+# to upload.
+#
 post "#{base_url_path}/ronTest/:content" do
 	FileUtils.mkdir_p(destination_directory)
 	# puts "#{params}"
 	
 	filename = File.join(destination_directory, output_logging_filename)
-	datafile = params[:content]
+	# data = params[:ronCustomFileContents]
+	data = params[:ronCustomFileContents][:tempfile].read
 	
 	# FileUtils.append(datafile, filename)	
 	# FileUtils.copy(datafile[:tempfile], filename)
@@ -94,7 +109,15 @@ post "#{base_url_path}/ronTest/:content" do
 	# File.write (filename, "test string", null, {mode: "a"})
 	
 	File.open(filename, "a") { |theFile|
-		theFile.write("here is some text\n")
+		# theFile.write("here is some text. Did we get form data? #{request.env}\n")
+		
+		# envData = request.env
+		# rackData = envData["rack"]
+		# dataToPrint = envData
+		# theFile.write("here is some text. Did we get form data? #{dataToPrint}\n")
+		
+		# theFile.write("here is some text. Did we get form data? #{params}\n")
+		theFile.write("here is some text. Did we get form data? #{data}\n")
 	}
 	
 	# "wrote to #{filename}\n"
