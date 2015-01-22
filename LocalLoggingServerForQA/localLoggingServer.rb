@@ -20,6 +20,7 @@ set :bind, '0.0.0.0'
 base_url_path = '/api/v1'
 destination_directory = File.expand_path("~/Desktop/localLoggingServerOutput")
 output_logging_filename = "output.txt"
+file_content_divider = "----------"
 
 #
 # Testing errors (?)
@@ -51,15 +52,39 @@ end
 # File Upload
 #
 
+
+#
+# Listens for file uploads from our iOS apps.
+# There's a centralized method there which
+# calls this method, using the parameters
+# it's expecting.
+#
+# To test this from curl, call
+#
+# 		curl "http://localhost:4567/api/v1/upload/someName" -F filedata=@simpleFileToUpload.txt
+#
+# "somename" is anything you like.
+# "filedata" is required: the variable name we'll extract in this method.
+# "simpleFileToUpload.txt" is the file you want to upload.  Note the "@".
+#
+# The results will be written to the file "output.txt"
+# in a folder on your Mac desktop.
+#
 post "#{base_url_path}/upload/:filename" do
 	FileUtils.mkdir_p(destination_directory)
 	puts "#{params}"
-	filename = File.join(destination_directory, params[:filename])
+
+	filename = File.join(destination_directory, output_logging_filename)
 	datafile = params[:filedata]
-	FileUtils.copy(datafile[:tempfile], filename)
-	"wrote to #{filename}\n"
-	200
+	data = datafile[:tempfile].read
+	
+	File.open(filename, "a") { |theFile|
+		theFile.write("#{file_content_divider}\n#{data}\n")
+	}
+
+	[200, {results: "wrote to #{filename}"}.to_json]
 end
+
 
 
 #
