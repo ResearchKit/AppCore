@@ -7,6 +7,7 @@
 
 #import "APCLog.h"
 #import "Flurry.h"
+#import "APCConstants.h"
 
 
 static NSDateFormatter *dateFormatter = nil;
@@ -239,11 +240,15 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
 		NSString *description = (error.localizedDescription ?:
 								 error.description ?:
 								 [NSString stringWithFormat: @"%@", error]);
-
-		if (self.isFlurryEnabled)
-		{
-			[Flurry logError: description message: nil error: error];
-		}
+        
+        if (self.isFlurryEnabled)
+        {
+            [Flurry logEvent: kErrorEvent withParameters: @{
+                                                            @"error_description" : description,
+                                                            @"full_error_description": [NSString stringWithFormat: @"%@", error]
+                                                            }];
+            [Flurry logError: error.domain message: description error: error];
+        }
 
 		[self logInternal_tag: @"APC_ERROR"
 					   method: apcLogMethodData
@@ -262,10 +267,15 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
 		NSString *printout = [NSString stringWithFormat: @"EXCEPTION: [%@]. Stack trace:\n%@", exception, exception.callStackSymbols];
 
 
-		if (self.isFlurryEnabled)
-		{
-			[Flurry logError: description message: nil exception: exception];
-		}
+        if (self.isFlurryEnabled)
+        {
+            [Flurry logEvent: kErrorEvent withParameters: @{
+                                                            @"exception_name" : description,
+                                                            @"exception_reason" : exception.reason,
+                                                            @"exception_stacktrace": printout
+                                                            }];
+            [Flurry logError: exception.name message: exception.reason exception: exception];
+        }
 
 		[self logInternal_tag: @"APC_ERROR"
 					   method: apcLogMethodData
@@ -328,6 +338,11 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
 	viewControllerAppeared: (NSObject *) viewController
 {
 	NSString *message = [NSString stringWithFormat: @"%@ appeared.", NSStringFromClass (viewController.class)];
+    
+    if (self.isFlurryEnabled)
+    {
+        [Flurry logEvent: kPageViewEvent withParameters: @{@"viewcontroller_viewed" : NSStringFromClass(viewController.class)}];
+    }
 
 	[self logInternal_tag: @" APC_VIEW"
 				   method: apcLogMethodData

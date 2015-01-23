@@ -22,18 +22,22 @@ NSString *const kOperatorGreaterThan        = @"gt";
 NSString *const kOperatorLessThanEqual      = @"le";
 NSString *const kOperatorGreaterThanEqual   = @"ge";
 
+NSString *const kConstraintsKey   = @"constraints";
+NSString *const kUiHintKey   = @"uihint";
+NSString *const kSliderValue   = @"slider";
+
 
 @class APCDummyObject;
 static APCDummyObject * _dummyObject;
 
 @interface APCDummyObject : NSObject
 
-- (RKSTAnswerFormat*) rkBooleanAnswerFormat: (SBBSurveyConstraints*) constraints;
-- (RKSTAnswerFormat*) rkDateAnswerFormat: (SBBSurveyConstraints*) constraints;
-- (RKSTAnswerFormat*) rkNumericAnswerFormat: (SBBSurveyConstraints*) constraints;
-- (RKSTAnswerFormat*) rkTimeIntervalAnswerFormat: (SBBSurveyConstraints*) constraints;
-- (RKSTAnswerFormat*) rkChoiceAnswerFormat: (SBBSurveyConstraints*) constraints;
-- (RKSTAnswerFormat*) rkTextAnswerFormat: (SBBSurveyConstraints*) constraints;
+- (RKSTAnswerFormat*) rkBooleanAnswerFormat:(NSDictionary *)objectDictionary;
+- (RKSTAnswerFormat*) rkDateAnswerFormat:(NSDictionary *)objectDictionary;
+- (RKSTAnswerFormat*) rkNumericAnswerFormat:(NSDictionary *)objectDictionary;
+- (RKSTAnswerFormat*) rkTimeIntervalAnswerFormat:(NSDictionary *)objectDictionary;
+- (RKSTAnswerFormat*) rkChoiceAnswerFormat:(NSDictionary *)objectDictionary;
+- (RKSTAnswerFormat*) rkTextAnswerFormat:(NSDictionary *)objectDictionary;
 
 @end
 
@@ -367,11 +371,11 @@ static APCDummyObject * _dummyObject;
 
 + (RKSTQuestionStep*) rkStepFromSBBSurveyQuestion: (SBBSurveyQuestion*) question
 {
-    RKSTQuestionStep * retStep =[RKSTQuestionStep questionStepWithIdentifier:question.identifier title:question.prompt answer:[self rkAnswerFormatFromSBBSurveyConstraints:question.constraints]];
+    RKSTQuestionStep * retStep =[RKSTQuestionStep questionStepWithIdentifier:question.identifier title:question.prompt answer:[self rkAnswerFormatFromSBBSurveyConstraints:question.constraints uiHint:question.uiHint]];
     return retStep;
 }
 
-+ (RKSTAnswerFormat*) rkAnswerFormatFromSBBSurveyConstraints: (SBBSurveyConstraints*) constraints
++ (RKSTAnswerFormat*) rkAnswerFormatFromSBBSurveyConstraints: (SBBSurveyConstraints*) constraints uiHint: (NSString*) hint
 {
     RKSTAnswerFormat * retAnswer;
     
@@ -382,9 +386,15 @@ static APCDummyObject * _dummyObject;
     NSString * selectorName = [self lookUpAnswerFormatMethod:NSStringFromClass([constraints class])];
     SEL selector = NSSelectorFromString(selectorName);
     
+    NSMutableDictionary * objDict = [NSMutableDictionary dictionary];
+    objDict[kConstraintsKey] = constraints;
+    if (hint.length > 0) {
+        objDict[kUiHintKey] = hint;
+    }
+    
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-    retAnswer = (RKSTAnswerFormat*) [_dummyObject performSelector:selector withObject:constraints];
+    retAnswer = (RKSTAnswerFormat*) [_dummyObject performSelector:selector withObject:objDict];
 #pragma clang diagnostic pop
     
     return retAnswer;
@@ -438,14 +448,15 @@ static APCDummyObject * _dummyObject;
 /*********************************************************************************/
 #pragma mark - Answer Format Methods
 /*********************************************************************************/
--(RKSTAnswerFormat *)rkBooleanAnswerFormat:(SBBSurveyConstraints *)constraints
+-(RKSTAnswerFormat *)rkBooleanAnswerFormat:(NSDictionary *)objectDictionary
 {
     RKSTAnswerFormat * retAnswer = [[RKSTBooleanAnswerFormat alloc] init];
     return retAnswer;
 }
 
-- (RKSTAnswerFormat *)rkDateAnswerFormat:(SBBSurveyConstraints *)constraints
+- (RKSTAnswerFormat *)rkDateAnswerFormat:(NSDictionary *)objectDictionary
 {
+    SBBSurveyConstraints * constraints = objectDictionary[kConstraintsKey];
     RKSTAnswerFormat * retAnswer;
     if ([constraints isKindOfClass:[SBBDateTimeConstraints class]]) {
         retAnswer = [RKSTDateAnswerFormat dateTimeAnswerFormat];
@@ -459,8 +470,9 @@ static APCDummyObject * _dummyObject;
     return retAnswer;
 }
 
-- (RKSTAnswerFormat*) rkChoiceAnswerFormat: (SBBSurveyConstraints*) constraints
+- (RKSTAnswerFormat*) rkChoiceAnswerFormat:(NSDictionary *)objectDictionary
 {
+    SBBSurveyConstraints * constraints = objectDictionary[kConstraintsKey];
     RKSTAnswerFormat * retAnswer;
     SBBMultiValueConstraints * localConstraints = (SBBMultiValueConstraints*)constraints;
     NSMutableArray * options = [NSMutableArray array];
@@ -477,35 +489,55 @@ static APCDummyObject * _dummyObject;
     return retAnswer;
 }
 
-- (RKSTAnswerFormat *)rkNumericAnswerFormat:(SBBSurveyConstraints *)constraints
+- (RKSTAnswerFormat *)rkNumericAnswerFormat:(NSDictionary *)objectDictionary
 {
+    SBBSurveyConstraints * constraints = objectDictionary[kConstraintsKey];
+    NSString * uiHint = objectDictionary[kUiHintKey];
     RKSTAnswerFormat * retValue;
     if ([constraints isKindOfClass:[SBBIntegerConstraints class]]) {
         SBBIntegerConstraints * integerConstraint = (SBBIntegerConstraints*) constraints;
         if (integerConstraint.maxValue && integerConstraint.minValue) {
+            if ([uiHint isEqualToString:kSliderValue]) {
             NSInteger stepValue = (integerConstraint.step != nil && [integerConstraint.step integerValue] > 0) ? [integerConstraint.step integerValue] : 1;
             NSInteger newStepValue = (NSInteger)((double)[integerConstraint.maxValue integerValue] - (double)[integerConstraint.minValue integerValue]) / 10.0;
             stepValue = MAX(newStepValue, stepValue);
             retValue = [RKSTScaleAnswerFormat scaleAnswerFormatWithMaxValue:[integerConstraint.maxValue integerValue] minValue:[integerConstraint.minValue integerValue] step:stepValue defaultValue:0];
+            }
+            else {
+                RKSTNumericAnswerFormat * format = (integerConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:integerConstraint.unit] : [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:nil];
+                format.maximum = integerConstraint.maxValue;
+                format.minimum = integerConstraint.minValue;
+                retValue = format;
+            }
+
         }
         else
         {
-            retValue = [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:nil];
+            retValue = (integerConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:integerConstraint.unit] : [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:nil];
         }
     }
     else if ([constraints isKindOfClass:[SBBDecimalConstraints class]]) {
-        retValue = [RKSTNumericAnswerFormat decimalAnswerFormatWithUnit:nil];
-
+        SBBDecimalConstraints * decimalConstraint = (SBBDecimalConstraints*) constraints;
+        if (decimalConstraint.maxValue && decimalConstraint.minValue) {
+            RKSTNumericAnswerFormat * format = (decimalConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat decimalAnswerFormatWithUnit:decimalConstraint.unit] : [RKSTNumericAnswerFormat decimalAnswerFormatWithUnit:nil];
+            format.maximum = decimalConstraint.maxValue;
+            format.minimum = decimalConstraint.minValue;
+            retValue = format;
+        }
+        else
+        {
+            retValue = (decimalConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat decimalAnswerFormatWithUnit:decimalConstraint.unit] : [RKSTNumericAnswerFormat decimalAnswerFormatWithUnit:nil];
+        }
     }
     return retValue;
 }
 
-- (RKSTAnswerFormat *)rkTextAnswerFormat:(SBBSurveyConstraints *)constraints
+- (RKSTAnswerFormat *)rkTextAnswerFormat:(NSDictionary *)objectDictionary
 {
     return [RKSTTextAnswerFormat textAnswerFormat];
 }
 
-- (RKSTAnswerFormat *)rkTimeIntervalAnswerFormat:(SBBSurveyConstraints *)constraints
+- (RKSTAnswerFormat *)rkTimeIntervalAnswerFormat:(NSDictionary *)objectDictionary
 {
     return [RKSTTimeIntervalAnswerFormat timeIntervalAnswerFormat];
 }

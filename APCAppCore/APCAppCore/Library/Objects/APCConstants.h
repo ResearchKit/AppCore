@@ -92,6 +92,8 @@ FOUNDATION_EXPORT NSString *const kAppStateChangedEvent;
 FOUNDATION_EXPORT NSString *const kNetworkEvent;
 FOUNDATION_EXPORT NSString *const kSchedulerEvent;
 FOUNDATION_EXPORT NSString *const kTaskEvent;
+FOUNDATION_EXPORT NSString *const kPageViewEvent;
+FOUNDATION_EXPORT NSString *const kErrorEvent;
 
 @interface APCConstants : NSObject
 
