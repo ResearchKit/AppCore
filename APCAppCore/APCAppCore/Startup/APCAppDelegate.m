@@ -109,7 +109,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
+
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken

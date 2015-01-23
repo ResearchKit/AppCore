@@ -94,6 +94,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.caption = NSLocalizedString(@"Reminder", @"");
             field.identifier = kAPCSwitchCellIdentifier;
             field.editable = NO;
+            APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+            field.on = appDelegate.tasksReminder.reminderOn;
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
@@ -104,9 +106,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         {
             APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
             field.caption = NSLocalizedString(@"Reminder Times", @"");
-            field.pickerData = @[@[@"9:00AM", @"9:00PM"]];
+            field.pickerData = @[[APCTasksReminderManager reminderTimesArray]];
             field.textAlignnment = NSTextAlignmentRight;
             field.identifier = kAPCDefaultTableViewCellIdentifier;
+            APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+            field.selectedRowIndices = @[@([[APCTasksReminderManager reminderTimesArray] indexOfObject:appDelegate.tasksReminder.reminderTime])];
 
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
@@ -119,9 +123,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         section.rows = [NSArray arrayWithArray:rowItems];
         [items addObject:section];
     }
-    
-    
-    
+
     {
         NSMutableArray *rowItems = [NSMutableArray new];
         
@@ -209,11 +211,18 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void)pickerTableViewCell:(APCPickerTableViewCell *)cell pickerViewDidSelectIndices:(NSArray *)selectedIndices
 {
     [super pickerTableViewCell:cell pickerViewDidSelectIndices:selectedIndices];
-    
-    NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
-    
-    [self.parameters setNumber:[APCParameters autoLockValues][index] forKey:kNumberOfMinutesForPasscodeKey];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if (indexPath.section == 0 && indexPath.row == 1) {
+        NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
+        [self.parameters setNumber:[APCParameters autoLockValues][index] forKey:kNumberOfMinutesForPasscodeKey];
+    }
+    else if (indexPath.section == 1 && indexPath.row == 2) {
+        APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+        NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
+        appDelegate.tasksReminder.reminderTime = [APCTasksReminderManager reminderTimesArray][index];
+    }
 }
+
 
 - (void)setupDefaultCellAppearance:(APCDefaultTableViewCell *)cell
 {
@@ -237,7 +246,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (void)switchTableViewCell:(APCSwitchTableViewCell *)cell switchValueChanged:(BOOL)on
 {
-    
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if (indexPath.section == 1 && indexPath.row == 0) {
+        APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+        appDelegate.tasksReminder.reminderOn = on;
+    }
 }
 
 #pragma mark - Getter

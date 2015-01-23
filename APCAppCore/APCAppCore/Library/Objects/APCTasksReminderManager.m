@@ -72,6 +72,7 @@ NSString * const kTaskReminderMessage = @"Complete your activities for today!";
     if (notification) {
         UIApplication *app = [UIApplication sharedApplication];
         [app cancelLocalNotification:notification];
+        APCLogDebug(@"Cancelled Notification: %@", notification);
     }
 }
 
@@ -91,11 +92,12 @@ NSString * const kTaskReminderMessage = @"Complete your activities for today!";
     notificationInfo[kTaskReminderUserInfoKey] = kTaskReminderUserInfo;
     localNotification.userInfo = notificationInfo;
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+    APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Scheduled Reminder: %@", localNotification]}));
 }
 
 - (NSDate*) calculateFireDate
 {
-    NSTimeInterval reminderOffset = [[APCTasksReminderManager reminderTimesArray] indexOfObject:self.reminderTime] * kMinutesPerHour * kSecondsPerMinute;
+    NSTimeInterval reminderOffset = ([[APCTasksReminderManager reminderTimesArray] indexOfObject:self.reminderTime]) * kMinutesPerHour * kSecondsPerMinute;
     APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
     NSDate *dateToSet = (delegate.dataSubstrate.countOfCompletedScheduledTasksForToday == delegate.dataSubstrate.countOfAllScheduledTasksForToday) ? [[NSDate tomorrowAtMidnight] dateByAddingTimeInterval:reminderOffset] : [[NSDate todayAtMidnight] dateByAddingTimeInterval:reminderOffset];
     return dateToSet;

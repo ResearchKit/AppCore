@@ -10,7 +10,7 @@
 typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
     kSignUpPermissionsTypeHealthKit,
     kSignUpPermissionsTypeLocation,
-    kSignUpPermissionsTypePushNotifications,
+    kSignUpPermissionsTypeLocalNotifications,
     kSignUpPermissionsTypeCoremotion,
     kSignUpPermissionsTypeMicrophone,
     kSignUpPermissionsTypeCamera,

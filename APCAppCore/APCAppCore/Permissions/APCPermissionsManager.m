@@ -90,13 +90,9 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 #endif
         }
             break;
-        case kSignUpPermissionsTypePushNotifications:
+        case kSignUpPermissionsTypeLocalNotifications:
         {
-#if TARGET_IPHONE_SIMULATOR
-            isGranted = YES;
-#else
             isGranted = [[UIApplication sharedApplication] currentUserNotificationSettings].types != 0;
-#endif
         }
             break;
         case kSignUpPermissionsTypeCoremotion:
@@ -225,9 +221,9 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             }
         }
             break;
-        case kSignUpPermissionsTypePushNotifications:
+        case kSignUpPermissionsTypeLocalNotifications:
         {
-            if ([[UIApplication sharedApplication] currentUserNotificationSettings].types == 0) {
+            if ([[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone) {
                 UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
                                                                                                      |UIUserNotificationTypeBadge
                                                                                                      |UIUserNotificationTypeSound) categories:nil];
@@ -235,7 +231,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             } else {
                 
                 if (self.completionBlock) {
-                    self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypePushNotifications]);
+                    self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocalNotifications]);
                     self.completionBlock = nil;
                 }
             }
@@ -359,7 +355,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             message = [NSString localizedStringWithFormat:NSLocalizedString(@"Please go to Settings -> Privacy -> Health -> %@ to re-enable.", nil), appName];
         }
             break;
-        case kSignUpPermissionsTypePushNotifications:{
+        case kSignUpPermissionsTypeLocalNotifications:{
             message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Notifications and enable 'Allow Notifications'", nil), appName];
         }
             break;
@@ -448,7 +444,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 - (void)appFailedToRegisterForRemoteNotification
 {
     if (self.completionBlock) {
-        self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypePushNotifications]);
+        self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocalNotifications]);
         self.completionBlock = nil;
     }
 }

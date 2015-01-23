@@ -141,12 +141,12 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
                 }
             }
                 break;
-            case kSignUpPermissionsTypePushNotifications:
+            case kSignUpPermissionsTypeLocalNotifications:
             {
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
-                item.permissionType = kSignUpPermissionsTypePushNotifications;
-                item.caption = NSLocalizedString(@"Push Notifications", @"");
-                item.detailText = NSLocalizedString(@"Lorem ipsum dolor sit amet, etos et ya consectetur adip isicing elit, sed.", @"");
+                item.permissionType = kSignUpPermissionsTypeLocalNotifications;
+                item.caption = NSLocalizedString(@"Notifications", @"");
+                item.detailText = NSLocalizedString(@"Allowing notifications enables the app to show you reminders.", @"");
                 [items addObject:item];
             }
                 break;
