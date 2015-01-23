@@ -8,6 +8,7 @@
 #import "APCBaseTaskViewController.h"
 #import "APCAppDelegate.h"
 #import "APCAppCore.h"
+#import "APCLocalLoggingServer.h"
 
 @implementation APCBaseTaskViewController
 
@@ -109,6 +110,16 @@
 
     NSString * archiveFileName = [archiver writeToOutputDirectory:self.taskResultsFilePath];
     [self storeInCoreDataWithFileName:archiveFileName resultSummary:resultSummary];
+
+	/*
+	 When ready, use this:
+		[APCLocalLoggingServer logDataFromFilePath: archiveFileName];
+	 
+	 That should work identically to this -logText method.
+	 In the mean time, we'll just write the string:
+	 */
+	[APCLocalLoggingServer logText: resultSummary
+				  withFakeFilename: @"resultSummary.json"];
 }
 
 - (void) storeInCoreDataWithFileName: (NSString *) fileName resultSummary: (NSString *) resultSummary
