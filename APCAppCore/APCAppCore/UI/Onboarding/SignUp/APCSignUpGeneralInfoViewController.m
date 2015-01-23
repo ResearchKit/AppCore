@@ -631,13 +631,9 @@
             
             APCLogError2 (error);
             [spinnerController dismissViewControllerAnimated:NO completion:^{
-                
-                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Sign Up", @"")
-                                                                   message:error.message
-                                                                  delegate:self
-                                                         cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                                         otherButtonTitles:NSLocalizedString(@"Try Again", nil), nil];
-                [alertView show];
+                UIAlertController *alertController = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Up", @"")
+                                                                                     message:error.message];
+                [weakSelf presentViewController:alertController animated:YES completion:nil];
                 
             }];
         }
@@ -745,19 +741,19 @@
     [[self onboarding] popScene];
 }
 
-#pragma mark AlertView delegate
-
--(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
-    if (buttonIndex == 0) {
-        NSLog(@"canceled");
-    }else{
-        //try again
-        NSLog(@"Trying again");
-        [self sendCredentials];
-    }
-    
-}
+//#pragma mark AlertView delegate
+//
+//-(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+//    
+//    if (buttonIndex == 0) {
+//        NSLog(@"canceled");
+//    }else{
+//        //try again
+//        NSLog(@"Trying again");
+//        [self sendCredentials];
+//    }
+//    
+//}
 
 
 
