@@ -582,7 +582,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
         if (error) {
             APCLogError2 (error);
             [spinnerController dismissViewControllerAnimated:NO completion:^{
-                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Withdraw", @"") message:error.message];
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Out", @"") message:error.message];
                 [weakSelf presentViewController:alert animated:YES completion:nil];
             }];
         } else {
