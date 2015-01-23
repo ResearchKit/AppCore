@@ -79,20 +79,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             row.itemType = kAPCSettingsItemTypePasscode;
             [rowItems addObject:row];
         }
-       /* Temporarily removing this row
-        {
-            APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = NSLocalizedString(@"Change Password", @"");
-            field.identifier = kAPCBasicTableViewCellIdentifier;
-            field.textAlignnment = NSTextAlignmentRight;
-            field.editable = NO;
-            
-            APCTableViewRow *row = [APCTableViewRow new];
-            row.item = field;
-            row.itemType = kAPCSettingsItemTypePassword;
-            [rowItems addObject:row];
-        }
-        */
         
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
@@ -100,7 +86,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         [items addObject:section];
     }
     
-    // Temporarily removing this section
     {
         NSMutableArray *rowItems = [NSMutableArray new];
         
@@ -112,7 +97,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
-            row.itemType = kAPCSettingsItemTypePushNotifications;
+            row.itemType = kAPCSettingsItemTypeReminderOnOff;
             [rowItems addObject:row];
         }
         
@@ -125,7 +110,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
-            row.itemType = kAPCSettingsItemTypeDevices;
+            row.itemType = kAPCSettingsItemTypeReminderTime;
             [rowItems addObject:row];
         }
      
@@ -244,6 +229,15 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
     [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
     [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
+}
+
+/*********************************************************************************/
+#pragma mark - Switch Cell Delegate
+/*********************************************************************************/
+
+- (void)switchTableViewCell:(APCSwitchTableViewCell *)cell switchValueChanged:(BOOL)on
+{
+    
 }
 
 #pragma mark - Getter

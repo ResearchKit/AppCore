@@ -12,9 +12,8 @@
 typedef NS_ENUM(APCTableViewItemType, APCSettingsItemType) {
     kAPCSettingsItemTypeAutoLock,
     kAPCSettingsItemTypePasscode,
-    kAPCSettingsItemTypePassword,
-    kAPCSettingsItemTypePushNotifications,
-    kAPCSettingsItemTypeDevices,
+    kAPCSettingsItemTypeReminderOnOff,
+    kAPCSettingsItemTypeReminderTime,
     kAPCSettingsItemTypePermissions
 };
 

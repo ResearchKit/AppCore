@@ -12,6 +12,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "APCOnboarding.h"
+#import "APCTasksReminderManager.h"
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -52,6 +53,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self registerNotifications];
     [self setUpHKPermissions];
     [self setUpAppAppearance];
+    [self setUpTasksReminder];
     [self showAppropriateVC];
     
     [self.dataMonitor appFinishedLaunching];
@@ -160,6 +162,10 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [APCPermissionsManager setHealthKitTypesToWrite:self.initializationOptions[kHKWritePermissionsKey]];
 }
 
+- (void) setUpTasksReminder {
+    self.tasksReminder = [APCTasksReminderManager new];
+}
+
 /*********************************************************************************/
 #pragma mark - Respond to Notifications
 /*********************************************************************************/
@@ -179,6 +185,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (void) signedInNotification:(NSNotification*) notification
 {
     [self.dataMonitor userConsented];
+    [self.tasksReminder updateTasksReminder];
     [self showTabBar];
 }
 
@@ -192,7 +199,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     self.dataSubstrate.currentUser.signedUp = NO;
     self.dataSubstrate.currentUser.signedIn = NO;
     [APCKeychainStore removeValueForKey:kPasswordKey];
-    
+    [self.tasksReminder updateTasksReminder];
     [self showOnBoarding];
 }
 
@@ -201,7 +208,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self clearNSUserDefaults];
     [APCKeychainStore resetKeyChain];
     [self.dataSubstrate resetCoreData];
-    
+    [self.tasksReminder updateTasksReminder];
     [self showOnBoarding];
 }
 

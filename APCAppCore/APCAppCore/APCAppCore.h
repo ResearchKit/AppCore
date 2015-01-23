@@ -35,6 +35,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCHealthKitQuantityTracker.h>
 #import <APCAppCore/APCOnboarding.h>
 #import <APCAppCore/APCDataResult.h>
+#import <APCAppCore/APCTasksReminderManager.h>
 
 /* -------------------------
  Logging

@@ -23,6 +23,8 @@ NSString *const APCAppDidFailToRegisterForRemoteNotification = @"APCAppDidFailTo
 
 NSString *const APCScoringHealthKitDataIsAvailableNotification = @"APCScoringHealthKitDataIsAvailableNotification";
 
+NSString *const APCUpdateTasksReminderNotification = @"APCUpdateTasksReminderNotification";
+
 NSString *const kStudyIdentifierKey                  = @"StudyIdentifierKey";
 NSString *const kAppPrefixKey                        = @"AppPrefixKey";
 NSString *const kBridgeEnvironmentKey                = @"BridgeEnvironmentKey";
@@ -33,6 +35,8 @@ NSString *const kHKReadPermissionsKey                = @"HKReadPermissions";
 NSString *const kAppServicesListRequiredKey          = @"AppServicesListRequired";
 NSString *const kAppProfileElementsListKey           = @"AppProfileElementsListKey";
 NSString *const kVideoURLKey                         = @"VideoURLKey";
+NSString *const kTaskReminderStartupDefaultOnOffKey  = @"TaskReminderStartupDefaultOnOffKey;
+NSString *const kTaskReminderStartupDefaultTimeKey   = @"TaskReminderStartupDefaultTimeKey;
 
 NSString *const kHKQuantityTypeKey                   = @"HKQuantityType";
 NSString *const kHKCategoryTypeKey                   = @"HKCategoryType";
@@ -65,6 +69,9 @@ NSString *const kTertiaryRedColorKey    = @"TertiaryRedColorKey";
 NSString *const kTertiaryYellowColorKey = @"TertiaryYellowColorKey";
 NSString *const kTertiaryPurpleColorKey = @"TertiaryPurpleColorKey";
 NSString *const kTertiaryGrayColorKey   = @"TertiaryGrayColorKey";
+
+NSString *const kTasksReminderDefaultsOnOffKey = @"TasksReminderDefaultsOnOffKey";
+NSString *const kTasksReminderDefaultsTimeKey = @"TasksReminderDefaultsTimeKey";
 
 
 /*********************************************************************************/
