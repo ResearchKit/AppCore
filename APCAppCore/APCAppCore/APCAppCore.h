@@ -156,6 +156,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  ------------------------- */
 #import <APCAppCore/NSBundle+Helper.h>
 #import <APCAppCore/NSDate+Helper.h>
+#import <APCAppCore/NSDateComponents+Helper.h>
 #import <APCAppCore/NSError+APCAdditions.h>
 #import <APCAppCore/NSObject+Helper.h>
 #import <APCAppCore/NSString+Helper.h>

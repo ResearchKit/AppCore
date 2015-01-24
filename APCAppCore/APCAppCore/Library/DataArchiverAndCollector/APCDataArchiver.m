@@ -140,15 +140,15 @@
 }
 
 - (void) encryptZipFile {
-    NSData * unencryptedZipData = [NSData dataWithContentsOfFile:self.tempUnencryptedZipFilePath];
+//    NSData * unencryptedZipData = [NSData dataWithContentsOfFile:self.tempUnencryptedZipFilePath];
     
-    NSError * encryptionError;
-    NSData * encryptedZipData = RKCryptographicMessageSyntaxEnvelopedData(unencryptedZipData, [self readPEM], RKEncryptionAlgorithmAES128CBC, &encryptionError);
-    APCLogError2(encryptionError);
-    
-    NSError * fileWriteError;
-    [encryptedZipData writeToFile:self.tempEncryptedZipFilePath options:NSDataWritingAtomic error:&fileWriteError];
-    APCLogError2(fileWriteError);
+//    NSError * encryptionError;
+//    NSData * encryptedZipData = RKCryptographicMessageSyntaxEnvelopedData(unencryptedZipData, [self readPEM], RKEncryptionAlgorithmAES128CBC, &encryptionError);
+//    APCLogError2(encryptionError);
+//    
+//    NSError * fileWriteError;
+//    [encryptedZipData writeToFile:self.tempEncryptedZipFilePath options:NSDataWritingAtomic error:&fileWriteError];
+//    APCLogError2(fileWriteError);
 }
 
 /*********************************************************************************/
