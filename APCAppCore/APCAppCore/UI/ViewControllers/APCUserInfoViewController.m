@@ -107,6 +107,7 @@ static CGFloat const kPickerCellHeight = 164.0f;
             pickerCell.pickerValues = customPickerField.pickerData;
             [pickerCell.pickerView reloadAllComponents];
             pickerCell.delegate = self;
+            pickerCell.selectedRowIndices = customPickerField.selectedRowIndices;
             
             [self setupPickerCellAppeareance:pickerCell];
         }
