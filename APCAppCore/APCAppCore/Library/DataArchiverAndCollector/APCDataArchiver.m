@@ -10,10 +10,26 @@
 #import "zipzap.h"
 #import <objc/runtime.h>
 
+NSString *const kQuestionTypeKey = @"questionType";
+NSString *const kUserInfoKey    = @"userInfo";
+NSString *const kIdentifierKey    = @"identifier";
+NSString *const kStartDateKey    = @"startDate";
+NSString *const kEndDateKey    = @"endDate";
+NSString *const kTaskRunKey     = @"taskRun";
+NSString *const kItemKey        = @"item";
+
+NSString *const kFilesKey = @"files";
+
+NSString *const kFileInfoNameKey = @"filename";
+NSString *const kFileInfoTimeStampKey = @"timestamp";
+NSString *const kFileInfoContentTypeKey = @"contentType";
+
 @interface APCDataArchiver ()
 
 @property (nonatomic, strong) ZZArchive * zipArchive;
 @property (nonatomic, strong) NSMutableDictionary * infoDict;
+@property (nonatomic, strong) NSMutableArray * filesList;
+@property (nonatomic, strong) NSMutableArray * zipEntries;
 @property (nonatomic, strong) NSString * tempOutputDirectory;
 @property (nonatomic, readonly) NSString * tempUnencryptedZipFilePath;
 @property (nonatomic, readonly) NSString * tempEncryptedZipFilePath;
@@ -26,6 +42,8 @@
     self = [super init];
     if (self) {
         self.infoDict = [NSMutableDictionary dictionary];
+        self.filesList = [NSMutableArray array];
+        self.zipEntries = [NSMutableArray array];
         self.tempOutputDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID UUID].UUIDString];
         NSError * error;
         self.zipArchive = [[ZZArchive alloc] initWithURL:[NSURL fileURLWithPath:[self.tempOutputDirectory stringByAppendingPathComponent:@"unencrypted.zip"]]
@@ -41,6 +59,7 @@
 -(NSString *)tempUnencryptedZipFilePath {
     return [self.tempOutputDirectory stringByAppendingPathComponent:@"unencrypted.zip"];
 }
+
 -(NSString *)tempEncryptedZipFilePath {
     return [self.tempOutputDirectory stringByAppendingPathComponent:@"encrypted.zip"];
 }
@@ -66,13 +85,17 @@
 - (instancetype)initWithResults: (NSArray*) results itemIdentifier: (NSString*) itemIdentifier runUUID: (NSUUID*) runUUID {
     self = [self init];
     if (self) {
+        //Set up info Dictionary
+        self.infoDict[kTaskRunKey] = runUUID.UUIDString;
+        self.infoDict[kItemKey] = itemIdentifier;
         [self processResults:results];
     }
     return self;
 }
 
-- (void) processResults: (NSArray*) results {
-    
+- (void) processResults: (NSArray*) results
+{
+
     [results enumerateObjectsUsingBlock:^(RKSTStepResult *stepResult, NSUInteger idx, BOOL *stop) {
         [stepResult.results enumerateObjectsUsingBlock:^(RKSTResult *result, NSUInteger idx, BOOL *stop) {
             //Update date if needed
@@ -109,14 +132,95 @@
     
 }
 
+/*********************************************************************************/
+#pragma mark - Add Result Archive
+/*********************************************************************************/
 - (void) addResultToArchive: (RKSTResult*) result {
-    NSArray * properties = [APCDataArchiver classPropsFor:result.class];
-    NSDictionary * dictionary = [result dictionaryWithValuesForKeys:properties];
+    NSMutableArray * properties = [NSMutableArray array];
+    [properties addObjectsFromArray:[APCDataArchiver classPropsFor:[RKSTResult class]]];
+    if (result.superclass != [RKSTResult class]) {
+        [properties addObjectsFromArray:[APCDataArchiver classPropsFor:result.superclass]];
+    }
+    [properties addObjectsFromArray:[APCDataArchiver classPropsFor:result.class]];
+    NSMutableDictionary * dictionary = [[result dictionaryWithValuesForKeys:properties] mutableCopy];
+    [self processDictionary:dictionary];
     APCLogDebug(@"%@", dictionary);
+    [self writeResultDictionaryToArchive:dictionary];
+    [self addFileInfoEntry:dictionary];
+}
+
+- (void) processDictionary :(NSMutableDictionary*) mutableDictionary {
+    static NSArray* array = nil;
+    if (array == nil) {
+        array = @[@"None", @"Scale", @"SingleChoice", @"MultipleChoice", @"Decimal",@"Integer", @"Boolean", @"Text", @"TimeOfDay", @"DateAndTime", @"Date", @"TimeInterval"];
+    }
+    //Replace questionType
+    if (mutableDictionary[kQuestionTypeKey]) {
+        NSUInteger index = ((NSNumber*) mutableDictionary[kQuestionTypeKey]).integerValue;
+        if (index < array.count) {
+            mutableDictionary[kQuestionTypeKey] = array[index];
+        }
+    }
+    
+    //Remove userInfo if its empty
+    if ([mutableDictionary[kUserInfoKey] isEqual:[NSNull null]]) {
+        [mutableDictionary removeObjectForKey:kUserInfoKey];
+    }
+    
+    //Replace identifier with item
+    if (mutableDictionary[kIdentifierKey]) {
+        mutableDictionary[kItemKey] =mutableDictionary[kIdentifierKey];
+        [mutableDictionary removeObjectForKey:kIdentifierKey];
+    }
+    
+    //Override dates with strings
+    if ([mutableDictionary[kStartDateKey] isKindOfClass:[NSDate class]]) {
+        mutableDictionary[kStartDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kStartDateKey]];
+    }
+    
+    if ([mutableDictionary[kEndDateKey] isKindOfClass:[NSDate class]]) {
+        mutableDictionary[kEndDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kEndDateKey]];
+    }
+}
+
+- (void) writeResultDictionaryToArchive: (NSDictionary*) dictionary
+{
+    NSString * fileName = dictionary[kItemKey]?:@"NoName";
+    [self writeDictionaryToArchive:dictionary fileName:fileName];
+}
+
+- (void) writeDictionaryToArchive: (NSDictionary*) dictionary fileName: (NSString*) fileName
+{
+    NSError * error;
+    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:&error];
+    APCLogError2(error);
+    NSString * fullFileName = [fileName stringByAppendingPathExtension:@"json"];
+    [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fullFileName
+                                                                compress:YES
+                                                               dataBlock:^(NSError** error){ return jsonData;}]];
+}
+
+- (void) addFileInfoEntry: (NSDictionary*) dictionary {
+    NSMutableDictionary * fileInfoEntry = [NSMutableDictionary dictionary];
+    NSString * fileName = dictionary[kItemKey]?:@"NoName";
+    NSString * fullFileName = [fileName stringByAppendingPathExtension:@"json"];
+    fileInfoEntry[kFileInfoNameKey] = fullFileName;
+    
+    fileInfoEntry[kFileInfoTimeStampKey] = dictionary[kEndDateKey];
+    fileInfoEntry[kFileInfoContentTypeKey] = @"application/json";
+    [self.filesList addObject:fileInfoEntry];
 }
 
 - (void) finalizeZipFile {
     
+    if (self.filesList.count) {
+        self.infoDict[kFilesKey] = self.filesList;
+    }
+    [self writeDictionaryToArchive:self.infoDict fileName:@"info"];
+    
+    NSError * error;
+    [self.zipArchive updateEntries:self.zipEntries error:&error];
+    APCLogError2(error);
 }
 
 /*********************************************************************************/
@@ -127,20 +231,20 @@
     NSAssert([[NSFileManager defaultManager] fileExistsAtPath:outputDirectory], @"Output Directory does not exist");
     
     [self encryptZipFile];
-//
+
     NSError * moveError;
-    [[NSFileManager defaultManager] moveItemAtPath:self.tempEncryptedZipFilePath toPath:outputDirectory error:&moveError];
+    [[NSFileManager defaultManager] moveItemAtPath:self.tempEncryptedZipFilePath toPath:[outputDirectory stringByAppendingPathComponent:@"encrypted.zip"] error:&moveError];
     APCLogError2(moveError);
     
     if (self.preserveUnencryptedFile) {
-        [[NSFileManager defaultManager] moveItemAtPath:self.tempUnencryptedZipFilePath toPath:outputDirectory error:&moveError];
+        [[NSFileManager defaultManager] moveItemAtPath:self.tempUnencryptedZipFilePath toPath:[outputDirectory stringByAppendingPathComponent:@"unencrypted.zip"] error:&moveError];
         APCLogError2(moveError);
     }
     else {
         [[NSFileManager defaultManager] removeItemAtPath:self.tempUnencryptedZipFilePath error:&moveError];
         APCLogError2(moveError);
     }
-    return @"unencrypted.zip";
+    return @"encrypted.zip";
 }
 
 - (void) encryptZipFile {

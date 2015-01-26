@@ -2521,10 +2521,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"$(OTHER_LDFLAGS)",
-				);
+				OTHER_LDFLAGS = "$(OTHER_LDFLAGS)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2563,10 +2560,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"$(OTHER_LDFLAGS)",
-				);
+				OTHER_LDFLAGS = "$(OTHER_LDFLAGS)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2596,10 +2590,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = APCAppCore;
 				SKIP_INSTALL = YES;
 			};
@@ -2625,10 +2616,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = APCAppCore;
 				SKIP_INSTALL = YES;
 			};
@@ -2710,10 +2698,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"$(OTHER_LDFLAGS)",
-				);
+				OTHER_LDFLAGS = "$(OTHER_LDFLAGS)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2745,10 +2730,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = APCAppCore;
 				SKIP_INSTALL = YES;
 			};

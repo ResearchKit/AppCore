@@ -105,6 +105,7 @@
 {
     NSString * resultSummary = [self createResultSummary];
     APCDataArchiver * archiver = [[APCDataArchiver alloc] initWithTaskResult:self.result];
+    archiver.preserveUnencryptedFile = YES;
 
     NSString * archiveFileName = [archiver writeToOutputDirectory:self.taskResultsFilePath];
     [self storeInCoreDataWithFileName:archiveFileName resultSummary:resultSummary];
