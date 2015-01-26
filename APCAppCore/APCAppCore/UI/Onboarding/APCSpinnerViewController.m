@@ -41,13 +41,14 @@
     [super viewWillAppear:animated];
     
     [self.activityIndicatorView startAnimating];
+
+	APCLogViewControllerAppeared();
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
     [self.activityIndicatorView stopAnimating];
-  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Orientation methods
