@@ -59,6 +59,7 @@
 		08027AA81A7319AC00B358CC /* consent_07@3x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A761A7319AC00B358CC /* consent_07@3x.m4v */; };
 		0830A3491A30FA8D00F7D0E4 /* APCScoring.h in Headers */ = {isa = PBXBuildFile; fileRef = 0830A3471A30FA8D00F7D0E4 /* APCScoring.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0830A34A1A30FA8D00F7D0E4 /* APCScoring.m in Sources */ = {isa = PBXBuildFile; fileRef = 0830A3481A30FA8D00F7D0E4 /* APCScoring.m */; };
+		0833AE1E1A76C016001D8AA0 /* APCConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128EA1A2F78490015982C /* APCConstants.m */; };
 		089E2E831A6051F600A8FBF3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B241A2F86280015982C /* HealthKit.framework */; };
 		360C63CC1A339700002EC86C /* NSDateComponents+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 360C63CA1A339700002EC86C /* NSDateComponents+Helper.h */; };
 		360C63CD1A339700002EC86C /* NSDateComponents+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63CB1A339700002EC86C /* NSDateComponents+Helper.m */; };
@@ -2321,6 +2322,7 @@
 				36A9BE1E1A2FF2B200B14ADD /* APCScheduleExpression.m in Sources */,
 				36C8B3E51A38D95A0051096B /* APCLogTests.m in Sources */,
 				F5F12B151A2F78870015982C /* APCScheduleExpressionListSelectorTests.m in Sources */,
+				0833AE1E1A76C016001D8AA0 /* APCConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
