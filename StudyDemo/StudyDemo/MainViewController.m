@@ -79,6 +79,9 @@ static NSString * const BreastCancerConsentIdentifier = @"BreastCancerConsentIde
     NSMutableDictionary *buttons = [NSMutableDictionary dictionary];
     
     NSMutableArray *buttonKeys = [NSMutableArray array];
+    
+    RKCryptographicMessageSyntaxEnvelopedData([@"blah" dataUsingEncoding:NSUTF8StringEncoding], [@"blah" dataUsingEncoding:NSUTF8StringEncoding], RKEncryptionAlgorithmAES128CBC, NULL);
+    
 
 #ifndef VIDEO_DEMO
     {

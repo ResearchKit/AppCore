@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <ResearchKit/ResearchKit.h>
 
 @class RKSTTaskResult;
 
@@ -16,7 +17,8 @@
 
 @property (nonatomic) BOOL preserveUnencryptedFile;
 
-- (void) writeToOutputDirectory: (NSString*) outputDirectory;
+- (NSString*) writeToOutputDirectory: (NSString*) outputDirectory;
 
+RK_EXTERN NSData *RKSTCryptographicMessageSyntaxEnvelopedData(NSData *data, NSData *identity, RKEncryptionAlgorithm algorithm, NSError * __autoreleasing *error) RKST_AVAILABLE_IOS(8_3);
 
 @end

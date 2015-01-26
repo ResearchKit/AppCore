@@ -8,6 +8,7 @@
 #import "APCDataArchiver.h"
 #import "APCAppCore.h"
 #import "zipzap.h"
+#import <objc/runtime.h>
 
 @interface APCDataArchiver ()
 
@@ -109,7 +110,9 @@
 }
 
 - (void) addResultToArchive: (RKSTResult*) result {
-    
+    NSArray * properties = [APCDataArchiver classPropsFor:result.class];
+    NSDictionary * dictionary = [result dictionaryWithValuesForKeys:properties];
+    APCLogDebug(@"%@", dictionary);
 }
 
 - (void) finalizeZipFile {
@@ -119,12 +122,12 @@
 /*********************************************************************************/
 #pragma mark - Write Output File
 /*********************************************************************************/
-- (void)writeToOutputDirectory:(NSString *)outputDirectory {
+- (NSString*)writeToOutputDirectory:(NSString *)outputDirectory {
     
     NSAssert([[NSFileManager defaultManager] fileExistsAtPath:outputDirectory], @"Output Directory does not exist");
     
     [self encryptZipFile];
-    
+//
     NSError * moveError;
     [[NSFileManager defaultManager] moveItemAtPath:self.tempEncryptedZipFilePath toPath:outputDirectory error:&moveError];
     APCLogError2(moveError);
@@ -137,18 +140,19 @@
         [[NSFileManager defaultManager] removeItemAtPath:self.tempUnencryptedZipFilePath error:&moveError];
         APCLogError2(moveError);
     }
+    return @"unencrypted.zip";
 }
 
 - (void) encryptZipFile {
-//    NSData * unencryptedZipData = [NSData dataWithContentsOfFile:self.tempUnencryptedZipFilePath];
+    NSData * unencryptedZipData = [NSData dataWithContentsOfFile:self.tempUnencryptedZipFilePath];
     
-//    NSError * encryptionError;
-//    NSData * encryptedZipData = RKCryptographicMessageSyntaxEnvelopedData(unencryptedZipData, [self readPEM], RKEncryptionAlgorithmAES128CBC, &encryptionError);
-//    APCLogError2(encryptionError);
-//    
-//    NSError * fileWriteError;
-//    [encryptedZipData writeToFile:self.tempEncryptedZipFilePath options:NSDataWritingAtomic error:&fileWriteError];
-//    APCLogError2(fileWriteError);
+    NSError * encryptionError;
+    NSData * encryptedZipData = RKSTCryptographicMessageSyntaxEnvelopedData(unencryptedZipData, [self readPEM], RKEncryptionAlgorithmAES128CBC, &encryptionError);
+    APCLogError2(encryptionError);
+    
+    NSError * fileWriteError;
+    [encryptedZipData writeToFile:self.tempEncryptedZipFilePath options:NSDataWritingAtomic error:&fileWriteError];
+    APCLogError2(fileWriteError);
 }
 
 /*********************************************************************************/
@@ -161,6 +165,29 @@
     NSData * data = [NSData dataWithContentsOfFile:path];
     NSAssert(data != nil, @"Please add PEM file");
     return data;
+}
+
++ (NSArray *)classPropsFor:(Class)klass
+{
+    if (klass == NULL) {
+        return nil;
+    }
+    
+    NSMutableArray *results = [NSMutableArray array];
+    
+    unsigned int outCount, i;
+    objc_property_t *properties = class_copyPropertyList(klass, &outCount);
+    for (i = 0; i < outCount; i++) {
+        objc_property_t property = properties[i];
+        const char *propName = property_getName(property);
+        if(propName) {
+            NSString *propertyName = [NSString stringWithUTF8String:propName];
+            [results addObject:propertyName];
+        }
+    }
+    free(properties);
+    
+    return [NSArray arrayWithArray:results];
 }
 
 @end

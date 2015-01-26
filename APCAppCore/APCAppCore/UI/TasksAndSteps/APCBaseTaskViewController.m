@@ -104,8 +104,10 @@
 - (void) processTaskResult
 {
     NSString * resultSummary = [self createResultSummary];
-//    NSString * archiveFileName = nil;//[self.result archiveWithFilePath:self.taskResultsFilePath];
-    [self storeInCoreDataWithFileName:@"" resultSummary:resultSummary];
+    APCDataArchiver * archiver = [[APCDataArchiver alloc] initWithTaskResult:self.result];
+
+    NSString * archiveFileName = [archiver writeToOutputDirectory:self.taskResultsFilePath];
+    [self storeInCoreDataWithFileName:archiveFileName resultSummary:resultSummary];
 }
 
 - (void) storeInCoreDataWithFileName: (NSString *) fileName resultSummary: (NSString *) resultSummary
