@@ -39,14 +39,14 @@ static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 		result = shouldLog.boolValue;
 	}
 
-	else
-	{
-		#if DEBUG
-		{
-			result = YES;
-		}
-		#endif
-	}
+//	else
+//	{
+//		#if DEBUG
+//		{
+//			result = YES;
+//		}
+//		#endif
+//	}
 
 	return result;
 }
