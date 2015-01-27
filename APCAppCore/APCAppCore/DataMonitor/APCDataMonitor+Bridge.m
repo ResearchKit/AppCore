@@ -36,6 +36,21 @@ NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
 
 - (void) batchUploadDataToBridgeOnCompletion: (void (^)(NSError * error)) completionBlock
 {
+
+#warning Ron here. Are we missing some uploads?  This 'if' statement seems like it should cause that.  I think the 'if' should be as follows.  In addition, we've joined "upload" and "save to core data" in the same block of code; should we?
+
+//	if (self.dataSubstrate.currentUser.isConsented)
+//	{
+//		if (self.batchUploadingInProgress)
+//		{
+//			// ...enqueue the new upload
+//		}
+//		else
+//		{
+//			// do one upload
+//		}
+//	}
+
     if (self.dataSubstrate.currentUser.isConsented && !self.batchUploadingInProgress) {
         self.batchUploadingInProgress = YES;
         NSManagedObjectContext * context = self.dataSubstrate.persistentContext;
