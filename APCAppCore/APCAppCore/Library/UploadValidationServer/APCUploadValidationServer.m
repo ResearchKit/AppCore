@@ -1,12 +1,11 @@
 //
-//  APCLocalLoggingServer.m
-//  APCAppCore
+//  APCUploadValidationServer.m
+//  AppCore
 //
-//  Created by Ron Conescu on 1/22/15.
-//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//  Copyright (c) 2015 Apple Inc. All rights reserved.
 //
 
-#import "APCLocalLoggingServer.h"
+#import "APCUploadValidationServer.h"
 
 /**
  For extracting the MIME type of the file to upload.
@@ -24,7 +23,7 @@ static NSNumber *shouldLog = nil;
 static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 
 
-@implementation APCLocalLoggingServer
+@implementation APCUploadValidationServer
 
 + (void) setupTurningLoggingOn: (BOOL) shouldTurnLoggingOn
 {
@@ -70,7 +69,7 @@ withFakeFilename: (NSString *) fakeFilename
 
 /*
  The stuff below is the "original" stuff,
- from Ed's commit of APCDataSubstrate+ResearchKit.m ,
+ from a commit of APCDataSubstrate+ResearchKit.m ,
  dated 2014-Dec-03.
  */
 

@@ -55,8 +55,8 @@
 		360C63D11A339746002EC86C /* NSDateComponentsHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */; };
 		36B1AAE51A38DEA800CE7DB5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3EB1A38D9FF0051096B /* Security.framework */; };
 		36B1AAE61A38DEAF00CE7DB5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */; };
-		36BA08DE1A784C5D006D40D4 /* APCLocalLoggingServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 36BA08DC1A784C5D006D40D4 /* APCLocalLoggingServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		36BA08DF1A784C5D006D40D4 /* APCLocalLoggingServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 36BA08DD1A784C5D006D40D4 /* APCLocalLoggingServer.m */; };
+		36BA08E31A784E10006D40D4 /* APCUploadValidationServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 36BA08E11A784E10006D40D4 /* APCUploadValidationServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		36BA08E41A784E10006D40D4 /* APCUploadValidationServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 36BA08E21A784E10006D40D4 /* APCUploadValidationServer.m */; };
 		36C8B3E51A38D95A0051096B /* APCLogTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36C8B3E41A38D95A0051096B /* APCLogTests.m */; };
 		36C8B3E91A38D9C80051096B /* Flurry.h in Headers */ = {isa = PBXBuildFile; fileRef = 36C8B3E71A38D9C80051096B /* Flurry.h */; };
 		36C8B3EC1A38D9FF0051096B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3EB1A38D9FF0051096B /* Security.framework */; };
@@ -506,8 +506,8 @@
 		08027A751A7319AC00B358CC /* consent_06@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_06@3x.m4v"; sourceTree = "<group>"; };
 		08027A761A7319AC00B358CC /* consent_07@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_07@3x.m4v"; sourceTree = "<group>"; };
 		360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateComponentsHelperTests.m; sourceTree = "<group>"; };
-		36BA08DC1A784C5D006D40D4 /* APCLocalLoggingServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCLocalLoggingServer.h; sourceTree = "<group>"; };
-		36BA08DD1A784C5D006D40D4 /* APCLocalLoggingServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLocalLoggingServer.m; sourceTree = "<group>"; };
+		36BA08E11A784E10006D40D4 /* APCUploadValidationServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCUploadValidationServer.h; sourceTree = "<group>"; };
+		36BA08E21A784E10006D40D4 /* APCUploadValidationServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCUploadValidationServer.m; sourceTree = "<group>"; };
 		36C8B3E41A38D95A0051096B /* APCLogTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLogTests.m; sourceTree = "<group>"; };
 		36C8B3E71A38D9C80051096B /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
 		36C8B3EB1A38D9FF0051096B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -1087,13 +1087,13 @@
 			name = "NSDateComponents+HelperTests";
 			sourceTree = "<group>";
 		};
-		36BA08DB1A784C5D006D40D4 /* LoggingToLocalServerForQA */ = {
+		36BA08E01A784E10006D40D4 /* UploadValidationServer */ = {
 			isa = PBXGroup;
 			children = (
-				36BA08DC1A784C5D006D40D4 /* APCLocalLoggingServer.h */,
-				36BA08DD1A784C5D006D40D4 /* APCLocalLoggingServer.m */,
+				36BA08E11A784E10006D40D4 /* APCUploadValidationServer.h */,
+				36BA08E21A784E10006D40D4 /* APCUploadValidationServer.m */,
 			);
-			path = LoggingToLocalServerForQA;
+			path = UploadValidationServer;
 			sourceTree = "<group>";
 		};
 		36C8B3E31A38D94F0051096B /* APCLogTests */ = {
@@ -1270,7 +1270,6 @@
 				F5B947621A73272C0034C522 /* DataArchiverAndCollector */,
 				F5B947651A73272C0034C522 /* HealthKitTracker */,
 				F5B947681A73272C0034C522 /* Logging */,
-				36BA08DB1A784C5D006D40D4 /* LoggingToLocalServerForQA */,
 				F5B9476E1A73272C0034C522 /* Objects */,
 				F5B9477B1A73272C0034C522 /* Parameters */,
 				F5B9478B1A73272C0034C522 /* PassiveLocationTracking */,
@@ -1278,6 +1277,7 @@
 				F5B947911A73272C0034C522 /* ScheduleExpression */,
 				F5B947A71A73272C0034C522 /* Scheduler */,
 				F5B947AA1A73272C0034C522 /* Scoring */,
+				36BA08E01A784E10006D40D4 /* UploadValidationServer */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -2053,7 +2053,6 @@
 				F5F12AE21A2F78490015982C /* APCTextFieldTableViewCell.h in Headers */,
 				F5F12AAA1A2F78490015982C /* APCInEligibleViewController.h in Headers */,
 				F5F12A751A2F78490015982C /* APCPieGraphView.h in Headers */,
-				36BA08DE1A784C5D006D40D4 /* APCLocalLoggingServer.h in Headers */,
 				F5B948121A73272C0034C522 /* APCScheduler.h in Headers */,
 				F5B946471A7309A20034C522 /* ZZStandardCryptoEngine.h in Headers */,
 				F5B947CF1A73272C0034C522 /* UIAlertController+Helper.h in Headers */,
@@ -2092,6 +2091,7 @@
 				F5F129E41A2F78490015982C /* APCDataMonitor.h in Headers */,
 				F5F129E81A2F78490015982C /* APCDataSubstrate+HealthKit.h in Headers */,
 				F5F12AD81A2F78490015982C /* APCPermissionsCell.h in Headers */,
+				36BA08E31A784E10006D40D4 /* APCUploadValidationServer.h in Headers */,
 				F5B946241A7309A20034C522 /* ZZArchive.h in Headers */,
 				F5B947DB1A73272C0034C522 /* APCLog.h in Headers */,
 				F5F12A0A1A2F78490015982C /* APCTask.h in Headers */,
@@ -2413,7 +2413,6 @@
 				F5B947AE1A73272C0034C522 /* APCAppearanceInfo.m in Sources */,
 				5B0432A81A322BEE000DC9ED /* APCOnboardingTask.m in Sources */,
 				F5F12AB11A2F78490015982C /* APCSignUpMedicalInfoViewController.m in Sources */,
-				36BA08DF1A784C5D006D40D4 /* APCLocalLoggingServer.m in Sources */,
 				F5F12ABF1A2F78490015982C /* APCDashboardViewController.m in Sources */,
 				F5F12A761A2F78490015982C /* APCPieGraphView.m in Sources */,
 				F5F12AEB1A2F78490015982C /* APCDashboardLineGraphTableViewCell.m in Sources */,
@@ -2448,6 +2447,7 @@
 				F5B947B61A73272C0034C522 /* APCDeviceHardware+APCHelper.m in Sources */,
 				F5B947BC1A73272C0034C522 /* NSBundle+Helper.m in Sources */,
 				F5F12A031A2F78490015982C /* APCScheduledTask.m in Sources */,
+				36BA08E41A784E10006D40D4 /* APCUploadValidationServer.m in Sources */,
 				F5B948131A73272C0034C522 /* APCScheduler.m in Sources */,
 				F5F12A841A2F78490015982C /* APCResizeView.m in Sources */,
 				F5F12A881A2F78490015982C /* APCSignUpTask.m in Sources */,

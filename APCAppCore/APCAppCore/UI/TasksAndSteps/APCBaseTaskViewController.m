@@ -8,7 +8,7 @@
 #import "APCBaseTaskViewController.h"
 #import "APCAppDelegate.h"
 #import "APCAppCore.h"
-#import "APCLocalLoggingServer.h"
+#import "APCUploadValidationServer.h"
 
 @implementation APCBaseTaskViewController
 
@@ -113,13 +113,13 @@
 
 	/*
 	 When ready, use this:
-		[APCLocalLoggingServer logDataFromFilePath: archiveFileName];
+		[APCUploadValidationServer logDataFromFilePath: archiveFileName];
 	 
 	 That should work identically to this -logText method.
 	 In the mean time, we'll just write the string:
 	 */
-	[APCLocalLoggingServer logText: resultSummary
-				  withFakeFilename: @"resultSummary.json"];
+	[APCUploadValidationServer logText: resultSummary
+					  withFakeFilename: @"resultSummary.json"];
 }
 
 - (void) storeInCoreDataWithFileName: (NSString *) fileName resultSummary: (NSString *) resultSummary
