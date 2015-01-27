@@ -105,9 +105,7 @@ NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController
         }
         else
         {
-            APCTask * task = [APCTask taskWithTaskID:activity.survey.uniqueID inContext:apcSchedule.managedObjectContext];
-            NSAssert(task, @"Task not found!");
-            apcSchedule.taskID = activity.survey.uniqueID;
+            APCLogError(@"Unknown Activity Type: %@", activity.activityType);
         }
     }
 
