@@ -107,7 +107,8 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
             if ([result isKindOfClass:[APCDataResult class]])
             {
                 APCDataResult * dataResult = (APCDataResult*) result;
-                [self addDataToArchive:dataResult.data fileName:[dataResult.identifier stringByAppendingString:@"_data"] contentType:@"data" timeStamp:dataResult.endDate];
+                NSString *fileName = dataResult.identifier?:(stepResult.identifier?:[NSUUID UUID].UUIDString);
+                [self addDataToArchive:dataResult.data fileName:[fileName stringByAppendingString:@"_data"] contentType:@"data" timeStamp:dataResult.endDate];
             }
             else if ([result isKindOfClass:[RKSTFileResult class]])
             {
