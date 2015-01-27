@@ -59,13 +59,18 @@ end
 # calls this method, using the parameters
 # it's expecting.
 #
-# To test this from curl, call
+# To test this from curl, call:
 #
 # 		curl "http://localhost:4567/api/v1/upload/someName" -F filedata=@simpleFileToUpload.txt
-#
-# "somename" is anything you like.
-# "filedata" is required: the variable name we'll extract in this method.
-# "simpleFileToUpload.txt" is the file you want to upload.  Note the "@".
+# 		                                          ^^^^^^^^     ^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+# 		                                             1             2               3
+# With these components:
+# 	1)	"somename" is anything you like.
+# 	2)	"filedata" is required: the variable name we'll
+# 		extract in this method.
+# 	3)	"simpleFileToUpload.txt" is the file you want to
+# 		upload.  Note the "@"; that's part of the 'curl'
+# 		syntax.
 #
 # The results will be written to the file "output.txt"
 # in a folder on your Mac desktop.
