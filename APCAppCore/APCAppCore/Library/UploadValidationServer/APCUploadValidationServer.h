@@ -30,6 +30,12 @@
 + (void) setupTurningLoggingOn: (BOOL) shouldTurnLoggingOn;
 
 /**
+ Returns the value passed to +setupTurningLoggingOn,
+ or NO if that method was not called.
+ */
++ (BOOL) isLoggingOn;
+
+/**
  Kind of a hack, until we get result-data-archiving
  working again.  The "fake filename" is so we know
  what MIME type to give it, and so we can label it

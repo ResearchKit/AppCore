@@ -17,7 +17,7 @@
 /**
  If this is non-nil, we'll use it.
  Otherwise, we'll use YES if in debug mode,
- NO if in production.  See +isLoggingEnabled.
+ NO if in production.  See +isLoggingOn.
  */
 static NSNumber *shouldLog = nil;
 static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
@@ -30,7 +30,7 @@ static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 	shouldLog = @(shouldTurnLoggingOn);
 }
 
-+ (BOOL) isLoggingEnabled
++ (BOOL) isLoggingOn
 {
 	BOOL result = NO;
 
@@ -75,7 +75,7 @@ withFakeFilename: (NSString *) fakeFilename
 
 + (void) uploadData: (NSData *) dataToLog withFilenameForMimeType: (NSString *) filename
 {
-	if (self.isLoggingEnabled)
+	if (self.isLoggingOn)
 	{
 		NSURL * url = [NSURL URLWithString:@"http://127.0.0.1:4567/api/v1/upload/passive_data_collection"];
 		NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
