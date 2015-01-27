@@ -41,17 +41,17 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.infoDict = [NSMutableDictionary dictionary];
-        self.filesList = [NSMutableArray array];
-        self.zipEntries = [NSMutableArray array];
-        self.tempOutputDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID UUID].UUIDString];
+        _infoDict = [NSMutableDictionary dictionary];
+        _filesList = [NSMutableArray array];
+        _zipEntries = [NSMutableArray array];
+        _tempOutputDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID UUID].UUIDString];
         NSError * error;
-        self.zipArchive = [[ZZArchive alloc] initWithURL:[NSURL fileURLWithPath:[self.tempOutputDirectory stringByAppendingPathComponent:@"unencrypted.zip"]]
+        _zipArchive = [[ZZArchive alloc] initWithURL:[NSURL fileURLWithPath:[self.tempOutputDirectory stringByAppendingPathComponent:@"unencrypted.zip"]]
                                                  options:@{ZZOpenOptionsCreateIfMissingKey : @YES}
                                                    error:&error];
         APCLogError2(error);
         
-        self.preserveUnencryptedFile = NO;
+        _preserveUnencryptedFile = NO;
     }
     return self;
 }
@@ -86,8 +86,8 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     self = [self init];
     if (self) {
         //Set up info Dictionary
-        self.infoDict[kTaskRunKey] = runUUID.UUIDString;
-        self.infoDict[kItemKey] = itemIdentifier;
+        _infoDict[kTaskRunKey] = runUUID.UUIDString;
+        _infoDict[kItemKey] = itemIdentifier;
         [self processResults:results];
     }
     return self;
@@ -203,11 +203,15 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
 {
     NSError * error;
     NSData * jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:&error];
-    APCLogError2(error);
-    NSString * fullFileName = [fileName stringByAppendingPathExtension:@"json"];
-    [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fullFileName
-                                                                compress:YES
-                                                               dataBlock:^(NSError** error){ return jsonData;}]];
+    if (jsonData !=nil) {
+        NSString * fullFileName = [fileName stringByAppendingPathExtension:@"json"];
+        [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fullFileName
+                                                                    compress:YES
+                                                                   dataBlock:^(NSError** error){ return jsonData;}]];
+    }
+    else {
+        APCLogError2(error);
+    }
 }
 
 - (void) writeDataToArchive: (NSData*) data fileName: (NSString*) fileName
@@ -263,16 +267,20 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     NSString * newUnEncryptedPath = [outputDirectory stringByAppendingPathComponent:@"unencrypted.zip"];
 
     NSError * moveError;
-    [[NSFileManager defaultManager] moveItemAtPath:self.tempEncryptedZipFilePath toPath:newEncryptedPath error:&moveError];
-    APCLogError2(moveError);
-    
-    if (self.preserveUnencryptedFile) {
-        [[NSFileManager defaultManager] moveItemAtPath:self.tempUnencryptedZipFilePath toPath:newUnEncryptedPath error:&moveError];
+    if (![[NSFileManager defaultManager] moveItemAtPath:self.tempEncryptedZipFilePath toPath:newEncryptedPath error:&moveError]) {
         APCLogError2(moveError);
     }
+
+    if (self.preserveUnencryptedFile) {
+        if (![[NSFileManager defaultManager] moveItemAtPath:self.tempUnencryptedZipFilePath toPath:newUnEncryptedPath error:&moveError]) {
+            APCLogError2(moveError);
+        }
+    }
     else {
-        [[NSFileManager defaultManager] removeItemAtPath:self.tempUnencryptedZipFilePath error:&moveError];
-        APCLogError2(moveError);
+        if (![[NSFileManager defaultManager] removeItemAtPath:self.tempUnencryptedZipFilePath error:&moveError]) {
+            APCLogError2(moveError);
+        }
+        
     }
     return ([[NSFileManager defaultManager] fileExistsAtPath:newEncryptedPath])? @"encrypted.zip" : nil;
 }
