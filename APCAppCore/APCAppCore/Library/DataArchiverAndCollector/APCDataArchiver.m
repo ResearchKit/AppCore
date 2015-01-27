@@ -107,16 +107,20 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
             if ([result isKindOfClass:[APCDataResult class]])
             {
                 APCDataResult * dataResult = (APCDataResult*) result;
-                [self addDataToArchive:dataResult.data fileName:[dataResult.identifier stringByAppendingString:@"_data"] contentType:@"data" timeStamp:dataResult.endDate metadata:nil];
+                [self addDataToArchive:dataResult.data fileName:[dataResult.identifier stringByAppendingString:@"_data"] contentType:@"data" timeStamp:dataResult.endDate];
             }
             else if ([result isKindOfClass:[RKSTFileResult class]])
             {
                 RKSTFileResult * fileResult = (RKSTFileResult*) result;
-                [self addFileToArchive:fileResult.fileURL contentType:@"data" metadata:nil];
+                [self addFileToArchive:fileResult.fileURL contentType:@"data" timeStamp:fileResult.endDate];
+            }
+            else if ([result isKindOfClass:[RKSTQuestionResult class]])
+            {
+                [self addResultToArchive:result];
             }
             else
             {
-                [self addResultToArchive:result];
+                APCLogError(@"Result not processed for : %@", result.identifier);
             }
         }];
     }];
@@ -124,12 +128,17 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     [self finalizeZipFile];
 }
 
-- (void) addDataToArchive: (NSData*) data fileName: (NSString*) string contentType:(NSString*) contentType timeStamp: (NSDate*) date metadata: (NSDictionary*) metadata {
-    
+- (void) addDataToArchive: (NSData*) data fileName: (NSString*) fileName contentType:(NSString*) contentType timeStamp: (NSDate*) date
+{
+    [self writeDataToArchive:data fileName:fileName];
+    [self addFileInfoEntryWithFileName:fileName timeStamp:[NSString stringWithFormat:@"%@", date] contentType:contentType];
 }
 
-- (void) addFileToArchive: (NSURL*) fileURL contentType: (NSString*) contentType metadata: (NSDictionary*) metadata {
-    
+- (void) addFileToArchive: (NSURL*) fileURL contentType: (NSString*) contentType timeStamp: (NSDate*) date
+{
+    NSString * fileName = fileURL.lastPathComponent;
+    [self writeURLToArchive:fileURL];
+    [self addFileInfoEntryWithFileName:fileName timeStamp:[NSString stringWithFormat:@"%@", date] contentType:contentType];
 }
 
 /*********************************************************************************/
@@ -146,7 +155,7 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     [self processDictionary:dictionary];
     APCLogDebug(@"%@", dictionary);
     [self writeResultDictionaryToArchive:dictionary];
-    [self addFileInfoEntry:dictionary];
+    [self addFileInfoEntryWithDictionary:dictionary];
 }
 
 - (void) processDictionary :(NSMutableDictionary*) mutableDictionary {
@@ -200,14 +209,31 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
                                                                dataBlock:^(NSError** error){ return jsonData;}]];
 }
 
-- (void) addFileInfoEntry: (NSDictionary*) dictionary {
-    NSMutableDictionary * fileInfoEntry = [NSMutableDictionary dictionary];
+- (void) writeDataToArchive: (NSData*) data fileName: (NSString*) fileName
+{
+    [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fileName
+                                                                compress:YES
+                                                               dataBlock:^(NSError** error){ return data;}]];
+}
+
+- (void) writeURLToArchive: (NSURL*) url
+{
+    
+}
+
+- (void) addFileInfoEntryWithDictionary: (NSDictionary*) dictionary
+{
     NSString * fileName = dictionary[kItemKey]?:@"NoName";
     NSString * fullFileName = [fileName stringByAppendingPathExtension:@"json"];
-    fileInfoEntry[kFileInfoNameKey] = fullFileName;
-    
-    fileInfoEntry[kFileInfoTimeStampKey] = dictionary[kEndDateKey];
-    fileInfoEntry[kFileInfoContentTypeKey] = @"application/json";
+    [self addFileInfoEntryWithFileName:fullFileName timeStamp:dictionary[kEndDateKey] contentType:@"application/json"];
+}
+
+- (void) addFileInfoEntryWithFileName: (NSString*) fileName timeStamp: (NSString*) dateString contentType: (NSString*) contentType
+{
+    NSMutableDictionary * fileInfoEntry = [NSMutableDictionary dictionary];
+    fileInfoEntry[kFileInfoNameKey] = fileName;
+    fileInfoEntry[kFileInfoTimeStampKey] = dateString;
+    fileInfoEntry[kFileInfoContentTypeKey] = contentType;
     [self.filesList addObject:fileInfoEntry];
 }
 
@@ -231,20 +257,23 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     NSAssert([[NSFileManager defaultManager] fileExistsAtPath:outputDirectory], @"Output Directory does not exist");
     
     [self encryptZipFile];
+    
+    NSString * newEncryptedPath = [outputDirectory stringByAppendingPathComponent:@"encrypted.zip"];
+    NSString * newUnEncryptedPath = [outputDirectory stringByAppendingPathComponent:@"unencrypted.zip"];
 
     NSError * moveError;
-    [[NSFileManager defaultManager] moveItemAtPath:self.tempEncryptedZipFilePath toPath:[outputDirectory stringByAppendingPathComponent:@"encrypted.zip"] error:&moveError];
+    [[NSFileManager defaultManager] moveItemAtPath:self.tempEncryptedZipFilePath toPath:newEncryptedPath error:&moveError];
     APCLogError2(moveError);
     
     if (self.preserveUnencryptedFile) {
-        [[NSFileManager defaultManager] moveItemAtPath:self.tempUnencryptedZipFilePath toPath:[outputDirectory stringByAppendingPathComponent:@"unencrypted.zip"] error:&moveError];
+        [[NSFileManager defaultManager] moveItemAtPath:self.tempUnencryptedZipFilePath toPath:newUnEncryptedPath error:&moveError];
         APCLogError2(moveError);
     }
     else {
         [[NSFileManager defaultManager] removeItemAtPath:self.tempUnencryptedZipFilePath error:&moveError];
         APCLogError2(moveError);
     }
-    return @"encrypted.zip";
+    return ([[NSFileManager defaultManager] fileExistsAtPath:newEncryptedPath])? @"encrypted.zip" : nil;
 }
 
 - (void) encryptZipFile {
