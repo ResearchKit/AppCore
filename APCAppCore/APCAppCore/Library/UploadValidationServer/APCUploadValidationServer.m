@@ -77,7 +77,6 @@ withFakeFilename: (NSString *) fakeFilename
 {
 	if (self.isLoggingOn)
 	{
-//		NSURL * url = [NSURL URLWithString: @"http://127.0.0.1:4567/api/v1/upload/passive_data_collection"];
 		NSURL * url = [NSURL URLWithString: [NSString stringWithFormat: @"http://127.0.0.1:4567/api/v1/upload/%@", filename]];
 		NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: url];
 		[request setHTTPMethod: @"POST"];
@@ -94,7 +93,7 @@ withFakeFilename: (NSString *) fakeFilename
 															 fromData: data
 													completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
 			if (error) {
-				NSAssert(!error, @"%s: uploadTaskWithRequest error: %@", __FUNCTION__, error);
+				NSLog(@"+[APCUploadValiationServer uploadData:] Error when copying Sage data file to local validation server. Is the local server running? The error was:\n-----\n%@\n-----", error);
 			}
 		}];
 
