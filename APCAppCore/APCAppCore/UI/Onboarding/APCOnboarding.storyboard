@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -778,7 +778,7 @@
                                             <rect key="frame" x="169" y="2" width="143" height="63"/>
                                             <state key="normal" title="Female"/>
                                         </button>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A6D-nI-0bR">
+                                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A6D-nI-0bR">
                                             <rect key="frame" x="160" y="-1" width="1" height="66"/>
                                             <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
@@ -1162,18 +1162,23 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lJ6-Qj-KGv" id="urg-0I-biT">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="aoS-Ay-W9H">
-                                            <rect key="frame" x="20" y="21" width="100" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aoS-Ay-W9H">
+                                            <rect key="frame" x="20" y="8" width="222" height="49"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="M0T-ae-Uct"/>
-                                                <constraint firstAttribute="width" constant="100" id="etq-2J-1fa"/>
+                                                <constraint firstAttribute="width" constant="222" id="etq-2J-1fa"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="M0T-ae-Uct"/>
+                                                </mask>
+                                            </variation>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="Ccj-sG-x4h">
-                                            <rect key="frame" x="132" y="23" width="174" height="21"/>
+                                            <rect key="frame" x="232" y="23" width="74" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="4KJ-mb-UBM"/>
                                             </constraints>
@@ -1184,7 +1189,8 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="centerY" secondItem="Ccj-sG-x4h" secondAttribute="centerY" constant="-1" id="3nX-ka-W99"/>
-                                        <constraint firstItem="Ccj-sG-x4h" firstAttribute="leading" secondItem="aoS-Ay-W9H" secondAttribute="trailing" constant="12" id="PTm-WT-zmx"/>
+                                        <constraint firstItem="Ccj-sG-x4h" firstAttribute="leading" secondItem="aoS-Ay-W9H" secondAttribute="trailing" constant="-10" id="PTm-WT-zmx"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="aoS-Ay-W9H" secondAttribute="bottom" constant="-0.5" id="S9Y-Et-W6V"/>
                                         <constraint firstAttribute="centerY" secondItem="aoS-Ay-W9H" secondAttribute="centerY" constant="0.5" id="SwL-CQ-rDh"/>
                                         <constraint firstItem="aoS-Ay-W9H" firstAttribute="leading" secondItem="urg-0I-biT" secondAttribute="leadingMargin" constant="12" id="TSr-Et-whY"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="Ccj-sG-x4h" secondAttribute="trailing" constant="6" id="ihd-8l-k9T"/>
