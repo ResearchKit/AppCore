@@ -151,7 +151,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
 
 - (void)showConsent
 {
-    RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewControllerWithReviewStep:NO];
     
     consentVC.delegate = self;
     [self presentViewController:consentVC animated:YES completion:nil];
