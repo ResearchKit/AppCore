@@ -434,13 +434,6 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (RKSTTaskViewController *)consentViewController
 {
-    RKSTTaskViewController *taskVC = [self consentViewControllerWithReviewStep:YES];
-    
-    return taskVC;
-}
-
-- (RKSTTaskViewController *)consentViewControllerWithReviewStep:(BOOL)showReviewStep
-{
     NSAssert(FALSE, @"Override this method to return a valid Consent Task View Controller.");
     return nil;
 }

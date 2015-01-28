@@ -244,6 +244,15 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
         [mutableDictionary removeObjectForKey:kIdentifierKey];
     }
     
+        //Override dates with strings
+    if ([mutableDictionary[kStartDateKey] isKindOfClass:[NSDate class]]) {
+        mutableDictionary[kStartDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kStartDateKey]];
+    }
+    
+    if ([mutableDictionary[kEndDateKey] isKindOfClass:[NSDate class]]) {
+        mutableDictionary[kEndDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kEndDateKey]];
+    }
+    
     //Replace any other type of objects with its string equivalents
     NSMutableDictionary * copyDictionary = [mutableDictionary mutableCopy];
     [mutableDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
