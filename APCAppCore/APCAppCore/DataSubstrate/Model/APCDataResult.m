@@ -11,7 +11,7 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    id copy = [[[self class] alloc] init];
+    id copy = [super copyWithZone:zone];
     
     if (copy) {
         [copy setData:[self.data copyWithZone:zone]];
