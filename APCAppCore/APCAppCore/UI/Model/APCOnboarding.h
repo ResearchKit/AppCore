@@ -28,6 +28,8 @@ typedef NS_ENUM(NSUInteger, APCOnboardingTaskType) {
 
 @property (nonatomic, strong) NSMutableDictionary *scenes;
 
+@property (nonatomic, strong) NSMutableDictionary *sceneData;
+
 @property (nonatomic, weak) id <APCOnboardingDelegate> delegate;
 
 @property (nonatomic, readonly) APCOnboardingTaskType taskType;
