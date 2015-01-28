@@ -40,6 +40,8 @@ static NSString * const kOnboardingStoryboardName = @"APCOnboarding";
             _onboardingTask = [APCSignUpTask new];
         }
         
+        _sceneData = [NSMutableDictionary new];
+        
         _delegate = object;
         _onboardingTask.delegate = object;
         

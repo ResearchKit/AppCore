@@ -70,6 +70,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [self restoreSceneData];
+    
   APCLogViewControllerAppeared();
 }
 
@@ -93,6 +96,38 @@
     [self.navigationItem setLeftBarButtonItem:backBarButton];
     
     self.nextBarButton.enabled = NO;
+}
+
+- (void)saveSceneData
+{
+    NSDictionary *generalInfoSceneData = @{
+                                           @"name": self.nameTextField.text ?:[NSNull null],
+                                           @"email": self.emailTextField.text ?:[NSNull null],
+                                           @"photo": self.profileImage ?:[NSNull null]
+                                           };
+    
+    [self.onboarding.sceneData setObject:generalInfoSceneData forKey:self.onboarding.currentStep.identifier];
+}
+
+- (void)restoreSceneData
+{
+    // check if there is data for the scene
+    NSDictionary *sceneData = [self.onboarding.sceneData valueForKey:self.onboarding.currentStep.identifier];
+    
+    if (sceneData) {
+        if (sceneData[@"name"] != [NSNull null]) {
+            self.nameTextField.text = sceneData[@"name"];
+        }
+        
+        if (sceneData[@"email"] != [NSNull null]) {
+            self.emailTextField.text = sceneData[@"email"];
+        }
+        
+        if (sceneData[@"photo"] != [NSNull null]) {
+            self.profileImage = sceneData[@"photo"];
+            self.profileImageButton.imageView.image = self.profileImage;
+        }
+    }
 }
 
 - (NSArray *)prepareContent {
@@ -614,6 +649,8 @@
     
     if ([self isContentValid:nil]) {
         
+        [self saveSceneData];
+        
         [self loadProfileValuesInModel];
         
         [self sendCredentials];
@@ -737,6 +774,7 @@
 
 - (void)back
 {
+    [self saveSceneData];
     [self.navigationController popViewControllerAnimated:YES];
     [[self onboarding] popScene];
 }

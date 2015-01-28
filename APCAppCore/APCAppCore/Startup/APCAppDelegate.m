@@ -177,6 +177,11 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withdrawStudy:) name:APCUserWithdrawStudyNotification object:nil];
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void) signedUpNotification:(NSNotification*) notification
 {
     [self showNeedsEmailVerification];
@@ -429,7 +434,14 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (RKSTTaskViewController *)consentViewController
 {
-     NSAssert(FALSE, @"Override this method to return a valid Consent Task View Controller.");
+    RKSTTaskViewController *taskVC = [self consentViewControllerWithReviewStep:YES];
+    
+    return taskVC;
+}
+
+- (RKSTTaskViewController *)consentViewControllerWithReviewStep:(BOOL)showReviewStep
+{
+    NSAssert(FALSE, @"Override this method to return a valid Consent Task View Controller.");
     return nil;
 }
 
