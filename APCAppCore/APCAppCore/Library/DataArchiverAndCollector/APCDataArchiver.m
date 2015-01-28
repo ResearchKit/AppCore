@@ -186,7 +186,12 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     //Replace any other type of objects with its string equivalents
     NSMutableDictionary * copyDictionary = [mutableDictionary mutableCopy];
     [mutableDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        if (!([obj isKindOfClass:[NSNumber class]] || [obj isKindOfClass:[NSString class]])) {
+        //Removing NSCalendar objects if they are present
+        if ([obj isKindOfClass:[NSCalendar class]]) {
+            [copyDictionary removeObjectForKey:key];
+        }
+        //Otherwise call description on the objects to get string
+        else if (!([obj isKindOfClass:[NSNumber class]] || [obj isKindOfClass:[NSString class]])) {
             copyDictionary[key] = [NSString stringWithFormat:@"%@", obj];
         }
     }];
