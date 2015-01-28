@@ -45,6 +45,7 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
         _filesList = [NSMutableArray array];
         _zipEntries = [NSMutableArray array];
         _tempOutputDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID UUID].UUIDString];
+        [self createTempDirectoryIfDoesntExist];
         NSError * error;
         _zipArchive = [[ZZArchive alloc] initWithURL:[NSURL fileURLWithPath:[self.tempOutputDirectory stringByAppendingPathComponent:@"unencrypted.zip"]]
                                                  options:@{ZZOpenOptionsCreateIfMissingKey : @YES}
@@ -64,12 +65,11 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     return [self.tempOutputDirectory stringByAppendingPathComponent:@"encrypted.zip"];
 }
 
-- (void)setTempOutputDirectory:(NSString *)tempOutputDirectory {
-    _tempOutputDirectory = tempOutputDirectory;
+- (void)createTempDirectoryIfDoesntExist {
     
-    if (![[NSFileManager defaultManager] fileExistsAtPath:tempOutputDirectory]) {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:_tempOutputDirectory]) {
         NSError * fileError;
-        [[NSFileManager defaultManager] createDirectoryAtPath:tempOutputDirectory withIntermediateDirectories:YES attributes:nil error:&fileError];
+        [[NSFileManager defaultManager] createDirectoryAtPath:_tempOutputDirectory withIntermediateDirectories:YES attributes:nil error:&fileError];
         APCLogError2 (fileError);
     }
 }
@@ -153,13 +153,13 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     }
     [properties addObjectsFromArray:[APCDataArchiver classPropsFor:result.class]];
     NSMutableDictionary * dictionary = [[result dictionaryWithValuesForKeys:properties] mutableCopy];
-    [self processDictionary:dictionary];
+    dictionary = [self processDictionary:dictionary];
     APCLogDebug(@"%@", dictionary);
     [self writeResultDictionaryToArchive:dictionary];
     [self addFileInfoEntryWithDictionary:dictionary];
 }
 
-- (void) processDictionary :(NSMutableDictionary*) mutableDictionary {
+- (NSMutableDictionary*) processDictionary :(NSMutableDictionary*) mutableDictionary {
     static NSArray* array = nil;
     if (array == nil) {
         array = @[@"None", @"Scale", @"SingleChoice", @"MultipleChoice", @"Decimal",@"Integer", @"Boolean", @"Text", @"TimeOfDay", @"DateAndTime", @"Date", @"TimeInterval"];
@@ -183,14 +183,20 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
         [mutableDictionary removeObjectForKey:kIdentifierKey];
     }
     
-    //Override dates with strings
-    if ([mutableDictionary[kStartDateKey] isKindOfClass:[NSDate class]]) {
-        mutableDictionary[kStartDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kStartDateKey]];
-    }
+    //Replace any other type of objects with its string equivalents
+    NSMutableDictionary * copyDictionary = [mutableDictionary mutableCopy];
+    [mutableDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        //Removing NSCalendar objects if they are present
+        if ([obj isKindOfClass:[NSCalendar class]]) {
+            [copyDictionary removeObjectForKey:key];
+        }
+        //Otherwise call description on the objects to get string
+        else if (!([obj isKindOfClass:[NSNumber class]] || [obj isKindOfClass:[NSString class]])) {
+            copyDictionary[key] = [NSString stringWithFormat:@"%@", obj];
+        }
+    }];
     
-    if ([mutableDictionary[kEndDateKey] isKindOfClass:[NSDate class]]) {
-        mutableDictionary[kEndDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kEndDateKey]];
-    }
+    return copyDictionary;
 }
 
 - (void) writeResultDictionaryToArchive: (NSDictionary*) dictionary
