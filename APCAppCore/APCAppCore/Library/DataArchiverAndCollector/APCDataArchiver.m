@@ -10,18 +10,18 @@
 #import "zipzap.h"
 #import <objc/runtime.h>
 
-NSString *const kQuestionTypeKey = @"questionType";
-NSString *const kUserInfoKey    = @"userInfo";
-NSString *const kIdentifierKey    = @"identifier";
-NSString *const kStartDateKey    = @"startDate";
-NSString *const kEndDateKey    = @"endDate";
-NSString *const kTaskRunKey     = @"taskRun";
-NSString *const kItemKey        = @"item";
+NSString *const kQuestionTypeKey        = @"questionType";
+NSString *const kUserInfoKey            = @"userInfo";
+NSString *const kIdentifierKey          = @"identifier";
+NSString *const kStartDateKey           = @"startDate";
+NSString *const kEndDateKey             = @"endDate";
+NSString *const kTaskRunKey             = @"taskRun";
+NSString *const kItemKey                = @"item";
 
-NSString *const kFilesKey = @"files";
+NSString *const kFilesKey               = @"files";
 
-NSString *const kFileInfoNameKey = @"filename";
-NSString *const kFileInfoTimeStampKey = @"timestamp";
+NSString *const kFileInfoNameKey        = @"filename";
+NSString *const kFileInfoTimeStampKey   = @"timestamp";
 NSString *const kFileInfoContentTypeKey = @"contentType";
 
 @interface APCDataArchiver ()
@@ -45,6 +45,7 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
         _filesList = [NSMutableArray array];
         _zipEntries = [NSMutableArray array];
         _tempOutputDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID UUID].UUIDString];
+        [self createTempDirectoryIfDoesntExist];
         NSError * error;
         _zipArchive = [[ZZArchive alloc] initWithURL:[NSURL fileURLWithPath:[self.tempOutputDirectory stringByAppendingPathComponent:@"unencrypted.zip"]]
                                                  options:@{ZZOpenOptionsCreateIfMissingKey : @YES}
@@ -64,12 +65,11 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     return [self.tempOutputDirectory stringByAppendingPathComponent:@"encrypted.zip"];
 }
 
-- (void)setTempOutputDirectory:(NSString *)tempOutputDirectory {
-    _tempOutputDirectory = tempOutputDirectory;
+- (void)createTempDirectoryIfDoesntExist {
     
-    if (![[NSFileManager defaultManager] fileExistsAtPath:tempOutputDirectory]) {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:_tempOutputDirectory]) {
         NSError * fileError;
-        [[NSFileManager defaultManager] createDirectoryAtPath:tempOutputDirectory withIntermediateDirectories:YES attributes:nil error:&fileError];
+        [[NSFileManager defaultManager] createDirectoryAtPath:_tempOutputDirectory withIntermediateDirectories:YES attributes:nil error:&fileError];
         APCLogError2 (fileError);
     }
 }
@@ -115,6 +115,11 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
                 RKSTFileResult * fileResult = (RKSTFileResult*) result;
                 [self addFileToArchive:fileResult.fileURL contentType:@"data" timeStamp:fileResult.endDate];
             }
+            else if ([result isKindOfClass:[RKSTTappingIntervalResult class]])
+            {
+                RKSTTappingIntervalResult  *tappingResult = (RKSTTappingIntervalResult *)result;
+                [self addTappingResultsToArchive:tappingResult];
+            }
             else if ([result isKindOfClass:[RKSTQuestionResult class]])
             {
                 [self addResultToArchive:result];
@@ -142,9 +147,61 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     [self addFileInfoEntryWithFileName:fileName timeStamp:[NSString stringWithFormat:@"%@", date] contentType:contentType];
 }
 
+static  NSString  *kTappingViewSizeKey       = @"TappingViewSize";
+static  NSString  *kButtonRectLeftKey        = @"ButtonRectLeft";
+static  NSString  *kButtonRectRightKey       = @"ButtonRectRight";
+
+static  NSString  *kTappingSamplesKey        = @"TappingSamples";
+static      NSString  *kTappedButtonIdKey    = @"TappedButtonId";
+static      NSString  *kTappedButtonNoneKey  = @"TappedButtonNone";
+static      NSString  *kTappedButtonLeftKey  = @"TappedButtonLeft";
+static      NSString  *kTappedButtonRightKey = @"TappedButtonRight";
+static      NSString  *kTapTimeStampKey      = @"TapTimeStamp";
+static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
+
 /*********************************************************************************/
 #pragma mark - Add Result Archive
 /*********************************************************************************/
+
+- (void)addTappingResultsToArchive:(RKSTTappingIntervalResult *)result
+{
+    NSMutableDictionary  *dictionary = [NSMutableDictionary dictionary];
+    
+    NSString  *tappingViewSize = NSStringFromCGSize(result.stepViewSize);
+    dictionary[kTappingViewSizeKey] = tappingViewSize;
+    
+    dictionary[kStartDateKey] = result.startDate;
+    dictionary[kEndDateKey]   = result.endDate;
+    
+    NSString  *leftButtonRect = NSStringFromCGRect(result.buttonRect1);
+    dictionary[kButtonRectLeftKey] = leftButtonRect;
+    
+    NSString  *rightButtonRect = NSStringFromCGRect(result.buttonRect2);
+    dictionary[kButtonRectRightKey] = rightButtonRect;
+    
+    NSArray  *samples = result.samples;
+    NSMutableArray  *sampleResults = [NSMutableArray array];
+    for (RKSTTappingSample *sample  in  samples) {
+        NSMutableDictionary  *aSampleDictionary = [NSMutableDictionary dictionary];
+        
+        aSampleDictionary[kTapTimeStampKey]     = @(sample.timestamp);
+        
+        aSampleDictionary[kTapCoordinateKey]   = NSStringFromCGPoint(sample.location);
+        
+        if (sample.buttonIdentifier == RKTappingButtonIdentifierNone) {
+            aSampleDictionary[kTappedButtonIdKey] = kTappedButtonNoneKey;
+        } else if (sample.buttonIdentifier == RKTappingButtonIdentifierLeft) {
+            aSampleDictionary[kTappedButtonIdKey] = kTappedButtonLeftKey;
+        } else if (sample.buttonIdentifier == RKTappingButtonIdentifierRight) {
+            aSampleDictionary[kTappedButtonIdKey] = kTappedButtonRightKey;
+        }
+        [sampleResults addObject:aSampleDictionary];
+    }
+    dictionary[kTappingSamplesKey] = sampleResults;
+    [self processDictionary:dictionary];
+    [self writeResultDictionaryToArchive:dictionary];
+}
+
 - (void) addResultToArchive: (RKSTResult*) result {
     NSMutableArray * properties = [NSMutableArray array];
     [properties addObjectsFromArray:[APCDataArchiver classPropsFor:[RKSTResult class]]];
@@ -153,13 +210,13 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     }
     [properties addObjectsFromArray:[APCDataArchiver classPropsFor:result.class]];
     NSMutableDictionary * dictionary = [[result dictionaryWithValuesForKeys:properties] mutableCopy];
-    [self processDictionary:dictionary];
+    dictionary = [self processDictionary:dictionary];
     APCLogDebug(@"%@", dictionary);
     [self writeResultDictionaryToArchive:dictionary];
     [self addFileInfoEntryWithDictionary:dictionary];
 }
 
-- (void) processDictionary :(NSMutableDictionary*) mutableDictionary {
+- (NSMutableDictionary*) processDictionary :(NSMutableDictionary*) mutableDictionary {
     static NSArray* array = nil;
     if (array == nil) {
         array = @[@"None", @"Scale", @"SingleChoice", @"MultipleChoice", @"Decimal",@"Integer", @"Boolean", @"Text", @"TimeOfDay", @"DateAndTime", @"Date", @"TimeInterval"];
@@ -183,7 +240,7 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
         [mutableDictionary removeObjectForKey:kIdentifierKey];
     }
     
-    //Override dates with strings
+        //Override dates with strings
     if ([mutableDictionary[kStartDateKey] isKindOfClass:[NSDate class]]) {
         mutableDictionary[kStartDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kStartDateKey]];
     }
@@ -191,6 +248,21 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     if ([mutableDictionary[kEndDateKey] isKindOfClass:[NSDate class]]) {
         mutableDictionary[kEndDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kEndDateKey]];
     }
+    
+    //Replace any other type of objects with its string equivalents
+    NSMutableDictionary * copyDictionary = [mutableDictionary mutableCopy];
+    [mutableDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        //Removing NSCalendar objects if they are present
+        if ([obj isKindOfClass:[NSCalendar class]]) {
+            [copyDictionary removeObjectForKey:key];
+        }
+        //Otherwise call description on the objects to get string
+        else if (!([obj isKindOfClass:[NSNumber class]] || [obj isKindOfClass:[NSString class]])) {
+            copyDictionary[key] = [NSString stringWithFormat:@"%@", obj];
+        }
+    }];
+    
+    return copyDictionary;
 }
 
 - (void) writeResultDictionaryToArchive: (NSDictionary*) dictionary
