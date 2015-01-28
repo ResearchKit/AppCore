@@ -214,6 +214,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
                 studyDetails.tintColor = [UIColor tertiaryColorForString:rowItemDict[@"tint_color"]];
                 
                 rowItem.item = studyDetails;
+                
                 if ([studyDetails.detailText isEqualToString:@"study_details"]) {
                     rowItem.itemType = kAPCTableViewLearnItemTypeStudyDetails;
                 } else if ([studyDetails.detailText isEqualToString:@"consent"]){
@@ -221,6 +222,21 @@ static CGFloat kSectionHeaderHeight = 40.f;
                 }else {
                     rowItem.itemType = kAPCTableViewLearnItemTypeOtherDetails;
                 }
+                [rowItems addObject:rowItem];
+            }
+            
+            if (section.sectionTitle.length == 0) {
+            
+                // Here we add the Review Consent row
+                APCTableViewStudyDetailsItem *reviewConsentItem = [APCTableViewStudyDetailsItem new];
+                reviewConsentItem.caption = NSLocalizedString(@"Review Consent", nil);
+                reviewConsentItem.iconImage = [UIImage imageNamed:@"consent_icon"];
+                reviewConsentItem.tintColor = [UIColor appTertiaryPurpleColor];
+                
+                APCTableViewRow *rowItem = [APCTableViewRow new];
+                rowItem.item = reviewConsentItem;
+                rowItem.itemType = kAPCTableViewStudyItemTypeReviewConsent;
+                
                 [rowItems addObject:rowItem];
             }
             
