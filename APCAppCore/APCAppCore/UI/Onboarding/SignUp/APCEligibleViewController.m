@@ -66,35 +66,37 @@
 
 - (void)showConsent
 {
-    RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewControllerWithReviewStep:YES];
     
     consentVC.delegate = self;
     [self presentViewController:consentVC animated:YES completion:nil];
     
 }
 
-
 #pragma mark - RKSTTaskViewControllerDelegate methods
 
 - (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
 {
-    RKSTConsentSignatureResult *consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[0] results] firstObject];
+    RKSTConsentSignatureResult *consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
     
-    APCUser *user = [self user];
-    user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@",consentResult.signature.lastName];
-    user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
+    if (consentResult.signature.requiresName && (consentResult.signature.firstName && consentResult.signature.lastName)) {
     
-    NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
-    user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
-    
-    
-    [self dismissViewControllerAnimated:YES completion:^{
+        APCUser *user = [self user];
+        user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@",consentResult.signature.lastName];
+        user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
         
-        [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
+        NSDateFormatter *dateFormatter = [NSDateFormatter new];
+        dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
+        user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
         
-        [self startSignUp];
-    }];
+        
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+            [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
+            
+            [self startSignUp];
+        }];
+    }
 }
 
 - (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
