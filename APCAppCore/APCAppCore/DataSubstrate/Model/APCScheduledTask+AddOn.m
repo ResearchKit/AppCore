@@ -146,7 +146,7 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
 + (BOOL) userHasCompletedActivitiesInThePastInContext: (NSManagedObjectContext*) context {
     
     NSFetchRequest * request = [APCScheduledTask request];
-    request.predicate = [NSPredicate predicateWithFormat:@"completed == %@ && endOn > %@", @YES, [NSDate yesterdayAtMidnight]];
+    request.predicate = [NSPredicate predicateWithFormat:@"completed == %@ && endOn < %@", @YES, [NSDate yesterdayAtMidnight]];
     NSError * error;
     NSUInteger count = [context countForFetchRequest:request error:&error];
     APCLogError2 (error);
