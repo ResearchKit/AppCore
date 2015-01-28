@@ -59,6 +59,6 @@ withFakeFilename: (NSString *) fakeFilename;
  by default in debug mode.  To enable in production,
  call +setupTurningLoggingOn.
  */
-+ (void) logDataFromFilePath: (NSString *) path;
++ (void) logDataFromFileAtPath: (NSString *) path;
 
 @end

@@ -108,6 +108,7 @@
     APCDataArchiver * archiver = [[APCDataArchiver alloc] initWithTaskResult:self.result];
     archiver.preserveUnencryptedFile = YES;
 
+	// Ron:  add encryption flag here?
     NSString * archiveFileName = [archiver writeToOutputDirectory:self.taskResultsFilePath];
     [self storeInCoreDataWithFileName:archiveFileName resultSummary:resultSummary];
 
@@ -118,8 +119,25 @@
 	 That should work identically to this -logText method.
 	 In the mean time, we'll just write the string:
 	 */
-	[APCUploadValidationServer logText: resultSummary
-					  withFakeFilename: @"resultSummary.json"];
+	[APCUploadValidationServer logDataFromFileAtPath: archiver.unencryptedFilePath];
+}
+
+/**
+ Centralized piece of code that disables
+ encryption of the Sage data.  Potentially used
+ by other view controllers -- anyone creating
+ the archive files.
+ */
+- (BOOL) shouldEncryptArchiveFile
+{
+	BOOL shouldEncrypt = YES;
+
+	if (DEBUG)
+	{
+		shouldEncrypt = NO;
+	}
+
+	return shouldEncrypt;
 }
 
 - (void) storeInCoreDataWithFileName: (NSString *) fileName resultSummary: (NSString *) resultSummary

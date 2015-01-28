@@ -53,6 +53,9 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
         APCLogError2(error);
         
         _preserveUnencryptedFile = NO;
+
+		// Will be set if appropriate.
+		_unencryptedFilePath = nil;
     }
     return self;
 }
@@ -73,6 +76,7 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
         APCLogError2 (fileError);
     }
 }
+
 
 /*********************************************************************************/
 #pragma mark - Task Results
@@ -335,6 +339,8 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     }
 
     if (self.preserveUnencryptedFile) {
+		self.unencryptedFilePath = newUnEncryptedPath;
+
         if (![[NSFileManager defaultManager] moveItemAtPath:self.tempUnencryptedZipFilePath toPath:newUnEncryptedPath error:&moveError]) {
             APCLogError2(moveError);
         }

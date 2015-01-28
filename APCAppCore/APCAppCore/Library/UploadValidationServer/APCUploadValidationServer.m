@@ -39,14 +39,14 @@ static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 		result = shouldLog.boolValue;
 	}
 
-//	else
-//	{
-//		#if DEBUG
-//		{
-//			result = YES;
-//		}
-//		#endif
-//	}
+	else
+	{
+		#if DEBUG
+		{
+			result = YES;
+		}
+		#endif
+	}
 
 	return result;
 }
@@ -59,7 +59,7 @@ withFakeFilename: (NSString *) fakeFilename
 	[self uploadData: data withFilenameForMimeType: fakeFilename];
 }
 
-+ (void) logDataFromFilePath: (NSString *) path
++ (void) logDataFromFileAtPath: (NSString *) path
 {
 	NSData *data = [NSData dataWithContentsOfFile: path];
 	NSString *filename = path.lastPathComponent;
@@ -77,14 +77,14 @@ withFakeFilename: (NSString *) fakeFilename
 {
 	if (self.isLoggingOn)
 	{
-		NSURL * url = [NSURL URLWithString:@"http://127.0.0.1:4567/api/v1/upload/passive_data_collection"];
-		NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-		[request setHTTPMethod:@"POST"];
+//		NSURL * url = [NSURL URLWithString: @"http://127.0.0.1:4567/api/v1/upload/passive_data_collection"];
+		NSURL * url = [NSURL URLWithString: [NSString stringWithFormat: @"http://127.0.0.1:4567/api/v1/upload/%@", filename]];
+		NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: url];
+		[request setHTTPMethod: @"POST"];
 		NSString *boundary = [self boundaryString];
-		[request addValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
-
+		[request addValue: [NSString stringWithFormat: @"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField: @"Content-Type"];
 		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-		NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
+		NSURLSession *session = [NSURLSession sessionWithConfiguration: configuration];
 
 		NSData *data = [self createFormBodyPartWithBoundary: boundary
 													   data: dataToLog

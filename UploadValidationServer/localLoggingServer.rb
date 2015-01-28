@@ -18,7 +18,7 @@ require 'fileutils'
 disable :logging
 set :bind, '0.0.0.0'
 base_url_path = '/api/v1'
-destination_directory = File.expand_path("~/Desktop/localLoggingServerOutput")
+destination_directory = File.expand_path("~/Desktop/uploadValidationServerOutput")
 output_logging_filename = "output.txt"
 file_content_divider = "----------"
 
@@ -75,20 +75,47 @@ end
 # The results will be written to the file "output.txt"
 # in a folder on your Mac desktop.
 #
+
+#
+# adapting dhanush's original version
+#
+
 post "#{base_url_path}/upload/:filename" do
+# post "#{base_url_path}/upload/:variableImCurrentlyIgnoring" do
+	# userdir = "/tmp/upload_files"
+	# userdir = "./"
+
 	FileUtils.mkdir_p(destination_directory)
-	puts "#{params}"
+	puts "\n----------\nInput parameters:\n     #{params}"
 
-	filename = File.join(destination_directory, output_logging_filename)
+	basename = params[:filename]
+	filename = File.join(destination_directory, basename)
+
 	datafile = params[:filedata]
-	data = datafile[:tempfile].read
-	
-	File.open(filename, "a") { |theFile|
-		theFile.write("#{file_content_divider}\n#{data}\n")
-	}
+	FileUtils.copy(datafile[:tempfile], filename)
 
+	puts "\n     wrote to #{filename}"
 	[200, {results: "wrote to #{filename}"}.to_json]
 end
+
+
+#
+# My upload-to-file version
+# 
+# 		post "#{base_url_path}/upload/:filename" do
+# 			FileUtils.mkdir_p(destination_directory)
+# 			puts "#{params}"
+# 		
+# 			filename = File.join(destination_directory, output_logging_filename)
+# 			datafile = params[:filedata]		# temp location of the uploaded file on disk
+# 			data = datafile[:tempfile].read		# slurp the contents from disk into a string
+# 		
+# 			File.open(filename, "a") { |theFile|
+# 				theFile.write("#{file_content_divider}\n#{data}\n")
+# 			}
+# 		
+# 			[200, {results: "wrote to #{filename}"}.to_json]
+# 		end
 
 
 
