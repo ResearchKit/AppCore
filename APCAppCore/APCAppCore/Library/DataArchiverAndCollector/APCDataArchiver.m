@@ -45,7 +45,7 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
         _filesList = [NSMutableArray array];
         _zipEntries = [NSMutableArray array];
         _tempOutputDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID UUID].UUIDString];
-        [self createIfTempDirectoryIfDoesntExist];
+        [self createTempDirectoryIfDoesntExist];
         NSError * error;
         _zipArchive = [[ZZArchive alloc] initWithURL:[NSURL fileURLWithPath:[self.tempOutputDirectory stringByAppendingPathComponent:@"unencrypted.zip"]]
                                                  options:@{ZZOpenOptionsCreateIfMissingKey : @YES}
@@ -65,7 +65,7 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     return [self.tempOutputDirectory stringByAppendingPathComponent:@"encrypted.zip"];
 }
 
-- (void)createIfTempDirectoryIfDoesntExist {
+- (void)createTempDirectoryIfDoesntExist {
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:_tempOutputDirectory]) {
         NSError * fileError;
