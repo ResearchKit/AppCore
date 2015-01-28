@@ -153,13 +153,13 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     }
     [properties addObjectsFromArray:[APCDataArchiver classPropsFor:result.class]];
     NSMutableDictionary * dictionary = [[result dictionaryWithValuesForKeys:properties] mutableCopy];
-    [self processDictionary:dictionary];
+    dictionary = [self processDictionary:dictionary];
     APCLogDebug(@"%@", dictionary);
     [self writeResultDictionaryToArchive:dictionary];
     [self addFileInfoEntryWithDictionary:dictionary];
 }
 
-- (void) processDictionary :(NSMutableDictionary*) mutableDictionary {
+- (NSMutableDictionary*) processDictionary :(NSMutableDictionary*) mutableDictionary {
     static NSArray* array = nil;
     if (array == nil) {
         array = @[@"None", @"Scale", @"SingleChoice", @"MultipleChoice", @"Decimal",@"Integer", @"Boolean", @"Text", @"TimeOfDay", @"DateAndTime", @"Date", @"TimeInterval"];
@@ -183,14 +183,15 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
         [mutableDictionary removeObjectForKey:kIdentifierKey];
     }
     
-    //Override dates with strings
-    if ([mutableDictionary[kStartDateKey] isKindOfClass:[NSDate class]]) {
-        mutableDictionary[kStartDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kStartDateKey]];
-    }
+    //Replace any other type of objects with its string equivalents
+    NSMutableDictionary * copyDictionary = [mutableDictionary mutableCopy];
+    [mutableDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        if (!([obj isKindOfClass:[NSNumber class]] || [obj isKindOfClass:[NSString class]])) {
+            copyDictionary[key] = [NSString stringWithFormat:@"%@", obj];
+        }
+    }];
     
-    if ([mutableDictionary[kEndDateKey] isKindOfClass:[NSDate class]]) {
-        mutableDictionary[kEndDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kEndDateKey]];
-    }
+    return copyDictionary;
 }
 
 - (void) writeResultDictionaryToArchive: (NSDictionary*) dictionary
