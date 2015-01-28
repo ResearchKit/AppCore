@@ -59,6 +59,7 @@
 - (void)showPasscodeIfNecessary;
 
 - (RKSTTaskViewController *)consentViewController;
+- (RKSTTaskViewController *)consentViewControllerWithReviewStep:(BOOL)showReviewStep;
 
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
 
