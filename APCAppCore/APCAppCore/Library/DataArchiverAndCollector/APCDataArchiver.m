@@ -10,18 +10,18 @@
 #import "zipzap.h"
 #import <objc/runtime.h>
 
-NSString *const kQuestionTypeKey = @"questionType";
-NSString *const kUserInfoKey    = @"userInfo";
-NSString *const kIdentifierKey    = @"identifier";
-NSString *const kStartDateKey    = @"startDate";
-NSString *const kEndDateKey    = @"endDate";
-NSString *const kTaskRunKey     = @"taskRun";
-NSString *const kItemKey        = @"item";
+NSString *const kQuestionTypeKey        = @"questionType";
+NSString *const kUserInfoKey            = @"userInfo";
+NSString *const kIdentifierKey          = @"identifier";
+NSString *const kStartDateKey           = @"startDate";
+NSString *const kEndDateKey             = @"endDate";
+NSString *const kTaskRunKey             = @"taskRun";
+NSString *const kItemKey                = @"item";
 
-NSString *const kFilesKey = @"files";
+NSString *const kFilesKey               = @"files";
 
-NSString *const kFileInfoNameKey = @"filename";
-NSString *const kFileInfoTimeStampKey = @"timestamp";
+NSString *const kFileInfoNameKey        = @"filename";
+NSString *const kFileInfoTimeStampKey   = @"timestamp";
 NSString *const kFileInfoContentTypeKey = @"contentType";
 
 @interface APCDataArchiver ()
@@ -115,6 +115,11 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
                 RKSTFileResult * fileResult = (RKSTFileResult*) result;
                 [self addFileToArchive:fileResult.fileURL contentType:@"data" timeStamp:fileResult.endDate];
             }
+            else if ([result isKindOfClass:[RKSTTappingIntervalResult class]])
+            {
+                RKSTTappingIntervalResult  *tappingResult = (RKSTTappingIntervalResult *)result;
+                [self addTappingResultsToArchive:tappingResult];
+            }
             else if ([result isKindOfClass:[RKSTQuestionResult class]])
             {
                 [self addResultToArchive:result];
@@ -142,9 +147,61 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     [self addFileInfoEntryWithFileName:fileName timeStamp:[NSString stringWithFormat:@"%@", date] contentType:contentType];
 }
 
+static  NSString  *kTappingViewSizeKey       = @"TappingViewSize";
+static  NSString  *kButtonRectLeftKey        = @"ButtonRectLeft";
+static  NSString  *kButtonRectRightKey       = @"ButtonRectRight";
+
+static  NSString  *kTappingSamplesKey        = @"TappingSamples";
+static      NSString  *kTappedButtonIdKey    = @"TappedButtonId";
+static      NSString  *kTappedButtonNoneKey  = @"TappedButtonNone";
+static      NSString  *kTappedButtonLeftKey  = @"TappedButtonLeft";
+static      NSString  *kTappedButtonRightKey = @"TappedButtonRight";
+static      NSString  *kTapTimeStampKey      = @"TapTimeStamp";
+static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
+
 /*********************************************************************************/
 #pragma mark - Add Result Archive
 /*********************************************************************************/
+
+- (void)addTappingResultsToArchive:(RKSTTappingIntervalResult *)result
+{
+    NSMutableDictionary  *dictionary = [NSMutableDictionary dictionary];
+    
+    NSString  *tappingViewSize = NSStringFromCGSize(result.stepViewSize);
+    dictionary[kTappingViewSizeKey] = tappingViewSize;
+    
+    dictionary[kStartDateKey] = result.startDate;
+    dictionary[kEndDateKey]   = result.endDate;
+    
+    NSString  *leftButtonRect = NSStringFromCGRect(result.buttonRect1);
+    dictionary[kButtonRectLeftKey] = leftButtonRect;
+    
+    NSString  *rightButtonRect = NSStringFromCGRect(result.buttonRect2);
+    dictionary[kButtonRectRightKey] = rightButtonRect;
+    
+    NSArray  *samples = result.samples;
+    NSMutableArray  *sampleResults = [NSMutableArray array];
+    for (RKSTTappingSample *sample  in  samples) {
+        NSMutableDictionary  *aSampleDictionary = [NSMutableDictionary dictionary];
+        
+        aSampleDictionary[kTapTimeStampKey]     = @(sample.timestamp);
+        
+        aSampleDictionary[kTapCoordinateKey]   = NSStringFromCGPoint(sample.location);
+        
+        if (sample.buttonIdentifier == RKTappingButtonIdentifierNone) {
+            aSampleDictionary[kTappedButtonIdKey] = kTappedButtonNoneKey;
+        } else if (sample.buttonIdentifier == RKTappingButtonIdentifierLeft) {
+            aSampleDictionary[kTappedButtonIdKey] = kTappedButtonLeftKey;
+        } else if (sample.buttonIdentifier == RKTappingButtonIdentifierRight) {
+            aSampleDictionary[kTappedButtonIdKey] = kTappedButtonRightKey;
+        }
+        [sampleResults addObject:aSampleDictionary];
+    }
+    dictionary[kTappingSamplesKey] = sampleResults;
+    [self processDictionary:dictionary];
+    [self writeResultDictionaryToArchive:dictionary];
+}
+
 - (void) addResultToArchive: (RKSTResult*) result {
     NSMutableArray * properties = [NSMutableArray array];
     [properties addObjectsFromArray:[APCDataArchiver classPropsFor:[RKSTResult class]]];
