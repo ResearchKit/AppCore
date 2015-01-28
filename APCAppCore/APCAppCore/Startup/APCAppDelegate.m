@@ -177,6 +177,11 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withdrawStudy:) name:APCUserWithdrawStudyNotification object:nil];
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void) signedUpNotification:(NSNotification*) notification
 {
     [self showNeedsEmailVerification];
