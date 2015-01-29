@@ -26,18 +26,6 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ygh-IW-MBW">
-                                <rect key="frame" x="0.0" y="508" width="320" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="EvJ-jF-9aL"/>
-                                </constraints>
-                                <state key="normal" title="Use Touch ID">
-                                    <color key="titleColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="useTouchId:" destination="aU5-mj-CXc" eventType="touchUpInside" id="zfF-v3-edq"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aK3-gJ-vS8" customClass="APCPasscodeView">
                                 <rect key="frame" x="70" y="179" width="180" height="64"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -53,17 +41,30 @@
                                     <constraint firstAttribute="width" constant="50" id="YEo-WP-kzx"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ygh-IW-MBW" customClass="APCButton">
+                                <rect key="frame" x="87" y="516" width="146" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="EvJ-jF-9aL"/>
+                                    <constraint firstAttribute="width" constant="146" id="uRh-eZ-N5W"/>
+                                </constraints>
+                                <state key="normal" title="Use Touch ID">
+                                    <color key="titleColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="useTouchId:" destination="aU5-mj-CXc" eventType="touchUpInside" id="zfF-v3-edq"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ygh-IW-MBW" firstAttribute="leading" secondItem="MAj-Wy-kJa" secondAttribute="leading" id="36S-gx-RqB"/>
+                            <constraint firstItem="ygh-IW-MBW" firstAttribute="leading" secondItem="MAj-Wy-kJa" secondAttribute="leading" constant="87" id="36S-gx-RqB"/>
                             <constraint firstItem="cKG-bB-Ib1" firstAttribute="top" secondItem="Cr6-0R-lJe" secondAttribute="bottom" constant="25" id="9c6-8y-rdu"/>
                             <constraint firstItem="aK3-gJ-vS8" firstAttribute="top" secondItem="cKG-bB-Ib1" secondAttribute="bottom" constant="20" id="ShE-ol-A7j"/>
                             <constraint firstItem="Cr6-0R-lJe" firstAttribute="top" secondItem="445-jw-ZAP" secondAttribute="bottom" constant="30" id="Ulo-o4-xDE"/>
                             <constraint firstItem="cKG-bB-Ib1" firstAttribute="leading" secondItem="MAj-Wy-kJa" secondAttribute="leadingMargin" constant="13" id="VqT-z2-DCt"/>
                             <constraint firstAttribute="centerX" secondItem="aK3-gJ-vS8" secondAttribute="centerX" id="WCk-vE-JxC"/>
-                            <constraint firstItem="fZn-Rb-vDa" firstAttribute="top" secondItem="ygh-IW-MBW" secondAttribute="bottom" id="aDN-tl-Z7H"/>
-                            <constraint firstAttribute="trailing" secondItem="ygh-IW-MBW" secondAttribute="trailing" id="bOj-hf-Yga"/>
+                            <constraint firstItem="fZn-Rb-vDa" firstAttribute="top" secondItem="ygh-IW-MBW" secondAttribute="bottom" constant="8" id="aDN-tl-Z7H"/>
+                            <constraint firstAttribute="trailing" secondItem="ygh-IW-MBW" secondAttribute="trailing" constant="87" id="bOj-hf-Yga"/>
                             <constraint firstAttribute="centerX" secondItem="Cr6-0R-lJe" secondAttribute="centerX" id="ilQ-JB-VGR"/>
                             <constraint firstAttribute="trailingMargin" secondItem="cKG-bB-Ib1" secondAttribute="trailing" constant="12" id="xlr-kq-iLO"/>
                         </constraints>
