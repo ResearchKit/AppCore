@@ -144,8 +144,8 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
 		APCLogDebug (@"Starting Flurry session.");
 
 //		[Flurry setLogLevel: FlurryLogLevelAll];
-		[Flurry startSession: _flurryApiKey];
         [Flurry setCrashReportingEnabled:YES];
+		[Flurry startSession: _flurryApiKey];
 	}
 
 	else
