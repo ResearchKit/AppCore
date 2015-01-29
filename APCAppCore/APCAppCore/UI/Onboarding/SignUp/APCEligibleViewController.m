@@ -96,6 +96,10 @@
             
             [self startSignUp];
         }];
+    } else {
+        [taskViewController dismissViewControllerAnimated:YES completion:^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
+        }];
     }
 }
 
