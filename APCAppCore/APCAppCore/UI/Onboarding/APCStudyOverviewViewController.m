@@ -48,7 +48,22 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(goBackToSignUpJoin:)
+                                                 name:APCConsentCompletedWithDisagreeNotification
+                                               object:nil];
   APCLogViewControllerAppeared();
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:APCConsentCompletedWithDisagreeNotification object:nil];
+}
+
+- (void)goBackToSignUpJoin:(NSNotification *)notification
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (NSArray *)prepareContent
