@@ -7,7 +7,7 @@
  
 #import <UIKit/UIKit.h>
 
-extern NSString *const APCConsentCompletedWithDisagree;
+extern NSString *const APCConsentCompletedWithDisagreeNotification;
 
 @interface APCEligibleViewController : UIViewController
 

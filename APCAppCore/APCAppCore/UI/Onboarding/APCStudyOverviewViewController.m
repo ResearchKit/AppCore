@@ -52,14 +52,14 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(goBackToSignUpJoin:)
-                                                 name:APCConsentCompletedWithDisagree
+                                                 name:APCConsentCompletedWithDisagreeNotification
                                                object:nil];
   APCLogViewControllerAppeared();
 }
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:APCConsentCompletedWithDisagree object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:APCConsentCompletedWithDisagreeNotification object:nil];
 }
 
 - (void)goBackToSignUpJoin:(NSNotification *)notification

@@ -8,7 +8,7 @@
 #import "APCEligibleViewController.h"
 #import "APCAppCore.h"
 
-NSString *const APCConsentCompletedWithDisagree = @"goToSignInJoinScreen";
+NSString *const APCConsentCompletedWithDisagreeNotification = @"goToSignInJoinScreen";
 
 @interface APCEligibleViewController () <RKSTTaskViewControllerDelegate>
 
@@ -100,7 +100,7 @@ NSString *const APCConsentCompletedWithDisagree = @"goToSignInJoinScreen";
         }];
     } else {
         [taskViewController dismissViewControllerAnimated:YES completion:^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagree object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
         }];
     }
 }
