@@ -110,12 +110,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 }
 
 - (void)setUpAppearance
-{    
-    [self.joinButton setBackgroundImage:[UIImage imageWithColor:[UIColor appPrimaryColor]] forState:UIControlStateNormal];
-    [self.joinButton setTitleColor:[UIColor appSecondaryColor4] forState:UIControlStateNormal];
-    [self.loginButton setBackgroundImage:[UIImage imageWithColor:[UIColor appSecondaryColor2]] forState:UIControlStateNormal];
-    [self.loginButton setTitleColor:[UIColor appSecondaryColor4] forState:UIControlStateNormal];
-    
+{
     self.diseaseNameLabel.font = [UIFont appMediumFontWithSize:19];
     self.diseaseNameLabel.textColor = [UIColor appSecondaryColor1];
     self.diseaseNameLabel.adjustsFontSizeToFitWidth = YES;
