@@ -48,7 +48,22 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(goBackToSignUpJoin:)
+                                                 name:APCConsentCompletedWithDisagreeNotification
+                                               object:nil];
   APCLogViewControllerAppeared();
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:APCConsentCompletedWithDisagreeNotification object:nil];
+}
+
+- (void)goBackToSignUpJoin:(NSNotification *)notification
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (NSArray *)prepareContent
@@ -110,12 +125,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 }
 
 - (void)setUpAppearance
-{    
-    [self.joinButton setBackgroundImage:[UIImage imageWithColor:[UIColor appPrimaryColor]] forState:UIControlStateNormal];
-    [self.joinButton setTitleColor:[UIColor appSecondaryColor4] forState:UIControlStateNormal];
-    [self.loginButton setBackgroundImage:[UIImage imageWithColor:[UIColor appSecondaryColor2]] forState:UIControlStateNormal];
-    [self.loginButton setTitleColor:[UIColor appSecondaryColor4] forState:UIControlStateNormal];
-    
+{
     self.diseaseNameLabel.font = [UIFont appMediumFontWithSize:19];
     self.diseaseNameLabel.textColor = [UIColor appSecondaryColor1];
     self.diseaseNameLabel.adjustsFontSizeToFitWidth = YES;

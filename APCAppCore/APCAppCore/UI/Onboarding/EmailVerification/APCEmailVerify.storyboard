@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="h61-jT-BHu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="h61-jT-BHu">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -199,7 +199,7 @@ the link included in the message.</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="r2y-Sf-LKG">
-                                                    <rect key="frame" x="125" y="15" width="181" height="35"/>
+                                                    <rect key="frame" x="74" y="15" width="232" height="35"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="35" id="k8X-jy-yTd"/>
                                                     </constraints>
@@ -210,9 +210,9 @@ the link included in the message.</string>
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="39l-Jf-hqN">
-                                                    <rect key="frame" x="16" y="23" width="101" height="21"/>
+                                                    <rect key="frame" x="16" y="23" width="50" height="21"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="101" id="uhc-5s-1bY"/>
+                                                        <constraint firstAttribute="width" constant="50" id="uhc-5s-1bY"/>
                                                         <constraint firstAttribute="height" constant="21" id="vS5-U5-ZRg"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -223,7 +223,7 @@ the link included in the message.</string>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="r2y-Sf-LKG" secondAttribute="trailing" constant="6" id="3EW-Do-uvI"/>
                                                 <constraint firstItem="39l-Jf-hqN" firstAttribute="leading" secondItem="f7b-Pr-uWd" secondAttribute="leadingMargin" constant="8" id="7WJ-QG-hLs"/>
-                                                <constraint firstAttribute="centerY" secondItem="39l-Jf-hqN" secondAttribute="centerY" constant="-2" id="Gix-ah-1y0"/>
+                                                <constraint firstAttribute="centerY" secondItem="39l-Jf-hqN" secondAttribute="centerY" constant="-1" id="Gix-ah-1y0"/>
                                                 <constraint firstItem="r2y-Sf-LKG" firstAttribute="leading" secondItem="39l-Jf-hqN" secondAttribute="trailing" constant="8" id="KLW-cT-ZcY"/>
                                                 <constraint firstAttribute="centerY" secondItem="r2y-Sf-LKG" secondAttribute="centerY" constant="-1" id="LYM-jK-Wne"/>
                                             </constraints>
