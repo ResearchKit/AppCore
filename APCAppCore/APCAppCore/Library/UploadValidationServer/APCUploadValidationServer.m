@@ -41,11 +41,19 @@ static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 
 	else
 	{
-		#if DEBUG
-		{
-			result = YES;
-		}
-		#endif
+		/*
+		 Uncomment this if appropriate.
+
+		 If this is commented out, and no one calls
+		 +[self setupTurningLoggingOn: YES], then
+		 this logging server code will not run.
+		 */
+
+//		#if DEBUG
+//		{
+//			result = YES;
+//		}
+//		#endif
 	}
 
 	return result;

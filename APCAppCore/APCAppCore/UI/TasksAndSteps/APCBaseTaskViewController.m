@@ -108,18 +108,15 @@
     APCDataArchiver * archiver = [[APCDataArchiver alloc] initWithTaskResult:self.result];
     archiver.preserveUnencryptedFile = YES;
 
-	// Ron:  add encryption flag here?
     NSString * archiveFileName = [archiver writeToOutputDirectory:self.taskResultsFilePath];
     [self storeInCoreDataWithFileName:archiveFileName resultSummary:resultSummary];
 
 	/*
-	 When ready, use this:
-		[APCUploadValidationServer logDataFromFilePath: archiveFileName];
-	 
-	 That should work identically to this -logText method.
-	 In the mean time, we'll just write the string:
+	 Uncomment this to COPY the unencrypted file
+	 to a local server.  (The code above here
+	 uploads it to Sage.)
 	 */
-	[APCUploadValidationServer logDataFromFileAtPath: archiver.unencryptedFilePath];
+//	[APCUploadValidationServer logDataFromFileAtPath: archiver.unencryptedFilePath];
 }
 
 /**
