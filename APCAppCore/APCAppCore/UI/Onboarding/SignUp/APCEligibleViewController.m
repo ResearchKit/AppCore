@@ -8,8 +8,6 @@
 #import "APCEligibleViewController.h"
 #import "APCAppCore.h"
 
-NSString *const APCConsentCompletedWithDisagreeNotification = @"goToSignInJoinScreen";
-
 @interface APCEligibleViewController () <RKSTTaskViewControllerDelegate>
 
 @end

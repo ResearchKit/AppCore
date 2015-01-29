@@ -19,7 +19,6 @@
 #import "UIAlertController+Helper.h"
 #import "APCDeviceHardware+APCHelper.h"
 #import "APCAppCore.h"
-#import "APCEligibleViewController.h"
 
 static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
 
