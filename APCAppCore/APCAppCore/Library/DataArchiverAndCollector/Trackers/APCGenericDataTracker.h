@@ -9,4 +9,7 @@
 
 @interface APCGenericDataTracker : NSObject
 
+- (instancetype) initWithIdentifier:(NSString *)identifier;
+
+
 @end
