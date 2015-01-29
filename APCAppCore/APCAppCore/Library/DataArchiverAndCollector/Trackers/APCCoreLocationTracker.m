@@ -6,7 +6,7 @@
 // 
  
 #import "APCAppCore.h"
-#import "APCPassiveLocationTracking.h"
+#import "APCCoreLocationTracker.h"
 
 static NSString *kPassiveLocationTrackingIdentifier = @"com.ymedialabs.passiveLocationTracking";
 static NSString *kAPCPassiveLocationTrackingFileName = @"APCPassiveLocationTracking.json";
@@ -22,7 +22,7 @@ static  NSString  *kLocationJsonDateStamp                    = @"datestamp";
 static  NSString  *kLocationJsonVerticalAccuracy             = @"verticalAccuracy";
 static  NSString  *kLocationJsonHorizontalAccuracy           = @"horizontalAccuracy";
 
-@interface APCPassiveLocationTracking ()
+@interface APCCoreLocationTracker ()
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
@@ -55,7 +55,7 @@ static  NSString  *kLocationJsonHorizontalAccuracy           = @"horizontalAccur
 
 @end
 
-@implementation APCPassiveLocationTracking
+@implementation APCCoreLocationTracker
 
 - (instancetype)initWithDeferredUpdatesTimeout:(NSTimeInterval)anUpdateTimeout andHomeLocationStatus:(APCPassiveLocationTrackingHomeLocation)aHomeLocationStatus
 {

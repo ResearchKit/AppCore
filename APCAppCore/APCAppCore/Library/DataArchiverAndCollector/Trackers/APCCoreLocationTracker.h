@@ -24,7 +24,7 @@ typedef  enum  _APCPassiveLocationTrackingHomeLocation
 
 @protocol APCLocationTrackingHeartbeatDelegate;
 
-@interface APCPassiveLocationTracking : NSObject <CLLocationManagerDelegate>
+@interface APCCoreLocationTracker : NSObject <CLLocationManagerDelegate>
 
 
 /**
@@ -80,17 +80,17 @@ typedef  enum  _APCPassiveLocationTrackingHomeLocation
 /**
  * @brief Location has failed to update.
  */
-- (void)passiveLocationTracking:(APCPassiveLocationTracking *)parameters didFailToUpdateLocationWithError:(NSError *)error;
+- (void)passiveLocationTracking:(APCCoreLocationTracker *)parameters didFailToUpdateLocationWithError:(NSError *)error;
 
 /**
  * @brief Location updates did pause.
  */
-- (void)passiveLocationTracking:(APCPassiveLocationTracking *)parameters didPauseLocationTracking:(CLLocationManager *)manager;
+- (void)passiveLocationTracking:(APCCoreLocationTracker *)parameters didPauseLocationTracking:(CLLocationManager *)manager;
 
 /**
  * @brief Location updates did resume.
  */
-- (void)passiveLocationTracking:(APCPassiveLocationTracking *)parameters didResumeLocationTracking:(CLLocationManager *)manager;
+- (void)passiveLocationTracking:(APCCoreLocationTracker *)parameters didResumeLocationTracking:(CLLocationManager *)manager;
 
 /*********************************************************************************/
 //Logging Delegate Methods
@@ -98,22 +98,22 @@ typedef  enum  _APCPassiveLocationTrackingHomeLocation
 /**
  * @brief _self_ failed to update the log.
  */
-- (void)passiveLocationTracking:(APCPassiveLocationTracking *)parameters didFailToUpdateLogWithError:(NSError *)error;
+- (void)passiveLocationTracking:(APCCoreLocationTracker *)parameters didFailToUpdateLogWithError:(NSError *)error;
 
 /**
  * @brief _self_ failed to delete log file.
  */
-- (void)passiveLocationTracking:(APCPassiveLocationTracking *)parameters didFailToDeleteLogWithError:(NSError *)error;
+- (void)passiveLocationTracking:(APCCoreLocationTracker *)parameters didFailToDeleteLogWithError:(NSError *)error;
 
 /**
  * @brief The total size of files that are not marked uploaded, has reached a threshold.
  */
-- (void)passiveLocationTracking:(APCPassiveLocationTracking *)parameters didFailToUploadLog:(NSError *)error;
+- (void)passiveLocationTracking:(APCCoreLocationTracker *)parameters didFailToUploadLog:(NSError *)error;
 
 /**
  * @brief Finished saving log.
  */
-- (void)passiveLocationTracking:(APCPassiveLocationTracking *)parameters didFinishSavingLog:(NSURL *)fileURL;
+- (void)passiveLocationTracking:(APCCoreLocationTracker *)parameters didFinishSavingLog:(NSURL *)fileURL;
 
 
 @end

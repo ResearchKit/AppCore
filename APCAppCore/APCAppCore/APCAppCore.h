@@ -27,22 +27,28 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCModel.h>
 #import <APCAppCore/APCScheduler.h>
 #import <APCAppCore/APCScheduleExpression.h>
-#import <APCAppCore/APCPassiveLocationTracking.h>
 #import <APCAppCore/APCParameters.h>
 #import <APCAppCore/APCPermissionsManager.h>
 #import <APCAppCore/APCAssertionHandler.h>
 #import <APCAppCore/APCSignUpProgressing.h>
-#import <APCAppCore/APCHealthKitQuantityTracker.h>
 #import <APCAppCore/APCOnboarding.h>
 #import <APCAppCore/APCDataResult.h>
 #import <APCAppCore/APCTasksReminderManager.h>
+
+/* -------------------------------------
+ Data Archiver & Passive Data Collectors
+ --------------------------------------- */
 #import <APCAppCore/APCDataArchiver.h>
+#import <APCAppCore/APCPassiveDataCollector.h>
+#import <APCAppCore/APCGenericDataTracker.h>
+#import <APCAppCore/APCHealthKitQuantityTracker.h>
+#import <APCAppCore/APCCoreLocationTracker.h>
+#import <APCAppCore/APCCoreMotionTracker.h>
 
 /* -------------------------
  Logging
  ------------------------- */
 #import <APCAppCore/APCLog.h>
-
 
 /* UI */
 /* -------------------------
@@ -139,7 +145,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDashboardPieGraphTableViewCell.h>
 #import <APCAppCore/APCShareTableViewCell.h>
 #import <APCAppCore/APCAddressTableViewCell.h>
-
 
 /* -------------------------
  Objects
