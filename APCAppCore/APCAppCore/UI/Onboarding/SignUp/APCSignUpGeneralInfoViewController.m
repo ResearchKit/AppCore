@@ -101,7 +101,6 @@
 - (void)saveSceneData
 {
     NSDictionary *generalInfoSceneData = @{
-                                           @"name": self.nameTextField.text ?:[NSNull null],
                                            @"email": self.emailTextField.text ?:[NSNull null],
                                            @"photo": self.profileImage ?:[NSNull null]
                                            };
@@ -115,10 +114,6 @@
     NSDictionary *sceneData = [self.onboarding.sceneData valueForKey:self.onboarding.currentStep.identifier];
     
     if (sceneData) {
-        if (sceneData[@"name"] != [NSNull null]) {
-            self.nameTextField.text = sceneData[@"name"];
-        }
-        
         if (sceneData[@"email"] != [NSNull null]) {
             self.emailTextField.text = sceneData[@"email"];
         }
