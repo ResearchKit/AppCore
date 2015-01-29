@@ -7,6 +7,8 @@
  
 #import <UIKit/UIKit.h>
 
+extern NSString *const APCConsentCompletedWithDisagree;
+
 @interface APCEligibleViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UILabel *label1;

@@ -8,6 +8,8 @@
 #import "APCEligibleViewController.h"
 #import "APCAppCore.h"
 
+NSString *const APCConsentCompletedWithDisagree = @"goToSignInJoinScreen";
+
 @interface APCEligibleViewController () <RKSTTaskViewControllerDelegate>
 
 @end
@@ -95,6 +97,10 @@
             [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
             
             [self startSignUp];
+        }];
+    } else {
+        [taskViewController dismissViewControllerAnimated:YES completion:^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagree object:nil];
         }];
     }
 }

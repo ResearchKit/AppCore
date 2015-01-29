@@ -19,6 +19,7 @@
 #import "UIAlertController+Helper.h"
 #import "APCDeviceHardware+APCHelper.h"
 #import "APCAppCore.h"
+#import "APCEligibleViewController.h"
 
 static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
 
@@ -48,7 +49,22 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(goBackToSignUpJoin:)
+                                                 name:APCConsentCompletedWithDisagree
+                                               object:nil];
   APCLogViewControllerAppeared();
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:APCConsentCompletedWithDisagree object:nil];
+}
+
+- (void)goBackToSignUpJoin:(NSNotification *)notification
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (NSArray *)prepareContent
