@@ -15,44 +15,20 @@ require 'sinatra'
 require 'json'
 require 'fileutils'
 
+# Sinatra (web server) setup
 disable :logging
 set :bind, '0.0.0.0'
-base_url_path = '/api/v1'
-destination_directory = File.expand_path("~/Desktop/uploadValidationServerOutput")
-output_logging_filename = "output.txt"
-file_content_divider = "----------"
 
-#
-# Testing errors (?)
-#
+# My variables
+base_url_path			= '/api/v1'
+destination_directory	= File.expand_path("~/Desktop/uploadValidationServerOutput")
+download_directory		= File.join(destination_directory, "downloads")
+output_log_file_path	= File.join(destination_directory, "output.txt")
 
-get "#{base_url_path}/test_fail" do
-	[404, {message: 'Error'}.to_json]
-end
-
-post "#{base_url_path}/test_fail" do
-	[404, {message: 'Error'}.to_json]
-end
-
-put "#{base_url_path}/test_fail" do
-	[404, {message: 'Error'}.to_json]
-end
-
-
-#
-# Maintenance
-# 
-
-get "#{base_url_path}/server_maintenance" do
-	[503, {message: 'Server Under Maintenance'}.to_json]
-end
 
 
 #
 # File Upload
-#
-
-
 #
 # Listens for file uploads from our iOS apps.
 # There's a centralized method there which
@@ -76,135 +52,98 @@ end
 # in a folder on your Mac desktop.
 #
 
-#
-# adapting dhanush's original version
-#
-
 post "#{base_url_path}/upload/:filename" do
-# post "#{base_url_path}/upload/:variableImCurrentlyIgnoring" do
-	# userdir = "/tmp/upload_files"
-	# userdir = "./"
-
+	
+	#
+	# Setup
+	#
 	FileUtils.mkdir_p(destination_directory)
+	FileUtils.mkdir_p(download_directory)
+	
+	# Echo to the console.
 	puts "\n----------\nInput parameters:\n     #{params}"
 
-	basename = params[:filename]
-	filename = File.join(destination_directory, basename)
 
-	datafile = params[:filedata]
-	FileUtils.copy(datafile[:tempfile], filename)
-
-	puts "\n     wrote to #{filename}"
-	[200, {results: "wrote to #{filename}"}.to_json]
-end
-
-
-#
-# My upload-to-file version
-# 
-# 		post "#{base_url_path}/upload/:filename" do
-# 			FileUtils.mkdir_p(destination_directory)
-# 			puts "#{params}"
-# 		
-# 			filename = File.join(destination_directory, output_logging_filename)
-# 			datafile = params[:filedata]		# temp location of the uploaded file on disk
-# 			data = datafile[:tempfile].read		# slurp the contents from disk into a string
-# 		
-# 			File.open(filename, "a") { |theFile|
-# 				theFile.write("#{file_content_divider}\n#{data}\n")
-# 			}
-# 		
-# 			[200, {results: "wrote to #{filename}"}.to_json]
-# 		end
-
-
-
-#
-# Authentication
-#
-
-post "#{base_url_path}/auth/signUp" do
-	200
-end
-
-post "#{base_url_path}/auth/signIn" do
-	json = JSON.parse request.body.read
-	[200, { username: 		json[:username],	\
-			sessionToken: 	'sessionToken',		\
-			consented: 		true,				\
-			authenticated: 	true				\
-		  }.to_json]
-end
-
-
-#
-# Experimenting
-#
-
-
-# Yay!  Ok.  When I use curl to transmit a specific file (in my local directory) with the name "ronCustomFileContents", as follows:
-# 		curl "http://localhost:4567/api/v1/ronTest/:whatever?one=1&two=2" -F ronCustomFileContents=@simpleFileToUpload.txt
-#
-# ...I can then extract it to a string with the code below:
-# 		data = params[:ronCustomFileContents][:tempfile].read
-#
-# ...and when I use tail -f on the file "filename" (below),
-# the results are indeed the contents of the file I wanted
-# to upload.
-#
-post "#{base_url_path}/ronTest/:content" do
-	FileUtils.mkdir_p(destination_directory)
-	# puts "#{params}"
+	#
+	# Delete existing files, if any
+	#
+	# Purposely waiting 'til now to delete the previous
+	# files, so that I can error-check each file after
+	# uploading it.  (The more standard way might be
+	# to delete the file after using it, below.)
+	#
 	
-	filename = File.join(destination_directory, output_logging_filename)
-	# data = params[:ronCustomFileContents]
-	data = params[:ronCustomFileContents][:tempfile].read
-	
-	# FileUtils.append(datafile, filename)	
-	# FileUtils.copy(datafile[:tempfile], filename)
-	# file = File.open (filename, "a")	# append-only, creates if not there
-	# File.write (filename, "test string", null, {mode: "a"})
-	
-	File.open(filename, "a") { |theFile|
-		# theFile.write("here is some text. Did we get form data? #{request.env}\n")
+	Dir.foreach(download_directory) do |someFilePath|
 		
-		# envData = request.env
-		# rackData = envData["rack"]
-		# dataToPrint = envData
-		# theFile.write("here is some text. Did we get form data? #{dataToPrint}\n")
+		# File.delete(someFile)		# permissions problems
+		processId = spawn("rm #{someFilePath}")
+		Process.wait processId
 		
-		# theFile.write("here is some text. Did we get form data? #{params}\n")
-		theFile.write("here is some text. Did we get form data? #{data}\n")
+	end
+	
+
+	#
+	# Copy from temp directory
+	#
+	baseName			= params[:filename]
+	downloadedZipFile	= File.join(download_directory, baseName)
+	datafile			= params[:filedata]
+	FileUtils.copy(datafile[:tempfile], downloadedZipFile)
+	
+	
+	#
+	# Unzip
+	#
+
+	Dir.chdir(download_directory)
+	processId = spawn("unzip -o #{downloadedZipFile}")		# -o == overwrite without asking
+	Process.wait processId									# make it synchronous
+	
+	
+	#
+	# append content to output file
+	#
+	
+	File.open(output_log_file_path, "a") { |output_log_file|
+		output_log_file.write(
+			"\n======== New batch of files ========\n"	\
+			"These JSON files are located here:\n"		\
+			"     #{download_directory}\n"				\
+			"\n"										\
+			"They'll be deleted when you upload the next batch.\n" 
+		)
 	}
 	
-	# "wrote to #{filename}\n"
-	[200, {results: "wrote to #{filename}"}.to_json]
+	Dir.glob("#{download_directory}/*.json") do |jsonFile|
+		
+		thisFile = File.open(jsonFile, "r")
+		thisFileContents = thisFile.read
+		
+		File.open(output_log_file_path, "a") { |output_log_file|
+			baseName = File.basename(jsonFile)
+			output_log_file.write( "\n#{baseName}:\n#{thisFileContents}\n" )
+		}
+	end
+	
+
+	# echo to stdout (?)
+	puts "\n     wrote to #{downloadedZipFile}"
+	
+	# Return value (different from above?)
+	[200, {results: "wrote to #{downloadedZipFile}"}.to_json]
 end
+
 
 
 #
-# Catch All
-#
-
-get "#{base_url_path}/*" do
-	[200, {endpoint: {hello: 'world'}}.to_json] 
-end
-
-post "#{base_url_path}/*" do 
-	json = JSON.parse request.body.read
-	puts json["log"].to_s.colorize(:cyan)
-	[200, {endpoint: params, body: json }.to_json] 
-end
-
-put "#{base_url_path}/*" do 
-	json = JSON.parse request.body.read
-	[200, {endpoint: params, body: json }.to_json] 
-end
-
+# Catchall handlers.
+# 
 # This works:  catches all requests that didn't
 # meet one of the above criteria.  ORDER MATTERS:
 # if this rule goes first, the other rules don't
 # run.
+#
+
 get "*" do
 	[200, {error: "I didn't understand that GET request."}.to_json]
 end
