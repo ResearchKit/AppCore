@@ -8,19 +8,13 @@
 #import <Foundation/Foundation.h>
 
 /*
- This stuff was originally in
-
-	APCDataSubstrate+ResearchKit.m
-
- That file is CURRENTLY (for this 48 hours) not used.
- This happens to be when I'm working on this "mirror to local server" feature.
- After discussion with Farhan, this seems the best (temporary) place to put this code.
-
- Copied from Ed's commit of
- APCDataSubstrate+ResearchKit.m
- dated 2014-Dec-03.
+ Uploads files and text to a matching
+ DataVerificationServer, written in Ruby,
+ running on a specific machine.  (We're
+ still evolving how to specify the IP
+ address.)
  */
-@interface APCUploadValidationServer : NSObject
+@interface APCDataVerificationClient : NSObject
 
 /**
  Call this to enable or disable logging.
@@ -47,7 +41,7 @@
  by default in debug mode.  To enable in production,
  call +setupTurningLoggingOn.
  */
-+ (void)                   logText: (NSString *) text
++ (void)                uploadText: (NSString *) text
 	withFakeFilenameForContentType: (NSString *) fakeFilename;
 
 /* 
@@ -59,6 +53,6 @@
  by default in debug mode.  To enable in production,
  call +setupTurningLoggingOn.
  */
-+ (void) logDataFromFileAtPath: (NSString *) path;
++ (void) uploadDataFromFileAtPath: (NSString *) path;
 
 @end

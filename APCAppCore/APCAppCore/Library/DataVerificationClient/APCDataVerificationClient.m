@@ -5,7 +5,7 @@
 //  Copyright (c) 2015 Apple Inc. All rights reserved.
 //
 
-#import "APCUploadValidationServer.h"
+#import "APCDataVerificationClient.h"
 
 /**
  For extracting the MIME type of the file to upload.
@@ -23,7 +23,7 @@ static NSNumber *shouldLog = nil;
 static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 
 
-@implementation APCUploadValidationServer
+@implementation APCDataVerificationClient
 
 + (void) setupTurningLoggingOn: (BOOL) shouldTurnLoggingOn
 {
@@ -59,7 +59,7 @@ static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 	return result;
 }
 
-+ (void)                   logText: (NSString *) text
++ (void)                uploadText: (NSString *) text
 	withFakeFilenameForContentType: (NSString *) fakeFilename
 {
 	NSData *data = [text dataUsingEncoding: NSUTF8StringEncoding];
@@ -67,7 +67,7 @@ static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 	[self uploadData: data withFilenameForMimeType: fakeFilename];
 }
 
-+ (void) logDataFromFileAtPath: (NSString *) path
++ (void) uploadDataFromFileAtPath: (NSString *) path
 {
 	NSData *data = [NSData dataWithContentsOfFile: path];
 	NSString *filename = path.lastPathComponent;

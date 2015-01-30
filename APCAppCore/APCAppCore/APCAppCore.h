@@ -42,7 +42,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  Logging
  ------------------------- */
 #import <APCAppCore/APCLog.h>
-#import <APCAppCore/APCUploadValidationServer.h>
+#import <APCAppCore/APCDataVerificationClient.h>
 
 
 /* UI */

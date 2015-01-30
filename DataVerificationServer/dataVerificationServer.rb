@@ -21,9 +21,9 @@ set :bind, '0.0.0.0'
 
 # My variables
 base_url_path			= '/api/v1'
-destination_directory	= File.expand_path("~/Desktop/uploadValidationServerOutput")
+destination_directory	= File.expand_path("~/Desktop/dataVerificationFiles")
 download_directory		= File.join(destination_directory, "downloads")
-output_log_file_path	= File.join(destination_directory, "output.txt")
+output_log_file_path	= File.join(destination_directory, "dataVerificationLog.txt")
 
 
 

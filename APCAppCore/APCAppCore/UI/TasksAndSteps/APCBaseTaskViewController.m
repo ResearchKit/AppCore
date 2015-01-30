@@ -8,7 +8,7 @@
 #import "APCBaseTaskViewController.h"
 #import "APCAppDelegate.h"
 #import "APCAppCore.h"
-#import "APCUploadValidationServer.h"
+#import "APCDataVerificationClient.h"
 
 @implementation APCBaseTaskViewController
 
@@ -111,12 +111,13 @@
     NSString * archiveFileName = [archiver writeToOutputDirectory:self.taskResultsFilePath];
     [self storeInCoreDataWithFileName:archiveFileName resultSummary:resultSummary];
 
+
 	/*
 	 Uncomment this to COPY the unencrypted file
 	 to a local server.  (The code above here
 	 uploads it to Sage.)
 	 */
-//	[APCUploadValidationServer logDataFromFileAtPath: archiver.unencryptedFilePath];
+	[APCDataVerificationClient uploadDataFromFileAtPath: archiver.unencryptedFilePath];
 }
 
 /**
