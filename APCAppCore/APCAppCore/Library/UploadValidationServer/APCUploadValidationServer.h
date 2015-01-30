@@ -47,8 +47,8 @@
  by default in debug mode.  To enable in production,
  call +setupTurningLoggingOn.
  */
-+ (void) logText: (NSString *) text
-withFakeFilename: (NSString *) fakeFilename;
++ (void)                   logText: (NSString *) text
+	withFakeFilenameForContentType: (NSString *) fakeFilename;
 
 /* 
  The point of this class.

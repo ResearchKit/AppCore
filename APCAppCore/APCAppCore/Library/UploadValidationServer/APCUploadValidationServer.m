@@ -59,8 +59,8 @@ static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 	return result;
 }
 
-+ (void) logText: (NSString *) text
-withFakeFilename: (NSString *) fakeFilename
++ (void)                   logText: (NSString *) text
+	withFakeFilenameForContentType: (NSString *) fakeFilename
 {
 	NSData *data = [text dataUsingEncoding: NSUTF8StringEncoding];
 
