@@ -231,8 +231,8 @@
 		F5C787191A7ACA1A005F31FC /* APCCoreLocationTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C787151A7ACA1A005F31FC /* APCCoreLocationTracker.m */; };
 		F5C7871C1A7ACADA005F31FC /* APCPassiveDataCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C7871A1A7ACADA005F31FC /* APCPassiveDataCollector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5C7871D1A7ACADA005F31FC /* APCPassiveDataCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C7871B1A7ACADA005F31FC /* APCPassiveDataCollector.m */; };
-		F5C787201A7ACB3F005F31FC /* APCGenericDataTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C7871E1A7ACB3F005F31FC /* APCGenericDataTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F5C787211A7ACB3F005F31FC /* APCGenericDataTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C7871F1A7ACB3F005F31FC /* APCGenericDataTracker.m */; };
+		F5C787201A7ACB3F005F31FC /* APCDataTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C7871E1A7ACB3F005F31FC /* APCDataTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5C787211A7ACB3F005F31FC /* APCDataTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C7871F1A7ACB3F005F31FC /* APCDataTracker.m */; };
 		F5C787241A7ACB82005F31FC /* APCCoreMotionTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C787221A7ACB82005F31FC /* APCCoreMotionTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5C787251A7ACB82005F31FC /* APCCoreMotionTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C787231A7ACB82005F31FC /* APCCoreMotionTracker.m */; };
 		F5F129E11A2F78490015982C /* APCAppCore.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128831A2F78490015982C /* APCAppCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -689,8 +689,8 @@
 		F5C787151A7ACA1A005F31FC /* APCCoreLocationTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCoreLocationTracker.m; sourceTree = "<group>"; };
 		F5C7871A1A7ACADA005F31FC /* APCPassiveDataCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPassiveDataCollector.h; sourceTree = "<group>"; };
 		F5C7871B1A7ACADA005F31FC /* APCPassiveDataCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPassiveDataCollector.m; sourceTree = "<group>"; };
-		F5C7871E1A7ACB3F005F31FC /* APCGenericDataTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCGenericDataTracker.h; sourceTree = "<group>"; };
-		F5C7871F1A7ACB3F005F31FC /* APCGenericDataTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCGenericDataTracker.m; sourceTree = "<group>"; };
+		F5C7871E1A7ACB3F005F31FC /* APCDataTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataTracker.h; sourceTree = "<group>"; };
+		F5C7871F1A7ACB3F005F31FC /* APCDataTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataTracker.m; sourceTree = "<group>"; };
 		F5C787221A7ACB82005F31FC /* APCCoreMotionTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCoreMotionTracker.h; sourceTree = "<group>"; };
 		F5C787231A7ACB82005F31FC /* APCCoreMotionTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCoreMotionTracker.m; sourceTree = "<group>"; };
 		F5F128831A2F78490015982C /* APCAppCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAppCore.h; sourceTree = "<group>"; };
@@ -1480,8 +1480,8 @@
 		F5C787111A7ACA1A005F31FC /* Trackers */ = {
 			isa = PBXGroup;
 			children = (
-				F5C7871E1A7ACB3F005F31FC /* APCGenericDataTracker.h */,
-				F5C7871F1A7ACB3F005F31FC /* APCGenericDataTracker.m */,
+				F5C7871E1A7ACB3F005F31FC /* APCDataTracker.h */,
+				F5C7871F1A7ACB3F005F31FC /* APCDataTracker.m */,
 				F5C787121A7ACA1A005F31FC /* APCHealthKitQuantityTracker.h */,
 				F5C787131A7ACA1A005F31FC /* APCHealthKitQuantityTracker.m */,
 				F5C787141A7ACA1A005F31FC /* APCCoreLocationTracker.h */,
@@ -2049,7 +2049,7 @@
 				F5B9463A1A7309A20034C522 /* ZZHeaders.h in Headers */,
 				F5B947CD1A73272C0034C522 /* SBBGuidCreatedOnVersionHolder+APCAdditions.h in Headers */,
 				F5F12A7E1A2F78490015982C /* APCGraphConstants.h in Headers */,
-				F5C787201A7ACB3F005F31FC /* APCGenericDataTracker.h in Headers */,
+				F5C787201A7ACB3F005F31FC /* APCDataTracker.h in Headers */,
 				F5B947DD1A73272C0034C522 /* Flurry.h in Headers */,
 				F5F12A981A2F78490015982C /* APCChangeEmailViewController.h in Headers */,
 				F5B947F81A73272C0034C522 /* APCParametersUserDefaultCell.h in Headers */,
@@ -2417,7 +2417,7 @@
 				F5F12A7A1A2F78490015982C /* APCAxisView.m in Sources */,
 				F5B947EC1A73272C0034C522 /* APCDebugWindow.m in Sources */,
 				F5B947C41A73272C0034C522 /* NSError+APCAdditions.m in Sources */,
-				F5C787211A7ACB3F005F31FC /* APCGenericDataTracker.m in Sources */,
+				F5C787211A7ACB3F005F31FC /* APCDataTracker.m in Sources */,
 				F5B947CA1A73272C0034C522 /* NSString+Helper.m in Sources */,
 				F5B947AE1A73272C0034C522 /* APCAppearanceInfo.m in Sources */,
 				5B0432A81A322BEE000DC9ED /* APCOnboardingTask.m in Sources */,

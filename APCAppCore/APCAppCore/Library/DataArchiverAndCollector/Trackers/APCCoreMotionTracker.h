@@ -5,8 +5,8 @@
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
-#import "APCGenericDataTracker.h"
+#import "APCDataTracker.h"
 
-@interface APCCoreMotionTracker : APCGenericDataTracker
+@interface APCCoreMotionTracker : APCDataTracker
 
 @end

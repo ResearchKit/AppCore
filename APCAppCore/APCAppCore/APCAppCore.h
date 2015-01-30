@@ -40,7 +40,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  --------------------------------------- */
 #import <APCAppCore/APCDataArchiver.h>
 #import <APCAppCore/APCPassiveDataCollector.h>
-#import <APCAppCore/APCGenericDataTracker.h>
+#import <APCAppCore/APCDataTracker.h>
 #import <APCAppCore/APCHealthKitQuantityTracker.h>
 #import <APCAppCore/APCCoreLocationTracker.h>
 #import <APCAppCore/APCCoreMotionTracker.h>

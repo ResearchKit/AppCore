@@ -7,7 +7,7 @@
  
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import "APCGenericDataTracker.h"
+#import "APCDataTracker.h"
 
 /**
  Used for passive location tracking. PausesLocationUpdatesAutomatically property is set to YES. Core Location pauses
@@ -24,7 +24,7 @@ typedef  enum  _APCPassiveLocationTrackingHomeLocation
 
 @protocol APCLocationTrackingHeartbeatDelegate;
 
-@interface APCCoreLocationTracker : APCGenericDataTracker <CLLocationManagerDelegate>
+@interface APCCoreLocationTracker : APCDataTracker <CLLocationManagerDelegate>
 
 
 /**

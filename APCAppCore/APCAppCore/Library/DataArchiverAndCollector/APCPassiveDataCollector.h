@@ -6,7 +6,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "APCDataTracker.h"
 
 @interface APCPassiveDataCollector : NSObject
+
+-(void) addTracker: (APCDataTracker*) tracker;
+
+- (void) flush:(NSString*) trackerIdentifier; //Packages the data collected so far as encrypted zip.
 
 @end

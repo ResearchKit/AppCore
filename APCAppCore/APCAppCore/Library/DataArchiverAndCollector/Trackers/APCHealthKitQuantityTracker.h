@@ -6,9 +6,9 @@
 // 
  
 #import <Foundation/Foundation.h>
-#import "APCGenericDataTracker.h"
+#import "APCDataTracker.h"
 
-@interface APCHealthKitQuantityTracker : APCGenericDataTracker
+@interface APCHealthKitQuantityTracker : APCDataTracker
 
 @property (strong, nonatomic) __block NSDate *lastUpdate;
 @property (assign) NSInteger __block totalUpdates;
