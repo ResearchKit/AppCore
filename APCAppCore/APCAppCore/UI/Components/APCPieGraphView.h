@@ -41,6 +41,8 @@
 
 @property (nonatomic) UILabel *valueLabel;
 
+@property (nonatomic) BOOL shouldDrawClockwise;
+
 @end
 
 @protocol APCPieGraphViewDatasource <NSObject>
