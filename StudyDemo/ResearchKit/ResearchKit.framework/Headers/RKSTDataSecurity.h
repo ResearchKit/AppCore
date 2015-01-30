@@ -26,5 +26,5 @@ typedef NS_ENUM(NSInteger, RKEncryptionAlgorithm) {
  *
  * @note An exception is thrown if the identity is invalid.
  */
-RK_EXTERN NSData *RKCryptographicMessageSyntaxEnvelopedData(NSData *data, NSData *identity, RKEncryptionAlgorithm algorithm, NSError * __autoreleasing *error) RKST_AVAILABLE_IOS(8_3);
+RK_EXTERN NSData *RKSTCryptographicMessageSyntaxEnvelopedData(NSData *data, NSData *identity, RKEncryptionAlgorithm algorithm, NSError * __autoreleasing *error) RKST_AVAILABLE_IOS(8_3);
 
