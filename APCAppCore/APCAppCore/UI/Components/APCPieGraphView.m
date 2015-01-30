@@ -64,6 +64,8 @@ static CGFloat const kAnimationDuration = 0.35f;
     _shouldAnimate = YES;
     _shouldAnimateLegend = YES;
     
+    _shouldDrawClockwise = YES;
+    
     _actualValues = [NSMutableArray new];
     _normalizedValues = [NSMutableArray new];
     _sumOfValues = 0;
@@ -133,7 +135,12 @@ static CGFloat const kAnimationDuration = 0.35f;
     CGFloat startAngle = -M_PI_2;
     CGFloat endAngle = 3*M_PI_2;
     
-    UIBezierPath *circularArcBezierPath = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:startAngle endAngle:endAngle clockwise:YES];
+    if (!self.shouldDrawClockwise) {
+        startAngle = 3*M_PI_2;
+        endAngle = -M_PI_2;
+    }
+
+    UIBezierPath *circularArcBezierPath = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:startAngle endAngle:endAngle clockwise:self.shouldDrawClockwise];
     
     return circularArcBezierPath;
 }
@@ -242,7 +249,12 @@ static CGFloat const kAnimationDuration = 0.35f;
         
         
         if (value != 0) {
+            
             CGFloat angle = (value/2 + cumulativeValue) * M_PI * 2;
+            
+            if (!self.shouldDrawClockwise) {
+                angle = (value/2 + cumulativeValue) * - M_PI * 2;
+            }
             
             NSInteger offset = self.lineWidth/2 + 20;
             

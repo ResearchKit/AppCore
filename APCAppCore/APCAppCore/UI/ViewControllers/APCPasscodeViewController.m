@@ -86,8 +86,6 @@
     [self.titleLabel setFont:[UIFont appLightFontWithSize:19.0f]];
     
     [self.logoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
-    
-    [self.touchIdButton setBackgroundImage:[UIImage imageWithColor:[UIColor appPrimaryColor]] forState:UIControlStateNormal];
 }
 
 #pragma mark - APCPasscodeViewDelegate
@@ -181,7 +179,7 @@
     double animationDuration = [notifcation.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
     [UIView animateWithDuration:animationDuration animations:^{
-        self.touchIdButtonBottomConstraint.constant = keyboardHeight;
+        self.touchIdButtonBottomConstraint.constant = keyboardHeight + 15;
     }];
     
 }
