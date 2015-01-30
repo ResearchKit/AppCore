@@ -13,6 +13,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "APCOnboarding.h"
 #import "APCTasksReminderManager.h"
+#import "UIView+Helper.h"
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -32,7 +33,9 @@ static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
+
 @property (nonatomic) BOOL isPasscodeShowing;
+@property (nonatomic, strong) UIView *secureView;
 
 @end
 
@@ -66,6 +69,11 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     return YES;
 }
 
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+    [self showSecureView];
+}
+
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
 #ifndef DEVELOPMENT
@@ -75,6 +83,8 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         }];
     }
 #endif
+    
+    [self hideSecureView];
 
     [self.dataMonitor appBecameActive];
 }
@@ -100,10 +110,14 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
     }
     self.dataSubstrate.currentUser.sessionToken = nil;
+    
+    [self showSecureView];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
+    [self hideSecureView];
+    
     [self showPasscodeIfNecessary];
 }
 
@@ -479,5 +493,41 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [viewController dismissViewControllerAnimated:YES completion:nil];
     self.isPasscodeShowing = NO;
 }
+
+#pragma mark - Secure View
+
+- (void)showSecureView
+{
+    if (self.secureView == nil) {
+        self.secureView = [[UIView alloc] initWithFrame:self.window.rootViewController.view.bounds];
+        
+        UIImage *blurredImage = [self.window.rootViewController.view blurredSnapshot];
+        UIImage *appIcon = [UIImage imageNamed:@"AppIcon-Flexible" inBundle:[NSBundle mainBundle] compatibleWithTraitCollection:nil];
+        UIImageView *blurredImageView = [[UIImageView alloc] initWithImage:blurredImage];
+        UIImageView *appIconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, 180, 180)];
+        appIconImageView.layer.borderWidth = 2.0;
+        appIconImageView.layer.borderColor = [[UIColor appPrimaryColor] CGColor];
+        appIconImageView.layer.cornerRadius = 30.0;
+        appIconImageView.layer.masksToBounds = YES;
+        
+        appIconImageView.image = appIcon;
+        appIconImageView.center = blurredImageView.center;
+        
+        [self.secureView addSubview:blurredImageView];
+        [self.secureView addSubview:appIconImageView];
+    }
+    
+    [self.window.rootViewController.view addSubview:self.secureView];
+    [self.window.rootViewController.view bringSubviewToFront:self.secureView];
+}
+
+- (void)hideSecureView
+{
+    if (self.secureView) {
+        [self.secureView removeFromSuperview];
+        self.secureView = nil;
+    }
+}
+
 
 @end
