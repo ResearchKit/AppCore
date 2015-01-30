@@ -36,21 +36,6 @@ NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
 
 - (void) batchUploadDataToBridgeOnCompletion: (void (^)(NSError * error)) completionBlock
 {
-
-#warning Ron here.  Is this code correct?  It seems like it would unnecessarily suppress some uploads -- any uploads that start when another upload is in progress.  Maybe it should look like this:
-
-//	if (self.dataSubstrate.currentUser.isConsented)
-//	{
-//		if (self.batchUploadingInProgress)	// <<<--- here's the change I'm suggesting:  put this in its own "if" statement.
-//		{
-//			// ...enqueue the new upload
-//		}
-//		else
-//		{
-//			// do one upload
-//		}
-//	}
-
     if (self.dataSubstrate.currentUser.isConsented && !self.batchUploadingInProgress) {
         self.batchUploadingInProgress = YES;
         NSManagedObjectContext * context = self.dataSubstrate.persistentContext;
