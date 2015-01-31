@@ -31,4 +31,6 @@
 
 + (void) frame:(CGRect *)frame animationDuration:(CGFloat *)duration animationCurve:(UIViewAnimationCurve *)animationCurve fromKeyboardNotification:(NSNotification *)notification;
 
+- (UIImage *)blurredSnapshot;
+
 @end

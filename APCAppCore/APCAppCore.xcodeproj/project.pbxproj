@@ -54,6 +54,8 @@
 		0875C3D81A797A7B00CE50FB /* APCButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 0875C3D61A797A7B00CE50FB /* APCButton.h */; };
 		0875C3D91A797A7B00CE50FB /* APCButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0875C3D71A797A7B00CE50FB /* APCButton.m */; };
 		089E2E831A6051F600A8FBF3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B241A2F86280015982C /* HealthKit.framework */; };
+		08EA2AB31A7AD564007549C0 /* UIImage+ImageEffects.h in Headers */ = {isa = PBXBuildFile; fileRef = 08EA2AB11A7AD564007549C0 /* UIImage+ImageEffects.h */; };
+		08EA2AB41A7AD564007549C0 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */; };
 		360C63D11A339746002EC86C /* NSDateComponentsHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */; };
 		364D348A1A7B1C8F0060B3F5 /* APCDataVerificationClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 364D34881A7B1C8F0060B3F5 /* APCDataVerificationClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		364D348B1A7B1C8F0060B3F5 /* APCDataVerificationClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 364D34891A7B1C8F0060B3F5 /* APCDataVerificationClient.m */; };
@@ -509,6 +511,8 @@
 		08027A761A7319AC00B358CC /* consent_07@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_07@3x.m4v"; sourceTree = "<group>"; };
 		0875C3D61A797A7B00CE50FB /* APCButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCButton.h; sourceTree = "<group>"; };
 		0875C3D71A797A7B00CE50FB /* APCButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCButton.m; sourceTree = "<group>"; };
+		08EA2AB11A7AD564007549C0 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
+		08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateComponentsHelperTests.m; sourceTree = "<group>"; };
 		364D34881A7B1C8F0060B3F5 /* APCDataVerificationClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataVerificationClient.h; sourceTree = "<group>"; };
 		364D34891A7B1C8F0060B3F5 /* APCDataVerificationClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataVerificationClient.m; sourceTree = "<group>"; };
@@ -1311,6 +1315,8 @@
 		F5B9473F1A73272C0034C522 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				08EA2AB11A7AD564007549C0 /* UIImage+ImageEffects.h */,
+				08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */,
 				F5B947401A73272C0034C522 /* APCDeviceHardware+APCHelper.h */,
 				F5B947411A73272C0034C522 /* APCDeviceHardware+APCHelper.m */,
 				F5B947421A73272C0034C522 /* APCStepProgressBar+Appearance.h */,
@@ -1966,6 +1972,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5F12AF01A2F78490015982C /* APCDashboardProgressTableViewCell.h in Headers */,
+				08EA2AB31A7AD564007549C0 /* UIImage+ImageEffects.h in Headers */,
 				F5B947EF1A73272C0034C522 /* APCParameters.h in Headers */,
 				F5F12AA61A2F78490015982C /* APCEligibleViewController.h in Headers */,
 				F5F12A6F1A2F78490015982C /* APCCircularProgressView.h in Headers */,
@@ -2470,6 +2477,7 @@
 				F5F12A9C1A2F78490015982C /* APCEmailVerifyViewController.m in Sources */,
 				F5F12ACB1A2F78490015982C /* APCProfileViewController.m in Sources */,
 				F5F12ADF1A2F78490015982C /* APCShareTableViewCell.m in Sources */,
+				08EA2AB41A7AD564007549C0 /* UIImage+ImageEffects.m in Sources */,
 				F5B948091A73272C0034C522 /* APCScheduleExpressionParser.m in Sources */,
 				F5F129EF1A2F78490015982C /* APCDBStatus+AddOn.m in Sources */,
 				F5B947F01A73272C0034C522 /* APCParameters.m in Sources */,

@@ -247,7 +247,8 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
                                                             @"error_description" : description,
                                                             @"full_error_description": [NSString stringWithFormat: @"%@", error]
                                                             }];
-            [Flurry logError: error.domain message: description error: error];
+            //Makes the app slow. Revisit with next version of Flurry SDK.
+//            [Flurry logError: error.domain message: description error: error];
         }
 
 		[self logInternal_tag: @"APC_ERROR"
@@ -274,7 +275,8 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
                                                             @"exception_reason" : exception.reason,
                                                             @"exception_stacktrace": printout
                                                             }];
-            [Flurry logError: exception.name message: exception.reason exception: exception];
+            //Makes the app slow. Revisit with next version of Flurry SDK.
+//            [Flurry logError: exception.name message: exception.reason exception: exception];
         }
 
 		[self logInternal_tag: @"APC_ERROR"
