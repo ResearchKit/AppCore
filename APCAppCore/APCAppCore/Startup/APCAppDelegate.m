@@ -297,7 +297,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     NSArray       *items = tabBarController.tabBar.items;
     UITabBarItem  *selectedItem = tabBarController.tabBar.selectedItem;
     
-    NSUInteger     selectedItemIndex = 0;
+    NSUInteger     selectedItemIndex = 2;
     if (selectedItem != nil) {
         selectedItemIndex = [items indexOfObject:selectedItem];
     }
@@ -326,6 +326,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     }
     
     NSArray  *controllers = tabBarController.viewControllers;
+    [tabBarController setSelectedIndex:selectedItemIndex];
     [self tabBarController:tabBarController didSelectViewController:controllers[selectedItemIndex]];
 }
 
