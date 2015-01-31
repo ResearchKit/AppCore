@@ -25,6 +25,9 @@
  running on a specific machine.  (We're
  still evolving how to specify the IP
  address.)
+ 
+ For documentation, please see
+ https://ymedialabs.atlassian.net/wiki/display/APPLE/How+to+see+the+data+we+send+to+Sage
  */
 @interface APCDataVerificationClient : NSObject
 

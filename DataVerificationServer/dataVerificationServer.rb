@@ -18,6 +18,11 @@
 # 	ruby dataVerificationServer.rb
 #
 # You can launch this from any directory.
+#
+# For more information, see the Confluence page
+# about this:
+#
+# 		https://ymedialabs.atlassian.net/wiki/display/APPLE/How+to+see+the+data+we+send+to+Sage
 
 require 'sinatra'
 require 'json'
