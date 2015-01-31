@@ -1,15 +1,23 @@
-# Created by Dhanush Balachandran on 2014-Aug-15.
-# Hacked up by Ron Conescu on 2015-Jan-22.
-# Copyright (c) 2015 Y Media Labs. All rights reserved.
 #
-# To install Sinatra, type these at the command line:
-# 	$ sudo gem install sinatra
-# 	# sudo gem install thin
+# DataVerificationServer.rb
+# AppCore 
 #
-# ("thin" is the web server that Sinatra prefers.)
+# Copyright (c) 2015 Apple Inc. All rights reserved. 
+# 
+# Listens for data emitted by the matching
+# DataVerificationClient code in the research
+# apps.
+#
+# Requires the Ruby "gems" called "sinatra" and
+# "thin."  To get those, type these two commands
+# in the Terminal:
+# 	sudo gem install sinatra
+# 	sudo gem install thin
 #
 # Then to run this program, simply type
-# 	$ ruby server_mockup.rb
+# 	ruby dataVerificationServer.rb
+#
+# You can launch this from any directory.
 
 require 'sinatra'
 require 'json'
@@ -19,12 +27,11 @@ require 'fileutils'
 disable :logging
 set :bind, '0.0.0.0'
 
-# My variables
+# Our variables
 base_url_path			= '/api/v1'
 destination_directory	= File.expand_path("~/Desktop/dataVerificationFiles")
 download_directory		= File.join(destination_directory, "downloads")
 output_log_file_path	= File.join(destination_directory, "dataVerificationLog.txt")
-
 
 
 #
@@ -33,23 +40,19 @@ output_log_file_path	= File.join(destination_directory, "dataVerificationLog.txt
 # Listens for file uploads from our iOS apps.
 # There's a centralized method there which
 # calls this method, using the parameters
-# it's expecting.
+# I'm expecting.
 #
 # To test this from curl, call:
 #
-# 		curl "http://localhost:4567/api/v1/upload/someName" -F filedata=@simpleFileToUpload.txt
-# 		                                          ^^^^^^^^     ^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
-# 		                                             1             2               3
-# With these components:
-# 	1)	"somename" is anything you like.
-# 	2)	"filedata" is required: the variable name we'll
-# 		extract in this method.
-# 	3)	"simpleFileToUpload.txt" is the file you want to
-# 		upload.  Note the "@"; that's part of the 'curl'
-# 		syntax.
+# 		curl "http://localhost:4567/api/v1/upload/someTextFile.txt" -F filedata=@someTextFile.txt
 #
-# The results will be written to the file "output.txt"
-# in a folder on your Mac desktop.
+# where someTextFile.txt is any text file you like.
+#
+# The results will be written to
+#
+# 		~/Desktop/dataVerificationFiles/dataVerificationLog.txt
+#
+# i.e., a folder on your Mac desktop.
 #
 
 post "#{base_url_path}/upload/:filename" do

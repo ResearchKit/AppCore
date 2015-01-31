@@ -136,24 +136,6 @@
 	#endif
 }
 
-/**
- Centralized piece of code that disables
- encryption of the Sage data.  Potentially used
- by other view controllers -- anyone creating
- the archive files.
- */
-- (BOOL) shouldEncryptArchiveFile
-{
-	BOOL shouldEncrypt = YES;
-
-	if (DEBUG)
-	{
-		shouldEncrypt = NO;
-	}
-
-	return shouldEncrypt;
-}
-
 - (void) storeInCoreDataWithFileName: (NSString *) fileName resultSummary: (NSString *) resultSummary
 {
     NSManagedObjectContext * context = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext;
