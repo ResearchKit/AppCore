@@ -5,6 +5,16 @@
 //  Copyright (c) 2015 Apple Inc. All rights reserved.
 //
 
+/*
+ Only allow this file to appear in the compiled code
+ if we're diagnosting stuff, in-house.
+ */
+// ---------------------------------------------------------
+#ifdef USE_DATA_VERIFICATION_CLIENT
+// ---------------------------------------------------------
+
+
+
 #import "APCDataVerificationClient.h"
 
 /**
@@ -14,50 +24,10 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 
 
-/**
- If this is non-nil, we'll use it.
- Otherwise, we'll use YES if in debug mode,
- NO if in production.  See +isLoggingOn.
- */
-static NSNumber *shouldLog = nil;
 static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 
 
 @implementation APCDataVerificationClient
-
-+ (void) setupTurningLoggingOn: (BOOL) shouldTurnLoggingOn
-{
-	shouldLog = @(shouldTurnLoggingOn);
-}
-
-+ (BOOL) isLoggingOn
-{
-	BOOL result = NO;
-
-	if (shouldLog != nil)
-	{
-		result = shouldLog.boolValue;
-	}
-
-	else
-	{
-		/*
-		 Uncomment this if appropriate.
-
-		 If this is commented out, and no one calls
-		 +[self setupTurningLoggingOn: YES], then
-		 this logging server code will not run.
-		 */
-
-//		#if DEBUG
-//		{
-//			result = YES;
-//		}
-//		#endif
-	}
-
-	return result;
-}
 
 + (void)                uploadText: (NSString *) text
 	withFakeFilenameForContentType: (NSString *) fakeFilename
@@ -75,65 +45,33 @@ static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 	[self uploadData: data withFilenameForMimeType: filename];
 }
 
-/*
- The stuff below is the "original" stuff,
- from a commit of APCDataSubstrate+ResearchKit.m ,
- dated 2014-Dec-03.
- */
-
 + (void) uploadData: (NSData *) dataToLog withFilenameForMimeType: (NSString *) filename
 {
-	if (self.isLoggingOn)
-	{
-		NSURL * url = [NSURL URLWithString: [NSString stringWithFormat: @"http://127.0.0.1:4567/api/v1/upload/%@", filename]];
-		NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: url];
-		[request setHTTPMethod: @"POST"];
-		NSString *boundary = [self boundaryString];
-		[request addValue: [NSString stringWithFormat: @"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField: @"Content-Type"];
-		NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-		NSURLSession *session = [NSURLSession sessionWithConfiguration: configuration];
+	NSURL * url = [NSURL URLWithString: [NSString stringWithFormat: @"http://127.0.0.1:4567/api/v1/upload/%@", filename]];
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: url];
+	[request setHTTPMethod: @"POST"];
+	NSString *boundary = [self boundaryString];
+	[request addValue: [NSString stringWithFormat: @"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField: @"Content-Type"];
+	NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+	NSURLSession *session = [NSURLSession sessionWithConfiguration: configuration];
 
-		NSData *data = [self createFormBodyPartWithBoundary: boundary
-													   data: dataToLog
-												   filename: filename];
+	NSData *data = [self createFormBodyPartWithBoundary: boundary
+												   data: dataToLog
+											   filename: filename];
 
-		NSURLSessionUploadTask *task = [session uploadTaskWithRequest: request
-															 fromData: data
-													completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-			if (error) {
-				NSLog(@"+[APCUploadValiationServer uploadData:] Error when copying Sage data file to local validation server. Is the local server running? The error was:\n-----\n%@\n-----", error);
-			}
-		}];
+	NSURLSessionUploadTask *task = [session uploadTaskWithRequest: request
+														 fromData: data
+												completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+		if (error) {
+			NSLog(@"+[APCUploadValiationServer uploadData:] Error when copying Sage data file to local validation server. Is the local server running? The error was:\n-----\n%@\n-----", error);
+		}
+	}];
 
-		[task resume];
-	}
+	[task resume];
 }
 
 + (NSString *) boundaryString
 {
-	// generate boundary string
-	//
-	// adapted from http://developer.apple.com/library/ios/#samplecode/SimpleURLConnections
-
-	/*
-	 Original version:
-
-		 CFUUIDRef  uuid;
-		 NSString  *uuidStr;
-
-		 uuid = CFUUIDCreate(NULL);
-		 assert(uuid != NULL);
-
-		 uuidStr = CFBridgingRelease(CFUUIDCreateString(NULL, uuid));
-		 assert(uuidStr != NULL);
-
-		 CFRelease(uuid);
-	 
-	 I'm leaving that here because I don't know if NSUUID
-	 reliably does the same thing.  The documentation suggests
-	 that, maybe, it doesn't.
-	 */
-
 	NSUUID *uuid = [NSUUID new];
 	return [NSString stringWithFormat: @"Boundary-%@", uuid.UUIDString];
 }
@@ -191,6 +129,8 @@ static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 
 
 
-
+// ---------------------------------------------------------
+#endif  // USE_DATA_VERIFICATION_CLIENT
+// ---------------------------------------------------------
 
 

@@ -5,6 +5,18 @@
 //  Copyright (c) 2015 Apple Inc. All rights reserved.
 //
 
+
+
+/*
+ Only allow this file to appear in the compiled code
+ if we're diagnosting stuff, in-house.
+ */
+// ---------------------------------------------------------
+#ifdef USE_DATA_VERIFICATION_CLIENT
+// ---------------------------------------------------------
+
+
+
 #import <Foundation/Foundation.h>
 
 /*
@@ -15,19 +27,6 @@
  address.)
  */
 @interface APCDataVerificationClient : NSObject
-
-/**
- Call this to enable or disable logging.
- By default, uses the "DEVELOPMENT" #define,
- which is YES in debug mode and NO in production.
- */
-+ (void) setupTurningLoggingOn: (BOOL) shouldTurnLoggingOn;
-
-/**
- Returns the value passed to +setupTurningLoggingOn,
- or NO if that method was not called.
- */
-+ (BOOL) isLoggingOn;
 
 /**
  Kind of a hack, until we get result-data-archiving
@@ -56,3 +55,12 @@
 + (void) uploadDataFromFileAtPath: (NSString *) path;
 
 @end
+
+
+
+
+// ---------------------------------------------------------
+#endif  // USE_DATA_VERIFICATION_CLIENT
+// ---------------------------------------------------------
+
+
