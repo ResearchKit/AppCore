@@ -16,6 +16,8 @@ static NSString *const kEmailPropertyName = @"email";
 static NSString *const kPasswordPropertyName = @"password";
 static NSString *const kSessionTokenPropertyName = @"sessionToken";
 
+static NSString *const kPhoneNumberPropertyName = @"phoneNumber";
+static NSString *const kAllowContactPropertyName = @"allowContact";
 static NSString *const kProfileImagePropertyName = @"profileImage";
 static NSString *const kBirthDatePropertyName = @"birthDate";
 static NSString *const kBiologicalSexPropertyName = @"BiologicalSex";
@@ -236,6 +238,19 @@ static NSString *const kSignedInKey = @"SignedIn";
 /*********************************************************************************/
 #pragma mark - Setters for Properties in Core Data
 /*********************************************************************************/
+
+
+- (void)setAllowContact:(BOOL)allowContact
+{
+    _allowContact = allowContact;
+    [self updateStoredProperty:kAllowContactPropertyName withValue:@(allowContact)];
+}
+
+- (void)setPhoneNumber:(NSString *)phoneNumber
+{
+    _phoneNumber = phoneNumber;
+    [self updateStoredProperty:kPhoneNumberPropertyName withValue:phoneNumber];
+}
 
 - (void)setProfileImage:(NSData *)profileImage
 {
