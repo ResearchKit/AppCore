@@ -28,4 +28,6 @@
 
 @property (nonatomic, assign) int64_t stepValue;
 
+@property (nonatomic, strong) NSString* unit;
+
 @end

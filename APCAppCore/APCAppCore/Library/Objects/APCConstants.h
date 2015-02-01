@@ -10,7 +10,7 @@
 typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
     kSignUpPermissionsTypeHealthKit,
     kSignUpPermissionsTypeLocation,
-    kSignUpPermissionsTypePushNotifications,
+    kSignUpPermissionsTypeLocalNotifications,
     kSignUpPermissionsTypeCoremotion,
     kSignUpPermissionsTypeMicrophone,
     kSignUpPermissionsTypeCamera,
@@ -41,6 +41,10 @@ FOUNDATION_EXPORT NSString *const APCAppDidFailToRegisterForRemoteNotification;
 
 FOUNDATION_EXPORT NSString *const APCScoringHealthKitDataIsAvailableNotification;
 
+FOUNDATION_EXPORT NSString *const APCUpdateTasksReminderNotification;
+
+FOUNDATION_EXPORT NSString *const APCConsentCompletedWithDisagreeNotification;
+
 FOUNDATION_EXPORT NSString *const kStudyIdentifierKey;
 FOUNDATION_EXPORT NSString *const kAppPrefixKey;
 FOUNDATION_EXPORT NSString *const kBridgeEnvironmentKey;
@@ -51,6 +55,8 @@ FOUNDATION_EXPORT NSString *const kHKReadPermissionsKey;
 FOUNDATION_EXPORT NSString *const kAppServicesListRequiredKey;
 FOUNDATION_EXPORT NSString *const kAppProfileElementsListKey;
 FOUNDATION_EXPORT NSString *const kVideoURLKey;
+FOUNDATION_EXPORT NSString *const kTaskReminderStartupDefaultOnOffKey;
+FOUNDATION_EXPORT NSString *const kTaskReminderStartupDefaultTimeKey;
 
 FOUNDATION_EXPORT NSString *const kAnalyticsOnOffKey;
 FOUNDATION_EXPORT NSString *const kAnalyticsFlurryAPIKeyKey;	// Really. The NSDictionary key for something known as a "key."
@@ -84,6 +90,9 @@ FOUNDATION_EXPORT NSString *const kTertiaryRedColorKey ;
 FOUNDATION_EXPORT NSString *const kTertiaryYellowColorKey;
 FOUNDATION_EXPORT NSString *const kTertiaryPurpleColorKey;
 FOUNDATION_EXPORT NSString *const kTertiaryGrayColorKey;
+
+FOUNDATION_EXPORT NSString *const kTasksReminderDefaultsOnOffKey;
+FOUNDATION_EXPORT NSString *const kTasksReminderDefaultsTimeKey;
 
 /*********************************************************************************/
 #pragma mark - Events

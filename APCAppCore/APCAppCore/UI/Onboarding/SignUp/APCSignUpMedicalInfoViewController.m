@@ -158,7 +158,14 @@
                     field.textAlignnment = NSTextAlignmentRight;
                     field.pickerData = [APCUser heights];
                     if (self.user.height) {
-                        double heightInInches = [APCUser heightInInches:self.user.height];
+                        double heightInInches = round([APCUser heightInInches:self.user.height]);
+                        
+                        // When a height is returned from HealthKit as anything 12 inches or less,
+                        // we will default it to 12 inches.
+                        if (heightInInches < 12) {
+                            heightInInches = 12;
+                        }
+                        
                         NSString *feet = [NSString stringWithFormat:@"%d'", (int)heightInInches/12];
                         NSString *inches = [NSString stringWithFormat:@"%d''", (int)heightInInches%12];
                         

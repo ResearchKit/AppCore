@@ -12,6 +12,8 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "APCOnboarding.h"
+#import "APCTasksReminderManager.h"
+#import "UIView+Helper.h"
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -31,7 +33,9 @@ static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
+
 @property (nonatomic) BOOL isPasscodeShowing;
+@property (nonatomic, strong) UIView *secureView;
 
 @end
 
@@ -52,6 +56,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self registerNotifications];
     [self setUpHKPermissions];
     [self setUpAppAppearance];
+    [self setUpTasksReminder];
     [self showAppropriateVC];
     
     [self.dataMonitor appFinishedLaunching];
@@ -64,6 +69,11 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     return YES;
 }
 
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+    [self showSecureView];
+}
+
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
 #ifndef DEVELOPMENT
@@ -73,6 +83,8 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         }];
     }
 #endif
+    
+    [self hideSecureView];
 
     [self.dataMonitor appBecameActive];
 }
@@ -98,16 +110,20 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
     }
     self.dataSubstrate.currentUser.sessionToken = nil;
+    
+    [self showSecureView];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
+    [self hideSecureView];
+    
     [self showPasscodeIfNecessary];
 }
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
+
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
@@ -160,6 +176,10 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [APCPermissionsManager setHealthKitTypesToWrite:self.initializationOptions[kHKWritePermissionsKey]];
 }
 
+- (void) setUpTasksReminder {
+    self.tasksReminder = [APCTasksReminderManager new];
+}
+
 /*********************************************************************************/
 #pragma mark - Respond to Notifications
 /*********************************************************************************/
@@ -171,6 +191,11 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(withdrawStudy:) name:APCUserWithdrawStudyNotification object:nil];
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void) signedUpNotification:(NSNotification*) notification
 {
     [self showNeedsEmailVerification];
@@ -179,6 +204,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (void) signedInNotification:(NSNotification*) notification
 {
     [self.dataMonitor userConsented];
+    [self.tasksReminder updateTasksReminder];
     [self showTabBar];
 }
 
@@ -192,7 +218,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     self.dataSubstrate.currentUser.signedUp = NO;
     self.dataSubstrate.currentUser.signedIn = NO;
     [APCKeychainStore removeValueForKey:kPasswordKey];
-    
+    [self.tasksReminder updateTasksReminder];
     [self showOnBoarding];
 }
 
@@ -201,7 +227,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [self clearNSUserDefaults];
     [APCKeychainStore resetKeyChain];
     [self.dataSubstrate resetCoreData];
-    
+    [self.tasksReminder updateTasksReminder];
     [self showOnBoarding];
 }
 
@@ -271,7 +297,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     NSArray       *items = tabBarController.tabBar.items;
     UITabBarItem  *selectedItem = tabBarController.tabBar.selectedItem;
     
-    NSUInteger     selectedItemIndex = 0;
+    NSUInteger     selectedItemIndex = 2;
     if (selectedItem != nil) {
         selectedItemIndex = [items indexOfObject:selectedItem];
     }
@@ -300,6 +326,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     }
     
     NSArray  *controllers = tabBarController.viewControllers;
+    [tabBarController setSelectedIndex:selectedItemIndex];
     [self tabBarController:tabBarController didSelectViewController:controllers[selectedItemIndex]];
 }
 
@@ -422,7 +449,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (RKSTTaskViewController *)consentViewController
 {
-     NSAssert(FALSE, @"Override this method to return a valid Consent Task View Controller.");
+    NSAssert(FALSE, @"Override this method to return a valid Consent Task View Controller.");
     return nil;
 }
 
@@ -467,5 +494,41 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [viewController dismissViewControllerAnimated:YES completion:nil];
     self.isPasscodeShowing = NO;
 }
+
+#pragma mark - Secure View
+
+- (void)showSecureView
+{
+    if (self.secureView == nil) {
+        self.secureView = [[UIView alloc] initWithFrame:self.window.rootViewController.view.bounds];
+        
+        UIImage *blurredImage = [self.window.rootViewController.view blurredSnapshot];
+        UIImage *appIcon = [UIImage imageNamed:@"AppIcon-Flexible" inBundle:[NSBundle mainBundle] compatibleWithTraitCollection:nil];
+        UIImageView *blurredImageView = [[UIImageView alloc] initWithImage:blurredImage];
+        UIImageView *appIconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, 180, 180)];
+        appIconImageView.layer.borderWidth = 2.0;
+        appIconImageView.layer.borderColor = [[UIColor appPrimaryColor] CGColor];
+        appIconImageView.layer.cornerRadius = 30.0;
+        appIconImageView.layer.masksToBounds = YES;
+        
+        appIconImageView.image = appIcon;
+        appIconImageView.center = blurredImageView.center;
+        
+        [self.secureView addSubview:blurredImageView];
+        [self.secureView addSubview:appIconImageView];
+    }
+    
+    [self.window.rootViewController.view addSubview:self.secureView];
+    [self.window.rootViewController.view bringSubviewToFront:self.secureView];
+}
+
+- (void)hideSecureView
+{
+    if (self.secureView) {
+        [self.secureView removeFromSuperview];
+        self.secureView = nil;
+    }
+}
+
 
 @end

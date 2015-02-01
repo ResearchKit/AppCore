@@ -70,6 +70,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [self restoreSceneData];
+    
   APCLogViewControllerAppeared();
 }
 
@@ -93,6 +96,33 @@
     [self.navigationItem setLeftBarButtonItem:backBarButton];
     
     self.nextBarButton.enabled = NO;
+}
+
+- (void)saveSceneData
+{
+    NSDictionary *generalInfoSceneData = @{
+                                           @"email": self.emailTextField.text ?:[NSNull null],
+                                           @"photo": self.profileImage ?:[NSNull null]
+                                           };
+    
+    [self.onboarding.sceneData setObject:generalInfoSceneData forKey:self.onboarding.currentStep.identifier];
+}
+
+- (void)restoreSceneData
+{
+    // check if there is data for the scene
+    NSDictionary *sceneData = [self.onboarding.sceneData valueForKey:self.onboarding.currentStep.identifier];
+    
+    if (sceneData) {
+        if (sceneData[@"email"] != [NSNull null]) {
+            self.emailTextField.text = sceneData[@"email"];
+        }
+        
+        if (sceneData[@"photo"] != [NSNull null]) {
+            self.profileImage = sceneData[@"photo"];
+            self.profileImageButton.imageView.image = self.profileImage;
+        }
+    }
 }
 
 - (NSArray *)prepareContent {
@@ -614,6 +644,8 @@
     
     if ([self isContentValid:nil]) {
         
+        [self saveSceneData];
+        
         [self loadProfileValuesInModel];
         
         [self sendCredentials];
@@ -631,13 +663,9 @@
             
             APCLogError2 (error);
             [spinnerController dismissViewControllerAnimated:NO completion:^{
-                
-                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Sign Up", @"")
-                                                                   message:error.message
-                                                                  delegate:self
-                                                         cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                                         otherButtonTitles:NSLocalizedString(@"Try Again", nil), nil];
-                [alertView show];
+                UIAlertController *alertController = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Up", @"")
+                                                                                     message:error.message];
+                [weakSelf presentViewController:alertController animated:YES completion:nil];
                 
             }];
         }
@@ -741,23 +769,24 @@
 
 - (void)back
 {
+    [self saveSceneData];
     [self.navigationController popViewControllerAnimated:YES];
     [[self onboarding] popScene];
 }
 
-#pragma mark AlertView delegate
-
--(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
-    if (buttonIndex == 0) {
-        NSLog(@"canceled");
-    }else{
-        //try again
-        NSLog(@"Trying again");
-        [self sendCredentials];
-    }
-    
-}
+//#pragma mark AlertView delegate
+//
+//-(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+//    
+//    if (buttonIndex == 0) {
+//        NSLog(@"canceled");
+//    }else{
+//        //try again
+//        NSLog(@"Trying again");
+//        [self sendCredentials];
+//    }
+//    
+//}
 
 
 

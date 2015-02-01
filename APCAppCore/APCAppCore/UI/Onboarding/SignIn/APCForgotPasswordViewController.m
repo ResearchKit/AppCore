@@ -98,8 +98,7 @@
     
     if ([self isContentValid:&error]) {
         if ([self.emailTextField.text isValidForRegex:(NSString *)kAPCGeneralInfoItemEmailRegEx]) {
-            
-            
+
             NSString *emailAddress = self.emailTextField.text;
             
             if (emailAddress.length) {
@@ -109,29 +108,30 @@
 
                 [SBBComponent(SBBAuthManager) requestPasswordResetForEmail:emailAddress completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
                     
-                    [spinnerController dismissViewControllerAnimated:YES completion:^{
-                        UIAlertController *alert = nil;
-                        
-                        if (error) {
-                            alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Forgot Password", @"")  message:[[error.userInfo valueForKey:@"SBBOriginalErrorKey"] valueForKey:@"message"]];
-                        } else {
-                            
-                            [UIView animateWithDuration:0.2 animations:^{
-                                self.emailMessageLabel.text = NSLocalizedString(@"An email has been sent.", @"");
-                                self.emailMessageLabel.alpha = 1;
-                            }];
-                            
-                        }
-                    
-                        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-                            
-                            if (alert) {
-                                [self presentViewController:alert animated:YES completion:nil];
-                            }
-                            
-                        }];
-                    }];
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
 
+						[spinnerController dismissViewControllerAnimated:YES completion:^{
+
+							if (error)
+							{
+								NSString *errorTitle = NSLocalizedString (@"Forgot Password", @"This is the title for the message that appears when the user asked for a 'reset password,' and that 'resetting' process failed.");
+								NSDictionary *sageErrorDictionary = error.userInfo [@"SBBOriginalErrorKey"];
+								NSString *sageErrorMessage = sageErrorDictionary [@"message"];
+
+								UIAlertController *alert = [UIAlertController simpleAlertWithTitle: errorTitle
+																						   message: sageErrorMessage];
+
+								[self presentViewController:alert animated:YES completion:nil];
+							}
+							else
+							{
+								[UIView animateWithDuration:0.2 animations:^{
+									self.emailMessageLabel.text = NSLocalizedString(@"An email has been sent.", @"");
+									self.emailMessageLabel.alpha = 1;
+								}];
+							}
+						}];
+                    }];
                 }];
             }
         }

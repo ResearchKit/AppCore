@@ -99,7 +99,7 @@
 "FITNESS_INTRO_2_TEXT_FORMAT" = "Walk outdoors at your fastest possible pace for %1$@. When you're done, sit and rest comfortably for %2$@. To begin, tap Get Started.";
 
 /* Short walk active task. */
-"WALK_TASK_TITLE" = "Gait and Balance Test";
+"WALK_TASK_TITLE" = "Walking Activity";
 "WALK_INTRO_TEXT" = "This test measures your gait and balance as you walk and stand still. To complete this test, you’ll need to put your phone in your pocket and connect headphones to follow audio instructions.";
 "WALK_STAND_VOICE_INSTRUCTION_FORMAT" = "Now stand still for %@.";
 "WALK_STAND_INSTRUCTION_FORMAT" = "Stand still for %@.";
@@ -108,15 +108,15 @@
 
 
 /* Tapping active task. */
-"TAPPING_TASK_TITLE" = "Tapping Interval Test";
-"TAPPING_INTRO_TEXT" = "This test evaluates your [need some language here to explain this].";
+"TAPPING_TASK_TITLE" = "Tapping Activity";
+"TAPPING_INTRO_TEXT" = "This activity tests your ability to place a series of finger-taps on target.";
 "TAPPING_INTRO_TEXT_2_FORMAT" = "Rest your phone on a flat surface. Then use two fingers on the same hand to alternately tap the buttons that appear. Keep tapping for %@ and time your taps to be as consistent as possible.\n\nTap Get Started to begin the test.";
 "TAP_BUTTON_TITLE" = "Tap";
 "TOTAL_TAPS_LABEL" = "Total Taps";
-"TAPPING_INSTRUCTION_FORMAT" = "Use 2 fingers to alternately tap as fast as you can for %@.";
+"TAPPING_INSTRUCTION_FORMAT" = "Use two fingers to tap alternately as fast as you can for %@.";
 
 /* Audio active task. */
-"AUDIO_TASK_TITLE" = "Sustained\nPhonation Test";
+"AUDIO_TASK_TITLE" = "Voice Activity";
 "AUDIO_CALL_TO_ACTION" = "Tap Get Started to begin the test.";
 "AUDIO_INSTRUCTION" = "Say “Aaaaah” into the microphone for as long as you can.";
 "AUDIO_INTRO_TEXT" = "Say “Aaaaah” into the microphone for as long as you can. Keep a steady vocal volume so the audio bars remain blue.";

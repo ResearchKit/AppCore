@@ -35,11 +35,14 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCHealthKitQuantityTracker.h>
 #import <APCAppCore/APCOnboarding.h>
 #import <APCAppCore/APCDataResult.h>
+#import <APCAppCore/APCTasksReminderManager.h>
+#import <APCAppCore/APCDataArchiver.h>
 
 /* -------------------------
  Logging
  ------------------------- */
 #import <APCAppCore/APCLog.h>
+#import <APCAppCore/APCDataVerificationClient.h>
 
 
 /* UI */
@@ -68,6 +71,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCPasscodeViewController.h>
 #import <APCAppCore/APCHomeLocationViewController.h>
 #import <APCAppCore/APCLocationInfoViewController.h>
+#import <APCAppCore/APCConsentTaskViewController.h>
 
 /*--------------------------
  Dashboard ViewControllers
@@ -154,6 +158,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  ------------------------- */
 #import <APCAppCore/NSBundle+Helper.h>
 #import <APCAppCore/NSDate+Helper.h>
+#import <APCAppCore/NSDateComponents+Helper.h>
 #import <APCAppCore/NSError+APCAdditions.h>
 #import <APCAppCore/NSObject+Helper.h>
 #import <APCAppCore/NSString+Helper.h>

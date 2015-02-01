@@ -28,4 +28,6 @@
 
 @property (nonatomic, assign) double stepValue;
 
+@property (nonatomic, strong) NSString* unit;
+
 @end

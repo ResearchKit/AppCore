@@ -60,9 +60,10 @@ static NSString *const kFinishedProperty = @"finished";
 
 - (void)stepViewController:(RKSTStepViewController *)stepViewController didFinishWithNavigationDirection:(RKSTStepViewControllerNavigationDirection)direction
 {
-    if (!(self.progressor.completedSteps == 1 && direction == RKSTStepViewControllerNavigationDirectionReverse)) {
+    if ([super respondsToSelector:@selector(stepViewController:didFinishWithNavigationDirection:)]) {
         [super stepViewController:stepViewController didFinishWithNavigationDirection:direction];
     }
+    
     [self removeKVOIfNeeded];
 
     if (![self.task respondsToSelector:@selector(progressOfCurrentStep:withResult:)]) {

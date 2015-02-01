@@ -6,10 +6,13 @@
 // 
  
 #import "APCEligibleViewController.h"
+#import "APCConsentTaskViewController.h"
 #import "APCAppCore.h"
 
-@interface APCEligibleViewController () <RKSTTaskViewControllerDelegate>
+static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
+@interface APCEligibleViewController () <RKSTTaskViewControllerDelegate>
+@property (strong, nonatomic) RKSTTaskViewController *consentVC;
 @end
 
 @implementation APCEligibleViewController
@@ -17,6 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnControlOfTaskDelegate:) name:kreturnControlOfTaskDelegate object:nil];
     
     [self setUpAppearance];
     [self setupNavAppearance];
@@ -28,6 +32,10 @@
 {
     [super viewDidAppear:animated];
   APCLogViewControllerAppeared();
+}
+
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kreturnControlOfTaskDelegate object:nil];
 }
 
 - (void) setUpAppearance
@@ -66,35 +74,57 @@
 
 - (void)showConsent
 {
-    RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    self.consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
     
-    consentVC.delegate = self;
-    [self presentViewController:consentVC animated:YES completion:nil];
+    self.consentVC.delegate = self;
+    [self presentViewController:self.consentVC animated:YES completion:nil];
     
 }
 
-
 #pragma mark - RKSTTaskViewControllerDelegate methods
+
+//called on notification
+-(void)returnControlOfTaskDelegate: (id)sender{
+    
+    self.consentVC.delegate = self;
+    
+}
 
 - (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
 {
-    RKSTConsentSignatureResult *consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[0] results] firstObject];
     
-    APCUser *user = [self user];
-    user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@",consentResult.signature.lastName];
-    user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
+    RKSTConsentSignatureResult *consentResult;
+    if ([taskViewController respondsToSelector:@selector(signatureResult)]) {
+        APCConsentTaskViewController *consentTaskViewController = (APCConsentTaskViewController *)taskViewController;
+        if (consentTaskViewController.signatureResult) {
+            consentResult = consentTaskViewController.signatureResult;
+        }
+    }else{
+        consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
+    }
     
-    NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
-    user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
+    if (consentResult.signature.requiresName && (consentResult.signature.firstName && consentResult.signature.lastName)) {
     
-    
-    [self dismissViewControllerAnimated:YES completion:^{
+        APCUser *user = [self user];
+        user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@",consentResult.signature.lastName];
+        user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
         
-        [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
+        NSDateFormatter *dateFormatter = [NSDateFormatter new];
+        dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
+        user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
         
-        [self startSignUp];
-    }];
+        
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+            [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
+            
+            [self startSignUp];
+        }];
+    } else {
+        [taskViewController dismissViewControllerAnimated:YES completion:^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
+        }];
+    }
 }
 
 - (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController

@@ -6,6 +6,7 @@
 // 
  
 #import "UIView+Helper.h"
+#import "UIImage+ImageEffects.h"
 
 @implementation UIView (Helper)
 
@@ -65,6 +66,29 @@
     if ([[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey]) {
         [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:frame];
     }
+}
+
+- (UIImage *)blurredSnapshot
+{
+    // Create the image context
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, self.window.screen.scale);
+    
+    [self drawViewHierarchyInRect:self.frame afterScreenUpdates:NO];
+    
+    // Get the snapshot
+    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    // Now apply the blur effect using UIImageEffect category
+    UIImage *blurredSnapshotImage = [snapshotImage applyLightEffect];
+    
+    // Or apply any other effects available in "UIImage+ImageEffects.h"
+    // UIImage *blurredSnapshotImage = [snapshotImage applyDarkEffect];
+    // UIImage *blurredSnapshotImage = [snapshotImage applyExtraLightEffect];
+    
+    // Be nice and clean your mess up
+    UIGraphicsEndImageContext();
+    
+    return blurredSnapshotImage;
 }
 
 @end
