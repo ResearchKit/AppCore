@@ -167,7 +167,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
 #pragma mark - TaskViewController Delegate methods
 //If the TaskViewController has claimed the task delegate, we will be returned control here
 -(void)returnControlOfTaskDelegate: (id)sender{
-    self.consentVC.taskDelegate = self;
+    self.consentVC.delegate = self;
 }
 
 - (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
