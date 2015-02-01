@@ -90,7 +90,9 @@
     RKSTConsentSignatureResult *consentResult;
     if ([taskViewController respondsToSelector:@selector(signatureResult)]) {
         APCConsentTaskViewController *consentTaskViewController = (APCConsentTaskViewController *)taskViewController;
-        consentResult = consentTaskViewController.signatureResult;
+        if (consentTaskViewController.signatureResult) {
+            consentResult = consentTaskViewController.signatureResult;
+        }
     }else{
         consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
     }
