@@ -6,10 +6,11 @@
 // 
  
 #import "APCEligibleViewController.h"
+#import "APCConsentTaskViewController.h"
 #import "APCAppCore.h"
 
 @interface APCEligibleViewController () <RKSTTaskViewControllerDelegate>
-
+@property (strong, nonatomic) RKSTTaskViewController *consentVC;
 @end
 
 @implementation APCEligibleViewController
@@ -17,6 +18,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnControlOfTaskDelegate:) name:@"returnControlOfTaskDelegate" object:nil];
     
     [self setUpAppearance];
     [self setupNavAppearance];
@@ -66,18 +68,32 @@
 
 - (void)showConsent
 {
-    RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    self.consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
     
-    consentVC.delegate = self;
-    [self presentViewController:consentVC animated:YES completion:nil];
+    self.consentVC.delegate = self;
+    [self presentViewController:self.consentVC animated:YES completion:nil];
     
 }
 
 #pragma mark - RKSTTaskViewControllerDelegate methods
 
+//called on notification
+-(void)returnControlOfTaskDelegate: (id)sender{
+    
+    self.consentVC.delegate = self;
+    
+}
+
 - (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
 {
-    RKSTConsentSignatureResult *consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
+    
+    RKSTConsentSignatureResult *consentResult;
+    if ([taskViewController respondsToSelector:@selector(signatureResult)]) {
+        APCConsentTaskViewController *consentTaskViewController = (APCConsentTaskViewController *)taskViewController;
+        consentResult = consentTaskViewController.signatureResult;
+    }else{
+        consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
+    }
     
     if (consentResult.signature.requiresName && (consentResult.signature.firstName && consentResult.signature.lastName)) {
     
