@@ -9,6 +9,8 @@
 #import "APCConsentTaskViewController.h"
 #import "APCAppCore.h"
 
+static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
+
 @interface APCEligibleViewController () <RKSTTaskViewControllerDelegate>
 @property (strong, nonatomic) RKSTTaskViewController *consentVC;
 @end
@@ -18,7 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnControlOfTaskDelegate:) name:@"returnControlOfTaskDelegate" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnControlOfTaskDelegate:) name:kreturnControlOfTaskDelegate object:nil];
     
     [self setUpAppearance];
     [self setupNavAppearance];
@@ -33,7 +35,7 @@
 }
 
 -(void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"returnControlOfTaskDelegate" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kreturnControlOfTaskDelegate object:nil];
 }
 
 - (void) setUpAppearance

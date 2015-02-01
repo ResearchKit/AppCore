@@ -14,6 +14,7 @@
 #import "APCAppCore.h"
 
 static CGFloat kSectionHeaderHeight = 40.f;
+static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
 @interface APCLearnMasterViewController () <RKSTTaskViewControllerDelegate>
 @property (strong, nonatomic) RKSTTaskViewController *consentVC;
@@ -24,7 +25,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnControlOfTaskDelegate:) name:@"returnControlOfTaskDelegate" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnControlOfTaskDelegate:) name:kreturnControlOfTaskDelegate object:nil];
     
     self.items = [NSMutableArray new];
     
@@ -40,7 +41,7 @@ static CGFloat kSectionHeaderHeight = 40.f;
 }
 
 -(void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"returnControlOfTaskDelegate" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kreturnControlOfTaskDelegate object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
