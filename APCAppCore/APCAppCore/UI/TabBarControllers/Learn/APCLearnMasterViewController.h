@@ -8,8 +8,9 @@
 #import <UIKit/UIKit.h>
 #import "APCTableViewItem.h"
 #import "APCTintedTableViewCell.h"
+#import <ResearchKit/ResearchKit.h>
 
-@interface APCLearnMasterViewController : UITableViewController
+@interface APCLearnMasterViewController : UITableViewController <RKSTTaskViewControllerDelegate>
 
 @property (nonatomic, strong) NSArray *items;
 

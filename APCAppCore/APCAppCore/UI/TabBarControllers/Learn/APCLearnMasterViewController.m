@@ -16,7 +16,7 @@
 static CGFloat kSectionHeaderHeight = 40.f;
 
 @interface APCLearnMasterViewController () <RKSTTaskViewControllerDelegate>
-
+@property (strong, nonatomic) RKSTTaskViewController *consentVC;
 @end
 
 @implementation APCLearnMasterViewController
@@ -24,6 +24,8 @@ static CGFloat kSectionHeaderHeight = 40.f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnControlOfTaskDelegate:) name:@"returnControlOfTaskDelegate" object:nil];
+    
     self.items = [NSMutableArray new];
     
     self.items = [self prepareContent];
@@ -151,14 +153,18 @@ static CGFloat kSectionHeaderHeight = 40.f;
 
 - (void)showConsent
 {
-    RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    self.consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
     
-    consentVC.delegate = self;
-    [self presentViewController:consentVC animated:YES completion:nil];
+    self.consentVC.delegate = self;
+    [self presentViewController:self.consentVC animated:YES completion:nil];
     
 }
 
 #pragma mark - TaskViewController Delegate methods
+//If the TaskViewController has claimed the task delegate, we will be returned control here
+-(void)returnControlOfTaskDelegate: (id)sender{
+    self.consentVC.taskDelegate = self;
+}
 
 - (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
 {
