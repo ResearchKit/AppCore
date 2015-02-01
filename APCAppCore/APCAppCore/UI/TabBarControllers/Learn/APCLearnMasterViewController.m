@@ -39,6 +39,10 @@ static CGFloat kSectionHeaderHeight = 40.f;
   APCLogViewControllerAppeared();
 }
 
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"returnControlOfTaskDelegate" object:nil];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

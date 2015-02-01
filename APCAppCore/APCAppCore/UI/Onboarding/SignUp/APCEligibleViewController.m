@@ -32,6 +32,10 @@
   APCLogViewControllerAppeared();
 }
 
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"returnControlOfTaskDelegate" object:nil];
+}
+
 - (void) setUpAppearance
 {
     self.label1.font = [UIFont appRegularFontWithSize:19.0f];
