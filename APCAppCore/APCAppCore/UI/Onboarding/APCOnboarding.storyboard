@@ -778,12 +778,12 @@
                                             <rect key="frame" x="169" y="2" width="143" height="63"/>
                                             <state key="normal" title="Female"/>
                                         </button>
-                                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A6D-nI-0bR">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A6D-nI-0bR">
                                             <rect key="frame" x="160" y="-1" width="1" height="66"/>
                                             <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="1" id="n6o-Kg-rf0"/>
-                                                <constraint firstAttribute="height" constant="65" id="wg5-E8-0k1"/>
+                                                <constraint firstAttribute="height" constant="66" id="wg5-E8-0k1"/>
                                             </constraints>
                                         </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S02-oT-YCu">

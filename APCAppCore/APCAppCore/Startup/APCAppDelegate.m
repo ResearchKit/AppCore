@@ -69,11 +69,10 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     return YES;
 }
 
-// Temporarily disabling blurring the screen on -applicationWillResignActive
-//- (void)applicationWillResignActive:(UIApplication *)application
-//{
-//    [self showSecureView];
-//}
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+    [self showSecureView];
+}
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
