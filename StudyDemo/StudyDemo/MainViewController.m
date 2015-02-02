@@ -26,9 +26,10 @@ static NSString * const EQ5DTaskIdentifier = @"eq5d";
 static NSString * const ScreeningTaskIdentifier = @"screening";
 static NSString * const ScalesTaskIdentifier = @"scales";
 static NSString * const ImageChoicesTaskIdentifier = @"images";
-static NSString * const AudioTaskIdentifier = @"audio001";
+static NSString * const AudioTaskIdentifier = @"audio";
 static NSString * const FitnessTaskIdentifier = @"fitness";
 static NSString * const GaitTaskIdentifier = @"gait";
+static NSString * const MemoryTaskIdentifier = @"memory";
 static NSString * const DynamicTaskIdentifier = @"DynamicTask01";
 static NSString * const TwoFingerTapTaskIdentifier = @"tap";
 static NSString * const BCSEnrollmentTaskIdentifier = @"BCSEnrollment";
@@ -79,9 +80,6 @@ static NSString * const BreastCancerConsentIdentifier = @"BreastCancerConsentIde
     NSMutableDictionary *buttons = [NSMutableDictionary dictionary];
     
     NSMutableArray *buttonKeys = [NSMutableArray array];
-    
-    RKCryptographicMessageSyntaxEnvelopedData([@"blah" dataUsingEncoding:NSUTF8StringEncoding], [@"blah" dataUsingEncoding:NSUTF8StringEncoding], RKEncryptionAlgorithmAES128CBC, NULL);
-    
 
 #ifndef VIDEO_DEMO
     {
@@ -175,6 +173,14 @@ static NSString * const BreastCancerConsentIdentifier = @"BreastCancerConsentIde
         [button addTarget:self action:@selector(showTask:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitle:@"Show Task" forState:UIControlStateNormal];
         [buttonKeys addObject:@"task"];
+        buttons[buttonKeys.lastObject] = button;
+    }
+    
+    {
+        UIButton* button = [UIButton buttonWithType:UIButtonTypeSystem];
+        [button addTarget:self action:@selector(showMemoryTask:) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Memory Game" forState:UIControlStateNormal];
+        [buttonKeys addObject:@"memory"];
         buttons[buttonKeys.lastObject] = button;
     }
     
@@ -363,6 +369,7 @@ static NSString * const BreastCancerConsentIdentifier = @"BreastCancerConsentIde
     {
         RKSTInstructionStep* step = [[RKSTInstructionStep alloc] initWithIdentifier:@"iid_001"];
         step.title = @"Date Survey";
+        step.detailText = @"date pickers";
         [steps addObject:step];
     }
 
@@ -480,6 +487,19 @@ static NSString * const BreastCancerConsentIdentifier = @"BreastCancerConsentIde
                                       numberOfStepsPerLeg:20
                                              restDuration:30
                                                   options:RKPredefinedTaskOptionNone];
+    } else if ([identifier isEqualToString:MemoryTaskIdentifier]) {
+        return [RKSTOrderedTask spatialSpanMemoryTaskWithIdentifier:MemoryTaskIdentifier
+                                           intendedUseDescription:nil
+                                                      initialSpan:3
+                                                      minimumSpan:2
+                                                      maximumSpan:15
+                                                        playSpeed:1
+                                                         maxTests:5
+                                           maxConsecutiveFailures:3
+                                                customTargetImage:nil
+                                           customTargetPluralName:nil
+                                                  requireReversal:NO
+                                                          options:RKPredefinedTaskOptionNone];
     } else if ([identifier isEqualToString:DynamicTaskIdentifier]) {
         return [DynamicTask new];
     } else if ([identifier isEqualToString:ScreeningTaskIdentifier]) {
@@ -621,6 +641,17 @@ static NSString * const BreastCancerConsentIdentifier = @"BreastCancerConsentIde
 
 - (RKSTOrderedTask *)makeLongTask {
     NSMutableArray* steps = [NSMutableArray new];
+    
+    
+    {
+        RKSTQuestionStep* step = [RKSTQuestionStep questionStepWithIdentifier:@"qid_081"
+                                                                    title:@"Select a symptom"
+                                                                   answer:[RKSTAnswerFormat valuePickerAnswerFormatWithTextChoices:@[@[@"Cough"],
+                                                                                                                        @[@"Fever"],
+                                                                                                                        @[@"Headaches"]]  ]];
+        
+        [steps addObject:step];
+    }
     
     {
         RKSTQuestionStep* step = [RKSTQuestionStep questionStepWithIdentifier:@"qid_000"
@@ -897,8 +928,13 @@ static NSString * const BreastCancerConsentIdentifier = @"BreastCancerConsentIde
             [items addObject:item];
         }
         {
+            RKSTFormItem* item = [[RKSTFormItem alloc] initWithSectionTitle:@"Basic Information"];
+            [items addObject:item];
+        }
+        {
             
             RKSTFormItem* item = [[RKSTFormItem alloc] initWithIdentifier:@"fqid_health_bloodType" text:@"Blood Type" answerFormat:[RKSTHealthKitCharacteristicTypeAnswerFormat answerFormatWithCharacteristicType:[HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierBloodType]]];
+            item.placeholder = @"Choose a type";
             [items addObject:item];
         }
         {
@@ -1034,7 +1070,7 @@ static NSString * const BreastCancerConsentIdentifier = @"BreastCancerConsentIde
                                                                                  text:@"Yellow" value:@"yellow"];
             
             RKSTFormItem* item3 = [[RKSTFormItem alloc] initWithIdentifier:@"fqid_009_3" text:@"Which color do you like?"
-                                                          answerFormat:[RKSTAnswerFormat choiceAnswerFormatWithStyle:RKChoiceAnswerStyleSingleChoice imageChoices:@[option1, option2, option3]
+                                                          answerFormat:[RKSTAnswerFormat choiceAnswerFormatWithImageChoices:@[option1, option2, option3]
                                                                                                                ]];
             [items addObject:item3];
         }
@@ -1123,6 +1159,10 @@ static NSString * const BreastCancerConsentIdentifier = @"BreastCancerConsentIde
 
 - (IBAction)showGAIT:(id)sender{
     [self beginTaskWithIdentifier:GaitTaskIdentifier];
+}
+
+- (IBAction)showMemoryTask:(id)sender {
+    [self beginTaskWithIdentifier:MemoryTaskIdentifier];
 }
 
 - (IBAction)showInteruptTask:(id)sender{
@@ -1247,7 +1287,7 @@ static NSString * const BreastCancerConsentIdentifier = @"BreastCancerConsentIde
                                                                                  text:nil value:@"orange"];
             RKSTImageChoice* option3 = [RKSTImageChoice choiceWithNormalImage:[self imageWithColor:[UIColor yellowColor] size:size1 border:NO]
                                                                         selectedImage:[self imageWithColor:[UIColor yellowColor] size:size1 border:YES]
-                                                                                 text:@"Yellow Yellow Yellow" value:@"yellow"];
+                                                                                 text:@"Yellow Yellow Yellow Yellow Yellow Yellow Yellow Yellow Yellow Yellow Yellow Yellow" value:@"yellow"];
             RKSTImageChoice* option4 = [RKSTImageChoice choiceWithNormalImage:[self imageWithColor:[UIColor greenColor] size:size2 border:NO]
                                                                         selectedImage:[self imageWithColor:[UIColor greenColor] size:size2 border:YES]
                                                                                  text:@"Green" value:@"green"];
@@ -1260,19 +1300,19 @@ static NSString * const BreastCancerConsentIdentifier = @"BreastCancerConsentIde
             
             
             RKSTFormItem* item1 = [[RKSTFormItem alloc] initWithIdentifier:[@"fqid_009_1" stringByAppendingFormat:@"%@",dimension] text:@"Which color do you like?"
-                                                          answerFormat:[RKSTAnswerFormat choiceAnswerFormatWithStyle:RKChoiceAnswerStyleSingleChoice imageChoices:@[option1] ]];
+                                                          answerFormat:[RKSTAnswerFormat choiceAnswerFormatWithImageChoices:@[option1] ]];
             [items addObject:item1];
             
             RKSTFormItem* item2 = [[RKSTFormItem alloc] initWithIdentifier:[@"fqid_009_2" stringByAppendingFormat:@"%@",dimension] text:@"Which color do you like?"
-                                                          answerFormat:[RKSTAnswerFormat choiceAnswerFormatWithStyle:RKChoiceAnswerStyleSingleChoice imageChoices:@[option1, option2] ]];
+                                                          answerFormat:[RKSTAnswerFormat choiceAnswerFormatWithImageChoices:@[option1, option2] ]];
             [items addObject:item2];
             
             RKSTFormItem* item3 = [[RKSTFormItem alloc] initWithIdentifier:[@"fqid_009_3" stringByAppendingFormat:@"%@",dimension] text:@"Which color do you like?"
-                                                          answerFormat:[RKSTAnswerFormat choiceAnswerFormatWithStyle:RKChoiceAnswerStyleSingleChoice imageChoices:@[option1, option2, option3] ]];
+                                                          answerFormat:[RKSTAnswerFormat choiceAnswerFormatWithImageChoices:@[option1, option2, option3] ]];
             [items addObject:item3];
             
             RKSTFormItem* item6 = [[RKSTFormItem alloc] initWithIdentifier:[@"fqid_009_6" stringByAppendingFormat:@"%@",dimension] text:@"Which color do you like?"
-                                                          answerFormat:[RKSTAnswerFormat choiceAnswerFormatWithStyle:RKChoiceAnswerStyleMultipleChoice imageChoices:@[option1, option2, option3, option4, option5, option6] ]];
+                                                          answerFormat:[RKSTAnswerFormat choiceAnswerFormatWithImageChoices:@[option1, option2, option3, option4, option5, option6] ]];
             [items addObject:item6];
         }
         
@@ -1294,7 +1334,7 @@ static NSString * const BreastCancerConsentIdentifier = @"BreastCancerConsentIde
                                                                      text:@"Orange" value:@"orange"];
             RKSTImageChoice* option3 = [RKSTImageChoice choiceWithNormalImage:[self imageWithColor:[UIColor yellowColor] size:size1 border:NO]
                                                             selectedImage:[self imageWithColor:[UIColor yellowColor] size:size1 border:YES]
-                                                                     text:@"Yellow" value:@"yellow"];
+                                                                     text:@"Yellow Yellow Yellow Yellow Yellow Yellow Yellow Yellow Yellow Yellow" value:@"yellow"];
             RKSTImageChoice* option4 = [RKSTImageChoice choiceWithNormalImage:[self imageWithColor:[UIColor greenColor] size:size2 border:NO]
                                                             selectedImage:[self imageWithColor:[UIColor greenColor] size:size2 border:YES]
                                                                      text:@"Green" value:@"green"];
@@ -1308,22 +1348,22 @@ static NSString * const BreastCancerConsentIdentifier = @"BreastCancerConsentIde
             
             RKSTQuestionStep* step1 = [RKSTQuestionStep questionStepWithIdentifier:@"qid_000color1"
                                                                          title:@"Which color do you like?"
-                                                                        answer:[RKSTAnswerFormat choiceAnswerFormatWithStyle:RKChoiceAnswerStyleSingleChoice imageChoices:@[option1] ]];
+                                                                        answer:[RKSTAnswerFormat choiceAnswerFormatWithImageChoices:@[option1] ]];
             [steps addObject:step1];
             
             RKSTQuestionStep* step2 = [RKSTQuestionStep questionStepWithIdentifier:@"qid_000color2"
                                                                          title:@"Which color do you like?"
-                                                                        answer:[RKSTAnswerFormat choiceAnswerFormatWithStyle:RKChoiceAnswerStyleSingleChoice imageChoices:@[option1, option2] ]];
+                                                                        answer:[RKSTAnswerFormat choiceAnswerFormatWithImageChoices:@[option1, option2] ]];
             [steps addObject:step2];
             
             RKSTQuestionStep* step3 = [RKSTQuestionStep questionStepWithIdentifier:@"qid_000color3"
                                                                          title:@"Which color do you like?"
-                                                                        answer:[RKSTAnswerFormat choiceAnswerFormatWithStyle:RKChoiceAnswerStyleSingleChoice imageChoices:@[option1, option2, option3] ]];
+                                                                        answer:[RKSTAnswerFormat choiceAnswerFormatWithImageChoices:@[option1, option2, option3] ]];
             [steps addObject:step3];
             
             RKSTQuestionStep* step6 = [RKSTQuestionStep questionStepWithIdentifier:@"qid_000color6"
                                                                          title:@"Which color do you like?"
-                                                                        answer:[RKSTAnswerFormat choiceAnswerFormatWithStyle:RKChoiceAnswerStyleMultipleChoice imageChoices:@[option1, option2, option3, option4, option5, option6]]];
+                                                                        answer:[RKSTAnswerFormat choiceAnswerFormatWithImageChoices:@[option1, option2, option3, option4, option5, option6]]];
             [steps addObject:step6];
         }
     }
@@ -1700,11 +1740,11 @@ static NSString * const BreastCancerConsentIdentifier = @"BreastCancerConsentIde
 #pragma mark - RKSTTaskViewControllerDelegate
 
 - (BOOL)taskViewController:(RKSTTaskViewController *)taskViewController hasLearnMoreForStep:(RKSTStep *)step{
-    //static int counter = 0;
-    //counter ++;
-    //return ((counter % 2) > 0);
-    
-    return ([step isKindOfClass:[RKSTInstructionStep class]]);
+   
+    NSString* task_identifier = taskViewController.task.identifier;
+
+    return ([step isKindOfClass:[RKSTInstructionStep class]]
+            && NO == [@[AudioTaskIdentifier, FitnessTaskIdentifier, GaitTaskIdentifier, TwoFingerTapTaskIdentifier] containsObject:task_identifier]);
 }
 
 - (void)taskViewController:(RKSTTaskViewController *)taskViewController learnMoreForStep:(RKSTStepViewController *)stepViewController{
