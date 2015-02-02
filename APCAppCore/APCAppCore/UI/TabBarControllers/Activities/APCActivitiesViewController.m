@@ -103,11 +103,18 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     
     //Styling
     titleLabel.font = [UIFont appRegularFontWithSize:17];
-    titleLabel.textColor = [UIColor appSecondaryColor1];
     countLabel.font = [UIFont appRegularFontWithSize:15];
-    countLabel.textColor = [UIColor appSecondaryColor2];
     completionTimeLabel.font = [UIFont appLightFontWithSize:14];
-    completionTimeLabel.textColor = [UIColor appSecondaryColor3];
+    
+    if (indexPath.section > 0) {
+        titleLabel.textColor = [UIColor lightGrayColor];
+        countLabel.textColor = [UIColor lightGrayColor];
+        completionTimeLabel.textColor = [UIColor lightGrayColor];
+    } else {
+        titleLabel.textColor = [UIColor appSecondaryColor1];
+        countLabel.textColor = [UIColor appSecondaryColor2];
+        completionTimeLabel.textColor = [UIColor appSecondaryColor3];
+    }
     
     completionTimeLabel.text = taskCompletionTimeString;
 
@@ -166,53 +173,56 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (!self.taskSelectionDisabled) {
-        
-        id task = ((NSArray*)self.scheduledTasksArray[indexPath.section])[indexPath.row];
-        
-        if ([task isKindOfClass:[APCGroupedScheduledTask class]]) {
+    
+    if (indexPath.section == 0) {
+        if (!self.taskSelectionDisabled) {
             
-            APCGroupedScheduledTask *groupedScheduledTask = (APCGroupedScheduledTask *)task;
+            id task = ((NSArray*)self.scheduledTasksArray[indexPath.section])[indexPath.row];
             
-            NSString *taskClass = groupedScheduledTask.taskClassName;
-            
-            Class  class = [NSClassFromString(taskClass) class];
-            
-            if (class != [NSNull class])
-            {
-                NSInteger taskIndex = -1;
+            if ([task isKindOfClass:[APCGroupedScheduledTask class]]) {
                 
-                for (int i =0; i<groupedScheduledTask.scheduledTasks.count; i++) {
-                    APCScheduledTask *scheduledTask = groupedScheduledTask.scheduledTasks[i];
-                    if (!scheduledTask.completed.boolValue) {
-                        taskIndex = i;
-                        break;
+                APCGroupedScheduledTask *groupedScheduledTask = (APCGroupedScheduledTask *)task;
+                
+                NSString *taskClass = groupedScheduledTask.taskClassName;
+                
+                Class  class = [NSClassFromString(taskClass) class];
+                
+                if (class != [NSNull class])
+                {
+                    NSInteger taskIndex = -1;
+                    
+                    for (int i =0; i<groupedScheduledTask.scheduledTasks.count; i++) {
+                        APCScheduledTask *scheduledTask = groupedScheduledTask.scheduledTasks[i];
+                        if (!scheduledTask.completed.boolValue) {
+                            taskIndex = i;
+                            break;
+                        }
+                    }
+                    APCScheduledTask * taskToPerform = (taskIndex != -1) ? groupedScheduledTask.scheduledTasks[taskIndex] : [groupedScheduledTask.scheduledTasks lastObject];
+                    if (taskToPerform)
+                    {
+                        APCBaseTaskViewController *controller = [class customTaskViewController:taskToPerform];
+                        if (controller) {
+                            [self presentViewController:controller animated:YES completion:nil];
+                        }
+                        
                     }
                 }
-                APCScheduledTask * taskToPerform = (taskIndex != -1) ? groupedScheduledTask.scheduledTasks[taskIndex] : [groupedScheduledTask.scheduledTasks lastObject];
-                if (taskToPerform)
-                {
-                    APCBaseTaskViewController *controller = [class customTaskViewController:taskToPerform];
+                
+            } else {
+                APCScheduledTask *scheduledTask = (APCScheduledTask *)task;
+                
+                NSString *taskClass = scheduledTask.task.taskClassName;
+                
+                Class  class = [NSClassFromString(taskClass) class];
+                
+                if (class != [NSNull class]) {
+                    APCBaseTaskViewController *controller = [class customTaskViewController:scheduledTask];
                     if (controller) {
                         [self presentViewController:controller animated:YES completion:nil];
                     }
                     
                 }
-            }
-            
-        } else {
-            APCScheduledTask *scheduledTask = (APCScheduledTask *)task;
-            
-            NSString *taskClass = scheduledTask.task.taskClassName;
-            
-            Class  class = [NSClassFromString(taskClass) class];
-            
-            if (class != [NSNull class]) {
-                APCBaseTaskViewController *controller = [class customTaskViewController:scheduledTask];
-                if (controller) {
-                    [self presentViewController:controller animated:YES completion:nil];
-                }
-                
             }
         }
     }

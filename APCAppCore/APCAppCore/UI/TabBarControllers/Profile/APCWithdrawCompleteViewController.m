@@ -40,12 +40,6 @@
     [self.surveyLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.surveyLabel setFont:[UIFont appLightFontWithSize:17.0]];
     
-    [self.takeSurveyButton setBackgroundImage:[UIImage imageWithColor:[UIColor appPrimaryColor]] forState:UIControlStateNormal];
-    [self.takeSurveyButton.titleLabel setFont:[UIFont appMediumFontWithSize:19.0f]];
-    
-    [self.noThanksButton setTintColor:[UIColor appPrimaryColor]];
-    [self.noThanksButton.titleLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
-    
     [self.logoImageVIew setImage:[UIImage imageNamed:@"logo_disease"]];
 }
 
