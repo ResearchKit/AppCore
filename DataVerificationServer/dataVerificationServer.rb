@@ -48,14 +48,16 @@ destination_directory	= File.expand_path("~/Desktop/dataVerificationFiles")
 
 
 #
-# Section divider, and unique names for files and folders.
+# Section dividers, and unique names for files and folders.
 #
 # For the available time-and-date specifiers, see:
 # 		http://www.ruby-doc.org/core-2.2.0/Time.html#method-i-strftime
 #
-SECTION_DIVIDER_CHAR		= "="
-SECTION_DIVIDER_FORMAT		= "========== New files arrived on %A, %Y-%m-%d at %H:%M:%S %Z =========="
-DOWNLOAD_FOLDER_NAME_FORMAT	= "files_%Y-%m-%d_%H-%M-%S-%3N"
+SECTION_DIVIDER_CHAR			= "-"
+SECTION_DIVIDER_FORMAT			= "---------- New files arrived on %A, %Y-%m-%d at %H:%M:%S %Z ----------"
+DOWNLOAD_FOLDER_NAME_FORMAT		= "files_%Y-%m-%d_%H-%M-%S-%3N"
+STARTUP_MESSAGE_DIVIDER_CHAR	= "="
+STARTUP_MESSAGE_FORMAT			= "========== DataValidationServer starting up: %A, %Y-%m-%d at %H:%M:%S %Z =========="
 
 
 #
@@ -226,4 +228,27 @@ class Utils
 		divider
 	end
 	
+	def self.startup_message
+		time_string = Time.now.localtime.strftime( STARTUP_MESSAGE_FORMAT )
+		visual_divider = STARTUP_MESSAGE_DIVIDER_CHAR * time_string.length
+		message = "#{visual_divider}\n#{time_string}\n#{visual_divider}"
+		
+		# To return a value, put it on a line by itself:
+		message
+	end
+	
 end
+
+
+#
+# Startup message
+#
+# I'm putting this at the end of the file
+# because I don't yet know Ruby or Sinatra
+# enough to ask Sinatra to tell me, "please
+# do this when you've finisehd starting up."
+# So I have to do it physically after
+# defining my startup_message() method.
+#
+
+puts "\n\n\n#{Utils.startup_message}\n\n"
