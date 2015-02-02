@@ -66,6 +66,13 @@ RK_CLASS_AVAILABLE_IOS(8_3)
 @property (nonatomic) BOOL shouldVibrateOnStart;
 
 /**
+ * @brief Whether to vibrate when the step finish.
+ *
+ * Default value is NO.
+ */
+@property (nonatomic) BOOL shouldVibrateOnFinish;
+
+/**
  * @brief Leave Next button continuously enabled before the step completes.
  * At the same time, hides the skip button.
  *
