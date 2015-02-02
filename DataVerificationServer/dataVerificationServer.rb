@@ -53,7 +53,7 @@ output_log_file_path	= File.join(destination_directory, "dataVerificationLog.txt
 #
 # where someTextFile.txt is any text file you like.
 #
-# The results will be written to
+# The results will be written to:
 #
 # 		~/Desktop/dataVerificationFiles/dataVerificationLog.txt
 #
@@ -68,12 +68,18 @@ post "#{base_url_path}/upload/:filename" do
 	FileUtils.mkdir_p(destination_directory)
 	FileUtils.mkdir_p(download_directory)
 	
-	# Echo to the console.
-	puts "\n----------\nInput parameters:\n     #{params}"
+
+	
+	# Echo incoming parameters to the console.
+	#
+	# Please leave this commented-out line of code, so
+	# I remember how to access the incoming parameters.
+	#
+	# 		puts "\n----------\nInput parameters:\n     #{params}"
 
 
 	#
-	# Delete existing files, if any
+	# Delete existing files, if any.
 	#
 	# Purposely waiting 'til now to delete the previous
 	# files, so that I can error-check each file after
@@ -109,36 +115,32 @@ post "#{base_url_path}/upload/:filename" do
 	
 	
 	#
-	# append content to output file
+	# create string containing new content
 	#
 	
-	File.open(output_log_file_path, "a") { |output_log_file|
-		output_log_file.write(
-			"\n======== New batch of files ========\n"	\
-			"These JSON files are located here:\n"		\
-			"     #{download_directory}\n"				\
-			"\n"										\
-			"They'll be deleted when you upload the next batch.\n" 
-		)
-	}
+	content =	"\n======== New batch of files ========\n"	\
+				"These JSON files are located here:\n"		\
+				"     #{download_directory}\n"				\
+				"\n"										\
+				"They'll be deleted when you upload the next batch.\n\n" 
 	
 	Dir.glob("#{download_directory}/*.json") do |jsonFile|
 		
 		thisFile = File.open(jsonFile, "r")
 		thisFileContents = thisFile.read
 		
-		File.open(output_log_file_path, "a") { |output_log_file|
-			baseName = File.basename(jsonFile)
-			output_log_file.write( "\n#{baseName}:\n#{thisFileContents}\n" )
-		}
+		content <<	"#{jsonFile}:\n" \
+					"#{thisFileContents}\n"
 	end
 	
 
 	# echo to stdout (?)
-	puts "\n     wrote to #{downloadedZipFile}"
+	# puts "\n     wrote to #{downloadedZipFile}"
+	puts content
 	
 	# Return value (different from above?)
-	[200, {results: "wrote to #{downloadedZipFile}"}.to_json]
+	# 	[200, {results: "wrote to #{downloadedZipFile}"}.to_json]		# this is how to return JSON to the client
+	200
 end
 
 
