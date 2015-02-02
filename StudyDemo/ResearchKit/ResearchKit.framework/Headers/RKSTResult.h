@@ -106,6 +106,15 @@ RK_CLASS_AVAILABLE_IOS(8_3)
 @end
 
 RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTSpatialSpanMemoryResult : RKSTResult
+
+@property (nonatomic, assign) NSInteger score;
+@property (nonatomic, assign) NSInteger numberOfGames;
+@property (nonatomic, assign) NSInteger numberOfFailures;
+
+@end
+
+RK_CLASS_AVAILABLE_IOS(8_3)
 @interface RKSTFileResult : RKSTResult
 
 /**

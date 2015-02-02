@@ -1069,7 +1069,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZNj-BL-O64">
-                                                    <rect key="frame" x="125" y="15" width="181" height="35"/>
+                                                    <rect key="frame" x="69" y="15" width="237" height="35"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="35" id="aJL-RU-fBm"/>
                                                     </constraints>
@@ -1080,10 +1080,10 @@
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2b8-Nk-Sgj">
-                                                    <rect key="frame" x="16" y="23" width="101" height="21"/>
+                                                    <rect key="frame" x="16" y="23" width="45" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="I2w-Iv-cdf"/>
-                                                        <constraint firstAttribute="width" constant="101" id="WhW-TP-Fu1"/>
+                                                        <constraint firstAttribute="width" constant="45" id="WhW-TP-Fu1"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1093,7 +1093,7 @@
                                             <constraints>
                                                 <constraint firstItem="ZNj-BL-O64" firstAttribute="leading" secondItem="2b8-Nk-Sgj" secondAttribute="trailing" constant="8" id="Gp9-YA-4di"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="ZNj-BL-O64" secondAttribute="trailing" constant="6" id="NYa-3X-JDO"/>
-                                                <constraint firstAttribute="centerY" secondItem="2b8-Nk-Sgj" secondAttribute="centerY" constant="-2" id="gzS-Zx-2eV"/>
+                                                <constraint firstAttribute="centerY" secondItem="2b8-Nk-Sgj" secondAttribute="centerY" constant="-1" id="gzS-Zx-2eV"/>
                                                 <constraint firstAttribute="centerY" secondItem="ZNj-BL-O64" secondAttribute="centerY" constant="-1" id="rqd-e0-lJM"/>
                                                 <constraint firstItem="2b8-Nk-Sgj" firstAttribute="leading" secondItem="bLU-pj-BTQ" secondAttribute="leadingMargin" constant="8" id="vd6-bz-q2U"/>
                                             </constraints>

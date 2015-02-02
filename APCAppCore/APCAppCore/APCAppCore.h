@@ -49,6 +49,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  Logging
  ------------------------- */
 #import <APCAppCore/APCLog.h>
+#import <APCAppCore/APCDataVerificationClient.h>
 
 /* UI */
 /* -------------------------
@@ -76,6 +77,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCPasscodeViewController.h>
 #import <APCAppCore/APCHomeLocationViewController.h>
 #import <APCAppCore/APCLocationInfoViewController.h>
+#import <APCAppCore/APCConsentTaskViewController.h>
 
 /*--------------------------
  Dashboard ViewControllers

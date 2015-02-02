@@ -258,38 +258,43 @@ typedef NS_OPTIONS(NSUInteger, RKPredefinedTaskOption) {
  
  The "span" (length of the pattern sequence) is automatically varied during the
  task, increasing after successful completion and decreasing after failures, in
- the range <minSpan, maxSpan>.
+ the range [minimumSpan, maximumSpan].
  
- The delay between tests, and the speed of sequence playback, are controllable.
+ The speed of sequence playback is controllable, and the shape of the tap target is
+ customizable.
  The game finishes when either maxTests tests have been completed, or the participant
  has made maxFailures errors.
  
- This task can be used to assess memory for spatial patterns.
+ This task can be used to assess visuospatial memory and executive function.
  
- Data collected: task-specific result (RKSpatialSpanMemoryResult - TBD)
+ Data collected: RKSpatialSpanMemoryResult
  
  @param identifier        Task identifier to use for this task, appropriate to the study.
  @param intendedUse       Localized string describing the intended use of the data collected.
  @param initialSpan       Initial memory pattern sequence length.
- @param minSpan           Minimum pattern sequence length (patterns are never shorter than this).
- @param maxSpan           Maximum pattern sequence length (patterns are never longer than this).
- @param betweenTestDelay  Delay between tests (the rest period).
+ @param minSpan           Minimum pattern sequence length (sequences are never shorter than this).
+ @param maxSpan           Maximum pattern sequence length (sequences are never longer than this).
  @param playSpeed         Time per sequence item (smaller value means faster sequence play).
- @param maxTests          Maximum number of tests to conduct.
- @param maxFailures       Maximum number of failures to accept.
+ @param maxTests          Maximum number of rounds to conduct.
+ @param maxConsecutiveFailures       Terminate task if user has this many consecutive failures.
+ @param customTargetImage Image to use for the task instead of a flower. If nil, we use a flower.
+ @param customTargetPluralName    Custom name to go with the customTargetImage, for example, @"flowers"
+ @param requireReversal   Whether to require the user to tap the sequence in reverse order.
  @param options           Options affecting the features of the predefined task.
  @return An active task which can be presented with RKTaskViewController.
  */
 + (RKOrderedTask *)spatialSpanMemoryTaskWithIdentifier:(NSString *)identifier
-                         intendedUseDescription:(NSString *)intendedUseDescription
-                                    initialSpan:(NSInteger)initialSpan
-                                    minimumSpan:(NSInteger)minimumSpan
-                                    maximumSpan:(NSInteger)maximumSpan
-                               betweenTestDelay:(NSTimeInterval)betweenTestDelay
-                                      playSpeed:(NSTimeInterval)playSpeed
-                                       maxTests:(NSInteger)maxTests
-                                    maxFailures:(NSInteger)maxFailures
-                                        options:(RKPredefinedTaskOption)options;
+                                intendedUseDescription:(NSString *)intendedUseDescription
+                                           initialSpan:(NSInteger)initialSpan
+                                           minimumSpan:(NSInteger)minimumSpan
+                                           maximumSpan:(NSInteger)maximumSpan
+                                             playSpeed:(NSTimeInterval)playSpeed
+                                              maxTests:(NSInteger)maxTests
+                                maxConsecutiveFailures:(NSInteger)maxConsecutiveFailures
+                                     customTargetImage:(UIImage *)customTargetImage
+                                customTargetPluralName:(NSString *)customTargetPluralName
+                                       requireReversal:(BOOL)requireReversal
+                                               options:(RKPredefinedTaskOption)options;
 
 
 @end

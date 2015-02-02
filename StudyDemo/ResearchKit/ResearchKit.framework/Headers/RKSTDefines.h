@@ -21,5 +21,5 @@
 #else
 #define RK_CLASS_AVAILABLE_IOS(_iOSIntro)    NS_CLASS_AVAILABLE_IOS(_iOSIntro)
 #define RK_ENUM_AVAILABLE_IOS(_iOSIntro)     NS_ENUM_AVAILABLE_IOS(_iOSIntro)
-#define RKST_AVAILABLE_IOS(_iOSIntro)          NS_AVAILABLE_IOS(_iOSIntro)
+#define RK_AVAILABLE_IOS(_iOSIntro)          NS_AVAILABLE_IOS(_iOSIntro)
 #endif

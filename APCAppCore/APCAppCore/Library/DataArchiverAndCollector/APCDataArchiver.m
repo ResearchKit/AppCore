@@ -52,7 +52,16 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
                                                    error:&error];
         APCLogError2(error);
         
-        _preserveUnencryptedFile = NO;
+		/*
+		 Make sure crackers (Bad Guys) don't know these features
+		 exist, and (also) cannot use them, even by accident.
+		 */
+		#ifdef USE_DATA_VERIFICATION_CLIENT
+
+			_preserveUnencryptedFile = NO;
+			_unencryptedFilePath = nil;
+
+		#endif
     }
     return self;
 }
@@ -73,6 +82,7 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
         APCLogError2 (fileError);
     }
 }
+
 
 /*********************************************************************************/
 #pragma mark - Task Results
@@ -336,19 +346,33 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     [self encryptZipFile];
     
     NSString * newEncryptedPath = [outputDirectory stringByAppendingPathComponent:@"encrypted.zip"];
-    NSString * newUnEncryptedPath = [outputDirectory stringByAppendingPathComponent:@"unencrypted.zip"];
 
     NSError * moveError;
     if (![[NSFileManager defaultManager] moveItemAtPath:self.tempEncryptedZipFilePath toPath:newEncryptedPath error:&moveError]) {
         APCLogError2(moveError);
     }
 
-    if (self.preserveUnencryptedFile) {
+	/*
+	 Make sure crackers (Bad Guys) don't know these features
+	 exist, and (also) cannot use them, even by accident.
+	 */
+#ifdef USE_DATA_VERIFICATION_CLIENT
+
+	NSString * newUnEncryptedPath = [outputDirectory stringByAppendingPathComponent:@"unencrypted.zip"];
+
+	if (self.preserveUnencryptedFile)
+	{
+		self.unencryptedFilePath = newUnEncryptedPath;
+
         if (![[NSFileManager defaultManager] moveItemAtPath:self.tempUnencryptedZipFilePath toPath:newUnEncryptedPath error:&moveError]) {
             APCLogError2(moveError);
         }
     }
-    else {
+    else
+
+#endif
+
+	{
         if (![[NSFileManager defaultManager] removeItemAtPath:self.tempUnencryptedZipFilePath error:&moveError]) {
             APCLogError2(moveError);
         }

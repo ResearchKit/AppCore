@@ -8,6 +8,7 @@
 #import "APCBaseTaskViewController.h"
 #import "APCAppDelegate.h"
 #import "APCAppCore.h"
+#import "APCDataVerificationClient.h"
 
 @implementation APCBaseTaskViewController
 
@@ -105,10 +106,34 @@
 {
     NSString * resultSummary = [self createResultSummary];
     APCDataArchiver * archiver = [[APCDataArchiver alloc] initWithTaskResult:self.result];
-    archiver.preserveUnencryptedFile = YES;
+
+	/*
+	 See comment at bottom of this method.
+	 */
+	#ifdef USE_DATA_VERIFICATION_CLIENT
+
+		archiver.preserveUnencryptedFile = YES;
+
+	#endif
+
 
     NSString * archiveFileName = [archiver writeToOutputDirectory:self.taskResultsFilePath];
     [self storeInCoreDataWithFileName:archiveFileName resultSummary:resultSummary];
+
+	
+	/*
+	 This will COPY the unencrypted file to a local
+	 server.  (The code above here uploads it to Sage.)
+	 We're #if-ing it to make sure this code isn't
+	 accessible to Bad Guys in production.  Even if
+	 the code called, if it's in RAM at all, it can
+	 be exploited.
+	 */
+	#ifdef USE_DATA_VERIFICATION_CLIENT
+
+		[APCDataVerificationClient uploadDataFromFileAtPath: archiver.unencryptedFilePath];
+
+	#endif
 }
 
 - (void) storeInCoreDataWithFileName: (NSString *) fileName resultSummary: (NSString *) resultSummary

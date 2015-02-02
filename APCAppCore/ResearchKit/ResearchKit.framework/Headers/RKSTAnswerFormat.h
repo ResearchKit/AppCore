@@ -32,6 +32,7 @@ typedef NS_ENUM(NSInteger, RKChoiceAnswerStyle) {
 
 
 @class RKSTScaleAnswerFormat;
+@class RKSTValuePickerAnswerFormat;
 @class RKSTImageChoiceAnswerFormat;
 @class RKSTTextChoiceAnswerFormat;
 @class RKSTBooleanAnswerFormat;
@@ -60,8 +61,9 @@ RK_CLASS_AVAILABLE_IOS(8_3)
 
 + (RKSTBooleanAnswerFormat *)booleanAnswerFormat;
 
-+ (RKSTImageChoiceAnswerFormat *)choiceAnswerFormatWithStyle:(RKChoiceAnswerStyle)style
-                                        imageChoices:(NSArray *)imageChoices;
++ (RKSTValuePickerAnswerFormat *)valuePickerAnswerFormatWithTextChoices:(NSArray *)textChoices;
+
++ (RKSTImageChoiceAnswerFormat *)choiceAnswerFormatWithImageChoices:(NSArray *)imageChoices;
 
 + (RKSTTextChoiceAnswerFormat *)choiceAnswerFormatWithStyle:(RKChoiceAnswerStyle)style
                                         textChoices:(NSArray *)textChoices;
@@ -135,8 +137,28 @@ RK_CLASS_AVAILABLE_IOS(8_3)
 
 @end
 
+
 /**
- * @brief Format for a multiple or single choice question with a fixed set of image choices.
+ * @brief Format for a value picker with a fixed set of text choices.
+ * Reports its self to be single choice question. The participant can pick one value from a picker view.
+ * Produces RKSTChoiceQuestionResult.
+ */
+RK_CLASS_AVAILABLE_IOS(8_3)
+@interface RKSTValuePickerAnswerFormat : RKSTAnswerFormat
+
+/**
+ * @brief Create a value picker answer format to select from a set of text choices.
+ * @param textChoices         Array of RKSTTextChoice.
+ * @discussion RKSTTextChoice's detailText is ignored, text needs to be short enough to fit in a UIPickerView.
+ */
+- (instancetype)initWithTextChoices:(NSArray *)textChoices NS_DESIGNATED_INITIALIZER;
+
+@property (readonly, copy) NSArray *textChoices; // RKSTTextChoice
+
+@end
+
+/**
+ * @brief Format for single choice question with a fixed set of image choices.
  * Produces RKSTChoiceQuestionResult.
  */
 RK_CLASS_AVAILABLE_IOS(8_3)
@@ -145,12 +167,8 @@ RK_CLASS_AVAILABLE_IOS(8_3)
 /**
  * @brief Create a choice answer format to select on an image scale.
  * @param choices             Array of RKSTImageChoice
- * @param style               Whether single or multiple-choice.
  */
-- (instancetype)initWithStyle:(RKChoiceAnswerStyle)style
-                 imageChoices:(NSArray *)imageChoices NS_DESIGNATED_INITIALIZER;
-
-@property (readonly) RKChoiceAnswerStyle style;
+- (instancetype)initWithImageChoices:(NSArray *)imageChoices NS_DESIGNATED_INITIALIZER;
 
 @property (readonly, copy) NSArray *imageChoices; // RKSTImageChoice
 

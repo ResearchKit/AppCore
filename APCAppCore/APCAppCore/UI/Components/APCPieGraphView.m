@@ -70,7 +70,7 @@ static CGFloat const kAnimationDuration = 0.35f;
     _normalizedValues = [NSMutableArray new];
     _sumOfValues = 0;
     
-    _legendFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f];
+    _legendFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:12.0f];
     _percentageFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f];
     
     _titleLabel = [UILabel new];
@@ -320,9 +320,9 @@ static CGFloat const kAnimationDuration = 0.35f;
         textLabel.text = text;
         textLabel.font = self.legendFont;
         textLabel.textAlignment = NSTextAlignmentCenter;
-        textLabel.adjustsFontSizeToFitWidth = YES;
+        textLabel.adjustsFontSizeToFitWidth = NO;
         textLabel.frame = CGRectMake(labelPadding + dotSegmentWidth * idx, self.plotRegionHeight + 2*self.legendDotRadius, dotSegmentWidth - 2*labelPadding, self.legendPaddingHeight - self.legendDotRadius*2);
-        textLabel.numberOfLines = 2;
+        textLabel.numberOfLines = 1;
         textLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         [self addSubview:textLabel];
 
