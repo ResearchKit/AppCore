@@ -24,19 +24,38 @@
 #
 # 		https://ymedialabs.atlassian.net/wiki/display/APPLE/How+to+see+the+data+we+send+to+Sage
 
+
+#
+# Modules we're using.
+#
 require 'sinatra'
 require 'json'
 require 'fileutils'
 
-# Sinatra (web server) setup
+
+#
+# Sinatra (web server) setup.
+#
 disable :logging
 set :bind, '0.0.0.0'
 
-# Our variables
+
+#
+# Our variables.
+#
 base_url_path			= '/api/v1'
 destination_directory	= File.expand_path("~/Desktop/dataVerificationFiles")
-download_directory		= File.join(destination_directory, "downloads")
-output_log_file_path	= File.join(destination_directory, "dataVerificationLog.txt")
+
+
+#
+# Section divider, and unique names for files and folders.
+#
+# For the available time-and-date specifiers, see:
+# 		http://www.ruby-doc.org/core-2.2.0/Time.html#method-i-strftime
+#
+SECTION_DIVIDER_CHAR		= "="
+SECTION_DIVIDER_FORMAT		= "========== New files arrived on %A, %Y-%m-%d at %H:%M:%S %Z =========="
+DOWNLOAD_FOLDER_NAME_FORMAT	= "files_%Y-%m-%d_%H-%M-%S-%3N"
 
 
 #
@@ -65,72 +84,79 @@ post "#{base_url_path}/upload/:filename" do
 	#
 	# Setup
 	#
-	FileUtils.mkdir_p(destination_directory)
-	FileUtils.mkdir_p(download_directory)
+	FileUtils.mkdir_p( destination_directory )
 	
-
 	
-	# Echo incoming parameters to the console.
 	#
-	# Please leave this commented-out line of code, so
-	# I remember how to access the incoming parameters.
+	# Folder for these new files.
 	#
-	# 		puts "\n----------\nInput parameters:\n     #{params}"
-
-
-	#
-	# Delete existing files, if any.
-	#
-	# Purposely waiting 'til now to delete the previous
-	# files, so that I can error-check each file after
-	# uploading it.  (The more standard way might be
-	# to delete the file after using it, below.)
-	#
+	directory_error_message = nil;
+	download_directory = Utils.unique_folder_name_inside_parent_directory( destination_directory )
 	
-	Dir.foreach(download_directory) do |someFilePath|
-		
-		# File.delete(someFile)		# permissions problems
-		processId = spawn("rm #{someFilePath}")
-		Process.wait processId
-		
+	if Dir.exists?( download_directory ) then
+		directory_error_message =	"WARNING: Couldn't create unique download directory!\n"		\
+									"         You may see lots of files appearing in the\n" \
+									"         same directory.  Please show this message\n"	\
+									"         to whoever is maintaining this Ruby script."
 	end
+	
+	FileUtils.mkdir_p( download_directory )
 	
 
 	#
 	# Copy from temp directory
 	#
-	baseName			= params[:filename]
-	downloadedZipFile	= File.join(download_directory, baseName)
-	datafile			= params[:filedata]
-	FileUtils.copy(datafile[:tempfile], downloadedZipFile)
+	zip_file_base_name	= params[ :filename ]
+	downloadedZipFile	= File.join( download_directory, zip_file_base_name )
+	datafile			= params[ :filedata ]
+	FileUtils.copy( datafile[ :tempfile ], downloadedZipFile )
 	
 	
 	#
 	# Unzip
 	#
 
-	Dir.chdir(download_directory)
-	processId = spawn("unzip -o #{downloadedZipFile}")		# -o == overwrite without asking
+	Dir.chdir( download_directory )
+	processId = spawn( "unzip -o #{downloadedZipFile}" )	# -o == overwrite without asking
 	Process.wait processId									# make it synchronous
+	
+	
+	#
+	# Report what we just got
+	#
+	
+	content = "\n\n\n#{Utils.section_divider}\n"
+	content << "Got file     : #{zip_file_base_name}\n"
+	content << "Unzipping to : #{download_directory}/\n\n"
+	
+	content << "It contains these files:\n"
+	
+	Dir.glob( "#{download_directory}/*" ) do |file_path|
+		this_base_name = File.basename( file_path )
+		
+		if (this_base_name != zip_file_base_name) then
+			content << "•  #{this_base_name}\n"
+		end
+	end
+	
+	if  directory_error_message != nil  then
+		content << "\n#{directory_error_message}\n"
+	end
+	
+	content << "\nHere are the files I can read.\n\n"
 	
 	
 	#
 	# create string containing new content
 	#
 	
-	content =	"\n======== New batch of files ========\n"	\
-				"These JSON files are located here:\n"		\
-				"     #{download_directory}\n"				\
-				"\n"										\
-				"They'll be deleted when you upload the next batch.\n\n" 
-	
-	Dir.glob("#{download_directory}/*.json") do |jsonFile|
+	Dir.glob( "#{download_directory}/*.json" ) do |file_path|
 		
-		thisFile = File.open(jsonFile, "r")
-		thisFileContents = thisFile.read
+		file_pointer = File.open( file_path, "r")
+		file_contents = file_pointer.read
 		
-		content <<	"#{jsonFile}:\n" \
-					"#{thisFileContents}\n"
+		content <<	"#{File.basename( file_path )}:\n" \
+					"#{file_contents}\n\n"
 	end
 	
 
@@ -163,3 +189,41 @@ post "*" do
 end
 
 
+
+#
+# Gradually evolving tools for this file.
+# ...and re-learning Ruby, after a many-year break.
+#
+class Utils
+	
+	def self.unique_folder_name_inside_parent_directory( parent_folder_name )
+		
+		error_checking_counter = 0		# to make sure I'm not doing something silly.
+		
+		unique_folder_name = generate_unique_folder_name()
+		result = File.join( parent_folder_name, unique_folder_name)
+	
+		while  File.exists?( result ) && error_checking_counter < 100  do
+			sleep 0.01		# I just need a unique filename
+			unique_folder_name = generate_unique_folder_name()
+			result = File.join( parent_folder_name, unique_folder_name)
+			error_checking_counter += 1
+		end
+		
+		result
+	end
+	
+	def self.generate_unique_folder_name
+		Time.now.localtime.strftime( DOWNLOAD_FOLDER_NAME_FORMAT )
+	end
+	
+	def self.section_divider
+		time_string = Time.now.localtime.strftime( SECTION_DIVIDER_FORMAT )
+		visual_divider = SECTION_DIVIDER_CHAR * time_string.length
+		divider = "#{visual_divider}\n#{time_string}\n#{visual_divider}" 
+		
+		# To return a value, put it on a line by itself:
+		divider
+	end
+	
+end
