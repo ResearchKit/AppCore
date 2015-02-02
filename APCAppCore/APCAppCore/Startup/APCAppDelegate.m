@@ -164,6 +164,13 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         NSError * error;
         NSDictionary * dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
         APCLogError2 (error);
+        
+        NSDictionary *manipulatedDictionary = [(APCAppDelegate*)[UIApplication sharedApplication].delegate tasksAndSchedulesWillBeLoaded];
+        
+        if (manipulatedDictionary != nil) {
+            dictionary = manipulatedDictionary;
+        }
+        
         [self.dataSubstrate loadStaticTasksAndSchedules:dictionary];
         [self clearNSUserDefaults];
         [APCKeychainStore resetKeyChain];
@@ -241,6 +248,9 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (void) setUpInitializationOptions {/*Abstract Implementation*/}
 - (void) setUpAppAppearance {/*Abstract Implementation*/}
 - (void) setUpCollectors {/*Abstract Implementation*/}
+- (NSDictionary *) tasksAndSchedulesWillBeLoaded {
+    return nil;
+}
 
 /*********************************************************************************/
 #pragma mark - Public Helpers
