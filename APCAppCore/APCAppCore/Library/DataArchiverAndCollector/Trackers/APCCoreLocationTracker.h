@@ -61,7 +61,7 @@ typedef  enum  _APCPassiveLocationTrackingHomeLocation
  *  Delegate conforms to APCLocationTrackingHeartbeatDelegate.
  *
  */
-@property (weak, nonatomic) id <APCLocationTrackingHeartbeatDelegate> delegate;
+@property (weak, nonatomic) id <APCLocationTrackingHeartbeatDelegate> heartBeatDelegate;
 
 @end
 

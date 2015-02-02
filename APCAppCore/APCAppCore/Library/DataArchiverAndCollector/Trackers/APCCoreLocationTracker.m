@@ -326,9 +326,9 @@ static  NSString  *kLocationJsonHorizontalAccuracy           = @"horizontalAccur
 - (void) didFailToUpdateLocationWithError:(NSError *)error
 {
     
-    if ( [self.delegate respondsToSelector:@selector(passiveLocationTracking:didFailToUpdateLocationWithError:)] ) {
+    if ( [self.heartBeatDelegate respondsToSelector:@selector(passiveLocationTracking:didFailToUpdateLocationWithError:)] ) {
         
-        [self.delegate passiveLocationTracking:self didFailToUpdateLocationWithError:error];
+        [self.heartBeatDelegate passiveLocationTracking:self didFailToUpdateLocationWithError:error];
     }
 }
 
@@ -336,9 +336,9 @@ static  NSString  *kLocationJsonHorizontalAccuracy           = @"horizontalAccur
 - (void) didPauseLocationTracking:(CLLocationManager *)manager
 {
     
-    if ( [self.delegate respondsToSelector:@selector(passiveLocationTracking:didPauseLocationTracking:)] ) {
+    if ( [self.heartBeatDelegate respondsToSelector:@selector(passiveLocationTracking:didPauseLocationTracking:)] ) {
         
-        [self.delegate passiveLocationTracking:self didPauseLocationTracking:manager];
+        [self.heartBeatDelegate passiveLocationTracking:self didPauseLocationTracking:manager];
     }
 }
 
@@ -346,9 +346,9 @@ static  NSString  *kLocationJsonHorizontalAccuracy           = @"horizontalAccur
 - (void) didResumeLocationTracking:(CLLocationManager *)manager
 {
     
-    if ( [self.delegate respondsToSelector:@selector(passiveLocationTracking:didResumeLocationTracking:)] ) {
+    if ( [self.heartBeatDelegate respondsToSelector:@selector(passiveLocationTracking:didResumeLocationTracking:)] ) {
         
-        [self.delegate passiveLocationTracking:self didResumeLocationTracking:manager];
+        [self.heartBeatDelegate passiveLocationTracking:self didResumeLocationTracking:manager];
     }
 }
 
@@ -356,9 +356,9 @@ static  NSString  *kLocationJsonHorizontalAccuracy           = @"horizontalAccur
 - (void) didFailToUpdateLogWithError:(NSError *)error
 {
     
-    if ( [self.delegate respondsToSelector:@selector(passiveLocationTracking:didFailToUpdateLogWithError:)] ) {
+    if ( [self.heartBeatDelegate respondsToSelector:@selector(passiveLocationTracking:didFailToUpdateLogWithError:)] ) {
         
-        [self.delegate passiveLocationTracking:self didFailToUpdateLogWithError:error];
+        [self.heartBeatDelegate passiveLocationTracking:self didFailToUpdateLogWithError:error];
     }
 }
 
@@ -366,9 +366,9 @@ static  NSString  *kLocationJsonHorizontalAccuracy           = @"horizontalAccur
 - (void) didFailToDeleteLogWithError:(NSError *)error
 {
     
-    if ( [self.delegate respondsToSelector:@selector(passiveLocationTracking:didFailToDeleteLogWithError:)] ) {
+    if ( [self.heartBeatDelegate respondsToSelector:@selector(passiveLocationTracking:didFailToDeleteLogWithError:)] ) {
         
-        [self.delegate passiveLocationTracking:self didFailToDeleteLogWithError:error];
+        [self.heartBeatDelegate passiveLocationTracking:self didFailToDeleteLogWithError:error];
     }
 }
 
@@ -376,9 +376,9 @@ static  NSString  *kLocationJsonHorizontalAccuracy           = @"horizontalAccur
 - (void) didFailToUploadLogWithError:(NSError *)error
 {
     
-    if ( [self.delegate respondsToSelector:@selector(passiveLocationTracking:didFailToUploadLog:)] ) {
+    if ( [self.heartBeatDelegate respondsToSelector:@selector(passiveLocationTracking:didFailToUploadLog:)] ) {
         
-        [self.delegate passiveLocationTracking:self didFailToUploadLog:error];
+        [self.heartBeatDelegate passiveLocationTracking:self didFailToUploadLog:error];
     }
 }
 
@@ -386,9 +386,9 @@ static  NSString  *kLocationJsonHorizontalAccuracy           = @"horizontalAccur
 - (void) didFinishSavingLog:(NSURL *)fileURL
 {
     
-    if ( [self.delegate respondsToSelector:@selector(passiveLocationTracking:didFinishSavingLog:)] ) {
+    if ( [self.heartBeatDelegate respondsToSelector:@selector(passiveLocationTracking:didFinishSavingLog:)] ) {
         
-        [self.delegate passiveLocationTracking:self didFinishSavingLog:fileURL];
+        [self.heartBeatDelegate passiveLocationTracking:self didFinishSavingLog:fileURL];
     }
 }
 

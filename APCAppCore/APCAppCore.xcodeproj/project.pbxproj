@@ -83,6 +83,10 @@
 		7BD1D3D51A702ED200D6A377 /* APCDataResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BD1D3D31A702ED200D6A377 /* APCDataResult.m */; };
 		F50738C01A682E12004CF100 /* APCDateRange.h in Headers */ = {isa = PBXBuildFile; fileRef = F50738BE1A682E12004CF100 /* APCDateRange.h */; };
 		F50738C11A682E12004CF100 /* APCDateRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F50738BF1A682E12004CF100 /* APCDateRange.m */; };
+		F54DDD141A801A1B0073E4B4 /* APCHKCumulativeQuantityTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = F54DDD121A801A1B0073E4B4 /* APCHKCumulativeQuantityTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F54DDD151A801A1B0073E4B4 /* APCHKCumulativeQuantityTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = F54DDD131A801A1B0073E4B4 /* APCHKCumulativeQuantityTracker.m */; };
+		F5515D561A8009AD00DF8619 /* APCHKDiscreteQuantityTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = F5515D541A8009AD00DF8619 /* APCHKDiscreteQuantityTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5515D571A8009AD00DF8619 /* APCHKDiscreteQuantityTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = F5515D551A8009AD00DF8619 /* APCHKDiscreteQuantityTracker.m */; };
 		F55653B21A6F08E0003E0B0C /* libMobileGestalt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */; };
 		F55653B31A6F0918003E0B0C /* libMobileGestalt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */; };
 		F556549B1A701337003E0B0C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F556549A1A701337003E0B0C /* Localizable.strings */; };
@@ -549,6 +553,10 @@
 		F50738BF1A682E12004CF100 /* APCDateRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDateRange.m; sourceTree = "<group>"; };
 		F5179B2919D09128001DCCB7 /* APCAppCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APCAppCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5179B3419D09128001DCCB7 /* APCAppCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APCAppCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F54DDD121A801A1B0073E4B4 /* APCHKCumulativeQuantityTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHKCumulativeQuantityTracker.h; sourceTree = "<group>"; };
+		F54DDD131A801A1B0073E4B4 /* APCHKCumulativeQuantityTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHKCumulativeQuantityTracker.m; sourceTree = "<group>"; };
+		F5515D541A8009AD00DF8619 /* APCHKDiscreteQuantityTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHKDiscreteQuantityTracker.h; sourceTree = "<group>"; };
+		F5515D551A8009AD00DF8619 /* APCHKDiscreteQuantityTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHKDiscreteQuantityTracker.m; sourceTree = "<group>"; };
 		F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMobileGestalt.dylib; path = usr/lib/libMobileGestalt.dylib; sourceTree = SDKROOT; };
 		F556549A1A701337003E0B0C /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		F5B945F61A7309A20034C522 /* zipzap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zipzap.h; sourceTree = "<group>"; };
@@ -1295,7 +1303,6 @@
 				F5B9473F1A73272C0034C522 /* Categories */,
 				F5B947621A73272C0034C522 /* DataArchiverAndCollector */,
 				364D34871A7B1C8F0060B3F5 /* DataVerificationClient */,
-				F5B947651A73272C0034C522 /* HealthKitTracker */,
 				F5B947681A73272C0034C522 /* Logging */,
 				F5B9476E1A73272C0034C522 /* Objects */,
 				F5B9477B1A73272C0034C522 /* Parameters */,
@@ -1509,6 +1516,10 @@
 			children = (
 				F5C7871E1A7ACB3F005F31FC /* APCDataTracker.h */,
 				F5C7871F1A7ACB3F005F31FC /* APCDataTracker.m */,
+				F5515D541A8009AD00DF8619 /* APCHKDiscreteQuantityTracker.h */,
+				F5515D551A8009AD00DF8619 /* APCHKDiscreteQuantityTracker.m */,
+				F54DDD121A801A1B0073E4B4 /* APCHKCumulativeQuantityTracker.h */,
+				F54DDD131A801A1B0073E4B4 /* APCHKCumulativeQuantityTracker.m */,
 				F5C787121A7ACA1A005F31FC /* APCHealthKitQuantityTracker.h */,
 				F5C787131A7ACA1A005F31FC /* APCHealthKitQuantityTracker.m */,
 				F5C787141A7ACA1A005F31FC /* APCCoreLocationTracker.h */,
@@ -2020,12 +2031,14 @@
 				F5F12B041A2F78490015982C /* APCPasscodeViewController.h in Headers */,
 				F5F12A791A2F78490015982C /* APCAxisView.h in Headers */,
 				F5B946281A7309A20034C522 /* ZZArchiveEntryWriter.h in Headers */,
+				F54DDD141A801A1B0073E4B4 /* APCHKCumulativeQuantityTracker.h in Headers */,
 				F5F12AF61A2F78490015982C /* APCStepViewController.h in Headers */,
 				5B234E141A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h in Headers */,
 				F5F12AFB1A2F78490015982C /* APCInstructionStepViewController.h in Headers */,
 				F5F12A8B1A2F78490015982C /* APCIntroVideoViewController.h in Headers */,
 				F5F129E11A2F78490015982C /* APCAppCore.h in Headers */,
 				F5B947EB1A73272C0034C522 /* APCDebugWindow.h in Headers */,
+				F5515D561A8009AD00DF8619 /* APCHKDiscreteQuantityTracker.h in Headers */,
 				F5F12AE81A2F78490015982C /* APCDashboardEditTableViewCell.h in Headers */,
 				F5B947FE1A73272C0034C522 /* APCScheduleExpression.h in Headers */,
 				F5B946431A7309A20034C522 /* ZZOldArchiveEntryWriter.h in Headers */,
@@ -2436,6 +2449,7 @@
 				F5C7871D1A7ACADA005F31FC /* APCPassiveDataCollector.m in Sources */,
 				F5F129F31A2F78490015982C /* APCModel.xcdatamodeld in Sources */,
 				F5F129E51A2F78490015982C /* APCDataMonitor.m in Sources */,
+				F5515D571A8009AD00DF8619 /* APCHKDiscreteQuantityTracker.m in Sources */,
 				F5F129E91A2F78490015982C /* APCDataSubstrate+HealthKit.m in Sources */,
 				F5B947C61A73272C0034C522 /* NSManagedObject+APCHelper.m in Sources */,
 				F5B947DC1A73272C0034C522 /* APCLog.m in Sources */,
@@ -2452,6 +2466,7 @@
 				F5B947EC1A73272C0034C522 /* APCDebugWindow.m in Sources */,
 				F5B947C41A73272C0034C522 /* NSError+APCAdditions.m in Sources */,
 				F5C787211A7ACB3F005F31FC /* APCDataTracker.m in Sources */,
+				F54DDD151A801A1B0073E4B4 /* APCHKCumulativeQuantityTracker.m in Sources */,
 				F5B947CA1A73272C0034C522 /* NSString+Helper.m in Sources */,
 				F5B947AE1A73272C0034C522 /* APCAppearanceInfo.m in Sources */,
 				5B0432A81A322BEE000DC9ED /* APCOnboardingTask.m in Sources */,

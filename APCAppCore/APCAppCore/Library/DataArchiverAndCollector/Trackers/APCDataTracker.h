@@ -15,7 +15,13 @@
 @interface APCDataTracker : NSObject
 
 @property (nonatomic, readonly) NSString * identifier;
+
+//Meant only for APCPassiveDataCollector
+@property (nonatomic, strong) NSDictionary * infoDictionary;
+@property (nonatomic, strong) NSString * folder;
 @property (nonatomic, weak) id<APCDataTrackerDelegate> delegate;
+- (void) startTracking;
+- (void) stopTracking;
 
 @property (nonatomic) long long sizeThreshold;
 @property (nonatomic) NSTimeInterval stalenessInterval;
@@ -23,5 +29,6 @@
 - (instancetype) initWithIdentifier:(NSString *)identifier;
 
 - (NSArray*) columnNames;
+
 
 @end

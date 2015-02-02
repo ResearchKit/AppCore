@@ -11,7 +11,7 @@
 #import "APCOnboarding.h"
 #import "APCPasscodeViewController.h"
 
-@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager;
+@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector;
 
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
 
@@ -24,6 +24,7 @@
 @property (strong, nonatomic) APCScheduler * scheduler;
 @property (strong, nonatomic) APCHealthKitQuantityTracker *healthKitTracker;
 @property (strong, nonatomic) APCTasksReminderManager * tasksReminder;
+@property (strong, nonatomic) APCPassiveDataCollector * passiveDataCollector;
 
 //Initialization Methods
 @property (nonatomic, strong) NSDictionary * initializationOptions;

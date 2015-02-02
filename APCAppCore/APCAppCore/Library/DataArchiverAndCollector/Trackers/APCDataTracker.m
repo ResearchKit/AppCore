@@ -57,4 +57,14 @@ NSUInteger kDaysPerWeek = 7;
     return nil;
 }
 
+- (void) startTracking
+{
+    //Abstract implementation
+}
+
+- (void) stopTracking
+{
+    //Abstract implementation
+}
+
 @end
