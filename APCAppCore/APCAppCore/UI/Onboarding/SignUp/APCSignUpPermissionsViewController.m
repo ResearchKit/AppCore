@@ -172,14 +172,8 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
 
 - (void)setupNavAppearance
 {
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    backButton.frame = CGRectMake(0, 0, 44, 44);
-    [backButton setImage:[[UIImage imageNamed:@"back_button"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    backButton.tintColor = [UIColor appPrimaryColor];
-    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backBarButton];
+    UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(back) tintColor:[UIColor appPrimaryColor]];
+    [self.navigationItem setLeftBarButtonItem:backster];
 }
 
 - (void) setupProgressBar {

@@ -168,6 +168,13 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         NSError * error;
         NSDictionary * dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
         APCLogError2 (error);
+        
+        NSDictionary *manipulatedDictionary = [(APCAppDelegate*)[UIApplication sharedApplication].delegate tasksAndSchedulesWillBeLoaded];
+        
+        if (manipulatedDictionary != nil) {
+            dictionary = manipulatedDictionary;
+        }
+        
         [self.dataSubstrate loadStaticTasksAndSchedules:dictionary];
         [self clearNSUserDefaults];
         [APCKeychainStore resetKeyChain];
@@ -245,6 +252,9 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (void) setUpInitializationOptions {/*Abstract Implementation*/}
 - (void) setUpAppAppearance {/*Abstract Implementation*/}
 - (void) setUpCollectors {/*Abstract Implementation*/}
+- (NSDictionary *) tasksAndSchedulesWillBeLoaded {
+    return nil;
+}
 
 /*********************************************************************************/
 #pragma mark - Public Helpers
@@ -299,12 +309,8 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     tabBarController.delegate = self;
     
     NSArray       *items = tabBarController.tabBar.items;
-    UITabBarItem  *selectedItem = tabBarController.tabBar.selectedItem;
     
     NSUInteger     selectedItemIndex = 2;
-    if (selectedItem != nil) {
-        selectedItemIndex = [items indexOfObject:selectedItem];
-    }
     
     NSArray  *deselectedImageNames = @[ @"tab_dashboard",          @"tab_learn",          @"tab_activities",          @"tab_profile" ];
     NSArray  *selectedImageNames   = @[ @"tab_dashboard_selected", @"tab_learn_selected", @"tab_activities_selected", @"tab_profile_selected" ];

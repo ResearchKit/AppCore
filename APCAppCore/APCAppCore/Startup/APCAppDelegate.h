@@ -45,6 +45,8 @@
 - (void) showNeedsEmailVerification;
 - (void) setUpRootViewController: (UIViewController*) viewController;
 
+- (NSDictionary *) tasksAndSchedulesWillBeLoaded;
+
 //SetupMethods
 - (void) setUpInitializationOptions;
 - (void) setUpAppAppearance;
