@@ -7,10 +7,12 @@
 
 #import "APCCustomBackButton.h"
 
-static  const  CGFloat  kButtonWidth  = 30.0;
-static  const  CGFloat  kButtonHeight = 44.0;
-static  const  CGFloat  kLayerWidth   = 30.0;
-static  const  CGFloat  kLayerHeight  = 44.0;
+static  const  CGFloat  kButtonWidth     = 30.0;
+static  const  CGFloat  kButtonHeight    = 44.0;
+static  const  CGFloat  kLayerWidth      = 30.0;
+static  const  CGFloat  kLayerHeight     = 44.0;
+
+static  const  CGFloat  kArrowLineWeight =  2.0;
 
 @implementation APCCustomBackButton
 
@@ -37,7 +39,7 @@ static  const  CGFloat  kLayerHeight  = 44.0;
     shaper.frame = CGRectMake(0.0, 0.0, kLayerWidth, kLayerHeight);
     shaper.bounds = CGRectMake(0.0, 0.0, kLayerWidth, kLayerHeight);
     shaper.path = path;
-    shaper.lineWidth = 3.0;
+    shaper.lineWidth = kArrowLineWeight;
     shaper.fillColor = [[UIColor clearColor] CGColor];
     shaper.contentsScale = [[UIScreen mainScreen] scale];
     shaper.strokeColor = aTintColor.CGColor;

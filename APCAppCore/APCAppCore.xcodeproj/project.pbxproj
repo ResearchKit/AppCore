@@ -81,7 +81,7 @@
 		7B0DC4181A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7B0DC4171A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib */; };
 		7BD1D3D41A702ED200D6A377 /* APCDataResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BD1D3D21A702ED200D6A377 /* APCDataResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BD1D3D51A702ED200D6A377 /* APCDataResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BD1D3D31A702ED200D6A377 /* APCDataResult.m */; };
-		CFEF5CAD1A807DE4009A8634 /* APCCustomBackButton.h in Headers */ = {isa = PBXBuildFile; fileRef = CFEF5CAB1A807DE4009A8634 /* APCCustomBackButton.h */; };
+		CFEF5CAD1A807DE4009A8634 /* APCCustomBackButton.h in Headers */ = {isa = PBXBuildFile; fileRef = CFEF5CAB1A807DE4009A8634 /* APCCustomBackButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFEF5CAE1A807DE4009A8634 /* APCCustomBackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CFEF5CAC1A807DE4009A8634 /* APCCustomBackButton.m */; };
 		F50738C01A682E12004CF100 /* APCDateRange.h in Headers */ = {isa = PBXBuildFile; fileRef = F50738BE1A682E12004CF100 /* APCDateRange.h */; };
 		F50738C11A682E12004CF100 /* APCDateRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F50738BF1A682E12004CF100 /* APCDateRange.m */; };
