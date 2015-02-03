@@ -24,6 +24,7 @@ static NSString *const kAnchorDateFilename = @"anchorDate";
 @property (strong, nonatomic) HKObserverQuery *observerQuery;
 
 @property (nonatomic, readonly) NSString* anchorDateFilePath;
+@property (nonatomic) BOOL queryStarted;
 
 @end
 
@@ -47,10 +48,15 @@ static NSString *const kAnchorDateFilename = @"anchorDate";
 
 - (NSArray *)columnNames
 {
-    return @[@"startDate", @"endDate", @"dataType", @"data"];
+    return @[@"startDate", @"endDate", @"dataType", @"data", @"unit"];
 }
 
 - (void)startTracking
+{
+    [self updateTracking];
+}
+
+- (void)updateTracking
 {
     if ([HKHealthStore isHealthDataAvailable]) {
         
@@ -60,29 +66,45 @@ static NSString *const kAnchorDateFilename = @"anchorDate";
 
 - (void) mainDataQuery
 {
-    if (self.anchorDate < [NSDate todayAtMidnight]) {
-        NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:self.anchorDate endDate:nil options:HKQueryOptionNone];
-        HKStatisticsCollectionQuery * collectionQuery = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:self.quantityType quantitySamplePredicate:predicate options:HKStatisticsOptionCumulativeSum anchorDate:self.anchorDate intervalComponents:self.interval];
-
-        NSSortDescriptor *endDate = [NSSortDescriptor sortDescriptorWithKey:HKSampleSortIdentifierEndDate ascending:NO];
-
-        __weak APCHKCumulativeQuantityTracker * weakSelf = self;
-        
-        collectionQuery.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
-            if (!error) {
-                APCLogDebug(@"Results: %@", results.statistics);
-                [weakSelf processStatisticsCollection:results];
-            }
-        };
-        
-        [self.healthStore executeQuery:collectionQuery];
+    if (!self.queryStarted) {
+        if (self.anchorDate < [NSDate todayAtMidnight]) {
+            NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:self.anchorDate endDate:[NSDate todayAtMidnight] options:HKQueryOptionNone];
+            HKStatisticsCollectionQuery * collectionQuery = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:self.quantityType
+                                                                                              quantitySamplePredicate:predicate
+                                                                                                              options:HKStatisticsOptionCumulativeSum
+                                                                                                           anchorDate:self.anchorDate
+                                                                                                   intervalComponents:self.interval];
+            
+            __weak APCHKCumulativeQuantityTracker * weakSelf = self;
+            
+            collectionQuery.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
+                weakSelf.queryStarted = NO;
+                if (!error) {
+                    [weakSelf processStatisticsCollection:results];
+                }
+            };
+            self.queryStarted = YES;
+            [self.healthStore executeQuery:collectionQuery];
+        }
     }
-
 }
 
 - (void) processStatisticsCollection: (HKStatisticsCollection*) collection
 {
+    NSMutableArray * results = [NSMutableArray array];
     
+    [collection.statistics enumerateObjectsUsingBlock:^(HKStatistics * obj, NSUInteger idx, BOOL *stop) {
+        if (!self.unitForTracker) {
+            NSAssert(NO, @"unitForTracker missing");
+        }
+        HKUnit * unit = self.unitForTracker;
+        
+        NSArray * result = @[obj.startDate.description?:@"No start date", obj.endDate.description?:@"No end date", self.quantityType.identifier?:@"No identifier", @([[obj sumQuantity] doubleValueForUnit:unit])?:@0,unit.unitString?:@"unit"];
+        [results addObject:result];
+        
+    }];
+    [self.delegate APCDataTracker:self hasNewData:results];
+    self.anchorDate = [NSDate todayAtMidnight];
 }
 
 - (void)stopTracking

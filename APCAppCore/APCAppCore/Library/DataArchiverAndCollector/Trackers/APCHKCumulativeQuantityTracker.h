@@ -7,9 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <HealthKit/HealthKit.h>
 #import "APCDataTracker.h"
 
 @interface APCHKCumulativeQuantityTracker : APCDataTracker
+
+@property (nonatomic, strong) HKUnit* unitForTracker;
 
 - (instancetype) initWithIdentifier:(NSString *)identifier quantityTypeIdentifier: (NSString*) QuantityTypeIdentifier interval: (NSDateComponents*) interval;
 

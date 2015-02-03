@@ -67,4 +67,9 @@ NSUInteger kDaysPerWeek = 7;
     //Abstract implementation
 }
 
+- (void) updateTracking
+{
+    //Abstract implementation
+}
+
 @end

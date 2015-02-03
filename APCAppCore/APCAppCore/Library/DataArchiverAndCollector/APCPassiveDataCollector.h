@@ -12,9 +12,10 @@
 
 -(void) addTracker: (APCDataTracker*) tracker;
 
-- (void) flush:(NSString*) trackerIdentifier; //Packages the data collected so far as encrypted zip.
+- (void) flush:(APCDataTracker*) tracker; //Packages the data collected so far as encrypted zip.
 
 + (void) createOrAppendString: (NSString*) string toFile: (NSString*) path;
 + (void) createOrReplaceString: (NSString*) string toFile: (NSString*) path;
+
 
 @end

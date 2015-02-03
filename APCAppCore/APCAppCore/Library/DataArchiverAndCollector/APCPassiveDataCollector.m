@@ -7,6 +7,8 @@
 
 #import "APCPassiveDataCollector.h"
 #import "APCAppCore.h"
+#import "zipzap.h"
+#import "APCDataVerificationClient.h"
 
 static NSString *const kCollectorFolder = @"collector";
 static NSString *const kUploadFolder = @"upload";
@@ -25,6 +27,10 @@ static NSString *const kCSVFilename  = @"data.csv";
 @end
 
 @implementation APCPassiveDataCollector
+
+/*********************************************************************************/
+#pragma mark - Initializers & related methods
+/*********************************************************************************/
 
 - (instancetype)init
 {
@@ -45,17 +51,23 @@ static NSString *const kCSVFilename  = @"data.csv";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void) appBecameActive
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [self.registeredTrackers enumerateKeysAndObjectsUsingBlock:^(id key, APCDataTracker * obj, BOOL *stop) {
+            [obj updateTracking];
+        }];
+    });
+}
+
 - (NSString *)collectorsUploadPath
 {
     return [self.collectorsPath stringByAppendingPathComponent:kUploadFolder];
 }
 
-- (void) appBecameActive
-{
-   [self.registeredTrackers enumerateKeysAndObjectsUsingBlock:^(id key, APCDataTracker * obj, BOOL *stop) {
-       [obj updateTracking];
-   }];
-}
+/*********************************************************************************/
+#pragma mark - Adding tracker
+/*********************************************************************************/
 
 - (void)addTracker:(APCDataTracker *)tracker
 {
@@ -82,18 +94,79 @@ static NSString *const kCSVFilename  = @"data.csv";
             [self resetDataFilesForTracker:tracker];
         }
     }
-    //Load log files
-    else
-    {
-        NSData* dictData = [NSData dataWithContentsOfFile:infoFilePath];
-        infoDictionary = [NSDictionary dictionaryWithJSONString:[[NSString alloc] initWithData:dictData encoding:NSUTF8StringEncoding]];
-    }
+    NSData* dictData = [NSData dataWithContentsOfFile:infoFilePath];
+    infoDictionary = [NSDictionary dictionaryWithJSONString:[[NSString alloc] initWithData:dictData encoding:NSUTF8StringEncoding]];
     tracker.infoDictionary = infoDictionary;
 }
 
-- (void)flush:(NSString *)trackerIdentifier
+/*********************************************************************************/
+#pragma mark - Flush and zip creation
+/*********************************************************************************/
+
+- (void)flush:(APCDataTracker*) tracker
 {
+    //Write the end date
+    NSMutableDictionary * infoDictionary = [tracker.infoDictionary mutableCopy];
+    infoDictionary[kEndDateKey] = [NSDate date].description;
+    NSString * infoFilePath = [tracker.folder stringByAppendingPathComponent:kInfoFilename];
+    [APCPassiveDataCollector createOrReplaceString:[infoDictionary JSONString] toFile:infoFilePath];
     
+    [self createZipFile:tracker];
+    [self resetDataFilesForTracker:tracker];
+}
+
+- (void) createZipFile:(APCDataTracker*) tracker
+{
+    NSError * error;
+    NSString * unencryptedZipFileName = [NSString stringWithFormat:@"unencrypted_%@_%0.0f.zip",tracker.identifier, [[NSDate date] timeIntervalSinceReferenceDate]];
+    NSString * encryptedZipFileName = [NSString stringWithFormat:@"encrypted_%@_%0.0f.zip",tracker.identifier, [[NSDate date] timeIntervalSinceReferenceDate]];
+    NSString * unencryptedPath = [self.collectorsUploadPath stringByAppendingPathComponent:unencryptedZipFileName];
+    NSString * encryptedPath = [self.collectorsUploadPath stringByAppendingPathComponent:encryptedZipFileName];
+    
+    ZZArchive * zipArchive = [[ZZArchive alloc] initWithURL:[NSURL fileURLWithPath:unencryptedPath]
+                                                    options:@{ZZOpenOptionsCreateIfMissingKey : @YES}
+                                                      error:&error];
+    APCLogError2(error);
+    NSMutableArray * zipEntries = [NSMutableArray array];
+    NSString * csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
+    NSString * infoFilePath = [tracker.folder stringByAppendingPathComponent:kInfoFilename];
+    [zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: kCSVFilename
+                                                                compress:YES
+                                                          dataBlock:^(NSError** error){ return [NSData dataWithContentsOfFile:csvFilePath];}]];
+    [zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: kInfoFilename
+                                                           compress:YES
+                                                          dataBlock:^(NSError** error){ return [NSData dataWithContentsOfFile:infoFilePath];}]];
+
+    [zipArchive updateEntries:zipEntries error:&error];
+    APCLogError2(error);
+    
+    [APCDataArchiver encryptZipFile:unencryptedPath encryptedPath:encryptedPath];
+    APCLogDebug(@"Created zip file: %@", encryptedPath);
+    
+    if (![self shouldPreserveUnencryptedFiles]) {
+        NSError * error;
+        if (![[NSFileManager defaultManager] removeItemAtPath:unencryptedPath error:&error]) {
+            APCLogError2(error);
+        }
+    }
+    else
+    {
+#ifdef USE_DATA_VERIFICATION_CLIENT
+        
+        [APCDataVerificationClient uploadDataFromFileAtPath: unencryptedPath];
+        
+#endif
+    }
+}
+
+- (BOOL) shouldPreserveUnencryptedFiles
+{
+#ifdef USE_DATA_VERIFICATION_CLIENT
+    return YES;
+#else
+    return NO;
+#endif
+
 }
 
 /*********************************************************************************/
@@ -101,8 +174,34 @@ static NSString *const kCSVFilename  = @"data.csv";
 /*********************************************************************************/
 - (void) APCDataTracker:(APCDataTracker *)tracker hasNewData:(NSArray *)dataArray
 {
-    //Write array to CSV file
-    //Verify if the the data need to be flushed
+    [dataArray enumerateObjectsUsingBlock:^(NSArray * obj, NSUInteger idx, BOOL *stop) {
+        NSString * rowString = [[obj componentsJoinedByString:@","] stringByAppendingString:@"\n"];
+        NSString * csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
+        [APCPassiveDataCollector createOrAppendString:rowString toFile:csvFilePath];
+    }];
+    APCLogDebug(@"Results: %@", dataArray);
+    [self checkIfDataNeedsToBeFlushed:tracker];
+}
+
+- (void) checkIfDataNeedsToBeFlushed:(APCDataTracker*) tracker
+{
+    //Check for size
+    NSString * csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
+    NSError * error;
+    NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:csvFilePath error:&error];
+    APCLogError2(error);
+    unsigned long long filesize = [fileDictionary fileSize];
+    if (filesize >= tracker.sizeThreshold) {
+        [self flush:tracker];
+    }
+    
+    //Check for start date
+    NSDictionary * dictionary = tracker.infoDictionary;
+    NSString * startDateString = dictionary[kStartDateKey];
+    NSDate * startDate = [self datefromDateString:startDateString];
+    if ([[NSDate date] timeIntervalSinceDate:startDate] >= tracker.stalenessInterval) {
+        [self flush:tracker];
+    }
 }
 
 /*********************************************************************************/
@@ -111,6 +210,7 @@ static NSString *const kCSVFilename  = @"data.csv";
 
 - (void) resetDataFilesForTracker: (APCDataTracker*) tracker
 {
+    APCLogEventWithData(kPassiveCollectorEvent, (@{@"Tracker":tracker.identifier, @"Status" : @"Reset"}));
     NSString * csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
     NSString * infoFilePath = [tracker.folder stringByAppendingPathComponent:kInfoFilename];
     NSDictionary * infoDictionary;
@@ -184,6 +284,13 @@ static NSString *const kCSVFilename  = @"data.csv";
             APCLogError2(error);
         }
     }
+}
+
+- (NSDate*) datefromDateString: (NSString*) string
+{
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+    return [dateFormat dateFromString:string];
 }
 
 @end
