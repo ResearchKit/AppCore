@@ -82,6 +82,8 @@
 		7B0DC4181A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7B0DC4171A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib */; };
 		7BD1D3D41A702ED200D6A377 /* APCDataResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BD1D3D21A702ED200D6A377 /* APCDataResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BD1D3D51A702ED200D6A377 /* APCDataResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BD1D3D31A702ED200D6A377 /* APCDataResult.m */; };
+		CFEF5CAD1A807DE4009A8634 /* APCCustomBackButton.h in Headers */ = {isa = PBXBuildFile; fileRef = CFEF5CAB1A807DE4009A8634 /* APCCustomBackButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFEF5CAE1A807DE4009A8634 /* APCCustomBackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CFEF5CAC1A807DE4009A8634 /* APCCustomBackButton.m */; };
 		F50738C01A682E12004CF100 /* APCDateRange.h in Headers */ = {isa = PBXBuildFile; fileRef = F50738BE1A682E12004CF100 /* APCDateRange.h */; };
 		F50738C11A682E12004CF100 /* APCDateRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F50738BF1A682E12004CF100 /* APCDateRange.m */; };
 		F55653B21A6F08E0003E0B0C /* libMobileGestalt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */; };
@@ -541,6 +543,8 @@
 		7B0DC4171A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCActivitiesViewWithNoTask.xib; sourceTree = "<group>"; };
 		7BD1D3D21A702ED200D6A377 /* APCDataResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataResult.h; sourceTree = "<group>"; };
 		7BD1D3D31A702ED200D6A377 /* APCDataResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataResult.m; sourceTree = "<group>"; };
+		CFEF5CAB1A807DE4009A8634 /* APCCustomBackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCustomBackButton.h; sourceTree = "<group>"; };
+		CFEF5CAC1A807DE4009A8634 /* APCCustomBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCustomBackButton.m; sourceTree = "<group>"; };
 		F50738BE1A682E12004CF100 /* APCDateRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDateRange.h; sourceTree = "<group>"; };
 		F50738BF1A682E12004CF100 /* APCDateRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDateRange.m; sourceTree = "<group>"; };
 		F5179B2919D09128001DCCB7 /* APCAppCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APCAppCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1607,18 +1611,20 @@
 		F5F129241A2F78490015982C /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				0875C3D61A797A7B00CE50FB /* APCButton.h */,
+				0875C3D71A797A7B00CE50FB /* APCButton.m */,
 				F5F129251A2F78490015982C /* APCCircularProgressView.h */,
 				F5F129261A2F78490015982C /* APCCircularProgressView.m */,
 				F5F129271A2F78490015982C /* APCConcentricProgressView.h */,
 				F5F129281A2F78490015982C /* APCConcentricProgressView.m */,
 				F5F129291A2F78490015982C /* APCConfirmationView.h */,
 				F5F1292A1A2F78490015982C /* APCConfirmationView.m */,
+				CFEF5CAB1A807DE4009A8634 /* APCCustomBackButton.h */,
+				CFEF5CAC1A807DE4009A8634 /* APCCustomBackButton.m */,
 				F5F1292B1A2F78490015982C /* APCPieGraphView.h */,
 				F5F1292C1A2F78490015982C /* APCPieGraphView.m */,
 				F5F1292D1A2F78490015982C /* APCStepProgressBar.h */,
 				F5F1292E1A2F78490015982C /* APCStepProgressBar.m */,
-				0875C3D61A797A7B00CE50FB /* APCButton.h */,
-				0875C3D71A797A7B00CE50FB /* APCButton.m */,
 				F5F1292F1A2F78490015982C /* GraphCharts */,
 			);
 			path = Components;
@@ -2021,6 +2027,7 @@
 				F5F12AE81A2F78490015982C /* APCDashboardEditTableViewCell.h in Headers */,
 				F5B947FE1A73272C0034C522 /* APCScheduleExpression.h in Headers */,
 				F5B946431A7309A20034C522 /* ZZOldArchiveEntryWriter.h in Headers */,
+				CFEF5CAD1A807DE4009A8634 /* APCCustomBackButton.h in Headers */,
 				F5B946411A7309A20034C522 /* ZZOldArchiveEntry.h in Headers */,
 				F5F12ADE1A2F78490015982C /* APCShareTableViewCell.h in Headers */,
 				F5F12AE41A2F78490015982C /* APCTintedTableViewCell.h in Headers */,
@@ -2467,6 +2474,7 @@
 				F5F12A8A1A2F78490015982C /* APCTableViewItem.m in Sources */,
 				F5F12AD11A2F78490015982C /* APCWithdrawSurveyViewController.m in Sources */,
 				F5B947D61A73272C0034C522 /* UIView+Helper.m in Sources */,
+				CFEF5CAE1A807DE4009A8634 /* APCCustomBackButton.m in Sources */,
 				F5B947B21A73272C0034C522 /* UIFont+APCAppearance.m in Sources */,
 				F5F12AE91A2F78490015982C /* APCDashboardEditTableViewCell.m in Sources */,
 				F5B947B01A73272C0034C522 /* UIColor+APCAppearance.m in Sources */,

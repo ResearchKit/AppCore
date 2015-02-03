@@ -305,12 +305,8 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     tabBarController.delegate = self;
     
     NSArray       *items = tabBarController.tabBar.items;
-    UITabBarItem  *selectedItem = tabBarController.tabBar.selectedItem;
     
     NSUInteger     selectedItemIndex = 2;
-    if (selectedItem != nil) {
-        selectedItemIndex = [items indexOfObject:selectedItem];
-    }
     
     NSArray  *deselectedImageNames = @[ @"tab_dashboard",          @"tab_learn",          @"tab_activities",          @"tab_profile" ];
     NSArray  *selectedImageNames   = @[ @"tab_dashboard_selected", @"tab_learn_selected", @"tab_activities_selected", @"tab_profile_selected" ];
