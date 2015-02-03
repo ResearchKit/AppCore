@@ -35,13 +35,26 @@ static NSString *const kCSVFilename  = @"data.csv";
         _collectorsPath = [documentsDir stringByAppendingPathComponent:kCollectorFolder];
         [APCPassiveDataCollector createFolderIfDoesntExist:_collectorsPath];
         [APCPassiveDataCollector createFolderIfDoesntExist:[_collectorsPath stringByAppendingPathComponent:kUploadFolder]];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecameActive) name:UIApplicationDidBecomeActiveNotification object:[UIApplication sharedApplication]];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (NSString *)collectorsUploadPath
 {
     return [self.collectorsPath stringByAppendingPathComponent:kUploadFolder];
+}
+
+- (void) appBecameActive
+{
+   [self.registeredTrackers enumerateKeysAndObjectsUsingBlock:^(id key, APCDataTracker * obj, BOOL *stop) {
+       [obj updateTracking];
+   }];
 }
 
 - (void)addTracker:(APCDataTracker *)tracker

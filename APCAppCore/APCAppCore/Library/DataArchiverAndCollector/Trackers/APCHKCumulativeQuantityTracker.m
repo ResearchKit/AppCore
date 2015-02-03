@@ -20,6 +20,9 @@ static NSString *const kAnchorDateFilename = @"anchorDate";
 @property (nonatomic, strong) HKQuantityType * quantityType;
 @property (nonatomic, strong) NSDate * anchorDate;
 
+@property (nonatomic, readonly) HKHealthStore * healthStore;
+@property (strong, nonatomic) HKObserverQuery *observerQuery;
+
 @property (nonatomic, readonly) NSString* anchorDateFilePath;
 
 @end
@@ -37,6 +40,59 @@ static NSString *const kAnchorDateFilename = @"anchorDate";
     return self;
 }
 
+- (HKHealthStore *)healthStore
+{
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.healthStore;
+}
+
+- (NSArray *)columnNames
+{
+    return @[@"startDate", @"endDate", @"dataType", @"data"];
+}
+
+- (void)startTracking
+{
+    if ([HKHealthStore isHealthDataAvailable]) {
+        
+        [self mainDataQuery];
+    }
+}
+
+- (void) mainDataQuery
+{
+    if (self.anchorDate < [NSDate todayAtMidnight]) {
+        NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:self.anchorDate endDate:nil options:HKQueryOptionNone];
+        HKStatisticsCollectionQuery * collectionQuery = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:self.quantityType quantitySamplePredicate:predicate options:HKStatisticsOptionCumulativeSum anchorDate:self.anchorDate intervalComponents:self.interval];
+
+        NSSortDescriptor *endDate = [NSSortDescriptor sortDescriptorWithKey:HKSampleSortIdentifierEndDate ascending:NO];
+
+        __weak APCHKCumulativeQuantityTracker * weakSelf = self;
+        
+        collectionQuery.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
+            if (!error) {
+                APCLogDebug(@"Results: %@", results.statistics);
+                [weakSelf processStatisticsCollection:results];
+            }
+        };
+        
+        [self.healthStore executeQuery:collectionQuery];
+    }
+
+}
+
+- (void) processStatisticsCollection: (HKStatisticsCollection*) collection
+{
+    
+}
+
+- (void)stopTracking
+{
+    [self.healthStore stopQuery:self.observerQuery];
+}
+
+/*********************************************************************************/
+#pragma mark - Anchor Date
+/*********************************************************************************/
 - (NSString *)anchorDateFilePath
 {
     return [self.folder stringByAppendingPathComponent:kAnchorDateFilename];
@@ -60,7 +116,7 @@ static NSString *const kAnchorDateFilename = @"anchorDate";
             }
             else
             {
-                _anchorDate = [NSDate date];
+                _anchorDate = [[NSDate date] dateByAddingDays:-2];
                 [self writeAnchorDate:_anchorDate];
             }
         }
@@ -75,9 +131,5 @@ static NSString *const kAnchorDateFilename = @"anchorDate";
     [APCPassiveDataCollector createOrReplaceString:anchorDateString toFile:self.anchorDateFilePath];
 }
 
-- (NSArray *)columnNames
-{
-    return @[@"startDate", @"endDate", @"dataType", @"data"];
-}
 
 @end

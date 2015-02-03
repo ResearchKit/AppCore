@@ -20,7 +20,9 @@
 @property (nonatomic, strong) NSDictionary * infoDictionary;
 @property (nonatomic, strong) NSString * folder;
 @property (nonatomic, weak) id<APCDataTrackerDelegate> delegate;
+
 - (void) startTracking;
+- (void) updateTracking;
 - (void) stopTracking;
 
 @property (nonatomic) long long sizeThreshold;
