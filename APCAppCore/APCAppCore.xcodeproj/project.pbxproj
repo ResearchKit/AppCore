@@ -57,6 +57,7 @@
 		08EA2AB31A7AD564007549C0 /* UIImage+ImageEffects.h in Headers */ = {isa = PBXBuildFile; fileRef = 08EA2AB11A7AD564007549C0 /* UIImage+ImageEffects.h */; };
 		08EA2AB41A7AD564007549C0 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */; };
 		360C63D11A339746002EC86C /* NSDateComponentsHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */; };
+		3624092B1A8181350005B1A7 /* get_debug_ip_address.sh in Resources */ = {isa = PBXBuildFile; fileRef = 3624092A1A8181350005B1A7 /* get_debug_ip_address.sh */; };
 		364D348A1A7B1C8F0060B3F5 /* APCDataVerificationClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 364D34881A7B1C8F0060B3F5 /* APCDataVerificationClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		364D348B1A7B1C8F0060B3F5 /* APCDataVerificationClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 364D34891A7B1C8F0060B3F5 /* APCDataVerificationClient.m */; };
 		36B1AAE51A38DEA800CE7DB5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3EB1A38D9FF0051096B /* Security.framework */; };
@@ -516,7 +517,7 @@
 		08EA2AB11A7AD564007549C0 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateComponentsHelperTests.m; sourceTree = "<group>"; };
-		362409281A8138230005B1A7 /* APCDataVerificationClient_PersonalComputerIPAddresses.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APCDataVerificationClient_PersonalComputerIPAddresses.h; sourceTree = "<group>"; };
+		3624092A1A8181350005B1A7 /* get_debug_ip_address.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = get_debug_ip_address.sh; sourceTree = "<group>"; };
 		364D34881A7B1C8F0060B3F5 /* APCDataVerificationClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataVerificationClient.h; sourceTree = "<group>"; };
 		364D34891A7B1C8F0060B3F5 /* APCDataVerificationClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataVerificationClient.m; sourceTree = "<group>"; };
 		366433821A7DA29F007E2BCF /* ReadMe.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
@@ -1107,7 +1108,6 @@
 				366433821A7DA29F007E2BCF /* ReadMe.txt */,
 				364D34881A7B1C8F0060B3F5 /* APCDataVerificationClient.h */,
 				364D34891A7B1C8F0060B3F5 /* APCDataVerificationClient.m */,
-				362409281A8138230005B1A7 /* APCDataVerificationClient_PersonalComputerIPAddresses.h */,
 			);
 			path = DataVerificationClient;
 			sourceTree = "<group>";
@@ -1573,6 +1573,7 @@
 				08027A651A7319AC00B358CC /* ResearchKit-Assets */,
 				F556549A1A701337003E0B0C /* Localizable.strings */,
 				F5F12B1B1A2F78AE0015982C /* Info.plist */,
+				3624092A1A8181350005B1A7 /* get_debug_ip_address.sh */,
 				F5F1291B1A2F78490015982C /* update_version.sh */,
 			);
 			path = Resources;
@@ -2306,6 +2307,7 @@
 				08027A9A1A7319AC00B358CC /* walkingman_monitor@3x.png in Resources */,
 				F5F12A6E1A2F78490015982C /* TabBar.storyboard in Resources */,
 				08027AA21A7319AC00B358CC /* consent_01@3x.m4v in Resources */,
+				3624092B1A8181350005B1A7 /* get_debug_ip_address.sh in Resources */,
 				08027A881A7319AC00B358CC /* heartbeat@2x.png in Resources */,
 				08027A7A1A7319AC00B358CC /* consent_04@2x.png in Resources */,
 				F5F12AFF1A2F78490015982C /* APCIntroductionViewController.xib in Resources */,
