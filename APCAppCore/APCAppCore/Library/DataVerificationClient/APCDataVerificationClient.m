@@ -5,9 +5,14 @@
 //  Copyright (c) 2015 Apple Inc. All rights reserved.
 //
 
+
+
 /*
- Only allow this file to appear in the compiled code
- if we're diagnosting stuff, in-house.
+ Only allow this file to exist in the compiled code if
+ we're diagnosting stuff, in-house.  For documentation,
+ see:
+ 
+ https://ymedialabs.atlassian.net/wiki/display/APPLE/How+to+see+the+data+we+send+to+Sage
  */
 // ---------------------------------------------------------
 #ifdef USE_DATA_VERIFICATION_CLIENT
@@ -16,6 +21,17 @@
 
 
 #import "APCDataVerificationClient.h"
+
+
+/**
+ Change this to the computer where you're running the server.
+ */
+//static NSString * const DATA_VERIFICATION_SERVER_IP_ADDRESS = @"10.5.28.84";		// Ron's Mac
+static NSString * const DATA_VERIFICATION_SERVER_IP_ADDRESS = @"127.0.0.1";		// If you're using the Simulator
+
+static NSInteger const DATA_VERIFICATION_SERVER_PORT_NUMBER = 4567;
+
+
 
 /**
  For extracting the MIME type of the file to upload.
@@ -47,7 +63,11 @@ static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 
 + (void) uploadData: (NSData *) dataToLog withFilenameForMimeType: (NSString *) filename
 {
-	NSURL * url = [NSURL URLWithString: [NSString stringWithFormat: @"http://127.0.0.1:4567/api/v1/upload/%@", filename]];
+	NSURL * url = [NSURL URLWithString: [NSString stringWithFormat: @"http://%@:%d/api/v1/upload/%@",
+										 DATA_VERIFICATION_SERVER_IP_ADDRESS,
+										 (int) DATA_VERIFICATION_SERVER_PORT_NUMBER,
+										 filename]];
+
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: url];
 	[request setHTTPMethod: @"POST"];
 	NSString *boundary = [self boundaryString];
