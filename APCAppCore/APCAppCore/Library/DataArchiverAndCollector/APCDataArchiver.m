@@ -305,7 +305,9 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 
 - (void) writeURLToArchive: (NSURL*) url
 {
-    
+    [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: url.path.lastPathComponent
+                                                                compress:YES
+                                                               dataBlock:^(NSError** error){ return [NSData dataWithContentsOfURL:url];}]];
 }
 
 - (void) addFileInfoEntryWithDictionary: (NSDictionary*) dictionary
