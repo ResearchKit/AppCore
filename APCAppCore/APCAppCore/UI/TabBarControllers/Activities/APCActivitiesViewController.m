@@ -170,6 +170,17 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     return headerView;
 }
 
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    BOOL shouldHighlightRow = YES;
+    
+    if (indexPath.section > 0) {
+        shouldHighlightRow = NO;
+    }
+    
+    return shouldHighlightRow;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
