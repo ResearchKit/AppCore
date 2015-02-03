@@ -53,9 +53,6 @@
     [self.textView setFont:[UIFont appRegularFontWithSize:15.0f]];
     [self.textView setTextColor:[UIColor appSecondaryColor1]];
     
-    [self.doneButton setBackgroundImage:[UIImage imageWithColor:[UIColor appPrimaryColor]] forState:UIControlStateNormal];
-    [self.doneButton.titleLabel setFont:[UIFont appMediumFontWithSize:19.0f]];
-    
     [self.messageLabel setFont:[UIFont appLightFontWithSize:14.0f]];
     [self.messageLabel setTextColor:[UIColor appSecondaryColor2]];
 }
