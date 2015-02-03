@@ -516,6 +516,7 @@
 		08EA2AB11A7AD564007549C0 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateComponentsHelperTests.m; sourceTree = "<group>"; };
+		362409281A8138230005B1A7 /* APCDataVerificationClient_PersonalComputerIPAddresses.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APCDataVerificationClient_PersonalComputerIPAddresses.h; sourceTree = "<group>"; };
 		364D34881A7B1C8F0060B3F5 /* APCDataVerificationClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataVerificationClient.h; sourceTree = "<group>"; };
 		364D34891A7B1C8F0060B3F5 /* APCDataVerificationClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataVerificationClient.m; sourceTree = "<group>"; };
 		366433821A7DA29F007E2BCF /* ReadMe.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
@@ -1106,6 +1107,7 @@
 				366433821A7DA29F007E2BCF /* ReadMe.txt */,
 				364D34881A7B1C8F0060B3F5 /* APCDataVerificationClient.h */,
 				364D34891A7B1C8F0060B3F5 /* APCDataVerificationClient.m */,
+				362409281A8138230005B1A7 /* APCDataVerificationClient_PersonalComputerIPAddresses.h */,
 			);
 			path = DataVerificationClient;
 			sourceTree = "<group>";

@@ -6,7 +6,6 @@
 //
 
 
-
 /*
  Only allow this file to exist in the compiled code if
  we're diagnosting stuff, in-house.  For documentation,
@@ -24,23 +23,13 @@
 
 
 /**
- To make this app work with the DataVerificationServer,
- uncomment the entry for the computer where the server
- is running.  If you're using the Simulator, uncomment
- the "localhost" line (127.0.0.1).  Please set this back
- to "localhost" before committing to Git.
-
- This is safe becase the surrounding #define means
- this code will never ship in production.  The #defined
- item is triggered by a special Xcode Scheme.
+ To use this app with the DataVerificationServer,
+ add an entry for your computer to this list of
+ IP addresses, and then uncomment it.
  
- This is set up so you can easily type command-"/" to
- comment or uncomment certain lines.
+ You can also use the "localhost" entry.
  */
-static NSString * const DATA_VERIFICATION_SERVER_IP_ADDRESS = (
-//															   @"10.5.28.84"	// Ron's Mac
-															   @"127.0.0.1"		// "localhost" - if you're using the Simulator
-															   );
+#import "APCDataVerificationClient_PersonalComputerIPAddresses.h"
 
 
 /**
@@ -98,11 +87,24 @@ static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 												   data: dataToLog
 											   filename: filename];
 
+	NSLog (@"+[APCUploadValiationServer uploadData:] Attempting to log data to DataValidationServer at IP address [%@...]", DATA_VERIFICATION_SERVER_IP_ADDRESS);
+
 	NSURLSessionUploadTask *task = [session uploadTaskWithRequest: request
 														 fromData: data
 												completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
-		if (error) {
-			NSLog(@"+[APCUploadValiationServer uploadData:] Error when copying Sage data file to local validation server. Is the local server running? The error was:\n-----\n%@\n-----", error);
+		if (error)
+		{
+			NSLog (@"+[APCUploadValiationServer uploadData:] \n"
+				   "Error when copying Sage data file to the DataValidationServer.  Please check:\n"
+				   "- Is the local server running?\n"
+				   "- Is the correct IP address selected in APCDataVerificationClient_PersonalComputerIPAddresses.h ?\n"
+				   "- Is your phone on the office network (not 4G)?\n"
+				   "The error was:\n-----\n%@\n-----",
+				   error);
+		}
+		else
+		{
+			NSLog (@"+[APCUploadValiationServer uploadData:] ...done.");
 		}
 	}];
 
