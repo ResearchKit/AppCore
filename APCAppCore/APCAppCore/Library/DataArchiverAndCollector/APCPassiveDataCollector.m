@@ -131,32 +131,27 @@ static NSString *const kCSVFilename  = @"data.csv";
     NSString * csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
     NSString * infoFilePath = [tracker.folder stringByAppendingPathComponent:kInfoFilename];
     [zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: kCSVFilename
-                                                                compress:YES
+                                                           compress:YES
                                                           dataBlock:^(NSError** error){ return [NSData dataWithContentsOfFile:csvFilePath];}]];
     [zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: kInfoFilename
                                                            compress:YES
                                                           dataBlock:^(NSError** error){ return [NSData dataWithContentsOfFile:infoFilePath];}]];
-
+    
     [zipArchive updateEntries:zipEntries error:&error];
     APCLogError2(error);
     
     [APCDataArchiver encryptZipFile:unencryptedPath encryptedPath:encryptedPath];
     APCLogDebug(@"Created zip file: %@", encryptedPath);
     
-    if (![self shouldPreserveUnencryptedFiles]) {
-        NSError * error;
-        if (![[NSFileManager defaultManager] removeItemAtPath:unencryptedPath error:&error]) {
-            APCLogError2(error);
-        }
-    }
-    else
-    {
 #ifdef USE_DATA_VERIFICATION_CLIENT
-        
-        [APCDataVerificationClient uploadDataFromFileAtPath: unencryptedPath];
-        
-#endif
+    [APCDataVerificationClient uploadDataFromFileAtPath: unencryptedPath];
+#else
+    NSError * deleteError;
+    if (![[NSFileManager defaultManager] removeItemAtPath:unencryptedPath error:&deleteError]) {
+        APCLogError2(deleteError);
     }
+#endif
+    
     
     [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataMonitor uploadZipFile:encryptedPath onCompletion:^(NSError *error) {
         if (!error) {
@@ -166,16 +161,6 @@ static NSString *const kCSVFilename  = @"data.csv";
             }
         }
     }];
-}
-
-- (BOOL) shouldPreserveUnencryptedFiles
-{
-#ifdef USE_DATA_VERIFICATION_CLIENT
-    return YES;
-#else
-    return NO;
-#endif
-
 }
 
 /*********************************************************************************/
