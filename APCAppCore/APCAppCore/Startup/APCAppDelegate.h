@@ -7,7 +7,6 @@
  
 #import <UIKit/UIKit.h>
 #import "APCDataSubstrate.h"
-#import "APCHealthKitQuantityTracker.h"
 #import "APCOnboarding.h"
 #import "APCPasscodeViewController.h"
 
@@ -22,7 +21,6 @@
 @property (strong, nonatomic) APCDataSubstrate * dataSubstrate;
 @property (strong, nonatomic) APCDataMonitor * dataMonitor;
 @property (strong, nonatomic) APCScheduler * scheduler;
-@property (strong, nonatomic) APCHealthKitQuantityTracker *healthKitTracker;
 @property (strong, nonatomic) APCTasksReminderManager * tasksReminder;
 @property (strong, nonatomic) APCPassiveDataCollector * passiveDataCollector;
 
