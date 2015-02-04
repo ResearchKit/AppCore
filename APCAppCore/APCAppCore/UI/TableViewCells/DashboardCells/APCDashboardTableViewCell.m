@@ -25,6 +25,7 @@ static const CGFloat kTitleLabelHeight = 26.0f;
     self.titleLabel.font = [UIFont appRegularFontWithSize:19.0f];
     
     [self.infoButton setImage:[[UIImage imageNamed:@"info_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [self.infoButton setImage:[[UIImage imageNamed:@"info_icon_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
     self.infoButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     
     [self.resizeButton setImage:[[UIImage imageNamed:@"expand_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
@@ -48,7 +49,7 @@ static const CGFloat kTitleLabelHeight = 26.0f;
     self.titleLabel.text = title;
     
     CGSize textSize = [self.titleLabel.text boundingRectWithSize:CGSizeMake(320, kTitleLabelHeight) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.titleLabel.font} context:nil].size;
-    self.titleLabelWidthConstraint.constant = textSize.width + 2;
+    self.titleLabelWidthConstraint.constant = textSize.width + 1;
     
     [self setNeedsLayout];
 }

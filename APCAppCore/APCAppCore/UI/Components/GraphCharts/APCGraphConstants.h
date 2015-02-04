@@ -17,5 +17,5 @@ typedef NS_ENUM(NSUInteger, APCGraphAxisType) {
     kAPCGraphAxisTypeY
 };
 
-static CGFloat const kAPCGraphTopPadding = 55.f;
+static CGFloat const kAPCGraphTopPadding = 0.f;
 static CGFloat const kXAxisHeight = 30.f;

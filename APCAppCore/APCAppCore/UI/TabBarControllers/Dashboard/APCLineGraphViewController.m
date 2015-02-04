@@ -22,10 +22,11 @@
     // Do any additional setup after loading the view.
     
     self.graphView.tintColor = self.graphItem.tintColor;
-    self.graphView.titleLabel.text = self.graphItem.caption;
-    self.graphView.subTitleLabel.text = self.graphItem.detailText;
     self.graphView.datasource = self.graphItem.graphData;
     self.graphView.landscapeMode = YES;
+    
+    self.titleLabel.text = self.graphItem.caption;
+    self.subTitleLabel.text = self.graphItem.detailText;
     
     [self setupAppearance];
 }
@@ -34,6 +35,15 @@
 {
     [super viewDidAppear:animated];
   APCLogViewControllerAppeared();
+}
+
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
+    CGSize textSize = [self.titleLabel.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGRectGetHeight(self.titleLabel.frame)) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : self.titleLabel.font} context:nil].size;
+    
+    self.titleLabelWidthConstraint.constant = textSize.width + 2;
 }
 
 #pragma mark - Appearance
@@ -49,11 +59,16 @@
     [self.compareLabel setFont:[UIFont appLightFontWithSize:16.0f]];
     [self.compareLabel setTextColor:[UIColor appSecondaryColor2]];
     
-    self.graphView.titleLabel.font = [UIFont appRegularFontWithSize:24.0f];
-    self.graphView.subTitleLabel.font = [UIFont appRegularFontWithSize:16.0f];
+    self.titleLabel.font = [UIFont appRegularFontWithSize:24.0f];
+    self.titleLabel.textColor = self.graphItem.tintColor;
+    
+    self.subTitleLabel.font = [UIFont appRegularFontWithSize:16.0f];
+    self.subTitleLabel.textColor = [UIColor appSecondaryColor3];
     
     [self.collapseButton setImage:[[UIImage imageNamed:@"collapse_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.collapseButton.imageView setTintColor:self.graphItem.tintColor];
+    
+    self.tintView.backgroundColor = self.graphItem.tintColor;
 }
 
 #pragma mark - Orientation methods

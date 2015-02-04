@@ -18,6 +18,9 @@
 
 @property (nonatomic, strong) NSMutableArray *lineCharts;
 
+@property (nonatomic, strong) APCPresentAnimator *presentAnimator;
+@property (nonatomic, strong) APCFadeAnimator *fadeAnimator;
+
 @end
 
 @implementation APCDashboardViewController
@@ -28,7 +31,8 @@
     self.lineCharts = [NSMutableArray new];
     self.items = [NSMutableArray new];
     
-    [((APCAppDelegate *)[[UIApplication sharedApplication] delegate]) showPasscodeIfNecessary];
+    _presentAnimator = [APCPresentAnimator new];
+    _fadeAnimator = [APCFadeAnimator new];
 }
 
 - (void)viewDidLayoutSubviews
@@ -56,10 +60,6 @@
                                                   object:nil];
     
     [super viewWillDisappear:animated];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 - (void)updateVisibleRowsInTableView:(NSNotification *)notification
@@ -103,12 +103,10 @@
             
             graphCell.graphView.datasource = graphItem.graphData;
             graphCell.graphView.delegate = self;
-            graphCell.graphView.titleLabel.text = graphItem.caption;
-            graphCell.graphView.subTitleLabel.text = graphItem.detailText;
+            graphCell.title = graphItem.caption;
+            graphCell.subTitleLabel.text = graphItem.detailText;
             graphCell.graphView.tintColor = graphItem.tintColor;
             graphCell.graphView.panGestureRecognizer.delegate = self;
-            graphCell.graphView.titleLabel.font = [UIFont appRegularFontWithSize:19.0f];
-            graphCell.graphView.subTitleLabel.font = [UIFont appRegularFontWithSize:16.0f];
             graphCell.graphView.axisTitleFont = [UIFont appRegularFontWithSize:14.0f];
             
             graphCell.tintColor = graphItem.tintColor;
@@ -245,40 +243,54 @@
     return YES;
 }
 
-#pragma mark - Public Methods
+#pragma mark - UIViewControllerTransitioningDelegate methods
 
-- (APCTableViewItem *)itemForIndexPath:(NSIndexPath *)indexPath
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
+                                                                  presentingController:(UIViewController *)presenting
+                                                                      sourceController:(UIViewController *)source
 {
-    APCTableViewSection *sectionItem = self.items[indexPath.section];
-    APCTableViewRow *rowItem = sectionItem.rows[indexPath.row];
+    id<UIViewControllerAnimatedTransitioning> animationController;
     
-    APCTableViewItem *dashboardItem = rowItem.item;
+    if ([presented isKindOfClass:[APCLineGraphViewController class]]) {
+        animationController = self.presentAnimator;
+        self.presentAnimator.presenting = YES;
+    } else if ([presented isKindOfClass:[APCDashboardMoreInfoViewController class]]){
+        animationController = self.fadeAnimator;
+        self.fadeAnimator.presenting = YES;
+    }
     
-    return dashboardItem;
+    return animationController;
 }
 
-- (APCTableViewItemType)itemTypeForIndexPath:(NSIndexPath *)indexPath
-{
-    APCTableViewSection *sectionItem = self.items[indexPath.section];
-    APCTableViewRow *rowItem = sectionItem.rows[indexPath.row];
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
     
-    APCTableViewItemType dashboardItemType = rowItem.itemType;
+    id<UIViewControllerAnimatedTransitioning> animationController;
     
-    return dashboardItemType;
-}
-
-#pragma mark - APCDashboardGraphTableViewCellDelegate methods
-
-- (void)dashboardGraphViewCellDidTapExpandForCell:(APCDashboardLineGraphTableViewCell *)cell
-{
+    if ([dismissed isKindOfClass:[APCLineGraphViewController class]]) {
+        animationController = self.presentAnimator;
+        self.presentAnimator.presenting = NO;
+    } else if ([dismissed isKindOfClass:[APCDashboardMoreInfoViewController class]]){
+        animationController = self.fadeAnimator;
+        self.fadeAnimator.presenting = NO;
+    }
     
+    return animationController;
 }
 
 #pragma mark - APCDashboardTableViewCellDelegate methods
 
 - (void)dashboardTableViewCellDidTapExpand:(APCDashboardTableViewCell *)cell
 {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
+    APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)[self itemForIndexPath:indexPath];
+    
+    CGRect initialFrame = [cell convertRect:cell.bounds toView:self.view.window];
+    self.presentAnimator.initialFrame = initialFrame;
+    
+    APCLineGraphViewController *graphViewController = [[UIStoryboard storyboardWithName:@"APHDashboard" bundle:nil] instantiateViewControllerWithIdentifier:@"GraphVC"];
+    graphViewController.graphItem = graphItem;
+    [self.navigationController presentViewController:graphViewController animated:YES completion:nil];
 }
 
 - (void)dashboardTableViewCellDidTapMoreInfo:(APCDashboardTableViewCell *)cell
@@ -312,4 +324,27 @@
         
     }];
 }
+
+#pragma mark - Public Methods
+
+- (APCTableViewItem *)itemForIndexPath:(NSIndexPath *)indexPath
+{
+    APCTableViewSection *sectionItem = self.items[indexPath.section];
+    APCTableViewRow *rowItem = sectionItem.rows[indexPath.row];
+    
+    APCTableViewItem *dashboardItem = rowItem.item;
+    
+    return dashboardItem;
+}
+
+- (APCTableViewItemType)itemTypeForIndexPath:(NSIndexPath *)indexPath
+{
+    APCTableViewSection *sectionItem = self.items[indexPath.section];
+    APCTableViewRow *rowItem = sectionItem.rows[indexPath.row];
+    
+    APCTableViewItemType dashboardItemType = rowItem.itemType;
+    
+    return dashboardItemType;
+}
+
 @end
