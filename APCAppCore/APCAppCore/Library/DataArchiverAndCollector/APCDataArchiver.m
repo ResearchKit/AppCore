@@ -345,7 +345,7 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     
     NSAssert([[NSFileManager defaultManager] fileExistsAtPath:outputDirectory], @"Output Directory does not exist");
     
-    [self encryptZipFile];
+    [APCDataArchiver encryptZipFile:self.tempUnencryptedZipFilePath encryptedPath:self.tempEncryptedZipFilePath];
     
     NSString * newEncryptedPath = [outputDirectory stringByAppendingPathComponent:@"encrypted.zip"];
 
@@ -383,22 +383,23 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     return ([[NSFileManager defaultManager] fileExistsAtPath:newEncryptedPath])? @"encrypted.zip" : nil;
 }
 
-- (void) encryptZipFile {
-    NSData * unencryptedZipData = [NSData dataWithContentsOfFile:self.tempUnencryptedZipFilePath];
++ (void) encryptZipFile: (NSString*) unencryptedPath encryptedPath:(NSString*) encryptedPath
+{
+    NSData * unencryptedZipData = [NSData dataWithContentsOfFile:unencryptedPath];
     
     NSError * encryptionError;
-    NSData * encryptedZipData = RKSTCryptographicMessageSyntaxEnvelopedData(unencryptedZipData, [self readPEM], RKEncryptionAlgorithmAES128CBC, &encryptionError);
+    NSData * encryptedZipData = RKSTCryptographicMessageSyntaxEnvelopedData(unencryptedZipData, [APCDataArchiver readPEM], RKEncryptionAlgorithmAES128CBC, &encryptionError);
     APCLogError2(encryptionError);
     
     NSError * fileWriteError;
-    [encryptedZipData writeToFile:self.tempEncryptedZipFilePath options:NSDataWritingAtomic error:&fileWriteError];
+    [encryptedZipData writeToFile:encryptedPath options:NSDataWritingAtomic error:&fileWriteError];
     APCLogError2(fileWriteError);
 }
 
 /*********************************************************************************/
 #pragma mark - Helpers
 /*********************************************************************************/
-- (NSData*) readPEM
++ (NSData*) readPEM
 {
     APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
     NSString * path = [[NSBundle mainBundle] pathForResource:appDelegate.certificateFileName ofType:@"pem"];
