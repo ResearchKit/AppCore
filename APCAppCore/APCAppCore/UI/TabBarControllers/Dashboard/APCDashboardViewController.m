@@ -161,6 +161,7 @@
         headerLabel.textAlignment = NSTextAlignmentCenter;
         headerLabel.text = sectionItem.sectionTitle;
         [headerView addSubview:headerLabel];
+        [headerView setTranslatesAutoresizingMaskIntoConstraints:NO];
     }
     
     return headerView;
@@ -273,4 +274,45 @@
     
 }
 
+#pragma mark - APCDashboardTableViewCellDelegate methods
+
+- (void)dashboardTableViewCellDidTapExpand:(APCDashboardTableViewCell *)cell
+{
+    
+}
+
+- (void)dashboardTableViewCellDidTapMoreInfo:(APCDashboardTableViewCell *)cell
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    APCTableViewDashboardItem *item = (APCTableViewDashboardItem *)[self itemForIndexPath:indexPath];
+    
+    APCDashboardMoreInfoViewController *moreInfoViewController = [[UIStoryboard storyboardWithName:@"APHDashboard" bundle:nil] instantiateViewControllerWithIdentifier:@"APCDashboardMoreInfoViewController"];
+    moreInfoViewController.info = item.info;
+    
+    //Snapshot Cell
+    UIGraphicsBeginImageContextWithOptions(cell.bounds.size, NO, 0.0);
+    [cell drawViewHierarchyInRect:cell.bounds afterScreenUpdates:NO];
+    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    moreInfoViewController.snapshotImage = snapshotImage;
+    
+    //Set Rect of cell
+    CGRect rect = [cell convertRect:cell.bounds toView:self.view.window];
+    
+    moreInfoViewController.cellRect = rect;
+    
+    //Blur
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    UIVisualEffectView *blurredView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    [blurredView setFrame:self.tabBarController.view.frame];
+    [moreInfoViewController.view addSubview:blurredView];
+    
+    //Present
+    moreInfoViewController.transitioningDelegate = self;
+    moreInfoViewController.modalPresentationStyle = UIModalPresentationCustom;
+    [self.navigationController presentViewController:moreInfoViewController animated:YES completion:^{
+        
+    }];
+}
 @end
