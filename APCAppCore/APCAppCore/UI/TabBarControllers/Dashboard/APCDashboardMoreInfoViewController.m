@@ -37,6 +37,7 @@ static const CGFloat kBubbleInnerPadding = 39.0f;
     self.cellSnapshotImageView.image = self.snapshotImage;
     
     self.descriptionLabel.text = self.info;
+    self.backgroundImageView.image = self.blurredImage;
 }
 
 - (void)viewWillLayoutSubviews

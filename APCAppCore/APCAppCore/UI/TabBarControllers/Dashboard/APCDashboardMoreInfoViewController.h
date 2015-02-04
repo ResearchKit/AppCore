@@ -9,6 +9,7 @@
 
 @interface APCDashboardMoreInfoViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *cellHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *cellTopConstraint;
 @property (weak, nonatomic) IBOutlet UIImageView *cellSnapshotImageView;
@@ -22,5 +23,6 @@
 @property (strong, nonatomic) UIImage *snapshotImage;
 @property (nonatomic) CGRect cellRect;
 @property (strong, nonatomic) NSString *info;
+@property (strong, nonatomic) UIImage *blurredImage;
 
 @end
