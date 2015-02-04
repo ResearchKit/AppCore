@@ -31,6 +31,7 @@
 require 'sinatra'
 require 'json'
 require 'fileutils'
+require "open3"
 
 
 #
@@ -117,10 +118,33 @@ post "#{base_url_path}/upload/:filename" do
 	#
 	# Unzip
 	#
+	
+	#
+	# We can also do this:
+	# 		processId = spawn( "unzip -o #{downloadedZipFile}" )	# -o == overwrite without asking
+	# 		Process.wait processId								# make it synchronous
+	#
+	# ...but that doesn't give me the stdout, and lets
+	# the stdout appear immediately.
+	#
 
+	unzip_output = "";
 	Dir.chdir( download_directory )
-	processId = spawn( "unzip -o #{downloadedZipFile}" )	# -o == overwrite without asking
-	Process.wait processId									# make it synchronous
+	Open3.popen2e( "unzip -o #{downloadedZipFile}" ) { |stdin, stdout_and_stderr, thread_to_wait_for|
+		process_id = thread_to_wait_for.pid			# pid of the started process.
+		exit_status = thread_to_wait_for.value		# Process::Status object returned.
+		
+		# We can also extract the contents of a stream
+		# with read():
+		# unzip_output = stdout_and_stderr.read
+		
+		stdout_and_stderr.each { |line|
+			
+			# indent it.  We'll shove "unzip"'s output
+			# in the middle of ours.
+			unzip_output << "> #{line}"
+		}
+	}
 	
 	
 	#
@@ -130,7 +154,8 @@ post "#{base_url_path}/upload/:filename" do
 	content = "\n\n\n#{Utils.section_divider}\n"
 	content << "Got file     : #{zip_file_base_name}\n"
 	content << "Unzipping to : #{download_directory}/\n\n"
-	
+	content << unzip_output
+	content << "\n"
 	content << "It contains these files:\n"
 	
 	Dir.glob( "#{download_directory}/*" ) do |file_path|
