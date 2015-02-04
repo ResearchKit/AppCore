@@ -136,7 +136,7 @@ post "#{base_url_path}/upload/:filename" do
 		
 		# We can also extract the contents of a stream
 		# with read():
-		# unzip_output = stdout_and_stderr.read
+		# 		unzip_output = stdout_and_stderr.read
 		
 		stdout_and_stderr.each { |line|
 			
@@ -154,8 +154,7 @@ post "#{base_url_path}/upload/:filename" do
 	content = "\n\n\n#{Utils.section_divider}\n"
 	content << "Got file     : #{zip_file_base_name}\n"
 	content << "Unzipping to : #{download_directory}/\n\n"
-	content << unzip_output
-	content << "\n"
+	# content << "#{unzip_output}\n"		# for now, just suppress the unzip output.  I may revive this.
 	content << "It contains these files:\n"
 	
 	Dir.glob( "#{download_directory}/*" ) do |file_path|
@@ -181,6 +180,7 @@ post "#{base_url_path}/upload/:filename" do
 		
 		file_pointer = File.open( file_path, "r")
 		file_contents = file_pointer.read
+		file_pointer.close
 		
 		content <<	"#{File.basename( file_path )}:\n" \
 					"#{file_contents}\n\n"
