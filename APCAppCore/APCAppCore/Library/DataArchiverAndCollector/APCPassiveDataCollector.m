@@ -188,7 +188,6 @@ static NSString *const kCSVFilename  = @"data.csv";
         NSString * csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
         [APCPassiveDataCollector createOrAppendString:rowString toFile:csvFilePath];
     }];
-    APCLogDebug(@"Results: %@", dataArray);
     [self checkIfDataNeedsToBeFlushed:tracker];
 }
 

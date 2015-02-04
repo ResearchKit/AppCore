@@ -21,7 +21,6 @@ static NSString *const kAnchorDateFilename = @"anchorDate";
 @property (nonatomic, strong) NSDate * anchorDate;
 
 @property (nonatomic, readonly) HKHealthStore * healthStore;
-@property (strong, nonatomic) HKObserverQuery *observerQuery;
 
 @property (nonatomic, readonly) NSString* anchorDateFilePath;
 @property (nonatomic) BOOL queryStarted;
@@ -99,17 +98,12 @@ static NSString *const kAnchorDateFilename = @"anchorDate";
         }
         HKUnit * unit = self.unitForTracker;
         
-        NSArray * result = @[obj.startDate.description?:@"No start date", obj.endDate.description?:@"No end date", self.quantityType.identifier?:@"No identifier", @([[obj sumQuantity] doubleValueForUnit:unit])?:@0,unit.unitString?:@"unit"];
+        NSArray * result = @[obj.startDate.description?:@"No start date", obj.endDate.description?:@"No end date", self.quantityType.identifier?:@"No identifier", @([[obj sumQuantity] doubleValueForUnit:unit])?:@0,unit.unitString?:@"no unit"];
         [results addObject:result];
         
     }];
     [self.delegate APCDataTracker:self hasNewData:results];
     self.anchorDate = [NSDate todayAtMidnight];
-}
-
-- (void)stopTracking
-{
-    [self.healthStore stopQuery:self.observerQuery];
 }
 
 /*********************************************************************************/
@@ -138,7 +132,7 @@ static NSString *const kAnchorDateFilename = @"anchorDate";
             }
             else
             {
-                _anchorDate = [[NSDate date] dateByAddingDays:-2];
+                _anchorDate = [NSDate todayAtMidnight];
                 [self writeAnchorDate:_anchorDate];
             }
         }
