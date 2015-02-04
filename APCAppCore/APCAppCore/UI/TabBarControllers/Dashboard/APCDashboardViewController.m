@@ -299,15 +299,9 @@
     
     //Set Rect of cell
     CGRect rect = [cell convertRect:cell.bounds toView:self.view.window];
-    
     moreInfoViewController.cellRect = rect;
     
     //Blur
-//    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-//    UIVisualEffectView *blurredView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-//    [blurredView setFrame:self.tabBarController.view.frame];
-//    [moreInfoViewController.view addSubview:blurredView];
-
     UIImage *blurredImage = [self.tabBarController.view blurredSnapshotDark];
     moreInfoViewController.blurredImage = blurredImage;
     
