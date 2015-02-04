@@ -1,15 +1,24 @@
 #!/bin/sh
-
-#  get_debug_ip_address.sh
-#  AppCore
 #
-#  Copyright (c) 2015 Apple, Inc. All rights reserved.
-
-
-# Extract the IP address of the build machine.
-# Used during debugging.
+# get_debug_ip_address.sh
+# AppCore
 #
-# Here's how to read the line of code below.  Mentally split
+# Copyright (c) 2015 Apple, Inc. All rights reserved.
+#
+# Extracts the IP address of the build machine and saves
+# it to a pseudo-environment variable which is loaded at
+# run time.  Used during debugging, when logging unencrypted
+# Sage data to a local server to make sure the upload is
+# working correctly.
+#
+# This file is used by the main apps, but is stored in AppCore.
+# Each main app has a build script which runs this file.
+#
+
+#
+# A little shell script to extract the build machine's IP address
+#
+# Here's what each component of the line below does.  Mentally split
 # it into pieces at each "|" ("pipe") character:
 #
 #	ifconfig:
