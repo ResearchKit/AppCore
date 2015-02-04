@@ -123,6 +123,27 @@
 "AUDIO_INTENDED_USE" = "This test evaluates your speech by recording you as you speak into the microphone at the bottom of your phone.";
 "AUDIO_TOO_LOUD_LABEL" = "Too Loud";
 
+/* Spatial span memory active task. */
+"SPATIAL_SPAN_MEMORY_TITLE" = "Spatial Memory Test";
+"SPATIAL_SPAN_MEMORY_INTRO_TEXT" = "This test measures your spatial memory by showing you patterns and asking you to recall and repeat them.";
+"SPATIAL_SPAN_MEMORY_TARGET_PLURAL" = "flowers";
+"SPATIAL_SPAN_MEMORY_INTRO_2_TEXT_%@" = "%@ like those below will light up in a sequence. You'll be asked to remember the sequence and repeat it by tapping.";
+"SPATIAL_SPAN_MEMORY_INTRO_2_TEXT_REVERSE_%@" = "%@ like those below will light up in a sequence. You'll be asked to remember the sequence and repeat it in REVERSE order by tapping.";
+"SPATIAL_SPAN_MEMORY_CALL_TO_ACTION" = "To begin, tap Get Started, then watch closely.";
+"MEMORY_GAME_ITEM_COUNT_TITLE_%@" = "%@";
+"MEMORY_GAME_SCORE_TITLE" = "Score";
+"MEMORY_GAME_PLAYBACK_TITLE_%@" = "Watch the %@ light up";
+"MEMORY_GAME_GAMEPLAY_TITLE_%@" = "Tap the %@ in the order they lit up";
+"MEMORY_GAME_GAMEPLAY_REVERSE_TITLE_%@" = "Tap the %@ in reverse order";
+"MEMORY_GAME_COMPLETE_TITLE" = "Round Complete";
+"MEMORY_GAME_COMPLETE_MESSAGE" = "To continue to the next round, tap Next";
+"MEMORY_GAME_FAILED_TITLE" = "Try Again";
+"MEMORY_GAME_FAILED_MESSAGE" = "You didn't quite make it through that time. Tap 'Try Again' to repeat.";
+"MEMORY_GAME_TIMEOUT_TITLE" = "Time's Up";
+"MEMORY_GAME_TIMEOUT_MESSAGE" = "You ran out of time on this round.\nTap 'Try Again' to repeat.";
+"MEMORY_GAME_COMPLETE" = "Game Complete";
+"BUTTON_TRY_AGAIN" = "Try Again";
+
 
 /* Potentially user visible error messages. */
 "ERROR_DATALOGGER_CREATE_FILE" = "Could not create file";
