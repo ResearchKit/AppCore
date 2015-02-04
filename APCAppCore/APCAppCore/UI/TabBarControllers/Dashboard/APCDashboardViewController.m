@@ -281,16 +281,18 @@
 
 - (void)dashboardTableViewCellDidTapExpand:(APCDashboardTableViewCell *)cell
 {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    
-    APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)[self itemForIndexPath:indexPath];
-    
-    CGRect initialFrame = [cell convertRect:cell.bounds toView:self.view.window];
-    self.presentAnimator.initialFrame = initialFrame;
-    
-    APCLineGraphViewController *graphViewController = [[UIStoryboard storyboardWithName:@"APHDashboard" bundle:nil] instantiateViewControllerWithIdentifier:@"GraphVC"];
-    graphViewController.graphItem = graphItem;
-    [self.navigationController presentViewController:graphViewController animated:YES completion:nil];
+    if ([cell isKindOfClass:[APCDashboardLineGraphTableViewCell class]]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        
+        APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)[self itemForIndexPath:indexPath];
+        
+        CGRect initialFrame = [cell convertRect:cell.bounds toView:self.view.window];
+        self.presentAnimator.initialFrame = initialFrame;
+        
+        APCLineGraphViewController *graphViewController = [[UIStoryboard storyboardWithName:@"APHDashboard" bundle:nil] instantiateViewControllerWithIdentifier:@"GraphVC"];
+        graphViewController.graphItem = graphItem;
+        [self.navigationController presentViewController:graphViewController animated:YES completion:nil];
+    }
 }
 
 - (void)dashboardTableViewCellDidTapMoreInfo:(APCDashboardTableViewCell *)cell
