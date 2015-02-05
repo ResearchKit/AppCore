@@ -9,6 +9,7 @@
 #import "APCAppCore.h"
 #import "zipzap.h"
 #import <objc/runtime.h>
+#import "APCDeviceHardware.h"
 
 NSString *const kQuestionTypeKey        = @"questionType";
 NSString *const kUserInfoKey            = @"userInfo";
@@ -18,11 +19,24 @@ NSString *const kEndDateKey             = @"endDate";
 NSString *const kTaskRunKey             = @"taskRun";
 NSString *const kItemKey                = @"item";
 
+NSString *const kAppNameKey				= @"appName";
+NSString *const kAppVersionKey			= @"appVersion";
+NSString *const kPhoneInfoKey			= @"phoneInfo";
+NSString *const kUploadTimeKey			= @"uploadTime";
+
 NSString *const kFilesKey               = @"files";
 
 NSString *const kFileInfoNameKey        = @"filename";
 NSString *const kFileInfoTimeStampKey   = @"timestamp";
 NSString *const kFileInfoContentTypeKey = @"contentType";
+
+// Apple recommends caching NSDateFormatters when possible, 'cuz they're expensive to allocate.
+// Date formats from: http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns
+static NSString *const INFO_FILE_DATE_TIME_FORMAT = @"yyyy-MM-dd HH:mm:ss zzz '('EEEE, MMMM d'th', h:MM a, zzzz')'";
+static NSDateFormatter *localDateTimeFormatter = nil;
+static NSString *appName = nil;
+static NSString *appVersion = nil;
+static NSString *phoneInfo = nil;
 
 @interface APCDataArchiver ()
 
@@ -37,6 +51,21 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
 @end
 
 @implementation APCDataArchiver
+
++ (void) initialize
+{
+	localDateTimeFormatter = [NSDateFormatter new];
+	localDateTimeFormatter.dateFormat = INFO_FILE_DATE_TIME_FORMAT;
+
+	appName		= NSBundle.mainBundle.infoDictionary [@"CFBundleDisplayName"];
+
+	appVersion	= [NSString stringWithFormat: @"version %@, build %@",
+				   NSBundle.mainBundle.infoDictionary [@"CFBundleShortVersionString"],
+				   NSBundle.mainBundle.infoDictionary [@"CFBundleVersion"]
+				   ];
+
+	phoneInfo	= APCDeviceHardware.platformString;
+}
 
 - (instancetype)init {
     self = [super init];
@@ -92,15 +121,29 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
     return [self initWithResults:taskResult.results itemIdentifier:taskResult.identifier runUUID:taskResult.taskRunUUID];
 }
 
-- (instancetype)initWithResults: (NSArray*) results itemIdentifier: (NSString*) itemIdentifier runUUID: (NSUUID*) runUUID {
-    self = [self init];
-    if (self) {
-        //Set up info Dictionary
-        _infoDict[kTaskRunKey] = runUUID.UUIDString;
-        _infoDict[kItemKey] = itemIdentifier;
-        [self processResults:results];
-    }
-    return self;
+- (instancetype) initWithResults: (NSArray*) results
+				  itemIdentifier: (NSString*) itemIdentifier
+						 runUUID: (NSUUID*) runUUID
+{
+	self = [self init];
+
+	if (self)
+	{
+		// Set up info Dictionary
+		_infoDict [kTaskRunKey] = runUUID.UUIDString;
+		_infoDict [kItemKey] = itemIdentifier;
+
+		_infoDict [kAppNameKey] = appName;
+		_infoDict [kAppVersionKey] = appVersion;
+		_infoDict [kPhoneInfoKey] = phoneInfo;
+
+		// Keeping this around, 'cuz it took a little effort,
+		// but we don't currently need it.
+		//		_infoDict [kUploadTimeKey] = [localDateTimeFormatter stringFromDate: [NSDate date]];
+
+		[self processResults: results];
+	}
+return self;
 }
 
 - (void) processResults: (NSArray*) results
