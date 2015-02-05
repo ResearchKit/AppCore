@@ -33,4 +33,6 @@
 
 - (UIImage *)blurredSnapshot;
 
+- (UIImage *)blurredSnapshotDark;
+
 @end

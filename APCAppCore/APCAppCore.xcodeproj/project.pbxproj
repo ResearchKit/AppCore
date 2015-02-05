@@ -75,6 +75,12 @@
 		5B234E151A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B234E131A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m */; };
 		5B7EA0231A44C21200924DEE /* APCFormTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B7EA0211A44C21200924DEE /* APCFormTextField.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B7EA0241A44C21200924DEE /* APCFormTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7EA0221A44C21200924DEE /* APCFormTextField.m */; };
+		5B827B4C1A80A39900C685A3 /* APCDashboardMoreInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B827B4A1A80A39900C685A3 /* APCDashboardMoreInfoViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B827B4D1A80A39900C685A3 /* APCDashboardMoreInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B827B4B1A80A39900C685A3 /* APCDashboardMoreInfoViewController.m */; };
+		5B827B551A80CB0400C685A3 /* APCFadeAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B827B531A80CB0400C685A3 /* APCFadeAnimator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B827B561A80CB0400C685A3 /* APCFadeAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B827B541A80CB0400C685A3 /* APCFadeAnimator.m */; };
+		5B827B601A81CAE200C685A3 /* APCDashboardTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B827B5E1A81CAE200C685A3 /* APCDashboardTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B827B611A81CAE200C685A3 /* APCDashboardTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B827B5F1A81CAE200C685A3 /* APCDashboardTableViewCell.m */; };
 		6C7346081A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C7346061A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C7346091A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */; };
 		7B0DC4141A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B0DC4121A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h */; };
@@ -418,8 +424,6 @@
 		F5F12AE31A2F78490015982C /* APCTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129A61A2F78490015982C /* APCTextFieldTableViewCell.m */; };
 		F5F12AE41A2F78490015982C /* APCTintedTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129A71A2F78490015982C /* APCTintedTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12AE51A2F78490015982C /* APCTintedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129A81A2F78490015982C /* APCTintedTableViewCell.m */; };
-		F5F12AE61A2F78490015982C /* APCDashboardBadgesTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129AA1A2F78490015982C /* APCDashboardBadgesTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F5F12AE71A2F78490015982C /* APCDashboardBadgesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129AB1A2F78490015982C /* APCDashboardBadgesTableViewCell.m */; };
 		F5F12AE81A2F78490015982C /* APCDashboardEditTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129AC1A2F78490015982C /* APCDashboardEditTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12AE91A2F78490015982C /* APCDashboardEditTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129AD1A2F78490015982C /* APCDashboardEditTableViewCell.m */; };
 		F5F12AEA1A2F78490015982C /* APCDashboardLineGraphTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129AE1A2F78490015982C /* APCDashboardLineGraphTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -544,6 +548,12 @@
 		5B234E131A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCWithdrawDescriptionViewController.m; sourceTree = "<group>"; };
 		5B7EA0211A44C21200924DEE /* APCFormTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFormTextField.h; sourceTree = "<group>"; };
 		5B7EA0221A44C21200924DEE /* APCFormTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFormTextField.m; sourceTree = "<group>"; };
+		5B827B4A1A80A39900C685A3 /* APCDashboardMoreInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardMoreInfoViewController.h; sourceTree = "<group>"; };
+		5B827B4B1A80A39900C685A3 /* APCDashboardMoreInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDashboardMoreInfoViewController.m; sourceTree = "<group>"; };
+		5B827B531A80CB0400C685A3 /* APCFadeAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFadeAnimator.h; sourceTree = "<group>"; };
+		5B827B541A80CB0400C685A3 /* APCFadeAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFadeAnimator.m; sourceTree = "<group>"; };
+		5B827B5E1A81CAE200C685A3 /* APCDashboardTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardTableViewCell.h; sourceTree = "<group>"; };
+		5B827B5F1A81CAE200C685A3 /* APCDashboardTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDashboardTableViewCell.m; sourceTree = "<group>"; };
 		6C7346061A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConsentTaskViewController.h; sourceTree = "<group>"; };
 		6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCConsentTaskViewController.m; sourceTree = "<group>"; };
 		7B0DC4121A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCActivitiesViewWithNoTask.h; sourceTree = "<group>"; };
@@ -889,8 +899,6 @@
 		F5F129A61A2F78490015982C /* APCTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTextFieldTableViewCell.m; sourceTree = "<group>"; };
 		F5F129A71A2F78490015982C /* APCTintedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTintedTableViewCell.h; sourceTree = "<group>"; };
 		F5F129A81A2F78490015982C /* APCTintedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTintedTableViewCell.m; sourceTree = "<group>"; };
-		F5F129AA1A2F78490015982C /* APCDashboardBadgesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardBadgesTableViewCell.h; sourceTree = "<group>"; };
-		F5F129AB1A2F78490015982C /* APCDashboardBadgesTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDashboardBadgesTableViewCell.m; sourceTree = "<group>"; };
 		F5F129AC1A2F78490015982C /* APCDashboardEditTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardEditTableViewCell.h; sourceTree = "<group>"; };
 		F5F129AD1A2F78490015982C /* APCDashboardEditTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDashboardEditTableViewCell.m; sourceTree = "<group>"; };
 		F5F129AE1A2F78490015982C /* APCDashboardLineGraphTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardLineGraphTableViewCell.h; sourceTree = "<group>"; };
@@ -1150,6 +1158,15 @@
 				36E06F1B1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m */,
 			);
 			name = APCScheduleExpressionTests;
+			sourceTree = "<group>";
+		};
+		5B827B521A80CB0400C685A3 /* TransitionAnimators */ = {
+			isa = PBXGroup;
+			children = (
+				5B827B531A80CB0400C685A3 /* APCFadeAnimator.h */,
+				5B827B541A80CB0400C685A3 /* APCFadeAnimator.m */,
+			);
+			path = TransitionAnimators;
 			sourceTree = "<group>";
 		};
 		F5179B1F19D09128001DCCB7 = {
@@ -1612,6 +1629,7 @@
 		F5F129231A2F78490015982C /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				5B827B521A80CB0400C685A3 /* TransitionAnimators */,
 				F5F129241A2F78490015982C /* Components */,
 				F5F1293C1A2F78490015982C /* Model */,
 				F5F129431A2F78490015982C /* Onboarding */,
@@ -1802,6 +1820,8 @@
 				F5F1297F1A2F78490015982C /* APCDashboardViewController.m */,
 				F5F129801A2F78490015982C /* APCLineGraphViewController.h */,
 				F5F129811A2F78490015982C /* APCLineGraphViewController.m */,
+				5B827B4A1A80A39900C685A3 /* APCDashboardMoreInfoViewController.h */,
+				5B827B4B1A80A39900C685A3 /* APCDashboardMoreInfoViewController.m */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -1869,8 +1889,6 @@
 		F5F129A91A2F78490015982C /* DashboardCells */ = {
 			isa = PBXGroup;
 			children = (
-				F5F129AA1A2F78490015982C /* APCDashboardBadgesTableViewCell.h */,
-				F5F129AB1A2F78490015982C /* APCDashboardBadgesTableViewCell.m */,
 				F5F129AC1A2F78490015982C /* APCDashboardEditTableViewCell.h */,
 				F5F129AD1A2F78490015982C /* APCDashboardEditTableViewCell.m */,
 				F5F129AE1A2F78490015982C /* APCDashboardLineGraphTableViewCell.h */,
@@ -1881,6 +1899,8 @@
 				F5F129B31A2F78490015982C /* APCDashboardPieGraphTableViewCell.m */,
 				F5F129B41A2F78490015982C /* APCDashboardProgressTableViewCell.h */,
 				F5F129B51A2F78490015982C /* APCDashboardProgressTableViewCell.m */,
+				5B827B5E1A81CAE200C685A3 /* APCDashboardTableViewCell.h */,
+				5B827B5F1A81CAE200C685A3 /* APCDashboardTableViewCell.m */,
 			);
 			path = DashboardCells;
 			sourceTree = "<group>";
@@ -2031,6 +2051,7 @@
 				F5F12AD41A2F78490015982C /* APCCheckTableViewCell.h in Headers */,
 				F5F12ABA1A2F78490015982C /* APCActivitiesViewController.h in Headers */,
 				F5B947B71A73272C0034C522 /* APCStepProgressBar+Appearance.h in Headers */,
+				5B827B601A81CAE200C685A3 /* APCDashboardTableViewCell.h in Headers */,
 				F5F12ADA1A2F78490015982C /* APCPickerTableViewCell.h in Headers */,
 				F5F12B041A2F78490015982C /* APCPasscodeViewController.h in Headers */,
 				F5F12A791A2F78490015982C /* APCAxisView.h in Headers */,
@@ -2087,7 +2108,6 @@
 				F5F12A731A2F78490015982C /* APCConfirmationView.h in Headers */,
 				F5B947FC1A73272C0034C522 /* APCPermissionsManager.h in Headers */,
 				F5F12ACA1A2F78490015982C /* APCProfileViewController.h in Headers */,
-				F5F12AE61A2F78490015982C /* APCDashboardBadgesTableViewCell.h in Headers */,
 				F5B947E71A73272C0034C522 /* APCSegmentedButton.h in Headers */,
 				F5B947C71A73272C0034C522 /* NSObject+Helper.h in Headers */,
 				F5F12A891A2F78490015982C /* APCTableViewItem.h in Headers */,
@@ -2157,6 +2177,7 @@
 				F5F12A061A2F78490015982C /* APCTask+AddOn.h in Headers */,
 				F5F129F81A2F78490015982C /* APCResult.h in Headers */,
 				F5F129EC1A2F78490015982C /* APCDataSubstrate.h in Headers */,
+				5B827B551A80CB0400C685A3 /* APCFadeAnimator.h in Headers */,
 				F5B946341A7309A20034C522 /* ZZError.h in Headers */,
 				F5F129F01A2F78490015982C /* APCDBStatus.h in Headers */,
 				F5F129F41A2F78490015982C /* APCResult+AddOn.h in Headers */,
@@ -2189,6 +2210,7 @@
 				F5B948041A73272C0034C522 /* APCPointSelector.h in Headers */,
 				F5B946221A7309A20034C522 /* ZZAESDecryptInputStream.h in Headers */,
 				F5B947E31A73272C0034C522 /* APCGroupedScheduledTask.h in Headers */,
+				5B827B4C1A80A39900C685A3 /* APCDashboardMoreInfoViewController.h in Headers */,
 				F5B948061A73272C0034C522 /* APCScheduleEnumerator.h in Headers */,
 				F5B9463B1A7309A20034C522 /* ZZInflateInputStream.h in Headers */,
 				F5F12AA81A2F78490015982C /* APCInclusionCriteriaViewController.h in Headers */,
@@ -2361,8 +2383,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5F129F51A2F78490015982C /* APCResult+AddOn.m in Sources */,
+				5B827B561A80CB0400C685A3 /* APCFadeAnimator.m in Sources */,
 				F5F12AF11A2F78490015982C /* APCDashboardProgressTableViewCell.m in Sources */,
-				F5F12AE71A2F78490015982C /* APCDashboardBadgesTableViewCell.m in Sources */,
 				F5B9480F1A73272C0034C522 /* APCTimeSelector.m in Sources */,
 				F5F12A0B1A2F78490015982C /* APCTask.m in Sources */,
 				F5B9463E1A7309A20034C522 /* ZZNewArchiveEntry.mm in Sources */,
@@ -2435,6 +2457,7 @@
 				F5B946461A7309A20034C522 /* ZZStandardCryptoEngine.cpp in Sources */,
 				F54DDD2C1A8026010073E4B4 /* APCHKCumulativeQuantityTracker.m in Sources */,
 				F5B947D41A73272C0034C522 /* UIScrollView+Helper.m in Sources */,
+				5B827B4D1A80A39900C685A3 /* APCDashboardMoreInfoViewController.m in Sources */,
 				F5F12AB51A2F78490015982C /* APCSignUpPermissionsViewController.m in Sources */,
 				F5B947F91A73272C0034C522 /* APCParametersUserDefaultCell.m in Sources */,
 				F5F12AEF1A2F78490015982C /* APCDashboardPieGraphTableViewCell.m in Sources */,
@@ -2459,6 +2482,7 @@
 				F5B947DC1A73272C0034C522 /* APCLog.m in Sources */,
 				F5F12AD31A2F78490015982C /* APCAddressTableViewCell.m in Sources */,
 				F5F12A701A2F78490015982C /* APCCircularProgressView.m in Sources */,
+				5B827B611A81CAE200C685A3 /* APCDashboardTableViewCell.m in Sources */,
 				F5B947EE1A73272C0034C522 /* APCParameters+Settings.m in Sources */,
 				F5F12AB81A2F78490015982C /* APCTermsAndConditionsViewController.m in Sources */,
 				F5B9462C1A7309A20034C522 /* ZZConstants.m in Sources */,

@@ -7,10 +7,10 @@
  
 #import <UIKit/UIKit.h>
 #import "APCTableViewItem.h"
+#import "APCDashboardTableViewCell.h"
 #import "APCDashboardLineGraphTableViewCell.h"
 #import "APCDashboardMessageTableViewCell.h"
 #import "APCDashboardProgressTableViewCell.h"
-#import "APCDashboardBadgesTableViewCell.h"
 #import "APCGraph.h"
 
 typedef NS_ENUM(APCTableViewItemType, APCTableViewDashboardItemType) {
@@ -19,7 +19,7 @@ typedef NS_ENUM(APCTableViewItemType, APCTableViewDashboardItemType) {
     kAPCTableViewDashboardItemTypeMessage,
 };
 
-@interface APCDashboardViewController : UITableViewController <APCLineGraphViewDelegate, APCDashboardGraphTableViewCellDelegate>
+@interface APCDashboardViewController : UITableViewController <APCLineGraphViewDelegate, APCDashboardTableViewCellDelegate, UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, strong) NSMutableArray *items;
 

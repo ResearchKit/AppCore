@@ -6,15 +6,14 @@
 // 
  
 #import <UIKit/UIKit.h>
+#import "APCDashboardTableViewCell.h"
+
 @class APCPieGraphView;
 
 static NSString * const kAPCDashboardPieGraphTableViewCellIdentifier = @"APCDashboardPieGraphTableViewCell";
 
-@interface APCDashboardPieGraphTableViewCell : UITableViewCell
+@interface APCDashboardPieGraphTableViewCell : APCDashboardTableViewCell
 
-@property (weak, nonatomic) IBOutlet UIView *tintView;
 @property (weak, nonatomic) IBOutlet APCPieGraphView *pieGraphView;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (nonatomic, strong) UIColor *tintColor;
 
 @end
