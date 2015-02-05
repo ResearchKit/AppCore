@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <ResearchKit/ResearchKit.h>
 #import <CoreData/CoreData.h>
-#import "APCPassiveLocationTracking.h"
+#import "APCCoreLocationTracker.h"
 #import <HealthKit/HealthKit.h>
 #import "APCParameters.h"
 
@@ -27,8 +27,6 @@
 @property (assign) BOOL justJoined;
 @property (strong, nonatomic) NSString *logDirectory;
 @property (nonatomic, strong) APCUser * currentUser;
-
-@property (strong, nonatomic) APCPassiveLocationTracking *passiveLocationTracking;
 
 /*********************************************************************************/
 #pragma mark - Core Data Subsystem Public Properties

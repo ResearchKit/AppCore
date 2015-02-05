@@ -27,23 +27,30 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCModel.h>
 #import <APCAppCore/APCScheduler.h>
 #import <APCAppCore/APCScheduleExpression.h>
-#import <APCAppCore/APCPassiveLocationTracking.h>
 #import <APCAppCore/APCParameters.h>
 #import <APCAppCore/APCPermissionsManager.h>
 #import <APCAppCore/APCAssertionHandler.h>
 #import <APCAppCore/APCSignUpProgressing.h>
-#import <APCAppCore/APCHealthKitQuantityTracker.h>
 #import <APCAppCore/APCOnboarding.h>
 #import <APCAppCore/APCDataResult.h>
 #import <APCAppCore/APCTasksReminderManager.h>
+
+/* -------------------------------------
+ Data Archiver & Passive Data Collectors
+ --------------------------------------- */
 #import <APCAppCore/APCDataArchiver.h>
+#import <APCAppCore/APCPassiveDataCollector.h>
+#import <APCAppCore/APCDataTracker.h>
+#import <APCAppCore/APCHKDiscreteQuantityTracker.h>
+#import <APCAppCore/APCHKCumulativeQuantityTracker.h>
+#import <APCAppCore/APCCoreLocationTracker.h>
+#import <APCAppCore/APCCoreMotionTracker.h>
 
 /* -------------------------
  Logging
  ------------------------- */
 #import <APCAppCore/APCLog.h>
 #import <APCAppCore/APCDataVerificationClient.h>
-
 
 /* UI */
 /* -------------------------
@@ -112,17 +119,18 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 /* -------------------------
  Views
  ------------------------- */
-#import <APCAppCore/APCGraph.h>
-#import <APCAppCore/APCPieGraphView.h>
-#import <APCAppCore/APCStepProgressBar.h>
-#import <APCAppCore/APCSegmentedButton.h>
-#import <APCAppCore/APCImageButton.h>
 #import <APCAppCore/APCCircularProgressView.h>
 #import <APCAppCore/APCConcentricProgressView.h>
 #import <APCAppCore/APCConfirmationView.h>
-#import <APCAppCore/APCPasscodeView.h>
-#import <APCAppCore/APCResizeView.h>
+#import <APCAppCore/APCCustomBackButton.h>
 #import <APCAppCore/APCFormTextField.h>
+#import <APCAppCore/APCGraph.h>
+#import <APCAppCore/APCImageButton.h>
+#import <APCAppCore/APCPasscodeView.h>
+#import <APCAppCore/APCPieGraphView.h>
+#import <APCAppCore/APCResizeView.h>
+#import <APCAppCore/APCSegmentedButton.h>
+#import <APCAppCore/APCStepProgressBar.h>
 
 /* -------------------------
  Cells
@@ -142,7 +150,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDashboardPieGraphTableViewCell.h>
 #import <APCAppCore/APCShareTableViewCell.h>
 #import <APCAppCore/APCAddressTableViewCell.h>
-
 
 /* -------------------------
  Objects
