@@ -44,8 +44,9 @@ set :bind, '0.0.0.0'
 #
 # Our variables.
 #
-base_url_path			= '/api/v1'
-destination_directory	= File.expand_path("~/Desktop/dataVerificationFiles")
+base_url_path					= '/api/v1'
+destination_directory			= File.expand_path("~/Desktop/dataVerificationFiles")
+text_file_extensions_i_can_read	= [".json", ".txt", ".csv"]
 
 
 #
@@ -164,7 +165,7 @@ post "#{base_url_path}/upload/:filename" do
 			
 			content_file_list << "#{file_counter}.  #{this_base_name}\n"
 			
-			if File.extname( file_path ) == ".json" then
+			if text_file_extensions_i_can_read.include?( File.extname( file_path )) then
 				file_pointer = File.open( file_path, "r")
 				file_contents = file_pointer.read
 				file_pointer.close
