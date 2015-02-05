@@ -55,6 +55,8 @@ NSString *const kRegularFontNameKey = @"RegularFontNameKey";
 NSString *const kMediumFontNameKey  = @"MediumFontNameKey";
 NSString *const kLightFontNameKey   = @"LightFontNameKey";
 
+NSString *const kHairlineEnDashJoinerKey = @"\u200a\u2013\u200a";
+
 NSString *const kPrimaryAppColorKey = @"PrimaryAppColorKey";
 
 NSString *const kSecondaryColor1Key = @"SecondaryColor1Key";

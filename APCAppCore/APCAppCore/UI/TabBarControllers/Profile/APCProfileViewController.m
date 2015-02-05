@@ -561,7 +561,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
         
         NSString *fromDate = jsonDictionary[@"from_date"];
         if (fromDate.length > 0) {
-            self.dateRangeLabel.text = [fromDate stringByAppendingFormat:@" - %@", jsonDictionary[@"to_date"]];
+            self.dateRangeLabel.text = [fromDate stringByAppendingFormat:@"%@%@", kHairlineEnDashJoinerKey, jsonDictionary[@"to_date"]];
         } else {
             self.dateRangeLabel.hidden = YES;
             self.studyDetailsViewHeightConstraint.constant = kStudyDetailsViewHeightConstant;
