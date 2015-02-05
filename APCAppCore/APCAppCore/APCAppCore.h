@@ -137,7 +137,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCCheckTableViewCell.h>
 #import <APCAppCore/APCDashboardTableViewCell.h>
 #import <APCAppCore/APCDashboardLineGraphTableViewCell.h>
-#import <APCAppCore/APCDashboardBadgesTableViewCell.h>
 #import <APCAppCore/APCDashboardMessageTableViewCell.h>
 #import <APCAppCore/APCDashboardProgressTableViewCell.h>
 #import <APCAppCore/APCDashboardPieGraphTableViewCell.h>
