@@ -1,5 +1,5 @@
 //
-//  APCUploadValidationServer.m
+//  APCDataVerificationClient.m
 //  AppCore
 //
 //  Copyright (c) 2015 Apple Inc. All rights reserved.
@@ -59,6 +59,8 @@ static NSString * selectedDataVerificationServerName = nil;
 static NSString * const LOCALHOST_IP_ADDRESS = @"127.0.0.1";
 static NSInteger  const DATA_VERIFICATION_SERVER_PORT_NUMBER = 4567;
 static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
+static NSString * const DATA_VERIFICATION_SERVER_API_PREFIX = @"api/v1";
+static NSString * const DATA_VERIFICATION_SERVER_API_UPLOAD_COMMAND = @"upload";
 
 
 @implementation APCDataVerificationClient
@@ -127,9 +129,11 @@ static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 
 + (void) uploadData: (NSData *) dataToLog withFilenameForMimeType: (NSString *) filename
 {
-	NSURL * url = [NSURL URLWithString: [NSString stringWithFormat: @"http://%@:%d/api/v1/upload/%@",
+	NSURL * url = [NSURL URLWithString: [NSString stringWithFormat: @"http://%@:%d/%@/%@/%@",
 										 selectedDataVerificationServerIpAddress,
 										 (int) DATA_VERIFICATION_SERVER_PORT_NUMBER,
+										 DATA_VERIFICATION_SERVER_API_PREFIX,
+										 DATA_VERIFICATION_SERVER_API_UPLOAD_COMMAND,
 										 filename]];
 
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: url];
@@ -143,7 +147,7 @@ static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 												   data: dataToLog
 											   filename: filename];
 
-	NSLog (@"+[APCDataVerificationClient uploadData:] Attempting to log data to DataValidationServer at IP address [%@], the [%@]...", selectedDataVerificationServerIpAddress, selectedDataVerificationServerName);
+	NSLog (@"+[APCDataVerificationClient uploadData:] Attempting to log data to DataVerificationServer at IP address [%@], the [%@]...", selectedDataVerificationServerIpAddress, selectedDataVerificationServerName);
 
 	NSURLSessionUploadTask *task = [session uploadTaskWithRequest: request
 														 fromData: data
@@ -151,10 +155,9 @@ static NSString * const MESSAGE_IF_DATA_IS_EMPTY = @"No data provided.";
 		if (error)
 		{
 			NSLog (@"+[APCDataVerificationClient uploadData:] \n"
-				   "ERROR when copying Sage data file to the DataValidationServer at address [%@].  This is the [%@].  Please check:\n"
+				   "ERROR when copying Sage data file to the DataVerificationServer at address [%@].  This is the [%@].  Please check:\n"
 				   "- Is the local server running?\n"
 				   "- Is that a valid address?\n"
-				   "- Is the correct IP address selected in APCDataVerificationClient_PersonalComputerIPAddresses.h ?\n"
 				   "- Is your phone on the office network (not 4G)?\n"
 				   "The error was:\n-----\n%@\n-----",
 				   selectedDataVerificationServerIpAddress,
