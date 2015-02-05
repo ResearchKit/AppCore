@@ -2,7 +2,6 @@
 //  APCFadeAnimator.m
 //  APCAppCore
 //
-//  Created by Ramsundar Shandilya on 2/3/15.
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
