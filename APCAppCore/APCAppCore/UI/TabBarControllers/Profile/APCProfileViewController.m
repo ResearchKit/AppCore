@@ -559,15 +559,10 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
         
         self.diseaseLabel.text = jsonDictionary[@"disease_name"];
         
-        NSString *fromDate = jsonDictionary[@"from_date"];
-        if (fromDate.length > 0) {
-            self.dateRangeLabel.text = [fromDate stringByAppendingFormat:@"%@%@", kHairlineEnDashJoinerKey, jsonDictionary[@"to_date"]];
-        } else {
-            self.dateRangeLabel.hidden = YES;
-            self.studyDetailsViewHeightConstraint.constant = kStudyDetailsViewHeightConstant;
-            self.studyLabelCenterYConstraint.constant = 0.f;
-            [self.tableView layoutIfNeeded];
-        }
+        self.dateRangeLabel.hidden = YES;
+        self.studyDetailsViewHeightConstraint.constant = kStudyDetailsViewHeightConstant;
+        self.studyLabelCenterYConstraint.constant = 0.f;
+        [self.tableView layoutIfNeeded];
     }
 }
 
