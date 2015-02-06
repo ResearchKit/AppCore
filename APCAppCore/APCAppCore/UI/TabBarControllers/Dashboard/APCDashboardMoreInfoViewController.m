@@ -12,6 +12,9 @@
 static const CGFloat kBubbleInnerPadding = 39.0f;
 
 @interface APCDashboardMoreInfoViewController ()
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerViewVerticalConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *descriptionTopConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomConstraint;
 
 @end
 
@@ -49,6 +52,18 @@ static const CGFloat kBubbleInnerPadding = 39.0f;
     
     CGSize textSize = [self.descriptionLabel.text boundingRectWithSize:CGSizeMake(CGRectGetWidth(self.descriptionLabel.frame), CGFLOAT_MAX) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:self.descriptionLabel.font} context:nil].size;
     self.descriptionHeightConstraint.constant = textSize.height + kBubbleInnerPadding;
+    
+    if (self.shouldInvertBubble) {
+        
+        self.containerViewVerticalConstraint.active = NO;
+        
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.containerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.cellSnapshotImageView attribute:NSLayoutAttributeBottom multiplier:1 constant:2]];
+        
+        self.descriptionTopConstraint.constant = 30;
+        self.descriptionBottomConstraint.constant = 12;
+        
+        self.bubbleImageView.image = [[UIImage imageNamed:@"info_bubble_upsidedown"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 30, 10) resizingMode:UIImageResizingModeStretch];
+    }
     
     [self.view setNeedsLayout];
 }

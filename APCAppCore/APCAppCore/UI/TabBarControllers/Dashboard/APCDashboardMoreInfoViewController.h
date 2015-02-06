@@ -25,4 +25,6 @@
 @property (strong, nonatomic) NSString *info;
 @property (strong, nonatomic) UIImage *blurredImage;
 
+@property (nonatomic) BOOL shouldInvertBubble;
+
 @end
