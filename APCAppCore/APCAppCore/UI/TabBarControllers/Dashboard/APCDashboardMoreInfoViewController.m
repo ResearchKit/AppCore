@@ -11,7 +11,13 @@
 
 static const CGFloat kBubbleInnerPadding = 39.0f;
 
+static const CGFloat kDescriptionLabelTopConstant = 12.0f;
+static const CGFloat kDescriptionLabelBottomConstant = 30.0f;
+
 @interface APCDashboardMoreInfoViewController ()
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerViewVerticalConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *descriptionTopConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomConstraint;
 
 @end
 
@@ -40,6 +46,14 @@ static const CGFloat kBubbleInnerPadding = 39.0f;
     self.backgroundImageView.image = self.blurredImage;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        self.containerView.alpha = 1;
+    }];
+}
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
@@ -50,6 +64,18 @@ static const CGFloat kBubbleInnerPadding = 39.0f;
     CGSize textSize = [self.descriptionLabel.text boundingRectWithSize:CGSizeMake(CGRectGetWidth(self.descriptionLabel.frame), CGFLOAT_MAX) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:self.descriptionLabel.font} context:nil].size;
     self.descriptionHeightConstraint.constant = textSize.height + kBubbleInnerPadding;
     
+    if (self.shouldInvertBubble) {
+        
+        self.containerViewVerticalConstraint.active = NO;
+        
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.containerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.cellSnapshotImageView attribute:NSLayoutAttributeBottom multiplier:1 constant:2]];
+        
+        self.descriptionTopConstraint.constant = kDescriptionLabelBottomConstant;
+        self.descriptionBottomConstraint.constant = kDescriptionLabelTopConstant;
+        
+        self.bubbleImageView.image = [[UIImage imageNamed:@"info_bubble_upsidedown"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 30, 10) resizingMode:UIImageResizingModeStretch];
+    }
+    
     [self.view setNeedsLayout];
 }
 
@@ -59,9 +85,20 @@ static const CGFloat kBubbleInnerPadding = 39.0f;
     self.descriptionLabel.textColor = [UIColor appSecondaryColor2];
     
     self.bubbleImageView.image = [[UIImage imageNamed:@"info_bubble_upright"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 30, 10) resizingMode:UIImageResizingModeStretch];
+    
+    self.containerView.alpha = 0;
 }
 
 - (void)viewTapped:(UITapGestureRecognizer *)sender
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        self.containerView.alpha = 0;
+    }];
+    
+    [self performSelector:@selector(dismiss) withObject:nil afterDelay:0.2];
+}
+
+- (void)dismiss
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }

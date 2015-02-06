@@ -315,6 +315,10 @@
     CGRect rect = [cell convertRect:cell.bounds toView:self.view.window];
     moreInfoViewController.cellRect = rect;
     
+    if (CGRectGetMinY(rect) < CGRectGetHeight(self.view.window.bounds)*0.25) {
+        moreInfoViewController.shouldInvertBubble = YES;
+    }
+    
     //Blur
     UIImage *blurredImage = [self.tabBarController.view blurredSnapshotDark];
     moreInfoViewController.blurredImage = blurredImage;
