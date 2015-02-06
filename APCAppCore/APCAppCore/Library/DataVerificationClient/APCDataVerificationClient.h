@@ -1,15 +1,17 @@
 //
-//  APCUploadValidationServer.h
+//  APCDataVerificationClient.h
 //  AppCore
 //
 //  Copyright (c) 2015 Apple Inc. All rights reserved.
 //
 
 
-
 /*
- Only allow this file to appear in the compiled code
- if we're diagnosting stuff, in-house.
+ Only allow this file to exist in the compiled code if
+ we're diagnosting stuff, in-house.  For documentation,
+ see:
+
+ https://ymedialabs.atlassian.net/wiki/display/APPLE/How+to+see+the+data+we+send+to+Sage
  */
 // ---------------------------------------------------------
 #ifdef USE_DATA_VERIFICATION_CLIENT

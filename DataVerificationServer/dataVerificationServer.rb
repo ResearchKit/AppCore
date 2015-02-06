@@ -31,6 +31,7 @@
 require 'sinatra'
 require 'json'
 require 'fileutils'
+require "open3"
 
 
 #
@@ -43,8 +44,9 @@ set :bind, '0.0.0.0'
 #
 # Our variables.
 #
-base_url_path			= '/api/v1'
-destination_directory	= File.expand_path("~/Desktop/dataVerificationFiles")
+base_url_path					= '/api/v1'
+destination_directory			= File.expand_path("~/Desktop/dataVerificationFiles")
+text_file_extensions_i_can_read	= [".json", ".txt", ".csv"]
 
 
 #
@@ -53,6 +55,7 @@ destination_directory	= File.expand_path("~/Desktop/dataVerificationFiles")
 # For the available time-and-date specifiers, see:
 # 		http://www.ruby-doc.org/core-2.2.0/Time.html#method-i-strftime
 #
+FILE_DIVIDER_CHAR				= "-"
 SECTION_DIVIDER_CHAR			= "-"
 SECTION_DIVIDER_FORMAT			= "---------- New files arrived on %A, %Y-%m-%d at %H:%M:%S %Z ----------"
 DOWNLOAD_FOLDER_NAME_FORMAT		= "files_%Y-%m-%d_%H-%M-%S-%3N"
@@ -117,10 +120,64 @@ post "#{base_url_path}/upload/:filename" do
 	#
 	# Unzip
 	#
+	
+	#
+	# We can also do this:
+	# 		processId = spawn( "unzip -o #{downloadedZipFile}" )	# -o == overwrite without asking
+	# 		Process.wait processId								# make it synchronous
+	#
+	# ...but that doesn't give me the stdout, and lets
+	# the stdout appear immediately.
+	#
 
+	unzip_output = "";
 	Dir.chdir( download_directory )
-	processId = spawn( "unzip -o #{downloadedZipFile}" )	# -o == overwrite without asking
-	Process.wait processId									# make it synchronous
+	Open3.popen2e( "unzip -o #{downloadedZipFile}" ) { |stdin, stdout_and_stderr, thread_to_wait_for|
+		process_id = thread_to_wait_for.pid			# pid of the started process.
+		exit_status = thread_to_wait_for.value		# Process::Status object returned.
+		
+		# We can also extract the contents of a stream
+		# with read():
+		# 		unzip_output = stdout_and_stderr.read
+		
+		stdout_and_stderr.each { |line|
+			
+			# indent it.  We'll shove "unzip"'s output
+			# in the middle of ours.
+			unzip_output << "> #{line}"
+		}
+	}
+	
+	
+	#
+	# Analyze files
+	#
+	
+	file_counter = 0
+	content_file_list = ""
+	content_file_contents = ""
+	
+	Dir.glob( "#{download_directory}/*" ) do |file_path|
+		this_base_name = File.basename( file_path )
+
+		if (this_base_name != zip_file_base_name) then
+			file_counter = file_counter + 1
+			
+			content_file_list << "#{file_counter}.  #{this_base_name}\n"
+			
+			if text_file_extensions_i_can_read.include?( File.extname( file_path )) then
+				file_pointer = File.open( file_path, "r")
+				file_contents = file_pointer.read
+				file_pointer.close
+				
+				basename = File.basename( file_path )
+				file_name = "#{file_counter}. #{basename}"
+				file_divider = FILE_DIVIDER_CHAR * (file_name.length + 1)	# +1 == it overhangs by 1 char.
+				
+				content_file_contents << "#{file_divider}\n#{file_name}\n#{file_divider}\n#{file_contents}\n\n"
+			end
+		end
+	end
 	
 	
 	#
@@ -130,47 +187,19 @@ post "#{base_url_path}/upload/:filename" do
 	content = "\n\n\n#{Utils.section_divider}\n"
 	content << "Got file     : #{zip_file_base_name}\n"
 	content << "Unzipping to : #{download_directory}/\n\n"
-	
+	# content << "#{unzip_output}\n"		# for now, just suppress the unzip output.  I may revive this.
 	content << "It contains these files:\n"
-	
-	Dir.glob( "#{download_directory}/*" ) do |file_path|
-		this_base_name = File.basename( file_path )
-		
-		if (this_base_name != zip_file_base_name) then
-			content << "•  #{this_base_name}\n"
-		end
-	end
-	
-	if  directory_error_message != nil  then
-		content << "\n#{directory_error_message}\n"
-	end
-	
+	content << content_file_list
+	content << "\n#{directory_error_message}\n" if directory_error_message != nil
 	content << "\nHere are the files I can read.\n\n"
-	
-	
-	#
-	# create string containing new content
-	#
-	
-	Dir.glob( "#{download_directory}/*.json" ) do |file_path|
-		
-		file_pointer = File.open( file_path, "r")
-		file_contents = file_pointer.read
-		
-		content <<	"#{File.basename( file_path )}:\n" \
-					"#{file_contents}\n\n"
-	end
-	
+	content << content_file_contents
 
-	# echo to stdout (?)
-	# puts "\n     wrote to #{downloadedZipFile}"
 	puts content
 	
 	# Return value (different from above?)
 	# 	[200, {results: "wrote to #{downloadedZipFile}"}.to_json]		# this is how to return JSON to the client
 	200
 end
-
 
 
 #

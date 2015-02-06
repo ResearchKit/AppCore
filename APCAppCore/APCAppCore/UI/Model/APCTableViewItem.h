@@ -134,6 +134,7 @@
 @interface APCTableViewDashboardItem : APCTableViewItem
 
 @property (nonatomic, strong) UIColor *tintColor;
+@property (nonatomic, strong) NSString *info;
 
 @end
 

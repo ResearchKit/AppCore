@@ -222,7 +222,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
                     APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
                     field.selectionStyle = UITableViewCellSelectionStyleGray;
                     field.style = UITableViewCellStyleValue1;
-                    field.caption = NSLocalizedString(@"What time do you wake up?", @"");
+                    field.caption = NSLocalizedString(@"What time do you generally wake up?", @"");
                     field.placeholder = NSLocalizedString(@"7:00 AM", @"");
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
                     field.datePickerMode = UIDatePickerModeTime;
@@ -247,7 +247,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
                     APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
                     field.selectionStyle = UITableViewCellSelectionStyleGray;
                     field.style = UITableViewCellStyleValue1;
-                    field.caption = NSLocalizedString(@"What time do you go to sleep?", @"");
+                    field.caption = NSLocalizedString(@"What time do you generally go to sleep?", @"");
                     field.placeholder = NSLocalizedString(@"9:30 PM", @"");
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
                     field.datePickerMode = UIDatePickerModeTime;
@@ -559,15 +559,10 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
         
         self.diseaseLabel.text = jsonDictionary[@"disease_name"];
         
-        NSString *fromDate = jsonDictionary[@"from_date"];
-        if (fromDate.length > 0) {
-            self.dateRangeLabel.text = [fromDate stringByAppendingFormat:@" - %@", jsonDictionary[@"to_date"]];
-        } else {
-            self.dateRangeLabel.hidden = YES;
-            self.studyDetailsViewHeightConstraint.constant = kStudyDetailsViewHeightConstant;
-            self.studyLabelCenterYConstraint.constant = 0.f;
-            [self.tableView layoutIfNeeded];
-        }
+        self.dateRangeLabel.hidden = YES;
+        self.studyDetailsViewHeightConstraint.constant = kStudyDetailsViewHeightConstant;
+        self.studyLabelCenterYConstraint.constant = 0.f;
+        [self.tableView layoutIfNeeded];
     }
 }
 

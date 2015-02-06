@@ -10,8 +10,7 @@
 #import "APCAxisView.h"
 
 static CGFloat const kYAxisPaddingFactor = 0.166f;
-static CGFloat const kAPCGraphLeftPadding = 4.f;
-static CGFloat const kTitleLeftPadding = 12.f;
+static CGFloat const kAPCGraphLeftPadding = 0.f;
 static CGFloat const kAxisMarkingRulerLength = 8.0f;
 
 static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";
@@ -33,8 +32,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 
 @property (nonatomic, strong) APCAxisView *xAxisView;
 @property (nonatomic, strong) UIView *yAxisView;
-
-@property (nonatomic, strong) UIView *leftTintView;
 
 @property (nonatomic, strong) UIView *scrubberLine;
 @property (nonatomic, strong) UILabel *scrubberLabel;
@@ -111,26 +108,23 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     /* ----------------- */
     /* Basic Views */
     /* ----------------- */
-    _leftTintView = [UIView new];
-    _leftTintView.backgroundColor = _tintColor;
-    [self addSubview:_leftTintView];
     
     _plotsView = [UIView new];
     _plotsView.backgroundColor = [UIColor clearColor];
     [self addSubview:_plotsView];
     
-    /* ----------------- */
-    /* Labels */
-    /* ----------------- */
-    _titleLabel = [UILabel new];
-    _titleLabel.textColor = _tintColor;
-    _titleLabel.font = [UIFont fontWithName:@"Helvetica" size:19.0f];
-    [self addSubview:_titleLabel];
-    
-    _subTitleLabel = [UILabel new];
-    _subTitleLabel.textColor = [UIColor colorWithWhite:0.65 alpha:1.0];
-    _subTitleLabel.font = [UIFont fontWithName:@"Helvetica-Light" size:16.0f];
-    [self addSubview:_subTitleLabel];
+//    /* ----------------- */
+//    /* Labels */
+//    /* ----------------- */
+//    _titleLabel = [UILabel new];
+//    _titleLabel.textColor = _tintColor;
+//    _titleLabel.font = [UIFont fontWithName:@"Helvetica" size:19.0f];
+//    [self addSubview:_titleLabel];
+//    
+//    _subTitleLabel = [UILabel new];
+//    _subTitleLabel.textColor = [UIColor colorWithWhite:0.65 alpha:1.0];
+//    _subTitleLabel.font = [UIFont fontWithName:@"Helvetica-Light" size:16.0f];
+//    [self addSubview:_subTitleLabel];
     
     /* ----------------- */
     /* Scrubber Views */
@@ -184,38 +178,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 
 #pragma mark - Appearance
 
-- (void)updateTitleLabel
-{
-    if (self.isLandscapeMode) {
-        
-        self.titleLabel.font = [UIFont fontWithName:self.titleLabel.font.familyName size:24.0];
-        
-        CGFloat textWidth = [self.titleLabel.text boundingRectWithSize:CGSizeMake(CGRectGetWidth(self.frame)*0.40, kAPCGraphTopPadding) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:self.titleLabel.font} context:nil].size.width;
-        
-        self.titleLabel.frame = CGRectMake(CGRectGetMaxX(_leftTintView.frame) + kTitleLeftPadding, 0, textWidth, kAPCGraphTopPadding);
-        
-    } else {
-        self.titleLabel.font = [UIFont fontWithName:self.titleLabel.font.familyName size:19.0];
-        self.titleLabel.frame = CGRectMake(CGRectGetMaxX(_leftTintView.frame) + kTitleLeftPadding, 0, CGRectGetWidth(self.frame)*0.75, kAPCGraphTopPadding/2);
-    }
-}
-
-- (void)updateSubTitleLabel
-{
-    if (self.isLandscapeMode) {
-        
-        self.subTitleLabel.font = [UIFont fontWithName:self.subTitleLabel.font.familyName size:16.0];
-        
-        CGFloat textWidth = [self.subTitleLabel.text boundingRectWithSize:CGSizeMake(CGRectGetWidth(self.frame)*0.40, kAPCGraphTopPadding) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:self.subTitleLabel.font} context:nil].size.width;
-        
-        self.subTitleLabel.frame = CGRectMake(CGRectGetMaxX(self.titleLabel.frame) + kTitleLeftPadding, 0, textWidth, kAPCGraphTopPadding);
-        
-    } else {
-        self.subTitleLabel.font = [UIFont fontWithName:self.subTitleLabel.font.familyName size:16.0];
-        self.subTitleLabel.frame = CGRectMake(CGRectGetMaxX(_leftTintView.frame) + kTitleLeftPadding, kAPCGraphTopPadding/2, CGRectGetWidth(self.frame)*0.75, kAPCGraphTopPadding/2);
-    }
-}
-
 - (void)updateScrubberLabel
 {
     if (self.isLandscapeMode) {
@@ -250,13 +212,8 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     CGFloat yAxisPadding = CGRectGetWidth(self.frame)*kYAxisPaddingFactor;
     
     //Basic Views
-    _leftTintView.frame = CGRectMake(0, 0, 4, CGRectGetHeight(self.bounds) - kXAxisHeight);
     
     self.plotsView.frame = CGRectMake(kAPCGraphLeftPadding, kAPCGraphTopPadding, CGRectGetWidth(self.frame) - yAxisPadding - kAPCGraphLeftPadding, CGRectGetHeight(self.frame) - kXAxisHeight - kAPCGraphTopPadding);
-    
-    //Title Labels
-    [self updateTitleLabel];
-    [self updateSubTitleLabel];
     
     //Scrubber Views
     self.scrubberLine.frame = CGRectMake(0, kAPCGraphTopPadding, 1, CGRectGetHeight(self.plotsView.frame));
@@ -944,13 +901,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         [self.scrubberThumbView setCenter:CGPointMake(xPosition + kAPCGraphLeftPadding, [self canvasYPointForXPosition:xPosition] + kAPCGraphTopPadding)];
     }
     
-}
-
-- (void)setTintColor:(UIColor *)tintColor
-{
-    _tintColor = tintColor;
-    self.titleLabel.textColor = tintColor;
-    self.leftTintView.backgroundColor = tintColor;
 }
 
 @end

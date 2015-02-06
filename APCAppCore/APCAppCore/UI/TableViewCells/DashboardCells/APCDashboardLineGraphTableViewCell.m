@@ -6,6 +6,9 @@
 // 
  
 #import "APCDashboardLineGraphTableViewCell.h"
+#import "APCLineGraphView.h"
+#import "UIFont+APCAppearance.h"
+#import "UIColor+APCAppearance.h"
 
 @implementation APCDashboardLineGraphTableViewCell
 
@@ -13,20 +16,10 @@
 
 - (void)awakeFromNib {
     
-    [self.resizeButton setImage:[[UIImage imageNamed:@"expand_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
-- (IBAction)expandTapped:(id)sender
-{
-    if([self.delegate respondsToSelector:@selector(dashboardGraphViewCellDidTapExpandForCell:)]){
-        [self.delegate dashboardGraphViewCellDidTapExpandForCell:self];
-    }
+    [super awakeFromNib];
+    
+    self.subTitleLabel.font = [UIFont appRegularFontWithSize:16.0f];
+    self.subTitleLabel.textColor = [UIColor appSecondaryColor3];
 }
 
 -(void)layoutSubviews
@@ -39,7 +32,8 @@
 
 - (void)setTintColor:(UIColor *)tintColor
 {
-    _tintColor = tintColor;
-    [self.resizeButton.imageView setTintColor:tintColor];
+    [super setTintColor:tintColor];
+    self.graphView.tintColor = tintColor;
 }
+
 @end

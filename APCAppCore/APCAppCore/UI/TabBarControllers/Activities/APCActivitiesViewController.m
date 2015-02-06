@@ -52,6 +52,8 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     
     self.navigationItem.title = NSLocalizedString(@"Activities", @"Activities");
     self.tableView.backgroundColor = [UIColor appSecondaryColor4];
+    
+    [((APCAppDelegate *)[[UIApplication sharedApplication] delegate]) showPasscodeIfNecessary];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -168,6 +170,11 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     headerLabel.text = self.sectionsArray[section];
 
     return headerView;
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return indexPath.section == 0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

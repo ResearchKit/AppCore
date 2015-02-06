@@ -91,4 +91,27 @@
     return blurredSnapshotImage;
 }
 
+- (UIImage *)blurredSnapshotDark
+{
+    // Create the image context
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, self.window.screen.scale);
+    
+    [self drawViewHierarchyInRect:self.frame afterScreenUpdates:NO];
+    
+    // Get the snapshot
+    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    // Now apply the blur effect using UIImageEffect category
+    UIImage *blurredSnapshotImage = [snapshotImage applyDarkEffect];
+    
+    // Or apply any other effects available in "UIImage+ImageEffects.h"
+    // UIImage *blurredSnapshotImage = [snapshotImage applyDarkEffect];
+    // UIImage *blurredSnapshotImage = [snapshotImage applyExtraLightEffect];
+    
+    // Be nice and clean your mess up
+    UIGraphicsEndImageContext();
+    
+    return blurredSnapshotImage;
+}
+
 @end

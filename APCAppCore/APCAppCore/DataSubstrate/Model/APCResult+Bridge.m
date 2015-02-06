@@ -36,6 +36,13 @@
                 self.uploaded = @(YES);
                 NSError * saveError;
                 [self saveToPersistentStore:&saveError];
+                
+                //Delete archiveURLs
+                NSString * path = [[self.archiveURL path] stringByDeletingLastPathComponent];
+                NSError * deleteError;
+                if (![[NSFileManager defaultManager] removeItemAtPath:path error:&deleteError]) {
+                    APCLogError2(deleteError);
+                }
                 APCLogError2 (saveError);
                 if (completionBlock) {
                     completionBlock(error);

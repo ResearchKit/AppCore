@@ -15,6 +15,13 @@
 
 @property (nonatomic, strong) APCTableViewDashboardGraphItem *graphItem;
 
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleLabelWidthConstraint;
+
+@property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;
+
+@property (weak, nonatomic) IBOutlet UIView *tintView;
+
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 
 @property (weak, nonatomic) IBOutlet UISwitch *compareSwitch;

@@ -27,10 +27,6 @@
 
 @property (nonatomic, strong) UIColor *tintColor;
 
-@property (nonatomic, strong) UILabel *titleLabel;
-
-@property (nonatomic, strong) UILabel *subTitleLabel;
-
 @property (nonatomic, strong) UIColor *axisColor;
 
 @property (nonatomic, strong) UIColor *axisTitleColor;

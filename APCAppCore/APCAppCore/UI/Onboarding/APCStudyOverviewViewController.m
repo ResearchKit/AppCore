@@ -257,7 +257,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
         
         NSString *fromDate = jsonDictionary[@"from_date"];
         if (fromDate.length > 0) {
-            self.dateRangeLabel.text = [fromDate stringByAppendingFormat:@" - %@", jsonDictionary[@"to_date"]];
+            self.dateRangeLabel.text = [fromDate stringByAppendingFormat:@"%@%@", kHairlineEnDashJoinerKey, jsonDictionary[@"to_date"]];
         } else {
             self.dateRangeLabel.hidden = YES;
         }
