@@ -87,18 +87,18 @@ static NSString * const DEVICE_INFO_IF_CANT_DETECT	= @"CouldNotRetrieveDeviceInf
 		 -	4.	otherwise, try the next line
 		 */
 
-		_appName = ([self cleanString: bundleInfo [@"CFBundleName"]] ?:				// yes in Asthma
-					[self cleanString: bundleInfo [@"CFBundleDisplayName"]] ?:		// yes in Parkinson's, no in Asthma
-					[self cleanString: bundleInfo [@"CFBundleExecutable"]] ?:		// yes in Asthma
+		_appName = ([self cleanString: bundleInfo [@"CFBundleDisplayName"]] ?:		// source: info.plist > Bundle Display Name
+					[self cleanString: bundleInfo [@"CFBundleName"]] ?:				// source: info.plist > Bundle Name
+					[self cleanString: bundleInfo [@"CFBundleExecutable"]] ?:		// source: ?
 
 					// Apple:  "please use this method, 'cuz it gets the localized version if one is available"
-					[self cleanString: [mainBundle objectForInfoDictionaryKey: @"CFBundleName"]] ?:				// yes in Asthma
-					[self cleanString: [mainBundle objectForInfoDictionaryKey: @"CFBundleDisplayName"]] ?:		// no in Asthma
-					[self cleanString: [mainBundle objectForInfoDictionaryKey: @"CFBundleExecutable"]] ?:		// yes in Asthma
+					[self cleanString: [mainBundle objectForInfoDictionaryKey: @"CFBundleDisplayName"]] ?:		// source: ?
+					[self cleanString: [mainBundle objectForInfoDictionaryKey: @"CFBundleName"]] ?:				// source: ?
+					[self cleanString: [mainBundle objectForInfoDictionaryKey: @"CFBundleExecutable"]] ?:		// source: ?
 
-					[self cleanString: localizedBundleInfo [@"CFBundleName"]] ?:			// no in Asthma
-					[self cleanString: localizedBundleInfo [@"CFBundleDisplayName"]] ?:		// no in Asthma
-					[self cleanString: localizedBundleInfo [@"CFBundleExecutable"]] ?:		// no in Asthma
+					[self cleanString: localizedBundleInfo [@"CFBundleDisplayName"]] ?:		// source: ?
+					[self cleanString: localizedBundleInfo [@"CFBundleName"]] ?:			// source: ?
+					[self cleanString: localizedBundleInfo [@"CFBundleExecutable"]] ?:		// source: ?
 
 					APP_NAME_IF_CANT_DETECT);
 	}
