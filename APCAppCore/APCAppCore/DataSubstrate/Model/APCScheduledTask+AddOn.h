@@ -6,8 +6,9 @@
 // 
  
 #import "APCScheduledTask.h"
+#import "APCDateRange.h"
 
-@class UILocalNotification, APCDateRange;
+@class UILocalNotification;
 @interface APCScheduledTask (AddOn)
 
 - (void) completeScheduledTask;
@@ -19,6 +20,7 @@
 + (NSDictionary*) APCActivityVCScheduledTasksInContext: (NSManagedObjectContext*) context;
 + (instancetype) scheduledTaskForStartOnDate: (NSDate *) startOn schedule: (APCSchedule*) schedule inContext: (NSManagedObjectContext*) context;
 
++ (NSArray *)allScheduledTasksForDateRange: (APCDateRange*) dateRange completed: (NSNumber*) completed inContext: (NSManagedObjectContext*) context;
 /*********************************************************************************/
 #pragma mark - Counts
 /*********************************************************************************/
