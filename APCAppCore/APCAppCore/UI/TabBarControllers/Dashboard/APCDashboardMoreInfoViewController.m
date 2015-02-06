@@ -11,6 +11,9 @@
 
 static const CGFloat kBubbleInnerPadding = 39.0f;
 
+static const CGFloat kDescriptionLabelTopConstant = 12.0f;
+static const CGFloat kDescriptionLabelBottomConstant = 30.0f;
+
 @interface APCDashboardMoreInfoViewController ()
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerViewVerticalConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *descriptionTopConstraint;
@@ -43,6 +46,14 @@ static const CGFloat kBubbleInnerPadding = 39.0f;
     self.backgroundImageView.image = self.blurredImage;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        self.containerView.alpha = 1;
+    }];
+}
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
@@ -59,8 +70,8 @@ static const CGFloat kBubbleInnerPadding = 39.0f;
         
         [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.containerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.cellSnapshotImageView attribute:NSLayoutAttributeBottom multiplier:1 constant:2]];
         
-        self.descriptionTopConstraint.constant = 30;
-        self.descriptionBottomConstraint.constant = 12;
+        self.descriptionTopConstraint.constant = kDescriptionLabelBottomConstant;
+        self.descriptionBottomConstraint.constant = kDescriptionLabelTopConstant;
         
         self.bubbleImageView.image = [[UIImage imageNamed:@"info_bubble_upsidedown"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 30, 10) resizingMode:UIImageResizingModeStretch];
     }
@@ -74,9 +85,20 @@ static const CGFloat kBubbleInnerPadding = 39.0f;
     self.descriptionLabel.textColor = [UIColor appSecondaryColor2];
     
     self.bubbleImageView.image = [[UIImage imageNamed:@"info_bubble_upright"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 30, 10) resizingMode:UIImageResizingModeStretch];
+    
+    self.containerView.alpha = 0;
 }
 
 - (void)viewTapped:(UITapGestureRecognizer *)sender
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        self.containerView.alpha = 0;
+    }];
+    
+    [self performSelector:@selector(dismiss) withObject:nil afterDelay:0.2];
+}
+
+- (void)dismiss
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
