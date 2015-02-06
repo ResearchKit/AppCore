@@ -2,6 +2,7 @@
 //  APCStoredUserData.m
 //  APCAppCore
 //
+//  Created by Justin Warmkessel on 2/6/15.
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
@@ -10,6 +11,7 @@
 
 @implementation APCStoredUserData
 
+@dynamic allowContact;
 @dynamic biologicalSex;
 @dynamic birthDate;
 @dynamic bloodType;
@@ -23,13 +25,14 @@
 @dynamic homeLocationLong;
 @dynamic medicalConditions;
 @dynamic medications;
+@dynamic phoneNumber;
 @dynamic profileImage;
 @dynamic secondaryInfoSaved;
 @dynamic serverConsented;
 @dynamic sleepTime;
 @dynamic userConsented;
 @dynamic wakeUpTime;
-@dynamic phoneNumber;
-@dynamic allowContact;
+@dynamic customSurveyQuestion;
+@dynamic dailyScalesCompletionCounter;
 
 @end
