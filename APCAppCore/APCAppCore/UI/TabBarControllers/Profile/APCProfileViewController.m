@@ -110,6 +110,8 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
                     [rowItems addObject:row];
                 }
                     break;
+                    
+                    
                 case kAPCUserInfoItemTypeDateOfBirth:
                 {
                     APCTableViewItem *field = [APCTableViewItem new];
@@ -122,6 +124,26 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
                     APCTableViewRow *row = [APCTableViewRow new];
                     row.item = field;
                     row.itemType = kAPCUserInfoItemTypeDateOfBirth;
+                    [rowItems addObject:row];
+                    
+                }
+                    break;
+                    
+                case kAPCUserInfoItemTypeCustomSurvey:
+                {
+                    APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
+                    field.textAlignnment = NSTextAlignmentLeft;
+                    field.placeholder = NSLocalizedString(@"Custom Question Survey", @"");
+                    field.regularExpression = kAPCMedicalInfoItemWeightRegEx;
+                    if (self.user.customSurveyQuestion) {
+                        field.value = self.user.customSurveyQuestion;
+                    }
+                    field.keyboardType = UIKeyboardTypeAlphabet;
+                    field.identifier = kAPCTextFieldTableViewCellIdentifier;
+                    
+                    APCTableViewRow *row = [APCTableViewRow new];
+                    row.item = field;
+                    row.itemType = kAPCUserInfoItemTypeCustomSurvey;
                     [rowItems addObject:row];
 
                 }
@@ -500,6 +522,17 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
             APCTableViewItemType itemType = row.itemType;
             
             switch (itemType) {
+                case kAPCUserInfoItemTypeCustomSurvey:
+                    
+                {
+                    NSLog(@"%@",[(APCTableViewTextFieldItem *)item value]);
+                    
+                    if ([(APCTableViewTextFieldItem *)item value] != nil && ![[(APCTableViewTextFieldItem *)item value] isEqualToString:@""]) {
+                        
+                        self.user.customSurveyQuestion = [(APCTableViewTextFieldItem *)item value];
+                    }
+                }
+                    break;
                 case kAPCUserInfoItemTypeMedicalCondition:
                     self.user.medicalConditions = [(APCTableViewCustomPickerItem *)item stringValue];
                     break;

@@ -26,7 +26,8 @@ typedef NS_ENUM(APCTableViewItemType, APCUserInfoItemType) {
     kAPCUserInfoItemTypeBiologicalSex,
     kAPCUserInfoItemTypeSleepTime,
     kAPCUserInfoItemTypeWakeUpTime,
-    kAPCUserInfoItemTypeGlucoseLevel
+    kAPCUserInfoItemTypeGlucoseLevel,
+    kAPCUserInfoItemTypeCustomSurvey
 };
 
 typedef NS_ENUM(APCTableViewItemType, APCTableViewStudyItemType) {
