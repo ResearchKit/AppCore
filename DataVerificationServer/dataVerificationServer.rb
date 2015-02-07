@@ -61,6 +61,7 @@ SECTION_DIVIDER_FORMAT			= "---------- New files arrived on %A, %Y-%m-%d at %H:%
 DOWNLOAD_FOLDER_NAME_FORMAT		= "files_%Y-%m-%d_%H-%M-%S-%3N"
 STARTUP_MESSAGE_DIVIDER_CHAR	= "="
 STARTUP_MESSAGE_FORMAT			= "========== DataValidationServer starting up: %A, %Y-%m-%d at %H:%M:%S %Z =========="
+OUTPUT_FILE_NAME				= "dataVerificationServerLog.txt"
 
 
 #
@@ -195,6 +196,19 @@ post "#{base_url_path}/upload/:filename" do
 	content << content_file_contents
 
 	puts content
+
+
+	
+	#
+	# Copy it to a file in the new directory
+	#
+	
+	output_file_path = File.join( download_directory, OUTPUT_FILE_NAME )
+	
+	File.open(output_file_path, "a") { |output_file|
+		output_file.write content
+	}
+	
 	
 	# Return value (different from above?)
 	# 	[200, {results: "wrote to #{downloadedZipFile}"}.to_json]		# this is how to return JSON to the client
