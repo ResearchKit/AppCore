@@ -142,6 +142,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     _consentSignatureImage = [storedUserData.consentSignatureImage copy];
     
     _dailyScalesCompletionCounter = [[storedUserData.dailyScalesCompletionCounter copy] integerValue];
+    _customSurveyQuestion = [[storedUserData.customSurveyQuestion copy] stringValue];
 }
 
 - (void) updateStoredProperty:(NSString*) propertyName withValue: (id) value
