@@ -39,6 +39,21 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    CGRect headerRect = self.headerView.frame;
+    headerRect.size.height = 127.0f;
+    self.headerView.frame = headerRect;
+    
+    self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+  APCLogViewControllerAppeared();
+    
+    
     [self setupAppearance];
     
     self.nameTextField.delegate = self;
@@ -64,18 +79,6 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     self.permissionManager = [[APCPermissionsManager alloc] init];
     
     [self setupDataFromJSONFile:@"StudyOverview"];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    CGRect headerRect = self.headerView.frame;
-    headerRect.size.height = 127.0f;
-    self.headerView.frame = headerRect;
-    
-    self.tableView.tableHeaderView = self.tableView.tableHeaderView;
-  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Prepare Content
@@ -133,13 +136,15 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
                 {
                     APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
                     field.textAlignnment = NSTextAlignmentLeft;
-                    field.placeholder = NSLocalizedString(@"Custom Question Survey", @"");
-                    field.regularExpression = kAPCMedicalInfoItemWeightRegEx;
+                    field.placeholder = NSLocalizedString(@"custom question", @"");
+                    field.caption = @"Daily Scale";
                     if (self.user.customSurveyQuestion) {
                         field.value = self.user.customSurveyQuestion;
                     }
                     field.keyboardType = UIKeyboardTypeAlphabet;
                     field.identifier = kAPCTextFieldTableViewCellIdentifier;
+                    
+                    field.style = UITableViewStylePlain;
                     
                     APCTableViewRow *row = [APCTableViewRow new];
                     row.item = field;
