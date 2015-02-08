@@ -338,9 +338,6 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     [self.diseaseLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.diseaseLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
     
-    [self.dateRangeLabel setTextColor:[UIColor appSecondaryColor3]];
-    [self.dateRangeLabel setFont:[UIFont appLightFontWithSize:16.0f]];
-    
     [self.signOutButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
     [self.signOutButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0]];
     
@@ -559,7 +556,6 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
         
         self.diseaseLabel.text = jsonDictionary[@"disease_name"];
         
-        self.dateRangeLabel.hidden = YES;
         self.studyDetailsViewHeightConstraint.constant = kStudyDetailsViewHeightConstant;
         self.studyLabelCenterYConstraint.constant = 0.f;
         [self.tableView layoutIfNeeded];

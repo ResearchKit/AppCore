@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="u6G-bF-12V">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="u6G-bF-12V">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -115,23 +115,11 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="January 1st - June 1st 2014" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MvD-8y-vPS">
-                                            <rect key="frame" x="8" y="36" width="304" height="23"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="23" id="gJ2-ob-VcR"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="eRz-FJ-3tf" firstAttribute="leading" secondItem="eZ0-Ol-zUa" secondAttribute="leading" constant="8" id="1lZ-Gw-8Px"/>
-                                        <constraint firstAttribute="centerY" secondItem="MvD-8y-vPS" secondAttribute="centerY" constant="-11.5" id="7Op-47-5f3"/>
                                         <constraint firstAttribute="height" constant="72" id="9OY-Ut-XHm"/>
-                                        <constraint firstAttribute="trailing" secondItem="MvD-8y-vPS" secondAttribute="trailing" constant="8" id="PwG-Jn-a1T"/>
                                         <constraint firstAttribute="trailing" secondItem="eRz-FJ-3tf" secondAttribute="trailing" constant="8" id="ROa-l5-my6"/>
-                                        <constraint firstItem="MvD-8y-vPS" firstAttribute="leading" secondItem="eZ0-Ol-zUa" secondAttribute="leading" constant="8" id="kOZ-c6-kQ9"/>
                                         <constraint firstAttribute="centerY" secondItem="eRz-FJ-3tf" secondAttribute="centerY" constant="12" id="tKc-0k-I7J"/>
                                     </constraints>
                                 </view>
@@ -334,7 +322,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="dateRangeLabel" destination="MvD-8y-vPS" id="FGI-Yo-8Fb"/>
                         <outlet property="diseaseLabel" destination="eRz-FJ-3tf" id="9Wd-qR-yNJ"/>
                         <outlet property="editLabel" destination="Gvf-JT-xq5" id="98C-2t-CaD"/>
                         <outlet property="emailTextField" destination="oda-Xp-kW9" id="npF-oS-uYe"/>

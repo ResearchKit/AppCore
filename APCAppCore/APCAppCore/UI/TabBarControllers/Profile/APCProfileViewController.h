@@ -28,8 +28,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *diseaseLabel;
 
-@property (weak, nonatomic) IBOutlet UILabel *dateRangeLabel;
-
 @property (weak, nonatomic) IBOutlet UIButton *signOutButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *leaveStudyButton;

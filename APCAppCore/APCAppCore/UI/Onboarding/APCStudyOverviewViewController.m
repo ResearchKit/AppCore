@@ -130,10 +130,6 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     self.diseaseNameLabel.textColor = [UIColor appSecondaryColor1];
     self.diseaseNameLabel.adjustsFontSizeToFitWidth = YES;
     self.diseaseNameLabel.minimumScaleFactor = 0.5;
-    
-    self.dateRangeLabel.font = [UIFont appLightFontWithSize:16];
-    self.dateRangeLabel.textColor = [UIColor appSecondaryColor3];
-    
 }
 
 - (APCOnboarding *)onboarding
@@ -254,8 +250,6 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
         
         self.diseaseName = jsonDictionary[@"disease_name"];
         self.diseaseNameLabel.text = self.diseaseName;
-        
-        self.dateRangeLabel.hidden = YES;
         
         NSArray *questions = jsonDictionary[@"questions"];
         
