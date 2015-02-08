@@ -16,6 +16,8 @@ static NSString *const kEmailPropertyName = @"email";
 static NSString *const kPasswordPropertyName = @"password";
 static NSString *const kSessionTokenPropertyName = @"sessionToken";
 
+static NSString *const kDailyScalesCompletionCounterPropertyName = @"dailyScalesCompletionCounter";
+static NSString *const kCustomSurveyQuestionPropertyName = @"customSurveyQuestion";
 static NSString *const kPhoneNumberPropertyName = @"phoneNumber";
 static NSString *const kAllowContactPropertyName = @"allowContact";
 static NSString *const kProfileImagePropertyName = @"profileImage";
@@ -139,6 +141,8 @@ static NSString *const kSignedInKey = @"SignedIn";
     _consentSignatureDate = [storedUserData.consentSignatureDate copy];
     _consentSignatureImage = [storedUserData.consentSignatureImage copy];
     
+    _dailyScalesCompletionCounter = [[storedUserData.dailyScalesCompletionCounter copy] integerValue];
+    _customSurveyQuestion = [storedUserData.customSurveyQuestion copy];
 }
 
 - (void) updateStoredProperty:(NSString*) propertyName withValue: (id) value
@@ -245,6 +249,19 @@ static NSString *const kSignedInKey = @"SignedIn";
     _allowContact = allowContact;
     [self updateStoredProperty:kAllowContactPropertyName withValue:@(allowContact)];
 }
+
+- (void)setCustomSurveyQuestion:(NSString *)customSurveyQuestion
+{
+    _customSurveyQuestion = customSurveyQuestion;
+    [self updateStoredProperty:kCustomSurveyQuestionPropertyName withValue:customSurveyQuestion];
+}
+
+- (void)setDailyScalesCompletionCounter:(NSInteger)dailyScalesCompletionCounter
+{
+    _dailyScalesCompletionCounter = dailyScalesCompletionCounter;
+    [self updateStoredProperty:kDailyScalesCompletionCounterPropertyName withValue:@(dailyScalesCompletionCounter)];
+}
+
 
 - (void)setPhoneNumber:(NSString *)phoneNumber
 {

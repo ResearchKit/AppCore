@@ -39,6 +39,21 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    CGRect headerRect = self.headerView.frame;
+    headerRect.size.height = 127.0f;
+    self.headerView.frame = headerRect;
+    
+    self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+  APCLogViewControllerAppeared();
+    
+    
     [self setupAppearance];
     
     self.nameTextField.delegate = self;
@@ -64,18 +79,6 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     self.permissionManager = [[APCPermissionsManager alloc] init];
     
     [self setupDataFromJSONFile:@"StudyOverview"];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    CGRect headerRect = self.headerView.frame;
-    headerRect.size.height = 127.0f;
-    self.headerView.frame = headerRect;
-    
-    self.tableView.tableHeaderView = self.tableView.tableHeaderView;
-  APCLogViewControllerAppeared();
 }
 
 #pragma mark - Prepare Content
@@ -110,6 +113,8 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
                     [rowItems addObject:row];
                 }
                     break;
+                    
+                    
                 case kAPCUserInfoItemTypeDateOfBirth:
                 {
                     APCTableViewItem *field = [APCTableViewItem new];
@@ -122,6 +127,28 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
                     APCTableViewRow *row = [APCTableViewRow new];
                     row.item = field;
                     row.itemType = kAPCUserInfoItemTypeDateOfBirth;
+                    [rowItems addObject:row];
+                    
+                }
+                    break;
+                    
+                case kAPCUserInfoItemTypeCustomSurvey:
+                {
+                    APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
+                    field.textAlignnment = NSTextAlignmentLeft;
+                    field.placeholder = NSLocalizedString(@"custom question", @"");
+                    field.caption = @"Daily Scale";
+                    if (self.user.customSurveyQuestion) {
+                        field.value = self.user.customSurveyQuestion;
+                    }
+                    field.keyboardType = UIKeyboardTypeAlphabet;
+                    field.identifier = kAPCTextFieldTableViewCellIdentifier;
+                    
+                    field.style = UITableViewStylePlain;
+                    
+                    APCTableViewRow *row = [APCTableViewRow new];
+                    row.item = field;
+                    row.itemType = kAPCUserInfoItemTypeCustomSurvey;
                     [rowItems addObject:row];
 
                 }
@@ -500,6 +527,17 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
             APCTableViewItemType itemType = row.itemType;
             
             switch (itemType) {
+                case kAPCUserInfoItemTypeCustomSurvey:
+                    
+                {
+                    NSLog(@"%@",[(APCTableViewTextFieldItem *)item value]);
+                    
+                    if ([(APCTableViewTextFieldItem *)item value] != nil && ![[(APCTableViewTextFieldItem *)item value] isEqualToString:@""]) {
+                        
+                        self.user.customSurveyQuestion = [(APCTableViewTextFieldItem *)item value];
+                    }
+                }
+                    break;
                 case kAPCUserInfoItemTypeMedicalCondition:
                     self.user.medicalConditions = [(APCTableViewCustomPickerItem *)item stringValue];
                     break;
