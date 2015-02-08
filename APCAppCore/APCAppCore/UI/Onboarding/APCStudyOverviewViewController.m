@@ -255,12 +255,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
         self.diseaseName = jsonDictionary[@"disease_name"];
         self.diseaseNameLabel.text = self.diseaseName;
         
-        NSString *fromDate = jsonDictionary[@"from_date"];
-        if (fromDate.length > 0) {
-            self.dateRangeLabel.text = [fromDate stringByAppendingFormat:@"%@%@", kHairlineEnDashJoinerKey, jsonDictionary[@"to_date"]];
-        } else {
-            self.dateRangeLabel.hidden = YES;
-        }
+        self.dateRangeLabel.hidden = YES;
         
         NSArray *questions = jsonDictionary[@"questions"];
         
