@@ -303,32 +303,47 @@
     APCDashboardMoreInfoViewController *moreInfoViewController = [[UIStoryboard storyboardWithName:@"APHDashboard" bundle:nil] instantiateViewControllerWithIdentifier:@"APCDashboardMoreInfoViewController"];
     moreInfoViewController.info = item.info;
     
-    //Snapshot Cell
-    UIGraphicsBeginImageContextWithOptions(cell.bounds.size, NO, 0.0);
-    [cell drawViewHierarchyInRect:cell.bounds afterScreenUpdates:NO];
-    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    moreInfoViewController.snapshotImage = snapshotImage;
-    
     //Set Rect of cell
-    CGRect rect = [cell convertRect:cell.bounds toView:self.view.window];
-    moreInfoViewController.cellRect = rect;
+    __block CGRect rect = [cell convertRect:cell.bounds toView:self.view.window];
+    float delay = 0;
     
-    if (CGRectGetMinY(rect) < CGRectGetHeight(self.view.window.bounds)*0.25) {
-        moreInfoViewController.shouldInvertBubble = YES;
+    if (!CGRectContainsRect(self.view.window.bounds, rect)) {
+        delay = 0.3;
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
     
-    //Blur
-    UIImage *blurredImage = [self.tabBarController.view blurredSnapshotDark];
-    moreInfoViewController.blurredImage = blurredImage;
+    __weak typeof(self) weakSelf = self;
     
-    //Present
-    moreInfoViewController.transitioningDelegate = self;
-    moreInfoViewController.modalPresentationStyle = UIModalPresentationCustom;
-    [self.navigationController presentViewController:moreInfoViewController animated:YES completion:^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-    }];
+        rect = [cell convertRect:cell.bounds toView:weakSelf.view.window];
+        moreInfoViewController.cellRect = rect;
+        
+        //Snapshot Cell
+        UIGraphicsBeginImageContextWithOptions(cell.bounds.size, NO, 0.0);
+        [cell drawViewHierarchyInRect:cell.bounds afterScreenUpdates:YES];
+        UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        moreInfoViewController.snapshotImage = snapshotImage;
+        
+        if (CGRectGetMinY(rect) < CGRectGetHeight(weakSelf.view.window.bounds)*0.25) {
+            moreInfoViewController.shouldInvertBubble = YES;
+        }
+        
+        //Blur
+        UIImage *blurredImage = [weakSelf.tabBarController.view blurredSnapshotDark];
+        moreInfoViewController.blurredImage = blurredImage;
+        
+        //Present
+        moreInfoViewController.transitioningDelegate = weakSelf;
+        moreInfoViewController.modalPresentationStyle = UIModalPresentationCustom;
+        [weakSelf.navigationController presentViewController:moreInfoViewController animated:YES completion:^{
+            
+        }];
+    });
+    
+    
 }
 
 #pragma mark - Public Methods
