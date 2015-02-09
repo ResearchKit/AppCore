@@ -14,7 +14,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 @property (weak, nonatomic) IBOutlet UILabel *diseaseNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *dateRangeLabel;
 @property (weak, nonatomic) IBOutlet UIButton *joinButton;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UIImageView *researchInstituteImageView;
