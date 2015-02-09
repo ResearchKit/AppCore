@@ -113,19 +113,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     _plotsView.backgroundColor = [UIColor clearColor];
     [self addSubview:_plotsView];
     
-//    /* ----------------- */
-//    /* Labels */
-//    /* ----------------- */
-//    _titleLabel = [UILabel new];
-//    _titleLabel.textColor = _tintColor;
-//    _titleLabel.font = [UIFont fontWithName:@"Helvetica" size:19.0f];
-//    [self addSubview:_titleLabel];
-//    
-//    _subTitleLabel = [UILabel new];
-//    _subTitleLabel.textColor = [UIColor colorWithWhite:0.65 alpha:1.0];
-//    _subTitleLabel.font = [UIFont fontWithName:@"Helvetica-Light" size:16.0f];
-//    [self addSubview:_subTitleLabel];
-    
     /* ----------------- */
     /* Scrubber Views */
     /* ----------------- */
@@ -137,6 +124,12 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     _scrubberLabel = [UILabel new];
     _scrubberLabel.font = [UIFont fontWithName:@"Helvetica-Light" size:12.0f];
     _scrubberLabel.alpha = 0;
+    _scrubberLabel.layer.cornerRadius = 2.0f;
+    _scrubberLabel.layer.borderColor = [UIColor darkGrayColor].CGColor;
+    _scrubberLabel.layer.borderWidth = 1.0f;
+    _scrubberLabel.textAlignment = NSTextAlignmentCenter;
+    _scrubberLabel.frame = CGRectMake(2, 0, 100, 20);
+    _scrubberLabel.backgroundColor = [UIColor colorWithWhite:0.98 alpha:0.8];
     [self addSubview:_scrubberLabel];
     
     _scrubberThumbView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [self scrubberThumbSize].width, [self scrubberThumbSize].height)];
@@ -182,10 +175,8 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 {
     if (self.isLandscapeMode) {
         self.scrubberLabel.font = [UIFont fontWithName:self.scrubberLabel.font.familyName size:14.0f];
-        self.scrubberLabel.frame = CGRectMake(2, 0, 100, 20);
     } else {
         self.scrubberLabel.font = [UIFont fontWithName:self.scrubberLabel.font.familyName size:12.0f];
-        self.scrubberLabel.frame = CGRectMake(2, 0, 100, 20);
     }
 }
 
@@ -637,65 +628,76 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 }
 
 /* Used when the user scrubs the plot */
+
+//Scrubbing Value
 - (CGFloat)valueForCanvasXPosition:(CGFloat)xPosition
 {
-    CGFloat value= 0;
+    BOOL snapped = [self.xAxisPoints containsObject:@(xPosition)];
+    
+    CGFloat value = NSNotFound;
     
     NSInteger positionIndex = 0;
     
-    for (positionIndex = 0; positionIndex<self.xAxisPoints.count-1; positionIndex++) {
-        CGFloat xAxisPointVal = [self.xAxisPoints[positionIndex] floatValue];
-        if (xAxisPointVal > xPosition) {
-            break;
+    if (snapped) {
+        for (positionIndex = 0; positionIndex<self.xAxisPoints.count-1; positionIndex++) {
+            CGFloat xAxisPointVal = [self.xAxisPoints[positionIndex] floatValue];
+            if (xAxisPointVal == xPosition) {
+                break;
+            }
         }
+        
+        value = [self.dataPoints[positionIndex] floatValue];
+        
     }
     
-    CGFloat x1 = [self.xAxisPoints[positionIndex - 1] floatValue];
+    if (value == NSNotFound){
+        for (positionIndex = 0; positionIndex<self.xAxisPoints.count-1; positionIndex++) {
+            CGFloat xAxisPointVal = [self.xAxisPoints[positionIndex] floatValue];
+            if (xAxisPointVal > xPosition) {
+                break;
+            }
+        }
+        
+        NSInteger nextValidIndex = [self nextValidPositionIndexForPosition:positionIndex];
+        NSInteger prevValidIndex = [self prevValidPositionIndexForPosition:positionIndex];
+        
+        CGFloat x1 = [self.xAxisPoints[prevValidIndex] floatValue];
+        CGFloat x2 = [self.xAxisPoints[nextValidIndex] floatValue];
+        
+        CGFloat y1 = [self.dataPoints[prevValidIndex] floatValue];
+        CGFloat y2 = [self.dataPoints[nextValidIndex] floatValue];
+        
+        CGFloat slope = (y2 - y1)/(x2 - x1);
+        
+        //  (y2 - y3)/(x2 - x3) = m
+        value = y2 - (slope * (x2 - xPosition));
+    }
     
-    CGFloat x2 = [self.xAxisPoints[positionIndex] floatValue];
-    
-    CGFloat y1 = [self.dataPoints[positionIndex - 1] floatValue];
-    y1 = [self safeValueForValue:y1];
-    
-    CGFloat y2 = [self.dataPoints[positionIndex] floatValue];
-    y2 = [self safeValueForValue:y2];
-    
-    CGFloat slope = (y2 - y1)/(x2 - x1);
-    
-    //  (y2 - y3)/(x2 - x3) = m
-    value = y2 - (slope * (x2 - xPosition));
     
     return value;
 }
 
-- (CGFloat)safeValueForValue:(CGFloat)value
-{
-    CGFloat safeValue = value;
-    
-    if (safeValue == NSNotFound) {
-        safeValue = 0;
-    }
-    
-    return safeValue;
-}
-
+//Scrubber Y position
 - (CGFloat)canvasYPointForXPosition:(CGFloat)xPosition
 {
     CGFloat canvasYPosition;
     
     NSInteger positionIndex;
     for (positionIndex = 0; positionIndex<self.xAxisPoints.count - 1; positionIndex++) {
-        CGFloat num = ((NSNumber *)self.xAxisPoints[positionIndex]).floatValue;
-        if (xPosition < num) {
+        CGFloat xAxisPointVal = [self.xAxisPoints[positionIndex] floatValue];
+        if (xAxisPointVal > xPosition) {
             break;
         }
     }
     
-    CGFloat x1 = ((NSNumber *)self.xAxisPoints[positionIndex - 1]).floatValue;
-    CGFloat x2 = ((NSNumber *)self.xAxisPoints[positionIndex]).floatValue;
+    NSInteger nextValidIndex = [self nextValidPositionIndexForPosition:positionIndex];
+    NSInteger prevValidIndex = [self prevValidPositionIndexForPosition:positionIndex];
     
-    CGFloat y1 = ((NSNumber *)self.yAxisPoints[positionIndex - 1]).floatValue;
-    CGFloat y2 = ((NSNumber *)self.yAxisPoints[positionIndex]).floatValue;
+    CGFloat x1 = [self.xAxisPoints[prevValidIndex] floatValue];
+    CGFloat x2 = [self.xAxisPoints[nextValidIndex] floatValue];
+    
+    CGFloat y1 = [self.yAxisPoints[prevValidIndex] floatValue];
+    CGFloat y2 = [self.yAxisPoints[nextValidIndex] floatValue];
     
     CGFloat slope = (y2 - y1)/(x2 - x1);
     
@@ -703,6 +705,35 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     canvasYPosition = y2 - (slope * (x2 - xPosition));
     
     return canvasYPosition;
+}
+
+//Valid - dataPoints[index]!= NSNotFound
+- (NSInteger)nextValidPositionIndexForPosition:(NSInteger)positionIndex
+{
+    NSInteger validPosition = positionIndex;
+    
+    while (validPosition < (self.dataPoints.count-1)) {
+        if ([self.dataPoints[validPosition] floatValue] != NSNotFound) {
+            break;
+        }
+        validPosition ++;
+    }
+    
+    return validPosition;
+}
+
+- (NSInteger)prevValidPositionIndexForPosition:(NSInteger)positionIndex
+{
+    NSInteger validPosition = positionIndex - 1;
+    
+    while (validPosition > 0) {
+        if ([self.dataPoints[validPosition] floatValue] != NSNotFound) {
+            break;
+        }
+        validPosition --;
+    }
+    
+    return validPosition;
 }
 
 - (CGFloat)snappedXPosition:(CGFloat)xPosition
@@ -854,19 +885,24 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         self.scrubberLine.center = CGPointMake(snappedXPosition + kAPCGraphLeftPadding, self.scrubberLine.center.y);
         
         CGFloat scrubbingVal = [self valueForCanvasXPosition:(snappedXPosition)];
-        [self.scrubberLabel setFrame:CGRectMake(CGRectGetMaxX(self.scrubberLine.frame) + 4, CGRectGetMinY(self.scrubberLine.frame), CGRectGetWidth(self.scrubberLabel.frame), CGRectGetHeight(self.scrubberLabel.frame))];
         self.scrubberLabel.text = [NSString stringWithFormat:@"%.0f", scrubbingVal];
+        
+        CGSize textSize = [self.scrubberLabel.text boundingRectWithSize:CGSizeMake(320, CGRectGetHeight(self.scrubberLabel.bounds)) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:self.scrubberLabel.font} context:nil].size;
+        
+        [self.scrubberLabel setFrame:CGRectMake(CGRectGetMaxX(self.scrubberLine.frame) + 6, CGRectGetMinY(self.scrubberLine.frame), textSize.width + 3, CGRectGetHeight(self.scrubberLabel.frame))];
         
         //---------------
         
         CGFloat scrubberYPos = [self canvasYPointForXPosition:snappedXPosition];
-        if (scrubbingVal != NSNotFound) {
-            [self.scrubberThumbView setCenter:CGPointMake(snappedXPosition + kAPCGraphLeftPadding, scrubberYPos + kAPCGraphTopPadding)];
-            self.scrubberThumbView.alpha = 1;
+        
+        [self.scrubberThumbView setCenter:CGPointMake(snappedXPosition + kAPCGraphLeftPadding, scrubberYPos + kAPCGraphTopPadding)];
+        
+        if (scrubbingVal >= self.minimumValue && scrubbingVal <= self.maximumValue) {
             self.scrubberLabel.alpha = 1;
+            self.scrubberThumbView.alpha = 1;
         } else {
+            self.scrubberLabel.alpha = 0;
             self.scrubberThumbView.alpha = 0;
-            //            self.scrubberLabel.alpha = 0;
         }
         
         //---------------
