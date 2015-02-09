@@ -175,10 +175,8 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 {
     if (self.isLandscapeMode) {
         self.scrubberLabel.font = [UIFont fontWithName:self.scrubberLabel.font.familyName size:14.0f];
-//        self.scrubberLabel.frame = CGRectMake(2, 0, 100, 20);
     } else {
         self.scrubberLabel.font = [UIFont fontWithName:self.scrubberLabel.font.familyName size:12.0f];
-//        self.scrubberLabel.frame = CGRectMake(2, 0, 100, 20);
     }
 }
 
@@ -890,8 +888,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         self.scrubberLabel.text = [NSString stringWithFormat:@"%.0f", scrubbingVal];
         
         CGSize textSize = [self.scrubberLabel.text boundingRectWithSize:CGSizeMake(320, CGRectGetHeight(self.scrubberLabel.bounds)) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:self.scrubberLabel.font} context:nil].size;
-        
-        NSLog(@"Snapped X : %f", snappedXPosition);
         
         [self.scrubberLabel setFrame:CGRectMake(CGRectGetMaxX(self.scrubberLine.frame) + 6, CGRectGetMinY(self.scrubberLine.frame), textSize.width + 3, CGRectGetHeight(self.scrubberLabel.frame))];
         
