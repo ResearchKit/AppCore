@@ -113,19 +113,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     _plotsView.backgroundColor = [UIColor clearColor];
     [self addSubview:_plotsView];
     
-    //    /* ----------------- */
-    //    /* Labels */
-    //    /* ----------------- */
-    //    _titleLabel = [UILabel new];
-    //    _titleLabel.textColor = _tintColor;
-    //    _titleLabel.font = [UIFont fontWithName:@"Helvetica" size:19.0f];
-    //    [self addSubview:_titleLabel];
-    //
-    //    _subTitleLabel = [UILabel new];
-    //    _subTitleLabel.textColor = [UIColor colorWithWhite:0.65 alpha:1.0];
-    //    _subTitleLabel.font = [UIFont fontWithName:@"Helvetica-Light" size:16.0f];
-    //    [self addSubview:_subTitleLabel];
-    
     /* ----------------- */
     /* Scrubber Views */
     /* ----------------- */
@@ -137,6 +124,12 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     _scrubberLabel = [UILabel new];
     _scrubberLabel.font = [UIFont fontWithName:@"Helvetica-Light" size:12.0f];
     _scrubberLabel.alpha = 0;
+    _scrubberLabel.layer.cornerRadius = 2.0f;
+    _scrubberLabel.layer.borderColor = [UIColor darkGrayColor].CGColor;
+    _scrubberLabel.layer.borderWidth = 1.0f;
+    _scrubberLabel.textAlignment = NSTextAlignmentCenter;
+    _scrubberLabel.frame = CGRectMake(2, 0, 100, 20);
+    _scrubberLabel.backgroundColor = [UIColor colorWithWhite:0.98 alpha:0.8];
     [self addSubview:_scrubberLabel];
     
     _scrubberThumbView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [self scrubberThumbSize].width, [self scrubberThumbSize].height)];
@@ -182,10 +175,10 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 {
     if (self.isLandscapeMode) {
         self.scrubberLabel.font = [UIFont fontWithName:self.scrubberLabel.font.familyName size:14.0f];
-        self.scrubberLabel.frame = CGRectMake(2, 0, 100, 20);
+//        self.scrubberLabel.frame = CGRectMake(2, 0, 100, 20);
     } else {
         self.scrubberLabel.font = [UIFont fontWithName:self.scrubberLabel.font.familyName size:12.0f];
-        self.scrubberLabel.frame = CGRectMake(2, 0, 100, 20);
+//        self.scrubberLabel.frame = CGRectMake(2, 0, 100, 20);
     }
 }
 
@@ -894,8 +887,13 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         self.scrubberLine.center = CGPointMake(snappedXPosition + kAPCGraphLeftPadding, self.scrubberLine.center.y);
         
         CGFloat scrubbingVal = [self valueForCanvasXPosition:(snappedXPosition)];
-        [self.scrubberLabel setFrame:CGRectMake(CGRectGetMaxX(self.scrubberLine.frame) + 4, CGRectGetMinY(self.scrubberLine.frame), CGRectGetWidth(self.scrubberLabel.frame), CGRectGetHeight(self.scrubberLabel.frame))];
         self.scrubberLabel.text = [NSString stringWithFormat:@"%.0f", scrubbingVal];
+        
+        CGSize textSize = [self.scrubberLabel.text boundingRectWithSize:CGSizeMake(320, CGRectGetHeight(self.scrubberLabel.bounds)) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:self.scrubberLabel.font} context:nil].size;
+        
+        NSLog(@"Snapped X : %f", snappedXPosition);
+        
+        [self.scrubberLabel setFrame:CGRectMake(CGRectGetMaxX(self.scrubberLine.frame) + 6, CGRectGetMinY(self.scrubberLine.frame), textSize.width + 3, CGRectGetHeight(self.scrubberLabel.frame))];
         
         //---------------
         
