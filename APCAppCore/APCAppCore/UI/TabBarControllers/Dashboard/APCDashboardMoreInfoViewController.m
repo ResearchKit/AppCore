@@ -76,7 +76,7 @@ static const CGFloat kDescriptionLabelBottomConstant = 30.0f;
         
         self.bubbleImageView.image = [[UIImage imageNamed:@"info_bubble_upsidedown"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 30, 10) resizingMode:UIImageResizingModeStretch];
         
-        self.containerView.layer.anchorPoint = CGPointMake(0.5, 0);
+//        self.containerView.layer.anchorPoint = CGPointMake(0.5, 0);
         self.containerView.layer.transform = CATransform3DTranslate(self.containerView.layer.transform, 0, -CGRectGetHeight(self.containerView.layer.bounds)/2, 0);
     }
     
