@@ -34,8 +34,15 @@
     NSArray * unloadedSurveyTasks = [context executeFetchRequest:request error:&error];
     APCLogError2 (error);
     [unloadedSurveyTasks enumerateObjectsUsingBlock:^(APCTask * task, NSUInteger idx, BOOL *stop) {
-        [task loadSurveyOnCompletion:NULL];
+        [task loadSurveyOnCompletion:^(NSError *error) {
+            if (idx == unloadedSurveyTasks.count - 1) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:APCUpdateActivityNotification object:self userInfo:NULL];
+                });
+            }
+        }];
     }];
+
 }
 
 - (void) loadSurveyOnCompletion: (void (^)(NSError * error)) completionBlock
