@@ -17,6 +17,7 @@ NSString *const APCUserWithdrawStudyNotification     = @"APCUserWithdrawStudyNot
 NSString *const APCUserDidConsentNotification = @"APCUserDidConsentNotification";
 
 NSString *const APCScheduleUpdatedNotification = @"APCScheduleUpdatedNotification";
+NSString *const APCUpdateActivityNotification = @"APCUpdateActivityNotification";
 
 NSString *const APCAppDidRegisterUserNotification            = @"APCAppDidRegisterUserNotification";
 NSString *const APCAppDidFailToRegisterForRemoteNotification = @"APCAppDidFailToRegisterForRemoteNotifications";

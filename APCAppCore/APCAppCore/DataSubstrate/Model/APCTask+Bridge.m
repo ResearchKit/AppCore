@@ -30,11 +30,24 @@
     NSManagedObjectContext * context = ((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.persistentContext;
     NSFetchRequest * request = [APCTask request];
     request.predicate = [NSPredicate predicateWithFormat:@"taskDescription == nil && taskHRef != nil"];
-    NSError * error;
-    NSArray * unloadedSurveyTasks = [context executeFetchRequest:request error:&error];
-    APCLogError2 (error);
-    [unloadedSurveyTasks enumerateObjectsUsingBlock:^(APCTask * task, NSUInteger idx, BOOL *stop) {
-        [task loadSurveyOnCompletion:NULL];
+    [context performBlockAndWait:^{
+        NSError * error;
+        NSArray * unloadedSurveyTasks = [context executeFetchRequest:request error:&error];
+        APCLogError2 (error);
+        [unloadedSurveyTasks enumerateObjectsUsingBlock:^(APCTask * task, NSUInteger idx, BOOL *stop) {
+            [task loadSurveyOnCompletion:^(NSError *error) {
+                if (idx == unloadedSurveyTasks.count - 1) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[NSNotificationCenter defaultCenter] postNotificationName:APCUpdateActivityNotification object:self userInfo:NULL];
+                    });
+                }
+            }];
+        }];
+        if (unloadedSurveyTasks == nil || unloadedSurveyTasks.count == 0) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:APCUpdateActivityNotification object:self userInfo:NULL];
+            });
+        }
     }];
 }
 
@@ -56,7 +69,9 @@
                 [self.managedObjectContext performBlockAndWait:^{
                     self.taskTitle = sbbSurvey.name;
                     self.rkTask = [APCTask rkTaskFromSBBSurvey:survey];
-                    [self saveToPersistentStore:NULL];
+                    NSError * saveError;
+                    [self saveToPersistentStore:&saveError];
+                    APCLogError2(saveError);
                 }];
             }
             else
