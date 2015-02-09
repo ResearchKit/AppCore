@@ -86,7 +86,14 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             isGranted = YES;
 #else
             CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-            isGranted = (status == kCLAuthorizationStatusAuthorizedAlways); //TODO: Revisit the type of permissions to restrict/allow.
+            
+            if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
+                isGranted = YES;
+            }
+            
+            if (status == kCLAuthorizationStatusAuthorizedAlways) {
+                isGranted = YES;
+            }
 #endif
         }
             break;
@@ -213,6 +220,8 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             
             if (status == kCLAuthorizationStatusNotDetermined) {
                 [self.locationManager requestAlwaysAuthorization];
+                [self.locationManager requestWhenInUseAuthorization];
+                
             } else{
                 if (self.completionBlock) {
                     self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocation]);

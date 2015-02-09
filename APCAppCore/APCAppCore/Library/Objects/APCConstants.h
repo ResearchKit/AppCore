@@ -35,6 +35,7 @@ FOUNDATION_EXPORT NSString *const APCUserWithdrawStudyNotification;
 FOUNDATION_EXPORT NSString *const APCUserDidConsentNotification;
 
 FOUNDATION_EXPORT NSString *const APCScheduleUpdatedNotification;
+FOUNDATION_EXPORT NSString *const APCUpdateActivityNotification;
 
 FOUNDATION_EXPORT NSString *const APCAppDidRegisterUserNotification;
 FOUNDATION_EXPORT NSString *const APCAppDidFailToRegisterForRemoteNotification;

@@ -63,10 +63,23 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self reloadData];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:APCUpdateActivityNotification object:nil];
     APCLogViewControllerAppeared();
 }
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self reloadData];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
 
 #pragma mark - UITableViewDataSource Methods
 
