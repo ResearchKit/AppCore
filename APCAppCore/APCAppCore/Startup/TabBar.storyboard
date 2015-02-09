@@ -70,7 +70,7 @@
         <!--Activities-->
         <scene sceneID="q1K-go-hxc">
             <objects>
-                <viewController title="Activities" id="Tl4-eD-2tt" sceneMemberID="viewController">
+                <viewController restorationIdentifier="ActivitiesPlaceholderView" title="Activities" id="Tl4-eD-2tt" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jip-aF-eDh"/>
                         <viewControllerLayoutGuide type="bottom" id="HRO-UG-neO"/>

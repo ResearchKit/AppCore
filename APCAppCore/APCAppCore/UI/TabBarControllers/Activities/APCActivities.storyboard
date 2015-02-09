@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A388a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="hzw-2n-SwF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="hzw-2n-SwF">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -8,7 +8,7 @@
         <!--Activities-->
         <scene sceneID="fLO-Mh-TLB">
             <objects>
-                <navigationController title="Activities" id="hzw-2n-SwF" sceneMemberID="viewController">
+                <navigationController restorationIdentifier="ActivitiesNavController" title="Activities" id="hzw-2n-SwF" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Activities" id="HnP-dZ-Edk"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
@@ -27,7 +27,7 @@
         <!--Activities View Controller-->
         <scene sceneID="vNR-3U-gfD">
             <objects>
-                <tableViewController id="v3n-LY-Arx" customClass="APCActivitiesViewController" sceneMemberID="viewController">
+                <tableViewController restorationIdentifier="APCActivityVC" id="v3n-LY-Arx" customClass="APCActivitiesViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="1" id="PnQ-ER-saX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -40,8 +40,8 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" tag="300" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="1/3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MKz-GI-eCU">
-                                            <rect key="frame" x="266" y="11" width="46" height="61"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="300" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1/3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MKz-GI-eCU">
+                                            <rect key="frame" x="266" y="10" width="46" height="62"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="46" id="tzB-6b-FKv"/>
                                             </constraints>
@@ -58,7 +58,7 @@
                                             </constraints>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="200" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timed Walking " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.75" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O5H-qy-8ZK">
-                                            <rect key="frame" x="54" y="7.5" width="198" height="62.5"/>
+                                            <rect key="frame" x="54" y="8" width="198" height="62"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="62" id="7sd-t6-lvz"/>
                                             </constraints>
