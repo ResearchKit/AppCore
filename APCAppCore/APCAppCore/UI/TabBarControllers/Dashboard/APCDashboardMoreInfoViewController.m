@@ -28,9 +28,6 @@ static const CGFloat kDescriptionLabelBottomConstant = 30.0f;
     [super viewDidLoad];
     
     [self setupAppearance];
-    
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewTapped:)];
-    [self.view addGestureRecognizer:tapRecognizer];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -44,14 +41,18 @@ static const CGFloat kDescriptionLabelBottomConstant = 30.0f;
     
     self.descriptionLabel.text = self.info;
     self.backgroundImageView.image = self.blurredImage;
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    [UIView animateWithDuration:0.3 animations:^{
-        self.containerView.alpha = 1;
+    [UIView animateWithDuration:0.2 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self.containerView.transform = CGAffineTransformMakeScale(1, 1);
+        self.containerView.alpha = 1.0;
+    } completion:^(BOOL finished) {
+        
     }];
 }
 - (void)viewWillLayoutSubviews
@@ -74,6 +75,9 @@ static const CGFloat kDescriptionLabelBottomConstant = 30.0f;
         self.descriptionBottomConstraint.constant = kDescriptionLabelTopConstant;
         
         self.bubbleImageView.image = [[UIImage imageNamed:@"info_bubble_upsidedown"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 30, 10) resizingMode:UIImageResizingModeStretch];
+        
+        self.containerView.layer.anchorPoint = CGPointMake(0.5, 0);
+        self.containerView.layer.transform = CATransform3DTranslate(self.containerView.layer.transform, 0, -CGRectGetHeight(self.containerView.layer.bounds)/2, 0);
     }
     
     [self.view setNeedsLayout];
@@ -86,16 +90,19 @@ static const CGFloat kDescriptionLabelBottomConstant = 30.0f;
     
     self.bubbleImageView.image = [[UIImage imageNamed:@"info_bubble_upright"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 30, 10) resizingMode:UIImageResizingModeStretch];
     
+//    self.containerView.layer.anchorPoint = CGPointMake(0.5, 1.0);
     self.containerView.alpha = 0;
+    self.containerView.transform = CGAffineTransformMakeScale(0.01, 0.01);
 }
 
-- (void)viewTapped:(UITapGestureRecognizer *)sender
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [UIView animateWithDuration:0.2 animations:^{
-        self.containerView.alpha = 0;
+    [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self.containerView.transform = CGAffineTransformMakeScale(0.01, 0.01);
+        self.containerView.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        [self dismiss];
     }];
-    
-    [self performSelector:@selector(dismiss) withObject:nil afterDelay:0.2];
 }
 
 - (void)dismiss
