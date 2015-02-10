@@ -244,7 +244,6 @@ static NSString * const kOneTimeSchedule = @"once";
         //One time task already scheduled
         APCScheduledTask * validatedTask = scheduledTasksArray.firstObject;
         [self validateScheduledTask:validatedTask];
-        APCLogDebug(@"Found Already ScheduledTask: [%@] to start on [%@] ends on [%@]", validatedTask.task.taskTitle, [self.dateFormatter stringFromDate:validatedTask.startOn], [self.dateFormatter stringFromDate:validatedTask.endOn]);
     }
     else {
         //Many one time tasks found
@@ -273,10 +272,9 @@ static NSString * const kOneTimeSchedule = @"once";
     else if (filteredArray.count == 1) {
         APCScheduledTask * validatedTask = filteredArray.firstObject;
         [self validateScheduledTask:validatedTask];
-        APCLogDebug(@"Found Already ScheduledTask: [%@] to start on [%@] ends on [%@]", validatedTask.task.taskTitle, [self.dateFormatter stringFromDate:validatedTask.startOn], [self.dateFormatter stringFromDate:validatedTask.endOn]);
     }
     else {
-        APCLogDebug(@"Many recurring scheduled tasks %@ present with the exact same range: %@", task.taskTitle, range);
+        APCLogError(@"Many recurring scheduled tasks %@ present with the exact same range: %@", task.taskTitle, range);
     }
 }
 

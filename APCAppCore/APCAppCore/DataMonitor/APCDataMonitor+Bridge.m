@@ -18,12 +18,17 @@ NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
     if (self.dataSubstrate.currentUser.isConsented) {
         [APCSchedule updateSchedulesOnCompletion:^(NSError *error) {
             if (!error) {
-                [APCTask refreshSurveys];
-                [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeToday];
-                [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeTomorrow];
-                if (completionBlock) {
-                    completionBlock(error);
-                }
+                [APCTask refreshSurveysOnCompletion:^(NSError *error) {
+                    [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeToday];
+                    [self.scheduler updateScheduledTasksIfNotUpdatingWithRange:kAPCSchedulerDateRangeTomorrow];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[NSNotificationCenter defaultCenter] postNotificationName:APCUpdateActivityNotification object:self userInfo:NULL];
+                    });
+                    if (completionBlock) {
+                        completionBlock(error);
+                    }
+                }];
+
             }
             else {
                 if (completionBlock) {
