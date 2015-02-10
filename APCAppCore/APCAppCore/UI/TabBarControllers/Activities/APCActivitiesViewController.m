@@ -24,8 +24,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 
 @property (strong, nonatomic) APCActivitiesViewWithNoTask *noTasksView;
 
-@property (nonatomic, strong) RKSTTaskViewController * taskVC;
-@property (nonatomic, strong) id<RKSTTask> task;
 @end
 
 @implementation APCActivitiesViewController
@@ -226,8 +224,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
                     if (taskToPerform)
                     {
                         APCBaseTaskViewController *controller = [class customTaskViewController:taskToPerform];
-                        self.taskVC = controller;
-                        self.task = controller.task;
                         if (controller) {
                             [self presentViewController:controller animated:YES completion:nil];
                         }
@@ -244,8 +240,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
                 
                 if (class != [NSNull class]) {
                     APCBaseTaskViewController *controller = [class customTaskViewController:scheduledTask];
-                    self.taskVC = controller;
-                    self.task = controller.task;
                     if (controller) {
                         [self presentViewController:controller animated:YES completion:nil];
                     }
@@ -439,21 +433,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
         }
     }
     return returnArray;
-}
-
-- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
-{
-    [coder encodeObject:_taskVC forKey:@"taskVC"];
-    [coder encodeObject:_task forKey:@"task"];
-    [super encodeRestorableStateWithCoder:coder];
-}
-
-- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
-{
-    _taskVC = [coder decodeObjectForKey:@"taskVC"];
-    id<RKSTTask> taskForTaskVC = [coder decodeObjectForKey:@"task"];
-    _taskVC.task = taskForTaskVC;
-    [super decodeRestorableStateWithCoder:coder];
 }
 
 @end

@@ -10,7 +10,7 @@
 #import "APCAppCore.h"
 #import "APCDataVerificationClient.h"
 
-@interface APCBaseTaskViewController ()
+@interface APCBaseTaskViewController () <UIViewControllerRestoration>
 @property (strong, nonatomic) RKSTStepViewController * stepVC;
 @property (nonatomic, strong) RKSTStep * step;
 @end
@@ -24,6 +24,7 @@
     NSUUID * taskRunUUID = [NSUUID UUID];
     APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
     controller.restorationIdentifier = [task identifier];
+    controller.restorationClass = self;
     controller.scheduledTask = scheduledTask;
     controller.delegate = controller;
     return  controller;
@@ -174,6 +175,8 @@
 {
     [coder encodeObject:_stepVC forKey:@"stepVC"];
     [coder encodeObject:_step forKey:@"step"];
+    [coder encodeObject:self.task forKey:@"task"];
+    [coder encodeObject:_scheduledTask.objectID.URIRepresentation.absoluteString forKey:@"scheduledTask"];
     [super encodeRestorableStateWithCoder:coder];
 }
 
@@ -183,6 +186,24 @@
     _step = [coder decodeObjectForKey:@"step"];
     _stepVC.step = _step;
     [super decodeRestorableStateWithCoder:coder];
+}
+
++(UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder
+{
+    id<RKSTTask> task = [coder decodeObjectForKey:@"task"];
+    NSUUID * taskRunUUID = [coder decodeObjectForKey:@"taskRunUUID"];
+    NSString * scheduledTaskID = [coder decodeObjectForKey:@"scheduledTask"];
+    NSManagedObjectID * objID = [((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.persistentStoreCoordinator managedObjectIDForURIRepresentation:[NSURL URLWithString:scheduledTaskID]];
+    APCScheduledTask * scheduledTask = (APCScheduledTask*)[((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext objectWithID:objID];
+    if (scheduledTask) {
+        APCBaseTaskViewController * tvc = [[self alloc] initWithTask:task taskRunUUID:taskRunUUID];
+        tvc.scheduledTask = scheduledTask;
+        tvc.restorationIdentifier = [task identifier];
+        tvc.restorationClass = self;
+        tvc.delegate = tvc;
+        return tvc;
+    }
+    return nil;
 }
 
 @end

@@ -32,17 +32,10 @@ static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
-/*********************************************************************************/
-#pragma mark - State Restoration
-/*********************************************************************************/
-static NSString *const kStateRestorationSelectedIndex = @"selectedIndex";
-
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 
 @property (nonatomic) BOOL isPasscodeShowing;
 @property (nonatomic, strong) UIView *secureView;
-
-@property (nonatomic, strong) NSNumber * selectedIndexNumber;
 
 @end
 
@@ -166,22 +159,16 @@ static NSString *const kStateRestorationSelectedIndex = @"selectedIndex";
 {
     APCLogDebug(@"Ask for path: %@", identifierComponents);
     if ([identifierComponents.lastObject isEqualToString:@"AppTabbar"]) {
-        self.window.rootViewController = [[UIStoryboard storyboardWithName:@"TabBar" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
         return self.window.rootViewController;
     }
     else if ([identifierComponents.lastObject isEqualToString:@"ActivitiesNavController"])
     {
-        NSString  *name = [self.storyboardIdInfo objectAtIndex:2][@"name"];
-        UIStoryboard  *storyboard = [UIStoryboard storyboardWithName:name bundle:[self.storyboardIdInfo objectAtIndex:2][@"bundle"]];
-        UIViewController  *controller = [storyboard instantiateInitialViewController];
-        return controller;
+        return self.tabster.viewControllers[2];
     }
     else if ([identifierComponents.lastObject isEqualToString:@"APCActivityVC"])
     {
-        NSString  *name = [self.storyboardIdInfo objectAtIndex:2][@"name"];
-        UIStoryboard  *storyboard = [UIStoryboard storyboardWithName:name bundle:[self.storyboardIdInfo objectAtIndex:2][@"bundle"]];
-        UINavigationController *controller = [storyboard instantiateInitialViewController];
-        return controller.topViewController;
+        
+        return [(UINavigationController*) self.tabster.viewControllers[2] topViewController];
     }
     
     return nil;
