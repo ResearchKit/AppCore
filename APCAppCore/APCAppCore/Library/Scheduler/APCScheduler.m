@@ -1,5 +1,5 @@
-// 
-//  APCScheduler.m 
+ 
+//  APCScheduler.m
 //  AppCore 
 // 
 //  Copyright (c) 2014 Apple Inc. All rights reserved. 
@@ -135,7 +135,6 @@ static NSString * const kOneTimeSchedule = @"once";
         NSError * error;
         NSArray * scheduledTaskArray = [self.scheduleMOC executeFetchRequest:request error:&error];
         if (scheduledTaskArray.count > 0) { obj.inActive = @(YES);}
-        APCLogDebug(@"%@", scheduledTaskArray);
         APCLogError2 (error);
     }];
     
@@ -288,7 +287,6 @@ static NSString * const kOneTimeSchedule = @"once";
     createdScheduledTask.endOn = dateRange.endDate;
     createdScheduledTask.generatedSchedule = schedule;
     createdScheduledTask.task = task;
-    APCLogDebug(@"Created ScheduledTask: [%@] to start on [%@] ends on [%@]", createdScheduledTask.task.taskTitle, [self.dateFormatter stringFromDate:createdScheduledTask.startOn],  [self.dateFormatter stringFromDate:createdScheduledTask.endOn]);
     NSError * saveError;
     [createdScheduledTask saveToPersistentStore:&saveError];
     APCLogError2 (saveError);
