@@ -76,8 +76,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCEmailVerifyViewController.h>
 #import <APCAppCore/APCChangeEmailViewController.h>
 #import <APCAppCore/APCPasscodeViewController.h>
-#import <APCAppCore/APCHomeLocationViewController.h>
-#import <APCAppCore/APCLocationInfoViewController.h>
 #import <APCAppCore/APCConsentTaskViewController.h>
 
 /*--------------------------
