@@ -497,11 +497,11 @@ static APCDummyObject * _dummyObject;
     if ([constraints isKindOfClass:[SBBIntegerConstraints class]]) {
         SBBIntegerConstraints * integerConstraint = (SBBIntegerConstraints*) constraints;
         if (integerConstraint.maxValue && integerConstraint.minValue) {
-            if ([uiHint isEqualToString:kSliderValue]) {
-            NSInteger stepValue = (integerConstraint.step != nil && [integerConstraint.step integerValue] > 0) ? [integerConstraint.step integerValue] : 1;
-            NSInteger newStepValue = (NSInteger)((double)[integerConstraint.maxValue integerValue] - (double)[integerConstraint.minValue integerValue]) / 10.0;
-            stepValue = MAX(newStepValue, stepValue);
-            retValue = [RKSTScaleAnswerFormat scaleAnswerFormatWithMaxValue:[integerConstraint.maxValue integerValue] minValue:[integerConstraint.minValue integerValue] step:stepValue defaultValue:0];
+            if ([uiHint isEqualToString:kSliderValue] && [self validConstraintsForSlider:integerConstraint]) {
+                NSInteger stepValue = (integerConstraint.step != nil && [integerConstraint.step integerValue] > 0) ? [integerConstraint.step integerValue] : 1;
+                NSInteger newStepValue = (NSInteger)((double)[integerConstraint.maxValue integerValue] - (double)[integerConstraint.minValue integerValue]) / 10.0;
+                stepValue = MAX(newStepValue, stepValue);
+                retValue = [RKSTScaleAnswerFormat scaleAnswerFormatWithMaxValue:[integerConstraint.maxValue integerValue] minValue:[integerConstraint.minValue integerValue] step:stepValue defaultValue:0];
             }
             else {
                 RKSTNumericAnswerFormat * format = (integerConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:integerConstraint.unit] : [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:nil];
@@ -530,6 +530,35 @@ static APCDummyObject * _dummyObject;
         }
     }
     return retValue;
+}
+
+- (BOOL) validConstraintsForSlider: (SBBIntegerConstraints*) integerConstraint
+{
+    BOOL retValue = YES;
+    NSInteger maxValue = (NSInteger)[integerConstraint.maxValue doubleValue];
+    NSInteger minValue = (NSInteger)[integerConstraint.minValue doubleValue];
+    NSInteger range = maxValue - minValue;
+    NSInteger stepValue = (integerConstraint.step != nil && [integerConstraint.step integerValue] > 0) ? [integerConstraint.step integerValue] : 1;
+    NSInteger newStepValue = (NSInteger)round(((double)range / 10.0));
+    stepValue = MAX(newStepValue, stepValue);
+    double noOfSteps = (double) range / (double) stepValue;
+    if ([self hasDecimals:noOfSteps]) {
+        retValue = NO;
+    }
+    else if (noOfSteps > 10)
+    {
+        retValue = NO;
+    }
+    return retValue;
+}
+
+- (BOOL) hasDecimals: (double) f
+{
+     return (f-(NSInteger)f != 0);
+}
+
+BOOL CGFloatHasDecimals(float f) {
+    return (f-(int)f != 0);
 }
 
 - (RKSTAnswerFormat *)rkTextAnswerFormat:(NSDictionary *)objectDictionary

@@ -25,7 +25,7 @@
 #endif
 }
 
-+ (void)refreshSurveys
++ (void)refreshSurveysOnCompletion: (void (^)(NSError * error)) completionBlock
 {
     NSManagedObjectContext * context = ((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.persistentContext;
     NSFetchRequest * request = [APCTask request];
@@ -34,19 +34,30 @@
         NSError * error;
         NSArray * unloadedSurveyTasks = [context executeFetchRequest:request error:&error];
         APCLogError2 (error);
-        [unloadedSurveyTasks enumerateObjectsUsingBlock:^(APCTask * task, NSUInteger idx, BOOL *stop) {
-            [task loadSurveyOnCompletion:^(NSError *error) {
-                if (idx == unloadedSurveyTasks.count - 1) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [[NSNotificationCenter defaultCenter] postNotificationName:APCUpdateActivityNotification object:self userInfo:NULL];
-                    });
-                }
+        if (unloadedSurveyTasks && unloadedSurveyTasks.count) {
+            [unloadedSurveyTasks enumerateObjectsUsingBlock:^(APCTask * task, NSUInteger idx, BOOL *stop) {
+                [task loadSurveyOnCompletion:^(NSError *error) {
+                    if (error) {
+                        if (completionBlock) {
+                            completionBlock(error);
+                        }
+                    }
+                    else
+                    {
+                        if (idx == unloadedSurveyTasks.count - 1) {
+                            if (completionBlock) {
+                                completionBlock(nil);
+                            }
+                        }
+                    }
+                }];
             }];
-        }];
-        if (unloadedSurveyTasks == nil || unloadedSurveyTasks.count == 0) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:APCUpdateActivityNotification object:self userInfo:NULL];
-            });
+        }
+        else
+        {
+            if (completionBlock) {
+                completionBlock(nil);
+            }
         }
     }];
 }
