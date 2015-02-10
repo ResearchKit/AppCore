@@ -10,6 +10,11 @@
 #import "APCAppCore.h"
 #import "APCDataVerificationClient.h"
 
+@interface APCBaseTaskViewController () <UIViewControllerRestoration>
+@property (strong, nonatomic) RKSTStepViewController * stepVC;
+@property (nonatomic, strong) RKSTStep * step;
+@end
+
 @implementation APCBaseTaskViewController
 
 #pragma  mark  -  Instance Initialisation
@@ -18,6 +23,8 @@
     id<RKSTTask> task = [self createTask: scheduledTask];
     NSUUID * taskRunUUID = [NSUUID UUID];
     APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
+    controller.restorationIdentifier = [task identifier];
+    controller.restorationClass = self;
     controller.scheduledTask = scheduledTask;
     controller.delegate = controller;
     return  controller;
@@ -151,6 +158,52 @@
     [appDelegate.dataMonitor batchUploadDataToBridgeOnCompletion:^(NSError *error) {
         APCLogError2 (error);
     }];
+}
+
+/*********************************************************************************/
+#pragma mark - State Restoration
+/*********************************************************************************/
+
+-(void)stepViewControllerWillAppear:(RKSTStepViewController *)viewController
+{
+    [super stepViewControllerWillAppear:viewController];
+    self.stepVC = viewController;
+    self.step = self.stepVC.step;
+}
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [coder encodeObject:_stepVC forKey:@"stepVC"];
+    [coder encodeObject:_step forKey:@"step"];
+    [coder encodeObject:self.task forKey:@"task"];
+    [coder encodeObject:_scheduledTask.objectID.URIRepresentation.absoluteString forKey:@"scheduledTask"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    _stepVC = [coder decodeObjectOfClass:[UIViewController class] forKey:@"stepVC"];
+    _step = [coder decodeObjectForKey:@"step"];
+    _stepVC.step = _step;
+    [super decodeRestorableStateWithCoder:coder];
+}
+
++(UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder
+{
+    id<RKSTTask> task = [coder decodeObjectForKey:@"task"];
+    NSUUID * taskRunUUID = [coder decodeObjectForKey:@"taskRunUUID"];
+    NSString * scheduledTaskID = [coder decodeObjectForKey:@"scheduledTask"];
+    NSManagedObjectID * objID = [((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.persistentStoreCoordinator managedObjectIDForURIRepresentation:[NSURL URLWithString:scheduledTaskID]];
+    APCScheduledTask * scheduledTask = (APCScheduledTask*)[((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext objectWithID:objID];
+    if (scheduledTask) {
+        APCBaseTaskViewController * tvc = [[self alloc] initWithTask:task taskRunUUID:taskRunUUID];
+        tvc.scheduledTask = scheduledTask;
+        tvc.restorationIdentifier = [task identifier];
+        tvc.restorationClass = self;
+        tvc.delegate = tvc;
+        return tvc;
+    }
+    return nil;
 }
 
 @end

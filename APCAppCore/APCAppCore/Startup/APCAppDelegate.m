@@ -43,7 +43,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 /*********************************************************************************/
 #pragma mark - App Delegate Methods
 /*********************************************************************************/
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
@@ -66,6 +66,11 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 					flurryApiKey: self.initializationOptions [kAnalyticsFlurryAPIKeyKey]
 	 ];
     
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
     return YES;
 }
 
@@ -134,6 +139,38 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:APCAppDidFailToRegisterForRemoteNotification object:nil];
+}
+
+/*********************************************************************************/
+#pragma mark - State Restoration
+/*********************************************************************************/
+
+- (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder
+{
+    return self.dataSubstrate.currentUser.isSignedIn;
+}
+
+- (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder
+{
+    return self.dataSubstrate.currentUser.isSignedIn;
+}
+
+- (UIViewController *)application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder
+{
+    if ([identifierComponents.lastObject isEqualToString:@"AppTabbar"]) {
+        return self.window.rootViewController;
+    }
+    else if ([identifierComponents.lastObject isEqualToString:@"ActivitiesNavController"])
+    {
+        return self.tabster.viewControllers[2];
+    }
+    else if ([identifierComponents.lastObject isEqualToString:@"APCActivityVC"])
+    {
+        
+        return [(UINavigationController*) self.tabster.viewControllers[2] topViewController];
+    }
+    
+    return nil;
 }
 
 /*********************************************************************************/
