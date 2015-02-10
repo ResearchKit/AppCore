@@ -157,7 +157,6 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
 - (UIViewController *)application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder
 {
-    APCLogDebug(@"Ask for path: %@", identifierComponents);
     if ([identifierComponents.lastObject isEqualToString:@"AppTabbar"]) {
         return self.window.rootViewController;
     }

@@ -7,7 +7,6 @@
  
 #import <UIKit/UIKit.h>
 #import "APCGroupedScheduledTask.h"
-#import <ResearchKit/ResearchKit.h>
 
 @interface APCActivitiesViewController : UITableViewController
 

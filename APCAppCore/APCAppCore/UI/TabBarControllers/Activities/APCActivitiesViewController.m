@@ -23,7 +23,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 @property (strong, nonatomic) NSMutableArray *scheduledTasksArray;
 
 @property (strong, nonatomic) APCActivitiesViewWithNoTask *noTasksView;
-
 @end
 
 @implementation APCActivitiesViewController
@@ -53,7 +52,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     
     self.navigationItem.title = NSLocalizedString(@"Activities", @"Activities");
     self.tableView.backgroundColor = [UIColor appSecondaryColor4];
-//    self.restorationClass = [self class];
     
     [((APCAppDelegate *)[[UIApplication sharedApplication] delegate]) showPasscodeIfNecessary];
 }
