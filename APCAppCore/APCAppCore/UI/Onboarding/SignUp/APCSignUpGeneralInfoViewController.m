@@ -637,45 +637,43 @@
 
 - (IBAction)next
 {
-    
-    if ([self isContentValid:nil]) {
+    NSString *errorMessage = @"";
+    if ([self isContentValid:&errorMessage]) {
         
         [self saveSceneData];
         
         [self loadProfileValuesInModel];
         
-        [self sendCredentials];
+        APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+        [self presentViewController:spinnerController animated:YES completion:nil];
         
+        typeof(self) __weak weakSelf = self;
+        [self.user signUpOnCompletion:^(NSError *error) {
+            if (error) {
+                
+                APCLogError2 (error);
+                [spinnerController dismissViewControllerAnimated:NO completion:^{
+                    
+                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Sign Up", @"")
+                                                                       message:error.message
+                                                                      delegate:self
+                                                             cancelButtonTitle:NSLocalizedString(@"Change Details", nil)
+                                                             otherButtonTitles:NSLocalizedString(@"Send Again", nil), nil];
+                    [alertView show];
+                    
+                }];
+            }
+            else
+            {
+                [spinnerController dismissViewControllerAnimated:NO completion:^{
+                    
+                    UIViewController *viewController = [[self onboarding] nextScene];
+                    [weakSelf.navigationController pushViewController:viewController animated:YES];
+                }];
+            }
+        }];
     }
 }
-
--(void) sendCredentials{
-    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
-    [self presentViewController:spinnerController animated:YES completion:nil];
-    
-    typeof(self) __weak weakSelf = self;
-    [self.user signUpOnCompletion:^(NSError *error) {
-        if (error) {
-            
-            APCLogError2 (error);
-            [spinnerController dismissViewControllerAnimated:NO completion:^{
-                UIAlertController *alertController = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign Up", @"")
-                                                                                     message:error.message];
-                [weakSelf presentViewController:alertController animated:YES completion:nil];
-                
-            }];
-        }
-        else
-        {
-            [spinnerController dismissViewControllerAnimated:NO completion:^{
-                
-                UIViewController *viewController = [[self onboarding] nextScene];
-                [weakSelf.navigationController pushViewController:viewController animated:YES];
-            }];
-        }
-    }];
-}
-
 
 - (IBAction)cancel:(id)sender
 {
@@ -770,19 +768,18 @@
     [[self onboarding] popScene];
 }
 
-//#pragma mark AlertView delegate
-//
-//-(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-//    
-//    if (buttonIndex == 0) {
-//        NSLog(@"canceled");
-//    }else{
-//        //try again
-//        NSLog(@"Trying again");
-//        [self sendCredentials];
-//    }
-//    
-//}
+#pragma mark AlertView delegate
+
+-(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    if (buttonIndex == 0) {
+        //user may change details in case of user issue
+    }else{
+        //try to send again in case of server issue
+        [self next];
+    }
+    
+}
 
 
 
