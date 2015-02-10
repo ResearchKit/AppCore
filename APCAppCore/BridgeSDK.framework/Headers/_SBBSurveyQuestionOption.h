@@ -10,11 +10,15 @@
 #import <Foundation/Foundation.h>
 #import "SBBBridgeObject.h"
 
+#import "SBBImage.h"
+
 @protocol _SBBSurveyQuestionOption
 
 @end
 
 @interface _SBBSurveyQuestionOption : SBBBridgeObject
+
+@property (nonatomic, strong) SBBImage* image;
 
 @property (nonatomic, strong) NSString* label;
 
