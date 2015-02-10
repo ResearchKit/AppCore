@@ -142,7 +142,7 @@ static APCDummyObject * _dummyObject;
 
 - (RKSTTaskProgress)progressOfCurrentStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
 {
-    return RKSTTaskProgressMake([self.staticStepIdentifiers indexOfObject: step.identifier] + 1, self.staticStepIdentifiers.count);
+    return RKSTTaskProgressMake([self.staticStepIdentifiers indexOfObject: step.identifier], self.staticStepIdentifiers.count);
 }
 
 /*********************************************************************************/
