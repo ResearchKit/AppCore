@@ -253,49 +253,80 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
         [sampleResults addObject:aSampleDictionary];
     }
     dictionary[kTappingSamplesKey] = sampleResults;
-    [self processDictionary:dictionary];
-    [self writeResultDictionaryToArchive:dictionary];
+
+
+#warning Ron:  THIS IS NOT BEING USED AS INTENDED.  I renamed the method to reflect the intended use -- but this code is getting only part of the converted data.  I don't want to gratuitously make it "correct" because that might have lots of unintended side effects.
+
+	NSDictionary *hackedUpDictionary = [self generateDictionaryToSaveFromSourceDictionary:dictionary];
+    [self writeResultDictionaryToArchive: hackedUpDictionary];
 }
 
 - (void) addResultToArchive: (RKSTResult*) result {
     NSMutableArray * properties = [NSMutableArray array];
+
+
+#warning Ron: the next few lines seem to EFFECTIVELY get all the properties of the result object and all its superclasses.  However, as written, it seems to potentially skip several layers of classes, between RKSTResult and whatever object we received.  Could it, or should it, also be written as follows?
+	/*
+		id thingy = result.class;
+		done = NO;
+
+		while (thingy != nil && ! done) {
+			copy property names from thingy;
+
+			if (thingy == RKSTResult)
+				done = YES;
+
+			else
+				thingy = thingy.superclass;
+		}
+	 */
     [properties addObjectsFromArray:[APCDataArchiver classPropsFor:[RKSTResult class]]];
     if (result.superclass != [RKSTResult class]) {
         [properties addObjectsFromArray:[APCDataArchiver classPropsFor:result.superclass]];
     }
     [properties addObjectsFromArray:[APCDataArchiver classPropsFor:result.class]];
+
+
     NSMutableDictionary * dictionary = [[result dictionaryWithValuesForKeys:properties] mutableCopy];
-    dictionary = [self processDictionary:dictionary];
+    dictionary = [self generateDictionaryToSaveFromSourceDictionary:dictionary];
     APCLogDebug(@"%@", dictionary);
     [self writeResultDictionaryToArchive:dictionary];
     [self addFileInfoEntryWithDictionary:dictionary];
 }
 
-- (NSMutableDictionary*) processDictionary :(NSMutableDictionary*) mutableDictionary {
+- (NSMutableDictionary*) generateDictionaryToSaveFromSourceDictionary :(NSMutableDictionary*) mutableDictionary {
     static NSArray* array = nil;
+
+#warning Ron:  these hard-coded values seem to be the string equivalents of the some concept of a "question type," an integer, defined... somewhere else.  Where are those integers defined?  I think it'd help if these strings and those integers were defined in the same place.  And where is the "questionType" entry set to one of those integers?
     if (array == nil) {
         array = @[@"None", @"Scale", @"SingleChoice", @"MultipleChoice", @"Decimal",@"Integer", @"Boolean", @"Text", @"TimeOfDay", @"DateAndTime", @"Date", @"TimeInterval"];
     }
     //Replace questionType
     if (mutableDictionary[kQuestionTypeKey]) {
         NSUInteger index = ((NSNumber*) mutableDictionary[kQuestionTypeKey]).integerValue;
+
+#warning Ron:  here's where the question type is magically converted into one of the strings defined in this array called "array."
         if (index < array.count) {
             mutableDictionary[kQuestionTypeKey] = array[index];
         }
     }
     
     //Remove userInfo if its empty
+#warning Ron:  should we also extract the item, see if it's a dictionary, and see if it's empty?
     if ([mutableDictionary[kUserInfoKey] isEqual:[NSNull null]]) {
         [mutableDictionary removeObjectForKey:kUserInfoKey];
     }
     
     //Replace identifier with item
+#warning Ron: why do this?  Who's consuming this, such that the word "item" is better than "identifier"?
+#warning Ron: and why modify the original, if we're about to make a copy anyway -- and we know we generated this dictionary on the line of code immediately preceding this method call?
     if (mutableDictionary[kIdentifierKey]) {
         mutableDictionary[kItemKey] =mutableDictionary[kIdentifierKey];
         [mutableDictionary removeObjectForKey:kIdentifierKey];
     }
     
         //Override dates with strings
+#warning Ron: why?  ...although the default formatter does seem to generate pretty, terse, and readable results: "2015-02-07 23:15:17 +0000".
     if ([mutableDictionary[kStartDateKey] isKindOfClass:[NSDate class]]) {
         mutableDictionary[kStartDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kStartDateKey]];
     }
@@ -304,17 +335,57 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
         mutableDictionary[kEndDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kEndDateKey]];
     }
     
-    //Replace any other type of objects with its string equivalents
     NSMutableDictionary * copyDictionary = [mutableDictionary mutableCopy];
+
     [mutableDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        //Removing NSCalendar objects if they are present
-        if ([obj isKindOfClass:[NSCalendar class]]) {
+
+        // Delete NSCalendars.  By the time we serialize,
+		// we'll have a date/time objects with time zones,
+		// which is sufficient.
+        if ([obj isKindOfClass:[NSCalendar class]])
+		{
             [copyDictionary removeObjectForKey:key];
         }
-        //Otherwise call description on the objects to get string
-        else if (!([obj isKindOfClass:[NSNumber class]] || [obj isKindOfClass:[NSString class]])) {
-            copyDictionary[key] = [NSString stringWithFormat:@"%@", obj];
-        }
+
+		/*
+		 If the thing in question can be serialized as-is,
+		 leave it be.  Specifically:  if it's an array of
+		 strings, numbers, nulls, or dictionaries/arrays
+		 containing yet more primitives, include it as-is,
+		 instead of stringifying it.
+		 
+		 The reason:  if we stringify these, they end up
+		 with lots of gratuitous ()s, ""s, "\n"s, etc.
+		 
+		 The rules:
+		 https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSJSONSerialization_Class/
+		 */
+		else if ([NSJSONSerialization isValidJSONObject: obj])
+		{
+			// Arrays and dictionaries containing nothing
+			// but primitives, or more arrays/dictionaries
+			// of primitives, will be fine.  Leave as-is.
+		}
+
+		else if ([obj isKindOfClass: [NSString class]])
+		{
+			// Strings will be serialized just fine.  Leave as-is.
+		}
+
+		else if ([obj isKindOfClass: [NSNumber class]] && [NSJSONSerialization isValidJSONObject: @[obj]])
+		{
+			// Numbers will be serialized just fine,
+			// as long as they aren't NaN or infinity.
+			// To check for that, I wrapped the number
+			// in an array ( @[obj] ) and asked the
+			// serializer to inspect it.
+		}
+
+		else
+		{
+			// No idea what it is.  Stringify it.
+			copyDictionary[key] = [NSString stringWithFormat:@"%@", obj];
+		}
     }];
     
     return copyDictionary;
