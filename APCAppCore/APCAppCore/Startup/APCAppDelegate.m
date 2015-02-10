@@ -31,6 +31,7 @@ static NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
 static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
+static NSUInteger const kIndexOfActivitesTab = 0;
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 
@@ -328,10 +329,10 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 {
     if (!_storyboardIdInfo) {
         _storyboardIdInfo = @[
-                              @{@"name": kDashBoardStoryBoardKey, @"bundle" : [NSBundle mainBundle]},
-                              @{@"name": kLearnStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
-                              @{@"name": kActivitiesStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
-                              @{@"name": kHealthProfileStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]}
+                            @{@"name": kActivitiesStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
+                            @{@"name": kDashBoardStoryBoardKey, @"bundle" : [NSBundle mainBundle]},
+                            @{@"name": kLearnStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
+                            @{@"name": kHealthProfileStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]}
                               ];
     }
     return _storyboardIdInfo;
@@ -347,11 +348,11 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     
     NSArray       *items = tabBarController.tabBar.items;
     
-    NSUInteger     selectedItemIndex = 2;
+    NSUInteger     selectedItemIndex = kIndexOfActivitesTab;
     
-    NSArray  *deselectedImageNames = @[ @"tab_dashboard",          @"tab_learn",          @"tab_activities",          @"tab_profile" ];
-    NSArray  *selectedImageNames   = @[ @"tab_dashboard_selected", @"tab_learn_selected", @"tab_activities_selected", @"tab_profile_selected" ];
-    NSArray  *tabBarTitles         = @[ @"Dashboard", @"Learn", @"Activities", @"Profile"];
+    NSArray  *deselectedImageNames = @[ @"tab_activities", @"tab_dashboard", @"tab_learn", @"tab_profile" ];
+    NSArray  *selectedImageNames   = @[ @"tab_activities_selected", @"tab_dashboard_selected", @"tab_learn_selected",  @"tab_profile_selected" ];
+    NSArray  *tabBarTitles         = @[ @"Activities", @"Dashboard", @"Learn",  @"Profile"];
     
     for (int i=0; i<items.count; i++) {
         UITabBarItem  *item = items[i];
@@ -359,7 +360,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         item.selectedImage = [[UIImage imageNamed:selectedImageNames[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         item.title = tabBarTitles[i];
         
-        if (i == 2) {
+        if (i == kIndexOfActivitesTab) {
             NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
             NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
             NSNumber *activitiesBadgeValue = @(allScheduledTasks - completedScheduledTasks);
@@ -380,9 +381,9 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
     self.tabster = (UITabBarController  *)self.window.rootViewController;
-    NSArray  *deselectedImageNames = @[ @"tab_dashboard",          @"tab_learn",          @"tab_activities",          @"tab_profile" ];
-    NSArray  *selectedImageNames   = @[ @"tab_dashboard_selected", @"tab_learn_selected", @"tab_activities_selected", @"tab_profile_selected" ];
-    NSArray  *tabBarTitles         = @[ @"Dashboard", @"Learn", @"Activities", @"Profile"];
+    NSArray  *deselectedImageNames = @[@"tab_activities",  @"tab_dashboard", @"tab_learn",                    @"tab_profile" ];
+    NSArray  *selectedImageNames   = @[ @"tab_activities_selected", @"tab_dashboard_selected", @"tab_learn_selected",  @"tab_profile_selected" ];
+    NSArray  *tabBarTitles         = @[ @"Activities", @"Dashboard", @"Learn",  @"Profile"];
     
     if ([viewController isMemberOfClass: [UIViewController class]] == YES) {
         
@@ -401,7 +402,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         item.selectedImage = [[UIImage imageNamed:selectedImageNames[controllerIndex]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         item.title = tabBarTitles[controllerIndex];
         
-        if (controllerIndex == 2) {
+        if (controllerIndex == kIndexOfActivitesTab) {
             NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
             NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
             NSNumber *remainingTasks = @(allScheduledTasks - completedScheduledTasks);
