@@ -8,7 +8,6 @@
 #import "APCBaseWithProgressTaskViewController.h"
 #import "APCAppCore.h"
 
-static  CGFloat  kAPCStepProgressBarHeight = 8.0;
 static NSString *const kFinishedProperty = @"finished";
 
 @interface APCBaseWithProgressTaskViewController ()
