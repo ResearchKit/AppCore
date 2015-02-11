@@ -9,15 +9,8 @@
 #import "UIFont+APCAppearance.h"
 #import "UIColor+APCAppearance.h"
 
-static const CGFloat kBubbleInnerPadding = 39.0f;
-
-static const CGFloat kDescriptionLabelTopConstant = 12.0f;
-static const CGFloat kDescriptionLabelBottomConstant = 30.0f;
-
 @interface APCDashboardMoreInfoViewController ()
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *containerViewVerticalConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *descriptionTopConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomConstraint;
+
 
 @end
 
@@ -34,12 +27,8 @@ static const CGFloat kDescriptionLabelBottomConstant = 30.0f;
 {
     [super viewWillAppear:animated];
     
-    [self.view bringSubviewToFront:self.cellSnapshotImageView];
-    [self.view bringSubviewToFront:self.containerView];
-    
-    self.cellSnapshotImageView.image = self.snapshotImage;
-    
-    self.descriptionLabel.text = self.info;
+    self.titleLabel.text = self.titleString;
+    self.textView.text = self.info;
     self.backgroundImageView.image = self.blurredImage;
     
 }
@@ -48,66 +37,43 @@ static const CGFloat kDescriptionLabelBottomConstant = 30.0f;
 {
     [super viewDidAppear:animated];
     
-    [UIView animateWithDuration:0.2 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.containerView.transform = CGAffineTransformMakeScale(1, 1);
-        self.containerView.alpha = 1.0;
+    [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.7 initialSpringVelocity:2 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.containerView.center = CGPointMake(self.containerView.center.x, CGRectGetMidY(self.view.bounds));
     } completion:^(BOOL finished) {
         
     }];
 }
-- (void)viewWillLayoutSubviews
+- (void)viewDidLayoutSubviews
 {
-    [super viewWillLayoutSubviews];
+    [super viewDidLayoutSubviews];
     
-    self.cellTopConstraint.constant = CGRectGetMinY(self.cellRect) - 20;
-    self.cellHeightConstraint.constant = CGRectGetHeight(self.cellRect);
-    
-    CGSize textSize = [self.descriptionLabel.text boundingRectWithSize:CGSizeMake(CGRectGetWidth(self.descriptionLabel.frame), CGFLOAT_MAX) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:self.descriptionLabel.font} context:nil].size;
-    self.descriptionHeightConstraint.constant = textSize.height + kBubbleInnerPadding;
-    
-    if (self.shouldInvertBubble) {
-        
-        self.containerViewVerticalConstraint.active = NO;
-        
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.containerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.cellSnapshotImageView attribute:NSLayoutAttributeBottom multiplier:1 constant:2]];
-        
-        self.descriptionTopConstraint.constant = kDescriptionLabelBottomConstant;
-        self.descriptionBottomConstraint.constant = kDescriptionLabelTopConstant;
-        
-        self.bubbleImageView.image = [[UIImage imageNamed:@"info_bubble_upsidedown"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 30, 10) resizingMode:UIImageResizingModeStretch];
-        
-//        self.containerView.layer.anchorPoint = CGPointMake(0.5, 0);
-        self.containerView.layer.transform = CATransform3DTranslate(self.containerView.layer.transform, 0, -CGRectGetHeight(self.containerView.layer.bounds)/2, 0);
-    }
-    
-    [self.view setNeedsLayout];
+    self.containerView.center = CGPointMake(self.containerView.center.x, CGRectGetHeight(self.view.bounds)*1.5);
 }
 
 - (void)setupAppearance
 {
-    self.descriptionLabel.font = [UIFont appRegularFontWithSize:14.0f];
-    self.descriptionLabel.textColor = [UIColor appSecondaryColor2];
+    self.titleLabel.font = [UIFont appLightFontWithSize:24.0f];
+    self.titleLabel.textColor = [UIColor appSecondaryColor1];
     
-    self.bubbleImageView.image = [[UIImage imageNamed:@"info_bubble_upright"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 30, 10) resizingMode:UIImageResizingModeStretch];
+    self.textView.font = [UIFont appRegularFontWithSize:16.0f];
+    self.textView.textColor = [UIColor appSecondaryColor1];
     
-//    self.containerView.layer.anchorPoint = CGPointMake(0.5, 1.0);
-    self.containerView.alpha = 0;
-    self.containerView.transform = CGAffineTransformMakeScale(0.01, 0.01);
+    self.containerView.layer.cornerRadius = 5.0;
+    self.containerView.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.containerView.layer.shadowOffset = CGSizeMake(0, 4);
+    self.containerView.layer.masksToBounds = NO;
+    self.containerView.layer.shadowRadius = 10;
+    self.containerView.layer.shadowOpacity = 0.4;
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+- (IBAction)dismiss:(id)sender
 {
-    [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.containerView.transform = CGAffineTransformMakeScale(0.01, 0.01);
-        self.containerView.alpha = 0.0;
+    [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.7 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self.containerView.center = CGPointMake(self.containerView.center.x, CGRectGetHeight(self.view.bounds)*1.5 - CGRectGetHeight(self.containerView.bounds)/2);
     } completion:^(BOOL finished) {
-        [self dismiss];
+    
     }];
-}
-
-- (void)dismiss
-{
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
 @end
