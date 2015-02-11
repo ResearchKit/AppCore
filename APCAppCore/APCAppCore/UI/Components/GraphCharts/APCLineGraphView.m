@@ -17,7 +17,7 @@ static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";
 static NSString * const kGrowAnimationKey = @"LayerGrowAnimation";
 
 static CGFloat const kFadeAnimationDuration = 0.3;
-static CGFloat const kGrowAnimationDuration = 0.3;
+static CGFloat const kGrowAnimationDuration = 0.2;
 static CGFloat const kPopAnimationDuration  = 0.3;
 
 static CGFloat const kSnappingClosenessFactor = 0.35f;
@@ -370,34 +370,53 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     
     CGFloat rulerXPosition = CGRectGetWidth(self.yAxisView.bounds) - kAxisMarkingRulerLength + 2;
     
-    for (int i =0; i<yAxisLabelFactors.count; i++) {
+    if (self.maximumValueImage && self.minimumValueImage) {
+        //Use image icons as legends
         
-        CGFloat factor = ((NSNumber *)yAxisLabelFactors[i]).floatValue;
-        CGFloat positionOnYAxis = CGRectGetHeight(self.plotsView.frame) * (1 - factor);
+        CGFloat width = CGRectGetWidth(self.yAxisView.frame)/2;
+        CGFloat verticalPadding = 3.f;
         
-        UIBezierPath *rulerPath = [UIBezierPath bezierPath];
-        [rulerPath moveToPoint:CGPointMake(rulerXPosition, positionOnYAxis)];
-        [rulerPath addLineToPoint:CGPointMake(CGRectGetMaxX(self.yAxisView.bounds), positionOnYAxis)];
+        UIImageView *maxImageView = [[UIImageView alloc] initWithImage:self.maximumValueImage];
+        maxImageView.contentMode = UIViewContentModeScaleAspectFit;
+        maxImageView.frame = CGRectMake(CGRectGetWidth(self.yAxisView.bounds) - width, verticalPadding, width, width);
+        [self.yAxisView addSubview:maxImageView];
         
-        CAShapeLayer *rulerLayer = [CAShapeLayer layer];
-        rulerLayer.strokeColor = self.axisColor.CGColor;
-        rulerLayer.path = rulerPath.CGPath;
-        [self.yAxisView.layer addSublayer:rulerLayer];
+        UIImageView *minImageView = [[UIImageView alloc] initWithImage:self.minimumValueImage];
+        minImageView.contentMode = UIViewContentModeScaleAspectFit;
+        minImageView.frame = CGRectMake(CGRectGetWidth(self.yAxisView.bounds) - width, CGRectGetMaxY(self.yAxisView.bounds) - width - verticalPadding, width, width);
+        [self.yAxisView addSubview:minImageView];
         
-        CGFloat labelHeight = 20;//TODO:Constant
-        CGFloat labelYPosition = positionOnYAxis - labelHeight/2;
-        
-        CGFloat yValue = self.minimumValue + (self.maximumValue - self.minimumValue)*factor;
-        
-        UILabel *axisTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelYPosition, CGRectGetWidth(self.yAxisView.frame) - kAxisMarkingRulerLength, labelHeight)];
-        axisTitleLabel.text = [self formatNumber:@(yValue)]; //[NSString stringWithFormat:@"%.1f  ", yValue];
-        axisTitleLabel.backgroundColor = [UIColor clearColor];
-        axisTitleLabel.textColor = self.axisTitleColor;
-        axisTitleLabel.textAlignment = NSTextAlignmentRight;
-        axisTitleLabel.font = self.isLandscapeMode ? [UIFont fontWithName:self.axisTitleFont.familyName size:16.0f] : self.axisTitleFont;
-        axisTitleLabel.minimumScaleFactor = 0.8;
-        [self.yAxisView addSubview:axisTitleLabel];//TODO: Add to Axis View
+    } else {
+        for (int i =0; i<yAxisLabelFactors.count; i++) {
+            
+            CGFloat factor = [yAxisLabelFactors[i] floatValue];
+            CGFloat positionOnYAxis = CGRectGetHeight(self.plotsView.frame) * (1 - factor);
+            
+            UIBezierPath *rulerPath = [UIBezierPath bezierPath];
+            [rulerPath moveToPoint:CGPointMake(rulerXPosition, positionOnYAxis)];
+            [rulerPath addLineToPoint:CGPointMake(CGRectGetMaxX(self.yAxisView.bounds), positionOnYAxis)];
+            
+            CAShapeLayer *rulerLayer = [CAShapeLayer layer];
+            rulerLayer.strokeColor = self.axisColor.CGColor;
+            rulerLayer.path = rulerPath.CGPath;
+            [self.yAxisView.layer addSublayer:rulerLayer];
+            
+            CGFloat labelHeight = 20;//TODO:Constant
+            CGFloat labelYPosition = positionOnYAxis - labelHeight/2;
+            
+            CGFloat yValue = self.minimumValue + (self.maximumValue - self.minimumValue)*factor;
+            
+            UILabel *axisTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelYPosition, CGRectGetWidth(self.yAxisView.frame) - kAxisMarkingRulerLength, labelHeight)];
+            axisTitleLabel.text = [self formatNumber:@(yValue)]; //[NSString stringWithFormat:@"%.1f  ", yValue];
+            axisTitleLabel.backgroundColor = [UIColor clearColor];
+            axisTitleLabel.textColor = self.axisTitleColor;
+            axisTitleLabel.textAlignment = NSTextAlignmentRight;
+            axisTitleLabel.font = self.isLandscapeMode ? [UIFont fontWithName:self.axisTitleFont.familyName size:16.0f] : self.axisTitleFont;
+            axisTitleLabel.minimumScaleFactor = 0.8;
+            [self.yAxisView addSubview:axisTitleLabel];//TODO: Add to Axis View
+        }
     }
+    
 }
 
 - (void)drawhorizontalReferenceLines
@@ -414,9 +433,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     referenceLineLayer.lineDashPattern = self.isLandscapeMode ? @[@12, @7] : @[@6, @4];
     [self.layer addSublayer:referenceLineLayer];
     
-    if (self.shouldAnimate) {
-        referenceLineLayer.opacity = 0;
-    }
     [self.referenceLines addObject:referenceLineLayer];
 }
 
@@ -436,9 +452,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         referenceLineLayer.lineDashPattern = self.isLandscapeMode ? @[@12, @7] : @[@6, @4];
         [self.plotsView.layer addSublayer:referenceLineLayer];
         
-        if (self.shouldAnimate) {
-            referenceLineLayer.opacity = 0;
-        }
         [self.referenceLines addObject:referenceLineLayer];
     }
 }
@@ -764,12 +777,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 {
     CGFloat delay = 0.3;
     
-    for (int i=0; i<self.referenceLines.count; i++) {
-        CAShapeLayer *layer = self.referenceLines[i];
-        delay += 0.1;
-        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeFade startDelay:delay];
-    }
-    
     for (int i=0; i<self.dots.count; i++) {
         CAShapeLayer *layer = [self.dots[i] shapeLayer];
         delay += 0.1;
@@ -882,7 +889,28 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         //---------------
         
         CGFloat snappedXPosition = [self snappedXPosition:location.x];
-        [self scrubberViewForXPosition:snappedXPosition];
+        self.scrubberLine.center = CGPointMake(snappedXPosition + kAPCGraphLeftPadding, self.scrubberLine.center.y);
+        
+        CGFloat scrubbingVal = [self valueForCanvasXPosition:(snappedXPosition)];
+        self.scrubberLabel.text = [NSString stringWithFormat:@"%.0f", scrubbingVal];
+        
+        CGSize textSize = [self.scrubberLabel.text boundingRectWithSize:CGSizeMake(320, CGRectGetHeight(self.scrubberLabel.bounds)) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:self.scrubberLabel.font} context:nil].size;
+        
+        [self.scrubberLabel setFrame:CGRectMake(CGRectGetMaxX(self.scrubberLine.frame) + 6, CGRectGetMinY(self.scrubberLine.frame), textSize.width + 3, CGRectGetHeight(self.scrubberLabel.frame))];
+        
+        //---------------
+        
+        CGFloat scrubberYPos = [self canvasYPointForXPosition:snappedXPosition];
+        
+        [self.scrubberThumbView setCenter:CGPointMake(snappedXPosition + kAPCGraphLeftPadding, scrubberYPos + kAPCGraphTopPadding)];
+        
+        if (scrubbingVal >= self.minimumValue && scrubbingVal <= self.maximumValue) {
+            self.scrubberLabel.alpha = 1;
+            self.scrubberThumbView.alpha = 1;
+        } else {
+            self.scrubberLabel.alpha = 0;
+            self.scrubberThumbView.alpha = 0;
+        }
         
         //---------------
         
@@ -904,39 +932,18 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     }
 }
 
-- (void)scrubberViewForXPosition:(CGFloat)xPosition
-{
-    self.scrubberLine.center = CGPointMake(xPosition + kAPCGraphLeftPadding, self.scrubberLine.center.y);
-    
-    CGFloat scrubbingVal = [self valueForCanvasXPosition:(xPosition)];
-    self.scrubberLabel.text = [NSString stringWithFormat:@"%.0f", scrubbingVal];
-    
-    CGSize textSize = [self.scrubberLabel.text boundingRectWithSize:CGSizeMake(320, CGRectGetHeight(self.scrubberLabel.bounds)) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:self.scrubberLabel.font} context:nil].size;
-    
-    [self.scrubberLabel setFrame:CGRectMake(CGRectGetMaxX(self.scrubberLine.frame) + 6, CGRectGetMinY(self.scrubberLine.frame), textSize.width + 8, CGRectGetHeight(self.scrubberLabel.frame))];
-    
-    //---------------
-    
-    CGFloat scrubberYPos = [self canvasYPointForXPosition:xPosition];
-    
-    [self.scrubberThumbView setCenter:CGPointMake(xPosition + kAPCGraphLeftPadding, scrubberYPos + kAPCGraphTopPadding)];
-    
-    if (scrubbingVal >= self.minimumValue && scrubbingVal <= self.maximumValue) {
-        self.scrubberLabel.alpha = 1;
-        self.scrubberThumbView.alpha = 1;
-    } else {
-        self.scrubberLabel.alpha = 0;
-        self.scrubberThumbView.alpha = 0;
-    }
-}
-
 #pragma mark - Public Methods
 
 - (void)scrubReferenceLineForXPosition:(CGFloat)xPosition
 {
     if (self.dataPoints.count > 1) {
-        [self scrubberViewForXPosition:xPosition];
+        self.scrubberLine.center = CGPointMake(xPosition + kAPCGraphLeftPadding, self.scrubberLine.center.y);
+        [self.scrubberLabel setFrame:CGRectMake(self.scrubberLine.frame.origin.x + 5, kAPCGraphTopPadding, CGRectGetWidth(self.scrubberLabel.frame), CGRectGetHeight(self.scrubberLabel.frame))];
+        self.scrubberLabel.text = [NSString stringWithFormat:@"%.2f", [self valueForCanvasXPosition:xPosition]];
+        
+        [self.scrubberThumbView setCenter:CGPointMake(xPosition + kAPCGraphLeftPadding, [self canvasYPointForXPosition:xPosition] + kAPCGraphTopPadding)];
     }
+    
 }
 
 @end

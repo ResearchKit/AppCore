@@ -39,8 +39,12 @@
 
 @property (nonatomic, strong) UIColor *scrubberLineColor;
 
-
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
+
+//Support for image icons as legends
+@property (nonatomic, strong) UIImage *maximumValueImage;
+
+@property (nonatomic, strong) UIImage *minimumValueImage;
 
 - (NSInteger)numberOfPlots;
 
