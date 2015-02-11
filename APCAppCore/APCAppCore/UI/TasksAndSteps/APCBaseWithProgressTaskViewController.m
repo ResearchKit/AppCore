@@ -8,7 +8,6 @@
 #import "APCBaseWithProgressTaskViewController.h"
 #import "APCAppCore.h"
 
-static  CGFloat  kAPCStepProgressBarHeight = 8.0;
 static NSString *const kFinishedProperty = @"finished";
 
 @interface APCBaseWithProgressTaskViewController ()
@@ -17,42 +16,6 @@ static NSString *const kFinishedProperty = @"finished";
 @end
 
 @implementation APCBaseWithProgressTaskViewController
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    self.showsProgressInNavigationBar = NO;
-    
-    CGRect  navigationBarFrame = self.navigationBar.frame;
-    CGRect  progressorFrame = CGRectMake(0.0, CGRectGetHeight(navigationBarFrame) - kAPCStepProgressBarHeight, CGRectGetWidth(navigationBarFrame), kAPCStepProgressBarHeight);
-    
-    APCStepProgressBar  *tempProgressor = [[APCStepProgressBar alloc] initWithFrame:progressorFrame style:APCStepProgressBarStyleOnlyProgressView];
-    
-    id<RKSTTask> task = self.task;
-    
-    NSArray  *steps;
-    if ([task respondsToSelector:@selector(steps)]) {
-        steps = [task performSelector:@selector(steps)];
-        tempProgressor.numberOfSteps = [steps count];
-        [tempProgressor setCompletedSteps: 1 animation:NO];
-    }
-    else if([task respondsToSelector:@selector(progressOfCurrentStep:withResult:)])
-    {
-        RKSTTaskProgress progress = [task progressOfCurrentStep:nil withResult:self.result];
-        tempProgressor.numberOfSteps = progress.total;
-        [tempProgressor setCompletedSteps: 1 animation:NO];
-    }
-    tempProgressor.progressTintColor = [UIColor appTertiaryColor1];
-    [self.navigationBar addSubview:tempProgressor];
-    self.progressor = tempProgressor;
-    
-    self.navigationBar.topItem.title = NSLocalizedString(self.taskName, nil);
-}
-
-- (NSString *)taskName
-{
-    return self.scheduledTask.task.taskTitle;
-}
 
 /*********************************************************************************/
 #pragma mark - StepViewController Delegate Methods
@@ -65,27 +28,8 @@ static NSString *const kFinishedProperty = @"finished";
     }
     
     [self removeKVOIfNeeded];
-
-    if (![self.task respondsToSelector:@selector(progressOfCurrentStep:withResult:)]) {
-        NSInteger  completedSteps = self.progressor.completedSteps;
-        if (direction == RKSTStepViewControllerNavigationDirectionForward) {
-            completedSteps = completedSteps + 1;
-        } else {
-            completedSteps = completedSteps - 1;
-        }
-        [self.progressor setCompletedSteps:completedSteps animation:YES];
-    }
 }
 
-- (void)stepViewControllerWillAppear:(RKSTStepViewController *)viewController
-{
-    [super stepViewControllerWillAppear:viewController];
-    if([self.task respondsToSelector:@selector(progressOfCurrentStep:withResult:)])
-    {
-        RKSTTaskProgress progress = [self.task progressOfCurrentStep:viewController.step withResult:self.result];
-        [self.progressor setCompletedSteps:progress.current animation:YES];
-    }
-}
 
 - (BOOL) advanceArrayContainsStep: (RKSTStep*) step
 {

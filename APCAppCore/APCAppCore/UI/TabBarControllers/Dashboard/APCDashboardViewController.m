@@ -109,6 +109,9 @@
             graphCell.graphView.panGestureRecognizer.delegate = self;
             graphCell.graphView.axisTitleFont = [UIFont appRegularFontWithSize:14.0f];
             
+            graphCell.graphView.maximumValueImage = graphItem.maximumImage;
+            graphCell.graphView.minimumValueImage = graphItem.minimumImage;
+            
             graphCell.tintColor = graphItem.tintColor;
             graphCell.delegate = self;
             [graphCell.graphView layoutSubviews];
@@ -300,49 +303,20 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     APCTableViewDashboardItem *item = (APCTableViewDashboardItem *)[self itemForIndexPath:indexPath];
     
-    APCDashboardMoreInfoViewController *moreInfoViewController = [[UIStoryboard storyboardWithName:@"APHDashboard" bundle:nil] instantiateViewControllerWithIdentifier:@"APCDashboardMoreInfoViewController"];
+    APCDashboardMoreInfoViewController *moreInfoViewController = [[UIStoryboard storyboardWithName:@"APCDashboard" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCDashboardMoreInfoViewController"];
     moreInfoViewController.info = item.info;
+    moreInfoViewController.titleString = item.caption;
     
-    //Set Rect of cell
-    __block CGRect rect = [cell convertRect:cell.bounds toView:self.view.window];
-    float delay = 0;
+    //Blur
+    UIImage *blurredImage = [self.tabBarController.view blurredSnapshotDark];
+    moreInfoViewController.blurredImage = blurredImage;
     
-    if (!CGRectContainsRect(self.view.window.bounds, rect)) {
-        delay = 0.3;
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    }
-    
-    __weak typeof(self) weakSelf = self;
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    //Present
+    moreInfoViewController.transitioningDelegate = self;
+    moreInfoViewController.modalPresentationStyle = UIModalPresentationCustom;
+    [self.navigationController presentViewController:moreInfoViewController animated:YES completion:^{
         
-        rect = [cell convertRect:cell.bounds toView:weakSelf.view.window];
-        moreInfoViewController.cellRect = rect;
-        
-        //Snapshot Cell
-        UIGraphicsBeginImageContextWithOptions(cell.bounds.size, NO, 0.0);
-        [cell drawViewHierarchyInRect:cell.bounds afterScreenUpdates:YES];
-        UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        moreInfoViewController.snapshotImage = snapshotImage;
-        
-        if (CGRectGetMinY(rect) < CGRectGetHeight(weakSelf.view.window.bounds)*0.25) {
-            moreInfoViewController.shouldInvertBubble = YES;
-        }
-        
-        //Blur
-        UIImage *blurredImage = [weakSelf.tabBarController.view blurredSnapshotDark];
-        moreInfoViewController.blurredImage = blurredImage;
-        
-        //Present
-        moreInfoViewController.transitioningDelegate = weakSelf;
-        moreInfoViewController.modalPresentationStyle = UIModalPresentationCustom;
-        [weakSelf.navigationController presentViewController:moreInfoViewController animated:YES completion:^{
-            
-        }];
-    });
-    
+    }];
     
 }
 
