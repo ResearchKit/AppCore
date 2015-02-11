@@ -873,8 +873,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 
 #pragma mark - Touch
 
-#pragma mark - Touch
-
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
     if ((self.dataPoints.count > 0) && [self numberOfValidValues] > 0) {
