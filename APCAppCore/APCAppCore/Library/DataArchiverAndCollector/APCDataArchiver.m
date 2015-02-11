@@ -220,19 +220,19 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 
 - (void)addTappingResultsToArchive:(RKSTTappingIntervalResult *)result
 {
-    NSMutableDictionary  *dictionary = [NSMutableDictionary dictionary];
-    
+    NSMutableDictionary  *rawTappingResults = [NSMutableDictionary dictionary];
+
     NSString  *tappingViewSize = NSStringFromCGSize(result.stepViewSize);
-    dictionary[kTappingViewSizeKey] = tappingViewSize;
+    rawTappingResults[kTappingViewSizeKey] = tappingViewSize;
     
-    dictionary[kStartDateKey] = result.startDate;
-    dictionary[kEndDateKey]   = result.endDate;
+    rawTappingResults[kStartDateKey] = result.startDate;
+    rawTappingResults[kEndDateKey]   = result.endDate;
     
     NSString  *leftButtonRect = NSStringFromCGRect(result.buttonRect1);
-    dictionary[kButtonRectLeftKey] = leftButtonRect;
+    rawTappingResults[kButtonRectLeftKey] = leftButtonRect;
     
     NSString  *rightButtonRect = NSStringFromCGRect(result.buttonRect2);
-    dictionary[kButtonRectRightKey] = rightButtonRect;
+    rawTappingResults[kButtonRectRightKey] = rightButtonRect;
     
     NSArray  *samples = result.samples;
     NSMutableArray  *sampleResults = [NSMutableArray array];
@@ -252,13 +252,13 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
         }
         [sampleResults addObject:aSampleDictionary];
     }
-    dictionary[kTappingSamplesKey] = sampleResults;
+    rawTappingResults[kTappingSamplesKey] = sampleResults;
 
 
 #warning Ron:  THIS IS NOT BEING USED AS INTENDED.  I renamed the method to reflect the intended use -- but this code is getting only part of the converted data.  I don't want to gratuitously make it "correct" because that might have lots of unintended side effects.
 
-	NSDictionary *hackedUpDictionary = [self generateDictionaryToSaveFromSourceDictionary:dictionary];
-    [self writeResultDictionaryToArchive: hackedUpDictionary];
+	NSDictionary *serializableData = [self generateSerializableDataFromSourceDictionary: rawTappingResults];
+    [self writeResultDictionaryToArchive: serializableData];
 }
 
 - (void) addResultToArchive: (RKSTResult*) result
@@ -289,58 +289,64 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 		}
 	}
 
+    NSDictionary *propertiesToSave = [result dictionaryWithValuesForKeys: propertyNames];
+	NSDictionary *serializableData = [self generateSerializableDataFromSourceDictionary: propertiesToSave];
 
-    NSMutableDictionary * dictionary = [[result dictionaryWithValuesForKeys:propertyNames] mutableCopy];
-    dictionary = [self generateDictionaryToSaveFromSourceDictionary:dictionary];
-    APCLogDebug(@"%@", dictionary);
-    [self writeResultDictionaryToArchive:dictionary];
-    [self addFileInfoEntryWithDictionary:dictionary];
+    APCLogDebug(@"%@", serializableData);
+
+    [self writeResultDictionaryToArchive: serializableData];
+    [self addFileInfoEntryWithDictionary: serializableData];
 }
 
-- (NSMutableDictionary*) generateDictionaryToSaveFromSourceDictionary :(NSMutableDictionary*) mutableDictionary {
+- (NSDictionary *) generateSerializableDataFromSourceDictionary: (NSDictionary *) sourceDictionary
+{
     static NSArray* array = nil;
 
-#warning Ron:  these hard-coded values seem to be the string equivalents of the some concept of a "question type," an integer, defined... somewhere else.  Where are those integers defined?  I think it'd help if these strings and those integers were defined in the same place.  And where is the "questionType" entry set to one of those integers?
+	#warning Ron:  these hard-coded values seem to be the string equivalents of the some concept of a "question type," an integer, defined... somewhere else.  Where are those integers defined?  I think it'd help if these strings and those integers were defined in the same place.  And where is the "questionType" entry set to one of those integers?
     if (array == nil) {
         array = @[@"None", @"Scale", @"SingleChoice", @"MultipleChoice", @"Decimal",@"Integer", @"Boolean", @"Text", @"TimeOfDay", @"DateAndTime", @"Date", @"TimeInterval"];
     }
-    //Replace questionType
-    if (mutableDictionary[kQuestionTypeKey]) {
-        NSUInteger index = ((NSNumber*) mutableDictionary[kQuestionTypeKey]).integerValue;
 
-#warning Ron:  here's where the question type is magically converted into one of the strings defined in this array called "array."
+	NSMutableDictionary *somewhatCleanedUpSource = sourceDictionary.mutableCopy;
+
+
+    //Replace questionType
+    if (somewhatCleanedUpSource[kQuestionTypeKey]) {
+        NSUInteger index = ((NSNumber*) somewhatCleanedUpSource[kQuestionTypeKey]).integerValue;
+
+		#warning Ron:  here's where the question type is magically converted into one of the strings defined in this array called "array."
         if (index < array.count) {
-            mutableDictionary[kQuestionTypeKey] = array[index];
+            somewhatCleanedUpSource[kQuestionTypeKey] = array[index];
         }
     }
     
     //Remove userInfo if its empty
-#warning Ron:  should we also extract the item, see if it's a dictionary, and see if it's empty?
-    if ([mutableDictionary[kUserInfoKey] isEqual:[NSNull null]]) {
-        [mutableDictionary removeObjectForKey:kUserInfoKey];
+	#warning Ron:  should we also extract the item, see if it's a dictionary, and see if it's empty?
+    if ([somewhatCleanedUpSource[kUserInfoKey] isEqual:[NSNull null]]) {
+        [somewhatCleanedUpSource removeObjectForKey:kUserInfoKey];
     }
     
     //Replace identifier with item
-#warning Ron: why do this?  Who's consuming this, such that the word "item" is better than "identifier"?
-#warning Ron: and why modify the original, if we're about to make a copy anyway -- and we know we generated this dictionary on the line of code immediately preceding this method call?
-    if (mutableDictionary[kIdentifierKey]) {
-        mutableDictionary[kItemKey] =mutableDictionary[kIdentifierKey];
-        [mutableDictionary removeObjectForKey:kIdentifierKey];
+	#warning Ron: why do this?  Who's consuming this, such that the word "item" is better than "identifier"?
+	#warning Ron: and why modify the original, if we're about to make a copy anyway -- and we know we generated this dictionary on the line of code immediately preceding this method call?
+    if (somewhatCleanedUpSource[kIdentifierKey]) {
+        somewhatCleanedUpSource[kItemKey] =somewhatCleanedUpSource[kIdentifierKey];
+        [somewhatCleanedUpSource removeObjectForKey:kIdentifierKey];
     }
     
-        //Override dates with strings
-#warning Ron: why?  ...although the default formatter does seem to generate pretty, terse, and readable results: "2015-02-07 23:15:17 +0000".
-    if ([mutableDictionary[kStartDateKey] isKindOfClass:[NSDate class]]) {
-        mutableDictionary[kStartDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kStartDateKey]];
+    //Override dates with strings
+	#warning Ron: why?  ...although the default formatter does seem to generate pretty, terse, and readable results: "2015-02-07 23:15:17 +0000".
+    if ([somewhatCleanedUpSource[kStartDateKey] isKindOfClass:[NSDate class]]) {
+        somewhatCleanedUpSource[kStartDateKey] = [NSString stringWithFormat:@"%@", somewhatCleanedUpSource[kStartDateKey]];
     }
     
-    if ([mutableDictionary[kEndDateKey] isKindOfClass:[NSDate class]]) {
-        mutableDictionary[kEndDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kEndDateKey]];
+    if ([somewhatCleanedUpSource[kEndDateKey] isKindOfClass:[NSDate class]]) {
+        somewhatCleanedUpSource[kEndDateKey] = [NSString stringWithFormat:@"%@", somewhatCleanedUpSource[kEndDateKey]];
     }
     
-    NSMutableDictionary * copyDictionary = [mutableDictionary mutableCopy];
+    NSMutableDictionary * copyDictionary = [somewhatCleanedUpSource mutableCopy];
 
-    [mutableDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+    [somewhatCleanedUpSource enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
 
         // Delete NSCalendars.  By the time we serialize,
 		// we'll have a date/time objects with time zones,
