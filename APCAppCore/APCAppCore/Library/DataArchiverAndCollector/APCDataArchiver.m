@@ -299,99 +299,209 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 
 - (NSDictionary *) generateSerializableDataFromSourceDictionary: (NSDictionary *) sourceDictionary
 {
-	NSMutableDictionary *somewhatCleanedUpSource = sourceDictionary.mutableCopy;
+	NSMutableDictionary *serializableDictionary = [NSMutableDictionary new];
 
-    /*
-	 If we have a QuestionType, convert it to a human-readable name,
-	 and put both in the resulting dictionary.  This will let Sage
-	 (and us) switch() on the value, but debug it using the name.
+	/*
+	 Walk through all content we're about to serialize,
+	 convert it to something safe, and add to the outbound
+	 dictionary if desired.
 	 */
-    if (somewhatCleanedUpSource [kQuestionTypeKey])
+	for (NSString *key in sourceDictionary.allKeys)
 	{
-		NSNumber *questionTypeAsNumber = somewhatCleanedUpSource [kQuestionTypeKey];
-        RKQuestionType questionType = questionTypeAsNumber.integerValue;
-		NSString *questionTypeAsString = NSStringFromRKQuestionType (questionType);
-		somewhatCleanedUpSource [kQuestionTypeNameKey] = questionTypeAsString;
-    }
+		id value = sourceDictionary [key];
 
-    //Remove userInfo if its empty
-	#warning Ron:  should we also extract the item, see if it's a dictionary, and see if it's empty?
-    if ([somewhatCleanedUpSource[kUserInfoKey] isEqual:[NSNull null]]) {
-        [somewhatCleanedUpSource removeObjectForKey:kUserInfoKey];
-    }
-    
-    //Replace identifier with item
-	#warning Ron: why do this?  Who's consuming this, such that the word "item" is better than "identifier"?
-	#warning Ron: and why modify the original, if we're about to make a copy anyway -- and we know we generated this dictionary on the line of code immediately preceding this method call?
-    if (somewhatCleanedUpSource[kIdentifierKey]) {
-        somewhatCleanedUpSource[kItemKey] =somewhatCleanedUpSource[kIdentifierKey];
-        [somewhatCleanedUpSource removeObjectForKey:kIdentifierKey];
-    }
-    
-    //Override dates with strings
-	#warning Ron: why?  ...although the default formatter does seem to generate pretty, terse, and readable results: "2015-02-07 23:15:17 +0000".
-    if ([somewhatCleanedUpSource[kStartDateKey] isKindOfClass:[NSDate class]]) {
-        somewhatCleanedUpSource[kStartDateKey] = [NSString stringWithFormat:@"%@", somewhatCleanedUpSource[kStartDateKey]];
-    }
-    
-    if ([somewhatCleanedUpSource[kEndDateKey] isKindOfClass:[NSDate class]]) {
-        somewhatCleanedUpSource[kEndDateKey] = [NSString stringWithFormat:@"%@", somewhatCleanedUpSource[kEndDateKey]];
-    }
-    
-    NSMutableDictionary * copyDictionary = [somewhatCleanedUpSource mutableCopy];
 
-    [somewhatCleanedUpSource enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-
-        // Delete NSCalendars.  By the time we serialize,
-		// we'll have a date/time objects with time zones,
-		// which is sufficient.
-        if ([obj isKindOfClass:[NSCalendar class]])
-		{
-            [copyDictionary removeObjectForKey:key];
-        }
+		// - - - - - - - - - - - - - -
+		// Keys we like:  convert values to safe values
+		// - - - - - - - - - - - - - -
 
 		/*
+		 QuestionType:
+
+		 If we have a QuestionType, convert it to a human-readable name,
+		 and put both the name and the value into the resulting dictionary.
+		 This will let Sage (and us) switch() on the value, but debug it
+		 using the name.
+		 
+		 If the questionType field doesn't contain a number, just pass
+		 the value through as-is...  if it's legal JSON.  If not,
+		 stringify it.  Either way, mark it as "unknown."  (This is
+		 probably a programming error, though.)
+		 */
+		if ([key isEqualToString: kQuestionTypeKey])
+		{
+			NSString *questionTypeAsString = nil;
+			id itemToSerialize = nil;
+
+			// Make sure it's a legal number, not NaN or infinity,
+			// or else it can't be serialized.
+			if ([value isKindOfClass: [NSNumber class]]  && [NSJSONSerialization isValidJSONObject: @[value]])
+			{
+				NSNumber *questionTypeAsNumber = value;
+				RKQuestionType questionType = questionTypeAsNumber.integerValue;
+				questionTypeAsString = NSStringFromRKQuestionType (questionType);
+				itemToSerialize = value;
+			}
+
+			else
+			{
+				questionTypeAsString = RKQuestionTypeUnknown;
+
+				if ([NSJSONSerialization isValidJSONObject: @[value]])
+				{
+					// Don't know what it is (or why it's in the "question
+					// type" field), but it's JSON-friendly.  Leave it as-is.
+					itemToSerialize = value;
+				}
+
+				else
+				{
+					itemToSerialize = [NSString stringWithFormat: @"%@", value];
+				}
+			}
+
+			serializableDictionary [kQuestionTypeKey] = itemToSerialize;
+			serializableDictionary [kQuestionTypeNameKey] = questionTypeAsString;
+		}
+
+		/*
+		 UserInfo:
+
+		 Only copy the userInfo dictionary if it has something in it.
+		 
+		 If it contains non-JSON-friendly content, we'll stringify it.
+		 (If that happens, it may be a programming error, though.)
+		 */
+		else if ([key isEqualToString: kUserInfoKey])
+		{
+			if (value != [NSNull null] &&
+				[value isKindOfClass: [NSDictionary class]] &&
+				((NSDictionary *) value).count > 0)
+			{
+				id itemToSerialize = nil;
+				NSDictionary *userInfo = value;
+
+				if ([NSJSONSerialization isValidJSONObject: userInfo])
+				{
+					itemToSerialize = userInfo;
+				}
+				else
+				{
+					itemToSerialize = [NSString stringWithFormat: @"%@", userInfo];
+				}
+
+				serializableDictionary [kUserInfoKey] = itemToSerialize;
+			}
+
+			else
+			{
+				// It's null, or an empty dictionary.  Ignore it --
+				// omit it from the list of stuff to serialize.
+			}
+		}
+
+		/*
+		 Question Identifier:
+
+		 Replace the key "identifier" with "item".
+		 */
+		#warning Ron: why do this?  Who's consuming this, such that the word "item" is better than "identifier"?
+		else if ([key isEqualToString: kIdentifierKey])
+		{
+			id itemToSerialize = nil;
+
+			if ([NSJSONSerialization isValidJSONObject: @[value]])
+			{
+				itemToSerialize = value;
+			}
+			else
+			{
+				itemToSerialize = [NSString stringWithFormat: @"%@", value];
+			}
+
+			serializableDictionary [kItemKey] = itemToSerialize;
+		}
+
+		
+
+		// - - - - - - - - - - - - - -
+		// Values to delete
+		// - - - - - - - - - - - - - -
+		
+		/*
+		 Delete calendars.  Meaning:  if we see one, ignore it.
+		 
+		 We'll serialize Dates to a string that contains the time
+		 zone, so we don't need the Calendars.
+		 */
+		else if ([value isKindOfClass: [NSCalendar class]])
+		{
+			// Nothing to do.
+		}
+
+
+
+		// - - - - - - - - - - - - - -
+		// Values the serializer can convert natively
+		// - - - - - - - - - - - - - -
+		
+		/*
+		 Arrays, dictionaries, strings, numbers, and nulls.
+
 		 If the thing in question can be serialized as-is,
-		 leave it be.  Specifically:  if it's an array of
-		 strings, numbers, nulls, or dictionaries/arrays
-		 containing yet more primitives, include it as-is,
-		 instead of stringifying it.
+		 leave it be.  Specifically: 
 		 
-		 The reason:  if we stringify these, they end up
-		 with lots of gratuitous ()s, ""s, "\n"s, etc.
+		 -	if it's an array of strings, numbers, nulls, or
+			dictionaries/arrays containing yet more primitives,
+			include it as-is, instead of stringifying it.  Why?
+			Because if we stringify these, the strings end up
+			with lots of gratuitous ()s, ""s, "\n"s, etc.
+
+		 -	if it's a string or an NSNull, it's fine.
 		 
+		 -	if it's a number, and it's not NaN or infinity,
+			it's fine.  Since the serializer can tell us
+			about that, we'll just ask the serializer.
+		 
+		 We can check for all those situations by simply taking
+		 the value, wrapping it in an array, and asking the
+		 serializer to validate it.
+
 		 The rules:
 		 https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSJSONSerialization_Class/
 		 */
-		else if ([NSJSONSerialization isValidJSONObject: obj])
+		else if ([NSJSONSerialization isValidJSONObject: @[value]])
+
 		{
-			// Arrays and dictionaries containing nothing
-			// but primitives, or more arrays/dictionaries
-			// of primitives, will be fine.  Leave as-is.
+			serializableDictionary [key] = value;
 		}
 
-		else if ([obj isKindOfClass: [NSString class]])
-		{
-			// Strings will be serialized just fine.  Leave as-is.
-		}
 
-		else if ([obj isKindOfClass: [NSNumber class]] && [NSJSONSerialization isValidJSONObject: @[obj]])
-		{
-			// Numbers will be serialized just fine,
-			// as long as they aren't NaN or infinity.
-			// To check for that, I wrapped the number
-			// in an array ( @[obj] ) and asked the
-			// serializer to inspect it.
-		}
-
+		// - - - - - - - - - - - - - -
+		// Everything else:  values we want to keep, but don't know how to convert
+		// - - - - - - - - - - - - - -
+		
+		/*
+		 If we get here:  we've deleted stuff we wanted to delete,
+		 and converted stuff we wanted to convert.  Anything else
+		 is data we do indeed like, but we don't know how to deal
+		 with it, and the serializer didn't know, either.  So...
+		 convert it to a string.
+		 
+		 This includes NSDates, by the way.  Their default
+		 stringifier works fine.
+		 */
 		else
 		{
-			// No idea what it is.  Stringify it.
-			copyDictionary[key] = [NSString stringWithFormat:@"%@", obj];
+			NSString *valueToSerialize = [NSString stringWithFormat: @"%@", value];
+			serializableDictionary [key] = valueToSerialize;
 		}
-    }];
-    
-    return copyDictionary;
+	}
+
+	/*
+	 Whew.  Done.  Return an immutable copy, just on the principle of encapsulation.
+	 */
+	return [NSDictionary dictionaryWithDictionary: serializableDictionary];
 }
 
 - (void) writeResultDictionaryToArchive: (NSDictionary*) dictionary
