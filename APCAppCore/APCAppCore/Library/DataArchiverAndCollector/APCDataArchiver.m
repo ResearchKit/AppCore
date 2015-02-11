@@ -10,8 +10,10 @@
 #import "zipzap.h"
 #import <objc/runtime.h>
 #import "APCUtilities.h"
+#import "RKSTAnswerFormat+Helper.h"
 
 NSString *const kQuestionTypeKey        = @"questionType";
+NSString *const kQuestionTypeNameKey    = @"questionTypeName";
 NSString *const kUserInfoKey            = @"userInfo";
 NSString *const kIdentifierKey          = @"identifier";
 NSString *const kStartDateKey           = @"startDate";
@@ -297,26 +299,21 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 
 - (NSDictionary *) generateSerializableDataFromSourceDictionary: (NSDictionary *) sourceDictionary
 {
-    static NSArray* array = nil;
-
-	#warning Ron:  these hard-coded values seem to be the string equivalents of the some concept of a "question type," an integer, defined... somewhere else.  Where are those integers defined?  I think it'd help if these strings and those integers were defined in the same place.  And where is the "questionType" entry set to one of those integers?
-    if (array == nil) {
-        array = @[@"None", @"Scale", @"SingleChoice", @"MultipleChoice", @"Decimal",@"Integer", @"Boolean", @"Text", @"TimeOfDay", @"DateAndTime", @"Date", @"TimeInterval"];
-    }
-
 	NSMutableDictionary *somewhatCleanedUpSource = sourceDictionary.mutableCopy;
 
-
-    //Replace questionType
-    if (somewhatCleanedUpSource[kQuestionTypeKey]) {
-        NSUInteger index = ((NSNumber*) somewhatCleanedUpSource[kQuestionTypeKey]).integerValue;
-
-		#warning Ron:  here's where the question type is magically converted into one of the strings defined in this array called "array."
-        if (index < array.count) {
-            somewhatCleanedUpSource[kQuestionTypeKey] = array[index];
-        }
+    /*
+	 If we have a QuestionType, convert it to a human-readable name,
+	 and put both in the resulting dictionary.  This will let Sage
+	 (and us) switch() on the value, but debug it using the name.
+	 */
+    if (somewhatCleanedUpSource [kQuestionTypeKey])
+	{
+		NSNumber *questionTypeAsNumber = somewhatCleanedUpSource [kQuestionTypeKey];
+        RKQuestionType questionType = questionTypeAsNumber.integerValue;
+		NSString *questionTypeAsString = NSStringFromRKQuestionType (questionType);
+		somewhatCleanedUpSource [kQuestionTypeNameKey] = questionTypeAsString;
     }
-    
+
     //Remove userInfo if its empty
 	#warning Ron:  should we also extract the item, see if it's a dictionary, and see if it's empty?
     if ([somewhatCleanedUpSource[kUserInfoKey] isEqual:[NSNull null]]) {

@@ -69,6 +69,8 @@
 		36C8B3EC1A38D9FF0051096B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3EB1A38D9FF0051096B /* Security.framework */; };
 		36C8B3EE1A38DA4C0051096B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */; };
 		36E06F1C1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E06F1B1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m */; };
+		36F3BBBA1A8AF925006A3CAE /* RKSTAnswerFormat+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 36F3BBB81A8AF925006A3CAE /* RKSTAnswerFormat+Helper.h */; };
+		36F3BBBB1A8AF925006A3CAE /* RKSTAnswerFormat+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36F3BBB91A8AF925006A3CAE /* RKSTAnswerFormat+Helper.m */; };
 		5B04329F1A318AA2000DC9ED /* APCSignInTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B04329D1A318AA2000DC9ED /* APCSignInTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B0432A01A318AA2000DC9ED /* APCSignInTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B04329E1A318AA2000DC9ED /* APCSignInTask.m */; };
 		5B0432A71A322BEE000DC9ED /* APCOnboardingTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B0432A51A322BEE000DC9ED /* APCOnboardingTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -539,6 +541,8 @@
 		36C8B3EB1A38D9FF0051096B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		36E06F1B1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionRealLifeTests.m; sourceTree = "<group>"; };
+		36F3BBB81A8AF925006A3CAE /* RKSTAnswerFormat+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RKSTAnswerFormat+Helper.h"; sourceTree = "<group>"; };
+		36F3BBB91A8AF925006A3CAE /* RKSTAnswerFormat+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RKSTAnswerFormat+Helper.m"; sourceTree = "<group>"; };
 		5B04329D1A318AA2000DC9ED /* APCSignInTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignInTask.h; sourceTree = "<group>"; };
 		5B04329E1A318AA2000DC9ED /* APCSignInTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignInTask.m; sourceTree = "<group>"; };
 		5B0432A51A322BEE000DC9ED /* APCOnboardingTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCOnboardingTask.h; sourceTree = "<group>"; };
@@ -1403,6 +1407,8 @@
 				F5B9475F1A73272C0034C522 /* UIScrollView+Helper.m */,
 				F5B947601A73272C0034C522 /* UIView+Helper.h */,
 				F5B947611A73272C0034C522 /* UIView+Helper.m */,
+				36F3BBB81A8AF925006A3CAE /* RKSTAnswerFormat+Helper.h */,
+				36F3BBB91A8AF925006A3CAE /* RKSTAnswerFormat+Helper.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -2016,6 +2022,7 @@
 				F5F12AB21A2F78490015982C /* APCSignupPasscodeViewController.h in Headers */,
 				F5B947C91A73272C0034C522 /* NSString+Helper.h in Headers */,
 				F5B947BF1A73272C0034C522 /* NSDateComponents+Helper.h in Headers */,
+				36F3BBBA1A8AF925006A3CAE /* RKSTAnswerFormat+Helper.h in Headers */,
 				F5F129EE1A2F78490015982C /* APCDBStatus+AddOn.h in Headers */,
 				F5B947E91A73272C0034C522 /* APCTasksReminderManager.h in Headers */,
 				F54DDD251A8026010073E4B4 /* APCCoreMotionTracker.h in Headers */,
@@ -2495,6 +2502,7 @@
 				F5B946371A7309A20034C522 /* ZZFileChannel.m in Sources */,
 				F5F12B051A2F78490015982C /* APCPasscodeViewController.m in Sources */,
 				F5B947E81A73272C0034C522 /* APCSegmentedButton.m in Sources */,
+				36F3BBBB1A8AF925006A3CAE /* RKSTAnswerFormat+Helper.m in Sources */,
 				F5B946391A7309A20034C522 /* ZZFileChannelOutput.m in Sources */,
 				F5B947E01A73272C0034C522 /* APCConstants.m in Sources */,
 				F5F12B071A2F78490015982C /* APCUserInfoViewController.m in Sources */,
