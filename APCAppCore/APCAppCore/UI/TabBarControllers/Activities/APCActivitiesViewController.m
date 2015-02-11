@@ -176,7 +176,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:headerView.bounds];
     headerLabel.font = [UIFont appLightFontWithSize:16.0f];
-    headerLabel.textColor = [UIColor appSecondaryColor3];
+    headerLabel.textColor = [UIColor blackColor];
     headerLabel.textAlignment = NSTextAlignmentCenter;
     [headerView addSubview:headerLabel];
     
