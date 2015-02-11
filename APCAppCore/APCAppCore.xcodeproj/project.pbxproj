@@ -92,6 +92,10 @@
 		7B0DC4181A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7B0DC4171A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib */; };
 		7BD1D3D41A702ED200D6A377 /* APCDataResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BD1D3D21A702ED200D6A377 /* APCDataResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BD1D3D51A702ED200D6A377 /* APCDataResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BD1D3D31A702ED200D6A377 /* APCDataResult.m */; };
+		A7CFE4B51A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */; };
+		A7CFE4B61A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */; };
+		A7CFE4B71A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */; };
+		A7CFE4B81A8B05F4009A171C /* APCStudyOverviewCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CFE4B41A8B05F4009A171C /* APCStudyOverviewCollectionViewController.m */; };
 		CFEF5CAD1A807DE4009A8634 /* APCCustomBackButton.h in Headers */ = {isa = PBXBuildFile; fileRef = CFEF5CAB1A807DE4009A8634 /* APCCustomBackButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFEF5CAE1A807DE4009A8634 /* APCCustomBackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CFEF5CAC1A807DE4009A8634 /* APCCustomBackButton.m */; };
 		F50738C01A682E12004CF100 /* APCDateRange.h in Headers */ = {isa = PBXBuildFile; fileRef = F50738BE1A682E12004CF100 /* APCDateRange.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -562,6 +566,10 @@
 		7B0DC4171A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCActivitiesViewWithNoTask.xib; sourceTree = "<group>"; };
 		7BD1D3D21A702ED200D6A377 /* APCDataResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataResult.h; sourceTree = "<group>"; };
 		7BD1D3D31A702ED200D6A377 /* APCDataResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataResult.m; sourceTree = "<group>"; };
+		A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewCollectionViewCell.h; sourceTree = "<group>"; };
+		A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyOverviewCollectionViewCell.m; sourceTree = "<group>"; };
+		A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyOverviewCollectionViewController.h; sourceTree = "<group>"; };
+		A7CFE4B41A8B05F4009A171C /* APCStudyOverviewCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyOverviewCollectionViewController.m; sourceTree = "<group>"; };
 		CFEF5CAB1A807DE4009A8634 /* APCCustomBackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCustomBackButton.h; sourceTree = "<group>"; };
 		CFEF5CAC1A807DE4009A8634 /* APCCustomBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCustomBackButton.m; sourceTree = "<group>"; };
 		F50738BE1A682E12004CF100 /* APCDateRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDateRange.h; sourceTree = "<group>"; };
@@ -1699,6 +1707,10 @@
 		F5F129431A2F78490015982C /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */,
+				A7CFE4B21A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m */,
+				A7CFE4B31A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h */,
+				A7CFE4B41A8B05F4009A171C /* APCStudyOverviewCollectionViewController.m */,
 				F5F129441A2F78490015982C /* APCIntroVideoViewController.h */,
 				F5F129451A2F78490015982C /* APCIntroVideoViewController.m */,
 				F5F129461A2F78490015982C /* APCOnboarding.storyboard */,
@@ -2022,6 +2034,7 @@
 				F5B947C51A73272C0034C522 /* NSManagedObject+APCHelper.h in Headers */,
 				F5F12AC71A2F78490015982C /* APCChangePasscodeViewController.h in Headers */,
 				F5F12ABC1A2F78490015982C /* APCDashboardEditViewController.h in Headers */,
+				A7CFE4B51A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h in Headers */,
 				F5B9462F1A7309A20034C522 /* ZZDataChannelOutput.h in Headers */,
 				F5B947D51A73272C0034C522 /* UIView+Helper.h in Headers */,
 				F5F12AFD1A2F78490015982C /* APCIntroductionViewController.h in Headers */,
@@ -2083,6 +2096,7 @@
 				F5F12A851A2F78490015982C /* APCOnboarding.h in Headers */,
 				364D348A1A7B1C8F0060B3F5 /* APCDataVerificationClient.h in Headers */,
 				F5F12B001A2F78490015982C /* APCSimpleTaskSummaryViewController.h in Headers */,
+				A7CFE4B71A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h in Headers */,
 				F5F12A931A2F78490015982C /* APCStudyDetailsViewController.h in Headers */,
 				F5F12AEC1A2F78490015982C /* APCDashboardMessageTableViewCell.h in Headers */,
 				36C8B3E91A38D9C80051096B /* Flurry.h in Headers */,
@@ -2413,9 +2427,11 @@
 				F5B947D81A73272C0034C522 /* APCDataArchiver.m in Sources */,
 				F5F12A091A2F78490015982C /* APCTask+Bridge.m in Sources */,
 				F5B946231A7309A20034C522 /* ZZAESDecryptInputStream.mm in Sources */,
+				A7CFE4B61A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m in Sources */,
 				F5B947D01A73272C0034C522 /* UIAlertController+Helper.m in Sources */,
 				F5F129E71A2F78490015982C /* APCDataSubstrate+CoreData.m in Sources */,
 				F5F12AD71A2F78490015982C /* APCDefaultTableViewCell.m in Sources */,
+				A7CFE4B81A8B05F4009A171C /* APCStudyOverviewCollectionViewController.m in Sources */,
 				F5F12A781A2F78490015982C /* APCStepProgressBar.m in Sources */,
 				F5F12AF71A2F78490015982C /* APCStepViewController.m in Sources */,
 				F5F12AFE1A2F78490015982C /* APCIntroductionViewController.m in Sources */,
