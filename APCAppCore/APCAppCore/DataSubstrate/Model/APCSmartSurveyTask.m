@@ -21,6 +21,7 @@ NSString *const kOperatorLessThan           = @"lt";
 NSString *const kOperatorGreaterThan        = @"gt";
 NSString *const kOperatorLessThanEqual      = @"le";
 NSString *const kOperatorGreaterThanEqual   = @"ge";
+NSString *const kOperatorOtherThan          = @"ot";
 
 NSString *const kConstraintsKey   = @"constraints";
 NSString *const kUiHintKey   = @"uihint";
@@ -67,17 +68,20 @@ static APCDummyObject * _dummyObject;
         self.rkSteps = [NSMutableDictionary dictionary];
         self.staticStepIdentifiers = [NSMutableArray array];
         self.setOfIdentifiers = [NSMutableSet set];
-        [survey.questions enumerateObjectsUsingBlock:^(SBBSurveyQuestion* obj, NSUInteger idx, BOOL *stop) {
-            
-            self.rkSteps[obj.identifier] = [APCSmartSurveyTask rkStepFromSBBSurveyQuestion:obj];
-            
-            [self.staticStepIdentifiers addObject:obj.identifier];
-            [self.setOfIdentifiers addObject:obj.identifier];
-            
-            NSArray * rulesArray = [[obj constraints] rules];
-            if (rulesArray) {
-                self.rules[obj.identifier] = [self createArrayOfDictionaryForRules:rulesArray];
+        [survey.elements enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
+            if ([object isKindOfClass:[SBBSurveyQuestion class]]) {
+                SBBSurveyQuestion * obj = (SBBSurveyQuestion*) object;
+                self.rkSteps[obj.identifier] = [APCSmartSurveyTask rkStepFromSBBSurveyQuestion:obj];
+                
+                [self.staticStepIdentifiers addObject:obj.identifier];
+                [self.setOfIdentifiers addObject:obj.identifier];
+                
+                NSArray * rulesArray = [[obj constraints] rules];
+                if (rulesArray) {
+                    self.rules[obj.identifier] = [self createArrayOfDictionaryForRules:rulesArray];
+                }
             }
+
 
         }];
         NSAssert((self.staticStepIdentifiers.count == self.setOfIdentifiers.count), @"Duplicate Identifiers in Survey! Please rename them!");
@@ -121,7 +125,7 @@ static APCDummyObject * _dummyObject;
         RKSTStepResult * stepResult = (RKSTStepResult*) [result resultForIdentifier:step.identifier];
         id firstResult = stepResult.results.firstObject;
         if (firstResult == nil || [firstResult isKindOfClass:[RKSTQuestionResult class]]) {
-            skipToStep = [self processRules:rulesForThisStep forAnswer:[firstResult answer]];
+            skipToStep = [self processRules:rulesForThisStep forAnswer:[firstResult consolidatedAnswer]];
         }
         //If there is new skipToStep then skip to that step
         if (skipToStep) {
