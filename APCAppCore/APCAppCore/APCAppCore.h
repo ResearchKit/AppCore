@@ -123,6 +123,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCCustomBackButton.h>
 #import <APCAppCore/APCFormTextField.h>
 #import <APCAppCore/APCGraph.h>
+#import <APCAppCore/APCButton.h>
 #import <APCAppCore/APCImageButton.h>
 #import <APCAppCore/APCPasscodeView.h>
 #import <APCAppCore/APCPieGraphView.h>
