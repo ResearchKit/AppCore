@@ -261,33 +261,36 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     [self writeResultDictionaryToArchive: hackedUpDictionary];
 }
 
-- (void) addResultToArchive: (RKSTResult*) result {
-    NSMutableArray * properties = [NSMutableArray array];
+- (void) addResultToArchive: (RKSTResult*) result
+{
+	NSMutableArray * propertyNames = [NSMutableArray array];
 
-
-#warning Ron: the next few lines seem to EFFECTIVELY get all the properties of the result object and all its superclasses.  However, as written, it seems to potentially skip several layers of classes, between RKSTResult and whatever object we received.  Could it, or should it, also be written as follows?
 	/*
-		id thingy = result.class;
-		done = NO;
-
-		while (thingy != nil && ! done) {
-			copy property names from thingy;
-
-			if (thingy == RKSTResult)
-				done = YES;
-
-			else
-				thingy = thingy.superclass;
-		}
+	 Get the names of all properties of our result's class
+	 and all its superclasses.  Stop when we hit RKSTResult.
 	 */
-    [properties addObjectsFromArray:[APCDataArchiver classPropsFor:[RKSTResult class]]];
-    if (result.superclass != [RKSTResult class]) {
-        [properties addObjectsFromArray:[APCDataArchiver classPropsFor:result.superclass]];
-    }
-    [properties addObjectsFromArray:[APCDataArchiver classPropsFor:result.class]];
+	Class klass = result.class;
+	BOOL done = NO;
+	NSArray *propertyNamesForOneClass = nil;
+
+	while (klass != nil && ! done)
+	{
+		propertyNamesForOneClass = [self classPropsFor: klass];
+
+		[propertyNames addObjectsFromArray: propertyNamesForOneClass];
+
+		if (klass == [RKSTResult class])
+		{
+			done = YES;
+		}
+		else
+		{
+			klass = [klass superclass];
+		}
+	}
 
 
-    NSMutableDictionary * dictionary = [[result dictionaryWithValuesForKeys:properties] mutableCopy];
+    NSMutableDictionary * dictionary = [[result dictionaryWithValuesForKeys:propertyNames] mutableCopy];
     dictionary = [self generateDictionaryToSaveFromSourceDictionary:dictionary];
     APCLogDebug(@"%@", dictionary);
     [self writeResultDictionaryToArchive:dictionary];
@@ -524,7 +527,7 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     return data;
 }
 
-+ (NSArray *)classPropsFor:(Class)klass
+- (NSArray *)classPropsFor:(Class)klass
 {
     if (klass == NULL) {
         return nil;
