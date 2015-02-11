@@ -254,9 +254,6 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     }
     rawTappingResults[kTappingSamplesKey] = sampleResults;
 
-
-#warning Ron:  THIS IS NOT BEING USED AS INTENDED.  I renamed the method to reflect the intended use -- but this code is getting only part of the converted data.  I don't want to gratuitously make it "correct" because that might have lots of unintended side effects.
-
 	NSDictionary *serializableData = [self generateSerializableDataFromSourceDictionary: rawTappingResults];
     [self writeResultDictionaryToArchive: serializableData];
 }
