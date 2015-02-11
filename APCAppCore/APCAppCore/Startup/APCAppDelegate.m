@@ -167,8 +167,9 @@ static NSUInteger const kIndexOfActivitesTab = 0;
     }
     else if ([identifierComponents.lastObject isEqualToString:@"APCActivityVC"])
     {
-        
-        return [(UINavigationController*) self.tabster.viewControllers[2] topViewController];
+        if ( [self.tabster.viewControllers[2] respondsToSelector:@selector(topViewController)]) {
+            return [(UINavigationController*) self.tabster.viewControllers[2] topViewController];
+        }
     }
     
     return nil;
