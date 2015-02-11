@@ -238,17 +238,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 
 #pragma mark - Data
 
-//TODO: Commenting out as it is drawing an unwanted horizontal ref. line.
-//Investigate.
-
-//- (void)setDatasource:(id<APCLineGraphViewDataSource>)datasource
-//{
-//    if (datasource != _datasource) {
-//        _datasource = datasource;
-//        [self layoutSubviews];
-//    }
-//}
-
 - (NSInteger)numberOfPlots
 {
     NSInteger numberOfPlots = 1;
@@ -401,19 +390,19 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
             rulerLayer.path = rulerPath.CGPath;
             [self.yAxisView.layer addSublayer:rulerLayer];
             
-            CGFloat labelHeight = 20;//TODO:Constant
+            CGFloat labelHeight = 20;
             CGFloat labelYPosition = positionOnYAxis - labelHeight/2;
             
             CGFloat yValue = self.minimumValue + (self.maximumValue - self.minimumValue)*factor;
             
             UILabel *axisTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelYPosition, CGRectGetWidth(self.yAxisView.frame) - kAxisMarkingRulerLength, labelHeight)];
-            axisTitleLabel.text = [self formatNumber:@(yValue)]; //[NSString stringWithFormat:@"%.1f  ", yValue];
+            axisTitleLabel.text = [self formatNumber:@(yValue)]; 
             axisTitleLabel.backgroundColor = [UIColor clearColor];
             axisTitleLabel.textColor = self.axisTitleColor;
             axisTitleLabel.textAlignment = NSTextAlignmentRight;
             axisTitleLabel.font = self.isLandscapeMode ? [UIFont fontWithName:self.axisTitleFont.familyName size:16.0f] : self.axisTitleFont;
             axisTitleLabel.minimumScaleFactor = 0.8;
-            [self.yAxisView addSubview:axisTitleLabel];//TODO: Add to Axis View
+            [self.yAxisView addSubview:axisTitleLabel];
         }
     }
     
