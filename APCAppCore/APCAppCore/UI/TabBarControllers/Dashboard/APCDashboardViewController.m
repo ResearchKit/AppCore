@@ -109,6 +109,9 @@
             graphCell.graphView.panGestureRecognizer.delegate = self;
             graphCell.graphView.axisTitleFont = [UIFont appRegularFontWithSize:14.0f];
             
+            graphCell.graphView.maximumValueImage = graphItem.maximumImage;
+            graphCell.graphView.minimumValueImage = graphItem.minimumImage;
+            
             graphCell.tintColor = graphItem.tintColor;
             graphCell.delegate = self;
             [graphCell.graphView layoutSubviews];

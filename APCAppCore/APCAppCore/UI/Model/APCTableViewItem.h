@@ -147,9 +147,13 @@
 
 @interface APCTableViewDashboardGraphItem : APCTableViewDashboardItem
 
-@property (nonatomic) APCScoring *graphData;
+@property (nonatomic, strong) APCScoring *graphData;
 
 @property (nonatomic) APCDashboardGraphType graphType;
+
+@property (nonatomic, strong) UIImage *minimumImage;
+
+@property (nonatomic, strong) UIImage *maximumImage;
 
 @end
 

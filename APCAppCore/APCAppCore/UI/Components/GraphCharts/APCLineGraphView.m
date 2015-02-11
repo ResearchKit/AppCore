@@ -17,7 +17,7 @@ static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";
 static NSString * const kGrowAnimationKey = @"LayerGrowAnimation";
 
 static CGFloat const kFadeAnimationDuration = 0.3;
-static CGFloat const kGrowAnimationDuration = 0.3;
+static CGFloat const kGrowAnimationDuration = 0.2;
 static CGFloat const kPopAnimationDuration  = 0.3;
 
 static CGFloat const kSnappingClosenessFactor = 0.35f;
@@ -238,17 +238,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 
 #pragma mark - Data
 
-//TODO: Commenting out as it is drawing an unwanted horizontal ref. line.
-//Investigate.
-
-//- (void)setDatasource:(id<APCLineGraphViewDataSource>)datasource
-//{
-//    if (datasource != _datasource) {
-//        _datasource = datasource;
-//        [self layoutSubviews];
-//    }
-//}
-
 - (NSInteger)numberOfPlots
 {
     NSInteger numberOfPlots = 1;
@@ -370,34 +359,53 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     
     CGFloat rulerXPosition = CGRectGetWidth(self.yAxisView.bounds) - kAxisMarkingRulerLength + 2;
     
-    for (int i =0; i<yAxisLabelFactors.count; i++) {
+    if (self.maximumValueImage && self.minimumValueImage) {
+        //Use image icons as legends
         
-        CGFloat factor = ((NSNumber *)yAxisLabelFactors[i]).floatValue;
-        CGFloat positionOnYAxis = CGRectGetHeight(self.plotsView.frame) * (1 - factor);
+        CGFloat width = CGRectGetWidth(self.yAxisView.frame)/2;
+        CGFloat verticalPadding = 3.f;
         
-        UIBezierPath *rulerPath = [UIBezierPath bezierPath];
-        [rulerPath moveToPoint:CGPointMake(rulerXPosition, positionOnYAxis)];
-        [rulerPath addLineToPoint:CGPointMake(CGRectGetMaxX(self.yAxisView.bounds), positionOnYAxis)];
+        UIImageView *maxImageView = [[UIImageView alloc] initWithImage:self.maximumValueImage];
+        maxImageView.contentMode = UIViewContentModeScaleAspectFit;
+        maxImageView.frame = CGRectMake(CGRectGetWidth(self.yAxisView.bounds) - width, verticalPadding, width, width);
+        [self.yAxisView addSubview:maxImageView];
         
-        CAShapeLayer *rulerLayer = [CAShapeLayer layer];
-        rulerLayer.strokeColor = self.axisColor.CGColor;
-        rulerLayer.path = rulerPath.CGPath;
-        [self.yAxisView.layer addSublayer:rulerLayer];
+        UIImageView *minImageView = [[UIImageView alloc] initWithImage:self.minimumValueImage];
+        minImageView.contentMode = UIViewContentModeScaleAspectFit;
+        minImageView.frame = CGRectMake(CGRectGetWidth(self.yAxisView.bounds) - width, CGRectGetMaxY(self.yAxisView.bounds) - width - verticalPadding, width, width);
+        [self.yAxisView addSubview:minImageView];
         
-        CGFloat labelHeight = 20;//TODO:Constant
-        CGFloat labelYPosition = positionOnYAxis - labelHeight/2;
-        
-        CGFloat yValue = self.minimumValue + (self.maximumValue - self.minimumValue)*factor;
-        
-        UILabel *axisTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelYPosition, CGRectGetWidth(self.yAxisView.frame) - kAxisMarkingRulerLength, labelHeight)];
-        axisTitleLabel.text = [self formatNumber:@(yValue)]; //[NSString stringWithFormat:@"%.1f  ", yValue];
-        axisTitleLabel.backgroundColor = [UIColor clearColor];
-        axisTitleLabel.textColor = self.axisTitleColor;
-        axisTitleLabel.textAlignment = NSTextAlignmentRight;
-        axisTitleLabel.font = self.isLandscapeMode ? [UIFont fontWithName:self.axisTitleFont.familyName size:16.0f] : self.axisTitleFont;
-        axisTitleLabel.minimumScaleFactor = 0.8;
-        [self.yAxisView addSubview:axisTitleLabel];//TODO: Add to Axis View
+    } else {
+        for (int i =0; i<yAxisLabelFactors.count; i++) {
+            
+            CGFloat factor = [yAxisLabelFactors[i] floatValue];
+            CGFloat positionOnYAxis = CGRectGetHeight(self.plotsView.frame) * (1 - factor);
+            
+            UIBezierPath *rulerPath = [UIBezierPath bezierPath];
+            [rulerPath moveToPoint:CGPointMake(rulerXPosition, positionOnYAxis)];
+            [rulerPath addLineToPoint:CGPointMake(CGRectGetMaxX(self.yAxisView.bounds), positionOnYAxis)];
+            
+            CAShapeLayer *rulerLayer = [CAShapeLayer layer];
+            rulerLayer.strokeColor = self.axisColor.CGColor;
+            rulerLayer.path = rulerPath.CGPath;
+            [self.yAxisView.layer addSublayer:rulerLayer];
+            
+            CGFloat labelHeight = 20;
+            CGFloat labelYPosition = positionOnYAxis - labelHeight/2;
+            
+            CGFloat yValue = self.minimumValue + (self.maximumValue - self.minimumValue)*factor;
+            
+            UILabel *axisTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelYPosition, CGRectGetWidth(self.yAxisView.frame) - kAxisMarkingRulerLength, labelHeight)];
+            axisTitleLabel.text = [self formatNumber:@(yValue)]; 
+            axisTitleLabel.backgroundColor = [UIColor clearColor];
+            axisTitleLabel.textColor = self.axisTitleColor;
+            axisTitleLabel.textAlignment = NSTextAlignmentRight;
+            axisTitleLabel.font = self.isLandscapeMode ? [UIFont fontWithName:self.axisTitleFont.familyName size:16.0f] : self.axisTitleFont;
+            axisTitleLabel.minimumScaleFactor = 0.8;
+            [self.yAxisView addSubview:axisTitleLabel];
+        }
     }
+    
 }
 
 - (void)drawhorizontalReferenceLines
@@ -414,9 +422,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     referenceLineLayer.lineDashPattern = self.isLandscapeMode ? @[@12, @7] : @[@6, @4];
     [self.layer addSublayer:referenceLineLayer];
     
-    if (self.shouldAnimate) {
-        referenceLineLayer.opacity = 0;
-    }
     [self.referenceLines addObject:referenceLineLayer];
 }
 
@@ -436,9 +441,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         referenceLineLayer.lineDashPattern = self.isLandscapeMode ? @[@12, @7] : @[@6, @4];
         [self.plotsView.layer addSublayer:referenceLineLayer];
         
-        if (self.shouldAnimate) {
-            referenceLineLayer.opacity = 0;
-        }
         [self.referenceLines addObject:referenceLineLayer];
     }
 }
@@ -763,12 +765,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 - (void)animateLayersSequentially
 {
     CGFloat delay = 0.3;
-    
-    for (int i=0; i<self.referenceLines.count; i++) {
-        CAShapeLayer *layer = self.referenceLines[i];
-        delay += 0.1;
-        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeFade startDelay:delay];
-    }
     
     for (int i=0; i<self.dots.count; i++) {
         CAShapeLayer *layer = [self.dots[i] shapeLayer];

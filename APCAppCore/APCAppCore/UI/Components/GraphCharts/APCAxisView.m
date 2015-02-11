@@ -18,15 +18,27 @@
 
 @synthesize tintColor = _tintColor;
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [self sharedInit];
+    }
+    return self;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        
-        _titleLabels = [NSMutableArray new];
-        _leftOffset = 0;
+        [self sharedInit];
     }
-    
     return self;
+}
+
+- (void)sharedInit
+{
+    _titleLabels = [NSMutableArray new];
+    _leftOffset = 0;
 }
 
 - (void)layoutSubviews
