@@ -478,7 +478,7 @@ static NSUInteger const kIndexOfActivitesTab = 0;
     
     [UIView transitionWithView:self.window
                       duration:0.6
-                       options:UIViewAnimationOptionTransitionFlipFromLeft
+                       options:UIViewAnimationOptionTransitionNone
                     animations:^{
                         self.window.rootViewController = navController;
                     }
