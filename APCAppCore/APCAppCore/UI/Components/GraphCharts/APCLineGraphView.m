@@ -873,6 +873,8 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 
 #pragma mark - Touch
 
+#pragma mark - Touch
+
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
     if ((self.dataPoints.count > 0) && [self numberOfValidValues] > 0) {
@@ -889,28 +891,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         //---------------
         
         CGFloat snappedXPosition = [self snappedXPosition:location.x];
-        self.scrubberLine.center = CGPointMake(snappedXPosition + kAPCGraphLeftPadding, self.scrubberLine.center.y);
-        
-        CGFloat scrubbingVal = [self valueForCanvasXPosition:(snappedXPosition)];
-        self.scrubberLabel.text = [NSString stringWithFormat:@"%.0f", scrubbingVal];
-        
-        CGSize textSize = [self.scrubberLabel.text boundingRectWithSize:CGSizeMake(320, CGRectGetHeight(self.scrubberLabel.bounds)) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:self.scrubberLabel.font} context:nil].size;
-        
-        [self.scrubberLabel setFrame:CGRectMake(CGRectGetMaxX(self.scrubberLine.frame) + 6, CGRectGetMinY(self.scrubberLine.frame), textSize.width + 3, CGRectGetHeight(self.scrubberLabel.frame))];
-        
-        //---------------
-        
-        CGFloat scrubberYPos = [self canvasYPointForXPosition:snappedXPosition];
-        
-        [self.scrubberThumbView setCenter:CGPointMake(snappedXPosition + kAPCGraphLeftPadding, scrubberYPos + kAPCGraphTopPadding)];
-        
-        if (scrubbingVal >= self.minimumValue && scrubbingVal <= self.maximumValue) {
-            self.scrubberLabel.alpha = 1;
-            self.scrubberThumbView.alpha = 1;
-        } else {
-            self.scrubberLabel.alpha = 0;
-            self.scrubberThumbView.alpha = 0;
-        }
+        [self scrubberViewForXPosition:snappedXPosition];
         
         //---------------
         
@@ -932,18 +913,39 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     }
 }
 
+- (void)scrubberViewForXPosition:(CGFloat)xPosition
+{
+    self.scrubberLine.center = CGPointMake(xPosition + kAPCGraphLeftPadding, self.scrubberLine.center.y);
+    
+    CGFloat scrubbingVal = [self valueForCanvasXPosition:(xPosition)];
+    self.scrubberLabel.text = [NSString stringWithFormat:@"%.0f", scrubbingVal];
+    
+    CGSize textSize = [self.scrubberLabel.text boundingRectWithSize:CGSizeMake(320, CGRectGetHeight(self.scrubberLabel.bounds)) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:self.scrubberLabel.font} context:nil].size;
+    
+    [self.scrubberLabel setFrame:CGRectMake(CGRectGetMaxX(self.scrubberLine.frame) + 6, CGRectGetMinY(self.scrubberLine.frame), textSize.width + 8, CGRectGetHeight(self.scrubberLabel.frame))];
+    
+    //---------------
+    
+    CGFloat scrubberYPos = [self canvasYPointForXPosition:xPosition];
+    
+    [self.scrubberThumbView setCenter:CGPointMake(xPosition + kAPCGraphLeftPadding, scrubberYPos + kAPCGraphTopPadding)];
+    
+    if (scrubbingVal >= self.minimumValue && scrubbingVal <= self.maximumValue) {
+        self.scrubberLabel.alpha = 1;
+        self.scrubberThumbView.alpha = 1;
+    } else {
+        self.scrubberLabel.alpha = 0;
+        self.scrubberThumbView.alpha = 0;
+    }
+}
+
 #pragma mark - Public Methods
 
 - (void)scrubReferenceLineForXPosition:(CGFloat)xPosition
 {
     if (self.dataPoints.count > 1) {
-        self.scrubberLine.center = CGPointMake(xPosition + kAPCGraphLeftPadding, self.scrubberLine.center.y);
-        [self.scrubberLabel setFrame:CGRectMake(self.scrubberLine.frame.origin.x + 5, kAPCGraphTopPadding, CGRectGetWidth(self.scrubberLabel.frame), CGRectGetHeight(self.scrubberLabel.frame))];
-        self.scrubberLabel.text = [NSString stringWithFormat:@"%.2f", [self valueForCanvasXPosition:xPosition]];
-        
-        [self.scrubberThumbView setCenter:CGPointMake(xPosition + kAPCGraphLeftPadding, [self canvasYPointForXPosition:xPosition] + kAPCGraphTopPadding)];
+        [self scrubberViewForXPosition:xPosition];
     }
-    
 }
 
 @end
