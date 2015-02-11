@@ -116,6 +116,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstItem="eRz-FJ-3tf" firstAttribute="leading" secondItem="eZ0-Ol-zUa" secondAttribute="leading" constant="8" id="1lZ-Gw-8Px"/>
                                         <constraint firstAttribute="height" constant="72" id="9OY-Ut-XHm"/>
@@ -157,11 +158,11 @@
                                         <constraint firstAttribute="height" constant="21" id="nG0-iY-IiL"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                    <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstItem="eZ0-Ol-zUa" firstAttribute="leading" secondItem="kyI-F5-60O" secondAttribute="leading" id="0P0-iM-aAl"/>
                                 <constraint firstItem="HAN-E2-ARi" firstAttribute="top" secondItem="kyI-F5-60O" secondAttribute="top" constant="117" id="1zW-f2-NmB"/>

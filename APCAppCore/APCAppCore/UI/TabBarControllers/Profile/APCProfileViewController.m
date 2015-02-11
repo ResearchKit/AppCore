@@ -342,6 +342,8 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 - (void)setupAppearance
 {
+    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    
     [self.nameTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.nameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
@@ -353,7 +355,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     [self.editLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.editLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
     
-    [self.footerTitleLabel setTextColor:[UIColor appSecondaryColor3]];
+    [self.footerTitleLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.footerTitleLabel setFont:[UIFont appLightFontWithSize:16.0f]];
     
     [self.editLabel setTextColor:[UIColor appSecondaryColor1]];

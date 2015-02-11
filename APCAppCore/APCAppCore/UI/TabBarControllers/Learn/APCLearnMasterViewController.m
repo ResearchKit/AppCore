@@ -34,6 +34,15 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     [self.tableView reloadData];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [self setUpNavigationBarAppearance];
+}
+
+-(void)setUpNavigationBarAppearance{
+    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    self.navigationController.navigationBar.translucent = NO;
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -91,11 +100,11 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     if (sectionItem.sectionTitle.length > 0) {
         
         headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), tableView.sectionHeaderHeight)];
-        headerView.contentView.backgroundColor = [UIColor appSecondaryColor4];
+        headerView.contentView.backgroundColor = [UIColor whiteColor];
         
         UILabel *headerLabel = [[UILabel alloc] initWithFrame:headerView.bounds];
         headerLabel.font = [UIFont appLightFontWithSize:16.0f];
-        headerLabel.textColor = [UIColor appSecondaryColor3];
+        headerLabel.textColor = [UIColor appSecondaryColor1];
         headerLabel.textAlignment = NSTextAlignmentCenter;
         headerLabel.text = sectionItem.sectionTitle;
         [headerView addSubview:headerLabel];
