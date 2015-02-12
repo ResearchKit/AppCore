@@ -279,6 +279,27 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
 
 #pragma mark - Helpers
 
+- (void)dataPointIsAvailableFromHealthKit:(NSDictionary *)dataPoint
+{
+    APCLogDebug(@"Insight: %@", dataPoint);
+    
+    NSString *caption = NSLocalizedString(@"Data is not available", @"Data is not available");
+    NSNumber *pointValue = @(0);
+    
+    if ([dataPoint[kAPCInsightFactorValueKey] integerValue] != NSNotFound) {
+        caption = [NSString stringWithFormat:@"%@ %@",dataPoint[kAPCInsightFactorValueKey], self.insightFactorCaption];
+        pointValue = dataPoint[kAPCInsightFactorValueKey];
+    }
+    
+    if ([dataPoint[kInsightDatasetIsGoodDayKey] boolValue]) {
+        self.captionGood = NSLocalizedString(caption, caption);
+        self.valueGood = pointValue;
+    } else {
+        self.captionBad = NSLocalizedString(caption, caption);
+        self.valueBad = pointValue;
+    }
+}
+
 - (NSArray *)groupDataset:(NSArray *)dataset
 {
     NSMutableArray *groupedDataset = [NSMutableArray array];
