@@ -24,6 +24,9 @@ NSString const *kAPCInsightFactorNameKey = @"insightFactorNameKey";
 static NSString *kAPHInsightSampleTypeKey = @"insightSampleTypeKey";
 static NSString *kAPHInsightSampleUnitKey = @"insightSampleUnitKey";
 
+static NSString *kInsightDatasetIsGoodDayKey = @"insightDatasetIsGoodDayKey";
+static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadingKey";
+
 @interface APCInsights()
 
 @property (nonatomic, strong) HKHealthStore *healthStore;
