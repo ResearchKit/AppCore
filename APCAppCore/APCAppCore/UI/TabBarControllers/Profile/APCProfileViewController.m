@@ -494,7 +494,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     
     self.profileImage = image;
     [self.profileImageButton setImage:image forState:UIControlStateNormal];
-    
+    self.user.profileImage = UIImagePNGRepresentation(image);
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
