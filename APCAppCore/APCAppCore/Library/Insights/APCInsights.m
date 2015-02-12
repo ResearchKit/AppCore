@@ -400,27 +400,6 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
     return markedDataset;
 }
 
-- (NSArray *)postProcessDataset:(NSArray *)dataset
-{
-    NSMutableArray *readings = [NSMutableArray new];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd"];
-    
-    for (NSDictionary *day in dataset) {
-        NSMutableDictionary *dayEntry = [day mutableCopy];
-        
-        NSDate *readingDate = [dateFormatter dateFromString:day[kDatasetDateKey]];
-        
-        dayEntry[kAPCInsightFactorValueKey] = [self retrieveDatasetForInsight:self.insightFactorName
-                                                              fromReadingDate:readingDate];
-        dayEntry[kAPCInsightFactorNameKey] = self.insightFactorName;
-        
-        [readings addObject:dayEntry];
-    }
-    
-    return readings;
-}
-
 /**
  * @brief   Returns an NSDate that is past/future by the value of daySpan from the provided date.
  *
