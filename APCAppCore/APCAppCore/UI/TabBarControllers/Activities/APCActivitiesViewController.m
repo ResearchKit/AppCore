@@ -59,8 +59,14 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self setUpNavigationBarAppearance];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:APCUpdateActivityNotification object:nil];
     APCLogViewControllerAppeared();
+}
+
+-(void)setUpNavigationBarAppearance{
+    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    self.navigationController.navigationBar.translucent = NO;
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -172,11 +178,11 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), kTableViewSectionHeaderHeight)];
-    headerView.contentView.backgroundColor = [UIColor appSecondaryColor4];
+    headerView.contentView.backgroundColor = [UIColor whiteColor];
     
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:headerView.bounds];
     headerLabel.font = [UIFont appLightFontWithSize:16.0f];
-    headerLabel.textColor = [UIColor blackColor];
+    headerLabel.textColor = [UIColor appSecondaryColor1];
     headerLabel.textAlignment = NSTextAlignmentCenter;
     [headerView addSubview:headerLabel];
     

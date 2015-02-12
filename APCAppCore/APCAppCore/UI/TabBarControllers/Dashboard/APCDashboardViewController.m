@@ -45,12 +45,18 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    [self setUpAppearance];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updateVisibleRowsInTableView:)
                                                  name:APCScoringHealthKitDataIsAvailableNotification
                                                object:nil];
   APCLogViewControllerAppeared();
+}
+
+-(void)setUpAppearance{
+    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    self.navigationController.navigationBar.translucent = NO;
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -117,6 +123,8 @@
             [graphCell.graphView layoutSubviews];
             [self.lineCharts addObject:graphCell.graphView];
             
+            [graphCell.graphView refreshGraph];
+            
         } else if (graphItem.graphType == kAPCDashboardGraphTypePie) {
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypeTimeline) {
@@ -130,6 +138,26 @@
         
         messageCell.type = messageItem.messageType;
         messageCell.messageLabel.text = messageItem.detailText;
+        
+    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardInsightsItem class]]){
+        APCTableViewDashboardInsightsItem *insightHeader = (APCTableViewDashboardInsightsItem *)dashboardItem;
+        APCDashboardInsightsTableViewCell *insightsHeaderCell = (APCDashboardInsightsTableViewCell *)cell;
+        
+        insightsHeaderCell.cellTitle = insightHeader.caption;
+        insightsHeaderCell.cellSubtitle = insightHeader.detailText;
+        insightsHeaderCell.tintColor = insightHeader.tintColor;
+        insightsHeaderCell.delegate = self;
+        
+    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardInsightItem class]]){
+        APCTableViewDashboardInsightItem *insightItem = (APCTableViewDashboardInsightItem *)dashboardItem;
+        APCDashboardInsightTableViewCell *insightCell = (APCDashboardInsightTableViewCell *)cell;
+        
+        insightCell.goodInsightCaption = insightItem.goodCaption;
+        insightCell.badInsightCaption = insightItem.badCaption;
+        insightCell.goodInsightBar = insightItem.goodBar;
+        insightCell.badInsightBar = insightItem.badBar;
+        insightCell.insightImage = insightItem.insightImage;
+        
     } else {
         cell.textLabel.text = dashboardItem.caption;
         cell.detailTextLabel.text = dashboardItem.detailText;
@@ -154,11 +182,11 @@
     if (sectionItem.sectionTitle.length > 0) {
         
         headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), tableView.sectionHeaderHeight)];
-        headerView.contentView.backgroundColor = [UIColor appSecondaryColor4];
+        headerView.contentView.backgroundColor = [UIColor whiteColor];
         
         UILabel *headerLabel = [[UILabel alloc] initWithFrame:headerView.bounds];
         headerLabel.font = [UIFont appLightFontWithSize:16.0f];
-        headerLabel.textColor = [UIColor appSecondaryColor3];
+        headerLabel.textColor = [UIColor appSecondaryColor1];
         headerLabel.textAlignment = NSTextAlignmentCenter;
         headerLabel.text = sectionItem.sectionTitle;
         [headerView addSubview:headerLabel];
@@ -199,6 +227,8 @@
         CGFloat contentHeight = [dashboardItem.detailText boundingRectWithSize:CGSizeMake(284, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:[UIFont appLightFontWithSize:16.0f]} context:nil].size.height;
         height = contentHeight + basicCellHeight;
         
+    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardInsightItem class]]){
+        height = 90.0f;
     } else {
         height = 65.0f;
     }
@@ -340,6 +370,13 @@
     APCTableViewItemType dashboardItemType = rowItem.itemType;
     
     return dashboardItemType;
+}
+
+#pragma mark - APCDashboardInsightsTableViewCell Delegate
+
+- (void)dashboardInsightDidExpandForCell:(APCDashboardInsightsTableViewCell *)cell
+{
+    
 }
 
 @end
