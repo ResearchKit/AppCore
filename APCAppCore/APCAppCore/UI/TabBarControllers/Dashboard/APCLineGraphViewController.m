@@ -34,6 +34,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [self.graphView refreshGraph];
+    
   APCLogViewControllerAppeared();
 }
 
@@ -115,6 +118,7 @@
                     
                     [spinnerController dismissViewControllerAnimated:YES completion:^{
                         [self.graphView layoutSubviews];
+                        [self.graphView refreshGraph];
                     }];
                     
                 });
@@ -128,6 +132,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [spinnerController dismissViewControllerAnimated:YES completion:^{
                         [self.graphView layoutSubviews];
+                        [self.graphView refreshGraph];
                     }];
                 });
             }];
@@ -140,6 +145,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [spinnerController dismissViewControllerAnimated:YES completion:^{
                         [self.graphView layoutSubviews];
+                        [self.graphView refreshGraph];
                     }];
                 });
             }];
@@ -152,6 +158,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [spinnerController dismissViewControllerAnimated:YES completion:^{
                         [self.graphView layoutSubviews];
+                        [self.graphView refreshGraph];
                     }];
                 });
             }];
@@ -164,6 +171,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [spinnerController dismissViewControllerAnimated:YES completion:^{
                         [self.graphView layoutSubviews];
+                        [self.graphView refreshGraph];
                     }];
                 });
             }];
@@ -176,6 +184,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [spinnerController dismissViewControllerAnimated:YES completion:^{
                         [self.graphView layoutSubviews];
+                        [self.graphView refreshGraph];
                     }];
                 });
             }];

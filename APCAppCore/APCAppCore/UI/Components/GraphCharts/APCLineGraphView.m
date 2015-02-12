@@ -9,6 +9,9 @@
 #import "APCCircleView.h"
 #import "APCAxisView.h"
 
+NSString * const kAPCLineGraphViewTriggerAnimationsNotification = @"APCLineGraphViewTriggerAnimationsNotification";
+NSString * const kAPCLineGraphViewRefreshNotification = @"APCLineGraphViewRefreshNotification";
+
 static CGFloat const kYAxisPaddingFactor = 0.166f;
 static CGFloat const kAPCGraphLeftPadding = 0.f;
 static CGFloat const kAxisMarkingRulerLength = 8.0f;
@@ -16,11 +19,11 @@ static CGFloat const kAxisMarkingRulerLength = 8.0f;
 static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";
 static NSString * const kGrowAnimationKey = @"LayerGrowAnimation";
 
-static CGFloat const kFadeAnimationDuration = 0.3;
-static CGFloat const kGrowAnimationDuration = 0.2;
+static CGFloat const kFadeAnimationDuration = 0.2;
+static CGFloat const kGrowAnimationDuration = 0.1;
 static CGFloat const kPopAnimationDuration  = 0.3;
 
-static CGFloat const kSnappingClosenessFactor = 0.35f;
+static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 @interface APCLineGraphView ()
 
@@ -49,6 +52,7 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 @property (nonatomic, strong) CAShapeLayer *fillPathLayer;
 
 @property (nonatomic) BOOL shouldAnimate;
+@property (nonatomic) BOOL shouldLoadViews;
 
 @end
 
@@ -99,8 +103,12 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     _scrubberThumbColor = [UIColor colorWithWhite:1 alpha:0.8];
     
     _shouldAnimate = YES;
+    _shouldLoadViews = YES;
     
     [self setupViews];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(animateLayersSequentially) name:kAPCLineGraphViewTriggerAnimationsNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGraph) name:kAPCLineGraphViewRefreshNotification object:nil];
 }
 
 - (void)setupViews
@@ -212,6 +220,12 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     self.scrubberThumbView.frame = CGRectMake(0, 0, [self scrubberThumbSize].width, [self scrubberThumbSize].height);
     self.scrubberThumbView.layer.cornerRadius = self.scrubberThumbView.bounds.size.height/2;
     
+    [self.xAxisView layoutSubviews];
+
+}
+
+- (void)refreshGraph
+{
     //Clear subviews and sublayers
     [self.plotsView.layer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     
@@ -228,12 +242,9 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         }
     }
     
-    [self.xAxisView layoutSubviews];
+    self.shouldLoadViews = NO;
     
-    if (self.shouldAnimate) {
-        [self performSelector:@selector(animateLayersSequentially) withObject:nil afterDelay:0.2];
-        
-    }
+    [self animateLayersSequentially];
 }
 
 #pragma mark - Data
@@ -296,6 +307,15 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 - (void)drawXAxis
 {
     //Add Title Labels
+    [self.xAxisTitles removeAllObjects];
+    
+    for (int i=0; i<self.numberOfXAxisTitles; i++) {
+        if ([self.datasource respondsToSelector:@selector(lineGraph:titleForXAxisAtIndex:)]) {
+            NSString *title = [self.datasource lineGraph:self titleForXAxisAtIndex:i];
+            
+            [self.xAxisTitles addObject:title];
+        }
+    }
     
     if (self.xAxisView) {
         [self.xAxisView removeFromSuperview];
@@ -318,25 +338,17 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     xAxisLineLayer.path = xAxispath.CGPath;
     [self.xAxisView.layer addSublayer:xAxisLineLayer];
     
-    [self.xAxisTitles removeAllObjects];
-    
-    for (int i=0; i<self.numberOfXAxisTitles; i++) {
-        if ([self.datasource respondsToSelector:@selector(lineGraph:titleForXAxisAtIndex:)]) {
-            NSString *title = [self.datasource lineGraph:self titleForXAxisAtIndex:i];
-            
-            [self.xAxisTitles addObject:title];
-            
-            CGFloat positionOnXAxis = kAPCGraphLeftPadding + ((CGRectGetWidth(self.plotsView.frame) / (self.numberOfXAxisTitles - 1)) * i);
-            
-            UIBezierPath *rulerPath = [UIBezierPath bezierPath];
-            [rulerPath moveToPoint:CGPointMake(positionOnXAxis, - kAxisMarkingRulerLength)];
-            [rulerPath addLineToPoint:CGPointMake(positionOnXAxis, 0)];
-            
-            CAShapeLayer *rulerLayer = [CAShapeLayer layer];
-            rulerLayer.strokeColor = self.axisColor.CGColor;
-            rulerLayer.path = rulerPath.CGPath;
-            [self.xAxisView.layer addSublayer:rulerLayer];
-        }
+    for (int i=0; i<self.xAxisTitles.count; i++) {
+        CGFloat positionOnXAxis = kAPCGraphLeftPadding + ((CGRectGetWidth(self.plotsView.frame) / (self.numberOfXAxisTitles - 1)) * i);
+        
+        UIBezierPath *rulerPath = [UIBezierPath bezierPath];
+        [rulerPath moveToPoint:CGPointMake(positionOnXAxis, - kAxisMarkingRulerLength)];
+        [rulerPath addLineToPoint:CGPointMake(positionOnXAxis, 0)];
+        
+        CAShapeLayer *rulerLayer = [CAShapeLayer layer];
+        rulerLayer.strokeColor = self.axisColor.CGColor;
+        rulerLayer.path = rulerPath.CGPath;
+        [self.xAxisView.layer addSublayer:rulerLayer];
     }
 }
 
@@ -516,8 +528,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
             positionOnXAxis = [self.xAxisPoints[i] floatValue];
             positionOnYAxis = [self.yAxisPoints[i] floatValue];
             
-            
-            
             if (![plotLinePath isEmpty]) {
                 [plotLinePath addLineToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
                 [fillPath addLineToPoint:CGPointMake(positionOnXAxis, positionOnYAxis)];
@@ -674,8 +684,6 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
         //  (y2 - y3)/(x2 - x3) = m
         value = y2 - (slope * (x2 - xPosition));
     }
-    
-    
     return value;
 }
 
@@ -764,25 +772,21 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
 
 - (void)animateLayersSequentially
 {
-    CGFloat delay = 0.3;
+    CGFloat delay = 0.1;
     
     for (int i=0; i<self.dots.count; i++) {
         CAShapeLayer *layer = [self.dots[i] shapeLayer];
-        delay += 0.1;
         [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeFade startDelay:delay];
+        delay += 0.1;
     }
     
     for (int i=0; i<self.pathLines.count; i++) {
         CAShapeLayer *layer = self.pathLines[i];
-        delay += kGrowAnimationDuration;
         [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeGrow startDelay:delay];
+        delay += kGrowAnimationDuration;
     }
     
-    delay += 0.2;
-    
     [self animateLayer:self.fillPathLayer withAnimationType:kAPCGraphAnimationTypeFade startDelay:delay];
-    
-    self.shouldAnimate = NO;
 }
 
 - (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType
@@ -933,6 +937,13 @@ static CGFloat const kSnappingClosenessFactor = 0.35f;
     if (self.dataPoints.count > 1) {
         [self scrubberViewForXPosition:xPosition];
     }
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kAPCLineGraphViewTriggerAnimationsNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kAPCLineGraphViewRefreshNotification object:nil];
 }
 
 @end

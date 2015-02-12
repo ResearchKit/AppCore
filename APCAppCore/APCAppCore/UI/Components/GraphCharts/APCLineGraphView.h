@@ -8,6 +8,9 @@
 #import <UIKit/UIKit.h>
 #import "APCGraphConstants.h"
 
+FOUNDATION_EXPORT NSString * const kAPCLineGraphViewTriggerAnimationsNotification;
+FOUNDATION_EXPORT NSString * const kAPCLineGraphViewRefreshNotification;
+
 @protocol APCLineGraphViewDataSource;
 @protocol APCLineGraphViewDelegate;
 
@@ -53,6 +56,8 @@
 - (void)scrubReferenceLineForXPosition:(CGFloat)xPosition;
 
 - (void)setScrubberViewsHidden:(BOOL)hidden animated:(BOOL)animated;
+
+- (void)refreshGraph;
 
 @end
 
