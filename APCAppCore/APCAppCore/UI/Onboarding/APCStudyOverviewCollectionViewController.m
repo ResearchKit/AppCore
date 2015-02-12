@@ -190,8 +190,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 #pragma mark - UIScrollViewDelegate methods
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     CGFloat pageWidth = self.collectionView.frame.size.width;
     self.pageControl.currentPage = (self.collectionView.contentOffset.x + pageWidth / 2) / pageWidth;
 }
@@ -312,6 +311,13 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     UIViewController *viewController = [[self onboarding] nextScene];
     [self.navigationController pushViewController:viewController animated:YES];
     
+}
+
+- (IBAction)pageClicked:(UIPageControl *)sender {
+    NSInteger page = sender.currentPage;
+    CGRect frame = self.collectionView.frame;
+    CGFloat offset = frame.size.width * page;
+    [self.collectionView setContentOffset:CGPointMake(offset, 0) animated:YES];
 }
 
 
