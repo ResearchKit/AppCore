@@ -33,6 +33,9 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
 
 @property (nonatomic) APCInsightFactors insightFactor;
 @property (nonatomic, strong) NSString *insightFactorName;
+@property (nonatomic, strong) HKUnit *insightFactorUnit;
+
+@property (nonatomic, strong) NSString *insightFactorCaption;
 
 @property (nonatomic, strong) NSNumber *insightPeriodInDays;
 @property (nonatomic, strong) NSNumber *numberOfReadings;
