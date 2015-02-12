@@ -163,6 +163,26 @@
 
 @end
 
+@interface APCTableViewDashboardInsightsItem : APCTableViewDashboardItem
+
+@property (nonatomic, strong) UIColor *sidebarColor;
+@property (nonatomic, strong) NSString *titleCaption;
+@property (nonatomic, strong) NSString *subtitleCaption;
+
+@end
+
+@interface APCTableViewDashboardInsightItem : APCTableViewDashboardItem
+
+@property (nonatomic, strong) UIColor *tintColor;
+@property (nonatomic, strong) NSString *goodCaption;
+@property (nonatomic, strong) NSString *badCaption;
+@property (nonatomic, strong) NSNumber *goodBar;
+@property (nonatomic, strong) NSNumber *badBar;
+@property (nonatomic, strong) UIImage *insightImage;
+
+@end
+
+
 /* ----------------------------------------------- */
 
 @interface APCTableViewSection : NSObject
