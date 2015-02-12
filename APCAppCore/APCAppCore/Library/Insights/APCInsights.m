@@ -59,6 +59,11 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
         _insightPeriodInDays = period;
         _baselineHigh = baselineHigh;
         _baselineHighOther = baselineOther;
+        
+        _captionGood = NSLocalizedString(@"Data is not available", @"Data is not available");
+        _captionBad  = NSLocalizedString(@"Data is not available", @"Data is not available");
+        _valueGood = @(0);
+        _valueBad  = @(0);
     }
     
     return self;
