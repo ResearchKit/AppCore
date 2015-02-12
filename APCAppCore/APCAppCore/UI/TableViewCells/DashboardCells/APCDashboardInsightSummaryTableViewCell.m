@@ -53,24 +53,9 @@
     return self;
 }
 
-- (void)setTintColor:(UIColor *)tintColor
-{
-    _tintColor = tintColor;
-}
-
-- (void)setSidebarColor:(UIColor *)sidebarColor
-{
-    _sidebarColor = sidebarColor;
-}
-
 - (void)setSummaryCaption:(NSString *)summaryCaption
 {
     _summaryLabel.text = summaryCaption;
-}
-
-- (void)setShowTopSeparator:(BOOL)showTopSeparator
-{
-    _showTopSeparator = showTopSeparator;
 }
 
 - (void)drawRect:(CGRect)rect

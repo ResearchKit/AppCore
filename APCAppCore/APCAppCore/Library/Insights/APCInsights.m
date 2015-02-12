@@ -7,10 +7,6 @@
 
 #import "APCInsights.h"
 #import "APCAppCore.h"
-//#import "APCGlucoseReadings.h"
-//#import "APCGlucoseReadings+AddOn.h"
-//#import "APCInsightConfiguration.h"
-//#import "APCInsightConfiguration+AddOn.h"
 #import <HealthKit/HealthKit.h>
 
 NSString const *kInsightKeyGoodDayValue = @"insightKeyGoodDayValue";
@@ -147,17 +143,12 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
 
 - (void)factorInsight
 {
-    NSArray *readings = [self retrieveDatasetForGlucoseForPeriod:-5];
-    
-     
-//    if ([self.delegate respondsToSelector:@selector(didCompleteInsightForFactor:withInsight:)]) {
-//        [self.delegate didCompleteInsightForFactor:self.insightFactor withInsight:insight];
-//    }
+    [self retrieveDatasetForGlucoseForPeriod:-5];
 }
 
 #pragma mark - Core Data
 
-- (NSArray *)retrieveDatasetForGlucoseForPeriod:(NSInteger)period
+- (void)retrieveDatasetForGlucoseForPeriod:(NSInteger)period
 {
     NSArray *readings = nil;
     
@@ -190,8 +181,6 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
                                        forReading:marked
                                    withCompletion:nil];
     }
-
-    return readings;
 }
 
 #pragma mark HealthKit
