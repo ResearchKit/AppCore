@@ -130,6 +130,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCResizeView.h>
 #import <APCAppCore/APCSegmentedButton.h>
 #import <APCAppCore/APCStepProgressBar.h>
+#import <APCAppCore/APCInsightBarView.h>
 
 /* -------------------------
  Cells
@@ -149,6 +150,9 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDashboardPieGraphTableViewCell.h>
 #import <APCAppCore/APCShareTableViewCell.h>
 #import <APCAppCore/APCAddressTableViewCell.h>
+#import <APCAppCore/APCDashboardInsightsTableViewCell.h>
+#import <APCAppCore/APCDashboardInsightSummaryTableViewCell.h>
+#import <APCAppCore/APCDashboardInsightTableViewCell.h>
 
 /* -------------------------
  Objects
@@ -160,6 +164,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCFadeAnimator.h>
 #import <APCAppCore/APCScoring.h>
 #import <APCAppCore/APCDeviceHardware.h>
+#import <APCAppCore/APCInsights.h>
 
 /* -------------------------
  Categories
