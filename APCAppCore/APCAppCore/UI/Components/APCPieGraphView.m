@@ -240,10 +240,9 @@ static CGFloat const kAnimationDuration = 0.35f;
 
 - (void)drawPercentageLabels
 {
-    CGRect boundingBox = CGPathGetBoundingBox(self.circleLayer.path);
-    
     CGFloat cumulativeValue = 0;
     
+    NSMutableArray * textLayers = [NSMutableArray array];
     for (NSInteger idx = 0; idx < [self numberOfSegments]; idx++) {
         CGFloat value = ((NSNumber *)self.normalizedValues[idx]).floatValue;
         
@@ -256,10 +255,7 @@ static CGFloat const kAnimationDuration = 0.35f;
                 angle = (value/2 + cumulativeValue) * - M_PI * 2;
             }
             
-            NSInteger offset = self.lineWidth/2 + 20;
-            
-            CGPoint labelCenter = CGPointMake(cos(angle - M_PI_2) * (self.pieGraphRadius + offset) + boundingBox.size.width/2,
-                                              sin(angle - M_PI_2) * (self.pieGraphRadius + offset) + boundingBox.size.height/2);
+            CGPoint labelCenter = [self getCirclePointForAngle: angle];
             
             NSString *text = [NSString stringWithFormat:@"%0.0f%%", (value < .01) ? 1 :value * 100];
             CATextLayer *textLayer = [CATextLayer layer];
@@ -274,7 +270,10 @@ static CGFloat const kAnimationDuration = 0.35f;
             textLayer.alignmentMode = @"center";
             textLayer.contentsScale = [[UIScreen mainScreen] scale];
             
-            [self.circleLayer addSublayer:textLayer];
+            NSMutableDictionary * layerData = [@{@"layer" : textLayer, @"angle": [NSNumber numberWithFloat:angle]} mutableCopy];
+            [textLayers addObject: layerData];
+            
+            [self.circleLayer addSublayer: textLayer];
             
             cumulativeValue += value;
             
@@ -291,7 +290,83 @@ static CGFloat const kAnimationDuration = 0.35f;
             }
         }
     }
-    
+    [self adjustIntersectionsOfLayers:textLayers];
+}
+
+- (CGPoint) getCirclePointForAngle:(CGFloat) angle {
+    CGRect boundingBox = CGPathGetBoundingBox(self.circleLayer.path);
+    NSInteger offset = self.lineWidth/2 + 20;
+    CGPoint labelCenter = CGPointMake(cos(angle - M_PI_2) * (self.pieGraphRadius + offset) + boundingBox.size.width/2, sin(angle - M_PI_2) * (self.pieGraphRadius + offset) + boundingBox.size.height/2);
+    return labelCenter;
+}
+
+- (void) adjustIntersectionsOfLayers:(NSArray*) layers {
+    if (!layers.count){
+        return;
+    }
+    //Adjust labels while we have intersections
+    BOOL intersections = YES;
+    //We alternate directions in each iteration
+    BOOL shiftClockwise = NO;
+    CGFloat rotateDirection = self.shouldDrawClockwise ? 1 : -1;
+    //We use totalAngle to prevent from infinite loop
+    CGFloat totalAngle = 0;
+    while (intersections) {
+        intersections = NO;
+        shiftClockwise = !shiftClockwise;
+        
+        if (shiftClockwise) {
+            for (int idx = 0; idx < layers.count - 1; idx++) {
+                //prevent from infinite loop
+                if (!idx) {
+                    totalAngle+= 0.01;
+                    if (totalAngle >= 2*M_PI) {
+                        return;
+                    }
+                }
+                NSMutableDictionary* layerDict = layers[idx];
+                NSMutableDictionary* nextLayerDict = layers[(idx+1)];
+                if ([self shiftLayerDictionary:nextLayerDict fromLayerDictionary:layerDict inDirection:rotateDirection]) {
+                    intersections = YES;
+                }
+            }
+        } else {
+            for (NSInteger i = layers.count - 1; i > 0; i--) {
+                NSMutableDictionary* layerDict = layers[i];
+                NSMutableDictionary* nextLayerDict = layers[i - 1];
+                if ([self shiftLayerDictionary:nextLayerDict fromLayerDictionary:layerDict inDirection:-rotateDirection]) {
+                    intersections = YES;
+                }
+            }
+        }
+        //Adjust space between last and first element
+        NSMutableDictionary* lastLayerDict = layers.lastObject;
+        CALayer * lastLayer = lastLayerDict[@"layer"];
+        NSMutableDictionary* firstLayerDict = layers.firstObject;
+        CALayer * firstLayer = firstLayerDict[@"layer"];
+        if (CGRectIntersectsRect(lastLayer.frame, firstLayer.frame)) {
+            CGFloat firstLayerAngle = [firstLayerDict[@"angle"] floatValue];
+            CGFloat lastLayerAngle = [lastLayerDict[@"angle"] floatValue];
+            firstLayerAngle += rotateDirection * 0.01;
+            lastLayerAngle -= rotateDirection*0.01;
+            firstLayerDict[@"angle"] = [NSNumber numberWithFloat:firstLayerAngle];
+            lastLayerDict[@"angle"] = [NSNumber numberWithFloat:lastLayerAngle];
+        }
+    }
+}
+
+- (BOOL) shiftLayerDictionary:(NSMutableDictionary*)nextLayerDictionary fromLayerDictionary:(NSMutableDictionary*)fromLayerDictionary inDirection:(CGFloat) direction {
+    CGFloat shiftStep = 0.01;
+    CALayer * layer = fromLayerDictionary[@"layer"];
+    CALayer * nextLayer = nextLayerDictionary[@"layer"];
+    if (CGRectIntersectsRect(layer.frame, nextLayer.frame)) {
+        CGFloat nextLayerAngle = [nextLayerDictionary[@"angle"] floatValue];
+        nextLayerAngle += direction*shiftStep;
+        nextLayerDictionary[@"angle"] = [NSNumber numberWithFloat:nextLayerAngle];
+        nextLayer.position = [self getCirclePointForAngle: nextLayerAngle];
+        return YES;
+    }
+    return NO;
 }
 
 - (void)drawLegend
