@@ -27,7 +27,6 @@ static NSString *kAPHInsightSampleUnitKey = @"insightSampleUnitKey";
 @interface APCInsights()
 
 @property (nonatomic, strong) HKHealthStore *healthStore;
-@property (nonatomic, strong) APCDataSubstrate *dataStore;
 
 @property (nonatomic) APCInsightFactors insightFactor;
 @property (nonatomic, strong) NSString *insightFactorName;
@@ -64,8 +63,7 @@ static NSString *kAPHInsightSampleUnitKey = @"insightSampleUnitKey";
     self = [super init];
     
     if (self) {
-        _dataStore = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate;
-        _healthStore = _dataStore.healthStore;
+        _healthStore = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.healthStore;
         _insightFactor = factor;
         _ignoreBaselineOther = NO;
         
