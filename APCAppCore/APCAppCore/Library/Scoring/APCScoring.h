@@ -16,7 +16,8 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
     APHTimelineGroupDay = 0,
     APHTimelineGroupWeek,
     APHTimelineGroupMonth,
-    APHTimelineGroupYear
+    APHTimelineGroupYear,
+    APHTimelineGroupForInsights
 };
 
 @interface APCScoring : NSEnumerator <APCLineGraphViewDataSource>
@@ -60,5 +61,6 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
 - (NSNumber *)maximumDataPoint;
 - (NSNumber *)averageDataPoint;
 - (id)nextObject;
+- (NSArray *)allObjects;
 
 @end

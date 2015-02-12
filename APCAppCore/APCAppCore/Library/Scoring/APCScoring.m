@@ -399,25 +399,32 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                     taskValue = (NSNumber *)taskResultValue;
                 }
                 
-                if (!dataKey) {
-                    NSMutableDictionary *dataPoint = [[self generateDataPointForDate:pointDate
-                                                                           withValue:taskValue
-                                                                         noDataValue:YES] mutableCopy];
-                    dataPoint[kDatasetSortKey] = (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null];
-                    
-                    [self.dataPoints addObject:dataPoint];
+                NSMutableDictionary *dataPoint = nil;
+                
+                if (groupBy == APHTimelineGroupForInsights) {
+                    dataPoint = [[self generateDataPointForDate:pointDate
+                                                      withValue:taskValue
+                                                    noDataValue:YES] mutableCopy];
+                    dataPoint[@"raw"] = taskResult;
                 } else {
-                    NSDictionary *nestedData = [taskResult valueForKey:dataKey];
-                    
-                    if (nestedData) {
-                        NSMutableDictionary *dataPoint = [[self generateDataPointForDate:pointDate
-                                                                               withValue:taskValue
-                                                                             noDataValue:YES] mutableCopy];
+                    if (!dataKey) {
+                        dataPoint = [[self generateDataPointForDate:pointDate
+                                                          withValue:taskValue
+                                                        noDataValue:YES] mutableCopy];
                         dataPoint[kDatasetSortKey] = (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null];
                         
-                        [self.dataPoints addObject:dataPoint];
+                    } else {
+                        NSDictionary *nestedData = [taskResult valueForKey:dataKey];
+                        
+                        if (nestedData) {
+                            dataPoint = [[self generateDataPointForDate:pointDate
+                                                              withValue:taskValue
+                                                            noDataValue:YES] mutableCopy];
+                            dataPoint[kDatasetSortKey] = (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null];
+                        }
                     }
                 }
+                [self.dataPoints addObject:dataPoint];
             }
         }
     }
@@ -716,6 +723,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return spanDate;
 }
 
+#pragma mark - Min/Max/Avg
 
 - (NSNumber *)minimumDataPoint
 {
@@ -747,6 +755,8 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return avgValue;
 }
 
+#pragma mark - Object related methods
+
 - (id)nextObject
 {
     id nextPoint = nil;
@@ -770,6 +780,11 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     }
     
     return nextCorrelatedPoint;
+}
+
+- (NSArray *)allObjects
+{
+    return self.dataPoints;
 }
 
 #pragma mark - Graph Datasource
