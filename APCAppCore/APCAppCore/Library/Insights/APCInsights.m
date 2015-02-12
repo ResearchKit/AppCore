@@ -303,22 +303,22 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
 - (NSArray *)groupDataset:(NSArray *)dataset
 {
     NSMutableArray *groupedDataset = [NSMutableArray array];
-    NSArray *days = [dataset valueForKeyPath:@"@distinctUnionOfObjects.createdAt"];
-    NSArray *beforeAfter = @[@(YES), @(NO)];
+    NSArray *days = [dataset valueForKeyPath:@"@distinctUnionOfObjects.datasetGroupByDay"];
+    NSArray *beforeAfter = @[@"before", @"after"];
     
     for (NSString *day in days) {
         
-        for (NSNumber *before in beforeAfter) {
+        for (NSString *period in beforeAfter) {
             NSMutableDictionary *entry = [NSMutableDictionary dictionary];
             [entry setObject:day forKey:kDatasetDateKey];
             
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(createdAt = %@) and (isBefore = %@)", day, before];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K = %@) and (%K = %@)", kDatasetDateKey, day, @"raw.period", period];
             NSArray *groupItems = [dataset filteredArrayUsingPredicate:predicate];
             double itemSum = 0;
             double dayAverage = 0;
             
             for (NSDictionary *item in groupItems) {
-                NSNumber *value = item[@"value"];
+                NSNumber *value = item[kDatasetValueKey];
                 
                 if ([value integerValue] != NSNotFound) {
                     itemSum += [value doubleValue];
