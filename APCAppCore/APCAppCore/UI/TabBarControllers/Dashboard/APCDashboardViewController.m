@@ -45,12 +45,18 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    [self setUpAppearance];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updateVisibleRowsInTableView:)
                                                  name:APCScoringHealthKitDataIsAvailableNotification
                                                object:nil];
   APCLogViewControllerAppeared();
+}
+
+-(void)setUpAppearance{
+    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    self.navigationController.navigationBar.translucent = NO;
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -117,6 +123,8 @@
             [graphCell.graphView layoutSubviews];
             [self.lineCharts addObject:graphCell.graphView];
             
+            [graphCell.graphView refreshGraph];
+            
         } else if (graphItem.graphType == kAPCDashboardGraphTypePie) {
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypeTimeline) {
@@ -174,11 +182,11 @@
     if (sectionItem.sectionTitle.length > 0) {
         
         headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), tableView.sectionHeaderHeight)];
-        headerView.contentView.backgroundColor = [UIColor appSecondaryColor4];
+        headerView.contentView.backgroundColor = [UIColor whiteColor];
         
         UILabel *headerLabel = [[UILabel alloc] initWithFrame:headerView.bounds];
         headerLabel.font = [UIFont appLightFontWithSize:16.0f];
-        headerLabel.textColor = [UIColor appSecondaryColor3];
+        headerLabel.textColor = [UIColor appSecondaryColor1];
         headerLabel.textAlignment = NSTextAlignmentCenter;
         headerLabel.text = sectionItem.sectionTitle;
         [headerView addSubview:headerLabel];
