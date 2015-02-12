@@ -88,8 +88,6 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
 
 - (void)configureInsight
 {
-    NSMutableArray *insights = [NSMutableArray new];
-    
     switch (self.insightFactor) {
         case APCInsightFactorActivity:
         {
