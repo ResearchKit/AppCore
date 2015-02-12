@@ -84,6 +84,12 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
     return self;
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"Insight:\n  Insight Factor: %@\n  Readings: %@\n  Insight Period: %@\n Baseline A/B: %@/%@\n",
+            self.insightFactorName, self.numberOfReadings, self.insightPeriodInDays, self.baselineHigh, self.baselineHighOther];
+}
+
 - (void)configureInsight
 {
     NSMutableArray *insights = [NSMutableArray new];
