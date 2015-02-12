@@ -11,5 +11,6 @@
 @interface RKSTQuestionResult (APCHelper)
 
 - (id) consolidatedAnswer;
+- (BOOL) validForApplyingRule;
 
 @end

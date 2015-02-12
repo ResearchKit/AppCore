@@ -23,6 +23,8 @@ NSString *const kOperatorLessThanEqual      = @"le";
 NSString *const kOperatorGreaterThanEqual   = @"ge";
 NSString *const kOperatorOtherThan          = @"ot";
 
+NSString *const kEndOfSurveyMarker          = @"END_OF_SURVEY";
+
 NSString *const kConstraintsKey   = @"constraints";
 NSString *const kUiHintKey   = @"uihint";
 NSString *const kSliderValue   = @"slider";
@@ -82,8 +84,6 @@ static APCDummyObject * _dummyObject;
                     self.rules[obj.identifier] = [self createArrayOfDictionaryForRules:rulesArray];
                 }
             }
-
-
         }];
         NSAssert(self.staticStepIdentifiers.count > 0, @"Survey does not have any questions");
         NSAssert((self.staticStepIdentifiers.count == self.setOfIdentifiers.count), @"Duplicate Identifiers in Survey! Please rename them!");
@@ -127,8 +127,16 @@ static APCDummyObject * _dummyObject;
         RKSTStepResult * stepResult = (RKSTStepResult*) [result resultForIdentifier:step.identifier];
         id firstResult = stepResult.results.firstObject;
         if (firstResult == nil || [firstResult isKindOfClass:[RKSTQuestionResult class]]) {
-            skipToStep = [self processRules:rulesForThisStep forAnswer:[firstResult consolidatedAnswer]];
+            RKSTQuestionResult * questionResult = (RKSTQuestionResult*) firstResult;
+            if ([questionResult validForApplyingRule]) {
+                skipToStep = [self processRules:rulesForThisStep forAnswer:[questionResult consolidatedAnswer]];
+            }
         }
+        
+        if ([skipToStep isEqualToString:kEndOfSurveyMarker]) {
+            return nil;
+        }
+        
         //If there is new skipToStep then skip to that step
         if (skipToStep) {
             [self adjustDynamicStepIdentifersForSkipToStep:skipToStep from:step.identifier];
@@ -241,14 +249,16 @@ static APCDummyObject * _dummyObject;
     if (skipToIdentifier) {
         APCLogDebug(@"SKIPPING TO: %@", skipToIdentifier);
     }
-//    return skipToIdentifier;
-    return nil;
+    return skipToIdentifier;
 }
 
 - (NSString *) checkRule: (SBBSurveyRule*) rule againstAnswer: (id) answer
 {
     NSString * retValue = nil;
     NSString * operator     = [rule valueForKeyPath:kRuleOperatorKey];
+    if (operator.length > 0) {
+        operator = operator.lowercaseString;
+    }
     id value                = [rule valueForKeyPath:kRuleValueKey];
     NSString * skipToValue  = [rule valueForKeyPath:kRuleSkipToKey];
     
@@ -313,6 +323,27 @@ static APCDummyObject * _dummyObject;
             }
         }
     }
+    
+    //Other Than
+    if ([operator isEqualToString:kOperatorOtherThan]) {
+        if (answer == nil) {
+            retValue = skipToValue;
+        }
+        else if ([answer isKindOfClass:[NSString class]] && [value isKindOfClass:[NSString class]] ) {
+            if ([answer localizedCaseInsensitiveCompare:value] != NSOrderedSame) {
+                retValue = skipToValue;
+            }
+        }
+        else
+        {
+            if (answerNumber && valueNumber) {
+                if (fabs(answerDouble - valueDouble) > DBL_EPSILON) {
+                    retValue = skipToValue;
+                }
+            }
+        }
+    }
+    
     
     //Greater Than
     if ([operator isEqualToString:kOperatorGreaterThan]) {
