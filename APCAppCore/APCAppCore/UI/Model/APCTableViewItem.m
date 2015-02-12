@@ -124,6 +124,14 @@
 
 @end
 
+@implementation APCTableViewDashboardInsightsItem
+
+@end
+
+@implementation APCTableViewDashboardInsightItem
+
+@end
+
 
 /* ----------------------------- */
 
