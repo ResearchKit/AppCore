@@ -123,6 +123,8 @@
             [graphCell.graphView layoutSubviews];
             [self.lineCharts addObject:graphCell.graphView];
             
+            [graphCell.graphView refreshGraph];
+            
         } else if (graphItem.graphType == kAPCDashboardGraphTypePie) {
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypeTimeline) {
