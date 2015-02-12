@@ -33,7 +33,11 @@
 - (void)setupAppearance
 {
     [self.headerLabel setFont:[UIFont appLightFontWithSize:14.0f]];
-    [self.headerLabel setTextColor:[UIColor appSecondaryColor2]];
+    [self.headerLabel setTextColor:[UIColor appSecondaryColor1]];
+    [self.headerLabel setBackgroundColor:[UIColor whiteColor]];
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    self.navigationController.navigationBar.translucent = NO;
 }
 
 #pragma mark - UITableViewDataSource methods
