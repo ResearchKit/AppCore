@@ -130,6 +130,26 @@
         
         messageCell.type = messageItem.messageType;
         messageCell.messageLabel.text = messageItem.detailText;
+        
+    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardInsightsItem class]]){
+        APCTableViewDashboardInsightsItem *insightHeader = (APCTableViewDashboardInsightsItem *)dashboardItem;
+        APCDashboardInsightsTableViewCell *insightsHeaderCell = (APCDashboardInsightsTableViewCell *)cell;
+        
+        insightsHeaderCell.cellTitle = insightHeader.caption;
+        insightsHeaderCell.cellSubtitle = insightHeader.detailText;
+        insightsHeaderCell.tintColor = insightHeader.tintColor;
+        insightsHeaderCell.delegate = self;
+        
+    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardInsightItem class]]){
+        APCTableViewDashboardInsightItem *insightItem = (APCTableViewDashboardInsightItem *)dashboardItem;
+        APCDashboardInsightTableViewCell *insightCell = (APCDashboardInsightTableViewCell *)cell;
+        
+        insightCell.goodInsightCaption = insightItem.goodCaption;
+        insightCell.badInsightCaption = insightItem.badCaption;
+        insightCell.goodInsightBar = insightItem.goodBar;
+        insightCell.badInsightBar = insightItem.badBar;
+        insightCell.insightImage = insightItem.insightImage;
+        
     } else {
         cell.textLabel.text = dashboardItem.caption;
         cell.detailTextLabel.text = dashboardItem.detailText;
@@ -199,6 +219,8 @@
         CGFloat contentHeight = [dashboardItem.detailText boundingRectWithSize:CGSizeMake(284, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:[UIFont appLightFontWithSize:16.0f]} context:nil].size.height;
         height = contentHeight + basicCellHeight;
         
+    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardInsightItem class]]){
+        height = 90.0f;
     } else {
         height = 65.0f;
     }
@@ -340,6 +362,13 @@
     APCTableViewItemType dashboardItemType = rowItem.itemType;
     
     return dashboardItemType;
+}
+
+#pragma mark - APCDashboardInsightsTableViewCell Delegate
+
+- (void)dashboardInsightDidExpandForCell:(APCDashboardInsightsTableViewCell *)cell
+{
+    
 }
 
 @end
