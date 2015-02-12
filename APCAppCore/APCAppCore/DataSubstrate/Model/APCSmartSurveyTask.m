@@ -68,7 +68,8 @@ static APCDummyObject * _dummyObject;
         self.rkSteps = [NSMutableDictionary dictionary];
         self.staticStepIdentifiers = [NSMutableArray array];
         self.setOfIdentifiers = [NSMutableSet set];
-        [survey.elements enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
+        NSArray * elements = (survey.questions.count > 0) ? survey.questions : survey.elements;
+        [elements enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
             if ([object isKindOfClass:[SBBSurveyQuestion class]]) {
                 SBBSurveyQuestion * obj = (SBBSurveyQuestion*) object;
                 self.rkSteps[obj.identifier] = [APCSmartSurveyTask rkStepFromSBBSurveyQuestion:obj];
@@ -156,7 +157,7 @@ static APCDummyObject * _dummyObject;
 - (NSString *) nextStepIdentifier: (BOOL) after currentIdentifier: (NSString*) currentIdentifier
 {
     if (currentIdentifier == nil && after) {
-        return self.dynamicStepIdentifiers[0];
+        return (self.dynamicStepIdentifiers.count > 0) ? self.dynamicStepIdentifiers[0] : nil;
     }
     NSInteger currentIndex = [self.dynamicStepIdentifiers indexOfObject: currentIdentifier];
     NSAssert(currentIndex != NSNotFound, @"Step Not Found. Should not get here.");
@@ -179,8 +180,9 @@ static APCDummyObject * _dummyObject;
 {
     NSInteger currentIndex = [self.dynamicStepIdentifiers indexOfObject:currentStep];
     NSInteger skipToIndex = [self.dynamicStepIdentifiers indexOfObject:skipToStep];
-    NSAssert(currentIndex != NSNotFound, @"Should not happen");
-    NSAssert(skipToIndex != NSNotFound, @"Should not happen");
+    if (currentIndex == NSNotFound || skipToIndex == NSNotFound) {
+        return;
+    }
     
     if (skipToIndex > currentIndex) {
         while (![self.dynamicStepIdentifiers[currentIndex+1] isEqualToString:skipToStep]) {
@@ -239,7 +241,8 @@ static APCDummyObject * _dummyObject;
     if (skipToIdentifier) {
         APCLogDebug(@"SKIPPING TO: %@", skipToIdentifier);
     }
-    return skipToIdentifier;
+//    return skipToIdentifier;
+    return nil;
 }
 
 - (NSString *) checkRule: (SBBSurveyRule*) rule againstAnswer: (id) answer
@@ -375,6 +378,9 @@ static APCDummyObject * _dummyObject;
 + (RKSTQuestionStep*) rkStepFromSBBSurveyQuestion: (SBBSurveyQuestion*) question
 {
     RKSTQuestionStep * retStep =[RKSTQuestionStep questionStepWithIdentifier:question.identifier title:question.prompt answer:[self rkAnswerFormatFromSBBSurveyConstraints:question.constraints uiHint:question.uiHint]];
+    if (question.detail.length > 0) {
+        retStep.text = question.detail;
+    }
     return retStep;
 }
 
@@ -480,7 +486,8 @@ static APCDummyObject * _dummyObject;
     SBBMultiValueConstraints * localConstraints = (SBBMultiValueConstraints*)constraints;
     NSMutableArray * options = [NSMutableArray array];
     [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger idx, BOOL *stop) {
-        RKSTTextChoice * choice = [RKSTTextChoice choiceWithText:option.label detailText:nil value:option.value];
+        NSString * detailText = option.detail.length > 0 ? option.detail : nil;
+        RKSTTextChoice * choice = [RKSTTextChoice choiceWithText:option.label detailText:detailText value:option.value];
         [options addObject: choice];
     }];
     if (localConstraints.allowOtherValue) {

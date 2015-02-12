@@ -22,6 +22,10 @@
 
 @property (nonatomic, strong) NSString* label;
 
+//YML EDIT - START
+@property (nonatomic, strong) NSString* detail;
+//YML EDIT - END
+
 @property (nonatomic, strong) NSString* value;
 
 @end

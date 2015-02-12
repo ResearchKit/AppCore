@@ -22,6 +22,10 @@
 
 @property (nonatomic, strong) NSString* prompt;
 
+//YML EDIT - START
+@property (nonatomic, strong) NSString* detail;
+//YML EDIT - END
+
 @property (nonatomic, strong) NSString* uiHint;
 
 @end
