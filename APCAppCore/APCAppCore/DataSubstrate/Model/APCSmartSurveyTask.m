@@ -84,6 +84,7 @@ static APCDummyObject * _dummyObject;
 
 
         }];
+        NSAssert(self.staticStepIdentifiers.count > 0, @"Survey does not have any questions");
         NSAssert((self.staticStepIdentifiers.count == self.setOfIdentifiers.count), @"Duplicate Identifiers in Survey! Please rename them!");
         //For Debugging duplicates. Copy paste below commented line in lldb to look for duplicates
         //[self.staticStepIdentifiers sortedArrayUsingSelector: @selector(localizedCaseInsensitiveCompare:)];
@@ -259,8 +260,6 @@ static APCDummyObject * _dummyObject;
     NSNumber * valueNumber;
     if ([answer isKindOfClass:[NSString class]]) {
         answerNumber =[formatter numberFromString:answer];
-//        answerNumber = [answer isEqualToString:@"true"] ? @(YES) : answerNumber;
-//        answerNumber = [answer isEqualToString:@"false"] ? @(NO) : answerNumber;
     }
     else if ([answer isKindOfClass:[NSNumber class]])
     {
@@ -481,7 +480,6 @@ static APCDummyObject * _dummyObject;
     SBBMultiValueConstraints * localConstraints = (SBBMultiValueConstraints*)constraints;
     NSMutableArray * options = [NSMutableArray array];
     [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger idx, BOOL *stop) {
-        //TODO: Address this issue with Apple
         RKSTTextChoice * choice = [RKSTTextChoice choiceWithText:option.label detailText:nil value:option.value];
         [options addObject: choice];
     }];
@@ -489,7 +487,6 @@ static APCDummyObject * _dummyObject;
         [options addObject:NSLocalizedString(@"Other", @"Spinner Option")];
     }
     retAnswer = [RKSTAnswerFormat choiceAnswerFormatWithStyle:localConstraints.allowMultipleValue ? RKChoiceAnswerStyleMultipleChoice : RKChoiceAnswerStyleSingleChoice textChoices:options];
-    //[RKSTChoiceAnswerFormat choiceAnswerWithTextOptions:options style: localConstraints.allowMultipleValue ? RKChoiceAnswerStyleMultipleChoice : RKChoiceAnswerStyleSingleChoice];
     return retAnswer;
 }
 
