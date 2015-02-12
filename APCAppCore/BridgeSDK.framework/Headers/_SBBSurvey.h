@@ -18,6 +18,12 @@
 
 @property (nonatomic, strong) NSDate* createdOn;
 
+@property (nonatomic, strong) NSArray* elements;
+
+//YML EDIT - START
+@property (nonatomic, strong) NSArray* questions;
+//YML EDIT - END
+
 @property (nonatomic, strong) NSString* guid;
 
 @property (nonatomic, strong) NSString* identifier;
@@ -29,8 +35,6 @@
 @property (nonatomic, strong) NSNumber* published;
 
 @property (nonatomic, assign) BOOL publishedValue;
-
-@property (nonatomic, strong) NSArray* questions;
 
 @property (nonatomic, strong) NSNumber* version;
 

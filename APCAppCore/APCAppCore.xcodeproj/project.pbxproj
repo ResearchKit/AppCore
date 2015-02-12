@@ -111,6 +111,8 @@
 		CFEF5CAE1A807DE4009A8634 /* APCCustomBackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CFEF5CAC1A807DE4009A8634 /* APCCustomBackButton.m */; };
 		F50738C01A682E12004CF100 /* APCDateRange.h in Headers */ = {isa = PBXBuildFile; fileRef = F50738BE1A682E12004CF100 /* APCDateRange.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F50738C11A682E12004CF100 /* APCDateRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F50738BF1A682E12004CF100 /* APCDateRange.m */; };
+		F5306CCD1A8BE7F600732E60 /* RKSTQuestionResult+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5306CCB1A8BE7F600732E60 /* RKSTQuestionResult+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5306CCE1A8BE7F600732E60 /* RKSTQuestionResult+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5306CCC1A8BE7F600732E60 /* RKSTQuestionResult+APCHelper.m */; };
 		F54DDD231A8026010073E4B4 /* APCCoreLocationTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = F54DDD171A8026010073E4B4 /* APCCoreLocationTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F54DDD241A8026010073E4B4 /* APCCoreLocationTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = F54DDD181A8026010073E4B4 /* APCCoreLocationTracker.m */; };
 		F54DDD251A8026010073E4B4 /* APCCoreMotionTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = F54DDD191A8026010073E4B4 /* APCCoreMotionTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -598,6 +600,8 @@
 		F50738BF1A682E12004CF100 /* APCDateRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDateRange.m; sourceTree = "<group>"; };
 		F5179B2919D09128001DCCB7 /* APCAppCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APCAppCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5179B3419D09128001DCCB7 /* APCAppCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APCAppCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5306CCB1A8BE7F600732E60 /* RKSTQuestionResult+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RKSTQuestionResult+APCHelper.h"; sourceTree = "<group>"; };
+		F5306CCC1A8BE7F600732E60 /* RKSTQuestionResult+APCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RKSTQuestionResult+APCHelper.m"; sourceTree = "<group>"; };
 		F54DDD171A8026010073E4B4 /* APCCoreLocationTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCoreLocationTracker.h; sourceTree = "<group>"; };
 		F54DDD181A8026010073E4B4 /* APCCoreLocationTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCoreLocationTracker.m; sourceTree = "<group>"; };
 		F54DDD191A8026010073E4B4 /* APCCoreMotionTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCoreMotionTracker.h; sourceTree = "<group>"; };
@@ -1443,6 +1447,8 @@
 				F5B9475F1A73272C0034C522 /* UIScrollView+Helper.m */,
 				F5B947601A73272C0034C522 /* UIView+Helper.h */,
 				F5B947611A73272C0034C522 /* UIView+Helper.m */,
+				F5306CCB1A8BE7F600732E60 /* RKSTQuestionResult+APCHelper.h */,
+				F5306CCC1A8BE7F600732E60 /* RKSTQuestionResult+APCHelper.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -2114,6 +2120,7 @@
 				F5F12B061A2F78490015982C /* APCUserInfoViewController.h in Headers */,
 				7B0DC4141A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h in Headers */,
 				F5F129EA1A2F78490015982C /* APCDataSubstrate+ResearchKit.h in Headers */,
+				F5306CCD1A8BE7F600732E60 /* RKSTQuestionResult+APCHelper.h in Headers */,
 				F5B947E11A73272C0034C522 /* APCDeviceHardware.h in Headers */,
 				F5B946361A7309A20034C522 /* ZZFileChannel.h in Headers */,
 				F5F12A0C1A2F78490015982C /* APCUser+Bridge.h in Headers */,
@@ -2512,6 +2519,7 @@
 				F5F12A721A2F78490015982C /* APCConcentricProgressView.m in Sources */,
 				F5F129ED1A2F78490015982C /* APCDataSubstrate.m in Sources */,
 				F5B947FF1A73272C0034C522 /* APCScheduleExpression.m in Sources */,
+				F5306CCE1A8BE7F600732E60 /* RKSTQuestionResult+APCHelper.m in Sources */,
 				F54DDD261A8026010073E4B4 /* APCCoreMotionTracker.m in Sources */,
 				F5F129EB1A2F78490015982C /* APCDataSubstrate+ResearchKit.m in Sources */,
 				F5F12AC61A2F78490015982C /* APCLearnStudyDetailsViewController.m in Sources */,

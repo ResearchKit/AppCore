@@ -8,7 +8,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SBBBridgeObject.h"
+#import "SBBSurveyElement.h"
 
 #import "SBBSurveyConstraints.h"
 
@@ -16,15 +16,15 @@
 
 @end
 
-@interface _SBBSurveyQuestion : SBBBridgeObject
+@interface _SBBSurveyQuestion : SBBSurveyElement
 
 @property (nonatomic, strong) SBBSurveyConstraints* constraints;
 
-@property (nonatomic, strong) NSString* guid;
-
-@property (nonatomic, strong) NSString* identifier;
-
 @property (nonatomic, strong) NSString* prompt;
+
+//YML EDIT - START
+@property (nonatomic, strong) NSString* detail;
+//YML EDIT - END
 
 @property (nonatomic, strong) NSString* uiHint;
 
