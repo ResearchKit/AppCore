@@ -334,7 +334,7 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
             }
             
             [entry setObject:@(dayAverage) forKey:kDatasetValueKey];
-            [entry setObject:before forKey:@"before"];
+            [entry setObject:@([period isEqualToString:@"before"]) forKey:@"period"];
             
             [groupedDataset addObject:entry];
         }
