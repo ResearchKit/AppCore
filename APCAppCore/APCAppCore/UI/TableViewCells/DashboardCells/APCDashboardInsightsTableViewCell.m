@@ -54,7 +54,6 @@
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGFloat borderWidth = 1.0;
-    CGFloat bottomBorderWidth = 3.0;
     
     UIColor *borderColor = [UIColor colorWithWhite:0.973 alpha:1.000];
     
@@ -80,7 +79,7 @@
     
     // Sidebar
     CGFloat sidebarWidth = 4.0;
-    CGFloat sidbarHeight = rect.size.height - bottomBorderWidth;// - (topBorderWidth + bottomBorderWidth);
+    CGFloat sidbarHeight = rect.size.height;
     CGRect sidebar = CGRectMake(0, 0, sidebarWidth, sidbarHeight);
     UIColor *sidebarColor = self.tintColor;
     [sidebarColor setFill];
