@@ -160,35 +160,37 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
 - (NSArray *)retrieveDatasetForGlucoseForPeriod:(NSInteger)period
 {
     NSArray *readings = nil;
-//    NSError *error = nil;
-//    
-//    NSDate *startDate = [self dateForSpan:period fromDate:[NSDate date]];
-//    NSDate *endDate   = [NSDate date];
-//    
-//    NSManagedObjectContext *localContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-//    NSFetchRequest *request = [APCGlucoseReadings request];
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(createdAt >= %@) and (createdAt <= %@)", startDate, endDate];
-//    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"createdAt" ascending:YES];
-//    
-//    request.predicate = predicate;
-//    request.sortDescriptors = @[sortDescriptor];
-//    
-//    
-//    localContext.parentContext = self.dataStore.persistentContext;
-//    
-//    NSArray *entries = [localContext executeFetchRequest:request error:&error];
-//    
-//    if ([entries count] != 0) {        
-//        NSArray *groupedReadings = [self groupDataset:entries];
-//        
-//        NSArray *markedReadings = [self markDataset:groupedReadings];
-//        
-//        readings = [self postProcessDataset:markedReadings];
-//        
-//    } else {
-//        APCLogError(@"No glucose readings were found.");
-//    }
-//    
+    
+    APCScoring *glucoseReadings = [[APCScoring alloc] initWithTask:@"APHLogGlucose-42449E07-7124-40EF-AC93-CA5BBF95FC15"
+                                                      numberOfDays:-5
+                                                          valueKey:@"value"
+                                                           dataKey:nil
+                                                           sortKey:nil
+                                                           groupBy:APHTimelineGroupForInsights];
+    readings = [glucoseReadings allObjects];
+    
+    NSPredicate *predicateBefore = [NSPredicate predicateWithFormat:@"%K == %@", @"raw.period", @"before"];
+    NSPredicate *predicateAfter = [NSPredicate predicateWithFormat:@"%K == %@", @"raw.period", @"after"];
+    
+    NSArray *beforeReadings = [readings filteredArrayUsingPredicate:predicateBefore];
+    NSArray *afterReadings  = [readings filteredArrayUsingPredicate:predicateAfter];
+    
+    NSArray *groupedBeforeReadings = [self groupDataset:beforeReadings];
+    NSArray *groupedAfterReadings = [self groupDataset:afterReadings];
+    
+    NSMutableArray *groupedReadings = [NSMutableArray new];
+    [groupedReadings addObjectsFromArray:groupedBeforeReadings];
+    [groupedReadings addObjectsFromArray:groupedAfterReadings];
+    
+    NSArray *markedReadings = [self markDataset:groupedReadings];
+    
+    for (NSDictionary *marked in markedReadings) {
+        [self statsCollectionQueryForQuantityType:[HKQuantityType quantityTypeForIdentifier:self.insightFactorName]
+                                             unit:self.insightFactorUnit
+                                       forReading:marked
+                                   withCompletion:nil];
+    }
+
     return readings;
 }
 
