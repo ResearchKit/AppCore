@@ -98,57 +98,51 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
         case APCInsightFactorActivity:
         {
             self.insightFactorName = HKQuantityTypeIdentifierDistanceWalkingRunning;
-            [insights addObject:@{
-                                  kAPHInsightSampleTypeKey: [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning],
-                                  kAPHInsightSampleUnitKey: [HKUnit meterUnit]
-                                  }];
+            self.insightFactorUnit = [HKUnit meterUnit];
+            self.insightFactorCaption = NSLocalizedString(@"minutes spent active", @"{minutes} minutes spent active");
         }
             break;
         case APCInsightFactorCarbohydrateConsumption:
         {
             self.insightFactorName = HKQuantityTypeIdentifierDietaryCarbohydrates;
-            [insights addObject:@{
-                                  kAPHInsightSampleTypeKey: [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDietaryCarbohydrates],
-                                  kAPHInsightSampleUnitKey: [HKUnit gramUnit]
-                                  }];
+            self.insightFactorUnit = [HKUnit gramUnit];
+            self.insightFactorCaption = NSLocalizedString(@"carbohydrates consumed", @"{grams} carbohydrate consumed");
         }
             break;
         case APCInsightFactorCarbohydrateCalories:
         case APCInsightFactorSugarCalories:
         case APCInsightFactorCalories:
+        {
             self.insightFactorName = HKQuantityTypeIdentifierDietaryEnergyConsumed;
-            [insights addObject:@{
-                                  kAPHInsightSampleTypeKey: [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDietaryEnergyConsumed],
-                                  kAPHInsightSampleUnitKey: [HKUnit kilocalorieUnit]
-                                  }];
+            self.insightFactorUnit = [HKUnit kilocalorieUnit];
+            self.insightFactorCaption = NSLocalizedString(@"calories consumed", @"{kilo calories} calories consumed");
+        }
             break;
         case APCInsightFactorSteps:
+        {
             self.insightFactorName = HKQuantityTypeIdentifierStepCount;
-            [insights addObject:@{
-                                  kAPHInsightSampleTypeKey: [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount],
-                                  kAPHInsightSampleUnitKey: [HKUnit countUnit]
-                                  }];
+            self.insightFactorUnit = [HKUnit countUnit];
+            self.insightFactorCaption = NSLocalizedString(@"steps taken", @"{step value} steps taken");
+        }
             break;
         case APCInsightFactorSugarConsumption:
+        {
             self.insightFactorName = HKQuantityTypeIdentifierDietarySugar;
-            [insights addObject:@{
-                                  kAPHInsightSampleTypeKey: [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDietarySugar],
-                                  kAPHInsightSampleUnitKey: [HKUnit gramUnit]
-                                  }];
+            self.insightFactorUnit = [HKUnit gramUnit];
+            self.insightFactorCaption = NSLocalizedString(@"sugar consumed", @"{grams} sugar consumed");
+        }
             break;
         case APCInsightFactorTimeSlept:
+        {
             self.insightFactorName = HKCategoryTypeIdentifierSleepAnalysis;
-            [insights addObject:@{
-                                  kAPHInsightSampleTypeKey: [HKCategoryType categoryTypeForIdentifier:HKCategoryTypeIdentifierSleepAnalysis],
-                                  kAPHInsightSampleUnitKey: [HKUnit hourUnit]
-                                  }];
+            self.insightFactorUnit = [HKUnit hourUnit];
+            self.insightFactorCaption = NSLocalizedString(@"slept", @"slept");
+        }
             break;
         default:
             NSAssert(YES, @"This factor is not yet supported by Insights.");
             break;
     }
-    
-    //[self.dataStore setupObserverQueriesForInsights:insights];
 }
 
 - (void)factorInsight
