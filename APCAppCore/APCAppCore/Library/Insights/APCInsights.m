@@ -194,28 +194,87 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
     return readings;
 }
 
-#pragma mark - HealthKitCache
+#pragma mark HealthKit
 
-- (NSNumber *)retrieveDatasetForInsight:(NSString *)insightKey fromReadingDate:(NSDate *)readingDate
+- (void)statsCollectionQueryForQuantityType:(HKQuantityType *)quantityType
+                                       unit:(HKUnit *)unit
+                                 forReading:(NSDictionary *)reading
+                             withCompletion:(void (^)(void))completion
 {
-    NSNumber *insightSum = @(0);
-//
-//    NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-//    context.parentContext = self.dataStore.persistentContext;
-//    
-//    NSDate *startDate = [self dateForSpan:[self.insightPeriodInDays integerValue] fromDate:readingDate];
-//    
-//    NSArray *entries = [APCHealthKitCache entiresForInsight:insightKey
-//                                                  startDate:startDate
-//                                                    endDate:readingDate
-//                                                  inContext:context];
-//    if ([entries count]) {
-//        insightSum = [entries valueForKeyPath:@"@sum.value"];
-//    } else {
-//        NSLog(@"No data found in HealthKit for the requested period.");
-//    }
-//    
-    return insightSum;
+    NSDateComponents *interval = [[NSDateComponents alloc] init];
+    interval.day = 1;
+    
+    NSDate *readingDate = reading[kDatasetDateKey];
+    
+    NSDate *startDate = [[NSCalendar currentCalendar] dateBySettingHour:0
+                                                                 minute:0
+                                                                 second:0
+                                                                 ofDate:[self dateForSpan:[self.insightPeriodInDays integerValue]
+                                                                                 fromDate:readingDate]
+                                                                options:0];
+    
+    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:[NSDate date] options:HKQueryOptionStrictEndDate];
+    
+    BOOL isDecreteQuantity = ([quantityType aggregationStyle] == HKQuantityAggregationStyleDiscrete);
+    
+    HKStatisticsOptions queryOptions;
+    
+    if (isDecreteQuantity) {
+        queryOptions = HKStatisticsOptionDiscreteAverage;
+    } else {
+        queryOptions = HKStatisticsOptionCumulativeSum;
+    }
+    
+    HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:quantityType
+                                                                           quantitySamplePredicate:predicate
+                                                                                           options:queryOptions
+                                                                                        anchorDate:startDate
+                                                                                intervalComponents:interval];
+    
+    // set the results handler
+    query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
+        if (!error) {
+            NSDate *endDate = [[NSCalendar currentCalendar] dateBySettingHour:23
+                                                                       minute:59
+                                                                       second:59
+                                                                       ofDate:startDate
+                                                                      options:0];
+            NSDate *beginDate = startDate;
+            
+            __block NSDictionary *dataPoint = nil;
+            
+            [results enumerateStatisticsFromDate:beginDate
+                                          toDate:endDate
+                                       withBlock:^(HKStatistics *result, BOOL *stop) {
+                                           HKQuantity *quantity;
+                                           
+                                           if (isDecreteQuantity) {
+                                               quantity = result.averageQuantity;
+                                           } else {
+                                               quantity = result.sumQuantity;
+                                           }
+                                           
+                                           NSDate *date = result.startDate;
+                                           double value = [quantity doubleValueForUnit:unit];
+                                           
+                                           dataPoint = @{
+                                                       kDatasetDateKey: date,
+                                                       kDatasetValueKey: (!quantity) ? @(NSNotFound) : @(value),
+                                                       kAPCInsightFactorNameKey: self.insightFactorName
+                                                       };
+                                           
+                                           
+                                       }];
+            
+            NSMutableDictionary *readingPoint = [NSMutableDictionary dictionaryWithDictionary:reading];
+            [readingPoint setObject:self.insightFactorName forKey:kAPCInsightFactorNameKey];
+            [readingPoint setObject:dataPoint[kDatasetValueKey] forKey:kAPCInsightFactorValueKey];
+            
+            [self dataPointIsAvailableFromHealthKit:readingPoint];
+        }
+    };
+    
+    [self.healthStore executeQuery:query];
 }
 
 #pragma mark - Helpers
