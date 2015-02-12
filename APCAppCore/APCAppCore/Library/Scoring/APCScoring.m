@@ -10,8 +10,8 @@
 
 static NSDateFormatter *dateFormatter = nil;
 
-static NSString *const kDatasetDateKey        = @"datasetDateKey";
-static NSString *const kDatasetValueKey       = @"datasetValueKey";
+NSString *const kDatasetDateKey        = @"datasetDateKey";
+NSString *const kDatasetValueKey       = @"datasetValueKey";
 static NSString *const kDatasetSortKey        = @"datasetSortKey";
 static NSString *const kDatasetValueKindKey   = @"datasetValueKindKey";
 static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";

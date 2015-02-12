@@ -8,6 +8,9 @@
 #import <HealthKit/HealthKit.h>
 #import "APCLineGraphView.h"
 
+extern NSString *const kDatasetDateKey;
+extern NSString *const kDatasetValueKey;
+
 typedef NS_ENUM(NSUInteger, APHTimelineGroups)
 {
     APHTimelineGroupDay = 0,
