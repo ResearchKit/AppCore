@@ -391,8 +391,8 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
             isGoodDay = NO;
         }
         
-        [dayReading setObject:dayAverages forKey:kDatasetValueKey];
-        [dayReading setObject:@(isGoodDay) forKey:@"isGoodDay"];
+        [dayReading setObject:dayAverages forKey:kInsightDatasetAverageReadingKey];
+        [dayReading setObject:@(isGoodDay) forKey:kInsightDatasetIsGoodDayKey];
         
         [markedDataset addObject:dayReading];
     }
