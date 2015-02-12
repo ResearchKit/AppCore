@@ -366,14 +366,16 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
         for (NSDictionary *reading in groupedReadings) {
             NSNumber *average = reading[kDatasetValueKey];
             
-            // check if the average in-range or high
-            if ([reading[@"before"] boolValue]) {
-                if ([average doubleValue] >= 130) {
-                    tally++;
-                }
-            } else {
-                if ([average doubleValue] >= 180) {
-                    tally++;
+            if ([average integerValue] != NSNotFound) {
+                // check if the average in-range or high
+                if ([reading[@"period"] boolValue]) {
+                    if ([average doubleValue] >= [self.baselineHigh integerValue]) {
+                        tally++;
+                    }
+                } else {
+                    if ([average doubleValue] >= [self.baselineHighOther integerValue]) {
+                        tally++;
+                    }
                 }
             }
             
