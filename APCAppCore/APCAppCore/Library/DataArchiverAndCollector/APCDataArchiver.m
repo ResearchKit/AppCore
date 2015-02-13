@@ -324,8 +324,8 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 		//
 		// Replace the key "identifier" with the key "item".
 		//
-
-		#warning Ron: why do this?  Who's consuming this, such that the word "item" is better than "identifier"?
+		// Note:  several other parts of this file use kItemKey.
+		//
 
 		else if ([key isEqualToString: kIdentifierKey])
 		{
