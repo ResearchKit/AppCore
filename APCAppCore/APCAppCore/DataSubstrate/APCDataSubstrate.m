@@ -40,6 +40,11 @@
     [self.parameters setDelegate:self];
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 /*********************************************************************************/
 #pragma mark - Properties & Methods meant only for Categories
 /*************************************************s********************************/
