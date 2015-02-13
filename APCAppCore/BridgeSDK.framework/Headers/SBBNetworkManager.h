@@ -192,6 +192,14 @@ typedef NS_ENUM(NSInteger, SBBEnvironment) {
 
 #pragma mark - Init & Accessor Methods
 
+/*!
+ If you want to use SBBNetworkManager's features to access a different REST API, you can create an instance
+ using this initializer, with the scheme and host part of that API's URL as the baseURL.
+ 
+ @param baseURL The scheme and host part of a third-party REST API, e.g. https://webapi.somecompany.com . The urlString parameter of the put, get, etc. methods could then either be the fully-qualified URL of the endpoint you are accessing, or just the path part.
+ 
+ @return An initialized SBBNetworkManager instance with the given baseURL.
+ */
 - (instancetype) initWithBaseURL: (NSString*) baseURL;
 
 - (BOOL) isInternetConnected;

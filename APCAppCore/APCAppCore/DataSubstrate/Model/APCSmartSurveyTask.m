@@ -21,6 +21,9 @@ NSString *const kOperatorLessThan           = @"lt";
 NSString *const kOperatorGreaterThan        = @"gt";
 NSString *const kOperatorLessThanEqual      = @"le";
 NSString *const kOperatorGreaterThanEqual   = @"ge";
+NSString *const kOperatorOtherThan          = @"ot";
+
+NSString *const kEndOfSurveyMarker          = @"END_OF_SURVEY";
 
 NSString *const kConstraintsKey   = @"constraints";
 NSString *const kUiHintKey   = @"uihint";
@@ -67,19 +70,22 @@ static APCDummyObject * _dummyObject;
         self.rkSteps = [NSMutableDictionary dictionary];
         self.staticStepIdentifiers = [NSMutableArray array];
         self.setOfIdentifiers = [NSMutableSet set];
-        [survey.questions enumerateObjectsUsingBlock:^(SBBSurveyQuestion* obj, NSUInteger idx, BOOL *stop) {
-            
-            self.rkSteps[obj.identifier] = [APCSmartSurveyTask rkStepFromSBBSurveyQuestion:obj];
-            
-            [self.staticStepIdentifiers addObject:obj.identifier];
-            [self.setOfIdentifiers addObject:obj.identifier];
-            
-            NSArray * rulesArray = [[obj constraints] rules];
-            if (rulesArray) {
-                self.rules[obj.identifier] = [self createArrayOfDictionaryForRules:rulesArray];
+        NSArray * elements = (survey.questions.count > 0) ? survey.questions : survey.elements;
+        [elements enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
+            if ([object isKindOfClass:[SBBSurveyQuestion class]]) {
+                SBBSurveyQuestion * obj = (SBBSurveyQuestion*) object;
+                self.rkSteps[obj.identifier] = [APCSmartSurveyTask rkStepFromSBBSurveyQuestion:obj];
+                
+                [self.staticStepIdentifiers addObject:obj.identifier];
+                [self.setOfIdentifiers addObject:obj.identifier];
+                
+                NSArray * rulesArray = [[obj constraints] rules];
+                if (rulesArray) {
+                    self.rules[obj.identifier] = [self createArrayOfDictionaryForRules:rulesArray];
+                }
             }
-
         }];
+        NSAssert(self.staticStepIdentifiers.count > 0, @"Survey does not have any questions");
         NSAssert((self.staticStepIdentifiers.count == self.setOfIdentifiers.count), @"Duplicate Identifiers in Survey! Please rename them!");
         //For Debugging duplicates. Copy paste below commented line in lldb to look for duplicates
         //[self.staticStepIdentifiers sortedArrayUsingSelector: @selector(localizedCaseInsensitiveCompare:)];
@@ -121,8 +127,16 @@ static APCDummyObject * _dummyObject;
         RKSTStepResult * stepResult = (RKSTStepResult*) [result resultForIdentifier:step.identifier];
         id firstResult = stepResult.results.firstObject;
         if (firstResult == nil || [firstResult isKindOfClass:[RKSTQuestionResult class]]) {
-            skipToStep = [self processRules:rulesForThisStep forAnswer:[firstResult answer]];
+            RKSTQuestionResult * questionResult = (RKSTQuestionResult*) firstResult;
+            if ([questionResult validForApplyingRule]) {
+                skipToStep = [self processRules:rulesForThisStep forAnswer:[questionResult consolidatedAnswer]];
+            }
         }
+        
+        if ([skipToStep isEqualToString:kEndOfSurveyMarker]) {
+            return nil;
+        }
+        
         //If there is new skipToStep then skip to that step
         if (skipToStep) {
             [self adjustDynamicStepIdentifersForSkipToStep:skipToStep from:step.identifier];
@@ -151,7 +165,7 @@ static APCDummyObject * _dummyObject;
 - (NSString *) nextStepIdentifier: (BOOL) after currentIdentifier: (NSString*) currentIdentifier
 {
     if (currentIdentifier == nil && after) {
-        return self.dynamicStepIdentifiers[0];
+        return (self.dynamicStepIdentifiers.count > 0) ? self.dynamicStepIdentifiers[0] : nil;
     }
     NSInteger currentIndex = [self.dynamicStepIdentifiers indexOfObject: currentIdentifier];
     NSAssert(currentIndex != NSNotFound, @"Step Not Found. Should not get here.");
@@ -174,8 +188,9 @@ static APCDummyObject * _dummyObject;
 {
     NSInteger currentIndex = [self.dynamicStepIdentifiers indexOfObject:currentStep];
     NSInteger skipToIndex = [self.dynamicStepIdentifiers indexOfObject:skipToStep];
-    NSAssert(currentIndex != NSNotFound, @"Should not happen");
-    NSAssert(skipToIndex != NSNotFound, @"Should not happen");
+    if (currentIndex == NSNotFound || skipToIndex == NSNotFound) {
+        return;
+    }
     
     if (skipToIndex > currentIndex) {
         while (![self.dynamicStepIdentifiers[currentIndex+1] isEqualToString:skipToStep]) {
@@ -241,6 +256,9 @@ static APCDummyObject * _dummyObject;
 {
     NSString * retValue = nil;
     NSString * operator     = [rule valueForKeyPath:kRuleOperatorKey];
+    if (operator.length > 0) {
+        operator = operator.lowercaseString;
+    }
     id value                = [rule valueForKeyPath:kRuleValueKey];
     NSString * skipToValue  = [rule valueForKeyPath:kRuleSkipToKey];
     
@@ -255,8 +273,6 @@ static APCDummyObject * _dummyObject;
     NSNumber * valueNumber;
     if ([answer isKindOfClass:[NSString class]]) {
         answerNumber =[formatter numberFromString:answer];
-//        answerNumber = [answer isEqualToString:@"true"] ? @(YES) : answerNumber;
-//        answerNumber = [answer isEqualToString:@"false"] ? @(NO) : answerNumber;
     }
     else if ([answer isKindOfClass:[NSNumber class]])
     {
@@ -307,6 +323,27 @@ static APCDummyObject * _dummyObject;
             }
         }
     }
+    
+    //Other Than
+    if ([operator isEqualToString:kOperatorOtherThan]) {
+        if (answer == nil) {
+            retValue = skipToValue;
+        }
+        else if ([answer isKindOfClass:[NSString class]] && [value isKindOfClass:[NSString class]] ) {
+            if ([answer localizedCaseInsensitiveCompare:value] != NSOrderedSame) {
+                retValue = skipToValue;
+            }
+        }
+        else
+        {
+            if (answerNumber && valueNumber) {
+                if (fabs(answerDouble - valueDouble) > DBL_EPSILON) {
+                    retValue = skipToValue;
+                }
+            }
+        }
+    }
+    
     
     //Greater Than
     if ([operator isEqualToString:kOperatorGreaterThan]) {
@@ -372,6 +409,9 @@ static APCDummyObject * _dummyObject;
 + (RKSTQuestionStep*) rkStepFromSBBSurveyQuestion: (SBBSurveyQuestion*) question
 {
     RKSTQuestionStep * retStep =[RKSTQuestionStep questionStepWithIdentifier:question.identifier title:question.prompt answer:[self rkAnswerFormatFromSBBSurveyConstraints:question.constraints uiHint:question.uiHint]];
+    if (question.detail.length > 0) {
+        retStep.text = question.detail;
+    }
     return retStep;
 }
 
@@ -477,15 +517,14 @@ static APCDummyObject * _dummyObject;
     SBBMultiValueConstraints * localConstraints = (SBBMultiValueConstraints*)constraints;
     NSMutableArray * options = [NSMutableArray array];
     [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger idx, BOOL *stop) {
-        //TODO: Address this issue with Apple
-        RKSTTextChoice * choice = [RKSTTextChoice choiceWithText:option.label detailText:nil value:option.value];
+        NSString * detailText = option.detail.length > 0 ? option.detail : nil;
+        RKSTTextChoice * choice = [RKSTTextChoice choiceWithText:option.label detailText:detailText value:option.value];
         [options addObject: choice];
     }];
     if (localConstraints.allowOtherValue) {
         [options addObject:NSLocalizedString(@"Other", @"Spinner Option")];
     }
     retAnswer = [RKSTAnswerFormat choiceAnswerFormatWithStyle:localConstraints.allowMultipleValue ? RKChoiceAnswerStyleMultipleChoice : RKChoiceAnswerStyleSingleChoice textChoices:options];
-    //[RKSTChoiceAnswerFormat choiceAnswerWithTextOptions:options style: localConstraints.allowMultipleValue ? RKChoiceAnswerStyleMultipleChoice : RKChoiceAnswerStyleSingleChoice];
     return retAnswer;
 }
 
