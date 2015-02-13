@@ -25,8 +25,13 @@
     self.graphView.datasource = self.graphItem.graphData;
     self.graphView.landscapeMode = YES;
     
+    self.graphView.minimumValueImage = self.graphItem.minimumImage;
+    self.graphView.maximumValueImage = self.graphItem.maximumImage;
+    
     self.titleLabel.text = self.graphItem.caption;
     self.subTitleLabel.text = self.graphItem.detailText;
+    
+    self.averageImageView.image = self.graphItem.averageImage;
     
     [self setupAppearance];
 }
