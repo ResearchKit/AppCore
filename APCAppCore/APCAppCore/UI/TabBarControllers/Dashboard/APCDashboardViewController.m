@@ -117,6 +117,7 @@
             
             graphCell.graphView.maximumValueImage = graphItem.maximumImage;
             graphCell.graphView.minimumValueImage = graphItem.minimumImage;
+            graphCell.averageImageView.image = graphItem.averageImage;
             
             graphCell.tintColor = graphItem.tintColor;
             graphCell.delegate = self;
@@ -322,7 +323,7 @@
         CGRect initialFrame = [cell convertRect:cell.bounds toView:self.view.window];
         self.presentAnimator.initialFrame = initialFrame;
         
-        APCLineGraphViewController *graphViewController = [[UIStoryboard storyboardWithName:@"APHDashboard" bundle:nil] instantiateViewControllerWithIdentifier:@"GraphVC"];
+        APCLineGraphViewController *graphViewController = [[UIStoryboard storyboardWithName:@"APCDashboard" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCLineGraphViewController"];
         graphViewController.graphItem = graphItem;
         [self.navigationController presentViewController:graphViewController animated:YES completion:nil];
     }

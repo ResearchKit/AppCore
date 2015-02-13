@@ -7,7 +7,6 @@
  
 #import "APCUser.h"
 #import "APCPasscodeView.h"
-#import "APCStepProgressBar.h"
 #import "UIAlertController+Helper.h"
 #import "APCSignupPasscodeViewController.h"
 #import "APCSignUpPermissionsViewController.h"
@@ -41,8 +40,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    [self setupProgressBar];
     
     self.titleLabel.text = NSLocalizedString(@"Set a passcode\nfor secure identification", @"");
     
@@ -81,18 +78,6 @@
     UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(back) tintColor:[UIColor appPrimaryColor]];
     [self.navigationItem setLeftBarButtonItem:backster];
 
-}
-
-- (void) setupProgressBar {
-     
-    CGFloat stepProgressByYPosition = self.topLayoutGuide.length;
-    
-    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, stepProgressByYPosition, self.view.width, kAPCSignUpProgressBarHeight)
-                                                               style:APCStepProgressBarStyleDefault];
-    self.stepProgressBar.numberOfSteps = [self onboarding].onboardingTask.numberOfSteps;
-    [self.view addSubview:self.stepProgressBar];
-    
-    [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 2) animation:NO];
 }
 
 - (APCUser *) user {
