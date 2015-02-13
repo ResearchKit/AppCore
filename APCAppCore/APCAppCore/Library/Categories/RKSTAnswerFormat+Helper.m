@@ -30,7 +30,7 @@
 		case RKQuestionTypeTimeInterval:	result = @"TimeInterval";		break;
 
 		default:
-			result = RKQuestionTypeUnknown;
+			result = RKQuestionTypeUnknownAsString;
 			break;
 	}
 

@@ -303,198 +303,135 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 
 	/*
 	 Walk through all content we're about to serialize,
-	 convert it to something safe, and add to the outbound
-	 dictionary if desired.
+	 decide if we want to keep it, convert it to something
+	 safe, and add it to the outbound dictionary if desired.
 	 */
 	for (NSString *key in sourceDictionary.allKeys)
 	{
 		id value = sourceDictionary [key];
 
 
-		// - - - - - - - - - - - - - -
-		// Keys we like:  convert values to safe values
-		// - - - - - - - - - - - - - -
+		//
+		// Delete calendars.
+		//
 
-		/*
-		 QuestionType:
-
-		 If we have a QuestionType, convert it to a human-readable name,
-		 and put both the name and the value into the resulting dictionary.
-		 This will let Sage (and us) switch() on the value, but debug it
-		 using the name.
-		 
-		 If the questionType field doesn't contain a number, just pass
-		 the value through as-is...  if it's legal JSON.  If not,
-		 stringify it.  Either way, mark it as "unknown."  (This is
-		 probably a programming error, though.)
-		 */
-		if ([key isEqualToString: kQuestionTypeKey])
+		if ([value isKindOfClass: [NSCalendar class]])
 		{
-			NSString *questionTypeAsString = nil;
-			id itemToSerialize = nil;
-
-			// Make sure it's a legal number, not NaN or infinity,
-			// or else it can't be serialized.
-			if ([value isKindOfClass: [NSNumber class]]  && [NSJSONSerialization isValidJSONObject: @[value]])
-			{
-				NSNumber *questionTypeAsNumber = value;
-				RKQuestionType questionType = questionTypeAsNumber.integerValue;
-				questionTypeAsString = NSStringFromRKQuestionType (questionType);
-				itemToSerialize = value;
-			}
-
-			else
-			{
-				questionTypeAsString = RKQuestionTypeUnknown;
-
-				if ([NSJSONSerialization isValidJSONObject: @[value]])
-				{
-					// Don't know what it is (or why it's in the "question
-					// type" field), but it's JSON-friendly.  Leave it as-is.
-					itemToSerialize = value;
-				}
-
-				else
-				{
-					itemToSerialize = [NSString stringWithFormat: @"%@", value];
-				}
-			}
-
-			serializableDictionary [kQuestionTypeKey] = itemToSerialize;
-			serializableDictionary [kQuestionTypeNameKey] = questionTypeAsString;
+			// Skip it.
 		}
 
-		/*
-		 UserInfo:
 
-		 Only copy the userInfo dictionary if it has something in it.
-		 
-		 If it contains non-JSON-friendly content, we'll stringify it.
-		 (If that happens, it may be a programming error, though.)
-		 */
-		else if ([key isEqualToString: kUserInfoKey])
-		{
-			if (value != [NSNull null] &&
-				[value isKindOfClass: [NSDictionary class]] &&
-				((NSDictionary *) value).count > 0)
-			{
-				id itemToSerialize = nil;
-				NSDictionary *userInfo = value;
+		//
+		// Replace the key "identifier" with the key "item".
+		//
 
-				if ([NSJSONSerialization isValidJSONObject: userInfo])
-				{
-					itemToSerialize = userInfo;
-				}
-				else
-				{
-					itemToSerialize = [NSString stringWithFormat: @"%@", userInfo];
-				}
-
-				serializableDictionary [kUserInfoKey] = itemToSerialize;
-			}
-
-			else
-			{
-				// It's null, or an empty dictionary.  Ignore it --
-				// omit it from the list of stuff to serialize.
-			}
-		}
-
-		/*
-		 Question Identifier:
-
-		 Replace the key "identifier" with "item".
-		 */
 		#warning Ron: why do this?  Who's consuming this, such that the word "item" is better than "identifier"?
+
 		else if ([key isEqualToString: kIdentifierKey])
 		{
-			id itemToSerialize = nil;
-
-			if ([NSJSONSerialization isValidJSONObject: @[value]])
-			{
-				itemToSerialize = value;
-			}
-			else
-			{
-				itemToSerialize = [NSString stringWithFormat: @"%@", value];
-			}
-
+			id itemToSerialize = [self safeSerializableItemFromItem: value];
 			serializableDictionary [kItemKey] = itemToSerialize;
 		}
 
-		
 
-		// - - - - - - - - - - - - - -
-		// Values to delete
-		// - - - - - - - - - - - - - -
-		
-		/*
-		 Delete calendars.  Meaning:  if we see one, ignore it.
-		 
-		 We'll serialize Dates to a string that contains the time
-		 zone, so we don't need the Calendars.
-		 */
-		else if ([value isKindOfClass: [NSCalendar class]])
+		//
+		// Find and include the names for RKQuestionTypes.
+		//
+
+		else if ([key isEqualToString: kQuestionTypeKey])
 		{
-			// Nothing to do.
+			id valueToSerialize = nil;
+			NSString* nameToSerialize = nil;
+
+			NSNumber *questionType = [self safeSerializableQuestionTypeFromItem: value];
+
+			if (questionType != nil)
+			{
+				valueToSerialize = questionType;
+				nameToSerialize = NSStringFromRKQuestionType (questionType.integerValue);
+			}
+			else
+			{
+				valueToSerialize = [self safeSerializableItemFromItem: value];
+				nameToSerialize = RKQuestionTypeUnknownAsString;
+			}
+
+			serializableDictionary [kQuestionTypeKey] = valueToSerialize;
+			serializableDictionary [kQuestionTypeNameKey] = nameToSerialize;
 		}
 
 
+		//
+		// Include the userInfo dictionary if it has something in it.
+		//
 
-		// - - - - - - - - - - - - - -
-		// Values the serializer can convert natively
-		// - - - - - - - - - - - - - -
-		
-		/*
-		 Arrays, dictionaries, strings, numbers, and nulls.
-
-		 If the thing in question can be serialized as-is,
-		 leave it be.  Specifically: 
-		 
-		 -	if it's an array of strings, numbers, nulls, or
-			dictionaries/arrays containing yet more primitives,
-			include it as-is, instead of stringifying it.  Why?
-			Because if we stringify these, the strings end up
-			with lots of gratuitous ()s, ""s, "\n"s, etc.
-
-		 -	if it's a string or an NSNull, it's fine.
-		 
-		 -	if it's a number, and it's not NaN or infinity,
-			it's fine.  Since the serializer can tell us
-			about that, we'll just ask the serializer.
-		 
-		 We can check for all those situations by simply taking
-		 the value, wrapping it in an array, and asking the
-		 serializer to validate it.
-
-		 The rules:
-		 https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSJSONSerialization_Class/
-		 */
-		else if ([NSJSONSerialization isValidJSONObject: @[value]])
-
+		else if ([key isEqualToString: kUserInfoKey])
 		{
-			serializableDictionary [key] = value;
+			NSDictionary *safeDictionary = [self safeAndUsefulSerializableDictionaryFromMaybeDictionary: value];
+
+			if (safeDictionary)
+			{
+				serializableDictionary [kUserInfoKey] = safeDictionary;
+			}
+
+			else
+			{
+				// It's null, empty, or not a dictionary.  Skip it.
+			}
 		}
 
 
-		// - - - - - - - - - - - - - -
-		// Everything else:  values we want to keep, but don't know how to convert
-		// - - - - - - - - - - - - - -
-		
+		//
+		// Arrays of Integers and Booleans
+		//
+
 		/*
-		 If we get here:  we've deleted stuff we wanted to delete,
-		 and converted stuff we wanted to convert.  Anything else
-		 is data we do indeed like, but we don't know how to deal
-		 with it, and the serializer didn't know, either.  So...
-		 convert it to a string.
+		 Very commonly, we have arrays of integers and Booleans
+		 (as answers to multiple-choice questions, say).
+		 However, much earlier in this process, they got converted
+		 to strings.  This seems to be a core feature of ResearchKit.
+		 But there's still value in them being numeric or Boolean
+		 answers.  So if this is an array, try to convert each item
+		 to an integer or Boolean.  If we can't, just call our master
+		 -safe: method to make sure we can serialize it.
+		 */
+		else if ([value isKindOfClass: [NSArray class]])
+		{
+			NSArray *inputArray = value;
+			NSMutableArray *outputArray = [NSMutableArray new];
+
+			for (id item in inputArray)
+			{
+				id outputItem = [self safeSerializableIntOrBoolFromStringIfString: item];
+
+				if (outputItem == nil)
+				{
+					outputItem = [self safeSerializableItemFromItem: item];
+				}
+
+				[outputArray addObject: outputItem];
+			}
+
+			serializableDictionary [key] = outputArray;
+		}
+
+
+		//
+		// Everything Else
+		//
+
+		/*
+		 If we get here:  we want to keep it, but don't have specific
+		 rules for converting it.  Use our default serialization process:
+		 include it as-is if the serializer recognizes it, or convert it
+		 to a string if not.
 		 
-		 This includes NSDates, by the way.  Their default
-		 stringifier works fine.
+		 This includes NSDates, by the way.
 		 */
 		else
 		{
-			NSString *valueToSerialize = [NSString stringWithFormat: @"%@", value];
-			serializableDictionary [key] = valueToSerialize;
+			id itemToSerialize = [self safeSerializableItemFromItem: value];
+			serializableDictionary [key] = itemToSerialize;
 		}
 	}
 
@@ -658,6 +595,140 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     free(properties);
     
     return [NSArray arrayWithArray:results];
+}
+
+/**
+ Try to convert the specified item to an NSNumber, specifically
+ if it's a String that looks like a Boolean or an intenger.
+ */
+- (NSNumber *) safeSerializableIntOrBoolFromStringIfString: (id) item
+{
+	NSNumber *result = nil;
+
+	if ([item isKindOfClass: [NSString class]])
+	{
+		NSString *itemAsString = item;
+
+		if (itemAsString.length > 0)
+		{
+			if ([itemAsString compare: @"no" options: NSCaseInsensitiveSearch] == NSOrderedSame ||
+				[itemAsString compare: @"false" options: NSCaseInsensitiveSearch] == NSOrderedSame)
+			{
+				result = @(NO);
+			}
+
+			else if ([itemAsString compare: @"yes" options: NSCaseInsensitiveSearch] == NSOrderedSame ||
+					 [itemAsString compare: @"true" options: NSCaseInsensitiveSearch] == NSOrderedSame)
+			{
+				result = @(YES);
+			}
+
+			else
+			{
+				NSInteger itemAsInt = itemAsString.integerValue;
+				NSString *verificationString = [NSString stringWithFormat: @"%d", (int) itemAsInt];
+
+				// Here, we use -isValidJSONObject: to make sure the int isn't
+				// NaN or infinity.  According to the JSON rules, those will
+				// break the serializer.
+				if ([verificationString isEqualToString: itemAsString] && [NSJSONSerialization isValidJSONObject: @[verificationString]])
+				{
+					result = @(itemAsInt);
+				}
+
+				else
+				{
+					// It was NaN or infinity.  Therefore, we can't convert it
+					// to a safe or serializable value.  Ignore it.
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
+/**
+ If this item is a Number, try to convert it to an RKQuestionType.
+ */
+- (NSNumber *) safeSerializableQuestionTypeFromItem: (id) item
+{
+	NSNumber* result = nil;
+
+	if ([item isKindOfClass: [NSNumber class]]  && [NSJSONSerialization isValidJSONObject: @[item]])
+	{
+		NSNumber *questionTypeAsNumber = item;
+		RKQuestionType questionType = questionTypeAsNumber.integerValue;
+		result = @(questionType);
+	}
+
+	return result;
+}
+
+/**
+ If this is a Dictionary, and it has stuff in it, 
+ keep it -- either as a Dictionary (if we can
+ serialize it) or a string (if not).
+ */
+- (NSDictionary *) safeAndUsefulSerializableDictionaryFromMaybeDictionary: (id) maybeDictionary
+{
+	NSDictionary *result = nil;
+
+	if (maybeDictionary != [NSNull null] &&
+		[maybeDictionary isKindOfClass: [NSDictionary class]] &&
+		((NSDictionary *) maybeDictionary).count > 0)
+	{
+		// Make sure the whole dictionary can be serialized.
+		// If not, convert it to a string.
+		result = [self safeSerializableItemFromItem: maybeDictionary];
+	}
+
+	return result;
+}
+
+/**
+ If we can serialize the specified item, return it.
+ Otherwise, converts it to a string and returns the
+ string.
+ 
+ Things we can serialize are strings, numbers, NSNulls,
+ and arrays or dictionaries of those things (potentially
+ infinitely deep).  Numbers are OK as long as they're not
+ NaN or infinity.
+
+ Note that the REAL rules say we should call this method:
+
+		[NSJSONSerialization isValidJSONObject:]
+
+ instead of using, like, our brains, or other logic.
+ Which means (I guess) that Apple reserves the right to 
+ decide what can and cannot be serialized, as they
+ upgrade NSJSONSerializer.
+ 
+ Details:
+ https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSJSONSerialization_Class/
+ */
+- (id) safeSerializableItemFromItem: (id) item
+{
+	id result = nil;
+
+	/*
+	 NSJSONSerializer can only take an array or
+	 dictionary at its top level.  So wrap this item
+	 in an array.
+	 */
+	NSArray *itemToEvaluate = @[item];
+
+	if ([NSJSONSerialization isValidJSONObject: itemToEvaluate])
+	{
+		result = item;
+	}
+	else
+	{
+		result = [NSString stringWithFormat: @"%@", item];
+	}
+
+	return result;
 }
 
 @end

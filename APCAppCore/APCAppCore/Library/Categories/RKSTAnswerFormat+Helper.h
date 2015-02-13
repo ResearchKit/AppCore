@@ -12,7 +12,7 @@
  and pass an unknown questionType, the returned string will
  be this value.
  */
-static NSString * const RKQuestionTypeUnknown = @"UnknownQuestionType";
+static NSString * const RKQuestionTypeUnknownAsString = @"UnknownQuestionType";
 
 /**
  Calls +[RKSTAnswerFormat+Helper stringFromQuestionType:].
