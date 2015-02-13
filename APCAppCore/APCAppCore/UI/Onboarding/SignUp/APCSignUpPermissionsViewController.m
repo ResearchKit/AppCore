@@ -8,7 +8,6 @@
 #import "APCAppCore.h"
 #import "APCSignUpPermissionsViewController.h"
 #import "APCTableViewItem.h"
-#import "APCStepProgressBar.h"
 #import "APCPermissionsCell.h"
 #import "NSBundle+Helper.h"
 #import "APCPermissionsManager.h"
@@ -70,15 +69,9 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
     [super viewDidLoad];
     
     [self setupNavAppearance];
-    [self setupProgressBar];
     
     self.permissions = [self prepareData];
     [self reloadData];
-}
-
-- (void)viewWillLayoutSubviews
-{
-    self.stepProgressBar.frame = CGRectMake(0, -kAPCSignUpProgressBarHeight, self.view.width, kAPCSignUpProgressBarHeight);
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -174,21 +167,6 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
 {
     UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(back) tintColor:[UIColor appPrimaryColor]];
     [self.navigationItem setLeftBarButtonItem:backster];
-}
-
-- (void) setupProgressBar {
-
-    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, -kAPCSignUpProgressBarHeight, self.view.width, kAPCSignUpProgressBarHeight) style:APCStepProgressBarStyleDefault];
-    self.stepProgressBar.numberOfSteps = [self onboarding].onboardingTask.numberOfSteps;
-    [self.view addSubview:self.stepProgressBar];
-    
-    // Instead of reducing table view height, we can just adjust tableview scroll insets
-    UIEdgeInsets inset = self.tableView.contentInset;
-    inset.top += self.stepProgressBar.height;
-    
-    self.tableView.contentInset = inset;
-    
-    [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 2) animation:NO];
 }
 
 - (APCUser *) user {
