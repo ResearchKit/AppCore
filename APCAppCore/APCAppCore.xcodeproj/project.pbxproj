@@ -63,6 +63,8 @@
 		0894654E1A8C1F0200A983AC /* APCInsightBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0894654C1A8C1F0200A983AC /* APCInsightBarView.m */; };
 		089465521A8C211100A983AC /* APCInsights.h in Headers */ = {isa = PBXBuildFile; fileRef = 089465501A8C211100A983AC /* APCInsights.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		089465531A8C211100A983AC /* APCInsights.m in Sources */ = {isa = PBXBuildFile; fileRef = 089465511A8C211100A983AC /* APCInsights.m */; };
+		08970F121A8D407600EA46C3 /* APCFoodInsight.h in Headers */ = {isa = PBXBuildFile; fileRef = 08970F101A8D407600EA46C3 /* APCFoodInsight.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		08970F131A8D407600EA46C3 /* APCFoodInsight.m in Sources */ = {isa = PBXBuildFile; fileRef = 08970F111A8D407600EA46C3 /* APCFoodInsight.m */; };
 		089E2E831A6051F600A8FBF3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B241A2F86280015982C /* HealthKit.framework */; };
 		08EA2AB31A7AD564007549C0 /* UIImage+ImageEffects.h in Headers */ = {isa = PBXBuildFile; fileRef = 08EA2AB11A7AD564007549C0 /* UIImage+ImageEffects.h */; };
 		08EA2AB41A7AD564007549C0 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */; };
@@ -552,6 +554,8 @@
 		0894654C1A8C1F0200A983AC /* APCInsightBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCInsightBarView.m; sourceTree = "<group>"; };
 		089465501A8C211100A983AC /* APCInsights.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCInsights.h; sourceTree = "<group>"; };
 		089465511A8C211100A983AC /* APCInsights.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCInsights.m; sourceTree = "<group>"; };
+		08970F101A8D407600EA46C3 /* APCFoodInsight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFoodInsight.h; sourceTree = "<group>"; };
+		08970F111A8D407600EA46C3 /* APCFoodInsight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFoodInsight.m; sourceTree = "<group>"; };
 		08EA2AB11A7AD564007549C0 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateComponentsHelperTests.m; sourceTree = "<group>"; };
@@ -1155,6 +1159,8 @@
 			children = (
 				089465501A8C211100A983AC /* APCInsights.h */,
 				089465511A8C211100A983AC /* APCInsights.m */,
+				08970F101A8D407600EA46C3 /* APCFoodInsight.h */,
+				08970F111A8D407600EA46C3 /* APCFoodInsight.m */,
 			);
 			path = Insights;
 			sourceTree = "<group>";
@@ -2259,6 +2265,7 @@
 				F5B948041A73272C0034C522 /* APCPointSelector.h in Headers */,
 				F5B946221A7309A20034C522 /* ZZAESDecryptInputStream.h in Headers */,
 				F5B947E31A73272C0034C522 /* APCGroupedScheduledTask.h in Headers */,
+				08970F121A8D407600EA46C3 /* APCFoodInsight.h in Headers */,
 				5B827B4C1A80A39900C685A3 /* APCDashboardMoreInfoViewController.h in Headers */,
 				F5B948061A73272C0034C522 /* APCScheduleEnumerator.h in Headers */,
 				F5B9463B1A7309A20034C522 /* ZZInflateInputStream.h in Headers */,
@@ -2587,6 +2594,7 @@
 				F5F129F11A2F78490015982C /* APCDBStatus.m in Sources */,
 				F5B947E61A73272C0034C522 /* APCKeychainStore.m in Sources */,
 				F5F129F71A2F78490015982C /* APCResult+Bridge.m in Sources */,
+				08970F131A8D407600EA46C3 /* APCFoodInsight.m in Sources */,
 				F5B947B61A73272C0034C522 /* APCDeviceHardware+APCHelper.m in Sources */,
 				F5B947BC1A73272C0034C522 /* NSBundle+Helper.m in Sources */,
 				F5F12A031A2F78490015982C /* APCScheduledTask.m in Sources */,
