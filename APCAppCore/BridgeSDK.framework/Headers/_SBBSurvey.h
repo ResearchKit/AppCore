@@ -20,10 +20,6 @@
 
 @property (nonatomic, strong) NSArray* elements;
 
-//YML EDIT - START
-@property (nonatomic, strong) NSArray* questions;
-//YML EDIT - END
-
 @property (nonatomic, strong) NSString* guid;
 
 @property (nonatomic, strong) NSString* identifier;
