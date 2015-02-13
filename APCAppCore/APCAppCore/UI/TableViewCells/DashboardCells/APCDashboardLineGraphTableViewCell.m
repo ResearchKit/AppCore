@@ -20,6 +20,7 @@
     
     self.subTitleLabel.font = [UIFont appRegularFontWithSize:16.0f];
     self.subTitleLabel.textColor = [UIColor appSecondaryColor3];
+    
 }
 
 -(void)layoutSubviews
