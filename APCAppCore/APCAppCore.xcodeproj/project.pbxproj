@@ -126,6 +126,8 @@
 		F55653B21A6F08E0003E0B0C /* libMobileGestalt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */; };
 		F55653B31A6F0918003E0B0C /* libMobileGestalt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */; };
 		F556549B1A701337003E0B0C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F556549A1A701337003E0B0C /* Localizable.strings */; };
+		F5A861E51A8E7C60004EDB15 /* Flurry.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A861E31A8E7C60004EDB15 /* Flurry.h */; };
+		F5A861E61A8E7C60004EDB15 /* libFlurry_6.0.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A861E41A8E7C60004EDB15 /* libFlurry_6.0.0.a */; };
 		F5B946211A7309A20034C522 /* zipzap.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B945F61A7309A20034C522 /* zipzap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5B946221A7309A20034C522 /* ZZAESDecryptInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B945F71A7309A20034C522 /* ZZAESDecryptInputStream.h */; };
 		F5B946231A7309A20034C522 /* ZZAESDecryptInputStream.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5B945F81A7309A20034C522 /* ZZAESDecryptInputStream.mm */; };
@@ -213,8 +215,6 @@
 		F5B947D81A73272C0034C522 /* APCDataArchiver.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947641A73272C0034C522 /* APCDataArchiver.m */; };
 		F5B947DB1A73272C0034C522 /* APCLog.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B947691A73272C0034C522 /* APCLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5B947DC1A73272C0034C522 /* APCLog.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B9476A1A73272C0034C522 /* APCLog.m */; };
-		F5B947DD1A73272C0034C522 /* Flurry.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B9476C1A73272C0034C522 /* Flurry.h */; };
-		F5B947DE1A73272C0034C522 /* libFlurry_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5B9476D1A73272C0034C522 /* libFlurry_5.4.0.a */; };
 		F5B947DF1A73272C0034C522 /* APCConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B9476F1A73272C0034C522 /* APCConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5B947E01A73272C0034C522 /* APCConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947701A73272C0034C522 /* APCConstants.m */; };
 		F5B947E11A73272C0034C522 /* APCDeviceHardware.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B947711A73272C0034C522 /* APCDeviceHardware.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -614,6 +614,8 @@
 		F54DDD221A8026010073E4B4 /* APCHKDiscreteQuantityTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHKDiscreteQuantityTracker.m; sourceTree = "<group>"; };
 		F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMobileGestalt.dylib; path = usr/lib/libMobileGestalt.dylib; sourceTree = SDKROOT; };
 		F556549A1A701337003E0B0C /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		F5A861E31A8E7C60004EDB15 /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
+		F5A861E41A8E7C60004EDB15 /* libFlurry_6.0.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurry_6.0.0.a; sourceTree = "<group>"; };
 		F5B945F61A7309A20034C522 /* zipzap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zipzap.h; sourceTree = "<group>"; };
 		F5B945F71A7309A20034C522 /* ZZAESDecryptInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZAESDecryptInputStream.h; sourceTree = "<group>"; };
 		F5B945F81A7309A20034C522 /* ZZAESDecryptInputStream.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZZAESDecryptInputStream.mm; sourceTree = "<group>"; };
@@ -701,8 +703,6 @@
 		F5B947641A73272C0034C522 /* APCDataArchiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataArchiver.m; sourceTree = "<group>"; };
 		F5B947691A73272C0034C522 /* APCLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCLog.h; sourceTree = "<group>"; };
 		F5B9476A1A73272C0034C522 /* APCLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLog.m; sourceTree = "<group>"; };
-		F5B9476C1A73272C0034C522 /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
-		F5B9476D1A73272C0034C522 /* libFlurry_5.4.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurry_5.4.0.a; sourceTree = "<group>"; };
 		F5B9476F1A73272C0034C522 /* APCConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConstants.h; sourceTree = "<group>"; };
 		F5B947701A73272C0034C522 /* APCConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCConstants.m; sourceTree = "<group>"; };
 		F5B947711A73272C0034C522 /* APCDeviceHardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDeviceHardware.h; sourceTree = "<group>"; };
@@ -989,9 +989,9 @@
 				F55653B31A6F0918003E0B0C /* libMobileGestalt.dylib in Frameworks */,
 				F5F12B2F1A2F86600015982C /* libbz2.dylib in Frameworks */,
 				F5F12B2D1A2F86550015982C /* libarchive.dylib in Frameworks */,
+				F5A861E61A8E7C60004EDB15 /* libFlurry_6.0.0.a in Frameworks */,
 				F5F12B2B1A2F864B0015982C /* libz.dylib in Frameworks */,
 				F5F12B291A2F863E0015982C /* ResearchKit.framework in Frameworks */,
-				F5B947DE1A73272C0034C522 /* libFlurry_5.4.0.a in Frameworks */,
 				F5F12B271A2F86350015982C /* BridgeSDK.framework in Frameworks */,
 				F5F12B251A2F86280015982C /* HealthKit.framework in Frameworks */,
 				F5F12B231A2F861F0015982C /* CoreLocation.framework in Frameworks */,
@@ -1310,6 +1310,15 @@
 			path = Trackers;
 			sourceTree = "<group>";
 		};
+		F5A861E21A8E7C60004EDB15 /* Flurry */ = {
+			isa = PBXGroup;
+			children = (
+				F5A861E31A8E7C60004EDB15 /* Flurry.h */,
+				F5A861E41A8E7C60004EDB15 /* libFlurry_6.0.0.a */,
+			);
+			path = Flurry;
+			sourceTree = "<group>";
+		};
 		F5B945F41A7309A20034C522 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
@@ -1470,18 +1479,9 @@
 			children = (
 				F5B947691A73272C0034C522 /* APCLog.h */,
 				F5B9476A1A73272C0034C522 /* APCLog.m */,
-				F5B9476B1A73272C0034C522 /* Flurry */,
+				F5A861E21A8E7C60004EDB15 /* Flurry */,
 			);
 			path = Logging;
-			sourceTree = "<group>";
-		};
-		F5B9476B1A73272C0034C522 /* Flurry */ = {
-			isa = PBXGroup;
-			children = (
-				F5B9476C1A73272C0034C522 /* Flurry.h */,
-				F5B9476D1A73272C0034C522 /* libFlurry_5.4.0.a */,
-			);
-			path = Flurry;
 			sourceTree = "<group>";
 		};
 		F5B9476E1A73272C0034C522 /* Objects */ = {
@@ -2161,7 +2161,6 @@
 				F5B947CD1A73272C0034C522 /* SBBGuidCreatedOnVersionHolder+APCAdditions.h in Headers */,
 				F5F12A7E1A2F78490015982C /* APCGraphConstants.h in Headers */,
 				089465491A8C179700A983AC /* APCDashboardInsightTableViewCell.h in Headers */,
-				F5B947DD1A73272C0034C522 /* Flurry.h in Headers */,
 				F5F12A981A2F78490015982C /* APCChangeEmailViewController.h in Headers */,
 				F5B947F81A73272C0034C522 /* APCParametersUserDefaultCell.h in Headers */,
 				F5B946291A7309A20034C522 /* ZZChannel.h in Headers */,
@@ -2185,6 +2184,7 @@
 				F5F12A7D1A2F78490015982C /* APCGraph.h in Headers */,
 				F5F12AB61A2F78490015982C /* APCSignUpProgressing.h in Headers */,
 				F5F12A001A2F78490015982C /* APCScheduledTask+AddOn.h in Headers */,
+				F5A861E51A8E7C60004EDB15 /* Flurry.h in Headers */,
 				F5F12AB01A2F78490015982C /* APCSignUpMedicalInfoViewController.h in Headers */,
 				5B0432A71A322BEE000DC9ED /* APCOnboardingTask.h in Headers */,
 				F5B946451A7309A20034C522 /* ZZScopeGuard.h in Headers */,
