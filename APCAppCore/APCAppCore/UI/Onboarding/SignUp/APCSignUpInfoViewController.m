@@ -8,7 +8,6 @@
 #import "APCSignUpInfoViewController.h"
 #import "APCAppDelegate.h"
 #import "APCUserInfoConstants.h"
-#import "APCStepProgressBar.h"
 #import "NSString+Helper.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
@@ -37,7 +36,6 @@ static CGFloat const kHeaderHeight = 127.0f;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self setupStepProgressBar];
     [self setupAppearance];
     
     self.nameTextField.delegate = self;
@@ -67,21 +65,6 @@ static CGFloat const kHeaderHeight = 127.0f;
 }
 
 #pragma mark -
-
-- (void)setupStepProgressBar
-{
-    self.stepProgressBar = [[APCStepProgressBar alloc] initWithFrame:CGRectMake(0, -kAPCSignUpProgressBarHeight, CGRectGetWidth(self.view.frame), kAPCSignUpProgressBarHeight)
-                                                               style:APCStepProgressBarStyleOnlyProgressView];
-    self.stepProgressBar.numberOfSteps = [self onboarding].onboardingTask.numberOfSteps;
-    [self.view addSubview:self.stepProgressBar];
-    
-    
-    // Instead of reducing table view height, we can just adjust tableview scroll insets
-    UIEdgeInsets inset = self.tableView.contentInset;
-    inset.top += CGRectGetHeight(self.stepProgressBar.frame);
-    
-    self.tableView.contentInset = inset;
-}
 
 - (void)setStepNumber:(NSUInteger)stepNumber title:(NSString *)title
 {

@@ -7,7 +7,6 @@
  
 #import "APCSignUpMedicalInfoViewController.h"
 #import "APCSpinnerViewController.h"
-#import "APCStepProgressBar.h"
 #import "UIAlertController+Helper.h"
 #import "APCUser+Bridge.h"
 #import "APCAppDelegate.h"
@@ -32,7 +31,6 @@
     self.tableView.tableHeaderView = nil;
     
     self.items = [self prepareContent];
-    [self setupProgressBar];
     
     self.navigationItem.hidesBackButton = YES;
     
