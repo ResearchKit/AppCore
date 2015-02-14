@@ -55,7 +55,8 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
         _caloriesQuantityType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDietaryEnergyConsumed];
         _caloriesUnit = [HKUnit kilocalorieUnit];
         
-        _source = nil;
+        _startDate = [self dateForSpan:-7 fromDate:[NSDate date]];
+        _endDate   = [NSDate date];
         
         _foodHistory = [NSMutableArray new];
         
