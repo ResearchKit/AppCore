@@ -36,6 +36,7 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 @property (nonatomic, strong) NSDate *endDate;
 
 @property (nonatomic, strong) NSMutableArray *foodHistory;
+@property (nonatomic, strong) HKSource *source;
 
 //@property (nonatomic) NSInteger foodInsightAnchor;
 @property (nonatomic) NSInteger foodInsightCaloriesAnchor;
