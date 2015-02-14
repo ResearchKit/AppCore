@@ -25,4 +25,6 @@ extern NSString const *kFoodInsightFrequencyKey;
 - (instancetype)initFoodInsightForSampleType:(HKSampleType *)sample
                                         unit:(HKUnit *)unit;
 
+- (void)insight;
+
 @end

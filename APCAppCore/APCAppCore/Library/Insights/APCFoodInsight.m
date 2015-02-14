@@ -69,8 +69,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
                                                  selector:@selector(foodInsightDataCollectionIsDone:)
                                                      name:kAPHFoodInsightDataCollectionIsCompletedNotification
                                                    object:nil];
-        
-        [self configureSource];
     }
     
     return self;
@@ -79,6 +77,11 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)insight
+{
+    [self configureSource];
 }
 
 #pragma mark - Source
