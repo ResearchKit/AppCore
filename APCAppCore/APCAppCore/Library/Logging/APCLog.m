@@ -8,6 +8,7 @@
 #import "APCLog.h"
 #import "Flurry.h"
 #import "APCConstants.h"
+#import "APCUtilities.h"
 
 
 static NSDateFormatter *dateFormatter = nil;
@@ -29,90 +30,32 @@ static BOOL _isFlurryOn = NO;
  */
 static NSString *_flurryApiKey = nil;
 
-static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," developer personal account
+/**
+ A test key, to make sure logging works.
+ This is from a developer's personal, free account with Flurry.
+ */
+static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";
+
+
+
+// ---------------------------------------------------------
+#pragma mark - "Tags" - introductory strings in print statements
+// ---------------------------------------------------------
+
+/*
+ "Tags" that appear at the left edge of the debugging
+ statements we print with this logging facility.
+ */
+
+static NSString * const APCLogTagError = @"APC_ERROR";
+static NSString * const APCLogTagDebug = @"APC_DEBUG";
+static NSString * const APCLogTagEvent = @"APC_EVENT";
+static NSString * const APCLogTagData  = @" APC_DATA";
+static NSString * const APCLogTagView  = @" APC_VIEW";
+
 
 
 @implementation APCLog
-
-
-// ---------------------------------------------------------
-#pragma mark - Macro:  converting varArgs into a string
-// ---------------------------------------------------------
-
-/**
- This macro converts a bunch of "..." arguments into an NSString.
-
- Note that this macro requires ARC.  (To use it without ARC,
- edit the macro to call "autorelease" on formattedMessage before
- returning it.)
-
-
- To use it: 
- 
- First, create a method that ENDS with a "...", like this:
- 
-		- (void) printMyStuff: (NSString *) messageFormat, ...
-		{
-		}
- 
- Inside that method, call this macro, passing it the string
- you want to use as a formatting string.  Using the above
- example, it might be:
- 
-		- (void) printMyStuff: (NSString *) messageFormat, ...
-		{
-			NSString extractedString = stringFromVariadicArgumentsAndFormat(messageFormat);
- 
-			//
-			// now use the extractedString.  For example:
-			//
-			NSLog (@"That string was: %@", extractedString);
-		}
-
- Behind the scenes, this macro extracts the parameters from
- that "...", takes your formatting string, and passes them
- all to +[NSString stringWithFormat], giving you a normally-
- formatted string as a result.
- 
- This is identical to typing the following mess into the
- same method:
- 
-	va_list arguments;
-	va_start (arguments, format);
-	NSString *formattedMessage = [[NSString alloc] initWithFormat: format
-													    arguments: arguments];
-	va_end (arguments);
- 
- ...and then using the string "formattedMessage" somewhere.
- 
- If you're interested:  this macro "returns" a value by wrapping
- the whole thing in a ({ ... }) and them simply putting the value
- on a line by itself at the end.
- 
- References:
-
- -	Extracting the variadic arguments (the "..." parameter) into an array we pass to NSString:
-	http://stackoverflow.com/questions/1420421/how-to-pass-on-a-variable-number-of-arguments-to-nsstrings-stringwithformat
-
- -	"Returning" a value from a macro:
-	http://stackoverflow.com/questions/2679182/have-macro-return-a-value
-
- -	More ways to get to the variadic arguments arguments:
-	https://developer.apple.com/library/mac/qa/qa1405/_index.html
- 
- @author Ron
- @date December 10, 2014
- */
-#define NSStringFromVariadicArgumentsAndFormat(formatString)				\
-	({																		\
-		NSString *formattedMessage = nil;									\
-		va_list arguments;													\
-		va_start (arguments, formatString);									\
-		formattedMessage = [[NSString alloc] initWithFormat: formatString	\
-												  arguments: arguments];	\
-		va_end (arguments);													\
-		formattedMessage;													\
-	})
 
 
 
@@ -143,7 +86,10 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
 	{
 		APCLogDebug (@"Starting Flurry session.");
 
+		// Please don't delete this line of code, so that
+		// we remember it's possible.
 //		[Flurry setLogLevel: FlurryLogLevelAll];
+
         [Flurry setCrashReportingEnabled:YES];
 		[Flurry startSession: _flurryApiKey];
 	}
@@ -173,47 +119,6 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
 
 
 // ---------------------------------------------------------
-#pragma mark - Logging Methods
-// ---------------------------------------------------------
-
-+ (void) log: (NSString *) format, ...
-{
-	NSDate *now = [NSDate date];
-	NSString *dateString = [dateFormatter stringFromDate: now];
-	NSString *output = [NSString stringWithFormat: @"%@: %@", dateString, NSStringFromVariadicArgumentsAndFormat (format)];
-	NSLog (@"%@", output);
-}
-
-+ (void) logException: (NSException *) exception
-			   format: (NSString *) messageOrFormattingString, ...
-{
-	[self log: @"EXCEPTION: %@ Exception text: %@  Stack trace:\n%@",
-	 NSStringFromVariadicArgumentsAndFormat (messageOrFormattingString),
-	 exception,
-	 exception.callStackSymbols];
-}
-
-+ (void) logException: (NSException *) exception
-{
-	[self log: @"EXCEPTION: [%@]. Stack trace:\n%@", exception, exception.callStackSymbols];
-}
-
-+ (void) file: (NSString *) fileName
-		 line: (NSInteger) lineNumber
-	   method: (NSString *) classAndMethodName
-	   format: (NSString *) messageFormat, ...
-{
-	NSLog (@"%@ [%@:%d] %@ %@",
-		   [dateFormatter stringFromDate: [NSDate date]],
-		   fileName,
-		   (int) lineNumber,
-		   classAndMethodName,
-		   NSStringFromVariadicArgumentsAndFormat (messageFormat));
-}
-
-
-
-// ---------------------------------------------------------
 #pragma mark - New Logging Methods.  No, really.
 // ---------------------------------------------------------
 
@@ -227,7 +132,7 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
 
 	NSString *formattedMessage = NSStringFromVariadicArgumentsAndFormat(formatString);
 
-	[self logInternal_tag: @"APC_ERROR"
+	[self logInternal_tag: APCLogTagError
 				   method: apcLogMethodInfo
 				  message: formattedMessage];
 }
@@ -247,11 +152,17 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
                                                             @"error_description" : description,
                                                             @"full_error_description": [NSString stringWithFormat: @"%@", error]
                                                             }];
-            //Makes the app slow. Revisit with next version of Flurry SDK.
+
+            /*
+			 Makes the app slow. Revisit with next version of Flurry SDK.
+
+			 Please don't delete this line of code.  We want this; it's
+			 just broken-ish.
+			 */
 //            [Flurry logError: error.domain message: description error: error];
         }
 
-		[self logInternal_tag: @"APC_ERROR"
+		[self logInternal_tag: APCLogTagError
 					   method: apcLogMethodData
 					  message: description];
 	}
@@ -275,11 +186,16 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
                                                             @"exception_reason" : exception.reason,
                                                             @"exception_stacktrace": printout
                                                             }];
-            //Makes the app slow. Revisit with next version of Flurry SDK.
+			/*
+			 Makes the app slow. Revisit with next version of Flurry SDK.
+
+			 Please don't delete this line of code.  We want this; it's
+			 just broken-ish.
+			 */
 //            [Flurry logError: exception.name message: exception.reason exception: exception];
         }
 
-		[self logInternal_tag: @"APC_ERROR"
+		[self logInternal_tag: APCLogTagError
 					   method: apcLogMethodData
 					  message: printout];
 	}
@@ -295,7 +211,7 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
 
 	NSString *formattedMessage = NSStringFromVariadicArgumentsAndFormat(formatString);
 
-	[self logInternal_tag: @"APC_DEBUG"
+	[self logInternal_tag: APCLogTagDebug
 				   method: apcLogMethodData
 				  message: formattedMessage];
 }
@@ -315,7 +231,7 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
 		[Flurry logEvent: formattedMessage];
 	}
 
-	[self logInternal_tag: @"APC_EVENT"
+	[self logInternal_tag: APCLogTagEvent
 				   method: apcLogMethodData
 				  message: formattedMessage];
 }
@@ -331,7 +247,7 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
 		[Flurry logEvent: eventName withParameters: eventDictionary];
 	}
 
-	[self logInternal_tag: @" APC_DATA"
+	[self logInternal_tag: APCLogTagData
 				   method: apcLogMethodData
 				  message: message];
 }
@@ -346,7 +262,7 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
         [Flurry logEvent: kPageViewEvent withParameters: @{@"viewcontroller_viewed" : NSStringFromClass(viewController.class)}];
     }
 
-	[self logInternal_tag: @" APC_VIEW"
+	[self logInternal_tag: APCLogTagView
 				   method: apcLogMethodData
 				  message: message];
 }
@@ -361,8 +277,10 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";		// App "Test," 
 				  method: (NSString *) methodInfo
 				 message: (NSString *) message
 {
-	// Objective-C disables all NSLog() statements in
-	// a "release" build.
+	/*
+	 Objective-C disables all NSLog() statements in
+	 a "release" build, so this is safe to leave as-is.
+	 */
 	NSLog (@"%@ %@ => %@", tag, methodInfo, message);
 }
 

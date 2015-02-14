@@ -1,4 +1,4 @@
-// 
+//
 //  APCLineGraphViewController.h 
 //  AppCore 
 // 
@@ -33,4 +33,7 @@
 - (IBAction)collapse:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UISwitch *toggleSwitch;
+
+@property (weak, nonatomic) IBOutlet UIImageView *averageImageView;
+
 @end

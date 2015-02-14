@@ -10,8 +10,10 @@
 #import "zipzap.h"
 #import <objc/runtime.h>
 #import "APCUtilities.h"
+#import "RKSTAnswerFormat+Helper.h"
 
 NSString *const kQuestionTypeKey        = @"questionType";
+NSString *const kQuestionTypeNameKey    = @"questionTypeName";
 NSString *const kUserInfoKey            = @"userInfo";
 NSString *const kIdentifierKey          = @"identifier";
 NSString *const kStartDateKey           = @"startDate";
@@ -220,19 +222,19 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 
 - (void)addTappingResultsToArchive:(RKSTTappingIntervalResult *)result
 {
-    NSMutableDictionary  *dictionary = [NSMutableDictionary dictionary];
-    
+    NSMutableDictionary  *rawTappingResults = [NSMutableDictionary dictionary];
+
     NSString  *tappingViewSize = NSStringFromCGSize(result.stepViewSize);
-    dictionary[kTappingViewSizeKey] = tappingViewSize;
+    rawTappingResults[kTappingViewSizeKey] = tappingViewSize;
     
-    dictionary[kStartDateKey] = result.startDate;
-    dictionary[kEndDateKey]   = result.endDate;
+    rawTappingResults[kStartDateKey] = result.startDate;
+    rawTappingResults[kEndDateKey]   = result.endDate;
     
     NSString  *leftButtonRect = NSStringFromCGRect(result.buttonRect1);
-    dictionary[kButtonRectLeftKey] = leftButtonRect;
+    rawTappingResults[kButtonRectLeftKey] = leftButtonRect;
     
     NSString  *rightButtonRect = NSStringFromCGRect(result.buttonRect2);
-    dictionary[kButtonRectRightKey] = rightButtonRect;
+    rawTappingResults[kButtonRectRightKey] = rightButtonRect;
     
     NSArray  *samples = result.samples;
     NSMutableArray  *sampleResults = [NSMutableArray array];
@@ -252,72 +254,191 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
         }
         [sampleResults addObject:aSampleDictionary];
     }
-    dictionary[kTappingSamplesKey] = sampleResults;
-    [self processDictionary:dictionary];
-    [self writeResultDictionaryToArchive:dictionary];
+    rawTappingResults[kTappingSamplesKey] = sampleResults;
+
+	NSDictionary *serializableData = [self generateSerializableDataFromSourceDictionary: rawTappingResults];
+    [self writeResultDictionaryToArchive: serializableData];
 }
 
-- (void) addResultToArchive: (RKSTResult*) result {
-    NSMutableArray * properties = [NSMutableArray array];
-    [properties addObjectsFromArray:[APCDataArchiver classPropsFor:[RKSTResult class]]];
-    if (result.superclass != [RKSTResult class]) {
-        [properties addObjectsFromArray:[APCDataArchiver classPropsFor:result.superclass]];
-    }
-    [properties addObjectsFromArray:[APCDataArchiver classPropsFor:result.class]];
-    NSMutableDictionary * dictionary = [[result dictionaryWithValuesForKeys:properties] mutableCopy];
-    dictionary = [self processDictionary:dictionary];
-    APCLogDebug(@"%@", dictionary);
-    [self writeResultDictionaryToArchive:dictionary];
-    [self addFileInfoEntryWithDictionary:dictionary];
+- (void) addResultToArchive: (RKSTResult*) result
+{
+	NSMutableArray * propertyNames = [NSMutableArray array];
+
+	/*
+	 Get the names of all properties of our result's class
+	 and all its superclasses.  Stop when we hit RKSTResult.
+	 */
+	Class klass = result.class;
+	BOOL done = NO;
+	NSArray *propertyNamesForOneClass = nil;
+
+	while (klass != nil && ! done)
+	{
+		propertyNamesForOneClass = [self classPropsFor: klass];
+
+		[propertyNames addObjectsFromArray: propertyNamesForOneClass];
+
+		if (klass == [RKSTResult class])
+		{
+			done = YES;
+		}
+		else
+		{
+			klass = [klass superclass];
+		}
+	}
+
+    NSDictionary *propertiesToSave = [result dictionaryWithValuesForKeys: propertyNames];
+	NSDictionary *serializableData = [self generateSerializableDataFromSourceDictionary: propertiesToSave];
+
+    APCLogDebug(@"%@", serializableData);
+
+    [self writeResultDictionaryToArchive: serializableData];
+    [self addFileInfoEntryWithDictionary: serializableData];
 }
 
-- (NSMutableDictionary*) processDictionary :(NSMutableDictionary*) mutableDictionary {
-    static NSArray* array = nil;
-    if (array == nil) {
-        array = @[@"None", @"Scale", @"SingleChoice", @"MultipleChoice", @"Decimal",@"Integer", @"Boolean", @"Text", @"TimeOfDay", @"DateAndTime", @"Date", @"TimeInterval"];
-    }
-    //Replace questionType
-    if (mutableDictionary[kQuestionTypeKey]) {
-        NSUInteger index = ((NSNumber*) mutableDictionary[kQuestionTypeKey]).integerValue;
-        if (index < array.count) {
-            mutableDictionary[kQuestionTypeKey] = array[index];
-        }
-    }
-    
-    //Remove userInfo if its empty
-    if ([mutableDictionary[kUserInfoKey] isEqual:[NSNull null]]) {
-        [mutableDictionary removeObjectForKey:kUserInfoKey];
-    }
-    
-    //Replace identifier with item
-    if (mutableDictionary[kIdentifierKey]) {
-        mutableDictionary[kItemKey] =mutableDictionary[kIdentifierKey];
-        [mutableDictionary removeObjectForKey:kIdentifierKey];
-    }
-    
-        //Override dates with strings
-    if ([mutableDictionary[kStartDateKey] isKindOfClass:[NSDate class]]) {
-        mutableDictionary[kStartDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kStartDateKey]];
-    }
-    
-    if ([mutableDictionary[kEndDateKey] isKindOfClass:[NSDate class]]) {
-        mutableDictionary[kEndDateKey] = [NSString stringWithFormat:@"%@", mutableDictionary[kEndDateKey]];
-    }
-    
-    //Replace any other type of objects with its string equivalents
-    NSMutableDictionary * copyDictionary = [mutableDictionary mutableCopy];
-    [mutableDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        //Removing NSCalendar objects if they are present
-        if ([obj isKindOfClass:[NSCalendar class]]) {
-            [copyDictionary removeObjectForKey:key];
-        }
-        //Otherwise call description on the objects to get string
-        else if (!([obj isKindOfClass:[NSNumber class]] || [obj isKindOfClass:[NSString class]])) {
-            copyDictionary[key] = [NSString stringWithFormat:@"%@", obj];
-        }
-    }];
-    
-    return copyDictionary;
+- (NSDictionary *) generateSerializableDataFromSourceDictionary: (NSDictionary *) sourceDictionary
+{
+	NSMutableDictionary *serializableDictionary = [NSMutableDictionary new];
+
+	/*
+	 Walk through all content we're about to serialize,
+	 decide if we want to keep it, convert it to something
+	 safe, and add it to the outbound dictionary if desired.
+	 */
+	for (NSString *key in sourceDictionary.allKeys)
+	{
+		id value = sourceDictionary [key];
+
+
+		//
+		// Delete calendars.
+		//
+
+		if ([value isKindOfClass: [NSCalendar class]])
+		{
+			// Skip it.
+		}
+
+
+		//
+		// Replace the key "identifier" with the key "item".
+		//
+		// Note:  several other parts of this file use kItemKey.
+		//
+
+		else if ([key isEqualToString: kIdentifierKey])
+		{
+			id itemToSerialize = [self safeSerializableItemFromItem: value];
+			serializableDictionary [kItemKey] = itemToSerialize;
+		}
+
+
+		//
+		// Find and include the names for RKQuestionTypes.
+		//
+
+		else if ([key isEqualToString: kQuestionTypeKey])
+		{
+			id valueToSerialize = nil;
+			NSString* nameToSerialize = nil;
+
+			NSNumber *questionType = [self safeSerializableQuestionTypeFromItem: value];
+
+			if (questionType != nil)
+			{
+				valueToSerialize = questionType;
+				nameToSerialize = NSStringFromRKQuestionType (questionType.integerValue);
+			}
+			else
+			{
+				valueToSerialize = [self safeSerializableItemFromItem: value];
+				nameToSerialize = RKQuestionTypeUnknownAsString;
+			}
+
+			serializableDictionary [kQuestionTypeKey] = valueToSerialize;
+			serializableDictionary [kQuestionTypeNameKey] = nameToSerialize;
+		}
+
+
+		//
+		// Include the userInfo dictionary if it has something in it.
+		//
+
+		else if ([key isEqualToString: kUserInfoKey])
+		{
+			NSDictionary *safeDictionary = [self safeAndUsefulSerializableDictionaryFromMaybeDictionary: value];
+
+			if (safeDictionary)
+			{
+				serializableDictionary [kUserInfoKey] = safeDictionary;
+			}
+
+			else
+			{
+				// It's null, empty, or not a dictionary.  Skip it.
+			}
+		}
+
+
+		//
+		// Arrays of Integers and Booleans
+		//
+
+		/*
+		 Very commonly, we have arrays of integers and Booleans
+		 (as answers to multiple-choice questions, say).
+		 However, much earlier in this process, they got converted
+		 to strings.  This seems to be a core feature of ResearchKit.
+		 But there's still value in them being numeric or Boolean
+		 answers.  So if this is an array, try to convert each item
+		 to an integer or Boolean.  If we can't, just call our master
+		 -safe: method to make sure we can serialize it.
+		 */
+		else if ([value isKindOfClass: [NSArray class]])
+		{
+			NSArray *inputArray = value;
+			NSMutableArray *outputArray = [NSMutableArray new];
+
+			for (id item in inputArray)
+			{
+				id outputItem = [self safeSerializableIntOrBoolFromStringIfString: item];
+
+				if (outputItem == nil)
+				{
+					outputItem = [self safeSerializableItemFromItem: item];
+				}
+
+				[outputArray addObject: outputItem];
+			}
+
+			serializableDictionary [key] = outputArray;
+		}
+
+
+		//
+		// Everything Else
+		//
+
+		/*
+		 If we get here:  we want to keep it, but don't have specific
+		 rules for converting it.  Use our default serialization process:
+		 include it as-is if the serializer recognizes it, or convert it
+		 to a string if not.
+		 
+		 This includes NSDates, by the way.
+		 */
+		else
+		{
+			id itemToSerialize = [self safeSerializableItemFromItem: value];
+			serializableDictionary [key] = itemToSerialize;
+		}
+	}
+
+	/*
+	 Whew.  Done.  Return an immutable copy, just on the principle of encapsulation.
+	 */
+	return [NSDictionary dictionaryWithDictionary: serializableDictionary];
 }
 
 - (void) writeResultDictionaryToArchive: (NSDictionary*) dictionary
@@ -453,7 +574,7 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     return data;
 }
 
-+ (NSArray *)classPropsFor:(Class)klass
+- (NSArray *)classPropsFor:(Class)klass
 {
     if (klass == NULL) {
         return nil;
@@ -474,6 +595,140 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     free(properties);
     
     return [NSArray arrayWithArray:results];
+}
+
+/**
+ Try to convert the specified item to an NSNumber, specifically
+ if it's a String that looks like a Boolean or an intenger.
+ */
+- (NSNumber *) safeSerializableIntOrBoolFromStringIfString: (id) item
+{
+	NSNumber *result = nil;
+
+	if ([item isKindOfClass: [NSString class]])
+	{
+		NSString *itemAsString = item;
+
+		if (itemAsString.length > 0)
+		{
+			if ([itemAsString compare: @"no" options: NSCaseInsensitiveSearch] == NSOrderedSame ||
+				[itemAsString compare: @"false" options: NSCaseInsensitiveSearch] == NSOrderedSame)
+			{
+				result = @(NO);
+			}
+
+			else if ([itemAsString compare: @"yes" options: NSCaseInsensitiveSearch] == NSOrderedSame ||
+					 [itemAsString compare: @"true" options: NSCaseInsensitiveSearch] == NSOrderedSame)
+			{
+				result = @(YES);
+			}
+
+			else
+			{
+				NSInteger itemAsInt = itemAsString.integerValue;
+				NSString *verificationString = [NSString stringWithFormat: @"%d", (int) itemAsInt];
+
+				// Here, we use -isValidJSONObject: to make sure the int isn't
+				// NaN or infinity.  According to the JSON rules, those will
+				// break the serializer.
+				if ([verificationString isEqualToString: itemAsString] && [NSJSONSerialization isValidJSONObject: @[verificationString]])
+				{
+					result = @(itemAsInt);
+				}
+
+				else
+				{
+					// It was NaN or infinity.  Therefore, we can't convert it
+					// to a safe or serializable value.  Ignore it.
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
+/**
+ If this item is a Number, try to convert it to an RKQuestionType.
+ */
+- (NSNumber *) safeSerializableQuestionTypeFromItem: (id) item
+{
+	NSNumber* result = nil;
+
+	if ([item isKindOfClass: [NSNumber class]]  && [NSJSONSerialization isValidJSONObject: @[item]])
+	{
+		NSNumber *questionTypeAsNumber = item;
+		RKQuestionType questionType = questionTypeAsNumber.integerValue;
+		result = @(questionType);
+	}
+
+	return result;
+}
+
+/**
+ If this is a Dictionary, and it has stuff in it, 
+ keep it -- either as a Dictionary (if we can
+ serialize it) or a string (if not).
+ */
+- (NSDictionary *) safeAndUsefulSerializableDictionaryFromMaybeDictionary: (id) maybeDictionary
+{
+	NSDictionary *result = nil;
+
+	if (maybeDictionary != [NSNull null] &&
+		[maybeDictionary isKindOfClass: [NSDictionary class]] &&
+		((NSDictionary *) maybeDictionary).count > 0)
+	{
+		// Make sure the whole dictionary can be serialized.
+		// If not, convert it to a string.
+		result = [self safeSerializableItemFromItem: maybeDictionary];
+	}
+
+	return result;
+}
+
+/**
+ If we can serialize the specified item, return it.
+ Otherwise, converts it to a string and returns the
+ string.
+ 
+ Things we can serialize are strings, numbers, NSNulls,
+ and arrays or dictionaries of those things (potentially
+ infinitely deep).  Numbers are OK as long as they're not
+ NaN or infinity.
+
+ Note that the REAL rules say we should call this method:
+
+		[NSJSONSerialization isValidJSONObject:]
+
+ instead of using, like, our brains, or other logic.
+ Which means (I guess) that Apple reserves the right to 
+ decide what can and cannot be serialized, as they
+ upgrade NSJSONSerializer.
+ 
+ Details:
+ https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSJSONSerialization_Class/
+ */
+- (id) safeSerializableItemFromItem: (id) item
+{
+	id result = nil;
+
+	/*
+	 NSJSONSerializer can only take an array or
+	 dictionary at its top level.  So wrap this item
+	 in an array.
+	 */
+	NSArray *itemToEvaluate = @[item];
+
+	if ([NSJSONSerialization isValidJSONObject: itemToEvaluate])
+	{
+		result = item;
+	}
+	else
+	{
+		result = [NSString stringWithFormat: @"%@", item];
+	}
+
+	return result;
 }
 
 @end

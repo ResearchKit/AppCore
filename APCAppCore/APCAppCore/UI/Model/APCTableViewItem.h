@@ -155,6 +155,8 @@
 
 @property (nonatomic, strong) UIImage *maximumImage;
 
+@property (nonatomic, strong) UIImage *averageImage;
+
 @end
 
 @interface APCTableViewDashboardMessageItem : APCTableViewDashboardItem

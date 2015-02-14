@@ -18,6 +18,7 @@ static NSString * const kAPCDashboardGraphTableViewCellIdentifier = @"APCDashboa
 
 @property (weak, nonatomic) IBOutlet APCLineGraphView *graphView;
 @property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *averageImageView;
 
 
 @end
