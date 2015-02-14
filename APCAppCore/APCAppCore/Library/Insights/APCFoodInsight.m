@@ -222,7 +222,7 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
     
     NSArray *foodList = nil;
     
-    // Only return the top-10 foods
+    // Only return top-10 foods by frequency
     if ([markedDataset count] > 10) {
         NSRange range = NSMakeRange(0, 10);
         foodList = [markedDataset objectsAtIndexes:[[NSIndexSet alloc] initWithIndexesInRange:range]];
