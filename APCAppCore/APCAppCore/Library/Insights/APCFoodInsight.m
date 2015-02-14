@@ -58,7 +58,7 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
         _startDate = [self dateForSpan:-7 fromDate:[NSDate date]];
         _endDate   = [NSDate date];
         
-        _foodHistory = [NSMutableArray new];
+        _source = nil;
         
 //        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
