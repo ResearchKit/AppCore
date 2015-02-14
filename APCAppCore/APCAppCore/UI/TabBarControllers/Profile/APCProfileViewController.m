@@ -23,6 +23,7 @@
 
 static CGFloat const kSectionHeaderHeight = 40.f;
 static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
+static CGFloat const kPickerCellHeight = 164.0f;
 
 @interface APCProfileViewController ()
 
@@ -108,9 +109,11 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     if ( section >= self.items.count )
     {
         
-        if ([self.delegate respondsToSelector:@selector(tableView:numberOfRowsInSection:)])
+        if ([self.delegate respondsToSelector:@selector(tableView:numberOfRowsInAdjustedSection:)])
         {
-            count = [self.delegate tableView:tableView numberOfRowsInSection:section];
+            NSInteger adjustedSectionForExtender = section - self.items.count;
+            
+            count = [self.delegate tableView:tableView numberOfRowsInAdjustedSection:adjustedSectionForExtender];
         }
         
     }
@@ -140,9 +143,6 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"APCDefaultTableViewCell"];
         }
         
-        [self setupBasicCellAppearance:cell];
-        
-        
         UIView *view = nil;
         if ([self.delegate respondsToSelector:@selector(cellForRowAtAdjustedIndexPath:)])
         {
@@ -156,8 +156,6 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
         if (view) {
             [cell.contentView addSubview:view];
         }
-        
-        cell.textLabel.text = @"YAY";
         
     } else {
         
@@ -578,9 +576,9 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
             field.textAlignnment = NSTextAlignmentRight;
             field.pickerData = @[[APCParameters autoLockOptionStrings]];
 #warning This cells needs more setup.
-//            NSNumber *numberOfMinutes = nil;//[self.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
-//            NSInteger index = [[APCParameters autoLockValues] indexOfObject:numberOfMinutes];
-//            field.selectedRowIndices = @[@(index)];
+            NSNumber *numberOfMinutes = [self.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
+            NSInteger index = [[APCParameters autoLockValues] indexOfObject:numberOfMinutes];
+            field.selectedRowIndices = @[@(index)];
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
@@ -667,12 +665,13 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
         [items addObject:section];
     }
 
+    NSArray *newArray = nil;
     if ([self.delegate respondsToSelector:@selector(preparedContent:)])
     {
-        [self.delegate preparedContent:[NSArray arrayWithArray:items]];
+        newArray = [self.delegate preparedContent:[NSArray arrayWithArray:items]];
     }
     
-    return [NSArray arrayWithArray:items];
+    return newArray ? newArray : [NSArray arrayWithArray:items];
 }
 
 - (void)setupSwitchCellAppearance:(APCSwitchTableViewCell *)cell
@@ -766,23 +765,61 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 #pragma mark - UITableViewDelegate methods
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat height = tableView.rowHeight;
+    
+    if (indexPath.section >= self.items.count) {
+        
+
+        
+        if ([self.delegate respondsToSelector:@selector(tableView:heightForRowAtAdjustedIndexPath:)])
+        {
+            NSInteger adjustedSectionForExtender = indexPath.section - self.items.count;
+            NSIndexPath *newIndex = [NSIndexPath indexPathForRow:indexPath.row inSection:adjustedSectionForExtender];
+            height = [self.delegate tableView:tableView heightForRowAtAdjustedIndexPath:newIndex];
+        }
+    } else {
+        
+        if (self.isPickerShowing && [indexPath isEqual:self.pickerIndexPath]) {
+            height = kPickerCellHeight;
+        }
+    }
+
+    
+    return height;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    APCTableViewItemType type = [self itemTypeForIndexPath:indexPath];
-    
-    switch (type) {
-        case kAPCTableViewStudyItemTypeShare:
+
+    if (indexPath.section >= self.items.count) {
+        
+        if ([self.delegate respondsToSelector:@selector(navigationController:didSelectRowAtIndexPath:)])
         {
-//            APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCShareViewController"];
-//            shareViewController.hidesOkayButton = YES;
-//            [self.navigationController pushViewController:shareViewController animated:YES];
+
+            NSInteger adjustedSectionForExtender = indexPath.section - self.items.count;
+            NSIndexPath *newIndex = [NSIndexPath indexPathForRow:indexPath.row inSection:adjustedSectionForExtender];
+            [self.delegate navigationController:self.navigationController didSelectRowAtIndexPath:newIndex];
         }
-            break;
-            
-        default:{
-            [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+    } else {
+        
+        APCTableViewItemType type = [self itemTypeForIndexPath:indexPath];
+        
+        switch (type) {
+            case kAPCTableViewStudyItemTypeShare:
+            {
+                //            APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCShareViewController"];
+                //            shareViewController.hidesOkayButton = YES;
+                //            [self.navigationController pushViewController:shareViewController animated:YES];
+            }
+                break;
+                
+            default:{
+                [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+            }
+                break;
         }
-            break;
     }
 }
 

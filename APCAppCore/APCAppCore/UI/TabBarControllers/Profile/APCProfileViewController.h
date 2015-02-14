@@ -7,6 +7,7 @@
  
 #import <UIKit/UIKit.h>
 #import "APCUserInfoViewController.h"
+#import "APCParameters+Settings.h"
 
 @protocol APCProfileViewControllerDelegate;
 
@@ -38,6 +39,10 @@
 
 @property (assign) id <APCProfileViewControllerDelegate> delegate;
 
+@property (weak, nonatomic) IBOutlet UILabel *versionLabel;
+
+@property (nonatomic, strong) APCParameters *parameters;
+
 @property (nonatomic, strong) UIImage *profileImage;
 
 - (IBAction)showSettings:(id)sender;
@@ -63,9 +68,16 @@
 @optional
 
 - (UIView *)cellForRowAtAdjustedIndexPath:(NSIndexPath *)indexPath;
-- (BOOL)willDisplayCell:(NSIndexPath *)indexPath;
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView;
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
-- (void)preparedContent:(NSArray *)array;
 
+- (BOOL)willDisplayCell:(NSIndexPath *)indexPath;
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView;
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInAdjustedSection:(NSInteger)section;
+
+- (NSArray *)preparedContent:(NSArray *)array;
+
+- (void)navigationController:(UINavigationController *)navigationController didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtAdjustedIndexPath:(NSIndexPath *)indexPath;
 @end
