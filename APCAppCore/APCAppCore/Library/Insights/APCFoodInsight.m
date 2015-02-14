@@ -182,6 +182,17 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
     [self.healthStore executeQuery:query];
 }
 
+#pragma mark - Notification
+
+- (void)foodInsightDataCollectionIsDone:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(didCompleteFoodInsight:)]) {
+            [self.delegate didCompleteFoodInsight:self.foodHistory];
+        }
+    });
+}
+
 #pragma mark - Helpers
 
 - (NSArray *)addFrequencyForFoodInDataset:(NSArray *)dataset
