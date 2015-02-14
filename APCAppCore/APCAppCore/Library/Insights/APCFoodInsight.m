@@ -73,12 +73,8 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
     return self;
 }
 
-- (NSArray *)foodInsights
+- (void)dealloc
 {
-    NSArray *foodList = nil;
-    
-    
-    return foodList;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
