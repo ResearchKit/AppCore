@@ -62,8 +62,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
         
         _foodHistory = nil;
         
-//        _foodInsightAnchor = 0; //[defaults integerForKey:sample.identifier];
-        _foodInsightCaloriesAnchor = 0; //[defaults integerForKey:sample.identifier];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(foodInsightDataCollectionIsDone:)
                                                      name:kAPHFoodInsightDataCollectionIsCompletedNotification
