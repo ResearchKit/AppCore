@@ -7,7 +7,7 @@
  
 #import "APCTask.h"
 
-@protocol RKSTTask;
+@protocol ORKTask;
 @interface APCTask (AddOn)
 
 //Synchronous Method Call
@@ -15,7 +15,7 @@
 
 + (APCTask*) taskWithTaskID: (NSString*) taskID inContext: (NSManagedObjectContext*) context;
 
-@property (nonatomic, strong) id<RKSTTask> rkTask;
+@property (nonatomic, strong) id<ORKTask> rkTask;
 
 
 @end

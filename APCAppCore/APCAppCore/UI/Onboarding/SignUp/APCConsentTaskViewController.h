@@ -7,6 +7,6 @@
 
 #import <ResearchKit/ResearchKit.h>
 
-@interface APCConsentTaskViewController : RKSTTaskViewController <RKSTTaskViewControllerDelegate>
-@property (strong, nonatomic) RKSTConsentSignatureResult *signatureResult;
+@interface APCConsentTaskViewController : ORKTaskViewController <ORKTaskViewControllerDelegate>
+@property (strong, nonatomic) ORKConsentSignatureResult *signatureResult;
 @end

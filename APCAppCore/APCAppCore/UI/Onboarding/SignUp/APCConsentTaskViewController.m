@@ -24,15 +24,15 @@
 }
 
 #pragma mark Required Protocol Methods for Abstract Class
--(void)taskViewControllerDidComplete:(RKSTTaskViewController *)taskViewController{
+-(void)taskViewControllerDidComplete:(ORKTaskViewController *)taskViewController{
     
 }
 
--(void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error{
+-(void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *)step withError:(NSError *)error{
     
 }
 
--(void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController{
+-(void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController{
     
 }
 
