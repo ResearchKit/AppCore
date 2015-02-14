@@ -21,8 +21,6 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
 
 @interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
 
-@property (nonatomic, strong) UITableView *tableView;
-
 @property (nonatomic) NSInteger permissionsGrantedCount;
 
 @property (nonatomic, strong) APCPermissionsManager *permissionsManager;
