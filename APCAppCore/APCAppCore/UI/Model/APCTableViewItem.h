@@ -54,8 +54,6 @@
 
 @interface APCTableViewPickerItem : APCTableViewItem
 
-@property (nonatomic, copy) NSString *placeholder;
-
 @property (nonatomic, readwrite, getter = isDetailDiscloserStyle) BOOL detailDiscloserStyle;
 
 @end
@@ -175,7 +173,6 @@
 
 @interface APCTableViewDashboardInsightItem : APCTableViewDashboardItem
 
-@property (nonatomic, strong) UIColor *tintColor;
 @property (nonatomic, strong) NSString *goodCaption;
 @property (nonatomic, strong) NSString *badCaption;
 @property (nonatomic, strong) NSNumber *goodBar;
