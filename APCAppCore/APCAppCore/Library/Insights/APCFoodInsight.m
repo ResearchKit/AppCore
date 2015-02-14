@@ -40,6 +40,8 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 
 //@property (nonatomic) NSInteger foodInsightAnchor;
 @property (nonatomic) NSInteger foodInsightCaloriesAnchor;
+@property (nonatomic, strong) NSArray *foodHistory;
+@property (nonatomic, strong) NSNumber *totalCalories;
 
 @end
 
