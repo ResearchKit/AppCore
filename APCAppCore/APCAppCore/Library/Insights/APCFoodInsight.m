@@ -240,6 +240,13 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
     return foodList;
 }
 
+- (NSNumber *)percentOfSampleCalories:(NSNumber *)gramsConsumed
+{
+    NSInteger caloriesPerGramOfSample = 4;
+    double caloriesConsumed = [gramsConsumed doubleValue] * caloriesPerGramOfSample;
+    double percentOfCalories = caloriesConsumed / [self.totalCalories doubleValue];
+    
+    return @(percentOfCalories);
 }
 
 /**
