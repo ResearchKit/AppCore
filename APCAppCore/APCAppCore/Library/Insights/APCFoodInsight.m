@@ -97,9 +97,7 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
             }
 
             if (_source) {
-                [self queryForSampleType:_sampleType
-                                    unit:_sampleUnit
-                          withCompletion:nil];
+                [self queryForCalories];
             }
         }
     }];
@@ -107,6 +105,35 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 }
 
 #pragma mark - HealthKit
+
+- (void)queryForCalories
+{
+    NSLog(@"Running query for %@", self.caloriesQuantityType.identifier);
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K >= %@) AND (%K <= %@) and (%K = %@)",
+                              HKPredicateKeyPathStartDate, self.startDate,
+                              HKPredicateKeyPathEndDate, self.endDate,
+                              HKPredicateKeyPathSource, self.source];
+    
+    HKStatisticsQuery *query = [[HKStatisticsQuery alloc] initWithQuantityType:self.caloriesQuantityType
+                                                       quantitySamplePredicate:predicate
+                                                                       options:HKStatisticsOptionCumulativeSum
+                                                             completionHandler:^(HKStatisticsQuery *query, HKStatistics *result, NSError *error)
+    {
+        if (error) {
+            APCLogError2(error);
+        } else {
+            self.totalCalories = @([result.sumQuantity doubleValueForUnit:self.caloriesUnit]);
+            
+            NSLog(@"Total calories for last 7 days: %@", self.totalCalories);
+            
+            [self queryForSampleType:self.sampleType
+                                unit:self.sampleUnit];
+        }
+    }];
+    
+    [self.healthStore executeQuery:query];
+}
 
 - (void)queryForSampleType:(HKSampleType *)sampleType
                       unit:(HKUnit *)unit
