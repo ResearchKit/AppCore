@@ -18,6 +18,10 @@ static CGFloat const kHeaderHeight = 127.0f;
 
 @interface APCSignUpInfoViewController ()
 
+@property (nonatomic, getter=isPickerShowing) BOOL pickerShowing;
+
+@property (nonatomic, strong) NSIndexPath *pickerIndexPath;
+
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *email;
 

@@ -134,7 +134,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         {
             ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
             isGranted = status == ALAuthorizationStatusAuthorized;
-            break;
         }
         default:{
             isGranted = NO;

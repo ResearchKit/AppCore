@@ -48,7 +48,6 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
     [self setupCollectionView];
 }
 
