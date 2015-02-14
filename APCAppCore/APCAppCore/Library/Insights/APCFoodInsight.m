@@ -217,11 +217,29 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
         foodItem[kFoodInsightFoodGenericNameKey] = item;
         foodItem[kFoodInsightValueKey] = @(sumFoodValue);
         foodItem[kFoodInsightFrequencyKey] = @([countedSet countForObject:item]);
+        foodItem[kFoodInsightCaloriesValueKey] = [self percentOfSampleCalories:@(sumFoodValue)];
         
         [markedDataset addObject:foodItem];
     }
     
-    return markedDataset;
+    // Sort dataset by frequency in desending order
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:kFoodInsightFrequencyKey
+                                                                   ascending:NO];
+    [markedDataset sortUsingDescriptors:@[sortDescriptor]];
+    
+    NSArray *foodList = nil;
+    
+    // Only return the top-10 foods
+    if ([markedDataset count] > 10) {
+        NSRange range = NSMakeRange(0, 10);
+        foodList = [markedDataset objectsAtIndexes:[[NSIndexSet alloc] initWithIndexesInRange:range]];
+    } else {
+        foodList = markedDataset;
+    }
+    
+    return foodList;
+}
+
 }
 
 /**
