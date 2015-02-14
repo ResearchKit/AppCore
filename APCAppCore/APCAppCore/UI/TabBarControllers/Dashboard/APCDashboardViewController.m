@@ -158,6 +158,15 @@
         insightCell.goodInsightBar = insightItem.goodBar;
         insightCell.badInsightBar = insightItem.badBar;
         insightCell.insightImage = insightItem.insightImage;
+    
+    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardFoodInsightItem class]]){
+        APCTableViewDashboardFoodInsightItem *foodInsightItem = (APCTableViewDashboardFoodInsightItem *)dashboardItem;
+        APCDashboardFoodInsightTableViewCell *foodInsightCell = (APCDashboardFoodInsightTableViewCell *)cell;
+        
+        foodInsightCell.foodName = foodInsightItem.titleCaption;
+        foodInsightCell.foodSubtitle = foodInsightItem.subtitleCaption;
+        foodInsightCell.foodFrequency = foodInsightItem.frequency;
+        foodInsightCell.insightImage = foodInsightItem.foodInsightImage;
         
     } else {
         cell.textLabel.text = dashboardItem.caption;
