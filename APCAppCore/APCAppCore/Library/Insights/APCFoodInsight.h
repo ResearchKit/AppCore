@@ -22,6 +22,8 @@ extern NSString const *kFoodInsightFrequencyKey;
 
 @property (nonatomic, weak) id <APCFoodInsightDelegate> delegate;
 
+@property (nonatomic, strong) NSArray *foodHistory;
+
 - (instancetype)initFoodInsightForSampleType:(HKSampleType *)sample
                                         unit:(HKUnit *)unit;
 
