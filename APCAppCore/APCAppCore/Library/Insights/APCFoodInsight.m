@@ -17,8 +17,8 @@ static NSString *kFoodInsightCaloriesValueKey   = @"foodCaloriesValueKey";
 static NSString *kFoodInsightFrequencyKey       = @"foodFrequencyKey";
 static NSString *kFoodInsightUUIDKey            = @"foodUUIDKey";
 
-static NSInteger kLastSevenDays = -7; // This is a negative number because we need to go back in past,
-                                      // and in order to do so, we need to pass a negative integer to the NSDateComponents object.
+static NSInteger kLastSevenDays = -7; // This is a negative integer because we need to go back in time.
+                                      // In order to do so, we need to pass a negative integer to the NSDateComponents object.
 
 static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoodInsightDataCollectionIsCompletedNotification";
 
