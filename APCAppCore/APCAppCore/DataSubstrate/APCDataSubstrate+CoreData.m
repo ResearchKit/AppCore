@@ -75,16 +75,6 @@
     
     self.mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     self.mainContext.parentContext = self.persistentContext;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mergeChangesToMainContext:) name:NSManagedObjectContextDidSaveNotification object:self.persistentContext];
-}
-
-- (void) mergeChangesToMainContext: (NSNotification*) notification
-{
-    [self.mainContext performBlock:^{
-        [self.mainContext mergeChangesFromContextDidSaveNotification:notification];
-    }];
-
 }
 
 /*********************************************************************************/

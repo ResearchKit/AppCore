@@ -44,8 +44,10 @@
                     }
                     else
                     {
-                        if (completionBlock) {
-                            completionBlock(nil);
+                        if (idx == unloadedSurveyTasks.count - 1) {
+                            if (completionBlock) {
+                                completionBlock(nil);
+                            }
                         }
                     }
                 }];
