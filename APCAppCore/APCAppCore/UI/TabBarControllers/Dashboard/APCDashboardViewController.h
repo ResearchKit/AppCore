@@ -13,6 +13,7 @@
 #import "APCDashboardProgressTableViewCell.h"
 #import "APCDashboardInsightsTableViewCell.h"
 #import "APCDashboardInsightTableViewCell.h"
+#import "APCDashboardFoodInsightTableViewCell.h"
 #import "APCGraph.h"
 
 typedef NS_ENUM(APCTableViewItemType, APCTableViewDashboardItemType) {
