@@ -81,14 +81,14 @@
 
 #pragma mark - IBActions
 
-- (IBAction)done:(id)sender
+- (IBAction)done:(id) __unused sender
 {
     if ([self.delegate respondsToSelector:@selector(withdrawViewController:didFinishWithDescription:)]) {
         [self.delegate withdrawViewController:self didFinishWithDescription:self.textView.text];
     }
 }
 
-- (IBAction)cancel:(id)sender
+- (IBAction)cancel:(id) __unused sender
 {
     if ([self.delegate respondsToSelector:@selector(withdrawViewControllerDidCancel:)]) {
         [self.delegate withdrawViewControllerDidCancel:self];

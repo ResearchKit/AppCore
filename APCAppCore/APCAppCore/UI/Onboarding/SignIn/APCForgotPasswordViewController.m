@@ -63,9 +63,9 @@
 
 #pragma mark - UITextFieldDelegate
 
-- (BOOL) textFieldShouldReturn:(UITextField *)textField
+- (BOOL) textFieldShouldReturn: (UITextField *) __unused textField
 {
-   [self sendPassword];
+    [self sendPassword];
     
     return YES;
 }
@@ -100,8 +100,11 @@
                 APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
                 [self presentViewController:spinnerController animated:YES completion:nil];
 
-                [SBBComponent(SBBAuthManager) requestPasswordResetForEmail:emailAddress completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
-                    
+                [SBBComponent(SBBAuthManager) requestPasswordResetForEmail: emailAddress
+                                                                completion: ^(NSURLSessionDataTask * __unused task,
+                                                                              id __unused responseObject,
+                                                                              NSError *error) {
+
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
 
 						[spinnerController dismissViewControllerAnimated:YES completion:^{
@@ -145,7 +148,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)done:(id)sender
+- (IBAction) done: (id) __unused sender
 {
     [self sendPassword];
 }

@@ -34,7 +34,7 @@
 {
     __block NSNumber*   first;
     
-    [self.subSelectors enumerateObjectsUsingBlock:^(APCTimeSelector* selector, NSUInteger ndx, BOOL* stop)
+    [self.subSelectors enumerateObjectsUsingBlock:^(APCTimeSelector* selector, NSUInteger __unused  ndx, BOOL* __unused stop)
     {
         NSNumber*   subFirst = [selector initialValue];
         if (first == nil || [subFirst compare:first] == NSOrderedAscending)
@@ -50,7 +50,7 @@
 {
     __block BOOL    isAny = NO;
     
-    [self.subSelectors enumerateObjectsUsingBlock:^(APCPointSelector* selector, NSUInteger ndx, BOOL* stop)
+    [self.subSelectors enumerateObjectsUsingBlock:^(APCPointSelector* selector, NSUInteger __unused ndx, BOOL* __unused stop)
      {
          isAny = [selector matches:value];
          *stop = isAny;
@@ -59,12 +59,12 @@
     return isAny;
 }
 
-- (NSNumber*)nextMomentAfter:(NSNumber*)point;
+- (NSNumber*)nextMomentAfter:(NSNumber*)point
 {
     NSMutableArray* possibleNextPoints = [NSMutableArray array];
     NSNumber*       nextPoint          = nil;
 
-    [self.subSelectors enumerateObjectsUsingBlock:^(APCTimeSelector* selector, NSUInteger ndx, BOOL* stop)
+    [self.subSelectors enumerateObjectsUsingBlock:^(APCTimeSelector* selector, NSUInteger __unused ndx, BOOL* __unused stop)
     {
         NSNumber*   nextPoint = [selector nextMomentAfter:point];
         if (nextPoint != nil)

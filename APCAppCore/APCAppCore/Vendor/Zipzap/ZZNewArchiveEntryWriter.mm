@@ -52,7 +52,7 @@ namespace ZZDataConsumer
 	  compressionLevel:(NSInteger)compressionLevel
 			 dataBlock:(NSData*(^)(NSError** error))dataBlock
 		   streamBlock:(BOOL(^)(NSOutputStream* stream, NSError** error))streamBlock
-	 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer, NSError** error))dataConsumerBlock;
+	 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer, NSError** error))dataConsumerBlock
 {
 	if ((self = [super init]))
 	{

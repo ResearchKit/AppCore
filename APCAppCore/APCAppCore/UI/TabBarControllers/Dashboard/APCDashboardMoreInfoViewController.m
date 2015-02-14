@@ -39,7 +39,7 @@
     
     [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.7 initialSpringVelocity:2 options:UIViewAnimationOptionCurveEaseIn animations:^{
         self.containerView.center = CGPointMake(self.containerView.center.x, CGRectGetMidY(self.view.bounds));
-    } completion:^(BOOL finished) {
+    } completion:^(BOOL __unused finished) {
         
     }];
 }
@@ -66,11 +66,11 @@
     self.containerView.layer.shadowOpacity = 0.4;
 }
 
-- (IBAction)dismiss:(id)sender
+- (IBAction) dismiss: (id) __unused sender
 {
     [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.7 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.containerView.center = CGPointMake(self.containerView.center.x, CGRectGetHeight(self.view.bounds)*1.5 - CGRectGetHeight(self.containerView.bounds)/2);
-    } completion:^(BOOL finished) {
+    } completion:^(BOOL __unused finished) {
     
     }];
     

@@ -58,7 +58,7 @@ NSString * const kTaskReminderMessage = @"Complete your activities for today!";
     UIApplication *app = [UIApplication sharedApplication];
     NSArray *eventArray = [app scheduledLocalNotifications];
     __block UILocalNotification * retValue;
-    [eventArray enumerateObjectsUsingBlock:^(UILocalNotification * obj, NSUInteger idx, BOOL *stop) {
+    [eventArray enumerateObjectsUsingBlock:^(UILocalNotification * obj, NSUInteger __unused idx, BOOL * __unused stop) {
         NSDictionary *userInfoCurrent = obj.userInfo;
         if ([userInfoCurrent[kTaskReminderUserInfoKey] isEqualToString:kTaskReminderUserInfo]) {
             retValue = obj;

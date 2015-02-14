@@ -76,14 +76,14 @@
 
 #pragma mark - IBActions
 
-- (IBAction)agree:(id)sender
+- (IBAction) agree: (id) __unused sender
 {
     if ([self.delegate respondsToSelector:@selector(termsAndConditionsViewControllerDidAgree)]) {
         [self.delegate termsAndConditionsViewControllerDidAgree];
     }
 }
 
-- (IBAction)close:(id)sender
+- (IBAction) close: (id) __unused sender
 {
     if ([self.delegate respondsToSelector:@selector(termsAndConditionsViewControllerDidCancel)]) {
         [self.delegate termsAndConditionsViewControllerDidCancel];

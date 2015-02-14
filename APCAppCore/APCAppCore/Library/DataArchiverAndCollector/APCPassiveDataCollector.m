@@ -54,7 +54,7 @@ static NSString *const kCSVFilename  = @"data.csv";
 - (void) appBecameActive
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [self.registeredTrackers enumerateKeysAndObjectsUsingBlock:^(id key, APCDataTracker * obj, BOOL *stop) {
+        [self.registeredTrackers enumerateKeysAndObjectsUsingBlock:^(id __unused key, APCDataTracker * obj, BOOL * __unused stop) {
             [obj updateTracking];
         }];
     });
@@ -168,7 +168,7 @@ static NSString *const kCSVFilename  = @"data.csv";
 /*********************************************************************************/
 - (void) APCDataTracker:(APCDataTracker *)tracker hasNewData:(NSArray *)dataArray
 {
-    [dataArray enumerateObjectsUsingBlock:^(NSArray * obj, NSUInteger idx, BOOL *stop) {
+    [dataArray enumerateObjectsUsingBlock:^(NSArray * obj, NSUInteger __unused idx, BOOL * __unused stop) {
         NSString * rowString = [[obj componentsJoinedByString:@","] stringByAppendingString:@"\n"];
         NSString * csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
         [APCPassiveDataCollector createOrAppendString:rowString toFile:csvFilePath];

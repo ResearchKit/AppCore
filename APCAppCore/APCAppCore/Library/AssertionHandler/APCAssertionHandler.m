@@ -11,11 +11,20 @@
 
 @implementation APCAssertionHandler
 
-- (void) handleFailureInMethod:(SEL)selector object:(id)object file:(NSString *)fileName lineNumber:(NSInteger)line description:(NSString *)format,... {
+- (void) handleFailureInMethod: (SEL) __unused selector
+                        object: (id) __unused object
+                          file: (NSString *) __unused fileName
+                    lineNumber: (NSInteger) __unused line
+                   description: (NSString *) __unused format, ...
+{
     [self exitGracefully];
 }
 
-- (void) handleFailureInFunction:(NSString *)functionName file:(NSString *)fileName lineNumber:(NSInteger)line description:(NSString *)format,... {
+- (void) handleFailureInFunction: (NSString *) __unused functionName
+                            file: (NSString *) __unused fileName
+                      lineNumber: (NSInteger) __unused line
+                     description: (NSString *) __unused format, ...
+{
     [self exitGracefully];
 }
 
@@ -24,7 +33,7 @@
     
     NSString *alertMessage = NSLocalizedString(@"Oops! Something went wrong. We are really sorry for the inconvenience. Since we are not taking any risk on your data, you may need to restart the app.", @"");
     
-    UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         exit(0);
     }];
     

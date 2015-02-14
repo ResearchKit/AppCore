@@ -59,7 +59,7 @@
 
 #pragma mark - UITextFieldDelegate
 
-- (BOOL) textFieldShouldReturn:(UITextField *)textField
+- (BOOL) textFieldShouldReturn:(UITextField *) __unused textField
 {
     [self updateEmailAddress];
     
@@ -107,7 +107,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)done:(id)sender
+- (IBAction) done:(id) __unused sender
 {
     [self updateEmailAddress];
 }

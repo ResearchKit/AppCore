@@ -34,7 +34,7 @@ static NSString *const kFinishedProperty = @"finished";
 - (BOOL) advanceArrayContainsStep: (RKSTStep*) step
 {
     __block BOOL retValue = NO;
-    [self.stepsToAutomaticallyAdvanceOnTimer enumerateObjectsUsingBlock:^(NSString* stepID, NSUInteger idx, BOOL *stop) {
+    [self.stepsToAutomaticallyAdvanceOnTimer enumerateObjectsUsingBlock:^(NSString* stepID, NSUInteger __unused idx, BOOL * __unused stop) {
         if([step.identifier isEqualToString:stepID])
         {
             retValue = YES;
@@ -45,8 +45,8 @@ static NSString *const kFinishedProperty = @"finished";
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
-                        change:(NSDictionary *)change
-                       context:(void *)context
+                        change:(NSDictionary *) __unused change
+                       context:(void *) __unused context
 {
     if ([keyPath isEqualToString:kFinishedProperty]) {
         if ([object isFinished]) {
@@ -73,7 +73,8 @@ static NSString *const kFinishedProperty = @"finished";
 #pragma mark - TaskViewController Delegate
 /*********************************************************************************/
 
-- (void)taskViewController:(RKSTTaskViewController *)taskViewController stepViewControllerWillAppear:(RKSTStepViewController *)stepViewController
+- (void)       askViewController: (RKSTTaskViewController *) __unused taskViewController
+    stepViewControllerWillAppear: (RKSTStepViewController *) stepViewController
 {
     if ([self advanceArrayContainsStep:stepViewController.step])
     {

@@ -85,13 +85,14 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 /*********************************************************************************/
 #pragma mark - Table view data source
 /*********************************************************************************/
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger) numberOfSectionsInTableView: (UITableView *) __unused tableView {
 
     // Return the number of sections.
     return [self.sections count];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger) tableView: (UITableView *) __unused tableView
+  numberOfRowsInSection: (NSInteger) section {
     
     NSInteger rowCount = 0;
     
@@ -111,7 +112,8 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
     return  rowCount;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+- (NSString *) tableView: (UITableView *) __unused tableView
+ titleForHeaderInSection: (NSInteger) section {
 
     NSString *sectionTitle;
     
@@ -132,7 +134,8 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 }
 
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)       tableView: (UITableView *) __unused tableView
+    heightForRowAtIndexPath: (NSIndexPath *) indexPath {
 
     CGFloat height = 0;
     
@@ -334,12 +337,16 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 #pragma mark - InputCellDelegate
 /*********************************************************************************/
 
-- (void)parameters:(APCParameters *)parameters didFailWithError:(NSError *)error {
+- (void) parameters: (APCParameters *) __unused parameters
+   didFailWithError: (NSError *) error
+{
     NSLog(@"Did fail with error %@", error);
     NSAssert(!error, @"Assertion: An error occurred which had something to do with your .json file.");
 }
 
-- (void)parameters:(APCParameters *)parameters didFailWithValue:(id)value {
+- (void) parameters: (APCParameters *) __unused parameters
+   didFailWithValue: (id) value
+{
     NSLog(@"Did fail with value %@", value);
 
     UIAlertController *alertController = [[UIAlertController alloc] init];
@@ -364,13 +371,14 @@ typedef NS_ENUM(NSInteger, APCParametersEnum)
 #pragma mark - Buttons
 /*********************************************************************************/
 
-- (IBAction)donePressed:(id)sender {
+- (IBAction) donePressed: (id) __unused sender
+{
     [self.tableView endEditing:YES];
     
     [UIView animateWithDuration:0.3 animations:^{
         [self.navigationController.view setAlpha:0];
         
-    } completion:^(BOOL finished) {
+    } completion:^(BOOL __unused finished) {
         APCDebugWindow * window = (APCDebugWindow*) self.navigationController.view.window;
         [self.navigationController.view removeFromSuperview];
         [self.navigationController removeFromParentViewController];

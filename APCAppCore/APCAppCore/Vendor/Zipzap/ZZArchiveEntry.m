@@ -125,12 +125,12 @@
 	return [self newStreamWithPassword:nil error:error];
 }
 
-- (NSInputStream*)newStreamWithPassword:(NSString*)password error:(NSError**)error
+- (NSInputStream*)newStreamWithPassword:(NSString*) __unused password error:(NSError**) __unused error
 {
 	return nil;
 }
 
-- (BOOL)check:(NSError**)error
+- (BOOL)check:(NSError**) __unused error
 {
 	return YES;
 }
@@ -140,7 +140,7 @@
 	return [self newDataWithPassword:nil error:error];
 }
 
-- (NSData*)newDataWithPassword:(NSString*)password error:(NSError**)error
+- (NSData*)newDataWithPassword:(NSString*) __unused password error:(NSError**) __unused error
 {
 	return nil;
 }
@@ -150,12 +150,12 @@
 	return [self newDataProviderWithPassword:nil error:error];
 }
 
-- (CGDataProviderRef)newDataProviderWithPassword:(NSString*)password error:(NSError**)error
+- (CGDataProviderRef)newDataProviderWithPassword:(NSString*) __unused password error:(NSError**) __unused error
 {
 	return nil;
 }
 
-- (id<ZZArchiveEntryWriter>)newWriterCanSkipLocalFile:(BOOL)canSkipLocalFile
+- (id<ZZArchiveEntryWriter>)newWriterCanSkipLocalFile:(BOOL) __unused canSkipLocalFile
 {
 	return nil;
 }

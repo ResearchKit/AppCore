@@ -227,7 +227,7 @@ static NSString * const kAPCCircularProgressViewAnimationKey = @"APCCircularProg
 
 #pragma mark - CAAnimationDelegate methods
 
-- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
+- (void)animationDidStop:(CAAnimation *) __unused anim finished:(BOOL) __unused flag
 {
     [self updateStrokeEndForProgress:_progress];
 

@@ -47,7 +47,7 @@
   APCLogViewControllerAppeared();
 }
 
-- (IBAction)getStartedWasTapped:(id)sender
+- (IBAction) getStartedWasTapped: (id) __unused sender
 {
     [self.gettingStartedButton setEnabled:NO];
     if (self.delegate != nil) {
@@ -57,14 +57,14 @@
     }
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (void) prepareForSegue: (UIStoryboardSegue *) segue sender: (id) __unused sender
 {
     if ([segue.identifier isEqualToString:@"embeddedScroller"]) {
         self.introVC = segue.destinationViewController;
     }
 }
 
-- (void)cancelButtonTapped:(id)sender
+- (void) cancelButtonTapped: (id) __unused sender
 {
     if ([self.taskViewController.delegate respondsToSelector:@selector(taskViewControllerDidCancel:)]) {
         [self.taskViewController.delegate taskViewControllerDidCancel:self.taskViewController];

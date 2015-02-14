@@ -39,7 +39,8 @@ NSString * const kAPCSegmentedTableViewCellIdentifier = @"APCSegmentedTableViewC
     [self.femaleButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0]];
 }
 
-- (void) segmentedButtonPressed:(UIButton*) button selectedIndex: (NSInteger) selectedIndex
+- (void) segmentedButtonPressed: (UIButton*) __unused  button
+				  selectedIndex: (NSInteger) selectedIndex
 {
     self.selectedSegmentIndex = selectedIndex;
     

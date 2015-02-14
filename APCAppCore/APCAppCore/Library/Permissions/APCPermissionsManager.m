@@ -309,7 +309,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             
             ALAssetsLibrary *lib = [[ALAssetsLibrary alloc] init];
             
-            [lib enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+            [lib enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL * __unused stop) {
                 if (group == nil) {
                     // end of enumeration
                     weakSelf.completionBlock(YES, nil);
@@ -401,12 +401,12 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 
 #pragma mark - CLLocationManagerDelegate methods
 
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *) __unused error
 {
     [manager stopUpdatingLocation];
 }
 
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+- (void)locationManager:(CLLocationManager *) __unused manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
     switch (status) {
         case kCLAuthorizationStatusNotDetermined:

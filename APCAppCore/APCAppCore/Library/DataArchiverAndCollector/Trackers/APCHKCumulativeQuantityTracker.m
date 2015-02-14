@@ -75,12 +75,16 @@ static NSString *const kAnchorDateFilename = @"anchorDate";
             
             __weak APCHKCumulativeQuantityTracker * weakSelf = self;
             
-            collectionQuery.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
+            collectionQuery.initialResultsHandler = ^(HKStatisticsCollectionQuery * __unused query,
+                                                      HKStatisticsCollection *results,
+                                                      NSError *error)
+            {
                 weakSelf.queryStarted = NO;
                 if (!error) {
                     [weakSelf processStatisticsCollection:results];
                 }
             };
+
             self.queryStarted = YES;
             [self.healthStore executeQuery:collectionQuery];
         }
@@ -91,7 +95,10 @@ static NSString *const kAnchorDateFilename = @"anchorDate";
 {
     NSMutableArray * results = [NSMutableArray array];
     
-    [collection.statistics enumerateObjectsUsingBlock:^(HKStatistics * obj, NSUInteger idx, BOOL *stop) {
+    [collection.statistics enumerateObjectsUsingBlock: ^(HKStatistics * obj,
+                                                         NSUInteger __unused idx,
+                                                         BOOL * __unused stop)
+     {
         if (!self.unitForTracker) {
             NSAssert(NO, @"unitForTracker missing");
         }
@@ -99,8 +106,9 @@ static NSString *const kAnchorDateFilename = @"anchorDate";
         
         NSArray * result = @[obj.startDate.description?:@"No start date", obj.endDate.description?:@"No end date", self.quantityType.identifier?:@"No identifier", @([[obj sumQuantity] doubleValueForUnit:unit])?:@0,unit.unitString?:@"no unit"];
         [results addObject:result];
-        
+
     }];
+
     [self.delegate APCDataTracker:self hasNewData:results];
     self.anchorDate = [NSDate todayAtMidnight];
 }

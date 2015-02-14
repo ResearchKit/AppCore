@@ -35,7 +35,7 @@ static CGFloat cellHeight = 114.0;
 #pragma mark - UITextFieldDelegate
 /*********************************************************************************/
 
-- (void) textFieldDidEndEditing:(UITextField *)textField {
+- (void) textFieldDidEndEditing: (UITextField *) __unused textField {
     if ([self.delegate respondsToSelector:@selector(inputCellValueChanged:)]) {
         [self.delegate inputCellValueChanged:self];
     }

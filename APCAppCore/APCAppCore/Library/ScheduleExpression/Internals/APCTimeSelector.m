@@ -14,17 +14,17 @@
     return nil;
 }
 
-- (BOOL)matches:(NSNumber*)value
+- (BOOL)matches:(NSNumber*) __unused value
 {
     return NO;
 }
 
-- (NSNumber*)nextMomentAfter:(NSNumber*)point;
+- (NSNumber*)nextMomentAfter:(NSNumber*) __unused point
 {
     return nil;
 }
 
-- (APCTimeSelectorEnumerator*)enumeratorBeginningAt:(NSNumber*)value
+- (APCTimeSelectorEnumerator*)enumeratorBeginningAt:(NSNumber*) __unused value
 {
     return nil;
 }

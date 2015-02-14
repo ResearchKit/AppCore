@@ -9,7 +9,7 @@
 
 @implementation APCFadeAnimator
 
-- (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext
+- (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>) __unused transitionContext
 {
     return 0.2;
 }
@@ -29,7 +29,7 @@
             
             toViewController.view.alpha = 1;
             
-        } completion:^(BOOL finished) {
+        } completion:^(BOOL __unused finished) {
             [transitionContext completeTransition:YES];
         }];
     } else {
@@ -41,7 +41,7 @@
             
             fromViewController.view.alpha = 0;
             
-        } completion:^(BOOL finished) {
+        } completion:^(BOOL __unused finished) {
             [transitionContext completeTransition:YES];
         }];
     }

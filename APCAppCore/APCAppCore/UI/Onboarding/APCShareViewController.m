@@ -75,7 +75,8 @@
 
 #pragma mark - UITableViewDataSource methods
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView: (UITableView *) __unused tableView
+  numberOfRowsInSection: (NSInteger) __unused section
 {
     return self.shareTitles.count;
 }
@@ -90,7 +91,7 @@
 
 #pragma mark - Selectors / IBActions
 
-- (IBAction)okayTapped:(id)sender
+- (IBAction) okayTapped: (id) __unused sender
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
@@ -99,4 +100,5 @@
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
 @end

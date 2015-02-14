@@ -55,14 +55,14 @@ static const CGFloat kTitleLabelHeight = 26.0f;
 }
 #pragma mark - IBActions
 
-- (IBAction)infoTapped:(id)sender
+- (IBAction)infoTapped:(id) __unused sender
 {
     if ([self.delegate respondsToSelector:@selector(dashboardTableViewCellDidTapMoreInfo:)]) {
         [self.delegate dashboardTableViewCellDidTapMoreInfo:self];
     }
 }
 
-- (IBAction)expandTapped:(id)sender
+- (IBAction)expandTapped:(id) __unused sender
 {
     if ([self.delegate respondsToSelector:@selector(dashboardTableViewCellDidTapExpand:)]) {
         [self.delegate dashboardTableViewCellDidTapExpand:self];

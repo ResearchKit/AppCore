@@ -57,7 +57,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     [[NSNotificationCenter defaultCenter] removeObserver:self name:APCConsentCompletedWithDisagreeNotification object:nil];
 }
 
-- (void)goBackToSignUpJoin:(NSNotification *)notification
+- (void) goBackToSignUpJoin: (NSNotification *) __unused notification
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
@@ -162,12 +162,14 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 #pragma mark - UICollectionViewDataSource methods
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+- (NSInteger) numberOfSectionsInCollectionView: (UICollectionView *) __unused collectionView
+{
     return 1;
 }
 
-
--(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+-(NSInteger) collectionView: (UICollectionView *) __unused collectionView
+	 numberOfItemsInSection: (NSInteger) __unused section
+{
     APCTableViewSection *sectionItem = self.items.firstObject;
     return sectionItem.rows.count;
 }
@@ -185,13 +187,17 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     return cell;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+- (CGSize) collectionView: (UICollectionView *) __unused collectionView
+				   layout: (UICollectionViewLayout*) __unused collectionViewLayout
+   sizeForItemAtIndexPath: (NSIndexPath *) __unused indexPath
+{
     return self.collectionView.bounds.size;
 }
 
 #pragma mark - UIScrollViewDelegate methods
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+- (void) scrollViewDidEndDecelerating: (UIScrollView *) __unused scrollView
+{
     CGFloat pageWidth = self.collectionView.frame.size.width;
     self.pageControl.currentPage = (self.collectionView.contentOffset.x + pageWidth / 2) / pageWidth;
 }
@@ -209,7 +215,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 #pragma mark - TaskViewController Delegate methods
 
-- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
+- (void) taskViewControllerDidComplete: (RKSTTaskViewController *) __unused taskViewController
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -219,7 +225,9 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
+- (void) taskViewController: (RKSTTaskViewController *) taskViewController
+			  didFailOnStep: (RKSTStep *) __unused step
+				  withError: (NSError *) __unused error
 {
     //TODO: Figure out what to do if it fails
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
@@ -296,7 +304,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     return studyItemType;
 }
 
-- (void)signInTapped:(id)sender
+- (void) signInTapped: (id) __unused sender
 {
     [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignIn];
     
@@ -305,7 +313,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     
 }
 
-- (void)signUpTapped:(id)sender
+- (void) signUpTapped: (id) __unused sender
 {
     [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignUp];
     

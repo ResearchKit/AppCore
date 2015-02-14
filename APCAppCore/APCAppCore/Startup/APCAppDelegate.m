@@ -44,7 +44,8 @@ static NSUInteger const kIndexOfActivitesTab = 0;
 /*********************************************************************************/
 #pragma mark - App Delegate Methods
 /*********************************************************************************/
-- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL)               application: (UIApplication *) __unused application
+    willFinishLaunchingWithOptions: (NSDictionary *) __unused launchOptions
 {
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
@@ -70,21 +71,23 @@ static NSUInteger const kIndexOfActivitesTab = 0;
     return YES;
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL)application:(UIApplication *) __unused application didFinishLaunchingWithOptions:(NSDictionary *) __unused launchOptions
 {
     return YES;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application
+- (void)applicationWillResignActive:(UIApplication *) __unused application
 {
     [self showSecureView];
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application
+- (void)applicationDidBecomeActive:(UIApplication *) __unused application
 {
 #ifndef DEVELOPMENT
     if (self.dataSubstrate.currentUser.signedIn) {
-        [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+        [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion: ^(NSURLSessionDataTask * __unused task,
+																	  id  __unused responseObject,
+																	  NSError *error) {
             APCLogError2 (error);
         }];
     }
@@ -95,12 +98,12 @@ static NSUInteger const kIndexOfActivitesTab = 0;
     [self.dataMonitor appBecameActive];
 }
 
-- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+- (void)application:(UIApplication *) __unused application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
+- (void)applicationWillTerminate:(UIApplication *) __unused application
 {
     if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
         NSDate *currentTime = [NSDate date];
@@ -109,7 +112,7 @@ static NSUInteger const kIndexOfActivitesTab = 0;
     
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
+- (void)applicationDidEnterBackground:(UIApplication *) __unused application
 {
     if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
         NSDate *currentTime = [NSDate date];
@@ -120,24 +123,27 @@ static NSUInteger const kIndexOfActivitesTab = 0;
     [self showSecureView];
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
+- (void)applicationWillEnterForeground:(UIApplication *) __unused application
 {
     [self hideSecureView];
     
     [self showPasscodeIfNecessary];
 }
 
-- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+- (void)                    application: (UIApplication *) __unused application
+    didRegisterUserNotificationSettings: (UIUserNotificationSettings *) __unused notificationSettings
 {
 
 }
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+- (void)                                 application: (UIApplication *) __unused application
+    didRegisterForRemoteNotificationsWithDeviceToken: (NSData *) __unused deviceToken
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:APCAppDidRegisterUserNotification object:nil];
 }
 
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+- (void)                                 application: (UIApplication *) __unused application
+    didFailToRegisterForRemoteNotificationsWithError: (NSError *) __unused error
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:APCAppDidFailToRegisterForRemoteNotification object:nil];
 }
@@ -146,17 +152,17 @@ static NSUInteger const kIndexOfActivitesTab = 0;
 #pragma mark - State Restoration
 /*********************************************************************************/
 
-- (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder
+- (BOOL)application:(UIApplication *) __unused application shouldSaveApplicationState:(NSCoder *) __unused coder
 {
     return self.dataSubstrate.currentUser.isSignedIn;
 }
 
-- (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder
+- (BOOL)application:(UIApplication *) __unused application shouldRestoreApplicationState:(NSCoder *) __unused coder
 {
     return self.dataSubstrate.currentUser.isSignedIn;
 }
 
-- (UIViewController *)application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder
+- (UIViewController *)application:(UIApplication *) __unused application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *) __unused coder
 {
     if ([identifierComponents.lastObject isEqualToString:@"AppTabbar"]) {
         return self.window.rootViewController;
@@ -246,24 +252,24 @@ static NSUInteger const kIndexOfActivitesTab = 0;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void) signedUpNotification:(NSNotification*) notification
+- (void) signedUpNotification: (NSNotification*) __unused notification
 {
     [self showNeedsEmailVerification];
 }
 
-- (void) signedInNotification:(NSNotification*) notification
+- (void) signedInNotification: (NSNotification*) __unused notification
 {
     [self.dataMonitor userConsented];
     [self.tasksReminder updateTasksReminder];
     [self showTabBar];
 }
 
-- (void) userConsented:(NSNotification*) notification
+- (void) userConsented: (NSNotification*) __unused notification
 {
 
 }
 
-- (void) logOutNotification:(NSNotification*) notification
+- (void) logOutNotification: (NSNotification*) __unused notification
 {
     self.dataSubstrate.currentUser.signedUp = NO;
     self.dataSubstrate.currentUser.signedIn = NO;
@@ -272,7 +278,7 @@ static NSUInteger const kIndexOfActivitesTab = 0;
     [self showOnBoarding];
 }
 
-- (void)withdrawStudy:(NSNotification *)notification
+- (void) withdrawStudy: (NSNotification *) __unused notification
 {
     [self clearNSUserDefaults];
     [APCKeychainStore resetKeyChain];
@@ -514,7 +520,7 @@ static NSUInteger const kIndexOfActivitesTab = 0;
 
 #pragma mark - APCOnboardingDelegate methods
 
-- (APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)onboarding
+- (APCScene *) inclusionCriteriaSceneForOnboarding: (APCOnboarding *) __unused onboarding
 {
     NSAssert(FALSE, @"Cannot retun nil. Override this delegate method to return a valid APCScene.");
     
@@ -523,12 +529,12 @@ static NSUInteger const kIndexOfActivitesTab = 0;
 
 #pragma mark - APCOnboardingTaskDelegate methods
 
-- (APCUser *)userForOnboardingTask:(APCOnboardingTask *)task
+- (APCUser *) userForOnboardingTask: (APCOnboardingTask *) __unused task
 {
     return self.dataSubstrate.currentUser;
 }
 
-- (NSInteger)numberOfServicesInPermissionsListForOnboardingTask:(APCOnboardingTask *)task
+- (NSInteger) numberOfServicesInPermissionsListForOnboardingTask: (APCOnboardingTask *) __unused task
 {
     NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
     NSArray *servicesArray = initialOptions[kAppServicesListRequiredKey];

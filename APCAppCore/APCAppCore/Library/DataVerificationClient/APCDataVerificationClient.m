@@ -151,7 +151,9 @@ static NSString * const DATA_VERIFICATION_SERVER_API_UPLOAD_COMMAND = @"upload";
 
 	NSURLSessionUploadTask *task = [session uploadTaskWithRequest: request
 														 fromData: data
-												completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+												completionHandler: ^(NSData * __unused data,
+																	 NSURLResponse * __unused response,
+																	 NSError *error) {
 		if (error)
 		{
 			NSLog (@"+[APCDataVerificationClient uploadData:] \n"

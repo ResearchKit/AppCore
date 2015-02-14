@@ -153,8 +153,14 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
 
 - (void) processResults: (NSArray*) results
 {
-    [results enumerateObjectsUsingBlock:^(RKSTStepResult *stepResult, NSUInteger idx, BOOL *stop) {
-        [stepResult.results enumerateObjectsUsingBlock:^(RKSTResult *result, NSUInteger idx, BOOL *stop) {
+    [results enumerateObjectsUsingBlock: ^(RKSTStepResult *stepResult,
+										   NSUInteger  __unused idx,
+										   BOOL * __unused stop)
+	 {
+        [stepResult.results enumerateObjectsUsingBlock: ^(RKSTResult *result,
+														  NSUInteger  __unused idx,
+														  BOOL * __unused stop)
+		 {
             //Update date if needed
             if (!result.startDate) {
                 result.startDate = stepResult.startDate;

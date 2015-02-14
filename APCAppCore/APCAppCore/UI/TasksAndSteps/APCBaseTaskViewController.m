@@ -30,7 +30,7 @@
     return  controller;
 }
 
-+ (id<RKSTTask>)createTask: (APCScheduledTask*) scheduledTask
++ (id<RKSTTask>)createTask: (APCScheduledTask*) __unused scheduledTask
 {
     //To be overridden by child classes
     return  nil;
@@ -84,7 +84,9 @@
                                        }));
 }
 
-- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
+- (void)taskViewController: (RKSTTaskViewController *) __unused taskViewController
+             didFailOnStep: (RKSTStep *) __unused step
+                 withError: (NSError *) error
 {
     APCLogError2 (error);
     APCLogEventWithData(kTaskEvent, (@{
@@ -187,7 +189,8 @@
     [super decodeRestorableStateWithCoder:coder];
 }
 
-+(UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder
++ (UIViewController *) viewControllerWithRestorationIdentifierPath: (NSArray *) __unused identifierComponents
+                                                             coder: (NSCoder *) coder
 {
     id<RKSTTask> task = [coder decodeObjectForKey:@"task"];
     NSUUID * taskRunUUID = [coder decodeObjectForKey:@"taskRunUUID"];

@@ -61,7 +61,7 @@ static CGFloat const kButtonWidth = 25.0f;
 
 #pragma mark - Button Actions
 
-- (void)validButtonTapped:(UIButton *)sender
+- (void)validButtonTapped:(UIButton *) __unused sender
 {
     if (!self.valid) {
         if ([self.validationDelegate respondsToSelector:@selector(formTextFieldDidTapValidButton:)]) {

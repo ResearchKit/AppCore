@@ -96,7 +96,7 @@
     return UIInterfaceOrientationLandscapeLeft;
 }
 
-- (IBAction)collapse:(id)sender
+- (IBAction)collapse:(id) __unused sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
