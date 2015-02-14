@@ -158,6 +158,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDashboardInsightsTableViewCell.h>
 #import <APCAppCore/APCDashboardInsightSummaryTableViewCell.h>
 #import <APCAppCore/APCDashboardInsightTableViewCell.h>
+#import <APCAppCore/APCDashboardFoodInsightTableViewCell.h>
 
 /* -------------------------
  Objects
@@ -170,6 +171,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCScoring.h>
 #import <APCAppCore/APCDeviceHardware.h>
 #import <APCAppCore/APCInsights.h>
+#import <APCAppCore/APCFoodInsight.h>
 
 /* -------------------------
  Categories
