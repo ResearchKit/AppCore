@@ -8,16 +8,17 @@
 #import <Foundation/Foundation.h>
 #import <ResearchKit/ResearchKit.h>
 
-@class ORKTaskResult;
+@class RKSTTaskResult;
 
 @interface APCDataArchiver : NSObject
 
-- (instancetype) initWithTaskResult: (ORKTaskResult*) taskResult;
+- (instancetype) initWithTaskResult: (RKSTTaskResult*) taskResult;
 - (instancetype)initWithResults: (NSArray*) results itemIdentifier: (NSString*) itemIdentifier runUUID: (NSUUID*) runUUID;
 - (NSString*) writeToOutputDirectory: (NSString*) outputDirectory;
 
 + (void) encryptZipFile: (NSString*) unencryptedPath encryptedPath:(NSString*) encryptedPath;
 
+RK_EXTERN NSData *RKSTCryptographicMessageSyntaxEnvelopedData(NSData *data, NSData *identity, RKEncryptionAlgorithm algorithm, NSError * __autoreleasing *error) RKST_AVAILABLE_IOS(8_3);
 
 
 /*

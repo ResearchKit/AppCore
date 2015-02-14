@@ -10,7 +10,7 @@
 #import "APCTintedTableViewCell.h"
 #import <ResearchKit/ResearchKit.h>
 
-@interface APCLearnMasterViewController : UITableViewController <ORKTaskViewControllerDelegate>
+@interface APCLearnMasterViewController : UITableViewController <RKSTTaskViewControllerDelegate>
 
 @property (nonatomic, strong) NSArray *items;
 

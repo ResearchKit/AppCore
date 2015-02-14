@@ -11,7 +11,7 @@
 
 static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
 
-@interface APCStudyOverviewCollectionViewController () <ORKTaskViewControllerDelegate>
+@interface APCStudyOverviewCollectionViewController () <RKSTTaskViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *gradientCollectionView;
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
@@ -199,7 +199,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 - (void)showConsent
 {
-    ORKTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
     
     consentVC.delegate = self;
     [self presentViewController:consentVC animated:YES completion:nil];
@@ -208,17 +208,17 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 #pragma mark - TaskViewController Delegate methods
 
-- (void)taskViewControllerDidComplete: (ORKTaskViewController *)taskViewController
+- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController
+- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
 {
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *)step withError:(NSError *)error
+- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
 {
     //TODO: Figure out what to do if it fails
     [taskViewController dismissViewControllerAnimated:YES completion:nil];

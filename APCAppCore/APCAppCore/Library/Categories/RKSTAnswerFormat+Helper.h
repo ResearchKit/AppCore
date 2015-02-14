@@ -1,5 +1,5 @@
 //
-//  ORKAnswerFormat+Helper.h
+//  RKSTAnswerFormat+Helper.h
 //  AppCore
 //
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
@@ -8,14 +8,14 @@
 #import <ResearchKit/ResearchKit.h>
 
 /**
- If you call +[ORKAnswerFormat+Helper stringFromQuestionType],
+ If you call +[RKSTAnswerFormat+Helper stringFromQuestionType],
  and pass an unknown questionType, the returned string will
  be this value.
  */
 static NSString * const RKQuestionTypeUnknownAsString = @"UnknownQuestionType";
 
 /**
- Calls +[ORKAnswerFormat+Helper stringFromQuestionType:].
+ Calls +[RKSTAnswerFormat+Helper stringFromQuestionType:].
  Please see that method for limitations.
  
  This is named like the Objective-C standard
@@ -24,14 +24,14 @@ static NSString * const RKQuestionTypeUnknownAsString = @"UnknownQuestionType";
  the class we're actually accessing, to keep all
  our code nice and encapsulated.
  */
-extern NSString * NSStringFromRKQuestionType (ORKQuestionType questionType);
+extern NSString * NSStringFromRKQuestionType (RKQuestionType questionType);
 
 
 /**
  A bucket of utilites for interpreting/parsing/understanding
- ORKAnswerFormat.  Evolving.
+ RKSTAnswerFormat.  Evolving.
  */
-@interface ORKAnswerFormat (Helper)
+@interface RKSTAnswerFormat (Helper)
 
 /**
  Converts the specified QuestionType to a string.
@@ -45,6 +45,6 @@ extern NSString * NSStringFromRKQuestionType (ORKQuestionType questionType);
  ResearchKit source).  If RK adds more question types,
  we'll need to update this method.
  */
-+ (NSString *) stringFromQuestionType: (ORKQuestionType) questionType;
++ (NSString *) stringFromQuestionType: (RKQuestionType) questionType;
 
 @end

@@ -12,7 +12,7 @@ static NSString *const kFinishedProperty = @"finished";
 
 @interface APCBaseWithProgressTaskViewController ()
 @property  (nonatomic, weak)  APCStepProgressBar  *progressor;
-@property  (nonatomic, weak)  ORKStepViewController * observedVC;
+@property  (nonatomic, weak)  RKSTStepViewController * observedVC;
 @end
 
 @implementation APCBaseWithProgressTaskViewController
@@ -21,7 +21,7 @@ static NSString *const kFinishedProperty = @"finished";
 #pragma mark - StepViewController Delegate Methods
 /*********************************************************************************/
 
-- (void)stepViewController:(ORKStepViewController *)stepViewController didFinishWithNavigationDirection:(ORKStepViewControllerNavigationDirection)direction
+- (void)stepViewController:(RKSTStepViewController *)stepViewController didFinishWithNavigationDirection:(RKSTStepViewControllerNavigationDirection)direction
 {
     if ([super respondsToSelector:@selector(stepViewController:didFinishWithNavigationDirection:)]) {
         [super stepViewController:stepViewController didFinishWithNavigationDirection:direction];
@@ -31,7 +31,7 @@ static NSString *const kFinishedProperty = @"finished";
 }
 
 
-- (BOOL) advanceArrayContainsStep: (ORKStep*) step
+- (BOOL) advanceArrayContainsStep: (RKSTStep*) step
 {
     __block BOOL retValue = NO;
     [self.stepsToAutomaticallyAdvanceOnTimer enumerateObjectsUsingBlock:^(NSString* stepID, NSUInteger idx, BOOL *stop) {
@@ -50,9 +50,9 @@ static NSString *const kFinishedProperty = @"finished";
 {
     if ([keyPath isEqualToString:kFinishedProperty]) {
         if ([object isFinished]) {
-            ORKStepViewController * vc = object;
+            RKSTStepViewController * vc = object;
             [self removeKVOIfNeeded];
-            [vc.delegate stepViewController:vc didFinishWithNavigationDirection: ORKStepViewControllerNavigationDirectionForward];
+            [vc.delegate stepViewController:vc didFinishWithNavigationDirection: RKSTStepViewControllerNavigationDirectionForward];
         }
     }
 }
@@ -73,7 +73,7 @@ static NSString *const kFinishedProperty = @"finished";
 #pragma mark - TaskViewController Delegate
 /*********************************************************************************/
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController stepViewControllerWillAppear:(ORKStepViewController *)stepViewController
+- (void)taskViewController:(RKSTTaskViewController *)taskViewController stepViewControllerWillAppear:(RKSTStepViewController *)stepViewController
 {
     if ([self advanceArrayContainsStep:stepViewController.step])
     {
@@ -82,13 +82,13 @@ static NSString *const kFinishedProperty = @"finished";
     }
 }
 
-- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController
+- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
 {
     [self removeKVOIfNeeded];
     [super taskViewControllerDidCancel:taskViewController];
 }
 
-- (void)taskViewControllerDidComplete:(ORKTaskViewController *)taskViewController
+- (void)taskViewControllerDidComplete:(RKSTTaskViewController *)taskViewController
 {
     [self removeKVOIfNeeded];
     [super taskViewControllerDidComplete:taskViewController];

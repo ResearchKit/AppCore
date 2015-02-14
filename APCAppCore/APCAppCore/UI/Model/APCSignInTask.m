@@ -16,11 +16,11 @@ static NSInteger const kMinimumNumberOfSteps = 2; //MedicalInfo + Passcode
 
 @implementation APCSignInTask
 
-#pragma mark - ORKTask methods
+#pragma mark - RKSTTask methods
 
-- (ORKStep *)stepAfterStep:(ORKStep *)step withResult:(ORKTaskResult *)result
+- (RKSTStep *)stepAfterStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
 {
-    ORKStep *nextStep;
+    RKSTStep *nextStep;
     
     if (!step) {
         nextStep = self.signInStep;
@@ -56,9 +56,9 @@ static NSInteger const kMinimumNumberOfSteps = 2; //MedicalInfo + Passcode
     return nextStep;
 }
 
-- (ORKStep *)stepBeforeStep:(ORKStep *)step withResult:(ORKTaskResult *)result
+- (RKSTStep *)stepBeforeStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
 {
-    ORKStep *prevStep;
+    RKSTStep *prevStep;
     
     if ([step.identifier isEqualToString:kAPCSignUpMedicalInfoStepIdentifier]) {
         prevStep = nil;

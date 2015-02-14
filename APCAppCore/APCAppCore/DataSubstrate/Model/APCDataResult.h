@@ -7,7 +7,7 @@
 
 #import <ResearchKit/ResearchKit.h>
 
-@interface APCDataResult : ORKResult
+@interface APCDataResult : RKSTResult
 
 @property (nonatomic, strong) NSData *data;
 @end

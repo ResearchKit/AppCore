@@ -11,8 +11,8 @@
 
 static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
-@interface APCEligibleViewController () <ORKTaskViewControllerDelegate>
-@property (strong, nonatomic) ORKTaskViewController *consentVC;
+@interface APCEligibleViewController () <RKSTTaskViewControllerDelegate>
+@property (strong, nonatomic) RKSTTaskViewController *consentVC;
 @end
 
 @implementation APCEligibleViewController
@@ -75,7 +75,7 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     
 }
 
-#pragma mark - ORKTaskViewControllerDelegate methods
+#pragma mark - RKSTTaskViewControllerDelegate methods
 
 //called on notification
 -(void)returnControlOfTaskDelegate: (id)sender{
@@ -84,17 +84,17 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     
 }
 
-- (void)taskViewControllerDidComplete: (ORKTaskViewController *)taskViewController
+- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
 {
     
-    ORKConsentSignatureResult *consentResult;
+    RKSTConsentSignatureResult *consentResult;
     if ([taskViewController respondsToSelector:@selector(signatureResult)]) {
         APCConsentTaskViewController *consentTaskViewController = (APCConsentTaskViewController *)taskViewController;
         if (consentTaskViewController.signatureResult) {
             consentResult = consentTaskViewController.signatureResult;
         }
     }else{
-        consentResult = (ORKConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
+        consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
     }
     
     if (consentResult.signature.requiresName && (consentResult.signature.firstName && consentResult.signature.lastName)) {
@@ -121,12 +121,12 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     }
 }
 
-- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController
+- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
 {
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *)step withError:(NSError *)error
+- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
 {
     //TODO: Figure out what to do if it fails
     [taskViewController dismissViewControllerAnimated:YES completion:nil];

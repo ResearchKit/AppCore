@@ -7,6 +7,6 @@
  
 #import <ResearchKit/ResearchKit.h>
 
-@interface APCStepViewController : ORKStepViewController
+@interface APCStepViewController : RKSTStepViewController
 
 @end

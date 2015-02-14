@@ -14,7 +14,7 @@
 
 static NSString * const kServerInvalidEmailErrorString = @"Invalid username or password.";
 
-@interface APCSignInViewController () <ORKTaskViewControllerDelegate>
+@interface APCSignInViewController () <RKSTTaskViewControllerDelegate>
 
 @end
 
@@ -203,7 +203,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 
 - (void)showConsent
 {
-    ORKTaskViewController *consentViewController = [((APCAppDelegate*)[UIApplication sharedApplication].delegate) consentViewController];
+    RKSTTaskViewController *consentViewController = [((APCAppDelegate*)[UIApplication sharedApplication].delegate) consentViewController];
     consentViewController.delegate = self;
     [self.navigationController presentViewController:consentViewController animated:YES completion:nil];
 }
@@ -264,14 +264,14 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     }];
 }
 
-#pragma mark - ORKTaskViewControllerDelegate methods
+#pragma mark - RKSTTaskViewControllerDelegate methods
 
-- (void)taskViewControllerDidComplete: (ORKTaskViewController *)taskViewController
+- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
 {
     APCUser *user = [self user];
     user.userConsented = YES;
     
-    ORKConsentSignatureResult *consentResult = (ORKConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
+    RKSTConsentSignatureResult *consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
     
     user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@", consentResult.signature.lastName ];
     user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
@@ -285,12 +285,12 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     }];
 }
 
-- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController
+- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
 {
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *)step withError:(NSError *)error
+- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
 {
     //TODO: Figure out what to do if it fails
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
