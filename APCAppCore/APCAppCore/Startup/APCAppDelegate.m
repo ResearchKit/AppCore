@@ -32,6 +32,7 @@ static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 static NSUInteger const kIndexOfActivitesTab = 0;
+static NSUInteger const kIndexOfProfileTab = 3;
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 
@@ -44,6 +45,7 @@ static NSUInteger const kIndexOfActivitesTab = 0;
 /*********************************************************************************/
 #pragma mark - App Delegate Methods
 /*********************************************************************************/
+
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
@@ -291,6 +293,10 @@ static NSUInteger const kIndexOfActivitesTab = 0;
 - (void) setUpInitializationOptions {/*Abstract Implementation*/}
 - (void) setUpAppAppearance {/*Abstract Implementation*/}
 - (void) setUpCollectors {/*Abstract Implementation*/}
+- (id <APCProfileViewControllerDelegate>) profileExtenderDelegate {
+    return nil;
+}
+
 - (NSDictionary *) tasksAndSchedulesWillBeLoaded {
     return nil;
 }
@@ -382,9 +388,9 @@ static NSUInteger const kIndexOfActivitesTab = 0;
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
     self.tabster = (UITabBarController  *)self.window.rootViewController;
-    NSArray  *deselectedImageNames = @[@"tab_activities",  @"tab_dashboard", @"tab_learn",                    @"tab_profile" ];
-    NSArray  *selectedImageNames   = @[ @"tab_activities_selected", @"tab_dashboard_selected", @"tab_learn_selected",  @"tab_profile_selected" ];
-    NSArray  *tabBarTitles         = @[ @"Activities", @"Dashboard", @"Learn",  @"Profile"];
+    NSArray  *deselectedImageNames = @[ @"tab_activities",          @"tab_dashboard",           @"tab_learn",           @"tab_profile" ];
+    NSArray  *selectedImageNames   = @[ @"tab_activities_selected", @"tab_dashboard_selected",  @"tab_learn_selected",  @"tab_profile_selected" ];
+    NSArray  *tabBarTitles         = @[ @"Activities",              @"Dashboard",               @"Learn",               @"Profile"];
     
     if ([viewController isMemberOfClass: [UIViewController class]] == YES) {
         
@@ -402,6 +408,20 @@ static NSUInteger const kIndexOfActivitesTab = 0;
         item.image = [UIImage imageNamed:deselectedImageNames[controllerIndex]];
         item.selectedImage = [[UIImage imageNamed:selectedImageNames[controllerIndex]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         item.title = tabBarTitles[controllerIndex];
+        
+        if (controllerIndex == kIndexOfProfileTab)
+        {
+            
+            UINavigationController * profileNavigationController = (UINavigationController *) controller;
+            
+            if ( [profileNavigationController.childViewControllers[0] isKindOfClass:[APCProfileViewController class]])
+            {
+                
+                self.profileViewController = (APCProfileViewController *) profileNavigationController.childViewControllers[0];
+                
+                self.profileViewController.delegate = [self profileExtenderDelegate];
+            }
+        }
         
         if (controllerIndex == kIndexOfActivitesTab) {
             NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
