@@ -52,8 +52,8 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
         _sampleType = sample;
         _sampleUnit = unit;
         
-        _caloriesSampleType = [HKSampleType quantityTypeForIdentifier:HKQuantityTypeIdentifierDietaryEnergyConsumed];
-        _caloriesSampleUnit = [HKUnit kilocalorieUnit];
+        _caloriesQuantityType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDietaryEnergyConsumed];
+        _caloriesUnit = [HKUnit kilocalorieUnit];
         
         _source = nil;
         
