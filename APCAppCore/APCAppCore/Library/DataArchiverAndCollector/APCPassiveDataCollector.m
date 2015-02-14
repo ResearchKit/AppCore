@@ -152,15 +152,17 @@ static NSString *const kCSVFilename  = @"data.csv";
     }
 #endif
     
-    
-    [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataMonitor uploadZipFile:encryptedPath onCompletion:^(NSError *error) {
-        if (!error) {
-            NSError * deleteError;
-            if (![[NSFileManager defaultManager] removeItemAtPath:encryptedPath error:&deleteError]) {
-                APCLogError2(deleteError);
+    if ([[NSFileManager defaultManager] fileExistsAtPath:encryptedPath]) {
+        [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataMonitor uploadZipFile:encryptedPath onCompletion:^(NSError *error) {
+            if (!error) {
+                NSError * deleteError;
+                if (![[NSFileManager defaultManager] removeItemAtPath:encryptedPath error:&deleteError]) {
+                    APCLogError2(deleteError);
+                }
             }
-        }
-    }];
+        }];
+    }
+
 }
 
 /*********************************************************************************/
