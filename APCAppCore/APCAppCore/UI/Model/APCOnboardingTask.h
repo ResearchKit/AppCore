@@ -22,7 +22,7 @@ FOUNDATION_EXPORT NSString *const kAPCSignInStepIdentifier;
 
 @protocol APCOnboardingTaskDelegate;
 
-@interface APCOnboardingTask : NSObject <RKSTTask>
+@interface APCOnboardingTask : NSObject <ORKTask>
 
 @property (nonatomic, weak) id <APCOnboardingTaskDelegate> delegate;
 
@@ -41,23 +41,23 @@ FOUNDATION_EXPORT NSString *const kAPCSignInStepIdentifier;
 
 @property (nonatomic) NSInteger numberOfSteps;
 
-@property (nonatomic, strong) RKSTStep *inclusionCriteriaStep;
+@property (nonatomic, strong) ORKStep *inclusionCriteriaStep;
 
-@property (nonatomic, strong) RKSTStep *eligibleStep;
+@property (nonatomic, strong) ORKStep *eligibleStep;
 
-@property (nonatomic, strong) RKSTStep *ineligibleStep;
+@property (nonatomic, strong) ORKStep *ineligibleStep;
 
-@property (nonatomic, strong) RKSTStep *generalInfoStep;
+@property (nonatomic, strong) ORKStep *generalInfoStep;
 
-@property (nonatomic, strong) RKSTStep *medicalInfoStep;
+@property (nonatomic, strong) ORKStep *medicalInfoStep;
 
-@property (nonatomic, strong) RKSTStep *customInfoStep;
+@property (nonatomic, strong) ORKStep *customInfoStep;
 
-@property (nonatomic, strong) RKSTStep *passcodeStep;
+@property (nonatomic, strong) ORKStep *passcodeStep;
 
-@property (nonatomic, strong) RKSTStep *permissionsStep;
+@property (nonatomic, strong) ORKStep *permissionsStep;
 
-@property (nonatomic, strong) RKSTStep *signInStep;
+@property (nonatomic, strong) ORKStep *signInStep;
 
 @end
 

@@ -496,7 +496,7 @@ static NSUInteger const kIndexOfActivitesTab = 0;
     self.onboarding = [[APCOnboarding alloc] initWithDelegate:self taskType:type];
 }
 
-- (RKSTTaskViewController *)consentViewController
+- (ORKTaskViewController *)consentViewController
 {
     NSAssert(FALSE, @"Override this method to return a valid Consent Task View Controller.");
     return nil;

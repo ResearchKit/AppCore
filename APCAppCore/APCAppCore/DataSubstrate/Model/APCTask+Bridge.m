@@ -103,7 +103,7 @@
 /*********************************************************************************/
 #pragma mark - SBB to APCSmartSurvey Conversion
 /*********************************************************************************/
-+ (id<RKSTTask>) rkTaskFromSBBSurvey: (SBBSurvey*) survey
++ (id<ORKTask>) rkTaskFromSBBSurvey: (SBBSurvey*) survey
 {
     APCSmartSurveyTask * retTask = [[APCSmartSurveyTask alloc] initWithIdentifier:survey.identifier survey:survey];
     return retTask;

@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, APCOnboardingTaskType) {
 
 @property (nonatomic, readonly) APCOnboardingTask *onboardingTask;
 
-@property (nonatomic, strong) RKSTStep *currentStep;
+@property (nonatomic, strong) ORKStep *currentStep;
 
 @property (nonatomic, strong) NSMutableDictionary *scenes;
 
