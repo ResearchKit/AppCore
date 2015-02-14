@@ -17,6 +17,9 @@ static NSString *kFoodInsightCaloriesValueKey   = @"foodCaloriesValueKey";
 static NSString *kFoodInsightFrequencyKey       = @"foodFrequencyKey";
 static NSString *kFoodInsightUUIDKey            = @"foodUUIDKey";
 
+static NSInteger kLastSevenDays = -7; // This is a negative number because we need to go back in past,
+                                      // and in order to do so, we need to pass a negative integer to the NSDateComponents object.
+
 static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoodInsightDataCollectionIsCompletedNotification";
 
 @interface APCFoodInsight()
@@ -55,7 +58,7 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
         _caloriesQuantityType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDietaryEnergyConsumed];
         _caloriesUnit = [HKUnit kilocalorieUnit];
         
-        _startDate = [self dateForSpan:-7 fromDate:[NSDate date]];
+        _startDate = [self dateForSpan:kLastSevenDays fromDate:[NSDate date]];
         _endDate   = [NSDate date];
         
         _source = nil;
