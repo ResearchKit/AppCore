@@ -78,14 +78,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-//- (void)setFoodInsightAnchor:(NSInteger)foodInsightAnchor
-//{
-//    _foodInsightAnchor = foodInsightAnchor;
-//    
-////    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-////    [defaults setInteger:foodInsightAnchor forKey:self.sampleType.identifier];
-//}
-
 #pragma mark - Source
 
 - (void)configureSource
