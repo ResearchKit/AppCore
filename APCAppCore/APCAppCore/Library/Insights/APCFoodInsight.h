@@ -7,6 +7,11 @@
 
 #import "APCAppCore.h"
 
+extern NSString const *kFoodInsightFoodGenericNameKey;
+extern NSString const *kFoodInsightValueKey;
+extern NSString const *kFoodInsightCaloriesValueKey;
+extern NSString const *kFoodInsightFrequencyKey;
+
 @protocol APCFoodInsightDelegate <NSObject>
 
 - (void)didCompleteFoodInsight:(NSArray *)foodInsight;
