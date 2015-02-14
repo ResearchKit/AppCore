@@ -17,6 +17,8 @@ static NSString *kFoodInsightCaloriesValueKey   = @"foodCaloriesValueKey";
 static NSString *kFoodInsightFrequencyKey       = @"foodFrequencyKey";
 static NSString *kFoodInsightUUIDKey            = @"foodUUIDKey";
 
+static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoodInsightDataCollectionIsCompletedNotification";
+
 @interface APCFoodInsight()
 
 @property (nonatomic, strong) HKHealthStore *healthStore;
@@ -60,6 +62,10 @@ static NSString *kFoodInsightUUIDKey            = @"foodUUIDKey";
         
 //        _foodInsightAnchor = 0; //[defaults integerForKey:sample.identifier];
         _foodInsightCaloriesAnchor = 0; //[defaults integerForKey:sample.identifier];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(foodInsightDataCollectionIsDone:)
+                                                     name:kAPHFoodInsightDataCollectionIsCompletedNotification
+                                                   object:nil];
         
         [self configureSource];
     }
@@ -73,6 +79,7 @@ static NSString *kFoodInsightUUIDKey            = @"foodUUIDKey";
     
     
     return foodList;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 //- (void)setFoodInsightAnchor:(NSInteger)foodInsightAnchor
@@ -155,6 +162,9 @@ static NSString *kFoodInsightUUIDKey            = @"foodUUIDKey";
              
              NSArray *foodListWithFrequency = [self addFrequencyForFoodInDataset:foodList];
          }
+        // Post the notification that all data collection and processing is done.
+        [[NSNotificationCenter defaultCenter] postNotificationName:kAPHFoodInsightDataCollectionIsCompletedNotification
+                                                            object:nil];
     }];
     
     [self.healthStore executeQuery:query];
