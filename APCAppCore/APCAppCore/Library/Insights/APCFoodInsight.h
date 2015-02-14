@@ -7,9 +7,14 @@
 
 #import "APCAppCore.h"
 
+extern NSString const *kFoodInsightFoodGenericNameKey;
+extern NSString const *kFoodInsightValueKey;
+extern NSString const *kFoodInsightCaloriesValueKey;
+extern NSString const *kFoodInsightFrequencyKey;
+
 @protocol APCFoodInsightDelegate <NSObject>
 
-- (void)didCompleteFoodInsight:(NSArray *)foodInsight;
+- (void)didCompleteFoodInsightForSampleType:(HKSampleType *)sampleType insight:(NSArray *)foodInsight;
 
 @end
 
@@ -17,7 +22,11 @@
 
 @property (nonatomic, weak) id <APCFoodInsightDelegate> delegate;
 
+@property (nonatomic, strong) NSArray *foodHistory;
+
 - (instancetype)initFoodInsightForSampleType:(HKSampleType *)sample
                                         unit:(HKUnit *)unit;
+
+- (void)insight;
 
 @end

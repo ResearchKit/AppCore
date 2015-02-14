@@ -10,12 +10,12 @@
 static NSString *kLoseItBundleIdentifier        = @"com.fitnow.loseit";
 static NSString *kLoseItFoodImageNameKey        = @"HKFoodImageName";
 
-static NSString *kFoodInsightFoodNameKey        = @"foodNameKey";
-static NSString *kFoodInsightFoodGenericNameKey = @"foodGenericNameKey";
-static NSString *kFoodInsightValueKey           = @"foodValueKey";
-static NSString *kFoodInsightCaloriesValueKey   = @"foodCaloriesValueKey";
-static NSString *kFoodInsightFrequencyKey       = @"foodFrequencyKey";
-static NSString *kFoodInsightUUIDKey            = @"foodUUIDKey";
+NSString const *kFoodInsightFoodNameKey        = @"foodNameKey";
+NSString const *kFoodInsightFoodGenericNameKey = @"foodGenericNameKey";
+NSString const *kFoodInsightValueKey           = @"foodValueKey";
+NSString const *kFoodInsightCaloriesValueKey   = @"foodCaloriesValueKey";
+NSString const *kFoodInsightFrequencyKey       = @"foodFrequencyKey";
+NSString const *kFoodInsightUUIDKey            = @"foodUUIDKey";
 
 static NSInteger kLastSevenDays = -7; // This is a negative integer because we need to go back in time.
                                       // In order to do so, we need to pass a negative integer to the NSDateComponents object.
@@ -37,7 +37,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 
 @property (nonatomic, strong) HKSource *source;
 
-@property (nonatomic, strong) NSArray *foodHistory;
 @property (nonatomic, strong) NSNumber *totalCalories;
 
 @end
@@ -69,8 +68,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
                                                  selector:@selector(foodInsightDataCollectionIsDone:)
                                                      name:kAPHFoodInsightDataCollectionIsCompletedNotification
                                                    object:nil];
-        
-        [self configureSource];
     }
     
     return self;
@@ -79,6 +76,11 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)insight
+{
+    [self configureSource];
 }
 
 #pragma mark - Source
@@ -186,8 +188,8 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 - (void) foodInsightDataCollectionIsDone: (NSNotification *) __unused notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.delegate respondsToSelector:@selector(didCompleteFoodInsight:)]) {
-            [self.delegate didCompleteFoodInsight:self.foodHistory];
+        if ([self.delegate respondsToSelector:@selector(didCompleteFoodInsightForSampleType:insight:)]) {
+            [self.delegate didCompleteFoodInsightForSampleType:self.sampleType insight:self.foodHistory];
         }
     });
 }
