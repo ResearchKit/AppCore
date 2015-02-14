@@ -9,7 +9,7 @@
 
 @protocol APCFoodInsightDelegate <NSObject>
 
-- (void)didCompleteFoodInsight:(NSDictionary *)insight;
+- (void)didCompleteFoodInsight:(NSArray *)foodInsight;
 
 @end
 
@@ -19,7 +19,5 @@
 
 - (instancetype)initFoodInsightForSampleType:(HKSampleType *)sample
                                         unit:(HKUnit *)unit;
-
-- (NSArray *)foodInsights;
 
 @end
