@@ -184,8 +184,8 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 - (void)foodInsightDataCollectionIsDone:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.delegate respondsToSelector:@selector(didCompleteFoodInsight:)]) {
-            [self.delegate didCompleteFoodInsight:self.foodHistory];
+        if ([self.delegate respondsToSelector:@selector(didCompleteFoodInsightForSampleType:insight:)]) {
+            [self.delegate didCompleteFoodInsightForSampleType:self.sampleType insight:self.foodHistory];
         }
     });
 }

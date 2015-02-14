@@ -14,7 +14,7 @@ extern NSString const *kFoodInsightFrequencyKey;
 
 @protocol APCFoodInsightDelegate <NSObject>
 
-- (void)didCompleteFoodInsight:(NSArray *)foodInsight;
+- (void)didCompleteFoodInsightForSampleType:(HKSampleType *)sampleType insight:(NSArray *)foodInsight;
 
 @end
 
