@@ -108,8 +108,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 
 - (void)queryForCalories
 {
-    NSLog(@"Running query for %@", self.caloriesQuantityType.identifier);
-    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K >= %@) AND (%K <= %@) and (%K = %@)",
                               HKPredicateKeyPathStartDate, self.startDate,
                               HKPredicateKeyPathEndDate, self.endDate,
@@ -125,8 +123,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
         } else {
             self.totalCalories = @([result.sumQuantity doubleValueForUnit:self.caloriesUnit]);
             
-            NSLog(@"Total calories for last 7 days: %@", self.totalCalories);
-            
             [self queryForSampleType:self.sampleType
                                 unit:self.sampleUnit];
         }
@@ -138,8 +134,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 - (void)queryForSampleType:(HKSampleType *)sampleType
                       unit:(HKUnit *)unit
 {
-    NSLog(@"Running query for %@", sampleType.identifier);
-    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K >= %@) AND (%K <= %@) and (%K = %@)",
                               HKPredicateKeyPathStartDate, self.startDate,
                               HKPredicateKeyPathEndDate, self.endDate,
@@ -157,8 +151,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
             NSMutableArray *foodList = [NSMutableArray new];
 
             for (HKQuantitySample *sample in results) {
-                NSLog(@"%@", sample);
-
                 NSNumber *sampleValue = @([sample.quantity doubleValueForUnit:self.sampleUnit]);
 
                 NSDictionary *food = @{
@@ -202,8 +194,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
     NSCountedSet *countedSet = [[NSCountedSet alloc] initWithArray:genericFoodType];
     
     for (id item in countedSet) {
-        NSLog(@"Item: %@  (count of %lu)", item, [countedSet countForObject:item]);
-        
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", kFoodInsightFoodGenericNameKey, item];
         NSArray *foodGroup = [dataset filteredArrayUsingPredicate:predicate];
         
