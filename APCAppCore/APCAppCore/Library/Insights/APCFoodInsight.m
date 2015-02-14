@@ -137,16 +137,12 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 
 - (void)queryForSampleType:(HKSampleType *)sampleType
                       unit:(HKUnit *)unit
-            withCompletion:(void (^)(void))completion
 {
     NSLog(@"Running query for %@", sampleType.identifier);
     
-    NSDate *startDate = [self dateForSpan:-7 fromDate:[NSDate date]];
-    NSDate *endDate   = [NSDate date];
-    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K >= %@) AND (%K <= %@) and (%K = %@)",
-                              HKPredicateKeyPathStartDate, startDate,
-                              HKPredicateKeyPathEndDate, endDate,
+                              HKPredicateKeyPathStartDate, self.startDate,
+                              HKPredicateKeyPathEndDate, self.endDate,
                               HKPredicateKeyPathSource, self.source];
     
     HKSampleQuery *query = [[HKSampleQuery alloc] initWithSampleType:sampleType
@@ -155,28 +151,29 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
                                                      sortDescriptors:nil
                                                       resultsHandler:^(HKSampleQuery *query, NSArray *results, NSError *error)
     {
-         if (error) {
-             APCLogError2(error);
-         } else {
-             NSMutableArray *foodList = [NSMutableArray new];
+        if (error) {
+            APCLogError2(error);
+        } else {
+            NSMutableArray *foodList = [NSMutableArray new];
 
-             for (HKQuantitySample *sample in results) {
-                 NSLog(@"%@", sample);
+            for (HKQuantitySample *sample in results) {
+                NSLog(@"%@", sample);
 
-                 NSNumber *sampleValue = @([sample.quantity doubleValueForUnit:self.sampleUnit]);
+                NSNumber *sampleValue = @([sample.quantity doubleValueForUnit:self.sampleUnit]);
 
-                 NSDictionary *food = @{
+                NSDictionary *food = @{
                                         kFoodInsightFoodNameKey: sample.metadata[HKMetadataKeyFoodType],
                                         kFoodInsightUUIDKey: sample.metadata[HKMetadataKeyExternalUUID],
                                         kFoodInsightFoodGenericNameKey: sample.metadata[kLoseItFoodImageNameKey],
                                         kFoodInsightValueKey: sampleValue
-                                        };
-                 
-                 [foodList addObject:food];
-             }
-             
-             NSArray *foodListWithFrequency = [self addFrequencyForFoodInDataset:foodList];
-         }
+                                      };
+
+                [foodList addObject:food];
+            }
+
+            self.foodHistory = [self addFrequencyForFoodInDataset:foodList];
+        }
+        
         // Post the notification that all data collection and processing is done.
         [[NSNotificationCenter defaultCenter] postNotificationName:kAPHFoodInsightDataCollectionIsCompletedNotification
                                                             object:nil];
