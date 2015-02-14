@@ -60,7 +60,7 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
         
         _source = nil;
         
-//        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        _foodHistory = nil;
         
 //        _foodInsightAnchor = 0; //[defaults integerForKey:sample.identifier];
         _foodInsightCaloriesAnchor = 0; //[defaults integerForKey:sample.identifier];
