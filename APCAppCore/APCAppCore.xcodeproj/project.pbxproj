@@ -51,6 +51,8 @@
 		08027AA71A7319AC00B358CC /* consent_06@3x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A751A7319AC00B358CC /* consent_06@3x.m4v */; };
 		08027AA81A7319AC00B358CC /* consent_07@3x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A761A7319AC00B358CC /* consent_07@3x.m4v */; };
 		0833AE1E1A76C016001D8AA0 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		0871A3931A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0871A3911A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0871A3941A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0871A3921A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m */; };
 		0875C3D81A797A7B00CE50FB /* APCButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 0875C3D61A797A7B00CE50FB /* APCButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0875C3D91A797A7B00CE50FB /* APCButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0875C3D71A797A7B00CE50FB /* APCButton.m */; };
 		089465451A8C179700A983AC /* APCDashboardInsightsTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0894653F1A8C179700A983AC /* APCDashboardInsightsTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -63,6 +65,8 @@
 		0894654E1A8C1F0200A983AC /* APCInsightBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0894654C1A8C1F0200A983AC /* APCInsightBarView.m */; };
 		089465521A8C211100A983AC /* APCInsights.h in Headers */ = {isa = PBXBuildFile; fileRef = 089465501A8C211100A983AC /* APCInsights.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		089465531A8C211100A983AC /* APCInsights.m in Sources */ = {isa = PBXBuildFile; fileRef = 089465511A8C211100A983AC /* APCInsights.m */; };
+		08970F121A8D407600EA46C3 /* APCFoodInsight.h in Headers */ = {isa = PBXBuildFile; fileRef = 08970F101A8D407600EA46C3 /* APCFoodInsight.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		08970F131A8D407600EA46C3 /* APCFoodInsight.m in Sources */ = {isa = PBXBuildFile; fileRef = 08970F111A8D407600EA46C3 /* APCFoodInsight.m */; };
 		089E2E831A6051F600A8FBF3 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B241A2F86280015982C /* HealthKit.framework */; };
 		08EA2AB31A7AD564007549C0 /* UIImage+ImageEffects.h in Headers */ = {isa = PBXBuildFile; fileRef = 08EA2AB11A7AD564007549C0 /* UIImage+ImageEffects.h */; };
 		08EA2AB41A7AD564007549C0 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */; };
@@ -542,6 +546,8 @@
 		08027A741A7319AC00B358CC /* consent_05@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_05@3x.m4v"; sourceTree = "<group>"; };
 		08027A751A7319AC00B358CC /* consent_06@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_06@3x.m4v"; sourceTree = "<group>"; };
 		08027A761A7319AC00B358CC /* consent_07@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_07@3x.m4v"; sourceTree = "<group>"; };
+		0871A3911A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardFoodInsightTableViewCell.h; sourceTree = "<group>"; };
+		0871A3921A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDashboardFoodInsightTableViewCell.m; sourceTree = "<group>"; };
 		0875C3D61A797A7B00CE50FB /* APCButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCButton.h; sourceTree = "<group>"; };
 		0875C3D71A797A7B00CE50FB /* APCButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCButton.m; sourceTree = "<group>"; };
 		0894653F1A8C179700A983AC /* APCDashboardInsightsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardInsightsTableViewCell.h; sourceTree = "<group>"; };
@@ -554,6 +560,8 @@
 		0894654C1A8C1F0200A983AC /* APCInsightBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCInsightBarView.m; sourceTree = "<group>"; };
 		089465501A8C211100A983AC /* APCInsights.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCInsights.h; sourceTree = "<group>"; };
 		089465511A8C211100A983AC /* APCInsights.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCInsights.m; sourceTree = "<group>"; };
+		08970F101A8D407600EA46C3 /* APCFoodInsight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFoodInsight.h; sourceTree = "<group>"; };
+		08970F111A8D407600EA46C3 /* APCFoodInsight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFoodInsight.m; sourceTree = "<group>"; };
 		08EA2AB11A7AD564007549C0 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateComponentsHelperTests.m; sourceTree = "<group>"; };
@@ -1159,6 +1167,8 @@
 			children = (
 				089465501A8C211100A983AC /* APCInsights.h */,
 				089465511A8C211100A983AC /* APCInsights.m */,
+				08970F101A8D407600EA46C3 /* APCFoodInsight.h */,
+				08970F111A8D407600EA46C3 /* APCFoodInsight.m */,
 			);
 			path = Insights;
 			sourceTree = "<group>";
@@ -1937,6 +1947,8 @@
 				089465421A8C179700A983AC /* APCDashboardInsightSummaryTableViewCell.m */,
 				089465431A8C179700A983AC /* APCDashboardInsightTableViewCell.h */,
 				089465441A8C179700A983AC /* APCDashboardInsightTableViewCell.m */,
+				0871A3911A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h */,
+				0871A3921A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m */,
 				F5F129AC1A2F78490015982C /* APCDashboardEditTableViewCell.h */,
 				F5F129AD1A2F78490015982C /* APCDashboardEditTableViewCell.m */,
 				F5F129AE1A2F78490015982C /* APCDashboardLineGraphTableViewCell.h */,
@@ -2257,6 +2269,7 @@
 				F5F12AD61A2F78490015982C /* APCDefaultTableViewCell.h in Headers */,
 				F5B9462D1A7309A20034C522 /* ZZDataChannel.h in Headers */,
 				F5B947D11A73272C0034C522 /* UIImage+APCHelper.h in Headers */,
+				0871A3931A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h in Headers */,
 				F5B948021A73272C0034C522 /* APCListSelector.h in Headers */,
 				089465521A8C211100A983AC /* APCInsights.h in Headers */,
 				F5B947ED1A73272C0034C522 /* APCParameters+Settings.h in Headers */,
@@ -2266,6 +2279,7 @@
 				F5B948041A73272C0034C522 /* APCPointSelector.h in Headers */,
 				F5B946221A7309A20034C522 /* ZZAESDecryptInputStream.h in Headers */,
 				F5B947E31A73272C0034C522 /* APCGroupedScheduledTask.h in Headers */,
+				08970F121A8D407600EA46C3 /* APCFoodInsight.h in Headers */,
 				5B827B4C1A80A39900C685A3 /* APCDashboardMoreInfoViewController.h in Headers */,
 				F5B948061A73272C0034C522 /* APCScheduleEnumerator.h in Headers */,
 				F5B9463B1A7309A20034C522 /* ZZInflateInputStream.h in Headers */,
@@ -2595,6 +2609,7 @@
 				F5B947E61A73272C0034C522 /* APCKeychainStore.m in Sources */,
 				F5F129F71A2F78490015982C /* APCResult+Bridge.m in Sources */,
 				36B7D2561A8D848D0043F968 /* RKSTAnswerFormat+Helper.m in Sources */,
+				08970F131A8D407600EA46C3 /* APCFoodInsight.m in Sources */,
 				F5B947B61A73272C0034C522 /* APCDeviceHardware+APCHelper.m in Sources */,
 				F5B947BC1A73272C0034C522 /* NSBundle+Helper.m in Sources */,
 				F5F12A031A2F78490015982C /* APCScheduledTask.m in Sources */,
@@ -2609,6 +2624,7 @@
 				F5F12A7C1A2F78490015982C /* APCCircleView.m in Sources */,
 				F5F12A8C1A2F78490015982C /* APCIntroVideoViewController.m in Sources */,
 				F5F12A9C1A2F78490015982C /* APCEmailVerifyViewController.m in Sources */,
+				0871A3941A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m in Sources */,
 				F5F12ACB1A2F78490015982C /* APCProfileViewController.m in Sources */,
 				F5F12ADF1A2F78490015982C /* APCShareTableViewCell.m in Sources */,
 				08EA2AB41A7AD564007549C0 /* UIImage+ImageEffects.m in Sources */,

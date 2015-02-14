@@ -132,6 +132,10 @@
 
 @end
 
+@implementation APCTableViewDashboardFoodInsightItem
+
+@end
+
 
 /* ----------------------------- */
 
