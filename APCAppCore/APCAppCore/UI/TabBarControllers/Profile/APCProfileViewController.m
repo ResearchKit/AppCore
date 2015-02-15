@@ -21,11 +21,20 @@
 #import "APCUser+UserData.h"
 #import "APCPermissionsManager.h"
 
+#import "APCParameters+Settings.h"
+
 static CGFloat const kSectionHeaderHeight = 40.f;
 static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 static CGFloat const kPickerCellHeight = 164.0f;
 
+static NSString * const kAPCBasicTableViewCellIdentifier = @"APCBasicTableViewCell";
+static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetailTableViewCell";
+
 @interface APCProfileViewController ()
+
+@property (weak, nonatomic) IBOutlet UILabel *versionLabel;
+
+@property (nonatomic, strong) APCParameters *parameters;
 
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyDetailsViewHeightConstraint;
@@ -48,7 +57,7 @@ static CGFloat const kPickerCellHeight = 164.0f;
     [super viewWillAppear:animated];
     
     CGRect headerRect = self.headerView.frame;
-    headerRect.size.height = 127.0f;
+    headerRect.size.height = 159.0f;
     self.headerView.frame = headerRect;
     
     self.tableView.tableHeaderView = self.tableView.tableHeaderView;
@@ -441,17 +450,36 @@ static CGFloat const kPickerCellHeight = 164.0f;
                     field.textAlignnment = NSTextAlignmentRight;
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
 #warning this needs a solution. This causes a crash.
+                    
+                    NSInteger defaultIndexOfMyHeightInFeet = 5;
+                    NSInteger defaultIndexOfMyHeightInInches = 0;
+                    NSInteger indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
+                    NSInteger indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
+                    
                     if (self.user.height) {
-                        /*
+                        
                         double heightInInches = roundf([APCUser heightInInches:self.user.height]);
                         NSString *feet = [NSString stringWithFormat:@"%d'", (int)heightInInches/12];
                         NSString *inches = [NSString stringWithFormat:@"%d''", (int)heightInInches%12];
                         
-                        field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:feet]), @([field.pickerData[1] indexOfObject:inches]) ];
-                         */
-                    }
-                    else {
-                        field.selectedRowIndices = @[ @(2), @(5) ];
+                        NSArray *allPossibleHeightsInFeet = field.pickerData [0];
+                        NSArray *allPossibleHeightsInInches = field.pickerData [1];
+                        
+                        indexOfMyHeightInFeet = [allPossibleHeightsInFeet indexOfObject: feet];
+                        indexOfMyHeightInInches = [allPossibleHeightsInInches indexOfObject: inches];
+                        
+                        if (indexOfMyHeightInFeet == NSNotFound)
+                        {
+                            indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
+                        }
+                        
+                        if (indexOfMyHeightInInches == NSNotFound)
+                        {
+                            indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
+                        }
+                        
+                        field.selectedRowIndices = @[ @(indexOfMyHeightInFeet), @(indexOfMyHeightInInches) ];
+
                     }
                     
                     APCTableViewRow *row = [APCTableViewRow new];
@@ -575,10 +603,10 @@ static CGFloat const kPickerCellHeight = 164.0f;
             field.detailDiscloserStyle = YES;
             field.textAlignnment = NSTextAlignmentRight;
             field.pickerData = @[[APCParameters autoLockOptionStrings]];
-#warning This cells needs more setup.
-            NSNumber *numberOfMinutes = [self.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
-            NSInteger index = [[APCParameters autoLockValues] indexOfObject:numberOfMinutes];
-            field.selectedRowIndices = @[@(index)];
+#warning TODO crasher
+//            NSNumber *numberOfMinutes = [self.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
+//            NSInteger index = [[APCParameters autoLockValues] indexOfObject:numberOfMinutes];
+//            field.selectedRowIndices = @[@(index)];
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
@@ -589,7 +617,7 @@ static CGFloat const kPickerCellHeight = 164.0f;
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedString(@"Change Passcode", @"");
-            field.identifier = nil;//kAPCBasicTableViewCellIdentifier;
+            field.identifier = kAPCBasicTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
             
@@ -815,6 +843,18 @@ static CGFloat const kPickerCellHeight = 164.0f;
             }
                 break;
                 
+            case kAPCSettingsItemTypePasscode:
+            {
+                APCChangePasscodeViewController *changePasscodeViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ChangePasscodeVC"];
+                [self.navigationController presentViewController:changePasscodeViewController animated:YES completion:nil];
+            }
+                break;
+            case kAPCSettingsItemTypePermissions:
+            {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+            }
+                break;
+                
             default:{
                 [super tableView:tableView didSelectRowAtIndexPath:indexPath];
             }
@@ -901,6 +941,23 @@ static CGFloat const kPickerCellHeight = 164.0f;
     return YES;
 }
 
+#pragma mark - APCPickerTableViewCellDelegate methods
+
+- (void)pickerTableViewCell:(APCPickerTableViewCell *)cell pickerViewDidSelectIndices:(NSArray *)selectedIndices
+{
+    [super pickerTableViewCell:cell pickerViewDidSelectIndices:selectedIndices];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if (indexPath.section == 0 && indexPath.row == 1) {
+        NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
+        [self.parameters setNumber:[APCParameters autoLockValues][index] forKey:kNumberOfMinutesForPasscodeKey];
+    }
+    else if (indexPath.section == 1 && indexPath.row == 2) {
+        APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+        NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
+        appDelegate.tasksReminder.reminderTime = [APCTasksReminderManager reminderTimesArray][index];
+    }
+}
+
 #pragma mark - UIImagePickerControllerDelegate
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
@@ -925,7 +982,7 @@ static CGFloat const kPickerCellHeight = 164.0f;
 - (void)loadProfileValuesInModel
 {
     self.user.name = self.nameTextField.text;
-    self.user.email = self.emailTextField.text;
+    //self.user.email = self.emailTextField.text;
     
     if (self.profileImage) {
         self.user.profileImage = UIImageJPEGRepresentation(self.profileImage, 1.0);
@@ -991,8 +1048,28 @@ static CGFloat const kPickerCellHeight = 164.0f;
                     self.user.wakeUpTime = [(APCTableViewDatePickerItem *)item date];
                     break;
                     
+                case kAPCSettingsItemTypeAutoLock:
+
+                    break;
+
+                case kAPCSettingsItemTypePasscode:
+
+                    break;
+                    
+                case kAPCSettingsItemTypeReminderOnOff:
+
+                    break;
+                    
+                case kAPCSettingsItemTypeReminderTime:
+
+                    break;
+                    
+                case kAPCSettingsItemTypePermissions:
+
+                    break;
+                    
                 default:
-                    NSAssert(itemType <= kAPCUserInfoItemTypeWakeUpTime, @"ASSER_MESSAGE");
+                    NSAssert(itemType <= kAPCUserInfoItemTypeWakeUpTime, @"ASSERT_MESSAGE");
                     break;
             }
         }

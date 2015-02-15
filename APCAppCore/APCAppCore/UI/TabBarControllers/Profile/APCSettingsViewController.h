@@ -9,14 +9,6 @@
 #import "APCUserInfoViewController.h"
 #import "APCParameters+Settings.h"
 
-typedef NS_ENUM(APCTableViewItemType, APCSettingsItemType) {
-    kAPCSettingsItemTypeAutoLock,
-    kAPCSettingsItemTypePasscode,
-    kAPCSettingsItemTypeReminderOnOff,
-    kAPCSettingsItemTypeReminderTime,
-    kAPCSettingsItemTypePermissions
-};
-
 @interface APCSettingsViewController : APCUserInfoViewController
 
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;

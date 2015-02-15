@@ -7,7 +7,7 @@
  
 #import <UIKit/UIKit.h>
 #import "APCUserInfoViewController.h"
-#import "APCParameters+Settings.h"
+
 
 @protocol APCProfileViewControllerDelegate;
 
@@ -38,10 +38,6 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *rightBarButton;
 
 @property (assign) id <APCProfileViewControllerDelegate> delegate;
-
-@property (weak, nonatomic) IBOutlet UILabel *versionLabel;
-
-@property (nonatomic, strong) APCParameters *parameters;
 
 @property (nonatomic, strong) UIImage *profileImage;
 
