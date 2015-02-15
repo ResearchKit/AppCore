@@ -221,7 +221,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     self.scrubberThumbView.layer.cornerRadius = self.scrubberThumbView.bounds.size.height/2;
     
     [self.xAxisView layoutSubviews];
-
+    
 }
 
 - (void)refreshGraph
@@ -354,7 +354,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 - (void)drawYAxis
 {
-    NSArray *yAxisLabelFactors = @[@0.2f,@0.8f];
+    [self prepareDataForPlotIndex:0];
     
     if (self.yAxisView) {
         [self.yAxisView removeFromSuperview];
@@ -367,7 +367,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     self.yAxisView = [[UIView alloc] initWithFrame:CGRectMake(axisViewXPosition, kAPCGraphTopPadding, axisViewWidth, CGRectGetHeight(self.plotsView.frame))];
     [self addSubview:self.yAxisView];
     
-    [self calculateMinAndMaxPoints];
     
     CGFloat rulerXPosition = CGRectGetWidth(self.yAxisView.bounds) - kAxisMarkingRulerLength + 2;
     
@@ -388,6 +387,15 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         [self.yAxisView addSubview:minImageView];
         
     } else {
+        
+        NSArray *yAxisLabelFactors;
+        
+        if (self.minimumValue == self.maximumValue) {
+            yAxisLabelFactors = @[@0.5f];
+        } else {
+            yAxisLabelFactors = @[@0.2f,@0.8f];
+        }
+        
         for (int i =0; i<yAxisLabelFactors.count; i++) {
             
             CGFloat factor = [yAxisLabelFactors[i] floatValue];
@@ -408,7 +416,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
             CGFloat yValue = self.minimumValue + (self.maximumValue - self.minimumValue)*factor;
             
             UILabel *axisTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelYPosition, CGRectGetWidth(self.yAxisView.frame) - kAxisMarkingRulerLength, labelHeight)];
-            axisTitleLabel.text = [self formatNumber:@(yValue)]; 
+            axisTitleLabel.text = [self formatNumber:@(yValue)];
             axisTitleLabel.backgroundColor = [UIColor clearColor];
             axisTitleLabel.textColor = self.axisTitleColor;
             axisTitleLabel.textAlignment = NSTextAlignmentRight;
@@ -457,7 +465,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
 }
 
-- (void)drawGraphForPlotIndex:(NSInteger)plotIndex
+- (void)drawGraphForPlotIndex:(NSInteger)plotIndex;
 {
     [self prepareDataForPlotIndex:plotIndex];
     
@@ -594,27 +602,38 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     if ([self.datasource respondsToSelector:@selector(minimumValueForLineGraph:)]) {
         self.minimumValue = [self.datasource minimumValueForLineGraph:self];
     } else {
-        for (NSNumber *num in self.dataPoints) {
-            if (num.floatValue < self.minimumValue) {
-                self.minimumValue = num.floatValue;
+        
+        if (self.dataPoints.count) {
+            self.minimumValue = [self.dataPoints[0] floatValue];
+            
+            for (int i=1; i<self.dataPoints.count; i++) {
+                NSNumber *num = self.dataPoints[i];
+                if ((self.minimumValue == NSNotFound) || (num.floatValue < self.minimumValue)) {
+                    self.minimumValue = num.floatValue;
+                }
             }
         }
+        
     }
     
     //Max
     if ([self.datasource respondsToSelector:@selector(maximumValueForLineGraph:)]) {
         self.maximumValue = [self.datasource maximumValueForLineGraph:self];
     } else {
-        for (NSNumber *num in self.dataPoints) {
-            if (num.floatValue > self.maximumValue) {
-                self.maximumValue = num.floatValue;
+        if (self.dataPoints.count) {
+            self.maximumValue = [self.dataPoints[0] floatValue];
+            
+            for (int i=1; i<self.dataPoints.count; i++) {
+                NSNumber *num = self.dataPoints[i];
+                if (((num.floatValue != NSNotFound) && (num.floatValue > self.maximumValue)) || (self.maximumValue == NSNotFound)) {
+                    self.maximumValue = num.floatValue;
+                }
             }
         }
     }
 }
 
-- (NSArray *) normalizeCanvasPoints: (NSArray *) __unused dataPoints
-                            forRect: (CGSize) canvasSize
+- (NSArray *)normalizeCanvasPoints:(NSArray *)dataPoints forRect:(CGSize)canvasSize
 {
     [self calculateMinAndMaxPoints];
     
