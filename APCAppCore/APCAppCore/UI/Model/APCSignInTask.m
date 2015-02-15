@@ -18,7 +18,7 @@ static NSInteger const kMinimumNumberOfSteps = 2; //MedicalInfo + Passcode
 
 #pragma mark - RKSTTask methods
 
-- (RKSTStep *)stepAfterStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
+- (RKSTStep *)stepAfterStep:(RKSTStep *)step withResult:(RKSTTaskResult *) __unused result
 {
     RKSTStep *nextStep;
     
@@ -56,7 +56,7 @@ static NSInteger const kMinimumNumberOfSteps = 2; //MedicalInfo + Passcode
     return nextStep;
 }
 
-- (RKSTStep *)stepBeforeStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
+- (RKSTStep *)stepBeforeStep:(RKSTStep *)step withResult:(RKSTTaskResult *) __unused result
 {
     RKSTStep *prevStep;
     

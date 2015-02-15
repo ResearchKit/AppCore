@@ -84,7 +84,7 @@
 	XCTAssertNotNil(selector);
 	XCTAssertEqual(selector.subSelectors.count, 3);
 	
-	APCPointSelector*   pointSelector;
+	APCPointSelector*   pointSelector = nil;
 	
 	pointSelector = selector.subSelectors[0];
 	

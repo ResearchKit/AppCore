@@ -643,7 +643,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                                                                                 intervalComponents:interval];
     
     // set the results handler
-    query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
+    query.initialResultsHandler = ^(HKStatisticsCollectionQuery * __unused query, HKStatisticsCollection *results, NSError *error) {
         if (!error) {
             NSDate *endDate = [[NSCalendar currentCalendar] dateBySettingHour:23
                                                                        minute:59

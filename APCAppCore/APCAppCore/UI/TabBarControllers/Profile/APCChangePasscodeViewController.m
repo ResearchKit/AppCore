@@ -61,7 +61,7 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
 
 #pragma mark - APCPasscodeViewDelegate
 
-- (void) passcodeViewDidFinish:(APCPasscodeView *)passcodeView withCode:(NSString *)code {
+- (void) passcodeViewDidFinish:(APCPasscodeView *)passcodeView withCode:(NSString *) __unused code {
     
     switch (self.entryType) {
         case kAPCPasscodeEntryTypeOld:

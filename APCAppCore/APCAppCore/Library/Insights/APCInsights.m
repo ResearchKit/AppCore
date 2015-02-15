@@ -186,7 +186,7 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
 - (void)statsCollectionQueryForQuantityType:(HKQuantityType *)quantityType
                                        unit:(HKUnit *)unit
                                  forReading:(NSDictionary *)reading
-                             withCompletion:(void (^)(void))completion
+                             withCompletion:(void (^)(void)) __unused completion
 {
     NSDateComponents *interval = [[NSDateComponents alloc] init];
     interval.day = 1;

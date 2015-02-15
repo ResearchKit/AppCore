@@ -729,7 +729,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
         }];
         [alertController addAction:libraryAction];
         
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
             
         }];
         [alertController addAction:cancelAction];

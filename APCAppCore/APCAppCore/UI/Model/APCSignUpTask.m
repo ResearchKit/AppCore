@@ -14,7 +14,7 @@ static NSInteger const kMinimumNumberOfSteps = 3; //Gen Info + MedicalInfo + Pas
 
 #pragma mark - RKSTTask methods
 
-- (RKSTStep *)stepAfterStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
+- (RKSTStep *)stepAfterStep:(RKSTStep *)step withResult:(RKSTTaskResult *) __unused result
 {
     RKSTStep *nextStep;
     
@@ -58,7 +58,7 @@ static NSInteger const kMinimumNumberOfSteps = 3; //Gen Info + MedicalInfo + Pas
     return nextStep;
 }
 
-- (RKSTStep *)stepBeforeStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
+- (RKSTStep *)stepBeforeStep:(RKSTStep *)step withResult:(RKSTTaskResult *) __unused result
 {
     RKSTStep *prevStep;
     

@@ -251,7 +251,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         {
             __weak typeof(self) weakSelf = self;
             
-            [self.motionActivityManager queryActivityStartingFromDate:[NSDate date] toDate:[NSDate date] toQueue:[NSOperationQueue new] withHandler:^(NSArray *activities, NSError *error) {
+            [self.motionActivityManager queryActivityStartingFromDate:[NSDate date] toDate:[NSDate date] toQueue:[NSOperationQueue new] withHandler:^(NSArray * __unused activities, NSError *error) {
                 if (!error) {
                     weakSelf.coreMotionPermissionStatus = kPermissionStatusAuthorized;
                     weakSelf.completionBlock(YES, nil);

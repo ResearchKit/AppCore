@@ -132,10 +132,10 @@ static NSString *const kCSVFilename  = @"data.csv";
     NSString * infoFilePath = [tracker.folder stringByAppendingPathComponent:kInfoFilename];
     [zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: kCSVFilename
                                                            compress:YES
-                                                          dataBlock:^(NSError** error){ return [NSData dataWithContentsOfFile:csvFilePath];}]];
+                                                          dataBlock:^(NSError** __unused error){ return [NSData dataWithContentsOfFile:csvFilePath];}]];
     [zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: kInfoFilename
                                                            compress:YES
-                                                          dataBlock:^(NSError** error){ return [NSData dataWithContentsOfFile:infoFilePath];}]];
+                                                          dataBlock:^(NSError** __unused error){ return [NSData dataWithContentsOfFile:infoFilePath];}]];
     
     [zipArchive updateEntries:zipEntries error:&error];
     APCLogError2(error);

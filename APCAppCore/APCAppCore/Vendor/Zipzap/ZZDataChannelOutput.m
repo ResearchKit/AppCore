@@ -30,14 +30,14 @@
 }
 
 - (BOOL)seekToOffset:(uint32_t)offset
-			   error:(out NSError**)error
+			   error:(out NSError**) __unused error
 {
 	_offset = offset;
 	return YES;
 }
 
 - (BOOL)writeData:(NSData*)data
-			error:(out NSError**)error
+			error:(out NSError**) __unused error
 {
 	NSUInteger allDataLength = _allData.length;
 	NSUInteger dataLength = data.length;
@@ -59,7 +59,7 @@
 }
 
 - (BOOL)truncateAtOffset:(uint32_t)offset
-				   error:(out NSError**)error
+				   error:(out NSError**) __unused error
 {
 	_allData.length = offset;
 	return YES;

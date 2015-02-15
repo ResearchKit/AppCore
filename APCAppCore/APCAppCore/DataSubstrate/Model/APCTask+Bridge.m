@@ -35,7 +35,7 @@
         NSArray * unloadedSurveyTasks = [context executeFetchRequest:request error:&error];
         APCLogError2 (error);
         if (unloadedSurveyTasks && unloadedSurveyTasks.count) {
-            [unloadedSurveyTasks enumerateObjectsUsingBlock:^(APCTask * task, NSUInteger idx, BOOL * __unused stop) {
+            [unloadedSurveyTasks enumerateObjectsUsingBlock:^(APCTask * task, NSUInteger __unused idx, BOOL * __unused stop) {
                 [task loadSurveyOnCompletion:^(NSError *error) {
                     if (error) {
                         if (completionBlock) {

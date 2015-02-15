@@ -461,7 +461,7 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
         NSString * fullFileName = [fileName stringByAppendingPathExtension:@"json"];
         [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fullFileName
                                                                     compress:YES
-                                                                   dataBlock:^(NSError** error){ return jsonData;}]];
+                                                                   dataBlock:^(NSError** __unused error){ return jsonData;}]];
     }
     else {
         APCLogError2(error);
@@ -472,14 +472,14 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 {
     [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fileName
                                                                 compress:YES
-                                                               dataBlock:^(NSError** error){ return data;}]];
+                                                               dataBlock:^(NSError** __unused error){ return data;}]];
 }
 
 - (void) writeURLToArchive: (NSURL*) url
 {
     [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: url.path.lastPathComponent
                                                                 compress:YES
-                                                               dataBlock:^(NSError** error){ return [NSData dataWithContentsOfURL:url];}]];
+                                                               dataBlock:^(NSError** __unused error){ return [NSData dataWithContentsOfURL:url];}]];
 }
 
 - (void) addFileInfoEntryWithDictionary: (NSDictionary*) dictionary
