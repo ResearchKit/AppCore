@@ -44,6 +44,9 @@ static  const  CGFloat  kArrowLineWeight =  2.0;
     shaper.contentsScale = [[UIScreen mainScreen] scale];
     shaper.strokeColor = aTintColor.CGColor;
     [layer addSublayer:shaper];
+    
+    CGPathRelease(path);
+    
     return  button;
 }
 
