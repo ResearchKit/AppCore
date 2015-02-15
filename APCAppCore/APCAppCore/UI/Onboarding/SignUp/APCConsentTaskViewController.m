@@ -24,15 +24,20 @@
 }
 
 #pragma mark Required Protocol Methods for Abstract Class
--(void)taskViewControllerDidComplete:(RKSTTaskViewController *)taskViewController{
+- (void) taskViewControllerDidComplete: (RKSTTaskViewController *) __unused taskViewController
+{
     
 }
 
--(void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error{
+- (void) taskViewController: (RKSTTaskViewController *) __unused taskViewController
+              didFailOnStep: (RKSTStep *) __unused step
+                  withError: (NSError *) __unused error
+{
     
 }
 
--(void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController{
+- (void) taskViewControllerDidCancel: (RKSTTaskViewController *) __unused taskViewController
+{
     
 }
 

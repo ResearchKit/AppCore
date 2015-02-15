@@ -78,7 +78,7 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 #pragma mark - RKSTTaskViewControllerDelegate methods
 
 //called on notification
--(void)returnControlOfTaskDelegate: (id)sender{
+-(void)returnControlOfTaskDelegate: (id) __unused sender{
     
     self.consentVC.delegate = self;
     
@@ -147,7 +147,7 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
-- (IBAction)startConsentTapped:(id)sender
+- (IBAction)startConsentTapped:(id) __unused sender
 {
 #if DEVELOPMENT
     [self startSignUp];

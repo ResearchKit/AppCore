@@ -22,7 +22,7 @@
                        forState:UIControlStateNormal];
 }
 
-- (IBAction)expandTapped:(UIButton *)sender
+- (IBAction) expandTapped: (UIButton *) __unused sender
 {
     if([self.delegate respondsToSelector:@selector(dashboardInsightDidExpandForCell:)]){
         [self.delegate dashboardInsightDidExpandForCell:self];

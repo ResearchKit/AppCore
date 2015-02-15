@@ -234,12 +234,12 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 - (void)handleConsentConflict
 {
     UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign In", @"") message:NSLocalizedString(@"You have previously withdrawn from this Study. Do you wish to rejoin?", nil) preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Rejoin", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Rejoin", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         [self rejoinStudy];
     }];
     [alertContorller addAction:yesAction];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         
     }];
     [alertContorller addAction:cancelAction];
@@ -324,7 +324,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     
 }
 
-- (IBAction)signIn:(id)sender
+- (IBAction) signIn: (id) __unused sender
 {
     if ([self.userHandleTextField isFirstResponder]) {
         [self.userHandleTextField resignFirstResponder];

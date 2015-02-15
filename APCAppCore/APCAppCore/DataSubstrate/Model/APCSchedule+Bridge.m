@@ -32,7 +32,7 @@ NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController
                 context.parentContext = ((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.persistentContext;
                 [self clearAllRemoteUpdatableSchedules:context];
                 [context performBlockAndWait:^{
-                    [schedules enumerateObjectsUsingBlock:^(SBBSchedule* schedule, NSUInteger idx, BOOL *stop) {
+                    [schedules enumerateObjectsUsingBlock:^(SBBSchedule* schedule, NSUInteger  __unused idx, BOOL * __unused stop) {
                         APCSchedule * apcSchedule = [APCSchedule newObjectForContext:context];
                         [self mapSBBSchedule:schedule APCSchedule:apcSchedule];
                         NSError * error;

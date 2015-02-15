@@ -33,7 +33,7 @@ NSString *const kAPCSignInStepIdentifier                  = @"SignIn";
 
 #pragma mark - RKSTTask methods
 
-- (RKSTStep *)stepAfterStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
+- (RKSTStep *)stepAfterStep:(RKSTStep *) __unused step withResult:(RKSTTaskResult *) __unused result
 {
     RKSTStep *nextStep;
     
@@ -42,7 +42,7 @@ NSString *const kAPCSignInStepIdentifier                  = @"SignIn";
     return nextStep;
 }
 
-- (RKSTStep *)stepBeforeStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
+- (RKSTStep *)stepBeforeStep:(RKSTStep *) __unused step withResult:(RKSTTaskResult *) __unused result
 {
     RKSTStep *prevStep;
     

@@ -67,20 +67,20 @@ NSString * const kAPCTextFieldTableViewCellIdentifier = @"APCTextFieldTableViewC
 
 #pragma mark - UITextFieldDelegate methods
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
+- (void)textFieldDidBeginEditing:(UITextField *) __unused textField
 {
     if ([self.delegate respondsToSelector:@selector(textFieldTableViewCellDidBeginEditing:)]) {
         [self.delegate textFieldTableViewCellDidBeginEditing:self];
     }
 }
-- (void)textFieldDidEndEditing:(UITextField *)textField
+- (void)textFieldDidEndEditing:(UITextField *) __unused textField
 {
     if ([self.delegate respondsToSelector:@selector(textFieldTableViewCellDidEndEditing:)]) {
         [self.delegate textFieldTableViewCellDidEndEditing:self];
     }
 }
 
-- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+- (BOOL) textField:(UITextField *) __unused textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if ([self.delegate respondsToSelector:@selector(textFieldTableViewCell:shouldChangeCharactersInRange:replacementString:)]) {
         [self.delegate textFieldTableViewCell:self shouldChangeCharactersInRange:range replacementString:string];
     }
@@ -98,14 +98,14 @@ NSString * const kAPCTextFieldTableViewCellIdentifier = @"APCTextFieldTableViewC
     return YES;
 }
 
-- (void)formTextFieldDidTapValidButton:(APCFormTextField *)textField
+- (void)formTextFieldDidTapValidButton:(APCFormTextField *) __unused textField
 {
     if ([self.delegate respondsToSelector:@selector(textFieldTableViewCellDidTapValidationButton:)]) {
         [self.delegate textFieldTableViewCellDidTapValidationButton:self];
     }
 }
 
-- (void)textFieldDidChange:(UITextField *)textField
+- (void)textFieldDidChange:(UITextField *) __unused textField
 {
     if ([self.delegate respondsToSelector:@selector(textFieldTableViewCellDidChangeText:)]) {
         [self.delegate textFieldTableViewCellDidChangeText:self];

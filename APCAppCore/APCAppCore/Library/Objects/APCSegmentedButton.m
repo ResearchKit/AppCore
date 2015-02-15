@@ -22,11 +22,13 @@
     self = [super init];
     if (self) {
         _buttons = buttons;
-        [buttons enumerateObjectsUsingBlock:^(UIButton* button, NSUInteger idx, BOOL *stop) {
+        [buttons enumerateObjectsUsingBlock: ^(UIButton* button,
+                                               NSUInteger __unused idx,
+                                               BOOL * __unused stop) {
             button.tintColor = normalColor;
             [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
             
-        }];
+         }];
         _normalColor = normalColor;
         _highlightColor = highlightColor;
         _selectedIndex = -1;
@@ -36,7 +38,9 @@
 
 - (void) buttonPressed: (UIButton*) button
 {
-    [self.buttons enumerateObjectsUsingBlock:^(UIButton* localButton, NSUInteger idx, BOOL *stop) {
+    [self.buttons enumerateObjectsUsingBlock: ^(UIButton* localButton,
+                                                NSUInteger idx,
+                                                BOOL * __unused stop) {
         if ([localButton isEqual:button]) {
             self.selectedIndex = idx;
             localButton.tintColor = self.highlightColor;

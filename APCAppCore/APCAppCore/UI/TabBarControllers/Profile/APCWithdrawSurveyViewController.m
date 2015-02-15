@@ -62,11 +62,12 @@
 
 #pragma mark - UITableViewDataSource methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger) numberOfSectionsInTableView: (UITableView *) __unused tableView
 {
     return self.items.count;
 }
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView: (UITableView *) __unused tableView
+  numberOfRowsInSection: (NSInteger) section
 {
     APCTableViewSection *sectionItem = self.items[section];
     
@@ -112,12 +113,13 @@
 
 #pragma mark - APCWithdrawDescriptionViewControllerDelegate methods
 
-- (void)withdrawViewControllerDidCancel:(APCWithdrawDescriptionViewController *)viewController
+- (void)withdrawViewControllerDidCancel:(APCWithdrawDescriptionViewController *) __unused viewController
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)withdrawViewController:(APCWithdrawDescriptionViewController *)viewController didFinishWithDescription:(NSString *)text
+- (void) withdrawViewController: (APCWithdrawDescriptionViewController *) __unused viewController
+       didFinishWithDescription: (NSString *) text
 {
     self.descriptionText = text;
     
@@ -196,7 +198,7 @@
 
 #pragma mark - IBActions
 
-- (IBAction)submit:(id)sender
+- (IBAction) submit: (id) __unused sender
 {
     //TODO: Submit API Call
     [[NSNotificationCenter defaultCenter] postNotificationName:APCUserWithdrawStudyNotification object:self];

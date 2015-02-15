@@ -89,7 +89,7 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 {
     HKSourceQuery *sourceQuery = [[HKSourceQuery alloc] initWithSampleType:_sampleType
                                                            samplePredicate:nil
-                                                         completionHandler:^(HKSourceQuery *query, NSSet *sources, NSError *error)
+                                                         completionHandler:^(HKSourceQuery * __unused query, NSSet *sources, NSError *error)
     {
         if (error) {
             APCLogError2(error);
@@ -118,10 +118,12 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
                               HKPredicateKeyPathEndDate, self.endDate,
                               HKPredicateKeyPathSource, self.source];
     
-    HKStatisticsQuery *query = [[HKStatisticsQuery alloc] initWithQuantityType:self.caloriesQuantityType
-                                                       quantitySamplePredicate:predicate
-                                                                       options:HKStatisticsOptionCumulativeSum
-                                                             completionHandler:^(HKStatisticsQuery *query, HKStatistics *result, NSError *error)
+    HKStatisticsQuery *query = [[HKStatisticsQuery alloc] initWithQuantityType: self.caloriesQuantityType
+                                                       quantitySamplePredicate: predicate
+                                                                       options: HKStatisticsOptionCumulativeSum
+                                                             completionHandler: ^(HKStatisticsQuery * __unused query,
+                                                                                  HKStatistics *result,
+                                                                                  NSError *error)
     {
         if (error) {
             APCLogError2(error);
@@ -136,19 +138,21 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
     [self.healthStore executeQuery:query];
 }
 
-- (void)queryForSampleType:(HKSampleType *)sampleType
-                      unit:(HKUnit *)unit
+- (void) queryForSampleType: (HKSampleType *) sampleType
+                       unit: (HKUnit *) __unused unit
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K >= %@) AND (%K <= %@) and (%K = %@)",
                               HKPredicateKeyPathStartDate, self.startDate,
                               HKPredicateKeyPathEndDate, self.endDate,
                               HKPredicateKeyPathSource, self.source];
     
-    HKSampleQuery *query = [[HKSampleQuery alloc] initWithSampleType:sampleType
-                                                           predicate:predicate
-                                                               limit:HKObjectQueryNoLimit
-                                                     sortDescriptors:nil
-                                                      resultsHandler:^(HKSampleQuery *query, NSArray *results, NSError *error)
+    HKSampleQuery *query = [[HKSampleQuery alloc] initWithSampleType: sampleType
+                                                           predicate: predicate
+                                                               limit: HKObjectQueryNoLimit
+                                                     sortDescriptors: nil
+                                                      resultsHandler: ^(HKSampleQuery * __unused query,
+                                                                        NSArray *results,
+                                                                        NSError *error)
     {
         if (error) {
             APCLogError2(error);
@@ -181,7 +185,7 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 
 #pragma mark - Notification
 
-- (void)foodInsightDataCollectionIsDone:(NSNotification *)notification
+- (void) foodInsightDataCollectionIsDone: (NSNotification *) __unused notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([self.delegate respondsToSelector:@selector(didCompleteFoodInsightForSampleType:insight:)]) {

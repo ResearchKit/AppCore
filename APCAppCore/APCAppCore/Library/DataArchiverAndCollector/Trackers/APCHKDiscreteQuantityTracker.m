@@ -74,7 +74,7 @@ static NSString *const kAnchorDataFilename = @"anchorData";
                                                                                    anchor:[self.anchorData integerValue]
                                                                                     limit:HKObjectQueryNoLimit
                                                                         completionHandler:
-                                               ^(HKAnchoredObjectQuery *query, NSArray *results, NSUInteger newAnchor, NSError *error) {
+                                               ^(HKAnchoredObjectQuery * __unused query, NSArray *results, NSUInteger newAnchor, NSError *error) {
                                                    weakSelf.queryStarted = NO;
                                                    if (!error) {
                                                        self.anchorData = @(newAnchor);
@@ -90,7 +90,7 @@ static NSString *const kAnchorDataFilename = @"anchorData";
 {
     NSMutableArray * results = [NSMutableArray array];
     
-    [anchorResults enumerateObjectsUsingBlock:^(HKSample * sample, NSUInteger idx, BOOL *stop) {
+    [anchorResults enumerateObjectsUsingBlock:^(HKSample * sample, NSUInteger __unused idx, BOOL * __unused stop) {
         
         HKUnit * unit = self.unitForTracker;
         //NOTE: Currently only HKQuantitySample is supported. Other types may require a separate tracker.

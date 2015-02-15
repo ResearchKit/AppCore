@@ -85,12 +85,12 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 
 #pragma mark - UITableViewDataSource Methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView
 {
     return self.sectionsArray.count;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *) __unused tableView numberOfRowsInSection:(NSInteger)section
 {
     return ((NSArray*)self.scheduledTasksArray[section]).count;
 }
@@ -165,12 +165,14 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 
 #pragma mark - UITableViewDelegate Methods
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)       tableView: (UITableView *) __unused tableView
+    heightForRowAtIndexPath: (NSIndexPath *) __unused indexPath
 {
     return  kTableViewRowHeight;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)        tableView: (UITableView *) __unused tableView
+    heightForHeaderInSection: (NSInteger) __unused section
 {
     return kTableViewSectionHeaderHeight;
 }
@@ -191,7 +193,8 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     return headerView;
 }
 
-- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)                tableView: (UITableView *) __unused tableView
+    shouldHighlightRowAtIndexPath: (NSIndexPath *) indexPath
 {
     return indexPath.section == 0;
 }
@@ -255,7 +258,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 }
 
 #pragma mark - Update methods
-- (IBAction)updateActivities:(id)sender
+- (IBAction)updateActivities:(id) __unused sender
 {
     self.taskSelectionDisabled = YES;
     APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;

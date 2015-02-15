@@ -43,7 +43,7 @@
     self.permissionManager = [[APCPermissionsManager alloc] init];
     
     __weak typeof(self) weakSelf = self;
-    [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError *error) {
+    [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
         if (granted) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 weakSelf.permissionGranted = YES;
@@ -216,7 +216,7 @@
 
 #pragma mark - UITextFieldDelegate methods
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
+- (void)textFieldDidBeginEditing:(UITextField *) __unused textField
 {
     [UIView animateWithDuration:0.3 animations:^{
         self.alertLabel.alpha = 0;
@@ -292,7 +292,7 @@
 
 #pragma mark - APCTextFieldTableViewCellDelegate methods
 
-- (void)textFieldTableViewCellDidBeginEditing:(APCTextFieldTableViewCell *)cell
+- (void)textFieldTableViewCellDidBeginEditing:(APCTextFieldTableViewCell *) __unused cell
 {
     [UIView animateWithDuration:0.3 animations:^{
         self.alertLabel.alpha = 0;
@@ -589,7 +589,7 @@
 
 #pragma mark - IBActions
 
-- (IBAction)termsAndConditions:(UIButton *)sender
+- (IBAction) termsAndConditions: (UIButton *) __unused sender
 {
     APCTermsAndConditionsViewController *termsViewController =  [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCTermsAndConditionsViewController"];
     termsViewController.delegate = self;
@@ -675,12 +675,12 @@
     }
 }
 
-- (IBAction)cancel:(id)sender
+- (IBAction)cancel:(id) __unused sender
 {
     
 }
 
-- (IBAction)changeProfileImage:(id)sender
+- (IBAction)changeProfileImage:(id) __unused sender
 {
     __weak typeof(self) weakSelf = self;
     
@@ -718,7 +718,7 @@
     }];
     [alertController addAction:libraryAction];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         
     }];
     [alertController addAction:cancelAction];
@@ -749,11 +749,11 @@
 - (void)presentSettingsAlert:(NSError *)error
 {
     UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         
     }];
     [alertContorller addAction:dismiss];
-    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }];
     [alertContorller addAction:settings];
@@ -770,7 +770,7 @@
 
 #pragma mark AlertView delegate
 
--(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+-(void) alertView:(UIAlertView *) __unused alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     
     if (buttonIndex == 0) {
         //user may change details in case of user issue

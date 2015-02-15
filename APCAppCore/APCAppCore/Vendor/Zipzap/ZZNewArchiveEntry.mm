@@ -26,7 +26,7 @@
 	  compressionLevel:(NSInteger)compressionLevel
 			 dataBlock:(NSData*(^)(NSError** error))dataBlock
 		   streamBlock:(BOOL(^)(NSOutputStream* stream, NSError** error))streamBlock
-	 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer, NSError** error))dataConsumerBlock;
+	 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer, NSError** error))dataConsumerBlock
 {
 	if ((self = [super init]))
 	{
@@ -61,7 +61,7 @@
 	return _fileName;
 }
 
-- (id<ZZArchiveEntryWriter>)newWriterCanSkipLocalFile:(BOOL)canSkipLocalFile
+- (id<ZZArchiveEntryWriter>)newWriterCanSkipLocalFile:(BOOL) __unused canSkipLocalFile
 {
 	return [[ZZNewArchiveEntryWriter alloc] initWithFileName:_fileName
 												fileMode:_fileMode

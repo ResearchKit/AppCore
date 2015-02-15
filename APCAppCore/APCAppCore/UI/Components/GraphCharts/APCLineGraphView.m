@@ -457,7 +457,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
 }
 
-- (void)drawGraphForPlotIndex:(NSInteger)plotIndex;
+- (void)drawGraphForPlotIndex:(NSInteger)plotIndex
 {
     [self prepareDataForPlotIndex:plotIndex];
     
@@ -613,7 +613,8 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
 }
 
-- (NSArray *)normalizeCanvasPoints:(NSArray *)dataPoints forRect:(CGSize)canvasSize
+- (NSArray *) normalizeCanvasPoints: (NSArray *) __unused dataPoints
+                            forRect: (CGSize) canvasSize
 {
     [self calculateMinAndMaxPoints];
     

@@ -113,7 +113,7 @@
 
 #pragma mark - IBActions
 
-- (IBAction)useTouchId:(id)sender
+- (IBAction) useTouchId: (id) __unused sender
 {
     [self promptTouchId];
 }

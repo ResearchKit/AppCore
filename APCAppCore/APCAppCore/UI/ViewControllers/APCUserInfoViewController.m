@@ -32,15 +32,15 @@ static CGFloat const kPickerCellHeight = 164.0f;
 
 #pragma mark - Custom Methods
 
-- (void)setupPickerCellAppeareance:(APCPickerTableViewCell *)cell{}
+- (void)setupPickerCellAppeareance:(APCPickerTableViewCell *) __unused cell{}
 
-- (void)setupTextFieldCellAppearance:(APCTextFieldTableViewCell *)cell{}
+- (void)setupTextFieldCellAppearance:(APCTextFieldTableViewCell *) __unused cell{}
 
-- (void)setupSegmentedCellAppearance:(APCSegmentedTableViewCell *)cell{}
+- (void)setupSegmentedCellAppearance:(APCSegmentedTableViewCell *) __unused cell{}
 
-- (void)setupDefaultCellAppearance:(APCDefaultTableViewCell *)cell{}
+- (void)setupDefaultCellAppearance:(APCDefaultTableViewCell *) __unused cell{}
 
-- (void)setupSwitchCellAppearance:(APCSwitchTableViewCell *)cell{}
+- (void)setupSwitchCellAppearance:(APCSwitchTableViewCell *) __unused cell{}
 
 - (void)setupBasicCellAppearance:(UITableViewCell *)cell
 {
@@ -50,12 +50,13 @@ static CGFloat const kPickerCellHeight = 164.0f;
 
 #pragma mark - UITableViewDataSource methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger) numberOfSectionsInTableView: (UITableView *) __unused tableView
 {
     return self.items.count;
 }
 
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView: (UITableView *) __unused tableView
+  numberOfRowsInSection: (NSInteger) section
 {
     APCTableViewSection *itemsSection = self.items[section];
     
@@ -312,7 +313,7 @@ static CGFloat const kPickerCellHeight = 164.0f;
 
 #pragma mark - APCTextFieldTableViewCellDelegate methods
 
-- (void)textFieldTableViewCellDidBeginEditing:(APCTextFieldTableViewCell *)cell
+- (void) textFieldTableViewCellDidBeginEditing: (APCTextFieldTableViewCell *) __unused cell
 {
     if (self.pickerShowing) {
         [self hidePickerCell];

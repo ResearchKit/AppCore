@@ -374,7 +374,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     [self.leaveStudyButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0]];
 }
 
-- (void)setupPickerCellAppeareance:(APCPickerTableViewCell *)cell
+- (void) setupPickerCellAppeareance: (APCPickerTableViewCell *) __unused cell
 {
     
 }
@@ -420,7 +420,8 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     }
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)        tableView: (UITableView *) __unused tableView
+    heightForHeaderInSection: (NSInteger) section
 {
     CGFloat height;
     
@@ -651,20 +652,20 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 
 #pragma mark - IBActions
 
-- (IBAction)showSettings:(id)sender
+- (IBAction) showSettings: (id) __unused sender
 {
     APCSettingsViewController *settingsViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSettingsViewController"];
     [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 
-- (IBAction)signOut:(id)sender
+- (IBAction) signOut: (id) __unused sender
 {
     UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Out", @"") message:NSLocalizedString(@"Are you sure you want to sign out?", nil) preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *signOutAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Sign Out", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+    UIAlertAction *signOutAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Sign Out", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
         [self logOut];
     }];
     [alertContorller addAction:signOutAction];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
        
     }];
     [alertContorller addAction:cancelAction];
@@ -673,15 +674,15 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     
 }
 
-- (IBAction)leaveStudy:(id)sender
+- (IBAction) leaveStudy: (id) __unused sender
 {
     UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Withdraw", @"") message:NSLocalizedString(@"Are you sure you want to withdraw from the study?\nThis action cannot be undone.", nil) preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Withdraw", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+    UIAlertAction *withdrawAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Withdraw", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * __unused action) {
         [self withdraw];
     }];
     [alertContorller addAction:withdrawAction];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         
     }];
     [alertContorller addAction:cancelAction];
@@ -689,13 +690,13 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
     [self.navigationController presentViewController:alertContorller animated:YES completion:nil];
 }
 
-- (IBAction)changeProfileImage:(id)sender
+- (IBAction) changeProfileImage: (id) __unused sender
 {
     if (self.isEditing) {
         __weak typeof(self) weakSelf = self;
         
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             
             [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
                 if (granted) {
@@ -713,7 +714,7 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
             [alertController addAction:cameraAction];
         }
         
-        UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
                 if (granted) {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -760,11 +761,11 @@ static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 - (void)presentSettingsAlert:(NSError *)error
 {
     UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         
     }];
     [alertContorller addAction:dismiss];
-    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }];
     [alertContorller addAction:settings];

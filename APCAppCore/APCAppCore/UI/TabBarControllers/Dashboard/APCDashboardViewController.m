@@ -68,19 +68,19 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)updateVisibleRowsInTableView:(NSNotification *)notification
+- (void)updateVisibleRowsInTableView:(NSNotification *) __unused notification
 {
     [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - UITableViewDataSource methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView
 {
     return self.items.count;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *) __unused tableView numberOfRowsInSection:(NSInteger)section
 {
     APCTableViewSection *sectionItem = self.items[section];
     
@@ -206,7 +206,7 @@
     return headerView;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *) __unused tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat height = 0;
     
@@ -288,9 +288,9 @@
 
 #pragma mark - UIViewControllerTransitioningDelegate methods
 
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
-                                                                  presentingController:(UIViewController *)presenting
-                                                                      sourceController:(UIViewController *)source
+- (id <UIViewControllerAnimatedTransitioning>) animationControllerForPresentedController: (UIViewController *) presented
+                                                                    presentingController: (UIViewController *) __unused presenting
+                                                                        sourceController: (UIViewController *) __unused source
 {
     id<UIViewControllerAnimatedTransitioning> animationController;
     
@@ -384,7 +384,7 @@
 
 #pragma mark - APCDashboardInsightsTableViewCell Delegate
 
-- (void)dashboardInsightDidExpandForCell:(APCDashboardInsightsTableViewCell *)cell
+- (void) dashboardInsightDidExpandForCell: (APCDashboardInsightsTableViewCell *) __unused cell
 {
     
 }

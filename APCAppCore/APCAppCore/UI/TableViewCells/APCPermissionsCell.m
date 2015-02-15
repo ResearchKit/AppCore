@@ -26,7 +26,7 @@ NSString * const kSignUpPermissionsCellIdentifier = @"APCPermissionsCell";
     self.permissionsButton.unconfirmedTitle = NSLocalizedString(@"Grant Access", @"");
 }
 
-- (IBAction)permissionButtonTapped:(id)sender
+- (IBAction)permissionButtonTapped:(id) __unused sender
 {
     if ([self.delegate respondsToSelector:@selector(permissionsCellTappedPermissionsButton:)]) {
         [self.delegate permissionsCellTappedPermissionsButton:self];

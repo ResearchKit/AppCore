@@ -50,7 +50,9 @@ static NSString *_defaultService;
 }
 
 
-+ (NSData *)dataForKey:(NSString *)key service:(NSString *)service accessGroup:(NSString *)accessGroup
++ (NSData *) dataForKey: (NSString *) key
+                service: (NSString *) service
+            accessGroup: (NSString *) __unused accessGroup
 {
     NSData * ret = nil;
     if (key) {
@@ -149,7 +151,9 @@ errReturn:
     return retValue;
 }
 
-+ (BOOL)removeItemForKey:(NSString *)key service:(NSString *)service accessGroup:(NSString *)accessGroup
++ (BOOL) removeItemForKey: (NSString *) key
+                  service: (NSString *) service
+              accessGroup: (NSString *) __unused accessGroup
 {
     BOOL retValue = NO;
     if (key) {
@@ -202,7 +206,8 @@ errReturn:
     return retValue;
 }
 
-+ (NSArray *)itemsForService:(NSString *)service accessGroup:(NSString *)accessGroup
++ (NSArray *) itemsForService: (NSString *) service
+                  accessGroup: (NSString *) __unused accessGroup
 {
     if (!service) {
         service = [self defaultService];

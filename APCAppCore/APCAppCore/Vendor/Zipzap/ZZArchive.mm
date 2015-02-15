@@ -190,7 +190,7 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 	// get an entry writer for each new entry
 	NSMutableArray* newEntryWriters = [NSMutableArray array];
     
-    [newEntries enumerateObjectsUsingBlock:^(ZZArchiveEntry *anEntry, NSUInteger index, BOOL* stop)
+    [newEntries enumerateObjectsUsingBlock:^(ZZArchiveEntry *anEntry, NSUInteger index, BOOL* __unused stop)
      {
          [newEntryWriters addObject:[anEntry newWriterCanSkipLocalFile:index < skipIndex]];
      }];

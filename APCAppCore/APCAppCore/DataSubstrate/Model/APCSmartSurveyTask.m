@@ -71,7 +71,7 @@ static APCDummyObject * _dummyObject;
         self.staticStepIdentifiers = [NSMutableArray array];
         self.setOfIdentifiers = [NSMutableSet set];
         NSArray * elements = (survey.questions.count > 0) ? survey.questions : survey.elements;
-        [elements enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
+        [elements enumerateObjectsUsingBlock:^(id object, NSUInteger __unused idx, BOOL * __unused stop) {
             if ([object isKindOfClass:[SBBSurveyQuestion class]]) {
                 SBBSurveyQuestion * obj = (SBBSurveyQuestion*) object;
                 self.rkSteps[obj.identifier] = [APCSmartSurveyTask rkStepFromSBBSurveyQuestion:obj];
@@ -98,7 +98,7 @@ static APCDummyObject * _dummyObject;
 - (NSArray*) createArrayOfDictionaryForRules: (NSArray*) rulesArray
 {
     NSMutableArray * newRulesArray = [NSMutableArray array];
-    [rulesArray enumerateObjectsUsingBlock:^(SBBSurveyRule * rule, NSUInteger idx, BOOL *stop) {
+    [rulesArray enumerateObjectsUsingBlock:^(SBBSurveyRule * rule, NSUInteger __unused idx, BOOL * __unused stop) {
         NSMutableDictionary * ruleDict = [NSMutableDictionary dictionary];
         if (rule.operator) {
             ruleDict[kRuleOperatorKey] = rule.operator;
@@ -147,14 +147,14 @@ static APCDummyObject * _dummyObject;
     return nextStepIdentifier? self.rkSteps[nextStepIdentifier] : nil;
 }
 
-- (RKSTStep *)stepBeforeStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
+- (RKSTStep *)stepBeforeStep:(RKSTStep *)step withResult:(RKSTTaskResult *) __unused result
 {
     [self refillDynamicStepIdentifiersWithCurrentStepIdentifier:step.identifier];
     NSString * nextStepIdentifier = [self nextStepIdentifier:NO currentIdentifier:step.identifier];
     return nextStepIdentifier? self.rkSteps[nextStepIdentifier] : nil;
 }
 
-- (RKSTTaskProgress)progressOfCurrentStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
+- (RKSTTaskProgress)progressOfCurrentStep:(RKSTStep *)step withResult:(RKSTTaskResult *) __unused result
 {
     return RKSTTaskProgressMake([self.staticStepIdentifiers indexOfObject: step.identifier], self.staticStepIdentifiers.count);
 }
@@ -239,7 +239,7 @@ static APCDummyObject * _dummyObject;
      */
     __block NSString * skipToIdentifier = nil;
     if (answer == nil || [answer isKindOfClass:[NSNumber class]] || [answer isKindOfClass:[NSString class]]) {
-        [rules enumerateObjectsUsingBlock:^(SBBSurveyRule * rule, NSUInteger idx, BOOL *stop) {
+        [rules enumerateObjectsUsingBlock:^(SBBSurveyRule * rule, NSUInteger __unused idx, BOOL *stop) {
             skipToIdentifier = [self checkRule:rule againstAnswer:answer];
             if (skipToIdentifier) {
                 *stop = YES;
@@ -488,7 +488,7 @@ static APCDummyObject * _dummyObject;
 /*********************************************************************************/
 #pragma mark - Answer Format Methods
 /*********************************************************************************/
--(RKSTAnswerFormat *)rkBooleanAnswerFormat:(NSDictionary *)objectDictionary
+- (RKSTAnswerFormat *) rkBooleanAnswerFormat: (NSDictionary *) __unused objectDictionary
 {
     RKSTAnswerFormat * retAnswer = [[RKSTBooleanAnswerFormat alloc] init];
     return retAnswer;
@@ -516,7 +516,7 @@ static APCDummyObject * _dummyObject;
     RKSTAnswerFormat * retAnswer;
     SBBMultiValueConstraints * localConstraints = (SBBMultiValueConstraints*)constraints;
     NSMutableArray * options = [NSMutableArray array];
-    [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger idx, BOOL *stop) {
+    [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger __unused idx, BOOL * __unused stop) {
         NSString * detailText = option.detail.length > 0 ? option.detail : nil;
         RKSTTextChoice * choice = [RKSTTextChoice choiceWithText:option.label detailText:detailText value:option.value];
         [options addObject: choice];
@@ -600,12 +600,12 @@ BOOL CGFloatHasDecimals(float f) {
     return (f-(int)f != 0);
 }
 
-- (RKSTAnswerFormat *)rkTextAnswerFormat:(NSDictionary *)objectDictionary
+- (RKSTAnswerFormat *)rkTextAnswerFormat:(NSDictionary *) __unused objectDictionary
 {
     return [RKSTTextAnswerFormat textAnswerFormat];
 }
 
-- (RKSTAnswerFormat *)rkTimeIntervalAnswerFormat:(NSDictionary *)objectDictionary
+- (RKSTAnswerFormat *)rkTimeIntervalAnswerFormat:(NSDictionary *) __unused objectDictionary
 {
     return [RKSTTimeIntervalAnswerFormat timeIntervalAnswerFormat];
 }

@@ -110,7 +110,7 @@
 	return [self.computedDaysToEnumerate containsObject: value];
 }
 
-- (NSNumber*) nextMomentAfter: (NSNumber*) point;
+- (NSNumber*) nextMomentAfter: (NSNumber*) point
 {
 	NSNumber *result = nil;
 
@@ -278,8 +278,8 @@
  selector into specific dates (days-in-the-month) during the
  specified month and year.
  */
-- (NSMutableArray *) specificWeekdaysForMonth: (NSNumber *) month
-									  andYear: (NSNumber *) year
+- (NSMutableArray *) specificWeekdaysForMonth: (NSNumber *) __unused  month
+									  andYear: (NSNumber *) __unused  year
 							ignoringTheseDays: (NSArray *) precomputedDaysInMonth
 {
 
