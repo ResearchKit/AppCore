@@ -21,6 +21,7 @@
 static NSString *const kDataSubstrateClassName = @"APHDataSubstrate";
 static NSString *const kDatabaseName = @"db.sqlite";
 static NSString *const kTasksAndSchedulesJSONFileName = @"APHTasksAndSchedules";
+static NSString *const kConsentSectionFileName = @"APHConsentSection";
 
 /*********************************************************************************/
 #pragma mark - Tab bar Constants
@@ -226,6 +227,159 @@ static NSUInteger const kIndexOfActivitesTab = 0;
     }
 }
 
+- (NSMutableArray*)consentSections
+{
+    ORKConsentSectionType(^toSectionType)(NSString*) = ^(NSString* sectionTypeName)
+    {
+        ORKConsentSectionType   sectionType = ORKConsentSectionTypeCustom;
+        
+        if ([sectionTypeName isEqualToString:@"overview"])
+        {
+            sectionType = ORKConsentSectionTypeOverview;
+        }
+        else if ([sectionTypeName isEqualToString:@"privacy"])
+        {
+            sectionType = ORKConsentSectionTypePrivacy;
+        }
+        else if ([sectionTypeName isEqualToString:@"dataGathering"])
+        {
+            sectionType = ORKConsentSectionTypeDataGathering;
+        }
+        else if ([sectionTypeName isEqualToString:@"dataUse"])
+        {
+            sectionType = ORKConsentSectionTypeDataUse;
+        }
+        else if ([sectionTypeName isEqualToString:@"timeCommitment"])
+        {
+            sectionType = ORKConsentSectionTypeTimeCommitment;
+        }
+        else if ([sectionTypeName isEqualToString:@"studySurvey"])
+        {
+            sectionType = ORKConsentSectionTypeStudySurvey;
+        }
+        else if ([sectionTypeName isEqualToString:@"studyTasks"])
+        {
+            sectionType = ORKConsentSectionTypeStudyTasks;
+        }
+        else if ([sectionTypeName isEqualToString:@"withdrawing"])
+        {
+            sectionType = ORKConsentSectionTypeWithdrawing;
+        }
+        else if ([sectionTypeName isEqualToString:@"custom"])
+        {
+            sectionType = ORKConsentSectionTypeCustom;
+        }
+        else if ([sectionTypeName isEqualToString:@"onlyInDocument"])
+        {
+            sectionType = ORKConsentSectionTypeOnlyInDocument;
+        }
+
+        return sectionType;
+    };
+    NSString*   kConsentSections        = @"sections";
+    NSString*   kSectionType            = @"sectionType";
+    NSString*   kSectionTitle           = @"sectionTitle";
+    NSString*   kSectionFormalTitle     = @"sectionFormalTitle";
+    NSString*   kSectionSummary         = @"sectionSummary";
+    NSString*   kSectionContent         = @"sectionContent";
+    NSString*   kSectionHtmlContent     = @"sectionHtmlContent";
+    NSString*   kSectionImage           = @"sectionImage";
+    NSString*   kSectionAnimationUrl    = @"sectionAnimationUrl";
+    
+    NSString*       resource = [[NSBundle mainBundle] pathForResource:self.initializationOptions[kConsentSectionFileNameKey] ofType:@"json"];
+    NSAssert(resource != nil, @"Unable to location file with Consent Section in main bundle");
+    
+    NSData*         consentSectionData = [NSData dataWithContentsOfFile:resource];
+    NSAssert(consentSectionData != nil, @"Unable to create NSData with Consent Section data");
+    
+    NSError*        error             = nil;
+    NSDictionary*   consentParameters = [NSJSONSerialization JSONObjectWithData:consentSectionData options:NSJSONReadingMutableContainers error:&error];
+    NSAssert(consentParameters != nil, @"badly formed Consent Section data - error", error);
+    
+    NSArray*        parametersConsentSections = [consentParameters objectForKey:kConsentSections];
+    NSAssert(parametersConsentSections != nil && [parametersConsentSections isKindOfClass:[NSArray class]], @"Badly formed Consent Section data");
+    
+    NSMutableArray* consentSections = [NSMutableArray arrayWithCapacity:parametersConsentSections.count];
+    
+    for (NSDictionary* section in parametersConsentSections)
+    {
+        //  Custom typesdo not have predefiend title, summary, content, or animation
+        NSAssert([section isKindOfClass:[NSDictionary class]], @"Improper section type");
+        
+        NSString*   typeName     = [section objectForKey:kSectionType];
+        NSAssert(typeName != nil && [typeName isKindOfClass:[NSString class]],    @"Missing Section Type or improper type");
+        
+        ORKConsentSectionType   sectionType = toSectionType(typeName);
+        
+        NSString*   title        = [section objectForKey:kSectionTitle];
+        NSString*   formalTitle  = [section objectForKey:kSectionFormalTitle];
+        NSString*   summary      = [section objectForKey:kSectionSummary];
+        NSString*   content      = [section objectForKey:kSectionContent];
+        NSString*   htmlContent  = [section objectForKey:kSectionHtmlContent];
+        NSString*   image        = [section objectForKey:kSectionImage];
+        NSString*   animationUrl = [section objectForKey:kSectionAnimationUrl];
+        
+        NSAssert(title        == nil || title         != nil && [title isKindOfClass:[NSString class]],        @"Missing Section Title or improper type");
+        NSAssert(formalTitle  == nil || formalTitle   != nil && [formalTitle isKindOfClass:[NSString class]],  @"Missing Section Formal title or improper type");
+        NSAssert(summary      == nil || summary       != nil && [summary isKindOfClass:[NSString class]],      @"Missing Section Summary or improper type");
+        NSAssert(content      == nil || content       != nil && [content isKindOfClass:[NSString class]],      @"Missing Section Content or improper type");
+        NSAssert(htmlContent  == nil || htmlContent   != nil && [htmlContent isKindOfClass:[NSString class]],  @"Missing Section HTML Content or improper type");
+        NSAssert(image        == nil || image         != nil && [image isKindOfClass:[NSString class]],        @"Missing Section Image or improper typte");
+        NSAssert(animationUrl == nil || animationUrl  != nil && [animationUrl isKindOfClass:[NSString class]], @"Missing Animation URL or improper type");
+        
+        
+        ORKConsentSection*  section = [[ORKConsentSection alloc] initWithType:sectionType];
+        
+        if (title != nil)
+        {
+            section.title = title;
+        }
+        
+        if (formalTitle != nil)
+        {
+            section.formalTitle = formalTitle;
+        }
+        
+        if (summary != nil)
+        {
+            section.summary = summary;
+        }
+        
+        if (content != nil)
+        {
+            section.content = content;
+        }
+        
+        if (htmlContent != nil)
+        {
+            NSString*   path    = [[NSBundle mainBundle] pathForResource:htmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+            NSAssert(path != nil, @"Unable to locate HTML file: %@", htmlContent);
+            
+            NSError*    error   = nil;
+            NSString*   content = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+
+            NSAssert(content != nil, @"Unable to load content of file \"%@\": %@", path, error);
+            
+            section.htmlContent = content;
+        }
+        
+        if (image != nil)
+        {
+            section.customImage = [UIImage imageNamed:image];
+            NSAssert(section.customImage != nil, @"Unable to load image: %@", image);
+        }
+        
+        if (animationUrl != nil)
+        {
+            section.customAnimationURL = nil;
+        }
+        
+        [consentSections addObject:section];
+    }
+    
+    return consentSections;
+}
+
 - (void) setUpHKPermissions
 {
     [APCPermissionsManager setHealthKitTypesToRead:self.initializationOptions[kHKReadPermissionsKey]];
@@ -310,6 +464,7 @@ static NSUInteger const kIndexOfActivitesTab = 0;
     return [@{
               kDatabaseNameKey                     : kDatabaseName,
               kTasksAndSchedulesJSONFileNameKey    : kTasksAndSchedulesJSONFileName,
+              kConsentSectionFileNameKey           : kConsentSectionFileName
               } mutableCopy];
 }
 

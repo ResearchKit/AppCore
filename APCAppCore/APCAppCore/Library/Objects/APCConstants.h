@@ -51,6 +51,7 @@ FOUNDATION_EXPORT NSString *const kAppPrefixKey;
 FOUNDATION_EXPORT NSString *const kBridgeEnvironmentKey;
 FOUNDATION_EXPORT NSString *const kDatabaseNameKey;
 FOUNDATION_EXPORT NSString *const kTasksAndSchedulesJSONFileNameKey;
+FOUNDATION_EXPORT NSString *const kConsentSectionFileNameKey;
 FOUNDATION_EXPORT NSString *const kHKWritePermissionsKey;
 FOUNDATION_EXPORT NSString *const kHKReadPermissionsKey;
 FOUNDATION_EXPORT NSString *const kAppServicesListRequiredKey;
