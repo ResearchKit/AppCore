@@ -12,11 +12,11 @@ static NSInteger const kMinimumNumberOfSteps = 3; //Gen Info + MedicalInfo + Pas
 
 @implementation APCSignUpTask
 
-#pragma mark - RKSTTask methods
+#pragma mark - ORKTask methods
 
-- (RKSTStep *)stepAfterStep:(RKSTStep *)step withResult:(RKSTTaskResult *) __unused result
+- (ORKStep *)stepAfterStep:(ORKStep *)step withResult:(ORKTaskResult *) __unused result
 {
-    RKSTStep *nextStep;
+    ORKStep *nextStep;
     
     if (!step) {
         nextStep = self.inclusionCriteriaStep;
@@ -58,9 +58,9 @@ static NSInteger const kMinimumNumberOfSteps = 3; //Gen Info + MedicalInfo + Pas
     return nextStep;
 }
 
-- (RKSTStep *)stepBeforeStep:(RKSTStep *)step withResult:(RKSTTaskResult *) __unused result
+- (ORKStep *)stepBeforeStep:(ORKStep *)step withResult:(ORKTaskResult *) __unused result
 {
-    RKSTStep *prevStep;
+    ORKStep *prevStep;
     
     if ([step.identifier isEqualToString:kAPCSignUpInclusionCriteriaStepIdentifier]) {
         prevStep = nil;

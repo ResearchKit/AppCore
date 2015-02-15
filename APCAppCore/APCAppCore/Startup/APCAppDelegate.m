@@ -169,12 +169,12 @@ static NSUInteger const kIndexOfActivitesTab = 0;
     }
     else if ([identifierComponents.lastObject isEqualToString:@"ActivitiesNavController"])
     {
-        return self.tabster.viewControllers[2];
+        return self.tabster.viewControllers[kIndexOfActivitesTab];
     }
     else if ([identifierComponents.lastObject isEqualToString:@"APCActivityVC"])
     {
-        if ( [self.tabster.viewControllers[2] respondsToSelector:@selector(topViewController)]) {
-            return [(UINavigationController*) self.tabster.viewControllers[2] topViewController];
+        if ( [self.tabster.viewControllers[kIndexOfActivitesTab] respondsToSelector:@selector(topViewController)]) {
+            return [(UINavigationController*) self.tabster.viewControllers[kIndexOfActivitesTab] topViewController];
         }
     }
     
@@ -502,7 +502,7 @@ static NSUInteger const kIndexOfActivitesTab = 0;
     self.onboarding = [[APCOnboarding alloc] initWithDelegate:self taskType:type];
 }
 
-- (RKSTTaskViewController *)consentViewController
+- (ORKTaskViewController *)consentViewController
 {
     NSAssert(FALSE, @"Override this method to return a valid Consent Task View Controller.");
     return nil;

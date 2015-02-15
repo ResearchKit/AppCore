@@ -16,8 +16,8 @@
 static CGFloat kSectionHeaderHeight = 40.f;
 static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
-@interface APCLearnMasterViewController () <RKSTTaskViewControllerDelegate>
-@property (strong, nonatomic) RKSTTaskViewController *consentVC;
+@interface APCLearnMasterViewController () <ORKTaskViewControllerDelegate>
+@property (strong, nonatomic) ORKTaskViewController *consentVC;
 @end
 
 @implementation APCLearnMasterViewController
@@ -184,17 +184,17 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     self.consentVC.delegate = self;
 }
 
-- (void)taskViewControllerDidComplete: (RKSTTaskViewController *) __unused taskViewController
+- (void)taskViewControllerDidComplete: (ORKTaskViewController *) __unused taskViewController
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
+- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController
 {
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *) __unused tep withError:(NSError *) __unused error
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *) __unused step withError:(NSError *) __unused error
 {
     //TODO: Figure out what to do if it fails
     [taskViewController dismissViewControllerAnimated:YES completion:nil];

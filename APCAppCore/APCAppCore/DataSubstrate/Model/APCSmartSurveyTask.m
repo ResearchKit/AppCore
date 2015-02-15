@@ -35,12 +35,12 @@ static APCDummyObject * _dummyObject;
 
 @interface APCDummyObject : NSObject
 
-- (RKSTAnswerFormat*) rkBooleanAnswerFormat:(NSDictionary *)objectDictionary;
-- (RKSTAnswerFormat*) rkDateAnswerFormat:(NSDictionary *)objectDictionary;
-- (RKSTAnswerFormat*) rkNumericAnswerFormat:(NSDictionary *)objectDictionary;
-- (RKSTAnswerFormat*) rkTimeIntervalAnswerFormat:(NSDictionary *)objectDictionary;
-- (RKSTAnswerFormat*) rkChoiceAnswerFormat:(NSDictionary *)objectDictionary;
-- (RKSTAnswerFormat*) rkTextAnswerFormat:(NSDictionary *)objectDictionary;
+- (ORKAnswerFormat*) rkBooleanAnswerFormat:(NSDictionary *)objectDictionary;
+- (ORKAnswerFormat*) rkDateAnswerFormat:(NSDictionary *)objectDictionary;
+- (ORKAnswerFormat*) rkNumericAnswerFormat:(NSDictionary *)objectDictionary;
+- (ORKAnswerFormat*) rkTimeIntervalAnswerFormat:(NSDictionary *)objectDictionary;
+- (ORKAnswerFormat*) rkChoiceAnswerFormat:(NSDictionary *)objectDictionary;
+- (ORKAnswerFormat*) rkTextAnswerFormat:(NSDictionary *)objectDictionary;
 
 @end
 
@@ -116,7 +116,7 @@ static APCDummyObject * _dummyObject;
 }
 
 
-- (RKSTStep *)stepAfterStep:(RKSTStep *)step withResult:(RKSTTaskResult *)result
+- (ORKStep *)stepAfterStep:(ORKStep *)step withResult:(ORKTaskResult *)result
 {
     [self refillDynamicStepIdentifiersWithCurrentStepIdentifier:step.identifier];
     
@@ -124,10 +124,10 @@ static APCDummyObject * _dummyObject;
     NSArray * rulesForThisStep = self.rules[step.identifier];
     NSString * skipToStep = nil;
     if (rulesForThisStep.count) {
-        RKSTStepResult * stepResult = (RKSTStepResult*) [result resultForIdentifier:step.identifier];
+        ORKStepResult * stepResult = (ORKStepResult*) [result resultForIdentifier:step.identifier];
         id firstResult = stepResult.results.firstObject;
-        if (firstResult == nil || [firstResult isKindOfClass:[RKSTQuestionResult class]]) {
-            RKSTQuestionResult * questionResult = (RKSTQuestionResult*) firstResult;
+        if (firstResult == nil || [firstResult isKindOfClass:[ORKQuestionResult class]]) {
+            ORKQuestionResult * questionResult = (ORKQuestionResult*) firstResult;
             if ([questionResult validForApplyingRule]) {
                 skipToStep = [self processRules:rulesForThisStep forAnswer:[questionResult consolidatedAnswer]];
             }
@@ -147,16 +147,16 @@ static APCDummyObject * _dummyObject;
     return nextStepIdentifier? self.rkSteps[nextStepIdentifier] : nil;
 }
 
-- (RKSTStep *)stepBeforeStep:(RKSTStep *)step withResult:(RKSTTaskResult *) __unused result
+- (ORKStep *)stepBeforeStep:(ORKStep *)step withResult:(ORKTaskResult *)result
 {
     [self refillDynamicStepIdentifiersWithCurrentStepIdentifier:step.identifier];
     NSString * nextStepIdentifier = [self nextStepIdentifier:NO currentIdentifier:step.identifier];
     return nextStepIdentifier? self.rkSteps[nextStepIdentifier] : nil;
 }
 
-- (RKSTTaskProgress)progressOfCurrentStep:(RKSTStep *)step withResult:(RKSTTaskResult *) __unused result
+- (ORKTaskProgress)progressOfCurrentStep:(ORKStep *)step withResult:(ORKTaskResult *) __unused result
 {
-    return RKSTTaskProgressMake([self.staticStepIdentifiers indexOfObject: step.identifier], self.staticStepIdentifiers.count);
+    return ORKTaskProgressMake([self.staticStepIdentifiers indexOfObject: step.identifier], self.staticStepIdentifiers.count);
 }
 
 /*********************************************************************************/
@@ -232,9 +232,9 @@ static APCDummyObject * _dummyObject;
      *      Boolean: NSNumber SUPPORTED
      *      Text: NSString SUPPORTED
      *      Scale: NSNumber SUPPORTED
-     *      Date: RKSTDateAnswer with date components having (NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay). NOT SUPPORTED
-     *      Time: RKSTDateAnswer with date components having (NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond). NOT SUPPORTED
-     *      DateAndTime: RKSTDateAnswer with date components having (NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond). NOT SUPPORTED
+     *      Date: ORKDateAnswer with date components having (NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay). NOT SUPPORTED
+     *      Time: ORKDateAnswer with date components having (NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond). NOT SUPPORTED
+     *      DateAndTime: ORKDateAnswer with date components having (NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute|NSCalendarUnitSecond). NOT SUPPORTED
      *      Time Interval: NSNumber, containing a time span in seconds. SUPPORTED
      */
     __block NSString * skipToIdentifier = nil;
@@ -386,7 +386,7 @@ static APCDummyObject * _dummyObject;
 
 
 /*********************************************************************************/
-#pragma mark - Conversion of SBBSurvey to RKSTTask
+#pragma mark - Conversion of SBBSurvey to ORKTask
 /*********************************************************************************/
 
 + (NSString *) lookUpAnswerFormatMethod: (NSString*) SBBClassName
@@ -406,18 +406,18 @@ static APCDummyObject * _dummyObject;
     return answerFormatClass[SBBClassName];
 }
 
-+ (RKSTQuestionStep*) rkStepFromSBBSurveyQuestion: (SBBSurveyQuestion*) question
++ (ORKQuestionStep*) rkStepFromSBBSurveyQuestion: (SBBSurveyQuestion*) question
 {
-    RKSTQuestionStep * retStep =[RKSTQuestionStep questionStepWithIdentifier:question.identifier title:question.prompt answer:[self rkAnswerFormatFromSBBSurveyConstraints:question.constraints uiHint:question.uiHint]];
+    ORKQuestionStep * retStep =[ORKQuestionStep questionStepWithIdentifier:question.identifier title:question.prompt answer:[self rkAnswerFormatFromSBBSurveyConstraints:question.constraints uiHint:question.uiHint]];
     if (question.detail.length > 0) {
         retStep.text = question.detail;
     }
     return retStep;
 }
 
-+ (RKSTAnswerFormat*) rkAnswerFormatFromSBBSurveyConstraints: (SBBSurveyConstraints*) constraints uiHint: (NSString*) hint
++ (ORKAnswerFormat*) rkAnswerFormatFromSBBSurveyConstraints: (SBBSurveyConstraints*) constraints uiHint: (NSString*) hint
 {
-    RKSTAnswerFormat * retAnswer;
+    ORKAnswerFormat * retAnswer;
     
     if (!_dummyObject) {
         _dummyObject = [[APCDummyObject alloc] init];
@@ -434,7 +434,7 @@ static APCDummyObject * _dummyObject;
     
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-    retAnswer = (RKSTAnswerFormat*) [_dummyObject performSelector:selector withObject:objDict];
+    retAnswer = (ORKAnswerFormat*) [_dummyObject performSelector:selector withObject:objDict];
 #pragma clang diagnostic pop
     
     return retAnswer;
@@ -488,51 +488,51 @@ static APCDummyObject * _dummyObject;
 /*********************************************************************************/
 #pragma mark - Answer Format Methods
 /*********************************************************************************/
-- (RKSTAnswerFormat *) rkBooleanAnswerFormat: (NSDictionary *) __unused objectDictionary
+-(ORKAnswerFormat *)rkBooleanAnswerFormat:(NSDictionary *) __unused objectDictionary
 {
-    RKSTAnswerFormat * retAnswer = [[RKSTBooleanAnswerFormat alloc] init];
+    ORKAnswerFormat * retAnswer = [[ORKBooleanAnswerFormat alloc] init];
     return retAnswer;
 }
 
-- (RKSTAnswerFormat *)rkDateAnswerFormat:(NSDictionary *)objectDictionary
+- (ORKAnswerFormat *)rkDateAnswerFormat:(NSDictionary *)objectDictionary
 {
     SBBSurveyConstraints * constraints = objectDictionary[kConstraintsKey];
-    RKSTAnswerFormat * retAnswer;
+    ORKAnswerFormat * retAnswer;
     if ([constraints isKindOfClass:[SBBDateTimeConstraints class]]) {
-        retAnswer = [RKSTDateAnswerFormat dateTimeAnswerFormat];
+        retAnswer = [ORKDateAnswerFormat dateTimeAnswerFormat];
     }
     else if ([constraints isKindOfClass:[SBBDateConstraints class]]) {
-        retAnswer = [RKSTDateAnswerFormat dateAnswerFormat];
+        retAnswer = [ORKDateAnswerFormat dateAnswerFormat];
     }
     else if ([constraints isKindOfClass:[SBBTimeConstraints class]]) {
-        retAnswer = [RKSTTimeOfDayAnswerFormat timeOfDayAnswerFormat];
+        retAnswer = [ORKTimeOfDayAnswerFormat timeOfDayAnswerFormat];
     }
     return retAnswer;
 }
 
-- (RKSTAnswerFormat*) rkChoiceAnswerFormat:(NSDictionary *)objectDictionary
+- (ORKAnswerFormat*) rkChoiceAnswerFormat:(NSDictionary *)objectDictionary
 {
     SBBSurveyConstraints * constraints = objectDictionary[kConstraintsKey];
-    RKSTAnswerFormat * retAnswer;
+    ORKAnswerFormat * retAnswer;
     SBBMultiValueConstraints * localConstraints = (SBBMultiValueConstraints*)constraints;
     NSMutableArray * options = [NSMutableArray array];
     [localConstraints.enumeration enumerateObjectsUsingBlock:^(SBBSurveyQuestionOption* option, NSUInteger __unused idx, BOOL * __unused stop) {
         NSString * detailText = option.detail.length > 0 ? option.detail : nil;
-        RKSTTextChoice * choice = [RKSTTextChoice choiceWithText:option.label detailText:detailText value:option.value];
+        ORKTextChoice * choice = [ORKTextChoice choiceWithText:option.label detailText:detailText value:option.value];
         [options addObject: choice];
     }];
     if (localConstraints.allowOtherValue) {
         [options addObject:NSLocalizedString(@"Other", @"Spinner Option")];
     }
-    retAnswer = [RKSTAnswerFormat choiceAnswerFormatWithStyle:localConstraints.allowMultipleValue ? RKChoiceAnswerStyleMultipleChoice : RKChoiceAnswerStyleSingleChoice textChoices:options];
+    retAnswer = [ORKAnswerFormat choiceAnswerFormatWithStyle:localConstraints.allowMultipleValue ? ORKChoiceAnswerStyleMultipleChoice : ORKChoiceAnswerStyleSingleChoice textChoices:options];
     return retAnswer;
 }
 
-- (RKSTAnswerFormat *)rkNumericAnswerFormat:(NSDictionary *)objectDictionary
+- (ORKAnswerFormat *)rkNumericAnswerFormat:(NSDictionary *)objectDictionary
 {
     SBBSurveyConstraints * constraints = objectDictionary[kConstraintsKey];
     NSString * uiHint = objectDictionary[kUiHintKey];
-    RKSTAnswerFormat * retValue;
+    ORKAnswerFormat * retValue;
     if ([constraints isKindOfClass:[SBBIntegerConstraints class]]) {
         SBBIntegerConstraints * integerConstraint = (SBBIntegerConstraints*) constraints;
         if (integerConstraint.maxValue && integerConstraint.minValue) {
@@ -540,10 +540,10 @@ static APCDummyObject * _dummyObject;
                 NSInteger stepValue = (integerConstraint.step != nil && [integerConstraint.step integerValue] > 0) ? [integerConstraint.step integerValue] : 1;
                 NSInteger newStepValue = (NSInteger)((double)[integerConstraint.maxValue integerValue] - (double)[integerConstraint.minValue integerValue]) / 10.0;
                 stepValue = MAX(newStepValue, stepValue);
-                retValue = [RKSTScaleAnswerFormat scaleAnswerFormatWithMaxValue:[integerConstraint.maxValue integerValue] minValue:[integerConstraint.minValue integerValue] step:stepValue defaultValue:0];
+                retValue = [ORKScaleAnswerFormat scaleAnswerFormatWithMaxValue:[integerConstraint.maxValue integerValue] minValue:[integerConstraint.minValue integerValue] step:stepValue defaultValue:0];
             }
             else {
-                RKSTNumericAnswerFormat * format = (integerConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:integerConstraint.unit] : [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:nil];
+                ORKNumericAnswerFormat * format = (integerConstraint.unit.length > 0) ? [ORKNumericAnswerFormat integerAnswerFormatWithUnit:integerConstraint.unit] : [ORKNumericAnswerFormat integerAnswerFormatWithUnit:nil];
                 format.maximum = integerConstraint.maxValue;
                 format.minimum = integerConstraint.minValue;
                 retValue = format;
@@ -552,20 +552,20 @@ static APCDummyObject * _dummyObject;
         }
         else
         {
-            retValue = (integerConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:integerConstraint.unit] : [RKSTNumericAnswerFormat integerAnswerFormatWithUnit:nil];
+            retValue = (integerConstraint.unit.length > 0) ? [ORKNumericAnswerFormat integerAnswerFormatWithUnit:integerConstraint.unit] : [ORKNumericAnswerFormat integerAnswerFormatWithUnit:nil];
         }
     }
     else if ([constraints isKindOfClass:[SBBDecimalConstraints class]]) {
         SBBDecimalConstraints * decimalConstraint = (SBBDecimalConstraints*) constraints;
         if (decimalConstraint.maxValue && decimalConstraint.minValue) {
-            RKSTNumericAnswerFormat * format = (decimalConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat decimalAnswerFormatWithUnit:decimalConstraint.unit] : [RKSTNumericAnswerFormat decimalAnswerFormatWithUnit:nil];
+            ORKNumericAnswerFormat * format = (decimalConstraint.unit.length > 0) ? [ORKNumericAnswerFormat decimalAnswerFormatWithUnit:decimalConstraint.unit] : [ORKNumericAnswerFormat decimalAnswerFormatWithUnit:nil];
             format.maximum = decimalConstraint.maxValue;
             format.minimum = decimalConstraint.minValue;
             retValue = format;
         }
         else
         {
-            retValue = (decimalConstraint.unit.length > 0) ? [RKSTNumericAnswerFormat decimalAnswerFormatWithUnit:decimalConstraint.unit] : [RKSTNumericAnswerFormat decimalAnswerFormatWithUnit:nil];
+            retValue = (decimalConstraint.unit.length > 0) ? [ORKNumericAnswerFormat decimalAnswerFormatWithUnit:decimalConstraint.unit] : [ORKNumericAnswerFormat decimalAnswerFormatWithUnit:nil];
         }
     }
     return retValue;
@@ -600,14 +600,14 @@ BOOL CGFloatHasDecimals(float f) {
     return (f-(int)f != 0);
 }
 
-- (RKSTAnswerFormat *)rkTextAnswerFormat:(NSDictionary *) __unused objectDictionary
+- (ORKAnswerFormat *)rkTextAnswerFormat:(NSDictionary *) __unused objectDictionary
 {
-    return [RKSTTextAnswerFormat textAnswerFormat];
+    return [ORKTextAnswerFormat textAnswerFormat];
 }
 
-- (RKSTAnswerFormat *)rkTimeIntervalAnswerFormat:(NSDictionary *) __unused objectDictionary
+- (ORKAnswerFormat *)rkTimeIntervalAnswerFormat:(NSDictionary *) __unused objectDictionary
 {
-    return [RKSTTimeIntervalAnswerFormat timeIntervalAnswerFormat];
+    return [ORKTimeIntervalAnswerFormat timeIntervalAnswerFormat];
 }
 
 

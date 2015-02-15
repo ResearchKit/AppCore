@@ -11,8 +11,8 @@
 #import "APCDataVerificationClient.h"
 
 @interface APCBaseTaskViewController () <UIViewControllerRestoration>
-@property (strong, nonatomic) RKSTStepViewController * stepVC;
-@property (nonatomic, strong) RKSTStep * step;
+@property (strong, nonatomic) ORKStepViewController * stepVC;
+@property (nonatomic, strong) ORKStep * step;
 @end
 
 @implementation APCBaseTaskViewController
@@ -20,7 +20,7 @@
 #pragma  mark  -  Instance Initialisation
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask
 {
-    id<RKSTTask> task = [self createTask: scheduledTask];
+    id<ORKTask> task = [self createTask: scheduledTask];
     NSUUID * taskRunUUID = [NSUUID UUID];
     APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
     controller.restorationIdentifier = [task identifier];
@@ -30,7 +30,7 @@
     return  controller;
 }
 
-+ (id<RKSTTask>)createTask: (APCScheduledTask*) __unused scheduledTask
++ (id<ORKTask>)createTask: (APCScheduledTask*) __unused scheduledTask
 {
     //To be overridden by child classes
     return  nil;
@@ -57,9 +57,9 @@
                                        }));
 }
 /*********************************************************************************/
-#pragma mark - RKSTOrderedTaskDelegate
+#pragma mark - ORKOrderedTaskDelegate
 /*********************************************************************************/
-- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
+- (void)taskViewControllerDidComplete: (ORKTaskViewController *)taskViewController
 {
     [self processTaskResult];
     
@@ -74,7 +74,7 @@
                                        }));
 }
 
-- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
+- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController
 {
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
     APCLogEventWithData(kTaskEvent, (@{
@@ -84,9 +84,7 @@
                                        }));
 }
 
-- (void)taskViewController: (RKSTTaskViewController *) __unused taskViewController
-             didFailOnStep: (RKSTStep *) __unused step
-                 withError: (NSError *) error
+- (void)taskViewController:(ORKTaskViewController *) __unused taskViewController didFailOnStep:(ORKStep *) __unused step withError:(NSError *)error
 {
     APCLogError2 (error);
     APCLogEventWithData(kTaskEvent, (@{
@@ -165,7 +163,7 @@
 #pragma mark - State Restoration
 /*********************************************************************************/
 
--(void)stepViewControllerWillAppear:(RKSTStepViewController *)viewController
+-(void)stepViewControllerWillAppear:(ORKStepViewController *)viewController
 {
     [super stepViewControllerWillAppear:viewController];
     self.stepVC = viewController;
@@ -192,7 +190,7 @@
 + (UIViewController *) viewControllerWithRestorationIdentifierPath: (NSArray *) __unused identifierComponents
                                                              coder: (NSCoder *) coder
 {
-    id<RKSTTask> task = [coder decodeObjectForKey:@"task"];
+    id<ORKTask> task = [coder decodeObjectForKey:@"task"];
     NSUUID * taskRunUUID = [coder decodeObjectForKey:@"taskRunUUID"];
     NSString * scheduledTaskID = [coder decodeObjectForKey:@"scheduledTask"];
     NSManagedObjectID * objID = [((APCAppDelegate*)[UIApplication sharedApplication].delegate).dataSubstrate.persistentStoreCoordinator managedObjectIDForURIRepresentation:[NSURL URLWithString:scheduledTaskID]];
