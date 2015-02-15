@@ -10,12 +10,12 @@
 static NSString *kLoseItBundleIdentifier        = @"com.fitnow.loseit";
 static NSString *kLoseItFoodImageNameKey        = @"HKFoodImageName";
 
-NSString const *kFoodInsightFoodNameKey        = @"foodNameKey";
-NSString const *kFoodInsightFoodGenericNameKey = @"foodGenericNameKey";
-NSString const *kFoodInsightValueKey           = @"foodValueKey";
-NSString const *kFoodInsightCaloriesValueKey   = @"foodCaloriesValueKey";
-NSString const *kFoodInsightFrequencyKey       = @"foodFrequencyKey";
-NSString const *kFoodInsightUUIDKey            = @"foodUUIDKey";
+NSString * const kFoodInsightFoodNameKey        = @"foodNameKey";
+NSString * const kFoodInsightFoodGenericNameKey = @"foodGenericNameKey";
+NSString * const kFoodInsightValueKey           = @"foodValueKey";
+NSString * const kFoodInsightCaloriesValueKey   = @"foodCaloriesValueKey";
+NSString * const kFoodInsightFrequencyKey       = @"foodFrequencyKey";
+NSString * const kFoodInsightUUIDKey            = @"foodUUIDKey";
 
 static NSInteger kLastSevenDays = -7; // This is a negative integer because we need to go back in time.
                                       // In order to do so, we need to pass a negative integer to the NSDateComponents object.
