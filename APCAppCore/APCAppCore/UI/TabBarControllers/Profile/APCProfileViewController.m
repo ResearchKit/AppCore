@@ -76,6 +76,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     self.items = [self prepareContent];
     [self.tableView reloadData];
     
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSDictionary *info = [bundle infoDictionary];
+    NSString *prodName = [info objectForKey:@"CFBundleDisplayName"];
+    self.applicationNameLabel.text = prodName;
+    
     self.nameTextField.text = self.user.name;
     self.nameTextField.enabled = NO;
     
