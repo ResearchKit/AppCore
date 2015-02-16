@@ -7,9 +7,7 @@
  
 #import "APCStudyOverviewCollectionViewController.h"
 #import "APCAppCore.h"
-#import "APCStudyOverviewCollectionViewCell.h"
-
-static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
+#import "APCWebViewController.h"
 
 @interface APCStudyOverviewCollectionViewController () <ORKTaskViewControllerDelegate>
 
@@ -175,14 +173,30 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    APCStudyOverviewCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"studyOverviewCell" forIndexPath:indexPath];
     
-    APCTableViewStudyDetailsItem *studyDetails = [self itemForIndexPath: indexPath];
+    UICollectionViewCell *cell;
+    
+    APCTableViewStudyDetailsItem *studyDetails = [self itemForIndexPath:indexPath];
 
-    NSString *filePath = [[NSBundle mainBundle] pathForResource: studyDetails.detailText ofType:@"html" inDirectory:@"HTMLContent"];
-    NSURL *targetURL = [NSURL URLWithString:filePath];
-    NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
-    [cell.webView loadRequest:request];
+    if (studyDetails.videoName.length > 0) {
+        
+        APCStudyVideoCollectionViewCell *videoCell = (APCStudyVideoCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kAPCStudyVideoCollectionViewCellIdentifier forIndexPath:indexPath];
+        videoCell.delegate = self;
+        videoCell.titleLabel.text = studyDetails.caption;
+        
+        cell = videoCell;
+        
+    } else {
+        APCStudyOverviewCollectionViewCell *webViewCell = (APCStudyOverviewCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kAPCStudyOverviewCollectionViewCellIdentifier forIndexPath:indexPath];
+        
+        NSString *filePath = [[NSBundle mainBundle] pathForResource: studyDetails.detailText ofType:@"html" inDirectory:@"HTMLContent"];
+        NSURL *targetURL = [NSURL URLWithString:filePath];
+        NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
+        [webViewCell.webView loadRequest:request];
+        
+        cell = webViewCell;
+    }
+    
     
     return cell;
 }
@@ -266,6 +280,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
             studyDetails.detailText = questionDict[@"details"];
             studyDetails.iconImage = [[UIImage imageNamed:questionDict[@"icon_image"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             studyDetails.tintColor = [UIColor tertiaryColorForString:questionDict[@"tint_color"]];
+            studyDetails.videoName = questionDict[@"video_name"];
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = studyDetails;
@@ -327,5 +342,48 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     [self.collectionView setContentOffset:CGPointMake(offset, 0) animated:YES];
 }
 
+#pragma mark - APCStudyVideoCollectionViewCellDelegate methods
 
+- (void)studyVideoCollectionViewCellWatchVideo:(APCStudyVideoCollectionViewCell *)cell
+{
+    APCTableViewStudyDetailsItem *studyDetails = (APCTableViewStudyDetailsItem *)[self itemForIndexPath:[self.collectionView indexPathForCell:cell]];
+    
+    NSURL *fileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:studyDetails.videoName ofType:@"mp4"]];
+    APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
+    [self.navigationController presentViewController:introVideoViewController animated:YES completion:nil];
+
+}
+
+- (void)studyVideoCollectionViewCellReadConsent:(APCStudyVideoCollectionViewCell *)cell
+{
+    APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
+    webViewController.fileName = @"consent";
+    webViewController.fileType = @"pdf";
+    webViewController.title = NSLocalizedString(@"Consent", @"Consent");
+    
+    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
+    [self.navigationController presentViewController:navController animated:YES completion:nil];
+
+}
+
+- (void)studyVideoCollectionViewCellEmailConsent:(APCStudyVideoCollectionViewCell *)cell
+{
+    if ([MFMailComposeViewController canSendMail])
+    {
+        MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
+        mail.mailComposeDelegate = self;
+        
+        [self presentViewController:mail animated:YES completion:NULL];
+    }
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate method
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    if (result == MFMailComposeResultCancelled || result == MFMailComposeResultSent)
+    {
+        [controller dismissViewControllerAnimated:YES completion:nil];
+    }
+}
 @end

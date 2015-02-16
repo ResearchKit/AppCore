@@ -7,6 +7,8 @@
 
 #import "APCStudyOverviewCollectionViewCell.h"
 
+NSString *const kAPCStudyOverviewCollectionViewCellIdentifier = @"APCStudyOverviewCollectionViewCell";
+
 @implementation APCStudyOverviewCollectionViewCell {
     CGFloat lastMultiplier;
 }
