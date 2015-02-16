@@ -62,7 +62,7 @@
 
 //To be called from Datasubstrate
 - (void) setUpCollectors;
-- (id <APCProfileViewControllerDelegate>) profileExtender;
+- (id <APCProfileViewControllerDelegate>) profileExtenderDelegate;
 
 - (void)showPasscodeIfNecessary;
 
