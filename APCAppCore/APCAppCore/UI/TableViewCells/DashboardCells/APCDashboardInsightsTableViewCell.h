@@ -12,6 +12,7 @@
 @interface APCDashboardInsightsTableViewCell : UITableViewCell
 
 @property (nonatomic, weak) IBOutlet UIButton *expandButton;
+@property (weak, nonatomic) IBOutlet UIButton *infoButton;
 
 @property (nonatomic, weak) id <APCDashboardInsightsTableViewCellDelegate> delegate;
 
@@ -25,5 +26,6 @@
 
 @required
 - (void)dashboardInsightDidExpandForCell:(APCDashboardInsightsTableViewCell *)cell;
+- (void)dashboardInsightDidAskForMoreInfoForCell:(APCDashboardInsightsTableViewCell *)cell;
 
 @end
