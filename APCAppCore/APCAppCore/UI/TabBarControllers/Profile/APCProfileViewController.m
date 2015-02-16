@@ -222,6 +222,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 cell.selectionStyle = field.selectionStyle;
                 cell.textLabel.text = field.caption;
                 
+                cell.detailTextLabel.textColor = [UIColor blackColor];
+                
                 if (!field.editable && self.isEditing) {
                     cell.detailTextLabel.textColor = [UIColor lightGrayColor];
                 }
@@ -248,9 +250,18 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                         textFieldCell.type = kAPCTextFieldCellTypeLeft;
                     }
                     
+                    textFieldCell.type = kAPCTextFieldCellTypeRight;
                     textFieldCell.delegate = self;
                     
                     [self setupTextFieldCellAppearance:textFieldCell];
+                    
+                    if (!field.editable && self.isEditing) {
+                        textFieldCell.textField.textColor = [UIColor lightGrayColor];
+                        textFieldCell.textField.userInteractionEnabled = NO;
+                    
+                    } else {
+                        textFieldCell.textField.textColor = [UIColor blackColor];
+                    }
                     
                     cell = textFieldCell;
                 }
@@ -291,7 +302,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 //                    } else {
 //                        defaultCell.type = kAPCDefaultTableViewCellTypeLeft;
 //                    }
-                    
+//                    
                     [self setupDefaultCellAppearance:defaultCell];
                     
                 } else if ([field isKindOfClass:[APCTableViewSegmentItem class]]) {
@@ -314,15 +325,17 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 } else {
                     if (!cell) {
                         cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
+                        
+
                     }
                     [self setupBasicCellAppearance:cell];
                 }
                 
                 if (self.isEditing && field.editable && !self.signUp) {
 //                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//                    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+                    cell.selectionStyle = UITableViewCellSelectionStyleGray;
                 } else{
-                    cell.accessoryType = UITableViewCellAccessoryNone;
+//                    cell.accessoryType = UITableViewCellAccessoryNone;
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 }
             }
@@ -369,12 +382,25 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                 case kAPCUserInfoItemTypeDateOfBirth:
                 {
-                    APCTableViewItem *field = [APCTableViewItem new];
+                    APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
+
+                    field.textAlignnment = NSTextAlignmentLeft;
+                    field.placeholder = NSLocalizedString(@"", @"");
                     field.caption = NSLocalizedString(@"Birthdate", @"");
-                    field.identifier = kAPCDefaultTableViewCellIdentifier;
+                    if (self.user.customSurveyQuestion) {
+                        field.value = [self.user.birthDate toStringWithFormat:NSDateDefaultDateFormat];
+                    }
                     field.editable = NO;
-                    field.textAlignnment = NSTextAlignmentRight;
-                    field.detailText = [self.user.birthDate toStringWithFormat:NSDateDefaultDateFormat];
+                    field.keyboardType = UIKeyboardTypeAlphabet;
+                    field.identifier = kAPCTextFieldTableViewCellIdentifier;
+                    
+                    field.style = UITableViewStylePlain;
+//                    field.placeholder = NSLocalizedString(@"", @"");
+//                    field.caption = NSLocalizedString(@"Birthdate", @"");
+//                    field.identifier = kAPCDefaultTableViewCellIdentifier;
+//                    field.editable = NO;
+//                    field.textAlignnment = NSTextAlignmentRight;
+//                    field.detailText = [self.user.birthDate toStringWithFormat:NSDateDefaultDateFormat];
                     
                     APCTableViewRow *row = [APCTableViewRow new];
                     row.item = field;
@@ -767,10 +793,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
     [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
     
-    [self.nameTextField setTextColor:[UIColor appSecondaryColor1]];
-    [self.nameTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
+    [self.nameTextField setTextColor:[UIColor blackColor]];
     
-    [self.emailTextField setTextColor:[UIColor appSecondaryColor1]];
+    [self.nameTextField setFont:[UIFont fontWithName:@"Helvetica-Bold" size:17]];
+    
+//    [self.emailTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.emailTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
     [self.profileImageButton.imageView.layer setCornerRadius:CGRectGetHeight(self.profileImageButton.bounds)/2];
@@ -1338,7 +1365,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     self.nameTextField.enabled = self.isEditing;
     
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadData];
+
+
+
 }
 
 @end

@@ -212,13 +212,13 @@ static CGFloat const kPickerCellHeight = 164.0f;
                 [self setupBasicCellAppearance:cell];
             }
             
-            if (self.isEditing && field.editable && !self.signUp) {
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                cell.selectionStyle = UITableViewCellSelectionStyleGray;
-            } else{
-                cell.accessoryType = UITableViewCellAccessoryNone;
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            }
+//            if (self.isEditing && field.editable && !self.signUp) {
+//                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//                cell.selectionStyle = UITableViewCellSelectionStyleGray;
+//            } else{
+//                cell.accessoryType = UITableViewCellAccessoryNone;
+//                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//            }
         }
         
     }

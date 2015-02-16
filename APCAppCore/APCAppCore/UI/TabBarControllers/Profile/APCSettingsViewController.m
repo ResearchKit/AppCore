@@ -50,7 +50,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
         {
             APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
-            field.caption = NSLocalizedString(@"Reminder", @"");
+            field.caption = NSLocalizedString(@"All Task Reminders", @"");
             field.identifier = kAPCSwitchCellIdentifier;
             field.editable = NO;
             APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
@@ -78,7 +78,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         }
      
         APCTableViewSection *section = [APCTableViewSection new];
-        section.sectionTitle = NSLocalizedString(@"Reminder", @"");
+        section.sectionTitle = NSLocalizedString(@"", @"");
         section.rows = [NSArray arrayWithArray:rowItems];
         [items addObject:section];
     }
@@ -224,18 +224,18 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (void)setupDefaultCellAppearance:(APCDefaultTableViewCell *)cell
 {
-    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
-    [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
+    [cell.textLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
+    [cell.textLabel setTextColor:[UIColor blackColor]];
     
-    [cell.detailTextLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
-    [cell.detailTextLabel setTextColor:[UIColor appSecondaryColor2]];
+    [cell.detailTextLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
+    [cell.detailTextLabel setTextColor:[UIColor blackColor]];
 
 }
 
 - (void)setupSwitchCellAppearance:(APCSwitchTableViewCell *)cell
 {
-    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
-    [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
+    [cell.textLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
+    [cell.textLabel setTextColor:[UIColor blackColor]];
 }
 
 /*********************************************************************************/
