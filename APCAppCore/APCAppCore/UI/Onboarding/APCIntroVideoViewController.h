@@ -9,6 +9,6 @@
 
 @interface APCIntroVideoViewController : MPMoviePlayerViewController
 
-- (void) skip;
+- (void)dismiss;
 
 @end

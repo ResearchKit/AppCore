@@ -212,13 +212,19 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
             sumFoodValue += [food[kFoodInsightValueKey] doubleValue];
         }
         
-        NSMutableDictionary *foodItem = [NSMutableDictionary new];
-        foodItem[kFoodInsightFoodGenericNameKey] = item;
-        foodItem[kFoodInsightValueKey] = @(sumFoodValue);
-        foodItem[kFoodInsightFrequencyKey] = @([countedSet countForObject:item]);
-        foodItem[kFoodInsightCaloriesValueKey] = [self percentOfSampleCalories:@(sumFoodValue)];
+        NSNumber *caloriesFromSample = [self percentOfSampleCalories:@(sumFoodValue)];
         
-        [markedDataset addObject:foodItem];
+        double percentCalories = [caloriesFromSample doubleValue] * 100;
+        
+        if (percentCalories >= 20) {
+            NSMutableDictionary *foodItem = [NSMutableDictionary new];
+            foodItem[kFoodInsightFoodGenericNameKey] = item;
+            foodItem[kFoodInsightValueKey] = @(sumFoodValue);
+            foodItem[kFoodInsightFrequencyKey] = @([countedSet countForObject:item]);
+            foodItem[kFoodInsightCaloriesValueKey] = caloriesFromSample;
+            
+            [markedDataset addObject:foodItem];
+        }
     }
     
     // Sort dataset by frequency in desending order

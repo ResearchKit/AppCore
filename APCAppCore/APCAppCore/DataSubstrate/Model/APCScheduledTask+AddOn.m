@@ -52,7 +52,7 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     }
     else if(self.results.count > 1)
     {
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"updatedAt" ascending:NO];
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"endDate" ascending:NO];
         NSArray * sortedArray = [self.results sortedArrayUsingDescriptors:@[sortDescriptor]];
         retValue = [sortedArray firstObject];
     }
@@ -140,7 +140,14 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
             [filteredArray addObject:scheduledTask];
         }
     }
-    return filteredArray.count ? filteredArray : nil;
+    
+    NSArray * finalArray = filteredArray;
+    //Filtering multiday tasks that were completed yesterday or older
+    if (completed == nil) {
+        finalArray = [self filterTasksCompletedYesterdayOrOlder:filteredArray];
+    }
+    
+    return finalArray.count ? finalArray : nil;
 }
 
 + (BOOL) userHasCompletedActivitiesInThePastInContext: (NSManagedObjectContext*) context {
@@ -161,6 +168,25 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     NSArray * array = [context executeFetchRequest:request error:&error];
     APCLogError2 (error);
     return array.count ? [array firstObject] : nil;
+}
+
++ (NSArray*) filterTasksCompletedYesterdayOrOlder: (NSArray*) scheduledTasksArray
+{
+    NSMutableArray * filteredArray = [NSMutableArray array];
+    NSDate * todayAtMidnight = [NSDate todayAtMidnight];
+    [scheduledTasksArray enumerateObjectsUsingBlock:^(APCScheduledTask * obj, NSUInteger idx, BOOL *stop) {
+        
+        if ([obj.completed isEqualToNumber:@YES]) {
+            if (obj.lastResult.endDate.timeIntervalSinceReferenceDate >= todayAtMidnight.timeIntervalSinceReferenceDate) {
+                [filteredArray addObject:obj];
+            }
+        }
+        else
+        {
+            [filteredArray addObject:obj];
+        }
+    }];
+    return filteredArray;
 }
 
 /*********************************************************************************/

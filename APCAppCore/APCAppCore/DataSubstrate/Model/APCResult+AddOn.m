@@ -32,6 +32,8 @@ static NSDictionary * lookupDictionary;
 {
     apcResult.taskRunID = taskResult.taskRunUUID.UUIDString;
     apcResult.taskID = taskResult.identifier;
+    apcResult.startDate = taskResult.startDate;
+    apcResult.endDate = taskResult.endDate;
 }
 
 /*********************************************************************************/

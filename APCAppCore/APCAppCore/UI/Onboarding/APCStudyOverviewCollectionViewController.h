@@ -8,8 +8,11 @@
 #import <UIKit/UIKit.h>
 #import "APCTableViewItem.h"
 #import "APCTintedTableViewCell.h"
+#import "APCStudyOverviewCollectionViewCell.h"
+#import "APCStudyVideoCollectionViewCell.h"
+@import MessageUI;
 
-@interface APCStudyOverviewCollectionViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate>
+@interface APCStudyOverviewCollectionViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, APCStudyVideoCollectionViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UIView *headerView;
