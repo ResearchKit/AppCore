@@ -157,7 +157,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     if (indexPath.section >= self.items.count) {
         
         if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"APCDefaultTableViewCell"];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
         }
         
         UIView *view = nil;
@@ -220,6 +220,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             
             APCTableViewItem *field = [self itemForIndexPath:indexPath];
             
+            if ([field.caption isEqualToString:@"What time do you generally go to sleep?"]) {
+                
+            }
+            
             if (field) {
                 
                 cell = [tableView dequeueReusableCellWithIdentifier:field.identifier];
@@ -279,6 +283,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                     APCTableViewDatePickerItem *datePickerField = (APCTableViewDatePickerItem *)field;
                     APCDefaultTableViewCell *defaultCell = (APCDefaultTableViewCell *)cell;
+                    
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+                    
+
                     
                     if (datePickerField.date) {
                         NSString *dateWithFormat = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
@@ -340,14 +348,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
                     }
                     [self setupBasicCellAppearance:cell];
-                }
-                
-                if (self.isEditing && field.editable && !self.signUp) {
-//                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                    cell.selectionStyle = UITableViewCellSelectionStyleGray;
-                } else{
-//                    cell.accessoryType = UITableViewCellAccessoryNone;
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 }
             }
         }

@@ -159,11 +159,6 @@
                                         <constraint firstAttribute="trailingMargin" secondItem="1g6-nj-qsu" secondAttribute="trailing" constant="6" id="W4W-0G-6b1"/>
                                         <constraint firstAttribute="centerY" secondItem="dxl-CJ-CsB" secondAttribute="centerY" constant="0.5" id="bCo-bi-P2t"/>
                                     </constraints>
-                                    <variation key="default">
-                                        <mask key="constraints">
-                                            <exclude reference="VcN-bl-SnP"/>
-                                        </mask>
-                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="textField" destination="1g6-nj-qsu" id="Ey6-8Z-Uq5"/>
