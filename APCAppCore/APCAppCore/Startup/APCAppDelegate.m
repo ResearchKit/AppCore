@@ -372,7 +372,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
         
         if (animationUrl != nil)
         {
-            NSURL*      url   = [NSURL URLWithString:animationUrl];
+            NSURL*      url   = [[NSBundle mainBundle] URLForResource:animationUrl withExtension:@"m4v"];
             NSError*    error = nil;
             
             NSAssert([url checkResourceIsReachableAndReturnError:&error] == YES, @"Animation file--%@--not reachable: %@", animationUrl, error);
