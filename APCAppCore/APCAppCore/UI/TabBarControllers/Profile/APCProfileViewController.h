@@ -8,7 +8,10 @@
 #import <UIKit/UIKit.h>
 #import "APCUserInfoViewController.h"
 
-@interface APCProfileViewController : APCUserInfoViewController <APCPickerTableViewCellDelegate, APCTextFieldTableViewCellDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,UITextFieldDelegate>
+
+@protocol APCProfileViewControllerDelegate;
+
+@interface APCProfileViewController : APCUserInfoViewController <APCPickerTableViewCellDelegate, APCTextFieldTableViewCellDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,UITextFieldDelegate, APCSwitchTableViewCellDelegate>
 
 @property (nonatomic, strong) APCUser *user;
 
@@ -18,7 +21,7 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 
-@property (weak, nonatomic) IBOutlet UITextField *emailTextField;
+@property (weak, nonatomic) IBOutlet UILabel *emailTextField;
 
 @property (weak, nonatomic) IBOutlet UILabel *editLabel;
 
@@ -34,11 +37,10 @@
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *rightBarButton;
 
+@property (assign) id <APCProfileViewControllerDelegate> delegate;
+
 @property (nonatomic, strong) UIImage *profileImage;
 
-- (IBAction)showSettings:(id)sender;
-
-- (IBAction)signOut:(id)sender;
 
 - (IBAction)leaveStudy:(id)sender;
 
@@ -52,4 +54,23 @@
 
 - (NSArray *)prepareContent;
 
+@end
+
+
+@protocol APCProfileViewControllerDelegate <NSObject>
+@optional
+
+- (UIView *)cellForRowAtAdjustedIndexPath:(NSIndexPath *)indexPath;
+
+- (BOOL)willDisplayCell:(NSIndexPath *)indexPath;
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView;
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInAdjustedSection:(NSInteger)section;
+
+- (NSArray *)preparedContent:(NSArray *)array;
+
+- (void)navigationController:(UINavigationController *)navigationController didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtAdjustedIndexPath:(NSIndexPath *)indexPath;
 @end

@@ -145,7 +145,7 @@ NSString * const kTaskReminderMessage = @"Complete your activities for today!";
     return timeString;
 }
 
-- (void)setReminderTime:(NSString *)reminderTime
+- (void)setReminderTime:(NSString *)reminderTime 
 {
     [self updateReminderTime:reminderTime];
     [self updateTasksReminder];

@@ -27,14 +27,22 @@ typedef NS_ENUM(APCTableViewItemType, APCUserInfoItemType) {
     kAPCUserInfoItemTypeSleepTime,
     kAPCUserInfoItemTypeWakeUpTime,
     kAPCUserInfoItemTypeGlucoseLevel,
-    kAPCUserInfoItemTypeCustomSurvey
+    kAPCUserInfoItemTypeCustomSurvey,
+    kAPCSettingsItemTypeAutoLock,
+    kAPCSettingsItemTypePasscode,
+    kAPCSettingsItemTypeReminderOnOff,
+    kAPCSettingsItemTypeReminderTime,
+    kAPCSettingsItemTypePermissions,
+    kAPCUserInfoItemTypeReviewConsent
 };
+
 
 typedef NS_ENUM(APCTableViewItemType, APCTableViewStudyItemType) {
     kAPCTableViewStudyItemTypeStudyDetails,
     kAPCTableViewStudyItemTypeShare,
     kAPCTableViewStudyItemTypeReviewConsent
 };
+
 
 typedef NS_ENUM(APCTableViewItemType, APCTableViewLearnItemType) {
     kAPCTableViewLearnItemTypeStudyDetails,

@@ -9,6 +9,7 @@
 #import "APCDataSubstrate.h"
 #import "APCOnboarding.h"
 #import "APCPasscodeViewController.h"
+#import "APCProfileViewController.h"
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector;
 
@@ -23,6 +24,8 @@
 @property (strong, nonatomic) APCScheduler * scheduler;
 @property (strong, nonatomic) APCTasksReminderManager * tasksReminder;
 @property (strong, nonatomic) APCPassiveDataCollector * passiveDataCollector;
+
+@property (strong, nonatomic) APCProfileViewController * profileViewController;
 
 //Initialization Methods
 @property (nonatomic, strong) NSDictionary * initializationOptions;
@@ -59,6 +62,7 @@
 
 //To be called from Datasubstrate
 - (void) setUpCollectors;
+- (id <APCProfileViewControllerDelegate>) profileExtender;
 
 - (void)showPasscodeIfNecessary;
 

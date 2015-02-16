@@ -44,8 +44,7 @@ static CGFloat const kPickerCellHeight = 164.0f;
 
 - (void)setupBasicCellAppearance:(UITableViewCell *)cell
 {
-    [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
-    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
+    [cell.textLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
 }
 
 #pragma mark - UITableViewDataSource methods
@@ -214,13 +213,13 @@ static CGFloat const kPickerCellHeight = 164.0f;
                 [self setupBasicCellAppearance:cell];
             }
             
-            if (self.isEditing && field.editable && !self.signUp) {
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                cell.selectionStyle = UITableViewCellSelectionStyleGray;
-            } else{
-                cell.accessoryType = UITableViewCellAccessoryNone;
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            }
+//            if (self.isEditing && field.editable && !self.signUp) {
+//                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//                cell.selectionStyle = UITableViewCellSelectionStyleGray;
+//            } else{
+//                cell.accessoryType = UITableViewCellAccessoryNone;
+//                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//            }
         }
         
     }
