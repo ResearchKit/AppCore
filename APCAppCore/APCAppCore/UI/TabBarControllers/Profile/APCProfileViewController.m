@@ -331,6 +331,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     if (!cell) {
                         cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
                         
+                        cell.textLabel.frame = CGRectMake(12.0, cell.textLabel.frame.origin.y, cell.textLabel.frame.size.width, cell.textLabel.frame.size.height);
 
                     }
                     [self setupBasicCellAppearance:cell];
