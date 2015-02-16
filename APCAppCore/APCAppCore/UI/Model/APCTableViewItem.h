@@ -30,6 +30,8 @@
 
 @property (nonatomic, copy) NSString *placeholder;
 
+@property (nonatomic) BOOL showChevron;
+
 @property (nonatomic, readwrite, getter=isEditable) BOOL editable;
 
 @end

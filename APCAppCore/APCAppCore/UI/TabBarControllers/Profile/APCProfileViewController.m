@@ -229,6 +229,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 
                 cell.detailTextLabel.textColor = [UIColor blackColor];
                 
+                if (field.showChevron) {
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+                }
+                
                 if (!field.editable && self.isEditing) {
                     cell.detailTextLabel.textColor = [UIColor lightGrayColor];
                 }
@@ -638,15 +643,15 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
      NSMutableArray *rowItems = [NSMutableArray new];
      
      {
-     APCTableViewItem *field = [APCTableViewItem new];
-     field.caption = NSLocalizedString(@"Activity Reminders", @"");
-     field.identifier = kAPCDefaultTableViewCellIdentifier;
-     field.editable = NO;
-     
-     APCTableViewRow *row = [APCTableViewRow new];
-     row.item = field;
-     row.itemType = kAPCSettingsItemTypeReminderOnOff;
-     [rowItems addObject:row];
+         APCTableViewItem *field = [APCTableViewItem new];
+         field.caption = NSLocalizedString(@"Activity Reminders", @"");
+         field.identifier = kAPCDefaultTableViewCellIdentifier;
+         field.editable = NO;
+         field.showChevron = YES;
+         APCTableViewRow *row = [APCTableViewRow new];
+         row.item = field;
+         row.itemType = kAPCSettingsItemTypeReminderOnOff;
+         [rowItems addObject:row];
      }
 
 //     {
