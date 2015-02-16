@@ -30,7 +30,7 @@ static CGFloat const kPickerCellHeight = 164.0f;
 static NSString * const kAPCBasicTableViewCellIdentifier = @"APCBasicTableViewCell";
 static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetailTableViewCell";
 
-@interface APCProfileViewController ()
+@interface APCProfileViewController () <ORKTaskViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 
@@ -917,7 +917,40 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             }
                 break;
             case kAPCUserInfoItemTypeReviewConsent:
-
+            {
+                APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+                
+                NSArray*                sections  = [appDelegate consentSections];
+                ORKConsentDocument*     consent   = [[ORKConsentDocument alloc] init];
+                ORKConsentSignature*    signature = [ORKConsentSignature signatureForPersonWithTitle:NSLocalizedString(@"Participant", nil)
+                                                                                    dateFormatString:nil
+                                                                                          identifier:@"participant"];
+                
+                consent.title                = NSLocalizedString(@"Consent", nil);
+                consent.signaturePageTitle   = NSLocalizedString(@"Consent", nil);
+                consent.signaturePageContent = NSLocalizedString(@"I agree to participate in this research Study.", nil);
+                consent.sections             = sections;
+                
+                [consent addSignature:signature];
+                
+                
+                ORKVisualConsentStep*   step         = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual" document:consent];
+                
+                ORKOrderedTask* task = [[ORKOrderedTask alloc] initWithIdentifier:@"consent" steps:@[step]];
+                
+                ORKTaskViewController*  consentVC = [[ORKTaskViewController alloc] initWithTask:task taskRunUUID:[NSUUID UUID]];
+                
+                
+                
+                ORKTaskViewController *delegateConsentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+                
+                delegateConsentVC = consentVC;
+                delegateConsentVC.delegate = self;
+                
+                [self presentViewController:consentVC animated:YES completion:nil];
+                
+            }
+                
                 break;
                 
             case kAPCSettingsItemTypeReminderOnOff:
@@ -1376,5 +1409,15 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 
 }
+
+- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController {
+    [self dismissViewControllerAnimated:taskViewController completion:nil];
+}
+
+- (void)taskViewControllerDidComplete:(ORKTaskViewController *)taskViewController {
+    [self dismissViewControllerAnimated:taskViewController completion:nil];
+}
+
+
 
 @end
