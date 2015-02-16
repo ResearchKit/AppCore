@@ -160,14 +160,14 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
         }
         
-        UIView *view = nil;
+        UITableViewCell *view = nil;
         if ([self.delegate respondsToSelector:@selector(cellForRowAtAdjustedIndexPath:)])
         {
             NSInteger adjustedSectionForExtender = indexPath.section - self.items.count;
             
             NSIndexPath *newIndex = [NSIndexPath indexPathForRow:indexPath.row inSection:adjustedSectionForExtender];
             
-            view = [self.delegate cellForRowAtAdjustedIndexPath:newIndex];
+            cell = [self.delegate cellForRowAtAdjustedIndexPath:newIndex];
         }
     
         if (view) {
