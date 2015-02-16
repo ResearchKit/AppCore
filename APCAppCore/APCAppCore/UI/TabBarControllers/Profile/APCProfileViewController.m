@@ -698,8 +698,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedString(@"Change Passcode", @"");
-            field.identifier = kAPCBasicTableViewCellIdentifier;
-            field.textAlignnment = NSTextAlignmentRight;
+            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.textAlignnment = NSTextAlignmentLeft;
             field.editable = NO;
             
             APCTableViewRow *row = [APCTableViewRow new];
@@ -710,7 +710,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
-        section.sectionTitle = @"Security";
         [items addObject:section];
     }
 
