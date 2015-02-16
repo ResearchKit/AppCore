@@ -41,9 +41,6 @@
 
 @property (nonatomic, strong) UIImage *profileImage;
 
-- (IBAction)showSettings:(id)sender;
-
-- (IBAction)signOut:(id)sender;
 
 - (IBAction)leaveStudy:(id)sender;
 
