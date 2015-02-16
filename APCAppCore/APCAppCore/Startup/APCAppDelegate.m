@@ -736,14 +736,10 @@ static NSUInteger const kIndexOfProfileTab = 3;
         self.secureView = [[UIView alloc] initWithFrame:self.window.rootViewController.view.bounds];
         
         UIImage *blurredImage = [self.window.rootViewController.view blurredSnapshot];
-        UIImage *appIcon = [UIImage imageNamed:@"AppIcon-Flexible" inBundle:[NSBundle mainBundle] compatibleWithTraitCollection:nil];
+        UIImage *appIcon = [UIImage imageNamed:@"logo_disease" inBundle:[NSBundle mainBundle] compatibleWithTraitCollection:nil];
         UIImageView *blurredImageView = [[UIImageView alloc] initWithImage:blurredImage];
         UIImageView *appIconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, 180, 180)];
-        appIconImageView.layer.borderWidth = 2.0;
-        appIconImageView.layer.borderColor = [[UIColor appPrimaryColor] CGColor];
-        appIconImageView.layer.cornerRadius = 30.0;
-        appIconImageView.layer.masksToBounds = YES;
-        
+
         appIconImageView.image = appIcon;
         appIconImageView.center = blurredImageView.center;
         
