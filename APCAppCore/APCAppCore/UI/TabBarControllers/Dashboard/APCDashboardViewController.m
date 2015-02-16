@@ -239,7 +239,7 @@
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardInsightItem class]]){
         height = 90.0f;
     } else {
-        height = 65.0f;
+        height = 75.0f;
     }
     
     return height;
@@ -384,6 +384,11 @@
 #pragma mark - APCDashboardInsightsTableViewCell Delegate
 
 - (void) dashboardInsightDidExpandForCell: (APCDashboardInsightsTableViewCell *) __unused cell
+{
+    
+}
+
+- (void)dashboardInsightDidAskForMoreInfoForCell:(APCDashboardInsightsTableViewCell *) __unused cell
 {
     
 }
