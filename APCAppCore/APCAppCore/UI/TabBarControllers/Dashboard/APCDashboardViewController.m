@@ -39,7 +39,6 @@
 {
     [super viewDidLayoutSubviews];
     
-    [self.view layoutIfNeeded];
 }
 
 - (void)viewWillAppear:(BOOL)animated
