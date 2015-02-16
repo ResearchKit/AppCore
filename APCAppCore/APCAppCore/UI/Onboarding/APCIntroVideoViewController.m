@@ -23,7 +23,7 @@ static NSString *const kVideoShownKey = @"VideoShown";
 - (instancetype) initWithContentURL:(NSURL *)contentURL {
     self = [super initWithContentURL:contentURL];
     if (self) {
-        self.moviePlayer.controlStyle = MPMovieControlStyleNone;
+        self.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
     }
     
     return self;
@@ -68,26 +68,19 @@ static NSString *const kVideoShownKey = @"VideoShown";
     
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
 #pragma mark - Notifications
 
 - (void) playbackDidFinish:(NSNotification*)notification {
     int reason = [[[notification userInfo] valueForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
-    if (reason == MPMovieFinishReasonPlaybackEnded) {
-        [self skip];
+    if (reason == MPMovieFinishReasonPlaybackEnded || reason == MPMovieFinishReasonUserExited) {
+        [self dismiss];
     }
 }
 
 
 #pragma mark - Public Methods
 
-- (void) skip {
-    APCStudyOverviewViewController * vc = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"StudyOverviewVC"];
-    [self.navigationController pushViewController:vc animated:YES];
+- (void) dismiss {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end
