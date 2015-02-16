@@ -372,7 +372,11 @@ static NSUInteger const kIndexOfProfileTab = 3;
         
         if (animationUrl != nil)
         {
-            section.customAnimationURL = nil;
+            NSURL*      url   = [[NSBundle mainBundle] URLForResource:animationUrl withExtension:@"m4v"];
+            NSError*    error = nil;
+            
+            NSAssert([url checkResourceIsReachableAndReturnError:&error] == YES, @"Animation file--%@--not reachable: %@", animationUrl, error);
+            section.customAnimationURL = url;
         }
         
         [consentSections addObject:section];
