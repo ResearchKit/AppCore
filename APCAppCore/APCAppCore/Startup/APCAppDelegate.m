@@ -371,7 +371,11 @@ static NSUInteger const kIndexOfActivitesTab = 0;
         
         if (animationUrl != nil)
         {
-            section.customAnimationURL = nil;
+            NSURL*      url   = [NSURL URLWithString:animationUrl];
+            NSError*    error = nil;
+            
+            NSAssert([url checkResourceIsReachableAndReturnError:&error] == YES, @"Animation file--%@--not reachable: %@", animationUrl, error);
+            section.customAnimationURL = url;
         }
         
         [consentSections addObject:section];
