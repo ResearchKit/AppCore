@@ -1418,6 +1418,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     [self dismissViewControllerAnimated:taskViewController completion:nil];
 }
 
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *)step withError:(NSError *)error {
+    APCLogError2(error);
+}
 
 
 @end
