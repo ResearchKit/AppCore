@@ -44,8 +44,7 @@ static CGFloat const kPickerCellHeight = 164.0f;
 
 - (void)setupBasicCellAppearance:(UITableViewCell *)cell
 {
-    [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
-    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
+    [cell.textLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
 }
 
 #pragma mark - UITableViewDataSource methods

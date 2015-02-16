@@ -41,6 +41,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyLabelCenterYConstraint;
 @property (strong, nonatomic) APCPermissionsManager *permissionManager;
 
+@property (weak, nonatomic) IBOutlet UILabel *applicationNameLabel;
+
+
 @end
 
 @implementation APCProfileViewController
@@ -218,6 +221,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 
                 cell.selectionStyle = field.selectionStyle;
                 cell.textLabel.text = field.caption;
+                
+                if (!field.editable && self.isEditing) {
+                    cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+                }
+                
                 cell.detailTextLabel.text = field.detailText;
                 
                 if ([field isKindOfClass:[APCTableViewTextFieldItem class]]) {
@@ -311,8 +319,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 }
                 
                 if (self.isEditing && field.editable && !self.signUp) {
-                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+//                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//                    cell.selectionStyle = UITableViewCellSelectionStyleGray;
                 } else{
                     cell.accessoryType = UITableViewCellAccessoryNone;
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -444,41 +452,43 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                 case kAPCUserInfoItemTypeHeight:
                 {
-                    APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
+
+                    APCTableViewItem *field = [APCTableViewItem new];
                     field.caption = NSLocalizedString(@"Height", @"");
-                    field.pickerData = [APCUser heights];
+//                    field.pickerData = [APCUser heights];
+                    field.editable = NO;
                     field.textAlignnment = NSTextAlignmentRight;
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
-#warning this needs a solution. This causes a crash.
-                    
-                    NSInteger defaultIndexOfMyHeightInFeet = 5;
-                    NSInteger defaultIndexOfMyHeightInInches = 0;
-                    NSInteger indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
-                    NSInteger indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
-                    
+//#warning this needs a solution. This causes a crash.
+//                    
+//                    NSInteger defaultIndexOfMyHeightInFeet = 5;
+//                    NSInteger defaultIndexOfMyHeightInInches = 0;
+//                    NSInteger indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
+//                    NSInteger indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
+//                    
                     if (self.user.height) {
                         
-                        double heightInInches = roundf([APCUser heightInInches:self.user.height]);
-                        NSString *feet = [NSString stringWithFormat:@"%d'", (int)heightInInches/12];
-                        NSString *inches = [NSString stringWithFormat:@"%d''", (int)heightInInches%12];
-                        
-                        NSArray *allPossibleHeightsInFeet = field.pickerData [0];
-                        NSArray *allPossibleHeightsInInches = field.pickerData [1];
-                        
-                        indexOfMyHeightInFeet = [allPossibleHeightsInFeet indexOfObject: feet];
-                        indexOfMyHeightInInches = [allPossibleHeightsInInches indexOfObject: inches];
-                        
-                        if (indexOfMyHeightInFeet == NSNotFound)
-                        {
-                            indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
-                        }
-                        
-                        if (indexOfMyHeightInInches == NSNotFound)
-                        {
-                            indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
-                        }
-                        
-                        field.selectedRowIndices = @[ @(indexOfMyHeightInFeet), @(indexOfMyHeightInInches) ];
+//                        double heightInInches = roundf([APCUser heightInInches:self.user.height]);
+//                        NSString *feet = [NSString stringWithFormat:@"%d'", (int)heightInInches/12];
+//                        NSString *inches = [NSString stringWithFormat:@"%d''", (int)heightInInches%12];
+//                        
+//                        NSArray *allPossibleHeightsInFeet = field.pickerData [0];
+//                        NSArray *allPossibleHeightsInInches = field.pickerData [1];
+//                        
+//                        indexOfMyHeightInFeet = [allPossibleHeightsInFeet indexOfObject: feet];
+//                        indexOfMyHeightInInches = [allPossibleHeightsInInches indexOfObject: inches];
+//                        
+//                        if (indexOfMyHeightInFeet == NSNotFound)
+//                        {
+//                            indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
+//                        }
+//                        
+//                        if (indexOfMyHeightInInches == NSNotFound)
+//                        {
+//                            indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
+//                        }
+//                        
+//                        field.selectedRowIndices = @[ @(indexOfMyHeightInFeet), @(indexOfMyHeightInInches) ];
 
                     }
                     
@@ -794,21 +804,21 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (void)setupTextFieldCellAppearance:(APCTextFieldTableViewCell *)cell
 {
-    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
-    [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
+    [cell.textLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
+    [cell.textLabel setTextColor:[UIColor blackColor]];
     
     [cell.textField setFont:[UIFont appRegularFontWithSize:17.0f]];
-    [cell.textField setTextColor:[UIColor appSecondaryColor1]];
+    [cell.textField setTextColor:[UIColor blackColor]];
 }
 
 
 - (void)setupDefaultCellAppearance:(APCDefaultTableViewCell *)cell
 {
-    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
-    [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
+    [cell.textLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
+    [cell.textLabel setTextColor:[UIColor blackColor]];
     
     [cell.detailTextLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
-    [cell.detailTextLabel setTextColor:[UIColor appSecondaryColor1]];
+    [cell.detailTextLabel setTextColor:[UIColor blackColor]];
 }
 
 #pragma mark - UITableViewDelegate methods
@@ -1054,11 +1064,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                 case kAPCUserInfoItemTypeHeight:
                 {
-                    double height = [APCUser heightInInchesForSelectedIndices:[(APCTableViewCustomPickerItem *)item selectedRowIndices]];
-                    HKUnit *inchUnit = [HKUnit inchUnit];
-                    HKQuantity *heightQuantity = [HKQuantity quantityWithUnit:inchUnit doubleValue:height];
-                    
-                    self.user.height = heightQuantity;
+//                    double height = [APCUser heightInInchesForSelectedIndices:[(APCTableViewCustomPickerItem *)item selectedRowIndices]];
+//                    HKUnit *inchUnit = [HKUnit inchUnit];
+//                    HKQuantity *heightQuantity = [HKQuantity quantityWithUnit:inchUnit doubleValue:height];
+//                    
+//                    self.user.height = heightQuantity;
                 }
                     
                     break;
