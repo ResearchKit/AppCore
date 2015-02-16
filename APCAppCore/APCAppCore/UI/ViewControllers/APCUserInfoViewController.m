@@ -50,183 +50,183 @@ static CGFloat const kPickerCellHeight = 164.0f;
 
 #pragma mark - UITableViewDataSource methods
 
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-//{
-//    return self.items.count;
-//}
-//
-//- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-//{
-//    APCTableViewSection *itemsSection = self.items[section];
-//    
-//    NSInteger count = itemsSection.rows.count;
-//    
-//    if (self.isPickerShowing && self.pickerIndexPath.section == section) {
-//        count ++;
-//    }
-//    
-//    return count;
-//}
-//
-//- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    UITableViewCell *cell;
-//    
-//    if (self.pickerIndexPath && [self.pickerIndexPath isEqual:indexPath]) {
-//        cell = [tableView dequeueReusableCellWithIdentifier:kAPCPickerTableViewCellIdentifier];
-//        
-//        NSIndexPath *actualIndexPath = [NSIndexPath indexPathForRow:(indexPath.row - 1) inSection:indexPath.section];
-//        APCTableViewItem *field = [self itemForIndexPath:actualIndexPath];
-//        
-//        APCPickerTableViewCell *pickerCell = (APCPickerTableViewCell *)cell;
-//        
-//        if ([field isKindOfClass:[APCTableViewDatePickerItem class]]) {
-//            
-//            APCTableViewDatePickerItem *datePickerField = (APCTableViewDatePickerItem *)field;
-//            
-//            pickerCell.type = kAPCPickerCellTypeDate;
-//            if (datePickerField.date) {
-//                pickerCell.datePicker.date = datePickerField.date;
-//            }
-//            
-//            pickerCell.datePicker.datePickerMode = datePickerField.datePickerMode;
-//            if (datePickerField.minimumDate) {
-//                pickerCell.datePicker.minimumDate = datePickerField.minimumDate;
-//            }
-//            if (datePickerField.maximumDate) {
-//                pickerCell.datePicker.maximumDate = datePickerField.maximumDate;
-//            }
-//            pickerCell.delegate = self;
-//            
-//            [self setupPickerCellAppeareance:pickerCell];
-//            
-//        } else if ([field isKindOfClass:[APCTableViewCustomPickerItem class]]){
-//            
-//            APCTableViewCustomPickerItem *customPickerField = (APCTableViewCustomPickerItem *)field;
-//            pickerCell.type = kAPCPickerCellTypeCustom;
-//            pickerCell.pickerValues = customPickerField.pickerData;
-//            [pickerCell.pickerView reloadAllComponents];
-//            pickerCell.delegate = self;
-//            pickerCell.selectedRowIndices = customPickerField.selectedRowIndices;
-//            
-//            [self setupPickerCellAppeareance:pickerCell];
-//        }
-//        
-//    } else {
-//        
-//        APCTableViewItem *field = [self itemForIndexPath:indexPath];
-//        
-//        if (field) {
-//            
-//            cell = [tableView dequeueReusableCellWithIdentifier:field.identifier];
-//            
-//            cell.selectionStyle = field.selectionStyle;
-//            cell.textLabel.text = field.caption;
-//            cell.detailTextLabel.text = field.detailText;
-//            
-//            if ([field isKindOfClass:[APCTableViewTextFieldItem class]]) {
-//                
-//                APCTableViewTextFieldItem *textFieldItem = (APCTableViewTextFieldItem *)field;
-//                APCTextFieldTableViewCell *textFieldCell = (APCTextFieldTableViewCell *)cell;
-//                
-//                textFieldCell.textField.placeholder = textFieldItem.placeholder;
-//                textFieldCell.textField.text = textFieldItem.value;
-//                textFieldCell.textField.secureTextEntry = textFieldItem.isSecure;
-//                textFieldCell.textField.keyboardType = textFieldItem.keyboardType;
-//                textFieldCell.textField.returnKeyType = textFieldItem.returnKeyType;
-//                textFieldCell.textField.clearButtonMode = textFieldItem.clearButtonMode;
-//                textFieldCell.textField.text = textFieldItem.value;
-//                textFieldCell.textField.enabled = self.isEditing;
-//                
-//                if (field.textAlignnment == NSTextAlignmentRight) {
-//                    textFieldCell.type = kAPCTextFieldCellTypeRight;
-//                } else {
-//                    textFieldCell.type = kAPCTextFieldCellTypeLeft;
-//                }
-//                
-//                textFieldCell.delegate = self;
-//                
-//                [self setupTextFieldCellAppearance:textFieldCell];
-//                
-//                cell = textFieldCell;
-//            }
-//            else if ([field isKindOfClass:[APCTableViewDatePickerItem class]]) {
-//                
-//                APCTableViewDatePickerItem *datePickerField = (APCTableViewDatePickerItem *)field;
-//                APCDefaultTableViewCell *defaultCell = (APCDefaultTableViewCell *)cell;
-//                
-//                if (datePickerField.date) {
-//                    NSString *dateWithFormat = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
-//                    defaultCell.detailTextLabel.text = dateWithFormat;
-//                    defaultCell.detailTextLabel.textColor = [UIColor appSecondaryColor1];
-//                } else {
-//                    defaultCell.detailTextLabel.text = field.placeholder;
-//                    defaultCell.detailTextLabel.textColor = [UIColor appSecondaryColor3];
-//                }
-//                
-//                
-//                if (field.textAlignnment == NSTextAlignmentRight) {
-//                    defaultCell.type = kAPCDefaultTableViewCellTypeRight;
-//                } else {
-//                    defaultCell.type = kAPCDefaultTableViewCellTypeLeft;
-//                }
-//                
-//                [self setupDefaultCellAppearance:defaultCell];
-//                
-//            }
-//            else if ([field isKindOfClass:[APCTableViewCustomPickerItem class]]) {
-//                
-//                APCTableViewCustomPickerItem *customPickerField = (APCTableViewCustomPickerItem *)field;
-//                APCDefaultTableViewCell *defaultCell = (APCDefaultTableViewCell *)cell;
-//                
-//                defaultCell.detailTextLabel.text = customPickerField.stringValue;
-//                
-//                if (field.textAlignnment == NSTextAlignmentRight) {
-//                    defaultCell.type = kAPCDefaultTableViewCellTypeRight;
-//                } else {
-//                    defaultCell.type = kAPCDefaultTableViewCellTypeLeft;
-//                }
-//                
-//                [self setupDefaultCellAppearance:defaultCell];
-//                
-//            } else if ([field isKindOfClass:[APCTableViewSegmentItem class]]) {
-//                
-//                APCTableViewSegmentItem *segmentPickerField = (APCTableViewSegmentItem *)field;
-//                APCSegmentedTableViewCell *segmentedCell = (APCSegmentedTableViewCell *)cell;
-//                segmentedCell.delegate = self;
-//                segmentedCell.selectedSegmentIndex = segmentPickerField.selectedIndex;
-//                segmentedCell.userInteractionEnabled = segmentPickerField.editable;
-//                
-//            } else if ([field isKindOfClass:[APCTableViewSwitchItem class]]) {
-//                
-//                APCTableViewSwitchItem *switchField = (APCTableViewSwitchItem *)field;
-//                APCSwitchTableViewCell *switchCell = (APCSwitchTableViewCell *)cell;
-//                switchCell.textLabel.text = switchField.caption;
-//                switchCell.cellSwitch.on = switchField.on;
-//                switchCell.delegate = self;
-//                
-//                [self setupSwitchCellAppearance:switchCell];
-//            } else {
-//                if (!cell) {
-//                    cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
-//                }
-//                [self setupBasicCellAppearance:cell];
-//            }
-//            
-//            if (self.isEditing && field.editable && !self.signUp) {
-//                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//                cell.selectionStyle = UITableViewCellSelectionStyleGray;
-//            } else{
-//                cell.accessoryType = UITableViewCellAccessoryNone;
-//                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//            }
-//        }
-//        
-//    }
-//    
-//    return cell;
-//}
-//
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return self.items.count;
+}
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    APCTableViewSection *itemsSection = self.items[section];
+    
+    NSInteger count = itemsSection.rows.count;
+    
+    if (self.isPickerShowing && self.pickerIndexPath.section == section) {
+        count ++;
+    }
+    
+    return count;
+}
+
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell;
+    
+    if (self.pickerIndexPath && [self.pickerIndexPath isEqual:indexPath]) {
+        cell = [tableView dequeueReusableCellWithIdentifier:kAPCPickerTableViewCellIdentifier];
+        
+        NSIndexPath *actualIndexPath = [NSIndexPath indexPathForRow:(indexPath.row - 1) inSection:indexPath.section];
+        APCTableViewItem *field = [self itemForIndexPath:actualIndexPath];
+        
+        APCPickerTableViewCell *pickerCell = (APCPickerTableViewCell *)cell;
+        
+        if ([field isKindOfClass:[APCTableViewDatePickerItem class]]) {
+            
+            APCTableViewDatePickerItem *datePickerField = (APCTableViewDatePickerItem *)field;
+            
+            pickerCell.type = kAPCPickerCellTypeDate;
+            if (datePickerField.date) {
+                pickerCell.datePicker.date = datePickerField.date;
+            }
+            
+            pickerCell.datePicker.datePickerMode = datePickerField.datePickerMode;
+            if (datePickerField.minimumDate) {
+                pickerCell.datePicker.minimumDate = datePickerField.minimumDate;
+            }
+            if (datePickerField.maximumDate) {
+                pickerCell.datePicker.maximumDate = datePickerField.maximumDate;
+            }
+            pickerCell.delegate = self;
+            
+            [self setupPickerCellAppeareance:pickerCell];
+            
+        } else if ([field isKindOfClass:[APCTableViewCustomPickerItem class]]){
+            
+            APCTableViewCustomPickerItem *customPickerField = (APCTableViewCustomPickerItem *)field;
+            pickerCell.type = kAPCPickerCellTypeCustom;
+            pickerCell.pickerValues = customPickerField.pickerData;
+            [pickerCell.pickerView reloadAllComponents];
+            pickerCell.delegate = self;
+            pickerCell.selectedRowIndices = customPickerField.selectedRowIndices;
+            
+            [self setupPickerCellAppeareance:pickerCell];
+        }
+        
+    } else {
+        
+        APCTableViewItem *field = [self itemForIndexPath:indexPath];
+        
+        if (field) {
+            
+            cell = [tableView dequeueReusableCellWithIdentifier:field.identifier];
+            
+            cell.selectionStyle = field.selectionStyle;
+            cell.textLabel.text = field.caption;
+            cell.detailTextLabel.text = field.detailText;
+            
+            if ([field isKindOfClass:[APCTableViewTextFieldItem class]]) {
+                
+                APCTableViewTextFieldItem *textFieldItem = (APCTableViewTextFieldItem *)field;
+                APCTextFieldTableViewCell *textFieldCell = (APCTextFieldTableViewCell *)cell;
+                
+                textFieldCell.textField.placeholder = textFieldItem.placeholder;
+                textFieldCell.textField.text = textFieldItem.value;
+                textFieldCell.textField.secureTextEntry = textFieldItem.isSecure;
+                textFieldCell.textField.keyboardType = textFieldItem.keyboardType;
+                textFieldCell.textField.returnKeyType = textFieldItem.returnKeyType;
+                textFieldCell.textField.clearButtonMode = textFieldItem.clearButtonMode;
+                textFieldCell.textField.text = textFieldItem.value;
+                textFieldCell.textField.enabled = self.isEditing;
+                
+                if (field.textAlignnment == NSTextAlignmentRight) {
+                    textFieldCell.type = kAPCTextFieldCellTypeRight;
+                } else {
+                    textFieldCell.type = kAPCTextFieldCellTypeLeft;
+                }
+                
+                textFieldCell.delegate = self;
+                
+                [self setupTextFieldCellAppearance:textFieldCell];
+                
+                cell = textFieldCell;
+            }
+            else if ([field isKindOfClass:[APCTableViewDatePickerItem class]]) {
+                
+                APCTableViewDatePickerItem *datePickerField = (APCTableViewDatePickerItem *)field;
+                APCDefaultTableViewCell *defaultCell = (APCDefaultTableViewCell *)cell;
+                
+                if (datePickerField.date) {
+                    NSString *dateWithFormat = [datePickerField.date toStringWithFormat:datePickerField.dateFormat];
+                    defaultCell.detailTextLabel.text = dateWithFormat;
+                    defaultCell.detailTextLabel.textColor = [UIColor appSecondaryColor1];
+                } else {
+                    defaultCell.detailTextLabel.text = field.placeholder;
+                    defaultCell.detailTextLabel.textColor = [UIColor appSecondaryColor3];
+                }
+                
+                
+                if (field.textAlignnment == NSTextAlignmentRight) {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeRight;
+                } else {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeLeft;
+                }
+                
+                [self setupDefaultCellAppearance:defaultCell];
+                
+            }
+            else if ([field isKindOfClass:[APCTableViewCustomPickerItem class]]) {
+                
+                APCTableViewCustomPickerItem *customPickerField = (APCTableViewCustomPickerItem *)field;
+                APCDefaultTableViewCell *defaultCell = (APCDefaultTableViewCell *)cell;
+                
+                defaultCell.detailTextLabel.text = customPickerField.stringValue;
+                
+                if (field.textAlignnment == NSTextAlignmentRight) {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeRight;
+                } else {
+                    defaultCell.type = kAPCDefaultTableViewCellTypeLeft;
+                }
+                
+                [self setupDefaultCellAppearance:defaultCell];
+                
+            } else if ([field isKindOfClass:[APCTableViewSegmentItem class]]) {
+                
+                APCTableViewSegmentItem *segmentPickerField = (APCTableViewSegmentItem *)field;
+                APCSegmentedTableViewCell *segmentedCell = (APCSegmentedTableViewCell *)cell;
+                segmentedCell.delegate = self;
+                segmentedCell.selectedSegmentIndex = segmentPickerField.selectedIndex;
+                segmentedCell.userInteractionEnabled = segmentPickerField.editable;
+                
+            } else if ([field isKindOfClass:[APCTableViewSwitchItem class]]) {
+                
+                APCTableViewSwitchItem *switchField = (APCTableViewSwitchItem *)field;
+                APCSwitchTableViewCell *switchCell = (APCSwitchTableViewCell *)cell;
+                switchCell.textLabel.text = switchField.caption;
+                switchCell.cellSwitch.on = switchField.on;
+                switchCell.delegate = self;
+                
+                [self setupSwitchCellAppearance:switchCell];
+            } else {
+                if (!cell) {
+                    cell = [[UITableViewCell alloc] initWithStyle:field.style reuseIdentifier:field.identifier];
+                }
+                [self setupBasicCellAppearance:cell];
+            }
+            
+            if (self.isEditing && field.editable && !self.signUp) {
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                cell.selectionStyle = UITableViewCellSelectionStyleGray;
+            } else{
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+        }
+        
+    }
+    
+    return cell;
+}
+
 #pragma mark - UITableViewDelegate methods
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

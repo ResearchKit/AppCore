@@ -49,47 +49,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         NSMutableArray *rowItems = [NSMutableArray new];
         
         {
-            APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
-            field.selectionStyle = UITableViewCellSelectionStyleGray;
-            field.caption = NSLocalizedString(@"Auto-Lock", @"");
-            field.detailDiscloserStyle = YES;
-            field.textAlignnment = NSTextAlignmentRight;
-            field.pickerData = @[[APCParameters autoLockOptionStrings]];
-            
-            NSNumber *numberOfMinutes = [self.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
-            NSInteger index = [[APCParameters autoLockValues] indexOfObject:numberOfMinutes];
-            field.selectedRowIndices = @[@(index)];
-            
-            APCTableViewRow *row = [APCTableViewRow new];
-            row.item = field;
-            row.itemType = kAPCSettingsItemTypeAutoLock;
-            [rowItems addObject:row];
-        }
-        
-        {
-            APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = NSLocalizedString(@"Change Passcode", @"");
-            field.identifier = kAPCBasicTableViewCellIdentifier;
-            field.textAlignnment = NSTextAlignmentRight;
-            field.editable = NO;
-            
-            APCTableViewRow *row = [APCTableViewRow new];
-            row.item = field;
-            row.itemType = kAPCSettingsItemTypePasscode;
-            [rowItems addObject:row];
-        }
-        
-        APCTableViewSection *section = [APCTableViewSection new];
-        section.rows = [NSArray arrayWithArray:rowItems];
-        section.sectionTitle = @"Security";
-        [items addObject:section];
-    }
-    
-    {
-        NSMutableArray *rowItems = [NSMutableArray new];
-        
-        {
             APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
             field.caption = NSLocalizedString(@"Reminder", @"");
             field.identifier = kAPCSwitchCellIdentifier;
@@ -124,27 +83,72 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         [items addObject:section];
     }
 
-    {
-        NSMutableArray *rowItems = [NSMutableArray new];
-        
-        {
-            APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = NSLocalizedString(@"Permissions", @"");
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
-            field.textAlignnment = NSTextAlignmentRight;
-            field.editable = NO;
+
+    
+    
+    /*************/
+    
+    //Get all the tasks
+    NSManagedObjectContext * context = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext;
+    
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"APCTask" inManagedObjectContext:context];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSError *error;
+    NSArray *array = [context executeFetchRequest:request error:&error];
+    
+    APCLogError2(error);
+    
+    
+    
+    NSMutableArray *rowItems = [NSMutableArray new];
+    
+    for (APCTask *task in array) {
+        if (task.taskTitle) {
             
-            APCTableViewRow *row = [APCTableViewRow new];
-            row.item = field;
-            row.itemType = kAPCSettingsItemTypePermissions;
-            [rowItems addObject:row];
+            {
+                {
+                    APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
+                    field.caption = NSLocalizedString(task.taskTitle, @"");
+                    field.identifier = kAPCSwitchCellIdentifier;
+                    field.editable = NO;
+                    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+                    field.on = appDelegate.tasksReminder.reminderOn;
+                    
+                    APCTableViewRow *row = [APCTableViewRow new];
+                    row.item = field;
+                    row.itemType = kAPCSettingsItemTypeReminderOnOff;
+                    [rowItems addObject:row];
+                }
+                
+                {
+                    APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
+                    field.caption = NSLocalizedString(@"Reminder Time", @"");
+                    field.pickerData = @[[APCTasksReminderManager reminderTimesArray]];
+                    field.textAlignnment = NSTextAlignmentRight;
+                    field.identifier = kAPCDefaultTableViewCellIdentifier;
+                    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+                    field.selectedRowIndices = @[@([[APCTasksReminderManager reminderTimesArray] indexOfObject:appDelegate.tasksReminder.reminderTime])];
+                    
+                    APCTableViewRow *row = [APCTableViewRow new];
+                    row.item = field;
+                    row.itemType = kAPCSettingsItemTypeReminderTime;
+                    [rowItems addObject:row];
+                }
+            }
         }
-        
-        APCTableViewSection *section = [APCTableViewSection new];
-        section.rows = [NSArray arrayWithArray:rowItems];
-        section.sectionTitle = @"";
-        [items addObject:section];
     }
+    
+    APCTableViewSection *section = [APCTableViewSection new];
+    
+    section.rows = [NSArray arrayWithArray:rowItems];
+    [items addObject:section];
+
+    
+    /*************/
     
     return [NSArray arrayWithArray:items];
 }

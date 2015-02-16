@@ -590,6 +590,47 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         [items addObject:section];
     }
     */
+    
+    
+     {
+     NSMutableArray *rowItems = [NSMutableArray new];
+     
+     {
+     APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
+     field.caption = NSLocalizedString(@"Activity Reminders", @"");
+     field.identifier = kAPCSwitchCellIdentifier;
+     field.editable = NO;
+     APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+     field.on = appDelegate.tasksReminder.reminderOn;
+     
+     APCTableViewRow *row = [APCTableViewRow new];
+     row.item = field;
+     row.itemType = kAPCSettingsItemTypeReminderOnOff;
+     [rowItems addObject:row];
+     }
+
+     {
+     APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
+     field.caption = NSLocalizedString(@"Reminder Time", @"");
+     field.pickerData = @[[APCTasksReminderManager reminderTimesArray]];
+     field.textAlignnment = NSTextAlignmentRight;
+     field.identifier = kAPCDefaultTableViewCellIdentifier;
+     APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+     field.selectedRowIndices = @[@([[APCTasksReminderManager reminderTimesArray] indexOfObject:appDelegate.tasksReminder.reminderTime])];
+     
+     APCTableViewRow *row = [APCTableViewRow new];
+     row.item = field;
+     row.itemType = kAPCSettingsItemTypeReminderTime;
+     [rowItems addObject:row];
+     }
+     
+
+     APCTableViewSection *section = [APCTableViewSection new];
+
+     section.rows = [NSArray arrayWithArray:rowItems];
+     [items addObject:section];
+     }
+
 
     
     {
@@ -603,11 +644,17 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.detailDiscloserStyle = YES;
             field.textAlignnment = NSTextAlignmentRight;
             field.pickerData = @[[APCParameters autoLockOptionStrings]];
-#warning TODO crasher
-//            NSNumber *numberOfMinutes = [self.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
-//            NSInteger index = [[APCParameters autoLockValues] indexOfObject:numberOfMinutes];
-//            field.selectedRowIndices = @[@(index)];
+
+#warning This may be just a temporary fix
             
+            NSNumber *numberOfMinutes = [self.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
+            
+            if ( numberOfMinutes != nil)
+            {
+                NSInteger index = [[APCParameters autoLockValues] indexOfObject:numberOfMinutes];
+                field.selectedRowIndices = @[@(index)];
+            }
+
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
             row.itemType = kAPCSettingsItemTypeAutoLock;
@@ -632,45 +679,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         section.sectionTitle = @"Security";
         [items addObject:section];
     }
-    
-    {
-        NSMutableArray *rowItems = [NSMutableArray new];
-        
-        {
-            APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
-            field.caption = NSLocalizedString(@"Reminder", @"");
-            field.identifier = kAPCSwitchCellIdentifier;
-            field.editable = NO;
-            APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-            field.on = appDelegate.tasksReminder.reminderOn;
-            
-            APCTableViewRow *row = [APCTableViewRow new];
-            row.item = field;
-            row.itemType = kAPCSettingsItemTypeReminderOnOff;
-            [rowItems addObject:row];
-        }
-    
-        {
-            APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-            field.caption = NSLocalizedString(@"Reminder Time", @"");
-            field.pickerData = @[[APCTasksReminderManager reminderTimesArray]];
-            field.textAlignnment = NSTextAlignmentRight;
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
-            APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-            field.selectedRowIndices = @[@([[APCTasksReminderManager reminderTimesArray] indexOfObject:appDelegate.tasksReminder.reminderTime])];
-            
-            APCTableViewRow *row = [APCTableViewRow new];
-            row.item = field;
-            row.itemType = kAPCSettingsItemTypeReminderTime;
-            [rowItems addObject:row];
-        }
-        
-        APCTableViewSection *section = [APCTableViewSection new];
-        section.sectionTitle = NSLocalizedString(@"Reminder", @"");
-        section.rows = [NSArray arrayWithArray:rowItems];
-        [items addObject:section];
-    }
-    
+
     {
         NSMutableArray *rowItems = [NSMutableArray new];
         
@@ -684,6 +693,19 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
             row.itemType = kAPCSettingsItemTypePermissions;
+            [rowItems addObject:row];
+        }
+        
+        {
+            APCTableViewItem *field = [APCTableViewItem new];
+            field.caption = NSLocalizedString(@"Review Consent", @"");
+            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.textAlignnment = NSTextAlignmentRight;
+            field.editable = NO;
+            
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = field;
+            row.itemType = kAPCUserInfoItemTypeReviewConsent;
             [rowItems addObject:row];
         }
         
@@ -854,6 +876,17 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
             }
                 break;
+            case kAPCUserInfoItemTypeReviewConsent:
+            {
+
+                
+                APCSettingsViewController *remindersTableViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSettingsViewController"];
+                
+                [self.navigationController pushViewController:remindersTableViewController animated:YES];
+                
+            }
+                break;
+                
                 
             default:{
                 [super tableView:tableView didSelectRowAtIndexPath:indexPath];
@@ -982,7 +1015,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void)loadProfileValuesInModel
 {
     self.user.name = self.nameTextField.text;
-    //self.user.email = self.emailTextField.text;
     
     if (self.profileImage) {
         self.user.profileImage = UIImageJPEGRepresentation(self.profileImage, 1.0);
@@ -1068,6 +1100,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
                     break;
                     
+                case kAPCUserInfoItemTypeReviewConsent:
+                    
+                    break;
                 default:
                     NSAssert(itemType <= kAPCUserInfoItemTypeWakeUpTime, @"ASSERT_MESSAGE");
                     break;
@@ -1145,11 +1180,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 #pragma mark - IBActions
 
-- (IBAction)showSettings:(id)sender
-{
-    APCSettingsViewController *settingsViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSettingsViewController"];
-    [self.navigationController pushViewController:settingsViewController animated:YES];
-}
+//- (IBAction)showSettings:(id)sender
+//{
+//    APCSettingsViewController *settingsViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSettingsViewController"];
+//    [self.navigationController pushViewController:settingsViewController animated:YES];
+//}
 
 - (IBAction)signOut:(id)sender
 {

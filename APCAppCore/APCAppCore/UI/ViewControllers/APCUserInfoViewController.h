@@ -25,7 +25,7 @@
 
 @property (nonatomic, strong) NSIndexPath *pickerIndexPath;
 
-@property (nonatomic, getter=isEditing) BOOL editing;
+@property (nonatomic, getter=isEditing, setter=setEditing:) BOOL editing;
 
 @property (nonatomic, getter=isSignup) BOOL signUp;
 
