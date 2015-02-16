@@ -11,8 +11,8 @@
 
 static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
-@interface APCEligibleViewController () <RKSTTaskViewControllerDelegate>
-@property (strong, nonatomic) RKSTTaskViewController *consentVC;
+@interface APCEligibleViewController () <ORKTaskViewControllerDelegate>
+@property (strong, nonatomic) ORKTaskViewController *consentVC;
 @end
 
 @implementation APCEligibleViewController
@@ -75,26 +75,26 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     
 }
 
-#pragma mark - RKSTTaskViewControllerDelegate methods
+#pragma mark - ORKTaskViewControllerDelegate methods
 
 //called on notification
--(void)returnControlOfTaskDelegate: (id)sender{
+-(void)returnControlOfTaskDelegate: (id) __unused sender{
     
     self.consentVC.delegate = self;
     
 }
 
-- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
+- (void)taskViewControllerDidComplete: (ORKTaskViewController *)taskViewController
 {
     
-    RKSTConsentSignatureResult *consentResult;
+    ORKConsentSignatureResult *consentResult;
     if ([taskViewController respondsToSelector:@selector(signatureResult)]) {
         APCConsentTaskViewController *consentTaskViewController = (APCConsentTaskViewController *)taskViewController;
         if (consentTaskViewController.signatureResult) {
             consentResult = consentTaskViewController.signatureResult;
         }
     }else{
-        consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
+        consentResult = (ORKConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
     }
     
     if (consentResult.signature.requiresName && (consentResult.signature.firstName && consentResult.signature.lastName)) {
@@ -121,12 +121,12 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     }
 }
 
-- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
+- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController
 {
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *) __unused step withError:(NSError *) __unused error
 {
     //TODO: Figure out what to do if it fails
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
@@ -147,7 +147,7 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
-- (IBAction)startConsentTapped:(id)sender
+- (IBAction)startConsentTapped:(id) __unused sender
 {
 #if DEVELOPMENT
     [self startSignUp];

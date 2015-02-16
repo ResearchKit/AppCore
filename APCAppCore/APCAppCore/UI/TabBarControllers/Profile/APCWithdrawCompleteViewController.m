@@ -44,13 +44,13 @@
 }
 
 
-- (IBAction)takeSurvey:(id)sender
+- (IBAction) takeSurvey: (id) __unused sender
 {
     APCWithdrawSurveyViewController *viewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWithdrawSurveyViewController"];
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
-- (IBAction)noThanks:(id)sender
+- (IBAction) noThanks: (id) __unused sender
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:APCUserWithdrawStudyNotification object:self];
 }

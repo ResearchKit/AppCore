@@ -117,22 +117,22 @@
     }
 }
 
-- (IBAction)skip:(id)sender
+- (IBAction) skip: (id) __unused sender
 {
     self.user.signedIn = YES;
 }
 
-- (IBAction)changeEmailAddress:(id)sender
+- (IBAction) changeEmailAddress: (id) __unused sender
 {
     
 }
 
-- (IBAction)secretButton:(id)sender
+- (IBAction) secretButton: (id) __unused sender
 {
     self.user.signedIn = YES;
 }
 
-- (IBAction)resendEmail:(id)sender
+- (IBAction) resendEmail: (id) __unused sender
 {
     [self.user resendEmailVerificationOnCompletion:^(NSError *error) {
         if (error != nil) {

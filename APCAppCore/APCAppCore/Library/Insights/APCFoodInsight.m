@@ -10,12 +10,12 @@
 static NSString *kLoseItBundleIdentifier        = @"com.fitnow.loseit";
 static NSString *kLoseItFoodImageNameKey        = @"HKFoodImageName";
 
-static NSString *kFoodInsightFoodNameKey        = @"foodNameKey";
-static NSString *kFoodInsightFoodGenericNameKey = @"foodGenericNameKey";
-static NSString *kFoodInsightValueKey           = @"foodValueKey";
-static NSString *kFoodInsightCaloriesValueKey   = @"foodCaloriesValueKey";
-static NSString *kFoodInsightFrequencyKey       = @"foodFrequencyKey";
-static NSString *kFoodInsightUUIDKey            = @"foodUUIDKey";
+NSString * const kFoodInsightFoodNameKey        = @"foodNameKey";
+NSString * const kFoodInsightFoodGenericNameKey = @"foodGenericNameKey";
+NSString * const kFoodInsightValueKey           = @"foodValueKey";
+NSString * const kFoodInsightCaloriesValueKey   = @"foodCaloriesValueKey";
+NSString * const kFoodInsightFrequencyKey       = @"foodFrequencyKey";
+NSString * const kFoodInsightUUIDKey            = @"foodUUIDKey";
 
 static NSInteger kLastSevenDays = -7; // This is a negative integer because we need to go back in time.
                                       // In order to do so, we need to pass a negative integer to the NSDateComponents object.
@@ -37,7 +37,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 
 @property (nonatomic, strong) HKSource *source;
 
-@property (nonatomic, strong) NSArray *foodHistory;
 @property (nonatomic, strong) NSNumber *totalCalories;
 
 @end
@@ -69,8 +68,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
                                                  selector:@selector(foodInsightDataCollectionIsDone:)
                                                      name:kAPHFoodInsightDataCollectionIsCompletedNotification
                                                    object:nil];
-        
-        [self configureSource];
     }
     
     return self;
@@ -81,13 +78,18 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)insight
+{
+    [self configureSource];
+}
+
 #pragma mark - Source
 
 - (void)configureSource
 {
     HKSourceQuery *sourceQuery = [[HKSourceQuery alloc] initWithSampleType:_sampleType
                                                            samplePredicate:nil
-                                                         completionHandler:^(HKSourceQuery *query, NSSet *sources, NSError *error)
+                                                         completionHandler:^(HKSourceQuery * __unused query, NSSet *sources, NSError *error)
     {
         if (error) {
             APCLogError2(error);
@@ -116,10 +118,12 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
                               HKPredicateKeyPathEndDate, self.endDate,
                               HKPredicateKeyPathSource, self.source];
     
-    HKStatisticsQuery *query = [[HKStatisticsQuery alloc] initWithQuantityType:self.caloriesQuantityType
-                                                       quantitySamplePredicate:predicate
-                                                                       options:HKStatisticsOptionCumulativeSum
-                                                             completionHandler:^(HKStatisticsQuery *query, HKStatistics *result, NSError *error)
+    HKStatisticsQuery *query = [[HKStatisticsQuery alloc] initWithQuantityType: self.caloriesQuantityType
+                                                       quantitySamplePredicate: predicate
+                                                                       options: HKStatisticsOptionCumulativeSum
+                                                             completionHandler: ^(HKStatisticsQuery * __unused query,
+                                                                                  HKStatistics *result,
+                                                                                  NSError *error)
     {
         if (error) {
             APCLogError2(error);
@@ -134,19 +138,21 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
     [self.healthStore executeQuery:query];
 }
 
-- (void)queryForSampleType:(HKSampleType *)sampleType
-                      unit:(HKUnit *)unit
+- (void) queryForSampleType: (HKSampleType *) sampleType
+                       unit: (HKUnit *) __unused unit
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K >= %@) AND (%K <= %@) and (%K = %@)",
                               HKPredicateKeyPathStartDate, self.startDate,
                               HKPredicateKeyPathEndDate, self.endDate,
                               HKPredicateKeyPathSource, self.source];
     
-    HKSampleQuery *query = [[HKSampleQuery alloc] initWithSampleType:sampleType
-                                                           predicate:predicate
-                                                               limit:HKObjectQueryNoLimit
-                                                     sortDescriptors:nil
-                                                      resultsHandler:^(HKSampleQuery *query, NSArray *results, NSError *error)
+    HKSampleQuery *query = [[HKSampleQuery alloc] initWithSampleType: sampleType
+                                                           predicate: predicate
+                                                               limit: HKObjectQueryNoLimit
+                                                     sortDescriptors: nil
+                                                      resultsHandler: ^(HKSampleQuery * __unused query,
+                                                                        NSArray *results,
+                                                                        NSError *error)
     {
         if (error) {
             APCLogError2(error);
@@ -179,11 +185,11 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 
 #pragma mark - Notification
 
-- (void)foodInsightDataCollectionIsDone:(NSNotification *)notification
+- (void) foodInsightDataCollectionIsDone: (NSNotification *) __unused notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self.delegate respondsToSelector:@selector(didCompleteFoodInsight:)]) {
-            [self.delegate didCompleteFoodInsight:self.foodHistory];
+        if ([self.delegate respondsToSelector:@selector(didCompleteFoodInsightForSampleType:insight:)]) {
+            [self.delegate didCompleteFoodInsightForSampleType:self.sampleType insight:self.foodHistory];
         }
     });
 }
@@ -206,13 +212,19 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
             sumFoodValue += [food[kFoodInsightValueKey] doubleValue];
         }
         
-        NSMutableDictionary *foodItem = [NSMutableDictionary new];
-        foodItem[kFoodInsightFoodGenericNameKey] = item;
-        foodItem[kFoodInsightValueKey] = @(sumFoodValue);
-        foodItem[kFoodInsightFrequencyKey] = @([countedSet countForObject:item]);
-        foodItem[kFoodInsightCaloriesValueKey] = [self percentOfSampleCalories:@(sumFoodValue)];
+        NSNumber *caloriesFromSample = [self percentOfSampleCalories:@(sumFoodValue)];
         
-        [markedDataset addObject:foodItem];
+        double percentCalories = [caloriesFromSample doubleValue] * 100;
+        
+        if (percentCalories >= 20) {
+            NSMutableDictionary *foodItem = [NSMutableDictionary new];
+            foodItem[kFoodInsightFoodGenericNameKey] = item;
+            foodItem[kFoodInsightValueKey] = @(sumFoodValue);
+            foodItem[kFoodInsightFrequencyKey] = @([countedSet countForObject:item]);
+            foodItem[kFoodInsightCaloriesValueKey] = caloriesFromSample;
+            
+            [markedDataset addObject:foodItem];
+        }
     }
     
     // Sort dataset by frequency in desending order

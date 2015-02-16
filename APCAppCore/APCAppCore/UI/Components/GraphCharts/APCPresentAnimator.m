@@ -9,7 +9,7 @@
 
 @implementation APCPresentAnimator
 
-- (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext
+- (NSTimeInterval) transitionDuration: (id <UIViewControllerContextTransitioning>) __unused transitionContext
 {
     return 0.3;
 }
@@ -35,7 +35,7 @@
             toViewController.view.frame = finalFrame;
             
             
-        } completion:^(BOOL finished) {
+        } completion:^(BOOL __unused finished) {
             [transitionContext completeTransition:YES];
         }];
         
@@ -50,7 +50,7 @@
             fromViewController.view.transform = CGAffineTransformMakeRotation(0);
             fromViewController.view.frame = self.initialFrame;
             fromViewController.view.alpha = 0;
-        } completion:^(BOOL finished) {
+        } completion:^(BOOL __unused finished) {
             [transitionContext completeTransition:YES];
         }];
     }

@@ -14,7 +14,7 @@
 
 static NSString * const kServerInvalidEmailErrorString = @"Invalid username or password.";
 
-@interface APCSignInViewController () <RKSTTaskViewControllerDelegate>
+@interface APCSignInViewController () <ORKTaskViewControllerDelegate>
 
 @end
 
@@ -203,7 +203,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 
 - (void)showConsent
 {
-    RKSTTaskViewController *consentViewController = [((APCAppDelegate*)[UIApplication sharedApplication].delegate) consentViewController];
+    ORKTaskViewController *consentViewController = [((APCAppDelegate*)[UIApplication sharedApplication].delegate) consentViewController];
     consentViewController.delegate = self;
     [self.navigationController presentViewController:consentViewController animated:YES completion:nil];
 }
@@ -234,12 +234,12 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 - (void)handleConsentConflict
 {
     UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign In", @"") message:NSLocalizedString(@"You have previously withdrawn from this Study. Do you wish to rejoin?", nil) preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Rejoin", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Rejoin", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         [self rejoinStudy];
     }];
     [alertContorller addAction:yesAction];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         
     }];
     [alertContorller addAction:cancelAction];
@@ -264,14 +264,14 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     }];
 }
 
-#pragma mark - RKSTTaskViewControllerDelegate methods
+#pragma mark - ORKTaskViewControllerDelegate methods
 
-- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
+- (void)taskViewControllerDidComplete: (ORKTaskViewController *)taskViewController
 {
     APCUser *user = [self user];
     user.userConsented = YES;
     
-    RKSTConsentSignatureResult *consentResult = (RKSTConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
+    ORKConsentSignatureResult *consentResult = (ORKConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
     
     user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@", consentResult.signature.lastName ];
     user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
@@ -285,12 +285,12 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     }];
 }
 
-- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
+- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController
 {
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *) __unused step withError:(NSError *) __unused error
 {
     //TODO: Figure out what to do if it fails
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
@@ -324,7 +324,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     
 }
 
-- (IBAction)signIn:(id)sender
+- (IBAction) signIn: (id) __unused sender
 {
     if ([self.userHandleTextField isFirstResponder]) {
         [self.userHandleTextField resignFirstResponder];

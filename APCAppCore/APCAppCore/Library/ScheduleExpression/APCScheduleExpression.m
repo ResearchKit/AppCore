@@ -27,7 +27,7 @@
 
 @implementation APCScheduleExpression
 
-- (instancetype)initWithExpression:(NSString*)expression timeZero:(NSTimeInterval)timeZero
+- (instancetype)initWithExpression:(NSString*)expression timeZero:(NSTimeInterval) __unused timeZero
 {
     self = [self init];
 	

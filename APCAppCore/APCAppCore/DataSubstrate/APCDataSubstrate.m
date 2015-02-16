@@ -13,7 +13,9 @@
 
 @implementation APCDataSubstrate
 
-- (instancetype)initWithPersistentStorePath: (NSString*) storePath additionalModels:(NSManagedObjectModel *)mergedModels studyIdentifier:(NSString *)studyIdentifier
+- (instancetype) initWithPersistentStorePath: (NSString*) storePath
+                            additionalModels: (NSManagedObjectModel *) mergedModels
+                             studyIdentifier: (NSString *) __unused studyIdentifier
 {
     self = [super init];
     if (self) {
@@ -40,10 +42,17 @@
     [self.parameters setDelegate:self];
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 /*********************************************************************************/
 #pragma mark - Properties & Methods meant only for Categories
 /*************************************************s********************************/
-- (void)parameters:(APCParameters *)parameters didFailWithError:(NSError *)error {
+- (void) parameters: (APCParameters *) __unused parameters
+   didFailWithError: (NSError *) error
+{
     NSAssert(error, @"parameters are not loaded");
 }
 @end

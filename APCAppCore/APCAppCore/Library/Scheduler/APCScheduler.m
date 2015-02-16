@@ -110,7 +110,7 @@ static NSString * const kOneTimeSchedule = @"once";
     NSError * error;
     NSArray * array = [self.scheduleMOC executeFetchRequest:request error:&error];
     APCLogError2 (error);
-    [array enumerateObjectsUsingBlock:^(APCSchedule * schedule, NSUInteger idx, BOOL *stop) {
+    [array enumerateObjectsUsingBlock:^(APCSchedule * schedule, NSUInteger __unused idx, BOOL * __unused stop) {
         schedule.inActive = @(YES);
         NSError * saveError;
         [schedule saveToPersistentStore:&saveError];
@@ -128,7 +128,7 @@ static NSString * const kOneTimeSchedule = @"once";
     APCLogError2 (error);
     
     //Get completed scheduled tasks with that one time task. If they exist make the schedule inactive
-    [scheduleArray enumerateObjectsUsingBlock:^(APCSchedule * obj, NSUInteger idx, BOOL *stop) {
+    [scheduleArray enumerateObjectsUsingBlock:^(APCSchedule * obj, NSUInteger __unused idx, BOOL * __unused stop) {
         NSFetchRequest * request = [APCScheduledTask request];
         request.predicate = [NSPredicate predicateWithFormat:@"completed == %@ && task.taskID == %@", @(YES), obj.taskID];
         NSError * error;
@@ -163,7 +163,7 @@ static NSString * const kOneTimeSchedule = @"once";
 - (void) updateScheduledTasksBasedOnActiveSchedules
 {
     NSArray * activeSchedules = [self readActiveSchedules];
-    [activeSchedules enumerateObjectsUsingBlock:^(APCSchedule * schedule, NSUInteger idx, BOOL *stop) {
+    [activeSchedules enumerateObjectsUsingBlock:^(APCSchedule * schedule, NSUInteger __unused idx, BOOL * __unused stop) {
         [self updateScheduledTasksForSchedule:schedule];
     }];
 }
@@ -257,7 +257,7 @@ static NSString * const kOneTimeSchedule = @"once";
     NSArray * scheduledTasksArray = [self.allScheduledTasksForReferenceDate filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"task == %@", task]];
     
     NSMutableArray * filteredArray = [NSMutableArray array];
-    [scheduledTasksArray enumerateObjectsUsingBlock:^(APCScheduledTask * scheduledTask, NSUInteger idx, BOOL *stop) {
+    [scheduledTasksArray enumerateObjectsUsingBlock:^(APCScheduledTask * scheduledTask, NSUInteger __unused idx, BOOL * __unused stop) {
         if ([scheduledTask.dateRange compare:range] == kAPCDateRangeComparisonSameRange) {
             [filteredArray addObject:scheduledTask];
         }

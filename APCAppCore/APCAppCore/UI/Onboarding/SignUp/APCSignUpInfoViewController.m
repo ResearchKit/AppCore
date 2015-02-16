@@ -107,7 +107,7 @@ static CGFloat const kHeaderHeight = 127.0f;
 
 #pragma mark - Custom Methods
 
-- (void)setupPickerCellAppeareance:(APCPickerTableViewCell *)cell
+- (void)setupPickerCellAppeareance:(APCPickerTableViewCell *) __unused cell
 {
 
 }
@@ -121,7 +121,7 @@ static CGFloat const kHeaderHeight = 127.0f;
     [cell.textField setTextColor:[UIColor appSecondaryColor1]];
 }
 
-- (void)setupSegmentedCellAppearance:(APCSegmentedTableViewCell *)cell
+- (void)setupSegmentedCellAppearance:(APCSegmentedTableViewCell *) __unused cell
 {
     
 }

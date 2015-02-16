@@ -33,9 +33,12 @@
 {
     CGSize  contentSize = CGSizeMake(0.0, CGRectGetHeight(self.imageScroller.frame));
     NSUInteger  imageIndex = 0;
-    [self.imageScroller.subviews enumerateObjectsUsingBlock:^(UIView * view, NSUInteger idx, BOOL *stop) {
-        [view removeFromSuperview];
-    }];
+    [self.imageScroller.subviews enumerateObjectsUsingBlock: ^(UIView* view,
+                                                               NSUInteger __unused idx,
+                                                               BOOL* __unused stop)
+     {
+         [view removeFromSuperview];
+     }];
     
     for (NSString  *imageName  in  self.instructionalImages) {
         
@@ -63,9 +66,12 @@
     CGSize  contentSize = CGSizeMake(0.0, CGRectGetHeight(self.textScroller.frame));
     NSUInteger  paragraphIndex = 0;
     
-    [self.textScroller.subviews enumerateObjectsUsingBlock:^(UIView * view, NSUInteger idx, BOOL *stop) {
-        [view removeFromSuperview];
-    }];
+    [self.textScroller.subviews enumerateObjectsUsingBlock: ^(UIView* view,
+                                                              NSUInteger __unused idx,
+                                                              BOOL * __unused stop)
+     {
+         [view removeFromSuperview];
+     }];
 
     for (NSAttributedString  *string  in  self.localisedParagraphs) {
         
@@ -104,7 +110,10 @@
                                   NSParagraphStyleAttributeName:paragrapStyle
                                   };
     
-    [self.nonLocalisedParagraphs enumerateObjectsUsingBlock:^(NSString * paragraph, NSUInteger idx, BOOL *stop) {
+    [self.nonLocalisedParagraphs enumerateObjectsUsingBlock: ^(NSString* paragraph,
+                                                               NSUInteger idx,
+                                                               BOOL * __unused stop)
+     {
         NSMutableAttributedString * attributedHeadline;
         if (self.nonLocalisedHeadlines.count && self.nonLocalisedHeadlines.count >= idx) {
             NSString * headline = self.nonLocalisedHeadlines[idx];
@@ -178,12 +187,12 @@
 
 #pragma  mark  -  Scroll View Delegate Methods
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)sender
+- (void) scrollViewDidEndScrollingAnimation: (UIScrollView *) __unused sender
 {
     self.scrolledViaPageControl = NO;
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)sender
+- (void) scrollViewDidScroll: (UIScrollView *) __unused sender
 {
     if (self.wasScrolledViaPageControl == NO) {
         CGFloat  pageWidth = CGRectGetWidth(self.imageScroller.frame);

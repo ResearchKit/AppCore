@@ -26,13 +26,13 @@
 	return nil;
 }
 
-- (instancetype)temporaryChannel:(out NSError**)error
+- (instancetype)temporaryChannel:(out NSError**) __unused error
 {
 	return [[ZZDataChannel alloc] initWithData:[NSMutableData data]];
 }
 
 - (BOOL)replaceWithChannel:(id<ZZChannel>)channel
-					 error:(out NSError**)error
+					 error:(out NSError**) __unused error
 {
 	[(NSMutableData*)_allData setData:((ZZDataChannel*)channel)->_allData];
 	return YES;
@@ -57,7 +57,7 @@
 	return _allData;
 }
 
-- (id<ZZChannelOutput>)newOutput:(out NSError**)error
+- (id<ZZChannelOutput>)newOutput:(out NSError**) __unused error
 {
 	return [[ZZDataChannelOutput alloc] initWithData:(NSMutableData*)_allData];
 }

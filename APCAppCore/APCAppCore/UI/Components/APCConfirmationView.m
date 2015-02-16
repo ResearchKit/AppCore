@@ -75,7 +75,7 @@ static  short  coordinates[] = {
     }
 }
 
-- (void)drawRect:(CGRect)rect
+- (void)drawRect:(CGRect) __unused rect
 {
     CGRect  bounds = self.bounds;
     

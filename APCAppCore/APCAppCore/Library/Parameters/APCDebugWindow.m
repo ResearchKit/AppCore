@@ -17,7 +17,7 @@
 
 @implementation APCDebugWindow
 
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+- (void)motionEnded:(UIEventSubtype) __unused motion withEvent:(UIEvent *)event {
     if (self.enableDebuggerWindow) {
         if (event.type == UIEventTypeMotion && event.subtype == UIEventSubtypeMotionShake) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"DeviceShaken" object:self];

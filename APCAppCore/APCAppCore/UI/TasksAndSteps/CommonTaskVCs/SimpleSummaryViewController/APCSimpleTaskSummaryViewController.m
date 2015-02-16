@@ -76,11 +76,11 @@
 
 #pragma mark - Actions
 
-- (void)doneButtonTapped:(UIBarButtonItem *)sender
+- (void)doneButtonTapped:(UIBarButtonItem *) __unused sender
 {
     if (self.delegate != nil) {
         if ([self.delegate respondsToSelector:@selector(stepViewController:didFinishWithNavigationDirection:)] == YES) {
-            [self.delegate stepViewController:self didFinishWithNavigationDirection: RKSTStepViewControllerNavigationDirectionForward];
+            [self.delegate stepViewController:self didFinishWithNavigationDirection: ORKStepViewControllerNavigationDirectionForward];
         }
     }
 }

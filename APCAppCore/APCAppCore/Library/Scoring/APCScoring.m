@@ -190,7 +190,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 - (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
                                          unit:(HKUnit *)unit
                                  numberOfDays:(NSInteger)numberOfDays
-                                      groupBy:(APHTimelineGroups)groupBy
+                                      groupBy:(APHTimelineGroups) __unused groupBy
 {
     self = [super init];
     
@@ -556,7 +556,9 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                                                                                 intervalComponents:interval];
     
     // set the results handler
-    query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
+    query.initialResultsHandler = ^(HKStatisticsCollectionQuery * __unused query,
+                                    HKStatisticsCollection *results,
+                                    NSError *error) {
         if (!error) {
             NSDate *endDate = [[NSCalendar currentCalendar] dateBySettingHour:23
                                                                        minute:59
@@ -567,7 +569,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
             
             [results enumerateStatisticsFromDate:beginDate
                                           toDate:endDate
-                                       withBlock:^(HKStatistics *result, BOOL *stop) {
+                                       withBlock:^(HKStatistics *result, BOOL * __unused stop) {
                                            HKQuantity *quantity;
                                            
                                            if (isDecreteQuantity) {
@@ -641,7 +643,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                                                                                 intervalComponents:interval];
     
     // set the results handler
-    query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
+    query.initialResultsHandler = ^(HKStatisticsCollectionQuery * __unused query, HKStatisticsCollection *results, NSError *error) {
         if (!error) {
             NSDate *endDate = [[NSCalendar currentCalendar] dateBySettingHour:23
                                                                        minute:59
@@ -652,7 +654,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
             
             [results enumerateStatisticsFromDate:beginDate
                                           toDate:endDate
-                                       withBlock:^(HKStatistics *result, BOOL *stop) {
+                                       withBlock:^(HKStatistics *result, BOOL * __unused stop) {
                                            HKQuantity *quantity;
                                            
                                            if (isDecreteQuantity) {
@@ -789,7 +791,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 #pragma mark - Graph Datasource
 
-- (NSInteger)lineGraph:(APCLineGraphView *)graphView numberOfPointsInPlot:(NSInteger)plotIndex
+- (NSInteger)lineGraph:(APCLineGraphView *) __unused graphView numberOfPointsInPlot:(NSInteger)plotIndex
 {
     NSInteger numberOfPoints = 0;
     
@@ -801,7 +803,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return numberOfPoints;
 }
 
-- (NSInteger)numberOfPlotsInLineGraph:(APCLineGraphView *)graphView
+- (NSInteger)numberOfPlotsInLineGraph:(APCLineGraphView *) __unused graphView
 {
     NSUInteger numberOfPlots = 1;
     
@@ -811,17 +813,17 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return numberOfPlots;
 }
 
-- (CGFloat)minimumValueForLineGraph:(APCLineGraphView *)graphView
+- (CGFloat)minimumValueForLineGraph:(APCLineGraphView *) __unused graphView
 {
     return [[self minimumDataPoint] doubleValue];
 }
 
-- (CGFloat)maximumValueForLineGraph:(APCLineGraphView *)graphView
+- (CGFloat)maximumValueForLineGraph:(APCLineGraphView *) __unused graphView
 {
     return [[self maximumDataPoint] doubleValue];
 }
 
-- (CGFloat)lineGraph:(APCLineGraphView *)graphView plot:(NSInteger)plotIndex valueForPointAtIndex:(NSInteger)pointIndex
+- (CGFloat)lineGraph:(APCLineGraphView *) __unused graphView plot:(NSInteger)plotIndex valueForPointAtIndex:(NSInteger) __unused pointIndex
 {
     CGFloat value;
     
@@ -836,7 +838,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return value;
 }
 
-- (NSString *)lineGraph:(APCLineGraphView *)graphView titleForXAxisAtIndex:(NSInteger)pointIndex
+- (NSString *)lineGraph:(APCLineGraphView *) __unused graphView titleForXAxisAtIndex:(NSInteger)pointIndex
 {
     NSDate *titleDate = nil;
     

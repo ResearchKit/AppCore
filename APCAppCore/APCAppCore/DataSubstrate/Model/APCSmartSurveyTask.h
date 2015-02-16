@@ -9,7 +9,7 @@
 #import <ResearchKit/ResearchKit.h>
 
 @class SBBSurvey;
-@interface APCSmartSurveyTask : NSObject <RKSTTask>
+@interface APCSmartSurveyTask : NSObject <ORKTask>
 
 @property (nonatomic, copy, readonly) NSString * identifier;
 

@@ -146,7 +146,7 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
 
 #pragma mark - Core Data
 
-- (void)retrieveDatasetForGlucoseForPeriod:(NSInteger)period
+- (void) retrieveDatasetForGlucoseForPeriod: (NSInteger) __unused period
 {
     NSArray *readings = nil;
     
@@ -186,7 +186,7 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
 - (void)statsCollectionQueryForQuantityType:(HKQuantityType *)quantityType
                                        unit:(HKUnit *)unit
                                  forReading:(NSDictionary *)reading
-                             withCompletion:(void (^)(void))completion
+                             withCompletion:(void (^)(void)) __unused completion
 {
     NSDateComponents *interval = [[NSDateComponents alloc] init];
     interval.day = 1;
@@ -219,7 +219,9 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
                                                                                 intervalComponents:interval];
     
     // set the results handler
-    query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *results, NSError *error) {
+    query.initialResultsHandler = ^(HKStatisticsCollectionQuery * __unused query,
+                                    HKStatisticsCollection *results,
+                                    NSError *error) {
         if (!error) {
             NSDate *endDate = [[NSCalendar currentCalendar] dateBySettingHour:23
                                                                        minute:59
@@ -232,7 +234,7 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
             
             [results enumerateStatisticsFromDate:beginDate
                                           toDate:endDate
-                                       withBlock:^(HKStatistics *result, BOOL *stop) {
+                                       withBlock:^(HKStatistics *result, BOOL * __unused stop) {
                                            HKQuantity *quantity;
                                            
                                            if (isDecreteQuantity) {

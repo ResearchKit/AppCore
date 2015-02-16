@@ -94,7 +94,7 @@
 
 #pragma mark - APCPasscodeViewDelegate
 
-- (void) passcodeViewDidFinish:(APCPasscodeView *)passcodeView withCode:(NSString *)code {
+- (void) passcodeViewDidFinish:(APCPasscodeView *)passcodeView withCode:(NSString *) __unused code {
     if (passcodeView == self.passcodeView) {
         [self showRetry];
     }

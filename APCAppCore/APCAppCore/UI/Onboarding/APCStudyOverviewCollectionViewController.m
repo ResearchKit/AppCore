@@ -7,11 +7,9 @@
  
 #import "APCStudyOverviewCollectionViewController.h"
 #import "APCAppCore.h"
-#import "APCStudyOverviewCollectionViewCell.h"
+#import "APCWebViewController.h"
 
-static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
-
-@interface APCStudyOverviewCollectionViewController () <RKSTTaskViewControllerDelegate>
+@interface APCStudyOverviewCollectionViewController () <ORKTaskViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *gradientCollectionView;
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
@@ -57,7 +55,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     [[NSNotificationCenter defaultCenter] removeObserver:self name:APCConsentCompletedWithDisagreeNotification object:nil];
 }
 
-- (void)goBackToSignUpJoin:(NSNotification *)notification
+- (void) goBackToSignUpJoin: (NSNotification *) __unused notification
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
@@ -162,36 +160,58 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 #pragma mark - UICollectionViewDataSource methods
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+- (NSInteger) numberOfSectionsInCollectionView: (UICollectionView *) __unused collectionView
+{
     return 1;
 }
 
-
--(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+-(NSInteger) collectionView: (UICollectionView *) __unused collectionView
+	 numberOfItemsInSection: (NSInteger) __unused section
+{
     APCTableViewSection *sectionItem = self.items.firstObject;
     return sectionItem.rows.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    APCStudyOverviewCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"studyOverviewCell" forIndexPath:indexPath];
     
-    APCTableViewStudyDetailsItem *studyDetails = [self itemForIndexPath: indexPath];
+    UICollectionViewCell *cell;
+    
+    APCTableViewStudyDetailsItem *studyDetails = [self itemForIndexPath:indexPath];
 
-    NSString *filePath = [[NSBundle mainBundle] pathForResource: studyDetails.detailText ofType:@"html" inDirectory:@"HTMLContent"];
-    NSURL *targetURL = [NSURL URLWithString:filePath];
-    NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
-    [cell.webView loadRequest:request];
+    if (studyDetails.videoName.length > 0) {
+        
+        APCStudyVideoCollectionViewCell *videoCell = (APCStudyVideoCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kAPCStudyVideoCollectionViewCellIdentifier forIndexPath:indexPath];
+        videoCell.delegate = self;
+        videoCell.titleLabel.text = studyDetails.caption;
+        
+        cell = videoCell;
+        
+    } else {
+        APCStudyOverviewCollectionViewCell *webViewCell = (APCStudyOverviewCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kAPCStudyOverviewCollectionViewCellIdentifier forIndexPath:indexPath];
+        
+        NSString *filePath = [[NSBundle mainBundle] pathForResource: studyDetails.detailText ofType:@"html" inDirectory:@"HTMLContent"];
+        NSURL *targetURL = [NSURL URLWithString:filePath];
+        NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
+        [webViewCell.webView loadRequest:request];
+        
+        cell = webViewCell;
+    }
+    
     
     return cell;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+- (CGSize) collectionView: (UICollectionView *) __unused collectionView
+				   layout: (UICollectionViewLayout*) __unused collectionViewLayout
+   sizeForItemAtIndexPath: (NSIndexPath *) __unused indexPath
+{
     return self.collectionView.bounds.size;
 }
 
 #pragma mark - UIScrollViewDelegate methods
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+- (void) scrollViewDidEndDecelerating: (UIScrollView *) __unused scrollView
+{
     CGFloat pageWidth = self.collectionView.frame.size.width;
     self.pageControl.currentPage = (self.collectionView.contentOffset.x + pageWidth / 2) / pageWidth;
 }
@@ -200,7 +220,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 - (void)showConsent
 {
-    RKSTTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    ORKTaskViewController *consentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
     
     consentVC.delegate = self;
     [self presentViewController:consentVC animated:YES completion:nil];
@@ -209,17 +229,17 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 #pragma mark - TaskViewController Delegate methods
 
-- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
+- (void)taskViewControllerDidComplete: (ORKTaskViewController *) __unused taskViewController
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
+- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController
 {
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *) __unused step withError:(NSError *) __unused error
 {
     //TODO: Figure out what to do if it fails
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
@@ -260,6 +280,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
             studyDetails.detailText = questionDict[@"details"];
             studyDetails.iconImage = [[UIImage imageNamed:questionDict[@"icon_image"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             studyDetails.tintColor = [UIColor tertiaryColorForString:questionDict[@"tint_color"]];
+            studyDetails.videoName = questionDict[@"video_name"];
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = studyDetails;
@@ -296,7 +317,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     return studyItemType;
 }
 
-- (void)signInTapped:(id)sender
+- (void) signInTapped: (id) __unused sender
 {
     [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignIn];
     
@@ -305,7 +326,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     
 }
 
-- (void)signUpTapped:(id)sender
+- (void) signUpTapped: (id) __unused sender
 {
     [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignUp];
     
@@ -321,5 +342,48 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
     [self.collectionView setContentOffset:CGPointMake(offset, 0) animated:YES];
 }
 
+#pragma mark - APCStudyVideoCollectionViewCellDelegate methods
 
+- (void)studyVideoCollectionViewCellWatchVideo:(APCStudyVideoCollectionViewCell *)cell
+{
+    APCTableViewStudyDetailsItem *studyDetails = (APCTableViewStudyDetailsItem *)[self itemForIndexPath:[self.collectionView indexPathForCell:cell]];
+    
+    NSURL *fileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:studyDetails.videoName ofType:@"mp4"]];
+    APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
+    [self.navigationController presentViewController:introVideoViewController animated:YES completion:nil];
+
+}
+
+- (void)studyVideoCollectionViewCellReadConsent:(APCStudyVideoCollectionViewCell *)cell
+{
+    APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
+    webViewController.fileName = @"consent";
+    webViewController.fileType = @"pdf";
+    webViewController.title = NSLocalizedString(@"Consent", @"Consent");
+    
+    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
+    [self.navigationController presentViewController:navController animated:YES completion:nil];
+
+}
+
+- (void)studyVideoCollectionViewCellEmailConsent:(APCStudyVideoCollectionViewCell *)cell
+{
+    if ([MFMailComposeViewController canSendMail])
+    {
+        MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
+        mail.mailComposeDelegate = self;
+        
+        [self presentViewController:mail animated:YES completion:NULL];
+    }
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate method
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    if (result == MFMailComposeResultCancelled || result == MFMailComposeResultSent)
+    {
+        [controller dismissViewControllerAnimated:YES completion:nil];
+    }
+}
 @end

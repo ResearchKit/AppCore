@@ -443,7 +443,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     
     HKQuantitySample *heightSample = [HKQuantitySample quantitySampleWithType:heightType quantity:height startDate:now endDate:now];
     
-    [self.healthStore saveObject:heightSample withCompletion:^(BOOL success, NSError *error) {
+    [self.healthStore saveObject:heightSample withCompletion:^(BOOL __unused success, NSError *error) {
         APCLogError2 (error);
     }];
 }
@@ -475,7 +475,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     
     HKQuantitySample *weightSample = [HKQuantitySample quantitySampleWithType:weightType quantity:weight startDate:now endDate:now];
     
-    [self.healthStore saveObject:weightSample withCompletion:^(BOOL success, NSError *error) {
+    [self.healthStore saveObject:weightSample withCompletion:^(BOOL __unused success, NSError *error) {
         APCLogError2 (error);
     }];
 }
@@ -505,7 +505,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     
     HKQuantitySample *systolicBloodPressureSample = [HKQuantitySample quantitySampleWithType:bloodPressureType quantity:systolicBloodPressure startDate:now endDate:now];
     
-    [self.healthStore saveObject:systolicBloodPressureSample withCompletion:^(BOOL success, NSError *error) {
+    [self.healthStore saveObject:systolicBloodPressureSample withCompletion:^(BOOL __unused success, NSError *error) {
         APCLogError2 (error);
     }];
 }

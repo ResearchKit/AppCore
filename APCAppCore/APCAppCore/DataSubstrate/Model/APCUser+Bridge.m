@@ -30,7 +30,13 @@
     {
         NSParameterAssert(self.email);
         NSParameterAssert(self.password);
-        [SBBComponent(SBBAuthManager) signUpWithEmail:self.email username:self.email password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+        [SBBComponent(SBBAuthManager) signUpWithEmail: self.email
+											 username: self.email
+											 password: self.password
+										   completion: ^(NSURLSessionDataTask * __unused task,
+														 id __unused responseObject,
+														 NSError *error)
+		 {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (!error) {
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed Up"}));
@@ -58,7 +64,10 @@
         
         profile.firstName = self.name;
         
-        [SBBComponent(SBBProfileManager) updateUserProfileWithProfile:profile completion:^(id responseObject, NSError *error) {
+        [SBBComponent(SBBProfileManager) updateUserProfileWithProfile: profile
+														   completion: ^(id __unused responseObject,
+																		 NSError *error)
+		 {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (!error) {
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Profile Updated To Bridge"}));
@@ -106,7 +115,9 @@
     }
     else
     {
-        [SBBComponent(SBBConsentManager) suspendConsentWithCompletion:^(id responseObject, NSError *error) {
+        [SBBComponent(SBBConsentManager) suspendConsentWithCompletion: ^(id __unused responseObject,
+																		 NSError * __unused errorWeArePurposelyIgnoring)
+		 {
             [self signOutOnCompletion:^(NSError *error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(!error) {
@@ -131,7 +142,7 @@
     }
     else
     {
-        [SBBComponent(SBBConsentManager) resumeConsentWithCompletion:^(id responseObject, NSError *error) {
+        [SBBComponent(SBBConsentManager) resumeConsentWithCompletion:^(id __unused responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (!error) {
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Resumed Consent"}));
@@ -154,7 +165,12 @@
     else
     {
         NSParameterAssert(self.password);
-        [SBBComponent(SBBAuthManager) signInWithUsername:self.email password:self.password completion:^(NSURLSessionDataTask *task, id responseObject, NSError *signInError) {
+        [SBBComponent(SBBAuthManager) signInWithUsername: self.email
+                                                password: self.password
+                                              completion: ^(NSURLSessionDataTask * __unused task,
+                                                            id __unused responseObject,
+                                                            NSError *signInError)
+         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (!signInError) {
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed In"}));
@@ -179,7 +195,10 @@
     else
     {
         NSParameterAssert(self.password);
-        [SBBComponent(SBBAuthManager) signOutWithCompletion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+        [SBBComponent(SBBAuthManager) signOutWithCompletion: ^(NSURLSessionDataTask * __unused task,
+                                                               id __unused responseObject,
+                                                               NSError *error)
+         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed Out"}));
                 if (completionBlock) {
@@ -206,7 +225,7 @@
         [SBBComponent(SBBConsentManager) consentSignature:name
                                                 birthdate:birthDate
                                            signatureImage:consentImage
-                                               completion:^(id responseObject, NSError *error) {
+                                               completion:^(id __unused responseObject, NSError * __unused error) {
                                                    dispatch_async(dispatch_get_main_queue(), ^{
                                                        if (!error) {
                                                            APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Consent Sent To Bridge"}));
@@ -229,8 +248,11 @@
     }
     else
     {
-        [SBBComponent(SBBConsentManager) retrieveConsentSignatureWithCompletion:^(NSString *name, NSString *birthdate, UIImage *signatureImage, NSError *error) {
-            
+        [SBBComponent(SBBConsentManager) retrieveConsentSignatureWithCompletion: ^(NSString*          name,
+                                                                                   NSString* __unused birthdate,
+                                                                                   UIImage*           signatureImage,
+                                                                                   NSError*           error)
+		 {
             if (error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (completionBlock) {
@@ -265,7 +287,10 @@
     else
     {
         if (self.email.length > 0) {
-            [SBBComponent(SBBAuthManager) resendEmailVerification:self.email completion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+            [SBBComponent(SBBAuthManager) resendEmailVerification:self.email completion: ^(NSURLSessionDataTask * __unused task,
+                                                                                           id __unused responseObject,
+                                                                                           NSError *error)
+			 {
                 if (!error) {
                      APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"Bridge Server Aked to resend email verficiation email"}));
                 }
@@ -286,22 +311,22 @@
 #pragma mark - Authmanager Delegate Protocol
 /*********************************************************************************/
 
-- (NSString *)sessionTokenForAuthManager:(id<SBBAuthManagerProtocol>)authManager
+- (NSString *)sessionTokenForAuthManager:(id<SBBAuthManagerProtocol>) __unused authManager
 {
     return self.sessionToken;
 }
 
-- (void)authManager:(id<SBBAuthManagerProtocol>)authManager didGetSessionToken:(NSString *)sessionToken
+- (void)authManager:(id<SBBAuthManagerProtocol>) __unused authManager didGetSessionToken:(NSString *)sessionToken
 {
     self.sessionToken = sessionToken;
 }
 
-- (NSString *)usernameForAuthManager:(id<SBBAuthManagerProtocol>)authManager
+- (NSString *)usernameForAuthManager:(id<SBBAuthManagerProtocol>) __unused authManager
 {
     return self.email;
 }
 
-- (NSString *)passwordForAuthManager:(id<SBBAuthManagerProtocol>)authManager
+- (NSString *)passwordForAuthManager:(id<SBBAuthManagerProtocol>) __unused authManager
 {
     return self.password;
 }

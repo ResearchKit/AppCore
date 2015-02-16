@@ -90,7 +90,7 @@
 
 #pragma mark - APCPasscodeViewDelegate
 
-- (void) passcodeViewDidFinish:(APCPasscodeView *)passcodeView withCode:(NSString *)code {
+- (void) passcodeViewDidFinish:(APCPasscodeView *) __unused passcodeView withCode:(NSString *) __unused code {
 
     if (self.passcodeView.code.length > 0) {
         if ([self.passcodeView.code isEqualToString:[APCKeychainStore stringForKey:kAPCPasscodeKey]]) {
@@ -101,7 +101,7 @@
         } else {
             
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Wrong Passcode" message:@"Please enter again." preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
                 [self.passcodeView reset];
                 [self.passcodeView becomeFirstResponder];
             }];
@@ -113,7 +113,7 @@
 
 #pragma mark - IBActions
 
-- (IBAction)useTouchId:(id)sender
+- (IBAction) useTouchId: (id) __unused sender
 {
     [self promptTouchId];
 }

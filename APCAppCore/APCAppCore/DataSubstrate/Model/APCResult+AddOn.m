@@ -13,13 +13,13 @@ static NSDictionary * lookupDictionary;
 
 @implementation APCResult (AddOn)
 
-+ (NSManagedObjectID*) storeTaskResult:(RKSTTaskResult*) taskResult inContext: (NSManagedObjectContext*) context
++ (NSManagedObjectID*) storeTaskResult:(ORKTaskResult*) taskResult inContext: (NSManagedObjectContext*) context
 {
-    NSAssert([taskResult isKindOfClass:[RKSTTaskResult class]], @"Should be of type RKSTTaskResult");
+    NSAssert([taskResult isKindOfClass:[ORKTaskResult class]], @"Should be of type ORKTaskResult");
     __block NSManagedObjectID * objectID;
     [context performBlockAndWait:^{
         APCResult * result = [APCResult newObjectForContext:context];
-        [self mapRKSTResult:taskResult toAPCResult:result];
+        [self mapORKResult:taskResult toAPCResult:result];
         NSError * saveError;
         [result saveToPersistentStore:&saveError];
         APCLogError2 (saveError);
@@ -28,10 +28,12 @@ static NSDictionary * lookupDictionary;
     return objectID;
 }
 
-+ (void) mapRKSTResult:(RKSTTaskResult*) taskResult toAPCResult: (APCResult*) apcResult
++ (void) mapORKResult:(ORKTaskResult*) taskResult toAPCResult: (APCResult*) apcResult
 {
     apcResult.taskRunID = taskResult.taskRunUUID.UUIDString;
     apcResult.taskID = taskResult.identifier;
+    apcResult.startDate = taskResult.startDate;
+    apcResult.endDate = taskResult.endDate;
 }
 
 /*********************************************************************************/

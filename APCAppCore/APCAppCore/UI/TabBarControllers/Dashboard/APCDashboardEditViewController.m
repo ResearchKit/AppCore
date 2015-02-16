@@ -42,7 +42,7 @@
 
 #pragma mark - UITableViewDataSource methods
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *) __unused tableView numberOfRowsInSection:(NSInteger) __unused section
 {
     return self.items.count;
 }
@@ -64,12 +64,14 @@
 
 #pragma mark - UITableViewDelegate methods
 
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)tableView:(UITableView *) __unused tableView canMoveRowAtIndexPath:(NSIndexPath *) __unused indexPath
 {
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+- (void)     tableView: (UITableView *) __unused tableView
+    moveRowAtIndexPath: (NSIndexPath *) sourceIndexPath
+           toIndexPath: (NSIndexPath *) destinationIndexPath
 {
     NSNumber *rowTypeNumber = [self.rowItemsOrder objectAtIndex:sourceIndexPath.row];
     
@@ -78,19 +80,21 @@
 
 }
 
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCellEditingStyle) tableView: (UITableView *) __unused tableView
+			editingStyleForRowAtIndexPath: (NSIndexPath *) __unused indexPath
 {
     return UITableViewCellEditingStyleNone;
 }
 
-- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)                         tableView: (UITableView *) __unused tableView
+    shouldIndentWhileEditingRowAtIndexPath: (NSIndexPath *) __unused indexPath
 {
     return NO;
 }
 
 #pragma mark - IB Actions
 
-- (IBAction)done:(id)sender
+- (IBAction) done: (id) __unused sender
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:self.rowItemsOrder forKey:kAPCDashboardRowItemsOrder];
@@ -99,7 +103,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)cancel:(id)sender
+- (IBAction) cancel: (id) __unused sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }

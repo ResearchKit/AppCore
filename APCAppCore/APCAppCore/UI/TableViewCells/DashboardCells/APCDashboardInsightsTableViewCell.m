@@ -20,12 +20,27 @@
     
     [self.expandButton setImage:[[UIImage imageNamed:@"expand_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
                        forState:UIControlStateNormal];
+    
+    [self.infoButton setImage:[[UIImage imageNamed:@"info_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
+                     forState:UIControlStateNormal];
+    
+    [self.infoButton setImage:[[UIImage imageNamed:@"info_icon_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
+                     forState:UIControlStateHighlighted];
+    
+    self.infoButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
 }
 
-- (IBAction)expandTapped:(UIButton *)sender
+- (IBAction) expandTapped: (UIButton *) __unused sender
 {
     if([self.delegate respondsToSelector:@selector(dashboardInsightDidExpandForCell:)]){
         [self.delegate dashboardInsightDidExpandForCell:self];
+    }
+}
+
+- (IBAction)infoTapped:(UIButton *)sender
+{
+    if ([self.delegate respondsToSelector:@selector(dashboardInsightDidAskForMoreInfoForCell:)]) {
+        [self.delegate dashboardInsightDidAskForMoreInfoForCell:self];
     }
 }
 
@@ -33,6 +48,7 @@
 {
     _tintColor = tintColor;
     [self.expandButton.imageView setTintColor:tintColor];
+    [self.infoButton.imageView setTintColor:tintColor];
     self.titleCaption.textColor = self.tintColor;
 }
 

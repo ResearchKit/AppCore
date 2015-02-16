@@ -38,6 +38,9 @@
 - (void)loadStaticTasksAndSchedulesIfNecessary;  //For resetting app
 - (void) clearNSUserDefaults; //For resetting app
 
+- (NSMutableArray*)consentSections;  //  Retrieve and creates Consent Sections from JSON file.
+
+
 - (NSString*) certificateFileName;
 
 //Show Methods
@@ -63,7 +66,7 @@
 
 - (void)showPasscodeIfNecessary;
 
-- (RKSTTaskViewController *)consentViewController;
+- (ORKTaskViewController *)consentViewController;
 
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
 

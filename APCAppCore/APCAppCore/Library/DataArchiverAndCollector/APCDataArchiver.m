@@ -10,7 +10,7 @@
 #import "zipzap.h"
 #import <objc/runtime.h>
 #import "APCUtilities.h"
-#import "RKSTAnswerFormat+Helper.h"
+#import "ORKAnswerFormat+Helper.h"
 
 NSString *const kQuestionTypeKey        = @"questionType";
 NSString *const kQuestionTypeNameKey    = @"questionTypeName";
@@ -117,7 +117,7 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
 	return self;
 }
 
-- (instancetype) initWithTaskResult: (RKSTTaskResult*) taskResult
+- (instancetype) initWithTaskResult: (ORKTaskResult*) taskResult
 {
 	return [self initWithResults:taskResult.results itemIdentifier:taskResult.identifier runUUID:taskResult.taskRunUUID];
 }
@@ -153,8 +153,8 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
 
 - (void) processResults: (NSArray*) results
 {
-    [results enumerateObjectsUsingBlock:^(RKSTStepResult *stepResult, NSUInteger idx, BOOL *stop) {
-        [stepResult.results enumerateObjectsUsingBlock:^(RKSTResult *result, NSUInteger idx, BOOL *stop) {
+    [results enumerateObjectsUsingBlock:^(ORKStepResult *stepResult, NSUInteger __unused idx, BOOL * __unused stop) {
+        [stepResult.results enumerateObjectsUsingBlock:^(ORKResult *result, NSUInteger __unused idx, BOOL *__unused stop) {
             //Update date if needed
             if (!result.startDate) {
                 result.startDate = stepResult.startDate;
@@ -167,17 +167,17 @@ NSString *const kFileInfoContentTypeKey = @"contentType";
                 NSString *fileName = dataResult.identifier?:(stepResult.identifier?:[NSUUID UUID].UUIDString);
                 [self addDataToArchive:dataResult.data fileName:[fileName stringByAppendingString:@"_data"] contentType:@"data" timeStamp:dataResult.endDate];
             }
-            else if ([result isKindOfClass:[RKSTFileResult class]])
+            else if ([result isKindOfClass:[ORKFileResult class]])
             {
-                RKSTFileResult * fileResult = (RKSTFileResult*) result;
+                ORKFileResult * fileResult = (ORKFileResult*) result;
                 [self addFileToArchive:fileResult.fileURL contentType:@"data" timeStamp:fileResult.endDate];
             }
-            else if ([result isKindOfClass:[RKSTTappingIntervalResult class]])
+            else if ([result isKindOfClass:[ORKTappingIntervalResult class]])
             {
-                RKSTTappingIntervalResult  *tappingResult = (RKSTTappingIntervalResult *)result;
+                ORKTappingIntervalResult  *tappingResult = (ORKTappingIntervalResult *)result;
                 [self addTappingResultsToArchive:tappingResult];
             }
-            else if ([result isKindOfClass:[RKSTQuestionResult class]])
+            else if ([result isKindOfClass:[ORKQuestionResult class]])
             {
                 [self addResultToArchive:result];
             }
@@ -220,7 +220,7 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 #pragma mark - Add Result Archive
 /*********************************************************************************/
 
-- (void)addTappingResultsToArchive:(RKSTTappingIntervalResult *)result
+- (void)addTappingResultsToArchive:(ORKTappingIntervalResult *)result
 {
     NSMutableDictionary  *rawTappingResults = [NSMutableDictionary dictionary];
 
@@ -238,18 +238,18 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     
     NSArray  *samples = result.samples;
     NSMutableArray  *sampleResults = [NSMutableArray array];
-    for (RKSTTappingSample *sample  in  samples) {
+    for (ORKTappingSample *sample  in  samples) {
         NSMutableDictionary  *aSampleDictionary = [NSMutableDictionary dictionary];
         
         aSampleDictionary[kTapTimeStampKey]     = @(sample.timestamp);
         
         aSampleDictionary[kTapCoordinateKey]   = NSStringFromCGPoint(sample.location);
         
-        if (sample.buttonIdentifier == RKTappingButtonIdentifierNone) {
+        if (sample.buttonIdentifier == ORKTappingButtonIdentifierNone) {
             aSampleDictionary[kTappedButtonIdKey] = kTappedButtonNoneKey;
-        } else if (sample.buttonIdentifier == RKTappingButtonIdentifierLeft) {
+        } else if (sample.buttonIdentifier == ORKTappingButtonIdentifierLeft) {
             aSampleDictionary[kTappedButtonIdKey] = kTappedButtonLeftKey;
-        } else if (sample.buttonIdentifier == RKTappingButtonIdentifierRight) {
+        } else if (sample.buttonIdentifier == ORKTappingButtonIdentifierRight) {
             aSampleDictionary[kTappedButtonIdKey] = kTappedButtonRightKey;
         }
         [sampleResults addObject:aSampleDictionary];
@@ -260,13 +260,13 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     [self writeResultDictionaryToArchive: serializableData];
 }
 
-- (void) addResultToArchive: (RKSTResult*) result
+- (void) addResultToArchive: (ORKResult*) result
 {
 	NSMutableArray * propertyNames = [NSMutableArray array];
 
 	/*
 	 Get the names of all properties of our result's class
-	 and all its superclasses.  Stop when we hit RKSTResult.
+	 and all its superclasses.  Stop when we hit ORKResult.
 	 */
 	Class klass = result.class;
 	BOOL done = NO;
@@ -278,7 +278,7 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 
 		[propertyNames addObjectsFromArray: propertyNamesForOneClass];
 
-		if (klass == [RKSTResult class])
+		if (klass == [ORKResult class])
 		{
 			done = YES;
 		}
@@ -455,7 +455,7 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
         NSString * fullFileName = [fileName stringByAppendingPathExtension:@"json"];
         [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fullFileName
                                                                     compress:YES
-                                                                   dataBlock:^(NSError** error){ return jsonData;}]];
+                                                                   dataBlock:^(NSError** __unused error){ return jsonData;}]];
     }
     else {
         APCLogError2(error);
@@ -466,14 +466,14 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 {
     [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fileName
                                                                 compress:YES
-                                                               dataBlock:^(NSError** error){ return data;}]];
+                                                               dataBlock:^(NSError** __unused error){ return data;}]];
 }
 
 - (void) writeURLToArchive: (NSURL*) url
 {
     [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: url.path.lastPathComponent
                                                                 compress:YES
-                                                               dataBlock:^(NSError** error){ return [NSData dataWithContentsOfURL:url];}]];
+                                                               dataBlock:^(NSError** __unused error){ return [NSData dataWithContentsOfURL:url];}]];
 }
 
 - (void) addFileInfoEntryWithDictionary: (NSDictionary*) dictionary
@@ -551,15 +551,16 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 
 + (void) encryptZipFile: (NSString*) unencryptedPath encryptedPath:(NSString*) encryptedPath
 {
-    NSData * unencryptedZipData = [NSData dataWithContentsOfFile:unencryptedPath];
+//    NSData * unencryptedZipData = [NSData dataWithContentsOfFile:unencryptedPath];
     
     NSError * encryptionError;
-    NSData * encryptedZipData = RKSTCryptographicMessageSyntaxEnvelopedData(unencryptedZipData, [APCDataArchiver readPEM], RKEncryptionAlgorithmAES128CBC, &encryptionError);
+#warning Temporary Kludge to bypass CMS encryption
+//    NSData * encryptedZipData = ORKCryptographicMessageSyntaxEnvelopedData(unencryptedZipData, [APCDataArchiver readPEM], RKEncryptionAlgorithmAES128CBC, &encryptionError);
     APCLogError2(encryptionError);
     
-    NSError * fileWriteError;
-    [encryptedZipData writeToFile:encryptedPath options:NSDataWritingAtomic error:&fileWriteError];
-    APCLogError2(fileWriteError);
+//    NSError * fileWriteError;
+//    [encryptedZipData writeToFile:encryptedPath options:NSDataWritingAtomic error:&fileWriteError];
+//    APCLogError2(fileWriteError);
 }
 
 /*********************************************************************************/
@@ -658,7 +659,7 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 	if ([item isKindOfClass: [NSNumber class]]  && [NSJSONSerialization isValidJSONObject: @[item]])
 	{
 		NSNumber *questionTypeAsNumber = item;
-		RKQuestionType questionType = questionTypeAsNumber.integerValue;
+		ORKQuestionType questionType = questionTypeAsNumber.integerValue;
 		result = @(questionType);
 	}
 

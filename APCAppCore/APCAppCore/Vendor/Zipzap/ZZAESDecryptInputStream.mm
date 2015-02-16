@@ -140,7 +140,8 @@ static const uint WINZIP_PBKDF2_ROUNDS = 1000;
 	return bytesRead;
 }
 
-- (BOOL)getBuffer:(uint8_t**)buffer length:(NSUInteger*)len
+- (BOOL) getBuffer: (uint8_t**) __unused buffer
+            length: (NSUInteger*) __unused len
 {
 	return NO;
 }

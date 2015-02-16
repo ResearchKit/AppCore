@@ -33,6 +33,7 @@ NSString *const kAppPrefixKey                        = @"AppPrefixKey";
 NSString *const kBridgeEnvironmentKey                = @"BridgeEnvironmentKey";
 NSString *const kDatabaseNameKey                     = @"DatabaseNameKey";
 NSString *const kTasksAndSchedulesJSONFileNameKey    = @"TasksAndSchedulesJSONFileNameKey";
+NSString *const kConsentSectionFileNameKey           = @"ConsentSectionFileNameKey";
 NSString *const kHKWritePermissionsKey               = @"HKWritePermissions";
 NSString *const kHKReadPermissionsKey                = @"HKReadPermissions";
 NSString *const kAppServicesListRequiredKey          = @"AppServicesListRequired";

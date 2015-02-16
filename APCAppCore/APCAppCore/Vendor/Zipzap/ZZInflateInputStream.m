@@ -141,7 +141,7 @@ static const NSUInteger _bufferLength = 16384; // 16K buffer
 	return len - _stream.avail_out;
 }
 
-- (BOOL)getBuffer:(uint8_t**)buffer length:(NSUInteger*)len
+- (BOOL) getBuffer: (uint8_t**) __unused buffer length: (NSUInteger*) __unused len
 {
 	return NO;
 }

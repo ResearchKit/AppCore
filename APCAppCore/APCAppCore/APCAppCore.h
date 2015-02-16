@@ -82,6 +82,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCChangeEmailViewController.h>
 #import <APCAppCore/APCPasscodeViewController.h>
 #import <APCAppCore/APCConsentTaskViewController.h>
+#import <APCAppCore/APCWebViewController.h>
 
 /*--------------------------
  Dashboard ViewControllers
@@ -159,6 +160,8 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDashboardInsightSummaryTableViewCell.h>
 #import <APCAppCore/APCDashboardInsightTableViewCell.h>
 #import <APCAppCore/APCDashboardFoodInsightTableViewCell.h>
+#import <APCAppCore/APCStudyVideoCollectionViewCell.h>
+#import <APCAppCore/APCStudyOverviewCollectionViewCell.h>
 
 /* -------------------------
  Objects
@@ -191,7 +194,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/UIView+Helper.h>
 #import <APCAppCore/NSDictionary+APCAdditions.h>
 #import <APCAppCore/APCDeviceHardware+APCHelper.h>
-#import <APCAppCore/RKSTQuestionResult+APCHelper.h>
+#import <APCAppCore/ORKQuestionResult+APCHelper.h>
 
 /* -------------------------
  Appearance

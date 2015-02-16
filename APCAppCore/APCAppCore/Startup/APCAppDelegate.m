@@ -21,6 +21,7 @@
 static NSString *const kDataSubstrateClassName = @"APHDataSubstrate";
 static NSString *const kDatabaseName = @"db.sqlite";
 static NSString *const kTasksAndSchedulesJSONFileName = @"APHTasksAndSchedules";
+static NSString *const kConsentSectionFileName = @"APHConsentSection";
 
 /*********************************************************************************/
 #pragma mark - Tab bar Constants
@@ -45,8 +46,8 @@ static NSUInteger const kIndexOfProfileTab = 3;
 /*********************************************************************************/
 #pragma mark - App Delegate Methods
 /*********************************************************************************/
-
-- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL)               application: (UIApplication *) __unused application
+    willFinishLaunchingWithOptions: (NSDictionary *) __unused launchOptions
 {
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
@@ -72,21 +73,23 @@ static NSUInteger const kIndexOfProfileTab = 3;
     return YES;
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL)application:(UIApplication *) __unused application didFinishLaunchingWithOptions:(NSDictionary *) __unused launchOptions
 {
     return YES;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application
+- (void)applicationWillResignActive:(UIApplication *) __unused application
 {
     [self showSecureView];
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application
+- (void)applicationDidBecomeActive:(UIApplication *) __unused application
 {
 #ifndef DEVELOPMENT
     if (self.dataSubstrate.currentUser.signedIn) {
-        [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+        [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion: ^(NSURLSessionDataTask * __unused task,
+																	  id  __unused responseObject,
+																	  NSError *error) {
             APCLogError2 (error);
         }];
     }
@@ -97,12 +100,12 @@ static NSUInteger const kIndexOfProfileTab = 3;
     [self.dataMonitor appBecameActive];
 }
 
-- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+- (void)application:(UIApplication *) __unused application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
+- (void)applicationWillTerminate:(UIApplication *) __unused application
 {
     if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
         NSDate *currentTime = [NSDate date];
@@ -111,7 +114,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
+- (void)applicationDidEnterBackground:(UIApplication *) __unused application
 {
     if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
         NSDate *currentTime = [NSDate date];
@@ -122,24 +125,27 @@ static NSUInteger const kIndexOfProfileTab = 3;
     [self showSecureView];
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
+- (void)applicationWillEnterForeground:(UIApplication *) __unused application
 {
     [self hideSecureView];
     
     [self showPasscodeIfNecessary];
 }
 
-- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+- (void)                    application: (UIApplication *) __unused application
+    didRegisterUserNotificationSettings: (UIUserNotificationSettings *) __unused notificationSettings
 {
 
 }
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+- (void)                                 application: (UIApplication *) __unused application
+    didRegisterForRemoteNotificationsWithDeviceToken: (NSData *) __unused deviceToken
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:APCAppDidRegisterUserNotification object:nil];
 }
 
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+- (void)                                 application: (UIApplication *) __unused application
+    didFailToRegisterForRemoteNotificationsWithError: (NSError *) __unused error
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:APCAppDidFailToRegisterForRemoteNotification object:nil];
 }
@@ -148,29 +154,29 @@ static NSUInteger const kIndexOfProfileTab = 3;
 #pragma mark - State Restoration
 /*********************************************************************************/
 
-- (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder
+- (BOOL)application:(UIApplication *) __unused application shouldSaveApplicationState:(NSCoder *) __unused coder
 {
     return self.dataSubstrate.currentUser.isSignedIn;
 }
 
-- (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder
+- (BOOL)application:(UIApplication *) __unused application shouldRestoreApplicationState:(NSCoder *) __unused coder
 {
     return self.dataSubstrate.currentUser.isSignedIn;
 }
 
-- (UIViewController *)application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder
+- (UIViewController *)application:(UIApplication *) __unused application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *) __unused coder
 {
     if ([identifierComponents.lastObject isEqualToString:@"AppTabbar"]) {
         return self.window.rootViewController;
     }
     else if ([identifierComponents.lastObject isEqualToString:@"ActivitiesNavController"])
     {
-        return self.tabster.viewControllers[2];
+        return self.tabster.viewControllers[kIndexOfActivitesTab];
     }
     else if ([identifierComponents.lastObject isEqualToString:@"APCActivityVC"])
     {
-        if ( [self.tabster.viewControllers[2] respondsToSelector:@selector(topViewController)]) {
-            return [(UINavigationController*) self.tabster.viewControllers[2] topViewController];
+        if ( [self.tabster.viewControllers[kIndexOfActivitesTab] respondsToSelector:@selector(topViewController)]) {
+            return [(UINavigationController*) self.tabster.viewControllers[kIndexOfActivitesTab] topViewController];
         }
     }
     
@@ -222,6 +228,159 @@ static NSUInteger const kIndexOfProfileTab = 3;
     }
 }
 
+- (NSMutableArray*)consentSections
+{
+    ORKConsentSectionType(^toSectionType)(NSString*) = ^(NSString* sectionTypeName)
+    {
+        ORKConsentSectionType   sectionType = ORKConsentSectionTypeCustom;
+        
+        if ([sectionTypeName isEqualToString:@"overview"])
+        {
+            sectionType = ORKConsentSectionTypeOverview;
+        }
+        else if ([sectionTypeName isEqualToString:@"privacy"])
+        {
+            sectionType = ORKConsentSectionTypePrivacy;
+        }
+        else if ([sectionTypeName isEqualToString:@"dataGathering"])
+        {
+            sectionType = ORKConsentSectionTypeDataGathering;
+        }
+        else if ([sectionTypeName isEqualToString:@"dataUse"])
+        {
+            sectionType = ORKConsentSectionTypeDataUse;
+        }
+        else if ([sectionTypeName isEqualToString:@"timeCommitment"])
+        {
+            sectionType = ORKConsentSectionTypeTimeCommitment;
+        }
+        else if ([sectionTypeName isEqualToString:@"studySurvey"])
+        {
+            sectionType = ORKConsentSectionTypeStudySurvey;
+        }
+        else if ([sectionTypeName isEqualToString:@"studyTasks"])
+        {
+            sectionType = ORKConsentSectionTypeStudyTasks;
+        }
+        else if ([sectionTypeName isEqualToString:@"withdrawing"])
+        {
+            sectionType = ORKConsentSectionTypeWithdrawing;
+        }
+        else if ([sectionTypeName isEqualToString:@"custom"])
+        {
+            sectionType = ORKConsentSectionTypeCustom;
+        }
+        else if ([sectionTypeName isEqualToString:@"onlyInDocument"])
+        {
+            sectionType = ORKConsentSectionTypeOnlyInDocument;
+        }
+
+        return sectionType;
+    };
+    NSString*   kConsentSections        = @"sections";
+    NSString*   kSectionType            = @"sectionType";
+    NSString*   kSectionTitle           = @"sectionTitle";
+    NSString*   kSectionFormalTitle     = @"sectionFormalTitle";
+    NSString*   kSectionSummary         = @"sectionSummary";
+    NSString*   kSectionContent         = @"sectionContent";
+    NSString*   kSectionHtmlContent     = @"sectionHtmlContent";
+    NSString*   kSectionImage           = @"sectionImage";
+    NSString*   kSectionAnimationUrl    = @"sectionAnimationUrl";
+    
+    NSString*       resource = [[NSBundle mainBundle] pathForResource:self.initializationOptions[kConsentSectionFileNameKey] ofType:@"json"];
+    NSAssert(resource != nil, @"Unable to location file with Consent Section in main bundle");
+    
+    NSData*         consentSectionData = [NSData dataWithContentsOfFile:resource];
+    NSAssert(consentSectionData != nil, @"Unable to create NSData with Consent Section data");
+    
+    NSError*        error             = nil;
+    NSDictionary*   consentParameters = [NSJSONSerialization JSONObjectWithData:consentSectionData options:NSJSONReadingMutableContainers error:&error];
+    NSAssert(consentParameters != nil, @"badly formed Consent Section data - error", error);
+    
+    NSArray*        parametersConsentSections = [consentParameters objectForKey:kConsentSections];
+    NSAssert(parametersConsentSections != nil && [parametersConsentSections isKindOfClass:[NSArray class]], @"Badly formed Consent Section data");
+    
+    NSMutableArray* consentSections = [NSMutableArray arrayWithCapacity:parametersConsentSections.count];
+    
+    for (NSDictionary* section in parametersConsentSections)
+    {
+        //  Custom typesdo not have predefiend title, summary, content, or animation
+        NSAssert([section isKindOfClass:[NSDictionary class]], @"Improper section type");
+        
+        NSString*   typeName     = [section objectForKey:kSectionType];
+        NSAssert(typeName != nil && [typeName isKindOfClass:[NSString class]],    @"Missing Section Type or improper type");
+        
+        ORKConsentSectionType   sectionType = toSectionType(typeName);
+        
+        NSString*   title        = [section objectForKey:kSectionTitle];
+        NSString*   formalTitle  = [section objectForKey:kSectionFormalTitle];
+        NSString*   summary      = [section objectForKey:kSectionSummary];
+        NSString*   content      = [section objectForKey:kSectionContent];
+        NSString*   htmlContent  = [section objectForKey:kSectionHtmlContent];
+        NSString*   image        = [section objectForKey:kSectionImage];
+        NSString*   animationUrl = [section objectForKey:kSectionAnimationUrl];
+        
+        NSAssert(title        == nil || title         != nil && [title isKindOfClass:[NSString class]],        @"Missing Section Title or improper type");
+        NSAssert(formalTitle  == nil || formalTitle   != nil && [formalTitle isKindOfClass:[NSString class]],  @"Missing Section Formal title or improper type");
+        NSAssert(summary      == nil || summary       != nil && [summary isKindOfClass:[NSString class]],      @"Missing Section Summary or improper type");
+        NSAssert(content      == nil || content       != nil && [content isKindOfClass:[NSString class]],      @"Missing Section Content or improper type");
+        NSAssert(htmlContent  == nil || htmlContent   != nil && [htmlContent isKindOfClass:[NSString class]],  @"Missing Section HTML Content or improper type");
+        NSAssert(image        == nil || image         != nil && [image isKindOfClass:[NSString class]],        @"Missing Section Image or improper typte");
+        NSAssert(animationUrl == nil || animationUrl  != nil && [animationUrl isKindOfClass:[NSString class]], @"Missing Animation URL or improper type");
+        
+        
+        ORKConsentSection*  section = [[ORKConsentSection alloc] initWithType:sectionType];
+        
+        if (title != nil)
+        {
+            section.title = title;
+        }
+        
+        if (formalTitle != nil)
+        {
+            section.formalTitle = formalTitle;
+        }
+        
+        if (summary != nil)
+        {
+            section.summary = summary;
+        }
+        
+        if (content != nil)
+        {
+            section.content = content;
+        }
+        
+        if (htmlContent != nil)
+        {
+            NSString*   path    = [[NSBundle mainBundle] pathForResource:htmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+            NSAssert(path != nil, @"Unable to locate HTML file: %@", htmlContent);
+            
+            NSError*    error   = nil;
+            NSString*   content = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+
+            NSAssert(content != nil, @"Unable to load content of file \"%@\": %@", path, error);
+            
+            section.htmlContent = content;
+        }
+        
+        if (image != nil)
+        {
+            section.customImage = [UIImage imageNamed:image];
+            NSAssert(section.customImage != nil, @"Unable to load image: %@", image);
+        }
+        
+        if (animationUrl != nil)
+        {
+            section.customAnimationURL = nil;
+        }
+        
+        [consentSections addObject:section];
+    }
+    
+    return consentSections;
+}
+
 - (void) setUpHKPermissions
 {
     [APCPermissionsManager setHealthKitTypesToRead:self.initializationOptions[kHKReadPermissionsKey]];
@@ -248,24 +407,24 @@ static NSUInteger const kIndexOfProfileTab = 3;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void) signedUpNotification:(NSNotification*) notification
+- (void) signedUpNotification: (NSNotification*) __unused notification
 {
     [self showNeedsEmailVerification];
 }
 
-- (void) signedInNotification:(NSNotification*) notification
+- (void) signedInNotification: (NSNotification*) __unused notification
 {
     [self.dataMonitor userConsented];
     [self.tasksReminder updateTasksReminder];
     [self showTabBar];
 }
 
-- (void) userConsented:(NSNotification*) notification
+- (void) userConsented: (NSNotification*) __unused notification
 {
 
 }
 
-- (void) logOutNotification:(NSNotification*) notification
+- (void) logOutNotification: (NSNotification*) __unused notification
 {
     self.dataSubstrate.currentUser.signedUp = NO;
     self.dataSubstrate.currentUser.signedIn = NO;
@@ -274,7 +433,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     [self showOnBoarding];
 }
 
-- (void)withdrawStudy:(NSNotification *)notification
+- (void) withdrawStudy: (NSNotification *) __unused notification
 {
     [self clearNSUserDefaults];
     [APCKeychainStore resetKeyChain];
@@ -310,6 +469,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     return [@{
               kDatabaseNameKey                     : kDatabaseName,
               kTasksAndSchedulesJSONFileNameKey    : kTasksAndSchedulesJSONFileName,
+              kConsentSectionFileNameKey           : kConsentSectionFileName
               } mutableCopy];
 }
 
@@ -516,7 +676,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     self.onboarding = [[APCOnboarding alloc] initWithDelegate:self taskType:type];
 }
 
-- (RKSTTaskViewController *)consentViewController
+- (ORKTaskViewController *)consentViewController
 {
     NSAssert(FALSE, @"Override this method to return a valid Consent Task View Controller.");
     return nil;
@@ -534,7 +694,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 #pragma mark - APCOnboardingDelegate methods
 
-- (APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)onboarding
+- (APCScene *) inclusionCriteriaSceneForOnboarding: (APCOnboarding *) __unused onboarding
 {
     NSAssert(FALSE, @"Cannot retun nil. Override this delegate method to return a valid APCScene.");
     
@@ -543,12 +703,12 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 #pragma mark - APCOnboardingTaskDelegate methods
 
-- (APCUser *)userForOnboardingTask:(APCOnboardingTask *)task
+- (APCUser *) userForOnboardingTask: (APCOnboardingTask *) __unused task
 {
     return self.dataSubstrate.currentUser;
 }
 
-- (NSInteger)numberOfServicesInPermissionsListForOnboardingTask:(APCOnboardingTask *)task
+- (NSInteger) numberOfServicesInPermissionsListForOnboardingTask: (APCOnboardingTask *) __unused task
 {
     NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
     NSArray *servicesArray = initialOptions[kAppServicesListRequiredKey];

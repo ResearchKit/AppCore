@@ -185,25 +185,28 @@ static NSString *kLon = @"lon";
 #pragma mark -CLLocationManagerDelegate
 /*********************************************************************************/
 
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+- (void) locationManager: (CLLocationManager *) __unused manager
+		didFailWithError: (NSError *) error
 {
     APCLogError2(error);
 }
 
-- (void)locationManager:(CLLocationManager *)manager didFinishDeferredUpdatesWithError:(NSError *)error
+- (void)              locationManager: (CLLocationManager *) __unused manager
+    didFinishDeferredUpdatesWithError: (NSError *) error
 {
-    if (error != nil) {
+    if (error != nil)
+    {
         APCLogError(@"didFinishDeferredUpdatesWithError %@ \n", error);
     }
 }
 
 #pragma mark TODO  After pausing there may be some work to do here
 
-- (void)locationManagerDidResumeLocationUpdates:(CLLocationManager *)manager
+- (void) locationManagerDidResumeLocationUpdates: (CLLocationManager *) __unused manager
 {
 }
 
-- (void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager
+- (void) locationManagerDidPauseLocationUpdates: (CLLocationManager *) __unused manager
 {
     APCLogDebug(@"locationManagerDidPauseLocationUpdates");
 }

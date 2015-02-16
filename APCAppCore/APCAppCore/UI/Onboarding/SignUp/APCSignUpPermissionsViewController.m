@@ -181,7 +181,8 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
 
 #pragma mark - UITableViewDataSource methods
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView: (UITableView *) __unused tableView
+  numberOfRowsInSection: (NSInteger) __unused section
 {
     return self.permissions.count;
 }
@@ -206,7 +207,8 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
 
 #pragma mark - UITableViewDelegate methods
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)       tableView: (UITableView *) __unused tableView
+    heightForRowAtIndexPath: (NSIndexPath *) __unused indexPath
 {
     return kTableViewRowHeight;
 }
@@ -239,11 +241,11 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
 - (void)presentSettingsAlert:(NSError *)error
 {
     UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *__unused action) {
         
     }];
     [alertContorller addAction:dismiss];
-    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }];
     [alertContorller addAction:settings];
@@ -291,7 +293,7 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
 
 #pragma mark - UIApplication notification methods
 
-- (void)appDidBecomeActive:(NSNotification *)notification
+- (void) appDidBecomeActive: (NSNotification *) __unused notification
 {
     [self reloadData];
 }
@@ -317,7 +319,8 @@ static CGFloat const kTableViewRowHeight                 = 195.0f;
     [self.tableView reloadData];
 }
 
-- (IBAction)next:(id)sender {
+- (IBAction) next: (id) __unused sender
+{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self finishOnboarding];
 }

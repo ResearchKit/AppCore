@@ -65,25 +65,30 @@ NSString * const kAPCPickerTableViewCellIdentifier = @"APCPickerTableViewCell";
 
 #pragma mark - UIPickerViewDataSource methods
 
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+- (NSInteger) numberOfComponentsInPickerView: (UIPickerView *) __unused pickerView
 {
     return self.pickerValues.count;
 }
 
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+- (NSInteger) pickerView: (UIPickerView *) __unused pickerView
+ numberOfRowsInComponent: (NSInteger) component
 {
     return [self.pickerValues[component] count];
 }
 
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+- (NSString *) pickerView: (UIPickerView *) __unused pickerView
+              titleForRow: (NSInteger) row
+             forComponent: (NSInteger) component
 {
     return self.pickerValues[component][row];
 }
 
 #pragma mark - UIPickerViewDelegate Methods
 
-- (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    
+- (void) pickerView: (UIPickerView *) pickerView
+       didSelectRow: (NSInteger) __unused row
+        inComponent: (NSInteger) __unused component
+{
     NSMutableArray *selectedRowIndices = [NSMutableArray array];
     
     for (int i = 0 ; i < self.pickerValues.count; i++) {

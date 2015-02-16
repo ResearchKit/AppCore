@@ -16,8 +16,8 @@
 static CGFloat kSectionHeaderHeight = 40.f;
 static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
-@interface APCLearnMasterViewController () <RKSTTaskViewControllerDelegate>
-@property (strong, nonatomic) RKSTTaskViewController *consentVC;
+@interface APCLearnMasterViewController () <ORKTaskViewControllerDelegate>
+@property (strong, nonatomic) ORKTaskViewController *consentVC;
 @end
 
 @implementation APCLearnMasterViewController
@@ -67,12 +67,13 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
 #pragma mark - UITableViewDataSource methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger) numberOfSectionsInTableView: (UITableView *) __unused tableView
 {
     return self.items.count;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView: (UITableView *) __unused tableView
+  numberOfRowsInSection: (NSInteger) section
 {
     APCTableViewSection *sectionItem = self.items[section];
     
@@ -151,7 +152,8 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)        tableView: (UITableView *) __unused tableView
+    heightForHeaderInSection: (NSInteger) section
 {
     CGFloat height;
     
@@ -177,21 +179,22 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
 #pragma mark - TaskViewController Delegate methods
 //If the TaskViewController has claimed the task delegate, we will be returned control here
--(void)returnControlOfTaskDelegate: (id)sender{
+-(void) returnControlOfTaskDelegate: (id) __unused sender
+{
     self.consentVC.delegate = self;
 }
 
-- (void)taskViewControllerDidComplete: (RKSTTaskViewController *)taskViewController
+- (void)taskViewControllerDidComplete: (ORKTaskViewController *) __unused taskViewController
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewControllerDidCancel:(RKSTTaskViewController *)taskViewController
+- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController
 {
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewController:(RKSTTaskViewController *)taskViewController didFailOnStep:(RKSTStep *)step withError:(NSError *)error
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *) __unused step withError:(NSError *) __unused error
 {
     //TODO: Figure out what to do if it fails
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
