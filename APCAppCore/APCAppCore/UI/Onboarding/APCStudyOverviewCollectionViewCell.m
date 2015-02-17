@@ -44,7 +44,7 @@ NSString *const kAPCStudyOverviewCollectionViewCellIdentifier = @"APCStudyOvervi
     // Disable user selection
     [webView  stringByEvaluatingJavaScriptFromString: @"document.documentElement.style.webkitUserSelect='none';"];
     lastMultiplier = 1.0;
-    [self setFont];
+//    [self setFont];
 }
 
 - (void)setFont {
