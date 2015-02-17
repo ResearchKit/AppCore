@@ -123,17 +123,6 @@
     self.collectionView.dataSource = self;
     
     [self.researchInstituteImageView setImage:[UIImage imageNamed:@"logo_disease_researchInstitute"]];
-    [self addTransparencyGradient];
-}
-
-- (void)addTransparencyGradient
-{
-    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-    gradientLayer.frame = self.gradientCollectionView.bounds;
-    gradientLayer.colors = [NSArray arrayWithObjects:(id)[UIColor whiteColor].CGColor, (id)[UIColor clearColor].CGColor, nil];
-    gradientLayer.startPoint = CGPointMake(1.0f, 0.9f);
-    gradientLayer.endPoint = CGPointMake(1.0f, 1.0f);
-    self.gradientCollectionView.layer.mask = gradientLayer;
 }
 
 - (void)setUpAppearance
