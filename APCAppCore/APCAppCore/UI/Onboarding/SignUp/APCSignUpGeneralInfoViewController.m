@@ -682,6 +682,10 @@
 
 - (IBAction)changeProfileImage:(id) __unused sender
 {
+    [UIView animateWithDuration:0.3 animations:^{
+        self.alertLabel.alpha = 0;
+    }];
+    
     __weak typeof(self) weakSelf = self;
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
