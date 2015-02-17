@@ -390,25 +390,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                 case kAPCUserInfoItemTypeDateOfBirth:
                 {
-                    APCTableViewTextFieldItem *field = [APCTableViewTextFieldItem new];
-
-                    field.textAlignnment = NSTextAlignmentLeft;
-                    field.placeholder = NSLocalizedString(@"", @"");
+                    APCTableViewItem *field = [APCTableViewItem new];
                     field.caption = NSLocalizedString(@"Birthdate", @"");
-                    if (self.user.customSurveyQuestion) {
-                        field.value = [self.user.birthDate toStringWithFormat:NSDateDefaultDateFormat];
-                    }
+                    field.identifier = kAPCDefaultTableViewCellIdentifier;
                     field.editable = NO;
-                    field.keyboardType = UIKeyboardTypeAlphabet;
-                    field.identifier = kAPCTextFieldTableViewCellIdentifier;
-                    
-                    field.style = UITableViewStylePlain;
-//                    field.placeholder = NSLocalizedString(@"", @"");
-//                    field.caption = NSLocalizedString(@"Birthdate", @"");
-//                    field.identifier = kAPCDefaultTableViewCellIdentifier;
-//                    field.editable = NO;
-//                    field.textAlignnment = NSTextAlignmentRight;
-//                    field.detailText = [self.user.birthDate toStringWithFormat:NSDateDefaultDateFormat];
+                    field.textAlignnment = NSTextAlignmentRight;
+                    field.detailText = [self.user.birthDate toStringWithFormat:NSDateDefaultDateFormat];
                     
                     APCTableViewRow *row = [APCTableViewRow new];
                     row.item = field;
