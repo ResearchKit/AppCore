@@ -1774,9 +1774,19 @@
                                             </collectionViewCell>
                                         </cells>
                                     </collectionView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sE3-Ag-Qx6">
+                                        <rect key="frame" x="0.0" y="341" width="320" height="1"/>
+                                        <color key="backgroundColor" red="0.85098039219999999" green="0.85098039219999999" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="bc1-om-PRk"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="sE3-Ag-Qx6" firstAttribute="leading" secondItem="QiS-6G-IB1" secondAttribute="leading" id="6KC-hW-I9k"/>
+                                    <constraint firstAttribute="trailing" secondItem="sE3-Ag-Qx6" secondAttribute="trailing" id="EWL-BY-gCo"/>
+                                    <constraint firstAttribute="bottom" secondItem="sE3-Ag-Qx6" secondAttribute="bottom" id="H5M-pg-jEO"/>
                                     <constraint firstItem="SgZ-KM-25o" firstAttribute="leading" secondItem="QiS-6G-IB1" secondAttribute="leading" id="N69-Bz-5aZ"/>
                                     <constraint firstItem="SgZ-KM-25o" firstAttribute="top" secondItem="QiS-6G-IB1" secondAttribute="top" id="Odg-Ws-fYn"/>
                                     <constraint firstAttribute="bottom" secondItem="SgZ-KM-25o" secondAttribute="bottom" id="olg-wZ-gio"/>
@@ -1813,9 +1823,9 @@
                             <constraint firstAttribute="trailing" secondItem="dOr-00-ZDv" secondAttribute="trailing" id="I0I-CC-QMQ"/>
                             <constraint firstItem="aLS-jv-EqI" firstAttribute="top" secondItem="QiS-6G-IB1" secondAttribute="bottom" id="ZK9-b8-UgY"/>
                             <constraint firstItem="dOr-00-ZDv" firstAttribute="top" secondItem="VRq-AN-NOG" secondAttribute="bottom" constant="-20" id="cCn-Vq-IRf"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="QiS-6G-IB1" secondAttribute="trailing" constant="-16" id="dNf-QM-l2m"/>
                             <constraint firstAttribute="trailingMargin" secondItem="aLS-jv-EqI" secondAttribute="trailing" constant="50" id="geQ-Ku-Abi"/>
-                            <constraint firstItem="QiS-6G-IB1" firstAttribute="leading" secondItem="5tV-e0-GOi" secondAttribute="leadingMargin" constant="-16" id="kiX-mq-MSu"/>
+                            <constraint firstItem="dOr-00-ZDv" firstAttribute="trailing" secondItem="QiS-6G-IB1" secondAttribute="trailing" id="hn7-Pv-FFS"/>
+                            <constraint firstItem="dOr-00-ZDv" firstAttribute="leading" secondItem="QiS-6G-IB1" secondAttribute="leading" id="oOA-on-D6n"/>
                             <constraint firstItem="hGs-Z4-qAe" firstAttribute="top" secondItem="Srh-gC-C98" secondAttribute="bottom" constant="20" id="pMd-nO-8tt"/>
                             <constraint firstItem="QiS-6G-IB1" firstAttribute="top" secondItem="dOr-00-ZDv" secondAttribute="bottom" id="sTo-vo-xRv"/>
                             <constraint firstItem="Srh-gC-C98" firstAttribute="top" secondItem="aLS-jv-EqI" secondAttribute="bottom" id="xGL-Uv-g4j"/>

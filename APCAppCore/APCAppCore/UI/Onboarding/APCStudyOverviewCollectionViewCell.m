@@ -48,6 +48,11 @@ NSString *const kAPCStudyOverviewCollectionViewCellIdentifier = @"APCStudyOvervi
     //Commenting the below method call as text resizing with system font size is not required.
     
 //    [self setFont];
+    
+    //Disable horizontal scrolling. Without delay we'll have scrollable webView in some cases
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.webView.scrollView setContentSize: CGSizeMake(0, self.webView.scrollView.contentSize.height)];
+    });
 }
 
 - (void)setFont {
@@ -55,10 +60,6 @@ NSString *const kAPCStudyOverviewCollectionViewCellIdentifier = @"APCStudyOvervi
     NSString * javascriptFunc = [NSString stringWithFormat:@"function elementCurrentStyle(element, styleName){if (element.currentStyle){var i = 0, temp = \"\", changeCase = false;for (i = 0; i < styleName.length; i++)if (styleName[i] != '-'){temp += (changeCase ? styleName[i].toUpperCase() : styleName[i]);changeCase = false;} else {changeCase = true;}styleName = temp;return element.currentStyle[styleName];} else {return getComputedStyle(element, null).getPropertyValue(styleName);}};var all = document.getElementsByTagName(\"*\");for (var i=0; i < all.length; i++) {var element = all[i];var fontSize = elementCurrentStyle(element, \"font-size\");var fontSizeInt = parseInt(fontSize.replace(\"px\",\"\"));element.style.fontSize = (fontSizeInt*%f/%f) +\"px\";}", [self preferredMultiplyValue], lastMultiplier];
     [self.webView stringByEvaluatingJavaScriptFromString: javascriptFunc];
     lastMultiplier = [self preferredMultiplyValue];
-    //Disable horizontal scrolling. Without delay we'll have scrollable webView in some cases
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.webView.scrollView setContentSize: CGSizeMake(0, self.webView.scrollView.contentSize.height)];
-    });
 }
 
 - (CGFloat)preferredMultiplyValue {
