@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6724" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BnC-3K-zYD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BnC-3K-zYD">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6711"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -33,6 +33,38 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="sectionIndexBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="4hO-Ub-mwh">
+                            <rect key="frame" x="0.0" y="64" width="320" height="125"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Y1V-RG-GMG">
+                                    <rect key="frame" x="46" y="22" width="228" height="44"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="44" id="060-04-CEW"/>
+                                        <constraint firstAttribute="width" constant="228" id="O6z-9q-u1a"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Parkinson's Disease Study" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uWy-cG-Lcc">
+                                    <rect key="frame" x="46" y="74" width="228" height="30"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iwi-xR-umv">
+                                    <rect key="frame" x="0.0" y="124" width="320" height="1"/>
+                                    <color key="backgroundColor" red="0.85098039219999999" green="0.85098039219999999" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="uWy-cG-Lcc" firstAttribute="top" secondItem="Y1V-RG-GMG" secondAttribute="bottom" constant="8" id="9Ff-Qg-LI2"/>
+                                <constraint firstAttribute="centerX" secondItem="Y1V-RG-GMG" secondAttribute="centerX" id="TEp-wT-0al"/>
+                                <constraint firstAttribute="bottom" secondItem="uWy-cG-Lcc" secondAttribute="bottom" constant="21" id="YyA-mT-699"/>
+                                <constraint firstAttribute="trailing" secondItem="uWy-cG-Lcc" secondAttribute="trailing" constant="46" id="dWZ-wu-JZO"/>
+                                <constraint firstAttribute="centerY" secondItem="Y1V-RG-GMG" secondAttribute="centerY" constant="18.5" id="dhe-bn-WH7"/>
+                                <constraint firstItem="uWy-cG-Lcc" firstAttribute="leading" secondItem="4hO-Ub-mwh" secondAttribute="leading" constant="46" id="gM3-aq-eTz"/>
+                                <constraint firstAttribute="centerX" secondItem="uWy-cG-Lcc" secondAttribute="centerX" id="oLH-8f-j9J"/>
+                            </constraints>
+                        </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="mtQ-29-RsK">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -44,13 +76,6 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8cp-Bk-Yfl" id="1cb-By-18z">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mmG-s7-KzX">
-                                            <rect key="frame" x="0.0" y="0.0" width="4" height="76"/>
-                                            <color key="backgroundColor" red="0.21568629149999999" green="0.71372550729999995" blue="0.91764712329999998" alpha="1" colorSpace="deviceRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="4" id="bqa-qS-vr6"/>
-                                            </constraints>
-                                        </view>
                                         <imageView userInteractionEnabled="NO" tag="200" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XfX-bF-tGF">
                                             <rect key="frame" x="18" y="18" width="40" height="40"/>
                                             <constraints>
@@ -69,9 +94,6 @@
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="mmG-s7-KzX" firstAttribute="leading" secondItem="1cb-By-18z" secondAttribute="leadingMargin" constant="-8" id="3kk-J3-pgf"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="mmG-s7-KzX" secondAttribute="bottom" constant="-9" id="AOE-46-OkP"/>
-                                        <constraint firstItem="mmG-s7-KzX" firstAttribute="top" secondItem="1cb-By-18z" secondAttribute="topMargin" constant="-8" id="HVi-Gw-YrL"/>
                                         <constraint firstAttribute="centerY" secondItem="bYM-9d-7nO" secondAttribute="centerY" id="nes-mk-ei9"/>
                                         <constraint firstItem="bYM-9d-7nO" firstAttribute="trailing" secondItem="1cb-By-18z" secondAttribute="trailingMargin" id="ouF-xp-CnH"/>
                                         <constraint firstItem="XfX-bF-tGF" firstAttribute="leading" secondItem="1cb-By-18z" secondAttribute="leadingMargin" constant="10" id="p6y-mH-8qL"/>
@@ -82,7 +104,6 @@
                                 <connections>
                                     <outlet property="imageView" destination="XfX-bF-tGF" id="cJv-d1-CqB"/>
                                     <outlet property="textLabel" destination="bYM-9d-7nO" id="SpW-IK-Obw"/>
-                                    <outlet property="tintView" destination="mmG-s7-KzX" id="b9j-zJ-5je"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -93,6 +114,10 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Learn" id="WzP-aw-LC9"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="diseaseBanner" destination="Y1V-RG-GMG" id="xFu-zw-DEP"/>
+                        <outlet property="diseaseName" destination="uWy-cG-Lcc" id="yFL-ae-Msd"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gVe-yN-tdA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

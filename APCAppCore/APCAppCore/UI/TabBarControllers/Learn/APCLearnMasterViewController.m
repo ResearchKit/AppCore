@@ -17,7 +17,11 @@ static CGFloat kSectionHeaderHeight = 40.f;
 static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
 @interface APCLearnMasterViewController () <ORKTaskViewControllerDelegate>
+
 @property (strong, nonatomic) ORKTaskViewController *consentVC;
+@property (weak, nonatomic) IBOutlet UIImageView *diseaseBanner;
+@property (weak, nonatomic) IBOutlet UILabel *diseaseName;
+
 @end
 
 @implementation APCLearnMasterViewController
@@ -28,6 +32,9 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnControlOfTaskDelegate:) name:kreturnControlOfTaskDelegate object:nil];
     
     self.items = [NSMutableArray new];
+    
+    self.diseaseBanner.image = [UIImage imageNamed:@"logo_disease_researchInstitute"];
+    self.diseaseName.text = [APCUtilities appName];
     
     self.items = [self prepareContent];
     
@@ -69,7 +76,7 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
 - (NSInteger) numberOfSectionsInTableView: (UITableView *) __unused tableView
 {
-    return self.items.count;
+    return 1;
 }
 
 - (NSInteger) tableView: (UITableView *) __unused tableView
@@ -88,31 +95,9 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     
     cell.textLabel.text = studyDetailsItem.caption;
     cell.imageView.image = studyDetailsItem.iconImage;
-    cell.tintColor = studyDetailsItem.tintColor;
+    cell.imageView.tintColor = [UIColor appPrimaryColor];
     
     return cell;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *headerView;
-    
-    APCTableViewSection *sectionItem = self.items[section];
-    
-    if (sectionItem.sectionTitle.length > 0) {
-        
-        headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), tableView.sectionHeaderHeight)];
-        headerView.contentView.backgroundColor = [UIColor whiteColor];
-        
-        UILabel *headerLabel = [[UILabel alloc] initWithFrame:headerView.bounds];
-        headerLabel.font = [UIFont appLightFontWithSize:16.0f];
-        headerLabel.textColor = [UIColor appSecondaryColor1];
-        headerLabel.textAlignment = NSTextAlignmentCenter;
-        headerLabel.text = sectionItem.sectionTitle;
-        [headerView addSubview:headerLabel];
-    }
-    
-    return headerView;
 }
 
 #pragma mark UITableViewDelegate methods
@@ -235,32 +220,14 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
                 studyDetails.caption = rowItemDict[@"title"];
                 studyDetails.detailText = rowItemDict[@"details"];
                 studyDetails.iconImage = [[UIImage imageNamed:rowItemDict[@"icon_image"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                studyDetails.tintColor = [UIColor tertiaryColorForString:rowItemDict[@"tint_color"]];
                 
                 rowItem.item = studyDetails;
                 
                 if ([studyDetails.detailText isEqualToString:@"study_details"]) {
                     rowItem.itemType = kAPCTableViewLearnItemTypeStudyDetails;
-                } else if ([studyDetails.detailText isEqualToString:@"consent"]){
-                    rowItem.itemType = kAPCTableViewLearnItemTypeReviewConsent;
                 }else {
                     rowItem.itemType = kAPCTableViewLearnItemTypeOtherDetails;
                 }
-                [rowItems addObject:rowItem];
-            }
-            
-            if (section.sectionTitle.length == 0) {
-            
-                // Here we add the Review Consent row
-                APCTableViewStudyDetailsItem *reviewConsentItem = [APCTableViewStudyDetailsItem new];
-                reviewConsentItem.caption = NSLocalizedString(@"Review Consent", nil);
-                reviewConsentItem.iconImage = [UIImage imageNamed:@"consent_icon"];
-                reviewConsentItem.tintColor = [UIColor appTertiaryPurpleColor];
-                
-                APCTableViewRow *rowItem = [APCTableViewRow new];
-                rowItem.item = reviewConsentItem;
-                rowItem.itemType = kAPCTableViewStudyItemTypeReviewConsent;
-                
                 [rowItems addObject:rowItem];
             }
             
