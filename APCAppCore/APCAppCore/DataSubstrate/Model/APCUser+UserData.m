@@ -109,7 +109,7 @@
 
 + (double)heightInInchesForSelectedIndices:(NSArray *)selectedIndices
 {
-    NSInteger feet = ((NSNumber *)selectedIndices[0]).integerValue + 1;
+    NSInteger feet = ((NSNumber *)selectedIndices[0]).integerValue;
     NSInteger inches = ((NSNumber *)selectedIndices[1]).integerValue;
     
     double totalInches = (12 * feet) + inches;
