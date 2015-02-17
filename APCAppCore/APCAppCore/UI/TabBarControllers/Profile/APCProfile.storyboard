@@ -181,9 +181,9 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v3i-D8-I5m">
-                                            <rect key="frame" x="20" y="12" width="150" height="42"/>
+                                            <rect key="frame" x="20" y="12" width="178" height="42"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="150" id="5ht-dP-Sc0"/>
+                                                <constraint firstAttribute="width" constant="178" id="5ht-dP-Sc0"/>
                                                 <constraint firstAttribute="height" constant="42" id="aHH-Wp-WuX"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
