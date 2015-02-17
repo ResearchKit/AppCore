@@ -546,7 +546,6 @@ static NSUInteger const kIndexOfProfileTab = 3;
     
     NSArray  *controllers = tabBarController.viewControllers;
     
-    //Jira-1391 : Fix DRK 2/16/2015
     //These need to be "Selected" one by one it silly but I remember this from a pass issue.
     //We can hard code this as long as it matches the tab count above
     // Might want to refactor this more hwne we have time
