@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIView *gradientCollectionView;
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *joinButtonLeadingConstraint;
+@property (weak, nonatomic) IBOutlet UIButton *btnAlreadyParticipated;
 
 @end
 
@@ -134,6 +135,8 @@
     
     self.dateRangeLabel.font = [UIFont appLightFontWithSize:16];
     self.dateRangeLabel.textColor = [UIColor appSecondaryColor3];
+    
+    self.btnAlreadyParticipated.tintColor = [UIColor appPrimaryColor];
     
 }
 
