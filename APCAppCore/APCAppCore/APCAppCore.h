@@ -34,6 +34,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCOnboarding.h>
 #import <APCAppCore/APCDataResult.h>
 #import <APCAppCore/APCTasksReminderManager.h>
+#import <APCAppCore/APCUtilities.h>
 
 /* -------------------------------------
  Data Archiver & Passive Data Collectors
