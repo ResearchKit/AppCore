@@ -44,6 +44,9 @@ NSString *const kAPCStudyOverviewCollectionViewCellIdentifier = @"APCStudyOvervi
     // Disable user selection
     [webView  stringByEvaluatingJavaScriptFromString: @"document.documentElement.style.webkitUserSelect='none';"];
     lastMultiplier = 1.0;
+    
+    //Commenting the below method call as text resizing with system font size is not required.
+    
 //    [self setFont];
 }
 
