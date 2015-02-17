@@ -276,7 +276,12 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
     NSNumber *pointValue = @(0);
     
     if ([dataPoint[kAPCInsightFactorValueKey] integerValue] != NSNotFound) {
-        caption = [NSString stringWithFormat:@"%@ %@",dataPoint[kAPCInsightFactorValueKey], self.insightFactorCaption];
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setMaximumFractionDigits:0];
+        
+        caption = [NSString stringWithFormat:@"%@ %@",
+                   [numberFormatter stringFromNumber:dataPoint[kAPCInsightFactorValueKey]],
+                   self.insightFactorCaption];
         pointValue = dataPoint[kAPCInsightFactorValueKey];
     }
     
