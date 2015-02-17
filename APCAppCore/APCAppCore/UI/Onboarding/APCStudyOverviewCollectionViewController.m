@@ -370,10 +370,14 @@
 {
     if ([MFMailComposeViewController canSendMail])
     {
-        MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
-        mail.mailComposeDelegate = self;
+        MFMailComposeViewController *mailComposeVC = [[MFMailComposeViewController alloc] init];
+        mailComposeVC.mailComposeDelegate = self;
         
-        [self presentViewController:mail animated:YES completion:NULL];
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
+        NSData *fileData = [NSData dataWithContentsOfFile:filePath];
+        [mailComposeVC addAttachmentData:fileData mimeType:@"application/pdf" fileName:@"Consent"];
+        
+        [self presentViewController:mailComposeVC animated:YES completion:NULL];
     }
 }
 
@@ -381,9 +385,22 @@
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
-    if (result == MFMailComposeResultCancelled || result == MFMailComposeResultSent)
+    switch (result)
     {
-        [controller dismissViewControllerAnimated:YES completion:nil];
+        case MFMailComposeResultCancelled:
+            break;
+        case MFMailComposeResultSaved:
+            break;
+        case MFMailComposeResultSent:
+            break;
+        case MFMailComposeResultFailed:
+            APCLogError2(error);
+            break;
+        default:
+            break;
     }
+    
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
+
 @end
