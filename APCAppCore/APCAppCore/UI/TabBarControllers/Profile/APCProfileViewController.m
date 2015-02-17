@@ -489,11 +489,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
                     APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
                     field.caption = NSLocalizedString(@"Height", @"");
-                    field.pickerData = [APCUser heights];
-                    field.editable = NO;
-                    field.textAlignnment = NSTextAlignmentRight;
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
-
+                    field.selectionStyle = UITableViewCellSelectionStyleGray;
+                    field.detailDiscloserStyle = YES;
+                    field.textAlignnment = NSTextAlignmentRight;
+                    field.pickerData = [APCUser heights];
+                    
                     NSInteger defaultIndexOfMyHeightInFeet = 5;
                     NSInteger defaultIndexOfMyHeightInInches = 0;
                     NSInteger indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
