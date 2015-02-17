@@ -9,6 +9,8 @@
 #import "APCPermissionButton.h"
 #import "APCPermissionsManager.h"
 
+static NSString *kInternetNotAvailableErrorMessage1 = @"Internet Not Connected";
+static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reachable";
 
 @interface APCSignUpGeneralInfoViewController () <APCTermsAndConditionsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, APCFormTextFieldDelegate>
 
@@ -652,16 +654,29 @@
             if (error) {
                 
                 APCLogError2 (error);
-                [spinnerController dismissViewControllerAnimated:NO completion:^{
+            
+                if ([error.message isEqualToString:kInternetNotAvailableErrorMessage1] || [error.message isEqualToString:kInternetNotAvailableErrorMessage2]) {
+                    [spinnerController dismissViewControllerAnimated:NO completion:^{
                     
-                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Sign Up", @"")
-                                                                       message:error.message
-                                                                      delegate:self
-                                                             cancelButtonTitle:NSLocalizedString(@"Change Details", nil)
-                                                             otherButtonTitles:NSLocalizedString(@"Send Again", nil), nil];
-                    [alertView show];
-                    
-                }];
+                        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Sign Up", @"")
+                                                                           message:error.message
+                                                                          delegate:self
+                                                                 cancelButtonTitle:@"OK"
+                                                                 otherButtonTitles:nil];
+                        [alertView show];
+                    }];
+                }else{
+                    [spinnerController dismissViewControllerAnimated:NO completion:^{
+                        
+                        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Sign Up", @"")
+                                                                           message:error.message
+                                                                          delegate:self
+                                                                 cancelButtonTitle:NSLocalizedString(@"Change Details", nil)
+                                                                 otherButtonTitles:NSLocalizedString(@"Send Again", nil), nil];
+                        [alertView show];
+                        
+                    }];
+                }
             }
             else
             {
