@@ -46,6 +46,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     NSMutableArray *items = [NSMutableArray new];
     
     {
+        APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+        BOOL reminderOnState = appDelegate.tasksReminder.reminderOn;
+        
         NSMutableArray *rowItems = [NSMutableArray new];
         
         {
@@ -53,8 +56,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.caption = NSLocalizedString(@"All Task Reminders", @"");
             field.identifier = kAPCSwitchCellIdentifier;
             field.editable = NO;
-            APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-            field.on = appDelegate.tasksReminder.reminderOn;
+            
+            field.on = reminderOnState;
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
@@ -62,13 +65,13 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
+        if (reminderOnState)
         {
             APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
             field.caption = NSLocalizedString(@"Reminder Time", @"");
             field.pickerData = @[[APCTasksReminderManager reminderTimesArray]];
             field.textAlignnment = NSTextAlignmentRight;
             field.identifier = kAPCDefaultTableViewCellIdentifier;
-            APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
             field.selectedRowIndices = @[@([[APCTasksReminderManager reminderTimesArray] indexOfObject:appDelegate.tasksReminder.reminderTime])];
 
             APCTableViewRow *row = [APCTableViewRow new];
@@ -245,10 +248,13 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void)switchTableViewCell:(APCSwitchTableViewCell *)cell switchValueChanged:(BOOL)on
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    if (indexPath.section == 1 && indexPath.row == 0) {
+    if (indexPath.section == 0 && indexPath.row == 0) {
         APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
         appDelegate.tasksReminder.reminderOn = on;
     }
+    
+    self.items = [self prepareContent];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - Getter
