@@ -10,7 +10,7 @@
             <objects>
                 <tableViewController id="3ca-8Q-UW8" customClass="APCProfileViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="64" sectionHeaderHeight="22" sectionFooterHeight="22" id="pPM-kO-BHx">
-                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="separatorColor" red="0.85098039219999999" green="0.85098039219999999" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -288,9 +288,11 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="applicationNameLabel" destination="H3m-U4-zNB" id="6Xe-4F-enL"/>
                         <outlet property="editLabel" destination="vQl-IA-A14" id="poa-Ao-Vzy"/>
+                        <outlet property="emailTextField" destination="vQl-IA-A14" id="jMW-bs-0To"/>
                         <outlet property="headerView" destination="kqd-X8-uFF" id="mtL-hI-3F7"/>
                         <outlet property="leaveStudyButton" destination="UMm-O6-rLy" id="BcQ-JB-fBa"/>
                         <outlet property="nameTextField" destination="8hk-Wz-D1n" id="WWf-nf-0BV"/>

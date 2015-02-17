@@ -76,10 +76,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     self.items = [self prepareContent];
     [self.tableView reloadData];
     
-    NSBundle *bundle = [NSBundle mainBundle];
-    NSDictionary *info = [bundle infoDictionary];
-    NSString *prodName = [info objectForKey:@"CFBundleDisplayName"];
-    self.applicationNameLabel.text = prodName;
+    self.applicationNameLabel.text = [APCUtilities appName];
     
     self.nameTextField.text = self.user.name;
     self.nameTextField.enabled = NO;
@@ -490,42 +487,41 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 case kAPCUserInfoItemTypeHeight:
                 {
 
-                    APCTableViewItem *field = [APCTableViewItem new];
+                    APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
                     field.caption = NSLocalizedString(@"Height", @"");
-//                    field.pickerData = [APCUser heights];
+                    field.pickerData = [APCUser heights];
                     field.editable = NO;
                     field.textAlignnment = NSTextAlignmentRight;
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
-//#warning this needs a solution. This causes a crash.
-//                    
-//                    NSInteger defaultIndexOfMyHeightInFeet = 5;
-//                    NSInteger defaultIndexOfMyHeightInInches = 0;
-//                    NSInteger indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
-//                    NSInteger indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
-//                    
+
+                    NSInteger defaultIndexOfMyHeightInFeet = 5;
+                    NSInteger defaultIndexOfMyHeightInInches = 0;
+                    NSInteger indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
+                    NSInteger indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
+
                     if (self.user.height) {
                         
-//                        double heightInInches = roundf([APCUser heightInInches:self.user.height]);
-//                        NSString *feet = [NSString stringWithFormat:@"%d'", (int)heightInInches/12];
-//                        NSString *inches = [NSString stringWithFormat:@"%d''", (int)heightInInches%12];
-//                        
-//                        NSArray *allPossibleHeightsInFeet = field.pickerData [0];
-//                        NSArray *allPossibleHeightsInInches = field.pickerData [1];
-//                        
-//                        indexOfMyHeightInFeet = [allPossibleHeightsInFeet indexOfObject: feet];
-//                        indexOfMyHeightInInches = [allPossibleHeightsInInches indexOfObject: inches];
-//                        
-//                        if (indexOfMyHeightInFeet == NSNotFound)
-//                        {
-//                            indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
-//                        }
-//                        
-//                        if (indexOfMyHeightInInches == NSNotFound)
-//                        {
-//                            indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
-//                        }
-//                        
-//                        field.selectedRowIndices = @[ @(indexOfMyHeightInFeet), @(indexOfMyHeightInInches) ];
+                        double heightInInches = round([APCUser heightInInches:self.user.height]);
+                        NSString *feet = [NSString stringWithFormat:@"%i'", (int)heightInInches/12];
+                        NSString *inches = [NSString stringWithFormat:@"%i''", (int)heightInInches%12];
+                        
+                        NSArray *allPossibleHeightsInFeet = field.pickerData [0];
+                        NSArray *allPossibleHeightsInInches = field.pickerData [1];
+                        
+                        indexOfMyHeightInFeet = [allPossibleHeightsInFeet indexOfObject: feet];
+                        indexOfMyHeightInInches = [allPossibleHeightsInInches indexOfObject: inches];
+                        
+                        if (indexOfMyHeightInFeet == NSNotFound)
+                        {
+                            indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
+                        }
+                        
+                        if (indexOfMyHeightInInches == NSNotFound)
+                        {
+                            indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
+                        }
+                        
+                        field.selectedRowIndices = @[ @(indexOfMyHeightInFeet), @(indexOfMyHeightInInches) ];
 
                     }
                     
