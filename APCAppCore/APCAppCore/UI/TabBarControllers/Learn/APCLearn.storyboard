@@ -49,7 +49,7 @@
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iwi-xR-umv">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iwi-xR-umv">
                                     <rect key="frame" x="0.0" y="124" width="320" height="1"/>
                                     <color key="backgroundColor" red="0.85098039219999999" green="0.85098039219999999" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
                                 </view>
@@ -62,7 +62,11 @@
                                 <constraint firstAttribute="trailing" secondItem="uWy-cG-Lcc" secondAttribute="trailing" constant="46" id="dWZ-wu-JZO"/>
                                 <constraint firstAttribute="centerY" secondItem="Y1V-RG-GMG" secondAttribute="centerY" constant="18.5" id="dhe-bn-WH7"/>
                                 <constraint firstItem="uWy-cG-Lcc" firstAttribute="leading" secondItem="4hO-Ub-mwh" secondAttribute="leading" constant="46" id="gM3-aq-eTz"/>
+                                <constraint firstItem="iwi-xR-umv" firstAttribute="leading" secondItem="4hO-Ub-mwh" secondAttribute="leading" id="llk-KN-xas"/>
+                                <constraint firstItem="iwi-xR-umv" firstAttribute="top" secondItem="uWy-cG-Lcc" secondAttribute="bottom" constant="20" id="mzN-Qo-0Bf"/>
                                 <constraint firstAttribute="centerX" secondItem="uWy-cG-Lcc" secondAttribute="centerX" id="oLH-8f-j9J"/>
+                                <constraint firstAttribute="trailing" secondItem="iwi-xR-umv" secondAttribute="trailing" id="p9W-aR-tV5"/>
+                                <constraint firstAttribute="bottom" secondItem="iwi-xR-umv" secondAttribute="bottom" id="szT-s4-qy1"/>
                             </constraints>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="mtQ-29-RsK">
