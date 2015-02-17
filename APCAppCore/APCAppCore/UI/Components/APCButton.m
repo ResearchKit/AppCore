@@ -31,6 +31,9 @@
     // Appearance for selected state
     [self setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     [self setBackgroundImage:selectedBackground forState:UIControlStateSelected];
+    
+    // Appearance for disabled state
+    [self setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -67,6 +70,11 @@
     UIGraphicsEndImageContext();
     
     return image;
+}
+
+- (void)setEnabled:(BOOL)enabled {
+    [super setEnabled:enabled];
+    self.layer.borderColor = enabled ? [[UIColor appPrimaryColor] CGColor] : [[UIColor grayColor] CGColor];
 }
 
 @end
