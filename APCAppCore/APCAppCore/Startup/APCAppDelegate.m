@@ -545,7 +545,15 @@ static NSUInteger const kIndexOfProfileTab = 3;
     }
     
     NSArray  *controllers = tabBarController.viewControllers;
+    
+    //These need to be "Selected" one by one it silly but I remember this from a pass issue.
+    //We can hard code this as long as it matches the tab count above
+    // Might want to refactor this more hwne we have time
+    [tabBarController setSelectedIndex:selectedItemIndex + 1];
+    [tabBarController setSelectedIndex:selectedItemIndex + 2];
+    [tabBarController setSelectedIndex:selectedItemIndex + 3];
     [tabBarController setSelectedIndex:selectedItemIndex];
+    
     [self tabBarController:tabBarController didSelectViewController:controllers[selectedItemIndex]];
 }
 
