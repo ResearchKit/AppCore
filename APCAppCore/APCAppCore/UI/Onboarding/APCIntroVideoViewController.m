@@ -34,14 +34,6 @@ static NSString *const kVideoShownKey = @"VideoShown";
 - (void) viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame = CGRectMake(CGRectGetWidth(self.view.frame) - 70, 10, 60, 44);
-    [button setTitle:NSLocalizedString(@"SKIP", @"") forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(skip) forControlEvents:UIControlEventTouchUpInside];
-    [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
-
-    [self.view addSubview:button];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
