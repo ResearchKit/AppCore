@@ -28,6 +28,8 @@ typedef NS_ENUM(APCTableViewItemType, APCTableViewDashboardItemType) {
 
 @property (nonatomic, strong) NSMutableArray *items;
 
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;;
+
 - (APCTableViewItem *)itemForIndexPath:(NSIndexPath *)indexPath;
 
 - (APCTableViewItemType)itemTypeForIndexPath:(NSIndexPath *)indexPath;

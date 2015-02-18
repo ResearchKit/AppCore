@@ -99,7 +99,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     _referenceLineColor = [UIColor colorWithRed:225/255.f green:225/255.f blue:229/255.f alpha:1.f];
     
     _scrubberLineColor = [UIColor grayColor];
-    _scrubberThumbColor = [UIColor colorWithWhite:1 alpha:0.8];
+    _scrubberThumbColor = [UIColor colorWithWhite:1 alpha:1.0];
     
     _shouldAnimate = YES;
     _showsVerticalReferenceLines = NO;
@@ -341,7 +341,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     self.xAxisView.tintColor = self.tintColor;
     [self.xAxisView setupLabels:self.xAxisTitles forAxisType:kAPCGraphAxisTypeX];
     self.xAxisView.leftOffset = kAPCGraphLeftPadding;
-    [self addSubview:self.xAxisView];
+    [self insertSubview:self.xAxisView belowSubview:self.plotsView];
     
     UIBezierPath *xAxispath = [UIBezierPath bezierPath];
     [xAxispath moveToPoint:CGPointMake(0, 0)];
@@ -454,7 +454,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     referenceLineLayer.strokeColor = self.referenceLineColor.CGColor;
     referenceLineLayer.path = referenceLinePath.CGPath;
     referenceLineLayer.lineDashPattern = self.isLandscapeMode ? @[@12, @7] : @[@6, @4];
-    [self.layer addSublayer:referenceLineLayer];
+    [self.plotsView.layer addSublayer:referenceLineLayer];
     
     [self.referenceLines addObject:referenceLineLayer];
 }

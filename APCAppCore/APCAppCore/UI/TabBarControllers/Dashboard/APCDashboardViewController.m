@@ -30,6 +30,16 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 
 @implementation APCDashboardViewController
 
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        
+        _dateFormatter = [NSDateFormatter new];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -104,6 +114,9 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         
         progressCell.progressView.progress = progressItem.progress;
         progressCell.title = NSLocalizedString(@"Activity Completion", @"Activity Completion");
+        [self.dateFormatter setDateFormat:@"MMMM d"];
+        
+        progressCell.subTitleLabel.text = [NSString stringWithFormat:@"%@, %@", NSLocalizedString(@"Today",@"Today"), [self.dateFormatter stringFromDate:[NSDate date]]];
         
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardGraphItem class]]){
         
