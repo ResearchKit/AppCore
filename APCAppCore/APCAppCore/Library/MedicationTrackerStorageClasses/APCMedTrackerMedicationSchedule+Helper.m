@@ -52,23 +52,23 @@
             schedule.dateStartedUsing = [NSDate date];
 
             NSError *error = nil;
-//            [schedule saveToPersistentStore: &error];
+            [schedule saveToPersistentStore: &error];
 
-            if (localContext.hasChanges)
-            {
-                if ([localContext save: &error])
-                {
-                    NSLog (@"Save seems to have worked!");
-                }
-                else
-                {
-                    NSLog (@"Error while saving!  %@", error);
-                }
-            }
-            else
-            {
-                NSLog (@"Dude.  Nothing to save.  'sup widdat?");
-            }
+//            if (localContext.hasChanges)
+//            {
+//                if ([localContext save: &error])
+//                {
+//                    NSLog (@"Save seems to have worked!");
+//                }
+//                else
+//                {
+//                    NSLog (@"Error while saving!  %@", error);
+//                }
+//            }
+//            else
+//            {
+//                NSLog (@"Dude.  Nothing to save.  'sup widdat?");
+//            }
 
             NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];
 

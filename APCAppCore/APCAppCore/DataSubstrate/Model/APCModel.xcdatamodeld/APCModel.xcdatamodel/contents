@@ -13,7 +13,7 @@
     </entity>
     <entity name="APCMedTrackerMedicationSchedule" representedClassName="APCMedTrackerMedicationSchedule" syncable="YES">
         <attribute name="dateStartedUsing" attributeType="Date" syncable="YES"/>
-        <attribute name="dateStoppedUsing" attributeType="Date" syncable="YES"/>
+        <attribute name="dateStoppedUsing" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="didStopUsingOnDoctorsOrders" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="numberOfTimesPerDay" attributeType="Integer 16" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="zeroBasedDaysOfTheWeek" attributeType="String" syncable="YES"/>
