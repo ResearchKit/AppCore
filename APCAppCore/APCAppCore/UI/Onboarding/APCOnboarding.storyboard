@@ -951,7 +951,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EqO-DT-mOm">
-                                                    <rect key="frame" x="125" y="15" width="181" height="35"/>
+                                                    <rect key="frame" x="94" y="15" width="212" height="35"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="35" id="HCo-O6-5eJ"/>
                                                     </constraints>
@@ -962,10 +962,10 @@
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dEh-z0-2pc">
-                                                    <rect key="frame" x="16" y="23" width="101" height="21"/>
+                                                    <rect key="frame" x="16" y="23" width="70" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="n54-eX-dF8"/>
-                                                        <constraint firstAttribute="width" constant="101" id="xXM-Pk-xQl"/>
+                                                        <constraint firstAttribute="width" constant="70" id="xXM-Pk-xQl"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -987,7 +987,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="boZ-cz-pDf">
-                                                    <rect key="frame" x="125" y="15" width="181" height="35"/>
+                                                    <rect key="frame" x="94" y="15" width="212" height="35"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="35" id="joF-z1-SEO"/>
                                                     </constraints>
@@ -998,9 +998,9 @@
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pgt-IW-QQA">
-                                                    <rect key="frame" x="16" y="23" width="101" height="21"/>
+                                                    <rect key="frame" x="16" y="23" width="70" height="21"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="101" id="0TC-cs-cfI"/>
+                                                        <constraint firstAttribute="width" constant="70" id="0TC-cs-cfI"/>
                                                         <constraint firstAttribute="height" constant="21" id="gfv-I9-WRI"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
