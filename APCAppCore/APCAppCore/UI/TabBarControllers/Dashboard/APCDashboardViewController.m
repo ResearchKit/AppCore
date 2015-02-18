@@ -14,6 +14,8 @@
 #import "APCAppDelegate.h"
 #import "APCAppCore.h"
 
+static CGFloat const kAPCLineGraphCellHeight = 225.0f;
+
 @interface APCDashboardViewController ()<UIGestureRecognizerDelegate, APCConcentricProgressViewDataSource>
 
 @property (nonatomic, strong) NSMutableArray *lineCharts;
@@ -220,13 +222,13 @@
         APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)dashboardItem;
         
         if (graphItem.graphType == kAPCDashboardGraphTypeLine) {
-            height = 204.0f;
+            height = kAPCLineGraphCellHeight;
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypePie) {
-            height = 204.0f;
+            height = kAPCLineGraphCellHeight;
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypeTimeline) {
-            height = 204.0f;
+            height = kAPCLineGraphCellHeight;
             
         }
         

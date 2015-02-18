@@ -26,6 +26,8 @@ FOUNDATION_EXPORT NSString * const kAPCLineGraphViewRefreshNotification;
 
 @property (nonatomic, getter=isLandscapeMode) BOOL landscapeMode;
 
+@property (nonatomic) BOOL showsVerticalReferenceLines;
+
 /* Appearance */
 
 @property (nonatomic, strong) UIColor *tintColor;

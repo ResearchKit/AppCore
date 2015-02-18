@@ -52,7 +52,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 @property (nonatomic, strong) CAShapeLayer *fillPathLayer;
 
 @property (nonatomic) BOOL shouldAnimate;
-@property (nonatomic) BOOL shouldLoadViews;
 
 @end
 
@@ -93,9 +92,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     _tintColor = [UIColor colorWithRed:244/255.f green:190/255.f blue:74/255.f alpha:1.f];
     
-    _axisColor = [UIColor colorWithRed:100/255.f green:100/255.f blue:100/255.f alpha:1.f];
+    _axisColor = [UIColor colorWithRed:217/255.f green:217/255.f blue:217/255.f alpha:1.f];
     _axisTitleColor = [UIColor colorWithRed:142/255.f green:142/255.f blue:147/255.f alpha:1.f];
-    _axisTitleFont = [UIFont fontWithName:@"Helvetica" size:11.0f];
+    _axisTitleFont = [UIFont fontWithName:@"HelveticaNeue" size:11.0f];
     
     _referenceLineColor = [UIColor colorWithRed:225/255.f green:225/255.f blue:229/255.f alpha:1.f];
     
@@ -103,7 +102,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     _scrubberThumbColor = [UIColor colorWithWhite:1 alpha:0.8];
     
     _shouldAnimate = YES;
-    _shouldLoadViews = YES;
+    _showsVerticalReferenceLines = NO;
     
     [self setupViews];
     
@@ -231,8 +230,14 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     [self drawXAxis];
     [self drawYAxis];
+    
     [self drawhorizontalReferenceLines];
-    [self drawVerticalReferenceLines];
+    
+    if (self.showsVerticalReferenceLines) {
+        [self drawVerticalReferenceLines];
+    }
+    
+    [self calculateXAxisPoints];
     
     for (int i=0; i<[self numberOfPlots]; i++) {
         if ([self numberOfPointsinPlot:i] <= 1) {
@@ -241,8 +246,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
             [self drawGraphForPlotIndex:i];
         }
     }
-    
-    self.shouldLoadViews = NO;
     
     [self animateLayersSequentially];
 }
@@ -285,10 +288,21 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     return _numberOfXAxisTitles;
 }
 
+- (void)calculateXAxisPoints
+{
+    [self.xAxisPoints removeAllObjects];
+    
+    for (int i=0 ; i<[self numberOfXAxisTitles]; i++) {
+        
+        CGFloat positionOnXAxis = ((CGRectGetWidth(self.plotsView.frame) / (self.yAxisPoints.count - 1)) * i);
+        positionOnXAxis = round(positionOnXAxis);
+        [self.xAxisPoints addObject:@(positionOnXAxis)];
+    }
+}
+
 - (void)prepareDataForPlotIndex:(NSInteger)plotIndex
 {
     [self.dataPoints removeAllObjects];
-    [self.xAxisPoints removeAllObjects];
     [self.yAxisPoints removeAllObjects];
     
     for (int i = 0; i<[self numberOfPointsinPlot:plotIndex]; i++) {
@@ -324,7 +338,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     self.xAxisView = [[APCAxisView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.plotsView.frame), CGRectGetWidth(self.plotsView.frame), kXAxisHeight)];
     self.xAxisView.landscapeMode = self.landscapeMode;
-    self.xAxisView.tintColor = self.axisTitleColor;
+    self.xAxisView.tintColor = self.tintColor;
     [self.xAxisView setupLabels:self.xAxisTitles forAxisType:kAPCGraphAxisTypeX];
     self.xAxisView.leftOffset = kAPCGraphLeftPadding;
     [self addSubview:self.xAxisView];
@@ -393,7 +407,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         if (self.minimumValue == self.maximumValue) {
             yAxisLabelFactors = @[@0.5f];
         } else {
-            yAxisLabelFactors = @[@0.2f,@0.8f];
+            yAxisLabelFactors = @[@0.2f,@1.0f];
         }
         
         for (int i =0; i<yAxisLabelFactors.count; i++) {
@@ -469,11 +483,10 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     [self prepareDataForPlotIndex:plotIndex];
     
-    [self drawPointCirclesForPlotIndex:plotIndex];
-    
     if ([self numberOfValidValues] > 1) {
         [self drawLinesForPlotIndex:plotIndex];
     }
+    [self drawPointCirclesForPlotIndex:plotIndex];
 }
 
 - (void)drawPointCirclesForPlotIndex:(NSInteger)plotIndex
@@ -484,14 +497,12 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         
         CGFloat dataPointVal = [self.dataPoints[i] floatValue];
         
-        CGFloat positionOnXAxis = ((CGRectGetWidth(self.plotsView.frame) / (self.yAxisPoints.count - 1)) * i);
-        positionOnXAxis = round(positionOnXAxis);
-        [self.xAxisPoints addObject:@(positionOnXAxis)];
+        CGFloat positionOnXAxis = [self.xAxisPoints[i] floatValue];
         
         if (dataPointVal != NSNotFound) {
             CGFloat positionOnYAxis = ((NSNumber*)self.yAxisPoints[i]).floatValue;
             
-            CGFloat pointSize = self.isLandscapeMode ? 9.0f : 7.0f;
+            CGFloat pointSize = self.isLandscapeMode ? 10.0f : 8.0f;
             APCCircleView *point = [[APCCircleView alloc] initWithFrame:CGRectMake(0, 0, pointSize, pointSize)];
             point.tintColor = (plotIndex == 0) ? self.tintColor : self.referenceLineColor;
             point.center = CGPointMake(positionOnXAxis, positionOnYAxis);
