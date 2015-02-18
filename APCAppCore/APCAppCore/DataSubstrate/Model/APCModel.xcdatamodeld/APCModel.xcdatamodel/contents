@@ -12,6 +12,9 @@
         <relationship name="schedulesWhereIAmUsed" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCMedTrackerMedicationSchedule" inverseName="medicine" inverseEntity="APCMedTrackerMedicationSchedule" syncable="YES"/>
     </entity>
     <entity name="APCMedTrackerMedicationSchedule" representedClassName="APCMedTrackerMedicationSchedule" syncable="YES">
+        <attribute name="dateStartedUsing" attributeType="Date" syncable="YES"/>
+        <attribute name="dateStoppedUsing" attributeType="Date" syncable="YES"/>
+        <attribute name="didStopUsingOnDoctorsOrders" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="numberOfTimesPerDay" attributeType="Integer 16" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="zeroBasedDaysOfTheWeek" attributeType="String" syncable="YES"/>
         <relationship name="actualDosesTaken" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCMedTrackerActualDosageTaken" inverseName="scheduleIAmBasedOn" inverseEntity="APCMedTrackerActualDosageTaken" syncable="YES"/>
@@ -112,7 +115,7 @@
         <element name="APCDBStatus" positionX="-1008" positionY="365" width="128" height="58"/>
         <element name="APCMedTrackerActualDosageTaken" positionX="-1197" positionY="647" width="216" height="73"/>
         <element name="APCMedTrackerMedication" positionX="-1215" positionY="899" width="180" height="73"/>
-        <element name="APCMedTrackerMedicationSchedule" positionX="-938" positionY="764" width="218" height="133"/>
+        <element name="APCMedTrackerMedicationSchedule" positionX="-938" positionY="764" width="218" height="178"/>
         <element name="APCMedTrackerPossibleDosage" positionX="-1269" positionY="758" width="216" height="88"/>
         <element name="APCMedTrackerScheduleColor" positionX="-666" positionY="729" width="207" height="133"/>
         <element name="APCResult" positionX="-1107" positionY="72" width="128" height="208"/>

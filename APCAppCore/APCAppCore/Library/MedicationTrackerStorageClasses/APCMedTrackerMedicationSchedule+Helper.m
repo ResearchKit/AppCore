@@ -12,6 +12,7 @@
 #import "APCAppDelegate.h"
 #import "APCDataSubstrate+CoreData.h"
 #import "NSManagedObject+APCHelper.h"
+#import "NSDate+Helper.h"
 
 @implementation APCMedTrackerMedicationSchedule (Helper)
 
@@ -48,6 +49,7 @@
             schedule.color = color;
             schedule.zeroBasedDaysOfTheWeek = [zeroBasedDaysOfTheWeek componentsJoinedByString: @","];
             schedule.numberOfTimesPerDay = numberOfTimesPerDay;
+            schedule.dateStartedUsing = [NSDate date];
 
             NSError *error = nil;
 //            [schedule saveToPersistentStore: &error];
@@ -83,5 +85,18 @@
 
     return result;
 }
+
+- (BOOL) isActive
+{
+    BOOL result = YES;
+
+    if (self.dateStoppedUsing != nil && self.dateStoppedUsing.isInThePast)
+    {
+        result = NO;
+    }
+
+    return result;
+}
+
 
 @end

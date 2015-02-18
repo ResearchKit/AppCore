@@ -157,6 +157,18 @@ NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
 	return result;
 }
 
+- (BOOL) isInThePast
+{
+    BOOL result = [self timeIntervalSinceNow] < 0;
+    return result;
+}
+
+- (BOOL) isInTheFuture
+{
+    BOOL result = [self timeIntervalSinceNow] > 0;
+    return result;
+}
+
 + (NSTimeInterval) parseISO8601DurationString: (NSString*) duration {
     
     float i = 0, years = 0, months = 0, weeks = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
