@@ -44,6 +44,8 @@
     
     if (text == nil || [text isEqualToString:@""]) {
         self.layer.borderWidth = 0;
+    } else {
+        self.layer.borderWidth = 1.0;
     }
     
     [self setNeedsDisplay];

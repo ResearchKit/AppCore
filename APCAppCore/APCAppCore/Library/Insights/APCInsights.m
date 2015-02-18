@@ -275,7 +275,7 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
     NSString *caption = NSLocalizedString(@"Data is not available", @"Data is not available");
     NSNumber *pointValue = @(0);
     
-    if ([dataPoint[kAPCInsightFactorValueKey] integerValue] != NSNotFound) {
+    if ([dataPoint[kAPCInsightFactorValueKey] isEqualToNumber:@(NSNotFound)] == NO) {
         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
         [numberFormatter setMaximumFractionDigits:0];
         
@@ -360,7 +360,7 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
         for (NSDictionary *reading in groupedReadings) {
             NSNumber *average = reading[kDatasetValueKey];
             
-            if ([average integerValue] != NSNotFound) {
+            if ([average isEqualToNumber:@(NSNotFound)] == NO) {
                 // check if the average in-range or high
                 if ([reading[@"period"] boolValue]) {
                     if ([average doubleValue] >= [self.baselineHigh integerValue]) {

@@ -119,7 +119,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 
     APCConfirmationView * confirmView = (APCConfirmationView*)[cell viewWithTag:100];
     UILabel * titleLabel = (UILabel*)[cell viewWithTag:200];
-    UILabel * countLabel = (UILabel*)[cell viewWithTag:300];
+    APCBadgeLabel * countLabel = (APCBadgeLabel *)[cell viewWithTag:300];
     UILabel * completionTimeLabel = (UILabel*)[cell viewWithTag:400];
     
     //Styling
@@ -281,18 +281,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 
 - (void)reloadData
 {
-    [self reloadTableArray];
-    [self.tableView reloadData];
-    
-    //Display a custom view announcing that there are no activities if there are none.
-    if (self.sectionsArray.count == 0) {
-        [self addCustomNoTaskView];
-    } else {
-        if (self.noTasksView) {
-            [self.noTasksView removeFromSuperview];
-        }
-    }
-    
     // Update the badge
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -307,6 +295,18 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
         activitiesTab.badgeValue = [remainingTasks stringValue];
     } else {
         activitiesTab.badgeValue = nil;
+    }
+    
+    [self reloadTableArray];
+    [self.tableView reloadData];
+    
+    //Display a custom view announcing that there are no activities if there are none.
+    if (self.sectionsArray.count == 0) {
+        [self addCustomNoTaskView];
+    } else {
+        if (self.noTasksView) {
+            [self.noTasksView removeFromSuperview];
+        }
     }
 }
 
