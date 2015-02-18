@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>name</key>
+		<string>Amantadine</string>
+		<key>uniqueId</key>
+		<integer>1</integer>
+	</dict>
+	<dict>
+		<key>uniqueId</key>
+		<integer>2</integer>
+		<key>name</key>
+		<string>Azilect</string>
+	</dict>
+	<dict>
+		<key>uniqueId</key>
+		<integer>3</integer>
+		<key>name</key>
+		<string>Carbidopa-Levodopa</string>
+	</dict>
+	<dict>
+		<key>uniqueId</key>
+		<integer>4</integer>
+		<key>name</key>
+		<string>Cogentin</string>
+	</dict>
+	<dict>
+		<key>uniqueId</key>
+		<integer>5</integer>
+		<key>name</key>
+		<string>Dopamine</string>
+	</dict>
+	<dict>
+		<key>uniqueId</key>
+		<integer>6</integer>
+		<key>name</key>
+		<string>Eldepryl</string>
+	</dict>
+	<dict>
+		<key>uniqueId</key>
+		<integer>7</integer>
+		<key>name</key>
+		<string>Entacapone (Comtan)</string>
+	</dict>
+	<dict>
+		<key>uniqueId</key>
+		<integer>8</integer>
+		<key>name</key>
+		<string>Zelapar</string>
+	</dict>
+</array>
+</plist>

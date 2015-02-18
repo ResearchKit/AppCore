@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>uniqueId</key>
+		<integer>1</integer>
+		<key>uniqueIdOfMedication</key>
+		<integer>1</integer>
+		<key>uniqueIdOfDosage</key>
+		<integer>4</integer>
+		<key>uniqueIdOfColor</key>
+		<integer>3</integer>
+		<key>numberOfTimesPerDay</key>
+		<integer>2</integer>
+		<key>zeroBasedDaysOfTheWeek</key>
+		<array>
+			<integer>2</integer>
+			<string>3</string>
+		</array>
+	</dict>
+	<dict>
+		<key>uniqueId</key>
+		<integer>2</integer>
+		<key>uniqueIdOfMedication</key>
+		<integer>2</integer>
+		<key>uniqueIdOfDosage</key>
+		<integer>3</integer>
+		<key>uniqueIdOfColor</key>
+		<integer>1</integer>
+		<key>numberOfTimesPerDay</key>
+		<integer>3</integer>
+		<key>zeroBasedDaysOfTheWeek</key>
+		<array>
+			<string>0</string>
+		</array>
+	</dict>
+	<dict>
+		<key>uniqueId</key>
+		<integer>3</integer>
+		<key>uniqueIdOfMedication</key>
+		<integer>5</integer>
+		<key>uniqueIdOfDosage</key>
+		<integer>3</integer>
+		<key>uniqueIdOfColor</key>
+		<integer>5</integer>
+		<key>numberOfTimesPerDay</key>
+		<integer>4</integer>
+		<key>zeroBasedDaysOfTheWeek</key>
+		<array>
+			<string>4</string>
+			<integer>2</integer>
+			<string>3</string>
+		</array>
+	</dict>
+</array>
+</plist>
