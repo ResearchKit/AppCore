@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
+    kSignUpPermissionsTypeNone = 0,
     kSignUpPermissionsTypeHealthKit,
     kSignUpPermissionsTypeLocation,
     kSignUpPermissionsTypeLocalNotifications,
