@@ -1833,18 +1833,19 @@
                         <constraints>
                             <constraint firstItem="dOr-00-ZDv" firstAttribute="leading" secondItem="5tV-e0-GOi" secondAttribute="leading" id="3Eg-mi-8H4"/>
                             <constraint firstAttribute="centerX" secondItem="bc0-QL-BYl" secondAttribute="centerX" id="3tk-ij-gxs"/>
+                            <constraint firstItem="hGs-Z4-qAe" firstAttribute="top" secondItem="bc0-QL-BYl" secondAttribute="bottom" constant="8" id="4tU-EY-4p9"/>
                             <constraint firstItem="aLS-jv-EqI" firstAttribute="leading" secondItem="5tV-e0-GOi" secondAttribute="leadingMargin" constant="50" id="62r-NT-AUT"/>
                             <constraint firstAttribute="centerX" secondItem="Srh-gC-C98" secondAttribute="centerX" id="7tp-Or-d4c"/>
                             <constraint firstAttribute="trailing" secondItem="dOr-00-ZDv" secondAttribute="trailing" id="I0I-CC-QMQ"/>
-                            <constraint firstAttribute="centerY" secondItem="bc0-QL-BYl" secondAttribute="centerY" constant="-261" id="ZHd-tl-Ojy"/>
-                            <constraint firstItem="aLS-jv-EqI" firstAttribute="top" secondItem="QiS-6G-IB1" secondAttribute="bottom" id="ZK9-b8-UgY"/>
+                            <constraint firstItem="aLS-jv-EqI" firstAttribute="top" secondItem="QiS-6G-IB1" secondAttribute="bottom" id="OmG-A9-3xJ"/>
+                            <constraint firstItem="bc0-QL-BYl" firstAttribute="top" secondItem="Srh-gC-C98" secondAttribute="bottom" constant="2" id="bYv-B1-nyn"/>
                             <constraint firstItem="dOr-00-ZDv" firstAttribute="top" secondItem="VRq-AN-NOG" secondAttribute="bottom" constant="-20" id="cCn-Vq-IRf"/>
                             <constraint firstAttribute="trailingMargin" secondItem="aLS-jv-EqI" secondAttribute="trailing" constant="50" id="geQ-Ku-Abi"/>
                             <constraint firstItem="dOr-00-ZDv" firstAttribute="trailing" secondItem="QiS-6G-IB1" secondAttribute="trailing" id="hn7-Pv-FFS"/>
                             <constraint firstItem="dOr-00-ZDv" firstAttribute="leading" secondItem="QiS-6G-IB1" secondAttribute="leading" id="oOA-on-D6n"/>
                             <constraint firstItem="hGs-Z4-qAe" firstAttribute="top" secondItem="Srh-gC-C98" secondAttribute="bottom" constant="40" id="pMd-nO-8tt"/>
+                            <constraint firstItem="Srh-gC-C98" firstAttribute="top" secondItem="aLS-jv-EqI" secondAttribute="bottom" id="rhv-ni-0LJ"/>
                             <constraint firstItem="QiS-6G-IB1" firstAttribute="top" secondItem="dOr-00-ZDv" secondAttribute="bottom" id="sTo-vo-xRv"/>
-                            <constraint firstItem="Srh-gC-C98" firstAttribute="top" secondItem="aLS-jv-EqI" secondAttribute="bottom" id="xGL-Uv-g4j"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
