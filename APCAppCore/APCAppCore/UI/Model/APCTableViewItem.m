@@ -86,6 +86,16 @@
 
 @synthesize permissionType = _permissionType;
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _permissionType = kSignUpPermissionsTypeNone;
+        _permissionGranted = NO;
+    }
+    return self;
+}
+
 @end
 
 @implementation APCTableViewSwitchItem

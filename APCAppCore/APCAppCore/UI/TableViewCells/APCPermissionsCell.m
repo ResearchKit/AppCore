@@ -7,12 +7,11 @@
  
 #import "APCPermissionsCell.h"
 #import "UIColor+APCAppearance.h"
+#import "UIFont+APCAppearance.h"
 
 NSString * const kSignUpPermissionsCellIdentifier = @"APCPermissionsCell";
 
 @interface APCPermissionsCell()
-
-@property (weak, nonatomic) IBOutlet APCPermissionButton *permissionsButton;
 
 @end
 
@@ -20,13 +19,17 @@ NSString * const kSignUpPermissionsCellIdentifier = @"APCPermissionsCell";
 
 - (void)awakeFromNib
 {
-    self.backgroundColor = [UIColor colorWithWhite:248/255.f alpha:1.0];
+    self.titleLabel.font = [UIFont appLightFontWithSize:25.0];
+    self.titleLabel.textColor = [UIColor appSecondaryColor1];
     
-    self.permissionsButton.confirmedTitle = NSLocalizedString(@"Access Granted", @"");
-    self.permissionsButton.unconfirmedTitle = NSLocalizedString(@"Grant Access", @"");
+    self.detailsLabel.textColor = [UIColor appSecondaryColor1];
+    self.detailsLabel.font = [UIFont appRegularFontWithSize:16.f];
+    
+    [self.permissionButton setTitle:NSLocalizedString(@"Allow", @"Allow") forState:UIControlStateNormal];
+    [self.permissionButton setTitle:NSLocalizedString(@"Granted", @"Granted") forState:UIControlStateDisabled];
 }
 
-- (IBAction)permissionButtonTapped:(id) __unused sender
+- (IBAction)allowPermission:(id)sender
 {
     if ([self.delegate respondsToSelector:@selector(permissionsCellTappedPermissionsButton:)]) {
         [self.delegate permissionsCellTappedPermissionsButton:self];
@@ -35,7 +38,7 @@ NSString * const kSignUpPermissionsCellIdentifier = @"APCPermissionsCell";
 
 - (void)setPermissionsGranted:(BOOL)granted
 {
-    [self.permissionsButton setSelected:granted];
+    self.permissionButton.enabled = !granted;
 }
 
 @end
