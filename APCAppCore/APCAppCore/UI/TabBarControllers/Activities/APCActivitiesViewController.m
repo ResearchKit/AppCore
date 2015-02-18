@@ -133,7 +133,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
         completionTimeLabel.textColor = [UIColor lightGrayColor];
     } else {
         titleLabel.textColor = [UIColor appSecondaryColor1];
-        countLabel.textColor = [UIColor appSecondaryColor2];
+        countLabel.textColor = [UIColor appPrimaryColor];
         completionTimeLabel.textColor = [UIColor appSecondaryColor3];
     }
     
@@ -148,7 +148,8 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
         if (tasksCount == completedTasksCount) {
             countLabel.text = nil;
         } else {
-            countLabel.text = [NSString stringWithFormat:@"%lu/%lu", (unsigned long)completedTasksCount, (unsigned long)tasksCount];
+            NSUInteger remaining = tasksCount - completedTasksCount;
+            countLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)remaining];
         }
         
         confirmView.completed = groupedScheduledTask.complete;
