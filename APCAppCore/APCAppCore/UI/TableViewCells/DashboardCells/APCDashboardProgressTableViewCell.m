@@ -12,27 +12,34 @@
 @implementation APCDashboardProgressTableViewCell
 
 - (void)awakeFromNib {
+    
     [super awakeFromNib];
-    // Initialization code
     
     [self setupAppearance];
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-    
-    // Configure the view for the selected state
 }
 
 - (void)setupAppearance
 {
     self.progressView.progress = 0.0f;
-    self.progressView.lineWidth = 3.0f;
+    self.progressView.lineWidth = 4.0f;
     self.progressView.progressLabel.textColor = [UIColor appTertiaryColor1];
     self.progressView.tintColor = [UIColor appTertiaryColor1];
     
-    self.titleLabel.font = [UIFont appRegularFontWithSize:14.0f];
-    self.titleLabel.textColor = [UIColor appSecondaryColor2];
+    self.titleLabel.textColor = [UIColor appSecondaryColor1];
+    
+    self.subTitleLabel.font = [UIFont appRegularFontWithSize:15.0f];
+    self.subTitleLabel.textColor = [UIColor appSecondaryColor2];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    if (self.progressView.progress == 0) {
+        self.progressView.tintColor = [UIColor appSecondaryColor2];
+    } else {
+        self.progressView.tintColor = [UIColor appTertiaryColor1];
+    }
 }
 
 @end

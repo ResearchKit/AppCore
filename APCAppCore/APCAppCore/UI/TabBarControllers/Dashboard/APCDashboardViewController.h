@@ -16,6 +16,8 @@
 #import "APCDashboardFoodInsightTableViewCell.h"
 #import "APCGraph.h"
 
+FOUNDATION_EXPORT NSInteger const kNumberOfDaysToDisplay;
+
 typedef NS_ENUM(APCTableViewItemType, APCTableViewDashboardItemType) {
     kAPCTableViewDashboardItemTypeProgress,
     kAPCTableViewDashboardItemTypeGraph,

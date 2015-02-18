@@ -14,6 +14,9 @@
 #import "APCAppDelegate.h"
 #import "APCAppCore.h"
 
+NSInteger const kNumberOfDaysToDisplay = 7;
+
+static CGFloat const kAPCProgressViewCellHeight = 198.0f;
 static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 
 @interface APCDashboardViewController ()<UIGestureRecognizerDelegate, APCConcentricProgressViewDataSource>
@@ -100,6 +103,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         APCDashboardProgressTableViewCell *progressCell = (APCDashboardProgressTableViewCell *)cell;
         
         progressCell.progressView.progress = progressItem.progress;
+        progressCell.title = NSLocalizedString(@"Activity Completion", @"Activity Completion");
         
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardGraphItem class]]){
         
@@ -184,29 +188,6 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *headerView;
-    
-    APCTableViewSection *sectionItem = self.items[section];
-    
-    if (sectionItem.sectionTitle.length > 0) {
-        
-        headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), tableView.sectionHeaderHeight)];
-        headerView.contentView.backgroundColor = [UIColor whiteColor];
-        
-        UILabel *headerLabel = [[UILabel alloc] initWithFrame:headerView.bounds];
-        headerLabel.font = [UIFont appLightFontWithSize:16.0f];
-        headerLabel.textColor = [UIColor appSecondaryColor1];
-        headerLabel.textAlignment = NSTextAlignmentCenter;
-        headerLabel.text = sectionItem.sectionTitle;
-        [headerView addSubview:headerLabel];
-        [headerView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    }
-    
-    return headerView;
-}
-
 - (CGFloat)tableView:(UITableView *) __unused tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat height = 0;
@@ -215,7 +196,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     
     if ([dashboardItem isKindOfClass:[APCTableViewDashboardProgressItem class]]) {
         
-        height = 163.0f;
+        height = kAPCProgressViewCellHeight;
         
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardGraphItem class]]){
         
