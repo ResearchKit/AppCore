@@ -122,6 +122,17 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCWithdrawCompleteViewController.h>
 
 /* -------------------------
+ Medication-Tracker Storage (not the med-tracker itself)
+ ------------------------- */
+#import <APCAppCore/APCMedTrackerActualDosageTaken.h>
+#import <APCAppCore/APCMedTrackerMedication.h>
+#import <APCAppCore/APCMedTrackerMedicationSchedule.h>
+#import <APCAppCore/APCMedTrackerMedicationSchedule+Helper.h>
+#import <APCAppCore/APCMedTrackerPossibleDosage.h>
+#import <APCAppCore/APCMedTrackerScheduleColor.h>
+
+
+/* -------------------------
  Views
  ------------------------- */
 #import <APCAppCore/APCCircularProgressView.h>
