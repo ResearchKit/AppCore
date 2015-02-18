@@ -2,7 +2,6 @@
 //  APCBadgeLabel.m
 //  APCAppCore
 //
-//  Created by Farhan Ahmed on 2/16/15.
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
@@ -12,9 +11,9 @@
 
 - (void)sharedInit
 {
-    self.layer.cornerRadius = roundf(self.frame.size.width/2);
+    self.layer.cornerRadius = 15;
     self.layer.borderColor  = [[UIColor redColor] CGColor];
-    self.layer.borderWidth  = 2.0;
+    self.layer.borderWidth  = 1.0;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -37,6 +36,17 @@
     }
     
     return self;
+}
+
+- (void)setText:(NSString *)text
+{
+    [super setText:text];
+    
+    if (text == nil || [text isEqualToString:@""]) {
+        self.layer.borderWidth = 0;
+    }
+    
+    [self setNeedsDisplay];
 }
 
 @end
