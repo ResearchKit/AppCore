@@ -17,24 +17,40 @@
 @protocol ORKTaskResultSource;
 
 
+/**
+ * @enum       ORKTaskViewControllerResult
+ * @constant   ORKTaskViewControllerResultSaved         The task was cancelled by participant or the developer, and asked to save current result.
+ * @constant   ORKTaskViewControllerResultDiscarded     The task was cancelled by participant or the developer, and asked to discard current result.
+ * @constant   ORKTaskViewControllerResultCompleted     Successful completion of the task that has no steps after it.
+ * @constant   ORKTaskViewControllerResultFailed        The task failed due to an error.
+ */
+
+typedef NS_ENUM(NSInteger, ORKTaskViewControllerResult) {
+    ORKTaskViewControllerResultSaved,
+    ORKTaskViewControllerResultDiscarded,
+    ORKTaskViewControllerResultCompleted,
+    ORKTaskViewControllerResultFailed
+};
+
 @protocol ORKTaskViewControllerDelegate <NSObject>
 
 /**
- * @brief Successful completion of a step that has no steps after it.
+ * @brief    Delegate callback which is called upon task finished.
+ * @param      taskViewController     The ORKTaskViewController instance which is returning the result.
+ * @param      result                 ORKTaskViewControllerResult indicating how the user chose to complete the composition process.
+ * @param      error                  NSError indicating the failure reason if failure did occur.  This will be <tt>nil</tt> if
+ * result did not indicate failure.
  */
-- (void)taskViewControllerDidComplete:(ORKTaskViewController *)taskViewController;
-
-/**
- * @brief Reports an error during the task.
- */
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *)step withError:(NSError *)error;
-
-/**
- * @brief The task was cancelled by participant or the developer.
- */
-- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController;
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error;
 
 @optional
+
+/**
+ * @brief Whether support saving the states of current uncompleted task and present it to user later.
+ * @discussion If this is not being implemented, task viewController will assume save and restore is not supported.
+ */
+- (BOOL)taskViewControllerSupportsSaveAndRestore:(ORKTaskViewController *)taskViewController;
+
 /**
  * @brief Check whether there is "Learn More" content for this step
  * @return NO if there is no additional content to display.
@@ -83,7 +99,7 @@
  * the task at any time.
  */
 ORK_CLASS_AVAILABLE
-@interface ORKTaskViewController : UIViewController<ORKStepViewControllerDelegate>
+@interface ORKTaskViewController : UIViewController<ORKStepViewControllerDelegate, UIViewControllerRestoration>
 
 
 /**
@@ -96,6 +112,13 @@ ORK_CLASS_AVAILABLE
 - (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
+
+/**
+ * @brief Create a new task view controller from restoration data
+ * @param task      The task to be presented.
+ * @param data      Data obtained from instance API (restorationData) .
+ */
+- (instancetype)initWithTask:(id<ORKTask>)task restorationData:(NSData *)data;
 
 @property (nonatomic, weak) id<ORKTaskViewControllerDelegate> delegate;
 
@@ -131,6 +154,12 @@ ORK_CLASS_AVAILABLE
  * results forward of the current position are not included.
  */
 @property (nonatomic, copy, readonly) ORKTaskResult* result;
+
+/**
+ * @brief ViewController's snapshot to be used for future restoration.
+ * @discussion Use (initWithTask:restorationData:) to create a new ViewController with current state.
+ */
+@property (nonatomic, copy, readonly) NSData *restorationData;
 
 /**
  * @brief Path to the directoty to store generated data files.

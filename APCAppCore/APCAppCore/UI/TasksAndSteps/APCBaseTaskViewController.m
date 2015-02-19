@@ -59,40 +59,49 @@
 /*********************************************************************************/
 #pragma mark - ORKOrderedTaskDelegate
 /*********************************************************************************/
-- (void)taskViewControllerDidComplete: (ORKTaskViewController *)taskViewController
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
 {
     [self processTaskResult];
-    
-    [self.scheduledTask completeScheduledTask];
-    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-    [appDelegate.scheduler updateScheduledTasksIfNotUpdating:NO];
+
+    if (result == ORKTaskViewControllerResultCompleted)
+    {
+        [self.scheduledTask completeScheduledTask];
+        APCAppDelegate* appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
+        [appDelegate.scheduler updateScheduledTasksIfNotUpdating:NO];
+        APCLogEventWithData(kTaskEvent, (@{
+                                           @"task_status":@"ResultCompleted",
+                                           @"task_title": self.scheduledTask.task.taskTitle,
+                                           @"task_view_controller":NSStringFromClass([self class])
+                                           }));
+    }
+    else if (result == ORKTaskViewControllerResultFailed)
+    {
+        APCLogEventWithData(kTaskEvent, (@{
+                                           @"task_status":@"ResultFailed",
+                                           @"task_title": self.scheduledTask.task.taskTitle,
+                                           @"task_view_controller":NSStringFromClass([self class])
+                                           }));
+    }
+    else if (result == ORKTaskViewControllerResultDiscarded)
+    {
+        APCLogEventWithData(kTaskEvent, (@{
+                                           @"task_status":@"ResultDiscarded",
+                                           @"task_title": self.scheduledTask.task.taskTitle,
+                                           @"task_view_controller":NSStringFromClass([self class])
+                                           }));
+    }
+    else if (result == ORKTaskViewControllerResultSaved)
+    {
+        APCLogEventWithData(kTaskEvent, (@{
+                                           @"task_status":@"ResultSaved",
+                                           @"task_title": self.scheduledTask.task.taskTitle,
+                                           @"task_view_controller":NSStringFromClass([self class])
+                                           }));
+    }
+
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
-    APCLogEventWithData(kTaskEvent, (@{
-                                       @"task_status":@"Completed",
-                                       @"task_title": self.scheduledTask.task.taskTitle,
-                                       @"task_view_controller":NSStringFromClass([self class])
-                                       }));
 }
 
-- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController
-{
-    [taskViewController dismissViewControllerAnimated:YES completion:nil];
-    APCLogEventWithData(kTaskEvent, (@{
-                                       @"task_status":@"Cancelled",
-                                       @"task Title": self.scheduledTask.task.taskTitle,
-                                       @"task_view_controller":NSStringFromClass([self class])
-                                       }));
-}
-
-- (void)taskViewController:(ORKTaskViewController *) __unused taskViewController didFailOnStep:(ORKStep *) __unused step withError:(NSError *)error
-{
-    APCLogError2 (error);
-    APCLogEventWithData(kTaskEvent, (@{
-                                       @"task_status":@"Failed",
-                                       @"task Title": self.scheduledTask.task.taskTitle,
-                                       @"task_view_controller":NSStringFromClass([self class])
-                                       }));
-}
 
 - (NSString *)taskResultsFilePath
 {
