@@ -163,26 +163,16 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 }
 
 #pragma mark - TaskViewController Delegate methods
+
 //If the TaskViewController has claimed the task delegate, we will be returned control here
 -(void) returnControlOfTaskDelegate: (id) __unused sender
 {
     self.consentVC.delegate = self;
 }
 
-- (void)taskViewControllerDidComplete: (ORKTaskViewController *) __unused taskViewController
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController
-{
-    [taskViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *) __unused step withError:(NSError *) __unused error
-{
-    //TODO: Figure out what to do if it fails
-    [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Public methods

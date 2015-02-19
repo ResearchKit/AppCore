@@ -84,71 +84,67 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     
 }
 
-- (void)taskViewControllerDidComplete: (ORKTaskViewController *)taskViewController
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
 {
-    
-    ORKConsentSignatureResult *consentResult =  nil;
-    
-    if ([taskViewController respondsToSelector:@selector(signatureResult)])
+    if (result == ORKTaskViewControllerResultCompleted)
     {
-        APCConsentTaskViewController *consentTaskViewController = (APCConsentTaskViewController *)taskViewController;
-        if (consentTaskViewController.signatureResult)
-        {
-            consentResult = consentTaskViewController.signatureResult;
-        }
-    }
-    else
-    {
-        NSString*   signatureResultStepIdentifier = @"reviewStep";
+        ORKConsentSignatureResult *consentResult =  nil;
         
-        for (ORKStepResult* result in taskViewController.result.results)
+        if ([taskViewController respondsToSelector:@selector(signatureResult)])
         {
-            if ([result.identifier isEqualToString:signatureResultStepIdentifier])
+            APCConsentTaskViewController *consentTaskViewController = (APCConsentTaskViewController *)taskViewController;
+            if (consentTaskViewController.signatureResult)
             {
-                consentResult = (ORKConsentSignatureResult*)[[result results] firstObject];
-                break;
+                consentResult = consentTaskViewController.signatureResult;
             }
         }
-        
-        NSAssert(consentResult != nil, @"Unable to find consent result with signature (identifier == \"%@\"", signatureResultStepIdentifier);
-    }
-    
-    if (consentResult.signature.requiresName && (consentResult.signature.firstName && consentResult.signature.lastName))
-    {
-        APCUser *user = [self user];
-        user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@",consentResult.signature.lastName];
-        user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
-        
-        NSDateFormatter *dateFormatter = [NSDateFormatter new];
-        dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
-        user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
-        
-        [self dismissViewControllerAnimated:YES completion:^
+        else
         {
-            [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
+            NSString*   signatureResultStepIdentifier = @"reviewStep";
             
-            [self startSignUp];
-        }];
+            for (ORKStepResult* result in taskViewController.result.results)
+            {
+                if ([result.identifier isEqualToString:signatureResultStepIdentifier])
+                {
+                    consentResult = (ORKConsentSignatureResult*)[[result results] firstObject];
+                    break;
+                }
+            }
+            
+            NSAssert(consentResult != nil, @"Unable to find consent result with signature (identifier == \"%@\"", signatureResultStepIdentifier);
+        }
+        
+        if (consentResult.signature.requiresName && (consentResult.signature.firstName && consentResult.signature.lastName))
+        {
+            APCUser *user = [self user];
+            user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@",consentResult.signature.lastName];
+            user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
+            
+            NSDateFormatter *dateFormatter = [NSDateFormatter new];
+            dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
+            user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
+            
+            [self dismissViewControllerAnimated:YES completion:^
+             {
+                 [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
+                 
+                 [self startSignUp];
+             }];
+        }
+        else
+        {
+            [taskViewController dismissViewControllerAnimated:YES completion:^
+             {
+                 [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
+             }];
+        }
     }
     else
     {
-        [taskViewController dismissViewControllerAnimated:YES completion:^
-        {
-            [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
-        }];
+        [taskViewController dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
-- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController
-{
-    [taskViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *) __unused step withError:(NSError *) __unused error
-{
-    //TODO: Figure out what to do if it fails
-    [taskViewController dismissViewControllerAnimated:YES completion:nil];
-}
 
 #pragma mark - Selectors
 
