@@ -3183,6 +3183,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
 				);
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = APCAppCore;
 				SKIP_INSTALL = YES;
@@ -3317,6 +3318,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
 				);
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = APCAppCore;
 				SKIP_INSTALL = YES;
@@ -3343,6 +3345,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
 				);
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = APCAppCore;
 				SKIP_INSTALL = YES;
@@ -3457,6 +3460,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
 				);
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = APCAppCore;
 				SKIP_INSTALL = YES;

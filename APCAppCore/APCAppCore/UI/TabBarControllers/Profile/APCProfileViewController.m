@@ -638,21 +638,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
          [rowItems addObject:row];
      }
 
-//     {
-//     APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-//     field.caption = NSLocalizedString(@"Reminder Time", @"");
-//     field.pickerData = @[[APCTasksReminderManager reminderTimesArray]];
-//     field.textAlignnment = NSTextAlignmentRight;
-//     field.identifier = kAPCDefaultTableViewCellIdentifier;
-//     APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-//     field.selectedRowIndices = @[@([[APCTasksReminderManager reminderTimesArray] indexOfObject:appDelegate.tasksReminder.reminderTime])];
-//     
-//     APCTableViewRow *row = [APCTableViewRow new];
-//     row.item = field;
-//     row.itemType = kAPCSettingsItemTypeReminderTime;
-//     [rowItems addObject:row];
-//     }
-     
 
      APCTableViewSection *section = [APCTableViewSection new];
 
@@ -791,7 +776,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self.nameTextField setFont:[UIFont fontWithName:@"Helvetica-Bold" size:17]];
     
-//    [self.emailTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.emailTextField setFont:[UIFont appRegularFontWithSize:16.0f]];
     
     [self.profileImageButton.imageView.layer setCornerRadius:CGRectGetHeight(self.profileImageButton.bounds)/2];
@@ -888,6 +872,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         switch (type) {
             case kAPCTableViewStudyItemTypeShare:
             {
+                //  Commented out since we do NOT want to share the apps while they're underdevelopment.
                 //            APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCShareViewController"];
                 //            shareViewController.hidesOkayButton = YES;
                 //            [self.navigationController pushViewController:shareViewController animated:YES];
@@ -1119,11 +1104,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                 case kAPCUserInfoItemTypeHeight:
                 {
-//                    double height = [APCUser heightInInchesForSelectedIndices:[(APCTableViewCustomPickerItem *)item selectedRowIndices]];
-//                    HKUnit *inchUnit = [HKUnit inchUnit];
-//                    HKQuantity *heightQuantity = [HKQuantity quantityWithUnit:inchUnit doubleValue:height];
-//                    
-//                    self.user.height = heightQuantity;
                 }
                     
                     break;
@@ -1245,12 +1225,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 }
 
 #pragma mark - IBActions
-
-//- (IBAction)showSettings:(id)sender
-//{
-//    APCSettingsViewController *settingsViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSettingsViewController"];
-//    [self.navigationController pushViewController:settingsViewController animated:YES];
-//}
 
 - (IBAction) signOut: (id) __unused sender
 {
@@ -1399,17 +1373,28 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 }
 
-- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController {
-    [self dismissViewControllerAnimated:taskViewController completion:nil];
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
+{
+    if (result == ORKTaskViewControllerResultCompleted)
+    {
+        [self dismissViewControllerAnimated:taskViewController completion:nil];
+    }
+    else if (result == ORKTaskViewControllerResultDiscarded)
+    {
+        [self dismissViewControllerAnimated:taskViewController completion:nil];
+    }
+    else if (result == ORKTaskViewControllerResultSaved)
+    {
+        [self dismissViewControllerAnimated:taskViewController completion:nil];
+    }
+    else if (result == ORKTaskViewControllerResultFailed)
+    {
+        APCLogError2(error);
+    }
+    else
+    {
+        NSAssert(YES, @"Hit an option not supported by ORKTasViewControllerResult");
+    }
 }
-
-- (void)taskViewControllerDidComplete:(ORKTaskViewController *)taskViewController {
-    [self dismissViewControllerAnimated:taskViewController completion:nil];
-}
-
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *)step withError:(NSError *)error {
-    APCLogError2(error);
-}
-
 
 @end

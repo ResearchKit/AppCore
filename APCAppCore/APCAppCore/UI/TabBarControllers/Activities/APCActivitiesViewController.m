@@ -8,6 +8,7 @@
 #import "APCActivitiesViewController.h"
 #import "APCAppCore.h"
 #import "APCActivitiesViewWithNoTask.h"
+#import "APCCircularProgressView.h"
 
 static NSString *kTableCellReuseIdentifier = @"ActivitiesTableViewCell";
 static NSString *kTableCellWithTimeReuseIdentifier = @"ActivitiesTableViewCellWithTime";
@@ -23,6 +24,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 @property (strong, nonatomic) NSMutableArray *scheduledTasksArray;
 
 @property (strong, nonatomic) APCActivitiesViewWithNoTask *noTasksView;
+
 @end
 
 @implementation APCActivitiesViewController
@@ -54,13 +56,18 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     self.tableView.backgroundColor = [UIColor appSecondaryColor4];
     
     [((APCAppDelegate *)[[UIApplication sharedApplication] delegate]) showPasscodeIfNecessary];
+    
+    self.taskProgress.lineWidth = 2;
+    self.taskProgress.tintColor = [UIColor appPrimaryColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self setUpNavigationBarAppearance];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:APCUpdateActivityNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadData)
+                                                 name:APCUpdateActivityNotification object:nil];
     APCLogViewControllerAppeared();
 }
 
@@ -80,8 +87,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     [super viewDidDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
-
 
 #pragma mark - UITableViewDataSource Methods
 
