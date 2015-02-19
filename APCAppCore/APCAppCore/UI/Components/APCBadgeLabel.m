@@ -6,15 +6,9 @@
 //
 
 #import "APCBadgeLabel.h"
+#import "UIColor+APCAppearance.h"
 
 @implementation APCBadgeLabel
-
-- (void)sharedInit
-{
-    self.layer.cornerRadius = 15;
-    self.layer.borderColor  = [[UIColor redColor] CGColor];
-    self.layer.borderWidth  = 1.0;
-}
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -36,6 +30,25 @@
     }
     
     return self;
+}
+
+- (void)sharedInit
+{
+    _tintColor = [UIColor appPrimaryColor];
+    
+    _lineWidth = 1.0f;
+    
+    self.layer.cornerRadius = CGRectGetHeight(self.bounds)/2;
+    self.layer.masksToBounds = NO;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    self.layer.cornerRadius = CGRectGetHeight(self.bounds)/2;
+    self.layer.borderColor  = self.tintColor.CGColor;
+    self.layer.borderWidth  = 1.0;
 }
 
 - (void)setText:(NSString *)text
