@@ -17,7 +17,7 @@
 
 #import <CoreMotion/CoreMotion.h>
 
-static CGFloat const kTableViewRowHeight                 = 195.0f;
+static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 @interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
 

@@ -138,6 +138,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCSegmentedButton.h>
 #import <APCAppCore/APCStepProgressBar.h>
 #import <APCAppCore/APCInsightBarView.h>
+#import <APCAppCore/APCPermissionButton.h>
 
 /* -------------------------
  Cells
@@ -176,6 +177,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDeviceHardware.h>
 #import <APCAppCore/APCInsights.h>
 #import <APCAppCore/APCFoodInsight.h>
+#import <APCAppCore/APCBadgeLabel.h>
 
 /* -------------------------
  Categories

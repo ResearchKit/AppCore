@@ -268,21 +268,56 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 
 - (void)taskViewControllerDidComplete: (ORKTaskViewController *)taskViewController
 {
-    APCUser *user = [self user];
-    user.userConsented = YES;
+    ORKConsentSignatureResult *consentResult =  nil;
     
-    ORKConsentSignatureResult *consentResult = (ORKConsentSignatureResult *)[[taskViewController.result.results[1] results] firstObject];
+    if ([taskViewController respondsToSelector:@selector(signatureResult)])
+    {
+        APCConsentTaskViewController *consentTaskViewController = (APCConsentTaskViewController *)taskViewController;
+        if (consentTaskViewController.signatureResult)
+        {
+            consentResult = consentTaskViewController.signatureResult;
+        }
+    }
+    else
+    {
+        NSString*   signatureResultStepIdentifier = @"reviewStep";
+        
+        for (ORKStepResult* result in taskViewController.result.results)
+        {
+            if ([result.identifier isEqualToString:signatureResultStepIdentifier])
+            {
+                consentResult = (ORKConsentSignatureResult*)[[result results] firstObject];
+                break;
+            }
+        }
+        
+        NSAssert(consentResult != nil, @"Unable to find consent result with signature (identifier == \"%@\"", signatureResultStepIdentifier);
+    }
     
-    user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@", consentResult.signature.lastName ];
-    user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
-    
-    NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
-    user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
-    
-    [taskViewController dismissViewControllerAnimated:YES completion:^{
-        [self sendConsent];
-    }];
+    if (consentResult.signature.requiresName && (consentResult.signature.firstName && consentResult.signature.lastName))
+    {
+        APCUser *user = [self user];
+        user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@",consentResult.signature.lastName];
+        user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
+        
+        NSDateFormatter *dateFormatter = [NSDateFormatter new];
+        dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
+        user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
+        
+        [self dismissViewControllerAnimated:YES completion:^
+         {
+             [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
+             
+             [self sendConsent];
+         }];
+    }
+    else
+    {
+        [taskViewController dismissViewControllerAnimated:YES completion:^
+         {
+             [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
+         }];
+    }
 }
 
 - (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController

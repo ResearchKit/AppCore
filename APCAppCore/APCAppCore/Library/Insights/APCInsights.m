@@ -9,19 +9,21 @@
 #import "APCAppCore.h"
 #import <HealthKit/HealthKit.h>
 
-NSString const *kInsightKeyGoodDayValue = @"insightKeyGoodDayValue";
-NSString const *kInsightKeyGlucoseGoodDayValue = @"insightKeyGlucoseGoodDayValue";
-NSString const *kInsightKeyGlucoseBadDayValue = @"insightKeyGlucoseBadDayValue";
-NSString const *kInsightKeyBadDayValue  = @"insightKeyBadDayValue";
+NSString * const kInsightKeyGoodDayValue = @"insightKeyGoodDayValue";
+NSString * const kInsightKeyGlucoseGoodDayValue = @"insightKeyGlucoseGoodDayValue";
+NSString * const kInsightKeyGlucoseBadDayValue = @"insightKeyGlucoseBadDayValue";
+NSString * const kInsightKeyBadDayValue  = @"insightKeyBadDayValue";
 
-NSString const *kAPCInsightFactorValueKey = @"insightFactorValueKey";
-NSString const *kAPCInsightFactorNameKey = @"insightFactorNameKey";
+NSString * const kAPCInsightFactorValueKey = @"insightFactorValueKey";
+NSString * const kAPCInsightFactorNameKey = @"insightFactorNameKey";
 
 static NSString *kAPHInsightSampleTypeKey = @"insightSampleTypeKey";
 static NSString *kAPHInsightSampleUnitKey = @"insightSampleUnitKey";
 
 static NSString *kInsightDatasetIsGoodDayKey = @"insightDatasetIsGoodDayKey";
 static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadingKey";
+
+NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsightDataCollectionIsCompletedNotification";
 
 @interface APCInsights()
 
@@ -259,7 +261,7 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
             [readingPoint setObject:self.insightFactorName forKey:kAPCInsightFactorNameKey];
             [readingPoint setObject:dataPoint[kDatasetValueKey] forKey:kAPCInsightFactorValueKey];
             
-            [self dataPointIsAvailableFromHealthKit:readingPoint];
+            [self dataPointsAreAvailableFromHealthKit:readingPoint];
         }
     };
     
@@ -268,14 +270,14 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
 
 #pragma mark - Helpers
 
-- (void)dataPointIsAvailableFromHealthKit:(NSDictionary *)dataPoint
+- (void)dataPointsAreAvailableFromHealthKit:(NSDictionary *)dataPoint
 {
     APCLogDebug(@"Insight: %@", dataPoint);
     
     NSString *caption = NSLocalizedString(@"Data is not available", @"Data is not available");
     NSNumber *pointValue = @(0);
     
-    if ([dataPoint[kAPCInsightFactorValueKey] integerValue] != NSNotFound) {
+    if ([dataPoint[kAPCInsightFactorValueKey] isEqualToNumber:@(NSNotFound)] == NO) {
         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
         [numberFormatter setMaximumFractionDigits:0];
         
@@ -292,6 +294,13 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
         self.captionBad = NSLocalizedString(caption, caption);
         self.valueBad = pointValue;
     }
+    
+    NSOperationQueue *realMainQueue = [NSOperationQueue mainQueue];
+    
+    [realMainQueue addOperationWithBlock:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kAPCInsightDataCollectionIsCompletedNotification
+                                                            object:nil];
+    }];
 }
 
 - (NSArray *)groupDataset:(NSArray *)dataset
@@ -360,7 +369,7 @@ static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadi
         for (NSDictionary *reading in groupedReadings) {
             NSNumber *average = reading[kDatasetValueKey];
             
-            if ([average integerValue] != NSNotFound) {
+            if ([average isEqualToNumber:@(NSNotFound)] == NO) {
                 // check if the average in-range or high
                 if ([reading[@"period"] boolValue]) {
                     if ([average doubleValue] >= [self.baselineHigh integerValue]) {

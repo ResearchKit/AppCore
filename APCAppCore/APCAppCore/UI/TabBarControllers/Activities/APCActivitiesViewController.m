@@ -8,6 +8,7 @@
 #import "APCActivitiesViewController.h"
 #import "APCAppCore.h"
 #import "APCActivitiesViewWithNoTask.h"
+#import "APCCircularProgressView.h"
 
 static NSString *kTableCellReuseIdentifier = @"ActivitiesTableViewCell";
 static NSString *kTableCellWithTimeReuseIdentifier = @"ActivitiesTableViewCellWithTime";
@@ -23,6 +24,9 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 @property (strong, nonatomic) NSMutableArray *scheduledTasksArray;
 
 @property (strong, nonatomic) APCActivitiesViewWithNoTask *noTasksView;
+
+@property (weak, nonatomic) IBOutlet APCCircularProgressView *taskProgress;
+
 @end
 
 @implementation APCActivitiesViewController
@@ -54,14 +58,24 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     self.tableView.backgroundColor = [UIColor appSecondaryColor4];
     
     [((APCAppDelegate *)[[UIApplication sharedApplication] delegate]) showPasscodeIfNecessary];
+    
+    self.taskProgress.lineWidth = 2;
+    self.taskProgress.tintColor = [UIColor appPrimaryColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self setUpNavigationBarAppearance];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadData) name:APCUpdateActivityNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadData)
+                                                 name:APCUpdateActivityNotification object:nil];
     APCLogViewControllerAppeared();
+    
+    NSUInteger allScheduledTasks = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.countOfAllScheduledTasksForToday;
+    NSUInteger completedScheduledTasks = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.countOfCompletedScheduledTasksForToday;
+    
+    self.taskProgress.progress = (CGFloat)completedScheduledTasks/allScheduledTasks;
 }
 
 -(void)setUpNavigationBarAppearance{
@@ -80,8 +94,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     [super viewDidDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
-
 
 #pragma mark - UITableViewDataSource Methods
 
@@ -119,7 +131,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 
     APCConfirmationView * confirmView = (APCConfirmationView*)[cell viewWithTag:100];
     UILabel * titleLabel = (UILabel*)[cell viewWithTag:200];
-    UILabel * countLabel = (UILabel*)[cell viewWithTag:300];
+    APCBadgeLabel * countLabel = (APCBadgeLabel *)[cell viewWithTag:300];
     UILabel * completionTimeLabel = (UILabel*)[cell viewWithTag:400];
     
     //Styling
@@ -133,7 +145,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
         completionTimeLabel.textColor = [UIColor lightGrayColor];
     } else {
         titleLabel.textColor = [UIColor appSecondaryColor1];
-        countLabel.textColor = [UIColor appSecondaryColor2];
+        countLabel.textColor = [UIColor appPrimaryColor];
         completionTimeLabel.textColor = [UIColor appSecondaryColor3];
     }
     
@@ -148,7 +160,8 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
         if (tasksCount == completedTasksCount) {
             countLabel.text = nil;
         } else {
-            countLabel.text = [NSString stringWithFormat:@"%lu/%lu", (unsigned long)completedTasksCount, (unsigned long)tasksCount];
+            NSUInteger remaining = tasksCount - completedTasksCount;
+            countLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)remaining];
         }
         
         confirmView.completed = groupedScheduledTask.complete;
@@ -280,18 +293,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 
 - (void)reloadData
 {
-    [self reloadTableArray];
-    [self.tableView reloadData];
-    
-    //Display a custom view announcing that there are no activities if there are none.
-    if (self.sectionsArray.count == 0) {
-        [self addCustomNoTaskView];
-    } else {
-        if (self.noTasksView) {
-            [self.noTasksView removeFromSuperview];
-        }
-    }
-    
     // Update the badge
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -306,6 +307,18 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
         activitiesTab.badgeValue = [remainingTasks stringValue];
     } else {
         activitiesTab.badgeValue = nil;
+    }
+    
+    [self reloadTableArray];
+    [self.tableView reloadData];
+    
+    //Display a custom view announcing that there are no activities if there are none.
+    if (self.sectionsArray.count == 0) {
+        [self addCustomNoTaskView];
+    } else {
+        if (self.noTasksView) {
+            [self.noTasksView removeFromSuperview];
+        }
     }
 }
 

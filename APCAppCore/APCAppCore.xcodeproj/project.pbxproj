@@ -50,6 +50,8 @@
 		08027AA61A7319AC00B358CC /* consent_05@3x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A741A7319AC00B358CC /* consent_05@3x.m4v */; };
 		08027AA71A7319AC00B358CC /* consent_06@3x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A751A7319AC00B358CC /* consent_06@3x.m4v */; };
 		08027AA81A7319AC00B358CC /* consent_07@3x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A761A7319AC00B358CC /* consent_07@3x.m4v */; };
+		081A477A1A93EC4700E13148 /* APCBadgeLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 081A47781A93EC4700E13148 /* APCBadgeLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		081A477B1A93EC4700E13148 /* APCBadgeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 081A47791A93EC4700E13148 /* APCBadgeLabel.m */; };
 		0833AE1E1A76C016001D8AA0 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		0871A3931A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0871A3911A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0871A3941A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0871A3921A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m */; };
@@ -550,6 +552,8 @@
 		08027A741A7319AC00B358CC /* consent_05@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_05@3x.m4v"; sourceTree = "<group>"; };
 		08027A751A7319AC00B358CC /* consent_06@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_06@3x.m4v"; sourceTree = "<group>"; };
 		08027A761A7319AC00B358CC /* consent_07@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_07@3x.m4v"; sourceTree = "<group>"; };
+		081A47781A93EC4700E13148 /* APCBadgeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCBadgeLabel.h; sourceTree = "<group>"; };
+		081A47791A93EC4700E13148 /* APCBadgeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCBadgeLabel.m; sourceTree = "<group>"; };
 		0871A3911A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardFoodInsightTableViewCell.h; sourceTree = "<group>"; };
 		0871A3921A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDashboardFoodInsightTableViewCell.m; sourceTree = "<group>"; };
 		0875C3D61A797A7B00CE50FB /* APCButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCButton.h; sourceTree = "<group>"; };
@@ -1721,6 +1725,8 @@
 		F5F129241A2F78490015982C /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				081A47781A93EC4700E13148 /* APCBadgeLabel.h */,
+				081A47791A93EC4700E13148 /* APCBadgeLabel.m */,
 				0894654B1A8C1F0200A983AC /* APCInsightBarView.h */,
 				0894654C1A8C1F0200A983AC /* APCInsightBarView.m */,
 				0875C3D61A797A7B00CE50FB /* APCButton.h */,
@@ -2195,6 +2201,7 @@
 				F5F12ACA1A2F78490015982C /* APCProfileViewController.h in Headers */,
 				F5B947E71A73272C0034C522 /* APCSegmentedButton.h in Headers */,
 				F5B947C71A73272C0034C522 /* NSObject+Helper.h in Headers */,
+				081A477A1A93EC4700E13148 /* APCBadgeLabel.h in Headers */,
 				F5F12A891A2F78490015982C /* APCTableViewItem.h in Headers */,
 				F5F12AC31A2F78490015982C /* APCLearnMasterViewController.h in Headers */,
 				F5B9463A1A7309A20034C522 /* ZZHeaders.h in Headers */,
@@ -2664,6 +2671,7 @@
 				F5B947BA1A73272C0034C522 /* HKHealthStore+APCExtensions.m in Sources */,
 				F5F12A7C1A2F78490015982C /* APCCircleView.m in Sources */,
 				F5F12A8C1A2F78490015982C /* APCIntroVideoViewController.m in Sources */,
+				081A477B1A93EC4700E13148 /* APCBadgeLabel.m in Sources */,
 				F5F12A9C1A2F78490015982C /* APCEmailVerifyViewController.m in Sources */,
 				0871A3941A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m in Sources */,
 				F5F12ACB1A2F78490015982C /* APCProfileViewController.m in Sources */,
