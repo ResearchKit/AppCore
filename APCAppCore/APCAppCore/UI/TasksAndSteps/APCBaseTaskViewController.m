@@ -61,10 +61,10 @@
 /*********************************************************************************/
 - (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
 {
-    [self processTaskResult];
-
     if (result == ORKTaskViewControllerResultCompleted)
     {
+        [self processTaskResult];
+        
         [self.scheduledTask completeScheduledTask];
         APCAppDelegate* appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
         [appDelegate.scheduler updateScheduledTasksIfNotUpdating:NO];
