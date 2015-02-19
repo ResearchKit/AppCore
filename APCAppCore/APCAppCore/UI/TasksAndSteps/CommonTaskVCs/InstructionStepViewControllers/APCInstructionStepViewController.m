@@ -66,8 +66,8 @@
 
 - (void) cancelButtonTapped: (id) __unused sender
 {
-    if ([self.taskViewController.delegate respondsToSelector:@selector(taskViewControllerDidCancel:)]) {
-        [self.taskViewController.delegate taskViewControllerDidCancel:self.taskViewController];
+    if ([self.taskViewController.delegate respondsToSelector:@selector(taskViewController:didFinishWithResult:error:)]) {
+        [self.taskViewController.delegate taskViewController:self.taskViewController didFinishWithResult:ORKTaskViewControllerResultDiscarded error:nil];
     }
 }
 

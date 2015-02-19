@@ -39,6 +39,14 @@ ORK_CLASS_AVAILABLE
 @property (nonatomic, copy) NSString *signaturePageContent;
 
 /**
+ * @brief Review HTML content
+ * @discussion Normally, the review content is generated from the constituent sections,
+ * and the signatures table.
+ * If this property is set, then the review content is reproduced exactly as provided.
+ */
+@property (nonatomic, copy) NSString *htmlReviewContent;
+
+/**
  * @brief Set of signatures required or provided
  * The signature object itself may be filled in or modified when running an ORKConsentReviewStep
  */
