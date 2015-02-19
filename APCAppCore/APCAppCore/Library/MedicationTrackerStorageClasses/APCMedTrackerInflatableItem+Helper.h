@@ -10,12 +10,21 @@
 
 
 /**
- The +generateFromPlist method calls you back when
+ The +reloadAllFromPlist method calls you back when
  it's done, using a block with this signature.
  */
 typedef void (^APCMedTrackerFileLoadCallback) (NSArray *arrayOfGeneratedObjects,
                                                NSManagedObjectContext *contextWhereOperationRan,
                                                NSTimeInterval operationDuration);
+
+/**
+ The +loadAllFromCoreData method calls you back when
+ it's done, using a block with this signature.
+ */
+typedef void (^APCMedTrackerQueryCallback) (NSArray *arrayOfGeneratedObjects,
+                                            NSManagedObjectContext *contextWhereOperationRan,
+                                            NSTimeInterval operationDuration,
+                                            NSError *error);
 
 
 @interface APCMedTrackerInflatableItem (Helper)
@@ -31,5 +40,15 @@ typedef void (^APCMedTrackerFileLoadCallback) (NSArray *arrayOfGeneratedObjects,
                           usingQueue: (NSOperationQueue *) queue
                    andDoThisWhenDone: (APCMedTrackerFileLoadCallback) callbackBlock;
 
+/**
+ Runs a query which loads all objects of this class in CoreData.
+ Passes that array back to you in the block you specify.
+ 
+ Intended to be used for our very short lists:  medication names,
+ colors, etc.  This merely loads a fetch request and extracts
+ all items from it; it can easily be done in other ways.
+ */
++ (void) loadAllFromCoreDataUsingQueue: (NSOperationQueue *) queue
+                     andDoThisWhenDone: (APCMedTrackerQueryCallback) callbackBlock;
 
 @end

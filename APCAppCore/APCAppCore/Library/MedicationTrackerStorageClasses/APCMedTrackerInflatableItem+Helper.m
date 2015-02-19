@@ -12,6 +12,24 @@
 
 @implementation APCMedTrackerInflatableItem (Helper)
 
++ (void) loadAllFromCoreDataUsingQueue: (NSOperationQueue *) queue
+                     andDoThisWhenDone: (APCMedTrackerQueryCallback) callbackBlock
+{
+    [queue addOperationWithBlock:^{
+
+        NSDate *startTime = [NSDate date];
+        NSManagedObjectContext *context = [self newContextOnCurrentQueue];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass ([self class])];
+        NSError *error = nil;
+
+        NSArray *foundItems = [context executeFetchRequest: request error: &error];
+
+        NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];
+
+        callbackBlock (foundItems, context, operationDuration, error);
+    }];
+}
+
 + (void) reloadAllFromPlistFileNamed: (NSString *) fileName
                           usingQueue: (NSOperationQueue *) queue
                    andDoThisWhenDone: (APCMedTrackerFileLoadCallback) callbackBlock
