@@ -1,13 +1,13 @@
 //
-//  APCMedTrackerScheduleColor+Helper.h
+//  APCMedTrackerMedication+Helper.h
 //  APCAppCore
 //
 //  Created by Ron Conescu on 2/18/15.
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
-#import "APCMedTrackerScheduleColor.h"
+#import "APCMedTrackerMedication.h"
 
-@interface APCMedTrackerScheduleColor (Helper)
+@interface APCMedTrackerMedication (Helper)
 
 @end

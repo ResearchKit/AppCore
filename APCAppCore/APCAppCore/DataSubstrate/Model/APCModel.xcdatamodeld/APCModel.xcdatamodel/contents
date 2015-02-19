@@ -25,7 +25,7 @@
         <relationship name="medicine" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerMedication" inverseName="schedulesWhereIAmUsed" inverseEntity="APCMedTrackerMedication" syncable="YES"/>
     </entity>
     <entity name="APCMedTrackerPossibleDosage" representedClassName="APCMedTrackerPossibleDosage" parentEntity="APCMedTrackerInflatableItem" syncable="YES">
-        <attribute name="amount" optional="YES" attributeType="Float" minValueString="0" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="amount" optional="YES" attributeType="Float" minValueString="0" syncable="YES"/>
         <relationship name="schedulesWhereIAmUsed" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerMedicationSchedule" inverseName="dosage" inverseEntity="APCMedTrackerMedicationSchedule" syncable="YES"/>
     </entity>
     <entity name="APCMedTrackerScheduleColor" representedClassName="APCMedTrackerScheduleColor" parentEntity="APCMedTrackerInflatableItem" syncable="YES">

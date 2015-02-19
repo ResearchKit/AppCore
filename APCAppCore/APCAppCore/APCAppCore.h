@@ -124,12 +124,20 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 /* -------------------------
  Medication-Tracker Storage (not the med-tracker itself)
  ------------------------- */
+#import <APCAppCore/APCMedTrackerDataStorageManager.h>
+
 #import <APCAppCore/APCMedTrackerActualDosageTaken.h>
+#import <APCAppCore/APCMedTrackerInflatableItem.h>
 #import <APCAppCore/APCMedTrackerMedication.h>
 #import <APCAppCore/APCMedTrackerMedicationSchedule.h>
-#import <APCAppCore/APCMedTrackerMedicationSchedule+Helper.h>
 #import <APCAppCore/APCMedTrackerPossibleDosage.h>
 #import <APCAppCore/APCMedTrackerScheduleColor.h>
+
+#import <APCAppCore/APCMedTrackerActualDosageTaken+Helper.h>
+#import <APCAppCore/APCMedTrackerInflatableItem+Helper.h>
+#import <APCAppCore/APCMedTrackerMedication+Helper.h>
+#import <APCAppCore/APCMedTrackerMedicationSchedule+Helper.h>
+#import <APCAppCore/APCMedTrackerPossibleDosage+Helper.h>
 #import <APCAppCore/APCMedTrackerScheduleColor+Helper.h>
 
 /* -------------------------
