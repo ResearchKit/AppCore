@@ -380,7 +380,7 @@ static CGFloat const kAnimationDuration = 0.35f;
         dot.frame = CGRectMake(0, 0, self.legendDotRadius*2, self.legendDotRadius*2);
         dot.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, CGRectGetWidth(dot.bounds), CGRectGetHeight(dot.bounds))
                                               cornerRadius:self.legendDotRadius].CGPath;
-        dot.position = CGPointMake(dotXPosition, (self.plotRegionHeight + self.legendDotRadius) + 30);
+        dot.position = CGPointMake(dotXPosition, self.plotRegionHeight + self.legendDotRadius);
         dot.fillColor = [self colorForSegmentAtIndex:idx].CGColor;
         [self.layer addSublayer:dot];
         
@@ -396,7 +396,7 @@ static CGFloat const kAnimationDuration = 0.35f;
         textLabel.font = self.legendFont;
         textLabel.textAlignment = NSTextAlignmentCenter;
         textLabel.adjustsFontSizeToFitWidth = NO;
-        textLabel.frame = CGRectMake(labelPadding + dotSegmentWidth * idx, (self.plotRegionHeight + 2*self.legendDotRadius) + 30, dotSegmentWidth - 2*labelPadding, self.legendPaddingHeight - self.legendDotRadius*2);
+        textLabel.frame = CGRectMake(labelPadding + dotSegmentWidth * idx, self.plotRegionHeight + 2*self.legendDotRadius, dotSegmentWidth - 2*labelPadding, self.legendPaddingHeight - self.legendDotRadius*2);
         textLabel.numberOfLines = 1;
         textLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         [self addSubview:textLabel];
