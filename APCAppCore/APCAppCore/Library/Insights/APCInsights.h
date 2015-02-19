@@ -7,8 +7,9 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString const *kAPCInsightFactorValueKey;
-extern NSString const *kAPCInsightFactorNameKey;
+extern NSString * const kAPCInsightFactorValueKey;
+extern NSString * const kAPCInsightFactorNameKey;
+extern NSString * const kAPCInsightDataCollectionIsCompletedNotification;
 
 typedef NS_ENUM(NSUInteger, APCInsightFactors)
 {

@@ -96,12 +96,12 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
         } else {
             for (HKSource *source in sources) {
                 if ([source.bundleIdentifier isEqualToString:kLoseItBundleIdentifier]) {
-                    _source = source;
+                    self.source = source;
                     break;
                 }
             }
 
-            if (_source) {
+            if (self.source) {
                 [self queryForCalories];
             }
         }
@@ -187,11 +187,13 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 
 - (void) foodInsightDataCollectionIsDone: (NSNotification *) __unused notification
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    NSOperationQueue *theRealLifeMainThreadQueue = [NSOperationQueue mainQueue];
+    
+    [theRealLifeMainThreadQueue addOperationWithBlock:^{
         if ([self.delegate respondsToSelector:@selector(didCompleteFoodInsightForSampleType:insight:)]) {
             [self.delegate didCompleteFoodInsightForSampleType:self.sampleType insight:self.foodHistory];
         }
-    });
+    }];
 }
 
 #pragma mark - Helpers
