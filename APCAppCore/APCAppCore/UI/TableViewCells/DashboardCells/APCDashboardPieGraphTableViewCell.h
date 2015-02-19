@@ -15,5 +15,7 @@ static NSString * const kAPCDashboardPieGraphTableViewCellIdentifier = @"APCDash
 @interface APCDashboardPieGraphTableViewCell : APCDashboardTableViewCell
 
 @property (weak, nonatomic) IBOutlet APCPieGraphView *pieGraphView;
+@property (weak, nonatomic) IBOutlet UILabel *daysRemainingLabel;
+@property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
 
 @end
