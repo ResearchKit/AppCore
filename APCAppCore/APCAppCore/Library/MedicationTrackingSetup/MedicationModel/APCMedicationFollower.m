@@ -14,7 +14,7 @@
 {
     self = [super init];
     if (self != nil) {
-        _medicationName        = @"Unknown Medication";
+        _medicationName        = NSLocalizedString(@"Unknown Medication", nil);
         _numberOfDosesPrescribed = [NSNumber numberWithInteger:0];
         _numberOfDosesTaken  = [NSNumber numberWithInteger:0];
     }

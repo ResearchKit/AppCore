@@ -10,6 +10,5 @@
 @interface APCFrequencyDayTableViewCell : UITableViewCell
 
 @property  (nonatomic, weak)  IBOutlet  UILabel   *dayTitle;
-//@property  (nonatomic, weak)  IBOutlet  UIButton  *frequencyButton;
 
 @end

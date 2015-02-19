@@ -123,6 +123,9 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+        //
+        //    provide a non-empty blank string to get a section header at the bottom of the section
+        //
     NSString  *title = @"";
     if (section == 0) {
         title = @"Select which scheduled doses you have taken today";

@@ -133,7 +133,6 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
 
 - (void)dailyCalendarViewDidSelect:(NSDate *)date
 {
-    NSLog(@"dailyViewDidClick");
 }
 
 - (NSUInteger)currentScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *)calendarView
@@ -143,7 +142,6 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
 
 - (void)dailyCalendarViewDidSwipeLeft
 {
-    NSLog(@"dailyCalendarViewDidSwipeLeft");
     if (self.exScrolliburScrolledByUser == NO) {
         if (self.exScrolliburCurrentPage < (self.exScrolliburNumberOfPages - 1)) {
             CGRect  rect = CGRectMake(CGRectGetWidth(self.exScrollibur.frame) * (self.exScrolliburCurrentPage + 1), 0.0, CGRectGetWidth(self.exScrollibur.frame), CGRectGetHeight(self.exScrollibur.frame));
@@ -156,7 +154,6 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
 
 - (void)dailyCalendarViewDidSwipeRight
 {
-    NSLog(@"dailyCalendarViewDidSwipeRight");
     if (self.exScrolliburScrolledByUser == NO) {
         if (self.exScrolliburCurrentPage > 0) {
             CGRect  rect = CGRectMake(CGRectGetWidth(self.exScrollibur.frame) * (self.exScrolliburCurrentPage - 1), 0.0, CGRectGetWidth(self.exScrollibur.frame), CGRectGetHeight(self.exScrollibur.frame));
@@ -200,11 +197,6 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
 
     [button addTarget:self action:@selector(lozengeButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
 
-//    CALayer  *layer = button.layer;
-//    layer.borderWidth  = 3.0;
-//    layer.cornerRadius = 4.0;
-//    layer.borderColor = [color CGColor];
-
     return  button;
 }
 
@@ -223,7 +215,9 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
 
     CGFloat  disp = CGRectGetWidth(self.view.bounds) / 7.0;
     CGFloat  baseYCoordinate = kLozengeBaseYCoordinate;
-
+        //
+        //    NSNumber objects in the code below are initalised with integer values
+        //
     APCMedicationTrackerMedicationsDisplayView  *view = [[self.exScrollibur subviews] objectAtIndex:self.exScrolliburCurrentPage];
 
     for (APCMedicationModel  *model  in  self.medications) {
@@ -322,7 +316,6 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
         frame.size.width = CGRectGetWidth(viewFrame);
         frame.size.height = CGRectGetHeight(scrollerFrame);
         APCMedicationTrackerMedicationsDisplayView  *view = [[APCMedicationTrackerMedicationsDisplayView alloc] initWithFrame:frame];
-//        view.backgroundColor = self.colormap[colors[page]];
         view.backgroundColor = [UIColor whiteColor];
         [self.exScrollibur addSubview:view];
     }
@@ -393,7 +386,7 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    self.cancelButtonItem.title = @"Done";
+    self.cancelButtonItem.title = NSLocalizedString(@"Done", @"Done");
     if (self.viewsWereCreated == NO) {
         [self makeCalendar];
         [self makePages];

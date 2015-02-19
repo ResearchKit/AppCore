@@ -8,6 +8,9 @@
 #import "NSDate+MedicationTracker.h"
 #import "UIColor+MedicationTracker.h"
 
+static  CGFloat  kDateLabelWidth     = 28.0;
+static  CGFloat  kDateLabelPointSize = 13.0;
+
 @interface APCMedicationTrackerCalendarDailyView  ( )
 
 @property  (nonatomic,  strong)  UILabel  *dateLabel;
@@ -15,17 +18,13 @@
 
 @end
 
-
-#define DATE_LABEL_SIZE 28.0
-#define DATE_LABEL_FONT_SIZE 13.0
-
 @implementation APCMedicationTrackerCalendarDailyView
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self != nil) {
-        [self addSubview:self.dateLabelContainer];
+        [self setupDateLabelContainerAndDateLabel];
 
         UITapGestureRecognizer  *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dailyViewDidClick:)];
         [self addGestureRecognizer:singleFingerTap];
@@ -33,35 +32,30 @@
     return  self;
 }
 
-- (UIView *)dateLabelContainer
+- (void)setupDateLabelContainerAndDateLabel
 {
-    if (_dateLabelContainer == nil) {
-        CGFloat  x = (self.bounds.size.width - DATE_LABEL_SIZE) / 2.0;
-        _dateLabelContainer = [[UIView alloc] initWithFrame:CGRectMake(x, 0, DATE_LABEL_SIZE, DATE_LABEL_SIZE)];
-        _dateLabelContainer.backgroundColor = [UIColor clearColor];
-        _dateLabelContainer.layer.cornerRadius = DATE_LABEL_SIZE / 2.0;
-        _dateLabelContainer.clipsToBounds = YES;
-        [_dateLabelContainer addSubview:self.dateLabel];
-    }
-    return  _dateLabelContainer;
-}
-
-- (UILabel *)dateLabel
-{
-    if (_dateLabel == nil) {
-        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, DATE_LABEL_SIZE, DATE_LABEL_SIZE)];
-        _dateLabel.backgroundColor = [UIColor clearColor];
-        _dateLabel.textColor = [UIColor whiteColor];
-        _dateLabel.textAlignment = NSTextAlignmentCenter;
-        _dateLabel.font = [UIFont systemFontOfSize:DATE_LABEL_FONT_SIZE];
-    }
-    return  _dateLabel;
+    UILabel  *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kDateLabelWidth, kDateLabelWidth)];
+    label.backgroundColor = [UIColor clearColor];
+    label.textColor = [UIColor whiteColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = [UIFont systemFontOfSize:kDateLabelPointSize];
+    self.dateLabel = label;
+    
+    CGFloat  x = (self.bounds.size.width - kDateLabelWidth) / 2.0;
+    UIView  *container = [[UIView alloc] initWithFrame:CGRectMake(x, 0, kDateLabelWidth, kDateLabelWidth)];
+    container.backgroundColor = [UIColor clearColor];
+    container.layer.cornerRadius = kDateLabelWidth / 2.0;
+    container.clipsToBounds = YES;
+    self.dateLabelContainer = container;
+    [self addSubview:self.dateLabelContainer];
+    
+    [self.dateLabelContainer addSubview:self.dateLabel];
 }
 
 - (void)setDate:(NSDate *)date
 {
     _date = date;
-
+    self.dateLabel.text = [_date getDateOfMonth];
     [self setNeedsDisplay];
 }
 
@@ -70,12 +64,6 @@
     _blnSelected = blnSelected;
     [self setNeedsDisplay];
 }
-
-- (void)drawRect:(CGRect)rect
-{
-    self.dateLabel.text = [self.date getDateOfMonth];
-}
-
 
 - (void)markSelected:(BOOL)blnSelected
 {
@@ -91,14 +79,8 @@
     }
 }
 
-//- (UIColor *)colorByDate
-//{
-//    return [self.date isPastDate]?[UIColor colorWithHex:0x7BD1FF]:[UIColor whiteColor];
-//}
-
 - (void)dailyViewDidClick: (UIGestureRecognizer *)tap
 {
-    NSLog(@"dailyViewDidClick");
     [self.delegate dailyCalendarViewDidSelect: self.date];
 }
 

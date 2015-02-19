@@ -13,8 +13,8 @@
 {
     self = [super init];
     if (self != nil) {
-        _medicationName        = @"Unknown Medication";
-        _medicationLabelColor  = @"Gray";
+        _medicationName        = NSLocalizedString(@"Unknown Medication", nil);
+        _medicationLabelColor  = NSLocalizedString(@"Gray", nil);
         _frequencyAndDays   =    nil;
         _medicationDosageValue = [NSNumber numberWithInteger:0];
         _medicationDosageText  = @"0\u2008mg";

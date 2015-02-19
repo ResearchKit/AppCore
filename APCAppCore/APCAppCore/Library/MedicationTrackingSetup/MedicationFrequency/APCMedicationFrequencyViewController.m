@@ -47,7 +47,6 @@ static  CGFloat    kSectionHeaderLabelOffset        =   16.0;
 
 @property  (nonatomic, strong)          NSArray              *valueButtons;
 
-//@property  (nonatomic, strong)          NSIndexPath          *selectedIndexPath;
 @property  (nonatomic, strong)          NSMutableDictionary  *daysAndDoses;
 
 @end
@@ -109,7 +108,9 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
         label.numberOfLines = 2;
         label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
         label.textColor = [UIColor blackColor];
-        label.text = sectionTitles[section];
+        NSString  *title = sectionTitles[section];
+        title = NSLocalizedString(title, nil);
+        label.text = title;
         [view addSubview:label];
     }
     return  view;
@@ -162,11 +163,6 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     } else if (indexPath.section == kDaysOfWeekSection) {
         dayCell.selectionStyle = UITableViewCellSelectionStyleNone;
         dayCell.dayTitle.text = daysOfWeekNames[indexPath.row];
-        
-//        CALayer  *layer = dayCell.frequencyButton.layer;
-//        layer.cornerRadius = CGRectGetWidth(dayCell.frequencyButton.frame) / 2.0;
-//        layer.masksToBounds = YES;
-//        [self setStateForFrequencyButton:dayCell.frequencyButton toState:UIControlStateNormal];
         cell = dayCell;
     }
     
@@ -205,27 +201,6 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     }
 }
 
-//- (void)setStateForDayButton:(UIControlState)state withTag:(NSInteger)tag
-//{
-//    if (self.selectedIndexPath != nil) {
-////        APCFrequencyDayTableViewCell  *cell = (APCFrequencyDayTableViewCell *)[self.tabulator cellForRowAtIndexPath:self.selectedIndexPath];
-//        NSString  *key = daysOfWeekNames[self.selectedIndexPath.row];
-////        [cell.frequencyButton setTag:tag];
-//        if (state == UIControlStateSelected) {
-////            [self setStateForFrequencyButton:cell.frequencyButton toState:UIControlStateSelected];
-////            [cell.frequencyButton setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
-////            [cell.frequencyButton setTitleColor:[UIColor whiteColor] forState:state];
-////            NSString  *title = [NSString stringWithFormat:@"%d", (tag - kBaseButtonTagValue)];
-////            [cell.frequencyButton setTitle:title forState:UIControlStateSelected];
-//            [self.daysAndDoses setObject:[NSNumber numberWithInteger:(tag - kBaseButtonTagValue)] forKey:key];
-//        } else {
-////            [self setStateForFrequencyButton:cell.frequencyButton toState:UIControlStateNormal];
-////            [cell.frequencyButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-////            [cell.frequencyButton setTitle:@"" forState:UIControlStateNormal];
-////            [self.daysAndDoses setObject:[NSNumber numberWithInteger:0] forKey:key];
-//        }
-//    }
-//}
 
 - (void)valueButtonTapped:(UIButton *)sender
 {

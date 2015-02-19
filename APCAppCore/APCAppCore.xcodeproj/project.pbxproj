@@ -1409,12 +1409,12 @@
 		CFFDED301A95725F00B25581 /* MedicationSetup */ = {
 			isa = PBXGroup;
 			children = (
+				CFFDEDB31A95734000B25581 /* MedicationName */,
 				CFFDED821A95734000B25581 /* MedicationDataStorageEngine */,
 				CFFDED971A95734000B25581 /* MedicationDosage */,
 				CFFDED9B1A95734000B25581 /* MedicationFrequency */,
 				CFFDEDA51A95734000B25581 /* MedicationLabel */,
 				CFFDEDAC1A95734000B25581 /* MedicationModel */,
-				CFFDEDB31A95734000B25581 /* MedicationName */,
 				CFFDEDB71A95734000B25581 /* MedicationSetup */,
 			);
 			name = MedicationSetup;
@@ -1489,15 +1489,15 @@
 		CFFDED9B1A95734000B25581 /* MedicationFrequency */ = {
 			isa = PBXGroup;
 			children = (
+				CFFDEDA21A95734000B25581 /* APCMedicationFrequencyViewController.h */,
+				CFFDEDA31A95734000B25581 /* APCMedicationFrequencyViewController.m */,
+				CFFDEDA41A95734000B25581 /* APCMedicationFrequencyViewController.xib */,
 				CFFDED9C1A95734000B25581 /* APCFrequencyDayTableViewCell.h */,
 				CFFDED9D1A95734000B25581 /* APCFrequencyDayTableViewCell.m */,
 				CFFDED9E1A95734000B25581 /* APCFrequencyDayTableViewCell.xib */,
 				CFFDED9F1A95734000B25581 /* APCFrequencyTableViewTimesCell.h */,
 				CFFDEDA01A95734000B25581 /* APCFrequencyTableViewTimesCell.m */,
 				CFFDEDA11A95734000B25581 /* APCFrequencyTableViewTimesCell.xib */,
-				CFFDEDA21A95734000B25581 /* APCMedicationFrequencyViewController.h */,
-				CFFDEDA31A95734000B25581 /* APCMedicationFrequencyViewController.m */,
-				CFFDEDA41A95734000B25581 /* APCMedicationFrequencyViewController.xib */,
 			);
 			name = MedicationFrequency;
 			path = MedicationTrackingSetup/MedicationFrequency;
@@ -1506,12 +1506,12 @@
 		CFFDEDA51A95734000B25581 /* MedicationLabel */ = {
 			isa = PBXGroup;
 			children = (
-				CFFDEDA61A95734000B25581 /* APCColorSwatchTableViewCell.h */,
-				CFFDEDA71A95734000B25581 /* APCColorSwatchTableViewCell.m */,
-				CFFDEDA81A95734000B25581 /* APCColorSwatchTableViewCell.xib */,
 				CFFDEDA91A95734000B25581 /* APCMedicationColorViewController.h */,
 				CFFDEDAA1A95734000B25581 /* APCMedicationColorViewController.m */,
 				CFFDEDAB1A95734000B25581 /* APCMedicationColorViewController.xib */,
+				CFFDEDA61A95734000B25581 /* APCColorSwatchTableViewCell.h */,
+				CFFDEDA71A95734000B25581 /* APCColorSwatchTableViewCell.m */,
+				CFFDEDA81A95734000B25581 /* APCColorSwatchTableViewCell.xib */,
 			);
 			name = MedicationLabel;
 			path = MedicationTrackingSetup/MedicationLabel;
@@ -1545,12 +1545,12 @@
 		CFFDEDB71A95734000B25581 /* MedicationSetup */ = {
 			isa = PBXGroup;
 			children = (
-				CFFDEDB81A95734000B25581 /* APCMedicationSummaryTableViewCell.h */,
-				CFFDEDB91A95734000B25581 /* APCMedicationSummaryTableViewCell.m */,
-				CFFDEDBA1A95734000B25581 /* APCMedicationSummaryTableViewCell.xib */,
 				CFFDEDBB1A95734000B25581 /* APCMedicationTrackerSetupViewController.h */,
 				CFFDEDBC1A95734000B25581 /* APCMedicationTrackerSetupViewController.m */,
 				CFFDEDBD1A95734000B25581 /* APCMedicationTrackerSetupViewController.xib */,
+				CFFDEDB81A95734000B25581 /* APCMedicationSummaryTableViewCell.h */,
+				CFFDEDB91A95734000B25581 /* APCMedicationSummaryTableViewCell.m */,
+				CFFDEDBA1A95734000B25581 /* APCMedicationSummaryTableViewCell.xib */,
 				CFFDEDBE1A95734000B25581 /* APCMedSetupNotificationKeys.h */,
 				CFFDEDBF1A95734000B25581 /* APCMedSetupNotificationKeys.m */,
 				CFFDEDC01A95734000B25581 /* APCSetupTableViewCell.h */,
