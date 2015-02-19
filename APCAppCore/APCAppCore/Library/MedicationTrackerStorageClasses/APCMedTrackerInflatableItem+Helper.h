@@ -14,7 +14,6 @@
  it's done, using a block with this signature.
  */
 typedef void (^APCMedTrackerFileLoadCallback) (NSArray *arrayOfGeneratedObjects,
-                                               NSManagedObjectContext *contextWhereOperationRan,
                                                NSTimeInterval operationDuration);
 
 /**
@@ -22,7 +21,6 @@ typedef void (^APCMedTrackerFileLoadCallback) (NSArray *arrayOfGeneratedObjects,
  it's done, using a block with this signature.
  */
 typedef void (^APCMedTrackerQueryCallback) (NSArray *arrayOfGeneratedObjects,
-                                            NSManagedObjectContext *contextWhereOperationRan,
                                             NSTimeInterval operationDuration,
                                             NSError *error);
 
@@ -32,13 +30,10 @@ typedef void (^APCMedTrackerQueryCallback) (NSArray *arrayOfGeneratedObjects,
 /**
  Attempts to load the stuff in the specified file as
  objects of whatever subclass of mine is executing this
- code.  If successful, the objects are saved to CoreData,
- and an array of those created objects is returned in
- the specified callback block.
+ code.
  */
-+ (void) reloadAllFromPlistFileNamed: (NSString *) fileName
-                          usingQueue: (NSOperationQueue *) queue
-                   andDoThisWhenDone: (APCMedTrackerFileLoadCallback) callbackBlock;
++ (NSArray *) reloadAllObjectsFromPlistFileNamed: (NSString *) fileName
+                                    usingContext: (NSManagedObjectContext *) context;
 
 /**
  Runs a query which loads all objects of this class in CoreData.
@@ -48,7 +43,7 @@ typedef void (^APCMedTrackerQueryCallback) (NSArray *arrayOfGeneratedObjects,
  colors, etc.  This merely loads a fetch request and extracts
  all items from it; it can easily be done in other ways.
  */
-+ (void) loadAllFromCoreDataUsingQueue: (NSOperationQueue *) queue
-                     andDoThisWhenDone: (APCMedTrackerQueryCallback) callbackBlock;
++ (void) fetchAllFromCoreDataAndUseThisQueue: (NSOperationQueue *) someQueue
+                            toDoThisWhenDone: (APCMedTrackerQueryCallback) callbackBlock;
 
 @end

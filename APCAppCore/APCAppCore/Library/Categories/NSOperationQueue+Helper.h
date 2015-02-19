@@ -10,6 +10,6 @@
 
 @interface NSOperationQueue (Helper)
 
-+ (instancetype) operationQueueWithName: (NSString *) name;
++ (instancetype) sequentialOperationQueueWithName: (NSString *) name;
 
 @end

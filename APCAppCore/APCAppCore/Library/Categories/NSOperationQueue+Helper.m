@@ -10,10 +10,11 @@
 
 @implementation NSOperationQueue (Helper)
 
-+ (instancetype) operationQueueWithName: (NSString *) name
++ (instancetype) sequentialOperationQueueWithName: (NSString *) name
 {
     NSOperationQueue *queue = [NSOperationQueue new];
     queue.name = name;
+    queue.maxConcurrentOperationCount = 1;
     return queue;
 }
 
