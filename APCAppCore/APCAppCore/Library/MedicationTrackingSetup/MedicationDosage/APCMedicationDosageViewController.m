@@ -10,8 +10,35 @@
 
 static  NSString  *kViewControllerName = @"Medication Dosages";
 
-static  NSString  *dosageStrings[] = { @"\u2007\u2007\u00bd\u2008mg", @"\u2007\u20071\u2008mg", @"\u2007\u20072\u00bd\u2008mg", @"\u2007\u20075\u2008mg",
-                                       @"\u200710\u2008mg", @"\u200720\u2008mg", @"\u200725\u2008mg", @"\u200750\u2008mg", @"\u200775\u2008mg", @"100\u2008mg" };
+    //
+    //    for a measure of typographic elegance,
+    //        the Unicode characters below have these meanings
+    //
+    //    2004    three per em space
+    //    2005    four per em space
+    //    2006    six per em space
+    //    2008    punctuation space
+    //    2009    thin space
+    //    200A    hairline space
+    //    200B    zero width space
+    //    2010    hyphen
+    //    2013    en dash
+    //    2014    em dash
+    //    00bc    1/4
+    //    00bd    1/2
+
+static  NSString  *dosageStrings[] = {
+                        @"\u2007\u2007\u00bd\u2008mg",
+                        @"\u2007\u20071\u2008mg",
+                        @"\u2007\u20072\u00bd\u2008mg",
+                        @"\u2007\u20075\u2008mg",
+                        @"\u200710\u2008mg",
+                        @"\u200720\u2008mg",
+                        @"\u200725\u2008mg",
+                        @"\u200750\u2008mg",
+                        @"\u200775\u2008mg",
+                        @"100\u2008mg"
+                    };
 
 static  CGFloat  dosageValues[] = { 0.5, 1, 2.5, 5, 10, 20, 25, 50, 75, 100 };
 static  NSInteger  numberOfDosageValues = (sizeof(dosageValues) / sizeof(CGFloat));
@@ -52,7 +79,7 @@ static  NSInteger  numberOfDosageValues = (sizeof(dosageValues) / sizeof(CGFloat
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSString  *title = @"Select Your Medication's Single Dose Amount";
+    NSString  *title = NSLocalizedString(@"Select Your Medication's Single Dose Amount", nil);
     return  title;
 }
 

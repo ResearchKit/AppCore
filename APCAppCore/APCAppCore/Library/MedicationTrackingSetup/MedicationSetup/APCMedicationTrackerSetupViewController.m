@@ -165,7 +165,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
         APCSetupTableViewCell  *aCell = (APCSetupTableViewCell *)[self.setupTabulator dequeueReusableCellWithIdentifier:kSetupTableCellName];
         aCell.topicLabel.text = mainTableCategories[indexPath.row];
         [self formatCellTopicForRow:(SetupTableRowTypes)indexPath.row withCell:aCell];
-//        aCell.addTopicLabel.text = addTableCategories[indexPath.row];
         cell = aCell;
     } else if (tableView == self.listTabulator) {
         APCMedicationSummaryTableViewCell  *aCell = (APCMedicationSummaryTableViewCell *)[self.listTabulator dequeueReusableCellWithIdentifier:kSummaryTableViewCell];
@@ -362,9 +361,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     
     UINib  *summaryCellNib = [UINib nibWithNibName:kSummaryTableViewCell bundle:[NSBundle appleCoreBundle]];
     [self.listTabulator registerNib:summaryCellNib forCellReuseIdentifier:kSummaryTableViewCell];
-    
-//    UIBarButtonItem  *addNewMedication = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewMedication:)];
-//    self.navigationItem.rightBarButtonItem = addNewMedication;
     
     self.currentMedicationRecords = [NSMutableArray array];
     self.currentMedicationModel = [[APCMedicationModel alloc] init];

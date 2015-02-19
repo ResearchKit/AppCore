@@ -11,14 +11,13 @@
 
 - (id)objectForKeyWithNil:(id)aKey
 {
-    if (self == nil) {
-        return nil;
+    id  answer = nil;
+    
+    id  object = [self objectForKey:aKey];
+    if (object != [NSNull null]) {
+        answer = object;
     }
-    id object = [self objectForKey:aKey];
-    if (object == [NSNull null]) {
-        return nil;
-    }
-    return object;
+    return answer;
 }
 
 @end

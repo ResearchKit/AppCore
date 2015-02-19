@@ -56,11 +56,6 @@ static  CGFloat   const  kCalendarSelectedDatePrintFontSizeDefault = 13.0;
     return self;
 }
 
-//- (void)setDelegate:(id<APCAppCoreDelegate>)delegate
-//{
-//    _delegate = delegate;
-//}
-
 - (void)setupViews
 {
     {
@@ -200,30 +195,23 @@ static  CGFloat   const  kCalendarSelectedDatePrintFontSizeDefault = 13.0;
 
 - (void)markDateSelected:(NSDate *)date
 {
-    for (APCMedicationTrackerCalendarDailyView  *v in [self.dailySubViewContainer subviews]) {
-        [v markSelected:([v.date isSameDateWith:date])];
+    for (APCMedicationTrackerCalendarDailyView  *view in [self.dailySubViewContainer subviews]) {
+        [view markSelected:([view.date isSameDateWith:date])];
     }
     self.selectedDate = date;
     NSDateFormatter  *dayFormatter = [[NSDateFormatter alloc] init];
     [dayFormatter setDateFormat:kCalendarSelectedDatePrintFormatDefault];
-    NSString  *strDate = [dayFormatter stringFromDate:date];
-//    if ([date isDateToday]) {
-//        strDate = [NSString stringWithFormat:@"%@", strDate ];
-//    }
+    NSString  *dateString = [dayFormatter stringFromDate:date];
 
-//    [self adjustDailyInfoLabelAndWeatherIcon : NO];
-
-    self.dateInfoLabel.text = strDate;
+    self.dateInfoLabel.text = dateString;
 }
 
 - (void)dailyInfoViewDidClick:(UIGestureRecognizer *)tap
 {
-//    [self redrawToDate:[NSDate new] ];
 }
 
 - (void)dayTitleViewDidClick:(UIGestureRecognizer *)tap
 {
-//    [self redrawToDate:((DayTitleLabel *)tap.view).date];
 }
 
 - (void)redrawToDate:(NSDate *)date
@@ -270,7 +258,6 @@ static  CGFloat   const  kCalendarSelectedDatePrintFontSizeDefault = 13.0;
                                 @"blnSwipeRight" : [NSNumber numberWithBool:blnSwipeRight],
                                 @"blnToday"      : [NSNumber numberWithBool:blnToday]
                                 }.mutableCopy;
-    NSLog(@"At End of delegateSwipeAnimation");
     if (blnSwipeRight == NO) {
         [self.delegate dailyCalendarViewDidSwipeLeft];
     } else {
@@ -317,7 +304,6 @@ static  CGFloat   const  kCalendarSelectedDatePrintFontSizeDefault = 13.0;
 
 - (void)dailyCalendarViewDidSelect:(NSDate *)date
 {
-    NSLog(@"dailyCalendarViewDidSelect");
     [self markDateSelected:date];
     [self.delegate dailyCalendarViewDidSelect:date];
 }

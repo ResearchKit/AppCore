@@ -7,6 +7,8 @@
 
 #import "NSDate+MedicationTracker.h"
 
+static  NSString  *kDefaultLocale = @"en_US_POSIX";
+
 @implementation NSDate (MedicationTracker)
 
 - (NSDate *)getWeekStartDate: (NSInteger)weekStartIndex
@@ -37,12 +39,12 @@
 
 - (NSString *)getDayOfWeekShortString
 {
-    static NSDateFormatter  *shortDayOfWeekFormatter;
+    static  NSDateFormatter  *shortDayOfWeekFormatter;
 
     if (shortDayOfWeekFormatter == nil) {
         shortDayOfWeekFormatter = [[NSDateFormatter alloc] init];
-        NSLocale* en_AU_POSIX = [[NSLocale alloc] initWithLocaleIdentifier:@"en_AU_POSIX"];
-        [shortDayOfWeekFormatter setLocale:en_AU_POSIX];
+        NSLocale  *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        [shortDayOfWeekFormatter setLocale:locale];
         [shortDayOfWeekFormatter setDateFormat:@"E"];
     }
     return  [shortDayOfWeekFormatter stringFromDate:self];
@@ -53,7 +55,7 @@
     static NSDateFormatter  *dateFormaater;
     if (dateFormaater == nil) {
         dateFormaater = [[NSDateFormatter alloc] init];
-        NSLocale* en_AU_POSIX = [[NSLocale alloc] initWithLocaleIdentifier:@"en_AU_POSIX"];
+        NSLocale* en_AU_POSIX = [[NSLocale alloc] initWithLocaleIdentifier:kDefaultLocale];
         [dateFormaater setLocale:en_AU_POSIX];
         [dateFormaater setDateFormat:@"d"];
     }

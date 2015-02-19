@@ -50,7 +50,7 @@ static  NSInteger numberOfMedicineNames = (sizeof(medicineNames) / sizeof(NSStri
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSString  *title = @"Select the Medication You Are Currently Taking";
+    NSString  *title = NSLocalizedString(@"Select the Medication You Are Currently Taking", nil);
     return  title;
 }
 

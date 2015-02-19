@@ -57,7 +57,7 @@ static  NSInteger  numberOfColorNames = (sizeof(colorNames) / sizeof(NSString *)
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSString  *title = @"Select a Color Code for Your Medication";
+    NSString  *title = NSLocalizedString(@"Select a Color Code for Your Medication", nil);
     return  title;
 }
 
@@ -65,6 +65,7 @@ static  NSInteger  numberOfColorNames = (sizeof(colorNames) / sizeof(NSString *)
 {
     APCColorSwatchTableViewCell  *cell = (APCColorSwatchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kColorSwatchTableCellName];
     NSString  *colorname = colorNames[indexPath.row];
+    colorname = NSLocalizedString(colorname, nil);
     cell.colorNameLabel.text = colorname;
     UIColor  *swatch = self.colormap[colorname];
     cell.colorSwatchView.backgroundColor = swatch;
