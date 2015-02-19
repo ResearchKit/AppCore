@@ -133,15 +133,16 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
         }
         else
         {
-            [taskViewController dismissViewControllerAnimated:YES completion:^
-             {
+            [taskViewController dismissViewControllerAnimated:YES completion:^{
                  [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
              }];
         }
     }
     else
     {
-        [taskViewController dismissViewControllerAnimated:YES completion:nil];
+        [taskViewController dismissViewControllerAnimated:YES completion:^{
+             [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
+         }];
     }
 }
 

@@ -143,24 +143,7 @@
                             <outlet property="delegate" destination="v3n-LY-Arx" id="htU-bb-MMg"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="JHm-KZ-DwG">
-                        <barButtonItem key="rightBarButtonItem" width="30" style="plain" id="Wib-aK-U8G">
-                            <view key="customView" contentMode="scaleToFill" id="h3q-ho-mRw" customClass="APCCircularProgressView">
-                                <rect key="frame" x="274" y="5" width="33" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="hidesProgressValue" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="progress">
-                                        <real key="value" value="0.0"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="lineWidth">
-                                        <real key="value" value="2"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="JHm-KZ-DwG"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="eFV-BR-6yP">
                         <autoresizingMask key="autoresizingMask"/>
@@ -168,9 +151,6 @@
                             <action selector="updateActivities:" destination="v3n-LY-Arx" eventType="valueChanged" id="3FT-3M-xSe"/>
                         </connections>
                     </refreshControl>
-                    <connections>
-                        <outlet property="taskProgress" destination="h3q-ho-mRw" id="3vV-pt-dVZ"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nJk-Uo-Zov" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
