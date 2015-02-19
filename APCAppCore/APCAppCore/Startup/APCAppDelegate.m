@@ -372,7 +372,13 @@ static NSUInteger const kIndexOfProfileTab = 3;
         
         if (animationUrl != nil)
         {
-            NSURL*      url   = [[NSBundle mainBundle] URLForResource:animationUrl withExtension:@"m4v"];
+            NSString * nameWithScaleFactor = animationUrl;
+            if ([[UIScreen mainScreen] scale] >= 3) {
+                nameWithScaleFactor = [nameWithScaleFactor stringByAppendingString:@"@3x"];
+            } else {
+                nameWithScaleFactor = [nameWithScaleFactor stringByAppendingString:@"@3x"];
+            }
+            NSURL*      url   = [[NSBundle mainBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
             NSError*    error = nil;
             
             NSAssert([url checkResourceIsReachableAndReturnError:&error] == YES, @"Animation file--%@--not reachable: %@", animationUrl, error);
