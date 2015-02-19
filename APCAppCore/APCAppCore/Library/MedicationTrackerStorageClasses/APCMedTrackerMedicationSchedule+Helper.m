@@ -35,11 +35,12 @@
         NSDate *startTime = [NSDate date];
         APCAppDelegate *appDelegate = (APCAppDelegate *) [[UIApplication sharedApplication] delegate];
         NSManagedObjectContext *masterContextIThink = appDelegate.dataSubstrate.persistentContext;
-
         NSManagedObjectContext *localContext = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
         localContext.parentContext = masterContextIThink;
 
-//      [localContext performBlockAndWait: ^{
+        //
+        // We can also use -performBlockAndWait:.
+        //
         [localContext performBlock: ^{
 
             APCMedTrackerMedicationSchedule *schedule = [APCMedTrackerMedicationSchedule newObjectForContext: localContext];
@@ -53,22 +54,6 @@
 
             NSError *error = nil;
             [schedule saveToPersistentStore: &error];
-
-//            if (localContext.hasChanges)
-//            {
-//                if ([localContext save: &error])
-//                {
-//                    NSLog (@"Save seems to have worked!");
-//                }
-//                else
-//                {
-//                    NSLog (@"Error while saving!  %@", error);
-//                }
-//            }
-//            else
-//            {
-//                NSLog (@"Dude.  Nothing to save.  'sup widdat?");
-//            }
 
             NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];
 

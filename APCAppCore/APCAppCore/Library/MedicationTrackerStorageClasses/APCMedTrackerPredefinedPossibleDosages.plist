@@ -3,88 +3,66 @@
 <plist version="1.0">
 <array>
 	<dict>
-		<key>uniqueId</key>
-		<integer>1</integer>
 		<key>name</key>
 		<string>1/2 mg</string>
 		<key>amount</key>
 		<string>0.5</string>
 	</dict>
 	<dict>
-		<key>uniqueId</key>
-		<integer>2</integer>
 		<key>name</key>
 		<string>1/2 mg</string>
 		<key>amount</key>
 		<string>0.5</string>
 	</dict>
 	<dict>
-		<key>uniqueId</key>
-		<integer>3</integer>
 		<key>name</key>
 		<string>1 mg</string>
 		<key>amount</key>
 		<string>1</string>
 	</dict>
 	<dict>
-		<key>uniqueId</key>
-		<integer>4</integer>
 		<key>name</key>
 		<string>2-1/2 mg</string>
 		<key>amount</key>
 		<string>2.5</string>
 	</dict>
 	<dict>
-		<key>uniqueId</key>
-		<integer>5</integer>
 		<key>name</key>
 		<string>5 mg</string>
 		<key>amount</key>
 		<string>5</string>
 	</dict>
 	<dict>
-		<key>uniqueId</key>
-		<integer>6</integer>
 		<key>name</key>
 		<string>10 mg</string>
 		<key>amount</key>
 		<string>10</string>
 	</dict>
 	<dict>
-		<key>uniqueId</key>
-		<integer>7</integer>
 		<key>name</key>
 		<string>20 mg</string>
 		<key>amount</key>
 		<string>20</string>
 	</dict>
 	<dict>
-		<key>uniqueId</key>
-		<integer>8</integer>
 		<key>name</key>
 		<string>25 mg</string>
 		<key>amount</key>
 		<string>25</string>
 	</dict>
 	<dict>
-		<key>uniqueId</key>
-		<integer>9</integer>
 		<key>name</key>
 		<string>50 mg</string>
 		<key>amount</key>
 		<string>50</string>
 	</dict>
 	<dict>
-		<key>uniqueId</key>
-		<integer>10</integer>
 		<key>name</key>
 		<string>75 mg</string>
 		<key>amount</key>
 		<string>75</string>
 	</dict>
 	<dict>
-		<key>uniqueId</key>
-		<integer>11</integer>
 		<key>name</key>
 		<string>100 mg</string>
 		<key>amount</key>

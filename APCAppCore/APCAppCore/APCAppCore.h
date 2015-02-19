@@ -130,7 +130,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCMedTrackerMedicationSchedule+Helper.h>
 #import <APCAppCore/APCMedTrackerPossibleDosage.h>
 #import <APCAppCore/APCMedTrackerScheduleColor.h>
-
+#import <APCAppCore/APCMedTrackerScheduleColor+Helper.h>
 
 /* -------------------------
  Views
