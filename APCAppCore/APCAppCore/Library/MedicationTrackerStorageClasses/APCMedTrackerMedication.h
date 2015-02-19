@@ -2,18 +2,18 @@
 //  APCMedTrackerMedication.h
 //  APCAppCore
 //
-//  Created by Ron Conescu on 2/17/15.
+//  Created by Ron Conescu on 2/18/15.
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "APCMedTrackerInflatableItem.h"
 
 @class APCMedTrackerMedicationSchedule;
 
-@interface APCMedTrackerMedication : NSManagedObject
+@interface APCMedTrackerMedication : APCMedTrackerInflatableItem
 
-@property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSSet *schedulesWhereIAmUsed;
 @end
 
