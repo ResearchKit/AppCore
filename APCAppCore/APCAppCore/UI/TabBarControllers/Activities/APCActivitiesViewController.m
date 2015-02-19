@@ -56,9 +56,6 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     self.tableView.backgroundColor = [UIColor appSecondaryColor4];
     
     [((APCAppDelegate *)[[UIApplication sharedApplication] delegate]) showPasscodeIfNecessary];
-    
-    self.taskProgress.lineWidth = 2;
-    self.taskProgress.tintColor = [UIColor appPrimaryColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated
