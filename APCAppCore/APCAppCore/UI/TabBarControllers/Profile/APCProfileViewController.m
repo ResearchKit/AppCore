@@ -1246,12 +1246,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 #pragma mark - IBActions
 
-//- (IBAction)showSettings:(id)sender
-//{
-//    APCSettingsViewController *settingsViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSettingsViewController"];
-//    [self.navigationController pushViewController:settingsViewController animated:YES];
-//}
-
 - (IBAction) signOut: (id) __unused sender
 {
     UIAlertController *alertContorller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Out", @"") message:NSLocalizedString(@"Are you sure you want to sign out?", nil) preferredStyle:UIAlertControllerStyleActionSheet];
