@@ -1,8 +1,7 @@
 //
 //  APCMedTrackerInflatableItem+Helper.m
-//  APCAppCore
+//  AppCore
 //
-//  Created by Ron Conescu on 2/18/15.
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
@@ -135,6 +134,7 @@
                                            inContext: (NSManagedObjectContext *) context
 {
     APCMedTrackerInflatableItem *result = nil;
+
     NSString *name = newlyGeneratedItem.name;
 
     if (name.length > 0)
@@ -145,14 +145,25 @@
         NSArray *foundItems = [context executeFetchRequest: request
                                                      error: &error];
 
-        if (error == nil)
+        if (foundItems == nil)
+        {
+            // Something went wrong!  (See definition of -executeFetchRequest for details.)
+            // For now, silently absorb it.  As we debug this, I'll look for errors.
+        }
+
+        else if (foundItems.count == 0)
+        {
+            // No matching items found.  No problem.
+        }
+
+        else
         {
             for (APCMedTrackerInflatableItem * foundItem in foundItems)
             {
                 /*
                  The item we just generated will, by definition,
                  be in the list of stuff the Context will find with
-                 this search.
+                 this search.  Skip it.
                  */
                 if (! [foundItem.objectID isEqual: newlyGeneratedItem.objectID])
                 {

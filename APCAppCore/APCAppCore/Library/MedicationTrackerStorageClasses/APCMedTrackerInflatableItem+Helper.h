@@ -1,8 +1,7 @@
 //
 //  APCMedTrackerInflatableItem+Helper.h
-//  APCAppCore
+//  AppCore
 //
-//  Created by Ron Conescu on 2/18/15.
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
@@ -19,6 +18,14 @@ typedef void (^APCMedTrackerFileLoadCallback) (NSArray *arrayOfGeneratedObjects,
 /**
  The +loadAllFromCoreData method calls you back when
  it's done, using a block with this signature.
+ 
+ Note that arrayOfGeneratedObjects and error are passed
+ to you straight from the output of
+ -[NSManagedObjectContext executeFetchRequest:].  Please
+ see that method for descriptions of those values.  In
+ particular, note that the array will be nil if there
+ was an error, but an empty array if there were simply
+ no items found.
  */
 typedef void (^APCMedTrackerQueryCallback) (NSArray *arrayOfGeneratedObjects,
                                             NSTimeInterval operationDuration,

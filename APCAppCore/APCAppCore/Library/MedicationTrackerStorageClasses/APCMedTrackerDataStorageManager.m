@@ -1,8 +1,7 @@
 //
 //  APCMedTrackerDataStorageManager.m
-//  APCAppCore
+//  AppCore
 //
-//  Created by Ron Conescu on 2/18/15.
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
@@ -115,16 +114,33 @@ static dispatch_once_t _startupComplete = 0;
         /*
          Save everything.
          */
+        NSString *errorMessage = nil;
+
         if (allInflatedObjects.count > 0)
         {
             NSError *error = nil;
             APCMedTrackerInflatableItem *someObject = allInflatedObjects.firstObject;
-            [someObject saveToPersistentStore: &error];
+
+            BOOL itWorked = [someObject saveToPersistentStore: &error];
+
+            if (itWorked)
+            {
+                errorMessage = @"None.  Everything seems to have worked perfectly.";
+            }
+            else if (error == nil)
+            {
+                errorMessage = @"Couldn't load files, but I have no information about why... ?!?";
+            }
+            else
+            {
+                errorMessage = [NSString stringWithFormat: @"%@", error];
+            }
         }
 
 
         NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startDate];
-        APCLogDebug (@"(Re)loaded static MedTracker items from disk in %f seconds.  Loaded these items: %@", operationDuration, allInflatedObjects);
+
+        APCLogDebug (@"(Re)loaded static MedTracker items from disk in %f seconds.  Error:  [%@]  Loaded these items: %@", operationDuration, errorMessage, allInflatedObjects);
 
 
         /*

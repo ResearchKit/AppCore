@@ -1,8 +1,7 @@
 //
 //  APCMedTrackerMedicationSchedule+Helper.m
-//  APCAppCore
+//  AppCore
 //
-//  Created by Ron Conescu on 2/17/15.
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
@@ -53,7 +52,20 @@
             schedule.dateStartedUsing = [NSDate date];
 
             NSError *error = nil;
-            [schedule saveToPersistentStore: &error];
+            BOOL itWorked = [schedule saveToPersistentStore: &error];
+
+            if (itWorked)
+            {
+                // Not sure how we're going to handle this, yet.  This method is still evolving.
+            }
+            else if (error == nil)
+            {
+
+            }
+            else
+            {
+
+            }
 
             NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];
 
