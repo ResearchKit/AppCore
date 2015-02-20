@@ -385,7 +385,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
             if ([[UIScreen mainScreen] scale] >= 3) {
                 nameWithScaleFactor = [nameWithScaleFactor stringByAppendingString:@"@3x"];
             } else {
-                nameWithScaleFactor = [nameWithScaleFactor stringByAppendingString:@"@3x"];
+                nameWithScaleFactor = [nameWithScaleFactor stringByAppendingString:@"@2x"];
             }
             NSURL*      url   = [[NSBundle mainBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
             NSError*    error = nil;
