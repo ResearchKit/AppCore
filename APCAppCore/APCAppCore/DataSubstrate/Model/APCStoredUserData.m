@@ -17,6 +17,8 @@
 @dynamic consentSignatureDate;
 @dynamic consentSignatureImage;
 @dynamic consentSignatureName;
+@dynamic customSurveyQuestion;
+@dynamic dailyScalesCompletionCounter;
 @dynamic ethnicity;
 @dynamic glucoseLevels;
 @dynamic homeLocationAddress;
@@ -31,7 +33,6 @@
 @dynamic sleepTime;
 @dynamic userConsented;
 @dynamic wakeUpTime;
-@dynamic customSurveyQuestion;
-@dynamic dailyScalesCompletionCounter;
+@dynamic hasHeartDisease;
 
 @end

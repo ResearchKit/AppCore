@@ -87,6 +87,7 @@
         <attribute name="dailyScalesCompletionCounter" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="ethnicity" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="glucoseLevels" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hasHeartDisease" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="homeLocationAddress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="homeLocationLat" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="homeLocationLong" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -122,7 +123,7 @@
         <element name="APCResult" positionX="-1107" positionY="72" width="128" height="208"/>
         <element name="APCSchedule" positionX="-729" positionY="-28" width="128" height="253"/>
         <element name="APCScheduledTask" positionX="-945" positionY="72" width="128" height="178"/>
-        <element name="APCStoredUserData" positionX="-1260" positionY="72" width="128" height="388"/>
+        <element name="APCStoredUserData" positionX="-1260" positionY="72" width="128" height="405"/>
         <element name="APCTask" positionX="-722" positionY="252" width="128" height="195"/>
     </elements>
 </model>
