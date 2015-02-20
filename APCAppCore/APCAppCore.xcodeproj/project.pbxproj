@@ -1596,9 +1596,9 @@
 			children = (
 				CFFDEDB71A95734000B25581 /* MedicationSetup */,
 				CFFDEDB31A95734000B25581 /* MedicationName */,
-				CFFDED971A95734000B25581 /* MedicationDosage */,
 				CFFDED9B1A95734000B25581 /* MedicationFrequency */,
 				CFFDEDA51A95734000B25581 /* MedicationLabel */,
+				CFFDED971A95734000B25581 /* MedicationDosage */,
 				CFFDEDAC1A95734000B25581 /* MedicationModel */,
 			);
 			name = MedicationSetup;
