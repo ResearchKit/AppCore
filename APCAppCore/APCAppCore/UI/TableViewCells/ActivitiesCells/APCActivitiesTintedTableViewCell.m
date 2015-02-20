@@ -61,9 +61,10 @@ static CGFloat const kTitleLabelCenterYConstant = 10.5f;
     
     self.subTitleLabel.textColor = [UIColor appSecondaryColor3];
     
-    self.countLabel.text = @"";
+    self.countLabel.hidden = YES;
     
     self.tintView.backgroundColor = [UIColor appTertiaryGrayColor];
+    
 }
 
 @end

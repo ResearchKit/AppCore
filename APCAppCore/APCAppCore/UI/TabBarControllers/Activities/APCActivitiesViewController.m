@@ -25,8 +25,6 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
 
 @property (strong, nonatomic) APCActivitiesViewWithNoTask *noTasksView;
 
-@property (weak, nonatomic) IBOutlet APCCircularProgressView *taskProgress;
-
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @end
 
@@ -60,9 +58,6 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     
     [((APCAppDelegate *)[[UIApplication sharedApplication] delegate]) showPasscodeIfNecessary];
     
-    self.taskProgress.lineWidth = 2;
-    self.taskProgress.tintColor = [UIColor appPrimaryColor];
-    
     [self.tableView registerNib:[UINib nibWithNibName:@"APCActivitiesSectionHeaderView" bundle:[NSBundle appleCoreBundle]] forHeaderFooterViewReuseIdentifier:kAPCActivitiesSectionHeaderViewIdentifier];
     
     self.dateFormatter = [NSDateFormatter new];
@@ -76,11 +71,6 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
                                              selector:@selector(reloadData)
                                                  name:APCUpdateActivityNotification object:nil];
     APCLogViewControllerAppeared();
-    
-    NSUInteger allScheduledTasks = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.countOfAllScheduledTasksForToday;
-    NSUInteger completedScheduledTasks = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.countOfCompletedScheduledTasksForToday;
-    
-    self.taskProgress.progress = (CGFloat)completedScheduledTasks/allScheduledTasks;
 }
 
 -(void)setUpNavigationBarAppearance{
