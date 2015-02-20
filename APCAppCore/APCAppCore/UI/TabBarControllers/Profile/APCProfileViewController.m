@@ -894,7 +894,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             {
                 APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
                 
-                NSArray*                sections  = [appDelegate consentSections];
+                NSArray*                sections  = [appDelegate consentSectionsAndHtmlContent:nil];
                 ORKConsentDocument*     consent   = [[ORKConsentDocument alloc] init];
                 ORKConsentSignature*    signature = [ORKConsentSignature signatureForPersonWithTitle:NSLocalizedString(@"Participant", nil)
                                                                                     dateFormatString:nil
