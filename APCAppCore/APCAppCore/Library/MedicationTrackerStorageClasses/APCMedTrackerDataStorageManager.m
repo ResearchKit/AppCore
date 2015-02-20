@@ -35,14 +35,30 @@ static dispatch_once_t _startupComplete = 0;
 
 @implementation APCMedTrackerDataStorageManager
 
-+ (void) startupAndThenUseThisQueue: (NSOperationQueue *) queue
-                           toDoThis: (APCMedTrackerGenericCallback) callbackBlock
++ (void) startupReloadingDefaults: (BOOL) shouldReloadPlistFiles
+              andThenUseThisQueue: (NSOperationQueue *) queue
+                         toDoThis: (APCMedTrackerGenericCallback) callbackBlock
 {
     if (! _defaultManager)
     {
         dispatch_once (& _startupComplete, ^{
-            [self generateDefaultManagerAndResourcesAndThenDoThis: callbackBlock
-                                                      onThisQueue: queue];
+
+            APCMedTrackerDataStorageManager *__block manager = [APCMedTrackerDataStorageManager new];
+            _defaultManager = manager;
+
+            manager.masterQueue = [NSOperationQueue sequentialOperationQueueWithName: QUEUE_NAME];
+            
+            [manager.masterQueue addOperationWithBlock:^{
+
+                manager.masterContext = [manager newContextOnCurrentQueue];
+                
+                if (shouldReloadPlistFiles)
+                {
+                    [self reloadStaticContentFromPlistFiles];
+                }
+
+                [self doThis: callbackBlock onThisQueue: queue];
+            }];
         });
     }
     else
@@ -63,91 +79,61 @@ static dispatch_once_t _startupComplete = 0;
 }
 
 /**
+ (Re)load current static data values from disk
+ (in case, say, we now have more medications, or
+ our designers have changed the color palette).
+
  This should be called exactly once, from +startup.
- I just wanted to break it into its own method because
- it contains a bunch of confusing concepts, and it
- gets called from a block in +startup, which makes
- the logic kinda hard to follow.
+ This is called from within a block on our special
+ queue.
  */
-+ (void) generateDefaultManagerAndResourcesAndThenDoThis: (APCMedTrackerGenericCallback) callbackBlock
-                                             onThisQueue: (NSOperationQueue *) consumerQueue
++ (void) reloadStaticContentFromPlistFiles
 {
-    /*
-     Create the manager.
-     */
-    APCMedTrackerDataStorageManager *__block manager = [APCMedTrackerDataStorageManager new];
-    _defaultManager = manager;
-
+    APCMedTrackerDataStorageManager *manager = [self defaultManager];
+    NSManagedObjectContext *context = manager.masterContext;
+    NSMutableArray *allInflatedObjects = [NSMutableArray new];
+    NSDate *startDate = [NSDate date];
 
     /*
-     Create the queue.
+     These methods are sequential, in-line methods,
+     because I designed them to be called from this
+     method.
      */
-    manager.masterQueue = [NSOperationQueue sequentialOperationQueueWithName: QUEUE_NAME];
-
-    [manager.masterQueue addOperationWithBlock:^{
-
-        NSDate* startDate = [NSDate date];
+    [allInflatedObjects addObjectsFromArray: [APCMedTrackerMedication reloadAllObjectsFromPlistFileNamed: FILE_WITH_PREDEFINED_MEDICATIONS usingContext: context]];
+    [allInflatedObjects addObjectsFromArray: [APCMedTrackerScheduleColor reloadAllObjectsFromPlistFileNamed: FILE_WITH_PREDEFINED_SCHEDULE_COLORS usingContext: context]];
+    [allInflatedObjects addObjectsFromArray: [APCMedTrackerPossibleDosage reloadAllObjectsFromPlistFileNamed: FILE_WITH_PREDEFINED_POSSIBLE_DOSAGES usingContext: context]];
 
 
-        /*
-         Create the context.
-         */
-        manager.masterContext = [manager newContextOnCurrentQueue];
+    /*
+     Save to CoreData.
+     */
+    NSString *errorMessage = nil;
 
+    if (allInflatedObjects.count > 0)
+    {
+        NSError *error = nil;
+        APCMedTrackerInflatableItem *someObject = allInflatedObjects.firstObject;
 
-        /*
-         (Re)load current static data values from disk
-         (in case, say, we now have more medications, or
-         our designers have changed the color palette).
-         These methods are all sequential, in-line methods,
-         because I designed them to be called from this
-         method.
-         */
-        NSManagedObjectContext *context = manager.masterContext;
-        NSMutableArray *allInflatedObjects = [NSMutableArray new];
+        BOOL itWorked = [someObject saveToPersistentStore: &error];
 
-        [allInflatedObjects addObjectsFromArray: [APCMedTrackerMedication reloadAllObjectsFromPlistFileNamed: FILE_WITH_PREDEFINED_MEDICATIONS usingContext: context]];
-        [allInflatedObjects addObjectsFromArray: [APCMedTrackerScheduleColor reloadAllObjectsFromPlistFileNamed: FILE_WITH_PREDEFINED_SCHEDULE_COLORS usingContext: context]];
-        [allInflatedObjects addObjectsFromArray: [APCMedTrackerPossibleDosage reloadAllObjectsFromPlistFileNamed: FILE_WITH_PREDEFINED_POSSIBLE_DOSAGES usingContext: context]];
-
-
-        /*
-         Save everything.
-         */
-        NSString *errorMessage = nil;
-
-        if (allInflatedObjects.count > 0)
+        if (itWorked)
         {
-            NSError *error = nil;
-            APCMedTrackerInflatableItem *someObject = allInflatedObjects.firstObject;
-
-            BOOL itWorked = [someObject saveToPersistentStore: &error];
-
-            if (itWorked)
-            {
-                errorMessage = @"None.  Everything seems to have worked perfectly.";
-            }
-            else if (error == nil)
-            {
-                errorMessage = @"Couldn't load files, but I have no information about why... ?!?";
-            }
-            else
-            {
-                errorMessage = [NSString stringWithFormat: @"%@", error];
-            }
+            errorMessage = @"Everything seems to have worked perfectly.";
         }
+        else if (error == nil)
+        {
+            errorMessage = @"Error: [Couldn't load files, but I have no information about why... ?!?]";
+        }
+        else
+        {
+            errorMessage = [NSString stringWithFormat: @"Error: [%@]", error];
+        }
+    }
 
 
-        NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startDate];
+    NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startDate];
 
-        APCLogDebug (@"(Re)loaded static MedTracker items from disk in %f seconds.  Error:  [%@]  Loaded these items: %@", operationDuration, errorMessage, allInflatedObjects);
-
-
-        /*
-         Do what the calling method asked.
-         */
-        [self doThis: callbackBlock onThisQueue: consumerQueue];
-    }];
+    APCLogDebug (@"(Re)loaded static MedTracker items from disk in %f seconds.  %@  Loaded these items: %@", operationDuration, errorMessage, allInflatedObjects);
 }
 
 + (instancetype) defaultManager

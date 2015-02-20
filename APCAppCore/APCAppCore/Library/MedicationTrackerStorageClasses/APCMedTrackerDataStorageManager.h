@@ -24,8 +24,9 @@ typedef void (^APCMedTrackerGenericCallback) (void);
  and a queue to do something immediately afterwards, or
  pass nil and/or NULL not to.
  */
-+ (void) startupAndThenUseThisQueue: (NSOperationQueue *) queue
-                           toDoThis: (APCMedTrackerGenericCallback) callbackBlock;
++ (void) startupReloadingDefaults: (BOOL) shouldReloadPlistFiles
+              andThenUseThisQueue: (NSOperationQueue *) queue
+                         toDoThis: (APCMedTrackerGenericCallback) callbackBlock;
 
 /**
  Get our singleton data-storage manager.
