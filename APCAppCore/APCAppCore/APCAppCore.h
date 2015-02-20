@@ -122,19 +122,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCWithdrawCompleteViewController.h>
 
 /* -------------------------
- Medication Tracking Setup Storage Engine
- ------------------------- */
-
-#import <APCAppCore/APCMedicationActualMedicine.h>
-#import <APCAppCore/APCMedicationColor.h>
-#import <APCAppCore/APCMedicationDataStorageEngine.h>
-#import <APCAppCore/APCMedicationDosageTaken.h>
-#import <APCAppCore/APCMedicationLozenge.h>
-#import <APCAppCore/APCMedicationPossibleDosage.h>
-#import <APCAppCore/APCMedicationUltraSimpleSelfInflator.h>
-#import <APCAppCore/APCMedicationWeeklySchedule.h>
-
-/* -------------------------
  Medication Tracking Setup Controllers
  ------------------------- */
 
@@ -172,19 +159,17 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  Medication-Tracker Storage (not the med-tracker itself)
  ------------------------- */
 #import <APCAppCore/APCMedTrackerDataStorageManager.h>
-
 #import <APCAppCore/APCMedTrackerActualDosageTaken.h>
-#import <APCAppCore/APCMedTrackerInflatableItem.h>
-#import <APCAppCore/APCMedTrackerMedication.h>
-#import <APCAppCore/APCMedTrackerMedicationSchedule.h>
-#import <APCAppCore/APCMedTrackerPossibleDosage.h>
-#import <APCAppCore/APCMedTrackerScheduleColor.h>
-
 #import <APCAppCore/APCMedTrackerActualDosageTaken+Helper.h>
+#import <APCAppCore/APCMedTrackerInflatableItem.h>
 #import <APCAppCore/APCMedTrackerInflatableItem+Helper.h>
+#import <APCAppCore/APCMedTrackerMedication.h>
 #import <APCAppCore/APCMedTrackerMedication+Helper.h>
+#import <APCAppCore/APCMedTrackerMedicationSchedule.h>
 #import <APCAppCore/APCMedTrackerMedicationSchedule+Helper.h>
+#import <APCAppCore/APCMedTrackerPossibleDosage.h>
 #import <APCAppCore/APCMedTrackerPossibleDosage+Helper.h>
+#import <APCAppCore/APCMedTrackerScheduleColor.h>
 #import <APCAppCore/APCMedTrackerScheduleColor+Helper.h>
 
 /* -------------------------
