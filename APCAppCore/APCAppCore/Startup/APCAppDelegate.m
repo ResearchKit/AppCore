@@ -301,9 +301,17 @@ static NSUInteger const kIndexOfProfileTab = 3;
     NSString*       documentHtmlContent = [consentParameters objectForKey:kDocumentHtml];
     NSAssert(documentHtmlContent == nil || documentHtmlContent != nil && [documentHtmlContent isKindOfClass:[NSString class]], @"Improper Document HTML Content type");
     
-    if (htmlContent != nil)
+    if (documentHtmlContent != nil)
     {
-        *htmlContent = documentHtmlContent;
+        NSString*   path    = [[NSBundle mainBundle] pathForResource:documentHtmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+        NSAssert(path != nil, @"Unable to locate HTML file: %@", documentHtmlContent);
+        
+        NSError*    error   = nil;
+        NSString*   content = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+        
+        NSAssert(content != nil, @"Unable to load content of file \"%@\": %@", path, error);
+        
+        *htmlContent = content;
     }
     
     NSArray*        parametersConsentSections = [consentParameters objectForKey:kConsentSections];
