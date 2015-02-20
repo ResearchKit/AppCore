@@ -11,6 +11,7 @@
 #import "APCPasscodeViewController.h"
 #import "APCProfileViewController.h"
 
+
 @class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector;
 
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
@@ -38,7 +39,7 @@
 - (void)loadStaticTasksAndSchedulesIfNecessary;  //For resetting app
 - (void) clearNSUserDefaults; //For resetting app
 
-- (NSMutableArray*)consentSections;  //  Retrieve and creates Consent Sections from JSON file.
+- (NSMutableArray*)consentSectionsAndHtmlContent:(NSString**)htmlContent;  //  Retrieve and creates Consent Sections from JSON file.
 
 
 - (NSString*) certificateFileName;

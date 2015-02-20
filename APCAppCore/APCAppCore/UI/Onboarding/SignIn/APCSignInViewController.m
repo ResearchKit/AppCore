@@ -266,6 +266,26 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 
 #pragma mark - ORKTaskViewControllerDelegate methods
 
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
+{
+    if (result == ORKTaskViewControllerResultCompleted)
+    {
+        [self taskViewControllerDidComplete:taskViewController];
+    }
+    else if (result == ORKTaskViewControllerResultDiscarded)
+    {
+        [taskViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+    else if (result == ORKTaskViewControllerResultFailed)
+    {
+        [taskViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+    else if (result == ORKTaskViewControllerResultSaved)
+    {
+        [taskViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 - (void)taskViewControllerDidComplete: (ORKTaskViewController *)taskViewController
 {
     ORKConsentSignatureResult *consentResult =  nil;
@@ -320,16 +340,6 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
     }
 }
 
-- (void)taskViewControllerDidCancel:(ORKTaskViewController *)taskViewController
-{
-    [taskViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFailOnStep:(ORKStep *) __unused step withError:(NSError *) __unused error
-{
-    //TODO: Figure out what to do if it fails
-    [taskViewController dismissViewControllerAnimated:YES completion:nil];
-}
 
 #pragma mark - IBActions 
 

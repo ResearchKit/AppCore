@@ -11,6 +11,7 @@
 #import <objc/runtime.h>
 #import "APCUtilities.h"
 #import "ORKAnswerFormat+Helper.h"
+#import "APCCMS.h"
 
 NSString *const kQuestionTypeKey        = @"questionType";
 NSString *const kQuestionTypeNameKey    = @"questionTypeName";
@@ -551,28 +552,25 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 
 + (void) encryptZipFile: (NSString*) unencryptedPath encryptedPath:(NSString*) encryptedPath
 {
-//    NSData * unencryptedZipData = [NSData dataWithContentsOfFile:unencryptedPath];
+    NSData * unencryptedZipData = [NSData dataWithContentsOfFile:unencryptedPath];
     
     NSError * encryptionError;
-#warning Temporary Kludge to bypass CMS encryption
-//    NSData * encryptedZipData = ORKCryptographicMessageSyntaxEnvelopedData(unencryptedZipData, [APCDataArchiver readPEM], RKEncryptionAlgorithmAES128CBC, &encryptionError);
+    NSData * encryptedZipData = cmsEncrypt(unencryptedZipData, [APCDataArchiver pemPath], &encryptionError);
     APCLogError2(encryptionError);
     
-//    NSError * fileWriteError;
-//    [encryptedZipData writeToFile:encryptedPath options:NSDataWritingAtomic error:&fileWriteError];
-//    APCLogError2(fileWriteError);
+    NSError * fileWriteError;
+    [encryptedZipData writeToFile:encryptedPath options:NSDataWritingAtomic error:&fileWriteError];
+    APCLogError2(fileWriteError);
 }
 
 /*********************************************************************************/
 #pragma mark - Helpers
 /*********************************************************************************/
-+ (NSData*) readPEM
++ (NSString*) pemPath
 {
     APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
     NSString * path = [[NSBundle mainBundle] pathForResource:appDelegate.certificateFileName ofType:@"pem"];
-    NSData * data = [NSData dataWithContentsOfFile:path];
-    NSAssert(data != nil, @"Please add PEM file");
-    return data;
+    return path;
 }
 
 - (NSArray *)classPropsFor:(Class)klass

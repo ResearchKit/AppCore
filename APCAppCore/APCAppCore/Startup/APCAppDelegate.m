@@ -228,7 +228,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     }
 }
 
-- (NSMutableArray*)consentSections
+- (NSMutableArray*)consentSectionsAndHtmlContent:(NSString**)htmlContent
 {
     ORKConsentSectionType(^toSectionType)(NSString*) = ^(NSString* sectionTypeName)
     {
@@ -277,6 +277,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
         return sectionType;
     };
+    NSString*   kDocumentHtml           = @"htmlDocument";
     NSString*   kConsentSections        = @"sections";
     NSString*   kSectionType            = @"sectionType";
     NSString*   kSectionTitle           = @"sectionTitle";
@@ -296,6 +297,22 @@ static NSUInteger const kIndexOfProfileTab = 3;
     NSError*        error             = nil;
     NSDictionary*   consentParameters = [NSJSONSerialization JSONObjectWithData:consentSectionData options:NSJSONReadingMutableContainers error:&error];
     NSAssert(consentParameters != nil, @"badly formed Consent Section data - error", error);
+    
+    NSString*       documentHtmlContent = [consentParameters objectForKey:kDocumentHtml];
+    NSAssert(documentHtmlContent == nil || documentHtmlContent != nil && [documentHtmlContent isKindOfClass:[NSString class]], @"Improper Document HTML Content type");
+    
+    if (documentHtmlContent != nil)
+    {
+        NSString*   path    = [[NSBundle mainBundle] pathForResource:documentHtmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+        NSAssert(path != nil, @"Unable to locate HTML file: %@", documentHtmlContent);
+        
+        NSError*    error   = nil;
+        NSString*   content = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+        
+        NSAssert(content != nil, @"Unable to load content of file \"%@\": %@", path, error);
+        
+        *htmlContent = content;
+    }
     
     NSArray*        parametersConsentSections = [consentParameters objectForKey:kConsentSections];
     NSAssert(parametersConsentSections != nil && [parametersConsentSections isKindOfClass:[NSArray class]], @"Badly formed Consent Section data");
@@ -372,7 +389,13 @@ static NSUInteger const kIndexOfProfileTab = 3;
         
         if (animationUrl != nil)
         {
-            NSURL*      url   = [[NSBundle mainBundle] URLForResource:animationUrl withExtension:@"m4v"];
+            NSString * nameWithScaleFactor = animationUrl;
+            if ([[UIScreen mainScreen] scale] >= 3) {
+                nameWithScaleFactor = [nameWithScaleFactor stringByAppendingString:@"@3x"];
+            } else {
+                nameWithScaleFactor = [nameWithScaleFactor stringByAppendingString:@"@2x"];
+            }
+            NSURL*      url   = [[NSBundle mainBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
             NSError*    error = nil;
             
             NSAssert([url checkResourceIsReachableAndReturnError:&error] == YES, @"Animation file--%@--not reachable: %@", animationUrl, error);

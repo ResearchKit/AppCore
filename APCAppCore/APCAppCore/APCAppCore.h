@@ -122,8 +122,56 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCWithdrawCompleteViewController.h>
 
 /* -------------------------
+ Medication Tracking Setup Storage Engine
+ ------------------------- */
+
+#import <APCAppCore/APCMedicationActualMedicine.h>
+#import <APCAppCore/APCMedicationColor.h>
+#import <APCAppCore/APCMedicationDataStorageEngine.h>
+#import <APCAppCore/APCMedicationDosageTaken.h>
+#import <APCAppCore/APCMedicationLozenge.h>
+#import <APCAppCore/APCMedicationPossibleDosage.h>
+#import <APCAppCore/APCMedicationUltraSimpleSelfInflator.h>
+#import <APCAppCore/APCMedicationWeeklySchedule.h>
+
+/* -------------------------
+ Medication Tracking Setup Controllers
+ ------------------------- */
+
+#import <APCAppCore/APCMedicationTrackerSetupViewController.h>
+#import <APCAppCore/APCMedicationDosageViewController.h>
+#import <APCAppCore/APCFrequencyDayTableViewCell.h>
+#import <APCAppCore/APCFrequencyTableViewTimesCell.h>
+#import <APCAppCore/APCMedicationFrequencyViewController.h>
+#import <APCAppCore/APCColorSwatchTableViewCell.h>
+#import <APCAppCore/APCMedicationColorViewController.h>
+#import <APCAppCore/APCLozengeButton.h>
+#import <APCAppCore/APCMedicationFollower.h>
+#import <APCAppCore/APCMedicationModel.h>
+#import <APCAppCore/APCMedicationNameViewController.h>
+#import <APCAppCore/APCMedicationTrackerSetupViewController.h>
+#import <APCAppCore/APCMedSetupNotificationKeys.h>
+#import <APCAppCore/APCSetupTableViewCell.h>
+#import <APCAppCore/APCMedicationSummaryTableViewCell.h>
+
+/* -------------------------
+ Medication Tracking App Level Components
+ ------------------------- */
+
+#import <APCAppCore/APCMedicationTrackerCalendarDailyView.h>
+#import <APCAppCore/APCMedicationTrackerCalendarViewController.h>
+#import <APCAppCore/APCMedicationTrackerCalendarWeeklyView.h>
+#import <APCAppCore/APCMedicationTrackerDayTitleLabel.h>
+#import <APCAppCore/APCMedicationTrackerDetailViewController.h>
+#import <APCAppCore/APCMedicationTrackerMedicationsDisplayView.h>
+#import <APCAppCore/NSDate+MedicationTracker.h>
+#import <APCAppCore/NSDictionary+MedicationTracker.h>
+#import <APCAppCore/UIColor+MedicationTracker.h>
+
+/* -------------------------
  Views
  ------------------------- */
+	 
 #import <APCAppCore/APCCircularProgressView.h>
 #import <APCAppCore/APCConcentricProgressView.h>
 #import <APCAppCore/APCConfirmationView.h>
