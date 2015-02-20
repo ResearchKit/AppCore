@@ -17,8 +17,6 @@ typedef void (^APCMedTrackerObjectCreationCallbackBlock) (id createdObject, NSTi
 
 @interface APCMedTrackerMedicationSchedule (Helper)
 
-@property (readonly) NSString *medicationName;
-
 + (void) newScheduleWithMedication: (APCMedTrackerMedication *) medicine
                             dosage: (APCMedTrackerPossibleDosage *) dosage
                              color: (APCMedTrackerScheduleColor *) color
@@ -27,7 +25,10 @@ typedef void (^APCMedTrackerObjectCreationCallbackBlock) (id createdObject, NSTi
                    andUseThisQueue: (NSOperationQueue *) someQueue
                   toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock;
 
-+ (NSArray *) schedulesForCurrentWeek;
+
+//    + (NSArray *) schedulesForCurrentWeek;
+//    - (NSArray *) blankLozenges;
+
 
 /**
  Returns YES if the schedule is currently active:
@@ -36,5 +37,20 @@ typedef void (^APCMedTrackerObjectCreationCallbackBlock) (id createdObject, NSTi
  "now."  This means the default is YES.
  */
 @property (readonly) BOOL isActive;
+
+@property (readonly) NSArray *zeroBasedDaysOfTheWeekAsArray;
+@property (readonly) NSDictionary *frequenciesAndDays;
+
+@property (readonly) NSNumber* dosageCountForSunday;
+@property (readonly) NSNumber* dosageCountForMonday;
+@property (readonly) NSNumber* dosageCountForTuesday;
+@property (readonly) NSNumber* dosageCountForWednesday;
+@property (readonly) NSNumber* dosageCountForThursday;
+@property (readonly) NSNumber* dosageCountForFriday;
+@property (readonly) NSNumber* dosageCountForSaturday;
+
++ (NSString *) nameForZeroBasedDay: (NSNumber *) zeroBasedDayOfTheWeek;
++ (NSNumber *) zeroBasedDayOfTheWeekForDayName: (NSString *) dayName;
+
 
 @end

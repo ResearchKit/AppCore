@@ -182,7 +182,6 @@
                                    @"zeroBasedDaysOfTheWeek",
                                    @"numberOfTimesPerDay"
                                    ]];
-
     return result;
 }
 

@@ -6,7 +6,10 @@
 //
 
 #import "APCMedTrackerScheduleColor.h"
+@class UIColor;
 
 @interface APCMedTrackerScheduleColor (Helper)
+
+@property (readonly) UIColor *UIColor;
 
 @end

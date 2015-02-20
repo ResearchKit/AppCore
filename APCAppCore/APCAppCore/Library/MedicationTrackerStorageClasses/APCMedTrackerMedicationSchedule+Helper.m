@@ -13,13 +13,15 @@
 #import "NSManagedObject+APCHelper.h"
 #import "NSDate+Helper.h"
 #import "APCMedTrackerDataStorageManager.h"
+#import "APCMedTrackerPossibleDosage+Helper.h"
+#import "APCMedTrackerMedication+Helper.h"
+#import "APCMedTrackerScheduleColor+Helper.h"
+
+
+static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
+
 
 @implementation APCMedTrackerMedicationSchedule (Helper)
-
-- (NSString *) medicationName
-{
-    return self.medicine.name;
-}
 
 + (void) newScheduleWithMedication: (APCMedTrackerMedication *) medicine
                             dosage: (APCMedTrackerPossibleDosage *) dosage
@@ -44,7 +46,7 @@
             schedule.medicine = medicine;
             schedule.dosage = dosage;
             schedule.color = color;
-            schedule.zeroBasedDaysOfTheWeek = [zeroBasedDaysOfTheWeek componentsJoinedByString: @","];
+            schedule.zeroBasedDaysOfTheWeek = [zeroBasedDaysOfTheWeek componentsJoinedByString: kSeparatorForZeroBasedDaysOfTheWeek];
             schedule.numberOfTimesPerDay = numberOfTimesPerDay;
             schedule.dateStartedUsing = [NSDate date];
 
@@ -89,6 +91,86 @@
     {
         result = NO;
     }
+
+    return result;
+}
+
+- (NSArray *) zeroBasedDaysOfTheWeekAsArray
+{
+    NSArray *zeroBasedDaysArray = [self.zeroBasedDaysOfTheWeek componentsSeparatedByString: kSeparatorForZeroBasedDaysOfTheWeek];
+
+    return zeroBasedDaysArray;
+}
+
+- (NSDictionary *) frequenciesAndDays
+{
+    NSMutableDictionary *result = [NSMutableDictionary new];
+    NSArray *zeroBasedDaysArray = self.zeroBasedDaysOfTheWeekAsArray;
+
+    for (NSUInteger zeroBasedDayOfWeek = 0; zeroBasedDayOfWeek < 7; zeroBasedDayOfWeek ++)
+    {
+        NSNumber *key = @(zeroBasedDayOfWeek);
+        NSNumber *value = @(0);
+
+        if ([zeroBasedDaysArray containsObject: key])
+        {
+            value = self.numberOfTimesPerDay;
+        }
+
+        result [key] = value;
+    }
+
+    NSDictionary *immutableResult = [NSDictionary dictionaryWithDictionary: result];
+    return immutableResult;
+}
+
++ (NSString *) nameForZeroBasedDay: (NSNumber *) zeroBasedDayOfTheWeek
+{
+    NSString *result = nil;
+
+    switch (zeroBasedDayOfTheWeek.integerValue)
+    {
+        case 0: result = @"Sunday"; break;
+        case 1: result = @"Monday"; break;
+        case 2: result = @"Tuesday"; break;
+        case 3: result = @"Wednesday"; break;
+        case 4: result = @"Thursday"; break;
+        case 5: result = @"Friday"; break;
+        case 6: result = @"Saturday"; break;
+
+        default:
+            result = [NSString stringWithFormat: @"unknownDay [%@]", zeroBasedDayOfTheWeek];
+            break;
+    }
+
+    return result;
+}
+
++ (NSNumber *) zeroBasedDayOfTheWeekForDayName: (NSString *) dayName
+{
+    NSString* simpleDayName = [[dayName.lowercaseString  stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]] substringToIndex: 3];
+
+    NSNumber* result = ([simpleDayName isEqualToString: @"sun"] ? @(0) :
+                        [simpleDayName isEqualToString: @"mon"] ? @(1) :
+                        [simpleDayName isEqualToString: @"tue"] ? @(2) :
+                        [simpleDayName isEqualToString: @"wed"] ? @(3) :
+                        [simpleDayName isEqualToString: @"thu"] ? @(4) :
+                        [simpleDayName isEqualToString: @"fri"] ? @(5) :
+                        [simpleDayName isEqualToString: @"sat"] ? @(6) :
+                        @(-1));
+    
+    return result;
+}
+
+- (NSString *) description
+{
+    NSString *result = [NSString stringWithFormat: @"Schedule { medication: %@, days: (%@), timesPerDay: %@, dosage: %@, color: %@ }",
+                        self.self.medicine.name,
+                        self.zeroBasedDaysOfTheWeek,
+                        self.numberOfTimesPerDay,
+                        self.dosage.name,
+                        self.color.name
+                        ];
 
     return result;
 }
