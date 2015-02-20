@@ -8,14 +8,16 @@
 #import "APCMedicationNameViewController.h"
 #import "APCMedSetupNotificationKeys.h"
 
-static  NSString  *kViewControllerName = @"Medication Name";
+#import "APCMedTrackerDataStorageManager.h"
+#import "APCMedTrackerMedication+Helper.h"
 
-static  NSString  *medicineNames[] = { @"Carbidopa-Levodopa", @"Dopamine", @"Eldepryl", @"Zelapar", @"Azilect", @"Entacapone (Comtan)", @"Cogentin", @"Amantadine" };
-static  NSInteger numberOfMedicineNames = (sizeof(medicineNames) / sizeof(NSString *));
+static  NSString  *kViewControllerName = @"Medication Name";
 
 @interface APCMedicationNameViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
 @property  (nonatomic, weak)  IBOutlet  UITableView  *tabulator;
+
+@property  (nonatomic, strong)          NSArray      *medicationList;
 
 @property  (nonatomic, strong)          NSIndexPath  *selectedIndex;
 
@@ -44,7 +46,7 @@ static  NSInteger numberOfMedicineNames = (sizeof(medicineNames) / sizeof(NSStri
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger  numberOfRows = numberOfMedicineNames;
+    NSInteger  numberOfRows = [self.medicationList count];
     return  numberOfRows;
 }
 
@@ -63,7 +65,8 @@ static  NSInteger numberOfMedicineNames = (sizeof(medicineNames) / sizeof(NSStri
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.textLabel.text = medicineNames[indexPath.row];
+    APCMedTrackerMedication  *medication = self.medicationList[indexPath.row];
+    cell.textLabel.text = medication.name;
     
     return  cell;
 }
@@ -91,8 +94,8 @@ static  NSInteger numberOfMedicineNames = (sizeof(medicineNames) / sizeof(NSStri
     if (self.selectedIndex == nil) {
         info = @{ APCMedSetupNameResultKey : [NSNull null] };
     } else {
-        NSString  *medicineName = medicineNames[self.selectedIndex.row];
-        info = @{ APCMedSetupNameResultKey : medicineName };
+        APCMedTrackerMedication  *medication = self.medicationList[indexPath.row];
+        info = @{ APCMedSetupNameResultKey : medication.name };
     }
     NSNotificationCenter  *centre = [NSNotificationCenter defaultCenter];
     NSNotification  *notification = [NSNotification notificationWithName:APCMedSetupNameResultNotificationKey object:nil userInfo:info];
@@ -109,7 +112,19 @@ static  NSInteger numberOfMedicineNames = (sizeof(medicineNames) / sizeof(NSStri
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    self.medicationList = [NSArray array];
+    
+    [APCMedTrackerMedication fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
+                                                toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
+                                                                    NSTimeInterval operationDuration,
+                                                                    NSError *error)
+     {
+         self.medicationList = arrayOfGeneratedObjects;
+         [self.tabulator reloadData];
+    }];
 }
 
 - (void)didReceiveMemoryWarning
