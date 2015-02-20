@@ -49,6 +49,8 @@
     self.layer.cornerRadius = CGRectGetHeight(self.bounds)/2;
     self.layer.borderColor  = self.tintColor.CGColor;
     self.layer.borderWidth  = 1.0;
+    
+    self.textColor = self.tintColor;
 }
 
 - (void)setText:(NSString *)text

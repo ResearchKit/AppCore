@@ -27,6 +27,8 @@ NSString * const kAPCActivitiesSectionHeaderViewIdentifier = @"APCActivitiesSect
     
     self.subTitleLabel.textColor = [UIColor appSecondaryColor2];
     self.subTitleLabel.font = [UIFont appRegularFontWithSize:14.f];
+    
+    self.contentView.backgroundColor = [UIColor colorWithWhite:248/255.0 alpha:1.0];
 }
 
 @end

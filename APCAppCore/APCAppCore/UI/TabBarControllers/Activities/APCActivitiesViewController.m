@@ -163,9 +163,11 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
         
         if (tasksCount == completedTasksCount) {
             cell.countLabel.text = nil;
+            cell.countLabel.hidden = YES;
         } else {
             NSUInteger remaining = tasksCount - completedTasksCount;
             cell.countLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)remaining];
+            cell.countLabel.hidden = NO;
         }
         
         cell.confirmationView.completed = groupedScheduledTask.complete;
@@ -175,6 +177,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
         cell.titleLabel.text = scheduledTask.task.taskTitle;
         cell.confirmationView.completed = scheduledTask.completed.boolValue;
         cell.countLabel.text = nil;
+        cell.countLabel.hidden = YES;
     }
     
     return  cell;
