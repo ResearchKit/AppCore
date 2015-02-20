@@ -56,7 +56,7 @@
         
         if (label.text) {
             labelWidth = [label.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, labelHeight) options:(NSStringDrawingUsesFontLeading | NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:label.font} context:nil].size.width;
-            labelWidth += 8; //padding
+            labelWidth += self.landscapeMode ? 14 : 8; //padding
         }
         
         if (i==0) {

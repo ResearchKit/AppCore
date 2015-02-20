@@ -156,8 +156,8 @@
                                 </segments>
                                 <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </segmentedControl>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cnr-qn-gof">
-                                <rect key="frame" x="0.0" y="55" width="4" height="227"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cnr-qn-gof" userLabel="Tint View">
+                                <rect key="frame" x="0.0" y="55" width="4" height="265"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.2666666667" blue="0.3803921569" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="4" id="WZs-dt-sHS"/>
@@ -199,7 +199,7 @@
                             <constraint firstItem="GW7-fg-rzK" firstAttribute="leading" secondItem="NSh-Ou-wJu" secondAttribute="leadingMargin" id="Ip6-72-ECV"/>
                             <constraint firstItem="AEN-nF-Kgn" firstAttribute="top" secondItem="PCx-rQ-uiY" secondAttribute="bottom" constant="-24" id="K9y-nm-rXa"/>
                             <constraint firstItem="Kio-T5-Y4A" firstAttribute="top" secondItem="zew-9J-Hox" secondAttribute="bottom" constant="8" id="KYd-ND-qqO"/>
-                            <constraint firstItem="8OJ-Bg-TnD" firstAttribute="top" secondItem="cnr-qn-gof" secondAttribute="bottom" constant="38" id="NR9-KM-Epo"/>
+                            <constraint firstItem="8OJ-Bg-TnD" firstAttribute="top" secondItem="cnr-qn-gof" secondAttribute="bottom" id="NR9-KM-Epo"/>
                             <constraint firstItem="8OJ-Bg-TnD" firstAttribute="top" secondItem="XCp-55-xj3" secondAttribute="bottom" constant="8" id="Nga-vg-AIx"/>
                             <constraint firstItem="GW7-fg-rzK" firstAttribute="top" secondItem="wbr-TH-IEh" secondAttribute="bottom" constant="14" id="O3b-kx-BHN"/>
                             <constraint firstItem="XCp-55-xj3" firstAttribute="leading" secondItem="NSh-Ou-wJu" secondAttribute="leading" constant="4" id="R1n-bF-wvl"/>
