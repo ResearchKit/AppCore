@@ -12,6 +12,7 @@
 #import "APCDataSubstrate+CoreData.h"
 #import "NSManagedObject+APCHelper.h"
 #import "NSDate+Helper.h"
+#import "APCMedTrackerDataStorageManager.h"
 
 @implementation APCMedTrackerMedicationSchedule (Helper)
 
@@ -28,14 +29,10 @@
                    andUseThisQueue: (NSOperationQueue *) someQueue
                   toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock
 {
-    // This is our pattern for creating and saving objects.
-    [someQueue addOperationWithBlock:^{
+    [[[APCMedTrackerDataStorageManager defaultManager] queue] addOperationWithBlock:^{
 
         NSDate *startTime = [NSDate date];
-        APCAppDelegate *appDelegate = (APCAppDelegate *) [[UIApplication sharedApplication] delegate];
-        NSManagedObjectContext *masterContextIThink = appDelegate.dataSubstrate.persistentContext;
-        NSManagedObjectContext *localContext = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
-        localContext.parentContext = masterContextIThink;
+        NSManagedObjectContext *localContext = [[APCMedTrackerDataStorageManager defaultManager] context];
 
         //
         // We can also use -performBlockAndWait:.
@@ -69,8 +66,9 @@
 
             NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];
 
+            // Report.
             [someQueue addOperationWithBlock: ^{
-                callbackBlock (schedule, operationDuration, localContext, schedule.objectID);
+                callbackBlock (schedule, operationDuration);
             }];
         }];
     }];

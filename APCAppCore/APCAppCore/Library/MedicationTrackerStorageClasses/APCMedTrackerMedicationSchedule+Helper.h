@@ -11,7 +11,7 @@
 @class APCMedTrackerScheduleColor;
 
 
-typedef void (^APCMedTrackerObjectCreationCallbackBlock) (id createdObject, NSTimeInterval operationDuration, NSManagedObjectContext *theContextWeSavedOn, NSManagedObjectID *scheduleObjectId);
+typedef void (^APCMedTrackerObjectCreationCallbackBlock) (id createdObject, NSTimeInterval operationDuration);
 
 
 

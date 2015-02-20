@@ -19,10 +19,13 @@
     [APCMedTrackerDataStorageManager.defaultManager.queue addOperationWithBlock:^{
 
         NSDate *startTime = [NSDate date];
-        NSManagedObjectContext *context = APCMedTrackerDataStorageManager.defaultManager.context;
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass ([self class])];
-        NSError *error = nil;
 
+        NSManagedObjectContext *context = APCMedTrackerDataStorageManager.defaultManager.context;
+
+        // Fetch all items of my current subclass.
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass ([self class])];
+
+        NSError *error = nil;
         NSArray *foundItems = [context executeFetchRequest: request error: &error];
 
         NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];

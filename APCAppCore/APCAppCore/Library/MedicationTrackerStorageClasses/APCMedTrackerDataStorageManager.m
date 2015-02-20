@@ -51,6 +51,8 @@ static dispatch_once_t _startupComplete = 0;
             [manager.masterQueue addOperationWithBlock:^{
 
                 manager.masterContext = [manager newContextOnCurrentQueue];
+
+                APCLogDebug (@"MedTracker defaultManager has been created.");
                 
                 if (shouldReloadPlistFiles)
                 {
