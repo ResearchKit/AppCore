@@ -22,7 +22,6 @@
 {
     self.progressView.progress = 0.0f;
     self.progressView.lineWidth = 4.0f;
-    self.progressView.progressLabel.textColor = [UIColor appTertiaryColor1];
     self.progressView.tintColor = [UIColor appTertiaryColor1];
     
     self.titleLabel.textColor = [UIColor appSecondaryColor1];
