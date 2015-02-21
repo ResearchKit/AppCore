@@ -53,14 +53,6 @@ typedef void (^APCMedTrackerObjectCreationCallbackBlock) (id createdObject, NSTi
 @property (readonly) NSArray *zeroBasedDaysOfTheWeekAsArray;
 @property (readonly) NSDictionary *frequenciesAndDays;
 
-//    @property (readonly) NSNumber* dosageCountForSunday;
-//    @property (readonly) NSNumber* dosageCountForMonday;
-//    @property (readonly) NSNumber* dosageCountForTuesday;
-//    @property (readonly) NSNumber* dosageCountForWednesday;
-//    @property (readonly) NSNumber* dosageCountForThursday;
-//    @property (readonly) NSNumber* dosageCountForFriday;
-//    @property (readonly) NSNumber* dosageCountForSaturday;
-
 + (NSString *) nameForZeroBasedDay: (NSNumber *) zeroBasedDayOfTheWeek;
 + (NSNumber *) zeroBasedDayOfTheWeekForDayName: (NSString *) dayName;
 
