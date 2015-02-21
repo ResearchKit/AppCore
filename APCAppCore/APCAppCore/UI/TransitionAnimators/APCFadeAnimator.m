@@ -25,7 +25,7 @@
         
         toViewController.view.alpha = 0;
         
-        [UIView animateWithDuration:0.3 animations:^{
+        [UIView animateWithDuration:0.1 animations:^{
             
             toViewController.view.alpha = 1;
             
