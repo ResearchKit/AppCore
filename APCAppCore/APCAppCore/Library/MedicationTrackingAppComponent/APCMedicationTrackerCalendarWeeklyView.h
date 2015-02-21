@@ -14,6 +14,7 @@
 - (void)dailyCalendarViewDidSelect:(NSDate *)date;
 
 - (NSUInteger)currentScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *)calendarView;
+- (NSUInteger)maximumScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *)calendarView;
 - (void)dailyCalendarViewDidSwipeLeft;
 - (void)dailyCalendarViewDidSwipeRight;
 
