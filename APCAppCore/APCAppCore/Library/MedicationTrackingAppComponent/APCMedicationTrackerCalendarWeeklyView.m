@@ -242,6 +242,11 @@ static  CGFloat   const  kCalendarSelectedDatePrintFontSizeDefault = 13.0;
 
 - (void)swipeRight:(UISwipeGestureRecognizer *)swipe
 {
+    NSUInteger  maximumPageNumber = [self.delegate maximumScrollablePageNumber:self];
+    NSUInteger  pageNumber = [self.delegate currentScrollablePageNumber:self];
+    if (pageNumber < maximumPageNumber) {
+        [self delegateSwipeAnimation:NO blnToday:NO selectedDate:nil];
+    }
     [self delegateSwipeAnimation:YES blnToday:NO selectedDate:nil];
 }
 
