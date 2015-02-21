@@ -20,15 +20,27 @@ typedef void (^APCMedTrackerObjectCreationCallbackBlock) (id createdObject, NSTi
 + (void) newScheduleWithMedication: (APCMedTrackerMedication *) medicine
                             dosage: (APCMedTrackerPossibleDosage *) dosage
                              color: (APCMedTrackerScheduleColor *) color
-                     daysOfTheWeek: (NSArray *) zeroBasedDaysOfTheWeek
-               numberOfTimesPerDay: (NSNumber *) numberOfTimesPerDay
+                frequenciesAndDays: (NSDictionary *) frequenciesAndDays
                    andUseThisQueue: (NSOperationQueue *) someQueue
                   toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock;
 
+/*
+ Note.  This is the method being called behind the scenes
+ for the above.  I'm hiding it because the method name is
+ so long that that Xcode's pop-up menu doesn't let us see
+ which is which, and the above method name is the one that
+ turned out to be needed by the UI.  However, since this
+ method tells a more accurate truth of what's being stored,
+ I wanted to make sure we don't forget it.
 
-//    + (NSArray *) schedulesForCurrentWeek;
-//    - (NSArray *) blankLozenges;
-
+ + (void) newScheduleWithMedication: (APCMedTrackerMedication *) medicine
+                             dosage: (APCMedTrackerPossibleDosage *) dosage
+                              color: (APCMedTrackerScheduleColor *) color
+                      daysOfTheWeek: (NSArray *) zeroBasedDaysOfTheWeek
+                numberOfTimesPerDay: (NSNumber *) numberOfTimesPerDay
+                    andUseThisQueue: (NSOperationQueue *) someQueue
+                   toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock;
+ */
 
 /**
  Returns YES if the schedule is currently active:
@@ -41,13 +53,13 @@ typedef void (^APCMedTrackerObjectCreationCallbackBlock) (id createdObject, NSTi
 @property (readonly) NSArray *zeroBasedDaysOfTheWeekAsArray;
 @property (readonly) NSDictionary *frequenciesAndDays;
 
-@property (readonly) NSNumber* dosageCountForSunday;
-@property (readonly) NSNumber* dosageCountForMonday;
-@property (readonly) NSNumber* dosageCountForTuesday;
-@property (readonly) NSNumber* dosageCountForWednesday;
-@property (readonly) NSNumber* dosageCountForThursday;
-@property (readonly) NSNumber* dosageCountForFriday;
-@property (readonly) NSNumber* dosageCountForSaturday;
+//    @property (readonly) NSNumber* dosageCountForSunday;
+//    @property (readonly) NSNumber* dosageCountForMonday;
+//    @property (readonly) NSNumber* dosageCountForTuesday;
+//    @property (readonly) NSNumber* dosageCountForWednesday;
+//    @property (readonly) NSNumber* dosageCountForThursday;
+//    @property (readonly) NSNumber* dosageCountForFriday;
+//    @property (readonly) NSNumber* dosageCountForSaturday;
 
 + (NSString *) nameForZeroBasedDay: (NSNumber *) zeroBasedDayOfTheWeek;
 + (NSNumber *) zeroBasedDayOfTheWeekForDayName: (NSString *) dayName;
