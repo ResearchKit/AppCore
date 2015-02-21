@@ -194,6 +194,7 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
     button.backgroundColor = [UIColor whiteColor];
     [button setTitle:title forState:UIControlStateNormal];
     [button setTitleColor:color forState:UIControlStateNormal];
+    button.incompleteBorderColor = color;
 
     [button addTarget:self action:@selector(lozengeButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -366,21 +367,7 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
                                  @"Saturday" : @(2),
                                  @"Sunday" : @(0)
                                  };
-    APCMedicationModel  *model03 = [[APCMedicationModel alloc] init];
-    model03.medicationName = @"Marijuana";
-    model03.medicationLabelColor = @"Orange";
-    model03.medicationDosageValue = @(5);
-    model03.medicationDosageText = @"5mg";
-    model03.frequencyAndDays = @{
-                                 @"Monday"  : @(0),
-                                 @"Tuesday" : @(0),
-                                 @"Wednesday" : @(2),
-                                 @"Thursday" : @(0),
-                                 @"Friday" : @(0),
-                                 @"Saturday" : @(2),
-                                 @"Sunday" : @(0)
-                                 };
-    self.medications = @[  model01, model02, model03 ];
+    self.medications = @[  model01, model02 ];
 }
 
 - (void)viewDidAppear:(BOOL)animated

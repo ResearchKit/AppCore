@@ -81,7 +81,7 @@ static  CGFloat  kDateLabelPointSize = 13.0;
 
 - (void)dailyViewDidClick: (UIGestureRecognizer *)tap
 {
-    [self.delegate dailyCalendarViewDidSelect: self.date];
+    [self.delegate dailyCalendarViewDidSelect:self.date];
 }
 
 @end
