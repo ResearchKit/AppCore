@@ -131,6 +131,41 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
     }];
 }
 
+/**
+ This code is identical to the code found in the APCMedTrackerInflatableItem classes.
+ I haven't yet unified those and this into a common superclass.  I'm getting there.
+ */
++ (void) fetchAllFromCoreDataAndUseThisQueue: (NSOperationQueue *) someQueue
+                            toDoThisWhenDone: (APCMedTrackerQueryCallback2) callbackBlock
+{
+    [APCMedTrackerDataStorageManager.defaultManager.queue addOperationWithBlock:^{
+
+        NSDate *startTime = [NSDate date];
+
+        NSManagedObjectContext *context = APCMedTrackerDataStorageManager.defaultManager.context;
+
+        // Fetch all items of my current subclass.
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass ([self class])];
+
+        NSError *error = nil;
+        NSArray *foundItems = [context executeFetchRequest: request error: &error];
+
+        NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];
+
+        /**
+         Pass the buck.  ...uh, pass the error to the target block.
+         :-)  See the explanation of APCMedTrackerQueryCallback2 for
+         how the parameters should be used.
+         */
+        if (someQueue != nil && callbackBlock != NULL)
+        {
+            [someQueue addOperationWithBlock: ^{
+                callbackBlock (foundItems, operationDuration, error);
+            }];
+        }
+    }];
+}
+
 + (NSArray *) schedulesForCurrentWeek
 {
     NSArray *result = nil;
