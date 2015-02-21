@@ -26,6 +26,61 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 + (void) newScheduleWithMedication: (APCMedTrackerMedication *) medicine
                             dosage: (APCMedTrackerPossibleDosage *) dosage
                              color: (APCMedTrackerScheduleColor *) color
+                frequenciesAndDays: (NSDictionary *) frequenciesAndDays
+                   andUseThisQueue: (NSOperationQueue *) someQueue
+                  toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock
+{
+    NSNumber *numberOfTimesPerDay = nil;
+    NSMutableArray *zeroBasedDaysOfTheWeek = [NSMutableArray new];
+
+    // Find the number of times per day:  the first non-zero entry.
+    // By definition, all days have the same number of times per day.
+    for (id thingy in frequenciesAndDays.allValues)
+    {
+        if ([thingy isKindOfClass: [NSNumber class]])
+        {
+            numberOfTimesPerDay = thingy;
+
+            if (numberOfTimesPerDay.integerValue > 0)
+            {
+                // Found.
+                break;
+            }
+        }
+    }
+
+    // Create a list of the zero-based days of the week.
+    for (NSString *key in frequenciesAndDays.allKeys)
+    {
+        id value = frequenciesAndDays [key];
+
+        if ([value isKindOfClass: [NSNumber class]])
+        {
+            NSInteger valueAsInt = ((NSNumber *) value).integerValue;
+
+            if (valueAsInt > 0)
+            {
+                // Found a day with a required dosage in it.  Capture it.
+                NSString *theDayWeWantToKeep = key;
+                NSNumber *zeroBasedIndexOfThatDay = [self zeroBasedDayOfTheWeekForDayName: theDayWeWantToKeep];
+                [zeroBasedDaysOfTheWeek addObject: zeroBasedIndexOfThatDay];
+            }
+        }
+    }
+
+    // Create it.
+    [self newScheduleWithMedication: medicine
+                             dosage: dosage
+                              color: color
+                      daysOfTheWeek: zeroBasedDaysOfTheWeek
+                numberOfTimesPerDay: numberOfTimesPerDay
+                    andUseThisQueue: someQueue
+                   toDoThisWhenDone: callbackBlock];
+}
+
++ (void) newScheduleWithMedication: (APCMedTrackerMedication *) medicine
+                            dosage: (APCMedTrackerPossibleDosage *) dosage
+                             color: (APCMedTrackerScheduleColor *) color
                      daysOfTheWeek: (NSArray *) zeroBasedDaysOfTheWeek
                numberOfTimesPerDay: (NSNumber *) numberOfTimesPerDay
                    andUseThisQueue: (NSOperationQueue *) someQueue
@@ -164,9 +219,28 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 
 - (NSString *) description
 {
+    /*
+     Convert from a string like "4,1" to "Monday, Thursday":
+     - original: "4,1"
+     - split: "4", "1"
+     - sort: "1", "4"
+     - numbers: 1, 4
+     - names: "Monday", "Thursday"
+     - unified string: "Monday, Thursday"
+     */
+    NSArray *zeroBasedDaysOfTheWeekArray = self.zeroBasedDaysOfTheWeekAsArray;
+    zeroBasedDaysOfTheWeekArray = [zeroBasedDaysOfTheWeekArray sortedArrayUsingSelector: @selector(compare:)];
+    NSMutableArray *dayNames = [NSMutableArray new];
+    for (NSString *item in zeroBasedDaysOfTheWeekArray)
+    {
+        NSInteger dayNumber = item.integerValue;
+        NSString *dayName = [[self class] nameForZeroBasedDay: @(dayNumber)];
+        [dayNames addObject: dayName];
+    }
+
     NSString *result = [NSString stringWithFormat: @"Schedule { medication: %@, days: (%@), timesPerDay: %@, dosage: %@, color: %@ }",
                         self.self.medicine.name,
-                        self.zeroBasedDaysOfTheWeek,
+                        [dayNames componentsJoinedByString: @", "],
                         self.numberOfTimesPerDay,
                         self.dosage.name,
                         self.color.name
