@@ -22,6 +22,7 @@
 @property (nonatomic, retain) NSNumber * dailyScalesCompletionCounter;
 @property (nonatomic, retain) NSString * ethnicity;
 @property (nonatomic, retain) NSString * glucoseLevels;
+@property (nonatomic, retain) NSNumber * hasHeartDisease;
 @property (nonatomic, retain) NSString * homeLocationAddress;
 @property (nonatomic, retain) NSNumber * homeLocationLat;
 @property (nonatomic, retain) NSNumber * homeLocationLong;
@@ -34,6 +35,6 @@
 @property (nonatomic, retain) NSDate * sleepTime;
 @property (nonatomic, retain) NSNumber * userConsented;
 @property (nonatomic, retain) NSDate * wakeUpTime;
-@property (nonatomic, retain) NSNumber * hasHeartDisease;
+@property (nonatomic, retain) NSDate * taskCompletion;
 
 @end

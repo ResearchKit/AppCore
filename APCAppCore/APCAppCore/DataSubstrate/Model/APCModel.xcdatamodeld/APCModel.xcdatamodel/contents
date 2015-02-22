@@ -98,6 +98,7 @@
         <attribute name="secondaryInfoSaved" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="serverConsented" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="sleepTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="taskCompletion" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="userConsented" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="wakeUpTime" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
@@ -123,7 +124,7 @@
         <element name="APCResult" positionX="-1107" positionY="72" width="128" height="208"/>
         <element name="APCSchedule" positionX="-729" positionY="-28" width="128" height="253"/>
         <element name="APCScheduledTask" positionX="-945" positionY="72" width="128" height="178"/>
-        <element name="APCStoredUserData" positionX="-1260" positionY="72" width="128" height="405"/>
+        <element name="APCStoredUserData" positionX="-1260" positionY="72" width="128" height="420"/>
         <element name="APCTask" positionX="-722" positionY="252" width="128" height="195"/>
     </elements>
 </model>
