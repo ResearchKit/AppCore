@@ -61,7 +61,7 @@
 {
     _tintColor = tintColor;
     
-    self.shapeLayer.fillColor = [_tintColor colorWithAlphaComponent:0.35].CGColor;
+    self.shapeLayer.fillColor = [UIColor whiteColor].CGColor;
     self.shapeLayer.borderColor = _tintColor.CGColor;
 }
 

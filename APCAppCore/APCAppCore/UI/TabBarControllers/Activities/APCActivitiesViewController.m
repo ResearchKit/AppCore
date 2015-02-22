@@ -10,11 +10,11 @@
 #import "APCActivitiesViewWithNoTask.h"
 #import "APCCircularProgressView.h"
 
-static NSString *kTableCellReuseIdentifier = @"ActivitiesTableViewCell";
-static NSString *kTableCellWithTimeReuseIdentifier = @"ActivitiesTableViewCellWithTime";
 
-static CGFloat kTableViewRowHeight = 80;
-static CGFloat kTableViewSectionHeaderHeight = 45;
+static CGFloat kTintedCellHeight = 65;
+static CGFloat kBasicCelllHeight = 50;
+
+static CGFloat kTableViewSectionHeaderHeight = 77;
 
 @interface APCActivitiesViewController ()
 
@@ -25,6 +25,7 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 
 @property (strong, nonatomic) APCActivitiesViewWithNoTask *noTasksView;
 
+@property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @end
 
 @implementation APCActivitiesViewController
@@ -56,6 +57,10 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
     self.tableView.backgroundColor = [UIColor appSecondaryColor4];
     
     [((APCAppDelegate *)[[UIApplication sharedApplication] delegate]) showPasscodeIfNecessary];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"APCActivitiesSectionHeaderView" bundle:[NSBundle appleCoreBundle]] forHeaderFooterViewReuseIdentifier:kAPCActivitiesSectionHeaderViewIdentifier];
+    
+    self.dateFormatter = [NSDateFormatter new];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -117,50 +122,62 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
         taskCompletionTimeString = scheduledTask.task.taskCompletionTimeString;
     }
     
-    UITableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier: taskCompletionTimeString.length ? kTableCellWithTimeReuseIdentifier : kTableCellReuseIdentifier];
-
-    APCConfirmationView * confirmView = (APCConfirmationView*)[cell viewWithTag:100];
-    UILabel * titleLabel = (UILabel*)[cell viewWithTag:200];
-    APCBadgeLabel * countLabel = (APCBadgeLabel *)[cell viewWithTag:300];
-    UILabel * completionTimeLabel = (UILabel*)[cell viewWithTag:400];
+    APCActivitiesTintedTableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier: kAPCActivitiesTintedTableViewCellIdentifier];
     
-    //Styling
-    titleLabel.font = [UIFont appRegularFontWithSize:17];
-    countLabel.font = [UIFont appRegularFontWithSize:15];
-    completionTimeLabel.font = [UIFont appLightFontWithSize:14];
-    
-    if (indexPath.section > 0) {
-        titleLabel.textColor = [UIColor lightGrayColor];
-        countLabel.textColor = [UIColor lightGrayColor];
-        completionTimeLabel.textColor = [UIColor lightGrayColor];
-    } else {
-        titleLabel.textColor = [UIColor appSecondaryColor1];
-        countLabel.textColor = [UIColor appPrimaryColor];
-        completionTimeLabel.textColor = [UIColor appSecondaryColor3];
+    switch (indexPath.row%5) {
+        case kAPCTintColorTypeGreen:
+            cell.tintColor = [UIColor appTertiaryGreenColor];
+            break;
+        case kAPCTintColorTypeRed:
+            cell.tintColor = [UIColor appTertiaryRedColor];
+            break;
+        case kAPCTintColorTypeYellow:
+            cell.tintColor = [UIColor appTertiaryYellowColor];
+            break;
+        case kAPCTintColorTypePurple:
+            cell.tintColor = [UIColor appTertiaryPurpleColor];
+            break;case kAPCTintColorTypeBlue:
+            cell.tintColor = [UIColor appTertiaryBlueColor];
+            break;
+        default:
+            cell.tintColor = [UIColor appTertiaryGrayColor];
+            break;
     }
     
-    completionTimeLabel.text = taskCompletionTimeString;
-
+    if (indexPath.section > 0) {
+        [cell setupIncompleteAppearance];
+    }
+    
+    if (taskCompletionTimeString) {
+        cell.subTitleLabel.text = taskCompletionTimeString;
+    } else {
+        cell.hidesSubTitle = YES;
+    }
+    
+    
     if ([task isKindOfClass:[APCGroupedScheduledTask class]])
     {
-        titleLabel.text = groupedScheduledTask.taskTitle;
+        cell.titleLabel.text = groupedScheduledTask.taskTitle;
         NSUInteger tasksCount = groupedScheduledTask.scheduledTasks.count;
         NSUInteger completedTasksCount = groupedScheduledTask.completedTasksCount;
         
         if (tasksCount == completedTasksCount) {
-            countLabel.text = nil;
+            cell.countLabel.text = nil;
+            cell.countLabel.hidden = YES;
         } else {
             NSUInteger remaining = tasksCount - completedTasksCount;
-            countLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)remaining];
+            cell.countLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)remaining];
+            cell.countLabel.hidden = NO;
         }
         
-        confirmView.completed = groupedScheduledTask.complete;
+        cell.confirmationView.completed = groupedScheduledTask.complete;
     }
     else if ([task isKindOfClass:[APCScheduledTask class]])
     {
-        titleLabel.text = scheduledTask.task.taskTitle;
-        confirmView.completed = scheduledTask.completed.boolValue;
-        countLabel.text = nil;
+        cell.titleLabel.text = scheduledTask.task.taskTitle;
+        cell.confirmationView.completed = scheduledTask.completed.boolValue;
+        cell.countLabel.text = nil;
+        cell.countLabel.hidden = YES;
     }
     
     return  cell;
@@ -171,27 +188,45 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 - (CGFloat)       tableView: (UITableView *) __unused tableView
     heightForRowAtIndexPath: (NSIndexPath *) __unused indexPath
 {
-    return  kTableViewRowHeight;
+    return  kTintedCellHeight;
 }
 
 - (CGFloat)        tableView: (UITableView *) __unused tableView
     heightForHeaderInSection: (NSInteger) __unused section
 {
-    return kTableViewSectionHeaderHeight;
+    CGFloat height = kTableViewSectionHeaderHeight;
+    
+    if (section == 0) {
+        height -= 15;
+    }
+    return height;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UITableViewHeaderFooterView *headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), kTableViewSectionHeaderHeight)];
-    headerView.contentView.backgroundColor = [UIColor whiteColor];
+    APCActivitiesSectionHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kAPCActivitiesSectionHeaderViewIdentifier];
     
-    UILabel *headerLabel = [[UILabel alloc] initWithFrame:headerView.bounds];
-    headerLabel.font = [UIFont appLightFontWithSize:16.0f];
-    headerLabel.textColor = [UIColor appSecondaryColor1];
-    headerLabel.textAlignment = NSTextAlignmentCenter;
-    [headerView addSubview:headerLabel];
     
-    headerLabel.text = self.sectionsArray[section];
+    switch (section) {
+        case 0:
+        {
+            [self.dateFormatter setDateFormat:@"MMMM d"];
+            headerView.titleLabel.text = [NSString stringWithFormat:@"%@, %@", NSLocalizedString(@"Today", @""), [self.dateFormatter stringFromDate:[NSDate date]] ];
+            headerView.subTitleLabel.text = NSLocalizedString(@"To start an activity, select from the list below.", @"");
+        }
+            break;
+        case 1:
+        {
+            headerView.titleLabel.text = NSLocalizedString(@"Yesterday", @"");
+            headerView.subTitleLabel.text = NSLocalizedString(@"Below are your incomplete tasks from yesterday. These are for reference only.", @"");
+        }
+            break;
+
+            
+        default:
+            break;
+    }
+    
 
     return headerView;
 }
@@ -395,14 +430,9 @@ static CGFloat kTableViewSectionHeaderHeight = 45;
 
 - (NSString*) formattedTodaySection
 {
-    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:[NSDate date]];
-    NSInteger day = [components day];
-    NSInteger month = [components month];
+    [self.dateFormatter setDateFormat:@"MMMM d"];
     
-    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    NSString *monthName = [[df monthSymbols] objectAtIndex:(month-1)];
-    
-    return [NSString stringWithFormat:@"Today, %@ %ld", monthName, (long)day];
+    return [NSString stringWithFormat:@"Today, %@", [self.dateFormatter stringFromDate:[NSDate date]]];
 }
 
 - (NSArray*)groupSimilarTasks:(NSArray *)ungroupedScheduledTasks

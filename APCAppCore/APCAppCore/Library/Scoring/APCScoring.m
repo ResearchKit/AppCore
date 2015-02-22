@@ -844,7 +844,12 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     
     titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
 
-    [dateFormatter setDateFormat:@"MMM d"];
+    if (pointIndex == 0) {
+        [dateFormatter setDateFormat:@"MMM d"];
+    } else {
+        [dateFormatter setDateFormat:@"d"];
+    }
+    
     
     NSString *xAxisTitle = [dateFormatter stringFromDate:titleDate];
                             
