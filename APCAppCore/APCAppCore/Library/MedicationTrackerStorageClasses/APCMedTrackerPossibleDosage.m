@@ -6,12 +6,12 @@
 //
 
 #import "APCMedTrackerPossibleDosage.h"
-#import "APCMedTrackerMedicationSchedule.h"
+#import "APCMedTrackerPrescription.h"
 
 
 @implementation APCMedTrackerPossibleDosage
 
 @dynamic amount;
-@dynamic schedulesWhereIAmUsed;
+@dynamic prescriptionsWhereIAmUsed;
 
 @end

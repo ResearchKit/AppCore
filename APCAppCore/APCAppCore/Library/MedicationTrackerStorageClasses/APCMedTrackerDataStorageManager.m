@@ -7,7 +7,7 @@
 
 #import "APCMedTrackerDataStorageManager.h"
 #import "APCMedTrackerMedication+Helper.h"
-#import "APCMedTrackerScheduleColor+Helper.h"
+#import "APCMedTrackerPrescriptionColor+Helper.h"
 #import "APCMedTrackerPossibleDosage+Helper.h"
 #import "NSOperationQueue+Helper.h"
 #import "APCAppDelegate.h"
@@ -18,8 +18,8 @@
 static APCMedTrackerDataStorageManager *_defaultManager = nil;
 
 static NSString * const FILE_WITH_PREDEFINED_MEDICATIONS = @"APCMedTrackerPredefinedMedications.plist";
-static NSString * const FILE_WITH_PREDEFINED_SCHEDULE_COLORS = @"APCMedTrackerPredefinedScheduleColors.plist";
 static NSString * const FILE_WITH_PREDEFINED_POSSIBLE_DOSAGES = @"APCMedTrackerPredefinedPossibleDosages.plist";
+static NSString * const FILE_WITH_PREDEFINED_PRESCRIPTION_COLORS = @"APCMedTrackerPredefinedPrescriptionColors.plist";
 static NSString * const QUEUE_NAME = @"MedicationTracker query queue";
 static dispatch_once_t _startupComplete = 0;
 
@@ -102,8 +102,8 @@ static dispatch_once_t _startupComplete = 0;
      method.
      */
     [allInflatedObjects addObjectsFromArray: [APCMedTrackerMedication reloadAllObjectsFromPlistFileNamed: FILE_WITH_PREDEFINED_MEDICATIONS usingContext: context]];
-    [allInflatedObjects addObjectsFromArray: [APCMedTrackerScheduleColor reloadAllObjectsFromPlistFileNamed: FILE_WITH_PREDEFINED_SCHEDULE_COLORS usingContext: context]];
     [allInflatedObjects addObjectsFromArray: [APCMedTrackerPossibleDosage reloadAllObjectsFromPlistFileNamed: FILE_WITH_PREDEFINED_POSSIBLE_DOSAGES usingContext: context]];
+    [allInflatedObjects addObjectsFromArray: [APCMedTrackerPrescriptionColor reloadAllObjectsFromPlistFileNamed: FILE_WITH_PREDEFINED_PRESCRIPTION_COLORS usingContext: context]];
 
 
     /*

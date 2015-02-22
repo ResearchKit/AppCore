@@ -163,12 +163,12 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCMedTrackerInflatableItem+Helper.h>
 #import <APCAppCore/APCMedTrackerMedication.h>
 #import <APCAppCore/APCMedTrackerMedication+Helper.h>
-#import <APCAppCore/APCMedTrackerMedicationSchedule.h>
-#import <APCAppCore/APCMedTrackerMedicationSchedule+Helper.h>
+#import <APCAppCore/APCMedTrackerPrescription.h>
+#import <APCAppCore/APCMedTrackerPrescription+Helper.h>
 #import <APCAppCore/APCMedTrackerPossibleDosage.h>
 #import <APCAppCore/APCMedTrackerPossibleDosage+Helper.h>
-#import <APCAppCore/APCMedTrackerScheduleColor.h>
-#import <APCAppCore/APCMedTrackerScheduleColor+Helper.h>
+#import <APCAppCore/APCMedTrackerPrescriptionColor.h>
+#import <APCAppCore/APCMedTrackerPrescriptionColor+Helper.h>
 
 /* -------------------------
  Views
@@ -214,6 +214,11 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDashboardFoodInsightTableViewCell.h>
 #import <APCAppCore/APCStudyVideoCollectionViewCell.h>
 #import <APCAppCore/APCStudyOverviewCollectionViewCell.h>
+#import <APCAppCore/APCStudyLandingCollectionViewCell.h>
+#import <APCAppCore/APCActivitiesTableViewCell.h>
+#import <APCAppCore/APCActivitiesBasicTableViewCell.h>
+#import <APCAppCore/APCActivitiesTintedTableViewCell.h>
+#import <APCAppCore/APCActivitiesSectionHeaderView.h>
 
 /* -------------------------
  Objects

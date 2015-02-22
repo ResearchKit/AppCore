@@ -1,5 +1,5 @@
 //
-//  APCMedTrackerPossibleDosage.h
+//  APCMedTrackerPrescriptionColor.h
 //  AppCore
 //
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
@@ -11,13 +11,16 @@
 
 @class APCMedTrackerPrescription;
 
-@interface APCMedTrackerPossibleDosage : APCMedTrackerInflatableItem
+@interface APCMedTrackerPrescriptionColor : APCMedTrackerInflatableItem
 
-@property (nonatomic, retain) NSNumber * amount;
+@property (nonatomic, retain) NSNumber * alphaAsFloat;
+@property (nonatomic, retain) NSNumber * blueAsInteger;
+@property (nonatomic, retain) NSNumber * greenAsInteger;
+@property (nonatomic, retain) NSNumber * redAsInteger;
 @property (nonatomic, retain) NSSet *prescriptionsWhereIAmUsed;
 @end
 
-@interface APCMedTrackerPossibleDosage (CoreDataGeneratedAccessors)
+@interface APCMedTrackerPrescriptionColor (CoreDataGeneratedAccessors)
 
 - (void)addPrescriptionsWhereIAmUsedObject:(APCMedTrackerPrescription *)value;
 - (void)removePrescriptionsWhereIAmUsedObject:(APCMedTrackerPrescription *)value;

@@ -7,6 +7,7 @@
 
 #import "APCDashboardTableViewCell.h"
 #import "UIFont+APCAppearance.h"
+#import "UIColor+APCAppearance.h"
 
 static const CGFloat kTitleLabelHeight = 26.0f;
 
@@ -27,9 +28,11 @@ static const CGFloat kTitleLabelHeight = 26.0f;
     [self.infoButton setImage:[[UIImage imageNamed:@"info_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.infoButton setImage:[[UIImage imageNamed:@"info_icon_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
     self.infoButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.infoButton.imageView.tintColor = [UIColor appSecondaryColor1];
     
     [self.resizeButton setImage:[[UIImage imageNamed:@"expand_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     self.resizeButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.resizeButton.imageView.tintColor = [UIColor appSecondaryColor1];
 }
 
 #pragma mark - Setter methods

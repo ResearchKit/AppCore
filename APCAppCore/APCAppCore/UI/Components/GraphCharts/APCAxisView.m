@@ -43,19 +43,35 @@
 
 - (void)layoutSubviews
 {
-    CGFloat labelWidth = (CGFloat)CGRectGetWidth(self.bounds)/(self.titleLabels.count - 1);
+    CGFloat segmentWidth = (CGFloat)CGRectGetWidth(self.bounds)/(self.titleLabels.count - 1);
+    CGFloat labelWidth = segmentWidth;
     
-    CGFloat labelHeight = (self.axisType == kAPCGraphAxisTypeX) ? CGRectGetHeight(self.bounds) : 20;
+    CGFloat labelHeight = (self.axisType == kAPCGraphAxisTypeX) ? CGRectGetHeight(self.bounds)*0.75 : 20;
     
     for (int i=0; i<self.titleLabels.count; i++) {
         
-        CGFloat positionX = (self.axisType == kAPCGraphAxisTypeX) ? (self.leftOffset + (i-0.5)*labelWidth) : 0;
+        CGFloat positionX = (self.axisType == kAPCGraphAxisTypeX) ? (self.leftOffset + i*segmentWidth) : 0;
         
         UILabel *label = (UILabel *)self.titleLabels[i];
+        
+        if (label.text) {
+            labelWidth = [label.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, labelHeight) options:(NSStringDrawingUsesFontLeading | NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:label.font} context:nil].size.width;
+            labelWidth += self.landscapeMode ? 14 : 8; //padding
+        }
+        
         if (i==0) {
-            label.frame  = CGRectMake(positionX + labelWidth/2, 0, labelWidth, labelHeight);
+            label.frame  = CGRectMake(positionX, (CGRectGetHeight(self.bounds) - labelHeight)/2, labelWidth, labelHeight);
         } else {
-            label.frame  = CGRectMake(positionX, 0, labelWidth, labelHeight);
+            label.frame  = CGRectMake(positionX - labelWidth/2, (CGRectGetHeight(self.bounds) - labelHeight)/2, labelWidth, labelHeight);
+        }
+        
+        if (i == self.titleLabels.count - 1) {
+            //Last label
+            
+            label.textColor = [UIColor whiteColor];
+            label.backgroundColor = self.tintColor;
+            label.layer.cornerRadius = CGRectGetHeight(label.frame)/2;
+            label.layer.masksToBounds = YES;
         }
         
     }
@@ -71,7 +87,7 @@
         label.text = titles[i];
         label.font = self.isLandscapeMode ? [UIFont fontWithName:@"Helvetica-Light" size:19.0] : [UIFont fontWithName:@"Helvetica-Light" size:12.0];
         label.numberOfLines = 2;
-        label.textAlignment = (i == 0) ? NSTextAlignmentLeft : NSTextAlignmentCenter;
+        label.textAlignment = NSTextAlignmentCenter;
         label.adjustsFontSizeToFitWidth = YES;
         label.minimumScaleFactor = 0.7;
         label.textColor = self.tintColor;
