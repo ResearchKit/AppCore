@@ -289,7 +289,7 @@
             studyDetails.iconImage = [[UIImage imageNamed:questionDict[@"icon_image"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             studyDetails.tintColor = [UIColor tertiaryColorForString:questionDict[@"tint_color"]];
             studyDetails.videoName = questionDict[@"video_name"];
-            studyDetails.showsConsent = ((NSString *)questionDict[@"video_name"]).length > 0;
+            studyDetails.showsConsent = ((NSString *)questionDict[@"show_consent"]).length > 0;
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = studyDetails;
@@ -410,6 +410,32 @@
     }
     
     [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)studyLandingCollectionViewCellEmailConsent:(APCStudyLandingCollectionViewCell *)cell
+{
+    if ([MFMailComposeViewController canSendMail])
+    {
+        MFMailComposeViewController *mailComposeVC = [[MFMailComposeViewController alloc] init];
+        mailComposeVC.mailComposeDelegate = self;
+        
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
+        NSData *fileData = [NSData dataWithContentsOfFile:filePath];
+        [mailComposeVC addAttachmentData:fileData mimeType:@"application/pdf" fileName:@"Consent"];
+        
+        [self presentViewController:mailComposeVC animated:YES completion:NULL];
+    }
+}
+
+- (void)studyLandingCollectionViewCellReadConsent:(APCStudyLandingCollectionViewCell *)cell
+{
+    APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
+    webViewController.fileName = @"consent";
+    webViewController.fileType = @"pdf";
+    webViewController.title = NSLocalizedString(@"Consent", @"Consent");
+    
+    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
+    [self.navigationController presentViewController:navController animated:YES completion:nil];
 }
 
 @end
