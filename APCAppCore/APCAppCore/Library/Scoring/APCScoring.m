@@ -159,7 +159,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
         _dataKey = dataKey;
         _sortKey = sortKey;
         
-        [self queryTaskId:taskId forDays:days valueKey:valueKey dataKey:dataKey sortKey:sortKey groupBy:groupBy];
+        [self queryTaskId:taskId forDays:days valueKey:valueKey dataKey:dataKey sortKey:sortKey groupBy:groupBy completion:nil];
     }
     
     return self;
@@ -230,14 +230,19 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
             NSAssert([self.quantityType isCompatibleWithUnit:self.hkUnit], @"The quantity and the unit must be compatible");
         }
     } else {
-        self.timeline = [self configureTimelineForDays:numberOfDays groupBy:groupBy];
+        // Update the timeline based on the number of days requested.
+        self.timeline = [self configureTimelineForDays:days groupBy:groupBy];
+        
+        // Update the generated dataset to be inline with the timeline.
+        [self generateEmptyDataset];
         
         [self queryTaskId:self.taskId
                     forDays:days
                  valueKey:self.valueKey
                   dataKey:self.dataKey
                   sortKey:self.sortKey
-                  groupBy:groupBy];
+                  groupBy:groupBy
+               completion:completion];
     }
 }
 
@@ -286,6 +291,9 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 - (void)generateEmptyDataset
 {
+    // clear out the datapoints
+    [self.dataPoints removeAllObjects];
+    
     for (NSDate *day in self.timeline) {
         NSDate *timelineDay = [[NSCalendar currentCalendar] dateBySettingHour:0
                                                                        minute:0
@@ -350,6 +358,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
             dataKey:(NSString *)dataKey
             sortKey:(NSString *)sortKey
          groupBy:(APHTimelineGroups)groupBy
+      completion:(void (^)(void))completion
 {
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -439,7 +448,13 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
         
         if (groupBy == APHTimelineGroupDay) {
             [self groupDatasetByDay];
+        } else {
+            [self groupDatasetbyPeriod:groupBy];
         }
+    }
+    
+    if (completion) {
+        completion();
     }
 }
 
@@ -521,6 +536,80 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     [self.dataPoints removeAllObjects];
     [self.dataPoints addObjectsFromArray:groupedDataset];
 }
+
+- (void)groupDatasetbyPeriod:(APHTimelineGroups)period
+{
+    NSMutableArray *groupedDataset = [NSMutableArray new];
+    NSString *groupKey = nil;
+    
+    switch (period) {
+        case APHTimelineGroupWeek:
+        {
+            groupKey = kDatasetGroupByWeek;
+        }
+            break;
+        case APHTimelineGroupMonth:
+        {
+            groupKey = kDatasetGroupByMonth;
+        }
+            break;
+        default:
+        {
+            groupKey = kDatasetGroupByDay;
+        }
+            break;
+    }
+    
+    NSDateComponents *groupDateComponents = [[NSDateComponents alloc] init];
+    
+    for (NSDate *groupStartDate in self.timeline) {
+        NSDate *groupEndDate   = nil;
+        
+        // Set start and end date for the grouping period
+        NSInteger weekNumber  = [[[NSCalendar currentCalendar] components:NSCalendarUnitWeekOfYear fromDate:groupStartDate] weekOfYear];
+        NSInteger monthNumber = [[[NSCalendar currentCalendar] components:NSCalendarUnitMonth fromDate:groupStartDate] month];
+        NSInteger yearNumber  = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:groupStartDate] year];
+        
+        if (period == APHTimelineGroupWeek) {
+            groupDateComponents.weekday = 7;
+            groupDateComponents.weekOfYear = weekNumber;
+            groupDateComponents.year = yearNumber;
+            
+            groupEndDate = [[NSCalendar currentCalendar] dateFromComponents:groupDateComponents];
+        } else if (period == APHTimelineGroupMonth) {
+            groupDateComponents.month = monthNumber;
+            groupEndDate = [[NSCalendar currentCalendar] dateFromComponents:groupDateComponents];
+        } else { // defaults to Day
+            groupEndDate = groupStartDate;
+        }
+        
+        // filter data points that are between the start and end dates
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K >= %@) AND (%K <= %@)",
+                                  kDatasetDateKey, groupStartDate,
+                                  kDatasetDateKey, groupEndDate];
+        NSArray *groupedPoints = [self.dataPoints filteredArrayUsingPredicate:predicate];
+        
+        double itemSum = 0;
+        double dayAverage = 0;
+        
+        for (NSDictionary *dataPoint in groupedPoints) {
+            NSNumber *value = [dataPoint valueForKey:kDatasetValueKey];
+            
+            if ([value integerValue] != NSNotFound) {
+                itemSum += [value doubleValue];
+            }
+            
+            if (groupedPoints.count != 0) {
+                dayAverage = itemSum / groupedPoints.count;
+            }
+            
+            if (dayAverage == 0) {
+                dayAverage = NSNotFound;
+            }
+        }
+    }
+}
+
 
 #pragma mark HealthKit
 
