@@ -505,7 +505,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     static APCDebugWindow *customWindow = nil;
     if (!customWindow) customWindow = [[APCDebugWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    customWindow.enableDebuggerWindow = NO;
+    customWindow.enableDebuggerWindow = YES;
     
     return customWindow;
 }
