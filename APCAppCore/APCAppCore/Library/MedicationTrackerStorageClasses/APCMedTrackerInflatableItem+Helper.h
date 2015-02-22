@@ -15,21 +15,30 @@
 typedef void (^APCMedTrackerFileLoadCallback) (NSArray *arrayOfGeneratedObjects,
                                                NSTimeInterval operationDuration);
 
+
+
 /**
- The +loadAllFromCoreData method calls you back when
- it's done, using a block with this signature.
- 
- Note that arrayOfGeneratedObjects and error are passed
- to you straight from the output of
- -[NSManagedObjectContext executeFetchRequest:].  Please
- see that method for descriptions of those values.  In
- particular, note that the array will be nil if there
- was an error, but an empty array if there were simply
- no items found.
+ The +fetchAll methods will call you back when
+ they're done, using a block with this signature.
+
+ Note that "arrayOfGeneratedObjects" and "error" are
+ passed to you straight from the output of a CoreData
+ "fetch request."  This means we have to interpret them
+ in precise ways:
+ - the array will be nil if there was an error
+ - the array will have stuff in it if there was stuff to be found
+ - the array will be empty if there were no items of the type you
+ requested.  You may consider this an error -- it depends on
+ your business logic.
+
+ Please see -[NSManagedObjectContext executeFetchRequest:]
+ for a formal and complete description of those rules.
  */
 typedef void (^APCMedTrackerQueryCallback) (NSArray *arrayOfGeneratedObjects,
                                             NSTimeInterval operationDuration,
                                             NSError *error);
+
+
 
 
 @interface APCMedTrackerInflatableItem (Helper)

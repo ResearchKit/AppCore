@@ -7,12 +7,13 @@
  
 #import <UIKit/UIKit.h>
 #import "APCCircularProgressView.h"
+#import "APCDashboardTableViewCell.h"
 
 static NSString * const kAPCDashboardProgressTableViewCellIdentifier = @"APCDashboardProgressTableViewCell";
 
-@interface APCDashboardProgressTableViewCell : UITableViewCell
+@interface APCDashboardProgressTableViewCell : APCDashboardTableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet APCCircularProgressView *progressView;
 
+@property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;
 @end

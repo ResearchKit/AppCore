@@ -9,4 +9,8 @@
 
 @interface APCBadgeLabel : UILabel
 
+@property (nonatomic, strong) UIColor *tintColor;
+
+@property (nonatomic) CGFloat lineWidth;
+
 @end

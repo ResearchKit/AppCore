@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="h61-jT-BHu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="h61-jT-BHu">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -18,24 +18,23 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tTU-aB-ynX">
-                                <rect key="frame" x="135" y="175" width="50" height="50"/>
+                                <rect key="frame" x="135" y="159" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Fvr-eQ-ARB"/>
                                     <constraint firstAttribute="width" constant="50" id="hET-jW-Is6"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A message has been sent to" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hsa-BE-Hkq">
-                                <rect key="frame" x="24" y="233" width="273" height="32"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="An email has been sent by app name to" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hsa-BE-Hkq">
+                                <rect key="frame" x="24" y="225" width="273" height="45"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="273" id="VeV-bB-5NY"/>
-                                    <constraint firstAttribute="height" constant="32" id="jDa-CD-QgG"/>
+                                    <constraint firstAttribute="height" constant="45" id="jDa-CD-QgG"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="johnny@appleseed.com" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3xK-c0-Pah">
-                                <rect key="frame" x="24" y="265" width="273" height="28"/>
+                                <rect key="frame" x="24" y="270" width="273" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="rU7-Zq-63L"/>
                                 </constraints>
@@ -43,45 +42,53 @@
                                 <color key="textColor" red="0.01176470588" green="0.62352941179999999" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gY2-y5-fND">
+                                <rect key="frame" x="16" y="295" width="288" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="zO6-NL-6a8"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <state key="normal" title="Wrong email? Tap here.">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="changeEmailAddress:" destination="h61-jT-BHu" eventType="touchUpInside" id="CNt-bI-O9r"/>
+                                    <segue destination="aIr-ax-YEE" kind="presentation" id="PCs-iy-OzG"/>
+                                </connections>
+                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1aj-Cn-g1q">
-                                <rect key="frame" x="16" y="289" width="288" height="59"/>
+                                <rect key="frame" x="16" y="322" width="288" height="59"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="59" id="Ukz-Dc-GLr"/>
                                     <constraint firstAttribute="width" constant="288" id="f3z-3h-GSv"/>
                                 </constraints>
                                 <string key="text">Verify your email by clicking on 
 the link included in the message.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A full copy of the consent has been sent to you for your records. " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yX7-Jl-zxX">
-                                <rect key="frame" x="16" y="343" width="288" height="59"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3lp-lE-Oux">
+                                <rect key="frame" x="16" y="427" width="288" height="1"/>
+                                <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="59" id="6xz-2O-k55"/>
+                                    <constraint firstAttribute="height" constant="1" id="wOD-8Z-UB1"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yX7-Jl-zxX">
+                                <rect key="frame" x="16" y="428" width="288" height="90"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="90" id="6xz-2O-k55"/>
                                     <constraint firstAttribute="width" constant="288" id="lvt-a2-1N3"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <string key="text">A full copy of the consent has been sent to you for your records. Remember to check your spam filter if you haven't received it within 30 minutes</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gY2-y5-fND">
-                                <rect key="frame" x="16" y="534" width="288" height="26"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="26" id="zO6-NL-6a8"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <state key="normal" title="Not johnny? Change email address">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="changeEmailAddress:" destination="h61-jT-BHu" eventType="touchUpInside" id="CNt-bI-O9r"/>
-                                    <segue destination="LBV-s1-hh7" kind="show" id="PCs-iy-OzG"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WLq-Ms-OSK">
-                                <rect key="frame" x="135" y="175" width="50" height="50"/>
+                                <rect key="frame" x="135" y="159" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="EdA-se-uDA"/>
                                     <constraint firstAttribute="width" constant="50" id="zlO-bB-FLE"/>
@@ -93,23 +100,13 @@ the link included in the message.</string>
                                     <action selector="secretButton:" destination="h61-jT-BHu" eventType="touchUpInside" id="SP5-lR-psQ"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Remember to check your spam filter if you haven't received it within 30 minutes)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gTc-ni-boB">
-                                <rect key="frame" x="24" y="410" width="273" height="51"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="51" id="HfR-QQ-771"/>
-                                    <constraint firstAttribute="width" constant="273" id="bey-AN-64d"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cVc-Jw-LIH">
-                                <rect key="frame" x="24" y="480" width="273" height="30"/>
+                                <rect key="frame" x="24" y="523" width="273" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="emJ-QS-ca3"/>
                                     <constraint firstAttribute="width" constant="273" id="rkR-Zp-gnM"/>
                                 </constraints>
-                                <state key="normal" title="Tap to Resend Verification E-Mail">
+                                <state key="normal" title="Resend Verification E-Mail">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -119,26 +116,29 @@ the link included in the message.</string>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="1aj-Cn-g1q" firstAttribute="top" secondItem="gY2-y5-fND" secondAttribute="bottom" constant="-3" id="2hc-Xg-wdB"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3xK-c0-Pah" secondAttribute="trailing" constant="7" id="3eD-Fs-Kle"/>
-                            <constraint firstItem="gTc-ni-boB" firstAttribute="top" secondItem="yX7-Jl-zxX" secondAttribute="bottom" constant="8" id="6bZ-BZ-HfF"/>
                             <constraint firstItem="WLq-Ms-OSK" firstAttribute="leading" secondItem="tTU-aB-ynX" secondAttribute="trailing" constant="-50" id="7Mx-4P-E6Y"/>
-                            <constraint firstItem="cVc-Jw-LIH" firstAttribute="top" secondItem="gTc-ni-boB" secondAttribute="bottom" constant="19" id="9ue-GP-Hsm"/>
                             <constraint firstAttribute="centerX" secondItem="cVc-Jw-LIH" secondAttribute="centerX" constant="-0.5" id="A2m-L2-YjN"/>
+                            <constraint firstItem="hsa-BE-Hkq" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" constant="8" id="C4Q-PN-VFI"/>
+                            <constraint firstItem="gY2-y5-fND" firstAttribute="top" secondItem="3xK-c0-Pah" secondAttribute="bottom" constant="-3" id="DV2-NO-ogr"/>
                             <constraint firstItem="gY2-y5-fND" firstAttribute="trailing" secondItem="Kj1-kb-LF2" secondAttribute="trailingMargin" id="Du9-o5-KKO"/>
-                            <constraint firstItem="yX7-Jl-zxX" firstAttribute="top" secondItem="1aj-Cn-g1q" secondAttribute="bottom" constant="-5" id="F0t-fC-eKP"/>
-                            <constraint firstAttribute="centerY" secondItem="tTU-aB-ynX" secondAttribute="centerY" constant="84" id="RlR-xX-Tpq"/>
+                            <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="yX7-Jl-zxX" secondAttribute="bottom" constant="50" id="G5E-d8-5bi"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="hsa-BE-Hkq" secondAttribute="trailing" constant="7" id="Icg-Ob-XNO"/>
+                            <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="3lp-lE-Oux" secondAttribute="bottom" constant="140" id="RFL-n7-4oA"/>
                             <constraint firstItem="gY2-y5-fND" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" id="SAb-hw-iLw"/>
+                            <constraint firstAttribute="centerY" secondItem="tTU-aB-ynX" secondAttribute="centerY" constant="100" id="Wfw-73-6SY"/>
                             <constraint firstAttribute="centerX" secondItem="yX7-Jl-zxX" secondAttribute="centerX" id="b2a-oT-iil"/>
                             <constraint firstAttribute="centerX" secondItem="tTU-aB-ynX" secondAttribute="centerX" id="bRb-Bv-bqr"/>
-                            <constraint firstAttribute="centerX" secondItem="gTc-ni-boB" secondAttribute="centerX" constant="-0.5" id="cZr-4m-yZb"/>
-                            <constraint firstItem="1aj-Cn-g1q" firstAttribute="top" secondItem="3xK-c0-Pah" secondAttribute="bottom" constant="-4" id="cjf-fz-I7l"/>
-                            <constraint firstItem="hsa-BE-Hkq" firstAttribute="top" secondItem="tTU-aB-ynX" secondAttribute="bottom" constant="8" id="eHM-Pe-VS7"/>
+                            <constraint firstItem="hsa-BE-Hkq" firstAttribute="top" secondItem="tTU-aB-ynX" secondAttribute="bottom" constant="16" id="eHM-Pe-VS7"/>
                             <constraint firstItem="WLq-Ms-OSK" firstAttribute="top" secondItem="tTU-aB-ynX" secondAttribute="bottom" constant="-50" id="g4N-5C-ApW"/>
                             <constraint firstItem="3xK-c0-Pah" firstAttribute="top" secondItem="hsa-BE-Hkq" secondAttribute="bottom" id="hom-mt-Ssh"/>
                             <constraint firstAttribute="centerX" secondItem="1aj-Cn-g1q" secondAttribute="centerX" id="j7a-H6-2UM"/>
-                            <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="gY2-y5-fND" secondAttribute="bottom" constant="8" id="mAW-qj-wll"/>
                             <constraint firstItem="3xK-c0-Pah" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" constant="8" id="myI-WR-eeJ"/>
                             <constraint firstAttribute="centerX" secondItem="hsa-BE-Hkq" secondAttribute="centerX" constant="-0.5" id="qbz-10-a2I"/>
+                            <constraint firstItem="3lp-lE-Oux" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" id="rnu-rc-p7p"/>
+                            <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="cVc-Jw-LIH" secondAttribute="bottom" constant="15" id="xrL-1i-of9"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="3lp-lE-Oux" secondAttribute="trailing" id="znn-Uv-IcD"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="nhs-F6-vkH"/>
@@ -238,6 +238,11 @@ the link included in the message.</string>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Change Email" id="bLv-ce-Rcj">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="s4U-qd-Icu">
+                            <connections>
+                                <action selector="cancel:" destination="LBV-s1-hh7" id="fSn-GV-ngu"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="96q-Kw-4tz">
                             <connections>
                                 <action selector="done:" destination="LBV-s1-hh7" id="jUM-xj-cyB"/>
@@ -251,6 +256,24 @@ the link included in the message.</string>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vkw-Gn-mUU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1960" y="591"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="NUS-mK-5Gt">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="aIr-ax-YEE" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ENn-0d-qnr">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="LBV-s1-hh7" kind="relationship" relationship="rootViewController" id="A8E-yU-131"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="S2c-2p-GS0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1428" y="591"/>
         </scene>

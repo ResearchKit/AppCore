@@ -216,6 +216,11 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDashboardFoodInsightTableViewCell.h>
 #import <APCAppCore/APCStudyVideoCollectionViewCell.h>
 #import <APCAppCore/APCStudyOverviewCollectionViewCell.h>
+#import <APCAppCore/APCStudyLandingCollectionViewCell.h>
+#import <APCAppCore/APCActivitiesTableViewCell.h>
+#import <APCAppCore/APCActivitiesBasicTableViewCell.h>
+#import <APCAppCore/APCActivitiesTintedTableViewCell.h>
+#import <APCAppCore/APCActivitiesSectionHeaderView.h>
 
 /* -------------------------
  Objects

@@ -107,7 +107,7 @@ static  short  coordinates[] = {
 {
     _incompleteBorderColor = borderColor;
     CALayer  *layer = self.layer;
-    layer.backgroundColor = [borderColor CGColor];
+    layer.borderColor = [borderColor CGColor];
     [self setNeedsDisplay];
 }
 

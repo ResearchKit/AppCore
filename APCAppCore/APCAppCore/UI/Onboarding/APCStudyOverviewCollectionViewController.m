@@ -32,6 +32,7 @@
     [self setUpAppearance];
     self.items = [self prepareContent];
     [self setUpPageView];
+    [self setupCollectionView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -48,8 +49,9 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self setupCollectionView];
+    
 }
+
 
 - (void)dealloc
 {
@@ -110,6 +112,7 @@
         self.joinButtonLeadingConstraint.constant = CGRectGetWidth(self.view.frame)/2;
         [self.view layoutIfNeeded];
     }
+    
 }
 
 - (void)setUpPageView
@@ -170,7 +173,24 @@
     
     APCTableViewStudyDetailsItem *studyDetails = [self itemForIndexPath:indexPath];
 
-    if (studyDetails.videoName.length > 0) {
+    if (indexPath.row == 0) {
+        
+        APCStudyLandingCollectionViewCell *landingCell = (APCStudyLandingCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kAPCStudyLandingCollectionViewCellIdentifier forIndexPath:indexPath];
+        landingCell.delegate = self;
+        landingCell.titleLabel.text = studyDetails.caption;
+        landingCell.subTitleLabel.text = studyDetails.detailText;
+        
+        if (studyDetails.showsConsent) {
+            landingCell.readConsentButton.hidden = NO;
+            landingCell.emailConsentButton.hidden = NO;
+        } else {
+            landingCell.readConsentButton.hidden = YES;
+            landingCell.emailConsentButton.hidden = YES;
+        }
+        
+        cell = landingCell;
+        
+    }else if (studyDetails.videoName.length > 0) {
         
         APCStudyVideoCollectionViewCell *videoCell = (APCStudyVideoCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kAPCStudyVideoCollectionViewCellIdentifier forIndexPath:indexPath];
         videoCell.delegate = self;
@@ -269,6 +289,7 @@
             studyDetails.iconImage = [[UIImage imageNamed:questionDict[@"icon_image"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             studyDetails.tintColor = [UIColor tertiaryColorForString:questionDict[@"tint_color"]];
             studyDetails.videoName = questionDict[@"video_name"];
+            studyDetails.showsConsent = ((NSString *)questionDict[@"show_consent"]).length > 0;
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = studyDetails;
@@ -389,6 +410,32 @@
     }
     
     [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)studyLandingCollectionViewCellEmailConsent:(APCStudyLandingCollectionViewCell *)cell
+{
+    if ([MFMailComposeViewController canSendMail])
+    {
+        MFMailComposeViewController *mailComposeVC = [[MFMailComposeViewController alloc] init];
+        mailComposeVC.mailComposeDelegate = self;
+        
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
+        NSData *fileData = [NSData dataWithContentsOfFile:filePath];
+        [mailComposeVC addAttachmentData:fileData mimeType:@"application/pdf" fileName:@"Consent"];
+        
+        [self presentViewController:mailComposeVC animated:YES completion:NULL];
+    }
+}
+
+- (void)studyLandingCollectionViewCellReadConsent:(APCStudyLandingCollectionViewCell *)cell
+{
+    APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
+    webViewController.fileName = @"consent";
+    webViewController.fileType = @"pdf";
+    webViewController.title = NSLocalizedString(@"Consent", @"Consent");
+    
+    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
+    [self.navigationController presentViewController:navController animated:YES completion:nil];
 }
 
 @end

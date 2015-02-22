@@ -26,6 +26,8 @@ FOUNDATION_EXPORT NSString * const kAPCLineGraphViewRefreshNotification;
 
 @property (nonatomic, getter=isLandscapeMode) BOOL landscapeMode;
 
+@property (nonatomic) BOOL showsVerticalReferenceLines;
+
 /* Appearance */
 
 @property (nonatomic, strong) UIColor *tintColor;
@@ -43,6 +45,8 @@ FOUNDATION_EXPORT NSString * const kAPCLineGraphViewRefreshNotification;
 @property (nonatomic, strong) UIColor *scrubberLineColor;
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
+
+@property (nonatomic, strong) NSString *emptyText;
 
 //Support for image icons as legends
 @property (nonatomic, strong) UIImage *maximumValueImage;

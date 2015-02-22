@@ -141,7 +141,9 @@ static NSString * const kOnboardingStoryboardName = @"APCOnboarding";
 
 - (void)popScene
 {
-    self.currentStep = [self.onboardingTask stepBeforeStep:self.currentStep withResult:nil];
+    if (![self.currentStep.identifier isEqualToString:kAPCSignUpMedicalInfoStepIdentifier]) {
+        self.currentStep = [self.onboardingTask stepBeforeStep:self.currentStep withResult:nil];
+    }
 }
 
 - (UIViewController *)viewControllerForSceneIdentifier:(NSString *)identifier
