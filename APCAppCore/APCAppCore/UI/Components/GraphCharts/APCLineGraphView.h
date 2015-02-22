@@ -46,6 +46,8 @@ FOUNDATION_EXPORT NSString * const kAPCLineGraphViewRefreshNotification;
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
 
+@property (nonatomic, strong) NSString *emptyText;
+
 //Support for image icons as legends
 @property (nonatomic, strong) UIImage *maximumValueImage;
 

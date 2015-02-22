@@ -35,6 +35,8 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 @property (nonatomic, strong) APCAxisView *xAxisView;
 @property (nonatomic, strong) UIView *yAxisView;
+@property (nonatomic, strong) UILabel *emptyLabel;
+@property (nonatomic) BOOL hasDataPoint;
 
 @property (nonatomic, strong) UIView *scrubberLine;
 @property (nonatomic, strong) UILabel *scrubberLabel;
@@ -103,6 +105,11 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     _shouldAnimate = YES;
     _showsVerticalReferenceLines = NO;
+    
+    _hasDataPoint = NO;
+    
+    _emptyText = NSLocalizedString(@"No Data", @"No Data");
+
     
     [self setupViews];
     
@@ -213,6 +220,10 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     self.plotsView.frame = CGRectMake(kAPCGraphLeftPadding, kAPCGraphTopPadding, CGRectGetWidth(self.frame) - yAxisPadding - kAPCGraphLeftPadding, CGRectGetHeight(self.frame) - kXAxisHeight - kAPCGraphTopPadding);
     
+    if (self.emptyLabel) {
+        self.emptyLabel.frame = CGRectMake(kAPCGraphLeftPadding, kAPCGraphTopPadding, CGRectGetWidth(self.frame) - kAPCGraphLeftPadding, CGRectGetHeight(self.frame) - kXAxisHeight - kAPCGraphTopPadding);
+    }
+    
     //Scrubber Views
     self.scrubberLine.frame = CGRectMake(0, kAPCGraphTopPadding, 1, CGRectGetHeight(self.plotsView.frame));
     [self updateScrubberLabel];
@@ -226,6 +237,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 - (void)refreshGraph
 {
     //Clear subviews and sublayers
+    [self.plotsView.layer.sublayers makeObjectsPerformSelector:@selector(removeAllAnimations)];
     [self.plotsView.layer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     
     [self drawXAxis];
@@ -247,7 +259,30 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         }
     }
     
+    if (!self.hasDataPoint) {
+        [self setupEmptyView];
+    } else {
+        if (self.emptyLabel) {
+            [self.emptyLabel removeFromSuperview];
+        }
+    }
+    
     [self animateLayersSequentially];
+
+}
+
+- (void)setupEmptyView
+{
+    if (!_emptyLabel) {
+        
+        _emptyLabel = [[UILabel alloc] initWithFrame:CGRectMake(kAPCGraphLeftPadding, kAPCGraphTopPadding, CGRectGetWidth(self.frame) - kAPCGraphLeftPadding, CGRectGetHeight(self.frame) - kXAxisHeight - kAPCGraphTopPadding)];
+        _emptyLabel.text = self.emptyText;
+        _emptyLabel.textAlignment = NSTextAlignmentCenter;
+        _emptyLabel.font = [UIFont fontWithName:@"Helvetica" size:25];
+        _emptyLabel.textColor = [UIColor lightGrayColor];
+    }
+    
+    [self addSubview:_emptyLabel];
 }
 
 #pragma mark - Data
@@ -310,6 +345,11 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         if ([self.datasource respondsToSelector:@selector(lineGraph:plot:valueForPointAtIndex:)]) {
             CGFloat value = [self.datasource lineGraph:self plot:plotIndex valueForPointAtIndex:i];
             [self.dataPoints addObject:@(value)];
+            
+            if (value != NSNotFound){
+                self.hasDataPoint = YES;
+            }
+
         }
     }
     
