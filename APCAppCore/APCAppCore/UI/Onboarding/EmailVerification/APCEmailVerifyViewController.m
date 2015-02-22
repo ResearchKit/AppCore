@@ -33,7 +33,9 @@
     [self setupAppearance];
     
     self.emailLabel.text = self.user.email;
-    [self.changeEmailButton setTitle:[NSString stringWithFormat:@"Not %@? Change email address", self.user.name] forState:UIControlStateNormal];
+    
+    NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
+    self.topMessageLabel.text = [NSString stringWithFormat:@"An email has been sent by %@ to", appName];
     
     [self checkSignIn];
 }
@@ -42,26 +44,29 @@
 {
     [super viewDidAppear:animated];
   APCLogViewControllerAppeared();
+    
+    self.emailLabel.text = self.user.email;
 }
 
 - (void)setupAppearance
 {
     [self.logoImageView setImage:[UIImage imageNamed:@"logo_disease"]];
     
-    [self.topMessageLabel setFont:[UIFont appRegularFontWithSize:19.0f]];
+    [self.topMessageLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
     [self.topMessageLabel setTextColor:[UIColor appSecondaryColor1]];
     
-    [self.emailLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
-    [self.emailLabel setTextColor:[UIColor appPrimaryColor]];
+    [self.emailLabel setFont:[UIFont appMediumFontWithSize:16.0f]];
+    [self.emailLabel setAdjustsFontSizeToFitWidth:YES];
+    [self.emailLabel setTextColor:[UIColor appSecondaryColor1]];
     
-    [self.middleMessageLabel setFont:[UIFont appRegularFontWithSize:19.0f]];
+    [self.middleMessageLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
     [self.middleMessageLabel setTextColor:[UIColor appSecondaryColor1]];
     
-    [self.bottomMessageLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
+    [self.bottomMessageLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
     [self.bottomMessageLabel setTextColor:[UIColor appSecondaryColor3]];
     
     [self.changeEmailButton.titleLabel setFont:[UIFont appRegularFontWithSize:12.0f]];
-    [self.changeEmailButton setTitleColor:[UIColor appSecondaryColor3] forState:UIControlStateNormal];
+    [self.changeEmailButton setTitleColor:[UIColor appSecondaryColor2] forState:UIControlStateNormal];
     
     [self.resendEmailButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
     [self.resendEmailButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];

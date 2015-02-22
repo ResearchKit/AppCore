@@ -12,5 +12,6 @@
 @property (nonatomic, weak) IBOutlet UITextField *emailTextField;
 
 - (void)updateEmailAddress;
+- (IBAction)cancel:(id)sender;
 
 @end
