@@ -13,11 +13,14 @@
 
 #import "APCAppCore.h"
 
-static  NSString  *viewControllerTitle = @"Medication Tracker";
+static  NSString  *viewControllerTitle   = @"Medication Tracker";
 
 static  NSString  *kSetupTableCellName   = @"APCSetupTableViewCell";
 
 static  NSInteger  numberOfSectionsInTableView = 2;
+
+static  NSInteger  kDailyDosesTakenSection     = 0;
+static  NSInteger  kMedicineSummarySection     = 1;
 
 static  NSString  *mainTableCategories[] = { @"Medication", @"Frequency", @"Label Color", @"Dosage" };
 
@@ -44,12 +47,12 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger  numberOfRows = 0;
-
-    if (section == 0) {
+    
+    if (section == kDailyDosesTakenSection) {
         if (self.follower != nil) {
             numberOfRows = [self.follower.follower.numberOfDosesPrescribed integerValue];
         }
-    } else if (section == 1) {
+    } else if (section == kMedicineSummarySection) {
         numberOfRows = 4;
     }
     return  numberOfRows;
@@ -78,7 +81,7 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 {
     UITableViewCell  *cell = nil;
 
-    if (indexPath.section == 0) {
+    if (indexPath.section == kDailyDosesTakenSection) {
         NSString  *identifier = @"Simple Cell Identifier";
         UITableViewCell  *aCell = [tableView dequeueReusableCellWithIdentifier:identifier];
         if (aCell == nil) {
@@ -88,7 +91,7 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
         aCell.textLabel.text = self.follower.follower.medicationName;
         aCell.detailTextLabel.text = [NSString stringWithFormat:@"Dose %ld, (%@)", (long)(indexPath.row + 1), self.follower.model.medicationDosageText];
         cell = aCell;
-    } else if (indexPath.section == 1) {
+    } else if (indexPath.section == kMedicineSummarySection) {
 
         APCSetupTableViewCell  *aCell = (APCSetupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSetupTableCellName];
 
@@ -127,12 +130,20 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
         //    provide a non-empty blank string to get a section header at the bottom of the section
         //
     NSString  *title = @"";
-    if (section == 0) {
+    if (section == kDailyDosesTakenSection) {
         title = @"Select which scheduled doses you have taken today";
     } else {
         title = @"          ";
     }
     return  title;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == kDailyDosesTakenSection) {
+        UITableViewCell  *cell = [tableView cellForRowAtIndexPath:indexPath];
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
 }
 
 #pragma  mark  -  View Controller Methods

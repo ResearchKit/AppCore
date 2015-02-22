@@ -112,11 +112,11 @@
 							if (error)
 							{
 								NSString *errorTitle = NSLocalizedString (@"Forgot Password", @"This is the title for the message that appears when the user asked for a 'reset password,' and that 'resetting' process failed.");
-								NSDictionary *sageErrorDictionary = error.userInfo [@"SBBOriginalErrorKey"];
-								NSString *sageErrorMessage = sageErrorDictionary [@"message"];
-
-								UIAlertController *alert = [UIAlertController simpleAlertWithTitle: errorTitle
-																						   message: sageErrorMessage];
+                                NSString *errorMessage = NSLocalizedString(@"Sorry, we could not find an account under \"%@\".  Please verify spelling.", @"Error message for wrong email in forgot password");
+                                errorMessage = [NSString stringWithFormat:errorMessage, self.emailTextField.text];
+                                
+                                UIAlertController *alert = [UIAlertController simpleAlertWithTitle: errorTitle
+                                                                                           message: errorMessage];
 
 								[self presentViewController:alert animated:YES completion:nil];
 							}

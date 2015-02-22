@@ -1,5 +1,5 @@
 //
-//  APCAppCore.m
+//  APCMedicationTrackerCalendarWeeklyView.m
 //  APCAppCore
 //
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
@@ -28,7 +28,7 @@ static  NSString* const  kCalendarSelectedDatePrintFormatDefault   = @"EEE, d MM
 static  CGFloat   const  kCalendarSelectedDatePrintFontSizeDefault = 13.0;
 
 
-@interface APCMedicationTrackerCalendarWeeklyView  ( ) <UIGestureRecognizerDelegate, APCMedicationTrackerCalendarWeeklyViewDelegate>
+@interface APCMedicationTrackerCalendarWeeklyView  ( ) <UIGestureRecognizerDelegate, APCMedicationTrackerCalendarDailyViewDelegate>
 
 @property  (nonatomic,  strong)  UIView    *backdrop;
 @property  (nonatomic,  strong)  UIView    *dailySubViewContainer;
@@ -47,6 +47,8 @@ static  CGFloat   const  kCalendarSelectedDatePrintFontSizeDefault = 13.0;
 @end
 
 @implementation APCMedicationTrackerCalendarWeeklyView
+
+#pragma  mark  -  Initialisation
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -240,6 +242,11 @@ static  CGFloat   const  kCalendarSelectedDatePrintFontSizeDefault = 13.0;
 
 - (void)swipeRight:(UISwipeGestureRecognizer *)swipe
 {
+    NSUInteger  maximumPageNumber = [self.delegate maximumScrollablePageNumber:self];
+    NSUInteger  pageNumber = [self.delegate currentScrollablePageNumber:self];
+    if (pageNumber < maximumPageNumber) {
+        [self delegateSwipeAnimation:NO blnToday:NO selectedDate:nil];
+    }
     [self delegateSwipeAnimation:YES blnToday:NO selectedDate:nil];
 }
 
@@ -300,7 +307,7 @@ static  CGFloat   const  kCalendarSelectedDatePrintFontSizeDefault = 13.0;
     }
 }
 
-#pragma DeputyDailyCalendarViewDelegate
+#pragma  mark  -  DeputyDailyCalendarViewDelegate
 
 - (void)dailyCalendarViewDidSelect:(NSDate *)date
 {
