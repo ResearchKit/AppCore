@@ -15,8 +15,8 @@
 
 @interface APCMedicationTrackerCalendarDailyView : UIView
 
-@property  (nonatomic,  weak)    id<APCMedicationTrackerCalendarDailyViewDelegate>  delegate;
-@property  (nonatomic,  strong)  NSDate                        *date;
+@property  (nonatomic, weak)     id  <APCMedicationTrackerCalendarDailyViewDelegate>  delegate;
+@property  (nonatomic, strong)   NSDate                        *date;
 @property  (nonatomic, assign)   BOOL                           blnSelected;
 
 - (void)markSelected:(BOOL)blnSelected;

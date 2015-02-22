@@ -16,6 +16,7 @@ static NSString *const kEmailPropertyName = @"email";
 static NSString *const kPasswordPropertyName = @"password";
 static NSString *const kSessionTokenPropertyName = @"sessionToken";
 
+static NSString *const kHasHeartDisease = @"hasHeartDisease";
 static NSString *const kDailyScalesCompletionCounterPropertyName = @"dailyScalesCompletionCounter";
 static NSString *const kCustomSurveyQuestionPropertyName = @"customSurveyQuestion";
 static NSString *const kPhoneNumberPropertyName = @"phoneNumber";
@@ -143,6 +144,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     
     _dailyScalesCompletionCounter = [[storedUserData.dailyScalesCompletionCounter copy] integerValue];
     _customSurveyQuestion = [storedUserData.customSurveyQuestion copy];
+    _hasHeartDisease = [[storedUserData.hasHeartDisease copy] integerValue];
 }
 
 - (void) updateStoredProperty:(NSString*) propertyName withValue: (id) value
@@ -243,6 +245,12 @@ static NSString *const kSignedInKey = @"SignedIn";
 #pragma mark - Setters for Properties in Core Data
 /*********************************************************************************/
 
+- (void)setHasHeartDisease:(NSInteger)hasHeartDisease {
+
+    _hasHeartDisease = hasHeartDisease;
+    [self updateStoredProperty:kHasHeartDisease withValue:@(hasHeartDisease)];
+    
+}
 
 - (void)setAllowContact:(BOOL)allowContact
 {

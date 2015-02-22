@@ -7,13 +7,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class  APCAppCore;
+@class  APCMedicationTrackerCalendarWeeklyView;
 
 @protocol APCMedicationTrackerCalendarWeeklyViewDelegate <NSObject>
 
 - (void)dailyCalendarViewDidSelect:(NSDate *)date;
 
-- (NSUInteger)currentScrollablePageNumber:(APCAppCore *)calendarView;
+- (NSUInteger)currentScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *)calendarView;
+- (NSUInteger)maximumScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *)calendarView;
 - (void)dailyCalendarViewDidSwipeLeft;
 - (void)dailyCalendarViewDidSwipeRight;
 

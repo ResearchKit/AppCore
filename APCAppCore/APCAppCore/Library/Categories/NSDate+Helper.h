@@ -33,6 +33,8 @@ extern NSString * const NSDateDefaultDateFormat;
 - (BOOL) isLaterThanDate: (NSDate*) otherDate;
 - (BOOL) isEarlierOrEqualToDate: (NSDate*) otherDate;
 - (BOOL) isLaterThanOrEqualToDate: (NSDate*) otherDate;
+- (BOOL) isInThePast;
+- (BOOL) isInTheFuture;
 
 + (NSTimeInterval) parseISO8601DurationString: (NSString*) duration ;
 

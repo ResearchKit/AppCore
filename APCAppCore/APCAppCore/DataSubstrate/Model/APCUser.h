@@ -39,6 +39,7 @@
 @property (nonatomic, getter=isConsented) BOOL consented; //Confirmation that server is consented. Should be used in the app to test for user consent.
 @property (nonatomic, getter=isUserConsented) BOOL userConsented; //User has consented though not communicated to the server.
 
+@property (nonatomic) NSInteger hasHeartDisease;
 @property (nonatomic) NSInteger dailyScalesCompletionCounter;
 @property (nonatomic, strong) NSString *customSurveyQuestion;
 @property (nonatomic, strong) NSString *phoneNumber;
