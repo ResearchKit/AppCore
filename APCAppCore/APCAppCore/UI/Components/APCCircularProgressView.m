@@ -116,6 +116,8 @@ static NSString * const kAPCCircularProgressViewAnimationKey = @"APCCircularProg
     self.circularProgressLayer.lineWidth = self.lineWidth;
     
     self.progressLabel.center = CGPointMake(CGRectGetWidth(self.bounds)/2, CGRectGetHeight(self.bounds)/2);
+    
+    self.progressLabel.textColor = (self.progress == 0) ? self.trackColor : self.tintColor;
 }
 
 - (UIBezierPath *)circularArcPath
@@ -201,6 +203,8 @@ static NSString * const kAPCCircularProgressViewAnimationKey = @"APCCircularProg
            
         }
     }
+    
+    self.progressLabel.textColor = (progress == 0) ? self.trackColor : self.tintColor;
 }
 
 - (void)updateStrokeEndForProgress:(CGFloat)progress
