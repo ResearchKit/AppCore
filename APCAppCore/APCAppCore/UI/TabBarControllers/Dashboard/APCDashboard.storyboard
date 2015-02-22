@@ -144,10 +144,10 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <segmentedControl hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="aDp-gi-ps1">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="aDp-gi-ps1">
                                 <rect key="frame" x="10" y="14" width="494" height="29"/>
                                 <segments>
-                                    <segment title="1D"/>
+                                    <segment title="5D"/>
                                     <segment title="1W"/>
                                     <segment title="1M"/>
                                     <segment title="3M"/>
@@ -155,6 +155,9 @@
                                     <segment title="1Y"/>
                                 </segments>
                                 <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="segmentControlChanged:" destination="YkO-h1-tiz" eventType="valueChanged" id="4ps-Ua-MGP"/>
+                                </connections>
                             </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cnr-qn-gof" userLabel="Tint View">
                                 <rect key="frame" x="0.0" y="55" width="4" height="265"/>
