@@ -118,6 +118,8 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         
         progressCell.subTitleLabel.text = [NSString stringWithFormat:@"%@, %@", NSLocalizedString(@"Today",@"Today"), [self.dateFormatter stringFromDate:[NSDate date]]];
         
+        progressCell.delegate = self;
+        
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardGraphItem class]]){
         
         APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)dashboardItem;
