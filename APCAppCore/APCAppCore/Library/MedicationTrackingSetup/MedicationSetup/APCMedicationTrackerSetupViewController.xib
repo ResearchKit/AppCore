@@ -21,10 +21,10 @@
                     <rect key="frame" x="0.0" y="0.0" width="600" height="293"/>
                     <subviews>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="91n-u5-qOC">
-                            <rect key="frame" x="0.0" y="0.0" width="600" height="238"/>
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="260"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="238" id="GX3-Gx-4iG"/>
+                                <constraint firstAttribute="height" constant="260" id="GX3-Gx-4iG"/>
                             </constraints>
                             <connections>
                                 <outlet property="dataSource" destination="-1" id="v4B-XR-KBZ"/>
@@ -32,22 +32,14 @@
                             </connections>
                         </tableView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f5m-k4-NZv" customClass="APCButton">
-                            <rect key="frame" x="227" y="241" width="146" height="44"/>
+                            <rect key="frame" x="227" y="263" width="146" height="44"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="146" id="69Y-nF-6rR"/>
                                 <constraint firstAttribute="width" constant="146" id="WuG-BG-fgT"/>
                                 <constraint firstAttribute="height" constant="44" id="gKm-FA-9XJ"/>
-                                <constraint firstAttribute="height" constant="44" id="u8f-98-nb6"/>
                             </constraints>
                             <state key="normal" title="Done">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
-                            <variation key="default">
-                                <mask key="constraints">
-                                    <exclude reference="69Y-nF-6rR"/>
-                                    <exclude reference="u8f-98-nb6"/>
-                                </mask>
-                            </variation>
                             <connections>
                                 <action selector="doneButtonWasTapped:" destination="-1" eventType="touchUpInside" id="P0l-8F-zcs"/>
                             </connections>
@@ -58,10 +50,16 @@
                         <constraint firstAttribute="centerX" secondItem="f5m-k4-NZv" secondAttribute="centerX" id="CaH-Ck-eS9"/>
                         <constraint firstItem="91n-u5-qOC" firstAttribute="top" secondItem="T57-y0-NON" secondAttribute="top" id="EUQ-Tj-Ngy"/>
                         <constraint firstAttribute="trailing" secondItem="91n-u5-qOC" secondAttribute="trailing" id="ZPl-HP-G5d"/>
+                        <constraint firstItem="f5m-k4-NZv" firstAttribute="top" secondItem="91n-u5-qOC" secondAttribute="bottom" constant="3" id="elL-Zu-L9j"/>
                         <constraint firstAttribute="bottom" secondItem="f5m-k4-NZv" secondAttribute="bottom" constant="8" id="hh1-ME-QoA"/>
                         <constraint firstAttribute="height" constant="293" id="mlD-4K-MYL"/>
                         <constraint firstItem="91n-u5-qOC" firstAttribute="leading" secondItem="T57-y0-NON" secondAttribute="leading" id="vVn-kF-4pd"/>
                     </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="hh1-ME-QoA"/>
+                        </mask>
+                    </variation>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="w3K-NH-IuG">
                     <rect key="frame" x="0.0" y="301" width="600" height="299"/>

@@ -12,6 +12,10 @@
 #import "APCMedicationNameViewController.h"
 
 #import "APCMedTrackerDataStorageManager.h"
+#import "APCMedTrackerMedication+Helper.h"
+#import "APCMedTrackerMedicationSchedule+Helper.h"
+#import "APCMedTrackerPossibleDosage+Helper.h"
+#import "APCMedTrackerScheduleColor+Helper.h"
 
 #import "NSBundle+Helper.h"
 
@@ -20,8 +24,6 @@
 #import "APCMedicationModel.h"
 
 #import "APCSetupTableViewCell.h"
-
-#import "APCMedSetupNotificationKeys.h"
 
 typedef  enum  _SetupTableRowTypes
 {
@@ -37,7 +39,14 @@ static  NSString  *kSetupTableCellName   = @"APCSetupTableViewCell";
 
 static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
 
+static  NSInteger  kAPCMedicationNameRow      = 0;
+static  NSInteger  kAPCMedicationFrequencyRow = 1;
+static  NSInteger  kAPCMedicationColorRow     = 2;
+static  NSInteger  kAPCMedicationDosageRow    = 3;
+
 static  NSString  *mainTableCategories[]          = { @"Name",        @"Frequency",     @"Label Color",  @"Dosage"        };
+static  NSInteger  kNumberOfMainTableCategories = (sizeof(mainTableCategories) / sizeof(NSString *));
+
 static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Frequency", @"Select Color", @"Select Dosage" };
 
 static  NSString  *mainColorCategories[]          = { @"Red", @"Green", @"Blue", @"Yellow", @"Cyan", @"Magenta", @"Orange", @"Purple" };
@@ -46,17 +55,15 @@ static  NSString  *daysOfWeekNames[]              = { @"Monday", @"Tuesday", @"W
 static  NSString  *daysOfWeekNamesAbbreviations[] = { @"Mon",    @"Tue",     @"Wed",       @"Thu",      @"Fri",    @"Sat",      @"Sun"    };
 static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSString *));
 
-@interface APCMedicationTrackerSetupViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
+@interface APCMedicationTrackerSetupViewController  ( )  <UITableViewDataSource, UITableViewDelegate,
+                                                APCMedicationNameViewControllerDelegate, APCMedicationFrequencyViewControllerDelegate,
+                                                APCMedicationColorViewControllerDelegate, APCMedicationDosageViewControllerDelegate>
 
 @property  (nonatomic, weak)  IBOutlet  UITableView             *setupTabulator;
 @property  (nonatomic, weak)  IBOutlet  UITableView             *listTabulator;
 
 @property  (nonatomic, weak)  IBOutlet  UIButton                *doneButton;
 
-@property  (nonatomic, strong)          NSArray                 *classesToInstantiate;
-@property  (nonatomic, strong)          NSArray                 *notificationNames;
-@property  (nonatomic, strong)          NSArray                 *resultsDictionaryKeys;
-@property  (nonatomic, strong)          NSArray                 *resultsNotificationSelectors;
 @property  (nonatomic, strong)          NSDictionary            *colormap;
 
 @property  (nonatomic, assign)          BOOL                     medicationNameWasSet;
@@ -66,9 +73,13 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 
 @property  (nonatomic, strong)          NSIndexPath             *selectedIndexPath;
 
-//@property  (nonatomic, strong)          NSArray                 *medicationRecords;
 @property  (nonatomic, strong)          NSMutableArray          *currentMedicationRecords;
 @property  (nonatomic, strong)          APCMedicationModel      *currentMedicationModel;
+
+@property (nonatomic, strong)           APCMedTrackerMedication  *theMedicationObject;
+@property (nonatomic, strong)           APCMedTrackerPossibleDosage  *possibleDosage;
+@property (nonatomic, strong)           APCMedTrackerScheduleColor  *colorObject;
+@property (nonatomic, strong)           NSDictionary             *frequenciesAndDaysObject;
 
 @end
 
@@ -86,7 +97,7 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     NSInteger  numberOfRows = 0;
     
     if (tableView == self.setupTabulator) {
-        numberOfRows = [self.classesToInstantiate count];
+        numberOfRows = kNumberOfMainTableCategories;
     } else if (tableView == self.listTabulator) {
         numberOfRows = [self.currentMedicationRecords count];
     }
@@ -106,10 +117,8 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     return  title;
 }
 
-- (NSString *)formatNumbersAndDays:(APCMedicationModel *)model
+- (NSString *)formatNumbersAndDays:(NSDictionary *)frequencyAndDays
 {
-    NSDictionary  *frequencyAndDays = model.frequencyAndDays;
-    
     NSMutableString  *daysAndNumbers = [NSMutableString string];
     for (NSUInteger  day = 0;  day < numberOfDaysOfWeek;  day++) {
         NSString  *key = daysOfWeekNames[day];
@@ -131,14 +140,14 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     aCell.colorSwatch.hidden   = YES;
     if (row == SetupTableRowTypesName) {
         if (self.medicationNameWasSet == YES) {
-            aCell.addTopicLabel.text = self.currentMedicationModel.medicationName;
+            aCell.addTopicLabel.text = self.theMedicationObject.name;
             [aCell setNeedsDisplay];
         } else {
             aCell.addTopicLabel.text = addTableCategories[row];
         }
     } else if (row == SetupTableRowTypesFrequency) {
         if (self.medicationFrequencyWasSet == YES) {
-            aCell.addTopicLabel.text = [self formatNumbersAndDays:self.currentMedicationModel];
+            aCell.addTopicLabel.text = [self formatNumbersAndDays:self.frequenciesAndDaysObject];
         } else {
             aCell.addTopicLabel.text = addTableCategories[row];
         }
@@ -146,13 +155,13 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
         if (self.medicationColorWasSet == YES) {
             aCell.addTopicLabel.hidden = YES;
             aCell.colorSwatch.hidden   = NO;
-            aCell.colorSwatch.backgroundColor = self.colormap[self.currentMedicationModel.medicationLabelColor];
+            aCell.colorSwatch.backgroundColor = self.colorObject.UIColor;
         } else {
             aCell.addTopicLabel.text = addTableCategories[row];
         }
     } else if (row == SetupTableRowTypesDosage) {
         if (self.medicationDosageWasSet == YES) {
-            aCell.addTopicLabel.text = self.currentMedicationModel.medicationDosageText;
+            aCell.addTopicLabel.text = self.possibleDosage.name;
         } else {
             aCell.addTopicLabel.text = addTableCategories[row];
         }
@@ -162,7 +171,10 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell  *cell = nil;
-    
+        //
+        //    if we re-instate the summary table,
+        //        we will need to revisit the code in the listTabulator branch
+        //
     if (tableView == self.setupTabulator) {
         APCSetupTableViewCell  *aCell = (APCSetupTableViewCell *)[self.setupTabulator dequeueReusableCellWithIdentifier:kSetupTableCellName];
         aCell.topicLabel.text = mainTableCategories[indexPath.row];
@@ -171,11 +183,7 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     } else if (tableView == self.listTabulator) {
         APCMedicationSummaryTableViewCell  *aCell = (APCMedicationSummaryTableViewCell *)[self.listTabulator dequeueReusableCellWithIdentifier:kSummaryTableViewCell];
         aCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        APCMedicationModel  *model = self.currentMedicationRecords[indexPath.row];
-        aCell.medicationName.text = model.medicationName;
-        aCell.colorswatch.backgroundColor = self.colormap[model.medicationLabelColor];
-        aCell.medicationDosage.text = self.currentMedicationModel.medicationDosageText;
-        NSString  *usesAndDays = [self formatNumbersAndDays:model];
+        NSString  *usesAndDays = [self formatNumbersAndDays:self.frequenciesAndDaysObject];
         aCell.medicationUseDays.text = usesAndDays;
         cell = aCell;
     }
@@ -186,21 +194,23 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-      SEL  selectors[] = {
-        @selector(didReceiveNotificationOfNameResults:),
-        @selector(didReceiveNotificationOfFrequencyResults:),
-        @selector(didReceiveNotificationOfColorResults:),
-        @selector(didReceiveNotificationOfDosageResults:),
-    };
     if (tableView == self.setupTabulator) {
-        if (indexPath.row < [self.classesToInstantiate count]) {
-            Class  klass = self.classesToInstantiate[indexPath.row];
-            UIViewController  *controller = [[klass alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
-            self.selectedIndexPath = indexPath;
-            
-            NSNotificationCenter  *centre = [NSNotificationCenter defaultCenter];
-            [centre addObserver:self selector:selectors[indexPath.row] name:self.notificationNames[indexPath.row] object:nil];
-            
+        self.selectedIndexPath = indexPath;
+        if (indexPath.row == kAPCMedicationNameRow) {
+            APCMedicationNameViewController  *controller = [[APCMedicationNameViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
+            controller.delegate = self;
+            [self.navigationController pushViewController:controller animated:YES];
+        } else if (indexPath.row == kAPCMedicationFrequencyRow) {
+            APCMedicationFrequencyViewController  *controller = [[APCMedicationFrequencyViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
+            controller.delegate = self;
+            [self.navigationController pushViewController:controller animated:YES];
+        } else if (indexPath.row == kAPCMedicationColorRow) {
+            APCMedicationColorViewController  *controller = [[APCMedicationColorViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
+            controller.delegate = self;
+            [self.navigationController pushViewController:controller animated:YES];
+        } else if (indexPath.row == kAPCMedicationDosageRow) {
+            APCMedicationDosageViewController  *controller = [[APCMedicationDosageViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
+            controller.delegate = self;
             [self.navigationController pushViewController:controller animated:YES];
         }
     }
@@ -224,12 +234,16 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 {
     [self.currentMedicationRecords addObject:self.currentMedicationModel];
     [self.listTabulator reloadData];
-    if (self.delegate != nil) {
-        if ([self.delegate respondsToSelector:@selector(medicationSetup:didCreateMedications:)] == YES) {
-            [self.delegate performSelector:@selector(medicationSetup:didCreateMedications:) withObject:self withObject:self.currentMedicationRecords];
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-    }
+    
+    [APCMedTrackerMedicationSchedule newScheduleWithMedication: self.theMedicationObject
+                                                        dosage: self.possibleDosage
+                                                         color: self.colorObject
+                                            frequenciesAndDays: self.frequenciesAndDaysObject
+                                               andUseThisQueue: [NSOperationQueue mainQueue]
+                                              toDoThisWhenDone: ^(id createdObject, NSTimeInterval operationDuration) {
+                                                  
+                                                  NSLog(@"'new APCMedTrackerMedicationSchedule' finished in %f seconds.  Result = %@", operationDuration, createdObject);
+                                              }];
     self.medicationNameWasSet      = NO;
     self.medicationColorWasSet     = NO;
     self.medicationFrequencyWasSet = NO;
@@ -237,6 +251,8 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     [self.setupTabulator reloadData];
     self.navigationItem.rightBarButtonItem.enabled = YES;
     self.doneButton.enabled = NO;
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma  mark  -  Notification Methods
@@ -249,46 +265,35 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     }
 }
 
-- (void)didReceiveNotificationOfNameResults:(NSNotification *)notification
+#pragma  mark  -  Delegate Methods Of Subordinate Setup Screens
+
+- (void)nameController:(APCMedicationNameViewController *)nameController didSelectMedicineName:(APCMedTrackerMedication *)medicationObject
 {
-    NSDictionary  *info = notification.userInfo;
-    
-    NSString  *medicationName = info[APCMedSetupNameResultKey];
-    self.currentMedicationModel.medicationName = medicationName;
+    self.theMedicationObject = medicationObject;
     self.medicationNameWasSet = YES;
     [self enableDoneButtonIfValuesSet];
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesName inSection:0] ] withRowAnimation:NO];
 }
 
-- (void)didReceiveNotificationOfFrequencyResults:(NSNotification *)notification
+- (void)frequencyController:(APCMedicationFrequencyViewController *)frequencyController didSelectFrequency:(NSDictionary *)daysAndNumbers
 {
-    NSDictionary  *info = notification.userInfo;
-    
-    NSDictionary  *frequencyInformation = info[APCMedSetupFrequencyResultKey];
-    self.currentMedicationModel.frequencyAndDays = frequencyInformation;
+    self.frequenciesAndDaysObject = daysAndNumbers;
     self.medicationFrequencyWasSet = YES;
     [self enableDoneButtonIfValuesSet];
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesFrequency inSection:0] ] withRowAnimation:NO];
 }
 
-- (void)didReceiveNotificationOfColorResults:(NSNotification *)notification
+- (void)colorController:(APCMedicationColorViewController *)colorController didSelectColorLabelName:(APCMedTrackerScheduleColor *)colorObject
 {
-    NSDictionary  *info = notification.userInfo;
-    NSString  *colorname = info[APCMedSetupNameColorKey];
-    self.currentMedicationModel.medicationLabelColor = colorname;
+    self.colorObject = colorObject;
     self.medicationColorWasSet = YES;
     [self enableDoneButtonIfValuesSet];
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesLabelColor inSection:0] ] withRowAnimation:NO];
 }
 
-- (void)didReceiveNotificationOfDosageResults:(NSNotification *)notification
+- (void)dosageController:(APCMedicationDosageViewController *)dosageController didSelectDosageAmount:(APCMedTrackerPossibleDosage *)dosageAmount
 {
-    NSDictionary  *info = notification.userInfo;
-    
-    NSNumber  *dosageNumber = info[APCMedSetupNameDosageValueKey];
-    self.currentMedicationModel.medicationDosageValue = dosageNumber;
-    NSString  *dosageString = info[APCMedSetupNameDosageStringKey];
-    self.currentMedicationModel.medicationDosageText = dosageString;
+    self.possibleDosage = dosageAmount;
     self.medicationDosageWasSet = YES;
     [self enableDoneButtonIfValuesSet];
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesDosage inSection:0] ] withRowAnimation:NO];
@@ -304,6 +309,7 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
     if (self.selectedIndexPath != nil) {
         [self.setupTabulator deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
     }
@@ -315,32 +321,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     [super viewDidLoad];
     
     self.navigationItem.title = kViewControllerName;
-        //
-        //    class names of view controllers to instantiate
-        //
-    self.classesToInstantiate = @[
-                                    [APCMedicationNameViewController class],
-                                    [APCMedicationFrequencyViewController class],
-                                    [APCMedicationColorViewController class],
-                                    [APCMedicationDosageViewController class]
-                                ];
-        //
-        //    notification names for results passed back from view controllers
-        //
-    self.notificationNames = @[  APCMedSetupNameResultNotificationKey,
-                                 APCMedSetupFrequencyResultNotificationKey,
-                                 APCMedSetupNameColorNotificationKey,
-                                 APCMedSetupNameDosageNotificationKey
-                               ];
-        //
-        //    keys for results in user info dictionaries
-        //
-    self.resultsDictionaryKeys = @[
-                                   APCMedSetupNameResultKey,
-                                   APCMedSetupFrequencyResultKey,
-                                   APCMedSetupNameColorKey,
-                                   APCMedSetupNameDosageValueKey
-                                ];
     
     self.colormap = @{
                       @"Gray"    : [UIColor grayColor],
@@ -368,6 +348,7 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     self.currentMedicationModel = [[APCMedicationModel alloc] init];
     
     [APCMedTrackerDataStorageManager startupReloadingDefaults:YES andThenUseThisQueue:nil toDoThis:NULL];
+    self.theMedicationObject = nil;
     
     self.doneButton.enabled = NO;
 }

@@ -6,7 +6,6 @@
 //
 
 #import "APCMedicationDosageViewController.h"
-#import "APCMedSetupNotificationKeys.h"
 
 #import "APCMedTrackerDataStorageManager.h"
 #import "APCMedTrackerPossibleDosage+Helper.h"
@@ -127,17 +126,12 @@ static  NSString  *kViewControllerName = @"Medication Dosages";
             self.selectedIndex = indexPath;
         }
     }
-    NSDictionary  *info = nil;
-    if (self.selectedIndex == nil) {
-        info = @{ APCMedSetupNameResultKey : [NSNull null] };
-    } else {
-        APCMedTrackerPossibleDosage  *dosage = self.dosageAmounts[indexPath.row];
-        NSNumber  *amount = dosage.amount;
-        info = @{ APCMedSetupNameDosageValueKey : amount };
+    if (self.delegate != nil) {
+        if ([self.delegate respondsToSelector:@selector(dosageController:didSelectDosageAmount:)] == YES) {
+            APCMedTrackerPossibleDosage  *dosage = self.dosageAmounts[indexPath.row];
+            [self.delegate performSelector:@selector(dosageController:didSelectDosageAmount:) withObject:self withObject:dosage];
+        }
     }
-    NSNotificationCenter  *centre = [NSNotificationCenter defaultCenter];
-    NSNotification  *notification = [NSNotification notificationWithName:APCMedSetupNameDosageNotificationKey object:nil userInfo:info];
-    [centre postNotification:notification];
 }
 
 #pragma  mark  -  View Controller Methods

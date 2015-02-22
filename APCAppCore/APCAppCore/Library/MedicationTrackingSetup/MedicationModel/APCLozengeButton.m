@@ -6,7 +6,6 @@
 //
 
 #import "APCLozengeButton.h"
-#import "APCMedicationFollower.h"
 
 static  CGFloat  kLayerBorderWidth  = 3.0;
 static  CGFloat  kLayerCornerRadius = 4.0;

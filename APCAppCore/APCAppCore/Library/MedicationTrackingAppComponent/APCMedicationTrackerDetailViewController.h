@@ -7,12 +7,12 @@
 
 #import <UIKit/UIKit.h>
 
-@class  APCMedicationModel;
+@class  APCMedTrackerMedicationSchedule;
 @class  APCLozengeButton;
 
 @interface APCMedicationTrackerDetailViewController : UIViewController
 
-@property  (nonatomic, strong)  APCMedicationModel     *model;
-@property  (nonatomic, strong)  APCLozengeButton       *follower;
+@property  (nonatomic, strong)  APCMedTrackerMedicationSchedule  *schedule;
+@property  (nonatomic, strong)  APCLozengeButton                 *lozenge;
 
 @end

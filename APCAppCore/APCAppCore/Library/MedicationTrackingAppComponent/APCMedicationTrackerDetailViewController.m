@@ -9,13 +9,23 @@
 #import "APCSetupTableViewCell.h"
 #import "APCMedicationModel.h"
 #import "APCLozengeButton.h"
-#import "APCMedicationFollower.h"
+
+#import "APCMedTrackerMedication+Helper.h"
+#import "APCMedTrackerMedicationSchedule+Helper.h"
+#import "APCMedTrackerPossibleDosage+Helper.h"
+#import "APCMedTrackerScheduleColor+Helper.h"
+#import "APCMedTrackerMedicationSchedule+Helper.h"
 
 #import "APCAppCore.h"
 
 static  NSString  *viewControllerTitle   = @"Medication Tracker";
 
 static  NSString  *kSetupTableCellName   = @"APCSetupTableViewCell";
+
+static  NSInteger  kSummarySectionNameRow      = 0;
+static  NSInteger  kSummarySectionFrequencyRow = 1;
+static  NSInteger  kSummarySectionColorRow     = 2;
+static  NSInteger  kSummarySectionDosageRow    = 3;
 
 static  NSInteger  numberOfSectionsInTableView = 2;
 
@@ -49,8 +59,8 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     NSInteger  numberOfRows = 0;
     
     if (section == kDailyDosesTakenSection) {
-        if (self.follower != nil) {
-            numberOfRows = [self.follower.follower.numberOfDosesPrescribed integerValue];
+        if (self.lozenge != nil) {
+            numberOfRows = [self.lozenge.numberOfDosesPrescribed integerValue];
         }
     } else if (section == kMedicineSummarySection) {
         numberOfRows = 4;
@@ -58,10 +68,8 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     return  numberOfRows;
 }
 
-- (NSString *)formatNumbersAndDays:(APCMedicationModel *)model
+- (NSString *)formatNumbersAndDays:(NSDictionary *)frequencyAndDays
 {
-    NSDictionary  *frequencyAndDays = model.frequencyAndDays;
-
     NSMutableString  *daysAndNumbers = [NSMutableString string];
     for (NSUInteger  day = 0;  day < numberOfDaysOfWeek;  day++) {
         NSString  *key = daysOfWeekNames[day];
@@ -88,8 +96,8 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
             aCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
         }
         aCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        aCell.textLabel.text = self.follower.follower.medicationName;
-        aCell.detailTextLabel.text = [NSString stringWithFormat:@"Dose %ld, (%@)", (long)(indexPath.row + 1), self.follower.model.medicationDosageText];
+        aCell.textLabel.text = self.schedule.medicine.name;
+        aCell.detailTextLabel.text = self.schedule.dosage.name;
         cell = aCell;
     } else if (indexPath.section == kMedicineSummarySection) {
 
@@ -107,14 +115,14 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
             aCell.addTopicLabel.hidden = NO;
         }
 
-        if (indexPath.row == 0) {
-            aCell.addTopicLabel.text = self.model.medicationName;
-        } else if (indexPath.row == 1) {
-            aCell.addTopicLabel.text = [self formatNumbersAndDays:self.model];
-        } else if (indexPath.row == 2) {
-            aCell.colorSwatch.backgroundColor = self.colormap[self.model.medicationLabelColor];
-        } else if (indexPath.row == 3) {
-            aCell.addTopicLabel.text = self.model.medicationDosageText;
+        if (indexPath.row == kSummarySectionNameRow) {
+            aCell.addTopicLabel.text = self.schedule.medicine.name;
+        } else if (indexPath.row == kSummarySectionFrequencyRow) {
+            aCell.addTopicLabel.text = [self formatNumbersAndDays:self.schedule.frequenciesAndDays];
+        } else if (indexPath.row == kSummarySectionColorRow) {
+            aCell.colorSwatch.backgroundColor = self.schedule.color.UIColor;
+        } else if (indexPath.row == kSummarySectionDosageRow) {
+            aCell.addTopicLabel.text = self.schedule.dosage.name;
         }
         cell = aCell;
     }
