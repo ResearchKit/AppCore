@@ -1,27 +1,28 @@
 //
-//  APCMedTrackerMedicationSchedule.m
-//  AppCore
+//  APCMedTrackerPrescription.m
+//  APCAppCore
 //
+//  Created by Ron Conescu on 2/22/15.
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
-#import "APCMedTrackerMedicationSchedule.h"
+#import "APCMedTrackerPrescription.h"
 #import "APCMedTrackerActualDosageTaken.h"
 #import "APCMedTrackerMedication.h"
 #import "APCMedTrackerPossibleDosage.h"
-#import "APCMedTrackerScheduleColor.h"
+#import "APCMedTrackerPrescriptionColor.h"
 
 
-@implementation APCMedTrackerMedicationSchedule
+@implementation APCMedTrackerPrescription
 
-@dynamic numberOfTimesPerDay;
-@dynamic zeroBasedDaysOfTheWeek;
 @dynamic dateStartedUsing;
 @dynamic dateStoppedUsing;
 @dynamic didStopUsingOnDoctorsOrders;
+@dynamic numberOfTimesPerDay;
+@dynamic zeroBasedDaysOfTheWeek;
 @dynamic actualDosesTaken;
 @dynamic color;
 @dynamic dosage;
-@dynamic medicine;
+@dynamic medication;
 
 @end

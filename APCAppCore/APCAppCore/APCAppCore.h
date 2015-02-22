@@ -165,12 +165,12 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCMedTrackerInflatableItem+Helper.h>
 #import <APCAppCore/APCMedTrackerMedication.h>
 #import <APCAppCore/APCMedTrackerMedication+Helper.h>
-#import <APCAppCore/APCMedTrackerMedicationSchedule.h>
-#import <APCAppCore/APCMedTrackerMedicationSchedule+Helper.h>
+#import <APCAppCore/APCMedTrackerPrescription.h>
+#import <APCAppCore/APCMedTrackerPrescription+Helper.h>
 #import <APCAppCore/APCMedTrackerPossibleDosage.h>
 #import <APCAppCore/APCMedTrackerPossibleDosage+Helper.h>
-#import <APCAppCore/APCMedTrackerScheduleColor.h>
-#import <APCAppCore/APCMedTrackerScheduleColor+Helper.h>
+#import <APCAppCore/APCMedTrackerPrescriptionColor.h>
+#import <APCAppCore/APCMedTrackerPrescriptionColor+Helper.h>
 
 /* -------------------------
  Views

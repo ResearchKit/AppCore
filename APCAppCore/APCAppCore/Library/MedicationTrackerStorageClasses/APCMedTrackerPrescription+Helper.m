@@ -1,11 +1,11 @@
 //
-//  APCMedTrackerMedicationSchedule+Helper.m
+//  APCMedTrackerPrescription+Helper.m
 //  AppCore
 //
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
-#import "APCMedTrackerMedicationSchedule+Helper.h"
+#import "APCMedTrackerPrescription+Helper.h"
 #import "APCMedTrackerMedication.h"
 #import "NSManagedObject+APCHelper.h"
 #import "APCAppDelegate.h"
@@ -15,20 +15,20 @@
 #import "APCMedTrackerDataStorageManager.h"
 #import "APCMedTrackerPossibleDosage+Helper.h"
 #import "APCMedTrackerMedication+Helper.h"
-#import "APCMedTrackerScheduleColor+Helper.h"
+#import "APCMedTrackerPrescriptionColor+Helper.h"
 
 
 static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 
 
-@implementation APCMedTrackerMedicationSchedule (Helper)
+@implementation APCMedTrackerPrescription (Helper)
 
-+ (void) newScheduleWithMedication: (APCMedTrackerMedication *) medicine
-                            dosage: (APCMedTrackerPossibleDosage *) dosage
-                             color: (APCMedTrackerScheduleColor *) color
-                  frequencyAndDays: (NSDictionary *) frequencyAndDays
-                   andUseThisQueue: (NSOperationQueue *) someQueue
-                  toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock
++ (void) newPrescriptionWithMedication: (APCMedTrackerMedication *) medicine
+                                dosage: (APCMedTrackerPossibleDosage *) dosage
+                                 color: (APCMedTrackerPrescriptionColor *) color
+                      frequencyAndDays: (NSDictionary *) frequencyAndDays
+                       andUseThisQueue: (NSOperationQueue *) someQueue
+                      toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock
 {
     NSNumber *numberOfTimesPerDay = nil;
     NSMutableArray *zeroBasedDaysOfTheWeek = [NSMutableArray new];
@@ -69,22 +69,22 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
     }
 
     // Create it.
-    [self newScheduleWithMedication: medicine
-                             dosage: dosage
-                              color: color
-                      daysOfTheWeek: zeroBasedDaysOfTheWeek
-                numberOfTimesPerDay: numberOfTimesPerDay
-                    andUseThisQueue: someQueue
-                   toDoThisWhenDone: callbackBlock];
+    [self newPrescriptionWithMedication: medicine
+                                 dosage: dosage
+                                  color: color
+                          daysOfTheWeek: zeroBasedDaysOfTheWeek
+                    numberOfTimesPerDay: numberOfTimesPerDay
+                        andUseThisQueue: someQueue
+                       toDoThisWhenDone: callbackBlock];
 }
 
-+ (void) newScheduleWithMedication: (APCMedTrackerMedication *) medicine
-                            dosage: (APCMedTrackerPossibleDosage *) dosage
-                             color: (APCMedTrackerScheduleColor *) color
-                     daysOfTheWeek: (NSArray *) zeroBasedDaysOfTheWeek
-               numberOfTimesPerDay: (NSNumber *) numberOfTimesPerDay
-                   andUseThisQueue: (NSOperationQueue *) someQueue
-                  toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock
++ (void) newPrescriptionWithMedication: (APCMedTrackerMedication *) medicine
+                                dosage: (APCMedTrackerPossibleDosage *) dosage
+                                 color: (APCMedTrackerPrescriptionColor *) color
+                         daysOfTheWeek: (NSArray *) zeroBasedDaysOfTheWeek
+                   numberOfTimesPerDay: (NSNumber *) numberOfTimesPerDay
+                       andUseThisQueue: (NSOperationQueue *) someQueue
+                      toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock
 {
     [[[APCMedTrackerDataStorageManager defaultManager] queue] addOperationWithBlock:^{
 
@@ -96,17 +96,17 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
         //
         [localContext performBlock: ^{
 
-            APCMedTrackerMedicationSchedule *schedule = [APCMedTrackerMedicationSchedule newObjectForContext: localContext];
+            APCMedTrackerPrescription *prescription = [APCMedTrackerPrescription newObjectForContext: localContext];
 
-            schedule.medicine = medicine;
-            schedule.dosage = dosage;
-            schedule.color = color;
-            schedule.zeroBasedDaysOfTheWeek = [zeroBasedDaysOfTheWeek componentsJoinedByString: kSeparatorForZeroBasedDaysOfTheWeek];
-            schedule.numberOfTimesPerDay = numberOfTimesPerDay;
-            schedule.dateStartedUsing = [NSDate date];
+            prescription.medication = medicine;
+            prescription.dosage = dosage;
+            prescription.color = color;
+            prescription.zeroBasedDaysOfTheWeek = [zeroBasedDaysOfTheWeek componentsJoinedByString: kSeparatorForZeroBasedDaysOfTheWeek];
+            prescription.numberOfTimesPerDay = numberOfTimesPerDay;
+            prescription.dateStartedUsing = [NSDate date];
 
             NSError *error = nil;
-            BOOL itWorked = [schedule saveToPersistentStore: &error];
+            BOOL itWorked = [prescription saveToPersistentStore: &error];
 
             if (itWorked)
             {
@@ -125,7 +125,7 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 
             // Report.
             [someQueue addOperationWithBlock: ^{
-                callbackBlock (schedule, operationDuration);
+                callbackBlock (prescription, operationDuration);
             }];
         }];
     }];
@@ -282,7 +282,7 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
     }
 
     NSString *result = [NSString stringWithFormat: @"Schedule { medication: %@, days: (%@), timesPerDay: %@, dosage: %@, color: %@ }",
-                        self.self.medicine.name,
+                        self.self.medication.name,
                         [dayNames componentsJoinedByString: @", "],
                         self.numberOfTimesPerDay,
                         self.dosage.name,
