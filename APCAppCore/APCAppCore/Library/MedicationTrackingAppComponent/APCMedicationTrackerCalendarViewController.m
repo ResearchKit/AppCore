@@ -24,12 +24,10 @@ static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
 static  NSString   *daysOfWeekNames[]    = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
 static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSString *));
 
-static  CGFloat  kLozengeButtonWidth     = 40.0;
-static  CGFloat  kLozengeButtonHeight    = 25.0;
-static  CGFloat  kLozengeBaseYCoordinate = 10.0;
-static  CGFloat  kLozengeBaseYStepOver   = 45.0;
-
-@interface APCMedicationTrackerCalendarViewController  ( ) <UITableViewDataSource, UITableViewDelegate, APCMedicationTrackerSetupViewControllerDelegate, APCMedicationTrackerCalendarWeeklyViewDelegate, UIScrollViewDelegate>
+@interface APCMedicationTrackerCalendarViewController  ( ) <UITableViewDataSource, UITableViewDelegate,
+                                APCMedicationTrackerSetupViewControllerDelegate,
+                                APCMedicationTrackerCalendarWeeklyViewDelegate, UIScrollViewDelegate,
+                                APCMedicationTrackerMedicationsDisplayViewDelegate>
 
 @property (nonatomic, weak)  IBOutlet  UIView                     *weekContainer;
 
@@ -129,15 +127,22 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
     [self.navigationController pushViewController:controller animated:YES];
 }
 
-#pragma  mark  -  Calendar View Delegate Methods
+#pragma  mark  -  Daily Calendar View Delegate Methods
 
 - (void)dailyCalendarViewDidSelect:(NSDate *)date
 {
 }
 
+#pragma  mark  -  Weekly Calendar View Delegate Methods
+
+- (NSUInteger)maximumScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *)calendarView
+{
+    return  self.exScrolliburNumberOfPages;
+}
+
 - (NSUInteger)currentScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *)calendarView
 {
-    return self.exScrolliburCurrentPage;
+    return  self.exScrolliburCurrentPage;
 }
 
 - (void)dailyCalendarViewDidSwipeLeft
@@ -164,6 +169,16 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
     self.exScrolliburScrolledByUser = NO;
 }
 
+#pragma  mark  -  Lozenge Display Pages Delegate Method
+
+- (void)displayView:(APCMedicationTrackerMedicationsDisplayView *)displayView lozengeButtonWasTapped:(APCLozengeButton *)lozenge
+{
+    APCMedicationTrackerDetailViewController  *controller = [[APCMedicationTrackerDetailViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
+    controller.model = lozenge.model;
+    controller.follower = lozenge;
+    [self.navigationController pushViewController:controller animated:YES];
+}
+
 #pragma  mark  -  Add Medications Action Method
 
 - (IBAction)addMedicationsButtonTapped:(id)sender
@@ -173,71 +188,30 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
     [self.navigationController pushViewController:controller animated:YES];
 }
 
-#pragma  mark  -  Lozenge Buttons Methods
-
-- (void)lozengeButtonWasTapped:(APCLozengeButton *)sender
+- (void)makePages
 {
-    APCMedicationTrackerDetailViewController  *controller = [[APCMedicationTrackerDetailViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
-    controller.model = sender.model;
-    controller.follower = sender;
-    [self.navigationController pushViewController:controller animated:YES];
-}
-
-- (APCLozengeButton *)medicationLozengeCenteredAtPoint:(CGPoint)point andColor:(UIColor *)color withTitle:(NSString *)title
-{
-    APCLozengeButton  *button = [APCLozengeButton buttonWithType:UIButtonTypeCustom];
-    CGRect  frame = CGRectMake(0.0, 0.0, kLozengeButtonWidth, kLozengeButtonHeight);
-    frame.origin = point;
-    frame.origin.x = point.x - (kLozengeButtonWidth / 2.0);
-    button.frame = frame;
-
-    button.backgroundColor = [UIColor whiteColor];
-    [button setTitle:title forState:UIControlStateNormal];
-    [button setTitleColor:color forState:UIControlStateNormal];
-
-    [button addTarget:self action:@selector(lozengeButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
-
-    return  button;
-}
-
-- (APCMedicationFollower *)makeMedicationFollowerWithModel:(APCMedicationModel *)model forDayOfWeek:(NSString *)weekday
-{
-    APCMedicationFollower  *follower = [[APCMedicationFollower alloc] init];
-    follower.medicationName = model.medicationName;
-    NSDictionary  *dictionary = model.frequencyAndDays;
-    follower.numberOfDosesPrescribed = dictionary[weekday];
-    return  follower;
-}
-
-- (void)makeLozengesLayout
-{
-    NSDictionary  *map = @{ @"Monday" : @(0.0), @"Tuesday" : @(1.0), @"Wednesday" : @(2.0), @"Thursday" : @(3.0), @"Friday" : @(4.0), @"Saturday" : @(5.0), @"Sunday" : @(6.0), };
-
-    CGFloat  disp = CGRectGetWidth(self.view.bounds) / 7.0;
-    CGFloat  baseYCoordinate = kLozengeBaseYCoordinate;
-        //
-        //    NSNumber objects in the code below are initalised with integer values
-        //
-    APCMedicationTrackerMedicationsDisplayView  *view = [[self.exScrollibur subviews] objectAtIndex:self.exScrolliburCurrentPage];
-
-    for (APCMedicationModel  *model  in  self.medications) {
-        NSDictionary  *dictionary = model.frequencyAndDays;
-        for (NSUInteger  day = 0;  day < numberOfDaysOfWeek;  day++) {
-            NSString  *dayOfWeek = daysOfWeekNames[day];
-            NSNumber  *number = dictionary[dayOfWeek];
-            if ([number integerValue] > 0) {
-                CGFloat  xPosition = ([map[dayOfWeek] floatValue] + 1) * disp - disp / 2.0;
-                NSString  *colorName = model.medicationLabelColor;
-                UIColor  *color = self.colormap[colorName];
-                APCLozengeButton  *button = [self medicationLozengeCenteredAtPoint:CGPointMake(xPosition, baseYCoordinate) andColor:color withTitle:@"0\u2009/\u20093"];
-                button.follower = [self makeMedicationFollowerWithModel:model forDayOfWeek:dayOfWeek];
-                button.model = model;
-                [view addSubview:button];
-            }
-        }
-        baseYCoordinate = baseYCoordinate + kLozengeBaseYStepOver;
+    self.exScrollibur.pagingEnabled = YES;
+    self.exScrollibur.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame) * 4, CGRectGetHeight(self.exScrollibur.frame));
+    self.exScrollibur.showsHorizontalScrollIndicator = NO;
+    self.exScrollibur.showsVerticalScrollIndicator = NO;
+    self.exScrollibur.scrollsToTop = NO;
+    self.exScrolliburCurrentPage = 0;
+    self.exScrollibur.delegate = self;
+    
+    for (NSUInteger  page = 0;  page < 4;  page++) {
+        CGRect viewFrame = self.view.frame;
+        CGRect scrollerFrame = self.exScrollibur.frame;
+        CGRect  frame = CGRectZero;
+        frame.origin.x = CGRectGetWidth(viewFrame) * page;
+        frame.origin.y = 0;
+        frame.size.width = CGRectGetWidth(viewFrame);
+        frame.size.height = CGRectGetHeight(scrollerFrame);
+        APCMedicationTrackerMedicationsDisplayView  *view = [[APCMedicationTrackerMedicationsDisplayView alloc] initWithFrame:frame];
+        view.delegate = self;
+        view.medicationModels = self.medications;
+        view.backgroundColor = [UIColor whiteColor];
+        [self.exScrollibur addSubview:view];
     }
-    [view setNeedsDisplay];
 }
 
 #pragma  mark  -  Scroll View Delegate Methods
@@ -297,30 +271,6 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
     self.weekCalendar.delegate = self;
 }
 
-- (void)makePages
-{
-    self.exScrollibur.pagingEnabled = YES;
-    self.exScrollibur.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame) * 4, CGRectGetHeight(self.view.frame));
-    self.exScrollibur.showsHorizontalScrollIndicator = NO;
-    self.exScrollibur.showsVerticalScrollIndicator = NO;
-    self.exScrollibur.scrollsToTop = NO;
-    self.exScrolliburCurrentPage = 0;
-    self.exScrollibur.delegate = self;
-
-    for (NSUInteger  page = 0;  page < 4;  page++) {
-        CGRect viewFrame = self.view.frame;
-        CGRect scrollerFrame = self.exScrollibur.frame;
-        CGRect  frame = CGRectZero;
-        frame.origin.x = CGRectGetWidth(viewFrame) * page;
-        frame.origin.y = 0;
-        frame.size.width = CGRectGetWidth(viewFrame);
-        frame.size.height = CGRectGetHeight(scrollerFrame);
-        APCMedicationTrackerMedicationsDisplayView  *view = [[APCMedicationTrackerMedicationsDisplayView alloc] initWithFrame:frame];
-        view.backgroundColor = [UIColor whiteColor];
-        [self.exScrollibur addSubview:view];
-    }
-}
-
 - (void)setupHiddenStates
 {
     if ([self.medications count] == 0) {
@@ -366,21 +316,7 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
                                  @"Saturday" : @(2),
                                  @"Sunday" : @(0)
                                  };
-    APCMedicationModel  *model03 = [[APCMedicationModel alloc] init];
-    model03.medicationName = @"Marijuana";
-    model03.medicationLabelColor = @"Orange";
-    model03.medicationDosageValue = @(5);
-    model03.medicationDosageText = @"5mg";
-    model03.frequencyAndDays = @{
-                                 @"Monday"  : @(0),
-                                 @"Tuesday" : @(0),
-                                 @"Wednesday" : @(2),
-                                 @"Thursday" : @(0),
-                                 @"Friday" : @(0),
-                                 @"Saturday" : @(2),
-                                 @"Sunday" : @(0)
-                                 };
-    self.medications = @[  model01, model02, model03 ];
+    self.medications = @[  model01, model02 ];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -389,12 +325,11 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
     self.cancelButtonItem.title = NSLocalizedString(@"Done", @"Done");
     if (self.viewsWereCreated == NO) {
         [self makeCalendar];
-        [self makePages];
         if ([self.medications count] == 0) {
             [self makeDummyModels];
         }
+        [self makePages];
         [self setupHiddenStates];
-        [self makeLozengesLayout];
         self.viewsWereCreated = YES;
     }
     [self.tabulator reloadData];
@@ -404,6 +339,11 @@ static  CGFloat  kLozengeBaseYStepOver   = 45.0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    NSDate  *date = [NSDate date];
+    NSCalendar  *greg = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSUInteger  week = [greg ordinalityOfUnit:NSCalendarUnitWeekOfYear inUnit:NSCalendarUnitYear forDate:date];
+    NSLog(@"Week in Year = %lu", (unsigned long)week);
 
     self.navigationItem.title = viewControllerTitle;
 

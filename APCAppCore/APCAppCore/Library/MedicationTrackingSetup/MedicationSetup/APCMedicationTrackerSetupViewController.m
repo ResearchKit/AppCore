@@ -11,6 +11,8 @@
 #import "APCMedicationFrequencyViewController.h"
 #import "APCMedicationNameViewController.h"
 
+#import "APCMedTrackerDataStorageManager.h"
+
 #import "NSBundle+Helper.h"
 
 #import "APCMedicationSummaryTableViewCell.h"
@@ -364,6 +366,8 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     
     self.currentMedicationRecords = [NSMutableArray array];
     self.currentMedicationModel = [[APCMedicationModel alloc] init];
+    
+    [APCMedTrackerDataStorageManager startupReloadingDefaults:YES andThenUseThisQueue:nil toDoThis:NULL];
     
     self.doneButton.enabled = NO;
 }
