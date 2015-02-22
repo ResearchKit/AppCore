@@ -159,7 +159,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
         _dataKey = dataKey;
         _sortKey = sortKey;
         
-        [self queryTaskId:taskId forDays:days valueKey:valueKey dataKey:dataKey sortKey:sortKey groupBy:groupBy];
+        [self queryTaskId:taskId forDays:days valueKey:valueKey dataKey:dataKey sortKey:sortKey groupBy:groupBy completion:nil];
     }
     
     return self;
@@ -350,6 +350,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
             dataKey:(NSString *)dataKey
             sortKey:(NSString *)sortKey
          groupBy:(APHTimelineGroups)groupBy
+      completion:(void (^)(void))completion
 {
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -440,6 +441,10 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
         if (groupBy == APHTimelineGroupDay) {
             [self groupDatasetByDay];
         }
+    }
+    
+    if (completion) {
+        completion();
     }
 }
 
