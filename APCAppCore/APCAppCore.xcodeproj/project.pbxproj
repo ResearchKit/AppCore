@@ -1431,6 +1431,32 @@
 			name = "NSDateComponents+HelperTests";
 			sourceTree = "<group>";
 		};
+		36116F0E1A994F2F008CFCDC /* Simple Types */ = {
+			isa = PBXGroup;
+			children = (
+				369E27D41A96B7A200D35DFA /* APCMedTrackerInflatableItem+Helper.h */,
+				369E27D51A96B7A200D35DFA /* APCMedTrackerInflatableItem+Helper.m */,
+				369E27D81A96B7A200D35DFA /* APCMedTrackerMedication+Helper.h */,
+				369E27D91A96B7A200D35DFA /* APCMedTrackerMedication+Helper.m */,
+				369E27E01A96B7A200D35DFA /* APCMedTrackerPossibleDosage+Helper.h */,
+				369E27E11A96B7A200D35DFA /* APCMedTrackerPossibleDosage+Helper.m */,
+				369E27E71A96B7A200D35DFA /* APCMedTrackerScheduleColor+Helper.h */,
+				369E27E81A96B7A200D35DFA /* APCMedTrackerScheduleColor+Helper.m */,
+			);
+			name = "Simple Types";
+			sourceTree = "<group>";
+		};
+		36116F0F1A994F33008CFCDC /* Complex Types */ = {
+			isa = PBXGroup;
+			children = (
+				369E27DC1A96B7A200D35DFA /* APCMedTrackerMedicationSchedule+Helper.h */,
+				369E27DD1A96B7A200D35DFA /* APCMedTrackerMedicationSchedule+Helper.m */,
+				369E27CE1A96B7A200D35DFA /* APCMedTrackerActualDosageTaken+Helper.h */,
+				369E27CF1A96B7A200D35DFA /* APCMedTrackerActualDosageTaken+Helper.m */,
+			);
+			name = "Complex Types";
+			sourceTree = "<group>";
+		};
 		364D34871A7B1C8F0060B3F5 /* DataVerificationClient */ = {
 			isa = PBXGroup;
 			children = (
@@ -1447,7 +1473,7 @@
 				369E281E1A96B7BA00D35DFA /* The Manager. Helps manage everything else. */,
 				369E281F1A96B7BC00D35DFA /* Static data files:  colors, medication names, etc. Hack 'em up. Re-loaded at each launch. */,
 				369E28211A96B7BF00D35DFA /* CoreData classes. Auto-generated. Modify with great care. */,
-				369E28201A96B7BE00D35DFA /* CoreData class categories.  Hack 'em up. */,
+				369E28201A96B7BE00D35DFA /* Helper methods for those CoreData classes */,
 				369E281D1A96B7B800D35DFA /* (evolving out) v1 */,
 			);
 			path = MedicationTrackerStorageClasses;
@@ -1497,23 +1523,13 @@
 			name = "Static data files:  colors, medication names, etc. Hack 'em up. Re-loaded at each launch.";
 			sourceTree = "<group>";
 		};
-		369E28201A96B7BE00D35DFA /* CoreData class categories.  Hack 'em up. */ = {
+		369E28201A96B7BE00D35DFA /* Helper methods for those CoreData classes */ = {
 			isa = PBXGroup;
 			children = (
-				369E27CE1A96B7A200D35DFA /* APCMedTrackerActualDosageTaken+Helper.h */,
-				369E27CF1A96B7A200D35DFA /* APCMedTrackerActualDosageTaken+Helper.m */,
-				369E27D41A96B7A200D35DFA /* APCMedTrackerInflatableItem+Helper.h */,
-				369E27D51A96B7A200D35DFA /* APCMedTrackerInflatableItem+Helper.m */,
-				369E27D81A96B7A200D35DFA /* APCMedTrackerMedication+Helper.h */,
-				369E27D91A96B7A200D35DFA /* APCMedTrackerMedication+Helper.m */,
-				369E27DC1A96B7A200D35DFA /* APCMedTrackerMedicationSchedule+Helper.h */,
-				369E27DD1A96B7A200D35DFA /* APCMedTrackerMedicationSchedule+Helper.m */,
-				369E27E01A96B7A200D35DFA /* APCMedTrackerPossibleDosage+Helper.h */,
-				369E27E11A96B7A200D35DFA /* APCMedTrackerPossibleDosage+Helper.m */,
-				369E27E71A96B7A200D35DFA /* APCMedTrackerScheduleColor+Helper.h */,
-				369E27E81A96B7A200D35DFA /* APCMedTrackerScheduleColor+Helper.m */,
+				36116F0E1A994F2F008CFCDC /* Simple Types */,
+				36116F0F1A994F33008CFCDC /* Complex Types */,
 			);
-			name = "CoreData class categories.  Hack 'em up.";
+			name = "Helper methods for those CoreData classes";
 			sourceTree = "<group>";
 		};
 		369E28211A96B7BF00D35DFA /* CoreData classes. Auto-generated. Modify with great care. */ = {
