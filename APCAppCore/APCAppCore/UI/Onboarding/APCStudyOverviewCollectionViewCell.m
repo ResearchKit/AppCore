@@ -67,19 +67,19 @@ NSString *const kAPCStudyOverviewCollectionViewCellIdentifier = @"APCStudyOvervi
     NSString *contentSize = [UIApplication sharedApplication].preferredContentSizeCategory;
     
     if ([contentSize isEqualToString:UIContentSizeCategoryExtraSmall]) {
-        return 0.7;
+        return 0.85;
     } else if ([contentSize isEqualToString:UIContentSizeCategorySmall]) {
-        return 0.8;
-    } else if ([contentSize isEqualToString:UIContentSizeCategoryMedium]) {
         return 0.9;
+    } else if ([contentSize isEqualToString:UIContentSizeCategoryMedium]) {
+        return 0.95;
     } else if ([contentSize isEqualToString:UIContentSizeCategoryLarge]) {
         return 1.0;
     } else if ([contentSize isEqualToString:UIContentSizeCategoryExtraLarge]) {
-        return 1.1;
+        return 1.05;
     } else if ([contentSize isEqualToString:UIContentSizeCategoryExtraExtraLarge]) {
-        return 1.2;
+        return 1.1;
     } else if ([contentSize isEqualToString:UIContentSizeCategoryExtraExtraExtraLarge]) {
-        return 1.3;
+        return 1.15;
     }
     return 1.0;
 }

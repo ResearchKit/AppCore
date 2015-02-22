@@ -127,6 +127,8 @@
 
 @property (nonatomic, strong) UIColor *tintColor;
 
+@property (nonatomic) BOOL showsConsent;
+
 @end
 
 /* ----------------------------------------------- */
