@@ -26,7 +26,7 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 + (void) newScheduleWithMedication: (APCMedTrackerMedication *) medicine
                             dosage: (APCMedTrackerPossibleDosage *) dosage
                              color: (APCMedTrackerScheduleColor *) color
-                frequenciesAndDays: (NSDictionary *) frequenciesAndDays
+                  frequencyAndDays: (NSDictionary *) frequencyAndDays
                    andUseThisQueue: (NSOperationQueue *) someQueue
                   toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock
 {
@@ -35,7 +35,7 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 
     // Find the number of times per day:  the first non-zero entry.
     // By definition, all days have the same number of times per day.
-    for (id thingy in frequenciesAndDays.allValues)
+    for (id thingy in frequencyAndDays.allValues)
     {
         if ([thingy isKindOfClass: [NSNumber class]])
         {
@@ -50,9 +50,9 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
     }
 
     // Create a list of the zero-based days of the week.
-    for (NSString *key in frequenciesAndDays.allKeys)
+    for (NSString *key in frequencyAndDays.allKeys)
     {
-        id value = frequenciesAndDays [key];
+        id value = frequencyAndDays [key];
 
         if ([value isKindOfClass: [NSNumber class]])
         {
@@ -185,29 +185,39 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
     return result;
 }
 
-- (NSArray *) zeroBasedDaysOfTheWeekAsArray
+- (NSArray *) zeroBasedDaysOfTheWeekAsArrayOfSortedNumbers
 {
-    NSArray *zeroBasedDaysArray = [self.zeroBasedDaysOfTheWeek componentsSeparatedByString: kSeparatorForZeroBasedDaysOfTheWeek];
+    NSArray *strings = [self.zeroBasedDaysOfTheWeek componentsSeparatedByString: kSeparatorForZeroBasedDaysOfTheWeek];
 
-    return zeroBasedDaysArray;
+    NSMutableArray *numbers = [NSMutableArray new];
+
+    for (NSString *dayNumberString in strings)
+    {
+        [numbers addObject: @(dayNumberString.integerValue)];
+    }
+
+    [numbers sortUsingSelector: @selector(compare:)];
+
+    return numbers;
 }
 
-- (NSDictionary *) frequenciesAndDays
+- (NSDictionary *) frequencyAndDays
 {
     NSMutableDictionary *result = [NSMutableDictionary new];
-    NSArray *zeroBasedDaysArray = self.zeroBasedDaysOfTheWeekAsArray;
+    NSArray *zeroBasedDaysArray = self.zeroBasedDaysOfTheWeekAsArrayOfSortedNumbers;
 
     for (NSUInteger zeroBasedDayOfWeek = 0; zeroBasedDayOfWeek < 7; zeroBasedDayOfWeek ++)
     {
-        NSNumber *key = @(zeroBasedDayOfWeek);
-        NSNumber *value = @(0);
+        NSNumber *dayNumber = @(zeroBasedDayOfWeek);
+        NSNumber *pillsToTakeOnThatDay = @(0);
 
-        if ([zeroBasedDaysArray containsObject: key])
+        if ([zeroBasedDaysArray containsObject: dayNumber])
         {
-            value = self.numberOfTimesPerDay;
+            pillsToTakeOnThatDay = self.numberOfTimesPerDay;
         }
 
-        result [key] = value;
+        NSString *dayNameName = [[self class] nameForZeroBasedDay: dayNumber];
+        result [dayNameName] = pillsToTakeOnThatDay;
     }
 
     NSDictionary *immutableResult = [NSDictionary dictionaryWithDictionary: result];
@@ -258,18 +268,16 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
      Convert from a string like "4,1" to "Monday, Thursday":
      - original: "4,1"
      - split: "4", "1"
-     - sort: "1", "4"
-     - numbers: 1, 4
+     - numbers:  4, 1
+     - sort: 1, 4
      - names: "Monday", "Thursday"
      - unified string: "Monday, Thursday"
      */
-    NSArray *zeroBasedDaysOfTheWeekArray = self.zeroBasedDaysOfTheWeekAsArray;
-    zeroBasedDaysOfTheWeekArray = [zeroBasedDaysOfTheWeekArray sortedArrayUsingSelector: @selector(compare:)];
+    NSArray *zeroBasedDaysOfTheWeekArray = self.zeroBasedDaysOfTheWeekAsArrayOfSortedNumbers;
     NSMutableArray *dayNames = [NSMutableArray new];
-    for (NSString *item in zeroBasedDaysOfTheWeekArray)
+    for (NSNumber *dayNumber in zeroBasedDaysOfTheWeekArray)
     {
-        NSInteger dayNumber = item.integerValue;
-        NSString *dayName = [[self class] nameForZeroBasedDay: @(dayNumber)];
+        NSString *dayName = [[self class] nameForZeroBasedDay: dayNumber];
         [dayNames addObject: dayName];
     }
 

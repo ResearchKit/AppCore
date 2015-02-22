@@ -47,7 +47,7 @@ typedef void (^APCMedTrackerQueryCallback2) (NSArray *arrayOfGeneratedObjects,
 + (void) newScheduleWithMedication: (APCMedTrackerMedication *) medicine
                             dosage: (APCMedTrackerPossibleDosage *) dosage
                              color: (APCMedTrackerScheduleColor *) color
-                frequenciesAndDays: (NSDictionary *) frequenciesAndDays
+                  frequencyAndDays: (NSDictionary *) frequencyAndDays
                    andUseThisQueue: (NSOperationQueue *) someQueue
                   toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock;
 
@@ -89,8 +89,8 @@ typedef void (^APCMedTrackerQueryCallback2) (NSArray *arrayOfGeneratedObjects,
  */
 @property (readonly) BOOL isActive;
 
-@property (readonly) NSArray *zeroBasedDaysOfTheWeekAsArray;
-@property (readonly) NSDictionary *frequenciesAndDays;
+@property (readonly) NSArray *zeroBasedDaysOfTheWeekAsArrayOfSortedNumbers;
+@property (readonly) NSDictionary *frequencyAndDays;
 
 + (NSString *) nameForZeroBasedDay: (NSNumber *) zeroBasedDayOfTheWeek;
 + (NSNumber *) zeroBasedDayOfTheWeekForDayName: (NSString *) dayName;
