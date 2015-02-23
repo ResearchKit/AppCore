@@ -1171,7 +1171,7 @@
             </objects>
             <point key="canvasLocation" x="224" y="2415"/>
         </scene>
-        <!--Medical Information-->
+        <!--Additional Information-->
         <scene sceneID="lj2-4X-z4Y">
             <objects>
                 <tableViewController storyboardIdentifier="APCSignUpMedicalInfoViewController" id="Plg-FM-GW9" customClass="APCSignUpMedicalInfoViewController" sceneMemberID="viewController">
@@ -1190,7 +1190,7 @@
                                     <constraints>
                                         <constraint firstAttribute="height" constant="21" id="jHX-oU-5DU"/>
                                     </constraints>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -1331,7 +1331,7 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Medical Information" id="gou-Uc-1H7">
+                    <navigationItem key="navigationItem" title="Additional Information" id="gou-Uc-1H7">
                         <barButtonItem key="rightBarButtonItem" title="Next" id="FsH-Bl-UEj">
                             <connections>
                                 <action selector="next" destination="Plg-FM-GW9" id="5cr-h0-nBB"/>
