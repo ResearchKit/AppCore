@@ -365,8 +365,10 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 - (IBAction)forgotPassword
 {
     APCForgotPasswordViewController *forgotPasswordViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCForgotPasswordViewController"];
-    [self.navigationController pushViewController:forgotPasswordViewController animated:YES];
     
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:forgotPasswordViewController];
+    
+    [self.navigationController presentViewController:navController animated:YES completion:nil];
 }
 
 - (IBAction) signIn: (id) __unused sender
