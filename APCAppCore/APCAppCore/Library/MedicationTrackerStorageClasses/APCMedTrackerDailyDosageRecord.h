@@ -1,5 +1,5 @@
 //
-//  APCMedTrackerActualDosageTaken.h
+//  APCMedTrackerDailyDosageRecord.h
 //  AppCore
 //
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
@@ -10,9 +10,10 @@
 
 @class APCMedTrackerPrescription;
 
-@interface APCMedTrackerActualDosageTaken : NSManagedObject
+@interface APCMedTrackerDailyDosageRecord : NSManagedObject
 
-@property (nonatomic, retain) NSDate * dateAndTimeDosageWasTaken;
+@property (nonatomic, retain) NSDate * dateThisRecordRepresents;
+@property (nonatomic, retain) NSNumber * numberOfDosesTakenForThisDate;
 @property (nonatomic, retain) APCMedTrackerPrescription *prescriptionIAmBasedOn;
 
 @end

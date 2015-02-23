@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 #import "APCSignUpInfoViewController.h"
 
-@interface APCSignUpGeneralInfoViewController : APCSignUpInfoViewController <UIAlertViewDelegate>
+@interface APCSignUpGeneralInfoViewController : APCSignUpInfoViewController
 
 - (NSArray *)prepareContent;
 

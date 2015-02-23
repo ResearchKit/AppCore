@@ -6,6 +6,7 @@
 //
 
 #import "APCDashboardInsightsTableViewCell.h"
+#import "UIColor+APCAppearance.h"
 
 @interface APCDashboardInsightsTableViewCell()
 
@@ -63,7 +64,28 @@
 {
     _cellSubtitle = cellSubtitle;
     
-    self.subtitleCaption.text = cellSubtitle;
+    //an NSDictionary of NSString => UIColor pairs
+    NSDictionary * wordToColorMapping = @{@"good": [UIColor appTertiaryGreenColor], @"bad": [UIColor orangeColor]};
+    
+    NSMutableAttributedString * attributedString = [[NSMutableAttributedString alloc] initWithString:@""];
+    
+    NSArray *titleWords = [cellSubtitle componentsSeparatedByString:@" "];
+
+    for (NSString *word in titleWords) {
+        UIColor *wordColor = [wordToColorMapping valueForKey:word];
+        
+        if (wordColor) {
+            NSDictionary *attributes = @{NSForegroundColorAttributeName: wordColor};
+            NSAttributedString *coloredString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", word]
+                                                                                attributes:attributes];
+            [attributedString appendAttributedString:coloredString];
+        } else {
+            NSAttributedString *otherWord = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", word]];
+            [attributedString appendAttributedString:otherWord];
+        }
+    }
+    
+    self.subtitleCaption.attributedText = attributedString;
 }
 
 - (void)drawRect:(CGRect)rect

@@ -11,8 +11,20 @@
 @class APCMedTrackerPrescriptionColor;
 
 
-typedef void (^APCMedTrackerObjectCreationCallbackBlock) (id createdObject, NSTimeInterval operationDuration);
+// ---------------------------------------------------------
+#pragma mark - Block Typedefs
+// ---------------------------------------------------------
 
+/*
+ Various blocks used by the methods in this class.
+ */
+
+/**
+ Some mightily useful documentation for this
+ particular callback.  ...ahem.  (Getting there...)
+ */
+typedef void (^APCMedTrackerObjectCreationCallbackBlock) (id createdObject,
+                                                          NSTimeInterval operationDuration);
 
 /**
  The +fetchAll methods will call you back when
@@ -39,8 +51,25 @@ typedef void (^APCMedTrackerQueryCallback2) (NSArray *arrayOfGeneratedObjects,
                                              NSTimeInterval operationDuration,
                                              NSError *error);
 
+/**
+ The -fetchDosesTaken...: method calls a block with
+ this signature when it completes.
+ */
+typedef void (^ APCMedTrackerRecordDosesCallback) (NSTimeInterval operationDuration,
+                                                   NSError *error);
+
+/**
+ The -fetchDosesTaken...: method calls a block with
+ this signature when it completes.
+ */
+typedef void (^ APCMedTrackerFetchDosesCallback) (NSArray *dailyDosageRecords,
+                                                  NSTimeInterval operationDuration,
+                                                  NSError *error);
 
 
+// ---------------------------------------------------------
+#pragma mark - The Class Itself
+// ---------------------------------------------------------
 
 @interface APCMedTrackerPrescription (Helper)
 
@@ -79,6 +108,65 @@ typedef void (^APCMedTrackerQueryCallback2) (NSArray *arrayOfGeneratedObjects,
  */
 + (void) fetchAllFromCoreDataAndUseThisQueue: (NSOperationQueue *) someQueue
                             toDoThisWhenDone: (APCMedTrackerQueryCallback2) callbackBlock;
+
+
+/**
+ Records the specified number of doses taken for this
+ prescription on the specified date.  Use 0 for
+ numberOfDosesTaken to clear that data (e.g., if the
+ user decided they tapped the wrong button).
+ 
+ This method does create, update, and/or delete, as needed:
+ -  If this is the first time something is being recorded
+    for the specified date, we'll create a new record.
+
+ -  If the user is updating the number of doses taken
+    for a given date, we'll find the previous record
+    and update it.
+
+ -  If the user is setting the number of doses for this
+    date back to zero (like, "oh, I meant to choose Wednesday,
+    not Monday" or "Darnit! I was just trying to see what
+    this screen did, not update my records!"), we'll delete
+    the existing record if it's there.
+ */
+- (void) recordThisManyDoses: (NSUInteger) numberOfDosesTaken
+                 takenOnDate: (NSDate *) date
+             andUseThisQueue: (NSOperationQueue *) someQueue
+            toDoThisWhenDone: (APCMedTrackerRecordDosesCallback) callbackBlock;
+
+/**
+ Retrieves all doses taken for this schedule
+ between the startDate and the endDate, inclusive.
+ Returns a dictionary containing all such dates.
+ The callbackBlock contains these parameters:
+ 
+ -  (NSDictionary *datesAndDoses):  a dictionary
+    mapping dates to the number of doses taken on
+    that date:
+ 
+        { date1 : doseCountOnDate1 ,
+          date2 : doseCountOnDate2 ,
+          ...
+        }
+ 
+    This dictionary will be nil if there was an error
+    (in which case, check the "error" parameter).
+    It will be empty if there were no doses taken
+    for this prescription during that date range.
+ 
+ -  (NSTimeInterval operationDuration):  How long the fetch
+    operation took, in fractional seconds.
+ 
+ -  (NSError *error):  if a problem happened, this will
+    contain a valid NSError object.  If we got an error
+    report from CoreData, we'll pass that to you.  Otherwise,
+    will create an appropriate-sounding error.
+ */
+- (void) fetchDosesTakenFromDate: (NSDate *) startDate
+                          toDate: (NSDate *) endDate
+                 andUseThisQueue: (NSOperationQueue *) someQueue
+                toDoThisWhenDone: (APCMedTrackerFetchDosesCallback) callbackBlock;
 
 
 /**

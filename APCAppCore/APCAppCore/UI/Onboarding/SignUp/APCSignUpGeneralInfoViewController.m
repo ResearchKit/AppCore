@@ -658,22 +658,33 @@ static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reacha
                 if ([error.message isEqualToString:kInternetNotAvailableErrorMessage1] || [error.message isEqualToString:kInternetNotAvailableErrorMessage2]) {
                     [spinnerController dismissViewControllerAnimated:NO completion:^{
                     
-                        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Sign Up", @"")
-                                                                           message:error.message
-                                                                          delegate:self
-                                                                 cancelButtonTitle:@"OK"
-                                                                 otherButtonTitles:nil];
-                        [alertView show];
+                        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Up", @"")
+                                                                                            message:error.message
+                                                                                     preferredStyle:UIAlertControllerStyleAlert];
+
+                        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                                              handler:^(UIAlertAction * action) {}];
+                        
+                        [alertView addAction:defaultAction];
+                        [self presentViewController:alertView animated:YES completion:nil];
                     }];
                 }else{
                     [spinnerController dismissViewControllerAnimated:NO completion:^{
                         
-                        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Sign Up", @"")
-                                                                           message:error.message
-                                                                          delegate:self
-                                                                 cancelButtonTitle:NSLocalizedString(@"Change Details", nil)
-                                                                 otherButtonTitles:NSLocalizedString(@"Send Again", nil), nil];
-                        [alertView show];
+                        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Up", @"")
+                                                                                           message:error.message
+                                                                                    preferredStyle:UIAlertControllerStyleAlert];
+                        
+                        UIAlertAction* okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Change Details", @"") style:UIAlertActionStyleDefault
+                                                                              handler:^(UIAlertAction * action) {}];
+                        
+                        UIAlertAction* changeAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Send Again", nil) style:UIAlertActionStyleDefault
+                                                                             handler:^(UIAlertAction * action) {[self next];}];
+                        
+                        
+                        [alertView addAction:okAction];
+                        [alertView addAction:changeAction];
+                        [self presentViewController:alertView animated:YES completion:nil];
                         
                     }];
                 }
@@ -786,20 +797,5 @@ static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reacha
     [self.navigationController popViewControllerAnimated:YES];
     [[self onboarding] popScene];
 }
-
-#pragma mark AlertView delegate
-
--(void) alertView:(UIAlertView *) __unused alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
-    if (buttonIndex == 0) {
-        //user may change details in case of user issue
-    }else{
-        //try to send again in case of server issue
-        [self next];
-    }
-    
-}
-
-
 
 @end

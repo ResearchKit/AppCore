@@ -21,6 +21,8 @@ static CGFloat const kAnimationDuration = 0.35f;
 
 @property (nonatomic) CGFloat sumOfValues;
 
+@property (nonatomic, strong) UILabel *emptyLabel;
+
 @end
 
 
@@ -82,8 +84,24 @@ static CGFloat const kAnimationDuration = 0.35f;
     [_valueLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:_pieGraphRadius/3.0f]];
     [_valueLabel setTextColor:[UIColor colorWithWhite:0.17 alpha:1.0]];
     [_valueLabel setTextAlignment:NSTextAlignmentCenter];
+    
+    _emptyText = NSLocalizedString(@"No Data", @"No Data");
 }
 
+- (void)setupEmptyView
+{
+    if (!_emptyLabel) {
+        
+        _emptyLabel = [[UILabel alloc] initWithFrame:self.bounds];
+        _emptyLabel.text = self.emptyText;
+        _emptyLabel.textAlignment = NSTextAlignmentCenter;
+        _emptyLabel.font = [UIFont fontWithName:@"Helvetica" size:25];
+        _emptyLabel.textColor = [UIColor lightGrayColor];
+        _emptyLabel.backgroundColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+    }
+    
+    [self addSubview:_emptyLabel];
+}
 
 #pragma mark - Layout
 
@@ -113,7 +131,9 @@ static CGFloat const kAnimationDuration = 0.35f;
     [self drawPercentageLabels];
     [self drawLegend];
     
-    
+    if (self.sumOfValues == 0) {
+        [self setupEmptyView];
+    }
 }
 
 - (void)updateValues

@@ -14,6 +14,7 @@
 #import "APCOnboarding.h"
 #import "APCTasksReminderManager.h"
 #import "UIView+Helper.h"
+#import "APCTabBarViewController.h"
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -96,7 +97,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 #endif
     
     [self hideSecureView];
-
+    [self showPasscodeIfNecessary];
     [self.dataMonitor appBecameActive];
 }
 
@@ -156,6 +157,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 - (BOOL)application:(UIApplication *) __unused application shouldSaveApplicationState:(NSCoder *) __unused coder
 {
+    [[UIApplication sharedApplication] ignoreSnapshotOnNextApplicationLaunch];
     return self.dataSubstrate.currentUser.isSignedIn;
 }
 
@@ -661,7 +663,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
             NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
             
             if (fabs(timeDifference) > numberOfMinutes * 60) {
-                
+            
                 [self showPasscode];
             }
         }
@@ -670,11 +672,10 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 - (void)showPasscode
 {
-    APCPasscodeViewController *passcodeViewController = [[UIStoryboard storyboardWithName:@"APCPasscode" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
-    passcodeViewController.delegate = self;
-    
-    [self.window.rootViewController presentViewController:passcodeViewController animated:YES completion:nil];
-    self.isPasscodeShowing = YES;
+    if ([self.window.rootViewController isKindOfClass:[APCTabBarViewController class]]) {
+        APCTabBarViewController * tvc = (APCTabBarViewController*) self.window.rootViewController;
+        tvc.showPasscodeScreen = YES;
+    }
 }
 
 - (void) showOnBoarding

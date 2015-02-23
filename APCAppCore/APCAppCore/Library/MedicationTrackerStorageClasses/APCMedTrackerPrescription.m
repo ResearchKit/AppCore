@@ -6,7 +6,7 @@
 //
 
 #import "APCMedTrackerPrescription.h"
-#import "APCMedTrackerActualDosageTaken.h"
+#import "APCMedTrackerDailyDosageRecord.h"
 #import "APCMedTrackerMedication.h"
 #import "APCMedTrackerPossibleDosage.h"
 #import "APCMedTrackerPrescriptionColor.h"

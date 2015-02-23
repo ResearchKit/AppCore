@@ -56,8 +56,6 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     self.navigationItem.title = NSLocalizedString(@"Activities", @"Activities");
     self.tableView.backgroundColor = [UIColor appSecondaryColor4];
     
-    [((APCAppDelegate *)[[UIApplication sharedApplication] delegate]) showPasscodeIfNecessary];
-    
     [self.tableView registerNib:[UINib nibWithNibName:@"APCActivitiesSectionHeaderView" bundle:[NSBundle appleCoreBundle]] forHeaderFooterViewReuseIdentifier:kAPCActivitiesSectionHeaderViewIdentifier];
     
     self.dateFormatter = [NSDateFormatter new];

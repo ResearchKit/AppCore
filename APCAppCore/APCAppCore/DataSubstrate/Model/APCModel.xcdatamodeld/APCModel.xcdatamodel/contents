@@ -3,9 +3,10 @@
     <entity name="APCDBStatus" representedClassName="APCDBStatus" syncable="YES">
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="APCMedTrackerActualDosageTaken" representedClassName="APCMedTrackerActualDosageTaken" syncable="YES">
-        <attribute name="dateAndTimeDosageWasTaken" attributeType="Date" indexed="YES" syncable="YES"/>
-        <relationship name="prescriptionIAmBasedOn" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerPrescription" inverseName="actualDosesTaken" inverseEntity="APCMedTrackerPrescription" syncable="YES"/>
+    <entity name="APCMedTrackerDailyDosageRecord" representedClassName="APCMedTrackerDailyDosageRecord" syncable="YES">
+        <attribute name="dateThisRecordRepresents" attributeType="Date" indexed="YES" syncable="YES"/>
+        <attribute name="numberOfDosesTakenForThisDate" attributeType="Integer 16" minValueString="0" defaultValueString="0" syncable="YES"/>
+        <relationship name="prescriptionIAmBasedOn" maxCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerPrescription" inverseName="actualDosesTaken" inverseEntity="APCMedTrackerPrescription" syncable="YES"/>
     </entity>
     <entity name="APCMedTrackerInflatableItem" representedClassName="APCMedTrackerInflatableItem" syncable="YES">
         <attribute name="name" attributeType="String" minValueString="1" indexed="YES" syncable="YES"/>
@@ -23,7 +24,7 @@
         <attribute name="didStopUsingOnDoctorsOrders" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="numberOfTimesPerDay" attributeType="Integer 16" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="zeroBasedDaysOfTheWeek" attributeType="String" syncable="YES"/>
-        <relationship name="actualDosesTaken" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCMedTrackerActualDosageTaken" inverseName="prescriptionIAmBasedOn" inverseEntity="APCMedTrackerActualDosageTaken" syncable="YES"/>
+        <relationship name="actualDosesTaken" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCMedTrackerDailyDosageRecord" inverseName="prescriptionIAmBasedOn" inverseEntity="APCMedTrackerDailyDosageRecord" syncable="YES"/>
         <relationship name="color" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerPrescriptionColor" inverseName="prescriptionsWhereIAmUsed" inverseEntity="APCMedTrackerPrescriptionColor" syncable="YES"/>
         <relationship name="dosage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerPossibleDosage" inverseName="prescriptionsWhereIAmUsed" inverseEntity="APCMedTrackerPossibleDosage" syncable="YES"/>
         <relationship name="medication" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerMedication" inverseName="prescriptionsWhereIAmUsed" inverseEntity="APCMedTrackerMedication" syncable="YES"/>
@@ -115,7 +116,7 @@
     </entity>
     <elements>
         <element name="APCDBStatus" positionX="-1008" positionY="365" width="128" height="58"/>
-        <element name="APCMedTrackerActualDosageTaken" positionX="-1197" positionY="647" width="216" height="73"/>
+        <element name="APCMedTrackerDailyDosageRecord" positionX="-1188" positionY="621" width="216" height="88"/>
         <element name="APCMedTrackerInflatableItem" positionX="-965" positionY="1080" width="299" height="58"/>
         <element name="APCMedTrackerMedication" positionX="-1260" positionY="935" width="180" height="58"/>
         <element name="APCMedTrackerPossibleDosage" positionX="-1269" positionY="758" width="216" height="73"/>

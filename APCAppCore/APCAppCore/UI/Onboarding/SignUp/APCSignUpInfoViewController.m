@@ -100,8 +100,8 @@ static CGFloat const kHeaderHeight = 127.0f;
     
     [self.profileImageButton.imageView.layer setCornerRadius:CGRectGetHeight(self.profileImageButton.bounds)/2];
     
-    [self.footerLabel setTextColor:[UIColor appSecondaryColor3]];
-    [self.footerLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
+    [self.footerLabel setTextColor:[UIColor appSecondaryColor1]];
+    [self.footerLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
     
 }
 

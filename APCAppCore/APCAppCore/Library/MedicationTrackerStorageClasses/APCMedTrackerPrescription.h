@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class APCMedTrackerActualDosageTaken, APCMedTrackerMedication, APCMedTrackerPossibleDosage, APCMedTrackerPrescriptionColor;
+@class APCMedTrackerDailyDosageRecord, APCMedTrackerMedication, APCMedTrackerPossibleDosage, APCMedTrackerPrescriptionColor;
 
 @interface APCMedTrackerPrescription : NSManagedObject
 
@@ -25,8 +25,8 @@
 
 @interface APCMedTrackerPrescription (CoreDataGeneratedAccessors)
 
-- (void)addActualDosesTakenObject:(APCMedTrackerActualDosageTaken *)value;
-- (void)removeActualDosesTakenObject:(APCMedTrackerActualDosageTaken *)value;
+- (void)addActualDosesTakenObject:(APCMedTrackerDailyDosageRecord *)value;
+- (void)removeActualDosesTakenObject:(APCMedTrackerDailyDosageRecord *)value;
 - (void)addActualDosesTaken:(NSSet *)values;
 - (void)removeActualDosesTaken:(NSSet *)values;
 

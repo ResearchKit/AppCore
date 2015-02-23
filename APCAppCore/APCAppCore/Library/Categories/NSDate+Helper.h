@@ -24,6 +24,9 @@ extern NSString * const NSDateDefaultDateFormat;
 + (instancetype) endOfDay: (NSDate*) date;
 + (instancetype) startOfTomorrow: (NSDate*) date;
 
+- (instancetype) startOfDay;
+- (instancetype) endOfDay;
+
 +(instancetype) todayAtMidnight;
 +(instancetype) tomorrowAtMidnight;
 +(instancetype) yesterdayAtMidnight;

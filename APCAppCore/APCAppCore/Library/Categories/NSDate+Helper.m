@@ -77,15 +77,25 @@ NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
 
 + (instancetype) startOfDay: (NSDate*) date
 {
+    return [date startOfDay];
+}
+
+- (instancetype) startOfDay
+{
     NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
+    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate: self];
     return [cal dateFromComponents:components];
 }
 
 + (instancetype) endOfDay: (NSDate*) date
 {
+    return [date endOfDay];
+}
+
+- (instancetype) endOfDay
+{
     NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
+    NSDateComponents *components = [cal components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate: self];
     components.hour = 23;
     components.minute = 59;
     components.second = 59;

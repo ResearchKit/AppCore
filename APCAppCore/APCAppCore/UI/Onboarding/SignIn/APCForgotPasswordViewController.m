@@ -24,7 +24,6 @@
     [super viewDidLoad];
     
     [self setupAppearance];
-    [self setupNavAppearance];
     
     self.emailMessageLabel.alpha = 0;
 }
@@ -42,12 +41,8 @@
 {
     [self.emailTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.emailTextField setFont:[UIFont appRegularFontWithSize:17.0f]];
-}
-
-- (void)setupNavAppearance
-{
-    UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(back) tintColor:[UIColor appPrimaryColor]];
-    [self.navigationItem setLeftBarButtonItem:backster];
+    
+    self.resetButton.backgroundColor = [UIColor clearColor];
 }
 
 #pragma mark - UITableViewDelegate method
@@ -100,6 +95,8 @@
                 APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
                 [self presentViewController:spinnerController animated:YES completion:nil];
 
+                __weak typeof(self) weakSelf = self;
+                
                 [SBBComponent(SBBAuthManager) requestPasswordResetForEmail: emailAddress
                                                                 completion: ^(NSURLSessionDataTask * __unused task,
                                                                               id __unused responseObject,
@@ -118,14 +115,17 @@
                                 UIAlertController *alert = [UIAlertController simpleAlertWithTitle: errorTitle
                                                                                            message: errorMessage];
 
-								[self presentViewController:alert animated:YES completion:nil];
+								[weakSelf presentViewController:alert animated:YES completion:nil];
 							}
 							else
 							{
 								[UIView animateWithDuration:0.2 animations:^{
-									self.emailMessageLabel.text = NSLocalizedString(@"An email has been sent.", @"");
-									self.emailMessageLabel.alpha = 1;
-								}];
+									weakSelf.emailMessageLabel.text = NSLocalizedString(@"An email has been sent.", @"");
+									weakSelf.emailMessageLabel.alpha = 1;
+                                    weakSelf.resetButton.alpha = 0;
+								} completion:^(BOOL finished) {
+                                    [weakSelf performSelector:@selector(dismiss) withObject:nil afterDelay:1.0];
+                                }];
 							}
 						}];
                     }];
@@ -141,16 +141,22 @@
     }
 }
 
+
 #pragma mark - Selectors / IBActions
 
-- (void)back
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (IBAction) done: (id) __unused sender
+- (IBAction)resetPassword:(id)sender
 {
     [self sendPassword];
+}
+
+- (IBAction)cancel:(id)sender
+{
+    [self dismiss];
+}
+
+- (void)dismiss
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
