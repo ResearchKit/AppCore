@@ -47,7 +47,7 @@ NSString *const kAPCStudyOverviewCollectionViewCellIdentifier = @"APCStudyOvervi
     
     //Commenting the below method call as text resizing with system font size is not required.
     
-//    [self setFont];
+    [self setFont];
     
     //Disable horizontal scrolling. Without delay we'll have scrollable webView in some cases
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -56,8 +56,10 @@ NSString *const kAPCStudyOverviewCollectionViewCellIdentifier = @"APCStudyOvervi
 }
 
 - (void)setFont {
+    //Disable at this moment
+    return;
     //Scale text regarding Dynamic settings
-    NSString * javascriptFunc = [NSString stringWithFormat:@"function elementCurrentStyle(element, styleName){if (element.currentStyle){var i = 0, temp = \"\", changeCase = false;for (i = 0; i < styleName.length; i++)if (styleName[i] != '-'){temp += (changeCase ? styleName[i].toUpperCase() : styleName[i]);changeCase = false;} else {changeCase = true;}styleName = temp;return element.currentStyle[styleName];} else {return getComputedStyle(element, null).getPropertyValue(styleName);}};var all = document.getElementsByTagName(\"*\");for (var i=0; i < all.length; i++) {var element = all[i];var fontSize = elementCurrentStyle(element, \"font-size\");var fontSizeInt = parseInt(fontSize.replace(\"px\",\"\"));element.style.fontSize = (fontSizeInt*%f/%f) +\"px\";}", [self preferredMultiplyValue], lastMultiplier];
+    NSString *javascriptFunc = [[NSString alloc] initWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%d%%'", (int)([self preferredMultiplyValue] * 100)];
     [self.webView stringByEvaluatingJavaScriptFromString: javascriptFunc];
     lastMultiplier = [self preferredMultiplyValue];
 }
@@ -67,19 +69,19 @@ NSString *const kAPCStudyOverviewCollectionViewCellIdentifier = @"APCStudyOvervi
     NSString *contentSize = [UIApplication sharedApplication].preferredContentSizeCategory;
     
     if ([contentSize isEqualToString:UIContentSizeCategoryExtraSmall]) {
-        return 0.85;
+        return 0.7;
     } else if ([contentSize isEqualToString:UIContentSizeCategorySmall]) {
-        return 0.9;
+        return 0.8;
     } else if ([contentSize isEqualToString:UIContentSizeCategoryMedium]) {
-        return 0.95;
+        return 0.9;
     } else if ([contentSize isEqualToString:UIContentSizeCategoryLarge]) {
         return 1.0;
     } else if ([contentSize isEqualToString:UIContentSizeCategoryExtraLarge]) {
-        return 1.05;
-    } else if ([contentSize isEqualToString:UIContentSizeCategoryExtraExtraLarge]) {
         return 1.1;
+    } else if ([contentSize isEqualToString:UIContentSizeCategoryExtraExtraLarge]) {
+        return 1.2;
     } else if ([contentSize isEqualToString:UIContentSizeCategoryExtraExtraExtraLarge]) {
-        return 1.15;
+        return 1.3;
     }
     return 1.0;
 }
