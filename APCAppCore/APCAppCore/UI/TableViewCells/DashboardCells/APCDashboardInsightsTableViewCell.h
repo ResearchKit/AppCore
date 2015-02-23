@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UIColor *tintColor;
 @property (nonatomic, strong) NSString *cellTitle;
 @property (nonatomic, strong) NSString *cellSubtitle;
+@property (nonatomic) BOOL showTopSeparator;
 
 @end
 

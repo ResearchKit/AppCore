@@ -107,17 +107,7 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGFloat borderWidth = 1.0;
     
-    UIColor *borderColor = [UIColor colorWithWhite:0.973 alpha:1.000];
-    
-    // Top border
-    CGContextSaveGState(context);
-    CGContextSetLineCap(context, kCGLineCapSquare);
-    CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
-    CGContextSetLineWidth(context, borderWidth);
-    CGContextMoveToPoint(context, 0, 0);
-    CGContextAddLineToPoint(context, rect.size.width, 0);
-    CGContextStrokePath(context);
-    CGContextRestoreGState(context);
+    UIColor *borderColor = [UIColor lightGrayColor];
     
     // Bottom border
     CGContextSaveGState(context);
