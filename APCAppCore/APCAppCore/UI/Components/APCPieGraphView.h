@@ -43,6 +43,8 @@
 
 @property (nonatomic) BOOL shouldDrawClockwise;
 
+@property (nonatomic, strong) NSString *emptyText;
+
 @end
 
 @protocol APCPieGraphViewDatasource <NSObject>
