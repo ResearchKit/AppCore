@@ -13,6 +13,9 @@
 #import "UIAlertController+Helper.h"
 #import "APCAppCore.h"
 
+static NSString *kInternetNotAvailableErrorMessage1 = @"Internet Not Connected";
+static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reachable";
+
 @interface APCChangeEmailViewController ()
 
 @end
@@ -23,7 +26,6 @@
     [super viewDidLoad];
     
     [self setupAppearance];
-    [self setupNavAppearance];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -38,12 +40,6 @@
 {
     [self.emailTextField setTextColor:[UIColor appSecondaryColor1]];
     [self.emailTextField setFont:[UIFont appRegularFontWithSize:17.0f]];
-}
-
-- (void)setupNavAppearance
-{
-    UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(back) tintColor:[UIColor appPrimaryColor]];
-    [self.navigationItem setLeftBarButtonItem:backster];
 }
 
 #pragma mark - UITableViewDelegate method
@@ -80,6 +76,10 @@
     return isContentValid;
 }
 
+- (APCUser *) user {
+    return ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+}
+
 #pragma mark - Public Methods
 
 - (void)updateEmailAddress
@@ -88,6 +88,39 @@
     
     if ([self isContentValid:&error]) {
         if ([self.emailTextField.text isValidForRegex:(NSString *)kAPCGeneralInfoItemEmailRegEx]) {
+            
+            APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+            [self presentViewController:spinnerController animated:YES completion:nil];
+            
+            APCUser *user = [self user];
+            user.email = self.emailTextField.text;
+            
+            typeof(self) __weak weakSelf = self;
+            [user signUpOnCompletion:^(NSError *error) {
+                if (error) {
+                    
+                    APCLogError2 (error);
+                    
+                    [spinnerController dismissViewControllerAnimated:NO completion:^{
+                        
+                        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                            
+                        }];
+                        
+                        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:error.message preferredStyle:UIAlertControllerStyleAlert];
+                        [alertController addAction:cancelAction];
+                        
+                        [weakSelf.navigationController presentViewController:alertController animated:YES completion:nil];
+                    }];
+                }
+                else
+                {
+                    [spinnerController dismissViewControllerAnimated:NO completion:^{
+                        
+                        [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                    }];
+                }
+            }];
             
         }
         else {
@@ -102,15 +135,14 @@
 
 #pragma mark - Selectors / IBActions
 
-- (void)back
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (IBAction) done:(id) __unused sender
 {
     [self updateEmailAddress];
 }
 
+- (IBAction)cancel:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 @end

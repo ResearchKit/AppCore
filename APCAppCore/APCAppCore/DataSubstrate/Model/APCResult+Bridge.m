@@ -29,21 +29,25 @@
     {
         if (self.archiveFilename.length > 0) {
             [SBBComponent(SBBUploadManager) uploadFileToBridge:self.archiveURL contentType:@"application/zip" completion:^(NSError *error) {
-                if (!error) {
+                
+                if (error) {
+                    APCLogError2(error);
+                } else {
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"Uploaded Task: %@    RunID: %@", self.taskID, self.taskRunID]}));
+                    
+                    self.uploaded = @(YES);
+                    NSError * saveError;
+                    [self saveToPersistentStore:&saveError];
+                    
+                    //Delete archiveURLs
+                    NSString * path = [[self.archiveURL path] stringByDeletingLastPathComponent];
+                    NSError * deleteError;
+                    if (![[NSFileManager defaultManager] removeItemAtPath:path error:&deleteError]) {
+                        APCLogError2(deleteError);
+                    }
+                    APCLogError2 (saveError);
                 }
                 
-                self.uploaded = @(YES);
-                NSError * saveError;
-                [self saveToPersistentStore:&saveError];
-                
-                //Delete archiveURLs
-                NSString * path = [[self.archiveURL path] stringByDeletingLastPathComponent];
-                NSError * deleteError;
-                if (![[NSFileManager defaultManager] removeItemAtPath:path error:&deleteError]) {
-                    APCLogError2(deleteError);
-                }
-                APCLogError2 (saveError);
                 if (completionBlock) {
                     completionBlock(error);
                 }

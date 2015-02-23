@@ -10,7 +10,7 @@
 #import "APCMedSetupNotificationKeys.h"
 
 #import "APCMedTrackerDataStorageManager.h"
-#import "APCMedTrackerScheduleColor+Helper.h"
+#import "APCMedTrackerPrescriptionColor+Helper.h"
 
 #import "NSBundle+Helper.h"
 
@@ -65,7 +65,7 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
 {
     APCColorSwatchTableViewCell  *cell = (APCColorSwatchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kColorSwatchTableCellName];
     
-    APCMedTrackerScheduleColor  *schedulColor = self.colorsList[indexPath.row];
+    APCMedTrackerPrescriptionColor  *schedulColor = self.colorsList[indexPath.row];
     
     NSString  *colorname = schedulColor.name;
     colorname = NSLocalizedString(colorname, nil);
@@ -99,7 +99,7 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
     if (self.selectedIndex == nil) {
         info = @{ APCMedSetupNameColorKey : [UIColor grayColor] };
     } else {
-        APCMedTrackerScheduleColor  *schedulColor = self.colorsList[indexPath.row];
+        APCMedTrackerPrescriptionColor  *schedulColor = self.colorsList[indexPath.row];
         NSString  *colorName = schedulColor.name;
         info = @{
                  APCMedSetupNameColorKey : colorName
@@ -128,7 +128,7 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
     
     self.colorsList = [NSArray array];
     
-    [APCMedTrackerScheduleColor fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
+    [APCMedTrackerPrescriptionColor fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
                                                 toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
                                                                     NSTimeInterval operationDuration,
                                                                     NSError *error)

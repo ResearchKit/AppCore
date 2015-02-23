@@ -13,7 +13,7 @@
 - (void)drawRect:(CGRect)rect
 {
     UIColor *goodBarColor = [UIColor appTertiaryGreenColor];
-    UIColor *badBarColor = [UIColor lightGrayColor];
+    UIColor *badBarColor = [UIColor orangeColor];
     CGFloat barHeight = 4.0;
     
     CGFloat goodWidth = 0;

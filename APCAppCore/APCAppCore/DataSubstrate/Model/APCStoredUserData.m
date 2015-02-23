@@ -21,6 +21,7 @@
 @dynamic dailyScalesCompletionCounter;
 @dynamic ethnicity;
 @dynamic glucoseLevels;
+@dynamic hasHeartDisease;
 @dynamic homeLocationAddress;
 @dynamic homeLocationLat;
 @dynamic homeLocationLong;
@@ -33,6 +34,6 @@
 @dynamic sleepTime;
 @dynamic userConsented;
 @dynamic wakeUpTime;
-@dynamic hasHeartDisease;
+@dynamic taskCompletion;
 
 @end

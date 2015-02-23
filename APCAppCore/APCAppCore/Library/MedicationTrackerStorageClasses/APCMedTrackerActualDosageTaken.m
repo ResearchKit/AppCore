@@ -1,18 +1,17 @@
 //
 //  APCMedTrackerActualDosageTaken.m
-//  APCAppCore
+//  AppCore
 //
-//  Created by Ron Conescu on 2/17/15.
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
 #import "APCMedTrackerActualDosageTaken.h"
-#import "APCMedTrackerMedicationSchedule.h"
+#import "APCMedTrackerPrescription.h"
 
 
 @implementation APCMedTrackerActualDosageTaken
 
 @dynamic dateAndTimeDosageWasTaken;
-@dynamic scheduleIAmBasedOn;
+@dynamic prescriptionIAmBasedOn;
 
 @end

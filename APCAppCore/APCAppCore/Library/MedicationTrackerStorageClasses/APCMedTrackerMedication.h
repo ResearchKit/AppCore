@@ -9,18 +9,18 @@
 #import <CoreData/CoreData.h>
 #import "APCMedTrackerInflatableItem.h"
 
-@class APCMedTrackerMedicationSchedule;
+@class APCMedTrackerPrescription;
 
 @interface APCMedTrackerMedication : APCMedTrackerInflatableItem
 
-@property (nonatomic, retain) NSSet *schedulesWhereIAmUsed;
+@property (nonatomic, retain) NSSet *prescriptionsWhereIAmUsed;
 @end
 
 @interface APCMedTrackerMedication (CoreDataGeneratedAccessors)
 
-- (void)addSchedulesWhereIAmUsedObject:(APCMedTrackerMedicationSchedule *)value;
-- (void)removeSchedulesWhereIAmUsedObject:(APCMedTrackerMedicationSchedule *)value;
-- (void)addSchedulesWhereIAmUsed:(NSSet *)values;
-- (void)removeSchedulesWhereIAmUsed:(NSSet *)values;
+- (void)addPrescriptionsWhereIAmUsedObject:(APCMedTrackerPrescription *)value;
+- (void)removePrescriptionsWhereIAmUsedObject:(APCMedTrackerPrescription *)value;
+- (void)addPrescriptionsWhereIAmUsed:(NSSet *)values;
+- (void)removePrescriptionsWhereIAmUsed:(NSSet *)values;
 
 @end

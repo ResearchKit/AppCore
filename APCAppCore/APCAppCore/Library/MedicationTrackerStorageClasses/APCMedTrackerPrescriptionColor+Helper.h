@@ -1,14 +1,14 @@
 //
-//  APCMedTrackerScheduleColor+Helper.h
+//  APCMedTrackerPrescriptionColor+Helper.h
 //  AppCore
 //
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
-#import "APCMedTrackerScheduleColor.h"
+#import "APCMedTrackerPrescriptionColor.h"
 @class UIColor;
 
-@interface APCMedTrackerScheduleColor (Helper)
+@interface APCMedTrackerPrescriptionColor (Helper)
 
 @property (readonly) UIColor *UIColor;
 

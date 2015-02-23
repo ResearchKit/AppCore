@@ -6,11 +6,11 @@
 //
 
 #import "APCMedTrackerMedication.h"
-#import "APCMedTrackerMedicationSchedule.h"
+#import "APCMedTrackerPrescription.h"
 
 
 @implementation APCMedTrackerMedication
 
-@dynamic schedulesWhereIAmUsed;
+@dynamic prescriptionsWhereIAmUsed;
 
 @end

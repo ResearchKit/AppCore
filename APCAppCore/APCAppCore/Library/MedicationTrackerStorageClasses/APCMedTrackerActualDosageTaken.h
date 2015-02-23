@@ -8,11 +8,11 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class APCMedTrackerMedicationSchedule;
+@class APCMedTrackerPrescription;
 
 @interface APCMedTrackerActualDosageTaken : NSManagedObject
 
 @property (nonatomic, retain) NSDate * dateAndTimeDosageWasTaken;
-@property (nonatomic, retain) APCMedTrackerMedicationSchedule *scheduleIAmBasedOn;
+@property (nonatomic, retain) APCMedTrackerPrescription *prescriptionIAmBasedOn;
 
 @end

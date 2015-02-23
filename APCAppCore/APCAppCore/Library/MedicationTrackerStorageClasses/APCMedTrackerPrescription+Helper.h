@@ -1,14 +1,14 @@
 //
-//  APCMedTrackerMedicationSchedule+Helper.h
+//  APCMedTrackerPrescription+Helper.h
 //  AppCore
 //
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
-#import "APCMedTrackerMedicationSchedule.h"
+#import "APCMedTrackerPrescription.h"
 @class APCMedTrackerMedication;
 @class APCMedTrackerPossibleDosage;
-@class APCMedTrackerScheduleColor;
+@class APCMedTrackerPrescriptionColor;
 
 
 typedef void (^APCMedTrackerObjectCreationCallbackBlock) (id createdObject, NSTimeInterval operationDuration);
@@ -42,14 +42,14 @@ typedef void (^APCMedTrackerQueryCallback2) (NSArray *arrayOfGeneratedObjects,
 
 
 
-@interface APCMedTrackerMedicationSchedule (Helper)
+@interface APCMedTrackerPrescription (Helper)
 
-+ (void) newScheduleWithMedication: (APCMedTrackerMedication *) medicine
-                            dosage: (APCMedTrackerPossibleDosage *) dosage
-                             color: (APCMedTrackerScheduleColor *) color
-                frequenciesAndDays: (NSDictionary *) frequenciesAndDays
-                   andUseThisQueue: (NSOperationQueue *) someQueue
-                  toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock;
++ (void) newPrescriptionWithMedication: (APCMedTrackerMedication *) medicine
+                                dosage: (APCMedTrackerPossibleDosage *) dosage
+                                 color: (APCMedTrackerPrescriptionColor *) color
+                      frequencyAndDays: (NSDictionary *) frequencyAndDays
+                       andUseThisQueue: (NSOperationQueue *) someQueue
+                      toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock;
 
 /*
  Note.  This is the method being called behind the scenes
@@ -60,13 +60,13 @@ typedef void (^APCMedTrackerQueryCallback2) (NSArray *arrayOfGeneratedObjects,
  method tells a more accurate truth of what's being stored,
  I wanted to make sure we don't forget it.
 
- + (void) newScheduleWithMedication: (APCMedTrackerMedication *) medicine
-                             dosage: (APCMedTrackerPossibleDosage *) dosage
-                              color: (APCMedTrackerScheduleColor *) color
-                      daysOfTheWeek: (NSArray *) zeroBasedDaysOfTheWeek
-                numberOfTimesPerDay: (NSNumber *) numberOfTimesPerDay
-                    andUseThisQueue: (NSOperationQueue *) someQueue
-                   toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock;
+ + (void) newPrescriptionWithMedication: (APCMedTrackerMedication *) medicine
+                                 dosage: (APCMedTrackerPossibleDosage *) dosage
+                                  color: (APCMedTrackerPrescriptionColor *) color
+                          daysOfTheWeek: (NSArray *) zeroBasedDaysOfTheWeek
+                    numberOfTimesPerDay: (NSNumber *) numberOfTimesPerDay
+                        andUseThisQueue: (NSOperationQueue *) someQueue
+                       toDoThisWhenDone: (APCMedTrackerObjectCreationCallbackBlock) callbackBlock;
  */
 
 
@@ -82,15 +82,16 @@ typedef void (^APCMedTrackerQueryCallback2) (NSArray *arrayOfGeneratedObjects,
 
 
 /**
- Returns YES if the schedule is currently active:
+ Returns YES if the prescription is currently active:
  if its dateStoppedUsing field is nil.  Returns NO
  if dateStoppedUsing is non-nil and earlier than
  "now."  This means the default is YES.
  */
 @property (readonly) BOOL isActive;
 
-@property (readonly) NSArray *zeroBasedDaysOfTheWeekAsArray;
-@property (readonly) NSDictionary *frequenciesAndDays;
+@property (readonly) NSDictionary *frequencyAndDays;
+
+@property (readonly) NSArray *zeroBasedDaysOfTheWeekAsArrayOfSortedNumbers;
 
 + (NSString *) nameForZeroBasedDay: (NSNumber *) zeroBasedDayOfTheWeek;
 + (NSNumber *) zeroBasedDayOfTheWeekForDayName: (NSString *) dayName;

@@ -14,6 +14,7 @@
 #import "APCOnboarding.h"
 #import "APCTasksReminderManager.h"
 #import "UIView+Helper.h"
+#import "APCTabBarViewController.h"
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -96,7 +97,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 #endif
     
     [self hideSecureView];
-
+    [self showPasscodeIfNecessary];
     [self.dataMonitor appBecameActive];
 }
 
@@ -156,6 +157,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 - (BOOL)application:(UIApplication *) __unused application shouldSaveApplicationState:(NSCoder *) __unused coder
 {
+    [[UIApplication sharedApplication] ignoreSnapshotOnNextApplicationLaunch];
     return self.dataSubstrate.currentUser.isSignedIn;
 }
 
@@ -505,7 +507,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     static APCDebugWindow *customWindow = nil;
     if (!customWindow) customWindow = [[APCDebugWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    customWindow.enableDebuggerWindow = NO;
+    customWindow.enableDebuggerWindow = YES;
     
     return customWindow;
 }
@@ -661,7 +663,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
             NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
             
             if (fabs(timeDifference) > numberOfMinutes * 60) {
-                
+            
                 [self showPasscode];
             }
         }
@@ -670,11 +672,10 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 - (void)showPasscode
 {
-    APCPasscodeViewController *passcodeViewController = [[UIStoryboard storyboardWithName:@"APCPasscode" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
-    passcodeViewController.delegate = self;
-    
-    [self.window.rootViewController presentViewController:passcodeViewController animated:YES completion:nil];
-    self.isPasscodeShowing = YES;
+    if ([self.window.rootViewController isKindOfClass:[APCTabBarViewController class]]) {
+        APCTabBarViewController * tvc = (APCTabBarViewController*) self.window.rootViewController;
+        tvc.showPasscodeScreen = YES;
+    }
 }
 
 - (void) showOnBoarding
@@ -767,12 +768,13 @@ static NSUInteger const kIndexOfProfileTab = 3;
         self.secureView = [[UIView alloc] initWithFrame:self.window.rootViewController.view.bounds];
         
         UIImage *blurredImage = [self.window.rootViewController.view blurredSnapshot];
-        UIImage *appIcon = [UIImage imageNamed:@"logo_disease" inBundle:[NSBundle mainBundle] compatibleWithTraitCollection:nil];
+        UIImage *appIcon = [UIImage imageNamed:@"logo_disease_large" inBundle:[NSBundle mainBundle] compatibleWithTraitCollection:nil];
         UIImageView *blurredImageView = [[UIImageView alloc] initWithImage:blurredImage];
         UIImageView *appIconImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, 180, 180)];
 
         appIconImageView.image = appIcon;
         appIconImageView.center = blurredImageView.center;
+        appIconImageView.contentMode = UIViewContentModeScaleAspectFit;
         
         [self.secureView addSubview:blurredImageView];
         [self.secureView addSubview:appIconImageView];
