@@ -15,24 +15,11 @@
 
 @implementation APCTabBarViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    APCLogDebug(@"View Did load");
-}
-
-- (void)viewWillAppear:(BOOL)animated
+- (void)setShowPasscodeScreen:(BOOL)showPasscodeScreen
 {
-    [super viewWillAppear:animated];
-    APCLogDebug(@"self.presentedVC: %@", self.presentedViewController);
-}
-
-- (void) viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    APCLogDebug(@"self.presentedVC: %@", self.presentedViewController);
-    if (self.showPasscodeScreen) {
-        self.showPasscodeScreen = NO;
-        [self showPasscode];
+    _showPasscodeScreen = showPasscodeScreen;
+    if (showPasscodeScreen) {
+        [self performSelector:@selector(showPasscode) withObject:nil afterDelay:0.4];
     }
 }
 
@@ -49,8 +36,9 @@
 
 - (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *)viewController
 {
-    [viewController dismissViewControllerAnimated:YES completion:nil];
     self.isPasscodeShowing = NO;
+    self.showPasscodeScreen = NO;
+    [viewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

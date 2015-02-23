@@ -157,6 +157,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 - (BOOL)application:(UIApplication *) __unused application shouldSaveApplicationState:(NSCoder *) __unused coder
 {
+    [[UIApplication sharedApplication] ignoreSnapshotOnNextApplicationLaunch];
     return self.dataSubstrate.currentUser.isSignedIn;
 }
 
@@ -661,25 +662,20 @@ static NSUInteger const kIndexOfProfileTab = 3;
             NSTimeInterval timeDifference = [lastUsedTime timeIntervalSinceNow];
             NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
             
-//            if (fabs(timeDifference) > numberOfMinutes * 60) {
+            if (fabs(timeDifference) > numberOfMinutes * 60) {
             
                 [self showPasscode];
-//            }
+            }
         }
     }
 }
 
 - (void)showPasscode
 {
-//    APCPasscodeViewController *passcodeViewController = [[UIStoryboard storyboardWithName:@"APCPasscode" bundle:[NSBundle appleCoreBundle]] instantiateInitialViewController];
-//    passcodeViewController.delegate = self;
-//    
-//    [self.window.rootViewController presentViewController:passcodeViewController animated:YES completion:nil];
-//    self.isPasscodeShowing = YES;
-    
-    APCTabBarViewController * tvc = (APCTabBarViewController*) self.window.rootViewController;
-    tvc.showPasscodeScreen = YES;
-    
+    if ([self.window.rootViewController isKindOfClass:[APCTabBarViewController class]]) {
+        APCTabBarViewController * tvc = (APCTabBarViewController*) self.window.rootViewController;
+        tvc.showPasscodeScreen = YES;
+    }
 }
 
 - (void) showOnBoarding
