@@ -263,6 +263,8 @@
 		F50738C11A682E12004CF100 /* APCDateRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F50738BF1A682E12004CF100 /* APCDateRange.m */; };
 		F5306CCD1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5306CCB1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5306CCE1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5306CCC1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.m */; };
+		F53C047F1A9B8C7D00BBEC03 /* APCTabBarViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F53C047D1A9B8C7D00BBEC03 /* APCTabBarViewController.h */; };
+		F53C04801A9B8C7D00BBEC03 /* APCTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53C047E1A9B8C7D00BBEC03 /* APCTabBarViewController.m */; };
 		F54DDD231A8026010073E4B4 /* APCCoreLocationTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = F54DDD171A8026010073E4B4 /* APCCoreLocationTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F54DDD241A8026010073E4B4 /* APCCoreLocationTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = F54DDD181A8026010073E4B4 /* APCCoreLocationTracker.m */; };
 		F54DDD251A8026010073E4B4 /* APCCoreMotionTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = F54DDD191A8026010073E4B4 /* APCCoreMotionTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -885,6 +887,8 @@
 		F5179B3419D09128001DCCB7 /* APCAppCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APCAppCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5306CCB1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ORKQuestionResult+APCHelper.h"; sourceTree = "<group>"; };
 		F5306CCC1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ORKQuestionResult+APCHelper.m"; sourceTree = "<group>"; };
+		F53C047D1A9B8C7D00BBEC03 /* APCTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCTabBarViewController.h; sourceTree = "<group>"; };
+		F53C047E1A9B8C7D00BBEC03 /* APCTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCTabBarViewController.m; sourceTree = "<group>"; };
 		F54DDD171A8026010073E4B4 /* APCCoreLocationTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCoreLocationTracker.h; sourceTree = "<group>"; };
 		F54DDD181A8026010073E4B4 /* APCCoreLocationTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCoreLocationTracker.m; sourceTree = "<group>"; };
 		F54DDD191A8026010073E4B4 /* APCCoreMotionTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCoreMotionTracker.h; sourceTree = "<group>"; };
@@ -2211,6 +2215,8 @@
 		F5F1291F1A2F78490015982C /* Startup */ = {
 			isa = PBXGroup;
 			children = (
+				F53C047D1A9B8C7D00BBEC03 /* APCTabBarViewController.h */,
+				F53C047E1A9B8C7D00BBEC03 /* APCTabBarViewController.m */,
 				F5F129201A2F78490015982C /* APCAppDelegate.h */,
 				F5F129211A2F78490015982C /* APCAppDelegate.m */,
 				F5F129221A2F78490015982C /* TabBar.storyboard */,
@@ -2714,6 +2720,7 @@
 				F5F12A901A2F78490015982C /* APCSpinnerViewController.h in Headers */,
 				CFFDEDFA1A95734000B25581 /* APCSetupTableViewCell.h in Headers */,
 				F5F129FA1A2F78490015982C /* APCSchedule+AddOn.h in Headers */,
+				F53C047F1A9B8C7D00BBEC03 /* APCTabBarViewController.h in Headers */,
 				F5B946211A7309A20034C522 /* zipzap.h in Headers */,
 				CFFDEDDD1A95734000B25581 /* APCFrequencyTableViewTimesCell.h in Headers */,
 				369E27F11A96B7A200D35DFA /* APCMedicationDosageTaken.h in Headers */,
@@ -3106,6 +3113,7 @@
 				F5F12A6D1A2F78490015982C /* APCAppDelegate.m in Sources */,
 				F5B9462E1A7309A20034C522 /* ZZDataChannel.m in Sources */,
 				5B9B36AC1A95DC1700389F42 /* APCActivitiesTableViewCell.m in Sources */,
+				F53C04801A9B8C7D00BBEC03 /* APCTabBarViewController.m in Sources */,
 				369E28051A96B7A200D35DFA /* APCMedTrackerInflatableItem+Helper.m in Sources */,
 				F5F12B091A2F78490015982C /* APCImageButton.m in Sources */,
 				F5F12A911A2F78490015982C /* APCSpinnerViewController.m in Sources */,

@@ -50,6 +50,8 @@
             }
         }];
     }
+    
+    self.title = NSLocalizedString(@"Additional Information", @"Additional Information");
 }
 
 - (void) viewDidAppear:(BOOL)animated {

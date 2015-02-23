@@ -442,42 +442,45 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         
     } else {
         
-        NSArray *yAxisLabelFactors;
-        
-        if (self.minimumValue == self.maximumValue) {
-            yAxisLabelFactors = @[@0.5f];
-        } else {
-            yAxisLabelFactors = @[@0.2f,@1.0f];
+        if (self.hasDataPoint) {
+            NSArray *yAxisLabelFactors;
+            
+            if (self.minimumValue == self.maximumValue) {
+                yAxisLabelFactors = @[@0.5f];
+            } else {
+                yAxisLabelFactors = @[@0.2f,@1.0f];
+            }
+            
+            for (int i =0; i<yAxisLabelFactors.count; i++) {
+                
+                CGFloat factor = [yAxisLabelFactors[i] floatValue];
+                CGFloat positionOnYAxis = CGRectGetHeight(self.plotsView.frame) * (1 - factor);
+                
+                UIBezierPath *rulerPath = [UIBezierPath bezierPath];
+                [rulerPath moveToPoint:CGPointMake(rulerXPosition, positionOnYAxis)];
+                [rulerPath addLineToPoint:CGPointMake(CGRectGetMaxX(self.yAxisView.bounds), positionOnYAxis)];
+                
+                CAShapeLayer *rulerLayer = [CAShapeLayer layer];
+                rulerLayer.strokeColor = self.axisColor.CGColor;
+                rulerLayer.path = rulerPath.CGPath;
+                [self.yAxisView.layer addSublayer:rulerLayer];
+                
+                CGFloat labelHeight = 20;
+                CGFloat labelYPosition = positionOnYAxis - labelHeight/2;
+                
+                CGFloat yValue = self.minimumValue + (self.maximumValue - self.minimumValue)*factor;
+                
+                UILabel *axisTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelYPosition, CGRectGetWidth(self.yAxisView.frame) - kAxisMarkingRulerLength, labelHeight)];
+                axisTitleLabel.text = [self formatNumber:@(yValue)];
+                axisTitleLabel.backgroundColor = [UIColor clearColor];
+                axisTitleLabel.textColor = self.axisTitleColor;
+                axisTitleLabel.textAlignment = NSTextAlignmentRight;
+                axisTitleLabel.font = self.isLandscapeMode ? [UIFont fontWithName:self.axisTitleFont.familyName size:16.0f] : self.axisTitleFont;
+                axisTitleLabel.minimumScaleFactor = 0.8;
+                [self.yAxisView addSubview:axisTitleLabel];
+            }
         }
         
-        for (int i =0; i<yAxisLabelFactors.count; i++) {
-            
-            CGFloat factor = [yAxisLabelFactors[i] floatValue];
-            CGFloat positionOnYAxis = CGRectGetHeight(self.plotsView.frame) * (1 - factor);
-            
-            UIBezierPath *rulerPath = [UIBezierPath bezierPath];
-            [rulerPath moveToPoint:CGPointMake(rulerXPosition, positionOnYAxis)];
-            [rulerPath addLineToPoint:CGPointMake(CGRectGetMaxX(self.yAxisView.bounds), positionOnYAxis)];
-            
-            CAShapeLayer *rulerLayer = [CAShapeLayer layer];
-            rulerLayer.strokeColor = self.axisColor.CGColor;
-            rulerLayer.path = rulerPath.CGPath;
-            [self.yAxisView.layer addSublayer:rulerLayer];
-            
-            CGFloat labelHeight = 20;
-            CGFloat labelYPosition = positionOnYAxis - labelHeight/2;
-            
-            CGFloat yValue = self.minimumValue + (self.maximumValue - self.minimumValue)*factor;
-            
-            UILabel *axisTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelYPosition, CGRectGetWidth(self.yAxisView.frame) - kAxisMarkingRulerLength, labelHeight)];
-            axisTitleLabel.text = [self formatNumber:@(yValue)];
-            axisTitleLabel.backgroundColor = [UIColor clearColor];
-            axisTitleLabel.textColor = self.axisTitleColor;
-            axisTitleLabel.textAlignment = NSTextAlignmentRight;
-            axisTitleLabel.font = self.isLandscapeMode ? [UIFont fontWithName:self.axisTitleFont.familyName size:16.0f] : self.axisTitleFont;
-            axisTitleLabel.minimumScaleFactor = 0.8;
-            [self.yAxisView addSubview:axisTitleLabel];
-        }
     }
     
 }
