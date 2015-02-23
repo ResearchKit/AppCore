@@ -151,9 +151,9 @@ static  CGFloat   const  kCalendarSelectedDatePrintFontSizeDefault = 13.0;
     for (NSUInteger  i = 0;  i < kNumberOfWeekDivisions;  i++) {
         NSDate  *dt = [dtWeekStart addDays:i];
 
-        [self dayTitleViewForDate: dt inFrame: CGRectMake(dailyWidth*i, 0, dailyWidth, kDayTitleViewHeight)];
+        [self dayTitleViewForDate: dt inFrame: CGRectMake(dailyWidth * i, 0, dailyWidth, kDayTitleViewHeight)];
 
-        [self dailyViewForDate:dt inFrame: CGRectMake(dailyWidth*i, 0, dailyWidth, kDateViewHeight) ];
+        [self dailyViewForDate:dt inFrame: CGRectMake(dailyWidth * i, 0, dailyWidth, kDateViewHeight) ];
 
         self.endDate = dt;
     }

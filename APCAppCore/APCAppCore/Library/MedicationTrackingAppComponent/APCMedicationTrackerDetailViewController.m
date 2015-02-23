@@ -11,10 +11,9 @@
 #import "APCLozengeButton.h"
 
 #import "APCMedTrackerMedication+Helper.h"
-#import "APCMedTrackerMedicationSchedule+Helper.h"
+#import "APCMedTrackerPrescription+Helper.h"
 #import "APCMedTrackerPossibleDosage+Helper.h"
-#import "APCMedTrackerScheduleColor+Helper.h"
-#import "APCMedTrackerMedicationSchedule+Helper.h"
+#import "APCMedTrackerPrescriptionColor+Helper.h"
 
 #import "APCAppCore.h"
 
@@ -59,8 +58,9 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     NSInteger  numberOfRows = 0;
     
     if (section == kDailyDosesTakenSection) {
+        NSLog(@"APCMedicationTrackerDetailViewController numberOfRowsInSection, lozenge = %@", self.lozenge);
         if (self.lozenge != nil) {
-            numberOfRows = [self.lozenge.numberOfDosesPrescribed integerValue];
+            numberOfRows = [self.lozenge.prescription.numberOfTimesPerDay integerValue];
         }
     } else if (section == kMedicineSummarySection) {
         numberOfRows = 4;
@@ -96,8 +96,8 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
             aCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
         }
         aCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        aCell.textLabel.text = self.schedule.medicine.name;
-        aCell.detailTextLabel.text = self.schedule.dosage.name;
+        aCell.textLabel.text = self.lozenge.prescription.medication.name;
+        aCell.detailTextLabel.text = self.lozenge.prescription.dosage.name;
         cell = aCell;
     } else if (indexPath.section == kMedicineSummarySection) {
 
@@ -116,13 +116,13 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
         }
 
         if (indexPath.row == kSummarySectionNameRow) {
-            aCell.addTopicLabel.text = self.schedule.medicine.name;
+            aCell.addTopicLabel.text = self.lozenge.prescription.medication.name;
         } else if (indexPath.row == kSummarySectionFrequencyRow) {
-            aCell.addTopicLabel.text = [self formatNumbersAndDays:self.schedule.frequenciesAndDays];
+            aCell.addTopicLabel.text = [self formatNumbersAndDays:self.lozenge.prescription.frequencyAndDays];
         } else if (indexPath.row == kSummarySectionColorRow) {
-            aCell.colorSwatch.backgroundColor = self.schedule.color.UIColor;
+            aCell.colorSwatch.backgroundColor = self.lozenge.prescription.color.UIColor;
         } else if (indexPath.row == kSummarySectionDosageRow) {
-            aCell.addTopicLabel.text = self.schedule.dosage.name;
+            aCell.addTopicLabel.text = self.lozenge.prescription.dosage.name;
         }
         cell = aCell;
     }
@@ -150,7 +150,11 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 {
     if (indexPath.section == kDailyDosesTakenSection) {
         UITableViewCell  *cell = [tableView cellForRowAtIndexPath:indexPath];
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        if (cell.accessoryType == UITableViewCellAccessoryNone) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
     }
 }
 
@@ -159,8 +163,12 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    NSLog(@"APCMedicationTrackerDetailViewController viewDidLoad, lozenge = %@", self.lozenge);
 
     self.navigationItem.title = viewControllerTitle;
+    
+    self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
     UINib  *setupTableCellNib = [UINib nibWithNibName:kSetupTableCellName bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:setupTableCellNib forCellReuseIdentifier:kSetupTableCellName];

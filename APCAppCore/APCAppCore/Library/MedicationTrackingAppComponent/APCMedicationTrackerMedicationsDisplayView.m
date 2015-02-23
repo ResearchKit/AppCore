@@ -7,13 +7,10 @@
 
 #import "APCMedicationTrackerMedicationsDisplayView.h"
 
-#import "APCMedicationModel.h"
-
 #import "APCMedTrackerMedication+Helper.h"
-#import "APCMedTrackerMedicationSchedule+Helper.h"
+#import "APCMedTrackerPrescription+Helper.h"
 #import "APCMedTrackerPossibleDosage+Helper.h"
-#import "APCMedTrackerScheduleColor+Helper.h"
-#import "APCMedTrackerMedicationSchedule+Helper.h"
+#import "APCMedTrackerPrescriptionColor+Helper.h"
 
 #import "APCLozengeButton.h"
 
@@ -82,9 +79,9 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 
 #pragma   mark  -  Custom Setter Method for Medication Models
 
-- (void)setSchedules:(NSArray *)theSchedules
+- (void)setPrescriptions:(NSArray *)thePrescriptions
 {
-    _schedules = theSchedules;
+    _prescriptions = thePrescriptions;
     [self makeLozengesLayout];
 }
 
@@ -112,25 +109,25 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 
 - (void)makeLozengesLayout
 {
-    NSDictionary  *map = @{ @"Monday" : @(0.0), @"Tuesday" : @(1.0), @"Wednesday" : @(2.0), @"Thursday" : @(3.0), @"Friday" : @(4.0), @"Saturday" : @(5.0), @"Sunday" : @(6.0), };
+    NSDictionary  *map = @{ @"Monday" : @(0.0), @"Tuesday" : @(1.0), @"Wednesday" : @(2.0), @"Thursday" : @(3.0), @"Friday" : @(4.0), @"Saturday" : @(5.0), @"Sunday" : @(6.0) };
     
     CGFloat  disp = CGRectGetWidth(self.bounds) / 7.0;
     CGFloat  baseYCoordinate = kLozengeBaseYCoordinate;
         //
         //    NSNumber objects in the code below are initalised with integer values
         //
-    for (APCMedTrackerMedicationSchedule  *schedule  in  self.schedules) {
-        NSDictionary  *dictionary = schedule.frequenciesAndDays;
+    for (APCMedTrackerPrescription  *prescription  in  self.prescriptions) {
+        NSDictionary  *dictionary = prescription.frequencyAndDays;
         for (NSUInteger  day = 0;  day < numberOfDaysOfWeek;  day++) {
             NSString  *dayOfWeek = daysOfWeekNames[day];
             NSNumber  *number = dictionary[dayOfWeek];
             if ([number integerValue] > 0) {
                 CGFloat  xPosition = ([map[dayOfWeek] floatValue] + 1) * disp - disp / 2.0;
-                UIColor  *color = schedule.color.UIColor;
-                APCLozengeButton  *lozenge = [self medicationLozengeCenteredAtPoint:CGPointMake(xPosition, baseYCoordinate) andColor:color withTitle:@"0\u2009/\u20093"];
-                lozenge.numberOfDosesPrescribed = number;
-                lozenge.numberOfDosesTaken      = [NSNumber numberWithInteger:0];
-                lozenge.schedule = schedule;
+                UIColor  *color = prescription.color.UIColor;
+                NSNumber  *numberOfTimes = prescription.numberOfTimesPerDay;
+                NSString  *title = [NSString stringWithFormat:@"0\u2009/\u2009%lu", [numberOfTimes unsignedIntegerValue]];
+                APCLozengeButton  *lozenge = [self medicationLozengeCenteredAtPoint:CGPointMake(xPosition, baseYCoordinate) andColor:color withTitle:title];
+                lozenge.prescription = prescription;
                 [self addSubview:lozenge];
             }
         }

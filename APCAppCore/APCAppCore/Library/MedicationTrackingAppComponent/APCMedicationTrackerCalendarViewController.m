@@ -11,15 +11,14 @@
 #import "APCMedicationTrackerDetailViewController.h"
 #import "APCMedicationTrackerSetupViewController.h"
 #import "APCMedicationSummaryTableViewCell.h"
-#import "APCMedicationModel.h"
+//#import "APCMedicationModel.h"
 #import "APCLozengeButton.h"
 
 #import "APCMedTrackerDataStorageManager.h"
 #import "APCMedTrackerMedication+Helper.h"
-#import "APCMedTrackerMedicationSchedule+Helper.h"
+#import "APCMedTrackerPrescription+Helper.h"
 #import "APCMedTrackerPossibleDosage+Helper.h"
-#import "APCMedTrackerScheduleColor+Helper.h"
-#import "APCMedTrackerMedicationSchedule+Helper.h"
+#import "APCMedTrackerPrescriptionColor+Helper.h"
 
 #import "NSBundle+Helper.h"
 
@@ -75,13 +74,13 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 {
     APCMedicationSummaryTableViewCell  *cell = (APCMedicationSummaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSummaryTableViewCell];
 
-    APCMedTrackerMedicationSchedule  *schedule = self.schedules[indexPath.row];
+    APCMedTrackerPrescription  *prescription = self.schedules[indexPath.row];
 
-    cell.colorswatch.backgroundColor = schedule.color.UIColor;
-    cell.medicationName.text = schedule.medicine.name;
-    cell.medicationDosage.text = schedule.dosage.name;
+    cell.colorswatch.backgroundColor = prescription.color.UIColor;
+    cell.medicationName.text = prescription.medication.name;
+    cell.medicationDosage.text = prescription.dosage.name;
 
-    NSDictionary  *frequencyAndDays = schedule.frequenciesAndDays;
+    NSDictionary  *frequencyAndDays = prescription.frequencyAndDays;
 
     NSMutableString  *daysAndNumbers = [NSMutableString string];
     for (NSUInteger  day = 0;  day < numberOfDaysOfWeek;  day++) {
@@ -105,8 +104,8 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     APCMedicationTrackerDetailViewController  *controller = [[APCMedicationTrackerDetailViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
-    APCMedTrackerMedicationSchedule  *schedule = self.schedules[indexPath.row];
-    controller.schedule = schedule;
+    APCMedTrackerPrescription  *prescription = self.schedules[indexPath.row];
+    controller.lozenge.prescription = prescription;
     [self.navigationController pushViewController:controller animated:YES];
 }
 
@@ -157,7 +156,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 - (void)displayView:(APCMedicationTrackerMedicationsDisplayView *)displayView lozengeButtonWasTapped:(APCLozengeButton *)lozenge
 {
     APCMedicationTrackerDetailViewController  *controller = [[APCMedicationTrackerDetailViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
-    controller.schedule = lozenge.schedule;
+    controller.lozenge = lozenge;
     [self.navigationController pushViewController:controller animated:YES];
 }
 
@@ -189,7 +188,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
         frame.size.height = CGRectGetHeight(scrollerFrame);
         APCMedicationTrackerMedicationsDisplayView  *view = [[APCMedicationTrackerMedicationsDisplayView alloc] initWithFrame:frame];
         view.delegate = self;
-        view.schedules = self.schedules;
+        view.prescriptions = self.schedules;
         view.backgroundColor = [UIColor whiteColor];
         [self.exScrollibur addSubview:view];
         [view setNeedsDisplay];
@@ -297,16 +296,19 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     
 //    self.schedules = [NSArray array];
     
-    [APCMedTrackerMedicationSchedule fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
+    [APCMedTrackerPrescription fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
                                                         toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
                                                                             NSTimeInterval operationDuration,
                                                                             NSError *error)
      {
          self.schedules = arrayOfGeneratedObjects;
-         [self makeCalendar];
-         [self setupHiddenStates];
-         [self.tabulator reloadData];
-         [self makePages];
+         if (self.viewsWereCreated == NO) {
+             [self makeCalendar];
+             [self setupHiddenStates];
+             [self.tabulator reloadData];
+             [self makePages];
+             self.viewsWereCreated = YES;
+         }
      }];
 }
 

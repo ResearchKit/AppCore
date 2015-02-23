@@ -8,11 +8,11 @@
 #import <UIKit/UIKit.h>
 
 @class  APCMedicationColorViewController;
-@class  APCMedTrackerScheduleColor;
+@class  APCMedTrackerPrescriptionColor;
 
 @protocol  APCMedicationColorViewControllerDelegate  <NSObject>
 
-- (void)colorController:(APCMedicationColorViewController *)colorController didSelectColorLabelName:(APCMedTrackerScheduleColor *)colorObject;
+- (void)colorController:(APCMedicationColorViewController *)colorController didSelectColorLabelName:(APCMedTrackerPrescriptionColor *)colorObject;
 
 @end
 

@@ -19,7 +19,7 @@
 
 @interface APCMedicationTrackerMedicationsDisplayView : UIView
 
-@property  (nonatomic, strong)  NSArray  *schedules;
+@property  (nonatomic, strong)  NSArray  *prescriptions;
 
 @property  (nonatomic, weak)  id <APCMedicationTrackerMedicationsDisplayViewDelegate>  delegate;
 

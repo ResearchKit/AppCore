@@ -13,15 +13,13 @@
 
 #import "APCMedTrackerDataStorageManager.h"
 #import "APCMedTrackerMedication+Helper.h"
-#import "APCMedTrackerMedicationSchedule+Helper.h"
+#import "APCMedTrackerPrescription+Helper.h"
 #import "APCMedTrackerPossibleDosage+Helper.h"
-#import "APCMedTrackerScheduleColor+Helper.h"
+#import "APCMedTrackerPrescriptionColor+Helper.h"
 
 #import "NSBundle+Helper.h"
 
 #import "APCMedicationSummaryTableViewCell.h"
-
-#import "APCMedicationModel.h"
 
 #import "APCSetupTableViewCell.h"
 
@@ -74,11 +72,10 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 @property  (nonatomic, strong)          NSIndexPath             *selectedIndexPath;
 
 @property  (nonatomic, strong)          NSMutableArray          *currentMedicationRecords;
-@property  (nonatomic, strong)          APCMedicationModel      *currentMedicationModel;
 
 @property (nonatomic, strong)           APCMedTrackerMedication  *theMedicationObject;
 @property (nonatomic, strong)           APCMedTrackerPossibleDosage  *possibleDosage;
-@property (nonatomic, strong)           APCMedTrackerScheduleColor  *colorObject;
+@property (nonatomic, strong)           APCMedTrackerPrescriptionColor  *colorObject;
 @property (nonatomic, strong)           NSDictionary             *frequenciesAndDaysObject;
 
 @end
@@ -220,7 +217,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 
 - (void)addNewMedication:(id)sender
 {
-    self.currentMedicationModel = [[APCMedicationModel alloc] init];
     self.medicationNameWasSet      = NO;
     self.medicationColorWasSet     = NO;
     self.medicationFrequencyWasSet = NO;
@@ -232,13 +228,12 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 
 - (IBAction)doneButtonWasTapped:(id)sender
 {
-    [self.currentMedicationRecords addObject:self.currentMedicationModel];
     [self.listTabulator reloadData];
     
-    [APCMedTrackerMedicationSchedule newScheduleWithMedication: self.theMedicationObject
+    [APCMedTrackerPrescription newPrescriptionWithMedication: self.theMedicationObject
                                                         dosage: self.possibleDosage
                                                          color: self.colorObject
-                                            frequenciesAndDays: self.frequenciesAndDaysObject
+                                            frequencyAndDays: self.frequenciesAndDaysObject
                                                andUseThisQueue: [NSOperationQueue mainQueue]
                                               toDoThisWhenDone: ^(id createdObject, NSTimeInterval operationDuration) {
                                                   
@@ -283,7 +278,7 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesFrequency inSection:0] ] withRowAnimation:NO];
 }
 
-- (void)colorController:(APCMedicationColorViewController *)colorController didSelectColorLabelName:(APCMedTrackerScheduleColor *)colorObject
+- (void)colorController:(APCMedicationColorViewController *)colorController didSelectColorLabelName:(APCMedTrackerPrescriptionColor *)colorObject
 {
     self.colorObject = colorObject;
     self.medicationColorWasSet = YES;
@@ -345,7 +340,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     [self.listTabulator registerNib:summaryCellNib forCellReuseIdentifier:kSummaryTableViewCell];
     
     self.currentMedicationRecords = [NSMutableArray array];
-    self.currentMedicationModel = [[APCMedicationModel alloc] init];
     
     [APCMedTrackerDataStorageManager startupReloadingDefaults:YES andThenUseThisQueue:nil toDoThis:NULL];
     self.theMedicationObject = nil;
