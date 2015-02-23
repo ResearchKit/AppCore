@@ -159,8 +159,8 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  Medication-Tracker Storage (not the med-tracker itself)
  ------------------------- */
 #import <APCAppCore/APCMedTrackerDataStorageManager.h>
-#import <APCAppCore/APCMedTrackerActualDosageTaken.h>
-#import <APCAppCore/APCMedTrackerActualDosageTaken+Helper.h>
+#import <APCAppCore/APCMedTrackerDailyDosageRecord.h>
+#import <APCAppCore/APCMedTrackerDailyDosageRecord+Helper.h>
 #import <APCAppCore/APCMedTrackerInflatableItem.h>
 #import <APCAppCore/APCMedTrackerInflatableItem+Helper.h>
 #import <APCAppCore/APCMedTrackerMedication.h>
