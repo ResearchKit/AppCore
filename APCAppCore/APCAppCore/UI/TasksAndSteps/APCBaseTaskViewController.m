@@ -198,7 +198,6 @@
     id localRestorationData = [coder decodeObjectForKey:@"restorationData"];
     if (scheduledTask) {
         APCBaseTaskViewController * tvc =[[self alloc] initWithTask:task restorationData:localRestorationData];
-//        APCBaseTaskViewController * tvc = [[self alloc] initWithTask:task taskRunUUID:taskRunUUID];
         tvc.scheduledTask = scheduledTask;
         tvc.restorationIdentifier = [task identifier];
         tvc.restorationClass = self;
