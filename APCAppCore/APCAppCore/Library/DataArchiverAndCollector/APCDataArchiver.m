@@ -557,10 +557,8 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     NSError * encryptionError;
     NSData * encryptedZipData = cmsEncrypt(unencryptedZipData, [APCDataArchiver pemPath], &encryptionError);
     APCLogError2(encryptionError);
-    
-    NSError * fileWriteError;
-    return [encryptedZipData writeToFile:encryptedPath options:NSDataWritingAtomic error:&fileWriteError];
 
+    return [encryptedZipData writeToFile:encryptedPath options:NSDataWritingAtomic error:nil];
 }
 
 /*********************************************************************************/
