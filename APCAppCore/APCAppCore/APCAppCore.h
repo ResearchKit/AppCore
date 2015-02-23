@@ -51,6 +51,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import "APCAppCore/ZZArchiveEntry.h"
 #import "APCAppCore/ZZConstants.h"
 #import "APCAppCore/ZZError.h"
+#import "APCAppCore/APCCMS.h"
 
 /* -------------------------
  Logging
@@ -159,8 +160,8 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  Medication-Tracker Storage (not the med-tracker itself)
  ------------------------- */
 #import <APCAppCore/APCMedTrackerDataStorageManager.h>
-#import <APCAppCore/APCMedTrackerActualDosageTaken.h>
-#import <APCAppCore/APCMedTrackerActualDosageTaken+Helper.h>
+#import <APCAppCore/APCMedTrackerDailyDosageRecord.h>
+#import <APCAppCore/APCMedTrackerDailyDosageRecord+Helper.h>
 #import <APCAppCore/APCMedTrackerInflatableItem.h>
 #import <APCAppCore/APCMedTrackerInflatableItem+Helper.h>
 #import <APCAppCore/APCMedTrackerMedication.h>

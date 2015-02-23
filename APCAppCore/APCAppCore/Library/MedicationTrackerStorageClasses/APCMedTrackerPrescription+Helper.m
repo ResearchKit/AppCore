@@ -16,12 +16,32 @@
 #import "APCMedTrackerPossibleDosage+Helper.h"
 #import "APCMedTrackerMedication+Helper.h"
 #import "APCMedTrackerPrescriptionColor+Helper.h"
+#import "APCMedTrackerDailyDosageRecord+Helper.h"
+
+
+/*
+ Note to reviewers:
+ 
+ - there are various hard-coded "errorDomains" and "errorCodes"
+ throughout this file.  Acknowledged.  We're working toward a
+ centralized way to manage those.
+ 
+ - similarly, there's a utility method that creates an NSError
+ object from a domain, a code, and a root-cause error.  We'll
+ shortly move that to another class, too.
+ */
 
 
 static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 
 
 @implementation APCMedTrackerPrescription (Helper)
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Fetching and creating Prescriptions
+// ---------------------------------------------------------
 
 + (void) newPrescriptionWithMedication: (APCMedTrackerMedication *) medicine
                                 dosage: (APCMedTrackerPossibleDosage *) dosage
@@ -166,12 +186,197 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
     }];
 }
 
-+ (NSArray *) schedulesForCurrentWeek
-{
-    NSArray *result = nil;
 
-    return result;
+
+// ---------------------------------------------------------
+#pragma mark - Fetching and saving DailyDosageRecords
+// ---------------------------------------------------------
+
+/**
+ This method does create, update, and/or delete, as needed.
+ See comments in the header file for details.
+ */
+- (void) recordThisManyDoses: (NSUInteger) numberOfDosesTaken
+                 takenOnDate: (NSDate *) endUsersChosenDate
+             andUseThisQueue: (NSOperationQueue *) someQueue
+            toDoThisWhenDone: (APCMedTrackerRecordDosesCallback) callbackBlock
+{
+    __block APCMedTrackerPrescription *blockSafePrescription = self;
+
+    [APCMedTrackerDataStorageManager.defaultManager.queue addOperationWithBlock:^{
+
+        NSDate *startTime = [NSDate date];
+        NSManagedObjectContext *context = APCMedTrackerDataStorageManager.defaultManager.context;
+
+        // We can also use -performBlockAndWait:.
+        [context performBlock: ^{
+
+            NSString *errorDomainToReturn = nil;
+            NSInteger errorCode = 0;
+            NSError *coreDataError = nil;
+
+            APCMedTrackerDailyDosageRecord *dosageRecord = nil;
+            NSString *nameOfEntityWeAreUpdating = NSStringFromClass ([APCMedTrackerDailyDosageRecord class]);
+            NSString *nameOfDateGetterMethod = NSStringFromSelector (@selector (dateThisRecordRepresents));
+
+
+            //
+            // Delete any existing record(s) for today.
+            // (There should only be one, at most, but, still.)
+            // We could update an existing one, but the cost will
+            // be nearly the same.
+            //
+
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: nameOfEntityWeAreUpdating];
+
+            request.predicate = [NSPredicate predicateWithFormat:
+                                 @"%K >= %@ && %K <= %@",
+                                 nameOfDateGetterMethod, endUsersChosenDate.startOfDay,
+                                 nameOfDateGetterMethod, endUsersChosenDate.endOfDay];
+
+            NSArray *doseRecordsFound = [context executeFetchRequest: request
+                                                               error: &coreDataError];
+
+
+            // CoreData defines a "nil" result as "an error happened."
+            // If this works, we'll get back an array, even if it's empty.
+            if (doseRecordsFound == nil)
+            {
+                errorDomainToReturn = @"MedTrackerDataStorageError_CantLoadExistingDosageRecords";
+                errorCode = 1;
+
+                // if the coreDataError is set, we'll use it shortly.
+            }
+
+            else
+            {
+                for (APCMedTrackerDailyDosageRecord *record in doseRecordsFound)
+                {
+                    // These'll get deleted when we do the "save," below.
+                    [context deleteObject: record];
+                }
+
+
+                //
+                // Create the new record, if appropriate.
+                //
+
+                if (numberOfDosesTaken > 0)
+                {
+                    dosageRecord = [APCMedTrackerDailyDosageRecord newObjectForContext: context];
+                    dosageRecord.prescriptionIAmBasedOn = blockSafePrescription;
+                    dosageRecord.dateThisRecordRepresents = endUsersChosenDate;
+                    dosageRecord.numberOfDosesTakenForThisDate = @(numberOfDosesTaken);
+                }
+
+
+                //
+                // Save.  This saves the Prescription object, not
+                // just the dosage.  If we deleted the record, this
+                // accomplishes that, too, because of how our save:
+                // method works.
+                //
+
+                BOOL successfullySaved = [dosageRecord saveToPersistentStore: & coreDataError];
+
+                if (successfullySaved)
+                {
+                    // Nothing to do.  Yay!
+                }
+                else
+                {
+                    errorDomainToReturn = @"MedTrackerDataStorageError_CantSaveOrDeleteDosageRecord";
+                    errorCode = 2;
+
+                    // if the coreDataError is set, we'll use it in a moment.
+                }
+            }
+
+
+            //
+            // Report.
+            //
+
+            NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];
+
+            if (someQueue != nil && callbackBlock != NULL)
+            {
+                NSError *errorToReturn = [self errorWithDomain: errorDomainToReturn
+                                                          code: errorCode
+                                               underlyingError: coreDataError];
+
+                [someQueue addOperationWithBlock: ^{
+                    callbackBlock (operationDuration, errorToReturn);
+                }];
+            }
+        }];
+    }];
 }
+
+- (void) fetchDosesTakenFromDate: (NSDate *) startDate
+                          toDate: (NSDate *) endDate
+                 andUseThisQueue: (NSOperationQueue *) someQueue
+                toDoThisWhenDone: (APCMedTrackerFetchDosesCallback) callbackBlock
+{
+    [APCMedTrackerDataStorageManager.defaultManager.queue addOperationWithBlock:^{
+
+        NSDate *startTime = [NSDate date];
+        NSManagedObjectContext *context = APCMedTrackerDataStorageManager.defaultManager.context;
+
+        // Gradually working toward normalizing our error-handling.
+        NSError *coreDataError = nil;
+        NSString *errorDomain = nil;
+        NSInteger errorCode = 0;
+
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass ([APCMedTrackerDailyDosageRecord class])];
+
+        NSString *nameOfDateGetterMethod = NSStringFromSelector (@selector (dateThisRecordRepresents));
+
+        request.predicate = [NSPredicate predicateWithFormat:
+                             @"%K >= %@ && %K <= %@",
+                             nameOfDateGetterMethod,
+                             startDate,
+                             nameOfDateGetterMethod,
+                             endDate];
+
+        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey: nameOfDateGetterMethod
+                                                                  ascending: YES]];
+
+        // "nil" means "a CoreData error occurred."  That's our default value.
+        NSArray *dailyRecordsFound = [context executeFetchRequest: request error: & coreDataError];
+
+        if (dailyRecordsFound == nil)
+        {
+            errorDomain = @"MedTrackerDataStorageError";
+            errorCode = 1;
+
+            // We'll return the error CoreData sent us as an underlyingError, shortly.
+        }
+        else
+        {
+            // Done!
+        }
+
+        NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];
+
+        if (someQueue != nil && callbackBlock != NULL)
+        {
+            NSError *error = [self errorWithDomain: errorDomain
+                                              code: errorCode
+                                   underlyingError: coreDataError];
+
+            [someQueue addOperationWithBlock: ^{
+                callbackBlock (dailyRecordsFound, operationDuration, error);
+            }];
+        }
+    }];
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Computed properties
+// ---------------------------------------------------------
 
 - (BOOL) isActive
 {
@@ -262,6 +467,49 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
     return result;
 }
 
+
+
+// ---------------------------------------------------------
+#pragma mark - Utilities
+// ---------------------------------------------------------
+
+/**
+ Working toward normalizing my error-handling.
+ If you provide a nil or empty domain string, this
+ method returns nil.  Otherwise, creates an error
+ with the specified domain and code.  If underlyingError
+ is not nil, attaches it to a userInfo dictionary with
+ the appropriate Apple key.
+ */
+- (NSError *) errorWithDomain: (NSString *) domain
+                         code: (NSInteger) code
+              underlyingError: (NSError *) underlyingError
+{
+    NSError *error = nil;
+
+    if (domain.length > 0)
+    {
+        NSDictionary *userInfoDictionary = nil;
+
+        if (underlyingError != nil)
+        {
+            userInfoDictionary = @{ NSUnderlyingErrorKey: underlyingError };
+        }
+
+        error = [NSError errorWithDomain: domain
+                                    code: code
+                                userInfo: userInfoDictionary];
+    }
+    
+    return error;
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Description method
+// ---------------------------------------------------------
+
 - (NSString *) description
 {
     /*
@@ -281,7 +529,7 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
         [dayNames addObject: dayName];
     }
 
-    NSString *result = [NSString stringWithFormat: @"Schedule { medication: %@, days: (%@), timesPerDay: %@, dosage: %@, color: %@ }",
+    NSString *result = [NSString stringWithFormat: @"Prescription { medication: %@, days: (%@), timesPerDay: %@, dosage: %@, color: %@ }",
                         self.self.medication.name,
                         [dayNames componentsJoinedByString: @", "],
                         self.numberOfTimesPerDay,

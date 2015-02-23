@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -1072,7 +1072,7 @@
                             </constraints>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="1Os-Uh-v3B">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                            <rect key="frame" x="0.0" y="188" width="320" height="100"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email messages" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IXV-QN-OmM">
@@ -1081,12 +1081,28 @@
                                     <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.5568627451" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zMc-Pg-Iea" customClass="APCButton">
+                                    <rect key="frame" x="71" y="45" width="178" height="40"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="178" id="bNF-yH-NIj"/>
+                                        <constraint firstAttribute="height" constant="40" id="huO-Xa-OYB"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <state key="normal" title="Reset Password">
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="resetPassword:" destination="fMs-Av-8Hw" eventType="touchUpInside" id="TpV-61-37e"/>
+                                    </connections>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstItem="IXV-QN-OmM" firstAttribute="leading" secondItem="1Os-Uh-v3B" secondAttribute="leading" constant="13" id="b0b-aB-zI8"/>
                                 <constraint firstItem="IXV-QN-OmM" firstAttribute="top" secondItem="1Os-Uh-v3B" secondAttribute="top" constant="11" id="clg-Nm-cWs"/>
                                 <constraint firstAttribute="trailing" secondItem="IXV-QN-OmM" secondAttribute="trailing" constant="12" id="hGP-nk-Dyg"/>
+                                <constraint firstAttribute="centerX" secondItem="zMc-Pg-Iea" secondAttribute="centerX" id="iet-C5-Him"/>
+                                <constraint firstAttribute="bottom" secondItem="zMc-Pg-Iea" secondAttribute="bottom" constant="15" id="mWq-YN-bYr"/>
                             </constraints>
                         </view>
                         <sections>
@@ -1137,9 +1153,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Forgot Password" id="VJi-su-bLn">
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="ge9-55-UUF">
+                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="YIi-kr-eYl">
                             <connections>
-                                <action selector="done:" destination="fMs-Av-8Hw" id="2q3-XB-uFS"/>
+                                <action selector="cancel:" destination="fMs-Av-8Hw" id="iY1-uC-L7z"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1148,13 +1164,14 @@
                     <connections>
                         <outlet property="emailMessageLabel" destination="IXV-QN-OmM" id="fVA-fa-Nxy"/>
                         <outlet property="emailTextField" destination="ZNj-BL-O64" id="0Q6-Tx-d7t"/>
+                        <outlet property="resetButton" destination="zMc-Pg-Iea" id="Awg-1g-gsb"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oou-uM-mbD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="224" y="2415"/>
         </scene>
-        <!--Medical Information-->
+        <!--Additional Information-->
         <scene sceneID="lj2-4X-z4Y">
             <objects>
                 <tableViewController storyboardIdentifier="APCSignUpMedicalInfoViewController" id="Plg-FM-GW9" customClass="APCSignUpMedicalInfoViewController" sceneMemberID="viewController">
@@ -1173,7 +1190,7 @@
                                     <constraints>
                                         <constraint firstAttribute="height" constant="21" id="jHX-oU-5DU"/>
                                     </constraints>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -1314,7 +1331,7 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Medical Information" id="gou-Uc-1H7">
+                    <navigationItem key="navigationItem" title="Additional Information" id="gou-Uc-1H7">
                         <barButtonItem key="rightBarButtonItem" title="Next" id="FsH-Bl-UEj">
                             <connections>
                                 <action selector="next" destination="Plg-FM-GW9" id="5cr-h0-nBB"/>
@@ -1748,7 +1765,7 @@
                                                                                         <constraint firstAttribute="height" constant="1" id="ySX-EA-WjH"/>
                                                                                     </constraints>
                                                                                 </view>
-                                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can also see a copy of the Study Consent document by tapping on the image below: **NOTE - THIS IS IN PROGRESS **" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x1f-vW-Aux">
+                                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please tap on the image below to see a copy of the Study Consent document." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x1f-vW-Aux">
                                                                                     <rect key="frame" x="20" y="243" width="283" height="75"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="height" constant="75" id="dMy-eg-xRU"/>

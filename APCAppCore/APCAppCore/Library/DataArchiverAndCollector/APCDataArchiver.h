@@ -16,8 +16,8 @@
 - (instancetype)initWithResults: (NSArray*) results itemIdentifier: (NSString*) itemIdentifier runUUID: (NSUUID*) runUUID;
 - (NSString*) writeToOutputDirectory: (NSString*) outputDirectory;
 
-+ (void) encryptZipFile: (NSString*) unencryptedPath encryptedPath:(NSString*) encryptedPath;
-
++ (BOOL) encryptZipFile: (NSString*) unencryptedPath encryptedPath:(NSString*) encryptedPath;
+- (NSDictionary *) generateSerializableDataFromSourceDictionary: (NSDictionary *) sourceDictionary;
 
 
 /*

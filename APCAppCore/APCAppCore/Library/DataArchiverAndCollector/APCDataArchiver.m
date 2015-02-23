@@ -550,17 +550,15 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     return ([[NSFileManager defaultManager] fileExistsAtPath:newEncryptedPath])? @"encrypted.zip" : nil;
 }
 
-+ (void) encryptZipFile: (NSString*) unencryptedPath encryptedPath:(NSString*) encryptedPath
++ (BOOL) encryptZipFile: (NSString*) unencryptedPath encryptedPath:(NSString*) encryptedPath
 {
     NSData * unencryptedZipData = [NSData dataWithContentsOfFile:unencryptedPath];
     
     NSError * encryptionError;
     NSData * encryptedZipData = cmsEncrypt(unencryptedZipData, [APCDataArchiver pemPath], &encryptionError);
     APCLogError2(encryptionError);
-    
-    NSError * fileWriteError;
-    [encryptedZipData writeToFile:encryptedPath options:NSDataWritingAtomic error:&fileWriteError];
-    APCLogError2(fileWriteError);
+
+    return [encryptedZipData writeToFile:encryptedPath options:NSDataWritingAtomic error:nil];
 }
 
 /*********************************************************************************/
