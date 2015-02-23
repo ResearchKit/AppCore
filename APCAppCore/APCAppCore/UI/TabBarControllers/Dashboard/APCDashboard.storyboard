@@ -144,7 +144,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="aDp-gi-ps1">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="aDp-gi-ps1">
                                 <rect key="frame" x="10" y="14" width="494" height="29"/>
                                 <segments>
                                     <segment title="5D"/>
@@ -154,7 +154,6 @@
                                     <segment title="6M"/>
                                     <segment title="1Y"/>
                                 </segments>
-                                <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="segmentControlChanged:" destination="YkO-h1-tiz" eventType="valueChanged" id="4ps-Ua-MGP"/>
                                 </connections>
@@ -167,10 +166,10 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Steps" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GW7-fg-rzK">
-                                <rect key="frame" x="16" y="69" width="130" height="26"/>
+                                <rect key="frame" x="16" y="65" width="130" height="33"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="130" id="DI5-A9-phx"/>
-                                    <constraint firstAttribute="height" constant="26" id="i2d-xh-pac"/>
+                                    <constraint firstAttribute="height" constant="33" id="i2d-xh-pac"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -204,7 +203,7 @@
                             <constraint firstItem="Kio-T5-Y4A" firstAttribute="top" secondItem="zew-9J-Hox" secondAttribute="bottom" constant="8" id="KYd-ND-qqO"/>
                             <constraint firstItem="8OJ-Bg-TnD" firstAttribute="top" secondItem="cnr-qn-gof" secondAttribute="bottom" id="NR9-KM-Epo"/>
                             <constraint firstItem="8OJ-Bg-TnD" firstAttribute="top" secondItem="XCp-55-xj3" secondAttribute="bottom" constant="8" id="Nga-vg-AIx"/>
-                            <constraint firstItem="GW7-fg-rzK" firstAttribute="top" secondItem="wbr-TH-IEh" secondAttribute="bottom" constant="14" id="O3b-kx-BHN"/>
+                            <constraint firstItem="GW7-fg-rzK" firstAttribute="top" secondItem="wbr-TH-IEh" secondAttribute="bottom" constant="10" id="O3b-kx-BHN"/>
                             <constraint firstItem="XCp-55-xj3" firstAttribute="leading" secondItem="NSh-Ou-wJu" secondAttribute="leading" constant="4" id="R1n-bF-wvl"/>
                             <constraint firstItem="XCp-55-xj3" firstAttribute="top" secondItem="zew-9J-Hox" secondAttribute="bottom" constant="110" id="Rz7-kB-I55"/>
                             <constraint firstAttribute="trailingMargin" secondItem="wbr-TH-IEh" secondAttribute="trailing" constant="-16" id="THU-Oc-ow6"/>
@@ -234,7 +233,7 @@
                         <outlet property="compareLabel" destination="kG0-AQ-xbp" id="sls-uJ-S19"/>
                         <outlet property="compareSwitch" destination="JXf-ca-BPk" id="XBn-gM-ca9"/>
                         <outlet property="graphView" destination="XCp-55-xj3" id="cFz-VB-LuS"/>
-                        <outlet property="segmentedControl" destination="aDp-gi-ps1" id="WGa-KS-VGR"/>
+                        <outlet property="segmentedControl" destination="aDp-gi-ps1" id="2qy-j5-QNg"/>
                         <outlet property="subTitleLabel" destination="AEN-nF-Kgn" id="LmK-gl-s8L"/>
                         <outlet property="tintView" destination="cnr-qn-gof" id="mlp-Oc-pRa"/>
                         <outlet property="titleLabel" destination="GW7-fg-rzK" id="qfs-Eb-UPK"/>

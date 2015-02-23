@@ -60,7 +60,7 @@
 {
     self.segmentedControl.tintColor = [UIColor clearColor];
     [self.segmentedControl setTitleTextAttributes:@{NSFontAttributeName:[UIFont appRegularFontWithSize:19.0f], NSForegroundColorAttributeName : [UIColor appSecondaryColor2]} forState:UIControlStateNormal];
-    [self.segmentedControl setTitleTextAttributes:@{NSFontAttributeName:[UIFont appMediumFontWithSize:19.0f], NSForegroundColorAttributeName : [UIColor appSecondaryColor1]} forState:UIControlStateSelected];
+    [self.segmentedControl setTitleTextAttributes:@{NSFontAttributeName:[UIFont appMediumFontWithSize:19.0f], NSForegroundColorAttributeName : [UIColor whiteColor]} forState:UIControlStateSelected];
     
     self.compareSwitch.onTintColor = self.graphItem.tintColor;
     
