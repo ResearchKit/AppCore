@@ -159,18 +159,14 @@
         errorMap = [NSError errorMapCFNetwork];
     } else if ([self.domain isEqualToString:SBB_ERROR_DOMAIN]) {
         id localError = self.userInfo[SBB_ORIGINAL_ERROR_KEY];
+        errorMap = [NSError errorMapBridgeSDK];
         
-        if (self.code < kSBBUnknownError) {
-            errorMap = [NSError errorMapBridgeSDK];
+        if ([localError isKindOfClass:[NSError class]]) {
+            message = [(NSError *)localError localizedDescription];
         } else {
-            if ([localError isKindOfClass:[NSError class]]) {
-                message = [(NSError *)localError localizedDescription];
-            }
-            else {
-                message = [localError objectForKey:@"message"];
-            }
+            message = [localError objectForKey:@"message"];
+            errorMap = [NSError errorMapRefactoredMessages];
         }
-
     }
     
     errorMap = errorMap ? errorMap : [NSError errorMapRefactoredMessages];
