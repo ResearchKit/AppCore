@@ -655,7 +655,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 - (void)showPasscodeIfNecessary
 {
-    if (self.dataSubstrate.currentUser.isSignedIn) {
+    if (self.dataSubstrate.currentUser.isSignedIn && !self.isPasscodeShowing) {
         NSDate *lastUsedTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
         
         if (lastUsedTime) {
@@ -667,6 +667,8 @@ static NSUInteger const kIndexOfProfileTab = 3;
                 [self showPasscode];
             }
         }
+    } else {
+        self.isPasscodeShowing = NO;
     }
 }
 
@@ -759,6 +761,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 {
     [viewController dismissViewControllerAnimated:YES completion:nil];
     self.isPasscodeShowing = NO;
+    
 }
 
 #pragma mark - Secure View
