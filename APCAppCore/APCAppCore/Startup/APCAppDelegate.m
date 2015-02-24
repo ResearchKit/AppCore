@@ -660,10 +660,10 @@ static NSUInteger const kIndexOfProfileTab = 3;
             NSTimeInterval timeDifference = [lastUsedTime timeIntervalSinceNow];
             NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
             
-//            if (fabs(timeDifference) > numberOfMinutes * 60) {
+            if (fabs(timeDifference) > numberOfMinutes * 60) {
 
                 [self showPasscode];
-//            }
+            }
         }
     } else {
         self.isPasscodeShowing = NO;
