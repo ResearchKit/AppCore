@@ -9,6 +9,8 @@
 #import "APCAppCore.h"
 #import "APCWebViewController.h"
 
+static NSString *kConsentEmailSubject = @"Consent Document";
+
 @interface APCStudyOverviewCollectionViewController () <ORKTaskViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *gradientCollectionView;
@@ -422,7 +424,7 @@
         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
         NSData *fileData = [NSData dataWithContentsOfFile:filePath];
         [mailComposeVC addAttachmentData:fileData mimeType:@"application/pdf" fileName:@"Consent"];
-        
+        [mailComposeVC setSubject:kConsentEmailSubject];
         [self presentViewController:mailComposeVC animated:YES completion:NULL];
     }
 }
