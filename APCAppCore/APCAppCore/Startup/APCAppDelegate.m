@@ -663,7 +663,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
             NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
             
             if (fabs(timeDifference) > numberOfMinutes * 60) {
-            
+
                 [self showPasscode];
             }
         }
@@ -674,6 +674,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 {
     if ([self.window.rootViewController isKindOfClass:[APCTabBarViewController class]]) {
         APCTabBarViewController * tvc = (APCTabBarViewController*) self.window.rootViewController;
+        self.isPasscodeShowing = YES;
         tvc.showPasscodeScreen = YES;
     }
 }
