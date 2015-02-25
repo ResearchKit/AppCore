@@ -727,6 +727,41 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         section.sectionTitle = @"";
         [items addObject:section];
     }
+    
+    {
+        NSMutableArray *rowItems = [NSMutableArray new];
+        
+        {
+            APCTableViewItem *field = [APCTableViewItem new];
+            field.caption = NSLocalizedString(@"Privacy Policy", @"");
+            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.textAlignnment = NSTextAlignmentRight;
+            field.editable = NO;
+            
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = field;
+            row.itemType = kAPCSettingsItemTypePrivacyPolicy;
+            [rowItems addObject:row];
+        }
+        
+        {
+            APCTableViewItem *field = [APCTableViewItem new];
+            field.caption = NSLocalizedString(@"Terms and Conditions", @"");
+            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.textAlignnment = NSTextAlignmentRight;
+            field.editable = NO;
+            
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = field;
+            row.itemType = kAPCSettingsItemTypeTermsAndConditions;
+            [rowItems addObject:row];
+        }
+        
+        APCTableViewSection *section = [APCTableViewSection new];
+        section.rows = [NSArray arrayWithArray:rowItems];
+        section.sectionTitle = @"";
+        [items addObject:section];
+    }
 
     NSArray *newArray = nil;
     if ([self.delegate respondsToSelector:@selector(preparedContent:)])
@@ -937,6 +972,16 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 
             }
                 break;
+            case kAPCSettingsItemTypePrivacyPolicy:
+            {
+                [self showPrivacyPolicy];
+            }
+                break;
+            case kAPCSettingsItemTypeTermsAndConditions:
+            {
+                [self showTermsAndConditions];
+            }
+                break;
                 
             default:{
                 [super tableView:tableView didSelectRowAtIndexPath:indexPath];
@@ -986,7 +1031,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             
             UILabel *headerLabel = [[UILabel alloc] initWithFrame:headerView.bounds];
             headerLabel.font = [UIFont appLightFontWithSize:16.0f];
-            headerLabel.textColor = [UIColor appSecondaryColor3];
+            headerLabel.textColor = [UIColor appSecondaryColor4];
             headerLabel.textAlignment = NSTextAlignmentCenter;
             headerLabel.text = sectionItem.sectionTitle;
             [headerView addSubview:headerLabel];
@@ -1059,6 +1104,33 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void) imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+#pragma mark - ORKTaskViewControllerDelegate methods
+
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
+{
+    if (result == ORKTaskViewControllerResultCompleted)
+    {
+        [self dismissViewControllerAnimated:taskViewController completion:nil];
+    }
+    else if (result == ORKTaskViewControllerResultDiscarded)
+    {
+        [self dismissViewControllerAnimated:taskViewController completion:nil];
+    }
+    else if (result == ORKTaskViewControllerResultSaved)
+    {
+        [self dismissViewControllerAnimated:taskViewController completion:nil];
+    }
+    else if (result == ORKTaskViewControllerResultFailed)
+    {
+        APCLogError2(error);
+    }
+    else
+    {
+        NSAssert(YES, @"Hit an option not supported by ORKTasViewControllerResult");
+    }
 }
 
 #pragma mark - Public methods
@@ -1224,7 +1296,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }];
 }
 
-#pragma mark - IBActions
+#pragma mark - IBActions/Selectors
 
 - (IBAction) signOut: (id) __unused sender
 {
@@ -1369,32 +1441,28 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self.tableView reloadData];
 
-
-
 }
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
+- (void)showPrivacyPolicy
 {
-    if (result == ORKTaskViewControllerResultCompleted)
-    {
-        [self dismissViewControllerAnimated:taskViewController completion:nil];
-    }
-    else if (result == ORKTaskViewControllerResultDiscarded)
-    {
-        [self dismissViewControllerAnimated:taskViewController completion:nil];
-    }
-    else if (result == ORKTaskViewControllerResultSaved)
-    {
-        [self dismissViewControllerAnimated:taskViewController completion:nil];
-    }
-    else if (result == ORKTaskViewControllerResultFailed)
-    {
-        APCLogError2(error);
-    }
-    else
-    {
-        NSAssert(YES, @"Hit an option not supported by ORKTasViewControllerResult");
-    }
+    APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
+    webViewController.fileName = @"PrivacyPolicy";
+    webViewController.fileType = @"pdf";
+    webViewController.title = NSLocalizedString(@"Privacy Policy", @"");
+    
+    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
+    [self.navigationController presentViewController:navController animated:YES completion:nil];
+}
+
+- (void)showTermsAndConditions
+{
+    APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
+    webViewController.fileName = @"TermsAndConditions";
+    webViewController.fileType = @"pdf";
+    webViewController.title = NSLocalizedString(@"Terms and Conditions", @"");
+    
+    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
+    [self.navigationController presentViewController:navController animated:YES completion:nil];
 }
 
 @end
