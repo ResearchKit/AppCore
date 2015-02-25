@@ -12,6 +12,8 @@ static NSDateFormatter *dateFormatter = nil;
 
 NSString *const kDatasetDateKey        = @"datasetDateKey";
 NSString *const kDatasetValueKey       = @"datasetValueKey";
+NSString *const kDatasetRangeValueKey  = @"datasetRangeValueKey";
+
 static NSString *const kDatasetSortKey        = @"datasetSortKey";
 static NSString *const kDatasetValueKindKey   = @"datasetValueKindKey";
 static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
@@ -343,6 +345,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
             
             point[kDatasetValueKey] = dataPoint[kDatasetValueKey];
             point[kDatasetValueNoDataKey] = dataPoint[kDatasetValueNoDataKey];
+            point[kDatasetRangeValueKey] = dataPoint[kDatasetRangeValueKey];
             
             [self.dataPoints replaceObjectAtIndex:pointIndex withObject:point];
         }
@@ -633,7 +636,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     HKStatisticsOptions queryOptions;
     
     if (isDecreteQuantity) {
-        queryOptions = HKStatisticsOptionDiscreteAverage;
+        queryOptions = HKStatisticsOptionDiscreteAverage | HKStatisticsOptionDiscreteMax | HKStatisticsOptionDiscreteMin;
     } else {
         queryOptions = HKStatisticsOptionCumulativeSum;
     }
@@ -660,9 +663,12 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                                           toDate:endDate
                                        withBlock:^(HKStatistics *result, BOOL * __unused stop) {
                                            HKQuantity *quantity;
+                                           APCRangePoint *rangePoint = nil;
                                            
                                            if (isDecreteQuantity) {
                                                quantity = result.averageQuantity;
+                                               rangePoint = [[APCRangePoint alloc] initWithMinimumValue:[result.minimumQuantity doubleValueForUnit:unit]
+                                                                                           maximumValue:[result.maximumQuantity doubleValueForUnit:unit]];
                                            } else {
                                                quantity = result.sumQuantity;
                                            }
@@ -673,6 +679,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                                            NSDictionary *dataPoint = @{
                                                                        kDatasetDateKey: date,
                                                                        kDatasetValueKey: (!quantity) ? @(NSNotFound) : @(value),
+                                                                       kDatasetRangeValueKey: (!rangePoint) ? @(NSNotFound) : rangePoint,
                                                                        kDatasetValueNoDataKey: (isDecreteQuantity) ? @(YES) : @(NO)
                                                                        };
                                            
@@ -879,6 +886,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 }
 
 #pragma mark - Graph Datasource
+#pragma mark Line
 
 - (NSInteger)lineGraph:(APCLineGraphView *) __unused graphView numberOfPointsInPlot:(NSInteger)plotIndex
 {
@@ -945,5 +953,39 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return xAxisTitle;
 }
 
+#pragma mark Discrete
+
+- (NSInteger)discreteGraph:(APCDiscreteGraphView *)graphView numberOfPointsInPlot:(NSInteger)plotIndex
+{
+    return [self.timeline count];
+}
+
+- (APCRangePoint *)discreteGraph:(APCDiscreteGraphView *)graphView plot:(NSInteger)plotIndex valueForPointAtIndex:(NSInteger)pointIndex
+{
+    APCRangePoint *value;
+    
+    NSDictionary *point = [self nextObject];
+    value = [point valueForKey:kDatasetRangeValueKey];
+    
+    return value;
+}
+
+- (NSString *)discreteGraph:(APCDiscreteGraphView *)graphView titleForXAxisAtIndex:(NSInteger)pointIndex
+{
+    NSDate *titleDate = nil;
+    
+    titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
+    
+    if (pointIndex == 0) {
+        [dateFormatter setDateFormat:@"MMM d"];
+    } else {
+        [dateFormatter setDateFormat:@"d"];
+    }
+    
+    
+    NSString *xAxisTitle = [dateFormatter stringFromDate:titleDate];
+    
+    return xAxisTitle;
+}
 
 @end
