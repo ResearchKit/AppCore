@@ -463,6 +463,26 @@ static NSString *const kSignedInKey = @"SignedIn";
     }];
 }
 
+//Inhaler
+- (HKQuantity *)inhalerUse
+{
+    
+    HKQuantityType *inhalerUseType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierInhalerUsage];
+    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+    __block HKQuantity * inhalerUse;
+    [self.healthStore mostRecentQuantitySampleOfType:inhalerUseType predicate:nil completion:^(HKQuantity *mostRecentQuantity, NSError *error) {
+        APCLogError2 (error);
+        inhalerUse = mostRecentQuantity;
+        dispatch_semaphore_signal(sema);
+    }];
+    
+    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+    
+    sema = NULL;
+    return inhalerUse;
+}
+
+
 //Weight
 - (HKQuantity *)weight
 {
