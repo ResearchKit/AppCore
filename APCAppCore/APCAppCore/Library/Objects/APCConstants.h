@@ -42,6 +42,7 @@ FOUNDATION_EXPORT NSString *const APCAppDidRegisterUserNotification;
 FOUNDATION_EXPORT NSString *const APCAppDidFailToRegisterForRemoteNotification;
 
 FOUNDATION_EXPORT NSString *const APCScoringHealthKitDataIsAvailableNotification;
+FOUNDATION_EXPORT NSString *const APCTaskResultsProcessedNotification;
 
 FOUNDATION_EXPORT NSString *const APCUpdateTasksReminderNotification;
 

@@ -12,4 +12,6 @@
 //Creates it synchronously
 + (NSManagedObjectID*) storeTaskResult:(ORKTaskResult*) taskResult inContext: (NSManagedObjectContext*) context;
 
++ (APCResult*) findAPCResultFromTaskResult: (ORKTaskResult*) taskResult inContext: (NSManagedObjectContext*) context;
+
 @end

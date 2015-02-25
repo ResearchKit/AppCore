@@ -36,6 +36,18 @@ static NSDictionary * lookupDictionary;
     apcResult.endDate = taskResult.endDate;
 }
 
++ (APCResult *)findAPCResultFromTaskResult:(ORKTaskResult *)taskResult inContext:(NSManagedObjectContext *)context
+{
+    NSFetchRequest * request = [APCResult request];
+    request.predicate = [NSPredicate predicateWithFormat:@"taskRunID == %@", taskResult.taskRunUUID.UUIDString];
+    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"endDate" ascending:NO]];
+    request.fetchLimit = 1;
+    NSError * error;
+    NSArray * result = [context executeFetchRequest:request error:&error];
+    APCLogError2(error);
+    return result.count > 0 ? result.firstObject : nil;
+}
+
 /*********************************************************************************/
 #pragma mark - Life Cycle Methods
 /*********************************************************************************/

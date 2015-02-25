@@ -23,6 +23,7 @@ NSString *const APCAppDidRegisterUserNotification            = @"APCAppDidRegist
 NSString *const APCAppDidFailToRegisterForRemoteNotification = @"APCAppDidFailToRegisterForRemoteNotifications";
 
 NSString *const APCScoringHealthKitDataIsAvailableNotification = @"APCScoringHealthKitDataIsAvailableNotification";
+NSString *const APCTaskResultsProcessedNotification = @"APCTaskResultsProcessedNotification";
 
 NSString *const APCUpdateTasksReminderNotification = @"APCUpdateTasksReminderNotification";
 
