@@ -23,10 +23,13 @@ NSString *const APCAppDidRegisterUserNotification            = @"APCAppDidRegist
 NSString *const APCAppDidFailToRegisterForRemoteNotification = @"APCAppDidFailToRegisterForRemoteNotifications";
 
 NSString *const APCScoringHealthKitDataIsAvailableNotification = @"APCScoringHealthKitDataIsAvailableNotification";
+NSString *const APCTaskResultsProcessedNotification = @"APCTaskResultsProcessedNotification";
 
 NSString *const APCUpdateTasksReminderNotification = @"APCUpdateTasksReminderNotification";
 
 NSString *const APCConsentCompletedWithDisagreeNotification = @"goToSignInJoinScreen";
+
+NSString* const APCMotionHistoryReporterDoneNotification = @"APCMotionHistoryReporterDoneNotification";
 
 NSString *const kStudyIdentifierKey                 = @"StudyIdentifierKey";
 NSString *const kAppPrefixKey                       = @"AppPrefixKey";

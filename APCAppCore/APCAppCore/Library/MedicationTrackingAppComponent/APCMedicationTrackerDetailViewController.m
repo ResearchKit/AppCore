@@ -42,6 +42,8 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 
 @property (nonatomic, weak)  IBOutlet  UITableView    *tabulator;
 
+@property (nonatomic, assign)          NSUInteger      numberOfTickMarksToSet;
+
 @end
 
 @implementation APCMedicationTrackerDetailViewController
@@ -97,6 +99,10 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
         aCell.selectionStyle = UITableViewCellSelectionStyleNone;
         aCell.textLabel.text = self.lozenge.prescription.medication.name;
         aCell.detailTextLabel.text = self.lozenge.prescription.dosage.name;
+        if (self.numberOfTickMarksToSet > 0) {
+            aCell.accessoryType = UITableViewCellAccessoryCheckmark;
+            self.numberOfTickMarksToSet = self.numberOfTickMarksToSet - 1;
+        }
         cell = aCell;
     } else if (indexPath.section == kMedicineSummarySection) {
 
@@ -216,6 +222,8 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 
     UINib  *setupTableCellNib = [UINib nibWithNibName:kSetupTableCellName bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:setupTableCellNib forCellReuseIdentifier:kSetupTableCellName];
+    
+    self.numberOfTickMarksToSet = [self.lozenge.numberOfDosesTaken unsignedIntegerValue];
 }
 
 - (void)didReceiveMemoryWarning
