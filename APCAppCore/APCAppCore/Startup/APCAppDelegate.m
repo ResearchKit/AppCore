@@ -637,18 +637,18 @@ static NSUInteger const kIndexOfProfileTab = 3;
 /*********************************************************************************/
 - (void) showAppropriateVC
 {
-//    if (self.dataSubstrate.currentUser.isSignedIn) {
+    if (self.dataSubstrate.currentUser.isSignedIn) {
         [self showTabBar];
         
-//    }
-//    else if (self.dataSubstrate.currentUser.isSignedUp)
-//    {
-//        [self showNeedsEmailVerification];
-//    }
-//    else
-//    {
-//        [self showOnBoarding];
-//    }
+    }
+    else if (self.dataSubstrate.currentUser.isSignedUp)
+    {
+        [self showNeedsEmailVerification];
+    }
+    else
+    {
+        [self showOnBoarding];
+    }
 }
 
 - (void)showPasscodeIfNecessary
