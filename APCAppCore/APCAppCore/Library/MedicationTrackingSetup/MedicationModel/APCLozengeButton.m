@@ -6,7 +6,9 @@
 //
 
 #import "APCLozengeButton.h"
-#import "APCMedicationFollower.h"
+
+#import "APCMedTrackerPrescription.h"
+#import "APCMedTrackerPrescription+Helper.h"
 
 static  CGFloat  kLayerBorderWidth  = 3.0;
 static  CGFloat  kLayerCornerRadius = 4.0;
@@ -25,6 +27,7 @@ static  short  coordinates[] = {
     'z'
 };
 
+#pragma  mark  -  Initialisation
 
 + (instancetype)buttonWithType:(UIButtonType)buttonType
 {
@@ -73,6 +76,8 @@ static  short  coordinates[] = {
     }
 }
 
+#pragma  mark  -  Drawing
+
 - (void)drawRect:(CGRect)rect
 {
     [super drawRect:rect];
@@ -81,41 +86,30 @@ static  short  coordinates[] = {
     
     UIBezierPath  *path = [UIBezierPath bezierPath];
     
-    if (self.isCompleted == NO) {
-        [self.incompleteBackgroundColor set];
+    if ([self.numberOfDosesTaken unsignedIntegerValue] == [self.prescription.numberOfTimesPerDay unsignedIntegerValue]) {
+        [self setTitle:@"" forState:UIControlStateNormal];
+        UIColor  *background = [self.completedBorderColor colorWithAlphaComponent:0.75];
+        CALayer  *layer = self.layer;
+        layer.backgroundColor = [background CGColor];
+        
+        [self.completedBorderColor set];
         [path stroke];
-    } else {
-        [self.completedBackgroundColor set];
-        [path fill];
-        [path stroke];
+        
         [self makePath:path withDimension:self.bounds];
-        [self.completedTickColor set];
+        [[UIColor whiteColor] set];
         [path fill];
+    } else {
+        NSNumber  *numberOfTimes = self.prescription.numberOfTimesPerDay;
+        NSString  *aTitle = [NSString stringWithFormat:@"%lu\u2009/\u2009%lu", [self.numberOfDosesTaken unsignedIntegerValue], [numberOfTimes unsignedIntegerValue]];
+        [self setTitle:aTitle forState:UIControlStateNormal];
     }
 }
 
-- (void)setIncompleteBackgroundColor:(UIColor *)backgroundColor
-{
-    [super setBackgroundColor:backgroundColor];
-    _incompleteBackgroundColor = backgroundColor;
-    CALayer  *layer = self.layer;
-    layer.backgroundColor = [backgroundColor CGColor];
-    [self setNeedsDisplay];
-}
+#pragma  mark  -  Custom Setters
 
-- (void)setIncompleteBorderColor:(UIColor *)borderColor
+- (void)setNumberOfDosesTaken:(NSNumber *)aNumber
 {
-    _incompleteBorderColor = borderColor;
-    CALayer  *layer = self.layer;
-    layer.borderColor = [borderColor CGColor];
-    [self setNeedsDisplay];
-}
-
-- (void)setIncompleteTickColor:(UIColor *)tickColor
-{
-    _incompleteTickColor = tickColor;
-    CALayer  *layer = self.layer;
-    layer.backgroundColor = [tickColor CGColor];
+    _numberOfDosesTaken = aNumber;
     [self setNeedsDisplay];
 }
 

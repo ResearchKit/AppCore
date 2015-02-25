@@ -7,7 +7,6 @@
 
 #import "APCMedicationColorViewController.h"
 #import "APCColorSwatchTableViewCell.h"
-#import "APCMedSetupNotificationKeys.h"
 
 #import "APCMedTrackerDataStorageManager.h"
 #import "APCMedTrackerPrescriptionColor+Helper.h"
@@ -95,19 +94,12 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
             self.selectedIndex = indexPath;
         }
     }
-    NSDictionary  *info = nil;
-    if (self.selectedIndex == nil) {
-        info = @{ APCMedSetupNameColorKey : [UIColor grayColor] };
-    } else {
-        APCMedTrackerPrescriptionColor  *schedulColor = self.colorsList[indexPath.row];
-        NSString  *colorName = schedulColor.name;
-        info = @{
-                 APCMedSetupNameColorKey : colorName
-                };
+    if (self.delegate != nil) {
+        if ([self.delegate respondsToSelector:@selector(colorController:didSelectColorLabelName:)] == YES) {
+            APCMedTrackerPrescriptionColor  *schedulColor = self.colorsList[indexPath.row];
+            [self.delegate performSelector:@selector(colorController:didSelectColorLabelName:) withObject:self withObject:schedulColor];
+        }
     }
-    NSNotificationCenter  *centre = [NSNotificationCenter defaultCenter];
-    NSNotification  *notification = [NSNotification notificationWithName:APCMedSetupNameColorNotificationKey object:nil userInfo:info];
-    [centre postNotification:notification];
 }
 
 - (NSString *)title

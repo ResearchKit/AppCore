@@ -14,11 +14,11 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bhB-7S-Mte" userLabel="Add Topic Label">
-                        <rect key="frame" x="148" y="11" width="132" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bhB-7S-Mte" userLabel="Add Topic Label">
+                        <rect key="frame" x="148" y="0.0" width="132" height="44"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="132" id="dBj-1v-6zH"/>
-                            <constraint firstAttribute="height" constant="21" id="eb4-My-CVr"/>
+                            <constraint firstAttribute="height" constant="44" id="eb4-My-CVr"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -35,27 +35,31 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vJf-Z2-oXv" userLabel="Color Swatch">
-                        <rect key="frame" x="242" y="3" width="37" height="37"/>
+                        <rect key="frame" x="242" y="4" width="36" height="36"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="37" id="5TQ-dW-cdF"/>
-                            <constraint firstAttribute="height" constant="37" id="8R3-b3-oVu"/>
+                            <constraint firstAttribute="width" constant="36" id="5TQ-dW-cdF"/>
+                            <constraint firstAttribute="height" constant="36" id="8R3-b3-oVu"/>
                         </constraints>
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="vJf-Z2-oXv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-5" id="2a5-NA-ZGR"/>
+                    <constraint firstItem="vJf-Z2-oXv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-4" id="2a5-NA-ZGR"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="vJf-Z2-oXv" secondAttribute="bottom" constant="-5" id="2vV-Ay-xbq"/>
                     <constraint firstItem="bhB-7S-Mte" firstAttribute="leading" secondItem="56q-8K-rRa" secondAttribute="trailing" constant="8" id="87g-Cc-4WD"/>
                     <constraint firstAttribute="centerY" secondItem="56q-8K-rRa" secondAttribute="centerY" constant="0.5" id="89R-Ua-OTd"/>
                     <constraint firstItem="56q-8K-rRa" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="UPK-PM-aIx"/>
                     <constraint firstItem="vJf-Z2-oXv" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="ZY2-a7-hXk"/>
+                    <constraint firstItem="vJf-Z2-oXv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-4" id="dM4-5E-JAX"/>
                     <constraint firstItem="vJf-Z2-oXv" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="234" id="ivf-RM-Fi5"/>
-                    <constraint firstAttribute="centerY" secondItem="bhB-7S-Mte" secondAttribute="centerY" constant="0.5" id="n6j-pQ-oGU"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="vJf-Z2-oXv" secondAttribute="bottom" constant="-5" id="oaj-Lw-JKZ"/>
+                    <constraint firstAttribute="centerY" secondItem="bhB-7S-Mte" secondAttribute="centerY" constant="-0.5" id="n6j-pQ-oGU"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="vJf-Z2-oXv" secondAttribute="bottom" constant="-4" id="oaj-Lw-JKZ"/>
                 </constraints>
                 <variation key="default">
                     <mask key="constraints">
+                        <exclude reference="2a5-NA-ZGR"/>
                         <exclude reference="ZY2-a7-hXk"/>
+                        <exclude reference="oaj-Lw-JKZ"/>
                     </mask>
                 </variation>
             </tableViewCellContentView>
@@ -64,7 +68,7 @@
                 <outlet property="colorSwatch" destination="vJf-Z2-oXv" id="zHV-Hm-ORX"/>
                 <outlet property="topicLabel" destination="56q-8K-rRa" id="5ru-G5-NwE"/>
             </connections>
-            <point key="canvasLocation" x="437" y="303"/>
+            <point key="canvasLocation" x="437" y="302"/>
         </tableViewCell>
     </objects>
 </document>
