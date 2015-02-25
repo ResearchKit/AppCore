@@ -7,12 +7,22 @@
 
 #import "APCInhalerUsageTracker.h"
 #import <HKHealthStore+APCExtensions.h>
-
+static NSString *const kCSVFilename  = @"data.csv";
 @implementation APCInhalerUsageTracker
 
 -(instancetype)initWithIdentifier:(NSString *)identifier{
     self = [super initWithIdentifier:identifier];
+    self.csvFilename = kCSVFilename;
     return self;
+}
+
+//does nothing in this case because updates are provided via HK background delivery
+-(void)startTracking{
+    [super startTracking];
+}
+
+- (NSArray *)columnNames{
+    return @[@"inhaler use"];
 }
 
 @end
