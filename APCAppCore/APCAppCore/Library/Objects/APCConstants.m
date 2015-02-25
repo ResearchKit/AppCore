@@ -29,6 +29,8 @@ NSString *const APCUpdateTasksReminderNotification = @"APCUpdateTasksReminderNot
 
 NSString *const APCConsentCompletedWithDisagreeNotification = @"goToSignInJoinScreen";
 
+NSString* const APCMotionHistoryReporterDoneNotification = @"APCMotionHistoryReporterDoneNotification";
+
 NSString *const kStudyIdentifierKey                 = @"StudyIdentifierKey";
 NSString *const kAppPrefixKey                       = @"AppPrefixKey";
 NSString *const kBridgeEnvironmentKey               = @"BridgeEnvironmentKey";
