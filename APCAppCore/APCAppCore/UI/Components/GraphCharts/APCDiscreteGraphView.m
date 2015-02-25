@@ -100,7 +100,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     _hasDataPoint = NO;
     _shouldAnimate = YES;
-    _shouldConnectRanges = NO;
+    _shouldConnectRanges = YES;
     
     [self setupViews];
     

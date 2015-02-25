@@ -1,18 +1,18 @@
-// 
-//  APCDashboardLineGraphTableViewCell.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
- 
-#import "APCDashboardLineGraphTableViewCell.h"
-#import "APCLineGraphView.h"
+//
+//  APCDashboardDiscreteGraphTableViewCell.m
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
+
+#import "APCDashboardDiscreteGraphTableViewCell.h"
 #import "UIFont+APCAppearance.h"
 #import "UIColor+APCAppearance.h"
+#import "APCDiscreteGraphView.h"
 
-NSString * const kAPCDashboardGraphTableViewCellIdentifier = @"APCDashboardLineGraphTableViewCell";
+NSString * const kAPCDashboardDiscreteGraphTableViewCellIdentifier = @"APCDashboardDiscreteGraphTableViewCell";
 
-@implementation APCDashboardLineGraphTableViewCell
+@implementation APCDashboardDiscreteGraphTableViewCell
 
 @synthesize tintColor = _tintColor;
 

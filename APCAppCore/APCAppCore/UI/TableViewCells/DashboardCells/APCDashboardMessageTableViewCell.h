@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 #import "APCConstants.h"
 
-static NSString * const kAPCDashboardMessageTableViewCellIdentifier = @"APCDashboardMessageTableViewCell";
+FOUNDATION_EXPORT NSString * const kAPCDashboardMessageTableViewCellIdentifier;
 
 @interface APCDashboardMessageTableViewCell : UITableViewCell
 

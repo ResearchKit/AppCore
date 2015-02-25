@@ -9,7 +9,7 @@
 #import "APCCircularProgressView.h"
 #import "APCDashboardTableViewCell.h"
 
-static NSString * const kAPCDashboardProgressTableViewCellIdentifier = @"APCDashboardProgressTableViewCell";
+FOUNDATION_EXPORT NSString * const kAPCDashboardProgressTableViewCellIdentifier;
 
 @interface APCDashboardProgressTableViewCell : APCDashboardTableViewCell
 

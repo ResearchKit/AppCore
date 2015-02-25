@@ -10,9 +10,7 @@
 
 @class APCLineGraphView;
 
-static NSString * const kAPCDashboardGraphTableViewCellIdentifier = @"APCDashboardLineGraphTableViewCell";
-
-@protocol APCDashboardGraphTableViewCellDelegate;
+FOUNDATION_EXPORT NSString * const kAPCDashboardGraphTableViewCellIdentifier;
 
 @interface APCDashboardLineGraphTableViewCell : APCDashboardTableViewCell
 
