@@ -29,6 +29,8 @@
                      forState:UIControlStateHighlighted];
     
     self.infoButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    
+    self.showTopSeparator = NO;
 }
 
 - (IBAction) expandTapped: (UIButton *) __unused sender
@@ -92,16 +94,28 @@
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGFloat borderWidth = 1.0;
+    CGFloat topSeparatorWidth = rect.size.width;
+    CGFloat topSeparatorHeight = 4.0;
+    CGFloat topBorderYValue = 0;
     
-    UIColor *borderColor = [UIColor colorWithWhite:0.973 alpha:1.000];
+    UIColor *borderColor = [UIColor lightGrayColor];
+    
+    if (self.showTopSeparator) {
+        CGRect topSeparator = CGRectMake(0, 0, topSeparatorWidth, topSeparatorHeight);
+        UIColor *separatorColor = [UIColor colorWithWhite:0.973 alpha:1.000]; //[UIColor colorWithWhite:0.910 alpha:1.000];
+        [separatorColor setFill];
+        UIRectFill(topSeparator);
+        
+        topBorderYValue = topSeparatorHeight;
+    }
     
     // Top border
     CGContextSaveGState(context);
     CGContextSetLineCap(context, kCGLineCapSquare);
     CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
     CGContextSetLineWidth(context, borderWidth);
-    CGContextMoveToPoint(context, 0, 0);
-    CGContextAddLineToPoint(context, rect.size.width, 0);
+    CGContextMoveToPoint(context, 0, topBorderYValue);
+    CGContextAddLineToPoint(context, rect.size.width, topBorderYValue);
     CGContextStrokePath(context);
     CGContextRestoreGState(context);
     
@@ -118,7 +132,14 @@
     // Sidebar
     CGFloat sidebarWidth = 4.0;
     CGFloat sidbarHeight = rect.size.height;
-    CGRect sidebar = CGRectMake(0, 0, sidebarWidth, sidbarHeight);
+    CGRect sidebar;
+    
+    if (self.showTopSeparator) {
+        sidebar = CGRectMake(0, topSeparatorHeight, sidebarWidth, sidbarHeight);
+    } else {
+        sidebar = CGRectMake(0, 0, sidebarWidth, sidbarHeight);
+    }
+    
     UIColor *sidebarColor = self.tintColor;
     [sidebarColor setFill];
     UIRectFill(sidebar);

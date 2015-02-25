@@ -225,9 +225,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
     
     //Scrubber Views
-    self.scrubberLine.frame = CGRectMake(0, kAPCGraphTopPadding, 1, CGRectGetHeight(self.plotsView.frame));
+    self.scrubberLine.frame = CGRectMake(CGRectGetMinX(self.scrubberLine.frame), kAPCGraphTopPadding, 1, CGRectGetHeight(self.plotsView.frame));
     [self updateScrubberLabel];
-    self.scrubberThumbView.frame = CGRectMake(0, 0, [self scrubberThumbSize].width, [self scrubberThumbSize].height);
+    self.scrubberThumbView.frame = CGRectMake(CGRectGetMinX(self.scrubberThumbView.frame), CGRectGetMinY(self.scrubberThumbView.frame), [self scrubberThumbSize].width, [self scrubberThumbSize].height);
     self.scrubberThumbView.layer.cornerRadius = self.scrubberThumbView.bounds.size.height/2;
     
     [self.xAxisView layoutSubviews];

@@ -129,8 +129,6 @@ static NSUInteger const kIndexOfProfileTab = 3;
 - (void)applicationWillEnterForeground:(UIApplication *) __unused application
 {
     [self hideSecureView];
-    
-    [self showPasscodeIfNecessary];
 }
 
 - (void)                    application: (UIApplication *) __unused application
@@ -655,7 +653,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 - (void)showPasscodeIfNecessary
 {
-    if (self.dataSubstrate.currentUser.isSignedIn) {
+    if (self.dataSubstrate.currentUser.isSignedIn && !self.isPasscodeShowing) {
         NSDate *lastUsedTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
         
         if (lastUsedTime) {
@@ -663,10 +661,12 @@ static NSUInteger const kIndexOfProfileTab = 3;
             NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
             
             if (fabs(timeDifference) > numberOfMinutes * 60) {
-            
+
                 [self showPasscode];
             }
         }
+    } else {
+        self.isPasscodeShowing = NO;
     }
 }
 
@@ -674,6 +674,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 {
     if ([self.window.rootViewController isKindOfClass:[APCTabBarViewController class]]) {
         APCTabBarViewController * tvc = (APCTabBarViewController*) self.window.rootViewController;
+        self.isPasscodeShowing = YES;
         tvc.showPasscodeScreen = YES;
     }
 }
@@ -758,6 +759,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 {
     [viewController dismissViewControllerAnimated:YES completion:nil];
     self.isPasscodeShowing = NO;
+    
 }
 
 #pragma mark - Secure View
