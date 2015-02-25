@@ -75,6 +75,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCInEligibleViewController.h>
 #import <APCAppCore/APCShareViewController.h>
 #import <APCAppCore/APCTermsAndConditionsViewController.h>
+#import <APCAppCore/APCPermissionPrimingViewController.h>
 #import <APCAppCore/APCSignUpInfoViewController.h>
 #import <APCAppCore/APCSignUpGeneralInfoViewController.h>
 #import <APCAppCore/APCSignUpMedicalInfoViewController.h>
