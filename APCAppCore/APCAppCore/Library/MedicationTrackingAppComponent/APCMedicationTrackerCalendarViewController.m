@@ -194,8 +194,6 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
         view.backgroundColor = [UIColor whiteColor];
         [self.exScrollibur addSubview:view];
         [view makePrescriptionDisplaysWithPrescriptions:self.prescriptions andDate:startOfWeekDate];
-//        view.startOfWeekDate = startOfWeekDate;
-//        view.prescriptions = self.prescriptions;
         startOfWeekDate = [startOfWeekDate addDays:7];
     }
     self.exScrolliburNumberOfPages = 4;
@@ -273,34 +271,9 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     }
 }
 
-    //
-    //    We're keeping this commented out code for now
-    //        but intend to delete it if we don't re-instate it
-    //
-
-//- (void)viewDidAppear:(BOOL)animated
-//{
-//    [super viewDidAppear:animated];
-//     NSLog(@"APCMedicationTrackerCalendarViewController viewDidAppear");
-//    self.cancelButtonItem.title = NSLocalizedString(@"Done", @"Done");
-//    if (self.viewsWereCreated == NO) {
-//        [self makeCalendar];
-////        if ([self.schedules count] == 0) {
-//////            [self makeDummyModels];
-////        }
-//        [self makePages];
-////        [self setupHiddenStates];
-//        self.viewsWereCreated = YES;
-//    }
-//    [self.tabulator reloadData];
-//    [self.view setNeedsDisplay];
-//}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-//    self.schedules = [NSArray array];
     
     [APCMedTrackerPrescription fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
                                                         toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,

@@ -239,9 +239,9 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
                                                          color: self.colorObject
                                             frequencyAndDays: self.frequenciesAndDaysObject
                                                andUseThisQueue: [NSOperationQueue mainQueue]
-                                              toDoThisWhenDone: ^(id createdObject, NSTimeInterval operationDuration) {
-                                                  
-                                                  NSLog(@"'new APCMedTrackerMedicationSchedule' finished in %f seconds.  Result = %@", operationDuration, createdObject);
+                                              toDoThisWhenDone: ^(id createdObject,
+                                                                  NSTimeInterval operationDuration)
+    {
                                               }];
     self.medicationNameWasSet      = NO;
     self.medicationColorWasSet     = NO;

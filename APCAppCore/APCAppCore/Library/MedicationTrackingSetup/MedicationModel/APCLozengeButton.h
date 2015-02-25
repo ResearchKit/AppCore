@@ -24,6 +24,4 @@
 
 @property  (nonatomic, assign, getter = isCompleted)  BOOL  completed;
 
-//- (void)assignPrescription:(APCMedTrackerPrescription *)aPrescription  forDate:(NSDate *)aDate;
-
 @end

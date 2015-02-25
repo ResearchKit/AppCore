@@ -21,6 +21,8 @@
 
 #import "APCLozengeButton.h"
 
+#import "APCAppCore.h"
+
 static  CGFloat  kLozengeButtonWidth     = 40.0;
 static  CGFloat  kLozengeButtonHeight    = 25.0;
 static  CGFloat  kLozengeBaseYCoordinate = 10.0;
@@ -83,7 +85,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
          {
              if (error)
              {
-                     // Do something interesting
+                 APCLogError2(error);
              }
              else
              {
@@ -92,8 +94,6 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
              }
          }];
     }
-    
-//    [self makeLozengesLayout];
 }
 
 #pragma   mark  -  Create Lozenge Button
@@ -167,46 +167,6 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
         }
     }
 }
-
-//APCMedTrackerDailyDosageRecord  *record = nil;
-//
-//if (error != nil) {
-//    APCLogError2(error);
-//} else if (dailyDosageRecords.count == 0) {
-//    self.lozenge.numberOfDosesTaken = [NSNumber numberWithUnsignedInteger:0];
-//} else {
-//    record = [dailyDosageRecords firstObject];
-//    self.lozenge.numberOfDosesTaken = record.numberOfDosesTakenForThisDate;
-//}
-
-//- (void)makeLozengesLayout
-//{
-//    NSDictionary  *map = @{ @"Monday" : @(0.0), @"Tuesday" : @(1.0), @"Wednesday" : @(2.0), @"Thursday" : @(3.0), @"Friday" : @(4.0), @"Saturday" : @(5.0), @"Sunday" : @(6.0) };
-//    
-//    CGFloat  disp = CGRectGetWidth(self.bounds) / 7.0;
-//    CGFloat  baseYCoordinate = kLozengeBaseYCoordinate;
-//        //
-//        //    NSNumber objects in the code below are initalised with integer values
-//        //
-//    for (APCMedTrackerPrescription  *prescription  in  self.prescriptions) {
-//        NSDictionary  *dictionary = prescription.frequencyAndDays;
-//        for (NSUInteger  day = 0;  day < numberOfDaysOfWeek;  day++) {
-//            NSDate  *currentDate = [self.startOfWeekDate addDays:day];
-//            NSString  *dayOfWeek = daysOfWeekNames[day];
-//            NSNumber  *number = dictionary[dayOfWeek];
-//            if ([number integerValue] > 0) {
-//                CGFloat  xPosition = ([map[dayOfWeek] floatValue] + 1) * disp - disp / 2.0;
-//                UIColor  *color = prescription.color.UIColor;
-//                APCLozengeButton  *lozenge = [self medicationLozengeCenteredAtPoint:CGPointMake(xPosition, baseYCoordinate) andColor:color];
-//                lozenge.prescription = prescription;
-//                lozenge.currentDate = currentDate;
-////                [lozenge assignPrescription:prescription forDate:currentDate];
-//                [self addSubview:lozenge];
-//            }
-//        }
-//        baseYCoordinate = baseYCoordinate + kLozengeBaseYStepOver;
-//    }
-//}
 
 #pragma   mark  -  Drawing
 

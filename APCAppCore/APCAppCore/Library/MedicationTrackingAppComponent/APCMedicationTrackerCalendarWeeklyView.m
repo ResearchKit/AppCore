@@ -184,11 +184,6 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
     return  view;
 }
 
-//- (void)drawRect:(CGRect)rect
-//{
-//    [self initDailyViews];
-//}
-
 - (NSArray *)fetchDailyCalendarDayViews
 {
     NSArray  *subviews = [self.dailySubViewContainer subviews];

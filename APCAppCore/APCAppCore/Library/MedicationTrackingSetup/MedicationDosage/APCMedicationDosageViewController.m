@@ -12,42 +12,6 @@
 
 static  NSString  *kViewControllerName = @"Medication Dosages";
 
-    //
-    //    for a measure of typographic elegance,
-    //        the Unicode characters below have these meanings
-    //
-    //    2004    three per em space
-    //    2005    four per em space
-    //    2006    six per em space
-    //    2008    punctuation space
-    //    2009    thin space
-    //    200A    hairline space
-    //    200B    zero width space
-    //    2010    hyphen
-    //    2013    en dash
-    //    2014    em dash
-    //    00bc    1/4
-    //    00bd    1/2
-
-
-    //
-    //    Commented out Code here will be removed to
-    //        APCMedTrackerPredefinedPossibleDosages.plist soon
-    //
-//static  NSString  *dosageStrings[] = {
-//                        @"\u2007\u2007\u00bd\u2008mg",
-//                        @"\u2007\u20071\u2008mg",
-//                        @"\u2007\u20072\u00bd\u2008mg",
-//                        @"\u2007\u20075\u2008mg",
-//                        @"\u200710\u2008mg",
-//                        @"\u200720\u2008mg",
-//                        @"\u200725\u2008mg",
-//                        @"\u200750\u2008mg",
-//                        @"\u200775\u2008mg",
-//                        @"100\u2008mg"
-//                    };
-//
-
 @interface APCMedicationDosageViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
 @property  (nonatomic, weak)  IBOutlet  UITableView  *tabulator;

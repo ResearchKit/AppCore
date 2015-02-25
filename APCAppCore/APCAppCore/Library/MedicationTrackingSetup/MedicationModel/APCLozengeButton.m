@@ -38,42 +38,6 @@ static  short  coordinates[] = {
     return  button;
 }
 
-#pragma  mark  -  Custom Setter for Prescription
-
-- (void)assignPrescription:(APCMedTrackerPrescription *)aPrescription forDate:(NSDate *)aDate
-{
-    _prescription = aPrescription;
-    self.dailyDosageRecord = nil;
-    
-    [aPrescription fetchDosesTakenFromDate: aDate
-                                    toDate: aDate
-                           andUseThisQueue: [NSOperationQueue mainQueue]
-                          toDoThisWhenDone: ^(APCMedTrackerPrescription *prescription,
-                                              NSArray *dailyDosageRecords,
-                                              NSTimeInterval operationDuration,
-                                              NSError *error)
-     {
-         if ([dailyDosageRecords count] == 0) {
-             NSLog(@"APCLozengeButton dailyDosageRecords count = 0, error = %@", error);
-         } else {
-             self.dailyDosageRecord = dailyDosageRecords.firstObject;
-         }
-     }];
-        // Concept:
-//    self.numPillsSoFarToday = [prescription numPillsForDate: aDate];
-//    
-//    
-//    [_prescription recordThisManyDoses: 0
-//        takenOnDate: aDate
-//   andUseThisQueue: [NSOperationQueue mainQueue]
-//  toDoThisWhenDone: ^(NSTimeInterval operationDuration,
-//                                          NSError *error)
-//     {
-//     }];
-}
-
-#pragma  mark  -  Assign Prescription Information
-
 - (void)makePath:(UIBezierPath *)path withDimension:(CGRect)bounds
 {
     CGFloat  dimension = CGRectGetWidth(bounds);
