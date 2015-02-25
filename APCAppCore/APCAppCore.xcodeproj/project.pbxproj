@@ -189,6 +189,10 @@
 		6C7346091A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */; };
 		6CACF2C21A9D510A000C504B /* APCInhalerUsageTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CACF2C01A9D510A000C504B /* APCInhalerUsageTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CACF2C31A9D510A000C504B /* APCInhalerUsageTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CACF2C11A9D510A000C504B /* APCInhalerUsageTracker.m */; };
+		712AB44C1A9E692400556DA2 /* APCMotionHistoryData.h in Headers */ = {isa = PBXBuildFile; fileRef = 712AB4481A9E692400556DA2 /* APCMotionHistoryData.h */; };
+		712AB44D1A9E692400556DA2 /* APCMotionHistoryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 712AB4491A9E692400556DA2 /* APCMotionHistoryData.m */; };
+		712AB44E1A9E692400556DA2 /* APCMotionHistoryReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 712AB44A1A9E692400556DA2 /* APCMotionHistoryReporter.h */; };
+		712AB44F1A9E692400556DA2 /* APCMotionHistoryReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 712AB44B1A9E692400556DA2 /* APCMotionHistoryReporter.m */; };
 		747307101A96E1DE0071D863 /* APCCMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7473070E1A96E1DE0071D863 /* APCCMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		747307111A96E1DE0071D863 /* APCCMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 7473070F1A96E1DE0071D863 /* APCCMS.m */; };
 		747307161A96E2FB0071D863 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747307151A96E2FB0071D863 /* openssl.framework */; };
@@ -811,6 +815,10 @@
 		6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCConsentTaskViewController.m; sourceTree = "<group>"; };
 		6CACF2C01A9D510A000C504B /* APCInhalerUsageTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCInhalerUsageTracker.h; sourceTree = "<group>"; };
 		6CACF2C11A9D510A000C504B /* APCInhalerUsageTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCInhalerUsageTracker.m; sourceTree = "<group>"; };
+		712AB4481A9E692400556DA2 /* APCMotionHistoryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMotionHistoryData.h; sourceTree = "<group>"; };
+		712AB4491A9E692400556DA2 /* APCMotionHistoryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMotionHistoryData.m; sourceTree = "<group>"; };
+		712AB44A1A9E692400556DA2 /* APCMotionHistoryReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMotionHistoryReporter.h; sourceTree = "<group>"; };
+		712AB44B1A9E692400556DA2 /* APCMotionHistoryReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMotionHistoryReporter.m; sourceTree = "<group>"; };
 		7473070E1A96E1DE0071D863 /* APCCMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCCMS.h; path = CMS/APCCMS.h; sourceTree = "<group>"; };
 		7473070F1A96E1DE0071D863 /* APCCMS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCCMS.m; path = CMS/APCCMS.m; sourceTree = "<group>"; };
 		747307151A96E2FB0071D863 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openssl.framework; sourceTree = "<group>"; };
@@ -1609,6 +1617,17 @@
 			path = CollectionViewCells;
 			sourceTree = "<group>";
 		};
+		712AB4471A9E690600556DA2 /* MotionHistoryReporter */ = {
+			isa = PBXGroup;
+			children = (
+				712AB4481A9E692400556DA2 /* APCMotionHistoryData.h */,
+				712AB4491A9E692400556DA2 /* APCMotionHistoryData.m */,
+				712AB44A1A9E692400556DA2 /* APCMotionHistoryReporter.h */,
+				712AB44B1A9E692400556DA2 /* APCMotionHistoryReporter.m */,
+			);
+			name = MotionHistoryReporter;
+			sourceTree = "<group>";
+		};
 		7473070D1A96E1BB0071D863 /* CMS */ = {
 			isa = PBXGroup;
 			children = (
@@ -1925,6 +1944,7 @@
 		F5B947341A73272C0034C522 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				712AB4471A9E690600556DA2 /* MotionHistoryReporter */,
 				7473070D1A96E1BB0071D863 /* CMS */,
 				F5B947351A73272C0034C522 /* AppearanceHelpers */,
 				F5B9473C1A73272C0034C522 /* AssertionHandler */,
@@ -2840,6 +2860,7 @@
 				F5F129F41A2F78490015982C /* APCResult+AddOn.h in Headers */,
 				CFFDEDED1A95734000B25581 /* APCMedicationModel.h in Headers */,
 				F5B946481A7309A20034C522 /* ZZStandardDecryptInputStream.h in Headers */,
+				712AB44C1A9E692400556DA2 /* APCMotionHistoryData.h in Headers */,
 				F5F12A831A2F78490015982C /* APCResizeView.h in Headers */,
 				F5B947AD1A73272C0034C522 /* APCAppearanceInfo.h in Headers */,
 				F5F12A971A2F78490015982C /* APCUserInfoConstants.h in Headers */,
@@ -2870,6 +2891,7 @@
 				F5B948021A73272C0034C522 /* APCListSelector.h in Headers */,
 				089465521A8C211100A983AC /* APCInsights.h in Headers */,
 				F5B947ED1A73272C0034C522 /* APCParameters+Settings.h in Headers */,
+				712AB44E1A9E692400556DA2 /* APCMotionHistoryReporter.h in Headers */,
 				CFFDED701A95731F00B25581 /* APCMedicationTrackerCalendarViewController.h in Headers */,
 				369E28081A96B7A200D35DFA /* APCMedTrackerMedication+Helper.h in Headers */,
 				F5F12A021A2F78490015982C /* APCScheduledTask.h in Headers */,
@@ -3226,6 +3248,7 @@
 				F5F129E51A2F78490015982C /* APCDataMonitor.m in Sources */,
 				F5F129E91A2F78490015982C /* APCDataSubstrate+HealthKit.m in Sources */,
 				CFFDEDDE1A95734000B25581 /* APCFrequencyTableViewTimesCell.m in Sources */,
+				712AB44D1A9E692400556DA2 /* APCMotionHistoryData.m in Sources */,
 				36AAB3501A9A75BB00FAC255 /* APCMedTrackerPrescription.m in Sources */,
 				F5B947C61A73272C0034C522 /* NSManagedObject+APCHelper.m in Sources */,
 				F5B947DC1A73272C0034C522 /* APCLog.m in Sources */,
@@ -3294,6 +3317,7 @@
 				F5F129F71A2F78490015982C /* APCResult+Bridge.m in Sources */,
 				36B7D2561A8D848D0043F968 /* ORKAnswerFormat+Helper.m in Sources */,
 				08970F131A8D407600EA46C3 /* APCFoodInsight.m in Sources */,
+				712AB44F1A9E692400556DA2 /* APCMotionHistoryReporter.m in Sources */,
 				F5B947B61A73272C0034C522 /* APCDeviceHardware+APCHelper.m in Sources */,
 				369E280D1A96B7A200D35DFA /* APCMedTrackerPrescription+Helper.m in Sources */,
 				F5B947BC1A73272C0034C522 /* NSBundle+Helper.m in Sources */,

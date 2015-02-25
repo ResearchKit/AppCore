@@ -42,10 +42,13 @@ FOUNDATION_EXPORT NSString *const APCAppDidRegisterUserNotification;
 FOUNDATION_EXPORT NSString *const APCAppDidFailToRegisterForRemoteNotification;
 
 FOUNDATION_EXPORT NSString *const APCScoringHealthKitDataIsAvailableNotification;
+FOUNDATION_EXPORT NSString *const APCTaskResultsProcessedNotification;
 
 FOUNDATION_EXPORT NSString *const APCUpdateTasksReminderNotification;
 
 FOUNDATION_EXPORT NSString *const APCConsentCompletedWithDisagreeNotification;
+
+FOUNDATION_EXPORT NSString *const APCMotionHistoryReporterDoneNotification;
 
 FOUNDATION_EXPORT NSString *const kStudyIdentifierKey;
 FOUNDATION_EXPORT NSString *const kAppPrefixKey;
