@@ -19,8 +19,8 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To start an activity, select form the list below" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pcs-hM-kNK">
-                    <rect key="frame" x="16" y="35" width="287" height="36"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To start an activity, select form the list below" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pcs-hM-kNK">
+                    <rect key="frame" x="16" y="35" width="288" height="36"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
@@ -41,7 +41,7 @@
                 <constraint firstAttribute="trailing" secondItem="xb7-Eb-hLE" secondAttribute="trailing" constant="22" id="NY4-PR-bBm"/>
                 <constraint firstItem="xb7-Eb-hLE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="25" id="YDd-U0-ZQu"/>
                 <constraint firstAttribute="trailing" secondItem="1xT-bi-TC8" secondAttribute="trailing" id="cEP-gO-pFA"/>
-                <constraint firstAttribute="trailing" secondItem="pcs-hM-kNK" secondAttribute="trailing" constant="17" id="pSH-sB-pBT"/>
+                <constraint firstAttribute="trailing" secondItem="pcs-hM-kNK" secondAttribute="trailing" constant="16" id="pSH-sB-pBT"/>
                 <constraint firstItem="1xT-bi-TC8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="rGC-ey-BZQ"/>
                 <constraint firstItem="pcs-hM-kNK" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="uSr-qr-Eo0"/>
             </constraints>

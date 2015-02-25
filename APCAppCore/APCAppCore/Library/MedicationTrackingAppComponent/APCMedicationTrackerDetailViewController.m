@@ -9,13 +9,24 @@
 #import "APCSetupTableViewCell.h"
 #import "APCMedicationModel.h"
 #import "APCLozengeButton.h"
-#import "APCMedicationFollower.h"
+
+#import "APCMedTrackerDailyDosageRecord.h"
+
+#import "APCMedTrackerMedication+Helper.h"
+#import "APCMedTrackerPrescription+Helper.h"
+#import "APCMedTrackerPossibleDosage+Helper.h"
+#import "APCMedTrackerPrescriptionColor+Helper.h"
 
 #import "APCAppCore.h"
 
 static  NSString  *viewControllerTitle   = @"Medication Tracker";
 
 static  NSString  *kSetupTableCellName   = @"APCSetupTableViewCell";
+
+static  NSInteger  kSummarySectionNameRow      = 0;
+static  NSInteger  kSummarySectionFrequencyRow = 1;
+static  NSInteger  kSummarySectionColorRow     = 2;
+static  NSInteger  kSummarySectionDosageRow    = 3;
 
 static  NSInteger  numberOfSectionsInTableView = 2;
 
@@ -30,8 +41,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 @interface APCMedicationTrackerDetailViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, weak)  IBOutlet  UITableView    *tabulator;
-
-@property (nonatomic, strong)           NSDictionary  *colormap;
 
 @end
 
@@ -49,8 +58,8 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     NSInteger  numberOfRows = 0;
     
     if (section == kDailyDosesTakenSection) {
-        if (self.follower != nil) {
-            numberOfRows = [self.follower.follower.numberOfDosesPrescribed integerValue];
+        if (self.lozenge != nil) {
+            numberOfRows = [self.lozenge.prescription.numberOfTimesPerDay integerValue];
         }
     } else if (section == kMedicineSummarySection) {
         numberOfRows = 4;
@@ -58,10 +67,8 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     return  numberOfRows;
 }
 
-- (NSString *)formatNumbersAndDays:(APCMedicationModel *)model
+- (NSString *)formatNumbersAndDays:(NSDictionary *)frequencyAndDays
 {
-    NSDictionary  *frequencyAndDays = model.frequencyAndDays;
-
     NSMutableString  *daysAndNumbers = [NSMutableString string];
     for (NSUInteger  day = 0;  day < numberOfDaysOfWeek;  day++) {
         NSString  *key = daysOfWeekNames[day];
@@ -88,8 +95,8 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
             aCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
         }
         aCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        aCell.textLabel.text = self.follower.follower.medicationName;
-        aCell.detailTextLabel.text = [NSString stringWithFormat:@"Dose %ld, (%@)", (long)(indexPath.row + 1), self.follower.model.medicationDosageText];
+        aCell.textLabel.text = self.lozenge.prescription.medication.name;
+        aCell.detailTextLabel.text = self.lozenge.prescription.dosage.name;
         cell = aCell;
     } else if (indexPath.section == kMedicineSummarySection) {
 
@@ -107,19 +114,65 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
             aCell.addTopicLabel.hidden = NO;
         }
 
-        if (indexPath.row == 0) {
-            aCell.addTopicLabel.text = self.model.medicationName;
-        } else if (indexPath.row == 1) {
-            aCell.addTopicLabel.text = [self formatNumbersAndDays:self.model];
-        } else if (indexPath.row == 2) {
-            aCell.colorSwatch.backgroundColor = self.colormap[self.model.medicationLabelColor];
-        } else if (indexPath.row == 3) {
-            aCell.addTopicLabel.text = self.model.medicationDosageText;
+        if (indexPath.row == kSummarySectionNameRow) {
+            aCell.addTopicLabel.text = self.lozenge.prescription.medication.name;
+        } else if (indexPath.row == kSummarySectionFrequencyRow) {
+            aCell.addTopicLabel.text = [self formatNumbersAndDays:self.lozenge.prescription.frequencyAndDays];
+        } else if (indexPath.row == kSummarySectionColorRow) {
+            aCell.colorSwatch.backgroundColor = self.lozenge.prescription.color.UIColor;
+        } else if (indexPath.row == kSummarySectionDosageRow) {
+            aCell.addTopicLabel.text = self.lozenge.prescription.dosage.name;
         }
         cell = aCell;
     }
 
     return  cell;
+}
+
+#pragma  mark  -  Update Data Store Methods
+
+- (void)updateNumberOfDosesTaken
+{
+    NSInteger   numberOfRowsInDosesSection = [self.tabulator numberOfRowsInSection:kDailyDosesTakenSection];
+    NSUInteger  totalNumberOfDosesTaken = 0;
+    for (NSUInteger  row = 0;  row < numberOfRowsInDosesSection;  row++) {
+        UITableViewCell  *doseCell = [self.tabulator cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:kDailyDosesTakenSection]];
+        if (doseCell.accessoryType == UITableViewCellAccessoryCheckmark) {
+            totalNumberOfDosesTaken = totalNumberOfDosesTaken + 1;
+        }
+    }
+    NSDate  *dateOfLozenge = self.lozenge.currentDate;
+    [self.lozenge.prescription recordThisManyDoses: totalNumberOfDosesTaken
+                                       takenOnDate: dateOfLozenge
+                                   andUseThisQueue: [NSOperationQueue mainQueue]
+                                  toDoThisWhenDone: ^(NSTimeInterval operationDuration,
+                                                      NSError *error)
+     {
+         if (error != nil) {
+             APCLogError2(error);
+         } else {
+             [self.lozenge.prescription fetchDosesTakenFromDate:dateOfLozenge
+                                                         toDate:dateOfLozenge
+                                                andUseThisQueue:[NSOperationQueue mainQueue]
+                                               toDoThisWhenDone:^(APCMedTrackerPrescription *prescription,
+                                                                  NSArray *dailyDosageRecords,
+                                                                  NSTimeInterval operationDuration,
+                                                                  NSError *error)
+              {
+                  APCMedTrackerDailyDosageRecord  *record = nil;
+                  
+                  if (error != nil) {
+                      APCLogError2(error);
+                  } else if (dailyDosageRecords.count == 0) {
+                      self.lozenge.numberOfDosesTaken = [NSNumber numberWithUnsignedInteger:0];
+                  } else {
+                      record = [dailyDosageRecords firstObject];
+                      self.lozenge.numberOfDosesTaken = record.numberOfDosesTakenForThisDate;
+                  }
+              }];
+         }
+         
+     }];
 }
 
 #pragma  mark  -  Table View Delegate Methods
@@ -142,7 +195,12 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 {
     if (indexPath.section == kDailyDosesTakenSection) {
         UITableViewCell  *cell = [tableView cellForRowAtIndexPath:indexPath];
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        if (cell.accessoryType == UITableViewCellAccessoryNone) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+        [self updateNumberOfDosesTaken];
     }
 }
 
@@ -153,21 +211,11 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     [super viewDidLoad];
 
     self.navigationItem.title = viewControllerTitle;
+    
+    self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
     UINib  *setupTableCellNib = [UINib nibWithNibName:kSetupTableCellName bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:setupTableCellNib forCellReuseIdentifier:kSetupTableCellName];
-
-    self.colormap = @{
-                      @"Gray"    : [UIColor grayColor],
-                      @"Red"     : [UIColor redColor],
-                      @"Green"   : [UIColor greenColor],
-                      @"Blue"    : [UIColor blueColor],
-                      @"Cyan"    : [UIColor cyanColor],
-                      @"Magenta" : [UIColor magentaColor],
-                      @"Yellow"  : [UIColor yellowColor],
-                      @"Orange"  : [UIColor orangeColor],
-                      @"Purple"  : [UIColor purpleColor]
-                      };
 }
 
 - (void)didReceiveMemoryWarning

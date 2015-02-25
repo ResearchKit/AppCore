@@ -389,7 +389,11 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     request.sortDescriptors = @[sortDescriptor];
     
     NSError *error = nil;
-    NSArray *tasks = [appDelegate.dataSubstrate.mainContext executeFetchRequest:request error:&error];
+    
+    NSManagedObjectContext * localContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    localContext.parentContext = appDelegate.dataSubstrate.persistentContext;
+    
+    NSArray *tasks = [localContext executeFetchRequest:request error:&error];
     
     for (APCScheduledTask *task in tasks) {
         if ([task.completed boolValue]) {

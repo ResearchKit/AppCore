@@ -204,7 +204,7 @@ the link included in the message.</string>
                                                         <constraint firstAttribute="height" constant="35" id="k8X-jy-yTd"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" keyboardAppearance="alert" returnKeyType="done"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" keyboardAppearance="light" returnKeyType="done"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="LBV-s1-hh7" id="04Z-7e-Vtw"/>
                                                     </connections>

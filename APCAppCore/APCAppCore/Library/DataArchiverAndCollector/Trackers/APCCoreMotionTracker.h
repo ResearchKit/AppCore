@@ -6,7 +6,11 @@
 //
 
 #import "APCDataTracker.h"
+#import <CoreMotion/CoreMotion.h>
 
 @interface APCCoreMotionTracker : APCDataTracker
 
+@property (nonatomic, strong) CMMotionActivityManager *motionActivityManager;
+
 @end
+

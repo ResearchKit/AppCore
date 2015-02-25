@@ -129,8 +129,6 @@ static NSUInteger const kIndexOfProfileTab = 3;
 - (void)applicationWillEnterForeground:(UIApplication *) __unused application
 {
     [self hideSecureView];
-    
-    [self showPasscodeIfNecessary];
 }
 
 - (void)                    application: (UIApplication *) __unused application

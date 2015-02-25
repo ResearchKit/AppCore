@@ -318,6 +318,8 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
                  andUseThisQueue: (NSOperationQueue *) someQueue
                 toDoThisWhenDone: (APCMedTrackerFetchDosesCallback) callbackBlock
 {
+    __block APCMedTrackerPrescription *blockSafeSelf = self;
+    
     [APCMedTrackerDataStorageManager.defaultManager.queue addOperationWithBlock:^{
 
         NSDate *startTime = [NSDate date];
@@ -335,9 +337,9 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
         request.predicate = [NSPredicate predicateWithFormat:
                              @"%K >= %@ && %K <= %@",
                              nameOfDateGetterMethod,
-                             startDate,
+                             startDate.startOfDay,
                              nameOfDateGetterMethod,
-                             endDate];
+                             endDate.endOfDay];
 
         request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey: nameOfDateGetterMethod
                                                                   ascending: YES]];
@@ -366,7 +368,7 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
                                    underlyingError: coreDataError];
 
             [someQueue addOperationWithBlock: ^{
-                callbackBlock (dailyRecordsFound, operationDuration, error);
+                callbackBlock (blockSafeSelf, dailyRecordsFound, operationDuration, error);
             }];
         }
     }];
