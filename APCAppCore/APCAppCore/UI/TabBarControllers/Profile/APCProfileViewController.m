@@ -52,7 +52,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deselectTheFirstSelectedRow) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -352,13 +351,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 
     return cell;
-}
-
-#pragma mark NSNotificationCenter
-
-//App did become active notification
-- (void)deselectTheFirstSelectedRow {
-    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
 }
 
 #pragma mark - Prepare Content
@@ -917,6 +909,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
                 }];
                 [alertController addAction:okAction];
+                
+                [self presentViewController:alertController animated:YES completion:nil];
+                [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
             }
                 break;
             case kAPCUserInfoItemTypeReviewConsent:
