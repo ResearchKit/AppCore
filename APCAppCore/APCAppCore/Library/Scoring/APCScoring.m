@@ -998,4 +998,20 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return xAxisTitle;
 }
 
+- (CGFloat)minimumValueForDiscreteGraph:(APCDiscreteGraphView *)graphView
+{
+    CGFloat factor = 0.2;
+    CGFloat maxDataPoint = [[self maximumDataPoint] doubleValue];
+    CGFloat minDataPoint = [[self minimumDataPoint] doubleValue];
+    
+    CGFloat minValue = (minDataPoint - factor*maxDataPoint)/(1-factor);
+    
+    return minValue;
+}
+
+- (CGFloat)maximumValueForDiscreteGraph:(APCDiscreteGraphView *)graphView
+{
+    return [[self maximumDataPoint] doubleValue];
+}
+
 @end
