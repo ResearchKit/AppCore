@@ -7,29 +7,58 @@
 
 #import "APCCoreMotionTracker.h"
 
-static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 
+static NSString *const kLastUsedTimeKey = @"APCPassiveCoreMotionLastTrackedEndDate";
+static NSInteger const kNumberOfDaysBack = 8;
 @implementation APCCoreMotionTracker
 
 - (void) startTracking
+
 {
-    NSDate *lastUsedTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
-    if (!lastUsedTime) {
-        
-    }
+    self.motionActivityManager = [[CMMotionActivityManager alloc] init];
+    
 }
 
-- (void) stopTracking
-{
-    //Abstract implementation
-}
 
 - (void) updateTracking
 {
-    //Abstract implementation
+    NSDate *lastTrackedEndDate = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+    
+    if (!lastTrackedEndDate) {
+        lastTrackedEndDate = [self maximumNumberOfDaysBack];
+        
+    }
+    
+    [self.motionActivityManager queryActivityStartingFromDate:lastTrackedEndDate
+                                                       toDate:[NSDate date]
+                                                      toQueue:[NSOperationQueue new]
+                                                  withHandler:^(NSArray *activities, NSError *error) {
+                                                      
+                                                      
+                                                      [self.delegate APCDataTracker:self hasNewData:activities];
+                                                      
+                                                      [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastUsedTimeKey];
+                                                  }];
 }
 
-//NSDate *currentTime = [NSDate date];
-//[[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
-//NSDate *lastUsedTime = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+- (NSArray *)columnNames
+{
+    return @[@"activity"];
+}
+
+#pragma mark - Helper methods
+         
+ - (NSDate *) maximumNumberOfDaysBack {
+     NSInteger               numberOfDaysBack = kNumberOfDaysBack * -1;
+     NSDateComponents        *components = [[NSDateComponents alloc] init];
+     
+     [components setDay:numberOfDaysBack];
+     
+     NSDate                  *date = [[NSCalendar currentCalendar] dateByAddingComponents:components
+                                                                                           toDate:[NSDate date]
+                                                                                          options:0];
+     
+     return date;
+ }
+
 @end

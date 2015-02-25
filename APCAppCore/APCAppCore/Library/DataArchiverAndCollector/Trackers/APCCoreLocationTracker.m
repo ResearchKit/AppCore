@@ -92,6 +92,7 @@ static NSString *kLon = @"lon";
 - (void)startTracking
 {
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
+        
         self.locationManager = [[CLLocationManager alloc] init];
         [self.locationManager setDelegate:self];
         [self.locationManager requestAlwaysAuthorization];

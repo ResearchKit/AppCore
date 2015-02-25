@@ -171,8 +171,18 @@ static NSString *const kCSVFilename  = @"data.csv";
 - (void) APCDataTracker:(APCDataTracker *)tracker hasNewData:(NSArray *)dataArray
 {
     [dataArray enumerateObjectsUsingBlock:^(NSArray * obj, NSUInteger __unused idx, BOOL * __unused stop) {
-        NSString * rowString = [[obj componentsJoinedByString:@","] stringByAppendingString:@"\n"];
-        NSString * csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
+        
+        NSString * rowString = nil;
+        NSString * csvFilePath = nil;
+        
+        if ([obj isKindOfClass:[CMLogItem class]]) {
+            rowString = [obj.description stringByAppendingString:@"\n"];
+            csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
+        } else {
+            rowString = [[obj componentsJoinedByString:@","] stringByAppendingString:@"\n"];
+            csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
+        }
+    
         [APCPassiveDataCollector createOrAppendString:rowString toFile:csvFilePath];
     }];
     [self checkIfDataNeedsToBeFlushed:tracker];
