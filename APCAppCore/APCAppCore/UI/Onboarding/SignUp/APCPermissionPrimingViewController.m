@@ -45,9 +45,12 @@
 
 - (void)setupNavAppearance
 {
-    UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(back) tintColor:[UIColor appPrimaryColor]];
-    [self.navigationItem setLeftBarButtonItem:backster];
-    
+    if ([[self onboarding] taskType] == kAPCOnboardingTaskTypeSignUp) {
+        UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(back) tintColor:[UIColor appPrimaryColor]];
+        [self.navigationItem setLeftBarButtonItem:backster];
+    } else {
+        [self.navigationItem setHidesBackButton:YES];
+    }
 }
 
 - (APCOnboarding *)onboarding
