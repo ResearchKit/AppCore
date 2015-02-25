@@ -463,12 +463,12 @@ static NSString *const kSignedInKey = @"SignedIn";
     }];
 }
 
-//Inhaler
+//Requires a valid HKQuantityTypeIdentifier
 - (void)initiateQueryAndNotificationForHKQuantityType:(NSString *)quantityTypeIdentifier{
-
+    
     HKQuantityType *quantityType = [HKQuantityType quantityTypeForIdentifier:quantityTypeIdentifier];
-    dispatch_queue_t inhalerQueue = dispatch_queue_create("com.asthma.inhaler", NULL);
-    dispatch_async(inhalerQueue, ^{
+    dispatch_queue_t queryQueue = dispatch_queue_create("com.asthma.HKQuery", NULL);
+    dispatch_async(queryQueue, ^{
     
         [self.healthStore mostRecentQuantitySampleOfType:quantityType predicate:nil completion:^(HKQuantity *mostRecentQuantity, NSError *error) {
             if (!mostRecentQuantity) {
