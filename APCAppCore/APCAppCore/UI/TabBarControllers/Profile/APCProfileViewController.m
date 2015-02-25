@@ -901,17 +901,17 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 NSString *ok = NSLocalizedString(@"OK", @"OK");
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                    //No-op
+                    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
                 }];
                 [alertController addAction:cancelAction];
                 
                 UIAlertAction *okAction = [UIAlertAction actionWithTitle:ok style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+                    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
                 }];
                 [alertController addAction:okAction];
                 
                 [self presentViewController:alertController animated:YES completion:nil];
-                [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
             }
                 break;
             case kAPCUserInfoItemTypeReviewConsent:
