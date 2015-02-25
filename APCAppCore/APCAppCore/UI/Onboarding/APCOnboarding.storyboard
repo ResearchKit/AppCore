@@ -538,6 +538,84 @@
             </objects>
             <point key="canvasLocation" x="603" y="1046"/>
         </scene>
+        <!--Consent-->
+        <scene sceneID="iX3-qJ-Q6h">
+            <objects>
+                <viewController storyboardIdentifier="APCPermissionPrimingViewController" id="aCp-7t-Iis" customClass="APCPermissionPrimingViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="379-2m-7nf"/>
+                        <viewControllerLayoutGuide type="bottom" id="Rnt-5e-NO8"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Zry-Rk-H8M">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZIY-au-pmn">
+                                <rect key="frame" x="135" y="36" width="50" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Xp0-Me-CCY"/>
+                                    <constraint firstAttribute="width" constant="50" id="tK0-zW-J18"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What to Expect" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vVd-e0-MNW">
+                                <rect key="frame" x="16" y="87" width="288" height="55"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="55" id="tnR-gv-SKI"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="38"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OTN-K1-Dig">
+                                <rect key="frame" x="16" y="144" width="288" height="192"/>
+                                <string key="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </string>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z5w-pH-4Mb" customClass="APCButton">
+                                <rect key="frame" x="89" y="443" width="142" height="41"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="142" id="jU6-hu-O3w"/>
+                                    <constraint firstAttribute="height" constant="41" id="tqF-Y4-zDr"/>
+                                </constraints>
+                                <state key="normal" title="Got it">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="next:" destination="aCp-7t-Iis" eventType="touchUpInside" id="zmg-QC-Zg8"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="z5w-pH-4Mb" secondAttribute="centerX" id="1CW-SI-H2h"/>
+                            <constraint firstItem="OTN-K1-Dig" firstAttribute="leading" secondItem="Zry-Rk-H8M" secondAttribute="leadingMargin" id="7ta-Bm-a4u"/>
+                            <constraint firstItem="vVd-e0-MNW" firstAttribute="top" secondItem="ZIY-au-pmn" secondAttribute="bottom" constant="21" id="Kml-36-ZWz"/>
+                            <constraint firstItem="OTN-K1-Dig" firstAttribute="top" secondItem="vVd-e0-MNW" secondAttribute="bottom" constant="2" id="Pxd-Ua-3Bp"/>
+                            <constraint firstItem="vVd-e0-MNW" firstAttribute="trailing" secondItem="Zry-Rk-H8M" secondAttribute="trailingMargin" id="UUp-TU-XOU"/>
+                            <constraint firstItem="OTN-K1-Dig" firstAttribute="trailing" secondItem="Zry-Rk-H8M" secondAttribute="trailingMargin" id="Wsn-Bn-4IA"/>
+                            <constraint firstItem="vVd-e0-MNW" firstAttribute="leading" secondItem="Zry-Rk-H8M" secondAttribute="leadingMargin" id="Zk2-BP-MpW"/>
+                            <constraint firstItem="ZIY-au-pmn" firstAttribute="top" secondItem="379-2m-7nf" secondAttribute="bottom" constant="36" id="ive-Jp-bXQ"/>
+                            <constraint firstItem="Rnt-5e-NO8" firstAttribute="top" secondItem="z5w-pH-4Mb" secondAttribute="bottom" constant="20" id="jco-sd-9dd"/>
+                            <constraint firstItem="Rnt-5e-NO8" firstAttribute="top" secondItem="OTN-K1-Dig" secondAttribute="bottom" constant="168" id="pG9-aS-1LF"/>
+                            <constraint firstAttribute="centerX" secondItem="ZIY-au-pmn" secondAttribute="centerX" id="pRD-O9-yOd"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Consent" id="6uW-cz-b2s"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="detailTextLabel" destination="OTN-K1-Dig" id="RbB-l9-mne"/>
+                        <outlet property="headerImageView" destination="ZIY-au-pmn" id="4xU-w1-0ia"/>
+                        <outlet property="nextButton" destination="z5w-pH-4Mb" id="lqA-1c-4jr"/>
+                        <outlet property="titleLabel" destination="vVd-e0-MNW" id="DUU-jr-8df"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Wkk-SF-io0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-977" y="1714"/>
+        </scene>
         <!--Terms And Conditions View Controller-->
         <scene sceneID="1Pi-q8-fsh">
             <objects>

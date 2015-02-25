@@ -28,24 +28,25 @@ NSString *const APCUpdateTasksReminderNotification = @"APCUpdateTasksReminderNot
 
 NSString *const APCConsentCompletedWithDisagreeNotification = @"goToSignInJoinScreen";
 
-NSString *const kStudyIdentifierKey                  = @"StudyIdentifierKey";
-NSString *const kAppPrefixKey                        = @"AppPrefixKey";
-NSString *const kBridgeEnvironmentKey                = @"BridgeEnvironmentKey";
-NSString *const kDatabaseNameKey                     = @"DatabaseNameKey";
-NSString *const kTasksAndSchedulesJSONFileNameKey    = @"TasksAndSchedulesJSONFileNameKey";
-NSString *const kConsentSectionFileNameKey           = @"ConsentSectionFileNameKey";
-NSString *const kHKWritePermissionsKey               = @"HKWritePermissions";
-NSString *const kHKReadPermissionsKey                = @"HKReadPermissions";
-NSString *const kAppServicesListRequiredKey          = @"AppServicesListRequired";
-NSString *const kAppProfileElementsListKey           = @"AppProfileElementsListKey";
-NSString *const kVideoURLKey                         = @"VideoURLKey";
-NSString *const kTaskReminderStartupDefaultOnOffKey  = @"TaskReminderStartupDefaultOnOffKey";
-NSString *const kTaskReminderStartupDefaultTimeKey   = @"TaskReminderStartupDefaultTimeKey";
+NSString *const kStudyIdentifierKey                 = @"StudyIdentifierKey";
+NSString *const kAppPrefixKey                       = @"AppPrefixKey";
+NSString *const kBridgeEnvironmentKey               = @"BridgeEnvironmentKey";
+NSString *const kDatabaseNameKey                    = @"DatabaseNameKey";
+NSString *const kTasksAndSchedulesJSONFileNameKey   = @"TasksAndSchedulesJSONFileNameKey";
+NSString *const kConsentSectionFileNameKey          = @"ConsentSectionFileNameKey";
+NSString *const kHKWritePermissionsKey              = @"HKWritePermissions";
+NSString *const kHKReadPermissionsKey               = @"HKReadPermissions";
+NSString *const kAppServicesListRequiredKey         = @"AppServicesListRequired";
+NSString *const kAppServicesDescriptionsKey         = @"AppServicesDescriptions";
+NSString *const kAppProfileElementsListKey          = @"AppProfileElementsListKey";
+NSString *const kVideoURLKey                        = @"VideoURLKey";
+NSString *const kTaskReminderStartupDefaultOnOffKey = @"TaskReminderStartupDefaultOnOffKey";
+NSString *const kTaskReminderStartupDefaultTimeKey  = @"TaskReminderStartupDefaultTimeKey";
 
-NSString *const kHKQuantityTypeKey                   = @"HKQuantityType";
-NSString *const kHKCategoryTypeKey                   = @"HKCategoryType";
-NSString *const kHKCharacteristicTypeKey             = @"HKCharacteristicType";
-NSString *const kHKCorrelationTypeKey                = @"HKCorrelationType";
+NSString *const kHKQuantityTypeKey                        = @"HKQuantityType";
+NSString *const kHKCategoryTypeKey                        = @"HKCategoryType";
+NSString *const kHKCharacteristicTypeKey                  = @"HKCharacteristicType";
+NSString *const kHKCorrelationTypeKey                     = @"HKCorrelationType";
 
 NSString *const kPasswordKey                         = @"Password";
 NSString *const kNumberOfMinutesForPasscodeKey       = @"NumberOfMinutesForPasscodeKey";

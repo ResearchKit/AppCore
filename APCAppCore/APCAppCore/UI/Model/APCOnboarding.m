@@ -8,6 +8,7 @@
 #import "APCOnboarding.h"
 #import "APCEligibleViewController.h"
 #import "APCInEligibleViewController.h"
+#import "APCPermissionPrimingViewController.h"
 #import "APCSignUpGeneralInfoViewController.h"
 #import "APCSignUpMedicalInfoViewController.h"
 #import "APCSignupPasscodeViewController.h"
@@ -77,6 +78,14 @@ static NSString * const kOnboardingStoryboardName = @"APCOnboarding";
         scene.bundle = [NSBundle appleCoreBundle];
         
         [scenes setObject:scene forKey:kAPCSignUpIneligibleStepIdentifier];
+    }
+    {
+        APCScene *scene = [APCScene new];
+        scene.name = NSStringFromClass([APCPermissionPrimingViewController class]);
+        scene.storyboardName = kOnboardingStoryboardName;
+        scene.bundle = [NSBundle appleCoreBundle];
+        
+        [scenes setObject:scene forKey:kAPCSignUpPermissionsPrimingStepIdentifier];
     }
     {
         APCScene *scene = [APCScene new];

@@ -56,6 +56,7 @@ FOUNDATION_EXPORT NSString *const kConsentSectionFileNameKey;
 FOUNDATION_EXPORT NSString *const kHKWritePermissionsKey;
 FOUNDATION_EXPORT NSString *const kHKReadPermissionsKey;
 FOUNDATION_EXPORT NSString *const kAppServicesListRequiredKey;
+FOUNDATION_EXPORT NSString *const kAppServicesDescriptionsKey;
 FOUNDATION_EXPORT NSString *const kAppProfileElementsListKey;
 FOUNDATION_EXPORT NSString *const kVideoURLKey;
 FOUNDATION_EXPORT NSString *const kTaskReminderStartupDefaultOnOffKey;
