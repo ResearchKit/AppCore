@@ -916,7 +916,13 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 - (CGFloat)minimumValueForLineGraph:(APCLineGraphView *) __unused graphView
 {
-    return [[self minimumDataPoint] doubleValue];
+    CGFloat factor = 0.2;
+    CGFloat maxDataPoint = [[self maximumDataPoint] doubleValue];
+    CGFloat minDataPoint = [[self minimumDataPoint] doubleValue];
+    
+    CGFloat minValue = (minDataPoint - factor*maxDataPoint)/(1-factor);
+    
+    return minValue;
 }
 
 - (CGFloat)maximumValueForLineGraph:(APCLineGraphView *) __unused graphView
