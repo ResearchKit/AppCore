@@ -11,7 +11,6 @@
 #import "APCMedicationTrackerDetailViewController.h"
 #import "APCMedicationTrackerSetupViewController.h"
 #import "APCMedicationSummaryTableViewCell.h"
-//#import "APCMedicationModel.h"
 #import "APCLozengeButton.h"
 
 #import "APCMedTrackerDataStorageManager.h"
@@ -19,6 +18,9 @@
 #import "APCMedTrackerPrescription+Helper.h"
 #import "APCMedTrackerPossibleDosage+Helper.h"
 #import "APCMedTrackerPrescriptionColor+Helper.h"
+
+#import "APCMedicationTrackerCalendarDailyView.h"
+#import "NSDate+MedicationTracker.h"
 
 #import "NSBundle+Helper.h"
 
@@ -42,15 +44,12 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 
 @property (nonatomic, weak)  IBOutlet  UITableView                *tabulator;
 
-@property (nonatomic, weak)            APCMedicationTrackerCalendarWeeklyView      *weekCalendar;
+@property (nonatomic, weak)            APCMedicationTrackerCalendarWeeklyView      *weeklyCalendar;
 
 @property (nonatomic, weak)  IBOutlet  UIView                     *noMedicationView;
 
-@property (nonatomic, weak)            APCMedicationTrackerMedicationsDisplayView  *medicationsDisplayer;
-
-@property (nonatomic, strong)          NSArray                    *schedules;
+@property (nonatomic, strong)          NSArray                    *prescriptions;
 @property (nonatomic, strong)          NSArray                    *weeksArray;
-//@property (nonatomic, strong)          NSDictionary               *colormap;
 
 @property (nonatomic, assign)          BOOL                        viewsWereCreated;
 
@@ -67,14 +66,14 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return  [self.schedules count];
+    return  [self.prescriptions count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     APCMedicationSummaryTableViewCell  *cell = (APCMedicationSummaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSummaryTableViewCell];
 
-    APCMedTrackerPrescription  *prescription = self.schedules[indexPath.row];
+    APCMedTrackerPrescription  *prescription = self.prescriptions[indexPath.row];
 
     cell.colorswatch.backgroundColor = prescription.color.UIColor;
     cell.medicationName.text = prescription.medication.name;
@@ -104,7 +103,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     APCMedicationTrackerDetailViewController  *controller = [[APCMedicationTrackerDetailViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
-    APCMedTrackerPrescription  *prescription = self.schedules[indexPath.row];
+    APCMedTrackerPrescription  *prescription = self.prescriptions[indexPath.row];
     controller.lozenge.prescription = prescription;
     [self.navigationController pushViewController:controller animated:YES];
 }
@@ -178,7 +177,11 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     self.exScrolliburCurrentPage = 0;
     self.exScrollibur.delegate = self;
     
-    for (NSUInteger  page = 0;  page < 4;  page++) {
+    NSArray  *dayViews = [self.weeklyCalendar fetchDailyCalendarDayViews];
+    APCMedicationTrackerCalendarDailyView  *dayView = (APCMedicationTrackerCalendarDailyView *)[dayViews firstObject];
+    NSDate  *startOfWeekDate = dayView.date;
+    
+    for (NSUInteger  page = 0;  page < 1;  page++) {
         CGRect viewFrame = self.view.frame;
         CGRect scrollerFrame = self.exScrollibur.frame;
         CGRect  frame = CGRectZero;
@@ -188,11 +191,14 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
         frame.size.height = CGRectGetHeight(scrollerFrame);
         APCMedicationTrackerMedicationsDisplayView  *view = [[APCMedicationTrackerMedicationsDisplayView alloc] initWithFrame:frame];
         view.delegate = self;
-        view.prescriptions = self.schedules;
         view.backgroundColor = [UIColor whiteColor];
         [self.exScrollibur addSubview:view];
-        [view setNeedsDisplay];
+        [view makePrescriptionDisplaysWithPrescriptions:self.prescriptions andDate:startOfWeekDate];
+//        view.startOfWeekDate = startOfWeekDate;
+//        view.prescriptions = self.prescriptions;
+        startOfWeekDate = [startOfWeekDate addDays:7];
     }
+    self.exScrolliburNumberOfPages = 4;
 }
 
 #pragma  mark  -  Scroll View Delegate Methods
@@ -211,12 +217,12 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
         CGFloat  pageWidth = CGRectGetWidth(self.exScrollibur.frame);
         NSUInteger  newPage = floor((self.exScrollibur.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
         if (newPage != oldPage) {
-            self.exScrolliburCurrentPage = newPage;
             if (newPage > oldPage) {
-                [self.weekCalendar swipeLeft:nil];
+                [self.weeklyCalendar swipeRight:nil];
             } else {
-                [self.weekCalendar swipeRight:nil];
+                [self.weeklyCalendar swipeLeft:nil];
             }
+            self.exScrolliburCurrentPage = newPage;
         }
     }
 }
@@ -226,35 +232,35 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 - (void)makeCalendar
 {
    APCMedicationTrackerCalendarWeeklyView  *weekly = [[APCMedicationTrackerCalendarWeeklyView alloc] initWithFrame:CGRectMake(0.0, 0.0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.weekContainer.bounds))];
-    self.weekCalendar = weekly;
-    self.weekCalendar.firstDayOfWeek = [NSNumber numberWithInteger:1];
+    self.weeklyCalendar = weekly;
+    self.weeklyCalendar.firstDayOfWeek = [NSNumber numberWithInteger:1];
 
-    [self.weekContainer addSubview:self.weekCalendar];
+    [self.weekContainer addSubview:self.weeklyCalendar];
 
-    [self.weekCalendar setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.weeklyCalendar setTranslatesAutoresizingMaskIntoConstraints:NO];
 
     [self.weekContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.weekContainer attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
-                                                                  toItem:self.weekCalendar attribute:NSLayoutAttributeTop
+                                                                  toItem:self.weeklyCalendar attribute:NSLayoutAttributeTop
                                                               multiplier:1 constant:0]];
 
     [self.weekContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.weekContainer attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual
-                                                                  toItem:self.weekCalendar attribute:NSLayoutAttributeLeading
+                                                                  toItem:self.weeklyCalendar attribute:NSLayoutAttributeLeading
                                                               multiplier:1 constant:0]];
 
     [self.weekContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.weekContainer attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual
-                                                                  toItem:self.weekCalendar attribute:NSLayoutAttributeTrailing
+                                                                  toItem:self.weeklyCalendar attribute:NSLayoutAttributeTrailing
                                                               multiplier:1 constant:0]];
 
     [self.weekContainer addConstraint:[NSLayoutConstraint constraintWithItem:self.weekContainer attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual
-                                                                  toItem:self.weekCalendar attribute:NSLayoutAttributeBottom
+                                                                  toItem:self.weeklyCalendar attribute:NSLayoutAttributeBottom
                                                               multiplier:1 constant:0]];
-    [self.weekCalendar setupViews];
-    self.weekCalendar.delegate = self;
+    [self.weeklyCalendar setupViews];
+    self.weeklyCalendar.delegate = self;
 }
 
 - (void)setupHiddenStates
 {
-    if ([self.schedules count] == 0) {
+    if ([self.prescriptions count] == 0) {
         self.tabulator.hidden        = YES;
         self.exScrollibur.hidden     = YES;
         self.weekContainer.hidden    = YES;
@@ -269,7 +275,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 
     //
     //    We're keeping this commented out code for now
-    //        but intend to delete it if we don't res-instate it
+    //        but intend to delete it if we don't re-instate it
     //
 
 //- (void)viewDidAppear:(BOOL)animated
@@ -301,7 +307,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
                                                                             NSTimeInterval operationDuration,
                                                                             NSError *error)
      {
-         self.schedules = arrayOfGeneratedObjects;
+         self.prescriptions = arrayOfGeneratedObjects;
          if (self.viewsWereCreated == NO) {
              [self makeCalendar];
              [self setupHiddenStates];
@@ -316,7 +322,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 {
     [super viewDidLoad];
     
-    self.schedules = [NSArray array];
+    self.prescriptions = [NSArray array];
     
     [APCMedTrackerDataStorageManager startupReloadingDefaults:YES andThenUseThisQueue:nil toDoThis:NULL];
 

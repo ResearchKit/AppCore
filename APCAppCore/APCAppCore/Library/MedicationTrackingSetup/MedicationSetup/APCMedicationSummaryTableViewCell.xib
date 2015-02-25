@@ -42,56 +42,25 @@
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aNF-2x-2TV" userLabel="Use Days of Medication ">
                         <rect key="frame" x="168" y="6" width="119" height="32"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="18" id="Swn-es-Ok9"/>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="119" id="qIZ-bz-N0m"/>
-                            <constraint firstAttribute="width" constant="119" id="wJE-ef-MoI"/>
-                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="Swn-es-Ok9"/>
-                                <exclude reference="qIZ-bz-N0m"/>
-                            </mask>
-                        </variation>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="centerY" secondItem="aNF-2x-2TV" secondAttribute="centerY" constant="-1" id="13g-Hw-pAD"/>
                     <constraint firstAttribute="bottomMargin" secondItem="sBE-tC-Wkl" secondAttribute="bottom" constant="-8" id="1qe-oE-cHg"/>
-                    <constraint firstItem="aNF-2x-2TV" firstAttribute="leading" secondItem="Xd2-Be-G4r" secondAttribute="trailing" constant="8" symbolic="YES" id="4si-1T-lyP"/>
                     <constraint firstItem="Hcl-lN-K2n" firstAttribute="leading" secondItem="sBE-tC-Wkl" secondAttribute="trailing" constant="8" id="7iD-87-Ne3"/>
-                    <constraint firstItem="Hcl-lN-K2n" firstAttribute="leading" secondItem="Xd2-Be-G4r" secondAttribute="leading" id="B1v-d5-8C3"/>
                     <constraint firstItem="sBE-tC-Wkl" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-7" id="CzF-MZ-Mbn"/>
-                    <constraint firstAttribute="centerY" secondItem="aNF-2x-2TV" secondAttribute="centerY" constant="-11.5" id="EiR-kP-SGj"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Hcl-lN-K2n" secondAttribute="bottom" constant="-8" id="FKx-L0-3R1"/>
-                    <constraint firstItem="Hcl-lN-K2n" firstAttribute="top" secondItem="Xd2-Be-G4r" secondAttribute="bottom" constant="3" id="KZe-sK-Ipc"/>
                     <constraint firstItem="aNF-2x-2TV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-2" id="LdY-zq-NTr"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="Hcl-lN-K2n" secondAttribute="bottom" constant="-8" id="RMB-DC-DU4"/>
                     <constraint firstItem="sBE-tC-Wkl" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="SFM-8y-mOo"/>
                     <constraint firstAttribute="bottomMargin" secondItem="aNF-2x-2TV" secondAttribute="bottom" constant="-3" id="TFi-Lt-AWP"/>
                     <constraint firstItem="aNF-2x-2TV" firstAttribute="leading" secondItem="Hcl-lN-K2n" secondAttribute="trailing" constant="56" id="URO-Hq-ptZ"/>
                     <constraint firstItem="Hcl-lN-K2n" firstAttribute="leading" secondItem="sBE-tC-Wkl" secondAttribute="trailing" constant="8" symbolic="YES" id="ZAg-k1-4yH"/>
-                    <constraint firstItem="Xd2-Be-G4r" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-6" id="gap-pR-fJJ"/>
                     <constraint firstItem="Xd2-Be-G4r" firstAttribute="leading" secondItem="sBE-tC-Wkl" secondAttribute="trailing" constant="8" id="lew-VC-ply"/>
-                    <constraint firstAttribute="trailing" secondItem="aNF-2x-2TV" secondAttribute="trailing" id="oKo-zY-zsc"/>
                     <constraint firstItem="Hcl-lN-K2n" firstAttribute="top" secondItem="Xd2-Be-G4r" secondAttribute="bottom" constant="2" id="xE5-n7-9XE"/>
                     <constraint firstAttribute="trailingMargin" secondItem="aNF-2x-2TV" secondAttribute="trailing" constant="25" id="z4t-B2-yaE"/>
                 </constraints>
-                <variation key="default">
-                    <mask key="constraints">
-                        <exclude reference="gap-pR-fJJ"/>
-                        <exclude reference="B1v-d5-8C3"/>
-                        <exclude reference="KZe-sK-Ipc"/>
-                        <exclude reference="RMB-DC-DU4"/>
-                        <exclude reference="13g-Hw-pAD"/>
-                        <exclude reference="4si-1T-lyP"/>
-                        <exclude reference="EiR-kP-SGj"/>
-                        <exclude reference="oKo-zY-zsc"/>
-                    </mask>
-                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="colorswatch" destination="sBE-tC-Wkl" id="QHo-XU-PXP"/>

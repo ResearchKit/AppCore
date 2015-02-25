@@ -10,6 +10,8 @@
 #import "APCMedicationModel.h"
 #import "APCLozengeButton.h"
 
+#import "APCMedTrackerDailyDosageRecord.h"
+
 #import "APCMedTrackerMedication+Helper.h"
 #import "APCMedTrackerPrescription+Helper.h"
 #import "APCMedTrackerPossibleDosage+Helper.h"
@@ -40,8 +42,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 
 @property (nonatomic, weak)  IBOutlet  UITableView    *tabulator;
 
-@property (nonatomic, strong)           NSDictionary  *colormap;
-
 @end
 
 @implementation APCMedicationTrackerDetailViewController
@@ -58,7 +58,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     NSInteger  numberOfRows = 0;
     
     if (section == kDailyDosesTakenSection) {
-        NSLog(@"APCMedicationTrackerDetailViewController numberOfRowsInSection, lozenge = %@", self.lozenge);
         if (self.lozenge != nil) {
             numberOfRows = [self.lozenge.prescription.numberOfTimesPerDay integerValue];
         }
@@ -130,6 +129,52 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     return  cell;
 }
 
+#pragma  mark  -  Update Data Store Methods
+
+- (void)updateNumberOfDosesTaken
+{
+    NSInteger   numberOfRowsInDosesSection = [self.tabulator numberOfRowsInSection:kDailyDosesTakenSection];
+    NSUInteger  totalNumberOfDosesTaken = 0;
+    for (NSUInteger  row = 0;  row < numberOfRowsInDosesSection;  row++) {
+        UITableViewCell  *doseCell = [self.tabulator cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:kDailyDosesTakenSection]];
+        if (doseCell.accessoryType == UITableViewCellAccessoryCheckmark) {
+            totalNumberOfDosesTaken = totalNumberOfDosesTaken + 1;
+        }
+    }
+    NSDate  *dateOfLozenge = self.lozenge.currentDate;
+    [self.lozenge.prescription recordThisManyDoses: totalNumberOfDosesTaken
+                                       takenOnDate: dateOfLozenge
+                                   andUseThisQueue: [NSOperationQueue mainQueue]
+                                  toDoThisWhenDone: ^(NSTimeInterval operationDuration,
+                                                      NSError *error)
+     {
+         if (error != nil) {
+             APCLogError2(error);
+         } else {
+             [self.lozenge.prescription fetchDosesTakenFromDate:dateOfLozenge
+                                                         toDate:dateOfLozenge
+                                                andUseThisQueue:[NSOperationQueue mainQueue]
+                                               toDoThisWhenDone:^(APCMedTrackerPrescription *prescription,
+                                                                  NSArray *dailyDosageRecords,
+                                                                  NSTimeInterval operationDuration,
+                                                                  NSError *error)
+              {
+                  APCMedTrackerDailyDosageRecord  *record = nil;
+                  
+                  if (error != nil) {
+                      APCLogError2(error);
+                  } else if (dailyDosageRecords.count == 0) {
+                      self.lozenge.numberOfDosesTaken = [NSNumber numberWithUnsignedInteger:0];
+                  } else {
+                      record = [dailyDosageRecords firstObject];
+                      self.lozenge.numberOfDosesTaken = record.numberOfDosesTakenForThisDate;
+                  }
+              }];
+         }
+         
+     }];
+}
+
 #pragma  mark  -  Table View Delegate Methods
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -155,6 +200,7 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
         } else {
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
+        [self updateNumberOfDosesTaken];
     }
 }
 
@@ -163,8 +209,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    NSLog(@"APCMedicationTrackerDetailViewController viewDidLoad, lozenge = %@", self.lozenge);
 
     self.navigationItem.title = viewControllerTitle;
     
@@ -172,18 +216,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 
     UINib  *setupTableCellNib = [UINib nibWithNibName:kSetupTableCellName bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:setupTableCellNib forCellReuseIdentifier:kSetupTableCellName];
-
-    self.colormap = @{
-                      @"Gray"    : [UIColor grayColor],
-                      @"Red"     : [UIColor redColor],
-                      @"Green"   : [UIColor greenColor],
-                      @"Blue"    : [UIColor blueColor],
-                      @"Cyan"    : [UIColor cyanColor],
-                      @"Magenta" : [UIColor magentaColor],
-                      @"Yellow"  : [UIColor yellowColor],
-                      @"Orange"  : [UIColor orangeColor],
-                      @"Purple"  : [UIColor purpleColor]
-                      };
 }
 
 - (void)didReceiveMemoryWarning

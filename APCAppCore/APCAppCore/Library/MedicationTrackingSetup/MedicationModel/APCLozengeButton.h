@@ -7,20 +7,23 @@
 
 #import <UIKit/UIKit.h>
 
+@class  APCMedTrackerDailyDosageRecord;
 @class  APCMedTrackerPrescription;
 
 @interface APCLozengeButton : UIButton
 
-@property  (nonatomic, strong)  APCMedTrackerPrescription  *prescription;
+@property  (nonatomic, strong)  APCMedTrackerDailyDosageRecord  *dailyDosageRecord;
+@property  (nonatomic, strong)  APCMedTrackerPrescription       *prescription;
 
-@property  (nonatomic, strong)  UIColor                    *completedTickColor;
-@property  (nonatomic, strong)  UIColor                    *completedBackgroundColor;
-@property  (nonatomic, strong)  UIColor                    *completedBorderColor;
+@property  (nonatomic, strong)  NSDate                          *currentDate;
+@property  (nonatomic, strong)  NSNumber                        *numberOfDosesTaken;
 
-@property  (nonatomic, strong)  UIColor                    *incompleteTickColor;
-@property  (nonatomic, strong)  UIColor                    *incompleteBackgroundColor;
-@property  (nonatomic, strong)  UIColor                    *incompleteBorderColor;
+@property  (nonatomic, strong)  UIColor                         *completedTickColor;
+@property  (nonatomic, strong)  UIColor                         *completedBackgroundColor;
+@property  (nonatomic, strong)  UIColor                         *completedBorderColor;
 
 @property  (nonatomic, assign, getter = isCompleted)  BOOL  completed;
+
+//- (void)assignPrescription:(APCMedTrackerPrescription *)aPrescription  forDate:(NSDate *)aDate;
 
 @end

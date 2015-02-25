@@ -62,7 +62,8 @@ typedef void (^ APCMedTrackerRecordDosesCallback) (NSTimeInterval operationDurat
  The -fetchDosesTaken...: method calls a block with
  this signature when it completes.
  */
-typedef void (^ APCMedTrackerFetchDosesCallback) (NSArray *dailyDosageRecords,
+typedef void (^ APCMedTrackerFetchDosesCallback) (APCMedTrackerPrescription *prescription,
+                                                  NSArray *dailyDosageRecords,
                                                   NSTimeInterval operationDuration,
                                                   NSError *error);
 

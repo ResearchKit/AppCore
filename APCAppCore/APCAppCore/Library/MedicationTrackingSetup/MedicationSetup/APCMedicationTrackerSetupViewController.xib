@@ -17,7 +17,7 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="91n-u5-qOC" userLabel="Setup Table View">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="91n-u5-qOC" userLabel="Setup Table View">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="196"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
@@ -28,44 +28,42 @@
                         <outlet property="delegate" destination="-1" id="UsF-XO-FYM"/>
                     </connections>
                 </tableView>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="w3K-NH-IuG" userLabel="List Table View">
-                    <rect key="frame" x="0.0" y="284" width="600" height="316"/>
-                    <color key="backgroundColor" red="0.80000001190000003" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" relation="lessThanOrEqual" priority="250" constant="316" id="qQg-6B-Xiq"/>
-                    </constraints>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="d2H-AH-MzK"/>
-                        <outlet property="delegate" destination="-1" id="HId-6B-19j"/>
-                    </connections>
-                </tableView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f5m-k4-NZv" customClass="APCButton">
+                <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f5m-k4-NZv" userLabel="Done Button" customClass="APCButton">
                     <rect key="frame" x="227" y="218" width="146" height="44"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="146" id="WuG-BG-fgT"/>
                         <constraint firstAttribute="height" constant="44" id="gKm-FA-9XJ"/>
                     </constraints>
-                    <state key="normal" title="Done">
+                    <state key="normal" title="Add Medication">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
                         <action selector="doneButtonWasTapped:" destination="-1" eventType="touchUpInside" id="P0l-8F-zcs"/>
                     </connections>
                 </button>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="250" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="w3K-NH-IuG" userLabel="List Table View">
+                    <rect key="frame" x="0.0" y="278" width="600" height="272"/>
+                    <color key="backgroundColor" red="0.97254901959999995" green="0.95840628370000003" blue="0.13845801029999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="d2H-AH-MzK"/>
+                        <outlet property="delegate" destination="-1" id="HId-6B-19j"/>
+                    </connections>
+                </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="f5m-k4-NZv" firstAttribute="top" secondItem="91n-u5-qOC" secondAttribute="bottom" constant="22" id="1Yg-uO-FJF"/>
+                <constraint firstItem="91n-u5-qOC" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="21g-Mc-nkl"/>
                 <constraint firstItem="w3K-NH-IuG" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="3Aj-0H-lFD"/>
-                <constraint firstItem="91n-u5-qOC" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="BDk-Kq-M0j"/>
                 <constraint firstItem="91n-u5-qOC" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="GcA-46-jgK"/>
-                <constraint firstAttribute="bottom" secondItem="w3K-NH-IuG" secondAttribute="bottom" id="Iaf-xw-ACZ"/>
                 <constraint firstAttribute="trailing" secondItem="91n-u5-qOC" secondAttribute="trailing" id="Lu4-ts-4F7"/>
-                <constraint firstItem="w3K-NH-IuG" firstAttribute="top" secondItem="f5m-k4-NZv" secondAttribute="bottom" constant="22" id="cOr-4a-Q8i"/>
+                <constraint firstAttribute="bottom" secondItem="w3K-NH-IuG" secondAttribute="bottom" constant="50" id="ald-lC-Sgk"/>
                 <constraint firstAttribute="centerX" secondItem="f5m-k4-NZv" secondAttribute="centerX" id="cba-j2-PQP"/>
                 <constraint firstAttribute="trailing" secondItem="w3K-NH-IuG" secondAttribute="trailing" id="fOq-rd-9IH"/>
+                <constraint firstItem="w3K-NH-IuG" firstAttribute="top" secondItem="f5m-k4-NZv" secondAttribute="bottom" constant="16" id="kQF-3X-yWz"/>
             </constraints>
-            <point key="canvasLocation" x="-193" y="479"/>
+            <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+            <point key="canvasLocation" x="-196" y="579"/>
         </view>
     </objects>
 </document>

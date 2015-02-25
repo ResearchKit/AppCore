@@ -10,6 +10,7 @@
 @class  APCMedicationTrackerMedicationsDisplayView;
 
 @class  APCLozengeButton;
+@class  APCMedTrackerPrescription;
 
 @protocol  APCMedicationTrackerMedicationsDisplayViewDelegate  <NSObject>
 
@@ -20,7 +21,10 @@
 @interface APCMedicationTrackerMedicationsDisplayView : UIView
 
 @property  (nonatomic, strong)  NSArray  *prescriptions;
+@property  (nonatomic, strong)  NSDate   *startOfWeekDate;
 
 @property  (nonatomic, weak)  id <APCMedicationTrackerMedicationsDisplayViewDelegate>  delegate;
+
+- (void)makePrescriptionDisplaysWithPrescriptions:(NSArray *)thePrescriptions andDate:(NSDate *)aDate;
 
 @end

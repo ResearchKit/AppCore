@@ -42,7 +42,7 @@ static  NSInteger  kAPCMedicationFrequencyRow = 1;
 static  NSInteger  kAPCMedicationColorRow     = 2;
 static  NSInteger  kAPCMedicationDosageRow    = 3;
 
-static  NSString  *mainTableCategories[]          = { @"Name",        @"Frequency",     @"Label Color",  @"Dosage"        };
+static  NSString  *mainTableCategories[]          = { @"Name",        @"Frequency",     @"Label Color",  @"Dosage (optional)"        };
 static  NSInteger  kNumberOfMainTableCategories = (sizeof(mainTableCategories) / sizeof(NSString *));
 
 static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Frequency", @"Select Color", @"Select Dosage" };
@@ -61,8 +61,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 @property  (nonatomic, weak)  IBOutlet  UITableView             *listTabulator;
 
 @property  (nonatomic, weak)  IBOutlet  UIButton                *doneButton;
-
-@property  (nonatomic, strong)          NSDictionary            *colormap;
 
 @property  (nonatomic, assign)          BOOL                     medicationNameWasSet;
 @property  (nonatomic, assign)          BOOL                     medicationColorWasSet;
@@ -221,7 +219,13 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     self.medicationColorWasSet     = NO;
     self.medicationFrequencyWasSet = NO;
     self.medicationDosageWasSet    = NO;
-    self.navigationItem.rightBarButtonItem.enabled = NO;
+}
+
+#pragma  mark  -  Finished Button Action Method
+
+- (IBAction)finishedButtonWasTapped:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 #pragma  mark  -  Done Button Action Method
@@ -250,12 +254,10 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma  mark  -  Notification Methods
-
 - (void)enableDoneButtonIfValuesSet
 {
     if ((self.medicationNameWasSet == YES) && (self.medicationColorWasSet == YES) &&
-        (self.medicationFrequencyWasSet == YES) &&  (self.medicationDosageWasSet == YES)) {
+        (self.medicationFrequencyWasSet == YES)) {
         self.doneButton.enabled = YES;
     }
 }
@@ -290,7 +292,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
 {
     self.possibleDosage = dosageAmount;
     self.medicationDosageWasSet = YES;
-    [self enableDoneButtonIfValuesSet];
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesDosage inSection:0] ] withRowAnimation:NO];
 }
 
@@ -316,19 +317,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     [super viewDidLoad];
     
     self.navigationItem.title = kViewControllerName;
-    
-    self.colormap = @{
-                      @"Gray"    : [UIColor grayColor],
-                      @"Red"     : [UIColor redColor],
-                      @"Green"   : [UIColor greenColor],
-                      @"Blue"    : [UIColor blueColor],
-                      @"Cyan"    : [UIColor cyanColor],
-                      @"Magenta" : [UIColor magentaColor],
-                      @"Yellow"  : [UIColor yellowColor],
-                      @"Orange"  : [UIColor orangeColor],
-                      @"Purple"  : [UIColor purpleColor]
-                    };
-    
     
     self.setupTabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.listTabulator.tableFooterView  = [[UIView alloc] initWithFrame:CGRectZero];
