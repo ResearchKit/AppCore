@@ -183,6 +183,8 @@
 		5BB10C141A91F970002D2DD2 /* APCWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB10C121A91F970002D2DD2 /* APCWebViewController.m */; };
 		5BD6EBA21A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD6EBA01A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BD6EBA31A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6EBA11A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.m */; };
+		5BD6EBC41A9D905100C3BFB0 /* APCPermissionPrimingViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD6EBC21A9D905100C3BFB0 /* APCPermissionPrimingViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5BD6EBC51A9D905100C3BFB0 /* APCPermissionPrimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6EBC31A9D905100C3BFB0 /* APCPermissionPrimingViewController.m */; };
 		6C7346081A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C7346061A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C7346091A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */; };
 		747307101A96E1DE0071D863 /* APCCMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7473070E1A96E1DE0071D863 /* APCCMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -805,6 +807,8 @@
 		5BB10C121A91F970002D2DD2 /* APCWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCWebViewController.m; sourceTree = "<group>"; };
 		5BD6EBA01A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyLandingCollectionViewCell.h; sourceTree = "<group>"; };
 		5BD6EBA11A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyLandingCollectionViewCell.m; sourceTree = "<group>"; };
+		5BD6EBC21A9D905100C3BFB0 /* APCPermissionPrimingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPermissionPrimingViewController.h; sourceTree = "<group>"; };
+		5BD6EBC31A9D905100C3BFB0 /* APCPermissionPrimingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPermissionPrimingViewController.m; sourceTree = "<group>"; };
 		6C7346061A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConsentTaskViewController.h; sourceTree = "<group>"; };
 		6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCConsentTaskViewController.m; sourceTree = "<group>"; };
 		7473070E1A96E1DE0071D863 /* APCCMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCCMS.h; path = CMS/APCCMS.h; sourceTree = "<group>"; };
@@ -2366,6 +2370,8 @@
 				F5F129661A2F78490015982C /* APCInclusionCriteriaViewController.m */,
 				F5F129671A2F78490015982C /* APCInEligibleViewController.h */,
 				F5F129681A2F78490015982C /* APCInEligibleViewController.m */,
+				5BD6EBC21A9D905100C3BFB0 /* APCPermissionPrimingViewController.h */,
+				5BD6EBC31A9D905100C3BFB0 /* APCPermissionPrimingViewController.m */,
 				F5F129691A2F78490015982C /* APCSignUpGeneralInfoViewController.h */,
 				F5F1296A1A2F78490015982C /* APCSignUpGeneralInfoViewController.m */,
 				F5F1296B1A2F78490015982C /* APCSignUpInfoViewController.h */,
@@ -2635,6 +2641,7 @@
 				F5F12AF01A2F78490015982C /* APCDashboardProgressTableViewCell.h in Headers */,
 				08EA2AB31A7AD564007549C0 /* UIImage+ImageEffects.h in Headers */,
 				5BB10C0A1A91D540002D2DD2 /* APCStudyVideoCollectionViewCell.h in Headers */,
+				5BD6EBC41A9D905100C3BFB0 /* APCPermissionPrimingViewController.h in Headers */,
 				3654318D1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.h in Headers */,
 				F5B947EF1A73272C0034C522 /* APCParameters.h in Headers */,
 				F5F12AA61A2F78490015982C /* APCEligibleViewController.h in Headers */,
@@ -3139,6 +3146,7 @@
 				F5B947C21A73272C0034C522 /* NSDictionary+APCAdditions.m in Sources */,
 				F5F12A071A2F78490015982C /* APCTask+AddOn.m in Sources */,
 				F5B946491A7309A20034C522 /* ZZStandardDecryptInputStream.mm in Sources */,
+				5BD6EBC51A9D905100C3BFB0 /* APCPermissionPrimingViewController.m in Sources */,
 				F5B947D21A73272C0034C522 /* UIImage+APCHelper.m in Sources */,
 				5B9B36B01A95DEEB00389F42 /* APCActivitiesSectionHeaderView.m in Sources */,
 				F5F12ABD1A2F78490015982C /* APCDashboardEditViewController.m in Sources */,
