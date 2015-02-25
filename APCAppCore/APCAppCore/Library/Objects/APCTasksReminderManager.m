@@ -87,6 +87,7 @@ NSString * const kTaskReminderMessage = @"Complete your activities for today!";
     localNotification.timeZone = [NSTimeZone localTimeZone];
     localNotification.alertBody = kTaskReminderMessage;
     localNotification.repeatInterval = NSCalendarUnitDay;
+    localNotification.soundName = UILocalNotificationDefaultSoundName;
     
     NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
     notificationInfo[kTaskReminderUserInfoKey] = kTaskReminderUserInfo;
