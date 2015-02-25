@@ -907,9 +907,16 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 NSString *message = NSLocalizedString(@"The app will open its Permissions in the phone's Settings.", @"The app will open its Permissions in the phone's Settings.");
                 NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
                 NSString *ok = NSLocalizedString(@"OK", @"OK");
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancel otherButtonTitles:ok, nil];
-                alertView.tag = kAPCPermissionsAlertViewTag;
-                [alertView show];
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                    //No-op
+                }];
+                [alertController addAction:cancelAction];
+                
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:ok style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+                }];
+                [alertController addAction:okAction];
             }
                 break;
             case kAPCUserInfoItemTypeReviewConsent:
@@ -1244,18 +1251,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             }];
         }
     }];
-}
-
-#pragma mark UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (alertView.tag == kAPCPermissionsAlertViewTag) {
-        if (buttonIndex == 1) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-        } else {
-            [self deselectTheFirstSelectedRow];
-        }
-    }
 }
 
 #pragma mark - IBActions
