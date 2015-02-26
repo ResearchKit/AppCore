@@ -12,11 +12,23 @@
 #import "APCConsentInstructionQuestion.h"
 
 
-static NSString*    kIdentifierTag     = @"identifier";
-static NSString*    kPromptTag         = @"prompt";
-static NSString*    kTextTag           = @"text";
-static NSString*    kSuccessMessageTag = @"successMessage";
-static NSString*    kFailedMessageTag  = @"failedMessage";
+static NSString*    kDocumentHtmlTag       = @"htmlDocument";
+static NSString*    kIdentifierTag         = @"identifier";
+static NSString*    kPromptTag             = @"prompt";
+static NSString*    kTextTag               = @"text";
+static NSString*    kSuccessMessageTag     = @"success";
+static NSString*    kFailedMessageTag      = @"failed";
+static NSString*    kDocumentPropertiesTag = @"documentProperties";
+static NSString*    kQuizTag               = @"quiz";
+static NSString*    kSectionTag            = @"sections";
+static NSString*    kQuestionsTag          = @"questions";
+static NSString*    kQuestionTypeTag       = @"type";
+static NSString*    kBooleanTypeTag        = @"boolean";
+static NSString*    kInstructionTypeTag    = @"instruction";
+static NSString*    kExpectedAnswerTag     = @"expectedAnswer";
+static NSString*    kTrueTag               = @"true";
+static NSString*    kFalseTag              = @"false";
+
 
 
 @interface APCConsentTask ()
@@ -252,10 +264,6 @@ static NSString*    kFailedMessageTag  = @"failedMessage";
 
 - (void)loadFromJson:(NSString*)fileName
 {
-    static NSString*    kDocumentPropertiesTag = @"documentProperties";
-    static NSString*    kQuizTag               = @"quiz";
-    static NSString*    kSectionTag            = @"sections";
-    
     NSString*       filePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"json"];
     NSAssert(filePath != nil, @"Unable to location file with Consent Section in main bundle");
     
@@ -287,15 +295,7 @@ static NSString*    kFailedMessageTag  = @"failedMessage";
 
 - (void)loadDocumentProperties:(NSDictionary*)properties
 {
-    //  "documentProperties" :
-    //  {
-    //      "htmlDocument" : "cardio_fullconsent"
-    //  }
-    
-    static NSString*   kDocumentHtmlTag    = @"htmlDocument";
-    
     NSString*   documentHtmlContent = [properties objectForKey:kDocumentHtmlTag];
-    
     NSAssert(documentHtmlContent == nil || documentHtmlContent != nil && [documentHtmlContent isKindOfClass:[NSString class]], @"Improper Document HTML Content type");
     
     if (documentHtmlContent != nil)
@@ -318,30 +318,11 @@ static NSString*    kFailedMessageTag  = @"failedMessage";
 
 - (void)loadQuiz:(NSDictionary*)properties
 {
-    /*
-         "quiz":
-         {
-             "questions":
-             [
-                 {
-                    "identifier": "question1",
-                     "prompt": "Continue",
-                     "type": "boolean",
-                     "expectedAnswer": "true"
-                 }
-             ].
-             "failure": "",
-             "success": ""
-         }
-     */
-    //  type: boolean, others??
-    static NSString*    kQuestionsTag      = @"questions";
-    static NSString*    kFailureMessageTag = @"failure";
-    static NSString*    kSuccessMessageTag = @"success";
-    
-    NSString*   failureMessage = [properties objectForKey:kFailureMessageTag];
+    //  Failure and success messages are optioinal, questions, however are not.
+    NSString*   failureMessage = [properties objectForKey:kFailedMessageTag];
     NSString*   sucessMessage  = [properties objectForKey:kSuccessMessageTag];
     NSArray*    questions      = [properties objectForKey:kQuestionsTag];
+    NSAssert(questions != nil, @"No questions defined for Consent Quiz");
     
     self.failureMessage = failureMessage;
     self.successMessage = sucessMessage;
@@ -362,19 +343,9 @@ static NSString*    kFailedMessageTag  = @"failedMessage";
 
 - (APCConsentQuestion*)loadQuestion:(NSDictionary*)properties
 {
-    /*
-         {
-             "identifier": "question1",
-             "prompt": "Continue",
-             "type": "boolean",
-             "expectedAnswer": "true"
-         }
-     */
-    static NSString*    kQuestionTypeTag    = @"type";
-    static NSString*    kBooleanTypeTag     = @"boolean";
-    static NSString*    kInstructionTypeTag = @"instruction";
-
-    NSString*           type     = [properties objectForKey:kQuestionTypeTag];
+    NSString*   type = [properties objectForKey:kQuestionTypeTag];
+    NSAssert(type != nil, @"No question type defined for Question element");
+    
     APCConsentQuestion* question = nil;
     
     if ([type isEqualToString:kBooleanTypeTag])
@@ -391,13 +362,14 @@ static NSString*    kFailedMessageTag  = @"failedMessage";
 
 - (APCConsentBooleanQuestion*)loadBooleanQuestion:(NSDictionary*)properties
 {
-    static NSString*    kExpectedAnswerTag = @"expectedAnswer";
-    static NSString*    kTrueTag           = @"true";
-    static NSString*    kFalseTag          = @"false";
-    
     NSString*   identifier     = [properties objectForKey:kIdentifierTag];
+    NSAssert(identifier != nil, @"Missing identifier for boolean question");
+    
     NSString*   prompt         = [properties objectForKey:kPromptTag];
+    NSAssert(prompt != nil, @"Missing prompt for boolean question");
+    
     NSString*   expectedString = [properties objectForKey:kExpectedAnswerTag];
+    NSAssert(expectedString, @"Missing Expected Answer for boolean question");
     BOOL        expected       = false;
     
     if ([expectedString isEqualToString:kTrueTag])
@@ -411,6 +383,7 @@ static NSString*    kFailedMessageTag  = @"failedMessage";
     else
     {
         //  error
+        NSAssert(true, @"Unknown Expected Answer for boolean question:", expectedString);
     }
     APCConsentBooleanQuestion*  question = [[APCConsentBooleanQuestion alloc] initWithIdentifier:identifier
                                                                                           prompt:prompt
@@ -422,6 +395,8 @@ static NSString*    kFailedMessageTag  = @"failedMessage";
 - (APCConsentInstructionQuestion*)loadInstructionQuestion:(NSDictionary*)properties
 {
     NSString*   identifier     = [properties objectForKey:kIdentifierTag];
+    NSAssert(identifier != nil, @"Missing identifier for Instruction Question");
+    
     NSString*   prompt         = [properties objectForKey:kPromptTag];
     NSString*   text           = [properties objectForKey:kTextTag];
     
