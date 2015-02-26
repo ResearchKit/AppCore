@@ -189,9 +189,9 @@
 		6C7346091A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */; };
 		6CACF2C21A9D510A000C504B /* APCInhalerUsageTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CACF2C01A9D510A000C504B /* APCInhalerUsageTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CACF2C31A9D510A000C504B /* APCInhalerUsageTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CACF2C11A9D510A000C504B /* APCInhalerUsageTracker.m */; };
-		712AB44C1A9E692400556DA2 /* APCMotionHistoryData.h in Headers */ = {isa = PBXBuildFile; fileRef = 712AB4481A9E692400556DA2 /* APCMotionHistoryData.h */; };
+		712AB44C1A9E692400556DA2 /* APCMotionHistoryData.h in Headers */ = {isa = PBXBuildFile; fileRef = 712AB4481A9E692400556DA2 /* APCMotionHistoryData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		712AB44D1A9E692400556DA2 /* APCMotionHistoryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 712AB4491A9E692400556DA2 /* APCMotionHistoryData.m */; };
-		712AB44E1A9E692400556DA2 /* APCMotionHistoryReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 712AB44A1A9E692400556DA2 /* APCMotionHistoryReporter.h */; };
+		712AB44E1A9E692400556DA2 /* APCMotionHistoryReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 712AB44A1A9E692400556DA2 /* APCMotionHistoryReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		712AB44F1A9E692400556DA2 /* APCMotionHistoryReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 712AB44B1A9E692400556DA2 /* APCMotionHistoryReporter.m */; };
 		747307101A96E1DE0071D863 /* APCCMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7473070E1A96E1DE0071D863 /* APCCMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		747307111A96E1DE0071D863 /* APCCMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 7473070F1A96E1DE0071D863 /* APCCMS.m */; };

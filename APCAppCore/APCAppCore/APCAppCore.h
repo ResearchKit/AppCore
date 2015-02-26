@@ -236,6 +236,8 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCInsights.h>
 #import <APCAppCore/APCFoodInsight.h>
 #import <APCAppCore/APCBadgeLabel.h>
+#import <APCAppCore/APCMotionHistoryData.h>
+#import <APCAppCore/APCMotionHistoryReporter.h>
 
 /* -------------------------
  Categories
