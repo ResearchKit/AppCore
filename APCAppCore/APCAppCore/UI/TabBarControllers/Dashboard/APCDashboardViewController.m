@@ -132,26 +132,43 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardGraphItem class]]){
         
         APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)dashboardItem;
-        APCDashboardLineGraphTableViewCell *graphCell = (APCDashboardLineGraphTableViewCell *)cell;
+        APCDashboardGraphTableViewCell *graphCell = (APCDashboardGraphTableViewCell *)cell;
         
-        graphCell.graphView.datasource = graphItem.graphData;
-        graphCell.graphView.delegate = self;
+        APCBaseGraphView *graphView;
+        
+        if (graphItem.graphType == kAPCDashboardGraphTypeLine) {
+            graphView = (APCLineGraphView *)graphCell.lineGraphView;
+            graphCell.lineGraphView.datasource = graphItem.graphData;
+            
+            graphCell.discreteGraphView.hidden = YES;
+            
+        } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
+            graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
+            graphCell.discreteGraphView.datasource = graphItem.graphData;
+            
+            graphCell.lineGraphView.hidden = YES;
+        }
+        
+        graphView.delegate = self;
+        graphView.tintColor = graphItem.tintColor;
+        graphView.panGestureRecognizer.delegate = self;
+        graphView.axisTitleFont = [UIFont appRegularFontWithSize:14.0f];
+        
+        graphView.maximumValueImage = graphItem.maximumImage;
+        graphView.minimumValueImage = graphItem.minimumImage;
+        
+        graphCell.averageImageView.image = graphItem.averageImage;
         graphCell.title = graphItem.caption;
         graphCell.subTitleLabel.text = graphItem.detailText;
-        graphCell.graphView.tintColor = graphItem.tintColor;
-        graphCell.graphView.panGestureRecognizer.delegate = self;
-        graphCell.graphView.axisTitleFont = [UIFont appRegularFontWithSize:14.0f];
-        
-        graphCell.graphView.maximumValueImage = graphItem.maximumImage;
-        graphCell.graphView.minimumValueImage = graphItem.minimumImage;
-        graphCell.averageImageView.image = graphItem.averageImage;
         
         graphCell.tintColor = graphItem.tintColor;
         graphCell.delegate = self;
-        [graphCell.graphView layoutSubviews];
-        [self.lineCharts addObject:graphCell.graphView];
+        [graphView layoutSubviews];
         
-        [graphCell.graphView refreshGraph];
+        [self.lineCharts addObject:graphView];
+        
+        [graphView refreshGraph];
+        
         
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardMessageItem class]]){
         
@@ -316,7 +333,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 
 - (void)dashboardTableViewCellDidTapExpand:(APCDashboardTableViewCell *)cell
 {
-    if ([cell isKindOfClass:[APCDashboardLineGraphTableViewCell class]]) {
+    if ([cell isKindOfClass:[APCDashboardGraphTableViewCell class]]) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
         
         APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)[self itemForIndexPath:indexPath];

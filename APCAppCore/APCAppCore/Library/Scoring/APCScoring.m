@@ -667,12 +667,12 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                                           toDate:endDate
                                        withBlock:^(HKStatistics *result, BOOL * __unused stop) {
                                            HKQuantity *quantity;
-                                           APCRangePoint *rangePoint = nil;
+                                           APCRangePoint *rangePoint = [APCRangePoint new];
                                            
                                            if (isDecreteQuantity) {
                                                quantity = result.averageQuantity;
-                                               rangePoint = [[APCRangePoint alloc] initWithMinimumValue:[result.minimumQuantity doubleValueForUnit:unit]
-                                                                                           maximumValue:[result.maximumQuantity doubleValueForUnit:unit]];
+                                               rangePoint.minimumValue = [result.minimumQuantity doubleValueForUnit:unit];
+                                               rangePoint.maximumValue = [result.maximumQuantity doubleValueForUnit:unit];
                                            } else {
                                                quantity = result.sumQuantity;
                                            }
@@ -683,7 +683,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                                            NSDictionary *dataPoint = @{
                                                                        kDatasetDateKey: date,
                                                                        kDatasetValueKey: (!quantity) ? @(NSNotFound) : @(value),
-                                                                       kDatasetRangeValueKey: (!rangePoint) ? @(NSNotFound) : rangePoint,
+                                                                       kDatasetRangeValueKey: rangePoint,
                                                                        kDatasetValueNoDataKey: (isDecreteQuantity) ? @(YES) : @(NO)
                                                                        };
                                            
@@ -977,6 +977,9 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     NSDictionary *point = [self nextObject];
     value = [point valueForKey:kDatasetRangeValueKey];
     
+    if (!value) {
+        value = [APCRangePoint new];
+    }
     return value;
 }
 
