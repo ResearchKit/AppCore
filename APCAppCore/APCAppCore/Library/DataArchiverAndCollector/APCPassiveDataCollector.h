@@ -16,6 +16,6 @@
 
 + (void) createOrAppendString: (NSString*) string toFile: (NSString*) path;
 + (void) createOrReplaceString: (NSString*) string toFile: (NSString*) path;
-
+- (void) checkIfDataNeedsToBeFlushed:(APCDataTracker*) tracker;
 
 @end
