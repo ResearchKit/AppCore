@@ -284,17 +284,13 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 #pragma mark - UIGestureRecognizerDelegate methods
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+
+    CGPoint translation = [(UIPanGestureRecognizer *)gestureRecognizer translationInView:gestureRecognizer.view.superview];
+    BOOL retValue = fabsf(translation.x) > fabsf(translation.y);
     
-    BOOL retVal = YES;
+    NSLog(@"BOOl - %d", retValue);
     
-    if (![gestureRecognizer isEqual:self.tableView.panGestureRecognizer] && ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]])) {
-        UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer*)gestureRecognizer;
-        CGPoint translation = [panGesture translationInView:self.tableView];
-        retVal = fabs(translation.x) > fabs(translation.y);
-    }
-    NSLog(@"%d", retVal);
-    
-    return retVal;
+    return retValue;
 }
 
 #pragma mark - UIViewControllerTransitioningDelegate methods

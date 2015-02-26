@@ -68,7 +68,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        [self sharedInit];
     }
     return self;
 }
@@ -76,7 +75,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder]) {
-        [self sharedInit];
     }
     return self;
 }
@@ -930,6 +928,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
+    
     if ((self.dataPoints.count > 0) && [self numberOfValidValues] > 0) {
         CGPoint location = [gestureRecognizer locationInView:self.plotsView];
         
@@ -953,6 +952,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         }
         
         if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+            
+            NSLog(@"Delegate - %@", gestureRecognizer.delegate);
+            
             [self setScrubberViewsHidden:NO animated:YES];
             if ([self.delegate respondsToSelector:@selector(graphViewTouchesBegan:)]) {
                 [self.delegate graphViewTouchesBegan:self];

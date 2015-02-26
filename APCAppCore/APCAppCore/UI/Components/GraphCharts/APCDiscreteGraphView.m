@@ -68,7 +68,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        [self sharedInit];
     }
     return self;
 }
@@ -76,7 +75,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder]) {
-        [self sharedInit];
     }
     return self;
 }
