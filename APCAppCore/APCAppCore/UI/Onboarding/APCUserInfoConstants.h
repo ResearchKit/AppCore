@@ -33,7 +33,9 @@ typedef NS_ENUM(APCTableViewItemType, APCUserInfoItemType) {
     kAPCSettingsItemTypeReminderOnOff,
     kAPCSettingsItemTypeReminderTime,
     kAPCSettingsItemTypePermissions,
-    kAPCUserInfoItemTypeReviewConsent
+    kAPCUserInfoItemTypeReviewConsent,
+    kAPCSettingsItemTypePrivacyPolicy,
+    kAPCSettingsItemTypeTermsAndConditions,
 };
 
 
