@@ -598,8 +598,8 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
             plotLineLayer.strokeColor = (plotIndex == 0) ? self.tintColor.CGColor : self.referenceLineColor.CGColor;
             plotLineLayer.lineJoin = kCALineJoinRound;
             plotLineLayer.lineCap = kCALineCapRound;
-            plotLineLayer.lineWidth = self.isLandscapeMode ? 8.0 : 4.0;
-            
+            plotLineLayer.lineWidth = self.isLandscapeMode ? 10.0 : 8.0;
+            plotLineLayer.opacity = 0.4;
             [self.plotsView.layer addSublayer:plotLineLayer];
             
             if (self.shouldAnimate) {
