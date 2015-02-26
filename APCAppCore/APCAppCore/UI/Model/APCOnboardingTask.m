@@ -7,15 +7,16 @@
 
 #import "APCOnboardingTask.h"
 
-NSString *const kAPCSignUpInclusionCriteriaStepIdentifier = @"InclusionCriteria";
-NSString *const kAPCSignUpEligibleStepIdentifier          = @"Eligible";
-NSString *const kAPCSignUpIneligibleStepIdentifier        = @"Ineligible";
-NSString *const kAPCSignUpGeneralInfoStepIdentifier       = @"GeneralInfo";
-NSString *const kAPCSignUpMedicalInfoStepIdentifier       = @"MedicalInfo";
-NSString *const kAPCSignUpCustomInfoStepIdentifier        = @"CustomInfo";
-NSString *const kAPCSignUpPasscodeStepIdentifier          = @"Passcode";
-NSString *const kAPCSignUpPermissionsStepIdentifier       = @"Permissions";
-NSString *const kAPCSignInStepIdentifier                  = @"SignIn";
+NSString *const kAPCSignUpInclusionCriteriaStepIdentifier   = @"InclusionCriteria";
+NSString *const kAPCSignUpEligibleStepIdentifier            = @"Eligible";
+NSString *const kAPCSignUpIneligibleStepIdentifier          = @"Ineligible";
+NSString *const kAPCSignUpGeneralInfoStepIdentifier         = @"GeneralInfo";
+NSString *const kAPCSignUpMedicalInfoStepIdentifier         = @"MedicalInfo";
+NSString *const kAPCSignUpCustomInfoStepIdentifier          = @"CustomInfo";
+NSString *const kAPCSignUpPasscodeStepIdentifier            = @"Passcode";
+NSString *const kAPCSignUpPermissionsStepIdentifier         = @"Permissions";
+NSString *const kAPCSignInStepIdentifier                    = @"SignIn";
+NSString *const kAPCSignUpPermissionsPrimingStepIdentifier  = @"PermissionsPriming";
 
 @implementation APCOnboardingTask
 
@@ -106,6 +107,15 @@ NSString *const kAPCSignInStepIdentifier                  = @"SignIn";
     }
     
     return _ineligibleStep;
+}
+
+- (ORKStep *)permissionsPrimingStep
+{
+    if (!_permissionsPrimingStep) {
+        _permissionsPrimingStep = [[ORKStep alloc] initWithIdentifier:kAPCSignUpPermissionsPrimingStepIdentifier];
+    }
+    
+    return _permissionsPrimingStep;
 }
 
 - (ORKStep *)generalInfoStep

@@ -322,7 +322,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     NSUInteger allScheduledTasks = appDelegate.dataSubstrate.countOfAllScheduledTasksForToday;
     NSUInteger completedScheduledTasks = appDelegate.dataSubstrate.countOfCompletedScheduledTasksForToday;
     
-    NSNumber *remainingTasks = @(allScheduledTasks - completedScheduledTasks);
+    NSNumber *remainingTasks = (completedScheduledTasks < allScheduledTasks) ? @(allScheduledTasks - completedScheduledTasks) : @(0);
     
     UITabBarItem *activitiesTab = appDelegate.tabster.tabBar.selectedItem;
     

@@ -64,6 +64,11 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
                                              selector:@selector(updateVisibleRowsInTableView:)
                                                  name:APCScoringHealthKitDataIsAvailableNotification
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateVisibleRowsInTableView:)
+                                                 name:APCTaskResultsProcessedNotification
+                                               object:nil];
   APCLogViewControllerAppeared();
 }
 
@@ -78,6 +83,10 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:APCScoringHealthKitDataIsAvailableNotification
                                                   object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:APCTaskResultsProcessedNotification
+                                                  object:nil];
+    
     
     [super viewWillDisappear:animated];
 }

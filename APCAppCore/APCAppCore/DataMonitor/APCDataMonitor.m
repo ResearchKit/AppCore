@@ -72,4 +72,15 @@
 }
 
 
+- (void)performCoreDataBlockInBackground:(void (^)(NSManagedObjectContext *))coreDataBlock
+{
+    NSManagedObjectContext * privateContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    privateContext.parentContext = self.dataSubstrate.persistentContext;
+    [privateContext performBlock:^{
+        if (coreDataBlock) {
+            coreDataBlock(privateContext);
+        }
+    }];
+}
+
 @end

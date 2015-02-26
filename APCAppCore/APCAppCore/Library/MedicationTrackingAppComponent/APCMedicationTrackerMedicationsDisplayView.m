@@ -106,9 +106,9 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     frame.origin.x = point.x - (kLozengeButtonWidth / 2.0);
     lozenge.frame = frame;
     
-    lozenge.backgroundColor = [UIColor whiteColor];
+//    lozenge.backgroundColor = [UIColor whiteColor];
     [lozenge setTitleColor:color forState:UIControlStateNormal];
-    lozenge.completedBorderColor = color;
+    lozenge.lozengeColor = color;
     
     [lozenge addTarget:self action:@selector(lozengeButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
     

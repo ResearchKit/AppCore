@@ -97,6 +97,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     
     NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
     NSArray *servicesArray = initialOptions[kAppServicesListRequiredKey];
+    NSDictionary *servicesDescrtiptions = initialOptions[kAppServicesDescriptionsKey];
     
     for (NSNumber *type in servicesArray) {
         
@@ -108,7 +109,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeHealthKit;
                 item.caption = NSLocalizedString(@"Health Kit", @"");
-                item.detailText = NSLocalizedString(@"Lorem ipsum dolor sit amet, etos et ya consectetur adip isicing elit, sed.", @"");
+                item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeHealthKit)];
                 [items addObject:item];
             }
                 break;
@@ -117,7 +118,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeLocation;
                 item.caption = NSLocalizedString(@"Location Services", @"");
-                item.detailText = NSLocalizedString(@"Using your GPS enables the app to accurately determine distances travelled. Your actual location will never be shared.", @"");
+                item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeLocation)];
                 [items addObject:item];
             }
                 break;
@@ -127,7 +128,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                     APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                     item.permissionType = kSignUpPermissionsTypeCoremotion;
                     item.caption = NSLocalizedString(@"Motion Activity", @"");
-                    item.detailText = NSLocalizedString(@"Using the motion co-processor allows the app to determine your activity, helping the study better understand how activity level may influence disease.", @"");
+                    item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeCoremotion)];
                     [items addObject:item];
                 }
             }
@@ -137,7 +138,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeLocalNotifications;
                 item.caption = NSLocalizedString(@"Notifications", @"");
-                item.detailText = NSLocalizedString(@"Allowing notifications enables the app to show you reminders.", @"");
+                item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeLocalNotifications)];
                 [items addObject:item];
             }
                 break;
@@ -146,7 +147,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeMicrophone;
                 item.caption = NSLocalizedString(@"Microphone", @"");
-                item.detailText = NSLocalizedString(@"Access to microphone is required for your Voice Recording Activity.", @"");
+                item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeMicrophone)];
                 [items addObject:item];
             }
                 break;

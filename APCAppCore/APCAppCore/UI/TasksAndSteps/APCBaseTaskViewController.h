@@ -11,6 +11,7 @@
 
 @interface APCBaseTaskViewController : ORKTaskViewController <ORKTaskViewControllerDelegate, ORKStepViewControllerDelegate>
 @property  (nonatomic, strong)  APCScheduledTask  *scheduledTask;
+@property (nonatomic, copy) void (^createResultSummaryBlock) (NSManagedObjectContext* context);
 
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask;
 - (NSString *) createResultSummary;
