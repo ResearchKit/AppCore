@@ -511,6 +511,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
         
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K = %@) and (%K <> %@)", kDatasetDateKey, day, kDatasetValueKey, @(NSNotFound)];
         NSArray *groupItems = [self.dataPoints filteredArrayUsingPredicate:predicate];
+        
         double itemSum = 0;
         double dayAverage = 0;
         
@@ -530,7 +531,19 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
             dayAverage = NSNotFound;
         }
         
+        // Set the min/max for the data
+        APCRangePoint *rangePoint = [APCRangePoint new];
+        
+        if (dayAverage != NSNotFound) {
+            NSNumber *dataMinValue = [groupItems valueForKeyPath:@"@min.datasetValueKey"];
+            NSNumber *dataMaxValue = [groupItems valueForKeyPath:@"@max.datasetValueKey"];
+            
+            rangePoint.minimumValue = [dataMinValue floatValue];
+            rangePoint.maximumValue = [dataMaxValue floatValue];
+        }
+        
         [entry setObject:@(dayAverage) forKey:kDatasetValueKey];
+        [entry setObject:rangePoint forKey:kDatasetRangeValueKey];
         
         [groupedDataset addObject:entry];
     }
