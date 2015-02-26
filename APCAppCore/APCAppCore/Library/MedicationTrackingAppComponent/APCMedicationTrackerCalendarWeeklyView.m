@@ -233,19 +233,19 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
 
 - (void)swipeLeft:(UISwipeGestureRecognizer *)swipe
 {
-    NSUInteger  pageNumber = [self.delegate currentScrollablePageNumber:self];
-    if (pageNumber != 0) {
-        [self performSwipeAnimation:WeeklyCalendarScrollDirectionLeft blnToday:NO selectedDate:nil];
-    }
+//    NSUInteger  pageNumber = [self.delegate currentScrollablePageNumber:self];
+//    if (pageNumber != 0) {
+        [self performSwipeAnimation:WeeklyCalendarScrollDirectionRight blnToday:NO selectedDate:nil];
+//    }
 }
 
 - (void)swipeRight:(UISwipeGestureRecognizer *)swipe
 {
-    NSUInteger  maximumPageNumber = [self.delegate maximumScrollablePageNumber:self];
-    NSUInteger  pageNumber = [self.delegate currentScrollablePageNumber:self];
-    if (pageNumber < maximumPageNumber) {
-        [self performSwipeAnimation:WeeklyCalendarScrollDirectionRight blnToday:NO selectedDate:nil];
-    }
+//    NSUInteger  maximumPageNumber = [self.delegate maximumScrollablePageNumber:self];
+//    NSUInteger  pageNumber = [self.delegate currentScrollablePageNumber:self];
+//    if (pageNumber < maximumPageNumber) {
+        [self performSwipeAnimation:WeeklyCalendarScrollDirectionLeft blnToday:NO selectedDate:nil];
+//    }
 }
 
 - (void)performSwipeAnimation:(WeeklyCalendarScrollDirection)scrollDirection blnToday:(BOOL)blnToday selectedDate:(NSDate *)selectedDate

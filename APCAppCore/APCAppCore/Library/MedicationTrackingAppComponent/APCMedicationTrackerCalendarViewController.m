@@ -23,6 +23,7 @@
 #import "NSDate+MedicationTracker.h"
 
 #import "NSBundle+Helper.h"
+#import "NSDate+Helper.h"
 
 static  NSString  *viewControllerTitle   = @"Medication Tracker";
 
@@ -44,12 +45,12 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 
 @property (nonatomic, weak)  IBOutlet  UITableView                *tabulator;
 
-@property (nonatomic, weak)            APCMedicationTrackerCalendarWeeklyView      *weeklyCalendar;
+@property (nonatomic, weak)            APCMedicationTrackerCalendarWeeklyView  *weeklyCalendar;
 
 @property (nonatomic, weak)  IBOutlet  UIView                     *noMedicationView;
 
 @property (nonatomic, strong)          NSArray                    *prescriptions;
-@property (nonatomic, strong)          NSArray                    *weeksArray;
+@property (nonatomic, strong)          NSArray                    *calendricalPages;
 
 @property (nonatomic, assign)          BOOL                        viewsWereCreated;
 
@@ -78,6 +79,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     cell.colorswatch.backgroundColor = prescription.color.UIColor;
     cell.medicationName.text = prescription.medication.name;
     cell.medicationDosage.text = prescription.dosage.name;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     NSDictionary  *frequencyAndDays = prescription.frequencyAndDays;
 
@@ -102,10 +104,12 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    APCMedicationTrackerDetailViewController  *controller = [[APCMedicationTrackerDetailViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
-    APCMedTrackerPrescription  *prescription = self.prescriptions[indexPath.row];
-    controller.lozenge.prescription = prescription;
-    [self.navigationController pushViewController:controller animated:YES];
+    if (YES == NO) {
+        APCMedicationTrackerDetailViewController  *controller = [[APCMedicationTrackerDetailViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
+        APCMedTrackerPrescription  *prescription = self.prescriptions[indexPath.row];
+        controller.lozenge.prescription = prescription;
+        [self.navigationController pushViewController:controller animated:YES];
+    }
 }
 
 #pragma  mark  -  Daily Calendar View Delegate Methods
@@ -129,11 +133,19 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 - (void)dailyCalendarViewDidSwipeLeft
 {
     if (self.exScrolliburScrolledByUser == NO) {
-        if (self.exScrolliburCurrentPage < (self.exScrolliburNumberOfPages - 1)) {
-            CGRect  rect = CGRectMake(CGRectGetWidth(self.exScrollibur.frame) * (self.exScrolliburCurrentPage + 1), 0.0, CGRectGetWidth(self.exScrollibur.frame), CGRectGetHeight(self.exScrollibur.frame));
-            [self.exScrollibur scrollRectToVisible:rect animated:YES];
-            self.exScrolliburCurrentPage = self.exScrolliburCurrentPage + 1;
+        if (((self.exScrolliburNumberOfPages + 1) > self.exScrolliburNumberOfPages) && (self.exScrolliburCurrentPage == self.exScrolliburNumberOfPages - 1)) {
+            APCMedicationTrackerMedicationsDisplayView  *lastView = [self.calendricalPages lastObject];
+            NSDate  *startOfWeekDate = [lastView.startOfWeekDate dateByAddingDays:7];
+            APCMedicationTrackerMedicationsDisplayView  *view = [self makeWaterfallPageForPageNumber:self.exScrolliburNumberOfPages andStartOfWeekDate:startOfWeekDate  insertAtFront:NO];
+            self.exScrollibur.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame) * (self.exScrolliburNumberOfPages + 1), CGRectGetHeight(self.exScrollibur.frame));
+            self.exScrolliburNumberOfPages = self.exScrolliburNumberOfPages + 1;
+            NSMutableArray  *newPages = [self.calendricalPages mutableCopy];
+            [newPages addObject: view];
+            self.calendricalPages = newPages;
         }
+        CGRect  rect = CGRectMake(CGRectGetWidth(self.exScrollibur.frame) * (self.exScrolliburCurrentPage + 1), 0.0, CGRectGetWidth(self.exScrollibur.frame), CGRectGetHeight(self.exScrollibur.frame));
+        [self.exScrollibur scrollRectToVisible:rect animated:YES];
+        self.exScrolliburCurrentPage = self.exScrolliburCurrentPage + 1;
     }
     self.exScrolliburScrolledByUser = NO;
 }
@@ -141,9 +153,28 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 - (void)dailyCalendarViewDidSwipeRight
 {
     if (self.exScrolliburScrolledByUser == NO) {
+        if (self.exScrolliburCurrentPage == 0) {
+            APCMedicationTrackerMedicationsDisplayView  *firstView = [self.calendricalPages firstObject];
+            NSDate  *startOfWeekDate = [firstView.startOfWeekDate dateByAddingDays:-7];
+            APCMedicationTrackerMedicationsDisplayView  *view = [self makeWaterfallPageForPageNumber:0 andStartOfWeekDate:startOfWeekDate  insertAtFront:YES];
+            self.exScrollibur.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame) * (self.exScrolliburNumberOfPages + 1), CGRectGetHeight(self.exScrollibur.frame));
+            self.exScrolliburNumberOfPages = self.exScrolliburNumberOfPages + 1;
+            self.exScrolliburCurrentPage = 0;
+            NSMutableArray  *newPages = [self.calendricalPages mutableCopy];
+            [newPages insertObject: view atIndex:0];
+            self.calendricalPages = newPages;
+            NSArray  *pages = [self.exScrollibur subviews];
+            NSUInteger  index = 0;
+            for (UIView  *view  in  pages) {
+                CGRect  frame = view.frame;
+                frame.origin.x = CGRectGetWidth(self.view.frame) * index;
+                view.frame = frame;
+                index = index + 1;
+            }
+        }
+        CGRect  rect = CGRectMake(CGRectGetWidth(self.exScrollibur.frame) * (self.exScrolliburCurrentPage - 1), 0.0, CGRectGetWidth(self.exScrollibur.frame), CGRectGetHeight(self.exScrollibur.frame));
+        [self.exScrollibur scrollRectToVisible:rect animated:YES];
         if (self.exScrolliburCurrentPage > 0) {
-            CGRect  rect = CGRectMake(CGRectGetWidth(self.exScrollibur.frame) * (self.exScrolliburCurrentPage - 1), 0.0, CGRectGetWidth(self.exScrollibur.frame), CGRectGetHeight(self.exScrollibur.frame));
-            [self.exScrollibur scrollRectToVisible:rect animated:YES];
             self.exScrolliburCurrentPage = self.exScrolliburCurrentPage - 1;
         }
     }
@@ -167,36 +198,50 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     [self.navigationController pushViewController:controller animated:YES];
 }
 
-- (void)makePages
+#pragma  mark  -  Calendar Pages Management
+
+- (void)configureExScrollibur
 {
+    self.exScrollibur.scrollEnabled = NO;
     self.exScrollibur.pagingEnabled = YES;
-    self.exScrollibur.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame) * 4, CGRectGetHeight(self.exScrollibur.frame));
+    self.exScrollibur.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetHeight(self.exScrollibur.frame));
     self.exScrollibur.showsHorizontalScrollIndicator = NO;
     self.exScrollibur.showsVerticalScrollIndicator = NO;
     self.exScrollibur.scrollsToTop = NO;
     self.exScrolliburCurrentPage = 0;
     self.exScrollibur.delegate = self;
-    
+}
+
+- (void)makeFirstPage
+{
     NSArray  *dayViews = [self.weeklyCalendar fetchDailyCalendarDayViews];
     APCMedicationTrackerCalendarDailyView  *dayView = (APCMedicationTrackerCalendarDailyView *)[dayViews firstObject];
     NSDate  *startOfWeekDate = dayView.date;
-    
-    for (NSUInteger  page = 0;  page < 1;  page++) {
-        CGRect viewFrame = self.view.frame;
-        CGRect scrollerFrame = self.exScrollibur.frame;
-        CGRect  frame = CGRectZero;
-        frame.origin.x = CGRectGetWidth(viewFrame) * page;
-        frame.origin.y = 0;
-        frame.size.width = CGRectGetWidth(viewFrame);
-        frame.size.height = CGRectGetHeight(scrollerFrame);
-        APCMedicationTrackerMedicationsDisplayView  *view = [[APCMedicationTrackerMedicationsDisplayView alloc] initWithFrame:frame];
-        view.delegate = self;
-        view.backgroundColor = [UIColor whiteColor];
+    APCMedicationTrackerMedicationsDisplayView  *view = [self makeWaterfallPageForPageNumber:0 andStartOfWeekDate:startOfWeekDate insertAtFront:NO];
+    self.exScrolliburNumberOfPages = 1;
+    self.exScrolliburCurrentPage = 0;
+    self.calendricalPages = @[ view ];
+}
+
+- (APCMedicationTrackerMedicationsDisplayView *)makeWaterfallPageForPageNumber:(NSUInteger)pageNumber andStartOfWeekDate:(NSDate *)startOfWeekDate insertAtFront:(BOOL)insert
+{
+    CGRect viewFrame = self.view.frame;
+    CGRect scrollerFrame = self.exScrollibur.frame;
+    CGRect  frame = CGRectZero;
+    frame.origin.x = CGRectGetWidth(viewFrame) * pageNumber;
+    frame.origin.y = 0;
+    frame.size.width = CGRectGetWidth(viewFrame);
+    frame.size.height = CGRectGetHeight(scrollerFrame);
+    APCMedicationTrackerMedicationsDisplayView  *view = [[APCMedicationTrackerMedicationsDisplayView alloc] initWithFrame:frame];
+    view.delegate = self;
+    view.backgroundColor = [UIColor whiteColor];
+    if (insert == NO) {
         [self.exScrollibur addSubview:view];
-        [view makePrescriptionDisplaysWithPrescriptions:self.prescriptions andDate:startOfWeekDate];
-        startOfWeekDate = [startOfWeekDate addDays:7];
+    } else {
+        [self.exScrollibur insertSubview:view atIndex:0];
     }
-    self.exScrolliburNumberOfPages = 4;
+    [view makePrescriptionDisplaysWithPrescriptions:self.prescriptions andDate:startOfWeekDate];
+    return  view;
 }
 
 #pragma  mark  -  Scroll View Delegate Methods
@@ -216,9 +261,9 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
         NSUInteger  newPage = floor((self.exScrollibur.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
         if (newPage != oldPage) {
             if (newPage > oldPage) {
-                [self.weeklyCalendar swipeRight:nil];
-            } else {
                 [self.weeklyCalendar swipeLeft:nil];
+            } else {
+                [self.weeklyCalendar swipeRight:nil];
             }
             self.exScrolliburCurrentPage = newPage;
         }
@@ -284,10 +329,11 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
          if (self.viewsWereCreated == NO) {
              [self makeCalendar];
              [self setupHiddenStates];
-             [self.tabulator reloadData];
-             [self makePages];
+             [self configureExScrollibur];
+             [self makeFirstPage];
              self.viewsWereCreated = YES;
          }
+         [self.tabulator reloadData];
      }];
 }
 
