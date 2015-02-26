@@ -36,6 +36,11 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCTasksReminderManager.h>
 #import <APCAppCore/APCUtilities.h>
 
+//  Tasks
+#import <APCAppCore/APCConsentTask.h>
+#import <APCAppCore/APCConsentQuestion.h>
+#import <APCAppCore/APCConsentBooleanQuestion.h>
+
 /* -------------------------------------
  Data Archiver & Passive Data Collectors
  --------------------------------------- */

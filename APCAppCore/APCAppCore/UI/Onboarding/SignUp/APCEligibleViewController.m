@@ -106,17 +106,17 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
             
             for (ORKStepResult* result in taskViewController.result.results)
             {
+                NSLog(@"Id: %@", result.identifier);
                 if ([result.identifier isEqualToString:signatureResultStepIdentifier])
                 {
                     consentResult = (ORKConsentSignatureResult*)[[result results] firstObject];
                     break;
                 }
             }
-            
-            NSAssert(consentResult != nil, @"Unable to find consent result with signature (identifier == \"%@\"", signatureResultStepIdentifier);
         }
         
-        if (consentResult.signature.requiresName && (consentResult.signature.firstName && consentResult.signature.lastName))
+        //  if no signature (no consent result) then assume the user failed the quiz
+        if (consentResult != nil && consentResult.signature.requiresName && (consentResult.signature.firstName && consentResult.signature.lastName))
         {
             APCUser *user = [self user];
             user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@",consentResult.signature.lastName];
