@@ -513,7 +513,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     [self prepareDataForPlotIndex:plotIndex];
     
-    if ([self numberOfValidValues] > 1 && self.shouldConnectRanges) {
+    if ([self numberOfValidValues] > 0 && self.shouldConnectRanges) {
         [self drawLinesForPlotIndex:plotIndex];
     }
     [self drawPointCirclesForPlotIndex:plotIndex];
@@ -1019,6 +1019,10 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     return (self.minimumValue == self.maximumValue);
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"Min:%0.0f,Max:%0.0f", self.minimumValue, self.maximumValue];
+}
 @end
 
 
