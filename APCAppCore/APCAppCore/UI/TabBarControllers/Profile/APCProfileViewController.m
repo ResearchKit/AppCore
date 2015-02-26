@@ -1202,6 +1202,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 case kAPCUserInfoItemTypeReviewConsent:
                     
                     break;
+                    
+                case kAPCSettingsItemTypePrivacyPolicy:
+                    
+                    break;
                 default:
                     NSAssert(itemType <= kAPCUserInfoItemTypeWakeUpTime, @"ASSERT_MESSAGE");
                     break;
