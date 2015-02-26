@@ -9,6 +9,8 @@
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 
+NSString * const kAPCDashboardMessageTableViewCellIdentifier = @"APCDashboardMessageTableViewCell";
+
 @implementation APCDashboardMessageTableViewCell
 
 - (void)awakeFromNib {

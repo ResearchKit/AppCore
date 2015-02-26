@@ -5,28 +5,39 @@
 //  Copyright (c) 2014 Apple Inc. All rights reserved. 
 // 
  
-#import "APCLineGraphViewController.h"
+#import "APCGraphViewController.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "UIImage+APCHelper.h"
 #import "APCAppCore.h"
 
-@interface APCLineGraphViewController ()
+@interface APCGraphViewController ()
 
 @end
 
-@implementation APCLineGraphViewController
+@implementation APCGraphViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.graphView.tintColor = self.graphItem.tintColor;
-    self.graphView.datasource = self.graphItem.graphData;
-    self.graphView.landscapeMode = YES;
+    APCBaseGraphView *graphView;
     
-    self.graphView.minimumValueImage = self.graphItem.minimumImage;
-    self.graphView.maximumValueImage = self.graphItem.maximumImage;
+    if (self.graphItem.graphType == kAPCDashboardGraphTypeLine) {
+        graphView = self.lineGraphView;
+        self.lineGraphView.datasource = self.graphItem.graphData;
+        self.discreteGraphView.hidden = YES;
+    } else if (self.graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
+        graphView = self.discreteGraphView;
+        self.discreteGraphView.datasource = self.graphItem.graphData;
+        self.lineGraphView.hidden = YES;
+    }
+    
+    graphView.tintColor = self.graphItem.tintColor;
+    graphView.landscapeMode = YES;
+    
+    graphView.minimumValueImage = self.graphItem.minimumImage;
+    graphView.maximumValueImage = self.graphItem.maximumImage;
     
     self.titleLabel.text = self.graphItem.caption;
     self.subTitleLabel.text = self.graphItem.detailText;
@@ -40,7 +51,13 @@
 {
     [super viewDidAppear:animated];
     
-    [self.graphView refreshGraph];
+    if (self.graphItem.graphType == kAPCDashboardGraphTypeLine) {
+        [self.lineGraphView refreshGraph];
+    } else if (self.graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
+        [self.discreteGraphView refreshGraph];
+    }
+    
+    
     
   APCLogViewControllerAppeared();
 }
@@ -110,6 +127,14 @@
 
 - (IBAction)segmentControlChanged:(UISegmentedControl *)sender
 {
+    APCBaseGraphView *graphView;
+    
+    if (self.graphItem.graphType == kAPCDashboardGraphTypeLine) {
+        graphView = self.lineGraphView;
+    } else if (self.graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
+        graphView = self.discreteGraphView;
+    }
+    
     APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
     spinnerController.landscape = YES;
     [self presentViewController:spinnerController animated:YES completion:nil];
@@ -122,8 +147,8 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
                     [spinnerController dismissViewControllerAnimated:YES completion:^{
-                        [self.graphView layoutSubviews];
-                        [self.graphView refreshGraph];
+                        [graphView layoutSubviews];
+                        [graphView refreshGraph];
                     }];
                     
                 });
@@ -136,8 +161,8 @@
             [self.graphItem.graphData updatePeriodForDays:-7 groupBy:APHTimelineGroupDay withCompletionHandler:^{
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [spinnerController dismissViewControllerAnimated:YES completion:^{
-                        [self.graphView layoutSubviews];
-                        [self.graphView refreshGraph];
+                        [graphView layoutSubviews];
+                        [graphView refreshGraph];
                     }];
                 });
             }];
@@ -149,8 +174,8 @@
             [self.graphItem.graphData updatePeriodForDays:-30 groupBy:APHTimelineGroupWeek withCompletionHandler:^{
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [spinnerController dismissViewControllerAnimated:YES completion:^{
-                        [self.graphView layoutSubviews];
-                        [self.graphView refreshGraph];
+                        [graphView layoutSubviews];
+                        [graphView refreshGraph];
                     }];
                 });
             }];
@@ -162,8 +187,8 @@
             [self.graphItem.graphData updatePeriodForDays:-90 groupBy:APHTimelineGroupWeek withCompletionHandler:^{
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [spinnerController dismissViewControllerAnimated:YES completion:^{
-                        [self.graphView layoutSubviews];
-                        [self.graphView refreshGraph];
+                        [graphView layoutSubviews];
+                        [graphView refreshGraph];
                     }];
                 });
             }];
@@ -175,8 +200,8 @@
             [self.graphItem.graphData updatePeriodForDays:-180 groupBy:APHTimelineGroupMonth withCompletionHandler:^{
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [spinnerController dismissViewControllerAnimated:YES completion:^{
-                        [self.graphView layoutSubviews];
-                        [self.graphView refreshGraph];
+                        [graphView layoutSubviews];
+                        [graphView refreshGraph];
                     }];
                 });
             }];
@@ -188,8 +213,8 @@
             [self.graphItem.graphData updatePeriodForDays:-365 groupBy:APHTimelineGroupMonth withCompletionHandler:^{
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [spinnerController dismissViewControllerAnimated:YES completion:^{
-                        [self.graphView layoutSubviews];
-                        [self.graphView refreshGraph];
+                        [graphView layoutSubviews];
+                        [graphView refreshGraph];
                     }];
                 });
             }];
