@@ -331,7 +331,7 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           
                                                       }
                                                       
-                                                      if(numberOfDays >= 0)
+                                                      if(numberOfDays == 0)
                                                       {
                                                           isTheDataReady = true;
                                                           [[NSNotificationCenter defaultCenter] postNotificationName:APCMotionHistoryReporterDoneNotification object:self];
