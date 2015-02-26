@@ -368,12 +368,15 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 - (void)studyVideoCollectionViewCellReadConsent:(APCStudyVideoCollectionViewCell *)cell
 {
     APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
-    webViewController.fileName = @"consent";
-    webViewController.fileType = @"pdf";
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    [webViewController.webview setDataDetectorTypes:UIDataDetectorTypeAll];
     webViewController.title = NSLocalizedString(@"Consent", @"Consent");
     
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
-    [self.navigationController presentViewController:navController animated:YES completion:nil];
+    [self.navigationController presentViewController:navController animated:YES completion:^{
+        [webViewController.webview loadData:data MIMEType:@"application/pdf" textEncodingName:@"utf-8" baseURL:nil];
+    }];
 
 }
 
@@ -432,12 +435,15 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 - (void)studyLandingCollectionViewCellReadConsent:(APCStudyLandingCollectionViewCell *)cell
 {
     APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
-    webViewController.fileName = @"consent";
-    webViewController.fileType = @"pdf";
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    [webViewController.webview setDataDetectorTypes:UIDataDetectorTypeAll];
     webViewController.title = NSLocalizedString(@"Consent", @"Consent");
     
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
-    [self.navigationController presentViewController:navController animated:YES completion:nil];
+    [self.navigationController presentViewController:navController animated:YES completion:^{
+        [webViewController.webview loadData:data MIMEType:@"application/pdf" textEncodingName:@"utf-8" baseURL:nil];
+    }];
 }
 
 @end

@@ -744,19 +744,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
-        {
-            APCTableViewItem *field = [APCTableViewItem new];
-            field.caption = NSLocalizedString(@"Terms and Conditions", @"");
-            field.identifier = kAPCDefaultTableViewCellIdentifier;
-            field.textAlignnment = NSTextAlignmentRight;
-            field.editable = NO;
-            
-            APCTableViewRow *row = [APCTableViewRow new];
-            row.item = field;
-            row.itemType = kAPCSettingsItemTypeTermsAndConditions;
-            [rowItems addObject:row];
-        }
-        
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
         section.sectionTitle = @"";
@@ -927,37 +914,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 break;
             case kAPCUserInfoItemTypeReviewConsent:
             {
-                APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-                
-                NSArray*                sections  = [appDelegate consentSectionsAndHtmlContent:nil];
-                ORKConsentDocument*     consent   = [[ORKConsentDocument alloc] init];
-                ORKConsentSignature*    signature = [ORKConsentSignature signatureForPersonWithTitle:NSLocalizedString(@"Participant", nil)
-                                                                                    dateFormatString:nil
-                                                                                          identifier:@"participant"];
-                
-                consent.title                = NSLocalizedString(@"Consent", nil);
-                consent.signaturePageTitle   = NSLocalizedString(@"Consent", nil);
-                consent.signaturePageContent = NSLocalizedString(@"I agree to participate in this research Study.", nil);
-                consent.sections             = sections;
-                
-                [consent addSignature:signature];
-                
-                
-                ORKVisualConsentStep*   step         = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual" document:consent];
-                
-                ORKOrderedTask* task = [[ORKOrderedTask alloc] initWithIdentifier:@"consent" steps:@[step]];
-                
-                ORKTaskViewController*  consentVC = [[ORKTaskViewController alloc] initWithTask:task taskRunUUID:[NSUUID UUID]];
-                
-                
-                
-                ORKTaskViewController *delegateConsentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
-                
-                delegateConsentVC = consentVC;
-                delegateConsentVC.delegate = self;
-                
-                [self presentViewController:consentVC animated:YES completion:nil];
-                
+                [self reviewConsent];
             }
                 
                 break;
@@ -979,7 +936,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 break;
             case kAPCSettingsItemTypeTermsAndConditions:
             {
-                [self showTermsAndConditions];
+                
             }
                 break;
                 
@@ -1443,26 +1400,95 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 }
 
+#pragma mark - Privacy Policy
+
 - (void)showPrivacyPolicy
 {
     APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
-    webViewController.fileName = @"PrivacyPolicy";
-    webViewController.fileType = @"pdf";
+    NSString *filePath = [[NSBundle mainBundle] pathForResource: @"privacypolicy" ofType:@"html" inDirectory:@"HTMLContent"];
+    NSURL *targetURL = [NSURL URLWithString:filePath];
+    NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
     webViewController.title = NSLocalizedString(@"Privacy Policy", @"");
     
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
-    [self.navigationController presentViewController:navController animated:YES completion:nil];
+    [self.navigationController presentViewController:navController animated:YES completion:^{
+        [webViewController.webview loadRequest:request];
+    }];
 }
 
-- (void)showTermsAndConditions
+
+
+#pragma mark - Review Consent helper methods
+
+- (void)reviewConsent
 {
-    APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
-    webViewController.fileName = @"TermsAndConditions";
-    webViewController.fileType = @"pdf";
-    webViewController.title = NSLocalizedString(@"Terms and Conditions", @"");
+    __weak typeof(self) weakSelf = self;
     
-    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
-    [self.navigationController presentViewController:navController animated:YES completion:nil];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Review Consent" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *pdfAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View PDF", @"View PDF") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+        APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
+        NSData *data = [NSData dataWithContentsOfFile:filePath];
+        [webViewController.webview setDataDetectorTypes:UIDataDetectorTypeAll];
+        webViewController.title = NSLocalizedString(@"Consent", @"Consent");
+        
+        UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
+        [self.navigationController presentViewController:navController animated:YES completion:^{
+            [webViewController.webview loadData:data MIMEType:@"application/pdf" textEncodingName:@"utf-8" baseURL:nil];
+        }];
+        
+    }];
+    [alertController addAction:pdfAction];
+    
+    UIAlertAction *videoAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Watch Video", @"Watch Video") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+        NSURL *fileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"intro" ofType:@"mp4"]];
+        APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
+        [weakSelf.navigationController presentViewController:introVideoViewController animated:YES completion:nil];
+    }];
+    [alertController addAction:videoAction];
+    
+    UIAlertAction *slidesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View Slides", @"View Slides") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [weakSelf showConsentSlides];
+    }];
+    [alertController addAction:slidesAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)showConsentSlides
+{
+    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+    
+    NSArray*                sections  = [appDelegate consentSectionsAndHtmlContent:nil];
+    ORKConsentDocument*     consent   = [[ORKConsentDocument alloc] init];
+    ORKConsentSignature*    signature = [ORKConsentSignature signatureForPersonWithTitle:NSLocalizedString(@"Participant", nil)
+                                                                        dateFormatString:nil
+                                                                              identifier:@"participant"];
+    
+    consent.title                = NSLocalizedString(@"Consent", nil);
+    consent.signaturePageTitle   = NSLocalizedString(@"Consent", nil);
+    consent.signaturePageContent = NSLocalizedString(@"I agree to participate in this research Study.", nil);
+    consent.sections             = sections;
+    
+    [consent addSignature:signature];
+    
+    
+    ORKVisualConsentStep*   step         = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual" document:consent];
+    
+    ORKOrderedTask* task = [[ORKOrderedTask alloc] initWithIdentifier:@"consent" steps:@[step]];
+    
+    ORKTaskViewController*  consentVC = [[ORKTaskViewController alloc] initWithTask:task taskRunUUID:[NSUUID UUID]];
+    
+    
+    
+    ORKTaskViewController *delegateConsentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    
+    delegateConsentVC = consentVC;
+    delegateConsentVC.delegate = self;
+    
+    [self presentViewController:consentVC animated:YES completion:nil];
 }
 
 @end
