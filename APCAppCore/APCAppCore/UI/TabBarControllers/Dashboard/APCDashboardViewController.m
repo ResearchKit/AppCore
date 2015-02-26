@@ -141,12 +141,14 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
             graphCell.lineGraphView.datasource = graphItem.graphData;
             
             graphCell.discreteGraphView.hidden = YES;
+            graphCell.lineGraphView.hidden = NO;
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
             graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
             graphCell.discreteGraphView.datasource = graphItem.graphData;
             
             graphCell.lineGraphView.hidden = YES;
+            graphCell.discreteGraphView.hidden = NO;
         }
         
         graphView.delegate = self;
