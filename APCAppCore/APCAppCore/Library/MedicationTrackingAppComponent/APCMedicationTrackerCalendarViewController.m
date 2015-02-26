@@ -24,6 +24,7 @@
 
 #import "NSBundle+Helper.h"
 #import "NSDate+Helper.h"
+#import "APCLog.h"
 
 static  NSString  *viewControllerTitle   = @"Medication Tracker";
 
@@ -50,6 +51,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 @property (nonatomic, weak)  IBOutlet  UIView                     *noMedicationView;
 
 @property (nonatomic, strong)          NSArray                    *prescriptions;
+@property (nonatomic, assign)          BOOL                        calendricalPagesNeedRefresh;
 @property (nonatomic, strong)          NSArray                    *calendricalPages;
 
 @property (nonatomic, assign)          BOOL                        viewsWereCreated;
@@ -244,6 +246,14 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     return  view;
 }
 
+- (void)refreshAllPages
+{
+    for (APCMedicationTrackerMedicationsDisplayView  *page  in  self.calendricalPages) {
+        NSDate  *startOfWeekDate = page.startOfWeekDate;
+        [page refreshWithPrescriptions:self.prescriptions andDate:startOfWeekDate];
+    }
+}
+
 #pragma  mark  -  Scroll View Delegate Methods
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
@@ -325,15 +335,28 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
                                                                             NSTimeInterval operationDuration,
                                                                             NSError *error)
      {
-         self.prescriptions = arrayOfGeneratedObjects;
-         if (self.viewsWereCreated == NO) {
-             [self makeCalendar];
+         if (error != nil) {
+             APCLogError2 (error);
+         } else {
+             if (([self.prescriptions count] > 0) && ([arrayOfGeneratedObjects count] > [self.prescriptions count])) {
+                 self.calendricalPagesNeedRefresh = YES;
+             }
+             self.prescriptions = arrayOfGeneratedObjects;
+             if (self.viewsWereCreated == NO) {
+                 [self makeCalendar];
+                 [self configureExScrollibur];
+                 self.viewsWereCreated = YES;
+             }
              [self setupHiddenStates];
-             [self configureExScrollibur];
-             [self makeFirstPage];
-             self.viewsWereCreated = YES;
+             if ((self.exScrolliburNumberOfPages == 0) && ([self.prescriptions count] > 0)) {
+                 [self makeFirstPage];
+             }
+             [self.tabulator reloadData];
+             if (self.calendricalPagesNeedRefresh == YES) {
+                 [self refreshAllPages];
+                 self.calendricalPagesNeedRefresh = NO;
+             }
          }
-         [self.tabulator reloadData];
      }];
 }
 

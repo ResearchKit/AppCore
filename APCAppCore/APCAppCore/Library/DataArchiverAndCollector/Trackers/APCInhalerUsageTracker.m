@@ -22,7 +22,7 @@ static NSString *const kCSVFilename  = @"data.csv";
 }
 
 - (NSArray *)columnNames{
-    return @[@"inhaler use"];
+    return @[@"Date,Time,Inhaler Use"];
 }
 
 @end
