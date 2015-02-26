@@ -148,10 +148,11 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     
     if (taskCompletionTimeString) {
         cell.subTitleLabel.text = taskCompletionTimeString;
+    }else if ([scheduledTask.generatedSchedule.scheduleType isEqualToString:@"once"]) {
+        cell.subTitleLabel.text = @"One Time";
     } else {
         cell.hidesSubTitle = YES;
     }
-    
     
     if ([task isKindOfClass:[APCGroupedScheduledTask class]])
     {
