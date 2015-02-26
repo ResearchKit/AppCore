@@ -303,7 +303,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 {
     id<UIViewControllerAnimatedTransitioning> animationController;
     
-    if ([presented isKindOfClass:[APCLineGraphViewController class]]) {
+    if ([presented isKindOfClass:[APCGraphViewController class]]) {
         animationController = self.presentAnimator;
         self.presentAnimator.presenting = YES;
     } else if ([presented isKindOfClass:[APCDashboardMoreInfoViewController class]]){
@@ -318,7 +318,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     
     id<UIViewControllerAnimatedTransitioning> animationController;
     
-    if ([dismissed isKindOfClass:[APCLineGraphViewController class]]) {
+    if ([dismissed isKindOfClass:[APCGraphViewController class]]) {
         animationController = self.presentAnimator;
         self.presentAnimator.presenting = NO;
     } else if ([dismissed isKindOfClass:[APCDashboardMoreInfoViewController class]]){
@@ -341,7 +341,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         CGRect initialFrame = [cell convertRect:cell.bounds toView:self.view.window];
         self.presentAnimator.initialFrame = initialFrame;
         
-        APCLineGraphViewController *graphViewController = [[UIStoryboard storyboardWithName:@"APCDashboard" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCLineGraphViewController"];
+        APCGraphViewController *graphViewController = [[UIStoryboard storyboardWithName:@"APCDashboard" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCLineGraphViewController"];
         graphViewController.graphItem = graphItem;
         [self.navigationController presentViewController:graphViewController animated:YES completion:nil];
     }
