@@ -6,6 +6,7 @@
 //
 
 #import "APCFoodInsight.h"
+#import "NSOperationQueue+Helper.h"
 
 static NSString *kLoseItBundleIdentifier        = @"com.fitnow.loseit";
 static NSString *kLoseItFoodImageNameKey        = @"HKFoodImageName";
@@ -39,6 +40,12 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 
 @property (nonatomic, strong) NSNumber *totalCalories;
 
+@property (nonatomic, strong) __block NSMutableArray *foodList;
+@property (nonatomic, strong) __block NSMutableArray *queuedFoodItems;
+@property (nonatomic, strong) __block NSMutableArray *caloriesForFoodItems;
+
+@property (nonatomic, strong) NSOperationQueue *insightCaloriesQueue;
+
 @end
 
 @implementation APCFoodInsight
@@ -64,6 +71,11 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
         
         _foodHistory = nil;
         
+        _queuedFoodItems = [NSMutableArray new];
+        _foodList = [NSMutableArray new];
+        
+        _insightCaloriesQueue = [NSOperationQueue sequentialOperationQueueWithName:@"Diet Insight: Getting calories from HeathKit"];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(foodInsightDataCollectionIsDone:)
                                                      name:kAPHFoodInsightDataCollectionIsCompletedNotification
@@ -80,6 +92,11 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 
 - (void)insight
 {
+    // clean up before processing data.
+    self.foodHistory = nil;
+    [self.queuedFoodItems removeAllObjects];
+    [self.foodList removeAllObjects];
+    
     [self configureSource];
 }
 
@@ -102,7 +119,8 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
             }
 
             if (self.source) {
-                [self queryForCalories];
+                [self queryForSampleType:self.sampleType
+                                    unit:self.sampleUnit];
             }
         }
     }];
@@ -138,6 +156,59 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
     [self.healthStore executeQuery:query];
 }
 
+- (void)queryCaloriesForFoodType:(NSString *)foodItemExternalId
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K.%K = %@) AND (%K >= %@) AND (%K <= %@) AND (%K = %@)",
+                              HKPredicateKeyPathMetadata, HKMetadataKeyExternalUUID, foodItemExternalId,
+                              HKPredicateKeyPathStartDate, self.startDate,
+                              HKPredicateKeyPathEndDate, self.endDate,
+                              HKPredicateKeyPathSource, self.source];
+    
+    
+    HKStatisticsQuery *query = [[HKStatisticsQuery alloc] initWithQuantityType: self.caloriesQuantityType
+                                                       quantitySamplePredicate: predicate
+                                                                       options: HKStatisticsOptionCumulativeSum
+                                                             completionHandler: ^(HKStatisticsQuery * __unused query,
+                                                                                  HKStatistics *result,
+                                                                                  NSError *error)
+    {
+        if (error) {
+            APCLogError2(error);
+        } else {
+            NSNumber *caloriesForFoodItem = @([result.sumQuantity doubleValueForUnit:self.caloriesUnit]);
+            
+            APCLogDebug(@"Calories %@", caloriesForFoodItem);
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", kFoodInsightUUIDKey, foodItemExternalId];
+            NSArray *matchedFoodItem = [self.foodList filteredArrayUsingPredicate:predicate];
+            
+            if (matchedFoodItem) {
+                NSUInteger foodItemIndex = [self.foodList indexOfObject:[matchedFoodItem firstObject]];
+                
+                if (foodItemIndex == NSNotFound) {
+                    APCLogError(@"The object %@ was not found in the food list.", [matchedFoodItem firstObject]);
+                } else {
+                    NSMutableDictionary *foodItem = [[matchedFoodItem firstObject] mutableCopy];
+                    foodItem[kFoodInsightCaloriesValueKey] = caloriesForFoodItem;
+                    
+                    [self.foodList replaceObjectAtIndex:foodItemIndex withObject:foodItem];
+                }
+            }
+            
+            [self.caloriesForFoodItems addObject:@{
+                                                   kFoodInsightUUIDKey: foodItemExternalId,
+                                                   kFoodInsightCaloriesValueKey: caloriesForFoodItem
+                                                   }];
+            
+        }
+        
+        [self fetchCaloriesForItemsInFoodListQueue];
+    }];
+
+    
+    [self.healthStore executeQuery:query];
+}
+
 - (void) queryForSampleType: (HKSampleType *) sampleType
                        unit: (HKUnit *) __unused unit
 {
@@ -157,11 +228,9 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
         if (error) {
             APCLogError2(error);
         } else {
-            NSMutableArray *foodList = [NSMutableArray new];
-
             for (HKQuantitySample *sample in results) {
                 NSNumber *sampleValue = @([sample.quantity doubleValueForUnit:self.sampleUnit]);
-
+                
                 NSDictionary *food = @{
                                         kFoodInsightFoodNameKey: sample.metadata[HKMetadataKeyFoodType],
                                         kFoodInsightUUIDKey: sample.metadata[HKMetadataKeyExternalUUID],
@@ -169,15 +238,13 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
                                         kFoodInsightValueKey: sampleValue
                                       };
 
-                [foodList addObject:food];
+                [self.foodList addObject:food];
             }
-
-            self.foodHistory = [self addFrequencyForFoodInDataset:foodList];
+            
+            [self.queuedFoodItems addObjectsFromArray:self.foodList];
+            
+            [self fetchCaloriesForItemsInFoodListQueue];
         }
-        
-        // Post the notification that all data collection and processing is done.
-        [[NSNotificationCenter defaultCenter] postNotificationName:kAPHFoodInsightDataCollectionIsCompletedNotification
-                                                            object:nil];
     }];
     
     [self.healthStore executeQuery:query];
@@ -198,6 +265,36 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 
 #pragma mark - Helpers
 
+- (void)fetchCaloriesForItemsInFoodListQueue
+{
+    APCLogDebug(@"Fetching calories entry point...");
+    
+    [self.insightCaloriesQueue addOperationWithBlock:^{
+       
+        BOOL hasFoodItemsInQueue = self.queuedFoodItems.count > 0;
+        
+        APCLogDebug(@"About to queue food item...");
+        
+        if (hasFoodItemsInQueue) {
+            
+            NSDictionary *foodItem = [self.queuedFoodItems firstObject];
+            [self.queuedFoodItems removeObjectAtIndex:0];
+            
+            APCLogDebug(@"We are about to ask HK for the calories for food item %@...", foodItem);
+            
+            [self queryCaloriesForFoodType:foodItem[kFoodInsightUUIDKey]];
+        } else {
+            APCLogDebug(@"We're done!");
+            self.foodHistory = [self addFrequencyForFoodInDataset:self.foodList];
+            
+            // Post the notification that all data collection and processing is done.
+            [[NSNotificationCenter defaultCenter] postNotificationName:kAPHFoodInsightDataCollectionIsCompletedNotification
+                                                                object:nil];
+        }
+    }];
+
+}
+
 - (NSArray *)addFrequencyForFoodInDataset:(NSArray *)dataset
 {
     NSMutableArray *markedDataset = [NSMutableArray new];
@@ -208,19 +305,26 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", kFoodInsightFoodGenericNameKey, item];
         NSArray *foodGroup = [dataset filteredArrayUsingPredicate:predicate];
         
+        NSString *foodItemName = nil;
         double sumFoodValue = 0;
+        double sumFoodCalories = 0;
         
         for (NSDictionary *food in foodGroup) {
+            if (!foodItemName) {
+                foodItemName = food[kFoodInsightFoodNameKey];
+            }
+            
             sumFoodValue += [food[kFoodInsightValueKey] doubleValue];
+            sumFoodCalories += [food[kFoodInsightCaloriesValueKey] doubleValue];
         }
         
-        NSNumber *caloriesFromSample = [self percentOfSampleCalories:@(sumFoodValue)];
+        NSNumber *caloriesFromSample = [self percentOfSampleCalories:@(sumFoodValue) totalCalories:@(sumFoodCalories)];
         
         double percentCalories = [caloriesFromSample doubleValue] * 100;
         
         if (percentCalories >= 10) {
             NSMutableDictionary *foodItem = [NSMutableDictionary new];
-            foodItem[kFoodInsightFoodGenericNameKey] = item;
+            foodItem[kFoodInsightFoodNameKey] = foodItemName;
             foodItem[kFoodInsightValueKey] = @(sumFoodValue);
             foodItem[kFoodInsightFrequencyKey] = @([countedSet countForObject:item]);
             foodItem[kFoodInsightCaloriesValueKey] = caloriesFromSample;
@@ -248,10 +352,15 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 }
 
 - (NSNumber *)percentOfSampleCalories:(NSNumber *)gramsConsumed
+                        totalCalories:(NSNumber *)totalCalories
 {
     NSInteger caloriesPerGramOfSample = 4;
     double caloriesConsumed = [gramsConsumed doubleValue] * caloriesPerGramOfSample;
-    double percentOfCalories = caloriesConsumed / [self.totalCalories doubleValue];
+    double percentOfCalories = caloriesConsumed / [totalCalories doubleValue];
+    
+    if (percentOfCalories > 1) {
+        percentOfCalories = 1;
+    }
     
     return @(percentOfCalories);
 }
