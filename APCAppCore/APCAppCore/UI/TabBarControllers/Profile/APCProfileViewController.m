@@ -1419,6 +1419,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 row.item.selectionStyle = UITableViewCellSelectionStyleNone;
             }];
         }];
+        
     } else{
         
         sender.title = NSLocalizedString(@"Done", @"Done");
@@ -1435,6 +1436,19 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }
     
     self.editing = !self.editing;
+    
+    if (self.isEditing) {
+        if ([self.delegate respondsToSelector:@selector(hasStartedEditing)])
+        {
+            [self.delegate hasStartedEditing];
+        }
+    } else {
+        if ([self.delegate respondsToSelector:@selector(hasFinishedEditing)])
+        {
+            [self.delegate hasFinishedEditing];
+        }
+    }
+
     
     self.nameTextField.enabled = self.isEditing;
     
