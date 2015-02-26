@@ -345,7 +345,10 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
             
             point[kDatasetValueKey] = dataPoint[kDatasetValueKey];
             point[kDatasetValueNoDataKey] = dataPoint[kDatasetValueNoDataKey];
-            point[kDatasetRangeValueKey] = dataPoint[kDatasetRangeValueKey];
+            
+            if (dataPoint[kDatasetRangeValueKey]) {
+                point[kDatasetRangeValueKey] = dataPoint[kDatasetRangeValueKey];
+            }
             
             [self.dataPoints replaceObjectAtIndex:pointIndex withObject:point];
         }
@@ -679,12 +682,15 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                                           toDate:endDate
                                        withBlock:^(HKStatistics *result, BOOL * __unused stop) {
                                            HKQuantity *quantity;
+                                           NSMutableDictionary *dataPoint = [NSMutableDictionary new];
                                            APCRangePoint *rangePoint = [APCRangePoint new];
                                            
                                            if (isDecreteQuantity) {
                                                quantity = result.averageQuantity;
                                                rangePoint.minimumValue = [result.minimumQuantity doubleValueForUnit:unit];
                                                rangePoint.maximumValue = [result.maximumQuantity doubleValueForUnit:unit];
+                                               
+                                               dataPoint[kDatasetRangeValueKey] = rangePoint;
                                            } else {
                                                quantity = result.sumQuantity;
                                            }
@@ -692,12 +698,9 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                                            NSDate *date = result.startDate;
                                            double value = [quantity doubleValueForUnit:unit];
                                            
-                                           NSDictionary *dataPoint = @{
-                                                                       kDatasetDateKey: date,
-                                                                       kDatasetValueKey: (!quantity) ? @(NSNotFound) : @(value),
-                                                                       kDatasetRangeValueKey: rangePoint,
-                                                                       kDatasetValueNoDataKey: (isDecreteQuantity) ? @(YES) : @(NO)
-                                                                       };
+                                           dataPoint[kDatasetDateKey] = date;
+                                           dataPoint[kDatasetValueKey] = (!quantity) ? @(NSNotFound) : @(value);
+                                           dataPoint[kDatasetValueNoDataKey] = (isDecreteQuantity) ? @(YES) : @(NO);
                                            
                                            [self addDataPointToTimeline:dataPoint];
                                        }];
@@ -842,13 +845,16 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 - (NSNumber *)minimumDataPoint
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
-    
     NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
+    
     NSArray *rangeArray = [filteredArray valueForKey:kDatasetRangeValueKey];
+    NSPredicate *rangePredicate = [NSPredicate predicateWithFormat:@"SELF <> %@", [NSNull null]];
+    
+    NSArray *rangePoints = [rangeArray filteredArrayUsingPredicate:rangePredicate];
     
     NSNumber *minValue = nil;
     
-    if (rangeArray) {
+    if (rangePoints.count != 0) {
         minValue = [rangeArray valueForKeyPath:@"@min.minimumValue"];
     } else {
         minValue = [filteredArray valueForKeyPath:@"@min.datasetValueKey"];
@@ -860,14 +866,17 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 - (NSNumber *)maximumDataPoint
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
-    
+
     NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
     NSArray *rangeArray = [filteredArray valueForKey:kDatasetRangeValueKey];
+    NSPredicate *rangePredicate = [NSPredicate predicateWithFormat:@"SELF <> %@", [NSNull null]];
+    
+    NSArray *rangePoints = [rangeArray filteredArrayUsingPredicate:rangePredicate];
     
     NSNumber *maxValue = nil;
     
-    if (rangeArray) {
-        maxValue = [rangeArray valueForKeyPath:@"@min.maximumValue"];
+    if (rangePoints.count != 0) {
+        maxValue = [rangeArray valueForKeyPath:@"@max.maximumValue"];
     } else {
         maxValue = [filteredArray valueForKeyPath:@"@max.datasetValueKey"];
     }
