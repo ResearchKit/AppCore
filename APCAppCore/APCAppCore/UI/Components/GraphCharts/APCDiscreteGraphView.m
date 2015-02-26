@@ -458,7 +458,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
             CGFloat yValue = self.minimumValue + (self.maximumValue - self.minimumValue)*factor;
             
             UILabel *axisTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelYPosition, CGRectGetWidth(self.yAxisView.frame) - kAxisMarkingRulerLength, labelHeight)];
-            axisTitleLabel.text = [self formatNumber:@(yValue)];
+            axisTitleLabel.text = [NSString stringWithFormat:@"%0.0f", yValue];
             axisTitleLabel.backgroundColor = [UIColor clearColor];
             axisTitleLabel.textColor = self.axisTitleColor;
             axisTitleLabel.textAlignment = NSTextAlignmentRight;
