@@ -559,7 +559,6 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 - (void)groupDatasetbyPeriod:(APHTimelineGroups)period
 {
-    NSMutableArray *groupedDataset = [NSMutableArray new];
     NSString *groupKey = nil;
     
     switch (period) {
@@ -843,9 +842,17 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 - (NSNumber *)minimumDataPoint
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
-    NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
     
-    NSNumber *minValue = [filteredArray valueForKeyPath:@"@min.datasetValueKey"];
+    NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
+    NSArray *rangeArray = [filteredArray valueForKey:kDatasetRangeValueKey];
+    
+    NSNumber *minValue = nil;
+    
+    if (rangeArray) {
+        minValue = [rangeArray valueForKeyPath:@"@min.minimumValue"];
+    } else {
+        minValue = [filteredArray valueForKeyPath:@"@min.datasetValueKey"];
+    }
     
     return minValue;
 }
@@ -853,9 +860,17 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 - (NSNumber *)maximumDataPoint
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
-    NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
     
-    NSNumber *maxValue = [filteredArray valueForKeyPath:@"@max.datasetValueKey"];
+    NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
+    NSArray *rangeArray = [filteredArray valueForKey:kDatasetRangeValueKey];
+    
+    NSNumber *maxValue = nil;
+    
+    if (rangeArray) {
+        maxValue = [rangeArray valueForKeyPath:@"@min.maximumValue"];
+    } else {
+        maxValue = [filteredArray valueForKeyPath:@"@max.datasetValueKey"];
+    }
     
     return maxValue;
 }
