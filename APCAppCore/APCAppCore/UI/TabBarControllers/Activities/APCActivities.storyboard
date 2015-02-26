@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="hzw-2n-SwF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="hzw-2n-SwF">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -56,22 +56,32 @@
                                             </constraints>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="200" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timed Walking " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O5H-qy-8ZK">
-                                            <rect key="frame" x="49" y="9" width="207" height="26"/>
+                                            <rect key="frame" x="49" y="19" width="207" height="19"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="26" id="ZmM-yI-zIE"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="ZmM-yI-zIE"/>
+                                                </mask>
+                                            </variation>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="200" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20 seconds" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.75" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="66n-Qe-jiA">
-                                            <rect key="frame" x="49" y="32" width="207" height="23"/>
+                                            <rect key="frame" x="49" y="35" width="207" height="16.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="23" id="CYt-ZT-qO9"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                             <color key="textColor" red="0.46274509800000002" green="0.46274509800000002" blue="0.46274509800000002" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="CYt-ZT-qO9"/>
+                                                </mask>
+                                            </variation>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="300" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MKz-GI-eCU" customClass="APCBadgeLabel">
                                             <rect key="frame" x="266" y="18" width="39" height="29"/>
@@ -92,8 +102,11 @@
                                         </view>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="66n-Qe-jiA" firstAttribute="top" secondItem="O5H-qy-8ZK" secondAttribute="bottom" constant="-3" id="4gi-sQ-72G"/>
                                         <constraint firstItem="voa-2B-67Q" firstAttribute="leading" secondItem="AaU-zH-a4G" secondAttribute="leadingMargin" constant="-8" id="89J-Ux-AEv"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="66n-Qe-jiA" secondAttribute="bottom" constant="5" id="8QC-Ey-j1I"/>
                                         <constraint firstItem="66n-Qe-jiA" firstAttribute="leading" secondItem="O5H-qy-8ZK" secondAttribute="leading" id="BAe-Ba-rWe"/>
+                                        <constraint firstItem="O5H-qy-8ZK" firstAttribute="top" relation="greaterThanOrEqual" secondItem="AaU-zH-a4G" secondAttribute="topMargin" constant="3" id="CcX-Ut-0Yd"/>
                                         <constraint firstItem="O5H-qy-8ZK" firstAttribute="leading" secondItem="pfD-qB-vcP" secondAttribute="trailing" constant="12" id="EKC-bW-INZ"/>
                                         <constraint firstAttribute="centerY" secondItem="MKz-GI-eCU" secondAttribute="centerY" id="FO2-1a-CZs"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="O5H-qy-8ZK" secondAttribute="trailing" constant="56" id="J6c-67-fOq"/>
@@ -104,11 +117,19 @@
                                         <constraint firstAttribute="bottomMargin" secondItem="pDu-FS-vGo" secondAttribute="bottom" constant="-8" id="ds7-nH-8Ah"/>
                                         <constraint firstAttribute="centerY" secondItem="O5H-qy-8ZK" secondAttribute="centerY" constant="10.5" id="hiK-9s-gOv"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="66n-Qe-jiA" secondAttribute="trailing" constant="56" id="i0d-a2-Ju9"/>
+                                        <constraint firstItem="66n-Qe-jiA" firstAttribute="top" secondItem="O5H-qy-8ZK" secondAttribute="bottom" constant="-3" id="nOy-MM-ZDY"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="MKz-GI-eCU" secondAttribute="trailing" constant="7" id="rxJ-Bp-Shz"/>
                                         <constraint firstItem="pDu-FS-vGo" firstAttribute="leading" secondItem="AaU-zH-a4G" secondAttribute="leadingMargin" constant="-8" id="sAS-9y-rEp"/>
                                         <constraint firstItem="voa-2B-67Q" firstAttribute="top" secondItem="AaU-zH-a4G" secondAttribute="topMargin" constant="-8" id="wKb-7C-vTz"/>
                                         <constraint firstItem="pfD-qB-vcP" firstAttribute="leading" secondItem="AaU-zH-a4G" secondAttribute="leadingMargin" constant="8" id="wPf-R5-Haz"/>
                                     </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="hiK-9s-gOv"/>
+                                            <exclude reference="4gi-sQ-72G"/>
+                                            <exclude reference="L41-uw-hZx"/>
+                                        </mask>
+                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="confirmationView" destination="pfD-qB-vcP" id="1ke-a3-jzk"/>
