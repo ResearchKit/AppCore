@@ -288,8 +288,6 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     CGPoint translation = [(UIPanGestureRecognizer *)gestureRecognizer translationInView:gestureRecognizer.view.superview];
     BOOL retValue = fabsf(translation.x) > fabsf(translation.y);
     
-    NSLog(@"BOOl - %d", retValue);
-    
     return retValue;
 }
 

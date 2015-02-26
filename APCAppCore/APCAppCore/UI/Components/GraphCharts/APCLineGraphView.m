@@ -953,8 +953,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         
         if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
             
-            NSLog(@"Delegate - %@", gestureRecognizer.delegate);
-            
             [self setScrubberViewsHidden:NO animated:YES];
             if ([self.delegate respondsToSelector:@selector(graphViewTouchesBegan:)]) {
                 [self.delegate graphViewTouchesBegan:self];
