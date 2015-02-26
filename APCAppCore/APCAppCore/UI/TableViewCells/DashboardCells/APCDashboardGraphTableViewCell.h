@@ -1,4 +1,4 @@
-// 
+//
 //  APCDashboardLineGraphTableViewCell.h 
 //  AppCore 
 // 
@@ -9,14 +9,14 @@
 #import "APCDashboardTableViewCell.h"
 
 @class APCLineGraphView;
+@class APCDiscreteGraphView;
 
-static NSString * const kAPCDashboardGraphTableViewCellIdentifier = @"APCDashboardLineGraphTableViewCell";
+FOUNDATION_EXPORT NSString * const kAPCDashboardGraphTableViewCellIdentifier;
 
-@protocol APCDashboardGraphTableViewCellDelegate;
+@interface APCDashboardGraphTableViewCell : APCDashboardTableViewCell
 
-@interface APCDashboardLineGraphTableViewCell : APCDashboardTableViewCell
-
-@property (weak, nonatomic) IBOutlet APCLineGraphView *graphView;
+@property (weak, nonatomic) IBOutlet APCLineGraphView *lineGraphView;
+@property (weak, nonatomic) IBOutlet APCDiscreteGraphView *discreteGraphView;
 @property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *averageImageView;
 

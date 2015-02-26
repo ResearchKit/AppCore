@@ -7,6 +7,7 @@
 
 #import <HealthKit/HealthKit.h>
 #import "APCLineGraphView.h"
+#import "APCDiscreteGraphView.h"
 
 extern NSString *const kDatasetDateKey;
 extern NSString *const kDatasetValueKey;
@@ -20,7 +21,7 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
     APHTimelineGroupForInsights
 };
 
-@interface APCScoring : NSEnumerator <APCLineGraphViewDataSource>
+@interface APCScoring : NSEnumerator <APCLineGraphViewDataSource, APCDiscreteGraphViewDataSource>
 
 - (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
                                          unit:(HKUnit *)unit

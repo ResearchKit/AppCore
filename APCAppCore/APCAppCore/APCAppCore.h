@@ -93,7 +93,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  -------------------------*/
 #import <APCAppCore/APCDashboardViewController.h>
 #import <APCAppCore/APCDashboardEditViewController.h>
-#import <APCAppCore/APCLineGraphViewController.h>
+#import <APCAppCore/APCGraphViewController.h>
 #import <APCAppCore/APCDashboardMoreInfoViewController.h>
 
 /*--------------------------
@@ -206,7 +206,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCTintedTableViewCell.h>
 #import <APCAppCore/APCCheckTableViewCell.h>
 #import <APCAppCore/APCDashboardTableViewCell.h>
-#import <APCAppCore/APCDashboardLineGraphTableViewCell.h>
+#import <APCAppCore/APCDashboardGraphTableViewCell.h>
 #import <APCAppCore/APCDashboardMessageTableViewCell.h>
 #import <APCAppCore/APCDashboardProgressTableViewCell.h>
 #import <APCAppCore/APCDashboardPieGraphTableViewCell.h>
