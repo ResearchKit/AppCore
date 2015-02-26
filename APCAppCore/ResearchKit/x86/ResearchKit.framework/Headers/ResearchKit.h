@@ -27,6 +27,7 @@
 #import <ResearchKit/ORKConsentSection.h>
 #import <ResearchKit/ORKVisualConsentStep.h>
 #import <ResearchKit/ORKConsentReviewStep.h>
+#import <ResearchKit/ORKConsentSharingStep.h>
 
 #import <ResearchKit/ORKRecorder.h>
 #import <ResearchKit/ORKActiveStep.h>
