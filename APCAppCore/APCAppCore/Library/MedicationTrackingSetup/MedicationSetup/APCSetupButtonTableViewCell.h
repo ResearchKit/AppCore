@@ -2,7 +2,6 @@
 //  APCSetupButtonTableViewCell.h
 //  APCAppCore
 //
-//  Created by Henry McGilton on 2/25/15.
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
