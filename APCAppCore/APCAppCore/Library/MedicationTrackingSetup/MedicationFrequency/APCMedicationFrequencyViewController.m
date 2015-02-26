@@ -11,8 +11,6 @@
 
 #import "NSBundle+Helper.h"
 
-#import "APCMedSetupNotificationKeys.h"
-
 static  NSString  *kViewControllerName          = @"Medication Frequency";
 
 static  NSString  *kFrequencyTableTimesCellName = @"APCFrequencyTableViewTimesCell";
@@ -201,7 +199,6 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     }
 }
 
-
 - (void)valueButtonTapped:(UIButton *)sender
 {
     UIButton  *tappedButton   = sender;
@@ -223,11 +220,9 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
 {
     UITableViewCell  *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
     
-//    self.selectedIndexPath = indexPath;
     if (selectedCell.accessoryType == UITableViewCellAccessoryNone) {
         selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
-//        self.selectedIndexPath = nil;
         selectedCell.accessoryType = UITableViewCellAccessoryNone;
     }
     NSString  *key = daysOfWeekNames[indexPath.row];
@@ -247,10 +242,11 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
             self.daysAndDoses[dayName] = [NSNumber numberWithInteger:(valueButton.tag - kBaseButtonTagValue)];
         }
     }
-    NSDictionary  *info = @{ APCMedSetupFrequencyResultKey : self.daysAndDoses };
-    NSNotificationCenter  *centre = [NSNotificationCenter defaultCenter];
-    NSNotification  *notification = [NSNotification notificationWithName:APCMedSetupFrequencyResultNotificationKey object:nil userInfo:info];
-    [centre postNotification:notification];
+    if (self.delegate != nil) {
+        if ([self.delegate respondsToSelector:@selector(frequencyController:didSelectFrequency:)] == YES) {
+            [self.delegate performSelector:@selector(frequencyController:didSelectFrequency:) withObject:self withObject:self.daysAndDoses];
+        }
+    }
 }
 
 #pragma  mark  -  View Controller Methods

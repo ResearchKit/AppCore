@@ -20,18 +20,25 @@
 
 @end
 
+typedef  enum  _WeeklyCalendarScrollDirection
+{
+    WeeklyCalendarScrollDirectionLeft = 0,
+    WeeklyCalendarScrollDirectionRight
+}  WeeklyCalendarScrollDirection;
 
 @interface APCMedicationTrackerCalendarWeeklyView : UIView
 
 @property  (nonatomic, strong)  NSNumber  *firstDayOfWeek;
 @property  (nonatomic, weak)    id  <APCMedicationTrackerCalendarWeeklyViewDelegate>  delegate;
 @property  (nonatomic, strong)  NSDate    *selectedDate;
+@property  (nonatomic, strong)  NSArray   *dayDates;
+
+- (NSArray *)fetchDailyCalendarDayViews;
 
 - (void)setupViews;
 
 - (void)swipeLeft:(UISwipeGestureRecognizer *)swipe;
 - (void)swipeRight:(UISwipeGestureRecognizer *)swipe;
-
 
 - (void)redrawToDate:(NSDate *)date;
 

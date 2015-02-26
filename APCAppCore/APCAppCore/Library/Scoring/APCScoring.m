@@ -12,6 +12,8 @@ static NSDateFormatter *dateFormatter = nil;
 
 NSString *const kDatasetDateKey        = @"datasetDateKey";
 NSString *const kDatasetValueKey       = @"datasetValueKey";
+NSString *const kDatasetRangeValueKey  = @"datasetRangeValueKey";
+
 static NSString *const kDatasetSortKey        = @"datasetSortKey";
 static NSString *const kDatasetValueKindKey   = @"datasetValueKindKey";
 static NSString *const kDatasetValueNoDataKey = @"datasetValueNoDataKey";
@@ -344,6 +346,10 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
             point[kDatasetValueKey] = dataPoint[kDatasetValueKey];
             point[kDatasetValueNoDataKey] = dataPoint[kDatasetValueNoDataKey];
             
+            if (dataPoint[kDatasetRangeValueKey]) {
+                point[kDatasetRangeValueKey] = dataPoint[kDatasetRangeValueKey];
+            }
+            
             [self.dataPoints replaceObjectAtIndex:pointIndex withObject:point];
         }
     }
@@ -508,6 +514,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
         
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K = %@) and (%K <> %@)", kDatasetDateKey, day, kDatasetValueKey, @(NSNotFound)];
         NSArray *groupItems = [self.dataPoints filteredArrayUsingPredicate:predicate];
+        
         double itemSum = 0;
         double dayAverage = 0;
         
@@ -527,7 +534,19 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
             dayAverage = NSNotFound;
         }
         
+        // Set the min/max for the data
+        APCRangePoint *rangePoint = [APCRangePoint new];
+        
+        if (dayAverage != NSNotFound) {
+            NSNumber *dataMinValue = [groupItems valueForKeyPath:@"@min.datasetValueKey"];
+            NSNumber *dataMaxValue = [groupItems valueForKeyPath:@"@max.datasetValueKey"];
+            
+            rangePoint.minimumValue = [dataMinValue floatValue];
+            rangePoint.maximumValue = [dataMaxValue floatValue];
+        }
+        
         [entry setObject:@(dayAverage) forKey:kDatasetValueKey];
+        [entry setObject:rangePoint forKey:kDatasetRangeValueKey];
         
         [groupedDataset addObject:entry];
     }
@@ -543,7 +562,6 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 - (void)groupDatasetbyPeriod:(APHTimelineGroups)period
 {
-    NSMutableArray *groupedDataset = [NSMutableArray new];
     NSString *groupKey = nil;
     
     switch (period) {
@@ -637,7 +655,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     HKStatisticsOptions queryOptions;
     
     if (isDecreteQuantity) {
-        queryOptions = HKStatisticsOptionDiscreteAverage;
+        queryOptions = HKStatisticsOptionDiscreteAverage | HKStatisticsOptionDiscreteMax | HKStatisticsOptionDiscreteMin;
     } else {
         queryOptions = HKStatisticsOptionCumulativeSum;
     }
@@ -664,9 +682,15 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                                           toDate:endDate
                                        withBlock:^(HKStatistics *result, BOOL * __unused stop) {
                                            HKQuantity *quantity;
+                                           NSMutableDictionary *dataPoint = [NSMutableDictionary new];
+                                           APCRangePoint *rangePoint = [APCRangePoint new];
                                            
                                            if (isDecreteQuantity) {
                                                quantity = result.averageQuantity;
+                                               rangePoint.minimumValue = [result.minimumQuantity doubleValueForUnit:unit];
+                                               rangePoint.maximumValue = [result.maximumQuantity doubleValueForUnit:unit];
+                                               
+                                               dataPoint[kDatasetRangeValueKey] = rangePoint;
                                            } else {
                                                quantity = result.sumQuantity;
                                            }
@@ -674,11 +698,9 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                                            NSDate *date = result.startDate;
                                            double value = [quantity doubleValueForUnit:unit];
                                            
-                                           NSDictionary *dataPoint = @{
-                                                                       kDatasetDateKey: date,
-                                                                       kDatasetValueKey: (!quantity) ? @(NSNotFound) : @(value),
-                                                                       kDatasetValueNoDataKey: (isDecreteQuantity) ? @(YES) : @(NO)
-                                                                       };
+                                           dataPoint[kDatasetDateKey] = date;
+                                           dataPoint[kDatasetValueKey] = (!quantity) ? @(NSNotFound) : @(value);
+                                           dataPoint[kDatasetValueNoDataKey] = (isDecreteQuantity) ? @(YES) : @(NO);
                                            
                                            [self addDataPointToTimeline:dataPoint];
                                        }];
@@ -825,7 +847,18 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
     NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
     
-    NSNumber *minValue = [filteredArray valueForKeyPath:@"@min.datasetValueKey"];
+    NSArray *rangeArray = [filteredArray valueForKey:kDatasetRangeValueKey];
+    NSPredicate *rangePredicate = [NSPredicate predicateWithFormat:@"SELF <> %@", [NSNull null]];
+    
+    NSArray *rangePoints = [rangeArray filteredArrayUsingPredicate:rangePredicate];
+    
+    NSNumber *minValue = nil;
+    
+    if (rangePoints.count != 0) {
+        minValue = [rangeArray valueForKeyPath:@"@min.minimumValue"];
+    } else {
+        minValue = [filteredArray valueForKeyPath:@"@min.datasetValueKey"];
+    }
     
     return minValue;
 }
@@ -833,9 +866,20 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 - (NSNumber *)maximumDataPoint
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
+
     NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
+    NSArray *rangeArray = [filteredArray valueForKey:kDatasetRangeValueKey];
+    NSPredicate *rangePredicate = [NSPredicate predicateWithFormat:@"SELF <> %@", [NSNull null]];
     
-    NSNumber *maxValue = [filteredArray valueForKeyPath:@"@max.datasetValueKey"];
+    NSArray *rangePoints = [rangeArray filteredArrayUsingPredicate:rangePredicate];
+    
+    NSNumber *maxValue = nil;
+    
+    if (rangePoints.count != 0) {
+        maxValue = [rangeArray valueForKeyPath:@"@max.maximumValue"];
+    } else {
+        maxValue = [filteredArray valueForKeyPath:@"@max.datasetValueKey"];
+    }
     
     return maxValue;
 }
@@ -883,6 +927,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 }
 
 #pragma mark - Graph Datasource
+#pragma mark Line
 
 - (NSInteger)lineGraph:(APCLineGraphView *) __unused graphView numberOfPointsInPlot:(NSInteger)plotIndex
 {
@@ -908,7 +953,13 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 - (CGFloat)minimumValueForLineGraph:(APCLineGraphView *) __unused graphView
 {
-    return [[self minimumDataPoint] doubleValue];
+    CGFloat factor = 0.2;
+    CGFloat maxDataPoint = [[self maximumDataPoint] doubleValue];
+    CGFloat minDataPoint = [[self minimumDataPoint] doubleValue];
+    
+    CGFloat minValue = (minDataPoint - factor*maxDataPoint)/(1-factor);
+    
+    return minValue;
 }
 
 - (CGFloat)maximumValueForLineGraph:(APCLineGraphView *) __unused graphView
@@ -949,5 +1000,58 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return xAxisTitle;
 }
 
+#pragma mark Discrete
+
+- (NSInteger)discreteGraph:(APCDiscreteGraphView *)graphView numberOfPointsInPlot:(NSInteger)plotIndex
+{
+    return [self.timeline count];
+}
+
+- (APCRangePoint *)discreteGraph:(APCDiscreteGraphView *)graphView plot:(NSInteger)plotIndex valueForPointAtIndex:(NSInteger)pointIndex
+{
+    APCRangePoint *value;
+    
+    NSDictionary *point = [self nextObject];
+    value = [point valueForKey:kDatasetRangeValueKey];
+    
+    if (!value) {
+        value = [APCRangePoint new];
+    }
+    return value;
+}
+
+- (NSString *)discreteGraph:(APCDiscreteGraphView *)graphView titleForXAxisAtIndex:(NSInteger)pointIndex
+{
+    NSDate *titleDate = nil;
+    
+    titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
+    
+    if (pointIndex == 0) {
+        [dateFormatter setDateFormat:@"MMM d"];
+    } else {
+        [dateFormatter setDateFormat:@"d"];
+    }
+    
+    
+    NSString *xAxisTitle = [dateFormatter stringFromDate:titleDate];
+    
+    return xAxisTitle;
+}
+
+- (CGFloat)minimumValueForDiscreteGraph:(APCDiscreteGraphView *)graphView
+{
+    CGFloat factor = 0.2;
+    CGFloat maxDataPoint = [[self maximumDataPoint] doubleValue];
+    CGFloat minDataPoint = [[self minimumDataPoint] doubleValue];
+    
+    CGFloat minValue = (minDataPoint - factor*maxDataPoint)/(1-factor);
+    
+    return minValue;
+}
+
+- (CGFloat)maximumValueForDiscreteGraph:(APCDiscreteGraphView *)graphView
+{
+    return [[self maximumDataPoint] doubleValue];
+}
 
 @end

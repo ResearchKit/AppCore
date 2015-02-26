@@ -7,10 +7,21 @@
 
 #import "APCMedicationTrackerMedicationsDisplayView.h"
 
-#import "APCMedicationModel.h"
-#import "APCMedicationFollower.h"
+#import "APCMedTrackerPrescription.h"
+
+#import "APCMedTrackerMedication+Helper.h"
+#import "APCMedTrackerPrescription+Helper.h"
+#import "APCMedTrackerPossibleDosage+Helper.h"
+#import "APCMedTrackerPrescriptionColor+Helper.h"
+
+#import "APCMedTrackerDailyDosageRecord.h"
+
+#import "NSDate+MedicationTracker.h"
+#import "NSDate+Helper.h"
 
 #import "APCLozengeButton.h"
+
+#import "APCAppCore.h"
 
 static  CGFloat  kLozengeButtonWidth     = 40.0;
 static  CGFloat  kLozengeButtonHeight    = 25.0;
@@ -22,8 +33,6 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 
 @interface  APCMedicationTrackerMedicationsDisplayView  ( )
 
-@property  (nonatomic, strong)  NSDictionary  *colormap;
-
 @end
 
 @implementation APCMedicationTrackerMedicationsDisplayView
@@ -34,7 +43,6 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 {
     self = [super initWithFrame:frame];
     if (self != nil) {
-        [self commonInit];
     }
     return  self;
 }
@@ -43,25 +51,8 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 {
     self = [super initWithCoder:decoder];
     if (self != nil) {
-        [self commonInit];
     }
     return  self;
-}
-
-- (void)commonInit
-{
-    self.colormap = @{
-                      @"Gray"    : [UIColor grayColor],
-                      @"Red"     : [UIColor redColor],
-                      @"Green"   : [UIColor greenColor],
-                      @"Blue"    : [UIColor blueColor],
-                      @"Cyan"    : [UIColor cyanColor],
-                      @"Magenta" : [UIColor magentaColor],
-                      @"Yellow"  : [UIColor yellowColor],
-                      @"Orange"  : [UIColor orangeColor],
-                      @"Purple"  : [UIColor purpleColor]
-                    };
-    [self makeLozengesLayout];
 }
 
 #pragma   mark  -  Lozenge Button Action Method
@@ -75,70 +66,105 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     }
 }
 
-#pragma   mark  -  Custom Setter Method for Medication Models
+#pragma   mark  -  Custom Initialisation Method for Medication Models
 
-- (void)setMedicationModels:(NSArray *)models
+- (void)makePrescriptionDisplaysWithPrescriptions:(NSArray *)thePrescriptions andDate:(NSDate *)aDate
 {
-    _medicationModels = models;
-    [self makeLozengesLayout];
+    self.prescriptions = thePrescriptions;
+    self.startOfWeekDate = aDate;
+    
+    for (APCMedTrackerPrescription *prescription in thePrescriptions) {
+        
+        [prescription fetchDosesTakenFromDate: aDate
+                                       toDate: [aDate dateByAddingDays: 6]
+                              andUseThisQueue: [NSOperationQueue mainQueue]
+                             toDoThisWhenDone: ^(APCMedTrackerPrescription *prescriptionBeingFetched,
+                                                 NSArray *dailyDosageRecords,
+                                                 NSTimeInterval operationDuration,
+                                                 NSError *error)
+         {
+             if (error)
+             {
+                 APCLogError2(error);
+             }
+             else
+             {
+                 [self makeLozengesLayoutForPrescription: prescriptionBeingFetched
+                                 usingDailyDosageRecords: dailyDosageRecords];
+             }
+         }];
+    }
 }
 
 #pragma   mark  -  Create Lozenge Button
 
-- (APCLozengeButton *)medicationLozengeCenteredAtPoint:(CGPoint)point andColor:(UIColor *)color withTitle:(NSString *)title
+- (APCLozengeButton *)medicationLozengeCenteredAtPoint:(CGPoint)point andColor:(UIColor *)color
 {
-    APCLozengeButton  *button = [APCLozengeButton buttonWithType:UIButtonTypeCustom];
+    APCLozengeButton  *lozenge = [APCLozengeButton buttonWithType:UIButtonTypeCustom];
     CGRect  frame = CGRectMake(0.0, 0.0, kLozengeButtonWidth, kLozengeButtonHeight);
     frame.origin = point;
     frame.origin.x = point.x - (kLozengeButtonWidth / 2.0);
-    button.frame = frame;
+    lozenge.frame = frame;
     
-    button.backgroundColor = [UIColor whiteColor];
-    [button setTitle:title forState:UIControlStateNormal];
-    [button setTitleColor:color forState:UIControlStateNormal];
-    button.incompleteBorderColor = color;
+//    lozenge.backgroundColor = [UIColor whiteColor];
+    [lozenge setTitleColor:color forState:UIControlStateNormal];
+    lozenge.lozengeColor = color;
     
-    [button addTarget:self action:@selector(lozengeButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [lozenge addTarget:self action:@selector(lozengeButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
     
-    return  button;
+    return  lozenge;
 }
 
 #pragma   mark  -  Create Lozenge Buttons
 
-- (APCMedicationFollower *)makeMedicationFollowerWithModel:(APCMedicationModel *)model forDayOfWeek:(NSString *)weekday
+- (void)makeLozengesLayoutForPrescription: (APCMedTrackerPrescription *) prescription
+                  usingDailyDosageRecords: (NSArray *) dailyDosageRecords   // forRow:(NSUInteger)
 {
-    APCMedicationFollower  *follower = [[APCMedicationFollower alloc] init];
-    follower.medicationName = model.medicationName;
-    NSDictionary  *dictionary = model.frequencyAndDays;
-    follower.numberOfDosesPrescribed = dictionary[weekday];
-    return  follower;
-}
-
-- (void)makeLozengesLayout
-{
-    NSDictionary  *map = @{ @"Monday" : @(0.0), @"Tuesday" : @(1.0), @"Wednesday" : @(2.0), @"Thursday" : @(3.0), @"Friday" : @(4.0), @"Saturday" : @(5.0), @"Sunday" : @(6.0), };
-    
+    NSDictionary  *map = @{ @"Monday" : @(0.0), @"Tuesday" : @(1.0), @"Wednesday" : @(2.0), @"Thursday" : @(3.0), @"Friday" : @(4.0), @"Saturday" : @(5.0), @"Sunday" : @(6.0) };
     CGFloat  disp = CGRectGetWidth(self.bounds) / 7.0;
+    
     CGFloat  baseYCoordinate = kLozengeBaseYCoordinate;
-        //
-        //    NSNumber objects in the code below are initalised with integer values
-        //
-    for (APCMedicationModel  *model  in  self.medicationModels) {
-        NSDictionary  *dictionary = model.frequencyAndDays;
-        for (NSUInteger  day = 0;  day < numberOfDaysOfWeek;  day++) {
-            NSString  *dayOfWeek = daysOfWeekNames[day];
-            NSNumber  *number = dictionary[dayOfWeek];
-            if ([number integerValue] > 0) {
-                CGFloat  xPosition = ([map[dayOfWeek] floatValue] + 1) * disp - disp / 2.0;
-                NSString  *colorName = model.medicationLabelColor;
-                UIColor  *color = self.colormap[colorName];
-                APCLozengeButton  *button = [self medicationLozengeCenteredAtPoint:CGPointMake(xPosition, baseYCoordinate) andColor:color withTitle:@"0\u2009/\u20093"];
-                button.follower = [self makeMedicationFollowerWithModel:model forDayOfWeek:dayOfWeek];
-                button.model = model;
-                [self addSubview:button];
+    
+    NSUInteger lozengeRow = [self.prescriptions indexOfObject: prescription];
+    CGFloat  yCoordinate = baseYCoordinate + lozengeRow * kLozengeBaseYStepOver;
+    
+    NSDictionary  *dictionary = prescription.frequencyAndDays;
+    
+    for (NSUInteger  day = 0;  day < numberOfDaysOfWeek;  day++) {
+        NSDate  *currentDate = [self.startOfWeekDate addDays:day];
+        NSString  *dayOfWeek = daysOfWeekNames[day];
+        NSNumber  *number = dictionary[dayOfWeek];
+        if ([number integerValue] > 0) {
+            CGFloat  xPosition = ([map[dayOfWeek] floatValue] + 1) * disp - disp / 2.0;
+            UIColor  *color = prescription.color.UIColor;
+            APCLozengeButton  *lozenge = [self medicationLozengeCenteredAtPoint:CGPointMake(xPosition, yCoordinate) andColor:color];
+            
+            
+            APCMedTrackerDailyDosageRecord *foundRecord = nil;
+            
+            for (APCMedTrackerDailyDosageRecord *thisRecord in dailyDosageRecords)
+            {
+                if ([thisRecord.dateThisRecordRepresents.startOfDay isEqualToDate: currentDate.startOfDay])
+                {
+                    foundRecord = thisRecord;
+                    break;
+                }
             }
+            
+            if (foundRecord)
+            {
+                lozenge.numberOfDosesTaken = foundRecord.numberOfDosesTakenForThisDate;
+            }
+            else
+            {
+                lozenge.numberOfDosesTaken = [NSNumber numberWithUnsignedInteger:0];
+            }
+
+            
+            lozenge.prescription = prescription;
+            lozenge.currentDate = currentDate;
+            [self addSubview:lozenge];
         }
-        baseYCoordinate = baseYCoordinate + kLozengeBaseYStepOver;
     }
 }
 

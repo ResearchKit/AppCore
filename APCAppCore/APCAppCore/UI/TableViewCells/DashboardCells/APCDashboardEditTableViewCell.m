@@ -8,6 +8,8 @@
 #import "APCDashboardEditTableViewCell.h"
 #import "UIFont+APCAppearance.h"
 
+NSString *const kAPCDashboardEditTableViewCellIdentifier = @"APCDashboardEditTableViewCell";
+
 @implementation APCDashboardEditTableViewCell
 
 @synthesize tintColor = _tintColor;

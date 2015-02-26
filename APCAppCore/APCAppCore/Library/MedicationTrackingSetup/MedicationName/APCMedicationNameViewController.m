@@ -6,7 +6,6 @@
 //
 
 #import "APCMedicationNameViewController.h"
-#import "APCMedSetupNotificationKeys.h"
 
 #import "APCMedTrackerDataStorageManager.h"
 #import "APCMedTrackerMedication+Helper.h"
@@ -90,16 +89,12 @@ static  NSString  *kViewControllerName = @"Medication Name";
             self.selectedIndex = indexPath;
         }
     }
-    NSDictionary  *info = nil;
-    if (self.selectedIndex == nil) {
-        info = @{ APCMedSetupNameResultKey : [NSNull null] };
-    } else {
-        APCMedTrackerMedication  *medication = self.medicationList[indexPath.row];
-        info = @{ APCMedSetupNameResultKey : medication.name };
+    if (self.delegate != nil) {
+        if ([self.delegate respondsToSelector:@selector(nameController:didSelectMedicineName:)] == YES) {
+            APCMedTrackerMedication  *medication = self.medicationList[indexPath.row];
+            [self.delegate performSelector:@selector(nameController:didSelectMedicineName:) withObject:self withObject:medication];
+        }
     }
-    NSNotificationCenter  *centre = [NSNotificationCenter defaultCenter];
-    NSNotification  *notification = [NSNotification notificationWithName:APCMedSetupNameResultNotificationKey object:nil userInfo:info];
-    [centre postNotification:notification];
 }
 
 #pragma  mark  -  View Controller Methods

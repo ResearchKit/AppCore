@@ -40,6 +40,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCConsentTask.h>
 #import <APCAppCore/APCConsentQuestion.h>
 #import <APCAppCore/APCConsentBooleanQuestion.h>
+#import <APCAppCore/APCConsentInstructionQuestion.h>
 
 /* -------------------------------------
  Data Archiver & Passive Data Collectors
@@ -50,6 +51,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCHKDiscreteQuantityTracker.h>
 #import <APCAppCore/APCHKCumulativeQuantityTracker.h>
 #import <APCAppCore/APCCoreLocationTracker.h>
+#import <APCAppCore/APCInhalerUsageTracker.h>
 #import <APCAppCore/APCCoreMotionTracker.h>
 #import <APCAppCore/zipzap.h>
 #import <APCAppCore/ZZArchive.h>
@@ -80,6 +82,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCInEligibleViewController.h>
 #import <APCAppCore/APCShareViewController.h>
 #import <APCAppCore/APCTermsAndConditionsViewController.h>
+#import <APCAppCore/APCPermissionPrimingViewController.h>
 #import <APCAppCore/APCSignUpInfoViewController.h>
 #import <APCAppCore/APCSignUpGeneralInfoViewController.h>
 #import <APCAppCore/APCSignUpMedicalInfoViewController.h>
@@ -96,7 +99,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  -------------------------*/
 #import <APCAppCore/APCDashboardViewController.h>
 #import <APCAppCore/APCDashboardEditViewController.h>
-#import <APCAppCore/APCLineGraphViewController.h>
+#import <APCAppCore/APCGraphViewController.h>
 #import <APCAppCore/APCDashboardMoreInfoViewController.h>
 
 /*--------------------------
@@ -139,12 +142,11 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCColorSwatchTableViewCell.h>
 #import <APCAppCore/APCMedicationColorViewController.h>
 #import <APCAppCore/APCLozengeButton.h>
-#import <APCAppCore/APCMedicationFollower.h>
 #import <APCAppCore/APCMedicationModel.h>
 #import <APCAppCore/APCMedicationNameViewController.h>
 #import <APCAppCore/APCMedicationTrackerSetupViewController.h>
-#import <APCAppCore/APCMedSetupNotificationKeys.h>
 #import <APCAppCore/APCSetupTableViewCell.h>
+#import <APCAppCore/APCSetupButtonTableViewCell.h>
 #import <APCAppCore/APCMedicationSummaryTableViewCell.h>
 
 /* -------------------------
@@ -210,7 +212,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCTintedTableViewCell.h>
 #import <APCAppCore/APCCheckTableViewCell.h>
 #import <APCAppCore/APCDashboardTableViewCell.h>
-#import <APCAppCore/APCDashboardLineGraphTableViewCell.h>
+#import <APCAppCore/APCDashboardGraphTableViewCell.h>
 #import <APCAppCore/APCDashboardMessageTableViewCell.h>
 #import <APCAppCore/APCDashboardProgressTableViewCell.h>
 #import <APCAppCore/APCDashboardPieGraphTableViewCell.h>
@@ -241,6 +243,8 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCInsights.h>
 #import <APCAppCore/APCFoodInsight.h>
 #import <APCAppCore/APCBadgeLabel.h>
+#import <APCAppCore/APCMotionHistoryData.h>
+#import <APCAppCore/APCMotionHistoryReporter.h>
 
 /* -------------------------
  Categories

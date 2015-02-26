@@ -6,7 +6,9 @@
 //
 
 #import "APCLozengeButton.h"
-#import "APCMedicationFollower.h"
+
+#import "APCMedTrackerPrescription.h"
+#import "APCMedTrackerPrescription+Helper.h"
 
 static  CGFloat  kLayerBorderWidth  = 3.0;
 static  CGFloat  kLayerCornerRadius = 4.0;
@@ -25,6 +27,7 @@ static  short  coordinates[] = {
     'z'
 };
 
+#pragma  mark  -  Initialisation
 
 + (instancetype)buttonWithType:(UIButtonType)buttonType
 {
@@ -73,80 +76,47 @@ static  short  coordinates[] = {
     }
 }
 
+#pragma  mark  -  Drawing
+
 - (void)drawRect:(CGRect)rect
 {
     [super drawRect:rect];
     
-    self.backgroundColor = [UIColor clearColor];
-    
-    UIBezierPath  *path = [UIBezierPath bezierPath];
-    
-    if (self.isCompleted == NO) {
-        [self.incompleteBackgroundColor set];
-        [path stroke];
+    if ([self.numberOfDosesTaken unsignedIntegerValue] < [self.prescription.numberOfTimesPerDay unsignedIntegerValue]) {
+        CALayer  *layer = self.layer;
+        layer.backgroundColor = [[UIColor whiteColor] CGColor];
+        NSNumber  *numberOfTimes = self.prescription.numberOfTimesPerDay;
+        NSString  *aTitle = [NSString stringWithFormat:@"%lu\u2009/\u2009%lu", [self.numberOfDosesTaken unsignedIntegerValue], [numberOfTimes unsignedIntegerValue]];
+        [self setTitle:aTitle forState:UIControlStateNormal];
+        [self setTitleColor:self.lozengeColor forState:UIControlStateNormal];
     } else {
-        [self.completedBackgroundColor set];
+        [self setTitle:@"" forState:UIControlStateNormal];
+        UIColor  *background = [self.lozengeColor colorWithAlphaComponent:0.625];
+        CALayer  *layer = self.layer;
+        layer.backgroundColor = [background CGColor];
+        
+        UIBezierPath  *path = [UIBezierPath bezierPath];
+        [self makePath:path withDimension:self.bounds];
+        [[UIColor whiteColor] set];
+        path.lineWidth = 1.0;
         [path fill];
         [path stroke];
-        [self makePath:path withDimension:self.bounds];
-        [self.completedTickColor set];
-        [path fill];
     }
 }
 
-- (void)setIncompleteBackgroundColor:(UIColor *)backgroundColor
+#pragma  mark  -  Custom Setters
+
+- (void)setNumberOfDosesTaken:(NSNumber *)aNumber
 {
-    [super setBackgroundColor:backgroundColor];
-    _incompleteBackgroundColor = backgroundColor;
-    CALayer  *layer = self.layer;
-    layer.backgroundColor = [backgroundColor CGColor];
+    _numberOfDosesTaken = aNumber;
     [self setNeedsDisplay];
 }
 
-- (void)setIncompleteBorderColor:(UIColor *)borderColor
+- (void)setLozengeColor:(UIColor *)lozengeColor
 {
-    _incompleteBorderColor = borderColor;
+    _lozengeColor = lozengeColor;
     CALayer  *layer = self.layer;
-    layer.borderColor = [borderColor CGColor];
-    [self setNeedsDisplay];
-}
-
-- (void)setIncompleteTickColor:(UIColor *)tickColor
-{
-    _incompleteTickColor = tickColor;
-    CALayer  *layer = self.layer;
-    layer.backgroundColor = [tickColor CGColor];
-    [self setNeedsDisplay];
-}
-
-- (void)setCompletedBackgroundColor:(UIColor *)backgroundColor
-{
-    [super setBackgroundColor:backgroundColor];
-    _completedBackgroundColor = backgroundColor;
-    CALayer  *layer = self.layer;
-    layer.backgroundColor = [backgroundColor CGColor];
-    [self setNeedsDisplay];
-}
-
-- (void)setCompletedBorderColor:(UIColor *)borderColor
-{
-    _completedBorderColor = borderColor;
-    CALayer  *layer = self.layer;
-    layer.borderColor = [borderColor CGColor];
-    [self setNeedsDisplay];
-}
-
-- (void)setBackgroundColor:(UIColor *)backgroundColor
-{
-    [super setBackgroundColor:backgroundColor];
-    CALayer  *layer = self.layer;
-    layer.backgroundColor = [self.backgroundColor CGColor];
-    [self setNeedsDisplay];
-}
-
-- (void)setCompleted:(BOOL)completed
-{
-    _completed = completed;
+    layer.borderColor = [_lozengeColor CGColor];
     [self setNeedsDisplay];
 }
 

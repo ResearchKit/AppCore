@@ -20,6 +20,8 @@
 - (void) addDidEnterBackground;
 - (void) userConsented;
 
+- (void) performCoreDataBlockInBackground: (void(^)(NSManagedObjectContext * context)) block;
+
 /*********************************************************************************/
 #pragma mark - For Categories Only
 /*********************************************************************************/
