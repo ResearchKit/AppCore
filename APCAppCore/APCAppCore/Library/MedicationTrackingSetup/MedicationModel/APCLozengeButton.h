@@ -18,10 +18,6 @@
 @property  (nonatomic, strong)  NSDate                          *currentDate;
 @property  (nonatomic, strong)  NSNumber                        *numberOfDosesTaken;
 
-@property  (nonatomic, strong)  UIColor                         *completedTickColor;
-@property  (nonatomic, strong)  UIColor                         *completedBackgroundColor;
-@property  (nonatomic, strong)  UIColor                         *completedBorderColor;
-
-@property  (nonatomic, assign, getter = isCompleted)  BOOL  completed;
+@property  (nonatomic, strong)  UIColor                         *lozengeColor;
 
 @end

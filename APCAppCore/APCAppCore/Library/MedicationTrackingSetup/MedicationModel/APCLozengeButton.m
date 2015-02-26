@@ -82,26 +82,25 @@ static  short  coordinates[] = {
 {
     [super drawRect:rect];
     
-    self.backgroundColor = [UIColor clearColor];
-    
-    UIBezierPath  *path = [UIBezierPath bezierPath];
-    
-    if ([self.numberOfDosesTaken unsignedIntegerValue] == [self.prescription.numberOfTimesPerDay unsignedIntegerValue]) {
-        [self setTitle:@"" forState:UIControlStateNormal];
-        UIColor  *background = [self.completedBorderColor colorWithAlphaComponent:0.75];
+    if ([self.numberOfDosesTaken unsignedIntegerValue] < [self.prescription.numberOfTimesPerDay unsignedIntegerValue]) {
         CALayer  *layer = self.layer;
-        layer.backgroundColor = [background CGColor];
-        
-        [self.completedBorderColor set];
-        [path stroke];
-        
-        [self makePath:path withDimension:self.bounds];
-        [[UIColor whiteColor] set];
-        [path fill];
-    } else {
+        layer.backgroundColor = [[UIColor whiteColor] CGColor];
         NSNumber  *numberOfTimes = self.prescription.numberOfTimesPerDay;
         NSString  *aTitle = [NSString stringWithFormat:@"%lu\u2009/\u2009%lu", [self.numberOfDosesTaken unsignedIntegerValue], [numberOfTimes unsignedIntegerValue]];
         [self setTitle:aTitle forState:UIControlStateNormal];
+        [self setTitleColor:self.lozengeColor forState:UIControlStateNormal];
+    } else {
+        [self setTitle:@"" forState:UIControlStateNormal];
+        UIColor  *background = [self.lozengeColor colorWithAlphaComponent:0.625];
+        CALayer  *layer = self.layer;
+        layer.backgroundColor = [background CGColor];
+        
+        UIBezierPath  *path = [UIBezierPath bezierPath];
+        [self makePath:path withDimension:self.bounds];
+        [[UIColor whiteColor] set];
+        path.lineWidth = 1.0;
+        [path fill];
+        [path stroke];
     }
 }
 
@@ -113,34 +112,11 @@ static  short  coordinates[] = {
     [self setNeedsDisplay];
 }
 
-- (void)setCompletedBackgroundColor:(UIColor *)backgroundColor
+- (void)setLozengeColor:(UIColor *)lozengeColor
 {
-    [super setBackgroundColor:backgroundColor];
-    _completedBackgroundColor = backgroundColor;
+    _lozengeColor = lozengeColor;
     CALayer  *layer = self.layer;
-    layer.backgroundColor = [backgroundColor CGColor];
-    [self setNeedsDisplay];
-}
-
-- (void)setCompletedBorderColor:(UIColor *)borderColor
-{
-    _completedBorderColor = borderColor;
-    CALayer  *layer = self.layer;
-    layer.borderColor = [borderColor CGColor];
-    [self setNeedsDisplay];
-}
-
-- (void)setBackgroundColor:(UIColor *)backgroundColor
-{
-    [super setBackgroundColor:backgroundColor];
-    CALayer  *layer = self.layer;
-    layer.backgroundColor = [self.backgroundColor CGColor];
-    [self setNeedsDisplay];
-}
-
-- (void)setCompleted:(BOOL)completed
-{
-    _completed = completed;
+    layer.borderColor = [_lozengeColor CGColor];
     [self setNeedsDisplay];
 }
 
