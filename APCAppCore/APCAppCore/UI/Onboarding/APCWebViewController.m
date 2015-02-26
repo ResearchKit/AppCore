@@ -16,10 +16,7 @@
 -(void)viewDidLoad{
     self.webview.delegate = self;
     self.webview.alpha = 0.0;
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:self.fileName ofType:self.fileType];
-    NSData *data = [NSData dataWithContentsOfFile:filePath];
-    [self.webview loadData:data MIMEType:@"application/pdf" textEncodingName:@"utf-8" baseURL:nil];
-    [self.webview setDataDetectorTypes:UIDataDetectorTypeAll];
+    
     self.webview.scalesPageToFit = YES;
 }
 
