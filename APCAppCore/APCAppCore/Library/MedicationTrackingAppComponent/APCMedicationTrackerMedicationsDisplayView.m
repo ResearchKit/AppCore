@@ -96,6 +96,16 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     }
 }
 
+#pragma   mark  -  Refesh Method for Medication Models
+
+- (void)refreshWithPrescriptions:(NSArray *)thePrescriptions andDate:(NSDate *)aDate
+{
+    NSArray  *subviews = self.subviews;
+    [subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
+    [self makePrescriptionDisplaysWithPrescriptions:thePrescriptions andDate:aDate];
+}
+
 #pragma   mark  -  Create Lozenge Button
 
 - (APCLozengeButton *)medicationLozengeCenteredAtPoint:(CGPoint)point andColor:(UIColor *)color
