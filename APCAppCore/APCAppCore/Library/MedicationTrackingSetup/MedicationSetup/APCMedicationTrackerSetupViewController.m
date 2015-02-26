@@ -22,6 +22,8 @@
 #import "APCMedicationSummaryTableViewCell.h"
 
 #import "APCSetupTableViewCell.h"
+#import "APCSetupButtonTableViewCell.h"
+#import "APCButton.h"
 
 typedef  enum  _SetupTableRowTypes
 {
@@ -31,9 +33,10 @@ typedef  enum  _SetupTableRowTypes
     SetupTableRowTypesDosage
 }  SetupTableRowTypes;
 
-static  NSString  *kViewControllerName   = @"Set Up Medications";
+static  NSString  *kViewControllerName       = @"Set Up Medications";
 
-static  NSString  *kSetupTableCellName   = @"APCSetupTableViewCell";
+static  NSString  *kSetupTableCellName       = @"APCSetupTableViewCell";
+static  NSString  *kSetupTableButtonCellName = @"APCSetupButtonTableViewCell";
 
 static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
 
@@ -41,6 +44,7 @@ static  NSInteger  kAPCMedicationNameRow      = 0;
 static  NSInteger  kAPCMedicationFrequencyRow = 1;
 static  NSInteger  kAPCMedicationColorRow     = 2;
 static  NSInteger  kAPCMedicationDosageRow    = 3;
+static  NSInteger  kAPCMedicationButtonRow    = 4;
 
 static  NSString  *mainTableCategories[]          = { @"Name",        @"Frequency",     @"Label Color",  @"Dosage (optional)"        };
 static  NSInteger  kNumberOfMainTableCategories = (sizeof(mainTableCategories) / sizeof(NSString *));
@@ -92,7 +96,7 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     NSInteger  numberOfRows = 0;
     
     if (tableView == self.setupTabulator) {
-        numberOfRows = kNumberOfMainTableCategories;
+        numberOfRows = kNumberOfMainTableCategories + 1;
     } else if (tableView == self.listTabulator) {
         numberOfRows = [self.currentMedicationRecords count];
     }
@@ -163,6 +167,18 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat  height = 44.0;
+    
+    if (tableView == self.setupTabulator) {
+        if (indexPath.row == kAPCMedicationButtonRow) {
+            height = 88.0;
+        }
+    }
+    return  height;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell  *cell = nil;
@@ -171,10 +187,18 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
         //        we will need to revisit the code in the listTabulator branch
         //
     if (tableView == self.setupTabulator) {
-        APCSetupTableViewCell  *aCell = (APCSetupTableViewCell *)[self.setupTabulator dequeueReusableCellWithIdentifier:kSetupTableCellName];
-        aCell.topicLabel.text = mainTableCategories[indexPath.row];
-        [self formatCellTopicForRow:(SetupTableRowTypes)indexPath.row withCell:aCell];
-        cell = aCell;
+        if (indexPath.row < kAPCMedicationButtonRow) {
+            APCSetupTableViewCell  *aCell = (APCSetupTableViewCell *)[self.setupTabulator dequeueReusableCellWithIdentifier:kSetupTableCellName];
+            aCell.topicLabel.text = mainTableCategories[indexPath.row];
+            [self formatCellTopicForRow:(SetupTableRowTypes)indexPath.row withCell:aCell];
+            cell = aCell;
+        } else {
+            APCSetupButtonTableViewCell  *aCell = (APCSetupButtonTableViewCell *)[self.setupTabulator dequeueReusableCellWithIdentifier:kSetupTableButtonCellName];
+            aCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [aCell.doneButton addTarget:self action:@selector(doneButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
+            [aCell.doneButton setTitle:@"Done" forState:UIControlStateNormal];
+            cell = aCell;
+        }
     } else if (tableView == self.listTabulator) {
         APCMedicationSummaryTableViewCell  *aCell = (APCMedicationSummaryTableViewCell *)[self.listTabulator dequeueReusableCellWithIdentifier:kSummaryTableViewCell];
         aCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -295,7 +319,7 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesDosage inSection:0] ] withRowAnimation:NO];
 }
 
-#pragma  mark  -  View Controller Methods
+#pragma  mark  -  View Controller Methods  kSetupTableButtonCellName
 
 - (NSString *)title
 {
@@ -323,6 +347,9 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     
     UINib  *setupTableCellNib = [UINib nibWithNibName:kSetupTableCellName bundle:[NSBundle appleCoreBundle]];
     [self.setupTabulator registerNib:setupTableCellNib forCellReuseIdentifier:kSetupTableCellName];
+    
+    UINib  *setupTableButtonCellNib = [UINib nibWithNibName:kSetupTableButtonCellName bundle:[NSBundle appleCoreBundle]];
+    [self.setupTabulator registerNib:setupTableButtonCellNib forCellReuseIdentifier:kSetupTableButtonCellName];
     
     UINib  *summaryCellNib = [UINib nibWithNibName:kSummaryTableViewCell bundle:[NSBundle appleCoreBundle]];
     [self.listTabulator registerNib:summaryCellNib forCellReuseIdentifier:kSummaryTableViewCell];

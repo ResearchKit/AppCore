@@ -42,18 +42,28 @@
                             <constraint firstAttribute="height" constant="36" id="8R3-b3-oVu"/>
                         </constraints>
                     </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pqx-UB-OmG" userLabel="Separator View">
+                        <rect key="frame" x="10" y="43" width="310" height="1"/>
+                        <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="xzf-tR-Lp6"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="vJf-Z2-oXv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-4" id="2a5-NA-ZGR"/>
                     <constraint firstAttribute="bottomMargin" secondItem="vJf-Z2-oXv" secondAttribute="bottom" constant="-5" id="2vV-Ay-xbq"/>
                     <constraint firstItem="bhB-7S-Mte" firstAttribute="leading" secondItem="56q-8K-rRa" secondAttribute="trailing" constant="8" id="87g-Cc-4WD"/>
                     <constraint firstAttribute="centerY" secondItem="56q-8K-rRa" secondAttribute="centerY" constant="0.5" id="89R-Ua-OTd"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="Pqx-UB-OmG" secondAttribute="bottom" constant="-9" id="Nnv-0c-Yh8"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Pqx-UB-OmG" secondAttribute="trailing" constant="-41" id="Onc-Gi-cXD"/>
                     <constraint firstItem="56q-8K-rRa" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="UPK-PM-aIx"/>
                     <constraint firstItem="vJf-Z2-oXv" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="ZY2-a7-hXk"/>
                     <constraint firstItem="vJf-Z2-oXv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-4" id="dM4-5E-JAX"/>
                     <constraint firstItem="vJf-Z2-oXv" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="234" id="ivf-RM-Fi5"/>
                     <constraint firstAttribute="centerY" secondItem="bhB-7S-Mte" secondAttribute="centerY" constant="-0.5" id="n6j-pQ-oGU"/>
                     <constraint firstAttribute="bottomMargin" secondItem="vJf-Z2-oXv" secondAttribute="bottom" constant="-4" id="oaj-Lw-JKZ"/>
+                    <constraint firstItem="Pqx-UB-OmG" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="2" id="tBn-9B-aK6"/>
                 </constraints>
                 <variation key="default">
                     <mask key="constraints">
@@ -68,7 +78,7 @@
                 <outlet property="colorSwatch" destination="vJf-Z2-oXv" id="zHV-Hm-ORX"/>
                 <outlet property="topicLabel" destination="56q-8K-rRa" id="5ru-G5-NwE"/>
             </connections>
-            <point key="canvasLocation" x="437" y="302"/>
+            <point key="canvasLocation" x="442" y="494"/>
         </tableViewCell>
     </objects>
 </document>
