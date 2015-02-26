@@ -10,7 +10,7 @@
 
 @class APCPieGraphView;
 
-static NSString * const kAPCDashboardPieGraphTableViewCellIdentifier = @"APCDashboardPieGraphTableViewCell";
+FOUNDATION_EXPORT NSString * const kAPCDashboardPieGraphTableViewCellIdentifier;
 
 @interface APCDashboardPieGraphTableViewCell : APCDashboardTableViewCell
 

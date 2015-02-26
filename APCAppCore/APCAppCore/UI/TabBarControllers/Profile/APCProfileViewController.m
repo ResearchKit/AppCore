@@ -27,6 +27,7 @@ static CGFloat const kSectionHeaderHeight = 40.f;
 static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 static CGFloat const kPickerCellHeight = 164.0f;
 
+static const NSInteger kAPCPermissionsAlertViewTag = 100;
 static NSString * const kAPCBasicTableViewCellIdentifier = @"APCBasicTableViewCell";
 static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetailTableViewCell";
 
@@ -51,8 +52,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -379,6 +378,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.editable = NO;
                     field.textAlignnment = NSTextAlignmentRight;
                     field.detailText = [APCUser stringValueFromSexType:self.user.biologicalSex];
+                    field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     
                     APCTableViewRow *row = [APCTableViewRow new];
                     row.item = field;
@@ -396,6 +396,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.editable = NO;
                     field.textAlignnment = NSTextAlignmentRight;
                     field.detailText = [self.user.birthDate toStringWithFormat:NSDateDefaultDateFormat];
+                    field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     
                     APCTableViewRow *row = [APCTableViewRow new];
                     row.item = field;
@@ -416,6 +417,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     }
                     field.keyboardType = UIKeyboardTypeAlphabet;
                     field.identifier = kAPCTextFieldTableViewCellIdentifier;
+                    field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     
                     field.style = UITableViewStylePlain;
                     
@@ -433,6 +435,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.pickerData = @[[APCUser medicalConditions]];
                     field.textAlignnment = NSTextAlignmentRight;
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
+                    field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     
                     if (self.user.medications) {
                         field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:self.user.medicalConditions]) ];
@@ -456,6 +459,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.pickerData = @[[APCUser medications]];
                     field.textAlignnment = NSTextAlignmentRight;
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
+                    field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     
                     if (self.user.medications) {
                         field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:self.user.medications]) ];
@@ -477,10 +481,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
                     field.caption = NSLocalizedString(@"Height", @"");
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
-                    field.selectionStyle = UITableViewCellSelectionStyleGray;
                     field.detailDiscloserStyle = YES;
                     field.textAlignnment = NSTextAlignmentRight;
                     field.pickerData = [APCUser heights];
+                    field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     
                     NSInteger defaultIndexOfMyHeightInFeet = 5;
                     NSInteger defaultIndexOfMyHeightInInches = 0;
@@ -532,6 +536,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.keyboardType = UIKeyboardTypeDecimalPad;
                     field.textAlignnment = NSTextAlignmentRight;
                     field.identifier = kAPCTextFieldTableViewCellIdentifier;
+                    field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     
                     APCTableViewRow *row = [APCTableViewRow new];
                     row.item = field;
@@ -543,7 +548,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 case kAPCUserInfoItemTypeWakeUpTime:
                 {
                     APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-                    field.selectionStyle = UITableViewCellSelectionStyleGray;
                     field.style = UITableViewCellStyleValue1;
                     field.caption = NSLocalizedString(@"What time do you generally wake up?", @"");
                     field.placeholder = NSLocalizedString(@"7:00 AM", @"");
@@ -552,6 +556,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;
                     field.textAlignnment = NSTextAlignmentRight;
                     field.detailDiscloserStyle = YES;
+                    field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     
                     if (self.user.sleepTime) {
                         field.date = self.user.wakeUpTime;
@@ -568,7 +573,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 case kAPCUserInfoItemTypeSleepTime:
                 {
                     APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
-                    field.selectionStyle = UITableViewCellSelectionStyleGray;
                     field.style = UITableViewCellStyleValue1;
                     field.caption = NSLocalizedString(@"What time do you generally go to sleep?", @"");
                     field.placeholder = NSLocalizedString(@"9:30 PM", @"");
@@ -577,6 +581,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.dateFormat = kAPCMedicalInfoItemSleepTimeFormat;
                     field.textAlignnment = NSTextAlignmentRight;
                     field.detailDiscloserStyle = YES;
+                    field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     
                     if (self.user.wakeUpTime) {
                         field.date = self.user.sleepTime;
@@ -653,7 +658,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         {
             APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
             field.identifier = kAPCDefaultTableViewCellIdentifier;
-            field.selectionStyle = UITableViewCellSelectionStyleGray;
+            field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
             field.caption = NSLocalizedString(@"Auto-Lock", @"");
             field.detailDiscloserStyle = YES;
             field.textAlignnment = NSTextAlignmentRight;
@@ -681,6 +686,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentLeft;
             field.editable = NO;
+            field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
@@ -702,6 +708,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
+            field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
@@ -715,6 +722,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
+            field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
@@ -909,7 +917,23 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 break;
             case kAPCSettingsItemTypePermissions:
             {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+                NSString *title = NSLocalizedString(@"Permissions", @"Permissions");
+                NSString *message = NSLocalizedString(@"The app will open its Permissions in the phone's Settings.", @"The app will open its Permissions in the phone's Settings.");
+                NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
+                NSString *ok = NSLocalizedString(@"OK", @"OK");
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+                }];
+                [alertController addAction:cancelAction];
+                
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:ok style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+                    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+                }];
+                [alertController addAction:okAction];
+                
+                [self presentViewController:alertController animated:YES completion:nil];
             }
                 break;
             case kAPCUserInfoItemTypeReviewConsent:
@@ -1384,12 +1408,26 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         self.navigationItem.leftBarButtonItem.enabled = YES;
         
         [self loadProfileValuesInModel];
+        [self.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            APCTableViewSection *section = (APCTableViewSection *)obj;
+            [section.rows enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                APCTableViewRow * row = (APCTableViewRow *)obj;
+                row.item.selectionStyle = UITableViewCellSelectionStyleNone;
+            }];
+        }];
     } else{
         
         sender.title = NSLocalizedString(@"Done", @"Done");
         sender.style = UIBarButtonItemStyleDone;
         
         self.navigationItem.leftBarButtonItem.enabled = NO;
+        [self.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            APCTableViewSection *section = (APCTableViewSection *)obj;
+            [section.rows enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                APCTableViewRow * row = (APCTableViewRow *)obj;
+                row.item.selectionStyle = UITableViewCellSelectionStyleGray;
+            }];
+        }];
     }
     
     self.editing = !self.editing;

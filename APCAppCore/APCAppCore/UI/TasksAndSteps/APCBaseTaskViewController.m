@@ -167,6 +167,9 @@
     [appDelegate.dataMonitor batchUploadDataToBridgeOnCompletion:^(NSError *error) {
         APCLogError2 (error);
     }];
+    if (self.createResultSummaryBlock) {
+        [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataMonitor performCoreDataBlockInBackground:self.createResultSummaryBlock];
+    }
 }
 
 /*********************************************************************************/

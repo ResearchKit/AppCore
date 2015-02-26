@@ -64,6 +64,11 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
                                              selector:@selector(updateVisibleRowsInTableView:)
                                                  name:APCScoringHealthKitDataIsAvailableNotification
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateVisibleRowsInTableView:)
+                                                 name:APCTaskResultsProcessedNotification
+                                               object:nil];
   APCLogViewControllerAppeared();
 }
 
@@ -78,6 +83,10 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:APCScoringHealthKitDataIsAvailableNotification
                                                   object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:APCTaskResultsProcessedNotification
+                                                  object:nil];
+    
     
     [super viewWillDisappear:animated];
 }
@@ -123,34 +132,45 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardGraphItem class]]){
         
         APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)dashboardItem;
-        APCDashboardLineGraphTableViewCell *graphCell = (APCDashboardLineGraphTableViewCell *)cell;
+        APCDashboardGraphTableViewCell *graphCell = (APCDashboardGraphTableViewCell *)cell;
+        
+        APCBaseGraphView *graphView;
         
         if (graphItem.graphType == kAPCDashboardGraphTypeLine) {
+            graphView = (APCLineGraphView *)graphCell.lineGraphView;
+            graphCell.lineGraphView.datasource = graphItem.graphData;
             
-            graphCell.graphView.datasource = graphItem.graphData;
-            graphCell.graphView.delegate = self;
-            graphCell.title = graphItem.caption;
-            graphCell.subTitleLabel.text = graphItem.detailText;
-            graphCell.graphView.tintColor = graphItem.tintColor;
-            graphCell.graphView.panGestureRecognizer.delegate = self;
-            graphCell.graphView.axisTitleFont = [UIFont appRegularFontWithSize:14.0f];
+            graphCell.discreteGraphView.hidden = YES;
+            graphCell.lineGraphView.hidden = NO;
             
-            graphCell.graphView.maximumValueImage = graphItem.maximumImage;
-            graphCell.graphView.minimumValueImage = graphItem.minimumImage;
-            graphCell.averageImageView.image = graphItem.averageImage;
+        } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
+            graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
+            graphCell.discreteGraphView.datasource = graphItem.graphData;
             
-            graphCell.tintColor = graphItem.tintColor;
-            graphCell.delegate = self;
-            [graphCell.graphView layoutSubviews];
-            [self.lineCharts addObject:graphCell.graphView];
-            
-            [graphCell.graphView refreshGraph];
-            
-        } else if (graphItem.graphType == kAPCDashboardGraphTypePie) {
-            
-        } else if (graphItem.graphType == kAPCDashboardGraphTypeTimeline) {
-            
+            graphCell.lineGraphView.hidden = YES;
+            graphCell.discreteGraphView.hidden = NO;
         }
+        
+        graphView.delegate = self;
+        graphView.tintColor = graphItem.tintColor;
+        graphView.panGestureRecognizer.delegate = self;
+        graphView.axisTitleFont = [UIFont appRegularFontWithSize:14.0f];
+        
+        graphView.maximumValueImage = graphItem.maximumImage;
+        graphView.minimumValueImage = graphItem.minimumImage;
+        
+        graphCell.averageImageView.image = graphItem.averageImage;
+        graphCell.title = graphItem.caption;
+        graphCell.subTitleLabel.text = graphItem.detailText;
+        
+        graphCell.tintColor = graphItem.tintColor;
+        graphCell.delegate = self;
+        [graphView layoutSubviews];
+        
+        [self.lineCharts addObject:graphView];
+        
+        [graphView refreshGraph];
+        
         
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardMessageItem class]]){
         
@@ -215,18 +235,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardGraphItem class]]){
         
-        APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)dashboardItem;
-        
-        if (graphItem.graphType == kAPCDashboardGraphTypeLine) {
-            height = kAPCLineGraphCellHeight;
-            
-        } else if (graphItem.graphType == kAPCDashboardGraphTypePie) {
-            height = kAPCLineGraphCellHeight;
-            
-        } else if (graphItem.graphType == kAPCDashboardGraphTypeTimeline) {
-            height = kAPCLineGraphCellHeight;
-            
-        }
+        height = kAPCLineGraphCellHeight;
         
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardMessageItem class]]){
         
@@ -243,31 +252,31 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     return height;
 }
 
-#pragma mark - APCLineGraphViewDelegate methods
+#pragma mark - APCBaseGraphViewDelegate methods
 
-- (void)lineGraphTouchesBegan:(APCLineGraphView *)graphView
+- (void)graphViewTouchesBegan:(APCBaseGraphView *)graphView
 {
-    for (APCLineGraphView *lineGraph in self.lineCharts) {
-        if (lineGraph != graphView) {
-            [lineGraph setScrubberViewsHidden:NO animated:YES];
+    for (APCLineGraphView *currentGraph in self.lineCharts) {
+        if (currentGraph != graphView) {
+            [currentGraph setScrubberViewsHidden:NO animated:YES];
         }
     }
 }
 
-- (void)lineGraph:(APCLineGraphView *)graphView touchesMovedToXPosition:(CGFloat)xPosition
+- (void)graphView:(APCBaseGraphView *)graphView touchesMovedToXPosition:(CGFloat)xPosition
 {
-    for (APCLineGraphView *lineGraph in self.lineCharts) {
-        if (lineGraph != graphView) {
-            [lineGraph scrubReferenceLineForXPosition:xPosition];
+    for (APCLineGraphView *currentGraph in self.lineCharts) {
+        if (currentGraph != graphView) {
+            [currentGraph scrubReferenceLineForXPosition:xPosition];
         }
     }
 }
 
-- (void)lineGraphTouchesEnded:(APCLineGraphView *)graphView
+- (void)graphViewTouchesEnded:(APCBaseGraphView *)graphView
 {
-    for (APCLineGraphView *lineGraph in self.lineCharts) {
-        if (lineGraph != graphView) {
-            [lineGraph setScrubberViewsHidden:YES animated:YES];
+    for (APCLineGraphView *currentGraph in self.lineCharts) {
+        if (currentGraph != graphView) {
+            [currentGraph setScrubberViewsHidden:YES animated:YES];
         }
     }
 }
@@ -275,12 +284,11 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 #pragma mark - UIGestureRecognizerDelegate methods
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    if (![gestureRecognizer isEqual:self.tableView.panGestureRecognizer] && ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]])) {
-        UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer*)gestureRecognizer;
-        CGPoint translation = [panGesture velocityInView:self.tableView];
-        return fabs(translation.x) > fabs(translation.y);
-    }
-    return YES;
+
+    CGPoint translation = [(UIPanGestureRecognizer *)gestureRecognizer translationInView:gestureRecognizer.view.superview];
+    BOOL retValue = fabsf(translation.x) > fabsf(translation.y);
+    
+    return retValue;
 }
 
 #pragma mark - UIViewControllerTransitioningDelegate methods
@@ -291,7 +299,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 {
     id<UIViewControllerAnimatedTransitioning> animationController;
     
-    if ([presented isKindOfClass:[APCLineGraphViewController class]]) {
+    if ([presented isKindOfClass:[APCGraphViewController class]]) {
         animationController = self.presentAnimator;
         self.presentAnimator.presenting = YES;
     } else if ([presented isKindOfClass:[APCDashboardMoreInfoViewController class]]){
@@ -306,7 +314,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     
     id<UIViewControllerAnimatedTransitioning> animationController;
     
-    if ([dismissed isKindOfClass:[APCLineGraphViewController class]]) {
+    if ([dismissed isKindOfClass:[APCGraphViewController class]]) {
         animationController = self.presentAnimator;
         self.presentAnimator.presenting = NO;
     } else if ([dismissed isKindOfClass:[APCDashboardMoreInfoViewController class]]){
@@ -321,7 +329,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 
 - (void)dashboardTableViewCellDidTapExpand:(APCDashboardTableViewCell *)cell
 {
-    if ([cell isKindOfClass:[APCDashboardLineGraphTableViewCell class]]) {
+    if ([cell isKindOfClass:[APCDashboardGraphTableViewCell class]]) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
         
         APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)[self itemForIndexPath:indexPath];
@@ -329,7 +337,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         CGRect initialFrame = [cell convertRect:cell.bounds toView:self.view.window];
         self.presentAnimator.initialFrame = initialFrame;
         
-        APCLineGraphViewController *graphViewController = [[UIStoryboard storyboardWithName:@"APCDashboard" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCLineGraphViewController"];
+        APCGraphViewController *graphViewController = [[UIStoryboard storyboardWithName:@"APCDashboard" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCLineGraphViewController"];
         graphViewController.graphItem = graphItem;
         [self.navigationController presentViewController:graphViewController animated:YES completion:nil];
     }

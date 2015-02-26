@@ -9,6 +9,8 @@
 #import "UIFont+APCAppearance.h"
 #import "UIColor+APCAppearance.h"
 
+NSString * const kAPCDashboardPieGraphTableViewCellIdentifier = @"APCDashboardPieGraphTableViewCell";
+
 @implementation APCDashboardPieGraphTableViewCell
 
 - (void)awakeFromNib {
