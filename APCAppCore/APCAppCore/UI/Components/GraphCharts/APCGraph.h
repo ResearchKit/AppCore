@@ -8,4 +8,5 @@
 #import "APCAxisView.h"
 #import "APCCircleView.h"
 #import "APCLineGraphView.h"
+#import "APCDiscreteGraphView.h"
 

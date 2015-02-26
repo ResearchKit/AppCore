@@ -7,7 +7,7 @@
  
 #import <UIKit/UIKit.h>
 
-static NSString *const kAPCDashboardEditTableViewCellIdentifier = @"APCDashboardEditTableViewCell";
+FOUNDATION_EXPORT NSString *const kAPCDashboardEditTableViewCellIdentifier;
 
 @interface APCDashboardEditTableViewCell : UITableViewCell
 
