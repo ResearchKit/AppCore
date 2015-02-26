@@ -65,7 +65,7 @@
     CGFloat topSeparatorWidth = rect.size.width;
     CGFloat topSeparatorHeight = 4.0;
     
-    UIColor *borderColor = [UIColor colorWithWhite:0.973 alpha:1.000];
+    UIColor *borderColor = [UIColor lightGrayColor]; //[UIColor colorWithWhite:0.973 alpha:1.000];
     
     if (self.showTopSeparator) {
         CGRect topSeparator = CGRectMake(0, 0, topSeparatorWidth, topSeparatorHeight);
