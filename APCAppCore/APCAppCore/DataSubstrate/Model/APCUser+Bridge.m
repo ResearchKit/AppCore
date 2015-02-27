@@ -8,6 +8,7 @@
 #import "APCUser+Bridge.h"
 #import "APCAppCore.h"
 
+#warning Default data sharing is scoped to All. Please update this before shipping.
 #define DEFAULT_DATA_SHARING_SCOPE SBBConsentShareScopeAll
 
 @implementation APCUser (Bridge)
