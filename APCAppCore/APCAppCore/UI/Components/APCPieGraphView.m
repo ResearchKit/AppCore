@@ -131,7 +131,7 @@ static CGFloat const kAnimationDuration = 0.35f;
     [self drawPercentageLabels];
     [self drawLegend];
     
-    if (self.sumOfValues == 0) {
+    if (self.sumOfValues == 100) {
         [self setupEmptyView];
     }
 }
