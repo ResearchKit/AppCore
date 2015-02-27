@@ -115,10 +115,7 @@ NSString * const kTaskReminderMessage = @"Please complete your asthma study acti
     if (jsonDictionary) {
         return jsonDictionary[@"disease_name"];
     } else {
-        if (parseError) {
-            APCLogError2(parseError);
-        }
-        
+        APCLogError2(parseError);
         return @"this study";
     }
 }
