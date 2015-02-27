@@ -198,7 +198,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
         APCStudyVideoCollectionViewCell *videoCell = (APCStudyVideoCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kAPCStudyVideoCollectionViewCellIdentifier forIndexPath:indexPath];
         videoCell.delegate = self;
         videoCell.titleLabel.text = studyDetails.caption;
-        
+        videoCell.videoMessageLabel.text = studyDetails.detailText;
         cell = videoCell;
         
     } else {
