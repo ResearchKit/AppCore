@@ -412,6 +412,9 @@ static APCDummyObject * _dummyObject;
     if (question.detail.length > 0) {
         retStep.text = question.detail;
     }
+    if (question.promptDetail.length > 0) {
+        retStep.text = question.promptDetail;
+    }
     return retStep;
 }
 
