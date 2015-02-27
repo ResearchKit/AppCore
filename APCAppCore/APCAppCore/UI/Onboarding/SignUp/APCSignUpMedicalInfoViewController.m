@@ -158,10 +158,10 @@
                     field.textAlignnment = NSTextAlignmentRight;
                     field.pickerData = [APCUser heights];
 
-					NSInteger defaultIndexOfMyHeightInFeet = 5;
-					NSInteger defaultIndexOfMyHeightInInches = 0;
-					NSInteger indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
-					NSInteger indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
+//					NSInteger defaultIndexOfMyHeightInFeet = 5;
+//					NSInteger defaultIndexOfMyHeightInInches = 0;
+//					NSInteger indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
+//					NSInteger indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
 
                     if (self.user.height) {
                         double heightInInches = round([APCUser heightInInches:self.user.height]);
@@ -172,18 +172,18 @@
 						NSArray *allPossibleHeightsInFeet = field.pickerData [0];
 						NSArray *allPossibleHeightsInInches = field.pickerData [1];
 
-						indexOfMyHeightInFeet = [allPossibleHeightsInFeet indexOfObject: feet];
-						indexOfMyHeightInInches = [allPossibleHeightsInInches indexOfObject: inches];
-
-						if (indexOfMyHeightInFeet == NSNotFound)
-						{
-							indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
-						}
-
-						if (indexOfMyHeightInInches == NSNotFound)
-						{
-							indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
-						}
+//						indexOfMyHeightInFeet = [allPossibleHeightsInFeet indexOfObject: feet];
+//						indexOfMyHeightInInches = [allPossibleHeightsInInches indexOfObject: inches];
+//
+//						if (indexOfMyHeightInFeet == NSNotFound)
+//						{
+//							indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
+//						}
+//
+//						if (indexOfMyHeightInInches == NSNotFound)
+//						{
+//							indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
+//						}
                     }
 
 					field.selectedRowIndices = @[ @(indexOfMyHeightInFeet), @(indexOfMyHeightInInches) ];
