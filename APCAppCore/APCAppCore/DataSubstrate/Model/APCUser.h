@@ -64,6 +64,8 @@
 
 @property (nonatomic, getter=isSecondaryInfoSaved) BOOL secondaryInfoSaved;
 
+- (void)initiateQueryAndNotificationForHKQuantityType:(NSString *)quantityTypeIdentifier;
+
 /*********************************************************************************/
 #pragma mark - Simulated Properties using HealthKit
 /*********************************************************************************/
@@ -71,9 +73,10 @@
 @property (nonatomic) HKBiologicalSex biologicalSex;
 @property (nonatomic) HKBloodType bloodType;
 
+
 @property (nonatomic, strong) HKQuantity * height;
 @property (nonatomic, strong) HKQuantity * weight;
-
+@property (nonatomic, strong, readonly) HKQuantity * inhalerUse;
 @property (nonatomic, strong) HKQuantity *systolicBloodPressure;
 
 /*********************************************************************************/

@@ -505,7 +505,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     static APCDebugWindow *customWindow = nil;
     if (!customWindow) customWindow = [[APCDebugWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    customWindow.enableDebuggerWindow = YES;
+    customWindow.enableDebuggerWindow = NO;
     
     return customWindow;
 }
@@ -557,7 +557,8 @@ static NSUInteger const kIndexOfProfileTab = 3;
         if (i == kIndexOfActivitesTab) {
             NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
             NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
-            NSNumber *activitiesBadgeValue = @(allScheduledTasks - completedScheduledTasks);
+            
+            NSNumber *activitiesBadgeValue = (completedScheduledTasks < allScheduledTasks) ? @(allScheduledTasks - completedScheduledTasks) : @(0);
             
             if ([activitiesBadgeValue integerValue] != 0) {
                 item.badgeValue = [activitiesBadgeValue stringValue];
@@ -621,7 +622,8 @@ static NSUInteger const kIndexOfProfileTab = 3;
         if (controllerIndex == kIndexOfActivitesTab) {
             NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
             NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
-            NSNumber *remainingTasks = @(allScheduledTasks - completedScheduledTasks);
+            
+            NSNumber *remainingTasks = (completedScheduledTasks < allScheduledTasks) ? @(allScheduledTasks - completedScheduledTasks) : @(0);
             
             if ([remainingTasks integerValue] != 0) {
                 item.badgeValue = [remainingTasks stringValue];

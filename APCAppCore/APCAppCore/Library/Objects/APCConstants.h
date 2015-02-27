@@ -25,8 +25,7 @@ typedef NS_ENUM(NSUInteger, APCDashboardMessageType) {
 
 typedef NS_ENUM(NSUInteger, APCDashboardGraphType) {
     kAPCDashboardGraphTypeLine,
-    kAPCDashboardGraphTypePie,
-    kAPCDashboardGraphTypeTimeline,
+    kAPCDashboardGraphTypeDiscrete,
 };
 
 FOUNDATION_EXPORT NSString *const APCUserSignedUpNotification;
@@ -47,6 +46,8 @@ FOUNDATION_EXPORT NSString *const APCTaskResultsProcessedNotification;
 FOUNDATION_EXPORT NSString *const APCUpdateTasksReminderNotification;
 
 FOUNDATION_EXPORT NSString *const APCConsentCompletedWithDisagreeNotification;
+
+FOUNDATION_EXPORT NSString *const APCMotionHistoryReporterDoneNotification;
 
 FOUNDATION_EXPORT NSString *const kStudyIdentifierKey;
 FOUNDATION_EXPORT NSString *const kAppPrefixKey;

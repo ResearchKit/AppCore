@@ -9,9 +9,10 @@
 #import "APCGraph.h"
 #import "APCTableViewItem.h"
 
-@interface APCLineGraphViewController : UIViewController
+@interface APCGraphViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet APCLineGraphView *graphView;
+@property (weak, nonatomic) IBOutlet APCLineGraphView *lineGraphView;
+@property (weak, nonatomic) IBOutlet APCDiscreteGraphView *discreteGraphView;
 
 @property (nonatomic, strong) APCTableViewDashboardGraphItem *graphItem;
 

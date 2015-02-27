@@ -23,7 +23,7 @@ NSData * cmsEncrypt(NSData *data, NSString *identityPath, NSError * __autoreleas
      * On OpenSSL 1.0.0 and later only:
      * for streaming set CMS_STREAM
      */
-    int flags = CMS_STREAM;
+    int flags = CMS_STREAM | CMS_BINARY;
     
     OpenSSL_add_all_algorithms();
     ERR_load_crypto_strings();

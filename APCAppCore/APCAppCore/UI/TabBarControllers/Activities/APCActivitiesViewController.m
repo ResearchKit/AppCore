@@ -148,10 +148,11 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     
     if (taskCompletionTimeString) {
         cell.subTitleLabel.text = taskCompletionTimeString;
+    }else if ([scheduledTask.generatedSchedule.scheduleType isEqualToString:@"once"]) {
+        cell.subTitleLabel.text = @"One Time";
     } else {
         cell.hidesSubTitle = YES;
     }
-    
     
     if ([task isKindOfClass:[APCGroupedScheduledTask class]])
     {
@@ -322,7 +323,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     NSUInteger allScheduledTasks = appDelegate.dataSubstrate.countOfAllScheduledTasksForToday;
     NSUInteger completedScheduledTasks = appDelegate.dataSubstrate.countOfCompletedScheduledTasksForToday;
     
-    NSNumber *remainingTasks = @(allScheduledTasks - completedScheduledTasks);
+    NSNumber *remainingTasks = (completedScheduledTasks < allScheduledTasks) ? @(allScheduledTasks - completedScheduledTasks) : @(0);
     
     UITabBarItem *activitiesTab = appDelegate.tabster.tabBar.selectedItem;
     
