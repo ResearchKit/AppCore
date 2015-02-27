@@ -20,10 +20,6 @@
 
 @property (nonatomic, strong) SBBImage* image;
 
-@property (nonatomic, strong) NSString* prompt;
-
-@property (nonatomic, strong) NSString* promptDetail;
-
 @property (nonatomic, strong) NSString* title;
 
 @end
