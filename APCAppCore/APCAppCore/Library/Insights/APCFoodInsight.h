@@ -8,6 +8,7 @@
 #import "APCAppCore.h"
 
 extern NSString * const kFoodInsightFoodGenericNameKey;
+extern NSString * const kFoodInsightFoodNameKey;
 extern NSString * const kFoodInsightValueKey;
 extern NSString * const kFoodInsightCaloriesValueKey;
 extern NSString * const kFoodInsightFrequencyKey;

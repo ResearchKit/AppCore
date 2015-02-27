@@ -12,6 +12,7 @@
 #import "APCUtilities.h"
 #import "ORKAnswerFormat+Helper.h"
 #import "APCCMS.h"
+#import "NSDate+Helper.h"
 
 NSString *const kQuestionTypeKey            = @"questionType";
 NSString *const kQuestionTypeNameKey        = @"questionTypeName";
@@ -236,7 +237,7 @@ static NSArray * kKnownJSONFilenamePrefixes = nil;
 - (void) addDataToArchive: (NSData*) data fileName: (NSString*) fileName contentType:(NSString*) contentType timeStamp: (NSDate*) date
 {
     [self writeDataToArchive:data fileName:fileName];
-    [self addFileInfoEntryWithFileName:fileName timeStamp:[NSString stringWithFormat:@"%@", date] contentType:contentType];
+    [self addFileInfoEntryWithFileName:fileName timeStamp: date.toStringInISO8601Format contentType:contentType];
 }
 
 - (void) addJSONFileToArchive: (ORKFileResult *) file usingFileName: (NSString *) fileName
@@ -251,7 +252,7 @@ static NSArray * kKnownJSONFilenamePrefixes = nil;
 {
     [self addFileToArchiveFromURL: file.fileURL
                     usingFileName: file.fileURL.lastPathComponent
-                      contentType: @"data"      // Not sure why this particular string.  At the moment, it's historical.
+                      contentType: @"data"      // Not sure why we're using this particular string.  At the moment, it's historical.
                         timeStamp: file.endDate];
 }
 
@@ -264,7 +265,7 @@ static NSArray * kKnownJSONFilenamePrefixes = nil;
               usingFileName: fileName];
 
     [self addFileInfoEntryWithFileName: fileName
-                             timeStamp: [NSString stringWithFormat:@"%@", date]
+                             timeStamp: date.toStringInISO8601Format
                            contentType: contentType];
 }
 
@@ -435,7 +436,7 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 			// Skip it.
 		}
 
-
+        
 		//
 		// Replace the key "identifier" with the key "item".
 		//
@@ -528,7 +529,22 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 			}
 
 			serializableDictionary [key] = outputArray;
-		}
+        }
+
+
+        //
+        // Make dates "ISO-8601 compliant."  Meaning, format
+        // them like this:  2015-02-25T16:42:11+00:00
+        //
+        // Per Sage.
+        // From http://en.wikipedia.org/wiki/ISO_8601.
+        //
+        else if ([value isKindOfClass: [NSDate class]])
+        {
+            NSDate *theDate = (NSDate *) value;
+            NSString *sageFriendlyDate = theDate.toStringInISO8601Format;
+            serializableDictionary [key] = sageFriendlyDate;
+        }
 
 
 		//
@@ -540,8 +556,6 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 		 rules for converting it.  Use our default serialization process:
 		 include it as-is if the serializer recognizes it, or convert it
 		 to a string if not.
-		 
-		 This includes NSDates, by the way.
 		 */
 		else
 		{

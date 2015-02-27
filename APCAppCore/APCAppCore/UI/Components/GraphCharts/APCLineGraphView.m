@@ -60,13 +60,14 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 @implementation APCLineGraphView
 
 @synthesize tintColor = _tintColor;
+@synthesize maximumValue = _maximumValue;
+@synthesize minimumValue = _minimumValue;
 
 #pragma mark - Init
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        [self sharedInit];
     }
     return self;
 }
@@ -74,13 +75,14 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder]) {
-        [self sharedInit];
     }
     return self;
 }
 
 - (void)sharedInit
 {
+    [super sharedInit];
+    
     _dataPoints = [NSMutableArray new];
     
     _xAxisPoints = [NSMutableArray new];
@@ -94,22 +96,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     _tintColor = [UIColor colorWithRed:244/255.f green:190/255.f blue:74/255.f alpha:1.f];
     
-    _axisColor = [UIColor colorWithRed:217/255.f green:217/255.f blue:217/255.f alpha:1.f];
-    _axisTitleColor = [UIColor colorWithRed:142/255.f green:142/255.f blue:147/255.f alpha:1.f];
-    _axisTitleFont = [UIFont fontWithName:@"HelveticaNeue" size:11.0f];
-    
-    _referenceLineColor = [UIColor colorWithRed:225/255.f green:225/255.f blue:229/255.f alpha:1.f];
-    
-    _scrubberLineColor = [UIColor grayColor];
-    _scrubberThumbColor = [UIColor colorWithWhite:1 alpha:1.0];
-    
     _shouldAnimate = YES;
-    _showsVerticalReferenceLines = NO;
     
     _hasDataPoint = NO;
-    
-    _emptyText = NSLocalizedString(@"No Data", @"No Data");
-
     
     [self setupViews];
     
@@ -131,7 +120,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     /* Scrubber Views */
     /* ----------------- */
     _scrubberLine = [UIView new];
-    _scrubberLine.backgroundColor = _scrubberLineColor;
+    _scrubberLine.backgroundColor = self.scrubberLineColor;
     _scrubberLine.alpha = 0;
     [self addSubview:_scrubberLine];
     
@@ -148,14 +137,14 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     _scrubberThumbView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [self scrubberThumbSize].width, [self scrubberThumbSize].height)];
     _scrubberThumbView.layer.borderWidth = 1.0;
-    _scrubberThumbView.backgroundColor = _scrubberThumbColor;
+    _scrubberThumbView.backgroundColor = self.scrubberThumbColor;
     _scrubberThumbView.layer.borderColor = [UIColor darkGrayColor].CGColor;
     _scrubberThumbView.alpha = 0;
     [self addSubview:_scrubberThumbView];
     
-    _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
-    _panGestureRecognizer.delaysTouchesBegan = YES;
-    [self addGestureRecognizer:_panGestureRecognizer];
+    self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+    self.panGestureRecognizer.delaysTouchesBegan = YES;
+    [self addGestureRecognizer:self.panGestureRecognizer];
 }
 
 - (void)setDefaults
@@ -268,7 +257,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
     
     [self animateLayersSequentially];
-
+    
 }
 
 - (void)setupEmptyView
@@ -349,7 +338,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
             if (value != NSNotFound){
                 self.hasDataPoint = YES;
             }
-
+            
         }
     }
     
@@ -442,45 +431,42 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         
     } else {
         
-        if (self.hasDataPoint) {
-            NSArray *yAxisLabelFactors;
-            
-            if (self.minimumValue == self.maximumValue) {
-                yAxisLabelFactors = @[@0.5f];
-            } else {
-                yAxisLabelFactors = @[@0.2f,@1.0f];
-            }
-            
-            for (int i =0; i<yAxisLabelFactors.count; i++) {
-                
-                CGFloat factor = [yAxisLabelFactors[i] floatValue];
-                CGFloat positionOnYAxis = CGRectGetHeight(self.plotsView.frame) * (1 - factor);
-                
-                UIBezierPath *rulerPath = [UIBezierPath bezierPath];
-                [rulerPath moveToPoint:CGPointMake(rulerXPosition, positionOnYAxis)];
-                [rulerPath addLineToPoint:CGPointMake(CGRectGetMaxX(self.yAxisView.bounds), positionOnYAxis)];
-                
-                CAShapeLayer *rulerLayer = [CAShapeLayer layer];
-                rulerLayer.strokeColor = self.axisColor.CGColor;
-                rulerLayer.path = rulerPath.CGPath;
-                [self.yAxisView.layer addSublayer:rulerLayer];
-                
-                CGFloat labelHeight = 20;
-                CGFloat labelYPosition = positionOnYAxis - labelHeight/2;
-                
-                CGFloat yValue = self.minimumValue + (self.maximumValue - self.minimumValue)*factor;
-                
-                UILabel *axisTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelYPosition, CGRectGetWidth(self.yAxisView.frame) - kAxisMarkingRulerLength, labelHeight)];
-                axisTitleLabel.text = [self formatNumber:@(yValue)];
-                axisTitleLabel.backgroundColor = [UIColor clearColor];
-                axisTitleLabel.textColor = self.axisTitleColor;
-                axisTitleLabel.textAlignment = NSTextAlignmentRight;
-                axisTitleLabel.font = self.isLandscapeMode ? [UIFont fontWithName:self.axisTitleFont.familyName size:16.0f] : self.axisTitleFont;
-                axisTitleLabel.minimumScaleFactor = 0.8;
-                [self.yAxisView addSubview:axisTitleLabel];
-            }
+        NSArray *yAxisLabelFactors;
+        
+        if (self.minimumValue == self.maximumValue) {
+            yAxisLabelFactors = @[@0.5f];
+        } else {
+            yAxisLabelFactors = @[@0.2f,@1.0f];
         }
         
+        for (int i =0; i<yAxisLabelFactors.count; i++) {
+            
+            CGFloat factor = [yAxisLabelFactors[i] floatValue];
+            CGFloat positionOnYAxis = CGRectGetHeight(self.plotsView.frame) * (1 - factor);
+            
+            UIBezierPath *rulerPath = [UIBezierPath bezierPath];
+            [rulerPath moveToPoint:CGPointMake(rulerXPosition, positionOnYAxis)];
+            [rulerPath addLineToPoint:CGPointMake(CGRectGetMaxX(self.yAxisView.bounds), positionOnYAxis)];
+            
+            CAShapeLayer *rulerLayer = [CAShapeLayer layer];
+            rulerLayer.strokeColor = self.axisColor.CGColor;
+            rulerLayer.path = rulerPath.CGPath;
+            [self.yAxisView.layer addSublayer:rulerLayer];
+            
+            CGFloat labelHeight = 20;
+            CGFloat labelYPosition = positionOnYAxis - labelHeight/2;
+            
+            CGFloat yValue = self.minimumValue + (self.maximumValue - self.minimumValue)*factor;
+            
+            UILabel *axisTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelYPosition, CGRectGetWidth(self.yAxisView.frame) - kAxisMarkingRulerLength, labelHeight)];
+            axisTitleLabel.text = [NSString stringWithFormat:@"%0.0f", yValue];
+            axisTitleLabel.backgroundColor = [UIColor clearColor];
+            axisTitleLabel.textColor = self.axisTitleColor;
+            axisTitleLabel.textAlignment = NSTextAlignmentRight;
+            axisTitleLabel.font = self.isLandscapeMode ? [UIFont fontWithName:self.axisTitleFont.familyName size:16.0f] : self.axisTitleFont;
+            axisTitleLabel.minimumScaleFactor = 0.8;
+            [self.yAxisView addSubview:axisTitleLabel];
+        }
     }
     
 }
@@ -942,6 +928,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
+    
     if ((self.dataPoints.count > 0) && [self numberOfValidValues] > 0) {
         CGPoint location = [gestureRecognizer locationInView:self.plotsView];
         
@@ -960,19 +947,20 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         
         //---------------
         
-        if ([self.delegate respondsToSelector:@selector(lineGraph:touchesMovedToXPosition:)]) {
-            [self.delegate lineGraph:self touchesMovedToXPosition:snappedXPosition];
+        if ([self.delegate respondsToSelector:@selector(graphView:touchesMovedToXPosition:)]) {
+            [self.delegate graphView:self touchesMovedToXPosition:snappedXPosition];
         }
         
         if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+            
             [self setScrubberViewsHidden:NO animated:YES];
-            if ([self.delegate respondsToSelector:@selector(lineGraphTouchesBegan:)]) {
-                [self.delegate lineGraphTouchesBegan:self];
+            if ([self.delegate respondsToSelector:@selector(graphViewTouchesBegan:)]) {
+                [self.delegate graphViewTouchesBegan:self];
             }
         } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded){
             [self setScrubberViewsHidden:YES animated:YES];
-            if ([self.delegate respondsToSelector:@selector(lineGraphTouchesEnded:)]) {
-                [self.delegate lineGraphTouchesEnded:self];
+            if ([self.delegate respondsToSelector:@selector(graphViewTouchesEnded:)]) {
+                [self.delegate graphViewTouchesEnded:self];
             }
         }
     }

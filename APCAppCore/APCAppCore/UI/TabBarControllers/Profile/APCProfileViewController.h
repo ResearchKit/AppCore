@@ -73,4 +73,8 @@
 - (void)navigationController:(UINavigationController *)navigationController didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtAdjustedIndexPath:(NSIndexPath *)indexPath;
+
+- (void)hasStartedEditing;
+
+- (void)hasFinishedEditing;
 @end

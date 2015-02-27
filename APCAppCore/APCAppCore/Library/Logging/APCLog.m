@@ -122,6 +122,37 @@ static NSString * const APCLogTagView  = @" APC_VIEW";
 #pragma mark - New Logging Methods.  No, really.
 // ---------------------------------------------------------
 
++ (NSString *) comprehensiveErrorMessageFromError: (NSError *) error
+{
+    /*
+     We're going to print the domain, code, and user-info dictionary.
+     This will also (by definition) print out the following "normal"
+     error stuff:
+
+     - error.description.  This is composed from the domain, code, localized description, and userInfo dictionary.
+     - error.localizedDescription:  This is from the userInfo dictionary.
+     - error.localizedFailureReason:  This is also from the userInfo dictionary.
+     */
+
+    NSString *comprehensiveString = [NSString stringWithFormat:
+                                     @"An error occurred. Available info:\n"
+                                     "----- ERROR INFO -----\n"
+                                     "Domain: %@\n"
+                                     "Code:   %@\n"
+                                     "User-info dictionary: %@\n"
+                                     "----------------------",
+
+                                     error.domain.length == 0 ? @"(none)" : error.domain,
+                                     @(error.code),
+                                     error.userInfo.count == 0 ? @"(empty)" : error.userInfo
+                                     ];
+
+    //
+    // Ship it!
+    //
+    return comprehensiveString;
+}
+
 + (void) methodInfo: (NSString *) apcLogMethodInfo
 	   errorMessage: (NSString *) formatString, ...
 {
@@ -142,16 +173,11 @@ static NSString * const APCLogTagView  = @" APC_VIEW";
 {
 	if (error != nil)
 	{
-		NSString *description = (error.localizedDescription ?:
-								 error.description ?:
-								 [NSString stringWithFormat: @"%@", error]);
+        NSString *description = [self comprehensiveErrorMessageFromError: error];
         
         if (self.isFlurryEnabled)
         {
-            [Flurry logEvent: kErrorEvent withParameters: @{
-                                                            @"error_description" : description,
-                                                            @"full_error_description": [NSString stringWithFormat: @"%@", error]
-                                                            }];
+            [Flurry logEvent: kErrorEvent withParameters: @{ @"error_description" : description }];
 
             /*
 			 Makes the app slow. Revisit with next version of Flurry SDK.
