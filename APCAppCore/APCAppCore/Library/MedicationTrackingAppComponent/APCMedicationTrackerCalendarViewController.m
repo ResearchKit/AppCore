@@ -102,18 +102,6 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     return  cell;
 }
 
-#pragma  mark  -  Table View Delegate Methods
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (YES == NO) {
-        APCMedicationTrackerDetailViewController  *controller = [[APCMedicationTrackerDetailViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
-        APCMedTrackerPrescription  *prescription = self.prescriptions[indexPath.row];
-        controller.lozenge.prescription = prescription;
-        [self.navigationController pushViewController:controller animated:YES];
-    }
-}
-
 #pragma  mark  -  Daily Calendar View Delegate Methods
 
 - (void)dailyCalendarViewDidSelect:(NSDate *)date
