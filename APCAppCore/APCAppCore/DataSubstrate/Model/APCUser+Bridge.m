@@ -8,6 +8,8 @@
 #import "APCUser+Bridge.h"
 #import "APCAppCore.h"
 
+#define DEFAULT_DATA_SHARING_SCOPE SBBConsentShareScopeAll
+
 @implementation APCUser (Bridge)
 
 - (BOOL) serverDisabled
@@ -139,7 +141,7 @@
     }
     else
     {
-        [SBBComponent(SBBConsentManager) dataSharing:SBBConsentShareScopeAll completion:^(id responseObject, NSError *error) {
+        [SBBComponent(SBBConsentManager) dataSharing:DEFAULT_DATA_SHARING_SCOPE completion:^(id responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (!error) {
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Resumed Consent"}));
@@ -222,7 +224,7 @@
         [SBBComponent(SBBConsentManager) consentSignature:name
                                                 birthdate:birthDate
                                            signatureImage:consentImage
-                                                dataSharing:SBBConsentShareScopeAll
+                                                dataSharing:DEFAULT_DATA_SHARING_SCOPE
                                                completion:^(id __unused responseObject, NSError * __unused error) {
                                                    dispatch_async(dispatch_get_main_queue(), ^{
                                                        if (!error) {
