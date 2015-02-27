@@ -110,7 +110,7 @@
 /* Tapping active task. */
 "TAPPING_TASK_TITLE" = "Tapping Activity";
 "TAPPING_INTRO_TEXT" = "This activity tests your ability to place a series of finger-taps on target.";
-"TAPPING_INTRO_TEXT_2_FORMAT" = "Rest your phone on a flat surface. Then use two fingers on the same hand to alternately tap the buttons that appear. Keep tapping for %@ and time your taps to be as consistent as possible.\n\nTap Get Started to begin the test.";
+"TAPPING_INTRO_TEXT_2_FORMAT" = "Rest your phone on a flat surface. Then use two fingers on the same hand to alternately tap the buttons that appear. Keep tapping as quickly as possible for %@ and time your taps to be as consistent as possible.\n\nTap Get Started to begin the test.";
 "TAP_BUTTON_TITLE" = "Tap";
 "TOTAL_TAPS_LABEL" = "Total Taps";
 "TAPPING_INSTRUCTION_FORMAT" = "Use two fingers to tap alternately as fast as you can for %@.";
