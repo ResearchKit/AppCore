@@ -33,12 +33,12 @@ typedef  enum  _SetupTableRowTypes
     SetupTableRowTypesDosage
 }  SetupTableRowTypes;
 
-static  NSString  *kViewControllerName       = @"Set Up Medications";
+static  NSString  *kViewControllerName        = @"Set Up Medications";
 
-static  NSString  *kSetupTableCellName       = @"APCSetupTableViewCell";
-static  NSString  *kSetupTableButtonCellName = @"APCSetupButtonTableViewCell";
+static  NSString  *kSetupTableCellName        = @"APCSetupTableViewCell";
+static  NSString  *kSetupTableButtonCellName  = @"APCSetupButtonTableViewCell";
 
-static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
+static  NSString  *kSummaryTableViewCell      = @"APCMedicationSummaryTableViewCell";
 
 static  NSInteger  kAPCMedicationNameRow      = 0;
 static  NSInteger  kAPCMedicationFrequencyRow = 1;
@@ -46,14 +46,14 @@ static  NSInteger  kAPCMedicationColorRow     = 2;
 static  NSInteger  kAPCMedicationDosageRow    = 3;
 static  NSInteger  kAPCMedicationButtonRow    = 4;
 
-static  NSString  *mainTableCategories[]          = { @"Name",        @"Frequency",     @"Label Color",  @"Dosage (optional)"        };
+static  NSString  *mainTableCategories[]        = { @"Name",        @"Frequency",     @"Label Color",  @"Dosage (optional)"        };
 static  NSInteger  kNumberOfMainTableCategories = (sizeof(mainTableCategories) / sizeof(NSString *));
 
-static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Frequency", @"Select Color", @"Select Dosage" };
+static  NSString  *addTableCategories[]         = { @"Select Name", @"Add Frequency", @"Select Color", @"Select Dosage" };
 
-static  NSString  *mainColorCategories[]          = { @"Red", @"Green", @"Blue", @"Yellow", @"Cyan", @"Magenta", @"Orange", @"Purple" };
+static  NSString  *mainColorCategories[]        = { @"Red", @"Green", @"Blue", @"Yellow", @"Cyan", @"Magenta", @"Orange", @"Purple" };
 
-static  NSString  *daysOfWeekNames[]              = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
+static  NSString  *daysOfWeekNames[]            = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
 static  NSString  *daysOfWeekNamesAbbreviations[] = { @"Mon",    @"Tue",     @"Wed",       @"Thu",      @"Fri",    @"Sat",      @"Sun"    };
 static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSString *));
 
@@ -61,24 +61,24 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
                                                 APCMedicationNameViewControllerDelegate, APCMedicationFrequencyViewControllerDelegate,
                                                 APCMedicationColorViewControllerDelegate, APCMedicationDosageViewControllerDelegate>
 
-@property  (nonatomic, weak)  IBOutlet  UITableView             *setupTabulator;
-@property  (nonatomic, weak)  IBOutlet  UITableView             *listTabulator;
+@property  (nonatomic, weak)  IBOutlet  UITableView                    *setupTabulator;
+@property  (nonatomic, weak)  IBOutlet  UITableView                    *listTabulator;
 
-@property  (nonatomic, weak)  IBOutlet  UIButton                *doneButton;
+@property  (nonatomic, weak)            UIButton                       *doneButton;
 
-@property  (nonatomic, assign)          BOOL                     medicationNameWasSet;
-@property  (nonatomic, assign)          BOOL                     medicationColorWasSet;
-@property  (nonatomic, assign)          BOOL                     medicationFrequencyWasSet;
-@property  (nonatomic, assign)          BOOL                     medicationDosageWasSet;
+@property  (nonatomic, assign)          BOOL                             medicationNameWasSet;
+@property  (nonatomic, assign)          BOOL                             medicationColorWasSet;
+@property  (nonatomic, assign)          BOOL                             medicationFrequencyWasSet;
+@property  (nonatomic, assign)          BOOL                             medicationDosageWasSet;
 
-@property  (nonatomic, strong)          NSIndexPath             *selectedIndexPath;
+@property  (nonatomic, strong)          NSIndexPath                     *selectedIndexPath;
 
-@property  (nonatomic, strong)          NSMutableArray          *currentMedicationRecords;
+@property  (nonatomic, strong)          NSMutableArray                  *currentMedicationRecords;
 
-@property (nonatomic, strong)           APCMedTrackerMedication  *theMedicationObject;
-@property (nonatomic, strong)           APCMedTrackerPossibleDosage  *possibleDosage;
+@property (nonatomic, strong)           APCMedTrackerMedication         *theMedicationObject;
+@property (nonatomic, strong)           APCMedTrackerPossibleDosage     *possibleDosage;
 @property (nonatomic, strong)           APCMedTrackerPrescriptionColor  *colorObject;
-@property (nonatomic, strong)           NSDictionary             *frequenciesAndDaysObject;
+@property (nonatomic, strong)           NSDictionary                    *frequenciesAndDaysObject;
 
 @end
 
@@ -195,6 +195,8 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
         } else {
             APCSetupButtonTableViewCell  *aCell = (APCSetupButtonTableViewCell *)[self.setupTabulator dequeueReusableCellWithIdentifier:kSetupTableButtonCellName];
             aCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            self.doneButton = aCell.doneButton;
+            self.doneButton.enabled = NO;
             [aCell.doneButton addTarget:self action:@selector(doneButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
             [aCell.doneButton setTitle:@"Done" forState:UIControlStateNormal];
             cell = aCell;
@@ -235,22 +237,22 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     }
 }
 
-#pragma  mark  -  Add New Medication Method
+//#pragma  mark  -  Add New Medication Method
 
-- (void)addNewMedication:(id)sender
-{
-    self.medicationNameWasSet      = NO;
-    self.medicationColorWasSet     = NO;
-    self.medicationFrequencyWasSet = NO;
-    self.medicationDosageWasSet    = NO;
-}
+//- (void):(id)sender
+//{
+//    self.medicationNameWasSet      = NO;
+//    self.medicationColorWasSet     = NO;
+//    self.medicationFrequencyWasSet = NO;
+//    self.medicationDosageWasSet    = NO;
+//}
 
-#pragma  mark  -  Finished Button Action Method
-
-- (IBAction)finishedButtonWasTapped:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:NULL];
-}
+//#pragma  mark  -  Finished Button Action Method
+//
+//- (IBAction)finishedButtonWasTapped:(id)sender
+//{
+//    [self dismissViewControllerAnimated:YES completion:NULL];
+//}
 
 #pragma  mark  -  Done Button Action Method
 
@@ -360,6 +362,22 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     self.theMedicationObject = nil;
     
     self.doneButton.enabled = NO;
+    
+    self.medicationNameWasSet      = NO;
+    self.medicationColorWasSet     = NO;
+    self.medicationFrequencyWasSet = NO;
+    self.medicationDosageWasSet    = NO;
+    
+    [APCMedTrackerPossibleDosage fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
+                                                    toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
+                                                                        NSTimeInterval operationDuration,
+                                                                        NSError *error)
+     {
+         NSSortDescriptor *amountSorter = [[NSSortDescriptor alloc] initWithKey:@"amount" ascending:YES];
+         NSArray  *descriptors = @[ amountSorter ];
+         NSArray  *sorted = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
+         self.possibleDosage = [sorted lastObject];
+    }];
 }
 
 - (void)didReceiveMemoryWarning

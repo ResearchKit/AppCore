@@ -11,10 +11,6 @@
 
 @property (weak, nonatomic) IBOutlet UIWebView *webview;
 
-@property (nonatomic, strong) NSString *fileName;
-
-@property (nonatomic, strong) NSString *fileType;
-
 - (IBAction)close:(id)sender;
 
 @end

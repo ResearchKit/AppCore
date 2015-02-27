@@ -17,10 +17,7 @@ FOUNDATION_EXPORT NSString *const kAPCStudyVideoCollectionViewCellIdentifier;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *videoMessageLabel;
 @property (weak, nonatomic) IBOutlet UIButton *videoButton;
-@property (weak, nonatomic) IBOutlet UILabel *consentMessageLabel;
-@property (weak, nonatomic) IBOutlet UIButton *consentButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *contentViewheightConstraint;
-@property (weak, nonatomic) IBOutlet APCButton *emailConsentButton;
 
 @property (weak, nonatomic) id <APCStudyVideoCollectionViewCellDelegate> delegate;
 

@@ -36,4 +36,7 @@
 #import <ResearchKit/ORKQuestionStepViewController_Private.h>
 #import <ResearchKit/ORKRecorder_Private.h>
 
+// Temporary private exports in this branch
+#import <ResearchKit/ORKCompletionStep.h>
+#import <ResearchKit/ORKCompletionStepViewController.h>
 

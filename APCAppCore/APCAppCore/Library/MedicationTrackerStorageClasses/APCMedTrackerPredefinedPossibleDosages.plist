@@ -2,12 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <array>
-	<dict>
-		<key>name</key>
-		<string>1/2 mg</string>
-		<key>amount</key>
-		<real>0.5</real>
-	</dict>
+    <dict>
+        <key>name</key>
+        <string>Other</string>
+        <key>amount</key>
+        <real>1000000.0</real>
+    </dict>
+    <dict>
+        <key>name</key>
+        <string>1/2 mg</string>
+        <key>amount</key>
+        <real>0.5</real>
+    </dict>
 	<dict>
 		<key>name</key>
 		<string>1/2 mg</string>

@@ -735,6 +735,29 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         section.sectionTitle = @"";
         [items addObject:section];
     }
+    
+    {
+        NSMutableArray *rowItems = [NSMutableArray new];
+        
+        {
+            APCTableViewItem *field = [APCTableViewItem new];
+            field.caption = NSLocalizedString(@"Privacy Policy", @"");
+            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.textAlignnment = NSTextAlignmentRight;
+            field.editable = NO;
+            field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
+            
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = field;
+            row.itemType = kAPCSettingsItemTypePrivacyPolicy;
+            [rowItems addObject:row];
+        }
+        
+        APCTableViewSection *section = [APCTableViewSection new];
+        section.rows = [NSArray arrayWithArray:rowItems];
+        section.sectionTitle = @"";
+        [items addObject:section];
+    }
 
     NSArray *newArray = nil;
     if ([self.delegate respondsToSelector:@selector(preparedContent:)])
@@ -916,37 +939,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 break;
             case kAPCUserInfoItemTypeReviewConsent:
             {
-                APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-                
-                NSArray*                sections  = [appDelegate consentSectionsAndHtmlContent:nil];
-                ORKConsentDocument*     consent   = [[ORKConsentDocument alloc] init];
-                ORKConsentSignature*    signature = [ORKConsentSignature signatureForPersonWithTitle:NSLocalizedString(@"Participant", nil)
-                                                                                    dateFormatString:nil
-                                                                                          identifier:@"participant"];
-                
-                consent.title                = NSLocalizedString(@"Consent", nil);
-                consent.signaturePageTitle   = NSLocalizedString(@"Consent", nil);
-                consent.signaturePageContent = NSLocalizedString(@"I agree to participate in this research Study.", nil);
-                consent.sections             = sections;
-                
-                [consent addSignature:signature];
-                
-                
-                ORKVisualConsentStep*   step         = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual" document:consent];
-                
-                ORKOrderedTask* task = [[ORKOrderedTask alloc] initWithIdentifier:@"consent" steps:@[step]];
-                
-                ORKTaskViewController*  consentVC = [[ORKTaskViewController alloc] initWithTask:task taskRunUUID:[NSUUID UUID]];
-                
-                
-                
-                ORKTaskViewController *delegateConsentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
-                
-                delegateConsentVC = consentVC;
-                delegateConsentVC.delegate = self;
-                
-                [self presentViewController:consentVC animated:YES completion:nil];
-                
+                [self reviewConsent];
             }
                 
                 break;
@@ -958,6 +951,16 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 APCSettingsViewController *remindersTableViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSettingsViewController"];
                 
                 [self.navigationController pushViewController:remindersTableViewController animated:YES];
+                
+            }
+                break;
+            case kAPCSettingsItemTypePrivacyPolicy:
+            {
+                [self showPrivacyPolicy];
+            }
+                break;
+            case kAPCSettingsItemTypeTermsAndConditions:
+            {
                 
             }
                 break;
@@ -1010,7 +1013,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             
             UILabel *headerLabel = [[UILabel alloc] initWithFrame:headerView.bounds];
             headerLabel.font = [UIFont appLightFontWithSize:16.0f];
-            headerLabel.textColor = [UIColor appSecondaryColor3];
+            headerLabel.textColor = [UIColor appSecondaryColor4];
             headerLabel.textAlignment = NSTextAlignmentCenter;
             headerLabel.text = sectionItem.sectionTitle;
             [headerView addSubview:headerLabel];
@@ -1083,6 +1086,33 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void) imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+#pragma mark - ORKTaskViewControllerDelegate methods
+
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
+{
+    if (result == ORKTaskViewControllerResultCompleted)
+    {
+        [self dismissViewControllerAnimated:taskViewController completion:nil];
+    }
+    else if (result == ORKTaskViewControllerResultDiscarded)
+    {
+        [self dismissViewControllerAnimated:taskViewController completion:nil];
+    }
+    else if (result == ORKTaskViewControllerResultSaved)
+    {
+        [self dismissViewControllerAnimated:taskViewController completion:nil];
+    }
+    else if (result == ORKTaskViewControllerResultFailed)
+    {
+        APCLogError2(error);
+    }
+    else
+    {
+        NSAssert(YES, @"Hit an option not supported by ORKTasViewControllerResult");
+    }
 }
 
 #pragma mark - Public methods
@@ -1173,6 +1203,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 case kAPCUserInfoItemTypeReviewConsent:
                     
                     break;
+                    
+                case kAPCSettingsItemTypePrivacyPolicy:
+                    
+                    break;
                 default:
                     NSAssert(itemType <= kAPCUserInfoItemTypeWakeUpTime, @"ASSERT_MESSAGE");
                     break;
@@ -1248,7 +1282,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }];
 }
 
-#pragma mark - IBActions
+#pragma mark - IBActions/Selectors
 
 - (IBAction) signOut: (id) __unused sender
 {
@@ -1386,6 +1420,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 row.item.selectionStyle = UITableViewCellSelectionStyleNone;
             }];
         }];
+        
     } else{
         
         sender.title = NSLocalizedString(@"Done", @"Done");
@@ -1403,36 +1438,130 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     self.editing = !self.editing;
     
+    if (self.isEditing) {
+        if ([self.delegate respondsToSelector:@selector(hasStartedEditing)])
+        {
+            [self.delegate hasStartedEditing];
+        }
+    } else {
+        if ([self.delegate respondsToSelector:@selector(hasFinishedEditing)])
+        {
+            [self.delegate hasFinishedEditing];
+        }
+    }
+
+    
     self.nameTextField.enabled = self.isEditing;
     
     [self.tableView reloadData];
 
-
-
 }
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
+#pragma mark - Privacy Policy
+
+- (void)showPrivacyPolicy
 {
-    if (result == ORKTaskViewControllerResultCompleted)
+    APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource: @"PrivacyPolicy" ofType:@"html" inDirectory:@"HTMLContent"];
+    NSURL *targetURL = [NSURL URLWithString:filePath];
+    NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
+    webViewController.title = NSLocalizedString(@"Privacy Policy", @"");
+    
+    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
+    [self.navigationController presentViewController:navController animated:YES completion:^{
+        [webViewController.webview loadRequest:request];
+    }];
+}
+
+
+
+#pragma mark - Review Consent helper methods
+
+- (void)reviewConsent
+{
+    __weak typeof(self) weakSelf = self;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Review Consent" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+    
     {
-        [self dismissViewControllerAnimated:taskViewController completion:nil];
+        UIAlertAction *pdfAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View PDF", @"View PDF") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            
+            APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
+            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
+            NSData *data = [NSData dataWithContentsOfFile:filePath];
+            [webViewController.webview setDataDetectorTypes:UIDataDetectorTypeAll];
+            webViewController.title = NSLocalizedString(@"Consent", @"Consent");
+            
+            UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
+            [weakSelf.navigationController presentViewController:navController animated:YES completion:^{
+                [webViewController.webview loadData:data MIMEType:@"application/pdf" textEncodingName:@"utf-8" baseURL:nil];
+            }];
+            
+        }];
+        [alertController addAction:pdfAction];
     }
-    else if (result == ORKTaskViewControllerResultDiscarded)
+    
+    
     {
-        [self dismissViewControllerAnimated:taskViewController completion:nil];
+        UIAlertAction *videoAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Watch Video", @"Watch Video") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            
+            NSURL *fileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Intro" ofType:@"mp4"]];
+            APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
+            [weakSelf.navigationController presentViewController:introVideoViewController animated:YES completion:nil];
+        }];
+        [alertController addAction:videoAction];
     }
-    else if (result == ORKTaskViewControllerResultSaved)
+    
+    
     {
-        [self dismissViewControllerAnimated:taskViewController completion:nil];
+        UIAlertAction *slidesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View Slides", @"View Slides") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [weakSelf showConsentSlides];
+        }];
+        [alertController addAction:slidesAction];
     }
-    else if (result == ORKTaskViewControllerResultFailed)
+    
     {
-        APCLogError2(error);
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+            
+        }];
+        [alertController addAction:cancelAction];
     }
-    else
-    {
-        NSAssert(YES, @"Hit an option not supported by ORKTasViewControllerResult");
-    }
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)showConsentSlides
+{
+    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+    
+    NSArray*                sections  = [appDelegate consentSectionsAndHtmlContent:nil];
+    ORKConsentDocument*     consent   = [[ORKConsentDocument alloc] init];
+    ORKConsentSignature*    signature = [ORKConsentSignature signatureForPersonWithTitle:NSLocalizedString(@"Participant", nil)
+                                                                        dateFormatString:nil
+                                                                              identifier:@"participant"];
+    
+    consent.title                = NSLocalizedString(@"Consent", nil);
+    consent.signaturePageTitle   = NSLocalizedString(@"Consent", nil);
+    consent.signaturePageContent = NSLocalizedString(@"I agree to participate in this research Study.", nil);
+    consent.sections             = sections;
+    
+    [consent addSignature:signature];
+    
+    
+    ORKVisualConsentStep*   step         = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual" document:consent];
+    
+    ORKOrderedTask* task = [[ORKOrderedTask alloc] initWithIdentifier:@"consent" steps:@[step]];
+    
+    ORKTaskViewController*  consentVC = [[ORKTaskViewController alloc] initWithTask:task taskRunUUID:[NSUUID UUID]];
+    
+    
+    
+    ORKTaskViewController *delegateConsentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    
+    delegateConsentVC = consentVC;
+    delegateConsentVC.delegate = self;
+    
+    [self presentViewController:consentVC animated:YES completion:nil];
 }
 
 @end

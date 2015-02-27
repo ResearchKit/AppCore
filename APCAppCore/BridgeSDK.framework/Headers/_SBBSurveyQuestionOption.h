@@ -18,13 +18,11 @@
 
 @interface _SBBSurveyQuestionOption : SBBBridgeObject
 
+@property (nonatomic, strong) NSString* detail;
+
 @property (nonatomic, strong) SBBImage* image;
 
 @property (nonatomic, strong) NSString* label;
-
-//YML EDIT - START
-@property (nonatomic, strong) NSString* detail;
-//YML EDIT - END
 
 @property (nonatomic, strong) NSString* value;
 

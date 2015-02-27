@@ -26,5 +26,6 @@
 @property  (nonatomic, weak)  id <APCMedicationTrackerMedicationsDisplayViewDelegate>  delegate;
 
 - (void)makePrescriptionDisplaysWithPrescriptions:(NSArray *)thePrescriptions andDate:(NSDate *)aDate;
+- (void)refreshWithPrescriptions:(NSArray *)thePrescriptions andDate:(NSDate *)aDate;
 
 @end

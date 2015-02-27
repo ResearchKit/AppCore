@@ -17,6 +17,16 @@ extern NSString * const NSDateDefaultDateFormat;
  */
 - (NSString *) toStringWithFormat:(NSString *)format;
 
+/**
+ Sage requires our dates to be in "ISO-8601" format,
+ like this:
+ 
+        2015-02-25T16:42:11+00:00
+ 
+ Got the rules from http://en.wikipedia.org/wiki/ISO_8601
+ */
+- (NSString *) toStringInISO8601Format;
+
 - (NSString *) friendlyDescription;
 - (NSDate *) dateByAddingDays:(NSInteger)inDays;
 

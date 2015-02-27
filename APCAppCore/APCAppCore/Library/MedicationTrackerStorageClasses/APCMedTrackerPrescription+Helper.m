@@ -215,7 +215,6 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
             NSInteger errorCode = 0;
             NSError *coreDataError = nil;
 
-            APCMedTrackerDailyDosageRecord *dosageRecord = nil;
             NSString *nameOfEntityWeAreUpdating = NSStringFromClass ([APCMedTrackerDailyDosageRecord class]);
             NSString *nameOfDateGetterMethod = NSStringFromSelector (@selector (dateThisRecordRepresents));
 
@@ -250,6 +249,8 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 
             else
             {
+                APCMedTrackerDailyDosageRecord *firstRecordBeingDeleted = doseRecordsFound.firstObject;
+                
                 for (APCMedTrackerDailyDosageRecord *record in doseRecordsFound)
                 {
                     // These'll get deleted when we do the "save," below.
@@ -260,13 +261,15 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
                 //
                 // Create the new record, if appropriate.
                 //
+                
+                APCMedTrackerDailyDosageRecord *dosageRecordWereCreating = nil;
 
                 if (numberOfDosesTaken > 0)
                 {
-                    dosageRecord = [APCMedTrackerDailyDosageRecord newObjectForContext: context];
-                    dosageRecord.prescriptionIAmBasedOn = blockSafePrescription;
-                    dosageRecord.dateThisRecordRepresents = endUsersChosenDate;
-                    dosageRecord.numberOfDosesTakenForThisDate = @(numberOfDosesTaken);
+                    dosageRecordWereCreating = [APCMedTrackerDailyDosageRecord newObjectForContext: context];
+                    dosageRecordWereCreating.prescriptionIAmBasedOn = blockSafePrescription;
+                    dosageRecordWereCreating.dateThisRecordRepresents = endUsersChosenDate;
+                    dosageRecordWereCreating.numberOfDosesTakenForThisDate = @(numberOfDosesTaken);
                 }
 
 
@@ -276,8 +279,26 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
                 // accomplishes that, too, because of how our save:
                 // method works.
                 //
+                
+                // We have to save SOMEthing, but it doesn't matter which object
+                // we save.
+                
+                BOOL successfullySaved = NO;
+                
+                if (dosageRecordWereCreating)
+                {
+                    successfullySaved = [dosageRecordWereCreating saveToPersistentStore: & coreDataError];
+                }
+                else if (firstRecordBeingDeleted)
+                {
+                    successfullySaved = [firstRecordBeingDeleted saveToPersistentStore: & coreDataError];
+                }
+                else
+                {
+                    // We have nothing to save and nothing to delete.  Theoretically,
+                    // we can't get here.  Ahem.  :-)  Let's see what happens.
+                }
 
-                BOOL successfullySaved = [dosageRecord saveToPersistentStore: & coreDataError];
 
                 if (successfullySaved)
                 {

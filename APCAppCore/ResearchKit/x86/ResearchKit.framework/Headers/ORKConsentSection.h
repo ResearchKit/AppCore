@@ -74,6 +74,11 @@ ORK_CLASS_AVAILABLE
 @property (nonatomic, copy) UIImage *customImage;
 
 /**
+ * @brief Override for learn more button title.
+ */
+@property (nonatomic, copy) NSString *customLearnMoreButtonTitle;
+
+/**
  * @brief File URL to custom animation video
  * If supplied, transition animation is loaded from here.
  */

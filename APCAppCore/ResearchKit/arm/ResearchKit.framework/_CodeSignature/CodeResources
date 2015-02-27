@@ -6,7 +6,7 @@
 	<dict>
 		<key>Assets.car</key>
 		<data>
-		RMzHTciXcTfv540pcNCPR30vgIc=
+		J+RgLVCY2ScZO+HoayQB8IfuTyQ=
 		</data>
 		<key>Headers/ORKActiveStep.h</key>
 		<data>
@@ -30,7 +30,11 @@
 		</data>
 		<key>Headers/ORKConsentSection.h</key>
 		<data>
-		Qn+ZPMIJUcAADqA1AiMja+a+rjw=
+		Wdf0Nd8IPAuCQ/LS3NJR0NSg/Cg=
+		</data>
+		<key>Headers/ORKConsentSharingStep.h</key>
+		<data>
+		QwnDGUCIqt39PHAaLWzkILk//3I=
 		</data>
 		<key>Headers/ORKConsentSignature.h</key>
 		<data>
@@ -90,11 +94,11 @@
 		</data>
 		<key>Headers/ResearchKit.h</key>
 		<data>
-		I107jx+WFbLNDGrC7bfQEu+k1Wg=
+		wmLdbSHLKwdeHuy9/wZQgAfmDIw=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		JzfK58WEBSjJ9nrjcar05wXYz+c=
+		wRirVifT5UAMU5rbQw3dVA2LhdQ=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -108,9 +112,21 @@
 		<data>
 		5R0fmt0/rHN4uAFYZWa05EyfHXw=
 		</data>
+		<key>PrivateHeaders/ORKCompletionStep.h</key>
+		<data>
+		VH60ieBbTz7D8DLcROcC8NMGnls=
+		</data>
+		<key>PrivateHeaders/ORKCompletionStepViewController.h</key>
+		<data>
+		4Tn/pfsIWNpNKpThIvak4AeURk4=
+		</data>
 		<key>PrivateHeaders/ORKConsentReviewStepViewController.h</key>
 		<data>
 		C60MnNxO9bamsPVUFH5s+oZy3Qs=
+		</data>
+		<key>PrivateHeaders/ORKConsentSharingStepViewController.h</key>
+		<data>
+		/DczRjA6spSPqbqDzm8d695x96A=
 		</data>
 		<key>PrivateHeaders/ORKCustomStepView.h</key>
 		<data>
@@ -182,7 +198,7 @@
 		</data>
 		<key>PrivateHeaders/ResearchKit_Private.h</key>
 		<data>
-		ycaW3JtpYFZ4scByjg9TaQFCDDY=
+		I/iSkB85ewBWCGe7K5jdK+jKMbM=
 		</data>
 		<key>consent_01@2x.m4v</key>
 		<data>
@@ -244,7 +260,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			hYIwI6cBl/hegTonjOwJdXPSABw=
+			I+s0+aC0oIeKmnLw/RsUq5C5R2Q=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -254,7 +270,7 @@
 	<dict>
 		<key>Assets.car</key>
 		<data>
-		RMzHTciXcTfv540pcNCPR30vgIc=
+		J+RgLVCY2ScZO+HoayQB8IfuTyQ=
 		</data>
 		<key>Headers/ORKActiveStep.h</key>
 		<data>
@@ -278,7 +294,11 @@
 		</data>
 		<key>Headers/ORKConsentSection.h</key>
 		<data>
-		Qn+ZPMIJUcAADqA1AiMja+a+rjw=
+		Wdf0Nd8IPAuCQ/LS3NJR0NSg/Cg=
+		</data>
+		<key>Headers/ORKConsentSharingStep.h</key>
+		<data>
+		QwnDGUCIqt39PHAaLWzkILk//3I=
 		</data>
 		<key>Headers/ORKConsentSignature.h</key>
 		<data>
@@ -338,7 +358,7 @@
 		</data>
 		<key>Headers/ResearchKit.h</key>
 		<data>
-		I107jx+WFbLNDGrC7bfQEu+k1Wg=
+		wmLdbSHLKwdeHuy9/wZQgAfmDIw=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -352,9 +372,21 @@
 		<data>
 		5R0fmt0/rHN4uAFYZWa05EyfHXw=
 		</data>
+		<key>PrivateHeaders/ORKCompletionStep.h</key>
+		<data>
+		VH60ieBbTz7D8DLcROcC8NMGnls=
+		</data>
+		<key>PrivateHeaders/ORKCompletionStepViewController.h</key>
+		<data>
+		4Tn/pfsIWNpNKpThIvak4AeURk4=
+		</data>
 		<key>PrivateHeaders/ORKConsentReviewStepViewController.h</key>
 		<data>
 		C60MnNxO9bamsPVUFH5s+oZy3Qs=
+		</data>
+		<key>PrivateHeaders/ORKConsentSharingStepViewController.h</key>
+		<data>
+		/DczRjA6spSPqbqDzm8d695x96A=
 		</data>
 		<key>PrivateHeaders/ORKCustomStepView.h</key>
 		<data>
@@ -426,7 +458,7 @@
 		</data>
 		<key>PrivateHeaders/ResearchKit_Private.h</key>
 		<data>
-		ycaW3JtpYFZ4scByjg9TaQFCDDY=
+		I/iSkB85ewBWCGe7K5jdK+jKMbM=
 		</data>
 		<key>consent_01@2x.m4v</key>
 		<data>
@@ -488,7 +520,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			hYIwI6cBl/hegTonjOwJdXPSABw=
+			I+s0+aC0oIeKmnLw/RsUq5C5R2Q=
 			</data>
 			<key>optional</key>
 			<true/>
