@@ -12,6 +12,7 @@
 
 //Synchronous Method Call
 + (void) createTasksFromJSON: (NSArray*) tasksArray inContext: (NSManagedObjectContext*) context;
++ (void) updateTasksFromJSON: (NSArray*) tasksArray inContext:(NSManagedObjectContext *)context;
 
 + (APCTask*) taskWithTaskID: (NSString*) taskID inContext: (NSManagedObjectContext*) context;
 

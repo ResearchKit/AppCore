@@ -10,6 +10,8 @@
 @interface APCDBStatus (AddOn)
 
 + (BOOL) isSeedLoadedWithContext: (NSManagedObjectContext*) context;
-+ (void) setSeedLoadedWithContext: (NSManagedObjectContext*) context;
++ (NSString*) dbStatusVersionwithContext : (NSManagedObjectContext*) context;
++ (void)setSeedLoaded: (NSString*) version WithContext:(NSManagedObjectContext *)context;
++ (void)updateSeedLoaded: (NSString*) version WithContext:(NSManagedObjectContext *)context;
 
 @end

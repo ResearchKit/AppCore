@@ -12,6 +12,7 @@
 
 //Synchronous Method Call
 + (void) createSchedulesFromJSON: (NSArray*) schedulesArray inContext: (NSManagedObjectContext*) context;
++ (void) updateSchedulesFromJSON: (NSArray *)schedulesArray inContext:(NSManagedObjectContext *)context;
 
 - (BOOL) isOneTimeSchedule;
 @property (nonatomic, readonly) APCScheduleExpression * scheduleExpression;
