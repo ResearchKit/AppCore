@@ -24,6 +24,8 @@ static NSString *const kDatabaseName = @"db.sqlite";
 static NSString *const kTasksAndSchedulesJSONFileName = @"APHTasksAndSchedules";
 static NSString *const kConsentSectionFileName = @"APHConsentSection";
 
+static NSString *const kDBStatusCurrentVersion = @"v1.0";
+
 /*********************************************************************************/
 #pragma mark - Tab bar Constants
 /*********************************************************************************/
@@ -209,7 +211,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 - (void)loadStaticTasksAndSchedulesIfNecessary
 {
     if (![APCDBStatus isSeedLoadedWithContext:self.dataSubstrate.persistentContext]) {
-        [APCDBStatus setSeedLoadedWithContext:self.dataSubstrate.persistentContext];
+        [APCDBStatus setSeedLoaded:self.initializationOptions[kDBStatusVersionKey] WithContext:self.dataSubstrate.persistentContext];
         NSString *resource = [[NSBundle mainBundle] pathForResource:self.initializationOptions[kTasksAndSchedulesJSONFileNameKey] ofType:@"json"];
         NSData *jsonData = [NSData dataWithContentsOfFile:resource];
         NSError * error;
@@ -226,6 +228,36 @@ static NSUInteger const kIndexOfProfileTab = 3;
         [self clearNSUserDefaults];
         [APCKeychainStore resetKeyChain];
     }
+    else
+    {
+        NSString * dbVersionStr = [APCDBStatus dbStatusVersionwithContext:self.dataSubstrate.persistentContext];
+        if (![dbVersionStr isEqualToString:self.initializationOptions[kDBStatusVersionKey]]) {
+            [self updateDBVersionStatus];
+        }
+    }
+}
+
+//This method is overridable from each app
+- (void) updateDBVersionStatus
+{
+    NSString *resource = [[NSBundle mainBundle] pathForResource:self.initializationOptions[kTasksAndSchedulesJSONFileNameKey] ofType:@"json"];
+    NSData *jsonData = [NSData dataWithContentsOfFile:resource];
+    NSError * error;
+    NSDictionary * dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+    APCLogError2 (error);
+    
+    //Deeper investigation needed for enabling tasksAndSchedulesWillBeLoaded
+    /*NSDictionary *manipulatedDictionary = [(APCAppDelegate*)[UIApplication sharedApplication].delegate tasksAndSchedulesWillBeLoaded];
+    
+    if (manipulatedDictionary != nil) {
+        dictionary = manipulatedDictionary;
+    }*/
+    
+    //Enabling refreshing of tasks JSON only. Schedules might be tricky as Apps could manipulate schedules after creation.
+    //More investigation needed
+    [APCTask updateTasksFromJSON:dictionary[@"tasks"] inContext:self.dataSubstrate.persistentContext];
+    //[APCSchedule updateSchedulesFromJSON:dictionary[@"schedules"] inContext:self.dataSubstrate.persistentContext];
+    [APCDBStatus updateSeedLoaded:self.initializationOptions[kDBStatusVersionKey] WithContext:self.dataSubstrate.persistentContext];
 }
 
 - (NSMutableArray*)consentSectionsAndHtmlContent:(NSString**)htmlContent
@@ -475,6 +507,8 @@ static NSUInteger const kIndexOfProfileTab = 3;
     return ([self.initializationOptions[kBridgeEnvironmentKey] integerValue] == SBBEnvironmentStaging) ? [self.initializationOptions[kAppPrefixKey] stringByAppendingString:@"-staging"] :self.initializationOptions[kAppPrefixKey];
 }
 
+
+
 #pragma mark - Other Abstract Implmentations
 - (void) setUpInitializationOptions {/*Abstract Implementation*/}
 - (void) setUpAppAppearance {/*Abstract Implementation*/}
@@ -496,7 +530,8 @@ static NSUInteger const kIndexOfProfileTab = 3;
     return [@{
               kDatabaseNameKey                     : kDatabaseName,
               kTasksAndSchedulesJSONFileNameKey    : kTasksAndSchedulesJSONFileName,
-              kConsentSectionFileNameKey           : kConsentSectionFileName
+              kConsentSectionFileNameKey           : kConsentSectionFileName,
+              kDBStatusVersionKey                  : kDBStatusCurrentVersion
               } mutableCopy];
 }
 

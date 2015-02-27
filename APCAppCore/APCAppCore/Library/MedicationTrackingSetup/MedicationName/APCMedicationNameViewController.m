@@ -89,10 +89,15 @@ static  NSString  *kViewControllerName = @"Medication Name";
             self.selectedIndex = indexPath;
         }
     }
-    if (self.delegate != nil) {
-        if ([self.delegate respondsToSelector:@selector(nameController:didSelectMedicineName:)] == YES) {
-            APCMedTrackerMedication  *medication = self.medicationList[indexPath.row];
-            [self.delegate performSelector:@selector(nameController:didSelectMedicineName:) withObject:self withObject:medication];
+    if (self.selectedIndex == nil) {
+        self.navigationItem.hidesBackButton = YES;
+    } else {
+        self.navigationItem.hidesBackButton = NO;
+        if (self.delegate != nil) {
+            if ([self.delegate respondsToSelector:@selector(nameController:didSelectMedicineName:)] == YES) {
+                APCMedTrackerMedication  *medication = self.medicationList[indexPath.row];
+                [self.delegate performSelector:@selector(nameController:didSelectMedicineName:) withObject:self withObject:medication];
+            }
         }
     }
 }
@@ -108,6 +113,8 @@ static  NSString  *kViewControllerName = @"Medication Name";
 {
     [super viewDidLoad];
     
+    self.navigationItem.hidesBackButton = YES;
+    
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     self.medicationList = [NSArray array];
@@ -117,7 +124,9 @@ static  NSString  *kViewControllerName = @"Medication Name";
                                                                     NSTimeInterval operationDuration,
                                                                     NSError *error)
      {
-         self.medicationList = arrayOfGeneratedObjects;
+         NSSortDescriptor *nameSorter = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+         NSArray  *descriptors = @[ nameSorter ];
+         self.medicationList = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
          [self.tabulator reloadData];
     }];
 }

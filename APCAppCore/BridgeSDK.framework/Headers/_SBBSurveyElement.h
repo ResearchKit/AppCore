@@ -20,4 +20,8 @@
 
 @property (nonatomic, strong) NSString* identifier;
 
+@property (nonatomic, strong) NSString* prompt;
+
+@property (nonatomic, strong) NSString* promptDetail;
+
 @end

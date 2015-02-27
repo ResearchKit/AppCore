@@ -1,4 +1,4 @@
-// 
+//
 //  APCEmailVerifyViewController.m 
 //  AppCore 
 // 
@@ -110,6 +110,9 @@
     if (self.user.isUserConsented) {
         [self.user sendUserConsentedToBridgeOnCompletion:^(NSError *error) {
             if (error) {
+
+                APCLogError2(error);
+
                 UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Consent Error", @"") message:error.localizedDescription];
                 [self presentViewController:alert animated:YES completion:nil];
             }

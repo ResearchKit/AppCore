@@ -248,13 +248,20 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void)switchTableViewCell:(APCSwitchTableViewCell *)cell switchValueChanged:(BOOL)on
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    if (indexPath.section == 0 && indexPath.row == 0) {
+    BOOL allReminders = indexPath.section == 0 && indexPath.row == 0;
+    if (allReminders) {
         APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
         appDelegate.tasksReminder.reminderOn = on;
     }
     
     self.items = [self prepareContent];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+    if (allReminders) {
+        [self.tableView reloadData];
+    } else {
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+
 }
 
 #pragma mark - Getter

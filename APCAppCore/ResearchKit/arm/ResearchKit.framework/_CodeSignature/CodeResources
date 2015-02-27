@@ -6,7 +6,7 @@
 	<dict>
 		<key>Assets.car</key>
 		<data>
-		r08jA6RGPaQUEt7upXFbOREq00s=
+		J+RgLVCY2ScZO+HoayQB8IfuTyQ=
 		</data>
 		<key>Headers/ORKActiveStep.h</key>
 		<data>
@@ -98,7 +98,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		HaLsdGopJz+6heNyyz6JIwSXnu0=
+		wRirVifT5UAMU5rbQw3dVA2LhdQ=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -111,6 +111,14 @@
 		<key>MovieTintShader.vsh</key>
 		<data>
 		5R0fmt0/rHN4uAFYZWa05EyfHXw=
+		</data>
+		<key>PrivateHeaders/ORKCompletionStep.h</key>
+		<data>
+		VH60ieBbTz7D8DLcROcC8NMGnls=
+		</data>
+		<key>PrivateHeaders/ORKCompletionStepViewController.h</key>
+		<data>
+		4Tn/pfsIWNpNKpThIvak4AeURk4=
 		</data>
 		<key>PrivateHeaders/ORKConsentReviewStepViewController.h</key>
 		<data>
@@ -190,7 +198,7 @@
 		</data>
 		<key>PrivateHeaders/ResearchKit_Private.h</key>
 		<data>
-		ycaW3JtpYFZ4scByjg9TaQFCDDY=
+		I/iSkB85ewBWCGe7K5jdK+jKMbM=
 		</data>
 		<key>consent_01@2x.m4v</key>
 		<data>
@@ -262,7 +270,7 @@
 	<dict>
 		<key>Assets.car</key>
 		<data>
-		r08jA6RGPaQUEt7upXFbOREq00s=
+		J+RgLVCY2ScZO+HoayQB8IfuTyQ=
 		</data>
 		<key>Headers/ORKActiveStep.h</key>
 		<data>
@@ -364,6 +372,14 @@
 		<data>
 		5R0fmt0/rHN4uAFYZWa05EyfHXw=
 		</data>
+		<key>PrivateHeaders/ORKCompletionStep.h</key>
+		<data>
+		VH60ieBbTz7D8DLcROcC8NMGnls=
+		</data>
+		<key>PrivateHeaders/ORKCompletionStepViewController.h</key>
+		<data>
+		4Tn/pfsIWNpNKpThIvak4AeURk4=
+		</data>
 		<key>PrivateHeaders/ORKConsentReviewStepViewController.h</key>
 		<data>
 		C60MnNxO9bamsPVUFH5s+oZy3Qs=
@@ -442,7 +458,7 @@
 		</data>
 		<key>PrivateHeaders/ResearchKit_Private.h</key>
 		<data>
-		ycaW3JtpYFZ4scByjg9TaQFCDDY=
+		I/iSkB85ewBWCGe7K5jdK+jKMbM=
 		</data>
 		<key>consent_01@2x.m4v</key>
 		<data>

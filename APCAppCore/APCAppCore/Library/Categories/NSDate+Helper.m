@@ -9,6 +9,20 @@
 
 NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
 
+
+/**
+ Sage requires our dates to be in "ISO-8601" format,
+ like this:
+
+ 2015-02-25T16:42:11+00:00
+
+ Got the rules from http://en.wikipedia.org/wiki/ISO_8601
+ Date-formatting rules from http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns
+ */
+static NSString * const kDateFormatISO8601 = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
+
+
+
 @implementation NSDate (Helper)
 
 - (NSString *) toStringWithFormat:(NSString *)format {
@@ -73,6 +87,14 @@ NSString * const NSDateDefaultDateFormat            = @"MMM dd, yyyy";
     }
     
     return retValue;
+}
+
+- (NSString *) toStringInISO8601Format
+{
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    [formatter setDateFormat: kDateFormatISO8601];
+    NSString *result = [formatter stringFromDate: self];
+    return result;
 }
 
 + (instancetype) startOfDay: (NSDate*) date
