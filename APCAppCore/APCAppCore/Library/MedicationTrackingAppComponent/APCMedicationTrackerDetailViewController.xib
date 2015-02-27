@@ -16,7 +16,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P1N-iS-h9g">
-                    <rect key="frame" x="0.0" y="66" width="600" height="44"/>
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                     <items>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="rQc-8U-UHn"/>
                         <barButtonItem title="Medication Details" id="8y4-fO-9vG"/>
@@ -25,7 +25,7 @@
                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </toolbar>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="PhK-o3-X8y">
-                    <rect key="frame" x="0.0" y="110" width="600" height="490"/>
+                    <rect key="frame" x="0.0" y="44" width="600" height="556"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="Kv2-vd-h9h"/>
@@ -37,13 +37,13 @@
             <constraints>
                 <constraint firstItem="PhK-o3-X8y" firstAttribute="top" secondItem="P1N-iS-h9g" secondAttribute="bottom" id="2WS-I5-Uuv"/>
                 <constraint firstAttribute="trailing" secondItem="P1N-iS-h9g" secondAttribute="trailing" id="Bsy-YQ-hz5"/>
-                <constraint firstItem="P1N-iS-h9g" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="66" id="DTB-Hy-zto"/>
+                <constraint firstItem="P1N-iS-h9g" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="DTB-Hy-zto"/>
                 <constraint firstItem="P1N-iS-h9g" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="aC5-2h-SMm"/>
                 <constraint firstAttribute="trailing" secondItem="PhK-o3-X8y" secondAttribute="trailing" id="gpT-KZ-7Qu"/>
                 <constraint firstAttribute="bottom" secondItem="PhK-o3-X8y" secondAttribute="bottom" id="jA9-X8-aVN"/>
                 <constraint firstItem="PhK-o3-X8y" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="tdv-7Y-mxD"/>
             </constraints>
-            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+            <nil key="simulatedTopBarMetrics"/>
         </view>
     </objects>
 </document>
