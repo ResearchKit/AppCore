@@ -201,6 +201,7 @@ static NSArray * kKnownJSONFilenamePrefixes = nil;
                 NSString *fileName = dataResult.identifier?:(stepResult.identifier?:[NSUUID UUID].UUIDString);
                 [self addDataToArchive:dataResult.data fileName:[fileName stringByAppendingString:@"_data"] contentType:@"data" timeStamp:dataResult.endDate];
             }
+
             else if ([result isKindOfClass:[ORKFileResult class]])
             {
                 ORKFileResult * fileResult = (ORKFileResult*) result;
@@ -215,15 +216,18 @@ static NSArray * kKnownJSONFilenamePrefixes = nil;
                     [self addJSONFileToArchive: fileResult usingFileName: fileNameIfCanInterpretAsJSON];
                 }
             }
+
             else if ([result isKindOfClass:[ORKTappingIntervalResult class]])
             {
                 ORKTappingIntervalResult  *tappingResult = (ORKTappingIntervalResult *)result;
                 [self addTappingResultsToArchive:tappingResult];
             }
+
             else if ([result isKindOfClass:[ORKQuestionResult class]])
             {
                 [self addResultToArchive:result];
             }
+
             else
             {
                 APCLogError(@"Result not processed for : %@", result.identifier);
