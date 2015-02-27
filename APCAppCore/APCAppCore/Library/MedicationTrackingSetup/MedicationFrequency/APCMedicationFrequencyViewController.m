@@ -44,6 +44,9 @@ static  CGFloat    kSectionHeaderLabelOffset        =   16.0;
 @property  (nonatomic, weak)  IBOutlet  UITableView          *tabulator;
 
 @property  (nonatomic, strong)          NSArray              *valueButtons;
+@property  (nonatomic, assign)          BOOL                  aValueButtonWasSelected;
+
+@property  (nonatomic, assign)          BOOL                  oneOrMoreDaysWereSelected;
 
 @property  (nonatomic, strong)          NSMutableDictionary  *daysAndDoses;
 
@@ -206,15 +209,38 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     
     if (selectedButton == nil) {
         [self setStateForFrequencyButton:tappedButton toState:UIControlStateSelected];
+        self.aValueButtonWasSelected = YES;
     } else if (selectedButton == tappedButton) {
         [self setStateForFrequencyButton:tappedButton toState:UIControlStateNormal];
+        self.aValueButtonWasSelected = NO;
     } else {
         [self setStateForFrequencyButton:selectedButton toState:UIControlStateNormal];
         [self setStateForFrequencyButton:tappedButton toState:UIControlStateSelected];
+        self.aValueButtonWasSelected = YES;
+    }
+    self.oneOrMoreDaysWereSelected = [self areAnyDaysSelected];
+    if ((self.oneOrMoreDaysWereSelected == YES) && (self.aValueButtonWasSelected == YES)) {
+        self.navigationItem.hidesBackButton = NO;
+    } else {
+        self.navigationItem.hidesBackButton = YES;
     }
 }
 
 #pragma  mark  -  Table View Delegate Methods
+
+- (BOOL)areAnyDaysSelected
+{
+    BOOL  answer = NO;
+    
+    for (NSInteger  day = 0;  day < kNumberOfRowsInDaysOfWeekSection;  day++) {
+        UITableViewCell  *cell = [self.tabulator cellForRowAtIndexPath:[NSIndexPath indexPathForRow:day inSection:kDaysOfWeekSection]];
+        if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
+            answer = YES;
+            break;
+        }
+    }
+    return  answer;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -227,6 +253,13 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     }
     NSString  *key = daysOfWeekNames[indexPath.row];
     [self.daysAndDoses setObject:[NSNumber numberWithInteger:0] forKey:key];
+    
+    self.oneOrMoreDaysWereSelected = [self areAnyDaysSelected];
+    if ((self.oneOrMoreDaysWereSelected == YES) && (self.aValueButtonWasSelected == YES)) {
+        self.navigationItem.hidesBackButton = NO;
+    } else {
+        self.navigationItem.hidesBackButton = YES;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -259,6 +292,8 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.navigationItem.hidesBackButton = YES;
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     

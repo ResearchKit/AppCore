@@ -73,6 +73,19 @@ static  NSString  *kViewControllerName = @"Medication Dosages";
 
 #pragma  mark  -  Table View Delegate Methods
 
+- (APCMedTrackerPossibleDosage *)findDosageWithZeroAmount
+{
+    APCMedTrackerPossibleDosage  *answer = nil;
+    
+    for (APCMedTrackerPossibleDosage  *dosage  in  self.dosageAmounts) {
+        if ([dosage.amount floatValue] == 0) {
+            answer = dosage;
+            break;
+        }
+    }
+    return  answer;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell  *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
@@ -90,10 +103,15 @@ static  NSString  *kViewControllerName = @"Medication Dosages";
             self.selectedIndex = indexPath;
         }
     }
-    if (self.delegate != nil) {
-        if ([self.delegate respondsToSelector:@selector(dosageController:didSelectDosageAmount:)] == YES) {
-            APCMedTrackerPossibleDosage  *dosage = self.dosageAmounts[indexPath.row];
-            [self.delegate performSelector:@selector(dosageController:didSelectDosageAmount:) withObject:self withObject:dosage];
+    APCMedTrackerPossibleDosage  *dosage = nil;
+    if (self.selectedIndex == nil) {
+        dosage = [self findDosageWithZeroAmount];
+    } else {
+        dosage = self.dosageAmounts[indexPath.row];
+        if (self.delegate != nil) {
+            if ([self.delegate respondsToSelector:@selector(dosageController:didSelectDosageAmount:)] == YES) {
+                [self.delegate performSelector:@selector(dosageController:didSelectDosageAmount:) withObject:self withObject:dosage];
+            }
         }
     }
 }
@@ -118,7 +136,9 @@ static  NSString  *kViewControllerName = @"Medication Dosages";
                                                                         NSTimeInterval operationDuration,
                                                                         NSError *error)
      {
-         self.dosageAmounts = arrayOfGeneratedObjects;
+         NSSortDescriptor *amountSorter = [[NSSortDescriptor alloc] initWithKey:@"amount" ascending:YES];
+         NSArray  *descriptors = @[ amountSorter ];
+         self.dosageAmounts = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
          [self.tabulator reloadData];
      }];
 }

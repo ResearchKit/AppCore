@@ -258,8 +258,6 @@
 		CFFDEDE81A95734000B25581 /* APCMedicationColorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFFDEDAB1A95734000B25581 /* APCMedicationColorViewController.xib */; };
 		CFFDEDE91A95734000B25581 /* APCLozengeButton.h in Headers */ = {isa = PBXBuildFile; fileRef = CFFDEDAD1A95734000B25581 /* APCLozengeButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFFDEDEA1A95734000B25581 /* APCLozengeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFDEDAE1A95734000B25581 /* APCLozengeButton.m */; };
-		CFFDEDED1A95734000B25581 /* APCMedicationModel.h in Headers */ = {isa = PBXBuildFile; fileRef = CFFDEDB11A95734000B25581 /* APCMedicationModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		CFFDEDEE1A95734000B25581 /* APCMedicationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFDEDB21A95734000B25581 /* APCMedicationModel.m */; };
 		CFFDEDEF1A95734000B25581 /* APCMedicationNameViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = CFFDEDB41A95734000B25581 /* APCMedicationNameViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFFDEDF01A95734000B25581 /* APCMedicationNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFDEDB51A95734000B25581 /* APCMedicationNameViewController.m */; };
 		CFFDEDF11A95734000B25581 /* APCMedicationNameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFFDEDB61A95734000B25581 /* APCMedicationNameViewController.xib */; };
@@ -891,8 +889,6 @@
 		CFFDEDAB1A95734000B25581 /* APCMedicationColorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCMedicationColorViewController.xib; sourceTree = "<group>"; };
 		CFFDEDAD1A95734000B25581 /* APCLozengeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCLozengeButton.h; sourceTree = "<group>"; };
 		CFFDEDAE1A95734000B25581 /* APCLozengeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLozengeButton.m; sourceTree = "<group>"; };
-		CFFDEDB11A95734000B25581 /* APCMedicationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMedicationModel.h; sourceTree = "<group>"; };
-		CFFDEDB21A95734000B25581 /* APCMedicationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMedicationModel.m; sourceTree = "<group>"; };
 		CFFDEDB41A95734000B25581 /* APCMedicationNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMedicationNameViewController.h; sourceTree = "<group>"; };
 		CFFDEDB51A95734000B25581 /* APCMedicationNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMedicationNameViewController.m; sourceTree = "<group>"; };
 		CFFDEDB61A95734000B25581 /* APCMedicationNameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCMedicationNameViewController.xib; sourceTree = "<group>"; };
@@ -1747,8 +1743,6 @@
 			children = (
 				CFFDEDAD1A95734000B25581 /* APCLozengeButton.h */,
 				CFFDEDAE1A95734000B25581 /* APCLozengeButton.m */,
-				CFFDEDB11A95734000B25581 /* APCMedicationModel.h */,
-				CFFDEDB21A95734000B25581 /* APCMedicationModel.m */,
 			);
 			name = MedicationModel;
 			path = MedicationTrackingSetup/MedicationModel;
@@ -2881,7 +2875,6 @@
 				369E27FE1A96B7A200D35DFA /* APCMedTrackerDailyDosageRecord+Helper.h in Headers */,
 				F5F129F01A2F78490015982C /* APCDBStatus.h in Headers */,
 				F5F129F41A2F78490015982C /* APCResult+AddOn.h in Headers */,
-				CFFDEDED1A95734000B25581 /* APCMedicationModel.h in Headers */,
 				F5B946481A7309A20034C522 /* ZZStandardDecryptInputStream.h in Headers */,
 				712AB44C1A9E692400556DA2 /* APCMotionHistoryData.h in Headers */,
 				F5F12A831A2F78490015982C /* APCResizeView.h in Headers */,
@@ -3227,7 +3220,6 @@
 				369E27F61A96B7A200D35DFA /* APCMedicationPossibleDosage.m in Sources */,
 				F5B946421A7309A20034C522 /* ZZOldArchiveEntry.mm in Sources */,
 				F5F129FB1A2F78490015982C /* APCSchedule+AddOn.m in Sources */,
-				CFFDEDEE1A95734000B25581 /* APCMedicationModel.m in Sources */,
 				F5B9463C1A7309A20034C522 /* ZZInflateInputStream.m in Sources */,
 				F5B946401A7309A20034C522 /* ZZNewArchiveEntryWriter.mm in Sources */,
 				369E28181A96B7A200D35DFA /* APCMedTrackerPrescriptionColor+Helper.m in Sources */,

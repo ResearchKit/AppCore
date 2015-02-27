@@ -7,7 +7,6 @@
 
 #import "APCMedicationTrackerDetailViewController.h"
 #import "APCSetupTableViewCell.h"
-#import "APCMedicationModel.h"
 #import "APCLozengeButton.h"
 
 #import "APCMedTrackerDailyDosageRecord.h"
@@ -23,15 +22,18 @@ static  NSString  *viewControllerTitle   = @"Medication Tracker";
 
 static  NSString  *kSetupTableCellName   = @"APCSetupTableViewCell";
 
-static  NSInteger  kSummarySectionNameRow      = 0;
-static  NSInteger  kSummarySectionFrequencyRow = 1;
-static  NSInteger  kSummarySectionColorRow     = 2;
-static  NSInteger  kSummarySectionDosageRow    = 3;
+static  NSInteger  kSummarySectionNameRow        = 0;
+static  NSInteger  kSummarySectionFrequencyRow   = 1;
+static  NSInteger  kSummarySectionColorRow       = 2;
+static  NSInteger  kSummarySectionDosageRow      = 3;
 
-static  NSInteger  numberOfSectionsInTableView = 2;
+static  NSInteger  numberOfSectionsInTableView   = 2;
 
-static  NSInteger  kDailyDosesTakenSection     = 0;
-static  NSInteger  kMedicineSummarySection     = 1;
+static  NSInteger  kDailyDosesTakenSection       = 0;
+static  NSInteger  kMedicineSummarySection       = 1;
+
+static  CGFloat    kHeightForDosesTakenHeader    = 36.0;
+static  CGFloat    kPointSizeForDosesTakenHeader = 15.0;
 
 static  NSString  *mainTableCategories[] = { @"Medication", @"Frequency", @"Label Color", @"Dosage" };
 
@@ -181,17 +183,57 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
      }];
 }
 
-#pragma  mark  -  Table View Delegate Methods
+#pragma  mark  -  Table View Delegate Methods    lineBreakMode
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView  *view = nil;
+    
+    if (section == kDailyDosesTakenSection) {
+        
+        CGFloat  width = CGRectGetWidth(self.view.frame);
+        CGFloat  offset = 17.0;
+        
+        CGRect  frame = CGRectMake(0.0, 0.0, width, kHeightForDosesTakenHeader);
+        UIView  *container = [[UIView alloc] initWithFrame:frame];
+        
+        frame = CGRectMake(offset, 0.0, width - 2.0 * offset, kHeightForDosesTakenHeader);
+        UILabel  *label = [[UILabel alloc] initWithFrame:frame];
+        label.numberOfLines = 0;
+        label.font = [UIFont appLightFontWithSize:kPointSizeForDosesTakenHeader];
+        label.textColor = [UIColor blackColor];
+        label.text = NSLocalizedString(@"Select which scheduled doses you have taken today", nil);
+        label.lineBreakMode = NSLineBreakByWordWrapping;
+        [container addSubview:label];
+        
+        frame = CGRectMake(0.0, (kHeightForDosesTakenHeader - 1.0), width, 1.0);
+        UIView  *line = [[UIView alloc] initWithFrame:frame];
+        line.backgroundColor = [UIColor colorWithWhite:0.90 alpha:1.0];
+        [container addSubview:line];
+        
+        view = container;
+    }
+    return  view;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    CGFloat  height = 18.0;
+    
+    if (section == kDailyDosesTakenSection) {
+        height = kHeightForDosesTakenHeader;
+    }
+    
+    return  height;
+}
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+    NSString  *title = @"";
         //
         //    provide a non-empty blank string to get a section header at the bottom of the section
         //
-    NSString  *title = @"";
-    if (section == kDailyDosesTakenSection) {
-        title = @"Select which scheduled doses you have taken today";
-    } else {
+    if (section == kMedicineSummarySection) {
         title = @"          ";
     }
     return  title;
