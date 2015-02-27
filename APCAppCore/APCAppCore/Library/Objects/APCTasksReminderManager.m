@@ -112,9 +112,13 @@ NSString * const kTaskReminderMessage = @"Please complete your asthma study acti
     NSError *parseError;
     NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
     
-    if (!parseError) {
+    if (jsonDictionary) {
         return jsonDictionary[@"disease_name"];
     } else {
+        if (parseError) {
+            APCLogError2(parseError);
+        }
+        
         return @"this study";
     }
 }
