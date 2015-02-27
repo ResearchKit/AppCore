@@ -13,7 +13,7 @@ NSString * const kTaskReminderUserInfoKey = @"TaskReminderUserInfoKey";
 static NSInteger kSecondsPerMinute = 60;
 static NSInteger kMinutesPerHour = 60;
 
-NSString * const kTaskReminderMessage = @"Complete your activities for today!";
+NSString * const kTaskReminderMessage = @"Please complete your asthma study activities today. Thank you for participating in %@!";
 
 @interface APCTasksReminderManager ()
 
@@ -85,7 +85,7 @@ NSString * const kTaskReminderMessage = @"Complete your activities for today!";
     
     localNotification.fireDate = [self calculateFireDate];
     localNotification.timeZone = [NSTimeZone localTimeZone];
-    localNotification.alertBody = kTaskReminderMessage;
+    localNotification.alertBody = [NSString stringWithFormat:kTaskReminderMessage, [self studyName]];
     localNotification.repeatInterval = NSCalendarUnitDay;
     localNotification.soundName = UILocalNotificationDefaultSoundName;
     
@@ -102,6 +102,22 @@ NSString * const kTaskReminderMessage = @"Complete your activities for today!";
     APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
     NSDate *dateToSet = (delegate.dataSubstrate.countOfCompletedScheduledTasksForToday == delegate.dataSubstrate.countOfAllScheduledTasksForToday) ? [[NSDate tomorrowAtMidnight] dateByAddingTimeInterval:reminderOffset] : [[NSDate todayAtMidnight] dateByAddingTimeInterval:reminderOffset];
     return dateToSet;
+}
+
+
+- (NSString *)studyName {
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"StudyOverview" ofType:@"json"];
+    NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+    
+    NSError *parseError;
+    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
+    
+    if (jsonDictionary) {
+        return jsonDictionary[@"disease_name"];
+    } else {
+        APCLogError2(parseError);
+        return @"this study";
+    }
 }
 
 /*********************************************************************************/

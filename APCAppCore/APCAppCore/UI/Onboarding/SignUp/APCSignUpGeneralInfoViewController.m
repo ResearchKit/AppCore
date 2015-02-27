@@ -11,6 +11,7 @@
 
 static NSString *kInternetNotAvailableErrorMessage1 = @"Internet Not Connected";
 static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reachable";
+static NSString * const kInternalMaxParticipantsMessage = @"has reached the limit of allowed participants.";
 
 @interface APCSignUpGeneralInfoViewController () <APCTermsAndConditionsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, APCFormTextFieldDelegate>
 
@@ -655,7 +656,7 @@ static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reacha
                 
                 APCLogError2 (error);
             
-                if ([error.message isEqualToString:kInternetNotAvailableErrorMessage1] || [error.message isEqualToString:kInternetNotAvailableErrorMessage2]) {
+                if ([error.message isEqualToString:kInternetNotAvailableErrorMessage1] || [error.message isEqualToString:kInternetNotAvailableErrorMessage2] || [error.message rangeOfString:kInternalMaxParticipantsMessage].location != NSNotFound) {
                     [spinnerController dismissViewControllerAnimated:NO completion:^{
                     
                         UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Up", @"")
@@ -668,7 +669,7 @@ static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reacha
                         [alertView addAction:defaultAction];
                         [self presentViewController:alertView animated:YES completion:nil];
                     }];
-                }else{
+                } else {
                     [spinnerController dismissViewControllerAnimated:NO completion:^{
                         
                         UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Up", @"")

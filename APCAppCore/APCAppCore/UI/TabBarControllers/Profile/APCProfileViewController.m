@@ -745,6 +745,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
+            field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
@@ -1202,6 +1203,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 case kAPCUserInfoItemTypeReviewConsent:
                     
                     break;
+                    
+                case kAPCSettingsItemTypePrivacyPolicy:
+                    
+                    break;
                 default:
                     NSAssert(itemType <= kAPCUserInfoItemTypeWakeUpTime, @"ASSERT_MESSAGE");
                     break;
@@ -1415,6 +1420,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 row.item.selectionStyle = UITableViewCellSelectionStyleNone;
             }];
         }];
+        
     } else{
         
         sender.title = NSLocalizedString(@"Done", @"Done");
@@ -1431,6 +1437,19 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }
     
     self.editing = !self.editing;
+    
+    if (self.isEditing) {
+        if ([self.delegate respondsToSelector:@selector(hasStartedEditing)])
+        {
+            [self.delegate hasStartedEditing];
+        }
+    } else {
+        if ([self.delegate respondsToSelector:@selector(hasFinishedEditing)])
+        {
+            [self.delegate hasFinishedEditing];
+        }
+    }
+
     
     self.nameTextField.enabled = self.isEditing;
     
