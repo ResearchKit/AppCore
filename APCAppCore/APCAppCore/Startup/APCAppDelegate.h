@@ -37,6 +37,7 @@
 @property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
 
 - (void)loadStaticTasksAndSchedulesIfNecessary;  //For resetting app
+- (void) updateDBVersionStatus;
 - (void) clearNSUserDefaults; //For resetting app
 
 - (NSMutableArray*)consentSectionsAndHtmlContent:(NSString**)htmlContent;  //  Retrieve and creates Consent Sections from JSON file.

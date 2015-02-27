@@ -43,6 +43,35 @@ static NSString * const kTaskFileNameKey = @"taskFileName";
   }];
 }
 
++ (void) updateTasksFromJSON: (NSArray*) tasksArray inContext:(NSManagedObjectContext *)context
+{
+    [context performBlockAndWait:^{
+        for (NSDictionary * taskDict in tasksArray) {
+            APCTask * task = [APCTask taskWithTaskID:taskDict[kTaskIDKey] inContext:context];
+            if (task == nil) {
+                task = [APCTask newObjectForContext:context];
+                task.taskID = taskDict[kTaskIDKey];
+            }
+            task.taskTitle = taskDict[kTaskTitleKey];
+            task.taskClassName = taskDict[kTaskClassNameKey];
+            task.taskCompletionTimeString = taskDict[kTaskCompletionTimeStringKey];
+            
+            if (taskDict[kTaskFileNameKey]) {
+                NSString *resource = [[NSBundle mainBundle] pathForResource:taskDict[kTaskFileNameKey] ofType:@"json"];
+                NSData *jsonData = [NSData dataWithContentsOfFile:resource];
+                NSError * error;
+                NSDictionary * dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+                id manager = SBBComponent(SBBSurveyManager);
+                SBBSurvey * survey = [[manager objectManager] objectFromBridgeJSON:dictionary];
+                task.rkTask = [APCTask rkTaskFromSBBSurvey:survey];
+            }
+            NSError * error;
+            [task saveToPersistentStore:&error];
+            APCLogError2 (error);
+        }
+    }];
+}
+
 + (APCTask*) taskWithTaskID: (NSString*) taskID inContext:(NSManagedObjectContext *)context
 {
     __block APCTask * retTask;
