@@ -103,5 +103,9 @@
     return color;
 }
 
++ (UIColor *)colorForTaskId:(NSString *)taskId
+{
+    return [APCAppearanceInfo valueForAppearanceKey:taskId];
+}
 
 @end

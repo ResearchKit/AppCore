@@ -15,4 +15,6 @@
 @property (nonatomic, strong) NSNumber *badInsightBar;
 @property (nonatomic, strong) UIImage *insightImage;
 
+@property (nonatomic, strong) UIColor *tintColor;
+
 @end

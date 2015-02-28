@@ -152,6 +152,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCMedicationTrackerDayTitleLabel.h>
 #import <APCAppCore/APCMedicationTrackerDetailViewController.h>
 #import <APCAppCore/APCMedicationTrackerMedicationsDisplayView.h>
+#import <APCAppCore/APCAddPrescriptionTableViewCell.h>
 #import <APCAppCore/NSDate+MedicationTracker.h>
 #import <APCAppCore/NSDictionary+MedicationTracker.h>
 #import <APCAppCore/UIColor+MedicationTracker.h>

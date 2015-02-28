@@ -66,7 +66,7 @@
     [self.bottomMessageLabel setTextColor:[UIColor appSecondaryColor3]];
     
     [self.changeEmailButton.titleLabel setFont:[UIFont appRegularFontWithSize:12.0f]];
-    [self.changeEmailButton setTitleColor:[UIColor appSecondaryColor2] forState:UIControlStateNormal];
+    [self.changeEmailButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
     
     [self.resendEmailButton.titleLabel setFont:[UIFont appRegularFontWithSize:16.0f]];
     [self.resendEmailButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
