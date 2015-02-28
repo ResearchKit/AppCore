@@ -12,6 +12,7 @@
 
 
 static NSDateFormatter *dateFormatter = nil;
+static NSString * const kErrorIndentationString = @"    ";
 
 
 /**
@@ -147,9 +148,21 @@ static NSString * const APCLogTagView  = @" APC_VIEW";
                                      error.userInfo.count == 0 ? @"(empty)" : error.userInfo
                                      ];
 
-    //
-    // Ship it!
-    //
+    /*
+     When we print underlying dictionaries, they come out
+     with escaped newlines.  Make 'em real newlines, so we
+     can read them on the console.
+     */
+    comprehensiveString = [comprehensiveString stringByReplacingOccurrencesOfString: @"\\n" withString: @"\n"];
+
+    /*
+     Ditto for escaped quotation marks.  (Is this safe?)
+     */
+    comprehensiveString = [comprehensiveString stringByReplacingOccurrencesOfString: @"\\\"" withString: @"\""];
+
+    /*
+     Ship it.
+     */
     return comprehensiveString;
 }
 

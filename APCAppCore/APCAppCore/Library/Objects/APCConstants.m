@@ -97,6 +97,28 @@ NSString *const kErrorEvent             = @"ErrorEvent";
 NSString *const kPassiveCollectorEvent  = @"PassiveCollectorEvent";
 
 
+/*********************************************************************************/
+#pragma mark - Errors
+/*********************************************************************************/
+NSString * const kAPCErrorDomain_CoreData                               = @"kAPCErrorDomain_CoreData";
+NSInteger  const kAPCErrorDomain_CoreData_Code_Undetermined             = -1;
+NSInteger  const kAPCErrorDomain_CoreData_Code_NoError                  = 0;
+NSInteger  const kAPCErrorDomain_CoreData_Code_CantCreateDatabase       = 1;
+NSInteger  const kAPCErrorDomain_CoreData_Code_CantOpenExistingDatabase = 2;
+
 @implementation APCConstants
 
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+

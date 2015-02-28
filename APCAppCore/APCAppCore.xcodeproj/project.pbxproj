@@ -727,6 +727,8 @@
 		3627D3471A9A7517006B02E8 /* APCMedTrackerMedication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCMedTrackerMedication.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		3627D34A1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCMedTrackerPossibleDosage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		3627D34B1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCMedTrackerPossibleDosage.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		36469C311AA1433700C10CA7 /* APCModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "APCModel 2.xcdatamodel"; sourceTree = "<group>"; };
+		36469C321AA1650F00C10CA7 /* APCModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "APCModel 3.xcdatamodel"; sourceTree = "<group>"; };
 		364D34881A7B1C8F0060B3F5 /* APCDataVerificationClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataVerificationClient.h; sourceTree = "<group>"; };
 		364D34891A7B1C8F0060B3F5 /* APCDataVerificationClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataVerificationClient.m; sourceTree = "<group>"; };
 		3654318B1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMedTrackerInflatableItem.h; sourceTree = "<group>"; };
@@ -3842,9 +3844,11 @@
 		F5F128981A2F78490015982C /* APCModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				36469C311AA1433700C10CA7 /* APCModel 2.xcdatamodel */,
+				36469C321AA1650F00C10CA7 /* APCModel 3.xcdatamodel */,
 				F5F128991A2F78490015982C /* APCModel.xcdatamodel */,
 			);
-			currentVersion = F5F128991A2F78490015982C /* APCModel.xcdatamodel */;
+			currentVersion = 36469C321AA1650F00C10CA7 /* APCModel 3.xcdatamodel */;
 			path = APCModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
