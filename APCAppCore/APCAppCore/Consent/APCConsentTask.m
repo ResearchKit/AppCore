@@ -10,30 +10,36 @@
 #import "APCLog.h"
 #import "APCConsentBooleanQuestion.h"
 #import "APCConsentInstructionQuestion.h"
+#import "APCConsentTextChoiceQuestion.h"
 
 
-static NSString*    kDocumentHtmlTag       = @"htmlDocument";
-static NSString*    kIdentifierTag         = @"identifier";
-static NSString*    kPromptTag             = @"prompt";
-static NSString*    kTextTag               = @"text";
-static NSString*    kSuccessMessageTag     = @"success";
-static NSString*    kFailedMessageTag      = @"failed";
-static NSString*    kDocumentPropertiesTag = @"documentProperties";
-static NSString*    kQuizTag               = @"quiz";
-static NSString*    kSectionTag            = @"sections";
-static NSString*    kQuestionsTag          = @"questions";
-static NSString*    kQuestionTypeTag       = @"type";
-static NSString*    kBooleanTypeTag        = @"boolean";
-static NSString*    kInstructionTypeTag    = @"instruction";
-static NSString*    kExpectedAnswerTag     = @"expectedAnswer";
-static NSString*    kTrueTag               = @"true";
-static NSString*    kFalseTag              = @"false";
+static NSString*    kDocumentHtmlTag                    = @"htmlDocument";
+static NSString*    kInvestigatorShortDescriptionTag    = @"investigatorShortDescription";
+static NSString*    kInvestigatorLongDescriptionTag     = @"investigatorLongDescription";
+static NSString*    kHtmlContentTag                     = @"htmlContent";
+static NSString*    kIdentifierTag                      = @"identifier";
+static NSString*    kPromptTag                          = @"prompt";
+static NSString*    kTextTag                            = @"text";
+static NSString*    kSuccessMessageTag                  = @"success";
+static NSString*    kFailedMessageTag                   = @"failed";
+static NSString*    kDocumentPropertiesTag              = @"documentProperties";
+static NSString*    kQuizTag                            = @"quiz";
+static NSString*    kSectionTag                         = @"sections";
+static NSString*    kQuestionsTag                       = @"questions";
+static NSString*    kQuestionTypeTag                    = @"type";
+static NSString*    kBooleanTypeTag                     = @"boolean";
+static NSString*    kSingleChoiceTextTag                = @"singleChoiceText";
+static NSString*    kInstructionTypeTag                 = @"instruction";
+static NSString*    kExpectedAnswerTag                  = @"expectedAnswer";
+static NSString*    kTrueTag                            = @"true";
+static NSString*    kFalseTag                           = @"false";
+static NSString*    kTextChoicesTag                     = @"textChoices";
+static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
 
 
 
 @interface APCConsentTask ()
 
-//@property (nonatomic, copy)   NSString*         identifier;
 @property (nonatomic, strong) NSMutableArray*   consentSteps;
 @property (nonatomic, strong) APCStack*         path;
 @property (nonatomic, assign) BOOL              passedQuiz;
@@ -44,9 +50,15 @@ static NSString*    kFalseTag              = @"false";
 @property (nonatomic, copy)   NSArray*          questions;
 @property (nonatomic, copy)   NSString*         successMessage;
 @property (nonatomic, copy)   NSString*         failureMessage;
+@property (nonatomic, assign) NSUInteger        maxAllowedFailure;
 
 //  Consent
 @property (nonatomic, strong) NSArray*          documentSections;
+
+//  Sharing
+@property (nonatomic, copy)   NSString*         investigatorShortDescription;
+@property (nonatomic, copy)   NSString*         investigatorLongDescription;
+@property (nonatomic, copy)   NSString*         sharingHtmlLearnMoreContent;
 
 @end
 
@@ -74,14 +86,22 @@ static NSString*    kFalseTag              = @"false";
     [document addSignature:signature];
     
     
-    ORKVisualConsentStep*   visualStep = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual" document:document];
-    ORKConsentReviewStep*   reviewStep = [[ORKConsentReviewStep alloc] initWithIdentifier:@"reviewStep" signature:signature inDocument:document];
+    ORKVisualConsentStep*   visualStep  = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual"
+                                                                                  document:document];
+    ORKConsentSharingStep*  sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:@"Sage"
+                                                               investigatorShortDescription:@"Sage"
+                                                                investigatorLongDescription:@"Sage"
+                                                              localizedLearnMoreHTMLContent:@"<html></html>"];
+    ORKConsentReviewStep*   reviewStep  = [[ORKConsentReviewStep alloc] initWithIdentifier:@"reviewStep"
+                                                                                 signature:signature
+                                                                                inDocument:document];
     
     reviewStep.reasonForConsent = @"By agreeing you confirm that you read the information and that you "
                                   @"wish to take part in this research study.";
 
     NSMutableArray* consentSteps = [[NSMutableArray alloc] init];
     [consentSteps addObject:visualStep];
+    [consentSteps addObject:sharingStep];
     
     for (APCConsentQuestion* q in self.questions)
     {
@@ -167,16 +187,21 @@ static NSString*    kFalseTag              = @"false";
     };
     BOOL(^proctor)() = ^()
     {
-        BOOL    didPass = YES;
+        NSUInteger  failureCount = 0;
         
         for (ORKStepResult* stepResult in result.results)
         {
             APCConsentQuestion*     q = findQuestion(stepResult.identifier);
             if (q != nil)
             {
-                didPass &= [q evaluate:stepResult];
+                if ([q evaluate:stepResult] == NO)
+                {
+                    ++failureCount;
+                }
             }
         }
+        
+        BOOL    didPass = failureCount < self.maxAllowedFailure;
         
         return didPass;
     };
@@ -314,6 +339,26 @@ static NSString*    kFalseTag              = @"false";
             }
         }
     }
+
+    self.investigatorShortDescription = [properties objectForKey:kInvestigatorShortDescriptionTag];
+    NSAssert(self.investigatorShortDescription != nil && [self.investigatorShortDescription isKindOfClass:[NSString class]], @"Improper type for Investigator Short Description");
+    
+    self.investigatorLongDescription = [properties objectForKey:kInvestigatorLongDescriptionTag];
+    NSAssert(self.investigatorLongDescription != nil && [self.investigatorLongDescription isKindOfClass:[NSString class]], @"Improper type for Investigator Long Description");
+
+    NSString*   htmlContent = [properties objectForKey:kHtmlContentTag];
+    if (htmlContent != nil)
+    {
+        NSString*   path    = [[NSBundle mainBundle] pathForResource:htmlContent ofType:@"html" inDirectory:@"HTMLContent"];
+        NSAssert(path != nil, @"Unable to locate HTML file: %@", htmlContent);
+        
+        NSError*    error   = nil;
+        NSString*   content = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+        
+        NSAssert(content != nil, @"Unable to load content of file \"%@\": %@", path, error);
+        
+        self.sharingHtmlLearnMoreContent = content;
+    }
 }
 
 - (void)loadQuiz:(NSDictionary*)properties
@@ -321,11 +366,13 @@ static NSString*    kFalseTag              = @"false";
     //  Failure and success messages are optioinal, questions, however are not.
     NSString*   failureMessage = [properties objectForKey:kFailedMessageTag];
     NSString*   sucessMessage  = [properties objectForKey:kSuccessMessageTag];
+    NSString*   allowedFailure = [properties objectForKey:kAllowedFailuresCountTag];
     NSArray*    questions      = [properties objectForKey:kQuestionsTag];
     NSAssert(questions != nil, @"No questions defined for Consent Quiz");
     
-    self.failureMessage = failureMessage;
-    self.successMessage = sucessMessage;
+    self.failureMessage     = failureMessage;
+    self.successMessage     = sucessMessage;
+    self.maxAllowedFailure  = allowedFailure.integerValue;
     
     if (questions != nil)
     {
@@ -355,6 +402,10 @@ static NSString*    kFalseTag              = @"false";
     else if ([type isEqualToString:kInstructionTypeTag])
     {
         question = [self loadInstructionQuestion:properties];
+    }
+    else if ([type isEqualToString:kSingleChoiceTextTag])
+    {
+        question = [self loadTextChoiceQuestion:properties];
     }
  
     return question;
@@ -392,6 +443,7 @@ static NSString*    kFalseTag              = @"false";
     return question;
 }
 
+
 - (APCConsentInstructionQuestion*)loadInstructionQuestion:(NSDictionary*)properties
 {
     NSString*   identifier     = [properties objectForKey:kIdentifierTag];
@@ -406,6 +458,35 @@ static NSString*    kFalseTag              = @"false";
     
     return question;
 }
+
+- (APCConsentTextChoiceQuestion*)loadTextChoiceQuestion:(NSDictionary*)properties
+{
+    NSString*   identifier      = [properties objectForKey:kIdentifierTag];
+    NSAssert(identifier != nil, @"Missing identifier for Instruction Question");
+    
+    NSString*   prompt              = [properties objectForKey:kPromptTag];
+    NSString*   expectedString      = [properties objectForKey:kExpectedAnswerTag];
+    NSArray*    choicesProperties   = [properties objectForKey:kTextChoicesTag];
+    NSArray*    choices             = [self loadChoices:choicesProperties];
+
+    
+    APCConsentTextChoiceQuestion*   question = [[APCConsentTextChoiceQuestion alloc] initWithIdentifier:identifier
+                                                                                                 prompt:prompt
+                                                                                                answers:choices
+                                                                                         expectedAnswer:expectedString.integerValue];
+    return question;
+}
+
+- (NSArray*)loadChoices:(NSArray*)properties
+{
+    for (NSString* choice in properties)
+    {
+        NSAssert([choice isKindOfClass:[NSString class]], @"Unexpected type for text choice");
+    }
+    
+    return properties;
+}
+
 
 - (void)loadSections:(NSArray*)properties
 {
@@ -558,5 +639,6 @@ static NSString*    kFalseTag              = @"false";
 
     self.documentSections = consentSections;
 }
+
 
 @end
