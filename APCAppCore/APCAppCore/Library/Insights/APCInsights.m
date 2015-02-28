@@ -118,7 +118,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         {
             self.insightFactorName = HKQuantityTypeIdentifierStepCount;
             self.insightFactorUnit = [HKUnit countUnit];
-            self.insightFactorCaption = NSLocalizedString(@"steps taken", @"{step value} steps taken");
+            self.insightFactorCaption = NSLocalizedString(@"Steps", @"{step value} steps taken");
         }
             break;
         case APCInsightFactorSugarConsumption:

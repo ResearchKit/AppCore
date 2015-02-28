@@ -95,7 +95,7 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGFloat borderWidth = 1.0;
     CGFloat topSeparatorWidth = rect.size.width;
-    CGFloat topSeparatorHeight = 4.0;
+    CGFloat topSeparatorHeight = 7.0;
     CGFloat topBorderYValue = 0;
     
     UIColor *borderColor = [UIColor lightGrayColor];

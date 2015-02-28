@@ -52,10 +52,16 @@
         
         CGFloat positionX = (self.axisType == kAPCGraphAxisTypeX) ? (self.leftOffset + i*segmentWidth) : 0;
         
+        if (i==0) {
+            //Shift the first label to acoomodate the month text.
+            positionX -= self.leftOffset;
+        }
+        
         UILabel *label = (UILabel *)self.titleLabels[i];
         
         if (label.text) {
             labelWidth = [label.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, labelHeight) options:(NSStringDrawingUsesFontLeading | NSStringDrawingUsesLineFragmentOrigin) attributes:@{NSFontAttributeName:label.font} context:nil].size.width;
+            labelWidth = MAX(labelWidth, 15);
             labelWidth += self.landscapeMode ? 14 : 8; //padding
         }
         

@@ -8,6 +8,10 @@
 #import "NSDictionary+APCAdditions.h"
 #import "APCAppCore.h"
 
+static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
+static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSString *));
+static  NSString  *oneThroughFiveNames[] = { @"One", @"Two", @"Three", @"Four", @"Five" };
+
 @implementation NSDictionary (APCAdditions)
 
 - (NSString *)JSONString
@@ -29,4 +33,55 @@
     return retValue;
 }
 
+    //
+    //    to support Medication Tracking Requirements
+    //
+- (NSString *)formatNumbersAndDays
+{
+    NSDictionary  *mapper = @{ @"Monday" : @"Mon", @"Tuesday" : @"Tue", @"Wednesday" : @"Wed", @"Thursday" : @"Thu", @"Friday" : @"Fri", @"Saturday" : @"Sat", @"Sunday" : @"Sun" };
+    
+    BOOL  everyday = YES;
+    NSNumber  *saved = nil;
+    NSArray  *all = [self allValues];
+    for (NSNumber  *number  in  all) {
+        if ([number integerValue] > 0) {
+            saved = number;
+        } else {
+            everyday = NO;
+            break;
+        }
+    }
+    
+    NSString  *result = @"";
+    if (everyday == YES) {
+        if ([saved unsignedIntegerValue] > 5) {
+            result = [NSString stringWithFormat:@"%lu times Every Day", (unsigned long)[saved unsignedIntegerValue]];
+        } else {
+            result = [NSString stringWithFormat:@"%@ times Every Day", oneThroughFiveNames[[saved unsignedIntegerValue] - 1]];
+        }
+    } else {
+        NSMutableString  *daysAndNumbers = [NSMutableString string];
+        for (NSUInteger  day = 0;  day < numberOfDaysOfWeek;  day++) {
+            NSString  *key = daysOfWeekNames[day];
+            NSNumber  *number = [self objectForKey:key];
+            if ([number integerValue] > 0) {
+                if ([saved unsignedIntegerValue] > 5) {
+                    if (daysAndNumbers.length == 0) {
+                        [daysAndNumbers appendFormat:@"%lu times on %@", (unsigned long)[number unsignedIntegerValue], mapper[key]];
+                    } else {
+                        [daysAndNumbers appendFormat:@", %@", mapper[key]];
+                    }
+                } else {
+                    if (daysAndNumbers.length == 0) {
+                        [daysAndNumbers appendFormat:@"%@ times on %@", oneThroughFiveNames[[number unsignedIntegerValue] - 1], mapper[key]];
+                    } else {
+                        [daysAndNumbers appendFormat:@", %@", mapper[key]];
+                    }
+                }
+            }
+        }
+        result = daysAndNumbers;
+    }
+    return  result;
+}
 @end

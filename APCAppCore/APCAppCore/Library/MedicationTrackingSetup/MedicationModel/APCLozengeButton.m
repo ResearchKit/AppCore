@@ -86,7 +86,7 @@ static  short  coordinates[] = {
         CALayer  *layer = self.layer;
         layer.backgroundColor = [[UIColor whiteColor] CGColor];
         NSNumber  *numberOfTimes = self.prescription.numberOfTimesPerDay;
-        NSString  *aTitle = [NSString stringWithFormat:@"%lu\u2009/\u2009%lu", [self.numberOfDosesTaken unsignedIntegerValue], [numberOfTimes unsignedIntegerValue]];
+        NSString  *aTitle = [NSString stringWithFormat:@"%lu\u2009/\u2009%lu", (unsigned long)[self.numberOfDosesTaken unsignedIntegerValue], (unsigned long)[numberOfTimes unsignedIntegerValue]];
         [self setTitle:aTitle forState:UIControlStateNormal];
         [self setTitleColor:self.lozengeColor forState:UIControlStateNormal];
     } else {

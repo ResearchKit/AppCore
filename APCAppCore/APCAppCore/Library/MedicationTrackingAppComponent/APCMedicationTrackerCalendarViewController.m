@@ -11,6 +11,7 @@
 #import "APCMedicationTrackerDetailViewController.h"
 #import "APCMedicationTrackerSetupViewController.h"
 #import "APCMedicationSummaryTableViewCell.h"
+#import "APCAddPrescriptionTableViewCell.h"
 #import "APCLozengeButton.h"
 
 #import "APCMedTrackerDataStorageManager.h"
@@ -23,15 +24,15 @@
 #import "NSDate+MedicationTracker.h"
 
 #import "NSBundle+Helper.h"
+#import "NSDictionary+APCAdditions.h"
+#import "UIFont+APCAppearance.h"
 #import "NSDate+Helper.h"
 #import "APCLog.h"
 
 static  NSString  *viewControllerTitle   = @"Medication Tracker";
 
-static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
-
-static  NSString   *daysOfWeekNames[]    = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
-static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSString *));
+static  NSString  *kSummaryTableViewCell         = @"APCMedicationSummaryTableViewCell";
+static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableViewCell";
 
 @interface APCMedicationTrackerCalendarViewController  ( ) <UITableViewDataSource, UITableViewDelegate,
                                 APCMedicationTrackerCalendarWeeklyViewDelegate, UIScrollViewDelegate,
@@ -45,10 +46,10 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 @property (nonatomic, assign)          BOOL                        exScrolliburScrolledByUser;
 
 @property (nonatomic, weak)  IBOutlet  UITableView                *tabulator;
+@property (nonatomic, weak)  IBOutlet  UIView                     *tapItemsView;
+@property (nonatomic, weak)  IBOutlet  UIView                     *yourPrescriptionsView;
 
 @property (nonatomic, weak)            APCMedicationTrackerCalendarWeeklyView  *weeklyCalendar;
-
-@property (nonatomic, weak)  IBOutlet  UIView                     *noMedicationView;
 
 @property (nonatomic, strong)          NSArray                    *prescriptions;
 @property (nonatomic, assign)          BOOL                        calendricalPagesNeedRefresh;
@@ -64,40 +65,41 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return  1;
+    NSInteger  numberOfSections = 0;
+    
+    numberOfSections = 1;
+    return  numberOfSections;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return  [self.prescriptions count];
+        //
+        //    one extra row for the Add Medications Cell
+        //
+        return  [self.prescriptions count] + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    APCMedicationSummaryTableViewCell  *cell = (APCMedicationSummaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSummaryTableViewCell];
+    UITableViewCell  *cell = nil;
+    
+    if (indexPath.row == [self.prescriptions count]) {
+        APCAddPrescriptionTableViewCell  *aCell = (APCAddPrescriptionTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kAddPrescriptionTableViewCell];
+        cell = aCell;
+    } else {
+        APCMedicationSummaryTableViewCell  *aCell = (APCMedicationSummaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSummaryTableViewCell];
 
-    APCMedTrackerPrescription  *prescription = self.prescriptions[indexPath.row];
+        APCMedTrackerPrescription  *prescription = self.prescriptions[indexPath.row];
 
-    cell.colorswatch.backgroundColor = prescription.color.UIColor;
-    cell.medicationName.text = prescription.medication.name;
-    cell.medicationDosage.text = prescription.dosage.name;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        aCell.colorswatch.backgroundColor = prescription.color.UIColor;
+        aCell.medicationName.text = prescription.medication.name;
+        aCell.medicationDosage.text = prescription.dosage.name;
+        aCell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-    NSDictionary  *frequencyAndDays = prescription.frequencyAndDays;
-
-    NSMutableString  *daysAndNumbers = [NSMutableString string];
-    for (NSUInteger  day = 0;  day < numberOfDaysOfWeek;  day++) {
-        NSString  *key = daysOfWeekNames[day];
-        NSNumber  *number = [frequencyAndDays objectForKey:key];
-        if ([number integerValue] > 0) {
-            if (daysAndNumbers.length == 0) {
-                [daysAndNumbers appendFormat:@"%ld\u2009\u00d7, %@", [number integerValue], [key substringToIndex:3]];
-            } else {
-                [daysAndNumbers appendFormat:@", %@", [key substringToIndex:3]];
-            }
-        }
+        NSString  *daysAndNumbers = [prescription.frequencyAndDays formatNumbersAndDays];
+        aCell.medicationUseDays.text = daysAndNumbers;
+        cell = aCell;
     }
-    cell.medicationUseDays.text = daysAndNumbers;
 
     return  cell;
 }
@@ -106,10 +108,8 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (YES == NO) {
-        APCMedicationTrackerDetailViewController  *controller = [[APCMedicationTrackerDetailViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
-        APCMedTrackerPrescription  *prescription = self.prescriptions[indexPath.row];
-        controller.lozenge.prescription = prescription;
+    if (indexPath.row == [self.prescriptions count]) {
+        APCMedicationTrackerSetupViewController  *controller = [[APCMedicationTrackerSetupViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
         [self.navigationController pushViewController:controller animated:YES];
     }
 }
@@ -189,14 +189,6 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 {
     APCMedicationTrackerDetailViewController  *controller = [[APCMedicationTrackerDetailViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
     controller.lozenge = lozenge;
-    [self.navigationController pushViewController:controller animated:YES];
-}
-
-#pragma  mark  -  Add Medications Action Method
-
-- (IBAction)addMedicationsButtonTapped:(id)sender
-{
-    APCMedicationTrackerSetupViewController  *controller = [[APCMedicationTrackerSetupViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
     [self.navigationController pushViewController:controller animated:YES];
 }
 
@@ -313,16 +305,13 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 
 - (void)setupHiddenStates
 {
+    self.tabulator.hidden        = NO;
+    self.exScrollibur.hidden     = NO;
+    self.weekContainer.hidden    = NO;
     if ([self.prescriptions count] == 0) {
-        self.tabulator.hidden        = YES;
-        self.exScrollibur.hidden     = YES;
-        self.weekContainer.hidden    = YES;
-        self.noMedicationView.hidden = NO;
+        self.tapItemsView.hidden = YES;
     } else {
-        self.noMedicationView.hidden = YES;
-        self.tabulator.hidden        = NO;
-        self.exScrollibur.hidden     = NO;
-        self.weekContainer.hidden    = NO;
+        self.tapItemsView.hidden = NO;
     }
 }
 
@@ -347,7 +336,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
                  [self configureExScrollibur];
                  self.viewsWereCreated = YES;
              }
-             [self setupHiddenStates];
+//             [self setupHiddenStates];
              if ((self.exScrolliburNumberOfPages == 0) && ([self.prescriptions count] > 0)) {
                  [self makeFirstPage];
              }
@@ -356,6 +345,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
                  [self refreshAllPages];
                  self.calendricalPagesNeedRefresh = NO;
              }
+             [self setupHiddenStates];
          }
      }];
 }
@@ -371,9 +361,12 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     self.navigationItem.title = viewControllerTitle;
     
     self.cancelButtonItem.title = NSLocalizedString(@"Done", @"Done");
-
+    
     UINib  *summaryCellNib = [UINib nibWithNibName:kSummaryTableViewCell bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:summaryCellNib forCellReuseIdentifier:kSummaryTableViewCell];
+    
+    UINib  *addPrescriptionCellNib = [UINib nibWithNibName:kAddPrescriptionTableViewCell bundle:[NSBundle appleCoreBundle]];
+    [self.tabulator registerNib:addPrescriptionCellNib forCellReuseIdentifier:kAddPrescriptionTableViewCell];
 };
 
 - (void)didReceiveMemoryWarning
