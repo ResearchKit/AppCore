@@ -40,7 +40,7 @@
     }
 }
 
-- (IBAction)infoTapped:(UIButton *)sender
+- (IBAction)infoTapped:(UIButton *) __unused sender
 {
     if ([self.delegate respondsToSelector:@selector(dashboardInsightDidAskForMoreInfoForCell:)]) {
         [self.delegate dashboardInsightDidAskForMoreInfoForCell:self];

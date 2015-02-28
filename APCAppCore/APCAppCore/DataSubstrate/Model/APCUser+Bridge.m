@@ -118,7 +118,7 @@
     }
     else
     {
-        [SBBComponent(SBBConsentManager) dataSharing:SBBConsentShareScopeNone completion:^(id responseObject, NSError * __unused error) {
+        [SBBComponent(SBBConsentManager) dataSharing:SBBConsentShareScopeNone completion:^(id __unused responseObject, NSError * __unused error) {
             [self signOutOnCompletion:^(NSError *error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(!error) {
@@ -142,7 +142,7 @@
     }
     else
     {
-        [SBBComponent(SBBConsentManager) dataSharing:DEFAULT_DATA_SHARING_SCOPE completion:^(id responseObject, NSError *error) {
+        [SBBComponent(SBBConsentManager) dataSharing:DEFAULT_DATA_SHARING_SCOPE completion:^(id __unused responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (!error) {
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Resumed Consent"}));

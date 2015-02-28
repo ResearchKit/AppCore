@@ -336,7 +336,7 @@ static CGFloat const kAnimationDuration = 0.35f;
         shiftClockwise = !shiftClockwise;
         
         if (shiftClockwise) {
-            for (int idx = 0; idx < layers.count - 1; idx++) {
+            for (NSUInteger idx = 0; idx < layers.count - 1; idx++) {
                 //prevent from infinite loop
                 if (!idx) {
                     totalAngle+= 0.01;

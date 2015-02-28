@@ -244,7 +244,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 
 #pragma mark - TaskViewController Delegate methods
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *) __unused error
 {
     if (result == ORKTaskViewControllerResultCompleted)
     {
@@ -366,7 +366,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 
 }
 
-- (void)studyVideoCollectionViewCellReadConsent:(APCStudyVideoCollectionViewCell *)cell
+- (void)studyVideoCollectionViewCellReadConsent:(APCStudyVideoCollectionViewCell *) __unused cell
 {
     APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
@@ -381,7 +381,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 
 }
 
-- (void)studyVideoCollectionViewCellEmailConsent:(APCStudyVideoCollectionViewCell *)cell
+- (void)studyVideoCollectionViewCellEmailConsent:(APCStudyVideoCollectionViewCell *) __unused cell
 {
     if ([MFMailComposeViewController canSendMail])
     {
@@ -418,7 +418,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)studyLandingCollectionViewCellEmailConsent:(APCStudyLandingCollectionViewCell *)cell
+- (void)studyLandingCollectionViewCellEmailConsent:(APCStudyLandingCollectionViewCell *) __unused cell
 {
     if ([MFMailComposeViewController canSendMail])
     {
@@ -436,7 +436,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
     
 }
 
-- (void)studyLandingCollectionViewCellReadConsent:(APCStudyLandingCollectionViewCell *)cell
+- (void)studyLandingCollectionViewCellReadConsent:(APCStudyLandingCollectionViewCell *) __unused cell
 {
     APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];

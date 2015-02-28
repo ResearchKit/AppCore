@@ -244,7 +244,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
                 {
                     NSInteger taskIndex = -1;
                     
-                    for (int i =0; i<groupedScheduledTask.scheduledTasks.count; i++) {
+                    for (NSUInteger i =0; i<groupedScheduledTask.scheduledTasks.count; i++) {
                         APCScheduledTask *scheduledTask = groupedScheduledTask.scheduledTasks[i];
                         if (!scheduledTask.completed.boolValue) {
                             taskIndex = i;

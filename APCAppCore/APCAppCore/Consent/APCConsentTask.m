@@ -155,7 +155,7 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     if (self.successMessage != nil)
     {
         step = [[ORKInstructionStep alloc] initWithIdentifier:kSuccessMessageTag];
-        step.title = self.failureTitle;
+        step.title = self.successTitle;
         step.text  = self.successMessage;
         step.image = [UIImage imageNamed:@"Completion-Check"];
     }
@@ -168,11 +168,11 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
 
 - (ORKStep*)stepAfterStep:(ORKStep*)step withResult:(ORKTaskResult*)result
 {
-    BOOL(^compareStep)(ORKStep*, NSUInteger, BOOL*) = ^(ORKStep* s, NSUInteger ndx, BOOL* stop)
+    BOOL(^compareStep)(ORKStep*, NSUInteger, BOOL*) = ^(ORKStep* s, NSUInteger  __unused ndx, BOOL* __unused stop)
     {
         return [s.identifier isEqualToString:step.identifier];
     };
-    BOOL(^compareQuestion)(APCConsentQuestion*, NSUInteger, BOOL*) = ^(APCConsentQuestion* q, NSUInteger ndx, BOOL* stop)
+    BOOL(^compareQuestion)(APCConsentQuestion*, NSUInteger, BOOL*) = ^(APCConsentQuestion* q, NSUInteger __unused ndx, BOOL* __unused stop)
     {
         return [q.identifier isEqualToString:step.identifier];
     };
@@ -269,7 +269,7 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
 }
 
 
-- (ORKStep*)stepBeforeStep:(ORKStep*)step withResult:(ORKTaskResult*)result
+- (ORKStep*)stepBeforeStep:(ORKStep*) __unused step withResult:(ORKTaskResult*) __unused result
 {
     ORKStep*    previousStep = nil;
     
@@ -281,12 +281,12 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     return previousStep;
 }
 
-- (ORKStep*)stepWithIdentifier:(NSString*)identifier
+- (ORKStep*)stepWithIdentifier:(NSString*) __unused identifier
 {
     return nil;
 }
 
-- (ORKTaskProgress)progressOfCurrentStep:(ORKStep*)step withResult:(ORKTaskResult*)result
+- (ORKTaskProgress)progressOfCurrentStep:(ORKStep*) __unused step withResult:(ORKTaskResult*) __unused result
 {
     return ORKTaskProgressMake(0, 0);
 }

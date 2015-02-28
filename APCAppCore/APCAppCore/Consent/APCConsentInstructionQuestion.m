@@ -28,7 +28,7 @@
     return self;
 }
 
-- (BOOL)evaluate:(ORKStepResult*)stepResult
+- (BOOL)evaluate:(ORKStepResult*) __unused stepResult
 {
     return YES;
 }

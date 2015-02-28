@@ -29,7 +29,7 @@ NSString * const kSignUpPermissionsCellIdentifier = @"APCPermissionsCell";
     [self.permissionButton setTitle:NSLocalizedString(@"Granted", @"Granted") forState:UIControlStateDisabled];
 }
 
-- (IBAction)allowPermission:(id)sender
+- (IBAction)allowPermission:(id)__unused sender
 {
     if ([self.delegate respondsToSelector:@selector(permissionsCellTappedPermissionsButton:)]) {
         [self.delegate permissionsCellTappedPermissionsButton:self];

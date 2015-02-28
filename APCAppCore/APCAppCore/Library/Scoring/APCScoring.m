@@ -1002,12 +1002,12 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 #pragma mark Discrete
 
-- (NSInteger)discreteGraph:(APCDiscreteGraphView *)graphView numberOfPointsInPlot:(NSInteger)plotIndex
+- (NSInteger)discreteGraph:(APCDiscreteGraphView *) __unused graphView numberOfPointsInPlot:(NSInteger) __unused plotIndex
 {
     return [self.timeline count];
 }
 
-- (APCRangePoint *)discreteGraph:(APCDiscreteGraphView *)graphView plot:(NSInteger)plotIndex valueForPointAtIndex:(NSInteger)pointIndex
+- (APCRangePoint *)discreteGraph:(APCDiscreteGraphView *) __unused graphView plot:(NSInteger) __unused plotIndex valueForPointAtIndex:(NSInteger) __unused pointIndex
 {
     APCRangePoint *value;
     
@@ -1020,7 +1020,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return value;
 }
 
-- (NSString *)discreteGraph:(APCDiscreteGraphView *)graphView titleForXAxisAtIndex:(NSInteger)pointIndex
+- (NSString *)discreteGraph:(APCDiscreteGraphView *) __unused graphView titleForXAxisAtIndex:(NSInteger) __unused pointIndex
 {
     NSDate *titleDate = nil;
     
@@ -1038,7 +1038,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return xAxisTitle;
 }
 
-- (CGFloat)minimumValueForDiscreteGraph:(APCDiscreteGraphView *)graphView
+- (CGFloat)minimumValueForDiscreteGraph:(APCDiscreteGraphView *) __unused graphView
 {
     CGFloat factor = 0.2;
     CGFloat maxDataPoint = [[self maximumDataPoint] doubleValue];
@@ -1049,7 +1049,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return minValue;
 }
 
-- (CGFloat)maximumValueForDiscreteGraph:(APCDiscreteGraphView *)graphView
+- (CGFloat)maximumValueForDiscreteGraph:(APCDiscreteGraphView *) __unused graphView
 {
     return [[self maximumDataPoint] doubleValue];
 }

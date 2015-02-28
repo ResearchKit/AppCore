@@ -44,14 +44,14 @@ NSString *const kAPCStudyLandingCollectionViewCellIdentifier = @"APCStudyLanding
 }
 
 
-- (IBAction)readConsent:(id)sender
+- (IBAction)readConsent:(id) __unused sender
 {
     if ([self.delegate respondsToSelector:@selector(studyLandingCollectionViewCellReadConsent:)]) {
         [self.delegate studyLandingCollectionViewCellReadConsent:self];
     }
 }
 
-- (IBAction)emailConsent:(id)sender
+- (IBAction)emailConsent:(id) __unused sender
 {
     if ([self.delegate respondsToSelector:@selector(studyLandingCollectionViewCellEmailConsent:)]) {
         [self.delegate studyLandingCollectionViewCellEmailConsent:self];

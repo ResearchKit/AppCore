@@ -32,7 +32,7 @@ NSString * const kAPCStudyVideoCollectionViewCellIdentifier = @"APCStudyVideoCol
 
 }
 
-- (IBAction)watchVideo:(id)sender
+- (IBAction)watchVideo:(id) __unused sender
 {
     if ([self.delegate respondsToSelector:@selector(studyVideoCollectionViewCellWatchVideo:)]) {
         [self.delegate studyVideoCollectionViewCellWatchVideo:self];

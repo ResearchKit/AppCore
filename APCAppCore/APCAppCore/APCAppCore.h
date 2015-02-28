@@ -41,6 +41,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCConsentQuestion.h>
 #import <APCAppCore/APCConsentBooleanQuestion.h>
 #import <APCAppCore/APCConsentInstructionQuestion.h>
+#import <APCAppCore/APCConsentTextChoiceQuestion.h>
 
 /* -------------------------------------
  Data Archiver & Passive Data Collectors

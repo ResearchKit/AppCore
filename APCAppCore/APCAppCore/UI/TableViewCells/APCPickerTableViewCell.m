@@ -49,7 +49,7 @@ NSString * const kAPCPickerTableViewCellIdentifier = @"APCPickerTableViewCell";
 {
     NSMutableArray *selectedRowIndices = [NSMutableArray array];
     
-    for (int i = 0 ; i < self.pickerValues.count; i++) {
+    for (NSUInteger i = 0 ; i < self.pickerValues.count; i++) {
         [selectedRowIndices addObject:@([self.pickerView selectedRowInComponent:i])];
     }
     
@@ -58,7 +58,7 @@ NSString * const kAPCPickerTableViewCellIdentifier = @"APCPickerTableViewCell";
 
 - (void)setSelectedRowIndices:(NSArray *)selectedRowIndices
 {
-    for (int i = 0 ; i < selectedRowIndices.count; i++) {
+    for (NSUInteger i = 0 ; i < selectedRowIndices.count; i++) {
         [self.pickerView selectRow:[selectedRowIndices[i] integerValue] inComponent:i animated:NO];
     }
 }

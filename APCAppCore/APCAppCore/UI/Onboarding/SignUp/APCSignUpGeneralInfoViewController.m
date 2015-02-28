@@ -375,11 +375,11 @@ static NSString * const kInternalMaxParticipantsMessage = @"has reached the limi
     
     if (isContentValid) {
         
-        for (int j=0; j<self.items.count; j++) {
+        for (NSUInteger j=0; j<self.items.count; j++) {
             
             APCTableViewSection *section = self.items[j];
             
-            for (int i = 0; i < section.rows.count; i++) {
+            for (NSUInteger i = 0; i < section.rows.count; i++) {
                 
                 APCTableViewRow *row = section.rows[i];
                 
@@ -664,7 +664,7 @@ static NSString * const kInternalMaxParticipantsMessage = @"has reached the limi
                                                                                      preferredStyle:UIAlertControllerStyleAlert];
 
                         UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                                              handler:^(UIAlertAction * action) {}];
+                                                                              handler:^(UIAlertAction * __unused action) {}];
                         
                         [alertView addAction:defaultAction];
                         [self presentViewController:alertView animated:YES completion:nil];
@@ -677,10 +677,10 @@ static NSString * const kInternalMaxParticipantsMessage = @"has reached the limi
                                                                                     preferredStyle:UIAlertControllerStyleAlert];
                         
                         UIAlertAction* okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Change Details", @"") style:UIAlertActionStyleDefault
-                                                                              handler:^(UIAlertAction * action) {}];
+                                                                              handler:^(UIAlertAction * __unused action) {}];
                         
                         UIAlertAction* changeAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Send Again", nil) style:UIAlertActionStyleDefault
-                                                                             handler:^(UIAlertAction * action) {[self next];}];
+                                                                             handler:^(UIAlertAction * __unused action) {[self next];}];
                         
                         
                         [alertView addAction:okAction];

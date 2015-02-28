@@ -374,7 +374,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:item.caption message:item.info preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
         
     }];
     

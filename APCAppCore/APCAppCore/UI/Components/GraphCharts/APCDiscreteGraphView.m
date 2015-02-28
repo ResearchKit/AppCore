@@ -380,7 +380,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     xAxisLineLayer.path = xAxispath.CGPath;
     [self.xAxisView.layer addSublayer:xAxisLineLayer];
     
-    for (int i=0; i<self.xAxisTitles.count; i++) {
+    for (NSUInteger i=0; i<self.xAxisTitles.count; i++) {
         CGFloat positionOnXAxis = kAPCGraphLeftPadding + ((CGRectGetWidth(self.plotsView.frame) / (self.numberOfXAxisTitles - 1)) * i);
         
         UIBezierPath *rulerPath = [UIBezierPath bezierPath];
@@ -507,7 +507,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
 }
 
-- (void)drawGraphForPlotIndex:(NSInteger)plotIndex;
+- (void)drawGraphForPlotIndex:(NSInteger)plotIndex
 {
     [self prepareDataForPlotIndex:plotIndex];
     

@@ -170,7 +170,7 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     self.consentVC.delegate = self;
 }
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
+- (void)taskViewController:(ORKTaskViewController *) __unused taskViewController didFinishWithResult:(ORKTaskViewControllerResult) __unused result error:(NSError *) __unused error
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }

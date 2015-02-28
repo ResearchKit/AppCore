@@ -48,7 +48,7 @@
     
     CGFloat labelHeight = (self.axisType == kAPCGraphAxisTypeX) ? CGRectGetHeight(self.bounds)*0.75 : 20;
     
-    for (int i=0; i<self.titleLabels.count; i++) {
+    for (NSUInteger i=0; i<self.titleLabels.count; i++) {
         
         CGFloat positionX = (self.axisType == kAPCGraphAxisTypeX) ? (self.leftOffset + i*segmentWidth) : 0;
         
@@ -87,7 +87,7 @@
 {
     self.axisType = type;
     
-    for (int i=0; i<titles.count; i++) {
+    for (NSUInteger i=0; i<titles.count; i++) {
         
         UILabel *label = [UILabel new];
         label.text = titles[i];

@@ -80,7 +80,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
                               andUseThisQueue: [NSOperationQueue mainQueue]
                              toDoThisWhenDone: ^(APCMedTrackerPrescription *prescriptionBeingFetched,
                                                  NSArray *dailyDosageRecords,
-                                                 NSTimeInterval operationDuration,
+                                                 NSTimeInterval __unused operationDuration,
                                                  NSError *error)
          {
              if (error)
