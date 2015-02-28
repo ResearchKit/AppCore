@@ -166,14 +166,6 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     return  cell;
 }
 
--(int)countOccurrenceOfIdentifier:(NSString *)identifier{
-    
-    return 1;
-    
-}
-
-
-
 #pragma mark - UITableViewDelegate Methods
 
 - (CGFloat)       tableView: (UITableView *) __unused tableView
