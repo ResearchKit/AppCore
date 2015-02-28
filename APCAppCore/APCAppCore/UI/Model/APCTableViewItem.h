@@ -137,6 +137,7 @@
 
 @property (nonatomic, strong) UIColor *tintColor;
 @property (nonatomic, strong) NSString *info;
+@property (nonatomic, strong) NSString *taskId;
 
 @end
 
@@ -172,6 +173,7 @@
 @property (nonatomic, strong) UIColor *sidebarColor;
 @property (nonatomic, strong) NSString *titleCaption;
 @property (nonatomic, strong) NSString *subtitleCaption;
+@property (nonatomic) BOOL showTopSeparator;
 
 @end
 

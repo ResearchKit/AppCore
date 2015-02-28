@@ -58,7 +58,7 @@
     return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
 }
 
-- (IBAction)next:(id)sender
+- (IBAction)next:(id) __unused sender
 {
     UIViewController *viewController = [[self onboarding] nextScene];
     [self.navigationController pushViewController:viewController animated:YES];

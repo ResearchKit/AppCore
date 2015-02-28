@@ -18,6 +18,7 @@
 #import "APCMedTrackerPrescriptionColor+Helper.h"
 
 #import "NSBundle+Helper.h"
+#import "NSDictionary+APCAdditions.h"
 
 #import "APCMedicationSummaryTableViewCell.h"
 
@@ -33,29 +34,23 @@ typedef  enum  _SetupTableRowTypes
     SetupTableRowTypesDosage
 }  SetupTableRowTypes;
 
-static  NSString  *kViewControllerName        = @"Set Up Medications";
+static  NSString  *kViewControllerName            = @"Set Up Medications";
 
-static  NSString  *kSetupTableCellName        = @"APCSetupTableViewCell";
-static  NSString  *kSetupTableButtonCellName  = @"APCSetupButtonTableViewCell";
+static  NSString  *kSetupTableCellName            = @"APCSetupTableViewCell";
+static  NSString  *kSetupTableButtonCellName      = @"APCSetupButtonTableViewCell";
 
-static  NSString  *kSummaryTableViewCell      = @"APCMedicationSummaryTableViewCell";
+static  NSString  *kSummaryTableViewCell          = @"APCMedicationSummaryTableViewCell";
 
-static  NSInteger  kAPCMedicationNameRow      = 0;
-static  NSInteger  kAPCMedicationFrequencyRow = 1;
-static  NSInteger  kAPCMedicationColorRow     = 2;
-static  NSInteger  kAPCMedicationDosageRow    = 3;
-static  NSInteger  kAPCMedicationButtonRow    = 4;
+static  NSInteger  kAPCMedicationNameRow          = 0;
+static  NSInteger  kAPCMedicationFrequencyRow     = 1;
+static  NSInteger  kAPCMedicationColorRow         = 2;
+static  NSInteger  kAPCMedicationDosageRow        = 3;
+static  NSInteger  kAPCMedicationButtonRow        = 4;
 
-static  NSString  *mainTableCategories[]        = { @"Name",        @"Frequency",     @"Label Color",  @"Dosage (optional)"        };
-static  NSInteger  kNumberOfMainTableCategories = (sizeof(mainTableCategories) / sizeof(NSString *));
+static  NSString  *mainTableCategories[]          = { @"Name",        @"Frequency",     @"Label Color",  @"Dosage (optional)"        };
+static  NSInteger  kNumberOfMainTableCategories   = (sizeof(mainTableCategories) / sizeof(NSString *));
 
-static  NSString  *addTableCategories[]         = { @"Select Name", @"Add Frequency", @"Select Color", @"Select Dosage" };
-
-static  NSString  *mainColorCategories[]        = { @"Red", @"Green", @"Blue", @"Yellow", @"Cyan", @"Magenta", @"Orange", @"Purple" };
-
-static  NSString  *daysOfWeekNames[]            = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
-static  NSString  *daysOfWeekNamesAbbreviations[] = { @"Mon",    @"Tue",     @"Wed",       @"Thu",      @"Fri",    @"Sat",      @"Sun"    };
-static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSString *));
+static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Frequency", @"Select Color", @"Select Dosage" };
 
 @interface APCMedicationTrackerSetupViewController  ( )  <UITableViewDataSource, UITableViewDelegate,
                                                 APCMedicationNameViewControllerDelegate, APCMedicationFrequencyViewControllerDelegate,
@@ -116,23 +111,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     return  title;
 }
 
-- (NSString *)formatNumbersAndDays:(NSDictionary *)frequencyAndDays
-{
-    NSMutableString  *daysAndNumbers = [NSMutableString string];
-    for (NSUInteger  day = 0;  day < numberOfDaysOfWeek;  day++) {
-        NSString  *key = daysOfWeekNames[day];
-        NSNumber  *number = [frequencyAndDays objectForKey:key];
-        if ([number integerValue] > 0) {
-            if (daysAndNumbers.length == 0) {
-                [daysAndNumbers appendFormat:@"%ld\u2009\u00d7, %@", [number integerValue], [key substringToIndex:3]];
-            } else {
-                [daysAndNumbers appendFormat:@", %@", [key substringToIndex:3]];
-            }
-        }
-    }
-    return  daysAndNumbers;
-}
-
 - (void)formatCellTopicForRow:(SetupTableRowTypes)row withCell:(APCSetupTableViewCell *)aCell
 {
     aCell.addTopicLabel.hidden = NO;
@@ -146,7 +124,7 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
         }
     } else if (row == SetupTableRowTypesFrequency) {
         if (self.medicationFrequencyWasSet == YES) {
-            aCell.addTopicLabel.text = [self formatNumbersAndDays:self.frequenciesAndDaysObject];
+            aCell.addTopicLabel.text = [self.frequenciesAndDaysObject formatNumbersAndDays];
         } else {
             aCell.addTopicLabel.text = addTableCategories[row];
         }
@@ -204,7 +182,7 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
     } else if (tableView == self.listTabulator) {
         APCMedicationSummaryTableViewCell  *aCell = (APCMedicationSummaryTableViewCell *)[self.listTabulator dequeueReusableCellWithIdentifier:kSummaryTableViewCell];
         aCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        NSString  *usesAndDays = [self formatNumbersAndDays:self.frequenciesAndDaysObject];
+        NSString  *usesAndDays = [self.frequenciesAndDaysObject formatNumbersAndDays];
         aCell.medicationUseDays.text = usesAndDays;
         cell = aCell;
     }
@@ -236,23 +214,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
         }
     }
 }
-
-//#pragma  mark  -  Add New Medication Method
-
-//- (void):(id)sender
-//{
-//    self.medicationNameWasSet      = NO;
-//    self.medicationColorWasSet     = NO;
-//    self.medicationFrequencyWasSet = NO;
-//    self.medicationDosageWasSet    = NO;
-//}
-
-//#pragma  mark  -  Finished Button Action Method
-//
-//- (IBAction)finishedButtonWasTapped:(id)sender
-//{
-//    [self dismissViewControllerAnimated:YES completion:NULL];
-//}
 
 #pragma  mark  -  Done Button Action Method
 

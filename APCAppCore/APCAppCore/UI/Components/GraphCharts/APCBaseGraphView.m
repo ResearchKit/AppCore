@@ -56,19 +56,19 @@
     return 0;
 }
 
-- (NSInteger)numberOfPointsinPlot:(NSInteger)plotIndex
+- (NSInteger)numberOfPointsinPlot:(NSInteger) __unused plotIndex
 {
     [self throwOverrideException];
     
     return 0;
 }
 
-- (void)scrubReferenceLineForXPosition:(CGFloat)xPosition
+- (void)scrubReferenceLineForXPosition:(CGFloat) __unused xPosition
 {
     [self throwOverrideException];
 }
 
-- (void)setScrubberViewsHidden:(BOOL)hidden animated:(BOOL)animated
+- (void)setScrubberViewsHidden:(BOOL) __unused hidden animated:(BOOL) __unused animated
 {
     [self throwOverrideException];
 }

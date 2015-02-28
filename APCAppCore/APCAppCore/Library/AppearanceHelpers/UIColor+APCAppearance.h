@@ -29,4 +29,6 @@
 
 + (UIColor *)tertiaryColorForString:(NSString *)colorName;
 
++ (UIColor *)colorForTaskId:(NSString *)taskId;
+
 @end

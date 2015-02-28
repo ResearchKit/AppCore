@@ -103,7 +103,7 @@ static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reacha
                     
                     [spinnerController dismissViewControllerAnimated:NO completion:^{
                         
-                        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
                             
                         }];
                         
@@ -140,7 +140,7 @@ static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reacha
     [self updateEmailAddress];
 }
 
-- (IBAction)cancel:(id)sender
+- (IBAction)cancel:(id) __unused sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }

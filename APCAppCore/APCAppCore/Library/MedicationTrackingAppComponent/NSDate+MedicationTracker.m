@@ -52,14 +52,14 @@ static  NSString  *kDefaultLocale = @"en_US_POSIX";
 
 - (NSString *)getDateOfMonth
 {
-    static NSDateFormatter  *dateFormaater;
-    if (dateFormaater == nil) {
-        dateFormaater = [[NSDateFormatter alloc] init];
+    static NSDateFormatter  *formatter;
+    if (formatter == nil) {
+        formatter = [[NSDateFormatter alloc] init];
         NSLocale* en_AU_POSIX = [[NSLocale alloc] initWithLocaleIdentifier:kDefaultLocale];
-        [dateFormaater setLocale:en_AU_POSIX];
-        [dateFormaater setDateFormat:@"d"];
+        [formatter setLocale:en_AU_POSIX];
+        [formatter setDateFormat:@"d"];
     }
-    return  [dateFormaater stringFromDate:self];
+    return  [formatter stringFromDate:self];
 }
 
 - (NSDate*)midnightDate

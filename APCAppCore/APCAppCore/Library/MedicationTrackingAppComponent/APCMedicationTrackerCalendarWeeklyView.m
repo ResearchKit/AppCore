@@ -10,6 +10,7 @@
 #import "APCMedicationTrackerDayTitleLabel.h"
 
 #import "NSDate+MedicationTracker.h"
+#import "NSDate+Helper.h"
 #import "UIColor+MedicationTracker.h"
 #import "NSDictionary+MedicationTracker.h"
 
@@ -23,9 +24,8 @@ static  CGFloat  kDateViewHeight           =  28.0;
 
 static  CGFloat  kDateLabelInfoHeight      =  20.0;
 
-static  NSInteger const  kCalendarWeekStartDayDefault              = 1;
-static  NSString* const  kCalendarSelectedDatePrintFormatDefault   = @"EEE, d MMM yyyy";
-static  CGFloat   const  kCalendarSelectedDatePrintFontSizeDefault = 13.0;
+static  NSInteger const  kCalendarWeekStartDay          = 1;
+static  CGFloat   const  kCalendarSelectedDatePointSize = 13.0;
 
 static  NSString  *kPerformScrollDirectionKey = @"kPerformScrollDirectionKey";
 static  NSString  *kSelectedDateKey           = @"SelectedDateKey";
@@ -88,7 +88,7 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
         self.dateInfoLabel = label;
         self.dateInfoLabel.textAlignment = NSTextAlignmentCenter;
         self.dateInfoLabel.userInteractionEnabled = YES;
-        self.dateInfoLabel.font = [UIFont systemFontOfSize: kCalendarSelectedDatePrintFontSizeDefault];
+        self.dateInfoLabel.font = [UIFont systemFontOfSize: kCalendarSelectedDatePointSize];
         self.dateInfoLabel.textColor = [UIColor blackColor];
         self.dateInfoLabel.backgroundColor = [UIColor clearColor];
     }
@@ -131,7 +131,7 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
     NSDate  *today = [NSDate new];
     NSInteger  weekStartOrdinal = [self.firstDayOfWeek integerValue];
     if (weekStartOrdinal == 0) {
-        weekStartOrdinal = kCalendarWeekStartDayDefault;
+        weekStartOrdinal = kCalendarWeekStartDay;
     }
     NSDate  *startOfWeekDate = [today getWeekStartDate:weekStartOrdinal];
     self.startDate = startOfWeekDate;
@@ -143,7 +143,7 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
         [view removeFromSuperview];
     }
     for (NSUInteger  day = 0;  day < kNumberOfWeekDivisions;  day++) {
-        NSDate  *date = [startOfWeekDate addDays:day];
+        NSDate  *date = [startOfWeekDate dateByAddingDays:day];
 
         [self dayTitleViewForDate:date withFrame: CGRectMake(dailyWidth * day, 0, dailyWidth, kDayTitleViewHeight)];
 
@@ -162,7 +162,7 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
     dayTitleLabel.textAlignment = NSTextAlignmentCenter;
     dayTitleLabel.font = [UIFont systemFontOfSize:kDayTitleFontSize];
 
-    dayTitleLabel.text = [[date getDayOfWeekShortString] uppercaseString];
+    dayTitleLabel.text = [[[date getDayOfWeekShortString] uppercaseString] substringToIndex:1];
     dayTitleLabel.date = date;
     dayTitleLabel.userInteractionEnabled = YES;
 
@@ -197,7 +197,7 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
     }
     self.selectedDate = date;
     NSDateFormatter  *dayFormatter = [[NSDateFormatter alloc] init];
-    [dayFormatter setDateFormat:kCalendarSelectedDatePrintFormatDefault];
+    dayFormatter.dateStyle = NSDateFormatterFullStyle;
     NSString  *dateString = [dayFormatter stringFromDate:date];
 
     self.dateInfoLabel.text = dateString;
@@ -288,7 +288,7 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
     if (blnToday == YES) {
         dtStart = [[NSDate new] getWeekStartDate:self.weekStartConfig.integerValue];
     } else {
-        dtStart = (selectedDate)? [selectedDate getWeekStartDate:self.weekStartConfig.integerValue]:[self.startDate addDays:step * 7];
+        dtStart = (selectedDate)? [selectedDate getWeekStartDate:self.weekStartConfig.integerValue]:[self.startDate dateByAddingDays:step * 7];
     }
     self.startDate = dtStart;
     for (UIView  *view in [self.dailySubViewContainer subviews]) {
@@ -296,7 +296,7 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
     }
 
     for (NSUInteger  days = 0;  days < kNumberOfWeekDivisions;  days++) {
-        NSDate  *aDate = [dtStart addDays:days];
+        NSDate  *aDate = [dtStart dateByAddingDays:days];
 
         APCMedicationTrackerCalendarDailyView  *view = [self dailyViewForDate:aDate withFrame: CGRectMake(dailyWidth * days, 0, dailyWidth, kDateViewHeight) ];
         APCMedicationTrackerDayTitleLabel  *titleLabel = [[self.dayTitleSubViewContainer subviews] objectAtIndex:days];

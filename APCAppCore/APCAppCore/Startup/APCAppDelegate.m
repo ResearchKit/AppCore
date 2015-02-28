@@ -583,7 +583,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     NSArray  *selectedImageNames   = @[ @"tab_activities_selected", @"tab_dashboard_selected", @"tab_learn_selected",  @"tab_profile_selected" ];
     NSArray  *tabBarTitles         = @[ @"Activities", @"Dashboard", @"Learn",  @"Profile"];
     
-    for (int i=0; i<items.count; i++) {
+    for (NSUInteger i=0; i<items.count; i++) {
         UITabBarItem  *item = items[i];
         item.image = [UIImage imageNamed:deselectedImageNames[i]];
         item.selectedImage = [[UIImage imageNamed:selectedImageNames[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -674,18 +674,18 @@ static NSUInteger const kIndexOfProfileTab = 3;
 /*********************************************************************************/
 - (void) showAppropriateVC
 {
-    if (self.dataSubstrate.currentUser.isSignedIn) {
+//    if (self.dataSubstrate.currentUser.isSignedIn) {
         [self showTabBar];
         
-    }
-    else if (self.dataSubstrate.currentUser.isSignedUp)
-    {
-        [self showNeedsEmailVerification];
-    }
-    else
-    {
-        [self showOnBoarding];
-    }
+//    }
+//    else if (self.dataSubstrate.currentUser.isSignedUp)
+//    {
+//        [self showNeedsEmailVerification];
+//    }
+//    else
+//    {
+//        [self showOnBoarding];
+//    }
 }
 
 - (void)showPasscodeIfNecessary

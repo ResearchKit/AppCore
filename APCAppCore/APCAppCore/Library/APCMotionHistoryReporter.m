@@ -109,7 +109,7 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
     [motionActivityManager queryActivityStartingFromDate:newStartDate
                                                        toDate:newEndDate
                                                       toQueue:[NSOperationQueue new]
-                                                  withHandler:^(NSArray *activities, NSError *error) {
+                                                  withHandler:^(NSArray *activities, NSError * __unused error) {
                                                      
                                                       if (numberOfDays > 0)
                                                       {

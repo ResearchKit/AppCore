@@ -32,7 +32,7 @@ static NSInteger const kNumberOfDaysBack = 8;
     [self.motionActivityManager queryActivityStartingFromDate:lastTrackedEndDate
                                                        toDate:[NSDate date]
                                                       toQueue:[NSOperationQueue new]
-                                                  withHandler:^(NSArray *activities, NSError *error) {
+                                                  withHandler:^(NSArray *activities, NSError * __unused error) {
                                                       
                                                       
                                                       [self.delegate APCDataTracker:self hasNewData:activities];

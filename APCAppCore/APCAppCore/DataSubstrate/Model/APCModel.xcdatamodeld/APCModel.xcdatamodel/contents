@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14C109" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="APCDBStatus" representedClassName="APCDBStatus" syncable="YES">
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -27,7 +27,7 @@
         <relationship name="actualDosesTaken" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCMedTrackerDailyDosageRecord" inverseName="prescriptionIAmBasedOn" inverseEntity="APCMedTrackerDailyDosageRecord" syncable="YES"/>
         <relationship name="color" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerPrescriptionColor" inverseName="prescriptionsWhereIAmUsed" inverseEntity="APCMedTrackerPrescriptionColor" syncable="YES"/>
         <relationship name="dosage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerPossibleDosage" inverseName="prescriptionsWhereIAmUsed" inverseEntity="APCMedTrackerPossibleDosage" syncable="YES"/>
-        <relationship name="medication" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerMedication" inverseName="prescriptionsWhereIAmUsed" inverseEntity="APCMedTrackerMedication" syncable="YES"/>
+        <relationship name="medication" maxCount="1" deletionRule="Nullify" destinationEntity="APCMedTrackerMedication" inverseName="prescriptionsWhereIAmUsed" inverseEntity="APCMedTrackerMedication" syncable="YES"/>
     </entity>
     <entity name="APCMedTrackerPrescriptionColor" representedClassName="APCMedTrackerPrescriptionColor" parentEntity="APCMedTrackerInflatableItem" syncable="YES">
         <attribute name="alphaAsFloat" attributeType="Float" minValueString="0" maxValueString="1" defaultValueString="1" syncable="YES"/>

@@ -9,7 +9,7 @@
 #import "APCAppCore.h"
 #import "APCActivitiesViewWithNoTask.h"
 #import "APCCircularProgressView.h"
-
+#import "UIColor+APCAppearance.h"
 
 static CGFloat kTintedCellHeight = 65;
 
@@ -121,38 +121,13 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     
     APCActivitiesTintedTableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier: kAPCActivitiesTintedTableViewCellIdentifier];
     
-    switch (indexPath.row%5) {
-        case kAPCTintColorTypeGreen:
-            cell.tintColor = [UIColor appTertiaryGreenColor];
-            break;
-        case kAPCTintColorTypeRed:
-            cell.tintColor = [UIColor appTertiaryRedColor];
-            break;
-        case kAPCTintColorTypeYellow:
-            cell.tintColor = [UIColor appTertiaryYellowColor];
-            break;
-        case kAPCTintColorTypePurple:
-            cell.tintColor = [UIColor appTertiaryPurpleColor];
-            break;case kAPCTintColorTypeBlue:
-            cell.tintColor = [UIColor appTertiaryBlueColor];
-            break;
-        default:
-            cell.tintColor = [UIColor appTertiaryGrayColor];
-            break;
-    }
-    
-    if (indexPath.section > 0) {
-        [cell setupIncompleteAppearance];
-    }
-    
     if (taskCompletionTimeString) {
         cell.subTitleLabel.text = taskCompletionTimeString;
-    }else if ([scheduledTask.generatedSchedule.scheduleType isEqualToString:@"once"]) {
-        cell.subTitleLabel.text = @"One Time";
+        cell.hidesSubTitle = NO;
     } else {
         cell.hidesSubTitle = YES;
     }
-    
+
     if ([task isKindOfClass:[APCGroupedScheduledTask class]])
     {
         cell.titleLabel.text = groupedScheduledTask.taskTitle;
@@ -169,13 +144,23 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
         }
         
         cell.confirmationView.completed = groupedScheduledTask.complete;
+        
+        APCScheduledTask *firstTask = groupedScheduledTask.scheduledTasks.firstObject;
+        cell.tintColor = [UIColor colorForTaskId:firstTask.task.taskID];
     }
     else if ([task isKindOfClass:[APCScheduledTask class]])
-    {
+    {        
         cell.titleLabel.text = scheduledTask.task.taskTitle;
         cell.confirmationView.completed = scheduledTask.completed.boolValue;
         cell.countLabel.text = nil;
         cell.countLabel.hidden = YES;
+        cell.tintColor = [UIColor colorForTaskId:scheduledTask.task.taskID];
+    }
+    
+    if (indexPath.section > 0) {
+        [cell setupIncompleteAppearance];
+    } else {
+        [cell setupAppearance];
     }
     
     return  cell;
@@ -256,7 +241,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
                 {
                     NSInteger taskIndex = -1;
                     
-                    for (int i =0; i<groupedScheduledTask.scheduledTasks.count; i++) {
+                    for (NSUInteger i =0; i<groupedScheduledTask.scheduledTasks.count; i++) {
                         APCScheduledTask *scheduledTask = groupedScheduledTask.scheduledTasks[i];
                         if (!scheduledTask.completed.boolValue) {
                             taskIndex = i;

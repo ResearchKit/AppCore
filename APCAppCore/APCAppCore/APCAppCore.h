@@ -36,6 +36,13 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCTasksReminderManager.h>
 #import <APCAppCore/APCUtilities.h>
 
+//  Tasks
+#import <APCAppCore/APCConsentTask.h>
+#import <APCAppCore/APCConsentQuestion.h>
+#import <APCAppCore/APCConsentBooleanQuestion.h>
+#import <APCAppCore/APCConsentInstructionQuestion.h>
+#import <APCAppCore/APCConsentTextChoiceQuestion.h>
+
 /* -------------------------------------
  Data Archiver & Passive Data Collectors
  --------------------------------------- */
@@ -146,12 +153,14 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  Medication Tracking App Level Components
  ------------------------- */
 
-#import <APCAppCore/APCMedicationTrackerCalendarDailyView.h>
 #import <APCAppCore/APCMedicationTrackerCalendarViewController.h>
+#import <APCAppCore/APCMedicationTrackerCalendarDailyView.h>
+#import <APCAppCore/APCMedicationDetailsTableViewCell.h>
 #import <APCAppCore/APCMedicationTrackerCalendarWeeklyView.h>
 #import <APCAppCore/APCMedicationTrackerDayTitleLabel.h>
 #import <APCAppCore/APCMedicationTrackerDetailViewController.h>
 #import <APCAppCore/APCMedicationTrackerMedicationsDisplayView.h>
+#import <APCAppCore/APCAddPrescriptionTableViewCell.h>
 #import <APCAppCore/NSDate+MedicationTracker.h>
 #import <APCAppCore/NSDictionary+MedicationTracker.h>
 #import <APCAppCore/UIColor+MedicationTracker.h>
@@ -177,6 +186,9 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  Views
  ------------------------- */
 	 
+#import <APCAppCore/APCHorizontalThinLineView.h>
+#import <APCAppCore/APCHorizontalBottomThinLineView.h>
+#import <APCAppCore/APCVerticalThinLineView.h>
 #import <APCAppCore/APCCircularProgressView.h>
 #import <APCAppCore/APCConcentricProgressView.h>
 #import <APCAppCore/APCConfirmationView.h>
