@@ -58,7 +58,7 @@
     NSMutableString *string = [NSMutableString string];
     
     if (self.pickerData.count > 0) {
-        for (int i = 0; i < self.selectedRowIndices.count; i++) {
+        for (NSUInteger i = 0; i < self.selectedRowIndices.count; i++) {
             NSArray *component = self.pickerData[i];
             
             NSInteger selectedRowInComponent = [self.selectedRowIndices[i] integerValue];

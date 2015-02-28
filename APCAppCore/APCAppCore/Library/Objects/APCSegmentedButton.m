@@ -61,7 +61,7 @@
 {
     _selectedIndex = selectedIndex;
 
-    for (int i=0; i<self.buttons.count; i++) {
+    for (NSUInteger i=0; i<self.buttons.count; i++) {
         UIButton *button = self.buttons[i];
         if (i == selectedIndex) {
             button.tintColor = self.highlightColor;

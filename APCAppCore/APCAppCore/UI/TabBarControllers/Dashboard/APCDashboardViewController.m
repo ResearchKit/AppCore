@@ -182,12 +182,13 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardInsightsItem class]]){
         APCTableViewDashboardInsightsItem *insightHeader = (APCTableViewDashboardInsightsItem *)dashboardItem;
-        APCDashboardInsightsTableViewCell *insightsHeaderCell = (APCDashboardInsightsTableViewCell *)cell;
+        APCDashboardInsightsTableViewCell *insightHeaderCell = (APCDashboardInsightsTableViewCell *)cell;
         
-        insightsHeaderCell.cellTitle = insightHeader.caption;
-        insightsHeaderCell.cellSubtitle = insightHeader.detailText;
-        insightsHeaderCell.tintColor = insightHeader.tintColor;
-        insightsHeaderCell.delegate = self;
+        insightHeaderCell.cellTitle = insightHeader.caption;
+        insightHeaderCell.cellSubtitle = insightHeader.detailText;
+        insightHeaderCell.tintColor = insightHeader.tintColor;
+        insightHeaderCell.showTopSeparator = insightHeader.showTopSeparator;
+        insightHeaderCell.delegate = self;
         
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardInsightItem class]]){
         APCTableViewDashboardInsightItem *insightItem = (APCTableViewDashboardInsightItem *)dashboardItem;
@@ -198,6 +199,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         insightCell.goodInsightBar = insightItem.goodBar;
         insightCell.badInsightBar = insightItem.badBar;
         insightCell.insightImage = insightItem.insightImage;
+        insightCell.tintColor = insightItem.tintColor;
     
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardFoodInsightItem class]]){
         APCTableViewDashboardFoodInsightItem *foodInsightItem = (APCTableViewDashboardFoodInsightItem *)dashboardItem;
@@ -207,6 +209,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         foodInsightCell.foodSubtitle = foodInsightItem.subtitleCaption;
         foodInsightCell.foodFrequency = foodInsightItem.frequency;
         foodInsightCell.insightImage = foodInsightItem.foodInsightImage;
+        foodInsightCell.tintColor = foodInsightItem.tintColor;
         
     } else {
         cell.textLabel.text = dashboardItem.caption;
@@ -345,6 +348,8 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 
 - (void)dashboardTableViewCellDidTapMoreInfo:(APCDashboardTableViewCell *)cell
 {
+    /* Pop up implementation. Commented out for ActionSheet 
+     
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     APCTableViewDashboardItem *item = (APCTableViewDashboardItem *)[self itemForIndexPath:indexPath];
     
@@ -362,7 +367,22 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     [self.navigationController presentViewController:moreInfoViewController animated:YES completion:^{
         
     }];
+     */
     
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    APCTableViewDashboardItem *item = (APCTableViewDashboardItem *)[self itemForIndexPath:indexPath];
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:item.caption message:item.info preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+        
+    }];
+    
+    [alertController addAction:dismissAction];
+    
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark - Public Methods

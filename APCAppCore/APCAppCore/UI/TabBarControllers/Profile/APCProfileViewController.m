@@ -923,12 +923,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
                 NSString *ok = NSLocalizedString(@"OK", @"OK");
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
                     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
                 }];
                 [alertController addAction:cancelAction];
                 
-                UIAlertAction *okAction = [UIAlertAction actionWithTitle:ok style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:ok style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
                     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
                 }];
@@ -1125,11 +1125,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         self.user.profileImage = UIImageJPEGRepresentation(self.profileImage, 1.0);
     }
     
-    for (int j=0; j<self.items.count; j++) {
+    for (NSUInteger j=0; j<self.items.count; j++) {
         
         APCTableViewSection *section = self.items[j];
         
-        for (int i = 0; i < section.rows.count; i++) {
+        for (NSUInteger i = 0; i < section.rows.count; i++) {
             
             APCTableViewRow *row = section.rows[i];
             
@@ -1413,9 +1413,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         self.navigationItem.leftBarButtonItem.enabled = YES;
         
         [self loadProfileValuesInModel];
-        [self.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [self.items enumerateObjectsUsingBlock:^(id obj, NSUInteger  __unused idx, BOOL * __unused stop) {
             APCTableViewSection *section = (APCTableViewSection *)obj;
-            [section.rows enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [section.rows enumerateObjectsUsingBlock:^(id obj, NSUInteger  __unused idx, BOOL * __unused stop) {
                 APCTableViewRow * row = (APCTableViewRow *)obj;
                 row.item.selectionStyle = UITableViewCellSelectionStyleNone;
             }];
@@ -1427,9 +1427,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         sender.style = UIBarButtonItemStyleDone;
         
         self.navigationItem.leftBarButtonItem.enabled = NO;
-        [self.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [self.items enumerateObjectsUsingBlock:^(id obj, NSUInteger  __unused idx, BOOL * __unused stop) {
             APCTableViewSection *section = (APCTableViewSection *)obj;
-            [section.rows enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [section.rows enumerateObjectsUsingBlock:^(id obj, NSUInteger __unused idx, BOOL * __unused stop) {
                 APCTableViewRow * row = (APCTableViewRow *)obj;
                 row.item.selectionStyle = UITableViewCellSelectionStyleGray;
             }];
@@ -1484,7 +1484,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Review Consent" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
     
     {
-        UIAlertAction *pdfAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View PDF", @"View PDF") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UIAlertAction *pdfAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View PDF", @"View PDF") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             
             APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
             NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
@@ -1503,7 +1503,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     
     {
-        UIAlertAction *videoAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Watch Video", @"Watch Video") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UIAlertAction *videoAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Watch Video", @"Watch Video") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             
             NSURL *fileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Intro" ofType:@"mp4"]];
             APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
@@ -1514,7 +1514,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     
     {
-        UIAlertAction *slidesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View Slides", @"View Slides") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UIAlertAction *slidesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View Slides", @"View Slides") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             [weakSelf showConsentSlides];
         }];
         [alertController addAction:slidesAction];

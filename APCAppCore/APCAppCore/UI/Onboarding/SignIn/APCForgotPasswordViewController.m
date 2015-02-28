@@ -123,7 +123,7 @@
 									weakSelf.emailMessageLabel.text = NSLocalizedString(@"An email has been sent.", @"");
 									weakSelf.emailMessageLabel.alpha = 1;
                                     weakSelf.resetButton.alpha = 0;
-								} completion:^(BOOL finished) {
+								} completion:^(BOOL __unused finished) {
                                     [weakSelf performSelector:@selector(dismiss) withObject:nil afterDelay:1.0];
                                 }];
 							}
@@ -144,12 +144,12 @@
 
 #pragma mark - Selectors / IBActions
 
-- (IBAction)resetPassword:(id)sender
+- (IBAction)resetPassword:(id) __unused sender
 {
     [self sendPassword];
 }
 
-- (IBAction)cancel:(id)sender
+- (IBAction)cancel:(id) __unused sender
 {
     [self dismiss];
 }

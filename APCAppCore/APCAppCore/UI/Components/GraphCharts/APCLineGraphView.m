@@ -12,8 +12,8 @@
 NSString * const kAPCLineGraphViewTriggerAnimationsNotification = @"APCLineGraphViewTriggerAnimationsNotification";
 NSString * const kAPCLineGraphViewRefreshNotification = @"APCLineGraphViewRefreshNotification";
 
-static CGFloat const kYAxisPaddingFactor = 0.166f;
-static CGFloat const kAPCGraphLeftPadding = 0.f;
+static CGFloat const kYAxisPaddingFactor = 0.15f;
+static CGFloat const kAPCGraphLeftPadding = 10.f;
 static CGFloat const kAxisMarkingRulerLength = 8.0f;
 
 static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";
@@ -381,7 +381,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     xAxisLineLayer.path = xAxispath.CGPath;
     [self.xAxisView.layer addSublayer:xAxisLineLayer];
     
-    for (int i=0; i<self.xAxisTitles.count; i++) {
+    for (NSUInteger i=0; i<self.xAxisTitles.count; i++) {
         CGFloat positionOnXAxis = kAPCGraphLeftPadding + ((CGRectGetWidth(self.plotsView.frame) / (self.numberOfXAxisTitles - 1)) * i);
         
         UIBezierPath *rulerPath = [UIBezierPath bezierPath];
@@ -439,7 +439,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
             yAxisLabelFactors = @[@0.2f,@1.0f];
         }
         
-        for (int i =0; i<yAxisLabelFactors.count; i++) {
+        for (NSUInteger i =0; i<yAxisLabelFactors.count; i++) {
             
             CGFloat factor = [yAxisLabelFactors[i] floatValue];
             CGFloat positionOnYAxis = CGRectGetHeight(self.plotsView.frame) * (1 - factor);
@@ -511,7 +511,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
 }
 
-- (void)drawGraphForPlotIndex:(NSInteger)plotIndex;
+- (void)drawGraphForPlotIndex:(NSInteger)plotIndex
 {
     [self prepareDataForPlotIndex:plotIndex];
     
@@ -525,7 +525,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     [self.dots removeAllObjects];
     
-    for (int i=0 ; i<self.yAxisPoints.count; i++) {
+    for (NSUInteger i=0 ; i<self.yAxisPoints.count; i++) {
         
         CGFloat dataPointVal = [self.dataPoints[i] floatValue];
         
@@ -560,7 +560,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     BOOL emptyDataPresent = NO;
     
-    for (int i=0; i<self.yAxisPoints.count; i++) {
+    for (NSUInteger i=0; i<self.yAxisPoints.count; i++) {
         
         CGFloat dataPointVal = [self.dataPoints[i] floatValue];
         
@@ -649,7 +649,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         if (self.dataPoints.count) {
             self.minimumValue = [self.dataPoints[0] floatValue];
             
-            for (int i=1; i<self.dataPoints.count; i++) {
+            for (NSUInteger i=1; i<self.dataPoints.count; i++) {
                 NSNumber *num = self.dataPoints[i];
                 if ((self.minimumValue == NSNotFound) || (num.floatValue < self.minimumValue)) {
                     self.minimumValue = num.floatValue;
@@ -666,7 +666,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         if (self.dataPoints.count) {
             self.maximumValue = [self.dataPoints[0] floatValue];
             
-            for (int i=1; i<self.dataPoints.count; i++) {
+            for (NSUInteger i=1; i<self.dataPoints.count; i++) {
                 NSNumber *num = self.dataPoints[i];
                 if (((num.floatValue != NSNotFound) && (num.floatValue > self.maximumValue)) || (self.maximumValue == NSNotFound)) {
                     self.maximumValue = num.floatValue;
@@ -676,13 +676,13 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
 }
 
-- (NSArray *)normalizeCanvasPoints:(NSArray *)dataPoints forRect:(CGSize)canvasSize
+- (NSArray *)normalizeCanvasPoints:(NSArray *) __unused dataPoints forRect:(CGSize)canvasSize
 {
     [self calculateMinAndMaxPoints];
     
     NSMutableArray *normalizedPoints = [NSMutableArray new];
     
-    for (int i=0; i<self.dataPoints.count; i++) {
+    for (NSUInteger i=0; i<self.dataPoints.count; i++) {
         
         CGFloat normalizedPointValue;
         CGFloat dataPointValue = [self.dataPoints[i] floatValue];
@@ -837,13 +837,13 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     CGFloat delay = 0.1;
     
-    for (int i=0; i<self.dots.count; i++) {
+    for (NSUInteger i=0; i<self.dots.count; i++) {
         CAShapeLayer *layer = [self.dots[i] shapeLayer];
         [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeFade startDelay:delay];
         delay += 0.1;
     }
     
-    for (int i=0; i<self.pathLines.count; i++) {
+    for (NSUInteger i=0; i<self.pathLines.count; i++) {
         CAShapeLayer *layer = self.pathLines[i];
         [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeGrow startDelay:delay];
         delay += kGrowAnimationDuration;

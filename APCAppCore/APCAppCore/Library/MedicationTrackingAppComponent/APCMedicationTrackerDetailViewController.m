@@ -53,12 +53,12 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
 
 #pragma  mark  -  Table View Data Source Methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView
 {
     return  numberOfSectionsInTableView;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *) __unused tableView numberOfRowsInSection:(NSInteger) __unused section
 {
     NSInteger  numberOfRows = 0;
     
@@ -68,7 +68,7 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
     return  numberOfRows;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *) __unused indexPath
 {
     UITableViewCell  *cell = nil;
 
@@ -135,7 +135,7 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
     [self.lozenge.prescription recordThisManyDoses: totalNumberOfDosesTaken
                                        takenOnDate: dateOfLozenge
                                    andUseThisQueue: [NSOperationQueue mainQueue]
-                                  toDoThisWhenDone: ^(NSTimeInterval operationDuration,
+                                  toDoThisWhenDone: ^(NSTimeInterval __unused operationDuration,
                                                       NSError *error)
      {
          if (error != nil) {
@@ -144,9 +144,9 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
              [self.lozenge.prescription fetchDosesTakenFromDate:dateOfLozenge
                                                          toDate:dateOfLozenge
                                                 andUseThisQueue:[NSOperationQueue mainQueue]
-                                               toDoThisWhenDone:^(APCMedTrackerPrescription *prescription,
+                                               toDoThisWhenDone:^(APCMedTrackerPrescription * __unused prescription,
                                                                   NSArray *dailyDosageRecords,
-                                                                  NSTimeInterval operationDuration,
+                                                                  NSTimeInterval  __unused operationDuration,
                                                                   NSError *error)
               {
                   APCMedTrackerDailyDosageRecord  *record = nil;
@@ -167,7 +167,7 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
 
 #pragma  mark  -  Table View Delegate Methods
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+- (UIView *)tableView:(UITableView *) __unused tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView  *view = nil;
     
@@ -198,7 +198,7 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
     return  view;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *) __unused tableView heightForHeaderInSection:(NSInteger)section
 {
     CGFloat  height = 18.0;
     

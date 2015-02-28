@@ -31,30 +31,30 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
 
 #pragma  mark  -  Toolbar Button Action Methods
 
-- (IBAction)cancelButtonTapped:(UIBarButtonItem *)sender
+- (IBAction)cancelButtonTapped:(UIBarButtonItem *) __unused sender
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
-- (IBAction)doneButtonTapped:(UIBarButtonItem *)sender
+- (IBAction)doneButtonTapped:(UIBarButtonItem *) __unused sender
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 #pragma  mark  -  Table View Data Source Methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView
 {
     return  1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *) __unused tableView numberOfRowsInSection:(NSInteger) __unused section
 {
      NSInteger  numberOfRows = [self.colorsList count];
     return  numberOfRows;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *)tableView:(UITableView *) __unused tableView titleForHeaderInSection:(NSInteger) __unused section
 {
     NSString  *title = NSLocalizedString(@"Select a Color Code for Your Medication", nil);
     return  title;
@@ -129,8 +129,8 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
     
     [APCMedTrackerPrescriptionColor fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
                                                 toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
-                                                                    NSTimeInterval operationDuration,
-                                                                    NSError *error)
+                                                                    NSTimeInterval  __unused operationDuration,
+                                                                    NSError * __unused error)
      {
          self.colorsList = arrayOfGeneratedObjects;
          [self.tabulator reloadData];

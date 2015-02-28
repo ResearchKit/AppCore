@@ -8,6 +8,9 @@
 #import "APCIntroductionViewController.h"
 #import "APCAppCore.h"
 
+static NSInteger const kTitleFontSize = 18.0;
+static NSInteger const kRegularFontSize = 17.0;
+
 @interface APCIntroductionViewController  ( ) <UIScrollViewDelegate>
 
 @property  (nonatomic, weak)    IBOutlet  UIScrollView   *textScroller;
@@ -99,14 +102,14 @@
     paragrapStyle.alignment                = NSTextAlignmentCenter;
 
     NSDictionary  *headlineAttributes = @{
-                                           NSFontAttributeName : [UIFont appRegularFontWithSize: 17.0],
-                                           NSForegroundColorAttributeName : [UIColor appSecondaryColor1],
+                                           NSFontAttributeName : [UIFont appRegularFontWithSize: kTitleFontSize],
+                                           NSForegroundColorAttributeName : [UIColor blackColor],
                                            NSParagraphStyleAttributeName:paragrapStyle
                                            };
     
     NSDictionary  *paragraphAttributes = @{
-                                  NSFontAttributeName : [UIFont appLightFontWithSize: 16.0],
-                                  NSForegroundColorAttributeName : [UIColor appSecondaryColor2],
+                                  NSFontAttributeName : [UIFont appLightFontWithSize: kRegularFontSize],
+                                  NSForegroundColorAttributeName : [UIColor blackColor],
                                   NSParagraphStyleAttributeName:paragrapStyle
                                   };
     

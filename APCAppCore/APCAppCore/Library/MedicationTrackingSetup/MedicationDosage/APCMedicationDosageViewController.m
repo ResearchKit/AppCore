@@ -26,30 +26,30 @@ static  NSString  *kViewControllerName = @"Medication Dosages";
 
 #pragma  mark  -  Toolbar Button Action Methods
 
-- (IBAction)cancelButtonTapped:(UIBarButtonItem *)sender
+- (IBAction)cancelButtonTapped:(UIBarButtonItem *) __unused sender
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
-- (IBAction)doneButtonTapped:(UIBarButtonItem *)sender
+- (IBAction)doneButtonTapped:(UIBarButtonItem *) __unused sender
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 #pragma  mark  -  Table View Data Source Methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView
 {
     return  1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *) __unused tableView numberOfRowsInSection:(NSInteger) __unused section
 {
     NSInteger  numberOfRows = [self.dosageAmounts count];
     return  numberOfRows;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *)tableView:(UITableView *) __unused tableView titleForHeaderInSection:(NSInteger) __unused section
 {
     NSString  *title = NSLocalizedString(@"Select Your Medication's Single Dose Amount", nil);
     return  title;
@@ -133,8 +133,8 @@ static  NSString  *kViewControllerName = @"Medication Dosages";
     
     [APCMedTrackerPossibleDosage fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
                                                     toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
-                                                                        NSTimeInterval operationDuration,
-                                                                        NSError *error)
+                                                                        NSTimeInterval  __unused operationDuration,
+                                                                        NSError * __unused error)
      {
          NSSortDescriptor *amountSorter = [[NSSortDescriptor alloc] initWithKey:@"amount" ascending:YES];
          NSArray  *descriptors = @[ amountSorter ];

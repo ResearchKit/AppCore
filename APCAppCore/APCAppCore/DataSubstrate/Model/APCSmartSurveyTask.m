@@ -147,7 +147,7 @@ static APCDummyObject * _dummyObject;
     return nextStepIdentifier? self.rkSteps[nextStepIdentifier] : nil;
 }
 
-- (ORKStep *)stepBeforeStep:(ORKStep *)step withResult:(ORKTaskResult *)result
+- (ORKStep *)stepBeforeStep:(ORKStep *)step withResult:(ORKTaskResult *) __unused result
 {
     [self refillDynamicStepIdentifiersWithCurrentStepIdentifier:step.identifier];
     NSString * nextStepIdentifier = [self nextStepIdentifier:NO currentIdentifier:step.identifier];

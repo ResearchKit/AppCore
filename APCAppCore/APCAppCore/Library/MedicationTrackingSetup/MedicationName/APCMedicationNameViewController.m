@@ -26,30 +26,30 @@ static  NSString  *kViewControllerName = @"Medication Name";
 
 #pragma  mark  -  Toolbar Button Action Methods
 
-- (void)cancelButtonTapped:(UIBarButtonItem *)sender
+- (void)cancelButtonTapped:(UIBarButtonItem *) __unused sender
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
-- (void)doneButtonTapped:(UIBarButtonItem *)sender
+- (void)doneButtonTapped:(UIBarButtonItem *) __unused sender
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 #pragma  mark  -  Table View Data Source Methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView
 {
     return  1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *) __unused tableView numberOfRowsInSection:(NSInteger) __unused section
 {
     NSInteger  numberOfRows = [self.medicationList count];
     return  numberOfRows;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *)tableView:(UITableView *) __unused tableView titleForHeaderInSection:(NSInteger) __unused section
 {
     NSString  *title = NSLocalizedString(@"Select the Medication You Are Currently Taking", nil);
     return  title;
@@ -121,8 +121,8 @@ static  NSString  *kViewControllerName = @"Medication Name";
     
     [APCMedTrackerMedication fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
                                                 toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
-                                                                    NSTimeInterval operationDuration,
-                                                                    NSError *error)
+                                                                    NSTimeInterval  __unused operationDuration,
+                                                                    NSError * __unused error)
      {
          NSSortDescriptor *nameSorter = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
          NSArray  *descriptors = @[ nameSorter ];

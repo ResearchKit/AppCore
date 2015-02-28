@@ -64,7 +64,7 @@ static NSString * const kAPCAnimationKey = @"APCAnimationKey";
     
     NSUInteger numberOfComponents = [self numberOfComponents];
     
-    for (int i=0; i < numberOfComponents; i++) {
+    for (NSUInteger i=0; i < numberOfComponents; i++) {
         
         CAShapeLayer *dashedTrackLayer = [CAShapeLayer layer];
         [dashedTrackLayer setFrame:self.bounds];
@@ -132,7 +132,7 @@ static NSString * const kAPCAnimationKey = @"APCAnimationKey";
 
 - (void)animatePaths
 {
-    for (int i=0; i < [self numberOfComponents]; i++) {
+    for (NSUInteger i=0; i < [self numberOfComponents]; i++) {
         
         CAShapeLayer *progressLayer = self.progressLayers[i];
         CGFloat value = [self.datasource concentricProgressView:self valueForComponentAtIndex:i];

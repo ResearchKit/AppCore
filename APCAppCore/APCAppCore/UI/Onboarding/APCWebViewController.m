@@ -20,7 +20,7 @@
     self.webview.scalesPageToFit = YES;
 }
 
--(void)webViewDidFinishLoad:(UIWebView *)webView{
+-(void)webViewDidFinishLoad:(UIWebView *) __unused webView{
     [UIView animateWithDuration:1.0 animations:^{
         self.webview.alpha = 1.0;
     }];
@@ -36,7 +36,7 @@
     return YES;
 }
 
-- (IBAction)close:(id)sender
+- (IBAction)close:(id) __unused sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }

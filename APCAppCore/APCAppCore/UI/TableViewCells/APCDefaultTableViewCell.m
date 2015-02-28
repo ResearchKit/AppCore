@@ -29,7 +29,7 @@ NSString * const kAPCDefaultTableViewCellIdentifier = @"APCDefaultTableViewCell"
     // Configure the view for the selected state
 }
 
-- (void)setType:(APCDefaultTableViewCellType)type
+- (void)setType:(APCDefaultTableViewCellType) __unused type
 {
     if (type == kAPCDefaultTableViewCellTypeLeft) {
         self.textLabelWidthConstraint.constant = 91;

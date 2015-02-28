@@ -173,7 +173,7 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
 {
     NSMutableArray * filteredArray = [NSMutableArray array];
     NSDate * todayAtMidnight = [NSDate todayAtMidnight];
-    [scheduledTasksArray enumerateObjectsUsingBlock:^(APCScheduledTask * obj, NSUInteger idx, BOOL *stop) {
+    [scheduledTasksArray enumerateObjectsUsingBlock:^(APCScheduledTask * obj, NSUInteger __unused idx, BOOL * __unused stop) {
         
         if ([obj.completed isEqualToNumber:@YES]) {
             if (obj.lastResult.endDate.timeIntervalSinceReferenceDate >= todayAtMidnight.timeIntervalSinceReferenceDate) {

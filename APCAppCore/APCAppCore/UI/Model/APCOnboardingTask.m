@@ -34,7 +34,7 @@ NSString *const kAPCSignUpPermissionsPrimingStepIdentifier  = @"PermissionsPrimi
 
 #pragma mark - ORKTask methods
 
-- (ORKStep *)stepAfterStep:(ORKStep *)step withResult:(ORKTaskResult *) __unused result
+- (ORKStep *)stepAfterStep:(ORKStep *) __unused step withResult:(ORKTaskResult *) __unused result
 {
     ORKStep *nextStep;
     
@@ -43,7 +43,7 @@ NSString *const kAPCSignUpPermissionsPrimingStepIdentifier  = @"PermissionsPrimi
     return nextStep;
 }
 
-- (ORKStep *)stepBeforeStep:(ORKStep *)step withResult:(ORKTaskResult *) __unused result
+- (ORKStep *)stepBeforeStep:(ORKStep *) __unused step withResult:(ORKTaskResult *) __unused result
 {
     ORKStep *prevStep;
     
