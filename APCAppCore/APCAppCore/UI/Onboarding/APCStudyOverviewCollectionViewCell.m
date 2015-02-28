@@ -56,12 +56,12 @@ NSString *const kAPCStudyOverviewCollectionViewCellIdentifier = @"APCStudyOvervi
 }
 
 - (void)setFont {
-    //Disable at this moment
-    return;
+    // This functionality needs to be properly hashed out,
+    // therefore we are temporarily disabling it.
     //Scale text regarding Dynamic settings
-    NSString *javascriptFunc = [[NSString alloc] initWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%d%%'", (int)([self preferredMultiplyValue] * 100)];
-    [self.webView stringByEvaluatingJavaScriptFromString: javascriptFunc];
-    lastMultiplier = [self preferredMultiplyValue];
+//    NSString *javascriptFunc = [[NSString alloc] initWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%d%%'", (int)([self preferredMultiplyValue] * 100)];
+//    [self.webView stringByEvaluatingJavaScriptFromString: javascriptFunc];
+//    lastMultiplier = [self preferredMultiplyValue];
 }
 
 - (CGFloat)preferredMultiplyValue {

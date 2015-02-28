@@ -12,7 +12,6 @@
 
 
 static CGFloat kTintedCellHeight = 65;
-static CGFloat kBasicCelllHeight = 50;
 
 static CGFloat kTableViewSectionHeaderHeight = 77;
 
