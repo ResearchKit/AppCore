@@ -75,6 +75,8 @@
 		08EA2AB41A7AD564007549C0 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */; };
 		360C63D11A339746002EC86C /* NSDateComponentsHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */; };
 		3624092B1A8181350005B1A7 /* get_debug_ip_address.sh in Resources */ = {isa = PBXBuildFile; fileRef = 3624092A1A8181350005B1A7 /* get_debug_ip_address.sh */; };
+		3625EA2A1AA2726900459AB5 /* APCCatastrophicErrorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3625EA281AA2726900459AB5 /* APCCatastrophicErrorViewController.h */; };
+		3625EA2B1AA2726900459AB5 /* APCCatastrophicErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3625EA291AA2726900459AB5 /* APCCatastrophicErrorViewController.m */; };
 		3627D3481A9A7517006B02E8 /* APCMedTrackerMedication.h in Headers */ = {isa = PBXBuildFile; fileRef = 3627D3461A9A7517006B02E8 /* APCMedTrackerMedication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3627D3491A9A7517006B02E8 /* APCMedTrackerMedication.m in Sources */ = {isa = PBXBuildFile; fileRef = 3627D3471A9A7517006B02E8 /* APCMedTrackerMedication.m */; };
 		3627D34C1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.h in Headers */ = {isa = PBXBuildFile; fileRef = 3627D34A1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -147,6 +149,7 @@
 		36AAB3551A9A760D00FAC255 /* APCMedTrackerPrescriptionColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 36AAB3531A9A760D00FAC255 /* APCMedTrackerPrescriptionColor.m */; };
 		36B1AAE51A38DEA800CE7DB5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3EB1A38D9FF0051096B /* Security.framework */; };
 		36B1AAE61A38DEAF00CE7DB5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */; };
+		36B5EE4E1AA259E100589911 /* CatastrophicError.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36B5EE4D1AA259E100589911 /* CatastrophicError.storyboard */; };
 		36B7D2551A8D848D0043F968 /* ORKAnswerFormat+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 36B7D2531A8D848D0043F968 /* ORKAnswerFormat+Helper.h */; };
 		36B7D2561A8D848D0043F968 /* ORKAnswerFormat+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36B7D2541A8D848D0043F968 /* ORKAnswerFormat+Helper.m */; };
 		36C8B3E51A38D95A0051096B /* APCLogTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36C8B3E41A38D95A0051096B /* APCLogTests.m */; };
@@ -747,6 +750,8 @@
 		08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateComponentsHelperTests.m; sourceTree = "<group>"; };
 		3624092A1A8181350005B1A7 /* get_debug_ip_address.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = get_debug_ip_address.sh; sourceTree = "<group>"; };
+		3625EA281AA2726900459AB5 /* APCCatastrophicErrorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCCatastrophicErrorViewController.h; path = Errors/APCCatastrophicErrorViewController.h; sourceTree = "<group>"; };
+		3625EA291AA2726900459AB5 /* APCCatastrophicErrorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCCatastrophicErrorViewController.m; path = Errors/APCCatastrophicErrorViewController.m; sourceTree = "<group>"; };
 		3627D3461A9A7517006B02E8 /* APCMedTrackerMedication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCMedTrackerMedication.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		3627D3471A9A7517006B02E8 /* APCMedTrackerMedication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCMedTrackerMedication.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		3627D34A1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCMedTrackerPossibleDosage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -803,6 +808,7 @@
 		36AAB34E1A9A75BB00FAC255 /* APCMedTrackerPrescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCMedTrackerPrescription.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		36AAB3521A9A760D00FAC255 /* APCMedTrackerPrescriptionColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMedTrackerPrescriptionColor.h; sourceTree = "<group>"; };
 		36AAB3531A9A760D00FAC255 /* APCMedTrackerPrescriptionColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMedTrackerPrescriptionColor.m; sourceTree = "<group>"; };
+		36B5EE4D1AA259E100589911 /* CatastrophicError.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = CatastrophicError.storyboard; path = Onboarding/CatastrophicError.storyboard; sourceTree = "<group>"; };
 		36B7D2531A8D848D0043F968 /* ORKAnswerFormat+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ORKAnswerFormat+Helper.h"; sourceTree = "<group>"; };
 		36B7D2541A8D848D0043F968 /* ORKAnswerFormat+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ORKAnswerFormat+Helper.m"; sourceTree = "<group>"; };
 		36C8B3E41A38D95A0051096B /* APCLogTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLogTests.m; sourceTree = "<group>"; };
@@ -1618,6 +1624,16 @@
 			name = "Main classes. Please modify only the Helper files. The others are generated by CoreData.";
 			sourceTree = "<group>";
 		};
+		36B5EE4F1AA25A0D00589911 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				36B5EE4D1AA259E100589911 /* CatastrophicError.storyboard */,
+				3625EA281AA2726900459AB5 /* APCCatastrophicErrorViewController.h */,
+				3625EA291AA2726900459AB5 /* APCCatastrophicErrorViewController.m */,
+			);
+			name = Errors;
+			sourceTree = "<group>";
+		};
 		36C8B3E31A38D94F0051096B /* APCLogTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -2335,13 +2351,14 @@
 			isa = PBXGroup;
 			children = (
 				5BB10C071A91D540002D2DD2 /* CollectionViewCells */,
-				5B827B521A80CB0400C685A3 /* TransitionAnimators */,
 				F5F129241A2F78490015982C /* Components */,
+				36B5EE4F1AA25A0D00589911 /* Errors */,
 				F5F1293C1A2F78490015982C /* Model */,
 				F5F129431A2F78490015982C /* Onboarding */,
 				F5F129761A2F78490015982C /* TabBarControllers */,
 				F5F129941A2F78490015982C /* TableViewCells */,
 				F5F129B61A2F78490015982C /* TasksAndSteps */,
+				5B827B521A80CB0400C685A3 /* TransitionAnimators */,
 				F5F129CC1A2F78490015982C /* ViewControllers */,
 				F5F129D21A2F78490015982C /* Views */,
 			);
@@ -2860,6 +2877,7 @@
 				7419F4141AA1EB5C0085DA83 /* APCConsentTextChoiceQuestion.h in Headers */,
 				F5F129FE1A2F78490015982C /* APCSchedule.h in Headers */,
 				0875C3D81A797A7B00CE50FB /* APCButton.h in Headers */,
+				3625EA2A1AA2726900459AB5 /* APCCatastrophicErrorViewController.h in Headers */,
 				5B9B36A71A95D9C900389F42 /* APCActivitiesBasicTableViewCell.h in Headers */,
 				F5B9480C1A73272C0034C522 /* APCScheduleExpressionTokenizer.h in Headers */,
 				F5F12A851A2F78490015982C /* APCOnboarding.h in Headers */,
@@ -3167,6 +3185,7 @@
 				CFFDEDDC1A95734000B25581 /* APCFrequencyDayTableViewCell.xib in Resources */,
 				08027A771A7319AC00B358CC /* consent_01@2x.png in Resources */,
 				CFFDEDE21A95734000B25581 /* APCMedicationFrequencyViewController.xib in Resources */,
+				36B5EE4E1AA259E100589911 /* CatastrophicError.storyboard in Resources */,
 				08027A9B1A7319AC00B358CC /* consent_01@2x.m4v in Resources */,
 				08027AA11A7319AC00B358CC /* consent_07@2x.m4v in Resources */,
 				369E27F81A96B7A200D35DFA /* APCMedicationSampleSchedules.plist in Resources */,
@@ -3384,6 +3403,7 @@
 				5B234E151A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m in Sources */,
 				F5B9480D1A73272C0034C522 /* APCScheduleExpressionTokenizer.m in Sources */,
 				6C7346091A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m in Sources */,
+				3625EA2B1AA2726900459AB5 /* APCCatastrophicErrorViewController.m in Sources */,
 				F54DDD281A8026010073E4B4 /* APCDataTracker.m in Sources */,
 				F5F12A7A1A2F78490015982C /* APCAxisView.m in Sources */,
 				F5B947EC1A73272C0034C522 /* APCDebugWindow.m in Sources */,

@@ -15,6 +15,7 @@
 #import "APCTasksReminderManager.h"
 #import "UIView+Helper.h"
 #import "APCTabBarViewController.h"
+#import "UIAlertController+Helper.h"
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -42,6 +43,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 @property (nonatomic) BOOL isPasscodeShowing;
 @property (nonatomic, strong) UIView *secureView;
+@property (nonatomic, strong) NSError *catastrophicStartupError;
 
 @end
 
@@ -57,6 +59,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     [self setUpInitializationOptions];
     NSAssert(self.initializationOptions, @"Please set up initialization options");
 
+    [self doGeneralInitialization];
     [self initializeBridgeServerConnection];
     [self initializeAppleCoreStack];
     [self loadStaticTasksAndSchedulesIfNecessary];
@@ -149,6 +152,14 @@ static NSUInteger const kIndexOfProfileTab = 3;
     didFailToRegisterForRemoteNotificationsWithError: (NSError *) __unused error
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:APCAppDidFailToRegisterForRemoteNotification object:nil];
+}
+
+/*********************************************************************************/
+#pragma mark - General initialization
+/*********************************************************************************/
+- (void) doGeneralInitialization
+{
+    self.catastrophicStartupError = nil;
 }
 
 /*********************************************************************************/
@@ -451,6 +462,42 @@ static NSUInteger const kIndexOfProfileTab = 3;
 }
 
 /*********************************************************************************/
+#pragma mark - Catastrophic startup errors
+/*********************************************************************************/
+- (void) registerCatastrophicStartupError: (NSError *) error
+{
+    self.catastrophicStartupError = error;
+}
+
+- (BOOL) hadCatastrophicStartupError
+{
+    return self.catastrophicStartupError != nil;
+}
+
+- (void) showCatastrophicStartupError
+{
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName: @"CatastrophicError"
+                                                         bundle: [NSBundle appleCoreBundle]];
+
+    UIViewController *errorViewController = [storyBoard instantiateInitialViewController];
+
+    self.window.rootViewController = errorViewController;
+    NSError *error = self.catastrophicStartupError;
+
+    __block APCAppDelegate *blockSafeSelf = self;
+
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle: error.userInfo [NSLocalizedFailureReasonErrorKey]
+                                                                   message: error.userInfo [NSLocalizedRecoverySuggestionErrorKey]];
+
+        [blockSafeSelf.window.rootViewController presentViewController: alert animated: YES completion: nil];
+
+    }];
+
+}
+
+/*********************************************************************************/
 #pragma mark - Respond to Notifications
 /*********************************************************************************/
 - (void) registerNotifications {
@@ -674,9 +721,13 @@ static NSUInteger const kIndexOfProfileTab = 3;
 /*********************************************************************************/
 - (void) showAppropriateVC
 {
-    if (self.dataSubstrate.currentUser.isSignedIn) {
+    if (self.hadCatastrophicStartupError)
+    {
+        [self showCatastrophicStartupError];
+    }
+    else if (self.dataSubstrate.currentUser.isSignedIn)
+    {
         [self showTabBar];
-        
     }
     else if (self.dataSubstrate.currentUser.isSignedUp)
     {

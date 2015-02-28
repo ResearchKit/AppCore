@@ -56,6 +56,7 @@
 //SetupMethods
 - (void) setUpInitializationOptions;
 - (void) setUpAppAppearance;
+- (void) registerCatastrophicStartupError: (NSError *) error;
 
 //For User in Subclasses
 - (void) signedInNotification:(NSNotification *)notification;
