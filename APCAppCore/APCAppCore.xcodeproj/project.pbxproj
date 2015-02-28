@@ -53,8 +53,6 @@
 		081A477A1A93EC4700E13148 /* APCBadgeLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 081A47781A93EC4700E13148 /* APCBadgeLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		081A477B1A93EC4700E13148 /* APCBadgeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 081A47791A93EC4700E13148 /* APCBadgeLabel.m */; };
 		0833AE1E1A76C016001D8AA0 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		08351E631AA1340500407141 /* APCHorizontalThinLineView.h in Headers */ = {isa = PBXBuildFile; fileRef = 08351E5F1AA1340500407141 /* APCHorizontalThinLineView.h */; };
-		08351E641AA1340500407141 /* APCHorizontalThinLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08351E601AA1340500407141 /* APCHorizontalThinLineView.m */; };
 		08351E651AA1340500407141 /* APCVerticalThinLineView.h in Headers */ = {isa = PBXBuildFile; fileRef = 08351E611AA1340500407141 /* APCVerticalThinLineView.h */; };
 		08351E661AA1340500407141 /* APCVerticalThinLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08351E621AA1340500407141 /* APCVerticalThinLineView.m */; };
 		0871A3931A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0871A3911A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -213,10 +211,6 @@
 		7B6F91761A97EF3500335E50 /* APCStoredUserData.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B6F91741A97EF3500335E50 /* APCStoredUserData.m */; };
 		7BD1D3D41A702ED200D6A377 /* APCDataResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BD1D3D21A702ED200D6A377 /* APCDataResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BD1D3D51A702ED200D6A377 /* APCDataResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BD1D3D31A702ED200D6A377 /* APCDataResult.m */; };
-		7BF54F911AA1354D0081C935 /* APCHorizontalThinLineView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BF54F8D1AA1354D0081C935 /* APCHorizontalThinLineView.h */; };
-		7BF54F921AA1354E0081C935 /* APCHorizontalThinLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BF54F8E1AA1354D0081C935 /* APCHorizontalThinLineView.m */; };
-		7BF54F931AA1354E0081C935 /* APCVerticalThinLineView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BF54F8F1AA1354D0081C935 /* APCVerticalThinLineView.h */; };
-		7BF54F941AA1354E0081C935 /* APCVerticalThinLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BF54F901AA1354D0081C935 /* APCVerticalThinLineView.m */; };
 		7BF54F971AA158E50081C935 /* APCHorizontalBottomThinLineView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BF54F951AA158E50081C935 /* APCHorizontalBottomThinLineView.h */; };
 		7BF54F981AA158E50081C935 /* APCHorizontalBottomThinLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BF54F961AA158E50081C935 /* APCHorizontalBottomThinLineView.m */; };
 		A7CFE4B51A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = A7CFE4B11A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -713,8 +707,6 @@
 		08027A761A7319AC00B358CC /* consent_07@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_07@3x.m4v"; sourceTree = "<group>"; };
 		081A47781A93EC4700E13148 /* APCBadgeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCBadgeLabel.h; sourceTree = "<group>"; };
 		081A47791A93EC4700E13148 /* APCBadgeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCBadgeLabel.m; sourceTree = "<group>"; };
-		08351E5F1AA1340500407141 /* APCHorizontalThinLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHorizontalThinLineView.h; sourceTree = "<group>"; };
-		08351E601AA1340500407141 /* APCHorizontalThinLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHorizontalThinLineView.m; sourceTree = "<group>"; };
 		08351E611AA1340500407141 /* APCVerticalThinLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCVerticalThinLineView.h; sourceTree = "<group>"; };
 		08351E621AA1340500407141 /* APCVerticalThinLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCVerticalThinLineView.m; sourceTree = "<group>"; };
 		0871A3911A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardFoodInsightTableViewCell.h; sourceTree = "<group>"; };
@@ -2903,7 +2895,6 @@
 				369E27FE1A96B7A200D35DFA /* APCMedTrackerDailyDosageRecord+Helper.h in Headers */,
 				F5F129F01A2F78490015982C /* APCDBStatus.h in Headers */,
 				F5F129F41A2F78490015982C /* APCResult+AddOn.h in Headers */,
-				08351E631AA1340500407141 /* APCHorizontalThinLineView.h in Headers */,
 				F5B946481A7309A20034C522 /* ZZStandardDecryptInputStream.h in Headers */,
 				712AB44C1A9E692400556DA2 /* APCMotionHistoryData.h in Headers */,
 				F5F12A831A2F78490015982C /* APCResizeView.h in Headers */,
@@ -3199,7 +3190,6 @@
 				F5B946351A7309A20034C522 /* ZZError.m in Sources */,
 				5BE106F11A9EE2D900CA5A07 /* APCDashboardGraphTableViewCell.m in Sources */,
 				CFFDEDF31A95734000B25581 /* APCMedicationSummaryTableViewCell.m in Sources */,
-				08351E641AA1340500407141 /* APCHorizontalThinLineView.m in Sources */,
 				5B0432A01A318AA2000DC9ED /* APCSignInTask.m in Sources */,
 				F5F12A0F1A2F78490015982C /* APCUser+UserData.m in Sources */,
 				F5F12AC11A2F78490015982C /* APCGraphViewController.m in Sources */,
