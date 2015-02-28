@@ -8,10 +8,10 @@
 #import "APCIntroductionViewController.h"
 #import "APCAppCore.h"
 
-@interface APCIntroductionViewController  ( ) <UIScrollViewDelegate>
-
 static NSInteger const kTitleFontSize = 18.0;
 static NSInteger const kRegularFontSize = 17.0;
+
+@interface APCIntroductionViewController  ( ) <UIScrollViewDelegate>
 
 @property  (nonatomic, weak)    IBOutlet  UIScrollView   *textScroller;
 @property  (nonatomic, weak)    IBOutlet  UIScrollView   *imageScroller;
