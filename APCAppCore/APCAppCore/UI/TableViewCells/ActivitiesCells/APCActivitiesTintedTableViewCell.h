@@ -30,6 +30,7 @@ typedef NS_ENUM(NSUInteger, APCTintColorType) {
 
 @property (nonatomic) BOOL hidesSubTitle;
 
+- (void)setupAppearance;
 - (void)setupIncompleteAppearance;
 
 @end

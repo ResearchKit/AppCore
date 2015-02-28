@@ -21,6 +21,8 @@ static CGFloat const kTitleLabelCenterYConstant = 10.5f;
     
     [self setupAppearance];
     
+    self.countLabel.text = @"";
+    
     self.hidesSubTitle = NO;
 }
 
@@ -31,8 +33,6 @@ static CGFloat const kTitleLabelCenterYConstant = 10.5f;
     
     self.subTitleLabel.textColor = [UIColor appSecondaryColor3];
     self.subTitleLabel.font = [UIFont appRegularFontWithSize:14.f];
-    
-    self.countLabel.text = @"";
 }
 
 - (void)setHidesSubTitle:(BOOL)hidesSubTitle
@@ -46,6 +46,8 @@ static CGFloat const kTitleLabelCenterYConstant = 10.5f;
     } else {
         self.titleLabelCenterYConstraint.constant = kTitleLabelCenterYConstant;
     }
+    
+    [self layoutIfNeeded];
 }
 
 - (void)setTintColor:(UIColor *)tintColor
