@@ -137,6 +137,7 @@
 
 @property (nonatomic, strong) UIColor *tintColor;
 @property (nonatomic, strong) NSString *info;
+@property (nonatomic, strong) NSString *taskId;
 
 @end
 
