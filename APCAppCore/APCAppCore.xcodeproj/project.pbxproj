@@ -39,17 +39,6 @@
 		08027A981A7319AC00B358CC /* sittingman@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08027A621A7319AC00B358CC /* sittingman@3x.png */; };
 		08027A991A7319AC00B358CC /* walkingman@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08027A631A7319AC00B358CC /* walkingman@3x.png */; };
 		08027A9A1A7319AC00B358CC /* walkingman_monitor@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08027A641A7319AC00B358CC /* walkingman_monitor@3x.png */; };
-		08027A9B1A7319AC00B358CC /* consent_01@2x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A681A7319AC00B358CC /* consent_01@2x.m4v */; };
-		08027A9C1A7319AC00B358CC /* consent_02@2x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A691A7319AC00B358CC /* consent_02@2x.m4v */; };
-		08027A9E1A7319AC00B358CC /* consent_04@2x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A6B1A7319AC00B358CC /* consent_04@2x.m4v */; };
-		08027A9F1A7319AC00B358CC /* consent_05@2x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A6C1A7319AC00B358CC /* consent_05@2x.m4v */; };
-		08027AA01A7319AC00B358CC /* consent_06@2x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A6D1A7319AC00B358CC /* consent_06@2x.m4v */; };
-		08027AA11A7319AC00B358CC /* consent_07@2x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A6E1A7319AC00B358CC /* consent_07@2x.m4v */; };
-		08027AA21A7319AC00B358CC /* consent_01@3x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A701A7319AC00B358CC /* consent_01@3x.m4v */; };
-		08027AA51A7319AC00B358CC /* consent_04@3x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A731A7319AC00B358CC /* consent_04@3x.m4v */; };
-		08027AA61A7319AC00B358CC /* consent_05@3x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A741A7319AC00B358CC /* consent_05@3x.m4v */; };
-		08027AA71A7319AC00B358CC /* consent_06@3x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A751A7319AC00B358CC /* consent_06@3x.m4v */; };
-		08027AA81A7319AC00B358CC /* consent_07@3x.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 08027A761A7319AC00B358CC /* consent_07@3x.m4v */; };
 		081A477A1A93EC4700E13148 /* APCBadgeLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 081A47781A93EC4700E13148 /* APCBadgeLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		081A477B1A93EC4700E13148 /* APCBadgeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 081A47791A93EC4700E13148 /* APCBadgeLabel.m */; };
 		0833AE1E1A76C016001D8AA0 /* (null) in Sources */ = {isa = PBXBuildFile; };
@@ -710,20 +699,6 @@
 		08027A621A7319AC00B358CC /* sittingman@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sittingman@3x.png"; sourceTree = "<group>"; };
 		08027A631A7319AC00B358CC /* walkingman@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "walkingman@3x.png"; sourceTree = "<group>"; };
 		08027A641A7319AC00B358CC /* walkingman_monitor@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "walkingman_monitor@3x.png"; sourceTree = "<group>"; };
-		08027A681A7319AC00B358CC /* consent_01@2x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_01@2x.m4v"; sourceTree = "<group>"; };
-		08027A691A7319AC00B358CC /* consent_02@2x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_02@2x.m4v"; sourceTree = "<group>"; };
-		08027A6A1A7319AC00B358CC /* consent_03@2x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_03@2x.m4v"; sourceTree = "<group>"; };
-		08027A6B1A7319AC00B358CC /* consent_04@2x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_04@2x.m4v"; sourceTree = "<group>"; };
-		08027A6C1A7319AC00B358CC /* consent_05@2x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_05@2x.m4v"; sourceTree = "<group>"; };
-		08027A6D1A7319AC00B358CC /* consent_06@2x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_06@2x.m4v"; sourceTree = "<group>"; };
-		08027A6E1A7319AC00B358CC /* consent_07@2x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_07@2x.m4v"; sourceTree = "<group>"; };
-		08027A701A7319AC00B358CC /* consent_01@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_01@3x.m4v"; sourceTree = "<group>"; };
-		08027A711A7319AC00B358CC /* consent_02@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_02@3x.m4v"; sourceTree = "<group>"; };
-		08027A721A7319AC00B358CC /* consent_03@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_03@3x.m4v"; sourceTree = "<group>"; };
-		08027A731A7319AC00B358CC /* consent_04@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_04@3x.m4v"; sourceTree = "<group>"; };
-		08027A741A7319AC00B358CC /* consent_05@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_05@3x.m4v"; sourceTree = "<group>"; };
-		08027A751A7319AC00B358CC /* consent_06@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_06@3x.m4v"; sourceTree = "<group>"; };
-		08027A761A7319AC00B358CC /* consent_07@3x.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "consent_07@3x.m4v"; sourceTree = "<group>"; };
 		081A47781A93EC4700E13148 /* APCBadgeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCBadgeLabel.h; sourceTree = "<group>"; };
 		081A47791A93EC4700E13148 /* APCBadgeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCBadgeLabel.m; sourceTree = "<group>"; };
 		08351E611AA1340500407141 /* APCVerticalThinLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCVerticalThinLineView.h; sourceTree = "<group>"; };
@@ -1456,51 +1431,6 @@
 				08027A641A7319AC00B358CC /* walkingman_monitor@3x.png */,
 			);
 			path = "phone-736h@3x";
-			sourceTree = "<group>";
-		};
-		08027A651A7319AC00B358CC /* ResearchKit-Assets */ = {
-			isa = PBXGroup;
-			children = (
-				08027A661A7319AC00B358CC /* Consent */,
-			);
-			path = "ResearchKit-Assets";
-			sourceTree = "<group>";
-		};
-		08027A661A7319AC00B358CC /* Consent */ = {
-			isa = PBXGroup;
-			children = (
-				08027A671A7319AC00B358CC /* phone@2x */,
-				08027A6F1A7319AC00B358CC /* phone@3x */,
-			);
-			path = Consent;
-			sourceTree = "<group>";
-		};
-		08027A671A7319AC00B358CC /* phone@2x */ = {
-			isa = PBXGroup;
-			children = (
-				08027A681A7319AC00B358CC /* consent_01@2x.m4v */,
-				08027A691A7319AC00B358CC /* consent_02@2x.m4v */,
-				08027A6A1A7319AC00B358CC /* consent_03@2x.m4v */,
-				08027A6B1A7319AC00B358CC /* consent_04@2x.m4v */,
-				08027A6C1A7319AC00B358CC /* consent_05@2x.m4v */,
-				08027A6D1A7319AC00B358CC /* consent_06@2x.m4v */,
-				08027A6E1A7319AC00B358CC /* consent_07@2x.m4v */,
-			);
-			path = "phone@2x";
-			sourceTree = "<group>";
-		};
-		08027A6F1A7319AC00B358CC /* phone@3x */ = {
-			isa = PBXGroup;
-			children = (
-				08027A701A7319AC00B358CC /* consent_01@3x.m4v */,
-				08027A711A7319AC00B358CC /* consent_02@3x.m4v */,
-				08027A721A7319AC00B358CC /* consent_03@3x.m4v */,
-				08027A731A7319AC00B358CC /* consent_04@3x.m4v */,
-				08027A741A7319AC00B358CC /* consent_05@3x.m4v */,
-				08027A751A7319AC00B358CC /* consent_06@3x.m4v */,
-				08027A761A7319AC00B358CC /* consent_07@3x.m4v */,
-			);
-			path = "phone@3x";
 			sourceTree = "<group>";
 		};
 		0894654F1A8C211100A983AC /* Insights */ = {
@@ -2310,7 +2240,6 @@
 			isa = PBXGroup;
 			children = (
 				08027A3A1A7319AC00B358CC /* Assets */,
-				08027A651A7319AC00B358CC /* ResearchKit-Assets */,
 				F556549A1A701337003E0B0C /* Localizable.strings */,
 				F5F12B1B1A2F78AE0015982C /* Info.plist */,
 				3624092A1A8181350005B1A7 /* get_debug_ip_address.sh */,
@@ -3118,20 +3047,17 @@
 				08027A981A7319AC00B358CC /* sittingman@3x.png in Resources */,
 				08027A7F1A7319AC00B358CC /* consent_02@3x.png in Resources */,
 				CFFDEDF41A95734000B25581 /* APCMedicationSummaryTableViewCell.xib in Resources */,
-				08027A9E1A7319AC00B358CC /* consent_04@2x.m4v in Resources */,
 				08027A931A7319AC00B358CC /* heartbeat@3x.png in Resources */,
 				08027A921A7319AC00B358CC /* heart-fitness@3x.png in Resources */,
 				F5F12A9A1A2F78490015982C /* APCEmailVerify.storyboard in Resources */,
 				F5F12AB91A2F78490015982C /* APCActivities.storyboard in Resources */,
 				CFFDEDDF1A95734000B25581 /* APCFrequencyTableViewTimesCell.xib in Resources */,
-				08027AA51A7319AC00B358CC /* consent_04@3x.m4v in Resources */,
 				08027A821A7319AC00B358CC /* consent_05@3x.png in Resources */,
 				F5F12B021A2F78490015982C /* APCSimpleTaskSummaryViewController.xib in Resources */,
 				F5F12AC91A2F78490015982C /* APCProfile.storyboard in Resources */,
 				369E28161A96B7A200D35DFA /* APCMedTrackerPredefinedPrescriptionColors.plist in Resources */,
 				08027A7D1A7319AC00B358CC /* consent_07@2x.png in Resources */,
 				08027A891A7319AC00B358CC /* phonesoundwaves@2x.png in Resources */,
-				08027AA81A7319AC00B358CC /* consent_07@3x.m4v in Resources */,
 				08027A7B1A7319AC00B358CC /* consent_05@2x.png in Resources */,
 				08027A991A7319AC00B358CC /* walkingman@3x.png in Resources */,
 				CF8270C41AA12A110039B255 /* APCAddPrescriptionTableViewCell.xib in Resources */,
@@ -3147,7 +3073,6 @@
 				08027A851A7319AC00B358CC /* handtapping01@2x.png in Resources */,
 				F5F12B031A2F78490015982C /* APCPasscode.storyboard in Resources */,
 				08027A8D1A7319AC00B358CC /* sittingman@2x.png in Resources */,
-				08027A9F1A7319AC00B358CC /* consent_05@2x.m4v in Resources */,
 				08027A781A7319AC00B358CC /* consent_02@2x.png in Resources */,
 				369E27F71A96B7A200D35DFA /* APCMedicationSampleDosesTaken.plist in Resources */,
 				7B0DC4181A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib in Resources */,
@@ -3158,7 +3083,6 @@
 				08027A8E1A7319AC00B358CC /* walkingman@2x.png in Resources */,
 				08027A971A7319AC00B358CC /* pocket@3x.png in Resources */,
 				08027A8F1A7319AC00B358CC /* walkingman_monitor@2x.png in Resources */,
-				08027A9C1A7319AC00B358CC /* consent_02@2x.m4v in Resources */,
 				F5F12AC21A2F78490015982C /* APCLearn.storyboard in Resources */,
 				08027A941A7319AC00B358CC /* phonesoundwaves@3x.png in Resources */,
 				CFFDEDFC1A95734000B25581 /* APCSetupTableViewCell.xib in Resources */,
@@ -3167,8 +3091,6 @@
 				CFFDEDDC1A95734000B25581 /* APCFrequencyDayTableViewCell.xib in Resources */,
 				08027A771A7319AC00B358CC /* consent_01@2x.png in Resources */,
 				CFFDEDE21A95734000B25581 /* APCMedicationFrequencyViewController.xib in Resources */,
-				08027A9B1A7319AC00B358CC /* consent_01@2x.m4v in Resources */,
-				08027AA11A7319AC00B358CC /* consent_07@2x.m4v in Resources */,
 				369E27F81A96B7A200D35DFA /* APCMedicationSampleSchedules.plist in Resources */,
 				08027A901A7319AC00B358CC /* handtapping01@3x.png in Resources */,
 				08027A791A7319AC00B358CC /* consent_03@2x.png in Resources */,
@@ -3176,12 +3098,10 @@
 				08027A8B1A7319AC00B358CC /* phonewaves@2x.png in Resources */,
 				08027A8A1A7319AC00B358CC /* phonetapping@2x.png in Resources */,
 				CF130B7A1A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib in Resources */,
-				08027AA71A7319AC00B358CC /* consent_06@3x.m4v in Resources */,
 				08027A801A7319AC00B358CC /* consent_03@3x.png in Resources */,
 				08027A831A7319AC00B358CC /* consent_06@3x.png in Resources */,
 				08027A9A1A7319AC00B358CC /* walkingman_monitor@3x.png in Resources */,
 				F5F12A6E1A2F78490015982C /* TabBar.storyboard in Resources */,
-				08027AA21A7319AC00B358CC /* consent_01@3x.m4v in Resources */,
 				CFFDED791A95731F00B25581 /* APCMedicationTrackerDetailViewController.xib in Resources */,
 				3624092B1A8181350005B1A7 /* get_debug_ip_address.sh in Resources */,
 				08027A881A7319AC00B358CC /* heartbeat@2x.png in Resources */,
@@ -3190,8 +3110,6 @@
 				08027A811A7319AC00B358CC /* consent_04@3x.png in Resources */,
 				F556549B1A701337003E0B0C /* Localizable.strings in Resources */,
 				F5F12A921A2F78490015982C /* APCSpinnerViewController.xib in Resources */,
-				08027AA01A7319AC00B358CC /* consent_06@2x.m4v in Resources */,
-				08027AA61A7319AC00B358CC /* consent_05@3x.m4v in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
