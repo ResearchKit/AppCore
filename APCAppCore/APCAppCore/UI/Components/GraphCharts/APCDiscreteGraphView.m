@@ -12,8 +12,8 @@
 NSString * const kAPCDiscreteGraphViewTriggerAnimationsNotification = @"APCDiscreteGraphViewTriggerAnimationsNotification";
 NSString * const kAPCDiscreteGraphViewRefreshNotification = @"APCDiscreteGraphViewRefreshNotification";
 
-static CGFloat const kYAxisPaddingFactor = 0.166f;
-static CGFloat const kAPCGraphLeftPadding = 0.f;
+static CGFloat const kYAxisPaddingFactor = 0.15f;
+static CGFloat const kAPCGraphLeftPadding = 10.f;
 static CGFloat const kAxisMarkingRulerLength = 8.0f;
 
 static NSString * const kFadeAnimationKey = @"LayerFadeAnimation";

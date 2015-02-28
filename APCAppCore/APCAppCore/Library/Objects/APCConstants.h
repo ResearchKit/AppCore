@@ -114,6 +114,28 @@ FOUNDATION_EXPORT NSString *const kPageViewEvent;
 FOUNDATION_EXPORT NSString *const kErrorEvent;
 FOUNDATION_EXPORT NSString *const kPassiveCollectorEvent;
 
+
+/*********************************************************************************/
+#pragma mark - Errors
+/*********************************************************************************/
+FOUNDATION_EXPORT NSString * const kAPCErrorDomain_CoreData;
+FOUNDATION_EXPORT NSInteger  const kAPCErrorDomain_CoreData_Code_Undetermined;
+FOUNDATION_EXPORT NSInteger  const kAPCErrorDomain_CoreData_Code_NoError;
+FOUNDATION_EXPORT NSInteger  const kAPCErrorDomain_CoreData_Code_CantCreateDatabase;
+FOUNDATION_EXPORT NSInteger  const kAPCErrorDomain_CoreData_Code_CantOpenExistingDatabase;
+
 @interface APCConstants : NSObject
 
 @end
+
+
+
+
+
+
+
+
+
+
+
+

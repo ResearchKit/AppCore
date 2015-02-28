@@ -33,6 +33,7 @@
         <attribute name="alphaAsFloat" attributeType="Float" minValueString="0" maxValueString="1" defaultValueString="1" syncable="YES"/>
         <attribute name="blueAsInteger" attributeType="Integer 16" minValueString="0" maxValueString="255" defaultValueString="50" syncable="YES"/>
         <attribute name="greenAsInteger" optional="YES" attributeType="Integer 16" minValueString="0" maxValueString="255" defaultValueString="50" syncable="YES"/>
+        <attribute name="naturalSortOrder" attributeType="Integer 16" minValueString="0" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="redAsInteger" optional="YES" attributeType="Integer 16" minValueString="0" maxValueString="255" defaultValueString="50" syncable="YES"/>
         <relationship name="prescriptionsWhereIAmUsed" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="APCMedTrackerPrescription" inverseName="color" inverseEntity="APCMedTrackerPrescription" syncable="YES"/>
     </entity>
@@ -121,7 +122,7 @@
         <element name="APCMedTrackerMedication" positionX="-1260" positionY="935" width="180" height="58"/>
         <element name="APCMedTrackerPossibleDosage" positionX="-1269" positionY="758" width="216" height="73"/>
         <element name="APCMedTrackerPrescription" positionX="-938" positionY="764" width="218" height="178"/>
-        <element name="APCMedTrackerPrescriptionColor" positionX="-666" positionY="729" width="207" height="118"/>
+        <element name="APCMedTrackerPrescriptionColor" positionX="-666" positionY="729" width="207" height="133"/>
         <element name="APCResult" positionX="-1107" positionY="72" width="128" height="208"/>
         <element name="APCSchedule" positionX="-729" positionY="-28" width="128" height="253"/>
         <element name="APCScheduledTask" positionX="-945" positionY="72" width="128" height="178"/>
