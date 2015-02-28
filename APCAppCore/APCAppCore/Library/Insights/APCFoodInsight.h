@@ -12,6 +12,7 @@ extern NSString * const kFoodInsightFoodNameKey;
 extern NSString * const kFoodInsightValueKey;
 extern NSString * const kFoodInsightCaloriesValueKey;
 extern NSString * const kFoodInsightFrequencyKey;
+extern NSString * const kFoodInsightSugarCaloriesValueKey;
 
 @protocol APCFoodInsightDelegate <NSObject>
 
