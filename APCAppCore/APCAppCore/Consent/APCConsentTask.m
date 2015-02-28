@@ -20,8 +20,10 @@ static NSString*    kHtmlContentTag                     = @"htmlContent";
 static NSString*    kIdentifierTag                      = @"identifier";
 static NSString*    kPromptTag                          = @"prompt";
 static NSString*    kTextTag                            = @"text";
-static NSString*    kSuccessMessageTag                  = @"success";
-static NSString*    kFailedMessageTag                   = @"failed";
+static NSString*    kSuccessTitleTag                    = @"successTitle";
+static NSString*    kSuccessMessageTag                  = @"successMessage";
+static NSString*    kFailedTitleTag                     = @"failureTitle";
+static NSString*    kFailedMessageTag                   = @"failureMessage";
 static NSString*    kDocumentPropertiesTag              = @"documentProperties";
 static NSString*    kQuizTag                            = @"quiz";
 static NSString*    kSectionTag                         = @"sections";
@@ -48,6 +50,8 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
 
 //  Quiz properties
 @property (nonatomic, copy)   NSArray*          questions;
+@property (nonatomic, copy)   NSString*         successTitle;
+@property (nonatomic, copy)   NSString*         failureTitle;
 @property (nonatomic, copy)   NSString*         successMessage;
 @property (nonatomic, copy)   NSString*         failureMessage;
 @property (nonatomic, assign) NSUInteger        maxAllowedFailure;
@@ -131,13 +135,14 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
 
 - (ORKStep*)failureStep
 {
-    ORKStep*    step = nil;
+    ORKInstructionStep* step = nil;
     
     if (self.successMessage != nil)
     {
         step = [[ORKInstructionStep alloc] initWithIdentifier:kFailedMessageTag];
-        step.title = NSLocalizedString(@"Failed", nil);
+        step.title = self.failureTitle;
         step.text  = self.failureMessage;
+        step.image = [UIImage imageNamed:@"consent_quiz_retry"];
     }
 
     return step;
@@ -145,13 +150,14 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
 
 - (ORKStep*)successStep
 {
-    ORKStep*    step = nil;
+    ORKInstructionStep* step = nil;
     
     if (self.successMessage != nil)
     {
         step = [[ORKInstructionStep alloc] initWithIdentifier:kSuccessMessageTag];
-        step.title = NSLocalizedString(@"Passed", nil);
+        step.title = self.failureTitle;
         step.text  = self.successMessage;
+        step.image = [UIImage imageNamed:@"Completion-Check"];
     }
     
     return step;
@@ -201,7 +207,7 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
             }
         }
         
-        BOOL    didPass = failureCount < self.maxAllowedFailure;
+        BOOL    didPass = failureCount <= self.maxAllowedFailure;
         
         return didPass;
     };
@@ -364,14 +370,18 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
 - (void)loadQuiz:(NSDictionary*)properties
 {
     //  Failure and success messages are optioinal, questions, however are not.
+    NSString*   failureTitle   = [properties objectForKey:kFailedTitleTag];
     NSString*   failureMessage = [properties objectForKey:kFailedMessageTag];
-    NSString*   sucessMessage  = [properties objectForKey:kSuccessMessageTag];
+    NSString*   successTitle   = [properties objectForKey:kSuccessTitleTag];
+    NSString*   successMessage = [properties objectForKey:kSuccessMessageTag];
     NSString*   allowedFailure = [properties objectForKey:kAllowedFailuresCountTag];
     NSArray*    questions      = [properties objectForKey:kQuestionsTag];
     NSAssert(questions != nil, @"No questions defined for Consent Quiz");
     
+    self.successTitle       = successTitle;
+    self.failureTitle       = failureTitle;
     self.failureMessage     = failureMessage;
-    self.successMessage     = sucessMessage;
+    self.successMessage     = successMessage;
     self.maxAllowedFailure  = allowedFailure.integerValue;
     
     if (questions != nil)
