@@ -9,6 +9,7 @@
 #import "APCAppCore.h"
 #import <CoreData/CoreData.h>
 
+
 @implementation APCDataSubstrate (CoreData)
 
 /*********************************************************************************/
@@ -85,8 +86,11 @@
 
             [userInfo addEntriesFromDictionary:
              @{
-               NSLocalizedFailureReasonErrorKey: @"Unable to Open Database",
-               NSLocalizedRecoverySuggestionErrorKey: @"Unable to open your existing data file. Please exit the app and try again. If the problem recurs, please uninstall and reinstall the app.",
+               NSLocalizedFailureReasonErrorKey: NSLocalizedString (@"Unable to Open Database",
+                                                                    @"If we can't open the user's existing data file, they'll see an alert with this title."),
+
+               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString (@"Unable to open your existing data file. Please exit the app and try again. If the problem recurs, please uninstall and reinstall the app.",
+                                                                         @"If we can't open the user's existing data file, they'll see an alert with this message."),
                }];
         }
         else
@@ -95,8 +99,11 @@
 
             [userInfo addEntriesFromDictionary:
              @{
-               NSLocalizedFailureReasonErrorKey: @"Unable to Create Database",
-               NSLocalizedRecoverySuggestionErrorKey: @"We were unable to create a place to save your data. Please exit the app and try again. If the problem recurs, please uninstall the app and try once more.",
+               NSLocalizedFailureReasonErrorKey: NSLocalizedString (@"Unable to Create Database",
+                                                                    @"If we can't open create a place to store the user's data, they'll see an alert with this title."),
+
+               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString (@"We were unable to create a place to save your data. Please exit the app and try again. If the problem recurs, please uninstall the app and try once more.",
+                                                                         @"If we can't open create a place to store the user's data, they'll see an alert with this message."),
                }];
         }
 
@@ -107,53 +114,14 @@
         APCLogError2 (catastrophe);
 
 
-        // FOR NOW:  make sure we see this.
-        NSAssert (NO, @"WARNING:  Couldn't create database.  Now what?");
-
-
         /*
-         Not sure what else we can do:  we couldn't open and/or
-         migrate the database.  For now, use our "old" solution
-         of destroying the user's data.
+         FOR NOW:  crash.  Next version:  display an alert, but don't crash.
          
-         Note that with the NSAssert above, we'll never reach this line.
+         We are purposely choosing NOT to delete the user's data and start
+         over, using [self removeSqliteStore].  We're not sure what else
+         to do, though.
          */
-        if ([[NSFileManager defaultManager] fileExistsAtPath: self.storePath])
-        {
-            [self removeSqliteStore];
-        }
-
-        NSError *secondTryError = nil;
-        persistentStore = [self.persistentStoreCoordinator addPersistentStoreWithType: NSSQLiteStoreType
-                                                                        configuration: nil
-                                                                                  URL: persistentStoreUrl
-                                                                              options: options
-                                                                                error: & secondTryError];
-
-        if (persistentStore)
-        {
-            // Well, at least we could create a blank database.
-        }
-
-        else
-        {
-            // Yikes!  We couldn't even do that!  Now what?
-            NSDictionary *userInfoDict = @{ NSUnderlyingErrorKey                  : secondTryError ?: [NSNull null],
-                                            NSFilePathErrorKey                    : self.storePath,
-                                            NSLocalizedFailureReasonErrorKey      : @"Unable to Create Database (take 2)",
-                                            NSLocalizedRecoverySuggestionErrorKey : @"We were unable to create a place to save your data. (We tried twice.) Please exit the app and try again. If the problem recurs, please uninstall the app and try once more.",
-                                            };
-
-            catastrophe = [NSError errorWithDomain: kAPCErrorDomain_CoreData
-                                              code: kAPCErrorDomain_CoreData_Code_CantCreateDatabase
-                                          userInfo: userInfoDict];
-
-            APCLogError2 (catastrophe);
-
-
-            // Again:  FOR NOW, make sure we see this.
-            NSAssert (NO, @"WARNING: Couldn't even create NEW database.  Now what?");
-        }
+        NSAssert (NO, @"WARNING:  Couldn't create database.  Now what?");
     }
 }
 
