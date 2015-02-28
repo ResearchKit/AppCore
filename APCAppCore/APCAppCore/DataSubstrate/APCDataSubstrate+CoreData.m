@@ -9,6 +9,7 @@
 #import "APCAppCore.h"
 #import <CoreData/CoreData.h>
 
+
 @implementation APCDataSubstrate (CoreData)
 
 /*********************************************************************************/
@@ -45,20 +46,83 @@
 
 - (void) setUpPersistentStore
 {
-    NSError * error;
-    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @(YES),
-                              NSInferMappingModelAutomaticallyOption: @(YES)
-                              };
-    
-    NSPersistentStore *persistentStore = [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:self.storePath] options:options error:&error];
-    if (!persistentStore) {
-        //TODO: Address removing persistent store in production
-        NSError * localError;
-        [self removeSqliteStore];
-        [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:self.storePath] options:options error:&localError];
-        APCLogError2 (localError);
+    NSError *error               = nil;
+    NSURL   *persistentStoreUrl  = [NSURL fileURLWithPath: self.storePath];
+    BOOL    fileAlreadyExists    = [[NSFileManager defaultManager] fileExistsAtPath: self.storePath];
+
+    NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption : @(YES),
+                               NSInferMappingModelAutomaticallyOption       : @(YES)
+                               };
+
+    NSPersistentStore *persistentStore = [self.persistentStoreCoordinator addPersistentStoreWithType: NSSQLiteStoreType
+                                                                                       configuration: nil
+                                                                                                 URL: persistentStoreUrl
+                                                                                             options: options
+                                                                                               error: & error];
+
+    if (persistentStore)
+    {
+        // Great!  Everything worked.  (Sound of whistling)
     }
-    NSAssert([[NSFileManager defaultManager] fileExistsAtPath:self.storePath], @"Database Not Created");
+
+    else
+    {
+        /*
+         In case we want to switch() on them, the list of possible
+         CoreData errors is here:
+
+                https://developer.apple.com/library/ios/documentation/Cocoa/Reference/CoreDataFramework/Miscellaneous/CoreData_Constants/
+         */
+
+        NSInteger errorCode = kAPCErrorDomain_CoreData_Code_Undetermined;
+
+        NSMutableDictionary * userInfo = @{ NSUnderlyingErrorKey : error ?: [NSNull null],
+                                            NSFilePathErrorKey   : self.storePath,
+                                           }.mutableCopy;
+
+        if (fileAlreadyExists)
+        {
+            errorCode = kAPCErrorDomain_CoreData_Code_CantOpenExistingDatabase;
+
+            [userInfo addEntriesFromDictionary:
+             @{
+               NSLocalizedFailureReasonErrorKey: NSLocalizedString (@"Unable to Open Database",
+                                                                    @"If we can't open the user's existing data file, they'll see an alert with this title."),
+
+               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString (@"Unable to open your existing data file. Please exit the app and try again. If the problem recurs, please uninstall and reinstall the app.",
+                                                                         @"If we can't open the user's existing data file, they'll see an alert with this message."),
+               }];
+        }
+        else
+        {
+            errorCode = kAPCErrorDomain_CoreData_Code_CantCreateDatabase;
+
+            [userInfo addEntriesFromDictionary:
+             @{
+               NSLocalizedFailureReasonErrorKey: NSLocalizedString (@"Unable to Create Database",
+                                                                    @"If we can't open create a place to store the user's data, they'll see an alert with this title."),
+
+               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString (@"We were unable to create a place to save your data. Please exit the app and try again. If the problem recurs, please uninstall the app and try once more.",
+                                                                         @"If we can't open create a place to store the user's data, they'll see an alert with this message."),
+               }];
+        }
+
+        NSError *catastrophe = [NSError errorWithDomain: kAPCErrorDomain_CoreData
+                                                   code: errorCode
+                                               userInfo: userInfo];
+
+        APCLogError2 (catastrophe);
+
+
+        /*
+         FOR NOW:  crash.  Next version:  display an alert, but don't crash.
+         
+         We are purposely choosing NOT to delete the user's data and start
+         over, using [self removeSqliteStore].  We're not sure what else
+         to do, though.
+         */
+        NSAssert (NO, @"WARNING:  Couldn't create database.  Now what?");
+    }
 }
 
 - (void) removeSqliteStore
