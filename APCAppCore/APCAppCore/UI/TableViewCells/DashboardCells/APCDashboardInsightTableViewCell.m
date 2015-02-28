@@ -118,6 +118,15 @@
     CGContextAddLineToPoint(context, rect.size.width, rect.size.height);
     CGContextStrokePath(context);
     CGContextRestoreGState(context);
+    
+    // Sidebar
+    CGFloat sidebarWidth = 4.0;
+    CGFloat sidbarHeight = rect.size.height;
+    CGRect sidebar = CGRectMake(0, 0, sidebarWidth, sidbarHeight);
+    
+    UIColor *sidebarColor = self.tintColor;
+    [sidebarColor setFill];
+    UIRectFill(sidebar);
 }
 
 @end

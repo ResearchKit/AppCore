@@ -173,6 +173,7 @@
 @property (nonatomic, strong) UIColor *sidebarColor;
 @property (nonatomic, strong) NSString *titleCaption;
 @property (nonatomic, strong) NSString *subtitleCaption;
+@property (nonatomic) BOOL showTopSeparator;
 
 @end
 
