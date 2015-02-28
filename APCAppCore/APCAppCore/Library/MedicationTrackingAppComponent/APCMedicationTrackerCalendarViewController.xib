@@ -8,8 +8,10 @@
             <connections>
                 <outlet property="exScrollibur" destination="KL7-BS-XTd" id="ngl-ko-fia"/>
                 <outlet property="tabulator" destination="bka-yN-34d" id="qKV-rW-9JT"/>
+                <outlet property="tapItemsView" destination="jK1-nf-DCv" id="I4k-a3-oUu"/>
                 <outlet property="view" destination="0LA-A4-Ylc" id="am7-nf-FTY"/>
                 <outlet property="weekContainer" destination="HNJ-T2-NQa" id="MLN-8J-wvZ"/>
+                <outlet property="yourPrescriptionsView" destination="3mn-ab-tHb" id="oBy-EB-1NJ"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
