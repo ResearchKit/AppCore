@@ -141,7 +141,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     NSDictionary  *dictionary = prescription.frequencyAndDays;
     
     for (NSUInteger  day = 0;  day < numberOfDaysOfWeek;  day++) {
-        NSDate  *currentDate = [self.startOfWeekDate addDays:day];
+        NSDate  *currentDate = [self.startOfWeekDate dateByAddingDays:day];
         NSString  *dayOfWeek = daysOfWeekNames[day];
         NSNumber  *number = dictionary[dayOfWeek];
         if ([number integerValue] > 0) {

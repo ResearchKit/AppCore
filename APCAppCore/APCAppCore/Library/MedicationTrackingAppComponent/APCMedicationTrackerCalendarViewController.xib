@@ -39,8 +39,8 @@
                                 <constraint firstAttribute="width" constant="600" id="jM5-DU-rhG"/>
                             </constraints>
                         </view>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap on above items to log intake" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vMQ-ee-Tsy" userLabel="Your Prescriptions">
-                            <rect key="frame" x="17" y="0.0" width="583" height="18"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap on above items to log intake" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vMQ-ee-Tsy" userLabel="Tap Items">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="18"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
@@ -58,7 +58,7 @@
                         <constraint firstAttribute="trailing" secondItem="LjJ-jh-YLu" secondAttribute="trailing" id="HLf-O7-AmI"/>
                         <constraint firstAttribute="bottom" secondItem="LjJ-jh-YLu" secondAttribute="bottom" id="Q1V-d5-kZR"/>
                         <constraint firstAttribute="trailing" secondItem="vMQ-ee-Tsy" secondAttribute="trailing" id="Qgz-q5-8LO"/>
-                        <constraint firstItem="vMQ-ee-Tsy" firstAttribute="leading" secondItem="jK1-nf-DCv" secondAttribute="leading" constant="17" id="Qsm-9V-Cqn"/>
+                        <constraint firstItem="vMQ-ee-Tsy" firstAttribute="leading" secondItem="jK1-nf-DCv" secondAttribute="leading" id="Qsm-9V-Cqn"/>
                         <constraint firstItem="t3b-cR-MNm" firstAttribute="top" secondItem="jK1-nf-DCv" secondAttribute="top" id="T8H-yz-dRS"/>
                         <constraint firstItem="LjJ-jh-YLu" firstAttribute="top" secondItem="t3b-cR-MNm" secondAttribute="bottom" constant="16" id="VQ3-Zf-VMB"/>
                         <constraint firstAttribute="bottom" secondItem="vMQ-ee-Tsy" secondAttribute="bottom" id="bUg-i4-edW"/>

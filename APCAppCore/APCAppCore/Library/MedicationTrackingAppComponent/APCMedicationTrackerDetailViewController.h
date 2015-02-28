@@ -11,6 +11,6 @@
 
 @interface APCMedicationTrackerDetailViewController : UIViewController
 
-@property  (nonatomic, strong)  APCLozengeButton           *lozenge;
+@property  (nonatomic, strong)  APCLozengeButton  *lozenge;
 
 @end

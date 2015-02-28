@@ -153,8 +153,9 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  Medication Tracking App Level Components
  ------------------------- */
 
-#import <APCAppCore/APCMedicationTrackerCalendarDailyView.h>
 #import <APCAppCore/APCMedicationTrackerCalendarViewController.h>
+#import <APCAppCore/APCMedicationTrackerCalendarDailyView.h>
+#import <APCAppCore/APCMedicationDetailsTableViewCell.h>
 #import <APCAppCore/APCMedicationTrackerCalendarWeeklyView.h>
 #import <APCAppCore/APCMedicationTrackerDayTitleLabel.h>
 #import <APCAppCore/APCMedicationTrackerDetailViewController.h>
@@ -185,6 +186,9 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  Views
  ------------------------- */
 	 
+#import <APCAppCore/APCHorizontalThinLineView.h>
+#import <APCAppCore/APCHorizontalBottomThinLineView.h>
+#import <APCAppCore/APCVerticalThinLineView.h>
 #import <APCAppCore/APCCircularProgressView.h>
 #import <APCAppCore/APCConcentricProgressView.h>
 #import <APCAppCore/APCConfirmationView.h>

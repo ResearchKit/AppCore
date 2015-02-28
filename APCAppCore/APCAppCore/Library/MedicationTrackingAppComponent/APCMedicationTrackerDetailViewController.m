@@ -11,6 +11,9 @@
 
 #import "APCMedTrackerDailyDosageRecord.h"
 
+#import "APCMedicationDetailsTableViewCell.h"
+#import "APCConfirmationView.h"
+
 #import "APCMedTrackerMedication+Helper.h"
 #import "APCMedTrackerPrescription+Helper.h"
 #import "APCMedTrackerPossibleDosage+Helper.h"
@@ -20,19 +23,13 @@
 
 #import "NSDictionary+APCAdditions.h"
 
-static  NSString  *viewControllerTitle   = @"Medication Tracker";
+static  NSString  *viewControllerTitle           = @"Medication Details";
 
-static  NSString  *kSetupTableCellName   = @"APCSetupTableViewCell";
-
-//static  NSInteger  kSummarySectionNameRow        = 0;
-//static  NSInteger  kSummarySectionFrequencyRow   = 1;
-//static  NSInteger  kSummarySectionColorRow       = 2;
-//static  NSInteger  kSummarySectionDosageRow      = 3;
+static  NSString  *kMedicationDetailsName        = @"APCMedicationDetailsTableViewCell";
 
 static  NSInteger  numberOfSectionsInTableView   = 1;
 
 static  NSInteger  kDailyDosesTakenSection       = 0;
-//static  NSInteger  kMedicineSummarySection       = 1;
 
 static  CGFloat    kHeightForDosesTakenHeader    = 36.0;
 static  CGFloat    kPointSizeForDosesTakenHeader = 15.0;
@@ -43,9 +40,11 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
 
 @interface APCMedicationTrackerDetailViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, weak)  IBOutlet  UITableView    *tabulator;
+@property (nonatomic, weak)  IBOutlet  UIBarButtonItem  *todayMedicineTitle;
 
-@property (nonatomic, assign)          NSUInteger      numberOfTickMarksToSet;
+@property (nonatomic, weak)  IBOutlet  UITableView      *tabulator;
+
+@property (nonatomic, assign)          NSUInteger        numberOfTickMarksToSet;
 
 @end
 
@@ -70,52 +69,18 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *) __unused indexPath
 {
-    UITableViewCell  *cell = nil;
-
-//    if (indexPath.section == kDailyDosesTakenSection) {
-        NSString  *identifier = @"Simple Cell Identifier";
-        UITableViewCell  *aCell = [tableView dequeueReusableCellWithIdentifier:identifier];
-        if (aCell == nil) {
-            aCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
-        }
-        aCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        aCell.textLabel.text = self.lozenge.prescription.medication.name;
-        aCell.detailTextLabel.text = self.lozenge.prescription.dosage.name;
-        if (self.numberOfTickMarksToSet > 0) {
-            aCell.accessoryType = UITableViewCellAccessoryCheckmark;
-            self.numberOfTickMarksToSet = self.numberOfTickMarksToSet - 1;
-        }
-        cell = aCell;
-//    } else if (indexPath.section == kMedicineSummarySection) {
-//
-//        APCSetupTableViewCell  *aCell = (APCSetupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSetupTableCellName];
-//
-//        aCell.topicLabel.text = mainTableCategories[indexPath.row];
-//        aCell.accessoryType = UITableViewCellAccessoryNone;
-//        aCell.selectionStyle = UITableViewCellSelectionStyleNone;
-//
-//        if (indexPath.row == 2) {
-//            aCell.colorSwatch.hidden = NO;
-//            aCell.addTopicLabel.hidden = YES;
-//        } else {
-//            aCell.colorSwatch.hidden = YES;
-//            aCell.addTopicLabel.hidden = NO;
-//        }
-//
-//        if (indexPath.row == kSummarySectionNameRow) {
-//            aCell.addTopicLabel.text = self.lozenge.prescription.medication.name;
-//        } else if (indexPath.row == kSummarySectionFrequencyRow) {
-//            NSDictionary  *numbersAndDays = self.lozenge.prescription.frequencyAndDays;
-//            NSString  *formatted = [numbersAndDays formatNumbersAndDays];
-//            aCell.addTopicLabel.text = formatted;
-//        } else if (indexPath.row == kSummarySectionColorRow) {
-//            aCell.colorSwatch.backgroundColor = self.lozenge.prescription.color.UIColor;
-//        } else if (indexPath.row == kSummarySectionDosageRow) {
-//            aCell.addTopicLabel.text = self.lozenge.prescription.dosage.name;
-//        }
-//        cell = aCell;
-//    }
-
+    APCMedicationDetailsTableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier:kMedicationDetailsName];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.colorSwatch.backgroundColor = self.lozenge.prescription.color.UIColor;
+    cell.medicationName.text = self.lozenge.prescription.medication.name;
+    NSString  *doseNumberString = [NSString stringWithFormat:@"Dose %ld", (indexPath.row + 1)];
+    cell.doseNumber.text = doseNumberString;
+    NSString  *doseAmountString = [NSString stringWithFormat:@"(%@)", self.lozenge.prescription.dosage.name];
+    cell.doseAmount.text = doseAmountString;
+    if (self.numberOfTickMarksToSet > 0) {
+        cell.confirmer.completed = YES;
+        self.numberOfTickMarksToSet = self.numberOfTickMarksToSet - 1;
+    }
     return  cell;
 }
 
@@ -126,8 +91,8 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
     NSInteger   numberOfRowsInDosesSection = [self.tabulator numberOfRowsInSection:kDailyDosesTakenSection];
     NSUInteger  totalNumberOfDosesTaken = 0;
     for (NSUInteger  row = 0;  row < numberOfRowsInDosesSection;  row++) {
-        UITableViewCell  *doseCell = [self.tabulator cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:kDailyDosesTakenSection]];
-        if (doseCell.accessoryType == UITableViewCellAccessoryCheckmark) {
+        APCMedicationDetailsTableViewCell  *doseCell = (APCMedicationDetailsTableViewCell *)[self.tabulator cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:kDailyDosesTakenSection]];
+        if (doseCell.confirmer.completed == YES) {
             totalNumberOfDosesTaken = totalNumberOfDosesTaken + 1;
         }
     }
@@ -184,7 +149,7 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
         label.numberOfLines = 0;
         label.font = [UIFont appLightFontWithSize:kPointSizeForDosesTakenHeader];
         label.textColor = [UIColor blackColor];
-        label.text = NSLocalizedString(@"Select which scheduled doses you have taken today", nil);
+        label.text = NSLocalizedString(@"Select which scheduled doses you have taken", nil);
         label.lineBreakMode = NSLineBreakByWordWrapping;
         [container addSubview:label];
         
@@ -209,26 +174,14 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
     return  height;
 }
 
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    NSString  *title = @"";
-//        //
-//        //    provide a non-empty blank string to get a section header at the bottom of the section
-//        //
-//    if (section == kMedicineSummarySection) {
-//        title = @"          ";
-//    }
-//    return  title;
-//}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == kDailyDosesTakenSection) {
-        UITableViewCell  *cell = [tableView cellForRowAtIndexPath:indexPath];
-        if (cell.accessoryType == UITableViewCellAccessoryNone) {
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        APCMedicationDetailsTableViewCell  *cell = (APCMedicationDetailsTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+        if (cell.confirmer.completed == NO) {
+            cell.confirmer.completed = YES;
         } else {
-            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.confirmer.completed = NO;
         }
         [self updateNumberOfDosesTaken];
     }
@@ -244,10 +197,16 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
-    UINib  *setupTableCellNib = [UINib nibWithNibName:kSetupTableCellName bundle:[NSBundle appleCoreBundle]];
-    [self.tabulator registerNib:setupTableCellNib forCellReuseIdentifier:kSetupTableCellName];
+    UINib  *medicationDetailsCellNib = [UINib nibWithNibName:kMedicationDetailsName bundle:[NSBundle appleCoreBundle]];
+    [self.tabulator registerNib:medicationDetailsCellNib forCellReuseIdentifier:kMedicationDetailsName];
     
     self.numberOfTickMarksToSet = [self.lozenge.numberOfDosesTaken unsignedIntegerValue];
+    
+    NSDateFormatter  *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateStyle = NSDateFormatterFullStyle;
+    formatter.timeStyle = NSDateFormatterNoStyle;
+    NSString  *todayDate = [formatter stringFromDate:self.lozenge.currentDate];
+    self.todayMedicineTitle.title = todayDate;
 }
 
 - (void)didReceiveMemoryWarning
