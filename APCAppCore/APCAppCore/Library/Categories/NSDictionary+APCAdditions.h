@@ -11,5 +11,6 @@
 
 - (NSString*) JSONString;
 + (instancetype) dictionaryWithJSONString: (NSString *) string;
+- (NSString *)formatNumbersAndDays;
 
 @end
