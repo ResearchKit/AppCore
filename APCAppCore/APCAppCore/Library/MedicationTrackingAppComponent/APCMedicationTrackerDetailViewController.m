@@ -18,6 +18,8 @@
 
 #import "APCAppCore.h"
 
+#import "NSDictionary+APCAdditions.h"
+
 static  NSString  *viewControllerTitle   = @"Medication Tracker";
 
 static  NSString  *kSetupTableCellName   = @"APCSetupTableViewCell";
@@ -38,7 +40,6 @@ static  CGFloat    kPointSizeForDosesTakenHeader = 15.0;
 static  NSString  *mainTableCategories[] = { @"Medication", @"Frequency", @"Label Color", @"Dosage" };
 
 static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
-static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSString *));
 
 @interface APCMedicationTrackerDetailViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
@@ -69,23 +70,6 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
         numberOfRows = 4;
     }
     return  numberOfRows;
-}
-
-- (NSString *)formatNumbersAndDays:(NSDictionary *)frequencyAndDays
-{
-    NSMutableString  *daysAndNumbers = [NSMutableString string];
-    for (NSUInteger  day = 0;  day < numberOfDaysOfWeek;  day++) {
-        NSString  *key = daysOfWeekNames[day];
-        NSNumber  *number = [frequencyAndDays objectForKey:key];
-        if ([number integerValue] > 0) {
-            if (daysAndNumbers.length == 0) {
-                [daysAndNumbers appendFormat:@"%ld\u2009\u00d7, %@", [number integerValue], [key substringToIndex:3]];
-            } else {
-                [daysAndNumbers appendFormat:@", %@", [key substringToIndex:3]];
-            }
-        }
-    }
-    return  daysAndNumbers;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -125,7 +109,9 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
         if (indexPath.row == kSummarySectionNameRow) {
             aCell.addTopicLabel.text = self.lozenge.prescription.medication.name;
         } else if (indexPath.row == kSummarySectionFrequencyRow) {
-            aCell.addTopicLabel.text = [self formatNumbersAndDays:self.lozenge.prescription.frequencyAndDays];
+            NSDictionary  *numbersAndDays = self.lozenge.prescription.frequencyAndDays;
+            NSString  *formatted = [numbersAndDays formatNumbersAndDays];
+            aCell.addTopicLabel.text = formatted;
         } else if (indexPath.row == kSummarySectionColorRow) {
             aCell.colorSwatch.backgroundColor = self.lozenge.prescription.color.UIColor;
         } else if (indexPath.row == kSummarySectionDosageRow) {
@@ -183,7 +169,7 @@ static  NSUInteger  numberOfDaysOfWeek = (sizeof(daysOfWeekNames) / sizeof(NSStr
      }];
 }
 
-#pragma  mark  -  Table View Delegate Methods    lineBreakMode
+#pragma  mark  -  Table View Delegate Methods
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
