@@ -163,7 +163,7 @@ static NSString * const kInternalMaxParticipantsMessage = @"has reached the limi
                 field.identifier = kAPCDefaultTableViewCellIdentifier;
                 
                 NSCalendar * gregorian = [[NSCalendar alloc] initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
-                NSDate * currentDate = [NSDate date];
+                NSDate * currentDate = [[NSDate date] startOfDay];
                 NSDateComponents * comps = [[NSDateComponents alloc] init];
                 [comps setYear: -18];
                 NSDate * maxDate = [gregorian dateByAddingComponents: comps toDate: currentDate options: 0];
