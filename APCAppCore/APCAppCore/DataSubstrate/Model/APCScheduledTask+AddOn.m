@@ -125,8 +125,7 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     request.predicate = finalPredicate;
     
     NSSortDescriptor *titleSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"task.taskTitle" ascending:YES];
-    NSSortDescriptor * completedSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"completed" ascending:YES];
-    request.sortDescriptors = @[completedSortDescriptor, titleSortDescriptor];
+    request.sortDescriptors = @[titleSortDescriptor];
     
     NSError * error;
     NSArray * array = [context executeFetchRequest:request error:&error];
