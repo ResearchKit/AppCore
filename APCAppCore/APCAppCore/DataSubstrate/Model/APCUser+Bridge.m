@@ -223,7 +223,7 @@
         UIImage *consentImage = [UIImage imageWithData:self.consentSignatureImage];
         
         [SBBComponent(SBBConsentManager) consentSignature:name
-                                                birthdate:birthDate
+                                                birthdate: [birthDate startOfDay]
                                            signatureImage:consentImage
                                                 dataSharing:DEFAULT_DATA_SHARING_SCOPE
                                                completion:^(id __unused responseObject, NSError * __unused error) {
