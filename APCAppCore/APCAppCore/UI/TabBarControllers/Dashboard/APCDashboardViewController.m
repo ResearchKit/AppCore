@@ -345,6 +345,8 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 
 - (void)dashboardTableViewCellDidTapMoreInfo:(APCDashboardTableViewCell *)cell
 {
+    /* Pop up implementation. Commented out for ActionSheet 
+     
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     APCTableViewDashboardItem *item = (APCTableViewDashboardItem *)[self itemForIndexPath:indexPath];
     
@@ -362,7 +364,22 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     [self.navigationController presentViewController:moreInfoViewController animated:YES completion:^{
         
     }];
+     */
     
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    APCTableViewDashboardItem *item = (APCTableViewDashboardItem *)[self itemForIndexPath:indexPath];
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:item.caption message:item.info preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"Dismiss") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+    }];
+    
+    [alertController addAction:dismissAction];
+    
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark - Public Methods
