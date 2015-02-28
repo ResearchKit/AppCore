@@ -25,9 +25,6 @@ typedef NS_ENUM(NSInteger, MotionActivity)
 {
     CMMotionActivityManager * motionActivityManager;
     CMMotionManager * motionManager;
-    
-    NSMutableArray *motionDayValues;
-    
     NSMutableArray *motionReport;
     BOOL isTheDataReady;
     
@@ -60,7 +57,6 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
     self = [super init];
     if(self) {
         self->motionActivityManager = [CMMotionActivityManager new];
-        self->motionDayValues = [NSMutableArray new];
         self->motionReport = [NSMutableArray new];
         self->isTheDataReady = false;
         
@@ -74,7 +70,6 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
 
 -(void)startMotionCoProcessorDataFrom:(NSDate *)startDate andEndDate:(NSDate *)endDate andNumberOfDays:(NSInteger)numberOfDays
 {
-    [motionDayValues removeAllObjects];
     [motionReport removeAllObjects];
     isTheDataReady = false;
     
@@ -134,6 +129,8 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           
                                                           //Setting lastMotionActivityType to 0 from this point on we will use the emum.
                                                           NSInteger lastMotionActivityType = 0;
+                                                          
+                                                           NSMutableArray *motionDayValues = [NSMutableArray new];
                                                           
                                                           for(CMMotionActivity *activity in activities)
                                                           {

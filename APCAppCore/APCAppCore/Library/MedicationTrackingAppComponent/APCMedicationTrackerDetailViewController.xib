@@ -7,6 +7,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="APCMedicationTrackerDetailViewController">
             <connections>
                 <outlet property="tabulator" destination="PhK-o3-X8y" id="6dn-Re-ePa"/>
+                <outlet property="todayMedicineTitle" destination="8y4-fO-9vG" id="i9r-Xc-TRi"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
