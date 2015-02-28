@@ -14,4 +14,6 @@
 @property (nonatomic, strong) NSNumber *foodFrequency;
 @property (nonatomic, strong) UIImage *insightImage;
 
+@property (nonatomic, strong) UIColor *tintColor;
+
 @end
