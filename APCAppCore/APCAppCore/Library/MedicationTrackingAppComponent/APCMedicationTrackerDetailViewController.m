@@ -24,15 +24,15 @@ static  NSString  *viewControllerTitle   = @"Medication Tracker";
 
 static  NSString  *kSetupTableCellName   = @"APCSetupTableViewCell";
 
-static  NSInteger  kSummarySectionNameRow        = 0;
-static  NSInteger  kSummarySectionFrequencyRow   = 1;
-static  NSInteger  kSummarySectionColorRow       = 2;
-static  NSInteger  kSummarySectionDosageRow      = 3;
+//static  NSInteger  kSummarySectionNameRow        = 0;
+//static  NSInteger  kSummarySectionFrequencyRow   = 1;
+//static  NSInteger  kSummarySectionColorRow       = 2;
+//static  NSInteger  kSummarySectionDosageRow      = 3;
 
-static  NSInteger  numberOfSectionsInTableView   = 2;
+static  NSInteger  numberOfSectionsInTableView   = 1;
 
 static  NSInteger  kDailyDosesTakenSection       = 0;
-static  NSInteger  kMedicineSummarySection       = 1;
+//static  NSInteger  kMedicineSummarySection       = 1;
 
 static  CGFloat    kHeightForDosesTakenHeader    = 36.0;
 static  CGFloat    kPointSizeForDosesTakenHeader = 15.0;
@@ -62,12 +62,8 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
 {
     NSInteger  numberOfRows = 0;
     
-    if (section == kDailyDosesTakenSection) {
-        if (self.lozenge != nil) {
-            numberOfRows = [self.lozenge.prescription.numberOfTimesPerDay integerValue];
-        }
-    } else if (section == kMedicineSummarySection) {
-        numberOfRows = 4;
+    if (self.lozenge != nil) {
+        numberOfRows = [self.lozenge.prescription.numberOfTimesPerDay integerValue];
     }
     return  numberOfRows;
 }
@@ -76,7 +72,7 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
 {
     UITableViewCell  *cell = nil;
 
-    if (indexPath.section == kDailyDosesTakenSection) {
+//    if (indexPath.section == kDailyDosesTakenSection) {
         NSString  *identifier = @"Simple Cell Identifier";
         UITableViewCell  *aCell = [tableView dequeueReusableCellWithIdentifier:identifier];
         if (aCell == nil) {
@@ -90,35 +86,35 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
             self.numberOfTickMarksToSet = self.numberOfTickMarksToSet - 1;
         }
         cell = aCell;
-    } else if (indexPath.section == kMedicineSummarySection) {
-
-        APCSetupTableViewCell  *aCell = (APCSetupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSetupTableCellName];
-
-        aCell.topicLabel.text = mainTableCategories[indexPath.row];
-        aCell.accessoryType = UITableViewCellAccessoryNone;
-        aCell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-        if (indexPath.row == 2) {
-            aCell.colorSwatch.hidden = NO;
-            aCell.addTopicLabel.hidden = YES;
-        } else {
-            aCell.colorSwatch.hidden = YES;
-            aCell.addTopicLabel.hidden = NO;
-        }
-
-        if (indexPath.row == kSummarySectionNameRow) {
-            aCell.addTopicLabel.text = self.lozenge.prescription.medication.name;
-        } else if (indexPath.row == kSummarySectionFrequencyRow) {
-            NSDictionary  *numbersAndDays = self.lozenge.prescription.frequencyAndDays;
-            NSString  *formatted = [numbersAndDays formatNumbersAndDays];
-            aCell.addTopicLabel.text = formatted;
-        } else if (indexPath.row == kSummarySectionColorRow) {
-            aCell.colorSwatch.backgroundColor = self.lozenge.prescription.color.UIColor;
-        } else if (indexPath.row == kSummarySectionDosageRow) {
-            aCell.addTopicLabel.text = self.lozenge.prescription.dosage.name;
-        }
-        cell = aCell;
-    }
+//    } else if (indexPath.section == kMedicineSummarySection) {
+//
+//        APCSetupTableViewCell  *aCell = (APCSetupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSetupTableCellName];
+//
+//        aCell.topicLabel.text = mainTableCategories[indexPath.row];
+//        aCell.accessoryType = UITableViewCellAccessoryNone;
+//        aCell.selectionStyle = UITableViewCellSelectionStyleNone;
+//
+//        if (indexPath.row == 2) {
+//            aCell.colorSwatch.hidden = NO;
+//            aCell.addTopicLabel.hidden = YES;
+//        } else {
+//            aCell.colorSwatch.hidden = YES;
+//            aCell.addTopicLabel.hidden = NO;
+//        }
+//
+//        if (indexPath.row == kSummarySectionNameRow) {
+//            aCell.addTopicLabel.text = self.lozenge.prescription.medication.name;
+//        } else if (indexPath.row == kSummarySectionFrequencyRow) {
+//            NSDictionary  *numbersAndDays = self.lozenge.prescription.frequencyAndDays;
+//            NSString  *formatted = [numbersAndDays formatNumbersAndDays];
+//            aCell.addTopicLabel.text = formatted;
+//        } else if (indexPath.row == kSummarySectionColorRow) {
+//            aCell.colorSwatch.backgroundColor = self.lozenge.prescription.color.UIColor;
+//        } else if (indexPath.row == kSummarySectionDosageRow) {
+//            aCell.addTopicLabel.text = self.lozenge.prescription.dosage.name;
+//        }
+//        cell = aCell;
+//    }
 
     return  cell;
 }
@@ -213,17 +209,17 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
     return  height;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSString  *title = @"";
-        //
-        //    provide a non-empty blank string to get a section header at the bottom of the section
-        //
-    if (section == kMedicineSummarySection) {
-        title = @"          ";
-    }
-    return  title;
-}
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    NSString  *title = @"";
+//        //
+//        //    provide a non-empty blank string to get a section header at the bottom of the section
+//        //
+//    if (section == kMedicineSummarySection) {
+//        title = @"          ";
+//    }
+//    return  title;
+//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

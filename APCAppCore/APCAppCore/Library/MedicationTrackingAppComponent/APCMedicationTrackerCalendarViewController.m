@@ -46,7 +46,8 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 @property (nonatomic, assign)          BOOL                        exScrolliburScrolledByUser;
 
 @property (nonatomic, weak)  IBOutlet  UITableView                *tabulator;
-@property (nonatomic, weak)            UIView                     *sectionHeader;
+@property (nonatomic, weak)  IBOutlet  UIView                     *tapItemsView;
+@property (nonatomic, weak)  IBOutlet  UIView                     *yourPrescriptionsView;
 
 @property (nonatomic, weak)            APCMedicationTrackerCalendarWeeklyView  *weeklyCalendar;
 
@@ -307,11 +308,11 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     self.tabulator.hidden        = NO;
     self.exScrollibur.hidden     = NO;
     self.weekContainer.hidden    = NO;
-//    if ([self.prescriptions count] == 0) {
-//        self.sectionHeader.hidden = YES;
-//    } else {
-//        self.sectionHeader.hidden = YES;
-//    }
+    if ([self.prescriptions count] == 0) {
+        self.tapItemsView.hidden = YES;
+    } else {
+        self.tapItemsView.hidden = NO;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -335,7 +336,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
                  [self configureExScrollibur];
                  self.viewsWereCreated = YES;
              }
-             [self setupHiddenStates];
+//             [self setupHiddenStates];
              if ((self.exScrolliburNumberOfPages == 0) && ([self.prescriptions count] > 0)) {
                  [self makeFirstPage];
              }
@@ -344,6 +345,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
                  [self refreshAllPages];
                  self.calendricalPagesNeedRefresh = NO;
              }
+             [self setupHiddenStates];
          }
      }];
 }
