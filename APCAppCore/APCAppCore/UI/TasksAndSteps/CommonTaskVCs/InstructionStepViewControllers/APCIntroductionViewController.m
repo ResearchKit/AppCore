@@ -84,7 +84,7 @@ static CGFloat      const kParagraphYPosition   = 20.0;
         
         CGRect  frame = CGRectMake(paragraphIndex * CGRectGetWidth(self.textScroller.frame), 0.0, CGRectGetWidth(self.textScroller.frame), kHeadlineHeight);
         UILabel  *texter = [[UILabel alloc] initWithFrame:frame];
-        texter.font = [UIFont fontWithName:@"Helvetica-Bold" size:kTitleFontSize];
+        texter.font = [UIFont fontWithName:@"Helvetica Neue" size:kTitleFontSize];
         texter.lineBreakMode = NSLineBreakByWordWrapping;
         texter.numberOfLines = 0;
         texter.text = string;
