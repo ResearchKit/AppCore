@@ -204,6 +204,9 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCStepProgressBar.h>
 #import <APCAppCore/APCInsightBarView.h>
 #import <APCAppCore/APCPermissionButton.h>
+#import <APCAppCore/APCTheme.h>
+#import <APCAppCore/APCActivityTrackingStepViewController.h>
+#import <APCAppCore/APCFitnessAllocation.h>
 
 /* -------------------------
  Cells
