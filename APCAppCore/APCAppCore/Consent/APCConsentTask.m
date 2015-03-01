@@ -86,6 +86,7 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     document.signaturePageContent = @"By agreeing you confirm that you read the information and that you "
                                     @"wish to take part in this research study.";
     document.sections             = self.documentSections;
+    document.htmlReviewContent    = self.documentHtmlContent;
     
     [document addSignature:signature];
     
