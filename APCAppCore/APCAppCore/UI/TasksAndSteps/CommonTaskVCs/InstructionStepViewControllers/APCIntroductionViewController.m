@@ -116,57 +116,12 @@ static CGFloat      const kParagraphYPosition   = 20.0;
 
 #pragma  mark  -  Localise Instructional Paragraphs
 
-- (void)initialiseInstructionalParagraphs
-{
-    NSMutableArray  *localised = [NSMutableArray array];
-    
-    NSMutableParagraphStyle *paragrapStyle = NSMutableParagraphStyle.new;
-    //paragrapStyle.alignment                = NSTextAlignmentCenter;
-
-    NSDictionary  *headlineAttributes = @{
-                                           NSFontAttributeName : [UIFont appRegularFontWithSize: kTitleFontSize],
-                                           NSForegroundColorAttributeName : [UIColor blackColor],
-                                           NSParagraphStyleAttributeName:paragrapStyle
-                                           };
-    
-    NSDictionary  *paragraphAttributes = @{
-                                  NSFontAttributeName : [UIFont appLightFontWithSize: kRegularFontSize],
-                                  NSForegroundColorAttributeName : [UIColor blackColor],
-                                  NSParagraphStyleAttributeName:paragrapStyle
-                                  };
-    
-    [self.nonLocalisedParagraphs enumerateObjectsUsingBlock: ^(NSString* paragraph,
-                                                               NSUInteger idx,
-                                                               BOOL * __unused stop)
-     {
-        NSMutableAttributedString * attributedHeadline;
-        if (self.nonLocalisedHeadlines.count && self.nonLocalisedHeadlines.count >= idx) {
-            NSString * headline = self.nonLocalisedHeadlines[idx];
-            NSString * translatedHeadline = NSLocalizedString(headline, nil);
-            attributedHeadline = [[NSMutableAttributedString alloc] initWithString:[translatedHeadline stringByAppendingString:@"\n"] attributes:headlineAttributes];
-        }
-        NSString  *translated = NSLocalizedString(paragraph, nil);
-        NSAttributedString  *styled = [[NSAttributedString alloc] initWithString:translated attributes:paragraphAttributes];
-        if (attributedHeadline) {
-            [attributedHeadline appendAttributedString:styled];
-            styled = attributedHeadline;
-        }
-        
-        [localised addObject:styled];
-    }];
-    self.localisedParagraphs = localised;
-}
-
 - (void)setupWithInstructionalImages:(NSArray *)imageNames headlines:(NSArray *)headlines andParagraphs:(NSArray *)paragraphs
 {
     self.instructionalImages = imageNames;
     
-//    [self initialiseImageScrollView]; 
-    
     self.nonLocalisedParagraphs = paragraphs;
     self.nonLocalisedHeadlines = headlines;
-    [self initialiseInstructionalParagraphs];
-//    [self initialiseParagraphsScrollView];
 }
 
 
