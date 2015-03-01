@@ -83,6 +83,9 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     _dataKey = nil;
     _sortKey = nil;
     
+    _customMaximumPoint = CGFLOAT_MAX;
+    _customMinimumPoint = CGFLOAT_MIN;
+    
     if (!dateFormatter) {
         dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
@@ -958,12 +961,12 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     
     CGFloat minValue = (minDataPoint - factor*maxDataPoint)/(1-factor);
     
-    return minValue;
+    return (self.customMinimumPoint == CGFLOAT_MIN) ? minValue: self.customMinimumPoint;
 }
 
 - (CGFloat)maximumValueForLineGraph:(APCLineGraphView *) __unused graphView
 {
-    return [[self maximumDataPoint] doubleValue];
+    return (self.customMaximumPoint == CGFLOAT_MAX) ? [[self maximumDataPoint] doubleValue] : self.customMaximumPoint;
 }
 
 - (CGFloat)lineGraph:(APCLineGraphView *) __unused graphView plot:(NSInteger)plotIndex valueForPointAtIndex:(NSInteger) __unused pointIndex
@@ -1045,12 +1048,12 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     
     CGFloat minValue = (minDataPoint - factor*maxDataPoint)/(1-factor);
     
-    return minValue;
+    return (self.customMinimumPoint == CGFLOAT_MIN) ? minValue: self.customMinimumPoint;
 }
 
 - (CGFloat)maximumValueForDiscreteGraph:(APCDiscreteGraphView *) __unused graphView
 {
-    return [[self maximumDataPoint] doubleValue];
+    return (self.customMaximumPoint == CGFLOAT_MAX) ? [[self maximumDataPoint] doubleValue] : self.customMaximumPoint;
 }
 
 @end

@@ -23,6 +23,9 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
 
 @interface APCScoring : NSEnumerator <APCLineGraphViewDataSource, APCDiscreteGraphViewDataSource>
 
+@property (nonatomic) CGFloat customMaximumPoint;
+@property (nonatomic) CGFloat customMinimumPoint;
+
 - (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
                                          unit:(HKUnit *)unit
                                  numberOfDays:(NSInteger)numberOfDays;

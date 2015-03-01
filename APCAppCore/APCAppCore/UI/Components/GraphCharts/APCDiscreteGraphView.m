@@ -420,7 +420,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         
         UIImageView *maxImageView = [[UIImageView alloc] initWithImage:self.maximumValueImage];
         maxImageView.contentMode = UIViewContentModeScaleAspectFit;
-        maxImageView.frame = CGRectMake(CGRectGetWidth(self.yAxisView.bounds) - width, verticalPadding, width, width);
+        maxImageView.frame = CGRectMake(CGRectGetWidth(self.yAxisView.bounds) - width, -width/2, width, width);
         [self.yAxisView addSubview:maxImageView];
         
         UIImageView *minImageView = [[UIImageView alloc] initWithImage:self.minimumValueImage];
