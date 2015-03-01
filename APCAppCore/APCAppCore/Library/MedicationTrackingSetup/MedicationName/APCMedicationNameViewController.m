@@ -89,10 +89,7 @@ static  NSString  *kViewControllerName = @"Medication Name";
             self.selectedIndex = indexPath;
         }
     }
-    if (self.selectedIndex == nil) {
-        self.navigationItem.hidesBackButton = YES;
-    } else {
-        self.navigationItem.hidesBackButton = NO;
+    if (self.selectedIndex != nil) {
         if (self.delegate != nil) {
             if ([self.delegate respondsToSelector:@selector(nameController:didSelectMedicineName:)] == YES) {
                 APCMedTrackerMedication  *medication = self.medicationList[indexPath.row];
@@ -112,8 +109,6 @@ static  NSString  *kViewControllerName = @"Medication Name";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.navigationItem.hidesBackButton = YES;
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     

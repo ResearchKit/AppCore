@@ -6,6 +6,7 @@
 //
 
 #import "NSDate+MedicationTracker.h"
+#import "NSDate+Helper.h"
 
 static  NSString  *kDefaultLocale = @"en_US_POSIX";
 
@@ -18,7 +19,7 @@ static  NSString  *kDefaultLocale = @"en_US_POSIX";
     NSInteger gap = (weekStartIndex <=  weekDay) ?  weekDay  : ( 7 + weekDay );
     NSInteger day = weekStartIndex - gap;
 
-    return [self addDays:day];
+    return [self dateByAddingDays:day];
 }
 
 - (NSNumber *)getWeekDay
@@ -28,31 +29,22 @@ static  NSString  *kDefaultLocale = @"en_US_POSIX";
     return  [NSNumber numberWithInteger:([comps weekday] - 1)];
 }
 
-- (NSDate *)addDays:(NSInteger)day
-{
-    NSDateComponents  *dayComponent = [[NSDateComponents alloc] init];
-    dayComponent.day = day;
-
-    NSCalendar  *theCalendar = [NSCalendar currentCalendar];
-    return  [theCalendar dateByAddingComponents:dayComponent toDate:self options:0];
-}
-
 - (NSString *)getDayOfWeekShortString
 {
-    static  NSDateFormatter  *shortDayOfWeekFormatter;
+    static  NSDateFormatter  *formatter;
 
-    if (shortDayOfWeekFormatter == nil) {
-        shortDayOfWeekFormatter = [[NSDateFormatter alloc] init];
+    if (formatter == nil) {
+        formatter = [[NSDateFormatter alloc] init];
         NSLocale  *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-        [shortDayOfWeekFormatter setLocale:locale];
-        [shortDayOfWeekFormatter setDateFormat:@"E"];
+        [formatter setLocale:locale];
+        [formatter setDateFormat:@"E"];
     }
-    return  [shortDayOfWeekFormatter stringFromDate:self];
+    return  [formatter stringFromDate:self];
 }
 
 - (NSString *)getDateOfMonth
 {
-    static NSDateFormatter  *formatter;
+    static  NSDateFormatter  *formatter;
     if (formatter == nil) {
         formatter = [[NSDateFormatter alloc] init];
         NSLocale* en_AU_POSIX = [[NSLocale alloc] initWithLocaleIdentifier:kDefaultLocale];

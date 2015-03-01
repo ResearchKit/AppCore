@@ -14,18 +14,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bhB-7S-Mte" userLabel="Add Topic Label">
-                        <rect key="frame" x="148" y="0.0" width="132" height="44"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="132" id="dBj-1v-6zH"/>
-                            <constraint firstAttribute="height" constant="44" id="eb4-My-CVr"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="56q-8K-rRa" userLabel="Topic Label">
-                        <rect key="frame" x="8" y="11" width="132" height="21"/>
+                        <rect key="frame" x="8" y="2" width="132" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="132" id="4CH-Cc-mvr"/>
                             <constraint firstAttribute="height" constant="21" id="oMl-92-GGN"/>
@@ -34,16 +24,32 @@
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bhB-7S-Mte" userLabel="Add Topic Label">
+                        <rect key="frame" x="148" y="1" width="132" height="44"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="132" id="dBj-1v-6zH"/>
+                            <constraint firstAttribute="height" constant="44" id="eb4-My-CVr"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OnZ-l7-ia0" userLabel="Extra Label">
+                        <rect key="frame" x="8" y="23" width="130" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vJf-Z2-oXv" userLabel="Color Swatch">
-                        <rect key="frame" x="242" y="4" width="36" height="36"/>
+                        <rect key="frame" x="242" y="5" width="36" height="36"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="36" id="5TQ-dW-cdF"/>
                             <constraint firstAttribute="height" constant="36" id="8R3-b3-oVu"/>
                         </constraints>
                     </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pqx-UB-OmG" userLabel="Separator View">
-                        <rect key="frame" x="10" y="43" width="310" height="1"/>
+                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pqx-UB-OmG" userLabel="Separator View">
+                        <rect key="frame" x="10" y="44" width="310" height="1"/>
                         <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="xzf-tR-Lp6"/>
@@ -51,34 +57,24 @@
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="vJf-Z2-oXv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-4" id="2a5-NA-ZGR"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="vJf-Z2-oXv" secondAttribute="bottom" constant="-5" id="2vV-Ay-xbq"/>
                     <constraint firstItem="bhB-7S-Mte" firstAttribute="leading" secondItem="56q-8K-rRa" secondAttribute="trailing" constant="8" id="87g-Cc-4WD"/>
-                    <constraint firstAttribute="centerY" secondItem="56q-8K-rRa" secondAttribute="centerY" constant="0.5" id="89R-Ua-OTd"/>
+                    <constraint firstAttribute="centerY" secondItem="56q-8K-rRa" secondAttribute="centerY" constant="9.5" id="89R-Ua-OTd"/>
+                    <constraint firstItem="vJf-Z2-oXv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-3" id="C3l-7O-LNO"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Pqx-UB-OmG" secondAttribute="bottom" constant="-9" id="Nnv-0c-Yh8"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Pqx-UB-OmG" secondAttribute="trailing" constant="-41" id="Onc-Gi-cXD"/>
                     <constraint firstItem="56q-8K-rRa" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="UPK-PM-aIx"/>
-                    <constraint firstItem="vJf-Z2-oXv" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="ZY2-a7-hXk"/>
-                    <constraint firstItem="vJf-Z2-oXv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-4" id="dM4-5E-JAX"/>
                     <constraint firstItem="vJf-Z2-oXv" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="234" id="ivf-RM-Fi5"/>
                     <constraint firstAttribute="centerY" secondItem="bhB-7S-Mte" secondAttribute="centerY" constant="-0.5" id="n6j-pQ-oGU"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="vJf-Z2-oXv" secondAttribute="bottom" constant="-4" id="oaj-Lw-JKZ"/>
                     <constraint firstItem="Pqx-UB-OmG" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="2" id="tBn-9B-aK6"/>
                 </constraints>
-                <variation key="default">
-                    <mask key="constraints">
-                        <exclude reference="2a5-NA-ZGR"/>
-                        <exclude reference="ZY2-a7-hXk"/>
-                        <exclude reference="oaj-Lw-JKZ"/>
-                    </mask>
-                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="addTopicLabel" destination="bhB-7S-Mte" id="Jmd-1F-0T2"/>
                 <outlet property="colorSwatch" destination="vJf-Z2-oXv" id="zHV-Hm-ORX"/>
+                <outlet property="extraLabel" destination="OnZ-l7-ia0" id="BY2-iQ-7iZ"/>
                 <outlet property="topicLabel" destination="56q-8K-rRa" id="5ru-G5-NwE"/>
             </connections>
-            <point key="canvasLocation" x="442" y="494"/>
+            <point key="canvasLocation" x="442" y="492"/>
         </tableViewCell>
     </objects>
 </document>

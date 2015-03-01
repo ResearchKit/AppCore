@@ -10,7 +10,7 @@
 
 static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
 static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSString *));
-static  NSString  *oneThroughFiveNames[] = { @"One", @"Two", @"Three", @"Four", @"Five" };
+static  NSString  *oneThroughFiveNames[] = { @"Once", @"Two times", @"Three times", @"Four times", @"Five times" };
 
 @implementation NSDictionary (APCAdditions)
 
@@ -57,7 +57,7 @@ static  NSString  *oneThroughFiveNames[] = { @"One", @"Two", @"Three", @"Four", 
         if ([saved unsignedIntegerValue] > 5) {
             result = [NSString stringWithFormat:@"%lu times Every Day", (unsigned long)[saved unsignedIntegerValue]];
         } else {
-            result = [NSString stringWithFormat:@"%@ times Every Day", oneThroughFiveNames[[saved unsignedIntegerValue] - 1]];
+            result = [NSString stringWithFormat:@"%@ Every Day", oneThroughFiveNames[[saved unsignedIntegerValue] - 1]];
         }
     } else {
         NSMutableString  *daysAndNumbers = [NSMutableString string];
@@ -73,7 +73,7 @@ static  NSString  *oneThroughFiveNames[] = { @"One", @"Two", @"Three", @"Four", 
                     }
                 } else {
                     if (daysAndNumbers.length == 0) {
-                        [daysAndNumbers appendFormat:@"%@ times on %@", oneThroughFiveNames[[number unsignedIntegerValue] - 1], mapper[key]];
+                        [daysAndNumbers appendFormat:@"%@ on %@", oneThroughFiveNames[[number unsignedIntegerValue] - 1], mapper[key]];
                     } else {
                         [daysAndNumbers appendFormat:@", %@", mapper[key]];
                     }

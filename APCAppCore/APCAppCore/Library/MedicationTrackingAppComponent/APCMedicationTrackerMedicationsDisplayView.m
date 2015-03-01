@@ -16,6 +16,7 @@
 
 #import "APCMedTrackerDailyDosageRecord.h"
 
+#import "UIFont+APCAppearance.h"
 #import "NSDate+MedicationTracker.h"
 #import "NSDate+Helper.h"
 
@@ -23,10 +24,15 @@
 
 #import "APCAppCore.h"
 
-static  CGFloat  kLozengeButtonWidth     = 40.0;
-static  CGFloat  kLozengeButtonHeight    = 25.0;
+static  CGFloat  kLozengeButtonWidth     = 38.0;
+static  CGFloat  kLozengeButtonHeight    = 29.0;
 static  CGFloat  kLozengeBaseYCoordinate = 10.0;
-static  CGFloat  kLozengeBaseYStepOver   = 45.0;
+static  CGFloat  kLozengeBaseYStepOver   = 49.0;
+
+static  CGFloat  kWaterfallDashOnValue   = 11.0;
+static  CGFloat  kWaterfallDashOffValue  =  7.0;
+
+static  CGFloat  kLozengeTextPointSize   = 14.0;
 
 static  NSString   *daysOfWeekNames[]    = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
 static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSString *));
@@ -116,8 +122,8 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     frame.origin.x = point.x - (kLozengeButtonWidth / 2.0);
     lozenge.frame = frame;
     
-//    lozenge.backgroundColor = [UIColor whiteColor];
     [lozenge setTitleColor:color forState:UIControlStateNormal];
+    [[lozenge titleLabel] setFont:[UIFont appRegularFontWithSize:kLozengeTextPointSize]];
     lozenge.lozengeColor = color;
     
     [lozenge addTarget:self action:@selector(lozengeButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -125,7 +131,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     return  lozenge;
 }
 
-#pragma   mark  -  Create Lozenge Buttons
+#pragma   mark  -  Create Lozenge Buttons     kLozengeTextPointSize
 
 - (void)makeLozengesLayoutForPrescription: (APCMedTrackerPrescription *) prescription
                   usingDailyDosageRecords: (NSArray *) dailyDosageRecords   // forRow:(NSUInteger)
@@ -197,10 +203,10 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
         CGContextAddLineToPoint(context, x, y2);
     }
     [[UIColor lightGrayColor] set];
-    CGContextSetLineWidth(context, 2.0);
-    CGContextSetLineCap(context, kCGLineCapRound);
-    CGFloat  dashes[] = { 0.0, 8.0 };
-    CGContextSetLineDash (context, 0.0, dashes, 2);
+    CGContextSetLineWidth(context, 1.0);
+    CGContextSetLineCap(context, kCGLineCapButt);
+    CGFloat  dashes[] = { kWaterfallDashOnValue, kWaterfallDashOffValue };
+    CGContextSetLineDash(context, 0.0, dashes, (sizeof(dashes) / sizeof(CGFloat)));
     CGContextStrokePath(context);
 }
 

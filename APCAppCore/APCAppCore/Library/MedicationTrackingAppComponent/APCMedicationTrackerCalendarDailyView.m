@@ -14,7 +14,7 @@ static  CGFloat  kDateLabelPointSize = 13.0;
 @interface APCMedicationTrackerCalendarDailyView  ( )
 
 @property  (nonatomic,  strong)  UILabel  *dateLabel;
-@property  (nonatomic,  strong)  UIView   *dateLabelContainer;
+@property  (nonatomic,  strong)  UIView   *dateLabelBackdrop;
 
 @end
 
@@ -46,36 +46,36 @@ static  CGFloat  kDateLabelPointSize = 13.0;
     container.backgroundColor = [UIColor clearColor];
     container.layer.cornerRadius = kDateLabelWidth / 2.0;
     container.clipsToBounds = YES;
-    self.dateLabelContainer = container;
-    [self addSubview:self.dateLabelContainer];
+    self.dateLabelBackdrop = container;
+    [self addSubview:self.dateLabelBackdrop];
     
-    [self.dateLabelContainer addSubview:self.dateLabel];
+    [self.dateLabelBackdrop addSubview:self.dateLabel];
 }
 
-- (void)setDate:(NSDate *)date
+- (void)setDate:(NSDate *)aDate
 {
-    _date = date;
+    _date = aDate;
     self.dateLabel.text = [_date getDateOfMonth];
     [self setNeedsDisplay];
 }
 
-- (void)setBlnSelected: (BOOL)blnSelected
+- (void)setSelected:(BOOL)selected
 {
-    _blnSelected = blnSelected;
+    _selected = selected;
     [self setNeedsDisplay];
 }
 
-- (void)markSelected:(BOOL)blnSelected
+- (void)markSelected:(BOOL)selected
 {
-    if (([self.date isDateToday]) && (blnSelected == YES)) {
+    if (([self.date isDateToday]) && (selected == YES)) {
         self.dateLabel.textColor       = [UIColor todaysDateTextColor];
-        self.dateLabelContainer.backgroundColor = [UIColor todaysDateBackgroundColor];
-    } else if (blnSelected == YES) {
+        self.dateLabelBackdrop.backgroundColor = [UIColor todaysDateBackgroundColor];
+    } else if (selected == YES) {
         self.dateLabel.textColor       = [UIColor selectedDateTextColor];
-        self.dateLabelContainer.backgroundColor = [UIColor selectedDateBackgroundColor];
+        self.dateLabelBackdrop.backgroundColor = [UIColor selectedDateBackgroundColor];
     } else {
         self.dateLabel.textColor       = [UIColor regularDateTextColor];
-        self.dateLabelContainer.backgroundColor = [UIColor regularDateBackgroundColor];
+        self.dateLabelBackdrop.backgroundColor = [UIColor regularDateBackgroundColor];
     }
 }
 
