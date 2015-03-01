@@ -348,7 +348,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
 
 - (void)dashboardTableViewCellDidTapMoreInfo:(APCDashboardTableViewCell *)cell
 {
-    /* Pop up implementation. Commented out for ActionSheet 
+    // Pop up implementation. Commented out for ActionSheet
      
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     APCTableViewDashboardItem *item = (APCTableViewDashboardItem *)[self itemForIndexPath:indexPath];
@@ -357,18 +357,23 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     moreInfoViewController.info = item.info;
     moreInfoViewController.titleString = item.caption;
     
-    //Blur
-    UIImage *blurredImage = [self.tabBarController.view blurredSnapshotDark];
-    moreInfoViewController.blurredImage = blurredImage;
+    // Get the snapshot
+    UIView *targetView = self.tabBarController.view;
+    UIGraphicsBeginImageContextWithOptions(targetView.bounds.size, NO, targetView.window.screen.scale);
+    [targetView drawViewHierarchyInRect:targetView.frame afterScreenUpdates:NO];
+    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+    moreInfoViewController.blurredImage = snapshotImage;
     
     //Present
+    
     moreInfoViewController.transitioningDelegate = self;
     moreInfoViewController.modalPresentationStyle = UIModalPresentationCustom;
     [self.navigationController presentViewController:moreInfoViewController animated:YES completion:^{
         
     }];
-     */
     
+    //ActionSheet implementation
+    /*
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     APCTableViewDashboardItem *item = (APCTableViewDashboardItem *)[self itemForIndexPath:indexPath];
     
@@ -383,6 +388,7 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     
     [self presentViewController:alertController animated:YES completion:nil];
+     */
 }
 
 #pragma mark - Public Methods
