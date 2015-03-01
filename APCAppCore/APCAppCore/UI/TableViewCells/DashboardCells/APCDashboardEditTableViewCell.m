@@ -44,37 +44,15 @@ NSString *const kAPCDashboardEditTableViewCellIdentifier = @"APCDashboardEditTab
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGFloat borderWidth = 1.0;
-    CGFloat bottomBorderWidth = 3.0;
-    
-    UIColor *borderColor = [UIColor colorWithWhite:0.973 alpha:1.000];
-    
-    // Top border
-    CGContextSaveGState(context);
-    CGContextSetLineCap(context, kCGLineCapSquare);
-    CGContextSetStrokeColorWithColor(context, [UIColor lightGrayColor].CGColor);
-    CGContextSetLineWidth(context, borderWidth);
-    CGContextMoveToPoint(context, 0, 0);
-    CGContextAddLineToPoint(context, rect.size.width, 0);
-    CGContextStrokePath(context);
-    CGContextRestoreGState(context);
-    
-    // First Bottom Border
+    CGFloat bottomBorderWidth = 0.0;
+
+    // Bottom Border
     CGContextSaveGState(context);
     CGContextSetLineCap(context, kCGLineCapSquare);
     CGContextSetStrokeColorWithColor(context, [UIColor lightGrayColor].CGColor);
     CGContextSetLineWidth(context, borderWidth);
     CGContextMoveToPoint(context, 0, rect.size.height - bottomBorderWidth);
     CGContextAddLineToPoint(context, rect.size.width, rect.size.height - bottomBorderWidth);
-    CGContextStrokePath(context);
-    CGContextRestoreGState(context);
-    
-    // Bottom border
-    CGContextSaveGState(context);
-    CGContextSetLineCap(context, kCGLineCapSquare);
-    CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
-    CGContextSetLineWidth(context, bottomBorderWidth * 2);
-    CGContextMoveToPoint(context, 0, rect.size.height);
-    CGContextAddLineToPoint(context, rect.size.width, rect.size.height);
     CGContextStrokePath(context);
     CGContextRestoreGState(context);
     
