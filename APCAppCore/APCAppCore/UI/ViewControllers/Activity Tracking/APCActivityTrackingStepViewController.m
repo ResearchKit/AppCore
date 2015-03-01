@@ -1,5 +1,5 @@
 //
-//  APHActivityTrackingStepViewController.m
+//  APCActivityTrackingStepViewController.m
 //  MyHeart Counts
 //
 //  Copyright (c) 2014 Apple, Inc. All rights reserved.
@@ -13,6 +13,7 @@ static NSInteger const kYesterdaySegmentIndex    = 0;
 static NSInteger const kTodaySegmentIndex        = 1;
 static NSInteger const kWeekSegmentIndex         = 2;
 
+#warning This text is using lorem ipsum in 7 Day fitness
 static NSString   *kLearnMoreString = @"Lorem Ipsum.";
 
 static NSInteger const kSmallerFontSize = 16;
@@ -45,7 +46,6 @@ static NSInteger const kRegularFontSize = 17;
 
 - (void)viewDidLoad {
     
-//    self.view.layer.frame.origin.x
     [super viewDidLoad];
     self.daysRemaining.text = [self fitnessDaysRemaining];
     
@@ -55,7 +55,7 @@ static NSInteger const kRegularFontSize = 17;
                                                                              action:@selector(handleClose:)];
 
 
-    self.view.layer.backgroundColor = [UIColor colorWithWhite:0.973 alpha:1.000].CGColor;
+    self.view.layer.backgroundColor = [UIColor appSecondaryColor4].CGColor;
     
     self.segmentDays.tintColor = [UIColor clearColor];
 
