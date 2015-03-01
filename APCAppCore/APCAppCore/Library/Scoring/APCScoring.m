@@ -8,8 +8,6 @@
 #import "APCScoring.h"
 #import "APCAppCore.h"
 
-static NSDateFormatter *dateFormatter = nil;
-
 NSString *const kDatasetDateKey        = @"datasetDateKey";
 NSString *const kDatasetValueKey       = @"datasetValueKey";
 NSString *const kDatasetRangeValueKey  = @"datasetRangeValueKey";
@@ -41,6 +39,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 @property (nonatomic, strong) HKQuantityType *quantityType;
 @property (nonatomic, strong) HKUnit *hkUnit;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @end
 
@@ -89,6 +88,9 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     if (!dateFormatter) {
         dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    if (!self.dateFormatter) {
+        self.dateFormatter = [[NSDateFormatter alloc] init];
+        [self.dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
     }
     
     _timeline = [self configureTimelineForDays:days groupBy:APHTimelineGroupDay]; //[self configureTimelineForDays:days];
@@ -991,13 +993,13 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
 
     if (pointIndex == 0) {
-        [dateFormatter setDateFormat:@"MMM d"];
+        [self.dateFormatter setDateFormat:@"MMM d"];
     } else {
-        [dateFormatter setDateFormat:@"d"];
+        [self.dateFormatter setDateFormat:@"d"];
     }
     
     
-    NSString *xAxisTitle = [dateFormatter stringFromDate:titleDate];
+    NSString *xAxisTitle = [self.dateFormatter stringFromDate:titleDate];
                             
     return xAxisTitle;
 }
@@ -1029,13 +1031,13 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
     
     if (pointIndex == 0) {
-        [dateFormatter setDateFormat:@"MMM d"];
+        [self.dateFormatter setDateFormat:@"MMM d"];
     } else {
-        [dateFormatter setDateFormat:@"d"];
+        [self.dateFormatter setDateFormat:@"d"];
     }
     
     
-    NSString *xAxisTitle = [dateFormatter stringFromDate:titleDate];
+    NSString *xAxisTitle = [self.dateFormatter stringFromDate:titleDate];
     
     return xAxisTitle;
 }
