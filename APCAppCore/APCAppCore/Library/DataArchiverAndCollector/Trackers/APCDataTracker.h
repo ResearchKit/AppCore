@@ -25,7 +25,7 @@
 - (void) updateTracking;
 - (void) stopTracking;
 
-@property (nonatomic) long long sizeThreshold;
+@property (nonatomic) unsigned long long sizeThreshold;
 @property (nonatomic) NSTimeInterval stalenessInterval;
 
 - (instancetype) initWithIdentifier:(NSString *)identifier;

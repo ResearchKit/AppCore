@@ -24,7 +24,6 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 @interface APCScoring()
 
-@property (nonatomic, strong) HKHealthStore *healthStore;
 @property (nonatomic, strong) NSMutableArray *dataPoints;
 @property (nonatomic, strong) NSMutableArray *updatedDataPoints;
 @property (nonatomic, strong) NSMutableArray *correlateDataPoints;

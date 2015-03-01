@@ -91,7 +91,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     APCTableViewSection *sectionItem = self.items[indexPath.section];
-    if (indexPath.row == (sectionItem.rows.count - 1)) {
+    if ((NSUInteger)indexPath.row == (sectionItem.rows.count - 1)) {
         
         APCWithdrawDescriptionViewController *viewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWithdrawDescriptionViewController"];
         viewController.delegate = self;

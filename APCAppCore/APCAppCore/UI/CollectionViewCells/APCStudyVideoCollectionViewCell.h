@@ -22,9 +22,6 @@ FOUNDATION_EXPORT NSString *const kAPCStudyVideoCollectionViewCellIdentifier;
 @property (weak, nonatomic) id <APCStudyVideoCollectionViewCellDelegate> delegate;
 
 - (IBAction)watchVideo:(id)sender;
-- (IBAction)readConsent:(id)sender;
-- (IBAction)emailConsent:(id)sender;
-
 
 @end
 

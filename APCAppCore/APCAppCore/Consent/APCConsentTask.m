@@ -86,16 +86,17 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     document.signaturePageContent = @"By agreeing you confirm that you read the information and that you "
                                     @"wish to take part in this research study.";
     document.sections             = self.documentSections;
+    document.htmlReviewContent    = self.documentHtmlContent;
     
     [document addSignature:signature];
     
     
     ORKVisualConsentStep*   visualStep  = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual"
                                                                                   document:document];
-    ORKConsentSharingStep*  sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:@"Sage"
-                                                               investigatorShortDescription:@"Sage"
-                                                                investigatorLongDescription:@"Sage"
-                                                              localizedLearnMoreHTMLContent:@"<html></html>"];
+    ORKConsentSharingStep*  sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:@"sharing"
+                                                               investigatorShortDescription:self.investigatorShortDescription
+                                                                investigatorLongDescription:self.investigatorLongDescription
+                                                              localizedLearnMoreHTMLContent:self.sharingHtmlLearnMoreContent];
     ORKConsentReviewStep*   reviewStep  = [[ORKConsentReviewStep alloc] initWithIdentifier:@"reviewStep"
                                                                                  signature:signature
                                                                                 inDocument:document];

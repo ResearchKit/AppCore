@@ -63,7 +63,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 
 #pragma  mark  -  Table View Data Source Methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView
 {
     NSInteger  numberOfSections = 0;
     
@@ -71,7 +71,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     return  numberOfSections;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *) __unused tableView numberOfRowsInSection:(NSInteger) __unused section
 {
         //
         //    one extra row for the Add Medications Cell
@@ -83,7 +83,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 {
     UITableViewCell  *cell = nil;
     
-    if (indexPath.row == [self.prescriptions count]) {
+    if ((NSUInteger)indexPath.row == [self.prescriptions count]) {
         APCAddPrescriptionTableViewCell  *aCell = (APCAddPrescriptionTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kAddPrescriptionTableViewCell];
         cell = aCell;
     } else {
@@ -106,9 +106,9 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 
 #pragma  mark  -  Table View Delegate Methods
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *) __unused tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == [self.prescriptions count]) {
+    if ((NSUInteger)indexPath.row == [self.prescriptions count]) {
         APCMedicationTrackerSetupViewController  *controller = [[APCMedicationTrackerSetupViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
         [self.navigationController pushViewController:controller animated:YES];
     }
@@ -116,18 +116,18 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 
 #pragma  mark  -  Daily Calendar View Delegate Methods
 
-- (void)dailyCalendarViewDidSelect:(NSDate *)date
+- (void)dailyCalendarViewDidSelect:(NSDate *) __unused date
 {
 }
 
 #pragma  mark  -  Weekly Calendar View Delegate Methods
 
-- (NSUInteger)maximumScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *)calendarView
+- (NSUInteger)maximumScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *) __unused calendarView
 {
     return  self.exScrolliburNumberOfPages;
 }
 
-- (NSUInteger)currentScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *)calendarView
+- (NSUInteger)currentScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *) __unused calendarView
 {
     return  self.exScrolliburCurrentPage;
 }
@@ -185,7 +185,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 
 #pragma  mark  -  Lozenge Display Pages Delegate Method
 
-- (void)displayView:(APCMedicationTrackerMedicationsDisplayView *)displayView lozengeButtonWasTapped:(APCLozengeButton *)lozenge
+- (void)displayView:(APCMedicationTrackerMedicationsDisplayView *) __unused displayView lozengeButtonWasTapped:(APCLozengeButton *)lozenge
 {
     APCMedicationTrackerDetailViewController  *controller = [[APCMedicationTrackerDetailViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
     controller.lozenge = lozenge;
@@ -321,7 +321,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     
     [APCMedTrackerPrescription fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
                                                         toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
-                                                                            NSTimeInterval operationDuration,
+                                                                            NSTimeInterval __unused operationDuration,
                                                                             NSError *error)
      {
          if (error != nil) {

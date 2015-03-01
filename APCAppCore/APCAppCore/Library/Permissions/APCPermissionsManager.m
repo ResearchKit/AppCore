@@ -26,7 +26,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 
 @property (nonatomic, strong) CMMotionActivityManager *motionActivityManager;
 @property (nonatomic, strong) CLLocationManager *locationManager;
-@property (nonatomic, strong) HKHealthStore *healthStore;
 
 @property (nonatomic) APCPermissionStatus coreMotionPermissionStatus;
 
