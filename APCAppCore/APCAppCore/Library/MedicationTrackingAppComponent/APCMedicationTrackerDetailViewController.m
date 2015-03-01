@@ -44,6 +44,8 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
 
 @property (nonatomic, weak)  IBOutlet  UITableView      *tabulator;
 
+@property (nonatomic, weak)  IBOutlet  APCButton        *doneButton;
+
 @property (nonatomic, assign)          NSUInteger        numberOfTickMarksToSet;
 
 @end
@@ -90,7 +92,7 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
 {
     NSInteger   numberOfRowsInDosesSection = [self.tabulator numberOfRowsInSection:kDailyDosesTakenSection];
     NSUInteger  totalNumberOfDosesTaken = 0;
-    for (NSUInteger  row = 0;  row < numberOfRowsInDosesSection;  row++) {
+    for (NSInteger  row = 0;  row < numberOfRowsInDosesSection;  row++) {
         APCMedicationDetailsTableViewCell  *doseCell = (APCMedicationDetailsTableViewCell *)[self.tabulator cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:kDailyDosesTakenSection]];
         if (doseCell.confirmer.completed == YES) {
             totalNumberOfDosesTaken = totalNumberOfDosesTaken + 1;
@@ -149,7 +151,7 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
         label.numberOfLines = 0;
         label.font = [UIFont appLightFontWithSize:kPointSizeForDosesTakenHeader];
         label.textColor = [UIColor blackColor];
-        label.text = NSLocalizedString(@"Select which scheduled doses you have taken", nil);
+        label.text = NSLocalizedString(@"Log Your Medications", nil);
         label.lineBreakMode = NSLineBreakByWordWrapping;
         [container addSubview:label];
         
@@ -187,6 +189,13 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
     }
 }
 
+#pragma  mark  -  Done Button Action Method
+
+- (IBAction)doneButtonWasTapped:(id) __unused sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma  mark  -  View Controller Methods
 
 - (void)viewDidLoad
@@ -199,6 +208,8 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
 
     UINib  *medicationDetailsCellNib = [UINib nibWithNibName:kMedicationDetailsName bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:medicationDetailsCellNib forCellReuseIdentifier:kMedicationDetailsName];
+    
+    [self.doneButton addTarget:self action:@selector(doneButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
     
     self.numberOfTickMarksToSet = [self.lozenge.numberOfDosesTaken unsignedIntegerValue];
     

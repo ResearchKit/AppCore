@@ -10,13 +10,13 @@
 #import "APCOnboarding.h"
 #import "APCPasscodeViewController.h"
 #import "APCProfileViewController.h"
+#import "APCConsentTask.h"
 
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector;
 
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
 
-@property  (strong, nonatomic)  UIWindow * window;
 @property (strong, nonatomic) UITabBarController *tabster;
 
 //APC Related Properties & Methods
@@ -40,8 +40,7 @@
 - (void) updateDBVersionStatus;
 - (void) clearNSUserDefaults; //For resetting app
 
-- (NSMutableArray*)consentSectionsAndHtmlContent:(NSString**)htmlContent;  //  Retrieve and creates Consent Sections from JSON file.
-
+- (UIWindow *)window;
 
 - (NSString*) certificateFileName;
 
@@ -70,6 +69,7 @@
 - (void)showPasscodeIfNecessary;
 
 - (ORKTaskViewController *)consentViewController;
+- (NSMutableArray*)consentSectionsAndHtmlContent:(NSString**)htmlContent;
 
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
 

@@ -92,7 +92,7 @@
 {
 	if (self.expression.length > 0 && self.nextToken.countOfScannedCharacters > 0)
 	{
-		NSInteger numCharsToConsume = self.nextToken.countOfScannedCharacters;
+		NSUInteger numCharsToConsume = self.nextToken.countOfScannedCharacters;
 
 		if (numCharsToConsume > self.expression.length)
 		{

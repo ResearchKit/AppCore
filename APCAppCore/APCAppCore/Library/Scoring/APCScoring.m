@@ -8,8 +8,6 @@
 #import "APCScoring.h"
 #import "APCAppCore.h"
 
-static NSDateFormatter *dateFormatter = nil;
-
 NSString *const kDatasetDateKey        = @"datasetDateKey";
 NSString *const kDatasetValueKey       = @"datasetValueKey";
 NSString *const kDatasetRangeValueKey  = @"datasetRangeValueKey";
@@ -24,7 +22,6 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 @interface APCScoring()
 
-@property (nonatomic, strong) HKHealthStore *healthStore;
 @property (nonatomic, strong) NSMutableArray *dataPoints;
 @property (nonatomic, strong) NSMutableArray *updatedDataPoints;
 @property (nonatomic, strong) NSMutableArray *correlateDataPoints;
@@ -42,6 +39,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 @property (nonatomic, strong) HKQuantityType *quantityType;
 @property (nonatomic, strong) HKUnit *hkUnit;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @end
 
@@ -84,9 +82,12 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     _dataKey = nil;
     _sortKey = nil;
     
-    if (!dateFormatter) {
-        dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    _customMaximumPoint = CGFLOAT_MAX;
+    _customMinimumPoint = CGFLOAT_MIN;
+    
+    if (!self.dateFormatter) {
+        self.dateFormatter = [[NSDateFormatter alloc] init];
+        [self.dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
     }
     
     _timeline = [self configureTimelineForDays:days groupBy:APHTimelineGroupDay]; //[self configureTimelineForDays:days];
@@ -959,12 +960,12 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     
     CGFloat minValue = (minDataPoint - factor*maxDataPoint)/(1-factor);
     
-    return minValue;
+    return (self.customMinimumPoint == CGFLOAT_MIN) ? minValue: self.customMinimumPoint;
 }
 
 - (CGFloat)maximumValueForLineGraph:(APCLineGraphView *) __unused graphView
 {
-    return [[self maximumDataPoint] doubleValue];
+    return (self.customMaximumPoint == CGFLOAT_MAX) ? [[self maximumDataPoint] doubleValue] : self.customMaximumPoint;
 }
 
 - (CGFloat)lineGraph:(APCLineGraphView *) __unused graphView plot:(NSInteger)plotIndex valueForPointAtIndex:(NSInteger) __unused pointIndex
@@ -989,13 +990,13 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
 
     if (pointIndex == 0) {
-        [dateFormatter setDateFormat:@"MMM d"];
+        [self.dateFormatter setDateFormat:@"MMM d"];
     } else {
-        [dateFormatter setDateFormat:@"d"];
+        [self.dateFormatter setDateFormat:@"d"];
     }
     
     
-    NSString *xAxisTitle = [dateFormatter stringFromDate:titleDate];
+    NSString *xAxisTitle = [self.dateFormatter stringFromDate:titleDate];
                             
     return xAxisTitle;
 }
@@ -1027,13 +1028,13 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
     
     if (pointIndex == 0) {
-        [dateFormatter setDateFormat:@"MMM d"];
+        [self.dateFormatter setDateFormat:@"MMM d"];
     } else {
-        [dateFormatter setDateFormat:@"d"];
+        [self.dateFormatter setDateFormat:@"d"];
     }
     
     
-    NSString *xAxisTitle = [dateFormatter stringFromDate:titleDate];
+    NSString *xAxisTitle = [self.dateFormatter stringFromDate:titleDate];
     
     return xAxisTitle;
 }
@@ -1046,12 +1047,12 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     
     CGFloat minValue = (minDataPoint - factor*maxDataPoint)/(1-factor);
     
-    return minValue;
+    return (self.customMinimumPoint == CGFLOAT_MIN) ? minValue: self.customMinimumPoint;
 }
 
 - (CGFloat)maximumValueForDiscreteGraph:(APCDiscreteGraphView *) __unused graphView
 {
-    return [[self maximumDataPoint] doubleValue];
+    return (self.customMaximumPoint == CGFLOAT_MAX) ? [[self maximumDataPoint] doubleValue] : self.customMaximumPoint;
 }
 
 @end

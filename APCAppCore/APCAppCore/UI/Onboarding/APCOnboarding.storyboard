@@ -551,14 +551,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZIY-au-pmn">
-                                <rect key="frame" x="135" y="36" width="50" height="30"/>
+                                <rect key="frame" x="135" y="36" width="50" height="35"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="Xp0-Me-CCY"/>
+                                    <constraint firstAttribute="height" constant="35" id="Xp0-Me-CCY"/>
                                     <constraint firstAttribute="width" constant="50" id="tK0-zW-J18"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What to Expect" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vVd-e0-MNW">
-                                <rect key="frame" x="16" y="87" width="288" height="55"/>
+                                <rect key="frame" x="16" y="92" width="288" height="55"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="tnR-gv-SKI"/>
                                 </constraints>
@@ -567,7 +567,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OTN-K1-Dig">
-                                <rect key="frame" x="16" y="144" width="288" height="192"/>
+                                <rect key="frame" x="16" y="149" width="288" height="162"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="162" id="deL-8Y-Loz"/>
+                                </constraints>
                                 <string key="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </string>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -598,7 +601,6 @@
                             <constraint firstItem="vVd-e0-MNW" firstAttribute="leading" secondItem="Zry-Rk-H8M" secondAttribute="leadingMargin" id="Zk2-BP-MpW"/>
                             <constraint firstItem="ZIY-au-pmn" firstAttribute="top" secondItem="379-2m-7nf" secondAttribute="bottom" constant="36" id="ive-Jp-bXQ"/>
                             <constraint firstItem="Rnt-5e-NO8" firstAttribute="top" secondItem="z5w-pH-4Mb" secondAttribute="bottom" constant="20" id="jco-sd-9dd"/>
-                            <constraint firstItem="Rnt-5e-NO8" firstAttribute="top" secondItem="OTN-K1-Dig" secondAttribute="bottom" constant="168" id="pG9-aS-1LF"/>
                             <constraint firstAttribute="centerX" secondItem="ZIY-au-pmn" secondAttribute="centerX" id="pRD-O9-yOd"/>
                         </constraints>
                     </view>
@@ -1262,23 +1264,7 @@
                         <view key="tableFooterView" contentMode="scaleToFill" id="gV4-YU-vnP">
                             <rect key="frame" x="0.0" y="151" width="320" height="41"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="All fields on this screen are optional." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xRx-pv-8IL">
-                                    <rect key="frame" x="15" y="10" width="297" height="21"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="21" id="jHX-oU-5DU"/>
-                                    </constraints>
-                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
                             <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstItem="xRx-pv-8IL" firstAttribute="leading" secondItem="gV4-YU-vnP" secondAttribute="leading" constant="15" id="fRO-Y2-rx5"/>
-                                <constraint firstAttribute="centerY" secondItem="xRx-pv-8IL" secondAttribute="centerY" id="ipr-0G-Eyc"/>
-                                <constraint firstAttribute="trailing" secondItem="xRx-pv-8IL" secondAttribute="trailing" constant="8" id="oKt-FM-mEr"/>
-                            </constraints>
                         </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCDefaultTableViewCell" id="lJ6-Qj-KGv" customClass="APCDefaultTableViewCell">
@@ -1419,9 +1405,6 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-                    <connections>
-                        <outlet property="footerLabel" destination="xRx-pv-8IL" id="cdx-wE-fu6"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FbE-3l-Iey" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -10,8 +10,8 @@
 #import "APCMedTrackerPrescription.h"
 #import "APCMedTrackerPrescription+Helper.h"
 
-static  CGFloat  kLayerBorderWidth  = 3.0;
-static  CGFloat  kLayerCornerRadius = 4.0;
+static  CGFloat  kLayerBorderWidth  = 2.0;
+static  CGFloat  kLayerCornerRadius = 6.0;
 
 @implementation APCLozengeButton
 

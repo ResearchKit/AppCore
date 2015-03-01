@@ -202,9 +202,9 @@ typedef enum : NSUInteger {
 @interface APCScheduleExpressionToken : NSObject
 
 // Stuff we might scan
-@property (nonatomic, assign) NSInteger integerValue;
-@property (nonatomic, strong) NSString* stringValue;
-@property (nonatomic, assign) NSInteger countOfScannedCharacters;
+@property (nonatomic, assign) NSInteger  integerValue;
+@property (nonatomic, strong) NSString*  stringValue;
+@property (nonatomic, assign) NSUInteger countOfScannedCharacters;
 
 // Recording what happened when scanning the above
 @property (nonatomic, assign) APCScheduleExpressionTokenType type;

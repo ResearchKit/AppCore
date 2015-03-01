@@ -72,10 +72,36 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
 
 - (instancetype)initWithIdentifier:(NSString*)identifier propertiesFileName:(NSString*)fileName
 {
+    NSArray*    consentSteps = [self commonInitWithPropertiesFileName:fileName customSteps:nil];
+    
+    self = [super initWithIdentifier:identifier steps:consentSteps];
+    if (self)
+    {
+        
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithIdentifier:(NSString*)identifier propertiesFileName:(NSString*)fileName customSteps:(NSArray*)customSteps
+{
+    NSArray*    consentSteps = [self commonInitWithPropertiesFileName:fileName customSteps:customSteps];
+    
+    self = [super initWithIdentifier:identifier steps:consentSteps];
+    if (self)
+    {
+        
+    }
+    
+    return self;
+}
+
+- (NSArray*)commonInitWithPropertiesFileName:(NSString*)fileName customSteps:(NSArray*)customSteps
+{
     _passedQuiz = YES;
     
     [self loadFromJson:fileName];
-
+    
     ORKConsentSignature*    signature = [ORKConsentSignature signatureForPersonWithTitle:@"Participant"
                                                                         dateFormatString:nil
                                                                               identifier:@"participant"];
@@ -86,26 +112,30 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     document.signaturePageContent = @"By agreeing you confirm that you read the information and that you "
                                     @"wish to take part in this research study.";
     document.sections             = self.documentSections;
+    document.htmlReviewContent    = self.documentHtmlContent;
     
     [document addSignature:signature];
     
+    _consentDocument = document;
+    
     
     ORKVisualConsentStep*   visualStep  = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual"
-                                                                                  document:document];
-    ORKConsentSharingStep*  sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:@"Sage"
-                                                               investigatorShortDescription:@"Sage"
-                                                                investigatorLongDescription:@"Sage"
-                                                              localizedLearnMoreHTMLContent:@"<html></html>"];
+                                                                                  document:_consentDocument];
+    ORKConsentSharingStep*  sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:@"sharing"
+                                                               investigatorShortDescription:self.investigatorShortDescription
+                                                                investigatorLongDescription:self.investigatorLongDescription
+                                                              localizedLearnMoreHTMLContent:self.sharingHtmlLearnMoreContent];
     ORKConsentReviewStep*   reviewStep  = [[ORKConsentReviewStep alloc] initWithIdentifier:@"reviewStep"
                                                                                  signature:signature
-                                                                                inDocument:document];
+                                                                                inDocument:_consentDocument];
     
     reviewStep.reasonForConsent = @"By agreeing you confirm that you read the information and that you "
                                   @"wish to take part in this research study.";
-
+    
     NSMutableArray* consentSteps = [[NSMutableArray alloc] init];
     [consentSteps addObject:visualStep];
     [consentSteps addObject:sharingStep];
+    [consentSteps addObjectsFromArray:customSteps];
     
     for (APCConsentQuestion* q in self.questions)
     {
@@ -114,10 +144,9 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     
     [consentSteps addObject:reviewStep];
     
-    self = [super initWithIdentifier:identifier steps:consentSteps];
-    
-    return self;
+    return consentSteps;
 }
+
 
 - (NSArray*)instantiateQuiz:(NSArray*)rawQuizArray
 {
@@ -224,7 +253,7 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     }
     else if ([step.identifier isEqualToString:kFailedMessageTag])
     {
-        //  do nothing
+        nextStep = self.steps.firstObject;
     }
     else
     {
@@ -234,9 +263,9 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
         {
             NSUInteger  questionIndex = [self.questions indexOfObjectPassingTest:compareQuestion];
             
-            if (questionIndex == NSNotFound)    //  Are we at a question?
+            if (questionIndex == NSNotFound)                    //  Are we at a question?
             {
-                nextStep = self.steps[stepIndex + 1];   //  Pick the next step
+                nextStep = self.steps[stepIndex + 1];           //  Pick the next step
             }
             else
             {

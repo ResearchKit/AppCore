@@ -39,6 +39,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 static NSUInteger const kIndexOfActivitesTab = 0;
 static NSUInteger const kIndexOfProfileTab = 3;
 
+
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 
 @property (nonatomic) BOOL isPasscodeShowing;
@@ -46,6 +47,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 @property (nonatomic, strong) NSError *catastrophicStartupError;
 
 @end
+
 
 @implementation APCAppDelegate
 /*********************************************************************************/
@@ -492,9 +494,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
                                                                    message: error.userInfo [NSLocalizedRecoverySuggestionErrorKey]];
 
         [blockSafeSelf.window.rootViewController presentViewController: alert animated: YES completion: nil];
-
     }];
-
 }
 
 /*********************************************************************************/

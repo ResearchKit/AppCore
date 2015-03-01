@@ -91,7 +91,7 @@ NSString * const kAPCPickerTableViewCellIdentifier = @"APCPickerTableViewCell";
 {
     NSMutableArray *selectedRowIndices = [NSMutableArray array];
     
-    for (int i = 0 ; i < self.pickerValues.count; i++) {
+    for (NSUInteger i = 0 ; i < self.pickerValues.count; i++) {
         [selectedRowIndices addObject:@([pickerView selectedRowInComponent:i])];
     }
     

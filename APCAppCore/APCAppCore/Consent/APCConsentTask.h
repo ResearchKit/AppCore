@@ -12,6 +12,9 @@
 
 @interface APCConsentTask : ORKOrderedTask <ORKTask>
 
+@property (nonatomic, strong) ORKConsentDocument*   consentDocument;
+
 - (instancetype)initWithIdentifier:(NSString*)identifier propertiesFileName:(NSString*)fileName;
+- (instancetype)initWithIdentifier:(NSString*)identifier propertiesFileName:(NSString*)fileName customSteps:(NSArray*)customSteps;
 
 @end
