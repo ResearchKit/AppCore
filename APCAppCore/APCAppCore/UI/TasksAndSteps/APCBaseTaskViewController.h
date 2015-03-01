@@ -15,6 +15,8 @@
 
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask;
 - (NSString *) createResultSummary;
-- (void) storeInCoreDataWithFileName: (NSString *) fileName resultSummary: (NSString *) resultSummary;
+- (void) storeInCoreDataWithFileName: (NSString *) fileName
+                       resultSummary: (NSString *) resultSummary
+                        usingContext: (NSManagedObjectContext *) context;
 
 @end

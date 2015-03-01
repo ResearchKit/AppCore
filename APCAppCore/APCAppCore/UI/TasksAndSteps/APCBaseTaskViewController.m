@@ -155,6 +155,14 @@
 - (void) storeInCoreDataWithFileName: (NSString *) fileName resultSummary: (NSString *) resultSummary
 {
     NSManagedObjectContext * context = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext;
+    
+    [self storeInCoreDataWithFileName: fileName resultSummary: resultSummary usingContext: context];
+}
+
+- (void) storeInCoreDataWithFileName: (NSString *) fileName
+                       resultSummary: (NSString *) resultSummary
+                        usingContext: (NSManagedObjectContext *) context
+{
     NSManagedObjectID * objectID = [APCResult storeTaskResult:self.result inContext:context];
     APCResult * result = (APCResult*)[context objectWithID:objectID];
     result.archiveFilename = fileName;
