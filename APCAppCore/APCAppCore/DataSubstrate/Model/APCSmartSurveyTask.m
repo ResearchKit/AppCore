@@ -177,7 +177,7 @@ static APCDummyObject * _dummyObject;
     }
     else
     {
-        if ((currentIndex - 1) >= 0) {
+        if (currentIndex >= 1) {
             newIndex = currentIndex -1;
         }
     }
