@@ -76,18 +76,38 @@ static NSInteger const kRegularFontSize = 17.0;
          [view removeFromSuperview];
      }];
 
-    for (NSAttributedString  *string  in  self.localisedParagraphs) {
+    int counter = 0;
+    
+    for (NSString  *string  in  self.nonLocalisedHeadlines) {
         
-        CGRect  frame = CGRectMake(paragraphIndex * CGRectGetWidth(self.textScroller.frame), 0.0, CGRectGetWidth(self.textScroller.frame), CGRectGetHeight(self.textScroller.frame));
+        CGRect  frame = CGRectMake(paragraphIndex * CGRectGetWidth(self.textScroller.frame), 0.0, CGRectGetWidth(self.textScroller.frame), 42.0);
         UILabel  *texter = [[UILabel alloc] initWithFrame:frame];
+        texter.font = [UIFont fontWithName:@"Helvetica-Bold" size:kTitleFontSize];
+        texter.lineBreakMode = NSLineBreakByWordWrapping;
         texter.numberOfLines = 0;
-        texter.attributedText = string;
+        texter.text = string;
         texter.backgroundColor = [UIColor clearColor];
         [self.textScroller addSubview:texter];
+        texter.textAlignment = NSTextAlignmentCenter;
+        
+        CGRect  paragraphFrame = CGRectMake(paragraphIndex * CGRectGetWidth(self.textScroller.frame),
+                                            20,
+                                            CGRectGetWidth(self.textScroller.frame),
+                                            CGRectGetHeight(self.textScroller.frame));
+        UILabel  *paragraphText = [[UILabel alloc] initWithFrame:paragraphFrame];
+        paragraphText.font = [UIFont fontWithName:@"Helvetica Neue" size:kRegularFontSize];
+        paragraphText.lineBreakMode = NSLineBreakByWordWrapping;
+        paragraphText.numberOfLines = 0;
+        paragraphText.text = self.nonLocalisedParagraphs[counter];
+        paragraphText.backgroundColor = [UIColor clearColor];
+        [self.textScroller addSubview:paragraphText];
+        paragraphText.textAlignment = NSTextAlignmentCenter;
+        
         
         contentSize.width = contentSize.width + CGRectGetWidth(self.textScroller.frame);
         
         paragraphIndex = paragraphIndex + 1;
+        counter++;
     }
     self.textScroller.contentSize = contentSize;
 }
@@ -99,7 +119,7 @@ static NSInteger const kRegularFontSize = 17.0;
     NSMutableArray  *localised = [NSMutableArray array];
     
     NSMutableParagraphStyle *paragrapStyle = NSMutableParagraphStyle.new;
-    paragrapStyle.alignment                = NSTextAlignmentCenter;
+    //paragrapStyle.alignment                = NSTextAlignmentCenter;
 
     NSDictionary  *headlineAttributes = @{
                                            NSFontAttributeName : [UIFont appRegularFontWithSize: kTitleFontSize],
@@ -121,7 +141,7 @@ static NSInteger const kRegularFontSize = 17.0;
         if (self.nonLocalisedHeadlines.count && self.nonLocalisedHeadlines.count >= idx) {
             NSString * headline = self.nonLocalisedHeadlines[idx];
             NSString * translatedHeadline = NSLocalizedString(headline, nil);
-            attributedHeadline = [[NSMutableAttributedString alloc] initWithString:[translatedHeadline stringByAppendingString:@"\n\n"] attributes:headlineAttributes];
+            attributedHeadline = [[NSMutableAttributedString alloc] initWithString:[translatedHeadline stringByAppendingString:@"\n"] attributes:headlineAttributes];
         }
         NSString  *translated = NSLocalizedString(paragraph, nil);
         NSAttributedString  *styled = [[NSAttributedString alloc] initWithString:translated attributes:paragraphAttributes];
