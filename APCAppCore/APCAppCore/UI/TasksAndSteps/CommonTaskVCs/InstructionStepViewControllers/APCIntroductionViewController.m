@@ -8,8 +8,10 @@
 #import "APCIntroductionViewController.h"
 #import "APCAppCore.h"
 
-static NSInteger const kTitleFontSize = 18.0;
-static NSInteger const kRegularFontSize = 17.0;
+static NSInteger    const kTitleFontSize        = 18.0;
+static NSInteger    const kRegularFontSize      = 17.0;
+static CGFloat      const kHeadlineHeight       = 42.0f;
+static CGFloat      const kParagraphYPosition   = 20.0;
 
 @interface APCIntroductionViewController  ( ) <UIScrollViewDelegate>
 
@@ -80,7 +82,7 @@ static NSInteger const kRegularFontSize = 17.0;
     
     for (NSString  *string  in  self.nonLocalisedHeadlines) {
         
-        CGRect  frame = CGRectMake(paragraphIndex * CGRectGetWidth(self.textScroller.frame), 0.0, CGRectGetWidth(self.textScroller.frame), 42.0);
+        CGRect  frame = CGRectMake(paragraphIndex * CGRectGetWidth(self.textScroller.frame), 0.0, CGRectGetWidth(self.textScroller.frame), kHeadlineHeight);
         UILabel  *texter = [[UILabel alloc] initWithFrame:frame];
         texter.font = [UIFont fontWithName:@"Helvetica-Bold" size:kTitleFontSize];
         texter.lineBreakMode = NSLineBreakByWordWrapping;
@@ -91,7 +93,7 @@ static NSInteger const kRegularFontSize = 17.0;
         texter.textAlignment = NSTextAlignmentCenter;
         
         CGRect  paragraphFrame = CGRectMake(paragraphIndex * CGRectGetWidth(self.textScroller.frame),
-                                            20,
+                                            kParagraphYPosition,
                                             CGRectGetWidth(self.textScroller.frame),
                                             CGRectGetHeight(self.textScroller.frame));
         UILabel  *paragraphText = [[UILabel alloc] initWithFrame:paragraphFrame];
