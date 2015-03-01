@@ -705,8 +705,6 @@ static NSUInteger const kIndexOfProfileTab = 3;
             NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
             NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
             
-            NSNumber *remainingTasks = (completedScheduledTasks < allScheduledTasks) ? @(allScheduledTasks - completedScheduledTasks) : @(0);
-            
             if ([remainingTasks integerValue] != 0) {
                 item.badgeValue = [remainingTasks stringValue];
             } else {
