@@ -59,7 +59,7 @@ typedef NS_ENUM(NSUInteger, APCAppState) {
 
 static CGFloat const kAPCSignUpProgressBarHeight                = 14.0f;
 
-static NSInteger kAPCPasswordMinimumLength = 2;
+static NSUInteger kAPCPasswordMinimumLength = 2;
 
 
 static NSString * const kAPCUserInfoFieldNameRegEx              = @"[A-Za-z\\ ]+";

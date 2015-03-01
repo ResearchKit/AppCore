@@ -421,7 +421,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         
         UIImageView *maxImageView = [[UIImageView alloc] initWithImage:self.maximumValueImage];
         maxImageView.contentMode = UIViewContentModeScaleAspectFit;
-        maxImageView.frame = CGRectMake(CGRectGetWidth(self.yAxisView.bounds) - width, verticalPadding, width, width);
+        maxImageView.frame = CGRectMake(CGRectGetWidth(self.yAxisView.bounds) - width, -width/2, width, width);
         [self.yAxisView addSubview:maxImageView];
         
         UIImageView *minImageView = [[UIImageView alloc] initWithImage:self.minimumValueImage];
@@ -711,7 +711,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     CGFloat value = NSNotFound;
     
-    NSInteger positionIndex = 0;
+    NSUInteger positionIndex = 0;
     
     if (snapped) {
         for (positionIndex = 0; positionIndex<self.xAxisPoints.count-1; positionIndex++) {
@@ -755,7 +755,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     CGFloat canvasYPosition;
     
-    NSInteger positionIndex;
+    NSUInteger positionIndex;
     for (positionIndex = 0; positionIndex<self.xAxisPoints.count - 1; positionIndex++) {
         CGFloat xAxisPointVal = [self.xAxisPoints[positionIndex] floatValue];
         if (xAxisPointVal > xPosition) {
@@ -783,7 +783,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 //Valid - dataPoints[index]!= NSNotFound
 - (NSInteger)nextValidPositionIndexForPosition:(NSInteger)positionIndex
 {
-    NSInteger validPosition = positionIndex;
+    NSUInteger validPosition = positionIndex;
     
     while (validPosition < (self.dataPoints.count-1)) {
         if ([self.dataPoints[validPosition] floatValue] != NSNotFound) {
@@ -813,7 +813,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     CGFloat widthBetweenPoints = CGRectGetWidth(self.plotsView.frame)/self.xAxisPoints.count;
     
-    NSInteger positionIndex;
+    NSUInteger positionIndex;
     for (positionIndex = 0; positionIndex<self.xAxisPoints.count; positionIndex++) {
         
         CGFloat dataPointVal = [self.dataPoints[positionIndex] floatValue];

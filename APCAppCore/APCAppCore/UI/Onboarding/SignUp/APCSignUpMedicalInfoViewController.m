@@ -284,11 +284,11 @@
 
 - (void) loadProfileValuesInModel {
     
-    for (int j=0; j<self.items.count; j++) {
+    for (NSUInteger j=0; j<self.items.count; j++) {
         
         APCTableViewSection *section = self.items[j];
         
-        for (int i = 0; i < section.rows.count; i++) {
+        for (NSUInteger i = 0; i < section.rows.count; i++) {
             
             APCTableViewRow *row = section.rows[i];
             

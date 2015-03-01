@@ -35,7 +35,7 @@ NSUInteger kDaysPerWeek = 7;
 #pragma mark - Abstract Implementations
 /*********************************************************************************/
 
-- (long long)sizeThreshold
+- (unsigned long long)sizeThreshold
 {
     if (_sizeThreshold == 0) {
         _sizeThreshold = 1 * kKBPerMB * kBytesPerKB;

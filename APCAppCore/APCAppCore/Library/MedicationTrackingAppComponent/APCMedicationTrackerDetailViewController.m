@@ -92,7 +92,7 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
 {
     NSInteger   numberOfRowsInDosesSection = [self.tabulator numberOfRowsInSection:kDailyDosesTakenSection];
     NSUInteger  totalNumberOfDosesTaken = 0;
-    for (NSUInteger  row = 0;  row < numberOfRowsInDosesSection;  row++) {
+    for (NSInteger  row = 0;  row < numberOfRowsInDosesSection;  row++) {
         APCMedicationDetailsTableViewCell  *doseCell = (APCMedicationDetailsTableViewCell *)[self.tabulator cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:kDailyDosesTakenSection]];
         if (doseCell.confirmer.completed == YES) {
             totalNumberOfDosesTaken = totalNumberOfDosesTaken + 1;

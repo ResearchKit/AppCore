@@ -74,7 +74,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     return  numberOfSections;
 }
 
-- (NSInteger)tableView:(UITableView *) __unused sectiontableView numberOfRowsInSection:(NSInteger) __unused section
+- (NSInteger)tableView:(UITableView *) __unused tableView numberOfRowsInSection:(NSInteger) __unused section
 {
         return  [self.prescriptions count];
 }
@@ -98,18 +98,18 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 
 #pragma  mark  -  Daily Calendar View Delegate Methods
 
-- (void)dailyCalendarViewDidSelect:(NSDate *)__unused date
+- (void)dailyCalendarViewDidSelect:(NSDate *) __unused date
 {
 }
 
 #pragma  mark  -  Weekly Calendar View Delegate Methods
 
-- (NSUInteger)maximumScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *)__unused calendarView
+- (NSUInteger)maximumScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *) __unused calendarView
 {
     return  self.exScrolliburNumberOfPages;
 }
 
-- (NSUInteger)currentScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *)__unused calendarView
+- (NSUInteger)currentScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *) __unused calendarView
 {
     return  self.exScrolliburCurrentPage;
 }
@@ -180,7 +180,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 
 - (void)configureExScrollibur
 {
-    self.exScrollibur.scrollEnabled = YES;
+    self.exScrollibur.scrollEnabled = NO;
     self.exScrollibur.pagingEnabled = YES;
     self.exScrollibur.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetHeight(self.exScrollibur.frame));
     self.exScrollibur.showsHorizontalScrollIndicator = NO;

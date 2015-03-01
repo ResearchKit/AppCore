@@ -506,11 +506,11 @@ static NSString * const kInternalMaxParticipantsMessage = @"has reached the limi
     }
     
     
-    for (int j=0; j<self.items.count; j++) {
+    for (NSUInteger j=0; j<self.items.count; j++) {
         
         APCTableViewSection *section = self.items[j];
         
-        for (int i = 0; i < section.rows.count; i++) {
+        for (NSUInteger i = 0; i < section.rows.count; i++) {
             
             APCTableViewRow *row = section.rows[i];
             
@@ -606,11 +606,11 @@ static NSString * const kInternalMaxParticipantsMessage = @"has reached the limi
     NSUInteger randomInteger = arc4random();
     self.emailTextField.text = [NSString stringWithFormat:@"dhanush.balachandran+%@@ymedialabs.com", @(randomInteger)];
     
-    for (int j=0; j<self.items.count; j++) {
+    for (NSUInteger j=0; j<self.items.count; j++) {
         
         APCTableViewSection *section = self.items[j];
         
-        for (int i = 0; i < section.rows.count; i++) {
+        for (NSUInteger i = 0; i < section.rows.count; i++) {
             
             APCTableViewRow *row = section.rows[i];
             
