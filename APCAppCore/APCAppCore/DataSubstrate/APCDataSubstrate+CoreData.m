@@ -115,13 +115,12 @@
 
 
         /*
-         FOR NOW:  crash.  Next version:  display an alert, but don't crash.
-         
-         We are purposely choosing NOT to delete the user's data and start
-         over, using [self removeSqliteStore].  We're not sure what else
-         to do, though.
+         Report this actually-catastrophic error to the app.
+         It'll display it when it gets a chance -- a few
+         milliseconds from now, asynchronously.
          */
-        NSAssert (NO, @"WARNING:  Couldn't create database.  Now what?");
+        APCAppDelegate *appDelegate = (APCAppDelegate *) [[UIApplication sharedApplication] delegate];
+        [appDelegate registerCatastrophicStartupError: catastrophe];
     }
 }
 
