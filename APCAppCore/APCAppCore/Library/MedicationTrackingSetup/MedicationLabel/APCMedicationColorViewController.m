@@ -94,9 +94,7 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
             self.selectedIndex = indexPath;
         }
     }
-    if (self.selectedIndex == nil) {
-        self.navigationItem.hidesBackButton = YES;
-    } else {
+    if (self.selectedIndex != nil) {
         self.navigationItem.hidesBackButton = NO;
         if (self.delegate != nil) {
             if ([self.delegate respondsToSelector:@selector(colorController:didSelectColorLabelName:)] == YES) {

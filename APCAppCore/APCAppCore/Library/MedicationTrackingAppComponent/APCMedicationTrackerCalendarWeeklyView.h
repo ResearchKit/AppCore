@@ -37,8 +37,8 @@ typedef  enum  _WeeklyCalendarScrollDirection
 
 - (void)setupViews;
 
-- (void)swipeLeft:(UISwipeGestureRecognizer *)swipe;
-- (void)swipeRight:(UISwipeGestureRecognizer *)swipe;
+- (void)swipeLeft:(UISwipeGestureRecognizer *)swiper;
+- (void)swipeRight:(UISwipeGestureRecognizer *)swiper;
 
 - (void)redrawToDate:(NSDate *)date;
 

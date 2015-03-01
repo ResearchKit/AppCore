@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="exScrollibur" destination="KL7-BS-XTd" id="ngl-ko-fia"/>
                 <outlet property="tabulator" destination="bka-yN-34d" id="qKV-rW-9JT"/>
+                <outlet property="tapItemsLabel" destination="vMQ-ee-Tsy" id="VDa-7W-Ed8"/>
                 <outlet property="tapItemsView" destination="jK1-nf-DCv" id="I4k-a3-oUu"/>
                 <outlet property="view" destination="0LA-A4-Ylc" id="am7-nf-FTY"/>
                 <outlet property="weekContainer" destination="HNJ-T2-NQa" id="MLN-8J-wvZ"/>
@@ -77,8 +78,8 @@
                                 <constraint firstAttribute="width" constant="600" id="rD5-yE-mpL"/>
                             </constraints>
                         </view>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Prescriptions" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G6p-QE-uyF">
-                            <rect key="frame" x="12" y="0.0" width="588" height="18"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Prescriptions" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G6p-QE-uyF">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="18"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
@@ -95,7 +96,7 @@
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="G6p-QE-uyF" secondAttribute="bottom" id="141-ZQ-jnZ"/>
                         <constraint firstAttribute="trailing" secondItem="LWt-EN-lEN" secondAttribute="trailing" id="4LW-5G-m3k"/>
-                        <constraint firstItem="G6p-QE-uyF" firstAttribute="leading" secondItem="3mn-ab-tHb" secondAttribute="leading" constant="12" id="6uc-Kn-xFV"/>
+                        <constraint firstItem="G6p-QE-uyF" firstAttribute="leading" secondItem="3mn-ab-tHb" secondAttribute="leading" id="6uc-Kn-xFV"/>
                         <constraint firstItem="LWt-EN-lEN" firstAttribute="leading" secondItem="3mn-ab-tHb" secondAttribute="leading" id="9aR-tV-J9M"/>
                         <constraint firstItem="G6p-QE-uyF" firstAttribute="top" secondItem="3mn-ab-tHb" secondAttribute="top" id="Irg-sK-BuQ"/>
                         <constraint firstItem="PhK-O4-B3t" firstAttribute="leading" secondItem="3mn-ab-tHb" secondAttribute="leading" id="Yne-tc-l9p"/>

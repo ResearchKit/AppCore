@@ -21,10 +21,12 @@
 #import "APCMedTrackerPrescriptionColor+Helper.h"
 
 #import "APCMedicationTrackerCalendarDailyView.h"
+#import "APCCustomBackButton.h"
 #import "NSDate+MedicationTracker.h"
 
 #import "NSBundle+Helper.h"
 #import "NSDictionary+APCAdditions.h"
+#import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "NSDate+Helper.h"
 #import "APCLog.h"
@@ -47,6 +49,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 
 @property (nonatomic, weak)  IBOutlet  UITableView                *tabulator;
 @property (nonatomic, weak)  IBOutlet  UIView                     *tapItemsView;
+@property (nonatomic, weak)  IBOutlet  UILabel                    *tapItemsLabel;
 @property (nonatomic, weak)  IBOutlet  UIView                     *yourPrescriptionsView;
 
 @property (nonatomic, weak)            APCMedicationTrackerCalendarWeeklyView  *weeklyCalendar;
@@ -61,7 +64,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 
 @implementation APCMedicationTrackerCalendarViewController
 
-#pragma  mark  -  Table View Data Source Methods
+#pragma  mark  -  Table View Data Source Methods   UITableViewCellEditingStyleDelete
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView
 {
@@ -73,45 +76,24 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 
 - (NSInteger)tableView:(UITableView *) __unused tableView numberOfRowsInSection:(NSInteger) __unused section
 {
-        //
-        //    one extra row for the Add Medications Cell
-        //
-        return  [self.prescriptions count] + 1;
+        return  [self.prescriptions count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell  *cell = nil;
-    
-    if ((NSUInteger)indexPath.row == [self.prescriptions count]) {
-        APCAddPrescriptionTableViewCell  *aCell = (APCAddPrescriptionTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kAddPrescriptionTableViewCell];
-        cell = aCell;
-    } else {
-        APCMedicationSummaryTableViewCell  *aCell = (APCMedicationSummaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSummaryTableViewCell];
+    APCMedicationSummaryTableViewCell  *cell = (APCMedicationSummaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSummaryTableViewCell];
 
-        APCMedTrackerPrescription  *prescription = self.prescriptions[indexPath.row];
+    APCMedTrackerPrescription  *prescription = self.prescriptions[indexPath.row];
 
-        aCell.colorswatch.backgroundColor = prescription.color.UIColor;
-        aCell.medicationName.text = prescription.medication.name;
-        aCell.medicationDosage.text = prescription.dosage.name;
-        aCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.colorswatch.backgroundColor = prescription.color.UIColor;
+    cell.medicationName.text = prescription.medication.name;
+    cell.medicationDosage.text = prescription.dosage.name;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-        NSString  *daysAndNumbers = [prescription.frequencyAndDays formatNumbersAndDays];
-        aCell.medicationUseDays.text = daysAndNumbers;
-        cell = aCell;
-    }
+    NSString  *daysAndNumbers = [prescription.frequencyAndDays formatNumbersAndDays];
+    cell.medicationUseDays.text = daysAndNumbers;
 
     return  cell;
-}
-
-#pragma  mark  -  Table View Delegate Methods
-
-- (void)tableView:(UITableView *) __unused tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ((NSUInteger)indexPath.row == [self.prescriptions count]) {
-        APCMedicationTrackerSetupViewController  *controller = [[APCMedicationTrackerSetupViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
-        [self.navigationController pushViewController:controller animated:YES];
-    }
 }
 
 #pragma  mark  -  Daily Calendar View Delegate Methods
@@ -187,9 +169,11 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 
 - (void)displayView:(APCMedicationTrackerMedicationsDisplayView *) __unused displayView lozengeButtonWasTapped:(APCLozengeButton *)lozenge
 {
-    APCMedicationTrackerDetailViewController  *controller = [[APCMedicationTrackerDetailViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
-    controller.lozenge = lozenge;
-    [self.navigationController pushViewController:controller animated:YES];
+    if ([lozenge.currentDate isEarlierOrEqualToDate:[NSDate date]] == YES) {
+        APCMedicationTrackerDetailViewController  *controller = [[APCMedicationTrackerDetailViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
+        controller.lozenge = lozenge;
+        [self.navigationController pushViewController:controller animated:YES];
+    }
 }
 
 #pragma  mark  -  Calendar Pages Management
@@ -206,8 +190,21 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     self.exScrollibur.delegate = self;
 }
 
+- (void)makeBlankPage
+{
+    CGRect  frame = CGRectZero;
+    frame.size.width = CGRectGetWidth(self.view.frame);
+    frame.size.height = CGRectGetHeight(self.exScrollibur.frame);
+    APCMedicationTrackerMedicationsDisplayView  *view = [[APCMedicationTrackerMedicationsDisplayView alloc] initWithFrame:frame];
+    view.backgroundColor = [UIColor whiteColor];
+    [self.exScrollibur addSubview:view];
+}
+
 - (void)makeFirstPage
 {
+    NSArray  *subviews = [self.exScrollibur subviews];
+    [subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
     NSArray  *dayViews = [self.weeklyCalendar fetchDailyCalendarDayViews];
     APCMedicationTrackerCalendarDailyView  *dayView = (APCMedicationTrackerCalendarDailyView *)[dayViews firstObject];
     NSDate  *startOfWeekDate = dayView.date;
@@ -223,7 +220,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     CGRect scrollerFrame = self.exScrollibur.frame;
     CGRect  frame = CGRectZero;
     frame.origin.x = CGRectGetWidth(viewFrame) * pageNumber;
-    frame.origin.y = 0;
+    frame.origin.y = 0.0;
     frame.size.width = CGRectGetWidth(viewFrame);
     frame.size.height = CGRectGetHeight(scrollerFrame);
     APCMedicationTrackerMedicationsDisplayView  *view = [[APCMedicationTrackerMedicationsDisplayView alloc] initWithFrame:frame];
@@ -272,6 +269,23 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     }
 }
 
+#pragma  mark  -  Done Button Action Method
+
+- (void)doneButtonWasTapped:(id)__unused sender
+{
+    if (self.delegate != nil) {
+        if ([self.delegate respondsToSelector:@selector(stepViewController:didFinishWithNavigationDirection:)] == YES) {
+            [self.delegate stepViewController:self didFinishWithNavigationDirection:ORKStepViewControllerNavigationDirectionForward];
+        }
+    }
+}
+
+- (void)addMedicationWasTapped:(id)__unused sender
+{
+    APCMedicationTrackerSetupViewController  *controller = [[APCMedicationTrackerSetupViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
+    [self.navigationController pushViewController:controller animated:YES];
+}
+
 #pragma  mark  -  View Controller Methods
 
 - (void)makeCalendar
@@ -309,15 +323,23 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     self.exScrollibur.hidden     = NO;
     self.weekContainer.hidden    = NO;
     if ([self.prescriptions count] == 0) {
-        self.tapItemsView.hidden = YES;
+        self.tapItemsLabel.text = @"Tap the Plus Sign to Create Prescriptions";
+        self.yourPrescriptionsView.hidden = YES;
     } else {
-        self.tapItemsView.hidden = NO;
+        self.tapItemsLabel.text = @"Tap on above items to log intake";
+        self.yourPrescriptionsView.hidden = NO;
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(doneButtonWasTapped:) tintColor:[UIColor appPrimaryColor]];
+    self.navigationItem.leftBarButtonItem = backster;
+    
+    UIBarButtonItem  *addster = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMedicationWasTapped:)];
+    self.navigationItem.rightBarButtonItem = addster;
     
     [APCMedTrackerPrescription fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
                                                         toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
@@ -336,8 +358,9 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
                  [self configureExScrollibur];
                  self.viewsWereCreated = YES;
              }
-//             [self setupHiddenStates];
-             if ((self.exScrolliburNumberOfPages == 0) && ([self.prescriptions count] > 0)) {
+             if ([self.prescriptions count] == 0) {
+                 [self makeBlankPage];
+             } else if (self.exScrolliburNumberOfPages == 0) {
                  [self makeFirstPage];
              }
              [self.tabulator reloadData];
@@ -359,8 +382,6 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     [APCMedTrackerDataStorageManager startupReloadingDefaults:YES andThenUseThisQueue:nil toDoThis:NULL];
 
     self.navigationItem.title = viewControllerTitle;
-    
-    self.cancelButtonItem.title = NSLocalizedString(@"Done", @"Done");
     
     UINib  *summaryCellNib = [UINib nibWithNibName:kSummaryTableViewCell bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:summaryCellNib forCellReuseIdentifier:kSummaryTableViewCell];

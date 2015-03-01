@@ -47,8 +47,10 @@ static  NSInteger  kAPCMedicationColorRow         = 2;
 static  NSInteger  kAPCMedicationDosageRow        = 3;
 static  NSInteger  kAPCMedicationButtonRow        = 4;
 
-static  NSString  *mainTableCategories[]          = { @"Name",        @"Frequency",     @"Label Color",  @"Dosage (optional)"        };
+static  NSString  *mainTableCategories[]          = { @"Name",        @"Frequency",     @"Label Color",  @"Dosage" };
 static  NSInteger  kNumberOfMainTableCategories   = (sizeof(mainTableCategories) / sizeof(NSString *));
+static  NSString  *extraTableCategories[]         = { @"Required",    @"Required",      @"Optional",     @"Optional" };
+
 
 static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Frequency", @"Select Color", @"Select Dosage" };
 
@@ -71,8 +73,12 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
 @property  (nonatomic, strong)          NSMutableArray                  *currentMedicationRecords;
 
 @property (nonatomic, strong)           APCMedTrackerMedication         *theMedicationObject;
+
 @property (nonatomic, strong)           APCMedTrackerPossibleDosage     *possibleDosage;
+
 @property (nonatomic, strong)           APCMedTrackerPrescriptionColor  *colorObject;
+@property (nonatomic, strong)           NSArray                         *colorsList;
+
 @property (nonatomic, strong)           NSDictionary                    *frequenciesAndDaysObject;
 
 @end
@@ -81,12 +87,12 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
 
 #pragma  mark  -  Table View Data Source Methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView
 {
     return  1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger) __unused section
 {
     NSInteger  numberOfRows = 0;
     
@@ -98,7 +104,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
     return  numberOfRows;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger) __unused section
 {
     NSString  *title = nil;
     
@@ -168,6 +174,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
         if (indexPath.row < kAPCMedicationButtonRow) {
             APCSetupTableViewCell  *aCell = (APCSetupTableViewCell *)[self.setupTabulator dequeueReusableCellWithIdentifier:kSetupTableCellName];
             aCell.topicLabel.text = mainTableCategories[indexPath.row];
+            aCell.extraLabel.text = extraTableCategories[indexPath.row];
             [self formatCellTopicForRow:(SetupTableRowTypes)indexPath.row withCell:aCell];
             cell = aCell;
         } else {
@@ -221,6 +228,10 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
 {
     [self.listTabulator reloadData];
     
+    if (self.colorObject == nil) {
+        self.colorObject = self.colorsList[0];
+    }
+
     [APCMedTrackerPrescription newPrescriptionWithMedication: self.theMedicationObject
                                                         dosage: self.possibleDosage
                                                          color: self.colorObject
@@ -243,8 +254,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
 
 - (void)enableDoneButtonIfValuesSet
 {
-    if ((self.medicationNameWasSet == YES) && (self.medicationColorWasSet == YES) &&
-        (self.medicationFrequencyWasSet == YES)) {
+    if ((self.medicationNameWasSet == YES) && (self.medicationFrequencyWasSet == YES)) {
         self.doneButton.enabled = YES;
     }
 }
@@ -331,14 +341,25 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
     
     [APCMedTrackerPossibleDosage fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
                                                     toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
-                                                                        NSTimeInterval operationDuration,
-                                                                        NSError *error)
+                                                                        NSTimeInterval __unused operationDuration,
+                                                                        NSError __unused *error)
      {
          NSSortDescriptor *amountSorter = [[NSSortDescriptor alloc] initWithKey:@"amount" ascending:YES];
          NSArray  *descriptors = @[ amountSorter ];
          NSArray  *sorted = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
          self.possibleDosage = [sorted lastObject];
     }];
+    
+    
+    self.colorsList = [NSArray array];
+    
+    [APCMedTrackerPrescriptionColor fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
+                                                       toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
+                                                                           NSTimeInterval  __unused operationDuration,
+                                                                           NSError * __unused error)
+     {
+         self.colorsList = arrayOfGeneratedObjects;
+     }];
 }
 
 - (void)didReceiveMemoryWarning

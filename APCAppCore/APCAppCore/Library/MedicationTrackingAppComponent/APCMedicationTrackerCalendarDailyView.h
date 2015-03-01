@@ -17,8 +17,8 @@
 
 @property  (nonatomic, weak)     id  <APCMedicationTrackerCalendarDailyViewDelegate>  delegate;
 @property  (nonatomic, strong)   NSDate                        *date;
-@property  (nonatomic, assign)   BOOL                           blnSelected;
+@property  (nonatomic, assign, getter = isSelected)  BOOL       selected;
 
-- (void)markSelected:(BOOL)blnSelected;
+- (void)markSelected:(BOOL)selected;
 
 @end

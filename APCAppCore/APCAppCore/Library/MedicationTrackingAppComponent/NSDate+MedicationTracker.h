@@ -9,7 +9,6 @@
 
 @interface NSDate (MedicationTracker)
 
-- (NSDate *)addDays:(NSInteger)day;
 - (NSDate *)getWeekStartDate: (NSInteger)weekStartIndex;
 - (NSString *)getDayOfWeekShortString;
 - (NSString *)getDateOfMonth;
