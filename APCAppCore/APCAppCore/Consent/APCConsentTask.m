@@ -93,10 +93,10 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     
     ORKVisualConsentStep*   visualStep  = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual"
                                                                                   document:document];
-    ORKConsentSharingStep*  sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:@"Sage"
-                                                               investigatorShortDescription:@"Sage"
-                                                                investigatorLongDescription:@"Sage"
-                                                              localizedLearnMoreHTMLContent:@"<html></html>"];
+    ORKConsentSharingStep*  sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:@"sharing"
+                                                               investigatorShortDescription:self.investigatorShortDescription
+                                                                investigatorLongDescription:self.investigatorLongDescription
+                                                              localizedLearnMoreHTMLContent:self.sharingHtmlLearnMoreContent];
     ORKConsentReviewStep*   reviewStep  = [[ORKConsentReviewStep alloc] initWithIdentifier:@"reviewStep"
                                                                                  signature:signature
                                                                                 inDocument:document];
