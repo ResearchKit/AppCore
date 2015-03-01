@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="h61-jT-BHu">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6246"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -76,8 +76,8 @@ the link included in the message.</string>
                                     <constraint firstAttribute="height" constant="1" id="wOD-8Z-UB1"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yX7-Jl-zxX">
-                                <rect key="frame" x="-297" y="428" width="913" height="90"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yX7-Jl-zxX">
+                                <rect key="frame" x="16" y="428" width="288" height="90"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="90" id="6xz-2O-k55"/>
                                     <constraint firstAttribute="width" constant="288" id="lvt-a2-1N3"/>
@@ -113,6 +113,32 @@ the link included in the message.</string>
                                     <action selector="resendEmail:" destination="h61-jT-BHu" eventType="touchUpInside" id="QrR-zk-AgC"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oso-d1-ecu" userLabel="Tap-to-continue container and click handler">
+                                <rect key="frame" x="16" y="374" width="288" height="38"/>
+                                <subviews>
+                                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kIy-TE-6ug">
+                                        <rect key="frame" x="75" y="8" width="139" height="23"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="23" id="JuA-uf-2ib"/>
+                                            <constraint firstAttribute="width" constant="139" id="rzs-1N-5Wj"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="Tap to continue.">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="kIy-TE-6ug" secondAttribute="centerX" constant="-0.5" id="8Qk-vW-7Ae"/>
+                                    <constraint firstAttribute="height" constant="38" id="8lv-T2-lFr"/>
+                                    <constraint firstAttribute="centerY" secondItem="kIy-TE-6ug" secondAttribute="centerY" constant="-0.5" id="LKj-mq-YbU"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="KDO-bk-fRc" appends="YES" id="b56-bC-ILE"/>
+                                </connections>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -127,9 +153,11 @@ the link included in the message.</string>
                             <constraint firstAttribute="trailingMargin" secondItem="hsa-BE-Hkq" secondAttribute="trailing" constant="7" id="Icg-Ob-XNO"/>
                             <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="3lp-lE-Oux" secondAttribute="bottom" constant="140" id="RFL-n7-4oA"/>
                             <constraint firstItem="gY2-y5-fND" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" id="SAb-hw-iLw"/>
+                            <constraint firstItem="Oso-d1-ecu" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" id="WbE-4e-dtm"/>
                             <constraint firstAttribute="centerY" secondItem="tTU-aB-ynX" secondAttribute="centerY" constant="100" id="Wfw-73-6SY"/>
                             <constraint firstAttribute="centerX" secondItem="yX7-Jl-zxX" secondAttribute="centerX" id="b2a-oT-iil"/>
                             <constraint firstAttribute="centerX" secondItem="tTU-aB-ynX" secondAttribute="centerX" id="bRb-Bv-bqr"/>
+                            <constraint firstItem="Oso-d1-ecu" firstAttribute="trailing" secondItem="Kj1-kb-LF2" secondAttribute="trailingMargin" id="cYP-tQ-y8J"/>
                             <constraint firstItem="hsa-BE-Hkq" firstAttribute="top" secondItem="tTU-aB-ynX" secondAttribute="bottom" constant="16" id="eHM-Pe-VS7"/>
                             <constraint firstItem="WLq-Ms-OSK" firstAttribute="top" secondItem="tTU-aB-ynX" secondAttribute="bottom" constant="-50" id="g4N-5C-ApW"/>
                             <constraint firstItem="3xK-c0-Pah" firstAttribute="top" secondItem="hsa-BE-Hkq" secondAttribute="bottom" id="hom-mt-Ssh"/>
@@ -137,6 +165,7 @@ the link included in the message.</string>
                             <constraint firstItem="3xK-c0-Pah" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" constant="8" id="myI-WR-eeJ"/>
                             <constraint firstAttribute="centerX" secondItem="hsa-BE-Hkq" secondAttribute="centerX" constant="-0.5" id="qbz-10-a2I"/>
                             <constraint firstItem="3lp-lE-Oux" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" id="rnu-rc-p7p"/>
+                            <constraint firstItem="Oso-d1-ecu" firstAttribute="top" secondItem="1aj-Cn-g1q" secondAttribute="bottom" constant="-7" id="vky-Xx-GHV"/>
                             <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="cVc-Jw-LIH" secondAttribute="bottom" constant="15" id="xrL-1i-of9"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3lp-lE-Oux" secondAttribute="trailing" id="znn-Uv-IcD"/>
                         </constraints>
@@ -151,10 +180,17 @@ the link included in the message.</string>
                         <outlet property="logoImageView" destination="tTU-aB-ynX" id="xhh-SA-ugB"/>
                         <outlet property="middleMessageLabel" destination="1aj-Cn-g1q" id="8Lq-Yw-1So"/>
                         <outlet property="resendEmailButton" destination="cVc-Jw-LIH" id="lPI-nw-88V"/>
+                        <outlet property="retryButtonContainer" destination="Oso-d1-ecu" id="kDg-Ay-OCJ"/>
+                        <outlet property="tapToRetryAgainButton" destination="kIy-TE-6ug" id="bnu-JP-RyU"/>
                         <outlet property="topMessageLabel" destination="hsa-BE-Hkq" id="0Mn-zg-XPa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pMI-oc-XZ0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="KDO-bk-fRc" userLabel="tap-to-continue gesture (on container view)">
+                    <connections>
+                        <action selector="tapToContinueGestureWasInvoked:" destination="h61-jT-BHu" id="xmi-SF-cah"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="954" y="591"/>
         </scene>
