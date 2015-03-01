@@ -74,8 +74,15 @@ FOUNDATION_EXPORT NSString *const kHKCharacteristicTypeKey;
 FOUNDATION_EXPORT NSString *const kHKCorrelationTypeKey;
 FOUNDATION_EXPORT NSString *const kHKWorkoutTypeKey;
 
-FOUNDATION_EXPORT NSString *const kPasswordKey;
-FOUNDATION_EXPORT NSString *const kNumberOfMinutesForPasscodeKey;
+FOUNDATION_EXPORT NSString * const kPasswordKey;
+FOUNDATION_EXPORT NSString * const kNumberOfMinutesForPasscodeKey;
+
+FOUNDATION_EXPORT NSInteger      const kAPCSigninErrorCode_NotSignedIn;
+FOUNDATION_EXPORT NSUInteger     const kAPCSigninNumRetriesBeforePause;
+FOUNDATION_EXPORT NSTimeInterval const kAPCSigninNumSecondsBetweenRetries;
+FOUNDATION_EXPORT NSTimeInterval const kAPCSignInButtonPulseFadeInTimeInSeconds;
+FOUNDATION_EXPORT NSTimeInterval const kAPCSignInButtonPulseFadeOutTimeInSeconds;
+FOUNDATION_EXPORT NSTimeInterval const kAPCSignInButtonPulsePauseWhileVisibleTimeInSeconds;
 
 FOUNDATION_EXPORT NSString *const kRegularFontNameKey;
 FOUNDATION_EXPORT NSString *const kMediumFontNameKey;
@@ -102,6 +109,7 @@ FOUNDATION_EXPORT NSString *const kTertiaryGrayColorKey;
 
 FOUNDATION_EXPORT NSString *const kTasksReminderDefaultsOnOffKey;
 FOUNDATION_EXPORT NSString *const kTasksReminderDefaultsTimeKey;
+
 
 /*********************************************************************************/
 #pragma mark - Events
