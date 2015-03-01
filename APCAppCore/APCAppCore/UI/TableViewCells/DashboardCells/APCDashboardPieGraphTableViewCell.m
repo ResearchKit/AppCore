@@ -27,6 +27,9 @@ NSString * const kAPCDashboardPieGraphTableViewCellIdentifier = @"APCDashboardPi
     
     self.subTitleLabel2.font = [UIFont appRegularFontWithSize:16.0f];
     self.subTitleLabel2.textColor = [UIColor appSecondaryColor3];
+    
+    self.subTitleLabel3.font = [UIFont appRegularFontWithSize:16.0f];
+    self.subTitleLabel3.textColor = [UIColor appSecondaryColor3];
 }
 
 
