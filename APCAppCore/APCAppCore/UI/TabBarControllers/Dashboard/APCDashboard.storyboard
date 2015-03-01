@@ -109,11 +109,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XCp-55-xj3" customClass="APCLineGraphView">
-                                <rect key="frame" x="4" y="60" width="564" height="252"/>
+                                <rect key="frame" x="4" y="75" width="564" height="237"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3ZX-FY-u6V" customClass="APCDiscreteGraphView">
-                                <rect key="frame" x="4" y="70" width="564" height="242"/>
+                                <rect key="frame" x="4" y="75" width="564" height="237"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kio-T5-Y4A">
@@ -174,8 +174,8 @@
                             <constraint firstItem="8OJ-Bg-TnD" firstAttribute="top" secondItem="cnr-qn-gof" secondAttribute="bottom" id="NR9-KM-Epo"/>
                             <constraint firstItem="8OJ-Bg-TnD" firstAttribute="top" secondItem="XCp-55-xj3" secondAttribute="bottom" constant="8" id="Nga-vg-AIx"/>
                             <constraint firstItem="XCp-55-xj3" firstAttribute="leading" secondItem="NSh-Ou-wJu" secondAttribute="leading" constant="4" id="R1n-bF-wvl"/>
-                            <constraint firstItem="XCp-55-xj3" firstAttribute="top" secondItem="zew-9J-Hox" secondAttribute="bottom" constant="60" id="Rz7-kB-I55"/>
-                            <constraint firstItem="3ZX-FY-u6V" firstAttribute="top" secondItem="zew-9J-Hox" secondAttribute="bottom" constant="70" id="W3p-5a-QUk"/>
+                            <constraint firstItem="XCp-55-xj3" firstAttribute="top" secondItem="zew-9J-Hox" secondAttribute="bottom" constant="75" id="Rz7-kB-I55"/>
+                            <constraint firstItem="3ZX-FY-u6V" firstAttribute="top" secondItem="zew-9J-Hox" secondAttribute="bottom" constant="75" id="W3p-5a-QUk"/>
                             <constraint firstAttribute="trailing" secondItem="Kio-T5-Y4A" secondAttribute="trailing" constant="8" id="ZQf-50-Qpw"/>
                             <constraint firstAttribute="trailing" secondItem="XCp-55-xj3" secondAttribute="trailing" id="dGX-Jb-qd3"/>
                             <constraint firstItem="GW7-fg-rzK" firstAttribute="top" secondItem="zew-9J-Hox" secondAttribute="bottom" constant="15" id="fh2-7h-fcd"/>
