@@ -18,5 +18,6 @@ FOUNDATION_EXPORT NSString * const kAPCDashboardPieGraphTableViewCellIdentifier;
 @property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *subTitleLabel2
 ;
+@property (weak, nonatomic) IBOutlet UILabel *subTitleLabel3;
 
 @end
