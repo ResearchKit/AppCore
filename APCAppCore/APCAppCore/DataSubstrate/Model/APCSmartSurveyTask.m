@@ -167,7 +167,7 @@ static APCDummyObject * _dummyObject;
     if (currentIdentifier == nil && after) {
         return (self.dynamicStepIdentifiers.count > 0) ? self.dynamicStepIdentifiers[0] : nil;
     }
-    NSInteger currentIndex = [self.dynamicStepIdentifiers indexOfObject: currentIdentifier];
+    NSUInteger currentIndex = [self.dynamicStepIdentifiers indexOfObject: currentIdentifier];
     NSAssert(currentIndex != NSNotFound, @"Step Not Found. Should not get here.");
     NSInteger newIndex = NSNotFound;
     if (after) {

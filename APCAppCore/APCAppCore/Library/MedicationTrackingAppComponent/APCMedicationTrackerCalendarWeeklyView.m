@@ -203,11 +203,11 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
     self.dateInfoLabel.text = dateString;
 }
 
-- (void)dailyInfoViewDidClick:(UIGestureRecognizer *)tap
+- (void)dailyInfoViewDidClick:(UIGestureRecognizer *) __unused tap
 {
 }
 
-- (void)dayTitleViewDidClick:(UIGestureRecognizer *)tap
+- (void)dayTitleViewDidClick:(UIGestureRecognizer *) __unused tap
 {
 }
 
@@ -231,12 +231,12 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
 
 #pragma  mark  -  Swipe Gesture Recognisers
 
-- (void)swipeLeft:(UISwipeGestureRecognizer *)swipe
+- (void)swipeLeft:(UISwipeGestureRecognizer *) __unused swipe
 {
         [self performSwipeAnimation:WeeklyCalendarScrollDirectionRight blnToday:NO selectedDate:nil];
 }
 
-- (void)swipeRight:(UISwipeGestureRecognizer *)swipe
+- (void)swipeRight:(UISwipeGestureRecognizer *) __unused swipe
 {
         [self performSwipeAnimation:WeeklyCalendarScrollDirectionLeft blnToday:NO selectedDate:nil];
 }

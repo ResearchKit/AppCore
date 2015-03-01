@@ -27,7 +27,6 @@ static CGFloat const kSectionHeaderHeight = 40.f;
 static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
 static CGFloat const kPickerCellHeight = 164.0f;
 
-static const NSInteger kAPCPermissionsAlertViewTag = 100;
 static NSString * const kAPCBasicTableViewCellIdentifier = @"APCBasicTableViewCell";
 static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetailTableViewCell";
 
@@ -119,7 +118,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     NSInteger count = 0;
     
-    if ( section >= self.items.count )
+    if ( (NSUInteger)section >= self.items.count )
     {
         
         if ([self.delegate respondsToSelector:@selector(tableView:numberOfRowsInAdjustedSection:)])
@@ -150,7 +149,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
     UITableViewCell *cell;
     
-    if (indexPath.section >= self.items.count) {
+    if ((NSUInteger)indexPath.section >= self.items.count) {
         
         if (!cell) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
@@ -293,13 +292,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                         defaultCell.detailTextLabel.textColor = [UIColor appSecondaryColor3];
                     }
                     
-#warning temporarily disabled this code to make tableview work
-//                    if (field.textAlignnment == NSTextAlignmentRight) {
-//                        defaultCell.type = kAPCDefaultTableViewCellTypeRight;
-//                    } else {
-//                        defaultCell.type = kAPCDefaultTableViewCellTypeLeft;
-//                    }
-                    
                     [self setupDefaultCellAppearance:defaultCell];
                     
                 }
@@ -310,13 +302,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                     defaultCell.detailTextLabel.text = customPickerField.stringValue;
 
-#warning temporarily disabled this code to make tableview work
-//                    if (field.textAlignnment == NSTextAlignmentRight) {
-//                        defaultCell.type = kAPCDefaultTableViewCellTypeRight;
-//                    } else {
-//                        defaultCell.type = kAPCDefaultTableViewCellTypeLeft;
-//                    }
-//                    
                     [self setupDefaultCellAppearance:defaultCell];
                     
                 } else if ([field isKindOfClass:[APCTableViewSegmentItem class]]) {
@@ -664,8 +649,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.textAlignnment = NSTextAlignmentRight;
             field.pickerData = @[[APCParameters autoLockOptionStrings]];
 
-#warning This may be just a temporary fix
-            
             NSNumber *numberOfMinutes = [self.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
             
             if ( numberOfMinutes != nil)
@@ -863,7 +846,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
     CGFloat height = tableView.rowHeight;
     
-    if (indexPath.section >= self.items.count) {
+    if ((NSUInteger)indexPath.section >= self.items.count) {
         
 
         
@@ -887,7 +870,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
-    if (indexPath.section >= self.items.count) {
+    if ((NSUInteger)indexPath.section >= self.items.count) {
         
         if ([self.delegate respondsToSelector:@selector(navigationController:didSelectRowAtIndexPath:)])
         {
@@ -991,7 +974,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
     UITableViewHeaderFooterView *headerView;
     
-    if ( section >= self.items.count )
+    if ((NSUInteger)section >= self.items.count )
     {
         
         if ([self.delegate respondsToSelector:@selector(tableView:numberOfRowsInSection:)])
