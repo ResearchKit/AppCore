@@ -32,8 +32,9 @@
 @dynamic secondaryInfoSaved;
 @dynamic serverConsented;
 @dynamic sleepTime;
+@dynamic taskCompletion;
 @dynamic userConsented;
 @dynamic wakeUpTime;
-@dynamic taskCompletion;
+@dynamic sharedOptionSelection;
 
 @end

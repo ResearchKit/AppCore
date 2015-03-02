@@ -33,8 +33,9 @@
 @property (nonatomic, retain) NSNumber * secondaryInfoSaved;
 @property (nonatomic, retain) NSNumber * serverConsented;
 @property (nonatomic, retain) NSDate * sleepTime;
+@property (nonatomic, retain) NSDate * taskCompletion;
 @property (nonatomic, retain) NSNumber * userConsented;
 @property (nonatomic, retain) NSDate * wakeUpTime;
-@property (nonatomic, retain) NSDate * taskCompletion;
+@property (nonatomic, retain) NSNumber * sharedOptionSelection;
 
 @end
