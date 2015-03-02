@@ -463,6 +463,11 @@ static NSUInteger const kIndexOfProfileTab = 3;
     self.tasksReminder = [APCTasksReminderManager new];
 }
 
+- (NSArray *)offsetForTaskSchedules
+{
+    return nil;
+}
+
 /*********************************************************************************/
 #pragma mark - Catastrophic startup errors
 /*********************************************************************************/

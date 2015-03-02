@@ -91,6 +91,9 @@ NSString *const kTertiaryGrayColorKey   = @"TertiaryGrayColorKey";
 NSString *const kTasksReminderDefaultsOnOffKey = @"TasksReminderDefaultsOnOffKey";
 NSString *const kTasksReminderDefaultsTimeKey = @"TasksReminderDefaultsTimeKey";
 
+NSString *const kScheduleOffsetTaskIdKey = @"scheduleOffsetTaskIdKey";
+NSString *const kScheduleOffsetOffsetKey = @"scheduleOffsetOffsetKey";
+
 
 /*********************************************************************************/
 #pragma mark - Events

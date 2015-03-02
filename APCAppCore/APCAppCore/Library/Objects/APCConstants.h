@@ -110,6 +110,9 @@ FOUNDATION_EXPORT NSString *const kTertiaryGrayColorKey;
 FOUNDATION_EXPORT NSString *const kTasksReminderDefaultsOnOffKey;
 FOUNDATION_EXPORT NSString *const kTasksReminderDefaultsTimeKey;
 
+FOUNDATION_EXPORT NSString *const kScheduleOffsetTaskIdKey;
+FOUNDATION_EXPORT NSString *const kScheduleOffsetOffsetKey;
+
 
 /*********************************************************************************/
 #pragma mark - Events
