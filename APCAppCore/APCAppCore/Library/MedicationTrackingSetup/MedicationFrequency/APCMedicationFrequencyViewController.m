@@ -9,6 +9,7 @@
 #import "APCFrequencyTableViewTimesCell.h"
 #import "APCFrequencyDayTableViewCell.h"
 
+#import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
 
 static  NSString  *kViewControllerName          = @"Medication Frequency";
@@ -17,31 +18,37 @@ static  NSString  *kFrequencyTableTimesCellName = @"APCFrequencyTableViewTimesCe
 
 static  NSString  *kFrequencyDayTableCellName   = @"APCFrequencyDayTableViewCell";
 
+static  NSString  *kEveryDayOfWeekCaption       = @"Every Day";
+
 static  NSString  *daysOfWeekNames[]            = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
 static  NSString  *daysOfWeekNamesAbbreviated[] = { @"Mon",    @"Tue",     @"Wed",       @"Thu",      @"Fri",    @"Sat",      @"Sun"    };
 
 static  NSUInteger  numberOfDaysOfWeekNames     = (sizeof(daysOfWeekNames) / sizeof(NSString *));
 
-static  NSInteger  kNumberOfSections                =    2;
+static  NSInteger  kNumberOfSections                =    3;
 
 static  NSInteger  kFrequencySection                =    0;
 static  NSInteger  kNumberOfRowsInFrequencySection  =    1;
 static  CGFloat    kRowHeightForFrequencySection    =   56.0;
 
-static  NSInteger  kDaysOfWeekSection               =    1;
+static  NSInteger  kEveryDayOfWeekSection           =    1;
+static  NSInteger  kNumberOfRowsEveryDayWeekSection =    1;
+
+static  NSInteger  kDaysOfWeekSection               =    2;
 static  NSInteger  kNumberOfRowsInDaysOfWeekSection =    7;
 
 static  NSInteger  kBaseButtonTagValue              = 1000;
 static  NSInteger  kFirstButtonTagValue             = 1001;
 static  NSInteger  kLastButtonTagValue              = 1005;
 
-static  CGFloat    kSectionHeaderHeight             =   48.0;
+static  CGFloat    kSectionHeaderHeights[]          = { 48.0, 48.0, 8.0 };
 static  CGFloat    kSectionHeaderLabelOffset        =   16.0;
 
 
 @interface APCMedicationFrequencyViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
 @property  (nonatomic, weak)  IBOutlet  UITableView          *tabulator;
+@property  (nonatomic, assign)          BOOL                  everyDayWasSelected;
 
 @property  (nonatomic, strong)          NSArray              *valueButtons;
 @property  (nonatomic, assign)          BOOL                  aValueButtonWasSelected;
@@ -79,17 +86,19 @@ static  CGFloat    kSectionHeaderLabelOffset        =   16.0;
     
     if (section == kFrequencySection) {
         numberOfRows = kNumberOfRowsInFrequencySection;
+    } else if (section == kEveryDayOfWeekSection) {
+        numberOfRows = kNumberOfRowsEveryDayWeekSection;
     } else if (section == kDaysOfWeekSection) {
         numberOfRows = kNumberOfRowsInDaysOfWeekSection;
     }
     return  numberOfRows;
 }
 
-static  NSString  *sectionTitles[] = { @"How many times a day do you take this medication?", @"On what days do you take this medication?" };
+static  NSString  *sectionTitles[] = { @"How many times a day do you take this medication?", @"On what days do you take this medication?", @"        " };
 
-- (CGFloat)tableView:(UITableView *) __unused tableView heightForHeaderInSection:(NSInteger) __unused section
+- (CGFloat)tableView:(UITableView *) __unused tableView heightForHeaderInSection:(NSInteger)section
 {
-    return  kSectionHeaderHeight;
+    return  kSectionHeaderHeights[section];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -153,6 +162,9 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     
     if (indexPath.section == kFrequencySection) {
         freqCell = (APCFrequencyTableViewTimesCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyTableTimesCellName];
+        freqCell.accessoryType = UITableViewCellAccessoryNone;
+    } else if (indexPath.section == kEveryDayOfWeekSection) {
+        dayCell = (APCFrequencyDayTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyDayTableCellName];
     } else if (indexPath.section == kDaysOfWeekSection) {
         dayCell = (APCFrequencyDayTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyDayTableCellName];
     }
@@ -161,6 +173,10 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
         freqCell.selectionStyle = UITableViewCellSelectionStyleNone;
         [self processFrequencyButtonsForCell:freqCell];
         cell = freqCell;
+    } else if (indexPath.section == kEveryDayOfWeekSection) {
+        dayCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        dayCell.dayTitle.text = kEveryDayOfWeekCaption;
+        cell = dayCell;
     } else if (indexPath.section == kDaysOfWeekSection) {
         dayCell.selectionStyle = UITableViewCellSelectionStyleNone;
         dayCell.dayTitle.text = daysOfWeekNames[indexPath.row];
@@ -237,19 +253,45 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     return  answer;
 }
 
+- (void)setCell:(APCFrequencyDayTableViewCell *)cell toSelectedState:(BOOL)selected
+{
+    if (selected == YES) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        cell.dayTitle.textColor = [UIColor appPrimaryColor];
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.dayTitle.textColor = [UIColor blackColor];
+    }
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell  *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
+    APCFrequencyDayTableViewCell  *selectedCell = (APCFrequencyDayTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     
-    if (selectedCell.accessoryType == UITableViewCellAccessoryNone) {
-        selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
-    } else {
-        selectedCell.accessoryType = UITableViewCellAccessoryNone;
+    if (indexPath.section == kEveryDayOfWeekSection) {
+        if (self.everyDayWasSelected == NO) {
+            self.everyDayWasSelected = YES;
+        } else {
+            self.everyDayWasSelected = NO;
+        }
+        [self setCell:selectedCell toSelectedState:self.everyDayWasSelected];
+        
+        for (NSUInteger  day = 0;  day < numberOfDaysOfWeekNames;  day++) {
+            NSIndexPath  *path = [NSIndexPath indexPathForRow:day inSection:kDaysOfWeekSection];
+            APCFrequencyDayTableViewCell  *cell = (APCFrequencyDayTableViewCell *)[tableView cellForRowAtIndexPath:path];
+            [self setCell:cell toSelectedState:self.everyDayWasSelected];
+        }
+    } else if (indexPath.section == kDaysOfWeekSection) {
+        if (selectedCell.accessoryType == UITableViewCellAccessoryNone) {
+            [self setCell:selectedCell toSelectedState:YES];
+        } else {
+            [self setCell:selectedCell toSelectedState:NO];
+        }
+        NSString  *key = daysOfWeekNames[indexPath.row];
+        [self.daysAndDoses setObject:[NSNumber numberWithInteger:0] forKey:key];
+        
+        self.oneOrMoreDaysWereSelected = [self areAnyDaysSelected];
     }
-    NSString  *key = daysOfWeekNames[indexPath.row];
-    [self.daysAndDoses setObject:[NSNumber numberWithInteger:0] forKey:key];
-    
-    self.oneOrMoreDaysWereSelected = [self areAnyDaysSelected];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

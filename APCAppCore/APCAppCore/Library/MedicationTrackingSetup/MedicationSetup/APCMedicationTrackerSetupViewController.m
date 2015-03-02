@@ -109,7 +109,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
     NSString  *title = nil;
     
     if (tableView == self.setupTabulator) {
-        title = @"Add Your Medication Details";
+        title = NSLocalizedString(@"Add Your Medication Details", nil);
     } else if (tableView == self.listTabulator) {
         title = nil;
     }
