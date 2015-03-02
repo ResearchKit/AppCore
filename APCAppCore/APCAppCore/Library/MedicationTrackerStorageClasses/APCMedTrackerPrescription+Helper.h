@@ -67,6 +67,13 @@ typedef void (^ APCMedTrackerFetchDosesCallback) (APCMedTrackerPrescription *pre
                                                   NSTimeInterval operationDuration,
                                                   NSError *error);
 
+/**
+ The -expirePrescxription...: method calls a block with
+ this signature when it completes.
+ */
+typedef void (^ APCMedTrackerExpirePresriptionCallback) (NSTimeInterval operationDuration,
+                                                         NSError *error);
+
 
 // ---------------------------------------------------------
 #pragma mark - The Class Itself
@@ -169,6 +176,12 @@ typedef void (^ APCMedTrackerFetchDosesCallback) (APCMedTrackerPrescription *pre
                  andUseThisQueue: (NSOperationQueue *) someQueue
                 toDoThisWhenDone: (APCMedTrackerFetchDosesCallback) callbackBlock;
 
+
+/**
+ Sets the -dateStoppedUsing field to "now".
+ */
+- (void) expirePrescriptionAndUseThisQueue: (NSOperationQueue *) someQueue
+                          toDoThisWhenDone: (APCMedTrackerExpirePresriptionCallback) callbackBlock;
 
 /**
  Returns YES if the prescription is currently active:

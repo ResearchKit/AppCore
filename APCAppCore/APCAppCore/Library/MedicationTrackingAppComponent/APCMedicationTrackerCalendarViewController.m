@@ -51,10 +51,12 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 @property (nonatomic, weak)  IBOutlet  UIView                     *tapItemsView;
 @property (nonatomic, weak)  IBOutlet  UILabel                    *tapItemsLabel;
 @property (nonatomic, weak)  IBOutlet  UIView                     *yourPrescriptionsView;
+@property (nonatomic, weak)  IBOutlet  UIButton                   *editButton;
 
 @property (nonatomic, weak)            APCMedicationTrackerCalendarWeeklyView  *weeklyCalendar;
 
 @property (nonatomic, strong)          NSArray                    *prescriptions;
+@property (nonatomic, strong)          APCMedTrackerPrescription  *prescriptionToExpire;
 @property (nonatomic, assign)          BOOL                        calendricalPagesNeedRefresh;
 @property (nonatomic, strong)          NSArray                    *calendricalPages;
 
@@ -94,6 +96,62 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     cell.medicationUseDays.text = daysAndNumbers;
 
     return  cell;
+}
+
+#pragma  mark  -  Table View Delegate Methods
+
+- (BOOL)tableView:(UITableView *) __unused tableView canEditRowAtIndexPath:(NSIndexPath *) __unused indexPath
+{
+    return  YES;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *) __unused tableView editingStyleForRowAtIndexPath:(NSIndexPath *) __unused indexPath
+{
+    return  UITableViewCellEditingStyleDelete;
+}
+
+- (void)tableView:(UITableView *) __unused tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        UIAlertController  *alerter = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Please Confirm Removal", nil)
+                                       message:NSLocalizedString(@"This Action Cannot Be Undone", nil)
+                                preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction  *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel
+                                                               handler:^(UIAlertAction  __unused *action) {}];
+        [alerter addAction:cancelAction];
+        UIAlertAction  *deleteAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil) style:UIAlertActionStyleDestructive
+                                                               handler:^(UIAlertAction  __unused *action)
+        {
+            [self deleteRowFromTable:indexPath];
+       }];
+        [alerter addAction:deleteAction];
+        
+        [self presentViewController: alerter animated: YES completion: nil];
+    }
+}
+
+- (void)deleteRowFromTable:(NSIndexPath *)indexPath
+{
+        self.prescriptionToExpire = self.prescriptions[indexPath.row];
+
+        NSMutableArray  *temp = [self.prescriptions mutableCopy];
+        [temp removeObjectAtIndex:indexPath.row];
+        self.prescriptions = temp;
+
+        NSArray  *paths = @[ indexPath ];
+        [self.tabulator deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationFade];
+
+        [self.prescriptionToExpire expirePrescriptionAndUseThisQueue: (NSOperationQueue *) [NSOperationQueue mainQueue]
+                                                    toDoThisWhenDone: ^(NSTimeInterval __unused operationDuration,
+                                                                      NSError *error)
+         {
+             if (error != nil) {
+                 APCLogError2 (error);
+             } else {
+                 [self refreshAllPages];
+                 [self setupHiddenStates];
+             }
+         }];
 }
 
 #pragma  mark  -  Daily Calendar View Delegate Methods
@@ -286,6 +344,19 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     [self.navigationController pushViewController:controller animated:YES];
 }
 
+- (IBAction)editButtonWasTapped:(UIButton *) __unused sender
+{
+    NSString  *title = nil;
+    if (self.tabulator.isEditing == NO) {
+        [self.tabulator setEditing:YES animated:YES];
+        title = @"Done";
+    } else {
+        [self.tabulator setEditing:NO animated:YES];
+        title = @"Edit";
+    }
+    [self.editButton setTitle:title forState:UIControlStateNormal];
+}
+
 #pragma  mark  -  View Controller Methods
 
 - (void)makeCalendar
@@ -325,9 +396,11 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     if ([self.prescriptions count] == 0) {
         self.tapItemsLabel.text = @"Tap the Plus Sign to Create Prescriptions";
         self.yourPrescriptionsView.hidden = YES;
+        self.editButton.hidden = YES;
     } else {
         self.tapItemsLabel.text = @"Tap on above items to log intake";
         self.yourPrescriptionsView.hidden = NO;
+        self.editButton.hidden = NO;
     }
 }
 
@@ -352,7 +425,13 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
              if (([self.prescriptions count] > 0) && ([arrayOfGeneratedObjects count] > [self.prescriptions count])) {
                  self.calendricalPagesNeedRefresh = YES;
              }
-             self.prescriptions = arrayOfGeneratedObjects;
+             NSMutableArray  *temp = [NSMutableArray array];
+             for (APCMedTrackerPrescription  *aPrescription  in  arrayOfGeneratedObjects) {
+                 if (aPrescription.isActive == YES) {
+                     [temp addObject:aPrescription];
+                 }
+             }
+             self.prescriptions = temp;
              if (self.viewsWereCreated == NO) {
                  [self makeCalendar];
                  [self configureExScrollibur];
@@ -382,6 +461,9 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     [APCMedTrackerDataStorageManager startupReloadingDefaults:YES andThenUseThisQueue:nil toDoThis:NULL];
 
     self.navigationItem.title = viewControllerTitle;
+    
+    self.editButton.titleLabel.font = [UIFont systemFontOfSize:12.0];
+    [self.editButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
     
     UINib  *summaryCellNib = [UINib nibWithNibName:kSummaryTableViewCell bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:summaryCellNib forCellReuseIdentifier:kSummaryTableViewCell];
