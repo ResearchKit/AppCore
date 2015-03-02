@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -695,7 +695,7 @@
             </objects>
             <point key="canvasLocation" x="-571" y="1714"/>
         </scene>
-        <!--General Information-->
+        <!--Registration-->
         <scene sceneID="pEM-WY-3lu">
             <objects>
                 <tableViewController storyboardIdentifier="APCSignUpGeneralInfoViewController" id="sFC-wf-Eja" customClass="APCSignUpGeneralInfoViewController" sceneMemberID="viewController">
@@ -777,11 +777,11 @@
                             </variation>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="lnS-1T-Hjt">
-                            <rect key="frame" x="0.0" y="572" width="320" height="30"/>
+                            <rect key="frame" x="0.0" y="572" width="320" height="130"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lgU-Hg-9zH">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lgU-Hg-9zH">
+                                    <rect key="frame" x="10" y="10" width="300" height="120"/>
                                     <color key="backgroundColor" red="0.93725490196078431" green="0.26666666666666666" blue="0.38039215686274508" alpha="1" colorSpace="calibratedRGB"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -790,10 +790,10 @@
                             </subviews>
                             <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
-                                <constraint firstItem="lgU-Hg-9zH" firstAttribute="leading" secondItem="lnS-1T-Hjt" secondAttribute="leading" id="JDN-46-bUd"/>
-                                <constraint firstItem="lgU-Hg-9zH" firstAttribute="top" secondItem="lnS-1T-Hjt" secondAttribute="top" id="NnY-wK-c1d"/>
+                                <constraint firstItem="lgU-Hg-9zH" firstAttribute="leading" secondItem="lnS-1T-Hjt" secondAttribute="leading" constant="10" id="JDN-46-bUd"/>
+                                <constraint firstItem="lgU-Hg-9zH" firstAttribute="top" secondItem="lnS-1T-Hjt" secondAttribute="top" constant="10" id="NnY-wK-c1d"/>
                                 <constraint firstAttribute="bottom" secondItem="lgU-Hg-9zH" secondAttribute="bottom" id="O8V-lY-Peg"/>
-                                <constraint firstAttribute="trailing" secondItem="lgU-Hg-9zH" secondAttribute="trailing" id="hXX-oi-Cwa"/>
+                                <constraint firstAttribute="trailing" secondItem="lgU-Hg-9zH" secondAttribute="trailing" constant="10" id="hXX-oi-Cwa"/>
                             </constraints>
                         </view>
                         <prototypes>
@@ -960,7 +960,7 @@
                             <outlet property="delegate" destination="sFC-wf-Eja" id="Au5-FW-kOt"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="General Information" id="lnu-pF-0qk">
+                    <navigationItem key="navigationItem" title="Registration" id="lnu-pF-0qk">
                         <barButtonItem key="rightBarButtonItem" title="Next" id="Ajq-Tk-Wbx">
                             <connections>
                                 <action selector="next" destination="sFC-wf-Eja" id="zni-l0-WKg"/>
