@@ -13,6 +13,8 @@ static NSString *kInternetNotAvailableErrorMessage1 = @"Internet Not Connected";
 static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reachable";
 static NSString * const kInternalMaxParticipantsMessage = @"has reached the limit of allowed participants.";
 
+static CGFloat const KRegularFontSize = 17.0;
+
 @interface APCSignUpGeneralInfoViewController () <APCTermsAndConditionsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, APCFormTextFieldDelegate>
 
 @property (nonatomic, strong) APCPermissionsManager *permissionManager;
@@ -84,7 +86,7 @@ static NSString * const kInternalMaxParticipantsMessage = @"has reached the limi
     [super setupAppearance];
     
     self.alertLabel.alpha = 1;
-    [self.alertLabel setFont:[UIFont fontWithName:@"Helvetica Neue" size:17.0]];
+    [self.alertLabel setFont:[UIFont fontWithName:@"Helvetica Neue" size:KRegularFontSize]];
     self.alertLabel.text = NSLocalizedString(@"Sage Bionetworks, a non-profit biomedical research institute, is helping to collect data for this study and distribute it to the study investigators and other researchers. Please provide a unique email address and password to create a secure account.", @"");
     [self.alertLabel setTextColor:[UIColor blackColor]];
     [self.alertLabel setBackgroundColor:[UIColor clearColor]];
