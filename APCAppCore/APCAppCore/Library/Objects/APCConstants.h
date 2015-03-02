@@ -113,6 +113,10 @@ FOUNDATION_EXPORT NSString *const kTasksReminderDefaultsTimeKey;
 FOUNDATION_EXPORT NSString *const kScheduleOffsetTaskIdKey;
 FOUNDATION_EXPORT NSString *const kScheduleOffsetOffsetKey;
 
+FOUNDATION_EXPORT NSString *const kReviewConsentActionPDF;
+FOUNDATION_EXPORT NSString *const kReviewConsentActionVideo;
+FOUNDATION_EXPORT NSString *const kReviewConsentActionSlides;
+
 
 /*********************************************************************************/
 #pragma mark - Events

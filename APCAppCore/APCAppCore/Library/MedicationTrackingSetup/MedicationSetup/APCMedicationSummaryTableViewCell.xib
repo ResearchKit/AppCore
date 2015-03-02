@@ -59,9 +59,15 @@
                     <constraint firstItem="Hcl-lN-K2n" firstAttribute="leading" secondItem="Xd2-Be-G4r" secondAttribute="trailing" constant="8" id="R5c-Kw-Zk9"/>
                     <constraint firstItem="sBE-tC-Wkl" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="SFM-8y-mOo"/>
                     <constraint firstItem="Xd2-Be-G4r" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="X5i-pw-1wU"/>
+                    <constraint firstAttribute="trailing" secondItem="Hcl-lN-K2n" secondAttribute="trailing" id="k5r-sb-Xio"/>
                     <constraint firstItem="Xd2-Be-G4r" firstAttribute="leading" secondItem="sBE-tC-Wkl" secondAttribute="trailing" constant="8" id="lew-VC-ply"/>
                     <constraint firstItem="Hcl-lN-K2n" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="qD8-Wj-4ig"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="R5c-Kw-Zk9"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="colorswatch" destination="sBE-tC-Wkl" id="QHo-XU-PXP"/>

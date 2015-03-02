@@ -474,7 +474,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 
     self.navigationItem.title = viewControllerTitle;
     
-    self.editButton.titleLabel.font = [UIFont systemFontOfSize:12.0];
+    self.editButton.titleLabel.font = [UIFont systemFontOfSize:17.0];
     [self.editButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
     
     UINib  *summaryCellNib = [UINib nibWithNibName:kSummaryTableViewCell bundle:[NSBundle appleCoreBundle]];
