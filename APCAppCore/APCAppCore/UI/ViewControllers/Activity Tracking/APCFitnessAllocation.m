@@ -221,19 +221,26 @@ typedef NS_ENUM(NSUInteger, SevenDayFitnessQueryType)
             NSUInteger sedentaryCounter   = 0;
             NSUInteger moderateCounter    = 0;
             NSUInteger vigorousCounter    = 0;
+            NSUInteger sleepCounter = 0;
 
             
             for(APCMotionHistoryData * theData in dayArray) {
                 
                 if(theData.activityType == ActivityTypeSleeping)
                 {
-                    [self.sleepDataset addObject:@(theData.timeInterval)];
+                    //[self.sleepDataset addObject:@(theData.timeInterval)];
+                    sleepCounter += theData.timeInterval;
                 }
-                else if(theData.activityType == ActivityTypeStationary)
+                else if(theData.activityType == ActivityTypeSedentary)
                 {
+                    sedentaryCounter += theData.timeInterval;
+                }
+                
+                else if (theData.activityType == ActivityTypeLight) {
                     inactiveCounter += theData.timeInterval;
                 }
-                else if(theData.activityType == ActivityTypeWalking)
+                
+                else if(theData.activityType == ActivityTypeModerate)
                 {
                     moderateCounter += theData.timeInterval;
                 }
@@ -245,14 +252,14 @@ typedef NS_ENUM(NSUInteger, SevenDayFitnessQueryType)
                 
             }
             
-            sedentaryCounter = inactiveCounter/3;
+            
             
             NSDictionary *activityData = @{
                                            self.segmentInactive: @(inactiveCounter),
                                            self.segmentSedentary: @(sedentaryCounter),
                                            self.segmentModerate: @(moderateCounter),
                                            self.segmentVigorous: @(vigorousCounter),
-                                           self.segmentSleep: self.sleepDataset[sleepArrayCounter]
+                                           self.segmentSleep: @(sleepCounter)
                                            };
             sleepArrayCounter++;
             
