@@ -6,6 +6,7 @@
 //
 #import "APCMedicationTrackerCalendarDailyView.h"
 #import "NSDate+MedicationTracker.h"
+#import "UIFont+APCAppearance.h"
 #import "UIColor+MedicationTracker.h"
 
 static  CGFloat  kDateLabelWidth     = 28.0;
@@ -38,7 +39,7 @@ static  CGFloat  kDateLabelPointSize = 13.0;
     label.backgroundColor = [UIColor clearColor];
     label.textColor = [UIColor whiteColor];
     label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont systemFontOfSize:kDateLabelPointSize];
+    label.font = [UIFont appRegularFontWithSize:kDateLabelPointSize];
     self.dateLabel = label;
     
     CGFloat  x = (self.bounds.size.width - kDateLabelWidth) / 2.0;

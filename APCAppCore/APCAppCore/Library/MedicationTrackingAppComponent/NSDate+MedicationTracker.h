@@ -12,7 +12,7 @@
 - (NSDate *)getWeekStartDate: (NSInteger)weekStartIndex;
 - (NSString *)getDayOfWeekShortString;
 - (NSString *)getDateOfMonth;
-- (BOOL)isSameDateWith:(NSDate *)dt;
+- (BOOL)isSameDateWith:(NSDate *)aDate;
 - (BOOL)isDateToday;
 - (BOOL)isWithinDate: (NSDate *)earlierDate toDate:(NSDate *)laterDate;
 - (BOOL)isPastDate;

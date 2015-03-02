@@ -29,15 +29,9 @@
                 <constraint firstAttribute="bottom" secondItem="m7f-3w-6hF" secondAttribute="bottom" id="6qG-Gy-PvT"/>
                 <constraint firstItem="m7f-3w-6hF" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="bm1-U5-JFr"/>
                 <constraint firstAttribute="trailing" secondItem="m7f-3w-6hF" secondAttribute="trailing" id="mpf-iO-wQy"/>
-                <constraint firstAttribute="bottom" secondItem="m7f-3w-6hF" secondAttribute="bottom" constant="186" id="nse-QA-t2g"/>
                 <constraint firstItem="m7f-3w-6hF" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="spM-XK-83b"/>
             </constraints>
-            <variation key="default">
-                <mask key="constraints">
-                    <exclude reference="nse-QA-t2g"/>
-                </mask>
-            </variation>
-            <point key="canvasLocation" x="336" y="351"/>
+            <point key="canvasLocation" x="612" y="457"/>
         </view>
     </objects>
 </document>

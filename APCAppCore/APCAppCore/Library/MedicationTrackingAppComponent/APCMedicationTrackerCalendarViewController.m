@@ -66,7 +66,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
 
 @implementation APCMedicationTrackerCalendarViewController
 
-#pragma  mark  -  Table View Data Source Methods   UITableViewCellEditingStyleDelete
+#pragma  mark  -  Table View Data Source Methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView
 {
@@ -248,6 +248,15 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     self.exScrollibur.delegate = self;
 }
 
+- (void)animateViewVisibility:(APCMedicationTrackerMedicationsDisplayView *)aView
+{
+    aView.alpha = 0.0;
+    [UIView beginAnimations:@"FadeToBlack" context:NULL];
+    [UIView setAnimationDuration:1.25];
+    aView.alpha = 1.0;
+    [UIView commitAnimations];
+}
+
 - (void)makeBlankPage
 {
     CGRect  frame = CGRectZero;
@@ -256,6 +265,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     APCMedicationTrackerMedicationsDisplayView  *view = [[APCMedicationTrackerMedicationsDisplayView alloc] initWithFrame:frame];
     view.backgroundColor = [UIColor whiteColor];
     [self.exScrollibur addSubview:view];
+    [self animateViewVisibility:view];
 }
 
 - (void)makeFirstPage
@@ -270,6 +280,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     self.exScrolliburNumberOfPages = 1;
     self.exScrolliburCurrentPage = 0;
     self.calendricalPages = @[ view ];
+    [self animateViewVisibility:view];
 }
 
 - (APCMedicationTrackerMedicationsDisplayView *)makeWaterfallPageForPageNumber:(NSUInteger)pageNumber andStartOfWeekDate:(NSDate *)startOfWeekDate insertAtFront:(BOOL)insert
@@ -290,6 +301,7 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
         [self.exScrollibur insertSubview:view atIndex:0];
     }
     [view makePrescriptionDisplaysWithPrescriptions:self.prescriptions andDate:startOfWeekDate];
+    [self animateViewVisibility:view];
     return  view;
 }
 
