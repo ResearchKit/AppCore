@@ -82,9 +82,53 @@ typedef NS_ENUM(NSUInteger, SevenDayFitnessQueryType)
     if (self) {
         if (startDate) {
             if (startDate) {
+                
+                NSDate *startDateZeroHour = startDate;
+                NSDate *comparisonDate = nil;
+                {
+                    NSDate *currentDate = startDate;
+                    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+                    [dateComponents setHour:0];
+                    [dateComponents setMinute:0];
+                    [dateComponents setSecond:0];
+                    
+                    startDateZeroHour = [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:currentDate options:0];
+
+                }
+                
+                {
+                    NSDate *currentDate = [NSDate date];
+                    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+                    [dateComponents setDay:-6];
+
+                    comparisonDate = [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:currentDate options:0];
+                    
+                    comparisonDate = [[NSCalendar currentCalendar] dateBySettingHour:0 minute:0 second:0 ofDate:comparisonDate options:0];
+                }
+                
+                // If the start date is younger than the comparison date then use the start date
+                // Else if the start date is older than the comparsion date then set the comparison date
+                if ([startDateZeroHour isLaterThanDate:comparisonDate])
+                {
+                    startDate = startDateZeroHour;
+                }
+                
+                else
+                {
+                    startDate = comparisonDate;
+                }
+
+                
                 _allocationStartDate = startDate;
+                
             } else {
-                _allocationStartDate = [NSDate date];
+                
+                NSDate *currentDate = [NSDate date];
+                NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+                [dateComponents setDay:-6];
+                NSDate *sevenDaysAgo = [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:currentDate options:0];
+
+                _allocationStartDate = sevenDaysAgo;
             }
             
             if (!dateFormatter) {

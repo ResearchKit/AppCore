@@ -245,6 +245,11 @@ static NSInteger const kRegularFontSize = 17;
     NSString *remaining = [NSString stringWithFormat:NSLocalizedString(@"%lu %@ Remaining",
                                                                        @"{count} {day/s} Remaining"), daysRemain, days];
     
+    if (daysRemain <= 0)
+    {
+        remaining = @"Here is your activity and sleep assessment for the last 7 days";
+    }
+    
     return remaining;
 }
 
