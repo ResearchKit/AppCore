@@ -238,6 +238,9 @@
 		CF8270C21AA12A110039B255 /* APCAddPrescriptionTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CF8270BF1AA12A110039B255 /* APCAddPrescriptionTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF8270C31AA12A110039B255 /* APCAddPrescriptionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8270C01AA12A110039B255 /* APCAddPrescriptionTableViewCell.m */; };
 		CF8270C41AA12A110039B255 /* APCAddPrescriptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF8270C11AA12A110039B255 /* APCAddPrescriptionTableViewCell.xib */; };
+		CFBD289A1AA4408800F49161 /* APCMedicationNameTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CFBD28971AA4408800F49161 /* APCMedicationNameTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFBD289B1AA4408800F49161 /* APCMedicationNameTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CFBD28981AA4408800F49161 /* APCMedicationNameTableViewCell.m */; };
+		CFBD289C1AA4408800F49161 /* APCMedicationNameTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFBD28991AA4408800F49161 /* APCMedicationNameTableViewCell.xib */; };
 		CFEF5CAD1A807DE4009A8634 /* APCCustomBackButton.h in Headers */ = {isa = PBXBuildFile; fileRef = CFEF5CAB1A807DE4009A8634 /* APCCustomBackButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFEF5CAE1A807DE4009A8634 /* APCCustomBackButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CFEF5CAC1A807DE4009A8634 /* APCCustomBackButton.m */; };
 		CFFDED6E1A95731F00B25581 /* APCMedicationTrackerCalendarDailyView.h in Headers */ = {isa = PBXBuildFile; fileRef = CFFDED5A1A95731F00B25581 /* APCMedicationTrackerCalendarDailyView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -891,6 +894,9 @@
 		CF8270BF1AA12A110039B255 /* APCAddPrescriptionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCAddPrescriptionTableViewCell.h; path = MedicationTrackingAppComponent/APCAddPrescriptionTableViewCell.h; sourceTree = "<group>"; };
 		CF8270C01AA12A110039B255 /* APCAddPrescriptionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCAddPrescriptionTableViewCell.m; path = MedicationTrackingAppComponent/APCAddPrescriptionTableViewCell.m; sourceTree = "<group>"; };
 		CF8270C11AA12A110039B255 /* APCAddPrescriptionTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = APCAddPrescriptionTableViewCell.xib; path = MedicationTrackingAppComponent/APCAddPrescriptionTableViewCell.xib; sourceTree = "<group>"; };
+		CFBD28971AA4408800F49161 /* APCMedicationNameTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMedicationNameTableViewCell.h; sourceTree = "<group>"; };
+		CFBD28981AA4408800F49161 /* APCMedicationNameTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMedicationNameTableViewCell.m; sourceTree = "<group>"; };
+		CFBD28991AA4408800F49161 /* APCMedicationNameTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCMedicationNameTableViewCell.xib; sourceTree = "<group>"; };
 		CFEF5CAB1A807DE4009A8634 /* APCCustomBackButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCustomBackButton.h; sourceTree = "<group>"; };
 		CFEF5CAC1A807DE4009A8634 /* APCCustomBackButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCustomBackButton.m; sourceTree = "<group>"; };
 		CFFDED5A1A95731F00B25581 /* APCMedicationTrackerCalendarDailyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCMedicationTrackerCalendarDailyView.h; path = MedicationTrackingAppComponent/APCMedicationTrackerCalendarDailyView.h; sourceTree = "<group>"; };
@@ -1835,6 +1841,9 @@
 				CFFDEDB41A95734000B25581 /* APCMedicationNameViewController.h */,
 				CFFDEDB51A95734000B25581 /* APCMedicationNameViewController.m */,
 				CFFDEDB61A95734000B25581 /* APCMedicationNameViewController.xib */,
+				CFBD28971AA4408800F49161 /* APCMedicationNameTableViewCell.h */,
+				CFBD28981AA4408800F49161 /* APCMedicationNameTableViewCell.m */,
+				CFBD28991AA4408800F49161 /* APCMedicationNameTableViewCell.xib */,
 			);
 			name = MedicationName;
 			path = MedicationTrackingSetup/MedicationName;
@@ -3024,6 +3033,7 @@
 				7B6C8CB71AA26ECE0007B560 /* APCConsentBooleanQuestion.h in Headers */,
 				5B827B4C1A80A39900C685A3 /* APCDashboardMoreInfoViewController.h in Headers */,
 				369E27FA1A96B7A200D35DFA /* APCMedicationUltraSimpleSelfInflator.h in Headers */,
+				CFBD289A1AA4408800F49161 /* APCMedicationNameTableViewCell.h in Headers */,
 				369E280C1A96B7A200D35DFA /* APCMedTrackerPrescription+Helper.h in Headers */,
 				F5B948061A73272C0034C522 /* APCScheduleEnumerator.h in Headers */,
 				F5B9463B1A7309A20034C522 /* ZZInflateInputStream.h in Headers */,
@@ -3153,6 +3163,7 @@
 				F5F12A8D1A2F78490015982C /* APCOnboarding.storyboard in Resources */,
 				F5F12A121A2F78490015982C /* MODEL_README in Resources */,
 				F5B947F11A73272C0034C522 /* APCParameters.storyboard in Resources */,
+				CFBD289C1AA4408800F49161 /* APCMedicationNameTableViewCell.xib in Resources */,
 				08027A851A7319AC00B358CC /* handtapping01@2x.png in Resources */,
 				F5F12B031A2F78490015982C /* APCPasscode.storyboard in Resources */,
 				08027A8D1A7319AC00B358CC /* sittingman@2x.png in Resources */,
@@ -3418,6 +3429,7 @@
 				F5B948011A73272C0034C522 /* APCDayOfMonthSelector.m in Sources */,
 				F5F12AC41A2F78490015982C /* APCLearnMasterViewController.m in Sources */,
 				F5B946371A7309A20034C522 /* ZZFileChannel.m in Sources */,
+				CFBD289B1AA4408800F49161 /* APCMedicationNameTableViewCell.m in Sources */,
 				F5F12B051A2F78490015982C /* APCPasscodeViewController.m in Sources */,
 				F5B947E81A73272C0034C522 /* APCSegmentedButton.m in Sources */,
 				F5B946391A7309A20034C522 /* ZZFileChannelOutput.m in Sources */,

@@ -284,6 +284,8 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 - (void)setUserSignedIn
 {
     self.user.signedIn = YES;
+    
+    [(APCAppDelegate *)[UIApplication sharedApplication].delegate afterOnBoardProcessIsFinished];
 }
 
 - (void)back

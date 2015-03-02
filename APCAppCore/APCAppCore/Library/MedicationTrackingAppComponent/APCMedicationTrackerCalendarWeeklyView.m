@@ -11,21 +11,32 @@
 
 #import "NSDate+MedicationTracker.h"
 #import "NSDate+Helper.h"
+#import "UIFont+APCAppearance.h"
 #import "UIColor+MedicationTracker.h"
 #import "NSDictionary+MedicationTracker.h"
 
 static  NSUInteger  kNumberOfWeekDivisions =   7;
 
 static  CGFloat  kDayTitleViewHeight       =  20.0;
-static  CGFloat  kDayTitleFontSize         =  11.0;
 static  CGFloat  kDateTitleMarginTop       =   4.0;
 
 static  CGFloat  kDateViewHeight           =  28.0;
 
 static  CGFloat  kDateLabelInfoHeight      =  20.0;
 
+static  CGFloat  kNavigationArrowsWidth    =  34.0 * 0.5625;
+static  CGFloat  kNavigationArrowsHeight   =  28.0 * 0.5625;
+static  CGFloat  kNavigationArrowsHorOffset = 16.0;
+static  CGFloat  kNavigationArrowsVerOffset =  4.0;
+
+static  NSString  *kNavigationLeftArrowName  = @"icon_arrowleft";
+static  NSString  *kNavigationRightArrowName = @"icon_arrowright";
+
 static  NSInteger const  kCalendarWeekStartDay          =  1;
 static  CGFloat   const  kCalendarSelectedDatePointSize = 13.0;
+
+static  CGFloat   const  kDayTitlePointSize             = 12.0;
+static  CGFloat   const  kDayTitleGrayScale             = 0.5569;
 
 static  NSString  *kPerformScrollDirectionKey = @"kPerformScrollDirectionKey";
 static  NSString  *kSelectedDateKey           = @"SelectedDateKey";
@@ -95,15 +106,27 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
         self.dailyInfoBackdrop.userInteractionEnabled = YES;
         self.dailyInfoBackdrop.backgroundColor = [UIColor clearColor];
         [self.backdrop addSubview:self.dailyInfoBackdrop];
-
-        [self.dailyInfoBackdrop addSubview:self.dateInfoLabel];
-        [self.dailyInfoBackdrop bringSubviewToFront:self.dateInfoLabel];
-        [self markDateSelected:[NSDate date]];
+        
+        CGRect  frame = CGRectMake(kNavigationArrowsHorOffset, kNavigationArrowsVerOffset, kNavigationArrowsWidth, kNavigationArrowsHeight);
+        
+        UIButton  *leftScrollerButton = [UIButton  buttonWithType:UIButtonTypeCustom];
+        leftScrollerButton.frame = frame;
+        [leftScrollerButton setBackgroundImage:[UIImage imageNamed:kNavigationLeftArrowName] forState:UIControlStateNormal];
+        [leftScrollerButton addTarget:self action:@selector(leftScrollerButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [self.dailyInfoBackdrop addSubview:leftScrollerButton];
+        
+        frame = CGRectMake(CGRectGetWidth(self.backdrop.frame) - kNavigationArrowsWidth - kNavigationArrowsHorOffset, kNavigationArrowsVerOffset, kNavigationArrowsWidth, kNavigationArrowsHeight);
+        
+        UIButton  *rightScrollerButton = [UIButton  buttonWithType:UIButtonTypeCustom];
+        rightScrollerButton.frame = frame;
+        [rightScrollerButton setBackgroundImage:[UIImage imageNamed:kNavigationRightArrowName] forState:UIControlStateNormal];
+        [rightScrollerButton addTarget:self action:@selector(rightScrollerButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [self.dailyInfoBackdrop addSubview:rightScrollerButton];
 
         UITapGestureRecognizer  *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dailyInfoViewDidClick:)];
         [self.dailyInfoBackdrop addGestureRecognizer:singleFingerTap];
     }
-    [self initDailyViews];
+    [self initialiseDailyViews];
 }
 
 - (void)setupBackdrop
@@ -122,7 +145,7 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
     self.backdrop.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
 }
 
-- (void)initDailyViews
+- (void)initialiseDailyViews
 {
     CGFloat dailyWidth = self.bounds.size.width / kNumberOfWeekDivisions;
     NSDate  *today = [NSDate new];
@@ -151,13 +174,16 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
     [self dailyCalendarViewDidSelect:[NSDate new]];
 }
 
+#pragma  mark  -  Uitility Methods
+
 - (UILabel *)dayTitleViewForDate:(NSDate *)date withFrame:(CGRect)frame
 {
     APCMedicationTrackerDayTitleLabel  *dayTitleLabel = [[APCMedicationTrackerDayTitleLabel alloc] initWithFrame:frame];
     dayTitleLabel.backgroundColor = [UIColor clearColor];
     dayTitleLabel.textColor = self.dayTitleTextColor;
     dayTitleLabel.textAlignment = NSTextAlignmentCenter;
-    dayTitleLabel.font = [UIFont systemFontOfSize:kDayTitleFontSize];
+    dayTitleLabel.font = [UIFont appRegularFontWithSize:kDayTitlePointSize];
+    dayTitleLabel.textColor = [UIColor colorWithRed:kDayTitleGrayScale green:kDayTitleGrayScale blue:kDayTitleGrayScale alpha:1.0];
 
     dayTitleLabel.text = [[[date getDayOfWeekShortString] uppercaseString] substringToIndex:1];
     dayTitleLabel.date = date;
@@ -234,6 +260,18 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
 }
 
 - (void)swipeRight:(UISwipeGestureRecognizer *) __unused swiper
+{
+    [self performSwipeAnimation:WeeklyCalendarScrollDirectionLeft dateIsToday:NO selectedDate:nil];
+}
+
+#pragma  mark  -  Arrow Button Action Methods
+
+- (void)leftScrollerButtonWasTapped:(UIButton *) __unused sender
+{
+    [self performSwipeAnimation:WeeklyCalendarScrollDirectionRight dateIsToday:NO selectedDate:nil];
+}
+
+- (void)rightScrollerButtonWasTapped:(UIButton *) __unused sender
 {
     [self performSwipeAnimation:WeeklyCalendarScrollDirectionLeft dateIsToday:NO selectedDate:nil];
 }
