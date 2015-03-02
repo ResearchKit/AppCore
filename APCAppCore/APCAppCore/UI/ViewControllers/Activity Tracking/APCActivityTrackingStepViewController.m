@@ -191,7 +191,7 @@ static NSInteger const kRegularFontSize = 17;
     [self refreshAllocation:sender.selectedSegmentIndex];
 }
 
-- (void)handleClose:(UIBarButtonItem *)sender
+- (void)handleClose:(UIBarButtonItem *) __unused sender
 {
     if ([self.delegate respondsToSelector:@selector(stepViewController:didFinishWithNavigationDirection:)] == YES) {
         [self.delegate stepViewController:self didFinishWithNavigationDirection:ORKStepViewControllerNavigationDirectionForward];
@@ -322,22 +322,22 @@ static NSInteger const kRegularFontSize = 17;
     return [self.allocationDataset count];
 }
 
-- (UIColor *)pieGraphView:(APCPieGraphView *)pieGraphView colorForSegmentAtIndex:(NSInteger)index
+- (UIColor *)pieGraphView:(APCPieGraphView *) __unused pieGraphView colorForSegmentAtIndex:(NSInteger)index
 {
     return [[self.allocationDataset valueForKey:kDatasetSegmentColorKey] objectAtIndex:index];
 }
 
-- (NSString *)pieGraphView:(APCPieGraphView *)pieGraphView titleForSegmentAtIndex:(NSInteger)index
+- (NSString *)pieGraphView:(APCPieGraphView *) __unused pieGraphView titleForSegmentAtIndex:(NSInteger)index
 {
     return [[self.allocationDataset valueForKey:kDatasetSegmentKey] objectAtIndex:index];
 }
 
-- (CGFloat)pieGraphView:(APCPieGraphView *)pieGraphView valueForSegmentAtIndex:(NSInteger)index
+- (CGFloat)pieGraphView:(APCPieGraphView *) __unused pieGraphView valueForSegmentAtIndex:(NSInteger)index
 {
     return [[[self.allocationDataset valueForKey:kSegmentSumKey] objectAtIndex:index] floatValue];
 }
 
-- (IBAction)resetTaskStartDate:(id)sender {
+- (IBAction)resetTaskStartDate:(id) __unused sender {
     
     [[UIView appearanceWhenContainedIn:[UIAlertController class], nil] setTintColor:[UIColor appPrimaryColor]];
     
@@ -372,7 +372,7 @@ static NSInteger const kRegularFontSize = 17;
     [self.segmentDays setEnabled:NO forSegmentAtIndex:2];
 }
 
-- (IBAction)infoIconHandler:(id)sender {
+- (IBAction)infoIconHandler:(id) __unused sender {
     UIImage *blurredImage = [self.view blurredSnapshotDark];
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -495,10 +495,10 @@ static NSInteger const kRegularFontSize = 17;
 
 
 
-- (void)removeLearnMore:(id)sender {
+- (void)removeLearnMore:(id) __unused sender {
     [UIView animateWithDuration:0.2 animations:^{
         self.customSurveylearnMoreView.alpha = 0;
-    } completion:^(BOOL finished) {
+    } completion:^(BOOL __unused finished) {
         [self.customSurveylearnMoreView removeFromSuperview];
     }];
 }

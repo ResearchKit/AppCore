@@ -202,7 +202,7 @@ typedef NS_ENUM(NSUInteger, SevenDayFitnessQueryType)
 
 }
 
-- (void)reporterDone:(NSNotification *)notification {
+- (void)reporterDone:(NSNotification *) __unused notification {
     
     APCMotionHistoryReporter *reporter = [APCMotionHistoryReporter sharedInstance];
     

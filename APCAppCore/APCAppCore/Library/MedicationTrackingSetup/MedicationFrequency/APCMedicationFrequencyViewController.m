@@ -56,24 +56,24 @@ static  CGFloat    kSectionHeaderLabelOffset        =   16.0;
 
 #pragma  mark  -  Toolbar Button Action Methods
 
-- (IBAction)cancelButtonTapped:(UIBarButtonItem *)sender
+- (IBAction)cancelButtonTapped:(UIBarButtonItem *) __unused sender
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
-- (IBAction)doneButtonTapped:(UIBarButtonItem *)sender
+- (IBAction)doneButtonTapped:(UIBarButtonItem *) __unused sender
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 #pragma  mark  -  Table View Data Source Methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView
 {
     return  kNumberOfSections;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *) __unused tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger  numberOfRows = 0;
     
@@ -87,7 +87,7 @@ static  CGFloat    kSectionHeaderLabelOffset        =   16.0;
 
 static  NSString  *sectionTitles[] = { @"How many times a day do you take this medication?", @"On what days do you take this medication?" };
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *) __unused tableView heightForHeaderInSection:(NSInteger) __unused section
 {
     return  kSectionHeaderHeight;
 }
@@ -134,7 +134,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     self.valueButtons = buttons;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *) __unused tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat  answer = 44.0;
     

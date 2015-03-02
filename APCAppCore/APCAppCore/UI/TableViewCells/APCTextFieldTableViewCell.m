@@ -55,6 +55,8 @@ NSString * const kAPCTextFieldTableViewCellIdentifier = @"APCTextFieldTableViewC
 
 - (void)setType:(APCTextFieldCellType)type
 {
+    _type = type;
+    
     if (type == kAPCTextFieldCellTypeLeft) {
         self.textLabelWidthConstraint.constant = 111;
         self.textField.textAlignment = NSTextAlignmentLeft;

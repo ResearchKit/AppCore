@@ -224,7 +224,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
 
 #pragma  mark  -  Done Button Action Method
 
-- (IBAction)doneButtonWasTapped:(id)sender
+- (IBAction)doneButtonWasTapped:(id) __unused sender
 {
     [self.listTabulator reloadData];
     
@@ -237,8 +237,8 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
                                                          color: self.colorObject
                                             frequencyAndDays: self.frequenciesAndDaysObject
                                                andUseThisQueue: [NSOperationQueue mainQueue]
-                                              toDoThisWhenDone: ^(id createdObject,
-                                                                  NSTimeInterval operationDuration)
+                                              toDoThisWhenDone: ^(id __unused createdObject,
+                                                                  NSTimeInterval __unused operationDuration)
     {
                                               }];
     self.medicationNameWasSet      = NO;
@@ -261,7 +261,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
 
 #pragma  mark  -  Delegate Methods Of Subordinate Setup Screens
 
-- (void)nameController:(APCMedicationNameViewController *)nameController didSelectMedicineName:(APCMedTrackerMedication *)medicationObject
+- (void)nameController:(APCMedicationNameViewController *) __unused nameController didSelectMedicineName:(APCMedTrackerMedication *)medicationObject
 {
     self.theMedicationObject = medicationObject;
     self.medicationNameWasSet = YES;
@@ -269,7 +269,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesName inSection:0] ] withRowAnimation:NO];
 }
 
-- (void)frequencyController:(APCMedicationFrequencyViewController *)frequencyController didSelectFrequency:(NSDictionary *)daysAndNumbers
+- (void)frequencyController:(APCMedicationFrequencyViewController *) __unused frequencyController didSelectFrequency:(NSDictionary *)daysAndNumbers
 {
     self.frequenciesAndDaysObject = daysAndNumbers;
     self.medicationFrequencyWasSet = YES;
@@ -277,7 +277,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesFrequency inSection:0] ] withRowAnimation:NO];
 }
 
-- (void)colorController:(APCMedicationColorViewController *)colorController didSelectColorLabelName:(APCMedTrackerPrescriptionColor *)colorObject
+- (void)colorController:(APCMedicationColorViewController *) __unused colorController didSelectColorLabelName:(APCMedTrackerPrescriptionColor *)colorObject
 {
     self.colorObject = colorObject;
     self.medicationColorWasSet = YES;
@@ -285,7 +285,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesLabelColor inSection:0] ] withRowAnimation:NO];
 }
 
-- (void)dosageController:(APCMedicationDosageViewController *)dosageController didSelectDosageAmount:(APCMedTrackerPossibleDosage *)dosageAmount
+- (void)dosageController:(APCMedicationDosageViewController *) __unused dosageController didSelectDosageAmount:(APCMedTrackerPossibleDosage *)dosageAmount
 {
     self.possibleDosage = dosageAmount;
     self.medicationDosageWasSet = YES;
