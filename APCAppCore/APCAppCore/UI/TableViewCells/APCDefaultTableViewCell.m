@@ -31,6 +31,8 @@ NSString * const kAPCDefaultTableViewCellIdentifier = @"APCDefaultTableViewCell"
 
 - (void)setType:(APCDefaultTableViewCellType)type
 {
+    _type = type;
+
     if (type == kAPCDefaultTableViewCellTypeLeft) {
         self.textLabelWidthConstraint.constant = 91;
         self.detailTextLabel.textAlignment = NSTextAlignmentLeft;

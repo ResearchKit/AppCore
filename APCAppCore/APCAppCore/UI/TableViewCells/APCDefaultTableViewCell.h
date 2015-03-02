@@ -20,6 +20,6 @@ typedef NS_ENUM(NSUInteger, APCDefaultTableViewCellType) {
 
 @property (weak, nonatomic) IBOutlet UILabel *detailTextLabel;
 
-@property (nonatomic) APCDefaultTableViewCellType type;
+@property (nonatomic, assign) APCDefaultTableViewCellType type;
 
 @end

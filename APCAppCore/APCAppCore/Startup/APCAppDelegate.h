@@ -63,6 +63,8 @@
 - (void) signedUpNotification: (NSNotification*) notification;
 - (void) logOutNotification:(NSNotification *)notification;
 
+- (NSArray *)offsetForTaskSchedules;
+
 //To be called from Datasubstrate
 - (void) setUpCollectors;
 - (id <APCProfileViewControllerDelegate>) profileExtenderDelegate;

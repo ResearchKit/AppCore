@@ -25,6 +25,8 @@ NSString * const kAPCPickerTableViewCellIdentifier = @"APCPickerTableViewCell";
 
 - (void)setType:(APCPickerCellType)type
 {
+    _type = type;
+    
     switch (type) {
         case kAPCPickerCellTypeDate:
         {

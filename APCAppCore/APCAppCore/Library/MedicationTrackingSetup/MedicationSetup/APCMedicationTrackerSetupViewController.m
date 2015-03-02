@@ -224,7 +224,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
 
 #pragma  mark  -  Done Button Action Method
 
-- (IBAction)doneButtonWasTapped:(UIButton *) __unused sender
+- (IBAction)doneButtonWasTapped:(id) __unused sender
 {
     [self.listTabulator reloadData];
     
@@ -237,8 +237,8 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Freq
                                                          color: self.colorObject
                                             frequencyAndDays: self.frequenciesAndDaysObject
                                                andUseThisQueue: [NSOperationQueue mainQueue]
-                                              toDoThisWhenDone: ^(id  __unused createdObject,
-                                                                  NSTimeInterval  __unused operationDuration)
+                                              toDoThisWhenDone: ^(id __unused createdObject,
+                                                                  NSTimeInterval __unused operationDuration)
     {
                                               }];
     self.medicationNameWasSet      = NO;
