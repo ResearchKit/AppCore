@@ -1513,13 +1513,18 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     
     {
-        UIAlertAction *videoAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Watch Video", @"Watch Video") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
-            
-            NSURL *fileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Intro" ofType:@"mp4"]];
-            APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
-            [weakSelf.navigationController presentViewController:introVideoViewController animated:YES completion:nil];
-        }];
-        [alertController addAction:videoAction];
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"Intro" ofType:@"mp4"];
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+            UIAlertAction *videoAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Watch Video", @"Watch Video") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+                
+                NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+                APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
+                [weakSelf.navigationController presentViewController:introVideoViewController animated:YES completion:nil];
+            }];
+            [alertController addAction:videoAction];
+        }
+        
     }
     
     
