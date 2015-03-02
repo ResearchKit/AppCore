@@ -13,6 +13,8 @@
 
 #import "NSBundle+Helper.h"
 
+#import "APCLog.h"
+
 static  NSString  *kViewControllerName       = @"Medication Colors";
 
 static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
@@ -127,8 +129,12 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
                                                                     NSTimeInterval  __unused operationDuration,
                                                                     NSError * __unused error)
      {
-         self.colorsList = arrayOfGeneratedObjects;
-         [self.tabulator reloadData];
+         if (error != nil) {
+             APCLogError2(error);
+         } else {
+             self.colorsList = arrayOfGeneratedObjects;
+             [self.tabulator reloadData];
+         }
      }];
 }
 
