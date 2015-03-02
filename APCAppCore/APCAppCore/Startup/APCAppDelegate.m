@@ -135,6 +135,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 - (void)applicationWillEnterForeground:(UIApplication *) __unused application
 {
+    [[NSUserDefaults standardUserDefaults]synchronize];
     [self hideSecureView];
 }
 
