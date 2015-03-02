@@ -69,6 +69,8 @@
         [self.scheduledTask completeScheduledTask];
         APCAppDelegate* appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
         [appDelegate.scheduler updateScheduledTasksIfNotUpdating:NO];
+        [taskViewController dismissViewControllerAnimated:YES completion:nil];
+
         APCLogEventWithData(kTaskEvent, (@{
                                            @"task_status":@"ResultCompleted",
                                            @"task_title": self.scheduledTask.task.taskTitle,
@@ -77,14 +79,23 @@
     }
     else if (result == ORKTaskViewControllerResultFailed)
     {
-        APCLogEventWithData(kTaskEvent, (@{
-                                           @"task_status":@"ResultFailed",
-                                           @"task_title": self.scheduledTask.task.taskTitle,
-                                           @"task_view_controller":NSStringFromClass([self class])
-                                           }));
+        if (error.code == 260 && error.domain == NSCocoaErrorDomain)
+        {
+            //  Ignore this condition as it's due to no collected data.
+        }
+        else
+        {
+            [taskViewController dismissViewControllerAnimated:YES completion:nil];
+            APCLogEventWithData(kTaskEvent, (@{
+                                               @"task_status":@"ResultFailed",
+                                               @"task_title": self.scheduledTask.task.taskTitle,
+                                               @"task_view_controller":NSStringFromClass([self class])
+                                               }));
+        }
     }
     else if (result == ORKTaskViewControllerResultDiscarded)
     {
+        [taskViewController dismissViewControllerAnimated:YES completion:nil];
         APCLogEventWithData(kTaskEvent, (@{
                                            @"task_status":@"ResultDiscarded",
                                            @"task_title": self.scheduledTask.task.taskTitle,
@@ -93,14 +104,13 @@
     }
     else if (result == ORKTaskViewControllerResultSaved)
     {
+        [taskViewController dismissViewControllerAnimated:YES completion:nil];
         APCLogEventWithData(kTaskEvent, (@{
                                            @"task_status":@"ResultSaved",
                                            @"task_title": self.scheduledTask.task.taskTitle,
                                            @"task_view_controller":NSStringFromClass([self class])
                                            }));
     }
-
-    [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 
