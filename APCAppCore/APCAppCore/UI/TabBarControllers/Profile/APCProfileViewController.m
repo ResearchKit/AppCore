@@ -627,6 +627,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
          field.identifier = kAPCDefaultTableViewCellIdentifier;
          field.editable = NO;
          field.showChevron = YES;
+         field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleGray;
+         
          APCTableViewRow *row = [APCTableViewRow new];
          row.item = field;
          row.itemType = kAPCSettingsItemTypeReminderOnOff;
@@ -654,6 +656,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.textAlignnment = NSTextAlignmentRight;
             field.pickerData = @[[APCParameters autoLockOptionStrings]];
             field.editable = YES;
+            field.selectionStyle = UITableViewCellSelectionStyleGray;
             
             NSNumber *numberOfMinutes = [self.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
             
@@ -675,7 +678,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentLeft;
             field.editable = NO;
-            field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
+            field.selectionStyle = UITableViewCellSelectionStyleGray;
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
@@ -697,7 +700,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
-            field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
+            field.selectionStyle = UITableViewCellSelectionStyleGray;
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
@@ -711,7 +714,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
-            field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
+            field.selectionStyle = UITableViewCellSelectionStyleGray;
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
@@ -734,7 +737,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
-            field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
+            field.selectionStyle = UITableViewCellSelectionStyleGray;
             
             APCTableViewRow *row = [APCTableViewRow new];
             row.item = field;
@@ -940,9 +943,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             {
                 if (!self.isEditing){
                     [self reviewConsent];
-                } else {
-                    [tableView deselectRowAtIndexPath:indexPath animated:YES];
                 }
+                [tableView deselectRowAtIndexPath:indexPath animated:YES];
                 
             }
                 
