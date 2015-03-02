@@ -16,6 +16,7 @@ static NSString *const kEmailPropertyName = @"email";
 static NSString *const kPasswordPropertyName = @"password";
 static NSString *const kSessionTokenPropertyName = @"sessionToken";
 
+static NSString *const kSharedOptionSelection = @"sharedOptionSelection";
 static NSString *const kTaskCompletion = @"taskCompletion";
 static NSString *const kHasHeartDisease = @"hasHeartDisease";
 static NSString *const kDailyScalesCompletionCounterPropertyName = @"dailyScalesCompletionCounter";
@@ -147,6 +148,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     _customSurveyQuestion = [storedUserData.customSurveyQuestion copy];
     _hasHeartDisease = [[storedUserData.hasHeartDisease copy] integerValue];
     _taskCompletion = [storedUserData.taskCompletion copy];
+    _sharedOptionSelection = [storedUserData.hasHeartDisease copy];
 }
 
 - (void) updateStoredProperty:(NSString*) propertyName withValue: (id) value
@@ -246,6 +248,12 @@ static NSString *const kSignedInKey = @"SignedIn";
 /*********************************************************************************/
 #pragma mark - Setters for Properties in Core Data
 /*********************************************************************************/
+
+- (void)setSharedOptionSelection:(NSNumber *)sharedOptionSelection
+{
+    _sharedOptionSelection = sharedOptionSelection;
+    [self updateStoredProperty:kSharedOptionSelection withValue:sharedOptionSelection];
+}
 
 - (void)setTaskCompletion:(NSDate *)taskCompletion {
     _taskCompletion = taskCompletion;

@@ -142,7 +142,10 @@
     }
     else
     {
-        [SBBComponent(SBBConsentManager) dataSharing:DEFAULT_DATA_SHARING_SCOPE completion:^(id __unused responseObject, NSError *error) {
+        APCAppDelegate *delegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+        NSNumber *selected = delegate.dataSubstrate.currentUser.sharedOptionSelection;
+        
+        [SBBComponent(SBBConsentManager) dataSharing:[selected integerValue] completion:^(id __unused responseObject, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (!error) {
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Resumed Consent"}));
@@ -222,10 +225,13 @@
         NSDate * birthDate = self.birthDate ?: [NSDate dateWithTimeIntervalSince1970:(60*60*24*365*10)];
         UIImage *consentImage = [UIImage imageWithData:self.consentSignatureImage];
         
+        APCAppDelegate *delegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+        NSNumber *selected = delegate.dataSubstrate.currentUser.sharedOptionSelection;
+        
         [SBBComponent(SBBConsentManager) consentSignature:name
                                                 birthdate: [birthDate startOfDay]
                                            signatureImage:consentImage
-                                                dataSharing:DEFAULT_DATA_SHARING_SCOPE
+                                                dataSharing:[selected integerValue]
                                                completion:^(id __unused responseObject, NSError * __unused error) {
                                                    dispatch_async(dispatch_get_main_queue(), ^{
                                                        if (!error) {
