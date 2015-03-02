@@ -28,7 +28,7 @@
 
 - (UIRectEdge)edgesForExtendedLayout
 {
-    return UIRectEdgeTop;
+    return UIRectEdgeNone;
 }
 
 - (BOOL)automaticallyAdjustsScrollViewInsets

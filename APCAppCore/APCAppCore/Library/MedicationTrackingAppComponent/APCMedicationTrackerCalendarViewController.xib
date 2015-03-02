@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="APCMedicationTrackerCalendarViewController">
             <connections>
+                <outlet property="editButton" destination="GSJ-dT-HRL" id="akW-1Y-uwV"/>
                 <outlet property="exScrollibur" destination="KL7-BS-XTd" id="ngl-ko-fia"/>
                 <outlet property="tabulator" destination="bka-yN-34d" id="qKV-rW-9JT"/>
                 <outlet property="tapItemsLabel" destination="vMQ-ee-Tsy" id="VDa-7W-Ed8"/>
@@ -80,7 +81,7 @@
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Prescriptions" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G6p-QE-uyF">
                             <rect key="frame" x="0.0" y="0.0" width="600" height="18"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -91,6 +92,20 @@
                                 <constraint firstAttribute="width" constant="600" id="ask-IO-8OL"/>
                             </constraints>
                         </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GSJ-dT-HRL">
+                            <rect key="frame" x="535" y="-3" width="62" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="KGy-qF-4oh"/>
+                                <constraint firstAttribute="width" constant="62" id="ne0-yo-KTZ"/>
+                            </constraints>
+                            <state key="normal" title="Edit">
+                                <color key="titleColor" red="0.0" green="0.21182316600000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="editButtonWasTapped:" destination="-1" eventType="touchUpInside" id="PPa-Vx-ShT"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
@@ -99,6 +114,9 @@
                         <constraint firstItem="G6p-QE-uyF" firstAttribute="leading" secondItem="3mn-ab-tHb" secondAttribute="leading" id="6uc-Kn-xFV"/>
                         <constraint firstItem="LWt-EN-lEN" firstAttribute="leading" secondItem="3mn-ab-tHb" secondAttribute="leading" id="9aR-tV-J9M"/>
                         <constraint firstItem="G6p-QE-uyF" firstAttribute="top" secondItem="3mn-ab-tHb" secondAttribute="top" id="Irg-sK-BuQ"/>
+                        <constraint firstAttribute="trailing" secondItem="GSJ-dT-HRL" secondAttribute="trailing" constant="3" id="JMA-EW-nWJ"/>
+                        <constraint firstAttribute="bottom" secondItem="GSJ-dT-HRL" secondAttribute="bottom" constant="-9" id="WZn-Pe-MOt"/>
+                        <constraint firstItem="GSJ-dT-HRL" firstAttribute="top" secondItem="3mn-ab-tHb" secondAttribute="top" constant="-3" id="XAf-Uf-sZc"/>
                         <constraint firstItem="PhK-O4-B3t" firstAttribute="leading" secondItem="3mn-ab-tHb" secondAttribute="leading" id="Yne-tc-l9p"/>
                         <constraint firstAttribute="trailing" secondItem="G6p-QE-uyF" secondAttribute="trailing" id="egI-CC-28S"/>
                         <constraint firstAttribute="bottom" secondItem="LWt-EN-lEN" secondAttribute="bottom" id="hNU-Ss-SFQ"/>

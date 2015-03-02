@@ -95,7 +95,6 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
         }
     }
     if (self.selectedIndex != nil) {
-        self.navigationItem.hidesBackButton = NO;
         if (self.delegate != nil) {
             if ([self.delegate respondsToSelector:@selector(colorController:didSelectColorLabelName:)] == YES) {
                 APCMedTrackerPrescriptionColor  *schedulColor = self.colorsList[indexPath.row];
@@ -115,8 +114,6 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.navigationItem.hidesBackButton = YES;
 
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     

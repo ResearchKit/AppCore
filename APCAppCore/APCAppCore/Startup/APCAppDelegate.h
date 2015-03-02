@@ -13,10 +13,11 @@
 #import "APCConsentTask.h"
 
 
-@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector;
+@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
 
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
 
+@property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
 @property (strong, nonatomic) UITabBarController *tabster;
 
 //APC Related Properties & Methods
@@ -61,6 +62,8 @@
 - (void) signedInNotification:(NSNotification *)notification;
 - (void) signedUpNotification: (NSNotification*) notification;
 - (void) logOutNotification:(NSNotification *)notification;
+
+- (NSArray *)offsetForTaskSchedules;
 
 //To be called from Datasubstrate
 - (void) setUpCollectors;

@@ -125,11 +125,10 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
             NSDateFormatter *dateFormatter = [NSDateFormatter new];
             dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
             user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
+            [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
             
-            [self dismissViewControllerAnimated:YES completion:^
+            [self.consentVC dismissViewControllerAnimated:YES completion:^
              {
-                 [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
-                 
                  [self startSignUp];
              }];
         }
