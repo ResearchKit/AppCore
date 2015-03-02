@@ -36,6 +36,8 @@ NSString * const kAPCDashboardMessageTableViewCellIdentifier = @"APCDashboardMes
 
 - (void)setType:(APCDashboardMessageType)type
 {
+    _type = type;
+    
     switch (type) {
         case kAPCDashboardMessageTypeAlert:
         {

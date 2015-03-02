@@ -155,7 +155,7 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ study activiti
     if (timeString == nil) {
         APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
         NSString * timeDefault = delegate.initializationOptions[kTaskReminderStartupDefaultTimeKey];
-        timeString = timeDefault?:@"5:00PM";
+        timeString = timeDefault?:@"5:00 PM";
         [[NSUserDefaults standardUserDefaults] setObject:timeString forKey:kTasksReminderDefaultsTimeKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }

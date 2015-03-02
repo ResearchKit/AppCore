@@ -92,7 +92,7 @@ private:
 			
 			// read in 1K at a time until byte count read
 			uint64_t totalBytesRead = 0;
-			while (totalBytesRead < count)
+			while (totalBytesRead < (uint64_t) count)
 			{
 				NSInteger bytesRead = [_stream read:skip
 										  maxLength:(NSUInteger)MIN((uint64_t)sizeof(skip), count - totalBytesRead)];

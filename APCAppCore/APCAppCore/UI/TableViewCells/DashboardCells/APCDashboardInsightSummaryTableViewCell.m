@@ -55,6 +55,8 @@
 
 - (void)setSummaryCaption:(NSString *)summaryCaption
 {
+    _summaryCaption = summaryCaption;
+    
     _summaryLabel.text = summaryCaption;
 }
 
