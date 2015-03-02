@@ -15,6 +15,16 @@
 #import "NSError+APCAdditions.h"
 #import "APCAppCore.h"
 
+
+/**
+ This string appears in a certain text field in the Storyboard.
+ We'll replace it with the name of the actual app.  This lets us
+ lay out the text in Interface Builder, but still have
+ programmatic control over part of it.
+ */
+static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
+
+
 @interface APCEmailVerifyViewController ()
 @property (nonatomic, readonly) APCUser * user;
 @property (nonatomic, assign) NSUInteger signInCounter;
@@ -97,7 +107,7 @@
     self.emailLabel.text = self.user.email;
 
     NSString *appName = [APCUtilities appName];
-    self.topMessageLabel.text = [NSString stringWithFormat:@"An email has been sent by\n%@ to", appName];
+    self.topMessageLabel.text = [self.topMessageLabel.text stringByReplacingOccurrencesOfString: kAPCAppNamePlaceholderString withString: appName];
 }
 
 - (void) viewWillAppear: (BOOL) animated

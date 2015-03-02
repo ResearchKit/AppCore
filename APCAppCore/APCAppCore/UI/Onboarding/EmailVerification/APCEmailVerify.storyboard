@@ -24,17 +24,19 @@
                                     <constraint firstAttribute="width" constant="50" id="edH-8S-1jl"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="An email has been sent by app name to" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hsa-BE-Hkq">
-                                <rect key="frame" x="16" y="141" width="288" height="45"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hsa-BE-Hkq">
+                                <rect key="frame" x="16" y="146" width="288" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="r5d-t5-dSv"/>
                                 </constraints>
+                                <string key="text">$appName$
+has sent you an email at</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="johnny@appleseed.com" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3xK-c0-Pah">
-                                <rect key="frame" x="16" y="185" width="288" height="28"/>
+                                <rect key="frame" x="16" y="197" width="288" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="Wan-5W-p4b"/>
                                 </constraints>
@@ -43,12 +45,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gY2-y5-fND">
-                                <rect key="frame" x="16" y="206" width="288" height="30"/>
+                                <rect key="frame" x="49" y="230" width="222" height="29"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="kpY-K8-pES"/>
+                                    <constraint firstAttribute="width" constant="222" id="0vx-Gh-BO1"/>
+                                    <constraint firstAttribute="height" constant="29" id="Fb3-wS-FVI"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <state key="normal" title="Wrong email? Tap here.">
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="Wrong email address? Tap here.">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -58,19 +61,20 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3lp-lE-Oux">
-                                <rect key="frame" x="16" y="352" width="288" height="1"/>
+                                <rect key="frame" x="16" y="374" width="288" height="1"/>
                                 <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="wOD-8Z-UB1"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yX7-Jl-zxX">
-                                <rect key="frame" x="16" y="352" width="288" height="90"/>
+                                <rect key="frame" x="41" y="396" width="238" height="34"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="90" id="6xz-2O-k55"/>
-                                    <constraint firstAttribute="width" constant="288" id="lvt-a2-1N3"/>
+                                    <constraint firstAttribute="height" constant="34" id="6xz-2O-k55"/>
+                                    <constraint firstAttribute="width" constant="238" id="lvt-a2-1N3"/>
                                 </constraints>
-                                <string key="text">A full copy of the consent will be sent to you for your records. Remember to check your spam filter if you haven't received it within 30 minutes</string>
+                                <string key="text">A full copy of the consent agreement
+will be sent to you for your records.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -90,6 +94,7 @@
                                     <constraint firstAttribute="height" constant="30" id="emJ-QS-ca3"/>
                                     <constraint firstAttribute="width" constant="273" id="rkR-Zp-gnM"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <state key="normal" title="Resend Verification E-Mail">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -97,25 +102,12 @@
                                     <action selector="resendEmail:" destination="h61-jT-BHu" eventType="touchUpInside" id="QrR-zk-AgC"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1aj-Cn-g1q">
-                                <rect key="frame" x="34" y="239" width="252" height="41"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="41" id="GMI-6V-k6C"/>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="41" id="JGV-8A-dWg"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="41" id="Tmg-Nx-Mvn"/>
-                                </constraints>
-                                <string key="text">Verify your email by clicking on 
-the link included in the message.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QwO-ep-Om3" customClass="APCButton">
-                                <rect key="frame" x="81" y="292" width="159" height="44"/>
+                                <rect key="frame" x="81" y="291" width="159" height="44"/>
                                 <color key="backgroundColor" red="0.81724121800000005" green="1" blue="0.97136515830000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="159" id="0Ve-HM-FiC"/>
-                                    <constraint firstAttribute="height" constant="44" id="yN8-Ls-dtG"/>
+                                    <constraint firstAttribute="width" constant="159" id="Y2I-4q-NAu"/>
+                                    <constraint firstAttribute="height" constant="44" id="tmy-ba-2IZ"/>
                                 </constraints>
                                 <state key="normal" title="Tap to Continue">
                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -131,29 +123,25 @@ the link included in the message.</string>
                             <constraint firstItem="hsa-BE-Hkq" firstAttribute="trailing" secondItem="Kj1-kb-LF2" secondAttribute="trailingMargin" id="2zi-3Q-RSf"/>
                             <constraint firstItem="tTU-aB-ynX" firstAttribute="height" secondItem="WLq-Ms-OSK" secondAttribute="height" id="3bt-zY-Rgn"/>
                             <constraint firstItem="tTU-aB-ynX" firstAttribute="top" secondItem="PZ9-QS-Gmr" secondAttribute="bottom" constant="21" id="5z3-WH-O1B"/>
-                            <constraint firstItem="3xK-c0-Pah" firstAttribute="top" secondItem="hsa-BE-Hkq" secondAttribute="bottom" constant="-1" id="7EN-10-Hqd"/>
+                            <constraint firstItem="3xK-c0-Pah" firstAttribute="top" secondItem="hsa-BE-Hkq" secondAttribute="bottom" constant="6" id="7EN-10-Hqd"/>
                             <constraint firstAttribute="centerX" secondItem="tTU-aB-ynX" secondAttribute="centerX" id="91V-EC-FkN"/>
                             <constraint firstAttribute="centerX" secondItem="cVc-Jw-LIH" secondAttribute="centerX" constant="-0.5" id="A2m-L2-YjN"/>
-                            <constraint firstItem="1aj-Cn-g1q" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" constant="18" id="APH-7V-NiJ"/>
                             <constraint firstItem="tTU-aB-ynX" firstAttribute="top" secondItem="WLq-Ms-OSK" secondAttribute="top" id="D0w-lz-w04"/>
-                            <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="yX7-Jl-zxX" secondAttribute="bottom" constant="38" id="G5E-d8-5bi"/>
-                            <constraint firstItem="gY2-y5-fND" firstAttribute="trailing" secondItem="Kj1-kb-LF2" secondAttribute="trailingMargin" id="I0o-bW-rhU"/>
-                            <constraint firstItem="1aj-Cn-g1q" firstAttribute="top" secondItem="gY2-y5-fND" secondAttribute="bottom" constant="3" id="Iye-lc-Qlq"/>
-                            <constraint firstItem="hsa-BE-Hkq" firstAttribute="top" secondItem="WLq-Ms-OSK" secondAttribute="bottom" constant="6" id="LcI-px-aNQ"/>
-                            <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="3lp-lE-Oux" secondAttribute="bottom" constant="127" id="RFL-n7-4oA"/>
+                            <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="yX7-Jl-zxX" secondAttribute="bottom" constant="50" id="G5E-d8-5bi"/>
+                            <constraint firstItem="hsa-BE-Hkq" firstAttribute="top" secondItem="WLq-Ms-OSK" secondAttribute="bottom" constant="11" id="LcI-px-aNQ"/>
+                            <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="3lp-lE-Oux" secondAttribute="bottom" constant="105" id="RFL-n7-4oA"/>
                             <constraint firstItem="hsa-BE-Hkq" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" id="V0i-1R-CAM"/>
+                            <constraint firstAttribute="centerX" secondItem="QwO-ep-Om3" secondAttribute="centerX" constant="-0.5" id="VKP-8z-4Nr"/>
                             <constraint firstItem="tTU-aB-ynX" firstAttribute="leading" secondItem="WLq-Ms-OSK" secondAttribute="leading" id="VYn-t0-KYD"/>
-                            <constraint firstItem="gY2-y5-fND" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" id="XaJ-LK-ohF"/>
+                            <constraint firstItem="QwO-ep-Om3" firstAttribute="top" secondItem="gY2-y5-fND" secondAttribute="bottom" constant="32" id="W8r-Tw-HC7"/>
+                            <constraint firstAttribute="centerX" secondItem="gY2-y5-fND" secondAttribute="centerX" id="Y2N-VW-9EN"/>
                             <constraint firstAttribute="centerX" secondItem="yX7-Jl-zxX" secondAttribute="centerX" id="b2a-oT-iil"/>
-                            <constraint firstItem="QwO-ep-Om3" firstAttribute="top" secondItem="1aj-Cn-g1q" secondAttribute="bottom" constant="12" id="bc5-LK-pjH"/>
+                            <constraint firstItem="gY2-y5-fND" firstAttribute="top" secondItem="3xK-c0-Pah" secondAttribute="bottom" constant="5" id="cp4-Ep-F2V"/>
                             <constraint firstItem="3xK-c0-Pah" firstAttribute="trailing" secondItem="Kj1-kb-LF2" secondAttribute="trailingMargin" id="eio-eH-r3b"/>
-                            <constraint firstItem="1aj-Cn-g1q" firstAttribute="trailing" secondItem="Kj1-kb-LF2" secondAttribute="trailingMargin" constant="-18" id="g08-f2-w22"/>
                             <constraint firstItem="tTU-aB-ynX" firstAttribute="width" secondItem="WLq-Ms-OSK" secondAttribute="width" id="iuY-nJ-UUo"/>
                             <constraint firstItem="3lp-lE-Oux" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" id="rnu-rc-p7p"/>
-                            <constraint firstAttribute="centerX" secondItem="QwO-ep-Om3" secondAttribute="centerX" constant="-0.5" id="sZH-lC-phB"/>
                             <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="cVc-Jw-LIH" secondAttribute="bottom" constant="10" id="xrL-1i-of9"/>
                             <constraint firstItem="3xK-c0-Pah" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" id="yWn-hJ-Nxe"/>
-                            <constraint firstItem="gY2-y5-fND" firstAttribute="top" secondItem="3xK-c0-Pah" secondAttribute="bottom" constant="-7" id="zjn-h5-eZT"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3lp-lE-Oux" secondAttribute="trailing" id="znn-Uv-IcD"/>
                         </constraints>
                     </view>
@@ -165,7 +153,6 @@ the link included in the message.</string>
                         <outlet property="changeEmailButton" destination="gY2-y5-fND" id="vNy-JB-kK6"/>
                         <outlet property="emailLabel" destination="3xK-c0-Pah" id="JpR-EY-Kpw"/>
                         <outlet property="logoImageView" destination="tTU-aB-ynX" id="xhh-SA-ugB"/>
-                        <outlet property="middleMessageLabel" destination="1aj-Cn-g1q" id="8Lq-Yw-1So"/>
                         <outlet property="resendEmailButton" destination="cVc-Jw-LIH" id="lPI-nw-88V"/>
                         <outlet property="topMessageLabel" destination="hsa-BE-Hkq" id="0Mn-zg-XPa"/>
                     </connections>
