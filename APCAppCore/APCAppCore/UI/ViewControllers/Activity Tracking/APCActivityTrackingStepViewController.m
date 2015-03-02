@@ -14,7 +14,7 @@ static NSInteger const kTodaySegmentIndex        = 1;
 static NSInteger const kWeekSegmentIndex         = 2;
 
 #warning This text is using lorem ipsum in 7 Day fitness
-static NSString   *kLearnMoreString = @"Lorem Ipsum.";
+static NSString   *kLearnMoreString = @"The circle shows estimates of the proportion of time you have been spending in different levels of activity, based on sensor data from your phone or wearable device. It also estimates your accumulated “active minutes,” which combines moderate and vigorous activities, and daily steps. This is intended to be informational, as accurate assessment of every type of activity from sensors is an ongoing area of research and development. Your data can help us refine these estimates and better understand the relationship between activity and heart health";
 
 static NSInteger const kSmallerFontSize = 16;
 static NSInteger const kRegularFontSize = 17;
