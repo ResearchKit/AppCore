@@ -468,6 +468,16 @@ static NSUInteger const kIndexOfProfileTab = 3;
     return nil;
 }
 
+- (void)afterOnBoardProcessIsFinished
+{
+    /* Abstract implementation. Subclass to override 
+     *
+     * Use this as a hook to post-process anything that is needed
+     * to be processed right after the 'finishOnboarding' method
+     * is invoked.
+     */
+}
+
 /*********************************************************************************/
 #pragma mark - Catastrophic startup errors
 /*********************************************************************************/

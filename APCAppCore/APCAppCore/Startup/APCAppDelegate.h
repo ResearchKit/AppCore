@@ -64,6 +64,7 @@
 - (void) logOutNotification:(NSNotification *)notification;
 
 - (NSArray *)offsetForTaskSchedules;
+- (void)afterOnBoardProcessIsFinished;
 
 //To be called from Datasubstrate
 - (void) setUpCollectors;
