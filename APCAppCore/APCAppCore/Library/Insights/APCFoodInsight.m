@@ -360,9 +360,12 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
     }
     
     // Sort dataset by frequency in desending order
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:kFoodInsightFrequencyKey
-                                                                   ascending:NO];
-    [markedDataset sortUsingDescriptors:@[sortDescriptor]];
+    NSSortDescriptor *sortDescriptorFrequency = [[NSSortDescriptor alloc] initWithKey:kFoodInsightFrequencyKey
+                                                                            ascending:NO];
+    
+    NSSortDescriptor *sortDescriptiorPercentage = [[NSSortDescriptor alloc] initWithKey:kFoodInsightCaloriesValueKey
+                                                                              ascending:NO];
+    [markedDataset sortUsingDescriptors:@[sortDescriptorFrequency, sortDescriptiorPercentage]];
     
     NSArray *foodList = nil;
     

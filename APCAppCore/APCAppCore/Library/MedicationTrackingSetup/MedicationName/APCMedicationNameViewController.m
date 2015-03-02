@@ -10,6 +10,8 @@
 #import "APCMedTrackerDataStorageManager.h"
 #import "APCMedTrackerMedication+Helper.h"
 
+#import "APCLog.h"
+
 static  NSString  *kViewControllerName = @"Medication Name";
 
 @interface APCMedicationNameViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
@@ -117,12 +119,16 @@ static  NSString  *kViewControllerName = @"Medication Name";
     [APCMedTrackerMedication fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
                                                 toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
                                                                     NSTimeInterval  __unused operationDuration,
-                                                                    NSError * __unused error)
+                                                                    NSError *error)
      {
-         NSSortDescriptor *nameSorter = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-         NSArray  *descriptors = @[ nameSorter ];
-         self.medicationList = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
-         [self.tabulator reloadData];
+         if (error != nil) {
+             APCLogError2(error);
+         } else {
+             NSSortDescriptor *nameSorter = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+             NSArray  *descriptors = @[ nameSorter ];
+             self.medicationList = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
+            [self.tabulator reloadData];
+        }
     }];
 }
 

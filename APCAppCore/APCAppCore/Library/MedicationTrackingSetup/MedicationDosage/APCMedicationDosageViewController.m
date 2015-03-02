@@ -10,6 +10,8 @@
 #import "APCMedTrackerDataStorageManager.h"
 #import "APCMedTrackerPossibleDosage+Helper.h"
 
+#import "APCLog.h"
+
 static  NSString  *kViewControllerName = @"Medication Dosages";
 
 @interface APCMedicationDosageViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
@@ -134,12 +136,16 @@ static  NSString  *kViewControllerName = @"Medication Dosages";
     [APCMedTrackerPossibleDosage fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
                                                     toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
                                                                         NSTimeInterval  __unused operationDuration,
-                                                                        NSError * __unused error)
+                                                                        NSError *error)
      {
-         NSSortDescriptor *amountSorter = [[NSSortDescriptor alloc] initWithKey:@"amount" ascending:YES];
-         NSArray  *descriptors = @[ amountSorter ];
-         self.dosageAmounts = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
-         [self.tabulator reloadData];
+         if (error != nil) {
+             APCLogError2(error);
+         } else {
+             NSSortDescriptor *amountSorter = [[NSSortDescriptor alloc] initWithKey:@"amount" ascending:YES];
+             NSArray  *descriptors = @[ amountSorter ];
+             self.dosageAmounts = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
+             [self.tabulator reloadData];
+         }
      }];
 }
 
