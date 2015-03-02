@@ -14,10 +14,10 @@ static  NSString  *kDefaultLocale = @"en_US_POSIX";
 
 - (NSDate *)getWeekStartDate: (NSInteger)weekStartIndex
 {
-    int weekDay = [[self getWeekDay] intValue];
+    int  weekDay = [[self getWeekDay] intValue];
 
-    NSInteger gap = (weekStartIndex <=  weekDay) ?  weekDay  : ( 7 + weekDay );
-    NSInteger day = weekStartIndex - gap;
+    NSInteger  gap = (weekStartIndex <= weekDay) ?  weekDay  : ( 7 + weekDay );
+    NSInteger  day = weekStartIndex - gap;
 
     return [self dateByAddingDays:day];
 }
@@ -47,8 +47,8 @@ static  NSString  *kDefaultLocale = @"en_US_POSIX";
     static  NSDateFormatter  *formatter;
     if (formatter == nil) {
         formatter = [[NSDateFormatter alloc] init];
-        NSLocale* en_AU_POSIX = [[NSLocale alloc] initWithLocaleIdentifier:kDefaultLocale];
-        [formatter setLocale:en_AU_POSIX];
+        NSLocale  *en_US_POSIX = [[NSLocale alloc] initWithLocaleIdentifier:kDefaultLocale];
+        [formatter setLocale:en_US_POSIX];
         [formatter setDateFormat:@"d"];
     }
     return  [formatter stringFromDate:self];
@@ -59,9 +59,9 @@ static  NSString  *kDefaultLocale = @"en_US_POSIX";
     return [[NSCalendar currentCalendar] dateFromComponents:[[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:self]];
 }
 
-- (BOOL) isSameDateWith: (NSDate *)dt
+- (BOOL) isSameDateWith: (NSDate *)aDate
 {
-    return  ([[self midnightDate] isEqualToDate: [dt midnightDate]])?YES:NO;
+    return  ([[self midnightDate] isEqualToDate: [aDate midnightDate]])?YES:NO;
 }
 
 - (BOOL)isDateToday
