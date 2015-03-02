@@ -244,7 +244,7 @@ static CGFloat const kPickerCellHeight = 164.0f;
 {
     APCTableViewItem *field = [self itemForIndexPath:indexPath];
     
-    if (self.isEditing && field.isEditable && ([field isKindOfClass:[APCTableViewCustomPickerItem class]] ||
+    if ((self.isEditing || field.isEditable) && ([field isKindOfClass:[APCTableViewCustomPickerItem class]] ||
                              [field isKindOfClass:[APCTableViewDatePickerItem class]])) {
         
         [self.tableView endEditing:YES];
