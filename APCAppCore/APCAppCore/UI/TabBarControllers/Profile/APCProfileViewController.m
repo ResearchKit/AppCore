@@ -421,6 +421,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.textAlignnment = NSTextAlignmentRight;
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
                     field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
+                    field.editable = NO;
                     
                     if (self.user.medications) {
                         field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:self.user.medicalConditions]) ];
@@ -445,6 +446,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.textAlignnment = NSTextAlignmentRight;
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
                     field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
+                    field.editable = NO;
                     
                     if (self.user.medications) {
                         field.selectedRowIndices = @[ @([field.pickerData[0] indexOfObject:self.user.medications]) ];
@@ -470,6 +472,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.textAlignnment = NSTextAlignmentRight;
                     field.pickerData = [APCUser heights];
                     field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
+                    field.editable = NO;
                     
                     NSInteger defaultIndexOfMyHeightInFeet = 5;
                     NSInteger defaultIndexOfMyHeightInInches = 0;
@@ -542,6 +545,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.textAlignnment = NSTextAlignmentRight;
                     field.detailDiscloserStyle = YES;
                     field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
+                    field.editable = NO;
                     
                     if (self.user.sleepTime) {
                         field.date = self.user.wakeUpTime;
@@ -567,6 +571,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.textAlignnment = NSTextAlignmentRight;
                     field.detailDiscloserStyle = YES;
                     field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
+                    field.editable = NO;
                     
                     if (self.user.wakeUpTime) {
                         field.date = self.user.sleepTime;
@@ -648,7 +653,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.detailDiscloserStyle = YES;
             field.textAlignnment = NSTextAlignmentRight;
             field.pickerData = @[[APCParameters autoLockOptionStrings]];
-
+            field.editable = YES;
+            
             NSNumber *numberOfMinutes = [self.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
             
             if ( numberOfMinutes != nil)
@@ -895,51 +901,72 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 
             case kAPCSettingsItemTypePasscode:
             {
-                APCChangePasscodeViewController *changePasscodeViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ChangePasscodeVC"];
-                [self.navigationController presentViewController:changePasscodeViewController animated:YES completion:nil];
+                if (!self.isEditing) {
+                    APCChangePasscodeViewController *changePasscodeViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ChangePasscodeVC"];
+                    [self.navigationController presentViewController:changePasscodeViewController animated:YES completion:nil];
+                } else {
+                    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                }
+                
             }
                 break;
             case kAPCSettingsItemTypePermissions:
             {
-                NSString *title = NSLocalizedString(@"Permissions", @"Permissions");
-                NSString *message = NSLocalizedString(@"The app will open its Permissions in the phone's Settings.", @"The app will open its Permissions in the phone's Settings.");
-                NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
-                NSString *ok = NSLocalizedString(@"OK", @"OK");
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
-                    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
-                }];
-                [alertController addAction:cancelAction];
+                [tableView deselectRowAtIndexPath:indexPath animated:YES];
                 
-                UIAlertAction *okAction = [UIAlertAction actionWithTitle:ok style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-                    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
-                }];
-                [alertController addAction:okAction];
+                if (!self.isEditing){
+                    NSString *title = NSLocalizedString(@"Permissions", @"Permissions");
+                    NSString *message = NSLocalizedString(@"The app will open its Permissions in the phone's Settings.", @"The app will open its Permissions in the phone's Settings.");
+                    NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
+                    NSString *ok = NSLocalizedString(@"OK", @"OK");
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+                        [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+                    }];
+                    [alertController addAction:cancelAction];
+                    
+                    UIAlertAction *okAction = [UIAlertAction actionWithTitle:ok style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+                        [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+                    }];
+                    [alertController addAction:okAction];
+                    
+                    [self presentViewController:alertController animated:YES completion:nil];
+                }
                 
-                [self presentViewController:alertController animated:YES completion:nil];
             }
                 break;
             case kAPCUserInfoItemTypeReviewConsent:
             {
-                [self reviewConsent];
+                if (!self.isEditing){
+                    [self reviewConsent];
+                } else {
+                    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                }
+                
             }
                 
                 break;
                 
             case kAPCSettingsItemTypeReminderOnOff:
             {
-                
-                
-                APCSettingsViewController *remindersTableViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSettingsViewController"];
-                
-                [self.navigationController pushViewController:remindersTableViewController animated:YES];
+                if (!self.isEditing){
+                    APCSettingsViewController *remindersTableViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSettingsViewController"];
+                    
+                    [self.navigationController pushViewController:remindersTableViewController animated:YES];
+                } else {
+                    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                }
                 
             }
                 break;
             case kAPCSettingsItemTypePrivacyPolicy:
             {
-                [self showPrivacyPolicy];
+                if (!self.isEditing){
+                    [self showPrivacyPolicy];
+                } else {
+                    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                }
             }
                 break;
             case kAPCSettingsItemTypeTermsAndConditions:
