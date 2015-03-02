@@ -281,14 +281,54 @@ static NSString * const kOneTimeSchedule = @"once";
 /*********************************************************************************/
 - (void) createScheduledTask:(APCSchedule*) schedule task: (APCTask*) task dateRange: (APCDateRange*) dateRange
 {
+    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    NSArray *offsetsForTask = [appDelegate offsetForTaskSchedules];
+    
     APCScheduledTask * createdScheduledTask = [APCScheduledTask newObjectForContext:self.scheduleMOC];
-    createdScheduledTask.startOn = dateRange.startDate;
-    createdScheduledTask.endOn = dateRange.endDate;
+    
+    NSDate *taskStartDate = dateRange.startDate;
+    NSDate *taskEndDate = dateRange.endDate;
+    
+    if (offsetsForTask) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", kScheduleOffsetTaskIdKey, task.taskID];
+        NSArray *matchedTasks = [offsetsForTask filteredArrayUsingPredicate:predicate];
+        NSNumber *daysToOffset = nil;
+        
+        if (matchedTasks.count > 0) {
+            daysToOffset = [[matchedTasks firstObject] valueForKey:kScheduleOffsetOffsetKey];
+        }
+        
+        if (daysToOffset) {
+            NSDateComponents *components = [[NSDateComponents alloc] init];
+            [components setDay:[daysToOffset integerValue]];
+            
+            NSDate *offsetStartDate = [[NSCalendar currentCalendar] dateByAddingComponents:components
+                                                                                    toDate:taskStartDate
+                                                                                   options:0];
+            
+            NSDate *offsetEndDate = [[NSCalendar currentCalendar] dateByAddingComponents:components
+                                                                                  toDate:taskEndDate
+                                                                                 options:0];
+            
+            taskStartDate = offsetStartDate;
+            taskEndDate = offsetEndDate;
+            
+            APCLogDebug(@"Task %@ scheduled offset by %lu days. New start date is %@", task.taskTitle, [daysToOffset integerValue], taskStartDate);
+        }
+    }
+    
+    createdScheduledTask.startOn = taskStartDate;
+    createdScheduledTask.endOn = taskEndDate;
     createdScheduledTask.generatedSchedule = schedule;
     createdScheduledTask.task = task;
-    NSError * saveError;
-    [createdScheduledTask saveToPersistentStore:&saveError];
-    APCLogError2 (saveError);
+    
+    NSError * saveError = nil;
+    BOOL saveSuccess = [createdScheduledTask saveToPersistentStore:&saveError];
+    
+    if (!saveSuccess) {
+        APCLogError2 (saveError);
+    }
     
     //Validate the task
     [self.validatedScheduledTasksForReferenceDate addObject:createdScheduledTask];
