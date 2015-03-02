@@ -190,6 +190,7 @@
 		712AB44D1A9E692400556DA2 /* APCMotionHistoryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 712AB4491A9E692400556DA2 /* APCMotionHistoryData.m */; };
 		712AB44E1A9E692400556DA2 /* APCMotionHistoryReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 712AB44A1A9E692400556DA2 /* APCMotionHistoryReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		712AB44F1A9E692400556DA2 /* APCMotionHistoryReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 712AB44B1A9E692400556DA2 /* APCMotionHistoryReporter.m */; };
+		7423AB5B1AA3FFD8004A325A /* APCConsentRedirector.h in Headers */ = {isa = PBXBuildFile; fileRef = 7423AB591AA3FFD8004A325A /* APCConsentRedirector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		747307101A96E1DE0071D863 /* APCCMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7473070E1A96E1DE0071D863 /* APCCMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		747307111A96E1DE0071D863 /* APCCMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 7473070F1A96E1DE0071D863 /* APCCMS.m */; };
 		747307161A96E2FB0071D863 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747307151A96E2FB0071D863 /* openssl.framework */; };
@@ -842,6 +843,7 @@
 		712AB4491A9E692400556DA2 /* APCMotionHistoryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMotionHistoryData.m; sourceTree = "<group>"; };
 		712AB44A1A9E692400556DA2 /* APCMotionHistoryReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMotionHistoryReporter.h; sourceTree = "<group>"; };
 		712AB44B1A9E692400556DA2 /* APCMotionHistoryReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMotionHistoryReporter.m; sourceTree = "<group>"; };
+		7423AB591AA3FFD8004A325A /* APCConsentRedirector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConsentRedirector.h; sourceTree = "<group>"; };
 		7473070E1A96E1DE0071D863 /* APCCMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCCMS.h; path = CMS/APCCMS.h; sourceTree = "<group>"; };
 		7473070F1A96E1DE0071D863 /* APCCMS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCCMS.m; path = CMS/APCCMS.m; sourceTree = "<group>"; };
 		747307151A96E2FB0071D863 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openssl.framework; sourceTree = "<group>"; };
@@ -1668,6 +1670,7 @@
 				7B6C8CB21AA26ECE0007B560 /* APCConsentQuestion.m */,
 				7B6C8CB51AA26ECE0007B560 /* APCConsentTextChoiceQuestion.h */,
 				7B6C8CB61AA26ECE0007B560 /* APCConsentTextChoiceQuestion.m */,
+				7423AB591AA3FFD8004A325A /* APCConsentRedirector.h */,
 			);
 			name = Consent;
 			path = ../Consent;
@@ -2893,6 +2896,7 @@
 				F5B947E71A73272C0034C522 /* APCSegmentedButton.h in Headers */,
 				F5B947C71A73272C0034C522 /* NSObject+Helper.h in Headers */,
 				747307101A96E1DE0071D863 /* APCCMS.h in Headers */,
+				7423AB5B1AA3FFD8004A325A /* APCConsentRedirector.h in Headers */,
 				081A477A1A93EC4700E13148 /* APCBadgeLabel.h in Headers */,
 				F5F12A891A2F78490015982C /* APCTableViewItem.h in Headers */,
 				F5F12AC31A2F78490015982C /* APCLearnMasterViewController.h in Headers */,

@@ -11,6 +11,7 @@
 #import "APCConsentBooleanQuestion.h"
 #import "APCConsentInstructionQuestion.h"
 #import "APCConsentTextChoiceQuestion.h"
+#import "APCConsentRedirector.h"
 
 
 static NSString*    kDocumentHtmlTag                    = @"htmlDocument";
@@ -55,6 +56,8 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
 @property (nonatomic, copy)   NSString*         successMessage;
 @property (nonatomic, copy)   NSString*         failureMessage;
 @property (nonatomic, assign) NSUInteger        maxAllowedFailure;
+@property (nonatomic, assign) NSInteger         indexOfFirstCustomStep;
+@property (nonatomic, assign) NSInteger         indexOfFirstQuizStep;
 
 //  Consent
 @property (nonatomic, strong) NSArray*          documentSections;
@@ -77,7 +80,7 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     self = [super initWithIdentifier:identifier steps:consentSteps];
     if (self)
     {
-        
+        _failedMessageTag = kFailedMessageTag;
     }
     
     return self;
@@ -98,7 +101,9 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
 
 - (NSArray*)commonInitWithPropertiesFileName:(NSString*)fileName customSteps:(NSArray*)customSteps
 {
-    _passedQuiz = YES;
+    _passedQuiz             = YES;
+    _indexOfFirstCustomStep = NSNotFound;
+    _indexOfFirstQuizStep   = NSNotFound;
     
     [self loadFromJson:fileName];
     
@@ -135,8 +140,11 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     NSMutableArray* consentSteps = [[NSMutableArray alloc] init];
     [consentSteps addObject:visualStep];
     [consentSteps addObject:sharingStep];
+    
+    _indexOfFirstCustomStep = consentSteps.count;
     [consentSteps addObjectsFromArray:customSteps];
     
+    _indexOfFirstQuizStep = consentSteps.count;
     for (APCConsentQuestion* q in self.questions)
     {
         [consentSteps addObject:q.instantiateRkQuestion];
@@ -251,9 +259,33 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     {
         nextStep = self.steps.lastObject;
     }
-    else if ([step.identifier isEqualToString:kFailedMessageTag])
+    else if ([step.identifier isEqualToString:self.failedMessageTag])
     {
-        nextStep = self.steps.firstObject;
+        if (self.redirector != nil && [self.redirector conformsToProtocol:@protocol(APCConsentRedirector)])
+        {
+            APCConsentRedirection   redirection = [self.redirector redirect];
+            
+            if (redirection == APCConsentBackToConsentBeginning)
+            {
+                nextStep = self.steps.firstObject;
+            }
+            else if (redirection == APCConsentBackToCustomStepBeginning)
+            {
+                nextStep = self.steps[self.indexOfFirstCustomStep];
+            }
+            else if (redirection == APCConsentBackToQuizBeginning)
+            {
+                nextStep = self.steps[self.indexOfFirstQuizStep];
+            }
+            else if (redirection == APCConsentRedirectionNone)
+            {
+                nextStep = self.steps.lastObject;
+            }
+        }
+        else
+        {
+            nextStep = self.steps.firstObject;
+        }
     }
     else
     {
