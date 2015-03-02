@@ -88,67 +88,67 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 
     
-    
-    /*************/
-    
-    //Get all the tasks
-    NSManagedObjectContext * context = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext;
-    
-    NSEntityDescription *entityDescription = [NSEntityDescription
-                                              entityForName:@"APCTask" inManagedObjectContext:context];
-    
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:entityDescription];
-    
-    NSError *error;
-    NSArray *array = [context executeFetchRequest:request error:&error];
-    
-    APCLogError2(error);
-    
-    
-    
-    NSMutableArray *rowItems = [NSMutableArray new];
-    
-    for (APCTask *task in array) {
-        if (task.taskTitle) {
-            
-            {
-                {
-                    APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
-                    field.caption = NSLocalizedString(task.taskTitle, @"");
-                    field.identifier = kAPCSwitchCellIdentifier;
-                    field.editable = NO;
-                    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-                    field.on = appDelegate.tasksReminder.reminderOn;
-                    
-                    APCTableViewRow *row = [APCTableViewRow new];
-                    row.item = field;
-                    row.itemType = kAPCSettingsItemTypeReminderOnOff;
-                    [rowItems addObject:row];
-                }
-                
-                {
-                    APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
-                    field.caption = NSLocalizedString(@"Reminder Time", @"");
-                    field.pickerData = @[[APCTasksReminderManager reminderTimesArray]];
-                    field.textAlignnment = NSTextAlignmentRight;
-                    field.identifier = kAPCDefaultTableViewCellIdentifier;
-                    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-                    field.selectedRowIndices = @[@([[APCTasksReminderManager reminderTimesArray] indexOfObject:appDelegate.tasksReminder.reminderTime])];
-                    
-                    APCTableViewRow *row = [APCTableViewRow new];
-                    row.item = field;
-                    row.itemType = kAPCSettingsItemTypeReminderTime;
-                    [rowItems addObject:row];
-                }
-            }
-        }
-    }
-    
-    APCTableViewSection *section = [APCTableViewSection new];
-    
-    section.rows = [NSArray arrayWithArray:rowItems];
-    [items addObject:section];
+//    
+//    /*************/
+//    
+//    //Get all the tasks
+//    NSManagedObjectContext * context = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext;
+//    
+//    NSEntityDescription *entityDescription = [NSEntityDescription
+//                                              entityForName:@"APCTask" inManagedObjectContext:context];
+//    
+//    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+//    [request setEntity:entityDescription];
+//    
+//    NSError *error;
+//    NSArray *array = [context executeFetchRequest:request error:&error];
+//    
+//    APCLogError2(error);
+//    
+//    
+//    
+//    NSMutableArray *rowItems = [NSMutableArray new];
+//    
+//    for (APCTask *task in array) {
+//        if (task.taskTitle) {
+//            
+//            {
+//                {
+//                    APCTableViewSwitchItem *field = [APCTableViewSwitchItem new];
+//                    field.caption = NSLocalizedString(task.taskTitle, @"");
+//                    field.identifier = kAPCSwitchCellIdentifier;
+//                    field.editable = NO;
+//                    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+//                    field.on = appDelegate.tasksReminder.reminderOn;
+//                    
+//                    APCTableViewRow *row = [APCTableViewRow new];
+//                    row.item = field;
+//                    row.itemType = kAPCSettingsItemTypeReminderOnOff;
+//                    [rowItems addObject:row];
+//                }
+//                
+//                {
+//                    APCTableViewCustomPickerItem *field = [APCTableViewCustomPickerItem new];
+//                    field.caption = NSLocalizedString(@"Reminder Time", @"");
+//                    field.pickerData = @[[APCTasksReminderManager reminderTimesArray]];
+//                    field.textAlignnment = NSTextAlignmentRight;
+//                    field.identifier = kAPCDefaultTableViewCellIdentifier;
+//                    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+//                    field.selectedRowIndices = @[@([[APCTasksReminderManager reminderTimesArray] indexOfObject:appDelegate.tasksReminder.reminderTime])];
+//                    
+//                    APCTableViewRow *row = [APCTableViewRow new];
+//                    row.item = field;
+//                    row.itemType = kAPCSettingsItemTypeReminderTime;
+//                    [rowItems addObject:row];
+//                }
+//            }
+//        }
+//    }
+//    
+//    APCTableViewSection *section = [APCTableViewSection new];
+//    
+//    section.rows = [NSArray arrayWithArray:rowItems];
+//    [items addObject:section];
 
     
     /*************/
