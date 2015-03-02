@@ -1493,48 +1493,55 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
     __weak typeof(self) weakSelf = self;
     
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Review Consent" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
     
-    {
-        UIAlertAction *pdfAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View PDF", @"View PDF") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
-            
-            APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
-            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
-            NSData *data = [NSData dataWithContentsOfFile:filePath];
-            [webViewController.webview setDataDetectorTypes:UIDataDetectorTypeAll];
-            webViewController.title = NSLocalizedString(@"Consent", @"Consent");
-            
-            UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
-            [weakSelf.navigationController presentViewController:navController animated:YES completion:^{
-                [webViewController.webview loadData:data MIMEType:@"application/pdf" textEncodingName:@"utf-8" baseURL:nil];
-            }];
-            
-        }];
-        [alertController addAction:pdfAction];
+    NSArray *consentReviewActions = [appDelegate reviewConsentActions];
+    
+    if (!consentReviewActions) {
+        consentReviewActions = @[kReviewConsentActionPDF, kReviewConsentActionVideo, kReviewConsentActionSlides];
     }
     
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Review Consent" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
     
-    {
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"Intro" ofType:@"mp4"];
-        
-        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+    if ([consentReviewActions containsObject:kReviewConsentActionPDF]) {
+        {
+            UIAlertAction *pdfAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View PDF", @"View PDF") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+                
+                APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
+                NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
+                NSData *data = [NSData dataWithContentsOfFile:filePath];
+                [webViewController.webview setDataDetectorTypes:UIDataDetectorTypeAll];
+                webViewController.title = NSLocalizedString(@"Consent", @"Consent");
+                
+                UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
+                [weakSelf.navigationController presentViewController:navController animated:YES completion:^{
+                    [webViewController.webview loadData:data MIMEType:@"application/pdf" textEncodingName:@"utf-8" baseURL:nil];
+                }];
+                
+            }];
+            [alertController addAction:pdfAction];
+        }
+    }
+    
+    if ([consentReviewActions containsObject:kReviewConsentActionVideo]) {
+        {
             UIAlertAction *videoAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Watch Video", @"Watch Video") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
                 
-                NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+                NSURL *fileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Intro" ofType:@"mp4"]];
                 APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
                 [weakSelf.navigationController presentViewController:introVideoViewController animated:YES completion:nil];
             }];
             [alertController addAction:videoAction];
         }
-        
     }
     
-    
-    {
-        UIAlertAction *slidesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View Slides", @"View Slides") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
-            [weakSelf showConsentSlides];
-        }];
-        [alertController addAction:slidesAction];
+    if ([consentReviewActions containsObject:kReviewConsentActionSlides]) {
+        {
+            UIAlertAction *slidesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"View Slides", @"View Slides") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+                [weakSelf showConsentSlides];
+            }];
+            [alertController addAction:slidesAction];
+        }
     }
     
     {

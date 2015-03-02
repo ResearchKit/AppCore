@@ -478,6 +478,12 @@ static NSUInteger const kIndexOfProfileTab = 3;
      */
 }
 
+// Review Consent Actions
+- (NSArray *)reviewConsentActions
+{
+    return nil;
+}
+
 /*********************************************************************************/
 #pragma mark - Catastrophic startup errors
 /*********************************************************************************/

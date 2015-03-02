@@ -94,6 +94,9 @@ NSString *const kTasksReminderDefaultsTimeKey = @"TasksReminderDefaultsTimeKey";
 NSString *const kScheduleOffsetTaskIdKey = @"scheduleOffsetTaskIdKey";
 NSString *const kScheduleOffsetOffsetKey = @"scheduleOffsetOffsetKey";
 
+NSString *const kReviewConsentActionPDF    = @"PDF";
+NSString *const kReviewConsentActionVideo  = @"VIDEO";
+NSString *const kReviewConsentActionSlides = @"SLIDES";
 
 /*********************************************************************************/
 #pragma mark - Events
