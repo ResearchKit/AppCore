@@ -114,10 +114,9 @@ static NSString*    kSharingTag                         = @"sharing";
                                                                               identifier:@"participant"];
     ORKConsentDocument*     document  = [[ORKConsentDocument alloc] init];
     
-    document.title                = @"Consent";
-    document.signaturePageTitle   = @"Consent";
-    document.signaturePageContent = @"By agreeing you confirm that you read the information and that you "
-                                    @"wish to take part in this research study.";
+    document.title                = NSLocalizedString(@"Consent", nil);
+    document.signaturePageTitle   = NSLocalizedString(@"Consent", nil);
+    document.signaturePageContent = NSLocalizedString(@"By agreeing you confirm that you read the consent and that you wish to take part in this research study.", nil);
     document.sections             = self.documentSections;
     document.htmlReviewContent    = self.documentHtmlContent;
     
