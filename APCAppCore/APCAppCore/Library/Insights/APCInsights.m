@@ -278,13 +278,25 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     NSNumber *pointValue = @(0);
     
     if ([dataPoint[kAPCInsightFactorValueKey] isEqualToNumber:@(NSNotFound)] == NO) {
+        
         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
         [numberFormatter setMaximumFractionDigits:0];
         
-        caption = [NSString stringWithFormat:@"%@ %@",
-                   [numberFormatter stringFromNumber:dataPoint[kAPCInsightFactorValueKey]],
-                   self.insightFactorCaption];
-        pointValue = dataPoint[kAPCInsightFactorValueKey];
+        if ([dataPoint[kAPCInsightFactorNameKey] isEqualToString:HKQuantityTypeIdentifierDietaryEnergyConsumed]) {
+            
+            if ([dataPoint[kAPCInsightFactorValueKey] doubleValue] > 1000.0) {
+                pointValue = dataPoint[kAPCInsightFactorValueKey];
+                
+                caption = [NSString stringWithFormat:@"%@ %@",
+                           [numberFormatter stringFromNumber:dataPoint[kAPCInsightFactorValueKey]],
+                           self.insightFactorCaption];
+            }
+        } else {
+            caption = [NSString stringWithFormat:@"%@ %@",
+                       [numberFormatter stringFromNumber:dataPoint[kAPCInsightFactorValueKey]],
+                       self.insightFactorCaption];
+            pointValue = dataPoint[kAPCInsightFactorValueKey];
+        }
     }
     
     if ([dataPoint[kInsightDatasetIsGoodDayKey] boolValue]) {
