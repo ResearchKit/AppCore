@@ -69,10 +69,26 @@ static NSString *const kCSVFilename  = @"data.csv";
 #pragma mark - Adding tracker
 /*********************************************************************************/
 
-- (void)addTracker:(APCDataTracker *)tracker
+- (void) addTracker: (APCDataTracker *) tracker
 {
-    NSAssert(self.registeredTrackers[tracker.identifier] == nil, @"Tracker with the same identifier already exists");
-    self.registeredTrackers[tracker.identifier] = tracker;
+    NSString *identifier = tracker.identifier;
+    APCDataTracker *existingTracker = self.registeredTrackers [identifier];
+
+    if (existingTracker)
+    {
+        NSString *message = [NSString stringWithFormat: @"Trying to install a [%@].  Found an existing one the same name, [%@].  We'll use that older one, instead of the new one.  Calling this an 'error' because we want to track when this happens, in case it leads to problems.", NSStringFromClass ([existingTracker class]), identifier];
+
+        NSError *errorKindaSorta = [NSError errorWithDomain: @"PassiveDataCollector"
+                                                       code: 1
+                                                   userInfo: @{ NSLocalizedFailureReasonErrorKey: @"Duplicate Passive Data Collector",
+                                                                NSLocalizedRecoverySuggestionErrorKey: message }];
+
+        APCLogError2 (errorKindaSorta);
+
+        tracker = existingTracker;
+    }
+
+    self.registeredTrackers [identifier] = tracker;
     tracker.delegate = self;
     [self loadOrCreateDataFiles:tracker];
     [tracker startTracking];
