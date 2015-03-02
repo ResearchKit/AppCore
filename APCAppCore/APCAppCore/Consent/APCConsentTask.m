@@ -11,6 +11,8 @@
 #import "APCConsentBooleanQuestion.h"
 #import "APCConsentInstructionQuestion.h"
 #import "APCConsentTextChoiceQuestion.h"
+#import "APCConsentRedirector.h"
+#import "APCAppDelegate.h"
 
 
 static NSString*    kDocumentHtmlTag                    = @"htmlDocument";
@@ -37,6 +39,7 @@ static NSString*    kTrueTag                            = @"true";
 static NSString*    kFalseTag                           = @"false";
 static NSString*    kTextChoicesTag                     = @"textChoices";
 static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
+static NSString*    kSharingTag                         = @"sharing";
 
 
 
@@ -55,6 +58,8 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
 @property (nonatomic, copy)   NSString*         successMessage;
 @property (nonatomic, copy)   NSString*         failureMessage;
 @property (nonatomic, assign) NSUInteger        maxAllowedFailure;
+@property (nonatomic, assign) NSInteger         indexOfFirstCustomStep;
+@property (nonatomic, assign) NSInteger         indexOfFirstQuizStep;
 
 //  Consent
 @property (nonatomic, strong) NSArray*          documentSections;
@@ -77,7 +82,7 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     self = [super initWithIdentifier:identifier steps:consentSteps];
     if (self)
     {
-        
+        _failedMessageTag = kFailedMessageTag;
     }
     
     return self;
@@ -98,7 +103,9 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
 
 - (NSArray*)commonInitWithPropertiesFileName:(NSString*)fileName customSteps:(NSArray*)customSteps
 {
-    _passedQuiz = YES;
+    _passedQuiz             = YES;
+    _indexOfFirstCustomStep = NSNotFound;
+    _indexOfFirstQuizStep   = NSNotFound;
     
     [self loadFromJson:fileName];
     
@@ -121,7 +128,7 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     
     ORKVisualConsentStep*   visualStep  = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual"
                                                                                   document:_consentDocument];
-    ORKConsentSharingStep*  sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:@"sharing"
+    ORKConsentSharingStep*  sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:kSharingTag
                                                                investigatorShortDescription:self.investigatorShortDescription
                                                                 investigatorLongDescription:self.investigatorLongDescription
                                                               localizedLearnMoreHTMLContent:self.sharingHtmlLearnMoreContent];
@@ -135,8 +142,11 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     NSMutableArray* consentSteps = [[NSMutableArray alloc] init];
     [consentSteps addObject:visualStep];
     [consentSteps addObject:sharingStep];
+    
+    _indexOfFirstCustomStep = consentSteps.count;
     [consentSteps addObjectsFromArray:customSteps];
     
+    _indexOfFirstQuizStep = consentSteps.count;
     for (APCConsentQuestion* q in self.questions)
     {
         [consentSteps addObject:q.instantiateRkQuestion];
@@ -240,23 +250,9 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
         
         return didPass;
     };
-    ORKStep*    nextStep = nil;
-    
-    if (step == nil)    //  First step?
+    ORKStep*(^findNextStep)() = ^()
     {
-        nextStep = self.steps.firstObject;
-        self.passedQuiz = YES;
-    }
-    else if ([step.identifier isEqualToString:kSuccessMessageTag])
-    {
-        nextStep = self.steps.lastObject;
-    }
-    else if ([step.identifier isEqualToString:kFailedMessageTag])
-    {
-        nextStep = self.steps.firstObject;
-    }
-    else
-    {
+        ORKStep*    nextStep  = nil;
         NSUInteger  stepIndex = [self.steps indexOfObjectPassingTest:compareStep];
         
         if (stepIndex != NSNotFound && stepIndex < self.steps.count - 1)  //  Ensures we find a step and don't run off the end
@@ -286,6 +282,82 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
                 }
             }
         }
+        return nextStep;
+    };
+    ORKStep*    nextStep = nil;
+    
+    if (step == nil)    //  First step?
+    {
+        nextStep = self.steps.firstObject;
+        self.passedQuiz = YES;
+    }
+    else if ([step.identifier isEqualToString:kSharingTag])
+    {
+        // Check for the sharing options answer and set the answer in the data model
+        ORKStepResult*  sharingStep = [result stepResultForStepIdentifier:kSharingTag];
+        if (sharingStep != nil)
+        {
+            NSArray *resultsOfSharingStep = [sharingStep results];
+            
+            if ([resultsOfSharingStep firstObject])
+            {
+                NSNumber*   sharingAnswer = [[[resultsOfSharingStep firstObject] choiceAnswers] firstObject];
+                
+                if (sharingAnswer != nil)
+                {
+                    APCAppDelegate* delegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+                    NSInteger       selected = -1;
+                    
+                    if ([sharingAnswer integerValue] == 0)
+                    {
+                        selected = SBBConsentShareScopeStudy;
+                    }
+                    else if ([sharingAnswer integerValue] == 1)
+                    {
+                        selected = SBBConsentShareScopeAll;
+                    }
+                    
+                    delegate.dataSubstrate.currentUser.sharedOptionSelection = [NSNumber numberWithInteger:selected];
+                }
+            }
+        }
+        nextStep = findNextStep();
+    }
+    else if ([step.identifier isEqualToString:kSuccessMessageTag])
+    {
+        nextStep = self.steps.lastObject;
+    }
+    else if ([step.identifier isEqualToString:self.failedMessageTag])
+    {
+        if (self.redirector != nil && [self.redirector conformsToProtocol:@protocol(APCConsentRedirector)])
+        {
+            APCConsentRedirection   redirection = [self.redirector redirect];
+            
+            if (redirection == APCConsentBackToConsentBeginning)
+            {
+                nextStep = self.steps.firstObject;
+            }
+            else if (redirection == APCConsentBackToCustomStepBeginning)
+            {
+                nextStep = self.steps[self.indexOfFirstCustomStep];
+            }
+            else if (redirection == APCConsentBackToQuizBeginning)
+            {
+                nextStep = self.steps[self.indexOfFirstQuizStep];
+            }
+            else if (redirection == APCConsentRedirectionNone)
+            {
+                nextStep = self.steps.lastObject;
+            }
+        }
+        else
+        {
+            nextStep = self.steps.firstObject;
+        }
+    }
+    else
+    {
+        nextStep = findNextStep();
     }
     
     

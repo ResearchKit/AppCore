@@ -25,8 +25,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDataSubstrate+ResearchKit.h>
 #import <APCAppCore/APCDataSubstrate+HealthKit.h>
 #import <APCAppCore/APCModel.h>
-#import <APCAppCore/APCScheduler.h>
-#import <APCAppCore/APCScheduleExpression.h>
 #import <APCAppCore/APCParameters.h>
 #import <APCAppCore/APCPermissionsManager.h>
 #import <APCAppCore/APCAssertionHandler.h>
@@ -42,6 +40,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCConsentBooleanQuestion.h>
 #import <APCAppCore/APCConsentInstructionQuestion.h>
 #import <APCAppCore/APCConsentTextChoiceQuestion.h>
+#import <APCAppCore/APCConsentRedirector.h>
 
 /* -------------------------------------
  Data Archiver & Passive Data Collectors
@@ -283,3 +282,18 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/UIFont+APCAppearance.h>
 #import <APCAppCore/UIColor+APCAppearance.h>
 #import <APCAppCore/APCStepProgressBar+Appearance.h>
+
+/* -------------------------
+ Schedule and ScheduleExpression components
+ ------------------------- */
+#import <APCAppCore/APCScheduler.h>
+#import <APCAppCore/APCScheduleExpression.h>
+#import <APCAppCore/APCDayOfMonthSelector.h>
+#import <APCAppCore/APCListSelector.h>
+#import <APCAppCore/APCPointSelector.h>
+#import <APCAppCore/APCScheduleEnumerator.h>
+#import <APCAppCore/APCScheduleExpressionParser.h>
+#import <APCAppCore/APCScheduleExpressionToken.h>
+#import <APCAppCore/APCScheduleExpressionTokenizer.h>
+#import <APCAppCore/APCTimeSelector.h>
+#import <APCAppCore/APCTimeSelectorEnumerator.h>

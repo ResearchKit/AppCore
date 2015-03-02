@@ -41,7 +41,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.titleLabel.text = NSLocalizedString(@"Select a 4-digit a passcode. Setting up a passcode will help provide quick and secure access to this application.", @"");
+    self.titleLabel.text = NSLocalizedString(@"Select a 4-digit passcode. Setting up a passcode will help provide quick and secure access to this application.", @"");
     
     self.passcodeView.delegate = self;
     self.retryPasscodeView.delegate = self;
@@ -129,7 +129,7 @@
     self.passcodeView.hidden = NO;
     self.retryPasscodeView.hidden = YES;
     
-    self.titleLabel.text = NSLocalizedString(@"Select a 4-digit a passcode. Setting up a passcode will help provide quick and secure access to this application.", @"");
+    self.titleLabel.text = NSLocalizedString(@"Select a 4-digit passcode. Setting up a passcode will help provide quick and secure access to this application.", @"");
     
     [self.passcodeView becomeFirstResponder];
     [self.passcodeView reset];

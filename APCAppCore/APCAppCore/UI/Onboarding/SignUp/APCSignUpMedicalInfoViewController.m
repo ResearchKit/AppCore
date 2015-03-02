@@ -211,7 +211,7 @@
                 {
                     APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
                     field.caption = NSLocalizedString(@"What time do you generally wake up?", @"");
-                    field.placeholder = @"--:--";
+                    field.placeholder = @"07:00 AM";
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
                     field.selectionStyle = UITableViewCellSelectionStyleGray;
                     field.datePickerMode = UIDatePickerModeTime;
@@ -234,7 +234,7 @@
                 {
                     APCTableViewDatePickerItem *field = [APCTableViewDatePickerItem new];
                     field.caption = NSLocalizedString(@"What time do you generally go to sleep?", @"");
-                    field.placeholder = @"--:--";
+                    field.placeholder = @"09:30 PM";
                     field.style = UITableViewCellStyleValue1;
                     field.identifier = kAPCDefaultTableViewCellIdentifier;
                     field.selectionStyle = UITableViewCellSelectionStyleGray;

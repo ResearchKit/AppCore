@@ -688,8 +688,14 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                                            
                                            if (isDecreteQuantity) {
                                                quantity = result.averageQuantity;
-                                               rangePoint.minimumValue = [result.minimumQuantity doubleValueForUnit:unit];
-                                               rangePoint.maximumValue = [result.maximumQuantity doubleValueForUnit:unit];
+                                               
+                                               if (result.minimumQuantity) {
+                                                   rangePoint.minimumValue = [result.minimumQuantity doubleValueForUnit:unit];
+                                               }
+                                               
+                                               if (result.maximumQuantity) {
+                                                   rangePoint.maximumValue = [result.maximumQuantity doubleValueForUnit:unit];
+                                               }
                                                
                                                dataPoint[kDatasetRangeValueKey] = rangePoint;
                                            } else {

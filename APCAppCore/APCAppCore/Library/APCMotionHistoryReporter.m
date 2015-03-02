@@ -112,6 +112,7 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           
                                                           NSTimeInterval totalSleepTime = 0.0;
                                                           NSTimeInterval totalStationaryTime = 0.0;
+                                                          NSTimeInterval totalLightActivityTime = 0.0;
                                                           NSTimeInterval totalWalkingTime = 0.0;
                                                           NSTimeInterval totalRunningTime = 0.0;
                                                           NSTimeInterval totalAutomotiveTime = 0.0;
@@ -136,117 +137,142 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           {
                                                               
                                                               //get anactivity based on high Confidence
-                                                              if (activity.confidence == CMMotionActivityConfidenceHigh){
+                                                              //if (activity.confidence == CMMotionActivityConfidenceHigh){
                                                                 
                                                                   
                                                                   
-                                                                  //this will skip the first activity as the lastMotionActivityType will be zero which is not in the enum
-                                                                  if(lastMotionActivityType == MotionActivityWalking)
-                                                                  {
-                                                                      //now wee need to figure out if its sleep time
-                                                                      // anything over 3 hours will be sleep time
-                                                                      NSTimeInterval activityLength = 0.0;
-                                                                      
-                                                                      activityLength = fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                      
-                                                                      if(activityLength >= 45) // 45 seconds
-                                                                      {
-                                                                          totalModerateTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                       
-                                                                      }
-                                                                      else
-                                                                      {
-                                                                          totalSedentaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                         
-                                                                      }
-                                                                      
-                                                                    
-                                                                      totalWalkingTime +=  fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                    
-                                                                  }
-                                                                  else if(lastMotionActivityType == MotionActivityRunning)
-                                                                  {
-                                                                      totalRunningTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                      
-                                                                  }
-                                                                  else if(lastMotionActivityType == MotionActivityAutomotive)
-                                                                  {
-                                                                      totalAutomotiveTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                     
-                                                                  }
-                                                                  else if(lastMotionActivityType == MotionActivityUnknown)
-                                                                  {
-                                                                      totalUnknownTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                      
-                                                                  }
-                                                                  else if(lastMotionActivityType == MotionActivityCycling)
-                                                                  {
-                                                                      totalCyclingTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                     
-                                                                  }
-                                                                  else if(lastMotionActivityType == MotionActivityStationary)
-                                                                  {
-                                                                      
-                                                                      //now wee need to figure out if its sleep time
-                                                                      // anything over 3 hours will be sleep time
-                                                                      NSTimeInterval activityLength = 0.0;
-                                                                      
-                                                                      activityLength = fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                    
-                                                                      
-                                                                      if(activityLength >= 10800) // 3 hours in seconds
-                                                                      {
-                                                                          totalSleepTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                          
-                                                                      }
-                                                                      else
-                                                                      {
-                                                                          totalStationaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                         
-                                                                      }
-                                                                      
-                                                                  }
+                                                              //this will skip the first activity as the lastMotionActivityType will be zero which is not in the enum
+                                                              if((lastMotionActivityType == MotionActivityWalking && activity.confidence == CMMotionActivityConfidenceHigh) || (lastMotionActivityType == MotionActivityWalking && activity.confidence == CMMotionActivityConfidenceMedium))
+                                                              {
+                                                                  //now we need to figure out if its sleep time
+                                                                  // anything over 3 hours will be sleep time
+                                                                  NSTimeInterval activityLength = 0.0;
                                                                   
+                                                                  activityLength = fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
                                                                   
-                                                                  if (activity.stationary){
-                                                                     
-                                                                      lastMotionActivityType = MotionActivityStationary;
-                                                                      lastActivity_started = activity.startDate;
-                                                                      
+                                                                  if(activity.confidence == CMMotionActivityConfidenceMedium || activity.confidence == CMMotionActivityConfidenceHigh) // 45 seconds
+                                                                  {
+                                                                      totalModerateTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                   
+                                                                  }
+                                                                
+                                                              }
+                                                              else if(lastMotionActivityType == MotionActivityWalking && activity.confidence == CMMotionActivityConfidenceLow)
+                                                              {
+                                                                  totalLightActivityTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                  
+                                                              }
+                                                              
+                                                              else if(lastMotionActivityType == MotionActivityRunning)
+                                                              {
+                                                                  totalRunningTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                  
+                                                              }
+                                                              else if(lastMotionActivityType == MotionActivityAutomotive)
+                                                              {
+                                                                  totalSedentaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                 
+                                                              }
+                                                              else if(lastMotionActivityType == MotionActivityUnknown)
+                                                              {
+                                                                  if (activity.stationary)
+                                                                  {
+                                                                      totalSedentaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
                                                                   }
                                                                   else if (activity.walking)
                                                                   {
-                                                                      lastMotionActivityType = MotionActivityWalking;
-                                                                      lastActivity_started = activity.startDate;
-                                                                      
+                                                                      totalLightActivityTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
                                                                   }
-                                                                  else if (activity.running){
-                                                                      
-                                                                      lastMotionActivityType = MotionActivityRunning;
-                                                                      lastActivity_started = activity.startDate;
-                                                                      
+                                                                  else if (activity.running)
+                                                                  {
+                                                                      totalRunningTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
                                                                   }
-                                                                  else if (activity.automotive){
-                                                                      
-                                                                      lastMotionActivityType = MotionActivityAutomotive;
-                                                                      lastActivity_started = activity.startDate;
-                                                                      
+                                                                  
+                                                                  else if (activity.cycling)
+                                                                  {
+                                                                      totalRunningTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
                                                                   }
-                                                                  else if (activity.cycling){
-                                                                     
-                                                                      lastMotionActivityType = MotionActivityCycling;
-                                                                      lastActivity_started = activity.startDate;
+                                                                  else if (activity.automotive)
+                                                                  {
+                                                                      totalSedentaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                  }
+                                                                  
+                                                                  totalUnknownTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                  
+                                                              }
+                                                              else if(lastMotionActivityType == MotionActivityCycling)
+                                                              {
+                                                                  totalRunningTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                 
+                                                              }
+                                                              else if(lastMotionActivityType == MotionActivityStationary)
+                                                              {
+                                                                  
+                                                                  //now we need to figure out if its sleep time
+                                                                  // anything over 3 hours will be sleep time
+                                                                  NSTimeInterval activityLength = 0.0;
+                                                                  
+                                                                  activityLength = fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                
+                                                                  
+                                                                  if(activityLength >= 10800 && activity.confidence == CMMotionActivityConfidenceHigh) // 3 hours in seconds
+                                                                  {
+                                                                      totalSleepTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
                                                                       
                                                                   }
                                                                   else
                                                                   {
-                                                                      lastMotionActivityType = MotionActivityUnknown;
-                                                                      lastActivity_started = activity.startDate;
-                                                                      
+                                                                      totalSedentaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                     
                                                                   }
                                                                   
                                                               }
                                                               
+                                                              
+                                                              if (activity.stationary){
+                                                                 
+                                                                  lastMotionActivityType = MotionActivityStationary;
+                                                                  lastActivity_started = activity.startDate;
+                                                                  
+                                                              }
+                                                              else if (activity.walking)
+                                                              {
+                                                                  lastMotionActivityType = MotionActivityWalking;
+                                                                  lastActivity_started = activity.startDate;
+                                                                  
+                                                              }
+                                                              
+                                                              else if (activity.walking && activity.confidence == CMMotionActivityConfidenceLow)
+                                                              {
+                                                                  lastMotionActivityType = MotionActivityWalking;
+                                                                  lastActivity_started = activity.startDate;
+                                                                  
+                                                              }
+                                                              
+                                                              else if (activity.running){
+                                                                  
+                                                                  lastMotionActivityType = MotionActivityRunning;
+                                                                  lastActivity_started = activity.startDate;
+                                                                  
+                                                              }
+                                                              else if (activity.automotive){
+                                                                  
+                                                                  lastMotionActivityType = MotionActivityAutomotive;
+                                                                  lastActivity_started = activity.startDate;
+                                                                  
+                                                              }
+                                                              else if (activity.cycling){
+                                                                 
+                                                                  lastMotionActivityType = MotionActivityCycling;
+                                                                  lastActivity_started = activity.startDate;
+                                                                  
+                                                              }
+                                                              else
+                                                              {
+                                                                  lastMotionActivityType = MotionActivityUnknown;
+                                                                  lastActivity_started = activity.startDate;
+                                                                  
+                                                              }
                                                               
                                                           }
                                                           
@@ -265,16 +291,28 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           motionHistoryDataWalking.timeInterval = totalWalkingTime;
                                                           [motionDayValues addObject:motionHistoryDataWalking];
                                                           
+                                                          APCMotionHistoryData * motionHistoryLightActivity = [APCMotionHistoryData new];
+                                                          motionHistoryLightActivity.activityType = ActivityTypeLight;
+                                                          motionHistoryLightActivity.timeInterval = totalWalkingTime;
+                                                          [motionDayValues addObject:motionHistoryLightActivity];
                                                           
-                                                        
+                                                          
                                                           APCMotionHistoryData * motionHistoryDataRunning = [APCMotionHistoryData new];
-                                                          motionHistoryDataRunning.activityType = ActivityTypeRunning;
-                                                          motionHistoryDataRunning.timeInterval = totalRunningTime;
+                                                          motionHistoryDataRunning.activityType = ActivityTypeLight;
+                                                          motionHistoryDataRunning.timeInterval = totalLightActivityTime;
                                                           [motionDayValues addObject:motionHistoryDataRunning];
                                                           
+                                                          APCMotionHistoryData * motionHistoryDataSedentary = [APCMotionHistoryData new];
+                                                          motionHistoryDataSedentary.activityType = ActivityTypeSedentary;
+                                                          motionHistoryDataSedentary.timeInterval = totalSedentaryTime;
+                                                          [motionDayValues addObject:motionHistoryDataSedentary];
                                                           
+                                                          APCMotionHistoryData * motionHistoryDataModerate = [APCMotionHistoryData new];
+                                                          motionHistoryDataModerate.activityType = ActivityTypeModerate;
+                                                          motionHistoryDataModerate.timeInterval = totalModerateTime;
+                                                          [motionDayValues addObject:motionHistoryDataModerate];
                                                           
-                                                         
+
                                                           APCMotionHistoryData * motionHistoryDataAutomotive = [APCMotionHistoryData new];
                                                           motionHistoryDataAutomotive.activityType = ActivityTypeAutomotive;
                                                           motionHistoryDataAutomotive.timeInterval = totalAutomotiveTime;

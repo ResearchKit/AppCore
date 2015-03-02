@@ -33,7 +33,7 @@
 /*********************************************************************************/
 #pragma mark - Stored Properties in Core Data
 /*********************************************************************************/
-
+@property (nonatomic) NSNumber *sharedOptionSelection;
 @property (nonatomic, strong) NSData *profileImage;
 
 @property (nonatomic, getter=isConsented) BOOL consented; //Confirmation that server is consented. Should be used in the app to test for user consent.

@@ -15,7 +15,11 @@ typedef NS_ENUM(NSInteger, ActivityType)
     ActivityTypeAutomotive,
     ActivityTypeCycling,
     ActivityTypeUnknown,
-    ActivityTypeSleeping
+    ActivityTypeSleeping,
+    ActivityTypeLight,
+    ActivityTypeModerate,
+    ActivityTypeSedentary
+    
 };
 
 @interface APCMotionHistoryData : NSObject
