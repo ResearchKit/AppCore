@@ -86,7 +86,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         [items addObject:section];
     }
 
-
+//The code below enables per task notifications section and rows.
     
 //    
 //    /*************/
