@@ -85,7 +85,7 @@ static NSString * const kInternalMaxParticipantsMessage = @"has reached the limi
     
     self.alertLabel.alpha = 1;
     [self.alertLabel setFont:[UIFont fontWithName:@"Helvetica Neue" size:17.0]];
-    self.alertLabel.text = @"Sage Bionetworks, a non-profit biomedical research institute, is helping to collect data for this study and distribute it to the study investigators and other researchers. Please provide a unique email address and password to create a secure account.";
+    self.alertLabel.text = NSLocalizedString(@"Sage Bionetworks, a non-profit biomedical research institute, is helping to collect data for this study and distribute it to the study investigators and other researchers. Please provide a unique email address and password to create a secure account.", @"");
     [self.alertLabel setTextColor:[UIColor blackColor]];
     [self.alertLabel setBackgroundColor:[UIColor clearColor]];
     [self.alertLabel setTextAlignment:NSTextAlignmentLeft];
