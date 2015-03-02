@@ -398,6 +398,72 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 
 
 // ---------------------------------------------------------
+#pragma mark - Disabling ("expiring") the Prescription
+// ---------------------------------------------------------
+
+- (void) expirePrescriptionAndUseThisQueue: (NSOperationQueue *) someQueue
+                          toDoThisWhenDone: (APCMedTrackerExpirePresriptionCallback) callbackBlock
+{
+    __block APCMedTrackerPrescription *blockSafePrescription = self;
+    
+    [APCMedTrackerDataStorageManager.defaultManager.queue addOperationWithBlock:^{
+        
+        NSDate *startTime = [NSDate date];
+        NSManagedObjectContext *context = APCMedTrackerDataStorageManager.defaultManager.context;
+        
+        // We can also use -performBlockAndWait:.
+        [context performBlock: ^{
+            
+            NSString *errorDomainToReturn = nil;
+            NSInteger errorCode = 0;
+            NSError *coreDataError = nil;
+
+            //
+            // All this overhead (ahem:  "noise") for the following
+            // nearly-trivial operation:
+            //
+            // Note:  there's also a -didStopUsingOnDoctorsOrders
+            // field.  I overengineered that.  Ahem.  We don't need it.
+            // We're purposely ignoring it.
+            //
+            blockSafePrescription.dateStoppedUsing = [NSDate date];
+            
+            //
+            // Save it.
+            //
+            BOOL successfullySaved = [blockSafePrescription saveToPersistentStore: & coreDataError];
+            
+            if (successfullySaved)
+            {
+                    // Nothing to do.  Yay!
+            }
+            else
+            {
+                errorDomainToReturn = @"MedTrackerDataStorageError_CantExpirePrescription";
+                errorCode = 3;
+                
+                // if the coreDataError is set, we'll use it in a moment.
+            }
+            
+            NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];
+            
+            if (someQueue != nil && callbackBlock != NULL)
+            {
+                NSError *errorToReturn = [self errorWithDomain: errorDomainToReturn
+                                                          code: errorCode
+                                               underlyingError: coreDataError];
+                
+                [someQueue addOperationWithBlock: ^{
+                    callbackBlock (operationDuration, errorToReturn);
+                }];
+            }
+        }];
+    }];
+}
+
+
+
+// ---------------------------------------------------------
 #pragma mark - Computed properties
 // ---------------------------------------------------------
 
@@ -552,12 +618,13 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
         [dayNames addObject: dayName];
     }
 
-    NSString *result = [NSString stringWithFormat: @"Prescription { medication: %@, days: (%@), timesPerDay: %@, dosage: %@, color: %@ }",
+    NSString *result = [NSString stringWithFormat: @"Prescription { medication: %@, days: (%@), timesPerDay: %@, dosage: %@, color: %@, isActive: %@ }",
                         self.self.medication.name,
                         [dayNames componentsJoinedByString: @", "],
                         self.numberOfTimesPerDay,
                         self.dosage.name,
-                        self.color.name
+                        self.color.name,
+                        self.isActive ? @"YES" : @"NO"
                         ];
 
     return result;
