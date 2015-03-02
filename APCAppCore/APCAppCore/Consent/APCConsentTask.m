@@ -291,6 +291,21 @@ static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
     
     if (nextStep != nil)
     {
+        if( [step.identifier isEqualToString:@"sharing"] && [result stepResultForStepIdentifier:@"sharing"] != nil)
+        {
+            NSArray *resultsOfSharingStep = [[result stepResultForStepIdentifier:@"sharing"] results];
+            
+            if ([resultsOfSharingStep firstObject])
+            {
+                NSNumber *number = [[[resultsOfSharingStep firstObject] choiceAnswers] firstObject];
+                
+                if (number != nil)
+                {
+                    NSLog(@"THe number");
+                }
+            }
+        }
+        
         [self.path push:nextStep];                          //  Record our path
     }
     
