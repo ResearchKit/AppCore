@@ -247,7 +247,7 @@ static NSInteger const kRegularFontSize = 17;
     
     if (daysRemain <= 0)
     {
-        remaining = @"Here is your activity and sleep assessment for the last 7 days";
+        remaining = NSLocalizedString(@"Here is your activity and sleep assessment for the last 7 days", @"");
     }
     
     return remaining;
