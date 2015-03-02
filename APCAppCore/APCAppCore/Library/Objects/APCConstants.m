@@ -47,13 +47,20 @@ NSString *const kTaskReminderStartupDefaultOnOffKey = @"TaskReminderStartupDefau
 NSString *const kTaskReminderStartupDefaultTimeKey  = @"TaskReminderStartupDefaultTimeKey";
 NSString *const kDBStatusVersionKey                 = @"DBStatusVersionKey";
 
-NSString *const kHKQuantityTypeKey                        = @"HKQuantityType";
-NSString *const kHKCategoryTypeKey                        = @"HKCategoryType";
-NSString *const kHKCharacteristicTypeKey                  = @"HKCharacteristicType";
-NSString *const kHKCorrelationTypeKey                     = @"HKCorrelationType";
+NSString *const kHKQuantityTypeKey          = @"HKQuantityType";
+NSString *const kHKCategoryTypeKey          = @"HKCategoryType";
+NSString *const kHKCharacteristicTypeKey    = @"HKCharacteristicType";
+NSString *const kHKCorrelationTypeKey       = @"HKCorrelationType";
 
-NSString *const kPasswordKey                         = @"Password";
-NSString *const kNumberOfMinutesForPasscodeKey       = @"NumberOfMinutesForPasscodeKey";
+NSString * const kPasswordKey                    = @"Password";
+NSString * const kNumberOfMinutesForPasscodeKey  = @"NumberOfMinutesForPasscodeKey";
+
+NSInteger      const kAPCSigninErrorCode_NotSignedIn                        = 404;
+NSUInteger     const kAPCSigninNumRetriesBeforePause                        = 10;
+NSTimeInterval const kAPCSigninNumSecondsBetweenRetries                     = 10;
+NSTimeInterval const kAPCSignInButtonPulseFadeInTimeInSeconds               = 1.5;
+NSTimeInterval const kAPCSignInButtonPulseFadeOutTimeInSeconds              = 1.5;
+NSTimeInterval const kAPCSignInButtonPulsePauseWhileVisibleTimeInSeconds    = 1.5;
 
 NSString *const kAnalyticsOnOffKey					 = @"AnalyticsOnOffKey";
 NSString *const kAnalyticsFlurryAPIKeyKey			 = @"AnalyticsFlurryAPIKeyKey";
@@ -95,7 +102,6 @@ NSString *const kTaskEvent              = @"TaskEvent";
 NSString *const kPageViewEvent          = @"PageViewEvent";
 NSString *const kErrorEvent             = @"ErrorEvent";
 NSString *const kPassiveCollectorEvent  = @"PassiveCollectorEvent";
-
 
 /*********************************************************************************/
 #pragma mark - Errors

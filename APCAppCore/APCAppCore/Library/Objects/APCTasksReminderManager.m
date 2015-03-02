@@ -13,7 +13,7 @@ NSString * const kTaskReminderUserInfoKey = @"TaskReminderUserInfoKey";
 static NSInteger kSecondsPerMinute = 60;
 static NSInteger kMinutesPerHour = 60;
 
-NSString * const kTaskReminderMessage = @"Please complete your asthma study activities today. Thank you for participating in %@!";
+NSString * const kTaskReminderMessage = @"Please complete your %@ study activities today. Thank you for participating in %@!";
 
 @interface APCTasksReminderManager ()
 
@@ -85,7 +85,7 @@ NSString * const kTaskReminderMessage = @"Please complete your asthma study acti
     
     localNotification.fireDate = [self calculateFireDate];
     localNotification.timeZone = [NSTimeZone localTimeZone];
-    localNotification.alertBody = [NSString stringWithFormat:kTaskReminderMessage, [self studyName]];
+    localNotification.alertBody = [NSString stringWithFormat:kTaskReminderMessage, [self studyName], [self studyName]];
     localNotification.repeatInterval = NSCalendarUnitDay;
     localNotification.soundName = UILocalNotificationDefaultSoundName;
     

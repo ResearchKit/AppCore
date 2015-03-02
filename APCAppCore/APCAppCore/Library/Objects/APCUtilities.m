@@ -8,7 +8,6 @@
 #import "APCUtilities.h"
 #import "APCDeviceHardware.h"
 
-
 /**
  These are fixed per launch of the app.  They're also
  small.  So cache them -- partly because we're still figuring
@@ -22,9 +21,15 @@ static NSString * const APP_NAME_IF_CANT_DETECT		= @"CouldNotRetrieveAppName";
 static NSString * const VERSION_IF_CANT_DETECT		= @"???";
 static NSString * const BUILD_IF_CANT_DETECT		= @"???";
 static NSString * const DEVICE_INFO_IF_CANT_DETECT	= @"CouldNotRetrieveDeviceInfo";
+static NSString *       _realApplicationName = nil;
 
 
 @implementation APCUtilities
+
++ (void) setRealApplicationName: (NSString *) realAppName
+{
+    _realApplicationName = realAppName;
+}
 
 + (NSString *) deviceDescription
 {
@@ -87,7 +92,9 @@ static NSString * const DEVICE_INFO_IF_CANT_DETECT	= @"CouldNotRetrieveDeviceInf
 		 -	4.	otherwise, try the next line
 		 */
 
-		_appName = ([self cleanString: bundleInfo [@"CFBundleDisplayName"]] ?:		// source: info.plist > Bundle Display Name
+        _appName = ([self cleanString: _realApplicationName] ?:
+                    
+                    [self cleanString: bundleInfo [@"CFBundleDisplayName"]] ?:		// source: info.plist > Bundle Display Name
 					[self cleanString: bundleInfo [@"CFBundleName"]] ?:				// source: info.plist > Bundle Name
 					[self cleanString: bundleInfo [@"CFBundleExecutable"]] ?:		// source: ?
 

@@ -10,6 +10,14 @@
 @interface APCUtilities : NSObject
 
 /**
+ When the app loads, it calls this method to tell us
+ what the REAL, human-readable name is.  If not set,
+ we'll explore various sytem variables trying to find
+ the name.
+ */
++ (void) setRealApplicationName: (NSString *) realAppName;
+
+/**
  Human-readable name of the app, on the phone's
  desktop (the Springboard).
  
