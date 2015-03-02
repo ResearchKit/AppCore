@@ -9,10 +9,15 @@
 
 #import "APCMedTrackerDataStorageManager.h"
 #import "APCMedTrackerMedication+Helper.h"
+#import "APCMedicationNameTableViewCell.h"
+
+#import "NSBundle+Helper.h"
 
 #import "APCLog.h"
 
-static  NSString  *kViewControllerName = @"Medication Name";
+static  NSString  *kViewControllerName      = @"Medication Name";
+
+static  NSString  *kMedicationNameTableCell = @"APCMedicationNameTableViewCell";
 
 @interface APCMedicationNameViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
@@ -59,15 +64,33 @@ static  NSString  *kViewControllerName = @"Medication Name";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static  NSString  *identifier = @"MedicationNameTableViewCell";
+    APCMedicationNameTableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier:kMedicationNameTableCell];
     
-    UITableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-    }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     APCMedTrackerMedication  *medication = self.medicationList[indexPath.row];
-    cell.textLabel.text = medication.name;
+    NSString  *medicationName = medication.name;
+    NSRange  range = [medicationName rangeOfString:@" ("];
+    NSString  *firstString = nil;
+    NSString  *secondString = nil;
+    if (range.location == NSNotFound) {
+        firstString = medicationName;
+        cell.topLabel.hidden    = YES;
+        cell.middleLabel.hidden = NO;
+        cell.bottomLabel.hidden = YES;
+        cell.middleLabel.text   = firstString;
+    } else {
+        firstString = [medicationName substringToIndex:range.location];
+        secondString = [medicationName substringFromIndex:(range.location + 1)];
+        cell.topLabel.hidden    = NO;
+        cell.middleLabel.hidden = YES;
+        cell.bottomLabel.hidden = NO;
+        cell.topLabel.text      = firstString;
+        cell.bottomLabel.text   = secondString;
+    }
+//    cell.topLabel.hidden = YES;
+//    cell.middleLabel.hidden = NO;
+//    cell.middleLabel.text = medication.name;
+//    cell.bottomLabel.hidden = YES;
     
     return  cell;
 }
@@ -116,6 +139,9 @@ static  NSString  *kViewControllerName = @"Medication Name";
     
     self.medicationList = [NSArray array];
     
+    UINib  *medicationNameTableCellNib = [UINib nibWithNibName:kMedicationNameTableCell bundle:[NSBundle appleCoreBundle]];
+    [self.tabulator registerNib:medicationNameTableCellNib forCellReuseIdentifier:kMedicationNameTableCell];
+    
     [APCMedTrackerMedication fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
                                                 toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
                                                                     NSTimeInterval  __unused operationDuration,
@@ -126,7 +152,24 @@ static  NSString  *kViewControllerName = @"Medication Name";
          } else {
              NSSortDescriptor *nameSorter = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
              NSArray  *descriptors = @[ nameSorter ];
-             self.medicationList = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
+             NSArray  *sorted = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
+             NSMutableArray  *copyOfSorted = [sorted mutableCopy];
+             
+             APCMedTrackerMedication  *foundMedication = nil;
+             NSUInteger  foundIndex = 0;
+             for (NSUInteger  index = 0;  index < [copyOfSorted count];  index++) {
+                 APCMedTrackerMedication  *medication = [copyOfSorted objectAtIndex:index];
+                 if ([medication.name isEqualToString:@"Other"] == YES) {
+                     foundMedication = medication;
+                     foundIndex = index;
+                     break;
+                 }
+             }
+             if (foundMedication != nil) {
+                 [copyOfSorted removeObjectAtIndex:foundIndex];
+                 [copyOfSorted addObject:foundMedication];
+             }
+             self.medicationList = copyOfSorted;
             [self.tabulator reloadData];
         }
     }];

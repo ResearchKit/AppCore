@@ -147,6 +147,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCMedicationTrackerSetupViewController.h>
 #import <APCAppCore/APCSetupTableViewCell.h>
 #import <APCAppCore/APCSetupButtonTableViewCell.h>
+#import <APCAppCore/APCMedicationNameTableViewCell.h>
 #import <APCAppCore/APCMedicationSummaryTableViewCell.h>
 
 /* -------------------------

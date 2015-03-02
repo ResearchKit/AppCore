@@ -4,27 +4,27 @@
 <array>
 	<dict>
 		<key>name</key>
-		<string>Amantadine</string>
+		<string>Amantadine (Symmetrel)</string>
 	</dict>
 	<dict>
 		<key>name</key>
-		<string>Azilect</string>
+		<string>Apomorphine (Apokyn)</string>
 	</dict>
 	<dict>
 		<key>name</key>
-		<string>Carbidopa-Levodopa</string>
+		<string>Benztropine (Cogentin)</string>
 	</dict>
 	<dict>
 		<key>name</key>
-		<string>Cogentin</string>
+		<string>Bromocriptine (Parlodel)</string>
 	</dict>
 	<dict>
 		<key>name</key>
-		<string>Dopamine</string>
+		<string>Carbidopa, levodopa, entacapone (Stalevo)</string>
 	</dict>
 	<dict>
 		<key>name</key>
-		<string>Eldepryl</string>
+		<string>Carbidopa-Levodopa (Sinemet, Sinemet CR)</string>
 	</dict>
 	<dict>
 		<key>name</key>
@@ -32,7 +32,43 @@
 	</dict>
 	<dict>
 		<key>name</key>
-		<string>Zelapar</string>
+		<string>Levodopa-Benserazide (Madopar)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Melevodopa (Sirio)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Pramipexole (Mirapex, Mirapex ER, Mirapexin,Sifrol)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Rasagiline (Azilect)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Ropinirole (Adartel, Requip, Requip XL, Ropark)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Rotigotine (Neupro)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Selegiline (l-deprenyl, Eldepryl, Zelapar)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Tolacapone (Tasmar)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Trihexyphenidyl (Apo-Trihex, Artane)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Other</string>
 	</dict>
 </array>
 </plist>

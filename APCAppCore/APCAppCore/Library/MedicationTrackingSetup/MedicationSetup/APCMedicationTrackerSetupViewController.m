@@ -52,7 +52,7 @@ static  NSInteger  kNumberOfMainTableCategories   = (sizeof(mainTableCategories)
 static  NSString  *extraTableCategories[]         = { @"Required",    @"Required",      @"Optional",     @"Optional" };
 
 
-static  NSString  *addTableCategories[]           = { @"Select Name", @"Add Frequency", @"Select Color", @"Select Dosage" };
+static  NSString  *addTableCategories[]           = { @"Select Name", @"Select Frequency", @"Select Color", @"Select Dosage" };
 
 @interface APCMedicationTrackerSetupViewController  ( )  <UITableViewDataSource, UITableViewDelegate,
                                                 APCMedicationNameViewControllerDelegate, APCMedicationFrequencyViewControllerDelegate,
