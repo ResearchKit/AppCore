@@ -307,7 +307,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
             self.daysAndDoses[dayName] = [NSNumber numberWithInteger:(valueButton.tag - kBaseButtonTagValue)];
         }
     }
-    if ((self.aValueButtonWasSelected == YES) && (self.oneOrMoreDaysWereSelected == YES)) {
+    if ((valueButton != nil) && ([self areAnyDaysSelected] == YES)) {
         if (self.delegate != nil) {
             if ([self.delegate respondsToSelector:@selector(frequencyController:didSelectFrequency:)] == YES) {
                 [self.delegate performSelector:@selector(frequencyController:didSelectFrequency:) withObject:self withObject:self.daysAndDoses];
