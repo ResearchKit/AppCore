@@ -134,9 +134,8 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
         }
         else
         {
-            [taskViewController dismissViewControllerAnimated:YES completion:^{
-                 [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
-             }];
+            [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
+            [taskViewController dismissViewControllerAnimated:YES completion:nil];
         }
     }
     else
