@@ -307,10 +307,13 @@
                 case kAPCUserInfoItemTypeHeight:
                 {
                     double height = [APCUser heightInInchesForSelectedIndices:[(APCTableViewCustomPickerItem *)item selectedRowIndices]];
-                    HKUnit *inchUnit = [HKUnit inchUnit];
-                    HKQuantity *heightQuantity = [HKQuantity quantityWithUnit:inchUnit doubleValue:height];
                     
-                    self.user.height = heightQuantity;
+                    if (height > 0) {
+                        HKUnit *inchUnit = [HKUnit inchUnit];
+                        HKQuantity *heightQuantity = [HKQuantity quantityWithUnit:inchUnit doubleValue:height];
+                        
+                        self.user.height = heightQuantity;
+                    }
                 }
                     
                     break;
@@ -318,10 +321,13 @@
                 case kAPCUserInfoItemTypeWeight:
                 {
                     double weight = [[(APCTableViewTextFieldItem *)item value] floatValue];
-                    HKUnit *poundUnit = [HKUnit poundUnit];
-                    HKQuantity *weightQuantity = [HKQuantity quantityWithUnit:poundUnit doubleValue:weight];
                     
-                    self.user.weight = weightQuantity;
+                    if (weight > 0) {
+                        HKUnit *poundUnit = [HKUnit poundUnit];
+                        HKQuantity *weightQuantity = [HKQuantity quantityWithUnit:poundUnit doubleValue:weight];
+                        
+                        self.user.weight = weightQuantity;
+                    }
                 }
                     break;
                     

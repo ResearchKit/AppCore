@@ -478,10 +478,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     NSInteger defaultIndexOfMyHeightInInches = 0;
                     NSInteger indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
                     NSInteger indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
-
-                    if (self.user.height) {
-                        
-                        double heightInInches = round([APCUser heightInInches:self.user.height]);
+                    
+                    double usersHeight = [APCUser heightInInches:self.user.height];
+                    
+                    if (usersHeight) {
+                        double heightInInches = round(usersHeight);
                         NSString *feet = [NSString stringWithFormat:@"%i'", (int)heightInInches/12];
                         NSString *inches = [NSString stringWithFormat:@"%i''", (int)heightInInches%12];
                         
@@ -518,9 +519,13 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.caption = NSLocalizedString(@"Weight", @"");
                     field.placeholder = NSLocalizedString(@"add weight (lb)", @"");
                     field.regularExpression = kAPCMedicalInfoItemWeightRegEx;
-                    if (self.user.weight) {
-                        field.value = [NSString stringWithFormat:@"%.0f", [APCUser weightInPounds:self.user.weight]];
+                    
+                    double userWeight = [APCUser weightInPounds:self.user.weight];
+                    
+                    if (userWeight) {
+                        field.value = [NSString stringWithFormat:@"%.0f", userWeight];
                     }
+                    
                     field.keyboardType = UIKeyboardTypeDecimalPad;
                     field.textAlignnment = NSTextAlignmentRight;
                     field.identifier = kAPCTextFieldTableViewCellIdentifier;
