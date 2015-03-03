@@ -73,6 +73,6 @@ static NSString *const kVideoShownKey = @"VideoShown";
 #pragma mark - Public Methods
 
 - (void) dismiss {
-    [self dismissMoviePlayerViewControllerAnimated];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end

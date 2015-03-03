@@ -362,7 +362,10 @@ static NSString *kConsentEmailSubject = @"Consent Document";
     
     NSURL *fileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:studyDetails.videoName ofType:@"mp4"]];
     APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
-    [self presentMoviePlayerViewControllerAnimated:introVideoViewController];
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:introVideoViewController];
+    navController.navigationBarHidden = YES;
+    [self presentViewController:navController animated:YES completion:nil];
 
 }
 
