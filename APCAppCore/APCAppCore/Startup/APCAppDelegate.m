@@ -207,9 +207,12 @@ static NSUInteger const kIndexOfProfileTab = 3;
 /*********************************************************************************/
 - (void) initializeBridgeServerConnection
 {
-//  According to Bridge SDK documentation, the below line should only be used for debug or staging environment.
-//    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment:(SBBEnvironment)[self.initializationOptions[kBridgeEnvironmentKey] integerValue]];
-    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey]];
+//If in DEBUG mode, automatically point to staging environment. In release mode read from intializationOptions dictionary.
+#if DEBUG
+    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment: SBBEnvironmentStaging];
+#else
+    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment:(SBBEnvironment)[self.initializationOptions[kBridgeEnvironmentKey] integerValue]];
+#endif
 }
 
 - (void) initializeAppleCoreStack
