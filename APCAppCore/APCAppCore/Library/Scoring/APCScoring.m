@@ -563,26 +563,6 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 - (void)groupDatasetbyPeriod:(APHTimelineGroups)period
 {
-    NSString *groupKey = nil;
-    
-    switch (period) {
-        case APHTimelineGroupWeek:
-        {
-            groupKey = kDatasetGroupByWeek;
-        }
-            break;
-        case APHTimelineGroupMonth:
-        {
-            groupKey = kDatasetGroupByMonth;
-        }
-            break;
-        default:
-        {
-            groupKey = kDatasetGroupByDay;
-        }
-            break;
-    }
-    
     NSDateComponents *groupDateComponents = [[NSDateComponents alloc] init];
     
     for (NSDate *groupStartDate in self.timeline) {
