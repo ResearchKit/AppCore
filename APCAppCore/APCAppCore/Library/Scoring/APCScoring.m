@@ -477,7 +477,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     // sort the results in a decsending order,
     // in case there are more than one result for a meal time.
     NSSortDescriptor *sortByCreateAtDescending = [[NSSortDescriptor alloc] initWithKey:@"createdAt"
-                                                                             ascending:YES];
+                                                                             ascending:NO];
     
     NSArray *sortedScheduleTaskresults = [scheduledTaskResults sortedArrayUsingDescriptors:@[sortByCreateAtDescending]];
     
