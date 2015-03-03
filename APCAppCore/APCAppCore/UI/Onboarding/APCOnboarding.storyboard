@@ -1933,7 +1933,7 @@
                                     <constraint firstAttribute="height" constant="30" id="uYa-ql-Yw3"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <state key="normal" title="Already Joined?">
+                                <state key="normal" title="Already Participating?">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>

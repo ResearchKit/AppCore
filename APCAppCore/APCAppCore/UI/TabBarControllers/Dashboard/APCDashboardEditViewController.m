@@ -35,7 +35,6 @@
     [self.headerLabel setFont:[UIFont appLightFontWithSize:14.0f]];
     [self.headerLabel setTextColor:[UIColor appSecondaryColor1]];
     [self.headerLabel setBackgroundColor:[UIColor clearColor]];
-    [self.view setBackgroundColor:[UIColor whiteColor]];
     [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
     self.navigationController.navigationBar.translucent = NO;
 }

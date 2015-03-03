@@ -75,7 +75,6 @@ NSInteger const kNumberOfDaysToDisplay = 7;
 -(void)setUpAppearance{
     [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
     self.navigationController.navigationBar.translucent = NO;
-    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

@@ -7,6 +7,7 @@
  
 #import "APCDashboardEditTableViewCell.h"
 #import "UIFont+APCAppearance.h"
+#import "UIColor+APCAppearance.h"
 
 NSString *const kAPCDashboardEditTableViewCellIdentifier = @"APCDashboardEditTableViewCell";
 
@@ -49,7 +50,7 @@ NSString *const kAPCDashboardEditTableViewCellIdentifier = @"APCDashboardEditTab
     // Bottom Border
     CGContextSaveGState(context);
     CGContextSetLineCap(context, kCGLineCapSquare);
-    CGContextSetStrokeColorWithColor(context, [UIColor lightGrayColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, [UIColor colorWithWhite:0.85 alpha:1.0].CGColor);
     CGContextSetLineWidth(context, borderWidth);
     CGContextMoveToPoint(context, 0, rect.size.height - bottomBorderWidth);
     CGContextAddLineToPoint(context, rect.size.width, rect.size.height - bottomBorderWidth);

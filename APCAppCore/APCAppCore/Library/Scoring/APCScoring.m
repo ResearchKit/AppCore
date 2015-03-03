@@ -941,12 +941,12 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 - (CGFloat)minimumValueForLineGraph:(APCLineGraphView *) __unused graphView
 {
     CGFloat factor = 0.2;
-    CGFloat maxDataPoint = [[self maximumDataPoint] doubleValue];
-    CGFloat minDataPoint = [[self minimumDataPoint] doubleValue];
+    CGFloat maxDataPoint = (self.customMaximumPoint == CGFLOAT_MAX) ? [[self maximumDataPoint] doubleValue] : self.customMaximumPoint;
+    CGFloat minDataPoint = (self.customMinimumPoint == CGFLOAT_MIN) ? [[self minimumDataPoint] doubleValue] : self.customMinimumPoint;
     
     CGFloat minValue = (minDataPoint - factor*maxDataPoint)/(1-factor);
     
-    return (self.customMinimumPoint == CGFLOAT_MIN) ? minValue: self.customMinimumPoint;
+    return minValue;
 }
 
 - (CGFloat)maximumValueForLineGraph:(APCLineGraphView *) __unused graphView
@@ -1028,12 +1028,12 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 - (CGFloat)minimumValueForDiscreteGraph:(APCDiscreteGraphView *) __unused graphView
 {
     CGFloat factor = 0.2;
-    CGFloat maxDataPoint = [[self maximumDataPoint] doubleValue];
-    CGFloat minDataPoint = [[self minimumDataPoint] doubleValue];
+    CGFloat maxDataPoint = (self.customMaximumPoint == CGFLOAT_MAX) ? [[self maximumDataPoint] doubleValue] : self.customMaximumPoint;
+    CGFloat minDataPoint = (self.customMinimumPoint == CGFLOAT_MIN) ? [[self minimumDataPoint] doubleValue] : self.customMinimumPoint;
     
     CGFloat minValue = (minDataPoint - factor*maxDataPoint)/(1-factor);
     
-    return (self.customMinimumPoint == CGFLOAT_MIN) ? minValue: self.customMinimumPoint;
+    return minValue;
 }
 
 - (CGFloat)maximumValueForDiscreteGraph:(APCDiscreteGraphView *) __unused graphView
