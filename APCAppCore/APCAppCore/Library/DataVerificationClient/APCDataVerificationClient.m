@@ -8,11 +8,13 @@
 
 /*
  Only allow this file to exist in the compiled code if
- we're diagnosting stuff, in-house.  For documentation,
+ we're diagnosing stuff, in-house.  For documentation,
  see:
  
  https://ymedialabs.atlassian.net/wiki/display/APPLE/How+to+see+the+data+we+send+to+Sage
  */
+
+
 // ---------------------------------------------------------
 #ifdef USE_DATA_VERIFICATION_CLIENT
 // ---------------------------------------------------------
@@ -122,9 +124,21 @@ static NSString * const DATA_VERIFICATION_SERVER_API_UPLOAD_COMMAND = @"upload";
 + (void) uploadDataFromFileAtPath: (NSString *) path
 {
 	NSData *data = [NSData dataWithContentsOfFile: path];
-	NSString *filename = path.lastPathComponent;
 
-	[self uploadData: data withFilenameForMimeType: filename];
+    if (path.length == 0)
+    {
+        NSLog (@"WARNING:  Whoops! Asked to upload data to verification server, but I can't get to the path [%@].", path);
+    }
+    else if (data == nil)
+    {
+        NSLog (@"WARNING:  Whoops! Asked to upload data to verification server, but I can't import the stuff at [%@] into an NSData object.", path);
+    }
+    else
+    {
+        NSString *filename = path.lastPathComponent;
+
+        [self uploadData: data withFilenameForMimeType: filename];
+    }
 }
 
 + (void) uploadData: (NSData *) dataToLog withFilenameForMimeType: (NSString *) filename
