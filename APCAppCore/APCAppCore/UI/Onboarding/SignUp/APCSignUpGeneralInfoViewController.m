@@ -13,7 +13,7 @@ static NSString *kInternetNotAvailableErrorMessage1 = @"Internet Not Connected";
 static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reachable";
 static NSString * const kInternalMaxParticipantsMessage = @"has reached the limit of allowed participants.";
 
-static CGFloat const KRegularFontSize = 17.0;
+static CGFloat kHeaderHeight = 157.0f;
 
 @interface APCSignUpGeneralInfoViewController () <APCTermsAndConditionsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, APCFormTextFieldDelegate>
 
@@ -24,6 +24,7 @@ static CGFloat const KRegularFontSize = 17.0;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *nextBarButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *alertLabelBottomConstraint;
 @property (weak, nonatomic) IBOutlet UILabel *alertLabel;
+@property (weak, nonatomic) IBOutlet UILabel *footerLabel;
 
 @property (nonatomic, strong) UIImage *profileImage;
 
@@ -72,6 +73,22 @@ static CGFloat const KRegularFontSize = 17.0;
     [self.emailTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    UIEdgeInsets inset = self.tableView.contentInset;
+    self.tableView.contentInset = inset;
+    
+    if (self.headerView && (CGRectGetHeight(self.headerView.frame) != kHeaderHeight)) {
+        CGRect headerRect = self.headerView.frame;
+        headerRect.size.height = kHeaderHeight;
+        self.headerView.frame = headerRect;
+        
+        self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+    }
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -85,12 +102,9 @@ static CGFloat const KRegularFontSize = 17.0;
 {
     [super setupAppearance];
     
-    self.alertLabel.alpha = 1;
-    [self.alertLabel setFont:[UIFont fontWithName:@"Helvetica Neue" size:KRegularFontSize]];
-    self.alertLabel.text = NSLocalizedString(@"Sage Bionetworks, a non-profit biomedical research institute, is helping to collect data for this study and distribute it to the study investigators and other researchers. Please provide a unique email address and password to create a secure account.", @"");
-    [self.alertLabel setTextColor:[UIColor blackColor]];
-    [self.alertLabel setBackgroundColor:[UIColor clearColor]];
-    [self.alertLabel setTextAlignment:NSTextAlignmentLeft];
+    self.footerLabel.font = [UIFont appRegularFontWithSize:16.0f];
+    self.footerLabel.text = NSLocalizedString(@"Sage Bionetworks, a non-profit biomedical research institute, is helping to collect data for this study and distribute it to the study investigators and other researchers. Please provide a unique email address and password to create a secure account.", @"");
+    self.footerLabel.textColor = [UIColor appSecondaryColor2];
     
 }
 
