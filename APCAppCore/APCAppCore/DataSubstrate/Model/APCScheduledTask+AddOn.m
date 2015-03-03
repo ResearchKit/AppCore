@@ -39,6 +39,26 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
     APCLogError2 (saveError);
 }
 
+- (BOOL)removeScheduledTask:(NSError **)taskError
+{
+    BOOL deleteSuccess = NO;
+    
+    [self clearCurrentReminderIfNecessary];
+    
+    [self.managedObjectContext deleteObject:self];
+    
+    NSError *coreDataError = nil;
+    deleteSuccess = [self saveToPersistentStore:&coreDataError];
+    
+    if (!deleteSuccess) {
+        APCLogError2(coreDataError);
+    }
+    
+    *taskError = coreDataError;
+    
+    return deleteSuccess;
+}
+
 - (NSString *)completeByDateString
 {
     return [self.endOn friendlyDescription];

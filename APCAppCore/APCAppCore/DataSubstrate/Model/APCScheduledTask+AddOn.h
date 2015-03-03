@@ -13,6 +13,8 @@
 
 - (void) completeScheduledTask;
 - (void) deleteScheduledTask;
+- (BOOL)removeScheduledTask:(NSError **)taskError;
+
 @property (nonatomic, readonly) APCResult* lastResult;
 
 @property (nonatomic, readonly) NSString * completeByDateString;
