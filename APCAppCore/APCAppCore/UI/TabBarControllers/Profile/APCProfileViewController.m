@@ -1529,7 +1529,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 
                 NSURL *fileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Intro" ofType:@"mp4"]];
                 APCIntroVideoViewController *introVideoViewController = [[APCIntroVideoViewController alloc] initWithContentURL:fileURL];
-                [weakSelf.navigationController presentViewController:introVideoViewController animated:YES completion:nil];
+                
+                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:introVideoViewController];
+                navController.navigationBarHidden = YES;
+                [weakSelf presentViewController:navController animated:YES completion:nil];
             }];
             [alertController addAction:videoAction];
         }
