@@ -15,13 +15,20 @@
 #import "NSError+APCAdditions.h"
 #import "APCAppCore.h"
 
+
+/**
+ This string appears in a certain text field in the Storyboard.
+ We'll replace it with the name of the actual app.  This lets us
+ lay out the text in Interface Builder, but still have
+ programmatic control over part of it.
+ */
+static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
+
+
 @interface APCEmailVerifyViewController ()
 @property (nonatomic, readonly) APCUser * user;
 @property (nonatomic, assign) NSUInteger signInCounter;
 @property (nonatomic, strong) NSTimer *timer;
-@property (weak, nonatomic) IBOutlet UIButton *tapToRetryAgainButton;
-@property (nonatomic, assign) BOOL pleaseStopPulsingTheButton;
-@property (weak, nonatomic) IBOutlet UIView *retryButtonContainer;
 
 /** Makes sure we don't queue a server request for 
  every time the user presses the button. */
@@ -60,11 +67,6 @@
  -  Those timing and counter values are all constants,
     named "kAPCSignIn...", defined in APCConstants.h.
  
- -  The button is floating inside a container.  The container
-    handles the user tap, not the button.  The button
-    spends most of its life fading in and out, and the
-    user can't tap on it while it's animating.
- 
  -  The tap process has a "gate."  Once the user taps, we
     we prevent taps until the next server response has
     come back.  This is to prevent a bunch of network hits,
@@ -97,7 +99,6 @@
 
     self.timer = nil;
     self.signInCounter = 0;
-    self.pleaseStopPulsingTheButton = NO;
     self.serverCheckIsInProgress = NO;
 
     [self setupAppearance];
@@ -106,7 +107,7 @@
     self.emailLabel.text = self.user.email;
 
     NSString *appName = [APCUtilities appName];
-    self.topMessageLabel.text = [NSString stringWithFormat:@"An email has been sent by %@ to", appName];
+    self.topMessageLabel.text = [self.topMessageLabel.text stringByReplacingOccurrencesOfString: kAPCAppNamePlaceholderString withString: appName];
 }
 
 - (void) viewWillAppear: (BOOL) animated
@@ -115,7 +116,6 @@
 
     // Check the server.  This will check once, and then
     // start a timer to check again in a few seconds.
-    [self startPulsingTapToContinueButton];
     [self resetSignInCounter];
     [self checkSignInOnce];
 }
@@ -130,8 +130,6 @@
 
 - (void) viewWillDisappear:(BOOL)animated
 {
-    [self stopPulsingTapToContinueButton];
-
     // This is crucial:  without this, we'll get a memory leak
     // (a retain loop).
     [self stopTimer];
@@ -301,58 +299,7 @@
 #pragma mark - The "Tap to Continue" button
 // ---------------------------------------------------------
 
-- (void) startPulsingTapToContinueButton
-{
-    self.pleaseStopPulsingTheButton = NO;
-    self.tapToRetryAgainButton.alpha = 0;
-    self.tapToRetryAgainButton.hidden = NO;
-
-    [self showTapToContinueButton];
-}
-
-- (void) stopPulsingTapToContinueButton
-{
-    // As soon as the next fade-in or fade-out completes, it'll stop.
-    self.pleaseStopPulsingTheButton = YES;
-}
-
-- (void) showTapToContinueButton
-{
-    if (! self.pleaseStopPulsingTheButton)
-    {
-        [UIView animateWithDuration: kAPCSignInButtonPulseFadeInTimeInSeconds
-                         animations: ^{
-
-            self.tapToRetryAgainButton.alpha = 1;
-
-        } completion: ^(BOOL __unused finished) {
-
-            [self hideTapToContinueButton];
-
-        }];
-    }
-}
-
-- (void) hideTapToContinueButton
-{
-    if (! self.pleaseStopPulsingTheButton)
-    {
-        [UIView animateWithDuration: kAPCSignInButtonPulseFadeOutTimeInSeconds
-                              delay: kAPCSignInButtonPulsePauseWhileVisibleTimeInSeconds
-                            options: 0
-                         animations:^{
-
-            self.tapToRetryAgainButton.alpha = 0;
-
-        } completion: ^(BOOL __unused finished) {
-
-            [self showTapToContinueButton];
-
-        }];
-    }
-}
-
-- (IBAction) tapToContinueGestureWasInvoked: (UIGestureRecognizer *) __unused tapGesture
+- (IBAction) tapToContinueButtonWasIndeedTapped: (id) __unused sender
 {
     /*
      When a server check starts, we'll set this flag, and un-set

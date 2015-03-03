@@ -118,6 +118,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
         NSDate *currentTime = [NSDate date];
         [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
 }
@@ -127,6 +128,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     if (self.dataSubstrate.currentUser.signedIn && !self.isPasscodeShowing) {
         NSDate *currentTime = [NSDate date];
         [[NSUserDefaults standardUserDefaults] setObject:currentTime forKey:kLastUsedTimeKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
     self.dataSubstrate.currentUser.sessionToken = nil;
     
@@ -135,7 +137,9 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 - (void)applicationWillEnterForeground:(UIApplication *) __unused application
 {
+    [[NSUserDefaults standardUserDefaults]synchronize];
     [self hideSecureView];
+    [self showPasscodeIfNecessary];
 }
 
 - (void)                    application: (UIApplication *) __unused application
@@ -771,7 +775,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
             NSTimeInterval timeDifference = [lastUsedTime timeIntervalSinceNow];
             NSInteger numberOfMinutes = [self.dataSubstrate.parameters integerForKey:kNumberOfMinutesForPasscodeKey];
             
-            if (fabs(timeDifference) > numberOfMinutes * 60) {
+            if (timeDifference * -1 > numberOfMinutes * 60) {
 
                 [self showPasscode];
             }
