@@ -249,9 +249,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         });
         
         if (self.pickerShowing) {
-            NSLog(@"hide picker before reload");
-            [self hidePickerCell];
-            
+            [self hidePickerCell];            
         }
     }
     self.items = [self prepareContent];
