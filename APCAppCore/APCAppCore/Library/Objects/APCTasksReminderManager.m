@@ -13,7 +13,7 @@ NSString * const kTaskReminderUserInfoKey = @"TaskReminderUserInfoKey";
 static NSInteger kSecondsPerMinute = 60;
 static NSInteger kMinutesPerHour = 60;
 
-NSString * const kTaskReminderMessage = @"Please complete your %@ activities today. Thank you for participating in the %@! study!";
+NSString * const kTaskReminderMessage = @"Please complete your %@ activities today. Thank you for participating in the %@ study!";
 
 @interface APCTasksReminderManager ()
 
