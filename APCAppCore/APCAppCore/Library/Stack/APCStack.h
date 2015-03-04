@@ -12,5 +12,6 @@
 - (NSUInteger)count;
 - (void)push:(id)element;
 - (id)pop;
-
+- (id)peek
+;
 @end
