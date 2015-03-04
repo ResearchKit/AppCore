@@ -44,7 +44,7 @@
                                         <rect key="frame" x="8" y="8" width="304" height="29"/>
                                         <segments>
                                             <segment title="Yesterday"/>
-                                            <segment title="Today"/>
+                                            <segment title="Last 24 Hours"/>
                                             <segment title="Week"/>
                                         </segments>
                                         <connections>
