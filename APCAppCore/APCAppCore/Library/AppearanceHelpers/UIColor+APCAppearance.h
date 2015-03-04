@@ -27,6 +27,8 @@
 + (UIColor *) appTertiaryYellowColor;
 + (UIColor *) appTertiaryGrayColor;
 
++ (UIColor *) appBorderLineColor;
+
 + (UIColor *)tertiaryColorForString:(NSString *)colorName;
 
 + (UIColor *)colorForTaskId:(NSString *)taskId;

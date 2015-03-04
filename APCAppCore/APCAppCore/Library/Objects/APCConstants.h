@@ -107,6 +107,8 @@ FOUNDATION_EXPORT NSString *const kTertiaryYellowColorKey;
 FOUNDATION_EXPORT NSString *const kTertiaryPurpleColorKey;
 FOUNDATION_EXPORT NSString *const kTertiaryGrayColorKey;
 
+FOUNDATION_EXPORT NSString *const kBorderLineColor;
+
 FOUNDATION_EXPORT NSString *const kTasksReminderDefaultsOnOffKey;
 FOUNDATION_EXPORT NSString *const kTasksReminderDefaultsTimeKey;
 

@@ -103,6 +103,11 @@
     return color;
 }
 
++ (UIColor *)appBorderLineColor
+{
+    return [APCAppearanceInfo valueForAppearanceKey:kBorderLineColor];
+}
+
 + (UIColor *)colorForTaskId:(NSString *)taskId
 {
     return [APCAppearanceInfo valueForAppearanceKey:taskId];

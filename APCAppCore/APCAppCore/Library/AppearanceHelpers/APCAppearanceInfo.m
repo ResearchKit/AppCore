@@ -43,7 +43,8 @@ static NSDictionary * localAppearanceDictionary;
              kTertiaryRedColorKey : [UIColor colorWithRed:0.919 green:0.226 blue:0.342 alpha:1.000],
              kTertiaryYellowColorKey : [UIColor colorWithRed:0.994 green:0.709 blue:0.278 alpha:1.000],
              kTertiaryPurpleColorKey : [UIColor colorWithRed:0.574 green:0.252 blue:0.829 alpha:1.000],
-             kTertiaryGrayColorKey : [UIColor colorWithRed:157/255.0f green:157/255.0f blue:157/255.0f alpha:1.000]
+             kTertiaryGrayColorKey : [UIColor colorWithRed:157/255.0f green:157/255.0f blue:157/255.0f alpha:1.000],
+             kBorderLineColor: [UIColor colorWithWhite:0.749 alpha:1.000]
              };
 }
 
