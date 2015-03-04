@@ -18,6 +18,8 @@
 
 @interface APCMedicationColorViewController : UIViewController
 
-@property  (nonatomic, weak)  id  <APCMedicationColorViewControllerDelegate>  delegate;
+@property  (nonatomic, strong)  APCMedTrackerPrescriptionColor  *oneColorDescriptor;
+
+@property  (nonatomic, weak)    id  <APCMedicationColorViewControllerDelegate>  delegate;
 
 @end
