@@ -242,18 +242,26 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     BOOL allReminders = indexPath.section == 0 && indexPath.row == 0;
     if (allReminders) {
-        APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-        appDelegate.tasksReminder.reminderOn = on;
+        
+        dispatch_sync(dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0), ^{
+            APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+            appDelegate.tasksReminder.reminderOn = on;
+        });
+        
+        if (self.pickerShowing) {
+            NSLog(@"hide picker before reload");
+            [self hidePickerCell];
+            
+        }
     }
-    
     self.items = [self prepareContent];
-    
+    [self.tableView reloadData];
+
     if (allReminders) {
         [self.tableView reloadData];
     } else {
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
-
 }
 
 #pragma mark - Getter
