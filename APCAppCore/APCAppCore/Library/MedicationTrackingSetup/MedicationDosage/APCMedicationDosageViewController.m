@@ -12,7 +12,10 @@
 
 #import "APCLog.h"
 
-static  NSString  *kViewControllerName = @"Medication Dosages";
+static  NSString  *kViewControllerName       = @"Medication Dosages";
+
+static  CGFloat    kSectionHeaderHeight      = 42.0;
+static  CGFloat    kSectionHeaderLabelOffset = 10.0;
 
 @interface APCMedicationDosageViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
@@ -26,16 +29,11 @@ static  NSString  *kViewControllerName = @"Medication Dosages";
 
 @implementation APCMedicationDosageViewController
 
-#pragma  mark  -  Toolbar Button Action Methods
-
-- (IBAction)cancelButtonTapped:(UIBarButtonItem *) __unused sender
-{
-    [self dismissViewControllerAnimated:YES completion:NULL];
-}
+#pragma  mark  -  Navigation Bar Button Action Methods
 
 - (IBAction)doneButtonTapped:(UIBarButtonItem *) __unused sender
 {
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma  mark  -  Table View Data Source Methods
@@ -51,12 +49,6 @@ static  NSString  *kViewControllerName = @"Medication Dosages";
     return  numberOfRows;
 }
 
-- (NSString *)tableView:(UITableView *) __unused tableView titleForHeaderInSection:(NSInteger) __unused section
-{
-    NSString  *title = NSLocalizedString(@"Select Your Medication's Single Dose Amount", nil);
-    return  title;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static  NSString  *identifier = @"DosageTableViewCell";
@@ -70,6 +62,11 @@ static  NSString  *kViewControllerName = @"Medication Dosages";
     NSString  *amountText = dosage.name;
     cell.textLabel.text = amountText;
     
+    if (self.selectedIndex != nil) {
+        if ([self.selectedIndex isEqual:indexPath] == YES) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+    }
     return  cell;
 }
 
@@ -110,10 +107,56 @@ static  NSString  *kViewControllerName = @"Medication Dosages";
         dosage = [self findDosageWithZeroAmount];
     } else {
         dosage = self.dosageAmounts[indexPath.row];
-        if (self.delegate != nil) {
-            if ([self.delegate respondsToSelector:@selector(dosageController:didSelectDosageAmount:)] == YES) {
-                [self.delegate performSelector:@selector(dosageController:didSelectDosageAmount:) withObject:self withObject:dosage];
-            }
+    }
+    if (self.delegate != nil) {
+        if ([self.delegate respondsToSelector:@selector(dosageController:didSelectDosageAmount:)] == YES) {
+            [self.delegate performSelector:@selector(dosageController:didSelectDosageAmount:) withObject:self withObject:dosage];
+        }
+    }
+}
+
+- (CGFloat)tableView:(UITableView *) __unused tableView heightForHeaderInSection:(NSInteger)section
+{
+    CGFloat  answer = 0;
+    
+    if (section == 0) {
+        answer = kSectionHeaderHeight;
+    }
+    return  answer;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView  *view = nil;
+    
+    if (section == 0) {
+        CGFloat  width  = CGRectGetWidth(tableView.frame);
+        CGFloat  height = [self tableView:tableView heightForHeaderInSection:section];
+        CGRect   frame  = CGRectMake(0.0, 0.0, width, height);
+        view = [[UIView alloc] initWithFrame:frame];
+        view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+        
+        frame.origin.x = kSectionHeaderLabelOffset;
+        frame.size.width = frame.size.width - 2.0 * kSectionHeaderLabelOffset;
+        UILabel  *label = [[UILabel alloc] initWithFrame:frame];
+        label.numberOfLines = 2;
+        label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+        label.textColor = [UIColor blackColor];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.text = NSLocalizedString(@"Select Your Medication's Single Dose Amount", nil);
+        [view addSubview:label];
+    }
+    return  view;
+}
+
+- (void)setupIndexPathForDosageDescriptor:(APCMedTrackerPossibleDosage *)record
+{
+    for (NSUInteger  index = 0;  index < [self.dosageAmounts count];  index++) {
+        APCMedTrackerPossibleDosage  *dosage = self.dosageAmounts[index];
+        if ([dosage.name isEqualToString:record.name] == YES) {
+            NSIndexPath  *path = [NSIndexPath indexPathForRow:index inSection:0];
+            self.selectedIndex = path;
+            break;
         }
     }
 }
@@ -131,6 +174,9 @@ static  NSString  *kViewControllerName = @"Medication Dosages";
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
+    self.navigationItem.rightBarButtonItem = donester;
+    
     self.dosageAmounts = [NSArray array];
     
     [APCMedTrackerPossibleDosage fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
@@ -144,6 +190,9 @@ static  NSString  *kViewControllerName = @"Medication Dosages";
              NSSortDescriptor *amountSorter = [[NSSortDescriptor alloc] initWithKey:@"amount" ascending:YES];
              NSArray  *descriptors = @[ amountSorter ];
              self.dosageAmounts = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
+             if (self.dosageRecord != nil) {
+                 [self setupIndexPathForDosageDescriptor:self.dosageRecord];
+             }
              [self.tabulator reloadData];
          }
      }];

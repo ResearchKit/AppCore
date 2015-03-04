@@ -18,6 +18,8 @@
 
 @interface APCMedicationDosageViewController : UIViewController
 
+@property  (nonatomic, strong)    APCMedTrackerPossibleDosage                 *dosageRecord;
+
 @property  (nonatomic, weak)  id  <APCMedicationDosageViewControllerDelegate>  delegate;
 
 @end

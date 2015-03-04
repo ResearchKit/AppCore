@@ -9,7 +9,7 @@
 
 @interface APCMedicationSummaryTableViewCell : UITableViewCell
 
-@property (nonatomic, weak)  IBOutlet  UIView  *colorswatch;
+@property (nonatomic, weak)  IBOutlet  UIView   *colorswatch;
 @property (nonatomic, weak)  IBOutlet  UILabel  *medicationName;
 @property (nonatomic, weak)  IBOutlet  UILabel  *medicationDosage;
 @property (nonatomic, weak)  IBOutlet  UILabel  *medicationUseDays;
