@@ -34,10 +34,6 @@ static  NSInteger  kDailyDosesTakenSection       = 0;
 static  CGFloat    kHeightForDosesTakenHeader    = 36.0;
 static  CGFloat    kPointSizeForDosesTakenHeader = 15.0;
 
-static  NSString  *mainTableCategories[] = { @"Medication", @"Frequency", @"Label Color", @"Dosage" };
-
-static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
-
 @interface APCMedicationTrackerDetailViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, weak)  IBOutlet  UIBarButtonItem  *todayMedicineTitle;
@@ -98,6 +94,7 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
             totalNumberOfDosesTaken = totalNumberOfDosesTaken + 1;
         }
     }
+    self.lozenge.dailyDosageRecord.numberOfDosesTakenForThisDate = [NSNumber numberWithUnsignedInteger:totalNumberOfDosesTaken];
     NSDate  *dateOfLozenge = self.lozenge.currentDate;
     [self.lozenge.prescription recordThisManyDoses: totalNumberOfDosesTaken
                                        takenOnDate: dateOfLozenge
@@ -116,19 +113,26 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
                                                                   NSTimeInterval  __unused operationDuration,
                                                                   NSError *error)
               {
-                  APCMedTrackerDailyDosageRecord  *record = nil;
-                  
                   if (error != nil) {
                       APCLogError2(error);
-                  } else if (dailyDosageRecords.count == 0) {
-                      self.lozenge.numberOfDosesTaken = [NSNumber numberWithUnsignedInteger:0];
                   } else {
-                      record = [dailyDosageRecords firstObject];
-                      self.lozenge.numberOfDosesTaken = record.numberOfDosesTakenForThisDate;
+                      APCMedTrackerDailyDosageRecord  *record = nil;
+                      
+                      for (APCMedTrackerDailyDosageRecord  *thisRecord  in  dailyDosageRecords) {
+                          if ([thisRecord.dateThisRecordRepresents.startOfDay isEqualToDate: dateOfLozenge.startOfDay]) {
+                              record = thisRecord;
+                              break;
+                          }
+                      }
+                      if (record != nil) {
+                          self.lozenge.dailyDosageRecord = record;
+                          [self.lozenge setNeedsDisplay];
+                      } else {
+                          self.lozenge.dailyDosageRecord = nil;
+                      }
                   }
               }];
          }
-         
      }];
 }
 
@@ -211,7 +215,11 @@ static  NSString  *daysOfWeekNames[]     = { @"Monday", @"Tuesday", @"Wednesday"
     
     [self.doneButton addTarget:self action:@selector(doneButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
     
-    self.numberOfTickMarksToSet = [self.lozenge.numberOfDosesTaken unsignedIntegerValue];
+    NSUInteger  numberOfTickMarks = 0;
+    if (self.lozenge.dailyDosageRecord != nil) {
+        numberOfTickMarks = [self.lozenge.dailyDosageRecord.numberOfDosesTakenForThisDate unsignedIntegerValue];
+    }
+    self.numberOfTickMarksToSet = numberOfTickMarks;
     
     NSDateFormatter  *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterFullStyle;
