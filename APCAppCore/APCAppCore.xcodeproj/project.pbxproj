@@ -44,6 +44,8 @@
 		0833AE1E1A76C016001D8AA0 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		0871A3931A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0871A3911A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0871A3941A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0871A3921A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m */; };
+		087468061AA691A400BE2572 /* APCThankYouViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 087468041AA691A400BE2572 /* APCThankYouViewController.h */; };
+		087468071AA691A400BE2572 /* APCThankYouViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 087468051AA691A400BE2572 /* APCThankYouViewController.m */; };
 		0875C3D81A797A7B00CE50FB /* APCButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 0875C3D61A797A7B00CE50FB /* APCButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0875C3D91A797A7B00CE50FB /* APCButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0875C3D71A797A7B00CE50FB /* APCButton.m */; };
 		089465451A8C179700A983AC /* APCDashboardInsightsTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0894653F1A8C179700A983AC /* APCDashboardInsightsTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -716,6 +718,8 @@
 		081A47791A93EC4700E13148 /* APCBadgeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCBadgeLabel.m; sourceTree = "<group>"; };
 		0871A3911A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardFoodInsightTableViewCell.h; sourceTree = "<group>"; };
 		0871A3921A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDashboardFoodInsightTableViewCell.m; sourceTree = "<group>"; };
+		087468041AA691A400BE2572 /* APCThankYouViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCThankYouViewController.h; sourceTree = "<group>"; };
+		087468051AA691A400BE2572 /* APCThankYouViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCThankYouViewController.m; sourceTree = "<group>"; };
 		0875C3D61A797A7B00CE50FB /* APCButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCButton.h; sourceTree = "<group>"; };
 		0875C3D71A797A7B00CE50FB /* APCButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCButton.m; sourceTree = "<group>"; };
 		0894653F1A8C179700A983AC /* APCDashboardInsightsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardInsightsTableViewCell.h; sourceTree = "<group>"; };
@@ -2512,6 +2516,8 @@
 				F5F129731A2F78490015982C /* APCSignUpProgressing.h */,
 				F5F129741A2F78490015982C /* APCTermsAndConditionsViewController.h */,
 				F5F129751A2F78490015982C /* APCTermsAndConditionsViewController.m */,
+				087468041AA691A400BE2572 /* APCThankYouViewController.h */,
+				087468051AA691A400BE2572 /* APCThankYouViewController.m */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -2895,6 +2901,7 @@
 				F5B947C71A73272C0034C522 /* NSObject+Helper.h in Headers */,
 				747307101A96E1DE0071D863 /* APCCMS.h in Headers */,
 				7423AB5B1AA3FFD8004A325A /* APCConsentRedirector.h in Headers */,
+				087468061AA691A400BE2572 /* APCThankYouViewController.h in Headers */,
 				081A477A1A93EC4700E13148 /* APCBadgeLabel.h in Headers */,
 				F5F12A891A2F78490015982C /* APCTableViewItem.h in Headers */,
 				F5F12AC31A2F78490015982C /* APCLearnMasterViewController.h in Headers */,
@@ -3376,6 +3383,7 @@
 				0894654E1A8C1F0200A983AC /* APCInsightBarView.m in Sources */,
 				5B9B36A81A95D9C900389F42 /* APCActivitiesBasicTableViewCell.m in Sources */,
 				F5F12A991A2F78490015982C /* APCChangeEmailViewController.m in Sources */,
+				087468071AA691A400BE2572 /* APCThankYouViewController.m in Sources */,
 				F5F12AA71A2F78490015982C /* APCEligibleViewController.m in Sources */,
 				F5C7871D1A7ACADA005F31FC /* APCPassiveDataCollector.m in Sources */,
 				F5F129F31A2F78490015982C /* APCModel.xcdatamodeld in Sources */,
