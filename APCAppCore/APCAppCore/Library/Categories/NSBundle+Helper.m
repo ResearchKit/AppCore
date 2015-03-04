@@ -2,7 +2,7 @@
 //  NSBundle+Helper.m 
 //  APCAppCore
 //
-//  Copyright © 2015 Apple, Inc. All rights reserved.
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 #import "NSBundle+Helper.h"
 static NSString *const kAPCAppCoreBundleID = @"com.ymedialabs.APCAppCore";

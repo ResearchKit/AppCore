@@ -2,7 +2,7 @@
 //  APCSchedule+Bridge.m 
 //  APCAppCore
 //
-//  Copyright © 2015 Apple, Inc. All rights reserved.
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
  
 #import "APCSchedule+Bridge.h"
