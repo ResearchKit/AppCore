@@ -21,7 +21,6 @@
 #import "APCUser+UserData.h"
 #import "APCPermissionsManager.h"
 #import "APCSharingOptionsViewController.h"
-#import "APCParameters+Settings.h"
 
 static CGFloat const kSectionHeaderHeight = 40.f;
 static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
@@ -33,9 +32,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 @interface APCProfileViewController () <ORKTaskViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
-
-@property (nonatomic, strong) APCParameters *parameters;
-
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyDetailsViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyLabelCenterYConstraint;
@@ -670,15 +666,15 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.caption = NSLocalizedString(@"Auto-Lock", @"");
             field.detailDiscloserStyle = YES;
             field.textAlignnment = NSTextAlignmentRight;
-            field.pickerData = @[[APCParameters autoLockOptionStrings]];
+            field.pickerData = @[[APCProfileViewController autoLockOptionStrings]];
             field.editable = YES;
             field.selectionStyle = UITableViewCellSelectionStyleGray;
             
-            NSNumber *numberOfMinutes = [self.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
+            NSNumber *numberOfMinutes = [[NSUserDefaults standardUserDefaults] objectForKey:kNumberOfMinutesForPasscodeKey];
             
             if ( numberOfMinutes != nil)
             {
-                NSInteger index = [[APCParameters autoLockValues] indexOfObject:numberOfMinutes];
+                NSInteger index = [[APCProfileViewController autoLockValues] indexOfObject:numberOfMinutes];
                 field.selectedRowIndices = @[@(index)];
             }
 
@@ -1109,14 +1105,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
     [super pickerTableViewCell:cell pickerViewDidSelectIndices:selectedIndices];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    if (indexPath.section == 0 && indexPath.row == 1) {
+    //auto lock
+    if (indexPath.section == 2 && indexPath.row == 1) {
         NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
-        [self.parameters setNumber:[APCParameters autoLockValues][index] forKey:kNumberOfMinutesForPasscodeKey];
-    }
-    else if (indexPath.section == 1 && indexPath.row == 2) {
-        APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-        NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
-        appDelegate.tasksReminder.reminderTime = [APCTasksReminderManager reminderTimesArray][index];
+        [[NSUserDefaults standardUserDefaults] setObject:[APCProfileViewController autoLockValues][index] forKey:kNumberOfMinutesForPasscodeKey];
     }
 }
 
@@ -1206,6 +1198,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                 case kAPCUserInfoItemTypeHeight:
                 {
+                    double height = [[(APCTableViewCustomPickerItem *)item stringValue] floatValue];
+                    HKUnit *footUnit = [HKUnit footUnit];
+                    HKQuantity *heightQuantity = [HKQuantity quantityWithUnit:footUnit doubleValue:height];
+                    
+                    self.user.height = heightQuantity;
                 }
                     
                     break;
@@ -1253,6 +1250,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     break;
                     
                 case kAPCSettingsItemTypePrivacyPolicy:
+                    
+                    break;
+                    
+                case kAPCSettingsItemTypeSharingOptions:
                     
                     break;
                 default:
@@ -1625,6 +1626,27 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     delegateConsentVC.delegate = self;
     
     [self presentViewController:consentVC animated:YES completion:nil];
+}
+
+#pragma mark Auto-Lock helper methods
+
++ (NSArray *)autoLockValues
+{
+    return @[@5, @10, @15, @30, @45];
+}
+
++ (NSArray *)autoLockOptionStrings
+{
+    NSArray *values = [APCProfileViewController autoLockValues];
+    
+    NSMutableArray *options = [NSMutableArray new];
+    
+    for (NSNumber *val in values) {
+        NSString *optionString = [NSString stringWithFormat:@"%ld %@", (long)val.integerValue, NSLocalizedString(@"minutes", nil)];
+        [options addObject:optionString];
+    }
+    
+    return [NSArray arrayWithArray:options];
 }
 
 @end
