@@ -19,8 +19,10 @@ static  NSString  *kViewControllerName       = @"Medication Name";
 
 static  NSString  *kMedicationNameTableCell  = @"APCMedicationNameTableViewCell";
 
-static  CGFloat    kSectionHeaderHeight      = 42.0;
+static  CGFloat    kSectionHeaderHeight      = 77.0;
 static  CGFloat    kSectionHeaderLabelOffset = 10.0;
+
+static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
 @interface APCMedicationNameViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
@@ -165,6 +167,11 @@ static  CGFloat    kSectionHeaderLabelOffset = 10.0;
             break;
         }
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *) __unused indexPath
+{
+    return  kAPCMedicationRowHeight;
 }
 
 #pragma  mark  -  View Controller Methods

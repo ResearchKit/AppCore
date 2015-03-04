@@ -19,8 +19,10 @@ static  NSString  *kViewControllerName       = @"Medication Colors";
 
 static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
 
-static  CGFloat    kSectionHeaderHeight      = 42.0;
+static  CGFloat    kSectionHeaderHeight      = 77.0;
 static  CGFloat    kSectionHeaderLabelOffset = 10.0;
+
+static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
 @interface APCMedicationColorViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
@@ -111,6 +113,11 @@ static  CGFloat    kSectionHeaderLabelOffset = 10.0;
         answer = kSectionHeaderHeight;
     }
     return  answer;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *) __unused indexPath
+{
+    return  kAPCMedicationRowHeight;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

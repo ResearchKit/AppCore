@@ -138,6 +138,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCMedicationTrackerSetupViewController.h>
 #import <APCAppCore/APCMedicationDosageViewController.h>
 #import <APCAppCore/APCFrequencyDayTableViewCell.h>
+#import <APCAppCore/APCFrequencyEverydayTableViewCell.h>
 #import <APCAppCore/APCFrequencyTableViewTimesCell.h>
 #import <APCAppCore/APCMedicationFrequencyViewController.h>
 #import <APCAppCore/APCColorSwatchTableViewCell.h>

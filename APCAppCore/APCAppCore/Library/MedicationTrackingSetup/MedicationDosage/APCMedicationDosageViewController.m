@@ -14,8 +14,10 @@
 
 static  NSString  *kViewControllerName       = @"Medication Dosages";
 
-static  CGFloat    kSectionHeaderHeight      = 42.0;
+static  CGFloat    kSectionHeaderHeight      = 77.0;
 static  CGFloat    kSectionHeaderLabelOffset = 10.0;
+
+static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
 @interface APCMedicationDosageViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
@@ -113,6 +115,11 @@ static  CGFloat    kSectionHeaderLabelOffset = 10.0;
             [self.delegate performSelector:@selector(dosageController:didSelectDosageAmount:) withObject:self withObject:dosage];
         }
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *) __unused indexPath
+{
+    return  kAPCMedicationRowHeight;
 }
 
 - (CGFloat)tableView:(UITableView *) __unused tableView heightForHeaderInSection:(NSInteger)section

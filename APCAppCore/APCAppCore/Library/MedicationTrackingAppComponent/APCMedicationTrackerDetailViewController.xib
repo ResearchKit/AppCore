@@ -6,7 +6,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="APCMedicationTrackerDetailViewController">
             <connections>
-                <outlet property="doneButton" destination="Q1t-Fv-8hG" id="yFu-ld-8hA"/>
                 <outlet property="tabulator" destination="PhK-o3-X8y" id="6dn-Re-ePa"/>
                 <outlet property="todayMedicineTitle" destination="8y4-fO-9vG" id="i9r-Xc-TRi"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -26,7 +25,7 @@
                     </items>
                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </toolbar>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="PhK-o3-X8y">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="PhK-o3-X8y">
                     <rect key="frame" x="0.0" y="44" width="600" height="370"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
@@ -34,16 +33,6 @@
                         <outlet property="delegate" destination="-1" id="Maa-kh-lrO"/>
                     </connections>
                 </tableView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q1t-Fv-8hG" userLabel="Done Button" customClass="APCButton">
-                    <rect key="frame" x="227" y="436" width="146" height="44"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="44" id="kgb-XX-RLz"/>
-                        <constraint firstAttribute="width" constant="146" id="xsS-LY-KAL"/>
-                    </constraints>
-                    <state key="normal" title="Done">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
@@ -51,11 +40,8 @@
                 <constraint firstAttribute="trailing" secondItem="P1N-iS-h9g" secondAttribute="trailing" id="Bsy-YQ-hz5"/>
                 <constraint firstItem="P1N-iS-h9g" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="DTB-Hy-zto"/>
                 <constraint firstItem="P1N-iS-h9g" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="aC5-2h-SMm"/>
-                <constraint firstItem="Q1t-Fv-8hG" firstAttribute="top" secondItem="PhK-o3-X8y" secondAttribute="bottom" constant="22" id="axX-BC-ubd"/>
-                <constraint firstAttribute="centerX" secondItem="Q1t-Fv-8hG" secondAttribute="centerX" id="gCK-Ed-HhN"/>
                 <constraint firstAttribute="trailing" secondItem="PhK-o3-X8y" secondAttribute="trailing" id="gpT-KZ-7Qu"/>
                 <constraint firstItem="PhK-o3-X8y" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="tdv-7Y-mxD"/>
-                <constraint firstAttribute="bottom" secondItem="Q1t-Fv-8hG" secondAttribute="bottom" constant="120" id="zqL-mJ-QzO"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
         </view>
