@@ -212,7 +212,6 @@ typedef NS_ENUM(NSUInteger, SevenDayFitnessQueryType)
     
     if(theMotionData.count > 0)
     {
-        int sleepArrayCounter = 0;
         
         for (NSArray *dayArray in theMotionData)
         {
@@ -221,7 +220,7 @@ typedef NS_ENUM(NSUInteger, SevenDayFitnessQueryType)
             NSUInteger sedentaryCounter   = 0;
             NSUInteger moderateCounter    = 0;
             NSUInteger vigorousCounter    = 0;
-            NSUInteger sleepCounter = 0;
+            NSUInteger sleepCounter       = 0;
 
             
             for(APCMotionHistoryData * theData in dayArray) {
@@ -261,7 +260,6 @@ typedef NS_ENUM(NSUInteger, SevenDayFitnessQueryType)
                                            self.segmentVigorous: @(vigorousCounter),
                                            self.segmentSleep: @(sleepCounter)
                                            };
-            sleepArrayCounter++;
             
             [self.wakeDataset addObject:activityData];
           
@@ -274,7 +272,6 @@ typedef NS_ENUM(NSUInteger, SevenDayFitnessQueryType)
         }
     }
     
-    //Not sure if this is needed
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:APHSevenDayAllocationSleepDataIsReadyNotification object:nil];
     });

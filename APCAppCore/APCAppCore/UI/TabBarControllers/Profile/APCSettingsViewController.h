@@ -11,8 +11,6 @@
 
 @interface APCSettingsViewController : APCUserInfoViewController
 
-@property (weak, nonatomic) IBOutlet UILabel *versionLabel;
-
 @property (nonatomic, strong) APCParameters *parameters;
 
 @end
