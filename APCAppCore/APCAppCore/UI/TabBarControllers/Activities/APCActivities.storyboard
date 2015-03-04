@@ -40,13 +40,6 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="voa-2B-67Q">
-                                            <rect key="frame" x="0.0" y="0.0" width="4" height="65"/>
-                                            <color key="backgroundColor" red="0.93725490199999995" green="0.2666666667" blue="0.3803921569" alpha="1" colorSpace="calibratedRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="4" id="vcQ-sN-aES"/>
-                                            </constraints>
-                                        </view>
                                         <view tag="100" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pfD-qB-vcP" customClass="APCConfirmationView">
                                             <rect key="frame" x="16" y="22" width="21" height="21"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -85,31 +78,18 @@
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pDu-FS-vGo" userLabel="Bottom line">
-                                            <rect key="frame" x="0.0" y="64" width="320" height="1"/>
-                                            <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="1" id="qdE-9b-SAx"/>
-                                            </constraints>
-                                        </view>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="voa-2B-67Q" firstAttribute="leading" secondItem="AaU-zH-a4G" secondAttribute="leadingMargin" constant="-8" id="89J-Ux-AEv"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="66n-Qe-jiA" secondAttribute="bottom" id="8QC-Ey-j1I"/>
                                         <constraint firstItem="66n-Qe-jiA" firstAttribute="leading" secondItem="O5H-qy-8ZK" secondAttribute="leading" id="BAe-Ba-rWe"/>
                                         <constraint firstItem="O5H-qy-8ZK" firstAttribute="leading" secondItem="pfD-qB-vcP" secondAttribute="trailing" constant="12" id="EKC-bW-INZ"/>
                                         <constraint firstAttribute="centerY" secondItem="MKz-GI-eCU" secondAttribute="centerY" id="FO2-1a-CZs"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="O5H-qy-8ZK" secondAttribute="trailing" constant="56" id="J6c-67-fOq"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="voa-2B-67Q" secondAttribute="bottom" constant="-8" id="LG7-og-N1V"/>
                                         <constraint firstAttribute="centerY" secondItem="pfD-qB-vcP" secondAttribute="centerY" id="Nyk-mf-32o"/>
                                         <constraint firstAttribute="centerY" secondItem="O5H-qy-8ZK" secondAttribute="centerY" constant="10" id="dag-S4-Apu"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="pDu-FS-vGo" secondAttribute="trailing" constant="-8" id="drG-u3-Bfc"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="pDu-FS-vGo" secondAttribute="bottom" constant="-8" id="ds7-nH-8Ah"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="66n-Qe-jiA" secondAttribute="trailing" constant="56" id="i0d-a2-Ju9"/>
                                         <constraint firstItem="66n-Qe-jiA" firstAttribute="top" secondItem="O5H-qy-8ZK" secondAttribute="bottom" constant="2" id="nOy-MM-ZDY"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="MKz-GI-eCU" secondAttribute="trailing" constant="7" id="rxJ-Bp-Shz"/>
-                                        <constraint firstItem="pDu-FS-vGo" firstAttribute="leading" secondItem="AaU-zH-a4G" secondAttribute="leadingMargin" constant="-8" id="sAS-9y-rEp"/>
-                                        <constraint firstItem="voa-2B-67Q" firstAttribute="top" secondItem="AaU-zH-a4G" secondAttribute="topMargin" constant="-8" id="wKb-7C-vTz"/>
                                         <constraint firstItem="pfD-qB-vcP" firstAttribute="leading" secondItem="AaU-zH-a4G" secondAttribute="leadingMargin" constant="8" id="wPf-R5-Haz"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -117,7 +97,6 @@
                                     <outlet property="confirmationView" destination="pfD-qB-vcP" id="1ke-a3-jzk"/>
                                     <outlet property="countLabel" destination="MKz-GI-eCU" id="zda-oa-KA0"/>
                                     <outlet property="subTitleLabel" destination="66n-Qe-jiA" id="Q7n-QQ-1zz"/>
-                                    <outlet property="tintView" destination="voa-2B-67Q" id="xJY-yh-zno"/>
                                     <outlet property="titleLabel" destination="O5H-qy-8ZK" id="1Kd-Yf-jJz"/>
                                     <outlet property="titleLabelCenterYConstraint" destination="dag-S4-Apu" id="2z3-a7-j1x"/>
                                 </connections>
