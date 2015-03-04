@@ -474,6 +474,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 - (NSArray *)offsetForTaskSchedules
 {
+    //TODO: Number of days should be zero based. If I want something to show up on day 2 then the offset is 1
     return nil;
 }
 
