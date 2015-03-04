@@ -1,9 +1,9 @@
 // 
 //  APCModel.h 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright © 2015 Apple, Inc. All rights reserved.
+//
  
 #ifndef APCAppCore_APCModel_h
 #define APCAppCore_APCModel_h

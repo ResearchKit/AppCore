@@ -1,9 +1,9 @@
 // 
 //  APCDashboardMessageTableViewCell.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright © 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCDashboardMessageTableViewCell.h"
 #import "UIColor+APCAppearance.h"

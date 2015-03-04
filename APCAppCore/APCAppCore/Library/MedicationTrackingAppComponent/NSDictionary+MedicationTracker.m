@@ -2,7 +2,7 @@
 //  NSDictionary+MedicationTracker.m
 //  APCAppCore
 //
-//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//  Copyright © 2015 Apple, Inc. All rights reserved.
 //
 
 #import "NSDictionary+MedicationTracker.h"

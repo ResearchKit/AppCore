@@ -1,8 +1,8 @@
 //
 //  APCDiscreteGraphView.m
-//  AppCore
+//  APCAppCore
 //
-//  Copyright (c) 2014 Apple Inc. All rights reserved.
+//  Copyright © 2015 Apple, Inc. All rights reserved.
 //
 
 #import "APCDiscreteGraphView.h"
@@ -1006,13 +1006,13 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 - (BOOL)isEmpty
 {
-    BOOL empty = NO;
+    _empty = NO;
     
     if (self.minimumValue == NSNotFound && self.maximumValue == NSNotFound) {
-        empty = YES;
+        _empty = YES;
     }
     
-    return empty;
+    return _empty;
 }
 
 - (BOOL)isRangeZero

@@ -1,9 +1,9 @@
 // 
 //  APCInEligibleViewController.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright © 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCInEligibleViewController.h"
 #import "UIColor+APCAppearance.h"

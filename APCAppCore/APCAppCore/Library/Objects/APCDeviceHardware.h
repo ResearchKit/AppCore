@@ -1,8 +1,8 @@
 //
 //  APCDeviceHardware.h
-//  AppCore
+//  APCAppCore
 //
-//  Copyright (c) 2014 Apple Inc. All rights reserved.
+//  Copyright © 2015 Apple, Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
