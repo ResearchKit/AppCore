@@ -21,6 +21,7 @@
 #pragma  mark  -  Instance Initialisation
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask
 {
+    [[UIView appearance] setTintColor:[UIColor appPrimaryColor]];
     id<ORKTask> task = [self createTask: scheduledTask];
     NSUUID * taskRunUUID = [NSUUID UUID];
     APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
