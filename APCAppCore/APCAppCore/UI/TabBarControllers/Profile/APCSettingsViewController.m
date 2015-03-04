@@ -213,11 +213,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
     [super pickerTableViewCell:cell pickerViewDidSelectIndices:selectedIndices];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    if (indexPath.section == 0 && indexPath.row == 1) {
-        NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
-        [self.parameters setNumber:[APCParameters autoLockValues][index] forKey:kNumberOfMinutesForPasscodeKey];
-    }
-    else if (indexPath.section == 1 && indexPath.row == 2) {
+    if (indexPath.section == 0 && indexPath.row == 2) {
         APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
         NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
         appDelegate.tasksReminder.reminderTime = [APCTasksReminderManager reminderTimesArray][index];

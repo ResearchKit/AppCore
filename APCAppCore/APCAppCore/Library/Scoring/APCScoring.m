@@ -112,6 +112,18 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
  *
  */
 
+- (instancetype)initWithTask:(NSString *)taskId numberOfDays:(NSInteger)numberOfDays valueKey:(NSString *)valueKey latestOnly:(BOOL)latestOnly
+{
+    self = [self initWithTask:taskId
+                 numberOfDays:numberOfDays
+                     valueKey:valueKey
+                      dataKey:nil
+                      sortKey:nil
+                   latestOnly:latestOnly
+                      groupBy:APHTimelineGroupDay];
+    return self;
+}
+
 - (instancetype)initWithTask:(NSString *)taskId numberOfDays:(NSInteger)numberOfDays valueKey:(NSString *)valueKey
 {
     self = [self initWithTask:taskId numberOfDays:numberOfDays valueKey:valueKey dataKey:nil sortKey:nil groupBy:APHTimelineGroupDay];
@@ -137,6 +149,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                      valueKey:valueKey
                       dataKey:dataKey
                       sortKey:sortKey
+                   latestOnly:YES
                    groupBy:APHTimelineGroupDay];
     
     return self;
@@ -147,7 +160,25 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                     valueKey:(NSString *)valueKey
                      dataKey:(NSString *)dataKey
                      sortKey:(NSString *)sortKey
-                  groupBy:(APHTimelineGroups)groupBy
+                     groupBy:(APHTimelineGroups)groupBy
+{
+    self = [self initWithTask:taskId
+                 numberOfDays:numberOfDays
+                     valueKey:valueKey
+                      dataKey:dataKey
+                      sortKey:sortKey
+                   latestOnly:YES
+                      groupBy:groupBy];
+    return self;
+}
+
+- (instancetype)initWithTask:(NSString *)taskId
+                numberOfDays:(NSInteger)numberOfDays
+                    valueKey:(NSString *)valueKey
+                     dataKey:(NSString *)dataKey
+                     sortKey:(NSString *)sortKey
+                  latestOnly:(BOOL)latestOnly
+                     groupBy:(APHTimelineGroups)groupBy
 {
     self = [super init];
     
@@ -162,7 +193,14 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
         _dataKey = dataKey;
         _sortKey = sortKey;
         
-        [self queryTaskId:taskId forDays:days valueKey:valueKey dataKey:dataKey sortKey:sortKey groupBy:groupBy completion:nil];
+        [self queryTaskId:taskId
+                  forDays:days
+                 valueKey:valueKey
+                  dataKey:dataKey
+                  sortKey:sortKey
+               latestOnly:latestOnly
+                  groupBy:groupBy
+               completion:nil];
     }
     
     return self;
@@ -244,6 +282,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                  valueKey:self.valueKey
                   dataKey:self.dataKey
                   sortKey:self.sortKey
+               latestOnly:YES
                   groupBy:groupBy
                completion:completion];
     }
@@ -364,8 +403,9 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
            valueKey:(NSString *)valueKey
             dataKey:(NSString *)dataKey
             sortKey:(NSString *)sortKey
-         groupBy:(APHTimelineGroups)groupBy
-      completion:(void (^)(void))completion
+         latestOnly:(BOOL)latestOnly
+            groupBy:(APHTimelineGroups)groupBy
+         completion:(void (^)(void))completion
 {
     APCAppDelegate *appDelegate = (APCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -401,50 +441,52 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     
     for (APCScheduledTask *task in tasks) {
         if ([task.completed boolValue]) {
-            NSDictionary *taskResult = [self retrieveResultSummaryFromResults:task.results];
+            NSArray *taskResults = [self retrieveResultSummaryFromResults:task.results latestOnly:latestOnly];
             
-            if (taskResult) {
-                NSDate *pointDate = [[NSCalendar currentCalendar] dateBySettingHour:0
-                                                                             minute:0
-                                                                             second:0
-                                                                             ofDate:task.startOn
-                                                                            options:0];
-                
-                id taskResultValue = [taskResult valueForKey:valueKey];
-                NSNumber *taskValue = nil;
-                
-                if ([taskResultValue isKindOfClass:[NSNull class]] || !taskResultValue) {
-                    taskValue = @(NSNotFound);
-                } else {
-                    taskValue = (NSNumber *)taskResultValue;
-                }
-                
-                NSMutableDictionary *dataPoint = nil;
-                
-                if (groupBy == APHTimelineGroupForInsights) {
-                    dataPoint = [[self generateDataPointForDate:pointDate
-                                                      withValue:taskValue
-                                                    noDataValue:YES] mutableCopy];
-                    dataPoint[@"raw"] = taskResult;
-                } else {
-                    if (!dataKey) {
+            for (NSDictionary *taskResult in taskResults) {
+                if (taskResult) {
+                    NSDate *pointDate = [[NSCalendar currentCalendar] dateBySettingHour:0
+                                                                                 minute:0
+                                                                                 second:0
+                                                                                 ofDate:task.startOn
+                                                                                options:0];
+                    
+                    id taskResultValue = [taskResult valueForKey:valueKey];
+                    NSNumber *taskValue = nil;
+                    
+                    if ([taskResultValue isKindOfClass:[NSNull class]] || !taskResultValue) {
+                        taskValue = @(NSNotFound);
+                    } else {
+                        taskValue = (NSNumber *)taskResultValue;
+                    }
+                    
+                    NSMutableDictionary *dataPoint = nil;
+                    
+                    if (groupBy == APHTimelineGroupForInsights) {
                         dataPoint = [[self generateDataPointForDate:pointDate
                                                           withValue:taskValue
                                                         noDataValue:YES] mutableCopy];
-                        dataPoint[kDatasetSortKey] = (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null];
-                        
+                        dataPoint[@"raw"] = taskResult;
                     } else {
-                        NSDictionary *nestedData = [taskResult valueForKey:dataKey];
-                        
-                        if (nestedData) {
+                        if (!dataKey) {
                             dataPoint = [[self generateDataPointForDate:pointDate
                                                               withValue:taskValue
                                                             noDataValue:YES] mutableCopy];
                             dataPoint[kDatasetSortKey] = (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null];
+                            
+                        } else {
+                            NSDictionary *nestedData = [taskResult valueForKey:dataKey];
+                            
+                            if (nestedData) {
+                                dataPoint = [[self generateDataPointForDate:pointDate
+                                                                  withValue:taskValue
+                                                                noDataValue:YES] mutableCopy];
+                                dataPoint[kDatasetSortKey] = (sortKey) ? [taskResult valueForKey:sortKey] : [NSNull null];
+                            }
                         }
                     }
+                    [self.dataPoints addObject:dataPoint];
                 }
-                [self.dataPoints addObject:dataPoint];
             }
         }
     }
@@ -469,9 +511,8 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     }
 }
 
-- (NSDictionary *)retrieveResultSummaryFromResults:(NSSet *)results
+- (NSArray *)retrieveResultSummaryFromResults:(NSSet *)results latestOnly:(BOOL)latestOnly
 {
-    NSDictionary *result = nil;
     NSArray *scheduledTaskResults = [results allObjects];
     
     // sort the results in a decsending order,
@@ -484,24 +525,28 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     // We are iterating throught the results because:
     // a.) There could be more than one result
     // b.) In case the last result is nil, we will pick the next result that has a value.
-    NSString *resultSummary = nil;
+    NSMutableArray *allResultSummaries = [NSMutableArray new];
     
     for (APCResult *result in sortedScheduleTaskresults) {
-        resultSummary = [result resultSummary];
+        NSString *resultSummary = [result resultSummary];
+        
         if (resultSummary) {
-            break;
+            
+            NSData *resultData = [resultSummary dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *error = nil;
+            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resultData
+                                                                   options:NSJSONReadingAllowFragments
+                                                                     error:&error];
+            
+            [allResultSummaries addObject:result];
+            
+            if (latestOnly) {
+                break;
+            }
         }
     }
     
-    if (resultSummary) {
-        NSData *resultData = [resultSummary dataUsingEncoding:NSUTF8StringEncoding];
-        NSError *error = nil;
-        result = [NSJSONSerialization JSONObjectWithData:resultData
-                                                 options:NSJSONReadingAllowFragments
-                                                   error:&error];
-    }
-    
-    return result;
+    return allResultSummaries;
 }
 
 - (void)groupDatasetByDay
