@@ -152,8 +152,8 @@
 	 server.  (The code above here uploads it to Sage.)
 	 We're #if-ing it to make sure this code isn't
 	 accessible to Bad Guys in production.  Even if
-	 the code called, if it's in RAM at all, it can
-	 be exploited.
+	 the code isn't called, if it's in RAM at all,
+     it can be exploited.
 	 */
 	#ifdef USE_DATA_VERIFICATION_CLIENT
 

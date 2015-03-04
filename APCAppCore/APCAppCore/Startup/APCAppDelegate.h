@@ -26,8 +26,8 @@
 @property (strong, nonatomic) APCScheduler * scheduler;
 @property (strong, nonatomic) APCTasksReminderManager * tasksReminder;
 @property (strong, nonatomic) APCPassiveDataCollector * passiveDataCollector;
-
 @property (strong, nonatomic) APCProfileViewController * profileViewController;
+@property (nonatomic) BOOL disableSignatureInConsent;
 
 //Initialization Methods
 @property (nonatomic, strong) NSDictionary * initializationOptions;
