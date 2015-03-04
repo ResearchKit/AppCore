@@ -29,8 +29,10 @@
     
     self.appName.text = [APCUtilities appName];
     
-    self.imageViewA.image = [UIImage imageNamed:@"tab_activities_selected"];
-    self.imageViewB.image = [UIImage imageNamed:@"tab_dashboard_selected"];
+    self.imageViewA.image = [[UIImage imageNamed:@"tab_activities_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.imageViewA.tintColor = [UIColor appPrimaryColor];
+    self.imageViewB.image = [[UIImage imageNamed:@"tab_dashboard_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.imageViewB.tintColor = [UIColor appPrimaryColor];
 }
 
 - (void)didReceiveMemoryWarning {
