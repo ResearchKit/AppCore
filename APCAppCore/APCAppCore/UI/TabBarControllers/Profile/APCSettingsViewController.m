@@ -26,10 +26,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self setupNavAppearance];
     
-    NSString *build = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-    NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-    self.versionLabel.text = [NSString stringWithFormat:@"Version: %@ (Build %@)", version, build];
-    
     self.editing = YES;
     
     self.items = [self prepareContent];
