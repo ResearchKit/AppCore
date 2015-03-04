@@ -183,6 +183,8 @@
 		5BD6EBC51A9D905100C3BFB0 /* APCPermissionPrimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6EBC31A9D905100C3BFB0 /* APCPermissionPrimingViewController.m */; };
 		5BE106F01A9EE2D900CA5A07 /* APCDashboardGraphTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BE106EE1A9EE2D900CA5A07 /* APCDashboardGraphTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BE106F11A9EE2D900CA5A07 /* APCDashboardGraphTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BE106EF1A9EE2D900CA5A07 /* APCDashboardGraphTableViewCell.m */; };
+		5BFEB41D1AA72CCD0089DEF7 /* APCSharingOptionsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BFEB41B1AA72CCD0089DEF7 /* APCSharingOptionsViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5BFEB41E1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BFEB41C1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m */; };
 		6C7346081A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C7346061A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C7346091A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */; };
 		6CACF2C21A9D510A000C504B /* APCInhalerUsageTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CACF2C01A9D510A000C504B /* APCInhalerUsageTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -840,6 +842,8 @@
 		5BD6EBC31A9D905100C3BFB0 /* APCPermissionPrimingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPermissionPrimingViewController.m; sourceTree = "<group>"; };
 		5BE106EE1A9EE2D900CA5A07 /* APCDashboardGraphTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardGraphTableViewCell.h; sourceTree = "<group>"; };
 		5BE106EF1A9EE2D900CA5A07 /* APCDashboardGraphTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDashboardGraphTableViewCell.m; sourceTree = "<group>"; };
+		5BFEB41B1AA72CCD0089DEF7 /* APCSharingOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSharingOptionsViewController.h; sourceTree = "<group>"; };
+		5BFEB41C1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSharingOptionsViewController.m; sourceTree = "<group>"; };
 		6C7346061A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConsentTaskViewController.h; sourceTree = "<group>"; };
 		6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCConsentTaskViewController.m; sourceTree = "<group>"; };
 		6CACF2C01A9D510A000C504B /* APCInhalerUsageTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCInhalerUsageTracker.h; sourceTree = "<group>"; };
@@ -2590,6 +2594,8 @@
 				F5F129931A2F78490015982C /* APCWithdrawSurveyViewController.m */,
 				5B234E121A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h */,
 				5B234E131A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m */,
+				5BFEB41B1AA72CCD0089DEF7 /* APCSharingOptionsViewController.h */,
+				5BFEB41C1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -2820,6 +2826,7 @@
 				CFFDED6E1A95731F00B25581 /* APCMedicationTrackerCalendarDailyView.h in Headers */,
 				7BF54F971AA158E50081C935 /* APCHorizontalBottomThinLineView.h in Headers */,
 				7B8C20131AA3AB8600BFEFDA /* APCTheme.h in Headers */,
+				5BFEB41D1AA72CCD0089DEF7 /* APCSharingOptionsViewController.h in Headers */,
 				F5F12AF61A2F78490015982C /* APCStepViewController.h in Headers */,
 				5B234E141A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h in Headers */,
 				F5F12AFB1A2F78490015982C /* APCInstructionStepViewController.h in Headers */,
@@ -3270,6 +3277,7 @@
 				F5F129FF1A2F78490015982C /* APCSchedule.m in Sources */,
 				F5F12A6D1A2F78490015982C /* APCAppDelegate.m in Sources */,
 				F5B9462E1A7309A20034C522 /* ZZDataChannel.m in Sources */,
+				5BFEB41E1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m in Sources */,
 				5B9B36AC1A95DC1700389F42 /* APCActivitiesTableViewCell.m in Sources */,
 				F53C04801A9B8C7D00BBEC03 /* APCTabBarViewController.m in Sources */,
 				369E28051A96B7A200D35DFA /* APCMedTrackerInflatableItem+Helper.m in Sources */,

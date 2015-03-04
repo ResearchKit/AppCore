@@ -20,7 +20,7 @@
 #import "APCSettingsViewController.h"
 #import "APCUser+UserData.h"
 #import "APCPermissionsManager.h"
-
+#import "APCSharingOptionsViewController.h"
 #import "APCParameters+Settings.h"
 
 static CGFloat const kSectionHeaderHeight = 40.f;
@@ -43,6 +43,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 @property (weak, nonatomic) IBOutlet UILabel *applicationNameLabel;
 
+@property (weak, nonatomic) IBOutlet UILabel *participationLabel;
 
 @end
 
@@ -95,6 +96,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     self.permissionManager = [[APCPermissionsManager alloc] init];
     
     [self setupDataFromJSONFile:@"StudyOverview"];
+    
+    if (self.user.sharedOptionSelection && self.user.sharedOptionSelection.integerValue == 0) {
+        self.participationLabel.text = NSLocalizedString(@"Your data is no longer being used for this study.", @"");
+        self.leaveStudyButton.hidden = YES;
+    }
 }
 
 
@@ -694,6 +700,20 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
+        if (!self.user.sharedOptionSelection || self.user.sharedOptionSelection.integerValue != 0) {
+            APCTableViewItem *field = [APCTableViewItem new];
+            field.caption = NSLocalizedString(@"Sharing Options", @"");
+            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.textAlignnment = NSTextAlignmentLeft;
+            field.editable = NO;
+            field.selectionStyle = UITableViewCellSelectionStyleGray;
+            
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = field;
+            row.itemType = kAPCSettingsItemTypeSharingOptions;
+            [rowItems addObject:row];
+        }
+        
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
         [items addObject:section];
@@ -979,9 +999,16 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 }
             }
                 break;
-            case kAPCSettingsItemTypeTermsAndConditions:
+            case kAPCSettingsItemTypeSharingOptions:
             {
-                
+                if (!self.isEditing){
+                    APCSharingOptionsViewController *sharingOptionsViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCSharingOptionsViewController"];
+                    
+                    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:sharingOptionsViewController];
+                    [self.navigationController presentViewController:navController animated:YES completion:nil];
+                } else {
+                    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                }
             }
                 break;
                 
@@ -1284,7 +1311,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     [self presentViewController:spinnerController animated:YES completion:nil];
     
     typeof(self) __weak weakSelf = self;
-    
+    self.user.sharedOptionSelection = [NSNumber numberWithInteger:SBBConsentShareScopeNone];
     [self.user withdrawStudyOnCompletion:^(NSError *error) {
         if (error) {
             APCLogError2 (error);

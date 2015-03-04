@@ -314,6 +314,41 @@
     }
 }
 
+- (void)changeDataSharingTypeOnCompletion:(void (^)(NSError *))completionBlock
+{
+    NSNumber *selected = self.sharedOptionSelection;
+    
+    [SBBComponent(SBBConsentManager) dataSharing:[selected integerValue] completion:^(id __unused responseObject, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (!error) {
+                switch (selected.integerValue) {
+                    case 0:
+                    {
+                        APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"Data Sharing disabled"}));
+                    }
+                        break;
+                    case 1:
+                    {
+                        APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"Data Sharing with Institute only"}));
+                    }
+                        break;
+                    case 2:
+                    {
+                        APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"Data Sharing with all"}));
+                    }
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+            if (completionBlock) {
+                completionBlock(error);
+            }
+        });
+    }];
+}
+
 /*********************************************************************************/
 #pragma mark - Authmanager Delegate Protocol
 /*********************************************************************************/
