@@ -325,9 +325,13 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 - (IBAction) next: (id) __unused sender
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-//    [self finishOnboarding];
-    UIViewController *viewController = [[self onboarding] nextScene];
-    [self.navigationController pushViewController:viewController animated:YES];
+    
+    if (self.onboarding.taskType == kAPCOnboardingTaskTypeSignIn) {
+        UIViewController *viewController = [[self onboarding] nextScene];
+        [self.navigationController pushViewController:viewController animated:YES];
+    } else {
+        [self finishOnboarding];
+    }
 }
 
 @end

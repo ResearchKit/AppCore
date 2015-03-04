@@ -28,6 +28,9 @@
     self.navigationItem.hidesBackButton = YES;
     
     self.appName.text = [APCUtilities appName];
+    
+    self.imageViewA.image = [UIImage imageNamed:@"tab_activities_selected"];
+    self.imageViewB.image = [UIImage imageNamed:@"tab_dashboard_selected"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,7 +51,11 @@
 }
 
 - (IBAction)next:(APCButton *) __unused sender {
-    [self finishOnboarding];
+    if (self.emailVerified == YES) {
+        [self performSelector:@selector(setUserSignedIn) withObject:nil afterDelay:0.4];
+    } else {
+        [self finishOnboarding];
+    }
 }
 
 - (void)finishOnboarding
@@ -59,8 +66,6 @@
     } else{
         [self performSelector:@selector(setUserSignedUp) withObject:nil afterDelay:0.4];
     }
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) setUserSignedUp

@@ -10,4 +10,6 @@
 
 @interface APCThankYouViewController : UIViewController <APCSignUpProgressing>
 
+@property (nonatomic) BOOL emailVerified;
+
 @end
