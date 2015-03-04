@@ -392,6 +392,7 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
 
 	NSDictionary *serializableData = [self generateSerializableDataFromSourceDictionary: rawTappingResults];
     [self writeResultDictionaryToArchive: serializableData];
+    [self addFileInfoEntryWithDictionary: serializableData];
 }
 
 - (void) addResultToArchive: (ORKResult*) result
