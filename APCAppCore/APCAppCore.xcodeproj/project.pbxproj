@@ -235,9 +235,6 @@
 		CF130B781A9E8DCD002DA023 /* APCSetupButtonTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CF130B751A9E8DCD002DA023 /* APCSetupButtonTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF130B791A9E8DCD002DA023 /* APCSetupButtonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF130B761A9E8DCD002DA023 /* APCSetupButtonTableViewCell.m */; };
 		CF130B7A1A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF130B771A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib */; };
-		CF8270C21AA12A110039B255 /* APCAddPrescriptionTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CF8270BF1AA12A110039B255 /* APCAddPrescriptionTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		CF8270C31AA12A110039B255 /* APCAddPrescriptionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8270C01AA12A110039B255 /* APCAddPrescriptionTableViewCell.m */; };
-		CF8270C41AA12A110039B255 /* APCAddPrescriptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF8270C11AA12A110039B255 /* APCAddPrescriptionTableViewCell.xib */; };
 		CFBD289A1AA4408800F49161 /* APCMedicationNameTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CFBD28971AA4408800F49161 /* APCMedicationNameTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFBD289B1AA4408800F49161 /* APCMedicationNameTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CFBD28981AA4408800F49161 /* APCMedicationNameTableViewCell.m */; };
 		CFBD289C1AA4408800F49161 /* APCMedicationNameTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFBD28991AA4408800F49161 /* APCMedicationNameTableViewCell.xib */; };
@@ -891,9 +888,6 @@
 		CF130B751A9E8DCD002DA023 /* APCSetupButtonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSetupButtonTableViewCell.h; sourceTree = "<group>"; };
 		CF130B761A9E8DCD002DA023 /* APCSetupButtonTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSetupButtonTableViewCell.m; sourceTree = "<group>"; };
 		CF130B771A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSetupButtonTableViewCell.xib; sourceTree = "<group>"; };
-		CF8270BF1AA12A110039B255 /* APCAddPrescriptionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCAddPrescriptionTableViewCell.h; path = MedicationTrackingAppComponent/APCAddPrescriptionTableViewCell.h; sourceTree = "<group>"; };
-		CF8270C01AA12A110039B255 /* APCAddPrescriptionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCAddPrescriptionTableViewCell.m; path = MedicationTrackingAppComponent/APCAddPrescriptionTableViewCell.m; sourceTree = "<group>"; };
-		CF8270C11AA12A110039B255 /* APCAddPrescriptionTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = APCAddPrescriptionTableViewCell.xib; path = MedicationTrackingAppComponent/APCAddPrescriptionTableViewCell.xib; sourceTree = "<group>"; };
 		CFBD28971AA4408800F49161 /* APCMedicationNameTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMedicationNameTableViewCell.h; sourceTree = "<group>"; };
 		CFBD28981AA4408800F49161 /* APCMedicationNameTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMedicationNameTableViewCell.m; sourceTree = "<group>"; };
 		CFBD28991AA4408800F49161 /* APCMedicationNameTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCMedicationNameTableViewCell.xib; sourceTree = "<group>"; };
@@ -1702,9 +1696,6 @@
 				CFFDED5C1A95731F00B25581 /* APCMedicationTrackerCalendarViewController.h */,
 				CFFDED5D1A95731F00B25581 /* APCMedicationTrackerCalendarViewController.m */,
 				CFFDED5E1A95731F00B25581 /* APCMedicationTrackerCalendarViewController.xib */,
-				CF8270BF1AA12A110039B255 /* APCAddPrescriptionTableViewCell.h */,
-				CF8270C01AA12A110039B255 /* APCAddPrescriptionTableViewCell.m */,
-				CF8270C11AA12A110039B255 /* APCAddPrescriptionTableViewCell.xib */,
 			);
 			name = "Main Calendar View";
 			sourceTree = "<group>";
@@ -2912,7 +2903,6 @@
 				F5F12A751A2F78490015982C /* APCPieGraphView.h in Headers */,
 				F5B948121A73272C0034C522 /* APCScheduler.h in Headers */,
 				F54DDD231A8026010073E4B4 /* APCCoreLocationTracker.h in Headers */,
-				CF8270C21AA12A110039B255 /* APCAddPrescriptionTableViewCell.h in Headers */,
 				CFFDEDF21A95734000B25581 /* APCMedicationSummaryTableViewCell.h in Headers */,
 				F5B946471A7309A20034C522 /* ZZStandardCryptoEngine.h in Headers */,
 				7BA5D99E1AA43F50006F505F /* APCStoredUserData.h in Headers */,
@@ -3152,7 +3142,6 @@
 				08027A891A7319AC00B358CC /* phonesoundwaves@2x.png in Resources */,
 				08027A7B1A7319AC00B358CC /* consent_05@2x.png in Resources */,
 				08027A991A7319AC00B358CC /* walkingman@3x.png in Resources */,
-				CF8270C41AA12A110039B255 /* APCAddPrescriptionTableViewCell.xib in Resources */,
 				08027A961A7319AC00B358CC /* phonewaves@3x.png in Resources */,
 				5B9B36B21A95DF0C00389F42 /* APCActivitiesSectionHeaderView.xib in Resources */,
 				369E28141A96B7A200D35DFA /* APCMedTrackerPredefinedMedications.plist in Resources */,
@@ -3486,7 +3475,6 @@
 				CF03CD031AA23DA2000437FF /* APCMedicationDetailsTableViewCell.m in Sources */,
 				F5B948091A73272C0034C522 /* APCScheduleExpressionParser.m in Sources */,
 				369E27FD1A96B7A200D35DFA /* APCMedicationWeeklySchedule.m in Sources */,
-				CF8270C31AA12A110039B255 /* APCAddPrescriptionTableViewCell.m in Sources */,
 				F5F129EF1A2F78490015982C /* APCDBStatus+AddOn.m in Sources */,
 				F5B947F01A73272C0034C522 /* APCParameters.m in Sources */,
 				F5F12A821A2F78490015982C /* APCPresentAnimator.m in Sources */,
