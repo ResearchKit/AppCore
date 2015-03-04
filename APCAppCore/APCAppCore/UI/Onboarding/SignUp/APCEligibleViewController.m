@@ -9,6 +9,7 @@
 #import "APCConsentTaskViewController.h"
 #import "APCAppCore.h"
 
+
 static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
 @interface APCEligibleViewController () <ORKTaskViewControllerDelegate>
@@ -84,6 +85,24 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     
     self.consentVC.delegate = self;
     
+}
+
+- (void)goBack
+{
+
+}
+
+- (void)taskViewController:(ORKTaskViewController *) __unused taskViewController stepViewControllerWillAppear:(ORKStepViewController *)stepViewController
+{
+    UIBarButtonItem *btnBack = [APCCustomBackButton customBackBarButtonItemWithTarget:self
+                                                                               action:@selector(goBack)
+                                                                            tintColor:[UIColor appPrimaryColor]];
+    
+    if ([stepViewController.step.identifier isEqualToString:@"sharing"]) {
+        stepViewController.backButtonItem = btnBack;
+    } else if ([stepViewController.step.identifier isEqualToString:@"reviewStep"]) {
+        stepViewController.backButtonItem = btnBack;
+    }
 }
 
 - (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *) __unused error
