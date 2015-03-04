@@ -390,6 +390,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             break;
             
         default:
+            message = @"";
             break;
     }
     
