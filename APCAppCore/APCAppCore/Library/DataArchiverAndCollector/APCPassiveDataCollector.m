@@ -9,6 +9,7 @@
 #import "APCAppCore.h"
 #import "zipzap.h"
 #import "APCDataVerificationClient.h"
+#import "CMMotionActivity+Helper.h"
 
 static NSString *const kCollectorFolder = @"collector";
 static NSString *const kUploadFolder = @"upload";
@@ -190,21 +191,46 @@ static NSString *const kCSVFilename  = @"data.csv";
 /*********************************************************************************/
 - (void) APCDataTracker:(APCDataTracker *)tracker hasNewData:(NSArray *)dataArray
 {
-    [dataArray enumerateObjectsUsingBlock:^(NSArray * obj, NSUInteger __unused idx, BOOL * __unused stop) {
+    [dataArray enumerateObjectsUsingBlock: ^(id obj, NSUInteger __unused idx, BOOL * __unused stop) {
         
         NSString * rowString = nil;
         NSString * csvFilePath = nil;
+        NSArray  * arrayOfStuffToPrint = nil;
         
-        if ([obj isKindOfClass:[CMLogItem class]]) {
-            rowString = [obj.description stringByAppendingString:@"\n"];
-            csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
-        } else {
-            rowString = [[obj componentsJoinedByString:@","] stringByAppendingString:@"\n"];
-            csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
+        if ([obj isKindOfClass: [CMMotionActivity class]])
+        {
+            /*
+             This csvColumnValues property comes from our CMMotionActivity+Helper
+             category. These values will be in the same order as the matching
+             csvColumnNames.  Those names will be shoved into the outbound .csv
+             file because they're returned by the -columnNames method of the
+             incoming Tracker.
+             */
+            arrayOfStuffToPrint = ((CMMotionActivity *) obj).csvColumnValues;
         }
-    
-        [APCPassiveDataCollector createOrAppendString:rowString toFile:csvFilePath];
+
+        else if ([obj isKindOfClass: [NSArray class]])
+        {
+            arrayOfStuffToPrint = obj;
+        }
+
+        else
+        {
+            // Should literally never happen.  Ahem.
+            APCLogDebug (@"Got report for dataTracker object [%@], but I don't know how to handle a [%@].",
+                         obj,
+                         NSStringFromClass ([obj class]));
+        }
+
+        if (arrayOfStuffToPrint.count > 0)
+        {
+            rowString = [[arrayOfStuffToPrint componentsJoinedByString: @","] stringByAppendingString: @"\n"];
+            csvFilePath = [tracker.folder stringByAppendingPathComponent: kCSVFilename];
+
+            [APCPassiveDataCollector createOrAppendString: rowString toFile: csvFilePath];
+        }
     }];
+
     [self checkIfDataNeedsToBeFlushed:tracker];
 }
 

@@ -6,6 +6,7 @@
 //
 
 #import "APCCoreMotionTracker.h"
+#import "CMMotionActivity+Helper.h"
 
 
 static NSString *const kLastUsedTimeKey = @"APCPassiveCoreMotionLastTrackedEndDate";
@@ -41,9 +42,9 @@ static NSInteger const kNumberOfDaysBack = 8;
                                                   }];
 }
 
-- (NSArray *)columnNames
+- (NSArray *) columnNames
 {
-    return @[@"activity"];
+    return [CMMotionActivity csvColumnNames];
 }
 
 #pragma mark - Helper methods
