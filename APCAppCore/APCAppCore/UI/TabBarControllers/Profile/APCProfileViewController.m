@@ -1458,7 +1458,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [self hidePickerCell];
         }
         
-        sender.title = NSLocalizedString(@"Edit", @"Edit");
+        sender.title = NSLocalizedString(@"Edit", @"Edit");
         sender.style = UIBarButtonItemStylePlain;
         
         self.navigationItem.leftBarButtonItem.enabled = YES;
