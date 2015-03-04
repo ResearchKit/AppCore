@@ -26,17 +26,11 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="gmU-TR-gY3" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="VLP-zf-Hks"/>
                 <constraint firstAttribute="trailing" secondItem="gmU-TR-gY3" secondAttribute="trailing" id="aMH-p1-SoL"/>
                 <constraint firstItem="gmU-TR-gY3" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="iNf-mB-htI"/>
                 <constraint firstItem="gmU-TR-gY3" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="ic1-sY-Ta3"/>
                 <constraint firstAttribute="bottom" secondItem="gmU-TR-gY3" secondAttribute="bottom" id="suB-ft-eKR"/>
             </constraints>
-            <variation key="default">
-                <mask key="constraints">
-                    <exclude reference="VLP-zf-Hks"/>
-                </mask>
-            </variation>
         </view>
     </objects>
 </document>

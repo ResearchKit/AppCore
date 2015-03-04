@@ -41,17 +41,19 @@ static  NSString  *kSetupTableButtonCellName      = @"APCSetupButtonTableViewCel
 
 static  NSString  *kSummaryTableViewCell          = @"APCMedicationSummaryTableViewCell";
 
-static  NSInteger  kAPCMedicationNameRow          = 0;
-static  NSInteger  kAPCMedicationFrequencyRow     = 1;
-static  NSInteger  kAPCMedicationColorRow         = 2;
-static  NSInteger  kAPCMedicationDosageRow        = 3;
-static  NSInteger  kAPCMedicationButtonRow        = 4;
+static  NSInteger  kAPCMedicationNameRow          =  0;
+static  NSInteger  kAPCMedicationFrequencyRow     =  1;
+static  NSInteger  kAPCMedicationColorRow         =  2;
+static  NSInteger  kAPCMedicationDosageRow        =  3;
+static  NSInteger  kAPCMedicationButtonRow        =  4;
+
+static  CGFloat    kAPCMedicationRowHeight        = 64.0;
 
 static  NSString  *mainTableCategories[]          = { @"Name",        @"Frequency",     @"Label Color",  @"Dosage" };
 static  NSInteger  kNumberOfMainTableCategories   = (sizeof(mainTableCategories) / sizeof(NSString *));
 static  NSString  *extraTableCategories[]         = { @"Required",    @"Required",      @"Optional",     @"Optional" };
 
-static  CGFloat    kSectionHeaderHeight           = 32.0;
+static  CGFloat    kSectionHeaderHeight           = 77.0;
 static  CGFloat    kSectionHeaderLabelOffset      = 10.0;
 
 static  NSString  *addTableCategories[]           = { @"Select Name", @"Select Frequency", @"Select Color", @"Select Dosage" };
@@ -142,7 +144,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat  height = 44.0;
+    CGFloat  height = kAPCMedicationRowHeight;
     
     if (tableView == self.setupTabulator) {
         if (indexPath.row == kAPCMedicationButtonRow) {
@@ -164,6 +166,9 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
             APCSetupTableViewCell  *aCell = (APCSetupTableViewCell *)[self.setupTabulator dequeueReusableCellWithIdentifier:kSetupTableCellName];
             aCell.topicLabel.text = mainTableCategories[indexPath.row];
             aCell.extraLabel.text = extraTableCategories[indexPath.row];
+            CGRect  frame = aCell.separator.frame;
+            frame.size.height = 0.5;
+            aCell.separator.frame = frame;
             [self formatCellTopicForRow:(SetupTableRowTypes)indexPath.row withCell:aCell];
             cell = aCell;
         } else {
@@ -240,6 +245,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
         label.numberOfLines = 2;
         label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
         label.textColor = [UIColor blackColor];
+        label.textAlignment = NSTextAlignmentCenter;
         label.text = NSLocalizedString(@"Add Your Medication Details", nil);;
         [view addSubview:label];
     }

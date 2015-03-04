@@ -13,5 +13,6 @@
 @property  (nonatomic, weak)  IBOutlet  UILabel  *extraLabel;
 @property  (nonatomic, weak)  IBOutlet  UILabel  *addTopicLabel;
 @property  (nonatomic, weak)  IBOutlet  UIView   *colorSwatch;
+@property  (nonatomic, weak)  IBOutlet  UIView   *separator;
 
 @end

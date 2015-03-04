@@ -241,6 +241,9 @@
 		CF130B781A9E8DCD002DA023 /* APCSetupButtonTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CF130B751A9E8DCD002DA023 /* APCSetupButtonTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF130B791A9E8DCD002DA023 /* APCSetupButtonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF130B761A9E8DCD002DA023 /* APCSetupButtonTableViewCell.m */; };
 		CF130B7A1A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF130B771A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib */; };
+		CF7945861AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CF7945831AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF7945871AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7945841AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.m */; };
+		CF7945881AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF7945851AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.xib */; };
 		CFBD289A1AA4408800F49161 /* APCMedicationNameTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CFBD28971AA4408800F49161 /* APCMedicationNameTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFBD289B1AA4408800F49161 /* APCMedicationNameTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CFBD28981AA4408800F49161 /* APCMedicationNameTableViewCell.m */; };
 		CFBD289C1AA4408800F49161 /* APCMedicationNameTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFBD28991AA4408800F49161 /* APCMedicationNameTableViewCell.xib */; };
@@ -900,6 +903,9 @@
 		CF130B751A9E8DCD002DA023 /* APCSetupButtonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSetupButtonTableViewCell.h; sourceTree = "<group>"; };
 		CF130B761A9E8DCD002DA023 /* APCSetupButtonTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSetupButtonTableViewCell.m; sourceTree = "<group>"; };
 		CF130B771A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSetupButtonTableViewCell.xib; sourceTree = "<group>"; };
+		CF7945831AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFrequencyEverydayTableViewCell.h; sourceTree = "<group>"; };
+		CF7945841AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFrequencyEverydayTableViewCell.m; sourceTree = "<group>"; };
+		CF7945851AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCFrequencyEverydayTableViewCell.xib; sourceTree = "<group>"; };
 		CFBD28971AA4408800F49161 /* APCMedicationNameTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMedicationNameTableViewCell.h; sourceTree = "<group>"; };
 		CFBD28981AA4408800F49161 /* APCMedicationNameTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMedicationNameTableViewCell.m; sourceTree = "<group>"; };
 		CFBD28991AA4408800F49161 /* APCMedicationNameTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCMedicationNameTableViewCell.xib; sourceTree = "<group>"; };
@@ -1803,12 +1809,15 @@
 				CFFDEDA21A95734000B25581 /* APCMedicationFrequencyViewController.h */,
 				CFFDEDA31A95734000B25581 /* APCMedicationFrequencyViewController.m */,
 				CFFDEDA41A95734000B25581 /* APCMedicationFrequencyViewController.xib */,
-				CFFDED9C1A95734000B25581 /* APCFrequencyDayTableViewCell.h */,
-				CFFDED9D1A95734000B25581 /* APCFrequencyDayTableViewCell.m */,
-				CFFDED9E1A95734000B25581 /* APCFrequencyDayTableViewCell.xib */,
 				CFFDED9F1A95734000B25581 /* APCFrequencyTableViewTimesCell.h */,
 				CFFDEDA01A95734000B25581 /* APCFrequencyTableViewTimesCell.m */,
 				CFFDEDA11A95734000B25581 /* APCFrequencyTableViewTimesCell.xib */,
+				CF7945831AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.h */,
+				CF7945841AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.m */,
+				CF7945851AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.xib */,
+				CFFDED9C1A95734000B25581 /* APCFrequencyDayTableViewCell.h */,
+				CFFDED9D1A95734000B25581 /* APCFrequencyDayTableViewCell.m */,
+				CFFDED9E1A95734000B25581 /* APCFrequencyDayTableViewCell.xib */,
 			);
 			name = MedicationFrequency;
 			path = MedicationTrackingSetup/MedicationFrequency;
@@ -2882,6 +2891,7 @@
 				7B8DBEC41AA186C6007B4026 /* APCHorizontalThinLineView.h in Headers */,
 				F5B947BD1A73272C0034C522 /* NSDate+Helper.h in Headers */,
 				F5B948101A73272C0034C522 /* APCTimeSelectorEnumerator.h in Headers */,
+				CF7945861AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.h in Headers */,
 				F5F12A7B1A2F78490015982C /* APCCircleView.h in Headers */,
 				F5F129FE1A2F78490015982C /* APCSchedule.h in Headers */,
 				0875C3D81A797A7B00CE50FB /* APCButton.h in Headers */,
@@ -3156,6 +3166,7 @@
 				08027A821A7319AC00B358CC /* consent_05@3x.png in Resources */,
 				F5F12B021A2F78490015982C /* APCSimpleTaskSummaryViewController.xib in Resources */,
 				F5F12AC91A2F78490015982C /* APCProfile.storyboard in Resources */,
+				CF7945881AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.xib in Resources */,
 				CF03CD041AA23DA2000437FF /* APCMedicationDetailsTableViewCell.xib in Resources */,
 				369E28161A96B7A200D35DFA /* APCMedTrackerPredefinedPrescriptionColors.plist in Resources */,
 				3650C65D1AA29BB50075C935 /* CatastrophicError.storyboard in Resources */,
@@ -3266,6 +3277,7 @@
 				5B7EA0241A44C21200924DEE /* APCFormTextField.m in Sources */,
 				7B6C8CC01AA26ECE0007B560 /* APCConsentTextChoiceQuestion.m in Sources */,
 				F5B947FD1A73272C0034C522 /* APCPermissionsManager.m in Sources */,
+				CF7945871AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.m in Sources */,
 				7B6C8CC51AA26F150007B560 /* APCStack.m in Sources */,
 				F5F129F91A2F78490015982C /* APCResult.m in Sources */,
 				F5F129FD1A2F78490015982C /* APCSchedule+Bridge.m in Sources */,

@@ -34,6 +34,8 @@ static  NSInteger  kDailyDosesTakenSection       = 0;
 static  CGFloat    kHeightForDosesTakenHeader    = 36.0;
 static  CGFloat    kPointSizeForDosesTakenHeader = 15.0;
 
+static  CGFloat    kAPCMedicationRowHeight       = 64.0;
+
 @interface APCMedicationTrackerDetailViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, weak)  IBOutlet  UIBarButtonItem  *todayMedicineTitle;
@@ -153,9 +155,10 @@ static  CGFloat    kPointSizeForDosesTakenHeader = 15.0;
         frame = CGRectMake(offset, 0.0, width - 2.0 * offset, kHeightForDosesTakenHeader);
         UILabel  *label = [[UILabel alloc] initWithFrame:frame];
         label.numberOfLines = 0;
-        label.font = [UIFont appLightFontWithSize:kPointSizeForDosesTakenHeader];
+        label.font = [UIFont appRegularFontWithSize:kPointSizeForDosesTakenHeader];
         label.textColor = [UIColor blackColor];
         label.text = NSLocalizedString(@"Log Your Medications", nil);
+        label.textAlignment = NSTextAlignmentCenter;
         label.lineBreakMode = NSLineBreakByWordWrapping;
         [container addSubview:label];
         
@@ -167,6 +170,11 @@ static  CGFloat    kPointSizeForDosesTakenHeader = 15.0;
         view = container;
     }
     return  view;
+}
+
+- (CGFloat)tableView:(UITableView *) __unused tableView heightForRowAtIndexPath:(NSIndexPath *) __unused indexPath
+{
+    return  kAPCMedicationRowHeight;
 }
 
 - (CGFloat)tableView:(UITableView *) __unused tableView heightForHeaderInSection:(NSInteger)section
@@ -195,7 +203,7 @@ static  CGFloat    kPointSizeForDosesTakenHeader = 15.0;
 
 #pragma  mark  -  Done Button Action Method
 
-- (IBAction)doneButtonWasTapped:(id) __unused sender
+- (IBAction)doneButtonTapped:(id) __unused sender
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -209,6 +217,9 @@ static  CGFloat    kPointSizeForDosesTakenHeader = 15.0;
     self.navigationItem.title = viewControllerTitle;
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
+    self.navigationItem.rightBarButtonItem = donester;
 
     UINib  *medicationDetailsCellNib = [UINib nibWithNibName:kMedicationDetailsName bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:medicationDetailsCellNib forCellReuseIdentifier:kMedicationDetailsName];
