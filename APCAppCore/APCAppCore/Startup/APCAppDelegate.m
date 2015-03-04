@@ -884,6 +884,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 - (void)showSecureView
 {
+    UIView *viewForSnapshot = self.window.rootViewController.presentedViewController ? self.window.rootViewController.presentedViewController.view : self.window.rootViewController.view;
     if (self.secureView == nil) {
         self.secureView = [[UIView alloc] initWithFrame:self.window.rootViewController.view.bounds];
         
@@ -898,10 +899,9 @@ static NSUInteger const kIndexOfProfileTab = 3;
         
         [self.secureView addSubview:blurredImageView];
         [self.secureView addSubview:appIconImageView];
+        
+        [viewForSnapshot insertSubview:self.secureView atIndex:NSIntegerMax];
     }
-    
-    [self.window.rootViewController.view addSubview:self.secureView];
-    [self.window.rootViewController.view bringSubviewToFront:self.secureView];
 }
 
 - (void)hideSecureView
