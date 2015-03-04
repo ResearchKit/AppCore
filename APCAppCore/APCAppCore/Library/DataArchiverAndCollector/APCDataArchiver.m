@@ -14,25 +14,34 @@
 #import "APCCMS.h"
 #import "NSDate+Helper.h"
 
-NSString *const kQuestionTypeKey            = @"questionType";
-NSString *const kQuestionTypeNameKey        = @"questionTypeName";
-NSString *const kUserInfoKey                = @"userInfo";
-NSString *const kIdentifierKey              = @"identifier";
-NSString *const kStartDateKey               = @"startDate";
-NSString *const kEndDateKey                 = @"endDate";
-NSString *const kTaskRunKey                 = @"taskRun";
-NSString *const kItemKey                    = @"item";
-                                            
-NSString *const kAppNameKey                 = @"appName";
-NSString *const kAppVersionKey              = @"appVersion";
-NSString *const kPhoneInfoKey               = @"phoneInfo";
-NSString *const kUploadTimeKey              = @"uploadTime";
-                                            
-NSString *const kFilesKey                   = @"files";
-                                            
-NSString *const kFileInfoNameKey            = @"filename";
-NSString *const kFileInfoTimeStampKey       = @"timestamp";
-NSString *const kFileInfoContentTypeKey     = @"contentType";
+static NSString * const kQuestionTypeKey            = @"questionType";
+static NSString * const kQuestionTypeNameKey        = @"questionTypeName";
+static NSString * const kUserInfoKey                = @"userInfo";
+static NSString * const kIdentifierKey              = @"identifier";
+static NSString * const kStartDateKey               = @"startDate";
+static NSString * const kEndDateKey                 = @"endDate";
+static NSString * const kTaskRunKey                 = @"taskRun";
+static NSString * const kItemKey                    = @"item";
+static NSString * const kAppNameKey                 = @"appName";
+static NSString * const kAppVersionKey              = @"appVersion";
+static NSString * const kPhoneInfoKey               = @"phoneInfo";
+static NSString * const kUploadTimeKey              = @"uploadTime";
+static NSString * const kFilesKey                   = @"files";
+static NSString * const kFileInfoNameKey            = @"filename";
+static NSString * const kFileInfoTimeStampKey       = @"timestamp";
+static NSString * const kFileInfoContentTypeKey     = @"contentType";
+static NSString * const kTappingViewSizeKey         = @"TappingViewSize";
+static NSString * const kButtonRectLeftKey          = @"ButtonRectLeft";
+static NSString * const kButtonRectRightKey         = @"ButtonRectRight";
+static NSString * const kTappingSamplesKey          = @"TappingSamples";
+static NSString * const kTappedButtonIdKey          = @"TappedButtonId";
+static NSString * const kTappedButtonNoneKey        = @"TappedButtonNone";
+static NSString * const kTappedButtonLeftKey        = @"TappedButtonLeft";
+static NSString * const kTappedButtonRightKey       = @"TappedButtonRight";
+static NSString * const kTapTimeStampKey            = @"TapTimeStamp";
+static NSString * const kTapCoordinateKey           = @"TapCoordinate";
+static NSString * const kAPCTappingResultsFileName  = @"tapping_results";
+
 
 /**
  We'll eventually use something that makes more sense, here.
@@ -340,18 +349,6 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
     return currentFileName;
 }
 
-static  NSString  *kTappingViewSizeKey       = @"TappingViewSize";
-static  NSString  *kButtonRectLeftKey        = @"ButtonRectLeft";
-static  NSString  *kButtonRectRightKey       = @"ButtonRectRight";
-
-static  NSString  *kTappingSamplesKey        = @"TappingSamples";
-static      NSString  *kTappedButtonIdKey    = @"TappedButtonId";
-static      NSString  *kTappedButtonNoneKey  = @"TappedButtonNone";
-static      NSString  *kTappedButtonLeftKey  = @"TappedButtonLeft";
-static      NSString  *kTappedButtonRightKey = @"TappedButtonRight";
-static      NSString  *kTapTimeStampKey      = @"TapTimeStamp";
-static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
-
 /*********************************************************************************/
 #pragma mark - Add Result Archive
 /*********************************************************************************/
@@ -391,6 +388,7 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
         [sampleResults addObject:aSampleDictionary];
     }
     rawTappingResults[kTappingSamplesKey] = sampleResults;
+    rawTappingResults[kItemKey] = kAPCTappingResultsFileName;
 
 	NSDictionary *serializableData = [self generateSerializableDataFromSourceDictionary: rawTappingResults];
     [self writeResultDictionaryToArchive: serializableData];
