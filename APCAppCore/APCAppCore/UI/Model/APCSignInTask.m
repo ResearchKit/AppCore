@@ -1,8 +1,8 @@
 //
 //  APCSignInTask.m
-//  AppCore
+//  APCAppCore
 //
-//  Copyright (c) 2014 Apple Inc. All rights reserved.
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
 #import "APCSignInTask.h"
@@ -53,6 +53,11 @@ static NSInteger const kMinimumNumberOfSteps = 2; //MedicalInfo + Passcode
             nextStep = self.permissionsStep;
             self.currentStepNumber += 1;
         }
+    } else if ([step.identifier isEqualToString:kAPCSignUpPermissionsStepIdentifier]) {
+        nextStep = self.thankyouStep;
+        self.currentStepNumber += 1;
+    } else if ([step.identifier isEqualToString:kAPCSignUpThankYouStepIdentifier]) {
+        nextStep = nil;
     }
     
     return nextStep;

@@ -1,6 +1,6 @@
 //
 //  APCMedTrackerPrescription+Helper.m
-//  AppCore
+//  APCAppCore
 //
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
@@ -211,106 +211,84 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
         // We can also use -performBlockAndWait:.
         [context performBlock: ^{
 
-            NSString *errorDomainToReturn = nil;
-            NSInteger errorCode = 0;
-            NSError *coreDataError = nil;
-
-            NSString *nameOfEntityWeAreUpdating = NSStringFromClass ([APCMedTrackerDailyDosageRecord class]);
-            NSString *nameOfDateGetterMethod = NSStringFromSelector (@selector (dateThisRecordRepresents));
-
-
             //
-            // Delete any existing record(s) for today.
-            // (There should only be one, at most, but, still.)
-            // We could update an existing one, but the cost will
-            // be nearly the same.
+            // Delete any existing record(s) for today which are (ahem)
+            // ACTUALLY ASSOCIATED WITH THIS PRESCRIPTION.  (This didn't
+            // cause us last-minute problems, or anything...)
             //
+            
+            NSString *dateFieldName = NSStringFromSelector (@selector (dateThisRecordRepresents));
+            
+            NSPredicate *dateFilter = [NSPredicate predicateWithFormat: @"%K >= %@ AND %K <= %@",
+                                       dateFieldName,
+                                       endUsersChosenDate.startOfDay,
+                                       dateFieldName,
+                                       endUsersChosenDate.endOfDay];
+            
+            NSSet *filteredRecords = [blockSafePrescription.actualDosesTaken filteredSetUsingPredicate: dateFilter];
+            
+            APCMedTrackerDailyDosageRecord *anyObjectBeingDeleted = filteredRecords.anyObject;
+            
+            
+            //
+            // Create a new record, if appropriate.
+            //
+            
+            APCMedTrackerDailyDosageRecord *dosageRecordWereCreating = nil;
 
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: nameOfEntityWeAreUpdating];
-
-            request.predicate = [NSPredicate predicateWithFormat:
-                                 @"%K >= %@ && %K <= %@",
-                                 nameOfDateGetterMethod, endUsersChosenDate.startOfDay,
-                                 nameOfDateGetterMethod, endUsersChosenDate.endOfDay];
-
-            NSArray *doseRecordsFound = [context executeFetchRequest: request
-                                                               error: &coreDataError];
-
-
-            // CoreData defines a "nil" result as "an error happened."
-            // If this works, we'll get back an array, even if it's empty.
-            if (doseRecordsFound == nil)
+            if (numberOfDosesTaken > 0)
             {
-                errorDomainToReturn = @"MedTrackerDataStorageError_CantLoadExistingDosageRecords";
-                errorCode = 1;
-
-                // if the coreDataError is set, we'll use it shortly.
+                dosageRecordWereCreating = [APCMedTrackerDailyDosageRecord newObjectForContext: context];
+                dosageRecordWereCreating.prescriptionIAmBasedOn = blockSafePrescription;
+                dosageRecordWereCreating.dateThisRecordRepresents = endUsersChosenDate;
+                dosageRecordWereCreating.numberOfDosesTakenForThisDate = @(numberOfDosesTaken);
             }
 
+
+            //
+            // Save.  This saves the whole Context, which therefore
+            // - saves the Presription object
+            // - saves the new Dosage record, if it exists
+            // - deletes any old Dosage records, if they exist
+            //
+            // We have to save SOMEthing, but it doesn't matter which object
+            // we save.
+            //
+            
+            BOOL successfullySaved = NO;
+            NSError *coreDataError = nil;
+           
+            if (dosageRecordWereCreating)
+            {
+                successfullySaved = [dosageRecordWereCreating saveToPersistentStore: & coreDataError];
+            }
+            else if (anyObjectBeingDeleted)
+            {
+                successfullySaved = [anyObjectBeingDeleted saveToPersistentStore: & coreDataError];
+            }
             else
             {
-                APCMedTrackerDailyDosageRecord *firstRecordBeingDeleted = doseRecordsFound.firstObject;
+                // We have nothing to save and nothing to delete.  Theoretically,
+                // we can't get here.  Ahem.  :-)  Let's see what happens.
+            }
+            
                 
-                for (APCMedTrackerDailyDosageRecord *record in doseRecordsFound)
-                {
-                    // These'll get deleted when we do the "save," below.
-                    [context deleteObject: record];
-                }
+            NSLog(@"###### Setting number of records for prescription [%@] on date [%@] to: [%@]. ######", blockSafePrescription, endUsersChosenDate, @(numberOfDosesTaken));
 
 
-                //
-                // Create the new record, if appropriate.
-                //
-                
-                APCMedTrackerDailyDosageRecord *dosageRecordWereCreating = nil;
+            NSString *errorDomainToReturn = nil;
+            NSInteger errorCode = 0;
 
-                if (numberOfDosesTaken > 0)
-                {
-                    dosageRecordWereCreating = [APCMedTrackerDailyDosageRecord newObjectForContext: context];
-                    dosageRecordWereCreating.prescriptionIAmBasedOn = blockSafePrescription;
-                    dosageRecordWereCreating.dateThisRecordRepresents = endUsersChosenDate;
-                    dosageRecordWereCreating.numberOfDosesTakenForThisDate = @(numberOfDosesTaken);
-                }
+            if (successfullySaved)
+            {
+                // Nothing to do.  Yay!
+            }
+            else
+            {
+                errorDomainToReturn = @"MedTrackerDataStorageError_CantSaveOrDeleteDosageRecord";
+                errorCode = 2;
 
-
-                //
-                // Save.  This saves the Prescription object, not
-                // just the dosage.  If we deleted the record, this
-                // accomplishes that, too, because of how our save:
-                // method works.
-                //
-                
-                // We have to save SOMEthing, but it doesn't matter which object
-                // we save.
-                
-                BOOL successfullySaved = NO;
-                
-                if (dosageRecordWereCreating)
-                {
-                    successfullySaved = [dosageRecordWereCreating saveToPersistentStore: & coreDataError];
-                }
-                else if (firstRecordBeingDeleted)
-                {
-                    successfullySaved = [firstRecordBeingDeleted saveToPersistentStore: & coreDataError];
-                }
-                else
-                {
-                    // We have nothing to save and nothing to delete.  Theoretically,
-                    // we can't get here.  Ahem.  :-)  Let's see what happens.
-                }
-
-
-                if (successfullySaved)
-                {
-                    // Nothing to do.  Yay!
-                }
-                else
-                {
-                    errorDomainToReturn = @"MedTrackerDataStorageError_CantSaveOrDeleteDosageRecord";
-                    errorCode = 2;
-
-                    // if the coreDataError is set, we'll use it in a moment.
-                }
+                // if the coreDataError is set, we'll use it in a moment.
             }
 
 
@@ -344,41 +322,58 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
     [APCMedTrackerDataStorageManager.defaultManager.queue addOperationWithBlock:^{
 
         NSDate *startTime = [NSDate date];
-        NSManagedObjectContext *context = APCMedTrackerDataStorageManager.defaultManager.context;
-
-        // Gradually working toward normalizing our error-handling.
-        NSError *coreDataError = nil;
-        NSString *errorDomain = nil;
-        NSInteger errorCode = 0;
-
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass ([APCMedTrackerDailyDosageRecord class])];
-
-        NSString *nameOfDateGetterMethod = NSStringFromSelector (@selector (dateThisRecordRepresents));
-
-        request.predicate = [NSPredicate predicateWithFormat:
-                             @"%K >= %@ && %K <= %@",
-                             nameOfDateGetterMethod,
-                             startDate.startOfDay,
-                             nameOfDateGetterMethod,
-                             endDate.endOfDay];
-
-        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey: nameOfDateGetterMethod
-                                                                  ascending: YES]];
-
-        // "nil" means "a CoreData error occurred."  That's our default value.
-        NSArray *dailyRecordsFound = [context executeFetchRequest: request error: & coreDataError];
-
-        if (dailyRecordsFound == nil)
-        {
-            errorDomain = @"MedTrackerDataStorageError";
-            errorCode = 1;
-
-            // We'll return the error CoreData sent us as an underlyingError, shortly.
-        }
-        else
-        {
-            // Done!
-        }
+        
+//        NSManagedObjectContext *context = APCMedTrackerDataStorageManager.defaultManager.context;
+//
+//        // Gradually working toward normalizing our error-handling.
+//        NSError *coreDataError = nil;
+//        NSString *errorDomain = nil;
+//        NSInteger errorCode = 0;
+//
+//        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass ([APCMedTrackerDailyDosageRecord class])];
+//
+//        NSString *nameOfDateGetterMethod = NSStringFromSelector (@selector (dateThisRecordRepresents));
+//
+//        request.predicate = [NSPredicate predicateWithFormat:
+//                             @"%K >= %@ && %K <= %@",
+//                             nameOfDateGetterMethod,
+//                             startDate.startOfDay,
+//                             nameOfDateGetterMethod,
+//                             endDate.endOfDay];
+//
+//        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey: nameOfDateGetterMethod
+//                                                                  ascending: YES]];
+//
+//        // "nil" means "a CoreData error occurred."  That's our default value.
+//        NSArray *dailyRecordsFound = [context executeFetchRequest: request error: & coreDataError];
+//
+//        if (dailyRecordsFound == nil)
+//        {
+//            errorDomain = @"MedTrackerDataStorageError";
+//            errorCode = 1;
+//
+//            // We'll return the error CoreData sent us as an underlyingError, shortly.
+//        }
+//        else
+//        {
+//            // Done!
+//        }
+        
+        
+        NSError    *coreDataError = nil;
+        NSString   *errorDomain = nil;
+        NSInteger  errorCode = 0;
+        
+        NSString *dateFieldName = NSStringFromSelector (@selector (dateThisRecordRepresents));
+        
+        NSPredicate *dateFilter = [NSPredicate predicateWithFormat: @"%K >= %@ AND %K <= %@",
+                                   dateFieldName,
+                                   startDate.startOfDay,
+                                   dateFieldName,
+                                   endDate.endOfDay];
+        
+        NSSet *filteredRecords = [self.actualDosesTaken filteredSetUsingPredicate: dateFilter];
+        NSArray *dailyRecordsFound = [filteredRecords allObjects];
 
         NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];
 

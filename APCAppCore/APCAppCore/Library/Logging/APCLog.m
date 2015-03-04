@@ -1,8 +1,8 @@
 //
 //  APCLog.m
-//  AppCore
+//  APCAppCore
 //
-//  Copyright (c) 2014 Apple Inc. All rights reserved.
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
 #import "APCLog.h"
@@ -48,11 +48,13 @@ static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";
  statements we print with this logging facility.
  */
 
-static NSString * const APCLogTagError = @"APC_ERROR";
-static NSString * const APCLogTagDebug = @"APC_DEBUG";
-static NSString * const APCLogTagEvent = @"APC_EVENT";
-static NSString * const APCLogTagData  = @" APC_DATA";
-static NSString * const APCLogTagView  = @" APC_VIEW";
+static NSString * const APCLogTagError   = @"APC_ERROR  ";
+static NSString * const APCLogTagDebug   = @"APC_DEBUG  ";
+static NSString * const APCLogTagEvent   = @"APC_EVENT  ";
+static NSString * const APCLogTagData    = @"APC_DATA   ";
+static NSString * const APCLogTagView    = @"APC_VIEW   ";
+static NSString * const APCLogTagArchive = @"APC_ARCHIVE";
+static NSString * const APCLogTagUpload  = @"APC_UPLOAD ";
 
 
 
@@ -253,6 +255,26 @@ static NSString * const APCLogTagView  = @" APC_VIEW";
 	[self logInternal_tag: APCLogTagDebug
 				   method: apcLogMethodData
 				  message: formattedMessage];
+}
+
++ (void)       methodInfo: (NSString *) apcLogMethodInfo
+    filenameBeingArchived: (NSString *) filenameOrPath
+{
+    NSString *message = [NSString stringWithFormat: @"Adding filename to .zip archive for uploading: [%@]", filenameOrPath];
+
+    [self logInternal_tag: APCLogTagArchive
+                   method: apcLogMethodInfo
+                  message: message];
+}
+
++ (void)       methodInfo: (NSString *) apcLogMethodInfo
+    filenameBeingUploaded: (NSString *) filenameOrPath
+{
+    NSString *message = [NSString stringWithFormat: @"Uploading filename to Sage: [%@]", filenameOrPath];
+
+    [self logInternal_tag: APCLogTagUpload
+                   method: apcLogMethodInfo
+                  message: message];
 }
 
 + (void) methodInfo: (NSString *) apcLogMethodData

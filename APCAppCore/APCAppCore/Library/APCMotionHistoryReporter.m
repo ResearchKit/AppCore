@@ -65,9 +65,6 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
     return self;
 }
 
-
-
-
 -(void)startMotionCoProcessorDataFrom:(NSDate *)startDate andEndDate:(NSDate *)endDate andNumberOfDays:(NSInteger)numberOfDays
 {
     [motionReport removeAllObjects];
@@ -75,8 +72,6 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
     
     [self getMotionCoProcessorDataFrom:startDate andEndDate:endDate andNumberOfDays:numberOfDays];
 }
-
-
 
 //iOS is collecting activity data in the background whether you ask for it or not, so this feature will give you activity data even if your application as only been installed very recently.
 -(void)getMotionCoProcessorDataFrom:(NSDate *)startDate andEndDate:(NSDate *)endDate andNumberOfDays:(NSInteger)numberOfDays
@@ -109,17 +104,12 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                       if (numberOfDays > 0)
                                                       {
                                                           NSDate *lastActivity_started;
-                                                          
-                                                          NSTimeInterval totalSleepTime = 0.0;
-                                                          NSTimeInterval totalStationaryTime = 0.0;
-                                                          NSTimeInterval totalLightActivityTime = 0.0;
-                                                          NSTimeInterval totalWalkingTime = 0.0;
-                                                          NSTimeInterval totalRunningTime = 0.0;
-                                                          NSTimeInterval totalAutomotiveTime = 0.0;
+
                                                           NSTimeInterval totalUnknownTime = 0.0;
-                                                          NSTimeInterval totalCyclingTime = 0.0;
-                                                          NSTimeInterval totalAllocatedTime = 0.0;
                                                           
+                                                          NSTimeInterval totalRunningTime = 0.0;
+                                                          NSTimeInterval totalSleepTime = 0.0;
+                                                          NSTimeInterval totalLightActivityTime = 0.0;
                                                           NSTimeInterval totalSedentaryTime = 0.0;
                                                           NSTimeInterval totalModerateTime = 0.0;
                                                           
@@ -135,11 +125,6 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           
                                                           for(CMMotionActivity *activity in activities)
                                                           {
-                                                              
-                                                              //get anactivity based on high Confidence
-                                                              //if (activity.confidence == CMMotionActivityConfidenceHigh){
-                                                                
-                                                                  
                                                                   
                                                               //this will skip the first activity as the lastMotionActivityType will be zero which is not in the enum
                                                               if((lastMotionActivityType == MotionActivityWalking && activity.confidence == CMMotionActivityConfidenceHigh) || (lastMotionActivityType == MotionActivityWalking && activity.confidence == CMMotionActivityConfidenceMedium))
@@ -173,33 +158,7 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                                   totalSedentaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
                                                                  
                                                               }
-                                                              else if(lastMotionActivityType == MotionActivityUnknown)
-                                                              {
-                                                                  if (activity.stationary)
-                                                                  {
-                                                                      totalSedentaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                  }
-                                                                  else if (activity.walking)
-                                                                  {
-                                                                      totalLightActivityTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                  }
-                                                                  else if (activity.running)
-                                                                  {
-                                                                      totalRunningTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                  }
-                                                                  
-                                                                  else if (activity.cycling)
-                                                                  {
-                                                                      totalRunningTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                  }
-                                                                  else if (activity.automotive)
-                                                                  {
-                                                                      totalSedentaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                  }
-                                                                  
-                                                                  totalUnknownTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
-                                                                  
-                                                              }
+
                                                               else if(lastMotionActivityType == MotionActivityCycling)
                                                               {
                                                                   totalRunningTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
@@ -215,7 +174,7 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                                   activityLength = fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
                                                                 
                                                                   
-                                                                  if(activityLength >= 10800 && activity.confidence == CMMotionActivityConfidenceHigh) // 3 hours in seconds
+                                                                  if(activityLength >= 10800) // 3 hours in seconds
                                                                   {
                                                                       totalSleepTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
                                                                       
@@ -225,6 +184,50 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                                       totalSedentaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
                                                                      
                                                                   }
+                                                                  
+                                                              }
+                                                              else if(lastMotionActivityType == MotionActivityUnknown)
+                                                              {
+                                                                  if (activity.stationary)
+                                                                  {
+                                                                      totalSedentaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                      
+                                                                      lastMotionActivityType = MotionActivityStationary;
+                                                                      lastActivity_started = activity.startDate;
+                                                                  }
+                                                                  else if (activity.walking && activity.confidence == CMMotionActivityConfidenceLow)
+                                                                  {
+                                                                      totalLightActivityTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                      lastMotionActivityType = MotionActivityWalking;
+                                                                      lastActivity_started = activity.startDate;
+                                                                  }
+                                                                  else if (activity.walking)
+                                                                  {
+                                                                      totalModerateTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                      lastMotionActivityType = MotionActivityWalking;
+                                                                      lastActivity_started = activity.startDate;
+                                                                  }
+                                                                  else if (activity.running)
+                                                                  {
+                                                                      totalRunningTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                      lastMotionActivityType = MotionActivityRunning;
+                                                                      lastActivity_started = activity.startDate;
+                                                                  }
+                                                                  
+                                                                  else if (activity.cycling)
+                                                                  {
+                                                                      totalRunningTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                      lastMotionActivityType = MotionActivityCycling;
+                                                                      lastActivity_started = activity.startDate;
+                                                                  }
+                                                                  else if (activity.automotive)
+                                                                  {
+                                                                      totalSedentaryTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                                      lastMotionActivityType = MotionActivityAutomotive;
+                                                                      lastActivity_started = activity.startDate;
+                                                                  }
+                                                                  
+                                                                  totalUnknownTime += fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
                                                                   
                                                               }
                                                               
@@ -276,27 +279,6 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                               
                                                           }
                                                           
-                                                          
-                                                          totalAllocatedTime = totalSleepTime + totalWalkingTime + totalRunningTime + totalAutomotiveTime + totalUnknownTime + totalStationaryTime;
-                                                         
-                                           
-                                                          APCMotionHistoryData * motionHistoryDataStationary = [APCMotionHistoryData new];
-                                                          motionHistoryDataStationary.activityType = ActivityTypeStationary;
-                                                          motionHistoryDataStationary.timeInterval = totalStationaryTime;
-                                                          [motionDayValues addObject:motionHistoryDataStationary];
-                                                          
-                                                         
-                                                          APCMotionHistoryData * motionHistoryDataWalking = [APCMotionHistoryData new];
-                                                          motionHistoryDataWalking.activityType = ActivityTypeWalking;
-                                                          motionHistoryDataWalking.timeInterval = totalWalkingTime;
-                                                          [motionDayValues addObject:motionHistoryDataWalking];
-                                                          
-                                                          APCMotionHistoryData * motionHistoryLightActivity = [APCMotionHistoryData new];
-                                                          motionHistoryLightActivity.activityType = ActivityTypeLight;
-                                                          motionHistoryLightActivity.timeInterval = totalWalkingTime;
-                                                          [motionDayValues addObject:motionHistoryLightActivity];
-                                                          
-                                                          
                                                           APCMotionHistoryData * motionHistoryDataRunning = [APCMotionHistoryData new];
                                                           motionHistoryDataRunning.activityType = ActivityTypeLight;
                                                           motionHistoryDataRunning.timeInterval = totalLightActivityTime;
@@ -312,28 +294,10 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           motionHistoryDataModerate.timeInterval = totalModerateTime;
                                                           [motionDayValues addObject:motionHistoryDataModerate];
                                                           
-
-                                                          APCMotionHistoryData * motionHistoryDataAutomotive = [APCMotionHistoryData new];
-                                                          motionHistoryDataAutomotive.activityType = ActivityTypeAutomotive;
-                                                          motionHistoryDataAutomotive.timeInterval = totalAutomotiveTime;
-                                                          [motionDayValues addObject:motionHistoryDataAutomotive];
-                                                          
-                                                          
-                                                          
-                                                         
-                                                          APCMotionHistoryData * motionHistoryDataCycling = [APCMotionHistoryData new];
-                                                          motionHistoryDataCycling.activityType = ActivityTypeCycling;
-                                                          motionHistoryDataCycling.timeInterval = totalCyclingTime;
-                                                          [motionDayValues addObject:motionHistoryDataCycling];
-                                                          
-                                                          
-                                                         
                                                           APCMotionHistoryData * motionHistoryDataUnknown = [APCMotionHistoryData new];
                                                           motionHistoryDataUnknown.activityType = ActivityTypeUnknown;
                                                           motionHistoryDataUnknown.timeInterval = totalUnknownTime;
                                                           [motionDayValues addObject:motionHistoryDataUnknown];
-                                                          
-                                                          
                                                           
                                                           APCMotionHistoryData * motionHistoryDataSleeping = [APCMotionHistoryData new];
                                                           motionHistoryDataSleeping.activityType = ActivityTypeSleeping;

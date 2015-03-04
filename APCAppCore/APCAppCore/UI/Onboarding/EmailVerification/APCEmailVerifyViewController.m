@@ -1,9 +1,9 @@
 //
 //  APCEmailVerifyViewController.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCEmailVerifyViewController.h"
 #import "APCAppDelegate.h"
@@ -14,6 +14,7 @@
 #import "UIColor+APCAppearance.h"
 #import "NSError+APCAdditions.h"
 #import "APCAppCore.h"
+#import "APCThankYouViewController.h"
 
 
 /**
@@ -285,11 +286,17 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
     }
     else
     {
-        self.user.signedIn = YES;
-
         [self.user updateProfileOnCompletion:^(NSError *error) {
             APCLogError2 (error);
         }];
+        
+        // load the thank you view controller
+        UIStoryboard *sbOnboarding = [UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]];
+        APCThankYouViewController *allSetVC = (APCThankYouViewController *)[sbOnboarding instantiateViewControllerWithIdentifier:@"APCThankYouViewController"];
+        
+        allSetVC.emailVerified = YES;
+        
+        [self presentViewController:allSetVC animated:YES completion:nil];
     }
 }
 

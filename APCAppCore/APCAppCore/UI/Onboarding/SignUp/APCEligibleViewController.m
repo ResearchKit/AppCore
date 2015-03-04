@@ -1,9 +1,9 @@
 // 
 //  APCEligibleViewController.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCEligibleViewController.h"
 #import "APCConsentTaskViewController.h"
@@ -134,9 +134,8 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
         }
         else
         {
-            [taskViewController dismissViewControllerAnimated:YES completion:^{
-                 [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
-             }];
+            [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
+            [taskViewController dismissViewControllerAnimated:YES completion:nil];
         }
     }
     else

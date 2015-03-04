@@ -1,9 +1,9 @@
 // 
 //  APCSignUpPermissionsViewController.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCAppCore.h"
 #import "APCSignUpPermissionsViewController.h"
@@ -325,7 +325,13 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 - (IBAction) next: (id) __unused sender
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self finishOnboarding];
+    
+    if (self.onboarding.taskType == kAPCOnboardingTaskTypeSignIn) {
+        UIViewController *viewController = [[self onboarding] nextScene];
+        [self.navigationController pushViewController:viewController animated:YES];
+    } else {
+        [self finishOnboarding];
+    }
 }
 
 @end

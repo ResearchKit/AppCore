@@ -1,9 +1,9 @@
 // 
 //  APCSignUpInfoViewController.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCSignUpInfoViewController.h"
 #import "APCAppDelegate.h"
@@ -114,7 +114,7 @@ static CGFloat const kHeaderHeight = 127.0f;
 
 - (void)setupTextFieldCellAppearance:(APCTextFieldTableViewCell *)cell
 {
-    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
+    [cell.textLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
     [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
     
     [cell.textField setFont:[UIFont appRegularFontWithSize:17.0f]];
@@ -128,7 +128,7 @@ static CGFloat const kHeaderHeight = 127.0f;
 
 - (void)setupDefaultCellAppearance:(APCDefaultTableViewCell *)cell
 {
-    [cell.textLabel setFont:[UIFont appRegularFontWithSize:14.0f]];
+    [cell.textLabel setFont:[UIFont appRegularFontWithSize:17.0f]];
     [cell.textLabel setTextColor:[UIColor appSecondaryColor1]];
     
     [cell.detailTextLabel setFont:[UIFont appRegularFontWithSize:17.0f]];

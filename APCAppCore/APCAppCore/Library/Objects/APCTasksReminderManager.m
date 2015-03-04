@@ -2,7 +2,7 @@
 //  APCTasksReminderManager.m
 //  APCAppCore
 //
-//  Copyright (c) 2014 Apple Inc. All rights reserved.
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
 #import "APCTasksReminderManager.h"
@@ -13,7 +13,7 @@ NSString * const kTaskReminderUserInfoKey = @"TaskReminderUserInfoKey";
 static NSInteger kSecondsPerMinute = 60;
 static NSInteger kMinutesPerHour = 60;
 
-NSString * const kTaskReminderMessage = @"Please complete your %@ study activities today. Thank you for participating in %@!";
+NSString * const kTaskReminderMessage = @"Please complete your %@ activities today. Thank you for participating in the %@ study!";
 
 @interface APCTasksReminderManager ()
 

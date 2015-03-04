@@ -1,9 +1,9 @@
 // 
 //  APCBaseTaskViewController.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCBaseTaskViewController.h"
 #import "APCAppDelegate.h"
@@ -21,6 +21,7 @@
 #pragma  mark  -  Instance Initialisation
 + (instancetype)customTaskViewController: (APCScheduledTask*) scheduledTask
 {
+    [[UIView appearance] setTintColor:[UIColor appPrimaryColor]];
     id<ORKTask> task = [self createTask: scheduledTask];
     NSUUID * taskRunUUID = [NSUUID UUID];
     APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
@@ -152,8 +153,8 @@
 	 server.  (The code above here uploads it to Sage.)
 	 We're #if-ing it to make sure this code isn't
 	 accessible to Bad Guys in production.  Even if
-	 the code called, if it's in RAM at all, it can
-	 be exploited.
+	 the code isn't called, if it's in RAM at all,
+     it can be exploited.
 	 */
 	#ifdef USE_DATA_VERIFICATION_CLIENT
 

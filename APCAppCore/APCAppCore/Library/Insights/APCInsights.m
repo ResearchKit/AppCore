@@ -58,8 +58,8 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         _baselineHigh = baselineHigh;
         _baselineHighOther = baselineOther;
         
-        _captionGood = NSLocalizedString(@"Data is not available", @"Data is not available");
-        _captionBad  = NSLocalizedString(@"Data is not available", @"Data is not available");
+        _captionGood = NSLocalizedString(@"Not enough data", @"Not enough data");
+        _captionBad  = NSLocalizedString(@"Not enough data", @"Not enough data");
         _valueGood = @(0);
         _valueBad  = @(0);
     }
@@ -274,7 +274,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 {
     APCLogDebug(@"Insight: %@", dataPoint);
     
-    NSString *caption = NSLocalizedString(@"Data is not available", @"Data is not available");
+    NSString *caption = NSLocalizedString(@"Not enough data", @"Not enough data");
     NSNumber *pointValue = @(0);
     
     if ([dataPoint[kAPCInsightFactorValueKey] isEqualToNumber:@(NSNotFound)] == NO) {

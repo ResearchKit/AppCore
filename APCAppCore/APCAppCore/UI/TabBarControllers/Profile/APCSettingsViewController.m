@@ -1,9 +1,9 @@
 // 
 //  APCSettingsViewController.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCSettingsViewController.h"
 #import "APCChangePasscodeViewController.h"
@@ -25,10 +25,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     [super viewDidLoad];
     
     [self setupNavAppearance];
-    
-    NSString *build = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-    NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-    self.versionLabel.text = [NSString stringWithFormat:@"Version: %@ (Build %@)", version, build];
     
     self.editing = YES;
     
@@ -213,11 +209,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
     [super pickerTableViewCell:cell pickerViewDidSelectIndices:selectedIndices];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    if (indexPath.section == 0 && indexPath.row == 1) {
-        NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
-        [self.parameters setNumber:[APCParameters autoLockValues][index] forKey:kNumberOfMinutesForPasscodeKey];
-    }
-    else if (indexPath.section == 1 && indexPath.row == 2) {
+    if (indexPath.section == 0 && indexPath.row == 2) {
         APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
         NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
         appDelegate.tasksReminder.reminderTime = [APCTasksReminderManager reminderTimesArray][index];
@@ -268,7 +260,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (APCParameters *)parameters
 {
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.parameters;
+    _parameters = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.parameters;
+    
+    return _parameters;
+   
 }
 
 #pragma mark - Selectors / IBActions

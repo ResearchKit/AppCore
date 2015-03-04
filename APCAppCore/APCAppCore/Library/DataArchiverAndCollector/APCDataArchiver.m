@@ -14,28 +14,43 @@
 #import "APCCMS.h"
 #import "NSDate+Helper.h"
 
-NSString *const kQuestionTypeKey            = @"questionType";
-NSString *const kQuestionTypeNameKey        = @"questionTypeName";
-NSString *const kUserInfoKey                = @"userInfo";
-NSString *const kIdentifierKey              = @"identifier";
-NSString *const kStartDateKey               = @"startDate";
-NSString *const kEndDateKey                 = @"endDate";
-NSString *const kTaskRunKey                 = @"taskRun";
-NSString *const kItemKey                    = @"item";
-                                            
-NSString *const kAppNameKey                 = @"appName";
-NSString *const kAppVersionKey              = @"appVersion";
-NSString *const kPhoneInfoKey               = @"phoneInfo";
-NSString *const kUploadTimeKey              = @"uploadTime";
-                                            
-NSString *const kFilesKey                   = @"files";
-                                            
-NSString *const kFileInfoNameKey            = @"filename";
-NSString *const kFileInfoTimeStampKey       = @"timestamp";
-NSString *const kFileInfoContentTypeKey     = @"contentType";
+static NSString * const kQuestionTypeKey            = @"questionType";
+static NSString * const kQuestionTypeNameKey        = @"questionTypeName";
+static NSString * const kUserInfoKey                = @"userInfo";
+static NSString * const kIdentifierKey              = @"identifier";
+static NSString * const kStartDateKey               = @"startDate";
+static NSString * const kEndDateKey                 = @"endDate";
+static NSString * const kTaskRunKey                 = @"taskRun";
+static NSString * const kItemKey                    = @"item";
+static NSString * const kAppNameKey                 = @"appName";
+static NSString * const kAppVersionKey              = @"appVersion";
+static NSString * const kPhoneInfoKey               = @"phoneInfo";
+static NSString * const kUploadTimeKey              = @"uploadTime";
+static NSString * const kFilesKey                   = @"files";
+static NSString * const kFileInfoNameKey            = @"filename";
+static NSString * const kFileInfoTimeStampKey       = @"timestamp";
+static NSString * const kFileInfoContentTypeKey     = @"contentType";
+static NSString * const kTappingViewSizeKey         = @"TappingViewSize";
+static NSString * const kButtonRectLeftKey          = @"ButtonRectLeft";
+static NSString * const kButtonRectRightKey         = @"ButtonRectRight";
+static NSString * const kTappingSamplesKey          = @"TappingSamples";
+static NSString * const kTappedButtonIdKey          = @"TappedButtonId";
+static NSString * const kTappedButtonNoneKey        = @"TappedButtonNone";
+static NSString * const kTappedButtonLeftKey        = @"TappedButtonLeft";
+static NSString * const kTappedButtonRightKey       = @"TappedButtonRight";
+static NSString * const kTapTimeStampKey            = @"TapTimeStamp";
+static NSString * const kTapCoordinateKey           = @"TapCoordinate";
+static NSString * const kAPCTappingResultsFileName  = @"tapping_results";
 
-static NSArray * kKnownJSONFilenamePrefixes = nil;
 
+/**
+ We'll eventually use something that makes more sense, here.
+ At the moment, this is pretty common, so I don't want to break
+ anything that's using this.
+ */
+static NSString * const kAPCFilenameIfCouldntIdentifyFileName = @"NoName";
+static NSString * const kAPCFilenameExtensionJSON = @"json";
+static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
 
 
 @interface APCDataArchiver ()
@@ -68,24 +83,13 @@ static NSArray * kKnownJSONFilenamePrefixes = nil;
      ...um.  Some of these are several megabytes.  So -- do we
      *want* to suggest that they're "readable"?
      */
-    kKnownJSONFilenamePrefixes = @[
-
-                                   //
-                                   // Parkinson's
-                                   //
-                                   @"accel_walking.outbound",
-                                   @"accel_walking.rest",
-                                   @"accel_walking.return",
-                                   @"deviceMotion_walking.outbound",
-                                   @"deviceMotion_walking.rest",
-                                   @"deviceMotion_walking.return",
-                                   @"pedometer_walking.outbound",
-                                   @"pedometer_walking.return",
-
-                                   //
-                                   // (more apps to go here)
-                                   //
-                                   ];
+    kAPCKnownJSONFilenamePrefixes = @[
+                                      @"accel_walking",
+                                      @"deviceMotion_walking",
+                                      @"pedometer_walking",
+                                      @"accel_tapping",
+                                      @"accel_fitness",
+                                      ];
 }
 
 /**
@@ -205,15 +209,16 @@ static NSArray * kKnownJSONFilenamePrefixes = nil;
             else if ([result isKindOfClass:[ORKFileResult class]])
             {
                 ORKFileResult * fileResult = (ORKFileResult*) result;
-                NSString *fileNameIfCanInterpretAsJSON = [self fileNameIfCanInterpretAsJSONFile: fileResult];
 
-                if (fileNameIfCanInterpretAsJSON == nil)
+                NSString *betterFilename = [self friendlyFilenameForFile: fileResult];
+
+                if ([betterFilename hasSuffix: kAPCFilenameExtensionJSON])
                 {
-                    [self addGenericDataFileToArchive: fileResult];
+                    [self addJSONFileToArchive: fileResult usingFileName: betterFilename];
                 }
                 else
                 {
-                    [self addJSONFileToArchive: fileResult usingFileName: fileNameIfCanInterpretAsJSON];
+                    [self addGenericDataFileToArchive: fileResult];
                 }
             }
 
@@ -277,64 +282,72 @@ static NSArray * kKnownJSONFilenamePrefixes = nil;
  A catchall for any rules, tricks, or whatever that we
  can use to make outbound "black box" data files readable.
  */
-- (NSString *) fileNameIfCanInterpretAsJSONFile: (ORKFileResult *) file
+- (NSString *) friendlyFilenameForFile: (ORKFileResult *) file
 {
-    BOOL canInterpretAsJSON = NO;
-    NSString *newFileName = nil;
+    BOOL isKnownJSONFilename = NO;
+    NSString *defaultFileName = file.fileURL.lastPathComponent;
+    NSString *currentFileName = defaultFileName;
 
+    /*
+     Is it JSON?
 
-    //
-    // First try:  is it a known JSON filename?
-    //
-
-    if (! canInterpretAsJSON)
+     If we happen to know this filename is JSON, 
+     set a flag before we mangle (or unmangle)
+     the name.
+     */
+    for (NSString *filenamePrefix in kAPCKnownJSONFilenamePrefixes)
     {
-        NSString *fileName = file.fileURL.lastPathComponent;
-        BOOL hasKnownJSONFilePrefix = NO;
-        for (NSString *knownPrefix in kKnownJSONFilenamePrefixes)
+        if ([defaultFileName hasPrefix: filenamePrefix])
         {
-            if ([fileName hasPrefix: knownPrefix])
-            {
-                hasKnownJSONFilePrefix = YES;
-                break;
-            }
-        }
-
-        canInterpretAsJSON = hasKnownJSONFilePrefix;
-
-        if (canInterpretAsJSON)
-        {
-            newFileName = [fileName stringByReplacingOccurrencesOfString: @"." withString: @"_"];
-            newFileName = [newFileName stringByAppendingString: @".json"];
+            isKnownJSONFilename = YES;
+            break;
         }
     }
 
+    /*
+     Strip trailing timestamps.
 
+     Some of our filenames have timestamps, like:
+     
+            "blah_blah_blah-20150131050505"
 
-    //
-    // Second try:  um... yeah.  Workin' on that.
-    //
+     --meaning January 31, 2015, at 5:05:05 AM.  If we find one,
+     strip off the timestamp.
+     
+     The timestamp is 14 characters, which is where the "14" in
+     this next line of code comes from:  I'm searching for strings
+     whose last 14 characters are digits ("\d").
+     */
+    NSString *timestampPattern = @"-\\d{14}";
+    NSRange timestampRange = [currentFileName rangeOfString: timestampPattern
+                                                    options: NSRegularExpressionSearch];
 
-    if (! canInterpretAsJSON)
+    if (timestampRange.location == currentFileName.length - timestampRange.length)
     {
-        // (sound of whistling)
+        currentFileName = [currentFileName substringToIndex: timestampRange.location];
     }
 
+    /*
+     Replace spaces, hyphens, dots, underscores,
+     or sequences of more than one of those things,
+     with a single "_".
+     */
+    currentFileName = [currentFileName stringByReplacingOccurrencesOfString: @"[_ .\\-]+"
+                                                                 withString: @"_"
+                                                                    options: NSRegularExpressionSearch
+                                                                      range: NSMakeRange (0, currentFileName.length)];
 
-    return newFileName;
+    /*
+     Now that we've unmangled it, append the ".json", if
+     appropriate.
+     */
+    if (isKnownJSONFilename)
+    {
+        currentFileName = [currentFileName stringByAppendingPathExtension: kAPCFilenameExtensionJSON];
+    }
+
+    return currentFileName;
 }
-
-static  NSString  *kTappingViewSizeKey       = @"TappingViewSize";
-static  NSString  *kButtonRectLeftKey        = @"ButtonRectLeft";
-static  NSString  *kButtonRectRightKey       = @"ButtonRectRight";
-
-static  NSString  *kTappingSamplesKey        = @"TappingSamples";
-static      NSString  *kTappedButtonIdKey    = @"TappedButtonId";
-static      NSString  *kTappedButtonNoneKey  = @"TappedButtonNone";
-static      NSString  *kTappedButtonLeftKey  = @"TappedButtonLeft";
-static      NSString  *kTappedButtonRightKey = @"TappedButtonRight";
-static      NSString  *kTapTimeStampKey      = @"TapTimeStamp";
-static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 
 /*********************************************************************************/
 #pragma mark - Add Result Archive
@@ -375,9 +388,11 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
         [sampleResults addObject:aSampleDictionary];
     }
     rawTappingResults[kTappingSamplesKey] = sampleResults;
+    rawTappingResults[kItemKey] = kAPCTappingResultsFileName;
 
 	NSDictionary *serializableData = [self generateSerializableDataFromSourceDictionary: rawTappingResults];
     [self writeResultDictionaryToArchive: serializableData];
+    [self addFileInfoEntryWithDictionary: serializableData];
 }
 
 - (void) addResultToArchive: (ORKResult*) result
@@ -417,166 +432,9 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     [self addFileInfoEntryWithDictionary: serializableData];
 }
 
-- (NSDictionary *) generateSerializableDataFromSourceDictionary: (NSDictionary *) sourceDictionary
-{
-	NSMutableDictionary *serializableDictionary = [NSMutableDictionary new];
-
-	/*
-	 Walk through all content we're about to serialize,
-	 decide if we want to keep it, convert it to something
-	 safe, and add it to the outbound dictionary if desired.
-	 */
-	for (NSString *key in sourceDictionary.allKeys)
-	{
-		id value = sourceDictionary [key];
-
-
-		//
-		// Delete calendars.
-		//
-
-		if ([value isKindOfClass: [NSCalendar class]])
-		{
-			// Skip it.
-		}
-
-        
-		//
-		// Replace the key "identifier" with the key "item".
-		//
-		// Note:  several other parts of this file use kItemKey.
-		//
-
-		else if ([key isEqualToString: kIdentifierKey])
-		{
-			id itemToSerialize = [self safeSerializableItemFromItem: value];
-			serializableDictionary [kItemKey] = itemToSerialize;
-		}
-
-
-		//
-		// Find and include the names for RKQuestionTypes.
-		//
-
-		else if ([key isEqualToString: kQuestionTypeKey])
-		{
-			id valueToSerialize = nil;
-			NSString* nameToSerialize = nil;
-
-			NSNumber *questionType = [self safeSerializableQuestionTypeFromItem: value];
-
-			if (questionType != nil)
-			{
-				valueToSerialize = questionType;
-				nameToSerialize = NSStringFromRKQuestionType (questionType.integerValue);
-			}
-			else
-			{
-				valueToSerialize = [self safeSerializableItemFromItem: value];
-				nameToSerialize = RKQuestionTypeUnknownAsString;
-			}
-
-			serializableDictionary [kQuestionTypeKey] = valueToSerialize;
-			serializableDictionary [kQuestionTypeNameKey] = nameToSerialize;
-		}
-
-
-		//
-		// Include the userInfo dictionary if it has something in it.
-		//
-
-		else if ([key isEqualToString: kUserInfoKey])
-		{
-			NSDictionary *safeDictionary = [self safeAndUsefulSerializableDictionaryFromMaybeDictionary: value];
-
-			if (safeDictionary)
-			{
-				serializableDictionary [kUserInfoKey] = safeDictionary;
-			}
-
-			else
-			{
-				// It's null, empty, or not a dictionary.  Skip it.
-			}
-		}
-
-
-		//
-		// Arrays of Integers and Booleans
-		//
-
-		/*
-		 Very commonly, we have arrays of integers and Booleans
-		 (as answers to multiple-choice questions, say).
-		 However, much earlier in this process, they got converted
-		 to strings.  This seems to be a core feature of ResearchKit.
-		 But there's still value in them being numeric or Boolean
-		 answers.  So if this is an array, try to convert each item
-		 to an integer or Boolean.  If we can't, just call our master
-		 -safe: method to make sure we can serialize it.
-		 */
-		else if ([value isKindOfClass: [NSArray class]])
-		{
-			NSArray *inputArray = value;
-			NSMutableArray *outputArray = [NSMutableArray new];
-
-			for (id item in inputArray)
-			{
-				id outputItem = [self safeSerializableIntOrBoolFromStringIfString: item];
-
-				if (outputItem == nil)
-				{
-					outputItem = [self safeSerializableItemFromItem: item];
-				}
-
-				[outputArray addObject: outputItem];
-			}
-
-			serializableDictionary [key] = outputArray;
-        }
-
-
-        //
-        // Make dates "ISO-8601 compliant."  Meaning, format
-        // them like this:  2015-02-25T16:42:11+00:00
-        //
-        // Per Sage.
-        // From http://en.wikipedia.org/wiki/ISO_8601.
-        //
-        else if ([value isKindOfClass: [NSDate class]])
-        {
-            NSDate *theDate = (NSDate *) value;
-            NSString *sageFriendlyDate = theDate.toStringInISO8601Format;
-            serializableDictionary [key] = sageFriendlyDate;
-        }
-
-
-		//
-		// Everything Else
-		//
-
-		/*
-		 If we get here:  we want to keep it, but don't have specific
-		 rules for converting it.  Use our default serialization process:
-		 include it as-is if the serializer recognizes it, or convert it
-		 to a string if not.
-		 */
-		else
-		{
-			id itemToSerialize = [self safeSerializableItemFromItem: value];
-			serializableDictionary [key] = itemToSerialize;
-		}
-	}
-
-	/*
-	 Whew.  Done.  Return an immutable copy, just on the principle of encapsulation.
-	 */
-	return [NSDictionary dictionaryWithDictionary: serializableDictionary];
-}
-
 - (void) writeResultDictionaryToArchive: (NSDictionary*) dictionary
 {
-    NSString * fileName = dictionary[kItemKey]?:@"NoName";
+    NSString * fileName = dictionary[kItemKey]?:kAPCFilenameIfCouldntIdentifyFileName;
     [self writeDictionaryToArchive:dictionary fileName:fileName];
 }
 
@@ -585,7 +443,10 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     NSError * error;
     NSData * jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:&error];
     if (jsonData !=nil) {
-        NSString * fullFileName = [fileName stringByAppendingPathExtension:@"json"];
+        NSString * fullFileName = [fileName stringByAppendingPathExtension: kAPCFilenameExtensionJSON];
+
+        APCLogFilenameBeingArchived (fullFileName);
+
         [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fullFileName
                                                                     compress:YES
                                                                    dataBlock:^(NSError** __unused error){ return jsonData;}]];
@@ -597,6 +458,8 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 
 - (void) writeDataToArchive: (NSData*) data fileName: (NSString*) fileName
 {
+    APCLogFilenameBeingArchived (fileName);
+
     [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fileName
                                                                 compress:YES
                                                                dataBlock:^(NSError** __unused error){ return data;}]];
@@ -604,6 +467,8 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 
 - (void) writeURLToArchive: (NSURL*) url usingFileName: (NSString *) fileName
 {
+    APCLogFilenameBeingArchived (fileName);
+
     [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fileName
                                                                 compress:YES
                                                                dataBlock:^(NSError** __unused error){ return [NSData dataWithContentsOfURL:url];}]];
@@ -611,8 +476,8 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 
 - (void) addFileInfoEntryWithDictionary: (NSDictionary*) dictionary
 {
-    NSString * fileName = dictionary[kItemKey]?:@"NoName";
-    NSString * fullFileName = [fileName stringByAppendingPathExtension:@"json"];
+    NSString * fileName = dictionary[kItemKey]?:kAPCFilenameIfCouldntIdentifyFileName;
+    NSString * fullFileName = [fileName stringByAppendingPathExtension: kAPCFilenameExtensionJSON];
     [self addFileInfoEntryWithFileName:fullFileName timeStamp:dictionary[kEndDateKey] contentType:@"application/json"];
 }
 
@@ -636,6 +501,7 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     [self.zipArchive updateEntries:self.zipEntries error:&error];
     APCLogError2(error);
 }
+
 
 /*********************************************************************************/
 #pragma mark - Write Output File
@@ -726,53 +592,274 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     return [NSArray arrayWithArray:results];
 }
 
+
+
+/*********************************************************************************/
+#pragma mark - Converting Serializable Data
+/*********************************************************************************/
+
+/**
+ The public API.  See comments in the header file.
+ */
+- (NSDictionary *) generateSerializableDataFromSourceDictionary: (NSDictionary *) sourceDictionary
+{
+    id result = [self generateSerializableObjectFromSourceObject: sourceDictionary
+                                                atRecursionDepth: 0];
+
+    return result;
+}
+
+/**
+ @param recursionDepth:  How far down this recursive conversion stack
+ we are.  One particular transformation only happens at the top level.
+ Only -generateSerializableArray and -generateSerializableDictionary
+ should modify this; all other methods should pass it through as-is.
+ */
+- (id) generateSerializableObjectFromSourceObject: (id) sourceObject
+                                 atRecursionDepth: (NSUInteger) recursionDepth
+{
+    id result = nil;
+
+    if ([sourceObject isKindOfClass: [NSArray class]])
+    {
+        result = [self generateSerializableArrayFromSourceArray: sourceObject
+                                               atRecursionDepth: recursionDepth];
+    }
+
+    else if ([sourceObject isKindOfClass: [NSDictionary class]])
+    {
+        result = [self generateSerializableDictionaryFromSourceDictionary: sourceObject
+                                                         atRecursionDepth: recursionDepth];
+    }
+
+    else
+    {
+        result = [self generateSerializableSimpleObjectFromSourceSimpleObject: sourceObject];
+    }
+
+    return result;
+}
+
+- (NSArray *) generateSerializableArrayFromSourceArray: (NSArray *) sourceArray
+                                      atRecursionDepth: (NSUInteger) recursionDepth
+{
+    NSMutableArray *resultArray = [NSMutableArray new];
+
+    for (id value in sourceArray)
+    {
+        id convertedValue = [self generateSerializableObjectFromSourceObject: value
+                                                            atRecursionDepth: recursionDepth + 1];
+
+        if (convertedValue != nil)
+        {
+            [resultArray addObject: convertedValue];
+        }
+    }
+
+    return resultArray;
+}
+
+- (NSDictionary *) generateSerializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary
+                                                     atRecursionDepth: (NSUInteger) recursionDepth
+{
+    NSMutableDictionary *resultDictionary = [NSMutableDictionary new];
+
+    for (NSString *key in sourceDictionary)
+    {
+        id value = sourceDictionary [key];
+
+        //
+        // Find and include the names for RKQuestionTypes.
+        //
+        if ([key isEqualToString: kQuestionTypeKey])
+        {
+            id valueToSerialize = nil;
+            NSString* nameToSerialize = nil;
+
+            NSNumber *questionType = [self extractRKQuestionTypeFromNSNumber: value];
+
+            if (questionType != nil)
+            {
+                valueToSerialize = questionType;
+                nameToSerialize = NSStringFromRKQuestionType (questionType.integerValue);
+            }
+            else
+            {
+                valueToSerialize = [self safeSerializableItemFromItem: value];
+                nameToSerialize = RKQuestionTypeUnknownAsString;
+            }
+
+            resultDictionary [kQuestionTypeKey] = valueToSerialize;
+            resultDictionary [kQuestionTypeNameKey] = nameToSerialize;
+        }
+
+        //
+        // Treat other keys and values normally...
+        //
+        else
+        {
+            id convertedKey = key;
+            id convertedValue = nil;
+
+
+            //
+            // ...with one exception:  at the top level only, convert
+            // the key "identifier" to the key "item".
+            //
+            // Not sure why.  (It's historical.)  Still investigating.
+            // Discovered so far:
+            // -  this is used for the outbound filename
+            // -  ?
+            // -  ?
+            //
+            if (recursionDepth == 0 && [key isEqualToString: kIdentifierKey])
+            {
+                convertedKey = kItemKey;
+            }
+            else
+            {
+                // "else" nothing.  This applies to every other decision.
+            }
+            
+
+            convertedValue = [self generateSerializableObjectFromSourceObject: value
+                                                             atRecursionDepth: recursionDepth + 1];
+
+            if (convertedValue != nil)
+            {
+                resultDictionary [convertedKey] = convertedValue;
+            }
+        }
+    }
+
+    return resultDictionary;
+}
+
+- (id) generateSerializableSimpleObjectFromSourceSimpleObject: (id) sourceObject
+{
+    id result = nil;
+
+    /*
+     Delete calendars.
+     */
+    if ([sourceObject isKindOfClass: [NSCalendar class]])
+    {
+        // Return nil.  This tells the calling method to omit this item.
+    }
+
+    /*
+     Make dates "ISO-8601 compliant."  Meaning, format
+     them like this:
+
+            2015-02-25T16:42:11+00:00
+
+     Per Sage.  I got the rules from:  http://en.wikipedia.org/wiki/ISO_8601
+     */
+    else if ([sourceObject isKindOfClass: [NSDate class]])
+    {
+        NSDate *theDate = (NSDate *) sourceObject;
+        NSString *sageFriendlyDate = theDate.toStringInISO8601Format;
+        result = sageFriendlyDate;
+    }
+
+    /*
+     Extract strings from UUIDs.
+     */
+    else if ([sourceObject isKindOfClass: [NSUUID class]])
+    {
+        NSUUID *uuid = (NSUUID *) sourceObject;
+        NSString *uuidString = uuid.UUIDString;
+        result = uuidString;
+    }
+
+    /*
+     Convert stringified ints and bools to their real values
+
+     Very commonly, we have strings that actually contains integers or
+     Booleans -- as answers to multiple-choice questions, say. However,
+     much earlier in this process, they got converted to strings. This
+     seems to be a core feature of ResearchKit. But there's still value
+     in them being numeric or Boolean answers. So try to convert each
+     item to an integer or Boolean. If we can't, just call our master
+     -safe: method to make sure we can serialize it.
+     */
+    else if ([sourceObject isKindOfClass: [NSString class]])
+    {
+        result = [self extractIntOrBoolFromString: sourceObject];
+
+        if (result == nil)
+        {
+            result = sourceObject;
+        }
+        else
+        {
+            // Accept the object we got from -extractIntOrBoolFromString.
+        }
+    }
+
+
+    /*
+     Everything Else
+
+     If we get here:  we want to keep it, but don't have specific
+     rules for converting it.  Use our default serialization process:
+     include it as-is if the serializer recognizes it, or convert it
+     to a string if not.
+     */
+    else
+    {
+        result = [self safeSerializableItemFromItem: sourceObject];
+    }
+    
+    
+    /*
+     Whew.
+     */
+    return result;
+}
+
 /**
  Try to convert the specified item to an NSNumber, specifically
  if it's a String that looks like a Boolean or an intenger.
  */
-- (NSNumber *) safeSerializableIntOrBoolFromStringIfString: (id) item
+- (NSNumber *) extractIntOrBoolFromString: (NSString *) itemAsString
 {
-	NSNumber *result = nil;
+    NSNumber *result = nil;
 
-	if ([item isKindOfClass: [NSString class]])
-	{
-		NSString *itemAsString = item;
+    if (itemAsString.length > 0)
+    {
+        if ([itemAsString compare: @"no" options: NSCaseInsensitiveSearch] == NSOrderedSame ||
+            [itemAsString compare: @"false" options: NSCaseInsensitiveSearch] == NSOrderedSame)
+        {
+            result = @(NO);
+        }
 
-		if (itemAsString.length > 0)
-		{
-			if ([itemAsString compare: @"no" options: NSCaseInsensitiveSearch] == NSOrderedSame ||
-				[itemAsString compare: @"false" options: NSCaseInsensitiveSearch] == NSOrderedSame)
-			{
-				result = @(NO);
-			}
+        else if ([itemAsString compare: @"yes" options: NSCaseInsensitiveSearch] == NSOrderedSame ||
+                 [itemAsString compare: @"true" options: NSCaseInsensitiveSearch] == NSOrderedSame)
+        {
+            result = @(YES);
+        }
 
-			else if ([itemAsString compare: @"yes" options: NSCaseInsensitiveSearch] == NSOrderedSame ||
-					 [itemAsString compare: @"true" options: NSCaseInsensitiveSearch] == NSOrderedSame)
-			{
-				result = @(YES);
-			}
+        else
+        {
+            NSInteger itemAsInt = itemAsString.integerValue;
+            NSString *verificationString = [NSString stringWithFormat: @"%d", (int) itemAsInt];
 
-			else
-			{
-				NSInteger itemAsInt = itemAsString.integerValue;
-				NSString *verificationString = [NSString stringWithFormat: @"%d", (int) itemAsInt];
+            // Here, we use -isValidJSONObject: to make sure the int isn't
+            // NaN or infinity.  According to the JSON rules, those will
+            // break the serializer.
+            if ([verificationString isEqualToString: itemAsString] && [NSJSONSerialization isValidJSONObject: @[verificationString]])
+            {
+                result = @(itemAsInt);
+            }
 
-				// Here, we use -isValidJSONObject: to make sure the int isn't
-				// NaN or infinity.  According to the JSON rules, those will
-				// break the serializer.
-				if ([verificationString isEqualToString: itemAsString] && [NSJSONSerialization isValidJSONObject: @[verificationString]])
-				{
-					result = @(itemAsInt);
-				}
-
-				else
-				{
-					// It was NaN or infinity.  Therefore, we can't convert it
-					// to a safe or serializable value.  Ignore it.
-				}
-			}
-		}
-	}
+            else
+            {
+                // It was NaN or infinity.  Therefore, we can't convert it
+                // to a safe or serializable value.  Ignore it.
+            }
+        }
+    }
 
 	return result;
 }
@@ -780,36 +867,14 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 /**
  If this item is a Number, try to convert it to an RKQuestionType.
  */
-- (NSNumber *) safeSerializableQuestionTypeFromItem: (id) item
+- (NSNumber *) extractRKQuestionTypeFromNSNumber: (NSNumber *) item
 {
 	NSNumber* result = nil;
 
-	if ([item isKindOfClass: [NSNumber class]]  && [NSJSONSerialization isValidJSONObject: @[item]])
+	if ([NSJSONSerialization isValidJSONObject: @[item]])
 	{
-		NSNumber *questionTypeAsNumber = item;
-		ORKQuestionType questionType = questionTypeAsNumber.integerValue;
+		ORKQuestionType questionType = item.integerValue;
 		result = @(questionType);
-	}
-
-	return result;
-}
-
-/**
- If this is a Dictionary, and it has stuff in it, 
- keep it -- either as a Dictionary (if we can
- serialize it) or a string (if not).
- */
-- (NSDictionary *) safeAndUsefulSerializableDictionaryFromMaybeDictionary: (id) maybeDictionary
-{
-	NSDictionary *result = nil;
-
-	if (maybeDictionary != [NSNull null] &&
-		[maybeDictionary isKindOfClass: [NSDictionary class]] &&
-		((NSDictionary *) maybeDictionary).count > 0)
-	{
-		// Make sure the whole dictionary can be serialized.
-		// If not, convert it to a string.
-		result = [self safeSerializableItemFromItem: maybeDictionary];
 	}
 
 	return result;
@@ -842,7 +907,7 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 	id result = nil;
 
 	/*
-	 NSJSONSerializer can only take an array or
+	 -isValidJSONObject: can only take an array or
 	 dictionary at its top level.  So wrap this item
 	 in an array.
 	 */

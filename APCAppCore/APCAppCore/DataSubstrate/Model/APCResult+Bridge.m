@@ -1,9 +1,9 @@
 // 
 //  APCResult+Bridge.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCResult+Bridge.h"
 
@@ -28,6 +28,10 @@
     else
     {
         if (self.archiveFilename.length > 0) {
+
+            NSString *pathBeingUploaded = self.archiveURL.absoluteString;
+            APCLogFilenameBeingUploaded (pathBeingUploaded);
+
             [SBBComponent(SBBUploadManager) uploadFileToBridge:self.archiveURL contentType:@"application/zip" completion:^(NSError *error) {
                 
                 if (error) {

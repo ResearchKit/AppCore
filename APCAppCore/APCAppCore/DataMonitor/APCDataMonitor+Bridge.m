@@ -1,9 +1,9 @@
 // 
 //  APCDataMonitor+Bridge.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCDataMonitor+Bridge.h"
 #import "APCSchedule+Bridge.h"
@@ -67,6 +67,9 @@ NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
 - (void) uploadZipFile:(NSString*) path onCompletion: (void (^)(NSError * error)) completionBlock
 {
     NSParameterAssert(path);
+
+    APCLogFilenameBeingUploaded (path);
+
     [SBBComponent(SBBUploadManager) uploadFileToBridge:[NSURL fileURLWithPath:path] contentType:@"application/zip" completion:^(NSError *error) {
         if (!error) {
             APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"Uploaded Passive Collector File: %@", path.lastPathComponent]}));

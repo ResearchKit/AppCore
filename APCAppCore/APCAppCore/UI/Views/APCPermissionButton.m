@@ -1,9 +1,9 @@
 // 
 //  APCPermissionButton.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCPermissionButton.h"
 #import "APCConfirmationView.h"

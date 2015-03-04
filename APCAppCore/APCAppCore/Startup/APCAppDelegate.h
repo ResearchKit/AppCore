@@ -1,9 +1,9 @@
 // 
 //  APCAppDelegate.h 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import <UIKit/UIKit.h>
 #import "APCDataSubstrate.h"
@@ -26,8 +26,8 @@
 @property (strong, nonatomic) APCScheduler * scheduler;
 @property (strong, nonatomic) APCTasksReminderManager * tasksReminder;
 @property (strong, nonatomic) APCPassiveDataCollector * passiveDataCollector;
-
 @property (strong, nonatomic) APCProfileViewController * profileViewController;
+@property (nonatomic) BOOL disableSignatureInConsent;
 
 //Initialization Methods
 @property (nonatomic, strong) NSDictionary * initializationOptions;

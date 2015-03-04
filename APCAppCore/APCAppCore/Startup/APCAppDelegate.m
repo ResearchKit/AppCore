@@ -1,9 +1,9 @@
 // 
 //  APCAppDelegate.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCAppDelegate.h"
 #import "APCAppCore.h"
@@ -208,11 +208,11 @@ static NSUInteger const kIndexOfProfileTab = 3;
 - (void) initializeBridgeServerConnection
 {
 //If in DEBUG mode, automatically point to staging environment. In release mode read from intializationOptions dictionary.
-#if DEBUG
-    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment: SBBEnvironmentStaging];
-#else
+//#if DEBUG
+//    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment: SBBEnvironmentStaging];
+//#else
     [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment:(SBBEnvironment)[self.initializationOptions[kBridgeEnvironmentKey] integerValue]];
-#endif
+//#endif
 }
 
 - (void) initializeAppleCoreStack
@@ -884,6 +884,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 - (void)showSecureView
 {
+    UIView *viewForSnapshot = self.window.rootViewController.presentedViewController ? self.window.rootViewController.presentedViewController.view : self.window.rootViewController.view;
     if (self.secureView == nil) {
         self.secureView = [[UIView alloc] initWithFrame:self.window.rootViewController.view.bounds];
         
@@ -898,10 +899,9 @@ static NSUInteger const kIndexOfProfileTab = 3;
         
         [self.secureView addSubview:blurredImageView];
         [self.secureView addSubview:appIconImageView];
+        
+        [viewForSnapshot insertSubview:self.secureView atIndex:NSIntegerMax];
     }
-    
-    [self.window.rootViewController.view addSubview:self.secureView];
-    [self.window.rootViewController.view bringSubviewToFront:self.secureView];
 }
 
 - (void)hideSecureView

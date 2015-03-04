@@ -1,8 +1,8 @@
 //
 //  APCOnboardingTask.h
-//  AppCore
+//  APCAppCore
 //
-//  Copyright (c) 2014 Apple Inc. All rights reserved.
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -18,6 +18,7 @@ FOUNDATION_EXPORT NSString *const kAPCSignUpMedicalInfoStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpCustomInfoStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpPasscodeStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsStepIdentifier;
+FOUNDATION_EXPORT NSString *const kAPCSignUpThankYouStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignInStepIdentifier;
 FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsPrimingStepIdentifier;
 
@@ -59,6 +60,8 @@ FOUNDATION_EXPORT NSString *const kAPCSignUpPermissionsPrimingStepIdentifier;
 @property (nonatomic, strong) ORKStep *passcodeStep;
 
 @property (nonatomic, strong) ORKStep *permissionsStep;
+
+@property (nonatomic, strong) ORKStep *thankyouStep;
 
 @property (nonatomic, strong) ORKStep *signInStep;
 

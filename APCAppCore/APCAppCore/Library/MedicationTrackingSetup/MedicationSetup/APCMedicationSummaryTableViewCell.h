@@ -1,6 +1,6 @@
 //
 //  APCMedicationSummaryTableViewCell.h
-//  AppCore
+//  APCAppCore
 //
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //

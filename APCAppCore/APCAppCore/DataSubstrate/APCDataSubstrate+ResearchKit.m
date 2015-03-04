@@ -1,9 +1,9 @@
 // 
 //  APCDataSubstrate+ResearchKit.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCDataSubstrate+ResearchKit.h"
 #import "APCAppCore.h"
@@ -52,6 +52,9 @@
     else
     {
         NSAssert(url, @"URL Missing");
+
+        APCLogFilenameBeingUploaded (url.absoluteString);
+
         [SBBComponent(SBBUploadManager) uploadFileToBridge:url contentType:@"application/zip" completion:^(NSError *error) {
             APCLogError2 (error);
             if (completionBlock) {

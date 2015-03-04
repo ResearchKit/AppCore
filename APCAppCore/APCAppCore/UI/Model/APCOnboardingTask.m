@@ -1,8 +1,8 @@
 //
 //  APCOnboardingTask.m
-//  AppCore
+//  APCAppCore
 //
-//  Copyright (c) 2014 Apple Inc. All rights reserved.
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
 #import "APCOnboardingTask.h"
@@ -15,6 +15,7 @@ NSString *const kAPCSignUpMedicalInfoStepIdentifier         = @"MedicalInfo";
 NSString *const kAPCSignUpCustomInfoStepIdentifier          = @"CustomInfo";
 NSString *const kAPCSignUpPasscodeStepIdentifier            = @"Passcode";
 NSString *const kAPCSignUpPermissionsStepIdentifier         = @"Permissions";
+NSString *const kAPCSignUpThankYouStepIdentifier            = @"ThankYou";
 NSString *const kAPCSignInStepIdentifier                    = @"SignIn";
 NSString *const kAPCSignUpPermissionsPrimingStepIdentifier  = @"PermissionsPriming";
 
@@ -161,6 +162,15 @@ NSString *const kAPCSignUpPermissionsPrimingStepIdentifier  = @"PermissionsPrimi
     }
     
     return _permissionsStep;
+}
+
+- (ORKStep *)thankyouStep
+{
+    if (!_thankyouStep) {
+        _thankyouStep = [[ORKStep alloc] initWithIdentifier:kAPCSignUpThankYouStepIdentifier];
+    }
+    
+    return _thankyouStep;
 }
 
 - (ORKStep *)signInStep

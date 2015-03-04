@@ -1,8 +1,8 @@
 //  APCScheduler.m
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 
 #import "APCScheduler.h"
@@ -179,6 +179,22 @@ static NSString * const kOneTimeSchedule = @"once";
     return array.count ? array : nil;
 }
 
+-(NSArray *) allScheduledTasks{
+    __block NSArray * scheduledTaskArray;
+    dispatch_sync(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
+        NSFetchRequest * request = [APCScheduledTask request];
+        [request setShouldRefreshRefetchedObjects:YES];
+        NSError * error;
+        scheduledTaskArray = [self.scheduleMOC executeFetchRequest:request error:&error];
+        if (scheduledTaskArray.count == 0) {
+            APCLogError2 (error);
+        }
+    });
+    
+    return scheduledTaskArray;
+}
+
+
 - (void) updateScheduledTasksForSchedule: (APCSchedule*) schedule
 {
     APCTask * task = [APCTask taskWithTaskID:schedule.taskID inContext:self.scheduleMOC];
@@ -229,24 +245,22 @@ static NSString * const kOneTimeSchedule = @"once";
 #pragma mark - One Time Task Find Or Create
 /*********************************************************************************/
 - (void) findOrCreateOneTimeScheduledTask:(APCSchedule *) schedule task: (APCTask*) task {
+
+     NSArray * scheduledTasksArray = [[self allScheduledTasks] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"task.taskID == %@", task.taskID]];
     
-    NSArray * scheduledTasksArray = [self.allScheduledTasksForReferenceDate filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"task == %@", task]];
-    
-    if (scheduledTasksArray.count == 0) {
+    if (scheduledTasksArray.count > 0){
+        //do nothing
+        APCLogDebug(@"task already scheduled: %@", task);
+        APCScheduledTask * validatedTask = scheduledTasksArray.firstObject;
+        [self validateScheduledTask:validatedTask];
+    }else{
         //One time not created, create it
         NSDate * startOnDate = [NSDate yesterdayAtMidnight]; //Hard coded to yesterday at midnight
         NSDate * endDate = (schedule.expires !=nil) ? [startOnDate dateByAddingTimeInterval:schedule.expiresInterval] : [startOnDate dateByAddingTimeInterval:[NSDate parseISO8601DurationString:@"P2Y"]];
         endDate = [NSDate endOfDay:endDate];
         [self createScheduledTask:schedule task:task dateRange:[[APCDateRange alloc] initWithStartDate:startOnDate endDate:endDate]];
-    } else if (scheduledTasksArray.count == 1) {
-        //One time task already scheduled
-        APCScheduledTask * validatedTask = scheduledTasksArray.firstObject;
-        [self validateScheduledTask:validatedTask];
     }
-    else {
-        //Many one time tasks found
-        NSAssert(NO, @"Many one time scheduled tasks should not be present");
-    }
+    
 }
 
 /*********************************************************************************/

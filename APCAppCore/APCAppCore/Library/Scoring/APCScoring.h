@@ -1,8 +1,8 @@
 //
 //  APHScoring.h
-//  AppCore
+//  APCAppCore
 //
-//  Copyright (c) 2014 Apple Inc. All rights reserved.
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
 #import <HealthKit/HealthKit.h>
@@ -42,6 +42,11 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
 - (instancetype)initWithTask:(NSString *)taskId
                 numberOfDays:(NSInteger)numberOfDays
                     valueKey:(NSString *)valueKey
+                  latestOnly:(BOOL)latestOnly;
+
+- (instancetype)initWithTask:(NSString *)taskId
+                numberOfDays:(NSInteger)numberOfDays
+                    valueKey:(NSString *)valueKey
                      dataKey:(NSString *)dataKey;
 
 - (instancetype)initWithTask:(NSString *)taskId
@@ -55,7 +60,7 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
                     valueKey:(NSString *)valueKey
                      dataKey:(NSString *)dataKey
                      sortKey:(NSString *)sortKey
-                  groupBy:(APHTimelineGroups)groupBy;
+                     groupBy:(APHTimelineGroups)groupBy;
 
 - (void)updatePeriodForDays:(NSInteger)numberOfDays
                     groupBy:(APHTimelineGroups)groupBy
