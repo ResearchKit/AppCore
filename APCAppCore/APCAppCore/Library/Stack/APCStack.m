@@ -47,4 +47,13 @@
     return answer;
 }
 
+- (id)peek
+{
+    NSAssert(self.storage.count, @"Attempted to pop an element off of an empty stack");
+    
+    id  answer = [self.storage lastObject];
+    
+    return answer;
+}
+
 @end

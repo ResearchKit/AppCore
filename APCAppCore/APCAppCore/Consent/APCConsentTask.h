@@ -11,7 +11,7 @@
 #import "APCConsentRedirector.h"
 
 
-@interface APCConsentTask : ORKOrderedTask <ORKTask>
+@interface APCConsentTask : NSObject <ORKTask>
 
 @property (nonatomic, strong) ORKConsentDocument*       consentDocument;
 @property (nonatomic, strong) id<APCConsentRedirector>  redirector;

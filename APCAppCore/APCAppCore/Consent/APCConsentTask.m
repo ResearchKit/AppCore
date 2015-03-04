@@ -6,7 +6,6 @@
 //
 
 #import "APCConsentTask.h"
-#import "APCStack.h"
 #import "APCLog.h"
 #import "APCConsentBooleanQuestion.h"
 #import "APCConsentInstructionQuestion.h"
@@ -45,8 +44,10 @@ static NSString*    kSharingTag                         = @"sharing";
 
 @interface APCConsentTask ()
 
+@property (nonatomic, copy)   NSString*         identifier;
+@property (nonatomic, strong) NSMutableArray*   steps;
+
 @property (nonatomic, strong) NSMutableArray*   consentSteps;
-@property (nonatomic, strong) APCStack*         path;
 @property (nonatomic, assign) BOOL              passedQuiz;
 
 @property (nonatomic, copy)   NSString*         documentHtmlContent;
@@ -69,6 +70,9 @@ static NSString*    kSharingTag                         = @"sharing";
 @property (nonatomic, copy)   NSString*         investigatorLongDescription;
 @property (nonatomic, copy)   NSString*         sharingHtmlLearnMoreContent;
 
+@property (nonatomic, strong) ORKConsentSharingStep*  sharingStep;
+@property (nonatomic, strong) ORKVisualConsentStep*   visualStep;
+
 @end
 
 
@@ -79,11 +83,10 @@ static NSString*    kSharingTag                         = @"sharing";
 {
     NSArray*    consentSteps = [self commonInitWithPropertiesFileName:fileName customSteps:nil];
     
-    self = [super initWithIdentifier:identifier steps:consentSteps];
-    if (self)
-    {
-        _failedMessageTag = kFailedMessageTag;
-    }
+    _consentSteps = [consentSteps mutableCopy];
+    _identifier = identifier;
+    _steps      = [consentSteps mutableCopy];
+    _failedMessageTag = kFailedMessageTag;
     
     return self;
 }
@@ -91,12 +94,10 @@ static NSString*    kSharingTag                         = @"sharing";
 - (instancetype)initWithIdentifier:(NSString*)identifier propertiesFileName:(NSString*)fileName customSteps:(NSArray*)customSteps
 {
     NSArray*    consentSteps = [self commonInitWithPropertiesFileName:fileName customSteps:customSteps];
-    
-    self = [super initWithIdentifier:identifier steps:consentSteps];
-    if (self)
-    {
-    
-    }
+
+    _consentSteps = [consentSteps mutableCopy];
+    _identifier = identifier;
+    _steps      = [consentSteps mutableCopy];
     
     return self;
 }
@@ -125,12 +126,12 @@ static NSString*    kSharingTag                         = @"sharing";
     _consentDocument = document;
     
     
-    ORKVisualConsentStep*   visualStep  = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual"
-                                                                                  document:_consentDocument];
-    ORKConsentSharingStep*  sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:kSharingTag
-                                                               investigatorShortDescription:self.investigatorShortDescription
-                                                                investigatorLongDescription:self.investigatorLongDescription
-                                                              localizedLearnMoreHTMLContent:self.sharingHtmlLearnMoreContent];
+    _visualStep  = [[ORKVisualConsentStep alloc] initWithIdentifier:@"visual"
+                                                           document:_consentDocument];
+    _sharingStep = [[ORKConsentSharingStep alloc] initWithIdentifier:kSharingTag
+                                        investigatorShortDescription:self.investigatorShortDescription
+                                         investigatorLongDescription:self.investigatorLongDescription
+                                       localizedLearnMoreHTMLContent:self.sharingHtmlLearnMoreContent];
     
     APCAppDelegate* delegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
     BOOL disableSignatureInConsent = delegate.disableSignatureInConsent;
@@ -147,8 +148,8 @@ static NSString*    kSharingTag                         = @"sharing";
                                   @"wish to take part in this research study.";
     
     NSMutableArray* consentSteps = [[NSMutableArray alloc] init];
-    [consentSteps addObject:visualStep];
-    [consentSteps addObject:sharingStep];
+    [consentSteps addObject:_visualStep];
+    [consentSteps addObject:_sharingStep];
     
     _indexOfFirstCustomStep = consentSteps.count;
     [consentSteps addObjectsFromArray:customSteps];
@@ -214,6 +215,26 @@ static NSString*    kSharingTag                         = @"sharing";
 
 - (ORKStep*)stepAfterStep:(ORKStep*)step withResult:(ORKTaskResult*)result
 {
+#if 0
+    ORKStep*    nextStep = nil;
+    
+    if (step == nil)
+    {
+        nextStep = self.consentSteps.firstObject;
+    }
+    else
+    {
+        NSUInteger  ndx = [self.consentSteps indexOfObject:step];
+        if (ndx < self.consentSteps.count - 1)
+        {
+            nextStep = self.consentSteps[ndx + 1];
+        }
+    }
+    
+    NSLog(@"stepAfterStep: %@ -> %@", step.identifier, nextStep.identifier);
+    
+    return nextStep;
+#endif
     BOOL(^compareStep)(ORKStep*, NSUInteger, BOOL*) = ^(ORKStep* s, NSUInteger  __unused ndx, BOOL* __unused stop)
     {
         return [s.identifier isEqualToString:step.identifier];
@@ -367,23 +388,29 @@ static NSString*    kSharingTag                         = @"sharing";
         nextStep = findNextStep();
     }
     
-    
-    if (nextStep != nil)
-    {
-        [self.path push:nextStep];                          //  Record our path
-    }
-    
     return nextStep;
 }
 
 
-- (ORKStep*)stepBeforeStep:(ORKStep*) __unused step withResult:(ORKTaskResult*) __unused result
+- (ORKStep*)stepBeforeStep:(ORKStep*)step withResult:(ORKTaskResult*) __unused result
 {
     ORKStep*    previousStep = nil;
     
-    if (self.path.count > 0)
+    if (step == nil)
     {
-        previousStep = [self.path pop];
+        previousStep = self.consentSteps.lastObject;
+    }
+    else
+    {
+        NSUInteger  ndx = [self.consentSteps indexOfObject:step];
+        if (ndx == NSNotFound)
+        {
+            previousStep = self.visualStep;
+        }
+        else if (ndx > 0)
+        {
+            previousStep = self.consentSteps[ndx - 1];
+        }
     }
     
     return previousStep;
