@@ -12,7 +12,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *completingActivitiesMessage;
 @property (weak, nonatomic) IBOutlet UILabel *thankYouBanner;
-@property (weak, nonatomic) IBOutlet UILabel *youCanCompareMessage;
 @property (weak, nonatomic) IBOutlet APCConfirmationView *confirmation;
 
 @end

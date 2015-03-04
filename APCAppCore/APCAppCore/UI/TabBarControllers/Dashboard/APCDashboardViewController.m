@@ -16,6 +16,9 @@
 
 NSInteger const kNumberOfDaysToDisplay = 7;
 
+static CGFloat const kAPCProgressViewCellHeight = 198.0f;
+static CGFloat const kAPCLineGraphCellHeight = 225.0f;
+
 @interface APCDashboardViewController ()<UIGestureRecognizerDelegate, APCConcentricProgressViewDataSource>
 
 @property (nonatomic, strong) NSMutableArray *lineCharts;
@@ -46,8 +49,6 @@ NSInteger const kNumberOfDaysToDisplay = 7;
     _presentAnimator = [APCPresentAnimator new];
     _fadeAnimator = [APCFadeAnimator new];
     
-    self.tableView.estimatedRowHeight = 65.0;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 - (void)viewDidLayoutSubviews
@@ -223,6 +224,35 @@ NSInteger const kNumberOfDaysToDisplay = 7;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (CGFloat)tableView:(UITableView *) __unused tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat height = 0;
+    
+    APCTableViewItem *dashboardItem = [self itemForIndexPath:indexPath];
+    
+    if ([dashboardItem isKindOfClass:[APCTableViewDashboardProgressItem class]]) {
+        
+        height = kAPCProgressViewCellHeight;
+        
+    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardGraphItem class]]){
+        
+        height = kAPCLineGraphCellHeight;
+        
+    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardMessageItem class]]){
+        
+        CGFloat basicCellHeight = 47.0f;
+        CGFloat contentHeight = [dashboardItem.detailText boundingRectWithSize:CGSizeMake(284, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:[UIFont appLightFontWithSize:16.0f]} context:nil].size.height;
+        height = contentHeight + basicCellHeight;
+        
+    } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardInsightItem class]]){
+        height = 90.0f;
+    } else {
+        height = 75.0f;
+    }
+    
+    return height;
 }
 
 #pragma mark - APCBaseGraphViewDelegate methods

@@ -11,5 +11,6 @@
 @interface APCSimpleTaskSummaryViewController : APCStepViewController
 
 @property (nonatomic) CGFloat taskProgress;
+@property (weak, nonatomic) IBOutlet UILabel *youCanCompareMessage;
 
 @end
