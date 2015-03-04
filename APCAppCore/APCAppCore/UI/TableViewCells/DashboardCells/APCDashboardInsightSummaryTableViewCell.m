@@ -4,7 +4,6 @@
 //
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
-
 #import "APCDashboardInsightSummaryTableViewCell.h"
 
 @interface APCDashboardInsightSummaryTableViewCell()

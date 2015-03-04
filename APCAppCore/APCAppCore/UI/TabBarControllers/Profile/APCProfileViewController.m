@@ -1,9 +1,9 @@
 // 
 //  APCProfileViewController.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCProfileViewController.h"
 #import "APCAppCore.h"
@@ -50,6 +50,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSString *build = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    self.versionLabel.text = [NSString stringWithFormat:@"Version: %@ (Build %@)", version, build];
     // Do any additional setup after loading the view.
 }
 

@@ -40,9 +40,8 @@ NSString *const kFileInfoContentTypeKey     = @"contentType";
  anything that's using this.
  */
 static NSString * const kAPCFilenameIfCouldntIdentifyFileName = @"NoName";
-
-static NSArray * kKnownJSONFilenamePrefixes = nil;
-
+static NSString * const kAPCFilenameExtensionJSON = @"json";
+static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
 
 
 @interface APCDataArchiver ()
@@ -75,24 +74,13 @@ static NSArray * kKnownJSONFilenamePrefixes = nil;
      ...um.  Some of these are several megabytes.  So -- do we
      *want* to suggest that they're "readable"?
      */
-    kKnownJSONFilenamePrefixes = @[
-
-                                   //
-                                   // Parkinson's
-                                   //
-                                   @"accel_walking.outbound",
-                                   @"accel_walking.rest",
-                                   @"accel_walking.return",
-                                   @"deviceMotion_walking.outbound",
-                                   @"deviceMotion_walking.rest",
-                                   @"deviceMotion_walking.return",
-                                   @"pedometer_walking.outbound",
-                                   @"pedometer_walking.return",
-
-                                   //
-                                   // (more apps to go here)
-                                   //
-                                   ];
+    kAPCKnownJSONFilenamePrefixes = @[
+                                      @"accel_walking",
+                                      @"deviceMotion_walking",
+                                      @"pedometer_walking",
+                                      @"accel_tapping",
+                                      @"accel_fitness",
+                                      ];
 }
 
 /**
@@ -212,15 +200,16 @@ static NSArray * kKnownJSONFilenamePrefixes = nil;
             else if ([result isKindOfClass:[ORKFileResult class]])
             {
                 ORKFileResult * fileResult = (ORKFileResult*) result;
-                NSString *fileNameIfCanInterpretAsJSON = [self fileNameIfCanInterpretAsJSONFile: fileResult];
 
-                if (fileNameIfCanInterpretAsJSON == nil)
+                NSString *betterFilename = [self friendlyFilenameForFile: fileResult];
+
+                if ([betterFilename hasSuffix: kAPCFilenameExtensionJSON])
                 {
-                    [self addGenericDataFileToArchive: fileResult];
+                    [self addJSONFileToArchive: fileResult usingFileName: betterFilename];
                 }
                 else
                 {
-                    [self addJSONFileToArchive: fileResult usingFileName: fileNameIfCanInterpretAsJSON];
+                    [self addGenericDataFileToArchive: fileResult];
                 }
             }
 
@@ -284,51 +273,71 @@ static NSArray * kKnownJSONFilenamePrefixes = nil;
  A catchall for any rules, tricks, or whatever that we
  can use to make outbound "black box" data files readable.
  */
-- (NSString *) fileNameIfCanInterpretAsJSONFile: (ORKFileResult *) file
+- (NSString *) friendlyFilenameForFile: (ORKFileResult *) file
 {
-    BOOL canInterpretAsJSON = NO;
-    NSString *newFileName = nil;
+    BOOL isKnownJSONFilename = NO;
+    NSString *defaultFileName = file.fileURL.lastPathComponent;
+    NSString *currentFileName = defaultFileName;
 
+    /*
+     Is it JSON?
 
-    //
-    // First try:  is it a known JSON filename?
-    //
-
-    if (! canInterpretAsJSON)
+     If we happen to know this filename is JSON, 
+     set a flag before we mangle (or unmangle)
+     the name.
+     */
+    for (NSString *filenamePrefix in kAPCKnownJSONFilenamePrefixes)
     {
-        NSString *fileName = file.fileURL.lastPathComponent;
-        BOOL hasKnownJSONFilePrefix = NO;
-        for (NSString *knownPrefix in kKnownJSONFilenamePrefixes)
+        if ([defaultFileName hasPrefix: filenamePrefix])
         {
-            if ([fileName hasPrefix: knownPrefix])
-            {
-                hasKnownJSONFilePrefix = YES;
-                break;
-            }
-        }
-
-        canInterpretAsJSON = hasKnownJSONFilePrefix;
-
-        if (canInterpretAsJSON)
-        {
-            newFileName = [fileName stringByReplacingOccurrencesOfString: @"." withString: @"_"];
-            newFileName = [newFileName stringByAppendingString: @".json"];
+            isKnownJSONFilename = YES;
+            break;
         }
     }
 
+    /*
+     Strip trailing timestamps.
 
+     Some of our filenames have timestamps, like:
+     
+            "blah_blah_blah-20150131050505"
 
-    //
-    // Second try:  um... yeah.  Workin' on that.
-    //
+     --meaning January 31, 2015, at 5:05:05 AM.  If we find one,
+     strip off the timestamp.
+     
+     The timestamp is 14 characters, which is where the "14" in
+     this next line of code comes from:  I'm searching for strings
+     whose last 14 characters are digits ("\d").
+     */
+    NSString *timestampPattern = @"-\\d{14}";
+    NSRange timestampRange = [currentFileName rangeOfString: timestampPattern
+                                                    options: NSRegularExpressionSearch];
 
-    if (! canInterpretAsJSON)
+    if (timestampRange.location == currentFileName.length - timestampRange.length)
     {
-        // (sound of whistling)
+        currentFileName = [currentFileName substringToIndex: timestampRange.location];
     }
 
+    /*
+     Replace spaces, hyphens, dots, underscores,
+     or sequences of more than one of those things,
+     with a single "_".
+     */
+    currentFileName = [currentFileName stringByReplacingOccurrencesOfString: @"[_ .\\-]+"
+                                                                 withString: @"_"
+                                                                    options: NSRegularExpressionSearch
+                                                                      range: NSMakeRange (0, currentFileName.length)];
 
-    return newFileName;
+    /*
+     Now that we've unmangled it, append the ".json", if
+     appropriate.
+     */
+    if (isKnownJSONFilename)
+    {
+        currentFileName = [currentFileName stringByAppendingPathExtension: kAPCFilenameExtensionJSON];
+    }
+
+    return currentFileName;
 }
 
 static  NSString  *kTappingViewSizeKey       = @"TappingViewSize";
@@ -435,7 +444,7 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
     NSError * error;
     NSData * jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:&error];
     if (jsonData !=nil) {
-        NSString * fullFileName = [fileName stringByAppendingPathExtension:@"json"];
+        NSString * fullFileName = [fileName stringByAppendingPathExtension: kAPCFilenameExtensionJSON];
         [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fullFileName
                                                                     compress:YES
                                                                    dataBlock:^(NSError** __unused error){ return jsonData;}]];
@@ -462,7 +471,7 @@ static      NSString  *kTapCoordinateKey     = @"TapCoordinate";
 - (void) addFileInfoEntryWithDictionary: (NSDictionary*) dictionary
 {
     NSString * fileName = dictionary[kItemKey]?:kAPCFilenameIfCouldntIdentifyFileName;
-    NSString * fullFileName = [fileName stringByAppendingPathExtension:@"json"];
+    NSString * fullFileName = [fileName stringByAppendingPathExtension: kAPCFilenameExtensionJSON];
     [self addFileInfoEntryWithFileName:fullFileName timeStamp:dictionary[kEndDateKey] contentType:@"application/json"];
 }
 

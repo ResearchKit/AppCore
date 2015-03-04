@@ -1,9 +1,9 @@
 // 
 //  APCAppDelegate.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCAppDelegate.h"
 #import "APCAppCore.h"
@@ -208,11 +208,11 @@ static NSUInteger const kIndexOfProfileTab = 3;
 - (void) initializeBridgeServerConnection
 {
 //If in DEBUG mode, automatically point to staging environment. In release mode read from intializationOptions dictionary.
-#if DEBUG
-    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment: SBBEnvironmentStaging];
-#else
+//#if DEBUG
+//    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment: SBBEnvironmentStaging];
+//#else
     [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment:(SBBEnvironment)[self.initializationOptions[kBridgeEnvironmentKey] integerValue]];
-#endif
+//#endif
 }
 
 - (void) initializeAppleCoreStack
