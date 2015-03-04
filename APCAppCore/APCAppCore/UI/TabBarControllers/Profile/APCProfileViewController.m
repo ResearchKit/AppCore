@@ -34,9 +34,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 @property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 
-@property (nonatomic, strong) APCParameters *parameters;
-
-
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyDetailsViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *studyLabelCenterYConstraint;
 @property (strong, nonatomic) APCPermissionsManager *permissionManager;
@@ -674,7 +671,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.editable = YES;
             field.selectionStyle = UITableViewCellSelectionStyleGray;
             
-            NSNumber *numberOfMinutes = [self.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
+            NSNumber *numberOfMinutes = [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.parameters numberForKey:kNumberOfMinutesForPasscodeKey];
             
             if ( numberOfMinutes != nil)
             {
@@ -1109,14 +1106,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
     [super pickerTableViewCell:cell pickerViewDidSelectIndices:selectedIndices];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    if (indexPath.section == 0 && indexPath.row == 1) {
+    //auto lock
+    if (indexPath.section == 2 && indexPath.row == 1) {
         NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
-        [self.parameters setNumber:[APCParameters autoLockValues][index] forKey:kNumberOfMinutesForPasscodeKey];
-    }
-    else if (indexPath.section == 1 && indexPath.row == 2) {
-        APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-        NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
-        appDelegate.tasksReminder.reminderTime = [APCTasksReminderManager reminderTimesArray][index];
+        [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.parameters setNumber:[APCParameters autoLockValues][index] forKey:kNumberOfMinutesForPasscodeKey];
     }
 }
 
@@ -1209,6 +1202,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                 case kAPCUserInfoItemTypeHeight:
                 {
+                    double height = [[(APCTableViewCustomPickerItem *)item stringValue] floatValue];
+                    HKUnit *footUnit = [HKUnit footUnit];
+                    HKQuantity *heightQuantity = [HKQuantity quantityWithUnit:footUnit doubleValue:height];
+                    
+                    self.user.height = heightQuantity;
                 }
                     
                     break;
@@ -1256,6 +1254,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     break;
                     
                 case kAPCSettingsItemTypePrivacyPolicy:
+                    
+                    break;
+                    
+                case kAPCSettingsItemTypeSharingOptions:
                     
                     break;
                 default:
