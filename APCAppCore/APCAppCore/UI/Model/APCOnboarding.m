@@ -13,6 +13,7 @@
 #import "APCSignUpMedicalInfoViewController.h"
 #import "APCSignupPasscodeViewController.h"
 #import "APCSignUpPermissionsViewController.h"
+#import "APCThankYouViewController.h"
 #import "APCSignInViewController.h"
 #import "NSBundle+Helper.h"
 
@@ -125,6 +126,14 @@ static NSString * const kOnboardingStoryboardName = @"APCOnboarding";
         scene.bundle = [NSBundle appleCoreBundle];
         
         [scenes setObject:scene forKey:kAPCSignUpPermissionsStepIdentifier];
+    }
+    {
+        APCScene *scene = [APCScene new];
+        scene.name = NSStringFromClass([APCThankYouViewController class]);
+        scene.storyboardName = kOnboardingStoryboardName;
+        scene.bundle = [NSBundle appleCoreBundle];
+        
+        [scenes setObject:scene forKey:kAPCSignUpThankYouStepIdentifier];
     }
     {
         APCScene *scene = [APCScene new];

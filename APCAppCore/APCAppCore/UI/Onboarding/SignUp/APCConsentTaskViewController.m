@@ -23,6 +23,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)taskViewController:(ORKTaskViewController *)taskViewController stepViewControllerWillAppear:(ORKStepViewController *)stepViewController
+{
+    
+}
+
 #pragma mark Required Protocol Methods for Abstract Class
 - (void)taskViewController:(ORKTaskViewController *) __unused taskViewController didFinishWithResult:(ORKTaskViewControllerResult) __unused result error:(NSError *) __unused error
 {

@@ -95,7 +95,7 @@ static NSString*    kSharingTag                         = @"sharing";
     self = [super initWithIdentifier:identifier steps:consentSteps];
     if (self)
     {
-        
+    
     }
     
     return self;
