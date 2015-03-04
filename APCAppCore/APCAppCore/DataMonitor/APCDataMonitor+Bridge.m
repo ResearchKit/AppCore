@@ -67,6 +67,9 @@ NSString *const kFirstTimeRefreshToday = @"FirstTimeRefreshToday";
 - (void) uploadZipFile:(NSString*) path onCompletion: (void (^)(NSError * error)) completionBlock
 {
     NSParameterAssert(path);
+
+    APCLogFilenameBeingUploaded (path);
+
     [SBBComponent(SBBUploadManager) uploadFileToBridge:[NSURL fileURLWithPath:path] contentType:@"application/zip" completion:^(NSError *error) {
         if (!error) {
             APCLogEventWithData(kNetworkEvent, (@{@"event_detail":[NSString stringWithFormat:@"Uploaded Passive Collector File: %@", path.lastPathComponent]}));

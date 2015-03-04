@@ -146,6 +146,10 @@ static NSString *const kCSVFilename  = @"data.csv";
     NSMutableArray * zipEntries = [NSMutableArray array];
     NSString * csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
     NSString * infoFilePath = [tracker.folder stringByAppendingPathComponent:kInfoFilename];
+
+    APCLogFilenameBeingArchived (kCSVFilename);
+    APCLogFilenameBeingArchived (kInfoFilename);
+
     [zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: kCSVFilename
                                                            compress:YES
                                                           dataBlock:^(NSError** __unused error){ return [NSData dataWithContentsOfFile:csvFilePath];}]];

@@ -57,14 +57,15 @@
 	defined at the bottom of this file.
  */
 
-#define APCLogError( ... )						[APCLog methodInfo: APCLogMethodInfo ()  errorMessage: __VA_ARGS__]
-#define APCLogError2( nsErrorObject )			[APCLog methodInfo: APCLogMethodInfo ()  error: nsErrorObject]
-#define APCLogException( nsException )			[APCLog methodInfo: APCLogMethodInfo ()  exception: nsException]
-#define APCLogDebug( ... )						[APCLog methodInfo: APCLogMethodInfo ()  debug: __VA_ARGS__]
-#define APCLogEvent( ... )						[APCLog methodInfo: APCLogMethodInfo ()  event: __VA_ARGS__]
-#define APCLogEventWithData( name, dictionary )	[APCLog methodInfo: APCLogMethodInfo ()  eventName: name  data: dictionary]
-#define APCLogViewControllerAppeared()			[APCLog methodInfo: APCLogMethodInfo ()  viewControllerAppeared: self]
-
+#define APCLogError( ... )                              [APCLog methodInfo: APCLogMethodInfo ()  errorMessage: __VA_ARGS__]
+#define APCLogError2( nsErrorObject )                   [APCLog methodInfo: APCLogMethodInfo ()  error: nsErrorObject]
+#define APCLogException( nsException )                  [APCLog methodInfo: APCLogMethodInfo ()  exception: nsException]
+#define APCLogDebug( ... )                              [APCLog methodInfo: APCLogMethodInfo ()  debug: __VA_ARGS__]
+#define APCLogEvent( ... )                              [APCLog methodInfo: APCLogMethodInfo ()  event: __VA_ARGS__]
+#define APCLogEventWithData( name, dictionary )         [APCLog methodInfo: APCLogMethodInfo ()  eventName: name  data: dictionary]
+#define APCLogViewControllerAppeared()                  [APCLog methodInfo: APCLogMethodInfo ()  viewControllerAppeared: self]
+#define APCLogFilenameBeingArchived( filenameOrPath )   [APCLog methodInfo: APCLogMethodInfo ()  filenameBeingArchived: filenameOrPath]
+#define APCLogFilenameBeingUploaded( filenameOrPath )   [APCLog methodInfo: APCLogMethodInfo ()  filenameBeingUploaded: filenameOrPath]
 
 
 
@@ -97,11 +98,19 @@
 
 /** Please consider calling APCLogException() instead. */
 + (void) methodInfo: (NSString *) apcLogMethodInfo
-		  exception: (NSException *) exception;
+          exception: (NSException *) exception;
 
 /** Please consider calling APCLogDebug() instead. */
 + (void) methodInfo: (NSString *) apcLogMethodInfo
-			  debug: (NSString *) formatString, ... ;
+              debug: (NSString *) formatString, ... ;
+
+/** Please consider calling APCLogFilenameBeingArchived() instead. */
++ (void)       methodInfo: (NSString *) apcLogMethodInfo
+    filenameBeingArchived: (NSString *) filenameOrPath;
+
+/** Please consider calling APCLogFilenameBeingUploaded() instead. */
++ (void)       methodInfo: (NSString *) apcLogMethodInfo
+    filenameBeingUploaded: (NSString *) filenameOrPath;
 
 /** Please consider calling APCLogEvent() instead. */
 + (void) methodInfo: (NSString *) apcLogMethodInfo

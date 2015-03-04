@@ -444,6 +444,9 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
     NSData * jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:&error];
     if (jsonData !=nil) {
         NSString * fullFileName = [fileName stringByAppendingPathExtension: kAPCFilenameExtensionJSON];
+
+        APCLogFilenameBeingArchived (fullFileName);
+
         [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fullFileName
                                                                     compress:YES
                                                                    dataBlock:^(NSError** __unused error){ return jsonData;}]];
@@ -455,6 +458,8 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
 
 - (void) writeDataToArchive: (NSData*) data fileName: (NSString*) fileName
 {
+    APCLogFilenameBeingArchived (fileName);
+
     [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fileName
                                                                 compress:YES
                                                                dataBlock:^(NSError** __unused error){ return data;}]];
@@ -462,6 +467,8 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
 
 - (void) writeURLToArchive: (NSURL*) url usingFileName: (NSString *) fileName
 {
+    APCLogFilenameBeingArchived (fileName);
+
     [self.zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: fileName
                                                                 compress:YES
                                                                dataBlock:^(NSError** __unused error){ return [NSData dataWithContentsOfURL:url];}]];
@@ -494,6 +501,7 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
     [self.zipArchive updateEntries:self.zipEntries error:&error];
     APCLogError2(error);
 }
+
 
 /*********************************************************************************/
 #pragma mark - Write Output File

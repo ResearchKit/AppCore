@@ -28,6 +28,10 @@
     else
     {
         if (self.archiveFilename.length > 0) {
+
+            NSString *pathBeingUploaded = self.archiveURL.absoluteString;
+            APCLogFilenameBeingUploaded (pathBeingUploaded);
+
             [SBBComponent(SBBUploadManager) uploadFileToBridge:self.archiveURL contentType:@"application/zip" completion:^(NSError *error) {
                 
                 if (error) {

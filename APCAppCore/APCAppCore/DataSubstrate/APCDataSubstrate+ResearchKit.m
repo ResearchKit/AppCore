@@ -52,6 +52,9 @@
     else
     {
         NSAssert(url, @"URL Missing");
+
+        APCLogFilenameBeingUploaded (url.absoluteString);
+
         [SBBComponent(SBBUploadManager) uploadFileToBridge:url contentType:@"application/zip" completion:^(NSError *error) {
             APCLogError2 (error);
             if (completionBlock) {
