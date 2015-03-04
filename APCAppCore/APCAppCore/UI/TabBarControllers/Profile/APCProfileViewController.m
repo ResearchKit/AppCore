@@ -1,9 +1,9 @@
 // 
 //  APCProfileViewController.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCProfileViewController.h"
 #import "APCAppCore.h"
