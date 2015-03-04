@@ -11,11 +11,10 @@
 
 @interface APCLozengeButton : UIButton
 
-@property  (nonatomic, strong)  APCMedTrackerDailyDosageRecord  *dailyDosageRecord;
 @property  (nonatomic, strong)  APCMedTrackerPrescription       *prescription;
+@property  (nonatomic, strong)  APCMedTrackerDailyDosageRecord  *dailyDosageRecord;
 
 @property  (nonatomic, strong)  NSDate                          *currentDate;
-@property  (nonatomic, strong)  NSNumber                        *numberOfDosesTaken;
 
 @property  (nonatomic, strong)  UIColor                         *lozengeColor;
 

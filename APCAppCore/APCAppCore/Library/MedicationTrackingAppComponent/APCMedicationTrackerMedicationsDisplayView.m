@@ -79,10 +79,10 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
     self.prescriptions = thePrescriptions;
     self.startOfWeekDate = aDate;
     
-    for (APCMedTrackerPrescription *prescription in thePrescriptions) {
+    for (APCMedTrackerPrescription *prescription in self.prescriptions) {
         
-        [prescription fetchDosesTakenFromDate: aDate
-                                       toDate: [aDate dateByAddingDays: 6]
+        [prescription fetchDosesTakenFromDate: self.startOfWeekDate
+                                       toDate: [self.startOfWeekDate dateByAddingDays: 6]
                               andUseThisQueue: [NSOperationQueue mainQueue]
                              toDoThisWhenDone: ^(APCMedTrackerPrescription *prescriptionBeingFetched,
                                                  NSArray *dailyDosageRecords,
@@ -134,10 +134,12 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 #pragma   mark  -  Create Lozenge Buttons     kLozengeTextPointSize
 
 - (void)makeLozengesLayoutForPrescription: (APCMedTrackerPrescription *) prescription
-                  usingDailyDosageRecords: (NSArray *) dailyDosageRecords   // forRow:(NSUInteger)
+                  usingDailyDosageRecords: (NSArray *) dailyDosageRecords
+
 {
     NSDictionary  *map = @{ @"Monday" : @(0.0), @"Tuesday" : @(1.0), @"Wednesday" : @(2.0), @"Thursday" : @(3.0), @"Friday" : @(4.0), @"Saturday" : @(5.0), @"Sunday" : @(6.0) };
-    CGFloat  disp = CGRectGetWidth(self.bounds) / 7.0;
+    
+    CGFloat  displacement = CGRectGetWidth(self.bounds) / 7.0;
     
     CGFloat  baseYCoordinate = kLozengeBaseYCoordinate;
     
@@ -151,32 +153,24 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
         NSString  *dayOfWeek = daysOfWeekNames[day];
         NSNumber  *number = dictionary[dayOfWeek];
         if ([number integerValue] > 0) {
-            CGFloat  xPosition = ([map[dayOfWeek] floatValue] + 1) * disp - disp / 2.0;
+            CGFloat  xPosition = ([map[dayOfWeek] floatValue] + 1) * displacement - displacement / 2.0;
             UIColor  *color = prescription.color.UIColor;
+            
             APCLozengeButton  *lozenge = [self medicationLozengeCenteredAtPoint:CGPointMake(xPosition, yCoordinate) andColor:color];
             
+            APCMedTrackerDailyDosageRecord  *record = nil;
             
-            APCMedTrackerDailyDosageRecord *foundRecord = nil;
-            
-            for (APCMedTrackerDailyDosageRecord *thisRecord in dailyDosageRecords)
-            {
-                if ([thisRecord.dateThisRecordRepresents.startOfDay isEqualToDate: currentDate.startOfDay])
-                {
-                    foundRecord = thisRecord;
+            for (APCMedTrackerDailyDosageRecord *thisRecord in dailyDosageRecords) {
+                if ([thisRecord.dateThisRecordRepresents.startOfDay isEqualToDate: currentDate.startOfDay]) {
+                    record = thisRecord;
                     break;
                 }
             }
-            
-            if (foundRecord)
-            {
-                lozenge.numberOfDosesTaken = foundRecord.numberOfDosesTakenForThisDate;
+            if (record != nil) {
+                lozenge.dailyDosageRecord = record;
+            } else {
+                lozenge.dailyDosageRecord = nil;
             }
-            else
-            {
-                lozenge.numberOfDosesTaken = [NSNumber numberWithUnsignedInteger:0];
-            }
-
-            
             lozenge.prescription = prescription;
             lozenge.currentDate = currentDate;
             [self addSubview:lozenge];
