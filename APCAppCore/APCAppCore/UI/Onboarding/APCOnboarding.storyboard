@@ -1693,6 +1693,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="spc-sz-gJT" firstAttribute="top" secondItem="AxJ-Kv-OS1" secondAttribute="bottom" constant="17" id="0bX-qb-m8c"/>
+                            <constraint firstAttribute="centerX" secondItem="Cnn-8E-rCa" secondAttribute="centerX" id="27O-fh-jia"/>
                             <constraint firstItem="imp-9a-3Ws" firstAttribute="top" secondItem="swZ-ls-Faz" secondAttribute="bottom" constant="17" id="5sx-nQ-s3C"/>
                             <constraint firstAttribute="centerY" secondItem="twe-y1-LwU" secondAttribute="centerY" constant="96.5" id="8s5-6C-TJm"/>
                             <constraint firstAttribute="centerY" secondItem="swZ-ls-Faz" secondAttribute="centerY" constant="67.5" id="Cxy-Y7-C2K"/>
@@ -1705,7 +1706,6 @@
                             <constraint firstAttribute="centerY" secondItem="0Wq-j5-0iQ" secondAttribute="centerY" constant="-158" id="Vko-s6-4uY"/>
                             <constraint firstAttribute="centerX" secondItem="0Wq-j5-0iQ" secondAttribute="centerX" id="b5x-Zx-sI4"/>
                             <constraint firstAttribute="centerX" secondItem="twe-y1-LwU" secondAttribute="centerX" id="b9L-RG-pMB"/>
-                            <constraint firstItem="Cnn-8E-rCa" firstAttribute="leading" secondItem="v3n-Wu-tdk" secondAttribute="leadingMargin" constant="71" id="eFk-cd-Z9C"/>
                             <constraint firstAttribute="centerX" secondItem="imp-9a-3Ws" secondAttribute="centerX" id="hLG-x6-ado"/>
                             <constraint firstAttribute="centerY" secondItem="spc-sz-gJT" secondAttribute="centerY" constant="125.5" id="ihW-Xe-96I"/>
                             <constraint firstAttribute="centerX" secondItem="AxJ-Kv-OS1" secondAttribute="centerX" id="jky-k6-tKF"/>
@@ -1720,11 +1720,18 @@
                             <constraint firstItem="C5d-Ju-ZW2" firstAttribute="top" secondItem="Cnn-8E-rCa" secondAttribute="bottom" constant="20" id="yii-WA-k0u"/>
                             <constraint firstItem="0Wq-j5-0iQ" firstAttribute="top" secondItem="nl9-3s-RtK" secondAttribute="bottom" constant="8" id="zxt-83-1TR"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="TNS-wB-nRd"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="appName" destination="twe-y1-LwU" id="80o-lU-COT"/>
+                        <outlet property="imageViewA" destination="imp-9a-3Ws" id="aWL-Lp-2mN"/>
+                        <outlet property="imageViewB" destination="nl9-3s-RtK" id="NMd-70-b9r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mT3-hB-dlS" userLabel="First Responder" sceneMemberID="firstResponder"/>

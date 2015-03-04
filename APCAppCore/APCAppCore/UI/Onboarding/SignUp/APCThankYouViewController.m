@@ -11,6 +11,8 @@
 @interface APCThankYouViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *appName;
+@property (weak, nonatomic) IBOutlet UIImageView *imageViewA;
+@property (weak, nonatomic) IBOutlet UIImageView *imageViewB;
 
 @end
 
@@ -31,6 +33,14 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
+
+- (APCUser *) user {
+    if (!_user) {
+        _user = ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+    }
+    return _user;
+}
+
 
 - (APCOnboarding *)onboarding
 {
