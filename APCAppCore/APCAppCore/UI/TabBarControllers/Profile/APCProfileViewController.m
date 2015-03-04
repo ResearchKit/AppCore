@@ -1109,7 +1109,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     //auto lock
     if (indexPath.section == 2 && indexPath.row == 1) {
         NSInteger index = ((NSNumber *)selectedIndices[0]).integerValue;
-        [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.parameters setNumber:[APCParameters autoLockValues][index] forKey:kNumberOfMinutesForPasscodeKey];
+        [[NSUserDefaults standardUserDefaults] setInteger:((NSNumber *)[APCParameters autoLockValues][index]).integerValue forKey:kNumberOfMinutesForPasscodeKey];
     }
 }
 
