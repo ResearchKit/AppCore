@@ -148,7 +148,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     _customSurveyQuestion = [storedUserData.customSurveyQuestion copy];
     _hasHeartDisease = [[storedUserData.hasHeartDisease copy] integerValue];
     _taskCompletion = [storedUserData.taskCompletion copy];
-    _sharedOptionSelection = [storedUserData.hasHeartDisease copy];
+    _sharedOptionSelection = [storedUserData.sharedOptionSelection copy];
 }
 
 - (void) updateStoredProperty:(NSString*) propertyName withValue: (id) value

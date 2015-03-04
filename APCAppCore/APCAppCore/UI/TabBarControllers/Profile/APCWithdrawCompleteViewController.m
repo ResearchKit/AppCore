@@ -11,6 +11,7 @@
 #import "UIFont+APCAppearance.h"
 #import "UIImage+APCHelper.h"
 #import "APCWithdrawSurveyViewController.h"
+#import "APCUser+Bridge.h"
 
 @interface APCWithdrawCompleteViewController ()
 
@@ -43,6 +44,9 @@
     [self.logoImageVIew setImage:[UIImage imageNamed:@"logo_disease"]];
 }
 
+- (APCUser *) user {
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+}
 
 - (IBAction) takeSurvey: (id) __unused sender
 {
@@ -52,6 +56,6 @@
 
 - (IBAction) noThanks: (id) __unused sender
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:APCUserWithdrawStudyNotification object:self];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 @end

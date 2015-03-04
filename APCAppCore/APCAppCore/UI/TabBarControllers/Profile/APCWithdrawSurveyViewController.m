@@ -12,6 +12,7 @@
 #import "NSBundle+Helper.h"
 #import "UIImage+APCHelper.h"
 #import "APCAppCore.h"
+#import "APCUser+Bridge.h"
 
 @interface APCWithdrawSurveyViewController ()<APCWithdrawDescriptionViewControllerDelegate>
 
@@ -58,6 +59,10 @@
     [self.headerLabel setFont:[UIFont appLightFontWithSize:14.0f]];
     [self.selectAllLabel setTextColor:[UIColor appSecondaryColor2]];
     [self.selectAllLabel setFont:[UIFont appLightFontWithSize:14.0f]];
+}
+
+- (APCUser *) user {
+    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
 }
 
 #pragma mark - UITableViewDataSource methods
@@ -200,8 +205,8 @@
 
 - (IBAction) submit: (id) __unused sender
 {
-    //TODO: Submit API Call
-    [[NSNotificationCenter defaultCenter] postNotificationName:APCUserWithdrawStudyNotification object:self];
+#warning Call relevant submit API
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

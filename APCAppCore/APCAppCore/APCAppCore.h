@@ -129,6 +129,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCChangePasscodeViewController.h>
 #import <APCAppCore/APCWithdrawSurveyViewController.h>
 #import <APCAppCore/APCWithdrawCompleteViewController.h>
+#import <APCAppCore/APCSharingOptionsViewController.h>
 
 /* -------------------------
  Medication Tracking Setup Controllers
