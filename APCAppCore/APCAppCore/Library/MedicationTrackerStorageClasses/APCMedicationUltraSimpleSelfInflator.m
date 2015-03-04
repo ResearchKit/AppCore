@@ -1,6 +1,6 @@
 //
 //  APCMedicationUltraSimpleSelfInflator.m
-//  AppCore
+//  APCAppCore
 //
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //

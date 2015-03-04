@@ -1,9 +1,9 @@
 // 
 //  APCSettingsViewController.m 
-//  AppCore 
-// 
-//  Copyright (c) 2014 Apple Inc. All rights reserved. 
-// 
+//  APCAppCore
+//
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
  
 #import "APCSettingsViewController.h"
 #import "APCChangePasscodeViewController.h"
@@ -260,7 +260,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 - (APCParameters *)parameters
 {
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.parameters;
+    _parameters = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.parameters;
+    
+    return _parameters;
+   
 }
 
 #pragma mark - Selectors / IBActions
