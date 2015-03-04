@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="jFC-QS-AwW">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="jFC-QS-AwW">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -73,10 +73,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gwx-lg-rch" userLabel="Text Scroll View">
-                                <rect key="frame" x="0.0" y="0.0" width="300" height="118"/>
+                                <rect key="frame" x="0.0" y="0.0" width="300" height="135"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Gwx-lg-rch" secondAttribute="height" multiplier="150:59" id="4cB-EJ-mIF"/>
+                                    <constraint firstAttribute="width" secondItem="Gwx-lg-rch" secondAttribute="height" multiplier="20:9" id="5Hn-Vi-wY8"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="4cB-EJ-mIF"/>
+                                    </mask>
+                                </variation>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JNo-Pr-A1O" userLabel="AccessoryView">
                                 <rect key="frame" x="0.0" y="115" width="300" height="27"/>
@@ -108,7 +114,7 @@
                             <constraint firstAttribute="trailing" secondItem="JNo-Pr-A1O" secondAttribute="trailing" id="6fW-Bf-WYq"/>
                             <constraint firstItem="JNo-Pr-A1O" firstAttribute="leading" secondItem="rYr-tU-JO9" secondAttribute="leading" id="6tv-cF-mRd"/>
                             <constraint firstItem="nNS-6q-lI5" firstAttribute="top" secondItem="JNo-Pr-A1O" secondAttribute="bottom" constant="1" id="De4-1S-toD"/>
-                            <constraint firstItem="JNo-Pr-A1O" firstAttribute="top" secondItem="Gwx-lg-rch" secondAttribute="bottom" constant="-3" id="E1T-WB-LO0"/>
+                            <constraint firstItem="JNo-Pr-A1O" firstAttribute="top" secondItem="Gwx-lg-rch" secondAttribute="bottom" constant="-20" id="E1T-WB-LO0"/>
                             <constraint firstItem="nNS-6q-lI5" firstAttribute="top" secondItem="JNo-Pr-A1O" secondAttribute="bottom" id="K9b-Ft-h3N"/>
                             <constraint firstAttribute="trailing" secondItem="nNS-6q-lI5" secondAttribute="trailing" id="OzJ-fm-Gxq"/>
                             <constraint firstItem="Mr0-uz-c6U" firstAttribute="leading" secondItem="rYr-tU-JO9" secondAttribute="leading" constant="5" id="PKo-0g-0zD"/>

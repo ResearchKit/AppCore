@@ -169,11 +169,17 @@
         [SBBComponent(SBBAuthManager) signInWithUsername: self.email
                                                 password: self.password
                                               completion: ^(NSURLSessionDataTask * __unused task,
-                                                            id __unused responseObject,
+                                                            id responseObject,
                                                             NSError *signInError)
          {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (!signInError) {
+                    
+                    NSDictionary *responseDictionary = (NSDictionary *) responseObject;
+                    if (responseDictionary) {
+                        NSNumber *dataSharing = responseDictionary[@"dataSharing"];
+                        self.sharedOptionSelection = dataSharing;
+                    }
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed In"}));
                 }
                 
