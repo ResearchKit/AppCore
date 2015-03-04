@@ -9,6 +9,8 @@
 #import "APCTabBarViewController.h"
 #import "APCAppCore.h"
 
+static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
+
 @interface APCTabBarViewController () <APCPasscodeViewControllerDelegate>
 @property (nonatomic) BOOL isPasscodeShowing;
 @end
@@ -39,6 +41,8 @@
     self.isPasscodeShowing = NO;
     self.showPasscodeScreen = NO;
     [viewController dismissViewControllerAnimated:YES completion:nil];
+    [[NSUserDefaults standardUserDefaults] setObject: [NSDate date] forKey:kLastUsedTimeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end
