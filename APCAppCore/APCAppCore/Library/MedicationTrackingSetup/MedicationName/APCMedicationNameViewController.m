@@ -15,13 +15,18 @@
 
 #import "APCLog.h"
 
-static  NSString  *kViewControllerName      = @"Medication Name";
+static  NSString  *kViewControllerName       = @"Medication Name";
 
-static  NSString  *kMedicationNameTableCell = @"APCMedicationNameTableViewCell";
+static  NSString  *kMedicationNameTableCell  = @"APCMedicationNameTableViewCell";
+
+static  CGFloat    kSectionHeaderHeight      = 42.0;
+static  CGFloat    kSectionHeaderLabelOffset = 10.0;
 
 @interface APCMedicationNameViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
 @property  (nonatomic, weak)  IBOutlet  UITableView  *tabulator;
+
+@property  (nonatomic, weak)          UIBarButtonItem  *donester;
 
 @property  (nonatomic, strong)          NSArray      *medicationList;
 
@@ -31,16 +36,11 @@ static  NSString  *kMedicationNameTableCell = @"APCMedicationNameTableViewCell";
 
 @implementation APCMedicationNameViewController
 
-#pragma  mark  -  Toolbar Button Action Methods
-
-- (void)cancelButtonTapped:(UIBarButtonItem *) __unused sender
-{
-    [self dismissViewControllerAnimated:YES completion:NULL];
-}
+#pragma  mark  -  Navigation Bar Button Action Methods
 
 - (void)doneButtonTapped:(UIBarButtonItem *) __unused sender
 {
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma  mark  -  Table View Data Source Methods
@@ -54,12 +54,6 @@ static  NSString  *kMedicationNameTableCell = @"APCMedicationNameTableViewCell";
 {
     NSInteger  numberOfRows = [self.medicationList count];
     return  numberOfRows;
-}
-
-- (NSString *)tableView:(UITableView *) __unused tableView titleForHeaderInSection:(NSInteger) __unused section
-{
-    NSString  *title = NSLocalizedString(@"Select the Medication You Are Currently Taking", nil);
-    return  title;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -87,11 +81,11 @@ static  NSString  *kMedicationNameTableCell = @"APCMedicationNameTableViewCell";
         cell.topLabel.text      = firstString;
         cell.bottomLabel.text   = secondString;
     }
-//    cell.topLabel.hidden = YES;
-//    cell.middleLabel.hidden = NO;
-//    cell.middleLabel.text = medication.name;
-//    cell.bottomLabel.hidden = YES;
-    
+    if (self.selectedIndex != nil) {
+        if ([self.selectedIndex isEqual:indexPath] == YES) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+    }
     return  cell;
 }
 
@@ -103,15 +97,18 @@ static  NSString  *kMedicationNameTableCell = @"APCMedicationNameTableViewCell";
     if (self.selectedIndex == nil) {
         self.selectedIndex = indexPath;
         selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        self.donester.enabled = YES;
     } else {
         UITableViewCell  *oldSelectedCell = [tableView cellForRowAtIndexPath:self.selectedIndex];
         if (selectedCell == oldSelectedCell) {
             selectedCell.accessoryType = UITableViewCellAccessoryNone;
             self.selectedIndex = nil;
+            self.donester.enabled = NO;
         } else {
             oldSelectedCell.accessoryType = UITableViewCellAccessoryNone;
             selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
             self.selectedIndex = indexPath;
+            self.donester.enabled = YES;
         }
     }
     if (self.selectedIndex != nil) {
@@ -120,6 +117,52 @@ static  NSString  *kMedicationNameTableCell = @"APCMedicationNameTableViewCell";
                 APCMedTrackerMedication  *medication = self.medicationList[indexPath.row];
                 [self.delegate performSelector:@selector(nameController:didSelectMedicineName:) withObject:self withObject:medication];
             }
+        }
+    }
+}
+
+- (CGFloat)tableView:(UITableView *) __unused tableView heightForHeaderInSection:(NSInteger)section
+{
+    CGFloat  answer = 0;
+    
+    if (section == 0) {
+        answer = kSectionHeaderHeight;
+    }
+    return  answer;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView  *view = nil;
+    
+    if (section == 0) {
+        CGFloat  width  = CGRectGetWidth(tableView.frame);
+        CGFloat  height = [self tableView:tableView heightForHeaderInSection:section];
+        CGRect   frame  = CGRectMake(0.0, 0.0, width, height);
+        view = [[UIView alloc] initWithFrame:frame];
+        view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+        
+        frame.origin.x = kSectionHeaderLabelOffset;
+        frame.size.width = frame.size.width - 2.0 * kSectionHeaderLabelOffset;
+        UILabel  *label = [[UILabel alloc] initWithFrame:frame];
+        label.numberOfLines = 2;
+        label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+        label.textColor = [UIColor blackColor];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.text = NSLocalizedString(@"Select the Medication You Are Currently Taking", nil);
+        [view addSubview:label];
+    }
+    return  view;
+}
+
+- (void)setupIndexPathForMedicationDescriptor:(APCMedTrackerMedication *)aMedicationRecord
+{
+    for (NSUInteger  index = 0;  index < [self.self.medicationList count];  index++) {
+        APCMedTrackerMedication  *medication = self.medicationList[index];
+        if ([medication.name isEqualToString:aMedicationRecord.name] == YES) {
+            NSIndexPath  *path = [NSIndexPath indexPathForRow:index inSection:0];
+            self.selectedIndex = path;
+            break;
         }
     }
 }
@@ -137,10 +180,15 @@ static  NSString  *kMedicationNameTableCell = @"APCMedicationNameTableViewCell";
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    self.medicationList = [NSArray array];
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
+    self.donester = donester;
+    self.navigationItem.rightBarButtonItem = self.donester;
+    self.donester.enabled = NO;
     
     UINib  *medicationNameTableCellNib = [UINib nibWithNibName:kMedicationNameTableCell bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:medicationNameTableCellNib forCellReuseIdentifier:kMedicationNameTableCell];
+    
+    self.medicationList = [NSArray array];
     
     [APCMedTrackerMedication fetchAllFromCoreDataAndUseThisQueue: [NSOperationQueue mainQueue]
                                                 toDoThisWhenDone: ^(NSArray *arrayOfGeneratedObjects,
@@ -153,8 +201,8 @@ static  NSString  *kMedicationNameTableCell = @"APCMedicationNameTableViewCell";
              NSSortDescriptor *nameSorter = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
              NSArray  *descriptors = @[ nameSorter ];
              NSArray  *sorted = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
-             NSMutableArray  *copyOfSorted = [sorted mutableCopy];
              
+             NSMutableArray  *copyOfSorted = [sorted mutableCopy];
              APCMedTrackerMedication  *foundMedication = nil;
              NSUInteger  foundIndex = 0;
              for (NSUInteger  index = 0;  index < [copyOfSorted count];  index++) {
@@ -170,6 +218,9 @@ static  NSString  *kMedicationNameTableCell = @"APCMedicationNameTableViewCell";
                  [copyOfSorted addObject:foundMedication];
              }
              self.medicationList = copyOfSorted;
+             if (self.medicationRecord != nil) {
+                 [self setupIndexPathForMedicationDescriptor:self.medicationRecord];
+             }
             [self.tabulator reloadData];
         }
     }];

@@ -51,6 +51,8 @@ static  NSString  *mainTableCategories[]          = { @"Name",        @"Frequenc
 static  NSInteger  kNumberOfMainTableCategories   = (sizeof(mainTableCategories) / sizeof(NSString *));
 static  NSString  *extraTableCategories[]         = { @"Required",    @"Required",      @"Optional",     @"Optional" };
 
+static  CGFloat    kSectionHeaderHeight           = 32.0;
+static  CGFloat    kSectionHeaderLabelOffset      = 10.0;
 
 static  NSString  *addTableCategories[]           = { @"Select Name", @"Select Frequency", @"Select Color", @"Select Dosage" };
 
@@ -102,19 +104,6 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
         numberOfRows = [self.currentMedicationRecords count];
     }
     return  numberOfRows;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger) __unused section
-{
-    NSString  *title = nil;
-    
-    if (tableView == self.setupTabulator) {
-        title = NSLocalizedString(@"Add Your Medication Details", nil);
-    } else if (tableView == self.listTabulator) {
-        title = nil;
-    }
-    
-    return  title;
 }
 
 - (void)formatCellTopicForRow:(SetupTableRowTypes)row withCell:(APCSetupTableViewCell *)aCell
@@ -205,21 +194,66 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
         if (indexPath.row == kAPCMedicationNameRow) {
             APCMedicationNameViewController  *controller = [[APCMedicationNameViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
             controller.delegate = self;
+            if (self.theMedicationObject != nil) {
+                controller.medicationRecord = self.theMedicationObject;
+            }
             [self.navigationController pushViewController:controller animated:YES];
         } else if (indexPath.row == kAPCMedicationFrequencyRow) {
             APCMedicationFrequencyViewController  *controller = [[APCMedicationFrequencyViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
             controller.delegate = self;
+            if (self.frequenciesAndDaysObject != nil) {
+                controller.daysNumbersDictionary = self.frequenciesAndDaysObject;
+            }
             [self.navigationController pushViewController:controller animated:YES];
         } else if (indexPath.row == kAPCMedicationColorRow) {
             APCMedicationColorViewController  *controller = [[APCMedicationColorViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
             controller.delegate = self;
+            if (self.colorObject != nil) {
+                controller.oneColorDescriptor = self.colorObject;
+            }
             [self.navigationController pushViewController:controller animated:YES];
         } else if (indexPath.row == kAPCMedicationDosageRow) {
             APCMedicationDosageViewController  *controller = [[APCMedicationDosageViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
             controller.delegate = self;
+            if (self.possibleDosage != nil) {
+                controller.dosageRecord = self.possibleDosage;
+            }
             [self.navigationController pushViewController:controller animated:YES];
         }
     }
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView  *view = nil;
+    
+    if (section == 0) {
+        CGFloat  width  = CGRectGetWidth(tableView.frame);
+        CGFloat  height = [self tableView:tableView heightForHeaderInSection:section];
+        CGRect   frame  = CGRectMake(0.0, 0.0, width, height);
+        view = [[UIView alloc] initWithFrame:frame];
+        view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+        
+        frame.origin.x = kSectionHeaderLabelOffset;
+        frame.size.width = frame.size.width - 2.0 * kSectionHeaderLabelOffset;
+        UILabel  *label = [[UILabel alloc] initWithFrame:frame];
+        label.numberOfLines = 2;
+        label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+        label.textColor = [UIColor blackColor];
+        label.text = NSLocalizedString(@"Add Your Medication Details", nil);;
+        [view addSubview:label];
+    }
+    return  view;
+}
+
+- (CGFloat)tableView:(UITableView *) __unused tableView heightForHeaderInSection:(NSInteger)section
+{
+    CGFloat  answer = 0;
+    
+    if (section == 0) {
+        answer = kSectionHeaderHeight;
+    }
+    return  answer;
 }
 
 #pragma  mark  -  Done Button Action Method
@@ -359,6 +393,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
                                                                            NSError * __unused error)
      {
          self.colorsList = arrayOfGeneratedObjects;
+         self.colorObject = [self.colorsList lastObject];
      }];
 }
 

@@ -64,6 +64,8 @@
 		08EA2AB41A7AD564007549C0 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */; };
 		360C63D11A339746002EC86C /* NSDateComponentsHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */; };
 		3624092B1A8181350005B1A7 /* get_debug_ip_address.sh in Resources */ = {isa = PBXBuildFile; fileRef = 3624092A1A8181350005B1A7 /* get_debug_ip_address.sh */; };
+		36257FBD1AA714B60060B95A /* CMMotionActivity+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 36257FBB1AA714B60060B95A /* CMMotionActivity+Helper.h */; };
+		36257FBE1AA714B60060B95A /* CMMotionActivity+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36257FBC1AA714B60060B95A /* CMMotionActivity+Helper.m */; };
 		3627D3481A9A7517006B02E8 /* APCMedTrackerMedication.h in Headers */ = {isa = PBXBuildFile; fileRef = 3627D3461A9A7517006B02E8 /* APCMedTrackerMedication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3627D3491A9A7517006B02E8 /* APCMedTrackerMedication.m in Sources */ = {isa = PBXBuildFile; fileRef = 3627D3471A9A7517006B02E8 /* APCMedTrackerMedication.m */; };
 		3627D34C1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.h in Headers */ = {isa = PBXBuildFile; fileRef = 3627D34A1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -237,9 +239,6 @@
 		CF130B781A9E8DCD002DA023 /* APCSetupButtonTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CF130B751A9E8DCD002DA023 /* APCSetupButtonTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF130B791A9E8DCD002DA023 /* APCSetupButtonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF130B761A9E8DCD002DA023 /* APCSetupButtonTableViewCell.m */; };
 		CF130B7A1A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF130B771A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib */; };
-		CF8270C21AA12A110039B255 /* APCAddPrescriptionTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CF8270BF1AA12A110039B255 /* APCAddPrescriptionTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		CF8270C31AA12A110039B255 /* APCAddPrescriptionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8270C01AA12A110039B255 /* APCAddPrescriptionTableViewCell.m */; };
-		CF8270C41AA12A110039B255 /* APCAddPrescriptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF8270C11AA12A110039B255 /* APCAddPrescriptionTableViewCell.xib */; };
 		CFBD289A1AA4408800F49161 /* APCMedicationNameTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CFBD28971AA4408800F49161 /* APCMedicationNameTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFBD289B1AA4408800F49161 /* APCMedicationNameTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CFBD28981AA4408800F49161 /* APCMedicationNameTableViewCell.m */; };
 		CFBD289C1AA4408800F49161 /* APCMedicationNameTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFBD28991AA4408800F49161 /* APCMedicationNameTableViewCell.xib */; };
@@ -738,6 +737,8 @@
 		08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateComponentsHelperTests.m; sourceTree = "<group>"; };
 		3624092A1A8181350005B1A7 /* get_debug_ip_address.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = get_debug_ip_address.sh; sourceTree = "<group>"; };
+		36257FBB1AA714B60060B95A /* CMMotionActivity+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CMMotionActivity+Helper.h"; sourceTree = "<group>"; };
+		36257FBC1AA714B60060B95A /* CMMotionActivity+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CMMotionActivity+Helper.m"; sourceTree = "<group>"; };
 		3627D3461A9A7517006B02E8 /* APCMedTrackerMedication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCMedTrackerMedication.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		3627D3471A9A7517006B02E8 /* APCMedTrackerMedication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCMedTrackerMedication.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		3627D34A1A9A7517006B02E8 /* APCMedTrackerPossibleDosage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = APCMedTrackerPossibleDosage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -895,9 +896,6 @@
 		CF130B751A9E8DCD002DA023 /* APCSetupButtonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSetupButtonTableViewCell.h; sourceTree = "<group>"; };
 		CF130B761A9E8DCD002DA023 /* APCSetupButtonTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSetupButtonTableViewCell.m; sourceTree = "<group>"; };
 		CF130B771A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSetupButtonTableViewCell.xib; sourceTree = "<group>"; };
-		CF8270BF1AA12A110039B255 /* APCAddPrescriptionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCAddPrescriptionTableViewCell.h; path = MedicationTrackingAppComponent/APCAddPrescriptionTableViewCell.h; sourceTree = "<group>"; };
-		CF8270C01AA12A110039B255 /* APCAddPrescriptionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCAddPrescriptionTableViewCell.m; path = MedicationTrackingAppComponent/APCAddPrescriptionTableViewCell.m; sourceTree = "<group>"; };
-		CF8270C11AA12A110039B255 /* APCAddPrescriptionTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = APCAddPrescriptionTableViewCell.xib; path = MedicationTrackingAppComponent/APCAddPrescriptionTableViewCell.xib; sourceTree = "<group>"; };
 		CFBD28971AA4408800F49161 /* APCMedicationNameTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMedicationNameTableViewCell.h; sourceTree = "<group>"; };
 		CFBD28981AA4408800F49161 /* APCMedicationNameTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMedicationNameTableViewCell.m; sourceTree = "<group>"; };
 		CFBD28991AA4408800F49161 /* APCMedicationNameTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCMedicationNameTableViewCell.xib; sourceTree = "<group>"; };
@@ -1706,9 +1704,6 @@
 				CFFDED5C1A95731F00B25581 /* APCMedicationTrackerCalendarViewController.h */,
 				CFFDED5D1A95731F00B25581 /* APCMedicationTrackerCalendarViewController.m */,
 				CFFDED5E1A95731F00B25581 /* APCMedicationTrackerCalendarViewController.xib */,
-				CF8270BF1AA12A110039B255 /* APCAddPrescriptionTableViewCell.h */,
-				CF8270C01AA12A110039B255 /* APCAddPrescriptionTableViewCell.m */,
-				CF8270C11AA12A110039B255 /* APCAddPrescriptionTableViewCell.xib */,
 			);
 			name = "Main Calendar View";
 			sourceTree = "<group>";
@@ -2100,6 +2095,8 @@
 				F5B947411A73272C0034C522 /* APCDeviceHardware+APCHelper.m */,
 				F5B947421A73272C0034C522 /* APCStepProgressBar+Appearance.h */,
 				F5B947431A73272C0034C522 /* APCStepProgressBar+Appearance.m */,
+				36257FBB1AA714B60060B95A /* CMMotionActivity+Helper.h */,
+				36257FBC1AA714B60060B95A /* CMMotionActivity+Helper.m */,
 				F5B947441A73272C0034C522 /* HKHealthStore+APCExtensions.h */,
 				F5B947451A73272C0034C522 /* HKHealthStore+APCExtensions.m */,
 				F5B947461A73272C0034C522 /* NSBundle+Helper.h */,
@@ -2919,7 +2916,6 @@
 				F5F12A751A2F78490015982C /* APCPieGraphView.h in Headers */,
 				F5B948121A73272C0034C522 /* APCScheduler.h in Headers */,
 				F54DDD231A8026010073E4B4 /* APCCoreLocationTracker.h in Headers */,
-				CF8270C21AA12A110039B255 /* APCAddPrescriptionTableViewCell.h in Headers */,
 				CFFDEDF21A95734000B25581 /* APCMedicationSummaryTableViewCell.h in Headers */,
 				F5B946471A7309A20034C522 /* ZZStandardCryptoEngine.h in Headers */,
 				7BA5D99E1AA43F50006F505F /* APCStoredUserData.h in Headers */,
@@ -3002,6 +2998,7 @@
 				369E28021A96B7A200D35DFA /* APCMedTrackerDataStorageManager.h in Headers */,
 				F5F12AC01A2F78490015982C /* APCGraphViewController.h in Headers */,
 				F5F12AAE1A2F78490015982C /* APCSignUpInfoViewController.h in Headers */,
+				36257FBD1AA714B60060B95A /* CMMotionActivity+Helper.h in Headers */,
 				F5C363601A40E21000113129 /* APCSmartSurveyTask.h in Headers */,
 				6C7346081A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h in Headers */,
 				F5B9462A1A7309A20034C522 /* ZZChannelOutput.h in Headers */,
@@ -3159,7 +3156,6 @@
 				08027A891A7319AC00B358CC /* phonesoundwaves@2x.png in Resources */,
 				08027A7B1A7319AC00B358CC /* consent_05@2x.png in Resources */,
 				08027A991A7319AC00B358CC /* walkingman@3x.png in Resources */,
-				CF8270C41AA12A110039B255 /* APCAddPrescriptionTableViewCell.xib in Resources */,
 				08027A961A7319AC00B358CC /* phonewaves@3x.png in Resources */,
 				5B9B36B21A95DF0C00389F42 /* APCActivitiesSectionHeaderView.xib in Resources */,
 				369E28141A96B7A200D35DFA /* APCMedTrackerPredefinedMedications.plist in Resources */,
@@ -3392,6 +3388,7 @@
 				CFFDEDDE1A95734000B25581 /* APCFrequencyTableViewTimesCell.m in Sources */,
 				712AB44D1A9E692400556DA2 /* APCMotionHistoryData.m in Sources */,
 				36AAB3501A9A75BB00FAC255 /* APCMedTrackerPrescription.m in Sources */,
+				36257FBE1AA714B60060B95A /* CMMotionActivity+Helper.m in Sources */,
 				F5B947C61A73272C0034C522 /* NSManagedObject+APCHelper.m in Sources */,
 				F5B947DC1A73272C0034C522 /* APCLog.m in Sources */,
 				F5F12AD31A2F78490015982C /* APCAddressTableViewCell.m in Sources */,
@@ -3494,7 +3491,6 @@
 				CF03CD031AA23DA2000437FF /* APCMedicationDetailsTableViewCell.m in Sources */,
 				F5B948091A73272C0034C522 /* APCScheduleExpressionParser.m in Sources */,
 				369E27FD1A96B7A200D35DFA /* APCMedicationWeeklySchedule.m in Sources */,
-				CF8270C31AA12A110039B255 /* APCAddPrescriptionTableViewCell.m in Sources */,
 				F5F129EF1A2F78490015982C /* APCDBStatus+AddOn.m in Sources */,
 				F5B947F01A73272C0034C522 /* APCParameters.m in Sources */,
 				F5F12A821A2F78490015982C /* APCPresentAnimator.m in Sources */,

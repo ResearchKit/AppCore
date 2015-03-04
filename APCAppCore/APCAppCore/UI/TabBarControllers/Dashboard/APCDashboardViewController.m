@@ -167,7 +167,10 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         graphCell.delegate = self;
         [graphView layoutSubviews];
         
-        [self.lineCharts addObject:graphView];
+        if (graphView != nil)
+        {
+            [self.lineCharts addObject:graphView];
+        }
         
         [graphView refreshGraph];
         
