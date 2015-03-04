@@ -1160,10 +1160,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     {
         APCLogError2(error);
     }
-    else
-    {
-        NSAssert(YES, @"Hit an option not supported by ORKTasViewControllerResult");
-    }
+    
 }
 
 #pragma mark - Public methods
@@ -1259,7 +1256,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                     break;
                 default:
-                    NSAssert(itemType <= kAPCUserInfoItemTypeWakeUpTime, @"ASSERT_MESSAGE");
+                
                     break;
             }
         }
