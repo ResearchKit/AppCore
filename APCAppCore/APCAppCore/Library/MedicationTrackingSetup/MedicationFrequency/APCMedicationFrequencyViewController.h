@@ -17,6 +17,8 @@
 
 @interface APCMedicationFrequencyViewController : UIViewController
 
+@property  (nonatomic, strong)    NSDictionary                                   *daysNumbersDictionary;
+
 @property  (nonatomic, weak)  id  <APCMedicationFrequencyViewControllerDelegate>  delegate;
 
 @end

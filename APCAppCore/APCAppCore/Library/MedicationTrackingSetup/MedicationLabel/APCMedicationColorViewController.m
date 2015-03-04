@@ -19,6 +19,9 @@ static  NSString  *kViewControllerName       = @"Medication Colors";
 
 static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
 
+static  CGFloat    kSectionHeaderHeight      = 42.0;
+static  CGFloat    kSectionHeaderLabelOffset = 10.0;
+
 @interface APCMedicationColorViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
 @property  (nonatomic, weak)  IBOutlet  UITableView   *tabulator;
@@ -31,16 +34,11 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
 
 @implementation APCMedicationColorViewController
 
-#pragma  mark  -  Toolbar Button Action Methods
-
-- (IBAction)cancelButtonTapped:(UIBarButtonItem *) __unused sender
-{
-    [self dismissViewControllerAnimated:YES completion:NULL];
-}
+#pragma  mark  -  Navigation Bar Button Action Methods
 
 - (IBAction)doneButtonTapped:(UIBarButtonItem *) __unused sender
 {
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma  mark  -  Table View Data Source Methods
@@ -56,12 +54,6 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
     return  numberOfRows;
 }
 
-- (NSString *)tableView:(UITableView *) __unused tableView titleForHeaderInSection:(NSInteger) __unused section
-{
-    NSString  *title = NSLocalizedString(@"Select a Color Code for Your Medication", nil);
-    return  title;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     APCColorSwatchTableViewCell  *cell = (APCColorSwatchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kColorSwatchTableCellName];
@@ -72,6 +64,11 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
     colorname = NSLocalizedString(colorname, nil);
     cell.colorNameLabel.text = colorname;
     
+    if (self.selectedIndex != nil) {
+        if ([self.selectedIndex isEqual:indexPath] == YES) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+    }
     cell.colorSwatchView.backgroundColor = schedulColor.UIColor;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return  cell;
@@ -106,18 +103,67 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
     }
 }
 
+- (CGFloat)tableView:(UITableView *) __unused tableView heightForHeaderInSection:(NSInteger)section
+{
+    CGFloat  answer = 0;
+    
+    if (section == 0) {
+        answer = kSectionHeaderHeight;
+    }
+    return  answer;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView  *view = nil;
+    
+    if (section == 0) {
+        CGFloat  width  = CGRectGetWidth(tableView.frame);
+        CGFloat  height = [self tableView:tableView heightForHeaderInSection:section];
+        CGRect   frame  = CGRectMake(0.0, 0.0, width, height);
+        view = [[UIView alloc] initWithFrame:frame];
+        view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+        
+        frame.origin.x = kSectionHeaderLabelOffset;
+        frame.size.width = frame.size.width - 2.0 * kSectionHeaderLabelOffset;
+        UILabel  *label = [[UILabel alloc] initWithFrame:frame];
+        label.numberOfLines = 2;
+        label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+        label.textColor = [UIColor blackColor];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.text = NSLocalizedString(@"Select a Color Code for Your Medication", nil);
+        [view addSubview:label];
+    }
+    return  view;
+}
+
+- (void)setupIndexPathForColorDescriptor:(APCMedTrackerPrescriptionColor *)descriptor
+{
+    for (NSUInteger  index = 0;  index < [self.colorsList count];  index++) {
+        APCMedTrackerPrescriptionColor  *color = self.colorsList[index];
+        if ([color.name isEqualToString:descriptor.name] == YES) {
+            NSIndexPath  *path = [NSIndexPath indexPathForRow:index inSection:0];
+            self.selectedIndex = path;
+            break;
+        }
+    }
+}
+
+#pragma  mark  -  View Controller Methods
+
 - (NSString *)title
 {
     return  kViewControllerName;
 }
-
-#pragma  mark  -  View Controller Methods
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
+    self.navigationItem.rightBarButtonItem = donester;
     
     UINib  *colorSwatchTableCellNib = [UINib nibWithNibName:kColorSwatchTableCellName bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:colorSwatchTableCellNib forCellReuseIdentifier:kColorSwatchTableCellName];
@@ -132,7 +178,13 @@ static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
          if (error != nil) {
              APCLogError2(error);
          } else {
-             self.colorsList = arrayOfGeneratedObjects;
+             NSSortDescriptor *nameSorter = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+             NSArray  *descriptors = @[ nameSorter ];
+             NSArray  *sorted = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
+             self.colorsList = sorted;
+             if (self.oneColorDescriptor != nil) {
+                 [self setupIndexPathForColorDescriptor:self.oneColorDescriptor];
+             }
              [self.tabulator reloadData];
          }
      }];

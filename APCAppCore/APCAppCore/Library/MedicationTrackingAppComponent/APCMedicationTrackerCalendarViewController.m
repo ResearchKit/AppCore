@@ -11,7 +11,6 @@
 #import "APCMedicationTrackerDetailViewController.h"
 #import "APCMedicationTrackerSetupViewController.h"
 #import "APCMedicationSummaryTableViewCell.h"
-#import "APCAddPrescriptionTableViewCell.h"
 #import "APCLozengeButton.h"
 
 #import "APCMedTrackerDataStorageManager.h"
@@ -34,7 +33,6 @@
 static  NSString  *viewControllerTitle   = @"Medication Tracker";
 
 static  NSString  *kSummaryTableViewCell         = @"APCMedicationSummaryTableViewCell";
-static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableViewCell";
 
 @interface APCMedicationTrackerCalendarViewController  ( ) <UITableViewDataSource, UITableViewDelegate,
                                 APCMedicationTrackerCalendarWeeklyViewDelegate, UIScrollViewDelegate,
@@ -81,6 +79,18 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
         return  [self.prescriptions count];
 }
 
+- (NSString *)extractFirstPartOfMedicationName:(NSString *)aName
+{
+    NSString  *answer = nil;
+    NSRange  range = [aName rangeOfString:@" ("];
+    if (range.location == NSNotFound) {
+        answer = aName;
+    } else {
+        answer = [aName substringToIndex:range.location];
+    }
+    return  answer;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     APCMedicationSummaryTableViewCell  *cell = (APCMedicationSummaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kSummaryTableViewCell];
@@ -88,7 +98,8 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     APCMedTrackerPrescription  *prescription = self.prescriptions[indexPath.row];
 
     cell.colorswatch.backgroundColor = prescription.color.UIColor;
-    cell.medicationName.text = prescription.medication.name;
+    NSString  *shortened = [self extractFirstPartOfMedicationName:prescription.medication.name];
+    cell.medicationName.text = shortened;
     cell.medicationDosage.text = prescription.dosage.name;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -479,9 +490,6 @@ static  NSString  *kAddPrescriptionTableViewCell = @"APCAddPrescriptionTableView
     
     UINib  *summaryCellNib = [UINib nibWithNibName:kSummaryTableViewCell bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:summaryCellNib forCellReuseIdentifier:kSummaryTableViewCell];
-    
-    UINib  *addPrescriptionCellNib = [UINib nibWithNibName:kAddPrescriptionTableViewCell bundle:[NSBundle appleCoreBundle]];
-    [self.tabulator registerNib:addPrescriptionCellNib forCellReuseIdentifier:kAddPrescriptionTableViewCell];
 };
 
 - (void)didReceiveMemoryWarning
