@@ -17,6 +17,27 @@
 - (NSString*) writeToOutputDirectory: (NSString*) outputDirectory;
 
 + (BOOL) encryptZipFile: (NSString*) unencryptedPath encryptedPath:(NSString*) encryptedPath;
+
+
+/**
+ Converts the specified object to data we can serialize into
+ JSON.  Sometimes, uses verrrrry specific rules to do this
+ conversion.  Some examples of this oddness:
+ -  we convert the key "identifier" in a top-level dictionary
+    to the word "item"
+ -  we attempt to convert strings into integers and Booleans
+ -  we stringify dates to ISO-8601 format
+ -  we return nil for NSCalendars, intended to mean "please
+    don't serialize this object," because we include the
+    time zone in the NSDate conversions (above)
+ -  Arrays and dictionaries will always be converted to
+    arrays and dictionaries, even if they end up having
+    no contents (evolving)
+ 
+ This method is recursive.  If it encounters an array or
+ dictionary, it'll call the same conversion routines on that
+ object and its contents.
+ */
 - (NSDictionary *) generateSerializableDataFromSourceDictionary: (NSDictionary *) sourceDictionary;
 
 

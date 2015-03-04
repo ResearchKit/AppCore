@@ -131,6 +131,14 @@ static NSString*    kSharingTag                         = @"sharing";
                                                                investigatorShortDescription:self.investigatorShortDescription
                                                                 investigatorLongDescription:self.investigatorLongDescription
                                                               localizedLearnMoreHTMLContent:self.sharingHtmlLearnMoreContent];
+    
+    APCAppDelegate* delegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+    BOOL disableSignatureInConsent = delegate.disableSignatureInConsent;
+    
+    if (disableSignatureInConsent) {
+        signature.requiresSignatureImage = NO;
+    }
+    
     ORKConsentReviewStep*   reviewStep  = [[ORKConsentReviewStep alloc] initWithIdentifier:@"reviewStep"
                                                                                  signature:signature
                                                                                 inDocument:_consentDocument];
