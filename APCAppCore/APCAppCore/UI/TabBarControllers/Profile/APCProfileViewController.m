@@ -97,10 +97,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self setupDataFromJSONFile:@"StudyOverview"];
     
+    /*Temporarily removed this. Since Sage returns dataSharing = 0 on Sign In.
     if (self.user.sharedOptionSelection && self.user.sharedOptionSelection.integerValue == 0) {
         self.participationLabel.text = NSLocalizedString(@"Your data is no longer being used for this study.", @"");
         self.leaveStudyButton.hidden = YES;
     }
+     */
 }
 
 
@@ -700,7 +702,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
-        if (!self.user.sharedOptionSelection || self.user.sharedOptionSelection.integerValue != 0) {
+        /*Temporarily commenting the IF condition. Sage returns dataSharing =0 on Sign In.*/
+        //if (!self.user.sharedOptionSelection || self.user.sharedOptionSelection.integerValue != 0)
+        {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedString(@"Sharing Options", @"");
             field.identifier = kAPCDefaultTableViewCellIdentifier;
