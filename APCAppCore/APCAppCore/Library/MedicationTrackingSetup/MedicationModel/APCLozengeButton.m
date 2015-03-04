@@ -9,13 +9,14 @@
 
 #import "APCMedTrackerPrescription.h"
 #import "APCMedTrackerPrescription+Helper.h"
+#import "APCMedTrackerDailyDosageRecord.h"
 
-static  CGFloat  kLayerBorderWidth  = 2.0;
-static  CGFloat  kLayerCornerRadius = 6.0;
+static  CGFloat  kLayerBorderWidth   = 2.0;
+static  CGFloat  kLayerCornerRadius  = 6.0;
 
 @implementation APCLozengeButton
 
-static  const  CGFloat  kDesignSpace   = 1000.0;
+static  const  CGFloat  kDesignSpace = 1000.0;
 
 static  short  coordinates[] = {
     'm', 252, 550,
@@ -82,11 +83,15 @@ static  short  coordinates[] = {
 {
     [super drawRect:rect];
     
-    if ([self.numberOfDosesTaken unsignedIntegerValue] < [self.prescription.numberOfTimesPerDay unsignedIntegerValue]) {
+    NSUInteger  numberOfTakenDoses = 0;
+    if (self.dailyDosageRecord != nil) {
+        numberOfTakenDoses = [self.dailyDosageRecord.numberOfDosesTakenForThisDate unsignedIntegerValue];
+    }
+    if (numberOfTakenDoses < [self.prescription.numberOfTimesPerDay unsignedIntegerValue]) {
         CALayer  *layer = self.layer;
         layer.backgroundColor = [[UIColor whiteColor] CGColor];
         NSNumber  *numberOfTimes = self.prescription.numberOfTimesPerDay;
-        NSString  *aTitle = [NSString stringWithFormat:@"%lu\u2009/\u2009%lu", (unsigned long)[self.numberOfDosesTaken unsignedIntegerValue], (unsigned long)[numberOfTimes unsignedIntegerValue]];
+        NSString  *aTitle = [NSString stringWithFormat:@"%lu\u2009/\u2009%lu", (unsigned long)numberOfTakenDoses, (unsigned long)[numberOfTimes unsignedIntegerValue]];
         [self setTitle:aTitle forState:UIControlStateNormal];
         [self setTitleColor:self.lozengeColor forState:UIControlStateNormal];
     } else {
@@ -106,9 +111,9 @@ static  short  coordinates[] = {
 
 #pragma  mark  -  Custom Setters
 
-- (void)setNumberOfDosesTaken:(NSNumber *)aNumber
+- (void)setDailyDosageRecord:(APCMedTrackerDailyDosageRecord *)aDailyDosageRecord
 {
-    _numberOfDosesTaken = aNumber;
+    _dailyDosageRecord = aDailyDosageRecord;
     [self setNeedsDisplay];
 }
 
