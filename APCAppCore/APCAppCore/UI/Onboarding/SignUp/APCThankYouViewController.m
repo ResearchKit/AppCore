@@ -78,6 +78,7 @@
 - (void)setUserSignedIn
 {
     self.user.signedIn = YES;
+    [(APCAppDelegate *)[UIApplication sharedApplication].delegate afterOnBoardProcessIsFinished];
 }
 
 @end
