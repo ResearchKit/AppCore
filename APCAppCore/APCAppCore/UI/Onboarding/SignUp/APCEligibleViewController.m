@@ -157,10 +157,6 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
     }
 }
 
--(BOOL)taskViewController:(ORKTaskViewController *)taskViewController shouldPresentStep:(ORKStep *)step {
-    return YES;
-}
-
 
 #pragma mark - Selectors
 
