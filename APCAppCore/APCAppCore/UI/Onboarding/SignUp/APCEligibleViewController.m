@@ -92,17 +92,9 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
 }
 
-- (void)taskViewController:(ORKTaskViewController *) __unused taskViewController stepViewControllerWillAppear:(ORKStepViewController *)stepViewController
+- (void)taskViewController:(ORKTaskViewController *) __unused taskViewController stepViewControllerWillAppear:(ORKStepViewController *) __unused stepViewController
 {
-    UIBarButtonItem *btnBack = [APCCustomBackButton customBackBarButtonItemWithTarget:self
-                                                                               action:@selector(goBack)
-                                                                            tintColor:[UIColor appPrimaryColor]];
-    
-    if ([stepViewController.step.identifier isEqualToString:@"sharing"]) {
-        stepViewController.backButtonItem = btnBack;
-    } else if ([stepViewController.step.identifier isEqualToString:@"reviewStep"]) {
-        stepViewController.backButtonItem = btnBack;
-    }
+
 }
 
 - (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *) __unused error
@@ -163,6 +155,10 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
              [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
          }];
     }
+}
+
+-(BOOL)taskViewController:(ORKTaskViewController *)taskViewController shouldPresentStep:(ORKStep *)step {
+    return YES;
 }
 
 
