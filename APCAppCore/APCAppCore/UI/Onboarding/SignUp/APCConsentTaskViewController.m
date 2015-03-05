@@ -16,7 +16,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,10 +32,6 @@
 - (void)taskViewController:(ORKTaskViewController *) __unused taskViewController didFinishWithResult:(ORKTaskViewControllerResult) __unused result error:(NSError *) __unused error
 {
     
-}
-
-- (BOOL)taskViewController:(ORKTaskViewController *) __unused taskViewController shouldPresentStep:(ORKStep *) __unused step {
-    return YES;
 }
 
 @end
