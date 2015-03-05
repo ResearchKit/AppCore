@@ -93,12 +93,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self setupDataFromJSONFile:@"StudyOverview"];
     
-    /*Temporarily removed this. Since Sage returns dataSharing = 0 on Sign In.
+    /* Sage returns dataSharing = 0 on Sign In. */
     if (self.user.sharedOptionSelection && self.user.sharedOptionSelection.integerValue == 0) {
         self.participationLabel.text = NSLocalizedString(@"Your data is no longer being used for this study.", @"");
         self.leaveStudyButton.hidden = YES;
     }
-     */
 }
 
 
