@@ -148,18 +148,6 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 }
 
-- (void)                                 application: (UIApplication *) __unused application
-    didRegisterForRemoteNotificationsWithDeviceToken: (NSData *) __unused deviceToken
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:APCAppDidRegisterUserNotification object:nil];
-}
-
-- (void)                                 application: (UIApplication *) __unused application
-    didFailToRegisterForRemoteNotificationsWithError: (NSError *) __unused error
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:APCAppDidFailToRegisterForRemoteNotification object:nil];
-}
-
 /*********************************************************************************/
 #pragma mark - General initialization
 /*********************************************************************************/
