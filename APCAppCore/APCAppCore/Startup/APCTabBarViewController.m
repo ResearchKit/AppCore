@@ -43,6 +43,9 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     [viewController dismissViewControllerAnimated:YES completion:nil];
     [[NSUserDefaults standardUserDefaults] setObject: [NSDate date] forKey:kLastUsedTimeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    if ([self.passcodeDelegate respondsToSelector:@selector(passcodeViewControllerDidSucceed:)]) {
+        [self.passcodeDelegate passcodeViewControllerDidSucceed: viewController];
+    }
 }
 
 @end
