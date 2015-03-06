@@ -6,6 +6,7 @@
 //
  
 #import "APCScheduledTask+AddOn.h"
+#import "APCTask+AddOn.h"
 #import "APCGroupedScheduledTask.h"
 
 @implementation APCGroupedScheduledTask
@@ -17,6 +18,11 @@
     }
     
     return self;
+}
+
+- (APCTask *) task
+{
+    return [[[self scheduledTasks] firstObject] task];
 }
 
 - (NSDate *)startOn
