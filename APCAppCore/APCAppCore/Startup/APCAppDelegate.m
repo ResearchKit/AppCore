@@ -772,8 +772,6 @@ static NSUInteger const kIndexOfProfileTab = 3;
                 [self showPasscode];
             }
         }
-    } else {
-        self.isPasscodeShowing = NO;
     }
 }
 
@@ -781,6 +779,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 {
     if ([self.window.rootViewController isKindOfClass:[APCTabBarViewController class]]) {
         APCTabBarViewController * tvc = (APCTabBarViewController*) self.window.rootViewController;
+        tvc.passcodeDelegate = self;
         self.isPasscodeShowing = YES;
         tvc.showPasscodeScreen = YES;
     }
@@ -862,11 +861,9 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 #pragma mark - APCPasscodeViewControllerDelegate methods
 
-- (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *)viewController
+- (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *) __unused viewController
 {
-    [viewController dismissViewControllerAnimated:YES completion:nil];
     self.isPasscodeShowing = NO;
-    
 }
 
 #pragma mark - Secure View

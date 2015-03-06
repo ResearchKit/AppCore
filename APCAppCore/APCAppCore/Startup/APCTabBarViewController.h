@@ -7,9 +7,11 @@
 
 
 #import <UIKit/UIKit.h>
+#import "APCPasscodeViewController.h"
 
 @interface APCTabBarViewController : UITabBarController
 
 @property (nonatomic) BOOL showPasscodeScreen;
+@property (nonatomic, weak) id<APCPasscodeViewControllerDelegate> passcodeDelegate;
 
 @end
