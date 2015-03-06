@@ -494,6 +494,21 @@ static NSUInteger const kIndexOfProfileTab = 3;
     return nil;
 }
 
+// The block of text for the All Set
+- (NSArray *)allSetTextBlocks
+{
+    /* Abstract implementaion. Subclass to override.
+     *
+     * Use this to provide custom text on the All Set
+     * screen.
+     *
+     * Please don't be glutenous, don't use four words
+     * when one would suffice.
+     */
+    
+    return nil;
+}
+
 /*********************************************************************************/
 #pragma mark - Catastrophic startup errors
 /*********************************************************************************/
