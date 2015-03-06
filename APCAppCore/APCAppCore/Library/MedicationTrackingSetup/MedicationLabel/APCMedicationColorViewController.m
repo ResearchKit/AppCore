@@ -115,7 +115,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     return  answer;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *) __unused indexPath
+- (CGFloat)tableView:(UITableView *) __unused tableView heightForRowAtIndexPath:(NSIndexPath *) __unused indexPath
 {
     return  kAPCMedicationRowHeight;
 }
