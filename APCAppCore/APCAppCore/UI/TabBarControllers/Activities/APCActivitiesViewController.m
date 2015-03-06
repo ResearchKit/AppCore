@@ -154,7 +154,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     else if ([task isKindOfClass:[APCScheduledTask class]])
     {        
         cell.titleLabel.text = scheduledTask.task.taskTitle;
-        if ([scheduledTask.task.taskID isEqualToString:scheduledTask.task.taskID] == NO) {
+        if ([scheduledTask.task.taskID isEqualToString:medicationTrackerTaskId] == NO) {
             cell.confirmationView.completed = scheduledTask.completed.boolValue;
         }
         cell.countLabel.text = nil;
