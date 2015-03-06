@@ -17,6 +17,8 @@
 
 static  NSString  *kViewControllerName       = @"Medication Colors";
 
+static  NSString  *kSectionHeaderTitle       = @"Select a Label Color for Your Medication";
+
 static  NSString  *kColorSwatchTableCellName = @"APCColorSwatchTableViewCell";
 
 static  CGFloat    kSectionHeaderHeight      = 77.0;
@@ -140,7 +142,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
         label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
         label.textColor = [UIColor blackColor];
         label.textAlignment = NSTextAlignmentCenter;
-        label.text = NSLocalizedString(@"Select a Color Code for Your Medication", nil);
+        label.text = NSLocalizedString(kSectionHeaderTitle, nil);
         [view addSubview:label];
     }
     return  view;
