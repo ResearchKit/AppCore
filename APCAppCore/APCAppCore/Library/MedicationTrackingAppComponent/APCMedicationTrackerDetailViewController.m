@@ -203,7 +203,7 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
 
 #pragma  mark  -  Done Button Action Method
 
-- (IBAction)doneButtonTapped:(id) __unused sender
+- (IBAction)doneButtonWasTapped:(id) __unused sender
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -217,9 +217,6 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
     self.navigationItem.title = viewControllerTitle;
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    
-    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
-    self.navigationItem.rightBarButtonItem = donester;
 
     UINib  *medicationDetailsCellNib = [UINib nibWithNibName:kMedicationDetailsName bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:medicationDetailsCellNib forCellReuseIdentifier:kMedicationDetailsName];
