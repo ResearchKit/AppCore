@@ -254,8 +254,9 @@ static NSString * const kOneTimeSchedule = @"once";
         APCScheduledTask * validatedTask = scheduledTasksArray.firstObject;
         [self validateScheduledTask:validatedTask];
     }else{
-        //One time not created, create it
-        NSDate * startOnDate = [NSDate yesterdayAtMidnight]; //Hard coded to yesterday at midnight
+        //One time not created, create it        
+        NSDate *startOnDate = [[NSCalendar currentCalendar] dateBySettingHour:0 minute:0 second:0 ofDate:[NSDate date] options:0];
+        
         NSDate * endDate = (schedule.expires !=nil) ? [startOnDate dateByAddingTimeInterval:schedule.expiresInterval] : [startOnDate dateByAddingTimeInterval:[NSDate parseISO8601DurationString:@"P2Y"]];
         endDate = [NSDate endOfDay:endDate];
         [self createScheduledTask:schedule task:task dateRange:[[APCDateRange alloc] initWithStartDate:startOnDate endDate:endDate]];
@@ -304,6 +305,7 @@ static NSString * const kOneTimeSchedule = @"once";
     NSDate *taskStartDate = dateRange.startDate;
     NSDate *taskEndDate = dateRange.endDate;
     
+
     if (offsetsForTask) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", kScheduleOffsetTaskIdKey, task.taskID];
         NSArray *matchedTasks = [offsetsForTask filteredArrayUsingPredicate:predicate];

@@ -439,6 +439,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
                 [self updateSelectedDaysListAtRow:day forState:YES];
             }
         }
+        self.donester.enabled = YES;
         [self.tabulator reloadData];
         [self setupEverydayCellState];
     } else {
