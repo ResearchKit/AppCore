@@ -69,6 +69,8 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     if (self.selectedIndex != nil) {
         if ([self.selectedIndex isEqual:indexPath] == YES) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
     cell.colorSwatchView.backgroundColor = schedulColor.UIColor;
