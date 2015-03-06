@@ -119,6 +119,11 @@ FOUNDATION_EXPORT NSString *const kReviewConsentActionPDF;
 FOUNDATION_EXPORT NSString *const kReviewConsentActionVideo;
 FOUNDATION_EXPORT NSString *const kReviewConsentActionSlides;
 
+FOUNDATION_EXPORT NSString *const kAllSetActivitiesTextOriginal;
+FOUNDATION_EXPORT NSString *const kAllSetActivitiesTextAdditional;
+FOUNDATION_EXPORT NSString *const kAllSetDashboardTextOriginal;
+FOUNDATION_EXPORT NSString *const kAllSetDashboardTextAdditional;
+
 
 /*********************************************************************************/
 #pragma mark - Events
