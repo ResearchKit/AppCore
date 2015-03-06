@@ -99,6 +99,11 @@ NSString *const kReviewConsentActionPDF    = @"PDF";
 NSString *const kReviewConsentActionVideo  = @"VIDEO";
 NSString *const kReviewConsentActionSlides = @"SLIDES";
 
+NSString *const kAllSetActivitiesTextOriginal   = @"allSetActivitiesTextOriginal";
+NSString *const kAllSetActivitiesTextAdditional = @"allSetActivitiesTextAdditional";
+NSString *const kAllSetDashboardTextOriginal    = @"allSetDashboardTextOriginal";
+NSString *const kAllSetDashboardTextAdditional  = @"allSetDashboardTextAdditional";
+
 /*********************************************************************************/
 #pragma mark - Events
 /*********************************************************************************/

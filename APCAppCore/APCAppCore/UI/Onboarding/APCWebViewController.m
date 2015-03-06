@@ -41,4 +41,22 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (BOOL)               webView: (UIWebView *) __unused webView
+    shouldStartLoadWithRequest: (NSURLRequest*)request
+                navigationType: (UIWebViewNavigationType)navigationType
+{
+    BOOL    shouldLoad = NO;
+    
+    if (navigationType == UIWebViewNavigationTypeLinkClicked)
+    {
+        [[UIApplication sharedApplication] openURL:[request URL]];
+    }
+    else
+    {
+        shouldLoad = YES;
+    }
+    
+    return shouldLoad;
+}
+
 @end
