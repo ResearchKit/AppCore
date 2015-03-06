@@ -102,6 +102,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    static  NSString  *medicationTrackerTaskId = @"a-APHMedicationTracker-20EF8ED2-E461-4C20-9024-F43FCAAAF4C3";
     
     id task = ((NSArray*)self.scheduledTasksArray[indexPath.section])[indexPath.row];
     
@@ -144,6 +145,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
             cell.countLabel.hidden = NO;
         }
         
+        
         cell.confirmationView.completed = groupedScheduledTask.complete;
         
         APCScheduledTask *firstTask = groupedScheduledTask.scheduledTasks.firstObject;
@@ -152,7 +154,9 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     else if ([task isKindOfClass:[APCScheduledTask class]])
     {        
         cell.titleLabel.text = scheduledTask.task.taskTitle;
-        cell.confirmationView.completed = scheduledTask.completed.boolValue;
+        if ([scheduledTask.task.taskID isEqualToString:scheduledTask.task.taskID] == NO) {
+            cell.confirmationView.completed = scheduledTask.completed.boolValue;
+        }
         cell.countLabel.text = nil;
         cell.countLabel.hidden = YES;
         cell.tintColor = [UIColor colorForTaskId:scheduledTask.task.taskID];
