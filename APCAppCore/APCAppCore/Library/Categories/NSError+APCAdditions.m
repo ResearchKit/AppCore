@@ -11,7 +11,7 @@ static NSString*    kServerTooDamnBusy          = @"Thank you for your interest 
 static NSString*    kUnexpectConditionMessage   = @"An unexpected condition has been encountered. Please retry in a few moments.";
 static NSString*    kNotConnectedMessage        = @"You are currently not connected to the Internet.";
 static NSString*    kServerMaintanenceMessage   = @"The study server is currently undergoing maintanence. Please retry in a few moments.";
-
+static NSString*    kAccountAlreadyExists       = @"This account already exists";
 
 @implementation NSError (APCAdditions)
 
@@ -52,7 +52,11 @@ static NSString*    kServerMaintanenceMessage   = @"The study server is currentl
     }
     else
     {
-        if ([code isEqual:@(503)])
+        if ([code isEqual:@(409)])
+        {
+            message = NSLocalizedString(kAccountAlreadyExists, nil);
+        }
+        else if ([code isEqual:@(503)])
         {
             message = NSLocalizedString(kServerTooDamnBusy, nil);
         }
@@ -101,7 +105,7 @@ static NSString*    kServerMaintanenceMessage   = @"The study server is currentl
 
 - (NSString*)message
 {
-    NSString*   message = NSLocalizedString(kUnexpectConditionMessage, nil);
+    NSString*   message = kUnexpectConditionMessage;
     
     if ([self.domain isEqualToString:(__bridge  NSString*)kCFErrorDomainCFNetwork])
     {
@@ -112,7 +116,7 @@ static NSString*    kServerMaintanenceMessage   = @"The study server is currentl
         message = [self bridgeErrorMessage];
     }
     
-    return [self checkMessageForNonUserTerms:message];
+    return [NSString stringWithFormat:@"%@ (%@)", [self checkMessageForNonUserTerms:message], @(self.code)];
 }
 
 
