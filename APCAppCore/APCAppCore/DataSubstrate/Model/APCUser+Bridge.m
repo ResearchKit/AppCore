@@ -120,6 +120,7 @@
             [self signOutOnCompletion:^(NSError *error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(!error) {
+                        self.consented = NO;
                         APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Suspended Consent"}));
                     }
                     if (completionBlock) {
