@@ -417,11 +417,11 @@ static  NSString  *kSummaryTableViewCell         = @"APCMedicationSummaryTableVi
     self.exScrollibur.hidden     = NO;
     self.weekContainer.hidden    = NO;
     if ([self.prescriptions count] == 0) {
-        self.tapItemsLabel.text = @"Tap the Plus Sign to Create Prescriptions";
+        self.tapItemsLabel.text = NSLocalizedString(@"Tap the “+” Sign to Create Prescriptions", nil);
         self.yourPrescriptionsView.hidden = YES;
         self.editButton.hidden = YES;
     } else {
-        self.tapItemsLabel.text = @"Tap on above items to log intake";
+        self.tapItemsLabel.text = NSLocalizedString(@"Tap on Items Above to Log Intake", nil);
         self.yourPrescriptionsView.hidden = NO;
         self.editButton.hidden = NO;
     }
