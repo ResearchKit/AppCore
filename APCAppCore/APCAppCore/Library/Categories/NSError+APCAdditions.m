@@ -12,6 +12,7 @@ static NSString*    kUnexpectConditionMessage   = @"An unexpected condition has 
 static NSString*    kNotConnectedMessage        = @"You are currently not connected to the Internet.";
 static NSString*    kServerMaintanenceMessage   = @"The study server is currently undergoing maintanence. Please retry in a few moments.";
 static NSString*    kAccountAlreadyExists       = @"This account already exists.";
+static NSString*    kAccountDoesNotExists       = @"There is no account register for this email address.";
 
 @implementation NSError (APCAdditions)
 
@@ -55,6 +56,10 @@ static NSString*    kAccountAlreadyExists       = @"This account already exists.
         if (self.code == 409)
         {
             message = NSLocalizedString(kAccountAlreadyExists, nil);
+        }
+        else if (self.code = 404)
+        {
+            message = NSLocalizedString(kAccountDoesNotExists, nil);
         }
         else if ([code isEqual:@(503)] || self.code == 503)
         {
