@@ -11,7 +11,7 @@ static NSString*    kServerTooDamnBusy          = @"Thank you for your interest 
 static NSString*    kUnexpectConditionMessage   = @"An unexpected condition has been encountered. Please retry in a few moments.";
 static NSString*    kNotConnectedMessage        = @"You are currently not connected to the Internet.";
 static NSString*    kServerMaintanenceMessage   = @"The study server is currently undergoing maintanence. Please retry in a few moments.";
-static NSString*    kAccountAlreadyExists       = @"This account already exists";
+static NSString*    kAccountAlreadyExists       = @"This account already exists.";
 
 @implementation NSError (APCAdditions)
 
@@ -21,7 +21,7 @@ static NSString*    kAccountAlreadyExists       = @"This account already exists"
         [message containsString:@"NSURLError"] ||
         [message rangeOfString:@"contact somebody" options:NSCaseInsensitiveSearch].location != NSNotFound)
     {
-        return NSLocalizedString(@"An unhandled error occurred", @"An unhandled error occurred");
+        return NSLocalizedString(@"An unknown error occurred", nil);
     }
     else
     {
@@ -52,11 +52,11 @@ static NSString*    kAccountAlreadyExists       = @"This account already exists"
     }
     else
     {
-        if ([code isEqual:@(409)])
+        if (self.code == 409)
         {
             message = NSLocalizedString(kAccountAlreadyExists, nil);
         }
-        else if ([code isEqual:@(503)])
+        else if ([code isEqual:@(503)] || self.code == 503)
         {
             message = NSLocalizedString(kServerTooDamnBusy, nil);
         }
