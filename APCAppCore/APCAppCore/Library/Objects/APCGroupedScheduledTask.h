@@ -6,6 +6,7 @@
 //
  
 #import <Foundation/Foundation.h>
+@class APCTask;
 
 @interface APCGroupedScheduledTask : NSObject
 
@@ -20,5 +21,7 @@
 
 @property (nonatomic, readonly) NSDate * startOn;
 @property (nonatomic, readonly) NSString * completeByDateString;
+
+- (APCTask *) task;
 
 @end
