@@ -73,7 +73,7 @@
     // Create the image context
     UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, self.window.screen.scale);
     
-    [self drawViewHierarchyInRect:self.frame afterScreenUpdates:NO];
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     
     // Get the snapshot
     UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
