@@ -15,7 +15,7 @@
 
 #import "APCLog.h"
 
-static  NSString  *kViewControllerName       = @"Medication Colors";
+static  NSString  *kViewControllerName       = @"Medication Label Color";
 
 static  NSString  *kSectionHeaderTitle       = @"Select a Label Color for Your Medication";
 
