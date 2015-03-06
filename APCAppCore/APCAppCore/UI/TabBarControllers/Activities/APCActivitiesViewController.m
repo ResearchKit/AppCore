@@ -63,6 +63,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+ 
     [self setUpNavigationBarAppearance];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reloadData)
@@ -400,15 +401,35 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     //create sections
     if (((NSArray*)scheduledTasksDict[@"today"]).count > 0) {
         [self.sectionsArray addObject:[self formattedTodaySection]];
-        NSArray * groupedArray = [self groupSimilarTasks:((NSArray*)scheduledTasksDict[@"today"])];
-        [self.scheduledTasksArray addObject:groupedArray];
+        NSArray * groupedArray = [self generateGroupsForTask:((NSArray*)scheduledTasksDict[@"today"])];
+        
+        
+        
+        NSArray *sortedTasks = [self sortTasksInArray:groupedArray];
+        
+        
+        
+        [self.scheduledTasksArray addObject:sortedTasks];
     }
     
     if (((NSArray*)scheduledTasksDict[@"yesterday"]).count > 0) {
         [self.sectionsArray addObject:@"Yesterday - Incomplete Tasks"];
-        NSArray * groupedArray = [self groupSimilarTasks:((NSArray*)scheduledTasksDict[@"yesterday"])];
-        [self.scheduledTasksArray addObject:groupedArray];
+        NSArray * groupedArray = [self generateGroupsForTask:((NSArray*)scheduledTasksDict[@"yesterday"])];
+        
+        NSArray *sortedTasks = [self sortTasksInArray:groupedArray];
+        
+        [self.scheduledTasksArray addObject:sortedTasks];
     }
+}
+
+- (NSArray *)sortTasksInArray:(NSArray *)unsortedTasks
+{
+    //NOTE: The task identifiers (taskID) start with a sort field. If you want to change the sort order change the identifiers within the file(s) currently named APHTasksAndSchedules.json and APHTasksAndSchedules_NoM7.json.
+    NSSortDescriptor* descriptorForSorting = [[NSSortDescriptor alloc]initWithKey:@"task.taskID" ascending:YES];
+    NSArray* sortDescriptors = @[descriptorForSorting];
+    NSArray* sortedArray = [unsortedTasks sortedArrayUsingDescriptors:sortDescriptors];
+    
+    return sortedArray;
 }
 
 - (NSString*) formattedTodaySection
@@ -418,7 +439,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     return [NSString stringWithFormat:@"Today, %@", [self.dateFormatter stringFromDate:[NSDate date]]];
 }
 
-- (NSArray*)groupSimilarTasks:(NSArray *)ungroupedScheduledTasks
+- (NSArray*)generateGroupsForTask:(NSArray *)ungroupedScheduledTasks
 {
     NSMutableArray *taskTypesArray = [[NSMutableArray alloc] init];
     
@@ -441,6 +462,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
         if (filteredTasksArray.count > 1) {
             APCScheduledTask *scheduledTask = filteredTasksArray.firstObject;
             APCGroupedScheduledTask *groupedTask = [[APCGroupedScheduledTask alloc] init];
+
             groupedTask.scheduledTasks = [NSMutableArray arrayWithArray:filteredTasksArray];
             groupedTask.taskTitle = scheduledTask.task.taskTitle;
             groupedTask.taskClassName = scheduledTask.task.taskClassName;
