@@ -10,10 +10,6 @@
 
 @interface APCThankYouViewController ()
 
-@property (weak, nonatomic) IBOutlet UILabel *appName;
-@property (weak, nonatomic) IBOutlet UIImageView *imageViewA;
-@property (weak, nonatomic) IBOutlet UIImageView *imageViewB;
-
 @end
 
 @implementation APCThankYouViewController
@@ -26,13 +22,6 @@
     [super viewDidLoad];
     
     self.navigationItem.hidesBackButton = YES;
-    
-    self.appName.text = [APCUtilities appName];
-    
-    self.imageViewA.image = [[UIImage imageNamed:@"tab_activities_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    self.imageViewA.tintColor = [UIColor appPrimaryColor];
-    self.imageViewB.image = [[UIImage imageNamed:@"tab_dashboard_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    self.imageViewB.tintColor = [UIColor appPrimaryColor];
 }
 
 - (void)didReceiveMemoryWarning {

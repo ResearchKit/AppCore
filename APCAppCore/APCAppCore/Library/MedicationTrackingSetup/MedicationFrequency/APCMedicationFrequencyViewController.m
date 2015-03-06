@@ -100,26 +100,9 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
 {
     UITableViewCell                 *cell     = nil;
     
-    APCFrequencyTableViewTimesCell     *freqCell      = nil;
-    APCFrequencyEverydayTableViewCell  *everydayCell  = nil;
-    APCFrequencyDayTableViewCell       *dayCell       = nil;
-    
     if (indexPath.section == kFrequencySection) {
-        freqCell = (APCFrequencyTableViewTimesCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyTableTimesCellName];
+        APCFrequencyTableViewTimesCell  *freqCell = (APCFrequencyTableViewTimesCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyTableTimesCellName];
         freqCell.accessoryType = UITableViewCellAccessoryNone;
-    } else if (indexPath.section == kEveryDayOfWeekSection) {
-        everydayCell = (APCFrequencyEverydayTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyEverydayTableCellName];
-        everydayCell.everydayTitle.text = kEveryDayOfWeekCaption;
-    } else if (indexPath.section == kDaysOfWeekSection) {
-        dayCell = (APCFrequencyDayTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyDayTableCellName];
-        if ([self fetchSelectedStateForRow:indexPath.row] == YES) {
-            [self setupSelectedCell:dayCell toSelectedState:YES];
-        } else {
-            [self setupSelectedCell:dayCell toSelectedState:NO];
-        }
-    }
-    
-    if ((indexPath.section == kFrequencySection) && (freqCell != nil)) {
         freqCell.selectionStyle = UITableViewCellSelectionStyleNone;
         [self processFrequencyButtonsForCell:freqCell];
         if (self.selectedValueButton != nil) {
@@ -127,6 +110,7 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
         }
         cell = freqCell;
     } else if (indexPath.section == kEveryDayOfWeekSection) {
+        APCFrequencyEverydayTableViewCell  *everydayCell = (APCFrequencyEverydayTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyEverydayTableCellName];
         everydayCell.selectionStyle = UITableViewCellSelectionStyleNone;
         everydayCell.everydayTitle.text = kEveryDayOfWeekCaption;
         if ([self numberOfSelectedDays] >= kAllDaysOfWeekCount) {
@@ -138,11 +122,12 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
         }
         cell = everydayCell;
     } else if (indexPath.section == kDaysOfWeekSection) {
+        APCFrequencyDayTableViewCell  *dayCell = (APCFrequencyDayTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyDayTableCellName];
         dayCell.selectionStyle = UITableViewCellSelectionStyleNone;
         dayCell.dayTitle.text = daysOfWeekNames[indexPath.row];
 
-        NSNumber  *selected = self.selectedDays[indexPath.row];
-        if ([selected boolValue] == YES) {
+        BOOL  value = [self fetchSelectedStateForRow:indexPath.row];
+        if (value == YES) {
             [self setupSelectedCell:dayCell toSelectedState:YES];
         } else {
             [self setupSelectedCell:dayCell toSelectedState:NO];
@@ -154,19 +139,6 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
 }
 
 #pragma  mark  -  Table View Delegate Methods
-
-- (void)updateSelectedDaysListAtRow:(NSInteger)row forState:(BOOL)selected
-{
-    NSNumber  *number = [NSNumber numberWithBool:selected];
-    [self.selectedDays replaceObjectAtIndex:row withObject:number];
-}
-
-- (void)updateAllSelectedDaysListToState:(BOOL)selected
-{
-    for (NSUInteger  index = 0;  index < kAllDaysOfWeekCount;  index++) {
-        [self updateSelectedDaysListAtRow:index forState:selected];
-    }
-}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -349,6 +321,19 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     NSNumber  *selected = self.selectedDays[row];
     answer = [selected boolValue];
     return  answer;
+}
+
+- (void)updateSelectedDaysListAtRow:(NSInteger)row forState:(BOOL)selected
+{
+    NSNumber  *number = [NSNumber numberWithBool:selected];
+    [self.selectedDays replaceObjectAtIndex:row withObject:number];
+}
+
+- (void)updateAllSelectedDaysListToState:(BOOL)selected
+{
+    for (NSUInteger  index = 0;  index < kAllDaysOfWeekCount;  index++) {
+        [self updateSelectedDaysListAtRow:index forState:selected];
+    }
 }
 
 - (NSUInteger)numberOfSelectedDays

@@ -19,6 +19,8 @@ static  NSString  *kViewControllerName       = @"Medication Name";
 
 static  NSString  *kMedicationNameTableCell  = @"APCMedicationNameTableViewCell";
 
+static  CGFloat    kNumberOfSectionsInTable  =  1.0;
+
 static  CGFloat    kSectionHeaderHeight      = 77.0;
 static  CGFloat    kSectionHeaderLabelOffset = 10.0;
 
@@ -26,13 +28,13 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
 @interface APCMedicationNameViewController  ( )  <UITableViewDataSource, UITableViewDelegate>
 
-@property  (nonatomic, weak)  IBOutlet  UITableView  *tabulator;
+@property  (nonatomic, weak)  IBOutlet  UITableView      *tabulator;
 
-@property  (nonatomic, weak)          UIBarButtonItem  *donester;
+@property  (nonatomic, weak)            UIBarButtonItem  *donester;
 
-@property  (nonatomic, strong)          NSArray      *medicationList;
+@property  (nonatomic, strong)          NSArray          *medicationList;
 
-@property  (nonatomic, strong)          NSIndexPath  *selectedIndex;
+@property  (nonatomic, strong)          NSIndexPath      *selectedIndex;
 
 @end
 
@@ -49,7 +51,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView
 {
-    return  1;
+    return  kNumberOfSectionsInTable;
 }
 
 - (NSInteger)tableView:(UITableView *) __unused tableView numberOfRowsInSection:(NSInteger) __unused section
@@ -86,6 +88,8 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     if (self.selectedIndex != nil) {
         if ([self.selectedIndex isEqual:indexPath] == YES) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
     return  cell;
@@ -225,6 +229,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
                  [copyOfSorted addObject:foundMedication];
              }
              self.medicationList = copyOfSorted;
+             
              if (self.medicationRecord != nil) {
                  [self setupIndexPathForMedicationDescriptor:self.medicationRecord];
              }
