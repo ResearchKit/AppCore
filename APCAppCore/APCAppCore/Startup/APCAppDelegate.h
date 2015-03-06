@@ -66,6 +66,7 @@
 - (NSArray *)offsetForTaskSchedules;
 - (void)afterOnBoardProcessIsFinished;
 - (NSArray *)reviewConsentActions;
+- (NSArray *)allSetTextBlocks;
 
 //To be called from Datasubstrate
 - (void) setUpCollectors;
