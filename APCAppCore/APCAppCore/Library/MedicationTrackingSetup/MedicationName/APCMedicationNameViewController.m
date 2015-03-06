@@ -232,6 +232,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
              
              if (self.medicationRecord != nil) {
                  [self setupIndexPathForMedicationDescriptor:self.medicationRecord];
+                 self.donester.enabled = YES;
              }
             [self.tabulator reloadData];
         }
