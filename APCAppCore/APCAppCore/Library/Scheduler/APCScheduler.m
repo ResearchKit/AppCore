@@ -338,7 +338,6 @@ static NSString * const kOneTimeSchedule = @"once";
         APCLogDebug(@"Task %@ scheduled offset by %lu days. New start date is %@", task.taskTitle, [daysToOffset integerValue], taskStartDate);
     }
     
-#warning  SET THE NSDATE DATE] hours to 0, 0 , 0
     if (([task.taskID isEqualToString:currentTaskID] && currentTaskID != nil)
         && (([offsetStartDate isEqualToDate:todaysDate]) ||
             ([[todaysDate laterDate:offsetStartDate] isEqualToDate:todaysDate])))
