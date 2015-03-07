@@ -174,7 +174,6 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
             cell = aCell;
         } else {
             APCSetupButtonTableViewCell  *aCell = (APCSetupButtonTableViewCell *)[self.setupTabulator dequeueReusableCellWithIdentifier:kSetupTableButtonCellName];
-            NSLog(@"APCMedicationTrackerSetupViewController Table View Frame = %@", NSStringFromCGRect(self.setupTabulator.frame));
             aCell.selectionStyle = UITableViewCellSelectionStyleNone;
             self.doneButton = aCell.doneButton;
             self.doneButton.enabled = NO;

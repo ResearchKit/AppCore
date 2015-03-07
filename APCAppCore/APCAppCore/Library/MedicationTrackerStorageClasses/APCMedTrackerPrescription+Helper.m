@@ -227,7 +227,21 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
             
             NSSet *filteredRecords = [blockSafePrescription.actualDosesTaken filteredSetUsingPredicate: dateFilter];
             
+            // We're about to delete ALL dosage records attached to this
+            // prescription.  If we HAPPEN to ALSO be creating a record,
+            // then when we save that record, the deleted guys will actually
+            // get deleted.  However, if we DON'T happen to create a record,
+            // we need to call "save:" on SOMEthing.  So let's keep hold
+            // of one of the records we're about to delete so we can "save" it.
             APCMedTrackerDailyDosageRecord *anyObjectBeingDeleted = filteredRecords.anyObject;
+            
+            // Now:  actually delete the records.  When we call "save" on
+            // anything, we actually save the context, which will do the
+            // real "delete" operation.
+            for (APCMedTrackerDailyDosageRecord *oldRecord in filteredRecords)
+            {
+                [context deleteObject: oldRecord];
+            }
             
             
             //
