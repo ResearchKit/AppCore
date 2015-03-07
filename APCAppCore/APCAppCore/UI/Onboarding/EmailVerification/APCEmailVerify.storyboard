@@ -96,7 +96,7 @@ will be sent to you for your records.</string>
                                     <constraint firstAttribute="width" constant="273" id="rkR-Zp-gnM"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <state key="normal" title="Resend Verification E-Mail">
+                                <state key="normal" title="Resend Verification Email">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
