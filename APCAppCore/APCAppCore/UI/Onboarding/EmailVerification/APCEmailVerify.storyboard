@@ -117,6 +117,16 @@ will be sent to you for your records.</string>
                                     <action selector="tapToContinueButtonWasIndeedTapped:" destination="h61-jT-BHu" eventType="touchUpInside" id="NyI-z2-ilF"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Once verified, tap below" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="18r-ky-Rhz">
+                                <rect key="frame" x="49" y="262" width="222" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="222" id="6C2-lf-h4R"/>
+                                    <constraint firstAttribute="height" constant="21" id="YXb-0f-f7o"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -127,6 +137,7 @@ will be sent to you for your records.</string>
                             <constraint firstAttribute="centerX" secondItem="tTU-aB-ynX" secondAttribute="centerX" id="91V-EC-FkN"/>
                             <constraint firstAttribute="centerX" secondItem="cVc-Jw-LIH" secondAttribute="centerX" constant="-0.5" id="A2m-L2-YjN"/>
                             <constraint firstItem="tTU-aB-ynX" firstAttribute="top" secondItem="WLq-Ms-OSK" secondAttribute="top" id="D0w-lz-w04"/>
+                            <constraint firstItem="18r-ky-Rhz" firstAttribute="top" secondItem="gY2-y5-fND" secondAttribute="bottom" constant="3" id="DWw-TG-l81"/>
                             <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="yX7-Jl-zxX" secondAttribute="bottom" constant="50" id="G5E-d8-5bi"/>
                             <constraint firstItem="hsa-BE-Hkq" firstAttribute="top" secondItem="WLq-Ms-OSK" secondAttribute="bottom" constant="11" id="LcI-px-aNQ"/>
                             <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="3lp-lE-Oux" secondAttribute="bottom" constant="105" id="RFL-n7-4oA"/>
@@ -134,8 +145,10 @@ will be sent to you for your records.</string>
                             <constraint firstAttribute="centerX" secondItem="QwO-ep-Om3" secondAttribute="centerX" constant="-0.5" id="VKP-8z-4Nr"/>
                             <constraint firstItem="tTU-aB-ynX" firstAttribute="leading" secondItem="WLq-Ms-OSK" secondAttribute="leading" id="VYn-t0-KYD"/>
                             <constraint firstItem="QwO-ep-Om3" firstAttribute="top" secondItem="gY2-y5-fND" secondAttribute="bottom" constant="32" id="W8r-Tw-HC7"/>
+                            <constraint firstAttribute="centerX" secondItem="18r-ky-Rhz" secondAttribute="centerX" id="WMt-jm-2Ds"/>
                             <constraint firstAttribute="centerX" secondItem="gY2-y5-fND" secondAttribute="centerX" id="Y2N-VW-9EN"/>
                             <constraint firstAttribute="centerX" secondItem="yX7-Jl-zxX" secondAttribute="centerX" id="b2a-oT-iil"/>
+                            <constraint firstAttribute="centerY" secondItem="18r-ky-Rhz" secondAttribute="centerY" constant="-32.5" id="cPJ-Pc-Zk9"/>
                             <constraint firstItem="gY2-y5-fND" firstAttribute="top" secondItem="3xK-c0-Pah" secondAttribute="bottom" constant="5" id="cp4-Ep-F2V"/>
                             <constraint firstItem="3xK-c0-Pah" firstAttribute="trailing" secondItem="Kj1-kb-LF2" secondAttribute="trailingMargin" id="eio-eH-r3b"/>
                             <constraint firstItem="tTU-aB-ynX" firstAttribute="width" secondItem="WLq-Ms-OSK" secondAttribute="width" id="iuY-nJ-UUo"/>
