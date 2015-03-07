@@ -49,38 +49,36 @@ static NSString*    kAccountDoesNotExists       = @"There is no account register
     
     if ([code isKindOfClass:[NSError class]])
     {
-        message = [(NSError*)code localizedDescription];
+        APCLogError(code);
+    }
+
+    if (self.code == 409)
+    {
+        message = NSLocalizedString(kAccountAlreadyExists, nil);
+    }
+    else if (self.code == 404)
+    {
+        message = NSLocalizedString(kAccountDoesNotExists, nil);
+    }
+    else if ([code isEqual:@(503)] || self.code == 503)
+    {
+        message = NSLocalizedString(kServerTooDamnBusy, nil);
+    }
+    else if ([code  isEqual: @(kSBBInternetNotConnected)])
+    {
+        message = NSLocalizedString(kNotConnectedMessage, nil);
+    }
+    else if ([code isEqual:@(kSBBServerNotReachable)])
+    {
+        message = NSLocalizedString(@"You are currently not able to reach the study server. Please retry in a few moments.", nil);
+    }
+    else if ([code isEqual:@(kSBBServerUnderMaintenance)])
+    {
+        message = NSLocalizedString(kServerMaintanenceMessage, nil);
     }
     else
     {
-        if (self.code == 409)
-        {
-            message = NSLocalizedString(kAccountAlreadyExists, nil);
-        }
-        else if (self.code == 404)
-        {
-            message = NSLocalizedString(kAccountDoesNotExists, nil);
-        }
-        else if ([code isEqual:@(503)] || self.code == 503)
-        {
-            message = NSLocalizedString(kServerTooDamnBusy, nil);
-        }
-        else if ([code  isEqual: @(kSBBInternetNotConnected)])
-        {
-            message = NSLocalizedString(kNotConnectedMessage, nil);
-        }
-        else if ([code isEqual:@(kSBBServerNotReachable)])
-        {
-            message = NSLocalizedString(@"You are currently not able to reach the study server. Please retry in a few moments.", nil);
-        }
-        else if ([code isEqual:@(kSBBServerUnderMaintenance)])
-        {
-            message = NSLocalizedString(kServerMaintanenceMessage, nil);
-        }
-        else
-        {
-            message = NSLocalizedString(kUnexpectConditionMessage, nil);
-        }
+        message = NSLocalizedString(kUnexpectConditionMessage, nil);
     }
 
     return message;
