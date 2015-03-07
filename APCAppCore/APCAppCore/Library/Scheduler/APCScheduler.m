@@ -298,54 +298,85 @@ static NSString * const kOneTimeSchedule = @"once";
     
     NSArray *offsetsForTask = [appDelegate offsetForTaskSchedules];
     
+    
+    
     APCScheduledTask * createdScheduledTask = [APCScheduledTask newObjectForContext:self.scheduleMOC];
     
     NSDate *taskStartDate = dateRange.startDate;
     NSDate *taskEndDate = dateRange.endDate;
-    
 
+    
+    NSPredicate *predicate = nil;
+    NSArray *matchedTasks = nil;
+    NSNumber *daysToOffset = nil;
+    NSString *currentTaskID = nil;
+    NSDate *offsetStartDate = nil;
+    NSDate *todaysDate = [NSDate todayAtMidnight];
+    
     if (offsetsForTask) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", kScheduleOffsetTaskIdKey, task.taskID];
-        NSArray *matchedTasks = [offsetsForTask filteredArrayUsingPredicate:predicate];
-        NSNumber *daysToOffset = nil;
+        predicate = [NSPredicate predicateWithFormat:@"%K == %@", kScheduleOffsetTaskIdKey, task.taskID];
+        matchedTasks = [offsetsForTask filteredArrayUsingPredicate:predicate];
+        daysToOffset = nil;
         
         if (matchedTasks.count > 0) {
             daysToOffset = [[matchedTasks firstObject] valueForKey:kScheduleOffsetOffsetKey];
+            currentTaskID = [[matchedTasks firstObject] valueForKey:kScheduleOffsetTaskIdKey];
         }
         
-        if (daysToOffset) {
-            NSDateComponents *components = [[NSDateComponents alloc] init];
-            [components setDay:[daysToOffset integerValue]];
-            
-            NSDate *offsetStartDate = [[NSCalendar currentCalendar] dateByAddingComponents:components
-                                                                                    toDate:taskStartDate
-                                                                                   options:0];
-            
-            NSDate *offsetEndDate = [[NSCalendar currentCalendar] dateByAddingComponents:components
-                                                                                  toDate:taskEndDate
-                                                                                 options:0];
-            
-            taskStartDate = offsetStartDate;
-            taskEndDate = offsetEndDate;
-            
-            APCLogDebug(@"Task %@ scheduled offset by %lu days. New start date is %@", task.taskTitle, [daysToOffset integerValue], taskStartDate);
+    }
+    
+    if (daysToOffset) {
+        NSDateComponents *components = [[NSDateComponents alloc] init];
+        [components setDay:[daysToOffset integerValue]];
+        
+        offsetStartDate = [[NSCalendar currentCalendar] dateByAddingComponents:components
+                                                                        toDate:task.createdAt
+                                                                       options:0];
+        
+        offsetStartDate = [offsetStartDate startOfDay];
+        
+        APCLogDebug(@"Task %@ scheduled offset by %lu days. New start date is %@", task.taskTitle, [daysToOffset integerValue], taskStartDate);
+    }
+    
+#warning  SET THE NSDATE DATE] hours to 0, 0 , 0
+    if (([task.taskID isEqualToString:currentTaskID] && currentTaskID != nil)
+        && (([offsetStartDate isEqualToDate:todaysDate]) ||
+            ([[todaysDate laterDate:offsetStartDate] isEqualToDate:todaysDate])))
+    {
+        
+        createdScheduledTask.startOn = taskStartDate;
+        createdScheduledTask.endOn = taskEndDate;
+        createdScheduledTask.generatedSchedule = schedule;
+        createdScheduledTask.task = task;
+        
+        NSError * saveError = nil;
+        BOOL saveSuccess = [createdScheduledTask saveToPersistentStore:&saveError];
+        
+        if (!saveSuccess) {
+            APCLogError2 (saveError);
         }
+        
+        //Validate the task
+        [self.validatedScheduledTasksForReferenceDate addObject:createdScheduledTask];
+        
+    } else if (daysToOffset == nil || daysToOffset <= 0) {
+        createdScheduledTask.startOn = taskStartDate;
+        createdScheduledTask.endOn = taskEndDate;
+        createdScheduledTask.generatedSchedule = schedule;
+        createdScheduledTask.task = task;
+        
+        NSError * saveError = nil;
+        BOOL saveSuccess = [createdScheduledTask saveToPersistentStore:&saveError];
+        
+        if (!saveSuccess) {
+            APCLogError2 (saveError);
+        }
+        
+        //Validate the task
+        [self.validatedScheduledTasksForReferenceDate addObject:createdScheduledTask];
+    } else {
+        APCLogDebug(@"Nothing should be happening here!");
     }
-    
-    createdScheduledTask.startOn = taskStartDate;
-    createdScheduledTask.endOn = taskEndDate;
-    createdScheduledTask.generatedSchedule = schedule;
-    createdScheduledTask.task = task;
-    
-    NSError * saveError = nil;
-    BOOL saveSuccess = [createdScheduledTask saveToPersistentStore:&saveError];
-    
-    if (!saveSuccess) {
-        APCLogError2 (saveError);
-    }
-    
-    //Validate the task
-    [self.validatedScheduledTasksForReferenceDate addObject:createdScheduledTask];
 }
 
 - (void) validateScheduledTask: (APCScheduledTask*) scheduledTask {
