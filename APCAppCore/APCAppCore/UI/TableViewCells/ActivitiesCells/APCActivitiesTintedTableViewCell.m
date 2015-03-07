@@ -52,6 +52,11 @@ static CGFloat const kTitleLabelCenterYConstant = 10.5f;
 
 - (void)setTintColor:(UIColor *)tintColor
 {
+    if (!tintColor) {
+        // default to the lightgray system color.
+        tintColor = [UIColor lightGrayColor];
+    }
+    
     _tintColor = tintColor;
     
     self.tintView.backgroundColor = tintColor;

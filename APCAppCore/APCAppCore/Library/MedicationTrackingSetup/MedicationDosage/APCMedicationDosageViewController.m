@@ -12,7 +12,7 @@
 
 #import "APCLog.h"
 
-static  NSString  *kViewControllerName       = @"Medication Dosages";
+static  NSString  *kViewControllerName       = @"Medication Dosage";
 
 static  CGFloat    kSectionHeaderHeight      = 77.0;
 static  CGFloat    kSectionHeaderLabelOffset = 10.0;

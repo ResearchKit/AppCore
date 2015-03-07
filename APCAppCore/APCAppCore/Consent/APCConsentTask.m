@@ -73,6 +73,10 @@ static NSString*    kSharingTag                         = @"sharing";
 @property (nonatomic, strong) ORKConsentSharingStep*  sharingStep;
 @property (nonatomic, strong) ORKVisualConsentStep*   visualStep;
 
+@property (nonatomic, strong) ORKStep*   lastQuestionStep;
+@property (nonatomic, strong) ORKStep*   resultQuestionStep;
+@property (nonatomic, strong) ORKStep*   afterResultQuestionStep;
+
 @end
 
 
@@ -318,6 +322,8 @@ static NSString*    kSharingTag                         = @"sharing";
                     {
                         nextStep = [self failureStep];
                     }
+                    self.lastQuestionStep = step;
+                    self.resultQuestionStep = nextStep;
                 }
                 else
                 {
@@ -403,6 +409,10 @@ static NSString*    kSharingTag                         = @"sharing";
         nextStep = findNextStep();
     }
     
+    if (step == self.resultQuestionStep) {
+        self.afterResultQuestionStep = nextStep;
+    }
+    
     return nextStep;
 }
 
@@ -418,7 +428,15 @@ static NSString*    kSharingTag                         = @"sharing";
     else
     {
         NSUInteger  ndx = [self.consentSteps indexOfObject:step];
-        if (ndx == NSNotFound)
+        if (step == self.resultQuestionStep)
+        {
+            previousStep = self.lastQuestionStep;
+        }
+        else if (step == self.afterResultQuestionStep)
+        {
+            previousStep = self.resultQuestionStep;
+        }
+        else if (ndx == NSNotFound)
         {
             previousStep = self.visualStep;
         }

@@ -7,11 +7,12 @@
  
 #import "APCAppCore.h"
 
-static NSString*    kServerTooDamnBusy          = @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily.";
-static NSString*    kUnexpectConditionMessage   = @"An unexpected condition has been encountered. Please retry in a few moments.";
-static NSString*    kNotConnectedMessage        = @"You are currently not connected to the Internet.";
-static NSString*    kServerMaintanenceMessage   = @"The study server is currently undergoing maintanence. Please retry in a few moments.";
-static NSString*    kAccountAlreadyExists       = @"This account already exists";
+static NSString*    kServerTooDamnBusy          = @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.";
+static NSString*    kUnexpectConditionMessage   = @"An unexpected condition has been encountered. Please try again soon.";
+static NSString*    kNotConnectedMessage        = @"You are currently not connected to the Internet. Please try again when you are connected to a network.";
+static NSString*    kServerMaintanenceMessage   = @"The study server is currently undergoing maintanence. Please try again soon.";
+static NSString*    kAccountAlreadyExists       = @"An account has already been created for this email address. Please use a different email address or sign in using the \"already participanting\" link on the Welcome Page.";
+static NSString*    kAccountDoesNotExists       = @"There is no account register for this email address.";
 
 @implementation NSError (APCAdditions)
 
@@ -21,7 +22,7 @@ static NSString*    kAccountAlreadyExists       = @"This account already exists"
         [message containsString:@"NSURLError"] ||
         [message rangeOfString:@"contact somebody" options:NSCaseInsensitiveSearch].location != NSNotFound)
     {
-        return NSLocalizedString(@"An unhandled error occurred", @"An unhandled error occurred");
+        return NSLocalizedString(@"An unknown error occurred", nil);
     }
     else
     {
@@ -52,11 +53,15 @@ static NSString*    kAccountAlreadyExists       = @"This account already exists"
     }
     else
     {
-        if ([code isEqual:@(409)])
+        if (self.code == 409)
         {
             message = NSLocalizedString(kAccountAlreadyExists, nil);
         }
-        else if ([code isEqual:@(503)])
+        else if (self.code == 404)
+        {
+            message = NSLocalizedString(kAccountDoesNotExists, nil);
+        }
+        else if ([code isEqual:@(503)] || self.code == 503)
         {
             message = NSLocalizedString(kServerTooDamnBusy, nil);
         }
@@ -70,7 +75,7 @@ static NSString*    kAccountAlreadyExists       = @"This account already exists"
         }
         else if ([code isEqual:@(kSBBServerUnderMaintenance)])
         {
-            message = NSLocalizedString(@"The study server currently under maintenance", nil);
+            message = NSLocalizedString(kServerMaintanenceMessage, nil);
         }
         else
         {
@@ -86,7 +91,15 @@ static NSString*    kAccountAlreadyExists       = @"This account already exists"
 {
     NSString*   message;
     
-    if (self.code >= 500 && self.code < 600)
+    if (self.code == 409)
+    {
+        message = NSLocalizedString(kAccountAlreadyExists, nil);
+    }
+    else if (self.code == 404)
+    {
+        message = NSLocalizedString(kAccountDoesNotExists, nil);
+    }
+    else if (self.code >= 500 && self.code < 600)
     {
         message = NSLocalizedString(kServerTooDamnBusy, nil);
     }

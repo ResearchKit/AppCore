@@ -174,6 +174,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
             cell = aCell;
         } else {
             APCSetupButtonTableViewCell  *aCell = (APCSetupButtonTableViewCell *)[self.setupTabulator dequeueReusableCellWithIdentifier:kSetupTableButtonCellName];
+            NSLog(@"APCMedicationTrackerSetupViewController Table View Frame = %@", NSStringFromCGRect(self.setupTabulator.frame));
             aCell.selectionStyle = UITableViewCellSelectionStyleNone;
             self.doneButton = aCell.doneButton;
             self.doneButton.enabled = NO;
@@ -355,9 +356,6 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
     [super viewDidLoad];
     
     self.navigationItem.title = kViewControllerName;
-    
-    self.setupTabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.listTabulator.tableFooterView  = [[UIView alloc] initWithFrame:CGRectZero];
     
     UINib  *setupTableCellNib = [UINib nibWithNibName:kSetupTableCellName bundle:[NSBundle appleCoreBundle]];
     [self.setupTabulator registerNib:setupTableCellNib forCellReuseIdentifier:kSetupTableCellName];
