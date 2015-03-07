@@ -181,15 +181,13 @@ static NSString * const kOneTimeSchedule = @"once";
 
 -(NSArray *) allScheduledTasks{
     __block NSArray * scheduledTaskArray;
-    dispatch_sync(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
-        NSFetchRequest * request = [APCScheduledTask request];
-        [request setShouldRefreshRefetchedObjects:YES];
-        NSError * error;
-        scheduledTaskArray = [self.scheduleMOC executeFetchRequest:request error:&error];
-        if (scheduledTaskArray.count == 0) {
-            APCLogError2 (error);
-        }
-    });
+    NSFetchRequest * request = [APCScheduledTask request];
+    [request setShouldRefreshRefetchedObjects:YES];
+    NSError * error;
+    scheduledTaskArray = [self.scheduleMOC executeFetchRequest:request error:&error];
+    if (scheduledTaskArray.count == 0) {
+        APCLogError2 (error);
+    }
     
     return scheduledTaskArray;
 }
