@@ -9,7 +9,6 @@
 #import "APCAppDelegate.h"
 #import "UIAlertController+Helper.h"
 #import "APCUser+Bridge.h"
-#import "UIAlertController+Helper.h"
 #import "UIFont+APCAppearance.h"
 #import "UIColor+APCAppearance.h"
 #import "NSError+APCAdditions.h"
@@ -17,63 +16,35 @@
 #import "APCThankYouViewController.h"
 
 
+typedef void (^APCStuffToDoAfterSpinnerAppears) (void);
+typedef void (^APCAlertDismisser) (void);
+
+
 /**
  This string appears in a certain text field in the Storyboard.
  We'll replace it with the name of the actual app.  This lets us
  lay out the text in Interface Builder, but still have
  programmatic control over part of it.
+ 
+ We may also use this string in an alert we show the user.
  */
 static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
+
+/**
+ Text of an alert shown if the user taps the button and
+ we think she hasn't clicked that email link yet.
+ */
+static NSString * const kAPCPleaseClickEmailAlertTitle = @"Please Check Your Email";
+static NSString * const kAPCPleaseClickEmailAlertMessageFormatString = @"\nYour email address has not yet been verified.\n\nPlease check your email for a message from $appName$, and click the link in that message.";
+static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 
 
 @interface APCEmailVerifyViewController ()
 @property (nonatomic, readonly) APCUser * user;
-@property (nonatomic, assign) NSUInteger signInCounter;
-@property (nonatomic, strong) NSTimer *timer;
-
-/** Makes sure we don't queue a server request for 
- every time the user presses the button. */
-@property (nonatomic, assign) BOOL serverCheckIsInProgress;
+@property (nonatomic, strong) UIAlertController *pleaseCheckEmailAlert;
+@property (nonatomic, weak) IBOutlet UIView *spinnerView;
 @end
 
-
-/*
- There are 3 separate timing concepts happening here, so we can
- get a specific, hopefully fluid, user experience.
- 
- The goal:  The user sees this screen.  It invites her to check her
- email and click a link in that email.  The next time she comes
- back to this screen, she finds that we have magically detected
- that "click," and have let her into the app.
- 
- Here's how we'll make that happen.
- 
- 1) Every 10 seconds:  check with the server to see if she
-    clicked that link.
- 
- 2) After we check 10 times, stop checking, on the premise
-    that she may have left the room and doesn't care any
-    more.
- 
- 3) Show a button on the screen, inviting her to check
-    whenever she likes.  When she taps the button, we'll
-    go back to step 1.
-
-
- Other notes:
- 
- -  Everything above has some interesting threading issues.
-    I've tried to make them explicit, below.
-
- -  Those timing and counter values are all constants,
-    named "kAPCSignIn...", defined in APCConstants.h.
- 
- -  The tap process has a "gate."  Once the user taps, we
-    we prevent taps until the next server response has
-    come back.  This is to prevent a bunch of network hits,
-    and keep us from handling the asynchronous responses,
-    if the user taps the button a bunch of times in a row.
- */
 
 @implementation APCEmailVerifyViewController
 
@@ -98,27 +69,20 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
 {
     [super viewDidLoad];
 
-    self.timer = nil;
-    self.signInCounter = 0;
-    self.serverCheckIsInProgress = NO;
-
     [self setupAppearance];
-    
+
     self.title = NSLocalizedString(@"Email Verification", nil);
+    self.pleaseCheckEmailAlert = nil;
+
+    // Hide the "johnny appleseed@..."
     self.emailLabel.text = self.user.email;
+
+    // Hide the spinner view.  It was probably showing in
+    // Interface Builder.
+    [self hideSpinnerUsingAnimation: NO andThenDoThis: nil];
 
     NSString *appName = [APCUtilities appName];
     self.topMessageLabel.text = [self.topMessageLabel.text stringByReplacingOccurrencesOfString: kAPCAppNamePlaceholderString withString: appName];
-}
-
-- (void) viewWillAppear: (BOOL) animated
-{
-    [super viewWillAppear: animated];
-
-    // Check the server.  This will check once, and then
-    // start a timer to check again in a few seconds.
-    [self resetSignInCounter];
-    [self checkSignInOnce];
 }
 
 - (void) viewDidAppear: (BOOL) animated
@@ -131,9 +95,9 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
 
 - (void) viewWillDisappear:(BOOL)animated
 {
-    // This is crucial:  without this, we'll get a memory leak
-    // (a retain loop).
-    [self stopTimer];
+    // Hide/cancel all the modal views which might be showing.
+    [self cancelPleaseCheckEmailAlertUsingAnimation: NO];
+    [self hideSpinnerUsingAnimation: NO andThenDoThis: nil];
 
     [super viewWillDisappear: animated];
 }
@@ -165,87 +129,25 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
 
 
 // ---------------------------------------------------------
-#pragma mark - The Sign-in Timer and Counter
-// ---------------------------------------------------------
-
-- (void) resetSignInCounter
-{
-    self.signInCounter = 0;
-}
-
-- (BOOL) shouldTrySignInAgain
-{
-    return self.signInCounter <= kAPCSigninNumRetriesBeforePause;
-}
-
-- (void) launchTimerOnce
-{
-    /*
-     This waits a few seconds, and calls -timerFired.
-     */
-    self.timer = [NSTimer scheduledTimerWithTimeInterval: kAPCSigninNumSecondsBetweenRetries
-                                                  target: self
-                                                selector: @selector(timerFired)
-                                                userInfo: nil
-                                                 repeats: NO];
-}
-
-- (void) stopTimer
-{
-    /**
-     "The timer maintains a strong reference to the target" --
-     this view controller -- until the timer is invalidated."
-     Argh!  What a perfect way to create a retain loop!
-     
-     From:
-     https://developer.apple.com/library/prerelease/ios/documentation/Cocoa/Reference/Foundation/Classes/NSTimer_Class/index.html#//apple_ref/occ/clm/NSTimer/scheduledTimerWithTimeInterval:invocation:repeats:
-     */
-    [self.timer invalidate];
-    self.timer = nil;
-}
-
-- (void) timerFired
-{
-    [self checkSignInOnce];
-}
-
-
-
-// ---------------------------------------------------------
 #pragma mark - Checking for Sign-In
 // ---------------------------------------------------------
 
 - (void) checkSignInOnce
 {
+    APCLogEventWithData (kNetworkEvent, @{ @"event_detail" : @"Email verification: checking with Sage to see if user has clicked email-verification link." });
+
+
+    //
+    // This call to "user" is the actual signin process.
+    //
+
     __weak APCEmailVerifyViewController * weakSelf = self;
 
-    self.signInCounter = self.signInCounter + 1;
-    self.serverCheckIsInProgress = YES;
-
-    [self announceCheckingServer];
-
-    //
-    // This is the signin process itself.
-    //
     [self.user signInOnCompletion: ^(NSError *error) {
-
-        self.serverCheckIsInProgress = NO;
 
         [weakSelf handleSigninResponseWithError: error];
 
     }];
-}
-
-- (void) announceCheckingServer
-{
-    APCLogEventWithData (kNetworkEvent, @{ @"event_detail" : @"Email verification: checking with Sage to see if user has clicked email-verification link." });
-}
-
-- (void) announceTemporarilyStoppingTimerLoop
-{
-    NSString *message = [NSString stringWithFormat: @"Email verification: Stopping auto-verification check after %d tries.  We'll try again when the user taps the on-screen button.", (int) kAPCSigninNumRetriesBeforePause];
-
-    APCLogEventWithData (kNetworkEvent, @{ @"event_detail" : message });
 }
 
 /**
@@ -263,40 +165,21 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
 
         else if (error.code == kAPCSigninErrorCode_NotSignedIn)
         {
-            /*
-             Retry 10 times or so.  Then stop.
-             The user can start again at any time
-             by pressing the button.
-             */
-            if (self.shouldTrySignInAgain)
-            {
-                [self launchTimerOnce];
-            }
-            else
-            {
-                [self announceTemporarilyStoppingTimerLoop];
-            }
+            [self showPleaseCheckEmailAlert];
         }
+
         else
         {
-            APCLogError2 (error);
-            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Sign In Error", @"") message:error.localizedDescription];
-            [self presentViewController:alert animated:YES completion:nil];
+            [self showSignInError: error];
         }
     }
     else
     {
-        [self.user updateProfileOnCompletion:^(NSError *error) {
+        [self.user updateProfileOnCompletion: ^(NSError *error) {
             APCLogError2 (error);
         }];
-        
-        // load the thank you view controller
-        UIStoryboard *sbOnboarding = [UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]];
-        APCThankYouViewController *allSetVC = (APCThankYouViewController *)[sbOnboarding instantiateViewControllerWithIdentifier:@"APCThankYouViewController"];
-        
-        allSetVC.emailVerified = YES;
-        
-        [self presentViewController:allSetVC animated:YES completion:nil];
+
+        [self showThankYouPage];
     }
 }
 
@@ -308,18 +191,164 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
 
 - (IBAction) tapToContinueButtonWasIndeedTapped: (id) __unused sender
 {
-    /*
-     When a server check starts, we'll set this flag, and un-set
-     it when we get the response.  This ensures we only queue up
-     one request, no matter how many times the user taps the
-     button.
-     */
-    if (! self.serverCheckIsInProgress)
-    {
-        [self stopTimer];
-        [self resetSignInCounter];
+    [self showSpinnerAndThenDoThis: ^{
         [self checkSignInOnce];
+    }];
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - The Spinner
+// ---------------------------------------------------------
+
+- (void) showSpinnerAndThenDoThis: (APCStuffToDoAfterSpinnerAppears) callbackBlock
+{
+    self.spinnerView.alpha = 0;
+    self.spinnerView.hidden = NO;
+
+    [UIView animateWithDuration: 0.5
+                     animations: ^{
+
+                         self.spinnerView.alpha = 1;
+
+                     } completion: ^(BOOL __unused finished) {
+
+                         // Conceptually, this callback needs to go on
+                         // the main thread (even though we're probably
+                         // not gonna do a main-thread thing with it).
+                         // However, since we're currently in an *animation*
+                         // completion block, and this is iOS, we're guaranteed
+                         // to already be on the main thread.  So we can
+                         // just call it.
+
+                         if (callbackBlock != nil)
+                         {
+                             callbackBlock ();
+                         }
+                     }];
+}
+
+- (void) hideSpinnerUsingAnimation: (BOOL) shouldAnimate
+                     andThenDoThis: (APCStuffToDoAfterSpinnerAppears) callbackBlock
+{
+    if (shouldAnimate)
+    {
+        [UIView animateWithDuration: 0.5
+                         animations: ^{
+
+                             self.spinnerView.alpha = 0;
+
+                         } completion: ^(BOOL __unused finished) {
+
+                             self.spinnerView.hidden = YES;
+
+                             // See matching comment in -showSpinner.
+                             callbackBlock ();
+                         }];
     }
+    else
+    {
+        self.spinnerView.hidden = YES;
+
+        if (callbackBlock != nil)
+        {
+            callbackBlock ();
+        }
+    }
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Other views we're showing
+// ---------------------------------------------------------
+
+/*
+ All these methods hide the spinner before displaying the views
+ they're designed to display.
+ */
+
+- (void) showPleaseCheckEmailAlert
+{
+    [self hideSpinnerUsingAnimation: YES andThenDoThis:^{
+
+        NSString *message = [kAPCPleaseClickEmailAlertMessageFormatString stringByReplacingOccurrencesOfString: kAPCAppNamePlaceholderString
+                                                                                                    withString: [APCUtilities appName]];
+
+        self.pleaseCheckEmailAlert = [UIAlertController alertControllerWithTitle: kAPCPleaseClickEmailAlertTitle
+                                                                         message: message
+                                                                  preferredStyle: UIAlertControllerStyleAlert];
+
+        UIAlertAction *okayAction = [UIAlertAction actionWithTitle: kAPCPleaseCheckEmailAlertOkButton
+                                                             style: UIAlertActionStyleDefault
+                                                           handler: ^(UIAlertAction * __unused action)
+                                     {
+                                         [self cancelPleaseCheckEmailAlertUsingAnimation: YES];
+                                     }];
+
+        [self.pleaseCheckEmailAlert addAction: okayAction];
+
+        [self presentViewController: self.pleaseCheckEmailAlert
+                           animated: YES
+                         completion: nil];
+    }];
+}
+
+- (void) showConsentError: (NSError *) error
+{
+    APCLogError2(error);
+
+    [self hideSpinnerUsingAnimation: YES andThenDoThis:^{
+
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Consent Error", @"") message:error.localizedDescription];
+
+        [self presentViewController:alert animated:YES completion:nil];
+
+    }];
+}
+
+- (void) showSignInError: (NSError *) error
+{
+    APCLogError2 (error);
+
+    [self hideSpinnerUsingAnimation: YES andThenDoThis:^{
+
+        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Sign In Error", @"") message:error.localizedDescription];
+
+        [self presentViewController:alert animated:YES completion:nil];
+
+    }];
+}
+
+- (void) showThankYouPage
+{
+    [self hideSpinnerUsingAnimation: YES andThenDoThis:^{
+
+        // load the thank you view controller
+        UIStoryboard *sbOnboarding = [UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]];
+        APCThankYouViewController *allSetVC = (APCThankYouViewController *)[sbOnboarding instantiateViewControllerWithIdentifier:@"APCThankYouViewController"];
+
+        allSetVC.emailVerified = YES;
+
+        [self presentViewController:allSetVC animated:YES completion:nil];
+
+    }];
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - The "please click that link" alert
+// ---------------------------------------------------------
+
+- (void) cancelPleaseCheckEmailAlertUsingAnimation: (BOOL) shouldAnimate
+{
+    __weak APCEmailVerifyViewController *weakSelf = self;
+
+    [self.pleaseCheckEmailAlert dismissViewControllerAnimated: shouldAnimate completion:^{
+        weakSelf.pleaseCheckEmailAlert = nil;
+    }];
 }
 
 
@@ -337,20 +366,22 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
             [weakSelf handleConsentResponseWithError: error];
         }];
     }
+    else
+    {
+        // What happens here?  And what should?
+    }
 }
 
 - (void) handleConsentResponseWithError: (NSError *) error
 {
     if (error)
     {
-        APCLogError2(error);
-
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Consent Error", @"") message:error.localizedDescription];
-        [self presentViewController:alert animated:YES completion:nil];
+        [self showConsentError: error];
     }
     else
     {
         self.user.consented = YES;
+
         [self checkSignInOnce];
     }
 }
