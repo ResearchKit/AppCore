@@ -255,7 +255,7 @@ static NSString * const kOneTimeSchedule = @"once";
         [self validateScheduledTask:validatedTask];
     }else{
         //One time not created, create it        
-        NSDate *startOnDate = [[NSCalendar currentCalendar] dateBySettingHour:0 minute:0 second:0 ofDate:[NSDate date] options:0];
+        NSDate *startOnDate = [self.referenceRange.startDate startOfDay];
         
         NSDate * endDate = (schedule.expires !=nil) ? [startOnDate dateByAddingTimeInterval:schedule.expiresInterval] : [startOnDate dateByAddingTimeInterval:[NSDate parseISO8601DurationString:@"P2Y"]];
         endDate = [NSDate endOfDay:endDate];
