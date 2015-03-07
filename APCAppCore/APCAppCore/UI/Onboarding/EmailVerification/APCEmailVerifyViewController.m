@@ -9,7 +9,6 @@
 #import "APCAppDelegate.h"
 #import "UIAlertController+Helper.h"
 #import "APCUser+Bridge.h"
-#import "UIAlertController+Helper.h"
 #import "UIFont+APCAppearance.h"
 #import "UIColor+APCAppearance.h"
 #import "NSError+APCAdditions.h"
@@ -17,13 +16,26 @@
 #import "APCThankYouViewController.h"
 
 
+typedef void (^APCAlertDismisser) (void);
+
+
 /**
  This string appears in a certain text field in the Storyboard.
  We'll replace it with the name of the actual app.  This lets us
  lay out the text in Interface Builder, but still have
  programmatic control over part of it.
+ 
+ We may also use this string in an alert we show the user.
  */
 static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
+
+/**
+ Text of an alert shown if the user taps the button and
+ we think she hasn't clicked that email link yet.
+ */
+static NSString * const kAPCPleaseClickEmailAlertTitle = @"Please Check Your Email";
+static NSString * const kAPCPleaseClickEmailAlertMessageFormatString = @"\nYour email address has not yet been verified.\n\nPlease check your email for a message from $appName$, and click the link in that message.";
+static NSString * const kAPCPleaseCheckEmailAlertOkButton = @"OK";
 
 
 @interface APCEmailVerifyViewController ()
@@ -34,6 +46,14 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
 /** Makes sure we don't queue a server request for 
  every time the user presses the button. */
 @property (nonatomic, assign) BOOL serverCheckIsInProgress;
+
+/**
+ Shown if the user taps the "Continue" button before
+ (we think) she's checked her email.
+ */
+@property (nonatomic, strong) UIAlertController *pleaseCheckEmailAlert;
+@property (nonatomic, assign) BOOL pleaseCheckEmailAlertIsShowing;
+
 @end
 
 
@@ -101,9 +121,11 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
     self.timer = nil;
     self.signInCounter = 0;
     self.serverCheckIsInProgress = NO;
+    self.pleaseCheckEmailAlert = nil;
+    self.pleaseCheckEmailAlertIsShowing = NO;
 
     [self setupAppearance];
-    
+
     self.title = NSLocalizedString(@"Email Verification", nil);
     self.emailLabel.text = self.user.email;
 
@@ -114,6 +136,10 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
 - (void) viewWillAppear: (BOOL) animated
 {
     [super viewWillAppear: animated];
+
+    // Prepare to calm the user down.  The matching "destroy"
+    // call is in -viewDidDisappear.
+    [self generatePleaseCheckEmailAlert];
 
     // Check the server.  This will check once, and then
     // start a timer to check again in a few seconds.
@@ -136,6 +162,13 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
     [self stopTimer];
 
     [super viewWillDisappear: animated];
+}
+
+- (void) viewDidDisappear: (BOOL) animated
+{
+    [self destroyPleaseCheckEmailAlert];
+
+    [super viewDidDisappear: animated];
 }
 
 - (void)setupAppearance
@@ -280,23 +313,29 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
         else
         {
             APCLogError2 (error);
-            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Sign In Error", @"") message:error.localizedDescription];
-            [self presentViewController:alert animated:YES completion:nil];
+
+            [self cancelPleaseCheckEmailAlertAndThenDoThis:^{
+                UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Sign In Error", @"") message:error.localizedDescription];
+                [self presentViewController:alert animated:YES completion:nil];
+            }];
         }
     }
     else
     {
-        [self.user updateProfileOnCompletion:^(NSError *error) {
-            APCLogError2 (error);
+        [self cancelPleaseCheckEmailAlertAndThenDoThis:^{
+
+            [self.user updateProfileOnCompletion: ^(NSError *error) {
+                APCLogError2 (error);
+            }];
+
+            // load the thank you view controller
+            UIStoryboard *sbOnboarding = [UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]];
+            APCThankYouViewController *allSetVC = (APCThankYouViewController *)[sbOnboarding instantiateViewControllerWithIdentifier:@"APCThankYouViewController"];
+
+            allSetVC.emailVerified = YES;
+
+            [self presentViewController:allSetVC animated:YES completion:nil];
         }];
-        
-        // load the thank you view controller
-        UIStoryboard *sbOnboarding = [UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]];
-        APCThankYouViewController *allSetVC = (APCThankYouViewController *)[sbOnboarding instantiateViewControllerWithIdentifier:@"APCThankYouViewController"];
-        
-        allSetVC.emailVerified = YES;
-        
-        [self presentViewController:allSetVC animated:YES completion:nil];
     }
 }
 
@@ -307,6 +346,12 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
 // ---------------------------------------------------------
 
 - (IBAction) tapToContinueButtonWasIndeedTapped: (id) __unused sender
+{
+    [self showPleaseCheckEmailAlert];
+    [self restartChecking];
+}
+
+- (void) restartChecking
 {
     /*
      When a server check starts, we'll set this flag, and un-set
@@ -320,6 +365,83 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
         [self resetSignInCounter];
         [self checkSignInOnce];
     }
+
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - The "please click that link" alert
+// ---------------------------------------------------------
+
+- (void) generatePleaseCheckEmailAlert
+{
+    NSString *message = [kAPCPleaseClickEmailAlertMessageFormatString stringByReplacingOccurrencesOfString: kAPCAppNamePlaceholderString
+                                                                                                withString: [APCUtilities appName]];
+
+    self.pleaseCheckEmailAlert = [UIAlertController alertControllerWithTitle: kAPCPleaseClickEmailAlertTitle
+                                                                     message: message
+                                                              preferredStyle: UIAlertControllerStyleAlert];
+
+    UIAlertAction *okayAction = [UIAlertAction actionWithTitle: kAPCPleaseCheckEmailAlertOkButton
+                                                         style: UIAlertActionStyleDefault
+                                                       handler: ^(UIAlertAction * __unused action)
+                                 {
+                                     self.pleaseCheckEmailAlertIsShowing = NO;
+                                     
+                                     [self restartChecking];
+                                 }];
+
+    [self.pleaseCheckEmailAlert addAction: okayAction];
+}
+
+- (void) destroyPleaseCheckEmailAlert
+{
+    // Not sure I need this.
+}
+
+- (void) showPleaseCheckEmailAlert
+{
+    [self presentViewController: self.pleaseCheckEmailAlert
+                       animated: YES
+                     completion:
+     ^{
+         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+             self.pleaseCheckEmailAlertIsShowing = YES;
+         }];
+     }];
+}
+
+/** Called when the email verification comes through
+ while the alert is on-screen. */
+- (void) cancelPleaseCheckEmailAlertAndThenDoThis: (APCAlertDismisser) callbackBlock
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+
+        // Make sure I don't dismiss mySELF.
+        if (self.pleaseCheckEmailAlertIsShowing)
+        {
+            self.pleaseCheckEmailAlertIsShowing = NO;
+
+            [self.pleaseCheckEmailAlert dismissViewControllerAnimated: YES
+                                                           completion: callbackBlock];
+        }
+
+        else
+        {
+            callbackBlock ();
+        }
+    }];
+}
+
+- (void) showSpinnerIfCheckInProgress
+{
+
+}
+
+- (void) hideSpinner
+{
+    
 }
 
 
@@ -345,8 +467,10 @@ static NSString * const kAPCAppNamePlaceholderString = @"$appName$";
     {
         APCLogError2(error);
 
-        UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Consent Error", @"") message:error.localizedDescription];
-        [self presentViewController:alert animated:YES completion:nil];
+        [self cancelPleaseCheckEmailAlertAndThenDoThis:^{
+            UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"User Consent Error", @"") message:error.localizedDescription];
+            [self presentViewController:alert animated:YES completion:nil];
+        }];
     }
     else
     {
