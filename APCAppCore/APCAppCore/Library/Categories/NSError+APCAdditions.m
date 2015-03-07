@@ -91,6 +91,10 @@ static NSString*    kAccountDoesNotExists       = @"There is no account register
 {
     NSString*   message;
     
+    if (self.code == 409)
+    {
+        message = NSLocalizedString(kAccountAlreadyExists, nil);
+    }
     else if (self.code == 404)
     {
         message = NSLocalizedString(kAccountDoesNotExists, nil);
