@@ -12,7 +12,7 @@
 
 #import "APCLog.h"
 
-static  NSString  *kViewControllerName       = @"Medication Dosages";
+static  NSString  *kViewControllerName       = @"Medication Dosage";
 
 static  CGFloat    kSectionHeaderHeight      = 77.0;
 static  CGFloat    kSectionHeaderLabelOffset = 10.0;
@@ -67,6 +67,8 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     if (self.selectedIndex != nil) {
         if ([self.selectedIndex isEqual:indexPath] == YES) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
     return  cell;
@@ -117,7 +119,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     }
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *) __unused indexPath
+- (CGFloat)tableView:(UITableView *) __unused tableView heightForRowAtIndexPath:(NSIndexPath *) __unused indexPath
 {
     return  kAPCMedicationRowHeight;
 }

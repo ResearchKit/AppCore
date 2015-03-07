@@ -18,7 +18,7 @@
                         <rect key="frame" x="8" y="2" width="312" height="60"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IMk-mJ-98p" userLabel="Top Label">
-                                <rect key="frame" x="0.0" y="8" width="312" height="20"/>
+                                <rect key="frame" x="0.0" y="12" width="312" height="20"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -38,7 +38,7 @@
                                 </variation>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rpu-3M-xeI" userLabel="Bottom Label">
-                                <rect key="frame" x="0.0" y="41" width="312" height="17"/>
+                                <rect key="frame" x="0.0" y="39" width="312" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -46,7 +46,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="IMk-mJ-98p" firstAttribute="top" secondItem="nsg-gf-R4f" secondAttribute="topMargin" id="4E8-NZ-sZc"/>
+                            <constraint firstItem="IMk-mJ-98p" firstAttribute="top" secondItem="nsg-gf-R4f" secondAttribute="topMargin" constant="4" id="4E8-NZ-sZc"/>
                             <constraint firstAttribute="trailing" secondItem="IMk-mJ-98p" secondAttribute="trailing" id="AVg-Id-GMj"/>
                             <constraint firstItem="IMk-mJ-98p" firstAttribute="leading" secondItem="RLK-8M-p6i" secondAttribute="leading" id="BH8-qD-Dlq"/>
                             <constraint firstItem="Rpu-3M-xeI" firstAttribute="leading" secondItem="nsg-gf-R4f" secondAttribute="leading" id="Cgh-UQ-ykT"/>
@@ -54,7 +54,7 @@
                             <constraint firstItem="Rpu-3M-xeI" firstAttribute="trailing" secondItem="RLK-8M-p6i" secondAttribute="trailing" id="K4X-GU-dhU"/>
                             <constraint firstAttribute="centerY" secondItem="RLK-8M-p6i" secondAttribute="centerY" constant="-6" id="TaO-x7-Tf8"/>
                             <constraint firstItem="IMk-mJ-98p" firstAttribute="trailing" secondItem="RLK-8M-p6i" secondAttribute="trailing" id="bkr-1B-y0P"/>
-                            <constraint firstItem="Rpu-3M-xeI" firstAttribute="top" secondItem="RLK-8M-p6i" secondAttribute="bottom" constant="-5" id="ggo-85-Qyq"/>
+                            <constraint firstItem="Rpu-3M-xeI" firstAttribute="top" secondItem="RLK-8M-p6i" secondAttribute="bottom" constant="-7" id="ggo-85-Qyq"/>
                             <constraint firstItem="RLK-8M-p6i" firstAttribute="leading" secondItem="nsg-gf-R4f" secondAttribute="leading" id="kgj-Fv-yoY"/>
                             <constraint firstItem="Rpu-3M-xeI" firstAttribute="leading" secondItem="RLK-8M-p6i" secondAttribute="leading" id="p88-Wa-CAt"/>
                         </constraints>

@@ -67,10 +67,21 @@
 }
 
 - (BOOL)               webView: (UIWebView *) __unused webView
-    shouldStartLoadWithRequest: (NSURLRequest *) __unused request
-                navigationType: (UIWebViewNavigationType) __unused navigationType
+    shouldStartLoadWithRequest: (NSURLRequest*)request
+                navigationType: (UIWebViewNavigationType)navigationType
 {
-    return YES;
+    BOOL    shouldLoad = NO;
+    
+    if (navigationType == UIWebViewNavigationTypeLinkClicked)
+    {
+        [[UIApplication sharedApplication] openURL:[request URL]];
+    }
+    else
+    {
+        shouldLoad = YES;
+    }
+    
+    return shouldLoad;
 }
 
 #pragma mark - Selectors / IBActions
@@ -87,5 +98,6 @@
     // Disable user selection
     [webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.style.webkitUserSelect='none';"];
 }
+
 
 @end

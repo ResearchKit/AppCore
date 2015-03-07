@@ -93,7 +93,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self setupDataFromJSONFile:@"StudyOverview"];
     
-    /* Sage returns dataSharing = 0 on Sign In. */
     if (self.user.sharedOptionSelection && self.user.sharedOptionSelection.integerValue == 0) {
         self.participationLabel.text = NSLocalizedString(@"Your data is no longer being used for this study.", @"");
         self.leaveStudyButton.hidden = YES;
@@ -697,9 +696,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
-        /*Temporarily commenting the IF condition. Sage returns dataSharing =0 on Sign In.*/
-        //if (!self.user.sharedOptionSelection || self.user.sharedOptionSelection.integerValue != 0)
+        if (self.user.isConsented)
         {
+            //  Instead of prevent the row from being added to the table, a better option would be to
+            //  disable the row (grey it out and don't respond to taps)
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedString(@"Sharing Options", @"");
             field.identifier = kAPCDefaultTableViewCellIdentifier;

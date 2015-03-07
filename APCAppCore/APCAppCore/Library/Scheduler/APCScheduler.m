@@ -181,15 +181,13 @@ static NSString * const kOneTimeSchedule = @"once";
 
 -(NSArray *) allScheduledTasks{
     __block NSArray * scheduledTaskArray;
-    dispatch_sync(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
-        NSFetchRequest * request = [APCScheduledTask request];
-        [request setShouldRefreshRefetchedObjects:YES];
-        NSError * error;
-        scheduledTaskArray = [self.scheduleMOC executeFetchRequest:request error:&error];
-        if (scheduledTaskArray.count == 0) {
-            APCLogError2 (error);
-        }
-    });
+    NSFetchRequest * request = [APCScheduledTask request];
+    [request setShouldRefreshRefetchedObjects:YES];
+    NSError * error;
+    scheduledTaskArray = [self.scheduleMOC executeFetchRequest:request error:&error];
+    if (scheduledTaskArray.count == 0) {
+        APCLogError2 (error);
+    }
     
     return scheduledTaskArray;
 }
@@ -254,8 +252,9 @@ static NSString * const kOneTimeSchedule = @"once";
         APCScheduledTask * validatedTask = scheduledTasksArray.firstObject;
         [self validateScheduledTask:validatedTask];
     }else{
-        //One time not created, create it
-        NSDate * startOnDate = [NSDate yesterdayAtMidnight]; //Hard coded to yesterday at midnight
+        //One time not created, create it        
+        NSDate *startOnDate = [self.referenceRange.startDate startOfDay];
+        
         NSDate * endDate = (schedule.expires !=nil) ? [startOnDate dateByAddingTimeInterval:schedule.expiresInterval] : [startOnDate dateByAddingTimeInterval:[NSDate parseISO8601DurationString:@"P2Y"]];
         endDate = [NSDate endOfDay:endDate];
         [self createScheduledTask:schedule task:task dateRange:[[APCDateRange alloc] initWithStartDate:startOnDate endDate:endDate]];
@@ -304,6 +303,7 @@ static NSString * const kOneTimeSchedule = @"once";
     NSDate *taskStartDate = dateRange.startDate;
     NSDate *taskEndDate = dateRange.endDate;
     
+
     if (offsetsForTask) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", kScheduleOffsetTaskIdKey, task.taskID];
         NSArray *matchedTasks = [offsetsForTask filteredArrayUsingPredicate:predicate];

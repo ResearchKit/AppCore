@@ -75,7 +75,7 @@ static NSInteger kNumberOfRows = 2;
     
     if (!parseError) {
         NSDictionary *infoDictionary = jsonDictionary[@"documentProperties"];
-        self.instituteName = infoDictionary[@"investigatorShortDescription"];
+        self.instituteName = infoDictionary[@"investigatorLongDescription"];
     }
 }
 

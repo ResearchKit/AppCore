@@ -73,6 +73,10 @@ static NSString*    kSharingTag                         = @"sharing";
 @property (nonatomic, strong) ORKConsentSharingStep*  sharingStep;
 @property (nonatomic, strong) ORKVisualConsentStep*   visualStep;
 
+@property (nonatomic, strong) ORKStep*   lastQuestionStep;
+@property (nonatomic, strong) ORKStep*   resultQuestionStep;
+@property (nonatomic, strong) ORKStep*   afterResultQuestionStep;
+
 @end
 
 
@@ -81,7 +85,21 @@ static NSString*    kSharingTag                         = @"sharing";
 
 - (instancetype)initWithIdentifier:(NSString*)identifier propertiesFileName:(NSString*)fileName
 {
-    NSArray*    consentSteps = [self commonInitWithPropertiesFileName:fileName customSteps:nil];
+    NSString*   reason      = @"By agreeing you confirm that you read the information and that you "
+                              @"wish to take part in this research study.";
+    NSArray*    consentSteps = [self commonInitWithPropertiesFileName:fileName customSteps:nil reasonForConsent:reason];
+    
+    _consentSteps = [consentSteps mutableCopy];
+    _identifier = identifier;
+    _steps      = [consentSteps mutableCopy];
+    _failedMessageTag = kFailedMessageTag;
+    
+    return self;
+}
+
+- (instancetype)initWithIdentifier:(NSString*)identifier propertiesFileName:(NSString*)fileName reasonForConsent:(NSString*)reason
+{
+    NSArray*    consentSteps = [self commonInitWithPropertiesFileName:fileName customSteps:nil reasonForConsent:reason];
     
     _consentSteps = [consentSteps mutableCopy];
     _identifier = identifier;
@@ -93,7 +111,9 @@ static NSString*    kSharingTag                         = @"sharing";
 
 - (instancetype)initWithIdentifier:(NSString*)identifier propertiesFileName:(NSString*)fileName customSteps:(NSArray*)customSteps
 {
-    NSArray*    consentSteps = [self commonInitWithPropertiesFileName:fileName customSteps:customSteps];
+    NSString*   reason      = @"By agreeing you confirm that you read the information and that you "
+                              @"wish to take part in this research study.";
+    NSArray*    consentSteps = [self commonInitWithPropertiesFileName:fileName customSteps:customSteps reasonForConsent:reason];
 
     _consentSteps = [consentSteps mutableCopy];
     _identifier = identifier;
@@ -102,7 +122,7 @@ static NSString*    kSharingTag                         = @"sharing";
     return self;
 }
 
-- (NSArray*)commonInitWithPropertiesFileName:(NSString*)fileName customSteps:(NSArray*)customSteps
+- (NSArray*)commonInitWithPropertiesFileName:(NSString*)fileName customSteps:(NSArray*)customSteps reasonForConsent:(NSString*)reason
 {
     _passedQuiz             = YES;
     _indexOfFirstCustomStep = NSNotFound;
@@ -144,8 +164,7 @@ static NSString*    kSharingTag                         = @"sharing";
                                                                                  signature:signature
                                                                                 inDocument:_consentDocument];
     
-    reviewStep.reasonForConsent = @"By agreeing you confirm that you read the information and that you "
-                                  @"wish to take part in this research study.";
+    reviewStep.reasonForConsent = reason;
     
     NSMutableArray* consentSteps = [[NSMutableArray alloc] init];
     [consentSteps addObject:_visualStep];
@@ -303,6 +322,8 @@ static NSString*    kSharingTag                         = @"sharing";
                     {
                         nextStep = [self failureStep];
                     }
+                    self.lastQuestionStep = step;
+                    self.resultQuestionStep = nextStep;
                 }
                 else
                 {
@@ -388,6 +409,10 @@ static NSString*    kSharingTag                         = @"sharing";
         nextStep = findNextStep();
     }
     
+    if (step == self.resultQuestionStep) {
+        self.afterResultQuestionStep = nextStep;
+    }
+    
     return nextStep;
 }
 
@@ -403,7 +428,15 @@ static NSString*    kSharingTag                         = @"sharing";
     else
     {
         NSUInteger  ndx = [self.consentSteps indexOfObject:step];
-        if (ndx == NSNotFound)
+        if (step == self.resultQuestionStep)
+        {
+            previousStep = self.lastQuestionStep;
+        }
+        else if (step == self.afterResultQuestionStep)
+        {
+            previousStep = self.resultQuestionStep;
+        }
+        else if (ndx == NSNotFound)
         {
             previousStep = self.visualStep;
         }

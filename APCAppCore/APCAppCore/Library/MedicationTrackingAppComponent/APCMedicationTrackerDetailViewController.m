@@ -42,7 +42,7 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
 
 @property (nonatomic, weak)  IBOutlet  UITableView      *tabulator;
 
-@property (nonatomic, weak)  IBOutlet  APCButton        *doneButton;
+@property  (nonatomic, weak)           UIBarButtonItem  *donester;;
 
 @property (nonatomic, assign)          NSUInteger        numberOfTickMarksToSet;
 
@@ -203,7 +203,7 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
 
 #pragma  mark  -  Done Button Action Method
 
-- (IBAction)doneButtonTapped:(id) __unused sender
+- (IBAction)doneButtonWasTapped:(id) __unused sender
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -218,13 +218,14 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
     
     self.tabulator.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonTapped:)];
-    self.navigationItem.rightBarButtonItem = donester;
+    UIBarButtonItem  *donester = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonWasTapped:)];
+    self.donester = donester;
+    self.navigationItem.rightBarButtonItem = self.donester;
+    self.donester.enabled = YES;
+
 
     UINib  *medicationDetailsCellNib = [UINib nibWithNibName:kMedicationDetailsName bundle:[NSBundle appleCoreBundle]];
     [self.tabulator registerNib:medicationDetailsCellNib forCellReuseIdentifier:kMedicationDetailsName];
-    
-    [self.doneButton addTarget:self action:@selector(doneButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
     
     NSUInteger  numberOfTickMarks = 0;
     if (self.lozenge.dailyDosageRecord != nil) {
