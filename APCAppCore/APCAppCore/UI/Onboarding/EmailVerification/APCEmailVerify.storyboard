@@ -133,6 +133,36 @@ will be sent to you for your records.</string>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ddi-aN-vlM" userLabel="spinner - full-screen mask">
+                                <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QF4-Z4-QsM" userLabel="spinner -- apparent border">
+                                        <rect key="frame" x="105" y="122" width="111" height="100"/>
+                                        <subviews>
+                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="QUz-Ib-Z8B">
+                                                <rect key="frame" x="37" y="31" width="37" height="37"/>
+                                            </activityIndicatorView>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.71999999999999997" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="100" id="IPl-tj-qdZ"/>
+                                            <constraint firstAttribute="centerX" secondItem="QUz-Ib-Z8B" secondAttribute="centerX" id="OM8-qH-Fc0"/>
+                                            <constraint firstAttribute="centerY" secondItem="QUz-Ib-Z8B" secondAttribute="centerY" constant="0.5" id="bYk-IR-eQX"/>
+                                            <constraint firstAttribute="width" constant="111" id="ch1-xJ-sSE"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="12"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.14000000000000001" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="QF4-Z4-QsM" firstAttribute="top" secondItem="ddi-aN-vlM" secondAttribute="top" constant="122" id="g75-Rn-xnJ"/>
+                                    <constraint firstAttribute="centerX" secondItem="QF4-Z4-QsM" secondAttribute="centerX" constant="-0.5" id="gib-wR-TuA"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -146,8 +176,12 @@ will be sent to you for your records.</string>
                             <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="yX7-Jl-zxX" secondAttribute="bottom" constant="50" id="G5E-d8-5bi"/>
                             <constraint firstItem="ikM-qL-vyw" firstAttribute="top" secondItem="gY2-y5-fND" secondAttribute="bottom" constant="5" id="GCQ-fD-dVn"/>
                             <constraint firstItem="hsa-BE-Hkq" firstAttribute="top" secondItem="WLq-Ms-OSK" secondAttribute="bottom" constant="11" id="LcI-px-aNQ"/>
+                            <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="ddi-aN-vlM" secondAttribute="bottom" id="Mrm-NO-zeQ"/>
+                            <constraint firstItem="ddi-aN-vlM" firstAttribute="top" secondItem="PZ9-QS-Gmr" secondAttribute="bottom" id="Nng-9G-aFA"/>
                             <constraint firstItem="ikM-qL-vyw" firstAttribute="trailing" secondItem="Kj1-kb-LF2" secondAttribute="trailingMargin" id="O9S-OR-6so"/>
+                            <constraint firstItem="ddi-aN-vlM" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leading" id="PdH-UC-11U"/>
                             <constraint firstItem="a5x-rm-Fx1" firstAttribute="top" secondItem="3lp-lE-Oux" secondAttribute="bottom" constant="105" id="RFL-n7-4oA"/>
+                            <constraint firstAttribute="trailing" secondItem="ddi-aN-vlM" secondAttribute="trailing" id="UQe-I8-So5"/>
                             <constraint firstItem="hsa-BE-Hkq" firstAttribute="leading" secondItem="Kj1-kb-LF2" secondAttribute="leadingMargin" id="V0i-1R-CAM"/>
                             <constraint firstItem="tTU-aB-ynX" firstAttribute="leading" secondItem="WLq-Ms-OSK" secondAttribute="leading" id="VYn-t0-KYD"/>
                             <constraint firstAttribute="centerX" secondItem="gY2-y5-fND" secondAttribute="centerX" id="Y2N-VW-9EN"/>
@@ -173,6 +207,7 @@ will be sent to you for your records.</string>
                         <outlet property="emailLabel" destination="3xK-c0-Pah" id="JpR-EY-Kpw"/>
                         <outlet property="logoImageView" destination="tTU-aB-ynX" id="xhh-SA-ugB"/>
                         <outlet property="resendEmailButton" destination="cVc-Jw-LIH" id="lPI-nw-88V"/>
+                        <outlet property="spinnerView" destination="ddi-aN-vlM" id="ywr-gW-U06"/>
                         <outlet property="topMessageLabel" destination="hsa-BE-Hkq" id="0Mn-zg-XPa"/>
                     </connections>
                 </viewController>
