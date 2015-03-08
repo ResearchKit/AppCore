@@ -13,6 +13,7 @@ static NSString*    kNotConnectedMessage        = @"You are currently not connec
 static NSString*    kServerMaintanenceMessage   = @"The study server is currently undergoing maintanence. Please try again soon.";
 static NSString*    kAccountAlreadyExists       = @"An account has already been created for this email address. Please use a different email address or sign in using the \"already participanting\" link on the Welcome Page.";
 static NSString*    kAccountDoesNotExists       = @"There is no account register for this email address.";
+static NSString*    kBadEmailAddress            = @"The email address submitted is not a valid email address. Please correct the email address and try again.";
 
 @implementation NSError (APCAdditions)
 
@@ -52,7 +53,11 @@ static NSString*    kAccountDoesNotExists       = @"There is no account register
         APCLogError(code);
     }
 
-    if (self.code == 409)
+    if (self.code == 400)
+    {
+        message = NSLocalizedString(kBadEmailAddress, nil);
+    }
+    else if (self.code == 409)
     {
         message = NSLocalizedString(kAccountAlreadyExists, nil);
     }
