@@ -267,7 +267,7 @@ typedef NS_ENUM(NSUInteger, SevenDayFitnessQueryType)
             NSNumber *vigorous = [activityData objectForKey:self.segmentVigorous];
             
             //    Active minutes = minutes of moderate activity + 2x(minutes of vigorous activity). This should be the TOTAL ACTIVE MINUTES FOR THE WEEK,
-            self.activeSeconds = (double)[moderate doubleValue] + ([vigorous doubleValue] * 2) ;
+            self.activeSeconds += (double)[moderate doubleValue] + ([vigorous doubleValue] * 2) ;
             
         }
     }
