@@ -210,11 +210,8 @@ static NSInteger const kRegularFontSize = 17;
 
 - (NSString *)fitnessDaysRemaining
 {
-    NSDate *startDate = [[NSCalendar currentCalendar] dateBySettingHour:0
-                                                                 minute:0
-                                                                 second:0
-                                                                 ofDate:[self checkSevenDayFitnessStartDate]
-                                                                options:0];
+    NSDate *startDate = [self checkSevenDayFitnessStartDate];
+    
     NSDate *today = [[NSCalendar currentCalendar] dateBySettingHour:0
                                                              minute:0
                                                              second:0
