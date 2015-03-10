@@ -50,10 +50,18 @@ static NSString*    kBadEmailAddress            = @"The email address submitted 
     
     if ([code isKindOfClass:[NSError class]])
     {
-        APCLogError(code);
+        NSError*    e = (NSError*)code;
+        
+        if (e.code == kCFURLErrorNotConnectedToInternet)
+        {
+            message = NSLocalizedString(kNotConnectedMessage, nil);
+        }
+        else
+        {
+            APCLogError(@"Network error: %@", code);
+        }
     }
-
-    if (self.code == 400)
+    else if (self.code == 400)
     {
         message = NSLocalizedString(kBadEmailAddress, nil);
     }
