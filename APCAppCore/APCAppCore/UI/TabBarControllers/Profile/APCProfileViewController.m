@@ -557,7 +557,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     field.editable = NO;
                     
-                    if (self.user.sleepTime) {
+                    if (self.user.wakeUpTime) {
                         field.date = self.user.wakeUpTime;
                         field.detailText = [field.date toStringWithFormat:kAPCMedicalInfoItemSleepTimeFormat];
                     }
@@ -583,7 +583,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     field.editable = NO;
                     
-                    if (self.user.wakeUpTime) {
+                    if (self.user.sleepTime) {
                         field.date = self.user.sleepTime;
                         field.detailText = [field.date toStringWithFormat:kAPCMedicalInfoItemSleepTimeFormat];
                     }
@@ -1197,9 +1197,11 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                 case kAPCUserInfoItemTypeHeight:
                 {
-                    double height = [[(APCTableViewCustomPickerItem *)item stringValue] floatValue];
-                    HKUnit *footUnit = [HKUnit footUnit];
-                    HKQuantity *heightQuantity = [HKQuantity quantityWithUnit:footUnit doubleValue:height];
+                    APCTableViewCustomPickerItem *heightPicker = (APCTableViewCustomPickerItem *)item;
+                    double height = [APCUser heightInInchesForSelectedIndices:heightPicker.selectedRowIndices];
+                    
+                    HKUnit *inchUnit = [HKUnit inchUnit];
+                    HKQuantity *heightQuantity = [HKQuantity quantityWithUnit:inchUnit doubleValue:height];
                     
                     self.user.height = heightQuantity;
                 }
