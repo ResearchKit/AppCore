@@ -318,6 +318,13 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesFrequency inSection:0] ] withRowAnimation:NO];
 }
 
+- (void)frequencyControllerDidCancel:(APCMedicationFrequencyViewController *) __unused frequencyController
+{
+    self.medicationFrequencyWasSet = NO;
+    [self enableDoneButtonIfValuesSet];
+    [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesFrequency inSection:0] ] withRowAnimation:NO];
+}
+
 - (void)colorController:(APCMedicationColorViewController *) __unused colorController didSelectColorLabelName:(APCMedTrackerPrescriptionColor *)colorObject
 {
     self.colorObject = colorObject;
