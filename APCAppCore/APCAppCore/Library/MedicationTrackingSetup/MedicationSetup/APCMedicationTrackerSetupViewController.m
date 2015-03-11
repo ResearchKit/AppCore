@@ -50,6 +50,7 @@ static  NSInteger  kAPCMedicationDosageRow        =  3;
 static  NSInteger  kAPCMedicationButtonRow        =  4;
 
 static  CGFloat    kAPCMedicationRowHeight        = 64.0;
+static  CGFloat    kAPCDoneButtonRowHeight        = 88.0;
 
 static  NSString  *mainTableCategories[]          = { @"Name",        @"Frequency",     @"Label Color",  @"Dosage" };
 static  NSInteger  kNumberOfMainTableCategories   = (sizeof(mainTableCategories) / sizeof(NSString *));
@@ -149,7 +150,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
     
     if (tableView == self.setupTabulator) {
         if (indexPath.row == kAPCMedicationButtonRow) {
-            height = 88.0;
+            height = kAPCDoneButtonRowHeight;
         }
     }
     return  height;
