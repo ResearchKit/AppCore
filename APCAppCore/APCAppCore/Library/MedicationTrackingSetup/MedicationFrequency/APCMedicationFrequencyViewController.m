@@ -56,6 +56,7 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
 @property  (nonatomic, assign)          BOOL                  everyDayWasSelected;
 
 @property  (nonatomic, weak)            UIBarButtonItem      *donester;
+@property  (nonatomic, assign)          BOOL                  doneButtonWasTapped;
 
 @property  (nonatomic, strong)          NSArray              *valueButtons;
 @property  (nonatomic, strong)          UIButton             *selectedValueButton;
@@ -67,13 +68,6 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
 @end
 
 @implementation APCMedicationFrequencyViewController
-
-#pragma  mark  -  Navigation Bar Button Action Methods
-
-- (IBAction)doneButtonTapped:(UIBarButtonItem *) __unused sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
 
 #pragma  mark  -  Table View Data Source Methods
 
@@ -235,19 +229,22 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
 
 - (void)processFrequencyButtonsForCell:(UITableViewCell *)cell
 {
-    NSMutableArray  *buttons = [NSMutableArray array];
-    for (NSInteger  index = kFirstButtonTagValue;  index <= kLastButtonTagValue;  index++) {
-        UIButton  *aButton = (UIButton *)[cell viewWithTag:index];
-        [aButton addTarget:self action:@selector(valueButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [aButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        [buttons addObject:aButton];
-        
-        CALayer  *layer = aButton.layer;
-        layer.cornerRadius = CGRectGetWidth(aButton.frame) / 2.0;
-        layer.masksToBounds = YES;
-        [self setStateForFrequencyButton:aButton toState:UIControlStateNormal];
+    if (self.valueButtons == nil) {
+        NSLog(@"processFrequencyButtonsForCell");
+        NSMutableArray  *buttons = [NSMutableArray array];
+        for (NSInteger  index = kFirstButtonTagValue;  index <= kLastButtonTagValue;  index++) {
+            UIButton  *aButton = (UIButton *)[cell viewWithTag:index];
+            [aButton addTarget:self action:@selector(valueButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+            [aButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+            [buttons addObject:aButton];
+            
+            CALayer  *layer = aButton.layer;
+            layer.cornerRadius = CGRectGetWidth(aButton.frame) / 2.0;
+            layer.masksToBounds = YES;
+            [self setStateForFrequencyButton:aButton toState:UIControlStateNormal];
+        }
+        self.valueButtons = buttons;
     }
-    self.valueButtons = buttons;
     NSUInteger  frequency = [self findDosageValueForValueButton];
     if (frequency > 0) {
         UIButton  *button = self.valueButtons[frequency - 1];
@@ -372,11 +369,11 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     }
 }
 
-#pragma  mark  -  View Controller Methods
+#pragma  mark  -  Navigation Bar Button Action Methods
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void)doneButtonTapped:(UIBarButtonItem *) __unused sender
 {
-    [super viewWillDisappear:animated];
+    self.doneButtonWasTapped = YES;
     
     UIButton  *valueButton = [self findSelectedButton];
     
@@ -387,13 +384,24 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
             self.daysAndDoses[dayName] = [NSNumber numberWithInteger:(valueButton.tag - kBaseButtonTagValue)];
         }
     }
-    if ((valueButton == nil) || ([self numberOfSelectedDays] == 0)) {
-        self.donester.enabled = NO;
-    } else if ((valueButton != nil) && ([self numberOfSelectedDays] > 0)) {
-        self.donester.enabled = YES;
+    if (self.delegate != nil) {
+        if ([self.delegate respondsToSelector:@selector(frequencyController:didSelectFrequency:)] == YES) {
+            [self.delegate performSelector:@selector(frequencyController:didSelectFrequency:) withObject:self withObject:self.daysAndDoses];
+        }
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma  mark  -  View Controller Methods
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    if (self.doneButtonWasTapped == NO) {
         if (self.delegate != nil) {
-            if ([self.delegate respondsToSelector:@selector(frequencyController:didSelectFrequency:)] == YES) {
-                [self.delegate performSelector:@selector(frequencyController:didSelectFrequency:) withObject:self withObject:self.daysAndDoses];
+            if ([self.delegate respondsToSelector:@selector(frequencyControllerDidCancel:)] == YES) {
+                [self.delegate performSelector:@selector(frequencyControllerDidCancel:) withObject:self];
             }
         }
     }
