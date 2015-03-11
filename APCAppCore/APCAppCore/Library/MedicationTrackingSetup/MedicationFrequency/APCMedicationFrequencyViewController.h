@@ -12,6 +12,7 @@
 @protocol  APCMedicationFrequencyViewControllerDelegate <NSObject>
 
 - (void)frequencyController:(APCMedicationFrequencyViewController *)frequencyController didSelectFrequency:(NSDictionary *)daysAndNumbers;
+- (void)frequencyControllerDidCancel:(APCMedicationFrequencyViewController *)frequencyController;
 
 @end
 
