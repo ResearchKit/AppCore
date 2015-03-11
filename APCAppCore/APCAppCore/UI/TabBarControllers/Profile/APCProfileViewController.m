@@ -583,7 +583,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     field.selectionStyle = self.isEditing ? UITableViewCellSelectionStyleGray : UITableViewCellSelectionStyleNone;
                     field.editable = NO;
                     
-                    if (self.user.wakeUpTime) {
+                    if (self.user.sleepTime) {
                         field.date = self.user.sleepTime;
                         field.detailText = [field.date toStringWithFormat:kAPCMedicalInfoItemSleepTimeFormat];
                     }
