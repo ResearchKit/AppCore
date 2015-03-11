@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F1066" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
@@ -25,8 +25,8 @@
                     </items>
                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </toolbar>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="PhK-o3-X8y">
-                    <rect key="frame" x="0.0" y="44" width="600" height="370"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="PhK-o3-X8y">
+                    <rect key="frame" x="0.0" y="44" width="600" height="556"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="Kv2-vd-h9h"/>
@@ -40,6 +40,7 @@
                 <constraint firstAttribute="trailing" secondItem="P1N-iS-h9g" secondAttribute="trailing" id="Bsy-YQ-hz5"/>
                 <constraint firstItem="P1N-iS-h9g" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="DTB-Hy-zto"/>
                 <constraint firstItem="P1N-iS-h9g" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="aC5-2h-SMm"/>
+                <constraint firstAttribute="bottom" secondItem="PhK-o3-X8y" secondAttribute="bottom" id="dPy-mK-DVH"/>
                 <constraint firstAttribute="trailing" secondItem="PhK-o3-X8y" secondAttribute="trailing" id="gpT-KZ-7Qu"/>
                 <constraint firstItem="PhK-o3-X8y" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="tdv-7Y-mxD"/>
             </constraints>
