@@ -32,6 +32,14 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
 @property (strong, nonatomic) APCActivitiesViewWithNoTask *noTasksView;
 
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
+
+// The below, tasksBySection and keepGoingTasks, are used only
+// for filtering the tasks that should not appear in the 'Yesterday'
+// section. Needless to say, we do need to refactor this bit of
+// logic so that it is more flexible.
+@property (strong, nonatomic) NSDictionary *tasksBySection;
+@property (strong, nonatomic) NSMutableArray *keepGoingTasks;
+
 @end
 
 @implementation APCActivitiesViewController
@@ -65,6 +73,11 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
     [self.tableView registerNib:[UINib nibWithNibName:@"APCActivitiesSectionHeaderView" bundle:[NSBundle appleCoreBundle]] forHeaderFooterViewReuseIdentifier:kAPCActivitiesSectionHeaderViewIdentifier];
     
     self.dateFormatter = [NSDateFormatter new];
+    
+    self.keepGoingTasks = [NSMutableArray new];
+    
+    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
+    self.tasksBySection = [appDelegate tasksToShowInActivities];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -418,20 +431,22 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
     //create sections
     if (((NSArray*)scheduledTasksDict[@"today"]).count > 0) {
         [self.sectionsArray addObject:[self formattedTodaySection]];
-        NSArray * groupedArray = [self generateGroupsForTask:((NSArray*)scheduledTasksDict[@"today"])];
         
+        NSArray *todaysTaskList = scheduledTasksDict[@"today"];
         
-        
+        NSArray * groupedArray = [self generateGroupsForTask:todaysTaskList];
+
         NSArray *sortedTasks = [self sortTasksInArray:groupedArray];
-        
-        
         
         [self.scheduledTasksArray addObject:sortedTasks];
     }
     
     if (((NSArray*)scheduledTasksDict[@"yesterday"]).count > 0) {
         [self.sectionsArray addObject:@"Yesterday - Incomplete Tasks"];
-        NSArray * groupedArray = [self generateGroupsForTask:((NSArray*)scheduledTasksDict[@"yesterday"])];
+        
+        NSArray *yesterdaysTaskList = [self removeTasksFromTaskList:scheduledTasksDict[@"yesterday"]];
+        
+        NSArray * groupedArray = [self generateGroupsForTask:yesterdaysTaskList];
         
         NSArray *sortedTasks = [self sortTasksInArray:groupedArray];
         
@@ -494,6 +509,31 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
         }
     }
     return returnArray;
+}
+
+/** @brief   Removes the tasks (provide via the self.tasksBySection property) from the provided task list.
+  *
+  * @param   taskList - Array of APCScheduledTask. This list will be filtered
+  *
+  * @return  A filtered array of APCScheduledTask; otherwise the original array is returned.
+  *
+  * @note    This needs to be refactored.
+  */
+- (NSArray *)removeTasksFromTaskList:(NSArray *)taskList
+{
+    NSArray *keepGoingTasks = self.tasksBySection[kActivitiesSectionKeepGoing];
+    NSMutableArray *filteredList = [taskList mutableCopy];
+    
+    for (APCScheduledTask *scheduledTask in taskList) {
+        if (keepGoingTasks) {
+            if ([keepGoingTasks containsObject:scheduledTask.task.taskID]) {
+                [filteredList removeObject:scheduledTask];
+                [self.keepGoingTasks addObject:scheduledTask];
+            }
+        }
+    }
+    
+    return filteredList;
 }
 
 @end
