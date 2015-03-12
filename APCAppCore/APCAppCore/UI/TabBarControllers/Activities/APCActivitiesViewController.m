@@ -77,7 +77,7 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
     self.keepGoingTasks = [NSMutableArray new];
     
     APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-    self.tasksBySection = [appDelegate tasksToShowInActivities];
+    self.tasksBySection = [appDelegate configureTasksForActivities];
 }
 
 - (void)viewWillAppear:(BOOL)animated

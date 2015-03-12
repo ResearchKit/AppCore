@@ -519,7 +519,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     return nil;
 }
 
-- (NSDictionary *)tasksToShowInActivities
+- (NSDictionary *)configureTasksForActivities
 {
     /* Abstract implementation. Subclass to override.
      *
