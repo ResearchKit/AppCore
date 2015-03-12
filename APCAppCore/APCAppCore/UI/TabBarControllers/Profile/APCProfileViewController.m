@@ -1137,15 +1137,15 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
     if (result == ORKTaskViewControllerResultCompleted)
     {
-        [self dismissViewControllerAnimated:taskViewController completion:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
     else if (result == ORKTaskViewControllerResultDiscarded)
     {
-        [self dismissViewControllerAnimated:taskViewController completion:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
     else if (result == ORKTaskViewControllerResultSaved)
     {
-        [self dismissViewControllerAnimated:taskViewController completion:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
     else if (result == ORKTaskViewControllerResultFailed)
     {
