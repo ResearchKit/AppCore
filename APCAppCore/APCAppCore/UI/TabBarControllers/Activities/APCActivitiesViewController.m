@@ -15,6 +15,13 @@ static CGFloat kTintedCellHeight = 65;
 
 static CGFloat kTableViewSectionHeaderHeight = 77;
 
+typedef NS_ENUM(NSUInteger, APCActivitiesSections)
+{
+    APCActivitiesSectionToday = 0,
+    APCActivitiesSectionYesterday,
+    APCActivitiesSectionsTotalNumberOfSections
+};
+
 @interface APCActivitiesViewController ()
 
 @property (nonatomic) BOOL taskSelectionDisabled;
@@ -163,7 +170,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
         cell.tintColor = [UIColor colorForTaskId:scheduledTask.task.taskID];
     }
     
-    if (indexPath.section > 0) {
+    if (indexPath.section == APCActivitiesSectionYesterday) {
         [cell setupIncompleteAppearance];
     } else {
         [cell setupAppearance];
@@ -185,7 +192,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
 {
     CGFloat height = kTableViewSectionHeaderHeight;
     
-    if (section == 0) {
+    if (section == APCActivitiesSectionToday) {
         height -= 15;
     }
     return height;
@@ -197,14 +204,14 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     
     
     switch (section) {
-        case 0:
+        case APCActivitiesSectionToday:
         {
             [self.dateFormatter setDateFormat:@"MMMM d"];
             headerView.titleLabel.text = [NSString stringWithFormat:@"%@, %@", NSLocalizedString(@"Today", @""), [self.dateFormatter stringFromDate:[NSDate date]] ];
             headerView.subTitleLabel.text = NSLocalizedString(@"To start an activity, select from the list below.", @"");
         }
             break;
-        case 1:
+        case APCActivitiesSectionYesterday:
         {
             headerView.titleLabel.text = NSLocalizedString(@"Yesterday", @"");
             headerView.subTitleLabel.text = NSLocalizedString(@"Below are your incomplete tasks from yesterday. These are for reference only.", @"");
@@ -212,7 +219,12 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
             break;
 
             
-        default:
+        default: // Keep going
+        {
+            headerView.titleLabel.text = NSLocalizedString(@"Keep Going!", @"Keep going");
+            headerView.subTitleLabel.text = NSLocalizedString(@"Try one of these extra activities, to enchance your experience in your study.",
+                                                              @"Try one of these extra activities, to enchance your experience in your study.");
+        }
             break;
     }
     
@@ -223,14 +235,14 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
 - (BOOL)                tableView: (UITableView *) __unused tableView
     shouldHighlightRowAtIndexPath: (NSIndexPath *) indexPath
 {
-    return indexPath.section == 0;
+    return indexPath.section != 1;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.section == 0) {
+    if (indexPath.section != APCActivitiesSectionYesterday) {
         if (!self.taskSelectionDisabled) {
             
             id task = ((NSArray*)self.scheduledTasksArray[indexPath.section])[indexPath.row];
@@ -456,6 +468,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
             [taskTypesArray addObject:taskId];
         }
     }
+    
     NSMutableArray * returnArray = [NSMutableArray array];
     /* group tasks by task Id */
     for (NSString *taskId in taskTypesArray) {
