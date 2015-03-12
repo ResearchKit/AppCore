@@ -20,12 +20,12 @@
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
 /*********************************************************************************/
-static NSString *const kDataSubstrateClassName = @"APHDataSubstrate";
-static NSString *const kDatabaseName = @"db.sqlite";
-static NSString *const kTasksAndSchedulesJSONFileName = @"APHTasksAndSchedules";
-static NSString *const kConsentSectionFileName = @"APHConsentSection";
+static NSString*    const kDataSubstrateClassName           = @"APHDataSubstrate";
+static NSString*    const kDatabaseName                     = @"db.sqlite";
+static NSString*    const kTasksAndSchedulesJSONFileName    = @"APHTasksAndSchedules";
+static NSString*    const kConsentSectionFileName           = @"APHConsentSection";
 
-static NSString *const kDBStatusCurrentVersion = @"v1.0";
+static NSString*    const kDBStatusCurrentVersion           = @"v1.0";
 
 /*********************************************************************************/
 #pragma mark - Tab bar Constants
@@ -56,6 +56,9 @@ static NSUInteger const kIndexOfProfileTab = 3;
 - (BOOL)               application: (UIApplication *) __unused application
     willFinishLaunchingWithOptions: (NSDictionary *) __unused launchOptions
 {
+    NSUInteger  previousVersion = [self obtainPreviousVersion];
+    [self performMigrationFrom:previousVersion currentVersion:kTheEntireDataModelOfTheApp];
+    
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
     [self setUpInitializationOptions];
@@ -79,6 +82,21 @@ static NSUInteger const kIndexOfProfileTab = 3;
 	 ];
     
     return YES;
+}
+
+- (NSUInteger)obtainPreviousVersion {
+    NSUserDefaults* defaults        = [NSUserDefaults standardUserDefaults];
+    return (NSUInteger) [defaults objectForKey:@"previousVersion"];
+}
+
+- (void)performMigrationFrom:(NSInteger) __unused previousVersion currentVersion:(NSInteger)__unused currentVersion
+{
+    /* abstract implementation */
+}
+
+- (void)performMigrationAfterDataSubstrateFrom:(NSInteger) __unused previousVersion currentVersion:(NSInteger) __unused currentVersion
+{
+    /* abstract implementation */
 }
 
 - (BOOL)application:(UIApplication *) __unused application didFinishLaunchingWithOptions:(NSDictionary *) __unused launchOptions
@@ -207,6 +225,9 @@ static NSUInteger const kIndexOfProfileTab = 3;
 - (void) initializeAppleCoreStack
 {
     self.dataSubstrate = [[APCDataSubstrate alloc] initWithPersistentStorePath:[[self applicationDocumentsDirectory] stringByAppendingPathComponent:self.initializationOptions[kDatabaseNameKey]] additionalModels: nil studyIdentifier:self.initializationOptions[kStudyIdentifierKey]];
+    
+    [self performMigrationAfterDataSubstrateFrom:[self obtainPreviousVersion] currentVersion:kTheEntireDataModelOfTheApp];
+    
     self.scheduler = [[APCScheduler alloc] initWithDataSubstrate:self.dataSubstrate];
     self.dataMonitor = [[APCDataMonitor alloc] initWithDataSubstrate:self.dataSubstrate scheduler:self.scheduler];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
