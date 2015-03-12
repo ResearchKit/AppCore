@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F1066" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -8,34 +8,34 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="APCMedicationDetailsTableViewCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o9W-qG-x23" userLabel="Color Swatch View">
-                        <rect key="frame" x="0.0" y="1" width="4" height="42"/>
+                        <rect key="frame" x="0.0" y="1" width="4" height="62"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="42" id="I8x-UV-mX7"/>
+                            <constraint firstAttribute="height" constant="62" id="I8x-UV-mX7"/>
                             <constraint firstAttribute="width" constant="4" id="dbN-Da-dPR"/>
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wsF-Ga-Zxx" userLabel="Medication Label">
-                        <rect key="frame" x="12" y="4" width="199" height="21"/>
+                        <rect key="frame" x="12" y="10" width="198" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WTt-q5-ebU" userLabel="Dose Amount">
-                        <rect key="frame" x="12" y="22" width="33" height="21"/>
+                        <rect key="frame" x="12" y="28" width="33" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dose 10" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XMr-TN-8gD">
-                        <rect key="frame" x="219" y="11" width="64" height="21"/>
+                        <rect key="frame" x="218" y="21" width="64" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="seU-Vz-Tq3"/>
                         </constraints>
@@ -44,24 +44,25 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l43-gd-IJL" userLabel="Confirmation View" customClass="APCConfirmationView">
-                        <rect key="frame" x="291" y="12" width="21" height="21"/>
+                        <rect key="frame" x="290" y="21" width="22" height="22"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="21" id="0OA-hK-DOd"/>
-                            <constraint firstAttribute="height" constant="21" id="WyG-Zk-QC7"/>
+                            <constraint firstAttribute="width" constant="22" id="0OA-hK-DOd"/>
+                            <constraint firstAttribute="height" constant="22" id="WyG-Zk-QC7"/>
                         </constraints>
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottomMargin" secondItem="WTt-q5-ebU" secondAttribute="bottom" constant="-8" id="0tj-Q3-xKb"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="WTt-q5-ebU" secondAttribute="bottom" constant="6" id="0tj-Q3-xKb"/>
                     <constraint firstItem="o9W-qG-x23" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-7" id="6nf-S1-8h1"/>
-                    <constraint firstItem="wsF-Ga-Zxx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-4" id="AUF-pa-ZVC"/>
+                    <constraint firstItem="wsF-Ga-Zxx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="AUF-pa-ZVC"/>
                     <constraint firstItem="l43-gd-IJL" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="Bww-wA-fMn"/>
                     <constraint firstItem="XMr-TN-8gD" firstAttribute="leading" secondItem="WTt-q5-ebU" secondAttribute="trailing" constant="59" id="CCg-7n-XY1"/>
-                    <constraint firstItem="l43-gd-IJL" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="4" id="DZu-8f-MCp"/>
+                    <constraint firstItem="l43-gd-IJL" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="13" id="DZu-8f-MCp"/>
                     <constraint firstItem="XMr-TN-8gD" firstAttribute="leading" secondItem="wsF-Ga-Zxx" secondAttribute="trailing" constant="8" id="K1m-lI-np8"/>
                     <constraint firstItem="WTt-q5-ebU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="4" id="PaB-5N-AnK"/>
                     <constraint firstItem="l43-gd-IJL" firstAttribute="leading" secondItem="XMr-TN-8gD" secondAttribute="trailing" constant="8" id="PkN-Nb-cd4"/>
+                    <constraint firstAttribute="centerY" secondItem="XMr-TN-8gD" secondAttribute="centerY" id="QVz-x2-NMg"/>
                     <constraint firstItem="XMr-TN-8gD" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="eOg-sD-LBK"/>
                     <constraint firstItem="wsF-Ga-Zxx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="4" id="gP5-cL-qS3"/>
                     <constraint firstItem="WTt-q5-ebU" firstAttribute="top" secondItem="wsF-Ga-Zxx" secondAttribute="bottom" constant="-3" id="gUD-n7-6ak"/>
@@ -72,6 +73,7 @@
                     <mask key="constraints">
                         <exclude reference="ytl-ye-4N6"/>
                         <exclude reference="CCg-7n-XY1"/>
+                        <exclude reference="eOg-sD-LBK"/>
                     </mask>
                 </variation>
             </tableViewCellContentView>

@@ -183,17 +183,19 @@ static CGFloat kHeaderHeight = 157.0f;
                 field.selectionStyle = UITableViewCellSelectionStyleGray;
                 field.identifier = kAPCDefaultTableViewCellIdentifier;
                 
-                NSCalendar * gregorian = [[NSCalendar alloc] initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
-                NSDate * currentDate = [[NSDate date] startOfDay];
+                NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
+                NSDate *currentDate = [[NSDate date] startOfDay];
                 NSDateComponents * comps = [[NSDateComponents alloc] init];
                 [comps setYear: -18];
-                NSDate * maxDate = [gregorian dateByAddingComponents: comps toDate: currentDate options: 0];
+                NSDate *maxDate = [gregorian dateByAddingComponents: comps toDate: currentDate options: 0];
                 field.maximumDate = maxDate;
                 
                 if (self.user.birthDate) {
                     field.date = self.user.birthDate;
                 } else{
-                    field.date = maxDate;
+                    [comps setYear:-30];
+                    NSDate *defaultDate = [gregorian dateByAddingComponents: comps toDate: currentDate options: 0];
+                    field.date = defaultDate;
                 }
                 
                 field.detailText = [field.date toStringWithFormat:field.dateFormat];

@@ -179,7 +179,17 @@
                     NSDictionary *responseDictionary = (NSDictionary *) responseObject;
                     if (responseDictionary) {
                         NSNumber *dataSharing = responseDictionary[@"dataSharing"];
-                        self.sharedOptionSelection = dataSharing;
+                        
+                        if (dataSharing.integerValue == 1) {
+                            NSString *scope = responseDictionary[@"sharingScope"];
+                            if ([scope isEqualToString:@"sponsors_and_partners"]) {
+                                self.sharedOptionSelection = @(SBBConsentShareScopeStudy);
+                            } else if ([scope isEqualToString:@"all_qualified_researchers"]) {
+                                self.sharedOptionSelection = @(SBBConsentShareScopeAll);
+                            }
+                        } else if (dataSharing.integerValue == 0) {
+                            self.sharedOptionSelection = @(SBBConsentShareScopeNone);
+                        }
                     }
                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Signed In"}));
                 }

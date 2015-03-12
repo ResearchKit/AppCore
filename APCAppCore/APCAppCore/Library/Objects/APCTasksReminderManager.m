@@ -92,6 +92,17 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
     NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
     notificationInfo[kTaskReminderUserInfoKey] = kTaskReminderUserInfo;
     localNotification.userInfo = notificationInfo;
+    
+    //Check if the notifications are registrered.
+    //Your app is added to the Settings app as soon as you call registerUserNotificationSettings
+    // Thus this has to be called to "install" the app into the settings, once it's called the user can turn it off and on
+    if ([[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone) {
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
+                                                                                             |UIUserNotificationTypeBadge
+                                                                                             |UIUserNotificationTypeSound) categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    }
+    
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
     APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Scheduled Reminder: %@", localNotification]}));
 }
