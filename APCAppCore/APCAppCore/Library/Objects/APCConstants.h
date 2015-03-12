@@ -124,6 +124,9 @@ FOUNDATION_EXPORT NSString *const kAllSetActivitiesTextAdditional;
 FOUNDATION_EXPORT NSString *const kAllSetDashboardTextOriginal;
 FOUNDATION_EXPORT NSString *const kAllSetDashboardTextAdditional;
 
+FOUNDATION_EXPORT NSString *const kActivitiesSectionKeepGoing;
+FOUNDATION_EXPORT NSString *const kActivitiesSectionYesterday;
+FOUNDATION_EXPORT NSString *const kActivitiesSectionToday;
 
 /*********************************************************************************/
 #pragma mark - Events
