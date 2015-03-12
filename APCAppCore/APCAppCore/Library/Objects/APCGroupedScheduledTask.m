@@ -22,7 +22,8 @@
 
 - (APCTask *) task
 {
-    return [[[self scheduledTasks] firstObject] task];
+    //We are assuming that this will return an APCTask.
+    return (APCTask *)[[[self scheduledTasks] firstObject] task];
 }
 
 - (NSDate *)startOn
