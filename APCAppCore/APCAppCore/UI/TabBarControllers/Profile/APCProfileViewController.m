@@ -1133,7 +1133,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 #pragma mark - ORKTaskViewControllerDelegate methods
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
+- (void)taskViewController:(ORKTaskViewController *) __unused taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
 {
     if (result == ORKTaskViewControllerResultCompleted)
     {

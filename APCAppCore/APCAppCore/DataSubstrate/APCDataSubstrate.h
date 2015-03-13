@@ -8,7 +8,6 @@
 #import <Foundation/Foundation.h>
 #import <ResearchKit/ResearchKit.h>
 #import <CoreData/CoreData.h>
-#import "APCCoreLocationTracker.h"
 #import <HealthKit/HealthKit.h>
 #import "APCParameters.h"
 

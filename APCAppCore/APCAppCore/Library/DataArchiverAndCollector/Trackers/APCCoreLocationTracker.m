@@ -7,7 +7,6 @@
 #import "APCAppCore.h"
 #import "APCCoreLocationTracker.h"
 
-static CLLocationDistance kAllowDistanceFilterAmount         = 500.0;        //  metres
 
 static  NSString  *kLocationTimeStamp                    = @"timestamp";
 static  NSString  *kLocationDistanceFromHomeLocation     = @"distanceFromHomeLocation";
@@ -29,8 +28,6 @@ static NSString *kLon = @"lon";
 }
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
-
-@property (nonatomic, assign) NSTimeInterval    deferredUpdatesTimeout;
 
     //
     //    determines whether there is a user's home location
@@ -54,16 +51,22 @@ static NSString *kLon = @"lon";
     //
 @property (nonatomic, strong) CLLocation  *mostRecentUpdatedLocation;
 
+@property (nonatomic, assign) BOOL deferringUpdates;
 @end
+
 
 @implementation APCCoreLocationTracker
 
-- (instancetype)initWithIdentifier:(NSString *)identifier deferredUpdatesTimeout:(NSTimeInterval)anUpdateTimeout andHomeLocationStatus:(APCPassiveLocationTrackingHomeLocation)aHomeLocationStatus
+- (instancetype)initWithIdentifier:(NSString*)identifier
+            deferredUpdatesTimeout:(NSTimeInterval) __unused anUpdateTimeout
+             andHomeLocationStatus:(APCPassiveLocationTrackingHomeLocation)aHomeLocationStatus
 {
+    APCLogDebug(@"Initalizing location tracker");
     self = [super initWithIdentifier:identifier];
-    if (self != nil) {
-        _deferredUpdatesTimeout = anUpdateTimeout;
-        _homeLocationStatus = aHomeLocationStatus;
+    if (self != nil)
+    {
+        _homeLocationStatus     = aHomeLocationStatus;
+        _deferringUpdates       = NO;
         [self setupInitialLocationParameters];
     }
     
@@ -77,12 +80,15 @@ static NSString *kLon = @"lon";
 
 - (void)setupInitialLocationParameters
 {
-    if (_homeLocationStatus == APCPassiveLocationTrackingHomeLocationAvailable) {
+    if (_homeLocationStatus == APCPassiveLocationTrackingHomeLocationAvailable)
+    {
         APCUser  *user = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
         CLLocationDegrees homeLocationLatitude  = [user.homeLocationLat doubleValue];
         CLLocationDegrees homeLocationLongitude = [user.homeLocationLong doubleValue];
         _baseTrackingLocation = [[CLLocation alloc] initWithLatitude:homeLocationLatitude longitude:homeLocationLongitude];
-    } else {
+    }
+    else
+    {
         _baseTrackingLocation       = [[CLLocation alloc] initWithLatitude:0.0 longitude:0.0];
         _mostRecentUpdatedLocation  = [[CLLocation alloc] initWithLatitude:0.0 longitude:0.0];
     }
@@ -90,40 +96,37 @@ static NSString *kLon = @"lon";
 
 - (void)startTracking
 {
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
-        
+    if ([CLLocationManager locationServicesEnabled] == YES)
+    {
+        APCLogDebug(@"Start location tracking");
         self.locationManager = [[CLLocationManager alloc] init];
-        [self.locationManager setDelegate:self];
-        [self.locationManager requestAlwaysAuthorization];
-        [self.locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
-        self.locationManager.distanceFilter = kAllowDistanceFilterAmount;
+        self.locationManager.delegate = self;
 
-        if ([CLLocationManager significantLocationChangeMonitoringAvailable] == NO) {
-            [self.locationManager startUpdatingLocation];
-        } else {
+        if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES &&
+            [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)
+        {
+            APCLogDebug(@"Significant Location Change Monitoring is Available");
             [self.locationManager startMonitoringSignificantLocationChanges];
-            [self.locationManager allowDeferredLocationUpdatesUntilTraveled:kAllowDistanceFilterAmount timeout:self.deferredUpdatesTimeout];
         }
     }
 }
 
 - (void)stopTracking
 {
-    if ([CLLocationManager locationServicesEnabled] == NO) {
-        APCLogDebug(@"Location services disabled");
-    } else {
-        if ([CLLocationManager significantLocationChangeMonitoringAvailable] == NO) {
-            [self.locationManager stopUpdatingLocation];
-        } else {
+    if ([CLLocationManager locationServicesEnabled] == YES)
+    {
+        if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES)
+        {
             [self.locationManager stopMonitoringSignificantLocationChanges];
         }
     }
 }
 
-- (NSArray *)columnNames
+- (NSArray*)columnNames
 {
-    NSArray * retValue;
-    if (self.homeLocationStatus == APCPassiveLocationTrackingHomeLocationAvailable) {
+    NSArray* retValue;
+    if (self.homeLocationStatus == APCPassiveLocationTrackingHomeLocationAvailable)
+    {
         retValue = @[kLocationTimeStamp, kLocationDistanceFromHomeLocation, kLocationDistanceUnit, kLocationHorizontalAccuracy, kLocationVerticalAccuracy];
     }
     else
@@ -137,14 +140,15 @@ static NSString *kLon = @"lon";
 #pragma mark - Private Methods
 /*********************************************************************************/
 
-- (NSArray *)locationDictionaryWithLocationManager:(CLLocationManager *)manager andDistanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
+- (NSArray*)locationDictionaryWithLocationManager:(CLLocationManager*)manager
+                    andDistanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
 {
     
-    NSString * timestamp = manager.location.timestamp.description;
-    NSString * distance = [NSString stringWithFormat:@"%f", distanceFromReferencePoint];
-    NSString * unit = @"meters"; //Hardcoded as Core Locations uses only meters
-    NSString * horizontalAccuracy = [NSString stringWithFormat:@"%f", manager.location.horizontalAccuracy];
-    NSString * verticalAccuracy = [NSString stringWithFormat:@"%f", manager.location.verticalAccuracy];
+    NSString*   timestamp          = manager.location.timestamp.description;
+    NSString*   distance           = [NSString stringWithFormat:@"%f", distanceFromReferencePoint];
+    NSString*   unit               = @"meters"; //Hardcoded as Core Locations uses only meters
+    NSString*   horizontalAccuracy = [NSString stringWithFormat:@"%f", manager.location.horizontalAccuracy];
+    NSString*   verticalAccuracy   = [NSString stringWithFormat:@"%f", manager.location.verticalAccuracy];
  
     return  @[timestamp, distance, unit, horizontalAccuracy, verticalAccuracy];
 }
@@ -152,21 +156,26 @@ static NSString *kLon = @"lon";
 - (void)updateArchiveDataWithLocationManager:(CLLocationManager *)manager withUpdateLocations:(NSArray *)locations
 {
     NSArray  *result = nil;
-    
-    if (self.homeLocationStatus == APCPassiveLocationTrackingHomeLocationAvailable) {
+        
+    if (self.homeLocationStatus == APCPassiveLocationTrackingHomeLocationAvailable)
+    {
         CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
         result = [self locationDictionaryWithLocationManager:manager andDistanceFromReferencePoint:distanceFromReferencePoint];
     }
     else
     {
-        if ((self.baseTrackingLocation.coordinate.latitude == 0.0) && (self.baseTrackingLocation.coordinate.longitude == 0.0)) {
+        if ((self.baseTrackingLocation.coordinate.latitude == 0.0) && (self.baseTrackingLocation.coordinate.longitude == 0.0))
+        {
             self.baseTrackingLocation = [locations firstObject];
             self.mostRecentUpdatedLocation = self.baseTrackingLocation;
-            if ([locations count] >= 1) {
+            if ([locations count] >= 1)
+            {
                 CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
                 result = [self locationDictionaryWithLocationManager:manager andDistanceFromReferencePoint:distanceFromReferencePoint];
             }
-        } else {
+        }
+        else
+        {
             self.baseTrackingLocation = self.mostRecentUpdatedLocation;
             self.mostRecentUpdatedLocation = manager.location;
             CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
@@ -175,57 +184,81 @@ static NSString *kLon = @"lon";
     }
     
     //Send to delegate
-    if (result) {
+    if (result)
+    {
         [self.delegate APCDataTracker:self hasNewData:@[result]];
     }
-
 }
 
 /*********************************************************************************/
 #pragma mark -CLLocationManagerDelegate
 /*********************************************************************************/
 
-- (void) locationManager: (CLLocationManager *) __unused manager
-		didFailWithError: (NSError *) error
+- (void)locationManager:(CLLocationManager*)manager didFailWithError:(NSError*)error
 {
     APCLogError2(error);
+    
+    switch(error.code)
+    {
+        case kCLErrorNetwork:
+        {
+            //  Possible network connection issue (eg, in airplane mode)
+            break;
+        }
+            
+        case kCLErrorDenied:
+        {
+            //  The user has denied use of location
+            [manager stopUpdatingLocation];
+            //  The app delegate should be notified so that other components (eg, Profile) could
+            //  better reflect the state of location services.
+            break;
+        }
+
+        default:
+        {
+            //  Unknown issue
+            break;
+        }
+    }
 }
 
-- (void)              locationManager: (CLLocationManager *) __unused manager
-    didFinishDeferredUpdatesWithError: (NSError *) error
+- (void)              locationManager:(CLLocationManager*) __unused manager
+    didFinishDeferredUpdatesWithError:(NSError*) error
 {
     if (error != nil)
     {
-        APCLogError(@"didFinishDeferredUpdatesWithError %@ \n", error);
+        APCLogError2(error);
     }
 }
 
 #pragma mark TODO  After pausing there may be some work to do here
 
-- (void) locationManagerDidResumeLocationUpdates: (CLLocationManager *) __unused manager
+- (void)locationManagerDidResumeLocationUpdates:(CLLocationManager*) __unused manager
 {
 }
 
-- (void) locationManagerDidPauseLocationUpdates: (CLLocationManager *) __unused manager
+- (void)locationManagerDidPauseLocationUpdates:(CLLocationManager*) __unused manager
 {
     APCLogDebug(@"locationManagerDidPauseLocationUpdates");
 }
 
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+- (void)locationManager:(CLLocationManager*)manager didUpdateLocations:(NSArray*)locations
 {
-    APCLogDebug(@"locationManager didUpdateLocations DeferredUpdatesTimeout = %.2f", self.deferredUpdatesTimeout);
+    APCLogDebug(@"locationManager didUpdateLocations at %@", [NSDate date]);
     [self updateArchiveDataWithLocationManager:manager withUpdateLocations:locations];
 }
 
 /*********************************************************************************/
 #pragma mark - Base Tracking Location & Recent Updated Location
 /*********************************************************************************/
-- (NSString *)baseTrackingFilePath
+- (NSString*)baseTrackingFilePath
 {
     return [self.folder stringByAppendingPathComponent:kBaseTrackingFileName];
 }
-- (NSString *)recentLocationFilePath
+
+- (NSString*)recentLocationFilePath
 {
     return [self.folder stringByAppendingPathComponent:kRecentLocationFileName];
 }
@@ -237,16 +270,21 @@ static NSString *kLon = @"lon";
     [self writeDictionary:dict toPath:[self baseTrackingFilePath]];
 }
 
-- (CLLocation *)baseTrackingLocation
+- (CLLocation*)baseTrackingLocation
 {
-    if (!_baseTrackingLocation) {
-        if (self.folder) {
-            if ([[NSFileManager defaultManager] fileExistsAtPath:[self baseTrackingFilePath]]) {
-                NSError * error;
-                NSString * jsonString = [NSString stringWithContentsOfFile:[self baseTrackingFilePath] encoding:NSUTF8StringEncoding error:&error];
+    if (!_baseTrackingLocation)
+    {
+        if (self.folder)
+        {
+            if ([[NSFileManager defaultManager] fileExistsAtPath:[self baseTrackingFilePath]])
+            {
+                NSError*    error;
+                NSString*   jsonString = [NSString stringWithContentsOfFile:[self baseTrackingFilePath] encoding:NSUTF8StringEncoding error:&error];
                 APCLogError2(error);
-                NSDictionary * dict;
-                if (jsonString) {
+                NSDictionary* dict;
+                
+                if (jsonString)
+                {
                     dict = [NSDictionary dictionaryWithJSONString:jsonString];
                     _baseTrackingLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue] longitude:[dict[kLon] doubleValue]];
                 }
@@ -263,28 +301,33 @@ static NSString *kLon = @"lon";
     [self writeDictionary:dict toPath:[self recentLocationFilePath]];
 }
 
-- (CLLocation *)mostRecentUpdatedLocation
+- (CLLocation*)mostRecentUpdatedLocation
 {
-    if (!_mostRecentUpdatedLocation) {
-        if (self.folder) {
-            if ([[NSFileManager defaultManager] fileExistsAtPath:[self recentLocationFilePath]]) {
-                NSError * error;
-                NSString * jsonString = [NSString stringWithContentsOfFile:[self recentLocationFilePath] encoding:NSUTF8StringEncoding error:&error];
+    if (!_mostRecentUpdatedLocation)
+    {
+        if (self.folder)
+        {
+            if ([[NSFileManager defaultManager] fileExistsAtPath:[self recentLocationFilePath]])
+            {
+                NSError*    error;
+                NSString*   jsonString = [NSString stringWithContentsOfFile:[self recentLocationFilePath] encoding:NSUTF8StringEncoding error:&error];
                 APCLogError2(error);
                 NSDictionary * dict;
-                if (jsonString) {
+                if (jsonString)
+                {
                     dict = [NSDictionary dictionaryWithJSONString:jsonString];
                     _mostRecentUpdatedLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue] longitude:[dict[kLon] doubleValue]];
                 }
             }
         }
     }
+    
     return _mostRecentUpdatedLocation;
 }
 
-- (void) writeDictionary: (NSDictionary*) dict toPath:(NSString*) path
+- (void)writeDictionary:(NSDictionary*)dict toPath:(NSString*)path
 {
-    NSString * dataString = [dict JSONString];
+    NSString*   dataString = [dict JSONString];
     [APCPassiveDataCollector createOrReplaceString:dataString toFile:path];
 }
 
