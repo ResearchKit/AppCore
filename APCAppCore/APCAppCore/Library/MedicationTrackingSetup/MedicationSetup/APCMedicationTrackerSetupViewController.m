@@ -222,7 +222,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
         } else if (indexPath.row == kAPCMedicationDosageRow) {
             APCMedicationDosageViewController  *controller = [[APCMedicationDosageViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
             controller.delegate = self;
-            if ((self.possibleDosage != nil) && (self.medicationColorWasSet)) {
+            if ((self.possibleDosage != nil) && (self.medicationDosageWasSet)) {
                 controller.dosageRecord = self.possibleDosage;
             }
             [self.navigationController pushViewController:controller animated:YES];
@@ -308,7 +308,14 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
     self.theMedicationObject = medicationObject;
     self.medicationNameWasSet = YES;
     [self enableDoneButtonIfValuesSet];
-    [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesName inSection:0] ] withRowAnimation:NO];
+    [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesName inSection:0] ] withRowAnimation:YES];
+}
+
+- (void)nameControllerDidCancel:(APCMedicationNameViewController *) __unused nameController
+{
+    self.medicationNameWasSet = NO;
+    [self enableDoneButtonIfValuesSet];
+    [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesName inSection:0] ] withRowAnimation:YES];
 }
 
 - (void)frequencyController:(APCMedicationFrequencyViewController *) __unused frequencyController didSelectFrequency:(NSDictionary *)daysAndNumbers
@@ -316,14 +323,14 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
     self.frequenciesAndDaysObject = daysAndNumbers;
     self.medicationFrequencyWasSet = YES;
     [self enableDoneButtonIfValuesSet];
-    [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesFrequency inSection:0] ] withRowAnimation:NO];
+    [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesFrequency inSection:0] ] withRowAnimation:YES];
 }
 
 - (void)frequencyControllerDidCancel:(APCMedicationFrequencyViewController *) __unused frequencyController
 {
     self.medicationFrequencyWasSet = NO;
     [self enableDoneButtonIfValuesSet];
-    [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesFrequency inSection:0] ] withRowAnimation:NO];
+    [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesFrequency inSection:0] ] withRowAnimation:YES];
 }
 
 - (void)colorController:(APCMedicationColorViewController *) __unused colorController didSelectColorLabelName:(APCMedTrackerPrescriptionColor *)colorObject
@@ -331,14 +338,28 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
     self.colorObject = colorObject;
     self.medicationColorWasSet = YES;
     [self enableDoneButtonIfValuesSet];
-    [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesLabelColor inSection:0] ] withRowAnimation:NO];
+    [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesLabelColor inSection:0] ] withRowAnimation:YES];
+}
+
+- (void)colorControllerDidCancel:(APCMedicationColorViewController *) __unused colorController
+{
+    self.medicationColorWasSet = NO;
+    self.colorObject = nil;
+    [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesLabelColor inSection:0] ] withRowAnimation:YES];
 }
 
 - (void)dosageController:(APCMedicationDosageViewController *) __unused dosageController didSelectDosageAmount:(APCMedTrackerPossibleDosage *)dosageAmount
 {
     self.possibleDosage = dosageAmount;
     self.medicationDosageWasSet = YES;
-    [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesDosage inSection:0] ] withRowAnimation:NO];
+    [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesDosage inSection:0] ] withRowAnimation:YES];
+}
+
+- (void)dosageControllerDidCancel:(APCMedicationDosageViewController *) __unused dosageController
+{
+    self.medicationDosageWasSet = NO;
+    self.possibleDosage = nil;
+    [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesDosage inSection:0] ] withRowAnimation:YES];
 }
 
 #pragma  mark  -  View Controller Methods  kSetupTableButtonCellName
