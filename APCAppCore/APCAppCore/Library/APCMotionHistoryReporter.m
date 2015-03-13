@@ -114,6 +114,11 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           NSTimeInterval totalModerateTime = 0.0;
                                                           
                                                           
+                                                          NSTimeInterval totalModerateActivityTime = 0.0;
+                                                          NSTimeInterval totalVigorousActivityTime = 0.0;
+                                                          
+                                                          
+                                                          
                                                           
                                                           
                                                           //CMMotionActivity is generated every time the state of motion changes. Assuming this, given two CMMMotionActivity objects you can calculate the duration between the two events thereby determining how long the activity of stationary/walking/running/driving/uknowning was.
@@ -123,8 +128,78 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           
                                                            NSMutableArray *motionDayValues = [NSMutableArray new];
                                                           
+                                                          BOOL activityRangeTimeFound = NO;
+                                                          
                                                           for(CMMotionActivity *activity in activities)
                                                           {
+                                                              
+                                                              NSTimeInterval activityLengthTime = 0.0;
+                                                              activityLengthTime = fabs([lastActivity_started timeIntervalSinceDate:activity.startDate]);
+                                                              
+
+                                                              
+                                                              NSDate *midnight = [[NSCalendar currentCalendar] dateBySettingHour:0
+                                                                                                                   minute:0
+                                                                                                                   second:0
+                                                                                                                   ofDate:newEndDate
+                                                                                                                  options:0];
+
+                                                              NSTimeInterval removeThis = 0;
+                                                              
+                                                              NSLog(@"Time Range");
+                                                              if (![[midnight laterDate:activity.startDate] isEqualToDate:midnight]|| [midnight isEqualToDate:activity.startDate]) {
+                                                                  
+                                                                  NSLog(@"We're in");
+                                                                  
+                                                                  if (![[lastActivity_started laterDate: midnight] isEqualToDate:lastActivity_started] && ![midnight isEqualToDate:lastActivity_started]) {
+                                                                      //Get time interval of the potentially overlapping date
+                                                                      removeThis = [midnight timeIntervalSinceDate:lastActivity_started];
+                                                                      
+                                                                      activityLengthTime = activityLengthTime - removeThis;
+                                                                      
+                                                                      activityRangeTimeFound = YES;
+                                                                  }
+                                                                  
+                                                                  //Look for walking moderate and high confidence
+                                                                  //Cycling any confidence
+                                                                  //Running any confidence
+                                                                  
+                                                                  if((lastMotionActivityType == MotionActivityWalking && activity.confidence == CMMotionActivityConfidenceHigh) || (lastMotionActivityType == MotionActivityWalking && activity.confidence == CMMotionActivityConfidenceMedium))
+                                                                  {
+
+                                                                      if(activity.confidence == CMMotionActivityConfidenceMedium || activity.confidence == CMMotionActivityConfidenceHigh)
+                                                                      {
+                                                                          totalModerateActivityTime += activityLengthTime;
+                                                                          
+                                                                      }
+                                                                      
+                                                                  } else if (lastMotionActivityType == MotionActivityRunning || lastMotionActivityType == MotionActivityCycling) {
+                                                                      
+                                                                      totalVigorousActivityTime += activityLengthTime;
+                                                                      
+                                                                      
+                                                                  }
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                              }
+                                                              
+                                                              
                                                                   
                                                               //this will skip the first activity as the lastMotionActivityType will be zero which is not in the enum
                                                               if((lastMotionActivityType == MotionActivityWalking && activity.confidence == CMMotionActivityConfidenceHigh) || (lastMotionActivityType == MotionActivityWalking && activity.confidence == CMMotionActivityConfidenceMedium))
@@ -303,6 +378,19 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           motionHistoryDataSleeping.activityType = ActivityTypeSleeping;
                                                           motionHistoryDataSleeping.timeInterval = totalSleepTime;
                                                           [motionDayValues addObject:motionHistoryDataSleeping];
+                                                          
+                                                          
+                                                          
+                                                          
+                                                          APCMotionHistoryData * motionHistoryActiveMinutesVigorous = [APCMotionHistoryData new];
+                                                          motionHistoryActiveMinutesVigorous.activityType = ActivityTypeAutomotive;
+                                                          motionHistoryActiveMinutesVigorous.timeInterval = totalVigorousActivityTime;
+                                                          [motionDayValues addObject:motionHistoryActiveMinutesVigorous];
+                                                          
+                                                          APCMotionHistoryData * motionHistoryActiveMinutesModerate = [APCMotionHistoryData new];
+                                                          motionHistoryActiveMinutesModerate.activityType = ActivityTypeCycling;
+                                                          motionHistoryActiveMinutesModerate.timeInterval = totalVigorousActivityTime;
+                                                          [motionDayValues addObject:motionHistoryActiveMinutesModerate];
                                                           
                                                           [motionReport addObject:motionDayValues];
                                                           
