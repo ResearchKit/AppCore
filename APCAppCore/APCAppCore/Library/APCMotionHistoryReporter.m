@@ -163,22 +163,11 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                                       if(activity.confidence == CMMotionActivityConfidenceMedium || activity.confidence == CMMotionActivityConfidenceHigh)
                                                                       {
                                                                           totalModerateActivityTime += activityLengthTime;
-                                                                          
-                                                                          
-                                                                          
-                                                                          NSLog(@"BLAH");
-                                                                          
                                                                       }
                                                                       
                                                                   } else if (lastMotionActivityType == MotionActivityRunning || lastMotionActivityType == MotionActivityCycling) {
                                                                       
                                                                       totalVigorousActivityTime += activityLengthTime;
-                                                                      
-                                                                      
-                                                                      
-                                                                      
-                                                                      
-                                                                      NSLog(@"BLAH");
                                                                       
                                                                   }
                                                               }
