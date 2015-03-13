@@ -116,11 +116,7 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           
                                                           NSTimeInterval totalModerateActivityTime = 0.0;
                                                           NSTimeInterval totalVigorousActivityTime = 0.0;
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          
+                                                           
                                                           //CMMotionActivity is generated every time the state of motion changes. Assuming this, given two CMMMotionActivity objects you can calculate the duration between the two events thereby determining how long the activity of stationary/walking/running/driving/uknowning was.
                                                           
                                                           //Setting lastMotionActivityType to 0 from this point on we will use the emum.
@@ -146,10 +142,7 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
 
                                                               NSTimeInterval removeThis = 0;
                                                               
-                                                              NSLog(@"Time Range");
                                                               if (![[midnight laterDate:activity.startDate] isEqualToDate:midnight]|| [midnight isEqualToDate:activity.startDate]) {
-                                                                  
-                                                                  NSLog(@"We're in");
                                                                   
                                                                   if (![[lastActivity_started laterDate: midnight] isEqualToDate:lastActivity_started] && ![midnight isEqualToDate:lastActivity_started]) {
                                                                       //Get time interval of the potentially overlapping date
@@ -171,6 +164,10 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                                       {
                                                                           totalModerateActivityTime += activityLengthTime;
                                                                           
+                                                                          
+                                                                          
+                                                                          NSLog(@"BLAH");
+                                                                          
                                                                       }
                                                                       
                                                                   } else if (lastMotionActivityType == MotionActivityRunning || lastMotionActivityType == MotionActivityCycling) {
@@ -178,28 +175,13 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                                       totalVigorousActivityTime += activityLengthTime;
                                                                       
                                                                       
+                                                                      
+                                                                      
+                                                                      
+                                                                      NSLog(@"BLAH");
+                                                                      
                                                                   }
-                                                                  
-                                                                  
-                                                                  
-                                                                  
-                                                                  
-                                                                  
-                                                                  
-                                                                  
-                                                                  
-                                                                  
-                                                                  
-                                                                  
-                                                                  
-                                                                  
-                                                                  
-                                                                  
-                                                                  
-                                                                  
                                                               }
-                                                              
-                                                              
                                                                   
                                                               //this will skip the first activity as the lastMotionActivityType will be zero which is not in the enum
                                                               if((lastMotionActivityType == MotionActivityWalking && activity.confidence == CMMotionActivityConfidenceHigh) || (lastMotionActivityType == MotionActivityWalking && activity.confidence == CMMotionActivityConfidenceMedium))
@@ -353,6 +335,14 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                               }
                                                               
                                                           }
+
+                                                          
+                                                          APCMotionHistoryData * motionHistoryVigorous = [APCMotionHistoryData new];
+                                                          motionHistoryVigorous.activityType = ActivityTypeRunning;
+                                                          motionHistoryVigorous.timeInterval = totalRunningTime;
+                                                          [motionDayValues addObject:motionHistoryVigorous];
+                                                          
+                                                          
                                                           
                                                           APCMotionHistoryData * motionHistoryDataRunning = [APCMotionHistoryData new];
                                                           motionHistoryDataRunning.activityType = ActivityTypeLight;
@@ -379,9 +369,6 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           motionHistoryDataSleeping.timeInterval = totalSleepTime;
                                                           [motionDayValues addObject:motionHistoryDataSleeping];
                                                           
-                                                          
-                                                          
-                                                          
                                                           APCMotionHistoryData * motionHistoryActiveMinutesVigorous = [APCMotionHistoryData new];
                                                           motionHistoryActiveMinutesVigorous.activityType = ActivityTypeAutomotive;
                                                           motionHistoryActiveMinutesVigorous.timeInterval = totalVigorousActivityTime;
@@ -389,7 +376,7 @@ static APCMotionHistoryReporter __strong *sharedInstance = nil;
                                                           
                                                           APCMotionHistoryData * motionHistoryActiveMinutesModerate = [APCMotionHistoryData new];
                                                           motionHistoryActiveMinutesModerate.activityType = ActivityTypeCycling;
-                                                          motionHistoryActiveMinutesModerate.timeInterval = totalVigorousActivityTime;
+                                                          motionHistoryActiveMinutesModerate.timeInterval = totalModerateActivityTime;
                                                           [motionDayValues addObject:motionHistoryActiveMinutesModerate];
                                                           
                                                           [motionReport addObject:motionDayValues];

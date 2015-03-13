@@ -198,7 +198,13 @@ typedef NS_ENUM(NSUInteger, SevenDayFitnessQueryType)
     numberOfDaysFromStartDate.day += 1;
     
     APCMotionHistoryReporter *reporter = [APCMotionHistoryReporter sharedInstance];
-    [reporter startMotionCoProcessorDataFrom:[NSDate dateWithTimeIntervalSinceNow:-24 * 60 * 60] andEndDate:[NSDate new] andNumberOfDays:numberOfDaysFromStartDate.day];
+    
+    
+    //Now using start and end of day as ranges. 
+    NSDate *startOfToday = [[NSDate date] startOfDay];
+    NSDate *endOfToday = [startOfToday endOfDay];
+    
+    [reporter startMotionCoProcessorDataFrom:startOfToday andEndDate:endOfToday andNumberOfDays:numberOfDaysFromStartDate.day];
 
 }
 
@@ -281,7 +287,7 @@ typedef NS_ENUM(NSUInteger, SevenDayFitnessQueryType)
           
             
             //    Active minutes = minutes of moderate activity + 2x(minutes of vigorous activity). This should be the TOTAL ACTIVE MINUTES FOR THE WEEK,
-            self.activeSeconds += (double)[moderate doubleValue] + ([vigorous doubleValue] * 2) ;
+            self.activeSeconds += (double)twoCounter + (oneCounter * 2) ;
             
         }
     }
