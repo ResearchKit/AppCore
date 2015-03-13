@@ -25,8 +25,8 @@
     id<ORKTask> task = [self createTask: scheduledTask];
     NSUUID * taskRunUUID = [NSUUID UUID];
     APCBaseTaskViewController * controller = task ? [[self alloc] initWithTask:task taskRunUUID:taskRunUUID] : nil;
-    controller.restorationIdentifier = [task identifier];
-    controller.restorationClass = self;
+//    controller.restorationIdentifier = [task identifier];
+//    controller.restorationClass = self;
     controller.scheduledTask = scheduledTask;
     controller.delegate = controller;
     return  controller;
@@ -80,7 +80,11 @@
     }
     else if (result == ORKTaskViewControllerResultFailed)
     {
-        if (error.code == 260 && error.domain == NSCocoaErrorDomain)
+        if (error.code == 4 && error.domain == NSCocoaErrorDomain)
+        {
+            
+        }
+        else if (error.code == 260 && error.domain == NSCocoaErrorDomain)
         {
             //  Ignore this condition as it's due to no collected data.
         }
@@ -112,6 +116,10 @@
                                            @"task_view_controller":NSStringFromClass([self class])
                                            }));
     }
+    else
+    {
+        
+    }
 }
 
 
@@ -121,9 +129,16 @@
     NSString * path = [[paths lastObject] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", self.taskRunUUID.UUIDString]];
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        NSError * fileError;
-        [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&fileError];
-        APCLogError2 (fileError);
+        NSError* fileError;
+        BOOL     created = [[NSFileManager defaultManager] createDirectoryAtPath:path
+                                                     withIntermediateDirectories:YES
+                                                                      attributes:@{ NSFileProtectionKey : NSFileProtectionCompleteUntilFirstUserAuthentication }
+                                                                           error:&fileError];
+        
+        if (created == NO)
+        {
+            APCLogError2 (fileError);
+        }
     }
     
     return path;
@@ -132,6 +147,7 @@
 - (void) processTaskResult
 {
     NSString * resultSummary = [self createResultSummary];
+    
     APCDataArchiver * archiver = [[APCDataArchiver alloc] initWithTaskResult:self.result];
 
 	/*
@@ -143,7 +159,7 @@
 
 	#endif
 
-
+    
     NSString * archiveFileName = [archiver writeToOutputDirectory:self.taskResultsFilePath];
     [self storeInCoreDataWithFileName:archiveFileName resultSummary:resultSummary];
 

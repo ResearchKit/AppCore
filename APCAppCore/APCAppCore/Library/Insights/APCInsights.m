@@ -8,6 +8,7 @@
 #import "APCInsights.h"
 #import "APCAppCore.h"
 #import <HealthKit/HealthKit.h>
+#import "NSOperationQueue+Helper.h"
 
 NSString * const kInsightKeyGoodDayValue = @"insightKeyGoodDayValue";
 NSString * const kInsightKeyGlucoseGoodDayValue = @"insightKeyGlucoseGoodDayValue";
@@ -40,6 +41,12 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 @property (nonatomic, strong) NSNumber *baselineHigh;
 @property (nonatomic, strong) NSNumber *baselineHighOther;
 
+@property (nonatomic, strong) NSMutableArray *insightPointValues;
+
+@property (nonatomic, strong) NSMutableArray *insightPoints;
+
+@property (nonatomic, strong) NSOperationQueue *insightQueue;
+
 @end
 
 @implementation APCInsights
@@ -62,6 +69,12 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         _captionBad  = NSLocalizedString(@"Not enough data", @"Not enough data");
         _valueGood = @(0);
         _valueBad  = @(0);
+        
+        _insightPointValues = [NSMutableArray new];
+        
+        NSString *queueName = [NSString stringWithFormat:@"Insights: Getting %@ from HeathKit", self.insightFactorName];
+        
+        _insightQueue = [NSOperationQueue sequentialOperationQueueWithName:queueName];
     }
     
     return self;
@@ -173,14 +186,9 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     [groupedReadings addObjectsFromArray:groupedBeforeReadings];
     [groupedReadings addObjectsFromArray:groupedAfterReadings];
     
-    NSArray *markedReadings = [self markDataset:groupedReadings];
+    self.insightPoints = [[self markDataset:groupedReadings] mutableCopy];
     
-    for (NSDictionary *marked in markedReadings) {
-        [self statsCollectionQueryForQuantityType:[HKQuantityType quantityTypeForIdentifier:self.insightFactorName]
-                                             unit:self.insightFactorUnit
-                                       forReading:marked
-                                   withCompletion:nil];
-    }
+    [self fetchDataFromHealthKitForItemsInInsightQueue];
 }
 
 #pragma mark HealthKit
@@ -261,7 +269,9 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
             [readingPoint setObject:self.insightFactorName forKey:kAPCInsightFactorNameKey];
             [readingPoint setObject:dataPoint[kDatasetValueKey] forKey:kAPCInsightFactorValueKey];
             
-            [self dataPointsAreAvailableFromHealthKit:readingPoint];
+            [self.insightPointValues addObject:readingPoint];
+            
+            [self fetchDataFromHealthKitForItemsInInsightQueue];
         }
     };
     
@@ -270,41 +280,83 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 
 #pragma mark - Helpers
 
-- (void)dataPointsAreAvailableFromHealthKit:(NSDictionary *)dataPoint
+- (void)fetchDataFromHealthKitForItemsInInsightQueue
 {
-    APCLogDebug(@"Insight: %@", dataPoint);
+    APCLogDebug(@"Fetching data from HealthKit entry point...");
+    
+    [self.insightQueue addOperationWithBlock:^{
+        
+        BOOL hasInsightPointsInQueue = self.insightPoints.count > 0;
+        
+        APCLogDebug(@"About to queue insight item...");
+        
+        if (hasInsightPointsInQueue) {
+            
+            NSDictionary *item = [self.insightPoints firstObject];
+            [self.insightPoints removeObjectAtIndex:0];
+            
+            APCLogDebug(@"We are about to ask HK for item %@...", item);
+            
+            [self statsCollectionQueryForQuantityType:[HKQuantityType quantityTypeForIdentifier:self.insightFactorName]
+                                                 unit:self.insightFactorUnit
+                                           forReading:item
+                                       withCompletion:nil];
+        } else {
+            APCLogDebug(@"Insights: We're done!");
+            [self dataPointsAreAvailableFromHealthKit:self.insightPointValues];
+        }
+    }];
+}
+
+- (void)dataPointsAreAvailableFromHealthKit:(NSArray *)insightPoints
+{
+    APCLogDebug(@"Insights: %@", insightPoints);
     
     NSString *caption = NSLocalizedString(@"Not enough data", @"Not enough data");
     NSNumber *pointValue = @(0);
     
-    if ([dataPoint[kAPCInsightFactorValueKey] isEqualToNumber:@(NSNotFound)] == NO) {
+    NSArray *goodPoints = [insightPoints filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %@", kInsightDatasetIsGoodDayKey, @(YES)]];
+    NSArray *badPoints  = [insightPoints filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %@", kInsightDatasetIsGoodDayKey, @(NO)]];
+    
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setMaximumFractionDigits:0];
+    
+    if (goodPoints.count > 0) {
+        pointValue = [goodPoints valueForKeyPath:@"@avg.insightFactorValueKey"];
         
-        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        [numberFormatter setMaximumFractionDigits:0];
-        
-        if ([dataPoint[kAPCInsightFactorNameKey] isEqualToString:HKQuantityTypeIdentifierDietaryEnergyConsumed]) {
-            
-            if ([dataPoint[kAPCInsightFactorValueKey] doubleValue] > 1000.0) {
-                pointValue = dataPoint[kAPCInsightFactorValueKey];
-                
+        if ([self.insightFactorName isEqualToString:HKQuantityTypeIdentifierDietaryEnergyConsumed]) {
+            if ([pointValue doubleValue] > 1000.0) {
                 caption = [NSString stringWithFormat:@"%@ %@",
-                           [numberFormatter stringFromNumber:dataPoint[kAPCInsightFactorValueKey]],
+                           [numberFormatter stringFromNumber:pointValue],
                            self.insightFactorCaption];
             }
         } else {
             caption = [NSString stringWithFormat:@"%@ %@",
-                       [numberFormatter stringFromNumber:dataPoint[kAPCInsightFactorValueKey]],
+                       [numberFormatter stringFromNumber:pointValue],
                        self.insightFactorCaption];
-            pointValue = dataPoint[kAPCInsightFactorValueKey];
         }
+
+        self.valueGood = pointValue;
+        self.captionGood = NSLocalizedString(caption, caption);
     }
     
-    if ([dataPoint[kInsightDatasetIsGoodDayKey] boolValue]) {
-        self.captionGood = NSLocalizedString(caption, caption);
-        self.valueGood = pointValue;
-    } else {
-        self.captionBad = NSLocalizedString(caption, caption);
+    if (badPoints.count > 0) {
+        pointValue = [badPoints valueForKeyPath:@"@avg.insightFactorValueKey"];
+        
+        if ([self.insightFactorName isEqualToString:HKQuantityTypeIdentifierDietaryEnergyConsumed]) {
+            if ([pointValue doubleValue] > 1000.0) {
+                caption = [NSString stringWithFormat:@"%@ %@",
+                           [numberFormatter stringFromNumber:pointValue],
+                           self.insightFactorCaption];
+            }
+        } else {
+            caption = [NSString stringWithFormat:@"%@ %@",
+                       [numberFormatter stringFromNumber:pointValue],
+                       self.insightFactorCaption];
+        }
+        
         self.valueBad = pointValue;
+        self.captionBad  = NSLocalizedString(caption, caption);
     }
     
     NSOperationQueue *realMainQueue = [NSOperationQueue mainQueue];

@@ -22,8 +22,6 @@ typedef enum : NSUInteger {
 
 + (NSArray *) csvColumnNames
 {
-    NSMutableArray *names = [NSMutableArray new];
-
     /*
      Keep these in the same order as the "column values" entries below.
      */
@@ -34,8 +32,6 @@ typedef enum : NSUInteger {
              @"confidenceRaw",
              @"confidencePercent"
              ];
-
-    return names;
 }
 
 - (NSArray *) csvColumnValues

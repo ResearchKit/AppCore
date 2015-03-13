@@ -12,6 +12,8 @@
 #import "APCProfileViewController.h"
 #import "APCConsentTask.h"
 
+#warning Be sure to set the CORRECT current version before releasing to production
+static NSUInteger   const kTheEntireDataModelOfTheApp                    = 2;
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
 
@@ -52,6 +54,10 @@
 - (void) setUpRootViewController: (UIViewController*) viewController;
 
 - (NSDictionary *) tasksAndSchedulesWillBeLoaded;
+- (void)performMigrationFrom:(NSInteger)previousVersion currentVersion:(NSInteger)currentVersion;
+- (void)performMigrationAfterDataSubstrateFrom:(NSInteger)previousVersion currentVersion:(NSInteger)currentVersion;
+- (NSString *) applicationDocumentsDirectory;
+- (NSUInteger)obtainPreviousVersion;
 
 //SetupMethods
 - (void) setUpInitializationOptions;
@@ -67,9 +73,11 @@
 - (void)afterOnBoardProcessIsFinished;
 - (NSArray *)reviewConsentActions;
 - (NSArray *)allSetTextBlocks;
+- (NSDictionary *)configureTasksForActivities;
 
 //To be called from Datasubstrate
 - (void) setUpCollectors;
+
 - (id <APCProfileViewControllerDelegate>) profileExtenderDelegate;
 
 - (void)showPasscodeIfNecessary;
