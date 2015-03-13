@@ -13,6 +13,7 @@
 @protocol  APCMedicationNameViewControllerDelegate <NSObject>
 
 - (void)nameController:(APCMedicationNameViewController *)nameController didSelectMedicineName:(APCMedTrackerMedication *)medicationObject;
+- (void)nameControllerDidCancel:(APCMedicationNameViewController *)nameController;
 
 @end
 

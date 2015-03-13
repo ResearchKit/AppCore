@@ -26,6 +26,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 @property  (nonatomic, strong)          NSArray      *dosageAmounts;
 
 @property  (nonatomic, strong)          NSIndexPath  *selectedIndex;
+@property  (nonatomic, assign)          BOOL          doneButtonWasTapped;
 
 @end
 
@@ -33,8 +34,22 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
 #pragma  mark  -  Navigation Bar Button Action Methods
 
-- (IBAction)doneButtonTapped:(UIBarButtonItem *) __unused sender
+- (void)doneButtonTapped:(UIBarButtonItem *) __unused sender
 {
+    self.doneButtonWasTapped = YES;
+    
+    APCMedTrackerPossibleDosage  *dosage = nil;
+    
+    if (self.selectedIndex == nil) {
+        dosage = [self findDosageWithZeroAmount];
+    } else {
+        dosage = self.dosageAmounts[self.selectedIndex.row];
+    }
+    if (self.delegate != nil) {
+        if ([self.delegate respondsToSelector:@selector(dosageController:didSelectDosageAmount:)] == YES) {
+            [self.delegate performSelector:@selector(dosageController:didSelectDosageAmount:) withObject:self withObject:dosage];
+        }
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -106,17 +121,6 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
             self.selectedIndex = indexPath;
         }
     }
-    APCMedTrackerPossibleDosage  *dosage = nil;
-    if (self.selectedIndex == nil) {
-        dosage = [self findDosageWithZeroAmount];
-    } else {
-        dosage = self.dosageAmounts[indexPath.row];
-    }
-    if (self.delegate != nil) {
-        if ([self.delegate respondsToSelector:@selector(dosageController:didSelectDosageAmount:)] == YES) {
-            [self.delegate performSelector:@selector(dosageController:didSelectDosageAmount:) withObject:self withObject:dosage];
-        }
-    }
 }
 
 - (CGFloat)tableView:(UITableView *) __unused tableView heightForRowAtIndexPath:(NSIndexPath *) __unused indexPath
@@ -175,6 +179,19 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 - (NSString *)title
 {
     return  kViewControllerName;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    if (self.doneButtonWasTapped == NO) {
+        if (self.delegate != nil) {
+            if ([self.delegate respondsToSelector:@selector(dosageControllerDidCancel:)] == YES) {
+                [self.delegate performSelector:@selector(dosageControllerDidCancel:) withObject:self];
+            }
+        }
+    }
 }
 
 - (void)viewDidLoad

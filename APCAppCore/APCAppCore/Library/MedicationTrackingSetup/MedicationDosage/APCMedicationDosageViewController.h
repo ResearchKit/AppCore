@@ -13,6 +13,7 @@
 @protocol  APCMedicationDosageViewControllerDelegate  <NSObject>
 
 - (void)dosageController:(APCMedicationDosageViewController *)dosageController didSelectDosageAmount:(APCMedTrackerPossibleDosage *)dosageAmount;
+- (void)dosageControllerDidCancel:(APCMedicationDosageViewController *)dosageController;
 
 @end
 
