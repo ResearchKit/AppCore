@@ -104,6 +104,10 @@ NSString *const kAllSetActivitiesTextAdditional = @"allSetActivitiesTextAddition
 NSString *const kAllSetDashboardTextOriginal    = @"allSetDashboardTextOriginal";
 NSString *const kAllSetDashboardTextAdditional  = @"allSetDashboardTextAdditional";
 
+NSString *const kActivitiesSectionKeepGoing     = @"activitiesSectionKeepGoing";
+NSString *const kActivitiesSectionYesterday     = @"activitiesSectionYesterday";
+NSString *const kActivitiesSectionToday         = @"activitiesSectionToday";
+
 /*********************************************************************************/
 #pragma mark - Events
 /*********************************************************************************/

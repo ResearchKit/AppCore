@@ -73,6 +73,7 @@ static NSUInteger   const kTheEntireDataModelOfTheApp                    = 2;
 - (void)afterOnBoardProcessIsFinished;
 - (NSArray *)reviewConsentActions;
 - (NSArray *)allSetTextBlocks;
+- (NSDictionary *)configureTasksForActivities;
 
 //To be called from Datasubstrate
 - (void) setUpCollectors;

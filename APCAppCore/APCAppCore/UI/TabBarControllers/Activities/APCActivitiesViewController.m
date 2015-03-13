@@ -15,6 +15,13 @@ static CGFloat kTintedCellHeight = 65;
 
 static CGFloat kTableViewSectionHeaderHeight = 77;
 
+typedef NS_ENUM(NSUInteger, APCActivitiesSections)
+{
+    APCActivitiesSectionToday = 0,
+    APCActivitiesSectionYesterday,
+    APCActivitiesSectionsTotalNumberOfSections
+};
+
 @interface APCActivitiesViewController ()
 
 @property (nonatomic) BOOL taskSelectionDisabled;
@@ -25,6 +32,14 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
 @property (strong, nonatomic) APCActivitiesViewWithNoTask *noTasksView;
 
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
+
+// The below, tasksBySection and keepGoingTasks, are used only
+// for filtering the tasks that should not appear in the 'Yesterday'
+// section. Needless to say, we do need to refactor this bit of
+// logic so that it is more flexible.
+@property (strong, nonatomic) NSDictionary *tasksBySection;
+@property (strong, nonatomic) NSMutableArray *keepGoingTasks;
+
 @end
 
 @implementation APCActivitiesViewController
@@ -58,6 +73,11 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     [self.tableView registerNib:[UINib nibWithNibName:@"APCActivitiesSectionHeaderView" bundle:[NSBundle appleCoreBundle]] forHeaderFooterViewReuseIdentifier:kAPCActivitiesSectionHeaderViewIdentifier];
     
     self.dateFormatter = [NSDateFormatter new];
+    
+    self.keepGoingTasks = [NSMutableArray new];
+    
+    APCAppDelegate * appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
+    self.tasksBySection = [appDelegate configureTasksForActivities];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -163,7 +183,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
         cell.tintColor = [UIColor colorForTaskId:scheduledTask.task.taskID];
     }
     
-    if (indexPath.section > 0) {
+    if (indexPath.section == APCActivitiesSectionYesterday) {
         [cell setupIncompleteAppearance];
     } else {
         [cell setupAppearance];
@@ -185,7 +205,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
 {
     CGFloat height = kTableViewSectionHeaderHeight;
     
-    if (section == 0) {
+    if (section == APCActivitiesSectionToday) {
         height -= 15;
     }
     return height;
@@ -197,14 +217,14 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     
     
     switch (section) {
-        case 0:
+        case APCActivitiesSectionToday:
         {
             [self.dateFormatter setDateFormat:@"MMMM d"];
             headerView.titleLabel.text = [NSString stringWithFormat:@"%@, %@", NSLocalizedString(@"Today", @""), [self.dateFormatter stringFromDate:[NSDate date]] ];
             headerView.subTitleLabel.text = NSLocalizedString(@"To start an activity, select from the list below.", @"");
         }
             break;
-        case 1:
+        case APCActivitiesSectionYesterday:
         {
             headerView.titleLabel.text = NSLocalizedString(@"Yesterday", @"");
             headerView.subTitleLabel.text = NSLocalizedString(@"Below are your incomplete tasks from yesterday. These are for reference only.", @"");
@@ -212,7 +232,12 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
             break;
 
             
-        default:
+        default: // Keep going
+        {
+            headerView.titleLabel.text = NSLocalizedString(@"Keep Going!", @"Keep going");
+            headerView.subTitleLabel.text = NSLocalizedString(@"Try one of these extra activities, to enchance your experience in your study.",
+                                                              @"Try one of these extra activities, to enchance your experience in your study.");
+        }
             break;
     }
     
@@ -223,14 +248,14 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
 - (BOOL)                tableView: (UITableView *) __unused tableView
     shouldHighlightRowAtIndexPath: (NSIndexPath *) indexPath
 {
-    return indexPath.section == 0;
+    return indexPath.section != 1;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.section == 0) {
+    if (indexPath.section != APCActivitiesSectionYesterday) {
         if (!self.taskSelectionDisabled) {
             
             id task = ((NSArray*)self.scheduledTasksArray[indexPath.section])[indexPath.row];
@@ -406,20 +431,22 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
     //create sections
     if (((NSArray*)scheduledTasksDict[@"today"]).count > 0) {
         [self.sectionsArray addObject:[self formattedTodaySection]];
-        NSArray * groupedArray = [self generateGroupsForTask:((NSArray*)scheduledTasksDict[@"today"])];
         
+        NSArray *todaysTaskList = scheduledTasksDict[@"today"];
         
-        
+        NSArray * groupedArray = [self generateGroupsForTask:todaysTaskList];
+
         NSArray *sortedTasks = [self sortTasksInArray:groupedArray];
-        
-        
         
         [self.scheduledTasksArray addObject:sortedTasks];
     }
     
     if (((NSArray*)scheduledTasksDict[@"yesterday"]).count > 0) {
         [self.sectionsArray addObject:@"Yesterday - Incomplete Tasks"];
-        NSArray * groupedArray = [self generateGroupsForTask:((NSArray*)scheduledTasksDict[@"yesterday"])];
+        
+        NSArray *yesterdaysTaskList = [self removeTasksFromTaskList:scheduledTasksDict[@"yesterday"]];
+        
+        NSArray * groupedArray = [self generateGroupsForTask:yesterdaysTaskList];
         
         NSArray *sortedTasks = [self sortTasksInArray:groupedArray];
         
@@ -456,6 +483,7 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
             [taskTypesArray addObject:taskId];
         }
     }
+    
     NSMutableArray * returnArray = [NSMutableArray array];
     /* group tasks by task Id */
     for (NSString *taskId in taskTypesArray) {
@@ -481,6 +509,31 @@ static CGFloat kTableViewSectionHeaderHeight = 77;
         }
     }
     return returnArray;
+}
+
+/** @brief   Removes the tasks (provide via the self.tasksBySection property) from the provided task list.
+  *
+  * @param   taskList - Array of APCScheduledTask. This list will be filtered
+  *
+  * @return  A filtered array of APCScheduledTask; otherwise the original array is returned.
+  *
+  * @note    This needs to be refactored.
+  */
+- (NSArray *)removeTasksFromTaskList:(NSArray *)taskList
+{
+    NSArray *keepGoingTasks = self.tasksBySection[kActivitiesSectionKeepGoing];
+    NSMutableArray *filteredList = [taskList mutableCopy];
+    
+    for (APCScheduledTask *scheduledTask in taskList) {
+        if (keepGoingTasks) {
+            if ([keepGoingTasks containsObject:scheduledTask.task.taskID]) {
+                [filteredList removeObject:scheduledTask];
+                [self.keepGoingTasks addObject:scheduledTask];
+            }
+        }
+    }
+    
+    return filteredList;
 }
 
 @end

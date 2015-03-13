@@ -519,6 +519,22 @@ static NSUInteger const kIndexOfProfileTab = 3;
     return nil;
 }
 
+- (NSDictionary *)configureTasksForActivities
+{
+    /* Abstract implementation. Subclass to override.
+     *
+     * Use this to properly group your tasks into the three groups
+     * that are now shown on the Activities tab.
+     * 
+     * 1. Todays tasks
+     * 2. Keep Going
+     * 3. Yesterday's incomplete tasks
+     *
+     * Note: This needs to be refactored
+     */
+    return nil;
+}
+
 /*********************************************************************************/
 #pragma mark - Catastrophic startup errors
 /*********************************************************************************/
