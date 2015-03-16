@@ -315,8 +315,12 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     NSString *caption = NSLocalizedString(@"Not enough data", @"Not enough data");
     NSNumber *pointValue = @(0);
     
-    NSArray *goodPoints = [insightPoints filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %@", kInsightDatasetIsGoodDayKey, @(YES)]];
-    NSArray *badPoints  = [insightPoints filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"%K == %@", kInsightDatasetIsGoodDayKey, @(NO)]];
+    NSArray *goodPoints = [insightPoints filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(%K == %@) AND (%K <> %@)",
+                                                                      kInsightDatasetIsGoodDayKey, @(YES),
+                                                                      kAPCInsightFactorValueKey, @(NSNotFound)]];
+    NSArray *badPoints  = [insightPoints filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(%K == %@) AND (%K <> %@)",
+                                                                      kInsightDatasetIsGoodDayKey, @(NO),
+                                                                      kAPCInsightFactorValueKey, @(NSNotFound)]];
     
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setMaximumFractionDigits:0];
