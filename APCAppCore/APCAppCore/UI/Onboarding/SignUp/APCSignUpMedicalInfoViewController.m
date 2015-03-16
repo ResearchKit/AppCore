@@ -170,8 +170,15 @@
 						NSArray *allPossibleHeightsInFeet = field.pickerData [0];
 						NSArray *allPossibleHeightsInInches = field.pickerData [1];
 
-						indexOfMyHeightInFeet = [allPossibleHeightsInFeet indexOfObject: feet];
-						indexOfMyHeightInInches = [allPossibleHeightsInInches indexOfObject: inches];
+                        //107 inches i.e. 8'11" is the max. height.
+                        if (heightInInches <= 107) {
+                            indexOfMyHeightInFeet = [allPossibleHeightsInFeet indexOfObject: feet];
+                            indexOfMyHeightInInches = [allPossibleHeightsInInches indexOfObject: inches];
+                        } else {
+                            indexOfMyHeightInFeet = allPossibleHeightsInFeet.count-1;
+                            indexOfMyHeightInInches = allPossibleHeightsInInches.count-1;
+                        }
+						
                     }
 
                     if (indexOfMyHeightInFeet && indexOfMyHeightInInches) {
