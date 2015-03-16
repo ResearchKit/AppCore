@@ -31,7 +31,7 @@
 }
 
 + (UIFont*) appQuestionLabelFont {
-    return [UIFont appRegularFontWithSize:19.0f];
+    return [UIFont appRegularFontWithSize:17.0f];
 }
 
 + (UIFont*) appQuestionOptionFont {
