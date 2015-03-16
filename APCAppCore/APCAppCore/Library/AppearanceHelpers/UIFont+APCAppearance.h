@@ -12,5 +12,8 @@
 + (UIFont*) appRegularFontWithSize: (CGFloat) size;
 + (UIFont*) appMediumFontWithSize: (CGFloat) size;
 + (UIFont*) appLightFontWithSize: (CGFloat) size;
++ (UIFont*) appNavBarTitleFont;
++ (UIFont*) appQuestionLabelFont;
++ (UIFont*) appQuestionOptionFont;
 
 @end
