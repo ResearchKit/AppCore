@@ -37,6 +37,8 @@ typedef NS_ENUM(NSUInteger, APCAllSetRows)
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     
     [self configureTextBlocks];
+    
+    [self.tableView reloadData];
 }
 
 - (void)configureTextBlocks
@@ -76,8 +78,6 @@ typedef NS_ENUM(NSUInteger, APCAllSetRows)
                 for (NSDictionary *textBlock in self.textBlocks) {
                     if (textBlock[kAllSetActivitiesTextOriginal]) {
                         cell.originalText = textBlock[kAllSetActivitiesTextOriginal];
-                    } else {
-                        cell.originalText = original;
                     }
                     
                     if (textBlock[kAllSetActivitiesTextAdditional]) {
@@ -103,8 +103,6 @@ typedef NS_ENUM(NSUInteger, APCAllSetRows)
                 for (NSDictionary *textBlock in self.textBlocks) {
                     if (textBlock[kAllSetDashboardTextOriginal]) {
                         cell.originalText = textBlock[kAllSetDashboardTextOriginal];
-                    } else {
-                        cell.originalText = original;
                     }
                     
                     if (textBlock[kAllSetDashboardTextAdditional]) {
