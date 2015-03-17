@@ -574,6 +574,78 @@ then a location event has occurred and location services must be manually starte
 }
 
 /*********************************************************************************/
+#pragma mark - Observer Query
+/*********************************************************************************/
+
+/**
+  * @brief  Sets up an observer query for the provided sample type and subscribes to background updates.
+  *
+  * @param  sampleType  HKSampleType that is used for setting up the observer query.
+  *
+  * @param  completion  A block that is called as soon as the observer query's update handler is 
+  *                     executed without any errors.
+  *
+  */
+- (void)observerQueryForSampleType:(HKSampleType *)sampleType
+                    withCompletion:(void (^)(void))completion
+{
+    NSLog(@"Setting up observer query for sample type %@", sampleType.identifier);
+
+    __weak APCAppDelegate *weakSelf = self;
+    
+    [self.dataSubstrate.healthStore enableBackgroundDeliveryForType:sampleType
+                                                          frequency:HKUpdateFrequencyImmediate
+                                                     withCompletion:^(BOOL success, NSError *error)
+    {
+        if (success == NO) {
+            APCLogError2(error);
+        } else {
+            HKObserverQuery *observerQuery = [[HKObserverQuery alloc] initWithSampleType:sampleType
+                                                                               predicate:nil
+                                                                           updateHandler:^(HKObserverQuery __unused *query,
+                                                                                           HKObserverQueryCompletionHandler completionHandler,
+                                                                                           NSError *error)
+            {
+                  
+                if (error) {
+                    APCLogError2(error);
+                } else {
+                    
+                    NSSortDescriptor *sortByLatest = [[NSSortDescriptor alloc] initWithKey:HKSampleSortIdentifierEndDate ascending:NO];
+                    HKSampleQuery *sampleQuery = [[HKSampleQuery alloc] initWithSampleType:sampleType
+                                                                           predicate:nil
+                                                                               limit:1
+                                                                     sortDescriptors:@[sortByLatest]
+                                                                      resultsHandler:^(HKSampleQuery __unused *query, NSArray *results, NSError *error)
+                    {
+                        if (!results) {
+                            APCLogError2(error);
+                        } else {
+                            HKQuantitySample *sample = results.firstObject;
+                            
+                            [weakSelf processUpdatesFromHealthKitForSampleType:sample];
+                        }
+                    }];
+                    
+                    [weakSelf.dataSubstrate.healthStore executeQuery:sampleQuery];
+                    
+                    // If there's a completion block execute it.
+                    if (completion) {
+                        completion();
+                    }
+                    
+                    // Since we are subscribing to background updates, we will need to call
+                    // the completion handler to let HealthKit know that we received the data.
+                    completionHandler();
+                }
+            }];
+            
+            [weakSelf.dataSubstrate.healthStore executeQuery:observerQuery];
+        }
+    }];
+}
+
+/*********************************************************************************/
 #pragma mark - Catastrophic startup errors
 /*********************************************************************************/
 - (void) registerCatastrophicStartupError: (NSError *) error
