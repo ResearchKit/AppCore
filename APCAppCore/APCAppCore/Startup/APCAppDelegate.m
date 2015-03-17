@@ -47,6 +47,9 @@ static NSUInteger const kIndexOfProfileTab = 3;
 @property (nonatomic, strong) UIView *secureView;
 @property (nonatomic, strong) NSError *catastrophicStartupError;
 
+@property (nonatomic, strong) NSOperationQueue *healthKitCollectorQueue;
+@property (nonatomic, strong) APCHealthKitDataCollector *healthKitCollector;
+
 @end
 
 
