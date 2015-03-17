@@ -77,6 +77,7 @@ then a location event has occurred and location services must be manually starte
     [self loadStaticTasksAndSchedulesIfNecessary];
     [self registerNotifications];
     [self setUpHKPermissions];
+    [self configureObserverQueries];
     [self setUpAppAppearance];
     [self setUpTasksReminder];
     [self showAppropriateVC];
@@ -487,6 +488,36 @@ then a location event has occurred and location services must be manually starte
 
 - (void) setUpTasksReminder {
     self.tasksReminder = [APCTasksReminderManager new];
+}
+
+/**
+  * @brief  This configures the observer queries for all HK data type
+  *         that the app will be asking for Read permissions.
+  */
+- (void)configureObserverQueries
+{
+    NSArray *dataTypesWithReadPermission = self.initializationOptions[kHKReadPermissionsKey];
+    
+    if (dataTypesWithReadPermission) {
+        
+        if (!self.healthKitCollectorQueue) {
+            self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:@"HealthKit Data Collector"];
+        }
+        
+        if (!self.healthKitCollector) {
+            self.healthKitCollector = [[APCHealthKitDataCollector alloc] initWithIdentifier:@"HealthKitDataCollector"];
+            [self.passiveDataCollector addTracker:self.healthKitCollector];
+            [self.healthKitCollector startTracking];
+        }
+        
+        for (NSString *dataType in dataTypesWithReadPermission) {
+            
+            HKSampleType *sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
+            
+            [self observerQueryForSampleType:sampleType
+                              withCompletion:nil];
+        }
+    }
 }
 
 - (NSArray *)offsetForTaskSchedules
