@@ -802,7 +802,7 @@ then a location event has occurred and location services must be manually starte
         NSString *healthKitType = quantitySample.quantityType.identifier;
         NSString *quantityValue = [NSString stringWithFormat:@"%@", quantitySample.quantity];
         
-        NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@", dateTimeStamp, healthKitType, quantityValue];
+        NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue];
         
         [APCPassiveDataCollector createOrAppendString:stringToWrite
                                                toFile:[self.healthKitCollector.folder stringByAppendingPathComponent:self.healthKitCollector.csvFilename]];
