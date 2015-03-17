@@ -629,7 +629,7 @@ then a location event has occurred and location services must be manually starte
 - (void)observerQueryForSampleType:(HKSampleType *)sampleType
                     withCompletion:(void (^)(void))completion
 {
-    NSLog(@"Setting up observer query for sample type %@", sampleType.identifier);
+    APCLogDebug(@"Setting up observer query for sample type %@", sampleType.identifier);
 
     __weak APCAppDelegate *weakSelf = self;
     
