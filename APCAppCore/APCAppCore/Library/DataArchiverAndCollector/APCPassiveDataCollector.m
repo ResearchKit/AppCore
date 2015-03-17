@@ -103,7 +103,10 @@ static NSString *const kCSVFilename  = @"data.csv";
     //Create log files
     if (![[NSFileManager defaultManager] fileExistsAtPath:tracker.folder]) {
         NSError * folderCreationError;
-        if (![[NSFileManager defaultManager] createDirectoryAtPath:tracker.folder withIntermediateDirectories:YES attributes:nil error:&folderCreationError]) {
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:tracker.folder
+                                       withIntermediateDirectories:YES
+                                                        attributes:@{ NSFileProtectionKey : NSFileProtectionCompleteUntilFirstUserAuthentication }
+                                                             error:&folderCreationError]) {
             APCLogError2(folderCreationError);
         }
         else
