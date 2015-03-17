@@ -30,6 +30,10 @@ static NSString * const kFilesKey                   = @"files";
 static NSString * const kFileInfoNameKey            = @"filename";
 static NSString * const kFileInfoTimeStampKey       = @"timestamp";
 static NSString * const kFileInfoContentTypeKey     = @"contentType";
+
+    //
+    //    Interval Tapping Dictionary Keys
+    //
 static NSString * const kTappingViewSizeKey         = @"TappingViewSize";
 static NSString * const kButtonRectLeftKey          = @"ButtonRectLeft";
 static NSString * const kButtonRectRightKey         = @"ButtonRectRight";
@@ -42,6 +46,13 @@ static NSString * const kTapTimeStampKey            = @"TapTimeStamp";
 static NSString * const kTapCoordinateKey           = @"TapCoordinate";
 static NSString * const kAPCTappingResultsFileName  = @"tapping_results";
 
+    //
+    //    Spatial Span Memory Dictionary Keys
+    //
+static NSString * const kSpatialSpanMemorySummaryNumberOfGames    = @"memory_game_number_of_games";
+static NSString * const kSpatialSpanMemorySummaryNumberOfFailures = @"memory_game_number_of_failures";
+static NSString * const kSpatialSpanMemorySummaryOverallScore     = @"memory_game_overall_score";
+static NSString * const kSpatialSpanMemorySummaryFilename         = @"memory_game_results";
 
 /**
  We'll eventually use something that makes more sense, here.
@@ -227,11 +238,17 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
                     [self addGenericDataFileToArchive: fileResult];
                 }
             }
-
+            
             else if ([result isKindOfClass:[ORKTappingIntervalResult class]])
             {
                 ORKTappingIntervalResult  *tappingResult = (ORKTappingIntervalResult *)result;
                 [self addTappingResultsToArchive:tappingResult];
+            }
+            
+            else if ([result isKindOfClass:[ORKSpatialSpanMemoryResult class]])
+            {
+                ORKSpatialSpanMemoryResult  *spatialSpanMemoryResult = (ORKSpatialSpanMemoryResult *)result;
+                [self addSpatialSpanMemoryResultsToArchive:spatialSpanMemoryResult];
             }
 
             else if ([result isKindOfClass:[ORKQuestionResult class]])
@@ -356,7 +373,7 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
 }
 
 /*********************************************************************************/
-#pragma mark - Add Result Archive
+#pragma mark - Add Task-Specific Results — Interval Tapping
 /*********************************************************************************/
 
 - (void)addTappingResultsToArchive:(ORKTappingIntervalResult *)result
@@ -400,6 +417,32 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
     [self writeResultDictionaryToArchive: serializableData];
     [self addFileInfoEntryWithDictionary: serializableData];
 }
+
+/*********************************************************************************/
+#pragma mark - Add Task-Specific Results — Spatial Span Memory
+/*********************************************************************************/
+
+- (void)addSpatialSpanMemoryResultsToArchive:(ORKSpatialSpanMemoryResult *)result
+{
+    NSMutableDictionary  *memoryGameResults = [NSMutableDictionary dictionary];
+    
+    memoryGameResults[kStartDateKey] = result.startDate;
+    memoryGameResults[kEndDateKey]   = result.endDate;
+    
+    memoryGameResults[kSpatialSpanMemorySummaryNumberOfGames]    = @(result.numberOfGames);
+    memoryGameResults[kSpatialSpanMemorySummaryNumberOfFailures] = @(result.numberOfFailures);
+    memoryGameResults[kSpatialSpanMemorySummaryOverallScore]     = @(result.score);
+    
+    memoryGameResults[kItemKey] = kSpatialSpanMemorySummaryFilename;
+    
+    NSDictionary  *serializableData = [self generateSerializableDataFromSourceDictionary: memoryGameResults];
+    [self writeResultDictionaryToArchive: serializableData];
+    [self addFileInfoEntryWithDictionary: serializableData];
+}
+
+/*********************************************************************************/
+#pragma mark - Add Result Archive
+/*********************************************************************************/
 
 - (void) addResultToArchive: (ORKResult*) result
 {
