@@ -623,6 +623,11 @@ then a location event has occurred and location services must be manually starte
                         } else {
                             HKQuantitySample *sample = results.firstObject;
                             
+                            // Anyone listening to this notification will need to make sure that if the it used
+                            // for updating anything UIKit related, it is done on the main thread.
+                            [[NSNotificationCenter defaultCenter] postNotificationName:APCHealthKitObserverQueryUpdateForSampleTypeNotification
+                                                                                object:sample];
+                            
                             [weakSelf processUpdatesFromHealthKitForSampleType:sample];
                         }
                     }];
@@ -748,6 +753,22 @@ then a location event has occurred and location services must be manually starte
 
 - (NSDictionary *) tasksAndSchedulesWillBeLoaded {
     return nil;
+}
+
+- (void)processUpdatesFromHealthKitForSampleType:(HKQuantitySample *)quantitySample
+{
+    [self.healthKitCollectorQueue addOperationWithBlock:^{
+        NSString *dateTimeStamp = [[NSDate date] toStringInISO8601Format];
+        NSString *healthKitType = quantitySample.quantityType.identifier;
+        NSString *quantityValue = [NSString stringWithFormat:@"%@", quantitySample.quantity];
+        
+        NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@", dateTimeStamp, healthKitType, quantityValue];
+        
+        [APCPassiveDataCollector createOrAppendString:stringToWrite
+                                               toFile:[self.healthKitCollector.folder stringByAppendingPathComponent:self.healthKitCollector.csvFilename]];
+        
+        [self.passiveDataCollector checkIfDataNeedsToBeFlushed:self.healthKitCollector];
+    }];
 }
 
 /*********************************************************************************/
