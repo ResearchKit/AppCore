@@ -1619,7 +1619,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     ORKTaskViewController*  consentVC = [[ORKTaskViewController alloc] initWithTask:task taskRunUUID:[NSUUID UUID]];
     
-    
+    consentVC.navigationBar.topItem.title = NSLocalizedString(@"Consent", nil);
     
     ORKTaskViewController *delegateConsentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
     

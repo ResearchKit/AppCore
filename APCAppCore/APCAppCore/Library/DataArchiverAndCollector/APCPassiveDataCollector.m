@@ -105,7 +105,10 @@ static NSString *const kCSVFilename  = @"data.csv";
         NSError * folderCreationError;
         if (![[NSFileManager defaultManager] createDirectoryAtPath:tracker.folder
                                        withIntermediateDirectories:YES
-                                                        attributes:@{ NSFileProtectionKey : NSFileProtectionCompleteUntilFirstUserAuthentication }
+                                                        attributes:@{
+                                                                        NSFileProtectionKey :
+                                                                        NSFileProtectionCompleteUntilFirstUserAuthentication
+                                                                     }
                                                              error:&folderCreationError]) {
             APCLogError2(folderCreationError);
         }
@@ -324,7 +327,13 @@ static NSString *const kCSVFilename  = @"data.csv";
 {
     if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
         NSError * folderCreationError;
-        if (![[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&folderCreationError]) {
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:path
+                                       withIntermediateDirectories:YES
+                                                        attributes:@{
+                                                                     NSFileProtectionKey :
+                                                                     NSFileProtectionCompleteUntilFirstUserAuthentication
+                                                                     }
+                                                             error:&folderCreationError]) {
             APCLogError2(folderCreationError);
         }
     }

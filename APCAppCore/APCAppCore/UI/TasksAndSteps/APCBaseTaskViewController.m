@@ -63,6 +63,14 @@
 /*********************************************************************************/
 - (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *) __unused error
 {
+    
+    NSString *currentStepIdentifier = @"Step identifier not available";
+    
+    if ( self.currentStepViewController.step.identifier != nil)
+    {
+        currentStepIdentifier = self.currentStepViewController.step.identifier;
+    }
+    
     if (result == ORKTaskViewControllerResultCompleted)
     {
         [self processTaskResult];
@@ -71,11 +79,12 @@
         APCAppDelegate* appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
         [appDelegate.scheduler updateScheduledTasksIfNotUpdating:NO];
         [taskViewController dismissViewControllerAnimated:YES completion:nil];
-
+        
         APCLogEventWithData(kTaskEvent, (@{
                                            @"task_status":@"ResultCompleted",
                                            @"task_title": self.scheduledTask.task.taskTitle,
-                                           @"task_view_controller":NSStringFromClass([self class])
+                                           @"task_view_controller":NSStringFromClass([self class]),
+                                           @"task_step" : currentStepIdentifier
                                            }));
     }
     else if (result == ORKTaskViewControllerResultFailed)
@@ -94,9 +103,14 @@
             APCLogEventWithData(kTaskEvent, (@{
                                                @"task_status":@"ResultFailed",
                                                @"task_title": self.scheduledTask.task.taskTitle,
-                                               @"task_view_controller":NSStringFromClass([self class])
+                                               @"task_view_controller":NSStringFromClass([self class]),
+                                               @"task_step" : currentStepIdentifier
                                                }));
+            
+
         }
+        
+        APCLogError2(error);
     }
     else if (result == ORKTaskViewControllerResultDiscarded)
     {
@@ -104,7 +118,8 @@
         APCLogEventWithData(kTaskEvent, (@{
                                            @"task_status":@"ResultDiscarded",
                                            @"task_title": self.scheduledTask.task.taskTitle,
-                                           @"task_view_controller":NSStringFromClass([self class])
+                                           @"task_view_controller":NSStringFromClass([self class]),
+                                           @"task_step" : currentStepIdentifier
                                            }));
     }
     else if (result == ORKTaskViewControllerResultSaved)
@@ -113,12 +128,14 @@
         APCLogEventWithData(kTaskEvent, (@{
                                            @"task_status":@"ResultSaved",
                                            @"task_title": self.scheduledTask.task.taskTitle,
-                                           @"task_view_controller":NSStringFromClass([self class])
+                                           @"task_view_controller":NSStringFromClass([self class]),
+                                           @"task_step" : currentStepIdentifier
                                            }));
     }
     else
     {
-        
+        APCLogError2(error);
+        APCLogEvent(@"The ORKTaskViewControllerResult for this task is not set");
     }
 }
 

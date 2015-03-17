@@ -179,7 +179,47 @@ then a location event has occurred and location services must be manually starte
 /*********************************************************************************/
 - (void) doGeneralInitialization
 {
+    NSError*    error = nil;
+    BOOL        fileSecurityPermissionsResetSuccessful = [self resetFileSecurityPermissionsWithError:&error];
+    
+    if (fileSecurityPermissionsResetSuccessful == NO)
+    {
+        APCLogDebug(@"Incomplete reset of file system security permissions");
+        APCLogError2(error);
+    }
+    
     self.catastrophicStartupError = nil;
+}
+
+- (BOOL)resetFileSecurityPermissionsWithError:(NSError* __autoreleasing *)error
+{
+    NSArray*                paths               = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString*               documentsDirectory  = [paths objectAtIndex:0];
+    NSFileManager*          fileManager         = [NSFileManager defaultManager];
+    NSDirectoryEnumerator*  directoryEnumerator = [fileManager enumeratorAtPath:documentsDirectory];
+
+    BOOL                    isSuccessful     = NO;
+    
+    for (NSString* relativeFilePath in directoryEnumerator)
+    {
+        NSDictionary*   attributes = directoryEnumerator.fileAttributes;
+        APCLogDebug(@"File name:       %@", relativeFilePath);
+        APCLogDebug(@"File protection: %@", attributes[NSFileProtectionKey]);
+        
+        if ([[attributes objectForKey:NSFileProtectionKey] isEqual:NSFileProtectionComplete])
+        {
+            NSString*   absoluteFilePath = [documentsDirectory stringByAppendingPathComponent:relativeFilePath];
+            
+            attributes   = @{ NSFileProtectionKey : NSFileProtectionCompleteUntilFirstUserAuthentication };
+            isSuccessful = [fileManager setAttributes:attributes ofItemAtPath:absoluteFilePath error:error];
+            if (isSuccessful == NO && error != nil)
+            {
+                APCLogError2(*error);
+            }
+        }
+    }
+    
+    return isSuccessful;
 }
 
 /*********************************************************************************/
