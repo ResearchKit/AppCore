@@ -16,6 +16,7 @@
 #import "UIView+Helper.h"
 #import "APCTabBarViewController.h"
 #import "UIAlertController+Helper.h"
+#import "APCHealthKitDataCollector.h"
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
