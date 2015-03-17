@@ -170,8 +170,15 @@
 						NSArray *allPossibleHeightsInFeet = field.pickerData [0];
 						NSArray *allPossibleHeightsInInches = field.pickerData [1];
 
-						indexOfMyHeightInFeet = [allPossibleHeightsInFeet indexOfObject: feet];
-						indexOfMyHeightInInches = [allPossibleHeightsInInches indexOfObject: inches];
+                        //107 inches i.e. 8'11" is the max. height.
+                        if (heightInInches <= 107) {
+                            indexOfMyHeightInFeet = [allPossibleHeightsInFeet indexOfObject: feet];
+                            indexOfMyHeightInInches = [allPossibleHeightsInInches indexOfObject: inches];
+                        } else {
+                            indexOfMyHeightInFeet = allPossibleHeightsInFeet.count-1;
+                            indexOfMyHeightInInches = allPossibleHeightsInInches.count-1;
+                        }
+						
                     }
 
                     if (indexOfMyHeightInFeet && indexOfMyHeightInInches) {
@@ -221,6 +228,12 @@
                     
                     if (self.user.sleepTime) {
                         field.date = self.user.sleepTime;
+                    } else {
+                        field.date = [[NSCalendar currentCalendar] dateBySettingHour:7
+                                                                              minute:0
+                                                                              second:0
+                                                                              ofDate:[NSDate date]
+                                                                             options:0];
                     }
                     
                     APCTableViewRow *row = [APCTableViewRow new];
@@ -245,6 +258,12 @@
                     
                     if (self.user.wakeUpTime) {
                         field.date = self.user.wakeUpTime;
+                    } else {
+                        field.date = [[NSCalendar currentCalendar] dateBySettingHour:21
+                                                                              minute:30
+                                                                              second:0
+                                                                              ofDate:[NSDate date]
+                                                                             options:0];
                     }
                     
                     APCTableViewRow *row = [APCTableViewRow new];

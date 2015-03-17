@@ -26,4 +26,16 @@
     return [UIFont fontWithName:[APCAppearanceInfo valueForAppearanceKey:kLightFontNameKey] size:size];
 }
 
++ (UIFont*) appNavBarTitleFont {
+    return [UIFont appMediumFontWithSize:17.0f];
+}
+
++ (UIFont*) appQuestionLabelFont {
+    return [UIFont appRegularFontWithSize:17.0f];
+}
+
++ (UIFont*) appQuestionOptionFont {
+    return [UIFont appRegularFontWithSize:44.0f];
+}
+
 @end

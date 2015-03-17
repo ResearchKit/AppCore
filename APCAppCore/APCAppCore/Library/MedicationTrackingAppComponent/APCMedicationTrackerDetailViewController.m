@@ -73,7 +73,7 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.colorSwatch.backgroundColor = self.lozenge.prescription.color.UIColor;
     cell.medicationName.text = self.lozenge.prescription.medication.name;
-    NSString  *doseNumberString = [NSString stringWithFormat:@"Dose %ld", (indexPath.row + 1)];
+    NSString  *doseNumberString = [NSString stringWithFormat:@"Dose %d", (indexPath.row + 1)];
     cell.doseNumber.text = doseNumberString;
     NSString  *doseAmountString = [NSString stringWithFormat:@"(%@)", self.lozenge.prescription.dosage.name];
     cell.doseAmount.text = doseAmountString;
@@ -151,6 +151,7 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
         
         CGRect  frame = CGRectMake(0.0, 0.0, width, kHeightForDosesTakenHeader);
         UIView  *container = [[UIView alloc] initWithFrame:frame];
+        container.backgroundColor = [UIColor colorWithWhite:0.90 alpha:0.85];
         
         frame = CGRectMake(offset, 0.0, width - 2.0 * offset, kHeightForDosesTakenHeader);
         UILabel  *label = [[UILabel alloc] initWithFrame:frame];

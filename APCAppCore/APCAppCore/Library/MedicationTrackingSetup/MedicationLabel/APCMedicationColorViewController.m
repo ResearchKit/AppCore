@@ -33,6 +33,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 @property  (nonatomic, strong)          NSArray       *colorsList;
 
 @property  (nonatomic, strong)          NSIndexPath   *selectedIndex;
+@property  (nonatomic, assign)          BOOL           doneButtonWasTapped;
 
 @end
 
@@ -42,6 +43,15 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
 - (IBAction)doneButtonTapped:(UIBarButtonItem *) __unused sender
 {
+    self.doneButtonWasTapped = YES;
+    if (self.selectedIndex != nil) {
+        if (self.delegate != nil) {
+            if ([self.delegate respondsToSelector:@selector(colorController:didSelectColorLabelName:)] == YES) {
+                APCMedTrackerPrescriptionColor  *schedulColor = self.colorsList[self.selectedIndex.row];
+                [self.delegate performSelector:@selector(colorController:didSelectColorLabelName:) withObject:self withObject:schedulColor];
+            }
+        }
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -165,6 +175,19 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 - (NSString *)title
 {
     return  kViewControllerName;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    if (self.doneButtonWasTapped == NO) {
+        if (self.delegate != nil) {
+            if ([self.delegate respondsToSelector:@selector(colorControllerDidCancel:)] == YES) {
+                [self.delegate performSelector:@selector(colorControllerDidCancel:) withObject:self];
+            }
+        }
+    }
 }
 
 - (void)viewDidLoad

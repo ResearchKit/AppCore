@@ -8,6 +8,7 @@
 #import "APCStudyLandingCollectionViewCell.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+@import MessageUI;
 
 NSString *const kAPCStudyLandingCollectionViewCellIdentifier = @"APCStudyLandingCollectionViewCell";
 
@@ -36,7 +37,14 @@ NSString *const kAPCStudyLandingCollectionViewCellIdentifier = @"APCStudyLanding
     self.swipeLabel.font = [UIFont appMediumFontWithSize:15.f];
     
     [self.emailConsentButton setTitle:NSLocalizedString(@"Email Consent Document", @"Email Consent Document") forState:UIControlStateNormal];
-    [self.emailConsentButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
+    
+    if ([MFMailComposeViewController canSendMail]) {
+        [self.emailConsentButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
+        [self.emailConsentButton setUserInteractionEnabled:YES];
+    }else{
+        [self.emailConsentButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        [self.emailConsentButton setUserInteractionEnabled:NO];
+    }
     
     [self.readConsentButton setTitle:NSLocalizedString(@"Read Consent Document", @"Read Consent Document") forState:UIControlStateNormal];
     [self.readConsentButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];

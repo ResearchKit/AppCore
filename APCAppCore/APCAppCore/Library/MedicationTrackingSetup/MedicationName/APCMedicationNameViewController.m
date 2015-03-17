@@ -31,6 +31,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 @property  (nonatomic, weak)  IBOutlet  UITableView      *tabulator;
 
 @property  (nonatomic, weak)            UIBarButtonItem  *donester;
+@property  (nonatomic, assign)          BOOL              doneButtonWasTapped;
 
 @property  (nonatomic, strong)          NSArray          *medicationList;
 
@@ -44,6 +45,16 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
 - (void)doneButtonTapped:(UIBarButtonItem *) __unused sender
 {
+    self.doneButtonWasTapped = YES;
+    
+    if (self.selectedIndex != nil) {
+        if (self.delegate != nil) {
+            if ([self.delegate respondsToSelector:@selector(nameController:didSelectMedicineName:)] == YES) {
+                APCMedTrackerMedication  *medication = self.medicationList[self.selectedIndex.row];
+                [self.delegate performSelector:@selector(nameController:didSelectMedicineName:) withObject:self withObject:medication];
+            }
+        }
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -117,14 +128,14 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
             self.donester.enabled = YES;
         }
     }
-    if (self.selectedIndex != nil) {
-        if (self.delegate != nil) {
-            if ([self.delegate respondsToSelector:@selector(nameController:didSelectMedicineName:)] == YES) {
-                APCMedTrackerMedication  *medication = self.medicationList[indexPath.row];
-                [self.delegate performSelector:@selector(nameController:didSelectMedicineName:) withObject:self withObject:medication];
-            }
-        }
-    }
+//    if (self.selectedIndex != nil) {
+//        if (self.delegate != nil) {
+//            if ([self.delegate respondsToSelector:@selector(nameController:didSelectMedicineName:)] == YES) {
+//                APCMedTrackerMedication  *medication = self.medicationList[indexPath.row];
+//                [self.delegate performSelector:@selector(nameController:didSelectMedicineName:) withObject:self withObject:medication];
+//            }
+//        }
+//    }
 }
 
 - (CGFloat)tableView:(UITableView *) __unused tableView heightForHeaderInSection:(NSInteger)section
@@ -183,6 +194,19 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 - (NSString *)title
 {
     return  kViewControllerName;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    if (self.doneButtonWasTapped == NO) {
+        if (self.delegate != nil) {
+            if ([self.delegate respondsToSelector:@selector(nameControllerDidCancel:)] == YES) {
+                [self.delegate performSelector:@selector(nameControllerDidCancel:) withObject:self];
+            }
+        }
+    }
 }
 
 - (void)viewDidLoad

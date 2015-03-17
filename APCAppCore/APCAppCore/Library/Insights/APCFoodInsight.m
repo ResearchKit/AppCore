@@ -257,14 +257,17 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
             for (HKQuantitySample *sample in results) {
                 NSNumber *sampleValue = @([sample.quantity doubleValueForUnit:self.sampleUnit]);
                 
-                NSDictionary *food = @{
-                                        kFoodInsightFoodNameKey: sample.metadata[HKMetadataKeyFoodType],
-                                        kFoodInsightUUIDKey: sample.metadata[HKMetadataKeyExternalUUID],
-                                        kFoodInsightFoodGenericNameKey: sample.metadata[kLoseItFoodImageNameKey],
-                                        kFoodInsightValueKey: sampleValue
-                                      };
-
-                [self.foodList addObject:food];
+                
+                if ([sampleValue doubleValue] > 0) {
+                    NSDictionary *food = @{
+                                            kFoodInsightFoodNameKey: sample.metadata[HKMetadataKeyFoodType],
+                                            kFoodInsightUUIDKey: sample.metadata[HKMetadataKeyExternalUUID],
+                                            kFoodInsightFoodGenericNameKey: sample.metadata[kLoseItFoodImageNameKey],
+                                            kFoodInsightValueKey: sampleValue
+                                          };
+                    
+                    [self.foodList addObject:food];
+                }
             }
             
             [self.queuedFoodItems addObjectsFromArray:self.foodList];

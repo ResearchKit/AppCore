@@ -13,6 +13,7 @@
 @protocol  APCMedicationColorViewControllerDelegate  <NSObject>
 
 - (void)colorController:(APCMedicationColorViewController *)colorController didSelectColorLabelName:(APCMedTrackerPrescriptionColor *)colorObject;
+- (void)colorControllerDidCancel:(APCMedicationColorViewController *)colorController;
 
 @end
 
