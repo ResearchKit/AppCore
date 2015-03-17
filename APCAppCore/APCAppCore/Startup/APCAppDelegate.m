@@ -16,6 +16,7 @@
 #import "UIView+Helper.h"
 #import "APCTabBarViewController.h"
 #import "UIAlertController+Helper.h"
+#import "APCHealthKitDataCollector.h"
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
@@ -46,6 +47,9 @@ static NSUInteger const kIndexOfProfileTab = 3;
 @property (nonatomic, strong) UIView *secureView;
 @property (nonatomic, strong) NSError *catastrophicStartupError;
 
+@property (nonatomic, strong) NSOperationQueue *healthKitCollectorQueue;
+@property (nonatomic, strong) APCHealthKitDataCollector *healthKitCollector;
+
 @end
 
 
@@ -73,6 +77,7 @@ then a location event has occurred and location services must be manually starte
     [self loadStaticTasksAndSchedulesIfNecessary];
     [self registerNotifications];
     [self setUpHKPermissions];
+    [self configureObserverQueries];
     [self setUpAppAppearance];
     [self setUpTasksReminder];
     [self showAppropriateVC];
@@ -525,6 +530,36 @@ then a location event has occurred and location services must be manually starte
     self.tasksReminder = [APCTasksReminderManager new];
 }
 
+/**
+  * @brief  This configures the observer queries for all HK data type
+  *         that the app will be asking for Read permissions.
+  */
+- (void)configureObserverQueries
+{
+    NSArray *dataTypesWithReadPermission = self.initializationOptions[kHKReadPermissionsKey];
+    
+    if (dataTypesWithReadPermission) {
+        
+        if (!self.healthKitCollectorQueue) {
+            self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:@"HealthKit Data Collector"];
+        }
+        
+        if (!self.healthKitCollector) {
+            self.healthKitCollector = [[APCHealthKitDataCollector alloc] initWithIdentifier:@"HealthKitDataCollector"];
+            [self.passiveDataCollector addTracker:self.healthKitCollector];
+            [self.healthKitCollector startTracking];
+        }
+        
+        for (NSString *dataType in dataTypesWithReadPermission) {
+            
+            HKSampleType *sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
+            
+            [self observerQueryForSampleType:sampleType
+                              withCompletion:nil];
+        }
+    }
+}
+
 - (NSArray *)offsetForTaskSchedules
 {
     //TODO: Number of days should be zero based. If I want something to show up on day 2 then the offset is 1
@@ -576,6 +611,83 @@ then a location event has occurred and location services must be manually starte
      * Note: This needs to be refactored
      */
     return nil;
+}
+
+/*********************************************************************************/
+#pragma mark - Observer Query
+/*********************************************************************************/
+
+/**
+  * @brief  Sets up an observer query for the provided sample type and subscribes to background updates.
+  *
+  * @param  sampleType  HKSampleType that is used for setting up the observer query.
+  *
+  * @param  completion  A block that is called as soon as the observer query's update handler is 
+  *                     executed without any errors.
+  *
+  */
+- (void)observerQueryForSampleType:(HKSampleType *)sampleType
+                    withCompletion:(void (^)(void))completion
+{
+    APCLogDebug(@"Setting up observer query for sample type %@", sampleType.identifier);
+
+    __weak APCAppDelegate *weakSelf = self;
+    
+    [self.dataSubstrate.healthStore enableBackgroundDeliveryForType:sampleType
+                                                          frequency:HKUpdateFrequencyImmediate
+                                                     withCompletion:^(BOOL success, NSError *error)
+    {
+        if (success == NO) {
+            APCLogError2(error);
+        } else {
+            HKObserverQuery *observerQuery = [[HKObserverQuery alloc] initWithSampleType:sampleType
+                                                                               predicate:nil
+                                                                           updateHandler:^(HKObserverQuery __unused *query,
+                                                                                           HKObserverQueryCompletionHandler completionHandler,
+                                                                                           NSError *error)
+            {
+                  
+                if (error) {
+                    APCLogError2(error);
+                } else {
+                    
+                    NSSortDescriptor *sortByLatest = [[NSSortDescriptor alloc] initWithKey:HKSampleSortIdentifierEndDate ascending:NO];
+                    HKSampleQuery *sampleQuery = [[HKSampleQuery alloc] initWithSampleType:sampleType
+                                                                           predicate:nil
+                                                                               limit:1
+                                                                     sortDescriptors:@[sortByLatest]
+                                                                      resultsHandler:^(HKSampleQuery __unused *query, NSArray *results, NSError *error)
+                    {
+                        if (!results) {
+                            APCLogError2(error);
+                        } else {
+                            HKQuantitySample *sample = results.firstObject;
+                            
+                            // Anyone listening to this notification will need to make sure that if the it used
+                            // for updating anything UIKit related, it is done on the main thread.
+                            [[NSNotificationCenter defaultCenter] postNotificationName:APCHealthKitObserverQueryUpdateForSampleTypeNotification
+                                                                                object:sample];
+                            
+                            [weakSelf processUpdatesFromHealthKitForSampleType:sample];
+                        }
+                    }];
+                    
+                    [weakSelf.dataSubstrate.healthStore executeQuery:sampleQuery];
+                    
+                    // If there's a completion block execute it.
+                    if (completion) {
+                        completion();
+                    }
+                    
+                    // Since we are subscribing to background updates, we will need to call
+                    // the completion handler to let HealthKit know that we received the data.
+                    completionHandler();
+                }
+            }];
+            
+            [weakSelf.dataSubstrate.healthStore executeQuery:observerQuery];
+        }
+    }];
 }
 
 /*********************************************************************************/
@@ -681,6 +793,22 @@ then a location event has occurred and location services must be manually starte
 
 - (NSDictionary *) tasksAndSchedulesWillBeLoaded {
     return nil;
+}
+
+- (void)processUpdatesFromHealthKitForSampleType:(HKQuantitySample *)quantitySample
+{
+    [self.healthKitCollectorQueue addOperationWithBlock:^{
+        NSString *dateTimeStamp = [[NSDate date] toStringInISO8601Format];
+        NSString *healthKitType = quantitySample.quantityType.identifier;
+        NSString *quantityValue = [NSString stringWithFormat:@"%@", quantitySample.quantity];
+        
+        NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue];
+        
+        [APCPassiveDataCollector createOrAppendString:stringToWrite
+                                               toFile:[self.healthKitCollector.folder stringByAppendingPathComponent:self.healthKitCollector.csvFilename]];
+        
+        [self.passiveDataCollector checkIfDataNeedsToBeFlushed:self.healthKitCollector];
+    }];
 }
 
 /*********************************************************************************/
