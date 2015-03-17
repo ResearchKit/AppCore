@@ -178,7 +178,13 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:_tempOutputDirectory]) {
         NSError * fileError;
-        [[NSFileManager defaultManager] createDirectoryAtPath:_tempOutputDirectory withIntermediateDirectories:YES attributes:nil error:&fileError];
+        [[NSFileManager defaultManager] createDirectoryAtPath:_tempOutputDirectory
+                                  withIntermediateDirectories:YES
+                                                   attributes:@{
+                                                                NSFileProtectionKey :
+                                                                NSFileProtectionCompleteUntilFirstUserAuthentication
+                                                                }
+                                                        error:&fileError];
         APCLogError2 (fileError);
     }
 }
