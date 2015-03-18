@@ -674,10 +674,14 @@ then a location event has occurred and location services must be manually starte
                                 
                                 if ([sampleKind isKindOfClass:[HKCategorySample class]]) {
                                     HKCategorySample *categorySample = (HKCategorySample *)sampleKind;
-                                    APCLogDebug(@"HK Update received for: %@ - %@", categorySample.categoryType.identifier, categorySample.value);
+                                    
+                                    
+                                    APCLogDebug(@"HK Update received for: %@ - %d", categorySample.categoryType.identifier, categorySample.value);
+                                
                                 } else {
                                     HKQuantitySample *quantitySample = (HKQuantitySample *)sampleKind;
                                     APCLogDebug(@"HK Update received for: %@ - %@", quantitySample.quantityType.identifier, quantitySample.quantity);
+                                    
                                 }
                                 
                                 // Anyone listening to this notification will need to make sure that if it is used
