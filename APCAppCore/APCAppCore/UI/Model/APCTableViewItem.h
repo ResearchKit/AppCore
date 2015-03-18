@@ -112,7 +112,7 @@
 
 @property (nonatomic) APCSignUpPermissionsType permissionType;
 
-@property (nonatomic, readwrite, getter=isPermissionGranted) BOOL permissionGranted;
+@property (nonatomic, assign) BOOL permissionGranted;
 
 @end
 
