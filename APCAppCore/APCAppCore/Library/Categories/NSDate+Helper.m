@@ -93,6 +93,7 @@ static NSString * const kDateFormatISO8601 = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
 {
     NSDateFormatter *formatter = [NSDateFormatter new];
     [formatter setDateFormat: kDateFormatISO8601];
+    [formatter setLocale: [[NSLocale alloc] initWithLocaleIdentifier: @"en_US"]];
     NSString *result = [formatter stringFromDate: self];
     return result;
 }
