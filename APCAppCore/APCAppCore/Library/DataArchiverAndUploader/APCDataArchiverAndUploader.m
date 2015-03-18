@@ -95,6 +95,12 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
 #pragma mark - Globals:  setting up and editing class and queues
 // ---------------------------------------------------------
 
+/**
+ Per Apple:  this method is called once per class, in a thread-safe
+ way, the first time the class is sent a message.  That includes the
+ "alloc" message, which means we can use this to set up stuff that
+ applies to all objects (instances) of this class.
+ */
 + (void) initialize
 {
     generalPurposeUploadQueue = [NSOperationQueue sequentialOperationQueueWithName: kAPCUploadQueueName];
