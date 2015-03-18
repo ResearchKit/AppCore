@@ -19,6 +19,11 @@
 #import "APCDataVerificationClient.h"
 
 
+static BOOL const K_DEBUG_INCLUDE_TESTING_MESSAGE = YES;
+static NSString * const kAPCUploaderThisIsATestMessage_Key = @"THIS_IS_A_TEST";
+static NSString * const kAPCUploaderThisIsATestMessage_Message = @"Dear Sage folks:  This whole .zip file is a test, as we work on improving the health apps.  Please ignore.";
+
+
 /*
  Some new keys, some historical.  Working on pruning this list.
  */
@@ -180,7 +185,7 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
 
 
 // ---------------------------------------------------------
-#pragma mark - The main method:  zip it and ship it
+#pragma mark - The main method:  calls all other methods below.
 // ---------------------------------------------------------
 
 - (void) go
@@ -204,23 +209,23 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
      get a callback when the upload completes.  Otherwise, we report
      whatever error we got, clean up, and stop.
      */
-    if (ok) ok = [self createWorkingDirectoryReturningError : & error];
-    if (ok) ok = [self createZipArchiveReturningError       : & error];
-    if (ok) ok = [self zipAllDictionariesReturningError     : & error];
-    if (ok) ok = [self createManifestReturningError         : & error];
-    if (ok) ok = [self saveToDiskReturningError             : & error];
-    if (ok) ok = [self encryptZipFileReturningError         : & error];
+    if (ok) ok = [self step1_createWorkingDirectoryReturningError : & error];
+    if (ok) ok = [self step2_createZipArchiveReturningError       : & error];
+    if (ok) ok = [self step3_zipAllDictionariesReturningError     : & error];
+    if (ok) ok = [self step4_createManifestReturningError         : & error];
+    if (ok) ok = [self step5_saveToDiskReturningError             : & error];
+    if (ok) ok = [self step6_encryptZipFileReturningError         : & error];
 
     if (ok)
     {
         // Wow!  Everything worked.  Ship it.  We'll get a callback
         // when done, which then calls -finalCleanup.
-        [self beginTheUpload];
+        [self step7_beginTheUpload];
     }
     else
     {
         // Boo.  Something broke.  Report and clean up.
-        [self finalCleanupHandlingError: error];
+        [self step8_finalCleanupHandlingError: error];
     }
 }
 
@@ -230,7 +235,7 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
 #pragma mark - Step 1:  Create a working directory
 // ---------------------------------------------------------
 
-- (BOOL) createWorkingDirectoryReturningError: (NSError **) error
+- (BOOL) step1_createWorkingDirectoryReturningError: (NSError **) error
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *tempDirectory = NSTemporaryDirectory ();
@@ -274,7 +279,7 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
 #pragma mark - Step 2:  Create the empty .zip archive, in RAM only
 // ---------------------------------------------------------
 
-- (BOOL) createZipArchiveReturningError: (NSError **) errorToReturn
+- (BOOL) step2_createZipArchiveReturningError: (NSError **) errorToReturn
 {
     NSError *errorCreatingArchive = nil;
 
@@ -310,7 +315,7 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
  sign of an error -- that means if we have trouble
  .zipping anything, we stop everything (by design).
  */
-- (BOOL) zipAllDictionariesReturningError: (NSError **) error
+- (BOOL) step3_zipAllDictionariesReturningError: (NSError **) error
 {
     NSError *localError = nil;
 
@@ -341,6 +346,9 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
  */
 - (NSString *) filenameFromDictionary: (NSDictionary *) dictionary
 {
+    //
+    // Try to extract a filename from the dictionary.
+    //
     NSString *filename = dictionary [kAPCNormalFileNameKey];
 
     if (filename == nil)
@@ -348,6 +356,9 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
         filename = dictionary [kAPCAlternateFileNameKey];
     }
 
+    //
+    // If that didn't work, use the next "unnamed_file" filename.
+    //
     if (filename == nil)
     {
         self.countOfUnknownFileNames = self.countOfUnknownFileNames + 1;
@@ -359,24 +370,36 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
         // We'll use the filename specified in the dictionary.
     }
 
-    filename = [self cleanUpFilename: filename];
+    //
+    // Normalize the filename:  remove extra "."s, spaces, etc.
+    // (Not sure this is a good idea.)
+    //
+    //    filename = [self cleanUpFilename: filename];
 
     return filename;
 }
 
-/**
- Replace spaces, hyphens, dots, underscores, or sequences of
- more than one of those things, with a single "_".
- */
-- (NSString *) cleanUpFilename: (NSString *) filename
-{
-    NSString *newFilename = [filename stringByReplacingOccurrencesOfString: @"[_ .\\-]+"
-                                                                withString: @"_"
-                                                                   options: NSRegularExpressionSearch
-                                                                     range: NSMakeRange (0, filename.length)];
-
-    return newFilename;
-}
+//
+// Please leave this commented-out method.  The code works; I'm
+// just not sure we're going to keep it.
+//
+//    /**
+//     Replace spaces, hyphens, dots, underscores, or sequences of
+//     more than one of those things, with a single "_".
+//
+//     (Not sure this is a good idea.)
+//
+//     */
+//    - (NSString *) cleanUpFilename: (NSString *) filename
+//    {
+//        NSString *newFilename = [filename stringByReplacingOccurrencesOfString: @"[_ .\\-]+"
+//                                                                    withString: @"_"
+//                                                                       options: NSRegularExpressionSearch
+//                                                                         range: NSMakeRange (0, filename.length)];
+//
+//        return newFilename;
+//    }
+//
 
 - (BOOL) insertIntoZipArchive: (NSDictionary *) dictionary
                      filename: (NSString *) filename
@@ -389,13 +412,20 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
      Get a serializable copy of our data.
 
      There should never be an error here.  Our
-     -generateSerializableDataFromSourceDictionary: method, called
-     above, stringifies everything it doesn't have a custom converter
-     for, and uses NSJSONSerialization to validate everything it does.
+     -serializableDictionaryFromSourceDictionary: method stringifies
+     everything it doesn't have a custom converter for, and uses
+     NSJSONSerialization to validate everything it does.
      
-     Ahem.  Famous last words, right?
+     (Ahem.  Famous last words, right?)
      */
     NSDictionary *uploadableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: dictionary];
+
+    if (K_DEBUG_INCLUDE_TESTING_MESSAGE)
+    {
+        NSMutableDictionary *temp = uploadableData.mutableCopy;
+        temp [kAPCUploaderThisIsATestMessage_Key] = kAPCUploaderThisIsATestMessage_Message;
+        uploadableData = temp;
+    }
 
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject: uploadableData
                                                        options: NSJSONWritingPrettyPrinted
@@ -443,7 +473,7 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
  bunch of files.  This method generates that "info.json"
  file.
  */
-- (BOOL) createManifestReturningError: (NSError **) error
+- (BOOL) step4_createManifestReturningError: (NSError **) error
 {
     NSError *localError = nil;
 
@@ -472,7 +502,7 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
 #pragma mark - Step 5:  Save to Disk
 // ---------------------------------------------------------
 
-- (BOOL) saveToDiskReturningError: (NSError **) error
+- (BOOL) step5_saveToDiskReturningError: (NSError **) error
 {
     NSError *localError = nil;
 
@@ -504,7 +534,7 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
 #pragma mark - Step 6:  Encrypt
 // ---------------------------------------------------------
 
-- (BOOL) encryptZipFileReturningError: (NSError **) error
+- (BOOL) step6_encryptZipFileReturningError: (NSError **) error
 {
     NSError *localError = nil;
     NSString *unencryptedPath = self.zipArchive.URL.relativePath; // NOT self.zipArchive.URL.absoluteString !
@@ -573,7 +603,7 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
 /**
  Ship it!
  */
-- (void) beginTheUpload
+- (void) step7_beginTheUpload
 {
     /*
      In our special debug-ish mode, copy the unencrypted
@@ -602,7 +632,7 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
                                            contentType: kAPCContentTypeForJSON
                                             completion: ^(NSError *uploadError)
      {
-         [self finalCleanupHandlingError: uploadError];
+         [self step8_finalCleanupHandlingError: uploadError];
      }];
 }
 
@@ -617,7 +647,7 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
  clean up, report to the user (um, eventually?), and
  delete myself.
  */
-- (void) finalCleanupHandlingError: (NSError *) error
+- (void) step8_finalCleanupHandlingError: (NSError *) error
 {
     /*
      This should be the only place in this file where we
