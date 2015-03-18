@@ -13,7 +13,8 @@
 #import "ORKAnswerFormat+Helper.h"
 #import "APCCMS.h"
 #import "NSDate+Helper.h"
-#import "APCDataArchiverAndUploader.h"
+#import "APCJSONSerializer.h"
+
 
 static NSString * const kQuestionTypeKey            = @"questionType";
 static NSString * const kQuestionTypeNameKey        = @"questionTypeName";
@@ -397,7 +398,7 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
     rawTappingResults[kTappingSamplesKey] = sampleResults;
     rawTappingResults[kItemKey] = kAPCTappingResultsFileName;
 
-	NSDictionary *serializableData = [self generateSerializableDataFromSourceDictionary: rawTappingResults];
+	NSDictionary *serializableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: rawTappingResults];
     [self writeResultDictionaryToArchive: serializableData];
     [self addFileInfoEntryWithDictionary: serializableData];
 }
@@ -431,7 +432,7 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
 	}
 
     NSDictionary *propertiesToSave = [result dictionaryWithValuesForKeys: propertyNames];
-	NSDictionary *serializableData = [self generateSerializableDataFromSourceDictionary: propertiesToSave];
+	NSDictionary *serializableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: propertiesToSave];
 
     APCLogDebug(@"%@", serializableData);
 
@@ -599,13 +600,9 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
     return [NSArray arrayWithArray:results];
 }
 
-/**
- Note:  the general-purpose methods for generating serializable
- data are now in APCDataArchiverAndUploader.
- */
 - (NSDictionary *) generateSerializableDataFromSourceDictionary: (NSDictionary *) sourceDictionary
 {
-    NSDictionary *result = [APCDataArchiverAndUploader serializableDictionaryFromSourceDictionary: sourceDictionary];
+    NSDictionary *result = [APCJSONSerializer serializableDictionaryFromSourceDictionary: sourceDictionary];
 
     return result;
 }

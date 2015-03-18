@@ -260,7 +260,7 @@ static NSString * const APCLogTagUpload  = @"APC_UPLOAD ";
 + (void)       methodInfo: (NSString *) apcLogMethodInfo
     filenameBeingArchived: (NSString *) filenameOrPath
 {
-    NSString *message = [NSString stringWithFormat: @"Adding filename to .zip archive for uploading: [%@]", filenameOrPath];
+    NSString *message = [NSString stringWithFormat: @"Adding file to .zip archive for uploading: [%@]", filenameOrPath];
 
     [self logInternal_tag: APCLogTagArchive
                    method: apcLogMethodInfo
@@ -270,7 +270,7 @@ static NSString * const APCLogTagUpload  = @"APC_UPLOAD ";
 + (void)       methodInfo: (NSString *) apcLogMethodInfo
     filenameBeingUploaded: (NSString *) filenameOrPath
 {
-    NSString *message = [NSString stringWithFormat: @"Uploading filename to Sage: [%@]", filenameOrPath];
+    NSString *message = [NSString stringWithFormat: @"Uploading file to Sage: [%@]", filenameOrPath];
 
     [self logInternal_tag: APCLogTagUpload
                    method: apcLogMethodInfo

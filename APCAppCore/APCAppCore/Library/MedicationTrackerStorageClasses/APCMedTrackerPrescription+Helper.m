@@ -19,6 +19,26 @@
 #import "APCMedTrackerDailyDosageRecord+Helper.h"
 #import "APCDataArchiverAndUploader.h"
 
+
+/*
+ Note to reviewers:
+
+ - there are various hard-coded "errorDomains" and "errorCodes"
+ throughout this file.  Acknowledged.  We're working toward a
+ centralized way to manage those.
+
+ - similarly, there's a utility method that creates an NSError
+ object from a domain, a code, and a root-cause error.  We'll
+ shortly move that to another class, too.
+ */
+
+
+
+/*
+ These strings are used when generating uploadable
+ versions of the content represented by this class and
+ some of the classes it manages.
+ */
 static NSString * const kAPCActionName_CreatePrescription               = @"user_action__create_prescription";
 static NSString * const kAPCActionName_ExpirePrescription               = @"user_action__expire_prescription";
 static NSString * const kAPCActionName_RecordDailyDoses                 = @"user_action__record_daily_doses_taken_of_one_medication";
@@ -40,19 +60,6 @@ static NSString * const kAPCActionKey_Dosage_TotalQuantityTakenToday    = @"dosa
 static NSString * const kAPCActionKey_Dosage_PrescriptionUniqueId       = @"dosage_prescription_unique_id";
 static NSString * const kAPCActionKey_Dosage_PrescriptionMedicationName = @"dosage_prescription_medication_name";
 
-
-
-/*
- Note to reviewers:
- 
- - there are various hard-coded "errorDomains" and "errorCodes"
- throughout this file.  Acknowledged.  We're working toward a
- centralized way to manage those.
- 
- - similarly, there's a utility method that creates an NSError
- object from a domain, a code, and a root-cause error.  We'll
- shortly move that to another class, too.
- */
 
 
 static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
