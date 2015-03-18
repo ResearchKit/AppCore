@@ -192,11 +192,10 @@ typedef void (^ APCMedTrackerExpirePresriptionCallback) (NSTimeInterval operatio
 @property (readonly) BOOL isActive;
 
 @property (readonly) NSDictionary *frequencyAndDays;
-
 @property (readonly) NSArray *zeroBasedDaysOfTheWeekAsArrayOfSortedNumbers;
+@property (readonly) NSArray *zeroBasedDaysOfTheWeekAsArrayOfSortedShortNames;
 
 + (NSString *) nameForZeroBasedDay: (NSNumber *) zeroBasedDayOfTheWeek;
 + (NSNumber *) zeroBasedDayOfTheWeekForDayName: (NSString *) dayName;
-
 
 @end
