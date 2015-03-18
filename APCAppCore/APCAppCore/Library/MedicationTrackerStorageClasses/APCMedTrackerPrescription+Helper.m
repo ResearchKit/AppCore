@@ -17,6 +17,7 @@
 #import "APCMedTrackerMedication+Helper.h"
 #import "APCMedTrackerPrescriptionColor+Helper.h"
 #import "APCMedTrackerDailyDosageRecord+Helper.h"
+#import "APCDataArchiverAndUploader.h"
 
 static NSString * const kAPCActionName_CreatePrescription               = @"user_action__create_prescription";
 static NSString * const kAPCActionName_ExpirePrescription               = @"user_action__expire_prescription";
@@ -735,6 +736,8 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 + (void) sendRecordedActionToSage: (NSDictionary *) actionRecord
 {
     NSLog (@"Just got this 'actionRecord': %@", actionRecord);
+
+    [APCDataArchiverAndUploader uploadOneDictionaryAsFile: actionRecord];
 }
 
 + (void) recordActionForCreatingPrescription: (APCMedTrackerPrescription *) prescription

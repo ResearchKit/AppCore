@@ -83,6 +83,8 @@
 		3650C65B1AA29BB50075C935 /* APCCatastrophicErrorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3650C6581AA29BB50075C935 /* APCCatastrophicErrorViewController.h */; };
 		3650C65C1AA29BB50075C935 /* APCCatastrophicErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3650C6591AA29BB50075C935 /* APCCatastrophicErrorViewController.m */; };
 		3650C65D1AA29BB50075C935 /* CatastrophicError.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3650C65A1AA29BB50075C935 /* CatastrophicError.storyboard */; };
+		3651424D1AA78521008A5CFA /* APCDataArchiverAndUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3651424B1AA78521008A5CFA /* APCDataArchiverAndUploader.h */; };
+		3651424E1AA78521008A5CFA /* APCDataArchiverAndUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3651424C1AA78521008A5CFA /* APCDataArchiverAndUploader.m */; };
 		3654318D1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3654318B1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3654318E1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3654318C1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.m */; };
 		36829A411A96B937000AA2AB /* APCMedTrackerPredefinedMedications.plist in Resources */ = {isa = PBXBuildFile; fileRef = 369E27E41A96B7A200D35DFA /* APCMedTrackerPredefinedMedications.plist */; };
@@ -771,6 +773,8 @@
 		3650C6581AA29BB50075C935 /* APCCatastrophicErrorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCatastrophicErrorViewController.h; sourceTree = "<group>"; };
 		3650C6591AA29BB50075C935 /* APCCatastrophicErrorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCatastrophicErrorViewController.m; sourceTree = "<group>"; };
 		3650C65A1AA29BB50075C935 /* CatastrophicError.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CatastrophicError.storyboard; sourceTree = "<group>"; };
+		3651424B1AA78521008A5CFA /* APCDataArchiverAndUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataArchiverAndUploader.h; sourceTree = "<group>"; };
+		3651424C1AA78521008A5CFA /* APCDataArchiverAndUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataArchiverAndUploader.m; sourceTree = "<group>"; };
 		3654318B1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMedTrackerInflatableItem.h; sourceTree = "<group>"; };
 		3654318C1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMedTrackerInflatableItem.m; sourceTree = "<group>"; };
 		366433821A7DA29F007E2BCF /* ReadMe.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
@@ -1528,6 +1532,15 @@
 			path = Errors;
 			sourceTree = "<group>";
 		};
+		3651424A1AA78514008A5CFA /* DataArchiverAndUploader */ = {
+			isa = PBXGroup;
+			children = (
+				3651424B1AA78521008A5CFA /* APCDataArchiverAndUploader.h */,
+				3651424C1AA78521008A5CFA /* APCDataArchiverAndUploader.m */,
+			);
+			path = DataArchiverAndUploader;
+			sourceTree = "<group>";
+		};
 		369E27BA1A96B7A200D35DFA /* MedicationTrackerStorageClasses */ = {
 			isa = PBXGroup;
 			children = (
@@ -2087,6 +2100,7 @@
 				F5B9473C1A73272C0034C522 /* AssertionHandler */,
 				F5B9473F1A73272C0034C522 /* Categories */,
 				F5B947621A73272C0034C522 /* DataArchiverAndCollector */,
+				3651424A1AA78514008A5CFA /* DataArchiverAndUploader */,
 				364D34871A7B1C8F0060B3F5 /* DataVerificationClient */,
 				0894654F1A8C211100A983AC /* Insights */,
 				F5B947681A73272C0034C522 /* Logging */,
@@ -2821,6 +2835,7 @@
 				5BD6EBC41A9D905100C3BFB0 /* APCPermissionPrimingViewController.h in Headers */,
 				3654318D1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.h in Headers */,
 				F5B947EF1A73272C0034C522 /* APCParameters.h in Headers */,
+				3651424D1AA78521008A5CFA /* APCDataArchiverAndUploader.h in Headers */,
 				F5F12AA61A2F78490015982C /* APCEligibleViewController.h in Headers */,
 				F5F12A6F1A2F78490015982C /* APCCircularProgressView.h in Headers */,
 				F5F12AA21A2F78490015982C /* APCForgotPasswordViewController.h in Headers */,
@@ -3322,6 +3337,7 @@
 				F5F12A6D1A2F78490015982C /* APCAppDelegate.m in Sources */,
 				F5B9462E1A7309A20034C522 /* ZZDataChannel.m in Sources */,
 				5BFEB41E1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m in Sources */,
+				3651424E1AA78521008A5CFA /* APCDataArchiverAndUploader.m in Sources */,
 				5B9B36AC1A95DC1700389F42 /* APCActivitiesTableViewCell.m in Sources */,
 				F53C04801A9B8C7D00BBEC03 /* APCTabBarViewController.m in Sources */,
 				369E28051A96B7A200D35DFA /* APCMedTrackerInflatableItem+Helper.m in Sources */,

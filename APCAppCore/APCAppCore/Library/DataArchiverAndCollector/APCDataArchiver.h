@@ -37,6 +37,10 @@
  This method is recursive.  If it encounters an array or
  dictionary, it'll call the same conversion routines on that
  object and its contents.
+ 
+ Note-note.  The bulk of this code has been moved to
+ APCDataArchiverAndUploader.  The method in this file
+ simply calls that other class.
  */
 - (NSDictionary *) generateSerializableDataFromSourceDictionary: (NSDictionary *) sourceDictionary;
 
