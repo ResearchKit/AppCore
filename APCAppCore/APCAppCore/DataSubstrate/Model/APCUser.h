@@ -64,8 +64,6 @@
 
 @property (nonatomic, getter=isSecondaryInfoSaved) BOOL secondaryInfoSaved;
 
-- (void)initiateQueryAndNotificationForHKQuantityType:(NSString *)quantityTypeIdentifier;
-
 /*********************************************************************************/
 #pragma mark - Simulated Properties using HealthKit
 /*********************************************************************************/
