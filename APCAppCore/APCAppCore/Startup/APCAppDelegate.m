@@ -663,12 +663,18 @@ then a location event has occurred and location services must be manually starte
                         } else {
                             HKQuantitySample *sample = results.firstObject;
                             
-                            // Anyone listening to this notification will need to make sure that if the it used
-                            // for updating anything UIKit related, it is done on the main thread.
-                            [[NSNotificationCenter defaultCenter] postNotificationName:APCHealthKitObserverQueryUpdateForSampleTypeNotification
-                                                                                object:sample];
-                            
-                            [weakSelf processUpdatesFromHealthKitForSampleType:sample];
+                            if (sample) {
+                                APCLogDebug(@"HK Update received for: %@ - %@", sample.quantityType.identifier, sample.quantity);
+                                
+                                // Anyone listening to this notification will need to make sure that if it is used
+                                // for updating anything related to UIKit, it needs to be done on the main thread.
+                                [[NSNotificationCenter defaultCenter] postNotificationName:APCHealthKitObserverQueryUpdateForSampleTypeNotification
+                                                                                    object:sample];
+                                
+                                [weakSelf processUpdatesFromHealthKitForSampleType:sample hkCompletionHandler:completionHandler];
+                            } else {
+                                completionHandler();
+                            }
                         }
                     }];
                     
@@ -678,10 +684,6 @@ then a location event has occurred and location services must be manually starte
                     if (completion) {
                         completion();
                     }
-                    
-                    // Since we are subscribing to background updates, we will need to call
-                    // the completion handler to let HealthKit know that we received the data.
-                    completionHandler();
                 }
             }];
             
