@@ -100,11 +100,7 @@ static NSOperationQueue * generalPurposeUploadQueue = nil;
 
 + (void) initialize
 {
-    NSInteger x = 4;
-
     generalPurposeUploadQueue = [NSOperationQueue sequentialOperationQueueWithName: kAPCUploadQueueName];
-
-    NSLog (@"No, really, I'm here!  %d", (int) x);
 }
 
 + (void) uploadOneDictionaryAsFile: (NSDictionary *) dictionary
