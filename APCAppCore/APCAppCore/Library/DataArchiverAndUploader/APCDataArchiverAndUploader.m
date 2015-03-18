@@ -85,7 +85,6 @@ static NSOperationQueue * generalPurposeUploadQueue = nil;
 @property (nonatomic, strong) ZZArchive             * zipArchive;
 @property (nonatomic, strong) NSMutableArray        * zipEntries;
 @property (nonatomic, strong) NSURL                 * zipArchiveURL;
-@property (nonatomic, strong) NSString              * encryptedArchiveFilename;
 @property (nonatomic, strong) NSString              * tempOutputDirectory;
 @property (nonatomic, strong) NSMutableArray        * fileInfoEntries;
 @property (nonatomic, strong) NSString              * workingDirectory;
@@ -101,7 +100,11 @@ static NSOperationQueue * generalPurposeUploadQueue = nil;
 
 + (void) initialize
 {
+    NSInteger x = 4;
+
     generalPurposeUploadQueue = [NSOperationQueue sequentialOperationQueueWithName: kAPCUploadQueueName];
+
+    NSLog (@"No, really, I'm here!  %d", (int) x);
 }
 
 + (void) uploadOneDictionaryAsFile: (NSDictionary *) dictionary
@@ -124,11 +127,20 @@ static NSOperationQueue * generalPurposeUploadQueue = nil;
             {
                 // Report, or handle it.
             }
+            else
+            {
+                // we'll use the filename specified in the dictionary.
+            }
 
             [newStyleArchiver insertIntoZipArchive: dictionary filename: filename];
             [newStyleArchiver packAndShip];
         }
+
+        NSLog(@"######### Your block has finished!  and uploadOne should have finished, like, years ago. ######");
+
     }];
+
+    NSLog(@"######### +uploadOne has finished!  ...but your block should still be going. ######");
 }
 
 - (id) init
@@ -254,7 +266,7 @@ static NSOperationQueue * generalPurposeUploadQueue = nil;
     if (self.fileInfoEntries.count)
     {
         NSError *error          = nil;
-        NSString *archivePath   = self.zipArchive.URL.absoluteString;
+        NSString *archivePath   = self.zipArchive.URL.relativePath; // self.zipArchive.URL.absoluteString;
         BOOL weCalledSage       = NO;
 
         NSDictionary *zipArchiveManifest = @{ kAPCSerializedDataKey_Files      : self.fileInfoEntries,
@@ -288,7 +300,7 @@ static NSOperationQueue * generalPurposeUploadQueue = nil;
         }
 
         else if (! [self encryptZipFile: archivePath
-                          encryptedPath: self.encryptedArchiveFilename
+                          encryptedPath: self.encryptedZipPath
                          returningError: & error])
         {
             APCLogError2 (error);
@@ -352,7 +364,7 @@ static NSOperationQueue * generalPurposeUploadQueue = nil;
 
         NSData *encryptedZipData = cmsEncrypt (unencryptedZipData, privateKeyFilePath, & localError);
 
-        if (error)
+        if (localError)
         {
             // report.
         }
@@ -390,7 +402,6 @@ static NSOperationQueue * generalPurposeUploadQueue = nil;
      */
     NSArray *filesToDestroy = @[self.unencryptedZipPath,
                                 self.encryptedZipPath,
-                                self.encryptedArchiveFilename,
                                 self.workingDirectory
                                 ];
 
