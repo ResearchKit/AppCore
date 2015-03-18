@@ -253,6 +253,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCBadgeLabel.h>
 #import <APCAppCore/APCMotionHistoryData.h>
 #import <APCAppCore/APCMotionHistoryReporter.h>
+#import <APCAppCore/APCJSONSerializer.h>
 
 /* -------------------------
  Categories
