@@ -744,7 +744,7 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 {
     NSLog (@"Just got this 'actionRecord': %@", actionRecord);
 
-    [APCDataArchiverAndUploader uploadOneDictionaryAsFile: actionRecord];
+    [APCDataArchiverAndUploader uploadOneDictionary: actionRecord];
 }
 
 + (void) recordActionForCreatingPrescription: (APCMedTrackerPrescription *) prescription

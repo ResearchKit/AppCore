@@ -56,6 +56,6 @@
  */
 @interface APCDataArchiverAndUploader : NSObject
 
-+ (void) uploadOneDictionaryAsFile: (NSDictionary *) dictionary;
++ (void) uploadOneDictionary: (NSDictionary *) dictionary;
 
 @end
