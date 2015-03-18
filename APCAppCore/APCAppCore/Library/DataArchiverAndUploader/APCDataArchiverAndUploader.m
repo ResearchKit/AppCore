@@ -216,7 +216,7 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
      whatever error we got, clean up, and stop.
      */
     if (ok) ok = [self step1_createWorkingDirectoryReturningError : & error];
-    if (ok) ok = [self step2_createZipArchiveReturningError       : & error];
+    if (ok) ok = [self step2_createZipArchiveInRamReturningError  : & error];
     if (ok) ok = [self step3_zipAllDictionariesReturningError     : & error];
     if (ok) ok = [self step4_createManifestReturningError         : & error];
     if (ok) ok = [self step5_saveToDiskReturningError             : & error];
@@ -285,7 +285,7 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
 #pragma mark - Step 2:  Create the empty .zip archive, in RAM only
 // ---------------------------------------------------------
 
-- (BOOL) step2_createZipArchiveReturningError: (NSError **) errorToReturn
+- (BOOL) step2_createZipArchiveInRamReturningError: (NSError **) errorToReturn
 {
     NSError *errorCreatingArchive = nil;
 
@@ -661,6 +661,20 @@ static NSOperationQueue * queueForTrackingUploaders = nil;
      fast as possible and falls through to here.
      */
     APCLogError2 (error);
+
+
+    /*
+     IMPORTANT!
+
+     if (error == couldn't upload to Sage)
+     {
+        queue some try-again concept
+     }
+     else
+     {
+        truly clean up
+     }
+     */
 
 
 
