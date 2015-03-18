@@ -19,7 +19,9 @@ static NSInteger kNumberOfRows = 2;
 
 @interface APCSharingOptionsViewController()
 
-@property (nonatomic, strong) NSString *instituteName;
+@property (nonatomic, strong) NSString *instituteShortName;
+
+@property (nonatomic, strong) NSString *instituteLongName;
 
 @property (nonatomic, strong) APCUser *user;
 
@@ -45,19 +47,19 @@ static NSInteger kNumberOfRows = 2;
     
     self.titleLabel.text = NSLocalizedString(@"Sharing Options", @"Sharing Options");
     
-    NSString *messageText = [NSString stringWithFormat:@"%@ will receive your study data from your participation in this study.\n\nSharing your coded study data more broadly (without information such as your name) may benefit this and future research.", self.instituteName];
+    NSString *messageText = [NSString stringWithFormat:@"%@ will receive your study data from your participation in this study.\n\nSharing your coded study data more broadly (without information such as your name) may benefit this and future research.", self.instituteLongName];
     self.messageLabel.text = NSLocalizedString(messageText, @"");
     
     
     NSMutableArray *options = [NSMutableArray new];
     
     {
-        NSString *option = [NSString stringWithFormat:@"Share my data with %@ and qualified researchers worldwide", self.instituteName];
+        NSString *option = [NSString stringWithFormat:@"Share my data with %@ and qualified researchers worldwide", self.instituteShortName];
         [options addObject:option];
     }
     
     {
-        NSString *option = [NSString stringWithFormat:@"Only share my data with %@", self.instituteName];
+        NSString *option = [NSString stringWithFormat:@"Only share my data with %@", self.instituteLongName];
         [options addObject:option];
     }
     
@@ -75,7 +77,8 @@ static NSInteger kNumberOfRows = 2;
     
     if (!parseError) {
         NSDictionary *infoDictionary = jsonDictionary[@"documentProperties"];
-        self.instituteName = infoDictionary[@"investigatorLongDescription"];
+        self.instituteLongName = infoDictionary[@"investigatorLongDescription"];
+        self.instituteShortName = infoDictionary[@"investigatorShortDescription"];
     }
 }
 
