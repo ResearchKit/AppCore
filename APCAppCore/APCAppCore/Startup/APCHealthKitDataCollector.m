@@ -7,7 +7,7 @@
 
 #import "APCHealthKitDataCollector.h"
 
-static NSString *const kHealthKitDataCollectorFilename = @"healthkit_data.csv";
+static NSString *const kHealthKitDataCollectorFilename = @"data.csv";
 
 @implementation APCHealthKitDataCollector
 
