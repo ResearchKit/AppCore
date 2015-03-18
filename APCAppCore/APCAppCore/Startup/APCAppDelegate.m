@@ -550,9 +550,16 @@ then a location event has occurred and location services must be manually starte
             [self.healthKitCollector startTracking];
         }
         
-        for (NSString *dataType in dataTypesWithReadPermission) {
+        for (id dataType in dataTypesWithReadPermission) {
             
-            HKSampleType *sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
+            HKSampleType *sampleType = nil;
+            
+            if ([dataType isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *categoryType = (NSDictionary *)dataType;
+                sampleType = [HKObjectType categoryTypeForIdentifier:categoryType[kHKCategoryTypeKey]];
+            } else {
+                sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
+            }
             
             [self observerQueryForSampleType:sampleType
                               withCompletion:nil];
@@ -661,17 +668,24 @@ then a location event has occurred and location services must be manually starte
                         if (!results) {
                             APCLogError2(error);
                         } else {
-                            HKQuantitySample *sample = results.firstObject;
+                            id sampleKind = results.firstObject;
                             
-                            if (sample) {
-                                APCLogDebug(@"HK Update received for: %@ - %@", sample.quantityType.identifier, sample.quantity);
+                            if (sampleKind) {
+                                
+                                if ([sampleKind isKindOfClass:[HKCategorySample class]]) {
+                                    HKCategorySample *categorySample = (HKCategorySample *)sampleKind;
+                                    APCLogDebug(@"HK Update received for: %@ - %@", categorySample.categoryType.identifier, categorySample.value);
+                                } else {
+                                    HKQuantitySample *quantitySample = (HKQuantitySample *)sampleKind;
+                                    APCLogDebug(@"HK Update received for: %@ - %@", quantitySample.quantityType.identifier, quantitySample.quantity);
+                                }
                                 
                                 // Anyone listening to this notification will need to make sure that if it is used
                                 // for updating anything related to UIKit, it needs to be done on the main thread.
                                 [[NSNotificationCenter defaultCenter] postNotificationName:APCHealthKitObserverQueryUpdateForSampleTypeNotification
-                                                                                    object:sample];
+                                                                                    object:sampleKind];
                                 
-                                [weakSelf processUpdatesFromHealthKitForSampleType:sample hkCompletionHandler:completionHandler];
+                                [weakSelf processUpdatesFromHealthKitForSampleType:sampleKind hkCompletionHandler:completionHandler];
                             } else {
                                 completionHandler();
                             }
@@ -797,12 +811,22 @@ then a location event has occurred and location services must be manually starte
     return nil;
 }
 
-- (void)processUpdatesFromHealthKitForSampleType:(HKQuantitySample *)quantitySample hkCompletionHandler:(HKObserverQueryCompletionHandler)completionHandler
+- (void)processUpdatesFromHealthKitForSampleType:(id)quantitySample hkCompletionHandler:(HKObserverQueryCompletionHandler)completionHandler
 {
     [self.healthKitCollectorQueue addOperationWithBlock:^{
         NSString *dateTimeStamp = [[NSDate date] toStringInISO8601Format];
-        NSString *healthKitType = quantitySample.quantityType.identifier;
-        NSString *quantityValue = [NSString stringWithFormat:@"%@", quantitySample.quantity];
+        NSString *healthKitType = nil;
+        NSString *quantityValue = nil;
+        
+        if ([quantitySample isKindOfClass:[HKCategorySample class]]) {
+            HKCategorySample *catSample = (HKCategorySample *)quantitySample;
+            healthKitType = catSample.categoryType.identifier;
+            quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
+        } else {
+            HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
+            healthKitType = qtySample.quantityType.identifier;
+            quantityValue = [NSString stringWithFormat:@"%@", qtySample.quantity];
+        }
         
         NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue];
         
