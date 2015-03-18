@@ -19,15 +19,10 @@
 #import "APCDataVerificationClient.h"
 
 
-static BOOL const K_DEBUG_INCLUDE_TESTING_MESSAGE = YES;
-static NSString * const kAPCUploaderThisIsATestMessage_Key = @"THIS_IS_A_TEST";
-static NSString * const kAPCUploaderThisIsATestMessage_Message = @"Dear Sage folks:  This whole .zip file is a test, as we work on improving the health apps.  Please ignore.";
+static BOOL       const K_DEBUG_INCLUDE_TESTING_MESSAGE         = YES;
+static NSString * const kAPCUploaderThisIsATestMessage_Key      = @"THIS_IS_A_TEST";
+static NSString * const kAPCUploaderThisIsATestMessage_Message  = @"Dear Sage folks:  This whole .zip file is a test, as we work on improving the health apps.  Please ignore.";
 
-
-/*
- Some new keys, some historical.  Working on pruning this list.
- */
-static NSString * const kTaskRunKey                             = @"taskRun";
 static NSString * const kAPCSerializedDataKey_PhoneInfo         = @"phoneInfo";
 static NSString * const kAPCEncryptedZipFileName                = @"encrypted.zip";
 static NSString * const kAPCUnencryptedZipFileName              = @"unencrypted.zip";
@@ -41,10 +36,7 @@ static NSString * const kAPCContentTypeForJSON                  = @"text/json";
 static NSString * const kAPCPrivateKeyFileExtension             = @"pem";
 static NSString * const kAPCUnknownFileNameFormatString         = @"UnknownFile_%d";
 
-
-static NSString * const kAPCErrorDomainArchiveAndUpload         = @"DataArchiverAndUploader";
-//static NSString * const kAPCErrorNone_Message                 = @"Everything worked!";
-//static NSInteger  const kAPCErrorNone_Code                    = 0;
+static NSString * const kAPCErrorDomainArchiveAndUpload                                 = @"DataArchiverAndUploader";
 static NSString * const kAPCErrorDomainArchiveAndUpload_CantCreateZip_Message           = @"Can't create .zip file.";
 static NSInteger  const kAPCErrorDomainArchiveAndUpload_CantCreateZip_Code              = 1;
 static NSString * const kAPCErrorDomainArchiveAndUpload_CantReadUnencryptedFile_Message = @"Can't read unencrypted .zip file.";
