@@ -10,7 +10,7 @@
 
 @interface APCSignUpPermissionsViewController : UITableViewController <APCSignUpProgressing>
 
-@property (nonatomic, strong) NSArray *permissions;
+@property (nonatomic, strong) __block NSMutableArray *permissions;
 
 - (void)finishOnboarding;
 
