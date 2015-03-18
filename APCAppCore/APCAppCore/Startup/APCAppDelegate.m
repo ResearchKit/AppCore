@@ -797,7 +797,7 @@ then a location event has occurred and location services must be manually starte
     return nil;
 }
 
-- (void)processUpdatesFromHealthKitForSampleType:(HKQuantitySample *)quantitySample
+- (void)processUpdatesFromHealthKitForSampleType:(HKQuantitySample *)quantitySample hkCompletionHandler:(HKObserverQueryCompletionHandler)completionHandler
 {
     [self.healthKitCollectorQueue addOperationWithBlock:^{
         NSString *dateTimeStamp = [[NSDate date] toStringInISO8601Format];
@@ -810,6 +810,8 @@ then a location event has occurred and location services must be manually starte
                                                toFile:[self.healthKitCollector.folder stringByAppendingPathComponent:self.healthKitCollector.csvFilename]];
         
         [self.passiveDataCollector checkIfDataNeedsToBeFlushed:self.healthKitCollector];
+        
+        completionHandler();
     }];
 }
 
