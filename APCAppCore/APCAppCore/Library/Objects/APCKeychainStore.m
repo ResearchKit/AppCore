@@ -229,7 +229,7 @@ errReturn:
     id returnValue = nil;
     OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, (CFTypeRef *)&result);
     if (status == errSecSuccess || status == errSecItemNotFound) {
-        returnValue =  CFBridgingRelease(result);
+        returnValue =  (__bridge id)(result);
     } else {
         returnValue = nil;
     }
