@@ -69,7 +69,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 - (BOOL)isPermissionsGrantedForType:(APCSignUpPermissionsType)type
 {
     BOOL isGranted = NO;
-    
+    [[NSUserDefaults standardUserDefaults]synchronize];
     switch (type) {
         case kSignUpPermissionsTypeHealthKit:
         {

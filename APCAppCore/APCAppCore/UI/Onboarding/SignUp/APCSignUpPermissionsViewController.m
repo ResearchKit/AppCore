@@ -104,6 +104,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
             {
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeHealthKit;
+                item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Health Kit", @"");
                 item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeHealthKit)];
                 [items addObject:item];
@@ -113,6 +114,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
             {
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeLocation;
+                item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Location Services", @"");
                 item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeLocation)];
                 [items addObject:item];
@@ -123,6 +125,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                 if ([CMMotionActivityManager isActivityAvailable]){
                     APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                     item.permissionType = kSignUpPermissionsTypeCoremotion;
+                    item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                     item.caption = NSLocalizedString(@"Motion Activity", @"");
                     item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeCoremotion)];
                     [items addObject:item];
@@ -133,6 +136,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
             {
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeLocalNotifications;
+                item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Notifications", @"");
                 item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeLocalNotifications)];
                 [items addObject:item];
@@ -142,6 +146,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
             {
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeMicrophone;
+                item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Microphone", @"");
                 item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeMicrophone)];
                 [items addObject:item];
