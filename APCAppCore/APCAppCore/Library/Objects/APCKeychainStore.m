@@ -225,14 +225,19 @@ errReturn:
     }
 #endif
     
-    CFArrayRef result = nil;
-    id returnValue = nil;
-    OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, (CFTypeRef *)&result);
+    CFTypeRef result = nil;
+    NSArray *returnValue = nil;
+    OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &result);
     if (status == errSecSuccess || status == errSecItemNotFound) {
-        returnValue =  (__bridge id)(result);
+        returnValue =  (__bridge NSArray *)(result);
     } else {
         returnValue = nil;
     }
+    if(result)
+    {
+         CFBridgingRelease(result);
+    }
+   
     return returnValue;
 }
 
