@@ -15,6 +15,7 @@
 
 - (NSUInteger)currentScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *)calendarView;
 - (NSUInteger)maximumScrollablePageNumber:(APCMedicationTrackerCalendarWeeklyView *)calendarView;
+
 - (void)dailyCalendarViewDidSwipeLeft;
 - (void)dailyCalendarViewDidSwipeRight;
 
@@ -36,6 +37,8 @@ typedef  enum  _WeeklyCalendarScrollDirection
 - (NSArray *)fetchDailyCalendarDayViews;
 
 - (void)setupViews;
+
+- (void)enableScrolling:(BOOL)enable;
 
 - (void)swipeLeft:(UISwipeGestureRecognizer *)swiper;
 - (void)swipeRight:(UISwipeGestureRecognizer *)swiper;

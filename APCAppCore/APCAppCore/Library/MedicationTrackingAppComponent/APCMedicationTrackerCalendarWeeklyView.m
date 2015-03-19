@@ -14,6 +14,7 @@
 #import "UIFont+APCAppearance.h"
 #import "UIColor+MedicationTracker.h"
 #import "NSDictionary+MedicationTracker.h"
+#import "APCConstants.h"
 
 static  NSUInteger  kNumberOfWeekDivisions =   7;
 
@@ -42,18 +43,26 @@ static  NSString  *kPerformScrollDirectionKey = @"kPerformScrollDirectionKey";
 static  NSString  *kSelectedDateKey           = @"SelectedDateKey";
 static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
 
+static  NSString  *kThinSpaceEnDashJoiner     = @"\u2009\u2013\u2009";
+
 @interface APCMedicationTrackerCalendarWeeklyView  ( ) <UIGestureRecognizerDelegate, APCMedicationTrackerCalendarDailyViewDelegate>
 
-@property  (nonatomic,  strong)  UIView    *backdrop;
-@property  (nonatomic,  strong)  UIView    *dailyBackdrop;
-@property  (nonatomic,  strong)  UIView    *dayTitleBackdrop;
-@property  (nonatomic,  strong)  UIView    *dailyInfoBackdrop;
-@property  (nonatomic,  strong)  UILabel   *dateInfoLabel;
-@property  (nonatomic,  strong)  NSDate    *startDate;
-@property  (nonatomic,  strong)  NSDate    *endOfWeekDate;
+@property  (nonatomic,  strong)  UIView                    *backdrop;
+@property  (nonatomic,  strong)  UIView                    *dailyBackdrop;
+@property  (nonatomic,  strong)  UIView                    *dayTitleBackdrop;
+@property  (nonatomic,  strong)  UIView                    *dailyInfoBackdrop;
+@property  (nonatomic,  strong)  UILabel                   *dateInfoLabel;
 
-@property  (nonatomic,  strong)  NSNumber  *weekStartConfig;
-@property  (nonatomic,  strong)  UIColor   *dayTitleTextColor;
+@property  (nonatomic,  weak)    UIButton                  *leftScrollButton;
+@property  (nonatomic,  weak)    UISwipeGestureRecognizer  *leftSwiper;
+@property  (nonatomic,  weak)    UIButton                  *rightScrollButton;
+@property  (nonatomic,  weak)    UISwipeGestureRecognizer  *rightSwiper;
+
+@property  (nonatomic,  strong)  NSDate                    *startDate;
+@property  (nonatomic,  strong)  NSDate                    *endOfWeekDate;
+
+@property  (nonatomic,  strong)  NSNumber                  *weekStartConfig;
+@property  (nonatomic,  strong)  UIColor                   *dayTitleTextColor;
 
 @end
 
@@ -106,6 +115,7 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
         self.dailyInfoBackdrop.userInteractionEnabled = YES;
         self.dailyInfoBackdrop.backgroundColor = [UIColor clearColor];
         [self.backdrop addSubview:self.dailyInfoBackdrop];
+        [self.dailyInfoBackdrop addSubview:self.dateInfoLabel];
         
         CGRect  frame = CGRectMake(kNavigationArrowsHorOffset, kNavigationArrowsVerOffset, kNavigationArrowsWidth, kNavigationArrowsHeight);
         
@@ -114,6 +124,7 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
         [leftScrollerButton setBackgroundImage:[UIImage imageNamed:kNavigationLeftArrowName] forState:UIControlStateNormal];
         [leftScrollerButton addTarget:self action:@selector(leftScrollerButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
         [self.dailyInfoBackdrop addSubview:leftScrollerButton];
+        self.leftScrollButton = leftScrollerButton;
         
         frame = CGRectMake(CGRectGetWidth(self.backdrop.frame) - kNavigationArrowsWidth - kNavigationArrowsHorOffset, kNavigationArrowsVerOffset, kNavigationArrowsWidth, kNavigationArrowsHeight);
         
@@ -122,9 +133,7 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
         [rightScrollerButton setBackgroundImage:[UIImage imageNamed:kNavigationRightArrowName] forState:UIControlStateNormal];
         [rightScrollerButton addTarget:self action:@selector(rightScrollerButtonWasTapped:) forControlEvents:UIControlEventTouchUpInside];
         [self.dailyInfoBackdrop addSubview:rightScrollerButton];
-
-        UITapGestureRecognizer  *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dailyInfoViewDidClick:)];
-        [self.dailyInfoBackdrop addGestureRecognizer:singleFingerTap];
+        self.rightScrollButton = rightScrollerButton;
     }
     [self initialiseDailyViews];
 }
@@ -136,11 +145,13 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
     [rightSwipeGesturer setDirection:UISwipeGestureRecognizerDirectionRight];
     [self.backdrop addGestureRecognizer:rightSwipeGesturer];
     rightSwipeGesturer.delegate = self;
+    self.rightSwiper = rightSwipeGesturer;
 
     UISwipeGestureRecognizer  *leftSwipeGesturer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft:)];
     [leftSwipeGesturer setDirection:UISwipeGestureRecognizerDirectionLeft];
     [self.backdrop addGestureRecognizer:leftSwipeGesturer];
     leftSwipeGesturer.delegate = self;
+    self.leftSwiper = leftSwipeGesturer;
 
     self.backdrop.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
 }
@@ -189,10 +200,6 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
     dayTitleLabel.date = date;
     dayTitleLabel.userInteractionEnabled = YES;
 
-    UITapGestureRecognizer  *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dayTitleViewDidClick:)];
-    [dayTitleLabel addGestureRecognizer:singleFingerTap];
-    [self setNeedsDisplay];
-
     [self.dayTitleBackdrop addSubview:dayTitleLabel];
     return  dayTitleLabel;
 }
@@ -218,20 +225,16 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
     for (APCMedicationTrackerCalendarDailyView  *view in [self.dailyBackdrop subviews]) {
         [view markSelected:([view.date isSameDateWith:date])];
     }
-    self.selectedDate = date;
-    NSDateFormatter  *dayFormatter = [[NSDateFormatter alloc] init];
-    dayFormatter.dateStyle = NSDateFormatterFullStyle;
-    NSString  *dateString = [dayFormatter stringFromDate:date];
-
-    self.dateInfoLabel.text = dateString;
-}
-
-- (void)dailyInfoViewDidClick:(UIGestureRecognizer *) __unused tap
-{
-}
-
-- (void)dayTitleViewDidClick:(UIGestureRecognizer *) __unused tap
-{
+    NSDateFormatter  *beginFormatter = [[NSDateFormatter alloc] init];
+    [beginFormatter setDateFormat:@"MMM d"];
+    NSString  *beginFormatted = [beginFormatter stringFromDate:self.startDate];
+    
+    NSDateFormatter  *endFormatter = [[NSDateFormatter alloc] init];
+    [endFormatter setDateFormat:@"MMM d, yyyy"];
+    NSString  *endFormatted = [endFormatter stringFromDate:self.endOfWeekDate];
+    
+    NSString  *finalDate = [NSString stringWithFormat:@"%@%@%@", beginFormatted, kThinSpaceEnDashJoiner, endFormatted];
+    self.dateInfoLabel.text = finalDate;
 }
 
 - (void)redrawToDate:(NSDate *)date
@@ -254,8 +257,24 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
 
 #pragma  mark  -  Swipe Gesture Recognisers
 
+- (void)enableScrolling:(BOOL)enable
+{
+    if (enable == YES) {
+        self.leftScrollButton.enabled  = YES;
+        self.leftSwiper.enabled        = YES;
+        self.rightScrollButton.enabled = YES;
+        self.rightSwiper.enabled       = YES;
+    } else {
+        self.leftScrollButton.enabled  = NO;
+        self.leftSwiper.enabled        = NO;
+        self.rightScrollButton.enabled = NO;
+        self.rightSwiper.enabled       = NO;
+    }
+}
+
 - (void)swipeLeft:(UISwipeGestureRecognizer *) __unused swiper
 {
+    
     [self performSwipeAnimation:WeeklyCalendarScrollDirectionRight dateIsToday:NO selectedDate:nil];
 }
 
@@ -323,7 +342,7 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
     if (dateIsToday == YES) {
         dtStart = [[NSDate new] getWeekStartDate:self.weekStartConfig.integerValue];
     } else {
-        dtStart = (selectedDate)? [selectedDate getWeekStartDate:self.weekStartConfig.integerValue]:[self.startDate dateByAddingDays:step * 7];
+        dtStart = (selectedDate) ? [selectedDate getWeekStartDate:self.weekStartConfig.integerValue]:[self.startDate dateByAddingDays:step * 7];
     }
     self.startDate = dtStart;
     for (UIView  *view in [self.dailyBackdrop subviews]) {
@@ -340,6 +359,7 @@ static  NSString  *kSelectedDateIsTodayKey    = @"kSelectedDateIsTodayKey";
         [view markSelected:([view.date isSameDateWith:self.selectedDate])];
         self.endOfWeekDate = aDate;
     }
+    [self markDateSelected:[NSDate date]];
 }
 
 #pragma  mark  -  DeputyDailyCalendarViewDelegate

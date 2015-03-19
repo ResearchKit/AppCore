@@ -20,12 +20,15 @@
 
 @interface APCMedicationTrackerMedicationsDisplayView : UIView
 
-@property  (nonatomic, strong)  NSArray  *prescriptions;
-@property  (nonatomic, strong)  NSDate   *startOfWeekDate;
+@property  (nonatomic, strong)  NSArray    *prescriptions;
+@property  (nonatomic, assign)  NSUInteger  numberOfFramesPerPage;
+@property  (nonatomic, strong)  NSDate     *startOfWeekDate;
 
 @property  (nonatomic, weak)  id <APCMedicationTrackerMedicationsDisplayViewDelegate>  delegate;
 
-- (void)makePrescriptionDisplaysWithPrescriptions:(NSArray *)thePrescriptions andDate:(NSDate *)aDate;
-- (void)refreshWithPrescriptions:(NSArray *)thePrescriptions andDate:(NSDate *)aDate;
++ (NSUInteger)numberOfPagesForPrescriptions:(NSUInteger)numberOfPrescriptions inFrameHeight:(CGFloat)frameHeight;
+
+- (void)makePrescriptionDisplaysWithPrescriptions:(NSArray *)thePrescriptions andNumberOfFrames:(NSUInteger)numberOfFramesPerPage andDate:(NSDate *)aDate;
+- (void)refreshWithPrescriptions:(NSArray *)thePrescriptions andNumberOfFrames:(NSUInteger)numberOfFramesPerPage andDate:(NSDate *)aDate;
 
 @end
