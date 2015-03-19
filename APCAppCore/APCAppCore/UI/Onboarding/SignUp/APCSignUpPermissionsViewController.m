@@ -21,8 +21,6 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 @interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
 
-@property (nonatomic) NSInteger permissionsGrantedCount;
-
 @property (nonatomic, strong) APCPermissionsManager *permissionsManager;
 
 @end
@@ -54,8 +52,6 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 - (void)sharedInit
 {
     _permissions = [NSMutableArray array];
-    
-    _permissionsGrantedCount = 0;
     
     _permissionsManager = [[APCPermissionsManager alloc] init];
 }
@@ -254,14 +250,6 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     [alertContorller addAction:settings];
     
     [self.navigationController presentViewController:alertContorller animated:YES completion:nil];
-}
-
-
-#pragma mark - Getter/Setter
-
-- (void)setPermissionsGrantedCount:(NSInteger)permissionsGrantedCount
-{
-    _permissionsGrantedCount = permissionsGrantedCount;
 }
 
 #pragma mark - Selectors / Button Actions
