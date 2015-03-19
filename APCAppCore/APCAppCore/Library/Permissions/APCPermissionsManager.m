@@ -237,6 +237,11 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                                                                                                      |UIUserNotificationTypeBadge
                                                                                                      |UIUserNotificationTypeSound) categories:nil];
                 [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+                [[NSUserDefaults standardUserDefaults]synchronize];
+                if (self.completionBlock) {
+                    self.completionBlock(YES, nil);
+                    self.completionBlock = nil;
+                }
             } else {
                 
                 if (self.completionBlock) {
