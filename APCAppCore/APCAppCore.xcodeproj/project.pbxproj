@@ -50,6 +50,8 @@
 		084302A41AB8D4550039C861 /* APCHealthKitDataCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = 084302A21AB8D4550039C861 /* APCHealthKitDataCollector.m */; };
 		0871A3931A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 0871A3911A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0871A3941A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0871A3921A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m */; };
+		087255C01ABA390500586492 /* APCJSONSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 087255BE1ABA390500586492 /* APCJSONSerializer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		087255C11ABA390500586492 /* APCJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 087255BF1ABA390500586492 /* APCJSONSerializer.m */; };
 		087468061AA691A400BE2572 /* APCThankYouViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 087468041AA691A400BE2572 /* APCThankYouViewController.h */; };
 		087468071AA691A400BE2572 /* APCThankYouViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 087468051AA691A400BE2572 /* APCThankYouViewController.m */; };
 		0875C3D81A797A7B00CE50FB /* APCButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 0875C3D61A797A7B00CE50FB /* APCButton.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -734,6 +736,8 @@
 		084302A21AB8D4550039C861 /* APCHealthKitDataCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHealthKitDataCollector.m; sourceTree = "<group>"; };
 		0871A3911A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDashboardFoodInsightTableViewCell.h; sourceTree = "<group>"; };
 		0871A3921A8F4244002EA80D /* APCDashboardFoodInsightTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDashboardFoodInsightTableViewCell.m; sourceTree = "<group>"; };
+		087255BE1ABA390500586492 /* APCJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCJSONSerializer.h; sourceTree = "<group>"; };
+		087255BF1ABA390500586492 /* APCJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCJSONSerializer.m; sourceTree = "<group>"; };
 		087468041AA691A400BE2572 /* APCThankYouViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCThankYouViewController.h; sourceTree = "<group>"; };
 		087468051AA691A400BE2572 /* APCThankYouViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCThankYouViewController.m; sourceTree = "<group>"; };
 		0875C3D61A797A7B00CE50FB /* APCButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCButton.h; sourceTree = "<group>"; };
@@ -2194,6 +2198,8 @@
 		F5B9476E1A73272C0034C522 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
+				087255BE1ABA390500586492 /* APCJSONSerializer.h */,
+				087255BF1ABA390500586492 /* APCJSONSerializer.m */,
 				F5B9476F1A73272C0034C522 /* APCConstants.h */,
 				F5B947701A73272C0034C522 /* APCConstants.m */,
 				F5B947711A73272C0034C522 /* APCDeviceHardware.h */,
@@ -2899,6 +2905,7 @@
 				F5F12A0C1A2F78490015982C /* APCUser+Bridge.h in Headers */,
 				F5B9463D1A7309A20034C522 /* ZZNewArchiveEntry.h in Headers */,
 				F5B947B31A73272C0034C522 /* APCAssertionHandler.h in Headers */,
+				087255C01ABA390500586492 /* APCJSONSerializer.h in Headers */,
 				3627D3481A9A7517006B02E8 /* APCMedTrackerMedication.h in Headers */,
 				F5B948081A73272C0034C522 /* APCScheduleExpressionParser.h in Headers */,
 				F5F12A6C1A2F78490015982C /* APCAppDelegate.h in Headers */,
@@ -3432,6 +3439,7 @@
 				F5F12AA71A2F78490015982C /* APCEligibleViewController.m in Sources */,
 				F5C7871D1A7ACADA005F31FC /* APCPassiveDataCollector.m in Sources */,
 				F5F129F31A2F78490015982C /* APCModel.xcdatamodeld in Sources */,
+				087255C11ABA390500586492 /* APCJSONSerializer.m in Sources */,
 				F5F129E51A2F78490015982C /* APCDataMonitor.m in Sources */,
 				F5F129E91A2F78490015982C /* APCDataSubstrate+HealthKit.m in Sources */,
 				CFFDEDDE1A95734000B25581 /* APCFrequencyTableViewTimesCell.m in Sources */,
