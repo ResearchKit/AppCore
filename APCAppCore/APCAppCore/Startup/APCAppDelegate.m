@@ -827,6 +827,17 @@ then a location event has occurred and location services must be manually starte
             HKCategorySample *catSample = (HKCategorySample *)quantitySample;
             healthKitType = catSample.categoryType.identifier;
             quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
+            
+            // Get the difference in seconds between the start and end date for the sample
+            NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
+                                                                                          fromDate:catSample.startDate
+                                                                                            toDate:catSample.endDate
+                                                                                           options:NSCalendarWrapComponents];
+            if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
+                quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", secondsSpentInBedOrAsleep.second];
+            } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
+                quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", secondsSpentInBedOrAsleep.second];
+            }
         } else {
             HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
             healthKitType = qtySample.quantityType.identifier;
