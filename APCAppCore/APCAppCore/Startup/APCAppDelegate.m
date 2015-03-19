@@ -831,7 +831,7 @@ then a location event has occurred and location services must be manually starte
             HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
             healthKitType = qtySample.quantityType.identifier;
             quantityValue = [NSString stringWithFormat:@"%@", qtySample.quantity];
-            quantityValue = [[quantityValue componentsSeparatedByString:@" "] componentsJoinedByString:@","];
+            quantityValue = [quantityValue stringByReplacingOccurrencesOfString:@" " withString:@","];
         }
         
         NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue];
