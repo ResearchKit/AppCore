@@ -196,7 +196,11 @@ static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
 - (void)dailyCalendarViewDidSwipeLeft
 {
     if (self.exScrolliburScrolledByUser == NO) {
-        if (self.exScrolliburCurrentPage == (self.exScrolliburNumberOfPages - 1)) {
+        if (self.exScrolliburCurrentPage != (self.exScrolliburNumberOfPages - 1)) {
+            self.exScrolliburCurrentPage = self.exScrolliburCurrentPage + 1;
+            CGRect  rect = CGRectMake(CGRectGetWidth(self.exScrollibur.frame) * (self.exScrolliburCurrentPage), 0.0, CGRectGetWidth(self.exScrollibur.frame), CGRectGetHeight(self.exScrollibur.frame));
+            [self.exScrollibur scrollRectToVisible:rect animated:YES];
+        } else {
             APCMedicationTrackerMedicationsDisplayView  *lastView = [self.calendricalPages lastObject];
             NSDate  *startOfWeekDate = [lastView.startOfWeekDate dateByAddingDays:7];
             APCMedicationTrackerMedicationsDisplayView  *view = [self makeWaterfallPageForPageNumber:self.exScrolliburNumberOfPages andNumberOfFrames:self.exScrolliburNumberOfFramesPerPage
@@ -207,10 +211,10 @@ static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
             NSMutableArray  *newPages = [self.calendricalPages mutableCopy];
             [newPages addObject: view];
             self.calendricalPages = newPages;
+            CGRect  rect = CGRectMake(CGRectGetWidth(self.exScrollibur.frame) * (self.exScrolliburCurrentPage + 1), 0.0, CGRectGetWidth(self.exScrollibur.frame), CGRectGetHeight(self.exScrollibur.frame));
+            [self.exScrollibur scrollRectToVisible:rect animated:YES];
+            self.exScrolliburCurrentPage = self.exScrolliburCurrentPage + 1;
         }
-        CGRect  rect = CGRectMake(CGRectGetWidth(self.exScrollibur.frame) * (self.exScrolliburCurrentPage + 1), 0.0, CGRectGetWidth(self.exScrollibur.frame), CGRectGetHeight(self.exScrollibur.frame));
-        [self.exScrollibur scrollRectToVisible:rect animated:YES];
-        self.exScrolliburCurrentPage = self.exScrolliburCurrentPage + 1;
     }
     self.exScrolliburScrolledByUser = NO;
 }
@@ -218,7 +222,11 @@ static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
 - (void)dailyCalendarViewDidSwipeRight
 {
     if (self.exScrolliburScrolledByUser == NO) {
-        if (self.exScrolliburCurrentPage == 0) {
+        if (self.exScrolliburCurrentPage != 0) {
+            self.exScrolliburCurrentPage = self.exScrolliburCurrentPage - 1;
+            CGRect  rect = CGRectMake(self.exScrolliburCurrentPage * CGRectGetWidth(self.exScrollibur.frame), 0.0, CGRectGetWidth(self.exScrollibur.frame), CGRectGetHeight(self.exScrollibur.frame));
+            [self.exScrollibur scrollRectToVisible:rect animated:YES];
+        } else {
             APCMedicationTrackerMedicationsDisplayView  *firstView = [self.calendricalPages firstObject];
             NSDate  *startOfWeekDate = [firstView.startOfWeekDate dateByAddingDays:-7];
             APCMedicationTrackerMedicationsDisplayView  *view = [self makeWaterfallPageForPageNumber:0 andNumberOfFrames:self.exScrolliburNumberOfFramesPerPage
@@ -238,9 +246,9 @@ static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
                 view.frame = frame;
                 index = index + 1;
             }
+            CGRect  rect = CGRectMake(0.0, 0.0, CGRectGetWidth(self.exScrollibur.frame), CGRectGetHeight(self.exScrollibur.frame));
+            [self.exScrollibur scrollRectToVisible:rect animated:YES];
         }
-        CGRect  rect = CGRectMake(CGRectGetWidth(self.exScrollibur.frame) * (self.exScrolliburCurrentPage - 1), 0.0, CGRectGetWidth(self.exScrollibur.frame), CGRectGetHeight(self.exScrollibur.frame));
-        [self.exScrollibur scrollRectToVisible:rect animated:YES];
     }
     self.exScrolliburScrolledByUser = NO;
 }
@@ -293,21 +301,32 @@ static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
     [UIView commitAnimations];
 }
 
+- (void)makeEmptyScrollView
+{
+    NSArray  *subviews = [self.exScrollibur subviews];
+    [subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+}
+
 - (void)makeBlankPage
 {
+    [self makeEmptyScrollView];
+    
     CGRect  frame = CGRectZero;
     frame.size.width = CGRectGetWidth(self.view.frame);
     frame.size.height = CGRectGetHeight(self.exScrollibur.frame);
     APCMedicationTrackerMedicationsDisplayView  *view = [[APCMedicationTrackerMedicationsDisplayView alloc] initWithFrame:frame];
     view.backgroundColor = [UIColor whiteColor];
+    self.exScrolliburNumberOfPages = 0;
+    self.exScrolliburCurrentPage   = 0;
     [self.exScrollibur addSubview:view];
+    [self.weeklyCalendar enableScrolling:NO];
+    
     [self animateViewVisibility:view];
 }
 
 - (void)makeFirstPage
 {
-    NSArray  *subviews = [self.exScrollibur subviews];
-    [subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [self makeEmptyScrollView];
     
     NSArray  *dayViews = [self.weeklyCalendar fetchDailyCalendarDayViews];
     APCMedicationTrackerCalendarDailyView  *dayView = (APCMedicationTrackerCalendarDailyView *)[dayViews firstObject];
@@ -317,6 +336,8 @@ static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
     self.exScrolliburNumberOfPages = 1;
     self.exScrolliburCurrentPage   = 0;
     self.calendricalPages = @[ view ];
+    [self.weeklyCalendar enableScrolling:YES];
+    
     [self animateViewVisibility:view];
 }
 
@@ -381,6 +402,7 @@ static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
             }
             self.exScrolliburCurrentPage = newPage;
         }
+        self.exScrolliburScrolledByUser = NO;
     }
 }
 
@@ -472,11 +494,13 @@ static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
          } else {
              NSPredicate  *predicate = [NSPredicate predicateWithFormat: @"%K == YES", NSStringFromSelector (@selector(isActive))];
              NSArray  *activePrescriptions = [arrayOfGeneratedObjects filteredArrayUsingPredicate:predicate];
+             
              if (([self.prescriptions count] > 0) && ([activePrescriptions count] > [self.prescriptions count])) {
                  self.calendricalPagesNeedRefresh = YES;
              }
              self.prescriptions = activePrescriptions;
              [self adjustExScrolliburContentHeightForPrescriptions:[self.prescriptions count]];
+             
              if (self.viewsWereCreated == NO) {
                  [self makeCalendar];
                  [self configureExScrollibur];
@@ -501,6 +525,11 @@ static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
 {
     [super viewWillAppear:animated];
     
+    if (self.navigationItem.leftBarButtonItem == nil) {
+        UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(doneButtonWasTapped:) tintColor:[UIColor appPrimaryColor]];
+        self.navigationItem.leftBarButtonItem = backster;
+    }
+    
     [self fetchAllPrescriptions];
 }
 
@@ -516,9 +545,6 @@ static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
     [APCMedTrackerDataStorageManager startupReloadingDefaults:YES andThenUseThisQueue:nil toDoThis:NULL];
 
     self.navigationItem.title = viewControllerTitle;
-    
-    UIBarButtonItem  *backster = [APCCustomBackButton customBackBarButtonItemWithTarget:self action:@selector(doneButtonWasTapped:) tintColor:[UIColor appPrimaryColor]];
-    self.navigationItem.leftBarButtonItem = backster;
     
     UIBarButtonItem  *addster = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMedicationWasTapped:)];
     self.navigationItem.rightBarButtonItem = addster;
