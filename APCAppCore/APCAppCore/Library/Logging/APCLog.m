@@ -9,6 +9,7 @@
 #import "Flurry.h"
 #import "APCConstants.h"
 #import "APCUtilities.h"
+#import "NSError+APCAdditions.h"
 
 
 static NSDateFormatter *dateFormatter = nil;
@@ -125,49 +126,6 @@ static NSString * const APCLogTagUpload  = @"APC_UPLOAD ";
 #pragma mark - New Logging Methods.  No, really.
 // ---------------------------------------------------------
 
-+ (NSString *) comprehensiveErrorMessageFromError: (NSError *) error
-{
-    /*
-     We're going to print the domain, code, and user-info dictionary.
-     This will also (by definition) print out the following "normal"
-     error stuff:
-
-     - error.description.  This is composed from the domain, code, localized description, and userInfo dictionary.
-     - error.localizedDescription:  This is from the userInfo dictionary.
-     - error.localizedFailureReason:  This is also from the userInfo dictionary.
-     */
-
-    NSString *comprehensiveString = [NSString stringWithFormat:
-                                     @"An error occurred. Available info:\n"
-                                     "----- ERROR INFO -----\n"
-                                     "Domain: %@\n"
-                                     "Code:   %@\n"
-                                     "User-info dictionary: %@\n"
-                                     "----------------------",
-
-                                     error.domain.length == 0 ? @"(none)" : error.domain,
-                                     @(error.code),
-                                     error.userInfo.count == 0 ? @"(empty)" : error.userInfo
-                                     ];
-
-    /*
-     When we print underlying dictionaries, they come out
-     with escaped newlines.  Make 'em real newlines, so we
-     can read them on the console.
-     */
-    comprehensiveString = [comprehensiveString stringByReplacingOccurrencesOfString: @"\\n" withString: @"\n"];
-
-    /*
-     Ditto for escaped quotation marks.  (Is this safe?)
-     */
-    comprehensiveString = [comprehensiveString stringByReplacingOccurrencesOfString: @"\\\"" withString: @"\""];
-
-    /*
-     Ship it.
-     */
-    return comprehensiveString;
-}
-
 + (void) methodInfo: (NSString *) apcLogMethodInfo
 	   errorMessage: (NSString *) formatString, ...
 {
@@ -188,7 +146,8 @@ static NSString * const APCLogTagUpload  = @"APC_UPLOAD ";
 {
 	if (error != nil)
 	{
-        NSString *description = [self comprehensiveErrorMessageFromError: error];
+        // Note:  this is expensive.
+        NSString *description = error.friendlyFormattedString;
         
         if (self.isFlurryEnabled)
         {

@@ -208,6 +208,9 @@ static NSString *folderPathForUploadOperations = nil;
      The last step is "start the upload."  If we get that far, we'll
      get a callback when the upload completes.  Otherwise, we report
      whatever error we got, clean up, and stop.
+     
+     Most of these steps work the same way, internally:  a cascading
+     series of sub-steps which error out as fast as possible.
      */
     if (ok) {  ok = [self createBaseFoldersDuringFirstRunReturningError : & error];  }
     if (ok) {  ok = [self createWorkingDirectoryReturningError          : & error];  }
@@ -274,14 +277,19 @@ static NSString *folderPathForUploadOperations = nil;
         else
         {
             NSFileManager *fileManager           = NSFileManager.defaultManager;
-
-            NSString *parentFolder               = [documentsFolder stringByAppendingPathComponent: kAPCFolderName_ArchiveAndUpload_TopLevelFolder];
-            NSString *folderForArchiving         = [parentFolder    stringByAppendingPathComponent: kAPCFolderName_ArchiveAndUpload_Archiving];
-            NSString *folderForUploading         = [parentFolder    stringByAppendingPathComponent: kAPCFolderName_ArchiveAndUpload_Uploading];
+            NSString *containerFolder            = [documentsFolder stringByAppendingPathComponent: kAPCFolderName_ArchiveAndUpload_TopLevelFolder];
+            NSString *folderForArchiving         = [containerFolder stringByAppendingPathComponent: kAPCFolderName_ArchiveAndUpload_Archiving];
+            NSString *folderForUploading         = [containerFolder stringByAppendingPathComponent: kAPCFolderName_ArchiveAndUpload_Uploading];
             NSError  *errorCreatingArchiveFolder = nil;
 
             BOOL folderCreated = [fileManager createAPCFolderAtPath: folderForArchiving
                                                      returningError: & errorCreatingArchiveFolder];
+
+
+//            // TESTING
+//            folderCreated = NO;
+//            errorCreatingArchiveFolder = [NSError errorWithDomain: @"blah" code: 2 userInfo: nil];
+
 
             if (! folderCreated)
             {
@@ -299,6 +307,10 @@ static NSString *folderPathForUploadOperations = nil;
                 folderCreated = [fileManager createAPCFolderAtPath: folderForUploading
                                                     returningError: & errorCreatingUploadFolder];
 
+//                // TESTING
+//                folderCreated = NO;
+//                errorCreatingUploadFolder = [NSError errorWithDomain: @"blah" code: 2 userInfo: nil];
+
                 if (! folderCreated)
                 {
                     localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantCreateUploadFolder
@@ -310,7 +322,7 @@ static NSString *folderPathForUploadOperations = nil;
                 else
                 {
                     uploadFoldersHaveBeenCreated        = folderCreated;
-                    folderPathContainingAllOtherFolders = parentFolder;
+                    folderPathContainingAllOtherFolders = containerFolder;
                     folderPathForArchiveOperations      = folderForArchiving;
                     folderPathForUploadOperations       = folderForUploading;
                 }
@@ -347,6 +359,10 @@ static NSString *folderPathForUploadOperations = nil;
 
     ableToCreateWorkingFolder = [fileManager createAPCFolderAtPath: workingDirectoryPath
                                                     returningError: & directoryCreationError];
+
+//    // TESTING
+//    ableToCreateWorkingFolder = NO;
+//    directoryCreationError = [NSError errorWithDomain: @"fred" code: 12 userInfo: nil];
 
     if (! ableToCreateWorkingFolder)
     {
@@ -389,6 +405,11 @@ static NSString *folderPathForUploadOperations = nil;
     self.zipArchive = [[ZZArchive alloc] initWithURL: self.unencryptedZipURL
                                              options: @{ ZZOpenOptionsCreateIfMissingKey : @(YES) }
                                                error: & errorCreatingArchive];
+
+    // TESTING
+//    self.zipArchive = nil;
+//    errorCreatingArchive = [NSError errorWithDomain: @"fred" code: 12 userInfo: nil];
+
 
     if (! self.zipArchive)
     {
@@ -943,24 +964,35 @@ static NSString *folderPathForUploadOperations = nil;
     [[self class] stopTrackingArchiver: self];
 }
 
+/**
+ Trash all files we created, and then trash the working
+ directory itself.
+ */
 - (void) cleanUpAndDestroyWorkingDirectory
+{
+    [self trashFileOrFolderAtPath: self.unencryptedZipPath];
+    [self trashFileOrFolderAtPath: self.encryptedZipPath];
+    [self trashFileOrFolderAtPath: self.workingDirectoryPath];
+}
+
+/**
+ Deletes the specified file/folder if it's non-nil and
+ actually exists.
+ 
+ This method is specifically designed to check for "nil"
+ paths, so I can wantonly call "delete" on everything I
+ MIGHT have created, without checking to see whether I 
+ actually DID create it.
+ */
+- (void) trashFileOrFolderAtPath: (NSString *) fileOrFolderPath
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
-    /*
-     The last item in this list of stuff to trash is the working
-     directory itself, which contains all the others.
-     */
-    NSArray *filesToDestroy = @[self.unencryptedZipPath,
-                                self.encryptedZipPath,
-                                self.workingDirectoryPath
-                                ];
-
-    for (NSString *path in filesToDestroy)
+    if (fileOrFolderPath != nil && [fileManager fileExistsAtPath: fileOrFolderPath])
     {
         NSError *errorDeletingFileOrDirectory = nil;
 
-        BOOL itemDeleted = [fileManager removeItemAtPath: path
+        BOOL itemDeleted = [fileManager removeItemAtPath: fileOrFolderPath
                                                    error: &errorDeletingFileOrDirectory];
 
         if (! itemDeleted)
@@ -970,7 +1002,7 @@ static NSString *folderPathForUploadOperations = nil;
                                                    domain: kAPCError_ArchiveAndUpload_Domain
                                             failureReason: kAPCError_ArchiveAndUpload_CantDeleteFileOrFolder_Reason
                                        recoverySuggestion: kAPCError_ArchiveAndUpload_CantDeleteFileOrFolder_Suggestion
-                                          relatedFilePath: path
+                                          relatedFilePath: fileOrFolderPath
                                                relatedURL: nil
                                               nestedError: errorDeletingFileOrDirectory];
 

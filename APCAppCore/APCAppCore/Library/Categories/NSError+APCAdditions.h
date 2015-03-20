@@ -147,6 +147,13 @@
                  relatedURL: (NSURL *)    someURL
                 nestedError: (NSError *)  rootCause;
 
+/**
+ Walks through the error and prepares a friendly printout for it,
+ specifically so we can print out and format the contents of nested
+ errors, arrays, and dictionaries.
+ */
+- (NSString *) friendlyFormattedString;
+
 @end
 
 

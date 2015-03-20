@@ -7,14 +7,17 @@
  
 #import "APCAppCore.h"
 
-static NSString*    kServerTooDamnBusy          = @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.";
-static NSString*    kUnexpectConditionMessage   = @"An unexpected condition has occurred. Please try again soon.";
-static NSString*    kNotConnectedMessage        = @"You are currently not connected to the Internet. Please try again when you are connected to a network.";
-static NSString*    kServerMaintanenceMessage   = @"The study server is currently undergoing maintanence. Please try again soon.";
-static NSString*    kAccountAlreadyExists       = @"An account has already been created for this email address. Please use a different email address, or sign in using the \"already participating\" link at the bottom of the Welcome page.";
-static NSString*    kAccountDoesNotExists       = @"There is no account registered for this email address.";
-static NSString*    kBadEmailAddress            = @"The email address submitted is not a valid email address. Please correct the email address and try again.";
-static NSString*    kNotReachableMessage        = @"We are currently not able to reach the study server. Please retry in a few moments.";
+static NSString * const kServerTooDamnBusy          = @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.";
+static NSString * const kUnexpectConditionMessage   = @"An unexpected condition has occurred. Please try again soon.";
+static NSString * const kNotConnectedMessage        = @"You are currently not connected to the Internet. Please try again when you are connected to a network.";
+static NSString * const kServerMaintanenceMessage   = @"The study server is currently undergoing maintanence. Please try again soon.";
+static NSString * const kAccountAlreadyExists       = @"An account has already been created for this email address. Please use a different email address, or sign in using the \"already participating\" link at the bottom of the Welcome page.";
+static NSString * const kAccountDoesNotExists       = @"There is no account registered for this email address.";
+static NSString * const kBadEmailAddress            = @"The email address submitted is not a valid email address. Please correct the email address and try again.";
+static NSString * const kNotReachableMessage        = @"We are currently not able to reach the study server. Please retry in a few moments.";
+
+static NSString * const oneTab = @"    ";
+
 
 @implementation NSError (APCAdditions)
 
@@ -34,9 +37,11 @@ static NSString*    kNotReachableMessage        = @"We are currently not able to
     return message;
 }
 
-/*********************************************************************************/
+
+
+// ---------------------------------------------------------
 #pragma mark - Error handlers
-/*********************************************************************************/
+// ---------------------------------------------------------
 
 - (void)handle
 {
@@ -145,9 +150,10 @@ static NSString*    kNotReachableMessage        = @"We are currently not able to
 }
 
 
-/*********************************************************************************/
+
+// ---------------------------------------------------------
 #pragma mark - Convenience Initializers
-/*********************************************************************************/
+// ---------------------------------------------------------
 
 + (NSError *) errorWithCode: (APCErrorCode) code
                      domain: (NSString *) domain
@@ -229,6 +235,68 @@ static NSString*    kNotReachableMessage        = @"We are currently not able to
                                      userInfo: userInfo];
 
     return error;
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Friendly printouts
+// ---------------------------------------------------------
+
+- (NSString *) friendlyFormattedString
+{
+    return [self friendlyFormattedStringAtLevel: 0];
+}
+
+- (NSString *) friendlyFormattedStringAtLevel: (NSUInteger) tabLevel
+{
+    NSMutableString *output = [NSMutableString new];
+
+    NSString *tab = [@"" stringByPaddingToLength: tabLevel * oneTab.length
+                                      withString: oneTab
+                                 startingAtIndex: 0];
+
+    NSString *tabForNestedObjects = [NSString stringWithFormat: @"\n%@", tab];
+
+    NSString *domain = self.domain.length > 0 ? self.domain : @"(none)";
+
+    [output appendFormat: @"%@Code: %@\n", tab, @(self.code)];
+    [output appendFormat: @"%@Domain: %@\n", tab, domain];
+
+    if (self.userInfo.count > 0)
+    {
+        for (NSString *key in [self.userInfo.allKeys sortedArrayUsingSelector: @selector (compare:)])
+        {
+            id value = self.userInfo [key];
+            NSString *valueString = nil;
+
+            if ([key isEqualToString: NSUnderlyingErrorKey] && [value isKindOfClass: [NSError class]])
+            {
+                valueString = [value friendlyFormattedStringAtLevel: tabLevel + 1];
+                [output appendFormat: @"%@%@:\n%@", tab, key, valueString];
+            }
+
+            else
+            {
+                valueString = [NSString stringWithFormat: @"%@", value];
+                valueString = [valueString stringByReplacingOccurrencesOfString: @"\\n" withString: @"\n"];
+                valueString = [valueString stringByReplacingOccurrencesOfString: @"\\\"" withString: @"\""];
+                valueString = [valueString stringByReplacingOccurrencesOfString: @"\n" withString: tabForNestedObjects];
+                [output appendFormat: @"%@%@: %@\n", tab, key, valueString];
+            }
+        }
+    }
+
+    if (tabLevel == 0)
+    {
+        [output insertString: @"An error occurred. Available info:\n----- ERROR INFO -----\n" atIndex: 0];
+        [output appendString: @"\n----------------------"];
+    }
+
+    /*
+     Ship it.
+     */
+    return output;
 }
 
 @end

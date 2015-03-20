@@ -19,6 +19,23 @@
                                                  attributes: @{ NSFileProtectionKey : NSFileProtectionCompleteUntilFirstUserAuthentication }
                                                       error: & folderCreationError];
 
+//    // TESTING
+//    folderCreated = NO;
+//    folderCreationError = [NSError errorWithDomain: @"Ron is testing"
+//                                              code: 0
+//                                          userInfo: @{ @"randomSubDictionary": @{
+//                                                               @"fred": @"dude!",
+//                                                               @"fredsAge": @(45),
+//                                                               @"yet another random dictionary": @{ @"one": @(1),
+//                                                                                                    @"two": @(2),
+//                                                                                                    @"three": @"some string with\nnewlines\nin it"
+//                                                                                                    }
+//                                                               },
+//                                                       NSUnderlyingErrorKey: [NSError errorWithDomain: @"random nested error"
+//                                                                                                 code: 15
+//                                                                                             userInfo: nil
+//                                                                              ]
+//                                                       }];
 
     if (folderCreated)
     {

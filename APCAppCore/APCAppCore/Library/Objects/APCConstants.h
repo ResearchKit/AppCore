@@ -239,20 +239,20 @@ static NSString * const kAPCError_CoreData_CantOpenDatabase_Suggestion          
 /** These are in the same sequence as the enum values
     with the same names, above. */
 static NSString * const kAPCError_ArchiveAndUpload_Domain                                   = @"kAPCError_ArchiveAndUpload_Domain";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateZipFile_Reason                 = @"Can't Create Archive";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateZipFile_Suggestion             = @"We couldn't create a .zip file.";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateZipFile_Reason                 = @"Can't Create Archive in Memory";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateZipFile_Suggestion             = @"We couldn't create the new, placeholder .zip file in RAM.  (We haven't even gotten to the 'save to disk' part.)";
 static NSString * const kAPCError_ArchiveAndUpload_CantInsertZipEntry_Reason                = @"Can't Insert Zip Entry";
 static NSString * const kAPCError_ArchiveAndUpload_CantInsertZipEntry_Suggestion            = @"We couldn't add one of the .zippable items to the .zip file.";
 static NSString * const kAPCError_ArchiveAndUpload_CantReadUnencryptedFile_Reason           = @"Can't Open Archive";
 static NSString * const kAPCError_ArchiveAndUpload_CantReadUnencryptedFile_Suggestion       = @"Couldn't read the unencrypted .zip file we just tried to create.";
-static NSString * const kAPCError_ArchiveAndUpload_CantFindDocumentsFolder_Reason           = @"Can't find Documents folder";
+static NSString * const kAPCError_ArchiveAndUpload_CantFindDocumentsFolder_Reason           = @"Can't Find 'Documents' Folder";
 static NSString * const kAPCError_ArchiveAndUpload_CantFindDocumentsFolder_Suggestion       = @"Couldn't find the user's 'documents' folder. This should never happen. Ahem.";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateArchiveFolder_Reason           = @"Can't find Documents folder";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateArchiveFolder_Suggestion       = @"Couldn't find the user's 'documents' folder. This should never happen. Ahem.";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateUploadFolder_Reason            = @"Can't find Documents folder";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateUploadFolder_Suggestion        = @"Couldn't find the user's 'documents' folder. This should never happen. Ahem.";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateArchiveFolder_Reason           = @"Can't create 'Archive' folder";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateArchiveFolder_Suggestion       = @"Couldn't create the folder for preparing our .zip files.";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateUploadFolder_Reason            = @"Can't create 'Upload' folder";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateUploadFolder_Suggestion        = @"Couldn't create the folder for saving files to be uploaded.";
 static NSString * const kAPCError_ArchiveAndUpload_CantCreateWorkingDirectory_Reason        = @"Can't Create Working Folder";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateWorkingDirectory_Suggestion    = @"Couldn't create a folder in which to create a .zip file.";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateWorkingDirectory_Suggestion    = @"Couldn't create a folder in which to make our .zip file.";
 static NSString * const kAPCError_ArchiveAndUpload_DontHaveAnyZippedFiles_Reason            = @"Don't Have Files For Archive";
 static NSString * const kAPCError_ArchiveAndUpload_DontHaveAnyZippedFiles_Suggestion        = @"Something went wrong. We don't seem to have any contents for this .zip file.";
 static NSString * const kAPCError_ArchiveAndUpload_CantCreateManifest_Reason                = @"Can't Create Manifest";
