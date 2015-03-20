@@ -183,11 +183,22 @@ static NSString * const kAPCOperationQueueName_ArchiveAndUpload_ModifyingListOfA
 #pragma mark - Errors
 // ---------------------------------------------------------
 
-/*
- When we get enough examples, here, we'll make them consistent.
- (Still striving for consistency now, but this is also just a catchall.)
- */
+/**
+ This enum is intended as a repository for all error
+ codes around the application suite.  Please add your
+ errors here, categorized, alphabetized, and in the
+ sequence appropriate for your module.
+ 
+ Please also give your stuff a clear starting point, as
+ the existing ones do.  For example, the 200s are the
+ "upload" errors:
 
+ - the first error in that section is "no upload error"
+
+ - the other errors are organized according to the flow
+   of the upload process, so larger error numbers are
+   later in the workflow
+ */
 typedef enum : NSInteger
 {
     APCErrorCode_None                                       = 0,
@@ -214,16 +225,19 @@ typedef enum : NSInteger
     APCErrorCode_ArchiveAndUpload_CantFindEncryptedFile,
     APCErrorCode_ArchiveAndUpload_UploadFailed,
     APCErrorCode_ArchiveAndUpload_CantDeleteFileOrFolder,
-}   APCErrorCode;
+
+} APCErrorCode;
 
 static NSString * const kAPCError_CoreData_Domain                                           = @"kAPCError_CoreData_Domain";
 
 static NSString * const kAPCError_CoreData_CantCreateDatabase_Reason                        = @"Unable to Create Database";
-static NSString * const kAPCError_CoreData_CantCreateDatabase_Suggestion                    = (@"We were unable to create a place to save your data. Please exit the app and try again. If the problem recurs, please uninstall the app and try once more.");
+static NSString * const kAPCError_CoreData_CantCreateDatabase_Suggestion                    = @"We were unable to create a place to save your data. Please exit the app and try again. If the problem recurs, please uninstall the app and try once more.";
 
 static NSString * const kAPCError_CoreData_CantOpenDatabase_Reason                          = @"Unable to Open Database";
-static NSString * const kAPCError_CoreData_CantOpenDatabase_Suggestion                      = (@"Unable to open your existing data file. Please exit the app and try again. If the problem recurs, please uninstall and reinstall the app.");
+static NSString * const kAPCError_CoreData_CantOpenDatabase_Suggestion                      = @"Unable to open your existing data file. Please exit the app and try again. If the problem recurs, please uninstall and reinstall the app.";
 
+/** These are in the same sequence as the enum values
+    with the same names, above. */
 static NSString * const kAPCError_ArchiveAndUpload_Domain                                   = @"kAPCError_ArchiveAndUpload_Domain";
 static NSString * const kAPCError_ArchiveAndUpload_CantCreateZipFile_Reason                 = @"Can't Create Archive";
 static NSString * const kAPCError_ArchiveAndUpload_CantCreateZipFile_Suggestion             = @"We couldn't create a .zip file.";

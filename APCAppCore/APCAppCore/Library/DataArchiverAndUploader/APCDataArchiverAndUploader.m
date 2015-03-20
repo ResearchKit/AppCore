@@ -1,8 +1,7 @@
 //
 //  APCDataArchiverAndUploader.m
-//  APCAppCore
+//  AppCore
 //
-//  Created by Ron Conescu on 3/4/15.
 //  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
@@ -241,8 +240,7 @@ static NSString *folderPathForUploadOperations = nil;
  This method creates our base working directories the first time
  the archiver runs.  They should persist across the lifetime of
  the app.  For that matter, they should persist across runs of
- the app, since the folders have constant names, defined at the
- top of this file.
+ the app, since the folders have constant names.
 
  @return    YES if the folders were created, or if they already
             existed.  NO if unable to create any of the base folders.
