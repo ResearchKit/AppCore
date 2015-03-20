@@ -55,8 +55,20 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidRegisterForRemoteNotifications) name:APCAppDidRegisterUserNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appFailedToRegisterForRemoteNotification) name:APCAppDidFailToRegisterForRemoteNotification object:nil];
-
+        //query coreMotion permission status asap
         _coreMotionPermissionStatus = kPermissionStatusNotDetermined;
+        __weak typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0), ^{
+            
+            [self.motionActivityManager queryActivityStartingFromDate:[NSDate date] toDate:[NSDate date] toQueue:[NSOperationQueue new] withHandler:^(NSArray * __unused activities, NSError *error) {
+                if (!error) {
+                    weakSelf.coreMotionPermissionStatus = kPermissionStatusAuthorized;
+                }else{
+                    weakSelf.coreMotionPermissionStatus = kPermissionStatusDenied;
+                }
+            }];
+        });
+        
     }
     return self;
 }
@@ -69,7 +81,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 - (BOOL)isPermissionsGrantedForType:(APCSignUpPermissionsType)type
 {
     BOOL isGranted = NO;
-    
+    [[NSUserDefaults standardUserDefaults]synchronize];
     switch (type) {
         case kSignUpPermissionsTypeHealthKit:
         {
@@ -237,6 +249,11 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                                                                                                      |UIUserNotificationTypeBadge
                                                                                                      |UIUserNotificationTypeSound) categories:nil];
                 [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+                [[NSUserDefaults standardUserDefaults]synchronize];
+                if (self.completionBlock) {
+                    self.completionBlock(YES, nil);
+                    self.completionBlock = nil;
+                }
             } else {
                 
                 if (self.completionBlock) {

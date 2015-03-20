@@ -103,7 +103,13 @@ static NSString *const kCSVFilename  = @"data.csv";
     //Create log files
     if (![[NSFileManager defaultManager] fileExistsAtPath:tracker.folder]) {
         NSError * folderCreationError;
-        if (![[NSFileManager defaultManager] createDirectoryAtPath:tracker.folder withIntermediateDirectories:YES attributes:nil error:&folderCreationError]) {
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:tracker.folder
+                                       withIntermediateDirectories:YES
+                                                        attributes:@{
+                                                                        NSFileProtectionKey :
+                                                                        NSFileProtectionCompleteUntilFirstUserAuthentication
+                                                                     }
+                                                             error:&folderCreationError]) {
             APCLogError2(folderCreationError);
         }
         else
@@ -124,9 +130,39 @@ static NSString *const kCSVFilename  = @"data.csv";
 {
     //Write the end date
     NSMutableDictionary * infoDictionary = [tracker.infoDictionary mutableCopy];
-    infoDictionary[kEndDateKey] = [NSDate date].description;
+    infoDictionary[kEndDateKey]   = [[NSDate date] toStringInISO8601Format];
+    infoDictionary[kStartDateKey] = [[self datefromDateString:infoDictionary[kStartDateKey]] toStringInISO8601Format];
     NSString * infoFilePath = [tracker.folder stringByAppendingPathComponent:kInfoFilename];
-    [APCPassiveDataCollector createOrReplaceString:[infoDictionary JSONString] toFile:infoFilePath];
+    
+    #warning This is temporary, please remove once the work on a better class is completed.
+    NSError *fileAttributeError = nil;
+    NSString *dataFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
+    NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:dataFilePath
+                                                                                    error:&fileAttributeError];
+    NSString *fileTimeStamp = nil;
+    
+    if (!fileAttributes) {
+        APCLogError2(fileAttributeError);
+        fileTimeStamp = [[NSDate date] toStringInISO8601Format];
+    } else {
+        fileTimeStamp = [[fileAttributes fileModificationDate] toStringInISO8601Format];
+    }
+    
+    infoDictionary[@"files"] = @[@{
+                                     @"filename": kCSVFilename,
+                                     @"timestamp": fileTimeStamp
+                                   }
+                                ];
+    infoDictionary[@"taskRun"] = [[NSUUID UUID] UUIDString];
+    infoDictionary[@"metaData"] = @{
+                                    @"appName": [APCUtilities appName],
+                                    @"appVersion": [APCUtilities appVersion],
+                                    @"device": [APCDeviceHardware platformString]
+                                   };
+    
+    NSDictionary *sageBS = [APCJSONSerializer serializableDictionaryFromSourceDictionary:infoDictionary];
+    
+    [APCPassiveDataCollector createOrReplaceString:[sageBS JSONString] toFile:infoFilePath];
     
     [self createZipFile:tracker];
     [self resetDataFilesForTracker:tracker];
@@ -321,7 +357,13 @@ static NSString *const kCSVFilename  = @"data.csv";
 {
     if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
         NSError * folderCreationError;
-        if (![[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&folderCreationError]) {
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:path
+                                       withIntermediateDirectories:YES
+                                                        attributes:@{
+                                                                     NSFileProtectionKey :
+                                                                     NSFileProtectionCompleteUntilFirstUserAuthentication
+                                                                     }
+                                                             error:&folderCreationError]) {
             APCLogError2(folderCreationError);
         }
     }

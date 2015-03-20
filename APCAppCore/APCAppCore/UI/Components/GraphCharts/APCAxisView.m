@@ -46,7 +46,7 @@
     CGFloat segmentWidth = (CGFloat)CGRectGetWidth(self.bounds)/(self.titleLabels.count - 1);
     CGFloat labelWidth = segmentWidth;
     
-    CGFloat labelHeight = (self.axisType == kAPCGraphAxisTypeX) ? CGRectGetHeight(self.bounds)*0.75 : 20;
+    CGFloat labelHeight = (self.axisType == kAPCGraphAxisTypeX) ? CGRectGetHeight(self.bounds)*0.77 : 20;
     
     for (NSUInteger i=0; i<self.titleLabels.count; i++) {
         

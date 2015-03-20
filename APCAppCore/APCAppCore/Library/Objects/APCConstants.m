@@ -29,7 +29,9 @@ NSString *const APCUpdateTasksReminderNotification = @"APCUpdateTasksReminderNot
 
 NSString *const APCConsentCompletedWithDisagreeNotification = @"goToSignInJoinScreen";
 
-NSString* const APCMotionHistoryReporterDoneNotification = @"APCMotionHistoryReporterDoneNotification";
+NSString *const APCMotionHistoryReporterDoneNotification = @"APCMotionHistoryReporterDoneNotification";
+
+NSString *const APCHealthKitObserverQueryUpdateForSampleTypeNotification = @"APCHealthKitObserverQueryUpdateForSampleTypeNotification";
 
 NSString *const kStudyIdentifierKey                 = @"StudyIdentifierKey";
 NSString *const kAppPrefixKey                       = @"AppPrefixKey";

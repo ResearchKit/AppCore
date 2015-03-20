@@ -26,7 +26,7 @@
 
 static  CGFloat  kLozengeButtonWidth     = 38.0;
 static  CGFloat  kLozengeButtonHeight    = 29.0;
-static  CGFloat  kLozengeBaseYCoordinate = 10.0;
+static  CGFloat  kLozengeBaseYCoordinate = 20.0;
 static  CGFloat  kLozengeBaseYStepOver   = 49.0;
 
 static  CGFloat  kWaterfallDashOnValue   = 11.0;
@@ -38,6 +38,9 @@ static  NSString   *daysOfWeekNames[]    = { @"Monday", @"Tuesday", @"Wednesday"
 static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSString *));
 
 @interface  APCMedicationTrackerMedicationsDisplayView  ( )
+
+@property  (nonatomic, assign)  CGFloat     currentFrameBase;
+@property  (nonatomic, assign)  NSUInteger  lozengeOffset;
 
 @end
 
@@ -63,6 +66,15 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 
 #pragma   mark  -  Lozenge Button Action Method
 
++ (NSUInteger)numberOfPagesForPrescriptions:(NSUInteger)numberOfPrescriptions inFrameHeight:(CGFloat)frameHeight
+{
+    CGFloat  floatPages = (kLozengeBaseYCoordinate + numberOfPrescriptions * kLozengeBaseYStepOver) / frameHeight;
+    NSUInteger  numberOfPages = (NSUInteger)(ceil(floatPages));
+    return  numberOfPages;
+}
+
+#pragma   mark  -  Lozenge Button Action Method
+
 - (void)lozengeButtonWasTapped:(APCLozengeButton *)sender
 {
     if (self.delegate != nil) {
@@ -74,11 +86,11 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 
 #pragma   mark  -  Custom Initialisation Method for Medication Models
 
-- (void)makePrescriptionDisplaysWithPrescriptions:(NSArray *)thePrescriptions andDate:(NSDate *)aDate
+- (void)makePrescriptionDisplaysWithPrescriptions:(NSArray *)thePrescriptions andNumberOfFrames:(NSUInteger)numberOfFramesPerPage andDate:(NSDate *)aDate
 {
     self.prescriptions = thePrescriptions;
+    self.numberOfFramesPerPage = numberOfFramesPerPage;
     self.startOfWeekDate = aDate;
-    
     for (APCMedTrackerPrescription *prescription in self.prescriptions) {
         
         [prescription fetchDosesTakenFromDate: self.startOfWeekDate
@@ -100,16 +112,19 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
              }
          }];
     }
+    self.currentFrameBase = 0.0;
+    self.lozengeOffset    = 0;
 }
 
 #pragma   mark  -  Refesh Method for Medication Models
 
-- (void)refreshWithPrescriptions:(NSArray *)thePrescriptions andDate:(NSDate *)aDate
+- (void)refreshWithPrescriptions:(NSArray *)thePrescriptions andNumberOfFrames:(NSUInteger)numberOfFramesPerPage andDate:(NSDate *)aDate
 {
+    self.numberOfFramesPerPage = numberOfFramesPerPage;
     NSArray  *subviews = self.subviews;
     [subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
-    [self makePrescriptionDisplaysWithPrescriptions:thePrescriptions andDate:aDate];
+    [self makePrescriptionDisplaysWithPrescriptions:thePrescriptions andNumberOfFrames:numberOfFramesPerPage andDate:aDate];
 }
 
 #pragma   mark  -  Create Lozenge Button
@@ -133,18 +148,26 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 
 #pragma   mark  -  Create Lozenge Buttons     kLozengeTextPointSize
 
-- (void)makeLozengesLayoutForPrescription: (APCMedTrackerPrescription *) prescription
-                  usingDailyDosageRecords: (NSArray *) dailyDosageRecords
+- (void)makeLozengesLayoutForPrescription: (APCMedTrackerPrescription *)prescription
+                  usingDailyDosageRecords: (NSArray *)dailyDosageRecords
 
 {
     NSDictionary  *map = @{ @"Monday" : @(0.0), @"Tuesday" : @(1.0), @"Wednesday" : @(2.0), @"Thursday" : @(3.0), @"Friday" : @(4.0), @"Saturday" : @(5.0), @"Sunday" : @(6.0) };
     
     CGFloat  displacement = CGRectGetWidth(self.bounds) / 7.0;
     
+    CGFloat  frameHeight = CGRectGetHeight(self.bounds) / self.numberOfFramesPerPage;
+    
     CGFloat  baseYCoordinate = kLozengeBaseYCoordinate;
     
-    NSUInteger lozengeRow = [self.prescriptions indexOfObject: prescription];
-    CGFloat  yCoordinate = baseYCoordinate + lozengeRow * kLozengeBaseYStepOver;
+    NSUInteger  lozengeRow = [self.prescriptions indexOfObject: prescription];
+    
+    CGFloat  yCoordinate = self.currentFrameBase + baseYCoordinate + (lozengeRow - self.lozengeOffset) * kLozengeBaseYStepOver;
+    if ((yCoordinate + kLozengeButtonHeight) > (self.currentFrameBase + frameHeight)) {
+        self.currentFrameBase = self.currentFrameBase + frameHeight;
+        self.lozengeOffset = lozengeRow;
+        yCoordinate = self.currentFrameBase + baseYCoordinate + (lozengeRow - self.lozengeOffset) * kLozengeBaseYStepOver;
+    }
     
     NSDictionary  *dictionary = prescription.frequencyAndDays;
     

@@ -21,8 +21,6 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 @interface APCSignUpPermissionsViewController () <UITableViewDelegate, UITableViewDataSource, APCPermissionCellDelegate>
 
-@property (nonatomic) NSInteger permissionsGrantedCount;
-
 @property (nonatomic, strong) APCPermissionsManager *permissionsManager;
 
 @end
@@ -55,8 +53,6 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 {
     _permissions = [NSMutableArray array];
     
-    _permissionsGrantedCount = 0;
-    
     _permissionsManager = [[APCPermissionsManager alloc] init];
 }
 
@@ -68,16 +64,14 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     
     [self setupNavAppearance];
     
-    self.permissions = [self prepareData];
-    [self reloadData];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+    self.permissions = [self prepareData].mutableCopy;
     [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
     
-    [self reloadData];
+    [self.tableView reloadData];
   APCLogViewControllerAppeared();
 
 }
@@ -87,6 +81,10 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Prepare Content
@@ -108,6 +106,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
             {
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeHealthKit;
+                item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Health Kit", @"");
                 item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeHealthKit)];
                 [items addObject:item];
@@ -117,6 +116,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
             {
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeLocation;
+                item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Location Services", @"");
                 item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeLocation)];
                 [items addObject:item];
@@ -127,6 +127,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
                 if ([CMMotionActivityManager isActivityAvailable]){
                     APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                     item.permissionType = kSignUpPermissionsTypeCoremotion;
+                    item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                     item.caption = NSLocalizedString(@"Motion Activity", @"");
                     item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeCoremotion)];
                     [items addObject:item];
@@ -137,6 +138,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
             {
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeLocalNotifications;
+                item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Notifications", @"");
                 item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeLocalNotifications)];
                 [items addObject:item];
@@ -146,6 +148,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
             {
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
                 item.permissionType = kSignUpPermissionsTypeMicrophone;
+                item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Microphone", @"");
                 item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeMicrophone)];
                 [items addObject:item];
@@ -198,8 +201,8 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     cell.detailsLabel.text = item.detailText;
     cell.delegate = self;
     cell.indexPath = indexPath;
-    
-    [cell setPermissionsGranted:item.isPermissionGranted];
+    [cell.permissionButton setEnabled:item.permissionGranted];
+    [cell setPermissionsGranted:item.permissionGranted];
     
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     
@@ -218,17 +221,18 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 - (void)permissionsCellTappedPermissionsButton:(APCPermissionsCell *)cell
 {
-    APCTableViewPermissionsItem *item = self.permissions[cell.indexPath.row];
+    __block APCTableViewPermissionsItem *item = self.permissions[cell.indexPath.row];
     
-    if (!item.isPermissionGranted) {
+    if (!item.permissionGranted) {
         
         __weak typeof(self) weakSelf = self;
         
         [self.permissionsManager requestForPermissionForType:item.permissionType withCompletion:^(BOOL granted, NSError *error) {
             if (granted) {
-                dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    [weakSelf reloadData];
-                });
+                APCTableViewPermissionsItem *item = weakSelf.permissions[cell.indexPath.row];
+                [item setPermissionGranted:granted];
+                weakSelf.permissions[cell.indexPath.row] = item;
+                [self.tableView reloadData];
             } else {
                 
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -237,6 +241,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
             }            
         }];
     }
+    [self.tableView reloadData];
 }
 
 - (void)presentSettingsAlert:(NSError *)error
@@ -252,14 +257,6 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     [alertContorller addAction:settings];
     
     [self.navigationController presentViewController:alertContorller animated:YES completion:nil];
-}
-
-
-#pragma mark - Getter/Setter
-
-- (void)setPermissionsGrantedCount:(NSInteger)permissionsGrantedCount
-{
-    _permissionsGrantedCount = permissionsGrantedCount;
 }
 
 #pragma mark - Selectors / Button Actions
@@ -298,29 +295,10 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 - (void) appDidBecomeActive: (NSNotification *) __unused notification
 {
-    [self reloadData];
+    [self.tableView reloadData];
 }
 
 #pragma mark - Permissions
-
-- (void)updatePermissions
-{
-    self.permissionsGrantedCount = 0;
-    
-    for (APCTableViewPermissionsItem *item in self.permissions) {
-        item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
-        if (item.permissionGranted) {
-            self.permissionsGrantedCount ++;
-        }
-    }
-}
-
-- (void)reloadData
-{
-    [self updatePermissions];
-
-    [self.tableView reloadData];
-}
 
 - (IBAction) next: (id) __unused sender
 {

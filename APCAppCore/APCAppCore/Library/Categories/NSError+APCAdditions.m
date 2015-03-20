@@ -7,14 +7,18 @@
  
 #import "APCAppCore.h"
 
-static NSString*    kServerTooDamnBusy          = @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.";
-static NSString*    kUnexpectConditionMessage   = @"An unexpected condition has occurred. Please try again soon.";
-static NSString*    kNotConnectedMessage        = @"You are currently not connected to the Internet. Please try again when you are connected to a network.";
-static NSString*    kServerMaintanenceMessage   = @"The study server is currently undergoing maintanence. Please try again soon.";
-static NSString*    kAccountAlreadyExists       = @"An account has already been created for this email address. Please use a different email address, or sign in using the \"already participating\" link at the bottom of the Welcome page.";
-static NSString*    kAccountDoesNotExists       = @"There is no account registered for this email address.";
-static NSString*    kBadEmailAddress            = @"The email address submitted is not a valid email address. Please correct the email address and try again.";
-static NSString*    kNotReachableMessage        = @"We are currently not able to reach the study server. Please retry in a few moments.";
+static NSString*    kServerTooDamnBusy              = @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.";
+static NSString*    kUnexpectConditionMessage       = @"An unexpected condition has occurred. Please try again soon.";
+static NSString*    kNotConnectedMessage            = @"You are currently not connected to the Internet. Please try again when you are connected to a network.";
+static NSString*    kServerMaintanenceMessage       = @"The study server is currently undergoing maintanence. Please try again soon.";
+static NSString*    kAccountAlreadyExists           = @"An account has already been created for this email address. Please use a different email address, or sign in using the \"already participating\" link at the bottom of the Welcome page.";
+static NSString*    kAccountDoesNotExists           = @"There is no account registered for this email address.";
+static NSString*    kBadEmailAddress                = @"The email address submitted is not a valid email address. Please correct the email address and try again.";
+static NSString*    kNotReachableMessage            = @"We are currently not able to reach the study server. Please retry in a few moments.";
+static NSString*    kInvalidEmailAddressOrPassword  = @"Entered email address or password is not valid. Plesae correct the email address or password and try again.";
+static NSString*    kSageMessageKey                 = @"message";
+static NSString*    kSageInvalidUsernameOrPassword  = @"Invalid username or password.";
+
 
 @implementation NSError (APCAdditions)
 
@@ -64,7 +68,19 @@ static NSString*    kNotReachableMessage        = @"We are currently not able to
     }
     else if (self.code == 400)
     {
-        message = NSLocalizedString(kBadEmailAddress, nil);
+        // There are several messages that need to be displayed within the 400
+        // Extract the internal message then act appropriately.
+        NSString * messageText =[code valueForKey:kSageMessageKey];
+        
+        if([messageText isEqualToString:(kSageInvalidUsernameOrPassword)])
+        {
+            message = NSLocalizedString(kInvalidEmailAddressOrPassword, nil);
+        }
+        else
+        {
+            message = NSLocalizedString(kBadEmailAddress, nil);
+        }
+        
     }
     else if (self.code == 409)
     {

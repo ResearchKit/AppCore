@@ -49,6 +49,8 @@ FOUNDATION_EXPORT NSString *const APCConsentCompletedWithDisagreeNotification;
 
 FOUNDATION_EXPORT NSString *const APCMotionHistoryReporterDoneNotification;
 
+FOUNDATION_EXPORT NSString *const APCHealthKitObserverQueryUpdateForSampleTypeNotification;
+
 FOUNDATION_EXPORT NSString *const kStudyIdentifierKey;
 FOUNDATION_EXPORT NSString *const kAppPrefixKey;
 FOUNDATION_EXPORT NSString *const kBridgeEnvironmentKey;

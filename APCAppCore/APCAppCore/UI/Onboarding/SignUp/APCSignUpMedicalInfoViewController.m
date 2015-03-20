@@ -228,6 +228,12 @@
                     
                     if (self.user.sleepTime) {
                         field.date = self.user.sleepTime;
+                    } else {
+                        field.date = [[NSCalendar currentCalendar] dateBySettingHour:7
+                                                                              minute:0
+                                                                              second:0
+                                                                              ofDate:[NSDate date]
+                                                                             options:0];
                     }
                     
                     APCTableViewRow *row = [APCTableViewRow new];
@@ -252,6 +258,12 @@
                     
                     if (self.user.wakeUpTime) {
                         field.date = self.user.wakeUpTime;
+                    } else {
+                        field.date = [[NSCalendar currentCalendar] dateBySettingHour:21
+                                                                              minute:30
+                                                                              second:0
+                                                                              ofDate:[NSDate date]
+                                                                             options:0];
                     }
                     
                     APCTableViewRow *row = [APCTableViewRow new];

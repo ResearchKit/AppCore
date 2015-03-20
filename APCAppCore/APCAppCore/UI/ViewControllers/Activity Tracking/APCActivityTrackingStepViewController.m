@@ -358,11 +358,12 @@ static NSInteger const kRegularFontSize = 17;
 - (void)reset
 {
     //Updating the start date of the task.
-    [self saveSevenDayFitnessStartDate: [NSDate date]];
+    [self saveSevenDayFitnessStartDate: [[NSDate date] startOfDay]];
 
     //Calling the motion history reporter to retrieve and update the data for core activity. This triggers a series of notifications that lead to the pie graph being drawn again here.
     APCMotionHistoryReporter *reporter = [APCMotionHistoryReporter sharedInstance];
-    [reporter startMotionCoProcessorDataFrom:[NSDate dateWithTimeIntervalSinceNow:-24 * 60 * 60] andEndDate:[NSDate new] andNumberOfDays:1];
+    
+    [reporter startMotionCoProcessorDataFrom:[[NSDate date] startOfDay] andEndDate:[[NSDate date] endOfDay] andNumberOfDays:1];
 
     [self.segmentDays setEnabled:NO forSegmentAtIndex:0];
     [self.segmentDays setEnabled:NO forSegmentAtIndex:2];

@@ -93,6 +93,17 @@ static NSString * const kDateFormatISO8601 = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
 {
     NSDateFormatter *formatter = [NSDateFormatter new];
     [formatter setDateFormat: kDateFormatISO8601];
+
+    /*
+     Set the formatter's locale.  Otherwise, the result will
+     come out in the user's local language, not in English; and
+     we wanna be able to generate it in English, since that's
+     how Sage is expecting it.  For the reason to set the POSIX
+     locale ("en_US_POSIX"), instead of the simpler "en-US",
+     see:  http://blog.gregfiumara.com/archives/245
+     */
+    [formatter setLocale: [[NSLocale alloc] initWithLocaleIdentifier: @"en_US_POSIX"]];
+
     NSString *result = [formatter stringFromDate: self];
     return result;
 }

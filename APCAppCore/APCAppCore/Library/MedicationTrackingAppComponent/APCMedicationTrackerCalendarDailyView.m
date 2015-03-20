@@ -27,9 +27,6 @@ static  CGFloat  kDateLabelPointSize = 13.0;
     self = [super initWithFrame:frame];
     if (self != nil) {
         [self setupDateLabelContainerAndDateLabel];
-
-        UITapGestureRecognizer  *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dailyViewDidClick:)];
-        [self addGestureRecognizer:singleFingerTap];
     }
     return  self;
 }
@@ -79,11 +76,6 @@ static  CGFloat  kDateLabelPointSize = 13.0;
         self.dateLabel.textColor       = [UIColor regularDateTextColor];
         self.dateLabelBackdrop.backgroundColor = [UIColor regularDateBackgroundColor];
     }
-}
-
-- (void)dailyViewDidClick: (UIGestureRecognizer *) __unused tap
-{
-    [self.delegate dailyCalendarViewDidSelect:self.date];
 }
 
 @end
