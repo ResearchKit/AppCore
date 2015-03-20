@@ -1,0 +1,165 @@
+Contributing to ResearchKit
+===========================
+
+> Most of this page focuses on code contributions to the existing
+> codebase. However, other types of contributions are welcome too, in
+> keeping with our [community ethos](link). For example, contributions of
+> free-to-use survey content, validation data, and analysis or
+> processing tools are all welcome. Ask on [researchkit-dev](link) or
+> [contact us](link) for guidance.
+
+
+Contributing software
+---------------------
+
+This page assumes you already know how to check out and build the code.
+
+To contribute to ResearchKit:
+
+1. [Choose or create an issue to work on.](#create)
+2. [Create a personal fork of ResearchKit.](#fork)
+3. [Develop your changes in your fork.](#develop)
+4. [Run the tests on the ORKDemo target.](#test)
+5. [Submit a pull request.](#request)
+6. Make any changes requested by the reviewer, and update your pull request as needed.
+7. Once accepted, your pull request will be merged into master.
+
+Choosing an issue to work on<a name="create"></a>
+----------------------------
+
+To find an issue to work on, either pick something that you need for
+your app, or select one of the issues from our [issue list](link). Or,
+consider one of the areas where we'd like to extend ResearchKit:
+
+* Faster 'get started' to a useful app
+* More active tasks
+* Data analysis for active tasks
+* More informed consent sections
+* Other ideas: ask on the [mailing list](link)
+
+If in doubt, bring your idea up on [researchkit-dev](link).
+
+
+Creating a personal fork<a name="fork"></a>
+------------------------
+
+On GitHub, it's easy to create a personal fork. Just tap the "Fork"
+button on the top right, and clone your new repository.
+
+
+Develop your changes in your fork<a name="develop"></a>
+---------------------------------
+
+Develop your changes using your normal development process. If you
+already have code from an existing project, you may need to adjust its
+style to more closely match that in ResearchKit.
+
+New components may need to expose new Public or Private
+headers. Public headers are for APIs that are likely to be a stable
+part of the ResearchKit interface. Private headers are for APIs that
+may need to be accessed from app-side unit tests, or that are more
+subject to change than the public interface. All other headers should
+be internal, "Project" headers.
+
+Include the standard license from the `LICENSE` file in the header of
+any new files, but also include any additional copyright messages
+appropriate for your institution or firm.
+
+Add automated tests for your feature, where it is possible to do
+so. For UI driven components where it is harder to write automated
+tests, add UI to the ORKDemo test application so that the new features
+can be reviewed and tested. Consider also whether to add new code to
+other existing demo apps to demonstrate your feature.
+
+Keep changes that fix different issues separate. For new features this
+can be more relaxed, but for bug fixes, separate bugs should be
+submitted as separate pull requests. A good way to do this is to
+create a new branch in your fork for each new pull request you intend.
+
+Any new user-visible strings should be included in the English
+Localizable strings table so that they can be localized in the next
+release cycle.
+
+
+Run the tests on the `ORKDemo` target<a name="test"></a>
+-----------------------------------
+
+All unit tests should pass, and there should be no warnings. Also
+verify that the `ORKDemo` app runs on both device and simulator.
+
+Where your code affects UI presentation, also test:
+
+* Multiple device form factors (for instance, iPhone 4S, iPhone 5, iPhone 6, iPhone 6 Plus).
+* Dynamic text, especially at the "Large" setting.
+* Rotation between portrait and landscape, where appropriate.
+
+
+Submit a pull request<a name="request"></a>
+---------------------
+
+Before submitting your first pull request, take a moment to sign and
+return this [Contributor's Agreement](link). Without this agreement,
+we will not be able to accept your changes.
+
+The reviewers may request changes. Make the changes, and update your
+pull request as needed. To begin with, reviewers will be Apple
+employees familiar with the project. As the community grows, we hope
+that a wider pool of reviewers will be invited to participate.
+
+Initial reviews will look at coding style and correctness, but may
+also touch on security and privacy. Reviews will not typically extend
+to the science informing particular tasks or tests, although
+additional documentation may be requested by the reviewer, and
+references can be helpful in giving background to research tasks which
+have a strong basis in the literature.
+
+In some cases, additional scientific review may be appropriate ([see
+below](#scientific)).
+
+
+After acceptance<a name="after"></a>
+----------------
+
+Once your pull request has been accepted, your changes will be merged
+to master. You are still responsible for your change after it is
+accepted. Stay in contact, in case bugs are detected that may require
+your attention.
+
+When the project is next branched for release, your changes will be
+incorporated. Queries may come back to you regarding localization,
+documentation, or other issues during this process.
+
+
+
+Scientific Review<a name="scientific"></a>
+-----------------
+
+(TBD) Dan's content to go here.
+
+
+Branching Process
+-----------------
+
+The `master` branch is used for work in progress. On `master`:
+
+* All test apps should build and run error free.
+* Unit tests should all pass
+* Everything should be continuously in working order in English (the base language)
+
+Release branches will be created periodically. Tagged releases will:
+
+* be up to date for all supported languages
+* have updated documentation
+* be considered fully stable
+
+When a new release branch is created, it will remain open until the
+release has stabilized. While the release is being stabilized:
+
+* Localization will be updated.
+* Documentation will be updated.
+* Assets will be verified complete for all target devices.
+* Changes will be merged back into `master`.
+
+Security or other urgent fixes may be posted to otherwise closed
+release branches, and new tags created.
+
