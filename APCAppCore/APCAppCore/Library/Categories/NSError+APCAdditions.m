@@ -145,4 +145,101 @@ static NSString*    kNotReachableMessage        = @"We are currently not able to
 }
 
 
+/*********************************************************************************/
+#pragma mark - Convenience Initializers
+/*********************************************************************************/
+
++ (NSError *) errorWithCode: (APCErrorCode) code
+                     domain: (NSString *) domain
+              failureReason: (NSString *) localizedFailureReason
+         recoverySuggestion: (NSString *) localizedRecoverySuggestion
+{
+    return [self errorWithCode: code
+                        domain: domain
+                 failureReason: localizedFailureReason
+            recoverySuggestion: localizedRecoverySuggestion
+               relatedFilePath: nil
+                    relatedURL: nil
+                   nestedError: nil];
+}
+
++ (NSError *) errorWithCode: (APCErrorCode) code
+                     domain: (NSString *) domain
+              failureReason: (NSString *) localizedFailureReason
+         recoverySuggestion: (NSString *) localizedRecoverySuggestion
+                nestedError: (NSError *)  rootCause
+{
+    return [self errorWithCode: code
+                        domain: domain
+                 failureReason: localizedFailureReason
+            recoverySuggestion: localizedRecoverySuggestion
+               relatedFilePath: nil
+                    relatedURL: nil
+                   nestedError: rootCause];
+}
+
++ (NSError *) errorWithCode: (APCErrorCode) code
+                     domain: (NSString *) domain
+              failureReason: (NSString *) localizedFailureReason
+         recoverySuggestion: (NSString *) localizedRecoverySuggestion
+            relatedFilePath: (NSString *) someFilePath
+{
+    return [self errorWithCode: code
+                        domain: domain
+                 failureReason: localizedFailureReason
+            recoverySuggestion: localizedRecoverySuggestion
+               relatedFilePath: someFilePath
+                    relatedURL: nil
+                   nestedError: nil];
+}
+
++ (NSError *) errorWithCode: (APCErrorCode) code
+                     domain: (NSString *) domain
+              failureReason: (NSString *) localizedFailureReason
+         recoverySuggestion: (NSString *) localizedRecoverySuggestion
+                 relatedURL: (NSURL *)    someURL
+{
+    return [self errorWithCode: code
+                        domain: domain
+                 failureReason: localizedFailureReason
+            recoverySuggestion: localizedRecoverySuggestion
+               relatedFilePath: nil
+                    relatedURL: someURL
+                   nestedError: nil];
+}
+
++ (NSError *) errorWithCode: (APCErrorCode) code
+                     domain: (NSString *) domain
+              failureReason: (NSString *) localizedFailureReason
+         recoverySuggestion: (NSString *) localizedRecoverySuggestion
+            relatedFilePath: (NSString *) someFilePath
+                 relatedURL: (NSURL *)    someURL
+                nestedError: (NSError *)  rootCause
+{
+    NSMutableDictionary *userInfo = [NSMutableDictionary new];
+
+    if (localizedFailureReason)         { userInfo [NSLocalizedFailureReasonErrorKey]       = localizedFailureReason;       }
+    if (localizedRecoverySuggestion)    { userInfo [NSLocalizedRecoverySuggestionErrorKey]  = localizedRecoverySuggestion;  }
+    if (someFilePath)                   { userInfo [NSFilePathErrorKey]                     = someFilePath;                 }
+    if (someURL)                        { userInfo [NSURLErrorKey]                          = someURL;                      }
+    if (rootCause)                      { userInfo [NSUnderlyingErrorKey]                   = rootCause;                    }
+
+    NSError *error = [NSError errorWithDomain: domain
+                                         code: code
+                                     userInfo: userInfo];
+
+    return error;
+}
+
 @end
+
+
+
+
+
+
+
+
+
+
+

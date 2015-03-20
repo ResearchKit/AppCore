@@ -8,6 +8,7 @@
 #import "APCDataSubstrate+CoreData.h"
 #import "APCAppCore.h"
 #import <CoreData/CoreData.h>
+#import "NSError+APCAdditions.h"
 
 
 @implementation APCDataSubstrate (CoreData)
@@ -46,7 +47,7 @@
 
 - (void) setUpPersistentStore
 {
-    NSError *error               = nil;
+    NSError *errorOpeningOrCreatingCoreDataFile = nil;
     NSURL   *persistentStoreUrl  = [NSURL fileURLWithPath: self.storePath];
     BOOL    fileAlreadyExists    = [[NSFileManager defaultManager] fileExistsAtPath: self.storePath];
 
@@ -58,13 +59,12 @@
                                                                                        configuration: nil
                                                                                                  URL: persistentStoreUrl
                                                                                              options: options
-                                                                                               error: & error];
+                                                                                               error: & errorOpeningOrCreatingCoreDataFile];
 
     if (persistentStore)
     {
         // Great!  Everything worked.  (Sound of whistling)
     }
-
     else
     {
         /*
@@ -73,43 +73,28 @@
 
                 https://developer.apple.com/library/ios/documentation/Cocoa/Reference/CoreDataFramework/Miscellaneous/CoreData_Constants/
          */
-
-        NSInteger errorCode = kAPCErrorDomain_CoreData_Code_Undetermined;
-
-        NSMutableDictionary * userInfo = @{ NSUnderlyingErrorKey : error ?: [NSNull null],
-                                            NSFilePathErrorKey   : self.storePath,
-                                           }.mutableCopy;
+        NSError *catastrophe = nil;
 
         if (fileAlreadyExists)
         {
-            errorCode = kAPCErrorDomain_CoreData_Code_CantOpenExistingDatabase;
-
-            [userInfo addEntriesFromDictionary:
-             @{
-               NSLocalizedFailureReasonErrorKey: NSLocalizedString (@"Unable to Open Database",
-                                                                    @"If we can't open the user's existing data file, they'll see an alert with this title."),
-
-               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString (@"Unable to open your existing data file. Please exit the app and try again. If the problem recurs, please uninstall and reinstall the app.",
-                                                                         @"If we can't open the user's existing data file, they'll see an alert with this message."),
-               }];
+            catastrophe = [NSError errorWithCode: APCErrorCode_CoreData_CantOpenExistingDatabase
+                                          domain: kAPCError_CoreData_Domain
+                                   failureReason: kAPCError_CoreData_CantOpenDatabase_Reason
+                              recoverySuggestion: kAPCError_CoreData_CantOpenDatabase_Suggestion
+                                 relatedFilePath: self.storePath
+                                      relatedURL: persistentStoreUrl
+                                     nestedError: errorOpeningOrCreatingCoreDataFile];
         }
         else
         {
-            errorCode = kAPCErrorDomain_CoreData_Code_CantCreateDatabase;
-
-            [userInfo addEntriesFromDictionary:
-             @{
-               NSLocalizedFailureReasonErrorKey: NSLocalizedString (@"Unable to Create Database",
-                                                                    @"If we can't open create a place to store the user's data, they'll see an alert with this title."),
-
-               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString (@"We were unable to create a place to save your data. Please exit the app and try again. If the problem recurs, please uninstall the app and try once more.",
-                                                                         @"If we can't open create a place to store the user's data, they'll see an alert with this message."),
-               }];
+            catastrophe = [NSError errorWithCode: APCErrorCode_CoreData_CantCreateDatabase
+                                          domain: kAPCError_CoreData_Domain
+                                   failureReason: kAPCError_CoreData_CantCreateDatabase_Reason
+                              recoverySuggestion: kAPCError_CoreData_CantCreateDatabase_Suggestion
+                                 relatedFilePath: self.storePath
+                                      relatedURL: persistentStoreUrl
+                                     nestedError: errorOpeningOrCreatingCoreDataFile];
         }
-
-        NSError *catastrophe = [NSError errorWithDomain: kAPCErrorDomain_CoreData
-                                                   code: errorCode
-                                               userInfo: userInfo];
 
         APCLogError2 (catastrophe);
 
@@ -117,7 +102,8 @@
         /*
          Report this actually-catastrophic error to the app.
          It'll display it when it gets a chance -- a few
-         milliseconds from now, asynchronously.
+         milliseconds from now (like, thousands of actual
+         instructions from now), asynchronously.
          */
         APCAppDelegate *appDelegate = (APCAppDelegate *) [[UIApplication sharedApplication] delegate];
         [appDelegate registerCatastrophicStartupError: catastrophe];

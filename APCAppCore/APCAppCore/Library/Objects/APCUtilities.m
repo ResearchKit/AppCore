@@ -131,4 +131,11 @@ static NSString *       _realApplicationName = nil;
 	return result;
 }
 
++ (NSString *) pathToUserDocumentsFolder
+{
+    NSString *documentsFolder = (NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES)).firstObject;
+
+    return documentsFolder;
+}
+
 @end

@@ -156,6 +156,8 @@
 		36CCF3A01AA45B790086CD1D /* APCConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947701A73272C0034C522 /* APCConstants.m */; };
 		36CCF3A11AA45B9D0086CD1D /* NSDateComponents+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B9474B1A73272C0034C522 /* NSDateComponents+Helper.m */; };
 		36CCF3A21AA45BC40086CD1D /* NSDate+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947491A73272C0034C522 /* NSDate+Helper.m */; };
+		36D0510E1ABB92F0008FC9B3 /* NSFileManager+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 36D0510C1ABB92F0008FC9B3 /* NSFileManager+Helper.h */; };
+		36D0510F1ABB92F0008FC9B3 /* NSFileManager+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36D0510D1ABB92F0008FC9B3 /* NSFileManager+Helper.m */; };
 		36E06F1C1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E06F1B1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m */; };
 		5B04329F1A318AA2000DC9ED /* APCSignInTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B04329D1A318AA2000DC9ED /* APCSignInTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B0432A01A318AA2000DC9ED /* APCSignInTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B04329E1A318AA2000DC9ED /* APCSignInTask.m */; };
@@ -827,6 +829,8 @@
 		36B7D2541A8D848D0043F968 /* ORKAnswerFormat+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ORKAnswerFormat+Helper.m"; sourceTree = "<group>"; };
 		36C8B3EB1A38D9FF0051096B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		36D0510C1ABB92F0008FC9B3 /* NSFileManager+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Helper.h"; sourceTree = "<group>"; };
+		36D0510D1ABB92F0008FC9B3 /* NSFileManager+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Helper.m"; sourceTree = "<group>"; };
 		36E06F1B1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionRealLifeTests.m; sourceTree = "<group>"; };
 		5B04329D1A318AA2000DC9ED /* APCSignInTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignInTask.h; sourceTree = "<group>"; };
 		5B04329E1A318AA2000DC9ED /* APCSignInTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignInTask.m; sourceTree = "<group>"; };
@@ -2183,6 +2187,8 @@
 				F5B9475F1A73272C0034C522 /* UIScrollView+Helper.m */,
 				F5B947601A73272C0034C522 /* UIView+Helper.h */,
 				F5B947611A73272C0034C522 /* UIView+Helper.m */,
+				36D0510C1ABB92F0008FC9B3 /* NSFileManager+Helper.h */,
+				36D0510D1ABB92F0008FC9B3 /* NSFileManager+Helper.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -2927,6 +2933,7 @@
 				36AAB34F1A9A75BB00FAC255 /* APCMedTrackerPrescription.h in Headers */,
 				5BB10C131A91F970002D2DD2 /* APCWebViewController.h in Headers */,
 				F5F12A871A2F78490015982C /* APCSignUpTask.h in Headers */,
+				36D0510E1ABB92F0008FC9B3 /* NSFileManager+Helper.h in Headers */,
 				F5B947AF1A73272C0034C522 /* UIColor+APCAppearance.h in Headers */,
 				F5F12A901A2F78490015982C /* APCSpinnerViewController.h in Headers */,
 				CFFDEDFA1A95734000B25581 /* APCSetupTableViewCell.h in Headers */,
@@ -3314,6 +3321,7 @@
 			files = (
 				F5F129F51A2F78490015982C /* APCResult+AddOn.m in Sources */,
 				5B827B561A80CB0400C685A3 /* APCFadeAnimator.m in Sources */,
+				36D0510F1ABB92F0008FC9B3 /* NSFileManager+Helper.m in Sources */,
 				F5F12AF11A2F78490015982C /* APCDashboardProgressTableViewCell.m in Sources */,
 				F5B9480F1A73272C0034C522 /* APCTimeSelector.m in Sources */,
 				F5F12A0B1A2F78490015982C /* APCTask.m in Sources */,
