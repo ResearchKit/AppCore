@@ -159,6 +159,8 @@
 		5B0432A01A318AA2000DC9ED /* APCSignInTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B04329E1A318AA2000DC9ED /* APCSignInTask.m */; };
 		5B0432A71A322BEE000DC9ED /* APCOnboardingTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B0432A51A322BEE000DC9ED /* APCOnboardingTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B0432A81A322BEE000DC9ED /* APCOnboardingTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0432A61A322BEE000DC9ED /* APCOnboardingTask.m */; };
+		5B09ED1F1ABC1BEF003C5061 /* APCLicenseInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B09ED1D1ABC1BEF003C5061 /* APCLicenseInfoViewController.h */; };
+		5B09ED201ABC1BEF003C5061 /* APCLicenseInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B09ED1E1ABC1BEF003C5061 /* APCLicenseInfoViewController.m */; };
 		5B234E141A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B234E121A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h */; };
 		5B234E151A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B234E131A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m */; };
 		5B73CAF21A8B3B8C00FFE79C /* APCDashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B73CAF11A8B3B8C00FFE79C /* APCDashboard.storyboard */; };
@@ -828,6 +830,8 @@
 		5B04329E1A318AA2000DC9ED /* APCSignInTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignInTask.m; sourceTree = "<group>"; };
 		5B0432A51A322BEE000DC9ED /* APCOnboardingTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCOnboardingTask.h; sourceTree = "<group>"; };
 		5B0432A61A322BEE000DC9ED /* APCOnboardingTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCOnboardingTask.m; sourceTree = "<group>"; };
+		5B09ED1D1ABC1BEF003C5061 /* APCLicenseInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCLicenseInfoViewController.h; sourceTree = "<group>"; };
+		5B09ED1E1ABC1BEF003C5061 /* APCLicenseInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLicenseInfoViewController.m; sourceTree = "<group>"; };
 		5B234E121A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCWithdrawDescriptionViewController.h; sourceTree = "<group>"; };
 		5B234E131A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCWithdrawDescriptionViewController.m; sourceTree = "<group>"; };
 		5B73CAF11A8B3B8C00FFE79C /* APCDashboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCDashboard.storyboard; sourceTree = "<group>"; };
@@ -2634,6 +2638,8 @@
 				5B234E131A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m */,
 				5BFEB41B1AA72CCD0089DEF7 /* APCSharingOptionsViewController.h */,
 				5BFEB41C1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m */,
+				5B09ED1D1ABC1BEF003C5061 /* APCLicenseInfoViewController.h */,
+				5B09ED1E1ABC1BEF003C5061 /* APCLicenseInfoViewController.m */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -2884,6 +2890,7 @@
 				CFFDEDE31A95734000B25581 /* APCColorSwatchTableViewCell.h in Headers */,
 				F5F12ADE1A2F78490015982C /* APCShareTableViewCell.h in Headers */,
 				F5F12AE41A2F78490015982C /* APCTintedTableViewCell.h in Headers */,
+				5B09ED1F1ABC1BEF003C5061 /* APCLicenseInfoViewController.h in Headers */,
 				084302A31AB8D4550039C861 /* APCHealthKitDataCollector.h in Headers */,
 				F5B948001A73272C0034C522 /* APCDayOfMonthSelector.h in Headers */,
 				F5F12AEE1A2F78490015982C /* APCDashboardPieGraphTableViewCell.h in Headers */,
@@ -3538,6 +3545,7 @@
 				F5B947C01A73272C0034C522 /* NSDateComponents+Helper.m in Sources */,
 				F5B948031A73272C0034C522 /* APCListSelector.m in Sources */,
 				F5F12AF91A2F78490015982C /* APCGenericSurveyTaskViewController.m in Sources */,
+				5B09ED201ABC1BEF003C5061 /* APCLicenseInfoViewController.m in Sources */,
 				F5B947BA1A73272C0034C522 /* HKHealthStore+APCExtensions.m in Sources */,
 				F5F12A7C1A2F78490015982C /* APCCircleView.m in Sources */,
 				F5F12A8C1A2F78490015982C /* APCIntroVideoViewController.m in Sources */,

@@ -21,6 +21,7 @@
 #import "APCUser+UserData.h"
 #import "APCPermissionsManager.h"
 #import "APCSharingOptionsViewController.h"
+#import "APCLicenseInfoViewController.h"
 
 static CGFloat const kSectionHeaderHeight = 40.f;
 static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
@@ -772,6 +773,20 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
+        {
+            APCTableViewItem *field = [APCTableViewItem new];
+            field.caption = NSLocalizedString(@"License Information", @"");
+            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.textAlignnment = NSTextAlignmentRight;
+            field.editable = NO;
+            field.selectionStyle = UITableViewCellSelectionStyleGray;
+            
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = field;
+            row.itemType = kAPCSettingsItemTypeLicenseInformation;
+            [rowItems addObject:row];
+        }
+        
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
         section.sectionTitle = @"";
@@ -998,6 +1013,20 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 }
             }
                 break;
+                
+            case kAPCSettingsItemTypeLicenseInformation:
+            {
+                if (!self.isEditing){
+                    
+                    APCLicenseInfoViewController *licenseInfoViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCLicenseInfoViewController"];
+                    [self.navigationController pushViewController:licenseInfoViewController animated:YES];
+                    
+                } else {
+                    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                }
+            }
+                break;
+                
             case kAPCSettingsItemTypeSharingOptions:
             {
                 if (!self.isEditing){
