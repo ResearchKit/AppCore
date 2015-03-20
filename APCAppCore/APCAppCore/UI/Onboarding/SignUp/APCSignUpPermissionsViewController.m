@@ -64,13 +64,11 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     
     [self setupNavAppearance];
     
-    self.permissions = [self prepareData].mutableCopy;
-    [self.tableView reloadData];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+    self.permissions = [self prepareData].mutableCopy;
     [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
     
     [self.tableView reloadData];
@@ -83,6 +81,10 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Prepare Content
