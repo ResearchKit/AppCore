@@ -314,10 +314,10 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
         NSAssert(consentResult != nil, @"Unable to find consent result with signature (identifier == \"%@\"", signatureResultStepIdentifier);
     }
     
-    if (consentResult.signature.requiresName && (consentResult.signature.firstName && consentResult.signature.lastName))
+    if (consentResult.signature.requiresName && (consentResult.signature.givenName && consentResult.signature.familyName))
     {
         APCUser *user = [self user];
-        user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@",consentResult.signature.lastName];
+        user.consentSignatureName = [consentResult.signature.givenName stringByAppendingFormat:@" %@",consentResult.signature.familyName];
         user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
         
         NSDateFormatter *dateFormatter = [NSDateFormatter new];

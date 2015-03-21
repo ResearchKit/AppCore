@@ -127,10 +127,10 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
         }
         
         //  if no signature (no consent result) then assume the user failed the quiz
-        if (consentResult != nil && consentResult.signature.requiresName && (consentResult.signature.firstName && consentResult.signature.lastName))
+        if (consentResult != nil && consentResult.signature.requiresName && (consentResult.signature.givenName && consentResult.signature.familyName))
         {
             APCUser *user = [self user];
-            user.consentSignatureName = [consentResult.signature.firstName stringByAppendingFormat:@" %@",consentResult.signature.lastName];
+            user.consentSignatureName = [consentResult.signature.givenName stringByAppendingFormat:@" %@",consentResult.signature.familyName];
             user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
             
             NSDateFormatter *dateFormatter = [NSDateFormatter new];
