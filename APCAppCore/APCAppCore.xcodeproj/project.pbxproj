@@ -205,6 +205,7 @@
 		747307101A96E1DE0071D863 /* APCCMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7473070E1A96E1DE0071D863 /* APCCMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		747307111A96E1DE0071D863 /* APCCMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 7473070F1A96E1DE0071D863 /* APCCMS.m */; };
 		747307161A96E2FB0071D863 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747307151A96E2FB0071D863 /* openssl.framework */; };
+		747FB1451ABDDFAE00345000 /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747FB1441ABDDFAE00345000 /* ResearchKit.framework */; };
 		7B0DC4141A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B0DC4121A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h */; };
 		7B0DC4151A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B0DC4131A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.m */; };
 		7B0DC4181A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7B0DC4171A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib */; };
@@ -683,7 +684,6 @@
 		F5F12B1A1A2F78870015982C /* APCScheduleExpressionEnumeratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DF1A2F78490015982C /* APCScheduleExpressionEnumeratorTests.m */; };
 		F5F12B231A2F861F0015982C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B221A2F861F0015982C /* CoreLocation.framework */; };
 		F5F12B251A2F86280015982C /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B241A2F86280015982C /* HealthKit.framework */; };
-		F5F12B291A2F863E0015982C /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B281A2F863E0015982C /* ResearchKit.framework */; };
 		F5F12B2B1A2F864B0015982C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2A1A2F864B0015982C /* libz.dylib */; };
 		F5F12B2D1A2F86550015982C /* libarchive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2C1A2F86550015982C /* libarchive.dylib */; };
 		F5F12B2F1A2F86600015982C /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2E1A2F86600015982C /* libbz2.dylib */; };
@@ -874,6 +874,7 @@
 		7473070E1A96E1DE0071D863 /* APCCMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCCMS.h; path = CMS/APCCMS.h; sourceTree = "<group>"; };
 		7473070F1A96E1DE0071D863 /* APCCMS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCCMS.m; path = CMS/APCCMS.m; sourceTree = "<group>"; };
 		747307151A96E2FB0071D863 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openssl.framework; sourceTree = "<group>"; };
+		747FB1441ABDDFAE00345000 /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = "../../researchkit/build/Debug-iphoneos/ResearchKit.framework"; sourceTree = "<group>"; };
 		7B0DC4121A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCActivitiesViewWithNoTask.h; sourceTree = "<group>"; };
 		7B0DC4131A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCActivitiesViewWithNoTask.m; sourceTree = "<group>"; };
 		7B0DC4171A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCActivitiesViewWithNoTask.xib; sourceTree = "<group>"; };
@@ -1357,7 +1358,6 @@
 		F5F12B1B1A2F78AE0015982C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5F12B221A2F861F0015982C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		F5F12B241A2F86280015982C /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
-		F5F12B281A2F863E0015982C /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = ResearchKit/ResearchKit.framework; sourceTree = "<group>"; };
 		F5F12B2A1A2F864B0015982C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F5F12B2C1A2F86550015982C /* libarchive.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libarchive.dylib; path = usr/lib/libarchive.dylib; sourceTree = SDKROOT; };
 		F5F12B2E1A2F86600015982C /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
@@ -1368,6 +1368,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				747FB1451ABDDFAE00345000 /* ResearchKit.framework in Frameworks */,
 				747307161A96E2FB0071D863 /* openssl.framework in Frameworks */,
 				F5B948171A7328F30034C522 /* ImageIO.framework in Frameworks */,
 				F55653B31A6F0918003E0B0C /* libMobileGestalt.dylib in Frameworks */,
@@ -1376,7 +1377,6 @@
 				F5F12B2D1A2F86550015982C /* libarchive.dylib in Frameworks */,
 				F5A861E61A8E7C60004EDB15 /* libFlurry_6.0.0.a in Frameworks */,
 				F5F12B2B1A2F864B0015982C /* libz.dylib in Frameworks */,
-				F5F12B291A2F863E0015982C /* ResearchKit.framework in Frameworks */,
 				F5F12B251A2F86280015982C /* HealthKit.framework in Frameworks */,
 				F5F12B231A2F861F0015982C /* CoreLocation.framework in Frameworks */,
 				36C8B3EC1A38D9FF0051096B /* Security.framework in Frameworks */,
@@ -2791,6 +2791,7 @@
 		F5F12B211A2F85FF0015982C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				747FB1441ABDDFAE00345000 /* ResearchKit.framework */,
 				747307151A96E2FB0071D863 /* openssl.framework */,
 				F5B948161A7328F30034C522 /* ImageIO.framework */,
 				F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */,
@@ -2800,7 +2801,6 @@
 				F5F12B2C1A2F86550015982C /* libarchive.dylib */,
 				F50981D41AA57E57002E2264 /* BridgeSDK.framework */,
 				F5F12B2A1A2F864B0015982C /* libz.dylib */,
-				F5F12B281A2F863E0015982C /* ResearchKit.framework */,
 				F5F12B241A2F86280015982C /* HealthKit.framework */,
 				F5F12B221A2F861F0015982C /* CoreLocation.framework */,
 			);
@@ -3288,7 +3288,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "${SRCROOT}/APCAppCore/Resources/rk_framework_switcher.sh\n${SRCROOT}/APCAppCore/Resources/bridge_framework_switcher.sh";
+			shellScript = "${SRCROOT}/APCAppCore/Resources/bridge_framework_switcher.sh";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -3668,6 +3668,7 @@
 					"$(PROJECT_DIR)/ResearchKit",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/BridgeSDK",
+					"/Users/edward.cessna/Apple/applebreastcancer/researchkit/build/Debug-iphoneos",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/APCAppCore/Resources/Info.plist";
@@ -3811,6 +3812,7 @@
 					"$(PROJECT_DIR)/ResearchKit",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/BridgeSDK",
+					"/Users/edward.cessna/Apple/applebreastcancer/researchkit/build/Debug-iphoneos",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/APCAppCore/Resources/Info.plist";
@@ -3845,6 +3847,7 @@
 					"$(PROJECT_DIR)/ResearchKit",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/BridgeSDK",
+					"/Users/edward.cessna/Apple/applebreastcancer/researchkit/build/Debug-iphoneos",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/APCAppCore/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3965,6 +3968,7 @@
 					"$(PROJECT_DIR)/ResearchKit",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/BridgeSDK",
+					"/Users/edward.cessna/Apple/applebreastcancer/researchkit/build/Debug-iphoneos",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
