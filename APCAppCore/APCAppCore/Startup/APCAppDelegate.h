@@ -12,8 +12,7 @@
 #import "APCProfileViewController.h"
 #import "APCConsentTask.h"
 
-#warning Be sure to set the CORRECT current version before releasing to production
-static NSUInteger   const kTheEntireDataModelOfTheApp                    = 2;
+extern NSUInteger   const kTheEntireDataModelOfTheApp;
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
 

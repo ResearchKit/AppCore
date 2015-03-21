@@ -18,6 +18,9 @@
 #import "UIAlertController+Helper.h"
 #import "APCHealthKitDataCollector.h"
 
+#warning Be sure to set the CORRECT current version before releasing to production
+NSUInteger   const kTheEntireDataModelOfTheApp              = 2;
+
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
 /*********************************************************************************/
