@@ -3665,10 +3665,8 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/ResearchKit",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/BridgeSDK",
-					"/Users/edward.cessna/Apple/applebreastcancer/researchkit/build/Debug-iphoneos",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/APCAppCore/Resources/Info.plist";
@@ -3809,10 +3807,8 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/ResearchKit",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/BridgeSDK",
-					"/Users/edward.cessna/Apple/applebreastcancer/researchkit/build/Debug-iphoneos",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/APCAppCore/Resources/Info.plist";
@@ -3844,10 +3840,8 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/ResearchKit",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/BridgeSDK",
-					"/Users/edward.cessna/Apple/applebreastcancer/researchkit/build/Debug-iphoneos",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/APCAppCore/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3965,10 +3959,8 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/ResearchKit",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/BridgeSDK",
-					"/Users/edward.cessna/Apple/applebreastcancer/researchkit/build/Debug-iphoneos",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
