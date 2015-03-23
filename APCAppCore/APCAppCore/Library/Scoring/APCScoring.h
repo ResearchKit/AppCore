@@ -71,5 +71,6 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
 - (NSNumber *)averageDataPoint;
 - (id)nextObject;
 - (NSArray *)allObjects;
+- (NSNumber *)numberOfDataPoints;
 
 @end

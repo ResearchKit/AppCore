@@ -958,6 +958,16 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return self.dataPoints;
 }
 
+- (NSNumber *)numberOfDataPoints
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
+    NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
+    
+    NSNumber *numberOfPoints = @(filteredArray.count);
+    
+    return numberOfPoints;
+}
+
 #pragma mark - Graph Datasource
 #pragma mark Line
 
