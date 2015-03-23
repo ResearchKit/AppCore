@@ -53,8 +53,8 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         _locationManager = [[CLLocationManager alloc] init];
         _locationManager.delegate = self;
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidRegisterForRemoteNotifications) name:APCAppDidRegisterUserNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appFailedToRegisterForRemoteNotification) name:APCAppDidFailToRegisterForRemoteNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidRegisterForRemoteNotifications:) name:APCAppDidRegisterUserNotification object:nil];
+
         _coreMotionPermissionStatus = kPermissionStatusNotDetermined;
                 
     }
@@ -240,16 +240,8 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                                                                                                      |UIUserNotificationTypeSound) categories:nil];
                 [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
                 [[NSUserDefaults standardUserDefaults]synchronize];
-                if (weakSelf.completionBlock) {
-                    weakSelf.completionBlock(YES, nil);
-                    weakSelf.completionBlock = nil;
-                }
-            } else {
-                
-                if (weakSelf.completionBlock) {
-                    weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocalNotifications]);
-                    weakSelf.completionBlock = nil;
-                }
+                /*in the case of notifications, callbacks are used to fire the completion block. Callbacks are delivered to appDidRegisterForRemoteNotifications:.
+                 */
             }
         }
             break;
@@ -451,20 +443,23 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 
 #pragma mark - Remote notifications methods
 
-- (void)appDidRegisterForRemoteNotifications
+- (void)appDidRegisterForRemoteNotifications: (NSNotification *)notification
 {
-    if (self.completionBlock) {
-        self.completionBlock(YES, nil);
-        self.completionBlock = nil;
+    
+    UIUserNotificationSettings *settings = (UIUserNotificationSettings *)notification.object;
+    
+    if (settings.types != 0) {
+        if (self.completionBlock) {
+            self.completionBlock(YES, nil);
+            self.completionBlock = nil;
+        }
+    }else{
+        if (self.completionBlock) {
+            self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocalNotifications]);
+            self.completionBlock = nil;
+        }
     }
-}
 
-- (void)appFailedToRegisterForRemoteNotification
-{
-    if (self.completionBlock) {
-        self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocalNotifications]);
-        self.completionBlock = nil;
-    }
 }
 
 #pragma mark - Dealloc
@@ -472,7 +467,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:APCAppDidRegisterUserNotification object:self];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:APCAppDidFailToRegisterForRemoteNotification object:self];
 }
 
 @end
