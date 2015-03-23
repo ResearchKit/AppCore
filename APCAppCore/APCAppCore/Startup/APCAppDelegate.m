@@ -170,9 +170,12 @@ then a location event has occurred and location services must be manually starte
 }
 
 - (void)                    application: (UIApplication *) __unused application
-    didRegisterUserNotificationSettings: (UIUserNotificationSettings *) __unused notificationSettings
+    didRegisterUserNotificationSettings: (UIUserNotificationSettings *) notificationSettings
 {
-
+    if (notificationSettings) {
+        [[NSNotificationCenter defaultCenter]postNotificationName:APCAppDidRegisterUserNotification object:notificationSettings];
+    }
+    
 }
 
 /*********************************************************************************/
