@@ -15,7 +15,7 @@ static NSString*    kAccountAlreadyExists           = @"An account has already b
 static NSString*    kAccountDoesNotExists           = @"There is no account registered for this email address.";
 static NSString*    kBadEmailAddress                = @"The email address submitted is not a valid email address. Please correct the email address and try again.";
 static NSString*    kNotReachableMessage            = @"We are currently not able to reach the study server. Please retry in a few moments.";
-static NSString*    kInvalidEmailAddressOrPassword  = @"Entered email address or password is not valid. Plesae correct the email address or password and try again.";
+static NSString*    kInvalidEmailAddressOrPassword  = @"Entered email address or password is not valid. Please correct the email address or password and try again.";
 static NSString*    kSageMessageKey                 = @"message";
 static NSString*    kSageInvalidUsernameOrPassword  = @"Invalid username or password.";
 
