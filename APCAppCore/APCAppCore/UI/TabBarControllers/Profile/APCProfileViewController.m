@@ -805,6 +805,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             field.identifier = kAPCDefaultTableViewCellIdentifier;
             field.textAlignnment = NSTextAlignmentRight;
             field.editable = NO;
+            field.showChevron = YES;
             field.selectionStyle = UITableViewCellSelectionStyleGray;
             
             APCTableViewRow *row = [APCTableViewRow new];
