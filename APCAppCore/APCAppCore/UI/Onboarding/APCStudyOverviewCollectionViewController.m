@@ -207,14 +207,18 @@ static NSString *kConsentEmailSubject = @"Consent Document";
         landingCell.delegate = self;
         landingCell.titleLabel.text = studyDetails.caption;
         landingCell.subTitleLabel.text = studyDetails.detailText;
-        
         landingCell.readConsentButton.hidden = YES;
-        landingCell.emailConsentButton.hidden = YES;
+        
+        if ([MFMailComposeViewController canSendMail]) {
+            [landingCell.emailConsentButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
+            [landingCell.emailConsentButton setUserInteractionEnabled:YES];
+        }else{
+            [landingCell.emailConsentButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            [landingCell.emailConsentButton setUserInteractionEnabled:NO];
+        }
+        
         if (studyDetails.showsConsent) {
             landingCell.readConsentButton.hidden = NO;
-            if ([MFMailComposeViewController canSendMail]){
-            landingCell.emailConsentButton.hidden = NO;
-            }
         }
         
         cell = landingCell;

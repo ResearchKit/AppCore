@@ -87,14 +87,13 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.permissions = [self prepareData].mutableCopy;
     [self setupNavAppearance];
     
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    self.permissions = [self prepareData].mutableCopy;
     [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
     
     [self.tableView reloadData];

@@ -64,14 +64,6 @@ NSString *const kAPCStudyLandingCollectionViewCellIdentifier = @"APCStudyLanding
     
     [self.emailConsentButton setTitle:NSLocalizedString(@"Email Consent Document", @"Email Consent Document") forState:UIControlStateNormal];
     
-    if ([MFMailComposeViewController canSendMail]) {
-        [self.emailConsentButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
-        [self.emailConsentButton setUserInteractionEnabled:YES];
-    }else{
-        [self.emailConsentButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [self.emailConsentButton setUserInteractionEnabled:NO];
-    }
-    
     [self.readConsentButton setTitle:NSLocalizedString(@"Read Consent Document", @"Read Consent Document") forState:UIControlStateNormal];
     [self.readConsentButton setTitleColor:[UIColor appPrimaryColor] forState:UIControlStateNormal];
 
