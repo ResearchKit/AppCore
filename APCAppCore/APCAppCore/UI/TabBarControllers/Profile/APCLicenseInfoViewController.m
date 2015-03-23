@@ -6,10 +6,15 @@
 //
 
 #import "APCLicenseInfoViewController.h"
+#import "NSBundle+Helper.h"
 
 static NSString * const kLicenseInfoCellIdentifier = @"LicenseInfoCell";
+static CGFloat const kCellBaseHeight = 66.0f;
+static CGFloat const klabelSidepadding = 30.f;
 
 @interface APCLicenseInfoViewController ()
+
+@property (nonatomic, strong) NSArray *content;
 
 @end
 
@@ -18,15 +23,46 @@ static NSString * const kLicenseInfoCellIdentifier = @"LicenseInfoCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.items = @[
-                   @"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
-                   
-                   @"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
-                   
-                   @"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
-                   
-                   @"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
-                   ];
+    self.content = @[@{
+                         @"title": @"Bridge SDK",
+                         @"filename": @"License_BridgeSDK",
+                         @"file_type": @"txt"
+                         },
+                     @{
+                         @"title": @"Open SSL",
+                         @"filename": @"License_OpenSSL",
+                         @"file_type": @"txt"
+                         },
+                     @{
+                         @"title": @"ZipZap",
+                         @"filename": @"License_ZipZap",
+                         @"file_type": @"txt"
+                         }
+                     ];
+    [self prepareContent];
+}
+
+- (void)prepareContent
+{
+    NSMutableArray *items = [NSMutableArray new];
+    
+    for (NSDictionary *info in self.content) {
+        NSString *filename = info[@"filename"];
+        NSString *type = info[@"file_type"];
+        
+        NSString *content = [self contentFromFile:filename type:type];
+        [items addObject:content];
+    }
+    
+    self.items = [NSArray arrayWithArray:items];
+}
+
+- (NSString *)contentFromFile:(NSString *)filename type:(NSString *)type
+{
+    NSString *filePath = [[NSBundle appleCoreBundle] pathForResource:filename ofType:type];
+    NSString *content = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+    
+    return content;
 }
 
 
@@ -44,7 +80,9 @@ static NSString * const kLicenseInfoCellIdentifier = @"LicenseInfoCell";
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kLicenseInfoCellIdentifier];
     
-    cell.textLabel.text = @"Title";
+    NSDictionary *info = self.content[indexPath.section];
+    
+    cell.textLabel.text = info[@"title"];
     cell.detailTextLabel.text = self.items[indexPath.section];
     
     return cell;
@@ -57,9 +95,9 @@ static NSString * const kLicenseInfoCellIdentifier = @"LicenseInfoCell";
     CGFloat height = 44;
     
     NSString *text = self.items[indexPath.section];
-    CGRect textRect = [text boundingRectWithSize:CGSizeMake(CGRectGetWidth(tableView.frame), CGFLOAT_MAX) options:NSStringDrawingUsesFontLeading | NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16.0]} context:nil];
+    CGRect textRect = [text boundingRectWithSize:CGSizeMake(CGRectGetWidth(tableView.frame) - klabelSidepadding, CGFLOAT_MAX) options:NSStringDrawingUsesFontLeading | NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.0]} context:nil];
     
-    height = textRect.size.height + 50;
+    height = textRect.size.height + kCellBaseHeight;
     
     return height;
 }

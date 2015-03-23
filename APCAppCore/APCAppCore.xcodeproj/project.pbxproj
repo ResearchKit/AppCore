@@ -163,6 +163,9 @@
 		5B09ED201ABC1BEF003C5061 /* APCLicenseInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B09ED1E1ABC1BEF003C5061 /* APCLicenseInfoViewController.m */; };
 		5B234E141A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B234E121A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h */; };
 		5B234E151A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B234E131A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m */; };
+		5B4574CA1ABFD07A00601DCC /* License_BridgeSDK.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B4574C71ABFD07A00601DCC /* License_BridgeSDK.txt */; };
+		5B4574CB1ABFD07A00601DCC /* License_OpenSSL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B4574C81ABFD07A00601DCC /* License_OpenSSL.txt */; };
+		5B4574CC1ABFD07A00601DCC /* License_ZipZap.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B4574C91ABFD07A00601DCC /* License_ZipZap.txt */; };
 		5B73CAF21A8B3B8C00FFE79C /* APCDashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B73CAF11A8B3B8C00FFE79C /* APCDashboard.storyboard */; };
 		5B7EA0231A44C21200924DEE /* APCFormTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B7EA0211A44C21200924DEE /* APCFormTextField.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B7EA0241A44C21200924DEE /* APCFormTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7EA0221A44C21200924DEE /* APCFormTextField.m */; };
@@ -834,6 +837,9 @@
 		5B09ED1E1ABC1BEF003C5061 /* APCLicenseInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCLicenseInfoViewController.m; sourceTree = "<group>"; };
 		5B234E121A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCWithdrawDescriptionViewController.h; sourceTree = "<group>"; };
 		5B234E131A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCWithdrawDescriptionViewController.m; sourceTree = "<group>"; };
+		5B4574C71ABFD07A00601DCC /* License_BridgeSDK.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = License_BridgeSDK.txt; sourceTree = "<group>"; };
+		5B4574C81ABFD07A00601DCC /* License_OpenSSL.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = License_OpenSSL.txt; sourceTree = "<group>"; };
+		5B4574C91ABFD07A00601DCC /* License_ZipZap.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = License_ZipZap.txt; sourceTree = "<group>"; };
 		5B73CAF11A8B3B8C00FFE79C /* APCDashboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCDashboard.storyboard; sourceTree = "<group>"; };
 		5B7EA0211A44C21200924DEE /* APCFormTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFormTextField.h; sourceTree = "<group>"; };
 		5B7EA0221A44C21200924DEE /* APCFormTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFormTextField.m; sourceTree = "<group>"; };
@@ -1630,6 +1636,16 @@
 			name = APCScheduleExpressionTests;
 			sourceTree = "<group>";
 		};
+		5B4574C61ABFD07A00601DCC /* Licenses */ = {
+			isa = PBXGroup;
+			children = (
+				5B4574C71ABFD07A00601DCC /* License_BridgeSDK.txt */,
+				5B4574C81ABFD07A00601DCC /* License_OpenSSL.txt */,
+				5B4574C91ABFD07A00601DCC /* License_ZipZap.txt */,
+			);
+			path = Licenses;
+			sourceTree = "<group>";
+		};
 		5B827B521A80CB0400C685A3 /* TransitionAnimators */ = {
 			isa = PBXGroup;
 			children = (
@@ -2365,6 +2381,7 @@
 		F5F1291A1A2F78490015982C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5B4574C61ABFD07A00601DCC /* Licenses */,
 				08027A3A1A7319AC00B358CC /* Assets */,
 				F556549A1A701337003E0B0C /* Localizable.strings */,
 				F5F12B1B1A2F78AE0015982C /* Info.plist */,
@@ -3255,8 +3272,10 @@
 				08027A7C1A7319AC00B358CC /* consent_06@2x.png in Resources */,
 				08027A8B1A7319AC00B358CC /* phonewaves@2x.png in Resources */,
 				08027A8A1A7319AC00B358CC /* phonetapping@2x.png in Resources */,
+				5B4574CC1ABFD07A00601DCC /* License_ZipZap.txt in Resources */,
 				CF130B7A1A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib in Resources */,
 				08027A801A7319AC00B358CC /* consent_03@3x.png in Resources */,
+				5B4574CA1ABFD07A00601DCC /* License_BridgeSDK.txt in Resources */,
 				08027A831A7319AC00B358CC /* consent_06@3x.png in Resources */,
 				08027A9A1A7319AC00B358CC /* walkingman_monitor@3x.png in Resources */,
 				F5F12A6E1A2F78490015982C /* TabBar.storyboard in Resources */,
@@ -3267,6 +3286,7 @@
 				F5F12AFF1A2F78490015982C /* APCIntroductionViewController.xib in Resources */,
 				08027A811A7319AC00B358CC /* consent_04@3x.png in Resources */,
 				F556549B1A701337003E0B0C /* Localizable.strings in Resources */,
+				5B4574CB1ABFD07A00601DCC /* License_OpenSSL.txt in Resources */,
 				F5F12A921A2F78490015982C /* APCSpinnerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
