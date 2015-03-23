@@ -149,7 +149,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 {
     
     self.completionBlock = completion;
-    
+    __weak typeof(self) weakSelf = self;
     switch (type) {
         case kSignUpPermissionsTypeHealthKit:
         {
@@ -207,7 +207,9 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             
             [self.healthStore requestAuthorizationToShareTypes:[NSSet setWithArray:dataTypesToWrite] readTypes:[NSSet setWithArray:dataTypesToRead] completion:^(BOOL success, NSError *error) {
                 if (completion) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
                     completion(success, error);
+                    });
                 }
             }];
 
@@ -223,9 +225,9 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                 [self.locationManager requestWhenInUseAuthorization];
                 
             } else{
-                if (self.completionBlock) {
-                    self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocation]);
-                    self.completionBlock = nil;
+                if (weakSelf.completionBlock) {
+                    weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocation]);
+                    weakSelf.completionBlock = nil;
                 }
             }
         }
@@ -238,34 +240,38 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                                                                                                      |UIUserNotificationTypeSound) categories:nil];
                 [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
                 [[NSUserDefaults standardUserDefaults]synchronize];
-                if (self.completionBlock) {
-                    self.completionBlock(YES, nil);
-                    self.completionBlock = nil;
+                if (weakSelf.completionBlock) {
+                    weakSelf.completionBlock(YES, nil);
+                    weakSelf.completionBlock = nil;
                 }
             } else {
                 
-                if (self.completionBlock) {
-                    self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocalNotifications]);
-                    self.completionBlock = nil;
+                if (weakSelf.completionBlock) {
+                    weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocalNotifications]);
+                    weakSelf.completionBlock = nil;
                 }
             }
         }
             break;
         case kSignUpPermissionsTypeCoremotion:
         {
-            __weak typeof(self) weakSelf = self;
+            
             
             [self.motionActivityManager queryActivityStartingFromDate:[NSDate date] toDate:[NSDate date] toQueue:[NSOperationQueue new] withHandler:^(NSArray * __unused activities, NSError *error) {
                 if (!error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
                     weakSelf.coreMotionPermissionStatus = kPermissionStatusAuthorized;
                     weakSelf.completionBlock(YES, nil);
                     weakSelf.completionBlock = nil;
+                    });
                 } else if (error != nil && error.code == CMErrorMotionActivityNotAuthorized) {
                     weakSelf.coreMotionPermissionStatus = kPermissionStatusDenied;
                     
                     if (weakSelf.completionBlock) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
                         weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeCoremotion]);
                         weakSelf.completionBlock = nil;
+                        });
                     }
                     
                 }
@@ -275,7 +281,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             break;
         case kSignUpPermissionsTypeMicrophone:
         {
-            __weak typeof(self) weakSelf = self;
             
             [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
                 if (granted) {
@@ -292,7 +297,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             break;
         case kSignUpPermissionsTypeCamera:
         {
-            __weak typeof(self) weakSelf = self;
             
             [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
                 if(granted){
@@ -309,7 +313,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             break;
         case kSignUpPermissionsTypePhotoLibrary:
         {
-            __weak typeof(self) weakSelf = self;
             
             ALAssetsLibrary *lib = [[ALAssetsLibrary alloc] init];
             
