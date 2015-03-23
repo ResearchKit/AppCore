@@ -182,8 +182,6 @@ static NSString *kConsentEmailSubject = @"Consent Document";
         landingCell.titleLabel.text = studyDetails.caption;
         landingCell.subTitleLabel.text = studyDetails.detailText;
         
-        landingCell.readConsentButton.hidden = YES;
-        landingCell.emailConsentButton.hidden = YES;
         if (studyDetails.showsConsent) {
             landingCell.readConsentButton.hidden = NO;
             if ([MFMailComposeViewController canSendMail]){
