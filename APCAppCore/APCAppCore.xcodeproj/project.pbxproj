@@ -94,7 +94,7 @@
 		368BAFEA1A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 368BAFE81A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.m */; };
 		369B47551A853E8500777639 /* APCUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 369B47531A853E8500777639 /* APCUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		369B47561A853E8500777639 /* APCUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 369B47541A853E8500777639 /* APCUtilities.m */; };
-		369DD55A1AC0EFCE00327729 /* APCCMS_NoEncryption_JustAStub.m in Sources */ = {isa = PBXBuildFile; fileRef = 369DD5561AC0E26900327729 /* APCCMS_NoEncryption_JustAStub.m */; };
+		369DD5591AC0EBBE00327729 /* APCCMS_UsingOpenSSL.m in Sources */ = {isa = PBXBuildFile; fileRef = 7473070F1A96E1DE0071D863 /* APCCMS_UsingOpenSSL.m */; };
 		369E27EB1A96B7A200D35DFA /* APCMedicationActualMedicine.h in Headers */ = {isa = PBXBuildFile; fileRef = 369E27BB1A96B7A200D35DFA /* APCMedicationActualMedicine.h */; };
 		369E27EC1A96B7A200D35DFA /* APCMedicationActualMedicine.m in Sources */ = {isa = PBXBuildFile; fileRef = 369E27BC1A96B7A200D35DFA /* APCMedicationActualMedicine.m */; };
 		369E27ED1A96B7A200D35DFA /* APCMedicationColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 369E27BD1A96B7A200D35DFA /* APCMedicationColor.h */; };
@@ -209,6 +209,7 @@
 		712AB44F1A9E692400556DA2 /* APCMotionHistoryReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 712AB44B1A9E692400556DA2 /* APCMotionHistoryReporter.m */; };
 		7423AB5B1AA3FFD8004A325A /* APCConsentRedirector.h in Headers */ = {isa = PBXBuildFile; fileRef = 7423AB591AA3FFD8004A325A /* APCConsentRedirector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		747307101A96E1DE0071D863 /* APCCMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7473070E1A96E1DE0071D863 /* APCCMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		747307161A96E2FB0071D863 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747307151A96E2FB0071D863 /* openssl.framework */; };
 		747FB1451ABDDFAE00345000 /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747FB1441ABDDFAE00345000 /* ResearchKit.framework */; };
 		7B0DC4141A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B0DC4121A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h */; };
 		7B0DC4151A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B0DC4131A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.m */; };
@@ -1378,6 +1379,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				747FB1451ABDDFAE00345000 /* ResearchKit.framework in Frameworks */,
+				747307161A96E2FB0071D863 /* openssl.framework in Frameworks */,
 				F5B948171A7328F30034C522 /* ImageIO.framework in Frameworks */,
 				F55653B31A6F0918003E0B0C /* libMobileGestalt.dylib in Frameworks */,
 				F5F12B2F1A2F86600015982C /* libbz2.dylib in Frameworks */,
@@ -3388,7 +3390,6 @@
 				F5F12A961A2F78490015982C /* APCStudyOverviewViewController.m in Sources */,
 				F5B947BE1A73272C0034C522 /* NSDate+Helper.m in Sources */,
 				F5F12AD51A2F78490015982C /* APCCheckTableViewCell.m in Sources */,
-				369DD55A1AC0EFCE00327729 /* APCCMS_NoEncryption_JustAStub.m in Sources */,
 				F5F12AE51A2F78490015982C /* APCTintedTableViewCell.m in Sources */,
 				F5B947D81A73272C0034C522 /* APCDataArchiver.m in Sources */,
 				F5F12A091A2F78490015982C /* APCTask+Bridge.m in Sources */,
@@ -3564,6 +3565,7 @@
 				F5B948031A73272C0034C522 /* APCListSelector.m in Sources */,
 				F5F12AF91A2F78490015982C /* APCGenericSurveyTaskViewController.m in Sources */,
 				5B09ED201ABC1BEF003C5061 /* APCLicenseInfoViewController.m in Sources */,
+				369DD5591AC0EBBE00327729 /* APCCMS_UsingOpenSSL.m in Sources */,
 				F5B947BA1A73272C0034C522 /* HKHealthStore+APCExtensions.m in Sources */,
 				F5F12A7C1A2F78490015982C /* APCCircleView.m in Sources */,
 				F5F12A8C1A2F78490015982C /* APCIntroVideoViewController.m in Sources */,
