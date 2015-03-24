@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *touchIdButton;
 @property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *touchIdButtonBottomConstraint;
+@property (nonatomic) NSInteger wrongAttemptsCount;
 
 @end
 
@@ -31,6 +32,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.wrongAttemptsCount = 0;
     
     self.touchContext = [LAContext new];
     self.passcodeView.delegate = self;
@@ -98,15 +101,35 @@
             if ([self.delegate respondsToSelector:@selector(passcodeViewControllerDidSucceed:)]) {
                 [self.delegate passcodeViewControllerDidSucceed:self];
             }
+            
+            self.wrongAttemptsCount = 0;
+            
         } else {
             
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Wrong Passcode" message:@"Please enter again." preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
-                [self.passcodeView reset];
-                [self.passcodeView becomeFirstResponder];
-            }];
-            [alert addAction:okAction];
-            [self presentViewController:alert animated:YES completion:nil];
+            if (self.wrongAttemptsCount < 5) {
+                CAKeyframeAnimation *shakeAnimation = [CAKeyframeAnimation animation];
+                shakeAnimation.keyPath = @"position.x";
+                shakeAnimation.values = @[ @0, @15, @-15, @15, @-15, @0 ];
+                shakeAnimation.keyTimes = @[ @0, @(1 / 8.0), @(3 / 8.0), @(5 / 8.0), @(7 / 8.0), @1 ];
+                shakeAnimation.duration = 0.27;
+                shakeAnimation.delegate = self;
+                shakeAnimation.additive = YES;
+                
+                [self.passcodeView.layer addAnimation:shakeAnimation forKey:@"shakeAnimation"];
+                
+                self.wrongAttemptsCount++;
+                
+            } else {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Wrong Passcode" message:@"Please enter again." preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
+                    [self.passcodeView reset];
+                    [self.passcodeView becomeFirstResponder];
+                }];
+                [alert addAction:okAction];
+                [self presentViewController:alert animated:YES completion:nil];
+
+            }
+            
         }
     }
 }
@@ -182,6 +205,14 @@
         self.touchIdButtonBottomConstraint.constant = keyboardHeight + 15;
     }];
     
+}
+
+#pragma mark - Animation Delegate
+
+- (void)animationDidStop:(CAAnimation *)__unused anim finished:(BOOL)__unused flag
+{
+    [self.passcodeView reset];
+    [self.passcodeView becomeFirstResponder];
 }
 
 @end
