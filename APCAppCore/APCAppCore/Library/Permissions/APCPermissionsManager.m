@@ -466,7 +466,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:APCAppDidRegisterUserNotification object:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
