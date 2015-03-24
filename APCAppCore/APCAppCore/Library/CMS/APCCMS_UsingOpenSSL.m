@@ -1,5 +1,5 @@
 // 
-//  APCCMS.m 
+//  APCCMS_UsingOpenSSL.m
 //  APCAppCore 
 // 
 // Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -36,6 +36,12 @@
 #import <openssl/cms.h>
 #import <openssl/err.h>
 
+
+/**
+ Remember, only include ONE of these encryption .m files
+ in your project.  See ENCRYPTION_README.txt for more
+ information.
+ */
 NSData * cmsEncrypt(NSData *data, NSString *identityPath, NSError * __autoreleasing *error) {
     BIO *in = NULL, *out = NULL, *tbio = NULL;
     X509 *rcert = NULL;

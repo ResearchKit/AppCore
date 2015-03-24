@@ -1,5 +1,5 @@
 // 
-//  APCCMS.h 
+//  APCCMS_NoEncryption_JustAStub.m
 //  APCAppCore 
 // 
 // Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -31,18 +31,21 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-#import <Foundation/Foundation.h>
-
+#import "APCCMS.h"
 
 /**
- Declares our general-purpose encryption method.
- This project contains multiple possible implementations
- of this method, in different .m files.
- 
- Choose the implementation you want by adding the
- appropriate .m file to the project, and removing the
- others.
- 
- See ENCRYPTION_README.txt for more information.
+ Remember, only include ONE of these encryption .m files
+ in your project.  See ENCRYPTION_README.txt for more
+ information.
  */
-NSData * cmsEncrypt(NSData *data, NSString *identityPath, NSError * __autoreleasing *error);
+NSData * cmsEncrypt (NSData *data,
+                     NSString * __unused identityPath,
+                     NSError **error)
+{
+    if (error != nil)
+    {
+        *error = nil;
+    }
+
+    return data;
+}
