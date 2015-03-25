@@ -86,7 +86,7 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
     __block UILocalNotification * retValue;
     [eventArray enumerateObjectsUsingBlock:^(UILocalNotification * obj, NSUInteger __unused idx, BOOL * __unused stop) {
         NSDictionary *userInfoCurrent = obj.userInfo;
-        if ([userInfoCurrent[kTaskReminderUserInfoKey] isEqualToString:kTaskReminderUserInfo]) {
+        if ([userInfoCurrent[[self taskReminderUserInfoKey]] isEqualToString:[self taskReminderUserInfo]]) {
             retValue = obj;
         }
     }];
@@ -111,12 +111,12 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
     
     localNotification.fireDate = [self calculateFireDate];
     localNotification.timeZone = [NSTimeZone localTimeZone];
-    localNotification.alertBody = [NSString stringWithFormat:kTaskReminderMessage, [self studyName], [self studyName]];
+    localNotification.alertBody = [NSString stringWithFormat:[self reminderMessage], [self studyName], [self studyName]];
     localNotification.repeatInterval = NSCalendarUnitDay;
     localNotification.soundName = UILocalNotificationDefaultSoundName;
     
     NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
-    notificationInfo[kTaskReminderUserInfoKey] = kTaskReminderUserInfo;
+    notificationInfo[[self taskReminderUserInfoKey]] = [self taskReminderUserInfo];
     localNotification.userInfo = notificationInfo;
     
     //Check if the notifications are registrered.
@@ -131,6 +131,19 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
     
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
     APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Scheduled Reminder: %@", localNotification]}));
+}
+
+-(NSString *)reminderMessage{
+    
+    return kTaskReminderMessage;
+}
+
+-(NSString *)taskReminderUserInfo{
+    return kTaskReminderUserInfo;
+}
+
+-(NSString *)taskReminderUserInfoKey{
+    return kTaskReminderUserInfoKey;
 }
 
 - (NSDate*) calculateFireDate
