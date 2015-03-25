@@ -53,22 +53,10 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         _locationManager = [[CLLocationManager alloc] init];
         _locationManager.delegate = self;
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidRegisterForRemoteNotifications) name:APCAppDidRegisterUserNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appFailedToRegisterForRemoteNotification) name:APCAppDidFailToRegisterForRemoteNotification object:nil];
-        //query coreMotion permission status asap
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidRegisterForRemoteNotifications:) name:APCAppDidRegisterUserNotification object:nil];
+
         _coreMotionPermissionStatus = kPermissionStatusNotDetermined;
-        __weak typeof(self) weakSelf = self;
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0), ^{
-            
-            [self.motionActivityManager queryActivityStartingFromDate:[NSDate date] toDate:[NSDate date] toQueue:[NSOperationQueue new] withHandler:^(NSArray * __unused activities, NSError *error) {
-                if (!error) {
-                    weakSelf.coreMotionPermissionStatus = kPermissionStatusAuthorized;
-                }else{
-                    weakSelf.coreMotionPermissionStatus = kPermissionStatusDenied;
-                }
-            }];
-        });
-        
+                
     }
     return self;
 }
@@ -161,7 +149,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 {
     
     self.completionBlock = completion;
-    
+    __weak typeof(self) weakSelf = self;
     switch (type) {
         case kSignUpPermissionsTypeHealthKit:
         {
@@ -219,7 +207,9 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             
             [self.healthStore requestAuthorizationToShareTypes:[NSSet setWithArray:dataTypesToWrite] readTypes:[NSSet setWithArray:dataTypesToRead] completion:^(BOOL success, NSError *error) {
                 if (completion) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
                     completion(success, error);
+                    });
                 }
             }];
 
@@ -235,9 +225,9 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                 [self.locationManager requestWhenInUseAuthorization];
                 
             } else{
-                if (self.completionBlock) {
-                    self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocation]);
-                    self.completionBlock = nil;
+                if (weakSelf.completionBlock) {
+                    weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocation]);
+                    weakSelf.completionBlock = nil;
                 }
             }
         }
@@ -250,34 +240,30 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                                                                                                      |UIUserNotificationTypeSound) categories:nil];
                 [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
                 [[NSUserDefaults standardUserDefaults]synchronize];
-                if (self.completionBlock) {
-                    self.completionBlock(YES, nil);
-                    self.completionBlock = nil;
-                }
-            } else {
-                
-                if (self.completionBlock) {
-                    self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocalNotifications]);
-                    self.completionBlock = nil;
-                }
+                /*in the case of notifications, callbacks are used to fire the completion block. Callbacks are delivered to appDidRegisterForRemoteNotifications:.
+                 */
             }
         }
             break;
         case kSignUpPermissionsTypeCoremotion:
         {
-            __weak typeof(self) weakSelf = self;
+            
             
             [self.motionActivityManager queryActivityStartingFromDate:[NSDate date] toDate:[NSDate date] toQueue:[NSOperationQueue new] withHandler:^(NSArray * __unused activities, NSError *error) {
                 if (!error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
                     weakSelf.coreMotionPermissionStatus = kPermissionStatusAuthorized;
                     weakSelf.completionBlock(YES, nil);
                     weakSelf.completionBlock = nil;
+                    });
                 } else if (error != nil && error.code == CMErrorMotionActivityNotAuthorized) {
                     weakSelf.coreMotionPermissionStatus = kPermissionStatusDenied;
                     
                     if (weakSelf.completionBlock) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
                         weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeCoremotion]);
                         weakSelf.completionBlock = nil;
+                        });
                     }
                     
                 }
@@ -287,7 +273,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             break;
         case kSignUpPermissionsTypeMicrophone:
         {
-            __weak typeof(self) weakSelf = self;
             
             [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
                 if (granted) {
@@ -304,7 +289,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             break;
         case kSignUpPermissionsTypeCamera:
         {
-            __weak typeof(self) weakSelf = self;
             
             [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
                 if(granted){
@@ -321,7 +305,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             break;
         case kSignUpPermissionsTypePhotoLibrary:
         {
-            __weak typeof(self) weakSelf = self;
             
             ALAssetsLibrary *lib = [[ALAssetsLibrary alloc] init];
             
@@ -460,28 +443,30 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 
 #pragma mark - Remote notifications methods
 
-- (void)appDidRegisterForRemoteNotifications
+- (void)appDidRegisterForRemoteNotifications: (NSNotification *)notification
 {
-    if (self.completionBlock) {
-        self.completionBlock(YES, nil);
-        self.completionBlock = nil;
+    
+    UIUserNotificationSettings *settings = (UIUserNotificationSettings *)notification.object;
+    
+    if (settings.types != 0) {
+        if (self.completionBlock) {
+            self.completionBlock(YES, nil);
+            self.completionBlock = nil;
+        }
+    }else{
+        if (self.completionBlock) {
+            self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocalNotifications]);
+            self.completionBlock = nil;
+        }
     }
-}
 
-- (void)appFailedToRegisterForRemoteNotification
-{
-    if (self.completionBlock) {
-        self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocalNotifications]);
-        self.completionBlock = nil;
-    }
 }
 
 #pragma mark - Dealloc
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:APCAppDidRegisterUserNotification object:self];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:APCAppDidFailToRegisterForRemoteNotification object:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

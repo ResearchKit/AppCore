@@ -21,6 +21,7 @@
 #import "APCUser+UserData.h"
 #import "APCPermissionsManager.h"
 #import "APCSharingOptionsViewController.h"
+#import "APCLicenseInfoViewController.h"
 
 static CGFloat const kSectionHeaderHeight = 40.f;
 static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
@@ -772,6 +773,20 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
+        {
+            APCTableViewItem *field = [APCTableViewItem new];
+            field.caption = NSLocalizedString(@"License Information", @"");
+            field.identifier = kAPCDefaultTableViewCellIdentifier;
+            field.textAlignnment = NSTextAlignmentRight;
+            field.editable = NO;
+            field.selectionStyle = UITableViewCellSelectionStyleGray;
+            
+            APCTableViewRow *row = [APCTableViewRow new];
+            row.item = field;
+            row.itemType = kAPCSettingsItemTypeLicenseInformation;
+            [rowItems addObject:row];
+        }
+        
         APCTableViewSection *section = [APCTableViewSection new];
         section.rows = [NSArray arrayWithArray:rowItems];
         section.sectionTitle = @"";
@@ -918,6 +933,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     } else {
         
         APCTableViewItemType type = [self itemTypeForIndexPath:indexPath];
+        UIStoryboard *onboarding = [UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]];
+        APCSignUpPermissionsViewController *signUpPermissions = [onboarding instantiateViewControllerWithIdentifier:@"APCSignUpPermissionsViewController"];
+        signUpPermissions.navigationItem.rightBarButtonItem = nil;
         
         switch (type) {
             case kAPCTableViewStudyItemTypeShare:
@@ -945,23 +963,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 [tableView deselectRowAtIndexPath:indexPath animated:YES];
                 
                 if (!self.isEditing){
-                    NSString *title = NSLocalizedString(@"Permissions", @"Permissions");
-                    NSString *message = NSLocalizedString(@"The app will open its Permissions in the phone's Settings.", @"The app will open its Permissions in the phone's Settings.");
-                    NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
-                    NSString *ok = NSLocalizedString(@"OK", @"OK");
-                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-                    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
-                        [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
-                    }];
-                    [alertController addAction:cancelAction];
-                    
-                    UIAlertAction *okAction = [UIAlertAction actionWithTitle:ok style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
-                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-                        [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
-                    }];
-                    [alertController addAction:okAction];
-                    
-                    [self presentViewController:alertController animated:YES completion:nil];
+
+                    [self.navigationController pushViewController:signUpPermissions animated:YES];
                 }
                 
             }
@@ -998,6 +1001,20 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 }
             }
                 break;
+                
+            case kAPCSettingsItemTypeLicenseInformation:
+            {
+                if (!self.isEditing){
+                    
+                    APCLicenseInfoViewController *licenseInfoViewController = [[UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCLicenseInfoViewController"];
+                    [self.navigationController pushViewController:licenseInfoViewController animated:YES];
+                    
+                } else {
+                    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+                }
+            }
+                break;
+                
             case kAPCSettingsItemTypeSharingOptions:
             {
                 if (!self.isEditing){

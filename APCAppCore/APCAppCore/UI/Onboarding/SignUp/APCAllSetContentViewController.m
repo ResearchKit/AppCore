@@ -78,12 +78,14 @@ typedef NS_ENUM(NSUInteger, APCAllSetRows)
                 for (NSDictionary *textBlock in self.textBlocks) {
                     if (textBlock[kAllSetActivitiesTextOriginal]) {
                         cell.originalText = textBlock[kAllSetActivitiesTextOriginal];
+                    } else {
+                        cell.originalText = original;
                     }
                     
                     if (textBlock[kAllSetActivitiesTextAdditional]) {
                         cell.additonalText = textBlock[kAllSetActivitiesTextAdditional];
                     } else {
-                        APCLogError(@"Received a key that is not supported. Data Received: %@", textBlock);
+                        cell.additonalText = nil;
                     }
                 }
             } else {
@@ -103,12 +105,14 @@ typedef NS_ENUM(NSUInteger, APCAllSetRows)
                 for (NSDictionary *textBlock in self.textBlocks) {
                     if (textBlock[kAllSetDashboardTextOriginal]) {
                         cell.originalText = textBlock[kAllSetDashboardTextOriginal];
+                    } else {
+                        cell.originalText = original;
                     }
                     
                     if (textBlock[kAllSetDashboardTextAdditional]) {
                         cell.additonalText = textBlock[kAllSetDashboardTextAdditional];
                     } else {
-                        APCLogError(@"Received a key that is not supported. Data Received: %@", textBlock);
+                        cell.additonalText = nil;
                     }
                 }
             } else {
