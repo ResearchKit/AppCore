@@ -11,6 +11,7 @@
 @class APCDataSubstrate;
 @class APCSchedule;
 @class APCDateRange;
+@class APCTask;
 
 typedef NS_ENUM(NSUInteger, APCSchedulerDateRange) {
     kAPCSchedulerDateRangeYesterday,
@@ -24,6 +25,12 @@ typedef NS_ENUM(NSUInteger, APCSchedulerDateRange) {
 
 - (void)updateScheduledTasksIfNotUpdating: (BOOL) today;
 - (void)updateScheduledTasksIfNotUpdatingWithRange: (APCSchedulerDateRange) range;
+- (void) updateScheduledTasksForSchedule: (APCSchedule*) schedule;
+
+@property (nonatomic, strong) APCDateRange * referenceRange;
+
+- (void) findOrCreateOneTimeScheduledTask:(APCSchedule *) schedule task: (APCTask*) task andStartDateReference: (NSDate *)startOn;
+
 
 @end
 
