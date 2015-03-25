@@ -191,15 +191,13 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         
         graphCell.tintColor = graphItem.tintColor;
         graphCell.delegate = self;
+        
         [graphView layoutSubviews];
         
         if (graphView != nil)
         {
             [self.lineCharts addObject:graphView];
         }
-        
-        [graphView refreshGraph];
-        
         
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardMessageItem class]]){
         
@@ -282,6 +280,29 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
     }
     
     return height;
+}
+
+- (void)tableView:(UITableView *)__unused tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    APCTableViewItem *dashboardItem = [self itemForIndexPath:indexPath];
+    
+    if ([dashboardItem isKindOfClass:[APCTableViewDashboardGraphItem class]]){
+        APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)dashboardItem;
+        APCDashboardGraphTableViewCell *graphCell = (APCDashboardGraphTableViewCell *)cell;
+        
+        APCBaseGraphView *graphView;
+        
+        if (graphItem.graphType == kAPCDashboardGraphTypeLine) {
+            graphView = (APCLineGraphView *)graphCell.lineGraphView;
+            
+        } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
+            graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
+        }
+        
+        [graphView setNeedsLayout];
+        [graphView layoutIfNeeded];
+        [graphView refreshGraph];
+    }
 }
 
 #pragma mark - APCBaseGraphViewDelegate methods
