@@ -18,6 +18,7 @@
 #import "APCMedTrackerPrescriptionColor+Helper.h"
 #import "APCMedTrackerDailyDosageRecord+Helper.h"
 #import "APCDataArchiverAndUploader.h"
+#import "APCLog.h"
 
 
 /*
@@ -742,9 +743,15 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 
 + (void) sendRecordedActionToSage: (NSDictionary *) actionRecord
 {
-    NSLog (@"Just got this 'actionRecord': %@", actionRecord);
+    /*
+     NOT YET READY FOR PRODUCTION
 
-    [APCDataArchiverAndUploader uploadOneDictionary: actionRecord];
+     Once we've finalized a file format, we can uncomment this line of code.
+
+            [APCDataArchiverAndUploader uploadOneDictionary: actionRecord];
+     */
+
+    APCLogDebug (@"MedTrackerPrescription:  NOT YET UPLOADING ANYTHING.  Waiting until we finalize file format.  I WOULD HAVE uploaded this:  %@", actionRecord);
 }
 
 + (void) recordActionForCreatingPrescription: (APCMedTrackerPrescription *) prescription
