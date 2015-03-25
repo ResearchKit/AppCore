@@ -111,7 +111,7 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
     
     localNotification.fireDate = [self calculateFireDate];
     localNotification.timeZone = [NSTimeZone localTimeZone];
-    localNotification.alertBody = [NSString stringWithFormat:kTaskReminderMessage, [self studyName], [self studyName]];
+    localNotification.alertBody = [NSString stringWithFormat:[self reminderMessage], [self studyName], [self studyName]];
     localNotification.repeatInterval = NSCalendarUnitDay;
     localNotification.soundName = UILocalNotificationDefaultSoundName;
     
@@ -131,6 +131,11 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
     
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
     APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Scheduled Reminder: %@", localNotification]}));
+}
+
+-(NSString *)reminderMessage{
+    
+    return kTaskReminderMessage;
 }
 
 - (NSDate*) calculateFireDate
