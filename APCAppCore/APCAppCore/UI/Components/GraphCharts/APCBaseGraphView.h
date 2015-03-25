@@ -24,8 +24,6 @@
 
 @property (nonatomic) BOOL showsVerticalReferenceLines;
 
-@property (nonatomic) BOOL shouldAutomaticallyAnimate;
-
 /* Appearance */
 
 @property (nonatomic, strong) UIColor *tintColor;
@@ -64,8 +62,6 @@
 - (void)setScrubberViewsHidden:(BOOL)hidden animated:(BOOL)animated;
 
 - (void)refreshGraph;
-
-- (void)animateGraph;
 
 @end
 

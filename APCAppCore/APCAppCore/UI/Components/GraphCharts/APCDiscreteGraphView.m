@@ -256,14 +256,8 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         }
     }
     
-    if (self.shouldAutomaticallyAnimate) {
-        [self animateLayersSequentially];
-    }
-}
-
-- (void)animateGraph
-{
     [self animateLayersSequentially];
+    
 }
 
 - (void)setupEmptyView

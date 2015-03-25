@@ -173,6 +173,8 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
             [self.lineCharts addObject:graphView];
         }
         
+//        [graphView refreshGraph];
+        
         
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardMessageItem class]]){
         
@@ -272,48 +274,12 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
             graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
+            graphCell.discreteGraphView.hidden = NO;
         }
         
         [graphView setNeedsLayout];
         [graphView layoutIfNeeded];
         [graphView refreshGraph];
-    }
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)__unused scrollView
-{
-    [self updateCellContent];
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)__unused scrollView willDecelerate:(BOOL)decelerate
-{
-    if (!decelerate) {
-        [self updateCellContent];
-    }
-}
-
-- (void)updateCellContent
-{
-    NSArray *visibleIndexPaths = [self.tableView indexPathsForVisibleRows];
-    
-    for (NSIndexPath *indexPath  in visibleIndexPaths) {
-        APCTableViewItem *dashboardItem = [self itemForIndexPath:indexPath];
-        
-        if ([dashboardItem isKindOfClass:[APCTableViewDashboardGraphItem class]]){
-            APCTableViewDashboardGraphItem *graphItem = (APCTableViewDashboardGraphItem *)dashboardItem;
-            APCDashboardGraphTableViewCell *graphCell = (APCDashboardGraphTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
-            
-            APCBaseGraphView *graphView;
-            
-            if (graphItem.graphType == kAPCDashboardGraphTypeLine) {
-                graphView = (APCLineGraphView *)graphCell.lineGraphView;
-                
-            } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
-                graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
-            }
-            
-            [graphView animateGraph];
-        }
     }
 }
 
