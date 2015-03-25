@@ -86,7 +86,7 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
     __block UILocalNotification * retValue;
     [eventArray enumerateObjectsUsingBlock:^(UILocalNotification * obj, NSUInteger __unused idx, BOOL * __unused stop) {
         NSDictionary *userInfoCurrent = obj.userInfo;
-        if ([userInfoCurrent[kTaskReminderUserInfoKey] isEqualToString:kTaskReminderUserInfo]) {
+        if ([userInfoCurrent[[self taskReminderUserInfoKey]] isEqualToString:[self taskReminderUserInfo]]) {
             retValue = obj;
         }
     }];
@@ -116,7 +116,7 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
     localNotification.soundName = UILocalNotificationDefaultSoundName;
     
     NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
-    notificationInfo[kTaskReminderUserInfoKey] = kTaskReminderUserInfo;
+    notificationInfo[[self taskReminderUserInfoKey]] = [self taskReminderUserInfo];
     localNotification.userInfo = notificationInfo;
     
     //Check if the notifications are registrered.
@@ -136,6 +136,14 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
 -(NSString *)reminderMessage{
     
     return kTaskReminderMessage;
+}
+
+-(NSString *)taskReminderUserInfo{
+    return kTaskReminderUserInfo;
+}
+
+-(NSString *)taskReminderUserInfoKey{
+    return kTaskReminderUserInfoKey;
 }
 
 - (NSDate*) calculateFireDate
