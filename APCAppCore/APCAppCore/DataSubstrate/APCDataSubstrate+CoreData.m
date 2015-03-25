@@ -11,6 +11,33 @@
 #import "NSError+APCAdditions.h"
 
 
+
+typedef enum : NSInteger
+{
+    APCErrorCode_CoreData_NoErrors = 0,
+    APCErrorCode_CoreData_CantCreateDatabase,
+    APCErrorCode_CoreData_CantOpenExistingDatabase,
+
+} APCErrorCode;
+
+static NSString * const kAPCError_CoreData_Domain                           = @"kAPCError_CoreData_Domain";
+
+static NSString * const kAPCError_CoreData_CantCreateDatabase_Reason        = @"Unable to Create Database";
+
+static NSString * const kAPCError_CoreData_CantCreateDatabase_Suggestion    = (@"We were unable to create a place to "
+                                                                               "save your data. Please exit the app and "
+                                                                               "try again. If the problem recurs, please "
+                                                                               "uninstall the app and try once more.");
+
+static NSString * const kAPCError_CoreData_CantOpenDatabase_Reason          = @"Unable to Open Database";
+
+static NSString * const kAPCError_CoreData_CantOpenDatabase_Suggestion      = (@"Unable to open your existing data file. "
+                                                                               "Please exit the app and try again. If the "
+                                                                               "problem recurs, please uninstall and "
+                                                                               "reinstall the app.");
+
+
+
 @implementation APCDataSubstrate (CoreData)
 
 /*********************************************************************************/

@@ -261,7 +261,7 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
 {
     [self addFileToArchiveFromURL: file.fileURL
                     usingFileName: fileName
-                      contentType: @"text/json"
+                      contentType: @"application/json"
                         timeStamp: file.endDate];
 }
 

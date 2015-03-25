@@ -7,9 +7,12 @@
  
 #import "APCConstants.h"
 
-/* -------------------------
- Constants
- ------------------------- */
+
+
+// ---------------------------------------------------------
+#pragma mark - Constants
+// ---------------------------------------------------------
+
 NSString *const APCUserSignedUpNotification   = @"APCUserSignedUpNotification";
 NSString *const APCUserSignedInNotification   = @"APCUserSignedInNotification";
 NSString *const APCUserLogOutNotification     = @"APCUserLogOutNotification";
@@ -110,9 +113,12 @@ NSString *const kActivitiesSectionKeepGoing     = @"activitiesSectionKeepGoing";
 NSString *const kActivitiesSectionYesterday     = @"activitiesSectionYesterday";
 NSString *const kActivitiesSectionToday         = @"activitiesSectionToday";
 
-/*********************************************************************************/
+
+
+// ---------------------------------------------------------
 #pragma mark - Events
-/*********************************************************************************/
+// ---------------------------------------------------------
+
 NSString *const kAppStateChangedEvent   = @"AppStateChanged";
 NSString *const kNetworkEvent           = @"NetworkEvent";
 NSString *const kSchedulerEvent         = @"SchedulerEvent";
@@ -120,6 +126,32 @@ NSString *const kTaskEvent              = @"TaskEvent";
 NSString *const kPageViewEvent          = @"PageViewEvent";
 NSString *const kErrorEvent             = @"ErrorEvent";
 NSString *const kPassiveCollectorEvent  = @"PassiveCollectorEvent";
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Known files, folders, extensions, and content types
+// ---------------------------------------------------------
+
+/*
+ Folders that will appear in the user's Documents directory,
+ or elsewhere that we might need to understand and inspect 'em.
+ */
+
+NSString * const kAPCFolderName_ArchiveAndUpload_TopLevelFolder = @"StuffBeingArchivedAndUploaded";
+NSString * const kAPCFolderName_ArchiveAndUpload_Archiving      = @"StuffBeingArchived";
+NSString * const kAPCFolderName_ArchiveAndUpload_Uploading      = @"StuffBeingUploaded";
+
+NSString * const kAPCFileName_EncryptedZipFile                  = @"encrypted.zip";
+NSString * const kAPCFileName_UnencryptedZipFile                = @"unencrypted.zip";
+
+NSString * const kAPCFileExtension_JSON                         = @"json";
+NSString * const kAPCFileExtension_PrivateKey                   = @"pem";
+NSString * const kAPCFileExtension_CommaSeparatedValues         = @"csv";
+
+NSString * const kAPCContentType_JSON                           = @"application/json";
+
+
 
 @implementation APCConstants
 

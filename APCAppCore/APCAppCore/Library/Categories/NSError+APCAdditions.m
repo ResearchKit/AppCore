@@ -170,7 +170,7 @@ static NSString * const oneTab = @"    ";
 #pragma mark - Convenience Initializers
 // ---------------------------------------------------------
 
-+ (NSError *) errorWithCode: (APCErrorCode) code
++ (NSError *) errorWithCode: (NSInteger)  code
                      domain: (NSString *) domain
               failureReason: (NSString *) localizedFailureReason
          recoverySuggestion: (NSString *) localizedRecoverySuggestion
@@ -184,7 +184,7 @@ static NSString * const oneTab = @"    ";
                    nestedError: nil];
 }
 
-+ (NSError *) errorWithCode: (APCErrorCode) code
++ (NSError *) errorWithCode: (NSInteger)  code
                      domain: (NSString *) domain
               failureReason: (NSString *) localizedFailureReason
          recoverySuggestion: (NSString *) localizedRecoverySuggestion
@@ -199,7 +199,7 @@ static NSString * const oneTab = @"    ";
                    nestedError: rootCause];
 }
 
-+ (NSError *) errorWithCode: (APCErrorCode) code
++ (NSError *) errorWithCode: (NSInteger)  code
                      domain: (NSString *) domain
               failureReason: (NSString *) localizedFailureReason
          recoverySuggestion: (NSString *) localizedRecoverySuggestion
@@ -214,7 +214,7 @@ static NSString * const oneTab = @"    ";
                    nestedError: nil];
 }
 
-+ (NSError *) errorWithCode: (APCErrorCode) code
++ (NSError *) errorWithCode: (NSInteger)  code
                      domain: (NSString *) domain
               failureReason: (NSString *) localizedFailureReason
          recoverySuggestion: (NSString *) localizedRecoverySuggestion
@@ -229,7 +229,7 @@ static NSString * const oneTab = @"    ";
                    nestedError: nil];
 }
 
-+ (NSError *) errorWithCode: (APCErrorCode) code
++ (NSError *) errorWithCode: (NSInteger)  code
                      domain: (NSString *) domain
               failureReason: (NSString *) localizedFailureReason
          recoverySuggestion: (NSString *) localizedRecoverySuggestion

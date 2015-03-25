@@ -28,15 +28,11 @@
  method behind the scenes.  Please add any more such methods
  you need.
 
- @param  code       APCErrorCode is an enum intended as a catchall
-                    for all our errors.  Please feel free to add your
-                    own error codes in there, alphabetized and grouped
-                    like the rest of them.  You can also just pass an
-                    NSInteger for this field.
- 
+ @param  code       An error code.  Any integer you like.
+
  @param  domain     A string representing the category of error.
  */
-+ (NSError *) errorWithCode: (APCErrorCode) code
++ (NSError *) errorWithCode: (NSInteger)  code
                      domain: (NSString *) domain
               failureReason: (NSString *) localizedFailureReason
          recoverySuggestion: (NSString *) localizedRecoverySuggestion;
@@ -49,11 +45,7 @@
  method behind the scenes.  Please add any more such methods
  you need.
 
- @param  code           APCErrorCode is an enum intended as a catchall
-                        for all our errors.  Please feel free to add your
-                        own error codes in there, alphabetized and grouped
-                        like the rest of them.  You can also just pass an
-                        NSInteger for this field.
+ @param  code           An error code.  Any integer you like.
 
  @param  domain         A string representing the category of error.
  
@@ -65,7 +57,7 @@
                         or may not be set to anything, and this method will
                         do the right thing with it.
  */
-+ (NSError *) errorWithCode: (APCErrorCode) code
++ (NSError *) errorWithCode: (NSInteger)  code
                      domain: (NSString *) domain
               failureReason: (NSString *) localizedFailureReason
          recoverySuggestion: (NSString *) localizedRecoverySuggestion
@@ -79,15 +71,11 @@
  method behind the scenes.  Please add any more such methods
  you need.
 
- @param  code       APCErrorCode is an enum intended as a catchall
-                    for all our errors.  Please feel free to add your
-                    own error codes in there, alphabetized and grouped
-                    like the rest of them.  You can also just pass an
-                    NSInteger for this field.
- 
+ @param  code       An error code.  Any integer you like.
+
  @param  domain     A string representing the category of error.
  */
-+ (NSError *) errorWithCode: (APCErrorCode) code
++ (NSError *) errorWithCode: (NSInteger)  code
                      domain: (NSString *) domain
               failureReason: (NSString *) localizedFailureReason
          recoverySuggestion: (NSString *) localizedRecoverySuggestion
@@ -101,15 +89,11 @@
  method behind the scenes.  Please add any more such methods
  you need.
 
- @param  code       APCErrorCode is an enum intended as a catchall
-                    for all our errors.  Please feel free to add your
-                    own error codes in there, alphabetized and grouped
-                    like the rest of them.  You can also just pass an
-                    NSInteger for this field.
- 
+ @param  code       An error code.  Any integer you like.
+
  @param  domain     A string representing the category of error.
  */
-+ (NSError *) errorWithCode: (APCErrorCode) code
++ (NSError *) errorWithCode: (NSInteger)  code
                      domain: (NSString *) domain
               failureReason: (NSString *) localizedFailureReason
          recoverySuggestion: (NSString *) localizedRecoverySuggestion
@@ -123,11 +107,7 @@
  method behind the scenes.  Please add any more such methods
  you need.
 
- @param  code           APCErrorCode is an enum intended as a catchall
-                        for all our errors.  Please feel free to add your
-                        own error codes in there, alphabetized and grouped
-                        like the rest of them.  You can also just pass an
-                        NSInteger for this field.
+ @param  code           An error code.  Any integer you like.
 
  @param  domain         A string representing the category of error.
  
@@ -139,7 +119,7 @@
                         or may not be set to anything, and this method will
                         do the right thing with it.
  */
-+ (NSError *) errorWithCode: (APCErrorCode) code
++ (NSError *) errorWithCode: (NSInteger)  code
                      domain: (NSString *) domain
               failureReason: (NSString *) localizedFailureReason
          recoverySuggestion: (NSString *) localizedRecoverySuggestion

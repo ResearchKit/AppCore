@@ -20,6 +20,12 @@
 #import "ZZArchiveEntry.h"
 
 
+
+// ---------------------------------------------------------
+#pragma mark - Constants
+// ---------------------------------------------------------
+
+
 static BOOL       const K_DEBUG_INCLUDE_TESTING_MESSAGE         = YES;
 static NSString * const kAPCUploaderThisIsATestMessage_Key      = @"THIS_IS_A_TEST";
 static NSString * const kAPCUploaderThisIsATestMessage_Message  = @"Dear Sage folks:  This whole .zip file is a test, as we work on improving the health apps.  Please ignore.";
@@ -28,6 +34,85 @@ static NSString * const kAPCNormalFileNameKey                   = @"item";      
 static NSString * const kAPCAlternateFileNameKey                = @"identifier";    // as filenames.  Soon, we can change that.
 static NSString * const kAPCNameOfIndexFile                     = @"info";
 static NSString * const kAPCUnknownFileNameFormatString         = @"UnknownFile_%d";
+
+static NSString * const kAPCOperationQueueName_ArchiveAndUpload_General                     = @"ArchiveAndUpload: Generic zip-and-upload queue";
+static NSString * const kAPCOperationQueueName_ArchiveAndUpload_ModifyingListOfArchivers    = @"ArchiveAndUpload: Queue for adding and removing archivers to a global list";
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Error Codes and Strings (more constants)
+// ---------------------------------------------------------
+
+typedef enum : NSInteger
+{
+    APCErrorCode_Undetermined                               = -1,
+    APCErrorCode_None                                       = 0,
+    APCErrorCode_ArchiveAndUpload_NoErrors                  = 100,
+    APCErrorCode_ArchiveAndUpload_CantCreateZipFile,
+    APCErrorCode_ArchiveAndUpload_CantSerializeObject,
+    APCErrorCode_ArchiveAndUpload_CantInsertZipEntry,
+    APCErrorCode_ArchiveAndUpload_CantReadUnencryptedFile,
+    APCErrorCode_ArchiveAndUpload_CantFindDocumentsFolder,
+    APCErrorCode_ArchiveAndUpload_CantCreateArchiveFolder,
+    APCErrorCode_ArchiveAndUpload_CantCreateUploadFolder,
+    APCErrorCode_ArchiveAndUpload_CantCreateWorkingDirectory,
+    APCErrorCode_ArchiveAndUpload_DontHaveAnyZippedFiles,
+    APCErrorCode_ArchiveAndUpload_CantCreateManifest,
+    APCErrorCode_ArchiveAndUpload_CantSaveUnencryptedFile,
+    APCErrorCode_ArchiveAndUpload_CantFindUnencryptedFile,
+    APCErrorCode_ArchiveAndUpload_CantEncryptFile,
+    APCErrorCode_ArchiveAndUpload_CantSaveEncryptedFile,
+    APCErrorCode_ArchiveAndUpload_CantFindEncryptedFile,
+    APCErrorCode_ArchiveAndUpload_UploadFailed,
+    APCErrorCode_ArchiveAndUpload_CantDeleteFileOrFolder,
+
+} APCErrorCode;
+
+
+static NSString * const kAPCError_CoreData_Domain                                           = @"kAPCError_CoreData_Domain";
+
+static NSString * const kAPCError_ArchiveAndUpload_Domain                                   = @"kAPCError_ArchiveAndUpload_Domain";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateZipFile_Reason                 = @"Can't Create Archive in Memory";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateZipFile_Suggestion             = @"We couldn't create the new, placeholder .zip file in RAM.  (We haven't even gotten to the 'save to disk' part.)";
+static NSString * const kAPCError_ArchiveAndUpload_CantSerializeObject_Reason               = @"Can't Serialize Object";
+static NSString * const kAPCError_ArchiveAndUpload_CantSerializeObject_Suggestion           = @"We couldn't generate a JSON version of some piece of data.";
+static NSString * const kAPCError_ArchiveAndUpload_CantInsertZipEntry_Reason                = @"Can't Insert Zip Entry";
+static NSString * const kAPCError_ArchiveAndUpload_CantInsertZipEntry_Suggestion            = @"We couldn't add one of the .zippable items to the .zip file.";
+static NSString * const kAPCError_ArchiveAndUpload_CantReadUnencryptedFile_Reason           = @"Can't Open Archive";
+static NSString * const kAPCError_ArchiveAndUpload_CantReadUnencryptedFile_Suggestion       = @"Couldn't read the unencrypted .zip file we just tried to create.";
+static NSString * const kAPCError_ArchiveAndUpload_CantFindDocumentsFolder_Reason           = @"Can't Find 'Documents' Folder";
+static NSString * const kAPCError_ArchiveAndUpload_CantFindDocumentsFolder_Suggestion       = @"Couldn't find the user's 'documents' folder. This should never happen. Ahem.";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateArchiveFolder_Reason           = @"Can't create 'Archive' folder";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateArchiveFolder_Suggestion       = @"Couldn't create the folder for preparing our .zip files.";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateUploadFolder_Reason            = @"Can't create 'Upload' folder";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateUploadFolder_Suggestion        = @"Couldn't create the folder for saving files to be uploaded.";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateWorkingDirectory_Reason        = @"Can't Create Working Folder";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateWorkingDirectory_Suggestion    = @"Couldn't create a folder in which to make our .zip file.";
+static NSString * const kAPCError_ArchiveAndUpload_DontHaveAnyZippedFiles_Reason            = @"Don't Have Files For Archive";
+static NSString * const kAPCError_ArchiveAndUpload_DontHaveAnyZippedFiles_Suggestion        = @"Something went wrong. We don't seem to have any contents for this .zip file.";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateManifest_Reason                = @"Can't Create Manifest";
+static NSString * const kAPCError_ArchiveAndUpload_CantCreateManifest_Suggestion_Format     = @"Couldn't create the manifest file entry (%@.%@) in the .zip file.";
+static NSString * const kAPCError_ArchiveAndUpload_CantSaveUnencryptedFile_Reason           = @"Can't Save Unencrypted File";
+static NSString * const kAPCError_ArchiveAndUpload_CantSaveUnencryptedFile_Suggestion       = @"We couldn't save the unencrypted .zip file to disk.";
+static NSString * const kAPCError_ArchiveAndUpload_CantFindUnencryptedFile_Reason           = @"Can't Find Unencrypted File";
+static NSString * const kAPCError_ArchiveAndUpload_CantFindUnencryptedFile_Suggestion       = @"We couldn't find the unencrypted .zip file on disk (even though we seem to have successfully saved it...?).";
+static NSString * const kAPCError_ArchiveAndUpload_CantEncryptFile_Reason                   = @"Can't Encrypt Zip File";
+static NSString * const kAPCError_ArchiveAndUpload_CantEncryptFile_Suggestion               = @"We couldn't encrypt the .zip file we need to upload.";
+static NSString * const kAPCError_ArchiveAndUpload_CantSaveEncryptedFile_Reason             = @"Can't Save Encrypted File";
+static NSString * const kAPCError_ArchiveAndUpload_CantSaveEncryptedFile_Suggestion         = @"We couldn't save the encrypted .zip file to disk.";
+static NSString * const kAPCError_ArchiveAndUpload_CantFindEncryptedFile_Reason             = @"Can't Find Encrypted File";
+static NSString * const kAPCError_ArchiveAndUpload_CantFindEncryptedFile_Suggestion         = @"We couldn't find the encrypted .zip file on disk (even though we seem to have successfully encrypted it...?).";
+static NSString * const kAPCError_ArchiveAndUpload_UploadFailed_Reason                      = @"Upload to Sage Failed";
+static NSString * const kAPCError_ArchiveAndUpload_UploadFailed_Suggestion                  = @"We got an error when uploading to Sage.  See the nested error for details.";
+static NSString * const kAPCError_ArchiveAndUpload_CantDeleteFileOrFolder_Reason            = @"Can't Delete File/Folder";
+static NSString * const kAPCError_ArchiveAndUpload_CantDeleteFileOrFolder_Suggestion        = @"We couldn't delete a file/folder creating during the archiving process. See attached path and nested error, if any, for details.";
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Global (class) variables
+// ---------------------------------------------------------
 
 /**
  These are effectively constants, although we have
@@ -62,6 +147,12 @@ static NSString *folderPathForArchiveOperations = nil;
 static NSString *folderPathForUploadOperations = nil;
 
 
+
+// ---------------------------------------------------------
+#pragma mark - Private Properties
+// ---------------------------------------------------------
+
+
 @interface APCDataArchiverAndUploader ()
 @property (nonatomic, strong) NSArray               * dictionariesToUpload;
 
@@ -86,7 +177,7 @@ static NSString *folderPathForUploadOperations = nil;
 
 
 // ---------------------------------------------------------
-#pragma mark - Globals:  setting up class and queues
+#pragma mark - Setting up class and queues
 // ---------------------------------------------------------
 
 /**
@@ -245,10 +336,10 @@ static NSString *folderPathForUploadOperations = nil;
  the app.  For that matter, they should persist across runs of
  the app, since the folders have constant names.
 
- @return    YES if the folders were created, or if they already
-            existed.  NO if unable to create any of the base folders.
+ @return  YES if the folders were created, or if they already
+          existed.  NO if unable to create any of the base folders.
 
- @param  errorToReturn    Will be filled with the earliest error
+ @param   errorToReturn   Will be filled with the earliest error
                           encountered, if any.  Will be set to nil
                           if no errors were encountered.
  */
@@ -286,9 +377,15 @@ static NSString *folderPathForUploadOperations = nil;
                                                      returningError: & errorCreatingArchiveFolder];
 
 
-//            // TESTING
-//            folderCreated = NO;
-//            errorCreatingArchiveFolder = [NSError errorWithDomain: @"blah" code: 2 userInfo: nil];
+            /*
+             TESTING
+             
+             Please leave this block of test code here.  It helps
+             verify that we're handling each possible error correctly.
+
+                    folderCreated = NO;
+                    errorCreatingArchiveFolder = [NSError errorWithDomain: @"fake underlying error creating archive folder" code: 2 userInfo: nil];
+             */
 
 
             if (! folderCreated)
@@ -297,6 +394,8 @@ static NSString *folderPathForUploadOperations = nil;
                                              domain: kAPCError_ArchiveAndUpload_Domain
                                       failureReason: kAPCError_ArchiveAndUpload_CantCreateArchiveFolder_Reason
                                  recoverySuggestion: kAPCError_ArchiveAndUpload_CantCreateArchiveFolder_Suggestion
+                                    relatedFilePath: folderForArchiving
+                                         relatedURL: nil
                                         nestedError: errorCreatingArchiveFolder];
             }
 
@@ -307,9 +406,15 @@ static NSString *folderPathForUploadOperations = nil;
                 folderCreated = [fileManager createAPCFolderAtPath: folderForUploading
                                                     returningError: & errorCreatingUploadFolder];
 
-//                // TESTING
-//                folderCreated = NO;
-//                errorCreatingUploadFolder = [NSError errorWithDomain: @"blah" code: 2 userInfo: nil];
+                /*
+                 TESTING
+
+                 Please leave this block of test code here.  It helps
+                 verify that we're handling each possible error correctly.
+
+                        folderCreated = NO;
+                        errorCreatingUploadFolder = [NSError errorWithDomain: @"fake underlying error creating upload folder" code: 2 userInfo: nil];
+                 */
 
                 if (! folderCreated)
                 {
@@ -317,6 +422,8 @@ static NSString *folderPathForUploadOperations = nil;
                                                  domain: kAPCError_ArchiveAndUpload_Domain
                                           failureReason: kAPCError_ArchiveAndUpload_CantCreateUploadFolder_Reason
                                      recoverySuggestion: kAPCError_ArchiveAndUpload_CantCreateUploadFolder_Suggestion
+                                        relatedFilePath: folderForUploading
+                                             relatedURL: nil
                                             nestedError: errorCreatingUploadFolder];
                 }
                 else
@@ -360,9 +467,15 @@ static NSString *folderPathForUploadOperations = nil;
     ableToCreateWorkingFolder = [fileManager createAPCFolderAtPath: workingDirectoryPath
                                                     returningError: & directoryCreationError];
 
-//    // TESTING
-//    ableToCreateWorkingFolder = NO;
-//    directoryCreationError = [NSError errorWithDomain: @"fred" code: 12 userInfo: nil];
+    /*
+     TESTING
+
+     Please leave this block of test code here.  It helps
+     verify that we're handling each possible error correctly.
+
+            ableToCreateWorkingFolder = NO;
+            directoryCreationError = [NSError errorWithDomain: @"fake underlying error creating working directory" code: 12 userInfo: nil];
+     */
 
     if (! ableToCreateWorkingFolder)
     {
@@ -406,10 +519,15 @@ static NSString *folderPathForUploadOperations = nil;
                                              options: @{ ZZOpenOptionsCreateIfMissingKey : @(YES) }
                                                error: & errorCreatingArchive];
 
-    // TESTING
-//    self.zipArchive = nil;
-//    errorCreatingArchive = [NSError errorWithDomain: @"fred" code: 12 userInfo: nil];
+    /*
+     TESTING
 
+     Please leave this block of test code here.  It helps
+     verify that we're handling each possible error correctly.
+
+            self.zipArchive = nil;
+            errorCreatingArchive = [NSError errorWithDomain: @"fake underlying error creating .zip file" code: 12 userInfo: nil];
+     */
 
     if (! self.zipArchive)
     {
@@ -466,6 +584,17 @@ static NSString *folderPathForUploadOperations = nil;
         ableToZipEverything = [self insertIntoZipArchive: dictionary
                                                 filename: filename
                                           returningError: & errorFromZipInsertProcess];
+
+        /*
+         TESTING
+
+         Please leave this block of test code here.  It helps
+         verify that we're handling each possible error correctly.
+
+                 ableToZipEverything = NO;
+                 errorFromZipInsertProcess = [NSError errorWithDomain: @"fake underlying error inserting entry into .zip file" code: 12 userInfo: nil];
+         */
+
 
         if (! ableToZipEverything)
         {
@@ -582,18 +711,29 @@ static NSString *folderPathForUploadOperations = nil;
         uploadableData = temp;
     }
 
+    NSError *errorSerializingTheData = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject: uploadableData
                                                        options: NSJSONWritingPrettyPrinted
-                                                         error: & localError];
+                                                         error: & errorSerializingTheData];
+
+    /*
+     TESTING
+
+     Please leave this block of test code here.  It helps
+     verify that we're handling each possible error correctly.
+
+            jsonData = nil;
+            errorSerializingTheData = [NSError errorWithDomain: @"fake underlying error serializing some data" code: 12 userInfo: nil];
+     */
+
 
     if (jsonData == nil)
     {
-        // Something broke!  We'll set the output error below.
-        // We are NOT creating a custom error, here, because this
-        // is a utility method used by higher-level methods
-        // in this class, and THOSE methods DO create custom
-        // errors.  So we'll just pass back the lower-level
-        // error we got.
+        localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantSerializeObject
+                                     domain: kAPCError_ArchiveAndUpload_Domain
+                              failureReason: kAPCError_ArchiveAndUpload_CantSerializeObject_Reason
+                         recoverySuggestion: kAPCError_ArchiveAndUpload_CantSerializeObject_Suggestion
+                                nestedError: errorSerializingTheData];
     }
 
     else
@@ -646,6 +786,16 @@ static NSString *folderPathForUploadOperations = nil;
     BOOL ableToCreateManifest = NO;
     NSError *localError = nil;
 
+    /*
+     TESTING
+
+     Please leave this block of test code here.  It helps
+     verify that we're handling each possible error correctly.
+
+             self.fileInfoEntries = nil;
+     */
+
+
     if (self.fileInfoEntries.count == 0)
     {
         localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_DontHaveAnyZippedFiles
@@ -666,6 +816,18 @@ static NSString *folderPathForUploadOperations = nil;
         ableToCreateManifest = [self insertIntoZipArchive: zipArchiveManifest
                                                  filename: kAPCNameOfIndexFile
                                            returningError: & errorCreatingManifest];
+
+
+        /*
+         TESTING
+
+         Please leave this block of test code here.  It helps
+         verify that we're handling each possible error correctly.
+
+                ableToCreateManifest = NO;
+                errorCreatingManifest = [NSError errorWithDomain: @"fake underlying error creating manifest file entry" code: 12 userInfo: nil];
+         */
+
 
         if (! ableToCreateManifest)
         {
@@ -709,6 +871,17 @@ static NSString *folderPathForUploadOperations = nil;
     ableToSaveToDisk = [self.zipArchive updateEntries: self.zipEntries
                                                 error: & errorSavingToDisk];
 
+    /*
+     TESTING
+
+     Please leave this block of test code here.  It helps
+     verify that we're handling each possible error correctly.
+
+            ableToSaveToDisk = NO;
+            errorSavingToDisk = [NSError errorWithDomain: @"fake underlying error saving .zip file" code: 12 userInfo: nil];
+     */
+
+
     if (! ableToSaveToDisk)
     {
         localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantSaveUnencryptedFile
@@ -723,6 +896,18 @@ static NSString *folderPathForUploadOperations = nil;
         NSError *errorFindingSavedFileOnDisk = nil;
 
         ableToSaveToDisk = [self.zipArchive.URL checkResourceIsReachableAndReturnError: & errorFindingSavedFileOnDisk];
+
+
+        /*
+         TESTING
+
+         Please leave this block of test code here.  It helps
+         verify that we're handling each possible error correctly.
+
+                 ableToSaveToDisk = NO;
+                 errorFindingSavedFileOnDisk = [NSError errorWithDomain: @"fake underlying error finding .zipped file" code: 12 userInfo: nil];
+         */
+
 
         if (! ableToSaveToDisk)
         {
@@ -757,19 +942,36 @@ static NSString *folderPathForUploadOperations = nil;
 
 - (BOOL) encryptZipFileReturningError: (NSError **) errorToReturn
 {
-    BOOL successfullyEncrypted = NO;
-    NSError *localError = nil;
-    NSString *unencryptedPath = self.zipArchive.URL.relativePath; // NOT self.zipArchive.URL.absoluteString !  Don't know why, though.
-    NSString *encryptedPath   = self.encryptedZipPath;
-
-    NSData *unencryptedZipData = [NSData dataWithContentsOfFile: unencryptedPath];
+    BOOL successfullyEncrypted  = NO;
+    NSError *localError         = nil;
+    NSString *unencryptedPath   = self.zipArchive.URL.relativePath;   // NOT self.zipArchive.URL.absoluteString !  Don't know why, though.
+    NSString *encryptedPath     = self.encryptedZipPath;
 
     /*
      Look at the structure of this next, big "if" statement.
+
      Every step says:
      - try something
      - if it fails, create an error
      - otherwise, try the next part
+     
+     Here we go.
+     */
+
+
+    NSError *errorReadingDisk = nil;
+    NSData *unencryptedZipData = [NSData dataWithContentsOfFile: unencryptedPath
+                                                        options: 0
+                                                          error: & errorReadingDisk];
+
+    /*
+     TESTING
+
+     Please leave this block of test code here.  It helps
+     verify that we're handling each possible error correctly.
+
+            unencryptedZipData = nil;
+            errorReadingDisk = [NSError errorWithDomain: @"fake underlying error reading .zip file from disk" code: 12 userInfo: nil];
      */
 
     if (unencryptedZipData == nil)
@@ -778,7 +980,9 @@ static NSString *folderPathForUploadOperations = nil;
                                      domain: kAPCError_ArchiveAndUpload_Domain
                               failureReason: kAPCError_ArchiveAndUpload_CantReadUnencryptedFile_Reason
                          recoverySuggestion: kAPCError_ArchiveAndUpload_CantReadUnencryptedFile_Suggestion
-                            relatedFilePath: unencryptedPath];
+                            relatedFilePath: unencryptedPath
+                                 relatedURL: self.zipArchive.URL
+                                nestedError: errorReadingDisk];
     }
     else
     {
@@ -788,6 +992,17 @@ static NSString *folderPathForUploadOperations = nil;
 
         NSError *encryptionError = nil;
         NSData *encryptedZipData = cmsEncrypt (unencryptedZipData, privateKeyFilePath, & encryptionError);
+
+
+        /*
+         TESTING
+
+         Please leave this block of test code here.  It helps
+         verify that we're handling each possible error correctly.
+
+                 encryptedZipData = nil;
+                 encryptionError = [NSError errorWithDomain: @"fake underlying error encrypting .zip file" code: 12 userInfo: nil];
+         */
 
         if (! encryptedZipData)
         {
@@ -801,11 +1016,21 @@ static NSString *folderPathForUploadOperations = nil;
         else
         {
             NSError *errorSavingToDisk = nil;
-            BOOL weZippedIt = [encryptedZipData writeToFile: encryptedPath
+            BOOL weSavedIt = [encryptedZipData writeToFile: encryptedPath
                                                     options: NSDataWritingAtomic
                                                       error: & errorSavingToDisk];
 
-            if (! weZippedIt)
+            /*
+             TESTING
+
+             Please leave this block of test code here.  It helps
+             verify that we're handling each possible error correctly.
+
+                     weSavedIt = NO;
+                     errorSavingToDisk = [NSError errorWithDomain: @"fake underlying error saving encrypted .zip file to disk" code: 12 userInfo: nil];
+             */
+
+            if (! weSavedIt)
             {
                 localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantSaveEncryptedFile
                                              domain: kAPCError_ArchiveAndUpload_Domain
@@ -818,6 +1043,16 @@ static NSString *folderPathForUploadOperations = nil;
             {
                 NSError *errorReachingZippedFile = nil;
                 BOOL itsReallyThere = [self.encryptedZipURL checkResourceIsReachableAndReturnError: & errorReachingZippedFile];
+
+                /*
+                 TESTING
+
+                 Please leave this block of test code here.  It helps
+                 verify that we're handling each possible error correctly.
+
+                         itsReallyThere = NO;
+                         errorReachingZippedFile = [NSError errorWithDomain: @"fake underlying error locating encrypted .zip file on disk" code: 12 userInfo: nil];
+                 */
 
                 if (! itsReallyThere)
                 {
@@ -900,6 +1135,15 @@ static NSString *folderPathForUploadOperations = nil;
      {
          NSError * localError = nil;
 
+        /*
+         TESTING
+
+         Please leave this block of test code here.  It helps
+         verify that we're handling each possible error correctly.
+
+                 uploadError = [NSError errorWithDomain: @"fake underlying error uploading file to the server" code: 12 userInfo: nil];
+         */
+
          if (uploadError != nil)
          {
              localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_UploadFailed
@@ -936,7 +1180,10 @@ static NSString *folderPathForUploadOperations = nil;
      errors, optionally containing an original error
      which generated it.
      */
-    APCLogError2 (error);
+    if (error != nil)
+    {
+        APCLogError2 (error);
+    }
 
 
     /*
