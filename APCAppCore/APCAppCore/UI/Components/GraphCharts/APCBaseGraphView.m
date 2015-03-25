@@ -39,6 +39,7 @@
     _scrubberThumbColor = [UIColor colorWithWhite:1 alpha:1.0];
     
     _showsVerticalReferenceLines = NO;
+    _shouldAutomaticallyAnimate = NO;
 
     _emptyText = NSLocalizedString(@"No Data", @"No Data");
     
@@ -74,6 +75,11 @@
 }
 
 - (void)refreshGraph
+{
+    [self throwOverrideException];
+}
+
+- (void)animateGraph
 {
     [self throwOverrideException];
 }
