@@ -173,9 +173,6 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
             [self.lineCharts addObject:graphView];
         }
         
-//        [graphView refreshGraph];
-        
-        
     } else if ([dashboardItem isKindOfClass:[APCTableViewDashboardMessageItem class]]){
         
         APCTableViewDashboardMessageItem *messageItem = (APCTableViewDashboardMessageItem *)dashboardItem;
@@ -274,7 +271,6 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
             
         } else if (graphItem.graphType == kAPCDashboardGraphTypeDiscrete) {
             graphView = (APCDiscreteGraphView *)graphCell.discreteGraphView;
-            graphCell.discreteGraphView.hidden = NO;
         }
         
         [graphView setNeedsLayout];
