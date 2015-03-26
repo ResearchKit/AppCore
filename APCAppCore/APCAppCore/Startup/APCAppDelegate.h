@@ -32,6 +32,7 @@ static NSUInteger   const kTheEntireDataModelOfTheApp                    = 2;
 @property (nonatomic) BOOL disableSignatureInConsent;
 
 //Initialization Methods
+@property (nonatomic, getter=doesPersisteStoreExist) BOOL persistentStoreExistence;
 @property (nonatomic, strong) NSDictionary * initializationOptions;
 - (NSMutableDictionary*) defaultInitializationOptions;
 

@@ -33,7 +33,7 @@
     [self setBackgroundImage:selectedBackground forState:UIControlStateSelected];
     
     // Appearance for disabled state
-    [self setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
+    [self setTitleColor:[[UIColor blackColor] colorWithAlphaComponent:0.3f] forState:UIControlStateDisabled];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -74,7 +74,7 @@
 
 - (void)setEnabled:(BOOL)enabled {
     [super setEnabled:enabled];
-    self.layer.borderColor = enabled ? [[UIColor appPrimaryColor] CGColor] : [[UIColor grayColor] CGColor];
+    self.layer.borderColor = enabled ? [[UIColor appPrimaryColor] CGColor] : [[[UIColor blackColor] colorWithAlphaComponent:0.3f] CGColor];
 }
 
 @end

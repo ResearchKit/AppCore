@@ -67,9 +67,6 @@ NSTimeInterval const kAPCSignInButtonPulseFadeInTimeInSeconds               = 1.
 NSTimeInterval const kAPCSignInButtonPulseFadeOutTimeInSeconds              = 1.5;
 NSTimeInterval const kAPCSignInButtonPulsePauseWhileVisibleTimeInSeconds    = 1.5;
 
-NSString *const kAnalyticsOnOffKey					 = @"AnalyticsOnOffKey";
-NSString *const kAnalyticsFlurryAPIKeyKey			 = @"AnalyticsFlurryAPIKeyKey";
-
 NSString *const kRegularFontNameKey = @"RegularFontNameKey";
 NSString *const kMediumFontNameKey  = @"MediumFontNameKey";
 NSString *const kLightFontNameKey   = @"LightFontNameKey";

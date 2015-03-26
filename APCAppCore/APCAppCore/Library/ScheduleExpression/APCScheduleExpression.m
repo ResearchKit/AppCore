@@ -13,7 +13,7 @@
 
 @interface APCScheduleExpression ()
 
-@property (nonatomic, strong) APCScheduleExpressionParser*	parser;
+@property (nonatomic, strong) NSString*                     originalCronExpression;
 @property (nonatomic, strong) NSArray*						selectors;
 @property (nonatomic, assign) BOOL							validExpression;
 @property (nonatomic, strong) APCTimeSelector*				minuteSelector;
@@ -33,6 +33,8 @@
 	
     if (self)
     {
+        _originalCronExpression = expression;
+
         APCScheduleExpressionParser* parser = [[APCScheduleExpressionParser alloc] initWithExpression:expression];
         
         _validExpression = [parser parse];
@@ -57,11 +59,6 @@
     return self;
 }
 
-- (BOOL)isValid
-{
-    return self.parser.isValidParse;
-}
-
 - (NSEnumerator*)enumeratorBeginningAtTime:(NSDate*)start
 {
     NSParameterAssert(start != nil);
@@ -71,7 +68,8 @@
                                                    hourSelector:self.hourSelector
                                              dayOfMonthSelector:self.dayOfMonthSelector
                                                   monthSelector:self.monthSelector
-                                                   yearSelector:self.yearSelector];
+                                                   yearSelector:self.yearSelector
+                                         originalCronExpression:self.originalCronExpression];
 }
 
 - (NSEnumerator*)enumeratorBeginningAtTime:(NSDate*)start endingAtTime:(NSDate*)end
@@ -85,7 +83,8 @@
                                                    hourSelector:self.hourSelector
                                              dayOfMonthSelector:self.dayOfMonthSelector
                                                   monthSelector:self.monthSelector
-                                                   yearSelector:self.yearSelector];
+                                                   yearSelector:self.yearSelector
+                                         originalCronExpression:self.originalCronExpression];
 }
 
 
