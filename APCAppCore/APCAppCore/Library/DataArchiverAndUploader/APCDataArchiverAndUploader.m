@@ -1,8 +1,34 @@
 //
-//  APCDataArchiverAndUploader.m
-//  AppCore
+// APCDataArchiverAndUploader.m
+// AppCore
 //
-//  Copyright (c) 2015 Apple, Inc. All rights reserved.
+// Copyright (c) 2015 Apple, Inc. All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+// 1.  Redistributions of source code must retain the above copyright notice, this
+// list of conditions and the following disclaimer.
+//
+// 2.  Redistributions in binary form must reproduce the above copyright notice,
+// this list of conditions and the following disclaimer in the documentation and/or
+// other materials provided with the distribution.
+//
+// 3.  Neither the name of the copyright holder(s) nor the names of any contributors
+// may be used to endorse or promote products derived from this software without
+// specific prior written permission. No license is granted to the trademarks of
+// the copyright holders even if such marks are included in this software.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+// OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 #import "APCDataArchiverAndUploader.h"
@@ -44,69 +70,71 @@ static NSString * const kAPCOperationQueueName_ArchiveAndUpload_ModifyingListOfA
 #pragma mark - Error Codes and Strings (more constants)
 // ---------------------------------------------------------
 
+
+/*
+ These all end in "_Code" so they'll be easy to spot
+ in the context menus, when we type "kError..." and see
+ a bunch of related items.  These will appear next to
+ their matching strings, defined below.
+ */
 typedef enum : NSInteger
 {
-    APCErrorCode_Undetermined                               = -1,
-    APCErrorCode_None                                       = 0,
-    APCErrorCode_ArchiveAndUpload_NoErrors                  = 100,
-    APCErrorCode_ArchiveAndUpload_CantCreateZipFile,
-    APCErrorCode_ArchiveAndUpload_CantSerializeObject,
-    APCErrorCode_ArchiveAndUpload_CantInsertZipEntry,
-    APCErrorCode_ArchiveAndUpload_CantReadUnencryptedFile,
-    APCErrorCode_ArchiveAndUpload_CantFindDocumentsFolder,
-    APCErrorCode_ArchiveAndUpload_CantCreateArchiveFolder,
-    APCErrorCode_ArchiveAndUpload_CantCreateUploadFolder,
-    APCErrorCode_ArchiveAndUpload_CantCreateWorkingDirectory,
-    APCErrorCode_ArchiveAndUpload_DontHaveAnyZippedFiles,
-    APCErrorCode_ArchiveAndUpload_CantCreateManifest,
-    APCErrorCode_ArchiveAndUpload_CantSaveUnencryptedFile,
-    APCErrorCode_ArchiveAndUpload_CantFindUnencryptedFile,
-    APCErrorCode_ArchiveAndUpload_CantEncryptFile,
-    APCErrorCode_ArchiveAndUpload_CantSaveEncryptedFile,
-    APCErrorCode_ArchiveAndUpload_CantFindEncryptedFile,
-    APCErrorCode_ArchiveAndUpload_UploadFailed,
-    APCErrorCode_ArchiveAndUpload_CantDeleteFileOrFolder,
+    kErrorCantCreateZipFile_Code        = 100,
+    kErrorCantSerializeObject_Code,
+    kErrorCantInsertZipEntry_Code,
+    kErrorCantReadUnencryptedFile_Code,
+    kErrorCantFindDocumentsFolder_Code,
+    kErrorCantCreateArchiveFolder_Code,
+    kErrorCantCreateUploadFolder_Code,
+    kErrorCantCreateWorkingDirectory_Code,
+    kErrorDontHaveAnyZippedFiles_Code,
+    kErrorCantCreateManifest_Code,
+    kErrorCantSaveUnencryptedFile_Code,
+    kErrorCantFindUnencryptedFile_Code,
+    kErrorCantEncryptFile_Code,
+    kErrorCantSaveEncryptedFile_Code,
+    kErrorCantFindEncryptedFile_Code,
+    kErrorUploadFailed_Code,
+    kErrorCantDeleteFileOrFolder_Code,
 
 } APCErrorCode;
 
 
-static NSString * const kAPCError_CoreData_Domain                                           = @"kAPCError_CoreData_Domain";
-
-static NSString * const kAPCError_ArchiveAndUpload_Domain                                   = @"kAPCError_ArchiveAndUpload_Domain";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateZipFile_Reason                 = @"Can't Create Archive in Memory";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateZipFile_Suggestion             = @"We couldn't create the new, placeholder .zip file in RAM.  (We haven't even gotten to the 'save to disk' part.)";
-static NSString * const kAPCError_ArchiveAndUpload_CantSerializeObject_Reason               = @"Can't Serialize Object";
-static NSString * const kAPCError_ArchiveAndUpload_CantSerializeObject_Suggestion           = @"We couldn't generate a JSON version of some piece of data.";
-static NSString * const kAPCError_ArchiveAndUpload_CantInsertZipEntry_Reason                = @"Can't Insert Zip Entry";
-static NSString * const kAPCError_ArchiveAndUpload_CantInsertZipEntry_Suggestion            = @"We couldn't add one of the .zippable items to the .zip file.";
-static NSString * const kAPCError_ArchiveAndUpload_CantReadUnencryptedFile_Reason           = @"Can't Open Archive";
-static NSString * const kAPCError_ArchiveAndUpload_CantReadUnencryptedFile_Suggestion       = @"Couldn't read the unencrypted .zip file we just tried to create.";
-static NSString * const kAPCError_ArchiveAndUpload_CantFindDocumentsFolder_Reason           = @"Can't Find 'Documents' Folder";
-static NSString * const kAPCError_ArchiveAndUpload_CantFindDocumentsFolder_Suggestion       = @"Couldn't find the user's 'documents' folder. This should never happen. Ahem.";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateArchiveFolder_Reason           = @"Can't create 'Archive' folder";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateArchiveFolder_Suggestion       = @"Couldn't create the folder for preparing our .zip files.";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateUploadFolder_Reason            = @"Can't create 'Upload' folder";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateUploadFolder_Suggestion        = @"Couldn't create the folder for saving files to be uploaded.";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateWorkingDirectory_Reason        = @"Can't Create Working Folder";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateWorkingDirectory_Suggestion    = @"Couldn't create a folder in which to make our .zip file.";
-static NSString * const kAPCError_ArchiveAndUpload_DontHaveAnyZippedFiles_Reason            = @"Don't Have Files For Archive";
-static NSString * const kAPCError_ArchiveAndUpload_DontHaveAnyZippedFiles_Suggestion        = @"Something went wrong. We don't seem to have any contents for this .zip file.";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateManifest_Reason                = @"Can't Create Manifest";
-static NSString * const kAPCError_ArchiveAndUpload_CantCreateManifest_Suggestion_Format     = @"Couldn't create the manifest file entry (%@.%@) in the .zip file.";
-static NSString * const kAPCError_ArchiveAndUpload_CantSaveUnencryptedFile_Reason           = @"Can't Save Unencrypted File";
-static NSString * const kAPCError_ArchiveAndUpload_CantSaveUnencryptedFile_Suggestion       = @"We couldn't save the unencrypted .zip file to disk.";
-static NSString * const kAPCError_ArchiveAndUpload_CantFindUnencryptedFile_Reason           = @"Can't Find Unencrypted File";
-static NSString * const kAPCError_ArchiveAndUpload_CantFindUnencryptedFile_Suggestion       = @"We couldn't find the unencrypted .zip file on disk (even though we seem to have successfully saved it...?).";
-static NSString * const kAPCError_ArchiveAndUpload_CantEncryptFile_Reason                   = @"Can't Encrypt Zip File";
-static NSString * const kAPCError_ArchiveAndUpload_CantEncryptFile_Suggestion               = @"We couldn't encrypt the .zip file we need to upload.";
-static NSString * const kAPCError_ArchiveAndUpload_CantSaveEncryptedFile_Reason             = @"Can't Save Encrypted File";
-static NSString * const kAPCError_ArchiveAndUpload_CantSaveEncryptedFile_Suggestion         = @"We couldn't save the encrypted .zip file to disk.";
-static NSString * const kAPCError_ArchiveAndUpload_CantFindEncryptedFile_Reason             = @"Can't Find Encrypted File";
-static NSString * const kAPCError_ArchiveAndUpload_CantFindEncryptedFile_Suggestion         = @"We couldn't find the encrypted .zip file on disk (even though we seem to have successfully encrypted it...?).";
-static NSString * const kAPCError_ArchiveAndUpload_UploadFailed_Reason                      = @"Upload to Sage Failed";
-static NSString * const kAPCError_ArchiveAndUpload_UploadFailed_Suggestion                  = @"We got an error when uploading to Sage.  See the nested error for details.";
-static NSString * const kAPCError_ArchiveAndUpload_CantDeleteFileOrFolder_Reason            = @"Can't Delete File/Folder";
-static NSString * const kAPCError_ArchiveAndUpload_CantDeleteFileOrFolder_Suggestion        = @"We couldn't delete a file/folder creating during the archiving process. See attached path and nested error, if any, for details.";
+static NSString * const kArchiveAndUploadErrorDomain                    = @"ArchiveAndUpload";
+static NSString * const kErrorCantCreateZipFile_Reason                  = @"Can't Create Archive in Memory";
+static NSString * const kErrorCantCreateZipFile_Suggestion              = @"We couldn't create the new, placeholder .zip file in RAM.  (We haven't even gotten to the 'save to disk' part.)";
+static NSString * const kErrorCantSerializeObject_Reason                = @"Can't Serialize Object";
+static NSString * const kErrorCantSerializeObject_Suggestion            = @"We couldn't generate a JSON version of some piece of data.";
+static NSString * const kErrorCantInsertZipEntry_Reason                 = @"Can't Insert Zip Entry";
+static NSString * const kErrorCantInsertZipEntry_Suggestion             = @"We couldn't add one of the .zippable items to the .zip file.";
+static NSString * const kErrorCantReadUnencryptedFile_Reason            = @"Can't Open Archive";
+static NSString * const kErrorCantReadUnencryptedFile_Suggestion        = @"Couldn't read the unencrypted .zip file we just tried to create.";
+static NSString * const kErrorCantFindDocumentsFolder_Reason            = @"Can't Find 'Documents' Folder";
+static NSString * const kErrorCantFindDocumentsFolder_Suggestion        = @"Couldn't find the user's 'documents' folder. This should never happen. Ahem.";
+static NSString * const kErrorCantCreateArchiveFolder_Reason            = @"Can't create 'Archive' folder";
+static NSString * const kErrorCantCreateArchiveFolder_Suggestion        = @"Couldn't create the folder for preparing our .zip files.";
+static NSString * const kErrorCantCreateUploadFolder_Reason             = @"Can't create 'Upload' folder";
+static NSString * const kErrorCantCreateUploadFolder_Suggestion         = @"Couldn't create the folder for saving files to be uploaded.";
+static NSString * const kErrorCantCreateWorkingDirectory_Reason         = @"Can't Create Working Folder";
+static NSString * const kErrorCantCreateWorkingDirectory_Suggestion     = @"Couldn't create a folder in which to make our .zip file.";
+static NSString * const kErrorDontHaveAnyZippedFiles_Reason             = @"Don't Have Files For Archive";
+static NSString * const kErrorDontHaveAnyZippedFiles_Suggestion         = @"Something went wrong. We don't seem to have any contents for this .zip file.";
+static NSString * const kErrorCantCreateManifest_Reason                 = @"Can't Create Manifest";
+static NSString * const kErrorCantCreateManifest_Suggestion_Format      = @"Couldn't create the manifest file entry (%@.%@) in the .zip file.";
+static NSString * const kErrorCantSaveUnencryptedFile_Reason            = @"Can't Save Unencrypted File";
+static NSString * const kErrorCantSaveUnencryptedFile_Suggestion        = @"We couldn't save the unencrypted .zip file to disk.";
+static NSString * const kErrorCantFindUnencryptedFile_Reason            = @"Can't Find Unencrypted File";
+static NSString * const kErrorCantFindUnencryptedFile_Suggestion        = @"We couldn't find the unencrypted .zip file on disk (even though we seem to have successfully saved it...?).";
+static NSString * const kErrorCantEncryptFile_Reason                    = @"Can't Encrypt Zip File";
+static NSString * const kErrorCantEncryptFile_Suggestion                = @"We couldn't encrypt the .zip file we need to upload.";
+static NSString * const kErrorCantSaveEncryptedFile_Reason              = @"Can't Save Encrypted File";
+static NSString * const kErrorCantSaveEncryptedFile_Suggestion          = @"We couldn't save the encrypted .zip file to disk.";
+static NSString * const kErrorCantFindEncryptedFile_Reason              = @"Can't Find Encrypted File";
+static NSString * const kErrorCantFindEncryptedFile_Suggestion          = @"We couldn't find the encrypted .zip file on disk (even though we seem to have successfully encrypted it...?).";
+static NSString * const kErrorUploadFailed_Reason                       = @"Upload to Sage Failed";
+static NSString * const kErrorUploadFailed_Suggestion                   = @"We got an error when uploading to Sage.  See the nested error for details.";
+static NSString * const kErrorCantDeleteFileOrFolder_Reason             = @"Can't Delete File/Folder";
+static NSString * const kErrorCantDeleteFileOrFolder_Suggestion         = @"We couldn't delete a file/folder creating during the archiving process. See attached path and nested error, if any, for details.";
 
 
 
@@ -181,10 +209,13 @@ static NSString *folderPathForUploadOperations = nil;
 // ---------------------------------------------------------
 
 /**
- Per Apple:  this method is called once per class, in a thread-safe
- way, the first time the class is sent a message.  That includes the
- "alloc" message, which means we can use this to set up stuff that
- applies to all objects (instances) of this class.
+ By definition, this method is called once per class, in a thread-safe
+ way, the first time the class is sent a message -- basically, the first
+ time we refer to the class.  That means we can use this to set up stuff
+ that applies to all objects (instances) of this class.
+
+ Documentation:  See +initialize in the NSObject Class Reference.  Currently, that's here:
+ https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/index.html#//apple_ref/occ/clm/NSObject/initialize
  */
 + (void) initialize
 {
@@ -359,10 +390,10 @@ static NSString *folderPathForUploadOperations = nil;
 
         if (! documentsFolder)
         {
-            localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantFindDocumentsFolder
-                                         domain: kAPCError_ArchiveAndUpload_Domain
-                                  failureReason: kAPCError_ArchiveAndUpload_CantFindDocumentsFolder_Reason
-                             recoverySuggestion: kAPCError_ArchiveAndUpload_CantFindDocumentsFolder_Suggestion];
+            localError = [NSError errorWithCode: kErrorCantFindDocumentsFolder_Code
+                                         domain: kArchiveAndUploadErrorDomain
+                                  failureReason: kErrorCantFindDocumentsFolder_Reason
+                             recoverySuggestion: kErrorCantFindDocumentsFolder_Suggestion];
         }
 
         else
@@ -390,10 +421,10 @@ static NSString *folderPathForUploadOperations = nil;
 
             if (! folderCreated)
             {
-                localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantCreateArchiveFolder
-                                             domain: kAPCError_ArchiveAndUpload_Domain
-                                      failureReason: kAPCError_ArchiveAndUpload_CantCreateArchiveFolder_Reason
-                                 recoverySuggestion: kAPCError_ArchiveAndUpload_CantCreateArchiveFolder_Suggestion
+                localError = [NSError errorWithCode: kErrorCantCreateArchiveFolder_Code
+                                             domain: kArchiveAndUploadErrorDomain
+                                      failureReason: kErrorCantCreateArchiveFolder_Reason
+                                 recoverySuggestion: kErrorCantCreateArchiveFolder_Suggestion
                                     relatedFilePath: folderForArchiving
                                          relatedURL: nil
                                         nestedError: errorCreatingArchiveFolder];
@@ -418,10 +449,10 @@ static NSString *folderPathForUploadOperations = nil;
 
                 if (! folderCreated)
                 {
-                    localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantCreateUploadFolder
-                                                 domain: kAPCError_ArchiveAndUpload_Domain
-                                          failureReason: kAPCError_ArchiveAndUpload_CantCreateUploadFolder_Reason
-                                     recoverySuggestion: kAPCError_ArchiveAndUpload_CantCreateUploadFolder_Suggestion
+                    localError = [NSError errorWithCode: kErrorCantCreateUploadFolder_Code
+                                                 domain: kArchiveAndUploadErrorDomain
+                                          failureReason: kErrorCantCreateUploadFolder_Reason
+                                     recoverySuggestion: kErrorCantCreateUploadFolder_Suggestion
                                         relatedFilePath: folderForUploading
                                              relatedURL: nil
                                             nestedError: errorCreatingUploadFolder];
@@ -479,10 +510,10 @@ static NSString *folderPathForUploadOperations = nil;
 
     if (! ableToCreateWorkingFolder)
     {
-        localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantCreateWorkingDirectory
-                                     domain: kAPCError_ArchiveAndUpload_Domain
-                              failureReason: kAPCError_ArchiveAndUpload_CantCreateWorkingDirectory_Reason
-                         recoverySuggestion: kAPCError_ArchiveAndUpload_CantCreateWorkingDirectory_Suggestion
+        localError = [NSError errorWithCode: kErrorCantCreateWorkingDirectory_Code
+                                     domain: kArchiveAndUploadErrorDomain
+                              failureReason: kErrorCantCreateWorkingDirectory_Reason
+                         recoverySuggestion: kErrorCantCreateWorkingDirectory_Suggestion
                                 nestedError: directoryCreationError];
     }
     else
@@ -500,7 +531,7 @@ static NSString *folderPathForUploadOperations = nil;
         *errorToReturn = localError;
     }
 
-    return (ableToCreateWorkingFolder);
+    return ableToCreateWorkingFolder;
 }
 
 
@@ -531,10 +562,10 @@ static NSString *folderPathForUploadOperations = nil;
 
     if (! self.zipArchive)
     {
-        localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantCreateZipFile
-                                     domain: kAPCError_ArchiveAndUpload_Domain
-                              failureReason: kAPCError_ArchiveAndUpload_CantCreateZipFile_Reason
-                         recoverySuggestion: kAPCError_ArchiveAndUpload_CantCreateZipFile_Suggestion
+        localError = [NSError errorWithCode: kErrorCantCreateZipFile_Code
+                                     domain: kArchiveAndUploadErrorDomain
+                              failureReason: kErrorCantCreateZipFile_Reason
+                         recoverySuggestion: kErrorCantCreateZipFile_Suggestion
                                 nestedError: errorCreatingArchive];
     }
     else
@@ -548,7 +579,7 @@ static NSString *folderPathForUploadOperations = nil;
         *errorToReturn = localError;
     }
 
-    return (ableToCreateZipArchive);
+    return ableToCreateZipArchive;
 }
 
 
@@ -599,10 +630,10 @@ static NSString *folderPathForUploadOperations = nil;
         if (! ableToZipEverything)
         {
             // Something broke.  Stop looping, and report.
-            localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantInsertZipEntry
-                                         domain: kAPCError_ArchiveAndUpload_Domain
-                                  failureReason: kAPCError_ArchiveAndUpload_CantInsertZipEntry_Reason
-                             recoverySuggestion: kAPCError_ArchiveAndUpload_CantInsertZipEntry_Suggestion
+            localError = [NSError errorWithCode: kErrorCantInsertZipEntry_Code
+                                         domain: kArchiveAndUploadErrorDomain
+                                  failureReason: kErrorCantInsertZipEntry_Reason
+                             recoverySuggestion: kErrorCantInsertZipEntry_Suggestion
                                     nestedError: errorFromZipInsertProcess];
             break;
         }
@@ -617,7 +648,7 @@ static NSString *folderPathForUploadOperations = nil;
         *errorToReturn = localError;
     }
 
-    return (ableToZipEverything);
+    return ableToZipEverything;
 }
 
 /**
@@ -729,10 +760,10 @@ static NSString *folderPathForUploadOperations = nil;
 
     if (jsonData == nil)
     {
-        localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantSerializeObject
-                                     domain: kAPCError_ArchiveAndUpload_Domain
-                              failureReason: kAPCError_ArchiveAndUpload_CantSerializeObject_Reason
-                         recoverySuggestion: kAPCError_ArchiveAndUpload_CantSerializeObject_Suggestion
+        localError = [NSError errorWithCode: kErrorCantSerializeObject_Code
+                                     domain: kArchiveAndUploadErrorDomain
+                              failureReason: kErrorCantSerializeObject_Reason
+                         recoverySuggestion: kErrorCantSerializeObject_Suggestion
                                 nestedError: errorSerializingTheData];
     }
 
@@ -766,7 +797,7 @@ static NSString *folderPathForUploadOperations = nil;
         *errorToReturn = localError;
     }
 
-    return (ableToInsertDictionaryIntoZipFile);
+    return ableToInsertDictionaryIntoZipFile;
 }
 
 
@@ -798,10 +829,10 @@ static NSString *folderPathForUploadOperations = nil;
 
     if (self.fileInfoEntries.count == 0)
     {
-        localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_DontHaveAnyZippedFiles
-                                     domain: kAPCError_ArchiveAndUpload_Domain
-                              failureReason: kAPCError_ArchiveAndUpload_DontHaveAnyZippedFiles_Reason
-                         recoverySuggestion: kAPCError_ArchiveAndUpload_DontHaveAnyZippedFiles_Suggestion];
+        localError = [NSError errorWithCode: kErrorDontHaveAnyZippedFiles_Code
+                                     domain: kArchiveAndUploadErrorDomain
+                              failureReason: kErrorDontHaveAnyZippedFiles_Reason
+                         recoverySuggestion: kErrorDontHaveAnyZippedFiles_Suggestion];
     }
     else
     {
@@ -831,13 +862,13 @@ static NSString *folderPathForUploadOperations = nil;
 
         if (! ableToCreateManifest)
         {
-            NSString *errorMessage = [NSString stringWithFormat: kAPCError_ArchiveAndUpload_CantCreateManifest_Suggestion_Format,
+            NSString *errorMessage = [NSString stringWithFormat: kErrorCantCreateManifest_Suggestion_Format,
                                       kAPCNameOfIndexFile,
                                       kAPCFileExtension_JSON];
 
-            localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantCreateManifest
-                                         domain: kAPCError_ArchiveAndUpload_Domain
-                                  failureReason: kAPCError_ArchiveAndUpload_CantCreateManifest_Reason
+            localError = [NSError errorWithCode: kErrorCantCreateManifest_Code
+                                         domain: kArchiveAndUploadErrorDomain
+                                  failureReason: kErrorCantCreateManifest_Reason
                              recoverySuggestion: errorMessage
                                     nestedError: errorCreatingManifest];
         }
@@ -853,7 +884,7 @@ static NSString *folderPathForUploadOperations = nil;
         *errorToReturn = localError;
     }
 
-    return (ableToCreateManifest);
+    return ableToCreateManifest;
 }
 
 
@@ -884,10 +915,10 @@ static NSString *folderPathForUploadOperations = nil;
 
     if (! ableToSaveToDisk)
     {
-        localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantSaveUnencryptedFile
-                                     domain: kAPCError_ArchiveAndUpload_Domain
-                              failureReason: kAPCError_ArchiveAndUpload_CantSaveUnencryptedFile_Reason
-                         recoverySuggestion: kAPCError_ArchiveAndUpload_CantSaveUnencryptedFile_Suggestion
+        localError = [NSError errorWithCode: kErrorCantSaveUnencryptedFile_Code
+                                     domain: kArchiveAndUploadErrorDomain
+                              failureReason: kErrorCantSaveUnencryptedFile_Reason
+                         recoverySuggestion: kErrorCantSaveUnencryptedFile_Suggestion
                                 nestedError: errorSavingToDisk];
     }
 
@@ -913,10 +944,10 @@ static NSString *folderPathForUploadOperations = nil;
         {
             // Something went wrong:  we thought we zipped it, but we couldn't
             // find it afterwards.
-            localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantFindUnencryptedFile
-                                         domain: kAPCError_ArchiveAndUpload_Domain
-                                  failureReason: kAPCError_ArchiveAndUpload_CantFindUnencryptedFile_Reason
-                             recoverySuggestion: kAPCError_ArchiveAndUpload_CantFindUnencryptedFile_Suggestion
+            localError = [NSError errorWithCode: kErrorCantFindUnencryptedFile_Code
+                                         domain: kArchiveAndUploadErrorDomain
+                                  failureReason: kErrorCantFindUnencryptedFile_Reason
+                             recoverySuggestion: kErrorCantFindUnencryptedFile_Suggestion
                                     nestedError: errorFindingSavedFileOnDisk];
         }
         else
@@ -931,7 +962,7 @@ static NSString *folderPathForUploadOperations = nil;
         *errorToReturn = localError;
     }
 
-    return (ableToSaveToDisk);
+    return ableToSaveToDisk;
 }
 
 
@@ -976,10 +1007,10 @@ static NSString *folderPathForUploadOperations = nil;
 
     if (unencryptedZipData == nil)
     {
-        localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantReadUnencryptedFile
-                                     domain: kAPCError_ArchiveAndUpload_Domain
-                              failureReason: kAPCError_ArchiveAndUpload_CantReadUnencryptedFile_Reason
-                         recoverySuggestion: kAPCError_ArchiveAndUpload_CantReadUnencryptedFile_Suggestion
+        localError = [NSError errorWithCode: kErrorCantReadUnencryptedFile_Code
+                                     domain: kArchiveAndUploadErrorDomain
+                              failureReason: kErrorCantReadUnencryptedFile_Reason
+                         recoverySuggestion: kErrorCantReadUnencryptedFile_Suggestion
                             relatedFilePath: unencryptedPath
                                  relatedURL: self.zipArchive.URL
                                 nestedError: errorReadingDisk];
@@ -1006,10 +1037,10 @@ static NSString *folderPathForUploadOperations = nil;
 
         if (! encryptedZipData)
         {
-            localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantEncryptFile
-                                         domain: kAPCError_ArchiveAndUpload_Domain
-                                  failureReason: kAPCError_ArchiveAndUpload_CantEncryptFile_Reason
-                             recoverySuggestion: kAPCError_ArchiveAndUpload_CantEncryptFile_Suggestion
+            localError = [NSError errorWithCode: kErrorCantEncryptFile_Code
+                                         domain: kArchiveAndUploadErrorDomain
+                                  failureReason: kErrorCantEncryptFile_Reason
+                             recoverySuggestion: kErrorCantEncryptFile_Suggestion
                                     nestedError: encryptionError];
         }
 
@@ -1032,10 +1063,10 @@ static NSString *folderPathForUploadOperations = nil;
 
             if (! weSavedIt)
             {
-                localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantSaveEncryptedFile
-                                             domain: kAPCError_ArchiveAndUpload_Domain
-                                      failureReason: kAPCError_ArchiveAndUpload_CantSaveEncryptedFile_Reason
-                                 recoverySuggestion: kAPCError_ArchiveAndUpload_CantSaveEncryptedFile_Suggestion
+                localError = [NSError errorWithCode: kErrorCantSaveEncryptedFile_Code
+                                             domain: kArchiveAndUploadErrorDomain
+                                      failureReason: kErrorCantSaveEncryptedFile_Reason
+                                 recoverySuggestion: kErrorCantSaveEncryptedFile_Suggestion
                                         nestedError: errorSavingToDisk];
             }
 
@@ -1056,10 +1087,10 @@ static NSString *folderPathForUploadOperations = nil;
 
                 if (! itsReallyThere)
                 {
-                    localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantFindEncryptedFile
-                                                 domain: kAPCError_ArchiveAndUpload_Domain
-                                          failureReason: kAPCError_ArchiveAndUpload_CantFindEncryptedFile_Reason
-                                     recoverySuggestion: kAPCError_ArchiveAndUpload_CantFindEncryptedFile_Suggestion
+                    localError = [NSError errorWithCode: kErrorCantFindEncryptedFile_Code
+                                                 domain: kArchiveAndUploadErrorDomain
+                                          failureReason: kErrorCantFindEncryptedFile_Reason
+                                     recoverySuggestion: kErrorCantFindEncryptedFile_Suggestion
                                             nestedError: errorReachingZippedFile];
                 }
 
@@ -1077,7 +1108,7 @@ static NSString *folderPathForUploadOperations = nil;
         *errorToReturn = localError;
     }
 
-    return (successfullyEncrypted);
+    return successfullyEncrypted;
 }
 
 
@@ -1146,10 +1177,10 @@ static NSString *folderPathForUploadOperations = nil;
 
          if (uploadError != nil)
          {
-             localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_UploadFailed
-                                          domain: kAPCError_ArchiveAndUpload_Domain
-                                   failureReason: kAPCError_ArchiveAndUpload_UploadFailed_Reason
-                              recoverySuggestion: kAPCError_ArchiveAndUpload_UploadFailed_Suggestion
+             localError = [NSError errorWithCode: kErrorUploadFailed_Code
+                                          domain: kArchiveAndUploadErrorDomain
+                                   failureReason: kErrorUploadFailed_Reason
+                              recoverySuggestion: kErrorUploadFailed_Suggestion
                                      nestedError: uploadError];
          }
 
@@ -1245,10 +1276,10 @@ static NSString *folderPathForUploadOperations = nil;
         if (! itemDeleted)
         {
             // Last chance to report this problem.
-            NSError * localError = [NSError errorWithCode: APCErrorCode_ArchiveAndUpload_CantDeleteFileOrFolder
-                                                   domain: kAPCError_ArchiveAndUpload_Domain
-                                            failureReason: kAPCError_ArchiveAndUpload_CantDeleteFileOrFolder_Reason
-                                       recoverySuggestion: kAPCError_ArchiveAndUpload_CantDeleteFileOrFolder_Suggestion
+            NSError * localError = [NSError errorWithCode: kErrorCantDeleteFileOrFolder_Code
+                                                   domain: kArchiveAndUploadErrorDomain
+                                            failureReason: kErrorCantDeleteFileOrFolder_Reason
+                                       recoverySuggestion: kErrorCantDeleteFileOrFolder_Suggestion
                                           relatedFilePath: fileOrFolderPath
                                                relatedURL: nil
                                               nestedError: errorDeletingFileOrDirectory];

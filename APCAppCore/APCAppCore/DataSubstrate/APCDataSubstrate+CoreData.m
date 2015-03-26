@@ -12,29 +12,21 @@
 
 
 
-typedef enum : NSInteger
-{
-    APCErrorCode_CoreData_NoErrors = 0,
-    APCErrorCode_CoreData_CantCreateDatabase,
-    APCErrorCode_CoreData_CantOpenExistingDatabase,
+static NSString * const kCoreDataErrorDomain                   = @"kAPCError_CoreData_Domain";
 
-} APCErrorCode;
+static NSInteger  const kErrorCantCreateDatabase_Code          = 1;
+static NSString * const kErrorCantCreateDatabase_Reason        = @"Unable to Create Database";
+static NSString * const kErrorCantCreateDatabase_Suggestion    = (@"We were unable to create a place to "
+                                                                  "save your data. Please exit the app and "
+                                                                  "try again. If the problem recurs, please "
+                                                                  "uninstall the app and try once more.");
 
-static NSString * const kAPCError_CoreData_Domain                           = @"kAPCError_CoreData_Domain";
-
-static NSString * const kAPCError_CoreData_CantCreateDatabase_Reason        = @"Unable to Create Database";
-
-static NSString * const kAPCError_CoreData_CantCreateDatabase_Suggestion    = (@"We were unable to create a place to "
-                                                                               "save your data. Please exit the app and "
-                                                                               "try again. If the problem recurs, please "
-                                                                               "uninstall the app and try once more.");
-
-static NSString * const kAPCError_CoreData_CantOpenDatabase_Reason          = @"Unable to Open Database";
-
-static NSString * const kAPCError_CoreData_CantOpenDatabase_Suggestion      = (@"Unable to open your existing data file. "
-                                                                               "Please exit the app and try again. If the "
-                                                                               "problem recurs, please uninstall and "
-                                                                               "reinstall the app.");
+static NSInteger  const kErrorCantOpenDatabase_Code    = 2;
+static NSString * const kErrorCantOpenDatabase_Reason          = @"Unable to Open Database";
+static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to open your existing data file. "
+                                                                  "Please exit the app and try again. If the "
+                                                                  "problem recurs, please uninstall and "
+                                                                  "reinstall the app.");
 
 
 
@@ -104,20 +96,20 @@ static NSString * const kAPCError_CoreData_CantOpenDatabase_Suggestion      = (@
 
         if (fileAlreadyExists)
         {
-            catastrophe = [NSError errorWithCode: APCErrorCode_CoreData_CantOpenExistingDatabase
-                                          domain: kAPCError_CoreData_Domain
-                                   failureReason: kAPCError_CoreData_CantOpenDatabase_Reason
-                              recoverySuggestion: kAPCError_CoreData_CantOpenDatabase_Suggestion
+            catastrophe = [NSError errorWithCode: kErrorCantOpenDatabase_Code
+                                          domain: kCoreDataErrorDomain
+                                   failureReason: kErrorCantOpenDatabase_Reason
+                              recoverySuggestion: kErrorCantOpenDatabase_Suggestion
                                  relatedFilePath: self.storePath
                                       relatedURL: persistentStoreUrl
                                      nestedError: errorOpeningOrCreatingCoreDataFile];
         }
         else
         {
-            catastrophe = [NSError errorWithCode: APCErrorCode_CoreData_CantCreateDatabase
-                                          domain: kAPCError_CoreData_Domain
-                                   failureReason: kAPCError_CoreData_CantCreateDatabase_Reason
-                              recoverySuggestion: kAPCError_CoreData_CantCreateDatabase_Suggestion
+            catastrophe = [NSError errorWithCode: kErrorCantCreateDatabase_Code
+                                          domain: kCoreDataErrorDomain
+                                   failureReason: kErrorCantCreateDatabase_Reason
+                              recoverySuggestion: kErrorCantCreateDatabase_Suggestion
                                  relatedFilePath: self.storePath
                                       relatedURL: persistentStoreUrl
                                      nestedError: errorOpeningOrCreatingCoreDataFile];
