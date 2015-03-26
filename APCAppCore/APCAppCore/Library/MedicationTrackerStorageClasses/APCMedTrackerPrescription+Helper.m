@@ -774,8 +774,8 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 
      Once we've finalized a file format, we can uncomment this line of code.
 
-     */
             [APCDataArchiverAndUploader uploadOneDictionary: actionRecord];
+     */
 
     APCLogDebug (@"MedTrackerPrescription:  NOT YET UPLOADING ANYTHING.  Waiting until we finalize file format.  I WOULD HAVE uploaded this:  %@", actionRecord);
 }
