@@ -115,6 +115,8 @@ then a location event has occurred and location services must be manually starte
 
 - (void)applicationWillResignActive:(UIApplication *) __unused application
 {
+    // This will dismiss the keyboard, if one is visible
+    [self.window endEditing:YES];
     [self showSecureView];
 }
 
