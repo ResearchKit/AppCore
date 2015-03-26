@@ -6,7 +6,6 @@
 //
 
 #import "APCLog.h"
-#import "Flurry.h"
 #import "APCConstants.h"
 #import "APCUtilities.h"
 
@@ -20,23 +19,6 @@ static NSString * const kErrorIndentationString = @"    ";
  http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns
  */
 static NSString *LOG_DATE_FORMAT = @"yyyy-MM-dd HH:mm:ss.SSS ZZZZ";
-
-/**
- Set by each application when it starts up.
- */
-static BOOL _isFlurryOn = NO;
-
-/**
- Set (or not) by each application when it starts up.
- */
-static NSString *_flurryApiKey = nil;
-
-/**
- A test key, to make sure logging works.
- This is from a developer's personal, free account with Flurry.
- */
-static NSString *TEST_FLURRY_API_KEY = @"N6Y52H6HPN6ZJ9DGN2JV";
-
 
 
 // ---------------------------------------------------------
