@@ -82,7 +82,8 @@ static NSString * const APCLogTagUpload  = @"APC_UPLOAD ";
 {
 	if (error != nil)
 	{
-        NSString *description = [self comprehensiveErrorMessageFromError: error];
+        // Note:  this is expensive.
+        NSString *description = error.friendlyFormattedString;
 
 		[self logInternal_tag: APCLogTagError
 					   method: apcLogMethodData
@@ -95,9 +96,6 @@ static NSString * const APCLogTagUpload  = @"APC_UPLOAD ";
 {
 	if (exception != nil)
 	{
-		NSString *description = (exception.name ?:
-								 [NSString stringWithFormat: @"%@", exception]);
-
 		NSString *printout = [NSString stringWithFormat: @"EXCEPTION: [%@]. Stack trace:\n%@", exception, exception.callStackSymbols];
 
 		[self logInternal_tag: APCLogTagError
