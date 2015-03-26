@@ -723,10 +723,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
-        if (self.user.isConsented)
+        if (self.user.isConsented && self.user.isSignedIn)
         {
-            //  Instead of prevent the row from being added to the table, a better option would be to
-            //  disable the row (grey it out and don't respond to taps)
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedString(@"Sharing Options", @"");
             field.identifier = kAPCDefaultTableViewCellIdentifier;
