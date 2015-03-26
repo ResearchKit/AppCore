@@ -11,39 +11,12 @@
 
 @interface APCLog : NSObject
 
-
-
 // ---------------------------------------------------------
-#pragma mark - Flurry integration
-// ---------------------------------------------------------
-
-/**
- Master method which turns Flurry logging on or off.
- 
- This is not particularly generic.  Each of our apps
- has a hard-coded, well-known "API key" for the Flurry
- analytics service.  Each app declares that value, and
- (as of this writing) our centralized app initializers
- call this method with those values.
- 
- The concept is pretty easy -- set a boolean if we want
- to enable logging -- but the implementation is quite
- app-specific, and evolving.
- */
-+ (void) setupTurningFlurryOn: (BOOL) shouldTurnFlurryOn
-				 flurryApiKey: (NSString *) flurryApiKey;
-
-
-
-// ---------------------------------------------------------
-#pragma mark - Logging wrappers:  almost generic, lots of Flurry
+#pragma mark - Logging wrappers:  almost generic
 // ---------------------------------------------------------
 
 /*
- These macros wrap NSLog and, sometimes, calls to Flurry
- to analyze our apps' behavior.  Evolving.  Please
- see the body of each matching Objective-C method (below)
- to learn which macros call Flurry.
+ These macros wrap NSLog. Evolving.
  
  You can also just call the Objective-C versions yourself.
  The reasons to use the macros are:
