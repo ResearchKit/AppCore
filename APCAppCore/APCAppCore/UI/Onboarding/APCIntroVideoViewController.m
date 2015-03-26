@@ -35,6 +35,7 @@
 #import "APCStudyOverviewViewController.h"
 #import "NSBundle+Helper.h"
 #import "APCAppCore.h"
+#import <AVFoundation/AVFoundation.h>
 
 static NSString *const kVideoShownKey = @"VideoShown";
 
@@ -50,6 +51,8 @@ static NSString *const kVideoShownKey = @"VideoShown";
     self = [super initWithContentURL:contentURL];
     if (self) {
         self.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+        
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     }
     
     return self;
