@@ -250,7 +250,6 @@ static NSString * const kOneTimeSchedule = @"once";
      NSArray * scheduledTasksArray = [[self allScheduledTasks] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"task.taskID == %@", task.taskID]];
     
     if (scheduledTasksArray.count > 0){
-        //do nothing
         APCLogDebug(@"task already scheduled: %@", task);
         APCScheduledTask * validatedTask = scheduledTasksArray.firstObject;
         [self validateScheduledTask:validatedTask];
@@ -269,7 +268,6 @@ static NSString * const kOneTimeSchedule = @"once";
     NSArray * scheduledTasksArray = [[self allScheduledTasks] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"task.taskID == %@", task.taskID]];
     
     if (scheduledTasksArray.count > 0){
-        //do nothing
         APCLogDebug(@"task already scheduled: %@", task);
         APCScheduledTask * validatedTask = scheduledTasksArray.firstObject;
         [self validateScheduledTask:validatedTask];
