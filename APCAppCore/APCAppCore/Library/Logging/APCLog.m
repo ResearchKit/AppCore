@@ -75,52 +75,6 @@ static NSString * const APCLogTagUpload  = @"APC_UPLOAD ";
 	}
 }
 
-/**
- Called by -[APCAppDelegate application:didFinishLaunchingWithOptions:],
- in AppCore.
- */
-+ (void) setupTurningFlurryOn: (BOOL) shouldTurnFlurryOn
-				 flurryApiKey: (NSString *) flurryApiKey
-{
-	_isFlurryOn = shouldTurnFlurryOn;
-	_flurryApiKey = flurryApiKey;
-
-	if (_isFlurryOn)
-	{
-		APCLogDebug (@"Starting Flurry session.");
-
-		// Please don't delete this line of code, so that
-		// we remember it's possible.
-//		[Flurry setLogLevel: FlurryLogLevelAll];
-
-        [Flurry setCrashReportingEnabled:YES];
-		[Flurry startSession: _flurryApiKey];
-	}
-
-	else
-	{
-		APCLogDebug (@"Flurry integration is disabled (using +setupTurningFlurryOn:flurryApiKey:).  Not connecting to Flurry.");
-	}
-}
-
-
-
-// ---------------------------------------------------------
-#pragma mark - Status
-// ---------------------------------------------------------
-
-+ (BOOL) isFlurryEnabled
-{
-	return (_isFlurryOn);
-}
-
-+ (NSString *) flurryApiKey
-{
-	return _flurryApiKey;
-}
-
-
-
 // ---------------------------------------------------------
 #pragma mark - New Logging Methods.  No, really.
 // ---------------------------------------------------------
@@ -189,19 +143,6 @@ static NSString * const APCLogTagUpload  = @"APC_UPLOAD ";
 	if (error != nil)
 	{
         NSString *description = [self comprehensiveErrorMessageFromError: error];
-        
-        if (self.isFlurryEnabled)
-        {
-            [Flurry logEvent: kErrorEvent withParameters: @{ @"error_description" : description }];
-
-            /*
-			 Makes the app slow. Revisit with next version of Flurry SDK.
-
-			 Please don't delete this line of code.  We want this; it's
-			 just broken-ish.
-			 */
-//            [Flurry logError: error.domain message: description error: error];
-        }
 
 		[self logInternal_tag: APCLogTagError
 					   method: apcLogMethodData
@@ -218,23 +159,6 @@ static NSString * const APCLogTagUpload  = @"APC_UPLOAD ";
 								 [NSString stringWithFormat: @"%@", exception]);
 
 		NSString *printout = [NSString stringWithFormat: @"EXCEPTION: [%@]. Stack trace:\n%@", exception, exception.callStackSymbols];
-
-
-        if (self.isFlurryEnabled)
-        {
-            [Flurry logEvent: kErrorEvent withParameters: @{
-                                                            @"exception_name" : description,
-                                                            @"exception_reason" : exception.reason,
-                                                            @"exception_stacktrace": printout
-                                                            }];
-			/*
-			 Makes the app slow. Revisit with next version of Flurry SDK.
-
-			 Please don't delete this line of code.  We want this; it's
-			 just broken-ish.
-			 */
-//            [Flurry logError: exception.name message: exception.reason exception: exception];
-        }
 
 		[self logInternal_tag: APCLogTagError
 					   method: apcLogMethodData
@@ -287,11 +211,6 @@ static NSString * const APCLogTagUpload  = @"APC_UPLOAD ";
 
 	NSString *formattedMessage = NSStringFromVariadicArgumentsAndFormat(formatString);
 
-	if (self.isFlurryEnabled)
-	{
-		[Flurry logEvent: formattedMessage];
-	}
-
 	[self logInternal_tag: APCLogTagEvent
 				   method: apcLogMethodData
 				  message: formattedMessage];
@@ -303,11 +222,6 @@ static NSString * const APCLogTagUpload  = @"APC_UPLOAD ";
 {
 	NSString *message = [NSString stringWithFormat: @"%@: %@", eventName, eventDictionary];
 
-	if (self.isFlurryEnabled)
-	{
-		[Flurry logEvent: eventName withParameters: eventDictionary];
-	}
-
 	[self logInternal_tag: APCLogTagData
 				   method: apcLogMethodData
 				  message: message];
@@ -317,11 +231,6 @@ static NSString * const APCLogTagUpload  = @"APC_UPLOAD ";
 	viewControllerAppeared: (NSObject *) viewController
 {
 	NSString *message = [NSString stringWithFormat: @"%@ appeared.", NSStringFromClass (viewController.class)];
-    
-    if (self.isFlurryEnabled)
-    {
-        [Flurry logEvent: kPageViewEvent withParameters: @{@"viewcontroller_viewed" : NSStringFromClass(viewController.class)}];
-    }
 
 	[self logInternal_tag: APCLogTagView
 				   method: apcLogMethodData

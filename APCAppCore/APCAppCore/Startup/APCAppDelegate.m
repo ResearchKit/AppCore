@@ -84,11 +84,6 @@ then a location event has occurred and location services must be manually starte
     [self.dataMonitor appFinishedLaunching];
     
     [self configureObserverQueries];
-
-	// Setup analytics options (and, conceptually, all logging options).
-	[APCLog setupTurningFlurryOn: [self.initializationOptions [kAnalyticsOnOffKey] boolValue]
-					flurryApiKey: self.initializationOptions [kAnalyticsFlurryAPIKeyKey]
-	 ];
     
     return YES;
 }

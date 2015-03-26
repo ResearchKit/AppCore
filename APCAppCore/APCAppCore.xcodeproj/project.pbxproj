@@ -335,7 +335,6 @@
 		F55653B31A6F0918003E0B0C /* libMobileGestalt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */; };
 		F556549B1A701337003E0B0C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F556549A1A701337003E0B0C /* Localizable.strings */; };
 		F5A861E51A8E7C60004EDB15 /* Flurry.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A861E31A8E7C60004EDB15 /* Flurry.h */; };
-		F5A861E61A8E7C60004EDB15 /* libFlurry_6.0.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A861E41A8E7C60004EDB15 /* libFlurry_6.0.0.a */; };
 		F5B946211A7309A20034C522 /* zipzap.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B945F61A7309A20034C522 /* zipzap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5B946221A7309A20034C522 /* ZZAESDecryptInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B945F71A7309A20034C522 /* ZZAESDecryptInputStream.h */; };
 		F5B946231A7309A20034C522 /* ZZAESDecryptInputStream.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5B945F81A7309A20034C522 /* ZZAESDecryptInputStream.mm */; };
@@ -1384,7 +1383,6 @@
 				F50981D51AA57E57002E2264 /* BridgeSDK.framework in Frameworks */,
 				F5F12B2F1A2F86600015982C /* libbz2.dylib in Frameworks */,
 				F5F12B2D1A2F86550015982C /* libarchive.dylib in Frameworks */,
-				F5A861E61A8E7C60004EDB15 /* libFlurry_6.0.0.a in Frameworks */,
 				F5F12B2B1A2F864B0015982C /* libz.dylib in Frameworks */,
 				F5F12B291A2F863E0015982C /* ResearchKit.framework in Frameworks */,
 				F5F12B251A2F86280015982C /* HealthKit.framework in Frameworks */,
