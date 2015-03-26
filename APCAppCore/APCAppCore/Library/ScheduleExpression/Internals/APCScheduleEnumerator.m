@@ -20,19 +20,19 @@
  in Xcode's "Variables" window.
  */
 typedef enum : NSUInteger {
-	APCScheduleEnumeratorDateComponentMinute = 0,
-	APCScheduleEnumeratorDateComponentHour   = 1,
-	APCScheduleEnumeratorDateComponentDay    = 2,
-	APCScheduleEnumeratorDateComponentMonth  = 3,
-	APCScheduleEnumeratorDateComponentYear   = 4,
-}	APCScheduleEnumeratorDateComponent;
+	DateFieldMinute = 0,
+	DateFieldHour   = 1,
+	DateFieldDay    = 2,
+	DateFieldMonth  = 3,
+	DateFieldYear   = 4,
+}	DateField;
 
 
 @interface APCScheduleEnumerator ()
 
 @property (nonatomic, strong) NSDate*					beginningMoment;
 @property (nonatomic, strong) NSDate*					endingMoment;
-@property (nonatomic, strong) NSString*					originalCronExpression;
+@property (nonatomic, strong) NSString*					originalCronExpression;     // For debugging only, but very helpful.
 
 @property (nonatomic, strong) APCListSelector*			minuteSelector;
 @property (nonatomic, strong) APCListSelector*			hourSelector;
@@ -55,34 +55,39 @@ typedef enum : NSUInteger {
 
 @implementation APCScheduleEnumerator
 
-- (instancetype)initWithBeginningTime:(NSDate*)begin
-                       minuteSelector:(APCTimeSelector*)minuteSelector
-                         hourSelector:(APCTimeSelector*)hourSelector
-                   dayOfMonthSelector:(APCTimeSelector*)dayOfMonthSelector
-                        monthSelector:(APCTimeSelector*)monthSelector
-                         yearSelector:(APCTimeSelector*)yearSelector
+- (instancetype)initWithBeginningTime: (NSDate *) begin
+                       minuteSelector: (APCTimeSelector *) minuteSelector
+                         hourSelector: (APCTimeSelector *) hourSelector
+                   dayOfMonthSelector: (APCTimeSelector *) dayOfMonthSelector
+                        monthSelector: (APCTimeSelector *) monthSelector
+                         yearSelector: (APCTimeSelector *) yearSelector
+               originalCronExpression: (NSString *) originalExpression
 {
-    return [self initWithBeginningTime:begin
-                            endingTime:nil
-                        minuteSelector:minuteSelector
-                          hourSelector:hourSelector
-                    dayOfMonthSelector:dayOfMonthSelector
-                         monthSelector:monthSelector
-                          yearSelector:yearSelector];
+    return [self initWithBeginningTime: begin
+                            endingTime: nil
+                        minuteSelector: minuteSelector
+                          hourSelector: hourSelector
+                    dayOfMonthSelector: dayOfMonthSelector
+                         monthSelector: monthSelector
+                          yearSelector: yearSelector
+                originalCronExpression: originalExpression];
 }
 
-- (instancetype)initWithBeginningTime:(NSDate*)begin
-                           endingTime:(NSDate*)end
-                       minuteSelector:(APCTimeSelector*)minuteSelector
-                         hourSelector:(APCTimeSelector*)hourSelector
-                   dayOfMonthSelector:(APCTimeSelector*)dayOfMonthSelector
-                        monthSelector:(APCTimeSelector*)monthSelector
-                         yearSelector:(APCTimeSelector*)yearSelector
+- (instancetype)initWithBeginningTime: (NSDate *) begin
+                           endingTime: (NSDate *) end
+                       minuteSelector: (APCTimeSelector *) minuteSelector
+                         hourSelector: (APCTimeSelector *) hourSelector
+                   dayOfMonthSelector: (APCTimeSelector *) dayOfMonthSelector
+                        monthSelector: (APCTimeSelector *) monthSelector
+                         yearSelector: (APCTimeSelector *) yearSelector
+               originalCronExpression: (NSString *) originalExpression
 {
 	self = [super init];
 
 	if (self)
 	{
+        _originalCronExpression = originalExpression;
+
 		_minuteSelector		= (APCListSelector*) minuteSelector;
 		_hourSelector		= (APCListSelector*) hourSelector;
 		_daySelector		= (APCDayOfMonthSelector*) dayOfMonthSelector;
@@ -142,7 +147,7 @@ typedef enum : NSUInteger {
 	NSNumber* minute	= self.minuteSelector.initialValue;
 	NSNumber* hour		= self.hourSelector.initialValue;
 	NSNumber* month		= self.monthSelector.initialValue;
-	NSNumber* year		= self.yearSelector.initialValue;
+	NSNumber* year		= self.yearSelector.initialValue;       // TODO.  This may be wrong and irrelevant -- it was computed based on "this year."  It needs to reflect the passed-in start and end years.  ...back in -init; we're too late, here.
 
 	[self.daySelector recomputeDaysBasedOnMonth:month year:year];
 	NSNumber* day		= self.daySelector.initialValue;
@@ -152,7 +157,7 @@ typedef enum : NSUInteger {
 	self.dateComponents = @[minute, hour, day, month, year].mutableCopy;
 
 	// What's that first date?
-	result = [self componentsToDate];
+	result = [self componentsAsDate];
 
 	if ([result isLaterThanDate: self.endingMoment])
 	{
@@ -191,7 +196,9 @@ typedef enum : NSUInteger {
  month-and-year combination, so that the day-of-the-week
  rules are applied correctly (e.g., getting the right date
  for "the first Friday of the month") and so that we have
- the right number of days per month (28, 31, etc.).
+ the right number of days per month (28, 31, etc.).  We thus
+ also have to check whether the new month has ANY legal days
+ in it at all, and move to the next month if not.
  
  This method is also used when determining the first legal
  date for this enumerator.  See -firstDate.
@@ -260,54 +267,65 @@ typedef enum : NSUInteger {
 - (NSDate*) nextDate
 {
 	NSDate* result = nil;
-	BOOL keepLookingForComponentToIncrement = YES;
-	APCScheduleEnumeratorDateComponent componentAndSelectorIndex = APCScheduleEnumeratorDateComponentMinute;
+	BOOL shouldInspectNextField = YES;
+	DateField dateFieldIndex = DateFieldMinute;
 
-	for (componentAndSelectorIndex = APCScheduleEnumeratorDateComponentMinute;
-		 componentAndSelectorIndex <= APCScheduleEnumeratorDateComponentYear;
-		 componentAndSelectorIndex ++)
-	{
-		APCTimeSelector* thisDateComponentSelector = self.selectors [componentAndSelectorIndex];
-		NSNumber* prevDateComponentValue = self.dateComponents [componentAndSelectorIndex];
-		NSNumber* thisDateComponentValue = [thisDateComponentSelector nextMomentAfter: prevDateComponentValue];
+    while (dateFieldIndex <= DateFieldYear && shouldInspectNextField)
+    {
+		APCTimeSelector* dateFieldSelector = self.selectors [dateFieldIndex];
+		NSNumber* prevFieldValue = self.dateComponents [dateFieldIndex];
+		NSNumber* newFieldValue = [dateFieldSelector nextMomentAfter: prevFieldValue];
 
-		if (thisDateComponentValue == nil)
+		if (newFieldValue == nil)
 		{
-			thisDateComponentValue = thisDateComponentSelector.initialValue;
-			keepLookingForComponentToIncrement = YES;
-		}
-		else
-		{
-			keepLookingForComponentToIncrement = NO;
+            NSNumber *firstFieldValue = dateFieldSelector.initialValue;
+            self.dateComponents [dateFieldIndex] = firstFieldValue;
+			shouldInspectNextField = YES;
 		}
 
-		self.dateComponents [componentAndSelectorIndex] = thisDateComponentValue;
+        else if (dateFieldIndex < DateFieldMonth)
+        {
+            self.dateComponents [dateFieldIndex] = newFieldValue;
+			shouldInspectNextField = NO;
+        }
 
-		if (! keepLookingForComponentToIncrement)
-		{
-			break;
-		}
+        else  // dateFieldIndex == Month or Year
+        {
+            // Record the fact that we looked at this month or year.
+            self.dateComponents [dateFieldIndex] = newFieldValue;
+
+            // Recompute the days in this new month.
+            NSNumber* month = self.dateComponents [DateFieldMonth];
+            NSNumber* year  = self.dateComponents [DateFieldYear];
+
+            [self.daySelector recomputeDaysBasedOnMonth: month
+                                                   year: year];
+            
+            if (self.daySelector.hasAnyLegalDays)
+            {
+                NSNumber *firstDayValue = self.daySelector.initialValue;
+                self.dateComponents [DateFieldDay] = firstDayValue;
+                shouldInspectNextField = NO;
+            }
+            else
+            {
+                // Go to the next month.  I.e., keep cycling on the current "date field."
+                dateFieldIndex = DateFieldMonth - (DateField) 1;
+                shouldInspectNextField = YES;
+            }
+        }
+
+        // Move to the next field.
+        dateFieldIndex ++;
 	}
 
-	if (componentAndSelectorIndex > APCScheduleEnumeratorDateComponentYear)
+	if (dateFieldIndex > DateFieldYear)
 	{
 		result = nil;
 	}
 	else
 	{
-		if (componentAndSelectorIndex == APCScheduleEnumeratorDateComponentMonth ||
-			componentAndSelectorIndex == APCScheduleEnumeratorDateComponentYear)
-		{
-			NSNumber* month = self.dateComponents [APCScheduleEnumeratorDateComponentMonth];
-			NSNumber* year  = self.dateComponents [APCScheduleEnumeratorDateComponentYear];
-
-			[self.daySelector recomputeDaysBasedOnMonth: month
-												   year: year];
-
-			self.dateComponents [APCScheduleEnumeratorDateComponentDay] = self.daySelector.initialValue;
-		}
-
-		result = [self componentsToDate];
+		result = [self componentsAsDate];
 		
 		if ([result isLaterThanDate: self.endingMoment])
 		{
@@ -318,15 +336,15 @@ typedef enum : NSUInteger {
 	return result;
 }
 
-- (NSDate*) componentsToDate
+- (NSDate*) componentsAsDate
 {
 	NSDateComponents *components = [NSDateComponents componentsInGregorianLocal];
 	
-	components.year     = [self.dateComponents [APCScheduleEnumeratorDateComponentYear]   integerValue];
-    components.month    = [self.dateComponents [APCScheduleEnumeratorDateComponentMonth]  integerValue];
-    components.day      = [self.dateComponents [APCScheduleEnumeratorDateComponentDay]    integerValue];
-    components.hour     = [self.dateComponents [APCScheduleEnumeratorDateComponentHour]   integerValue];
-    components.minute   = [self.dateComponents [APCScheduleEnumeratorDateComponentMinute] integerValue];
+	components.year     = [self.dateComponents [DateFieldYear]   integerValue];
+    components.month    = [self.dateComponents [DateFieldMonth]  integerValue];
+    components.day      = [self.dateComponents [DateFieldDay]    integerValue];
+    components.hour     = [self.dateComponents [DateFieldHour]   integerValue];
+    components.minute   = [self.dateComponents [DateFieldMinute] integerValue];
     
     return [components date];
 }

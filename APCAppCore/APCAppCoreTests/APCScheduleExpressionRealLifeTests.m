@@ -92,10 +92,12 @@
 	 */
 	NSArray* expressionsToTest =
 	@[
-//		@"0 5 * * *",											// 5am every day
+		@"0 5 * * *",											// 5am every day
 //		@"0 5 * * 1",											// 5am every Monday
-		@"0 5 * * 1#1",											// 5am, only first Monday
-		@"0 5 * * wed#3",										// 5am, only third Wednesday
+        @"0 5 29 * *",											// 5am on the 29th of every month
+        @"0 5 31 * *",											// 5am on the 31st of every month
+//		@"0 5 * * 1#1",											// 5am, only first Monday
+//		@"0 5 * * wed#3",										// 5am, only third Wednesday
 //		@"0 5 * * 1#2",											// 5am, only second Monday
 //		@"0 5,10,12,17,20 * * *",								// several every day
 //		@"0 5,10,12,17,20 * * 1",								// several only on Mondays
@@ -109,11 +111,11 @@
 //		@"0 5 * SEP,JUL,OCT/2,JAN-MAR THU,FRI,MON#1,TUE#2",
 //		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,FRI,MON#1,TUE#2",
 //		@"   0    5    *    SEP,JUL,OCT/2,JAN-MAR     THU,FRI,MON#1,TUE#2    ",
-
-		// Things that break:
+//
+//		/* Things that break: */
 //		@"0 5 * whatever dude",										// 5 fields, 2 with garbage
 //		@"0 5 * SEP,JUL,OCT/2,jAn-MAr THU,duuuude,MON#1,TUE#2",		// 5 fields, 1 with garbage
-		@"0 0 * *",					// 4 fields, not 5 or 7
+//		@"0 0 * *",					// 4 fields, not 5 or 7
 //		@"whatever",				// 1 field (with garbage in it)
 //		@"0 5, 6, 7 * * *",			// spaces after commas
 //		@"0 6, 12, 18, * * *",		// spaces after commas, generating illegal month number
@@ -121,21 +123,23 @@
 		];
 
 	NSArray* startDates = @[
-							[NSDate todayAtMidnight],
+//                           [NSDate todayAtMidnight],
 //							[[NSDate tomorrowAtMidnight] dateByAddingDays: 2],
 //							[[NSDate todayAtMidnight]    dateByAddingDays: -7],
+                            [[NSDate todayAtMidnight]    dateByAddingDays: -60],
+//                          [[NSDate todayAtMidnight]    dateByAddingDays: -120],   // currently fails: the year always starts on "current year"
 							];
 
 	NSArray *endDates = @[
-//						  [NSDate tomorrowAtMidnight],
-						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 3],
+//						   [NSDate tomorrowAtMidnight],
+//						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 3],
 //						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 14],
 //						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 32],
-//						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 60],
+						  [[NSDate tomorrowAtMidnight] dateByAddingDays: 60],
 						  ];
 
 	NSDateFormatter *formatter = self.dateFormatterInGregorianPacificTime;
-//	NSDateFormatter *formatter = self.dateFormatterInGregorianUTC;			// please leave this here.
+//	NSDateFormatter *formatter = self.dateFormatterInGregorianUTC;			// please leave this here, to remind us of this implementation decision.
 
 	NSDate *thisDate = nil;
 	NSTimeInterval userWakeupTimeOffset	= 0;

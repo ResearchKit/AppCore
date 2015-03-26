@@ -152,7 +152,6 @@
 	return self.weekdaySelectorIsWildcard && self.monthdaySelectorIsWildcard;
 }
 
-
 - (void) recomputeDaysBasedOnMonth: (NSNumber *) month
 							  year: (NSNumber *) year
 {
@@ -435,6 +434,11 @@
 	}
 
 	return result;
+}
+
+- (BOOL) hasAnyLegalDays
+{
+    return self.computedDaysToEnumerate.count > 0;
 }
 
 @end
