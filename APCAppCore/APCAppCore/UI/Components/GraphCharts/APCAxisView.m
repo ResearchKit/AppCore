@@ -78,6 +78,9 @@
             label.backgroundColor = self.tintColor;
             label.layer.cornerRadius = CGRectGetHeight(label.frame)/2;
             label.layer.masksToBounds = YES;
+        } else {
+            label.backgroundColor = [UIColor whiteColor];
+            label.opaque = YES;
         }
         
     }

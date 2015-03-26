@@ -84,11 +84,6 @@ then a location event has occurred and location services must be manually starte
     [self.dataMonitor appFinishedLaunching];
     
     [self configureObserverQueries];
-
-	// Setup analytics options (and, conceptually, all logging options).
-	[APCLog setupTurningFlurryOn: [self.initializationOptions [kAnalyticsOnOffKey] boolValue]
-					flurryApiKey: self.initializationOptions [kAnalyticsFlurryAPIKeyKey]
-	 ];
     
     return YES;
 }
@@ -115,6 +110,8 @@ then a location event has occurred and location services must be manually starte
 
 - (void)applicationWillResignActive:(UIApplication *) __unused application
 {
+    // This will dismiss the keyboard, if one is visible
+    [self.window endEditing:YES];
     [self showSecureView];
 }
 
