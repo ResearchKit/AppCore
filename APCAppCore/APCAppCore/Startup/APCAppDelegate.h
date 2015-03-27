@@ -78,7 +78,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 - (void) showOnBoarding;
 - (void) showNeedsEmailVerification;
 - (void) setUpRootViewController: (UIViewController*) viewController;
-
+- (void) setUpTasksReminder;
 - (NSDictionary *) tasksAndSchedulesWillBeLoaded;
 - (void)performMigrationFrom:(NSInteger)previousVersion currentVersion:(NSInteger)currentVersion;
 - (void)performMigrationAfterDataSubstrateFrom:(NSInteger)previousVersion currentVersion:(NSInteger)currentVersion;
