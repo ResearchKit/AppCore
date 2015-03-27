@@ -8,6 +8,18 @@
 #import "APCJSONSerializer.h"
 #import "ORKAnswerFormat+Helper.h"
 #import "NSDate+Helper.h"
+#import <CoreData/CoreData.h>
+
+
+/**
+ We use this regular-expression pattern to extract UUIDs
+ from CoreData object IDs.
+ */
+static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{8}\\-"
+                                                                  "[a-fA-F0-9]{4}\\-"
+                                                                  "[a-fA-F0-9]{4}\\-"
+                                                                  "[a-fA-F0-9]{4}\\-"
+                                                                  "[a-fA-F0-9]{12}");
 
 
 @implementation APCJSONSerializer
@@ -219,11 +231,37 @@
 
         if (result == nil)
         {
+            // If we couldn't numeric-ify it, use the original string.
             result = sourceObject;
         }
         else
         {
+            // Numericification worked.
             // Accept the object we got from -extractIntOrBoolFromString.
+        }
+    }
+
+
+    /*
+     Extract the UUID part of a CoreData ID, if we can.
+     */
+    else if ([sourceObject isKindOfClass: [NSManagedObjectID class]])
+    {
+        NSManagedObjectID *managedObjectId = (NSManagedObjectID *) sourceObject;
+        NSString          *idString        = [NSString stringWithFormat: @"%@", managedObjectId];
+        NSRange           uuidRange        = [idString    rangeOfString: kRegularExpressionPatternMatchingUUIDs
+                                                                options: NSRegularExpressionSearch];
+
+        if (uuidRange.location == NSNotFound)
+        {
+            // We can't find a UUID in there.  Just use the whole string.
+            // It'll be garbage, but it's at least safely serializable.
+            result = idString;
+        }
+        else
+        {
+            // Whee!  Found a UUID.  Extract and use that.
+            result = [idString substringWithRange: uuidRange];
         }
     }
 

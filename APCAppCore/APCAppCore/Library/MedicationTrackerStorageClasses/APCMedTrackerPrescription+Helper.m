@@ -60,35 +60,6 @@
  */
 
 
-
-/*
- These strings are used when generating uploadable
- versions of the content represented by this class and
- some of the classes it manages.
- */
-static NSString * const kAPCActionName_CreatePrescription               = @"user_action__create_prescription";
-static NSString * const kAPCActionName_ExpirePrescription               = @"user_action__expire_prescription";
-static NSString * const kAPCActionName_RecordDailyDoses                 = @"user_action__record_daily_doses_taken_of_one_medication";
-
-static NSString * const kAPCActionKey_FilenameToUpload                  = @"item";
-
-static NSString * const kAPCActionKey_Prescription_UniqueId             = @"prescription_unique_id";
-static NSString * const kAPCActionKey_Prescription_DateCreated          = @"prescription_date_created";
-static NSString * const kAPCActionKey_Prescription_DateExpired          = @"prescription_date_expired";
-static NSString * const kAPCActionKey_Prescription_DaysOfTheWeek        = @"prescription_days_of_the_week";
-static NSString * const kAPCActionKey_Prescription_TimesPerDay          = @"prescription_times_per_day";
-static NSString * const kAPCActionKey_Prescription_MedicationName       = @"prescription_medication_name";
-static NSString * const kAPCActionKey_Prescription_DosageAmount         = @"prescription_dosage_amount";
-static NSString * const kAPCActionKey_Prescription_DosageName           = @"prescription_dosage_name";
-static NSString * const kAPCActionKey_Prescription_ColorName            = @"prescription_color_name";
-
-static NSString * const kAPCActionKey_Dosage_Date                       = @"dosage_date";
-static NSString * const kAPCActionKey_Dosage_TotalQuantityTakenToday    = @"dosage_total_quantity_taken_today";
-static NSString * const kAPCActionKey_Dosage_PrescriptionUniqueId       = @"dosage_prescription_unique_id";
-static NSString * const kAPCActionKey_Dosage_PrescriptionMedicationName = @"dosage_prescription_medication_name";
-
-
-
 static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 
 
@@ -379,6 +350,7 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
             //
 
             [[self class] recordActionForRecordingNumberOfDoses: @(numberOfDosesTaken)
+                                                         onDate: endUsersChosenDate
                                                 forPrescription: blockSafePrescription];
 
 
@@ -769,29 +741,24 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 
 + (void) sendRecordedActionToSage: (NSDictionary *) actionRecord
 {
-    /*
-     NOT YET READY FOR PRODUCTION
-
-     Once we've finalized a file format, we can uncomment this line of code.
-
-            [APCDataArchiverAndUploader uploadOneDictionary: actionRecord];
-     */
-
-    APCLogDebug (@"MedTrackerPrescription:  NOT YET UPLOADING ANYTHING.  Waiting until we finalize file format.  I WOULD HAVE uploaded this:  %@", actionRecord);
+    [APCDataArchiverAndUploader uploadOneDictionary: actionRecord];
 }
 
 + (void) recordActionForCreatingPrescription: (APCMedTrackerPrescription *) prescription
 {
     NSDictionary * result = @{
-                              kAPCActionKey_FilenameToUpload            : kAPCActionName_CreatePrescription,
-                              kAPCActionKey_Prescription_DateCreated    : prescription.dateStartedUsing,
-                              kAPCActionKey_Prescription_DateExpired    : [NSNull null],
-                              kAPCActionKey_Prescription_DaysOfTheWeek  : prescription.zeroBasedDaysOfTheWeekAsArrayOfSortedShortNames,
-                              kAPCActionKey_Prescription_TimesPerDay    : prescription.numberOfTimesPerDay,
-                              kAPCActionKey_Prescription_MedicationName : prescription.medication.name,
-                              kAPCActionKey_Prescription_DosageAmount   : prescription.dosage.amount,
-                              kAPCActionKey_Prescription_DosageName     : prescription.dosage.name,
-                              kAPCActionKey_Prescription_ColorName      : prescription.color.name
+                              @"item"                               : @"medicationTracker_createPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
+                              @"userActionCategory"                 : @"medicationTracker",
+                              @"userAction"                         : @"createPrescription",
+                              @"userActionVersion"                  : @(1),
+                              @"prescriptionUniqueId"               : prescription.objectID,
+                              @"prescriptionDateCreated"            : prescription.dateStartedUsing,
+                              @"prescriptionDaysOfTheWeek"          : prescription.zeroBasedDaysOfTheWeekAsArrayOfSortedShortNames,
+                              @"prescriptionNumberOfTimesPerDay"    : prescription.numberOfTimesPerDay,
+                              @"prescriptionMedicationName"         : prescription.medication.name,
+                              @"prescriptionDosageAmount"           : prescription.dosage.amount,
+                              @"prescriptionDosageName"             : prescription.dosage.name,
+                              @"prescriptionColorName"              : prescription.color.name
                               };
 
     [self sendRecordedActionToSage: result];
@@ -800,24 +767,29 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 + (void) recordActionForExpiringPrescription: (APCMedTrackerPrescription *) prescription
 {
     NSDictionary * result = @{
-                              kAPCActionKey_FilenameToUpload            : kAPCActionName_ExpirePrescription,
-                              kAPCActionKey_Prescription_DateExpired    : prescription.dateStoppedUsing,
-                              kAPCActionKey_Prescription_MedicationName : prescription.medication.name,
-                              kAPCActionKey_Prescription_DosageAmount   : prescription.dosage.amount,
+                              @"item"                       : @"medicationTracker_cancelPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
+                              @"userActionCategory"         : @"medicationTracker",
+                              @"userAction"                 : @"cancelPrescription",
+                              @"userActionVersion"          : @(1),
+                              @"prescriptionUniqueId"       : prescription.objectID,
+                              @"prescriptionDateCanceled"   : prescription.dateStoppedUsing,
                               };
 
     [self sendRecordedActionToSage: result];
 }
 
-+ (void) recordActionForRecordingNumberOfDoses: (NSNumber *) todaysDoseCount
++ (void) recordActionForRecordingNumberOfDoses: (NSNumber *) numberOfDosesTaken
+                                        onDate: (NSDate *) date
                                forPrescription: (APCMedTrackerPrescription *) prescription
 {
     NSDictionary *result = @{
-                             kAPCActionKey_FilenameToUpload                 : kAPCActionName_RecordDailyDoses,
-                             kAPCActionKey_Dosage_Date                      : [NSDate date],
-                             kAPCActionKey_Dosage_TotalQuantityTakenToday   : todaysDoseCount,
-                             kAPCActionKey_Prescription_MedicationName      : prescription.medication.name,
-                             kAPCActionKey_Prescription_DosageAmount        : prescription.dosage.amount,
+                             @"item"                    : @"medicationTracker_recordTotalDailyDosesOfPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
+                             @"userActionCategory"      : @"medicationTracker",
+                             @"userAction"              : @"recordTotalDailyDosesOfPrescription",
+                             @"userActionVersion"       : @(1),
+                             @"prescriptionUniqueId"    : prescription.objectID,
+                             @"dosageDate"              : date,
+                             @"numberOfDosesTaken"      : numberOfDosesTaken
                              };
 
     [self sendRecordedActionToSage: result];
