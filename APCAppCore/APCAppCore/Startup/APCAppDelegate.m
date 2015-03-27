@@ -222,6 +222,9 @@ then a location event has occurred and location services must be manually starte
     }
     
     self.catastrophicStartupError = nil;
+    
+    //initialize tasksReminder
+    self.tasksReminder = [APCTasksReminderManager new];
 }
 
 - (BOOL)resetFileSecurityPermissionsWithError:(NSError* __autoreleasing *)error
@@ -559,9 +562,7 @@ then a location event has occurred and location services must be manually starte
     [APCPermissionsManager setHealthKitTypesToWrite:self.initializationOptions[kHKWritePermissionsKey]];
 }
 
-- (void) setUpTasksReminder {
-    self.tasksReminder = [APCTasksReminderManager new];
-}
+- (void) setUpTasksReminder {/*Abstract Implementation*/}
 
 /**
   * @brief  This configures the observer queries for all HK data type
