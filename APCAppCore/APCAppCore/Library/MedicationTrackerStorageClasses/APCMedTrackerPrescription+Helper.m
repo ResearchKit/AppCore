@@ -747,19 +747,42 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 + (void) recordActionForCreatingPrescription: (APCMedTrackerPrescription *) prescription
 {
     NSDictionary * result = @{
-                              @"item"                               : @"medicationTracker_createPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
-                              @"userActionCategory"                 : @"medicationTracker",
-                              @"userAction"                         : @"createPrescription",
-                              @"userActionVersion"                  : @(1),
-                              @"prescriptionUniqueId"               : prescription.objectID,
-                              @"prescriptionDateCreated"            : prescription.dateStartedUsing,
-                              @"prescriptionDaysOfTheWeek"          : prescription.zeroBasedDaysOfTheWeekAsArrayOfSortedShortNames,
-                              @"prescriptionNumberOfTimesPerDay"    : prescription.numberOfTimesPerDay,
-                              @"prescriptionMedicationName"         : prescription.medication.name,
-                              @"prescriptionDosageAmount"           : prescription.dosage.amount,
-                              @"prescriptionDosageName"             : prescription.dosage.name,
-                              @"prescriptionColorName"              : prescription.color.name
+                              @"item"           : @"medicationTracker_createPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
+
+                              @"userAction"     : @{ @"category"    : @"medicationTracker",
+                                                     @"name"        : @"createPrescription",
+                                                     @"version"     : @(1)
+                                                     },
+
+                              @"prescription"   : @{ @"uniqueId"               : prescription.objectID,
+                                                     @"dateCreated"            : prescription.dateStartedUsing,
+                                                     @"daysOfTheWeek"          : prescription.zeroBasedDaysOfTheWeekAsArrayOfSortedShortNames,
+                                                     @"numberOfTimesPerDay"    : prescription.numberOfTimesPerDay,
+                                                     @"medicationName"         : prescription.medication.name,
+                                                     @"dosageAmount"           : prescription.dosage.amount,
+                                                     @"dosageName"             : prescription.dosage.name,
+                                                     @"colorName"              : prescription.color.name
+                                                     },
                               };
+
+    //
+    // Please leave this commented-out code here.
+    // We're still evolving the data format; this is the "original."
+    //
+//    NSDictionary * result = @{
+//                              @"item"                               : @"medicationTracker_createPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
+//                              @"userActionCategory"                 : @"medicationTracker",
+//                              @"userAction"                         : @"createPrescription",
+//                              @"userActionVersion"                  : @(1),
+//                              @"prescriptionUniqueId"               : prescription.objectID,
+//                              @"prescriptionDateCreated"            : prescription.dateStartedUsing,
+//                              @"prescriptionDaysOfTheWeek"          : prescription.zeroBasedDaysOfTheWeekAsArrayOfSortedShortNames,
+//                              @"prescriptionNumberOfTimesPerDay"    : prescription.numberOfTimesPerDay,
+//                              @"prescriptionMedicationName"         : prescription.medication.name,
+//                              @"prescriptionDosageAmount"           : prescription.dosage.amount,
+//                              @"prescriptionDosageName"             : prescription.dosage.name,
+//                              @"prescriptionColorName"              : prescription.color.name
+//                              };
 
     [self sendRecordedActionToSage: result];
 }
@@ -767,14 +790,31 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 + (void) recordActionForExpiringPrescription: (APCMedTrackerPrescription *) prescription
 {
     NSDictionary * result = @{
-                              @"item"                       : @"medicationTracker_cancelPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
-                              @"userActionCategory"         : @"medicationTracker",
-                              @"userAction"                 : @"cancelPrescription",
-                              @"userActionVersion"          : @(1),
-                              @"prescriptionUniqueId"       : prescription.objectID,
-                              @"prescriptionDateCanceled"   : prescription.dateStoppedUsing,
+                              @"item"         : @"medicationTracker_cancelPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
+
+                              @"userAction"   : @{ @"category"      : @"medicationTracker",
+                                                   @"name"          : @"cancelPrescription",
+                                                   @"version"       : @(1),
+                                                   },
+
+                              @"prescription" : @{ @"uniqueId"      : prescription.objectID,
+                                                   @"dateCanceled"  : prescription.dateStoppedUsing,
+                                                   },
                               };
 
+    //
+    // Please leave this commented-out code here.
+    // We're still evolving the data format; this is the "original."
+    //
+//    NSDictionary * result = @{
+//                              @"item"                       : @"medicationTracker_cancelPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
+//                              @"userActionCategory"         : @"medicationTracker",
+//                              @"userAction"                 : @"cancelPrescription",
+//                              @"userActionVersion"          : @(1),
+//                              @"prescriptionUniqueId"       : prescription.objectID,
+//                              @"prescriptionDateCanceled"   : prescription.dateStoppedUsing,
+//                              };
+//
     [self sendRecordedActionToSage: result];
 }
 
@@ -783,14 +823,32 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
                                forPrescription: (APCMedTrackerPrescription *) prescription
 {
     NSDictionary *result = @{
-                             @"item"                    : @"medicationTracker_recordTotalDailyDosesOfPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
-                             @"userActionCategory"      : @"medicationTracker",
-                             @"userAction"              : @"recordTotalDailyDosesOfPrescription",
-                             @"userActionVersion"       : @(1),
-                             @"prescriptionUniqueId"    : prescription.objectID,
-                             @"dosageDate"              : date,
-                             @"numberOfDosesTaken"      : numberOfDosesTaken
+                             @"item"         : @"medicationTracker_recordTotalDailyDosesOfPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
+
+                             @"userAction"   : @{ @"category"       : @"medicationTracker",
+                                                  @"name"           : @"recordTotalDailyDosesOfPrescription",
+                                                  @"version"        : @(1),
+                                                  },
+
+                             @"prescription" : @{ @"uniqueId"           : prescription.objectID,
+                                                  @"dosageDate"         : date,
+                                                  @"numberOfDosesTaken" : numberOfDosesTaken
+                                                  },
                              };
+
+    //
+    // Please leave this commented-out code here.
+    // We're still evolving the data format; this is the "original."
+    //
+//    NSDictionary *result = @{
+//                             @"item"                    : @"medicationTracker_recordTotalDailyDosesOfPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
+//                             @"userActionCategory"      : @"medicationTracker",
+//                             @"userAction"              : @"recordTotalDailyDosesOfPrescription",
+//                             @"userActionVersion"       : @(1),
+//                             @"prescriptionUniqueId"    : prescription.objectID,
+//                             @"dosageDate"              : date,
+//                             @"numberOfDosesTaken"      : numberOfDosesTaken
+//                             };
 
     [self sendRecordedActionToSage: result];
 }
