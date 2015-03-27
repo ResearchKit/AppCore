@@ -34,7 +34,6 @@
 #import <Foundation/Foundation.h>
 
 @interface APCTaskReminder : NSObject
-@property (assign, nonatomic) BOOL reminderOn;
 @property (strong, nonatomic) NSString *reminderIdentifier;
 @property (strong, nonatomic) NSString *reminderBody;
 @property (strong, nonatomic) NSString *resultsSummaryKey;
