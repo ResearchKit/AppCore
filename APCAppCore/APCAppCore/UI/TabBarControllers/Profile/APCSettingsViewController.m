@@ -145,16 +145,17 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), tableView.sectionHeaderHeight)];
-    headerView.contentView.backgroundColor = [UIColor colorWithWhite:248/255.0f alpha:1.0];
-    
-    UILabel *headerLabel = [[UILabel alloc] initWithFrame:headerView.bounds];
-    headerLabel.font = [UIFont appLightFontWithSize:16.0f];
-    headerLabel.textColor = [UIColor appSecondaryColor2];
-    headerLabel.textAlignment = NSTextAlignmentCenter;
-    [headerView addSubview:headerLabel];
-    
-    APCTableViewSection *sectionItem = self.items[section];
-    headerLabel.text = sectionItem.sectionTitle;
+
+    switch (section) {
+        case 0:
+            headerView.textLabel.text = @"Set Reminder Time";
+            break;
+        case 1:
+            headerView.textLabel.text = @"Turn Task Reminders On/Off";
+            break;
+        default:
+            break;
+    }
     
     return headerView;
 }
