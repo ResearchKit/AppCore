@@ -245,7 +245,7 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
 - (NSDate*) calculateFireDate
 {
     NSTimeInterval reminderOffset = ([[APCTasksReminderManager reminderTimesArray] indexOfObject:self.reminderTime]) * kMinutesPerHour * kSecondsPerMinute;
-    NSDate *dateToSet = self.remindersToSend.count > 0 ? [[NSDate tomorrowAtMidnight] dateByAddingTimeInterval:reminderOffset] : [[NSDate todayAtMidnight] dateByAddingTimeInterval:reminderOffset];
+    NSDate *dateToSet = self.remindersToSend.count == 0 ? [[NSDate tomorrowAtMidnight] dateByAddingTimeInterval:reminderOffset] : [[NSDate todayAtMidnight] dateByAddingTimeInterval:reminderOffset];
     return dateToSet;
 }
 
@@ -297,8 +297,8 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
         return includeTask;
     }
     
-    NSArray *completedTasks = [APCTasksReminderManager scheduledTasksForTaskID:taskReminder.taskID completed:YES];
-    NSArray *scheduledTasks = [APCTasksReminderManager scheduledTasksForTaskID:taskReminder.taskID completed:NO];
+    NSArray *completedTasks = [APCTasksReminderManager scheduledTasksForTaskID:taskReminder.taskID completed:@1];
+    NSArray *scheduledTasks = [APCTasksReminderManager scheduledTasksForTaskID:taskReminder.taskID completed:nil];
     
     if (completedTasks.count >0 && taskReminder.resultsSummaryKey != nil) {
         for (APCScheduledTask *task in completedTasks) {
@@ -313,10 +313,10 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
                 result = [dictionary objectForKey:taskReminder.resultsSummaryKey];
             }
             
-            //may need to switch on result type enumeration
+            NSArray *results = [[NSArray alloc]initWithObjects:result, nil];
+            NSArray *completedTask = [results filteredArrayUsingPredicate:taskReminder.completedTaskPredicate];
             
-            //has this task been completed? The answer may depend on the question. Use Predicate?
-            if (result.integerValue == 1){
+            if (completedTask.count == 0){
                 includeTask = YES;
             }
         }
@@ -328,8 +328,9 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
 }
 
 //Pass in a taskID
-+ (NSArray *)scheduledTasksForTaskID:(NSString *)taskID completed:(BOOL)completed
++ (NSArray *)scheduledTasksForTaskID:(NSString *)taskID completed:(NSNumber *)completed
 {
+   
     APCDateRange *dateRange = [[APCDateRange alloc]initWithStartDate:[NSDate todayAtMidnight] endDate:[NSDate tomorrowAtMidnight]];
     NSManagedObjectContext *context = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext;
     
@@ -337,7 +338,10 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
     request.shouldRefreshRefetchedObjects = YES;
     NSPredicate * datePredicate = [NSPredicate predicateWithFormat:@"(startOn >= %@) AND (endOn <= %@) AND task.taskID == %@", dateRange.startDate, dateRange.endDate, taskID];
     
-    NSPredicate * completionPredicate = [NSPredicate predicateWithFormat:@"completed == %@", [NSNumber numberWithBool:completed]];
+    NSPredicate * completionPredicate = nil;
+    if (completed != nil) {
+        completionPredicate = [completed isEqualToNumber:@YES] ? [NSPredicate predicateWithFormat:@"completed == %@", completed] :[NSPredicate predicateWithFormat:@"completed == nil ||  completed == %@", completed] ;
+    }
     
     NSPredicate * finalPredicate = completionPredicate ? [NSCompoundPredicate andPredicateWithSubpredicates:@[datePredicate, completionPredicate]] : datePredicate;
     request.predicate = finalPredicate;
