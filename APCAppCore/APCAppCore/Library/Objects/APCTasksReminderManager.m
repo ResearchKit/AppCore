@@ -39,7 +39,7 @@ NSString * const kTaskReminderUserInfoKey = @"TaskReminderUserInfoKey";
 static NSInteger kSecondsPerMinute = 60;
 static NSInteger kMinutesPerHour = 60;
 
-NSString * const kTaskReminderMessage = @"Please complete your %@ activities today. Thank you for participating in the %@ study!";
+NSString * const kTaskReminderMessage = @"Here are your %@ reminders: %@Thank you for participating in the %@ study!";
 
 @interface APCTasksReminderManager ()
 
@@ -127,7 +127,7 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
     
     localNotification.fireDate = [self calculateFireDate];
     localNotification.timeZone = [NSTimeZone localTimeZone];
-    localNotification.alertBody = [NSString stringWithFormat:[self reminderMessage], [self studyName], [self studyName]];
+    localNotification.alertBody = [self reminderMessage];
     localNotification.repeatInterval = NSCalendarUnitDay;
     localNotification.soundName = UILocalNotificationDefaultSoundName;
     
@@ -146,14 +146,14 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
 /*********************************************************************************/
 -(NSString *)reminderMessage{
     
-    NSString *reminder = @"";
+    NSString *reminders = @"\n";
     //concatenate body of each message with \n
     
     for (APCTaskReminder *taskReminder in self.reminders) {
         if ([self includeTaskInReminder:taskReminder]) {
-            reminder = [reminder stringByAppendingString:@"• "];
-            reminder = [reminder stringByAppendingString:taskReminder.reminderBody];
-            reminder = [reminder stringByAppendingString:@"\n"];
+            reminders = [reminders stringByAppendingString:@"• "];
+            reminders = [reminders stringByAppendingString:taskReminder.reminderBody];
+            reminders = [reminders stringByAppendingString:@"\n"];
             self.remindersToSend[taskReminder.reminderIdentifier] = taskReminder;
         }else{
             if (self.remindersToSend[taskReminder.reminderIdentifier]) {
@@ -162,7 +162,7 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
         }
     }
     
-    return reminder;
+    return [NSString stringWithFormat:kTaskReminderMessage, [self studyName], reminders, [self studyName]];;
 }
 
 -(NSString *)taskReminderUserInfo{
@@ -337,7 +337,8 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
     
     NSFetchRequest * request = [APCScheduledTask request];
     request.shouldRefreshRefetchedObjects = YES;
-    NSPredicate * datePredicate = [NSPredicate predicateWithFormat:@"(startOn >= %@) AND (endOn <= %@) AND task.taskID == %@", dateRange.startDate, dateRange.endDate, taskID];
+    
+    NSPredicate * datePredicate = [NSPredicate predicateWithFormat:@"endOn >= %@ AND task.taskID == %@", dateRange.startDate, taskID];
     
     NSPredicate * completionPredicate = nil;
     if (completed != nil) {
