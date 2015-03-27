@@ -85,6 +85,11 @@
  */
 + (NSString *) cleanString: (NSString *) someString;
 
+/**
+ Returns the path to the user's "Documents" directory.
+ */
++ (NSString *) pathToUserDocumentsFolder;
+
 
 @end
 

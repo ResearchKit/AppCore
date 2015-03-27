@@ -93,9 +93,6 @@ FOUNDATION_EXPORT NSString *const kTaskReminderStartupDefaultOnOffKey;
 FOUNDATION_EXPORT NSString *const kTaskReminderStartupDefaultTimeKey;
 FOUNDATION_EXPORT NSString *const kDBStatusVersionKey;
 
-FOUNDATION_EXPORT NSString *const kAnalyticsOnOffKey;
-FOUNDATION_EXPORT NSString *const kAnalyticsFlurryAPIKeyKey;	// Really. The NSDictionary key for something known as a "key."
-
 FOUNDATION_EXPORT NSString *const kHKQuantityTypeKey;
 FOUNDATION_EXPORT NSString *const kHKCategoryTypeKey;
 FOUNDATION_EXPORT NSString *const kHKCharacteristicTypeKey;
@@ -156,9 +153,12 @@ FOUNDATION_EXPORT NSString *const kActivitiesSectionKeepGoing;
 FOUNDATION_EXPORT NSString *const kActivitiesSectionYesterday;
 FOUNDATION_EXPORT NSString *const kActivitiesSectionToday;
 
-/*********************************************************************************/
+
+
+// ---------------------------------------------------------
 #pragma mark - Events
-/*********************************************************************************/
+// ---------------------------------------------------------
+
 FOUNDATION_EXPORT NSString *const kAppStateChangedEvent;
 FOUNDATION_EXPORT NSString *const kNetworkEvent;
 FOUNDATION_EXPORT NSString *const kSchedulerEvent;
@@ -168,14 +168,30 @@ FOUNDATION_EXPORT NSString *const kErrorEvent;
 FOUNDATION_EXPORT NSString *const kPassiveCollectorEvent;
 
 
-/*********************************************************************************/
-#pragma mark - Errors
-/*********************************************************************************/
-FOUNDATION_EXPORT NSString * const kAPCErrorDomain_CoreData;
-FOUNDATION_EXPORT NSInteger  const kAPCErrorDomain_CoreData_Code_Undetermined;
-FOUNDATION_EXPORT NSInteger  const kAPCErrorDomain_CoreData_Code_NoError;
-FOUNDATION_EXPORT NSInteger  const kAPCErrorDomain_CoreData_Code_CantCreateDatabase;
-FOUNDATION_EXPORT NSInteger  const kAPCErrorDomain_CoreData_Code_CantOpenExistingDatabase;
+
+// ---------------------------------------------------------
+#pragma mark - Known files, folders, extensions, and content types
+// ---------------------------------------------------------
+
+/*
+ Folders that will appear in the user's Documents directory,
+ or elsewhere that we might need to understand and inspect 'em.
+ */
+
+FOUNDATION_EXPORT NSString * const kAPCFolderName_ArchiveAndUpload_TopLevelFolder;
+FOUNDATION_EXPORT NSString * const kAPCFolderName_ArchiveAndUpload_Archiving;
+FOUNDATION_EXPORT NSString * const kAPCFolderName_ArchiveAndUpload_Uploading;
+
+FOUNDATION_EXPORT NSString * const kAPCFileName_EncryptedZipFile;
+FOUNDATION_EXPORT NSString * const kAPCFileName_UnencryptedZipFile;
+
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_JSON;
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_PrivateKey;
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_CommaSeparatedValues;
+
+FOUNDATION_EXPORT NSString * const kAPCContentType_JSON;
+
+
 
 @interface APCConstants : NSObject
 

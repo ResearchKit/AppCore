@@ -113,18 +113,13 @@ then a location event has occurred and location services must be manually starte
     [self.dataMonitor appFinishedLaunching];
     
     [self configureObserverQueries];
-
-	// Setup analytics options (and, conceptually, all logging options).
-	[APCLog setupTurningFlurryOn: [self.initializationOptions [kAnalyticsOnOffKey] boolValue]
-					flurryApiKey: self.initializationOptions [kAnalyticsFlurryAPIKeyKey]
-	 ];
     
     return YES;
 }
 
 - (NSUInteger)obtainPreviousVersion {
     NSUserDefaults* defaults        = [NSUserDefaults standardUserDefaults];
-    return (NSUInteger) [defaults objectForKey:@"previousVersion"];
+    return (NSUInteger) [defaults integerForKey:@"previousVersion"];
 }
 
 - (void)performMigrationFrom:(NSInteger) __unused previousVersion currentVersion:(NSInteger)__unused currentVersion
@@ -144,6 +139,8 @@ then a location event has occurred and location services must be manually starte
 
 - (void)applicationWillResignActive:(UIApplication *) __unused application
 {
+    // This will dismiss the keyboard, if one is visible
+    [self.window endEditing:YES];
     [self showSecureView];
 }
 
@@ -303,8 +300,24 @@ then a location event has occurred and location services must be manually starte
 #endif
 }
 
+- (BOOL) determineIfPeresistentStoreExists {
+    
+    BOOL persistenStoreExists = NO;
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:
+          [[self applicationDocumentsDirectory] stringByAppendingPathComponent:self.initializationOptions[kDatabaseNameKey]]])
+    {
+        persistenStoreExists = YES;
+    }
+    
+    return persistenStoreExists;
+}
+
 - (void) initializeAppleCoreStack
 {
+    //Check if persistent store (db.sqlite file) exists
+    self.persistentStoreExistence = [self determineIfPeresistentStoreExists];
+    
     self.dataSubstrate = [[APCDataSubstrate alloc] initWithPersistentStorePath:[[self applicationDocumentsDirectory] stringByAppendingPathComponent:self.initializationOptions[kDatabaseNameKey]] additionalModels: nil studyIdentifier:self.initializationOptions[kStudyIdentifierKey]];
     
     [self performMigrationAfterDataSubstrateFrom:[self obtainPreviousVersion] currentVersion:kTheEntireDataModelOfTheApp];
@@ -338,7 +351,6 @@ then a location event has occurred and location services must be manually starte
         }
         
         [self.dataSubstrate loadStaticTasksAndSchedules:dictionary];
-        [self clearNSUserDefaults];
         [APCKeychainStore resetKeyChain];
     }
     else

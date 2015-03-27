@@ -50,4 +50,10 @@
 - (void) recomputeDaysBasedOnMonth: (NSNumber *) month
 							  year: (NSNumber *) year;
 
+/**
+ True if this selector contains any legal days for the current month and year.
+ Call this after calling -recompute.
+ */
+@property (readonly) BOOL hasAnyLegalDays;
+
 @end

@@ -42,7 +42,7 @@ static NSString * const kOneTimeSchedule = @"once";
 @property  (weak, nonatomic)     APCDataSubstrate        *dataSubstrate;
 @property  (strong, nonatomic)   NSManagedObjectContext  *scheduleMOC;
 @property  (nonatomic) BOOL isUpdating;
-@property (nonatomic, strong) APCDateRange * referenceRange;
+
 
 @property (nonatomic, strong) NSDateFormatter * dateFormatter;
 
@@ -277,13 +277,30 @@ static NSString * const kOneTimeSchedule = @"once";
      NSArray * scheduledTasksArray = [[self allScheduledTasks] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"task.taskID == %@", task.taskID]];
     
     if (scheduledTasksArray.count > 0){
-        //do nothing
         APCLogDebug(@"task already scheduled: %@", task);
         APCScheduledTask * validatedTask = scheduledTasksArray.firstObject;
         [self validateScheduledTask:validatedTask];
     }else{
         //One time not created, create it        
         NSDate *startOnDate = [self.referenceRange.startDate startOfDay];
+        
+        NSDate * endDate = (schedule.expires !=nil) ? [startOnDate dateByAddingTimeInterval:schedule.expiresInterval] : [startOnDate dateByAddingTimeInterval:[NSDate parseISO8601DurationString:@"P2Y"]];
+        endDate = [NSDate endOfDay:endDate];
+        [self createScheduledTask:schedule task:task dateRange:[[APCDateRange alloc] initWithStartDate:startOnDate endDate:endDate]];
+    }
+}
+
+- (void) findOrCreateOneTimeScheduledTask:(APCSchedule *) schedule task: (APCTask*) task andStartDateReference: (NSDate *)startOn {
+    
+    NSArray * scheduledTasksArray = [[self allScheduledTasks] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"task.taskID == %@", task.taskID]];
+    
+    if (scheduledTasksArray.count > 0){
+        APCLogDebug(@"task already scheduled: %@", task);
+        APCScheduledTask * validatedTask = scheduledTasksArray.firstObject;
+        [self validateScheduledTask:validatedTask];
+    }else{
+        //One time not created, create it
+        NSDate *startOnDate = [startOn startOfDay];
         
         NSDate * endDate = (schedule.expires !=nil) ? [startOnDate dateByAddingTimeInterval:schedule.expiresInterval] : [startOnDate dateByAddingTimeInterval:[NSDate parseISO8601DurationString:@"P2Y"]];
         endDate = [NSDate endOfDay:endDate];

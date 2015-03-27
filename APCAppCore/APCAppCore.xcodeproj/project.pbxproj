@@ -83,6 +83,8 @@
 		3650C65B1AA29BB50075C935 /* APCCatastrophicErrorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3650C6581AA29BB50075C935 /* APCCatastrophicErrorViewController.h */; };
 		3650C65C1AA29BB50075C935 /* APCCatastrophicErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3650C6591AA29BB50075C935 /* APCCatastrophicErrorViewController.m */; };
 		3650C65D1AA29BB50075C935 /* CatastrophicError.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3650C65A1AA29BB50075C935 /* CatastrophicError.storyboard */; };
+		3651424D1AA78521008A5CFA /* APCDataArchiverAndUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3651424B1AA78521008A5CFA /* APCDataArchiverAndUploader.h */; };
+		3651424E1AA78521008A5CFA /* APCDataArchiverAndUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3651424C1AA78521008A5CFA /* APCDataArchiverAndUploader.m */; };
 		3654318D1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3654318B1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3654318E1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3654318C1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.m */; };
 		36829A411A96B937000AA2AB /* APCMedTrackerPredefinedMedications.plist in Resources */ = {isa = PBXBuildFile; fileRef = 369E27E41A96B7A200D35DFA /* APCMedTrackerPredefinedMedications.plist */; };
@@ -151,10 +153,11 @@
 		36CCF3921AA4573D0086CD1D /* APCTimeSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947A41A73272C0034C522 /* APCTimeSelector.m */; };
 		36CCF3931AA4573D0086CD1D /* APCTimeSelectorEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947A61A73272C0034C522 /* APCTimeSelectorEnumerator.m */; };
 		36CCF3951AA457420086CD1D /* APCScheduleExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947931A73272C0034C522 /* APCScheduleExpression.m */; };
-		36CCF39C1AA458E60086CD1D /* libFlurry_6.0.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A861E41A8E7C60004EDB15 /* libFlurry_6.0.0.a */; };
 		36CCF3A01AA45B790086CD1D /* APCConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947701A73272C0034C522 /* APCConstants.m */; };
 		36CCF3A11AA45B9D0086CD1D /* NSDateComponents+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B9474B1A73272C0034C522 /* NSDateComponents+Helper.m */; };
 		36CCF3A21AA45BC40086CD1D /* NSDate+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B947491A73272C0034C522 /* NSDate+Helper.m */; };
+		36D0510E1ABB92F0008FC9B3 /* NSFileManager+Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 36D0510C1ABB92F0008FC9B3 /* NSFileManager+Helper.h */; };
+		36D0510F1ABB92F0008FC9B3 /* NSFileManager+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36D0510D1ABB92F0008FC9B3 /* NSFileManager+Helper.m */; };
 		36E06F1C1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E06F1B1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m */; };
 		5B04329F1A318AA2000DC9ED /* APCSignInTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B04329D1A318AA2000DC9ED /* APCSignInTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B0432A01A318AA2000DC9ED /* APCSignInTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B04329E1A318AA2000DC9ED /* APCSignInTask.m */; };
@@ -334,8 +337,6 @@
 		F55653B21A6F08E0003E0B0C /* libMobileGestalt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */; };
 		F55653B31A6F0918003E0B0C /* libMobileGestalt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */; };
 		F556549B1A701337003E0B0C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F556549A1A701337003E0B0C /* Localizable.strings */; };
-		F5A861E51A8E7C60004EDB15 /* Flurry.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A861E31A8E7C60004EDB15 /* Flurry.h */; };
-		F5A861E61A8E7C60004EDB15 /* libFlurry_6.0.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A861E41A8E7C60004EDB15 /* libFlurry_6.0.0.a */; };
 		F5B946211A7309A20034C522 /* zipzap.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B945F61A7309A20034C522 /* zipzap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5B946221A7309A20034C522 /* ZZAESDecryptInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B945F71A7309A20034C522 /* ZZAESDecryptInputStream.h */; };
 		F5B946231A7309A20034C522 /* ZZAESDecryptInputStream.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5B945F81A7309A20034C522 /* ZZAESDecryptInputStream.mm */; };
@@ -775,6 +776,8 @@
 		3650C6581AA29BB50075C935 /* APCCatastrophicErrorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCatastrophicErrorViewController.h; sourceTree = "<group>"; };
 		3650C6591AA29BB50075C935 /* APCCatastrophicErrorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCatastrophicErrorViewController.m; sourceTree = "<group>"; };
 		3650C65A1AA29BB50075C935 /* CatastrophicError.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CatastrophicError.storyboard; sourceTree = "<group>"; };
+		3651424B1AA78521008A5CFA /* APCDataArchiverAndUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataArchiverAndUploader.h; sourceTree = "<group>"; };
+		3651424C1AA78521008A5CFA /* APCDataArchiverAndUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataArchiverAndUploader.m; sourceTree = "<group>"; };
 		3654318B1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMedTrackerInflatableItem.h; sourceTree = "<group>"; };
 		3654318C1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMedTrackerInflatableItem.m; sourceTree = "<group>"; };
 		366433821A7DA29F007E2BCF /* ReadMe.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
@@ -829,6 +832,8 @@
 		36B7D2541A8D848D0043F968 /* ORKAnswerFormat+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ORKAnswerFormat+Helper.m"; sourceTree = "<group>"; };
 		36C8B3EB1A38D9FF0051096B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		36C8B3ED1A38DA4C0051096B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		36D0510C1ABB92F0008FC9B3 /* NSFileManager+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Helper.h"; sourceTree = "<group>"; };
+		36D0510D1ABB92F0008FC9B3 /* NSFileManager+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Helper.m"; sourceTree = "<group>"; };
 		36E06F1B1A33F071005D6EB0 /* APCScheduleExpressionRealLifeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCScheduleExpressionRealLifeTests.m; sourceTree = "<group>"; };
 		5B04329D1A318AA2000DC9ED /* APCSignInTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSignInTask.h; sourceTree = "<group>"; };
 		5B04329E1A318AA2000DC9ED /* APCSignInTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSignInTask.m; sourceTree = "<group>"; };
@@ -1011,8 +1016,6 @@
 		F54DDD221A8026010073E4B4 /* APCHKDiscreteQuantityTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHKDiscreteQuantityTracker.m; sourceTree = "<group>"; };
 		F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMobileGestalt.dylib; path = usr/lib/libMobileGestalt.dylib; sourceTree = SDKROOT; };
 		F556549A1A701337003E0B0C /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
-		F5A861E31A8E7C60004EDB15 /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
-		F5A861E41A8E7C60004EDB15 /* libFlurry_6.0.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurry_6.0.0.a; sourceTree = "<group>"; };
 		F5B945F61A7309A20034C522 /* zipzap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zipzap.h; sourceTree = "<group>"; };
 		F5B945F71A7309A20034C522 /* ZZAESDecryptInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZAESDecryptInputStream.h; sourceTree = "<group>"; };
 		F5B945F81A7309A20034C522 /* ZZAESDecryptInputStream.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZZAESDecryptInputStream.mm; sourceTree = "<group>"; };
@@ -1384,7 +1387,6 @@
 				F55653B31A6F0918003E0B0C /* libMobileGestalt.dylib in Frameworks */,
 				F5F12B2F1A2F86600015982C /* libbz2.dylib in Frameworks */,
 				F5F12B2D1A2F86550015982C /* libarchive.dylib in Frameworks */,
-				F5A861E61A8E7C60004EDB15 /* libFlurry_6.0.0.a in Frameworks */,
 				F5F12B2B1A2F864B0015982C /* libz.dylib in Frameworks */,
 				F5F12B251A2F86280015982C /* HealthKit.framework in Frameworks */,
 				F5F12B231A2F861F0015982C /* CoreLocation.framework in Frameworks */,
@@ -1400,7 +1402,6 @@
 				F55653B21A6F08E0003E0B0C /* libMobileGestalt.dylib in Frameworks */,
 				36B1AAE51A38DEA800CE7DB5 /* Security.framework in Frameworks */,
 				36B1AAE61A38DEAF00CE7DB5 /* SystemConfiguration.framework in Frameworks */,
-				36CCF39C1AA458E60086CD1D /* libFlurry_6.0.0.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1535,6 +1536,15 @@
 				3650C65A1AA29BB50075C935 /* CatastrophicError.storyboard */,
 			);
 			path = Errors;
+			sourceTree = "<group>";
+		};
+		3651424A1AA78514008A5CFA /* DataArchiverAndUploader */ = {
+			isa = PBXGroup;
+			children = (
+				3651424B1AA78521008A5CFA /* APCDataArchiverAndUploader.h */,
+				3651424C1AA78521008A5CFA /* APCDataArchiverAndUploader.m */,
+			);
+			path = DataArchiverAndUploader;
 			sourceTree = "<group>";
 		};
 		369E27BA1A96B7A200D35DFA /* MedicationTrackerStorageClasses */ = {
@@ -2031,15 +2041,6 @@
 			path = Trackers;
 			sourceTree = "<group>";
 		};
-		F5A861E21A8E7C60004EDB15 /* Flurry */ = {
-			isa = PBXGroup;
-			children = (
-				F5A861E31A8E7C60004EDB15 /* Flurry.h */,
-				F5A861E41A8E7C60004EDB15 /* libFlurry_6.0.0.a */,
-			);
-			path = Flurry;
-			sourceTree = "<group>";
-		};
 		F5B945F41A7309A20034C522 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
@@ -2108,6 +2109,7 @@
 				F5B9473C1A73272C0034C522 /* AssertionHandler */,
 				F5B9473F1A73272C0034C522 /* Categories */,
 				F5B947621A73272C0034C522 /* DataArchiverAndCollector */,
+				3651424A1AA78514008A5CFA /* DataArchiverAndUploader */,
 				364D34871A7B1C8F0060B3F5 /* DataVerificationClient */,
 				0894654F1A8C211100A983AC /* Insights */,
 				F5B947681A73272C0034C522 /* Logging */,
@@ -2190,6 +2192,8 @@
 				F5B9475F1A73272C0034C522 /* UIScrollView+Helper.m */,
 				F5B947601A73272C0034C522 /* UIView+Helper.h */,
 				F5B947611A73272C0034C522 /* UIView+Helper.m */,
+				36D0510C1ABB92F0008FC9B3 /* NSFileManager+Helper.h */,
+				36D0510D1ABB92F0008FC9B3 /* NSFileManager+Helper.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -2211,7 +2215,6 @@
 			children = (
 				F5B947691A73272C0034C522 /* APCLog.h */,
 				F5B9476A1A73272C0034C522 /* APCLog.m */,
-				F5A861E21A8E7C60004EDB15 /* Flurry */,
 			);
 			path = Logging;
 			sourceTree = "<group>";
@@ -2219,14 +2222,14 @@
 		F5B9476E1A73272C0034C522 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
-				087255BE1ABA390500586492 /* APCJSONSerializer.h */,
-				087255BF1ABA390500586492 /* APCJSONSerializer.m */,
 				F5B9476F1A73272C0034C522 /* APCConstants.h */,
 				F5B947701A73272C0034C522 /* APCConstants.m */,
 				F5B947711A73272C0034C522 /* APCDeviceHardware.h */,
 				F5B947721A73272C0034C522 /* APCDeviceHardware.m */,
 				F5B947731A73272C0034C522 /* APCGroupedScheduledTask.h */,
 				F5B947741A73272C0034C522 /* APCGroupedScheduledTask.m */,
+				087255BE1ABA390500586492 /* APCJSONSerializer.h */,
+				087255BF1ABA390500586492 /* APCJSONSerializer.m */,
 				F5B947751A73272C0034C522 /* APCKeychainStore.h */,
 				F5B947761A73272C0034C522 /* APCKeychainStore.m */,
 				F5B947771A73272C0034C522 /* APCSegmentedButton.h */,
@@ -2844,6 +2847,7 @@
 				5BD6EBC41A9D905100C3BFB0 /* APCPermissionPrimingViewController.h in Headers */,
 				3654318D1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.h in Headers */,
 				F5B947EF1A73272C0034C522 /* APCParameters.h in Headers */,
+				3651424D1AA78521008A5CFA /* APCDataArchiverAndUploader.h in Headers */,
 				F5F12AA61A2F78490015982C /* APCEligibleViewController.h in Headers */,
 				F5F12A6F1A2F78490015982C /* APCCircularProgressView.h in Headers */,
 				F5F12AA21A2F78490015982C /* APCForgotPasswordViewController.h in Headers */,
@@ -2936,6 +2940,7 @@
 				36AAB34F1A9A75BB00FAC255 /* APCMedTrackerPrescription.h in Headers */,
 				5BB10C131A91F970002D2DD2 /* APCWebViewController.h in Headers */,
 				F5F12A871A2F78490015982C /* APCSignUpTask.h in Headers */,
+				36D0510E1ABB92F0008FC9B3 /* NSFileManager+Helper.h in Headers */,
 				F5B947AF1A73272C0034C522 /* UIColor+APCAppearance.h in Headers */,
 				F5F12A901A2F78490015982C /* APCSpinnerViewController.h in Headers */,
 				CFFDEDFA1A95734000B25581 /* APCSetupTableViewCell.h in Headers */,
@@ -3013,7 +3018,6 @@
 				F5F12A001A2F78490015982C /* APCScheduledTask+AddOn.h in Headers */,
 				CFFDEDDA1A95734000B25581 /* APCFrequencyDayTableViewCell.h in Headers */,
 				7B6C8CC41AA26F150007B560 /* APCStack.h in Headers */,
-				F5A861E51A8E7C60004EDB15 /* Flurry.h in Headers */,
 				F5F12AB01A2F78490015982C /* APCSignUpMedicalInfoViewController.h in Headers */,
 				5B0432A71A322BEE000DC9ED /* APCOnboardingTask.h in Headers */,
 				F5B946451A7309A20034C522 /* ZZScopeGuard.h in Headers */,
@@ -3326,6 +3330,7 @@
 			files = (
 				F5F129F51A2F78490015982C /* APCResult+AddOn.m in Sources */,
 				5B827B561A80CB0400C685A3 /* APCFadeAnimator.m in Sources */,
+				36D0510F1ABB92F0008FC9B3 /* NSFileManager+Helper.m in Sources */,
 				F5F12AF11A2F78490015982C /* APCDashboardProgressTableViewCell.m in Sources */,
 				F5B9480F1A73272C0034C522 /* APCTimeSelector.m in Sources */,
 				F5F12A0B1A2F78490015982C /* APCTask.m in Sources */,
@@ -3349,6 +3354,7 @@
 				F5F12A6D1A2F78490015982C /* APCAppDelegate.m in Sources */,
 				F5B9462E1A7309A20034C522 /* ZZDataChannel.m in Sources */,
 				5BFEB41E1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m in Sources */,
+				3651424E1AA78521008A5CFA /* APCDataArchiverAndUploader.m in Sources */,
 				5B9B36AC1A95DC1700389F42 /* APCActivitiesTableViewCell.m in Sources */,
 				F53C04801A9B8C7D00BBEC03 /* APCTabBarViewController.m in Sources */,
 				369E28051A96B7A200D35DFA /* APCMedTrackerInflatableItem+Helper.m in Sources */,
@@ -3700,10 +3706,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/APCAppCore/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_CFLAGS = (
 					"-Wextra",
 					"-Wall",
@@ -3730,10 +3733,7 @@
 				);
 				INFOPLIST_FILE = APCAppCoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = APCAppCoreTests;
 			};
 			name = DebugAndSendToDataVerificationServer;
@@ -3842,10 +3842,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/APCAppCore/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_CFLAGS = (
 					"-Wextra",
 					"-Wall",
@@ -3874,10 +3871,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/APCAppCore/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_CFLAGS = (
 					"-Wextra",
 					"-Wall",
@@ -3903,10 +3897,7 @@
 				);
 				INFOPLIST_FILE = APCAppCoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = APCAppCoreTests;
 			};
 			name = Debug;
@@ -3922,10 +3913,7 @@
 				);
 				INFOPLIST_FILE = APCAppCoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = APCAppCoreTests;
 			};
 			name = Release;
@@ -3997,10 +3985,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/APCAppCore/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_CFLAGS = (
 					"-Wextra",
 					"-Wall",
@@ -4027,10 +4012,7 @@
 				);
 				INFOPLIST_FILE = APCAppCoreTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/APCAppCore/Library/Logging/Flurry",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = APCAppCoreTests;
 			};
 			name = Development;

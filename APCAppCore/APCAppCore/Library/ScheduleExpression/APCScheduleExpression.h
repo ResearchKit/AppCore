@@ -98,13 +98,6 @@
 - (instancetype)initWithExpression:(NSString*)expression timeZero:(NSTimeInterval)timeZero;
 
 /**
- *  isValid
- *
- *  @return True if the cron expression provided was parsable.
- */
-- (BOOL)isValid;
-
-/**
  *  An enumerator that provides an infinite sequence of NSDates that satisfies `self`, beginning at
  *  `start date`
  *

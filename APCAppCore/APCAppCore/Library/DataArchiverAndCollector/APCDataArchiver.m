@@ -39,6 +39,8 @@
 #import "ORKAnswerFormat+Helper.h"
 #import "APCCMS.h"
 #import "NSDate+Helper.h"
+#import "APCJSONSerializer.h"
+
 
     //
     //    ORK Result Base Class property keys
@@ -142,6 +144,15 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
 #pragma mark - Initialization
 /*********************************************************************************/
 
+/**
+ By definition, this method is called once per class, in a thread-safe
+ way, the first time the class is sent a message -- basically, the first
+ time we refer to the class.  That means we can use this to set up stuff
+ that applies to all objects (instances) of this class.
+
+ Documentation:  See +initialize in the NSObject Class Reference.  Currently, that's here:
+ https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSObject_Class/index.html#//apple_ref/occ/clm/NSObject/initialize
+ */
 + (void) initialize
 {
     /**
@@ -334,7 +345,7 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
 {
     [self addFileToArchiveFromURL: file.fileURL
                     usingFileName: fileName
-                      contentType: @"text/json"
+                      contentType: @"application/json"
                         timeStamp: file.endDate];
 }
 
@@ -471,7 +482,7 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
     rawTappingResults[kTappingSamplesKey] = sampleResults;
     rawTappingResults[kItemKey] = kAPCTappingResultsFileName;
 
-	NSDictionary *serializableData = [self generateSerializableDataFromSourceDictionary: rawTappingResults];
+	NSDictionary *serializableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: rawTappingResults];
     [self writeResultDictionaryToArchive: serializableData];
     [self addFileInfoEntryWithDictionary: serializableData];
 }
@@ -595,7 +606,7 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
 	}
 
     NSDictionary *propertiesToSave = [result dictionaryWithValuesForKeys: propertyNames];
-	NSDictionary *serializableData = [self generateSerializableDataFromSourceDictionary: propertiesToSave];
+	NSDictionary *serializableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: propertiesToSave];
 
     APCLogDebug(@"%@", serializableData);
 
@@ -763,337 +774,11 @@ static NSArray * kAPCKnownJSONFilenamePrefixes = nil;
     return [NSArray arrayWithArray:results];
 }
 
-
-
-/*********************************************************************************/
-#pragma mark - Converting Serializable Data
-/*********************************************************************************/
-
-/**
- The public API.  See comments in the header file.
- */
 - (NSDictionary *) generateSerializableDataFromSourceDictionary: (NSDictionary *) sourceDictionary
 {
-    id result = [self generateSerializableObjectFromSourceObject: sourceDictionary
-                                                atRecursionDepth: 0];
+    NSDictionary *result = [APCJSONSerializer serializableDictionaryFromSourceDictionary: sourceDictionary];
 
     return result;
-}
-
-/**
- @param recursionDepth:  How far down this recursive conversion stack
- we are.  One particular transformation only happens at the top level.
- Only -generateSerializableArray and -generateSerializableDictionary
- should modify this; all other methods should pass it through as-is.
- */
-- (id) generateSerializableObjectFromSourceObject: (id) sourceObject
-                                 atRecursionDepth: (NSUInteger) recursionDepth
-{
-    id result = nil;
-
-    if ([sourceObject isKindOfClass: [NSArray class]])
-    {
-        result = [self generateSerializableArrayFromSourceArray: sourceObject
-                                               atRecursionDepth: recursionDepth];
-    }
-
-    else if ([sourceObject isKindOfClass: [NSDictionary class]])
-    {
-        result = [self generateSerializableDictionaryFromSourceDictionary: sourceObject
-                                                         atRecursionDepth: recursionDepth];
-    }
-
-    else
-    {
-        result = [self generateSerializableSimpleObjectFromSourceSimpleObject: sourceObject];
-    }
-
-    return result;
-}
-
-- (NSArray *) generateSerializableArrayFromSourceArray: (NSArray *) sourceArray
-                                      atRecursionDepth: (NSUInteger) recursionDepth
-{
-    NSMutableArray *resultArray = [NSMutableArray new];
-
-    for (id value in sourceArray)
-    {
-        id convertedValue = [self generateSerializableObjectFromSourceObject: value
-                                                            atRecursionDepth: recursionDepth + 1];
-
-        if (convertedValue != nil)
-        {
-            [resultArray addObject: convertedValue];
-        }
-    }
-
-    return resultArray;
-}
-
-- (NSDictionary *) generateSerializableDictionaryFromSourceDictionary: (NSDictionary *) sourceDictionary
-                                                     atRecursionDepth: (NSUInteger) recursionDepth
-{
-    NSMutableDictionary *resultDictionary = [NSMutableDictionary new];
-
-    for (NSString *key in sourceDictionary)
-    {
-        id value = sourceDictionary [key];
-
-        //
-        // Find and include the names for RKQuestionTypes.
-        //
-        if ([key isEqualToString: kQuestionTypeKey])
-        {
-            id valueToSerialize = nil;
-            NSString* nameToSerialize = nil;
-
-            NSNumber *questionType = [self extractRKQuestionTypeFromNSNumber: value];
-
-            if (questionType != nil)
-            {
-                valueToSerialize = questionType;
-                nameToSerialize = NSStringFromRKQuestionType (questionType.integerValue);
-            }
-            else
-            {
-                valueToSerialize = [self safeSerializableItemFromItem: value];
-                nameToSerialize = RKQuestionTypeUnknownAsString;
-            }
-
-            resultDictionary [kQuestionTypeKey] = valueToSerialize;
-            resultDictionary [kQuestionTypeNameKey] = nameToSerialize;
-        }
-
-        //
-        // Treat other keys and values normally...
-        //
-        else
-        {
-            id convertedKey = key;
-            id convertedValue = nil;
-
-
-            //
-            // ...with one exception:  at the top level only, convert
-            // the key "identifier" to the key "item".
-            //
-            // Not sure why.  (It's historical.)  Still investigating.
-            // Discovered so far:
-            // -  this is used for the outbound filename
-            // -  ?
-            // -  ?
-            //
-            if (recursionDepth == 0 && [key isEqualToString: kIdentifierKey])
-            {
-                convertedKey = kItemKey;
-            }
-            else
-            {
-                // "else" nothing.  This applies to every other decision.
-            }
-            
-
-            convertedValue = [self generateSerializableObjectFromSourceObject: value
-                                                             atRecursionDepth: recursionDepth + 1];
-
-            if (convertedValue != nil)
-            {
-                resultDictionary [convertedKey] = convertedValue;
-            }
-        }
-    }
-
-    return resultDictionary;
-}
-
-- (id) generateSerializableSimpleObjectFromSourceSimpleObject: (id) sourceObject
-{
-    id result = nil;
-
-    /*
-     Delete calendars.
-     */
-    if ([sourceObject isKindOfClass: [NSCalendar class]])
-    {
-        // Return nil.  This tells the calling method to omit this item.
-    }
-
-    /*
-     Make dates "ISO-8601 compliant."  Meaning, format
-     them like this:
-
-            2015-02-25T16:42:11+00:00
-
-     Per Sage.  I got the rules from:  http://en.wikipedia.org/wiki/ISO_8601
-     */
-    else if ([sourceObject isKindOfClass: [NSDate class]])
-    {
-        NSDate *theDate = (NSDate *) sourceObject;
-        NSString *sageFriendlyDate = theDate.toStringInISO8601Format;
-        result = sageFriendlyDate;
-    }
-
-    /*
-     Extract strings from UUIDs.
-     */
-    else if ([sourceObject isKindOfClass: [NSUUID class]])
-    {
-        NSUUID *uuid = (NSUUID *) sourceObject;
-        NSString *uuidString = uuid.UUIDString;
-        result = uuidString;
-    }
-
-    /*
-     Convert stringified ints and bools to their real values
-
-     Very commonly, we have strings that actually contains integers or
-     Booleans -- as answers to multiple-choice questions, say. However,
-     much earlier in this process, they got converted to strings. This
-     seems to be a core feature of ResearchKit. But there's still value
-     in them being numeric or Boolean answers. So try to convert each
-     item to an integer or Boolean. If we can't, just call our master
-     -safe: method to make sure we can serialize it.
-     */
-    else if ([sourceObject isKindOfClass: [NSString class]])
-    {
-        result = [self extractIntOrBoolFromString: sourceObject];
-
-        if (result == nil)
-        {
-            result = sourceObject;
-        }
-        else
-        {
-            // Accept the object we got from -extractIntOrBoolFromString.
-        }
-    }
-
-
-    /*
-     Everything Else
-
-     If we get here:  we want to keep it, but don't have specific
-     rules for converting it.  Use our default serialization process:
-     include it as-is if the serializer recognizes it, or convert it
-     to a string if not.
-     */
-    else
-    {
-        result = [self safeSerializableItemFromItem: sourceObject];
-    }
-    
-    
-    /*
-     Whew.
-     */
-    return result;
-}
-
-/**
- Try to convert the specified item to an NSNumber, specifically
- if it's a String that looks like a Boolean or an intenger.
- */
-- (NSNumber *) extractIntOrBoolFromString: (NSString *) itemAsString
-{
-    NSNumber *result = nil;
-
-    if (itemAsString.length > 0)
-    {
-        if ([itemAsString compare: @"no" options: NSCaseInsensitiveSearch] == NSOrderedSame ||
-            [itemAsString compare: @"false" options: NSCaseInsensitiveSearch] == NSOrderedSame)
-        {
-            result = @(NO);
-        }
-
-        else if ([itemAsString compare: @"yes" options: NSCaseInsensitiveSearch] == NSOrderedSame ||
-                 [itemAsString compare: @"true" options: NSCaseInsensitiveSearch] == NSOrderedSame)
-        {
-            result = @(YES);
-        }
-
-        else
-        {
-            NSInteger itemAsInt = itemAsString.integerValue;
-            NSString *verificationString = [NSString stringWithFormat: @"%d", (int) itemAsInt];
-
-            // Here, we use -isValidJSONObject: to make sure the int isn't
-            // NaN or infinity.  According to the JSON rules, those will
-            // break the serializer.
-            if ([verificationString isEqualToString: itemAsString] && [NSJSONSerialization isValidJSONObject: @[verificationString]])
-            {
-                result = @(itemAsInt);
-            }
-
-            else
-            {
-                // It was NaN or infinity.  Therefore, we can't convert it
-                // to a safe or serializable value.  Ignore it.
-            }
-        }
-    }
-
-	return result;
-}
-
-/**
- If this item is a Number, try to convert it to an RKQuestionType.
- */
-- (NSNumber *) extractRKQuestionTypeFromNSNumber: (NSNumber *) item
-{
-	NSNumber* result = nil;
-
-	if ([NSJSONSerialization isValidJSONObject: @[item]])
-	{
-		ORKQuestionType questionType = item.integerValue;
-		result = @(questionType);
-	}
-
-	return result;
-}
-
-/**
- If we can serialize the specified item, return it.
- Otherwise, converts it to a string and returns the
- string.
- 
- Things we can serialize are strings, numbers, NSNulls,
- and arrays or dictionaries of those things (potentially
- infinitely deep).  Numbers are OK as long as they're not
- NaN or infinity.
-
- Note that the REAL rules say we should call this method:
-
-		[NSJSONSerialization isValidJSONObject:]
-
- instead of using, like, our brains, or other logic.
- Which means (I guess) that Apple reserves the right to 
- decide what can and cannot be serialized, as they
- upgrade NSJSONSerializer.
- 
- Details:
- https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSJSONSerialization_Class/
- */
-- (id) safeSerializableItemFromItem: (id) item
-{
-	id result = nil;
-
-	/*
-	 -isValidJSONObject: can only take an array or
-	 dictionary at its top level.  So wrap this item
-	 in an array.
-	 */
-	NSArray *itemToEvaluate = @[item];
-
-	if ([NSJSONSerialization isValidJSONObject: itemToEvaluate])
-	{
-		result = item;
-	}
-	else
-	{
-		result = [NSString stringWithFormat: @"%@", item];
-	}
-
-	return result;
 }
 
 @end
