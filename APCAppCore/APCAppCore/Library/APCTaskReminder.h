@@ -40,7 +40,18 @@
 @property (strong, nonatomic) NSPredicate *completedTaskPredicate;
 @property (strong, nonatomic) NSString *taskID;
 
+/**
+ Initializer
+ @param taskID the taskID declared in the json file for the activity
+ @param resultsSummaryKey the key used to locate the result in the resultsSummary
+ @param completedTaskPredicate A predicate determining whether the task retrieved from resultsSummary has been completed 
+ @param reminderBody The message to be presented in the Profile and the Reminder
+ */
 -(id)initWithTaskID: (NSString *)taskID resultsSummaryKey:(NSString *)resultsSummaryKey completedTaskPredicate:(NSPredicate *)completedTaskPredicate reminderBody:(NSString *)reminderBody;
-/**convenience initializer*/
+/**
+ Convenience initializer
+ @param taskID the taskID declared in the json file for the activity
+ @param reminderBody The message to be presented in the Profile and the Reminder
+ */
 -(id)initWithTaskID: (NSString *)taskID reminderBody:(NSString *)reminderBody;
 @end
