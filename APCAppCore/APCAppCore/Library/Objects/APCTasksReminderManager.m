@@ -154,6 +154,10 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
             reminder = [reminder stringByAppendingString:taskReminder.reminderBody];
             reminder = [reminder stringByAppendingString:@"\n"];
             self.remindersToSend[taskReminder.reminderIdentifier] = taskReminder;
+        }else{
+            if (self.remindersToSend[taskReminder.reminderIdentifier]) {
+                [self.remindersToSend removeObjectForKey:taskReminder.reminderIdentifier];
+            }
         }
     }
     
@@ -293,7 +297,8 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
         return includeTask;
     }
     
-    NSArray *completedTasks = [APCTasksReminderManager scheduledTasksForTaskID:taskReminder.taskID];
+    NSArray *completedTasks = [APCTasksReminderManager scheduledTasksForTaskID:taskReminder.taskID completed:YES];
+    NSArray *scheduledTasks = [APCTasksReminderManager scheduledTasksForTaskID:taskReminder.taskID completed:NO];
     
     if (completedTasks.count >0 && taskReminder.resultsSummaryKey != nil) {
         for (APCScheduledTask *task in completedTasks) {
@@ -315,7 +320,7 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
                 includeTask = YES;
             }
         }
-    }else if(completedTasks.count == 0){//if this task has not been completed, include it in the reminder
+    }else if(completedTasks.count == 0 && scheduledTasks.count > 0){//if this task has not been completed but was scheduled, include it in the reminder
         includeTask = YES;
     }
     
@@ -323,7 +328,7 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
 }
 
 //Pass in a taskID
-+ (NSArray *)scheduledTasksForTaskID:(NSString *)taskID
++ (NSArray *)scheduledTasksForTaskID:(NSString *)taskID completed:(BOOL)completed
 {
     APCDateRange *dateRange = [[APCDateRange alloc]initWithStartDate:[NSDate todayAtMidnight] endDate:[NSDate tomorrowAtMidnight]];
     NSManagedObjectContext *context = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.mainContext;
@@ -332,7 +337,7 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
     request.shouldRefreshRefetchedObjects = YES;
     NSPredicate * datePredicate = [NSPredicate predicateWithFormat:@"(startOn >= %@) AND (endOn <= %@) AND task.taskID == %@", dateRange.startDate, dateRange.endDate, taskID];
     
-    NSPredicate * completionPredicate = [NSPredicate predicateWithFormat:@"completed == %@", @YES];
+    NSPredicate * completionPredicate = [NSPredicate predicateWithFormat:@"completed == %@", [NSNumber numberWithBool:completed]];
     
     NSPredicate * finalPredicate = completionPredicate ? [NSCompoundPredicate andPredicateWithSubpredicates:@[datePredicate, completionPredicate]] : datePredicate;
     request.predicate = finalPredicate;
