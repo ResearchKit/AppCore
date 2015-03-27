@@ -37,7 +37,10 @@
 @property (strong, nonatomic) NSString *reminderIdentifier;
 @property (strong, nonatomic) NSString *reminderBody;
 @property (strong, nonatomic) NSString *resultsSummaryKey;
+@property (strong, nonatomic) NSPredicate *completedTaskPredicate;
 @property (strong, nonatomic) NSString *taskID;
 
--(id)initWithTaskID: (NSString *)taskID resultsSummaryKey:(NSString *)resultsSummaryKey reminderBody:(NSString *)reminderBody;
+-(id)initWithTaskID: (NSString *)taskID resultsSummaryKey:(NSString *)resultsSummaryKey completedTaskPredicate:(NSPredicate *)completedTaskPredicate reminderBody:(NSString *)reminderBody;
+/**convenience initializer*/
+-(id)initWithTaskID: (NSString *)taskID reminderBody:(NSString *)reminderBody;
 @end

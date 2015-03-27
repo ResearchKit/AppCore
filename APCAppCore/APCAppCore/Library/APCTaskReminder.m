@@ -35,22 +35,41 @@
 
 @implementation APCTaskReminder
 
--(id)initWithTaskID: (NSString *)taskID resultsSummaryKey:(NSString *)resultsSummaryKey reminderBody:(NSString *)reminderBody{
+-(id)initWithTaskID: (NSString *)taskID resultsSummaryKey:(NSString *)resultsSummaryKey completedTaskPredicate:(NSPredicate *)completedTaskPredicate reminderBody:(NSString *)reminderBody{
+    
     self = [super init];
+    NSAssert(taskID != nil, @"taskID cannot be nil");
+    NSAssert(reminderBody != nil, @"reminderBody cannot be nil");
+    NSAssert(completedTaskPredicate != nil, @"resultsSummaryPredicate cannot be nil");
+    NSAssert(resultsSummaryKey != nil, @"resultsSummaryKey cannot be nil");
+    
     if (self) {
         self.taskID = taskID;
+        self.reminderBody = reminderBody;
+        self.completedTaskPredicate = completedTaskPredicate;
+
         if (resultsSummaryKey) {
             self.resultsSummaryKey = resultsSummaryKey;
             self.reminderIdentifier = [NSString stringWithFormat:@"%@_%@_reminder", taskID, resultsSummaryKey];
         }else{
             self.reminderIdentifier = [NSString stringWithFormat:@"%@_reminder", taskID];
         }
-        self.reminderBody = reminderBody;
-        
+
     }
-    
     return self;
+    
 }
 
+-(id)initWithTaskID: (NSString *)taskID reminderBody:(NSString *)reminderBody{
+    self = [super init];
+    NSAssert(taskID != nil, @"taskID cannot be nil");
+    NSAssert(reminderBody != nil, @"reminderBody cannot be nil");
+    self.taskID = taskID;
+    self.reminderBody = reminderBody;
+    self.reminderIdentifier = [NSString stringWithFormat:@"%@_reminder", taskID];
+    self.resultsSummaryKey = nil;
+    self.completedTaskPredicate = nil;
+    return self;
+}
 
 @end
