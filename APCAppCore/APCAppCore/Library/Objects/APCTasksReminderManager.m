@@ -151,6 +151,7 @@ NSString * const kTaskReminderMessage = @"Please complete your %@ activities tod
     
     for (APCTaskReminder *taskReminder in self.reminders) {
         if ([self includeTaskInReminder:taskReminder]) {
+            reminder = [reminder stringByAppendingString:@"• "];
             reminder = [reminder stringByAppendingString:taskReminder.reminderBody];
             reminder = [reminder stringByAppendingString:@"\n"];
             self.remindersToSend[taskReminder.reminderIdentifier] = taskReminder;
