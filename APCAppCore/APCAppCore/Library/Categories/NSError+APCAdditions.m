@@ -40,10 +40,16 @@ static NSString*    kServerMaintanenceMessage       = @"The study server is curr
 static NSString*    kAccountAlreadyExists           = @"An account has already been created for this email address. Please use a different email address, or sign in using the \"already participating\" link at the bottom of the Welcome page.";
 static NSString*    kAccountDoesNotExists           = @"There is no account registered for this email address.";
 static NSString*    kBadEmailAddress                = @"The email address submitted is not a valid email address. Please correct the email address and try again.";
+static NSString*    kBadPasswordAddress             = @"The password you have entered is not a valid password.  Please try again.";
 static NSString*    kNotReachableMessage            = @"We are currently not able to reach the study server. Please retry in a few moments.";
 static NSString*    kInvalidEmailAddressOrPassword  = @"Entered email address or password is not valid. Please correct the email address or password and try again.";
 static NSString*    kSageMessageKey                 = @"message";
+static NSString*    kSageErrorsKey                  = @"errors";
+static NSString*    kSageErrorPasswordKey           = @"password";
+static NSString*    kSageErrorEmailKey              = @"email";
 static NSString*    kSageInvalidUsernameOrPassword  = @"Invalid username or password.";
+
+static NSString * const oneTab = @"    ";
 
 
 @implementation NSError (APCAdditions)
@@ -64,9 +70,11 @@ static NSString*    kSageInvalidUsernameOrPassword  = @"Invalid username or pass
     return message;
 }
 
-/*********************************************************************************/
+
+
+// ---------------------------------------------------------
 #pragma mark - Error handlers
-/*********************************************************************************/
+// ---------------------------------------------------------
 
 - (void)handle
 {
@@ -96,15 +104,17 @@ static NSString*    kSageInvalidUsernameOrPassword  = @"Invalid username or pass
     {
         // There are several messages that need to be displayed within the 400
         // Extract the internal message then act appropriately.
-        NSString * messageText =[code valueForKey:kSageMessageKey];
-        
-        if([messageText isEqualToString:(kSageInvalidUsernameOrPassword)])
-        {
-            message = NSLocalizedString(kInvalidEmailAddressOrPassword, nil);
-        }
-        else
+        NSDictionary * errors = [code valueForKey: kSageErrorsKey];
+        if([errors valueForKey: kSageErrorEmailKey])
         {
             message = NSLocalizedString(kBadEmailAddress, nil);
+        }
+        else if([errors valueForKey: kSageErrorPasswordKey])
+        {
+            message = NSLocalizedString(kBadPasswordAddress, nil);
+        } else
+        {
+            message = NSLocalizedString(kInvalidEmailAddressOrPassword, nil);
         }
         
     }
@@ -187,4 +197,170 @@ static NSString*    kSageInvalidUsernameOrPassword  = @"Invalid username or pass
 }
 
 
+
+// ---------------------------------------------------------
+#pragma mark - Convenience Initializers
+// ---------------------------------------------------------
+
++ (NSError *) errorWithCode: (NSInteger)  code
+                     domain: (NSString *) domain
+              failureReason: (NSString *) localizedFailureReason
+         recoverySuggestion: (NSString *) localizedRecoverySuggestion
+{
+    return [self errorWithCode: code
+                        domain: domain
+                 failureReason: localizedFailureReason
+            recoverySuggestion: localizedRecoverySuggestion
+               relatedFilePath: nil
+                    relatedURL: nil
+                   nestedError: nil];
+}
+
++ (NSError *) errorWithCode: (NSInteger)  code
+                     domain: (NSString *) domain
+              failureReason: (NSString *) localizedFailureReason
+         recoverySuggestion: (NSString *) localizedRecoverySuggestion
+                nestedError: (NSError *)  rootCause
+{
+    return [self errorWithCode: code
+                        domain: domain
+                 failureReason: localizedFailureReason
+            recoverySuggestion: localizedRecoverySuggestion
+               relatedFilePath: nil
+                    relatedURL: nil
+                   nestedError: rootCause];
+}
+
++ (NSError *) errorWithCode: (NSInteger)  code
+                     domain: (NSString *) domain
+              failureReason: (NSString *) localizedFailureReason
+         recoverySuggestion: (NSString *) localizedRecoverySuggestion
+            relatedFilePath: (NSString *) someFilePath
+{
+    return [self errorWithCode: code
+                        domain: domain
+                 failureReason: localizedFailureReason
+            recoverySuggestion: localizedRecoverySuggestion
+               relatedFilePath: someFilePath
+                    relatedURL: nil
+                   nestedError: nil];
+}
+
++ (NSError *) errorWithCode: (NSInteger)  code
+                     domain: (NSString *) domain
+              failureReason: (NSString *) localizedFailureReason
+         recoverySuggestion: (NSString *) localizedRecoverySuggestion
+                 relatedURL: (NSURL *)    someURL
+{
+    return [self errorWithCode: code
+                        domain: domain
+                 failureReason: localizedFailureReason
+            recoverySuggestion: localizedRecoverySuggestion
+               relatedFilePath: nil
+                    relatedURL: someURL
+                   nestedError: nil];
+}
+
++ (NSError *) errorWithCode: (NSInteger)  code
+                     domain: (NSString *) domain
+              failureReason: (NSString *) localizedFailureReason
+         recoverySuggestion: (NSString *) localizedRecoverySuggestion
+            relatedFilePath: (NSString *) someFilePath
+                 relatedURL: (NSURL *)    someURL
+                nestedError: (NSError *)  rootCause
+{
+    NSMutableDictionary *userInfo = [NSMutableDictionary new];
+
+    if (localizedFailureReason)         {  [userInfo  setValue: localizedFailureReason       forKey: NSLocalizedFailureReasonErrorKey       ];  }
+    if (localizedRecoverySuggestion)    {  [userInfo  setValue: localizedRecoverySuggestion  forKey: NSLocalizedRecoverySuggestionErrorKey  ];  }
+    if (someFilePath)                   {  [userInfo  setValue: someFilePath                 forKey: NSFilePathErrorKey                     ];  }
+    if (someURL)                        {  [userInfo  setValue: someURL                      forKey: NSURLErrorKey                          ];  }
+    if (rootCause)                      {  [userInfo  setValue: rootCause                    forKey: NSUnderlyingErrorKey                   ];  }
+
+    NSError *error = [NSError errorWithDomain: domain
+                                         code: code
+                                     userInfo: userInfo];
+
+    return error;
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Friendly printouts
+// ---------------------------------------------------------
+
+- (NSString *) friendlyFormattedString
+{
+    return [self friendlyFormattedStringAtLevel: 0];
+}
+
+- (NSString *) friendlyFormattedStringAtLevel: (NSUInteger) tabLevel
+{
+    NSMutableString *output = [NSMutableString new];
+
+    NSString *tab = [@"" stringByPaddingToLength: tabLevel * oneTab.length
+                                      withString: oneTab
+                                 startingAtIndex: 0];
+
+    NSString *tabForNestedObjects = [NSString stringWithFormat: @"\n%@", tab];
+
+    NSString *domain = self.domain.length > 0 ? self.domain : @"(none)";
+
+    [output appendFormat: @"%@Code: %@\n", tab, @(self.code)];
+    [output appendFormat: @"%@Domain: %@\n", tab, domain];
+
+    if (self.userInfo.count > 0)
+    {
+        for (NSString *key in [self.userInfo.allKeys sortedArrayUsingSelector: @selector (compare:)])
+        {
+            id value = self.userInfo [key];
+            NSString *valueString = nil;
+
+            if ([value isKindOfClass: [NSError class]])
+            {
+                valueString = [value friendlyFormattedStringAtLevel: tabLevel + 1];
+                [output appendFormat: @"%@%@:\n%@", tab, key, valueString];
+            }
+
+            else
+            {
+                valueString = [NSString stringWithFormat: @"%@", value];
+                valueString = [valueString stringByReplacingOccurrencesOfString: @"\\n" withString: @"\n"];
+                valueString = [valueString stringByReplacingOccurrencesOfString: @"\\\"" withString: @"\""];
+                valueString = [valueString stringByReplacingOccurrencesOfString: @"\n" withString: tabForNestedObjects];
+                [output appendFormat: @"%@%@: %@\n", tab, key, valueString];
+            }
+        }
+    }
+
+    if (tabLevel == 0)
+    {
+        [output insertString: @"An error occurred. Available info:\n----- ERROR INFO -----\n" atIndex: 0];
+
+        if ([output characterAtIndex: output.length - 1] != '\n')
+        {
+            [output appendString: @"\n"];
+        }
+
+        [output appendString: @"----------------------"];
+    }
+
+    /*
+     Ship it.
+     */
+    return output;
+}
+
 @end
+
+
+
+
+
+
+
+
+
+
+

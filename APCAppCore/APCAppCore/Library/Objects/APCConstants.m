@@ -33,9 +33,12 @@
  
 #import "APCConstants.h"
 
-/* -------------------------
- Constants
- ------------------------- */
+
+
+// ---------------------------------------------------------
+#pragma mark - Constants
+// ---------------------------------------------------------
+
 NSString *const APCUserSignedUpNotification   = @"APCUserSignedUpNotification";
 NSString *const APCUserSignedInNotification   = @"APCUserSignedInNotification";
 NSString *const APCUserLogOutNotification     = @"APCUserLogOutNotification";
@@ -90,9 +93,6 @@ NSTimeInterval const kAPCSignInButtonPulseFadeInTimeInSeconds               = 1.
 NSTimeInterval const kAPCSignInButtonPulseFadeOutTimeInSeconds              = 1.5;
 NSTimeInterval const kAPCSignInButtonPulsePauseWhileVisibleTimeInSeconds    = 1.5;
 
-NSString *const kAnalyticsOnOffKey					 = @"AnalyticsOnOffKey";
-NSString *const kAnalyticsFlurryAPIKeyKey			 = @"AnalyticsFlurryAPIKeyKey";
-
 NSString *const kRegularFontNameKey = @"RegularFontNameKey";
 NSString *const kMediumFontNameKey  = @"MediumFontNameKey";
 NSString *const kLightFontNameKey   = @"LightFontNameKey";
@@ -136,9 +136,12 @@ NSString *const kActivitiesSectionKeepGoing     = @"activitiesSectionKeepGoing";
 NSString *const kActivitiesSectionYesterday     = @"activitiesSectionYesterday";
 NSString *const kActivitiesSectionToday         = @"activitiesSectionToday";
 
-/*********************************************************************************/
+
+
+// ---------------------------------------------------------
 #pragma mark - Events
-/*********************************************************************************/
+// ---------------------------------------------------------
+
 NSString *const kAppStateChangedEvent   = @"AppStateChanged";
 NSString *const kNetworkEvent           = @"NetworkEvent";
 NSString *const kSchedulerEvent         = @"SchedulerEvent";
@@ -147,14 +150,31 @@ NSString *const kPageViewEvent          = @"PageViewEvent";
 NSString *const kErrorEvent             = @"ErrorEvent";
 NSString *const kPassiveCollectorEvent  = @"PassiveCollectorEvent";
 
-/*********************************************************************************/
-#pragma mark - Errors
-/*********************************************************************************/
-NSString * const kAPCErrorDomain_CoreData                               = @"kAPCErrorDomain_CoreData";
-NSInteger  const kAPCErrorDomain_CoreData_Code_Undetermined             = -1;
-NSInteger  const kAPCErrorDomain_CoreData_Code_NoError                  = 0;
-NSInteger  const kAPCErrorDomain_CoreData_Code_CantCreateDatabase       = 1;
-NSInteger  const kAPCErrorDomain_CoreData_Code_CantOpenExistingDatabase = 2;
+
+
+// ---------------------------------------------------------
+#pragma mark - Known files, folders, extensions, and content types
+// ---------------------------------------------------------
+
+/*
+ Folders that will appear in the user's Documents directory,
+ or elsewhere that we might need to understand and inspect 'em.
+ */
+
+NSString * const kAPCFolderName_ArchiveAndUpload_TopLevelFolder = @"StuffBeingArchivedAndUploaded";
+NSString * const kAPCFolderName_ArchiveAndUpload_Archiving      = @"StuffBeingArchived";
+NSString * const kAPCFolderName_ArchiveAndUpload_Uploading      = @"StuffBeingUploaded";
+
+NSString * const kAPCFileName_EncryptedZipFile                  = @"encrypted.zip";
+NSString * const kAPCFileName_UnencryptedZipFile                = @"unencrypted.zip";
+
+NSString * const kAPCFileExtension_JSON                         = @"json";
+NSString * const kAPCFileExtension_PrivateKey                   = @"pem";
+NSString * const kAPCFileExtension_CommaSeparatedValues         = @"csv";
+
+NSString * const kAPCContentType_JSON                           = @"application/json";
+
+
 
 @implementation APCConstants
 

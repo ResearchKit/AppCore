@@ -43,19 +43,50 @@
 #import "APCMedTrackerMedication+Helper.h"
 #import "APCMedTrackerPrescriptionColor+Helper.h"
 #import "APCMedTrackerDailyDosageRecord+Helper.h"
+#import "APCDataArchiverAndUploader.h"
+#import "APCLog.h"
 
 
 /*
  Note to reviewers:
- 
+
  - there are various hard-coded "errorDomains" and "errorCodes"
  throughout this file.  Acknowledged.  We're working toward a
  centralized way to manage those.
- 
+
  - similarly, there's a utility method that creates an NSError
  object from a domain, a code, and a root-cause error.  We'll
  shortly move that to another class, too.
  */
+
+
+
+/*
+ These strings are used when generating uploadable
+ versions of the content represented by this class and
+ some of the classes it manages.
+ */
+static NSString * const kAPCActionName_CreatePrescription               = @"user_action__create_prescription";
+static NSString * const kAPCActionName_ExpirePrescription               = @"user_action__expire_prescription";
+static NSString * const kAPCActionName_RecordDailyDoses                 = @"user_action__record_daily_doses_taken_of_one_medication";
+
+static NSString * const kAPCActionKey_FilenameToUpload                  = @"item";
+
+static NSString * const kAPCActionKey_Prescription_UniqueId             = @"prescription_unique_id";
+static NSString * const kAPCActionKey_Prescription_DateCreated          = @"prescription_date_created";
+static NSString * const kAPCActionKey_Prescription_DateExpired          = @"prescription_date_expired";
+static NSString * const kAPCActionKey_Prescription_DaysOfTheWeek        = @"prescription_days_of_the_week";
+static NSString * const kAPCActionKey_Prescription_TimesPerDay          = @"prescription_times_per_day";
+static NSString * const kAPCActionKey_Prescription_MedicationName       = @"prescription_medication_name";
+static NSString * const kAPCActionKey_Prescription_DosageAmount         = @"prescription_dosage_amount";
+static NSString * const kAPCActionKey_Prescription_DosageName           = @"prescription_dosage_name";
+static NSString * const kAPCActionKey_Prescription_ColorName            = @"prescription_color_name";
+
+static NSString * const kAPCActionKey_Dosage_Date                       = @"dosage_date";
+static NSString * const kAPCActionKey_Dosage_TotalQuantityTakenToday    = @"dosage_total_quantity_taken_today";
+static NSString * const kAPCActionKey_Dosage_PrescriptionUniqueId       = @"dosage_prescription_unique_id";
+static NSString * const kAPCActionKey_Dosage_PrescriptionMedicationName = @"dosage_prescription_medication_name";
+
 
 
 static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
@@ -169,7 +200,18 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 
             NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];
 
-            // Report.
+
+            //
+            // Report to Sage.
+            //
+
+            [[self class] recordActionForCreatingPrescription: prescription];
+
+
+            //
+            // Report to the user.
+            //
+            
             [someQueue addOperationWithBlock: ^{
                 callbackBlock (prescription, operationDuration);
             }];
@@ -333,7 +375,15 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 
 
             //
-            // Report.
+            // Report to Sage.
+            //
+
+            [[self class] recordActionForRecordingNumberOfDoses: @(numberOfDosesTaken)
+                                                forPrescription: blockSafePrescription];
+
+
+            //
+            // Report to the user.
             //
 
             NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];
@@ -479,7 +529,19 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
                 
                 // if the coreDataError is set, we'll use it in a moment.
             }
-            
+
+
+            //
+            // Report to Sage.
+            //
+
+            [[self class] recordActionForExpiringPrescription: blockSafePrescription];
+
+
+            //
+            // Report to the user.
+            //
+
             NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];
             
             if (someQueue != nil && callbackBlock != NULL)
@@ -530,6 +592,21 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
     return numbers;
 }
 
+- (NSArray *) zeroBasedDaysOfTheWeekAsArrayOfSortedShortNames
+{
+    NSArray *sortedNumbers = [self zeroBasedDaysOfTheWeekAsArrayOfSortedNumbers];
+
+    NSMutableArray *names = [NSMutableArray new];
+
+    for (NSNumber *zeroBasedDayOfWeek in sortedNumbers)
+    {
+        NSString *name = [[self class] shortNameForZeroBasedDay: zeroBasedDayOfWeek];
+        [names addObject: name];
+    }
+
+    return names;
+}
+
 - (NSDictionary *) frequencyAndDays
 {
     NSMutableDictionary *result = [NSMutableDictionary new];
@@ -568,8 +645,27 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
         case 6: result = @"Saturday"; break;
 
         default:
-            result = [NSString stringWithFormat: @"unknownDay [%@]", zeroBasedDayOfTheWeek];
-            break;
+        result = [NSString stringWithFormat: @"unknownDay [%@]", zeroBasedDayOfTheWeek];
+        break;
+    }
+
+    return result;
+}
+
++ (NSString *) shortNameForZeroBasedDay: (NSNumber *) zeroBasedDayOfTheWeek
+{
+    NSString *result = nil;
+
+    switch (zeroBasedDayOfTheWeek.integerValue)
+    {
+        case 0:  result = @"sun"; break;
+        case 1:  result = @"mon"; break;
+        case 2:  result = @"tue"; break;
+        case 3:  result = @"wed"; break;
+        case 4:  result = @"thu"; break;
+        case 5:  result = @"fri"; break;
+        case 6:  result = @"sat"; break;
+        default: result = @"???"; break;
     }
 
     return result;
@@ -665,5 +761,66 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
     return result;
 }
 
+
+
+// ---------------------------------------------------------
+#pragma mark - Data extracts to send to Sage
+// ---------------------------------------------------------
+
++ (void) sendRecordedActionToSage: (NSDictionary *) actionRecord
+{
+    /*
+     NOT YET READY FOR PRODUCTION
+
+     Once we've finalized a file format, we can uncomment this line of code.
+
+            [APCDataArchiverAndUploader uploadOneDictionary: actionRecord];
+     */
+
+    APCLogDebug (@"MedTrackerPrescription:  NOT YET UPLOADING ANYTHING.  Waiting until we finalize file format.  I WOULD HAVE uploaded this:  %@", actionRecord);
+}
+
++ (void) recordActionForCreatingPrescription: (APCMedTrackerPrescription *) prescription
+{
+    NSDictionary * result = @{
+                              kAPCActionKey_FilenameToUpload            : kAPCActionName_CreatePrescription,
+                              kAPCActionKey_Prescription_DateCreated    : prescription.dateStartedUsing,
+                              kAPCActionKey_Prescription_DateExpired    : [NSNull null],
+                              kAPCActionKey_Prescription_DaysOfTheWeek  : prescription.zeroBasedDaysOfTheWeekAsArrayOfSortedShortNames,
+                              kAPCActionKey_Prescription_TimesPerDay    : prescription.numberOfTimesPerDay,
+                              kAPCActionKey_Prescription_MedicationName : prescription.medication.name,
+                              kAPCActionKey_Prescription_DosageAmount   : prescription.dosage.amount,
+                              kAPCActionKey_Prescription_DosageName     : prescription.dosage.name,
+                              kAPCActionKey_Prescription_ColorName      : prescription.color.name
+                              };
+
+    [self sendRecordedActionToSage: result];
+}
+
++ (void) recordActionForExpiringPrescription: (APCMedTrackerPrescription *) prescription
+{
+    NSDictionary * result = @{
+                              kAPCActionKey_FilenameToUpload            : kAPCActionName_ExpirePrescription,
+                              kAPCActionKey_Prescription_DateExpired    : prescription.dateStoppedUsing,
+                              kAPCActionKey_Prescription_MedicationName : prescription.medication.name,
+                              kAPCActionKey_Prescription_DosageAmount   : prescription.dosage.amount,
+                              };
+
+    [self sendRecordedActionToSage: result];
+}
+
++ (void) recordActionForRecordingNumberOfDoses: (NSNumber *) todaysDoseCount
+                               forPrescription: (APCMedTrackerPrescription *) prescription
+{
+    NSDictionary *result = @{
+                             kAPCActionKey_FilenameToUpload                 : kAPCActionName_RecordDailyDoses,
+                             kAPCActionKey_Dosage_Date                      : [NSDate date],
+                             kAPCActionKey_Dosage_TotalQuantityTakenToday   : todaysDoseCount,
+                             kAPCActionKey_Prescription_MedicationName      : prescription.medication.name,
+                             kAPCActionKey_Prescription_DosageAmount        : prescription.dosage.amount,
+                             };
+
+    [self sendRecordedActionToSage: result];
+}
 
 @end

@@ -163,8 +163,8 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
         
         user.password = self.passwordTextField.text;
         [user signInOnCompletion:^(NSError *error) {
-            [spinnerController dismissViewControllerAnimated:YES completion:^{
-                if (error) {
+            if (error) {
+                [spinnerController dismissViewControllerAnimated:YES completion:^{
                     APCLogError2 (error);
                     
                     if (error.code == kSBBServerPreconditionNotMet) {
@@ -178,10 +178,11 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
                         [self presentViewController:alert animated:YES completion:nil];
                         
                     }
+                }];
                     
-                } else
-                {
-                    [user retrieveConsentOnCompletion:^(NSError *error) {
+            } else {
+                [user retrieveConsentOnCompletion:^(NSError *error) {
+                    [spinnerController dismissViewControllerAnimated:YES completion:^{
                         if (error) {
                             APCLogError2 (error);
                             
@@ -198,10 +199,8 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
                             [self signInSuccess];
                         }
                     }];
-                    
-                }
-            }];
-            
+                }];
+            }
         }];
     } else {
         UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Sign In", @"") message:errorMessage];

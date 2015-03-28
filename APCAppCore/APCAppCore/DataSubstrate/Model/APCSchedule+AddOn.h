@@ -44,4 +44,6 @@
 @property (nonatomic, readonly) APCScheduleExpression * scheduleExpression;
 - (NSTimeInterval) expiresInterval;
 
++ (APCSchedule*) cannedScheduleForTaskID: (NSString*) taskID inContext:(NSManagedObjectContext *)context;
+
 @end

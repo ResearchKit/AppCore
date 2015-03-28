@@ -38,19 +38,21 @@
 
 @interface APCScheduleEnumerator : NSEnumerator
 
-- (instancetype)initWithBeginningTime:(NSDate*)begin
-                       minuteSelector:(APCTimeSelector*)minuteSelector
-                         hourSelector:(APCTimeSelector*)hourSelector
-                   dayOfMonthSelector:(APCTimeSelector*)dayOfMonthSelector
-                        monthSelector:(APCTimeSelector*)monthSelector
-                         yearSelector:(APCTimeSelector*)yearSelector;
+- (instancetype)initWithBeginningTime: (NSDate *) begin
+                       minuteSelector: (APCTimeSelector *) minuteSelector
+                         hourSelector: (APCTimeSelector *) hourSelector
+                   dayOfMonthSelector: (APCTimeSelector *) dayOfMonthSelector
+                        monthSelector: (APCTimeSelector *) monthSelector
+                         yearSelector: (APCTimeSelector *) yearSelector
+               originalCronExpression: (NSString *) originalExpression;
 
-- (instancetype)initWithBeginningTime:(NSDate*)begin
-                           endingTime:(NSDate*)end
-                       minuteSelector:(APCTimeSelector*)minuteSelector
-                         hourSelector:(APCTimeSelector*)hourSelector
-                   dayOfMonthSelector:(APCTimeSelector*)dayOfMonthSelector
-                        monthSelector:(APCTimeSelector*)monthSelector
-                         yearSelector:(APCTimeSelector*)yearSelector;
+- (instancetype)initWithBeginningTime:(NSDate *) begin
+                           endingTime:(NSDate *) end
+                       minuteSelector:(APCTimeSelector *) minuteSelector
+                         hourSelector:(APCTimeSelector *) hourSelector
+                   dayOfMonthSelector:(APCTimeSelector *) dayOfMonthSelector
+                        monthSelector:(APCTimeSelector *) monthSelector
+                         yearSelector:(APCTimeSelector *) yearSelector
+               originalCronExpression: (NSString *) originalExpression;
 
 @end
