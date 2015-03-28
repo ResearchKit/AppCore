@@ -244,25 +244,19 @@ static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{
 
     /*
      Extract the UUID part of a CoreData ID, if we can.
+     
+     Note that this will work "just fine" if it's a CoreData
+     temporary ID.  But if that happens, you're probably
+     sending a temporary ID to a server, which may not be
+     what you want.
      */
     else if ([sourceObject isKindOfClass: [NSManagedObjectID class]])
     {
         NSManagedObjectID *managedObjectId = (NSManagedObjectID *) sourceObject;
-        NSString          *idString        = [NSString stringWithFormat: @"%@", managedObjectId];
-        NSRange           uuidRange        = [idString    rangeOfString: kRegularExpressionPatternMatchingUUIDs
-                                                                options: NSRegularExpressionSearch];
-
-        if (uuidRange.location == NSNotFound)
-        {
-            // We can't find a UUID in there.  Just use the whole string.
-            // It'll be garbage, but it's at least safely serializable.
-            result = idString;
-        }
-        else
-        {
-            // Whee!  Found a UUID.  Extract and use that.
-            result = [idString substringWithRange: uuidRange];
-        }
+        NSString *idString = managedObjectId.URIRepresentation.absoluteString;              // --> "x-coredata://73F057D0-BE34-4D67-8AF1-A25DB2D70774/APCMedTrackerPrescription/p1"
+        idString = [idString substringFromIndex: @"x-coreData://".length];                  // -->              "73F057D0-BE34-4D67-8AF1-A25DB2D70774/APCMedTrackerPrescription/p1"
+        idString = [idString stringByReplacingOccurrencesOfString: @"/" withString: @"-"];  // -->              "73F057D0-BE34-4D67-8AF1-A25DB2D70774-APCMedTrackerPrescription-p1"
+        result = idString;
     }
 
 
