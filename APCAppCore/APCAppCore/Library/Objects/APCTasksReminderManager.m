@@ -80,20 +80,22 @@ NSString * const kTaskReminderMessage = @"Here are your %@ reminders: %@Thank yo
 /*********************************************************************************/
 - (void) updateTasksReminder
 {
-    APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-    if (!delegate.dataSubstrate.currentUser.signedIn) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kTasksReminderDefaultsOnOffKey];
-        [self cancelLocalNotificationIfExists];
-    }
-    else
-    {
-        if (self.reminderOn) {
-            [self createOrUpdateLocalNotification];
-        }
-        else {
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
+        if (!delegate.dataSubstrate.currentUser.signedIn) {
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:kTasksReminderDefaultsOnOffKey];
             [self cancelLocalNotificationIfExists];
         }
-    }
+        else
+        {
+            if (self.reminderOn) {
+                [self createOrUpdateLocalNotification];
+            }
+            else {
+                [self cancelLocalNotificationIfExists];
+            }
+        }
+    });
 }
 
 - (UILocalNotification*) existingLocalNotification {
