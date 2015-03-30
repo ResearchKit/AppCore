@@ -93,15 +93,35 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
     return  numberOfRows;
 }
 
+- (NSString *)extractMedicationNamePrefix:(NSString *)medicationName
+{
+    NSRange  range = [medicationName rangeOfString:@" ("];
+    NSString  *firstString = nil;
+    NSString  *secondString = nil;
+    if (range.location == NSNotFound) {
+        firstString = medicationName;
+    } else {
+        firstString = [medicationName substringToIndex:range.location];
+        secondString = [medicationName substringFromIndex:(range.location + 1)];
+    }
+    return  firstString;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *) __unused indexPath
 {
     APCMedicationDetailsTableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier:kMedicationDetailsName];
+    cell.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     cell.colorSwatch.backgroundColor = self.lozenge.prescription.color.UIColor;
-    cell.medicationName.text = self.lozenge.prescription.medication.name;
+    
+    cell.medicationName.text = [self extractMedicationNamePrefix:self.lozenge.prescription.medication.name];
+    
     NSString  *doseNumberString = [NSString stringWithFormat:@"Dose %ld", (indexPath.row + 1)];
     cell.doseNumber.text = doseNumberString;
-    NSString  *doseAmountString = [NSString stringWithFormat:@"(%@)", self.lozenge.prescription.dosage.name];
+    
+    NSString  *doseAmountString = [NSString stringWithFormat:@"%@", self.lozenge.prescription.dosage.name];
     cell.doseAmount.text = doseAmountString;
     if (self.numberOfTickMarksToSet > 0) {
         cell.confirmer.completed = YES;
