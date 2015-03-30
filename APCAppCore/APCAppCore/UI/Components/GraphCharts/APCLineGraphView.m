@@ -354,7 +354,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     [self.dataPoints removeAllObjects];
     [self.yAxisPoints removeAllObjects];
-    
+    self.hasDataPoint = NO;
     for (int i = 0; i<[self numberOfPointsinPlot:plotIndex]; i++) {
         
         if ([self.datasource respondsToSelector:@selector(lineGraph:plot:valueForPointAtIndex:)]) {

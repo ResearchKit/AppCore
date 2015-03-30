@@ -212,7 +212,7 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
             break;
         case kAPCTableViewStudyItemTypeShare:
         {
-            APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"ShareVC"];
+            APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCShareViewController"];
             shareViewController.hidesOkayButton = YES;
             [self.navigationController pushViewController:shareViewController animated:YES];
         }

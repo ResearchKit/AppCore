@@ -33,6 +33,13 @@
  
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, APCShareType) {
+    kAPCShareTypeTwitter,
+    kAPCShareTypeFacebook,
+    kAPCShareTypeEmail,
+    kAPCShareTypeSMS
+};
+
 @interface APCShareViewController : UIViewController
 
 @property (nonatomic) BOOL hidesOkayButton;

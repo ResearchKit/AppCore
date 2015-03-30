@@ -1,4 +1,4 @@
-// 
+//
 //  APCLearnMasterViewController.m 
 //  APCAppCore 
 // 
@@ -38,6 +38,7 @@
 #import "APCStudyDetailsViewController.h"
 #import "APCLearnStudyDetailsViewController.h"
 #import "APCAppCore.h"
+#import "APCShareViewController.h"
 
 static CGFloat kSectionHeaderHeight = 40.f;
 static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
@@ -155,6 +156,13 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
             [self.navigationController pushViewController:detailViewController animated:YES];
         }
             break;
+        case kAPCTableViewLearnItemTypeShare:
+        {
+            APCShareViewController *shareViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCShareViewController"];
+            shareViewController.hidesOkayButton = YES;
+            [self.navigationController pushViewController:shareViewController animated:YES];
+        }
+            break;
             
         default:
             break;
@@ -241,7 +249,9 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
                 
                 if ([studyDetails.detailText isEqualToString:@"study_details"]) {
                     rowItem.itemType = kAPCTableViewLearnItemTypeStudyDetails;
-                }else {
+                } else if ([studyDetails.detailText isEqualToString:@"share"]) {
+                    rowItem.itemType = kAPCTableViewLearnItemTypeShare;
+                } else {
                     rowItem.itemType = kAPCTableViewLearnItemTypeOtherDetails;
                 }
                 [rowItems addObject:rowItem];

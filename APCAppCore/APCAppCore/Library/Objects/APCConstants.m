@@ -77,6 +77,7 @@ NSString *const kVideoURLKey                        = @"VideoURLKey";
 NSString *const kTaskReminderStartupDefaultOnOffKey = @"TaskReminderStartupDefaultOnOffKey";
 NSString *const kTaskReminderStartupDefaultTimeKey  = @"TaskReminderStartupDefaultTimeKey";
 NSString *const kDBStatusVersionKey                 = @"DBStatusVersionKey";
+NSString *const kShareMessageKey                    = @"ShareMessageKey";
 
 NSString *const kHKQuantityTypeKey          = @"HKQuantityType";
 NSString *const kHKCategoryTypeKey          = @"HKCategoryType";
