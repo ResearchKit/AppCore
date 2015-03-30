@@ -43,6 +43,7 @@
 #import "APCTabBarViewController.h"
 #import "UIAlertController+Helper.h"
 #import "APCHealthKitDataCollector.h"
+#import "APCConstants.h"
 
 #warning Be sure to set the CORRECT current version before releasing to production
 NSUInteger   const kTheEntireDataModelOfTheApp              = 2;
@@ -576,10 +577,19 @@ then a location event has occurred and location services must be manually starte
 
 - (void) setUpTasksReminder {/*Abstract Implementation*/}
 
+-(void)application:(UIApplication *)__unused application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler{
+    
+    if ([identifier isEqualToString:kDelayReminderIdentifier]) {
+        notification.fireDate = [notification.fireDate dateByAddingTimeInterval:3600];
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    }
+    completionHandler();
+}
+
 /**
-  * @brief  This configures the observer queries for all HK data type
-  *         that the app will be asking for Read permissions.
-  */
+ * @brief  This configures the observer queries for all HK data type
+ *         that the app will be asking for Read permissions.
+ */
 - (void)configureObserverQueries
 {
     NSArray *dataTypesWithReadPermission = self.initializationOptions[kHKReadPermissionsKey];

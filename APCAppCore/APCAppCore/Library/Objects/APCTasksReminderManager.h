@@ -34,12 +34,12 @@
 #import <Foundation/Foundation.h>
 #import "APCTaskReminder.h"
 @interface APCTasksReminderManager : NSObject
-
-+ (NSArray*) reminderTimesArray;
-
 @property (nonatomic) BOOL reminderOn;
 @property (nonatomic, strong) NSString * reminderTime; //Should be an element of reminderTimesArray
 @property (strong, nonatomic, getter=reminders) NSMutableArray *reminders;
+
 - (void) updateTasksReminder;
--(void)manageTaskReminder:(APCTaskReminder *)reminder;
+- (void)manageTaskReminder:(APCTaskReminder *)reminder;
++ (NSArray*) reminderTimesArray;
++ (NSSet *) taskReminderCategories;
 @end
