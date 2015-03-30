@@ -169,6 +169,7 @@
 		5B4574CA1ABFD07A00601DCC /* License_BridgeSDK.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B4574C71ABFD07A00601DCC /* License_BridgeSDK.txt */; };
 		5B4574CB1ABFD07A00601DCC /* License_OpenSSL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B4574C81ABFD07A00601DCC /* License_OpenSSL.txt */; };
 		5B4574CC1ABFD07A00601DCC /* License_ZipZap.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B4574C91ABFD07A00601DCC /* License_ZipZap.txt */; };
+		5B5523AA1AC915140068B51D /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5523A91AC915140068B51D /* Social.framework */; };
 		5B73CAF21A8B3B8C00FFE79C /* APCDashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B73CAF11A8B3B8C00FFE79C /* APCDashboard.storyboard */; };
 		5B7EA0231A44C21200924DEE /* APCFormTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B7EA0211A44C21200924DEE /* APCFormTextField.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B7EA0241A44C21200924DEE /* APCFormTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7EA0221A44C21200924DEE /* APCFormTextField.m */; };
@@ -845,6 +846,7 @@
 		5B4574C71ABFD07A00601DCC /* License_BridgeSDK.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = License_BridgeSDK.txt; sourceTree = "<group>"; };
 		5B4574C81ABFD07A00601DCC /* License_OpenSSL.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = License_OpenSSL.txt; sourceTree = "<group>"; };
 		5B4574C91ABFD07A00601DCC /* License_ZipZap.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = License_ZipZap.txt; sourceTree = "<group>"; };
+		5B5523A91AC915140068B51D /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		5B73CAF11A8B3B8C00FFE79C /* APCDashboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCDashboard.storyboard; sourceTree = "<group>"; };
 		5B7EA0211A44C21200924DEE /* APCFormTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFormTextField.h; sourceTree = "<group>"; };
 		5B7EA0221A44C21200924DEE /* APCFormTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFormTextField.m; sourceTree = "<group>"; };
@@ -1381,6 +1383,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B5523AA1AC915140068B51D /* Social.framework in Frameworks */,
 				747307161A96E2FB0071D863 /* openssl.framework in Frameworks */,
 				F5B948171A7328F30034C522 /* ImageIO.framework in Frameworks */,
 				F55653B31A6F0918003E0B0C /* libMobileGestalt.dylib in Frameworks */,
@@ -2817,6 +2820,7 @@
 		F5F12B211A2F85FF0015982C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5B5523A91AC915140068B51D /* Social.framework */,
 				747307151A96E2FB0071D863 /* openssl.framework */,
 				F5B948161A7328F30034C522 /* ImageIO.framework */,
 				F55653B11A6F08E0003E0B0C /* libMobileGestalt.dylib */,
