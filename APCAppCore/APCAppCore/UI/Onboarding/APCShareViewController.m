@@ -90,25 +90,25 @@
     switch (indexPath.row) {
         case kAPCShareTypeTwitter:
         {
-            cell.textLabel.text = @"Share on Twitter";
+            cell.textLabel.text = NSLocalizedString(@"Share on Twitter", nil);
             cell.imageView.image = [[UIImage imageNamed:@"twitter_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
             break;
         case kAPCShareTypeFacebook:
         {
-            cell.textLabel.text = @"Share on Facebook";
+            cell.textLabel.text = NSLocalizedString(@"Share on Facebook", nil);
             cell.imageView.image = [[UIImage imageNamed:@"facebook_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
             break;
         case kAPCShareTypeEmail:
         {
-            cell.textLabel.text = @"Share via Email";
+            cell.textLabel.text = NSLocalizedString(@"Share via Email", nil);
             cell.imageView.image = [[UIImage imageNamed:@"email_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
             break;
         case kAPCShareTypeSMS:
         {
-            cell.textLabel.text = @"Share via SMS";
+            cell.textLabel.text = NSLocalizedString(@"Share via SMS", nil);
             cell.imageView.image = [[UIImage imageNamed:@"sms_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
             break;
