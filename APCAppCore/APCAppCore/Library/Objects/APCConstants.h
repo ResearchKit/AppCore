@@ -66,6 +66,7 @@ FOUNDATION_EXPORT NSString *const kVideoURLKey;
 FOUNDATION_EXPORT NSString *const kTaskReminderStartupDefaultOnOffKey;
 FOUNDATION_EXPORT NSString *const kTaskReminderStartupDefaultTimeKey;
 FOUNDATION_EXPORT NSString *const kDBStatusVersionKey;
+FOUNDATION_EXPORT NSString *const kShareMessageKey;
 
 FOUNDATION_EXPORT NSString *const kHKQuantityTypeKey;
 FOUNDATION_EXPORT NSString *const kHKCategoryTypeKey;
