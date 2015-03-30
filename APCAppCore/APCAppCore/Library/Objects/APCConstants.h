@@ -91,6 +91,8 @@ FOUNDATION_EXPORT NSString *const kAppProfileElementsListKey;
 FOUNDATION_EXPORT NSString *const kVideoURLKey;
 FOUNDATION_EXPORT NSString *const kTaskReminderStartupDefaultOnOffKey;
 FOUNDATION_EXPORT NSString *const kTaskReminderStartupDefaultTimeKey;
+FOUNDATION_EXPORT NSString *const kDelayReminderIdentifier;
+FOUNDATION_EXPORT NSString *const kTaskReminderDelayCategory;
 FOUNDATION_EXPORT NSString *const kDBStatusVersionKey;
 FOUNDATION_EXPORT NSString *const kShareMessageKey;
 

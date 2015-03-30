@@ -33,13 +33,16 @@
  
 #import "APCTasksReminderManager.h"
 #import "APCAppCore.h"
+#import "APCConstants.h"
 
 NSString * const kTaskReminderUserInfo = @"CurrentTaskReminder";
 NSString * const kTaskReminderUserInfoKey = @"TaskReminderUserInfoKey";
+
 static NSInteger kSecondsPerMinute = 60;
 static NSInteger kMinutesPerHour = 60;
 
-NSString * const kTaskReminderMessage = @"Here are your %@ reminders: %@Thank you for participating in the %@ study!";
+NSString * const kTaskReminderMessage = @"Please complete your %@ activities today. Thank you for participating in the %@ study! %@";
+NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
 
 @interface APCTasksReminderManager ()
 
@@ -137,10 +140,36 @@ NSString * const kTaskReminderMessage = @"Here are your %@ reminders: %@Thank yo
     notificationInfo[[self taskReminderUserInfoKey]] = [self taskReminderUserInfo];
     localNotification.userInfo = notificationInfo;
     
+    localNotification.category = kTaskReminderDelayCategory;
+    
     if (self.remindersToSend.count >0) {
+        
         [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+       
         APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Scheduled Reminder: %@. Body: %@", localNotification, localNotification.alertBody]}));
     }
+}
+
++(NSSet *)taskReminderCategories{
+    
+    //Add Action for delay reminder
+    UIMutableUserNotificationAction *delayReminderAction = [[UIMutableUserNotificationAction alloc] init];
+    delayReminderAction.identifier = kDelayReminderIdentifier;
+    delayReminderAction.title = NSLocalizedString(kTaskReminderDelayMessage, nil);
+    delayReminderAction.activationMode = UIUserNotificationActivationModeBackground;
+    delayReminderAction.destructive = NO;
+    delayReminderAction.authenticationRequired = NO;
+    
+    //Add Category for delay reminder
+    UIMutableUserNotificationCategory *delayCategory = [[UIMutableUserNotificationCategory alloc] init];
+    delayCategory.identifier = kTaskReminderDelayCategory;
+    [delayCategory setActions:@[delayReminderAction]
+                   forContext:UIUserNotificationActionContextDefault];
+    [delayCategory setActions:@[delayReminderAction]
+                   forContext:UIUserNotificationActionContextMinimal];
+    
+    return [NSSet setWithObjects:delayCategory, nil];
+    
 }
 
 /*********************************************************************************/
@@ -164,7 +193,7 @@ NSString * const kTaskReminderMessage = @"Here are your %@ reminders: %@Thank yo
         }
     }
     
-    return [NSString stringWithFormat:kTaskReminderMessage, [self studyName], reminders, [self studyName]];;
+    return [NSString stringWithFormat:kTaskReminderMessage, [self studyName], [self studyName], reminders];;
 }
 
 -(NSString *)taskReminderUserInfo{
