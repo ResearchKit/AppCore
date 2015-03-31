@@ -106,6 +106,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 -(void)dealloc{
@@ -320,6 +321,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 - (void) appDidBecomeActive: (NSNotification *) __unused notification
 {
+    self.permissions = [self prepareData].mutableCopy;
     [self.tableView reloadData];
 }
 
