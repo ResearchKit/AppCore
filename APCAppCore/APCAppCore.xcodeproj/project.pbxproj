@@ -96,6 +96,7 @@
 		368BAFEA1A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 368BAFE81A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.m */; };
 		369B47551A853E8500777639 /* APCUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 369B47531A853E8500777639 /* APCUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		369B47561A853E8500777639 /* APCUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 369B47541A853E8500777639 /* APCUtilities.m */; };
+		369DD5591AC0EBBE00327729 /* APCCMS_UsingOpenSSL.m in Sources */ = {isa = PBXBuildFile; fileRef = 7473070F1A96E1DE0071D863 /* APCCMS_UsingOpenSSL.m */; };
 		369E27EB1A96B7A200D35DFA /* APCMedicationActualMedicine.h in Headers */ = {isa = PBXBuildFile; fileRef = 369E27BB1A96B7A200D35DFA /* APCMedicationActualMedicine.h */; };
 		369E27EC1A96B7A200D35DFA /* APCMedicationActualMedicine.m in Sources */ = {isa = PBXBuildFile; fileRef = 369E27BC1A96B7A200D35DFA /* APCMedicationActualMedicine.m */; };
 		369E27ED1A96B7A200D35DFA /* APCMedicationColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 369E27BD1A96B7A200D35DFA /* APCMedicationColor.h */; };
@@ -206,14 +207,16 @@
 		5BFEB41E1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BFEB41C1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m */; };
 		6C7346081A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C7346061A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C7346091A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */; };
+		6CD8B6741AC5011D0061E6D6 /* APCTaskReminder.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CD8B6721AC5011D0061E6D6 /* APCTaskReminder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6CD8B6751AC5011D0061E6D6 /* APCTaskReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD8B6731AC5011D0061E6D6 /* APCTaskReminder.m */; };
 		712AB44C1A9E692400556DA2 /* APCMotionHistoryData.h in Headers */ = {isa = PBXBuildFile; fileRef = 712AB4481A9E692400556DA2 /* APCMotionHistoryData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		712AB44D1A9E692400556DA2 /* APCMotionHistoryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 712AB4491A9E692400556DA2 /* APCMotionHistoryData.m */; };
 		712AB44E1A9E692400556DA2 /* APCMotionHistoryReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 712AB44A1A9E692400556DA2 /* APCMotionHistoryReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		712AB44F1A9E692400556DA2 /* APCMotionHistoryReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 712AB44B1A9E692400556DA2 /* APCMotionHistoryReporter.m */; };
 		7423AB5B1AA3FFD8004A325A /* APCConsentRedirector.h in Headers */ = {isa = PBXBuildFile; fileRef = 7423AB591AA3FFD8004A325A /* APCConsentRedirector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		747307101A96E1DE0071D863 /* APCCMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7473070E1A96E1DE0071D863 /* APCCMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		747307111A96E1DE0071D863 /* APCCMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 7473070F1A96E1DE0071D863 /* APCCMS.m */; };
 		747307161A96E2FB0071D863 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747307151A96E2FB0071D863 /* openssl.framework */; };
+		747FB1451ABDDFAE00345000 /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747FB1441ABDDFAE00345000 /* ResearchKit.framework */; };
 		7B0DC4141A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B0DC4121A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h */; };
 		7B0DC4151A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B0DC4131A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.m */; };
 		7B0DC4181A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7B0DC4171A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib */; };
@@ -320,7 +323,6 @@
 		CFFDEDFC1A95734000B25581 /* APCSetupTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFFDEDC21A95734000B25581 /* APCSetupTableViewCell.xib */; };
 		F50738C01A682E12004CF100 /* APCDateRange.h in Headers */ = {isa = PBXBuildFile; fileRef = F50738BE1A682E12004CF100 /* APCDateRange.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F50738C11A682E12004CF100 /* APCDateRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F50738BF1A682E12004CF100 /* APCDateRange.m */; };
-		F50981D51AA57E57002E2264 /* BridgeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F50981D41AA57E57002E2264 /* BridgeSDK.framework */; };
 		F5306CCD1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5306CCB1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5306CCE1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5306CCC1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.m */; };
 		F53C047F1A9B8C7D00BBEC03 /* APCTabBarViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = F53C047D1A9B8C7D00BBEC03 /* APCTabBarViewController.h */; };
@@ -690,7 +692,6 @@
 		F5F12B1A1A2F78870015982C /* APCScheduleExpressionEnumeratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129DF1A2F78490015982C /* APCScheduleExpressionEnumeratorTests.m */; };
 		F5F12B231A2F861F0015982C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B221A2F861F0015982C /* CoreLocation.framework */; };
 		F5F12B251A2F86280015982C /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B241A2F86280015982C /* HealthKit.framework */; };
-		F5F12B291A2F863E0015982C /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B281A2F863E0015982C /* ResearchKit.framework */; };
 		F5F12B2B1A2F864B0015982C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2A1A2F864B0015982C /* libz.dylib */; };
 		F5F12B2D1A2F86550015982C /* libarchive.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2C1A2F86550015982C /* libarchive.dylib */; };
 		F5F12B2F1A2F86600015982C /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F12B2E1A2F86600015982C /* libbz2.dylib */; };
@@ -789,6 +790,8 @@
 		368BAFE81A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMedTrackerDailyDosageRecord.m; sourceTree = "<group>"; };
 		369B47531A853E8500777639 /* APCUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCUtilities.h; sourceTree = "<group>"; };
 		369B47541A853E8500777639 /* APCUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCUtilities.m; sourceTree = "<group>"; };
+		369DD5541AC0DF8100327729 /* ENCRYPTION_README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ENCRYPTION_README.txt; path = CMS/ENCRYPTION_README.txt; sourceTree = "<group>"; };
+		369DD5561AC0E26900327729 /* APCCMS_NoEncryption_JustAStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCCMS_NoEncryption_JustAStub.m; path = CMS/APCCMS_NoEncryption_JustAStub.m; sourceTree = "<group>"; };
 		369E27BB1A96B7A200D35DFA /* APCMedicationActualMedicine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMedicationActualMedicine.h; sourceTree = "<group>"; };
 		369E27BC1A96B7A200D35DFA /* APCMedicationActualMedicine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMedicationActualMedicine.m; sourceTree = "<group>"; };
 		369E27BD1A96B7A200D35DFA /* APCMedicationColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMedicationColor.h; sourceTree = "<group>"; };
@@ -883,14 +886,17 @@
 		5BFEB41C1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSharingOptionsViewController.m; sourceTree = "<group>"; };
 		6C7346061A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConsentTaskViewController.h; sourceTree = "<group>"; };
 		6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCConsentTaskViewController.m; sourceTree = "<group>"; };
+		6CD8B6721AC5011D0061E6D6 /* APCTaskReminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCTaskReminder.h; path = APCAppCore/Library/APCTaskReminder.h; sourceTree = SOURCE_ROOT; };
+		6CD8B6731AC5011D0061E6D6 /* APCTaskReminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCTaskReminder.m; path = APCAppCore/Library/APCTaskReminder.m; sourceTree = SOURCE_ROOT; };
 		712AB4481A9E692400556DA2 /* APCMotionHistoryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMotionHistoryData.h; sourceTree = "<group>"; };
 		712AB4491A9E692400556DA2 /* APCMotionHistoryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMotionHistoryData.m; sourceTree = "<group>"; };
 		712AB44A1A9E692400556DA2 /* APCMotionHistoryReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMotionHistoryReporter.h; sourceTree = "<group>"; };
 		712AB44B1A9E692400556DA2 /* APCMotionHistoryReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCMotionHistoryReporter.m; sourceTree = "<group>"; };
 		7423AB591AA3FFD8004A325A /* APCConsentRedirector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConsentRedirector.h; sourceTree = "<group>"; };
 		7473070E1A96E1DE0071D863 /* APCCMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCCMS.h; path = CMS/APCCMS.h; sourceTree = "<group>"; };
-		7473070F1A96E1DE0071D863 /* APCCMS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCCMS.m; path = CMS/APCCMS.m; sourceTree = "<group>"; };
+		7473070F1A96E1DE0071D863 /* APCCMS_UsingOpenSSL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCCMS_UsingOpenSSL.m; path = CMS/APCCMS_UsingOpenSSL.m; sourceTree = "<group>"; };
 		747307151A96E2FB0071D863 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openssl.framework; sourceTree = "<group>"; };
+		747FB1441ABDDFAE00345000 /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = "../../researchkit/build/Debug-iphoneos/ResearchKit.framework"; sourceTree = "<group>"; };
 		7B0DC4121A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCActivitiesViewWithNoTask.h; sourceTree = "<group>"; };
 		7B0DC4131A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCActivitiesViewWithNoTask.m; sourceTree = "<group>"; };
 		7B0DC4171A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCActivitiesViewWithNoTask.xib; sourceTree = "<group>"; };
@@ -998,7 +1004,6 @@
 		CFFDEDC21A95734000B25581 /* APCSetupTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSetupTableViewCell.xib; sourceTree = "<group>"; };
 		F50738BE1A682E12004CF100 /* APCDateRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDateRange.h; sourceTree = "<group>"; };
 		F50738BF1A682E12004CF100 /* APCDateRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDateRange.m; sourceTree = "<group>"; };
-		F50981D41AA57E57002E2264 /* BridgeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BridgeSDK.framework; path = BridgeSDK/BridgeSDK.framework; sourceTree = "<group>"; };
 		F5179B2919D09128001DCCB7 /* APCAppCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APCAppCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5179B3419D09128001DCCB7 /* APCAppCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APCAppCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5306CCB1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ORKQuestionResult+APCHelper.h"; sourceTree = "<group>"; };
@@ -1372,7 +1377,6 @@
 		F5F12B1B1A2F78AE0015982C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5F12B221A2F861F0015982C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		F5F12B241A2F86280015982C /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
-		F5F12B281A2F863E0015982C /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = ResearchKit/ResearchKit.framework; sourceTree = "<group>"; };
 		F5F12B2A1A2F864B0015982C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F5F12B2C1A2F86550015982C /* libarchive.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libarchive.dylib; path = usr/lib/libarchive.dylib; sourceTree = SDKROOT; };
 		F5F12B2E1A2F86600015982C /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
@@ -1383,15 +1387,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				747FB1451ABDDFAE00345000 /* ResearchKit.framework in Frameworks */,
 				5B5523AA1AC915140068B51D /* Social.framework in Frameworks */,
 				747307161A96E2FB0071D863 /* openssl.framework in Frameworks */,
 				F5B948171A7328F30034C522 /* ImageIO.framework in Frameworks */,
 				F55653B31A6F0918003E0B0C /* libMobileGestalt.dylib in Frameworks */,
-				F50981D51AA57E57002E2264 /* BridgeSDK.framework in Frameworks */,
 				F5F12B2F1A2F86600015982C /* libbz2.dylib in Frameworks */,
 				F5F12B2D1A2F86550015982C /* libarchive.dylib in Frameworks */,
 				F5F12B2B1A2F864B0015982C /* libz.dylib in Frameworks */,
-				F5F12B291A2F863E0015982C /* ResearchKit.framework in Frameworks */,
 				F5F12B251A2F86280015982C /* HealthKit.framework in Frameworks */,
 				F5F12B231A2F861F0015982C /* CoreLocation.framework in Frameworks */,
 				36C8B3EC1A38D9FF0051096B /* Security.framework in Frameworks */,
@@ -1695,6 +1698,16 @@
 			path = CollectionViewCells;
 			sourceTree = "<group>";
 		};
+		6CD8B6761AC501250061E6D6 /* Reminders */ = {
+			isa = PBXGroup;
+			children = (
+				6CD8B6721AC5011D0061E6D6 /* APCTaskReminder.h */,
+				6CD8B6731AC5011D0061E6D6 /* APCTaskReminder.m */,
+			);
+			name = Reminders;
+			path = Scheduler;
+			sourceTree = "<group>";
+		};
 		712AB4471A9E690600556DA2 /* MotionHistoryReporter */ = {
 			isa = PBXGroup;
 			children = (
@@ -1709,8 +1722,10 @@
 		7473070D1A96E1BB0071D863 /* CMS */ = {
 			isa = PBXGroup;
 			children = (
+				369DD5541AC0DF8100327729 /* ENCRYPTION_README.txt */,
 				7473070E1A96E1DE0071D863 /* APCCMS.h */,
-				7473070F1A96E1DE0071D863 /* APCCMS.m */,
+				7473070F1A96E1DE0071D863 /* APCCMS_UsingOpenSSL.m */,
+				369DD5561AC0E26900327729 /* APCCMS_NoEncryption_JustAStub.m */,
 			);
 			name = CMS;
 			sourceTree = "<group>";
@@ -2120,6 +2135,7 @@
 				F5B9476E1A73272C0034C522 /* Objects */,
 				F5B9477B1A73272C0034C522 /* Parameters */,
 				F5B9478E1A73272C0034C522 /* Permissions */,
+				6CD8B6761AC501250061E6D6 /* Reminders */,
 				F5B947911A73272C0034C522 /* ScheduleExpression */,
 				F5B947A71A73272C0034C522 /* Scheduler */,
 				F5B947AA1A73272C0034C522 /* Scoring */,
@@ -2820,6 +2836,7 @@
 		F5F12B211A2F85FF0015982C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				747FB1441ABDDFAE00345000 /* ResearchKit.framework */,
 				5B5523A91AC915140068B51D /* Social.framework */,
 				747307151A96E2FB0071D863 /* openssl.framework */,
 				F5B948161A7328F30034C522 /* ImageIO.framework */,
@@ -2828,9 +2845,7 @@
 				36C8B3EB1A38D9FF0051096B /* Security.framework */,
 				F5F12B2E1A2F86600015982C /* libbz2.dylib */,
 				F5F12B2C1A2F86550015982C /* libarchive.dylib */,
-				F50981D41AA57E57002E2264 /* BridgeSDK.framework */,
 				F5F12B2A1A2F864B0015982C /* libz.dylib */,
-				F5F12B281A2F863E0015982C /* ResearchKit.framework */,
 				F5F12B241A2F86280015982C /* HealthKit.framework */,
 				F5F12B221A2F861F0015982C /* CoreLocation.framework */,
 			);
@@ -3117,6 +3132,7 @@
 				08023C531AAA12DF008E6DDA /* APCAllSetTableViewCell.h in Headers */,
 				F5B948041A73272C0034C522 /* APCPointSelector.h in Headers */,
 				F5B946221A7309A20034C522 /* ZZAESDecryptInputStream.h in Headers */,
+				6CD8B6741AC5011D0061E6D6 /* APCTaskReminder.h in Headers */,
 				F5B947E31A73272C0034C522 /* APCGroupedScheduledTask.h in Headers */,
 				08970F121A8D407600EA46C3 /* APCFoodInsight.h in Headers */,
 				7B6C8CB71AA26ECE0007B560 /* APCConsentBooleanQuestion.h in Headers */,
@@ -3323,7 +3339,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "${SRCROOT}/APCAppCore/Resources/rk_framework_switcher.sh\n${SRCROOT}/APCAppCore/Resources/bridge_framework_switcher.sh";
+			shellScript = "${SRCROOT}/APCAppCore/Resources/bridge_framework_switcher.sh";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -3399,7 +3415,6 @@
 				5BD6EBB81A9C77D900C3BFB0 /* APCBaseGraphView.m in Sources */,
 				F5F12A961A2F78490015982C /* APCStudyOverviewViewController.m in Sources */,
 				F5B947BE1A73272C0034C522 /* NSDate+Helper.m in Sources */,
-				747307111A96E1DE0071D863 /* APCCMS.m in Sources */,
 				F5F12AD51A2F78490015982C /* APCCheckTableViewCell.m in Sources */,
 				F5F12AE51A2F78490015982C /* APCTintedTableViewCell.m in Sources */,
 				F5B947D81A73272C0034C522 /* APCDataArchiver.m in Sources */,
@@ -3500,6 +3515,7 @@
 				6C7346091A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m in Sources */,
 				F54DDD281A8026010073E4B4 /* APCDataTracker.m in Sources */,
 				F5F12A7A1A2F78490015982C /* APCAxisView.m in Sources */,
+				6CD8B6751AC5011D0061E6D6 /* APCTaskReminder.m in Sources */,
 				F5B947EC1A73272C0034C522 /* APCDebugWindow.m in Sources */,
 				F5B947C41A73272C0034C522 /* NSError+APCAdditions.m in Sources */,
 				CFFDEDE11A95734000B25581 /* APCMedicationFrequencyViewController.m in Sources */,
@@ -3576,6 +3592,7 @@
 				F5B948031A73272C0034C522 /* APCListSelector.m in Sources */,
 				F5F12AF91A2F78490015982C /* APCGenericSurveyTaskViewController.m in Sources */,
 				5B09ED201ABC1BEF003C5061 /* APCLicenseInfoViewController.m in Sources */,
+				369DD5591AC0EBBE00327729 /* APCCMS_UsingOpenSSL.m in Sources */,
 				F5B947BA1A73272C0034C522 /* HKHealthStore+APCExtensions.m in Sources */,
 				F5F12A7C1A2F78490015982C /* APCCircleView.m in Sources */,
 				F5F12A8C1A2F78490015982C /* APCIntroVideoViewController.m in Sources */,
@@ -3703,7 +3720,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/ResearchKit",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/BridgeSDK",
 				);
@@ -3840,7 +3856,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/ResearchKit",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/BridgeSDK",
 				);
@@ -3871,7 +3886,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/ResearchKit",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/BridgeSDK",
 				);
@@ -3982,7 +3996,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/ResearchKit",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/BridgeSDK",
 				);

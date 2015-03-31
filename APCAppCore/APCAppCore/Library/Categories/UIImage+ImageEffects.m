@@ -1,7 +1,13 @@
+// 
+//  UIImage+ImageEffects.m 
+//  APCAppCore 
+// 
+// Copyright (c) 2015, Apple Inc. All rights reserved. 
+// 
 /*
-     File: UIImage+ImageEffects.m
+ File: UIImage+ImageEffects.m
  Abstract: This is a category of UIImage that adds methods to apply blur and tint effects to an image. This is the code you’ll want to look out to find out how to use vImage to efficiently calculate a blur.
-  Version: 1.0
+ Version: 1.0
  
  Disclaimer: IMPORTANT:  This Apple software is supplied to you by Apple
  Inc. ("Apple") in consideration of your agreement to the following
