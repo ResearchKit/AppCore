@@ -765,25 +765,6 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
                                                      },
                               };
 
-    //
-    // Please leave this commented-out code here.
-    // We're still evolving the data format; this is the "original."
-    //
-//    NSDictionary * result = @{
-//                              @"item"                               : @"medicationTracker_createPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
-//                              @"userActionCategory"                 : @"medicationTracker",
-//                              @"userAction"                         : @"createPrescription",
-//                              @"userActionVersion"                  : @(1),
-//                              @"prescriptionUniqueId"               : prescription.objectID,
-//                              @"prescriptionDateCreated"            : prescription.dateStartedUsing,
-//                              @"prescriptionDaysOfTheWeek"          : prescription.zeroBasedDaysOfTheWeekAsArrayOfSortedShortNames,
-//                              @"prescriptionNumberOfTimesPerDay"    : prescription.numberOfTimesPerDay,
-//                              @"prescriptionMedicationName"         : prescription.medication.name,
-//                              @"prescriptionDosageAmount"           : prescription.dosage.amount,
-//                              @"prescriptionDosageName"             : prescription.dosage.name,
-//                              @"prescriptionColorName"              : prescription.color.name
-//                              };
-
     [self sendRecordedActionToSage: result];
 }
 
@@ -802,19 +783,6 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
                                                    },
                               };
 
-    //
-    // Please leave this commented-out code here.
-    // We're still evolving the data format; this is the "original."
-    //
-//    NSDictionary * result = @{
-//                              @"item"                       : @"medicationTracker_cancelPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
-//                              @"userActionCategory"         : @"medicationTracker",
-//                              @"userAction"                 : @"cancelPrescription",
-//                              @"userActionVersion"          : @(1),
-//                              @"prescriptionUniqueId"       : prescription.objectID,
-//                              @"prescriptionDateCanceled"   : prescription.dateStoppedUsing,
-//                              };
-//
     [self sendRecordedActionToSage: result];
 }
 
@@ -835,20 +803,6 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
                                                   @"numberOfDosesTaken" : numberOfDosesTaken
                                                   },
                              };
-
-    //
-    // Please leave this commented-out code here.
-    // We're still evolving the data format; this is the "original."
-    //
-//    NSDictionary *result = @{
-//                             @"item"                    : @"medicationTracker_recordTotalDailyDosesOfPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
-//                             @"userActionCategory"      : @"medicationTracker",
-//                             @"userAction"              : @"recordTotalDailyDosesOfPrescription",
-//                             @"userActionVersion"       : @(1),
-//                             @"prescriptionUniqueId"    : prescription.objectID,
-//                             @"dosageDate"              : date,
-//                             @"numberOfDosesTaken"      : numberOfDosesTaken
-//                             };
 
     [self sendRecordedActionToSage: result];
 }
