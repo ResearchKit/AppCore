@@ -70,15 +70,13 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
 - (NSString *)extractMedicationNamePrefix:(NSString *)medicationName
 {
     NSRange  range = [medicationName rangeOfString:@" ("];
-    NSString  *firstString = nil;
-    NSString  *secondString = nil;
+    NSString  *answer = nil;
     if (range.location == NSNotFound) {
-        firstString = medicationName;
+        answer = medicationName;
     } else {
-        firstString = [medicationName substringToIndex:range.location];
-        secondString = [medicationName substringFromIndex:(range.location + 1)];
+        answer = [medicationName substringToIndex:range.location];
     }
-    return  firstString;
+    return  answer;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *) __unused indexPath
@@ -95,8 +93,8 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
     NSString  *doseNumberString = [NSString stringWithFormat:@"Dose %ld", (indexPath.row + 1)];
     cell.doseNumber.text = doseNumberString;
     
-    NSString  *doseAmountString = [NSString stringWithFormat:@"%@", self.lozenge.prescription.dosage.name];
-    cell.doseAmount.text = doseAmountString;
+    cell.doseAmount.text = self.lozenge.prescription.dosage.name;
+    
     if (self.numberOfTickMarksToSet > 0) {
         cell.confirmer.completed = YES;
         self.numberOfTickMarksToSet = self.numberOfTickMarksToSet - 1;
