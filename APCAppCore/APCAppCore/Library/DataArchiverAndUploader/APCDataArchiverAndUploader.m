@@ -1136,7 +1136,7 @@ static NSString *folderPathForUploadOperations = nil;
 
 
     /*
-     Log it to Flurry.
+     Log it.
      */
     APCLogFilenameBeingUploaded (self.encryptedZipPath);
 
