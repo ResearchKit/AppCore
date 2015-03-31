@@ -71,6 +71,8 @@
     
     NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
     self.shareMessage = initialOptions[kShareMessageKey];
+    
+    self.title = NSLocalizedString(@"Spread the Word", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated
