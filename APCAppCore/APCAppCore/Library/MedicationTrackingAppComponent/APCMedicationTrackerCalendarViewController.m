@@ -36,9 +36,11 @@ typedef  enum  _PlacementOfNewPages
     PlacementOfNewPagesAtEnd
 }  PlacementOfNewPages;
 
-static  NSString  *viewControllerTitle   = @"Medication Tracker";
+static  NSString  *viewControllerTitle     = @"Medication Tracker";
 
-static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
+static  NSString  *kSummaryTableViewCell   = @"APCMedicationSummaryTableViewCell";
+
+static  CGFloat    kAPCMedicationRowHeight = 64.0;
 
 @interface APCMedicationTrackerCalendarViewController  ( ) <UITableViewDataSource, UITableViewDelegate,
                                 APCMedicationTrackerCalendarWeeklyViewDelegate, UIScrollViewDelegate,
@@ -118,6 +120,11 @@ static  NSString  *kSummaryTableViewCell = @"APCMedicationSummaryTableViewCell";
 }
 
 #pragma  mark  -  Table View Delegate Methods
+
+- (CGFloat)tableView:(UITableView *) __unused tableView heightForRowAtIndexPath:(NSIndexPath *) __unused indexPath
+{
+    return  kAPCMedicationRowHeight;
+}
 
 - (BOOL)tableView:(UITableView *) __unused tableView canEditRowAtIndexPath:(NSIndexPath *) __unused indexPath
 {

@@ -1,10 +1,10 @@
-//
-//  APCMedicationTrackerDetailViewController.m
-//  APCAppCore
-//
-//  Copyright (c) 2015 Apple, Inc. All rights reserved.
-//
-
+// 
+//  APCMedicationTrackerDetailViewController.m 
+//  APCAppCore 
+// 
+// Copyright (c) 2015, Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCMedicationTrackerDetailViewController.h"
 #import "APCSetupTableViewCell.h"
 #import "APCLozengeButton.h"
@@ -67,16 +67,34 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
     return  numberOfRows;
 }
 
+- (NSString *)extractMedicationNamePrefix:(NSString *)medicationName
+{
+    NSRange  range = [medicationName rangeOfString:@" ("];
+    NSString  *answer = nil;
+    if (range.location == NSNotFound) {
+        answer = medicationName;
+    } else {
+        answer = [medicationName substringToIndex:range.location];
+    }
+    return  answer;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *) __unused indexPath
 {
     APCMedicationDetailsTableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier:kMedicationDetailsName];
+    cell.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     cell.colorSwatch.backgroundColor = self.lozenge.prescription.color.UIColor;
-    cell.medicationName.text = self.lozenge.prescription.medication.name;
+    
+    cell.medicationName.text = [self extractMedicationNamePrefix:self.lozenge.prescription.medication.name];
+    
     NSString  *doseNumberString = [NSString stringWithFormat:@"Dose %ld", (indexPath.row + 1)];
     cell.doseNumber.text = doseNumberString;
-    NSString  *doseAmountString = [NSString stringWithFormat:@"(%@)", self.lozenge.prescription.dosage.name];
-    cell.doseAmount.text = doseAmountString;
+    
+    cell.doseAmount.text = self.lozenge.prescription.dosage.name;
+    
     if (self.numberOfTickMarksToSet > 0) {
         cell.confirmer.completed = YES;
         self.numberOfTickMarksToSet = self.numberOfTickMarksToSet - 1;

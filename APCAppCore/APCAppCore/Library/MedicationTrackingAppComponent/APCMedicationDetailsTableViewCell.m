@@ -1,10 +1,10 @@
-//
-//  APCMedicationDetailsTableViewCell.m
-//  APCAppCore
-//
-//  Copyright (c) 2015 Apple, Inc. All rights reserved.
-//
-
+// 
+//  APCMedicationDetailsTableViewCell.m 
+//  APCAppCore 
+// 
+// Copyright (c) 2015, Apple Inc. All rights reserved. 
+// 
+ 
 #import "APCMedicationDetailsTableViewCell.h"
 
 @implementation APCMedicationDetailsTableViewCell
