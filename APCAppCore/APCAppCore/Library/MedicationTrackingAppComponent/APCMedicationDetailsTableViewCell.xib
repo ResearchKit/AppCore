@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F1066" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="13F1066" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -22,14 +22,18 @@
                             <constraint firstAttribute="width" constant="4" id="dbN-Da-dPR"/>
                         </constraints>
                     </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wsF-Ga-Zxx" userLabel="Medication Label">
-                        <rect key="frame" x="12" y="10" width="198" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wsF-Ga-Zxx" userLabel="Medication Label">
+                        <rect key="frame" x="12" y="3" width="198" height="42"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="42" id="0RP-jF-aBe"/>
+                            <constraint firstAttribute="width" constant="198" id="ibJ-SU-ddn"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WTt-q5-ebU" userLabel="Dose Amount">
-                        <rect key="frame" x="12" y="28" width="33" height="21"/>
+                        <rect key="frame" x="12" y="44" width="33" height="16"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -53,9 +57,9 @@
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottomMargin" secondItem="WTt-q5-ebU" secondAttribute="bottom" constant="6" id="0tj-Q3-xKb"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="WTt-q5-ebU" secondAttribute="bottom" constant="-5" id="0tj-Q3-xKb"/>
                     <constraint firstItem="o9W-qG-x23" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-7" id="6nf-S1-8h1"/>
-                    <constraint firstItem="wsF-Ga-Zxx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="AUF-pa-ZVC"/>
+                    <constraint firstItem="wsF-Ga-Zxx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-5" id="AUF-pa-ZVC"/>
                     <constraint firstItem="l43-gd-IJL" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="Bww-wA-fMn"/>
                     <constraint firstItem="XMr-TN-8gD" firstAttribute="leading" secondItem="WTt-q5-ebU" secondAttribute="trailing" constant="59" id="CCg-7n-XY1"/>
                     <constraint firstItem="l43-gd-IJL" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="13" id="DZu-8f-MCp"/>
@@ -65,7 +69,7 @@
                     <constraint firstAttribute="centerY" secondItem="XMr-TN-8gD" secondAttribute="centerY" id="QVz-x2-NMg"/>
                     <constraint firstItem="XMr-TN-8gD" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="eOg-sD-LBK"/>
                     <constraint firstItem="wsF-Ga-Zxx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="4" id="gP5-cL-qS3"/>
-                    <constraint firstItem="WTt-q5-ebU" firstAttribute="top" secondItem="wsF-Ga-Zxx" secondAttribute="bottom" constant="-3" id="gUD-n7-6ak"/>
+                    <constraint firstItem="WTt-q5-ebU" firstAttribute="top" secondItem="wsF-Ga-Zxx" secondAttribute="bottom" constant="-1" id="gUD-n7-6ak"/>
                     <constraint firstItem="o9W-qG-x23" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-8" id="njN-02-8hR"/>
                     <constraint firstAttribute="trailingMargin" secondItem="o9W-qG-x23" secondAttribute="trailing" constant="308" id="ytl-ye-4N6"/>
                 </constraints>
