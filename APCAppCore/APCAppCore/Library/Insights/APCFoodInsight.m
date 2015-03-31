@@ -351,7 +351,7 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
         
         double percentCalories = [caloriesFromSample doubleValue] * 100;
         
-        if (percentCalories >= 10) {
+        if (percentCalories >= 10 && sumFoodCalories > 80) {
             NSMutableDictionary *foodItem = [NSMutableDictionary new];
             foodItem[kFoodInsightFoodNameKey] = (!foodItemName) ? [NSNull null] : foodItemName;
             foodItem[kFoodInsightValueKey] = @(sumFoodValue);
