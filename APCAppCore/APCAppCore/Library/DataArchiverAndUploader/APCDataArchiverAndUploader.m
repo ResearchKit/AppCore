@@ -51,10 +51,6 @@
 #pragma mark - Constants
 // ---------------------------------------------------------
 
-
-static BOOL       const K_DEBUG_INCLUDE_TESTING_MESSAGE         = YES;
-static NSString * const kAPCUploaderThisIsATestMessage_Key      = @"THIS_IS_A_TEST";
-static NSString * const kAPCUploaderThisIsATestMessage_Message  = @"Dear Sage folks:  This whole .zip file is a test, as we work on improving the health apps.  Please ignore.";
 static NSString * const kAPCSerializedDataKey_PhoneInfo         = @"phoneInfo";
 static NSString * const kAPCNormalFileNameKey                   = @"item";          // not sure why these two things are used
 static NSString * const kAPCAlternateFileNameKey                = @"identifier";    // as filenames.  Soon, we can change that.
@@ -734,13 +730,6 @@ static NSString *folderPathForUploadOperations = nil;
      NSJSONSerialization to validate everything it does.
      */
     NSDictionary *uploadableData = [APCJSONSerializer serializableDictionaryFromSourceDictionary: dictionary];
-
-    if (K_DEBUG_INCLUDE_TESTING_MESSAGE)
-    {
-        NSMutableDictionary *temp = uploadableData.mutableCopy;
-        temp [kAPCUploaderThisIsATestMessage_Key] = kAPCUploaderThisIsATestMessage_Message;
-        uploadableData = temp;
-    }
 
     NSError *errorSerializingTheData = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject: uploadableData

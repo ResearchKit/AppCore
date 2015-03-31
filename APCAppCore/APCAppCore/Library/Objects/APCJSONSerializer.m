@@ -8,6 +8,18 @@
 #import "APCJSONSerializer.h"
 #import "ORKAnswerFormat+Helper.h"
 #import "NSDate+Helper.h"
+#import <CoreData/CoreData.h>
+
+
+/**
+ We use this regular-expression pattern to extract UUIDs
+ from CoreData object IDs.
+ */
+static NSString * const kRegularExpressionPatternMatchingUUIDs = (@"[a-fA-F0-9]{8}\\-"
+                                                                  "[a-fA-F0-9]{4}\\-"
+                                                                  "[a-fA-F0-9]{4}\\-"
+                                                                  "[a-fA-F0-9]{4}\\-"
+                                                                  "[a-fA-F0-9]{12}");
 
 
 @implementation APCJSONSerializer
@@ -219,12 +231,32 @@
 
         if (result == nil)
         {
+            // If we couldn't numeric-ify it, use the original string.
             result = sourceObject;
         }
         else
         {
+            // Numericification worked.
             // Accept the object we got from -extractIntOrBoolFromString.
         }
+    }
+
+
+    /*
+     Extract the UUID part of a CoreData ID, if we can.
+     
+     Note that this will work "just fine" if it's a CoreData
+     temporary ID.  But if that happens, you're probably
+     sending a temporary ID to a server, which may not be
+     what you want.
+     */
+    else if ([sourceObject isKindOfClass: [NSManagedObjectID class]])
+    {
+        NSManagedObjectID *managedObjectId = (NSManagedObjectID *) sourceObject;
+        NSString *idString = managedObjectId.URIRepresentation.absoluteString;              // --> "x-coredata://73F057D0-BE34-4D67-8AF1-A25DB2D70774/APCMedTrackerPrescription/p1"
+        idString = [idString substringFromIndex: @"x-coreData://".length];                  // -->              "73F057D0-BE34-4D67-8AF1-A25DB2D70774/APCMedTrackerPrescription/p1"
+        idString = [idString stringByReplacingOccurrencesOfString: @"/" withString: @"-"];  // -->              "73F057D0-BE34-4D67-8AF1-A25DB2D70774-APCMedTrackerPrescription-p1"
+        result = idString;
     }
 
 
