@@ -334,12 +334,12 @@ NSString *const kBypassServerProperty                   = @"bypassServer";
 
 - (BOOL)bypassServer
 {
-    return [self boolForKey:kBypassServerProperty];
+    return [[NSUserDefaults standardUserDefaults] boolForKey:kBypassServerProperty];
 }
 
 - (void)setBypassServer:(BOOL)bypassServer
 {
-    [self setBool:bypassServer forKey:kBypassServerProperty];
+    [[NSUserDefaults standardUserDefaults] setBool:bypassServer forKey:kBypassServerProperty];
 }
 
 
