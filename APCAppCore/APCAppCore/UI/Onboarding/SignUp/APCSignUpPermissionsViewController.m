@@ -321,6 +321,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 - (void) appDidBecomeActive: (NSNotification *) __unused notification
 {
+    self.permissions = [self prepareData].mutableCopy;
     [self.tableView reloadData];
 }
 
