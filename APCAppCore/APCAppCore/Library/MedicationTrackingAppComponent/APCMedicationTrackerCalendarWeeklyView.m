@@ -287,12 +287,12 @@ static  NSString  *kThinSpaceEnDashJoiner     = @"\u2009\u2013\u2009";
 
 - (void)leftScrollerButtonWasTapped:(UIButton *) __unused sender
 {
-    [self performSwipeAnimation:WeeklyCalendarScrollDirectionRight dateIsToday:NO selectedDate:nil];
+    [self performSwipeAnimation:WeeklyCalendarScrollDirectionLeft dateIsToday:NO selectedDate:nil];
 }
 
 - (void)rightScrollerButtonWasTapped:(UIButton *) __unused sender
 {
-    [self performSwipeAnimation:WeeklyCalendarScrollDirectionLeft dateIsToday:NO selectedDate:nil];
+    [self performSwipeAnimation:WeeklyCalendarScrollDirectionRight dateIsToday:NO selectedDate:nil];
 }
 
 - (void)performSwipeAnimation:(WeeklyCalendarScrollDirection)scrollDirection dateIsToday:(BOOL)dateIsToday selectedDate:(NSDate *)selectedDate
