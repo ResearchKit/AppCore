@@ -84,19 +84,11 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
 - (void) updateTasksReminder
 {
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-        if (!delegate.dataSubstrate.currentUser.signedIn) {
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:kTasksReminderDefaultsOnOffKey];
-            [self cancelLocalNotificationIfExists];
+        if (self.reminderOn) {
+            [self createOrUpdateLocalNotification];
         }
-        else
-        {
-            if (self.reminderOn) {
-                [self createOrUpdateLocalNotification];
-            }
-            else {
-                [self cancelLocalNotificationIfExists];
-            }
+        else {
+            [self cancelLocalNotificationIfExists];
         }
     });
 }
@@ -229,7 +221,7 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     if (number == nil) {
         APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
         NSNumber * numberDefault = delegate.initializationOptions[kTaskReminderStartupDefaultOnOffKey];
-        number = numberDefault?:@YES;
+        number = numberDefault?:@NO;
         [[NSUserDefaults standardUserDefaults] setObject:number forKey:kTasksReminderDefaultsOnOffKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
