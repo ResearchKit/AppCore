@@ -99,17 +99,19 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
 @property  (nonatomic, strong)          NSIndexPath                     *selectedIndexPath;
 
 @property  (nonatomic, strong)          NSMutableArray                  *currentMedicationRecords;
-@property (nonatomic, strong)           APCMedTrackerMedication         *theMedicationObject;
+@property  (nonatomic, strong)          APCMedTrackerMedication         *theMedicationObject;
 @property  (nonatomic, assign)          BOOL                             medicationNameWasSet;
 
-@property (nonatomic, strong)           NSDictionary                    *frequenciesAndDaysObject;
+@property  (nonatomic, strong)          NSDictionary                    *frequenciesAndDaysObject;
 @property  (nonatomic, assign)          BOOL                             medicationFrequencyWasSet;
 
-@property (nonatomic, strong)           APCMedTrackerPrescriptionColor  *colorObject;
-@property (nonatomic, strong)           NSArray                         *colorsList;
+@property  (nonatomic, strong)          APCMedTrackerPrescriptionColor  *defaultColorObject;
+@property  (nonatomic, strong)          APCMedTrackerPrescriptionColor  *selectedColorObject;
+@property  (nonatomic, strong)          NSArray                         *colorsList;
 @property  (nonatomic, assign)          BOOL                             medicationColorWasSet;
 
-@property (nonatomic, strong)           APCMedTrackerPossibleDosage     *possibleDosage;
+@property  (nonatomic, strong)          APCMedTrackerPossibleDosage     *defaultPossibleDosage;
+@property  (nonatomic, strong)          APCMedTrackerPossibleDosage     *selectedPossibleDosage;
 @property  (nonatomic, assign)          BOOL                             medicationDosageWasSet;
 
 @end
@@ -156,14 +158,14 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
         if (self.medicationColorWasSet == YES) {
             aCell.addTopicLabel.hidden = NO;
             aCell.colorSwatch.hidden   = NO;
-            aCell.addTopicLabel.text = self.colorObject.name;
-            aCell.colorSwatch.backgroundColor = self.colorObject.UIColor;
+            aCell.addTopicLabel.text = self.selectedColorObject.name;
+            aCell.colorSwatch.backgroundColor = self.selectedColorObject.UIColor;
         } else {
             aCell.addTopicLabel.text = addTableCategories[row];
         }
     } else if (row == SetupTableRowTypesDosage) {
         if (self.medicationDosageWasSet == YES) {
-            aCell.addTopicLabel.text = self.possibleDosage.name;
+            aCell.addTopicLabel.text = self.selectedPossibleDosage.name;
         } else {
             aCell.addTopicLabel.text = addTableCategories[row];
         }
@@ -241,15 +243,15 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
         } else if (indexPath.row == kAPCMedicationColorRow) {
             APCMedicationColorViewController  *controller = [[APCMedicationColorViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
             controller.delegate = self;
-            if ((self.colorObject != nil) && (self.medicationColorWasSet)){
-                controller.oneColorDescriptor = self.colorObject;
+            if ((self.selectedColorObject != nil) && (self.medicationColorWasSet)){
+                controller.oneColorDescriptor = self.selectedColorObject;
             }
             [self.navigationController pushViewController:controller animated:YES];
         } else if (indexPath.row == kAPCMedicationDosageRow) {
             APCMedicationDosageViewController  *controller = [[APCMedicationDosageViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
             controller.delegate = self;
-            if ((self.possibleDosage != nil) && (self.medicationDosageWasSet)) {
-                controller.dosageRecord = self.possibleDosage;
+            if ((self.selectedPossibleDosage != nil) && (self.medicationDosageWasSet)) {
+                controller.dosageRecord = self.selectedPossibleDosage;
             }
             [self.navigationController pushViewController:controller animated:YES];
         }
@@ -296,13 +298,17 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
 {
     [self.listTabulator reloadData];
     
-    if (self.colorObject == nil) {
-        self.colorObject = self.colorsList[0];
+    if (self.selectedColorObject == nil) {
+        self.selectedColorObject = self.defaultColorObject;
+    }
+    
+    if (self.selectedPossibleDosage == nil) {
+        self.selectedPossibleDosage = self.defaultPossibleDosage;
     }
 
     [APCMedTrackerPrescription newPrescriptionWithMedication: self.theMedicationObject
-                                                        dosage: self.possibleDosage
-                                                         color: self.colorObject
+                                                        dosage: self.selectedPossibleDosage
+                                                         color: self.selectedColorObject
                                             frequencyAndDays: self.frequenciesAndDaysObject
                                                andUseThisQueue: [NSOperationQueue mainQueue]
                                               toDoThisWhenDone: ^(id __unused createdObject,
@@ -329,6 +335,8 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
 
 #pragma  mark  -  Delegate Methods Of Subordinate Setup Screens
 
+#pragma  mark  -  Medication Name Delegates
+
 - (void)nameController:(APCMedicationNameViewController *) __unused nameController didSelectMedicineName:(APCMedTrackerMedication *)medicationObject
 {
     self.theMedicationObject = medicationObject;
@@ -343,6 +351,8 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
     [self enableDoneButtonIfValuesSet];
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesName inSection:0] ] withRowAnimation:YES];
 }
+
+#pragma  mark  -          Frequency and Days Delegates
 
 - (void)frequencyController:(APCMedicationFrequencyViewController *) __unused frequencyController didSelectFrequency:(NSDictionary *)daysAndNumbers
 {
@@ -359,9 +369,11 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesFrequency inSection:0] ] withRowAnimation:YES];
 }
 
+#pragma  mark  -          Color Label Delegates
+
 - (void)colorController:(APCMedicationColorViewController *) __unused colorController didSelectColorLabelName:(APCMedTrackerPrescriptionColor *)colorObject
 {
-    self.colorObject = colorObject;
+    self.selectedColorObject = colorObject;
     self.medicationColorWasSet = YES;
     [self enableDoneButtonIfValuesSet];
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesLabelColor inSection:0] ] withRowAnimation:YES];
@@ -370,13 +382,15 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
 - (void)colorControllerDidCancel:(APCMedicationColorViewController *) __unused colorController
 {
     self.medicationColorWasSet = NO;
-    self.colorObject = nil;
+    self.selectedColorObject = nil;
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesLabelColor inSection:0] ] withRowAnimation:YES];
 }
 
+#pragma  mark  -          Medication Dosage Delegates
+
 - (void)dosageController:(APCMedicationDosageViewController *) __unused dosageController didSelectDosageAmount:(APCMedTrackerPossibleDosage *)dosageAmount
 {
-    self.possibleDosage = dosageAmount;
+    self.selectedPossibleDosage = dosageAmount;
     self.medicationDosageWasSet = YES;
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesDosage inSection:0] ] withRowAnimation:YES];
 }
@@ -384,7 +398,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
 - (void)dosageControllerDidCancel:(APCMedicationDosageViewController *) __unused dosageController
 {
     self.medicationDosageWasSet = NO;
-    self.possibleDosage = nil;
+    self.selectedPossibleDosage = nil;
     [self.setupTabulator reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:SetupTableRowTypesDosage inSection:0] ] withRowAnimation:YES];
 }
 
@@ -440,7 +454,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
          NSSortDescriptor *amountSorter = [[NSSortDescriptor alloc] initWithKey:@"amount" ascending:YES];
          NSArray  *descriptors = @[ amountSorter ];
          NSArray  *sorted = [arrayOfGeneratedObjects sortedArrayUsingDescriptors:descriptors];
-         self.possibleDosage = [sorted lastObject];
+         self.defaultPossibleDosage = [sorted lastObject];
     }];
     
     self.colorsList = [NSArray array];
@@ -451,7 +465,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
                                                                            NSError * __unused error)
      {
          self.colorsList = arrayOfGeneratedObjects;
-         self.colorObject = [self.colorsList lastObject];
+         self.defaultColorObject = [self.colorsList lastObject];
      }];
 }
 
