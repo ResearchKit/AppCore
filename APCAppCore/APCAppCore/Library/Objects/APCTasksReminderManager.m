@@ -133,8 +133,21 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     localNotification.userInfo = notificationInfo;
     
     localNotification.category = kTaskReminderDelayCategory;
-    
+        
     if (self.remindersToSend.count >0) {
+        
+        //migration if notifications were registered without a category.
+        if ([[UIApplication sharedApplication] currentUserNotificationSettings].categories.count == 0 &&
+            [[UIApplication sharedApplication] currentUserNotificationSettings].types == (UIUserNotificationTypeAlert
+                                                                                          |UIUserNotificationTypeBadge
+                                                                                          |UIUserNotificationTypeSound)) {
+            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
+                                                                                                 |UIUserNotificationTypeBadge
+                                                                                                 |UIUserNotificationTypeSound) categories:[APCTasksReminderManager taskReminderCategories]];
+            
+            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+        }
         
         [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
        
