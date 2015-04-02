@@ -108,7 +108,6 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *) __unused indexPath
 {
     APCMedicationDetailsTableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier:kMedicationDetailsName];
-    cell.contentView.translatesAutoresizingMaskIntoConstraints = NO;
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
