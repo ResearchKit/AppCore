@@ -84,19 +84,11 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
 - (void) updateTasksReminder
 {
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-        if (!delegate.dataSubstrate.currentUser.signedIn) {
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:kTasksReminderDefaultsOnOffKey];
-            [self cancelLocalNotificationIfExists];
+        if (self.reminderOn) {
+            [self createOrUpdateLocalNotification];
         }
-        else
-        {
-            if (self.reminderOn) {
-                [self createOrUpdateLocalNotification];
-            }
-            else {
-                [self cancelLocalNotificationIfExists];
-            }
+        else {
+            [self cancelLocalNotificationIfExists];
         }
     });
 }
@@ -141,8 +133,21 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     localNotification.userInfo = notificationInfo;
     
     localNotification.category = kTaskReminderDelayCategory;
-    
+        
     if (self.remindersToSend.count >0) {
+        
+        //migration if notifications were registered without a category.
+        if ([[UIApplication sharedApplication] currentUserNotificationSettings].categories.count == 0 &&
+            [[UIApplication sharedApplication] currentUserNotificationSettings].types == (UIUserNotificationTypeAlert
+                                                                                          |UIUserNotificationTypeBadge
+                                                                                          |UIUserNotificationTypeSound)) {
+            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
+                                                                                                 |UIUserNotificationTypeBadge
+                                                                                                 |UIUserNotificationTypeSound) categories:[APCTasksReminderManager taskReminderCategories]];
+            
+            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+        }
         
         [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
        
@@ -229,7 +234,7 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     if (number == nil) {
         APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
         NSNumber * numberDefault = delegate.initializationOptions[kTaskReminderStartupDefaultOnOffKey];
-        number = numberDefault?:@YES;
+        number = numberDefault?:@NO;
         [[NSUserDefaults standardUserDefaults] setObject:number forKey:kTasksReminderDefaultsOnOffKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
@@ -352,7 +357,7 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
                 includeTask = YES;
             }
         }
-    }else if(completedTasks.count == 0 && scheduledTasks.count > 0){//if this task has not been completed but was scheduled, include it in the reminder
+    }else if(completedTasks.count < scheduledTasks.count){//if this task has not been completed but was scheduled, include it in the reminder
         includeTask = YES;
     }
     

@@ -39,18 +39,18 @@
 #import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
 
-static  NSString  *kViewControllerName          = @"Medication Frequency";
+static  NSString  *kViewControllerName              = @"Medication Frequency";
 
-static  NSString  *kFrequencyTableTimesCellName    = @"APCFrequencyTableViewTimesCell";
-static  NSString  *kFrequencyEverydayTableCellName = @"APCFrequencyEverydayTableViewCell";
-static  NSString  *kFrequencyDayTableCellName      = @"APCFrequencyDayTableViewCell";
+static  NSString  *kFrequencyTableTimesCellName     = @"APCFrequencyTableViewTimesCell";
+static  NSString  *kFrequencyEverydayTableCellName  = @"APCFrequencyEverydayTableViewCell";
+static  NSString  *kFrequencyDayTableCellName       = @"APCFrequencyDayTableViewCell";
 
-static  NSString  *kEveryDayOfWeekCaption       = @"Every Day";
+static  NSString  *kEveryDayOfWeekCaption           = @"Every Day";
 
-static  NSString  *daysOfWeekNames[]            = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
-static  NSString  *daysOfWeekNamesAbbreviated[] = { @"Mon",    @"Tue",     @"Wed",       @"Thu",      @"Fri",    @"Sat",      @"Sun"    };
+static  NSString  *daysOfWeekNames[]                = { @"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday" };
+static  NSString  *daysOfWeekNamesAbbreviated[]     = { @"Mon",    @"Tue",     @"Wed",       @"Thu",      @"Fri",    @"Sat",      @"Sun"    };
 
-static  NSUInteger  numberOfDaysOfWeekNames     = (sizeof(daysOfWeekNames) / sizeof(NSString *));
+static  NSUInteger  numberOfDaysOfWeekNames         = (sizeof(daysOfWeekNames) / sizeof(NSString *));
 
 static  NSUInteger kAllDaysOfWeekCount              =    7;
 
@@ -118,17 +118,18 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell                 *cell     = nil;
+    UITableViewCell  *cell = nil;
     
     if (indexPath.section == kFrequencySection) {
-        APCFrequencyTableViewTimesCell  *freqCell = (APCFrequencyTableViewTimesCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyTableTimesCellName];
-        freqCell.accessoryType = UITableViewCellAccessoryNone;
-        freqCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [self processFrequencyButtonsForCell:freqCell];
+        APCFrequencyTableViewTimesCell  *frequencyCell = (APCFrequencyTableViewTimesCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyTableTimesCellName];
+        frequencyCell.accessoryType = UITableViewCellAccessoryNone;
+        frequencyCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [self processFrequencyButtonsForCell:frequencyCell];
         if (self.selectedValueButton != nil) {
             [self setStateForFrequencyButton:self.selectedValueButton toState:UIControlStateSelected];
+        } else {
         }
-        cell = freqCell;
+        cell = frequencyCell;
     } else if (indexPath.section == kEveryDayOfWeekSection) {
         APCFrequencyEverydayTableViewCell  *everydayCell = (APCFrequencyEverydayTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyEverydayTableCellName];
         everydayCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -142,17 +143,17 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
         }
         cell = everydayCell;
     } else if (indexPath.section == kDaysOfWeekSection) {
-        APCFrequencyDayTableViewCell  *dayCell = (APCFrequencyDayTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyDayTableCellName];
-        dayCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        dayCell.dayTitle.text = daysOfWeekNames[indexPath.row];
+        APCFrequencyDayTableViewCell  *dayOfWeekCell = (APCFrequencyDayTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kFrequencyDayTableCellName];
+        dayOfWeekCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        dayOfWeekCell.dayTitle.text = daysOfWeekNames[indexPath.row];
 
         BOOL  value = [self fetchSelectedStateForRow:indexPath.row];
         if (value == YES) {
-            [self setupSelectedCell:dayCell toSelectedState:YES];
+            [self setupSelectedCell:dayOfWeekCell toSelectedState:YES];
         } else {
-            [self setupSelectedCell:dayCell toSelectedState:NO];
+            [self setupSelectedCell:dayOfWeekCell toSelectedState:NO];
         }
-        cell = dayCell;
+        cell = dayOfWeekCell;
     }
     [self setupEverydayCellState];
     return  cell;
@@ -261,6 +262,9 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
             UIButton  *aButton = (UIButton *)[cell viewWithTag:index];
             [aButton addTarget:self action:@selector(valueButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
             [aButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+            aButton.enabled = YES;
+            aButton.selected = NO;
+            aButton.highlighted = NO;
             [buttons addObject:aButton];
             
             CALayer  *layer = aButton.layer;
@@ -269,11 +273,12 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
             [self setStateForFrequencyButton:aButton toState:UIControlStateNormal];
         }
         self.valueButtons = buttons;
-    }
-    NSUInteger  frequency = [self findDosageValueForValueButton];
-    if (frequency > 0) {
-        UIButton  *button = self.valueButtons[frequency - 1];
-        [self setStateForFrequencyButton:button toState:UIControlStateSelected];
+        NSUInteger  frequency = [self findDosageValueForValueButton];
+        if (frequency > 0) {
+            UIButton  *button = self.valueButtons[frequency - 1];
+            self.selectedValueButton = button;
+            [self setStateForFrequencyButton:button toState:UIControlStateSelected];
+        }
     }
 }
 
@@ -290,7 +295,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     UIButton  *selectedButton = nil;
     
     for (UIButton  *aButton  in  self.valueButtons) {
-        if ((aButton.state & UIControlStateSelected) != 0) {
+        if (aButton.isSelected == YES) {
             selectedButton = aButton;
             break;
         }

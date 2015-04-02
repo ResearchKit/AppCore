@@ -723,7 +723,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
-        if (self.user.isConsented && self.user.isSignedIn)
+        if (self.user.sharedOptionSelection != [NSNumber numberWithInteger:SBBConsentShareScopeNone])
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedString(@"Sharing Options", @"");
