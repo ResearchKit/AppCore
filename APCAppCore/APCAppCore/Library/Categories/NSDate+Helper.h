@@ -67,6 +67,7 @@ extern NSString * const NSDateDefaultDateFormat;
 +(instancetype) tomorrowAtMidnight;
 +(instancetype) yesterdayAtMidnight;
 +(instancetype) weekAgoAtMidnight;
++(instancetype) priorSundayAtMidnightFromDate:(NSDate *)date;
 
 - (BOOL) isEarlierThanDate: (NSDate*) otherDate;
 - (BOOL) isLaterThanDate: (NSDate*) otherDate;
