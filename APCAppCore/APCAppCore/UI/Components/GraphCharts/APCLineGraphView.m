@@ -77,7 +77,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 @property (nonatomic, strong) NSMutableArray *referenceLines;
 @property (nonatomic, strong) NSMutableArray *pathLines;
 @property (nonatomic, strong) NSMutableArray *dots;
-@property (nonatomic, strong) CAShapeLayer *fillPathLayer;
+@property (nonatomic, strong) NSMutableArray *fillLayers;
 
 @property (nonatomic) BOOL shouldAnimate;
 
@@ -119,6 +119,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     _referenceLines = [NSMutableArray new];
     _pathLines = [NSMutableArray new];
     _dots = [NSMutableArray new];
+    _fillLayers = [NSMutableArray new];
     
     _tintColor = [UIColor colorWithRed:244/255.f green:190/255.f blue:74/255.f alpha:1.f];
     
@@ -265,6 +266,10 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     }
     
     [self calculateXAxisPoints];
+    
+    [self.dots removeAllObjects];
+    [self.pathLines removeAllObjects];
+    [self.fillLayers removeAllObjects];
     
     for (int i=0; i<[self numberOfPlots]; i++) {
         if ([self numberOfPointsinPlot:i] <= 1) {
@@ -549,8 +554,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 - (void)drawPointCirclesForPlotIndex:(NSInteger)plotIndex
 {
-    [self.dots removeAllObjects];
-    
     for (NSUInteger i=0 ; i<self.yAxisPoints.count; i++) {
         
         CGFloat dataPointVal = [self.dataPoints[i] floatValue];
@@ -577,8 +580,6 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 - (void)drawLinesForPlotIndex:(NSInteger)plotIndex
 {
-    [self.pathLines removeAllObjects];
-    
     UIBezierPath *fillPath = [UIBezierPath bezierPath];
     
     CGFloat positionOnXAxis = CGFLOAT_MAX;
@@ -639,14 +640,16 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     [fillPath addLineToPoint:CGPointMake(positionOnXAxis, CGRectGetHeight(self.plotsView.frame))];
     
-    self.fillPathLayer = [CAShapeLayer layer];
-    self.fillPathLayer.path = fillPath.CGPath;
-    self.fillPathLayer.fillColor = (plotIndex == 0) ? [self.tintColor colorWithAlphaComponent:0.4].CGColor : [self.referenceLineColor colorWithAlphaComponent:0.2].CGColor;
-    [self.plotsView.layer addSublayer:self.fillPathLayer];
+    CAShapeLayer *fillPathLayer = [CAShapeLayer layer];
+    fillPathLayer.path = fillPath.CGPath;
+    fillPathLayer.fillColor = (plotIndex == 0) ? [self.tintColor colorWithAlphaComponent:0.4].CGColor : [self.referenceLineColor colorWithAlphaComponent:0.2].CGColor;
+    [self.plotsView.layer addSublayer:fillPathLayer];
     
     if (self.shouldAnimate) {
-        self.fillPathLayer.opacity = 0;
+        fillPathLayer.opacity = 0;
     }
+    
+    [self.fillLayers addObject:fillPathLayer];
 }
 
 #pragma mark - Graph Calculations
@@ -875,7 +878,11 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         delay += kGrowAnimationDuration;
     }
     
-    [self animateLayer:self.fillPathLayer withAnimationType:kAPCGraphAnimationTypeFade startDelay:delay];
+    for (NSUInteger i=0; i<self.fillLayers.count; i++) {
+        CAShapeLayer *layer = self.fillLayers[i];
+        [self animateLayer:layer withAnimationType:kAPCGraphAnimationTypeFade startDelay:delay];
+        delay += kGrowAnimationDuration;
+    }
 }
 
 - (void)animateLayer:(CAShapeLayer *)shapeLayer withAnimationType:(APCGraphAnimationType)animationType
