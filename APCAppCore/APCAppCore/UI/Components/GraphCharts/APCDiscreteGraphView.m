@@ -550,18 +550,20 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 - (void)drawPointCirclesForPlotIndex:(NSInteger)plotIndex
 {
+    CGFloat pointSize = self.isLandscapeMode ? 10.0f : 8.0f;
+    
     for (NSUInteger i=0 ; i<self.yAxisPoints.count; i++) {
         
         APCRangePoint *dataPointVal = (APCRangePoint *)self.dataPoints[i];
         
         CGFloat positionOnXAxis = [self.xAxisPoints[i] floatValue];
+        positionOnXAxis += [self offsetForPlotIndex:plotIndex];
         
         if (!dataPointVal.isEmpty) {
             
             APCRangePoint *positionOnYAxis = (APCRangePoint *)self.yAxisPoints[i];
             
             {
-                CGFloat pointSize = self.isLandscapeMode ? 10.0f : 8.0f;
                 APCCircleView *point = [[APCCircleView alloc] initWithFrame:CGRectMake(0, 0, pointSize, pointSize)];
                 point.tintColor = (plotIndex == 0) ? self.tintColor : self.referenceLineColor;
                 point.center = CGPointMake(positionOnXAxis, positionOnYAxis.minimumValue);
@@ -605,12 +607,10 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         if (!dataPointVal.isEmpty && !dataPointVal.isRangeZero) {
             
             UIBezierPath *plotLinePath = [UIBezierPath bezierPath];
-            
-            if (positionOnXAxis != CGFLOAT_MAX) {
-                //Prev point exists
-                
-            }
+
             positionOnXAxis = [self.xAxisPoints[i] floatValue];
+            positionOnXAxis += [self offsetForPlotIndex:plotIndex];
+            
             positionOnYAxis = ((APCRangePoint *)self.yAxisPoints[i]);
             
             [plotLinePath moveToPoint:CGPointMake(positionOnXAxis, positionOnYAxis.minimumValue)];
@@ -634,6 +634,25 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
             
         }
     }
+}
+
+- (CGFloat)offsetForPlotIndex:(NSInteger)plotIndex
+{
+    CGFloat pointWidth = self.isLandscapeMode ? 10.0 : 8.0;
+    
+    NSInteger numberOfPlots = [self numberOfPlots];
+    
+    CGFloat offset = 0;
+    
+    if (numberOfPlots%2 == 0) {
+        //Even
+        offset = (plotIndex - numberOfPlots/2 + 0.5) * pointWidth;
+    } else {
+        //Odd
+        offset = (plotIndex - numberOfPlots/2) * pointWidth;
+    }
+    
+    return offset;
 }
 
 #pragma mark - Graph Calculations
