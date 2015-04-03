@@ -180,6 +180,8 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 - (void)startCollectionInsightData
 {
     [self retrieveDatasetForGlucoseForPeriod:-30];
+    
+    self.lastUpdatedAt = [NSDate timeIntervalSinceReferenceDate];
 }
 
 #pragma mark - Core Data
