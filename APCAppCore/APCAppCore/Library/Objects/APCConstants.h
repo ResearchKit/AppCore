@@ -128,6 +128,8 @@ FOUNDATION_EXPORT NSString *const kActivitiesSectionKeepGoing;
 FOUNDATION_EXPORT NSString *const kActivitiesSectionYesterday;
 FOUNDATION_EXPORT NSString *const kActivitiesSectionToday;
 
+FOUNDATION_EXPORT NSString *const kActivitiesRequiresMotionSensor;
+
 
 
 // ---------------------------------------------------------

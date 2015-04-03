@@ -111,6 +111,8 @@ NSString *const kActivitiesSectionKeepGoing     = @"activitiesSectionKeepGoing";
 NSString *const kActivitiesSectionYesterday     = @"activitiesSectionYesterday";
 NSString *const kActivitiesSectionToday         = @"activitiesSectionToday";
 
+NSString *const kActivitiesRequiresMotionSensor = @"activitiesRequireMotionSensor";
+
 
 
 // ---------------------------------------------------------
