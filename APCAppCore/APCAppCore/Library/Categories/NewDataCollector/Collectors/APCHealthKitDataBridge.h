@@ -1,5 +1,5 @@
 //
-//  APCFileManagerForCollector.m
+//  APCHealthKitDataBridge.h
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -31,12 +31,22 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "APCFileManagerForCollector.h"
+#import <Foundation/Foundation.h>
+#import <HealthKit/HealthKit.h>
 
-@implementation APCFileManagerForCollector
+#import "APCCollectorProtocol.h"
 
-- (void) didRecieveUpdatedValue:(id)results {
-    
-}
+@interface APCHealthKitDataBridge : NSObject
+
+@property (strong, nonatomic)   HKHealthStore*              healthStore;
+@property (strong, nonatomic)   HKUnit*                     unit;
+@property (strong, nonatomic)   NSString*                   identifier;
+@property (nonatomic)           id <APCCollectorProtocol>   delegate;
+@property (strong, nonatomic)   HKSampleType*               sampleType;
+
+
+- (instancetype) initWithIdentifier: (NSString *) identifier andSampleType: (HKSampleType *) sampleType;
+
+- (void) sampleQueryWithType: (HKSampleType *) sampleType andLimit: (NSUInteger) limit;
 
 @end

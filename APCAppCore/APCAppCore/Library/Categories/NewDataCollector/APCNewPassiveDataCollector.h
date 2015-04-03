@@ -32,7 +32,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@class APCDataSync;
+@class APCPassiveDataTracker;
 
 @interface APCNewPassiveDataCollector : NSObject
 
@@ -40,6 +40,7 @@
 -(void) beginSynchronization;
 -(void) suspendSynchronization;
 
-@property (nonatomic, strong)  NSMutableArray * dataSyncList;
+@property (nonatomic, strong)  NSDate*          anchorDate;
+@property (nonatomic, strong)  NSMutableArray*  dataSyncList;
 
 @end

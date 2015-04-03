@@ -1,5 +1,5 @@
 //
-//  APCHealthKitCumulativeQuantityTypeDataBridge.h
+//  APCDataCollector.m
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -31,8 +31,20 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "APCHealthKitDataBridge.h"
+#import "APCDataCollector.h"
 
-@interface APCHealthKitCumulativeQuantityTypeDataBridge : APCHealthKitDataBridge
+@implementation APCDataCollector
+
+- (void)start {
+    /* abstract implementation */
+}
+- (void)stop {
+    /* abstract implementation */
+}
+- (void) updateTracking {
+    /* abstract implementation */
+}
+
+
 
 @end

@@ -35,8 +35,20 @@
 
 @implementation APCNewPassiveDataCollector
 
+- (instancetype) init {
+    self = [super init];
+    
+    if (self)
+    {
+        _dataSyncList = [NSMutableArray new];
+    }
+    
+    return self;
+}
+
 - (void) addDataSync:(id)dataSync {
     
+    [self.dataSyncList addObject:dataSync];
 }
 
 - (void) beginSyncrhonization {
@@ -47,4 +59,8 @@
     
 }
 
+- (void) beginSynchronization {
+    
+    
+}
 @end

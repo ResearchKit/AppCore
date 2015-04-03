@@ -1,5 +1,5 @@
 //
-//  APCFileManagerForCollector.h
+//  APCDataCollector.h
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -30,13 +30,16 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-
 #import <Foundation/Foundation.h>
 #import "APCCollectorProtocol.h"
 
-@interface APCFileManagerForCollector : NSObject <APCCollectorProtocol>
+@interface APCDataCollector : NSObject
 
-@property (nonatomic, strong) NSOperationQueue *sequentialQueue;
+- (void)start;
+- (void)stop;
+- (void) updateTracking;
 
+@property (strong, nonatomic) id                receiver;
+@property (strong, nonatomic) id                <APCCollectorProtocol> delegate;
 
 @end

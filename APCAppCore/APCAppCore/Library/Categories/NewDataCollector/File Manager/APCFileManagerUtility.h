@@ -1,5 +1,5 @@
 //
-//  APCHealthKitDataBridge.h
+//  APCFileManagerUtility.h
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -32,20 +32,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <HealthKit/HealthKit.h>
 
-#import "APCCollectorProtocol.h"
+@interface APCFileManagerUtility : NSObject
 
-@interface APCHealthKitDataBridge : NSObject
++ (void) createOrAppendString: (NSString*) string toFile: (NSString*) path;
++ (void) createOrReplaceString: (NSString*) string toFile: (NSString*) path;
 
-@property (strong, nonatomic)   HKHealthStore *             healthStore;
-@property (strong, nonatomic)   HKUnit *                    unit;
-@property (strong, nonatomic)   NSString *                  identifier;
-@property (nonatomic)           id <APCCollectorProtocol>   delegate;
-@property (strong, nonatomic)   HKSampleType *              sampleType;
-
-- (instancetype) initWithIdentifier:(NSString *)identifier andSampleType: (HKSampleType *) sampleType;
-- (void)observerQueryForSampleType:(HKSampleType *)sampleType;
-- (void) sampleQueryWithType: (HKSampleType *)sampleType;
++ (void) createFolderIfDoesntExist: (NSString*) path;
++ (void) deleteFileIfExists: (NSString*) path;
 
 @end

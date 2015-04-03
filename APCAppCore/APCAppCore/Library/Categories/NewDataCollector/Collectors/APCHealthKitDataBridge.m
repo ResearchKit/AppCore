@@ -33,24 +33,9 @@
 
 #import "APCHealthKitDataBridge.h"
 #import "APCAppCore.h"
-
-@interface APCHealthKitDataBridge()
-
-@end
+#import <HealthKit/HealthKit.h>
 
 @implementation APCHealthKitDataBridge
-
-- (instancetype) init {
-    
-    self = [super init];
-    
-    if( self )
-    {
-        _healthStore                = nil;
-    }
-    
-    return self;
-}
 
 - (instancetype) initWithIdentifier:(NSString *)identifier andSampleType: (HKSampleType *) sampleType {
     
@@ -62,63 +47,23 @@
         
         _sampleType                 = sampleType;
         _identifier                 = identifier;
+        _healthStore                = [HKHealthStore new];
     }
     
     return self;
     
 }
 
-- (void)observerQueryForSampleType:(HKSampleType *)sampleType {
-    
-    __weak __typeof(self) weakSelf = self;
-    
 
-    APCLogDebug(@"Setting up observer query for sample type %@", sampleType.identifier);
-    
-    [self.healthStore enableBackgroundDeliveryForType:sampleType
-                                                          frequency:HKUpdateFrequencyImmediate
-                                                     withCompletion:^(BOOL success, NSError *error)
-     {
-         
-         __typeof(self) strongSelf = weakSelf;
-         __weak __typeof(self) weakSelf = strongSelf;
-         
-         if (success == NO) {
-             APCLogError2(error);
-         } else {
-             HKObserverQuery *observerQuery = [[HKObserverQuery alloc] initWithSampleType:sampleType
-                                                                                predicate:nil
-                                                                            updateHandler:^(HKObserverQuery __unused *query,
-                                                                                            HKObserverQueryCompletionHandler completionHandler,
-                                                                                            NSError *error)
-                                               {
-                                                   
-                                                   if (error) {
-                                                       APCLogError2(error);
-                                                   } else {
-                                                       
-                                                       [strongSelf sampleQueryWithType:strongSelf.sampleType];
-                                                       
-                                                       // If there's a completion block execute it.
-                                                       if (completionHandler) {
-                                                           completionHandler();
-                                                       }
-                                                   }
-                                               }];
-             
-             [weakSelf.healthStore executeQuery:observerQuery];
-         }
-     }];
-}
 
-- (void) sampleQueryWithType: (HKSampleType *)sampleType {
+- (void) sampleQueryWithType: (HKSampleType *)sampleType andLimit:(NSUInteger) limit{
 
     __weak __typeof(self) weakSelf = self;
         
     NSSortDescriptor *sortByLatest = [[NSSortDescriptor alloc] initWithKey:HKSampleSortIdentifierEndDate ascending:NO];
     HKSampleQuery *sampleQuery = [[HKSampleQuery alloc] initWithSampleType:sampleType
                                                                  predicate:nil
-                                                                     limit:1
+                                                                     limit:limit
                                                            sortDescriptors:@[sortByLatest]
                                                             resultsHandler:^(HKSampleQuery __unused *query, NSArray *results, NSError *error)
                                   {
@@ -138,7 +83,11 @@
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:APCHealthKitObserverQueryUpdateForSampleTypeNotification
                                                             object:results];
-        [self.delegate didRecieveUpdatedValue:results];
+        
+        if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
+        {
+            [self.delegate didRecieveUpdatedValueFromCollector:results];
+        }
     }
     else
     {

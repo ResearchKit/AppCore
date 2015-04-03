@@ -33,6 +33,6 @@
 
 @protocol APCCollectorProtocol <NSObject>
 
-- (void) didRecieveUpdatedValue:(id)results;
+- (void) didRecieveUpdatedValueFromCollector:(id)results;
 
 @end

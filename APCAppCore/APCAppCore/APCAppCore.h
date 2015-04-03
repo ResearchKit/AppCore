@@ -86,12 +86,12 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import "APCAppCore/APCCMS.h"
 
 #import "APCAppCore/APCNewPassiveDataCollector.h"
-#import "APCAppCore/APCDataSync.h"
 #import "APCAppCore/APCCollectorProtocol.h"
 #import "APCAppCore/APCHealthKitDataBridge.h"
 #import "APCAppCore/APCHealthKitCumulativeQuantityTypeDataBridge.h"
-#import "APCAppCore/APCFileManagerForCollector.h"
-
+#import "APCAppCore/APCDataFacilitator.h"
+#import "APCAppCore/APCFileManagerUtility.h"
+#import "APCAppCore/APCDataCollector.h"
 
 /* -------------------------
  Logging

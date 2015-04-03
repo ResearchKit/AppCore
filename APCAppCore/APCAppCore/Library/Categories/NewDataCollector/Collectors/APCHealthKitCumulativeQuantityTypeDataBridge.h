@@ -1,5 +1,5 @@
 //
-//  APCHealthKitCumulativeQuantityTypeDataBridge.m
+//  APCHealthKitCumulativeQuantityTypeDataBridge.h
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -31,8 +31,19 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "APCHealthKitCumulativeQuantityTypeDataBridge.h"
+#import "APCDataCollector.h"
+#import <HealthKit/HealthKit.h>
 
-@implementation APCHealthKitCumulativeQuantityTypeDataBridge
+@interface APCHealthKitCumulativeQuantityTypeDataBridge : APCDataCollector
+
+@property (strong, nonatomic)   HKHealthStore*              healthStore;
+@property (strong, nonatomic)   HKUnit*                     unit;
+@property (strong, nonatomic)   NSString*                   identifier;
+@property (nonatomic)           id <APCCollectorProtocol>   delegate;
+@property (strong, nonatomic)   HKSampleType*               sampleType;
+@property (nonatomic)         NSUInteger        queryLimit;
+
+
+- (instancetype) initWithIdentifier: (NSString *) identifier sampleType: (HKSampleType *) type andLimit: (NSUInteger)queryLimit;
 
 @end

@@ -601,7 +601,6 @@ then a location event has occurred and location services must be manually starte
         
         for (id dataType in dataTypesWithReadPermission) {
             
-            APCDataSync*    dataSync    = [[APCDataSync alloc] init];
             HKSampleType*   sampleType  = nil;
             
             if ([dataType isKindOfClass:[NSDictionary class]])
@@ -612,50 +611,17 @@ then a location event has occurred and location services must be manually starte
                 sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
             }
             
-            APCHealthKitDataBridge* dataBridge = [[APCHealthKitDataBridge alloc] initWithIdentifier:dataType andSampleType:sampleType];
-            [dataBridge observerQueryForSampleType:sampleType];
-
-            APCFileManagerForCollector *persistentGuy = [[APCFileManagerForCollector alloc] init];
+            APCHealthKitCumulativeQuantityTypeDataBridge *collector = [[APCHealthKitCumulativeQuantityTypeDataBridge alloc] initWithIdentifier:sampleType.identifier sampleType:sampleType andLimit:1];
             
-            [dataBridge setDelegate:persistentGuy];
-            [dataSync setCollector:dataBridge];
-            [self.passiveHealthKitCollector addDataSync:dataSync];
+            APCDataFacilitator *receiver = [[APCDataFacilitator alloc] initWithIdentifier:sampleType.identifier andColumnNames:@[@"datetime,type,value"]];
+            
+            [collector setReceiver:receiver];
+            [collector setDelegate:receiver];
+            [collector start];
+            
+            [self.passiveHealthKitCollector addDataSync:collector];
         }
     }
-    
-    /*** Old observer query kick-off code ***/
-    /*
-    NSArray *dataTypesWithReadPermission = self.initializationOptions[kHKReadPermissionsKey];
-    
-    if (dataTypesWithReadPermission) {
-        
-        if (!self.healthKitCollectorQueue) {
-            self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:@"HealthKit Data Collector"];
-        }
-        
-        if (!self.healthKitCollector) {
-            self.healthKitCollector = [[APCHealthKitDataCollector alloc] initWithIdentifier:@"HealthKitDataCollector"];
-            [self.passiveDataCollector addTracker:self.healthKitCollector];
-            [self.healthKitCollector startTracking];
-        }
-    
-        for (id dataType in dataTypesWithReadPermission) {
-            
-            HKSampleType *sampleType = nil;
-            
-            if ([dataType isKindOfClass:[NSDictionary class]]) {
-                NSDictionary *categoryType = (NSDictionary *)dataType;
-                sampleType = [HKObjectType categoryTypeForIdentifier:categoryType[kHKCategoryTypeKey]];
-            } else {
-                sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
-            }
-            
-            [self observerQueryForSampleType:sampleType
-                              withCompletion:nil];
-        }
-    }
-     
-     */
 }
 
 - (NSArray *)offsetForTaskSchedules
@@ -906,45 +872,45 @@ then a location event has occurred and location services must be manually starte
     return nil;
 }
 
-//- (void)processUpdatesFromHealthKitForSampleType:(id)quantitySample hkCompletionHandler:(HKObserverQueryCompletionHandler)completionHandler
-//{
-//    [self.healthKitCollectorQueue addOperationWithBlock:^{
-//        NSString *dateTimeStamp = [[NSDate date] toStringInISO8601Format];
-//        NSString *healthKitType = nil;
-//        NSString *quantityValue = nil;
-//        
-//        if ([quantitySample isKindOfClass:[HKCategorySample class]]) {
-//            HKCategorySample *catSample = (HKCategorySample *)quantitySample;
-//            healthKitType = catSample.categoryType.identifier;
-//            quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
-//            
-//            // Get the difference in seconds between the start and end date for the sample
-//            NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
-//                                                                                          fromDate:catSample.startDate
-//                                                                                            toDate:catSample.endDate
-//                                                                                           options:NSCalendarWrapComponents];
-//            if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
-//                quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", secondsSpentInBedOrAsleep.second];
-//            } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
-//                quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", secondsSpentInBedOrAsleep.second];
-//            }
-//        } else {
-//            HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
-//            healthKitType = qtySample.quantityType.identifier;
-//            quantityValue = [NSString stringWithFormat:@"%@", qtySample.quantity];
-//            quantityValue = [quantityValue stringByReplacingOccurrencesOfString:@" " withString:@","];
-//        }
-//        
-//        NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue];
-//        
-//        [APCPassiveDataCollector createOrAppendString:stringToWrite
-//                                               toFile:[self.healthKitCollector.folder stringByAppendingPathComponent:self.healthKitCollector.csvFilename]];
-//        
-//        [self.passiveDataCollector checkIfDataNeedsToBeFlushed:self.healthKitCollector];
-//        
-//        completionHandler();
-//    }];
-//}
+- (void)processUpdatesFromHealthKitForSampleType:(id)quantitySample hkCompletionHandler:(HKObserverQueryCompletionHandler)completionHandler
+{
+    [self.healthKitCollectorQueue addOperationWithBlock:^{
+        NSString *dateTimeStamp = [[NSDate date] toStringInISO8601Format];
+        NSString *healthKitType = nil;
+        NSString *quantityValue = nil;
+        
+        if ([quantitySample isKindOfClass:[HKCategorySample class]]) {
+            HKCategorySample *catSample = (HKCategorySample *)quantitySample;
+            healthKitType = catSample.categoryType.identifier;
+            quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
+            
+            // Get the difference in seconds between the start and end date for the sample
+            NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
+                                                                                          fromDate:catSample.startDate
+                                                                                            toDate:catSample.endDate
+                                                                                           options:NSCalendarWrapComponents];
+            if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
+                quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", secondsSpentInBedOrAsleep.second];
+            } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
+                quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", secondsSpentInBedOrAsleep.second];
+            }
+        } else {
+            HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
+            healthKitType = qtySample.quantityType.identifier;
+            quantityValue = [NSString stringWithFormat:@"%@", qtySample.quantity];
+            quantityValue = [quantityValue stringByReplacingOccurrencesOfString:@" " withString:@","];
+        }
+        
+        NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue];
+        
+        [APCPassiveDataCollector createOrAppendString:stringToWrite
+                                               toFile:[self.healthKitCollector.folder stringByAppendingPathComponent:self.healthKitCollector.csvFilename]];
+        
+        [self.passiveDataCollector checkIfDataNeedsToBeFlushed:self.healthKitCollector];
+        
+        completionHandler();
+    }];
+}
 
 /*********************************************************************************/
 #pragma mark - Public Helpers

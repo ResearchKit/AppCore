@@ -1,5 +1,5 @@
 //
-//  APCDataSync.h
+//  APCFileManagerForCollector.h
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -32,13 +32,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "APCCollectorProtocol.h"
 
-@interface APCDataSync : NSObject
+@interface APCDataFacilitator : NSObject <APCCollectorProtocol>
 
-- (void) startTracking;
-- (void) stopTracking;
-- (void) updateTracking;
+- (instancetype)initWithIdentifier:(NSString *)identifier andColumnNames:(NSArray *)columnNames;
 
-@property (strong, nonatomic) id collector;
 
 @end
