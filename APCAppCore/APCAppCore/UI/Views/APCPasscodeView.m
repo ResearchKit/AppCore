@@ -130,6 +130,12 @@ static CGFloat const kAPCPasscodeViewPinLength = 4;
     return self.hiddenTextField.isFirstResponder;
 }
 
+- (void)touchesBegan:(NSSet *)__unused touches withEvent:(UIEvent *)__unused event
+{
+    if (!self.hiddenTextField.isFirstResponder) {
+        [self.hiddenTextField becomeFirstResponder];
+    }
+}
 
 #pragma mark - UITextFieldDelegate
 
