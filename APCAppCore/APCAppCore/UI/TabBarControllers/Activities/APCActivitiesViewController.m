@@ -458,7 +458,7 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
     if (((NSArray*)scheduledTasksDict[@"today"]).count > 0) {
         [self.sectionsArray addObject:[self formattedTodaySection]];
         
-        NSArray *todaysTaskList = scheduledTasksDict[@"today"];
+        NSArray *todaysTaskList = [self removeTaskWhenHardwareNotAvailble:scheduledTasksDict[@"today"]];
         
         NSArray * groupedArray = [self generateGroupsForTask:todaysTaskList];
 
@@ -555,6 +555,34 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
             if ([keepGoingTasks containsObject:scheduledTask.task.taskID]) {
                 [filteredList removeObject:scheduledTask];
                 [self.keepGoingTasks addObject:scheduledTask];
+            }
+        }
+    }
+    
+    return filteredList;
+}
+
+/** @brief  When the hardware that is required by task that is not present on the device
+ *          the task will be removed from the provided task list.
+ *
+ * @param   taskList - Array of APCScheduledTask. This list will be filtered
+ *
+ * @return  A filtered array of APCScheduledTask; otherwise the original array is returned.
+ *
+ * @note    This needs to be refactored.
+ */
+- (NSArray *)removeTaskWhenHardwareNotAvailble:(NSArray *)taskList
+{
+    NSMutableArray *filteredList = [taskList mutableCopy];
+    
+    if ([APCDeviceHardware isMotionActivityAvailable] == NO) {
+        NSArray *hardwareDependentTasks = self.tasksBySection[kActivitiesRequiresMotionSensor];
+        
+        for (APCScheduledTask *scheduledTask in taskList) {
+            if (hardwareDependentTasks) {
+                if ([hardwareDependentTasks containsObject:scheduledTask.task.taskID]) {
+                    [filteredList removeObject:scheduledTask];
+                }
             }
         }
     }
