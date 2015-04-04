@@ -468,15 +468,17 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
     }
     
     if (((NSArray*)scheduledTasksDict[@"yesterday"]).count > 0) {
-        [self.sectionsArray addObject:@"Yesterday - Incomplete Tasks"];
-        
         NSArray *yesterdaysTaskList = [self removeTasksFromTaskList:scheduledTasksDict[@"yesterday"]];
         
-        NSArray * groupedArray = [self generateGroupsForTask:yesterdaysTaskList];
-        
-        NSArray *sortedTasks = [self sortTasksInArray:groupedArray];
-        
-        [self.scheduledTasksArray addObject:sortedTasks];
+        if (yesterdaysTaskList.count > 0) {
+            [self.sectionsArray addObject:@"Yesterday - Incomplete Tasks"];
+            
+            NSArray * groupedArray = [self generateGroupsForTask:yesterdaysTaskList];
+            
+            NSArray *sortedTasks = [self sortTasksInArray:groupedArray];
+            
+            [self.scheduledTasksArray addObject:sortedTasks];
+        }
     }
 }
 
