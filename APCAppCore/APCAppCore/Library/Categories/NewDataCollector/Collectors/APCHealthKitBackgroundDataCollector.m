@@ -31,16 +31,16 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "APCHealthKitCumulativeQuantityTypeDataBridge.h"
+#import "APCHealthKitBackgroundDataCollector.h"
 #import "APCAppCore.h"
 
-@interface APCHealthKitCumulativeQuantityTypeDataBridge()
+@interface APCHealthKitBackgroundDataCollector()
 
 @property (strong, nonatomic)   HKObserverQuery*    observerQuery;
 
 @end
 
-@implementation APCHealthKitCumulativeQuantityTypeDataBridge
+@implementation APCHealthKitBackgroundDataCollector
 
 - (instancetype) initWithIdentifier: (NSString *) identifier sampleType: (HKSampleType *) type andLimit: (NSUInteger)queryLimit {
 

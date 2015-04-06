@@ -217,8 +217,8 @@
 		747307101A96E1DE0071D863 /* APCCMS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7473070E1A96E1DE0071D863 /* APCCMS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		747307161A96E2FB0071D863 /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747307151A96E2FB0071D863 /* openssl.framework */; };
 		747FB1451ABDDFAE00345000 /* ResearchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747FB1441ABDDFAE00345000 /* ResearchKit.framework */; };
-		7B07B8AE1ACDD7B400734558 /* APCHealthKitCumulativeQuantityTypeDataBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B07B8AA1ACDD7B400734558 /* APCHealthKitCumulativeQuantityTypeDataBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7B07B8AF1ACDD7B400734558 /* APCHealthKitCumulativeQuantityTypeDataBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B07B8AB1ACDD7B400734558 /* APCHealthKitCumulativeQuantityTypeDataBridge.m */; };
+		7B07B8AE1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B07B8AA1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7B07B8AF1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B07B8AB1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.m */; };
 		7B07B8B01ACDD7B400734558 /* APCHealthKitDataBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B07B8AC1ACDD7B400734558 /* APCHealthKitDataBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7B07B8B11ACDD7B400734558 /* APCHealthKitDataBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B07B8AD1ACDD7B400734558 /* APCHealthKitDataBridge.m */; };
 		7B0DC4141A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B0DC4121A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h */; };
@@ -910,8 +910,8 @@
 		7473070F1A96E1DE0071D863 /* APCCMS_UsingOpenSSL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCCMS_UsingOpenSSL.m; path = CMS/APCCMS_UsingOpenSSL.m; sourceTree = "<group>"; };
 		747307151A96E2FB0071D863 /* openssl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openssl.framework; sourceTree = "<group>"; };
 		747FB1441ABDDFAE00345000 /* ResearchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ResearchKit.framework; path = "../../researchkit/build/Debug-iphoneos/ResearchKit.framework"; sourceTree = "<group>"; };
-		7B07B8AA1ACDD7B400734558 /* APCHealthKitCumulativeQuantityTypeDataBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHealthKitCumulativeQuantityTypeDataBridge.h; sourceTree = "<group>"; };
-		7B07B8AB1ACDD7B400734558 /* APCHealthKitCumulativeQuantityTypeDataBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHealthKitCumulativeQuantityTypeDataBridge.m; sourceTree = "<group>"; };
+		7B07B8AA1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHealthKitBackgroundDataCollector.h; sourceTree = "<group>"; };
+		7B07B8AB1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHealthKitBackgroundDataCollector.m; sourceTree = "<group>"; };
 		7B07B8AC1ACDD7B400734558 /* APCHealthKitDataBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCHealthKitDataBridge.h; sourceTree = "<group>"; };
 		7B07B8AD1ACDD7B400734558 /* APCHealthKitDataBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCHealthKitDataBridge.m; sourceTree = "<group>"; };
 		7B0DC4121A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCActivitiesViewWithNoTask.h; sourceTree = "<group>"; };
@@ -1766,8 +1766,8 @@
 		7B07B8A91ACDD7B400734558 /* Collectors */ = {
 			isa = PBXGroup;
 			children = (
-				7B07B8AA1ACDD7B400734558 /* APCHealthKitCumulativeQuantityTypeDataBridge.h */,
-				7B07B8AB1ACDD7B400734558 /* APCHealthKitCumulativeQuantityTypeDataBridge.m */,
+				7B07B8AA1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.h */,
+				7B07B8AB1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.m */,
 				7B07B8AC1ACDD7B400734558 /* APCHealthKitDataBridge.h */,
 				7B07B8AD1ACDD7B400734558 /* APCHealthKitDataBridge.m */,
 				7BBC9BC91ACF416700E022DB /* APCDataCollector.h */,
@@ -3150,7 +3150,7 @@
 				F5B947F41A73272C0034C522 /* APCParametersCoreDataCell.h in Headers */,
 				F5F12A8E1A2F78490015982C /* APCShareViewController.h in Headers */,
 				F5F12B0C1A2F78490015982C /* APCPermissionButton.h in Headers */,
-				7B07B8AE1ACDD7B400734558 /* APCHealthKitCumulativeQuantityTypeDataBridge.h in Headers */,
+				7B07B8AE1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.h in Headers */,
 				F5F12ACC1A2F78490015982C /* APCSettingsViewController.h in Headers */,
 				36B7D2551A8D848D0043F968 /* ORKAnswerFormat+Helper.h in Headers */,
 				F5F12A061A2F78490015982C /* APCTask+AddOn.h in Headers */,
@@ -3521,7 +3521,7 @@
 				F5B9464B1A7309A20034C522 /* ZZStoreOutputStream.m in Sources */,
 				F5F12B0D1A2F78490015982C /* APCPermissionButton.m in Sources */,
 				369E27F61A96B7A200D35DFA /* APCMedicationPossibleDosage.m in Sources */,
-				7B07B8AF1ACDD7B400734558 /* APCHealthKitCumulativeQuantityTypeDataBridge.m in Sources */,
+				7B07B8AF1ACDD7B400734558 /* APCHealthKitBackgroundDataCollector.m in Sources */,
 				F5B946421A7309A20034C522 /* ZZOldArchiveEntry.mm in Sources */,
 				F5F129FB1A2F78490015982C /* APCSchedule+AddOn.m in Sources */,
 				F5B9463C1A7309A20034C522 /* ZZInflateInputStream.m in Sources */,

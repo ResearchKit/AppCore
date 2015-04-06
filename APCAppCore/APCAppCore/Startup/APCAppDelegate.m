@@ -646,7 +646,7 @@ then a location event has occurred and location services must be manually starte
                 sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
             }
             
-            APCHealthKitCumulativeQuantityTypeDataBridge *collector = [[APCHealthKitCumulativeQuantityTypeDataBridge alloc] initWithIdentifier:sampleType.identifier sampleType:sampleType andLimit:1];
+            APCHealthKitBackgroundDataCollector *collector = [[APCHealthKitBackgroundDataCollector alloc] initWithIdentifier:sampleType.identifier sampleType:sampleType andLimit:1];
             
 
             

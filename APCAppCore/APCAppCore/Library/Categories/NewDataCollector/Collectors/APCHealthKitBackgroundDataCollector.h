@@ -34,7 +34,7 @@
 #import "APCDataCollector.h"
 #import <HealthKit/HealthKit.h>
 
-@interface APCHealthKitCumulativeQuantityTypeDataBridge : APCDataCollector
+@interface APCHealthKitBackgroundDataCollector : APCDataCollector
 
 @property (strong, nonatomic)   HKHealthStore*              healthStore;
 @property (strong, nonatomic)   HKUnit*                     unit;
