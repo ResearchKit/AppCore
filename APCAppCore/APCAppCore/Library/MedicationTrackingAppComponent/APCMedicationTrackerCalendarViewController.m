@@ -201,6 +201,9 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
                  APCLogError2 (error);
              } else {
                  [self fetchAllPrescriptions];
+                 if ([self.prescriptions count] == 0) {
+                     [self editButtonWasTapped:self.editButton];
+                 }
                  [self.view setNeedsDisplay];
                  [self refreshAllPages];
                  [self setupHiddenStates];
