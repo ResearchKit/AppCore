@@ -146,9 +146,9 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:APCHealthKitObserverQueryUpdateForSampleTypeNotification
                                                                 object:sampleKind];
             
-            if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
+            if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromHealthKitCollector:)])
             {
-                [self.delegate didRecieveUpdatedValueFromCollector:sampleKind];
+                [self.delegate didRecieveUpdatedValueFromHealthKitCollector:sampleKind];
             }
         }
 

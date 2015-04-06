@@ -34,7 +34,7 @@
 #import <Foundation/Foundation.h>
 #import "APCCollectorProtocol.h"
 
-@interface APCDataFacilitator : NSObject <APCCollectorProtocol>
+@interface APCPassiveHealthKitDataFacilitator : NSObject <APCCollectorProtocol>
 
 - (instancetype)initWithIdentifier:(NSString *)identifier andColumnNames:(NSArray *)columnNames;
 

@@ -31,8 +31,12 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
+#import <HealthKit/HealthKit.h>
+
 @protocol APCCollectorProtocol <NSObject>
 
 - (void) didRecieveUpdatedValueFromCollector:(id)results;
+
+- (void) didRecieveUpdatedValueFromHealthKitCollector:(id)quantitySample;
 
 @end

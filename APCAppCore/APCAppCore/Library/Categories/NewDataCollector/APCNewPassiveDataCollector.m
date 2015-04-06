@@ -32,6 +32,9 @@
 //
 
 #import "APCNewPassiveDataCollector.h"
+#import "APCDataCollector.h"
+#import "APCAppCore.h"
+
 
 @implementation APCNewPassiveDataCollector
 
@@ -41,6 +44,7 @@
     if (self)
     {
         _dataSyncList = [NSMutableArray new];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecameActive) name:UIApplicationDidBecomeActiveNotification object:[UIApplication sharedApplication]];
     }
     
     return self;
@@ -63,4 +67,22 @@
     
     
 }
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+- (void) appBecameActive
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        for (APCDataCollector * collector in self.dataSyncList)
+        {
+            [collector start];
+        }
+    });
+}
+
+
 @end

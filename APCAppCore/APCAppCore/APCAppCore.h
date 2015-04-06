@@ -89,7 +89,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import "APCAppCore/APCCollectorProtocol.h"
 #import "APCAppCore/APCHealthKitDataBridge.h"
 #import "APCAppCore/APCHealthKitCumulativeQuantityTypeDataBridge.h"
-#import "APCAppCore/APCDataFacilitator.h"
+#import "APCAppCore/APCPassiveHealthKitDataFacilitator.h"
 #import "APCAppCore/APCFileManagerUtility.h"
 #import "APCAppCore/APCDataCollector.h"
 

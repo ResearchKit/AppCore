@@ -31,7 +31,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "APCDataFacilitator.h"
+#import "APCPassiveHealthKitDataFacilitator.h"
 #import "APCAppCore.h"
 #import "zipzap.h"
 #import "APCDataVerificationClient.h"
@@ -47,7 +47,7 @@ static NSString *const kEndDateKey = @"endDate";
 static NSString *const kInfoFilename = @"info.json";
 static NSString *const kCSVFilename  = @"data.csv";
 
-@interface APCDataFacilitator ()
+@interface APCPassiveHealthKitDataFacilitator ()
 @property (nonatomic, strong) NSMutableDictionary * registeredTrackers;
 @property (nonatomic, strong) NSString * collectorsPath;
 @property (nonatomic, readonly) NSString *collectorsUploadPath;
@@ -60,10 +60,13 @@ static NSString *const kCSVFilename  = @"data.csv";
 @property (nonatomic) unsigned long long        sizeThreshold;
 @property (nonatomic)           NSArray*        columnNames;
 
+@property (nonatomic, strong) NSString*         csvFilename;
+@property (nonatomic, strong) NSOperationQueue* healthKitCollectorQueue;
+
 @end
 
 
-@implementation APCDataFacilitator
+@implementation APCPassiveHealthKitDataFacilitator
 
 /**********************************************************************/
 #pragma mark - APCCollectorProtocol Delegate Methods
@@ -77,35 +80,21 @@ static NSString *const kCSVFilename  = @"data.csv";
         //Unique configuration for collector
         _identifier = identifier;
         _columnNames = columnNames;
-
+        
+        if (!self.healthKitCollectorQueue) {
+            self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:@"HealthKit Data Collector"];
+        }
 
         //General configuration for file management
         _registeredTrackers = [NSMutableDictionary dictionary];
         NSString * documentsDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
         _collectorsPath = [documentsDir stringByAppendingPathComponent:kCollectorFolder];
-        [APCFileManagerUtility createFolderIfDoesntExist:_collectorsPath];
-        [APCFileManagerUtility createFolderIfDoesntExist:[_collectorsPath stringByAppendingPathComponent:kUploadFolder]];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecameActive) name:UIApplicationDidBecomeActiveNotification object:[UIApplication sharedApplication]];
+        [APCPassiveHealthKitDataFacilitator createFolderIfDoesntExist:_collectorsPath];
+        [APCPassiveHealthKitDataFacilitator createFolderIfDoesntExist:[_collectorsPath stringByAppendingPathComponent:kUploadFolder]];
         
         [self loadOrCreateDataFiles];
     }
     return self;
-}
-
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-
-- (void) appBecameActive
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [self.registeredTrackers enumerateKeysAndObjectsUsingBlock:^(id __unused key, APCDataTracker * obj, BOOL * __unused stop) {
-            [obj updateTracking];
-        }];
-    });
 }
 
 - (NSString *)collectorsUploadPath
@@ -144,83 +133,53 @@ static NSString *const kCSVFilename  = @"data.csv";
     self.infoDictionary = infoDictionary;
 }
 
-- (void) didRecieveUpdatedValueFromCollector:(id)quantitySample {
-
-//    [results enumerateObjectsUsingBlock: ^(id obj, NSUInteger __unused idx, BOOL * __unused stop) {
-//        
-//        NSString * rowString = nil;
-//        NSString * csvFilePath = nil;
-//        NSArray  * arrayOfStuffToPrint = nil;
-//        
-//        if ([obj isKindOfClass: [CMMotionActivity class]])
-//        {
-//            /*
-//             This csvColumnValues property comes from our CMMotionActivity+Helper
-//             category. These values will be in the same order as the matching
-//             csvColumnNames.  Those names will be shoved into the outbound .csv
-//             file because they're returned by the -columnNames method of the
-//             incoming Tracker.
-//             */
-//            arrayOfStuffToPrint = ((CMMotionActivity *) obj).csvColumnValues;
-//        }
-//        
-//        else if ([obj isKindOfClass: [NSArray class]])
-//        {
-//            arrayOfStuffToPrint = obj;
-//        }
-//        
-//        else
-//        {
-//            // Should literally never happen.  Ahem.
-//            APCLogDebug (@"Got report for dataTracker object [%@], but I don't know how to handle a [%@].",
-//                         obj,
-//                         NSStringFromClass ([obj class]));
-//        }
-//        
-//        if (arrayOfStuffToPrint.count > 0)
-//        {
-//            rowString = [[arrayOfStuffToPrint componentsJoinedByString: @","] stringByAppendingString: @"\n"];
-//            csvFilePath = [self.folder stringByAppendingPathComponent: kCSVFilename];
-//            
-//            [APCFileManagerUtility createOrAppendString: rowString toFile: csvFilePath];
-//        }
-//    }];
+- (void) didRecieveUpdatedValueFromHealthKitCollector:(id)quantitySample {
     
-    
-    NSString *dateTimeStamp = [[NSDate date] toStringInISO8601Format];
-    NSString *healthKitType = nil;
-    NSString *quantityValue = nil;
-    
-    if ([quantitySample isKindOfClass:[HKCategorySample class]]) {
-        HKCategorySample *catSample = (HKCategorySample *)quantitySample;
-        healthKitType = catSample.categoryType.identifier;
-        quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
-        
-        // Get the difference in seconds between the start and end date for the sample
-        NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
-                                                                                      fromDate:catSample.startDate
-                                                                                        toDate:catSample.endDate
-                                                                                       options:NSCalendarWrapComponents];
-        if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
-            quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", secondsSpentInBedOrAsleep.second];
-        } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
-            quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", secondsSpentInBedOrAsleep.second];
-        }
-    } else {
-        HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
-        healthKitType = qtySample.quantityType.identifier;
-        quantityValue = [NSString stringWithFormat:@"%@", qtySample.quantity];
-        quantityValue = [quantityValue stringByReplacingOccurrencesOfString:@" " withString:@","];
-    }
-    
-    NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue];
-        
-    [APCFileManagerUtility createOrAppendString:stringToWrite
-                                           toFile:[self.folder stringByAppendingPathComponent:self.identifier]];
-
-    
-    [self checkIfDataNeedsToBeFlushed];
+    [self processUpdatesFromHealthKitForSampleType:quantitySample];
 }
+
+
+
+- (void)processUpdatesFromHealthKitForSampleType:(id)quantitySample {
+    [self.healthKitCollectorQueue addOperationWithBlock:^{
+        NSString *dateTimeStamp = [[NSDate date] toStringInISO8601Format];
+        NSString *healthKitType = nil;
+        NSString *quantityValue = nil;
+        NSString *quantitySource = nil;
+        
+        if ([quantitySample isKindOfClass:[HKCategorySample class]]) {
+            HKCategorySample *catSample = (HKCategorySample *)quantitySample;
+            healthKitType = catSample.categoryType.identifier;
+            quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
+            
+            // Get the difference in seconds between the start and end date for the sample
+            NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
+                                                                                          fromDate:catSample.startDate
+                                                                                            toDate:catSample.endDate
+                                                                                           options:NSCalendarWrapComponents];
+            if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
+                quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", (long)secondsSpentInBedOrAsleep.second];
+            } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
+                quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", (long)secondsSpentInBedOrAsleep.second];
+            }
+        } else {
+            HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
+            healthKitType = qtySample.quantityType.identifier;
+            quantityValue = [NSString stringWithFormat:@"%@", qtySample.quantity];
+            quantityValue = [quantityValue stringByReplacingOccurrencesOfString:@" " withString:@","];
+            quantitySource = qtySample.source.name;
+        }
+        
+        NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue, quantitySource];
+        
+        [APCPassiveHealthKitDataFacilitator createOrAppendString:stringToWrite
+                                               toFile:[self.folder stringByAppendingPathComponent:kCSVFilename]];
+        
+        [self checkIfDataNeedsToBeFlushed];
+        
+    }];
+}
+
 
 - (void) checkIfDataNeedsToBeFlushed
 {
@@ -255,7 +214,8 @@ static NSString *const kCSVFilename  = @"data.csv";
     //Write the end date
     NSMutableDictionary * infoDictionary = [self.infoDictionary mutableCopy];
     infoDictionary[kEndDateKey]   = [[NSDate date] toStringInISO8601Format];
-    infoDictionary[kStartDateKey] = [[self datefromDateString:infoDictionary[kStartDateKey]] toStringInISO8601Format];
+    NSDate *startDate = [self datefromDateString:infoDictionary[kStartDateKey]];
+    infoDictionary[kStartDateKey] = [startDate toStringInISO8601Format];
     NSString * infoFilePath = [self.folder stringByAppendingPathComponent:kInfoFilename];
     
 #warning This is temporary, please remove once the work on a better class is completed.
@@ -286,7 +246,7 @@ static NSString *const kCSVFilename  = @"data.csv";
     
     NSDictionary *sageBS = [APCJSONSerializer serializableDictionaryFromSourceDictionary:infoDictionary];
     
-    [APCFileManagerUtility createOrReplaceString:[sageBS JSONString] toFile:infoFilePath];
+    [APCPassiveHealthKitDataFacilitator createOrReplaceString:[sageBS JSONString] toFile:infoFilePath];
     
     [self createZipFile];
     [self resetDataFilesForTracker];
@@ -358,17 +318,17 @@ static NSString *const kCSVFilename  = @"data.csv";
     NSString * infoFilePath = [self.folder stringByAppendingPathComponent:kInfoFilename];
     NSDictionary * infoDictionary;
     
-    [APCFileManagerUtility deleteFileIfExists:csvFilePath];
-    [APCFileManagerUtility deleteFileIfExists:infoFilePath];
+    [APCPassiveHealthKitDataFacilitator deleteFileIfExists:csvFilePath];
+    [APCPassiveHealthKitDataFacilitator deleteFileIfExists:infoFilePath];
     
     //Create info.json
     infoDictionary = @{kIdentifierKey : self.identifier, kStartDateKey : [NSDate date].description};
     NSString * infoJSON = [infoDictionary JSONString];
-    [APCFileManagerUtility createOrReplaceString:infoJSON toFile:infoFilePath];
+    [APCPassiveHealthKitDataFacilitator createOrReplaceString:infoJSON toFile:infoFilePath];
     
     //Create data csv file
     NSString * rowString = [[[self columnNames] componentsJoinedByString:@","] stringByAppendingString:@"\n"];
-    [APCFileManagerUtility createOrAppendString:rowString toFile:csvFilePath];
+    [APCPassiveHealthKitDataFacilitator createOrAppendString:rowString toFile:csvFilePath];
 }
 
 
@@ -377,6 +337,72 @@ static NSString *const kCSVFilename  = @"data.csv";
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
     return [dateFormat dateFromString:string];
+}
+
+
+
++ (void) createOrAppendString: (NSString*) string toFile: (NSString*) path
+{
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        [[string dataUsingEncoding:NSUTF8StringEncoding] writeToFile:path atomically:YES];
+    }
+    else
+    {
+        NSFileHandle *fileHandler = [NSFileHandle fileHandleForUpdatingAtPath:path];
+        [fileHandler seekToEndOfFile];
+        [fileHandler writeData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+        [fileHandler closeFile];
+    }
+}
+
++ (void) createOrReplaceString: (NSString*) string toFile: (NSString*) path
+{
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        NSError * error;
+        if (![string writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error]) {
+            APCLogError2(error);
+        }
+    }
+    else
+    {
+        NSError * error;
+        if (![[NSFileManager defaultManager] removeItemAtPath:path error:&error]) {
+            APCLogError2(error);
+        }
+        else
+        {
+            NSError * writeError;
+            if (![string writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error]) {
+                APCLogError2(writeError);
+            }
+        }
+    }
+}
+
++ (void) createFolderIfDoesntExist: (NSString*) path
+{
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        NSError * folderCreationError;
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:path
+                                       withIntermediateDirectories:YES
+                                                        attributes:@{
+                                                                     NSFileProtectionKey :
+                                                                         NSFileProtectionCompleteUntilFirstUserAuthentication
+                                                                     }
+                                                             error:&folderCreationError]) {
+            APCLogError2(folderCreationError);
+        }
+    }
+}
+
++ (void) deleteFileIfExists: (NSString*) path
+{
+    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        NSError * error;
+        if (![[NSFileManager defaultManager] removeItemAtPath:path error:&error]) {
+            APCLogError2(error);
+        }
+    }
 }
 
 

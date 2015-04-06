@@ -35,10 +35,10 @@
 
 @interface APCFileManagerUtility : NSObject
 
-+ (void) createOrAppendString: (NSString*) string toFile: (NSString*) path;
-+ (void) createOrReplaceString: (NSString*) string toFile: (NSString*) path;
-
-+ (void) createFolderIfDoesntExist: (NSString*) path;
-+ (void) deleteFileIfExists: (NSString*) path;
+//+ (void) createOrAppendString: (NSString*) string toFile: (NSString*) path;
+//+ (void) createOrReplaceString: (NSString*) string toFile: (NSString*) path;
+//
+//+ (void) createFolderIfDoesntExist: (NSString*) path;
+//+ (void) deleteFileIfExists: (NSString*) path;
 
 @end

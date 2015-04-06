@@ -225,8 +225,8 @@
 		7B0DC4151A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B0DC4131A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.m */; };
 		7B0DC4181A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7B0DC4171A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib */; };
 		7B2AA4A71ACE33400004A48B /* APCCollectorProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B2AA4A41ACE33400004A48B /* APCCollectorProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7B2AA4A81ACE33400004A48B /* APCDataFacilitator.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B2AA4A51ACE33400004A48B /* APCDataFacilitator.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7B2AA4A91ACE33400004A48B /* APCDataFacilitator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2AA4A61ACE33400004A48B /* APCDataFacilitator.m */; };
+		7B2AA4A81ACE33400004A48B /* APCPassiveHealthKitDataFacilitator.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B2AA4A51ACE33400004A48B /* APCPassiveHealthKitDataFacilitator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7B2AA4A91ACE33400004A48B /* APCPassiveHealthKitDataFacilitator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2AA4A61ACE33400004A48B /* APCPassiveHealthKitDataFacilitator.m */; };
 		7B2AA4AC1ACE337E0004A48B /* APCFileManagerUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B2AA4AA1ACE337E0004A48B /* APCFileManagerUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7B2AA4AD1ACE337E0004A48B /* APCFileManagerUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2AA4AB1ACE337E0004A48B /* APCFileManagerUtility.m */; };
 		7B6C8CB71AA26ECE0007B560 /* APCConsentBooleanQuestion.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B6C8CAD1AA26ECE0007B560 /* APCConsentBooleanQuestion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -918,8 +918,8 @@
 		7B0DC4131A5EFDDA0072EE80 /* APCActivitiesViewWithNoTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCActivitiesViewWithNoTask.m; sourceTree = "<group>"; };
 		7B0DC4171A5EFECC0072EE80 /* APCActivitiesViewWithNoTask.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCActivitiesViewWithNoTask.xib; sourceTree = "<group>"; };
 		7B2AA4A41ACE33400004A48B /* APCCollectorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCollectorProtocol.h; sourceTree = "<group>"; };
-		7B2AA4A51ACE33400004A48B /* APCDataFacilitator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataFacilitator.h; sourceTree = "<group>"; };
-		7B2AA4A61ACE33400004A48B /* APCDataFacilitator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataFacilitator.m; sourceTree = "<group>"; };
+		7B2AA4A51ACE33400004A48B /* APCPassiveHealthKitDataFacilitator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPassiveHealthKitDataFacilitator.h; sourceTree = "<group>"; };
+		7B2AA4A61ACE33400004A48B /* APCPassiveHealthKitDataFacilitator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPassiveHealthKitDataFacilitator.m; sourceTree = "<group>"; };
 		7B2AA4AA1ACE337E0004A48B /* APCFileManagerUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFileManagerUtility.h; sourceTree = "<group>"; };
 		7B2AA4AB1ACE337E0004A48B /* APCFileManagerUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFileManagerUtility.m; sourceTree = "<group>"; };
 		7B6C8CAD1AA26ECE0007B560 /* APCConsentBooleanQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConsentBooleanQuestion.h; sourceTree = "<group>"; };
@@ -1782,8 +1782,8 @@
 				7B2AA4AA1ACE337E0004A48B /* APCFileManagerUtility.h */,
 				7B2AA4AB1ACE337E0004A48B /* APCFileManagerUtility.m */,
 				7B2AA4A41ACE33400004A48B /* APCCollectorProtocol.h */,
-				7B2AA4A51ACE33400004A48B /* APCDataFacilitator.h */,
-				7B2AA4A61ACE33400004A48B /* APCDataFacilitator.m */,
+				7B2AA4A51ACE33400004A48B /* APCPassiveHealthKitDataFacilitator.h */,
+				7B2AA4A61ACE33400004A48B /* APCPassiveHealthKitDataFacilitator.m */,
 			);
 			path = "File Manager";
 			sourceTree = "<group>";
@@ -2995,7 +2995,7 @@
 				369E27F51A96B7A200D35DFA /* APCMedicationPossibleDosage.h in Headers */,
 				7B8DBEC21AA186B2007B4026 /* APCVerticalThinLineView.h in Headers */,
 				F5B947FE1A73272C0034C522 /* APCScheduleExpression.h in Headers */,
-				7B2AA4A81ACE33400004A48B /* APCDataFacilitator.h in Headers */,
+				7B2AA4A81ACE33400004A48B /* APCPassiveHealthKitDataFacilitator.h in Headers */,
 				F5B946431A7309A20034C522 /* ZZOldArchiveEntryWriter.h in Headers */,
 				CFEF5CAD1A807DE4009A8634 /* APCCustomBackButton.h in Headers */,
 				F5B946411A7309A20034C522 /* ZZOldArchiveEntry.h in Headers */,
@@ -3611,7 +3611,7 @@
 				F5B947AE1A73272C0034C522 /* APCAppearanceInfo.m in Sources */,
 				5B0432A81A322BEE000DC9ED /* APCOnboardingTask.m in Sources */,
 				F5F12AB11A2F78490015982C /* APCSignUpMedicalInfoViewController.m in Sources */,
-				7B2AA4A91ACE33400004A48B /* APCDataFacilitator.m in Sources */,
+				7B2AA4A91ACE33400004A48B /* APCPassiveHealthKitDataFacilitator.m in Sources */,
 				F5F12ABF1A2F78490015982C /* APCDashboardViewController.m in Sources */,
 				CFFDEDF61A95734000B25581 /* APCMedicationTrackerSetupViewController.m in Sources */,
 				F5F12A761A2F78490015982C /* APCPieGraphView.m in Sources */,
