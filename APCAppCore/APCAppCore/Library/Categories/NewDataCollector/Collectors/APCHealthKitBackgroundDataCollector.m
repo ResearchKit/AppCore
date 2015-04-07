@@ -166,8 +166,8 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
             }
             else if ([sampleKind isKindOfClass:[HKWorkout class]])
             {
-                HKWorkout* workoutSample = (HKWorkout*)sampleKind;
-                APCLogDebug(@"HK Update received for: %@ - %d", workoutSample.sampleType.identifier, workoutSample.metadata);
+                HKWorkoutType* workoutSample = (HKWorkoutType*)sampleKind;
+                APCLogDebug(@"HK Update received for: %@ - %d", workoutSample.identifier, workoutSample.description);
             }
             else
             {
