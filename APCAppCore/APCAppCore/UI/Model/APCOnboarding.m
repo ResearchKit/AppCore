@@ -175,8 +175,8 @@ static NSString * const kOnboardingStoryboardName = @"APCOnboarding";
 
 - (UIViewController *)nextScene
 {
-    
-    self.currentStep = [self.onboardingTask stepAfterStep:self.currentStep withResult:nil];
+    ORKTaskResult* result = nil;
+    self.currentStep = [self.onboardingTask stepAfterStep:self.currentStep withResult:result];
     
     UIViewController *nextViewController = [self viewControllerForSceneIdentifier:self.currentStep.identifier];
     
@@ -185,8 +185,9 @@ static NSString * const kOnboardingStoryboardName = @"APCOnboarding";
 
 - (void)popScene
 {
+    ORKTaskResult* result = nil;
     if (![self.currentStep.identifier isEqualToString:kAPCSignUpMedicalInfoStepIdentifier]) {
-        self.currentStep = [self.onboardingTask stepBeforeStep:self.currentStep withResult:nil];
+        self.currentStep = [self.onboardingTask stepBeforeStep:self.currentStep withResult:result];
     }
 }
 
