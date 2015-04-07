@@ -108,10 +108,10 @@ static NSString *const kFinishedProperty = @"finished";
     }
 }
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithReason:(ORKTaskViewControllerFinishReason)reason error:(nullable NSError *)error
 {
     [self removeKVOIfNeeded];
-    [super taskViewController:taskViewController didFinishWithResult:result error:error];
+    [super taskViewController:taskViewController didFinishWithReason:reason error:error];
 }
 
 @end

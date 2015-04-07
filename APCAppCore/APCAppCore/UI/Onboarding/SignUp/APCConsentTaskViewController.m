@@ -55,7 +55,7 @@
 }
 
 #pragma mark Required Protocol Methods for Abstract Class
-- (void)taskViewController:(ORKTaskViewController *) __unused taskViewController didFinishWithResult:(ORKTaskViewControllerResult) __unused result error:(NSError *) __unused error
+- (void)taskViewController:(ORKTaskViewController *) __unused taskViewController didFinishWithReason:(ORKTaskViewControllerFinishReason) __unused reason error:(nullable NSError *) __unused error
 {
     
 }
