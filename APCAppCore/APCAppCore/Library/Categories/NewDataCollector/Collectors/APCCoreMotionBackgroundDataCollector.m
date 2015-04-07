@@ -34,7 +34,7 @@
 #import "APCCoreMotionBackgroundDataCollector.h"
 #import "CMMotionActivity+Helper.h"
 
-static NSString *const kLastUsedTimeKey = @"APCPassiveCoreMotionLastTrackedEndDate";
+static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminatedTime";
 static NSInteger const kNumberOfDaysBack = 8;
 
 @interface APCCoreMotionBackgroundDataCollector()
@@ -51,18 +51,59 @@ static NSInteger const kNumberOfDaysBack = 8;
 */
 - (void) start
 {
+    
+    
     self.motionActivityManager = [[CMMotionActivityManager alloc] init];
     
-    [self.motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new] withHandler:^(CMMotionActivity *activity) {
-        if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)]) {
-            [self.delegate didRecieveUpdatedValueFromCollector:activity];
-        }
-    }];
+    NSDate* lastTrackedEndDate = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+    
+    if (!lastTrackedEndDate) {
+        lastTrackedEndDate = [self maximumNumberOfDaysBack];
+        
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [self.motionActivityManager queryActivityStartingFromDate:lastTrackedEndDate
+                                                       toDate:[NSDate date]
+                                                      toQueue:[NSOperationQueue new]
+                                                  withHandler:^(NSArray* activities, NSError* __unused error) {
+                                                      
+                                                      
+                                                      __typeof(self) strongSelf = weakSelf;
+                                                      
+                                                      if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
+                                                      {
+                                                          [strongSelf.delegate didRecieveUpdatedValueFromCollector:activities];
+                                                      }
+                                                      
+                                                      [strongSelf.motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new] withHandler:^(CMMotionActivity *activity) {
+                                                          if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)]) {
+                                                              [strongSelf.delegate didRecieveUpdatedValueFromCollector:activity];
+                                                          }
+                                                      }];
+                                                      
+                                                  }];
     
 }
 
-- (void)stop {
+- (void) stop {
     [self.motionActivityManager stopActivityUpdates];
+}
+
+#pragma mark - Helper methods
+
+- (NSDate*) maximumNumberOfDaysBack {
+    NSInteger               numberOfDaysBack = kNumberOfDaysBack * -1;
+    NSDateComponents*       components = [[NSDateComponents alloc] init];
+    
+    [components setDay:numberOfDaysBack];
+    
+    NSDate*                 date = [[NSCalendar currentCalendar] dateByAddingComponents:components
+                                                                                  toDate:[NSDate date]
+                                                                                 options:0];
+
+    return date;
 }
 
 @end

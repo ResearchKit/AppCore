@@ -37,10 +37,10 @@
 @interface APCNewPassiveDataCollector : NSObject
 
 -(void) addDataSync: (id) dataSync;
--(void) beginSynchronization;
--(void) suspendSynchronization;
+-(void) startCollecting;
+-(void) stopCollecting;
 
-@property (nonatomic, strong)  NSDate*          anchorDate;
+@property (nonatomic, strong, getter = getAppTerminationDate)  NSDate*          terminationDate;
 @property (nonatomic, strong)  NSMutableArray*  dataSyncList;
 
 @end

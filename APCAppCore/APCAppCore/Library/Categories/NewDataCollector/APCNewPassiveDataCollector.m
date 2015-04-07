@@ -36,6 +36,8 @@
 #import "APCAppCore.h"
 
 
+static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminatedTime";
+
 @implementation APCNewPassiveDataCollector
 
 - (instancetype) init {
@@ -45,27 +47,14 @@
     {
         _dataSyncList = [NSMutableArray new];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecameActive) name:UIApplicationDidBecomeActiveNotification object:[UIApplication sharedApplication]];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate) name:UIApplicationWillTerminateNotification object:[UIApplication sharedApplication]];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillSuspend) name:UIApplicationDidEnterBackgroundNotification object:[UIApplication sharedApplication]];
+    
     }
     
     return self;
-}
-
-- (void) addDataSync:(id)dataSync {
-    
-    [self.dataSyncList addObject:dataSync];
-}
-
-- (void) beginSyncrhonization {
-    
-}
-
-- (void) suspendSynchronization {
-    
-}
-
-- (void) beginSynchronization {
-    
-    
 }
 
 - (void)dealloc
@@ -73,6 +62,31 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void) addDataSync:(id)dataSync {
+    
+    [self.dataSyncList addObject:dataSync];
+}
+
+- (void) stopCollecting {
+ 
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        for (APCDataCollector * collector in self.dataSyncList)
+        {
+            [collector stop];
+        }
+    });
+}
+
+- (void) startCollecting {
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        for (APCDataCollector * collector in self.dataSyncList)
+        {
+            [collector start];
+        }
+    });
+    
+}
 
 - (void) appBecameActive
 {
@@ -82,6 +96,23 @@
             [collector start];
         }
     });
+}
+
+- (void) appWillSuspend
+{
+    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastUsedTimeKey];
+}
+
+- (void) appWillTerminate
+{
+    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastUsedTimeKey];
+}
+
+- (NSDate*) getAppTerminationDate
+{
+    _terminationDate = (NSDate*) [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+    
+    return _terminationDate;
 }
 
 

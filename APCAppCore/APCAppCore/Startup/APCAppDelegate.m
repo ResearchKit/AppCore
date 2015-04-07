@@ -630,7 +630,7 @@ then a location event has occurred and location services must be manually starte
     
     self.passiveHealthKitCollector = [[APCNewPassiveDataCollector alloc] init];
     
-    APCPassiveHealthKitDataFacilitator *receiver = [[APCPassiveHealthKitDataFacilitator alloc] initWithIdentifier:@"HealthKitDataCollector" andColumnNames:@[@"datetime,type,value,source"]];
+    APCPassiveHealthKitDataSink *receiver = [[APCPassiveHealthKitDataSink alloc] initWithIdentifier:@"HealthKitDataCollector" andColumnNames:@[@"datetime,type,value,source"]];
     
     if (dataTypesWithReadPermission) {
         
@@ -640,9 +640,22 @@ then a location event has occurred and location services must be manually starte
             
             if ([dataType isKindOfClass:[NSDictionary class]])
             {
+                
+
                 NSDictionary* categoryType = (NSDictionary *) dataType;
-                sampleType = [HKObjectType categoryTypeForIdentifier:categoryType[kHKCategoryTypeKey]];
-            } else {
+                
+                if ([categoryType[kHKCategoryTypeKey] isEqualToString:HKWorkoutTypeIdentifier])
+                {
+                    sampleType = [HKObjectType workoutType];
+                }
+                else
+                {
+                    sampleType = [HKObjectType categoryTypeForIdentifier:categoryType[kHKCategoryTypeKey]];
+                }
+
+            }
+            else
+            {
                 sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
             }
             

@@ -34,9 +34,8 @@
 #import <Foundation/Foundation.h>
 #import "APCCollectorProtocol.h"
 
-@interface APCPassiveHealthKitDataFacilitator : NSObject <APCCollectorProtocol>
+@interface APCPassiveHealthKitDataSink : NSObject <APCCollectorProtocol>
 
 - (instancetype)initWithIdentifier:(NSString *)identifier andColumnNames:(NSArray *)columnNames;
-
 
 @end

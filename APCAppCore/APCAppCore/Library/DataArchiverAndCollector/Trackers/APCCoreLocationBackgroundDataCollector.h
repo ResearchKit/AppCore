@@ -32,6 +32,7 @@
 // 
  
 #import <Foundation/Foundation.h>
+#import "APCDataCollector.h"
 #import <CoreLocation/CoreLocation.h>
 #import "APCDataTracker.h"
 
@@ -41,7 +42,7 @@ typedef  enum  _APCPassiveLocationTrackingHomeLocation
     APCPassiveLocationTrackingHomeLocationUnavailable
 }  APCPassiveLocationTrackingHomeLocation;
 
-@interface APCCoreLocationTracker : APCDataTracker
+@interface APCCoreLocationBackgroundDataCollector : APCDataCollector
 
 - (instancetype)initWithIdentifier: (NSString*) identifier deferredUpdatesTimeout:(NSTimeInterval)anUpdateTimeout andHomeLocationStatus:(APCPassiveLocationTrackingHomeLocation)aHomeLocationStatus;
 

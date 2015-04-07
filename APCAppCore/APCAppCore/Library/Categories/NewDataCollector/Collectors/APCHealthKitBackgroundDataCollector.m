@@ -34,9 +34,12 @@
 #import "APCHealthKitBackgroundDataCollector.h"
 #import "APCAppCore.h"
 
+static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminatedTime";
+
 @interface APCHealthKitBackgroundDataCollector()
 
 @property (strong, nonatomic)   HKObserverQuery*    observerQuery;
+@property (strong, nonatomic)   HKSampleQuery*      sampleQuery;
 
 @end
 
@@ -47,13 +50,11 @@
     self = [super init];
     
     if (self) {
-
-        NSParameterAssert(identifier != nil);
         
-        _identifier = identifier;
-        _sampleType = type;
-        _queryLimit = queryLimit;
-        _healthStore                = [HKHealthStore new];
+        _identifier     = identifier;
+        _sampleType     = type;
+        _queryLimit     = queryLimit;
+        _healthStore    = [HKHealthStore new];
     }
     
     return self;
@@ -65,36 +66,63 @@
 
 - (void)observerQueryForSampleType:(HKSampleType *)sampleType{
     
+    NSDate* lastTrackedEndDate = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+    
+    if(lastTrackedEndDate == nil) {
+        lastTrackedEndDate = [NSDate date];
+    }
+    
+    NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:lastTrackedEndDate endDate:[NSDate date] options:0];
+    
     __weak typeof(self) weakSelf = self;
     
-    
-        self.observerQuery = [[HKObserverQuery alloc] initWithSampleType:sampleType
-                                                                     predicate:nil
-                                                                 updateHandler:^(HKObserverQuery __unused *query,
-                                                                                 HKObserverQueryCompletionHandler completionHandler,
-                                                                                 NSError *error)
-                                    {
-                                        
-                                        if (error) {
-                                            APCLogError2(error);
-                                        } else {
-                                            //__typeof__(self) strongSelf = weakSelf;
-                                            
-                                            __typeof(self) strongSelf = weakSelf;
-                                            
-                                            [strongSelf sampleQueryWithType:strongSelf.sampleType andLimit:strongSelf.queryLimit];
-                                            
-                                            // If there's a completion block execute it.
-                                            if (completionHandler) {
-                                                completionHandler();
-                                            }
-                                        }
-                                    }];
+    self.sampleQuery = [[HKSampleQuery alloc] initWithSampleType:sampleType predicate:predicate limit:HKObjectQueryNoLimit sortDescriptors:nil resultsHandler:^(HKSampleQuery __unused *query, NSArray *results, NSError *error) {
+
+        if (error) {
+            APCLogError2(error);
+        } else {
+            
+            __typeof(self) strongSelf = weakSelf;
+            __weak typeof(self) weakSelf = strongSelf;
+            
+            
+            // Send the initial results
+            if (results)
+            {
+#warning Uncomment this line below once you have the data sink ready to support this.
+//                [strongSelf notifyListenersWithResults:results withError:error];
+            }
         
-        [self.healthStore executeQuery:self.observerQuery];
+            strongSelf.observerQuery = [[HKObserverQuery alloc] initWithSampleType:sampleType
+                                                                         predicate:nil
+                                                                     updateHandler:^(HKObserverQuery __unused *query,
+                                                                                     HKObserverQueryCompletionHandler completionHandler,
+                                                                                     NSError *error)
+                                        {
+                                            
+                                            if (error) {
+                                                APCLogError2(error);
+                                            } else {
+                                                __typeof(self) strongSelf = weakSelf;
+                                                
+                                                [strongSelf sampleQueryWithType:strongSelf.sampleType andLimit:strongSelf.queryLimit];
+                                                
+                                                // If there's a completion block execute it.
+                                                if (completionHandler) {
+                                                    completionHandler();
+                                                }
+                                            }
+                                        }];
+            
+            [strongSelf.healthStore executeQuery:strongSelf.observerQuery];
+        }
+    }];
+    
+    [self.healthStore executeQuery:self.sampleQuery];
 }
 
 - (void)stop {
+    [self.healthStore stopQuery:self.sampleQuery];
     [self.healthStore stopQuery:self.observerQuery];
 }
 
@@ -124,20 +152,25 @@
     
     if (results)
     {
-        
-        
-        
         id sampleKind = results.firstObject;
 
         if (sampleKind) {
 
-            if ([sampleKind isKindOfClass:[HKCategorySample class]]) {
+            if ([sampleKind isKindOfClass:[HKCategorySample class]])
+            {
                 HKCategorySample *categorySample = (HKCategorySample *)sampleKind;
 
 
                 APCLogDebug(@"HK Update received for: %@ - %d", categorySample.categoryType.identifier, categorySample.value);
 
-            } else {
+            }
+            else if ([sampleKind isKindOfClass:[HKWorkout class]])
+            {
+                HKWorkout* workoutSample = (HKWorkout*)sampleKind;
+                APCLogDebug(@"HK Update received for: %@ - %d", workoutSample.sampleType.identifier, workoutSample.metadata);
+            }
+            else
+            {
                 HKQuantitySample *quantitySample = (HKQuantitySample *)sampleKind;
                 APCLogDebug(@"HK Update received for: %@ - %@", quantitySample.quantityType.identifier, quantitySample.quantity);
 
@@ -151,7 +184,6 @@
                 [self.delegate didRecieveUpdatedValueFromHealthKitCollector:sampleKind];
             }
         }
-
     }
     else
     {

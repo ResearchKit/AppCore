@@ -32,7 +32,7 @@
 // 
 
 #import "APCAppCore.h"
-#import "APCCoreLocationTracker.h"
+#import "APCCoreLocationBackgroundDataCollector.h"
 
 
 static  NSString  *kLocationTimeStamp                    = @"timestamp";
@@ -48,7 +48,7 @@ static NSString *kRecentLocationFileName = @"recentLocation";
 static NSString *kLat = @"lat";
 static NSString *kLon = @"lon";
 
-@interface APCCoreLocationTracker () <CLLocationManagerDelegate>
+@interface APCCoreLocationBackgroundDataCollector () <CLLocationManagerDelegate>
 {
     CLLocation * _baseTrackingLocation;
     CLLocation * _mostRecentUpdatedLocation;
@@ -82,14 +82,14 @@ static NSString *kLon = @"lon";
 @end
 
 
-@implementation APCCoreLocationTracker
+@implementation APCCoreLocationBackgroundDataCollector
 
 - (instancetype)initWithIdentifier:(NSString*)identifier
             deferredUpdatesTimeout:(NSTimeInterval) __unused anUpdateTimeout
              andHomeLocationStatus:(APCPassiveLocationTrackingHomeLocation)aHomeLocationStatus
 {
     APCLogDebug(@"Initalizing location tracker");
-    self = [super initWithIdentifier:identifier];
+    self = [super init];
     if (self != nil)
     {
         _homeLocationStatus     = aHomeLocationStatus;
@@ -213,7 +213,10 @@ static NSString *kLon = @"lon";
     //Send to delegate
     if (result)
     {
-        [self.delegate APCDataTracker:self hasNewData:@[result]];
+        if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
+        {
+            [self.delegate didRecieveUpdatedValueFromCollector:result];
+        }
     }
 }
 
@@ -280,82 +283,82 @@ static NSString *kLon = @"lon";
 /*********************************************************************************/
 #pragma mark - Base Tracking Location & Recent Updated Location
 /*********************************************************************************/
-- (NSString*)baseTrackingFilePath
-{
-    return [self.folder stringByAppendingPathComponent:kBaseTrackingFileName];
-}
-
-- (NSString*)recentLocationFilePath
-{
-    return [self.folder stringByAppendingPathComponent:kRecentLocationFileName];
-}
-
-- (void)setBaseTrackingLocation:(CLLocation *)baseTrackingLocation
-{
-    _baseTrackingLocation = baseTrackingLocation;
-    NSDictionary * dict = @{kLat : @(baseTrackingLocation.coordinate.latitude), kLon : @(baseTrackingLocation.coordinate.longitude)};
-    [self writeDictionary:dict toPath:[self baseTrackingFilePath]];
-}
-
-- (CLLocation*)baseTrackingLocation
-{
-    if (!_baseTrackingLocation)
-    {
-        if (self.folder)
-        {
-            if ([[NSFileManager defaultManager] fileExistsAtPath:[self baseTrackingFilePath]])
-            {
-                NSError*    error;
-                NSString*   jsonString = [NSString stringWithContentsOfFile:[self baseTrackingFilePath] encoding:NSUTF8StringEncoding error:&error];
-                APCLogError2(error);
-                NSDictionary* dict;
-                
-                if (jsonString)
-                {
-                    dict = [NSDictionary dictionaryWithJSONString:jsonString];
-                    _baseTrackingLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue] longitude:[dict[kLon] doubleValue]];
-                }
-            }
-        }
-    }
-    return _baseTrackingLocation;
-}
-
-- (void)setMostRecentUpdatedLocation:(CLLocation *)mostRecentUpdatedLocation
-{
-    _mostRecentUpdatedLocation = mostRecentUpdatedLocation;
-    NSDictionary * dict = @{kLat : @(mostRecentUpdatedLocation.coordinate.latitude), kLon : @(mostRecentUpdatedLocation.coordinate.longitude)};
-    [self writeDictionary:dict toPath:[self recentLocationFilePath]];
-}
-
-- (CLLocation*)mostRecentUpdatedLocation
-{
-    if (!_mostRecentUpdatedLocation)
-    {
-        if (self.folder)
-        {
-            if ([[NSFileManager defaultManager] fileExistsAtPath:[self recentLocationFilePath]])
-            {
-                NSError*    error;
-                NSString*   jsonString = [NSString stringWithContentsOfFile:[self recentLocationFilePath] encoding:NSUTF8StringEncoding error:&error];
-                APCLogError2(error);
-                NSDictionary * dict;
-                if (jsonString)
-                {
-                    dict = [NSDictionary dictionaryWithJSONString:jsonString];
-                    _mostRecentUpdatedLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue] longitude:[dict[kLon] doubleValue]];
-                }
-            }
-        }
-    }
-    
-    return _mostRecentUpdatedLocation;
-}
-
-- (void)writeDictionary:(NSDictionary*)dict toPath:(NSString*)path
-{
-    NSString*   dataString = [dict JSONString];
-    [APCPassiveDataCollector createOrReplaceString:dataString toFile:path];
-}
+//- (NSString*)baseTrackingFilePath
+//{
+//    return [self.folder stringByAppendingPathComponent:kBaseTrackingFileName];
+//}
+//
+//- (NSString*)recentLocationFilePath
+//{
+//    return [self.folder stringByAppendingPathComponent:kRecentLocationFileName];
+//}
+//
+//- (void)setBaseTrackingLocation:(CLLocation *)baseTrackingLocation
+//{
+//    _baseTrackingLocation = baseTrackingLocation;
+//    NSDictionary * dict = @{kLat : @(baseTrackingLocation.coordinate.latitude), kLon : @(baseTrackingLocation.coordinate.longitude)};
+//    [self writeDictionary:dict toPath:[self baseTrackingFilePath]];
+//}
+//
+//- (CLLocation*)baseTrackingLocation
+//{
+//    if (!_baseTrackingLocation)
+//    {
+//        if (self.folder)
+//        {
+//            if ([[NSFileManager defaultManager] fileExistsAtPath:[self baseTrackingFilePath]])
+//            {
+//                NSError*    error;
+//                NSString*   jsonString = [NSString stringWithContentsOfFile:[self baseTrackingFilePath] encoding:NSUTF8StringEncoding error:&error];
+//                APCLogError2(error);
+//                NSDictionary* dict;
+//                
+//                if (jsonString)
+//                {
+//                    dict = [NSDictionary dictionaryWithJSONString:jsonString];
+//                    _baseTrackingLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue] longitude:[dict[kLon] doubleValue]];
+//                }
+//            }
+//        }
+//    }
+//    return _baseTrackingLocation;
+//}
+//
+//- (void)setMostRecentUpdatedLocation:(CLLocation *)mostRecentUpdatedLocation
+//{
+//    _mostRecentUpdatedLocation = mostRecentUpdatedLocation;
+//    NSDictionary * dict = @{kLat : @(mostRecentUpdatedLocation.coordinate.latitude), kLon : @(mostRecentUpdatedLocation.coordinate.longitude)};
+//    [self writeDictionary:dict toPath:[self recentLocationFilePath]];
+//}
+//
+//- (CLLocation*)mostRecentUpdatedLocation
+//{
+//    if (!_mostRecentUpdatedLocation)
+//    {
+//        if (self.folder)
+//        {
+//            if ([[NSFileManager defaultManager] fileExistsAtPath:[self recentLocationFilePath]])
+//            {
+//                NSError*    error;
+//                NSString*   jsonString = [NSString stringWithContentsOfFile:[self recentLocationFilePath] encoding:NSUTF8StringEncoding error:&error];
+//                APCLogError2(error);
+//                NSDictionary * dict;
+//                if (jsonString)
+//                {
+//                    dict = [NSDictionary dictionaryWithJSONString:jsonString];
+//                    _mostRecentUpdatedLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue] longitude:[dict[kLon] doubleValue]];
+//                }
+//            }
+//        }
+//    }
+//    
+//    return _mostRecentUpdatedLocation;
+//}
+//
+//- (void)writeDictionary:(NSDictionary*)dict toPath:(NSString*)path
+//{
+//    NSString*   dataString = [dict JSONString];
+//    [APCPassiveDataCollector createOrReplaceString:dataString toFile:path];
+//}
 
 @end

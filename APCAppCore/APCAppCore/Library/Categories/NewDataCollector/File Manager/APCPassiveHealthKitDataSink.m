@@ -31,7 +31,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "APCPassiveHealthKitDataFacilitator.h"
+#import "APCPassiveHealthKitDataSink.h"
 #import "APCAppCore.h"
 #import "zipzap.h"
 #import "APCDataVerificationClient.h"
@@ -47,7 +47,7 @@ static NSString *const kEndDateKey = @"endDate";
 static NSString *const kInfoFilename = @"info.json";
 static NSString *const kCSVFilename  = @"data.csv";
 
-@interface APCPassiveHealthKitDataFacilitator ()
+@interface APCPassiveHealthKitDataSink ()
 @property (nonatomic, strong) NSMutableDictionary * registeredTrackers;
 @property (nonatomic, strong) NSString * collectorsPath;
 @property (nonatomic, readonly) NSString *collectorsUploadPath;
@@ -66,7 +66,7 @@ static NSString *const kCSVFilename  = @"data.csv";
 @end
 
 
-@implementation APCPassiveHealthKitDataFacilitator
+@implementation APCPassiveHealthKitDataSink
 
 /**********************************************************************/
 #pragma mark - APCCollectorProtocol Delegate Methods
@@ -89,8 +89,8 @@ static NSString *const kCSVFilename  = @"data.csv";
         _registeredTrackers = [NSMutableDictionary dictionary];
         NSString * documentsDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
         _collectorsPath = [documentsDir stringByAppendingPathComponent:kCollectorFolder];
-        [APCPassiveHealthKitDataFacilitator createFolderIfDoesntExist:_collectorsPath];
-        [APCPassiveHealthKitDataFacilitator createFolderIfDoesntExist:[_collectorsPath stringByAppendingPathComponent:kUploadFolder]];
+        [APCPassiveHealthKitDataSink createFolderIfDoesntExist:_collectorsPath];
+        [APCPassiveHealthKitDataSink createFolderIfDoesntExist:[_collectorsPath stringByAppendingPathComponent:kUploadFolder]];
         
         [self loadOrCreateDataFiles];
     }
@@ -172,7 +172,7 @@ static NSString *const kCSVFilename  = @"data.csv";
         
         NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue, quantitySource];
         
-        [APCPassiveHealthKitDataFacilitator createOrAppendString:stringToWrite
+        [APCPassiveHealthKitDataSink createOrAppendString:stringToWrite
                                                toFile:[self.folder stringByAppendingPathComponent:kCSVFilename]];
         
         [self checkIfDataNeedsToBeFlushed];
@@ -246,7 +246,7 @@ static NSString *const kCSVFilename  = @"data.csv";
     
     NSDictionary *sageBS = [APCJSONSerializer serializableDictionaryFromSourceDictionary:infoDictionary];
     
-    [APCPassiveHealthKitDataFacilitator createOrReplaceString:[sageBS JSONString] toFile:infoFilePath];
+    [APCPassiveHealthKitDataSink createOrReplaceString:[sageBS JSONString] toFile:infoFilePath];
     
     [self createZipFile];
     [self resetDataFilesForTracker];
@@ -318,17 +318,17 @@ static NSString *const kCSVFilename  = @"data.csv";
     NSString * infoFilePath = [self.folder stringByAppendingPathComponent:kInfoFilename];
     NSDictionary * infoDictionary;
     
-    [APCPassiveHealthKitDataFacilitator deleteFileIfExists:csvFilePath];
-    [APCPassiveHealthKitDataFacilitator deleteFileIfExists:infoFilePath];
+    [APCPassiveHealthKitDataSink deleteFileIfExists:csvFilePath];
+    [APCPassiveHealthKitDataSink deleteFileIfExists:infoFilePath];
     
     //Create info.json
     infoDictionary = @{kIdentifierKey : self.identifier, kStartDateKey : [NSDate date].description};
     NSString * infoJSON = [infoDictionary JSONString];
-    [APCPassiveHealthKitDataFacilitator createOrReplaceString:infoJSON toFile:infoFilePath];
+    [APCPassiveHealthKitDataSink createOrReplaceString:infoJSON toFile:infoFilePath];
     
     //Create data csv file
     NSString * rowString = [[[self columnNames] componentsJoinedByString:@","] stringByAppendingString:@"\n"];
-    [APCPassiveHealthKitDataFacilitator createOrAppendString:rowString toFile:csvFilePath];
+    [APCPassiveHealthKitDataSink createOrAppendString:rowString toFile:csvFilePath];
 }
 
 

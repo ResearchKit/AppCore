@@ -76,7 +76,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDataTracker.h>
 #import <APCAppCore/APCHKDiscreteQuantityTracker.h>
 #import <APCAppCore/APCHKCumulativeQuantityTracker.h>
-#import <APCAppCore/APCCoreLocationTracker.h>
+#import <APCAppCore/APCCoreLocationBackgroundDataCollector.h>
 #import <APCAppCore/APCCoreMotionTracker.h>
 #import <APCAppCore/zipzap.h>
 #import <APCAppCore/ZZArchive.h>
@@ -87,9 +87,8 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 
 #import "APCAppCore/APCNewPassiveDataCollector.h"
 #import "APCAppCore/APCCollectorProtocol.h"
-#import "APCAppCore/APCHealthKitDataBridge.h"
 #import "APCAppCore/APCHealthKitBackgroundDataCollector.h"
-#import "APCAppCore/APCPassiveHealthKitDataFacilitator.h"
+#import "APCAppCore/APCPassiveHealthKitDataSink.h"
 #import "APCAppCore/APCFileManagerUtility.h"
 #import "APCAppCore/APCDataCollector.h"
 
