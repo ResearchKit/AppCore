@@ -107,6 +107,35 @@
     }
 }
 
+- (void) updateCustomProfile:(SBBUserProfile*)profile onCompletion:(void (^)(NSError * error))completionBlock
+{
+    if ([self serverDisabled]) {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+    }
+    else
+    {
+        profile.email     = self.email;
+        profile.username  = self.email;
+        profile.firstName = self.name;
+        
+        [SBBComponent(SBBProfileManager) updateUserProfileWithProfile: profile
+                                                           completion: ^(id __unused responseObject,
+                                                                         NSError *error)
+         {
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 if (!error) {
+                     APCLogEventWithData(kNetworkEvent, (@{@"event_detail":@"User Profile Updated To Bridge"}));
+                 }
+                 if (completionBlock) {
+                     completionBlock(error);
+                 }
+             });
+         }];
+    }
+}
+
 - (void) getProfileOnCompletion:(void (^)(NSError *))completionBlock
 {
     if ([self serverDisabled]) {

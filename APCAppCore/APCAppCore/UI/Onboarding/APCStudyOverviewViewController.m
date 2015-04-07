@@ -244,17 +244,17 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 #pragma mark - TaskViewController Delegate methods
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *) __unused error
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithReason:(ORKTaskViewControllerFinishReason)reason error:(nullable NSError *)__unused error
 {
-    if (result == ORKTaskViewControllerResultCompleted)
+    if (reason == ORKTaskViewControllerFinishReasonCompleted)
     {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-    else if (result == ORKTaskViewControllerResultDiscarded)
+    else if (reason == ORKTaskViewControllerFinishReasonDiscarded)
     {
         [taskViewController dismissViewControllerAnimated:YES completion:nil];
     }
-    else if (result == ORKTaskViewControllerResultFailed)
+    else if (reason == ORKTaskViewControllerFinishReasonFailed)
     {
         [taskViewController dismissViewControllerAnimated:YES completion:nil];
     }

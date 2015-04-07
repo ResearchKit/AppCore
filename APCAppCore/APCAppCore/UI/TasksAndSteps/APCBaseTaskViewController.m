@@ -87,7 +87,7 @@
 /*********************************************************************************/
 #pragma mark - ORKOrderedTaskDelegate
 /*********************************************************************************/
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *) __unused error
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithReason:(ORKTaskViewControllerFinishReason)reason error:(nullable NSError *)error
 {
     
     NSString *currentStepIdentifier = @"Step identifier not available";
@@ -97,7 +97,7 @@
         currentStepIdentifier = self.currentStepViewController.step.identifier;
     }
     
-    if (result == ORKTaskViewControllerResultCompleted)
+    if (reason == ORKTaskViewControllerFinishReasonCompleted)
     {
         [self processTaskResult];
         
@@ -113,7 +113,7 @@
                                            @"task_step" : currentStepIdentifier
                                            }));
     }
-    else if (result == ORKTaskViewControllerResultFailed)
+    else if (reason == ORKTaskViewControllerFinishReasonFailed)
     {
         if (error.code == 4 && error.domain == NSCocoaErrorDomain)
         {
@@ -138,7 +138,7 @@
         
         APCLogError2(error);
     }
-    else if (result == ORKTaskViewControllerResultDiscarded)
+    else if (reason == ORKTaskViewControllerFinishReasonDiscarded)
     {
         [taskViewController dismissViewControllerAnimated:YES completion:nil];
         APCLogEventWithData(kTaskEvent, (@{
@@ -148,7 +148,7 @@
                                            @"task_step" : currentStepIdentifier
                                            }));
     }
-    else if (result == ORKTaskViewControllerResultSaved)
+    else if (reason == ORKTaskViewControllerFinishReasonSaved)
     {
         [taskViewController dismissViewControllerAnimated:YES completion:nil];
         APCLogEventWithData(kTaskEvent, (@{

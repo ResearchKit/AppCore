@@ -50,6 +50,8 @@ static NSString *kAPHInsightSampleUnitKey = @"insightSampleUnitKey";
 static NSString *kInsightDatasetIsGoodDayKey = @"insightDatasetIsGoodDayKey";
 static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadingKey";
 
+static double kRefershDelayInSeconds = 300; // 5 minutes
+
 NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsightDataCollectionIsCompletedNotification";
 
 @interface APCInsights()
@@ -73,6 +75,8 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 
 @property (nonatomic, strong) NSOperationQueue *insightQueue;
 
+@property (nonatomic) NSTimeInterval lastUpdatedAt;
+
 @end
 
 @implementation APCInsights
@@ -95,6 +99,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         _captionBad  = NSLocalizedString(@"Not enough data", @"Not enough data");
         _valueGood = @(0);
         _valueBad  = @(0);
+        _lastUpdatedAt = 0;
         
         _insightPointValues = [NSMutableArray new];
         
@@ -114,6 +119,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         _healthStore = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.healthStore;
         _insightFactor = factor;
         _ignoreBaselineOther = NO;
+        _insightPoints = [NSMutableArray new];
         
         [self configureInsight];
     }
@@ -182,7 +188,26 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 
 - (void)factorInsight
 {
-    [self retrieveDatasetForGlucoseForPeriod:-5];
+    if (self.lastUpdatedAt == 0) {
+        [self startCollectionInsightData];
+    } else {
+        // We will only process the diet insights when there considerable amount of time
+        // has lapsed. As for what is 'considerable amount of time', take a look at the
+        // kRefreshDelayInSeconds variable at the top.
+        NSTimeInterval currentTimeInterval = [NSDate timeIntervalSinceReferenceDate];
+        NSTimeInterval lapsedTime = currentTimeInterval - self.lastUpdatedAt;
+        
+        if (lapsedTime > kRefershDelayInSeconds) {
+            [self startCollectionInsightData];
+        }
+    }
+}
+
+- (void)startCollectionInsightData
+{
+    [self retrieveDatasetForGlucoseForPeriod:-30];
+    
+    self.lastUpdatedAt = [NSDate timeIntervalSinceReferenceDate];
 }
 
 #pragma mark - Core Data
@@ -192,7 +217,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     NSArray *readings = nil;
     
     APCScoring *glucoseReadings = [[APCScoring alloc] initWithTask:@"APHLogGlucose-42449E07-7124-40EF-AC93-CA5BBF95FC15"
-                                                      numberOfDays:-5
+                                                      numberOfDays:period
                                                           valueKey:@"value"
                                                            dataKey:nil
                                                            sortKey:nil
@@ -212,7 +237,34 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     [groupedReadings addObjectsFromArray:groupedBeforeReadings];
     [groupedReadings addObjectsFromArray:groupedAfterReadings];
     
-    self.insightPoints = [[self markDataset:groupedReadings] mutableCopy];
+    NSArray *markedReadings = [self markDataset:groupedReadings];
+    
+    // we only need 5 Good and 5 Bad readings
+    NSPredicate *predicateGoodDay = [NSPredicate predicateWithFormat:@"%K == %@", kInsightDatasetIsGoodDayKey, @(YES)];
+    NSPredicate *predicateBadDay  = [NSPredicate predicateWithFormat:@"%K == %@", kInsightDatasetIsGoodDayKey, @(NO)];
+    
+    NSArray *readingForGoodDays = [markedReadings filteredArrayUsingPredicate:predicateGoodDay];
+    NSArray *readingForBadDays  = [markedReadings filteredArrayUsingPredicate:predicateBadDay];
+    
+    // We only need 5 good and bad days for the insights
+    NSRange range = NSMakeRange(0, 5);
+    NSArray *filteredGoodDays = nil;
+    NSArray *filteredBadDays  = nil;
+    
+    if (readingForGoodDays.count > 5) {
+        filteredGoodDays = [readingForGoodDays objectsAtIndexes:[[NSIndexSet alloc] initWithIndexesInRange:range]];
+    } else {
+        filteredGoodDays = readingForGoodDays;
+    }
+    
+    if (readingForBadDays.count > 5) {
+        filteredBadDays = [readingForBadDays objectsAtIndexes:[[NSIndexSet alloc] initWithIndexesInRange:range]];
+    } else {
+        filteredBadDays = readingForBadDays;
+    }
+    
+    [self.insightPoints addObjectsFromArray:filteredGoodDays];
+    [self.insightPoints addObjectsFromArray:filteredBadDays];
     
     [self fetchDataFromHealthKitForItemsInInsightQueue];
 }

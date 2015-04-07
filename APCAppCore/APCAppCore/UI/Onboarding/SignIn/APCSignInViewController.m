@@ -291,21 +291,21 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 
 #pragma mark - ORKTaskViewControllerDelegate methods
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *) __unused error
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithReason:(ORKTaskViewControllerFinishReason)reason error:(nullable NSError *)__unused error
 {
-    if (result == ORKTaskViewControllerResultCompleted)
+    if (reason == ORKTaskViewControllerFinishReasonCompleted)
     {
         [self taskViewControllerDidComplete:taskViewController];
     }
-    else if (result == ORKTaskViewControllerResultDiscarded)
+    else if (reason == ORKTaskViewControllerFinishReasonDiscarded)
     {
         [taskViewController dismissViewControllerAnimated:YES completion:nil];
     }
-    else if (result == ORKTaskViewControllerResultFailed)
+    else if (reason == ORKTaskViewControllerFinishReasonFailed)
     {
         [taskViewController dismissViewControllerAnimated:YES completion:nil];
     }
-    else if (result == ORKTaskViewControllerResultSaved)
+    else if (reason == ORKTaskViewControllerFinishReasonSaved)
     {
         [taskViewController dismissViewControllerAnimated:YES completion:nil];
     }

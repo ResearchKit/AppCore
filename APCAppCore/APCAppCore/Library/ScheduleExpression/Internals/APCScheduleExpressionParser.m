@@ -411,7 +411,30 @@ parseError:
 	for (APCPointSelector *point in list.subSelectors)
 	{
 		point.unitType = type;
+
+        // Validate and optionally coerce the data for various types.
+        switch (type)
+        {
+            case kDayOfWeek:
+                [self coercePointSelectorIntoDaysOfWeek: point];
+                break;
+                
+            default:
+                // No changes for the rest of them, yet.
+                break;
+        }
 	}
+}
+
+/**
+ TODO:  This would be better in a custom subclass, such as
+ something like APCWeekdaySelector.
+ */
+- (void) coercePointSelectorIntoDaysOfWeek: (APCPointSelector *) soonToBeWeekSelector
+{
+    // One very special edge case we're looking for:  a "7" passed for "Sunday."
+    if (soonToBeWeekSelector.begin.integerValue == 7) { soonToBeWeekSelector.begin = @(0); }
+    if (soonToBeWeekSelector.end.integerValue == 7) { soonToBeWeekSelector.end = @(0); }
 }
 
 /**

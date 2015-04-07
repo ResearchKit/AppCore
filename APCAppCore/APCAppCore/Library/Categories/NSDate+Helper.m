@@ -202,6 +202,14 @@ static NSString * const kDateFormatISO8601 = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
     return [cal dateFromComponents:components];
 }
 
++(instancetype)priorSundayAtMidnightFromDate:(NSDate *)date
+{
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitWeekOfYear | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
+    [components setWeekday:1];//Sunday
+    return [cal dateFromComponents:components];
+}
+
 - (BOOL) isEarlierThanDate: (NSDate*) otherDate
 {
 	BOOL result = [self compare: otherDate] == NSOrderedAscending;

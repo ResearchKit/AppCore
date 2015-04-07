@@ -274,9 +274,9 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 
 #pragma mark - TaskViewController Delegate methods
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *) __unused error
+- (void)taskViewController:(ORKTaskViewController *)taskViewController didFinishWithReason:(ORKTaskViewControllerFinishReason)reason error:(nullable NSError *)__unused error
 {
-    if (result == ORKTaskViewControllerResultCompleted)
+    if (reason == ORKTaskViewControllerFinishReasonCompleted)
     {
         [self dismissViewControllerAnimated:YES completion:nil];
     }

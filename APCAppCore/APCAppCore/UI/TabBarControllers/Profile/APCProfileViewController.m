@@ -723,7 +723,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
-        if (self.user.isConsented && self.user.isSignedIn)
+        if (self.user.sharedOptionSelection != [NSNumber numberWithInteger:SBBConsentShareScopeNone])
         {
             APCTableViewItem *field = [APCTableViewItem new];
             field.caption = NSLocalizedString(@"Sharing Options", @"");
@@ -1175,21 +1175,21 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 #pragma mark - ORKTaskViewControllerDelegate methods
 
-- (void)taskViewController:(ORKTaskViewController *) __unused taskViewController didFinishWithResult:(ORKTaskViewControllerResult)result error:(NSError *)error
+- (void)taskViewController:(ORKTaskViewController *) __unused taskViewController didFinishWithReason:(ORKTaskViewControllerFinishReason)reason error:(nullable NSError *)error
 {
-    if (result == ORKTaskViewControllerResultCompleted)
+    if (reason == ORKTaskViewControllerFinishReasonCompleted)
     {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-    else if (result == ORKTaskViewControllerResultDiscarded)
+    else if (reason == ORKTaskViewControllerFinishReasonDiscarded)
     {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-    else if (result == ORKTaskViewControllerResultSaved)
+    else if (reason == ORKTaskViewControllerFinishReasonSaved)
     {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-    else if (result == ORKTaskViewControllerResultFailed)
+    else if (reason == ORKTaskViewControllerFinishReasonFailed)
     {
         APCLogError2(error);
     }
