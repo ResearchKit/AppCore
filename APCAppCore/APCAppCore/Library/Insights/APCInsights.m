@@ -442,6 +442,13 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     }
     
     // TODO: Check if the difference between the good and bad vaules is at least 10%. Othewise don't show the insight.
+    double largerValue = ([self.valueGood doubleValue] > [self.valueBad doubleValue]) ? [self.valueGood doubleValue] : [self.valueBad doubleValue];
+    double smallerValue = ([self.valueGood doubleValue] < [self.valueBad doubleValue]) ? [self.valueGood doubleValue] : [self.valueBad doubleValue];
+    double differenceBetweenGoodAndBadValues = ((largerValue - smallerValue) / largerValue) * 100;
+    
+    if (differenceBetweenGoodAndBadValues < 10) {
+        [self resetInsight];
+    }
     
     NSOperationQueue *realMainQueue = [NSOperationQueue mainQueue];
     
@@ -573,6 +580,14 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
                                                                      toDate:date
                                                                     options:0];
     return spanDate;
+}
+
+- (void)resetInsight
+{
+    self.captionGood = NSLocalizedString(@"Not enough data", @"Not enough data");
+    self.captionBad  = NSLocalizedString(@"Not enough data", @"Not enough data");
+    self.valueGood = @(0);
+    self.valueBad  = @(0);
 }
 
 @end
