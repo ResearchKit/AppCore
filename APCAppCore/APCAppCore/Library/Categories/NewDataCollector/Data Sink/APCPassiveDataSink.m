@@ -1,37 +1,12 @@
 //
-//  APCFileManagerForCollector.m
+//  APCPassiveDataSink.m
 //  APCAppCore
 //
-// Copyright (c) 2015, Apple Inc. All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-// 1.  Redistributions of source code must retain the above copyright notice, this
-// list of conditions and the following disclaimer.
-//
-// 2.  Redistributions in binary form must reproduce the above copyright notice,
-// this list of conditions and the following disclaimer in the documentation and/or
-// other materials provided with the distribution.
-//
-// 3.  Neither the name of the copyright holder(s) nor the names of any contributors
-// may be used to endorse or promote products derived from this software without
-// specific prior written permission. No license is granted to the trademarks of
-// the copyright holders even if such marks are included in this software.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-// OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//  Created by Justin Warmkessel on 4/7/15.
+//  Copyright (c) 2015 Apple, Inc. All rights reserved.
 //
 
-#import "APCPassiveHealthKitDataSink.h"
+#import "APCPassiveDataSink.h"
 #import "APCAppCore.h"
 #import "zipzap.h"
 #import "APCDataVerificationClient.h"
@@ -47,30 +22,20 @@ static NSString *const kEndDateKey = @"endDate";
 static NSString *const kInfoFilename = @"info.json";
 static NSString *const kCSVFilename  = @"data.csv";
 
+static long long kKBPerMB = 1024;
+static long long kBytesPerKB = 1024;
+
+static NSUInteger kSecsPerMin = 60;
+static NSUInteger kMinsPerHour = 60;
+static NSUInteger kHoursPerDay = 24;
+static NSUInteger kDaysPerWeek = 7;
+
 @interface APCPassiveHealthKitDataSink ()
-@property (nonatomic, strong) NSMutableDictionary * registeredTrackers;
-@property (nonatomic, strong) NSString * collectorsPath;
-@property (nonatomic, readonly) NSString *collectorsUploadPath;
 
-//Unique configuration for collector
-@property (nonatomic, readonly) NSString*       identifier;
-@property (nonatomic, strong)   NSDictionary*   infoDictionary;
-@property (nonatomic, strong)   NSString*       folder;
-@property (nonatomic)           NSTimeInterval  stalenessInterval;
-@property (nonatomic) unsigned long long        sizeThreshold;
-@property (nonatomic)           NSArray*        columnNames;
-
-@property (nonatomic, strong) NSString*         csvFilename;
-@property (nonatomic, strong) NSOperationQueue* healthKitCollectorQueue;
 
 @end
 
-
-@implementation APCPassiveHealthKitDataSink
-
-/**********************************************************************/
-#pragma mark - APCCollectorProtocol Delegate Methods
-/**********************************************************************/
+@implementation APCPassiveDataSink
 
 - (instancetype)initWithIdentifier:(NSString *)identifier andColumnNames:(NSArray *)columnNames
 {
@@ -84,7 +49,7 @@ static NSString *const kCSVFilename  = @"data.csv";
         if (!self.healthKitCollectorQueue) {
             self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:@"HealthKit Data Collector"];
         }
-
+        
         //General configuration for file management
         _registeredTrackers = [NSMutableDictionary dictionary];
         NSString * documentsDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
@@ -133,53 +98,6 @@ static NSString *const kCSVFilename  = @"data.csv";
     self.infoDictionary = infoDictionary;
 }
 
-- (void) didRecieveUpdatedValueFromHealthKitCollector:(id)quantitySample {
-    
-    [self processUpdatesFromHealthKitForSampleType:quantitySample];
-}
-
-
-
-- (void)processUpdatesFromHealthKitForSampleType:(id)quantitySample {
-    [self.healthKitCollectorQueue addOperationWithBlock:^{
-        NSString *dateTimeStamp = [[NSDate date] toStringInISO8601Format];
-        NSString *healthKitType = nil;
-        NSString *quantityValue = nil;
-        NSString *quantitySource = nil;
-        
-        if ([quantitySample isKindOfClass:[HKCategorySample class]]) {
-            HKCategorySample *catSample = (HKCategorySample *)quantitySample;
-            healthKitType = catSample.categoryType.identifier;
-            quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
-            
-            // Get the difference in seconds between the start and end date for the sample
-            NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
-                                                                                          fromDate:catSample.startDate
-                                                                                            toDate:catSample.endDate
-                                                                                           options:NSCalendarWrapComponents];
-            if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
-                quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", (long)secondsSpentInBedOrAsleep.second];
-            } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
-                quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", (long)secondsSpentInBedOrAsleep.second];
-            }
-        } else {
-            HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
-            healthKitType = qtySample.quantityType.identifier;
-            quantityValue = [NSString stringWithFormat:@"%@", qtySample.quantity];
-            quantityValue = [quantityValue stringByReplacingOccurrencesOfString:@" " withString:@","];
-            quantitySource = qtySample.source.name;
-        }
-        
-        NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue, quantitySource];
-        
-        [APCPassiveHealthKitDataSink createOrAppendString:stringToWrite
-                                               toFile:[self.folder stringByAppendingPathComponent:kCSVFilename]];
-        
-        [self checkIfDataNeedsToBeFlushed];
-        
-    }];
-}
-
 
 - (void) checkIfDataNeedsToBeFlushed
 {
@@ -214,8 +132,17 @@ static NSString *const kCSVFilename  = @"data.csv";
     //Write the end date
     NSMutableDictionary * infoDictionary = [self.infoDictionary mutableCopy];
     infoDictionary[kEndDateKey]   = [[NSDate date] toStringInISO8601Format];
-    NSDate *startDate = [self datefromDateString:infoDictionary[kStartDateKey]];
-    infoDictionary[kStartDateKey] = [startDate toStringInISO8601Format];
+    
+    NSString *startDate = infoDictionary[kStartDateKey];
+    
+    if (startDate == nil)
+    {
+        startDate = [NSDate date].description;
+    }
+    
+    NSDate *dateFromStartDate = [self datefromDateString:startDate.description];
+    
+    infoDictionary[kStartDateKey] = [dateFromStartDate toStringInISO8601Format];
     NSString * infoFilePath = [self.folder stringByAppendingPathComponent:kInfoFilename];
     
 #warning This is temporary, please remove once the work on a better class is completed.
@@ -318,8 +245,8 @@ static NSString *const kCSVFilename  = @"data.csv";
     NSString * infoFilePath = [self.folder stringByAppendingPathComponent:kInfoFilename];
     NSDictionary * infoDictionary;
     
-    [APCPassiveHealthKitDataSink deleteFileIfExists:csvFilePath];
-    [APCPassiveHealthKitDataSink deleteFileIfExists:infoFilePath];
+    [APCPassiveDataSink deleteFileIfExists:csvFilePath];
+    [APCPassiveDataSink deleteFileIfExists:infoFilePath];
     
     //Create info.json
     infoDictionary = @{kIdentifierKey : self.identifier, kStartDateKey : [NSDate date].description};
@@ -405,6 +332,21 @@ static NSString *const kCSVFilename  = @"data.csv";
     }
 }
 
+- (unsigned long long)sizeThreshold
+{
+    if (_sizeThreshold == 0) {
+        _sizeThreshold = 1 * kKBPerMB * kBytesPerKB;
+    }
+    return _sizeThreshold;
+}
+
+- (NSTimeInterval)stalenessInterval
+{
+    if (_stalenessInterval == 0) {
+        _stalenessInterval = 1 * kDaysPerWeek * kHoursPerDay * kMinsPerHour * kSecsPerMin;
+    }
+    return _stalenessInterval;
+}
 
 
 @end

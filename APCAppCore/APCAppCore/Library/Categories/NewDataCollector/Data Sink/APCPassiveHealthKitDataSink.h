@@ -32,10 +32,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "APCPassiveDataSink.h"
 #import "APCCollectorProtocol.h"
 
-@interface APCPassiveHealthKitDataSink : NSObject <APCCollectorProtocol>
+@interface APCPassiveHealthKitDataSink : APCPassiveDataSink <APCCollectorProtocol>
 
-- (instancetype)initWithIdentifier:(NSString *)identifier andColumnNames:(NSArray *)columnNames;
+
 
 @end

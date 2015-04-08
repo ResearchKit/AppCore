@@ -35,8 +35,11 @@
 
 @protocol APCCollectorProtocol <NSObject>
 
+@optional
+
 - (void) didRecieveUpdatedValueFromCollector:(id)results;
 
+- (void) didRecieveArrayOfValuesFromHealthKitCollector:(NSArray*)quantitySamples;
 - (void) didRecieveUpdatedValueFromHealthKitCollector:(id)quantitySample;
 
 @end

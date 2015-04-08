@@ -213,7 +213,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                 }
                 else if ([typeIdentifier isKindOfClass:[NSDictionary class]])
                 {
-                    if ([typeIdentifier[kHKCategoryTypeKey] isEqualToString:HKWorkoutTypeIdentifier])
+                    if (typeIdentifier[kHKWorkoutTypeKey])
                     {
                         [dataTypesToRead addObject:[HKObjectType workoutType]];
                     }
@@ -221,8 +221,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                     {
                         [dataTypesToRead addObject:[self objectTypeFromDictionary:typeIdentifier]];
                     }
-                }
-                
+                }   
             }
             
             //-------WRITE TYPES--------

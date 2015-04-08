@@ -593,44 +593,18 @@ then a location event has occurred and location services must be manually starte
  */
 - (void)configureObserverQueries
 {
-//    NSArray *dataTypesWithReadPermission = self.initializationOptions[kHKReadPermissionsKey];
-//    
-//    if (dataTypesWithReadPermission) {
-//        
-//        if (!self.healthKitCollectorQueue) {
-//            self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:@"HealthKit Data Collector"];
-//        }
-//        
-//        if (!self.healthKitCollector) {
-//            self.healthKitCollector = [[APCHealthKitDataCollector alloc] initWithIdentifier:@"HealthKitDataCollector"];
-//            [self.passiveDataCollector addTracker:self.healthKitCollector];
-//            [self.healthKitCollector startTracking];
-//        }
-//        
-//        for (id dataType in dataTypesWithReadPermission) {
-//            
-//            HKSampleType *sampleType = nil;
-//            
-//            if ([dataType isKindOfClass:[NSDictionary class]]) {
-//                NSDictionary *categoryType = (NSDictionary *)dataType;
-//                sampleType = [HKObjectType categoryTypeForIdentifier:categoryType[kHKCategoryTypeKey]];
-//            } else {
-//                sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
-//            }
-//            
-//            [self observerQueryForSampleType:sampleType
-//                              withCompletion:nil];
-//        }
-//    }
-    
-    
-    
-    
     NSArray* dataTypesWithReadPermission = self.initializationOptions[kHKReadPermissionsKey];
     
-    self.passiveHealthKitCollector = [[APCNewPassiveDataCollector alloc] init];
+    if (!self.passiveHealthKitCollector)
+    {
+        self.passiveHealthKitCollector = [[APCNewPassiveDataCollector alloc] init];
+    }
     
-    APCPassiveHealthKitDataSink *receiver = [[APCPassiveHealthKitDataSink alloc] initWithIdentifier:@"HealthKitDataCollector" andColumnNames:@[@"datetime,type,value,source"]];
+    APCPassiveHealthKitDataSink* receiver           = [[APCPassiveHealthKitDataSink alloc] initWithIdentifier:@"HealthKitDataCollector"
+                                                                                               andColumnNames:@[@"datetime,type,value, unit,source"]];
+    
+    APCPassiveHealthKitWorkoutSink* workoutReceiver    = [[APCPassiveHealthKitWorkoutSink alloc] initWithIdentifier:@"HealthKitWorkoutCollector"
+                                                                                               andColumnNames:@[@"datetime, type, total distance, unit, energy consumed, unit, source"]];
     
     if (dataTypesWithReadPermission) {
         
@@ -640,19 +614,17 @@ then a location event has occurred and location services must be manually starte
             
             if ([dataType isKindOfClass:[NSDictionary class]])
             {
-                
-
                 NSDictionary* categoryType = (NSDictionary *) dataType;
                 
-                if ([categoryType[kHKCategoryTypeKey] isEqualToString:HKWorkoutTypeIdentifier])
+                //Distinguish
+                if (categoryType[kHKWorkoutTypeKey])
                 {
                     sampleType = [HKObjectType workoutType];
                 }
-                else
+                else if (categoryType[kHKCategoryTypeKey])
                 {
                     sampleType = [HKObjectType categoryTypeForIdentifier:categoryType[kHKCategoryTypeKey]];
                 }
-
             }
             else
             {
@@ -661,10 +633,18 @@ then a location event has occurred and location services must be manually starte
             
             APCHealthKitBackgroundDataCollector *collector = [[APCHealthKitBackgroundDataCollector alloc] initWithIdentifier:sampleType.identifier sampleType:sampleType andLimit:1];
             
+            //If the HKObjectType is a HKWorkoutType then set a different receiver/data sink.
+            if ([sampleType isKindOfClass:[HKWorkoutType class]])
+            {
+                [collector setReceiver:workoutReceiver];
+                [collector setDelegate:workoutReceiver];
+            }
+            else
+            {
+                [collector setReceiver:receiver];
+                [collector setDelegate:receiver];
+            }
 
-            
-            [collector setReceiver:receiver];
-            [collector setDelegate:receiver];
             [collector start];
             
             [self.passiveHealthKitCollector addDataSync:collector];

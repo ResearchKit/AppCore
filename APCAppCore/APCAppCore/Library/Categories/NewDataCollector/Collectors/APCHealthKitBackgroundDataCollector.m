@@ -89,8 +89,7 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
             // Send the initial results
             if (results)
             {
-#warning Uncomment this line below once you have the data sink ready to support this.
-//                [strongSelf notifyListenersWithResults:results withError:error];
+                [strongSelf.delegate didRecieveArrayOfValuesFromHealthKitCollector:results];
             }
         
             strongSelf.observerQuery = [[HKObserverQuery alloc] initWithSampleType:sampleType
@@ -166,8 +165,8 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
             }
             else if ([sampleKind isKindOfClass:[HKWorkout class]])
             {
-                HKWorkoutType* workoutSample = (HKWorkoutType*)sampleKind;
-                APCLogDebug(@"HK Update received for: %@ - %d", workoutSample.identifier, workoutSample.description);
+                HKWorkout* workoutSample = (HKWorkout*)sampleKind;
+                APCLogDebug(@"HK Update received for: %@ - %d", workoutSample.sampleType.identifier, workoutSample.metadata);
             }
             else
             {

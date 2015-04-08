@@ -83,6 +83,7 @@ NSString *const kShareMessageKey                    = @"ShareMessageKey";
 
 NSString *const kHKQuantityTypeKey          = @"HKQuantityType";
 NSString *const kHKCategoryTypeKey          = @"HKCategoryType";
+NSString *const kHKWorkoutTypeKey          = @"HKWorkoutType";
 NSString *const kHKCharacteristicTypeKey    = @"HKCharacteristicType";
 NSString *const kHKCorrelationTypeKey       = @"HKCorrelationType";
 
