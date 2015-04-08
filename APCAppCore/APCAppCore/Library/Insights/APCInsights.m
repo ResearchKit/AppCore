@@ -50,7 +50,7 @@ static NSString *kAPHInsightSampleUnitKey = @"insightSampleUnitKey";
 static NSString *kInsightDatasetIsGoodDayKey = @"insightDatasetIsGoodDayKey";
 static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadingKey";
 
-static double kRefershDelayInSeconds = 300; // 5 minutes
+static double kRefershDelayInSeconds = 180; // 3 minutes
 
 NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsightDataCollectionIsCompletedNotification";
 
@@ -407,7 +407,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         pointValue = [goodPoints valueForKeyPath:@"@avg.insightFactorValueKey"];
         
         if ([self.insightFactorName isEqualToString:HKQuantityTypeIdentifierDietaryEnergyConsumed]) {
-            if ([pointValue doubleValue] > 1000.0) {
+            if ([pointValue doubleValue] >= 1000.0) {
                 caption = [NSString stringWithFormat:@"%@ %@",
                            [numberFormatter stringFromNumber:pointValue],
                            self.insightFactorCaption];
@@ -426,7 +426,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         pointValue = [badPoints valueForKeyPath:@"@avg.insightFactorValueKey"];
         
         if ([self.insightFactorName isEqualToString:HKQuantityTypeIdentifierDietaryEnergyConsumed]) {
-            if ([pointValue doubleValue] > 1000.0) {
+            if ([pointValue doubleValue] >= 1000.0) {
                 caption = [NSString stringWithFormat:@"%@ %@",
                            [numberFormatter stringFromNumber:pointValue],
                            self.insightFactorCaption];
@@ -440,6 +440,8 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         self.valueBad = pointValue;
         self.captionBad  = NSLocalizedString(caption, caption);
     }
+    
+    // TODO: Check if the difference between the good and bad vaules is at least 10%. Othewise don't show the insight.
     
     NSOperationQueue *realMainQueue = [NSOperationQueue mainQueue];
     
