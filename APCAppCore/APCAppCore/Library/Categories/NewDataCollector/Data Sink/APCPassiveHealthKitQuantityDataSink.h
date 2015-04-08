@@ -35,7 +35,7 @@
 #import "APCPassiveDataSink.h"
 #import "APCCollectorProtocol.h"
 
-@interface APCPassiveHealthKitDataSink : APCPassiveDataSink <APCCollectorProtocol>
+@interface APCPassiveHealthKitQuantityDataSink : APCPassiveDataSink <APCCollectorProtocol>
 
 
 

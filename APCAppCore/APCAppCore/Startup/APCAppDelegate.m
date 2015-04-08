@@ -600,11 +600,14 @@ then a location event has occurred and location services must be manually starte
         self.passiveHealthKitCollector = [[APCNewPassiveDataCollector alloc] init];
     }
     
-    APCPassiveHealthKitDataSink* receiver           = [[APCPassiveHealthKitDataSink alloc] initWithIdentifier:@"HealthKitDataCollector"
-                                                                                               andColumnNames:@[@"datetime,type,value, unit,source"]];
+    APCPassiveHealthKitQuantityDataSink*    quantityreceiver    = [[APCPassiveHealthKitQuantityDataSink alloc] initWithIdentifier:@"HealthKitDataCollector"
+                                                                                                                   andColumnNames:@[@"datetime, type, value, unit, source"]];
     
-    APCPassiveHealthKitWorkoutSink* workoutReceiver    = [[APCPassiveHealthKitWorkoutSink alloc] initWithIdentifier:@"HealthKitWorkoutCollector"
-                                                                                               andColumnNames:@[@"datetime, type, total distance, unit, energy consumed, unit, source"]];
+    APCPassiveHealthKitWorkoutSink*         workoutReceiver     = [[APCPassiveHealthKitWorkoutSink alloc] initWithIdentifier:@"HealthKitWorkoutCollector"
+                                                                                                              andColumnNames:@[@"datetime, type, total distance, unit, energy consumed, unit, source"]];
+
+    APCPassiveHealthKitSleepSink*           sleepReceiver       = [[APCPassiveHealthKitSleepSink alloc] initWithIdentifier:@"HealthKitWorkoutCollector"
+                                                                                                            andColumnNames:@[@"datetime, type, category value, value, unit, source"]];
     
     if (dataTypesWithReadPermission) {
         
@@ -639,10 +642,15 @@ then a location event has occurred and location services must be manually starte
                 [collector setReceiver:workoutReceiver];
                 [collector setDelegate:workoutReceiver];
             }
+            else if ([sampleType isKindOfClass:[HKCategoryType class]])
+            {
+                [collector setReceiver:sleepReceiver];
+                [collector setDelegate:sleepReceiver];
+            }
             else
             {
-                [collector setReceiver:receiver];
-                [collector setDelegate:receiver];
+                [collector setReceiver:quantityreceiver];
+                [collector setDelegate:quantityreceiver];
             }
 
             [collector start];

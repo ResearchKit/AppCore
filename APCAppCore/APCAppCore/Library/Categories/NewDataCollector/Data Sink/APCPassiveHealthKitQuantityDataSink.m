@@ -31,7 +31,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "APCPassiveHealthKitDataSink.h"
+#import "APCPassiveHealthKitQuantityDataSink.h"
 #import "APCAppCore.h"
 
 static NSString *const kCollectorFolder = @"newCollector";
@@ -45,7 +45,7 @@ static NSString *const kInfoFilename = @"info.json";
 static NSString *const kCSVFilename  = @"data.csv";
 
 
-@implementation APCPassiveHealthKitDataSink
+@implementation APCPassiveHealthKitQuantityDataSink
 
 /**********************************************************************/
 #pragma mark - APCCollectorProtocol Delegate Methods
@@ -73,42 +73,18 @@ static NSString *const kCSVFilename  = @"data.csv";
         NSString *quantityValue = nil;
         NSString *quantitySource = nil;
         
-        if ([quantitySample isKindOfClass:[HKCategorySample class]]) {
-            HKCategorySample *catSample = (HKCategorySample *)quantitySample;
-            healthKitType = catSample.categoryType.identifier;
-            quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
-            
-            // Get the difference in seconds between the start and end date for the sample
-            NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
-                                                                                          fromDate:catSample.startDate
-                                                                                            toDate:catSample.endDate
-                                                                                           options:NSCalendarWrapComponents];
-            if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
-                quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", (long)secondsSpentInBedOrAsleep.second];
-            } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
-                quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", (long)secondsSpentInBedOrAsleep.second];
-            }
-        }
-        else if ([quantitySample isKindOfClass:[HKWorkout class]])
+
+        HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
+        healthKitType = qtySample.quantityType.identifier;
+        quantityValue = [NSString stringWithFormat:@"%@", qtySample.quantity];
+        quantityValue = [quantityValue stringByReplacingOccurrencesOfString:@" " withString:@","];
+        quantitySource = qtySample.source.name;
+        
+        if (quantitySource == nil)
         {
-            HKWorkout *qtySample = (HKWorkout *)quantitySample;
-            healthKitType = qtySample.sampleType.identifier;
-            quantityValue = [NSString stringWithFormat:@"%lu, %@, %@",(unsigned long)qtySample.workoutActivityType, qtySample.totalDistance, qtySample.totalEnergyBurned];
-            quantitySource = qtySample.source.name;
+            quantitySource = @"";
         }
-        else
-        {
-            HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
-            healthKitType = qtySample.quantityType.identifier;
-            quantityValue = [NSString stringWithFormat:@"%@", qtySample.quantity];
-            quantityValue = [quantityValue stringByReplacingOccurrencesOfString:@" " withString:@","];
-            quantitySource = qtySample.source.name;
-            
-            if (quantitySource == nil)
-            {
-                quantitySource = @"";
-            }
-        }
+    
         
         NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue, quantitySource];
         

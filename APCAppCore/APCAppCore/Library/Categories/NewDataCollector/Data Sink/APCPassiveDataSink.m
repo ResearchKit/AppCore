@@ -30,7 +30,7 @@ static NSUInteger kMinsPerHour = 60;
 static NSUInteger kHoursPerDay = 24;
 static NSUInteger kDaysPerWeek = 7;
 
-@interface APCPassiveHealthKitDataSink ()
+@interface APCPassiveHealthKitQuantityDataSink ()
 
 
 @end
@@ -54,8 +54,8 @@ static NSUInteger kDaysPerWeek = 7;
         _registeredTrackers = [NSMutableDictionary dictionary];
         NSString * documentsDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
         _collectorsPath = [documentsDir stringByAppendingPathComponent:kCollectorFolder];
-        [APCPassiveHealthKitDataSink createFolderIfDoesntExist:_collectorsPath];
-        [APCPassiveHealthKitDataSink createFolderIfDoesntExist:[_collectorsPath stringByAppendingPathComponent:kUploadFolder]];
+        [APCPassiveHealthKitQuantityDataSink createFolderIfDoesntExist:_collectorsPath];
+        [APCPassiveHealthKitQuantityDataSink createFolderIfDoesntExist:[_collectorsPath stringByAppendingPathComponent:kUploadFolder]];
         
         [self loadOrCreateDataFiles];
     }
@@ -173,7 +173,7 @@ static NSUInteger kDaysPerWeek = 7;
     
     NSDictionary *sageBS = [APCJSONSerializer serializableDictionaryFromSourceDictionary:infoDictionary];
     
-    [APCPassiveHealthKitDataSink createOrReplaceString:[sageBS JSONString] toFile:infoFilePath];
+    [APCPassiveHealthKitQuantityDataSink createOrReplaceString:[sageBS JSONString] toFile:infoFilePath];
     
     [self createZipFile];
     [self resetDataFilesForTracker];
@@ -251,11 +251,11 @@ static NSUInteger kDaysPerWeek = 7;
     //Create info.json
     infoDictionary = @{kIdentifierKey : self.identifier, kStartDateKey : [NSDate date].description};
     NSString * infoJSON = [infoDictionary JSONString];
-    [APCPassiveHealthKitDataSink createOrReplaceString:infoJSON toFile:infoFilePath];
+    [APCPassiveHealthKitQuantityDataSink createOrReplaceString:infoJSON toFile:infoFilePath];
     
     //Create data csv file
     NSString * rowString = [[[self columnNames] componentsJoinedByString:@","] stringByAppendingString:@"\n"];
-    [APCPassiveHealthKitDataSink createOrAppendString:rowString toFile:csvFilePath];
+    [APCPassiveHealthKitQuantityDataSink createOrAppendString:rowString toFile:csvFilePath];
 }
 
 

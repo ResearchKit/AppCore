@@ -88,11 +88,12 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import "APCAppCore/APCNewPassiveDataCollector.h"
 #import "APCAppCore/APCCollectorProtocol.h"
 #import "APCAppCore/APCHealthKitBackgroundDataCollector.h"
-#import "APCAppCore/APCPassiveHealthKitDataSink.h"
+#import "APCAppCore/APCPassiveHealthKitQuantityDataSink.h"
 #import "APCAppCore/APCFileManagerUtility.h"
 #import "APCAppCore/APCDataCollector.h"
 #import "APCAppCore/APCPassiveDataSink.h"
 #import "APCAppCore/APCPassiveHealthKitWorkoutSink.h"
+#import "APCAppCore/APCPassiveHealthKitSleepSink.h"
 
 /* -------------------------
  Logging
