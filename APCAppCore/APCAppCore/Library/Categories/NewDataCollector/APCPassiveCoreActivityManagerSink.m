@@ -1,5 +1,5 @@
 //
-//  APCPassiveHealthKitSleepSink.m
+//  APCPassiveCoreActivityManagerSink.m
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -31,8 +31,11 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "APCPassiveHealthKitSleepSink.h"
+#import "APCPassiveCoreActivityManagerSink.h"
 #import "APCAppCore.h"
+#import "zipzap.h"
+#import "APCDataVerificationClient.h"
+#import "CMMotionActivity+Helper.h"
 
 static NSString *const kCollectorFolder = @"newCollector";
 static NSString *const kUploadFolder = @"upload";
@@ -44,7 +47,7 @@ static NSString *const kEndDateKey = @"endDate";
 static NSString *const kInfoFilename = @"info.json";
 static NSString *const kCSVFilename  = @"data.csv";
 
-@implementation APCPassiveHealthKitSleepSink
+@implementation APCPassiveCoreActivityManagerSink
 
 /**********************************************************************/
 #pragma mark - APCCollectorProtocol Delegate Methods
@@ -56,6 +59,7 @@ static NSString *const kCSVFilename  = @"data.csv";
     
     [quantitySamples enumerateObjectsUsingBlock: ^(id quantitySample, NSUInteger __unused idx, BOOL * __unused stop) {
         __typeof(self) strongSelf = weakSelf;
+        
         [strongSelf processUpdatesFromHealthKitForSampleType:quantitySample];
         
     }];
@@ -66,50 +70,40 @@ static NSString *const kCSVFilename  = @"data.csv";
     [self processUpdatesFromHealthKitForSampleType:quantitySample];
 }
 
-
 /**********************************************************************/
 #pragma mark - Helper Methods
 /**********************************************************************/
 
 
 - (void) processUpdatesFromHealthKitForSampleType:(id)quantitySample {
+    
     __weak typeof(self) weakSelf = self;
+    
     [self.healthKitCollectorQueue addOperationWithBlock:^{
         __typeof(self) strongSelf = weakSelf;
-        HKCategorySample *catSample = (HKCategorySample *)quantitySample;
+        NSString * rowString = nil;
+        NSString * csvFilePath = nil;
+        NSArray  * arrayOfStuffToPrint = nil;
         
-        NSString *startDateTime = [catSample.startDate toStringInISO8601Format];
-        NSString *healthKitType = catSample.sampleType.identifier;
-
-        NSString *categoryValue = nil;
-        
-        if (catSample.value == HKCategoryValueSleepAnalysisAsleep)
+        if ([quantitySample isKindOfClass: [CMMotionActivity class]])
         {
-            categoryValue = @"HKCategoryValueSleepAnalysisAsleep";
+            /*
+             This csvColumnValues property comes from our CMMotionActivity+Helper
+             category. These values will be in the same order as the matching
+             csvColumnNames.  Those names will be shoved into the outbound .csv
+             file because they're returned by the -columnNames method of the
+             incoming Tracker.
+             */
+            arrayOfStuffToPrint = ((CMMotionActivity *) quantitySample).csvColumnValues;
         }
-        else
+
+        if (arrayOfStuffToPrint.count > 0)
         {
-            categoryValue = @"HKCategoryValueSleepAnalysisInBed";
+            rowString = [[arrayOfStuffToPrint componentsJoinedByString: @","] stringByAppendingString: @"\n"];
+            csvFilePath = [strongSelf.folder stringByAppendingPathComponent: kCSVFilename];
+            
+            [APCPassiveDataCollector createOrAppendString: rowString toFile: csvFilePath];
         }
-        
-        NSString *quantityUnit  = [HKUnit secondUnit].description;
-        NSString *quantitySource = catSample.source.name;
-        
-        
-        // Get the difference in seconds between the start and end date for the sample
-        NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
-                                                                                      fromDate:catSample.startDate
-                                                                                        toDate:catSample.endDate
-                                                                                       options:NSCalendarWrapComponents];
-
-        NSString* quantityValue = [NSString stringWithFormat:@"%ld", (long)secondsSpentInBedOrAsleep.second];
-    
-
-        NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@\n", startDateTime, healthKitType, categoryValue,  quantityValue, quantityUnit, quantitySource];
-        
-        //Write to file
-        [APCPassiveDataSink createOrAppendString:stringToWrite
-                                          toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
         
         [strongSelf checkIfDataNeedsToBeFlushed];
         

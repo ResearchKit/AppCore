@@ -51,10 +51,10 @@ static NSString *const kCSVFilename  = @"data.csv";
 #pragma mark - APCCollectorProtocol Delegate Methods
 /**********************************************************************/
 - (void) didRecieveArrayOfValuesFromHealthKitCollector:(NSArray*)quantitySamples {
-    
+    __weak typeof(self) weakSelf = self;
     [quantitySamples enumerateObjectsUsingBlock: ^(id quantitySample, NSUInteger __unused idx, BOOL * __unused stop) {
-        
-        [self processUpdatesFromHealthKitForSampleType:quantitySample];
+        __typeof(self) strongSelf = weakSelf;
+        [strongSelf processUpdatesFromHealthKitForSampleType:quantitySample];
         
     }];
 }
@@ -67,31 +67,49 @@ static NSString *const kCSVFilename  = @"data.csv";
 
 
 - (void)processUpdatesFromHealthKitForSampleType:(id)quantitySample {
+    __weak typeof(self) weakSelf = self;
     [self.healthKitCollectorQueue addOperationWithBlock:^{
-        NSString *dateTimeStamp = [[NSDate date] toStringInISO8601Format];
-        NSString *healthKitType = nil;
-        NSString *quantityValue = nil;
-        NSString *quantitySource = nil;
+        __typeof(self) strongSelf = weakSelf;
+        HKQuantitySample*   qtySample           = (HKQuantitySample *)quantitySample;
+        NSString*           startDateTimeStamp  = [qtySample.startDate toStringInISO8601Format];
+        NSString*           endDateTimeStamp    = [qtySample.endDate toStringInISO8601Format];
+        NSString*           healthKitType       = qtySample.quantityType.identifier;
         
 
-        HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
-        healthKitType = qtySample.quantityType.identifier;
-        quantityValue = [NSString stringWithFormat:@"%@", qtySample.quantity];
-        quantityValue = [quantityValue stringByReplacingOccurrencesOfString:@" " withString:@","];
-        quantitySource = qtySample.source.name;
+        NSString*           quantityValueRep    = [NSString stringWithFormat:@"%@", qtySample.quantity];
+        NSArray*            valueSplit          = [quantityValueRep componentsSeparatedByString:@" "];
+        NSString*           quantityValue       = [valueSplit objectAtIndex:0];
+
+        NSString*           quantityUnit        = @"";
+        for (int i = 1; i < (int)[valueSplit count]; i++)
+        {
+            quantityUnit = [quantityUnit stringByAppendingString:valueSplit[i]];
+        }
         
+        NSString*           quantitySource      = qtySample.source.name;
+
         if (quantitySource == nil)
         {
             quantitySource = @"";
         }
+        else if ([[[UIDevice currentDevice] name] isEqualToString:quantitySource])
+        {
+         quantitySource = @"iPhone";
+        }
     
         
-        NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue, quantitySource];
-        
+        NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@\n",
+                                   startDateTimeStamp,
+                                   endDateTimeStamp,
+                                   healthKitType,
+                                   quantityValue,
+                                   quantityUnit,
+                                   quantitySource];
+                
         [APCPassiveDataSink createOrAppendString:stringToWrite
-                                               toFile:[self.folder stringByAppendingPathComponent:kCSVFilename]];
+                                               toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
 
-        [self checkIfDataNeedsToBeFlushed];
+        [strongSelf checkIfDataNeedsToBeFlushed];
         
     }];
 }

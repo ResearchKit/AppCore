@@ -601,13 +601,13 @@ then a location event has occurred and location services must be manually starte
     }
     
     APCPassiveHealthKitQuantityDataSink*    quantityreceiver    = [[APCPassiveHealthKitQuantityDataSink alloc] initWithIdentifier:@"HealthKitDataCollector"
-                                                                                                                   andColumnNames:@[@"datetime, type, value, unit, source"]];
+                                                                                                                   andColumnNames:@[@"startTime,endTime,type,value,unit,source"]];
     
     APCPassiveHealthKitWorkoutSink*         workoutReceiver     = [[APCPassiveHealthKitWorkoutSink alloc] initWithIdentifier:@"HealthKitWorkoutCollector"
-                                                                                                              andColumnNames:@[@"datetime, type, total distance, unit, energy consumed, unit, source"]];
+                                                                                                              andColumnNames:@[@"startTime,endTime,type,workoutType,total distance,unit, energy consumed,unit,source"]];
 
-    APCPassiveHealthKitSleepSink*           sleepReceiver       = [[APCPassiveHealthKitSleepSink alloc] initWithIdentifier:@"HealthKitWorkoutCollector"
-                                                                                                            andColumnNames:@[@"datetime, type, category value, value, unit, source"]];
+    APCPassiveHealthKitSleepSink*           sleepReceiver       = [[APCPassiveHealthKitSleepSink alloc] initWithIdentifier:@"HealthKitSleepCollector"
+                                                                                                            andColumnNames:@[@"startTime,type,category value,value,unit,source"]];
     
     if (dataTypesWithReadPermission) {
         
