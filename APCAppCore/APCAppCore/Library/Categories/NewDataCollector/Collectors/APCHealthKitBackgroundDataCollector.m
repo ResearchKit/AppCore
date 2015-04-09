@@ -47,14 +47,12 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 - (instancetype) initWithIdentifier: (NSString *) identifier sampleType: (HKSampleType *) type andLimit: (NSUInteger)queryLimit {
 
-    self = [super init];
+    self = [super initWithIdentifier:identifier];
     
     if (self) {
-        
-        _identifier     = identifier;
-        _sampleType     = type;
-        _queryLimit     = queryLimit;
-        _healthStore    = [HKHealthStore new];
+        _sampleType         = type;
+        _queryLimit         = queryLimit;
+        _healthStore        = [HKHealthStore new];
     }
     
     return self;

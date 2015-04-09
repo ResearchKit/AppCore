@@ -43,7 +43,7 @@ static NSInteger const kNumberOfDaysBack = 8;
 @end
 
 @implementation APCCoreMotionBackgroundDataCollector
-    
+
 /*
 *      You can only have one handler installed at a time, calling
 *      startActivityUpdatesToQueue:withHandler: replaces the current
@@ -72,14 +72,14 @@ static NSInteger const kNumberOfDaysBack = 8;
                                                       
                                                       __typeof(self) strongSelf = weakSelf;
                                                       
-                                                      if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
+                                                      if ([strongSelf.delegate respondsToSelector:@selector(didRecieveArrayOfValuesFromHealthKitCollector:)])
                                                       {
-                                                          [strongSelf.delegate didRecieveUpdatedValueFromCollector:activities];
+                                                          [strongSelf.delegate didRecieveArrayOfValuesFromHealthKitCollector:activities];
                                                       }
                                                       
                                                       [strongSelf.motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new] withHandler:^(CMMotionActivity *activity) {
-                                                          if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)]) {
-                                                              [strongSelf.delegate didRecieveUpdatedValueFromCollector:activity];
+                                                          if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromHealthKitCollector:)]) {
+                                                              [strongSelf.delegate didRecieveUpdatedValueFromHealthKitCollector:activity];
                                                           }
                                                       }];
                                                       

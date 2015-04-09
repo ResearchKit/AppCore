@@ -32,7 +32,6 @@
 //
 
 #import <APCAppCore/APCAppCore.h>
-#import "APCCollectorProtocol.h"
 
 @interface APCCoreMotionBackgroundDataCollector : APCDataCollector
 

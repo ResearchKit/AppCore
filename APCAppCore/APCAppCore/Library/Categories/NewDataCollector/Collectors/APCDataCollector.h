@@ -35,11 +35,13 @@
 
 @interface APCDataCollector : NSObject
 
-- (void)start;
-- (void)stop;
+- (instancetype) initWithIdentifier:(NSString*)identifier;
+- (void) start;
+- (void) stop;
 - (void) updateTracking;
 
 @property (strong, nonatomic) id                receiver;
 @property (strong, nonatomic) id                <APCCollectorProtocol> delegate;
+@property (strong, nonatomic) NSString*         identifier;
 
 @end

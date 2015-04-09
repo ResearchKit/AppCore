@@ -89,7 +89,7 @@ static NSString *kLon = @"lon";
              andHomeLocationStatus:(APCPassiveLocationTrackingHomeLocation)aHomeLocationStatus
 {
     APCLogDebug(@"Initalizing location tracker");
-    self = [super init];
+    self = [super initWithIdentifier:identifier];
     if (self != nil)
     {
         _homeLocationStatus     = aHomeLocationStatus;

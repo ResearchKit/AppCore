@@ -35,6 +35,18 @@
 
 @implementation APCDataCollector
 
+- (instancetype) initWithIdentifier:(NSString*)identifier
+{
+    self = [super init];
+    
+    if (self)
+    {
+        _identifier = identifier;
+    }
+    
+    return self;
+}
+
 - (void)start {
     /* abstract implementation */
 }

@@ -38,10 +38,8 @@
 
 @property (strong, nonatomic)   HKHealthStore*              healthStore;
 @property (strong, nonatomic)   HKUnit*                     unit;
-@property (strong, nonatomic)   NSString*                   identifier;
-@property (nonatomic)           id <APCCollectorProtocol>   delegate;
 @property (strong, nonatomic)   HKSampleType*               sampleType;
-@property (nonatomic)         NSUInteger        queryLimit;
+@property (nonatomic)           NSUInteger                  queryLimit;
 
 
 - (instancetype) initWithIdentifier: (NSString *) identifier sampleType: (HKSampleType *) type andLimit: (NSUInteger)queryLimit;

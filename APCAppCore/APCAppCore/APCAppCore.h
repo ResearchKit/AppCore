@@ -95,6 +95,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import "APCAppCore/APCPassiveHealthKitWorkoutSink.h"
 #import "APCAppCore/APCPassiveHealthKitSleepSink.h"
 #import "APCAppCore/APCPassiveCoreActivityManagerSink.h"
+#import "APCAppCore/APCCoreMotionBackgroundDataCollector.h"
 
 /* -------------------------
  Logging

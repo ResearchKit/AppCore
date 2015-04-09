@@ -238,7 +238,7 @@
 		7B6C8CC01AA26ECE0007B560 /* APCConsentTextChoiceQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B6C8CB61AA26ECE0007B560 /* APCConsentTextChoiceQuestion.m */; };
 		7B6C8CC41AA26F150007B560 /* APCStack.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B6C8CC21AA26F150007B560 /* APCStack.h */; };
 		7B6C8CC51AA26F150007B560 /* APCStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B6C8CC31AA26F150007B560 /* APCStack.m */; };
-		7B76F94B1AD34A72003508EB /* APCCoreMotionBackgroundDataCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B76F9491AD34A72003508EB /* APCCoreMotionBackgroundDataCollector.h */; };
+		7B76F94B1AD34A72003508EB /* APCCoreMotionBackgroundDataCollector.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B76F9491AD34A72003508EB /* APCCoreMotionBackgroundDataCollector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7B76F94C1AD34A72003508EB /* APCCoreMotionBackgroundDataCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B76F94A1AD34A72003508EB /* APCCoreMotionBackgroundDataCollector.m */; };
 		7B8C20131AA3AB8600BFEFDA /* APCTheme.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B8C20111AA3AB8600BFEFDA /* APCTheme.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7B8C20141AA3AB8600BFEFDA /* APCTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B8C20121AA3AB8600BFEFDA /* APCTheme.m */; };
