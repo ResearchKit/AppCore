@@ -37,7 +37,7 @@
 static NSString *kLoseItBundleIdentifier           = @"com.fitnow.loseit";
 static NSString *kLoseItFoodImageNameKey           = @"HKFoodImageName";
 
-static double kRefershDelayInSeconds               = 300; // 5 minutes
+static double kRefershDelayInSeconds               = 180; // 3 minutes
 
 NSString * const kFoodInsightFoodNameKey           = @"foodNameKey";
 NSString * const kFoodInsightFoodGenericNameKey    = @"foodGenericNameKey";

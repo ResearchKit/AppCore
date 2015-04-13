@@ -50,7 +50,7 @@ static NSString *kAPHInsightSampleUnitKey = @"insightSampleUnitKey";
 static NSString *kInsightDatasetIsGoodDayKey = @"insightDatasetIsGoodDayKey";
 static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadingKey";
 
-static double kRefershDelayInSeconds = 300; // 5 minutes
+static double kRefershDelayInSeconds = 180; // 3 minutes
 
 NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsightDataCollectionIsCompletedNotification";
 
@@ -407,7 +407,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         pointValue = [goodPoints valueForKeyPath:@"@avg.insightFactorValueKey"];
         
         if ([self.insightFactorName isEqualToString:HKQuantityTypeIdentifierDietaryEnergyConsumed]) {
-            if ([pointValue doubleValue] > 1000.0) {
+            if ([pointValue doubleValue] >= 1000.0) {
                 caption = [NSString stringWithFormat:@"%@ %@",
                            [numberFormatter stringFromNumber:pointValue],
                            self.insightFactorCaption];
@@ -426,7 +426,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         pointValue = [badPoints valueForKeyPath:@"@avg.insightFactorValueKey"];
         
         if ([self.insightFactorName isEqualToString:HKQuantityTypeIdentifierDietaryEnergyConsumed]) {
-            if ([pointValue doubleValue] > 1000.0) {
+            if ([pointValue doubleValue] >= 1000.0) {
                 caption = [NSString stringWithFormat:@"%@ %@",
                            [numberFormatter stringFromNumber:pointValue],
                            self.insightFactorCaption];
@@ -439,6 +439,15 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         
         self.valueBad = pointValue;
         self.captionBad  = NSLocalizedString(caption, caption);
+    }
+    
+    // TODO: Check if the difference between the good and bad vaules is at least 10%. Othewise don't show the insight.
+    double largerValue = ([self.valueGood doubleValue] > [self.valueBad doubleValue]) ? [self.valueGood doubleValue] : [self.valueBad doubleValue];
+    double smallerValue = ([self.valueGood doubleValue] < [self.valueBad doubleValue]) ? [self.valueGood doubleValue] : [self.valueBad doubleValue];
+    double differenceBetweenGoodAndBadValues = ((largerValue - smallerValue) / largerValue) * 100;
+    
+    if (differenceBetweenGoodAndBadValues < 10) {
+        [self resetInsight];
     }
     
     NSOperationQueue *realMainQueue = [NSOperationQueue mainQueue];
@@ -571,6 +580,14 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
                                                                      toDate:date
                                                                     options:0];
     return spanDate;
+}
+
+- (void)resetInsight
+{
+    self.captionGood = NSLocalizedString(@"Not enough data", @"Not enough data");
+    self.captionBad  = NSLocalizedString(@"Not enough data", @"Not enough data");
+    self.valueGood = @(0);
+    self.valueBad  = @(0);
 }
 
 @end
