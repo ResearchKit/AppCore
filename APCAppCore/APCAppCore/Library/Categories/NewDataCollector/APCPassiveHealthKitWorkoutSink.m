@@ -93,7 +93,9 @@ static NSString *const kCSVFilename  = @"data.csv";
 
         NSString*   quantitySource              = sample.source.name;
         
-        NSString *  stringToWrite               = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
+        NSString *  metaData                    = [self convertDictionaryToString: [sample.metadata mutableCopy]];
+        
+        NSString *  stringToWrite               = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
                                                    startDateTimeStamp,
                                                    endDateTimeStamp,
                                                    healthKitType,
@@ -102,7 +104,8 @@ static NSString *const kCSVFilename  = @"data.csv";
                                                    distanceUnit,
                                                    energyConsumed,
                                                    energyUnit,
-                                                   quantitySource];
+                                                   quantitySource,
+                                                   metaData];
         
         //Write to file
         [APCPassiveDataSink createOrAppendString:stringToWrite
@@ -181,5 +184,16 @@ static NSString *const kCSVFilename  = @"data.csv";
     return [activityEvents objectForKey:@(num)];
 }
 
+- (NSString*) convertDictionaryToString:(NSMutableDictionary*) dict
+{
+    NSError* error;
+    NSDictionary* tempDict = [dict copy]; // get Dictionary from mutable Dictionary
+    //giving error as it takes dic, array,etc only. not custom object.
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:tempDict
+                                                       options:0 error:&error];
+    NSString* nsJson=  [[NSString alloc] initWithData:jsonData
+                                             encoding:NSUTF8StringEncoding];
+    return nsJson;
+}
 
 @end
