@@ -251,14 +251,14 @@ static NSString *folderPathForUploadOperations = nil;
 #pragma mark - The public API
 // ---------------------------------------------------------
 
-+ (void) uploadOneDictionary: (NSDictionary *) dictionary
++ (void) uploadDictionary: (NSDictionary *) dictionary
 {
     APCDataArchiverAndUploader *archiverAndUploader = [[APCDataArchiverAndUploader alloc] initWithDictionariesToUpload: @[dictionary]];
 
     [self startOneUploadWithUploader: archiverAndUploader];
 }
 
-+ (void) uploadOneFileAtPath: (NSString *) path
++ (void) uploadFileAtPath: (NSString *) path
 {
     APCDataArchiverAndUploader *archiverAndUploader = [[APCDataArchiverAndUploader alloc] initWithFilePathsToUpload: @[path]];
 
@@ -646,9 +646,9 @@ static NSString *folderPathForUploadOperations = nil;
     {
         NSString *filename = [self filenameFromDictionary: dictionary];
 
-        ableToZipEverything = [self insertIntoZipArchive: dictionary
-                                                filename: filename
-                                          returningError: & errorFromZipInsertProcess];
+        ableToZipEverything = [self insertDictionary: dictionary
+                          intoZipArchiveWithFilename: filename
+                                      returningError: & errorFromZipInsertProcess];
 
         /*
          TESTING
@@ -750,9 +750,9 @@ static NSString *folderPathForUploadOperations = nil;
 //    }
 //
 
-- (BOOL) insertIntoZipArchive: (NSDictionary *) dictionary
-                     filename: (NSString *) filename
-               returningError: (NSError **) errorToReturn
+- (BOOL)      insertDictionary: (NSDictionary *) dictionary
+    intoZipArchiveWithFilename: (NSString *) filename
+                returningError: (NSError **) errorToReturn
 {
     BOOL ableToInsertDictionaryIntoZipFile = NO;
     NSError *localError = nil;
@@ -857,8 +857,8 @@ static NSString *folderPathForUploadOperations = nil;
 
     for (NSString *path in self.filePathsToUpload)
     {
-        ableToZipEverything = [self insertOneRequestedFileIntoZipArchiveFromPath: path
-                                                                  returningError: & errorFromZipInsertProcess];
+        ableToZipEverything = [self insertFileAtPath: path
+                        intoZipArchiveReturningError: & errorFromZipInsertProcess];
 
         /*
          TESTING
@@ -895,8 +895,8 @@ static NSString *folderPathForUploadOperations = nil;
     return ableToZipEverything;
 }
 
-- (BOOL) insertOneRequestedFileIntoZipArchiveFromPath: (NSString *) path
-                                       returningError: (NSError **) errorToReturn
+- (BOOL)        insertFileAtPath: (NSString *) path
+    intoZipArchiveReturningError: (NSError **) errorToReturn
 {
     BOOL ableToInsertRequestedFileIntoZipFile = NO;
     NSError *localError = nil;
@@ -1060,9 +1060,9 @@ static NSString *folderPathForUploadOperations = nil;
 
         NSError *errorCreatingManifest = nil;
 
-        ableToCreateManifest = [self insertIntoZipArchive: zipArchiveManifest
-                                                 filename: kAPCNameOfIndexFile
-                                           returningError: & errorCreatingManifest];
+        ableToCreateManifest = [self insertDictionary: zipArchiveManifest
+                           intoZipArchiveWithFilename: kAPCNameOfIndexFile
+                                       returningError: & errorCreatingManifest];
 
 
         /*
@@ -1519,7 +1519,7 @@ static NSString *folderPathForUploadOperations = nil;
  */
 + (void) uploadResearchKitTaskResult: (id /* ORKTaskResult* */) __unused taskResult {}
 
-+ (void)        uploadOneDictionary: (NSDictionary *) __unused dictionary
++ (void)           uploadDictionary: (NSDictionary *) __unused dictionary
     encryptingContentsBeforeZipping: (BOOL)           __unused shouldEncryptContentsFirst {}
 
 + (void) uploadAirQualityData: (NSDictionary *) __unused airQualityStuff {}

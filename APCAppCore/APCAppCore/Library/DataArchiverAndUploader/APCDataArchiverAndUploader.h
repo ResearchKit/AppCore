@@ -153,7 +153,7 @@
 /**
  .zips and uploads the specified dictionary to Sage.
  */
-+ (void) uploadOneDictionary: (NSDictionary *) dictionary;
++ (void) uploadDictionary: (NSDictionary *) dictionary;
 
 
 /**
@@ -163,7 +163,7 @@
  You have to do that.  (If you'd rather have this method do it,
  we'll gladly make that change, though.)
  */
-+ (void) uploadOneFileAtPath: (NSString *) path;
++ (void) uploadFileAtPath: (NSString *) path;
 
 
 
@@ -180,7 +180,7 @@
 + (void) uploadResearchKitTaskResult: (id /* ORKTaskResult* */) taskResult;
 
 /** For air-quality data:  encrypt the individual files inside the .zip file, as well as encrypting the whole package. */
-+ (void)         uploadOneDictionary: (NSDictionary *) dictionary
++ (void)            uploadDictionary: (NSDictionary *) dictionary
      encryptingContentsBeforeZipping: (BOOL) shouldEncryptContentsFirst;
 
 /** Er...  maybe this would be better?  Maybe it calls the above? */
