@@ -114,7 +114,7 @@ then a location event has occurred and location services must be manually starte
     
     [self.dataMonitor appFinishedLaunching];
     
-    [self configureObserverQueries];
+    //[self configureObserverQueries];
     
     return YES;
 }
@@ -587,79 +587,6 @@ then a location event has occurred and location services must be manually starte
     completionHandler();
 }
 
-/**
- * @brief  This configures the observer queries for all HK data type
- *         that the app will be asking for Read permissions.
- */
-- (void)configureObserverQueries
-{
-    NSArray* dataTypesWithReadPermission = self.initializationOptions[kHKReadPermissionsKey];
-    
-    if (!self.passiveHealthKitCollector)
-    {
-        self.passiveHealthKitCollector = [[APCNewPassiveDataCollector alloc] init];
-    }
-    
-    APCPassiveHealthKitQuantityDataSink*    quantityreceiver    = [[APCPassiveHealthKitQuantityDataSink alloc] initWithIdentifier:@"HealthKitDataCollector"
-                                                                                                                   andColumnNames:@[@"startTime,endTime,type,value,unit,source"]];
-    
-    APCPassiveHealthKitWorkoutSink*         workoutReceiver     = [[APCPassiveHealthKitWorkoutSink alloc] initWithIdentifier:@"HealthKitWorkoutCollector"
-                                                                                                              andColumnNames:@[@"startTime,endTime,type,workoutType,total distance,unit, energy consumed,unit,source"]];
-
-    APCPassiveHealthKitSleepSink*           sleepReceiver       = [[APCPassiveHealthKitSleepSink alloc] initWithIdentifier:@"HealthKitSleepCollector"
-                                                                                                            andColumnNames:@[@"startTime,type,category value,value,unit,source"]];
-    
-    if (dataTypesWithReadPermission) {
-        
-        for (id dataType in dataTypesWithReadPermission) {
-            
-            HKSampleType*   sampleType  = nil;
-            
-            if ([dataType isKindOfClass:[NSDictionary class]])
-            {
-                NSDictionary* categoryType = (NSDictionary *) dataType;
-                
-                //Distinguish
-                if (categoryType[kHKWorkoutTypeKey])
-                {
-                    sampleType = [HKObjectType workoutType];
-                }
-                else if (categoryType[kHKCategoryTypeKey])
-                {
-                    sampleType = [HKObjectType categoryTypeForIdentifier:categoryType[kHKCategoryTypeKey]];
-                }
-            }
-            else
-            {
-                sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
-            }
-            
-            APCHealthKitBackgroundDataCollector *collector = [[APCHealthKitBackgroundDataCollector alloc] initWithIdentifier:sampleType.identifier sampleType:sampleType andLimit:1];
-            
-            //If the HKObjectType is a HKWorkoutType then set a different receiver/data sink.
-            if ([sampleType isKindOfClass:[HKWorkoutType class]])
-            {
-                [collector setReceiver:workoutReceiver];
-                [collector setDelegate:workoutReceiver];
-            }
-            else if ([sampleType isKindOfClass:[HKCategoryType class]])
-            {
-                [collector setReceiver:sleepReceiver];
-                [collector setDelegate:sleepReceiver];
-            }
-            else
-            {
-                [collector setReceiver:quantityreceiver];
-                [collector setDelegate:quantityreceiver];
-            }
-
-            [collector start];
-            
-            [self.passiveHealthKitCollector addDataSync:collector];
-        }
-    }
-}
-
 - (NSArray *)offsetForTaskSchedules
 {
     //TODO: Number of days should be zero based. If I want something to show up on day 2 then the offset is 1
@@ -711,96 +638,6 @@ then a location event has occurred and location services must be manually starte
      * Note: This needs to be refactored
      */
     return nil;
-}
-
-/*********************************************************************************/
-#pragma mark - Observer Query
-/*********************************************************************************/
-
-/**
-  * @brief  Sets up an observer query for the provided sample type and subscribes to background updates.
-  *
-  * @param  sampleType  HKSampleType that is used for setting up the observer query.
-  *
-  * @param  completion  A block that is called as soon as the observer query's update handler is 
-  *                     executed without any errors.
-  *
-  */
-- (void)observerQueryForSampleType:(HKSampleType *)sampleType
-                    withCompletion:(void (^)(void))completion
-{
-    APCLogDebug(@"Setting up observer query for sample type %@", sampleType.identifier);
-
-    __weak APCAppDelegate *weakSelf = self;
-    
-    [self.dataSubstrate.healthStore enableBackgroundDeliveryForType:sampleType
-                                                          frequency:HKUpdateFrequencyImmediate
-                                                     withCompletion:^(BOOL success, NSError *error)
-    {
-        if (success == NO) {
-            APCLogError2(error);
-        } else {
-            HKObserverQuery *observerQuery = [[HKObserverQuery alloc] initWithSampleType:sampleType
-                                                                               predicate:nil
-                                                                           updateHandler:^(HKObserverQuery __unused *query,
-                                                                                           HKObserverQueryCompletionHandler completionHandler,
-                                                                                           NSError *error)
-            {
-                  
-                if (error) {
-                    APCLogError2(error);
-                } else {
-                    
-                    NSSortDescriptor *sortByLatest = [[NSSortDescriptor alloc] initWithKey:HKSampleSortIdentifierEndDate ascending:NO];
-                    HKSampleQuery *sampleQuery = [[HKSampleQuery alloc] initWithSampleType:sampleType
-                                                                           predicate:nil
-                                                                               limit:1
-                                                                     sortDescriptors:@[sortByLatest]
-                                                                      resultsHandler:^(HKSampleQuery __unused *query, NSArray *results, NSError *error)
-                    {
-                        if (!results) {
-                            APCLogError2(error);
-                        } else {
-                            id sampleKind = results.firstObject;
-                            
-                            if (sampleKind) {
-                                
-                                if ([sampleKind isKindOfClass:[HKCategorySample class]]) {
-                                    HKCategorySample *categorySample = (HKCategorySample *)sampleKind;
-                                    
-                                    
-                                    APCLogDebug(@"HK Update received for: %@ - %d", categorySample.categoryType.identifier, categorySample.value);
-                                
-                                } else {
-                                    HKQuantitySample *quantitySample = (HKQuantitySample *)sampleKind;
-                                    APCLogDebug(@"HK Update received for: %@ - %@", quantitySample.quantityType.identifier, quantitySample.quantity);
-                                    
-                                }
-                                
-                                // Anyone listening to this notification will need to make sure that if it is used
-                                // for updating anything related to UIKit, it needs to be done on the main thread.
-                                [[NSNotificationCenter defaultCenter] postNotificationName:APCHealthKitObserverQueryUpdateForSampleTypeNotification
-                                                                                    object:sampleKind];
-                                
-                                [weakSelf processUpdatesFromHealthKitForSampleType:sampleKind hkCompletionHandler:completionHandler];
-                            } else {
-                                completionHandler();
-                            }
-                        }
-                    }];
-                    
-                    [weakSelf.dataSubstrate.healthStore executeQuery:sampleQuery];
-                    
-                    // If there's a completion block execute it.
-                    if (completion) {
-                        completion();
-                    }
-                }
-            }];
-            
-            [weakSelf.dataSubstrate.healthStore executeQuery:observerQuery];
-        }
-    }];
 }
 
 /*********************************************************************************/
@@ -906,46 +743,6 @@ then a location event has occurred and location services must be manually starte
 
 - (NSDictionary *) tasksAndSchedulesWillBeLoaded {
     return nil;
-}
-
-- (void)processUpdatesFromHealthKitForSampleType:(id)quantitySample hkCompletionHandler:(HKObserverQueryCompletionHandler)completionHandler
-{
-    [self.healthKitCollectorQueue addOperationWithBlock:^{
-        NSString *dateTimeStamp = [[NSDate date] toStringInISO8601Format];
-        NSString *healthKitType = nil;
-        NSString *quantityValue = nil;
-        
-        if ([quantitySample isKindOfClass:[HKCategorySample class]]) {
-            HKCategorySample *catSample = (HKCategorySample *)quantitySample;
-            healthKitType = catSample.categoryType.identifier;
-            quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
-            
-            // Get the difference in seconds between the start and end date for the sample
-            NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
-                                                                                          fromDate:catSample.startDate
-                                                                                            toDate:catSample.endDate
-                                                                                           options:NSCalendarWrapComponents];
-            if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
-                quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", secondsSpentInBedOrAsleep.second];
-            } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
-                quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", secondsSpentInBedOrAsleep.second];
-            }
-        } else {
-            HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
-            healthKitType = qtySample.quantityType.identifier;
-            quantityValue = [NSString stringWithFormat:@"%@", qtySample.quantity];
-            quantityValue = [quantityValue stringByReplacingOccurrencesOfString:@" " withString:@","];
-        }
-        
-        NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue];
-        
-        [APCPassiveDataCollector createOrAppendString:stringToWrite
-                                               toFile:[self.healthKitCollector.folder stringByAppendingPathComponent:self.healthKitCollector.csvFilename]];
-        
-        [self.passiveDataCollector checkIfDataNeedsToBeFlushed:self.healthKitCollector];
-        
-        completionHandler();
-    }];
 }
 
 /*********************************************************************************/
