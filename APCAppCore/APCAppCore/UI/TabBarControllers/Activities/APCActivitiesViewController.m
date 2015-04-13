@@ -125,7 +125,7 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self reloadData];
+    [self updateActivities: nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
