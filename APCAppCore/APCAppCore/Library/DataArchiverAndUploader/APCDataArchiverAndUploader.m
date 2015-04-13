@@ -620,7 +620,7 @@ static NSString *folderPathForUploadOperations = nil;
 
 
 // ---------------------------------------------------------
-#pragma mark - Step 3a:  .zip dictionaries
+#pragma mark - Step 3:  .zip dictionaries
 // ---------------------------------------------------------
 
 /**
