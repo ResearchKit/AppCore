@@ -409,7 +409,7 @@ static NSString *folderPathForUploadOperations = nil;
                           encountered, if any.  Will be set to nil
                           if no errors were encountered.
  */
-- (BOOL) createBaseFoldersDuringFirstRunReturningError: (NSError **) errorToReturn
+- (BOOL) createBaseFoldersDuringFirstRunReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     NSError *localError = nil;
 
@@ -511,7 +511,7 @@ static NSString *folderPathForUploadOperations = nil;
     return uploadFoldersHaveBeenCreated;
 }
 
-- (BOOL) createWorkingDirectoryReturningError: (NSError **) errorToReturn
+- (BOOL) createWorkingDirectoryReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     BOOL ableToCreateWorkingFolder = NO;
     NSError *localError = nil;
@@ -575,7 +575,7 @@ static NSString *folderPathForUploadOperations = nil;
 #pragma mark - Step 2:  Create the empty .zip archive, in RAM only
 // ---------------------------------------------------------
 
-- (BOOL) createZipArchiveInRamReturningError: (NSError **) errorToReturn
+- (BOOL) createZipArchiveInRamReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     BOOL ableToCreateZipArchive = NO;
     NSError *localError = nil;
@@ -631,7 +631,7 @@ static NSString *folderPathForUploadOperations = nil;
  sign of an error -- that means if we have trouble
  .zipping anything, we stop everything (by design).
  */
-- (BOOL) zipAllDictionariesReturningError: (NSError **) errorToReturn
+- (BOOL) zipAllDictionariesReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     /*
      Note:  unlike most other methods in this file, the result
@@ -752,7 +752,7 @@ static NSString *folderPathForUploadOperations = nil;
 
 - (BOOL)      insertDictionary: (NSDictionary *) dictionary
     intoZipArchiveWithFilename: (NSString *) filename
-                returningError: (NSError **) errorToReturn
+                returningError: (NSError * __autoreleasing *) errorToReturn
 {
     BOOL ableToInsertDictionaryIntoZipFile = NO;
     NSError *localError = nil;
@@ -814,7 +814,7 @@ static NSString *folderPathForUploadOperations = nil;
 
         ZZArchiveEntry *zipEntry = [ZZArchiveEntry archiveEntryWithFileName: fullFileName
                                                                    compress: YES
-                                                                  dataBlock: ^(NSError** __unused callbackError)
+                                                                  dataBlock: ^(NSError * __autoreleasing * __unused callbackError)
                                     {
                                         return jsonData;
                                     }];
@@ -850,7 +850,7 @@ static NSString *folderPathForUploadOperations = nil;
  sign of an error -- that means if we have trouble
  .zipping anything, we stop everything (by design).
  */
-- (BOOL) zipAllRequestedFilePathsReturningError: (NSError **) errorToReturn
+- (BOOL) zipAllRequestedFilePathsReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     /*
      Note:  unlike most other methods in this file, the result
@@ -902,7 +902,7 @@ static NSString *folderPathForUploadOperations = nil;
 }
 
 - (BOOL)        insertFileAtPath: (NSString *) path
-    intoZipArchiveReturningError: (NSError **) errorToReturn
+    intoZipArchiveReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     BOOL ableToInsertRequestedFileIntoZipFile = NO;
     NSError *localError = nil;
@@ -989,7 +989,7 @@ static NSString *folderPathForUploadOperations = nil;
              */
             ZZArchiveEntry *zipEntry = [ZZArchiveEntry archiveEntryWithFileName: filename
                                                                        compress: YES
-                                                                      dataBlock: ^(NSError** __unused callbackError)
+                                                                      dataBlock: ^(NSError * __autoreleasing * __unused callbackError)
                                         {
                                             return dataFromThatFile;
                                         }];
@@ -1040,7 +1040,7 @@ static NSString *folderPathForUploadOperations = nil;
  bunch of files.  This method generates that "info.json"
  file.
  */
-- (BOOL) createManifestReturningError: (NSError **) errorToReturn
+- (BOOL) createManifestReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     BOOL ableToCreateManifest = NO;
     NSError *localError = nil;
@@ -1121,7 +1121,7 @@ static NSString *folderPathForUploadOperations = nil;
 #pragma mark - Step 6:  Save to Disk
 // ---------------------------------------------------------
 
-- (BOOL) saveToDiskReturningError: (NSError **) errorToReturn
+- (BOOL) saveToDiskReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     BOOL ableToSaveToDisk = NO;
     NSError *localError = nil;
@@ -1199,7 +1199,7 @@ static NSString *folderPathForUploadOperations = nil;
 #pragma mark - Step 7:  Encrypt
 // ---------------------------------------------------------
 
-- (BOOL) encryptZipFileReturningError: (NSError **) errorToReturn
+- (BOOL) encryptZipFileReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     BOOL successfullyEncrypted  = NO;
     NSError *localError         = nil;

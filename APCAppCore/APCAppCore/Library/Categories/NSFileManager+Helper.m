@@ -36,7 +36,7 @@
 @implementation NSFileManager (Helper)
 
 - (BOOL) createAPCFolderAtPath: (NSString *) path
-                returningError: (NSError **) errorToReturn
+                returningError: (NSError * __autoreleasing *) errorToReturn
 {
     NSError *folderCreationError = nil;
 
@@ -80,7 +80,7 @@
 //     Please leave this method in this file.
 //     It helps us test complex errors that might be returned.
 //     */
-//    - (BOOL) generateGenericComplexErrorObject: (NSError **) errorToReturn
+//    - (BOOL) generateGenericComplexErrorObject: (NSError * __autoreleasing *) errorToReturn
 //    {
 //        NSDictionary *randomNestedDictionary2 = @{@"one": @(1),
 //                                                  @"two": @(2),
