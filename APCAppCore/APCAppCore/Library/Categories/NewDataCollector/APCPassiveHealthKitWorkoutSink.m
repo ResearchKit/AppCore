@@ -94,6 +94,7 @@ static NSString *const kCSVFilename  = @"data.csv";
         NSString*   quantitySource              = sample.source.name;
         
         NSString *  metaData                    = [self convertDictionaryToString: [sample.metadata mutableCopy]];
+        NSString *  metaDataStringified         = [NSString stringWithFormat:@"\"%@\"", metaData];
         
         NSString *  stringToWrite               = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
                                                    startDateTimeStamp,
@@ -105,7 +106,7 @@ static NSString *const kCSVFilename  = @"data.csv";
                                                    energyConsumed,
                                                    energyUnit,
                                                    quantitySource,
-                                                   metaData];
+                                                   metaDataStringified];
         
         //Write to file
         [APCPassiveDataSink createOrAppendString:stringToWrite
