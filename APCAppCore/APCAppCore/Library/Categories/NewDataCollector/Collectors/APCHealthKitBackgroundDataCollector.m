@@ -60,6 +60,10 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 - (void)start {
     [self observerQueryForSampleType:self.sampleType];
+    
+    NSSet *readTypes = [[NSSet alloc] initWithArray:@[self.sampleType]];
+    
+    [self.healthStore requestAuthorizationToShareTypes:nil readTypes:readTypes completion:nil];
 }
 
 - (void)observerQueryForSampleType:(HKSampleType *)sampleType{

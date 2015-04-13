@@ -76,7 +76,8 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDataTracker.h>
 #import <APCAppCore/APCHKDiscreteQuantityTracker.h>
 #import <APCAppCore/APCHKCumulativeQuantityTracker.h>
-#import <APCAppCore/APCCoreLocationBackgroundDataCollector.h>
+#import <APCAppCore/APCCoreLocationTracker.h>
+
 #import <APCAppCore/APCCoreMotionTracker.h>
 #import <APCAppCore/zipzap.h>
 #import <APCAppCore/ZZArchive.h>
