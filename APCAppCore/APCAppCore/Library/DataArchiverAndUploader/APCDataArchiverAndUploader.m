@@ -634,10 +634,9 @@ static NSString *folderPathForUploadOperations = nil;
 - (BOOL) zipAllDictionariesReturningError: (NSError **) errorToReturn
 {
     /*
-     Note:  unlike the other methods in this file, 
-     we're defaulting to "it worked."  If any individual
-     "insert" process fails, we'll change this to a "NO,"
-     and stop.
+     Note:  unlike most other methods in this file, the result
+     value in this method defaults to "it worked."  If any sub-step
+     fails, we'll change this to a "NO," and stop.
      */
     BOOL ableToZipEverything = YES;
     NSError *localError = nil;
@@ -848,10 +847,9 @@ static NSString *folderPathForUploadOperations = nil;
 - (BOOL) zipAllRequestedFilePathsReturningError: (NSError **) errorToReturn
 {
     /*
-     Note:  unlike most other methods in this file,
-     we're defaulting to "it worked."  If any individual
-     "insert" process fails, we'll change this to a "NO,"
-     and stop.
+     Note:  unlike most other methods in this file, the result
+     value in this method defaults to "it worked."  If any sub-step
+     fails, we'll change this to a "NO," and stop.
      */
     BOOL ableToZipEverything = YES;
     NSError *localError = nil;
