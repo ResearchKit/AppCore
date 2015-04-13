@@ -190,13 +190,19 @@ FOUNDATION_EXPORT NSString * const kAPCFolderName_ArchiveAndUpload_Uploading;
 FOUNDATION_EXPORT NSString * const kAPCFileName_EncryptedZipFile;
 FOUNDATION_EXPORT NSString * const kAPCFileName_UnencryptedZipFile;
 
-FOUNDATION_EXPORT NSString * const kAPCFileExtension_JSON;
-FOUNDATION_EXPORT NSString * const kAPCFileExtension_PrivateKey;
 FOUNDATION_EXPORT NSString * const kAPCFileExtension_CommaSeparatedValues;
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_JSON;
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_MPEG4Audio;
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_PlainText;
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_PlainTextShort;
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_PrivateKey;
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_ZipFile;
 
+FOUNDATION_EXPORT NSString * const kAPCContentType_CommaSeparatedValues;
 FOUNDATION_EXPORT NSString * const kAPCContentType_JSON;
-
-
+FOUNDATION_EXPORT NSString * const kAPCContentType_MPEG4Audio;
+FOUNDATION_EXPORT NSString * const kAPCContentType_PlainText;
+FOUNDATION_EXPORT NSString * const kAPCContentType_UnknownData;
 
 @interface APCConstants : NSObject
 

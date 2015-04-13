@@ -150,8 +150,20 @@
 @interface APCDataArchiverAndUploader : NSObject
 
 
-/** .zips and uploads the specified dictionary to Sage. */
+/**
+ .zips and uploads the specified dictionary to Sage.
+ */
 + (void) uploadOneDictionary: (NSDictionary *) dictionary;
+
+
+/**
+ .zips and uploads the specified file to Sage.
+ 
+ Note that this method will NOT delete the file afterwards.
+ You have to do that.  (If you'd rather have this method do it,
+ we'll gladly make that change, though.)
+ */
++ (void) uploadOneFileAtPath: (NSString *) path;
 
 
 
