@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="APCSimpleTaskSummaryViewController">
+            <connections>
+                <outlet property="confirmation" destination="O8j-a6-hzd" id="Agi-VT-rkJ"/>
+                <outlet property="thankYouBanner" destination="qUF-6z-e5c" id="oWz-N8-zUr"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="youCanCompareMessage" destination="LVd-bV-L6N" id="x5H-9f-E1i"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5fR-Pw-oic">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thank you!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="qUF-6z-e5c">
+                            <rect key="frame" x="28" y="231" width="264" height="22.5"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="264" id="3ZZ-ce-h0k"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="19"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your results will be displayed on the dashboard when ready." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LVd-bV-L6N">
+                            <rect key="frame" x="28" y="261" width="264" height="48"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="48" id="eUC-SG-yco"/>
+                                <constraint firstAttribute="width" constant="264" id="gCO-dw-Suq"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="19"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O8j-a6-hzd" customClass="APCConfirmationView">
+                            <rect key="frame" x="138" y="163" width="45" height="45"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="45" id="VO1-qq-jpS"/>
+                                <constraint firstAttribute="height" constant="45" id="XjT-Ss-UkW"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="centerY" secondItem="qUF-6z-e5c" secondAttribute="centerY" constant="9.75" id="1M8-j0-Q20"/>
+                        <constraint firstAttribute="centerX" secondItem="O8j-a6-hzd" secondAttribute="centerX" constant="-0.5" id="Csc-AL-6zj"/>
+                        <constraint firstAttribute="centerX" secondItem="qUF-6z-e5c" secondAttribute="centerX" id="IIK-Xb-TBT"/>
+                        <constraint firstAttribute="centerY" secondItem="O8j-a6-hzd" secondAttribute="centerY" constant="66.5" id="qOJ-kK-89I"/>
+                        <constraint firstAttribute="centerY" secondItem="LVd-bV-L6N" secondAttribute="centerY" constant="-33" id="roc-ol-olr"/>
+                        <constraint firstAttribute="centerX" secondItem="LVd-bV-L6N" secondAttribute="centerX" id="s0q-q3-BBS"/>
+                        <constraint firstItem="LVd-bV-L6N" firstAttribute="top" secondItem="qUF-6z-e5c" secondAttribute="bottom" constant="7.5" id="ynm-dV-FAX"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.96470594409999999" green="0.96862751250000001" blue="0.87843143940000001" alpha="1" colorSpace="deviceRGB"/>
+            <constraints>
+                <constraint firstItem="5fR-Pw-oic" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="e2P-rZ-3IW"/>
+                <constraint firstAttribute="trailing" secondItem="5fR-Pw-oic" secondAttribute="trailing" id="rnc-sb-lON"/>
+                <constraint firstItem="5fR-Pw-oic" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="xRu-Px-L7G"/>
+                <constraint firstAttribute="bottom" secondItem="5fR-Pw-oic" secondAttribute="bottom" id="yhH-sW-JJJ"/>
+            </constraints>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+            <point key="canvasLocation" x="373" y="259"/>
+        </view>
+    </objects>
+</document>

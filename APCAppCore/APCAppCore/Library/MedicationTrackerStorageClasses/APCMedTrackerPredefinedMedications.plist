@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>name</key>
+		<string>Amantadine (Symmetrel)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Apomorphine (Apokyn)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Benztropine (Cogentin)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Bromocriptine (Parlodel)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Carbidopa, levodopa, entacapone (Stalevo)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Carbidopa-Levodopa (Sinemet, Sinemet CR)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Entacapone (Comtan)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Levodopa-Benserazide (Madopar)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Melevodopa (Sirio)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Pramipexole (Mirapex, Mirapex ER, Mirapexin,Sifrol)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Rasagiline (Azilect)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Ropinirole (Adartel, Requip, Requip XL, Ropark)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Rotigotine (Neupro)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Selegiline (l-deprenyl, Eldepryl, Zelapar)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Tolacapone (Tasmar)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Trihexyphenidyl (Apo-Trihex, Artane)</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Other</string>
+	</dict>
+</array>
+</plist>

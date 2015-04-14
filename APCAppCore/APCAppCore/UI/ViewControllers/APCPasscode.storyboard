@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="aU5-mj-CXc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Passcode View Controller-->
+        <scene sceneID="xqH-ZC-12W">
+            <objects>
+                <viewController storyboardIdentifier="APCPasscodeViewController" id="aU5-mj-CXc" customClass="APCPasscodeViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="445-jw-ZAP"/>
+                        <viewControllerLayoutGuide type="bottom" id="fZn-Rb-vDa"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="MAj-Wy-kJa">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Touch ID or Enter Passcode" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cKG-bB-Ib1">
+                                <rect key="frame" x="29" y="125" width="263" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="eiy-mf-zkC"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aK3-gJ-vS8" customClass="APCPasscodeView">
+                                <rect key="frame" x="70" y="179" width="180" height="64"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="SXm-f0-KFa"/>
+                                    <constraint firstAttribute="width" constant="180" id="pAS-2X-ABg"/>
+                                </constraints>
+                            </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Cr6-0R-lJe">
+                                <rect key="frame" x="135" y="50" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="B3I-lW-f74"/>
+                                    <constraint firstAttribute="width" constant="50" id="YEo-WP-kzx"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ygh-IW-MBW" customClass="APCButton">
+                                <rect key="frame" x="87" y="509" width="146" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="EvJ-jF-9aL"/>
+                                    <constraint firstAttribute="width" constant="146" id="uRh-eZ-N5W"/>
+                                </constraints>
+                                <state key="normal" title="Use Touch ID">
+                                    <color key="titleColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="useTouchId:" destination="aU5-mj-CXc" eventType="touchUpInside" id="zfF-v3-edq"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ygh-IW-MBW" firstAttribute="leading" secondItem="MAj-Wy-kJa" secondAttribute="leading" constant="87" id="36S-gx-RqB"/>
+                            <constraint firstItem="cKG-bB-Ib1" firstAttribute="top" secondItem="Cr6-0R-lJe" secondAttribute="bottom" constant="25" id="9c6-8y-rdu"/>
+                            <constraint firstItem="aK3-gJ-vS8" firstAttribute="top" secondItem="cKG-bB-Ib1" secondAttribute="bottom" constant="20" id="ShE-ol-A7j"/>
+                            <constraint firstItem="Cr6-0R-lJe" firstAttribute="top" secondItem="445-jw-ZAP" secondAttribute="bottom" constant="30" id="Ulo-o4-xDE"/>
+                            <constraint firstItem="cKG-bB-Ib1" firstAttribute="leading" secondItem="MAj-Wy-kJa" secondAttribute="leadingMargin" constant="13" id="VqT-z2-DCt"/>
+                            <constraint firstAttribute="centerX" secondItem="aK3-gJ-vS8" secondAttribute="centerX" id="WCk-vE-JxC"/>
+                            <constraint firstItem="fZn-Rb-vDa" firstAttribute="top" secondItem="ygh-IW-MBW" secondAttribute="bottom" constant="15" id="aDN-tl-Z7H"/>
+                            <constraint firstAttribute="trailing" secondItem="ygh-IW-MBW" secondAttribute="trailing" constant="87" id="bOj-hf-Yga"/>
+                            <constraint firstAttribute="centerX" secondItem="Cr6-0R-lJe" secondAttribute="centerX" id="ilQ-JB-VGR"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="cKG-bB-Ib1" secondAttribute="trailing" constant="12" id="xlr-kq-iLO"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="logoImageView" destination="Cr6-0R-lJe" id="aMO-Pd-UVB"/>
+                        <outlet property="passcodeView" destination="aK3-gJ-vS8" id="mP1-mH-IYp"/>
+                        <outlet property="titleLabel" destination="cKG-bB-Ib1" id="hQ7-wi-qGf"/>
+                        <outlet property="touchIdButton" destination="ygh-IW-MBW" id="suU-sF-8cp"/>
+                        <outlet property="touchIdButtonBottomConstraint" destination="aDN-tl-Z7H" id="BrO-3W-6u8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1py-EM-jEb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="383" y="405"/>
+        </scene>
+    </scenes>
+</document>

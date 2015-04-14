@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F1066" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="APCMedicationTrackerDetailViewController">
+            <connections>
+                <outlet property="tabulator" destination="PhK-o3-X8y" id="6dn-Re-ePa"/>
+                <outlet property="todayMedicineTitle" destination="8y4-fO-9vG" id="i9r-Xc-TRi"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P1N-iS-h9g">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                    <items>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="rQc-8U-UHn"/>
+                        <barButtonItem title="Medication Details" id="8y4-fO-9vG"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="LvC-eg-w5g"/>
+                    </items>
+                    <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                </toolbar>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="PhK-o3-X8y">
+                    <rect key="frame" x="0.0" y="44" width="600" height="556"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="Kv2-vd-h9h"/>
+                        <outlet property="delegate" destination="-1" id="Maa-kh-lrO"/>
+                    </connections>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="PhK-o3-X8y" firstAttribute="top" secondItem="P1N-iS-h9g" secondAttribute="bottom" id="2WS-I5-Uuv"/>
+                <constraint firstAttribute="trailing" secondItem="P1N-iS-h9g" secondAttribute="trailing" id="Bsy-YQ-hz5"/>
+                <constraint firstItem="P1N-iS-h9g" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="DTB-Hy-zto"/>
+                <constraint firstItem="P1N-iS-h9g" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="aC5-2h-SMm"/>
+                <constraint firstAttribute="bottom" secondItem="PhK-o3-X8y" secondAttribute="bottom" id="dPy-mK-DVH"/>
+                <constraint firstAttribute="trailing" secondItem="PhK-o3-X8y" secondAttribute="trailing" id="gpT-KZ-7Qu"/>
+                <constraint firstItem="PhK-o3-X8y" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="tdv-7Y-mxD"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+        </view>
+    </objects>
+</document>

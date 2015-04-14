@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="yja-Bm-gxs">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Something Went Wrong…-->
+        <scene sceneID="7qA-Wk-sRv">
+            <objects>
+                <viewController title="Something Went Wrong…" id="yja-Bm-gxs" customClass="APCCatastrophicErrorViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Iwy-1O-5KB"/>
+                        <viewControllerLayoutGuide type="bottom" id="bJ4-mh-qzW"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="QnL-3e-ykA">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="logo_disease_large" translatesAutoresizingMaskIntoConstraints="NO" id="Y2i-gN-3s8">
+                                <rect key="frame" x="270" y="39" width="61" height="57"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DZ6-lI-FWU">
+                                <rect key="frame" x="16" y="104" width="568" height="21"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="DZ6-lI-FWU" firstAttribute="leading" secondItem="QnL-3e-ykA" secondAttribute="leadingMargin" id="6b2-m9-hGJ"/>
+                            <constraint firstAttribute="centerX" secondItem="Y2i-gN-3s8" secondAttribute="centerX" id="Fkt-Ky-GdA"/>
+                            <constraint firstItem="DZ6-lI-FWU" firstAttribute="trailing" secondItem="QnL-3e-ykA" secondAttribute="trailingMargin" id="ZzB-ys-no3"/>
+                            <constraint firstItem="Y2i-gN-3s8" firstAttribute="top" secondItem="Iwy-1O-5KB" secondAttribute="bottom" constant="19" id="dxT-vr-XbX"/>
+                            <constraint firstItem="DZ6-lI-FWU" firstAttribute="top" secondItem="Y2i-gN-3s8" secondAttribute="bottom" constant="8" id="geZ-PB-QJw"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="appNameLabel" destination="DZ6-lI-FWU" id="I3e-dv-tr5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="M2r-8I-gl1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="627" y="548"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="logo_disease_large" width="61" height="57"/>
+    </resources>
+</document>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="13F1066" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="APCMedicationSummaryTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sBE-tC-Wkl" userLabel="Color Swatch View">
+                        <rect key="frame" x="0.0" y="0.0" width="4" height="62"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="62" id="Msf-b4-OIj"/>
+                            <constraint firstAttribute="width" constant="4" id="emr-hy-8Wa"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xd2-Be-G4r" userLabel="Name of Medication">
+                        <rect key="frame" x="12" y="0.0" width="227" height="42"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="42" id="Mrl-1e-KXw"/>
+                            <constraint firstAttribute="width" constant="227" id="ZWS-4U-QnH"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1000 mg" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hcl-lN-K2n" userLabel="Dosage of Medication">
+                        <rect key="frame" x="247" y="21" width="73" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="73" id="S50-SP-CJs"/>
+                            <constraint firstAttribute="height" constant="21" id="Seg-a2-bW4"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EEZ-t4-VWc" userLabel="Frequency of Use">
+                        <rect key="frame" x="12" y="42" width="300" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="300" id="4pK-9F-3yp"/>
+                            <constraint firstAttribute="height" constant="21" id="ei2-TB-hmb"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="sBE-tC-Wkl" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="CzF-MZ-Mbn"/>
+                    <constraint firstItem="EEZ-t4-VWc" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="4" id="IfW-TS-24N"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="EEZ-t4-VWc" secondAttribute="bottom" constant="-8" id="Pqa-6I-hIW"/>
+                    <constraint firstItem="Hcl-lN-K2n" firstAttribute="leading" secondItem="Xd2-Be-G4r" secondAttribute="trailing" constant="8" id="R5c-Kw-Zk9"/>
+                    <constraint firstItem="sBE-tC-Wkl" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="SFM-8y-mOo"/>
+                    <constraint firstItem="Xd2-Be-G4r" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="X5i-pw-1wU"/>
+                    <constraint firstAttribute="trailing" secondItem="Hcl-lN-K2n" secondAttribute="trailing" id="k5r-sb-Xio"/>
+                    <constraint firstItem="Xd2-Be-G4r" firstAttribute="leading" secondItem="sBE-tC-Wkl" secondAttribute="trailing" constant="8" id="lew-VC-ply"/>
+                    <constraint firstItem="Hcl-lN-K2n" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="13" id="qD8-Wj-4ig"/>
+                </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="R5c-Kw-Zk9"/>
+                    </mask>
+                </variation>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="colorswatch" destination="sBE-tC-Wkl" id="QHo-XU-PXP"/>
+                <outlet property="medicationDosage" destination="Hcl-lN-K2n" id="kq1-8r-9rY"/>
+                <outlet property="medicationName" destination="Xd2-Be-G4r" id="Kif-yY-Idu"/>
+                <outlet property="medicationUseDays" destination="EEZ-t4-VWc" id="ZQR-HQ-irh"/>
+            </connections>
+            <point key="canvasLocation" x="556" y="353"/>
+        </tableViewCell>
+    </objects>
+</document>

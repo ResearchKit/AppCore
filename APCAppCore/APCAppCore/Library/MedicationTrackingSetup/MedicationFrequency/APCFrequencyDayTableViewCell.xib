@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCFrequencyDayTableViewCell" id="KGk-i7-Jjw" customClass="APCFrequencyDayTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1o9-vL-dYx">
+                        <rect key="frame" x="8" y="22" width="278" height="22"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottomMargin" secondItem="1o9-vL-dYx" secondAttribute="bottom" constant="11" id="7Rr-qh-rbi"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="1o9-vL-dYx" secondAttribute="trailing" constant="26" id="bYo-rl-4wH"/>
+                    <constraint firstItem="1o9-vL-dYx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="f64-8n-Qld"/>
+                    <constraint firstItem="1o9-vL-dYx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="14" id="tcA-MQ-sXk"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="dayTitle" destination="1o9-vL-dYx" id="DY4-6f-fc6"/>
+            </connections>
+            <point key="canvasLocation" x="503" y="306"/>
+        </tableViewCell>
+    </objects>
+</document>

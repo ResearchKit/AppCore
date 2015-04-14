@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+    <dict>
+        <key>name</key>
+        <string>Other</string>
+        <key>amount</key>
+        <real>1000000.0</real>
+    </dict>
+    <dict>
+        <key>name</key>
+        <string>1/2 mg</string>
+        <key>amount</key>
+        <real>0.5</real>
+    </dict>
+	<dict>
+		<key>name</key>
+		<string>1/2 mg</string>
+		<key>amount</key>
+		<real>0.5</real>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>1 mg</string>
+		<key>amount</key>
+		<integer>1</integer>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>2-1/2 mg</string>
+		<key>amount</key>
+		<real>2.5</real>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>5 mg</string>
+		<key>amount</key>
+		<integer>5</integer>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>10 mg</string>
+		<key>amount</key>
+		<integer>10</integer>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>20 mg</string>
+		<key>amount</key>
+		<integer>20</integer>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>25 mg</string>
+		<key>amount</key>
+		<integer>25</integer>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>50 mg</string>
+		<key>amount</key>
+		<integer>50</integer>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>75 mg</string>
+		<key>amount</key>
+		<integer>75</integer>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>100 mg</string>
+		<key>amount</key>
+		<integer>100</integer>
+	</dict>
+</array>
+</plist>

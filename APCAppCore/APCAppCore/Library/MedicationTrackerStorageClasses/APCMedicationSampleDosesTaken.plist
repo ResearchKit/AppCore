@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>uniqueId</key>
+		<integer>1</integer>
+		<key>uniqueIdOfScheduleIAmBasedOn</key>
+		<integer>1</integer>
+		<key>dateAndTimeDosageWasTaken</key>
+		<date>2015-02-16T18:07:46Z</date>
+	</dict>
+	<dict>
+		<key>uniqueId</key>
+		<integer>2</integer>
+		<key>uniqueIdOfScheduleIAmBasedOn</key>
+		<integer>1</integer>
+		<key>dateAndTimeDosageWasTaken</key>
+		<date>2014-02-21T17:08:07Z</date>
+	</dict>
+	<dict>
+		<key>uniqueId</key>
+		<integer>3</integer>
+		<key>uniqueIdOfScheduleIAmBasedOn</key>
+		<integer>2</integer>
+		<key>dateAndTimeDosageWasTaken</key>
+		<date>2015-02-16T18:07:46Z</date>
+	</dict>
+	<dict>
+		<key>uniqueId</key>
+		<integer>4</integer>
+		<key>uniqueIdOfScheduleIAmBasedOn</key>
+		<integer>3</integer>
+		<key>dateAndTimeDosageWasTaken</key>
+		<date>2015-02-16T18:07:46Z</date>
+	</dict>
+</array>
+</plist>
