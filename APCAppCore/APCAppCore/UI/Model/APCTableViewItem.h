@@ -215,7 +215,6 @@
 
 @interface APCTableViewDashboardFoodInsightItem : APCTableViewDashboardItem
 
-@property (nonatomic, strong) UIColor *tintColor;
 @property (nonatomic, strong) NSString *titleCaption;
 @property (nonatomic, strong) NSString *subtitleCaption;
 @property (nonatomic, strong) NSNumber *frequency;

@@ -90,9 +90,6 @@ static NSUInteger const kIndexOfProfileTab = 3;
 - (BOOL)               application: (UIApplication *) __unused application
     willFinishLaunchingWithOptions: (NSDictionary *) __unused launchOptions
 {
-#warning launchOptions must be checked upon start up. If UIApplicationLaunchOptionsLocationKey is present\
-then a location event has occurred and location services must be manually started.
-    
     NSUInteger  previousVersion = [self obtainPreviousVersion];
     [self performMigrationFrom:previousVersion currentVersion:kTheEntireDataModelOfTheApp];
     

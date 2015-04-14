@@ -200,7 +200,6 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
     else if ([task isKindOfClass:[APCScheduledTask class]])
     {        
         cell.titleLabel.text = scheduledTask.task.taskTitle;
-#warning This is a Temporary Fix and Will be Re-Factored into Application-Level
         if ([scheduledTask.task.taskID isEqualToString:medicationTrackerTaskId] == NO) {
             cell.confirmationView.completed = scheduledTask.completed.boolValue;
         }

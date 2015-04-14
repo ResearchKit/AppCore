@@ -50,7 +50,6 @@ static CGFloat kHeaderHeight = 157.0f;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *nextBarButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *alertLabelBottomConstraint;
 @property (weak, nonatomic) IBOutlet UILabel *alertLabel;
-@property (weak, nonatomic) IBOutlet UILabel *footerLabel;
 
 @property (nonatomic, strong) UIImage *profileImage;
 

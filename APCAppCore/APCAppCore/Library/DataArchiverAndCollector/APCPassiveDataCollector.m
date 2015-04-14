@@ -160,7 +160,6 @@ static NSString *const kCSVFilename  = @"data.csv";
     infoDictionary[kStartDateKey] = [[self datefromDateString:infoDictionary[kStartDateKey]] toStringInISO8601Format];
     NSString * infoFilePath = [tracker.folder stringByAppendingPathComponent:kInfoFilename];
     
-    #warning This is temporary, please remove once the work on a better class is completed.
     NSError *fileAttributeError = nil;
     NSString *dataFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
     NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:dataFilePath
