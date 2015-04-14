@@ -77,6 +77,8 @@ typedef enum : NSInteger
 {
     kErrorCantCreateZipFile_Code        = 100,
     kErrorCantSerializeObject_Code,
+    kErrorCantFindRequestedUploadableFile_Code,
+    kErrorCantReadRequestedUploadableFile_Code,
     kErrorCantInsertZipEntry_Code,
     kErrorCantReadUnencryptedFile_Code,
     kErrorCantFindDocumentsFolder_Code,
@@ -96,41 +98,45 @@ typedef enum : NSInteger
 } APCErrorCode;
 
 
-static NSString * const kArchiveAndUploadErrorDomain                    = @"ArchiveAndUpload";
-static NSString * const kErrorCantCreateZipFile_Reason                  = @"Can't Create Archive in Memory";
-static NSString * const kErrorCantCreateZipFile_Suggestion              = @"We couldn't create the new, placeholder .zip file in RAM.  (We haven't even gotten to the 'save to disk' part.)";
-static NSString * const kErrorCantSerializeObject_Reason                = @"Can't Serialize Object";
-static NSString * const kErrorCantSerializeObject_Suggestion            = @"We couldn't generate a JSON version of some piece of data.";
-static NSString * const kErrorCantInsertZipEntry_Reason                 = @"Can't Insert Zip Entry";
-static NSString * const kErrorCantInsertZipEntry_Suggestion             = @"We couldn't add one of the .zippable items to the .zip file.";
-static NSString * const kErrorCantReadUnencryptedFile_Reason            = @"Can't Open Archive";
-static NSString * const kErrorCantReadUnencryptedFile_Suggestion        = @"Couldn't read the unencrypted .zip file we just tried to create.";
-static NSString * const kErrorCantFindDocumentsFolder_Reason            = @"Can't Find 'Documents' Folder";
-static NSString * const kErrorCantFindDocumentsFolder_Suggestion        = @"Couldn't find the user's 'documents' folder. This should never happen. Ahem.";
-static NSString * const kErrorCantCreateArchiveFolder_Reason            = @"Can't create 'Archive' folder";
-static NSString * const kErrorCantCreateArchiveFolder_Suggestion        = @"Couldn't create the folder for preparing our .zip files.";
-static NSString * const kErrorCantCreateUploadFolder_Reason             = @"Can't create 'Upload' folder";
-static NSString * const kErrorCantCreateUploadFolder_Suggestion         = @"Couldn't create the folder for saving files to be uploaded.";
-static NSString * const kErrorCantCreateWorkingDirectory_Reason         = @"Can't Create Working Folder";
-static NSString * const kErrorCantCreateWorkingDirectory_Suggestion     = @"Couldn't create a folder in which to make our .zip file.";
-static NSString * const kErrorDontHaveAnyZippedFiles_Reason             = @"Don't Have Files For Archive";
-static NSString * const kErrorDontHaveAnyZippedFiles_Suggestion         = @"Something went wrong. We don't seem to have any contents for this .zip file.";
-static NSString * const kErrorCantCreateManifest_Reason                 = @"Can't Create Manifest";
-static NSString * const kErrorCantCreateManifest_Suggestion_Format      = @"Couldn't create the manifest file entry (%@.%@) in the .zip file.";
-static NSString * const kErrorCantSaveUnencryptedFile_Reason            = @"Can't Save Unencrypted File";
-static NSString * const kErrorCantSaveUnencryptedFile_Suggestion        = @"We couldn't save the unencrypted .zip file to disk.";
-static NSString * const kErrorCantFindUnencryptedFile_Reason            = @"Can't Find Unencrypted File";
-static NSString * const kErrorCantFindUnencryptedFile_Suggestion        = @"We couldn't find the unencrypted .zip file on disk (even though we seem to have successfully saved it...?).";
-static NSString * const kErrorCantEncryptFile_Reason                    = @"Can't Encrypt Zip File";
-static NSString * const kErrorCantEncryptFile_Suggestion                = @"We couldn't encrypt the .zip file we need to upload.";
-static NSString * const kErrorCantSaveEncryptedFile_Reason              = @"Can't Save Encrypted File";
-static NSString * const kErrorCantSaveEncryptedFile_Suggestion          = @"We couldn't save the encrypted .zip file to disk.";
-static NSString * const kErrorCantFindEncryptedFile_Reason              = @"Can't Find Encrypted File";
-static NSString * const kErrorCantFindEncryptedFile_Suggestion          = @"We couldn't find the encrypted .zip file on disk (even though we seem to have successfully encrypted it...?).";
-static NSString * const kErrorUploadFailed_Reason                       = @"Upload to Sage Failed";
-static NSString * const kErrorUploadFailed_Suggestion                   = @"We got an error when uploading to Sage.  See the nested error for details.";
-static NSString * const kErrorCantDeleteFileOrFolder_Reason             = @"Can't Delete File/Folder";
-static NSString * const kErrorCantDeleteFileOrFolder_Suggestion         = @"We couldn't delete a file/folder creating during the archiving process. See attached path and nested error, if any, for details.";
+static NSString * const kArchiveAndUploadErrorDomain                        = @"ArchiveAndUpload";
+static NSString * const kErrorCantCreateZipFile_Reason                      = @"Can't Create Archive in Memory";
+static NSString * const kErrorCantCreateZipFile_Suggestion                  = @"We couldn't create the new, placeholder .zip file in RAM.  (We haven't even gotten to the 'save to disk' part.)";
+static NSString * const kErrorCantSerializeObject_Reason                    = @"Can't Serialize Object";
+static NSString * const kErrorCantSerializeObject_Suggestion                = @"We couldn't generate a JSON version of some piece of data.";
+static NSString * const kErrorCantFindRequestedUploadableFile_Reason        = @"Can't Find Specified File";
+static NSString * const kErrorCantFindRequestedUploadableFile_Suggestion    = @"We couldn't find one of the files you asked us to upload. See the 'path' entry in this dictionary for the name of the problem file.";
+static NSString * const kErrorCantReadRequestedUploadableFile_Reason        = @"Can't Open Specified File";
+static NSString * const kErrorCantReadRequestedUploadableFile_Suggestion    = @"We couldn't open one of the files you asked us to upload. See the 'path' entry in this dictionary for the name of the problem file.";
+static NSString * const kErrorCantInsertZipEntry_Reason                     = @"Can't Insert Zip Entry";
+static NSString * const kErrorCantInsertZipEntry_Suggestion                 = @"We couldn't add one of the .zippable items to the .zip file.";
+static NSString * const kErrorCantReadUnencryptedFile_Reason                = @"Can't Open Archive";
+static NSString * const kErrorCantReadUnencryptedFile_Suggestion            = @"Couldn't read the unencrypted .zip file we just tried to create.";
+static NSString * const kErrorCantFindDocumentsFolder_Reason                = @"Can't Find 'Documents' Folder";
+static NSString * const kErrorCantFindDocumentsFolder_Suggestion            = @"Couldn't find the user's 'documents' folder. This should never happen. Ahem.";
+static NSString * const kErrorCantCreateArchiveFolder_Reason                = @"Can't create 'Archive' folder";
+static NSString * const kErrorCantCreateArchiveFolder_Suggestion            = @"Couldn't create the folder for preparing our .zip files.";
+static NSString * const kErrorCantCreateUploadFolder_Reason                 = @"Can't create 'Upload' folder";
+static NSString * const kErrorCantCreateUploadFolder_Suggestion             = @"Couldn't create the folder for saving files to be uploaded.";
+static NSString * const kErrorCantCreateWorkingDirectory_Reason             = @"Can't Create Working Folder";
+static NSString * const kErrorCantCreateWorkingDirectory_Suggestion         = @"Couldn't create a folder in which to make our .zip file.";
+static NSString * const kErrorDontHaveAnyZippedFiles_Reason                 = @"Don't Have Files For Archive";
+static NSString * const kErrorDontHaveAnyZippedFiles_Suggestion             = @"Something went wrong. We don't seem to have any contents for this .zip file.";
+static NSString * const kErrorCantCreateManifest_Reason                     = @"Can't Create Manifest";
+static NSString * const kErrorCantCreateManifest_Suggestion_Format          = @"Couldn't create the manifest file entry (%@.%@) in the .zip file.";
+static NSString * const kErrorCantSaveUnencryptedFile_Reason                = @"Can't Save Unencrypted File";
+static NSString * const kErrorCantSaveUnencryptedFile_Suggestion            = @"We couldn't save the unencrypted .zip file to disk.";
+static NSString * const kErrorCantFindUnencryptedFile_Reason                = @"Can't Find Unencrypted File";
+static NSString * const kErrorCantFindUnencryptedFile_Suggestion            = @"We couldn't find the unencrypted .zip file on disk (even though we seem to have successfully saved it...?).";
+static NSString * const kErrorCantEncryptFile_Reason                        = @"Can't Encrypt Zip File";
+static NSString * const kErrorCantEncryptFile_Suggestion                    = @"We couldn't encrypt the .zip file we need to upload.";
+static NSString * const kErrorCantSaveEncryptedFile_Reason                  = @"Can't Save Encrypted File";
+static NSString * const kErrorCantSaveEncryptedFile_Suggestion              = @"We couldn't save the encrypted .zip file to disk.";
+static NSString * const kErrorCantFindEncryptedFile_Reason                  = @"Can't Find Encrypted File";
+static NSString * const kErrorCantFindEncryptedFile_Suggestion              = @"We couldn't find the encrypted .zip file on disk (even though we seem to have successfully encrypted it...?).";
+static NSString * const kErrorUploadFailed_Reason                           = @"Upload to Sage Failed";
+static NSString * const kErrorUploadFailed_Suggestion                       = @"We got an error when uploading to Sage.  See the nested error for details.";
+static NSString * const kErrorCantDeleteFileOrFolder_Reason                 = @"Can't Delete File/Folder";
+static NSString * const kErrorCantDeleteFileOrFolder_Suggestion             = @"We couldn't delete a file/folder creating during the archiving process. See attached path and nested error, if any, for details.";
 
 
 
@@ -179,6 +185,7 @@ static NSString *folderPathForUploadOperations = nil;
 
 @interface APCDataArchiverAndUploader ()
 @property (nonatomic, strong) NSArray               * dictionariesToUpload;
+@property (nonatomic, strong) NSArray               * filePathsToUpload;
 
 @property (nonatomic, strong) ZZArchive             * zipArchive;
 @property (nonatomic, strong) NSMutableArray        * zipEntries;
@@ -224,16 +231,6 @@ static NSString *folderPathForUploadOperations = nil;
     phoneInfo   = [APCUtilities phoneInfo];
 }
 
-+ (void) uploadOneDictionary: (NSDictionary *) dictionary
-{
-    [queueForArchivingAndUploading addOperationWithBlock:^{
-
-        APCDataArchiverAndUploader *archiverAndUploader = [[APCDataArchiverAndUploader alloc] initWithDictionariesToUpload: @[dictionary]];
-
-        [archiverAndUploader go];
-    }];
-}
-
 + (void) trackNewArchiver: (APCDataArchiverAndUploader *) archiver
 {
     [queueForTrackingUploaders addOperationWithBlock: ^{
@@ -245,6 +242,33 @@ static NSString *folderPathForUploadOperations = nil;
 {
     [queueForTrackingUploaders addOperationWithBlock: ^{
         [uploadersWaitingForSageUploadToFinish removeObject: archiver];
+    }];
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - The public API
+// ---------------------------------------------------------
+
++ (void) uploadDictionary: (NSDictionary *) dictionary
+{
+    APCDataArchiverAndUploader *archiverAndUploader = [[APCDataArchiverAndUploader alloc] initWithDictionariesToUpload: @[dictionary]];
+
+    [self startOneUploadWithUploader: archiverAndUploader];
+}
+
++ (void) uploadFileAtPath: (NSString *) path
+{
+    APCDataArchiverAndUploader *archiverAndUploader = [[APCDataArchiverAndUploader alloc] initWithFilePathsToUpload: @[path]];
+
+    [self startOneUploadWithUploader: archiverAndUploader];
+}
+
++ (void) startOneUploadWithUploader: (APCDataArchiverAndUploader *) uploader
+{
+    [queueForArchivingAndUploading addOperationWithBlock: ^{
+        [uploader go];
     }];
 }
 
@@ -268,6 +292,8 @@ static NSString *folderPathForUploadOperations = nil;
         // This will be filled with stuff to ship.
         _dictionariesToUpload   = nil;
 
+        // Will contain an optional list of paths to files to be uploaded.
+        _filePathsToUpload      = nil;
 
         // These will be set if we can successfully create a working directory.
         _workingDirectoryPath   = nil;
@@ -295,6 +321,18 @@ static NSString *folderPathForUploadOperations = nil;
     if (self)
     {
         _dictionariesToUpload = [NSArray arrayWithArray: arrayOfDictionaries];
+    }
+
+    return self;
+}
+
+- (id) initWithFilePathsToUpload: (NSArray *) arrayOfFilePaths
+{
+    self = [self init];
+
+    if (self)
+    {
+        _filePathsToUpload = [NSArray arrayWithArray: arrayOfFilePaths];
     }
 
     return self;
@@ -334,6 +372,7 @@ static NSString *folderPathForUploadOperations = nil;
     if (ok) {  ok = [self createWorkingDirectoryReturningError          : & error];  }
     if (ok) {  ok = [self createZipArchiveInRamReturningError           : & error];  }
     if (ok) {  ok = [self zipAllDictionariesReturningError              : & error];  }
+    if (ok) {  ok = [self zipAllRequestedFilePathsReturningError        : & error];  }
     if (ok) {  ok = [self createManifestReturningError                  : & error];  }
     if (ok) {  ok = [self saveToDiskReturningError                      : & error];  }
     if (ok) {  ok = [self encryptZipFileReturningError                  : & error];  }
@@ -370,7 +409,7 @@ static NSString *folderPathForUploadOperations = nil;
                           encountered, if any.  Will be set to nil
                           if no errors were encountered.
  */
-- (BOOL) createBaseFoldersDuringFirstRunReturningError: (NSError **) errorToReturn
+- (BOOL) createBaseFoldersDuringFirstRunReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     NSError *localError = nil;
 
@@ -472,7 +511,7 @@ static NSString *folderPathForUploadOperations = nil;
     return uploadFoldersHaveBeenCreated;
 }
 
-- (BOOL) createWorkingDirectoryReturningError: (NSError **) errorToReturn
+- (BOOL) createWorkingDirectoryReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     BOOL ableToCreateWorkingFolder = NO;
     NSError *localError = nil;
@@ -536,7 +575,7 @@ static NSString *folderPathForUploadOperations = nil;
 #pragma mark - Step 2:  Create the empty .zip archive, in RAM only
 // ---------------------------------------------------------
 
-- (BOOL) createZipArchiveInRamReturningError: (NSError **) errorToReturn
+- (BOOL) createZipArchiveInRamReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     BOOL ableToCreateZipArchive = NO;
     NSError *localError = nil;
@@ -581,7 +620,7 @@ static NSString *folderPathForUploadOperations = nil;
 
 
 // ---------------------------------------------------------
-#pragma mark - Step 3:  .zip everything
+#pragma mark - Step 3:  .zip dictionaries
 // ---------------------------------------------------------
 
 /**
@@ -592,13 +631,12 @@ static NSString *folderPathForUploadOperations = nil;
  sign of an error -- that means if we have trouble
  .zipping anything, we stop everything (by design).
  */
-- (BOOL) zipAllDictionariesReturningError: (NSError **) errorToReturn
+- (BOOL) zipAllDictionariesReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     /*
-     Note:  unlike the other methods in this file, 
-     we're defaulting to "it worked."  If any individual
-     "insert" process fails, we'll change this to a "NO,"
-     and stop.
+     Note:  unlike most other methods in this file, the result
+     value in this method defaults to "it worked."  If any sub-step
+     fails, we'll change this to a "NO," and stop.
      */
     BOOL ableToZipEverything = YES;
     NSError *localError = nil;
@@ -608,9 +646,9 @@ static NSString *folderPathForUploadOperations = nil;
     {
         NSString *filename = [self filenameFromDictionary: dictionary];
 
-        ableToZipEverything = [self insertIntoZipArchive: dictionary
-                                                filename: filename
-                                          returningError: & errorFromZipInsertProcess];
+        ableToZipEverything = [self insertDictionary: dictionary
+                          intoZipArchiveWithFilename: filename
+                                      returningError: & errorFromZipInsertProcess];
 
         /*
          TESTING
@@ -712,9 +750,9 @@ static NSString *folderPathForUploadOperations = nil;
 //    }
 //
 
-- (BOOL) insertIntoZipArchive: (NSDictionary *) dictionary
-                     filename: (NSString *) filename
-               returningError: (NSError **) errorToReturn
+- (BOOL)      insertDictionary: (NSDictionary *) dictionary
+    intoZipArchiveWithFilename: (NSString *) filename
+                returningError: (NSError * __autoreleasing *) errorToReturn
 {
     BOOL ableToInsertDictionaryIntoZipFile = NO;
     NSError *localError = nil;
@@ -758,8 +796,17 @@ static NSString *folderPathForUploadOperations = nil;
 
     else
     {
-        // If we get this far, we'll assume everything else is going to work.  (Good idea?)
+        /*
+         If we get here, assume everything else is going to work.
+         (Ahem.)
+
+         TODO:  Look for ways that errors might be generated by the
+         method calls in this block of code.  As of this writing,
+         they look safe -- but that really suggests we're missing
+         a place where an NSError *should* have been returned.
+         */
         ableToInsertDictionaryIntoZipFile = YES;
+
 
         NSString * fullFileName = [filename stringByAppendingPathExtension: kAPCFileExtension_JSON];
 
@@ -767,7 +814,7 @@ static NSString *folderPathForUploadOperations = nil;
 
         ZZArchiveEntry *zipEntry = [ZZArchiveEntry archiveEntryWithFileName: fullFileName
                                                                    compress: YES
-                                                                  dataBlock: ^(NSError** __unused callbackError)
+                                                                  dataBlock: ^(NSError * __autoreleasing * __unused callbackError)
                                     {
                                         return jsonData;
                                     }];
@@ -792,7 +839,199 @@ static NSString *folderPathForUploadOperations = nil;
 
 
 // ---------------------------------------------------------
-#pragma mark - Step 4:  Create a "manifest"
+#pragma mark - Step 4:  .zip files
+// ---------------------------------------------------------
+
+/**
+ Loop through the files we were asked to upload, inserting
+ each into our .zip file.  If we have trouble doing any
+ of them, stop, and don't do the rest.  Because of how
+ this whole file works -- everything aborts at the first
+ sign of an error -- that means if we have trouble
+ .zipping anything, we stop everything (by design).
+ */
+- (BOOL) zipAllRequestedFilePathsReturningError: (NSError * __autoreleasing *) errorToReturn
+{
+    /*
+     Note:  unlike most other methods in this file, the result
+     value in this method defaults to "it worked."  If any sub-step
+     fails, we'll change this to a "NO," and stop.
+     */
+    BOOL ableToZipEverything = YES;
+    NSError *localError = nil;
+    NSError *errorFromZipInsertProcess = nil;
+
+    for (NSString *path in self.filePathsToUpload)
+    {
+        ableToZipEverything = [self insertFileAtPath: path
+                        intoZipArchiveReturningError: & errorFromZipInsertProcess];
+
+        /*
+         TESTING
+
+         Please leave this block of test code here.  It helps
+         verify that we're handling each possible error correctly.
+
+                 ableToZipEverything = NO;
+                 errorFromZipInsertProcess = [NSError errorWithDomain: @"fake underlying error inserting entry into .zip file" code: 12 userInfo: nil];
+         */
+
+
+        if (! ableToZipEverything)
+        {
+            // Something broke.  Stop looping, and report.
+            localError = [NSError errorWithCode: kErrorCantInsertZipEntry_Code
+                                         domain: kArchiveAndUploadErrorDomain
+                                  failureReason: kErrorCantInsertZipEntry_Reason
+                             recoverySuggestion: kErrorCantInsertZipEntry_Suggestion
+                                    nestedError: errorFromZipInsertProcess];
+            break;
+        }
+        else
+        {
+            // Yay!  Keep going, inserting the next item.
+        }
+    }
+
+    if (errorToReturn != nil)
+    {
+        *errorToReturn = localError;
+    }
+
+    return ableToZipEverything;
+}
+
+- (BOOL)        insertFileAtPath: (NSString *) path
+    intoZipArchiveReturningError: (NSError * __autoreleasing *) errorToReturn
+{
+    BOOL ableToInsertRequestedFileIntoZipFile = NO;
+    NSError *localError = nil;
+
+
+    /*
+     Try to find the requested file.
+     */
+    BOOL ableToFindFile = [[NSFileManager defaultManager] fileExistsAtPath: path];
+
+
+    /*
+     TESTING
+
+     Please leave this block of test code here.  It helps
+     verify that we're handling each possible error correctly.
+
+            ableToFindFile = NO;
+     */
+
+    if (! ableToFindFile)
+    {
+        // Can't find one of the requestd files.  Stop looping, and report.
+        localError = [NSError errorWithCode: kErrorCantFindRequestedUploadableFile_Code
+                                     domain: kArchiveAndUploadErrorDomain
+                              failureReason: kErrorCantFindRequestedUploadableFile_Reason
+                         recoverySuggestion: kErrorCantFindRequestedUploadableFile_Suggestion
+                            relatedFilePath: path
+                                 relatedURL: nil
+                                nestedError: nil];
+    }
+
+    else
+    {
+        NSError *errorReadingFile = nil;
+        NSData *dataFromThatFile = [NSData dataWithContentsOfFile: path
+                                                          options: NSDataReadingMappedIfSafe
+                                                            error: &errorReadingFile];
+
+        /*
+         TESTING
+
+         Please leave this block of test code here.  It helps
+         verify that we're handling each possible error correctly.
+
+                 dataFromThatFile = nil;
+                 errorReadingFile = [NSError errorWithDomain: @"fake underlying error reading data from file" code: 12 userInfo: nil];
+         */
+
+
+        if (dataFromThatFile == nil)
+        {
+            localError = [NSError errorWithCode: kErrorCantReadRequestedUploadableFile_Code
+                                         domain: kArchiveAndUploadErrorDomain
+                                  failureReason: kErrorCantReadRequestedUploadableFile_Reason
+                             recoverySuggestion: kErrorCantReadRequestedUploadableFile_Suggestion
+                                relatedFilePath: path
+                                     relatedURL: nil
+                                    nestedError: errorReadingFile];
+        }
+
+        else
+        {
+            /*
+             If we get here, assume everything else is going to work.
+             (Ahem.)
+
+             TODO:  Look for ways that errors might be generated by the
+             method calls in this block of code.  As of this writing,
+             they look safe -- but that really suggests we're missing
+             a place where an NSError *should* have been returned.
+             */
+            ableToInsertRequestedFileIntoZipFile = YES;
+
+            
+            APCLogFilenameBeingArchived (path);
+
+            NSString *filename = path.lastPathComponent;
+            NSString *contentType = [self contentTypeForFileAtPath: path];
+
+            /*
+             TODO:  Explore using the stream-based ZZArchiveEntry method,
+             so we don't have to slurp the whole file into RAM.
+             */
+            ZZArchiveEntry *zipEntry = [ZZArchiveEntry archiveEntryWithFileName: filename
+                                                                       compress: YES
+                                                                      dataBlock: ^(NSError * __autoreleasing * __unused callbackError)
+                                        {
+                                            return dataFromThatFile;
+                                        }];
+
+            [self.zipEntries addObject: zipEntry];
+
+            NSDictionary *fileInfoEntry = @{ kAPCSerializedDataKey_FileInfoName: filename,
+                                             kAPCSerializedDataKey_FileInfoTimeStamp: [NSDate date],
+                                             kAPCSerializedDataKey_FileInfoContentType: contentType };
+
+            [self.fileInfoEntries addObject: fileInfoEntry];
+        }
+    }
+    
+    if (errorToReturn != nil)
+    {
+        *errorToReturn = localError;
+    }
+    
+    return ableToInsertRequestedFileIntoZipFile;
+}
+
+- (NSString *) contentTypeForFileAtPath: (NSString *) path
+{
+    NSString *extension = path.pathExtension.lowercaseString;
+
+    NSString *contentType = kAPCContentType_UnknownData;
+
+    if      ([extension isEqualToString: kAPCFileExtension_CommaSeparatedValues])   { contentType = kAPCContentType_CommaSeparatedValues; }
+    else if ([extension isEqualToString: kAPCFileExtension_JSON])                   { contentType = kAPCContentType_JSON; }
+    else if ([extension isEqualToString: kAPCFileExtension_MPEG4Audio])             { contentType = kAPCContentType_MPEG4Audio; }
+    else if ([extension isEqualToString: kAPCFileExtension_PlainText])              { contentType = kAPCContentType_PlainText; }
+    else if ([extension isEqualToString: kAPCFileExtension_PlainTextShort])         { contentType = kAPCContentType_PlainText; }
+    else                                                                            { contentType = kAPCContentType_UnknownData; }
+
+    return contentType;
+}
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Step 5:  Create a "manifest"
 // ---------------------------------------------------------
 
 /**
@@ -801,7 +1040,7 @@ static NSString *folderPathForUploadOperations = nil;
  bunch of files.  This method generates that "info.json"
  file.
  */
-- (BOOL) createManifestReturningError: (NSError **) errorToReturn
+- (BOOL) createManifestReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     BOOL ableToCreateManifest = NO;
     NSError *localError = nil;
@@ -833,9 +1072,9 @@ static NSString *folderPathForUploadOperations = nil;
 
         NSError *errorCreatingManifest = nil;
 
-        ableToCreateManifest = [self insertIntoZipArchive: zipArchiveManifest
-                                                 filename: kAPCNameOfIndexFile
-                                           returningError: & errorCreatingManifest];
+        ableToCreateManifest = [self insertDictionary: zipArchiveManifest
+                           intoZipArchiveWithFilename: kAPCNameOfIndexFile
+                                       returningError: & errorCreatingManifest];
 
 
         /*
@@ -879,10 +1118,10 @@ static NSString *folderPathForUploadOperations = nil;
 
 
 // ---------------------------------------------------------
-#pragma mark - Step 5:  Save to Disk
+#pragma mark - Step 6:  Save to Disk
 // ---------------------------------------------------------
 
-- (BOOL) saveToDiskReturningError: (NSError **) errorToReturn
+- (BOOL) saveToDiskReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     BOOL ableToSaveToDisk = NO;
     NSError *localError = nil;
@@ -957,10 +1196,10 @@ static NSString *folderPathForUploadOperations = nil;
 
 
 // ---------------------------------------------------------
-#pragma mark - Step 6:  Encrypt
+#pragma mark - Step 7:  Encrypt
 // ---------------------------------------------------------
 
-- (BOOL) encryptZipFileReturningError: (NSError **) errorToReturn
+- (BOOL) encryptZipFileReturningError: (NSError * __autoreleasing *) errorToReturn
 {
     BOOL successfullyEncrypted  = NO;
     NSError *localError         = nil;
@@ -1103,7 +1342,7 @@ static NSString *folderPathForUploadOperations = nil;
 
 
 // ---------------------------------------------------------
-#pragma mark - Step 7:  Upload to Sage
+#pragma mark - Step 8:  Upload to Sage
 // ---------------------------------------------------------
 
 /**
@@ -1180,7 +1419,7 @@ static NSString *folderPathForUploadOperations = nil;
 
 
 // ---------------------------------------------------------
-#pragma mark - Step 8:  Clean Up
+#pragma mark - Step 9:  Clean Up
 // ---------------------------------------------------------
 
 /**
@@ -1292,7 +1531,7 @@ static NSString *folderPathForUploadOperations = nil;
  */
 + (void) uploadResearchKitTaskResult: (id /* ORKTaskResult* */) __unused taskResult {}
 
-+ (void)        uploadOneDictionary: (NSDictionary *) __unused dictionary
++ (void)           uploadDictionary: (NSDictionary *) __unused dictionary
     encryptingContentsBeforeZipping: (BOOL)           __unused shouldEncryptContentsFirst {}
 
 + (void) uploadAirQualityData: (NSDictionary *) __unused airQualityStuff {}
@@ -1300,6 +1539,7 @@ static NSString *folderPathForUploadOperations = nil;
 + (void) uploadDictionaries: (NSArray *)  __unused dictionaries
           withGroupFilename: (NSString *) __unused filename
     encryptingContentsFirst: (BOOL)       __unused shouldEncryptContentsFirst {}
+
 
 @end
 

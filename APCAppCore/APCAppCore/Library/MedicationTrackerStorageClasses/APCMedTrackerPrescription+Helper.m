@@ -741,7 +741,7 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 
 + (void) sendRecordedActionToSage: (NSDictionary *) actionRecord
 {
-    [APCDataArchiverAndUploader uploadOneDictionary: actionRecord];
+    [APCDataArchiverAndUploader uploadDictionary: actionRecord];
 }
 
 + (void) recordActionForCreatingPrescription: (APCMedTrackerPrescription *) prescription

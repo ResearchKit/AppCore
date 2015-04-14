@@ -150,8 +150,19 @@
 @interface APCDataArchiverAndUploader : NSObject
 
 
-/** .zips and uploads the specified dictionary to Sage. */
-+ (void) uploadOneDictionary: (NSDictionary *) dictionary;
+/**
+ .zips and uploads the specified dictionary to Sage.
+ */
++ (void) uploadDictionary: (NSDictionary *) dictionary;
+
+
+/**
+ .zips and uploads the specified file to Sage.
+ 
+ Note that this method will NOT delete the file afterwards.
+ You have to do that.
+ */
++ (void) uploadFileAtPath: (NSString *) path;
 
 
 
@@ -168,7 +179,7 @@
 + (void) uploadResearchKitTaskResult: (id /* ORKTaskResult* */) taskResult;
 
 /** For air-quality data:  encrypt the individual files inside the .zip file, as well as encrypting the whole package. */
-+ (void)         uploadOneDictionary: (NSDictionary *) dictionary
++ (void)            uploadDictionary: (NSDictionary *) dictionary
      encryptingContentsBeforeZipping: (BOOL) shouldEncryptContentsFirst;
 
 /** Er...  maybe this would be better?  Maybe it calls the above? */
