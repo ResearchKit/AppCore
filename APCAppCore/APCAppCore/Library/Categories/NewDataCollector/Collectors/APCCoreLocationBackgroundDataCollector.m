@@ -213,9 +213,9 @@ static NSString *kLon = @"lon";
     //Send to delegate
     if (result)
     {
-        if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
+        if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromHealthKitCollector:)])
         {
-            [self.delegate didRecieveUpdatedValueFromCollector:result];
+            [self.delegate didRecieveUpdatedValueFromHealthKitCollector:result];
         }
     }
 }
