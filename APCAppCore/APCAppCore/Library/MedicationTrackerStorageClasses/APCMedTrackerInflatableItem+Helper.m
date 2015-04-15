@@ -109,13 +109,12 @@
                         [generatedObject setValue: value forKey: key];
                     }
                 }
-
-                APCMedTrackerInflatableItem *itemToSave = generatedObject;
+				
                 APCMedTrackerInflatableItem *existingObjectWithThisName = [self itemWithSameNameAs: generatedObject
                                                                                          inContext: context];
                 if (existingObjectWithThisName)
                 {
-                    itemToSave = existingObjectWithThisName;
+                    APCMedTrackerInflatableItem *itemToSave = existingObjectWithThisName;
 
                     for (NSString *key in incomingData.allKeys)
                     {
