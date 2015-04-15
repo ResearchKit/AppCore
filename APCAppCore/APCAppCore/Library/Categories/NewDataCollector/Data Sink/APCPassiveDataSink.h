@@ -32,10 +32,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "APCCollectorProtocol.h"
 
 
-
-@interface APCPassiveDataSink : NSObject 
+@interface APCPassiveDataSink : NSObject <APCCollectorProtocol>
 
 @property (nonatomic, strong) NSMutableDictionary * registeredTrackers;
 @property (nonatomic, strong) NSString * collectorsPath;
