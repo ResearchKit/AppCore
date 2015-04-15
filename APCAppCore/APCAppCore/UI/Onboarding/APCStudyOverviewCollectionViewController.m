@@ -84,6 +84,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:APCConsentCompletedWithDisagreeNotification object:nil];
+	_collectionView.delegate = nil;
 }
 
 - (void) goBackToSignUpJoin: (NSNotification *) __unused notification
@@ -436,7 +437,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
         default:
             break;
     }
-    
+	controller.mailComposeDelegate = nil;
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
 

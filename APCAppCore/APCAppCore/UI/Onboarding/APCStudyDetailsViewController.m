@@ -42,6 +42,10 @@
 
 @implementation APCStudyDetailsViewController
 
+- (void)dealloc {
+	_webView.delegate = nil;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.

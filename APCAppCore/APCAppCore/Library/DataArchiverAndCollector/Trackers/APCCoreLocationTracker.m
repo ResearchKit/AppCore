@@ -103,6 +103,7 @@ static NSString *kLon = @"lon";
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+	_locationManager.delegate = nil;
 }
 
 - (void)setupInitialLocationParameters
@@ -126,6 +127,7 @@ static NSString *kLon = @"lon";
     if ([CLLocationManager locationServicesEnabled] == YES)
     {
         APCLogDebug(@"Start location tracking");
+		self.locationManager.delegate = nil;
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
 

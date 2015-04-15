@@ -104,6 +104,11 @@ static  NSString  *kThinSpaceEnDashJoiner     = @"\u2009\u2013\u2009";
     return self;
 }
 
+- (void)dealloc {
+	_leftSwiper.delegate = nil;
+	_rightSwiper.delegate = nil;
+}
+
 - (void)setupViews
 {
     {

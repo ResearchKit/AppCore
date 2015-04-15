@@ -48,6 +48,10 @@ static NSString *kInternetNotAvailableErrorMessage2 = @"BackendServer Not Reacha
 
 @implementation APCChangeEmailViewController
 
+- (void)dealloc {
+	_emailTextField.delegate = nil;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     

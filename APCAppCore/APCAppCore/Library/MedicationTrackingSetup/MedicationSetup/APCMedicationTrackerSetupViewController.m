@@ -118,6 +118,13 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
 
 @implementation APCMedicationTrackerSetupViewController
 
+- (void)dealloc {
+	_setupTabulator.delegate = nil;
+	_setupTabulator.dataSource = nil;
+	_listTabulator.delegate = nil;
+	_listTabulator.dataSource = nil;
+}
+
 #pragma  mark  -  Table View Data Source Methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView

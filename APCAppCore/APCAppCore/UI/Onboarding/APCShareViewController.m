@@ -55,6 +55,11 @@
 
 @implementation APCShareViewController
 
+- (void)dealloc {
+	_tableView.delegate = nil;
+	_tableView.dataSource = nil;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -251,7 +256,7 @@
         default:
             break;
     }
-    
+	controller.delegate = nil;
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -270,7 +275,7 @@
         default:
             break;
     }
-    
+	controller.delegate = nil;
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
