@@ -293,7 +293,7 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
 
 - (void)displayView:(APCMedicationTrackerMedicationsDisplayView *) __unused displayView lozengeButtonWasTapped:(APCLozengeButton *)lozenge
 {
-    if ([lozenge.currentDate isEarlierOrEqualToDate:[NSDate date]] == YES) {
+    if ([lozenge.currentDate isEarlierOrEqualToDate:[NSDate date]]) {
         APCMedicationTrackerDetailViewController  *controller = [[APCMedicationTrackerDetailViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
         controller.lozenge = lozenge;
         [self.navigationController pushViewController:controller animated:YES];
@@ -447,7 +447,7 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
 - (void)doneButtonWasTapped:(id)__unused sender
 {
     if (self.delegate != nil) {
-        if ([self.delegate respondsToSelector:@selector(stepViewController:didFinishWithNavigationDirection:)] == YES) {
+        if ([self.delegate respondsToSelector:@selector(stepViewController:didFinishWithNavigationDirection:)]) {
             [self.delegate stepViewController:self didFinishWithNavigationDirection:ORKStepViewControllerNavigationDirectionForward];
         }
     }
@@ -548,7 +548,7 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
                  [self makeFirstPage];
              }
              [self.tabulator reloadData];
-             if (self.calendricalPagesNeedRefresh == YES) {
+             if (self.calendricalPagesNeedRefresh) {
                  [self refreshAllPages];
                  self.calendricalPagesNeedRefresh = NO;
              }

@@ -135,7 +135,7 @@ static  CGFloat    kAPCMedicationRowHeight       = 64.0;
     NSUInteger  totalNumberOfDosesTaken = 0;
     for (NSInteger  row = 0;  row < numberOfRowsInDosesSection;  row++) {
         APCMedicationDetailsTableViewCell  *doseCell = (APCMedicationDetailsTableViewCell *)[self.tabulator cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:kDailyDosesTakenSection]];
-        if (doseCell.confirmer.completed == YES) {
+        if (doseCell.confirmer.completed) {
             totalNumberOfDosesTaken = totalNumberOfDosesTaken + 1;
         }
     }

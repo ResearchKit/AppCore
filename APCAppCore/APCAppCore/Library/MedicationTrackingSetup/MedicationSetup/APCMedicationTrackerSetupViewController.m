@@ -142,20 +142,20 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
     aCell.addTopicLabel.hidden = NO;
     aCell.colorSwatch.hidden   = YES;
     if (row == SetupTableRowTypesName) {
-        if (self.medicationNameWasSet == YES) {
+        if (self.medicationNameWasSet) {
             aCell.addTopicLabel.text = self.theMedicationObject.name;
             [aCell setNeedsDisplay];
         } else {
             aCell.addTopicLabel.text = addTableCategories[row];
         }
     } else if (row == SetupTableRowTypesFrequency) {
-        if (self.medicationFrequencyWasSet == YES) {
+        if (self.medicationFrequencyWasSet) {
             aCell.addTopicLabel.text = [self.frequenciesAndDaysObject formatNumbersAndDays];
         } else {
             aCell.addTopicLabel.text = addTableCategories[row];
         }
     } else if (row == SetupTableRowTypesLabelColor) {
-        if (self.medicationColorWasSet == YES) {
+        if (self.medicationColorWasSet) {
             aCell.addTopicLabel.hidden = NO;
             aCell.colorSwatch.hidden   = NO;
             aCell.addTopicLabel.text = self.selectedColorObject.name;
@@ -164,7 +164,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
             aCell.addTopicLabel.text = addTableCategories[row];
         }
     } else if (row == SetupTableRowTypesDosage) {
-        if (self.medicationDosageWasSet == YES) {
+        if (self.medicationDosageWasSet) {
             aCell.addTopicLabel.text = self.selectedPossibleDosage.name;
         } else {
             aCell.addTopicLabel.text = addTableCategories[row];
@@ -229,14 +229,14 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
         if (indexPath.row == kAPCMedicationNameRow) {
             APCMedicationNameViewController  *controller = [[APCMedicationNameViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
             controller.delegate = self;
-            if ((self.theMedicationObject != nil) && (self.medicationNameWasSet == YES)) {
+            if ((self.theMedicationObject != nil) && (self.medicationNameWasSet)) {
                 controller.medicationRecord = self.theMedicationObject;
             }
             [self.navigationController pushViewController:controller animated:YES];
         } else if (indexPath.row == kAPCMedicationFrequencyRow) {
             APCMedicationFrequencyViewController  *controller = [[APCMedicationFrequencyViewController alloc] initWithNibName:nil bundle:[NSBundle appleCoreBundle]];
             controller.delegate = self;
-            if ((self.frequenciesAndDaysObject != nil) && (self.medicationFrequencyWasSet == YES)) {
+            if ((self.frequenciesAndDaysObject != nil) && (self.medicationFrequencyWasSet)) {
                 controller.daysNumbersDictionary = self.frequenciesAndDaysObject;
             }
             [self.navigationController pushViewController:controller animated:YES];
@@ -328,7 +328,7 @@ static  NSString  *addTableCategories[]           = { @"Select Name", @"Select F
 
 - (void)enableDoneButtonIfValuesSet
 {
-    if ((self.medicationNameWasSet == YES) && (self.medicationFrequencyWasSet == YES)) {
+    if ((self.medicationNameWasSet) && (self.medicationFrequencyWasSet)) {
         self.doneButton.enabled = YES;
     }
 }

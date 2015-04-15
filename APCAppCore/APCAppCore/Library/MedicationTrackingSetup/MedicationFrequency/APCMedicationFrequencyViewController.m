@@ -148,7 +148,7 @@ static  CGFloat    kAPCMedicationRowHeight          = 64.0;
         dayOfWeekCell.dayTitle.text = daysOfWeekNames[indexPath.row];
 
         BOOL  value = [self fetchSelectedStateForRow:indexPath.row];
-        if (value == YES) {
+        if (value) {
             [self setupSelectedCell:dayOfWeekCell toSelectedState:YES];
         } else {
             [self setupSelectedCell:dayOfWeekCell toSelectedState:NO];
@@ -295,7 +295,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     UIButton  *selectedButton = nil;
     
     for (UIButton  *aButton  in  self.valueButtons) {
-        if (aButton.isSelected == YES) {
+        if (aButton.isSelected) {
             selectedButton = aButton;
             break;
         }
@@ -369,7 +369,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     
     for (NSUInteger  day = 0;  day < kAllDaysOfWeekCount;  day++) {
         NSNumber  *selected = self.selectedDays[day];
-        if ([selected boolValue] == YES) {
+        if ([selected boolValue]) {
             answer = answer + 1;
         }
     }
@@ -390,7 +390,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
 
 - (void)setupSelectedCell:(APCFrequencyDayTableViewCell *)cell toSelectedState:(BOOL)selected
 {
-    if (selected == YES) {
+    if (selected) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         cell.dayTitle.textColor = [UIColor appPrimaryColor];
     } else {
@@ -409,13 +409,13 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     
     for (NSUInteger  day = 0;  day < numberOfDaysOfWeekNames;  day++) {
         NSNumber  *number = self.selectedDays[day];
-        if ([number boolValue] == YES) {
+        if ([number boolValue]) {
             NSString  *dayName = daysOfWeekNames[day];
             self.daysAndDoses[dayName] = [NSNumber numberWithInteger:(valueButton.tag - kBaseButtonTagValue)];
         }
     }
     if (self.delegate != nil) {
-        if ([self.delegate respondsToSelector:@selector(frequencyController:didSelectFrequency:)] == YES) {
+        if ([self.delegate respondsToSelector:@selector(frequencyController:didSelectFrequency:)]) {
             [self.delegate performSelector:@selector(frequencyController:didSelectFrequency:) withObject:self withObject:self.daysAndDoses];
         }
     }
@@ -430,7 +430,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     
     if (self.doneButtonWasTapped == NO) {
         if (self.delegate != nil) {
-            if ([self.delegate respondsToSelector:@selector(frequencyControllerDidCancel:)] == YES) {
+            if ([self.delegate respondsToSelector:@selector(frequencyControllerDidCancel:)]) {
                 [self.delegate performSelector:@selector(frequencyControllerDidCancel:) withObject:self];
             }
         }

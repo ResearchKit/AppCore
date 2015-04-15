@@ -563,7 +563,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
             NSURL*      url   = [[NSBundle mainBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
             NSError*    error = nil;
             
-            NSAssert([url checkResourceIsReachableAndReturnError:&error] == YES, @"Animation file--%@--not reachable: %@", animationUrl, error);
+            NSAssert([url checkResourceIsReachableAndReturnError:&error], @"Animation file--%@--not reachable: %@", animationUrl, error);
             section.customAnimationURL = url;
         }
         
@@ -1017,7 +1017,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     NSArray  *selectedImageNames   = @[ @"tab_activities_selected", @"tab_dashboard_selected",  @"tab_learn_selected",  @"tab_profile_selected" ];
     NSArray  *tabBarTitles         = @[ @"Activities",              @"Dashboard",               @"Learn",               @"Profile"];
     
-    if ([viewController isMemberOfClass: [UIViewController class]] == YES) {
+    if ([viewController isMemberOfClass: [UIViewController class]]) {
         
         NSMutableArray  *controllers = [tabBarController.viewControllers mutableCopy];
         NSUInteger  controllerIndex = [controllers indexOfObject:viewController];

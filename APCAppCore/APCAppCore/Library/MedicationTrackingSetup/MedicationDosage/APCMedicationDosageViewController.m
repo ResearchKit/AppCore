@@ -72,7 +72,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
         dosage = self.dosageAmounts[self.selectedIndex.row];
     }
     if (self.delegate != nil) {
-        if ([self.delegate respondsToSelector:@selector(dosageController:didSelectDosageAmount:)] == YES) {
+        if ([self.delegate respondsToSelector:@selector(dosageController:didSelectDosageAmount:)]) {
             [self.delegate performSelector:@selector(dosageController:didSelectDosageAmount:) withObject:self withObject:dosage];
         }
     }
@@ -106,7 +106,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     cell.textLabel.text = amountText;
     
     if (self.selectedIndex != nil) {
-        if ([self.selectedIndex isEqual:indexPath] == YES) {
+        if ([self.selectedIndex isEqual:indexPath]) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         } else {
             cell.accessoryType = UITableViewCellAccessoryNone;
@@ -192,7 +192,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 {
     for (NSUInteger  index = 0;  index < [self.dosageAmounts count];  index++) {
         APCMedTrackerPossibleDosage  *dosage = self.dosageAmounts[index];
-        if ([dosage.name isEqualToString:record.name] == YES) {
+        if ([dosage.name isEqualToString:record.name]) {
             NSIndexPath  *path = [NSIndexPath indexPathForRow:index inSection:0];
             self.selectedIndex = path;
             break;
@@ -213,7 +213,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     
     if (self.doneButtonWasTapped == NO) {
         if (self.delegate != nil) {
-            if ([self.delegate respondsToSelector:@selector(dosageControllerDidCancel:)] == YES) {
+            if ([self.delegate respondsToSelector:@selector(dosageControllerDidCancel:)]) {
                 [self.delegate performSelector:@selector(dosageControllerDidCancel:) withObject:self];
             }
         }
