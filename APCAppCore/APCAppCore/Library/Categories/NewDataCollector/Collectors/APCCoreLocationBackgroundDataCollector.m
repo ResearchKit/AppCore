@@ -121,7 +121,7 @@ static NSString *kLon = @"lon";
     }
 }
 
-- (void)startTracking
+- (void)start
 {
     if ([CLLocationManager locationServicesEnabled] == YES)
     {
@@ -138,7 +138,7 @@ static NSString *kLon = @"lon";
     }
 }
 
-- (void)stopTracking
+- (void)stop
 {
     if ([CLLocationManager locationServicesEnabled] == YES)
     {
