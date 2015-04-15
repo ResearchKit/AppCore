@@ -73,7 +73,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     }
     if (self.delegate != nil) {
         if ([self.delegate respondsToSelector:@selector(dosageController:didSelectDosageAmount:)] == YES) {
-            [self.delegate performSelector:@selector(dosageController:didSelectDosageAmount:) withObject:self withObject:dosage];
+            [self.delegate dosageController:self didSelectDosageAmount:dosage];
         }
     }
     [self.navigationController popViewControllerAnimated:YES];
@@ -214,7 +214,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     if (self.doneButtonWasTapped == NO) {
         if (self.delegate != nil) {
             if ([self.delegate respondsToSelector:@selector(dosageControllerDidCancel:)] == YES) {
-                [self.delegate performSelector:@selector(dosageControllerDidCancel:) withObject:self];
+                [self.delegate dosageControllerDidCancel:self];
             }
         }
     }

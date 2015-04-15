@@ -416,7 +416,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     }
     if (self.delegate != nil) {
         if ([self.delegate respondsToSelector:@selector(frequencyController:didSelectFrequency:)] == YES) {
-            [self.delegate performSelector:@selector(frequencyController:didSelectFrequency:) withObject:self withObject:self.daysAndDoses];
+            [self.delegate frequencyController:self didSelectFrequency:self.daysAndDoses];
         }
     }
     [self.navigationController popViewControllerAnimated:YES];
@@ -431,7 +431,7 @@ static  NSString  *sectionTitles[] = { @"How many times a day do you take this m
     if (self.doneButtonWasTapped == NO) {
         if (self.delegate != nil) {
             if ([self.delegate respondsToSelector:@selector(frequencyControllerDidCancel:)] == YES) {
-                [self.delegate performSelector:@selector(frequencyControllerDidCancel:) withObject:self];
+                [self.delegate frequencyControllerDidCancel:self];
             }
         }
     }

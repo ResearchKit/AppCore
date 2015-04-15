@@ -77,7 +77,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
         if (self.delegate != nil) {
             if ([self.delegate respondsToSelector:@selector(nameController:didSelectMedicineName:)] == YES) {
                 APCMedTrackerMedication  *medication = self.medicationList[self.selectedIndex.row];
-                [self.delegate performSelector:@selector(nameController:didSelectMedicineName:) withObject:self withObject:medication];
+               [self.delegate nameController:self didSelectMedicineName:medication];
             }
         }
     }
@@ -229,7 +229,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     if (self.doneButtonWasTapped == NO) {
         if (self.delegate != nil) {
             if ([self.delegate respondsToSelector:@selector(nameControllerDidCancel:)] == YES) {
-                [self.delegate performSelector:@selector(nameControllerDidCancel:) withObject:self];
+                [self.delegate nameControllerDidCancel:self];
             }
         }
     }
