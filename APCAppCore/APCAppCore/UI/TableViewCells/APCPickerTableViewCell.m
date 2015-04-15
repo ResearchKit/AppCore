@@ -44,8 +44,8 @@ NSString * const kAPCPickerTableViewCellIdentifier = @"APCPickerTableViewCell";
 }
 
 - (void)dealloc {
-	_pickerView.delegate = nil;
-	_pickerView.dataSource = nil;
+    _pickerView.delegate = nil;
+    _pickerView.dataSource = nil;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

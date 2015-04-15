@@ -61,7 +61,7 @@ static CGFloat const kAPCPasscodeViewPinLength = 4;
 }
 
 - (void)dealloc {
-	_hiddenTextField.delegate = nil;
+    _hiddenTextField.delegate = nil;
 }
 
 - (void) addControls {

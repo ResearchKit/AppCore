@@ -56,8 +56,8 @@ static NSInteger kNumberOfRows = 2;
 @implementation APCSharingOptionsViewController
 
 - (void)dealloc {
-	_tableView.delegate = nil;
-	_tableView.dataSource = nil;
+    _tableView.delegate = nil;
+    _tableView.dataSource = nil;
 }
 
 - (void)viewDidLoad

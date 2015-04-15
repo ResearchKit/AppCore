@@ -43,7 +43,7 @@
 @implementation APCStudyDetailsViewController
 
 - (void)dealloc {
-	_webView.delegate = nil;
+    _webView.delegate = nil;
 }
 
 - (void)viewDidLoad {

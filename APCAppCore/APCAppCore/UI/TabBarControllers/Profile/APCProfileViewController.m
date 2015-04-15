@@ -73,7 +73,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 @implementation APCProfileViewController
 
 - (void)dealloc {
-	_nameTextField.delegate = nil;
+    _nameTextField.delegate = nil;
 }
 
 - (void)viewDidLoad {
@@ -1170,13 +1170,13 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     self.profileImage = image;
     [self.profileImageButton setImage:image forState:UIControlStateNormal];
     self.user.profileImage = UIImagePNGRepresentation(image);
-	picker.delegate = nil;
+    picker.delegate = nil;
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-	picker.delegate = nil;
+    picker.delegate = nil;
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 

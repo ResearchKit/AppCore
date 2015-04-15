@@ -493,8 +493,8 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 
 - (void)dealloc
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	_locationManager.delegate = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    _locationManager.delegate = nil;
 }
 
 @end

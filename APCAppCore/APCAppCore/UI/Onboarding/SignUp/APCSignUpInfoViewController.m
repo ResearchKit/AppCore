@@ -55,8 +55,8 @@ static CGFloat const kHeaderHeight = 127.0f;
 @synthesize user = _user;
 
 - (void)dealloc {
-	_nameTextField.delegate = nil;
-	_emailTextField.delegate = nil;
+    _nameTextField.delegate = nil;
+    _emailTextField.delegate = nil;
 }
 
 - (void)viewDidLoad {

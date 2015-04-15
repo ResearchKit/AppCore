@@ -59,8 +59,8 @@ static CGFloat      const kParagraphYPosition   = 20.0;
 @implementation APCIntroductionViewController
 
 - (void)dealloc {
-	_textScroller.delegate = nil;
-	_imageScroller.delegate = nil;
+    _textScroller.delegate = nil;
+    _imageScroller.delegate = nil;
 }
 
 #pragma  mark  -  Initialise Scroll View With Images
