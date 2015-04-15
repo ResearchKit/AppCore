@@ -71,7 +71,7 @@ static NSString *const kCSVFilename  = @"data.csv";
 }
 
 /**********************************************************************/
-#pragma mark - Helper Methods
+#pragma mark - Helper Methods=
 /**********************************************************************/
 
 
@@ -81,33 +81,60 @@ static NSString *const kCSVFilename  = @"data.csv";
     
     [self.healthKitCollectorQueue addOperationWithBlock:^{
         __typeof(self) strongSelf = weakSelf;
-        NSString * rowString = nil;
-        NSString * csvFilePath = nil;
-        NSArray  * arrayOfStuffToPrint = nil;
-        
+
         if ([quantitySample isKindOfClass: [CMMotionActivity class]])
         {
-            /*
-             This csvColumnValues property comes from our CMMotionActivity+Helper
-             category. These values will be in the same order as the matching
-             csvColumnNames.  Those names will be shoved into the outbound .csv
-             file because they're returned by the -columnNames method of the
-             incoming Tracker.
-             */
-            arrayOfStuffToPrint = ((CMMotionActivity *) quantitySample).csvColumnValues;
-        }
-
-        if (arrayOfStuffToPrint.count > 0)
-        {
-            rowString = [[arrayOfStuffToPrint componentsJoinedByString: @","] stringByAppendingString: @"\n"];
-            csvFilePath = [strongSelf.folder stringByAppendingPathComponent: kCSVFilename];
+            CMMotionActivity* motionActivitySample = (CMMotionActivity*)quantitySample;
             
-            [APCPassiveDataCollector createOrAppendString: rowString toFile: csvFilePath];
+            NSString* motionActivity = [self theMotionActivityName:motionActivitySample];
+            
+            NSNumber* motionConfidence = @(motionActivitySample.confidence);
+
+            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@\n", motionActivitySample.startDate.toStringInISO8601Format, motionActivity ,motionConfidence];
+            
+            //Write to file
+            [APCPassiveDataSink createOrAppendString:stringToWrite
+                                              toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
         }
         
         [strongSelf checkIfDataNeedsToBeFlushed];
         
     }];
+}
+
+- (NSString*)theMotionActivityName:(CMMotionActivity*)motionActivitySample
+{
+    NSString* motionActivityName = nil;
+    
+    if ([motionActivitySample unknown])
+    {
+        motionActivityName = @"unknown";
+    }
+    else if ([motionActivitySample stationary])
+    {
+        motionActivityName = @"stationary";
+    }
+    else if ([motionActivitySample walking])
+    {
+        motionActivityName = @"walking";
+    }
+    else if ([motionActivitySample running])
+    {
+        motionActivityName = @"running";
+    }
+    else if ([motionActivitySample cycling])
+    {
+        motionActivityName = @"cycling";
+    }
+    else if ([motionActivitySample automotive])
+    {
+        motionActivityName = @"automotive";
+    } else
+    {
+        motionActivityName = @"not available";
+    }
+    
+    return motionActivityName;
 }
 
 @end

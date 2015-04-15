@@ -296,7 +296,6 @@ static NSUInteger kDaysPerWeek = 7;
 }
 
 
-
 + (void) createOrAppendString: (NSString*) string toFile: (NSString*) path
 {
     if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
@@ -310,6 +309,7 @@ static NSUInteger kDaysPerWeek = 7;
         [fileHandler closeFile];
     }
 }
+
 
 + (void) createOrReplaceString: (NSString*) string toFile: (NSString*) path
 {
