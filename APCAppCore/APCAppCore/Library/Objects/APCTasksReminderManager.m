@@ -122,9 +122,9 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     // Schedule the notification
     UILocalNotification* localNotification = [[UILocalNotification alloc] init];
     
+    localNotification.alertBody = [self reminderMessage];
     localNotification.fireDate = [self calculateFireDate];
     localNotification.timeZone = [NSTimeZone localTimeZone];
-    localNotification.alertBody = [self reminderMessage];
     localNotification.repeatInterval = NSCalendarUnitDay;
     localNotification.soundName = UILocalNotificationDefaultSoundName;
     
