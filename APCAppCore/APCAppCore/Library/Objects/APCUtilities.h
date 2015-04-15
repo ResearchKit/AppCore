@@ -97,7 +97,7 @@
  UUID to the end of the temporary directory, NO to get the raw 
  temp directory itself.
  */
-+ (NSString *) pathToTemporaryDirectoryAddingUuid: (BOOL) shouldAddUUID;
++ (NSString *) pathToTemporaryDirectoryAddingUuid: (BOOL) shouldAddUuid;
 
 
 @end

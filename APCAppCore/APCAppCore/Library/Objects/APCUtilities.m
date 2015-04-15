@@ -164,11 +164,11 @@ static NSString *       _realApplicationName = nil;
     return documentsFolder;
 }
 
-+ (NSString *) pathToTemporaryDirectoryAddingUuid: (BOOL) shouldAddUUID
++ (NSString *) pathToTemporaryDirectoryAddingUuid: (BOOL) shouldAddUuid
 {
     NSString *tempDirectory = NSTemporaryDirectory ();
 
-    if (shouldAddUUID)
+    if (shouldAddUuid)
     {
         NSString *uuid = [[NSUUID UUID] UUIDString];
         tempDirectory = [tempDirectory stringByAppendingPathComponent: uuid];
