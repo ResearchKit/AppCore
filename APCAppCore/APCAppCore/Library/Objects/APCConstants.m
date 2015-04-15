@@ -159,6 +159,14 @@ NSString *const kPassiveCollectorEvent  = @"PassiveCollectorEvent";
 
 
 // ---------------------------------------------------------
+#pragma mark - Error Keys
+// ---------------------------------------------------------
+
+NSString * const kAPCArchiveAndUpload_FilesWeDidntTouchErrorKey = @"ArchiveAndUpload_FilesWeDidntTouch";
+
+
+
+// ---------------------------------------------------------
 #pragma mark - Known files, folders, extensions, and content types
 // ---------------------------------------------------------
 

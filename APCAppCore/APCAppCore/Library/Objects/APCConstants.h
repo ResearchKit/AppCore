@@ -175,6 +175,14 @@ FOUNDATION_EXPORT NSString *const kPassiveCollectorEvent;
 
 
 // ---------------------------------------------------------
+#pragma mark - Error Keys
+// ---------------------------------------------------------
+
+FOUNDATION_EXPORT NSString * const kAPCArchiveAndUpload_FilesWeDidntTouchErrorKey;
+
+
+
+// ---------------------------------------------------------
 #pragma mark - Known files, folders, extensions, and content types
 // ---------------------------------------------------------
 

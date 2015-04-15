@@ -33,6 +33,8 @@
 
 #import <Foundation/Foundation.h>
 
+
+
 /**
  Uploads .json and other files to Sage, .zipping and encrypting
  them first.
@@ -157,12 +159,74 @@
 
 
 /**
- .zips and uploads the specified file to Sage.
+ .zips and uploads the specified file to Sage.  This method
+ takes ownership of the file you specify; it will move the file
+ to a private directory, and upload it from there, on a separate
+ thread.  It will attempt to move the file while still on the
+ thread from which you called it, so that by the time this method
+ returns, you can do whatever you need to do next with the folder
+ and path where that file used to be.  Returns YES if it was able
+ to move the file, or NO if not.  Once moved, this class will do
+ all the .zipping and uploading from a separate thread.
+
+ We can evolve this design as needed.  This suits our current
+ needs.
  
- Note that this method will NOT delete the file afterwards.
- You have to do that.
+ This method simply calls the plural method,
+ +uploadFilesAtPaths:returningError:.
+ 
+ @return YES if able to move the file, NO if not.  This does
+ NOT mean the upload worked; this merely says whether the uploader
+ was able to grab the file.  If we return NO, the file becomes
+ your responsibility (again), to do with as you please.  For
+ your convenience, the path to the file will be in the returned
+ error object.
+ 
+ @param path  The path of the file to upload.
+ 
+ @param errorToReturn  A pointer to an error object.  If there's
+ a problem obtaining the file, we'll return the error here (and
+ print it to the console).  Pass nil if you don't care about the
+ error.
  */
-+ (void) uploadFileAtPath: (NSString *) path;
++ (BOOL) uploadFileAtPath: (NSString *) path
+           returningError: (NSError * __autoreleasing *) errorToReturn;
+
+
+/**
+ .zips and uploads the specified files to Sage.  This method
+ takes ownership of the files you specify; it will move the files
+ to a private directory, and upload them from there, on a separate
+ thread.  It will attempt to move the files while still on the
+ thread from which you called it, so that by the time this method
+ returns, you can do whatever you need to do next with the folder
+ and path where those files used to be.  Returns YES if it was able
+ to move the files, or NO if not.  Once moved, this class will do
+ all the .zipping and uploading from a separate thread.
+
+ We can evolve this design as needed.  This suits our current
+ needs.
+
+ @return YES if able to move the files, NO if not.  This does
+ NOT mean the upload worked; this merely says whether the uploader
+ was able to grab the files.
+
+ @param path  The paths of the files to upload.  The files must 
+ have different filenames-and-extensions -- please don't have
+ two files named "temp.txt", for example.
+
+ @param errorToReturn  A pointer to an error object.  If there's
+ a problem obtaining the file, we'll return the error here (and
+ print it to the console).  Pass nil if you don't care about the
+ error.  If you passed more than one file, the error's userInfo
+ dictionary will contain the entry 
+ kAPCArchiveAndUpload_FilesWeDidntTouchErrorKey, containing
+ an array of the paths we didn't move.  These paths are now
+ your responsibility (again).  Any paths we managed to move,
+ we'll delete, as if they had been uploaded.
+ */
++ (BOOL) uploadFilesAtPaths: (NSArray *) path
+             returningError: (NSError * __autoreleasing *) errorToReturn;
 
 
 
@@ -189,6 +253,7 @@
 + (void) uploadDictionaries: (NSArray *) dictionaries
           withGroupFilename: (NSString *) filename
     encryptingContentsFirst: (BOOL) shouldEncryptContentsFirst;
+
 
 @end
 

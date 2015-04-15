@@ -213,7 +213,8 @@ static NSString * const oneTab = @"    ";
             recoverySuggestion: localizedRecoverySuggestion
                relatedFilePath: nil
                     relatedURL: nil
-                   nestedError: nil];
+                   nestedError: nil
+                 otherUserInfo: nil];
 }
 
 + (NSError *) errorWithCode: (NSInteger)  code
@@ -228,7 +229,8 @@ static NSString * const oneTab = @"    ";
             recoverySuggestion: localizedRecoverySuggestion
                relatedFilePath: nil
                     relatedURL: nil
-                   nestedError: rootCause];
+                   nestedError: rootCause
+                 otherUserInfo: nil];
 }
 
 + (NSError *) errorWithCode: (NSInteger)  code
@@ -243,7 +245,8 @@ static NSString * const oneTab = @"    ";
             recoverySuggestion: localizedRecoverySuggestion
                relatedFilePath: someFilePath
                     relatedURL: nil
-                   nestedError: nil];
+                   nestedError: nil
+                 otherUserInfo: nil];
 }
 
 + (NSError *) errorWithCode: (NSInteger)  code
@@ -258,7 +261,8 @@ static NSString * const oneTab = @"    ";
             recoverySuggestion: localizedRecoverySuggestion
                relatedFilePath: nil
                     relatedURL: someURL
-                   nestedError: nil];
+                   nestedError: nil
+                 otherUserInfo: nil];
 }
 
 + (NSError *) errorWithCode: (NSInteger)  code
@@ -269,7 +273,28 @@ static NSString * const oneTab = @"    ";
                  relatedURL: (NSURL *)    someURL
                 nestedError: (NSError *)  rootCause
 {
+    return [self errorWithCode: code
+                        domain: domain
+                 failureReason: localizedFailureReason
+            recoverySuggestion: localizedRecoverySuggestion
+               relatedFilePath: someFilePath
+                    relatedURL: someURL
+                   nestedError: rootCause
+                 otherUserInfo: nil];
+}
+
++ (NSError *) errorWithCode: (NSInteger)  code
+                     domain: (NSString *) domain
+              failureReason: (NSString *) localizedFailureReason
+         recoverySuggestion: (NSString *) localizedRecoverySuggestion
+            relatedFilePath: (NSString *) someFilePath
+                 relatedURL: (NSURL *)    someURL
+                nestedError: (NSError *)  rootCause
+              otherUserInfo: (NSDictionary *) otherUserInfo
+{
     NSMutableDictionary *userInfo = [NSMutableDictionary new];
+
+    [userInfo addEntriesFromDictionary: otherUserInfo];
 
     if (localizedFailureReason)         {  [userInfo  setValue: localizedFailureReason       forKey: NSLocalizedFailureReasonErrorKey       ];  }
     if (localizedRecoverySuggestion)    {  [userInfo  setValue: localizedRecoverySuggestion  forKey: NSLocalizedRecoverySuggestionErrorKey  ];  }

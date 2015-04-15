@@ -56,6 +56,7 @@ static NSString * const kAPCNormalFileNameKey                   = @"item";      
 static NSString * const kAPCAlternateFileNameKey                = @"identifier";    // as filenames.  Soon, we can change that.
 static NSString * const kAPCNameOfIndexFile                     = @"info";
 static NSString * const kAPCUnknownFileNameFormatString         = @"UnknownFile_%d";
+static NSString * const kAPCPrivateFolderOfUploadableFiles      = @"filesToUpload";
 
 static NSString * const kAPCOperationQueueName_ArchiveAndUpload_General                     = @"ArchiveAndUpload: Generic zip-and-upload queue";
 static NSString * const kAPCOperationQueueName_ArchiveAndUpload_ModifyingListOfArchivers    = @"ArchiveAndUpload: Queue for adding and removing archivers to a global list";
@@ -75,68 +76,91 @@ static NSString * const kAPCOperationQueueName_ArchiveAndUpload_ModifyingListOfA
  */
 typedef enum : NSInteger
 {
-    kErrorCantCreateZipFile_Code        = 100,
-    kErrorCantSerializeObject_Code,
-    kErrorCantFindRequestedUploadableFile_Code,
-    kErrorCantReadRequestedUploadableFile_Code,
-    kErrorCantInsertZipEntry_Code,
-    kErrorCantReadUnencryptedFile_Code,
-    kErrorCantFindDocumentsFolder_Code,
+    kErrorArchiveAndUploadFirstErrorCode = 100,
     kErrorCantCreateArchiveFolder_Code,
+    kErrorCantCreateManifest_Code,
+    kErrorCantCreatePrivateFolder_Code,
+    kErrorCantCreateTempFolder_Code,
     kErrorCantCreateUploadFolder_Code,
     kErrorCantCreateWorkingDirectory_Code,
-    kErrorDontHaveAnyZippedFiles_Code,
-    kErrorCantCreateManifest_Code,
-    kErrorCantSaveUnencryptedFile_Code,
-    kErrorCantFindUnencryptedFile_Code,
-    kErrorCantEncryptFile_Code,
-    kErrorCantSaveEncryptedFile_Code,
-    kErrorCantFindEncryptedFile_Code,
-    kErrorUploadFailed_Code,
+    kErrorCantCreateZipFile_Code,
     kErrorCantDeleteFileOrFolder_Code,
+    kErrorCantEncryptFile_Code,
+    kErrorCantFindDocumentsFolder_Code,
+    kErrorCantFindEncryptedFile_Code,
+    kErrorCantFindRequestedUploadableFile_Code,
+    kErrorCantFindUnencryptedFile_Code,
+    kErrorCantInsertZipEntry_Code,
+    kErrorCantMoveRequestedUploadableFileToPrivateFolder_Code,
+    kErrorCantMoveRequestedUploadableFileToTempFolder_Code,
+    kErrorCantReadRequestedUploadableFile_Code,
+    kErrorCantReadUnencryptedFile_Code,
+    kErrorCantSaveEncryptedFile_Code,
+    kErrorCantSaveUnencryptedFile_Code,
+    kErrorCantSerializeObject_Code,
+    kErrorDontHaveAnyZippedFiles_Code,
+    kErrorHaveDuplicateUploadableFilenames_Code,
+    kErrorUploadFailed_Code,
 
 } APCErrorCode;
 
 
-static NSString * const kArchiveAndUploadErrorDomain                        = @"ArchiveAndUpload";
-static NSString * const kErrorCantCreateZipFile_Reason                      = @"Can't Create Archive in Memory";
-static NSString * const kErrorCantCreateZipFile_Suggestion                  = @"We couldn't create the new, placeholder .zip file in RAM.  (We haven't even gotten to the 'save to disk' part.)";
-static NSString * const kErrorCantSerializeObject_Reason                    = @"Can't Serialize Object";
-static NSString * const kErrorCantSerializeObject_Suggestion                = @"We couldn't generate a JSON version of some piece of data.";
-static NSString * const kErrorCantFindRequestedUploadableFile_Reason        = @"Can't Find Specified File";
-static NSString * const kErrorCantFindRequestedUploadableFile_Suggestion    = @"We couldn't find one of the files you asked us to upload. See the 'path' entry in this dictionary for the name of the problem file.";
-static NSString * const kErrorCantReadRequestedUploadableFile_Reason        = @"Can't Open Specified File";
-static NSString * const kErrorCantReadRequestedUploadableFile_Suggestion    = @"We couldn't open one of the files you asked us to upload. See the 'path' entry in this dictionary for the name of the problem file.";
-static NSString * const kErrorCantInsertZipEntry_Reason                     = @"Can't Insert Zip Entry";
-static NSString * const kErrorCantInsertZipEntry_Suggestion                 = @"We couldn't add one of the .zippable items to the .zip file.";
-static NSString * const kErrorCantReadUnencryptedFile_Reason                = @"Can't Open Archive";
-static NSString * const kErrorCantReadUnencryptedFile_Suggestion            = @"Couldn't read the unencrypted .zip file we just tried to create.";
-static NSString * const kErrorCantFindDocumentsFolder_Reason                = @"Can't Find 'Documents' Folder";
-static NSString * const kErrorCantFindDocumentsFolder_Suggestion            = @"Couldn't find the user's 'documents' folder. This should never happen. Ahem.";
-static NSString * const kErrorCantCreateArchiveFolder_Reason                = @"Can't create 'Archive' folder";
-static NSString * const kErrorCantCreateArchiveFolder_Suggestion            = @"Couldn't create the folder for preparing our .zip files.";
-static NSString * const kErrorCantCreateUploadFolder_Reason                 = @"Can't create 'Upload' folder";
-static NSString * const kErrorCantCreateUploadFolder_Suggestion             = @"Couldn't create the folder for saving files to be uploaded.";
-static NSString * const kErrorCantCreateWorkingDirectory_Reason             = @"Can't Create Working Folder";
-static NSString * const kErrorCantCreateWorkingDirectory_Suggestion         = @"Couldn't create a folder in which to make our .zip file.";
-static NSString * const kErrorDontHaveAnyZippedFiles_Reason                 = @"Don't Have Files For Archive";
-static NSString * const kErrorDontHaveAnyZippedFiles_Suggestion             = @"Something went wrong. We don't seem to have any contents for this .zip file.";
-static NSString * const kErrorCantCreateManifest_Reason                     = @"Can't Create Manifest";
-static NSString * const kErrorCantCreateManifest_Suggestion_Format          = @"Couldn't create the manifest file entry (%@.%@) in the .zip file.";
-static NSString * const kErrorCantSaveUnencryptedFile_Reason                = @"Can't Save Unencrypted File";
-static NSString * const kErrorCantSaveUnencryptedFile_Suggestion            = @"We couldn't save the unencrypted .zip file to disk.";
-static NSString * const kErrorCantFindUnencryptedFile_Reason                = @"Can't Find Unencrypted File";
-static NSString * const kErrorCantFindUnencryptedFile_Suggestion            = @"We couldn't find the unencrypted .zip file on disk (even though we seem to have successfully saved it...?).";
-static NSString * const kErrorCantEncryptFile_Reason                        = @"Can't Encrypt Zip File";
-static NSString * const kErrorCantEncryptFile_Suggestion                    = @"We couldn't encrypt the .zip file we need to upload.";
-static NSString * const kErrorCantSaveEncryptedFile_Reason                  = @"Can't Save Encrypted File";
-static NSString * const kErrorCantSaveEncryptedFile_Suggestion              = @"We couldn't save the encrypted .zip file to disk.";
-static NSString * const kErrorCantFindEncryptedFile_Reason                  = @"Can't Find Encrypted File";
-static NSString * const kErrorCantFindEncryptedFile_Suggestion              = @"We couldn't find the encrypted .zip file on disk (even though we seem to have successfully encrypted it...?).";
-static NSString * const kErrorUploadFailed_Reason                           = @"Upload to Sage Failed";
-static NSString * const kErrorUploadFailed_Suggestion                       = @"We got an error when uploading to Sage.  See the nested error for details.";
-static NSString * const kErrorCantDeleteFileOrFolder_Reason                 = @"Can't Delete File/Folder";
-static NSString * const kErrorCantDeleteFileOrFolder_Suggestion             = @"We couldn't delete a file/folder creating during the archiving process. See attached path and nested error, if any, for details.";
+static NSString * const kArchiveAndUploadErrorDomain                = @"ArchiveAndUpload";
+
+static NSString * const kErrorCantCreateArchiveFolder_Reason        = @"Can't create 'Archive' folder";
+static NSString * const kErrorCantCreateArchiveFolder_Suggestion    = @"Couldn't create the folder for preparing our .zip files.";
+static NSString * const kErrorCantCreateManifest_Reason             = @"Can't Create Manifest";
+static NSString * const kErrorCantCreateManifest_Suggestion_Format  = @"Couldn't create the manifest file entry (%@.%@) in the .zip file.";
+static NSString * const kErrorCantCreateUploadFolder_Reason         = @"Can't create 'Upload' folder";
+static NSString * const kErrorCantCreateUploadFolder_Suggestion     = @"Couldn't create the folder for saving files to be uploaded.";
+static NSString * const kErrorCantCreateWorkingDirectory_Reason     = @"Can't Create Working Folder";
+static NSString * const kErrorCantCreateWorkingDirectory_Suggestion = @"Couldn't create a folder in which to make our .zip file.";
+static NSString * const kErrorCantCreateZipFile_Reason              = @"Can't Create Archive in Memory";
+static NSString * const kErrorCantCreateZipFile_Suggestion          = @"We couldn't create the new, placeholder .zip file in RAM.  (We haven't even gotten to the 'save to disk' part.)";
+static NSString * const kErrorCantDeleteFileOrFolder_Reason         = @"Can't Delete File/Folder";
+static NSString * const kErrorCantDeleteFileOrFolder_Suggestion     = @"We couldn't delete a file/folder creating during the archiving process. See attached path and nested error, if any, for details.";
+static NSString * const kErrorCantEncryptFile_Reason                = @"Can't Encrypt Zip File";
+static NSString * const kErrorCantEncryptFile_Suggestion            = @"We couldn't encrypt the .zip file we need to upload.";
+static NSString * const kErrorCantFindDocumentsFolder_Reason        = @"Can't Find 'Documents' Folder";
+static NSString * const kErrorCantFindDocumentsFolder_Suggestion    = @"Couldn't find the user's 'documents' folder. This should never happen. Ahem.";
+static NSString * const kErrorCantFindEncryptedFile_Reason          = @"Can't Find Encrypted File";
+static NSString * const kErrorCantFindEncryptedFile_Suggestion      = @"We couldn't find the encrypted .zip file on disk (even though we seem to have successfully encrypted it...?).";
+static NSString * const kErrorCantFindUnencryptedFile_Reason        = @"Can't Find Unencrypted File";
+static NSString * const kErrorCantFindUnencryptedFile_Suggestion    = @"We couldn't find the unencrypted .zip file on disk (even though we seem to have successfully saved it...?).";
+static NSString * const kErrorCantInsertZipEntry_Reason             = @"Can't Insert Zip Entry";
+static NSString * const kErrorCantInsertZipEntry_Suggestion         = @"We couldn't add one of the .zippable items to the .zip file.";
+static NSString * const kErrorCantReadUnencryptedFile_Reason        = @"Can't Open Archive";
+static NSString * const kErrorCantReadUnencryptedFile_Suggestion    = @"Couldn't read the unencrypted .zip file we just tried to create.";
+static NSString * const kErrorCantSaveEncryptedFile_Reason          = @"Can't Save Encrypted File";
+static NSString * const kErrorCantSaveEncryptedFile_Suggestion      = @"We couldn't save the encrypted .zip file to disk.";
+static NSString * const kErrorCantSaveUnencryptedFile_Reason        = @"Can't Save Unencrypted File";
+static NSString * const kErrorCantSaveUnencryptedFile_Suggestion    = @"We couldn't save the unencrypted .zip file to disk.";
+static NSString * const kErrorCantSerializeObject_Reason            = @"Can't Serialize Object";
+static NSString * const kErrorCantSerializeObject_Suggestion        = @"We couldn't generate a JSON version of some piece of data.";
+static NSString * const kErrorDontHaveAnyZippedFiles_Reason         = @"Don't Have Files For Archive";
+static NSString * const kErrorDontHaveAnyZippedFiles_Suggestion     = @"Something went wrong. We don't seem to have any contents for this .zip file.";
+static NSString * const kErrorUploadFailed_Reason                   = @"Upload to Sage Failed";
+static NSString * const kErrorUploadFailed_Suggestion               = @"We got an error when uploading to Sage.  See the nested error for details.";
+
+
+/*
+ File-moving errors.  These are separate merely because the
+ constant names are longer, and they don't line up as well.
+ */
+static NSString * const kErrorCantCreatePrivateFolder_Reason                            = @"Can't Create Private Folder";
+static NSString * const kErrorCantCreatePrivateFolder_Suggestion                        = @"We couldn't create a private folder to hold the uploadable files.";
+static NSString * const kErrorCantCreateTempFolder_Reason                               = @"Can't Create Temp Folder";
+static NSString * const kErrorCantCreateTempFolder_Suggestion                           = @"We couldn't create a temporary folder to hold the uploadable files.";
+static NSString * const kErrorCantFindRequestedUploadableFile_Reason                    = @"Can't Find Specified File";
+static NSString * const kErrorCantFindRequestedUploadableFile_Suggestion                = @"We couldn't find one of the files you asked us to upload.";
+static NSString * const kErrorCantMoveRequestedUploadableFileToPrivateFolder_Reason     = @"Can't Move Specified File";
+static NSString * const kErrorCantMoveRequestedUploadableFileToPrivateFolder_Suggestion = @"We couldn't move one of the files from the temp directory to a private directory.";
+static NSString * const kErrorCantMoveRequestedUploadableFileToTempFolder_Reason        = @"Can't Move Specified File";
+static NSString * const kErrorCantMoveRequestedUploadableFileToTempFolder_Suggestion    = @"We couldn't move one of the files to a temporary directory.";
+static NSString * const kErrorCantReadRequestedUploadableFile_Reason                    = @"Can't Open Specified File";
+static NSString * const kErrorCantReadRequestedUploadableFile_Suggestion                = @"We couldn't open one of the files you asked us to upload.";
+static NSString * const kErrorHaveDuplicateUploadableFilenames_Reason                   = @"Duplicate Uploadable Filenames";
+static NSString * const kErrorHaveDuplicateUploadableFilenames_Suggestion               = @"Some of the filenames you specified for uploading are duplicates. The attached path shows the first duplicated name. Please upload only unique filenames in any one batch. (We can remove this restriction if needed.)";
 
 
 
@@ -185,7 +209,6 @@ static NSString *folderPathForUploadOperations = nil;
 
 @interface APCDataArchiverAndUploader ()
 @property (nonatomic, strong) NSArray               * dictionariesToUpload;
-@property (nonatomic, strong) NSArray               * filePathsToUpload;
 
 @property (nonatomic, strong) ZZArchive             * zipArchive;
 @property (nonatomic, strong) NSMutableArray        * zipEntries;
@@ -197,6 +220,15 @@ static NSString *folderPathForUploadOperations = nil;
 @property (nonatomic, strong) NSString              * encryptedZipPath;
 @property (nonatomic, strong) NSURL                 * unencryptedZipURL;
 @property (nonatomic, strong) NSURL                 * encryptedZipURL;
+
+// Files we've been asked to upload, and their folders,
+// throughout our view of their lifecycle.  Tracking
+// all these because we have to clean them all up:
+@property (nonatomic, strong) NSArray               * sourceFilePathsToUpload;              // raw paths from the calling method
+@property (nonatomic, strong) NSString              * pathToTempFolderOfFilesToUpload;      // someplace safe to put 'em (in the user's temp directory)
+@property (nonatomic, strong) NSArray               * tempFilePathsToUpload;                // their paths after we put 'em there
+@property (nonatomic, strong) NSString              * pathToPrivateFolderOfFilesToUpload;   // once we're rolling, a private place to put 'em, owned by this uploader object
+@property (nonatomic, strong) NSArray               * privateFilePathsToUpload;             // their paths once we put 'em there
 
 @property (nonatomic, assign) NSUInteger            countOfUnknownFileNames;
 @end
@@ -258,11 +290,46 @@ static NSString *folderPathForUploadOperations = nil;
     [self startOneUploadWithUploader: archiverAndUploader];
 }
 
-+ (void) uploadFileAtPath: (NSString *) path
-{
-    APCDataArchiverAndUploader *archiverAndUploader = [[APCDataArchiverAndUploader alloc] initWithFilePathsToUpload: @[path]];
 
-    [self startOneUploadWithUploader: archiverAndUploader];
++ (BOOL) uploadFileAtPath: (NSString *) path
+           returningError: (NSError * __autoreleasing *) errorToReturn
+{
+    BOOL result = [self uploadFilesAtPaths: @[path]
+                            returningError: errorToReturn];
+
+    return result;
+}
+
++ (BOOL) uploadFilesAtPaths: (NSArray *) paths
+             returningError: (NSError * __autoreleasing *) errorToReturn
+{
+    APCDataArchiverAndUploader *archiverAndUploader = [[APCDataArchiverAndUploader alloc] initWithFilePathsToUpload: paths];
+
+    // Before we start the upload:  try to move the files to
+    // a safe location we control.  Then the uploader will take
+    // full ownership of it once it's created its working
+    // directory.  If we *can't* get to the files, abort now
+    // and say why.
+    NSError *errorMovingFiles = nil;
+
+    BOOL ableToMoveFile = [archiverAndUploader moveUploadableFilesToSafeLocationReturningError: & errorMovingFiles];
+
+    if (ableToMoveFile)
+    {
+        // This is the upload itself.
+        [self startOneUploadWithUploader: archiverAndUploader];
+    }
+    else
+    {
+        APCLogError2 (errorMovingFiles);
+    }
+
+    if (errorToReturn != nil)
+    {
+        *errorToReturn = errorMovingFiles;
+    }
+
+    return ableToMoveFile;
 }
 
 + (void) startOneUploadWithUploader: (APCDataArchiverAndUploader *) uploader
@@ -284,31 +351,23 @@ static NSString *folderPathForUploadOperations = nil;
 
     if (self)
     {
-        _zipEntries                 = [NSMutableArray new];
-        _fileInfoEntries            = [NSMutableArray new];
-        _countOfUnknownFileNames    = 0;
+        _zipEntries                         = [NSMutableArray new];
+        _fileInfoEntries                    = [NSMutableArray new];
+        _countOfUnknownFileNames            = 0;
+        _dictionariesToUpload               = nil;
+        _workingDirectoryPath               = nil;
+        _unencryptedZipPath                 = nil;
+        _encryptedZipPath                   = nil;
+        _unencryptedZipURL                  = nil;
+        _encryptedZipURL                    = nil;
 
-
-        // This will be filled with stuff to ship.
-        _dictionariesToUpload   = nil;
-
-        // Will contain an optional list of paths to files to be uploaded.
-        _filePathsToUpload      = nil;
-
-        // These will be set if we can successfully create a working directory.
-        _workingDirectoryPath   = nil;
-        _unencryptedZipPath     = nil;
-        _encryptedZipPath       = nil;
-        _unencryptedZipURL      = nil;
-        _encryptedZipURL        = nil;
-
-
-        /*
-         Register with a static variable, so I don't
-         get deleted while waiting for Sage to reply.
-         I'll un-register myself in -finalCleanup.
-         */
-        [[self class] trackNewArchiver: self];
+        // Files we've been asked to upload, and their folders,
+        // throughout our view of their lifecycle:
+        _sourceFilePathsToUpload            = nil;
+        _pathToTempFolderOfFilesToUpload    = nil;
+        _tempFilePathsToUpload              = nil;
+        _pathToPrivateFolderOfFilesToUpload = nil;
+        _privateFilePathsToUpload           = nil;
     }
 
     return self;
@@ -332,11 +391,190 @@ static NSString *folderPathForUploadOperations = nil;
 
     if (self)
     {
-        _filePathsToUpload = [NSArray arrayWithArray: arrayOfFilePaths];
+        _sourceFilePathsToUpload = [NSArray arrayWithArray: arrayOfFilePaths];
     }
 
     return self;
 }
+
+
+
+// ---------------------------------------------------------
+#pragma mark - Preparation:  moving files to a location we control, while still on the calling thread
+// ---------------------------------------------------------
+
+- (BOOL) moveUploadableFilesToSafeLocationReturningError: (NSError * __autoreleasing *) errorToReturn
+{
+    BOOL itWorked = NO;
+    NSError *errorMovingFiles = nil;
+    NSMutableArray *filesIHaventMovedYet = [NSMutableArray arrayWithArray: self.sourceFilePathsToUpload];
+    NSMutableArray *filesIWasAbleToMove  = [NSMutableArray new];
+
+
+    // If we have an error, we'll report any files we weren't able to move,
+    // so the calling method can delete them (or whatever).
+    NSDictionary *userInfoDictionaryForError = @{ kAPCArchiveAndUpload_FilesWeDidntTouchErrorKey : filesIHaventMovedYet };
+
+
+    // Make sure we have unique filenames, because, for now, we're
+    // going to stick them all in the same directory.
+    //
+    // Also, for this next section:  default to itWorked = YES.
+    // We'll set it to NO if we find a duplicate name.
+    itWorked = YES;
+    NSMutableArray *filenames = [NSMutableArray new];
+
+
+    for (NSString *path in self.sourceFilePathsToUpload)
+    {
+        NSString *filename = path.lastPathComponent;
+        BOOL alreadyExists = [filenames containsObject: filename];
+
+        /*
+         TESTING
+         
+         Please leave this block of test code here.  It helps
+         verify that we're handling each possible error correctly.
+
+                alreadyExists = YES;
+         */
+
+        if (alreadyExists)
+        {
+            errorMovingFiles = [NSError errorWithCode: kErrorHaveDuplicateUploadableFilenames_Code
+                                               domain: kArchiveAndUploadErrorDomain
+                                        failureReason: kErrorHaveDuplicateUploadableFilenames_Reason
+                                   recoverySuggestion: kErrorHaveDuplicateUploadableFilenames_Suggestion
+                                      relatedFilePath: path
+                                           relatedURL: nil
+                                          nestedError: nil
+                                        otherUserInfo: userInfoDictionaryForError];
+
+            itWorked = NO;
+            break;
+        }
+
+        else
+        {
+            [filenames addObject: filename];
+        }
+    }
+
+    if (! itWorked)
+    {
+        // We've already calculated the error.  Nothing else to do.
+    }
+
+    else
+    {
+        NSError *errorCreatingTempFolder     = nil;
+        NSFileManager *fileManager           = [NSFileManager defaultManager];
+        self.pathToTempFolderOfFilesToUpload = [APCUtilities pathToTemporaryDirectoryAddingUuid: YES];
+
+        itWorked = [fileManager createAPCFolderAtPath: self.pathToTempFolderOfFilesToUpload
+                                       returningError: & errorCreatingTempFolder];
+
+        /*
+         TESTING
+         
+         Please leave this block of test code here.  It helps
+         verify that we're handling each possible error correctly.
+
+                itWorked = NO;
+                errorCreatingTempFolder = [NSError errorWithDomain: @"fake underlying error creating temp folder" code: 2 userInfo: nil];
+         */
+
+        if (! itWorked)
+        {
+            errorMovingFiles = [NSError errorWithCode: kErrorCantCreateTempFolder_Code
+                                               domain: kArchiveAndUploadErrorDomain
+                                        failureReason: kErrorCantCreateTempFolder_Reason
+                                   recoverySuggestion: kErrorCantCreateTempFolder_Suggestion
+                                      relatedFilePath: self.pathToTempFolderOfFilesToUpload
+                                           relatedURL: nil
+                                          nestedError: errorCreatingTempFolder
+                                        otherUserInfo: userInfoDictionaryForError];
+        }
+
+        else
+        {
+            NSError *errorMovingOneFile = nil;
+
+            for (NSString *sourcePath in self.sourceFilePathsToUpload)
+            {
+                NSString *filename = sourcePath.lastPathComponent;
+                NSString *destinationPath = [self.pathToTempFolderOfFilesToUpload stringByAppendingPathComponent: filename];
+
+                itWorked = [fileManager moveItemAtPath: sourcePath
+                                                toPath: destinationPath
+                                                 error: & errorMovingOneFile];
+
+                /*
+                 TESTING
+                 
+                 Please leave this block of test code here.  It helps
+                 verify that we're handling each possible error correctly.
+
+                        if ([self.sourceFilePathsToUpload indexOfObject: sourcePath] == 1)
+                        {
+                            itWorked = NO;
+                            errorMovingOneFile = [NSError errorWithDomain: @"fake underlying error moving a file" code: 2 userInfo: nil];
+                        }
+                 */
+
+                if (! itWorked)
+                {
+                    errorMovingFiles = [NSError errorWithCode: kErrorCantMoveRequestedUploadableFileToTempFolder_Code
+                                                       domain: kArchiveAndUploadErrorDomain
+                                                failureReason: kErrorCantMoveRequestedUploadableFileToTempFolder_Reason
+                                           recoverySuggestion: kErrorCantMoveRequestedUploadableFileToTempFolder_Suggestion
+                                              relatedFilePath: sourcePath
+                                                   relatedURL: nil
+                                                  nestedError: errorMovingOneFile
+                                                otherUserInfo: userInfoDictionaryForError];
+                    break;
+                }
+                
+                else
+                {
+                    [filesIHaventMovedYet removeObject: sourcePath];
+                    [filesIWasAbleToMove addObject: destinationPath];
+                }
+            }
+        }
+    }
+
+    // Whether or not this worked *completely*, track any files we
+    // moved, because we're now responsible for deleting them.
+    self.tempFilePathsToUpload = [NSMutableArray arrayWithArray: filesIWasAbleToMove];
+
+    if (! itWorked)
+    {
+        // And, now, try to delete those files.  We bought 'em, we own 'em.
+        // This is an exception to our normal cleanup process.  Normally, we'll
+        // clean up at the bottom of this class, after all the uploading is done.
+        // In this method, though, if we have an error, we will, by definition,
+        // never start the upload, so we have to clean up now.
+        if (filesIWasAbleToMove.count)
+        {
+            for (NSString *filePath in filesIWasAbleToMove)
+            {
+                [self trashFileOrFolderAtPath: filePath];
+            }
+
+            [self trashFileOrFolderAtPath: self.pathToTempFolderOfFilesToUpload];
+            self.pathToTempFolderOfFilesToUpload = nil;
+        }
+    }
+
+    if (errorToReturn != nil)
+    {
+        *errorToReturn = errorMovingFiles;
+    }
+
+    return itWorked;
+}
+
 
 
 
@@ -348,6 +586,14 @@ static NSString *folderPathForUploadOperations = nil;
 {
     NSError *error = nil;
     BOOL ok = YES;
+
+
+    /*
+     Register with a static variable, so I don't get deleted
+     while waiting for Sage to reply.  I'll un-register myself
+     in -finalCleanup.
+     */
+    [[self class] trackNewArchiver: self];
 
 
     /*
@@ -370,6 +616,7 @@ static NSString *folderPathForUploadOperations = nil;
      */
     if (ok) {  ok = [self createBaseFoldersDuringFirstRunReturningError : & error];  }
     if (ok) {  ok = [self createWorkingDirectoryReturningError          : & error];  }
+    if (ok) {  ok = [self moveFilesToWorkingDirectoryReturningError     : & error];  }
     if (ok) {  ok = [self createZipArchiveInRamReturningError           : & error];  }
     if (ok) {  ok = [self zipAllDictionariesReturningError              : & error];  }
     if (ok) {  ok = [self zipAllRequestedFilePathsReturningError        : & error];  }
@@ -553,11 +800,12 @@ static NSString *folderPathForUploadOperations = nil;
     }
     else
     {
-        self.workingDirectoryPath   = workingDirectoryPath;
-        self.unencryptedZipPath     = [workingDirectoryPath stringByAppendingPathComponent: kAPCFileName_UnencryptedZipFile];
-        self.encryptedZipPath       = [workingDirectoryPath stringByAppendingPathComponent: kAPCFileName_EncryptedZipFile];
-        self.unencryptedZipURL      = [NSURL fileURLWithPath: self.unencryptedZipPath];
-        self.encryptedZipURL        = [NSURL fileURLWithPath: self.encryptedZipPath];
+        self.workingDirectoryPath               = workingDirectoryPath;
+        self.pathToPrivateFolderOfFilesToUpload = [workingDirectoryPath stringByAppendingPathComponent: kAPCPrivateFolderOfUploadableFiles];
+        self.unencryptedZipPath                 = [workingDirectoryPath stringByAppendingPathComponent: kAPCFileName_UnencryptedZipFile];
+        self.encryptedZipPath                   = [workingDirectoryPath stringByAppendingPathComponent: kAPCFileName_EncryptedZipFile];
+        self.unencryptedZipURL                  = [NSURL fileURLWithPath: self.unencryptedZipPath];
+        self.encryptedZipURL                    = [NSURL fileURLWithPath: self.encryptedZipPath];
     }
 
 
@@ -567,6 +815,100 @@ static NSString *folderPathForUploadOperations = nil;
     }
 
     return ableToCreateWorkingFolder;
+}
+
+/**
+ This takes the files we put into a temp directory during
+ + moveUploadableFilesToSafeLocationReturningError:
+ and puts them into the uploader-specific working directory we
+ just made.
+ */
+- (BOOL) moveFilesToWorkingDirectoryReturningError: (NSError * __autoreleasing *) errorToReturn
+{
+    BOOL itWorked                       = NO;
+    NSError *errorMovingFiles           = nil;
+    NSError *errorCreatingPrivateFolder = nil;
+    NSFileManager *fileManager          = [NSFileManager defaultManager];
+    NSMutableArray *newArrayOfFilePaths = [NSMutableArray new];
+    NSString *pathToPrivateFolder       = self.pathToPrivateFolderOfFilesToUpload;
+
+    itWorked = [fileManager createAPCFolderAtPath: pathToPrivateFolder
+                                   returningError: & errorCreatingPrivateFolder];
+
+    /*
+     TESTING
+
+     Please leave this block of test code here.  It helps
+     verify that we're handling each possible error correctly.
+
+            itWorked = NO;
+            errorCreatingPrivateFolder = [NSError errorWithDomain: @"fake underlying error creating private upload folder" code: 12 userInfo: nil];
+     */
+
+    if (! itWorked)
+    {
+        errorMovingFiles = [NSError errorWithCode: kErrorCantCreatePrivateFolder_Code
+                                           domain: kArchiveAndUploadErrorDomain
+                                    failureReason: kErrorCantCreatePrivateFolder_Reason
+                               recoverySuggestion: kErrorCantCreatePrivateFolder_Suggestion
+                                  relatedFilePath: pathToPrivateFolder
+                                       relatedURL: nil
+                                      nestedError: errorCreatingPrivateFolder];
+    }
+
+    else
+    {
+        NSError *errorMovingOneFile = nil;
+
+        for (NSString *sourcePath in self.tempFilePathsToUpload)
+        {
+            NSString *filename = sourcePath.lastPathComponent;
+            NSString *destinationPath = [pathToPrivateFolder stringByAppendingPathComponent: filename];
+
+            itWorked = [fileManager moveItemAtPath: sourcePath
+                                            toPath: destinationPath
+                                             error: & errorMovingOneFile];
+
+            /*
+             TESTING
+
+             Please leave this block of test code here.  It helps
+             verify that we're handling each possible error correctly.
+
+                    itWorked = NO;
+                    errorMovingOneFile = [NSError errorWithDomain: @"fake underlying error moving one file to private upload area" code: 12 userInfo: nil];
+             */
+
+            if (! itWorked)
+            {
+                errorMovingFiles = [NSError errorWithCode: kErrorCantMoveRequestedUploadableFileToPrivateFolder_Code
+                                                   domain: kArchiveAndUploadErrorDomain
+                                            failureReason: kErrorCantMoveRequestedUploadableFileToPrivateFolder_Reason
+                                       recoverySuggestion: kErrorCantMoveRequestedUploadableFileToPrivateFolder_Suggestion
+                                          relatedFilePath: sourcePath
+                                               relatedURL: nil
+                                              nestedError: errorMovingOneFile];
+                break;
+            }
+
+            else
+            {
+                [newArrayOfFilePaths addObject: destinationPath];
+            }
+        }
+    }
+
+    if (itWorked)
+    {
+        self.privateFilePathsToUpload = newArrayOfFilePaths;
+    }
+
+    if (errorToReturn != nil)
+    {
+        *errorToReturn = errorMovingFiles;
+    }
+    
+    return itWorked;
 }
 
 
@@ -861,7 +1203,7 @@ static NSString *folderPathForUploadOperations = nil;
     NSError *localError = nil;
     NSError *errorFromZipInsertProcess = nil;
 
-    for (NSString *path in self.filePathsToUpload)
+    for (NSString *path in self.privateFilePathsToUpload)
     {
         ableToZipEverything = [self insertFileAtPath: path
                         intoZipArchiveReturningError: & errorFromZipInsertProcess];
@@ -1476,6 +1818,27 @@ static NSString *folderPathForUploadOperations = nil;
  */
 - (void) cleanUpAndDestroyWorkingDirectory
 {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *fullFilePath = nil;
+
+    NSArray *files = [fileManager contentsOfDirectoryAtPath: self.pathToTempFolderOfFilesToUpload error: nil];
+
+    for (NSString *filePath in files)
+    {
+        fullFilePath = [self.pathToTempFolderOfFilesToUpload stringByAppendingPathComponent: filePath];
+        [self trashFileOrFolderAtPath: fullFilePath];
+    }
+    
+    files = [fileManager contentsOfDirectoryAtPath: self.pathToPrivateFolderOfFilesToUpload error: nil];
+
+    for (NSString *filePath in files)
+    {
+        fullFilePath = [self.pathToPrivateFolderOfFilesToUpload stringByAppendingPathComponent: filePath];
+        [self trashFileOrFolderAtPath: fullFilePath];
+    }
+    
+    [self trashFileOrFolderAtPath: self.pathToTempFolderOfFilesToUpload];
+    [self trashFileOrFolderAtPath: self.pathToPrivateFolderOfFilesToUpload];
     [self trashFileOrFolderAtPath: self.unencryptedZipPath];
     [self trashFileOrFolderAtPath: self.encryptedZipPath];
     [self trashFileOrFolderAtPath: self.workingDirectoryPath];
@@ -1496,6 +1859,14 @@ static NSString *folderPathForUploadOperations = nil;
 
     if (fileOrFolderPath != nil && [fileManager fileExistsAtPath: fileOrFolderPath])
     {
+        /*
+         Please leave this commented-out debugging command here.
+         It's a reminder that we need to delete every file and
+         folder we create.
+
+                APCLogDebug (@"Cleaning up: removing file or folder at path [%@]...", fileOrFolderPath);
+         */
+
         NSError *errorDeletingFileOrDirectory = nil;
 
         BOOL itemDeleted = [fileManager removeItemAtPath: fileOrFolderPath
