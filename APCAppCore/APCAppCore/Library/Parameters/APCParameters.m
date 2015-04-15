@@ -284,7 +284,7 @@ NSString *const kBypassServerProperty                   = @"bypassServer";
     NSData *data = [[NSFileManager defaultManager] contentsAtPath:self.jsonPath];
     
     if (data) {
-        NSError *error;
+        NSError *error = nil;
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
         
         if (!dict) {
