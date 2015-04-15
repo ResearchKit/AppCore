@@ -206,60 +206,15 @@ static NSUInteger kDaysPerWeek = 7;
 
 - (void) uploadWithDataArchiverAndUploader
 {
+    NSError* error = nil;
     
-    NSString * csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
-    [APCDataArchiverAndUploader uploadFileAtPath:csvFilePath];
+    NSString* csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
+    [APCDataArchiverAndUploader uploadFileAtPath:csvFilePath returningError:&error];
     
-//    NSError * error;
-//    NSString * unencryptedZipFileName = [NSString stringWithFormat:@"unencrypted_%@_%0.0f.zip",self.identifier, [[NSDate date] timeIntervalSinceReferenceDate]];
-//    NSString * encryptedZipFileName = [NSString stringWithFormat:@"encrypted_%@_%0.0f.zip",self.identifier, [[NSDate date] timeIntervalSinceReferenceDate]];
-//    NSString * unencryptedPath = [self.collectorsUploadPath stringByAppendingPathComponent:unencryptedZipFileName];
-//    NSString * encryptedPath = [self.collectorsUploadPath stringByAppendingPathComponent:encryptedZipFileName];
-//    
-//    ZZArchive * zipArchive = [[ZZArchive alloc] initWithURL:[NSURL fileURLWithPath:unencryptedPath]
-//                                                    options:@{ZZOpenOptionsCreateIfMissingKey : @YES}
-//                                                      error:&error];
-//    APCLogError2(error);
-//    NSMutableArray * zipEntries = [NSMutableArray array];
-//    NSString * csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
-//    NSString * infoFilePath = [self.folder stringByAppendingPathComponent:kInfoFilename];
-//    
-//    APCLogFilenameBeingArchived (kCSVFilename);
-//    APCLogFilenameBeingArchived (kInfoFilename);
-//    
-//    [zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: kCSVFilename
-//                                                           compress:YES
-//                                                          dataBlock:^(NSError** __unused error){ return [NSData dataWithContentsOfFile:csvFilePath];}]];
-//    [zipEntries addObject: [ZZArchiveEntry archiveEntryWithFileName: kInfoFilename
-//                                                           compress:YES
-//                                                          dataBlock:^(NSError** __unused error){ return [NSData dataWithContentsOfFile:infoFilePath];}]];
-//    
-//    [zipArchive updateEntries:zipEntries error:&error];
-//    APCLogError2(error);
-//    
-//    [APCDataArchiver encryptZipFile:unencryptedPath encryptedPath:encryptedPath];
-//    APCLogDebug(@"Created zip file: %@", encryptedPath);
-//    
-//#ifdef USE_DATA_VERIFICATION_CLIENT
-//    [APCDataVerificationClient uploadDataFromFileAtPath: unencryptedPath];
-//#else
-//    NSError * deleteError;
-//    if (![[NSFileManager defaultManager] removeItemAtPath:unencryptedPath error:&deleteError]) {
-//        APCLogError2(deleteError);
-//    }
-//#endif
-//    
-//    if ([[NSFileManager defaultManager] fileExistsAtPath:encryptedPath]) {
-//        [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataMonitor uploadZipFile:encryptedPath onCompletion:^(NSError *error) {
-//            if (!error) {
-//                NSError * deleteError;
-//                if (![[NSFileManager defaultManager] removeItemAtPath:encryptedPath error:&deleteError]) {
-//                    APCLogError2(deleteError);
-//                }
-//            }
-//        }];
-//    }
-//    
+    if (error)
+    {
+        APCLogError2(error);
+    }
 }
 
 
