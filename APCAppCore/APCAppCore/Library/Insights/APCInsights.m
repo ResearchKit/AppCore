@@ -617,12 +617,12 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     range.location = 0;
     range.length = medianIndex;
     
-    NSArray *highReadings = [listOfReadings subarrayWithRange:range];
+    NSArray *lowReadings = [listOfReadings subarrayWithRange:range];
     
     range.location = range.length;
     range.length = listOfReadings.count  - range.length;
     
-    NSArray *lowReadings = [listOfReadings subarrayWithRange:range];
+    NSArray *highReadings = [listOfReadings subarrayWithRange:range];
     
     highLowReadings[kInsightDatasetHighKey] = [highReadings copy];
     highLowReadings[kInsightDatasetLowKey]  = [lowReadings copy];
