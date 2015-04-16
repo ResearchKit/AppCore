@@ -84,7 +84,7 @@ static NSUInteger kDaysPerWeek = 7;
     /* abstract implementation */
 }
 
-- (instancetype)initWithIdentifier:(NSString *)identifier andColumnNames:(NSArray *)columnNames
+- (instancetype)initWithIdentifier:(NSString *)identifier columnNames:(NSArray *)columnNames andOperationQueueName:(NSString *)operationQueueName
 {
     self = [super init];
     if (self) {
@@ -94,7 +94,7 @@ static NSUInteger kDaysPerWeek = 7;
         _columnNames = columnNames;
         
         if (!self.healthKitCollectorQueue) {
-            self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:@"HealthKit Data Collector"];
+            self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:operationQueueName];
         }
         
         [self checkIfCSVStructureHasChanged];

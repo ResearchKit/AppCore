@@ -53,7 +53,7 @@
 @property (nonatomic, strong) NSOperationQueue* healthKitCollectorQueue;
 
 
-- (instancetype)initWithIdentifier:(NSString *)identifier andColumnNames:(NSArray *)columnNames;
+- (instancetype)initWithIdentifier:(NSString*)identifier columnNames:(NSArray*)columnNames andOperationQueueName:(NSString*)operationQueueName;
 
 - (void) didRecieveUpdatedValuesFromCollector:(id) results;
 
