@@ -42,7 +42,7 @@ static  NSString  *kLocationVerticalAccuracy             = @"verticalAccuracy";
 static  NSString  *kLocationHorizontalAccuracy           = @"horizontalAccuracy";
 static  NSString  *kLocationDistanceUnit                 = @"distanceUnit"; //Always meters
 
-static NSString *kBaseTrackingFileName = @"baseTrackingLocation";
+//static NSString *kBaseTrackingFileName = @"baseTrackingLocation";
 static NSString *kRecentLocationFileName = @"recentLocation";
 
 static NSString *kLat = @"lat";
@@ -129,6 +129,8 @@ static NSString *kLon = @"lon";
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
 
+        [self.locationManager startUpdatingLocation];
+        
         if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES &&
             [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)
         {
@@ -213,9 +215,9 @@ static NSString *kLon = @"lon";
     //Send to delegate
     if (result)
     {
-        if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromHealthKitCollector:)])
+        if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
         {
-            [self.delegate didRecieveUpdatedValueFromHealthKitCollector:result];
+            [self.delegate didRecieveUpdatedValuesFromCollector:result];
         }
     }
 }

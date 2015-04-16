@@ -34,6 +34,6 @@
 #import <APCAppCore/APCAppCore.h>
 #import "APCCollectorProtocol.h"
 
-@interface APCPassiveHealthKitSleepSink : APCPassiveDataSink <APCCollectorProtocol>
+@interface APCPassiveHealthKitSleepSink : APCPassiveDataSink 
 
 @end

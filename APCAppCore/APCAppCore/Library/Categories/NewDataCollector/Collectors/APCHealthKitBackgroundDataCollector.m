@@ -91,7 +91,11 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
             // Send the initial results
             if (results)
             {
-                [strongSelf.delegate didRecieveArrayOfValuesFromHealthKitCollector:results];
+                if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValuesFromCollector:)])
+                {
+                    [strongSelf.delegate didRecieveUpdatedValuesFromCollector:results];
+                }
+                
             }
         
             strongSelf.observerQuery = [[HKObserverQuery alloc] initWithSampleType:sampleType
@@ -180,9 +184,9 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
             [[NSNotificationCenter defaultCenter] postNotificationName:APCHealthKitObserverQueryUpdateForSampleTypeNotification
                                                                 object:sampleKind];
             
-            if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromHealthKitCollector:)])
+            if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
             {
-                [self.delegate didRecieveUpdatedValueFromHealthKitCollector:sampleKind];
+                [self.delegate didRecieveUpdatedValueFromCollector:sampleKind];
             }
         }
     }

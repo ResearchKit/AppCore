@@ -50,23 +50,25 @@ static NSString *const kCSVFilename  = @"data.csv";
 /**********************************************************************/
 #pragma mark - APCCollectorProtocol Delegate Methods
 /**********************************************************************/
-- (void) didRecieveArrayOfValuesFromHealthKitCollector:(NSArray*)quantitySamples {
+- (void) didRecieveUpdatedValuesFromCollector:(NSArray*)quantitySamples {
     __weak typeof(self) weakSelf = self;
     [quantitySamples enumerateObjectsUsingBlock: ^(id quantitySample, NSUInteger __unused idx, BOOL * __unused stop) {
         __typeof(self) strongSelf = weakSelf;
-        [strongSelf processUpdatesFromHealthKitForSampleType:quantitySample];
+        [strongSelf processUpdatesFromCollector:quantitySample];
         
     }];
 }
 
-- (void) didRecieveUpdatedValueFromHealthKitCollector:(id)quantitySample {
+- (void) didRecieveUpdatedValueFromCollector:(id)result {
     
-    [self processUpdatesFromHealthKitForSampleType:quantitySample];
+    [self processUpdatesFromCollector:result];
 }
 
+- (void)processUpdatesFromCollector:(id)quantitySample {
 
-
-- (void)processUpdatesFromHealthKitForSampleType:(id)quantitySample {
+    //Super must be called here.
+    [super processUpdatesFromCollector:quantitySample];
+    
     __weak typeof(self) weakSelf = self;
     [self.healthKitCollectorQueue addOperationWithBlock:^{
         __typeof(self) strongSelf = weakSelf;

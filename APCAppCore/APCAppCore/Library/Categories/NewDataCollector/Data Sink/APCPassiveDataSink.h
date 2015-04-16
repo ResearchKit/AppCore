@@ -55,6 +55,12 @@
 
 - (instancetype)initWithIdentifier:(NSString *)identifier andColumnNames:(NSArray *)columnNames;
 
+- (void) didRecieveUpdatedValuesFromCollector:(id) results;
+
+- (void) didRecieveUpdatedValueFromCollector:(id) result;
+
+- (void)processUpdatesFromCollector:(id) quantitySample;
+
 - (void) checkIfDataNeedsToBeFlushed;
 
 + (void) createOrAppendString: (NSString*) string toFile: (NSString*) path;

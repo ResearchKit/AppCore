@@ -62,6 +62,28 @@ static NSUInteger kDaysPerWeek = 7;
 
 @implementation APCPassiveDataSink
 
+/*********************************************************************************/
+#pragma mark - Abstract methods from delegate
+/*********************************************************************************/
+- (void) didRecieveUpdatedValuesFromCollector:(id) __unused results
+{
+    /* abstract implementation */
+}
+
+- (void) didRecieveUpdatedValueFromCollector:(id) __unused result
+{
+    /* abstract implementation */
+}
+
+/*********************************************************************************/
+#pragma mark - Abstract methods
+/*********************************************************************************/
+
+- (void)processUpdatesFromCollector:(id) __unused quantitySample {
+    
+    [self checkIfCSVStructureHasChanged];
+}
+
 - (instancetype)initWithIdentifier:(NSString *)identifier andColumnNames:(NSArray *)columnNames
 {
     self = [super init];
@@ -123,6 +145,52 @@ static NSUInteger kDaysPerWeek = 7;
     self.infoDictionary = infoDictionary;
 }
 
+- (void) checkIfCSVStructureHasChanged
+{
+    [self.healthKitCollectorQueue addOperationWithBlock:^{
+        
+        NSString * csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:csvFilePath])
+        {
+            // read everything from text
+            NSString* fileContents =
+            [NSString stringWithContentsOfFile:csvFilePath
+                                      encoding:NSUTF8StringEncoding error:nil];
+            
+            // first, separate by new line
+            NSArray* dataSeparatedByNewLine =
+            [fileContents componentsSeparatedByCharactersInSet:
+             [NSCharacterSet newlineCharacterSet]];
+            
+            if (dataSeparatedByNewLine.count > 0)
+            {
+                NSString* expectedColumn =
+                [dataSeparatedByNewLine objectAtIndex:0];
+                
+                NSArray *items = [expectedColumn componentsSeparatedByString:@","];
+                
+                if (![items isEqualToArray:self.columnNames] && dataSeparatedByNewLine.count > 1)
+                {
+                    //If there's data then upload this data.
+                    [self flush];
+                    [self resetDataFilesForTracker];
+                }
+                else if (![items isEqualToArray:self.columnNames] && dataSeparatedByNewLine.count == 1)
+                {
+                    //If there isn't data then reset the file.
+                    [self resetDataFilesForTracker];
+                }
+            }
+            else
+            {
+                //If the file exists and there are no columns reset the file.
+                [self resetDataFilesForTracker];
+            }
+        }
+        
+    }];
+}
 
 - (void) checkIfDataNeedsToBeFlushed
 {
@@ -143,6 +211,8 @@ static NSUInteger kDaysPerWeek = 7;
     if ([[NSDate date] timeIntervalSinceDate:startDate] >= self.stalenessInterval) {
         [self flush];
     }
+    
+
 }
 /**********************************************************************/
 

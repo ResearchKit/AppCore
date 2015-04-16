@@ -72,14 +72,14 @@ static NSInteger const kNumberOfDaysBack = 8;
                                                       
                                                       __typeof(self) strongSelf = weakSelf;
                                                       
-                                                      if ([strongSelf.delegate respondsToSelector:@selector(didRecieveArrayOfValuesFromHealthKitCollector:)])
+                                                      if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValuesFromCollector:)])
                                                       {
-                                                          [strongSelf.delegate didRecieveArrayOfValuesFromHealthKitCollector:activities];
+                                                          [strongSelf.delegate didRecieveUpdatedValuesFromCollector:activities];
                                                       }
                                                       
                                                       [strongSelf.motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new] withHandler:^(CMMotionActivity *activity) {
-                                                          if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromHealthKitCollector:)]) {
-                                                              [strongSelf.delegate didRecieveUpdatedValueFromHealthKitCollector:activity];
+                                                          if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)]) {
+                                                              [strongSelf.delegate didRecieveUpdatedValueFromCollector:activity];
                                                           }
                                                       }];
                                                       
