@@ -81,14 +81,14 @@ static NSUInteger kDaysPerWeek = 7;
 
 - (void)processUpdatesFromCollector:(id) __unused quantitySample {
     
-    [self checkIfCSVStructureHasChanged];
+    /* abstract implementation */
 }
 
 - (instancetype)initWithIdentifier:(NSString *)identifier andColumnNames:(NSArray *)columnNames
 {
     self = [super init];
     if (self) {
-        
+    
         //Unique configuration for collector
         _identifier = identifier;
         _columnNames = columnNames;
@@ -96,6 +96,8 @@ static NSUInteger kDaysPerWeek = 7;
         if (!self.healthKitCollectorQueue) {
             self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:@"HealthKit Data Collector"];
         }
+        
+        [self checkIfCSVStructureHasChanged];
         
         //General configuration for file management
         _registeredTrackers = [NSMutableDictionary dictionary];
@@ -168,15 +170,17 @@ static NSUInteger kDaysPerWeek = 7;
                 NSString* expectedColumn =
                 [dataSeparatedByNewLine objectAtIndex:0];
                 
-                NSArray *items = [expectedColumn componentsSeparatedByString:@","];
+                NSArray* oldColumnStructure = [expectedColumn componentsSeparatedByString:@","];
                 
-                if (![items isEqualToArray:self.columnNames] && dataSeparatedByNewLine.count > 1)
+                NSArray* possibleNewStructure = [NSArray arrayWithArray:self.columnNames];
+                
+                if (![oldColumnStructure isEqualToArray:possibleNewStructure] && dataSeparatedByNewLine.count > 1)
                 {
                     //If there's data then upload this data.
                     [self flush];
                     [self resetDataFilesForTracker];
                 }
-                else if (![items isEqualToArray:self.columnNames] && dataSeparatedByNewLine.count == 1)
+                else if (![oldColumnStructure isEqualToArray:possibleNewStructure] && dataSeparatedByNewLine.count == 1)
                 {
                     //If there isn't data then reset the file.
                     [self resetDataFilesForTracker];
