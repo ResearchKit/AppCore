@@ -92,6 +92,7 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setupNotifications];
     
     self.navigationItem.title = NSLocalizedString(@"Activities", @"Activities");
     self.tableView.backgroundColor = [UIColor appSecondaryColor4];
@@ -111,10 +112,19 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
     [super viewWillAppear:animated];
  
     [self setUpNavigationBarAppearance];
+
+    [self reloadData];
+    APCLogViewControllerAppeared();
+}
+
+-(void) setupNotifications{
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reloadData)
                                                  name:APCUpdateActivityNotification object:nil];
-    APCLogViewControllerAppeared();
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateActivities:)
+                                                 name:APCDayChangedNotification object:nil];
 }
 
 -(void)setUpNavigationBarAppearance{
@@ -125,7 +135,6 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self updateActivities: nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
