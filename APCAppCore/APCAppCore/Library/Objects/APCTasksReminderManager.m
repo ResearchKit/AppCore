@@ -372,7 +372,6 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     
     if(completedTasks.count < scheduledTasks.count){//if this task has not been completed but was scheduled, include it in the reminder
         includeTask = YES;
-        return includeTask;
     }else if (completedTasks.count > 0 && taskReminder.resultsSummaryKey != nil) {
         for (APCScheduledTask *task in completedTasks) {
             
