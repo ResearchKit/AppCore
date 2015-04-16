@@ -253,11 +253,10 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     if (sortedReadings.count == 1) {
         [self.insightPoints addObjectsFromArray:sortedReadings];
     } else {
-        NSArray *inRangeReadings = [self readings:sortedReadings isInRange:YES limit:5];
-        NSArray *outOfRangeReadings = [self readings:sortedReadings isInRange:NO limit:5];
+        NSDictionary *highLowReadings = [self splitArray:sortedReadings];
         
-        [self.insightPoints addObjectsFromArray:inRangeReadings];
-        [self.insightPoints addObjectsFromArray:outOfRangeReadings];
+        [self.insightPoints addObjectsFromArray:highLowReadings[kInsightDatasetLowKey]];
+        [self.insightPoints addObjectsFromArray:highLowReadings[kInsightDatasetHighKey]];
     }
 
     [self fetchDataFromHealthKitForItemsInInsightQueue];
@@ -618,12 +617,12 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     range.location = 0;
     range.length = medianIndex;
     
-    NSArray *highReadings = [listOfReadings subarrayWithRange:range];
+    NSArray *lowReadings = [listOfReadings subarrayWithRange:range];
     
     range.location = range.length;
     range.length = listOfReadings.count  - range.length;
     
-    NSArray *lowReadings = [listOfReadings subarrayWithRange:range];
+    NSArray *highReadings = [listOfReadings subarrayWithRange:range];
     
     highLowReadings[kInsightDatasetHighKey] = [highReadings copy];
     highLowReadings[kInsightDatasetLowKey]  = [lowReadings copy];
@@ -696,7 +695,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         // For even number of elements in the array,
         // we will return the average of the two middle numbers
         // when the 'asIndex' is set to NO.
-        middle = (sorted.count / 2) - 1;
+        middle = (sorted.count / 2);
         result = [@[[sorted objectAtIndex:middle], [sorted objectAtIndex:middle + 1]] valueForKeyPath:@"@avg.self"];
     }
     
