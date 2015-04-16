@@ -228,16 +228,16 @@ static NSUInteger kDaysPerWeek = 7;
     NSMutableDictionary * infoDictionary = [self.infoDictionary mutableCopy];
     infoDictionary[kEndDateKey]   = [[NSDate date] toStringInISO8601Format];
     
-    NSString *startDate = infoDictionary[kStartDateKey];
+    NSDate *startDate = nil;
     
-    if (startDate == nil)
-    {
-        startDate = [NSDate date].description;
+    if (!infoDictionary[kStartDateKey]) {
+        startDate = [NSDate date];
+    } else {
+        startDate = [self datefromDateString:infoDictionary[kStartDateKey]];
     }
     
-    NSDate *dateFromStartDate = [self datefromDateString:startDate.description];
+    infoDictionary[kStartDateKey] = [startDate toStringInISO8601Format];
     
-    infoDictionary[kStartDateKey] = [dateFromStartDate toStringInISO8601Format];
     NSString * infoFilePath = [self.folder stringByAppendingPathComponent:kInfoFilename];
     
 #warning This is temporary, please remove once the work on a better class is completed.
