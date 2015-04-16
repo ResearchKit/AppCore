@@ -348,7 +348,6 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
         else
         {
             [appDelegate.scheduler updateScheduledTasksIfNotUpdating:YES];
-            [weakSelf reloadData];
         }
         [weakSelf.refreshControl endRefreshing];
         weakSelf.taskSelectionDisabled = NO;
