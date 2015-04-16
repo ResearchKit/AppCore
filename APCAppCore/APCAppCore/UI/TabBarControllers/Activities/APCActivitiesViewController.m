@@ -519,6 +519,7 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
         
         NSArray *filteredTasksArray = [ungroupedScheduledTasks filteredArrayUsingPredicate:predicate];
         
+        //if there is more than 1 task for the taskID, create an APCGroupedScheduledTask
         if (filteredTasksArray.count > 1) {
             APCScheduledTask *scheduledTask = filteredTasksArray.firstObject;
             APCGroupedScheduledTask *groupedTask = [[APCGroupedScheduledTask alloc] init];
@@ -530,7 +531,7 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
             
             [returnArray addObject:groupedTask];
         }
-        else
+        else if(filteredTasksArray.count == 1)
         {
             [returnArray addObject:filteredTasksArray.firstObject];
         }
