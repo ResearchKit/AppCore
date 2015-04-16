@@ -310,8 +310,6 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
         
         APCTaskReminder *reminder = [self.remindersToSend objectForKey:key];
         if (reminder) {
-            NSLog(@"reminder: %@", reminder.resultsSummaryKey);
-            
             if (!reminder.resultsSummaryKey) {
                 shouldDelay = NO;
             }
