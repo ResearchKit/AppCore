@@ -695,7 +695,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         // For even number of elements in the array,
         // we will return the average of the two middle numbers
         // when the 'asIndex' is set to NO.
-        middle = (sorted.count / 2) - 1;
+        middle = (sorted.count / 2);
         result = [@[[sorted objectAtIndex:middle], [sorted objectAtIndex:middle + 1]] valueForKeyPath:@"@avg.self"];
     }
     
