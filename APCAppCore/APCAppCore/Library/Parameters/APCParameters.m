@@ -283,16 +283,22 @@ NSString *const kBypassServerProperty                   = @"bypassServer";
 - (void)setContentOfFileToDictionary {
     NSData *data = [[NSFileManager defaultManager] contentsAtPath:self.jsonPath];
     
-    NSError *error;
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (data) {
+        NSError *error = nil;
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+        
+        if (!dict) {
+            APCLogEvent(@"Could not parse JSON file at: %@", self.jsonPath);
+            APCLogError2(error);
+            
+            [self didFail:error];
+        } else {
+            self.userDefaults = [dict mutableCopy];
+        }
+    } else {
+        APCLogError(@"Contents of the file could not be loaded. The path that was provided is: %@", self.jsonPath);
+    }
     
-    if (error) {
-        NSLog(@"File Parsing Error : %@", error);
-        [self didFail:error];
-    }
-    else {
-        self.userDefaults = [dict mutableCopy];
-    }
     [self addDefaultParametersIfNeeded];
 }
 

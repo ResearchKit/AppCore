@@ -156,8 +156,19 @@ static NSString *const kCSVFilename  = @"data.csv";
 {
     //Write the end date
     NSMutableDictionary * infoDictionary = [tracker.infoDictionary mutableCopy];
+    
     infoDictionary[kEndDateKey]   = [[NSDate date] toStringInISO8601Format];
-    infoDictionary[kStartDateKey] = [[self datefromDateString:infoDictionary[kStartDateKey]] toStringInISO8601Format];
+    
+    NSDate *startDate = nil;
+    
+    if (!infoDictionary[kStartDateKey]) {
+        startDate = [NSDate date];
+    } else {
+        startDate = [self datefromDateString:infoDictionary[kStartDateKey]];
+    }
+    
+    infoDictionary[kStartDateKey] = [startDate toStringInISO8601Format];
+    
     NSString * infoFilePath = [tracker.folder stringByAppendingPathComponent:kInfoFilename];
     
     NSError *fileAttributeError = nil;

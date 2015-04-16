@@ -530,10 +530,6 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
             
             [returnArray addObject:groupedTask];
         }
-        else
-        {
-            [returnArray addObject:filteredTasksArray.firstObject];
-        }
     }
     return returnArray;
 }
