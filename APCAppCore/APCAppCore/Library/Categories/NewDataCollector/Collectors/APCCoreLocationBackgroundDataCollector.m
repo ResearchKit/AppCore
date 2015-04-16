@@ -128,8 +128,6 @@ static NSString *kLon = @"lon";
         APCLogDebug(@"Start location tracking");
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
-
-        [self.locationManager startUpdatingLocation];
         
         if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES &&
             [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)
