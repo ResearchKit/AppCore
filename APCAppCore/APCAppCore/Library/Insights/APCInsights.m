@@ -529,7 +529,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         }
         
         [dayReading setObject:avgReadingsForTheDay forKey:kInsightDatasetAverageReadingKey];
-        [dayReading setObject:dayAverage forKey:kInsightDatasetDayAverage];
+        [dayReading setObject:(dayAverage != nil) ? dayAverage: @(0) forKey:kInsightDatasetDayAverage];
         [dayReading setObject:@(isGoodDay) forKey:kInsightDatasetIsGoodDayKey];
         
         [markedDataset addObject:dayReading];
