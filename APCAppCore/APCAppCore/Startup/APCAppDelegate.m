@@ -67,7 +67,6 @@ static NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
 static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
-static NSUInteger const kIndexOfActivitesTab = 0;
 static NSUInteger const kIndexOfProfileTab = 3;
 
 
