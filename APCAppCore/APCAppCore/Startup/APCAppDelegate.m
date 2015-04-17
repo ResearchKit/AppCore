@@ -974,7 +974,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
         item.image = [UIImage imageNamed:deselectedImageNames[i]];
         item.selectedImage = [[UIImage imageNamed:selectedImageNames[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         item.title = tabBarTitles[i];
-        
+        item.tag = i;
         if (i == kIndexOfActivitesTab) {
             NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
             NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
