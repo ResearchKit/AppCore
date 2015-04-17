@@ -156,6 +156,32 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     return headerView;
 }
 
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    
+    UITableViewHeaderFooterView *footerView;
+    
+    APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+    BOOL hasresultsSummaryKey = NO;
+    NSString *subtaskTitle;
+    for (APCTaskReminder *reminder in appDelegate.tasksReminder.reminders) {
+        BOOL on = [[NSUserDefaults standardUserDefaults]objectForKey:reminder.reminderIdentifier] ? YES : NO;
+        if (on && reminder.resultsSummaryKey) {
+            hasresultsSummaryKey = YES;
+            subtaskTitle = reminder.reminderBody;
+        }
+    }
+    
+    if (section == 1 && hasresultsSummaryKey) {
+        footerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), tableView.sectionHeaderHeight)];
+        NSString *footerText = [NSString stringWithFormat:@"%@ reminder will be sent 2 hours later.", subtaskTitle];
+        footerView.textLabel.text = NSLocalizedString(footerText, nil);
+        footerView.contentView.layer.backgroundColor = [UIColor clearColor].CGColor;
+    }
+    
+    return footerView == nil ? [UIView new] : footerView;
+}
+
+
 #pragma mark - Setup
 
 - (void)setupNavAppearance
