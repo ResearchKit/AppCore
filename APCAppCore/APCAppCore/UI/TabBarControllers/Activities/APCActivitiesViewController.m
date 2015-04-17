@@ -373,7 +373,7 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
     
     NSNumber *remainingTasks = (completedScheduledTasks < allScheduledTasks) ? @(allScheduledTasks - completedScheduledTasks) : @(0);
     
-    UITabBarItem *activitiesTab = appDelegate.tabster.tabBar.selectedItem;
+    UITabBarItem *activitiesTab = appDelegate.tabster.tabBarController.tabBar.items[kIndexOfActivitesTab];
     
     if ([remainingTasks integerValue] != 0) {
         activitiesTab.badgeValue = [remainingTasks stringValue];

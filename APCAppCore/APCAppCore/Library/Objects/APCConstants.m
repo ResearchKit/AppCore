@@ -90,6 +90,7 @@ NSString *const kHKCorrelationTypeKey       = @"HKCorrelationType";
 NSString * const kPasswordKey                    = @"Password";
 NSString * const kNumberOfMinutesForPasscodeKey  = @"NumberOfMinutesForPasscodeKey";
 
+NSUInteger     const kIndexOfActivitesTab                                   = 0;
 NSInteger      const kAPCSigninErrorCode_NotSignedIn                        = 404;
 NSUInteger     const kAPCSigninNumRetriesBeforePause                        = 10;
 NSTimeInterval const kAPCSigninNumSecondsBetweenRetries                     = 10;
