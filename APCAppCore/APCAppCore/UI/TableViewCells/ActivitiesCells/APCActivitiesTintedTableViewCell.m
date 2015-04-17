@@ -73,7 +73,7 @@ static CGFloat const kTitleLabelCenterYConstant = 10.5f;
         self.titleLabelCenterYConstraint.constant = kTitleLabelCenterYConstant;
     }
     
-    [self layoutIfNeeded];
+    [self setNeedsDisplay];
 }
 
 - (void)setTintColor:(UIColor *)tintColor
