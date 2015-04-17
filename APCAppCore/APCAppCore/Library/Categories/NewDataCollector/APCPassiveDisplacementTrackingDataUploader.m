@@ -31,18 +31,16 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "APCPassiveDisplacementTrackingSink.h"
+#import "APCPassiveDisplacementTrackingDataUploader.h"
 #import <CoreLocation/CoreLocation.h>
 
 static NSString *const kCollectorFolder = @"newCollector";
-static NSString *const kUploadFolder = @"upload";
-
-static NSString *const kIdentifierKey = @"identifier";
-static NSString *const kStartDateKey = @"startDate";
-static NSString *const kEndDateKey = @"endDate";
-
-static NSString *const kInfoFilename = @"info.json";
-static NSString *const kCSVFilename  = @"data.csv";
+static NSString *const kUploadFolder    = @"upload";
+static NSString *const kIdentifierKey   = @"identifier";
+static NSString *const kStartDateKey    = @"startDate";
+static NSString *const kEndDateKey      = @"endDate";
+static NSString *const kInfoFilename    = @"info.json";
+static NSString *const kCSVFilename     = @"data.csv";
 
 
 static  NSString  *kLocationTimeStamp                    = @"timestamp";
@@ -58,7 +56,7 @@ static NSString *kRecentLocationFileName = @"recentLocation";
 static NSString *kLat = @"lat";
 static NSString *kLon = @"lon";
 
-@interface APCPassiveDisplacementTrackingSink ()
+@interface APCPassiveDisplacementTrackingDataUploader ()
 {
     CLLocation * _baseTrackingLocation;
     CLLocation * _mostRecentUpdatedLocation;
@@ -68,7 +66,7 @@ static NSString *kLon = @"lon";
 
 @end
 
-@implementation APCPassiveDisplacementTrackingSink
+@implementation APCPassiveDisplacementTrackingDataUploader
 
 - (NSArray*)locationDictionaryWithLocationManager:(CLLocationManager*)manager
                     andDistanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
@@ -227,7 +225,7 @@ static NSString *kLon = @"lon";
 - (void)writeDictionary:(NSDictionary*)dict toPath:(NSString*)path
 {
     NSString*   dataString = [dict JSONString];
-    [APCPassiveDataCollector createOrReplaceString:dataString toFile:path];
+    [APCPassiveDisplacementTrackingDataUploader createOrReplaceString:dataString toFile:path];
 }
 
 

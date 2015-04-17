@@ -32,15 +32,14 @@
 //
 
 #import <Foundation/Foundation.h>
-@class APCPassiveDataTracker;
 
 @interface APCNewPassiveDataCollector : NSObject
 
--(void) addDataSync: (id) dataSync;
+-(void) addDataSink: (id) dataSync;
 -(void) startCollecting;
 -(void) stopCollecting;
 
-@property (nonatomic, strong, getter = getAppTerminationDate)  NSDate*          terminationDate;
-@property (nonatomic, strong)  NSMutableArray*  dataSyncList;
+@property (nonatomic, strong)  NSDate*          terminationDate;
+@property (nonatomic, strong)  NSMutableArray*  dataSinkList;
 
 @end

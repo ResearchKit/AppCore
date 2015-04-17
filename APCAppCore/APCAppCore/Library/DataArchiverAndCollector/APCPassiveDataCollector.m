@@ -278,7 +278,7 @@ static NSString *const kCSVFilename  = @"data.csv";
              file because they're returned by the -columnNames method of the
              incoming Tracker.
              */
-            arrayOfStuffToPrint = ((CMMotionActivity *) obj).csvColumnValues;
+            arrayOfStuffToPrint = @[];//((CMMotionActivity *) obj).csvColumnValues;
         }
 
         else if ([obj isKindOfClass: [NSArray class]])

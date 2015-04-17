@@ -1,5 +1,5 @@
 //
-//  APCPassiveHealthKitSleepSink.m
+//  APCPassiveCoreActivityManagerSink.m
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -31,93 +31,104 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "APCPassiveHealthKitSleepSink.h"
+#import "APCPassiveCoreActivityDataUploader.h"
 #import "APCAppCore.h"
+#import "zipzap.h"
+#import "APCDataVerificationClient.h"
+#import "CMMotionActivity+Helper.h"
 
 static NSString *const kCollectorFolder = @"newCollector";
-static NSString *const kUploadFolder = @"upload";
+static NSString *const kUploadFolder    = @"upload";
+static NSString *const kIdentifierKey   = @"identifier";
+static NSString *const kStartDateKey    = @"startDate";
+static NSString *const kEndDateKey      = @"endDate";
+static NSString *const kInfoFilename    = @"info.json";
+static NSString *const kCSVFilename     = @"data.csv";
 
-static NSString *const kIdentifierKey = @"identifier";
-static NSString *const kStartDateKey = @"startDate";
-static NSString *const kEndDateKey = @"endDate";
-
-static NSString *const kInfoFilename = @"info.json";
-static NSString *const kCSVFilename  = @"data.csv";
-
-@implementation APCPassiveHealthKitSleepSink
+@implementation APCPassiveCoreActivityDataUploader
 
 /**********************************************************************/
 #pragma mark - APCCollectorProtocol Delegate Methods
 /**********************************************************************/
 
 - (void) didRecieveUpdatedValuesFromCollector:(NSArray*)quantitySamples {
-    
     __weak typeof(self) weakSelf = self;
-    
     [quantitySamples enumerateObjectsUsingBlock: ^(id quantitySample, NSUInteger __unused idx, BOOL * __unused stop) {
         __typeof(self) strongSelf = weakSelf;
         [strongSelf processUpdatesFromCollector:quantitySample];
-        
     }];
 }
 
 - (void) didRecieveUpdatedValueFromCollector:(id)quantitySample {
-    
     [self processUpdatesFromCollector:quantitySample];
 }
 
-
 /**********************************************************************/
-#pragma mark - Helper Methods
+#pragma mark - Helper Methods=
 /**********************************************************************/
 
 
 - (void) processUpdatesFromCollector:(id)quantitySample {
-    
-    //Super must be called here.
+    //  Super must be called here. A method call to flush the data if the csv structure has changed will upload the data and manage the files associated and also create a new file with the appropraite csv structure.
     [super processUpdatesFromCollector:quantitySample];
     
     __weak typeof(self) weakSelf = self;
+    
     [self.healthKitCollectorQueue addOperationWithBlock:^{
         __typeof(self) strongSelf = weakSelf;
-        HKCategorySample *catSample = (HKCategorySample *)quantitySample;
-        
-        NSString *startDateTime = [catSample.startDate toStringInISO8601Format];
-        NSString *healthKitType = catSample.sampleType.identifier;
 
-        NSString *categoryValue = nil;
-        
-        if (catSample.value == HKCategoryValueSleepAnalysisAsleep)
+        if ([quantitySample isKindOfClass: [CMMotionActivity class]])
         {
-            categoryValue = @"HKCategoryValueSleepAnalysisAsleep";
-        }
-        else
-        {
-            categoryValue = @"HKCategoryValueSleepAnalysisInBed";
-        }
-        
-        NSString *quantityUnit  = [HKUnit secondUnit].description;
-        NSString *quantitySource = catSample.source.name;
-        
-        
-        // Get the difference in seconds between the start and end date for the sample
-        NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
-                                                                                      fromDate:catSample.startDate
-                                                                                        toDate:catSample.endDate
-                                                                                       options:NSCalendarWrapComponents];
+            CMMotionActivity* motionActivitySample = (CMMotionActivity*)quantitySample;
+            NSString* motionActivity    = [CMMotionActivity activityTypeName:motionActivitySample];
+            NSNumber* motionConfidence  = @(motionActivitySample.confidence);
 
-        NSString* quantityValue = [NSString stringWithFormat:@"%ld", (long)secondsSpentInBedOrAsleep.second];
-    
-
-        NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@\n", startDateTime, healthKitType, categoryValue,  quantityValue, quantityUnit, quantitySource];
-        
-        //Write to file
-        [APCPassiveDataSink createOrAppendString:stringToWrite
-                                          toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
+            NSString* stringToWrite     = [NSString stringWithFormat:@"%@,%@,%@\n", motionActivitySample.startDate.toStringInISO8601Format, motionActivity ,motionConfidence];
+            
+#warning This may be something that we need to fix.
+            //  Write the string of data to the csv file.
+            [APCPassiveDataSink createOrAppendString:stringToWrite
+                                              toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
+        }
         
         [strongSelf checkIfDataNeedsToBeFlushed];
         
     }];
+}
+
+- (NSString*)theMotionActivityName:(CMMotionActivity*)motionActivitySample
+{
+    NSString* motionActivityName = nil;
+    
+    if ([motionActivitySample unknown])
+    {
+        motionActivityName = @"unknown";
+    }
+    else if ([motionActivitySample stationary])
+    {
+        motionActivityName = @"stationary";
+    }
+    else if ([motionActivitySample walking])
+    {
+        motionActivityName = @"walking";
+    }
+    else if ([motionActivitySample running])
+    {
+        motionActivityName = @"running";
+    }
+    else if ([motionActivitySample cycling])
+    {
+        motionActivityName = @"cycling";
+    }
+    else if ([motionActivitySample automotive])
+    {
+        motionActivityName = @"automotive";
+    } else
+    {
+        motionActivityName = @"not available";
+    }
+    
+    return motionActivityName;
 }
 
 @end

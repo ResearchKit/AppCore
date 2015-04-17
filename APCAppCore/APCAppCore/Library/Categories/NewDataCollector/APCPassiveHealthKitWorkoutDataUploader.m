@@ -31,37 +31,32 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "APCPassiveHealthKitWorkoutSink.h"
+#import "APCPassiveHealthKitWorkoutDataUploader.h"
 #import "APCAppCore.h"
 
 static NSString *const kCollectorFolder = @"newCollector";
-static NSString *const kUploadFolder = @"upload";
+static NSString *const kUploadFolder    = @"upload";
+static NSString *const kIdentifierKey   = @"identifier";
+static NSString *const kStartDateKey    = @"startDate";
+static NSString *const kEndDateKey      = @"endDate";
+static NSString *const kInfoFilename    = @"info.json";
+static NSString *const kCSVFilename     = @"data.csv";
 
-static NSString *const kIdentifierKey = @"identifier";
-static NSString *const kStartDateKey = @"startDate";
-static NSString *const kEndDateKey = @"endDate";
-
-static NSString *const kInfoFilename = @"info.json";
-static NSString *const kCSVFilename  = @"data.csv";
-
-@implementation APCPassiveHealthKitWorkoutSink
+@implementation APCPassiveHealthKitWorkoutDataUploader
 
 /**********************************************************************/
 #pragma mark - APCCollectorProtocol Delegate Methods
 /**********************************************************************/
 
 - (void) didRecieveUpdatedValuesFromCollector:(NSArray*)quantitySamples {
-    
     __weak typeof(self) weakSelf = self;
     [quantitySamples enumerateObjectsUsingBlock: ^(id quantitySample, NSUInteger __unused idx, BOOL * __unused stop) {
         __typeof(self) strongSelf = weakSelf;
         [strongSelf processUpdatesFromCollector:quantitySample];
-        
     }];
 }
 
 - (void) didRecieveUpdatedValueFromCollector:(id)quantitySample {
-    
     [self processUpdatesFromCollector:quantitySample];
 }
 
@@ -72,34 +67,25 @@ static NSString *const kCSVFilename  = @"data.csv";
 
 
 - (void) processUpdatesFromCollector:(id)quantitySample {
-
-    //Super must be called here.
+    //  Super must be called here. A method call to flush the data if the csv structure has changed will upload the data and manage the files associated and also create a new file with the appropraite csv structure.
     [super processUpdatesFromCollector:quantitySample];
-    
     __weak typeof(self) weakSelf = self;
     [self.healthKitCollectorQueue addOperationWithBlock:^{
         __typeof(self) strongSelf = weakSelf;
         HKWorkout*  sample                      = (HKWorkout*)quantitySample;
-        
         NSString*   startDateTimeStamp          = [sample.startDate toStringInISO8601Format];
         NSString*   endDateTimeStamp            = [sample.endDate toStringInISO8601Format];
         NSString*   healthKitType               = sample.sampleType.identifier;
-        
         NSString*   activityType                = [strongSelf workoutActivityTypeStringRepresentation:sample.workoutActivityType];
-
         double      energyConsumedValue         = [sample.totalEnergyBurned doubleValueForUnit:[HKUnit kilocalorieUnit]];
         NSString*   energyConsumed              = [NSString stringWithFormat:@"%f", energyConsumedValue];
         NSString*   energyUnit                  = [HKUnit kilocalorieUnit].description;
-        
         double      totalDistanceConsumedValue  = [sample.totalDistance doubleValueForUnit:[HKUnit meterUnit]];
         NSString*   totalDistance               = [NSString stringWithFormat:@"%f", totalDistanceConsumedValue];
         NSString*   distanceUnit                = [HKUnit meterUnit].description;
-
         NSString*   quantitySource              = sample.source.name;
-        
         NSString *  metaData                    = [self convertDictionaryToString: [sample.metadata mutableCopy]];
         NSString *  metaDataStringified         = [NSString stringWithFormat:@"\"%@\"", metaData];
-        
         NSString *  stringToWrite               = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
                                                    startDateTimeStamp,
                                                    endDateTimeStamp,
@@ -111,13 +97,10 @@ static NSString *const kCSVFilename  = @"data.csv";
                                                    energyUnit,
                                                    quantitySource,
                                                    metaDataStringified];
-        
-        //Write to file
+        //  Write to file
         [APCPassiveDataSink createOrAppendString:stringToWrite
                                           toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
-        
         [strongSelf checkIfDataNeedsToBeFlushed];
-        
     }];
 }
 
@@ -191,14 +174,25 @@ static NSString *const kCSVFilename  = @"data.csv";
 
 - (NSString*) convertDictionaryToString:(NSMutableDictionary*) dict
 {
-    NSError* error;
-    NSDictionary* tempDict = [dict copy]; // get Dictionary from mutable Dictionary
-    //giving error as it takes dic, array,etc only. not custom object.
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:tempDict
-                                                       options:0 error:&error];
-    NSString* nsJson=  [[NSString alloc] initWithData:jsonData
-                                             encoding:NSUTF8StringEncoding];
-    return nsJson;
+    NSString* stringRepresentation = @"";
+    
+    if (dict != nil)
+    {
+        NSError*    error       = nil;
+        NSData*     jsonData    = [NSJSONSerialization dataWithJSONObject:dict
+                                                                  options:0
+                                                                    error:&error];
+
+        if (error)
+        {
+            APCLogError2(error);
+        }
+        
+        stringRepresentation =  [[NSString alloc] initWithData:jsonData
+                                                 encoding:NSUTF8StringEncoding];
+    }
+    
+    return stringRepresentation;
 }
 
 @end

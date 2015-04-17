@@ -42,7 +42,6 @@
 #import "UIView+Helper.h"
 #import "APCTabBarViewController.h"
 #import "UIAlertController+Helper.h"
-#import "APCHealthKitDataCollector.h"
 #import "APCConstants.h"
 
 #warning Be sure to set the CORRECT current version before releasing to production
@@ -76,10 +75,6 @@ static NSUInteger const kIndexOfProfileTab = 3;
 @property (nonatomic) BOOL isPasscodeShowing;
 @property (nonatomic, strong) UIView *secureView;
 @property (nonatomic, strong) NSError *catastrophicStartupError;
-
-@property (nonatomic, strong) NSOperationQueue *healthKitCollectorQueue;
-@property (nonatomic, strong) APCHealthKitDataCollector *healthKitCollector;
-
 
 @end
 
@@ -326,10 +321,6 @@ static NSUInteger const kIndexOfProfileTab = 3;
     
     self.scheduler = [[APCScheduler alloc] initWithDataSubstrate:self.dataSubstrate];
     self.dataMonitor = [[APCDataMonitor alloc] initWithDataSubstrate:self.dataSubstrate scheduler:self.scheduler];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        self.passiveDataCollector = [[APCPassiveDataCollector alloc] init];
-    });
-
     
     //Setup AuthDelegate for SageSDK
     SBBAuthManager * manager = (SBBAuthManager*) SBBComponent(SBBAuthManager);

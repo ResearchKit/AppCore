@@ -40,16 +40,15 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 @implementation APCNewPassiveDataCollector
 
-- (instancetype) init {
+- (instancetype)init
+{
     self = [super init];
     
     if (self)
     {
-        _dataSyncList = [NSMutableArray new];
+        _dataSinkList = [NSMutableArray new];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecameActive) name:UIApplicationDidBecomeActiveNotification object:[UIApplication sharedApplication]];
-        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate) name:UIApplicationWillTerminateNotification object:[UIApplication sharedApplication]];
-        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillSuspend) name:UIApplicationDidEnterBackgroundNotification object:[UIApplication sharedApplication]];
     
     }
@@ -62,25 +61,28 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void) addDataSync:(id)dataSync {
+- (void) addDataSink:(id)dataSync
+{
     
-    [self.dataSyncList addObject:dataSync];
+    [self.dataSinkList addObject:dataSync];
 }
 
-- (void) stopCollecting {
+- (void)stopCollecting
+{
  
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        for (APCDataCollector * collector in self.dataSyncList)
+        for (APCDataCollector * collector in self.dataSinkList)
         {
             [collector stop];
         }
     });
 }
 
-- (void) startCollecting {
+- (void)startCollecting
+{
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        for (APCDataCollector * collector in self.dataSyncList)
+        for (APCDataCollector * collector in self.dataSinkList)
         {
             [collector start];
         }
@@ -88,32 +90,24 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
     
 }
 
-- (void) appBecameActive
+- (void)appBecameActive
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        for (APCDataCollector * collector in self.dataSyncList)
+        for (APCDataCollector * collector in self.dataSinkList)
         {
             [collector start];
         }
     });
 }
 
-- (void) appWillSuspend
+- (void)appWillSuspend
 {
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastUsedTimeKey];
 }
 
-- (void) appWillTerminate
+- (void)appWillTerminate
 {
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastUsedTimeKey];
 }
-
-- (NSDate*) getAppTerminationDate
-{
-    _terminationDate = (NSDate*) [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
-    
-    return _terminationDate;
-}
-
 
 @end

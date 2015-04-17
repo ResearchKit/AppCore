@@ -1,5 +1,5 @@
 //
-//  APCPassiveCoreActivityManagerSink.h
+//  APCPassiveHealthKitWorkoutSink.h
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -34,6 +34,6 @@
 #import <APCAppCore/APCAppCore.h>
 #import "APCCollectorProtocol.h"
 
-@interface APCPassiveCoreActivityManagerSink : APCPassiveDataSink <APCCollectorProtocol>
+@interface APCPassiveHealthKitWorkoutDataUploader : APCPassiveDataSink 
 
 @end

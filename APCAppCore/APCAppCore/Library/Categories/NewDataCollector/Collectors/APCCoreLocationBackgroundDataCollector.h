@@ -34,7 +34,6 @@
 #import <Foundation/Foundation.h>
 #import "APCDataCollector.h"
 #import <CoreLocation/CoreLocation.h>
-#import "APCDataTracker.h"
 
 #warning uncomment this once the old passive data collector is phased out.
 

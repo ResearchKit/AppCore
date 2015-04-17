@@ -68,10 +68,6 @@ static NSInteger const kNumberOfDaysBack = 8;
                                                   }];
 }
 
-- (NSArray *) columnNames
-{
-    return [CMMotionActivity csvColumnNames];
-}
 
 #pragma mark - Helper methods
          

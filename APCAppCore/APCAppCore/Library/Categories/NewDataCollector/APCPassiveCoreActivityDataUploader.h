@@ -1,5 +1,5 @@
 //
-//  APCPassiveDisplacementTrackingSink.h
+//  APCPassiveCoreActivityManagerSink.h
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -32,8 +32,8 @@
 //
 
 #import <APCAppCore/APCAppCore.h>
+#import "APCCollectorProtocol.h"
 
-@interface APCPassiveDisplacementTrackingSink : APCPassiveDataSink
-
+@interface APCPassiveCoreActivityDataUploader : APCPassiveDataSink <APCCollectorProtocol>
 
 @end

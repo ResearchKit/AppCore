@@ -35,14 +35,12 @@
 #import "APCAppCore.h"
 
 static NSString *const kCollectorFolder = @"newCollector";
-static NSString *const kUploadFolder = @"upload";
-
-static NSString *const kIdentifierKey = @"identifier";
-static NSString *const kStartDateKey = @"startDate";
-static NSString *const kEndDateKey = @"endDate";
-
-static NSString *const kInfoFilename = @"info.json";
-static NSString *const kCSVFilename  = @"data.csv";
+static NSString *const kUploadFolder    = @"upload";
+static NSString *const kIdentifierKey   = @"identifier";
+static NSString *const kStartDateKey    = @"startDate";
+static NSString *const kEndDateKey      = @"endDate";
+static NSString *const kInfoFilename    = @"info.json";
+static NSString *const kCSVFilename     = @"data.csv";
 
 
 @implementation APCPassiveHealthKitQuantityDataSink
@@ -65,8 +63,7 @@ static NSString *const kCSVFilename  = @"data.csv";
 }
 
 - (void)processUpdatesFromCollector:(id)quantitySample {
-
-    //Super must be called here.
+    //  Super must be called here. A method call to flush the data if the csv structure has changed will upload the data and manage the files associated and also create a new file with the appropraite csv structure.
     [super processUpdatesFromCollector:quantitySample];
     
     __weak typeof(self) weakSelf = self;

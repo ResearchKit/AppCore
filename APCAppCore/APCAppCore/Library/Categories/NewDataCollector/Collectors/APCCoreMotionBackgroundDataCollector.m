@@ -35,9 +35,10 @@
 #import "CMMotionActivity+Helper.h"
 
 static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminatedTime";
-static NSInteger const kNumberOfDaysBack = 8;
+static NSInteger const kDefaultNumberOfDaysBack = 8;
 
 @interface APCCoreMotionBackgroundDataCollector()
+
 @property (nonatomic, strong) CMMotionActivityManager *motionActivityManager;
 
 @end
@@ -49,12 +50,9 @@ static NSInteger const kNumberOfDaysBack = 8;
 *      startActivityUpdatesToQueue:withHandler: replaces the current
 *      handler.
 */
-- (void) start
+- (void)start
 {
-    
-    
     self.motionActivityManager = [[CMMotionActivityManager alloc] init];
-    
     NSDate* lastTrackedEndDate = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
     
     if (!lastTrackedEndDate) {
@@ -68,8 +66,6 @@ static NSInteger const kNumberOfDaysBack = 8;
                                                        toDate:[NSDate date]
                                                       toQueue:[NSOperationQueue new]
                                                   withHandler:^(NSArray* activities, NSError* __unused error) {
-                                                      
-                                                      
                                                       __typeof(self) strongSelf = weakSelf;
                                                       
                                                       if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValuesFromCollector:)])
@@ -82,27 +78,26 @@ static NSInteger const kNumberOfDaysBack = 8;
                                                               [strongSelf.delegate didRecieveUpdatedValueFromCollector:activity];
                                                           }
                                                       }];
-                                                      
                                                   }];
-    
 }
 
-- (void) stop {
+- (void)stop
+{
     [self.motionActivityManager stopActivityUpdates];
 }
 
 #pragma mark - Helper methods
 
-- (NSDate*) maximumNumberOfDaysBack {
-    NSInteger               numberOfDaysBack = kNumberOfDaysBack * -1;
-    NSDateComponents*       components = [[NSDateComponents alloc] init];
+- (NSDate*)maximumNumberOfDaysBack
+{
+    NSInteger           numberOfDaysBack = kDefaultNumberOfDaysBack * -1;
+    NSDateComponents*   components = [[NSDateComponents alloc] init];
     
     [components setDay:numberOfDaysBack];
-    
-    NSDate*                 date = [[NSCalendar currentCalendar] dateByAddingComponents:components
-                                                                                  toDate:[NSDate date]
-                                                                                 options:0];
 
+    NSDate*             date = [[NSCalendar currentCalendar] dateByAddingComponents:components
+                                                                            toDate:[NSDate date]
+                                                                            options:0];
     return date;
 }
 

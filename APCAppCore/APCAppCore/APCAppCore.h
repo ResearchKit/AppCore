@@ -73,13 +73,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  --------------------------------------- */
 #import <APCAppCore/APCDataArchiverAndUploader.h>
 #import <APCAppCore/APCDataArchiver.h>
-#import <APCAppCore/APCPassiveDataCollector.h>
-#import <APCAppCore/APCDataTracker.h>
-#import <APCAppCore/APCHKDiscreteQuantityTracker.h>
-#import <APCAppCore/APCHKCumulativeQuantityTracker.h>
-#import <APCAppCore/APCCoreLocationTracker.h>
 
-#import <APCAppCore/APCCoreMotionTracker.h>
 #import <APCAppCore/zipzap.h>
 #import <APCAppCore/ZZArchive.h>
 #import "APCAppCore/ZZArchiveEntry.h"
@@ -94,11 +88,11 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import "APCAppCore/APCFileManagerUtility.h"
 #import "APCAppCore/APCDataCollector.h"
 #import "APCAppCore/APCPassiveDataSink.h"
-#import "APCAppCore/APCPassiveHealthKitWorkoutSink.h"
-#import "APCAppCore/APCPassiveHealthKitSleepSink.h"
-#import "APCAppCore/APCPassiveCoreActivityManagerSink.h"
+#import "APCAppCore/APCPassiveHealthKitWorkoutDataUploader.h"
+#import "APCAppCore/APCPassiveHealthKitSleepDataUploader.h"
+#import "APCAppCore/APCPassiveCoreActivityDataUploader.h"
 
-#import "APCAppCore/APCPassiveDisplacementTrackingSink.h"
+#import "APCAppCore/APCPassiveDisplacementTrackingDataUploader.h"
 #import "APCAppCore/APCCoreMotionBackgroundDataCollector.h"
 #import "APCAppCore/APCCoreLocationBackgroundDataCollector.h"
 
