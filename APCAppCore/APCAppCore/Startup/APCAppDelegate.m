@@ -886,9 +886,9 @@ static NSUInteger const kIndexOfProfileTab = 3;
                                                                                             toDate:catSample.endDate
                                                                                            options:NSCalendarWrapComponents];
             if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
-                quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", secondsSpentInBedOrAsleep.second];
+                quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", (long)secondsSpentInBedOrAsleep.second];
             } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
-                quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", secondsSpentInBedOrAsleep.second];
+                quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", (long)secondsSpentInBedOrAsleep.second];
             }
         } else {
             HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
