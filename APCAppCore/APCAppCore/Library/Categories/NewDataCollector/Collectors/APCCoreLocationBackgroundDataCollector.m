@@ -35,24 +35,21 @@
 #import "APCCoreLocationBackgroundDataCollector.h"
 
 
-static  NSString  *kLocationTimeStamp                    = @"timestamp";
-static  NSString  *kLocationDistanceFromHomeLocation     = @"distanceFromHomeLocation";
-static  NSString  *kLocationDistanceFromPreviousLocation = @"distanceFromPreviousLocation";
-static  NSString  *kLocationVerticalAccuracy             = @"verticalAccuracy";
-static  NSString  *kLocationHorizontalAccuracy           = @"horizontalAccuracy";
-static  NSString  *kLocationDistanceUnit                 = @"distanceUnit"; //Always meters
-
+//static  NSString  *kLocationTimeStamp                    = @"timestamp";
+//static  NSString  *kLocationDistanceFromHomeLocation     = @"distanceFromHomeLocation";
+//static  NSString  *kLocationDistanceFromPreviousLocation = @"distanceFromPreviousLocation";
+//static  NSString  *kLocationVerticalAccuracy             = @"verticalAccuracy";
+//static  NSString  *kLocationHorizontalAccuracy           = @"horizontalAccuracy";
+//static  NSString  *kLocationDistanceUnit                 = @"distanceUnit"; //Always meters
+//
 //static NSString *kBaseTrackingFileName = @"baseTrackingLocation";
-static NSString *kRecentLocationFileName = @"recentLocation";
-
-static NSString *kLat = @"lat";
-static NSString *kLon = @"lon";
+//static NSString *kRecentLocationFileName = @"recentLocation";
+//
+//static NSString *kLat = @"lat";
+//static NSString *kLon = @"lon";
 
 @interface APCCoreLocationBackgroundDataCollector () <CLLocationManagerDelegate>
-{
-    CLLocation * _baseTrackingLocation;
-    CLLocation * _mostRecentUpdatedLocation;
-}
+
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
@@ -129,6 +126,9 @@ static NSString *kLon = @"lon";
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
         
+#warning remmeber to remove this line below so we're only using significant location updates.
+        [self.locationManager startUpdatingLocation];
+        
         if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES &&
             [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)
         {
@@ -149,74 +149,16 @@ static NSString *kLon = @"lon";
     }
 }
 
-- (NSArray*)columnNames
-{
-    NSArray* retValue;
-    if (self.homeLocationStatus == APCPassiveLocationTrackingHomeLocationAvailable)
-    {
-        retValue = @[kLocationTimeStamp, kLocationDistanceFromHomeLocation, kLocationDistanceUnit, kLocationHorizontalAccuracy, kLocationVerticalAccuracy];
-    }
-    else
-    {
-        retValue = @[kLocationTimeStamp, kLocationDistanceFromPreviousLocation, kLocationDistanceUnit, kLocationHorizontalAccuracy, kLocationVerticalAccuracy];
-    }
-    return retValue;
-}
-
 /*********************************************************************************/
 #pragma mark - Private Methods
 /*********************************************************************************/
 
-- (NSArray*)locationDictionaryWithLocationManager:(CLLocationManager*)manager
-                    andDistanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
-{
-    
-    NSString*   timestamp          = manager.location.timestamp.description;
-    NSString*   distance           = [NSString stringWithFormat:@"%f", distanceFromReferencePoint];
-    NSString*   unit               = @"meters"; //Hardcoded as Core Locations uses only meters
-    NSString*   horizontalAccuracy = [NSString stringWithFormat:@"%f", manager.location.horizontalAccuracy];
-    NSString*   verticalAccuracy   = [NSString stringWithFormat:@"%f", manager.location.verticalAccuracy];
- 
-    return  @[timestamp, distance, unit, horizontalAccuracy, verticalAccuracy];
-}
-
 - (void)updateArchiveDataWithLocationManager:(CLLocationManager *)manager withUpdateLocations:(NSArray *)locations
 {
-    NSArray  *result = nil;
-        
-    if (self.homeLocationStatus == APCPassiveLocationTrackingHomeLocationAvailable)
-    {
-        CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
-        result = [self locationDictionaryWithLocationManager:manager andDistanceFromReferencePoint:distanceFromReferencePoint];
-    }
-    else
-    {
-        if ((self.baseTrackingLocation.coordinate.latitude == 0.0) && (self.baseTrackingLocation.coordinate.longitude == 0.0))
-        {
-            self.baseTrackingLocation = [locations firstObject];
-            self.mostRecentUpdatedLocation = self.baseTrackingLocation;
-            if ([locations count] >= 1)
-            {
-                CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
-                result = [self locationDictionaryWithLocationManager:manager andDistanceFromReferencePoint:distanceFromReferencePoint];
-            }
-        }
-        else
-        {
-            self.baseTrackingLocation = self.mostRecentUpdatedLocation;
-            self.mostRecentUpdatedLocation = manager.location;
-            CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
-            result = [self locationDictionaryWithLocationManager:manager andDistanceFromReferencePoint:distanceFromReferencePoint];
-        }
-    }
-    
     //Send to delegate
-    if (result)
+    if ([self.delegate respondsToSelector:@selector(didRecieveUpdateWithLocationManager:withUpdateLocations:)])
     {
-        if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
-        {
-            [self.delegate didRecieveUpdatedValuesFromCollector:result];
-        }
+        [self.delegate didRecieveUpdateWithLocationManager:manager withUpdateLocations:locations andDisplacement:self.homeLocationStatus];
     }
 }
 
@@ -273,92 +215,10 @@ static NSString *kLon = @"lon";
     APCLogDebug(@"locationManagerDidPauseLocationUpdates");
 }
 
-
 - (void)locationManager:(CLLocationManager*)manager didUpdateLocations:(NSArray*)locations
 {
     APCLogDebug(@"locationManager didUpdateLocations at %@", [NSDate date]);
     [self updateArchiveDataWithLocationManager:manager withUpdateLocations:locations];
 }
-
-/*********************************************************************************/
-#pragma mark - Base Tracking Location & Recent Updated Location
-/*********************************************************************************/
-//- (NSString*)baseTrackingFilePath
-//{
-//    return [self.folder stringByAppendingPathComponent:kBaseTrackingFileName];
-//}
-//
-//- (NSString*)recentLocationFilePath
-//{
-//    return [self.folder stringByAppendingPathComponent:kRecentLocationFileName];
-//}
-//
-//- (void)setBaseTrackingLocation:(CLLocation *)baseTrackingLocation
-//{
-//    _baseTrackingLocation = baseTrackingLocation;
-//    NSDictionary * dict = @{kLat : @(baseTrackingLocation.coordinate.latitude), kLon : @(baseTrackingLocation.coordinate.longitude)};
-//    [self writeDictionary:dict toPath:[self baseTrackingFilePath]];
-//}
-//
-//- (CLLocation*)baseTrackingLocation
-//{
-//    if (!_baseTrackingLocation)
-//    {
-//        if (self.folder)
-//        {
-//            if ([[NSFileManager defaultManager] fileExistsAtPath:[self baseTrackingFilePath]])
-//            {
-//                NSError*    error;
-//                NSString*   jsonString = [NSString stringWithContentsOfFile:[self baseTrackingFilePath] encoding:NSUTF8StringEncoding error:&error];
-//                APCLogError2(error);
-//                NSDictionary* dict;
-//                
-//                if (jsonString)
-//                {
-//                    dict = [NSDictionary dictionaryWithJSONString:jsonString];
-//                    _baseTrackingLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue] longitude:[dict[kLon] doubleValue]];
-//                }
-//            }
-//        }
-//    }
-//    return _baseTrackingLocation;
-//}
-//
-//- (void)setMostRecentUpdatedLocation:(CLLocation *)mostRecentUpdatedLocation
-//{
-//    _mostRecentUpdatedLocation = mostRecentUpdatedLocation;
-//    NSDictionary * dict = @{kLat : @(mostRecentUpdatedLocation.coordinate.latitude), kLon : @(mostRecentUpdatedLocation.coordinate.longitude)};
-//    [self writeDictionary:dict toPath:[self recentLocationFilePath]];
-//}
-//
-//- (CLLocation*)mostRecentUpdatedLocation
-//{
-//    if (!_mostRecentUpdatedLocation)
-//    {
-//        if (self.folder)
-//        {
-//            if ([[NSFileManager defaultManager] fileExistsAtPath:[self recentLocationFilePath]])
-//            {
-//                NSError*    error;
-//                NSString*   jsonString = [NSString stringWithContentsOfFile:[self recentLocationFilePath] encoding:NSUTF8StringEncoding error:&error];
-//                APCLogError2(error);
-//                NSDictionary * dict;
-//                if (jsonString)
-//                {
-//                    dict = [NSDictionary dictionaryWithJSONString:jsonString];
-//                    _mostRecentUpdatedLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue] longitude:[dict[kLon] doubleValue]];
-//                }
-//            }
-//        }
-//    }
-//    
-//    return _mostRecentUpdatedLocation;
-//}
-//
-//- (void)writeDictionary:(NSDictionary*)dict toPath:(NSString*)path
-//{
-//    NSString*   dataString = [dict JSONString];
-//    [APCPassiveDataCollector createOrReplaceString:dataString toFile:path];
-//}
 
 @end

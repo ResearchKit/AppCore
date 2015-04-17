@@ -75,6 +75,11 @@ static NSUInteger kDaysPerWeek = 7;
     /* abstract implementation */
 }
 
+- (void) didRecieveUpdateWithLocationManager:(CLLocationManager *) __unused manager withUpdateLocations:(NSArray *) __unused locations
+{
+    /* abstract implementation */
+}
+
 /*********************************************************************************/
 #pragma mark - Abstract methods
 /*********************************************************************************/

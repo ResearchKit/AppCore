@@ -38,14 +38,12 @@
 
 #warning uncomment this once the old passive data collector is phased out.
 
-/*
 typedef  enum  _APCPassiveLocationTrackingHomeLocation
 {
     APCPassiveLocationTrackingHomeLocationAvailable,
     APCPassiveLocationTrackingHomeLocationUnavailable
 }  APCPassiveLocationTrackingHomeLocation;
- 
- */
+
 
 @interface APCCoreLocationBackgroundDataCollector : APCDataCollector
 

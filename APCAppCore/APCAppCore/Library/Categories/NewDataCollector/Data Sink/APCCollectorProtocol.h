@@ -32,10 +32,15 @@
 //
 
 #import <HealthKit/HealthKit.h>
+#import <CoreLocation/CoreLocation.h>
 
 @protocol APCCollectorProtocol <NSObject>
 
+@optional
+
 - (void) didRecieveUpdatedValuesFromCollector:(id)results;
 - (void) didRecieveUpdatedValueFromCollector:(id)result;
+
+- (void) didRecieveUpdateWithLocationManager:(CLLocationManager *)manager withUpdateLocations:(NSArray *)locations andDisplacement:(NSInteger) passiveLocationTrackingHomeLocation;
 
 @end
