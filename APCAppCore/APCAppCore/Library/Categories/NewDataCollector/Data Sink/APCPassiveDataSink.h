@@ -34,33 +34,36 @@
 #import <Foundation/Foundation.h>
 #import "APCCollectorProtocol.h"
 
+typedef NSString* (^CSVSerializer)(NSInteger n);
 
 @interface APCPassiveDataSink : NSObject <APCCollectorProtocol>
 
-@property (nonatomic, strong) NSMutableDictionary * registeredTrackers;
-@property (nonatomic, strong) NSString * collectorsPath;
-@property (nonatomic, readonly) NSString *collectorsUploadPath;
+@property (nonatomic, strong)   NSMutableDictionary*    registeredTrackers;
+@property (nonatomic, strong)   NSString*               collectorsPath;
+@property (nonatomic, readonly) NSString*               collectorsUploadPath;
 
 //Unique configuration for collector
-@property (nonatomic, readonly) NSString*       identifier;
-@property (nonatomic, strong)   NSDictionary*   infoDictionary;
-@property (nonatomic, strong)   NSString*       folder;
-@property (nonatomic)           NSTimeInterval  stalenessInterval;
-@property (nonatomic) unsigned long long        sizeThreshold;
-@property (nonatomic)           NSArray*        columnNames;
+@property (nonatomic, readonly) NSString*               identifier;
+@property (nonatomic, strong)   NSDictionary*           infoDictionary;
+@property (nonatomic, strong)   NSString*               folder;
+@property (nonatomic)           NSTimeInterval          stalenessInterval;
+@property (nonatomic) unsigned long long                sizeThreshold;
+@property (nonatomic)           NSArray*                columnNames;
+@property (nonatomic, copy)     CSVSerializer           transformer;
+@property (nonatomic, strong)   NSString*               csvFilename;
+@property (nonatomic, strong)   NSOperationQueue*       healthKitCollectorQueue;
 
-@property (nonatomic, strong) NSString*         csvFilename;
-@property (nonatomic, strong) NSOperationQueue* healthKitCollectorQueue;
 
 
-- (instancetype)initWithIdentifier:(NSString*)identifier columnNames:(NSArray*)columnNames andOperationQueueName:(NSString*)operationQueueName;
+
+- (instancetype)initWithIdentifier:(NSString *)identifier
+                       columnNames:(NSArray *)columnNames
+                operationQueueName:(NSString *)operationQueueName
+                  andDataProcessor:(CSVSerializer)transformer;
 
 - (void) didRecieveUpdatedValuesFromCollector:(id) results;
-
 - (void) didRecieveUpdatedValueFromCollector:(id) result;
-
 - (void)processUpdatesFromCollector:(id) quantitySample;
-
 - (void) checkIfDataNeedsToBeFlushed;
 
 + (void) createOrAppendString: (NSString*) string toFile: (NSString*) path;

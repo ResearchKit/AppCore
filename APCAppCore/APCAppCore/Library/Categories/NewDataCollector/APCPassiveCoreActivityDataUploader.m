@@ -76,24 +76,31 @@ static NSString *const kCSVFilename     = @"data.csv";
     
     [self.healthKitCollectorQueue addOperationWithBlock:^{
         __typeof(self) strongSelf = weakSelf;
-
-        if ([quantitySample isKindOfClass: [CMMotionActivity class]])
+        __weak typeof(self) weakSelf = strongSelf;
+        
+        void (^createStringToWrite)(id) = ^(id quantitySample)
         {
-            CMMotionActivity* motionActivitySample = (CMMotionActivity*)quantitySample;
-            NSString* motionActivity    = [CMMotionActivity activityTypeName:motionActivitySample];
-            NSNumber* motionConfidence  = @(motionActivitySample.confidence);
-
-            NSString* stringToWrite     = [NSString stringWithFormat:@"%@,%@,%@\n", motionActivitySample.startDate.toStringInISO8601Format, motionActivity ,motionConfidence];
+            __typeof(self) strongSelf = weakSelf;
+            
+            CMMotionActivity* motionActivitySample  = (CMMotionActivity*)quantitySample;
+            NSString* motionActivity                = [CMMotionActivity activityTypeName:motionActivitySample];
+            NSNumber* motionConfidence              = @(motionActivitySample.confidence);
+            NSString* stringToWrite                 = [NSString stringWithFormat:@"%@,%@,%@\n", motionActivitySample.startDate.toStringInISO8601Format, motionActivity ,motionConfidence];
             
 #warning This may be something that we need to fix.
             //  Write the string of data to the csv file.
             [APCPassiveDataSink createOrAppendString:stringToWrite
                                               toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
-        }
+
+            [strongSelf checkIfDataNeedsToBeFlushed];
+            
+        };
         
-        [strongSelf checkIfDataNeedsToBeFlushed];
+        createStringToWrite(quantitySample);
         
     }];
+    
+    
 }
 
 - (NSString*)theMotionActivityName:(CMMotionActivity*)motionActivitySample

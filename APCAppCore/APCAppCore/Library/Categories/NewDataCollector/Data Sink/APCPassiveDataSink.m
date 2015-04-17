@@ -89,15 +89,16 @@ static NSUInteger kDaysPerWeek = 7;
     /* abstract implementation */
 }
 
-- (instancetype)initWithIdentifier:(NSString *)identifier columnNames:(NSArray *)columnNames andOperationQueueName:(NSString *)operationQueueName
+- (instancetype)initWithIdentifier:(NSString *)identifier columnNames:(NSArray *)columnNames operationQueueName:(NSString *)operationQueueName andDataProcessor:(CSVSerializer)transformer
 {
     self = [super init];
     if (self) {
     
         //Unique configuration for collector
-        _identifier = identifier;
-        _columnNames = columnNames;
-        
+        _identifier     = identifier;
+        _columnNames    = columnNames;
+        _transformer    = transformer;
+
         if (!self.healthKitCollectorQueue) {
             self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:operationQueueName];
         }
