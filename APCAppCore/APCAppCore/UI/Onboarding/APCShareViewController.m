@@ -228,9 +228,21 @@
     
     SLComposeViewController *composeViewController = [SLComposeViewController composeViewControllerForServiceType:type];
     
-    [composeViewController setInitialText:self.shareMessage];
-    
-    [self presentViewController:composeViewController animated:YES completion:nil];
+    if (composeViewController) {
+        [composeViewController setInitialText:self.shareMessage];
+        [self presentViewController:composeViewController animated:YES completion:nil];
+    } else {
+        NSString *updateTwitterClientMessage = NSLocalizedString(@"Your Twitter client does not support sharing from other apps. Please update your Twitter client.", nil);
+        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Update Twitter Client", nil)
+                                                                           message:updateTwitterClientMessage
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * __unused action) {}];
+        
+        [alertView addAction:defaultAction];
+        [self presentViewController:alertView animated:YES completion:nil];
+    }
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate method
