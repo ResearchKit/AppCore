@@ -100,19 +100,14 @@ static int dateCheckTimeInterval = 60;
 /*************************************************s********************************/
 
 -(void) instantiateTimer: (NSNotification *)__unused notification {
-    
     self.tomorrowAtMidnight = [NSDate tomorrowAtMidnight];
-    self.dateChangeTestTimer = [NSTimer scheduledTimerWithTimeInterval:dateCheckTimeInterval target:self selector:@selector(testDateCrossedMidnight:) userInfo:nil repeats:YES];
-    
+    self.dateChangeTestTimer = [NSTimer scheduledTimerWithTimeInterval:dateCheckTimeInterval target:self selector:@selector(didDateCrossMidnight:) userInfo:nil repeats:YES];
 }
 
--(void)testDateCrossedMidnight: (NSNotification*)__unused notification{
-    
+-(void)didDateCrossMidnight: (NSNotification*)__unused notification{
     if ([[NSDate new] compare:self.tomorrowAtMidnight] == NSOrderedDescending || [[NSDate new] compare:self.tomorrowAtMidnight] == NSOrderedSame) {
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
         [[NSNotificationCenter defaultCenter]postNotificationName:APCDayChangedNotification object:nil];
         self.tomorrowAtMidnight = [NSDate tomorrowAtMidnight];
-        });
     }
 }
 
