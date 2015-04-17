@@ -191,14 +191,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 -(CGFloat)tableView:(UITableView *)__unused tableView heightForFooterInSection:(NSInteger)section{
     
-    if (section == 1) {
-        return 50;
-    }
-    else{
-        return 0.0;
-    }
+    return section == 1 ? 50.0 : 0.0;
 }
-
 
 #pragma mark - Setup
 
