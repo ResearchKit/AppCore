@@ -250,16 +250,20 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     NSArray *sortedReadings = [markedReadings sortedArrayUsingDescriptors:@[sortByDayAverage]];
     
     // When there is only a single point we will return it
-    if (sortedReadings.count == 1) {
-        [self.insightPoints addObjectsFromArray:sortedReadings];
+    if (sortedReadings.count == 0) {
+        // There is nothing to do.
     } else {
-        NSDictionary *highLowReadings = [self splitArray:sortedReadings];
+        if (sortedReadings.count == 1) {
+            [self.insightPoints addObjectsFromArray:sortedReadings];
+        } else {
+            NSDictionary *highLowReadings = [self splitArray:sortedReadings];
+            
+            [self.insightPoints addObjectsFromArray:highLowReadings[kInsightDatasetLowKey]];
+            [self.insightPoints addObjectsFromArray:highLowReadings[kInsightDatasetHighKey]];
+        }
         
-        [self.insightPoints addObjectsFromArray:highLowReadings[kInsightDatasetLowKey]];
-        [self.insightPoints addObjectsFromArray:highLowReadings[kInsightDatasetHighKey]];
+        [self fetchDataFromHealthKitForItemsInInsightQueue];
     }
-
-    [self fetchDataFromHealthKitForItemsInInsightQueue];
 }
 
 #pragma mark HealthKit
