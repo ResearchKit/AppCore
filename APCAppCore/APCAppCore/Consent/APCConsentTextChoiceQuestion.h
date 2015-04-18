@@ -40,6 +40,7 @@
 
 - (instancetype)initWithIdentifier:(NSString*)identifier
                             prompt:(NSString*)prompt
+                            suffix:(NSString*)suffix
                            answers:(NSArray*)answers
                     expectedAnswer:(NSUInteger)indexOfExpectedAnswer;
 

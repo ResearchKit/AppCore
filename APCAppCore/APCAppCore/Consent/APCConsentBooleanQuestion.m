@@ -35,9 +35,9 @@
 
 @implementation APCConsentBooleanQuestion
 
-- (instancetype)initWithIdentifier:(NSString*)identifier prompt:(NSString*)prompt expectedAnswer:(BOOL)expectedAnswer
+- (instancetype)initWithIdentifier:(NSString*)identifier prompt:(NSString*)prompt suffix:(NSString*)suffix expectedAnswer:(BOOL)expectedAnswer
 {
-    self = [super initWithIdentifier:identifier prompt:prompt];
+    self = [super initWithIdentifier:identifier prompt:prompt suffix:suffix];
     if (self)
     {
         _expectedAnswer = expectedAnswer;
@@ -62,7 +62,8 @@
 - (ORKStep*)instantiateRkQuestion
 {
     ORKBooleanAnswerFormat* format   = [ORKBooleanAnswerFormat booleanAnswerFormat];
-    ORKQuestionStep*        question = [ORKQuestionStep questionStepWithIdentifier:self.identifier
+    
+    ORKQuestionStep*        question = [ORKQuestionStep questionStepWithIdentifier:self.extendedIdentifier
                                                                              title:self.prompt
                                                                             answer:format];
     question.optional = NO;
