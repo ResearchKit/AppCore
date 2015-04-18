@@ -151,12 +151,24 @@ NSString *const kInsightsNotEnoughData = @"Not enough data";
 {
     _goodInsightBar = goodInsightBar;
     
+    if (goodInsightBar.doubleValue == 0) {
+        [self setNoDataCaption:kInsightsNotEnoughData];
+    } else {
+        [self setNoDataCaption:nil];
+    }
+    
     self.goodBadBar.goodDayValue = goodInsightBar;
 }
 
 - (void)setBadInsightBar:(NSNumber *)badInsightBar
 {
     _badInsightBar = badInsightBar;
+    
+    if (badInsightBar.doubleValue == 0) {
+        [self setNoDataCaption:kInsightsNotEnoughData];
+    } else {
+        [self setNoDataCaption:nil];
+    }
     
     self.goodBadBar.badDayValue = badInsightBar;
 }
