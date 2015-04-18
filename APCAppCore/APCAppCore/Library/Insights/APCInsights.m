@@ -404,9 +404,13 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         pointValue = [goodPoints valueForKeyPath:@"@avg.insightFactorValueKey"];
         
         if ([self.insightFactorName isEqualToString:HKQuantityTypeIdentifierDietaryEnergyConsumed]) {
-            caption = [NSString stringWithFormat:@"%@ %@",
-                       [numberFormatter stringFromNumber:pointValue],
-                       self.insightFactorCaption];
+            if ([pointValue doubleValue] >= 1000) {
+                caption = [NSString stringWithFormat:@"%@ %@",
+                           [numberFormatter stringFromNumber:pointValue],
+                           self.insightFactorCaption];
+            } else {
+                pointValue = @(0);
+            }
         } else {
             caption = [NSString stringWithFormat:@"%@ %@",
                        [numberFormatter stringFromNumber:pointValue],
@@ -421,9 +425,13 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         pointValue = [badPoints valueForKeyPath:@"@avg.insightFactorValueKey"];
         
         if ([self.insightFactorName isEqualToString:HKQuantityTypeIdentifierDietaryEnergyConsumed]) {
-            caption = [NSString stringWithFormat:@"%@ %@",
-                       [numberFormatter stringFromNumber:pointValue],
-                       self.insightFactorCaption];
+            if ([pointValue doubleValue] >= 1000) {
+                caption = [NSString stringWithFormat:@"%@ %@",
+                           [numberFormatter stringFromNumber:pointValue],
+                           self.insightFactorCaption];
+            } else {
+                pointValue = @(0);
+            }
         } else {
             caption = [NSString stringWithFormat:@"%@ %@",
                        [numberFormatter stringFromNumber:pointValue],
