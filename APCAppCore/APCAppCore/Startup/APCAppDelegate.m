@@ -291,7 +291,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 /*********************************************************************************/
 - (void) initializeBridgeServerConnection
 {
-    [BridgeSDK setupWithStudy:kAppPrefixKey environment:(SBBEnvironment)[self.initializationOptions[kBridgeEnvironmentKey] integerValue]];
+    [BridgeSDK setupWithStudy:self.initializationOptions[kAppPrefixKey] environment:(SBBEnvironment)[self.initializationOptions[kBridgeEnvironmentKey] integerValue]];
 }
 
 - (BOOL) determineIfPeresistentStoreExists {
