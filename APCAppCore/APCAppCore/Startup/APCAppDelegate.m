@@ -233,8 +233,6 @@ static NSUInteger const kIndexOfProfileTab = 3;
     for (NSString* relativeFilePath in directoryEnumerator)
     {
         NSDictionary*   attributes = directoryEnumerator.fileAttributes;
-        APCLogDebug(@"File name:       %@", relativeFilePath);
-        APCLogDebug(@"File protection: %@", attributes[NSFileProtectionKey]);
         
         if ([[attributes objectForKey:NSFileProtectionKey] isEqual:NSFileProtectionComplete])
         {
