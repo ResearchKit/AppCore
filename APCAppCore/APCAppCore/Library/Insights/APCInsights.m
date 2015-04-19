@@ -564,6 +564,9 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     self.captionBad  = NSLocalizedString(@"Not enough data", @"Not enough data");
     self.valueGood = @(0);
     self.valueBad  = @(0);
+    
+    [self.insightPoints removeAllObjects];
+    [self.insightPointValues removeAllObjects];
 }
 
 /**
