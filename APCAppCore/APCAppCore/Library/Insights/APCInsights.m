@@ -53,8 +53,6 @@ static NSString *kInsightDatasetDayAverage = @"insightDatasetDayAverage";
 static NSString *kInsightDatasetHighKey = @"insightDatasetHighKey";
 static NSString *kInsightDatasetLowKey = @"InsightDatasetLowKey";
 
-static double kRefershDelayInSeconds = 180; // 3 minutes
-
 static double kBaselinePreMeal  = 130;
 static double kBaselinePostMeal = 180;
 
@@ -81,8 +79,6 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 
 @property (nonatomic, strong) NSOperationQueue *insightQueue;
 
-@property (nonatomic) NSTimeInterval lastUpdatedAt;
-
 @end
 
 @implementation APCInsights
@@ -105,7 +101,6 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         _captionBad  = NSLocalizedString(@"Not enough data", @"Not enough data");
         _valueGood = @(0);
         _valueBad  = @(0);
-        _lastUpdatedAt = 0;
         
         _insightPointValues = [NSMutableArray new];
         
@@ -194,26 +189,13 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 
 - (void)factorInsight
 {
-    if (self.lastUpdatedAt == 0) {
-        [self startCollectionInsightData];
-    } else {
-        // We will only process the diet insights when there considerable amount of time
-        // has lapsed. As for what is 'considerable amount of time', take a look at the
-        // kRefreshDelayInSeconds variable at the top.
-        NSTimeInterval currentTimeInterval = [NSDate timeIntervalSinceReferenceDate];
-        NSTimeInterval lapsedTime = currentTimeInterval - self.lastUpdatedAt;
-        
-        if (lapsedTime > kRefershDelayInSeconds) {
-            [self startCollectionInsightData];
-        }
-    }
+    [self startCollectionInsightData];
 }
 
 - (void)startCollectionInsightData
 {
+    [self resetInsight];
     [self retrieveDatasetForGlucoseForPeriod:-30];
-    
-    self.lastUpdatedAt = [NSDate timeIntervalSinceReferenceDate];
 }
 
 #pragma mark - Core Data

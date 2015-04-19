@@ -37,8 +37,6 @@
 static NSString *kLoseItBundleIdentifier           = @"com.fitnow.loseit";
 static NSString *kLoseItFoodImageNameKey           = @"HKFoodImageName";
 
-static double kRefershDelayInSeconds               = 180; // 3 minutes
-
 NSString * const kFoodInsightFoodNameKey           = @"foodNameKey";
 NSString * const kFoodInsightFoodGenericNameKey    = @"foodGenericNameKey";
 NSString * const kFoodInsightValueKey              = @"foodValueKey";
@@ -64,8 +62,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 
 @property (nonatomic, strong) NSDate *startDate;
 @property (nonatomic, strong) NSDate *endDate;
-
-@property (nonatomic) NSTimeInterval lastUpdatedAt;
 
 @property (nonatomic, strong) HKSource *source;
 
@@ -98,8 +94,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
         _startDate = [self dateForSpan:kLastSevenDays fromDate:[NSDate date]];
         _endDate   = [NSDate date];
         
-        _lastUpdatedAt = 0;
-        
         _source = nil;
         
         _foodHistory = nil;
@@ -125,19 +119,7 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
 
 - (void)insight
 {
-    if (self.lastUpdatedAt == 0) {
-        [self startCollectionInsightData];
-    } else {
-        // We will only process the diet insights when there considerable amount of time
-        // has lapsed. As for what is 'considerable amount of time', take a look at the
-        // kRefreshDelayInSeconds variable at the top.
-        NSTimeInterval currentTimeInterval = [NSDate timeIntervalSinceReferenceDate];
-        NSTimeInterval lapsedTime = currentTimeInterval - self.lastUpdatedAt;
-        
-        if (lapsedTime > kRefershDelayInSeconds) {
-            [self startCollectionInsightData];
-        }
-    }
+    [self startCollectionInsightData];
 }
 
 - (void)startCollectionInsightData
@@ -148,8 +130,6 @@ static NSString *kAPHFoodInsightDataCollectionIsCompletedNotification = @"APHFoo
     [self.foodList removeAllObjects];
     
     [self configureSource];
-    
-    self.lastUpdatedAt = [NSDate timeIntervalSinceReferenceDate];
 }
 
 #pragma mark - Source
