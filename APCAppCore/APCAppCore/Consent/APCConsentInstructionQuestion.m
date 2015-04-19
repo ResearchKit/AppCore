@@ -43,9 +43,10 @@
 
 - (instancetype)initWithIdentifier:(NSString*)identifier
                             prompt:(NSString*)prompt
+                            suffix:(NSString*)suffix
                               text:(NSString*)text
 {
-    self = [super initWithIdentifier:identifier prompt:prompt];
+    self = [super initWithIdentifier:identifier prompt:prompt suffix:suffix];
     if (self)
     {
         _text = text;
@@ -61,7 +62,7 @@
 
 - (ORKStep*)instantiateRkQuestion
 {
-    ORKInstructionStep* step = [[ORKInstructionStep alloc] initWithIdentifier:self.identifier];
+    ORKInstructionStep* step = [[ORKInstructionStep alloc] initWithIdentifier:self.extendedIdentifier];
     
     step.title = self.prompt;
     step.text  = self.text;

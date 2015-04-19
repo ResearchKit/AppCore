@@ -37,10 +37,11 @@
 
 - (instancetype)initWithIdentifier:(NSString*)identifier
                             prompt:(NSString*)prompt
+                            suffix:(NSString*)suffix
                            answers:(NSArray*)answers
                     expectedAnswer:(NSUInteger)indexOfExpectedAnswer
 {
-    self = [super initWithIdentifier:identifier prompt:prompt];
+    self = [super initWithIdentifier:identifier prompt:prompt suffix:suffix];
     if (self)
     {
         _answers               = answers;
@@ -73,7 +74,7 @@
 {
     ORKTextChoiceAnswerFormat*  format   = [[ORKTextChoiceAnswerFormat alloc] initWithStyle:ORKChoiceAnswerStyleSingleChoice
                                                                                 textChoices:self.answers];
-    ORKQuestionStep*            question = [ORKQuestionStep questionStepWithIdentifier:self.identifier
+    ORKQuestionStep*            question = [ORKQuestionStep questionStepWithIdentifier:self.extendedIdentifier
                                                                                  title:self.prompt
                                                                                 answer:format];
     question.optional = NO;

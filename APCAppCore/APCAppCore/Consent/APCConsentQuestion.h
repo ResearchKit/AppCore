@@ -37,10 +37,13 @@
 @interface APCConsentQuestion : NSObject
 
 @property (nonatomic, copy) NSString* identifier;
+@property (nonatomic, readonly) NSString* extendedIdentifier;
 @property (nonatomic, copy) NSString* prompt;
+@property (nonatomic, copy) NSString* suffix;
 
-- (instancetype)initWithIdentifier:(NSString*)identifier prompt:(NSString*)prompt;
+- (instancetype)initWithIdentifier:(NSString*)identifier prompt:(NSString*)prompt suffix:(NSString*)suffix;
 - (BOOL)evaluate:(ORKStepResult*)stepResult;
+- (NSString *)concatenate:(NSString *)identifier suffix:(NSString *)suffix;
 
 - (ORKStep*)instantiateRkQuestion;
 

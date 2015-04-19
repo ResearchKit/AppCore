@@ -39,6 +39,7 @@
 
 - (instancetype)initWithIdentifier:(NSString*)identifier
                             prompt:(NSString*)prompt
+                            suffix:(NSString*)suffix
                     expectedAnswer:(BOOL)expectedAnswer;
 
 @end
