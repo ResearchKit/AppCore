@@ -249,10 +249,10 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     NSSortDescriptor *sortByDayAverage = [NSSortDescriptor sortDescriptorWithKey:@"insightDatasetDayAverage" ascending:YES];
     NSArray *sortedReadings = [markedReadings sortedArrayUsingDescriptors:@[sortByDayAverage]];
     
-    // When there is only a single point we will return it
     if (sortedReadings.count == 0) {
         // There is nothing to do.
     } else {
+        // When there is only a single point we will return it
         if (sortedReadings.count == 1) {
             [self.insightPoints addObjectsFromArray:sortedReadings];
         } else {
@@ -399,6 +399,8 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setMaximumFractionDigits:0];
+    [numberFormatter setRoundingMode:NSNumberFormatterRoundDown];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
     
     if (goodPoints.count > 0) {
         pointValue = [goodPoints valueForKeyPath:@"@avg.insightFactorValueKey"];
