@@ -233,8 +233,6 @@ static NSUInteger const kIndexOfProfileTab = 3;
     for (NSString* relativeFilePath in directoryEnumerator)
     {
         NSDictionary*   attributes = directoryEnumerator.fileAttributes;
-        APCLogDebug(@"File name:       %@", relativeFilePath);
-        APCLogDebug(@"File protection: %@", attributes[NSFileProtectionKey]);
         
         if ([[attributes objectForKey:NSFileProtectionKey] isEqual:NSFileProtectionComplete])
         {
@@ -291,13 +289,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 /*********************************************************************************/
 - (void) initializeBridgeServerConnection
 {
-//If in DEBUG mode, automatically point to staging environment. In release mode read from intializationOptions dictionary.
-#warning Please make sure that the serve is pointing to Production in the RELEASE build!
-#if DEBUG
-    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment: SBBEnvironmentStaging];
-#else
-    [BridgeSDK setupWithAppPrefix:self.initializationOptions[kAppPrefixKey] environment:(SBBEnvironment)[self.initializationOptions[kBridgeEnvironmentKey] integerValue]];
-#endif
+    [BridgeSDK setupWithStudy:self.initializationOptions[kAppPrefixKey] environment:(SBBEnvironment)[self.initializationOptions[kBridgeEnvironmentKey] integerValue]];
 }
 
 - (BOOL) determineIfPeresistentStoreExists {
