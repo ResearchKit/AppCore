@@ -594,22 +594,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
  */
 - (NSUInteger)indexOfMedianInArray:(NSArray *)listOfNumbers
 {
-    return [[self medianInArray:listOfNumbers asIndex:YES] integerValue];
-}
-
-/**
- * @brief   Get the value of the median number in an array
- *
- * @param   listOfNumbers   An array of NSNumbers
- *
- * @return  Returns an NSNumber with the value of the median number in the provided array.
- *
- * @note    When there are even number of elements in the array, the median value that is returned
- *          is the average of the two middle numbers.
- */
-- (NSNumber *)valueOfMedianInArray:(NSArray *)listOfNumbers
-{
-    return [self medianInArray:listOfNumbers asIndex:NO];
+    return [[self medianInArray:listOfNumbers] integerValue];
 }
 
 /**
@@ -643,76 +628,31 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 }
 
 /**
- * @brief   Filters the dataset for the in-range and out-of-range values based on the limit
- *
- * @param   listOfReadings  An array of readings (each reading is an NSDictionary)
- *
- * @param   isInRange       Boolean for determining the kind of readings to return.
- *                          YES == in-range; NO == out-of-range
- *
- * @param   limit           Max number of elements that should be returned
- *
- * @return  An array of dictionaries filtered from the provided dataset using the isInRange and limit arguments.
- *
- */
-- (NSArray *)readings:(NSArray *)listOfReadings isInRange:(BOOL)isInRange limit:(NSUInteger)limit
-{
-    NSArray *readings = nil;
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", kInsightDatasetIsGoodDayKey, @(isInRange)];
-    NSArray *filteredReadings = [listOfReadings filteredArrayUsingPredicate:predicate];
-    
-    NSRange range = NSMakeRange(0, limit);
-    
-    if (filteredReadings.count > limit) {
-        readings = [filteredReadings subarrayWithRange:range];
-    } else {
-        readings = [filteredReadings copy];
-    }
-    
-    return readings;
-}
-
-/**
- * @brief   Returns either the median value or the index of the median in an
- *          array of NSNumbers.
+ * @brief   Returns the index of the median in an array of NSNumbers.
  *
  * @param   listOfNumbers   Array of NSNumbers
  *
- * @param   asIndex         YES for returing the index of the median number
- *                          NO  for returing the value of the median number
+ * @return  Returns an NSNumber that is an index the median number.
  *
- * @return  Returns an NSNumber that could either be an index or the value of the median number.
- *
- * @note    When there are even number of elements in the array, the median value that is returned
- *          is the average of the two middle numbers.
  */
-- (NSNumber *)medianInArray:(NSArray *)listOfNumbers asIndex:(BOOL)asIndex {
+- (NSNumber *)medianInArray:(NSArray *)listOfNumbers
+{
     NSNumber *result = nil;
     NSUInteger middle;
     
     // When there is only one element in the array
     if (listOfNumbers.count == 1) {
         middle = 0;
-        result = listOfNumbers[0];
-    }
+    } else {
     
-    NSArray * sorted = [listOfNumbers sortedArrayUsingSelector:@selector(compare:)];
-    
-    if (listOfNumbers.count % 2 != 0) {  //odd number of members
-        middle = (sorted.count / 2);
-        result = [sorted objectAtIndex:middle];
-    }
-    else {
-        // For even number of elements in the array,
-        // we will return the average of the two middle numbers
-        // when the 'asIndex' is set to NO.
-        middle = (sorted.count / 2);
-        result = [@[[sorted objectAtIndex:middle], [sorted objectAtIndex:middle + 1]] valueForKeyPath:@"@avg.self"];
-    }
-    
-    if (asIndex == YES) {
-        result = @(middle);
+        NSArray * sorted = [listOfNumbers sortedArrayUsingSelector:@selector(compare:)];
+        
+        if (listOfNumbers.count % 2 != 0) {  //odd number of members
+            middle = (sorted.count / 2);
+        } else {
+            // For even number of elements
+            middle = (sorted.count / 2) - 1;
+        }
     }
     
     return result;
