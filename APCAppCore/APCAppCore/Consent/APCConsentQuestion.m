@@ -35,13 +35,14 @@
 
 @implementation APCConsentQuestion
 
-- (instancetype)initWithIdentifier:(NSString*)identifier prompt:(NSString*)prompt
+- (instancetype)initWithIdentifier:(NSString*)identifier prompt:(NSString*)prompt suffix:(NSString*)suffix
 {
     self = [super init];
     if (self)
     {
         _identifier = identifier;
         _prompt     = prompt;
+        _suffix     = suffix;
     }
     
     return self;
@@ -50,6 +51,18 @@
 - (BOOL)evaluate:(ORKStepResult*) __unused stepResult
 {
     return false;
+}
+
+- (NSString *)extendedIdentifier
+{
+    NSString  *concatenated = [NSString stringWithFormat:@"%@%@", self.identifier, self.suffix];
+    return  concatenated;
+}
+
+- (NSString *)concatenate:(NSString *)anIdentifier suffix:(NSString *)aSuffix
+{
+    NSString  *concatenated = [NSString stringWithFormat:@"%@%@", anIdentifier, aSuffix];
+    return  concatenated;
 }
 
 - (ORKStep*)instantiateRkQuestion

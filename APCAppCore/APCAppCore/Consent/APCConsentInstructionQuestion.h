@@ -37,6 +37,7 @@
 
 - (instancetype)initWithIdentifier:(NSString*)identifier
                             prompt:(NSString*)prompt
+                            suffix:(NSString*)suffix
                               text:(NSString*)text;
 
 - (BOOL)evaluate:(ORKStepResult*)stepResult;

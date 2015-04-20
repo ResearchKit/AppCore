@@ -53,8 +53,6 @@ static NSString *kInsightDatasetDayAverage = @"insightDatasetDayAverage";
 static NSString *kInsightDatasetHighKey = @"insightDatasetHighKey";
 static NSString *kInsightDatasetLowKey = @"InsightDatasetLowKey";
 
-static double kRefershDelayInSeconds = 180; // 3 minutes
-
 static double kBaselinePreMeal  = 130;
 static double kBaselinePostMeal = 180;
 
@@ -81,8 +79,6 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 
 @property (nonatomic, strong) NSOperationQueue *insightQueue;
 
-@property (nonatomic) NSTimeInterval lastUpdatedAt;
-
 @end
 
 @implementation APCInsights
@@ -105,7 +101,6 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         _captionBad  = NSLocalizedString(@"Not enough data", @"Not enough data");
         _valueGood = @(0);
         _valueBad  = @(0);
-        _lastUpdatedAt = 0;
         
         _insightPointValues = [NSMutableArray new];
         
@@ -194,26 +189,13 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 
 - (void)factorInsight
 {
-    if (self.lastUpdatedAt == 0) {
-        [self startCollectionInsightData];
-    } else {
-        // We will only process the diet insights when there considerable amount of time
-        // has lapsed. As for what is 'considerable amount of time', take a look at the
-        // kRefreshDelayInSeconds variable at the top.
-        NSTimeInterval currentTimeInterval = [NSDate timeIntervalSinceReferenceDate];
-        NSTimeInterval lapsedTime = currentTimeInterval - self.lastUpdatedAt;
-        
-        if (lapsedTime > kRefershDelayInSeconds) {
-            [self startCollectionInsightData];
-        }
-    }
+    [self startCollectionInsightData];
 }
 
 - (void)startCollectionInsightData
 {
+    [self resetInsight];
     [self retrieveDatasetForGlucoseForPeriod:-30];
-    
-    self.lastUpdatedAt = [NSDate timeIntervalSinceReferenceDate];
 }
 
 #pragma mark - Core Data
@@ -249,17 +231,21 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     NSSortDescriptor *sortByDayAverage = [NSSortDescriptor sortDescriptorWithKey:@"insightDatasetDayAverage" ascending:YES];
     NSArray *sortedReadings = [markedReadings sortedArrayUsingDescriptors:@[sortByDayAverage]];
     
-    // When there is only a single point we will return it
-    if (sortedReadings.count == 1) {
-        [self.insightPoints addObjectsFromArray:sortedReadings];
+    if (sortedReadings.count == 0) {
+        // There is nothing to do.
     } else {
-        NSDictionary *highLowReadings = [self splitArray:sortedReadings];
+        // When there is only a single point we will return it
+        if (sortedReadings.count == 1) {
+            [self.insightPoints addObjectsFromArray:sortedReadings];
+        } else {
+            NSDictionary *highLowReadings = [self splitArray:sortedReadings];
+            
+            [self.insightPoints addObjectsFromArray:highLowReadings[kInsightDatasetLowKey]];
+            [self.insightPoints addObjectsFromArray:highLowReadings[kInsightDatasetHighKey]];
+        }
         
-        [self.insightPoints addObjectsFromArray:highLowReadings[kInsightDatasetLowKey]];
-        [self.insightPoints addObjectsFromArray:highLowReadings[kInsightDatasetHighKey]];
+        [self fetchDataFromHealthKitForItemsInInsightQueue];
     }
-
-    [self fetchDataFromHealthKitForItemsInInsightQueue];
 }
 
 #pragma mark HealthKit
@@ -395,14 +381,20 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setMaximumFractionDigits:0];
+    [numberFormatter setRoundingMode:NSNumberFormatterRoundDown];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
     
     if (goodPoints.count > 0) {
         pointValue = [goodPoints valueForKeyPath:@"@avg.insightFactorValueKey"];
         
         if ([self.insightFactorName isEqualToString:HKQuantityTypeIdentifierDietaryEnergyConsumed]) {
-            caption = [NSString stringWithFormat:@"%@ %@",
-                       [numberFormatter stringFromNumber:pointValue],
-                       self.insightFactorCaption];
+            if ([pointValue doubleValue] >= 1000) {
+                caption = [NSString stringWithFormat:@"%@ %@",
+                           [numberFormatter stringFromNumber:pointValue],
+                           self.insightFactorCaption];
+            } else {
+                pointValue = @(0);
+            }
         } else {
             caption = [NSString stringWithFormat:@"%@ %@",
                        [numberFormatter stringFromNumber:pointValue],
@@ -417,9 +409,13 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         pointValue = [badPoints valueForKeyPath:@"@avg.insightFactorValueKey"];
         
         if ([self.insightFactorName isEqualToString:HKQuantityTypeIdentifierDietaryEnergyConsumed]) {
-            caption = [NSString stringWithFormat:@"%@ %@",
-                       [numberFormatter stringFromNumber:pointValue],
-                       self.insightFactorCaption];
+            if ([pointValue doubleValue] >= 1000) {
+                caption = [NSString stringWithFormat:@"%@ %@",
+                           [numberFormatter stringFromNumber:pointValue],
+                           self.insightFactorCaption];
+            } else {
+                pointValue = @(0);
+            }
         } else {
             caption = [NSString stringWithFormat:@"%@ %@",
                        [numberFormatter stringFromNumber:pointValue],
@@ -529,7 +525,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         }
         
         [dayReading setObject:avgReadingsForTheDay forKey:kInsightDatasetAverageReadingKey];
-        [dayReading setObject:dayAverage forKey:kInsightDatasetDayAverage];
+        [dayReading setObject:(dayAverage != nil) ? dayAverage: @(0) forKey:kInsightDatasetDayAverage];
         [dayReading setObject:@(isGoodDay) forKey:kInsightDatasetIsGoodDayKey];
         
         [markedDataset addObject:dayReading];
@@ -568,6 +564,9 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     self.captionBad  = NSLocalizedString(@"Not enough data", @"Not enough data");
     self.valueGood = @(0);
     self.valueBad  = @(0);
+    
+    [self.insightPoints removeAllObjects];
+    [self.insightPointValues removeAllObjects];
 }
 
 /**
@@ -582,22 +581,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
  */
 - (NSUInteger)indexOfMedianInArray:(NSArray *)listOfNumbers
 {
-    return [[self medianInArray:listOfNumbers asIndex:YES] integerValue];
-}
-
-/**
- * @brief   Get the value of the median number in an array
- *
- * @param   listOfNumbers   An array of NSNumbers
- *
- * @return  Returns an NSNumber with the value of the median number in the provided array.
- *
- * @note    When there are even number of elements in the array, the median value that is returned
- *          is the average of the two middle numbers.
- */
-- (NSNumber *)valueOfMedianInArray:(NSArray *)listOfNumbers
-{
-    return [self medianInArray:listOfNumbers asIndex:NO];
+    return [[self medianInArray:listOfNumbers] integerValue];
 }
 
 /**
@@ -631,76 +615,31 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 }
 
 /**
- * @brief   Filters the dataset for the in-range and out-of-range values based on the limit
- *
- * @param   listOfReadings  An array of readings (each reading is an NSDictionary)
- *
- * @param   isInRange       Boolean for determining the kind of readings to return.
- *                          YES == in-range; NO == out-of-range
- *
- * @param   limit           Max number of elements that should be returned
- *
- * @return  An array of dictionaries filtered from the provided dataset using the isInRange and limit arguments.
- *
- */
-- (NSArray *)readings:(NSArray *)listOfReadings isInRange:(BOOL)isInRange limit:(NSUInteger)limit
-{
-    NSArray *readings = nil;
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", kInsightDatasetIsGoodDayKey, @(isInRange)];
-    NSArray *filteredReadings = [listOfReadings filteredArrayUsingPredicate:predicate];
-    
-    NSRange range = NSMakeRange(0, limit);
-    
-    if (filteredReadings.count > limit) {
-        readings = [filteredReadings subarrayWithRange:range];
-    } else {
-        readings = [filteredReadings copy];
-    }
-    
-    return readings;
-}
-
-/**
- * @brief   Returns either the median value or the index of the median in an
- *          array of NSNumbers.
+ * @brief   Returns the index of the median in an array of NSNumbers.
  *
  * @param   listOfNumbers   Array of NSNumbers
  *
- * @param   asIndex         YES for returing the index of the median number
- *                          NO  for returing the value of the median number
+ * @return  Returns an NSNumber that is an index the median number.
  *
- * @return  Returns an NSNumber that could either be an index or the value of the median number.
- *
- * @note    When there are even number of elements in the array, the median value that is returned
- *          is the average of the two middle numbers.
  */
-- (NSNumber *)medianInArray:(NSArray *)listOfNumbers asIndex:(BOOL)asIndex {
+- (NSNumber *)medianInArray:(NSArray *)listOfNumbers
+{
     NSNumber *result = nil;
     NSUInteger middle;
     
     // When there is only one element in the array
     if (listOfNumbers.count == 1) {
         middle = 0;
-        result = listOfNumbers[0];
-    }
+    } else {
     
-    NSArray * sorted = [listOfNumbers sortedArrayUsingSelector:@selector(compare:)];
-    
-    if (listOfNumbers.count % 2 != 0) {  //odd number of members
-        middle = (sorted.count / 2);
-        result = [sorted objectAtIndex:middle];
-    }
-    else {
-        // For even number of elements in the array,
-        // we will return the average of the two middle numbers
-        // when the 'asIndex' is set to NO.
-        middle = (sorted.count / 2);
-        result = [@[[sorted objectAtIndex:middle], [sorted objectAtIndex:middle + 1]] valueForKeyPath:@"@avg.self"];
-    }
-    
-    if (asIndex == YES) {
-        result = @(middle);
+        NSArray * sorted = [listOfNumbers sortedArrayUsingSelector:@selector(compare:)];
+        
+        if (listOfNumbers.count % 2 != 0) {  //odd number of members
+            middle = (sorted.count / 2);
+        } else {
+            // For even number of elements
+            middle = (sorted.count / 2) - 1;
+        }
     }
     
     return result;

@@ -33,6 +33,8 @@
  
 #import <UIKit/UIKit.h>
 
+extern NSString *const kInsightsNotEnoughData;
+
 @interface APCDashboardInsightTableViewCell : UITableViewCell
 
 @property (nonatomic, strong) NSString *goodInsightCaption;
@@ -40,6 +42,7 @@
 @property (nonatomic, strong) NSNumber *goodInsightBar;
 @property (nonatomic, strong) NSNumber *badInsightBar;
 @property (nonatomic, strong) UIImage *insightImage;
+@property (nonatomic, strong) NSString *noDataCaption;
 
 @property (nonatomic, strong) UIColor *tintColor;
 
