@@ -35,7 +35,7 @@
 #import "APCDataCollector.h"
 #import <CoreLocation/CoreLocation.h>
 
-@interface APCCoreLocationBackgroundDataCollector : APCDataCollector
+@interface APCDisplacementTrackingCollector : APCDataCollector
 
 - (instancetype)initWithIdentifier: (NSString*) identifier deferredUpdatesTimeout:(NSTimeInterval)anUpdateTimeout;
 

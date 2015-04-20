@@ -94,7 +94,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 
 #import "APCAppCore/APCPassiveDisplacementTrackingDataUploader.h"
 #import "APCAppCore/APCCoreMotionBackgroundDataCollector.h"
-#import "APCAppCore/APCCoreLocationBackgroundDataCollector.h"
+#import "APCAppCore/APCDisplacementTrackingCollector.h"
 
 
 /* -------------------------

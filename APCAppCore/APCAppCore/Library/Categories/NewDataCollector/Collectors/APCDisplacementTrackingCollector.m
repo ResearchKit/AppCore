@@ -32,7 +32,7 @@
 // 
 
 #import "APCAppCore.h"
-#import "APCCoreLocationBackgroundDataCollector.h"
+#import "APCDisplacementTrackingCollector.h"
 
 
 //static  NSString  *kLocationTimeStamp                    = @"timestamp";
@@ -48,7 +48,7 @@
 //static NSString *kLat = @"lat";
 //static NSString *kLon = @"lon";
 
-@interface APCCoreLocationBackgroundDataCollector () <CLLocationManagerDelegate>
+@interface APCDisplacementTrackingCollector () <CLLocationManagerDelegate>
 
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
@@ -72,7 +72,7 @@
 @end
 
 
-@implementation APCCoreLocationBackgroundDataCollector
+@implementation APCDisplacementTrackingCollector
 
 - (instancetype)initWithIdentifier:(NSString*)identifier
             deferredUpdatesTimeout:(NSTimeInterval) __unused anUpdateTimeout
