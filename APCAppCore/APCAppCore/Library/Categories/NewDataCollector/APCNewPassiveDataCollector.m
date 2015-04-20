@@ -63,13 +63,11 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 - (void) addDataSink:(id)dataSync
 {
-    
     [self.dataSinkList addObject:dataSync];
 }
 
 - (void)stopCollecting
 {
- 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         for (APCDataCollector * collector in self.dataSinkList)
         {
@@ -80,24 +78,22 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 - (void)startCollecting
 {
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        for (APCDataCollector * collector in self.dataSinkList)
-        {
+    for (APCDataCollector * collector in self.dataSinkList)
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             [collector start];
-        }
-    });
-    
+        });
+    }
 }
 
 - (void)appBecameActive
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        for (APCDataCollector * collector in self.dataSinkList)
-        {
+    for (APCDataCollector * collector in self.dataSinkList)
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             [collector start];
-        }
-    });
+        });
+    }
 }
 
 - (void)appWillSuspend
