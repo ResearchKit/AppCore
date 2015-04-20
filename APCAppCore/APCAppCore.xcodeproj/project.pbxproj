@@ -228,6 +228,8 @@
 		7B544B341ADF084F00361FB6 /* APCDisplacementTrackingCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B544B321ADF084F00361FB6 /* APCDisplacementTrackingCollector.m */; };
 		7B544B3B1ADF09E900361FB6 /* APCPassiveDisplacementTrackingDataUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B544B391ADF09E900361FB6 /* APCPassiveDisplacementTrackingDataUploader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7B544B3C1ADF09E900361FB6 /* APCPassiveDisplacementTrackingDataUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B544B3A1ADF09E900361FB6 /* APCPassiveDisplacementTrackingDataUploader.m */; };
+		7B558D281AE587DF00129167 /* CLLocation+APCBearing.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B558D261AE587DF00129167 /* CLLocation+APCBearing.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7B558D291AE587DF00129167 /* CLLocation+APCBearing.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B558D271AE587DF00129167 /* CLLocation+APCBearing.m */; };
 		7B6C8CB71AA26ECE0007B560 /* APCConsentBooleanQuestion.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B6C8CAD1AA26ECE0007B560 /* APCConsentBooleanQuestion.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7B6C8CB81AA26ECE0007B560 /* APCConsentBooleanQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B6C8CAE1AA26ECE0007B560 /* APCConsentBooleanQuestion.m */; };
 		7B6C8CB91AA26ECE0007B560 /* APCConsentInstructionQuestion.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B6C8CAF1AA26ECE0007B560 /* APCConsentInstructionQuestion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -923,6 +925,8 @@
 		7B544B321ADF084F00361FB6 /* APCDisplacementTrackingCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDisplacementTrackingCollector.m; sourceTree = "<group>"; };
 		7B544B391ADF09E900361FB6 /* APCPassiveDisplacementTrackingDataUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCPassiveDisplacementTrackingDataUploader.h; sourceTree = "<group>"; };
 		7B544B3A1ADF09E900361FB6 /* APCPassiveDisplacementTrackingDataUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPassiveDisplacementTrackingDataUploader.m; sourceTree = "<group>"; };
+		7B558D261AE587DF00129167 /* CLLocation+APCBearing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CLLocation+APCBearing.h"; sourceTree = "<group>"; };
+		7B558D271AE587DF00129167 /* CLLocation+APCBearing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CLLocation+APCBearing.m"; sourceTree = "<group>"; };
 		7B6C8CAD1AA26ECE0007B560 /* APCConsentBooleanQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConsentBooleanQuestion.h; sourceTree = "<group>"; };
 		7B6C8CAE1AA26ECE0007B560 /* APCConsentBooleanQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCConsentBooleanQuestion.m; sourceTree = "<group>"; };
 		7B6C8CAF1AA26ECE0007B560 /* APCConsentInstructionQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConsentInstructionQuestion.h; sourceTree = "<group>"; };
@@ -2285,6 +2289,8 @@
 				7BDF4D291AE5403E00ACC1F8 /* NSDictionary+APCStringify.m */,
 				7BDF4D301AE5492400ACC1F8 /* HKWorkout+APCHelper.h */,
 				7BDF4D311AE5492400ACC1F8 /* HKWorkout+APCHelper.m */,
+				7B558D261AE587DF00129167 /* CLLocation+APCBearing.h */,
+				7B558D271AE587DF00129167 /* CLLocation+APCBearing.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -2932,6 +2938,7 @@
 				F5F12AF01A2F78490015982C /* APCDashboardProgressTableViewCell.h in Headers */,
 				08EA2AB31A7AD564007549C0 /* UIImage+ImageEffects.h in Headers */,
 				5BB10C0A1A91D540002D2DD2 /* APCStudyVideoCollectionViewCell.h in Headers */,
+				7B558D281AE587DF00129167 /* CLLocation+APCBearing.h in Headers */,
 				5BD6EBC41A9D905100C3BFB0 /* APCPermissionPrimingViewController.h in Headers */,
 				3654318D1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.h in Headers */,
 				F5B947EF1A73272C0034C522 /* APCParameters.h in Headers */,
@@ -3474,6 +3481,7 @@
 				5B0432A01A318AA2000DC9ED /* APCSignInTask.m in Sources */,
 				F5F12A0F1A2F78490015982C /* APCUser+UserData.m in Sources */,
 				F5F12AC11A2F78490015982C /* APCGraphViewController.m in Sources */,
+				7B558D291AE587DF00129167 /* CLLocation+APCBearing.m in Sources */,
 				7BEFD7E31AD596070087F46C /* APCPassiveHealthKitQuantityDataSink.m in Sources */,
 				5BD6EBA31A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.m in Sources */,
 				F5F12A111A2F78490015982C /* APCUser.m in Sources */,

@@ -34,20 +34,6 @@
 #import "APCAppCore.h"
 #import "APCDisplacementTrackingCollector.h"
 
-
-//static  NSString  *kLocationTimeStamp                    = @"timestamp";
-//static  NSString  *kLocationDistanceFromHomeLocation     = @"distanceFromHomeLocation";
-//static  NSString  *kLocationDistanceFromPreviousLocation = @"distanceFromPreviousLocation";
-//static  NSString  *kLocationVerticalAccuracy             = @"verticalAccuracy";
-//static  NSString  *kLocationHorizontalAccuracy           = @"horizontalAccuracy";
-//static  NSString  *kLocationDistanceUnit                 = @"distanceUnit"; //Always meters
-//
-//static NSString *kBaseTrackingFileName = @"baseTrackingLocation";
-//static NSString *kRecentLocationFileName = @"recentLocation";
-//
-//static NSString *kLat = @"lat";
-//static NSString *kLon = @"lon";
-
 @interface APCDisplacementTrackingCollector () <CLLocationManagerDelegate>
 
 
@@ -107,7 +93,7 @@
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
         
-#warning remmeber to remove this line below so we're only using significant location updates.
+#warning delete line below. Only being used for testing.
         [self.locationManager startUpdatingLocation];
         
         if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES &&

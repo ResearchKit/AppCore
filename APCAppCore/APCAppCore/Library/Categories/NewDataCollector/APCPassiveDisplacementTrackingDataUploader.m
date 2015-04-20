@@ -66,21 +66,31 @@ static NSString *kLon = @"lon";
 @implementation APCPassiveDisplacementTrackingDataUploader
 
 - (NSArray*)locationDictionaryWithLocationManager:(CLLocationManager*)manager
-                    andDistanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
+                    distanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
+                              andPreviousLocation:(CLLocation*)previousLocation
+
 {
     
-    NSString*   timestamp          = manager.location.timestamp.description;
-    NSString*   distance           = [NSString stringWithFormat:@"%f", distanceFromReferencePoint];
-    NSString*   unit               = @"meters"; //Hardcoded as Core Locations uses only meters
-    NSString*   horizontalAccuracy = [NSString stringWithFormat:@"%f", manager.location.horizontalAccuracy];
-    NSString*   verticalAccuracy   = [NSString stringWithFormat:@"%f", manager.location.verticalAccuracy];
+    NSString*   timestamp           = manager.location.timestamp.description;
+    NSString*   distance            = [NSString stringWithFormat:@"%f", distanceFromReferencePoint];
+    NSString*   unit                = @"meters"; //Hardcoded as Core Locations uses only meters
+    double      vector              = [previousLocation bearingToLocation:manager.location];
+    NSString*   vectorUnit          = @"degrees";
+    double      magnitude           = [previousLocation calculateMagnitudeToLocation:manager.location];
+    double      direction           = [previousLocation calculateDirectionFromLocation:manager.location];
+    double      speed               = manager.location.speed;
+    NSString*   horizontalAccuracy  = [NSString stringWithFormat:@"%f", manager.location.horizontalAccuracy];
+    NSString*   verticalAccuracy    = [NSString stringWithFormat:@"%f", manager.location.verticalAccuracy];
     
-    return  @[timestamp, distance, unit, horizontalAccuracy, verticalAccuracy];
+    return  @[timestamp, distance, unit, @(vector), vectorUnit, @(magnitude), @(direction), @(speed), horizontalAccuracy, verticalAccuracy];
 }
 
 
 - (void) didRecieveUpdateWithLocationManager:(CLLocationManager *) manager withUpdateLocations:(NSArray *) locations
 {
+    //  We're calling super to handle changes to the CSV structure.
+    [super didRecieveUpdateWithLocationManager:manager withUpdateLocations:locations];
+    
     __weak typeof(self) weakSelf = self;
     
     [self.healthKitCollectorQueue addOperationWithBlock:^{
@@ -96,7 +106,7 @@ static NSString *kLon = @"lon";
             if ([locations count] >= 1)
             {
                 CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
-                result = [self locationDictionaryWithLocationManager:manager andDistanceFromReferencePoint:distanceFromReferencePoint];
+                result = [self locationDictionaryWithLocationManager:manager distanceFromReferencePoint:distanceFromReferencePoint andPreviousLocation:self.baseTrackingLocation];
             }
         }
         else
@@ -104,13 +114,24 @@ static NSString *kLon = @"lon";
             self.baseTrackingLocation = self.mostRecentUpdatedLocation;
             self.mostRecentUpdatedLocation = manager.location;
             CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
-            result = [self locationDictionaryWithLocationManager:manager andDistanceFromReferencePoint:distanceFromReferencePoint];
+            result = [self locationDictionaryWithLocationManager:manager distanceFromReferencePoint:distanceFromReferencePoint andPreviousLocation:self.baseTrackingLocation];
         }
         
         //Send to delegate
         if (result)
         {  
-            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@\n", result[0], result[1], result[2], result[3], result[4]];
+            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
+                                                                   result[0],
+                                                                   result[1],
+                                                                   result[2],
+                                                                   result[3],
+                                                                   result[4],
+                                                                   result[5],
+                                                                   result[6],
+                                                                   result[7],
+                                                                   result[8],
+                                                                   result[9]];
+
             //Write to file
             [APCPassiveDataSink createOrAppendString:stringToWrite
                                               toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
@@ -118,13 +139,6 @@ static NSString *kLon = @"lon";
             [strongSelf checkIfDataNeedsToBeFlushed];
         }        
     }];
-}
-
-- (NSArray*)columnNames
-{
-    NSArray* retValue = @[kLocationTimeStamp, kLocationDistanceFromPreviousLocation, kLocationDistanceUnit, kLocationHorizontalAccuracy, kLocationVerticalAccuracy];
-    
-    return retValue;
 }
 
 /*********************************************************************************/

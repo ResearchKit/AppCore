@@ -1,5 +1,5 @@
 //
-//  NSDictionary+APCStringify.h
+//  CLLocation+APCBearing.h
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -31,10 +31,12 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
-@interface NSDictionary (APCStringify)
+@interface CLLocation (APCBearing)
 
-+ (NSString*) convertDictionary:(NSDictionary *)dict ToStringWithReturningError: (NSError * __autoreleasing *) errorToReturn;
+-(double)bearingToLocation:(CLLocation*)destinationLocation;
+-(double)calculateMagnitudeToLocation:(CLLocation*)destinationLocation;
+-(double)calculateDirectionFromLocation:(CLLocation*)destinationLocation;
 
 @end
