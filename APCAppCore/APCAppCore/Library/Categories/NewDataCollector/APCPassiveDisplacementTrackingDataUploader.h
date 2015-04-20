@@ -35,5 +35,8 @@
 
 @interface APCPassiveDisplacementTrackingDataUploader : APCPassiveDataSink
 
+- (instancetype)initWithIdentifier:(NSString *)identifier
+                       columnNames:(NSArray *)columnNames
+                operationQueueName:(NSString *)operationQueueName;
 
 @end
