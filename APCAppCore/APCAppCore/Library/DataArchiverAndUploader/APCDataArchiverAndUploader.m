@@ -1163,7 +1163,7 @@ static NSString *folderPathForUploadOperations = nil;
 
         [self.zipEntries addObject: zipEntry];
 
-        NSDictionary *fileInfoEntry = @{ kAPCSerializedDataKey_FileInfoName: filename,
+        NSDictionary *fileInfoEntry = @{ kAPCSerializedDataKey_FileInfoName: fullFileName,
                                          kAPCSerializedDataKey_FileInfoTimeStamp: [NSDate date],
                                          kAPCSerializedDataKey_FileInfoContentType: kAPCContentType_JSON };
 

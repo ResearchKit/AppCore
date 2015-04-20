@@ -427,12 +427,15 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     }
     
     // Check if the difference between the good and bad vaules is at least 10%. Othewise don't show the insight.
-    double largerValue = ([self.valueGood doubleValue] > [self.valueBad doubleValue]) ? [self.valueGood doubleValue] : [self.valueBad doubleValue];
-    double smallerValue = ([self.valueGood doubleValue] < [self.valueBad doubleValue]) ? [self.valueGood doubleValue] : [self.valueBad doubleValue];
-    double differenceBetweenGoodAndBadValues = ((largerValue - smallerValue) / largerValue) * 100;
-    
-    if (differenceBetweenGoodAndBadValues < 10) {
-        [self resetInsight];
+    // The Steps and Calories are excluded from this comparion
+    if ((self.insightFactorName != HKQuantityTypeIdentifierDietaryEnergyConsumed) && (self.insightFactorName != HKQuantityTypeIdentifierStepCount)) {
+        double largerValue = ([self.valueGood doubleValue] > [self.valueBad doubleValue]) ? [self.valueGood doubleValue] : [self.valueBad doubleValue];
+        double smallerValue = ([self.valueGood doubleValue] < [self.valueBad doubleValue]) ? [self.valueGood doubleValue] : [self.valueBad doubleValue];
+        double differenceBetweenGoodAndBadValues = ((largerValue - smallerValue) / largerValue) * 100;
+        
+        if (differenceBetweenGoodAndBadValues < 10) {
+            [self resetInsight];
+        }
     }
     
     NSOperationQueue *realMainQueue = [NSOperationQueue mainQueue];
@@ -497,14 +500,16 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 - (NSArray *)markDataset:(NSArray *)dataset
 {
     NSMutableArray *markedDataset = [NSMutableArray new];
-    NSArray *days = [dataset valueForKeyPath:@"@distinctUnionOfObjects.datasetDateKey"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K <> %@)", kDatasetValueKey, @(NSNotFound)];
+    NSArray *readings = [dataset filteredArrayUsingPredicate:predicate];
+    NSArray *days = [readings valueForKeyPath:@"@distinctUnionOfObjects.datasetDateKey"];
     
     for (NSString *day in days) {
         NSMutableDictionary *dayReading = [NSMutableDictionary new];
         [dayReading setObject:day forKey:kDatasetDateKey];
         
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K = %@)", kDatasetDateKey, day];
-        NSArray *groupedReadings = [dataset filteredArrayUsingPredicate:predicate];
+        NSArray *groupedReadings = [readings filteredArrayUsingPredicate:predicate];
         NSMutableArray *avgReadingsForTheDay = [NSMutableArray new];
         
         for (NSDictionary *reading in groupedReadings) {
