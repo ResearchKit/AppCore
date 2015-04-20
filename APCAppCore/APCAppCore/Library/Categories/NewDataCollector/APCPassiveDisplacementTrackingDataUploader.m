@@ -44,7 +44,6 @@ static NSString *const kCSVFilename     = @"data.csv";
 
 
 static  NSString  *kLocationTimeStamp                    = @"timestamp";
-static  NSString  *kLocationDistanceFromHomeLocation     = @"distanceFromHomeLocation";
 static  NSString  *kLocationDistanceFromPreviousLocation = @"distanceFromPreviousLocation";
 static  NSString  *kLocationVerticalAccuracy             = @"verticalAccuracy";
 static  NSString  *kLocationHorizontalAccuracy           = @"horizontalAccuracy";
