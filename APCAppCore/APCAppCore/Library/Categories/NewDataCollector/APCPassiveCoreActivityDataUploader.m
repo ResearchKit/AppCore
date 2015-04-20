@@ -87,7 +87,6 @@ static NSString *const kCSVFilename     = @"data.csv";
             NSNumber* motionConfidence              = @(motionActivitySample.confidence);
             NSString* stringToWrite                 = [NSString stringWithFormat:@"%@,%@,%@\n", motionActivitySample.startDate.toStringInISO8601Format, motionActivity ,motionConfidence];
             
-#warning This may be something that we need to fix.
             //  Write the string of data to the csv file.
             [APCPassiveDataSink createOrAppendString:stringToWrite
                                               toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];

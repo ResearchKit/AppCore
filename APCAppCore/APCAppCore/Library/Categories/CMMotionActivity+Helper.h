@@ -48,5 +48,6 @@
 @interface CMMotionActivity (Helper)
 
 + (NSString *) activityTypeName:(CMMotionActivity*)motionActivitySample;
++ (NSString*)workoutActivityTypeStringRepresentation:(int)num;
 
 @end

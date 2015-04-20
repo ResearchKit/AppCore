@@ -54,13 +54,6 @@
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
     //
-    //    determines whether there is a user's home location
-    //        APCPassiveLocationTrackingHomeLocationAvailable  or
-    //        APCPassiveLocationTrackingHomeLocationUnavailable
-    //
-@property (nonatomic, assign) APCPassiveLocationTrackingHomeLocation  homeLocationStatus;
-
-    //
     //    when there is a user's home location, baseTrackingLocation
     //        maintains the position of the user's home location
     //
@@ -83,13 +76,11 @@
 
 - (instancetype)initWithIdentifier:(NSString*)identifier
             deferredUpdatesTimeout:(NSTimeInterval) __unused anUpdateTimeout
-             andHomeLocationStatus:(APCPassiveLocationTrackingHomeLocation)aHomeLocationStatus
 {
     APCLogDebug(@"Initalizing location tracker");
     self = [super initWithIdentifier:identifier];
     if (self != nil)
     {
-        _homeLocationStatus     = aHomeLocationStatus;
         _deferringUpdates       = NO;
         [self setupInitialLocationParameters];
     }
@@ -104,18 +95,8 @@
 
 - (void)setupInitialLocationParameters
 {
-    if (_homeLocationStatus == APCPassiveLocationTrackingHomeLocationAvailable)
-    {
-        APCUser  *user = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
-        CLLocationDegrees homeLocationLatitude  = [user.homeLocationLat doubleValue];
-        CLLocationDegrees homeLocationLongitude = [user.homeLocationLong doubleValue];
-        _baseTrackingLocation = [[CLLocation alloc] initWithLatitude:homeLocationLatitude longitude:homeLocationLongitude];
-    }
-    else
-    {
-        _baseTrackingLocation       = [[CLLocation alloc] initWithLatitude:0.0 longitude:0.0];
-        _mostRecentUpdatedLocation  = [[CLLocation alloc] initWithLatitude:0.0 longitude:0.0];
-    }
+    _baseTrackingLocation       = [[CLLocation alloc] initWithLatitude:0.0 longitude:0.0];
+    _mostRecentUpdatedLocation  = [[CLLocation alloc] initWithLatitude:0.0 longitude:0.0];
 }
 
 - (void)start
@@ -158,7 +139,7 @@
     //Send to delegate
     if ([self.delegate respondsToSelector:@selector(didRecieveUpdateWithLocationManager:withUpdateLocations:)])
     {
-        [self.delegate didRecieveUpdateWithLocationManager:manager withUpdateLocations:locations andDisplacement:self.homeLocationStatus];
+        [self.delegate didRecieveUpdateWithLocationManager:manager withUpdateLocations:locations];
     }
 }
 

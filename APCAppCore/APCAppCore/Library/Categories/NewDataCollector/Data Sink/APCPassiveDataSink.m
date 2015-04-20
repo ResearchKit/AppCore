@@ -37,26 +37,21 @@
 #import "APCDataVerificationClient.h"
 #import "CMMotionActivity+Helper.h"
 
-static NSString *const kCollectorFolder = @"newCollector";
-static NSString *const kUploadFolder = @"upload";
-
-static NSString *const kIdentifierKey = @"identifier";
-static NSString *const kStartDateKey = @"startDate";
-static NSString *const kEndDateKey = @"endDate";
-
-static NSString *const kInfoFilename = @"info.json";
-static NSString *const kCSVFilename  = @"data.csv";
-
-static long long kKBPerMB = 1024;
-static long long kBytesPerKB = 1024;
-
-static NSUInteger kSecsPerMin = 60;
-static NSUInteger kMinsPerHour = 60;
-static NSUInteger kHoursPerDay = 24;
-static NSUInteger kDaysPerWeek = 7;
+static NSString *const  kCollectorFolder    = @"newCollector";
+static NSString *const  kUploadFolder       = @"upload";
+static NSString *const  kIdentifierKey      = @"identifier";
+static NSString *const  kStartDateKey       = @"startDate";
+static NSString *const  kEndDateKey         = @"endDate";
+static NSString *const  kInfoFilename       = @"info.json";
+static NSString *const  kCSVFilename        = @"data.csv";
+static long long        kKBPerMB            = 1024;
+static long long        kBytesPerKB         = 1024;
+static NSUInteger       kSecsPerMin         = 60;
+static NSUInteger       kMinsPerHour        = 60;
+static NSUInteger       kHoursPerDay        = 24;
+static NSUInteger       kDaysPerWeek        = 7;
 
 @interface APCPassiveHealthKitQuantityDataSink ()
-
 
 @end
 
@@ -65,14 +60,18 @@ static NSUInteger kDaysPerWeek = 7;
 /*********************************************************************************/
 #pragma mark - Abstract methods from delegate
 /*********************************************************************************/
-- (void) didRecieveUpdatedValuesFromCollector:(id) __unused results
-{
-    /* abstract implementation */
+- (void) didRecieveUpdatedValuesFromCollector:(NSArray*)quantitySamples {
+    __weak typeof(self) weakSelf = self;
+    [quantitySamples enumerateObjectsUsingBlock: ^(id quantitySample, NSUInteger __unused idx, BOOL * __unused stop) {
+        __typeof(self) strongSelf = weakSelf;
+        [strongSelf processUpdatesFromCollector:quantitySample];
+        
+    }];
 }
 
-- (void) didRecieveUpdatedValueFromCollector:(id) __unused result
-{
-    /* abstract implementation */
+- (void) didRecieveUpdatedValueFromCollector:(id)result {
+    
+    [self processUpdatesFromCollector:result];
 }
 
 - (void) didRecieveUpdateWithLocationManager:(CLLocationManager *) __unused manager withUpdateLocations:(NSArray *) __unused locations
@@ -84,9 +83,27 @@ static NSUInteger kDaysPerWeek = 7;
 #pragma mark - Abstract methods
 /*********************************************************************************/
 
-- (void)processUpdatesFromCollector:(id) __unused quantitySample {
+- (void)processUpdatesFromCollector:(id)quantitySample {
+
+    [self checkIfCSVStructureHasChanged];
     
-    /* abstract implementation */
+    __weak typeof(self) weakSelf = self;
+    [self.healthKitCollectorQueue addOperationWithBlock:^{
+        __typeof(self) strongSelf = weakSelf;
+        
+        NSString *stringToWrite = [self transformCollectorData:quantitySample];
+        
+        [APCPassiveDataSink createOrAppendString:stringToWrite
+                                          toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
+        
+        [strongSelf checkIfDataNeedsToBeFlushed];
+        
+    }];
+}
+
+- (NSString*)transformCollectorData:(id)dataSample
+{
+    return self.transformer(dataSample);
 }
 
 - (instancetype)initWithIdentifier:(NSString *)identifier columnNames:(NSArray *)columnNames operationQueueName:(NSString *)operationQueueName andDataProcessor:(CSVSerializer)transformer

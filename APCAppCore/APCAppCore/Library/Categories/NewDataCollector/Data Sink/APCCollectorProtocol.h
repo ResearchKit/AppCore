@@ -40,7 +40,6 @@
 
 - (void) didRecieveUpdatedValuesFromCollector:(id)results;
 - (void) didRecieveUpdatedValueFromCollector:(id)result;
-
-- (void) didRecieveUpdateWithLocationManager:(CLLocationManager *)manager withUpdateLocations:(NSArray *)locations andDisplacement:(NSInteger) passiveLocationTrackingHomeLocation;
+- (void) didRecieveUpdateWithLocationManager:(CLLocationManager *)manager withUpdateLocations:(NSArray *)locations;
 
 @end

@@ -62,8 +62,6 @@ static NSString *kLon = @"lon";
     CLLocation * _mostRecentUpdatedLocation;
 }
 
-@property (nonatomic, assign) NSInteger  homeLocationStatus;
-
 @end
 
 @implementation APCPassiveDisplacementTrackingDataUploader
@@ -82,10 +80,8 @@ static NSString *kLon = @"lon";
 }
 
 
-- (void) didRecieveUpdateWithLocationManager:(CLLocationManager *) manager withUpdateLocations:(NSArray *) locations andDisplacement:(NSInteger)passiveLocationTrackingHomeLocation
+- (void) didRecieveUpdateWithLocationManager:(CLLocationManager *) manager withUpdateLocations:(NSArray *) locations
 {
-    self.homeLocationStatus = passiveLocationTrackingHomeLocation;
-    
     __weak typeof(self) weakSelf = self;
     
     [self.healthKitCollectorQueue addOperationWithBlock:^{
@@ -94,30 +90,22 @@ static NSString *kLon = @"lon";
         
         NSArray  *result = nil;
         
-        if (self.homeLocationStatus == 1)
+        if ((self.baseTrackingLocation.coordinate.latitude == 0.0) && (self.baseTrackingLocation.coordinate.longitude == 0.0))
         {
-            CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
-            result = [self locationDictionaryWithLocationManager:manager andDistanceFromReferencePoint:distanceFromReferencePoint];
-        }
-        else
-        {
-            if ((self.baseTrackingLocation.coordinate.latitude == 0.0) && (self.baseTrackingLocation.coordinate.longitude == 0.0))
+            self.baseTrackingLocation = [locations firstObject];
+            self.mostRecentUpdatedLocation = self.baseTrackingLocation;
+            if ([locations count] >= 1)
             {
-                self.baseTrackingLocation = [locations firstObject];
-                self.mostRecentUpdatedLocation = self.baseTrackingLocation;
-                if ([locations count] >= 1)
-                {
-                    CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
-                    result = [self locationDictionaryWithLocationManager:manager andDistanceFromReferencePoint:distanceFromReferencePoint];
-                }
-            }
-            else
-            {
-                self.baseTrackingLocation = self.mostRecentUpdatedLocation;
-                self.mostRecentUpdatedLocation = manager.location;
                 CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
                 result = [self locationDictionaryWithLocationManager:manager andDistanceFromReferencePoint:distanceFromReferencePoint];
             }
+        }
+        else
+        {
+            self.baseTrackingLocation = self.mostRecentUpdatedLocation;
+            self.mostRecentUpdatedLocation = manager.location;
+            CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
+            result = [self locationDictionaryWithLocationManager:manager andDistanceFromReferencePoint:distanceFromReferencePoint];
         }
         
         //Send to delegate
@@ -135,15 +123,8 @@ static NSString *kLon = @"lon";
 
 - (NSArray*)columnNames
 {
-    NSArray* retValue;
-    if (self.homeLocationStatus == 1)
-    {
-        retValue = @[kLocationTimeStamp, kLocationDistanceFromHomeLocation, kLocationDistanceUnit, kLocationHorizontalAccuracy, kLocationVerticalAccuracy];
-    }
-    else
-    {
-        retValue = @[kLocationTimeStamp, kLocationDistanceFromPreviousLocation, kLocationDistanceUnit, kLocationHorizontalAccuracy, kLocationVerticalAccuracy];
-    }
+    NSArray* retValue = @[kLocationTimeStamp, kLocationDistanceFromPreviousLocation, kLocationDistanceUnit, kLocationHorizontalAccuracy, kLocationVerticalAccuracy];
+    
     return retValue;
 }
 

@@ -34,7 +34,7 @@
 #import <Foundation/Foundation.h>
 #import "APCCollectorProtocol.h"
 
-typedef NSString* (^CSVSerializer)(NSInteger n);
+typedef NSString* (^CSVSerializer)(id dataSample);
 
 @interface APCPassiveDataSink : NSObject <APCCollectorProtocol>
 

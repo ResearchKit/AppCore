@@ -35,18 +35,9 @@
 #import "APCDataCollector.h"
 #import <CoreLocation/CoreLocation.h>
 
-#warning uncomment this once the old passive data collector is phased out.
-
-typedef  enum  _APCPassiveLocationTrackingHomeLocation
-{
-    APCPassiveLocationTrackingHomeLocationAvailable,
-    APCPassiveLocationTrackingHomeLocationUnavailable
-}  APCPassiveLocationTrackingHomeLocation;
-
-
 @interface APCCoreLocationBackgroundDataCollector : APCDataCollector
 
-- (instancetype)initWithIdentifier: (NSString*) identifier deferredUpdatesTimeout:(NSTimeInterval)anUpdateTimeout andHomeLocationStatus:(APCPassiveLocationTrackingHomeLocation)aHomeLocationStatus;
+- (instancetype)initWithIdentifier: (NSString*) identifier deferredUpdatesTimeout:(NSTimeInterval)anUpdateTimeout;
 
 @end
 
