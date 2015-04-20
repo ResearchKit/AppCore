@@ -497,14 +497,16 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 - (NSArray *)markDataset:(NSArray *)dataset
 {
     NSMutableArray *markedDataset = [NSMutableArray new];
-    NSArray *days = [dataset valueForKeyPath:@"@distinctUnionOfObjects.datasetDateKey"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K <> %@)", kDatasetValueKey, @(NSNotFound)];
+    NSArray *readings = [dataset filteredArrayUsingPredicate:predicate];
+    NSArray *days = [readings valueForKeyPath:@"@distinctUnionOfObjects.datasetDateKey"];
     
     for (NSString *day in days) {
         NSMutableDictionary *dayReading = [NSMutableDictionary new];
         [dayReading setObject:day forKey:kDatasetDateKey];
         
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K = %@)", kDatasetDateKey, day];
-        NSArray *groupedReadings = [dataset filteredArrayUsingPredicate:predicate];
+        NSArray *groupedReadings = [readings filteredArrayUsingPredicate:predicate];
         NSMutableArray *avgReadingsForTheDay = [NSMutableArray new];
         
         for (NSDictionary *reading in groupedReadings) {
