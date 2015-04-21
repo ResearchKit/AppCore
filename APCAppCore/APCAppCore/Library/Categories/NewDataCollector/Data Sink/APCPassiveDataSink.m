@@ -90,11 +90,11 @@ static NSUInteger       kDaysPerWeek        = 7;
 {
     __weak typeof(self) weakSelf = self;
     
-    [self checkIfCSVStructureHasChanged];
-    [self.healthKitCollectorQueue addOperationWithBlock:^
-    {
-        __typeof(self)  strongSelf      = weakSelf;
-        NSString*       stringToWrite   = [self transformCollectorData:quantitySample];
+    [self.healthKitCollectorQueue addOperationWithBlock:^{
+    
+        __typeof(self) strongSelf = weakSelf;
+        
+        NSString *stringToWrite = [self transformCollectorData:quantitySample];
         
         [APCPassiveDataSink createOrAppendString:stringToWrite
                                           toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];

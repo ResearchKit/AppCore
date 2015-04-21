@@ -107,9 +107,6 @@ static  NSString*       kLon                                    = @"lon";
 
 - (void) didRecieveUpdateWithLocationManager:(CLLocationManager *) manager withUpdateLocations:(NSArray *) locations
 {
-    //  We're calling super to handle changes to the CSV structure.
-    [super didRecieveUpdateWithLocationManager:manager withUpdateLocations:locations];
-    
     __weak typeof(self) weakSelf = self;
     
     [self.healthKitCollectorQueue addOperationWithBlock:^{
