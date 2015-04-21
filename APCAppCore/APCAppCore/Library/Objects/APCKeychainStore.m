@@ -32,6 +32,7 @@
 // 
  
 #import "APCKeychainStore.h"
+#import "APCLog.h"
 
 static NSString *_defaultService;
 
@@ -91,7 +92,6 @@ static NSString *_defaultService;
         [query setObject:(__bridge id)kCFBooleanTrue forKey:(__bridge id)kSecReturnData];
         [query setObject:(__bridge id)kSecMatchLimitOne forKey:(__bridge id)kSecMatchLimit];
         [query setObject:service forKey:(__bridge id)kSecAttrService];
-        [query setObject:key forKey:(__bridge id)kSecAttrGeneric];
         [query setObject:key forKey:(__bridge id)kSecAttrAccount];
 #if !TARGET_IPHONE_SIMULATOR && defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
         if (accessGroup) {
@@ -102,6 +102,7 @@ static NSString *_defaultService;
         CFTypeRef data = nil;
         OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &data);
         if (status != errSecSuccess) {
+            APCLogDebug(@"SecItemCopyMatching query failed with error code: %lii", status);
             return nil;
         }
         
