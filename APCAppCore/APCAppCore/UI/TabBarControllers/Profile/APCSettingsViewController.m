@@ -259,7 +259,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
         APCTaskReminder *reminder = [appDelegate.tasksReminder.reminders objectAtIndex:indexPath.row];
         
-        if (on == YES) {
+        if (on) {
             //turn the reminder on by adding to NSUserDefaults
             [[NSUserDefaults standardUserDefaults]setObject:reminder.reminderBody forKey:reminder.reminderIdentifier];
         }else{

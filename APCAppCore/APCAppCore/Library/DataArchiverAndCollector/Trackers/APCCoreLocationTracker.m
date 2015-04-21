@@ -124,14 +124,14 @@ static NSString *kLon = @"lon";
 
 - (void)startTracking
 {
-    if ([CLLocationManager locationServicesEnabled] == YES)
+    if ([CLLocationManager locationServicesEnabled])
     {
         APCLogDebug(@"Start location tracking");
         self.locationManager.delegate = nil;
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
 
-        if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES &&
+        if ([CLLocationManager significantLocationChangeMonitoringAvailable] &&
             [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)
         {
             APCLogDebug(@"Significant Location Change Monitoring is Available");
@@ -142,9 +142,9 @@ static NSString *kLon = @"lon";
 
 - (void)stopTracking
 {
-    if ([CLLocationManager locationServicesEnabled] == YES)
+    if ([CLLocationManager locationServicesEnabled])
     {
-        if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES)
+        if ([CLLocationManager significantLocationChangeMonitoringAvailable])
         {
             [self.locationManager stopMonitoringSignificantLocationChanges];
         }

@@ -92,10 +92,10 @@ static  CGFloat  kDateLabelPointSize = 13.0;
 
 - (void)markSelected:(BOOL)selected
 {
-    if (([self.date isDateToday]) && (selected == YES)) {
+    if (([self.date isDateToday]) && (selected)) {
         self.dateLabel.textColor       = [UIColor todaysDateTextColor];
         self.dateLabelBackdrop.backgroundColor = [UIColor todaysDateBackgroundColor];
-    } else if (selected == YES) {
+    } else if (selected) {
         self.dateLabel.textColor       = [UIColor selectedDateTextColor];
         self.dateLabelBackdrop.backgroundColor = [UIColor selectedDateBackgroundColor];
     } else {

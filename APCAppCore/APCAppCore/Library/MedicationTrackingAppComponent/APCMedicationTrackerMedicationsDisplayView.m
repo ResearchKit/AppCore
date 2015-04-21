@@ -104,7 +104,7 @@ static  NSUInteger  numberOfDaysOfWeek   = (sizeof(daysOfWeekNames) / sizeof(NSS
 - (void)lozengeButtonWasTapped:(APCLozengeButton *)sender
 {
     if (self.delegate != nil) {
-        if ([self.delegate respondsToSelector:@selector(displayView:lozengeButtonWasTapped:)] == YES) {
+        if ([self.delegate respondsToSelector:@selector(displayView:lozengeButtonWasTapped:)]) {
             [self.delegate displayView:self lozengeButtonWasTapped:sender];
         }
     }

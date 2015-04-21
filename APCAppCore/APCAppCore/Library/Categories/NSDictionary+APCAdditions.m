@@ -79,7 +79,7 @@ static  NSString  *oneThroughFiveNames[] = { @"Once", @"Two times", @"Three time
     }
     
     NSString  *result = @"";
-    if (everyday == YES) {
+    if (everyday) {
         if ([saved unsignedIntegerValue] > 5) {
             result = [NSString stringWithFormat:@"%lu times Every Day", (unsigned long)[saved unsignedIntegerValue]];
         } else {

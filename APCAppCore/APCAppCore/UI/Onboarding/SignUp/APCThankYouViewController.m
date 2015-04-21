@@ -68,7 +68,7 @@
 }
 
 - (IBAction)next:(APCButton *) __unused sender {
-    if (self.emailVerified == YES) {
+    if (self.emailVerified) {
         [self performSelector:@selector(setUserSignedIn) withObject:nil afterDelay:0.4];
     } else {
         [self finishOnboarding];
