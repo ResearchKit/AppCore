@@ -508,8 +508,6 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                     
                     NSInteger defaultIndexOfMyHeightInFeet = 5;
                     NSInteger defaultIndexOfMyHeightInInches = 0;
-                    NSInteger indexOfMyHeightInFeet = defaultIndexOfMyHeightInFeet;
-                    NSInteger indexOfMyHeightInInches = defaultIndexOfMyHeightInInches;
                     
                     double usersHeight = [APCUser heightInInches:self.user.height];
                     
@@ -521,8 +519,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                         NSArray *allPossibleHeightsInFeet = field.pickerData [0];
                         NSArray *allPossibleHeightsInInches = field.pickerData [1];
                         
-                        indexOfMyHeightInFeet = [allPossibleHeightsInFeet indexOfObject: feet];
-                        indexOfMyHeightInInches = [allPossibleHeightsInInches indexOfObject: inches];
+                        NSInteger indexOfMyHeightInFeet = [allPossibleHeightsInFeet indexOfObject: feet];
+                        NSInteger indexOfMyHeightInInches = [allPossibleHeightsInInches indexOfObject: inches];
                         
                         if (indexOfMyHeightInFeet == NSNotFound)
                         {
@@ -1664,17 +1662,13 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     ORKTaskViewController*  consentVC = [[ORKTaskViewController alloc] initWithTask:task taskRunUUID:[NSUUID UUID]];
     
     consentVC.navigationBar.topItem.title = NSLocalizedString(@"Consent", nil);
+	consentVC.delegate = self;
     
-    ORKTaskViewController *delegateConsentVC = [((APCAppDelegate *)[UIApplication sharedApplication].delegate) consentViewController];
+    NSUInteger subviewsCount = consentVC.view.subviews.count;
+    UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:consentVC.view.bounds
+                                                    withCenter:consentVC.view.center];
     
-    delegateConsentVC = consentVC;
-    delegateConsentVC.delegate = self;
-    
-    NSUInteger subviewsCount = delegateConsentVC.view.subviews.count;
-    UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:delegateConsentVC.view.bounds
-                                                    withCenter:delegateConsentVC.view.center];
-    
-    [delegateConsentVC.view insertSubview:watermarkLabel atIndex:subviewsCount];
+    [consentVC.view insertSubview:watermarkLabel atIndex:subviewsCount];
     
     [self presentViewController:consentVC animated:YES completion:nil];
 }
