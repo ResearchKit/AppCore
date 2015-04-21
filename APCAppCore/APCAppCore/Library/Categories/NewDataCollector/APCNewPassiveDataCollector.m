@@ -35,7 +35,6 @@
 #import "APCDataCollector.h"
 #import "APCAppCore.h"
 
-
 static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminatedTime";
 
 @implementation APCNewPassiveDataCollector
@@ -47,10 +46,18 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
     if (self)
     {
         _dataSinkList = [NSMutableArray new];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecameActive) name:UIApplicationDidBecomeActiveNotification object:[UIApplication sharedApplication]];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate) name:UIApplicationWillTerminateNotification object:[UIApplication sharedApplication]];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillSuspend) name:UIApplicationDidEnterBackgroundNotification object:[UIApplication sharedApplication]];
-    
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(appBecameActive)
+                                                     name:UIApplicationDidBecomeActiveNotification
+                                                   object:[UIApplication sharedApplication]];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(appWillTerminate)
+                                                     name:UIApplicationWillTerminateNotification
+                                                   object:[UIApplication sharedApplication]];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(appWillSuspend)
+                                                     name:UIApplicationDidEnterBackgroundNotification
+                                                   object:[UIApplication sharedApplication]];
     }
     
     return self;
@@ -68,8 +75,9 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 - (void)stopCollecting
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        for (APCDataCollector * collector in self.dataSinkList)
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
+    {
+        for (APCDataCollector* collector in self.dataSinkList)
         {
             [collector stop];
         }
@@ -80,7 +88,8 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 {
     for (APCDataCollector * collector in self.dataSinkList)
     {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
+        {
             [collector start];
         });
     }
@@ -88,9 +97,10 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 - (void)appBecameActive
 {
-    for (APCDataCollector * collector in self.dataSinkList)
+    for (APCDataCollector* collector in self.dataSinkList)
     {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
+        {
             [collector start];
         });
     }

@@ -36,7 +36,7 @@
 double DegreesToRadians(double degrees) {return degrees * M_PI / 180;};
 double RadiansToDegrees(double radians) {return radians * 180/M_PI;};
 
-@implementation CLLocation (APCBearing)
+@implementation CLLocation (APCAdditions)
 
 -(double)bearingToLocation:(CLLocation*)destinationLocation
 {
@@ -74,7 +74,7 @@ double RadiansToDegrees(double radians) {return radians * 180/M_PI;};
     double latDeltaSquared  = lat2 - lat1;
     double lonDeltaSquared  = lon2 - lon1;
     
-    return atan(latDeltaSquared/lonDeltaSquared);
+    return atan2(latDeltaSquared, lonDeltaSquared);
 }
 
 @end

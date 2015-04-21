@@ -270,8 +270,6 @@
 		7BEC13D61AA3AA5B00CA316C /* APCFitnessAllocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BEC13D11AA3AA5B00CA316C /* APCFitnessAllocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BEC13D71AA3AA5B00CA316C /* APCFitnessAllocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BEC13D21AA3AA5B00CA316C /* APCFitnessAllocation.m */; };
 		7BEFD7DD1AD596070087F46C /* APCCollectorProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BEFD7D61AD596070087F46C /* APCCollectorProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7BEFD7DE1AD596070087F46C /* APCFileManagerUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BEFD7D71AD596070087F46C /* APCFileManagerUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7BEFD7DF1AD596070087F46C /* APCFileManagerUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BEFD7D81AD596070087F46C /* APCFileManagerUtility.m */; };
 		7BEFD7E01AD596070087F46C /* APCPassiveDataSink.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BEFD7D91AD596070087F46C /* APCPassiveDataSink.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BEFD7E11AD596070087F46C /* APCPassiveDataSink.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BEFD7DA1AD596070087F46C /* APCPassiveDataSink.m */; };
 		7BEFD7E21AD596070087F46C /* APCPassiveHealthKitQuantityDataSink.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BEFD7DB1AD596070087F46C /* APCPassiveHealthKitQuantityDataSink.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -964,8 +962,6 @@
 		7BEC13D11AA3AA5B00CA316C /* APCFitnessAllocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFitnessAllocation.h; sourceTree = "<group>"; };
 		7BEC13D21AA3AA5B00CA316C /* APCFitnessAllocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFitnessAllocation.m; sourceTree = "<group>"; };
 		7BEFD7D61AD596070087F46C /* APCCollectorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCCollectorProtocol.h; path = "Data Sink/APCCollectorProtocol.h"; sourceTree = "<group>"; };
-		7BEFD7D71AD596070087F46C /* APCFileManagerUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCFileManagerUtility.h; path = "Data Sink/APCFileManagerUtility.h"; sourceTree = "<group>"; };
-		7BEFD7D81AD596070087F46C /* APCFileManagerUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCFileManagerUtility.m; path = "Data Sink/APCFileManagerUtility.m"; sourceTree = "<group>"; };
 		7BEFD7D91AD596070087F46C /* APCPassiveDataSink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCPassiveDataSink.h; path = "Data Sink/APCPassiveDataSink.h"; sourceTree = "<group>"; };
 		7BEFD7DA1AD596070087F46C /* APCPassiveDataSink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCPassiveDataSink.m; path = "Data Sink/APCPassiveDataSink.m"; sourceTree = "<group>"; };
 		7BEFD7DB1AD596070087F46C /* APCPassiveHealthKitQuantityDataSink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCPassiveHealthKitQuantityDataSink.h; path = "Data Sink/APCPassiveHealthKitQuantityDataSink.h"; sourceTree = "<group>"; };
@@ -1845,8 +1841,6 @@
 			isa = PBXGroup;
 			children = (
 				7BEFD7D61AD596070087F46C /* APCCollectorProtocol.h */,
-				7BEFD7D71AD596070087F46C /* APCFileManagerUtility.h */,
-				7BEFD7D81AD596070087F46C /* APCFileManagerUtility.m */,
 				7BEFD7D91AD596070087F46C /* APCPassiveDataSink.h */,
 				7BEFD7DA1AD596070087F46C /* APCPassiveDataSink.m */,
 				7BEFD7DB1AD596070087F46C /* APCPassiveHealthKitQuantityDataSink.h */,
@@ -3183,7 +3177,6 @@
 				36257FBD1AA714B60060B95A /* CMMotionActivity+Helper.h in Headers */,
 				F5C363601A40E21000113129 /* APCSmartSurveyTask.h in Headers */,
 				6C7346081A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h in Headers */,
-				7BEFD7DE1AD596070087F46C /* APCFileManagerUtility.h in Headers */,
 				F5B9462A1A7309A20034C522 /* ZZChannelOutput.h in Headers */,
 				F5F12AB41A2F78490015982C /* APCSignUpPermissionsViewController.h in Headers */,
 				7BEC13D61AA3AA5B00CA316C /* APCFitnessAllocation.h in Headers */,
@@ -3657,7 +3650,6 @@
 				F5F12AE91A2F78490015982C /* APCDashboardEditTableViewCell.m in Sources */,
 				F5B947B01A73272C0034C522 /* UIColor+APCAppearance.m in Sources */,
 				F5B947F31A73272C0034C522 /* APCParametersCell.m in Sources */,
-				7BEFD7DF1AD596070087F46C /* APCFileManagerUtility.m in Sources */,
 				F5F129F11A2F78490015982C /* APCDBStatus.m in Sources */,
 				F5B947E61A73272C0034C522 /* APCKeychainStore.m in Sources */,
 				F5F129F71A2F78490015982C /* APCResult+Bridge.m in Sources */,

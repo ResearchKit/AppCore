@@ -60,21 +60,24 @@ static NSUInteger       kDaysPerWeek        = 7;
 /*********************************************************************************/
 #pragma mark - Abstract methods from delegate
 /*********************************************************************************/
-- (void) didRecieveUpdatedValuesFromCollector:(NSArray*)quantitySamples {
+- (void)didRecieveUpdatedValuesFromCollector:(NSArray*)quantitySamples
+{
     __weak typeof(self) weakSelf = self;
-    [quantitySamples enumerateObjectsUsingBlock: ^(id quantitySample, NSUInteger __unused idx, BOOL * __unused stop) {
+    
+    [quantitySamples enumerateObjectsUsingBlock: ^(id quantitySample, NSUInteger __unused idx, BOOL * __unused stop)
+    {
         __typeof(self) strongSelf = weakSelf;
-        [strongSelf processUpdatesFromCollector:quantitySample];
         
+        [strongSelf processUpdatesFromCollector:quantitySample];
     }];
 }
 
-- (void) didRecieveUpdatedValueFromCollector:(id)result {
-    
+- (void)didRecieveUpdatedValueFromCollector:(id)result
+{
     [self processUpdatesFromCollector:result];
 }
 
-- (void) didRecieveUpdateWithLocationManager:(CLLocationManager *) __unused manager withUpdateLocations:(NSArray *) __unused locations
+- (void)didRecieveUpdateWithLocationManager:(CLLocationManager*) __unused manager withUpdateLocations:(NSArray*) __unused locations
 {
     [self checkIfCSVStructureHasChanged];
 }
@@ -83,21 +86,20 @@ static NSUInteger       kDaysPerWeek        = 7;
 #pragma mark - Abstract methods
 /*********************************************************************************/
 
-- (void)processUpdatesFromCollector:(id)quantitySample {
-
-    [self checkIfCSVStructureHasChanged];
-    
+- (void)processUpdatesFromCollector:(id)quantitySample
+{
     __weak typeof(self) weakSelf = self;
-    [self.healthKitCollectorQueue addOperationWithBlock:^{
-        __typeof(self) strongSelf = weakSelf;
-        
-        NSString *stringToWrite = [self transformCollectorData:quantitySample];
+    
+    [self checkIfCSVStructureHasChanged];
+    [self.healthKitCollectorQueue addOperationWithBlock:^
+    {
+        __typeof(self)  strongSelf      = weakSelf;
+        NSString*       stringToWrite   = [self transformCollectorData:quantitySample];
         
         [APCPassiveDataSink createOrAppendString:stringToWrite
                                           toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
         
         [strongSelf checkIfDataNeedsToBeFlushed];
-        
     }];
 }
 
@@ -106,11 +108,12 @@ static NSUInteger       kDaysPerWeek        = 7;
     return self.transformer(dataSample);
 }
 
-- (instancetype)initWithIdentifier:(NSString *)identifier columnNames:(NSArray *)columnNames operationQueueName:(NSString *)operationQueueName andDataProcessor:(CSVSerializer)transformer
+- (instancetype)initWithIdentifier:(NSString*)identifier columnNames:(NSArray*)columnNames operationQueueName:(NSString*)operationQueueName andDataProcessor:(CSVSerializer)transformer
 {
     self = [super init];
-    if (self) {
     
+    if (self)
+    {
         //Unique configuration for collector
         _identifier     = identifier;
         _columnNames    = columnNames;
@@ -123,9 +126,12 @@ static NSUInteger       kDaysPerWeek        = 7;
         [self checkIfCSVStructureHasChanged];
         
         //General configuration for file management
-        _registeredTrackers = [NSMutableDictionary dictionary];
-        NSString * documentsDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-        _collectorsPath = [documentsDir stringByAppendingPathComponent:kCollectorFolder];
+        NSString* documentsDir  = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+
+#warning DELETE THIS LINE BELOW. I believe it isn't used.
+        _registeredTrackers     = [NSMutableDictionary dictionary];
+        _collectorsPath         = [documentsDir stringByAppendingPathComponent:kCollectorFolder];
+        
         [APCPassiveHealthKitQuantityDataSink createFolderIfDoesntExist:_collectorsPath];
         [APCPassiveHealthKitQuantityDataSink createFolderIfDoesntExist:[_collectorsPath stringByAppendingPathComponent:kUploadFolder]];
         
@@ -134,7 +140,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     return self;
 }
 
-- (NSString *)collectorsUploadPath
+- (NSString*)collectorsUploadPath
 {
     return [self.collectorsPath stringByAppendingPathComponent:kUploadFolder];
 }
@@ -146,18 +152,23 @@ static NSUInteger       kDaysPerWeek        = 7;
 - (void) loadOrCreateDataFiles
 {
     self.folder = [self.collectorsPath stringByAppendingPathComponent:self.identifier];
-    NSString * infoFilePath = [self.folder stringByAppendingPathComponent:kInfoFilename];
-    NSDictionary * infoDictionary;
+    
+    NSString*       infoFilePath    = [self.folder stringByAppendingPathComponent:kInfoFilename];
+    NSDictionary*   infoDictionary  = nil;
+
     //Create log files
-    if (![[NSFileManager defaultManager] fileExistsAtPath:self.folder]) {
-        NSError * folderCreationError;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:self.folder])
+    {
+        NSError* folderCreationError = nil;
+        
         if (![[NSFileManager defaultManager] createDirectoryAtPath:self.folder
                                        withIntermediateDirectories:YES
                                                         attributes:@{
                                                                      NSFileProtectionKey :
                                                                          NSFileProtectionCompleteUntilFirstUserAuthentication
                                                                      }
-                                                             error:&folderCreationError]) {
+                                                             error:&folderCreationError])
+        {
             APCLogError2(folderCreationError);
         }
         else
@@ -165,47 +176,51 @@ static NSUInteger       kDaysPerWeek        = 7;
             [self resetDataFilesForTracker];
         }
     }
+    
     NSData* dictData = [NSData dataWithContentsOfFile:infoFilePath];
-    infoDictionary = [NSDictionary dictionaryWithJSONString:[[NSString alloc] initWithData:dictData encoding:NSUTF8StringEncoding]];
+    
+    infoDictionary      = [NSDictionary dictionaryWithJSONString:[[NSString alloc] initWithData:dictData
+                                                                                       encoding:NSUTF8StringEncoding]];
     self.infoDictionary = infoDictionary;
 }
 
 - (void) checkIfCSVStructureHasChanged
 {
-    [self.healthKitCollectorQueue addOperationWithBlock:^{
-        
-        NSString * csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
+    [self.healthKitCollectorQueue addOperationWithBlock:^
+    {
+        NSString* csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
         
         if ([[NSFileManager defaultManager] fileExistsAtPath:csvFilePath])
         {
             // read everything from text
-            NSString* fileContents =
-            [NSString stringWithContentsOfFile:csvFilePath
-                                      encoding:NSUTF8StringEncoding error:nil];
+            NSError*    fileContentsError   = nil;
+            NSString*   fileContents        = [NSString stringWithContentsOfFile:csvFilePath
+                                                                        encoding:NSUTF8StringEncoding
+                                                                           error:&fileContentsError];
+            
+            if (fileContentsError)
+            {
+                APCLogError2(fileContentsError);
+            }
             
             // first, separate by new line
-            NSArray* dataSeparatedByNewLine =
-            [fileContents componentsSeparatedByCharactersInSet:
-             [NSCharacterSet newlineCharacterSet]];
+            NSArray* dataSeparatedByNewLine = [fileContents componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
             
             if (dataSeparatedByNewLine.count > 0)
             {
-                NSString* expectedColumn =
-                [dataSeparatedByNewLine objectAtIndex:0];
+                NSString*   expectedColumn          = [dataSeparatedByNewLine objectAtIndex:0];
+                NSArray*    oldColumnStructure      = [expectedColumn componentsSeparatedByString:@","];
+                NSArray*    possibleNewStructure    = [NSArray arrayWithArray:self.columnNames];
                 
-                NSArray* oldColumnStructure = [expectedColumn componentsSeparatedByString:@","];
-                
-                NSArray* possibleNewStructure = [NSArray arrayWithArray:self.columnNames];
-                
-                if (![oldColumnStructure isEqualToArray:possibleNewStructure] && dataSeparatedByNewLine.count > 1)
+                if (![oldColumnStructure isEqualToArray:possibleNewStructure] && dataSeparatedByNewLine.count == 1)
+                {
+                    //If there isn't data then reset the file.
+                    [self resetDataFilesForTracker];
+                }
+                else
                 {
                     //If there's data then upload this data.
                     [self flush];
-                    [self resetDataFilesForTracker];
-                }
-                else if (![oldColumnStructure isEqualToArray:possibleNewStructure] && dataSeparatedByNewLine.count == 1)
-                {
-                    //If there isn't data then reset the file.
                     [self resetDataFilesForTracker];
                 }
             }
@@ -215,34 +230,37 @@ static NSUInteger       kDaysPerWeek        = 7;
                 [self resetDataFilesForTracker];
             }
         }
-        
     }];
 }
 
 - (void) checkIfDataNeedsToBeFlushed
 {
     //Check for size
-    NSString * csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
-    NSError * error;
-    NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:csvFilePath error:&error];
-    APCLogError2(error);
+    NSString*       csvFilePath         = [self.folder stringByAppendingPathComponent:kCSVFilename];
+    NSError*        error               = nil;
+    NSDictionary*   fileDictionary      = [[NSFileManager defaultManager] attributesOfItemAtPath:csvFilePath
+                                                                                           error:&error];
+    if (error)
+    {
+        APCLogError2(error);
+    }
+    
     unsigned long long filesize = [fileDictionary fileSize];
-    if (filesize >= self.sizeThreshold) {
+    if (filesize >= self.sizeThreshold)
+    {
         [self flush];
     }
     
     //Check for start date
-    NSDictionary * dictionary = self.infoDictionary;
-    NSString * startDateString = dictionary[kStartDateKey];
-    NSDate * startDate = [self datefromDateString:startDateString];
-    if ([[NSDate date] timeIntervalSinceDate:startDate] >= self.stalenessInterval) {
+    NSDictionary*   dictionary          = self.infoDictionary;
+    NSString*       startDateString     = dictionary[kStartDateKey];
+    NSDate*         startDate           = [self datefromDateString:startDateString];
+    
+    if ([[NSDate date] timeIntervalSinceDate:startDate] >= self.stalenessInterval)
+    {
         [self flush];
     }
-    
-
 }
-/**********************************************************************/
-
 
 
 /*********************************************************************************/
@@ -252,8 +270,13 @@ static NSUInteger       kDaysPerWeek        = 7;
 - (void)flush
 {
     //Write the end date
-    NSMutableDictionary * infoDictionary = [self.infoDictionary mutableCopy];
-    infoDictionary[kEndDateKey]   = [[NSDate date] toStringInISO8601Format];
+    NSMutableDictionary*    infoDictionary  = [self.infoDictionary mutableCopy];
+    NSString*               endDate         = [[NSDate date] toStringInISO8601Format];
+    
+    if (endDate != nil)
+    {
+        infoDictionary[kEndDateKey] = endDate;
+    }
     
     NSDate *startDate = nil;
     

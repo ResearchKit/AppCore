@@ -53,22 +53,18 @@ typedef NSString* (^CSVSerializer)(id dataSample);
 @property (nonatomic, strong)   NSString*               csvFilename;
 @property (nonatomic, strong)   NSOperationQueue*       healthKitCollectorQueue;
 
-
-
-
-- (instancetype)initWithIdentifier:(NSString *)identifier
-                       columnNames:(NSArray *)columnNames
-                operationQueueName:(NSString *)operationQueueName
+- (instancetype)initWithIdentifier:(NSString*)identifier
+                       columnNames:(NSArray*)columnNames
+                operationQueueName:(NSString*)operationQueueName
                   andDataProcessor:(CSVSerializer)transformer;
+- (void)didRecieveUpdatedValuesFromCollector:(id)results;
+- (void)didRecieveUpdatedValueFromCollector:(id)result;
+- (void)processUpdatesFromCollector:(id)quantitySample;
+- (void)checkIfDataNeedsToBeFlushed;
 
-- (void) didRecieveUpdatedValuesFromCollector:(id) results;
-- (void) didRecieveUpdatedValueFromCollector:(id) result;
-- (void)processUpdatesFromCollector:(id) quantitySample;
-- (void) checkIfDataNeedsToBeFlushed;
-
-+ (void) createOrAppendString: (NSString*) string toFile: (NSString*) path;
-+ (void) createOrReplaceString: (NSString*) string toFile: (NSString*) path;
-+ (void) createFolderIfDoesntExist: (NSString*) path;
-+ (void) deleteFileIfExists: (NSString*) path;
++ (void)createOrAppendString:(NSString*)string toFile:(NSString*)path;
++ (void)createOrReplaceString:(NSString*)string toFile:(NSString*)path;
++ (void)createFolderIfDoesntExist:(NSString*)path;
++ (void)deleteFileIfExists:(NSString*)path;
 
 @end

@@ -68,10 +68,9 @@ static  NSString*       kLon                                    = @"lon";
     NSString*   timestamp           = manager.location.timestamp.description;
     NSString*   distance            = [NSString stringWithFormat:@"%f", distanceFromReferencePoint];
     NSString*   unit                = @"meters"; //Hardcoded as Core Locations uses only meters
-    double      bearing             = [previousLocation bearingToLocation:manager.location];
-    NSString*   bearingUnit         = @"degrees";
     double      magnitude           = [previousLocation calculateMagnitudeToLocation:manager.location];
     double      direction           = [previousLocation calculateDirectionFromLocation:manager.location];
+    NSString*   directionUnit       = @"radians";
     
     //  A negative value of manager.location.speed indicates an invalid speed.
     NSString*   speed               = nil;
@@ -102,7 +101,7 @@ static  NSString*       kLon                                    = @"lon";
     NSString*   horizontalAccuracy  = [NSString stringWithFormat:@"%f", manager.location.horizontalAccuracy];
     NSString*   verticalAccuracy    = [NSString stringWithFormat:@"%f", manager.location.verticalAccuracy];
     
-    return  @[timestamp, distance, unit, @(bearing), bearingUnit, @(magnitude), @(direction), speed, speedUnit, floor, horizontalAccuracy, verticalAccuracy];
+    return  @[timestamp, distance, unit, @(magnitude), @(direction), directionUnit, speed, speedUnit, floor, horizontalAccuracy, verticalAccuracy];
 }
 
 
@@ -140,7 +139,7 @@ static  NSString*       kLon                                    = @"lon";
         //Send to delegate
         if (result)
         {  
-            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
+            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
                                                                    result[0],
                                                                    result[1],
                                                                    result[2],
@@ -151,8 +150,7 @@ static  NSString*       kLon                                    = @"lon";
                                                                    result[7],
                                                                    result[8],
                                                                    result[9],
-                                                                   result[10],
-                                                                   result[11]];
+                                                                   result[10]];
 
             //Write to file
             [APCPassiveDataSink createOrAppendString:stringToWrite

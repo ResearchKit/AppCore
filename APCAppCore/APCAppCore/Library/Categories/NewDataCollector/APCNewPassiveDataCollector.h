@@ -35,9 +35,9 @@
 
 @interface APCNewPassiveDataCollector : NSObject
 
--(void) addDataSink: (id) dataSync;
--(void) startCollecting;
--(void) stopCollecting;
+- (void)addDataSink:(id)dataSync;
+- (void)startCollecting;
+- (void)stopCollecting;
 
 @property (nonatomic, strong)  NSDate*          terminationDate;
 @property (nonatomic, strong)  NSMutableArray*  dataSinkList;

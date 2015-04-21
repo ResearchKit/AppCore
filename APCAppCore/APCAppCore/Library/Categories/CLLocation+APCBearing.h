@@ -33,7 +33,7 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-@interface CLLocation (APCBearing)
+@interface CLLocation (APCAdditions)
 
 -(double)bearingToLocation:(CLLocation*)destinationLocation;
 -(double)calculateMagnitudeToLocation:(CLLocation*)destinationLocation;
