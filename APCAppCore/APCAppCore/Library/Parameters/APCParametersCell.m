@@ -45,6 +45,10 @@ static CGFloat cellHeight = 114.0;
 
 @implementation APCParametersCell
 
+- (void)dealloc {
+    _parameterTextInput.delegate = nil;
+}
+
 - (void)awakeFromNib {
     // Initialization code
     [self.parameterTextInput setDelegate:self];

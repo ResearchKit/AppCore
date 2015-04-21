@@ -46,6 +46,11 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 
 @implementation APCSignInViewController
 
+- (void)dealloc {
+    _userHandleTextField.delegate = nil;
+    _passwordTextField.delegate = nil;
+}
+
 #pragma mark - Life Cycle
 
 - (void)viewDidLoad {

@@ -65,6 +65,11 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 
 @implementation APCMedicationColorViewController
 
+- (void)dealloc {
+    _tabulator.delegate = nil;
+    _tabulator.dataSource = nil;
+}
+
 #pragma  mark  -  Navigation Bar Button Action Methods
 
 - (IBAction)doneButtonTapped:(UIBarButtonItem *) __unused sender

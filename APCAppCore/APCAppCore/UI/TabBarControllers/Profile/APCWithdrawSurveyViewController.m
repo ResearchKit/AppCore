@@ -48,6 +48,11 @@
 
 @implementation APCWithdrawSurveyViewController
 
+- (void)dealloc {
+    _tableView.delegate = nil;
+    _tableView.dataSource = nil;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     

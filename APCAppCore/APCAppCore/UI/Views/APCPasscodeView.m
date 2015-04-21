@@ -60,6 +60,10 @@ static CGFloat const kAPCPasscodeViewPinLength = 4;
     return self;
 }
 
+- (void)dealloc {
+    _hiddenTextField.delegate = nil;
+}
+
 - (void) addControls {
     _digitViews = [NSMutableArray new];
     
