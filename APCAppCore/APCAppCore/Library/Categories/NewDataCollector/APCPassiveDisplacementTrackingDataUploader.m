@@ -59,7 +59,8 @@ static  NSString*       kLon                                    = @"lon";
 @end
 
 @implementation APCPassiveDisplacementTrackingDataUploader
-
+@synthesize baseTrackingLocation = _baseTrackingLocation;
+@synthesize mostRecentUpdatedLocation = _mostRecentUpdatedLocation;
 - (NSArray*)locationDictionaryWithLocationManager:(CLLocationManager*)manager
                        distanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
                               andPreviousLocation:(CLLocation*)previousLocation
@@ -74,23 +75,23 @@ static  NSString*       kLon                                    = @"lon";
     
     //  A negative value of manager.location.speed indicates an invalid speed.
     NSString*   speed               = nil;
-    if (manager.location.speed > 0)
+    if (manager.location.speed >= 0)
     {
         double pace = manager.location.speed;
         speed = [NSString stringWithFormat:@"%f", pace];
     }
     else
     {
-        speed = @"Invalid speed";
+        speed = @"invalid speed";
     }
 
     NSString*   speedUnit           = @"meters/second";
-    
     NSString*   floor               = nil;
     
+    //  A nil value of manager.location.floor indicates that this info is unavailable.
     if (manager.location.floor == nil)
     {
-        floor = @"Not available";
+        floor = @"not available";
     }
     else
     {
@@ -177,14 +178,14 @@ static  NSString*       kLon                                    = @"lon";
 
 - (void)setBaseTrackingLocation:(CLLocation *)baseTrackingLocation
 {
-    self.baseTrackingLocation = baseTrackingLocation;
+    _baseTrackingLocation = baseTrackingLocation;
     NSDictionary* dict = @{kLat : @(baseTrackingLocation.coordinate.latitude), kLon : @(baseTrackingLocation.coordinate.longitude)};
     [self writeDictionary:dict toPath:[self baseTrackingFilePath]];
 }
 
 - (CLLocation*)baseTrackingLocation
 {
-    if (!self.baseTrackingLocation)
+    if (!_baseTrackingLocation)
     {
         if (self.folder)
         {
@@ -204,26 +205,26 @@ static  NSString*       kLon                                    = @"lon";
                 if (jsonString)
                 {
                     dict = [NSDictionary dictionaryWithJSONString:jsonString];
-                    self.baseTrackingLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue]
+                    _baseTrackingLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue]
                                                                            longitude:[dict[kLon] doubleValue]];
                 }
             }
         }
     }
     
-    return self.baseTrackingLocation;
+    return _baseTrackingLocation;
 }
 
 - (void)setMostRecentUpdatedLocation:(CLLocation *)mostRecentUpdatedLocation
 {
-    self.mostRecentUpdatedLocation = mostRecentUpdatedLocation;
+    _mostRecentUpdatedLocation = mostRecentUpdatedLocation;
     NSDictionary * dict = @{kLat : @(mostRecentUpdatedLocation.coordinate.latitude), kLon : @(mostRecentUpdatedLocation.coordinate.longitude)};
     [self writeDictionary:dict toPath:[self recentLocationFilePath]];
 }
 
 - (CLLocation*)mostRecentUpdatedLocation
 {
-    if (!self.mostRecentUpdatedLocation)
+    if (!_mostRecentUpdatedLocation)
     {
         if (self.folder)
         {
@@ -244,14 +245,14 @@ static  NSString*       kLon                                    = @"lon";
                 if (jsonString)
                 {
                     dict = [NSDictionary dictionaryWithJSONString:jsonString];
-                    self.mostRecentUpdatedLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue]
+                    _mostRecentUpdatedLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue]
                                                                                 longitude:[dict[kLon] doubleValue]];
                 }
             }
         }
     }
     
-    return self.mostRecentUpdatedLocation;
+    return _mostRecentUpdatedLocation;
 }
 
 - (void)writeDictionary:(NSDictionary*)dict toPath:(NSString*)path
