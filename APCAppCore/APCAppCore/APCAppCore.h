@@ -80,17 +80,11 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import "APCAppCore/ZZConstants.h"
 #import "APCAppCore/ZZError.h"
 #import "APCAppCore/APCCMS.h"
-
 #import "APCAppCore/APCNewPassiveDataCollector.h"
 #import "APCAppCore/APCCollectorProtocol.h"
 #import "APCAppCore/APCHealthKitBackgroundDataCollector.h"
-#import "APCAppCore/APCPassiveHealthKitQuantityDataSink.h"
 #import "APCAppCore/APCDataCollector.h"
 #import "APCAppCore/APCPassiveDataSink.h"
-#import "APCAppCore/APCPassiveHealthKitWorkoutDataUploader.h"
-#import "APCAppCore/APCPassiveHealthKitSleepDataUploader.h"
-#import "APCAppCore/APCPassiveCoreActivityDataUploader.h"
-
 #import "APCAppCore/APCPassiveDisplacementTrackingDataUploader.h"
 #import "APCAppCore/APCCoreMotionBackgroundDataCollector.h"
 #import "APCAppCore/APCDisplacementTrackingCollector.h"
