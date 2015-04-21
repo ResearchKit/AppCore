@@ -98,10 +98,13 @@ static  NSString*       kLon                                    = @"lon";
         floor = [NSString stringWithFormat:@"%ld", (long)level];
     }
     
+    //  Altitude of the location can be positive (above sea level) or negative (below sea level).
+    double      altitude            = manager.location.altitude;
+    
     NSString*   horizontalAccuracy  = [NSString stringWithFormat:@"%f", manager.location.horizontalAccuracy];
     NSString*   verticalAccuracy    = [NSString stringWithFormat:@"%f", manager.location.verticalAccuracy];
     
-    return  @[timestamp, distance, unit, @(magnitude), @(direction), directionUnit, speed, speedUnit, floor, horizontalAccuracy, verticalAccuracy];
+    return  @[timestamp, distance, unit, @(magnitude), @(direction), directionUnit, speed, speedUnit, floor, @(altitude), horizontalAccuracy, verticalAccuracy];
 }
 
 
@@ -136,7 +139,7 @@ static  NSString*       kLon                                    = @"lon";
         //Send to delegate
         if (result)
         {  
-            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
+            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
                                                                    result[0],
                                                                    result[1],
                                                                    result[2],
@@ -147,7 +150,8 @@ static  NSString*       kLon                                    = @"lon";
                                                                    result[7],
                                                                    result[8],
                                                                    result[9],
-                                                                   result[10]];
+                                                                   result[10],
+                                                                   result[11]];
 
             //Write to file
             [APCPassiveDataSink createOrAppendString:stringToWrite

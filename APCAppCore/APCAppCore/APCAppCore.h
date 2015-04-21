@@ -85,7 +85,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import "APCAppCore/APCCollectorProtocol.h"
 #import "APCAppCore/APCHealthKitBackgroundDataCollector.h"
 #import "APCAppCore/APCPassiveHealthKitQuantityDataSink.h"
-#import "APCAppCore/APCFileManagerUtility.h"
 #import "APCAppCore/APCDataCollector.h"
 #import "APCAppCore/APCPassiveDataSink.h"
 #import "APCAppCore/APCPassiveHealthKitWorkoutDataUploader.h"
