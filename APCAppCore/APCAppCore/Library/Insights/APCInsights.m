@@ -238,10 +238,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         if (sortedReadings.count == 1) {
             [self.insightPoints addObjectsFromArray:sortedReadings];
         } else {
-            NSDictionary *highLowReadings = [self splitArray:sortedReadings];
-            
-            [self.insightPoints addObjectsFromArray:highLowReadings[kInsightDatasetLowKey]];
-            [self.insightPoints addObjectsFromArray:highLowReadings[kInsightDatasetHighKey]];
+            [self.insightPoints addObjectsFromArray:sortedReadings];
         }
         
         [self fetchDataFromHealthKitForItemsInInsightQueue];
@@ -572,82 +569,6 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     
     [self.insightPoints removeAllObjects];
     [self.insightPointValues removeAllObjects];
-}
-
-/**
- * @brief   Get the index of the median number in an array
- *
- * @param   listOfNumbers   An array of NSNumbers
- *
- * @return  Returns the index of the median number in the provided array.
- *
- * @note    When there are even number of elements in the array, the median index that is returned
- *          is for the first number of the two middle numbers.
- */
-- (NSUInteger)indexOfMedianInArray:(NSArray *)listOfNumbers
-{
-    return [[self medianInArray:listOfNumbers] integerValue];
-}
-
-/**
- * @brief   Splits an array at the provided index
- *
- * @param   listOfReadings  An array of NSNumbers
- *
- * @return  An NSDictionary with two keys: kInsightDatasetHighKey and kInsightDatasetLowKey
- */
-- (NSDictionary *)splitArray:(NSArray *)listOfReadings
-{
-    NSMutableDictionary *highLowReadings = [NSMutableDictionary new];
-    NSArray *readingNumbers = [listOfReadings valueForKey:kInsightDatasetDayAverage];
-    NSUInteger medianIndex = [self indexOfMedianInArray:readingNumbers];
-    NSRange range;
-    
-    range.location = 0;
-    range.length = medianIndex;
-    
-    NSArray *lowReadings = [listOfReadings subarrayWithRange:range];
-    
-    range.location = range.length;
-    range.length = listOfReadings.count  - range.length;
-    
-    NSArray *highReadings = [listOfReadings subarrayWithRange:range];
-    
-    highLowReadings[kInsightDatasetHighKey] = [highReadings copy];
-    highLowReadings[kInsightDatasetLowKey]  = [lowReadings copy];
-    
-    return highLowReadings;
-}
-
-/**
- * @brief   Returns the index of the median in an array of NSNumbers.
- *
- * @param   listOfNumbers   Array of NSNumbers
- *
- * @return  Returns an NSNumber that is an index the median number.
- *
- */
-- (NSNumber *)medianInArray:(NSArray *)listOfNumbers
-{
-    NSNumber *result = nil;
-    NSUInteger middle;
-    
-    // When there is only one element in the array
-    if (listOfNumbers.count == 1) {
-        middle = 0;
-    } else {
-    
-        NSArray * sorted = [listOfNumbers sortedArrayUsingSelector:@selector(compare:)];
-        
-        if (listOfNumbers.count % 2 != 0) {  //odd number of members
-            middle = (sorted.count / 2);
-        } else {
-            // For even number of elements
-            middle = (sorted.count / 2) - 1;
-        }
-    }
-    
-    return result;
 }
 
 @end
