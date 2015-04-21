@@ -92,6 +92,7 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setupNotifications];
     
     self.navigationItem.title = NSLocalizedString(@"Activities", @"Activities");
     self.tableView.backgroundColor = [UIColor appSecondaryColor4];
@@ -111,10 +112,19 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
     [super viewWillAppear:animated];
  
     [self setUpNavigationBarAppearance];
+
+    [self reloadData];
+    APCLogViewControllerAppeared();
+}
+
+-(void) setupNotifications{
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reloadData)
                                                  name:APCUpdateActivityNotification object:nil];
-    APCLogViewControllerAppeared();
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateActivities:)
+                                                 name:APCDayChangedNotification object:nil];
 }
 
 -(void)setUpNavigationBarAppearance{
@@ -125,7 +135,6 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self reloadData];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -200,7 +209,6 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
     else if ([task isKindOfClass:[APCScheduledTask class]])
     {        
         cell.titleLabel.text = scheduledTask.task.taskTitle;
-        // TODO: This is a Temporary Fix and Will be Re-Factored into Application-Level
         if ([scheduledTask.task.taskID isEqualToString:medicationTrackerTaskId] == NO) {
             cell.confirmationView.completed = scheduledTask.completed.boolValue;
         }
@@ -349,7 +357,6 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
         else
         {
             [appDelegate.scheduler updateScheduledTasksIfNotUpdating:YES];
-            [weakSelf reloadData];
         }
         [weakSelf.refreshControl endRefreshing];
         weakSelf.taskSelectionDisabled = NO;
@@ -367,11 +374,12 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
     NSNumber *remainingTasks = (completedScheduledTasks < allScheduledTasks) ? @(allScheduledTasks - completedScheduledTasks) : @(0);
     
     UITabBarItem *activitiesTab = appDelegate.tabster.tabBar.selectedItem;
-    
-    if ([remainingTasks integerValue] != 0) {
-        activitiesTab.badgeValue = [remainingTasks stringValue];
-    } else {
-        activitiesTab.badgeValue = nil;
+    if (activitiesTab.tag == (NSInteger)kIndexOfActivitesTab) {
+        if ([remainingTasks integerValue] != 0) {
+            activitiesTab.badgeValue = [remainingTasks stringValue];
+        } else {
+            activitiesTab.badgeValue = nil;
+        }
     }
     
     [self reloadTableArray];
@@ -520,6 +528,7 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
         
         NSArray *filteredTasksArray = [ungroupedScheduledTasks filteredArrayUsingPredicate:predicate];
         
+        //if there is more than 1 task for the taskID, create an APCGroupedScheduledTask
         if (filteredTasksArray.count > 1) {
             APCScheduledTask *scheduledTask = filteredTasksArray.firstObject;
             APCGroupedScheduledTask *groupedTask = [[APCGroupedScheduledTask alloc] init];
@@ -531,7 +540,7 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
             
             [returnArray addObject:groupedTask];
         }
-        else
+        else if(filteredTasksArray.count == 1)
         {
             [returnArray addObject:filteredTasksArray.firstObject];
         }

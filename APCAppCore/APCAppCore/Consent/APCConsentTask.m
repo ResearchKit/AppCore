@@ -33,6 +33,7 @@
  
 #import "APCConsentTask.h"
 #import "APCLog.h"
+#import "APCConsentQuestion.h"
 #import "APCConsentBooleanQuestion.h"
 #import "APCConsentInstructionQuestion.h"
 #import "APCConsentTextChoiceQuestion.h"
@@ -66,6 +67,8 @@ static NSString*    kTextChoicesTag                     = @"textChoices";
 static NSString*    kAllowedFailuresCountTag            = @"allowedFailures";
 static NSString*    kSharingTag                         = @"sharing";
 
+static NSString*    kStepIdentifierSuffixStart          = @"+X";
+
 
 
 @interface APCConsentTask ()
@@ -80,11 +83,15 @@ static NSString*    kSharingTag                         = @"sharing";
 
 //  Quiz properties
 @property (nonatomic, copy)   NSArray*          questions;
+@property (nonatomic, strong) NSString*         currentQuestionStepSuffix;
+@property (nonatomic, assign) NSUInteger        currentQuestionStepSuffixValue;
+
 @property (nonatomic, copy)   NSString*         successTitle;
 @property (nonatomic, copy)   NSString*         failureTitle;
 @property (nonatomic, copy)   NSString*         successMessage;
 @property (nonatomic, copy)   NSString*         failureMessage;
 @property (nonatomic, assign) NSUInteger        maxAllowedFailure;
+
 @property (nonatomic, assign) NSInteger         indexOfFirstCustomStep;
 @property (nonatomic, assign) NSInteger         indexOfFirstQuizStep;
 
@@ -154,6 +161,9 @@ static NSString*    kSharingTag                         = @"sharing";
     _indexOfFirstCustomStep = NSNotFound;
     _indexOfFirstQuizStep   = NSNotFound;
     
+    _currentQuestionStepSuffix      = @"";
+    _currentQuestionStepSuffixValue = 0;
+    
     [self loadFromJson:fileName];
     
     ORKConsentSignature*    signature = [ORKConsentSignature signatureForPersonWithTitle:@"Participant"
@@ -200,29 +210,14 @@ static NSString*    kSharingTag                         = @"sharing";
     [consentSteps addObjectsFromArray:customSteps];
     
     _indexOfFirstQuizStep = consentSteps.count;
-    for (APCConsentQuestion* q in self.questions)
+
+    for (APCConsentQuestion* question in self.questions)
     {
-        [consentSteps addObject:q.instantiateRkQuestion];
+        [consentSteps addObject:question.instantiateRkQuestion];
     }
-    
     [consentSteps addObject:reviewStep];
     
     return consentSteps;
-}
-
-
-- (NSArray*)instantiateQuiz:(NSArray*)rawQuizArray
-{
-    NSMutableArray* rkQuestions = [NSMutableArray arrayWithCapacity:rawQuizArray.count];
-    
-    for (APCConsentQuestion* rawQuestion in rawQuizArray)
-    {
-        ORKStep*    step = [rawQuestion instantiateRkQuestion];
-        
-        [rkQuestions addObject:step];
-    }
-    
-    return rkQuestions;
 }
 
 - (ORKStep*)failureStep
@@ -260,49 +255,31 @@ static NSString*    kSharingTag                         = @"sharing";
 
 - (ORKStep*)stepAfterStep:(ORKStep*)step withResult:(ORKTaskResult*)result
 {
-#if 0
-    ORKStep*    nextStep = nil;
-    
-    if (step == nil)
-    {
-        nextStep = self.consentSteps.firstObject;
-    }
-    else
-    {
-        NSUInteger  ndx = [self.consentSteps indexOfObject:step];
-        if (ndx < self.consentSteps.count - 1)
-        {
-            nextStep = self.consentSteps[ndx + 1];
-        }
-    }
-    
-    NSLog(@"stepAfterStep: %@ -> %@", step.identifier, nextStep.identifier);
-    
-    return nextStep;
-#endif
     BOOL(^compareStep)(ORKStep*, NSUInteger, BOOL*) = ^(ORKStep* s, NSUInteger  __unused ndx, BOOL* __unused stop)
     {
-        return [s.identifier isEqualToString:step.identifier];
+        return [s.identifier isEqualToString: step.identifier];
     };
+    
     BOOL(^compareQuestion)(APCConsentQuestion*, NSUInteger, BOOL*) = ^(APCConsentQuestion* q, NSUInteger __unused ndx, BOOL* __unused stop)
     {
-        return [q.identifier isEqualToString:step.identifier];
+        return [q.extendedIdentifier isEqualToString: step.identifier];
     };
+    
     APCConsentQuestion*(^findQuestion)(NSString*) = ^(NSString* identifier)
     {
         APCConsentQuestion* target = nil;
         
         for (APCConsentQuestion* q in self.questions)
         {
-            if ([q.identifier isEqualToString:identifier])
+            if ([q.extendedIdentifier isEqualToString:identifier] == YES)
             {
                 target = q;
                 break;
             }
         }
-        
         return target;
     };
+    
     BOOL(^proctor)() = ^()
     {
         NSUInteger  failureCount = 0;
@@ -323,6 +300,7 @@ static NSString*    kSharingTag                         = @"sharing";
         
         return didPass;
     };
+    
     ORKStep*(^findNextStep)() = ^()
     {
         ORKStep*    nextStep  = nil;
@@ -340,7 +318,7 @@ static NSString*    kSharingTag                         = @"sharing";
             {
                 if (questionIndex == self.questions.count - 1)  //  Is `step` the last question?
                 {
-                    if (proctor(result))
+                    if (proctor(result) == YES)
                     {
                         nextStep = [self successStep];
                     }
@@ -359,6 +337,7 @@ static NSString*    kSharingTag                         = @"sharing";
         }
         return nextStep;
     };
+    
     ORKStep*    nextStep = nil;
     
     if (step == nil)    //  First step?
@@ -427,6 +406,21 @@ static NSString*    kSharingTag                         = @"sharing";
         }
         else
         {
+            self.currentQuestionStepSuffixValue = self.currentQuestionStepSuffixValue + 1;
+            self.currentQuestionStepSuffix = [NSString stringWithFormat:@"%@%04lu", kStepIdentifierSuffixStart, self.currentQuestionStepSuffixValue];
+            
+            NSMutableArray  *replacer = [NSMutableArray array];
+            
+            for (APCConsentQuestion* question in self.questions)
+            {
+                question.suffix = self.currentQuestionStepSuffix;
+                ORKStep  *stepster = question.instantiateRkQuestion;
+                [replacer addObject:stepster];
+            }
+            NSRange  replacementRange = NSMakeRange(self.indexOfFirstQuizStep, [self.questions count]);
+            [self.steps        replaceObjectsInRange:replacementRange withObjectsFromArray:replacer];
+            [self.consentSteps replaceObjectsInRange:replacementRange withObjectsFromArray:replacer];
+            
             nextStep = self.steps.firstObject;
         }
     }
@@ -561,6 +555,8 @@ static NSString*    kSharingTag                         = @"sharing";
     }
 }
 
+#pragma mark Loading Quiz JSON
+
 - (void)loadQuiz:(NSDictionary*)properties
 {
     //  Failure and success messages are optioinal, questions, however are not.
@@ -587,10 +583,11 @@ static NSString*    kSharingTag                         = @"sharing";
             APCConsentQuestion* question = [self loadQuestion:questionProperties];
             [parsedQuestions addObject:question];
         }
-        
         self.questions = parsedQuestions;
     }
 }
+
+#pragma mark Loading Quiz Questions
 
 - (APCConsentQuestion*)loadQuestion:(NSDictionary*)properties
 {
@@ -642,6 +639,7 @@ static NSString*    kSharingTag                         = @"sharing";
     }
     APCConsentBooleanQuestion*  question = [[APCConsentBooleanQuestion alloc] initWithIdentifier:identifier
                                                                                           prompt:prompt
+                                                                                          suffix:self.currentQuestionStepSuffix
                                                                                   expectedAnswer:expected];
     
     return question;
@@ -658,6 +656,7 @@ static NSString*    kSharingTag                         = @"sharing";
     
     APCConsentInstructionQuestion*  question = [[APCConsentInstructionQuestion alloc] initWithIdentifier:identifier
                                                                                                   prompt:prompt
+                                                                                                suffix:self.currentQuestionStepSuffix
                                                                                                     text:text];
     
     return question;
@@ -676,10 +675,13 @@ static NSString*    kSharingTag                         = @"sharing";
     
     APCConsentTextChoiceQuestion*   question = [[APCConsentTextChoiceQuestion alloc] initWithIdentifier:identifier
                                                                                                  prompt:prompt
+                                                                                                suffix:self.currentQuestionStepSuffix
                                                                                                 answers:choices
                                                                                          expectedAnswer:expectedString.integerValue];
     return question;
 }
+
+#pragma mark Loading Choices
 
 - (NSArray*)loadChoices:(NSArray*)properties
 {
@@ -691,6 +693,7 @@ static NSString*    kSharingTag                         = @"sharing";
     return properties;
 }
 
+#pragma mark Loading Sections
 
 - (void)loadSections:(NSArray*)properties
 {
@@ -834,7 +837,7 @@ static NSString*    kSharingTag                         = @"sharing";
             NSURL*      url   = [[NSBundle mainBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
             NSError*    error = nil;
             
-            NSAssert([url checkResourceIsReachableAndReturnError:&error], @"Animation file--%@--not reachable: %@", animationUrl, error);
+            NSAssert([url checkResourceIsReachableAndReturnError:&error] == YES, @"Animation file--%@--not reachable: %@", animationUrl, error);
             section.customAnimationURL = url;
         }
         

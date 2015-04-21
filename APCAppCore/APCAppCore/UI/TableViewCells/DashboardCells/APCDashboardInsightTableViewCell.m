@@ -35,12 +35,15 @@
 #import "APCInsightBarView.h"
 #import "UIColor+APCAppearance.h"
 
+NSString *const kInsightsNotEnoughData = @"Not enough data";
+
 @interface APCDashboardInsightTableViewCell()
 
 @property (nonatomic, weak) IBOutlet UILabel *goodCaption;
 @property (nonatomic, weak) IBOutlet UILabel *badCaption;
 @property (nonatomic, weak) IBOutlet APCInsightBarView *goodBadBar;
 @property (nonatomic, weak) IBOutlet UIImageView *insightImageView;
+@property (nonatomic, weak) IBOutlet UILabel *noDataLabel;
 
 @end
 
@@ -93,9 +96,40 @@
     return self;
 }
 
+- (void)setNoDataCaption:(NSString *)noDataCaption
+{
+    _noDataCaption = noDataCaption;
+    
+    if (noDataCaption && (self.goodInsightBar.doubleValue == 0) && (self.badInsightBar.doubleValue == 0)) {
+        // If we have no data caption hide all other captions
+        // and show the no data caption.
+        self.goodCaption.hidden = YES;
+        self.goodBadBar.hidden = YES;
+        self.badCaption.hidden = YES;
+        
+        self.noDataLabel.text = noDataCaption;
+        self.noDataLabel.hidden = NO;
+    } else {
+        // Hide the no data caption and show all other
+        // captions.
+        self.goodCaption.hidden = NO;
+        self.goodBadBar.hidden = NO;
+        self.badCaption.hidden = NO;
+        
+        self.noDataLabel.text = noDataCaption;
+        self.noDataLabel.hidden = YES;
+    }
+}
+
 - (void)setGoodInsightCaption:(NSString *)goodInsightCaption
 {
     _goodInsightCaption = goodInsightCaption;
+    
+    if ([goodInsightCaption isEqualToString:kInsightsNotEnoughData]) {
+        [self setNoDataCaption:goodInsightCaption];
+    } else {
+        [self setNoDataCaption:nil];
+    }
     
     self.goodCaption.text = goodInsightCaption;
 }
@@ -104,6 +138,12 @@
 {
     _badInsightCaption = badInsightCaption;
     
+    if ([badInsightCaption isEqualToString:kInsightsNotEnoughData]) {
+        [self setNoDataCaption:badInsightCaption];
+    } else {
+        [self setNoDataCaption:nil];
+    }
+    
     self.badCaption.text = badInsightCaption;
 }
 
@@ -111,12 +151,24 @@
 {
     _goodInsightBar = goodInsightBar;
     
+    if (goodInsightBar.doubleValue == 0) {
+        [self setNoDataCaption:kInsightsNotEnoughData];
+    } else {
+        [self setNoDataCaption:nil];
+    }
+    
     self.goodBadBar.goodDayValue = goodInsightBar;
 }
 
 - (void)setBadInsightBar:(NSNumber *)badInsightBar
 {
     _badInsightBar = badInsightBar;
+    
+    if (badInsightBar.doubleValue == 0) {
+        [self setNoDataCaption:kInsightsNotEnoughData];
+    } else {
+        [self setNoDataCaption:nil];
+    }
     
     self.goodBadBar.badDayValue = badInsightBar;
 }

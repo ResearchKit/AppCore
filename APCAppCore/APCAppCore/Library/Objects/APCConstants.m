@@ -45,8 +45,9 @@ NSString *const APCUserLogOutNotification     = @"APCUserLogOutNotification";
 NSString *const APCUserWithdrawStudyNotification     = @"APCUserWithdrawStudyNotification";
 NSString *const APCUserDidConsentNotification = @"APCUserDidConsentNotification";
 
-NSString *const APCScheduleUpdatedNotification = @"APCScheduleUpdatedNotification";
-NSString *const APCUpdateActivityNotification = @"APCUpdateActivityNotification";
+NSString *const APCScheduleUpdatedNotification      = @"APCScheduleUpdatedNotification";
+NSString *const APCUpdateActivityNotification       = @"APCUpdateActivityNotification";
+NSString *const APCDayChangedNotification           = @"APCDayChangedNotification";
 
 NSString *const APCAppDidRegisterUserNotification            = @"APCAppDidRegisterUserNotification";
 NSString *const APCAppDidFailToRegisterForRemoteNotification = @"APCAppDidFailToRegisterForRemoteNotifications";
@@ -89,6 +90,7 @@ NSString *const kHKCorrelationTypeKey       = @"HKCorrelationType";
 NSString * const kPasswordKey                    = @"Password";
 NSString * const kNumberOfMinutesForPasscodeKey  = @"NumberOfMinutesForPasscodeKey";
 
+NSUInteger     const kIndexOfActivitesTab                                   = 0;
 NSInteger      const kAPCSigninErrorCode_NotSignedIn                        = 404;
 NSUInteger     const kAPCSigninNumRetriesBeforePause                        = 10;
 NSTimeInterval const kAPCSigninNumSecondsBetweenRetries                     = 10;
@@ -158,6 +160,14 @@ NSString *const kPassiveCollectorEvent  = @"PassiveCollectorEvent";
 
 
 // ---------------------------------------------------------
+#pragma mark - Error Keys
+// ---------------------------------------------------------
+
+NSString * const kAPCArchiveAndUpload_FilesWeDidntTouchErrorKey = @"ArchiveAndUpload_FilesWeDidntTouch";
+
+
+
+// ---------------------------------------------------------
 #pragma mark - Known files, folders, extensions, and content types
 // ---------------------------------------------------------
 
@@ -173,12 +183,26 @@ NSString * const kAPCFolderName_ArchiveAndUpload_Uploading      = @"StuffBeingUp
 NSString * const kAPCFileName_EncryptedZipFile                  = @"encrypted.zip";
 NSString * const kAPCFileName_UnencryptedZipFile                = @"unencrypted.zip";
 
-NSString * const kAPCFileExtension_JSON                         = @"json";
-NSString * const kAPCFileExtension_PrivateKey                   = @"pem";
 NSString * const kAPCFileExtension_CommaSeparatedValues         = @"csv";
+NSString * const kAPCFileExtension_JSON                         = @"json";
+NSString * const kAPCFileExtension_MPEG4Audio                   = @"m4a";
+NSString * const kAPCFileExtension_PlainText                    = @"text";
+NSString * const kAPCFileExtension_PlainTextShort               = @"txt";
+NSString * const kAPCFileExtension_PrivateKey                   = @"pem";
+NSString * const kAPCFileExtension_ZipFile                      = @"zip";
 
-NSString * const kAPCContentType_JSON                           = @"application/json";
+/*
+ These content types are from
+ 
+        http://en.wikipedia.org/wiki/Internet_media_type
 
+ with some help from the URLs mentioned at right.
+ */
+NSString * const kAPCContentType_CommaSeparatedValues           = @"text/csv";                  // https://tools.ietf.org/html/rfc4180
+NSString * const kAPCContentType_JSON                           = @"application/json";          // http://tools.ietf.org/html/rfc4627
+NSString * const kAPCContentType_MPEG4Audio                     = @"audio/mp4";                 //
+NSString * const kAPCContentType_PlainText                      = @"text/plain";
+NSString * const kAPCContentType_UnknownData                    = @"application/octet-stream";  // Wikipedia says "probably shouldn't use this," and let the recipient guess.
 
 
 @implementation APCConstants

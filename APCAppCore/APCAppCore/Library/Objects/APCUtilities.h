@@ -90,6 +90,15 @@
  */
 + (NSString *) pathToUserDocumentsFolder;
 
+/**
+ Returns the temporary directory for the current user.
+ 
+ @param shouldAddUUID  Specify YES to append a new, randomly-generated
+ UUID to the end of the temporary directory, NO to get the raw 
+ temp directory itself.
+ */
++ (NSString *) pathToTemporaryDirectoryAddingUuid: (BOOL) shouldAddUuid;
+
 
 @end
 

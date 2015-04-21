@@ -49,8 +49,12 @@ static NSString *kAPHInsightSampleUnitKey = @"insightSampleUnitKey";
 
 static NSString *kInsightDatasetIsGoodDayKey = @"insightDatasetIsGoodDayKey";
 static NSString *kInsightDatasetAverageReadingKey = @"insightDatasetAverageReadingKey";
+static NSString *kInsightDatasetDayAverage = @"insightDatasetDayAverage";
+static NSString *kInsightDatasetHighKey = @"insightDatasetHighKey";
+static NSString *kInsightDatasetLowKey = @"InsightDatasetLowKey";
 
-static double kRefershDelayInSeconds = 180; // 3 minutes
+static double kBaselinePreMeal  = 130;
+static double kBaselinePostMeal = 180;
 
 NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsightDataCollectionIsCompletedNotification";
 
@@ -75,8 +79,6 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 
 @property (nonatomic, strong) NSOperationQueue *insightQueue;
 
-@property (nonatomic) NSTimeInterval lastUpdatedAt;
-
 @end
 
 @implementation APCInsights
@@ -99,7 +101,6 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         _captionBad  = NSLocalizedString(@"Not enough data", @"Not enough data");
         _valueGood = @(0);
         _valueBad  = @(0);
-        _lastUpdatedAt = 0;
         
         _insightPointValues = [NSMutableArray new];
         
@@ -188,31 +189,18 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 
 - (void)factorInsight
 {
-    if (self.lastUpdatedAt == 0) {
-        [self startCollectionInsightData];
-    } else {
-        // We will only process the diet insights when there considerable amount of time
-        // has lapsed. As for what is 'considerable amount of time', take a look at the
-        // kRefreshDelayInSeconds variable at the top.
-        NSTimeInterval currentTimeInterval = [NSDate timeIntervalSinceReferenceDate];
-        NSTimeInterval lapsedTime = currentTimeInterval - self.lastUpdatedAt;
-        
-        if (lapsedTime > kRefershDelayInSeconds) {
-            [self startCollectionInsightData];
-        }
-    }
+    [self startCollectionInsightData];
 }
 
 - (void)startCollectionInsightData
 {
+    [self resetInsight];
     [self retrieveDatasetForGlucoseForPeriod:-30];
-    
-    self.lastUpdatedAt = [NSDate timeIntervalSinceReferenceDate];
 }
 
 #pragma mark - Core Data
 
-- (void) retrieveDatasetForGlucoseForPeriod: (NSInteger) __unused period
+- (void) retrieveDatasetForGlucoseForPeriod: (NSInteger)period
 {
     NSArray *readings = nil;
     
@@ -239,34 +227,22 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     
     NSArray *markedReadings = [self markDataset:groupedReadings];
     
-    // we only need 5 Good and 5 Bad readings
-    NSPredicate *predicateGoodDay = [NSPredicate predicateWithFormat:@"%K == %@", kInsightDatasetIsGoodDayKey, @(YES)];
-    NSPredicate *predicateBadDay  = [NSPredicate predicateWithFormat:@"%K == %@", kInsightDatasetIsGoodDayKey, @(NO)];
+    // sort the array in ascending order
+    NSSortDescriptor *sortByDayAverage = [NSSortDescriptor sortDescriptorWithKey:@"insightDatasetDayAverage" ascending:YES];
+    NSArray *sortedReadings = [markedReadings sortedArrayUsingDescriptors:@[sortByDayAverage]];
     
-    NSArray *readingForGoodDays = [markedReadings filteredArrayUsingPredicate:predicateGoodDay];
-    NSArray *readingForBadDays  = [markedReadings filteredArrayUsingPredicate:predicateBadDay];
-    
-    // We only need 5 good and bad days for the insights
-    NSRange range = NSMakeRange(0, 5);
-    NSArray *filteredGoodDays = nil;
-    NSArray *filteredBadDays  = nil;
-    
-    if (readingForGoodDays.count > 5) {
-        filteredGoodDays = [readingForGoodDays objectsAtIndexes:[[NSIndexSet alloc] initWithIndexesInRange:range]];
+    if (sortedReadings.count == 0) {
+        // There is nothing to do.
     } else {
-        filteredGoodDays = readingForGoodDays;
+        // When there is only a single point we will return it
+        if (sortedReadings.count == 1) {
+            [self.insightPoints addObjectsFromArray:sortedReadings];
+        } else {
+            [self.insightPoints addObjectsFromArray:sortedReadings];
+        }
+        
+        [self fetchDataFromHealthKitForItemsInInsightQueue];
     }
-    
-    if (readingForBadDays.count > 5) {
-        filteredBadDays = [readingForBadDays objectsAtIndexes:[[NSIndexSet alloc] initWithIndexesInRange:range]];
-    } else {
-        filteredBadDays = readingForBadDays;
-    }
-    
-    [self.insightPoints addObjectsFromArray:filteredGoodDays];
-    [self.insightPoints addObjectsFromArray:filteredBadDays];
-    
-    [self fetchDataFromHealthKitForItemsInInsightQueue];
 }
 
 #pragma mark HealthKit
@@ -402,15 +378,19 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setMaximumFractionDigits:0];
+    [numberFormatter setRoundingMode:NSNumberFormatterRoundDown];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
     
     if (goodPoints.count > 0) {
         pointValue = [goodPoints valueForKeyPath:@"@avg.insightFactorValueKey"];
         
         if ([self.insightFactorName isEqualToString:HKQuantityTypeIdentifierDietaryEnergyConsumed]) {
-            if ([pointValue doubleValue] >= 1000.0) {
+            if ([pointValue doubleValue] >= 1000) {
                 caption = [NSString stringWithFormat:@"%@ %@",
                            [numberFormatter stringFromNumber:pointValue],
                            self.insightFactorCaption];
+            } else {
+                pointValue = @(0);
             }
         } else {
             caption = [NSString stringWithFormat:@"%@ %@",
@@ -426,10 +406,12 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         pointValue = [badPoints valueForKeyPath:@"@avg.insightFactorValueKey"];
         
         if ([self.insightFactorName isEqualToString:HKQuantityTypeIdentifierDietaryEnergyConsumed]) {
-            if ([pointValue doubleValue] >= 1000.0) {
+            if ([pointValue doubleValue] >= 1000) {
                 caption = [NSString stringWithFormat:@"%@ %@",
                            [numberFormatter stringFromNumber:pointValue],
                            self.insightFactorCaption];
+            } else {
+                pointValue = @(0);
             }
         } else {
             caption = [NSString stringWithFormat:@"%@ %@",
@@ -439,6 +421,18 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
         
         self.valueBad = pointValue;
         self.captionBad  = NSLocalizedString(caption, caption);
+    }
+    
+    // Check if the difference between the good and bad vaules is at least 10%. Othewise don't show the insight.
+    // The Steps and Calories are excluded from this comparion
+    if ((self.insightFactorName != HKQuantityTypeIdentifierDietaryEnergyConsumed) && (self.insightFactorName != HKQuantityTypeIdentifierStepCount)) {
+        double largerValue = ([self.valueGood doubleValue] > [self.valueBad doubleValue]) ? [self.valueGood doubleValue] : [self.valueBad doubleValue];
+        double smallerValue = ([self.valueGood doubleValue] < [self.valueBad doubleValue]) ? [self.valueGood doubleValue] : [self.valueBad doubleValue];
+        double differenceBetweenGoodAndBadValues = ((largerValue - smallerValue) / largerValue) * 100;
+        
+        if (differenceBetweenGoodAndBadValues < 10) {
+            [self resetInsight];
+        }
     }
     
     NSOperationQueue *realMainQueue = [NSOperationQueue mainQueue];
@@ -466,11 +460,14 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
             double itemSum = 0;
             double dayAverage = 0;
             
+            // Deviation from baseline
             for (NSDictionary *item in groupItems) {
                 NSNumber *value = item[kDatasetValueKey];
                 
                 if ([value integerValue] != NSNotFound) {
-                    itemSum += [value doubleValue];
+                    double baseline = ([period isEqualToString:@"before"] ? kBaselinePreMeal : kBaselinePostMeal);
+                    
+                    itemSum += (baseline - [value doubleValue]); // This will be positive for in range and negative for out of range
                 }
             }
             
@@ -500,47 +497,37 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
 - (NSArray *)markDataset:(NSArray *)dataset
 {
     NSMutableArray *markedDataset = [NSMutableArray new];
-    NSArray *days = [dataset valueForKeyPath:@"@distinctUnionOfObjects.datasetDateKey"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K <> %@)", kDatasetValueKey, @(NSNotFound)];
+    NSArray *readings = [dataset filteredArrayUsingPredicate:predicate];
+    NSArray *days = [readings valueForKeyPath:@"@distinctUnionOfObjects.datasetDateKey"];
     
     for (NSString *day in days) {
         NSMutableDictionary *dayReading = [NSMutableDictionary new];
         [dayReading setObject:day forKey:kDatasetDateKey];
         
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K = %@)", kDatasetDateKey, day];
-        NSArray *groupedReadings = [dataset filteredArrayUsingPredicate:predicate];
-        NSMutableArray *dayAverages = [NSMutableArray new];
-        
-        NSUInteger tally = 0;
+        NSArray *groupedReadings = [readings filteredArrayUsingPredicate:predicate];
+        NSMutableArray *avgReadingsForTheDay = [NSMutableArray new];
         
         for (NSDictionary *reading in groupedReadings) {
             NSNumber *average = reading[kDatasetValueKey];
             
             if ([average isEqualToNumber:@(NSNotFound)] == NO) {
-                // check if the average in-range or high
-                if ([reading[@"period"] boolValue]) {
-                    if ([average doubleValue] >= [self.baselineHigh integerValue]) {
-                        tally++;
-                    }
-                } else {
-                    if ([average doubleValue] >= [self.baselineHighOther integerValue]) {
-                        tally++;
-                    }
-                }
+                [avgReadingsForTheDay addObject:average];
             }
-            
-            // add to the array
-            [dayAverages addObject:average];
         }
         
+        NSNumber *dayAverage = [avgReadingsForTheDay valueForKeyPath:@"@avg.self"];
         BOOL isGoodDay;
         
-        if (tally == 0) {
-            isGoodDay = YES;
+        if ([dayAverage doubleValue] > 0) {
+            isGoodDay = YES; // Good day == reading deviation is positive/in-range
         } else {
-            isGoodDay = NO;
+            isGoodDay = NO;  // Bad day  == reading deviation is negative/out-of-range
         }
         
-        [dayReading setObject:dayAverages forKey:kInsightDatasetAverageReadingKey];
+        [dayReading setObject:avgReadingsForTheDay forKey:kInsightDatasetAverageReadingKey];
+        [dayReading setObject:(dayAverage != nil) ? dayAverage: @(0) forKey:kInsightDatasetDayAverage];
         [dayReading setObject:@(isGoodDay) forKey:kInsightDatasetIsGoodDayKey];
         
         [markedDataset addObject:dayReading];
@@ -579,6 +566,9 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     self.captionBad  = NSLocalizedString(@"Not enough data", @"Not enough data");
     self.valueGood = @(0);
     self.valueBad  = @(0);
+    
+    [self.insightPoints removeAllObjects];
+    [self.insightPointValues removeAllObjects];
 }
 
 @end

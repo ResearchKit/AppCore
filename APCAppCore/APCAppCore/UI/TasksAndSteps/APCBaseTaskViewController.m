@@ -80,7 +80,7 @@
     APCLogViewControllerAppeared();
     APCLogEventWithData(kTaskEvent, (@{
                                        @"task_status":@"Started",
-                                       @"task_title": self.scheduledTask.task.taskTitle,
+                                       @"task_title": (self.scheduledTask.task.taskTitle == nil) ? @"No Title Provided": self.scheduledTask.task.taskTitle,
                                        @"task_view_controller":NSStringFromClass([self class])
                                        }));
 }

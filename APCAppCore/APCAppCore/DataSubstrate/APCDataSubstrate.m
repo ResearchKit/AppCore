@@ -37,6 +37,13 @@
 #import "APCDataSubstrate+HealthKit.h"
 #import "APCModel.h"
 
+static int dateCheckTimeInterval = 60;
+
+@interface APCDataSubstrate ()
+@property (strong, nonatomic) NSTimer *dateChangeTestTimer;//refreshes Activities if the date crosses midnight.
+@property (strong, nonatomic) NSDate *tomorrowAtMidnight;
+@end
+
 @implementation APCDataSubstrate
 
 - (instancetype) initWithPersistentStorePath: (NSString*) storePath
@@ -49,6 +56,7 @@
         [self setUpCurrentUser:self.persistentContext];
         [self setUpHealthKit];
         [self setupParameters];
+        [self setupNotifications];
     }
     return self;
 }
@@ -68,6 +76,11 @@
     [self.parameters setDelegate:self];
 }
 
+- (void) setupNotifications{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instantiateTimer:) name:UIApplicationWillEnterForegroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instantiateTimer:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+}
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -81,4 +94,21 @@
 {
     NSAssert(error, @"parameters are not loaded");
 }
+
+/*********************************************************************************/
+#pragma mark - Date Change Test Timer
+/*************************************************s********************************/
+
+-(void) instantiateTimer: (NSNotification *)__unused notification {
+    self.tomorrowAtMidnight = [NSDate tomorrowAtMidnight];
+    self.dateChangeTestTimer = [NSTimer scheduledTimerWithTimeInterval:dateCheckTimeInterval target:self selector:@selector(didDateCrossMidnight:) userInfo:nil repeats:YES];
+}
+
+-(void)didDateCrossMidnight: (NSNotification*)__unused notification{
+    if ([[NSDate new] compare:self.tomorrowAtMidnight] == NSOrderedDescending || [[NSDate new] compare:self.tomorrowAtMidnight] == NSOrderedSame) {
+        [[NSNotificationCenter defaultCenter]postNotificationName:APCDayChangedNotification object:nil];
+        self.tomorrowAtMidnight = [NSDate tomorrowAtMidnight];
+    }
+}
+
 @end

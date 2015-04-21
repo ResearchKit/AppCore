@@ -62,6 +62,7 @@ FOUNDATION_EXPORT NSString *const APCUserDidConsentNotification;
 
 FOUNDATION_EXPORT NSString *const APCScheduleUpdatedNotification;
 FOUNDATION_EXPORT NSString *const APCUpdateActivityNotification;
+FOUNDATION_EXPORT NSString *const APCDayChangedNotification;
 
 FOUNDATION_EXPORT NSString *const APCAppDidRegisterUserNotification;
 FOUNDATION_EXPORT NSString *const APCAppDidFailToRegisterForRemoteNotification;
@@ -105,6 +106,7 @@ FOUNDATION_EXPORT NSString *const kHKWorkoutTypeKey;
 FOUNDATION_EXPORT NSString * const kPasswordKey;
 FOUNDATION_EXPORT NSString * const kNumberOfMinutesForPasscodeKey;
 
+FOUNDATION_EXPORT NSUInteger     const kIndexOfActivitesTab;
 FOUNDATION_EXPORT NSInteger      const kAPCSigninErrorCode_NotSignedIn;
 FOUNDATION_EXPORT NSUInteger     const kAPCSigninNumRetriesBeforePause;
 FOUNDATION_EXPORT NSTimeInterval const kAPCSigninNumSecondsBetweenRetries;
@@ -175,6 +177,14 @@ FOUNDATION_EXPORT NSString *const kPassiveCollectorEvent;
 
 
 // ---------------------------------------------------------
+#pragma mark - Error Keys
+// ---------------------------------------------------------
+
+FOUNDATION_EXPORT NSString * const kAPCArchiveAndUpload_FilesWeDidntTouchErrorKey;
+
+
+
+// ---------------------------------------------------------
 #pragma mark - Known files, folders, extensions, and content types
 // ---------------------------------------------------------
 
@@ -190,13 +200,19 @@ FOUNDATION_EXPORT NSString * const kAPCFolderName_ArchiveAndUpload_Uploading;
 FOUNDATION_EXPORT NSString * const kAPCFileName_EncryptedZipFile;
 FOUNDATION_EXPORT NSString * const kAPCFileName_UnencryptedZipFile;
 
-FOUNDATION_EXPORT NSString * const kAPCFileExtension_JSON;
-FOUNDATION_EXPORT NSString * const kAPCFileExtension_PrivateKey;
 FOUNDATION_EXPORT NSString * const kAPCFileExtension_CommaSeparatedValues;
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_JSON;
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_MPEG4Audio;
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_PlainText;
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_PlainTextShort;
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_PrivateKey;
+FOUNDATION_EXPORT NSString * const kAPCFileExtension_ZipFile;
 
+FOUNDATION_EXPORT NSString * const kAPCContentType_CommaSeparatedValues;
 FOUNDATION_EXPORT NSString * const kAPCContentType_JSON;
-
-
+FOUNDATION_EXPORT NSString * const kAPCContentType_MPEG4Audio;
+FOUNDATION_EXPORT NSString * const kAPCContentType_PlainText;
+FOUNDATION_EXPORT NSString * const kAPCContentType_UnknownData;
 
 @interface APCConstants : NSObject
 

@@ -69,7 +69,6 @@ static NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
 static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
-static NSUInteger const kIndexOfActivitesTab = 0;
 static NSUInteger const kIndexOfProfileTab = 3;
 
 
@@ -92,11 +91,6 @@ static NSUInteger const kIndexOfProfileTab = 3;
 - (BOOL)               application: (UIApplication *) __unused application
     willFinishLaunchingWithOptions: (NSDictionary *) __unused launchOptions
 {
-    /* 
-     launchOptions must be checked upon start up. If UIApplicationLaunchOptionsLocationKey is present
-     then a location event has occurred and location services must be manually started.
-     */
-    
     NSUInteger  previousVersion = [self obtainPreviousVersion];
     [self performMigrationFrom:previousVersion currentVersion:kTheEntireDataModelOfTheApp];
     
@@ -241,8 +235,6 @@ static NSUInteger const kIndexOfProfileTab = 3;
     for (NSString* relativeFilePath in directoryEnumerator)
     {
         NSDictionary*   attributes = directoryEnumerator.fileAttributes;
-        APCLogDebug(@"File name:       %@", relativeFilePath);
-        APCLogDebug(@"File protection: %@", attributes[NSFileProtectionKey]);
         
         if ([[attributes objectForKey:NSFileProtectionKey] isEqual:NSFileProtectionComplete])
         {
@@ -299,13 +291,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 /*********************************************************************************/
 - (void) initializeBridgeServerConnection
 {
-//If in DEBUG mode, automatically point to staging environment. In release mode read from intializationOptions dictionary.
-/* Please make sure that the serve is pointing to Production in the RELEASE build! */
-#if DEBUG
-    [BridgeSDK setupWithStudy:self.initializationOptions[kAppPrefixKey] environment: SBBEnvironmentStaging];
-#else
     [BridgeSDK setupWithStudy:self.initializationOptions[kAppPrefixKey] environment:(SBBEnvironment)[self.initializationOptions[kBridgeEnvironmentKey] integerValue]];
-#endif
 }
 
 - (BOOL) determineIfPeresistentStoreExists {
@@ -893,9 +879,9 @@ static NSUInteger const kIndexOfProfileTab = 3;
                                                                                             toDate:catSample.endDate
                                                                                            options:NSCalendarWrapComponents];
             if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
-                quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", secondsSpentInBedOrAsleep.second];
+                quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", (long)secondsSpentInBedOrAsleep.second];
             } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
-                quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", secondsSpentInBedOrAsleep.second];
+                quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", (long)secondsSpentInBedOrAsleep.second];
             }
         } else {
             HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
@@ -982,7 +968,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
         item.image = [UIImage imageNamed:deselectedImageNames[i]];
         item.selectedImage = [[UIImage imageNamed:selectedImageNames[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         item.title = tabBarTitles[i];
-        
+        item.tag = i;
         if (i == kIndexOfActivitesTab) {
             NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
             NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;

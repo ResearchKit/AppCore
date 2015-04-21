@@ -170,8 +170,6 @@
 
 @implementation APCTableViewDashboardFoodInsightItem
 
-@dynamic tintColor;
-
 @end
 
 
