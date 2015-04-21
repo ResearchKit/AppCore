@@ -634,10 +634,12 @@ static CGFloat kHeaderHeight = 157.0f;
     
     [self.profileImageButton setImage:image forState:UIControlStateNormal];
     
+    picker.delegate = nil;
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    picker.delegate = nil;
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 

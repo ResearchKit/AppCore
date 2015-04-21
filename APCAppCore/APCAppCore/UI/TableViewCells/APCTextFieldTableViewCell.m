@@ -63,6 +63,10 @@ NSString * const kAPCTextFieldTableViewCellIdentifier = @"APCTextFieldTableViewC
     [self setupAppearance];
 }
 
+- (void)dealloc {
+    _textField.delegate = nil;
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

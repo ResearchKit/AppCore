@@ -56,7 +56,6 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 
 @implementation APCStudyOverviewViewController
 
-
 #pragma mark - Lifecycle
 
 - (void)viewDidLoad {
@@ -85,6 +84,8 @@ static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdent
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:APCConsentCompletedWithDisagreeNotification object:nil];
+    _tableView.delegate = nil;
+    _tableView.dataSource = nil;
 }
 
 - (void)goBackToSignUpJoin:(NSNotification *) __unused notification

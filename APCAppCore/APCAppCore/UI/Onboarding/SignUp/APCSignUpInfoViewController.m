@@ -54,6 +54,11 @@ static CGFloat const kHeaderHeight = 127.0f;
 @synthesize stepProgressBar;
 @synthesize user = _user;
 
+- (void)dealloc {
+    _nameTextField.delegate = nil;
+    _emailTextField.delegate = nil;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.

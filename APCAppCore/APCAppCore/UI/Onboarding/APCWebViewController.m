@@ -39,7 +39,11 @@
 
 @implementation APCWebViewController
 
-- (void)viewDidLoad {
+- (void)dealloc {
+    _webview.delegate = nil;
+}
+
+-(void)viewDidLoad {
 	[super viewDidLoad];
     self.webview.delegate = self;
     self.webview.alpha = 0.0;

@@ -100,6 +100,12 @@ static  CGFloat    kAPCMedicationRowHeight = 64.0;
 
 @implementation APCMedicationTrackerCalendarViewController
 
+- (void)dealloc {
+    _exScrollibur.delegate = nil;
+    _tabulator.delegate = nil;
+    _tabulator.dataSource = nil;
+}
+
 #pragma  mark  -  Table View Data Source Methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) __unused tableView

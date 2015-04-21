@@ -45,6 +45,10 @@
 
 @implementation APCForgotPasswordViewController
 
+- (void)dealloc {
+    _emailTextField.delegate = nil;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
