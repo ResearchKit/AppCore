@@ -272,7 +272,7 @@ static  NSString  *kThinSpaceEnDashJoiner     = @"\u2009\u2013\u2009";
 {
     if ([date isWithinDate:self.startDate toDate:self.endOfWeekDate] == NO) {
         BOOL  swipeRight = ([date compare:self.startDate] == NSOrderedAscending);
-        if (swipeRight == YES) {
+        if (swipeRight) {
             [self performSwipeAnimation:WeeklyCalendarScrollDirectionRight dateIsToday:[date isDateToday] selectedDate:date];
         } else {
             [self performSwipeAnimation:WeeklyCalendarScrollDirectionLeft dateIsToday:[date isDateToday] selectedDate:date];
@@ -290,7 +290,7 @@ static  NSString  *kThinSpaceEnDashJoiner     = @"\u2009\u2013\u2009";
 
 - (void)enableScrolling:(BOOL)enable
 {
-    if (enable == YES) {
+    if (enable) {
         self.leftScrollButton.enabled  = YES;
         self.leftSwiper.enabled        = YES;
         self.rightScrollButton.enabled = YES;
@@ -370,7 +370,7 @@ static  NSString  *kThinSpaceEnDashJoiner     = @"\u2009\u2013\u2009";
     CGFloat  dailyWidth = self.bounds.size.width / kNumberOfWeekDivisions;
 
     NSDate  *dtStart = nil;
-    if (dateIsToday == YES) {
+    if (dateIsToday) {
         dtStart = [[NSDate new] getWeekStartDate:self.weekStartConfig.integerValue];
     } else {
         dtStart = (selectedDate) ? [selectedDate getWeekStartDate:self.weekStartConfig.integerValue]:[self.startDate dateByAddingDays:step * 7];

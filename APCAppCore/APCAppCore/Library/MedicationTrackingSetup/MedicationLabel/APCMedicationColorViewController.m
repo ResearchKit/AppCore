@@ -77,7 +77,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     self.doneButtonWasTapped = YES;
     if (self.selectedIndex != nil) {
         if (self.delegate != nil) {
-            if ([self.delegate respondsToSelector:@selector(colorController:didSelectColorLabelName:)] == YES) {
+            if ([self.delegate respondsToSelector:@selector(colorController:didSelectColorLabelName:)]) {
                 APCMedTrackerPrescriptionColor  *schedulColor = self.colorsList[self.selectedIndex.row];
                 [self.delegate colorController:self didSelectColorLabelName:schedulColor];
             }
@@ -110,7 +110,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     cell.colorNameLabel.text = colorname;
     
     if (self.selectedIndex != nil) {
-        if ([self.selectedIndex isEqual:indexPath] == YES) {
+        if ([self.selectedIndex isEqual:indexPath]) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         } else {
             cell.accessoryType = UITableViewCellAccessoryNone;
@@ -142,7 +142,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     }
     if (self.selectedIndex != nil) {
         if (self.delegate != nil) {
-            if ([self.delegate respondsToSelector:@selector(colorController:didSelectColorLabelName:)] == YES) {
+            if ([self.delegate respondsToSelector:@selector(colorController:didSelectColorLabelName:)]) {
                 APCMedTrackerPrescriptionColor  *schedulColor = self.colorsList[indexPath.row];
                 [self.delegate colorController:self didSelectColorLabelName:schedulColor];
             }
@@ -193,7 +193,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 {
     for (NSUInteger  index = 0;  index < [self.colorsList count];  index++) {
         APCMedTrackerPrescriptionColor  *color = self.colorsList[index];
-        if ([color.name isEqualToString:descriptor.name] == YES) {
+        if ([color.name isEqualToString:descriptor.name]) {
             NSIndexPath  *path = [NSIndexPath indexPathForRow:index inSection:0];
             self.selectedIndex = path;
             break;
@@ -214,7 +214,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     
     if (self.doneButtonWasTapped == NO) {
         if (self.delegate != nil) {
-            if ([self.delegate respondsToSelector:@selector(colorControllerDidCancel:)] == YES) {
+            if ([self.delegate respondsToSelector:@selector(colorControllerDidCancel:)]) {
                 [self.delegate colorControllerDidCancel:self];
             }
         }

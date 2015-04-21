@@ -81,7 +81,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     
     if (self.selectedIndex != nil) {
         if (self.delegate != nil) {
-            if ([self.delegate respondsToSelector:@selector(nameController:didSelectMedicineName:)] == YES) {
+            if ([self.delegate respondsToSelector:@selector(nameController:didSelectMedicineName:)]) {
                 APCMedTrackerMedication  *medication = self.medicationList[self.selectedIndex.row];
                [self.delegate nameController:self didSelectMedicineName:medication];
             }
@@ -129,7 +129,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
         cell.bottomLabel.text   = secondString;
     }
     if (self.selectedIndex != nil) {
-        if ([self.selectedIndex isEqual:indexPath] == YES) {
+        if ([self.selectedIndex isEqual:indexPath]) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         } else {
             cell.accessoryType = UITableViewCellAccessoryNone;
@@ -162,7 +162,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     }
 //    if (self.selectedIndex != nil) {
 //        if (self.delegate != nil) {
-//            if ([self.delegate respondsToSelector:@selector(nameController:didSelectMedicineName:)] == YES) {
+//            if ([self.delegate respondsToSelector:@selector(nameController:didSelectMedicineName:)]) {
 //                APCMedTrackerMedication  *medication = self.medicationList[indexPath.row];
 //                [self.delegate performSelector:@selector(nameController:didSelectMedicineName:) withObject:self withObject:medication];
 //            }
@@ -208,7 +208,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
 {
     for (NSUInteger  index = 0;  index < [self.self.medicationList count];  index++) {
         APCMedTrackerMedication  *medication = self.medicationList[index];
-        if ([medication.name isEqualToString:aMedicationRecord.name] == YES) {
+        if ([medication.name isEqualToString:aMedicationRecord.name]) {
             NSIndexPath  *path = [NSIndexPath indexPathForRow:index inSection:0];
             self.selectedIndex = path;
             break;
@@ -234,7 +234,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
     
     if (self.doneButtonWasTapped == NO) {
         if (self.delegate != nil) {
-            if ([self.delegate respondsToSelector:@selector(nameControllerDidCancel:)] == YES) {
+            if ([self.delegate respondsToSelector:@selector(nameControllerDidCancel:)]) {
                 [self.delegate nameControllerDidCancel:self];
             }
         }
@@ -274,7 +274,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
              NSUInteger  foundIndex = 0;
              for (NSUInteger  index = 0;  index < [copyOfSorted count];  index++) {
                  APCMedTrackerMedication  *medication = [copyOfSorted objectAtIndex:index];
-                 if ([medication.name isEqualToString:@"Other"] == YES) {
+                 if ([medication.name isEqualToString:@"Other"]) {
                      foundMedication = medication;
                      foundIndex = index;
                      break;

@@ -80,7 +80,7 @@ NSString *const kBypassServerProperty                   = @"bypassServer";
     NSNumber*   number = nil;
     id          value = [self.userDefaults objectForKey:key];
     
-    if ([self isNumber:value] == YES)
+    if ([self isNumber:value])
     {
         number = (NSNumber*)value;
     }
@@ -97,7 +97,7 @@ NSString *const kBypassServerProperty                   = @"bypassServer";
     NSString*   str = nil;
     id          value = [self.userDefaults objectForKey:key];
     
-    if ([self isString:value] == YES)
+    if ([self isString:value])
     {
         str = (NSString*)value;
     }

@@ -190,7 +190,7 @@ static NSInteger const kRegularFontSize = 17;
 
 - (void)handleClose:(UIBarButtonItem *) __unused sender
 {
-    if ([self.delegate respondsToSelector:@selector(stepViewController:didFinishWithNavigationDirection:)] == YES) {
+    if ([self.delegate respondsToSelector:@selector(stepViewController:didFinishWithNavigationDirection:)]) {
         [self.delegate stepViewController:self didFinishWithNavigationDirection:ORKStepViewControllerNavigationDirectionForward];
     }
 }
