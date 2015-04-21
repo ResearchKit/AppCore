@@ -34,55 +34,74 @@
 #import "APCPassiveDisplacementTrackingDataUploader.h"
 #import <CoreLocation/CoreLocation.h>
 
-static NSString *const kCollectorFolder = @"newCollector";
-static NSString *const kUploadFolder    = @"upload";
-static NSString *const kIdentifierKey   = @"identifier";
-static NSString *const kStartDateKey    = @"startDate";
-static NSString *const kEndDateKey      = @"endDate";
-static NSString *const kInfoFilename    = @"info.json";
-static NSString *const kCSVFilename     = @"data.csv";
-
-
-static  NSString  *kLocationTimeStamp                    = @"timestamp";
-static  NSString  *kLocationDistanceFromPreviousLocation = @"distanceFromPreviousLocation";
-static  NSString  *kLocationVerticalAccuracy             = @"verticalAccuracy";
-static  NSString  *kLocationHorizontalAccuracy           = @"horizontalAccuracy";
-static  NSString  *kLocationDistanceUnit                 = @"distanceUnit"; //Always meters
-
-static NSString *kBaseTrackingFileName = @"baseTrackingLocation";
-static NSString *kRecentLocationFileName = @"recentLocation";
-
-static NSString *kLat = @"lat";
-static NSString *kLon = @"lon";
+static  NSString* const kCollectorFolder                        = @"newCollector";
+static  NSString* const kUploadFolder                           = @"upload";
+static  NSString* const kIdentifierKey                          = @"identifier";
+static  NSString* const kStartDateKey                           = @"startDate";
+static  NSString* const kEndDateKey                             = @"endDate";
+static  NSString* const kInfoFilename                           = @"info.json";
+static  NSString* const kCSVFilename                            = @"data.csv";
+static  NSString*       kLocationTimeStamp                      = @"timestamp";
+static  NSString*       kLocationDistanceFromPreviousLocation   = @"distanceFromPreviousLocation";
+static  NSString*       kLocationVerticalAccuracy               = @"verticalAccuracy";
+static  NSString*       kLocationHorizontalAccuracy             = @"horizontalAccuracy";
+static  NSString*       kLocationDistanceUnit                   = @"distanceUnit"; //Always meters
+static  NSString*       kBaseTrackingFileName                   = @"baseTrackingLocation";
+static  NSString*       kRecentLocationFileName                 = @"recentLocation";
+static  NSString*       kLat                                    = @"lat";
+static  NSString*       kLon                                    = @"lon";
 
 @interface APCPassiveDisplacementTrackingDataUploader ()
-{
-    CLLocation * _baseTrackingLocation;
-    CLLocation * _mostRecentUpdatedLocation;
-}
+
+@property (nonatomic, strong) CLLocation* baseTrackingLocation;
+@property (nonatomic, strong) CLLocation* mostRecentUpdatedLocation;
 
 @end
 
 @implementation APCPassiveDisplacementTrackingDataUploader
 
 - (NSArray*)locationDictionaryWithLocationManager:(CLLocationManager*)manager
-                    distanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
+                       distanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
                               andPreviousLocation:(CLLocation*)previousLocation
-
 {
-    
     NSString*   timestamp           = manager.location.timestamp.description;
     NSString*   distance            = [NSString stringWithFormat:@"%f", distanceFromReferencePoint];
     NSString*   unit                = @"meters"; //Hardcoded as Core Locations uses only meters
-    double      vector              = [previousLocation bearingToLocation:manager.location];
-    NSString*   vectorUnit          = @"degrees";
+    double      bearing             = [previousLocation bearingToLocation:manager.location];
+    NSString*   bearingUnit         = @"degrees";
     double      magnitude           = [previousLocation calculateMagnitudeToLocation:manager.location];
     double      direction           = [previousLocation calculateDirectionFromLocation:manager.location];
-    double      speed               = manager.location.speed;
+    
+    //  A negative value of manager.location.speed indicates an invalid speed.
+    NSString*   speed               = nil;
+    if (manager.location.speed > 0)
+    {
+        double pace = manager.location.speed;
+        speed = [NSString stringWithFormat:@"%f", pace];
+    }
+    else
+    {
+        speed = @"Invalid speed";
+    }
+
+    NSString*   speedUnit           = @"meters/second";
+    
+    NSString*   floor               = nil;
+    
+    if (manager.location.floor == nil)
+    {
+        floor = @"Not available";
+    }
+    else
+    {
+        NSInteger level = manager.location.floor.level;
+        floor = [NSString stringWithFormat:@"%ld", (long)level];
+    }
+    
     NSString*   horizontalAccuracy  = [NSString stringWithFormat:@"%f", manager.location.horizontalAccuracy];
     NSString*   verticalAccuracy    = [NSString stringWithFormat:@"%f", manager.location.verticalAccuracy];
     
-    return  @[timestamp, distance, unit, @(vector), vectorUnit, @(magnitude), @(direction), @(speed), horizontalAccuracy, verticalAccuracy];
+    return  @[timestamp, distance, unit, @(bearing), bearingUnit, @(magnitude), @(direction), speed, speedUnit, floor, horizontalAccuracy, verticalAccuracy];
 }
 
 
@@ -120,7 +139,7 @@ static NSString *kLon = @"lon";
         //Send to delegate
         if (result)
         {  
-            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
+            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
                                                                    result[0],
                                                                    result[1],
                                                                    result[2],
@@ -130,7 +149,9 @@ static NSString *kLon = @"lon";
                                                                    result[6],
                                                                    result[7],
                                                                    result[8],
-                                                                   result[9]];
+                                                                   result[9],
+                                                                   result[10],
+                                                                   result[11]];
 
             //Write to file
             [APCPassiveDataSink createOrAppendString:stringToWrite
@@ -156,64 +177,81 @@ static NSString *kLon = @"lon";
 
 - (void)setBaseTrackingLocation:(CLLocation *)baseTrackingLocation
 {
-    _baseTrackingLocation = baseTrackingLocation;
-    NSDictionary * dict = @{kLat : @(baseTrackingLocation.coordinate.latitude), kLon : @(baseTrackingLocation.coordinate.longitude)};
+    self.baseTrackingLocation = baseTrackingLocation;
+    NSDictionary* dict = @{kLat : @(baseTrackingLocation.coordinate.latitude), kLon : @(baseTrackingLocation.coordinate.longitude)};
     [self writeDictionary:dict toPath:[self baseTrackingFilePath]];
 }
 
 - (CLLocation*)baseTrackingLocation
 {
-    if (!_baseTrackingLocation)
+    if (!self.baseTrackingLocation)
     {
         if (self.folder)
         {
             if ([[NSFileManager defaultManager] fileExistsAtPath:[self baseTrackingFilePath]])
             {
-                NSError*    error;
-                NSString*   jsonString = [NSString stringWithContentsOfFile:[self baseTrackingFilePath] encoding:NSUTF8StringEncoding error:&error];
-                APCLogError2(error);
-                NSDictionary* dict;
+                NSError*    error       = nil;
+                NSString*   jsonString  = [NSString stringWithContentsOfFile:[self baseTrackingFilePath]
+                                                                    encoding:NSUTF8StringEncoding
+                                                                       error:&error];
+                if (error)
+                {
+                    APCLogError2(error);
+                }
+                
+                NSDictionary* dict      = nil;
                 
                 if (jsonString)
                 {
                     dict = [NSDictionary dictionaryWithJSONString:jsonString];
-                    _baseTrackingLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue] longitude:[dict[kLon] doubleValue]];
+                    self.baseTrackingLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue]
+                                                                           longitude:[dict[kLon] doubleValue]];
                 }
             }
         }
     }
-    return _baseTrackingLocation;
+    
+    return self.baseTrackingLocation;
 }
 
 - (void)setMostRecentUpdatedLocation:(CLLocation *)mostRecentUpdatedLocation
 {
-    _mostRecentUpdatedLocation = mostRecentUpdatedLocation;
+    self.mostRecentUpdatedLocation = mostRecentUpdatedLocation;
     NSDictionary * dict = @{kLat : @(mostRecentUpdatedLocation.coordinate.latitude), kLon : @(mostRecentUpdatedLocation.coordinate.longitude)};
     [self writeDictionary:dict toPath:[self recentLocationFilePath]];
 }
 
 - (CLLocation*)mostRecentUpdatedLocation
 {
-    if (!_mostRecentUpdatedLocation)
+    if (!self.mostRecentUpdatedLocation)
     {
         if (self.folder)
         {
             if ([[NSFileManager defaultManager] fileExistsAtPath:[self recentLocationFilePath]])
             {
-                NSError*    error;
-                NSString*   jsonString = [NSString stringWithContentsOfFile:[self recentLocationFilePath] encoding:NSUTF8StringEncoding error:&error];
-                APCLogError2(error);
-                NSDictionary * dict;
+                NSError*    error       = nil;
+                NSString*   jsonString  = [NSString stringWithContentsOfFile:[self recentLocationFilePath]
+                                                                    encoding:NSUTF8StringEncoding
+                                                                       error:&error];
+                
+                if (error)
+                {
+                    APCLogError2(error);
+                }
+                
+                NSDictionary* dict      = nil;
+                
                 if (jsonString)
                 {
                     dict = [NSDictionary dictionaryWithJSONString:jsonString];
-                    _mostRecentUpdatedLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue] longitude:[dict[kLon] doubleValue]];
+                    self.mostRecentUpdatedLocation = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue]
+                                                                                longitude:[dict[kLon] doubleValue]];
                 }
             }
         }
     }
     
-    return _mostRecentUpdatedLocation;
+    return self.mostRecentUpdatedLocation;
 }
 
 - (void)writeDictionary:(NSDictionary*)dict toPath:(NSString*)path
