@@ -1965,6 +1965,7 @@
 				F5179B2A19D09128001DCCB7 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		F5179B2A19D09128001DCCB7 /* Products */ = {
 			isa = PBXGroup;
