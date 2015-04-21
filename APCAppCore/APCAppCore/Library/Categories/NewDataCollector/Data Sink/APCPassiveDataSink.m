@@ -83,12 +83,12 @@ static NSUInteger       kDaysPerWeek        = 7;
 #pragma mark - Abstract methods
 /*********************************************************************************/
 
-- (void)processUpdatesFromCollector:(id)quantitySample {
-
-    [self checkIfCSVStructureHasChanged];
-    
+- (void)processUpdatesFromCollector:(id)quantitySample
+{
     __weak typeof(self) weakSelf = self;
+    
     [self.healthKitCollectorQueue addOperationWithBlock:^{
+    
         __typeof(self) strongSelf = weakSelf;
         
         NSString *stringToWrite = [self transformCollectorData:quantitySample];
