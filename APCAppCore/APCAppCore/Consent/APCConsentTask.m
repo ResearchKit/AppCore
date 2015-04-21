@@ -271,7 +271,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
         
         for (APCConsentQuestion* q in self.questions)
         {
-            if ([q.extendedIdentifier isEqualToString:identifier] == YES)
+            if ([q.extendedIdentifier isEqualToString:identifier])
             {
                 target = q;
                 break;
@@ -318,7 +318,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
             {
                 if (questionIndex == self.questions.count - 1)  //  Is `step` the last question?
                 {
-                    if (proctor(result) == YES)
+                    if (proctor(result))
                     {
                         nextStep = [self successStep];
                     }
@@ -837,7 +837,7 @@ static NSString*    kStepIdentifierSuffixStart          = @"+X";
             NSURL*      url   = [[NSBundle mainBundle] URLForResource:nameWithScaleFactor withExtension:@"m4v"];
             NSError*    error = nil;
             
-            NSAssert([url checkResourceIsReachableAndReturnError:&error] == YES, @"Animation file--%@--not reachable: %@", animationUrl, error);
+            NSAssert([url checkResourceIsReachableAndReturnError:&error], @"Animation file--%@--not reachable: %@", animationUrl, error);
             section.customAnimationURL = url;
         }
         
