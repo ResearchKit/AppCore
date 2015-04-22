@@ -422,7 +422,8 @@ static NSUInteger       kDaysPerWeek        = 7;
         {
             NSError* writeError = nil;
             
-            if (![string writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error]) {
+            if (![string writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error])
+            {
                 if (writeError)
                 {
                     APCLogError2(writeError);
@@ -436,7 +437,7 @@ static NSUInteger       kDaysPerWeek        = 7;
 {
     if (![[NSFileManager defaultManager] fileExistsAtPath:path])
     {
-        NSError * folderCreationError = nil;
+        NSError* folderCreationError = nil;
         
         if (![[NSFileManager defaultManager] createDirectoryAtPath:path
                                        withIntermediateDirectories:YES
