@@ -351,43 +351,51 @@ static NSUInteger       kDaysPerWeek        = 7;
 #pragma mark - Helpers
 /*********************************************************************************/
 
-- (void) resetDataFilesForTracker
+- (void)resetDataFilesForTracker
 {
     APCLogEventWithData(kPassiveCollectorEvent, (@{@"Tracker":self.identifier, @"Status" : @"Reset"}));
-    NSString * csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
-    NSString * infoFilePath = [self.folder stringByAppendingPathComponent:kInfoFilename];
-    NSDictionary * infoDictionary;
+    
+    NSString*       csvFilePath     = [self.folder stringByAppendingPathComponent:kCSVFilename];
+    NSString*       infoFilePath    = [self.folder stringByAppendingPathComponent:kInfoFilename];
+    NSDictionary*   infoDictionary  = nil;
     
     [APCPassiveDataSink deleteFileIfExists:csvFilePath];
     [APCPassiveDataSink deleteFileIfExists:infoFilePath];
     
     //Create info.json
     infoDictionary = @{kIdentifierKey : self.identifier, kStartDateKey : [NSDate date].description};
-    NSString * infoJSON = [infoDictionary JSONString];
+    
+    NSString*       infoJSON        = [infoDictionary JSONString];
+    
     [APCPassiveDataSink createOrReplaceString:infoJSON toFile:infoFilePath];
     
     //Create data csv file
-    NSString * rowString = [[[self columnNames] componentsJoinedByString:@","] stringByAppendingString:@"\n"];
+    NSString*       rowString       = [[[self columnNames] componentsJoinedByString:@","] stringByAppendingString:@"\n"];
+    
     [APCPassiveDataSink createOrAppendString:rowString toFile:csvFilePath];
 }
 
 
-- (NSDate*) datefromDateString: (NSString*) string
+- (NSDate*)datefromDateString:(NSString*)string
 {
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    NSDateFormatter* dateFormat = [[NSDateFormatter alloc] init];
+    
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+    
     return [dateFormat dateFromString:string];
 }
 
 
-+ (void) createOrAppendString: (NSString*) string toFile: (NSString*) path
++ (void)createOrAppendString:(NSString*)string toFile:(NSString*)path
 {
-    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path])
+    {
         [[string dataUsingEncoding:NSUTF8StringEncoding] writeToFile:path atomically:YES];
     }
     else
     {
-        NSFileHandle *fileHandler = [NSFileHandle fileHandleForUpdatingAtPath:path];
+        NSFileHandle* fileHandler = [NSFileHandle fileHandleForUpdatingAtPath:path];
+        
         [fileHandler seekToEndOfFile];
         [fileHandler writeData:[string dataUsingEncoding:NSUTF8StringEncoding]];
         [fileHandler closeFile];
@@ -395,69 +403,100 @@ static NSUInteger       kDaysPerWeek        = 7;
 }
 
 
-+ (void) createOrReplaceString: (NSString*) string toFile: (NSString*) path
++ (void)createOrReplaceString:(NSString*)string toFile:(NSString*)path
 {
-    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        NSError * error;
-        if (![string writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error]) {
-            APCLogError2(error);
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path])
+    {
+        NSError* error = nil;
+        
+        if (![string writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error])
+        {
+            if (error)
+            {
+                APCLogError2(error);
+            }
         }
     }
     else
     {
-        NSError * error;
-        if (![[NSFileManager defaultManager] removeItemAtPath:path error:&error]) {
-            APCLogError2(error);
+        NSError* error = nil;
+        if (![[NSFileManager defaultManager] removeItemAtPath:path error:&error])
+        {
+            if (error)
+            {
+                APCLogError2(error);
+            }
         }
         else
         {
-            NSError * writeError;
+            NSError* writeError = nil;
+            
             if (![string writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error]) {
-                APCLogError2(writeError);
+                if (writeError)
+                {
+                    APCLogError2(writeError);
+                }
             }
         }
     }
 }
 
-+ (void) createFolderIfDoesntExist: (NSString*) path
++ (void)createFolderIfDoesntExist:(NSString*)path
 {
-    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        NSError * folderCreationError;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path])
+    {
+        NSError * folderCreationError = nil;
+        
         if (![[NSFileManager defaultManager] createDirectoryAtPath:path
                                        withIntermediateDirectories:YES
                                                         attributes:@{
                                                                      NSFileProtectionKey :
                                                                          NSFileProtectionCompleteUntilFirstUserAuthentication
                                                                      }
-                                                             error:&folderCreationError]) {
-            APCLogError2(folderCreationError);
+                                                             error:&folderCreationError])
+        {
+            
+            if (folderCreationError)
+            {
+                APCLogError2(folderCreationError);
+            }
         }
     }
 }
 
-+ (void) deleteFileIfExists: (NSString*) path
++ (void)deleteFileIfExists:(NSString*)path
 {
-    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        NSError * error;
-        if (![[NSFileManager defaultManager] removeItemAtPath:path error:&error]) {
-            APCLogError2(error);
+    if ([[NSFileManager defaultManager] fileExistsAtPath:path])
+    {
+        NSError* error = nil;
+        
+        if (![[NSFileManager defaultManager] removeItemAtPath:path error:&error])
+        {
+            if (error)
+            {
+                APCLogError2(error);
+            }
         }
     }
 }
 
 - (unsigned long long)sizeThreshold
 {
-    if (_sizeThreshold == 0) {
+    if (_sizeThreshold == 0)
+    {
         _sizeThreshold = 1 * kKBPerMB * kBytesPerKB;
     }
+    
     return _sizeThreshold;
 }
 
 - (NSTimeInterval)stalenessInterval
 {
-    if (_stalenessInterval == 0) {
+    if (_stalenessInterval == 0)
+    {
         _stalenessInterval = 1 * kDaysPerWeek * kHoursPerDay * kMinsPerHour * kSecsPerMin;
     }
+    
     return _stalenessInterval;
 }
 

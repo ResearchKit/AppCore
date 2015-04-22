@@ -65,15 +65,14 @@ static  NSString*       kLon                                    = @"lon";
                        distanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
                               andPreviousLocation:(CLLocation*)previousLocation
 {
-    NSString*   timestamp           = manager.location.timestamp.description;
-    NSString*   distance            = [NSString stringWithFormat:@"%f", distanceFromReferencePoint];
-    NSString*   unit                = @"meters"; //Hardcoded as Core Locations uses only meters
-    double      magnitude           = [previousLocation calculateMagnitudeToLocation:manager.location];
-    double      direction           = [previousLocation calculateDirectionFromLocation:manager.location];
-    NSString*   directionUnit       = @"radians";
+    NSString*   timestamp               = manager.location.timestamp.description;
+    NSString*   distance                = [NSString stringWithFormat:@"%f", distanceFromReferencePoint];
+    NSString*   unit                    = @"meters"; //Hardcoded as Core Locations uses only meters
+    double      direction               = [previousLocation calculateDirectionFromLocation:manager.location];
+    NSString*   directionUnit           = @"radians";
     
     //  A negative value of manager.location.speed indicates an invalid speed.
-    NSString*   speed               = nil;
+    NSString*   speed                   = nil;
     if (manager.location.speed >= 0)
     {
         double pace = manager.location.speed;
@@ -84,8 +83,8 @@ static  NSString*       kLon                                    = @"lon";
         speed = @"invalid speed";
     }
 
-    NSString*   speedUnit           = @"meters/second";
-    NSString*   floor               = nil;
+    NSString*   speedUnit               = @"meters/second";
+    NSString*   floor                   = nil;
     
     //  A nil value of manager.location.floor indicates that this info is unavailable.
     if (manager.location.floor == nil)
@@ -99,47 +98,55 @@ static  NSString*       kLon                                    = @"lon";
     }
     
     //  Altitude of the location can be positive (above sea level) or negative (below sea level).
-    double      altitude            = manager.location.altitude;
+    double      altitude                = manager.location.altitude;
+    NSString*   altitudeUnit            = @"meters";
+    NSString*   horizontalAccuracy      = [NSString stringWithFormat:@"%f", manager.location.horizontalAccuracy];
+    NSString*   horizontalAccuracyUnit  = @"meters";
+    NSString*   verticalAccuracy        = [NSString stringWithFormat:@"%f", manager.location.verticalAccuracy];
+    NSString*   verticalAccuracyUnit    = @"meters";
     
-    NSString*   horizontalAccuracy  = [NSString stringWithFormat:@"%f", manager.location.horizontalAccuracy];
-    NSString*   verticalAccuracy    = [NSString stringWithFormat:@"%f", manager.location.verticalAccuracy];
-    
-    return  @[timestamp, distance, unit, @(magnitude), @(direction), directionUnit, speed, speedUnit, floor, @(altitude), horizontalAccuracy, verticalAccuracy];
+    return  @[timestamp, distance, unit, @(direction), directionUnit, speed, speedUnit, floor, @(altitude), altitudeUnit, horizontalAccuracy, horizontalAccuracyUnit, verticalAccuracy, verticalAccuracyUnit];
 }
 
 
-- (void) didRecieveUpdateWithLocationManager:(CLLocationManager *) manager withUpdateLocations:(NSArray *) locations
+- (void)didRecieveUpdateWithLocationManager:(CLLocationManager*)manager withUpdateLocations:(NSArray*)locations
 {
     __weak typeof(self) weakSelf = self;
     
-    [self.healthKitCollectorQueue addOperationWithBlock:^{
-        
-        __typeof(self) strongSelf = weakSelf;
-        
-        NSArray  *result = nil;
+    [self.healthKitCollectorQueue addOperationWithBlock:^
+    {
+        __typeof(self)  strongSelf  = weakSelf;
+        NSArray*        result      = nil;
         
         if ((self.baseTrackingLocation.coordinate.latitude == 0.0) && (self.baseTrackingLocation.coordinate.longitude == 0.0))
         {
             self.baseTrackingLocation = [locations firstObject];
             self.mostRecentUpdatedLocation = self.baseTrackingLocation;
+            
             if ([locations count] >= 1)
             {
                 CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
-                result = [self locationDictionaryWithLocationManager:manager distanceFromReferencePoint:distanceFromReferencePoint andPreviousLocation:self.baseTrackingLocation];
+                
+                result = [self locationDictionaryWithLocationManager:manager
+                                          distanceFromReferencePoint:distanceFromReferencePoint
+                                                 andPreviousLocation:self.baseTrackingLocation];
             }
         }
         else
         {
             self.baseTrackingLocation = self.mostRecentUpdatedLocation;
             self.mostRecentUpdatedLocation = manager.location;
+            
             CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
-            result = [self locationDictionaryWithLocationManager:manager distanceFromReferencePoint:distanceFromReferencePoint andPreviousLocation:self.baseTrackingLocation];
+            result = [self locationDictionaryWithLocationManager:manager
+                                      distanceFromReferencePoint:distanceFromReferencePoint
+                                             andPreviousLocation:self.baseTrackingLocation];
         }
         
         //Send to delegate
         if (result)
         {  
-            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
+            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
                                                                    result[0],
                                                                    result[1],
                                                                    result[2],
@@ -151,7 +158,9 @@ static  NSString*       kLon                                    = @"lon";
                                                                    result[8],
                                                                    result[9],
                                                                    result[10],
-                                                                   result[11]];
+                                                                   result[11],
+                                                                   result[12],
+                                                                   result[13]];
 
             //Write to file
             [APCPassiveDataSink createOrAppendString:stringToWrite
@@ -175,10 +184,12 @@ static  NSString*       kLon                                    = @"lon";
     return [self.folder stringByAppendingPathComponent:kRecentLocationFileName];
 }
 
-- (void)setBaseTrackingLocation:(CLLocation *)baseTrackingLocation
+- (void)setBaseTrackingLocation:(CLLocation*)baseTrackingLocation
 {
     _baseTrackingLocation = baseTrackingLocation;
+    
     NSDictionary* dict = @{kLat : @(baseTrackingLocation.coordinate.latitude), kLon : @(baseTrackingLocation.coordinate.longitude)};
+    
     [self writeDictionary:dict toPath:[self baseTrackingFilePath]];
 }
 
@@ -214,10 +225,12 @@ static  NSString*       kLon                                    = @"lon";
     return _baseTrackingLocation;
 }
 
-- (void)setMostRecentUpdatedLocation:(CLLocation *)mostRecentUpdatedLocation
+- (void)setMostRecentUpdatedLocation:(CLLocation*)mostRecentUpdatedLocation
 {
     _mostRecentUpdatedLocation = mostRecentUpdatedLocation;
+    
     NSDictionary * dict = @{kLat : @(mostRecentUpdatedLocation.coordinate.latitude), kLon : @(mostRecentUpdatedLocation.coordinate.longitude)};
+    
     [self writeDictionary:dict toPath:[self recentLocationFilePath]];
 }
 

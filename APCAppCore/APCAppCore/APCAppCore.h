@@ -80,7 +80,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import "APCAppCore/ZZConstants.h"
 #import "APCAppCore/ZZError.h"
 #import "APCAppCore/APCCMS.h"
-
 #import "APCAppCore/APCNewPassiveDataCollector.h"
 #import "APCAppCore/APCCollectorProtocol.h"
 #import "APCAppCore/APCHealthKitBackgroundDataCollector.h"
