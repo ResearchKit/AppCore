@@ -51,10 +51,6 @@ static NSUInteger       kMinsPerHour        = 60;
 static NSUInteger       kHoursPerDay        = 24;
 static NSUInteger       kDaysPerWeek        = 7;
 
-@interface APCPassiveDataSink ()
-
-@end
-
 @implementation APCPassiveDataSink
 
 /*********************************************************************************/
@@ -260,6 +256,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     {
         [self flush];
     }
+    [self flush];
 }
 
 
@@ -282,8 +279,20 @@ static NSUInteger       kDaysPerWeek        = 7;
     
     if (!infoDictionary[kStartDateKey]) {
         startDate = [NSDate date];
+        
+        
     } else {
-        startDate = [self datefromDateString:infoDictionary[kStartDateKey]];
+        
+        NSDate *date = [self datefromDateString:infoDictionary[kStartDateKey]];
+        
+        if (date == nil)
+        {
+            startDate = [NSDate date];
+        }
+        else
+        {
+            startDate = date;
+        }
     }
     
     infoDictionary[kStartDateKey] = [startDate toStringInISO8601Format];
