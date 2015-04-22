@@ -51,10 +51,6 @@ static NSUInteger       kMinsPerHour        = 60;
 static NSUInteger       kHoursPerDay        = 24;
 static NSUInteger       kDaysPerWeek        = 7;
 
-@interface APCPassiveHealthKitQuantityDataSink ()
-
-@end
-
 @implementation APCPassiveDataSink
 
 /*********************************************************************************/
@@ -132,8 +128,8 @@ static NSUInteger       kDaysPerWeek        = 7;
         _registeredTrackers     = [NSMutableDictionary dictionary];
         _collectorsPath         = [documentsDir stringByAppendingPathComponent:kCollectorFolder];
         
-        [APCPassiveHealthKitQuantityDataSink createFolderIfDoesntExist:_collectorsPath];
-        [APCPassiveHealthKitQuantityDataSink createFolderIfDoesntExist:[_collectorsPath stringByAppendingPathComponent:kUploadFolder]];
+        [APCPassiveDataSink createFolderIfDoesntExist:_collectorsPath];
+        [APCPassiveDataSink createFolderIfDoesntExist:[_collectorsPath stringByAppendingPathComponent:kUploadFolder]];
         
         [self loadOrCreateDataFiles];
     }
@@ -260,6 +256,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     {
         [self flush];
     }
+    [self flush];
 }
 
 
@@ -282,8 +279,20 @@ static NSUInteger       kDaysPerWeek        = 7;
     
     if (!infoDictionary[kStartDateKey]) {
         startDate = [NSDate date];
+        
+        
     } else {
-        startDate = [self datefromDateString:infoDictionary[kStartDateKey]];
+        
+        NSDate *date = [self datefromDateString:infoDictionary[kStartDateKey]];
+        
+        if (date == nil)
+        {
+            startDate = [NSDate date];
+        }
+        else
+        {
+            startDate = date;
+        }
     }
     
     infoDictionary[kStartDateKey] = [startDate toStringInISO8601Format];
@@ -318,7 +327,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     
     NSDictionary *sageBS = [APCJSONSerializer serializableDictionaryFromSourceDictionary:infoDictionary];
     
-    [APCPassiveHealthKitQuantityDataSink createOrReplaceString:[sageBS JSONString] toFile:infoFilePath];
+    [APCPassiveDataSink createOrReplaceString:[sageBS JSONString] toFile:infoFilePath];
     
     [self uploadWithDataArchiverAndUploader];
     [self resetDataFilesForTracker];
@@ -355,11 +364,11 @@ static NSUInteger       kDaysPerWeek        = 7;
     //Create info.json
     infoDictionary = @{kIdentifierKey : self.identifier, kStartDateKey : [NSDate date].description};
     NSString * infoJSON = [infoDictionary JSONString];
-    [APCPassiveHealthKitQuantityDataSink createOrReplaceString:infoJSON toFile:infoFilePath];
+    [APCPassiveDataSink createOrReplaceString:infoJSON toFile:infoFilePath];
     
     //Create data csv file
     NSString * rowString = [[[self columnNames] componentsJoinedByString:@","] stringByAppendingString:@"\n"];
-    [APCPassiveHealthKitQuantityDataSink createOrAppendString:rowString toFile:csvFilePath];
+    [APCPassiveDataSink createOrAppendString:rowString toFile:csvFilePath];
 }
 
 
