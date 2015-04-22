@@ -234,13 +234,7 @@ NSString * const kAPCInsightDataCollectionIsCompletedNotification = @"APCInsight
     if (sortedReadings.count == 0) {
         // There is nothing to do.
     } else {
-        // When there is only a single point we will return it
-        if (sortedReadings.count == 1) {
-            [self.insightPoints addObjectsFromArray:sortedReadings];
-        } else {
-            [self.insightPoints addObjectsFromArray:sortedReadings];
-        }
-        
+        [self.insightPoints addObjectsFromArray:sortedReadings];
         [self fetchDataFromHealthKitForItemsInInsightQueue];
     }
 }
