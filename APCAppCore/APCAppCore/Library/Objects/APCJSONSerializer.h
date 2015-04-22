@@ -41,18 +41,18 @@
  Imported (stolen, duplicated) from APCDataArchiver.
  Working on normalizing that.
  */
-static NSString * const kAPCSerializedDataKey_QuestionType            = @"questionType";
-static NSString * const kAPCSerializedDataKey_QuestionTypeName        = @"questionTypeName";
-static NSString * const kAPCSerializedDataKey_UserInfo                = @"userInfo";
-static NSString * const kAPCSerializedDataKey_Identifier              = @"identifier";
-static NSString * const kAPCSerializedDataKey_Item                    = @"item";
-static NSString * const kAPCSerializedDataKey_TaskRun                 = @"taskRun";
-static NSString * const kAPCSerializedDataKey_Files                   = @"files";
-static NSString * const kAPCSerializedDataKey_AppName                 = @"appName";
-static NSString * const kAPCSerializedDataKey_AppVersion              = @"appVersion";
-static NSString * const kAPCSerializedDataKey_FileInfoName            = @"filename";
-static NSString * const kAPCSerializedDataKey_FileInfoTimeStamp       = @"timestamp";
-static NSString * const kAPCSerializedDataKey_FileInfoContentType     = @"contentType";
+FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_QuestionType;
+FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_QuestionTypeName;
+FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_UserInfo;
+FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_Identifier;
+FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_Item;
+FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_TaskRun;
+FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_Files;
+FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_AppName;
+FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_AppVersion;
+FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_FileInfoName;
+FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_FileInfoTimeStamp;
+FOUNDATION_EXPORT NSString * const kAPCSerializedDataKey_FileInfoContentType;
 
 
 /**
