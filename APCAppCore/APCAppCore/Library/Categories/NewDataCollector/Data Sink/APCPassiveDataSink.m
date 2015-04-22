@@ -297,35 +297,67 @@ static NSUInteger       kDaysPerWeek        = 7;
     
     infoDictionary[kStartDateKey] = [startDate toStringInISO8601Format];
     
-    NSString * infoFilePath = [self.folder stringByAppendingPathComponent:kInfoFilename];
-    
-#warning This is temporary, please remove once the work on a better class is completed.
-    NSError *fileAttributeError = nil;
-    NSString *dataFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
-    NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:dataFilePath
+    NSString*       infoFilePath        = [self.folder stringByAppendingPathComponent:kInfoFilename];
+    NSError*        fileAttributeError  = nil;
+    NSString*       dataFilePath        = [self.folder stringByAppendingPathComponent:kCSVFilename];
+    NSDictionary*   fileAttributes      = [[NSFileManager defaultManager] attributesOfItemAtPath:dataFilePath
                                                                                     error:&fileAttributeError];
-    NSString *fileTimeStamp = nil;
+    NSString*       fileTimeStamp       = nil;
     
-    if (!fileAttributes) {
+    if (!fileAttributes)
+    {
         APCLogError2(fileAttributeError);
+        
         fileTimeStamp = [[NSDate date] toStringInISO8601Format];
-    } else {
-        fileTimeStamp = [[fileAttributes fileModificationDate] toStringInISO8601Format];
+        
+    } else
+    {
+        NSDate*     fileModificationDate = [fileAttributes fileModificationDate];
+        
+        if (fileModificationDate)
+        {
+            fileTimeStamp = [fileModificationDate toStringInISO8601Format];
+        }
+        else
+        {
+            fileTimeStamp = [[NSDate date] toStringInISO8601Format];
+        }
     }
     
-    infoDictionary[@"files"] = @[@{
-                                     @"filename": kCSVFilename,
-                                     @"timestamp": fileTimeStamp
+    id appName           = [APCUtilities appName];
+    id appVersion        = [APCUtilities appVersion];
+    id deviceHardware    = [APCDeviceHardware platformString];
+    
+    
+    if (appName == nil)
+    {
+        appName = [NSNull null];
+    }
+    
+    if (appVersion == nil)
+    {
+        appVersion = [NSNull null];
+    }
+    
+    if (deviceHardware == nil)
+    {
+        deviceHardware = [NSNull null];
+    }
+    
+    infoDictionary[@"files"]    = @[
+                                    @{
+                                     @"filename"    : kCSVFilename,
+                                     @"timestamp"   : fileTimeStamp
                                      }
-                                 ];
-    infoDictionary[@"taskRun"] = [[NSUUID UUID] UUIDString];
+                                    ];
+    infoDictionary[@"taskRun"]  = [[NSUUID UUID] UUIDString];
     infoDictionary[@"metaData"] = @{
-                                    @"appName": [APCUtilities appName],
-                                    @"appVersion": [APCUtilities appVersion],
-                                    @"device": [APCDeviceHardware platformString]
+                                    @"appName"      :   appName,
+                                    @"appVersion"   :   appVersion,
+                                    @"device"       :   deviceHardware
                                     };
     
-    NSDictionary *sageBS = [APCJSONSerializer serializableDictionaryFromSourceDictionary:infoDictionary];
+    NSDictionary* sageBS        = [APCJSONSerializer serializableDictionaryFromSourceDictionary:infoDictionary];
     
     [APCPassiveDataSink createOrReplaceString:[sageBS JSONString] toFile:infoFilePath];
     
@@ -335,10 +367,13 @@ static NSUInteger       kDaysPerWeek        = 7;
 
 - (void) uploadWithDataArchiverAndUploader
 {
-    NSError* error = nil;
-    
-    NSString* csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
-    [APCDataArchiverAndUploader uploadFileAtPath:csvFilePath returningError:&error];
+    NSError*    error       = nil;
+    NSString*   csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
+
+    [APCDataArchiverAndUploader uploadFileAtPath:csvFilePath
+                              withTaskIdentifier:self.identifier
+                                  andTaskRunUuid:nil
+                                  returningError:&error];
     
     if (error)
     {
