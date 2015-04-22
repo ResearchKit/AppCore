@@ -154,8 +154,18 @@
 
 /**
  .zips and uploads the specified dictionary to Sage.
+ 
+ @param taskIdentifier  A string identifying the purpose of this
+ upload.  I *think* this has to be something like a variable name.
+ Specification in progress.  Required.
+ 
+ @param taskRunUuid  A UUID representing a unique ID for this
+ run of this particular task.  May be nil.  I think.
+ Specification in progress.
  */
-+ (void) uploadDictionary: (NSDictionary *) dictionary;
++ (void) uploadDictionary: (NSDictionary *) dictionary
+       withTaskIdentifier: (NSString *) taskIdentifier
+           andTaskRunUuid: (NSUUID *) taskRunUuid;
 
 
 /**
@@ -183,13 +193,23 @@
  error object.
  
  @param path  The path of the file to upload.
- 
+
+ @param taskIdentifier  A string identifying the purpose of this
+ upload.  I *think* this has to be something like a variable name.
+ Specification in progress.  Required.
+
+ @param taskRunUuid  A UUID representing a unique ID for this
+ run of this particular task.  May be nil.  I think.
+ Specification in progress.
+
  @param errorToReturn  A pointer to an error object.  If there's
  a problem obtaining the file, we'll return the error here (and
  print it to the console).  Pass nil if you don't care about the
  error.
  */
 + (BOOL) uploadFileAtPath: (NSString *) path
+       withTaskIdentifier: (NSString *) taskIdentifier
+           andTaskRunUuid: (NSUUID *) taskRunUuid
            returningError: (NSError * __autoreleasing *) errorToReturn;
 
 
@@ -215,6 +235,14 @@
  have different filenames-and-extensions -- please don't have
  two files named "temp.txt", for example.
 
+ @param taskIdentifier  A string identifying the purpose of this
+ upload.  I *think* this has to be something like a variable name.
+ Specification in progress.  Required.
+
+ @param taskRunUuid  A UUID representing a unique ID for this
+ run of this particular task.  May be nil.  I think.
+ Specification in progress.
+ 
  @param errorToReturn  A pointer to an error object.  If there's
  a problem obtaining the file, we'll return the error here (and
  print it to the console).  Pass nil if you don't care about the
@@ -226,6 +254,8 @@
  we'll delete, as if they had been uploaded.
  */
 + (BOOL) uploadFilesAtPaths: (NSArray *) path
+         withTaskIdentifier: (NSString *) taskIdentifier
+             andTaskRunUuid: (NSUUID *) taskRunUuid
              returningError: (NSError * __autoreleasing *) errorToReturn;
 
 
@@ -237,22 +267,25 @@
 /*
  Other ideas, based on other needs around the app.  Not yet implemented.
  (All this will eventually go into DataSubstrate.)
+ 
+ Please leave this commented-out block here, as we think about
+ these options.
  */
 
-/** This represents what -[BaseTaskViewController processTaskResult] does now. */
-+ (void) uploadResearchKitTaskResult: (id /* ORKTaskResult* */) taskResult;
-
-/** For air-quality data:  encrypt the individual files inside the .zip file, as well as encrypting the whole package. */
-+ (void)            uploadDictionary: (NSDictionary *) dictionary
-     encryptingContentsBeforeZipping: (BOOL) shouldEncryptContentsFirst;
-
-/** Er...  maybe this would be better?  Maybe it calls the above? */
-+ (void) uploadAirQualityData: (NSDictionary *) airQualityStuff;
-
-/** Catchall for uploading piles of random stuff?  Tapping test, 6-minute-walk test, etc.? */
-+ (void) uploadDictionaries: (NSArray *) dictionaries
-          withGroupFilename: (NSString *) filename
-    encryptingContentsFirst: (BOOL) shouldEncryptContentsFirst;
+//    /** This represents what -[BaseTaskViewController processTaskResult] does now. */
+//    + (void) uploadResearchKitTaskResult: (id /* ORKTaskResult* */) taskResult;
+//
+//    /** For air-quality data:  encrypt the individual files inside the .zip file, as well as encrypting the whole package. */
+//    + (void)            uploadDictionary: (NSDictionary *) dictionary
+//         encryptingContentsBeforeZipping: (BOOL) shouldEncryptContentsFirst;
+//
+//    /** Er...  maybe this would be better?  Maybe it calls the above? */
+//    + (void) uploadAirQualityData: (NSDictionary *) airQualityStuff;
+//
+//    /** Catchall for uploading piles of random stuff?  Tapping test, 6-minute-walk test, etc.? */
+//    + (void) uploadDictionaries: (NSArray *) dictionaries
+//              withGroupFilename: (NSString *) filename
+//        encryptingContentsFirst: (BOOL) shouldEncryptContentsFirst;
 
 
 @end
