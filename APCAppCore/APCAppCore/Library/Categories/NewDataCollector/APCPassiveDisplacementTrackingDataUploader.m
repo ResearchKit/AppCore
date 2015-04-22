@@ -65,15 +65,14 @@ static  NSString*       kLon                                    = @"lon";
                        distanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
                               andPreviousLocation:(CLLocation*)previousLocation
 {
-    NSString*   timestamp           = manager.location.timestamp.description;
-    NSString*   distance            = [NSString stringWithFormat:@"%f", distanceFromReferencePoint];
-    NSString*   unit                = @"meters"; //Hardcoded as Core Locations uses only meters
-    double      magnitude           = [previousLocation calculateMagnitudeToLocation:manager.location];
-    double      direction           = [previousLocation calculateDirectionFromLocation:manager.location];
-    NSString*   directionUnit       = @"radians";
+    NSString*   timestamp               = manager.location.timestamp.description;
+    NSString*   distance                = [NSString stringWithFormat:@"%f", distanceFromReferencePoint];
+    NSString*   unit                    = @"meters"; //Hardcoded as Core Locations uses only meters
+    double      direction               = [previousLocation calculateDirectionFromLocation:manager.location];
+    NSString*   directionUnit           = @"radians";
     
     //  A negative value of manager.location.speed indicates an invalid speed.
-    NSString*   speed               = nil;
+    NSString*   speed                   = nil;
     if (manager.location.speed >= 0)
     {
         double pace = manager.location.speed;
@@ -84,8 +83,8 @@ static  NSString*       kLon                                    = @"lon";
         speed = @"invalid speed";
     }
 
-    NSString*   speedUnit           = @"meters/second";
-    NSString*   floor               = nil;
+    NSString*   speedUnit               = @"meters/second";
+    NSString*   floor                   = nil;
     
     //  A nil value of manager.location.floor indicates that this info is unavailable.
     if (manager.location.floor == nil)
@@ -99,12 +98,14 @@ static  NSString*       kLon                                    = @"lon";
     }
     
     //  Altitude of the location can be positive (above sea level) or negative (below sea level).
-    double      altitude            = manager.location.altitude;
+    double      altitude                = manager.location.altitude;
+    NSString*   altitudeUnit            = @"meters";
+    NSString*   horizontalAccuracy      = [NSString stringWithFormat:@"%f", manager.location.horizontalAccuracy];
+    NSString*   horizontalAccuracyUnit  = @"meters";
+    NSString*   verticalAccuracy        = [NSString stringWithFormat:@"%f", manager.location.verticalAccuracy];
+    NSString*   verticalAccuracyUnit    = @"meters";
     
-    NSString*   horizontalAccuracy  = [NSString stringWithFormat:@"%f", manager.location.horizontalAccuracy];
-    NSString*   verticalAccuracy    = [NSString stringWithFormat:@"%f", manager.location.verticalAccuracy];
-    
-    return  @[timestamp, distance, unit, @(magnitude), @(direction), directionUnit, speed, speedUnit, floor, @(altitude), horizontalAccuracy, verticalAccuracy];
+    return  @[timestamp, distance, unit, @(direction), directionUnit, speed, speedUnit, floor, @(altitude), altitudeUnit, horizontalAccuracy, horizontalAccuracyUnit, verticalAccuracy, verticalAccuracyUnit];
 }
 
 
@@ -139,7 +140,7 @@ static  NSString*       kLon                                    = @"lon";
         //Send to delegate
         if (result)
         {  
-            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
+            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
                                                                    result[0],
                                                                    result[1],
                                                                    result[2],
@@ -151,7 +152,9 @@ static  NSString*       kLon                                    = @"lon";
                                                                    result[8],
                                                                    result[9],
                                                                    result[10],
-                                                                   result[11]];
+                                                                   result[11],
+                                                                   result[12],
+                                                                   result[13]];
 
             //Write to file
             [APCPassiveDataSink createOrAppendString:stringToWrite
