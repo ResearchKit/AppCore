@@ -102,7 +102,12 @@
     
     [self.rowItemsOrder removeObjectAtIndex:sourceIndexPath.row];
     [self.rowItemsOrder insertObject:rowTypeNumber atIndex:destinationIndexPath.row];
-
+    
+    // update the items array to reflect the updated item order.
+    APCTableViewDashboardItem *selectedItem = [self.items objectAtIndex:sourceIndexPath.row];
+    
+    [self.items removeObjectAtIndex:sourceIndexPath.row];
+    [self.items insertObject:selectedItem atIndex:destinationIndexPath.row];
 }
 
 - (UITableViewCellEditingStyle) tableView: (UITableView *) __unused tableView
