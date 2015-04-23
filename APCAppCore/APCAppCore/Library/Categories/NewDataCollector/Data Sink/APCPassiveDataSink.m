@@ -383,7 +383,6 @@ static NSUInteger       kDaysPerWeek        = 7;
     }
 }
 
-
 /*********************************************************************************/
 #pragma mark - Helpers
 /*********************************************************************************/
@@ -430,16 +429,14 @@ static NSUInteger       kDaysPerWeek        = 7;
     [APCPassiveDataSink createOrAppendString:rowString toFile:csvFilePath];
 }
 
-
 - (NSDate*)datefromDateString:(NSString*)string
 {
     NSDateFormatter* dateFormat = [[NSDateFormatter alloc] init];
     
-    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZ"];
+    [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZZ"];
     
     return [dateFormat dateFromString:string];
 }
-
 
 + (void)createOrAppendString:(NSString*)string toFile:(NSString*)path
 {
