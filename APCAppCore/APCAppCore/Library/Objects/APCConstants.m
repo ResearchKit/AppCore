@@ -61,6 +61,7 @@ NSString *const APCConsentCompletedWithDisagreeNotification = @"goToSignInJoinSc
 
 NSString *const APCMotionHistoryReporterDoneNotification = @"APCMotionHistoryReporterDoneNotification";
 
+#warning NOT CERTAIN IF THIS CONSTANT BELOW IS STILL BEING USED 
 NSString *const APCHealthKitObserverQueryUpdateForSampleTypeNotification = @"APCHealthKitObserverQueryUpdateForSampleTypeNotification";
 
 NSString *const kStudyIdentifierKey                 = @"StudyIdentifierKey";

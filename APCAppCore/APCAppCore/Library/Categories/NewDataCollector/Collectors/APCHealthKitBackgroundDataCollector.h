@@ -42,6 +42,6 @@
 @property (nonatomic)           NSUInteger                  queryLimit;
 
 
-- (instancetype) initWithIdentifier: (NSString *) identifier sampleType: (HKSampleType *) type andLimit: (NSUInteger)queryLimit;
+- (instancetype)initWithIdentifier:(NSString*)identifier sampleType:(HKSampleType*)type andLimit:(NSUInteger)queryLimit;
 
 @end
