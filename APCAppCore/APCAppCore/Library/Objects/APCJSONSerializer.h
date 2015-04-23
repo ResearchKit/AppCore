@@ -46,6 +46,7 @@ static NSString * const kAPCSerializedDataKey_QuestionTypeName        = @"questi
 static NSString * const kAPCSerializedDataKey_UserInfo                = @"userInfo";
 static NSString * const kAPCSerializedDataKey_Identifier              = @"identifier";
 static NSString * const kAPCSerializedDataKey_Item                    = @"item";
+static NSString * const kAPCSerializedDataKey_TaskRun                 = @"taskRun";
 static NSString * const kAPCSerializedDataKey_Files                   = @"files";
 static NSString * const kAPCSerializedDataKey_AppName                 = @"appName";
 static NSString * const kAPCSerializedDataKey_AppVersion              = @"appVersion";
