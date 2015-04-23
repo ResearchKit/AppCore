@@ -233,6 +233,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCTheme.h>
 #import <APCAppCore/APCActivityTrackingStepViewController.h>
 #import <APCAppCore/APCFitnessAllocation.h>
+#import <APCAppCore/APCExampleLabel.h>
 
 /* -------------------------
  Cells
