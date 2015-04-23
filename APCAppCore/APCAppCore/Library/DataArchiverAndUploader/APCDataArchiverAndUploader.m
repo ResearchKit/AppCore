@@ -420,9 +420,6 @@ static NSString *folderPathForUploadOperations = nil;
     {
         _taskIdentifier = taskIdentifier;
         _taskRunUuid = taskRunUuid;
-
-        [self checkForValidTaskIdentifier: taskIdentifier emittingErrorIfNeeded: YES];
-        [self checkForValidTaskRunUuid:    taskRunUuid    emittingErrorIfNeeded: YES];
     }
 
     return self;
@@ -461,91 +458,7 @@ static NSString *folderPathForUploadOperations = nil;
 
 
 // ---------------------------------------------------------
-#pragma mark - Preparation 1:  Data-validating required fields
-// ---------------------------------------------------------
-
-- (void) checkForValidTaskIdentifier: (NSString *) incomingTaskIdentifier
-               emittingErrorIfNeeded: (BOOL) shouldEmitError
-{
-    BOOL isValid = NO;
-
-    /*
-     TODO:  Find out from Sage what the requirements for this
-     field are.  We should probably check for this being, say,
-     a legal C-style variable name.
-     */
-    NSString *trimmedString = [incomingTaskIdentifier stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-
-    if (trimmedString.length > 0)
-    {
-        isValid = YES;
-    }
-
-    /*
-     TESTING
-     
-     Please leave this block of test code here.  It helps
-     verify that we're handling each possible error correctly.
-
-            shouldEmitError = YES;
-            isValid = NO;
-     */
-
-    if (shouldEmitError && ! isValid)
-    {
-        NSString *errorMessage = [NSString stringWithFormat: kErrorInvalidTaskIdentifier_SuggestionFormat, incomingTaskIdentifier];
-
-        NSError *error = [NSError errorWithCode: kErrorInvalidTaskIdentifier_Code
-                                         domain: kArchiveAndUploadErrorDomain
-                                  failureReason: kErrorInvalidTaskIdentifier_Reason
-                             recoverySuggestion: errorMessage];
-
-        APCLogError2 (error);
-    }
-}
-
-- (void) checkForValidTaskRunUuid: (NSUUID *) incomingTaskRunUuid
-            emittingErrorIfNeeded: (BOOL) shouldEmitError
-
-{
-    BOOL isValid = NO;
-
-    /*
-     If we end up with any requirements for this field, put 'em here.
-     Otherwise...
-     */
-    if (YES)
-    {
-        isValid = YES;
-    }
-
-    /*
-     TESTING
-     
-     Please leave this block of test code here.  It helps
-     verify that we're handling each possible error correctly.
-
-            shouldEmitError = YES;
-            isValid = NO;
-     */
-
-    if (shouldEmitError && ! isValid)
-    {
-        NSString *errorMessage = [NSString stringWithFormat: kErrorInvalidTaskRunUuid_SuggestionFormat, incomingTaskRunUuid];
-
-        NSError *error = [NSError errorWithCode: kErrorInvalidTaskRunUuid_Code
-                                         domain: kArchiveAndUploadErrorDomain
-                                  failureReason: kErrorInvalidTaskRunUuid_Reason
-                             recoverySuggestion: errorMessage];
-
-        APCLogError2 (error);
-    }
-}
-
-
-
-// ---------------------------------------------------------
-#pragma mark - Preparation 2:  moving files to a location we control, while still on the calling thread
+#pragma mark - Preparation:  moving files to a location we control, while still on the calling thread
 // ---------------------------------------------------------
 
 - (BOOL) moveUploadableFilesToSafeLocationReturningError: (NSError * __autoreleasing *) errorToReturn
