@@ -81,6 +81,7 @@ FOUNDATION_EXPORT NSString *const APCHealthKitObserverQueryUpdateForSampleTypeNo
 FOUNDATION_EXPORT NSString *const kStudyIdentifierKey;
 FOUNDATION_EXPORT NSString *const kAppPrefixKey;
 FOUNDATION_EXPORT NSString *const kBridgeEnvironmentKey;
+FOUNDATION_EXPORT NSString *const kExampleConsentKey;
 FOUNDATION_EXPORT NSString *const kDatabaseNameKey;
 FOUNDATION_EXPORT NSString *const kTasksAndSchedulesJSONFileNameKey;
 FOUNDATION_EXPORT NSString *const kConsentSectionFileNameKey;
