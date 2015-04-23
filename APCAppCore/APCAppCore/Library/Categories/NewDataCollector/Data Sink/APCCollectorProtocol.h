@@ -40,6 +40,6 @@
 
 - (void)didRecieveUpdatedValuesFromCollector:(id)results;
 - (void)didRecieveUpdatedValueFromCollector:(id)result;
-- (void)didRecieveUpdateWithLocationManager:(CLLocationManager *)manager withUpdateLocations:(NSArray *)locations;
+- (void)didRecieveUpdateWithLocationManager:(CLLocationManager*)manager withUpdateLocations:(NSArray*)locations;
 
 @end

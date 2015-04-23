@@ -47,13 +47,18 @@
     return self;
 }
 
-- (void)start {
+- (void)start
+{
     /* abstract implementation */
 }
-- (void)stop {
+
+- (void)stop
+{
     /* abstract implementation */
 }
-- (void) updateTracking {
+
+- (void) updateTracking
+{
     /* abstract implementation */
 }
 

@@ -37,7 +37,7 @@
 
 @interface APCDisplacementTrackingCollector : APCDataCollector
 
-- (instancetype)initWithIdentifier: (NSString*) identifier deferredUpdatesTimeout:(NSTimeInterval)anUpdateTimeout;
+- (instancetype)initWithIdentifier:(NSString*)identifier deferredUpdatesTimeout:(NSTimeInterval)anUpdateTimeout;
 
 @end
 
