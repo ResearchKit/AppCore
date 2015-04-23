@@ -71,6 +71,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 /* -------------------------------------
  Data Archiver & Passive Data Collectors
  --------------------------------------- */
+#import <APCAppCore/APCDataArchiverAndUploader.h>
 #import <APCAppCore/APCDataArchiver.h>
 #import <APCAppCore/APCPassiveDataCollector.h>
 #import <APCAppCore/APCDataTracker.h>
