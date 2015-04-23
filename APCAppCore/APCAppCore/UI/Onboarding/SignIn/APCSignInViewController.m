@@ -230,6 +230,13 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 {
     ORKTaskViewController *consentViewController = [((APCAppDelegate*)[UIApplication sharedApplication].delegate) consentViewController];
     consentViewController.delegate = self;
+    
+    NSUInteger subviewsCount = consentViewController.view.subviews.count;
+    UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:consentViewController.view.bounds
+                                                    withCenter:consentViewController.view.center];
+    
+    [consentViewController.view insertSubview:watermarkLabel atIndex:subviewsCount];
+    
     [self.navigationController presentViewController:consentViewController animated:YES completion:nil];
 }
 

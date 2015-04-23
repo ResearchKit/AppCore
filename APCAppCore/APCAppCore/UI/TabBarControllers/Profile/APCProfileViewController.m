@@ -1659,6 +1659,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     delegateConsentVC = consentVC;
     delegateConsentVC.delegate = self;
     
+    NSUInteger subviewsCount = delegateConsentVC.view.subviews.count;
+    UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:delegateConsentVC.view.bounds
+                                                    withCenter:delegateConsentVC.view.center];
+    
+    [delegateConsentVC.view insertSubview:watermarkLabel atIndex:subviewsCount];
+    
     [self presentViewController:consentVC animated:YES completion:nil];
 }
 

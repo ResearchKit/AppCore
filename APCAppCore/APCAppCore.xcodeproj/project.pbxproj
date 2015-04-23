@@ -68,6 +68,8 @@
 		089465531A8C211100A983AC /* APCInsights.m in Sources */ = {isa = PBXBuildFile; fileRef = 089465511A8C211100A983AC /* APCInsights.m */; };
 		08970F121A8D407600EA46C3 /* APCFoodInsight.h in Headers */ = {isa = PBXBuildFile; fileRef = 08970F101A8D407600EA46C3 /* APCFoodInsight.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		08970F131A8D407600EA46C3 /* APCFoodInsight.m in Sources */ = {isa = PBXBuildFile; fileRef = 08970F111A8D407600EA46C3 /* APCFoodInsight.m */; };
+		08BABB421AD62D5D00059C35 /* APCExampleLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 08BABB401AD62D5D00059C35 /* APCExampleLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		08BABB431AD62D5D00059C35 /* APCExampleLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 08BABB411AD62D5D00059C35 /* APCExampleLabel.m */; };
 		08EA2AB31A7AD564007549C0 /* UIImage+ImageEffects.h in Headers */ = {isa = PBXBuildFile; fileRef = 08EA2AB11A7AD564007549C0 /* UIImage+ImageEffects.h */; };
 		08EA2AB41A7AD564007549C0 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */; };
 		360C63D11A339746002EC86C /* NSDateComponentsHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */; };
@@ -762,6 +764,8 @@
 		089465511A8C211100A983AC /* APCInsights.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCInsights.m; sourceTree = "<group>"; };
 		08970F101A8D407600EA46C3 /* APCFoodInsight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFoodInsight.h; sourceTree = "<group>"; };
 		08970F111A8D407600EA46C3 /* APCFoodInsight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFoodInsight.m; sourceTree = "<group>"; };
+		08BABB401AD62D5D00059C35 /* APCExampleLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCExampleLabel.h; sourceTree = "<group>"; };
+		08BABB411AD62D5D00059C35 /* APCExampleLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCExampleLabel.m; sourceTree = "<group>"; };
 		08EA2AB11A7AD564007549C0 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		08EA2AB21A7AD564007549C0 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		360C63D01A339746002EC86C /* NSDateComponentsHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateComponentsHelperTests.m; sourceTree = "<group>"; };
@@ -2819,6 +2823,8 @@
 				F5F129D81A2F78490015982C /* APCPermissionButton.m */,
 				5B7EA0211A44C21200924DEE /* APCFormTextField.h */,
 				5B7EA0221A44C21200924DEE /* APCFormTextField.m */,
+				08BABB401AD62D5D00059C35 /* APCExampleLabel.h */,
+				08BABB411AD62D5D00059C35 /* APCExampleLabel.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3086,6 +3092,7 @@
 				F5B946341A7309A20034C522 /* ZZError.h in Headers */,
 				369E27FE1A96B7A200D35DFA /* APCMedTrackerDailyDosageRecord+Helper.h in Headers */,
 				F5F129F01A2F78490015982C /* APCDBStatus.h in Headers */,
+				08BABB421AD62D5D00059C35 /* APCExampleLabel.h in Headers */,
 				F5F129F41A2F78490015982C /* APCResult+AddOn.h in Headers */,
 				F5B946481A7309A20034C522 /* ZZStandardDecryptInputStream.h in Headers */,
 				712AB44C1A9E692400556DA2 /* APCMotionHistoryData.h in Headers */,
@@ -3352,6 +3359,7 @@
 				5B827B561A80CB0400C685A3 /* APCFadeAnimator.m in Sources */,
 				36D0510F1ABB92F0008FC9B3 /* NSFileManager+Helper.m in Sources */,
 				F5F12AF11A2F78490015982C /* APCDashboardProgressTableViewCell.m in Sources */,
+				08BABB431AD62D5D00059C35 /* APCExampleLabel.m in Sources */,
 				F5B9480F1A73272C0034C522 /* APCTimeSelector.m in Sources */,
 				F5F12A0B1A2F78490015982C /* APCTask.m in Sources */,
 				F5B9463E1A7309A20034C522 /* ZZNewArchiveEntry.mm in Sources */,
