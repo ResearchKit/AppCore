@@ -86,7 +86,7 @@
 @protocol APCProfileViewControllerDelegate <NSObject>
 @optional
 
-- (UITableViewCell *)cellForRowAtAdjustedIndexPath:(NSIndexPath *)indexPath;
+- (UITableViewCell *)decorateCell:(UITableViewCell *)cell;
 
 - (BOOL)willDisplayCell:(NSIndexPath *)indexPath;
 

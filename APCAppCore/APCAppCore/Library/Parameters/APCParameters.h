@@ -68,6 +68,7 @@ extern NSString *const ParametersValueChangeNotification;
 
 @property (nonatomic) BOOL hideConsent;
 @property (nonatomic) BOOL bypassServer;
+@property (nonatomic) BOOL hideExampleConsent;
 
 @end
 

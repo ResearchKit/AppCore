@@ -184,23 +184,14 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     if ((NSUInteger)indexPath.section >= self.items.count) {
         
         if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+            cell = [tableView dequeueReusableCellWithIdentifier:kAPCDefaultTableViewCellIdentifier forIndexPath:indexPath];
         }
         
-        UITableViewCell *view = nil;
-        if ([self.delegate respondsToSelector:@selector(cellForRowAtAdjustedIndexPath:)])
+        if ([self.delegate respondsToSelector:@selector(decorateCell:)])
         {
-            NSInteger adjustedSectionForExtender = indexPath.section - self.items.count;
-            
-            NSIndexPath *newIndex = [NSIndexPath indexPathForRow:indexPath.row inSection:adjustedSectionForExtender];
-            
-            cell = [self.delegate cellForRowAtAdjustedIndexPath:newIndex];
+            [self.delegate decorateCell:cell];
         }
-    
-        if (view) {
-            [cell.contentView addSubview:view];
-        }
-        
+
     } else {
         
         if (self.pickerIndexPath && [self.pickerIndexPath isEqual:indexPath]) {
@@ -1667,6 +1658,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     delegateConsentVC = consentVC;
     delegateConsentVC.delegate = self;
+    
+    NSUInteger subviewsCount = delegateConsentVC.view.subviews.count;
+    UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:delegateConsentVC.view.bounds
+                                                    withCenter:delegateConsentVC.view.center];
+    
+    [delegateConsentVC.view insertSubview:watermarkLabel atIndex:subviewsCount];
     
     [self presentViewController:consentVC animated:YES completion:nil];
 }
