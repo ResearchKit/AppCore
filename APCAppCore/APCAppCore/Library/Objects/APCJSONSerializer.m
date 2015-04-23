@@ -37,6 +37,31 @@
 #import <CoreData/CoreData.h>
 
 
+
+/**
+ Publicly-declared constants (in my header file).
+
+ These constants are used by a couple of different classes
+ which prepare stuff for me to serialize.
+
+ Imported (stolen, duplicated) from APCDataArchiver.
+ Working on normalizing that.
+ */
+NSString * const kAPCSerializedDataKey_QuestionType            = @"questionType";
+NSString * const kAPCSerializedDataKey_QuestionTypeName        = @"questionTypeName";
+NSString * const kAPCSerializedDataKey_UserInfo                = @"userInfo";
+NSString * const kAPCSerializedDataKey_Identifier              = @"identifier";
+NSString * const kAPCSerializedDataKey_Item                    = @"item";
+NSString * const kAPCSerializedDataKey_TaskRun                 = @"taskRun";
+NSString * const kAPCSerializedDataKey_Files                   = @"files";
+NSString * const kAPCSerializedDataKey_AppName                 = @"appName";
+NSString * const kAPCSerializedDataKey_AppVersion              = @"appVersion";
+NSString * const kAPCSerializedDataKey_FileInfoName            = @"filename";
+NSString * const kAPCSerializedDataKey_FileInfoTimeStamp       = @"timestamp";
+NSString * const kAPCSerializedDataKey_FileInfoContentType     = @"contentType";
+
+
+
 /**
  We use this regular-expression pattern to extract UUIDs
  from CoreData object IDs.
