@@ -282,6 +282,8 @@
 		CF130B781A9E8DCD002DA023 /* APCSetupButtonTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CF130B751A9E8DCD002DA023 /* APCSetupButtonTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF130B791A9E8DCD002DA023 /* APCSetupButtonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF130B761A9E8DCD002DA023 /* APCSetupButtonTableViewCell.m */; };
 		CF130B7A1A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF130B771A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib */; };
+		CF64CF2C1AE860CC000795B5 /* APCDemographicUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = CF64CF2A1AE860CC000795B5 /* APCDemographicUploader.h */; };
+		CF64CF2D1AE860CC000795B5 /* APCDemographicUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = CF64CF2B1AE860CC000795B5 /* APCDemographicUploader.m */; };
 		CF7945861AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CF7945831AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF7945871AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7945841AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.m */; };
 		CF7945881AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF7945851AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.xib */; };
@@ -972,6 +974,8 @@
 		CF130B751A9E8DCD002DA023 /* APCSetupButtonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSetupButtonTableViewCell.h; sourceTree = "<group>"; };
 		CF130B761A9E8DCD002DA023 /* APCSetupButtonTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSetupButtonTableViewCell.m; sourceTree = "<group>"; };
 		CF130B771A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSetupButtonTableViewCell.xib; sourceTree = "<group>"; };
+		CF64CF2A1AE860CC000795B5 /* APCDemographicUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDemographicUploader.h; sourceTree = "<group>"; };
+		CF64CF2B1AE860CC000795B5 /* APCDemographicUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDemographicUploader.m; sourceTree = "<group>"; };
 		CF7945831AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFrequencyEverydayTableViewCell.h; sourceTree = "<group>"; };
 		CF7945841AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFrequencyEverydayTableViewCell.m; sourceTree = "<group>"; };
 		CF7945851AA7AEC70019160F /* APCFrequencyEverydayTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCFrequencyEverydayTableViewCell.xib; sourceTree = "<group>"; };
@@ -2718,6 +2722,8 @@
 				F5F1298D1A2F78490015982C /* APCProfileViewController.m */,
 				F5F1298E1A2F78490015982C /* APCSettingsViewController.h */,
 				F5F1298F1A2F78490015982C /* APCSettingsViewController.m */,
+				CF64CF2A1AE860CC000795B5 /* APCDemographicUploader.h */,
+				CF64CF2B1AE860CC000795B5 /* APCDemographicUploader.m */,
 				F5F129901A2F78490015982C /* APCWithdrawCompleteViewController.h */,
 				F5F129911A2F78490015982C /* APCWithdrawCompleteViewController.m */,
 				F5F129921A2F78490015982C /* APCWithdrawSurveyViewController.h */,
@@ -3057,6 +3063,7 @@
 				087468061AA691A400BE2572 /* APCThankYouViewController.h in Headers */,
 				081A477A1A93EC4700E13148 /* APCBadgeLabel.h in Headers */,
 				F5F12A891A2F78490015982C /* APCTableViewItem.h in Headers */,
+				CF64CF2C1AE860CC000795B5 /* APCDemographicUploader.h in Headers */,
 				F5F12AC31A2F78490015982C /* APCLearnMasterViewController.h in Headers */,
 				F5B9463A1A7309A20034C522 /* ZZHeaders.h in Headers */,
 				F5B947CD1A73272C0034C522 /* SBBGuidCreatedOnVersionHolder+APCAdditions.h in Headers */,
@@ -3628,6 +3635,7 @@
 				F5B947B01A73272C0034C522 /* UIColor+APCAppearance.m in Sources */,
 				F5B947F31A73272C0034C522 /* APCParametersCell.m in Sources */,
 				F5F129F11A2F78490015982C /* APCDBStatus.m in Sources */,
+				CF64CF2D1AE860CC000795B5 /* APCDemographicUploader.m in Sources */,
 				F5B947E61A73272C0034C522 /* APCKeychainStore.m in Sources */,
 				F5F129F71A2F78490015982C /* APCResult+Bridge.m in Sources */,
 				36B7D2561A8D848D0043F968 /* ORKAnswerFormat+Helper.m in Sources */,
