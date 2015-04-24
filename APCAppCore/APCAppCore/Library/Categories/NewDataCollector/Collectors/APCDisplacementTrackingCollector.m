@@ -60,14 +60,16 @@
 
 @implementation APCDisplacementTrackingCollector
 
-- (instancetype)initWithIdentifier:(NSString*)identifier
-            deferredUpdatesTimeout:(NSTimeInterval) __unused anUpdateTimeout
+- (instancetype)initWithIdentifier:(NSString*)identifier deferredUpdatesTimeout:(NSTimeInterval) __unused anUpdateTimeout
 {
     APCLogDebug(@"Initalizing location tracker");
+    
     self = [super initWithIdentifier:identifier];
+    
     if (self != nil)
     {
-        _deferringUpdates       = NO;
+        _deferringUpdates = NO;
+        
         [self setupInitialLocationParameters];
     }
     
@@ -89,18 +91,24 @@
 {
     if ([CLLocationManager locationServicesEnabled] == YES)
     {
-        APCLogDebug(@"Start location tracking");
-        self.locationManager = [[CLLocationManager alloc] init];
-        self.locationManager.delegate = self;
-        
-#warning delete line below. Only being used for testing.
-        [self.locationManager startUpdatingLocation];
-        
-        if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES &&
-            [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)
+        if (!self.locationManager)
         {
-            APCLogDebug(@"Significant Location Change Monitoring is Available");
-            [self.locationManager startMonitoringSignificantLocationChanges];
+            APCLogDebug(@"Start location tracking");
+            
+            self.locationManager = [[CLLocationManager alloc] init];
+            self.locationManager.delegate = self;
+            
+    #warning delete line below. Only being used for testing.
+            //[self.locationManager startUpdatingLocation];
+            [self.locationManager requestAlwaysAuthorization];
+            
+            if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES &&
+                [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)
+            {
+                APCLogDebug(@"Significant Location Change Monitoring is Available");
+                
+                [self.locationManager startMonitoringSignificantLocationChanges];
+            }
         }
     }
 }
@@ -120,7 +128,7 @@
 #pragma mark - Private Methods
 /*********************************************************************************/
 
-- (void)updateArchiveDataWithLocationManager:(CLLocationManager *)manager withUpdateLocations:(NSArray *)locations
+- (void)updateArchiveDataWithLocationManager:(CLLocationManager*)manager withUpdateLocations:(NSArray*)locations
 {
     //Send to delegate
     if ([self.delegate respondsToSelector:@selector(didRecieveUpdateWithLocationManager:withUpdateLocations:)])
@@ -162,19 +170,12 @@
     }
 }
 
-- (void)              locationManager:(CLLocationManager*) __unused manager
-    didFinishDeferredUpdatesWithError:(NSError*) error
+- (void)locationManager:(CLLocationManager*) __unused manager didFinishDeferredUpdatesWithError:(NSError*) error
 {
     if (error != nil)
     {
         APCLogError2(error);
     }
-}
-
-#pragma mark TODO  After pausing there may be some work to do here
-
-- (void)locationManagerDidResumeLocationUpdates:(CLLocationManager*) __unused manager
-{
 }
 
 - (void)locationManagerDidPauseLocationUpdates:(CLLocationManager*) __unused manager
@@ -185,6 +186,7 @@
 - (void)locationManager:(CLLocationManager*)manager didUpdateLocations:(NSArray*)locations
 {
     APCLogDebug(@"locationManager didUpdateLocations at %@", [NSDate date]);
+    
     [self updateArchiveDataWithLocationManager:manager withUpdateLocations:locations];
 }
 
