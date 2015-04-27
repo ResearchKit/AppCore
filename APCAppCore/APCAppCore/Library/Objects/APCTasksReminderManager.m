@@ -36,11 +36,13 @@
 #import "APCConstants.h"
 
 NSString * const kTaskReminderUserInfo = @"CurrentTaskReminder";
+NSString * const kSubtaskReminderUserInfo = @"CurrentSubtaskReminder";
 NSString * const kTaskReminderUserInfoKey = @"TaskReminderUserInfoKey";
+NSString * const kSubtaskReminderUserInfoKey = @"SubtaskReminderUserInfoKey";
 
 static NSInteger kSecondsPerMinute = 60;
 static NSInteger kMinutesPerHour = 60;
-static NSInteger kTaskReminderDelayMinutes = 120;
+static NSInteger kSubtaskReminderDelayMinutes = 120;
 
 NSString * const kTaskReminderMessage = @"Please complete your %@ activities today. Thank you for participating in the %@ study! %@";
 NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
@@ -88,76 +90,118 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
         @synchronized(self)
         {
             if (self.reminderOn) {
-                [self createOrUpdateLocalNotification];
+                [self createTaskReminder];
             }
             else {
-                [self cancelLocalNotificationIfExists];
+                [self cancelLocalNotificationsIfExist];
             }
         }
     });
 }
 
-- (UILocalNotification*) existingLocalNotification {
+- (NSArray *) existingLocalNotifications {
     UIApplication *app = [UIApplication sharedApplication];
     NSArray *eventArray = [app scheduledLocalNotifications];
-    __block UILocalNotification * retValue;
-    [eventArray enumerateObjectsUsingBlock:^(UILocalNotification * obj, NSUInteger __unused idx, BOOL * __unused stop) {
-        NSDictionary *userInfoCurrent = obj.userInfo;
-        if ([userInfoCurrent[[self taskReminderUserInfoKey]] isEqualToString:[self taskReminderUserInfo]]) {
-            retValue = obj;
+    NSMutableArray *appNotifications = [NSMutableArray new];
+    
+    for (UILocalNotification *notification in eventArray) {
+        NSDictionary *userInfoCurrent = notification.userInfo;
+        if ([userInfoCurrent[kTaskReminderUserInfoKey] isEqualToString:kTaskReminderUserInfo] ||
+            [userInfoCurrent[kSubtaskReminderUserInfoKey] isEqualToString:kSubtaskReminderUserInfo]) {
+            [appNotifications addObject:notification];
         }
-    }];
-    return retValue;
+    }
+
+    return appNotifications;
+    
 }
 
-- (void) cancelLocalNotificationIfExists {
-    UILocalNotification * notification = [self existingLocalNotification];
-    if (notification) {
-        UIApplication *app = [UIApplication sharedApplication];
+- (void) cancelLocalNotificationsIfExist {
+    NSArray *notifications = [self existingLocalNotifications];
+    UIApplication *app = [UIApplication sharedApplication];
+    
+    for (UILocalNotification * notification in notifications) {
         [app cancelLocalNotification:notification];
         APCLogDebug(@"Cancelled Notification: %@", notification);
+        
     }
 }
 
-- (void) createOrUpdateLocalNotification {
+- (void) createTaskReminder {
     
-    [self cancelLocalNotificationIfExists];
+    [self cancelLocalNotificationsIfExist];
     
-    // Schedule the notification
-    UILocalNotification* localNotification = [[UILocalNotification alloc] init];
-    
-    localNotification.alertBody = [self reminderMessage];
-    localNotification.fireDate = [self calculateFireDate];
-    localNotification.timeZone = [NSTimeZone localTimeZone];
-    localNotification.repeatInterval = NSCalendarUnitDay;
-    localNotification.soundName = UILocalNotificationDefaultSoundName;
-    
-    NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
-    notificationInfo[[self taskReminderUserInfoKey]] = [self taskReminderUserInfo];
-    localNotification.userInfo = notificationInfo;
-    
-    localNotification.category = kTaskReminderDelayCategory;
-    
+    // Schedule the Task notification
+    UILocalNotification* taskNotification = [[UILocalNotification alloc] init];
+    taskNotification.alertBody = [self reminderMessage];
+
+    BOOL subtaskReminderOnly = NO;
     if (self.remindersToSend.count >0) {
+        
+        if (self.remindersToSend.count == 1 && [self shouldSendSubtaskReminder]) {
+            subtaskReminderOnly = YES;
+        }
+        
+        taskNotification.fireDate = subtaskReminderOnly ? [self calculateSubtaskReminderFireDate] : [self calculateTaskReminderFireDate];
+        taskNotification.timeZone = [NSTimeZone localTimeZone];
+        taskNotification.repeatInterval = NSCalendarUnitDay;
+        taskNotification.soundName = UILocalNotificationDefaultSoundName;
+        
+        NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
+        notificationInfo[kTaskReminderUserInfoKey] = kTaskReminderUserInfo;//Task Reminder
+        taskNotification.userInfo = notificationInfo;
+        taskNotification.category = kTaskReminderDelayCategory;
         
         //migration if notifications were registered without a category.
         if ([[UIApplication sharedApplication] currentUserNotificationSettings].categories.count == 0 &&
             [[UIApplication sharedApplication] currentUserNotificationSettings].types == (UIUserNotificationTypeAlert
                                                                                           |UIUserNotificationTypeBadge
-                                                                                          |UIUserNotificationTypeSound)) {
-                UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
-                                                                                                     |UIUserNotificationTypeBadge
-                                                                                                     |UIUserNotificationTypeSound) categories:[APCTasksReminderManager taskReminderCategories]];
-                
-                [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-                [[NSUserDefaults standardUserDefaults]synchronize];
-            }
+                                                                                          |UIUserNotificationTypeSound))
+        {
+            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
+                                                                                                 |UIUserNotificationTypeBadge
+                                                                                                 |UIUserNotificationTypeSound) categories:[APCTasksReminderManager taskReminderCategories]];
+            
+            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+        }
         
-        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+        [[UIApplication sharedApplication] scheduleLocalNotification:taskNotification];
         
-        APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Scheduled Reminder: %@. Body: %@", localNotification, localNotification.alertBody]}));
+        APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Scheduled Reminder: %@. Body: %@", taskNotification, taskNotification.alertBody]}));
+    }
+    
+    //create a subtask reminder if needed
+    if ([self shouldSendSubtaskReminder] && !subtaskReminderOnly) {
+        [self createSubtaskReminder];
+    }
+    
+}
+
+- (void) createSubtaskReminder {
+    
+    // Schedule the Subtask notification
+    UILocalNotification* subtaskReminder = [[UILocalNotification alloc] init];
+    
+    subtaskReminder.alertBody = [self subtaskReminderMessage];//include only the subtask reminder body
+    subtaskReminder.fireDate = [self calculateSubtaskReminderFireDate];//delay by subtask reminder delay
+    subtaskReminder.timeZone = [NSTimeZone localTimeZone];
+    subtaskReminder.repeatInterval = NSCalendarUnitDay;
+    subtaskReminder.soundName = UILocalNotificationDefaultSoundName;
+    
+    NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
+    notificationInfo[kSubtaskReminderUserInfoKey] = kSubtaskReminderUserInfo;//Subtask Reminder
+    subtaskReminder.userInfo = notificationInfo;
+    subtaskReminder.category = kTaskReminderDelayCategory;
+    
+    if (self.remindersToSend.count >0) {
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:subtaskReminder];
+        
+        APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Scheduled Subtask Reminder: %@. Body: %@", subtaskReminder, subtaskReminder.alertBody]}));
     }
 }
+
 
 +(NSSet *)taskReminderCategories{
     
@@ -202,15 +246,24 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
         }
     }
     
+    return [NSString stringWithFormat:kTaskReminderMessage, [self studyName], [self studyName], reminders];
+}
+
+-(NSString *)subtaskReminderMessage{
+    
+    NSString *reminders = @"\n";
+    //concatenate body of each message with \n
+    
+    for (APCTaskReminder *taskReminder in self.reminders) {
+        if ([self includeTaskInReminder:taskReminder] && taskReminder.resultsSummaryKey) {
+            reminders = [reminders stringByAppendingString:@"• "];
+            reminders = [reminders stringByAppendingString:taskReminder.reminderBody];
+            reminders = [reminders stringByAppendingString:@"\n"];
+            self.remindersToSend[taskReminder.reminderIdentifier] = taskReminder;
+        }
+    }
+    
     return [NSString stringWithFormat:kTaskReminderMessage, [self studyName], [self studyName], reminders];;
-}
-
--(NSString *)taskReminderUserInfo{
-    return kTaskReminderUserInfo;
-}
-
--(NSString *)taskReminderUserInfoKey{
-    return kTaskReminderUserInfoKey;
 }
 
 - (NSString *)studyName {
@@ -283,17 +336,13 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (NSDate*) calculateFireDate
+- (NSDate*) calculateTaskReminderFireDate
 {
     NSTimeInterval reminderOffset = ([[APCTasksReminderManager reminderTimesArray] indexOfObject:self.reminderTime]) * kMinutesPerHour * kSecondsPerMinute;
-    //add task delay if on
-    reminderOffset = [self shouldDelayReminder]? reminderOffset += kTaskReminderDelayMinutes * kSecondsPerMinute : reminderOffset;
     
     NSDate *dateToSet = [NSDate new];
     if (self.remindersToSend.count == 0) {
         dateToSet = [[NSDate tomorrowAtMidnight] dateByAddingTimeInterval:reminderOffset];
-    }else if ([self shouldDelayReminder]){
-        dateToSet = [[NSDate todayAtMidnight] dateByAddingTimeInterval:reminderOffset];
     }else{
         dateToSet = [[NSDate todayAtMidnight] dateByAddingTimeInterval:reminderOffset];
     }
@@ -301,22 +350,31 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     return dateToSet;
 }
 
-- (BOOL) shouldDelayReminder{
+- (NSDate*) calculateSubtaskReminderFireDate
+{
+    NSTimeInterval reminderOffset = ([[APCTasksReminderManager reminderTimesArray] indexOfObject:self.reminderTime]) * kMinutesPerHour * kSecondsPerMinute;
+    //add subtask reminder delay
+    reminderOffset += kSubtaskReminderDelayMinutes * kSecondsPerMinute;
     
-    BOOL shouldDelay = YES;
+    return [[NSDate todayAtMidnight] dateByAddingTimeInterval:reminderOffset];
+}
+
+- (BOOL) shouldSendSubtaskReminder{
     
-    //Delay the reminder iif self.remindersToSend only contains a reminder where taskReminder.resultsSummaryKey != nil
+    BOOL shouldSend = NO;
+    
+    //Send the subtask reminder if self.remindersToSend contains a reminder where taskReminder.resultsSummaryKey != nil
     for (NSString *key in self.remindersToSend) {
         
         APCTaskReminder *reminder = [self.remindersToSend objectForKey:key];
         if (reminder) {
-            if (!reminder.resultsSummaryKey) {
-                shouldDelay = NO;
+            if (reminder.resultsSummaryKey) {
+                shouldSend = YES;
             }
         }
     }
     
-    return shouldDelay;
+    return shouldSend;
 }
 
 /*********************************************************************************/
