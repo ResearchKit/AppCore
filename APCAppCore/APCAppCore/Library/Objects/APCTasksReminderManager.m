@@ -118,13 +118,12 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
 
 - (void) cancelLocalNotificationsIfExist {
     NSArray *notifications = [self existingLocalNotifications];
+    UIApplication *app = [UIApplication sharedApplication];
     
     for (UILocalNotification * notification in notifications) {
-        if (notification) {
-            UIApplication *app = [UIApplication sharedApplication];
-            [app cancelLocalNotification:notification];
-            APCLogDebug(@"Cancelled Notification: %@", notification);
-        }
+        [app cancelLocalNotification:notification];
+        APCLogDebug(@"Cancelled Notification: %@", notification);
+        
     }
 }
 
