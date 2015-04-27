@@ -90,7 +90,7 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
         @synchronized(self)
         {
             if (self.reminderOn) {
-                [self createOrUpdateTaskReminder];
+                [self createTaskReminder];
             }
             else {
                 [self cancelLocalNotificationsIfExist];
@@ -106,8 +106,8 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     
     for (UILocalNotification *notification in eventArray) {
         NSDictionary *userInfoCurrent = notification.userInfo;
-        if ([userInfoCurrent[[self taskReminderUserInfoKey]] isEqualToString:[self taskReminderUserInfo]] ||
-            [userInfoCurrent[[self subtaskReminderUserInfoKey]] isEqualToString:[self subtaskReminderUserInfo]]) {
+        if ([userInfoCurrent[kTaskReminderUserInfoKey] isEqualToString:kTaskReminderUserInfo] ||
+            [userInfoCurrent[kSubtaskReminderUserInfoKey] isEqualToString:kSubtaskReminderUserInfo]) {
             [appNotifications addObject:notification];
         }
     }
@@ -127,7 +127,7 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     }
 }
 
-- (void) createOrUpdateTaskReminder {
+- (void) createTaskReminder {
     
     [self cancelLocalNotificationsIfExist];
     
@@ -148,7 +148,7 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
         taskNotification.soundName = UILocalNotificationDefaultSoundName;
         
         NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
-        notificationInfo[[self taskReminderUserInfoKey]] = [self taskReminderUserInfo];//Task Reminder
+        notificationInfo[kTaskReminderUserInfoKey] = kTaskReminderUserInfo;//Task Reminder
         taskNotification.userInfo = notificationInfo;
         taskNotification.category = kTaskReminderDelayCategory;
         
@@ -173,12 +173,12 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     
     //create a subtask reminder if needed
     if ([self shouldSendSubtaskReminder] && !subtaskReminderOnly) {
-        [self createOrUpdateSubtaskReminder];
+        [self createSubtaskReminder];
     }
     
 }
 
-- (void) createOrUpdateSubtaskReminder {
+- (void) createSubtaskReminder {
     
     // Schedule the Subtask notification
     UILocalNotification* subtaskReminder = [[UILocalNotification alloc] init];
@@ -190,7 +190,7 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     subtaskReminder.soundName = UILocalNotificationDefaultSoundName;
     
     NSMutableDictionary *notificationInfo = [[NSMutableDictionary alloc] init];
-    notificationInfo[[self subtaskReminderUserInfoKey]] = [self subtaskReminderUserInfo];//Subtask Reminder
+    notificationInfo[kSubtaskReminderUserInfoKey] = kSubtaskReminderUserInfo;//Subtask Reminder
     subtaskReminder.userInfo = notificationInfo;
     subtaskReminder.category = kTaskReminderDelayCategory;
     
@@ -264,22 +264,6 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     }
     
     return [NSString stringWithFormat:kTaskReminderMessage, [self studyName], [self studyName], reminders];;
-}
-
--(NSString *)taskReminderUserInfo{
-    return kTaskReminderUserInfo;
-}
-
--(NSString *)taskReminderUserInfoKey{
-    return kTaskReminderUserInfoKey;
-}
-
--(NSString *)subtaskReminderUserInfo{
-    return kSubtaskReminderUserInfo;
-}
-
--(NSString *)subtaskReminderUserInfoKey{
-    return kSubtaskReminderUserInfoKey;
 }
 
 - (NSString *)studyName {
