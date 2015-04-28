@@ -208,9 +208,13 @@ static  NSString* const kLon                                    = @"lon";
                 NSString*   jsonString  = [NSString stringWithContentsOfFile:[self baseTrackingFilePath]
                                                                     encoding:NSUTF8StringEncoding
                                                                        error:&error];
-                if (error || !jsonString)
+                
+                if (!jsonString)
                 {
-                    APCLogError2(error);
+                    if (error)
+                    {
+                        APCLogError2(error);
+                    }
                 }
                 else
                 {
@@ -249,9 +253,12 @@ static  NSString* const kLon                                    = @"lon";
                                                                     encoding:NSUTF8StringEncoding
                                                                        error:&error];
                 
-                if (error || !jsonString)
+                if (!jsonString)
                 {
-                    APCLogError2(error);
+                    if (error)
+                    {
+                        APCLogError2(error);
+                    }
                 }
                 else
                 {
