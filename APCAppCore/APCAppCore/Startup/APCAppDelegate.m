@@ -116,10 +116,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     [self setUpTasksReminder];
     [self performDemographicUploadIfRequired];
     [self showAppropriateVC];
-    
     [self.dataMonitor appFinishedLaunching];
-    
-    //[self configureObserverQueries];
     
     return YES;
 }

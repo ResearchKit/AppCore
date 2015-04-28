@@ -33,12 +33,12 @@
 
 #import "CLLocation+APCBearing.h"
 
-double DegreesToRadians(double degrees) {return degrees * M_PI / 180;};
-double RadiansToDegrees(double radians) {return radians * 180/M_PI;};
+static double DegreesToRadians(double degrees) {return degrees * M_PI / 180;};
+static double RadiansToDegrees(double radians) {return radians * 180/M_PI;};
 
 @implementation CLLocation (APCAdditions)
 
--(double)bearingToLocation:(CLLocation*)destinationLocation
+- (double)bearingToLocation:(CLLocation*)destinationLocation
 {
     double lat1             = DegreesToRadians(self.coordinate.latitude);
     double lon1             = DegreesToRadians(self.coordinate.longitude);
@@ -52,7 +52,7 @@ double RadiansToDegrees(double radians) {return radians * 180/M_PI;};
     return RadiansToDegrees(radiansBearing);
 }
 
--(double)calculateMagnitudeToLocation:(CLLocation*)destinationLocation
+- (double)calculateMagnitudeToLocation:(CLLocation*)destinationLocation
 {
     double lat1             = DegreesToRadians(self.coordinate.latitude);
     double lon1             = DegreesToRadians(self.coordinate.longitude);
@@ -65,7 +65,7 @@ double RadiansToDegrees(double radians) {return radians * 180/M_PI;};
     return sqrt(latLonSummed);
 }
 
--(double)calculateDirectionFromLocation:(CLLocation*)destinationLocation
+- (double)calculateDirectionFromLocation:(CLLocation*)destinationLocation
 {
     double lat1             = DegreesToRadians(self.coordinate.latitude);
     double lon1             = DegreesToRadians(self.coordinate.longitude);

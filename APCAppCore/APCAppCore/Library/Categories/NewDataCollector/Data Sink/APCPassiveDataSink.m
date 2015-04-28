@@ -247,8 +247,6 @@ static NSUInteger       kDaysPerWeek        = 7;
     NSDictionary*   dictionary          = self.infoDictionary;
     NSString*       startDateString     = dictionary[kStartDateKey];
     
-#warning potential bug with current users with buggy version of the passive data collector. If they have files that are created which have no date there is nothing but the file size to check against. 
-    
     if (startDateString)
     {
         NSDate* startDate = [self datefromDateString:startDateString];
@@ -262,14 +260,12 @@ static NSUInteger       kDaysPerWeek        = 7;
         }
         else
         {
-#warning what do we do if we have issues parsing the string and getting a date? Delete file?
             //  Issues parsing the 'date' string'. Reset data file or upload?
             [self resetDataFilesForTracker];
         }
     }
     else
     {
-#warning what do we do if we have issues parsing the string and getting a date? Delete file?
         [self resetDataFilesForTracker];
     }
 }

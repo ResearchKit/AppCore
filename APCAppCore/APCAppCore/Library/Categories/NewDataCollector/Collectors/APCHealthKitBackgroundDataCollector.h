@@ -43,6 +43,6 @@
 - (instancetype)initWithIdentifier:(NSString*)identifier
                         sampleType:(HKSampleType*)type
                         anchorName:(NSString*)anchorName
-                  launchDateAnchor:(LaunchDateAnchor)launchDateAnchor;
+                  launchDateAnchor:(InitialStartDatePredicateDesignator)launchDateAnchor;
 
 @end
