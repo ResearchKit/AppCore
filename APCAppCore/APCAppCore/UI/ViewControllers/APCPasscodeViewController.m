@@ -66,7 +66,7 @@
     self.passcodeView.delegate = self;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(passcodeViewShouldBecomeFirstResponder) name:UIApplicationWillEnterForegroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(makePasscodeViewBecomeFirstResponder) name:UIApplicationWillEnterForegroundNotification object:nil];
     
     [self setupAppearance];
     
@@ -93,7 +93,7 @@
     [super viewDidAppear:animated];
     
     if (![self.touchContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
-        [self passcodeViewShouldBecomeFirstResponder];
+        [self makePasscodeViewBecomeFirstResponder];
     } else {
         self.passcodeView.alpha = 0;
         self.titleLabel.alpha = 0;
@@ -155,7 +155,7 @@
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Wrong Passcode", nil) message:NSLocalizedString(@"Please enter again.", nil) preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
                     [self.passcodeView reset];
-                    [self passcodeViewShouldBecomeFirstResponder];
+                    [self makePasscodeViewBecomeFirstResponder];
                 }];
                 [alert addAction:okAction];
                 [self presentViewController:alert animated:YES completion:nil];
@@ -217,7 +217,7 @@
                                                     self.touchIdButton.alpha = 1;
                                                 }];
                                                 
-                                                [self passcodeViewShouldBecomeFirstResponder];
+                                                [self makePasscodeViewBecomeFirstResponder];
                                             });
                                             
                                         }
@@ -240,7 +240,7 @@
 }
 
 #pragma mark - Application Notifications
-- (void)passcodeViewShouldBecomeFirstResponder{
+- (void)makePasscodeViewBecomeFirstResponder{
     [self.passcodeView becomeFirstResponder];
 }
 
@@ -249,7 +249,7 @@
 - (void)animationDidStop:(CAAnimation *)__unused anim finished:(BOOL)__unused flag
 {
     [self.passcodeView reset];
-    [self passcodeViewShouldBecomeFirstResponder];
+    [self makePasscodeViewBecomeFirstResponder];
 }
 
 @end
