@@ -375,20 +375,23 @@ static NSString *folderPathForUploadOperations = nil;
 #pragma mark - Create one uploader
 // ---------------------------------------------------------
 
-/**
- The real, bare-bones init.  Technically, this is the "designated
- initializer."  However, the initializer you PROBABLY want is 
- -initWithTaskIdentifier:andTaskRunUuid: , because that emits
- a warning if you don't specify those fields.
- */
 - (id) init
+{
+    self = [self initWithTaskIdentifier: nil
+                         andTaskRunUuid: nil];
+
+    return self;
+}
+
+- (id) initWithTaskIdentifier: (NSString *) taskIdentifier
+               andTaskRunUuid: (NSUUID *) taskRunUuid
 {
     self = [super init];
 
     if (self)
     {
-        _taskIdentifier                     = nil;
-        _taskRunUuid                        = nil;
+        _taskIdentifier                     = taskIdentifier;
+        _taskRunUuid                        = taskRunUuid;
         _zipEntries                         = [NSMutableArray new];
         _fileInfoEntries                    = [NSMutableArray new];
         _countOfUnknownFileNames            = 0;
@@ -406,20 +409,6 @@ static NSString *folderPathForUploadOperations = nil;
         _tempFilePathsToUpload              = nil;
         _pathToPrivateFolderOfFilesToUpload = nil;
         _privateFilePathsToUpload           = nil;
-    }
-
-    return self;
-}
-
-- (id) initWithTaskIdentifier: (NSString *) taskIdentifier
-               andTaskRunUuid: (NSUUID *) taskRunUuid
-{
-    self = [self init];
-
-    if (self)
-    {
-        _taskIdentifier = taskIdentifier;
-        _taskRunUuid = taskRunUuid;
     }
 
     return self;
