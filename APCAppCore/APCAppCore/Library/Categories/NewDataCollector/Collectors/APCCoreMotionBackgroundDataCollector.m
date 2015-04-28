@@ -114,9 +114,9 @@ static NSInteger const kDefaultNumberOfDaysBack = 8;
     
     [components setDay:numberOfDaysBack];
 
-    NSDate*             date = [[NSCalendar currentCalendar] dateByAddingComponents:components
-                                                                            toDate:[NSDate date]
-                                                                            options:0];
+    NSDate*             date                = [[NSCalendar currentCalendar] dateByAddingComponents:components
+                                                                                            toDate:[NSDate date]
+                                                                                           options:0];
     return date;
 }
 

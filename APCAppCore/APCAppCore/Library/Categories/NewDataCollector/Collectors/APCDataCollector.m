@@ -35,14 +35,17 @@
 
 @implementation APCDataCollector
 
-- (instancetype)initWithIdentifier:(NSString*)identifier andDateAnchorName:(NSString*)anchorName
+- (instancetype)initWithIdentifier:(NSString*)identifier
+                    dateAnchorName:(NSString*)anchorName
+                  launchDateAnchor:(LaunchDateAnchor)launchDateAnchor
 {
     self = [super init];
     
     if (self)
     {
-        _anchorName = anchorName;
-        _identifier = identifier;
+        _anchorName         = anchorName;
+        _launchDateAnchor   = launchDateAnchor;
+        _identifier         = identifier;
     }
     
     return self;
@@ -61,6 +64,12 @@
 - (void) updateTracking
 {
     /* abstract implementation */
+}
+
+- (NSDate*)launchDate
+{
+    NSDate* userLaunchDate = self.launchDateAnchor();
+    return userLaunchDate;
 }
 
 @end

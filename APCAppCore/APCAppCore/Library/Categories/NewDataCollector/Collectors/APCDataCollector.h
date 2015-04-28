@@ -33,17 +33,23 @@
 #import <Foundation/Foundation.h>
 #import "APCCollectorProtocol.h"
 
+typedef NSDate*(^LaunchDateAnchor)();
+
 @interface APCDataCollector : NSObject
 
 /*
  Setting an anchor name will mean that you must explicitly setup your own predicates to prevent potential duplicate data from being queried. The argument for anchorName can be nil. 
  */
-- (instancetype)initWithIdentifier:(NSString*)identifier andDateAnchorName:(NSString*)anchorName;
+- (instancetype)initWithIdentifier:(NSString*)identifier
+                    dateAnchorName:(NSString*)anchorName
+                  launchDateAnchor:(LaunchDateAnchor)launchDateAnchor;
 - (void)start;
 - (void)stop;
 - (void)updateTracking;
+- (NSDate*)launchDate;
 
 @property (strong, nonatomic) NSString*         anchorName;
+@property (strong, nonatomic) LaunchDateAnchor  launchDateAnchor;
 @property (strong, nonatomic) id                receiver;
 @property (strong, nonatomic) id                <APCCollectorProtocol> delegate;
 @property (strong, nonatomic) NSString*         identifier;

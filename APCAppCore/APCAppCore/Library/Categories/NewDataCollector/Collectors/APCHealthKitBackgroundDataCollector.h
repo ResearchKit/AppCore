@@ -40,6 +40,9 @@
 @property (strong, nonatomic)   HKUnit*                     unit;
 @property (strong, nonatomic)   HKSampleType*               sampleType;
 
-- (instancetype)initWithIdentifier:(NSString*)identifier sampleType:(HKSampleType*)type andAnchorName:(NSString*)anchorName;
+- (instancetype)initWithIdentifier:(NSString*)identifier
+                        sampleType:(HKSampleType*)type
+                        anchorName:(NSString*)anchorName
+                  launchDateAnchor:(LaunchDateAnchor)launchDateAnchor;
 
 @end

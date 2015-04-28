@@ -45,9 +45,9 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 @implementation APCHealthKitBackgroundDataCollector
 
-- (instancetype)initWithIdentifier:(NSString*)identifier sampleType:(HKSampleType*)type andAnchorName:(NSString*)anchorName
+- (instancetype)initWithIdentifier:(NSString*)identifier sampleType:(HKSampleType*)type anchorName:(NSString*)anchorName launchDateAnchor:(LaunchDateAnchor)launchDateAnchor
 {
-    self = [super initWithIdentifier:identifier andDateAnchorName:anchorName];
+    self = [super initWithIdentifier:identifier dateAnchorName:anchorName launchDateAnchor:launchDateAnchor];
     
     if (self)
     {
@@ -106,17 +106,27 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 - (void)anchorQuery:(HKObserverQuery*)query completionHandle:(HKObserverQueryCompletionHandler)completionHandler
 {
-    NSUInteger anchorToUse                         = 0;
-    NSUInteger backgroundLaunchAnchorDate          = [[NSUserDefaults standardUserDefaults] integerForKey:self.anchorName];
+    NSUInteger      anchorToUse                         = 0;
+    NSUInteger      backgroundLaunchAnchorDate          = [[NSUserDefaults standardUserDefaults] integerForKey:self.anchorName];
+    NSPredicate*    predicate                           = nil;
     
     if (backgroundLaunchAnchorDate)
     {
         anchorToUse = backgroundLaunchAnchorDate;
     }
+    else
+    {
+        NSDate*     launchDate          = [self launchDate];
+        NSDate*     launchDayStartOfday = [launchDate startOfDay];
+        
+        predicate = [HKAnchoredObjectQuery predicateForSamplesWithStartDate:launchDayStartOfday
+                                                                    endDate:[NSDate date]
+                                                                    options:HKQueryOptionNone];
+    }
     
     __weak __typeof(self)   weakSelf        = self;
     HKAnchoredObjectQuery*  anchorQuery     = [[HKAnchoredObjectQuery alloc] initWithType:query.sampleType
-                                                                                predicate:nil
+                                                                                predicate:predicate
                                                                                    anchor:anchorToUse
                                                                                     limit:HKQueryOptionNone
                                                                         completionHandler:^(HKAnchoredObjectQuery __unused *query, NSArray *results, NSUInteger newAnchor, NSError *error)
