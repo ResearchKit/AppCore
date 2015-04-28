@@ -33,7 +33,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface APCNewPassiveDataCollector : NSObject
+@interface APCPassiveDataCollector : NSObject
 
 - (void)addDataSink:(id)dataSync;
 - (void)startCollecting;

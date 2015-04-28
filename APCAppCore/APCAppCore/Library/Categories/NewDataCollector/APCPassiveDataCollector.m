@@ -31,13 +31,13 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "APCNewPassiveDataCollector.h"
+#import "APCPassiveDataCollector.h"
 #import "APCDataCollector.h"
 #import "APCAppCore.h"
 
 static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminatedTime";
 
-@implementation APCNewPassiveDataCollector
+@implementation APCPassiveDataCollector
 
 - (instancetype)init
 {
