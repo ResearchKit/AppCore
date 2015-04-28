@@ -95,11 +95,9 @@
         {
             APCLogDebug(@"Start location tracking");
             
-            self.locationManager = [[CLLocationManager alloc] init];
-            self.locationManager.delegate = self;
+            self.locationManager            = [[CLLocationManager alloc] init];
+            self.locationManager.delegate   = self;
             
-    #warning delete line below. Only being used for testing.
-            //[self.locationManager startUpdatingLocation];
             [self.locationManager requestAlwaysAuthorization];
             
             if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES &&
