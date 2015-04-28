@@ -1804,7 +1804,7 @@
 			path = Migration;
 			sourceTree = "<group>";
 		};
-		7BCF702F1ACB6C4A00838717 /* NewDataCollector */ = {
+		7BCF702F1ACB6C4A00838717 /* PassiveDataCollector */ = {
 			isa = PBXGroup;
 			children = (
 				7BCF70301ACB6C5C00838717 /* APCPassiveDataCollector.h */,
@@ -1812,7 +1812,8 @@
 				7BEFD7D51AD595FB0087F46C /* Data Sink */,
 				7B07B8A91ACDD7B400734558 /* Collectors */,
 			);
-			path = NewDataCollector;
+			name = PassiveDataCollector;
+			path = Categories/NewDataCollector;
 			sourceTree = "<group>";
 		};
 		7BEC13CD1AA3AA5B00CA316C /* Activity Tracking */ = {
@@ -2101,13 +2102,6 @@
 			name = Bridge;
 			sourceTree = "<group>";
 		};
-		F54DDD161A8026010073E4B4 /* Trackers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Trackers;
-			sourceTree = "<group>";
-		};
 		F5B945F41A7309A20034C522 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
@@ -2174,6 +2168,7 @@
 				7473070D1A96E1BB0071D863 /* CMS */,
 				F5B947351A73272C0034C522 /* AppearanceHelpers */,
 				F5B9473C1A73272C0034C522 /* AssertionHandler */,
+				7BCF702F1ACB6C4A00838717 /* PassiveDataCollector */,
 				F5B9473F1A73272C0034C522 /* Categories */,
 				F5B947621A73272C0034C522 /* DataArchiverAndCollector */,
 				3651424A1AA78514008A5CFA /* DataArchiverAndUploader */,
@@ -2218,7 +2213,6 @@
 		F5B9473F1A73272C0034C522 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				7BCF702F1ACB6C4A00838717 /* NewDataCollector */,
 				F5B947401A73272C0034C522 /* APCDeviceHardware+APCHelper.h */,
 				F5B947411A73272C0034C522 /* APCDeviceHardware+APCHelper.m */,
 				F5B947421A73272C0034C522 /* APCStepProgressBar+Appearance.h */,
@@ -2278,7 +2272,6 @@
 			children = (
 				F5B947631A73272C0034C522 /* APCDataArchiver.h */,
 				F5B947641A73272C0034C522 /* APCDataArchiver.m */,
-				F54DDD161A8026010073E4B4 /* Trackers */,
 			);
 			path = DataArchiverAndCollector;
 			sourceTree = "<group>";
