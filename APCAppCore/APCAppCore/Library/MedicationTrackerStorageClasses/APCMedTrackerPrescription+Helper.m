@@ -45,22 +45,54 @@
 #import "APCMedTrackerDailyDosageRecord+Helper.h"
 #import "APCDataArchiverAndUploader.h"
 #import "APCLog.h"
+#import "APCJSONSerializer.h"
 
 
 /*
- Note to reviewers:
-
- - there are various hard-coded "errorDomains" and "errorCodes"
- throughout this file.  Acknowledged.  We're working toward a
- centralized way to manage those.
-
- - similarly, there's a utility method that creates an NSError
- object from a domain, a code, and a root-cause error.  We'll
- shortly move that to another class, too.
+ Please look at this collection of constants as a group, matching
+ the group of -recordXXXX: methods at the bottom of this file.
+ 
+ The idea:  as needed, we'll upload three "packages" of related
+ JSON data, corresponding to three user actions:  creating a
+ prescription, taking some medication specified in that prescription,
+ and cancelling the prescription.  The uploaded data comes from the
+ Prescription object chosen by the user.  These constants identify
+ that uploaded data.
  */
+static NSString * const kUploadablePackageIdentifierKey                     = @"userAction";
+static NSString * const kUploadablePackageCategoryKey                       = @"category";
+static NSString * const kUploadablePackageNameKey                           = @"name";
+static NSString * const kUploadablePackageVersionKey                        = @"version";
+static NSString * const kUploadablePackageCategory                          = @"medicationTracker";
+static NSString * const kUploadablePackageContents                          = @"prescription";
+static NSString * const kUploadablePackageCreatePrescriptionFileName        = @"medicationTracker_createPrescription";
+static NSString * const kUploadablePackageCreatePrescriptionName            = @"createPrescription";
+static NSUInteger const kUploadablePackageCreatePrescriptionSchemaVersion   = 1;
+static NSString * const kUploadablePackageExpirePrescriptionFileName        = @"medicationTracker_cancelPrescription";
+static NSString * const kUploadablePackageExpirePrescriptionName            = @"cancelPrescription";
+static NSUInteger const kUploadablePackageExpirePrescriptionSchemaVersion   = 1;
+static NSString * const kUploadablePackageRecordDosesFileName               = @"medicationTracker_recordTotalDailyDosesOfPrescription";
+static NSString * const kUploadablePackageRecordDosesName                   = @"recordTotalDailyDosesOfPrescription";
+static NSUInteger const kUploadablePackageRecordDosesSchemaVersion          = 1;
+static NSString * const kUploadableFieldUniqueIdKey                         = @"uniqueId";
+static NSString * const kUploadableFieldCreationDateKey                     = @"dateCreated";
+static NSString * const kUploadableFieldCancellationDateKey                 = @"dateCanceled";
+static NSString * const kUploadableFieldWeekdaysKey                         = @"daysOfTheWeek";
+static NSString * const kUploadableFieldTimesPerDayKey                      = @"numberOfTimesPerDay";
+static NSString * const kUploadableFieldMedicationNameKey                   = @"medicationName";
+static NSString * const kUploadableFieldDosageAmountKey                     = @"dosageAmount";
+static NSString * const kUploadableFieldDosageNameKey                       = @"dosageName";
+static NSString * const kUploadableFieldColorNameKey                        = @"colorName";
+static NSString * const kUploadableFieldDosageDateKey                       = @"dosageDate";
+static NSString * const kUploadableFieldDosesTakenKey                       = @"numberOfDosesTaken";
 
 
-static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
+/**
+ Returns a comma -- a highly specific field separator
+ for the consumer of one particular method.
+ */
+static NSString * const kSeparatorForZeroBasedDaysOfTheWeek             = @",";
+
 
 
 @implementation APCMedTrackerPrescription (Helper)
@@ -326,9 +358,6 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
             }
             
                 
-            NSLog(@"###### Setting number of records for prescription [%@] on date [%@] to: [%@]. ######", blockSafePrescription, endUsersChosenDate, @(numberOfDosesTaken));
-
-
             NSString *errorDomainToReturn = nil;
             NSInteger errorCode = 0;
 
@@ -383,61 +412,21 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
     
     [APCMedTrackerDataStorageManager.defaultManager.queue addOperationWithBlock:^{
 
-        NSDate *startTime = [NSDate date];
-        
-//        NSManagedObjectContext *context = APCMedTrackerDataStorageManager.defaultManager.context;
-//
-//        // Gradually working toward normalizing our error-handling.
-//        NSError *coreDataError = nil;
-//        NSString *errorDomain = nil;
-//        NSInteger errorCode = 0;
-//
-//        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass ([APCMedTrackerDailyDosageRecord class])];
-//
-//        NSString *nameOfDateGetterMethod = NSStringFromSelector (@selector (dateThisRecordRepresents));
-//
-//        request.predicate = [NSPredicate predicateWithFormat:
-//                             @"%K >= %@ && %K <= %@",
-//                             nameOfDateGetterMethod,
-//                             startDate.startOfDay,
-//                             nameOfDateGetterMethod,
-//                             endDate.endOfDay];
-//
-//        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey: nameOfDateGetterMethod
-//                                                                  ascending: YES]];
-//
-//        // "nil" means "a CoreData error occurred."  That's our default value.
-//        NSArray *dailyRecordsFound = [context executeFetchRequest: request error: & coreDataError];
-//
-//        if (dailyRecordsFound == nil)
-//        {
-//            errorDomain = @"MedTrackerDataStorageError";
-//            errorCode = 1;
-//
-//            // We'll return the error CoreData sent us as an underlyingError, shortly.
-//        }
-//        else
-//        {
-//            // Done!
-//        }
-        
-        
-        NSError    *coreDataError = nil;
-        NSString   *errorDomain = nil;
-        NSInteger  errorCode = 0;
-        
-        NSString *dateFieldName = NSStringFromSelector (@selector (dateThisRecordRepresents));
-        
-        NSPredicate *dateFilter = [NSPredicate predicateWithFormat: @"%K >= %@ AND %K <= %@",
-                                   dateFieldName,
-                                   startDate.startOfDay,
-                                   dateFieldName,
-                                   endDate.endOfDay];
-        
-        NSSet *filteredRecords = [self.actualDosesTaken filteredSetUsingPredicate: dateFilter];
-        NSArray *dailyRecordsFound = [filteredRecords allObjects];
+        NSDate      *startTime              = [NSDate date];
+        NSError     *coreDataError          = nil;
+        NSString    *errorDomain            = nil;
+        NSInteger   errorCode               = 0;
+        NSString    *dateFieldName          = NSStringFromSelector (@selector (dateThisRecordRepresents));
 
-        NSTimeInterval operationDuration = [[NSDate date] timeIntervalSinceDate: startTime];
+        NSPredicate *dateFilter             = [NSPredicate predicateWithFormat: @"%K >= %@ AND %K <= %@",
+                                               dateFieldName,
+                                               startDate.startOfDay,
+                                               dateFieldName,
+                                               endDate.endOfDay];
+
+        NSSet *filteredRecords              = [self.actualDosesTaken filteredSetUsingPredicate: dateFilter];
+        NSArray *dailyRecordsFound          = [filteredRecords allObjects];
+        NSTimeInterval operationDuration    = [[NSDate date] timeIntervalSinceDate: startTime];
 
         if (someQueue != nil && callbackBlock != NULL)
         {
@@ -475,19 +464,18 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
             NSInteger errorCode = 0;
             NSError *coreDataError = nil;
 
+
             //
-            // All this overhead (ahem:  "noise") for the following
-            // nearly-trivial operation:
+            // The point of this method:
             //
-            // Note:  there's also a -didStopUsingOnDoctorsOrders
-            // field.  I overengineered that.  Ahem.  We don't need it.
-            // We're purposely ignoring it.
-            //
+
             blockSafePrescription.dateStoppedUsing = [NSDate date];
-            
+
+
             //
             // Save it.
             //
+
             BOOL successfullySaved = [blockSafePrescription saveToPersistentStore: & coreDataError];
             
             if (successfullySaved)
@@ -739,32 +727,39 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 #pragma mark - Data extracts to send to Sage
 // ---------------------------------------------------------
 
+/*
+ Please look at the next four methods as a group.
+ The first method uploads a JSON "package" specified by the last 3 methods.
+ The last 3 methods all create parallel structures, so that people reading
+ the uploaded data see how these pieces relate to each other.
+ */
+
 + (void) sendRecordedActionToSage: (NSDictionary *) actionRecord
 {
     [APCDataArchiverAndUploader uploadDictionary: actionRecord
-                              withTaskIdentifier: actionRecord [@"item"]
+                              withTaskIdentifier: actionRecord [kAPCSerializedDataKey_Item]
                                   andTaskRunUuid: nil];
 }
 
 + (void) recordActionForCreatingPrescription: (APCMedTrackerPrescription *) prescription
 {
     NSDictionary * result = @{
-                              @"item"           : @"medicationTracker_createPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
+                              kAPCSerializedDataKey_Item      : kUploadablePackageCreatePrescriptionFileName,
 
-                              @"userAction"     : @{ @"category"    : @"medicationTracker",
-                                                     @"name"        : @"createPrescription",
-                                                     @"version"     : @(1)
-                                                     },
+                              kUploadablePackageIdentifierKey : @{ kUploadablePackageCategoryKey     : kUploadablePackageCategory,
+                                                                   kUploadablePackageNameKey         : kUploadablePackageCreatePrescriptionName,
+                                                                   kUploadablePackageVersionKey      : @(kUploadablePackageCreatePrescriptionSchemaVersion)
+                                                                   },
 
-                              @"prescription"   : @{ @"uniqueId"               : prescription.objectID,
-                                                     @"dateCreated"            : prescription.dateStartedUsing,
-                                                     @"daysOfTheWeek"          : prescription.zeroBasedDaysOfTheWeekAsArrayOfSortedShortNames,
-                                                     @"numberOfTimesPerDay"    : prescription.numberOfTimesPerDay,
-                                                     @"medicationName"         : prescription.medication.name,
-                                                     @"dosageAmount"           : prescription.dosage.amount,
-                                                     @"dosageName"             : prescription.dosage.name,
-                                                     @"colorName"              : prescription.color.name
-                                                     },
+                              kUploadablePackageContents      : @{ kUploadableFieldUniqueIdKey       : prescription.objectID,
+                                                                   kUploadableFieldCreationDateKey   : prescription.dateStartedUsing,
+                                                                   kUploadableFieldWeekdaysKey       : prescription.zeroBasedDaysOfTheWeekAsArrayOfSortedShortNames,
+                                                                   kUploadableFieldTimesPerDayKey    : prescription.numberOfTimesPerDay,
+                                                                   kUploadableFieldMedicationNameKey : prescription.medication.name,
+                                                                   kUploadableFieldDosageAmountKey   : prescription.dosage.amount,
+                                                                   kUploadableFieldDosageNameKey     : prescription.dosage.name,
+                                                                   kUploadableFieldColorNameKey      : prescription.color.name
+                                                                   },
                               };
 
     [self sendRecordedActionToSage: result];
@@ -773,16 +768,16 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
 + (void) recordActionForExpiringPrescription: (APCMedTrackerPrescription *) prescription
 {
     NSDictionary * result = @{
-                              @"item"         : @"medicationTracker_cancelPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
+                              kAPCSerializedDataKey_Item      : kUploadablePackageExpirePrescriptionFileName,
 
-                              @"userAction"   : @{ @"category"      : @"medicationTracker",
-                                                   @"name"          : @"cancelPrescription",
-                                                   @"version"       : @(1),
-                                                   },
+                              kUploadablePackageIdentifierKey : @{ kUploadablePackageCategoryKey       : kUploadablePackageCategory,
+                                                                   kUploadablePackageNameKey           : kUploadablePackageExpirePrescriptionName,
+                                                                   kUploadablePackageVersionKey        : @(kUploadablePackageExpirePrescriptionSchemaVersion),
+                                                                   },
 
-                              @"prescription" : @{ @"uniqueId"      : prescription.objectID,
-                                                   @"dateCanceled"  : prescription.dateStoppedUsing,
-                                                   },
+                              kUploadablePackageContents      : @{ kUploadableFieldUniqueIdKey         : prescription.objectID,
+                                                                   kUploadableFieldCancellationDateKey : prescription.dateStoppedUsing,
+                                                                   },
                               };
 
     [self sendRecordedActionToSage: result];
@@ -793,17 +788,17 @@ static NSString * const kSeparatorForZeroBasedDaysOfTheWeek = @",";
                                forPrescription: (APCMedTrackerPrescription *) prescription
 {
     NSDictionary *result = @{
-                             @"item"         : @"medicationTracker_recordTotalDailyDosesOfPrescription",      // old filename entry.  I'm trying to propose some new ways to think about this.
+                             kAPCSerializedDataKey_Item      : kUploadablePackageRecordDosesFileName,
 
-                             @"userAction"   : @{ @"category"       : @"medicationTracker",
-                                                  @"name"           : @"recordTotalDailyDosesOfPrescription",
-                                                  @"version"        : @(1),
-                                                  },
+                             kUploadablePackageIdentifierKey : @{ kUploadablePackageCategoryKey  : kUploadablePackageCategory,
+                                                                  kUploadablePackageNameKey      : kUploadablePackageRecordDosesName,
+                                                                  kUploadablePackageVersionKey   : @(kUploadablePackageRecordDosesSchemaVersion),
+                                                                  },
 
-                             @"prescription" : @{ @"uniqueId"           : prescription.objectID,
-                                                  @"dosageDate"         : date,
-                                                  @"numberOfDosesTaken" : numberOfDosesTaken
-                                                  },
+                             kUploadablePackageContents      :  @{ kUploadableFieldUniqueIdKey   : prescription.objectID,
+                                                                   kUploadableFieldDosageDateKey : date,
+                                                                   kUploadableFieldDosesTakenKey : numberOfDosesTaken
+                                                                   },
                              };
 
     [self sendRecordedActionToSage: result];
