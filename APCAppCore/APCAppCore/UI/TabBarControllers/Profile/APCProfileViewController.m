@@ -48,6 +48,7 @@
 #import "APCPermissionsManager.h"
 #import "APCSharingOptionsViewController.h"
 #import "APCLicenseInfoViewController.h"
+#import "APCDemographicUploader.h"
 
 static CGFloat const kSectionHeaderHeight = 40.f;
 static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
@@ -68,6 +69,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 @property (weak, nonatomic) IBOutlet UILabel *participationLabel;
 
+@property (strong, nonatomic) APCDemographicUploader  *demographicUploader;
+@property (nonatomic, assign)  BOOL                    profileEditsWerePerformed;
+
 @end
 
 @implementation APCProfileViewController
@@ -77,7 +81,8 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     NSString *build = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     self.versionLabel.text = [NSString stringWithFormat:@"Version: %@ (Build %@)", version, build];
-    // Do any additional setup after loading the view.
+    
+    self.demographicUploader = [[APCDemographicUploader alloc] init];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -126,6 +131,14 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (self.profileEditsWerePerformed == YES) {
+        self.profileEditsWerePerformed = NO;
+        [self.demographicUploader uploadNonIdentifiableDemographicData];
+    }
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -184,23 +197,14 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     if ((NSUInteger)indexPath.section >= self.items.count) {
         
         if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+            cell = [tableView dequeueReusableCellWithIdentifier:kAPCDefaultTableViewCellIdentifier forIndexPath:indexPath];
         }
         
-        UITableViewCell *view = nil;
-        if ([self.delegate respondsToSelector:@selector(cellForRowAtAdjustedIndexPath:)])
+        if ([self.delegate respondsToSelector:@selector(decorateCell:)])
         {
-            NSInteger adjustedSectionForExtender = indexPath.section - self.items.count;
-            
-            NSIndexPath *newIndex = [NSIndexPath indexPathForRow:indexPath.row inSection:adjustedSectionForExtender];
-            
-            cell = [self.delegate cellForRowAtAdjustedIndexPath:newIndex];
+            [self.delegate decorateCell:cell];
         }
-    
-        if (view) {
-            [cell.contentView addSubview:view];
-        }
-        
+
     } else {
         
         if (self.pickerIndexPath && [self.pickerIndexPath isEqual:indexPath]) {
@@ -1517,6 +1521,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         
         sender.title = NSLocalizedString(@"Done", @"Done");
         sender.style = UIBarButtonItemStyleDone;
+        self.profileEditsWerePerformed = YES;
         
         self.navigationItem.leftBarButtonItem.enabled = NO;
         [self.items enumerateObjectsUsingBlock:^(id obj, NSUInteger  __unused idx, BOOL * __unused stop) {
@@ -1666,6 +1671,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     delegateConsentVC = consentVC;
     delegateConsentVC.delegate = self;
+    
+    NSUInteger subviewsCount = delegateConsentVC.view.subviews.count;
+    UILabel *watermarkLabel = [APCExampleLabel watermarkInRect:delegateConsentVC.view.bounds
+                                                    withCenter:delegateConsentVC.view.center];
+    
+    [delegateConsentVC.view insertSubview:watermarkLabel atIndex:subviewsCount];
     
     [self presentViewController:consentVC animated:YES completion:nil];
 }

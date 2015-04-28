@@ -100,47 +100,53 @@ typedef enum : NSInteger
     kErrorCantSerializeObject_Code,
     kErrorDontHaveAnyZippedFiles_Code,
     kErrorHaveDuplicateUploadableFilenames_Code,
+    kErrorInvalidTaskIdentifier_Code,
+    kErrorInvalidTaskRunUuid_Code,
     kErrorUploadFailed_Code,
 
 } APCErrorCode;
 
 
-static NSString * const kArchiveAndUploadErrorDomain                = @"ArchiveAndUpload";
+static NSString * const kArchiveAndUploadErrorDomain                    = @"ArchiveAndUpload";
 
-static NSString * const kErrorCantCreateArchiveFolder_Reason        = @"Can't create 'Archive' folder";
-static NSString * const kErrorCantCreateArchiveFolder_Suggestion    = @"Couldn't create the folder for preparing our .zip files.";
-static NSString * const kErrorCantCreateManifest_Reason             = @"Can't Create Manifest";
-static NSString * const kErrorCantCreateManifest_Suggestion_Format  = @"Couldn't create the manifest file entry (%@.%@) in the .zip file.";
-static NSString * const kErrorCantCreateUploadFolder_Reason         = @"Can't create 'Upload' folder";
-static NSString * const kErrorCantCreateUploadFolder_Suggestion     = @"Couldn't create the folder for saving files to be uploaded.";
-static NSString * const kErrorCantCreateWorkingDirectory_Reason     = @"Can't Create Working Folder";
-static NSString * const kErrorCantCreateWorkingDirectory_Suggestion = @"Couldn't create a folder in which to make our .zip file.";
-static NSString * const kErrorCantCreateZipFile_Reason              = @"Can't Create Archive in Memory";
-static NSString * const kErrorCantCreateZipFile_Suggestion          = @"We couldn't create the new, placeholder .zip file in RAM.  (We haven't even gotten to the 'save to disk' part.)";
-static NSString * const kErrorCantDeleteFileOrFolder_Reason         = @"Can't Delete File/Folder";
-static NSString * const kErrorCantDeleteFileOrFolder_Suggestion     = @"We couldn't delete a file/folder creating during the archiving process. See attached path and nested error, if any, for details.";
-static NSString * const kErrorCantEncryptFile_Reason                = @"Can't Encrypt Zip File";
-static NSString * const kErrorCantEncryptFile_Suggestion            = @"We couldn't encrypt the .zip file we need to upload.";
-static NSString * const kErrorCantFindDocumentsFolder_Reason        = @"Can't Find 'Documents' Folder";
-static NSString * const kErrorCantFindDocumentsFolder_Suggestion    = @"Couldn't find the user's 'documents' folder. This should never happen. Ahem.";
-static NSString * const kErrorCantFindEncryptedFile_Reason          = @"Can't Find Encrypted File";
-static NSString * const kErrorCantFindEncryptedFile_Suggestion      = @"We couldn't find the encrypted .zip file on disk (even though we seem to have successfully encrypted it...?).";
-static NSString * const kErrorCantFindUnencryptedFile_Reason        = @"Can't Find Unencrypted File";
-static NSString * const kErrorCantFindUnencryptedFile_Suggestion    = @"We couldn't find the unencrypted .zip file on disk (even though we seem to have successfully saved it...?).";
-static NSString * const kErrorCantInsertZipEntry_Reason             = @"Can't Insert Zip Entry";
-static NSString * const kErrorCantInsertZipEntry_Suggestion         = @"We couldn't add one of the .zippable items to the .zip file.";
-static NSString * const kErrorCantReadUnencryptedFile_Reason        = @"Can't Open Archive";
-static NSString * const kErrorCantReadUnencryptedFile_Suggestion    = @"Couldn't read the unencrypted .zip file we just tried to create.";
-static NSString * const kErrorCantSaveEncryptedFile_Reason          = @"Can't Save Encrypted File";
-static NSString * const kErrorCantSaveEncryptedFile_Suggestion      = @"We couldn't save the encrypted .zip file to disk.";
-static NSString * const kErrorCantSaveUnencryptedFile_Reason        = @"Can't Save Unencrypted File";
-static NSString * const kErrorCantSaveUnencryptedFile_Suggestion    = @"We couldn't save the unencrypted .zip file to disk.";
-static NSString * const kErrorCantSerializeObject_Reason            = @"Can't Serialize Object";
-static NSString * const kErrorCantSerializeObject_Suggestion        = @"We couldn't generate a JSON version of some piece of data.";
-static NSString * const kErrorDontHaveAnyZippedFiles_Reason         = @"Don't Have Files For Archive";
-static NSString * const kErrorDontHaveAnyZippedFiles_Suggestion     = @"Something went wrong. We don't seem to have any contents for this .zip file.";
-static NSString * const kErrorUploadFailed_Reason                   = @"Upload to Sage Failed";
-static NSString * const kErrorUploadFailed_Suggestion               = @"We got an error when uploading to Sage.  See the nested error for details.";
+static NSString * const kErrorCantCreateArchiveFolder_Reason            = @"Can't create 'Archive' folder";
+static NSString * const kErrorCantCreateArchiveFolder_Suggestion        = @"Couldn't create the folder for preparing our .zip files.";
+static NSString * const kErrorCantCreateManifest_Reason                 = @"Can't Create Manifest";
+static NSString * const kErrorCantCreateManifest_SuggestionFormat       = @"Couldn't create the manifest file entry (%@.%@) in the .zip file.";
+static NSString * const kErrorCantCreateUploadFolder_Reason             = @"Can't create 'Upload' folder";
+static NSString * const kErrorCantCreateUploadFolder_Suggestion         = @"Couldn't create the folder for saving files to be uploaded.";
+static NSString * const kErrorCantCreateWorkingDirectory_Reason         = @"Can't Create Working Folder";
+static NSString * const kErrorCantCreateWorkingDirectory_Suggestion     = @"Couldn't create a folder in which to make our .zip file.";
+static NSString * const kErrorCantCreateZipFile_Reason                  = @"Can't Create Archive in Memory";
+static NSString * const kErrorCantCreateZipFile_Suggestion              = @"We couldn't create the new, placeholder .zip file in RAM.  (We haven't even gotten to the 'save to disk' part.)";
+static NSString * const kErrorCantDeleteFileOrFolder_Reason             = @"Can't Delete File/Folder";
+static NSString * const kErrorCantDeleteFileOrFolder_Suggestion         = @"We couldn't delete a file/folder creating during the archiving process. See attached path and nested error, if any, for details.";
+static NSString * const kErrorCantEncryptFile_Reason                    = @"Can't Encrypt Zip File";
+static NSString * const kErrorCantEncryptFile_Suggestion                = @"We couldn't encrypt the .zip file we need to upload.";
+static NSString * const kErrorCantFindDocumentsFolder_Reason            = @"Can't Find 'Documents' Folder";
+static NSString * const kErrorCantFindDocumentsFolder_Suggestion        = @"Couldn't find the user's 'documents' folder. This should never happen. Ahem.";
+static NSString * const kErrorCantFindEncryptedFile_Reason              = @"Can't Find Encrypted File";
+static NSString * const kErrorCantFindEncryptedFile_Suggestion          = @"We couldn't find the encrypted .zip file on disk (even though we seem to have successfully encrypted it...?).";
+static NSString * const kErrorCantFindUnencryptedFile_Reason            = @"Can't Find Unencrypted File";
+static NSString * const kErrorCantFindUnencryptedFile_Suggestion        = @"We couldn't find the unencrypted .zip file on disk (even though we seem to have successfully saved it...?).";
+static NSString * const kErrorCantInsertZipEntry_Reason                 = @"Can't Insert Zip Entry";
+static NSString * const kErrorCantInsertZipEntry_Suggestion             = @"We couldn't add one of the .zippable items to the .zip file.";
+static NSString * const kErrorCantReadUnencryptedFile_Reason            = @"Can't Open Archive";
+static NSString * const kErrorCantReadUnencryptedFile_Suggestion        = @"Couldn't read the unencrypted .zip file we just tried to create.";
+static NSString * const kErrorCantSaveEncryptedFile_Reason              = @"Can't Save Encrypted File";
+static NSString * const kErrorCantSaveEncryptedFile_Suggestion          = @"We couldn't save the encrypted .zip file to disk.";
+static NSString * const kErrorCantSaveUnencryptedFile_Reason            = @"Can't Save Unencrypted File";
+static NSString * const kErrorCantSaveUnencryptedFile_Suggestion        = @"We couldn't save the unencrypted .zip file to disk.";
+static NSString * const kErrorCantSerializeObject_Reason                = @"Can't Serialize Object";
+static NSString * const kErrorCantSerializeObject_Suggestion            = @"We couldn't generate a JSON version of some piece of data.";
+static NSString * const kErrorDontHaveAnyZippedFiles_Reason             = @"Don't Have Files For Archive";
+static NSString * const kErrorDontHaveAnyZippedFiles_Suggestion         = @"Something went wrong. We don't seem to have any contents for this .zip file.";
+static NSString * const kErrorInvalidTaskIdentifier_Reason              = @"Invalid Task Identifier";
+static NSString * const kErrorInvalidTaskIdentifier_SuggestionFormat    = @"The task identifier you specified [%@] does not appear to be valid.  Please check the source code for the current requirements for this field.";
+static NSString * const kErrorInvalidTaskRunUuid_Reason                 = @"Invalid Task Run ID";
+static NSString * const kErrorInvalidTaskRunUuid_SuggestionFormat       = @"The 'task run ID' you specified [%@] doesn't appear to be valid.  Please check the source code for the current requirements for this field.";
+static NSString * const kErrorUploadFailed_Reason                       = @"Upload to Sage Failed";
+static NSString * const kErrorUploadFailed_Suggestion                   = @"We got an error when uploading to Sage.  See the nested error for details.";
 
 
 /*
@@ -209,6 +215,18 @@ static NSString *folderPathForUploadOperations = nil;
 
 @interface APCDataArchiverAndUploader ()
 @property (nonatomic, strong) NSArray               * dictionariesToUpload;
+
+/**
+ Name for the task being uploaded.  Needs to be a legal
+ C-style variable name.  I think.  Specification in progress.
+ */
+@property (nonatomic, strong) NSString              * taskIdentifier;
+
+/**
+ Unique ID for this particular run of the task identified
+ with taskIdentifier.  I think.  Specification in progress.
+ */
+@property (nonatomic, strong) NSUUID                * taskRunUuid;
 
 @property (nonatomic, strong) ZZArchive             * zipArchive;
 @property (nonatomic, strong) NSMutableArray        * zipEntries;
@@ -284,26 +302,38 @@ static NSString *folderPathForUploadOperations = nil;
 // ---------------------------------------------------------
 
 + (void) uploadDictionary: (NSDictionary *) dictionary
+       withTaskIdentifier: (NSString *) taskIdentifier
+           andTaskRunUuid: (NSUUID *) taskRunUuid
 {
-    APCDataArchiverAndUploader *archiverAndUploader = [[APCDataArchiverAndUploader alloc] initWithDictionariesToUpload: @[dictionary]];
+    APCDataArchiverAndUploader *archiverAndUploader = [[APCDataArchiverAndUploader alloc] initWithDictionariesToUpload: @[dictionary]
+                                                                                                        taskIdentifier: taskIdentifier
+                                                                                                           taskRunUuid: taskRunUuid];
 
     [self startOneUploadWithUploader: archiverAndUploader];
 }
 
 
 + (BOOL) uploadFileAtPath: (NSString *) path
+       withTaskIdentifier: (NSString *) taskIdentifier
+           andTaskRunUuid: (NSUUID *) taskRunUuid
            returningError: (NSError * __autoreleasing *) errorToReturn
 {
     BOOL result = [self uploadFilesAtPaths: @[path]
+                        withTaskIdentifier: taskIdentifier
+                            andTaskRunUuid: taskRunUuid
                             returningError: errorToReturn];
 
     return result;
 }
 
 + (BOOL) uploadFilesAtPaths: (NSArray *) paths
+         withTaskIdentifier: (NSString *) taskIdentifier
+             andTaskRunUuid: (NSUUID *) taskRunUuid
              returningError: (NSError * __autoreleasing *) errorToReturn
 {
-    APCDataArchiverAndUploader *archiverAndUploader = [[APCDataArchiverAndUploader alloc] initWithFilePathsToUpload: paths];
+    APCDataArchiverAndUploader *archiverAndUploader = [[APCDataArchiverAndUploader alloc] initWithFilePathsToUpload: paths
+                                                                                                     taskIdentifier: taskIdentifier
+                                                                                                        taskRunUuid: taskRunUuid];
 
     // Before we start the upload:  try to move the files to
     // a safe location we control.  Then the uploader will take
@@ -314,14 +344,14 @@ static NSString *folderPathForUploadOperations = nil;
 
     BOOL ableToMoveFile = [archiverAndUploader moveUploadableFilesToSafeLocationReturningError: & errorMovingFiles];
 
-    if (ableToMoveFile)
+    if (! ableToMoveFile)
     {
-        // This is the upload itself.
-        [self startOneUploadWithUploader: archiverAndUploader];
+        APCLogError2 (errorMovingFiles);
     }
     else
     {
-        APCLogError2 (errorMovingFiles);
+        // This is the upload itself.
+        [self startOneUploadWithUploader: archiverAndUploader];
     }
 
     if (errorToReturn != nil)
@@ -345,12 +375,20 @@ static NSString *folderPathForUploadOperations = nil;
 #pragma mark - Create one uploader
 // ---------------------------------------------------------
 
+/**
+ The real, bare-bones init.  Technically, this is the "designated
+ initializer."  However, the initializer you PROBABLY want is 
+ -initWithTaskIdentifier:andTaskRunUuid: , because that emits
+ a warning if you don't specify those fields.
+ */
 - (id) init
 {
     self = [super init];
 
     if (self)
     {
+        _taskIdentifier                     = nil;
+        _taskRunUuid                        = nil;
         _zipEntries                         = [NSMutableArray new];
         _fileInfoEntries                    = [NSMutableArray new];
         _countOfUnknownFileNames            = 0;
@@ -373,9 +411,26 @@ static NSString *folderPathForUploadOperations = nil;
     return self;
 }
 
-- (id) initWithDictionariesToUpload: (NSArray *) arrayOfDictionaries
+- (id) initWithTaskIdentifier: (NSString *) taskIdentifier
+               andTaskRunUuid: (NSUUID *) taskRunUuid
 {
     self = [self init];
+
+    if (self)
+    {
+        _taskIdentifier = taskIdentifier;
+        _taskRunUuid = taskRunUuid;
+    }
+
+    return self;
+}
+
+- (id) initWithDictionariesToUpload: (NSArray *) arrayOfDictionaries
+                     taskIdentifier: (NSString *) taskIdentifier
+                        taskRunUuid: (NSUUID *) taskRunUuid
+{
+    self = [self initWithTaskIdentifier: taskIdentifier
+                         andTaskRunUuid: taskRunUuid];
 
     if (self)
     {
@@ -386,8 +441,11 @@ static NSString *folderPathForUploadOperations = nil;
 }
 
 - (id) initWithFilePathsToUpload: (NSArray *) arrayOfFilePaths
+                  taskIdentifier: (NSString *) taskIdentifier
+                     taskRunUuid: (NSUUID *) taskRunUuid
 {
-    self = [self init];
+    self = [self initWithTaskIdentifier: taskIdentifier
+                         andTaskRunUuid: taskRunUuid];
 
     if (self)
     {
@@ -1406,10 +1464,20 @@ static NSString *folderPathForUploadOperations = nil;
     }
     else
     {
-        NSDictionary *zipArchiveManifest = @{ kAPCSerializedDataKey_Files      : self.fileInfoEntries,
-                                              kAPCSerializedDataKey_AppName    : appName,
-                                              kAPCSerializedDataKey_AppVersion : appVersion,
-                                              kAPCSerializedDataKey_PhoneInfo  : phoneInfo
+        // These two values should never be nil.  But if they
+        // are, ship them anyway, so that Sage can catch them
+        // and ask us about them.  The programmer who wrote this
+        // call to the uploader will then, appropriately, provide
+        // those values.
+        id taskIdentifier = self.taskIdentifier ?: [NSNull null];
+        id taskRunUuid    = self.taskRunUuid    ?: [NSNull null];
+
+        NSDictionary *zipArchiveManifest = @{ kAPCSerializedDataKey_Files       : self.fileInfoEntries,
+                                              kAPCSerializedDataKey_Item        : taskIdentifier,
+                                              kAPCSerializedDataKey_TaskRun     : taskRunUuid,
+                                              kAPCSerializedDataKey_AppName     : appName,
+                                              kAPCSerializedDataKey_AppVersion  : appVersion,
+                                              kAPCSerializedDataKey_PhoneInfo   : phoneInfo
                                               };
 
         NSError *errorCreatingManifest = nil;
@@ -1432,7 +1500,7 @@ static NSString *folderPathForUploadOperations = nil;
 
         if (! ableToCreateManifest)
         {
-            NSString *errorMessage = [NSString stringWithFormat: kErrorCantCreateManifest_Suggestion_Format,
+            NSString *errorMessage = [NSString stringWithFormat: kErrorCantCreateManifest_SuggestionFormat,
                                       kAPCNameOfIndexFile,
                                       kAPCFileExtension_JSON];
 
@@ -1887,29 +1955,6 @@ static NSString *folderPathForUploadOperations = nil;
         }
     }
 }
-
-
-
-
-// ---------------------------------------------------------
-#pragma mark - Proposed Ideas (not yet implemented)
-// ---------------------------------------------------------
-
-/*
- See explanations in the header file.
-
- These empty method bodies are just to calm down the compiler warnings.
- */
-+ (void) uploadResearchKitTaskResult: (id /* ORKTaskResult* */) __unused taskResult {}
-
-+ (void)           uploadDictionary: (NSDictionary *) __unused dictionary
-    encryptingContentsBeforeZipping: (BOOL)           __unused shouldEncryptContentsFirst {}
-
-+ (void) uploadAirQualityData: (NSDictionary *) __unused airQualityStuff {}
-
-+ (void) uploadDictionaries: (NSArray *)  __unused dictionaries
-          withGroupFilename: (NSString *) __unused filename
-    encryptingContentsFirst: (BOOL)       __unused shouldEncryptContentsFirst {}
 
 
 @end

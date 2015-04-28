@@ -154,8 +154,47 @@
 
 /**
  .zips and uploads the specified dictionary to Sage.
+ 
+ The dictionary will be recursively converted to values that
+ can be serialized to JSON, and will then be converted to JSON.
+ The JSONified contents will then be stored as an entry in
+ the .zip file, using a filename specified in the "item" key
+ in the dictionary.
+ 
+ One requirement and one caveat for you:
+
+ (a) The requirement:  the dictionary must contain a key named
+ "item", whose value will become the name of the file containing
+ the JSON-ified contents of that dictionary.  Please use a
+ string value for this key which can be used as a filename:
+ "useful_question_data" is fine, "hey! cool stuff, dude!" is
+ less so.  Do not add a file extension; the file will
+ automatically receive the extension "json".
+
+ (b) The caveat:  the dictionary will be converted to JSON in ways
+ highly specific to this application suite and the fact that we're
+ uploading to Sage.  For example, NSDate objects are will be
+ converted to a specific ISO-8601 format (example:
+ "2014-01-31T12:34:56-0800"), and strings which contain stringified
+ arrays of integers will be converted to actual arrays of NSNumbers
+ (because this is currently a problem happening far upstream from
+ this uploader, in multiple places).
+
+ @param dictionary  A dictionary to upload.  The dictionary will
+ become a .json file, stored in a .zip file.  See the description
+ of this method, above, for details.
+
+ @param taskIdentifier  A string identifying the purpose of this
+ upload.  I *think* this has to be something like a variable name.
+ Specification in progress.  Required.
+
+ @param taskRunUuid  A UUID representing a unique ID for this
+ run of this particular task.  May be nil.  I think.
+ Specification in progress.
  */
-+ (void) uploadDictionary: (NSDictionary *) dictionary;
++ (void) uploadDictionary: (NSDictionary *) dictionary
+       withTaskIdentifier: (NSString *) taskIdentifier
+           andTaskRunUuid: (NSUUID *) taskRunUuid;
 
 
 /**
@@ -165,9 +204,7 @@
  thread.  It will attempt to move the file while still on the
  thread from which you called it, so that by the time this method
  returns, you can do whatever you need to do next with the folder
- and path where that file used to be.  Returns YES if it was able
- to move the file, or NO if not.  Once moved, this class will do
- all the .zipping and uploading from a separate thread.
+ and path where that file used to be.
 
  We can evolve this design as needed.  This suits our current
  needs.
@@ -175,21 +212,31 @@
  This method simply calls the plural method,
  +uploadFilesAtPaths:returningError:.
  
- @return YES if able to move the file, NO if not.  This does
+ @return YES if able to move the file, NO if not.  A YES here does
  NOT mean the upload worked; this merely says whether the uploader
  was able to grab the file.  If we return NO, the file becomes
  your responsibility (again), to do with as you please.  For
- your convenience, the path to the file will be in the returned
- error object.
+ your convenience, the path to the file will also be available
+ in the returned error object.
  
  @param path  The path of the file to upload.
- 
- @param errorToReturn  A pointer to an error object.  If there's
- a problem obtaining the file, we'll return the error here (and
- print it to the console).  Pass nil if you don't care about the
- error.
+
+ @param taskIdentifier  A string identifying the purpose of this
+ upload.  Required.  I *think* this has to be something like a
+ variable name, or a legal filename.  Specification in progress.
+
+ @param taskRunUuid  A UUID representing a unique ID for this
+ run of this particular task.  May be nil.  I think.
+ Specification in progress.
+
+ @param errorToReturn  A pointer to the variable for an error
+ object.  If there's a problem *obtaining* the file, we'll return
+ the error here (and print it to the console).  Pass nil if you
+ don't care about the error.
  */
 + (BOOL) uploadFileAtPath: (NSString *) path
+       withTaskIdentifier: (NSString *) taskIdentifier
+           andTaskRunUuid: (NSUUID *) taskRunUuid
            returningError: (NSError * __autoreleasing *) errorToReturn;
 
 
@@ -200,32 +247,42 @@
  thread.  It will attempt to move the files while still on the
  thread from which you called it, so that by the time this method
  returns, you can do whatever you need to do next with the folder
- and path where those files used to be.  Returns YES if it was able
- to move the files, or NO if not.  Once moved, this class will do
- all the .zipping and uploading from a separate thread.
+ and path where those files used to be.
 
  We can evolve this design as needed.  This suits our current
  needs.
 
- @return YES if able to move the files, NO if not.  This does
+ @return YES if able to move the file, NO if not.  A YES here does
  NOT mean the upload worked; this merely says whether the uploader
- was able to grab the files.
+ was able to grab the file.  If we return NO, the file becomes
+ your responsibility (again), to do with as you please.  For
+ your convenience, the path to the file will also be available
+ in the returned error object.
 
  @param path  The paths of the files to upload.  The files must 
  have different filenames-and-extensions -- please don't have
  two files named "temp.txt", for example.
 
- @param errorToReturn  A pointer to an error object.  If there's
- a problem obtaining the file, we'll return the error here (and
- print it to the console).  Pass nil if you don't care about the
- error.  If you passed more than one file, the error's userInfo
- dictionary will contain the entry 
- kAPCArchiveAndUpload_FilesWeDidntTouchErrorKey, containing
- an array of the paths we didn't move.  These paths are now
- your responsibility (again).  Any paths we managed to move,
- we'll delete, as if they had been uploaded.
+ @param taskIdentifier  A string identifying the purpose of this
+ upload.  Required.  I *think* this has to be something like a
+ variable name, or a legal filename.  Specification in progress.
+
+ @param taskRunUuid  A UUID representing a unique ID for this
+ run of this particular task.  May be nil.  I think.
+ Specification in progress.
+
+ @param errorToReturn  A pointer to to the variable for an error
+ object.  If there's a problem obtaining the file, we'll return
+ the error here (and print it to the console).  Pass nil if you
+ don't care about the error.  If you passed more than one file,
+ the error's userInfo dictionary will contain an array of the
+ paths we didn't move.  These paths are now your responsibility
+ (again).  Any paths we managed to move, we'll delete, as if
+ they had been uploaded.
  */
 + (BOOL) uploadFilesAtPaths: (NSArray *) path
+         withTaskIdentifier: (NSString *) taskIdentifier
+             andTaskRunUuid: (NSUUID *) taskRunUuid
              returningError: (NSError * __autoreleasing *) errorToReturn;
 
 
@@ -237,22 +294,25 @@
 /*
  Other ideas, based on other needs around the app.  Not yet implemented.
  (All this will eventually go into DataSubstrate.)
+ 
+ Please leave this commented-out block here, as we think about
+ these options.
  */
 
-/** This represents what -[BaseTaskViewController processTaskResult] does now. */
-+ (void) uploadResearchKitTaskResult: (id /* ORKTaskResult* */) taskResult;
-
-/** For air-quality data:  encrypt the individual files inside the .zip file, as well as encrypting the whole package. */
-+ (void)            uploadDictionary: (NSDictionary *) dictionary
-     encryptingContentsBeforeZipping: (BOOL) shouldEncryptContentsFirst;
-
-/** Er...  maybe this would be better?  Maybe it calls the above? */
-+ (void) uploadAirQualityData: (NSDictionary *) airQualityStuff;
-
-/** Catchall for uploading piles of random stuff?  Tapping test, 6-minute-walk test, etc.? */
-+ (void) uploadDictionaries: (NSArray *) dictionaries
-          withGroupFilename: (NSString *) filename
-    encryptingContentsFirst: (BOOL) shouldEncryptContentsFirst;
+//    /** This represents what -[BaseTaskViewController processTaskResult] does now. */
+//    + (void) uploadResearchKitTaskResult: (id /* ORKTaskResult* */) taskResult;
+//
+//    /** For air-quality data:  encrypt the individual files inside the .zip file, as well as encrypting the whole package. */
+//    + (void)            uploadDictionary: (NSDictionary *) dictionary
+//         encryptingContentsBeforeZipping: (BOOL) shouldEncryptContentsFirst;
+//
+//    /** Er...  maybe this would be better?  Maybe it calls the above? */
+//    + (void) uploadAirQualityData: (NSDictionary *) airQualityStuff;
+//
+//    /** Catchall for uploading piles of random stuff?  Tapping test, 6-minute-walk test, etc.? */
+//    + (void) uploadDictionaries: (NSArray *) dictionaries
+//              withGroupFilename: (NSString *) filename
+//        encryptingContentsFirst: (BOOL) shouldEncryptContentsFirst;
 
 
 @end
