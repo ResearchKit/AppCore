@@ -546,7 +546,6 @@
 		F5F12A121A2F78490015982C /* MODEL_README in Resources */ = {isa = PBXBuildFile; fileRef = F5F128B81A2F78490015982C /* MODEL_README */; };
 		F5F12A6C1A2F78490015982C /* APCAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129201A2F78490015982C /* APCAppDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A6D1A2F78490015982C /* APCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129211A2F78490015982C /* APCAppDelegate.m */; };
-		F5F12A6E1A2F78490015982C /* TabBar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5F129221A2F78490015982C /* TabBar.storyboard */; };
 		F5F12A6F1A2F78490015982C /* APCCircularProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129251A2F78490015982C /* APCCircularProgressView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F12A701A2F78490015982C /* APCCircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F129261A2F78490015982C /* APCCircularProgressView.m */; };
 		F5F12A711A2F78490015982C /* APCConcentricProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F129271A2F78490015982C /* APCConcentricProgressView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1240,7 +1239,6 @@
 		F5F1291B1A2F78490015982C /* update_version.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = update_version.sh; sourceTree = "<group>"; };
 		F5F129201A2F78490015982C /* APCAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAppDelegate.h; sourceTree = "<group>"; };
 		F5F129211A2F78490015982C /* APCAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		F5F129221A2F78490015982C /* TabBar.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TabBar.storyboard; sourceTree = "<group>"; };
 		F5F129251A2F78490015982C /* APCCircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCircularProgressView.h; sourceTree = "<group>"; };
 		F5F129261A2F78490015982C /* APCCircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCircularProgressView.m; sourceTree = "<group>"; };
 		F5F129271A2F78490015982C /* APCConcentricProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConcentricProgressView.h; sourceTree = "<group>"; };
@@ -2464,7 +2462,6 @@
 				F53C047E1A9B8C7D00BBEC03 /* APCTabBarViewController.m */,
 				F5F129201A2F78490015982C /* APCAppDelegate.h */,
 				F5F129211A2F78490015982C /* APCAppDelegate.m */,
-				F5F129221A2F78490015982C /* TabBar.storyboard */,
 				084302A11AB8D4550039C861 /* APCHealthKitDataCollector.h */,
 				084302A21AB8D4550039C861 /* APCHealthKitDataCollector.m */,
 			);
@@ -3357,7 +3354,6 @@
 				5B4574CA1ABFD07A00601DCC /* License_BridgeSDK.txt in Resources */,
 				08027A831A7319AC00B358CC /* consent_06@3x.png in Resources */,
 				08027A9A1A7319AC00B358CC /* walkingman_monitor@3x.png in Resources */,
-				F5F12A6E1A2F78490015982C /* TabBar.storyboard in Resources */,
 				CFFDED791A95731F00B25581 /* APCMedicationTrackerDetailViewController.xib in Resources */,
 				3624092B1A8181350005B1A7 /* get_debug_ip_address.sh in Resources */,
 				08027A881A7319AC00B358CC /* heartbeat@2x.png in Resources */,

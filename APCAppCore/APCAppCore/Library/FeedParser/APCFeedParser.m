@@ -102,7 +102,7 @@
 
 #pragma mark - NSXMLParserDelegate methods
 
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
+- (void)parser:(NSXMLParser *)__unused parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)__unused namespaceURI qualifiedName:(NSString *)__unused qName attributes:(NSDictionary *)attributeDict
 {
     self.currentElement = elementName;
     self.attributeDict = attributeDict;
@@ -115,12 +115,12 @@
     }
 }
 
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+- (void)parser:(NSXMLParser *)__unused parser foundCharacters:(NSString *)string
 {
     if ([self.currentElement isEqualToString:@"title"]) {
-        self.feedItem.title = [self.feedItem.title stringByAppendingString:string];
+        self.feedItem.title = string;
     } else if ([self.currentElement isEqualToString:@"link"]) {
-        self.feedItem.link = [self.feedItem.link stringByAppendingString:string];
+        self.feedItem.link = string;
     } else if ([self.currentElement isEqualToString:@"description"] || [self.currentElement isEqualToString:@"content"]) {
         self.feedItem.contentDescription = [self.feedItem.contentDescription stringByAppendingString:string];
     } else if ([self.currentElement isEqualToString:@"pubDate"]) {
@@ -132,7 +132,7 @@
     }
 }
 
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
+- (void)parser:(NSXMLParser *)__unused parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)__unused namespaceURI qualifiedName:(NSString *)__unused qName
 {
     if ([elementName isEqualToString:@"item"] || [elementName isEqualToString:@"entry"]) {
         
@@ -140,7 +140,7 @@
     }
 }
 
-- (void)parserDidEndDocument:(NSXMLParser *)parser
+- (void)parserDidEndDocument:(NSXMLParser *)__unused parser
 {
     __weak typeof(self) weakSelf = self;
     

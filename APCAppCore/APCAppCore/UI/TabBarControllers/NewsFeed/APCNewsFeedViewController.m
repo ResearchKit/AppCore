@@ -35,6 +35,7 @@
 #import "APCFeedParser.h"
 #import "APCFeedTableViewCell.h"
 #import "APCWebViewController.h"
+#import "NSBundle+Helper.h"
 
 @interface APCNewsFeedViewController ()
 
@@ -57,7 +58,7 @@
     self.dateFormatter = [NSDateFormatter new];
     self.dateFormatter.dateFormat = @"MM/dd/yy";
     
-    NSString *urlString = @"http://blogsofnote.blogspot.in/feeds/posts/default?alt=rss";// @"https://www.apple.com/main/rss/hotnews/hotnews.rss";
+    NSString *urlString = @"http://sagebionetworkstest.blogspot.com/feeds/posts/default?alt=rss"; // @"https://www.apple.com/main/rss/hotnews/hotnews.rss";
     
     self.feedParser = [[APCFeedParser alloc] initWithFeedURL:[NSURL URLWithString:urlString]];
     
@@ -71,20 +72,14 @@
         } else {
             //Throw error
         }
-        
     }];
     
-    self.title = NSLocalizedString(@"News", nil);
+    self.title = NSLocalizedString(@"News Feed", nil);
 }
 
+#pragma mark - UITableViewDataSource methods
 
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)__unused tableView {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)__unused tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)__unused tableView numberOfRowsInSection:(NSInteger)__unused section {
 
     return self.feeds.count;
 }
@@ -106,9 +101,11 @@
 {
     APCFeedItem *item = self.feeds[indexPath.row];
     
-    APCWebViewController *webViewVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
+    APCWebViewController *webViewVC = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
     
     webViewVC.link = item.link;
+    webViewVC.title = item.title;
+    webViewVC.navigationItem.rightBarButtonItem = nil;
     
     [self.navigationController pushViewController:webViewVC animated:YES];
     
