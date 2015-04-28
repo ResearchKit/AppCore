@@ -34,8 +34,7 @@
 #import "APCNewsFeedViewController.h"
 #import "APCFeedParser.h"
 #import "APCFeedTableViewCell.h"
-#import "APCWebViewController.h"
-#import "NSBundle+Helper.h"
+#import "APCAppCore.h"
 
 @interface APCNewsFeedViewController ()
 
@@ -62,19 +61,45 @@
     
     self.feedParser = [[APCFeedParser alloc] initWithFeedURL:[NSURL URLWithString:urlString]];
     
+    self.title = NSLocalizedString(@"News Feed", nil);
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
+    [self presentViewController:spinnerController animated:YES completion:nil];
+    
     __weak typeof(self) weakSelf = self;
     
     [self.feedParser fetchFeedWithCompletion:^(NSArray *results, NSError *error) {
         
-        if (!error) {
-            weakSelf.feeds = results;
-            [weakSelf.tableView reloadData];
-        } else {
-            //Throw error
-        }
+        [spinnerController dismissViewControllerAnimated:YES completion:^{
+            if (!error) {
+                weakSelf.feeds = results;
+                
+            } else {
+                //Throw error
+            }
+            
+            if (weakSelf.feeds.count > 0) {
+                weakSelf.tableView.backgroundView = nil;
+            } else {
+                UILabel *emptyLabel = [UILabel new];
+                emptyLabel.frame = weakSelf.tableView.bounds;
+                
+                emptyLabel.text = @"There's nothing here yet.";
+                emptyLabel.textColor = [UIColor appSecondaryColor3];
+                emptyLabel.textAlignment = NSTextAlignmentCenter;
+                emptyLabel.font = [UIFont appMediumFontWithSize:22];
+                
+                weakSelf.tableView.backgroundView = emptyLabel;
+            }
+            
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }];
     }];
-    
-    self.title = NSLocalizedString(@"News Feed", nil);
 }
 
 #pragma mark - UITableViewDataSource methods
@@ -106,6 +131,7 @@
     webViewVC.link = item.link;
     webViewVC.title = item.title;
     webViewVC.navigationItem.rightBarButtonItem = nil;
+    webViewVC.webToolBar.hidden = NO;
     
     [self.navigationController pushViewController:webViewVC animated:YES];
     
@@ -121,10 +147,26 @@
         
         if (!error) {
             weakSelf.feeds = results;
-            [weakSelf.tableView reloadData];
         } else {
             //Throw error
         }
+        
+        if (weakSelf.feeds.count > 0) {
+            weakSelf.tableView.backgroundView = nil;
+        } else {
+            UILabel *emptyLabel = [UILabel new];
+            emptyLabel.frame = weakSelf.tableView.bounds;
+            
+            emptyLabel.text = @"There's nothing here yet.";
+            emptyLabel.textColor = [UIColor appSecondaryColor3];
+            emptyLabel.textAlignment = NSTextAlignmentCenter;
+            emptyLabel.font = [UIFont appMediumFontWithSize:22];
+            
+            weakSelf.tableView.backgroundView = emptyLabel;
+        }
+        
+        [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
     }];
 }
 

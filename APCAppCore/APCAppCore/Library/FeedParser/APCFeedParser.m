@@ -92,9 +92,13 @@
         
         BOOL success = [weakSelf.parser parse];
         
-        NSLog(@"Success - %d", success);
         if (!success) {
-            NSLog(@"Error : %@", weakSelf.parser.parserError);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (weakSelf.completionBlock) {
+                    weakSelf.completionBlock(nil, weakSelf.parser.parserError);
+                }
+            });
         }
     });
     

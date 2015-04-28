@@ -977,7 +977,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
 - (void)showTabBar
 {
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    
+
     NSUInteger     selectedItemIndex = kIndexOfActivitesTab;
     
     NSMutableArray *tabBarItems = [NSMutableArray new];
@@ -1061,6 +1061,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
     
     [tabBarController setSelectedIndex:selectedItemIndex];
     tabBarController.delegate = self;
+    tabBarController.tabBar.translucent = NO;
     
     self.window.rootViewController = tabBarController;
 }
