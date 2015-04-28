@@ -138,12 +138,20 @@ static NSUInteger const kIndexOfProfileTab = 3;
         //    otherwise, the value should have been set to YES, to
         //    indicate that the Demographic data was previously uploaded
         //
-    BOOL  demographicDataWasUploaded = [defaults boolForKey:kDemographicDataWasUploadedKey];
-    if (demographicDataWasUploaded == NO) {
-        self.demographicUploader = [[APCDemographicUploader alloc] init];
-        [defaults setBool:YES forKey:kDemographicDataWasUploadedKey];
-        [defaults synchronize];
-        [self.demographicUploader uploadNonIdentifiableDemographicData];
+    
+        //
+        //    we run this code iff the user has previously consented,
+        //    indicating that this is an update to a previously installed version of the application
+        //
+    APCUser  *user = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+    if (user.isConsented) {
+        BOOL  demographicDataWasUploaded = [defaults boolForKey:kDemographicDataWasUploadedKey];
+        if (demographicDataWasUploaded == NO) {
+            self.demographicUploader = [[APCDemographicUploader alloc] init];
+            [defaults setBool:YES forKey:kDemographicDataWasUploadedKey];
+            [defaults synchronize];
+            [self.demographicUploader uploadNonIdentifiableDemographicData];
+        }
     }
 }
 
