@@ -42,7 +42,6 @@
 #import "UIView+Helper.h"
 #import "APCTabBarViewController.h"
 #import "UIAlertController+Helper.h"
-#import "APCHealthKitDataCollector.h"
 #import "APCDemographicUploader.h"
 #import "APCConstants.h"
 
@@ -70,26 +69,19 @@ static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 /*********************************************************************************/
 #pragma mark - User Defaults Keys
 /*********************************************************************************/
-
-static NSString *const kDemographicDataWasUploadedKey = @"kDemographicDataWasUploadedKey";
-
-static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
-static NSUInteger const kIndexOfProfileTab = 3;
-
+static NSString*    const kDemographicDataWasUploadedKey    = @"kDemographicDataWasUploadedKey";
+static NSString*    const kLastUsedTimeKey                  = @"APHLastUsedTime";
+static NSUInteger   const kIndexOfProfileTab                = 3;
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 
 @property (nonatomic) BOOL isPasscodeShowing;
 @property (nonatomic, strong) UIView *secureView;
 @property (nonatomic, strong) NSError *catastrophicStartupError;
-
 @property (nonatomic, strong) NSOperationQueue *healthKitCollectorQueue;
-@property (nonatomic, strong) APCHealthKitDataCollector *healthKitCollector;
-
 @property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
 
 @end
-
 
 @implementation APCAppDelegate
 /*********************************************************************************/
