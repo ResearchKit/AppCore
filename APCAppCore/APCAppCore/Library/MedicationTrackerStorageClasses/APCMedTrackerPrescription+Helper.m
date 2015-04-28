@@ -88,8 +88,9 @@ static NSString * const kUploadableFieldDosesTakenKey                       = @"
 
 
 /**
- Returns a comma -- a highly specific field separator
- for the consumer of one particular method.
+ Field separator for the text format used as one input
+ to and output from this class, per the requirements of
+ the consumer class for which this class was built.
  */
 static NSString * const kSeparatorForZeroBasedDaysOfTheWeek             = @",";
 
