@@ -64,7 +64,7 @@
 {
     APCLogDebug(@"Initalizing location tracker");
     
-    self = [super initWithIdentifier:identifier];
+    self = [super initWithIdentifier:identifier andDateAnchorName:nil];
     
     if (self != nil)
     {

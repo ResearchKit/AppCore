@@ -35,12 +35,13 @@
 
 @implementation APCDataCollector
 
-- (instancetype) initWithIdentifier:(NSString*)identifier
+- (instancetype)initWithIdentifier:(NSString*)identifier andDateAnchorName:(NSString*)anchorName
 {
     self = [super init];
     
     if (self)
     {
+        _anchorName = anchorName;
         _identifier = identifier;
     }
     
@@ -61,7 +62,5 @@
 {
     /* abstract implementation */
 }
-
-
 
 @end

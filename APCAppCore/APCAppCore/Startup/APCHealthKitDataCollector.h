@@ -33,7 +33,7 @@
  
 #import <APCAppCore/APCAppCore.h>
 
-@interface APCHealthKitDataCollector : APCDataTracker
+@interface APCHealthKitDataCollector : NSObject
 
 @property (nonatomic, strong) NSString *csvFilename;
 

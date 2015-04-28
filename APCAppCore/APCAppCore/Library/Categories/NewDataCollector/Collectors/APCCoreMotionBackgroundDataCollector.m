@@ -52,37 +52,50 @@ static NSInteger const kDefaultNumberOfDaysBack = 8;
 */
 - (void)start
 {
-    self.motionActivityManager = [[CMMotionActivityManager alloc] init];
-    
-    NSDate* lastTrackedEndDate = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
-    
-    if (!lastTrackedEndDate)
+    if (!self.motionActivityManager)
     {
-        lastTrackedEndDate = [self maximumNumberOfDaysBack];
-    }
-    
-    __weak typeof(self) weakSelf = self;
-    
-    [self.motionActivityManager queryActivityStartingFromDate:lastTrackedEndDate
-                                                       toDate:[NSDate date]
-                                                      toQueue:[NSOperationQueue new]
-                                                  withHandler:^(NSArray* activities, NSError* __unused error)
-    {
-        __typeof(self) strongSelf = weakSelf;
-
-        if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValuesFromCollector:)])
+        self.motionActivityManager = [[CMMotionActivityManager alloc] init];
+        
+        NSDate* lastTrackedEndDate = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+        
+        if (!lastTrackedEndDate)
         {
-          [strongSelf.delegate didRecieveUpdatedValuesFromCollector:activities];
+            lastTrackedEndDate = [NSDate date];
         }
-
-        [strongSelf.motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new] withHandler:^(CMMotionActivity *activity)
+        
+        __weak typeof(self) weakSelf = self;
+        
+        [self.motionActivityManager queryActivityStartingFromDate:lastTrackedEndDate
+                                                           toDate:[NSDate date]
+                                                          toQueue:[NSOperationQueue new]
+                                                      withHandler:^(NSArray* activities, NSError* error)
         {
-            if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
+            __typeof(self) strongSelf = weakSelf;
+            
+            if (error)
             {
-                [strongSelf.delegate didRecieveUpdatedValueFromCollector:activity];
+                APCLogError2(error);
             }
+            else
+            {
+                if (activities)
+                {
+                    if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValuesFromCollector:)])
+                    {
+                        [strongSelf.delegate didRecieveUpdatedValuesFromCollector:activities];
+                    }
+                }
+            }
+        
+            [strongSelf.motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new] withHandler:^(CMMotionActivity* activity)
+            {
+                if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
+                {
+                    [strongSelf.delegate didRecieveUpdatedValueFromCollector:activity];
+                }
+            }];
         }];
-    }];
+    }
 }
 
 - (void)stop
