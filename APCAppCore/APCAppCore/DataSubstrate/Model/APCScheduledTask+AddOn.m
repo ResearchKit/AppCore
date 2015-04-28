@@ -93,14 +93,16 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
 - (APCResult *)lastResult
 {
     APCResult * retValue = nil;
-    if (self.results.count == 1) {
-        retValue = [self.results anyObject];
-    }
-    else if(self.results.count > 1)
-    {
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"endDate" ascending:NO];
-        NSArray * sortedArray = [self.results sortedArrayUsingDescriptors:@[sortDescriptor]];
-        retValue = [sortedArray firstObject];
+    @synchronized(self){
+        if (self.results.count == 1) {
+            retValue = [self.results anyObject];
+        }
+        else if(self.results.count > 1)
+        {
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"endDate" ascending:NO];
+            NSArray * sortedArray = [self.results sortedArrayUsingDescriptors:@[sortDescriptor]];
+            retValue = [sortedArray firstObject];
+        }
     }
     return  retValue;
 }
