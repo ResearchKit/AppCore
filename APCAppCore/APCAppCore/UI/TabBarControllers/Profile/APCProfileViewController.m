@@ -1560,13 +1560,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 {
     APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
     NSString *filePath = [[NSBundle mainBundle] pathForResource: @"PrivacyPolicy" ofType:@"html" inDirectory:@"HTMLContent"];
-    NSURL *targetURL = [NSURL URLWithString:filePath];
-    NSURLRequest *request = [NSURLRequest requestWithURL:targetURL];
+    webViewController.link = filePath;
     webViewController.title = NSLocalizedString(@"Privacy Policy", @"");
     
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
     [self.navigationController presentViewController:navController animated:YES completion:^{
-        [webViewController.webview loadRequest:request];
+        
     }];
 }
 
@@ -1595,12 +1594,12 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
                 NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
                 NSData *data = [NSData dataWithContentsOfFile:filePath];
-                [webViewController.webview setDataDetectorTypes:UIDataDetectorTypeAll];
+                [webViewController.webView setDataDetectorTypes:UIDataDetectorTypeAll];
                 webViewController.title = NSLocalizedString(@"Consent", @"Consent");
                 
                 UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:webViewController];
                 [weakSelf.navigationController presentViewController:navController animated:YES completion:^{
-                    [webViewController.webview loadData:data MIMEType:@"application/pdf" textEncodingName:@"utf-8" baseURL:nil];
+                    [webViewController.webView loadData:data MIMEType:@"application/pdf" textEncodingName:@"utf-8" baseURL:nil];
                 }];
                 
             }];

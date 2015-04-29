@@ -66,6 +66,7 @@ static NSString *const kDashBoardStoryBoardKey     = @"APHDashboard";
 static NSString *const kLearnStoryBoardKey         = @"APCLearn";
 static NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
 static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
+static NSString *const kNewsFeedStoryBoardKey      = @"APCNewsFeed";
 
 /*********************************************************************************/
 #pragma mark - User Defaults Keys
@@ -74,7 +75,6 @@ static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 static NSString *const kDemographicDataWasUploadedKey = @"kDemographicDataWasUploadedKey";
 
 static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
-static NSUInteger const kIndexOfProfileTab = 3;
 
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
@@ -88,7 +88,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 @property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
 
-@end
+@end 
 
 
 @implementation APCAppDelegate
@@ -313,12 +313,12 @@ static NSUInteger const kIndexOfProfileTab = 3;
     }
     else if ([identifierComponents.lastObject isEqualToString:@"ActivitiesNavController"])
     {
-        return self.tabster.viewControllers[kIndexOfActivitesTab];
+        return self.tabBarController.viewControllers[kIndexOfActivitesTab];
     }
     else if ([identifierComponents.lastObject isEqualToString:@"APCActivityVC"])
     {
-        if ( [self.tabster.viewControllers[kIndexOfActivitesTab] respondsToSelector:@selector(topViewController)]) {
-            return [(UINavigationController*) self.tabster.viewControllers[kIndexOfActivitesTab] topViewController];
+        if ( [self.tabBarController.viewControllers[kIndexOfActivitesTab] respondsToSelector:@selector(topViewController)]) {
+            return [(UINavigationController*) self.tabBarController.viewControllers[kIndexOfActivitesTab] topViewController];
         }
     }
     
@@ -988,40 +988,77 @@ static NSUInteger const kIndexOfProfileTab = 3;
 /*********************************************************************************/
 #pragma mark - Tab Bar Stuff
 /*********************************************************************************/
-- (NSArray *)storyboardIdInfo
-{
-    if (!_storyboardIdInfo) {
-        _storyboardIdInfo = @[
-                            @{@"name": kActivitiesStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
-                            @{@"name": kDashBoardStoryBoardKey, @"bundle" : [NSBundle mainBundle]},
-                            @{@"name": kLearnStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]},
-                            @{@"name": kHealthProfileStoryBoardKey, @"bundle" : [NSBundle appleCoreBundle]}
-                              ];
-    }
-    return _storyboardIdInfo;
-}
 
 - (void)showTabBar
 {
-    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"TabBar" bundle:[NSBundle appleCoreBundle]];
-    
-    UITabBarController *tabBarController = (UITabBarController *)[storyBoard instantiateInitialViewController];
-    self.window.rootViewController = tabBarController;
-    tabBarController.delegate = self;
-    
-    NSArray       *items = tabBarController.tabBar.items;
-    
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+
     NSUInteger     selectedItemIndex = kIndexOfActivitesTab;
     
-    NSArray  *deselectedImageNames = @[ @"tab_activities", @"tab_dashboard", @"tab_learn", @"tab_profile" ];
-    NSArray  *selectedImageNames   = @[ @"tab_activities_selected", @"tab_dashboard_selected", @"tab_learn_selected",  @"tab_profile_selected" ];
-    NSArray  *tabBarTitles         = @[ @"Activities", @"Dashboard", @"Learn",  @"Profile"];
+    NSMutableArray *tabBarItems = [NSMutableArray new];
+    NSMutableArray *viewControllers = [NSMutableArray new];
+    
+    {
+        //Activities Tab
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Activities", nil) image:[UIImage imageNamed:@"tab_activities"] selectedImage:[UIImage imageNamed:@"tab_activities_selected"]];
+        [tabBarItems addObject:item];
+        
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"APCActivities" bundle:[NSBundle appleCoreBundle]];
+        UIViewController *viewController = [storyboard instantiateInitialViewController];
+        [viewControllers addObject:viewController];
+    }
+    
+    {
+        //Dashboard Tab
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Dashboard", nil) image:[UIImage imageNamed:@"tab_dashboard"] selectedImage:[UIImage imageNamed:@"tab_dashboard_selected"]];
+        [tabBarItems addObject:item];
+        
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"APHDashboard" bundle:[NSBundle mainBundle]];
+        UIViewController *viewController = [storyboard instantiateInitialViewController];
+        [viewControllers addObject:viewController];
+    }
+    
+    BOOL newsFeedTab = [self.initializationOptions[kNewsFeedTabKey] boolValue];
+    if (newsFeedTab) {
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"News Feed", nil) image:[UIImage imageNamed:@"tab_newsfeed"] selectedImage:[UIImage imageNamed:@"tab_newsfeed_selected"]];
+        [tabBarItems addObject:item];
+        
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"APCNewsFeed" bundle:[NSBundle appleCoreBundle]];
+        UIViewController *viewController = [storyboard instantiateInitialViewController];
+        [viewControllers addObject:viewController];
+    }
+    
+    {
+        //Learn Tab
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Learn", nil) image:[UIImage imageNamed:@"tab_learn"] selectedImage:[UIImage imageNamed:@"tab_learn_selected"]];
+        [tabBarItems addObject:item];
+        
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"APCLearn" bundle:[NSBundle appleCoreBundle]];
+        UIViewController *viewController = [storyboard instantiateInitialViewController];
+        [viewControllers addObject:viewController];
+    }
+    
+    {
+        //Profile Tab
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Profile", nil) image:[UIImage imageNamed:@"tab_profile"] selectedImage:[UIImage imageNamed:@"tab_profile_selected"]];
+        [tabBarItems addObject:item];
+        
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"APCProfile" bundle:[NSBundle appleCoreBundle]];
+        UIViewController *viewController = [storyboard instantiateInitialViewController];
+        [viewControllers addObject:viewController];
+    }
+    
+    [tabBarController setViewControllers:[NSArray arrayWithArray:viewControllers]];
+    
+    NSArray *items = tabBarController.tabBar.items;
     
     for (NSUInteger i=0; i<items.count; i++) {
-        UITabBarItem  *item = items[i];
-        item.image = [UIImage imageNamed:deselectedImageNames[i]];
-        item.selectedImage = [[UIImage imageNamed:selectedImageNames[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        item.title = tabBarTitles[i];
+        UITabBarItem *item = items[i];
+        UITabBarItem *tabBarItem = tabBarItems[i];
+        
+        item.image = tabBarItem.image;
+        item.selectedImage = tabBarItem.selectedImage;
+        item.title = tabBarItem.title;
         item.tag = i;
         if (i == kIndexOfActivitesTab) {
             NSUInteger allScheduledTasks = self.dataSubstrate.countOfAllScheduledTasksForToday;
@@ -1037,51 +1074,42 @@ static NSUInteger const kIndexOfProfileTab = 3;
         }
     }
     
-    NSArray  *controllers = tabBarController.viewControllers;
+    //The tab bar icons take the default tint color from UIView Appearance tintin iOS8. In order to fix this for we are selecting each of the tabs.
+    {
+        [tabBarController setSelectedIndex:0];
+        [tabBarController setSelectedIndex:1];
+        [tabBarController setSelectedIndex:2];
+        [tabBarController setSelectedIndex:3];
+        if (newsFeedTab) {
+            [tabBarController setSelectedIndex:4];
+        }
+    }
     
-    //These need to be "Selected" one by one it silly but I remember this from a pass issue.
-    //We can hard code this as long as it matches the tab count above
-    // Might want to refactor this more hwne we have time
-    [tabBarController setSelectedIndex:selectedItemIndex + 1];
-    [tabBarController setSelectedIndex:selectedItemIndex + 2];
-    [tabBarController setSelectedIndex:selectedItemIndex + 3];
+    
     [tabBarController setSelectedIndex:selectedItemIndex];
+    tabBarController.delegate = self;
+    tabBarController.tabBar.translucent = NO;
     
-    [self tabBarController:tabBarController didSelectViewController:controllers[selectedItemIndex]];
+    self.window.rootViewController = tabBarController;
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
-    self.tabster = (UITabBarController  *)self.window.rootViewController;
-    NSArray  *deselectedImageNames = @[ @"tab_activities",          @"tab_dashboard",           @"tab_learn",           @"tab_profile" ];
-    NSArray  *selectedImageNames   = @[ @"tab_activities_selected", @"tab_dashboard_selected",  @"tab_learn_selected",  @"tab_profile_selected" ];
-    NSArray  *tabBarTitles         = @[ @"Activities",              @"Dashboard",               @"Learn",               @"Profile"];
+    self.tabBarController = (UITabBarController  *)self.window.rootViewController;
     
-    if ([viewController isMemberOfClass: [UIViewController class]] == YES) {
+    if ([viewController isKindOfClass:[UIViewController class]]) {
         
-        NSMutableArray  *controllers = [tabBarController.viewControllers mutableCopy];
-        NSUInteger  controllerIndex = [controllers indexOfObject:viewController];
+        NSUInteger  controllerIndex = [tabBarController.viewControllers indexOfObject:viewController];
         
-        NSString  *name = [self.storyboardIdInfo objectAtIndex:controllerIndex][@"name"];
-        UIStoryboard  *storyboard = [UIStoryboard storyboardWithName:name bundle:[self.storyboardIdInfo objectAtIndex:controllerIndex][@"bundle"]];
-        UIViewController  *controller = [storyboard instantiateInitialViewController];
-        [controllers replaceObjectAtIndex:controllerIndex withObject:controller];
+        BOOL newsFeedTab = [self.initializationOptions[kNewsFeedTabKey] boolValue];
+        NSUInteger indexOfProfileTab = newsFeedTab ? 4 : 3;
         
-        [self.tabster setViewControllers:controllers animated:NO];
-        self.tabster.tabBar.tintColor = [UIColor appPrimaryColor];
-        UITabBarItem  *item = self.tabster.tabBar.selectedItem;
-        item.image = [UIImage imageNamed:deselectedImageNames[controllerIndex]];
-        item.selectedImage = [[UIImage imageNamed:selectedImageNames[controllerIndex]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        item.title = tabBarTitles[controllerIndex];
-        
-        if (controllerIndex == kIndexOfProfileTab)
+        if (controllerIndex == indexOfProfileTab)
         {
-            
-            UINavigationController * profileNavigationController = (UINavigationController *) controller;
+            UINavigationController * profileNavigationController = (UINavigationController *) viewController;
             
             if ( [profileNavigationController.childViewControllers[0] isKindOfClass:[APCProfileViewController class]])
             {
-                
                 self.profileViewController = (APCProfileViewController *) profileNavigationController.childViewControllers[0];
                 
                 self.profileViewController.delegate = [self profileExtenderDelegate];
@@ -1093,6 +1121,8 @@ static NSUInteger const kIndexOfProfileTab = 3;
             NSUInteger completedScheduledTasks = self.dataSubstrate.countOfCompletedScheduledTasksForToday;
             
             NSNumber *remainingTasks = (completedScheduledTasks < allScheduledTasks) ? @(allScheduledTasks - completedScheduledTasks) : @(0);
+            
+            UITabBarItem  *item = tabBarController.tabBar.selectedItem;
             
             if ([remainingTasks integerValue] != 0) {
                 item.badgeValue = [remainingTasks stringValue];
