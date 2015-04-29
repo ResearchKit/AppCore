@@ -1059,6 +1059,18 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         }
     }
     
+    //The tab bar icons take the default tint color from UIView Appearance tintin iOS8. In order to fix this for we are selecting each of the tabs.
+    {
+        [tabBarController setSelectedIndex:0];
+        [tabBarController setSelectedIndex:1];
+        [tabBarController setSelectedIndex:2];
+        [tabBarController setSelectedIndex:3];
+        if (newsFeedTab) {
+            [tabBarController setSelectedIndex:3];
+        }
+    }
+    
+    
     [tabBarController setSelectedIndex:selectedItemIndex];
     tabBarController.delegate = self;
     tabBarController.tabBar.translucent = NO;
