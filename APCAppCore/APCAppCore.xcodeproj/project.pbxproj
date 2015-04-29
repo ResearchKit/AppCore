@@ -167,9 +167,6 @@
 		5B0432A81A322BEE000DC9ED /* APCOnboardingTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0432A61A322BEE000DC9ED /* APCOnboardingTask.m */; };
 		5B0601C21AE79AE0009D6D65 /* APCFeedParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B0601C01AE79AE0009D6D65 /* APCFeedParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B0601C31AE79AE0009D6D65 /* APCFeedParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0601C11AE79AE0009D6D65 /* APCFeedParser.m */; };
-		5B0601C81AE79B31009D6D65 /* APCNewsFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B0601C51AE79B31009D6D65 /* APCNewsFeed.storyboard */; };
-		5B0601C91AE79B31009D6D65 /* APCNewsFeedViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B0601C61AE79B31009D6D65 /* APCNewsFeedViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5B0601CA1AE79B31009D6D65 /* APCNewsFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0601C71AE79B31009D6D65 /* APCNewsFeedViewController.m */; };
 		5B0601CD1AE79B50009D6D65 /* APCFeedTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B0601CB1AE79B50009D6D65 /* APCFeedTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B0601CE1AE79B50009D6D65 /* APCFeedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0601CC1AE79B50009D6D65 /* APCFeedTableViewCell.m */; };
 		5B09ED1F1ABC1BEF003C5061 /* APCLicenseInfoViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B09ED1D1ABC1BEF003C5061 /* APCLicenseInfoViewController.h */; };
@@ -202,6 +199,9 @@
 		5BB10C0B1A91D540002D2DD2 /* APCStudyVideoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB10C091A91D540002D2DD2 /* APCStudyVideoCollectionViewCell.m */; };
 		5BB10C131A91F970002D2DD2 /* APCWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BB10C111A91F970002D2DD2 /* APCWebViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BB10C141A91F970002D2DD2 /* APCWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB10C121A91F970002D2DD2 /* APCWebViewController.m */; };
+		5BD4CA071AF0E46F008D97AE /* APCNewsFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5BD4CA041AF0E46F008D97AE /* APCNewsFeed.storyboard */; };
+		5BD4CA081AF0E46F008D97AE /* APCNewsFeedViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD4CA051AF0E46F008D97AE /* APCNewsFeedViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5BD4CA091AF0E46F008D97AE /* APCNewsFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD4CA061AF0E46F008D97AE /* APCNewsFeedViewController.m */; };
 		5BD6EBA21A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD6EBA01A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BD6EBA31A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6EBA11A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.m */; };
 		5BD6EBB71A9C77D900C3BFB0 /* APCBaseGraphView.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD6EBB31A9C77D900C3BFB0 /* APCBaseGraphView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -856,9 +856,6 @@
 		5B0432A61A322BEE000DC9ED /* APCOnboardingTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCOnboardingTask.m; sourceTree = "<group>"; };
 		5B0601C01AE79AE0009D6D65 /* APCFeedParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFeedParser.h; sourceTree = "<group>"; };
 		5B0601C11AE79AE0009D6D65 /* APCFeedParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFeedParser.m; sourceTree = "<group>"; };
-		5B0601C51AE79B31009D6D65 /* APCNewsFeed.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCNewsFeed.storyboard; sourceTree = "<group>"; };
-		5B0601C61AE79B31009D6D65 /* APCNewsFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCNewsFeedViewController.h; sourceTree = "<group>"; };
-		5B0601C71AE79B31009D6D65 /* APCNewsFeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCNewsFeedViewController.m; sourceTree = "<group>"; };
 		5B0601CB1AE79B50009D6D65 /* APCFeedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCFeedTableViewCell.h; sourceTree = "<group>"; };
 		5B0601CC1AE79B50009D6D65 /* APCFeedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCFeedTableViewCell.m; sourceTree = "<group>"; };
 		5B09ED1D1ABC1BEF003C5061 /* APCLicenseInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCLicenseInfoViewController.h; sourceTree = "<group>"; };
@@ -891,6 +888,9 @@
 		5BB10C091A91D540002D2DD2 /* APCStudyVideoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyVideoCollectionViewCell.m; sourceTree = "<group>"; };
 		5BB10C111A91F970002D2DD2 /* APCWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCWebViewController.h; sourceTree = "<group>"; };
 		5BB10C121A91F970002D2DD2 /* APCWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCWebViewController.m; sourceTree = "<group>"; };
+		5BD4CA041AF0E46F008D97AE /* APCNewsFeed.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCNewsFeed.storyboard; sourceTree = "<group>"; };
+		5BD4CA051AF0E46F008D97AE /* APCNewsFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCNewsFeedViewController.h; sourceTree = "<group>"; };
+		5BD4CA061AF0E46F008D97AE /* APCNewsFeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCNewsFeedViewController.m; sourceTree = "<group>"; };
 		5BD6EBA01A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCStudyLandingCollectionViewCell.h; sourceTree = "<group>"; };
 		5BD6EBA11A9A46BB00C3BFB0 /* APCStudyLandingCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCStudyLandingCollectionViewCell.m; sourceTree = "<group>"; };
 		5BD6EBB31A9C77D900C3BFB0 /* APCBaseGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCBaseGraphView.h; sourceTree = "<group>"; };
@@ -1684,9 +1684,9 @@
 		5B0601C41AE79B31009D6D65 /* NewsFeed */ = {
 			isa = PBXGroup;
 			children = (
-				5B0601C51AE79B31009D6D65 /* APCNewsFeed.storyboard */,
-				5B0601C61AE79B31009D6D65 /* APCNewsFeedViewController.h */,
-				5B0601C71AE79B31009D6D65 /* APCNewsFeedViewController.m */,
+				5BD4CA041AF0E46F008D97AE /* APCNewsFeed.storyboard */,
+				5BD4CA051AF0E46F008D97AE /* APCNewsFeedViewController.h */,
+				5BD4CA061AF0E46F008D97AE /* APCNewsFeedViewController.m */,
 			);
 			path = NewsFeed;
 			sourceTree = "<group>";
@@ -2966,6 +2966,7 @@
 				F5F12A8B1A2F78490015982C /* APCIntroVideoViewController.h in Headers */,
 				F5F129E11A2F78490015982C /* APCAppCore.h in Headers */,
 				F5B947EB1A73272C0034C522 /* APCDebugWindow.h in Headers */,
+				5BD4CA081AF0E46F008D97AE /* APCNewsFeedViewController.h in Headers */,
 				F5F12AE81A2F78490015982C /* APCDashboardEditTableViewCell.h in Headers */,
 				369E27F51A96B7A200D35DFA /* APCMedicationPossibleDosage.h in Headers */,
 				7B8DBEC21AA186B2007B4026 /* APCVerticalThinLineView.h in Headers */,
@@ -3105,7 +3106,6 @@
 				F5F12AF21A2F78490015982C /* APCBaseTaskViewController.h in Headers */,
 				F5F12AF41A2F78490015982C /* APCBaseWithProgressTaskViewController.h in Headers */,
 				F5B947B51A73272C0034C522 /* APCDeviceHardware+APCHelper.h in Headers */,
-				5B0601C91AE79B31009D6D65 /* APCNewsFeedViewController.h in Headers */,
 				0894654D1A8C1F0200A983AC /* APCInsightBarView.h in Headers */,
 				F5F12ABE1A2F78490015982C /* APCDashboardViewController.h in Headers */,
 				F5F129E41A2F78490015982C /* APCDataMonitor.h in Headers */,
@@ -3344,12 +3344,12 @@
 				369E27F81A96B7A200D35DFA /* APCMedicationSampleSchedules.plist in Resources */,
 				08027A901A7319AC00B358CC /* handtapping01@3x.png in Resources */,
 				08027A791A7319AC00B358CC /* consent_03@2x.png in Resources */,
-				5B0601C81AE79B31009D6D65 /* APCNewsFeed.storyboard in Resources */,
 				08027A7C1A7319AC00B358CC /* consent_06@2x.png in Resources */,
 				08027A8B1A7319AC00B358CC /* phonewaves@2x.png in Resources */,
 				08027A8A1A7319AC00B358CC /* phonetapping@2x.png in Resources */,
 				5B4574CC1ABFD07A00601DCC /* License_ZipZap.txt in Resources */,
 				CF130B7A1A9E8DCD002DA023 /* APCSetupButtonTableViewCell.xib in Resources */,
+				5BD4CA071AF0E46F008D97AE /* APCNewsFeed.storyboard in Resources */,
 				08027A801A7319AC00B358CC /* consent_03@3x.png in Resources */,
 				5B4574CA1ABFD07A00601DCC /* License_BridgeSDK.txt in Resources */,
 				08027A831A7319AC00B358CC /* consent_06@3x.png in Resources */,
@@ -3440,7 +3440,6 @@
 				F5B947E41A73272C0034C522 /* APCGroupedScheduledTask.m in Sources */,
 				369E28091A96B7A200D35DFA /* APCMedTrackerMedication+Helper.m in Sources */,
 				F5F12AF31A2F78490015982C /* APCBaseTaskViewController.m in Sources */,
-				5B0601CA1AE79B31009D6D65 /* APCNewsFeedViewController.m in Sources */,
 				F5F12AE11A2F78490015982C /* APCSwitchTableViewCell.m in Sources */,
 				F5B946351A7309A20034C522 /* ZZError.m in Sources */,
 				5BE106F11A9EE2D900CA5A07 /* APCDashboardGraphTableViewCell.m in Sources */,
@@ -3473,6 +3472,7 @@
 				F5B947D81A73272C0034C522 /* APCDataArchiver.m in Sources */,
 				F5F12A091A2F78490015982C /* APCTask+Bridge.m in Sources */,
 				F5B946231A7309A20034C522 /* ZZAESDecryptInputStream.mm in Sources */,
+				5BD4CA091AF0E46F008D97AE /* APCNewsFeedViewController.m in Sources */,
 				A7CFE4B61A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m in Sources */,
 				F5B947D01A73272C0034C522 /* UIAlertController+Helper.m in Sources */,
 				F5F129E71A2F78490015982C /* APCDataSubstrate+CoreData.m in Sources */,

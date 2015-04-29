@@ -57,7 +57,7 @@
     self.dateFormatter = [NSDateFormatter new];
     self.dateFormatter.dateFormat = @"MM/dd/yy";
     
-    NSString *urlString = @"http://sagebionetworkstest.blogspot.com/feeds/posts/default?alt=rss"; // @"https://www.apple.com/main/rss/hotnews/hotnews.rss";
+    NSString *urlString = [self blogUrlFromJSONFile:@"StudyOverview"];
     
     self.feedParser = [[APCFeedParser alloc] initWithFeedURL:[NSURL URLWithString:urlString]];
     
@@ -168,6 +168,24 @@
         [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
         
     }];
+}
+
+- (NSString *)blogUrlFromJSONFile:(NSString *)jsonFileName
+{
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonFileName ofType:@"json"];
+    NSString *JSONString = [[NSString alloc] initWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:NULL];
+    
+    NSError *parseError;
+    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[JSONString dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&parseError];
+    
+    NSString *url = @"";
+    
+    if (!parseError) {
+        
+        url = jsonDictionary[@"blog_url"];
+    }
+    
+    return url;
 }
 
 @end
