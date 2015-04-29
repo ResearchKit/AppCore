@@ -270,6 +270,21 @@ static NSString *const kSignedInKey = @"SignedIn";
     return password;
 }
 
+- (NSDate *)estimatedConsentDate
+{
+    NSDate *consentDate = self.consentSignatureDate;
+    
+    if (!consentDate) {
+        // When the consent date is nil, we will use the nearest
+        // approximate date, which is the modified date of the
+        // email that is stored in the KeyChain, because it is
+        // stored there immediately after the user has consented.
+        consentDate = [APCKeychainStore modifiedDateForKey:kEmailPropertyName];
+    }
+    
+    return consentDate;
+}
+
 
 /*********************************************************************************/
 #pragma mark - Setters for Properties in Core Data
