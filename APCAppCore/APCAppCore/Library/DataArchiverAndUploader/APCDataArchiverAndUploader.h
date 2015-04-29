@@ -173,24 +173,25 @@
 
  (b) The caveat:  the dictionary will be converted to JSON in ways
  highly specific to this application suite and the fact that we're
- uploading to Sage.  For example, NSDate objects are will be
- converted to a specific ISO-8601 format (example:
- "2014-01-31T12:34:56-0800"), and strings which contain stringified
- arrays of integers will be converted to actual arrays of NSNumbers
- (because this is currently a problem happening far upstream from
- this uploader, in multiple places).
+ uploading to Sage.  For example, NSDate objects will be converted
+ to a specific ISO-8601 format (like "2014-01-31T12:34:56-0800"),
+ strings which contain arrays of integers will be converted to
+ arrays of actual integers, and CoreData objectIDs will be
+ converted to a UUID-like equivalent.
 
  @param dictionary  A dictionary to upload.  The dictionary will
  become a .json file, stored in a .zip file.  See the description
  of this method, above, for details.
 
- @param taskIdentifier  A string identifying the purpose of this
- upload.  I *think* this has to be something like a variable name.
- Specification in progress.  Required.
+ @param taskIdentifier  A human-readable string identifying the
+ purpose of this upload.  May be nil.  Note that the value, in
+ principle, should not be nil -- the point is to uniquely identify
+ your upload.  But that's a choice made by you and the people on
+ the server team who will receive your upload; the tool won't
+ prevent you from sending "nil" if you wish.
 
  @param taskRunUuid  A UUID representing a unique ID for this
- run of this particular task.  May be nil.  I think.
- Specification in progress.
+ run of the task identified by taskIdentifier.  May be nil.
  */
 + (void) uploadDictionary: (NSDictionary *) dictionary
        withTaskIdentifier: (NSString *) taskIdentifier
@@ -221,13 +222,15 @@
  
  @param path  The path of the file to upload.
 
- @param taskIdentifier  A string identifying the purpose of this
- upload.  Required.  I *think* this has to be something like a
- variable name, or a legal filename.  Specification in progress.
+ @param taskIdentifier  A human-readable string identifying the
+ purpose of this upload.  May be nil.  Note that the value, in
+ principle, should not be nil -- the point is to uniquely identify
+ your upload.  But that's a choice made by you and the people on
+ the server team who will receive your upload; the tool won't
+ prevent you from sending "nil" if you wish.
 
  @param taskRunUuid  A UUID representing a unique ID for this
- run of this particular task.  May be nil.  I think.
- Specification in progress.
+ run of the task identified by taskIdentifier.  May be nil.
 
  @param errorToReturn  A pointer to the variable for an error
  object.  If there's a problem *obtaining* the file, we'll return
@@ -263,13 +266,15 @@
  have different filenames-and-extensions -- please don't have
  two files named "temp.txt", for example.
 
- @param taskIdentifier  A string identifying the purpose of this
- upload.  Required.  I *think* this has to be something like a
- variable name, or a legal filename.  Specification in progress.
+ @param taskIdentifier  A human-readable string identifying the
+ purpose of this upload.  May be nil.  Note that the value, in
+ principle, should not be nil -- the point is to uniquely identify
+ your upload.  But that's a choice made by you and the people on
+ the server team who will receive your upload; the tool won't
+ prevent you from sending "nil" if you wish.
 
  @param taskRunUuid  A UUID representing a unique ID for this
- run of this particular task.  May be nil.  I think.
- Specification in progress.
+ run of the task identified by taskIdentifier.  May be nil.
 
  @param errorToReturn  A pointer to to the variable for an error
  object.  If there's a problem obtaining the file, we'll return
@@ -284,36 +289,6 @@
          withTaskIdentifier: (NSString *) taskIdentifier
              andTaskRunUuid: (NSUUID *) taskRunUuid
              returningError: (NSError * __autoreleasing *) errorToReturn;
-
-
-
-// ---------------------------------------------------------
-#pragma mark - Proposed Ideas (not yet implemented)
-// ---------------------------------------------------------
-
-/*
- Other ideas, based on other needs around the app.  Not yet implemented.
- (All this will eventually go into DataSubstrate.)
- 
- Please leave this commented-out block here, as we think about
- these options.
- */
-
-//    /** This represents what -[BaseTaskViewController processTaskResult] does now. */
-//    + (void) uploadResearchKitTaskResult: (id /* ORKTaskResult* */) taskResult;
-//
-//    /** For air-quality data:  encrypt the individual files inside the .zip file, as well as encrypting the whole package. */
-//    + (void)            uploadDictionary: (NSDictionary *) dictionary
-//         encryptingContentsBeforeZipping: (BOOL) shouldEncryptContentsFirst;
-//
-//    /** Er...  maybe this would be better?  Maybe it calls the above? */
-//    + (void) uploadAirQualityData: (NSDictionary *) airQualityStuff;
-//
-//    /** Catchall for uploading piles of random stuff?  Tapping test, 6-minute-walk test, etc.? */
-//    + (void) uploadDictionaries: (NSArray *) dictionaries
-//              withGroupFilename: (NSString *) filename
-//        encryptingContentsFirst: (BOOL) shouldEncryptContentsFirst;
-
 
 @end
 
