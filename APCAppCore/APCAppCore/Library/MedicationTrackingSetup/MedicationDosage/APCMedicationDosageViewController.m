@@ -187,7 +187,7 @@ static  CGFloat    kAPCMedicationRowHeight   = 64.0;
         label.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
         label.textColor = [UIColor blackColor];
         label.textAlignment = NSTextAlignmentCenter;
-        label.text = NSLocalizedString(@"Select Your Medication's Single Dose Amount", nil);
+        label.text = NSLocalizedString(@"Select Your Medication\'s Single Dose Amount", nil);
         [view addSubview:label];
     }
     return  view;

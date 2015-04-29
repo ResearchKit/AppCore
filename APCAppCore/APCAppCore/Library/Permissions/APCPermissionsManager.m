@@ -392,11 +392,11 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         }
             break;
         case kSignUpPermissionsTypeLocalNotifications:{
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Notifications and enable 'Allow Notifications'", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Notifications and enable ‘Allow Notifications’", nil), appName];
         }
             break;
         case kSignUpPermissionsTypeLocation:{
-            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Location and check 'Always'", nil), appName];
+            message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Location and check ‘Always’", nil), appName];
         }
             break;
         case kSignUpPermissionsTypeCoremotion:{
