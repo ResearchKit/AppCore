@@ -1066,7 +1066,7 @@ static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
         [tabBarController setSelectedIndex:2];
         [tabBarController setSelectedIndex:3];
         if (newsFeedTab) {
-            [tabBarController setSelectedIndex:3];
+            [tabBarController setSelectedIndex:4];
         }
     }
     
