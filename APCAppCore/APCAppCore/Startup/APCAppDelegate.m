@@ -646,6 +646,12 @@ static NSUInteger const kIndexOfProfileTab = 3;
                 sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
             }
             
+            if (![[NSUserDefaults standardUserDefaults] integerForKey:sampleType.identifier]) {
+                // Initialize the anchor to 0 that will be later used
+                // and updated by the anchored query.
+                [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:sampleType.identifier];
+            }
+            
             [self observerQueryForSampleType:sampleType
                               withCompletion:nil];
         }
