@@ -621,39 +621,42 @@ static NSUInteger const kIndexOfProfileTab = 3;
  */
 - (void)configureObserverQueries
 {
-    NSArray *dataTypesWithReadPermission = self.initializationOptions[kHKReadPermissionsKey];
-    
-    if (dataTypesWithReadPermission) {
+    if (self.dataSubstrate.currentUser.consented) {
         
-        if (!self.healthKitCollectorQueue) {
-            self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:@"HealthKit Data Collector"];
-        }
+        NSArray *dataTypesWithReadPermission = self.initializationOptions[kHKReadPermissionsKey];
         
-        if (!self.healthKitCollector) {
-            self.healthKitCollector = [[APCHealthKitDataCollector alloc] initWithIdentifier:@"HealthKitDataCollector"];
-            [self.passiveDataCollector addTracker:self.healthKitCollector];
-            [self.healthKitCollector startTracking];
-        }
-        
-        for (id dataType in dataTypesWithReadPermission) {
+        if (dataTypesWithReadPermission) {
             
-            HKSampleType *sampleType = nil;
-            
-            if ([dataType isKindOfClass:[NSDictionary class]]) {
-                NSDictionary *categoryType = (NSDictionary *)dataType;
-                sampleType = [HKObjectType categoryTypeForIdentifier:categoryType[kHKCategoryTypeKey]];
-            } else {
-                sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
+            if (!self.healthKitCollectorQueue) {
+                self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:@"HealthKit Data Collector"];
             }
             
-            if (![[NSUserDefaults standardUserDefaults] integerForKey:sampleType.identifier]) {
-                // Initialize the anchor to 0 that will be later used
-                // and updated by the anchored query.
-                [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:sampleType.identifier];
+            if (!self.healthKitCollector) {
+                self.healthKitCollector = [[APCHealthKitDataCollector alloc] initWithIdentifier:@"HealthKitDataCollector"];
+                [self.passiveDataCollector addTracker:self.healthKitCollector];
+                [self.healthKitCollector startTracking];
             }
             
-            [self observerQueryForSampleType:sampleType
-                              withCompletion:nil];
+            for (id dataType in dataTypesWithReadPermission) {
+                
+                HKSampleType *sampleType = nil;
+                
+                if ([dataType isKindOfClass:[NSDictionary class]]) {
+                    NSDictionary *categoryType = (NSDictionary *)dataType;
+                    sampleType = [HKObjectType categoryTypeForIdentifier:categoryType[kHKCategoryTypeKey]];
+                } else {
+                    sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
+                }
+                
+                if (![[NSUserDefaults standardUserDefaults] integerForKey:sampleType.identifier]) {
+                    // Initialize the anchor to 0 that will be later used
+                    // and updated by the anchored query.
+                    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:sampleType.identifier];
+                }
+                
+                [self observerQueryForSampleType:sampleType
+                                  withCompletion:nil];
+            }
         }
     }
 }
@@ -749,11 +752,23 @@ static NSUInteger const kIndexOfProfileTab = 3;
                     completionHandler();
                 } else {
                     NSUInteger anchorForSampleType = [[NSUserDefaults standardUserDefaults] integerForKey:sampleType.identifier];
+                    NSPredicate *predicate = nil;
+                    NSDate *consentDate = self.dataSubstrate.currentUser.consentSignatureDate;
+                    
+                    if (!consentDate) {
+                        consentDate = self.dataSubstrate.currentUser.estimatedConsentDate;
+                    }
+                    
+                    if (anchorForSampleType == 0) {
+                        predicate = [NSPredicate predicateWithFormat:@"%K >= %@",
+                                     HKPredicateKeyPathStartDate,
+                                     [consentDate startOfDay]];
+                    }
                     
                     APCLogDebug(@"Anchor: %lu (%@)", anchorForSampleType, sampleType.identifier);
                     
                     HKAnchoredObjectQuery *anchoredQuery = [[HKAnchoredObjectQuery alloc] initWithType:sampleType
-                                                                                             predicate:nil
+                                                                                             predicate:predicate
                                                                                                 anchor:anchorForSampleType
                                                                                                  limit:HKObjectQueryNoLimit
                                                                                      completionHandler:^(HKAnchoredObjectQuery * __unused query,
