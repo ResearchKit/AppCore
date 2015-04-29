@@ -85,7 +85,7 @@
 		3650C65B1AA29BB50075C935 /* APCCatastrophicErrorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3650C6581AA29BB50075C935 /* APCCatastrophicErrorViewController.h */; };
 		3650C65C1AA29BB50075C935 /* APCCatastrophicErrorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3650C6591AA29BB50075C935 /* APCCatastrophicErrorViewController.m */; };
 		3650C65D1AA29BB50075C935 /* CatastrophicError.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3650C65A1AA29BB50075C935 /* CatastrophicError.storyboard */; };
-		3651424D1AA78521008A5CFA /* APCDataArchiverAndUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3651424B1AA78521008A5CFA /* APCDataArchiverAndUploader.h */; };
+		3651424D1AA78521008A5CFA /* APCDataArchiverAndUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3651424B1AA78521008A5CFA /* APCDataArchiverAndUploader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3651424E1AA78521008A5CFA /* APCDataArchiverAndUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3651424C1AA78521008A5CFA /* APCDataArchiverAndUploader.m */; };
 		3654318D1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3654318B1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3654318E1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3654318C1A9A7BC200D66D97 /* APCMedTrackerInflatableItem.m */; };
