@@ -116,8 +116,8 @@
     APCFeedItem *item = self.feeds[indexPath.row];
     
     cell.titleLabel.text = item.title;
-    cell.descriptionLabel.text = item.contentDescription;
-    cell.dateLabel.text = [self.dateFormatter stringFromDate:item.publishDate];
+    cell.descriptionLabel.text = item.itemDescription;
+    cell.dateLabel.text = [self.dateFormatter stringFromDate:item.pubDate];
     
     return cell;
 }

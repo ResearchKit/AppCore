@@ -9,7 +9,7 @@
         <scene sceneID="sfj-ZS-Wqo">
             <objects>
                 <tableViewController storyboardIdentifier="APCNewsFeedViewController" id="MND-eq-PgB" customClass="APCNewsFeedViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="120" sectionHeaderHeight="22" sectionFooterHeight="22" id="kcT-Nr-ua7">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="130" sectionHeaderHeight="22" sectionFooterHeight="22" id="kcT-Nr-ua7">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -19,29 +19,29 @@
                             <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCFeedTableViewCell" id="uQ7-Pu-J2F" customClass="APCFeedTableViewCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="APCFeedTableViewCell" rowHeight="130" id="uQ7-Pu-J2F" customClass="APCFeedTableViewCell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uQ7-Pu-J2F" id="FeQ-zD-cAd">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="06/22/15" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F4Q-v6-gOD">
-                                            <rect key="frame" x="515" y="13" width="70" height="24"/>
+                                            <rect key="frame" x="522" y="18" width="63" height="24"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="24" id="Jeb-yH-qDh"/>
-                                                <constraint firstAttribute="width" constant="70" id="YF4-JV-DdO"/>
+                                                <constraint firstAttribute="width" constant="63" id="YF4-JV-DdO"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <color key="textColor" red="0.1764705882" green="0.1764705882" blue="0.1764705882" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.55686274509803924" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Today we released an update to the parkinson mPower Study app. Update now from the app store." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Psw-hC-rsh">
-                                            <rect key="frame" x="15" y="45" width="562" height="58"/>
+                                            <rect key="frame" x="15" y="50" width="565" height="70"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" red="0.39215686274509803" green="0.39215686274509803" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Parkinson mPower Study @parkinson" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aMN-pa-Yez">
-                                            <rect key="frame" x="15" y="13" width="492" height="24"/>
+                                            <rect key="frame" x="15" y="18" width="499" height="24"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="24" id="2qe-3V-gz1"/>
                                             </constraints>
@@ -49,17 +49,27 @@
                                             <color key="textColor" red="0.1764705882352941" green="0.1764705882352941" blue="0.1764705882352941" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vZQ-Tv-uP0">
+                                            <rect key="frame" x="0.0" y="129" width="600" height="1"/>
+                                            <color key="backgroundColor" red="0.9137254901960784" green="0.9137254901960784" blue="0.9137254901960784" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="1" id="aRx-vU-RRb"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="F4Q-v6-gOD" firstAttribute="leading" secondItem="aMN-pa-Yez" secondAttribute="trailing" constant="8" id="1Bh-CV-aFg"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="Psw-hC-rsh" secondAttribute="trailing" constant="15" id="AWN-J0-1OX"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="F4Q-v6-gOD" secondAttribute="trailing" constant="7" id="RfZ-qD-eCg"/>
-                                        <constraint firstItem="aMN-pa-Yez" firstAttribute="top" secondItem="FeQ-zD-cAd" secondAttribute="topMargin" constant="5" id="VcF-gS-bAI"/>
-                                        <constraint firstItem="Psw-hC-rsh" firstAttribute="leading" secondItem="FeQ-zD-cAd" secondAttribute="leadingMargin" constant="7" id="Z8h-j5-qlW"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="Psw-hC-rsh" secondAttribute="bottom" constant="8" id="ZLO-m3-W23"/>
-                                        <constraint firstItem="aMN-pa-Yez" firstAttribute="leading" secondItem="FeQ-zD-cAd" secondAttribute="leadingMargin" constant="7" id="bsi-cO-xvj"/>
-                                        <constraint firstItem="F4Q-v6-gOD" firstAttribute="top" secondItem="FeQ-zD-cAd" secondAttribute="topMargin" constant="5" id="pPP-VH-Xpw"/>
+                                        <constraint firstAttribute="trailing" secondItem="Psw-hC-rsh" secondAttribute="trailing" constant="20" id="AWN-J0-1OX"/>
+                                        <constraint firstAttribute="trailing" secondItem="F4Q-v6-gOD" secondAttribute="trailing" constant="15" id="RfZ-qD-eCg"/>
+                                        <constraint firstItem="aMN-pa-Yez" firstAttribute="top" secondItem="FeQ-zD-cAd" secondAttribute="top" constant="18" id="VcF-gS-bAI"/>
+                                        <constraint firstItem="Psw-hC-rsh" firstAttribute="leading" secondItem="FeQ-zD-cAd" secondAttribute="leading" constant="15" id="Z8h-j5-qlW"/>
+                                        <constraint firstAttribute="bottom" secondItem="Psw-hC-rsh" secondAttribute="bottom" constant="10" id="ZLO-m3-W23"/>
+                                        <constraint firstAttribute="trailing" secondItem="vZQ-Tv-uP0" secondAttribute="trailing" id="a36-N4-nhU"/>
+                                        <constraint firstItem="aMN-pa-Yez" firstAttribute="leading" secondItem="FeQ-zD-cAd" secondAttribute="leading" constant="15" id="bsi-cO-xvj"/>
+                                        <constraint firstItem="F4Q-v6-gOD" firstAttribute="top" secondItem="FeQ-zD-cAd" secondAttribute="top" constant="18" id="pPP-VH-Xpw"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="vZQ-Tv-uP0" secondAttribute="bottom" constant="-8" id="sT5-oh-grf"/>
                                         <constraint firstItem="Psw-hC-rsh" firstAttribute="top" secondItem="aMN-pa-Yez" secondAttribute="bottom" constant="8" id="u9J-7c-RNB"/>
+                                        <constraint firstItem="vZQ-Tv-uP0" firstAttribute="leading" secondItem="FeQ-zD-cAd" secondAttribute="leading" id="yE8-dj-IlO"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>

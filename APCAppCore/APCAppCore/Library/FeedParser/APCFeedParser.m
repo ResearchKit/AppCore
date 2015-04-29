@@ -41,6 +41,7 @@
 
 @property (nonatomic, strong) NSString *currentElement;
 @property (nonatomic, strong) NSDictionary *attributeDict;
+@property (nonatomic, strong) NSMutableString *tempString;
 
 @property (nonatomic, strong) APCFeedItem *feedItem;
 
@@ -114,26 +115,15 @@
     if ([elementName isEqualToString:@"item"] || [elementName isEqualToString:@"entry"]) {
         self.feedItem = nil;
         self.feedItem = [APCFeedItem new];
-    } else if ([elementName isEqualToString:@"link"]){
-        self.feedItem.link = self.attributeDict[@"href"];
     }
+    
+    self.tempString = nil;
+    self.tempString = [NSMutableString new];
 }
 
 - (void)parser:(NSXMLParser *)__unused parser foundCharacters:(NSString *)string
 {
-    if ([self.currentElement isEqualToString:@"title"]) {
-        self.feedItem.title = string;
-    } else if ([self.currentElement isEqualToString:@"link"]) {
-        self.feedItem.link = string;
-    } else if ([self.currentElement isEqualToString:@"description"] || [self.currentElement isEqualToString:@"content"]) {
-        self.feedItem.contentDescription = [self.feedItem.contentDescription stringByAppendingString:string];
-    } else if ([self.currentElement isEqualToString:@"pubDate"]) {
-        _dateFormatter.dateFormat = @"EEE, dd MMM yyyy HH:mm:ss Z";
-        self.feedItem.publishDate = [self.dateFormatter dateFromString:string];
-    } else if ([self.currentElement isEqualToString:@"updated"]) {
-        _dateFormatter.dateFormat = @"yyyy-MM-ddEEEEEHH:mm:SSSz";
-        self.feedItem.publishDate = [self.dateFormatter dateFromString:string];
-    }
+    [self.tempString appendString:string];
 }
 
 - (void)parser:(NSXMLParser *)__unused parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)__unused namespaceURI qualifiedName:(NSString *)__unused qName
@@ -141,6 +131,34 @@
     if ([elementName isEqualToString:@"item"] || [elementName isEqualToString:@"entry"]) {
         
         [self.results addObject:self.feedItem];
+    }
+    
+    if (self.feedItem != nil && self.tempString != nil) {
+        
+        if ([elementName isEqualToString:@"title"]) {
+            self.feedItem.title = self.tempString;
+        } else if ([elementName isEqualToString:@"description"]) {
+            self.feedItem.itemDescription = self.tempString;
+        } else if ([elementName isEqualToString:@"content:encoded"] || [elementName isEqualToString:@"content"]) {
+            self.feedItem.content = self.tempString;
+        } else if ([elementName isEqualToString:@"link"]) {
+            self.feedItem.link = self.tempString;
+        } else if ([elementName isEqualToString:@"pubDate"]) {
+            _dateFormatter.dateFormat = @"EEE, dd MMM yyyy HH:mm:ss Z";
+            self.feedItem.pubDate = [self.dateFormatter dateFromString:self.tempString];
+        } else if ([elementName isEqualToString:@"dc:creator"]) {
+            self.feedItem.author = self.tempString;
+        } else if ([elementName isEqualToString:@"guid"]) {
+            self.feedItem.guid = self.tempString;
+        }
+        
+        // sometimes the URL is inside enclosure element, not in link. Reference: http://www.w3schools.com/rss/rss_tag_enclosure.asp
+        if ([elementName isEqualToString:@"enclosure"] && self.attributeDict != nil) {
+            NSString *url = [self.attributeDict objectForKey:@"url"];
+            if(url) {
+                self.feedItem.link = url;
+            }
+        }
     }
 }
 
@@ -194,9 +212,52 @@
     if (self) {
         _title = @"";
         _link = @"";
-        _contentDescription = @"";
+        _content = @"";
+        _itemDescription = @"";
         
     }
     return self;
 }
+
+- (NSArray *)imagesFromItemDescription
+{
+    if (self.itemDescription) {
+        return [self imagesFromHTMLString:self.itemDescription];
+    }
+    
+    return nil;
+}
+
+- (NSArray *)imagesFromContent
+{
+    if (self.content) {
+        return [self imagesFromHTMLString:self.content];
+    }
+    
+    return nil;
+}
+
+#pragma mark - retrieve images from html string using regexp (private methode)
+
+- (NSArray *)imagesFromHTMLString:(NSString *)htmlstr
+{
+    NSMutableArray *imagesURLStringArray = [[NSMutableArray alloc] init];
+    
+    NSError *error;
+    
+    NSRegularExpression *regex = [NSRegularExpression
+                                  regularExpressionWithPattern:@"(https?)\\S*(png|jpg|jpeg|gif)"
+                                  options:NSRegularExpressionCaseInsensitive
+                                  error:&error];
+    
+    [regex enumerateMatchesInString:htmlstr
+                            options:0
+                              range:NSMakeRange(0, htmlstr.length)
+                         usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+                             [imagesURLStringArray addObject:[htmlstr substringWithRange:result.range]];
+                         }];
+    
+    return [NSArray arrayWithArray:imagesURLStringArray];
+}
+
 @end

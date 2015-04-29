@@ -53,10 +53,18 @@ typedef void (^APCFeedParserCompletionBlock)(NSArray* results, NSError *error);
 
 @property (nonatomic, strong) NSString *link;
 
-@property (nonatomic, strong) NSString *contentDescription;
+@property (nonatomic, strong) NSString *itemDescription;
 
-@property (nonatomic, strong) NSDate *publishDate;
+@property (nonatomic, strong) NSString *content;
 
-@property (nonatomic, strong) NSString *mediaURLString;
+@property (nonatomic, strong) NSDate *pubDate;
+
+@property (strong,nonatomic) NSString *author;
+
+@property (strong,nonatomic) NSString *guid;
+
+- (NSArray *)imagesFromContent;
+
+- (NSArray *)imagesFromItemDescription;
 
 @end
