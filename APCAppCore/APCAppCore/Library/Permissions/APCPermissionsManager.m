@@ -34,6 +34,8 @@
 #import "APCPermissionsManager.h"
 #import "APCUserInfoConstants.h"
 #import "APCTasksReminderManager.h"
+#import "APCAppDelegateTasks.h"
+#import "APCDataSubstrate.h"
 
 #import <UIKit/UIKit.h>
 #import <CoreMotion/CoreMotion.h>
@@ -83,16 +85,15 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         _locationManager.delegate = self;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidRegisterForRemoteNotifications:) name:APCAppDidRegisterUserNotification object:nil];
-
+		
         _coreMotionPermissionStatus = kPermissionStatusNotDetermined;
-                
     }
     return self;
 }
 
 - (HKHealthStore *)healthStore
 {
-    return [[(APCAppDelegate*) ([UIApplication sharedApplication].delegate) dataSubstrate] healthStore];
+    return [[(id<APCAppDelegateTasks>)([UIApplication sharedApplication].delegate) dataSubstrate] healthStore];
 }
 
 - (BOOL)isPermissionsGrantedForType:(APCSignUpPermissionsType)type
@@ -187,7 +188,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             NSMutableArray *dataTypesToRead = [NSMutableArray new];
             
             // Add Characteristic types
-            NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
+            NSDictionary *initialOptions = ((id<APCAppDelegateTasks>)[UIApplication sharedApplication].delegate).initializationOptions;
             NSArray *profileElementsList = initialOptions[kAppProfileElementsListKey];
             
             for (NSNumber *profileType in profileElementsList) {
@@ -490,7 +491,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             self.completionBlock = nil;
         }
     }
-
 }
 
 #pragma mark - Dealloc

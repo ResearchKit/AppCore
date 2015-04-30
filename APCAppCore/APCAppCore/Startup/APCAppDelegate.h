@@ -32,6 +32,7 @@
 // 
  
 #import <UIKit/UIKit.h>
+#import "APCAppDelegateTasks.h"
 #import "APCDataSubstrate.h"
 #import "APCOnboarding.h"
 #import "APCPasscodeViewController.h"
@@ -42,7 +43,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
 
-@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
+@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate, APCAppDelegateTasks>
 
 @property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
 @property (strong, nonatomic) UITabBarController *tabster;
@@ -58,7 +59,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 
 //Initialization Methods
 @property (nonatomic, getter=doesPersisteStoreExist) BOOL persistentStoreExistence;
-@property (nonatomic, strong) NSDictionary * initializationOptions;
+@property (nonatomic, copy) NSDictionary * initializationOptions;
 - (NSMutableDictionary*) defaultInitializationOptions;
 
 @property (strong, nonatomic) APCOnboarding *onboarding;

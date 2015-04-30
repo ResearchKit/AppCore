@@ -322,6 +322,7 @@
 		CFFDEDFA1A95734000B25581 /* APCSetupTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CFFDEDC01A95734000B25581 /* APCSetupTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFFDEDFB1A95734000B25581 /* APCSetupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFDEDC11A95734000B25581 /* APCSetupTableViewCell.m */; };
 		CFFDEDFC1A95734000B25581 /* APCSetupTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFFDEDC21A95734000B25581 /* APCSetupTableViewCell.xib */; };
+		EEBCDB821AF2B79A00E77C1F /* APCAppDelegateTasks.h in Headers */ = {isa = PBXBuildFile; fileRef = EEBCDB811AF2B79A00E77C1F /* APCAppDelegateTasks.h */; };
 		F50738C01A682E12004CF100 /* APCDateRange.h in Headers */ = {isa = PBXBuildFile; fileRef = F50738BE1A682E12004CF100 /* APCDateRange.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F50738C11A682E12004CF100 /* APCDateRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F50738BF1A682E12004CF100 /* APCDateRange.m */; };
 		F5306CCD1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5306CCB1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1005,6 +1006,7 @@
 		CFFDEDC01A95734000B25581 /* APCSetupTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSetupTableViewCell.h; sourceTree = "<group>"; };
 		CFFDEDC11A95734000B25581 /* APCSetupTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSetupTableViewCell.m; sourceTree = "<group>"; };
 		CFFDEDC21A95734000B25581 /* APCSetupTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSetupTableViewCell.xib; sourceTree = "<group>"; };
+		EEBCDB811AF2B79A00E77C1F /* APCAppDelegateTasks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCAppDelegateTasks.h; sourceTree = "<group>"; };
 		F50738BE1A682E12004CF100 /* APCDateRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDateRange.h; sourceTree = "<group>"; };
 		F50738BF1A682E12004CF100 /* APCDateRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDateRange.m; sourceTree = "<group>"; };
 		F5179B2919D09128001DCCB7 /* APCAppCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APCAppCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2423,6 +2425,7 @@
 				7B6C8CAC1AA26ECE0007B560 /* Consent */,
 				F53C047D1A9B8C7D00BBEC03 /* APCTabBarViewController.h */,
 				F53C047E1A9B8C7D00BBEC03 /* APCTabBarViewController.m */,
+				EEBCDB811AF2B79A00E77C1F /* APCAppDelegateTasks.h */,
 				F5F129201A2F78490015982C /* APCAppDelegate.h */,
 				F5F129211A2F78490015982C /* APCAppDelegate.m */,
 				F5F129221A2F78490015982C /* TabBar.storyboard */,
@@ -3109,6 +3112,7 @@
 				F5B9462A1A7309A20034C522 /* ZZChannelOutput.h in Headers */,
 				F54DDD2B1A8026010073E4B4 /* APCHKCumulativeQuantityTracker.h in Headers */,
 				F5F12AB41A2F78490015982C /* APCSignUpPermissionsViewController.h in Headers */,
+				EEBCDB821AF2B79A00E77C1F /* APCAppDelegateTasks.h in Headers */,
 				7BEC13D61AA3AA5B00CA316C /* APCFitnessAllocation.h in Headers */,
 				369E27ED1A96B7A200D35DFA /* APCMedicationColor.h in Headers */,
 				369E27EF1A96B7A200D35DFA /* APCMedicationDataStorageEngine.h in Headers */,
