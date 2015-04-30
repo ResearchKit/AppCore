@@ -32,7 +32,10 @@
 // 
  
 #import "APCPermissionsManager.h"
+#import "APCUserInfoConstants.h"
+#import "APCTasksReminderManager.h"
 
+#import <UIKit/UIKit.h>
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
 #import <HealthKit/HealthKit.h>
