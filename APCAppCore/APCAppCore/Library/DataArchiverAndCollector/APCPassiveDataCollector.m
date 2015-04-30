@@ -162,9 +162,9 @@ static NSString *const kCSVFilename  = @"data.csv";
     
     if (!successfullyMoved) {
         APCLogError2(flushError);
+    } else {
+        [self resetDataFilesForTracker:tracker];
     }
-    
-    [self resetDataFilesForTracker:tracker];
 }
 
 /*********************************************************************************/
