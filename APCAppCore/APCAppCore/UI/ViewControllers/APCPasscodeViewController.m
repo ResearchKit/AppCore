@@ -40,7 +40,7 @@
 #import "APCKeychainStore.h"
 #import "APCUserInfoConstants.h"
 #import "UIImage+APCHelper.h"
-#import "APCAppCore.h"
+#import "APCLog.h"
 
 @interface APCPasscodeViewController ()<APCPasscodeViewDelegate>
 
@@ -84,7 +84,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
     APCLogViewControllerAppeared();
 }
 
