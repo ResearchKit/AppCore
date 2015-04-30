@@ -374,6 +374,17 @@ NSString *const kBypassServerProperty                   = @"bypassServer";
     [[NSUserDefaults standardUserDefaults] setBool:bypassServer forKey:kBypassServerProperty];
 }
 
+- (BOOL)showExampleConsent
+{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:kExampleConsentKey];
+}
+
+- (void)setShowExampleConsent:(BOOL)showExampleConsent
+{
+    [[NSUserDefaults standardUserDefaults] setBool:showExampleConsent forKey:kExampleConsentKey];
+}
+
+
 /*********************************************************************************/
 #pragma mark - Delegate Methods
 /*********************************************************************************/
