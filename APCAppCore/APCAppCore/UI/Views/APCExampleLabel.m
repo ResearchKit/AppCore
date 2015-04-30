@@ -42,7 +42,7 @@
     
     APCAppDelegate *appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
     
-    if (appDelegate.dataSubstrate.parameters.showExampleConsent) {
+    if (!appDelegate.dataSubstrate.parameters.hideExampleConsent) {
         CGRect screenSize = rect;
         
         double height = screenSize.size.height;

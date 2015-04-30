@@ -374,14 +374,14 @@ NSString *const kBypassServerProperty                   = @"bypassServer";
     [[NSUserDefaults standardUserDefaults] setBool:bypassServer forKey:kBypassServerProperty];
 }
 
-- (BOOL)showExampleConsent
+- (BOOL)hideExampleConsent
 {
     return [[NSUserDefaults standardUserDefaults] boolForKey:kExampleConsentKey];
 }
 
-- (void)setShowExampleConsent:(BOOL)showExampleConsent
+- (void)setHideExampleConsent:(BOOL)hideExampleConsent
 {
-    [[NSUserDefaults standardUserDefaults] setBool:showExampleConsent forKey:kExampleConsentKey];
+    [[NSUserDefaults standardUserDefaults] setBool:hideExampleConsent forKey:kExampleConsentKey];
 }
 
 
