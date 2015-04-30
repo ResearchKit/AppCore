@@ -705,50 +705,41 @@ static NSUInteger const kIndexOfProfileTab = 3;
                                                                                            HKObserverQueryCompletionHandler completionHandler,
                                                                                            NSError *error)
             {
-                  
                 if (error) {
                     APCLogError2(error);
+                    completionHandler();
                 } else {
+                    NSUInteger anchorForSampleType = [[NSUserDefaults standardUserDefaults] integerForKey:sampleType.identifier];
                     
-                    NSSortDescriptor *sortByLatest = [[NSSortDescriptor alloc] initWithKey:HKSampleSortIdentifierEndDate ascending:NO];
-                    HKSampleQuery *sampleQuery = [[HKSampleQuery alloc] initWithSampleType:sampleType
-                                                                           predicate:nil
-                                                                               limit:1
-                                                                     sortDescriptors:@[sortByLatest]
-                                                                      resultsHandler:^(HKSampleQuery __unused *query, NSArray *results, NSError *error)
+                    APCLogDebug(@"Anchor: %lu (%@)", anchorForSampleType, sampleType.identifier);
+                    
+                    HKAnchoredObjectQuery *anchoredQuery = [[HKAnchoredObjectQuery alloc] initWithType:sampleType
+                                                                                             predicate:nil
+                                                                                                anchor:anchorForSampleType
+                                                                                                 limit:HKObjectQueryNoLimit
+                                                                                     completionHandler:^(HKAnchoredObjectQuery * __unused query,
+                                                                                                         NSArray *results,
+                                                                                                         NSUInteger newAnchor,
+                                                                                                         NSError *error)
                     {
                         if (!results) {
                             APCLogError2(error);
                         } else {
-                            id sampleKind = results.firstObject;
-                            
-                            if (sampleKind) {
+                            if (results.count > 0) {
+                                [[NSUserDefaults standardUserDefaults] setInteger:newAnchor forKey:sampleType.identifier];
                                 
-                                if ([sampleKind isKindOfClass:[HKCategorySample class]]) {
-                                    HKCategorySample *categorySample = (HKCategorySample *)sampleKind;
-                                    
-                                    
-                                    APCLogDebug(@"HK Update received for: %@ - %d", categorySample.categoryType.identifier, categorySample.value);
+                                APCLogDebug(@"Old/New Anchor: %lu/%lu (%@) [%@]", anchorForSampleType, newAnchor, sampleType.identifier, results);
                                 
-                                } else {
-                                    HKQuantitySample *quantitySample = (HKQuantitySample *)sampleKind;
-                                    APCLogDebug(@"HK Update received for: %@ - %@", quantitySample.quantityType.identifier, quantitySample.quantity);
-                                    
-                                }
-                                
-                                // Anyone listening to this notification will need to make sure that if it is used
-                                // for updating anything related to UIKit, it needs to be done on the main thread.
-                                [[NSNotificationCenter defaultCenter] postNotificationName:APCHealthKitObserverQueryUpdateForSampleTypeNotification
-                                                                                    object:sampleKind];
-                                
-                                [weakSelf processUpdatesFromHealthKitForSampleType:sampleKind hkCompletionHandler:completionHandler];
+                                [weakSelf processUpdatesFromHealthKitForSampleType:results];
                             } else {
-                                completionHandler();
+                                
                             }
                         }
+                        
+                        completionHandler();
                     }];
                     
-                    [weakSelf.dataSubstrate.healthStore executeQuery:sampleQuery];
+                    [weakSelf.dataSubstrate.healthStore executeQuery:anchoredQuery];
                     
                     // If there's a completion block execute it.
                     if (completion) {
