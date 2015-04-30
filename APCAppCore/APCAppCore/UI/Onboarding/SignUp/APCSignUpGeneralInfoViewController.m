@@ -74,7 +74,7 @@ static CGFloat kHeaderHeight = 157.0f;
     self.permissionManager = [[APCPermissionsManager alloc] init];
     
     __weak typeof(self) weakSelf = self;
-    [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
+    [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
         if (granted) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 weakSelf.permissionGranted = YES;
@@ -735,7 +735,7 @@ static CGFloat kHeaderHeight = 157.0f;
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
         
-        [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
+        [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
             if (granted) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf openCamera];
@@ -752,7 +752,7 @@ static CGFloat kHeaderHeight = 157.0f;
     }
     
     UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
-        [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
+        [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
             if (granted) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakSelf openPhotoLibrary];

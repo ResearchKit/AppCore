@@ -97,7 +97,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     BOOL isGranted = NO;
     [[NSUserDefaults standardUserDefaults]synchronize];
     switch (type) {
-        case kSignUpPermissionsTypeHealthKit:
+        case kAPCSignUpPermissionsTypeHealthKit:
         {
             HKCharacteristicType *dateOfBirth = [HKCharacteristicType characteristicTypeForIdentifier:HKCharacteristicTypeIdentifierDateOfBirth];
             HKAuthorizationStatus status = [self.healthStore authorizationStatusForType:dateOfBirth];
@@ -105,7 +105,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             isGranted = (status == HKAuthorizationStatusSharingAuthorized);
         }
             break;
-        case kSignUpPermissionsTypeLocation:
+        case kAPCSignUpPermissionsTypeLocation:
         {
 #if TARGET_IPHONE_SIMULATOR
             isGranted = YES;
@@ -122,12 +122,12 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 #endif
         }
             break;
-        case kSignUpPermissionsTypeLocalNotifications:
+        case kAPCSignUpPermissionsTypeLocalNotifications:
         {
             isGranted = [[UIApplication sharedApplication] currentUserNotificationSettings].types != 0;
         }
             break;
-        case kSignUpPermissionsTypeCoremotion:
+        case kAPCSignUpPermissionsTypeCoremotion:
         {
 #if TARGET_IPHONE_SIMULATOR
             isGranted = YES;
@@ -136,7 +136,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 #endif
         }
             break;
-        case kSignUpPermissionsTypeMicrophone:
+        case kAPCSignUpPermissionsTypeMicrophone:
         {
 #if TARGET_IPHONE_SIMULATOR
             isGranted = YES;
@@ -145,7 +145,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 #endif
         }
             break;
-        case kSignUpPermissionsTypeCamera:
+        case kAPCSignUpPermissionsTypeCamera:
         {
 #if TARGET_IPHONE_SIMULATOR
             isGranted = YES;
@@ -155,7 +155,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 #endif
         }
             break;
-        case kSignUpPermissionsTypePhotoLibrary:
+        case kAPCSignUpPermissionsTypePhotoLibrary:
         {
             ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
             isGranted = status == ALAuthorizationStatusAuthorized;
@@ -177,7 +177,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     self.completionBlock = completion;
     __weak typeof(self) weakSelf = self;
     switch (type) {
-        case kSignUpPermissionsTypeHealthKit:
+        case kAPCSignUpPermissionsTypeHealthKit:
         {
     
             //------READ TYPES--------
@@ -242,7 +242,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             
         }
             break;
-        case kSignUpPermissionsTypeLocation:
+        case kAPCSignUpPermissionsTypeLocation:
         {
             CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
             
@@ -252,18 +252,19 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                 
             } else{
                 if (weakSelf.completionBlock) {
-                    weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocation]);
+                    weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeLocation]);
                     weakSelf.completionBlock = nil;
                 }
             }
         }
             break;
-        case kSignUpPermissionsTypeLocalNotifications:
+        case kAPCSignUpPermissionsTypeLocalNotifications:
         {
             if ([[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone) {
                 UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
                                                                                                      |UIUserNotificationTypeBadge
-                                                                                                     |UIUserNotificationTypeSound) categories:[APCTasksReminderManager taskReminderCategories]];
+                                                                                                     |UIUserNotificationTypeSound)
+																						 categories:[APCTasksReminderManager taskReminderCategories]];
                 
                 [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
                 [[NSUserDefaults standardUserDefaults]synchronize];
@@ -272,7 +273,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             }
         }
             break;
-        case kSignUpPermissionsTypeCoremotion:
+        case kAPCSignUpPermissionsTypeCoremotion:
         {
             
             
@@ -288,7 +289,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                     
                     if (weakSelf.completionBlock) {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeCoremotion]);
+                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeCoremotion]);
                         weakSelf.completionBlock = nil;
                         });
                     }
@@ -298,7 +299,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             
         }
             break;
-        case kSignUpPermissionsTypeMicrophone:
+        case kAPCSignUpPermissionsTypeMicrophone:
         {
             
             [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
@@ -307,14 +308,14 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                     weakSelf.completionBlock = nil;
                 } else {
                     if (weakSelf.completionBlock) {
-                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeMicrophone]);
+                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeMicrophone]);
                         weakSelf.completionBlock = nil;
                     }
                 }
             }];
         }
             break;
-        case kSignUpPermissionsTypeCamera:
+        case kAPCSignUpPermissionsTypeCamera:
         {
             
             [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
@@ -323,14 +324,14 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
                     weakSelf.completionBlock = nil;
                 } else {
                     if (weakSelf.completionBlock) {
-                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeCamera]);
+                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeCamera]);
                         weakSelf.completionBlock = nil;
                     }
                 }
             }];
         }
             break;
-        case kSignUpPermissionsTypePhotoLibrary:
+        case kAPCSignUpPermissionsTypePhotoLibrary:
         {
             
             ALAssetsLibrary *lib = [[ALAssetsLibrary alloc] init];
@@ -345,7 +346,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             } failureBlock:^(NSError *error) {
                 if (error.code == ALAssetsLibraryAccessUserDeniedError) {
                     if (weakSelf.completionBlock) {
-                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypePhotoLibrary]);
+                        weakSelf.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypePhotoLibrary]);
                         weakSelf.completionBlock = nil;
                     }
                 }
@@ -387,31 +388,31 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     NSString *message;
     
     switch (type) {
-        case kSignUpPermissionsTypeHealthKit:{
+        case kAPCSignUpPermissionsTypeHealthKit:{
             message = [NSString localizedStringWithFormat:NSLocalizedString(@"Please go to Settings -> Privacy -> Health -> %@ to re-enable.", nil), appName];
         }
             break;
-        case kSignUpPermissionsTypeLocalNotifications:{
+        case kAPCSignUpPermissionsTypeLocalNotifications:{
             message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Notifications and enable 'Allow Notifications'", nil), appName];
         }
             break;
-        case kSignUpPermissionsTypeLocation:{
+        case kAPCSignUpPermissionsTypeLocation:{
             message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings -> Location and check 'Always'", nil), appName];
         }
             break;
-        case kSignUpPermissionsTypeCoremotion:{
+        case kAPCSignUpPermissionsTypeCoremotion:{
             message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Motion Activity.", nil), appName];
         }
             break;
-        case kSignUpPermissionsTypeMicrophone:{
+        case kAPCSignUpPermissionsTypeMicrophone:{
             message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Microphone", nil), appName];
         }
             break;
-        case kSignUpPermissionsTypeCamera:{
+        case kAPCSignUpPermissionsTypeCamera:{
             message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Camera", nil), appName];
         }
             break;
-        case kSignUpPermissionsTypePhotoLibrary:{
+        case kAPCSignUpPermissionsTypePhotoLibrary:{
             message = [NSString localizedStringWithFormat:NSLocalizedString(@"Tap on Settings and enable Photos", nil), appName];
         }
             break;
@@ -458,7 +459,7 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
         case kCLAuthorizationStatusRestricted: {
             [self.locationManager stopUpdatingLocation];
             if (self.completionBlock) {
-                self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocation]);
+                self.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeLocation]);
                 self.completionBlock = nil;
             }
             break;
@@ -472,7 +473,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
 
 - (void)appDidRegisterForRemoteNotifications: (NSNotification *)notification
 {
-    
     UIUserNotificationSettings *settings = (UIUserNotificationSettings *)notification.object;
     
     if (settings.types != 0) {
@@ -480,9 +480,10 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             self.completionBlock(YES, nil);
             self.completionBlock = nil;
         }
-    }else{
+    }
+	else {
         if (self.completionBlock) {
-            self.completionBlock(NO, [self permissionDeniedErrorForType:kSignUpPermissionsTypeLocalNotifications]);
+            self.completionBlock(NO, [self permissionDeniedErrorForType:kAPCSignUpPermissionsTypeLocalNotifications]);
             self.completionBlock = nil;
         }
     }

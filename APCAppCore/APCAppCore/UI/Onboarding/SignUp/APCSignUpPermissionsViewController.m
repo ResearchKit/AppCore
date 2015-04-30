@@ -128,55 +128,55 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
         APCSignUpPermissionsType permissionType = type.integerValue;
         
         switch (permissionType) {
-            case kSignUpPermissionsTypeHealthKit:
+            case kAPCSignUpPermissionsTypeHealthKit:
             {
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
-                item.permissionType = kSignUpPermissionsTypeHealthKit;
+                item.permissionType = kAPCSignUpPermissionsTypeHealthKit;
                 item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Health Kit", @"");
-                item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeHealthKit)];
+                item.detailText = servicesDescrtiptions[@(kAPCSignUpPermissionsTypeHealthKit)];
                 [items addObject:item];
             }
                 break;
-            case kSignUpPermissionsTypeLocation:
+            case kAPCSignUpPermissionsTypeLocation:
             {
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
-                item.permissionType = kSignUpPermissionsTypeLocation;
+                item.permissionType = kAPCSignUpPermissionsTypeLocation;
                 item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Location Services", @"");
-                item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeLocation)];
+                item.detailText = servicesDescrtiptions[@(kAPCSignUpPermissionsTypeLocation)];
                 [items addObject:item];
             }
                 break;
-            case kSignUpPermissionsTypeCoremotion:
+            case kAPCSignUpPermissionsTypeCoremotion:
             {
                 if ([CMMotionActivityManager isActivityAvailable]){
                     APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
-                    item.permissionType = kSignUpPermissionsTypeCoremotion;
+                    item.permissionType = kAPCSignUpPermissionsTypeCoremotion;
                     item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                     item.caption = NSLocalizedString(@"Motion Activity", @"");
-                    item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeCoremotion)];
+                    item.detailText = servicesDescrtiptions[@(kAPCSignUpPermissionsTypeCoremotion)];
                     [items addObject:item];
                 }
             }
                 break;
-            case kSignUpPermissionsTypeLocalNotifications:
+            case kAPCSignUpPermissionsTypeLocalNotifications:
             {
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
-                item.permissionType = kSignUpPermissionsTypeLocalNotifications;
+                item.permissionType = kAPCSignUpPermissionsTypeLocalNotifications;
                 item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Notifications", @"");
-                item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeLocalNotifications)];
+                item.detailText = servicesDescrtiptions[@(kAPCSignUpPermissionsTypeLocalNotifications)];
                 [items addObject:item];
             }
                 break;
-            case kSignUpPermissionsTypeMicrophone:
+            case kAPCSignUpPermissionsTypeMicrophone:
             {
                 APCTableViewPermissionsItem *item = [APCTableViewPermissionsItem new];
-                item.permissionType = kSignUpPermissionsTypeMicrophone;
+                item.permissionType = kAPCSignUpPermissionsTypeMicrophone;
                 item.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:item.permissionType];
                 item.caption = NSLocalizedString(@"Microphone", @"");
-                item.detailText = servicesDescrtiptions[@(kSignUpPermissionsTypeMicrophone)];
+                item.detailText = servicesDescrtiptions[@(kAPCSignUpPermissionsTypeMicrophone)];
                 [items addObject:item];
             }
                 break;

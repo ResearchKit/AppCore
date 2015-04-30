@@ -34,14 +34,14 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, APCSignUpPermissionsType) {
-    kSignUpPermissionsTypeNone = 0,
-    kSignUpPermissionsTypeHealthKit,
-    kSignUpPermissionsTypeLocation,
-    kSignUpPermissionsTypeLocalNotifications,
-    kSignUpPermissionsTypeCoremotion,
-    kSignUpPermissionsTypeMicrophone,
-    kSignUpPermissionsTypeCamera,
-    kSignUpPermissionsTypePhotoLibrary
+    kAPCSignUpPermissionsTypeNone = 0,
+    kAPCSignUpPermissionsTypeHealthKit,
+    kAPCSignUpPermissionsTypeLocation,
+    kAPCSignUpPermissionsTypeLocalNotifications,
+    kAPCSignUpPermissionsTypeCoremotion,
+    kAPCSignUpPermissionsTypeMicrophone,
+    kAPCSignUpPermissionsTypeCamera,
+    kAPCSignUpPermissionsTypePhotoLibrary
 };
 
 typedef NS_ENUM(NSUInteger, APCDashboardMessageType) {

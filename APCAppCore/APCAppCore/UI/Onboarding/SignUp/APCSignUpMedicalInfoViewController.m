@@ -62,11 +62,11 @@
     
     self.permissionManager = [[APCPermissionsManager alloc] init];
     
-    self.permissionGranted = [self.permissionManager isPermissionsGrantedForType:kSignUpPermissionsTypeHealthKit];
+    self.permissionGranted = [self.permissionManager isPermissionsGrantedForType:kAPCSignUpPermissionsTypeHealthKit];
     
     __weak typeof(self) weakSelf = self;
     if (!self.permissionGranted) {
-        [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
+        [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
             if (granted) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     weakSelf.permissionGranted = YES;

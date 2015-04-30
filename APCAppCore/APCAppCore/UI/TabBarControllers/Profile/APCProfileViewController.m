@@ -1422,7 +1422,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
             
-            [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
+            [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypeCamera withCompletion:^(BOOL granted, NSError *error) {
                 if (granted) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [weakSelf openCamera];
@@ -1439,7 +1439,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         }
         
         UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose from Library", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
-            [self.permissionManager requestForPermissionForType:kSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
+            [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypePhotoLibrary withCompletion:^(BOOL granted, NSError *error) {
                 if (granted) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [weakSelf openPhotoLibrary];
