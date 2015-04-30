@@ -86,6 +86,8 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import "APCAppCore/ZZError.h"
 #import "APCAppCore/APCCMS.h"
 
+#import <APCAppCore/CLLocation+APCBearing.h>
+
 /* -------------------------
  Logging
  ------------------------- */
