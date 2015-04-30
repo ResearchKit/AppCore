@@ -93,6 +93,11 @@ static NSString * const kScheduledTaskIDKey = @"scheduledTaskID";
 - (APCResult *)lastResult
 {
     APCResult * retValue = nil;
+    
+    /*
+    Comments on avoiding a race condition:
+    self.results has dynamically created accessor methods as this class is a category on an NSManagedObject subclass. lastResult() is the only method in this class to call self.results. After completing the Daily Survey, lastResult() is called by APCTasksReminderManager on a background thread to update reminders while self.results is potentially being modified on the main thread by core data to update APCActivitiesViewController. Ideally we would protect self.results but since this is a dynamically created property, this can't be done without changing and versioning the data model. Protecting self with synchronized will lock self until core data has updated self.results, then the background thread can access the lastResult of self.results.
+    */  
     @synchronized(self){
         if (self.results.count == 1) {
             retValue = [self.results anyObject];
