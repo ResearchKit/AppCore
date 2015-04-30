@@ -116,7 +116,7 @@
 {
     self = [super init];
     if (self) {
-        _permissionType = kSignUpPermissionsTypeNone;
+        _permissionType = kAPCSignUpPermissionsTypeNone;
         _permissionGranted = NO;
     }
     return self;
