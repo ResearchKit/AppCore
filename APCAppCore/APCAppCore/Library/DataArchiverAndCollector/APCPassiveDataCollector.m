@@ -218,8 +218,8 @@ static NSString *const kCSVFilename  = @"data.csv";
 - (void) checkIfDataNeedsToBeFlushed:(APCDataTracker*) tracker
 {
     //Check for size
-    NSString * csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
-    NSError * error;
+    NSString *csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
+    NSError *error;
     NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:csvFilePath error:&error];
     
     if (!fileDictionary) {
@@ -233,16 +233,15 @@ static NSString *const kCSVFilename  = @"data.csv";
     }
     
     //Check for start date
-    NSDictionary * dictionary = tracker.infoDictionary;
-    NSString * startDateString = dictionary[kStartDateKey];
-    NSDate* startDate = [self datefromDateString:startDateString];
-    
+    NSDictionary *dictionary = tracker.infoDictionary;
+    NSString *startDateString = dictionary[kStartDateKey];
+    NSDate *startDate = [self datefromDateString:startDateString];
     
     if (!startDate) {
         startDate = [NSDate date];
     }
     
-    if ([startDate timeIntervalSinceDate:startDate] >= tracker.stalenessInterval)
+    if ([[NSDate date] timeIntervalSinceDate:startDate] >= tracker.stalenessInterval)
     {
         [self flush:tracker];
     }
