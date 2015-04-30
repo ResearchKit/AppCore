@@ -32,29 +32,35 @@
 //
 
 #import "APCExampleLabel.h"
+#import "APCAppCore.h"
 
 @implementation APCExampleLabel
 
 + (UILabel *)watermarkInRect:(CGRect)rect withCenter:(CGPoint)center
 {
-    CGRect screenSize = rect;
-    
-    double height = screenSize.size.height;
-    double width  = screenSize.size.width;
-    double hypotenuse = hypotf(width, height);
-    double rotationAngle = asin(height/hypotenuse);
-    
     UILabel* watermarkLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    watermarkLabel.text = NSLocalizedString(@"EXAMPLE", nil);
-    watermarkLabel.font = [UIFont systemFontOfSize:72.0];
-    watermarkLabel.textColor = [UIColor colorWithWhite:0 alpha:0.05];
-    watermarkLabel.textAlignment = NSTextAlignmentCenter;
-    [watermarkLabel sizeToFit];
     
-    watermarkLabel.center = center;
+    APCAppDelegate *appDelegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
     
-    watermarkLabel.layer.affineTransform = CGAffineTransformMakeRotation(-rotationAngle);
-    
+    if (!appDelegate.dataSubstrate.parameters.hideExampleConsent) {
+        CGRect screenSize = rect;
+        
+        double height = screenSize.size.height;
+        double width  = screenSize.size.width;
+        double hypotenuse = hypotf(width, height);
+        double rotationAngle = asin(height/hypotenuse);
+        
+        watermarkLabel.text = NSLocalizedString(@"EXAMPLE", nil);
+        watermarkLabel.font = [UIFont systemFontOfSize:72.0];
+        watermarkLabel.textColor = [UIColor colorWithWhite:0 alpha:0.05];
+        watermarkLabel.textAlignment = NSTextAlignmentCenter;
+        [watermarkLabel sizeToFit];
+        
+        watermarkLabel.center = center;
+        
+        watermarkLabel.layer.affineTransform = CGAffineTransformMakeRotation(-rotationAngle);
+    }
+
     return watermarkLabel;
 }
 
