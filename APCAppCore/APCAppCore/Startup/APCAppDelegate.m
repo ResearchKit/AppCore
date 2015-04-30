@@ -1177,6 +1177,9 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 - (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *) __unused viewController
 {
+	[[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastUsedTimeKey];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+	
     self.isPasscodeShowing = NO;
 }
 

@@ -55,7 +55,7 @@
     
     NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
     NSDictionary *servicesDescrtiptions = initialOptions[kAppServicesDescriptionsKey];
-    self.detailTextLabel.text = servicesDescrtiptions[@(kSignUpPermissionsTypeHealthKit)];
+    self.detailTextLabel.text = servicesDescrtiptions[@(kAPCSignUpPermissionsTypeHealthKit)];
 }
 
 - (void)setupAppearance
