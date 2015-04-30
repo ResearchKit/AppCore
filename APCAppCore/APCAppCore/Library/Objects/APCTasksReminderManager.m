@@ -32,8 +32,17 @@
 // 
  
 #import "APCTasksReminderManager.h"
-#import "APCAppCore.h"
+#import "APCAppDelegate.h"
+#import "APCScheduledTask+AddOn.h"
+#import "APCResult+AddOn.h"
+
 #import "APCConstants.h"
+#import "APCLog.h"
+#import "NSDate+Helper.h"
+#import "NSDictionary+APCAdditions.h"
+#import "NSManagedObject+APCHelper.h"
+
+#import <UIKit/UIKit.h>
 
 NSString * const kTaskReminderUserInfo = @"CurrentTaskReminder";
 NSString * const kSubtaskReminderUserInfo = @"CurrentSubtaskReminder";
@@ -160,7 +169,8 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
         {
             UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
                                                                                                  |UIUserNotificationTypeBadge
-                                                                                                 |UIUserNotificationTypeSound) categories:[APCTasksReminderManager taskReminderCategories]];
+                                                                                                 |UIUserNotificationTypeSound)
+																					 categories:[APCTasksReminderManager taskReminderCategories]];
             
             [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
             [[NSUserDefaults standardUserDefaults]synchronize];
