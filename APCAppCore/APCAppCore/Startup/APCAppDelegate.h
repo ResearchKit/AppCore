@@ -89,6 +89,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 - (void) setUpInitializationOptions;
 - (void) setUpAppAppearance;
 - (void) registerCatastrophicStartupError: (NSError *) error;
+- (void) configureObserverQueries;
 
 //For User in Subclasses
 - (void) signedInNotification:(NSNotification *)notification;
@@ -100,6 +101,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 - (NSArray *)reviewConsentActions;
 - (NSArray *)allSetTextBlocks;
 - (NSDictionary *)configureTasksForActivities;
+- (NSArray *)metadataKeysForCorrelation;
 
 //To be called from Datasubstrate
 - (void) setUpCollectors;

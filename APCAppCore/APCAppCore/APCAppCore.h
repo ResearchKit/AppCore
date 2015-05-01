@@ -90,6 +90,8 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import "APCAppCore/APCDisplacementTrackingCollector.h"
 
 
+#import <APCAppCore/CLLocation+APCBearing.h>
+
 /* -------------------------
  Logging
  ------------------------- */

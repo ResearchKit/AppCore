@@ -109,5 +109,6 @@
 @property (nonatomic, getter=isSignedIn) BOOL signedIn;
 
 - (BOOL) isLoggedOut;
+- (NSDate *)estimatedConsentDate;
 
 @end

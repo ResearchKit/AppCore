@@ -303,17 +303,25 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
 /*********************************************************************************/
 
 - (BOOL)reminderOn {
-    NSNumber * number = [[NSUserDefaults standardUserDefaults] objectForKey:kTasksReminderDefaultsOnOffKey];
+    NSNumber * flag = [[NSUserDefaults standardUserDefaults] objectForKey:kTasksReminderDefaultsOnOffKey];
     //Setting up defaults using initialization options
-    if (number == nil) {
-        APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-        NSNumber * numberDefault = delegate.initializationOptions[kTaskReminderStartupDefaultOnOffKey];
-        number = numberDefault?:@NO;
-        [[NSUserDefaults standardUserDefaults] setObject:number forKey:kTasksReminderDefaultsOnOffKey];
+    if (flag == nil) {
+        //default to on if user has given Notification permissions
+        if ([[UIApplication sharedApplication] currentUserNotificationSettings].types != UIUserNotificationTypeNone){
+            flag = @YES;
+            [[NSUserDefaults standardUserDefaults] setObject:flag forKey:kTasksReminderDefaultsOnOffKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
+    
+    //if Notifications are not enabled, set Reminders to off
+    if ([[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone) {
+        flag = @NO;
+        [[NSUserDefaults standardUserDefaults] setObject:flag forKey:kTasksReminderDefaultsOnOffKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
-    return [number boolValue];
+    return [flag boolValue];
 }
 
 - (void)setReminderOn:(BOOL)reminderOn
