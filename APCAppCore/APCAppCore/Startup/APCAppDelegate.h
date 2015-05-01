@@ -101,6 +101,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 - (NSArray *)reviewConsentActions;
 - (NSArray *)allSetTextBlocks;
 - (NSDictionary *)configureTasksForActivities;
+- (NSArray *)metadataKeysForCorrelation;
 
 //To be called from Datasubstrate
 - (void) setUpCollectors;

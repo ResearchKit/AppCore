@@ -714,6 +714,16 @@ static NSUInteger const kIndexOfProfileTab = 3;
     return nil;
 }
 
+- (NSArray *)metadataKeysForCorrelation
+{
+    /* Abstract implementation. Subclass to override.
+     *
+     * Use this to supply an array of meta data keys (NSString)
+     * that should be pulled from the HealthKit sample type's meta data.
+     */
+    return nil;
+}
+
 /*********************************************************************************/
 #pragma mark - Observer Query
 /*********************************************************************************/
@@ -916,26 +926,40 @@ static NSUInteger const kIndexOfProfileTab = 3;
 {
     [self.healthKitCollectorQueue addOperationWithBlock:^{
         NSString *filename = [self.healthKitCollector.folder stringByAppendingPathComponent:self.healthKitCollector.csvFilename];
+        NSArray *metadataKeys = self.metadataKeysForCorrelation;
+        NSString *deviceName = [[UIDevice currentDevice] name];
         
         for (HKQuantitySample *quantitySample in quantitySamples) {
             NSString *healthKitType = nil;
             NSString *quantityValue = nil;
+            NSString *quantityCorrelation = @"No Data";
             NSString *dateTimeStamp = [quantitySample.startDate toStringInISO8601Format];
+            NSString *sourceBundleIdentifier = quantitySample.source.bundleIdentifier;
+            NSString *sourceName = nil;
+            
+            if ([quantitySample.source.name isEqualToString:deviceName]) {
+                sourceName = [APCDeviceHardware platformString];
+            } else {
+                sourceName = quantitySample.source.name;
+            }
             
             if ([quantitySample isKindOfClass:[HKCategorySample class]]) {
                 HKCategorySample *catSample = (HKCategorySample *)quantitySample;
                 healthKitType = catSample.categoryType.identifier;
-                quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
                 
-                // Get the difference in seconds between the start and end date for the sample
-                NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
-                                                                                              fromDate:catSample.startDate
-                                                                                                toDate:catSample.endDate
-                                                                                               options:NSCalendarWrapComponents];
-                if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
-                    quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", (long)secondsSpentInBedOrAsleep.second];
-                } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
-                    quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", (long)secondsSpentInBedOrAsleep.second];
+                if ([healthKitType isEqualToString:HKCategoryTypeIdentifierSleepAnalysis]) {
+                    quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
+                    
+                    // Get the difference in seconds between the start and end date for the sample
+                    NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
+                                                                                                  fromDate:catSample.startDate
+                                                                                                    toDate:catSample.endDate
+                                                                                                   options:NSCalendarWrapComponents];
+                    if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
+                        quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", (long)secondsSpentInBedOrAsleep.second];
+                    } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
+                        quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", (long)secondsSpentInBedOrAsleep.second];
+                    }
                 }
             } else {
                 HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
@@ -943,9 +967,27 @@ static NSUInteger const kIndexOfProfileTab = 3;
                 
                 quantityValue = [NSString stringWithFormat:@"%@", qtySample.quantity];
                 quantityValue = [quantityValue stringByReplacingOccurrencesOfString:@" " withString:@","];
+                
+                if (metadataKeys) {
+                    NSMutableArray *metadataValues = [NSMutableArray new];
+                    
+                    for (NSString *key in metadataKeys) {
+                        NSString *metadata = quantitySample.metadata[key];
+                        
+                        if (metadata) {
+                            [metadataValues addObject:metadata];
+                        }
+                    }
+                    
+                    if (metadataValues.count > 0) {
+                        quantityCorrelation = [metadataValues componentsJoinedByString:@" - "];
+                    }
+                }
             }
             
-            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue];
+            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,\"%@\",%@,%@\n",
+                                       dateTimeStamp, healthKitType, quantityValue,
+                                       quantityCorrelation, sourceBundleIdentifier, sourceName];
             
             [APCPassiveDataCollector createOrAppendString:stringToWrite
                                                    toFile:filename];
