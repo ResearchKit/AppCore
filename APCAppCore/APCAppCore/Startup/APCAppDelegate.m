@@ -883,17 +883,20 @@ static NSUInteger const kIndexOfProfileTab = 3;
             if ([quantitySample isKindOfClass:[HKCategorySample class]]) {
                 HKCategorySample *catSample = (HKCategorySample *)quantitySample;
                 healthKitType = catSample.categoryType.identifier;
-                quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
                 
-                // Get the difference in seconds between the start and end date for the sample
-                NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
-                                                                                              fromDate:catSample.startDate
-                                                                                                toDate:catSample.endDate
-                                                                                               options:NSCalendarWrapComponents];
-                if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
-                    quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", (long)secondsSpentInBedOrAsleep.second];
-                } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
-                    quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", (long)secondsSpentInBedOrAsleep.second];
+                if (healthKitType isEqualToString:HKCategoryTypeIdentifierSleepAnalysis) {
+                    quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
+                    
+                    // Get the difference in seconds between the start and end date for the sample
+                    NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
+                                                                                                  fromDate:catSample.startDate
+                                                                                                    toDate:catSample.endDate
+                                                                                                   options:NSCalendarWrapComponents];
+                    if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
+                        quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", (long)secondsSpentInBedOrAsleep.second];
+                    } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
+                        quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", (long)secondsSpentInBedOrAsleep.second];
+                    }
                 }
             } else {
                 HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
