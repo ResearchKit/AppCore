@@ -879,6 +879,8 @@ static NSUInteger const kIndexOfProfileTab = 3;
             NSString *healthKitType = nil;
             NSString *quantityValue = nil;
             NSString *dateTimeStamp = [quantitySample.startDate toStringInISO8601Format];
+            NSString *sourceBundleIdentifier = quantitySample.source.bundleIdentifier;
+            NSString *sourceName = quantitySample.source.name;
             
             if ([quantitySample isKindOfClass:[HKCategorySample class]]) {
                 HKCategorySample *catSample = (HKCategorySample *)quantitySample;
@@ -906,7 +908,9 @@ static NSUInteger const kIndexOfProfileTab = 3;
                 quantityValue = [quantityValue stringByReplacingOccurrencesOfString:@" " withString:@","];
             }
             
-            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@\n", dateTimeStamp, healthKitType, quantityValue];
+            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@\n",
+                                       dateTimeStamp, sourceBundleIdentifier, sourceName,
+                                       healthKitType, quantityValue];
             
             [APCPassiveDataCollector createOrAppendString:stringToWrite
                                                    toFile:filename];

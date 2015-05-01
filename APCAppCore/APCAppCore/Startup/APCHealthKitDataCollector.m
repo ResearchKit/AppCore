@@ -59,7 +59,7 @@ static NSString *const kHealthKitDataCollectorFilename = @"data.csv";
 
 - (NSArray *)columnNames
 {
-    return @[@"datetime,type,value"];
+    return @[@"datetime,sourceBundleIdentifier,sourceName,type,value,unit"];
 }
 
 @end
