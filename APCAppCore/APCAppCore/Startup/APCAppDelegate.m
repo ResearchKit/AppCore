@@ -884,7 +884,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
                 HKCategorySample *catSample = (HKCategorySample *)quantitySample;
                 healthKitType = catSample.categoryType.identifier;
                 
-                if (healthKitType isEqualToString:HKCategoryTypeIdentifierSleepAnalysis) {
+                if ([healthKitType isEqualToString:HKCategoryTypeIdentifierSleepAnalysis]) {
                     quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
                     
                     // Get the difference in seconds between the start and end date for the sample
