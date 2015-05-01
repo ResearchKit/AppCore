@@ -174,7 +174,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     }
     
     NSData* dictData = [NSData dataWithContentsOfFile:infoFilePath];
-    
+
     infoDictionary      = [NSDictionary dictionaryWithJSONString:[[NSString alloc] initWithData:dictData
                                                                                        encoding:NSUTF8StringEncoding]];
     self.infoDictionary = infoDictionary;
@@ -215,7 +215,6 @@ static NSUInteger       kDaysPerWeek        = 7;
             {
                 //If there's data then upload this data.
                 [self flush];
-                [self resetDataFilesForTracker];
             }
         }
         else
@@ -274,96 +273,16 @@ static NSUInteger       kDaysPerWeek        = 7;
 /*********************************************************************************/
 #pragma mark - Flush and zip creation
 /*********************************************************************************/
-
 - (void)flush
 {
-    //Write the end date
-    NSMutableDictionary*    infoDictionary  = [self.infoDictionary mutableCopy];
-    NSString*               endDate         = [[NSDate date] toStringInISO8601Format];
+    //  At this point the responsibility of the data is handed off to the uploadAndArchiver.
+    [self uploadWithDataArchiverAndUploader];
     
-    if (endDate != nil)
-    {
-        infoDictionary[kEndDateKey] = endDate;
-    }
-    
-    NSError*        fileAttributeError  = nil;
-    NSString*       infoFilePath        = [self.folder stringByAppendingPathComponent:kInfoFilename];
-    NSString*       dataFilePath        = [self.folder stringByAppendingPathComponent:kCSVFilename];
-    
-    if ([[NSFileManager alloc] fileExistsAtPath:dataFilePath])
-    {
-        NSDictionary*   fileAttributes      = [[NSFileManager defaultManager] attributesOfItemAtPath:dataFilePath
-                                                                                               error:&fileAttributeError];
-        id              fileTimeStamp       = nil;
-        
-        if (!fileAttributes)
-        {
-            APCLogError2(fileAttributeError);
-            
-            fileTimeStamp = [[NSDate date] toStringInISO8601Format];
-        }
-        else
-        {
-            NSDate*     fileModificationDate = [fileAttributes fileModificationDate];
-            
-            if (fileModificationDate)
-            {
-                fileTimeStamp = [fileModificationDate toStringInISO8601Format];
-            }
-            else
-            {
-                fileTimeStamp = [[NSDate date] toStringInISO8601Format];
-            }
-        }
-        
-        if (fileTimeStamp == nil)
-        {
-            fileTimeStamp = [NSNull null];
-        }
-        
-        id appName           = [APCUtilities appName];
-        id appVersion        = [APCUtilities appVersion];
-        id deviceHardware    = [APCDeviceHardware platformString];
-        
-        if (appName == nil)
-        {
-            appName = [NSNull null];
-        }
-        
-        if (appVersion == nil)
-        {
-            appVersion = [NSNull null];
-        }
-        
-        if (deviceHardware == nil)
-        {
-            deviceHardware = [NSNull null];
-        }
-        
-        infoDictionary[@"files"]    = @[
-                                        @{
-                                            @"filename"    : kCSVFilename,
-                                            @"timestamp"   : fileTimeStamp
-                                            }
-                                        ];
-        infoDictionary[@"taskRun"]  = [[NSUUID UUID] UUIDString];
-        infoDictionary[@"metaData"] = @{
-                                        @"appName"      :   appName,
-                                        @"appVersion"   :   appVersion,
-                                        @"device"       :   deviceHardware
-                                        };
-        
-        NSDictionary* sageBS        = [APCJSONSerializer serializableDictionaryFromSourceDictionary:infoDictionary];
-        
-        [APCPassiveDataSink createOrReplaceString:[sageBS JSONString] toFile:infoFilePath];
-        
-        [self uploadWithDataArchiverAndUploader];
-    }
-    
+    //  Reset the data files
     [self resetDataFilesForTracker];
 }
 
-- (void) uploadWithDataArchiverAndUploader
+- (void)uploadWithDataArchiverAndUploader
 {
     NSError*    error       = nil;
     NSString*   csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
