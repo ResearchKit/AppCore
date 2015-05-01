@@ -233,42 +233,40 @@ static NSUInteger       kDaysPerWeek        = 7;
     NSError*        error               = nil;
     NSDictionary*   fileDictionary      = [[NSFileManager defaultManager] attributesOfItemAtPath:csvFilePath
                                                                                            error:&error];
-    if (error)
-    {
-        APCLogError2(error);
-    }
     
-    unsigned long long filesize = [fileDictionary fileSize];
-    if (filesize >= self.sizeThreshold)
+    if (!fileDictionary)
     {
-        [self flush];
+        if (error)
+        {
+            APCLogError2(error);
+        }
     }
     else
     {
-        //Check for start date
-        NSDictionary*   dictionary          = self.infoDictionary;
-        NSString*       startDateString     = dictionary[kStartDateKey];
+        unsigned long long filesize = [fileDictionary fileSize];
         
-        if (startDateString)
+        if (filesize >= self.sizeThreshold)
         {
-            NSDate* startDate = [self datefromDateString:startDateString];
-
-            if (startDate)
-            {
-                if ([[NSDate date] timeIntervalSinceDate:startDate] >= self.stalenessInterval)
-                {
-                    [self flush];
-                }
-            }
-            else
-            {
-                //  Issues parsing the 'date' string'. Reset data file or upload?
-                [self resetDataFilesForTracker];
-            }
+            [self flush];
         }
         else
         {
-            [self resetDataFilesForTracker];
+            //Check for start date
+            NSDictionary*   dictionary          = self.infoDictionary;
+            NSString*       startDateString     = dictionary[kStartDateKey];
+            
+            if (startDateString)
+            {
+                NSDate* startDate = [self datefromDateString:startDateString];
+
+                if (startDate)
+                {
+                    if ([[NSDate date] timeIntervalSinceDate:startDate] >= self.stalenessInterval)
+                    {
+                        [self flush];
+                    }
+                }
+            }
         }
     }
 }
@@ -303,7 +301,6 @@ static NSUInteger       kDaysPerWeek        = 7;
             APCLogError2(fileAttributeError);
             
             fileTimeStamp = [[NSDate date] toStringInISO8601Format];
-            
         }
         else
         {
@@ -375,6 +372,7 @@ static NSUInteger       kDaysPerWeek        = 7;
                                              withTaskIdentifier:kItemIdentifier
                                                  andTaskRunUuid:nil
                                                  returningError:&error];
+    
     if (!success)
     {
         if (error)
