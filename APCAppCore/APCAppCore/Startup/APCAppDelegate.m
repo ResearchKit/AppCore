@@ -582,42 +582,43 @@ static NSUInteger const kIndexOfProfileTab = 3;
   */
 - (void)configureObserverQueries
 {
-    if (self.dataSubstrate.currentUser.consented) {
+    if (!self.dataSubstrate.currentUser.consented) {
+        return;
+    }
+    
+    NSArray *dataTypesWithReadPermission = self.initializationOptions[kHKReadPermissionsKey];
+    
+    if (dataTypesWithReadPermission) {
         
-        NSArray *dataTypesWithReadPermission = self.initializationOptions[kHKReadPermissionsKey];
+        if (!self.healthKitCollectorQueue) {
+            self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:@"HealthKit Data Collector"];
+        }
         
-        if (dataTypesWithReadPermission) {
+        if (!self.healthKitCollector) {
+            self.healthKitCollector = [[APCHealthKitDataCollector alloc] initWithIdentifier:@"HealthKitDataCollector"];
+            [self.passiveDataCollector addTracker:self.healthKitCollector];
+            [self.healthKitCollector startTracking];
+        }
+        
+        for (id dataType in dataTypesWithReadPermission) {
             
-            if (!self.healthKitCollectorQueue) {
-                self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:@"HealthKit Data Collector"];
+            HKSampleType *sampleType = nil;
+            
+            if ([dataType isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *categoryType = (NSDictionary *)dataType;
+                sampleType = [HKObjectType categoryTypeForIdentifier:categoryType[kHKCategoryTypeKey]];
+            } else {
+                sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
             }
             
-            if (!self.healthKitCollector) {
-                self.healthKitCollector = [[APCHealthKitDataCollector alloc] initWithIdentifier:@"HealthKitDataCollector"];
-                [self.passiveDataCollector addTracker:self.healthKitCollector];
-                [self.healthKitCollector startTracking];
+            if (![[NSUserDefaults standardUserDefaults] integerForKey:sampleType.identifier]) {
+                // Initialize the anchor to 0 that will be later used
+                // and updated by the anchored query.
+                [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:sampleType.identifier];
             }
             
-            for (id dataType in dataTypesWithReadPermission) {
-                
-                HKSampleType *sampleType = nil;
-                
-                if ([dataType isKindOfClass:[NSDictionary class]]) {
-                    NSDictionary *categoryType = (NSDictionary *)dataType;
-                    sampleType = [HKObjectType categoryTypeForIdentifier:categoryType[kHKCategoryTypeKey]];
-                } else {
-                    sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
-                }
-                
-                if (![[NSUserDefaults standardUserDefaults] integerForKey:sampleType.identifier]) {
-                    // Initialize the anchor to 0 that will be later used
-                    // and updated by the anchored query.
-                    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:sampleType.identifier];
-                }
-                
-                [self observerQueryForSampleType:sampleType
-                                  withCompletion:nil];
-            }
+            [self observerQueryForSampleType:sampleType
+                              withCompletion:nil];
         }
     }
 }
