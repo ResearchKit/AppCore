@@ -435,8 +435,12 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
         return includeTask;
     }
 
-    NSArray *completedTasks = [APCTasksReminderManager scheduledTasksForTaskID:taskReminder.taskID completed:@1];
-    NSArray *scheduledTasks = [APCTasksReminderManager scheduledTasksForTaskID:taskReminder.taskID completed:nil];
+    __block NSArray *completedTasks;
+    __block NSArray *scheduledTasks;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+    completedTasks = [APCTasksReminderManager scheduledTasksForTaskID:taskReminder.taskID completed:@1];
+    scheduledTasks = [APCTasksReminderManager scheduledTasksForTaskID:taskReminder.taskID completed:nil];
+    });
     
     if(completedTasks.count < scheduledTasks.count){//if this task has not been completed but was scheduled, include it in the reminder
         includeTask = YES;
