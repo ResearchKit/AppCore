@@ -306,11 +306,11 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     NSNumber * number = [[NSUserDefaults standardUserDefaults] objectForKey:kTasksReminderDefaultsOnOffKey];
     //Setting up defaults using initialization options
     if (number == nil) {
-        APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-        NSNumber * numberDefault = delegate.initializationOptions[kTaskReminderStartupDefaultOnOffKey];
-        number = numberDefault?:@NO;
-        [[NSUserDefaults standardUserDefaults] setObject:number forKey:kTasksReminderDefaultsOnOffKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        //default to on if user has given Notification permissions
+        if ([[UIApplication sharedApplication] currentUserNotificationSettings].types != UIUserNotificationTypeNone){
+            [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:kTasksReminderDefaultsOnOffKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
     }
     
     return [number boolValue];

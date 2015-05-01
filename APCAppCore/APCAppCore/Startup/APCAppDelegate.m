@@ -47,7 +47,7 @@
 #import "APCConstants.h"
 
 #warning Be sure to set the CORRECT current version before releasing to production
-NSUInteger   const kTheEntireDataModelOfTheApp              = 3;
+NSUInteger   const kTheEntireDataModelOfTheApp              = 4;
 
 /*********************************************************************************/
 #pragma mark - Initializations Option Defaults
