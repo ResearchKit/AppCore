@@ -242,31 +242,33 @@ static NSUInteger       kDaysPerWeek        = 7;
     {
         [self flush];
     }
-    
-    //Check for start date
-    NSDictionary*   dictionary          = self.infoDictionary;
-    NSString*       startDateString     = dictionary[kStartDateKey];
-    
-    if (startDateString)
+    else
     {
-        NSDate* startDate = [self datefromDateString:startDateString];
-
-        if (startDate)
+        //Check for start date
+        NSDictionary*   dictionary          = self.infoDictionary;
+        NSString*       startDateString     = dictionary[kStartDateKey];
+        
+        if (startDateString)
         {
-            if ([[NSDate date] timeIntervalSinceDate:startDate] >= self.stalenessInterval)
+            NSDate* startDate = [self datefromDateString:startDateString];
+
+            if (startDate)
             {
-                [self flush];
+                if ([[NSDate date] timeIntervalSinceDate:startDate] >= self.stalenessInterval)
+                {
+                    [self flush];
+                }
+            }
+            else
+            {
+                //  Issues parsing the 'date' string'. Reset data file or upload?
+                [self resetDataFilesForTracker];
             }
         }
         else
         {
-            //  Issues parsing the 'date' string'. Reset data file or upload?
             [self resetDataFilesForTracker];
         }
-    }
-    else
-    {
-        [self resetDataFilesForTracker];
     }
 }
 
@@ -368,14 +370,16 @@ static NSUInteger       kDaysPerWeek        = 7;
     NSError*    error       = nil;
     NSString*   csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
 
-    [APCDataArchiverAndUploader uploadFileAtPath:csvFilePath
-                              withTaskIdentifier:self.identifier
-                                  andTaskRunUuid:nil
-                                  returningError:&error];
-    
-    if (error)
+    BOOL success = [APCDataArchiverAndUploader uploadFileAtPath:csvFilePath
+                                             withTaskIdentifier:self.identifier
+                                                 andTaskRunUuid:nil
+                                                 returningError:&error];
+    if (!success)
     {
-        APCLogError2(error);
+        if (error)
+        {
+            APCLogError2(error);
+        }
     }
 }
 
