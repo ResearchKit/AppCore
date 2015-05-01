@@ -36,25 +36,11 @@
 
 @interface APCDisplacementTrackingCollector () <CLLocationManagerDelegate>
 
-
 @property (strong, nonatomic) CLLocationManager *locationManager;
-
-    //
-    //    when there is a user's home location, baseTrackingLocation
-    //        maintains the position of the user's home location
-    //
-    //    when there is not a user's home location, baseTrackingLocation
-    //        maintains the position of the most recent but one recorded location
-    //
 @property (nonatomic, strong) CLLocation  *baseTrackingLocation;
-
-    //
-    //    used in the case where there is not a user's home location,
-    //        this records the most recent location update
-    //
 @property (nonatomic, strong) CLLocation  *mostRecentUpdatedLocation;
-
 @property (nonatomic, assign) BOOL deferringUpdates;
+
 @end
 
 
@@ -64,7 +50,7 @@
 {
     APCLogDebug(@"Initalizing location tracker");
     
-    self = [super initWithIdentifier:identifier];
+    self = [super initWithIdentifier:identifier dateAnchorName:nil launchDateAnchor:nil];
     
     if (self != nil)
     {
@@ -95,8 +81,8 @@
         {
             APCLogDebug(@"Start location tracking");
             
-            self.locationManager = [[CLLocationManager alloc] init];
-            self.locationManager.delegate = self;
+            self.locationManager            = [[CLLocationManager alloc] init];
+            self.locationManager.delegate   = self;
             
             if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES &&
                 [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)

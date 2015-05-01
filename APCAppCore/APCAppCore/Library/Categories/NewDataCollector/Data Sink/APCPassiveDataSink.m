@@ -44,6 +44,7 @@ static NSString *const  kStartDateKey       = @"startDate";
 static NSString *const  kEndDateKey         = @"endDate";
 static NSString *const  kInfoFilename       = @"info.json";
 static NSString *const  kCSVFilename        = @"data.csv";
+static NSString *const  kItemIdentifier     = @"displacement";
 static long long        kKBPerMB            = 1024;
 static long long        kBytesPerKB         = 1024;
 static NSUInteger       kSecsPerMin         = 60;
@@ -173,7 +174,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     }
     
     NSData* dictData = [NSData dataWithContentsOfFile:infoFilePath];
-    
+
     infoDictionary      = [NSDictionary dictionaryWithJSONString:[[NSString alloc] initWithData:dictData
                                                                                        encoding:NSUTF8StringEncoding]];
     self.infoDictionary = infoDictionary;
@@ -214,7 +215,6 @@ static NSUInteger       kDaysPerWeek        = 7;
             {
                 //If there's data then upload this data.
                 [self flush];
-                [self resetDataFilesForTracker];
             }
         }
         else
@@ -232,154 +232,72 @@ static NSUInteger       kDaysPerWeek        = 7;
     NSError*        error               = nil;
     NSDictionary*   fileDictionary      = [[NSFileManager defaultManager] attributesOfItemAtPath:csvFilePath
                                                                                            error:&error];
-    if (error)
+    
+    if (!fileDictionary)
     {
-        APCLogError2(error);
-    }
-    
-    unsigned long long filesize = [fileDictionary fileSize];
-    if (filesize >= self.sizeThreshold)
-    {
-        [self flush];
-    }
-    
-    //Check for start date
-    NSDictionary*   dictionary          = self.infoDictionary;
-    NSString*       startDateString     = dictionary[kStartDateKey];
-    
-#warning potential bug with current users with buggy version of the passive data collector. If they have files that are created which have no date there is nothing but the file size to check against. 
-    
-    if (startDateString)
-    {
-        NSDate* startDate = [self datefromDateString:startDateString];
-
-        if (startDate)
+        if (error)
         {
-            if ([[NSDate date] timeIntervalSinceDate:startDate] >= self.stalenessInterval)
-            {
-                [self flush];
-            }
-        }
-        else
-        {
-#warning what do we do if we have issues parsing the string and getting a date? Delete file?
-            //  Issues parsing the 'date' string'. Reset data file or upload?
-            [self resetDataFilesForTracker];
+            APCLogError2(error);
         }
     }
     else
     {
-#warning what do we do if we have issues parsing the string and getting a date? Delete file?
-        [self resetDataFilesForTracker];
+        unsigned long long filesize = [fileDictionary fileSize];
+        
+        if (filesize >= self.sizeThreshold)
+        {
+            [self flush];
+        }
+        else
+        {
+            //Check for start date
+            NSDictionary*   dictionary          = self.infoDictionary;
+            NSString*       startDateString     = dictionary[kStartDateKey];
+            
+            if (startDateString)
+            {
+                NSDate* startDate = [self datefromDateString:startDateString];
+
+                if (startDate)
+                {
+                    if ([[NSDate date] timeIntervalSinceDate:startDate] >= self.stalenessInterval)
+                    {
+                        [self flush];
+                    }
+                }
+            }
+        }
     }
 }
 
 /*********************************************************************************/
 #pragma mark - Flush and zip creation
 /*********************************************************************************/
-
 - (void)flush
 {
-    //Write the end date
-    NSMutableDictionary*    infoDictionary  = [self.infoDictionary mutableCopy];
-    NSString*               endDate         = [[NSDate date] toStringInISO8601Format];
+    //  At this point the responsibility of the data is handed off to the uploadAndArchiver.
+    [self uploadWithDataArchiverAndUploader];
     
-    if (endDate != nil)
-    {
-        infoDictionary[kEndDateKey] = endDate;
-    }
-    
-    NSError*        fileAttributeError  = nil;
-    NSString*       infoFilePath        = [self.folder stringByAppendingPathComponent:kInfoFilename];
-    NSString*       dataFilePath        = [self.folder stringByAppendingPathComponent:kCSVFilename];
-    
-    if ([[NSFileManager alloc] fileExistsAtPath:dataFilePath])
-    {
-        NSDictionary*   fileAttributes      = [[NSFileManager defaultManager] attributesOfItemAtPath:dataFilePath
-                                                                                               error:&fileAttributeError];
-        id              fileTimeStamp       = nil;
-        
-        if (!fileAttributes)
-        {
-            APCLogError2(fileAttributeError);
-            
-            fileTimeStamp = [[NSDate date] toStringInISO8601Format];
-            
-        }
-        else
-        {
-            NSDate*     fileModificationDate = [fileAttributes fileModificationDate];
-            
-            if (fileModificationDate)
-            {
-                fileTimeStamp = [fileModificationDate toStringInISO8601Format];
-            }
-            else
-            {
-                fileTimeStamp = [[NSDate date] toStringInISO8601Format];
-            }
-        }
-        
-        if (fileTimeStamp == nil)
-        {
-            fileTimeStamp = [NSNull null];
-        }
-        
-        id appName           = [APCUtilities appName];
-        id appVersion        = [APCUtilities appVersion];
-        id deviceHardware    = [APCDeviceHardware platformString];
-        
-        if (appName == nil)
-        {
-            appName = [NSNull null];
-        }
-        
-        if (appVersion == nil)
-        {
-            appVersion = [NSNull null];
-        }
-        
-        if (deviceHardware == nil)
-        {
-            deviceHardware = [NSNull null];
-        }
-        
-        infoDictionary[@"files"]    = @[
-                                        @{
-                                            @"filename"    : kCSVFilename,
-                                            @"timestamp"   : fileTimeStamp
-                                            }
-                                        ];
-        infoDictionary[@"taskRun"]  = [[NSUUID UUID] UUIDString];
-        infoDictionary[@"metaData"] = @{
-                                        @"appName"      :   appName,
-                                        @"appVersion"   :   appVersion,
-                                        @"device"       :   deviceHardware
-                                        };
-        
-        NSDictionary* sageBS        = [APCJSONSerializer serializableDictionaryFromSourceDictionary:infoDictionary];
-        
-        [APCPassiveDataSink createOrReplaceString:[sageBS JSONString] toFile:infoFilePath];
-        
-        [self uploadWithDataArchiverAndUploader];
-    }
-    
+    //  Reset the data files
     [self resetDataFilesForTracker];
 }
 
-- (void) uploadWithDataArchiverAndUploader
+- (void)uploadWithDataArchiverAndUploader
 {
     NSError*    error       = nil;
     NSString*   csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
 
-    [APCDataArchiverAndUploader uploadFileAtPath:csvFilePath
-                              withTaskIdentifier:self.identifier
-                                  andTaskRunUuid:nil
-                                  returningError:&error];
+    BOOL success = [APCDataArchiverAndUploader uploadFileAtPath:csvFilePath
+                                             withTaskIdentifier:kItemIdentifier
+                                                 andTaskRunUuid:nil
+                                                 returningError:&error];
     
-    if (error)
+    if (!success)
     {
-        APCLogError2(error);
+        if (error)
+        {
+            APCLogError2(error);
+        }
     }
 }
 

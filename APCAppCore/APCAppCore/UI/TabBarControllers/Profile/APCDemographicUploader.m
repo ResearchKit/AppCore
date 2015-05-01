@@ -36,13 +36,14 @@
 #import "APCAppCore.h"
 #import "APCAllSetTableViewCell.h"
 #import "APCDataArchiverAndUploader.h"
+#import "NSDate+Helper.h"
 
 static  NSString  *kTaskIdentifierKey              = @"NonIdentifiableDemographicsTask";
 
 static  NSString  *kPatientInformationKey          = @"item";
 static  NSString  *kNonIdentifiableDemographicsKey = @"NonIdentifiableDemographics";
 
-static  NSString  *kPatientBirthDateKey            = @"patientBirthDate";
+static  NSString  *kPatientCurrentAgeKey           = @"patientCurrentAge";
 static  NSString  *kPatientBiologicalSexKey        = @"patientBiologicalSex";
 static  NSString  *kPatientHeightInchesKey         = @"patientHeightInches";
 static  NSString  *kPatientWeightPoundsKey         = @"patientWeightPounds";
@@ -83,9 +84,10 @@ static  NSString  *kPatientGoSleepTimeKey          = @"patientGoSleepTime";
     
     NSDate  *birthDate = user.birthDate;
     if (birthDate == nil) {
-        [demographics setObject:[NSNull null] forKey:kPatientBirthDateKey];
+        [demographics setObject:[NSNull null] forKey:kPatientCurrentAgeKey];
     } else {
-        [demographics setObject:birthDate forKey:kPatientBirthDateKey];
+        NSUInteger  age = [NSDate ageFromDateOfBirth:birthDate];
+        [demographics setObject:[NSNumber numberWithUnsignedInteger:age] forKey:kPatientCurrentAgeKey];
     }
     
     HKBiologicalSex  biologicalSex = user.biologicalSex;

@@ -1,4 +1,4 @@
-// 
+//
 //  APCAppDelegate.m 
 //  APCAppCore 
 // 
@@ -42,7 +42,6 @@
 #import "UIView+Helper.h"
 #import "APCTabBarViewController.h"
 #import "UIAlertController+Helper.h"
-#import "APCHealthKitDataCollector.h"
 #import "APCDemographicUploader.h"
 #import "APCConstants.h"
 
@@ -70,26 +69,19 @@ static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 /*********************************************************************************/
 #pragma mark - User Defaults Keys
 /*********************************************************************************/
-
-static NSString *const kDemographicDataWasUploadedKey = @"kDemographicDataWasUploadedKey";
-
-static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
-static NSUInteger const kIndexOfProfileTab = 3;
-
+static NSString*    const kDemographicDataWasUploadedKey    = @"kDemographicDataWasUploadedKey";
+static NSString*    const kLastUsedTimeKey                  = @"APHLastUsedTime";
+static NSUInteger   const kIndexOfProfileTab                = 3;
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 
 @property (nonatomic) BOOL isPasscodeShowing;
 @property (nonatomic, strong) UIView *secureView;
 @property (nonatomic, strong) NSError *catastrophicStartupError;
-
 @property (nonatomic, strong) NSOperationQueue *healthKitCollectorQueue;
-@property (nonatomic, strong) APCHealthKitDataCollector *healthKitCollector;
-
 @property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
 
 @end
-
 
 @implementation APCAppDelegate
 /*********************************************************************************/
@@ -116,10 +108,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
     [self setUpTasksReminder];
     [self performDemographicUploadIfRequired];
     [self showAppropriateVC];
-    
     [self.dataMonitor appFinishedLaunching];
-    
-    //[self configureObserverQueries];
     
     return YES;
 }
@@ -138,12 +127,20 @@ static NSUInteger const kIndexOfProfileTab = 3;
         //    otherwise, the value should have been set to YES, to
         //    indicate that the Demographic data was previously uploaded
         //
-    BOOL  demographicDataWasUploaded = [defaults boolForKey:kDemographicDataWasUploadedKey];
-    if (demographicDataWasUploaded == NO) {
-        self.demographicUploader = [[APCDemographicUploader alloc] init];
-        [defaults setBool:YES forKey:kDemographicDataWasUploadedKey];
-        [defaults synchronize];
-        [self.demographicUploader uploadNonIdentifiableDemographicData];
+    
+        //
+        //    we run this code iff the user has previously consented,
+        //    indicating that this is an update to a previously installed version of the application
+        //
+    APCUser  *user = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+    if (user.isConsented) {
+        BOOL  demographicDataWasUploaded = [defaults boolForKey:kDemographicDataWasUploadedKey];
+        if (demographicDataWasUploaded == NO) {
+            self.demographicUploader = [[APCDemographicUploader alloc] init];
+            [defaults setBool:YES forKey:kDemographicDataWasUploadedKey];
+            [defaults synchronize];
+            [self.demographicUploader uploadNonIdentifiableDemographicData];
+        }
     }
 }
 

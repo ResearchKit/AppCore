@@ -40,7 +40,7 @@
 
 extern NSUInteger   const kTheEntireDataModelOfTheApp;
 
-@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCFitnessAllocation, APCNewPassiveDataCollector;
+@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCFitnessAllocation, APCPassiveDataCollector;
 
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
 
@@ -52,7 +52,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 @property (strong, nonatomic) APCDataMonitor * dataMonitor;
 @property (strong, nonatomic) APCScheduler * scheduler;
 @property (strong, nonatomic) APCTasksReminderManager * tasksReminder;
-@property (nonatomic, strong) APCNewPassiveDataCollector *passiveHealthKitCollector;
+@property (nonatomic, strong) APCPassiveDataCollector *passiveHealthKitCollector;
 @property (strong, nonatomic) APCProfileViewController * profileViewController;
 @property (nonatomic) BOOL disableSignatureInConsent;
 

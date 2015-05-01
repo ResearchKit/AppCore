@@ -31,13 +31,13 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "APCNewPassiveDataCollector.h"
+#import "APCPassiveDataCollector.h"
 #import "APCDataCollector.h"
 #import "APCAppCore.h"
 
 static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminatedTime";
 
-@implementation APCNewPassiveDataCollector
+@implementation APCPassiveDataCollector
 
 - (instancetype)init
 {
@@ -46,26 +46,9 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
     if (self)
     {
         _dataSinkList = [NSMutableArray new];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(appBecameActive)
-                                                     name:UIApplicationDidBecomeActiveNotification
-                                                   object:[UIApplication sharedApplication]];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(appWillTerminate)
-                                                     name:UIApplicationWillTerminateNotification
-                                                   object:[UIApplication sharedApplication]];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(appWillSuspend)
-                                                     name:UIApplicationDidEnterBackgroundNotification
-                                                   object:[UIApplication sharedApplication]];
     }
     
     return self;
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) addDataSink:(id)dataSync
@@ -75,13 +58,13 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 - (void)stopCollecting
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
+    for (APCDataCollector* collector in self.dataSinkList)
     {
-        for (APCDataCollector* collector in self.dataSinkList)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
         {
             [collector stop];
-        }
-    });
+        });
+    }
 }
 
 - (void)startCollecting
@@ -93,27 +76,6 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
             [collector start];
         });
     }
-}
-
-- (void)appBecameActive
-{
-    for (APCDataCollector* collector in self.dataSinkList)
-    {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
-        {
-            [collector start];
-        });
-    }
-}
-
-- (void)appWillSuspend
-{
-    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastUsedTimeKey];
-}
-
-- (void)appWillTerminate
-{
-    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastUsedTimeKey];
 }
 
 @end

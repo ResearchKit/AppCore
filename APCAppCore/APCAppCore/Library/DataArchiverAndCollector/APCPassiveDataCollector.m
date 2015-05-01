@@ -159,16 +159,6 @@ static NSString *const kCSVFilename  = @"data.csv";
     
     infoDictionary[kEndDateKey]   = [[NSDate date] toStringInISO8601Format];
     
-    NSDate *startDate = nil;
-    
-    if (!infoDictionary[kStartDateKey]) {
-        startDate = [NSDate date];
-    } else {
-        startDate = [self datefromDateString:infoDictionary[kStartDateKey]];
-    }
-    
-    infoDictionary[kStartDateKey] = [startDate toStringInISO8601Format];
-    
     NSString * infoFilePath = [tracker.folder stringByAppendingPathComponent:kInfoFilename];
     
     NSError *fileAttributeError = nil;
@@ -312,18 +302,37 @@ static NSString *const kCSVFilename  = @"data.csv";
     NSString * csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
     NSError * error;
     NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:csvFilePath error:&error];
-    APCLogError2(error);
-    unsigned long long filesize = [fileDictionary fileSize];
-    if (filesize >= tracker.sizeThreshold) {
-        [self flush:tracker];
+    
+    if (!fileDictionary) {
+        APCLogError2(error);
+    } else {
+        unsigned long long filesize = [fileDictionary fileSize];
+        
+        if (filesize >= tracker.sizeThreshold) {
+            [self flush:tracker];
+        }
     }
     
     //Check for start date
     NSDictionary * dictionary = tracker.infoDictionary;
     NSString * startDateString = dictionary[kStartDateKey];
-    NSDate * startDate = [self datefromDateString:startDateString];
-    if ([[NSDate date] timeIntervalSinceDate:startDate] >= tracker.stalenessInterval) {
-        [self flush:tracker];
+    
+    if (startDateString)
+    {
+        NSDate* startDate = [self datefromDateString:startDateString];
+        
+        if (startDate)
+        {
+            if ([[NSDate date] timeIntervalSinceDate:startDate] >= tracker.stalenessInterval)
+            {
+                [self flush:tracker];
+            }
+        } else {
+            //  Issues parsing the 'date' string'. Reset data file.
+            [self resetDataFilesForTracker:tracker];
+        }
+    } else {
+        [self resetDataFilesForTracker:tracker];
     }
 }
 

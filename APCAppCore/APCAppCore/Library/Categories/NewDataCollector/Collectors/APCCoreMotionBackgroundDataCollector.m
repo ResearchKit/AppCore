@@ -52,37 +52,80 @@ static NSInteger const kDefaultNumberOfDaysBack = 8;
 */
 - (void)start
 {
-    self.motionActivityManager = [[CMMotionActivityManager alloc] init];
-    
-    NSDate* lastTrackedEndDate = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
-    
-    if (!lastTrackedEndDate)
+    if (!self.motionActivityManager)
     {
-        lastTrackedEndDate = [self maximumNumberOfDaysBack];
-    }
-    
-    __weak typeof(self) weakSelf = self;
-    
-    [self.motionActivityManager queryActivityStartingFromDate:lastTrackedEndDate
-                                                       toDate:[NSDate date]
-                                                      toQueue:[NSOperationQueue new]
-                                                  withHandler:^(NSArray* activities, NSError* __unused error)
-    {
-        __typeof(self) strongSelf = weakSelf;
-
-        if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValuesFromCollector:)])
+        self.motionActivityManager = [[CMMotionActivityManager alloc] init];
+        
+        NSDate* lastTrackedEndDate = [[NSUserDefaults standardUserDefaults] objectForKey:self.anchorName];
+        
+        if (!lastTrackedEndDate)
         {
-          [strongSelf.delegate didRecieveUpdatedValuesFromCollector:activities];
+            lastTrackedEndDate = [self launchDate];
         }
-
-        [strongSelf.motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new] withHandler:^(CMMotionActivity *activity)
+        
+        __weak typeof(self) weakSelf = self;
+        
+        [self.motionActivityManager queryActivityStartingFromDate:lastTrackedEndDate
+                                                           toDate:[NSDate date]
+                                                          toQueue:[NSOperationQueue new]
+                                                      withHandler:^(NSArray* activities, NSError* error)
         {
-            if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
+            __typeof(self) strongSelf = weakSelf;
+            
+            if (error)
             {
-                [strongSelf.delegate didRecieveUpdatedValueFromCollector:activity];
+                APCLogError2(error);
             }
+            else
+            {
+                if (activities)
+                {
+                    if ([activities lastObject])
+                    {
+                        CMMotionActivity*   lastResult  = (CMMotionActivity*)[activities lastObject];
+                        NSDate*             date        = lastResult.startDate;
+                        NSDateComponents*   components  = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond fromDate:date];
+
+                        [components setSecond:1];
+                        
+                        NSDate* futureDate = [[NSCalendar currentCalendar] dateByAddingComponents:components toDate:date options:0];
+                        [[NSUserDefaults standardUserDefaults] setObject:futureDate forKey:self.anchorName];
+                    }
+                    
+                    if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValuesFromCollector:)])
+                    {
+                        [strongSelf.delegate didRecieveUpdatedValuesFromCollector:activities];
+                    }
+                }
+            }
+        
+            __weak typeof(self) weakSelf = self;
+            
+            [strongSelf.motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue new] withHandler:^(CMMotionActivity* activity)
+            {
+                __typeof(self) strongSelf = weakSelf;
+                
+                if (activity)
+                {
+                    NSDate*             date        = activity.startDate;
+                    NSDateComponents*   components  = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond fromDate:date];
+                    
+                    [components setSecond:1];
+                    
+                    NSDate*             futureDate  = [[NSCalendar currentCalendar] dateByAddingComponents:components
+                                                                                                    toDate:date
+                                                                                                   options:0];
+                    
+                    [[NSUserDefaults standardUserDefaults] setObject:futureDate forKey:strongSelf.anchorName];
+                    
+                    if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
+                    {
+                        [strongSelf.delegate didRecieveUpdatedValueFromCollector:activity];
+                    }
+                }
+            }];
         }];
-    }];
+    }
 }
 
 - (void)stop
@@ -101,9 +144,9 @@ static NSInteger const kDefaultNumberOfDaysBack = 8;
     
     [components setDay:numberOfDaysBack];
 
-    NSDate*             date = [[NSCalendar currentCalendar] dateByAddingComponents:components
-                                                                            toDate:[NSDate date]
-                                                                            options:0];
+    NSDate*             date                = [[NSCalendar currentCalendar] dateByAddingComponents:components
+                                                                                            toDate:[NSDate date]
+                                                                                           options:0];
     return date;
 }
 

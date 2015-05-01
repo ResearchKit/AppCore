@@ -45,14 +45,13 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 @implementation APCHealthKitBackgroundDataCollector
 
-- (instancetype)initWithIdentifier:(NSString*)identifier sampleType:(HKSampleType*)type andLimit:(NSUInteger)queryLimit
+- (instancetype)initWithIdentifier:(NSString*)identifier sampleType:(HKSampleType*)type anchorName:(NSString*)anchorName launchDateAnchor:(InitialStartDatePredicateDesignator)launchDateAnchor
 {
-    self = [super initWithIdentifier:identifier];
+    self = [super initWithIdentifier:identifier dateAnchorName:anchorName launchDateAnchor:launchDateAnchor];
     
     if (self)
     {
         _sampleType         = type;
-        _queryLimit         = queryLimit;
         _healthStore        = [HKHealthStore new];
     }
     
@@ -61,34 +60,27 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 - (void)start
 {
-    [self observerQueryForSampleType:self.sampleType];
-    
-    NSSet* readTypes = [[NSSet alloc] initWithArray:@[self.sampleType]];
-    
-    [self.healthStore requestAuthorizationToShareTypes:nil
-                                             readTypes:readTypes
-                                            completion:nil];
+    if (!self.observerQuery)
+    {
+        [self observerQueryForSampleType:self.sampleType];
+        
+        NSSet* readTypes = [[NSSet alloc] initWithArray:@[self.sampleType]];
+        
+        [self.healthStore requestAuthorizationToShareTypes:nil
+                                                 readTypes:readTypes
+                                                completion:nil];
+    }
 }
 
 - (void)observerQueryForSampleType:(HKSampleType*)sampleType
 {
-    NSDate* lastTrackedEndDate = [[NSUserDefaults standardUserDefaults] objectForKey:kLastUsedTimeKey];
+    __weak __typeof(self) weakSelf = self;
     
-    if (lastTrackedEndDate == nil)
-    {
-        lastTrackedEndDate = [NSDate date];
-    }
-    
-    NSPredicate*        predicate   = [HKQuery predicateForSamplesWithStartDate:lastTrackedEndDate
-                                                               endDate:[NSDate date]
-                                                               options:HKQueryOptionNone];
-    __weak typeof(self) weakSelf    = self;
-    
-    self.sampleQuery = [[HKSampleQuery alloc] initWithSampleType:sampleType
-                                                       predicate:predicate
-                                                           limit:HKObjectQueryNoLimit
-                                                 sortDescriptors:nil
-                                                  resultsHandler:^(HKSampleQuery __unused *query, NSArray *results, NSError *error)
+    self.observerQuery = [[HKObserverQuery alloc] initWithSampleType:sampleType
+                                                                 predicate:nil
+                                                             updateHandler:^(HKObserverQuery __unused *query,
+                                                                             HKObserverQueryCompletionHandler completionHandler,
+                                                                             NSError *error)
     {
         if (error)
         {
@@ -96,82 +88,77 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
         }
         else
         {
-            __typeof(self)      strongSelf  = weakSelf;
-            __weak typeof(self) weakSelf    = strongSelf;
-            
-            // Send the initial results
-            if (results)
-            {
-                if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValuesFromCollector:)])
-                {
-                    [strongSelf.delegate didRecieveUpdatedValuesFromCollector:results];
-                }
-            }
-        
-            strongSelf.observerQuery = [[HKObserverQuery alloc] initWithSampleType:sampleType
-                                                                         predicate:nil
-                                                                     updateHandler:^(HKObserverQuery __unused *query,
-                                                                                     HKObserverQueryCompletionHandler completionHandler,
-                                                                                     NSError *error)
-                                        {
-                                            
-                                            if (error)
-                                            {
-                                                APCLogError2(error);
-                                            }
-                                            else
-                                            {
-                                                __typeof(self) strongSelf = weakSelf;
-                                                
-                                                [strongSelf sampleQueryWithType:strongSelf.sampleType andLimit:strongSelf.queryLimit];
-                                                
-                                                // If there's a completion block execute it.
-                                                if (completionHandler) {
-                                                    completionHandler();
-                                                }
-                                            }
-                                        }];
-            
-            [strongSelf.healthStore executeQuery:strongSelf.observerQuery];
+            __typeof(self) strongSelf = weakSelf;
+
+            [strongSelf anchorQuery:query
+                   completionHandle:completionHandler];
         }
     }];
-    
-    [self.healthStore executeQuery:self.sampleQuery];
+
+    [self.healthStore executeQuery:self.observerQuery];
 }
 
 - (void)stop
 {
-    [self.healthStore stopQuery:self.sampleQuery];
     [self.healthStore stopQuery:self.observerQuery];
 }
 
 
-- (void)sampleQueryWithType:(HKSampleType*)sampleType andLimit:(NSUInteger)limit
+- (void)anchorQuery:(HKObserverQuery*)query completionHandle:(HKObserverQueryCompletionHandler)completionHandler
 {
-    __weak __typeof(self)   weakSelf        = self;
-    NSSortDescriptor*       sortByLatest    = [[NSSortDescriptor alloc] initWithKey:HKSampleSortIdentifierEndDate ascending:NO];
-    HKSampleQuery*          sampleQuery     = [[HKSampleQuery alloc] initWithSampleType:sampleType
-                                                                 predicate:nil
-                                                                     limit:limit
-                                                           sortDescriptors:@[sortByLatest]
-                                                            resultsHandler:^(HKSampleQuery __unused *query, NSArray *results, NSError *error)
-                                  {
-                                      if (error)
-                                      {
-                                          APCLogError2(error);
-                                      }
-                                      else
-                                      {
-                                          if (results)
-                                          {
-                                              __typeof(self) strongSelf = weakSelf;
-                                              
-                                              [strongSelf notifyListenersWithResults:results withError:error];
-                                          }
-                                      }
-                                  }];
+    NSUInteger      anchorToUse                         = 0;
+    NSUInteger      backgroundLaunchAnchorDate          = [[NSUserDefaults standardUserDefaults] integerForKey:self.anchorName];
+    NSPredicate*    predicate                           = nil;
     
-    [self.healthStore executeQuery:sampleQuery];
+    if (backgroundLaunchAnchorDate)
+    {
+        anchorToUse = backgroundLaunchAnchorDate;
+    }
+    else
+    {
+        NSDate*     launchDate          = [self launchDate];
+        NSDate*     launchDayStartOfday = [launchDate startOfDay];
+        
+        predicate = [HKAnchoredObjectQuery predicateForSamplesWithStartDate:launchDayStartOfday
+                                                                    endDate:[NSDate date]
+                                                                    options:HKQueryOptionNone];
+    }
+    
+    __weak __typeof(self)   weakSelf        = self;
+    HKAnchoredObjectQuery*  anchorQuery     = [[HKAnchoredObjectQuery alloc] initWithType:query.sampleType
+                                                                                predicate:predicate
+                                                                                   anchor:anchorToUse
+                                                                                    limit:HKQueryOptionNone
+                                                                        completionHandler:^(HKAnchoredObjectQuery __unused *query, NSArray *results, NSUInteger newAnchor, NSError *error)
+    {
+        if (error)
+        {
+          APCLogError2(error);
+        }
+        else
+        {
+          if (results)
+          {
+              __typeof(self) strongSelf = weakSelf;
+              
+              if ([results lastObject])
+              {
+                  //  Set the anchor date for the next time the app is alive and send the current results to the data sink.
+                  [[NSUserDefaults standardUserDefaults] setInteger:newAnchor forKey:strongSelf.anchorName];
+                  [[NSUserDefaults standardUserDefaults] synchronize];
+              }
+              
+              [strongSelf notifyListenersWithResults:results withError:error];
+          }
+        }
+        
+        if (completionHandler)
+        {
+            completionHandler();
+        }
+    }];
+    
+    [self.healthStore executeQuery:anchorQuery];
     
 }
 
@@ -203,13 +190,10 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
                 APCLogDebug(@"HK Update received for: %@ - %@", quantitySample.quantityType.identifier, quantitySample.quantity);
 
             }
-
-            [[NSNotificationCenter defaultCenter] postNotificationName:APCHealthKitObserverQueryUpdateForSampleTypeNotification
-                                                                object:sampleKind];
             
             if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
             {
-                [self.delegate didRecieveUpdatedValueFromCollector:sampleKind];
+                [self.delegate didRecieveUpdatedValuesFromCollector:results];
             }
         }
     }

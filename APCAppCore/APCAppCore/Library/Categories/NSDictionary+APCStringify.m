@@ -47,7 +47,7 @@
                                                                     error:&error];
         
         // Something broke.  Return the provided error, if requested.
-        if (errorToReturn != nil)
+        if (errorToReturn || !jsonData)
         {
             *errorToReturn = error;
         }

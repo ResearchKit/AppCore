@@ -39,9 +39,10 @@
 @property (strong, nonatomic)   HKHealthStore*              healthStore;
 @property (strong, nonatomic)   HKUnit*                     unit;
 @property (strong, nonatomic)   HKSampleType*               sampleType;
-@property (nonatomic)           NSUInteger                  queryLimit;
 
-
-- (instancetype)initWithIdentifier:(NSString*)identifier sampleType:(HKSampleType*)type andLimit:(NSUInteger)queryLimit;
+- (instancetype)initWithIdentifier:(NSString*)identifier
+                        sampleType:(HKSampleType*)type
+                        anchorName:(NSString*)anchorName
+                  launchDateAnchor:(InitialStartDatePredicateDesignator)launchDateAnchor;
 
 @end
