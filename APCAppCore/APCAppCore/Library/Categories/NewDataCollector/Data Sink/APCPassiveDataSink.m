@@ -44,6 +44,7 @@ static NSString *const  kStartDateKey       = @"startDate";
 static NSString *const  kEndDateKey         = @"endDate";
 static NSString *const  kInfoFilename       = @"info.json";
 static NSString *const  kCSVFilename        = @"data.csv";
+static NSString *const  kItemIdentifier     = @"displacement";
 static long long        kKBPerMB            = 1024;
 static long long        kBytesPerKB         = 1024;
 static NSUInteger       kSecsPerMin         = 60;
@@ -371,7 +372,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     NSString*   csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
 
     BOOL success = [APCDataArchiverAndUploader uploadFileAtPath:csvFilePath
-                                             withTaskIdentifier:self.identifier
+                                             withTaskIdentifier:kItemIdentifier
                                                  andTaskRunUuid:nil
                                                  returningError:&error];
     if (!success)
