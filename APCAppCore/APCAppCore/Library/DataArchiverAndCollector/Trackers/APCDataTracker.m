@@ -64,7 +64,7 @@ NSUInteger kDaysPerWeek = 7;
 - (unsigned long long)sizeThreshold
 {
     if (_sizeThreshold == 0) {
-        _sizeThreshold = 1 * kKBPerMB * kBytesPerKB;
+        _sizeThreshold = 50 * kBytesPerKB;
     }
     return _sizeThreshold;
 }
@@ -72,7 +72,7 @@ NSUInteger kDaysPerWeek = 7;
 - (NSTimeInterval)stalenessInterval
 {
     if (_stalenessInterval == 0) {
-        _stalenessInterval = 1 * kDaysPerWeek * kHoursPerDay * kMinsPerHour * kSecsPerMin;
+        _stalenessInterval = 1 * kHoursPerDay * kMinsPerHour * kSecsPerMin;
     }
     return _stalenessInterval;
 }
