@@ -232,9 +232,9 @@ static NSString *const kCSVFilename  = @"data.csv";
         
         unsigned long long filesize = [fileDictionary fileSize];
         BOOL hasReachedFileSizeLimit = (filesize >= tracker.sizeThreshold);
-        BOOL hasReachedstalenessInterval = ([[NSDate date] timeIntervalSinceDate:startDate] >= tracker.stalenessInterval);
+        BOOL hasReachedStalenessInterval = ([[NSDate date] timeIntervalSinceDate:startDate] >= tracker.stalenessInterval);
         
-        if (hasReachedFileSizeLimit || hasReachedstalenessInterval) {
+        if (hasReachedFileSizeLimit || hasReachedStalenessInterval) {
             [self flush:tracker];
         }
     }
