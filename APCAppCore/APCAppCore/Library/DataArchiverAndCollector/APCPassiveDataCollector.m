@@ -162,9 +162,9 @@ static NSString *const kCSVFilename  = @"data.csv";
     
     if (!successfullyMoved) {
         APCLogError2(flushError);
+    } else {
+        [self resetDataFilesForTracker:tracker];
     }
-    
-    [self resetDataFilesForTracker:tracker];
 }
 
 /*********************************************************************************/
@@ -219,31 +219,26 @@ static NSString *const kCSVFilename  = @"data.csv";
 {
     //Check for size
     NSString *csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
-    NSError *error;
-    NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:csvFilePath error:&error];
+    NSError *flushError = nil;
+    NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:csvFilePath error:&flushError];
+    NSDate *startDate = [self datefromDateString:tracker.infoDictionary[kStartDateKey]];
     
     if (!fileDictionary) {
-        APCLogError2(error);
+        APCLogError2(flushError);
     } else {
-        unsigned long long filesize = [fileDictionary fileSize];
-        
-        if (filesize >= tracker.sizeThreshold) {
-            [self flush:tracker];
+        if (!startDate) {
+            startDate = [NSDate date];
         }
-    }
-    
-    //Check for start date
-    NSDictionary *dictionary = tracker.infoDictionary;
-    NSString *startDateString = dictionary[kStartDateKey];
-    NSDate *startDate = [self datefromDateString:startDateString];
-    
-    if (!startDate) {
-        startDate = [NSDate date];
-    }
-    
-    if ([[NSDate date] timeIntervalSinceDate:startDate] >= tracker.stalenessInterval)
-    {
-        [self flush:tracker];
+        
+        unsigned long long filesize = [fileDictionary fileSize];
+        BOOL hasReachedFileSizeLimit = (filesize >= tracker.sizeThreshold);
+        BOOL hasReachedStalenessInterval = ([[NSDate date] timeIntervalSinceDate:startDate] >= tracker.stalenessInterval);
+        
+        if (hasReachedFileSizeLimit || hasReachedStalenessInterval) {
+            if (hasReachedFileSizeLimit || hasReachedStalenessInterval) {
+                [self flush:tracker];
+            }
+        }
     }
 }
 
