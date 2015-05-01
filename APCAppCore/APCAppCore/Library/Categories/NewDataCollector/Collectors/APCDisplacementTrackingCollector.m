@@ -98,10 +98,6 @@
             self.locationManager = [[CLLocationManager alloc] init];
             self.locationManager.delegate = self;
             
-    #warning delete line below. Only being used for testing.
-            //[self.locationManager startUpdatingLocation];
-            [self.locationManager requestAlwaysAuthorization];
-            
             if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES &&
                 [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)
             {

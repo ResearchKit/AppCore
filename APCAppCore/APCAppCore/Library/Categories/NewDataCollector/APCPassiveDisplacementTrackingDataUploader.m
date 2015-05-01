@@ -59,13 +59,24 @@ static  NSString*       kLon                                    = @"lon";
 @end
 
 @implementation APCPassiveDisplacementTrackingDataUploader
-@synthesize baseTrackingLocation = _baseTrackingLocation;
-@synthesize mostRecentUpdatedLocation = _mostRecentUpdatedLocation;
+@synthesize baseTrackingLocation        = _baseTrackingLocation;
+@synthesize mostRecentUpdatedLocation   = _mostRecentUpdatedLocation;
+
 - (NSArray*)locationDictionaryWithLocationManager:(CLLocationManager*)manager
                        distanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
                               andPreviousLocation:(CLLocation*)previousLocation
 {
-    NSString*   timestamp               = manager.location.timestamp.description;
+    NSString*   timestamp               = nil;
+    
+    if (manager.location.timestamp == nil)
+    {
+        timestamp = @"not available";
+    }
+    else
+    {
+        timestamp = manager.location.timestamp.toStringInISO8601Format;
+    }
+    
     NSString*   distance                = [NSString stringWithFormat:@"%f", distanceFromReferencePoint];
     NSString*   unit                    = @"meters"; //Hardcoded as Core Locations uses only meters
     double      direction               = [previousLocation calculateDirectionFromLocation:manager.location];
@@ -73,6 +84,7 @@ static  NSString*       kLon                                    = @"lon";
     
     //  A negative value of manager.location.speed indicates an invalid speed.
     NSString*   speed                   = nil;
+    
     if (manager.location.speed >= 0)
     {
         double pace = manager.location.speed;
