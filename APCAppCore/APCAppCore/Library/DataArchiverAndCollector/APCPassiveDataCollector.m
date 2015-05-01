@@ -220,32 +220,11 @@ static NSString *const kCSVFilename  = @"data.csv";
                                                            compress:YES
                                                           dataBlock:^(NSError** __unused error){ return [NSData dataWithContentsOfFile:infoFilePath];}]];
     
-    [zipArchive updateEntries:zipEntries error:&error];
-    APCLogError2(error);
-    
-    [APCDataArchiver encryptZipFile:unencryptedPath encryptedPath:encryptedPath];
-    APCLogDebug(@"Created zip file: %@", encryptedPath);
-    
-#ifdef USE_DATA_VERIFICATION_CLIENT
-    [APCDataVerificationClient uploadDataFromFileAtPath: unencryptedPath];
-#else
-    NSError * deleteError;
-    if (![[NSFileManager defaultManager] removeItemAtPath:unencryptedPath error:&deleteError]) {
-        APCLogError2(deleteError);
+    if (!successfullyMoved) {
+        APCLogError2(flushError);
+    } else {
+        [self resetDataFilesForTracker:tracker];
     }
-#endif
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:encryptedPath]) {
-        [((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataMonitor uploadZipFile:encryptedPath onCompletion:^(NSError *error) {
-            if (!error) {
-                NSError * deleteError;
-                if (![[NSFileManager defaultManager] removeItemAtPath:encryptedPath error:&deleteError]) {
-                    APCLogError2(deleteError);
-                }
-            }
-        }];
-    }
-
 }
 
 /*********************************************************************************/
@@ -299,40 +278,27 @@ static NSString *const kCSVFilename  = @"data.csv";
 - (void) checkIfDataNeedsToBeFlushed:(APCDataTracker*) tracker
 {
     //Check for size
-    NSString * csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
-    NSError * error;
-    NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:csvFilePath error:&error];
+    NSString *csvFilePath = [tracker.folder stringByAppendingPathComponent:kCSVFilename];
+    NSError *flushError = nil;
+    NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:csvFilePath error:&flushError];
+    NSDate *startDate = [self datefromDateString:tracker.infoDictionary[kStartDateKey]];
     
     if (!fileDictionary) {
-        APCLogError2(error);
+        APCLogError2(flushError);
     } else {
-        unsigned long long filesize = [fileDictionary fileSize];
-        
-        if (filesize >= tracker.sizeThreshold) {
-            [self flush:tracker];
+        if (!startDate) {
+            startDate = [NSDate date];
         }
-    }
-    
-    //Check for start date
-    NSDictionary * dictionary = tracker.infoDictionary;
-    NSString * startDateString = dictionary[kStartDateKey];
-    
-    if (startDateString)
-    {
-        NSDate* startDate = [self datefromDateString:startDateString];
         
-        if (startDate)
-        {
-            if ([[NSDate date] timeIntervalSinceDate:startDate] >= tracker.stalenessInterval)
-            {
+        unsigned long long filesize = [fileDictionary fileSize];
+        BOOL hasReachedFileSizeLimit = (filesize >= tracker.sizeThreshold);
+        BOOL hasReachedStalenessInterval = ([[NSDate date] timeIntervalSinceDate:startDate] >= tracker.stalenessInterval);
+        
+        if (hasReachedFileSizeLimit || hasReachedStalenessInterval) {
+            if (hasReachedFileSizeLimit || hasReachedStalenessInterval) {
                 [self flush:tracker];
             }
-        } else {
-            //  Issues parsing the 'date' string'. Reset data file.
-            [self resetDataFilesForTracker:tracker];
         }
-    } else {
-        [self resetDataFilesForTracker:tracker];
     }
 }
 
