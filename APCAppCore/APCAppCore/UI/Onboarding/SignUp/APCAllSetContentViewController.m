@@ -64,6 +64,11 @@ typedef NS_ENUM(NSUInteger, APCAllSetRows)
     
     [self configureTextBlocks];
     
+    self.demographicUploader = [[APCDemographicUploader alloc] init];
+    [self.demographicUploader uploadNonIdentifiableDemographicData];
+    
+    [(APCAppDelegate *)[UIApplication sharedApplication].delegate configureObserverQueries];
+    
     [self.tableView reloadData];
 }
 
