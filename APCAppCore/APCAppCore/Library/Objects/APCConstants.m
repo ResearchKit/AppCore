@@ -66,7 +66,6 @@ NSString *const APCHealthKitObserverQueryUpdateForSampleTypeNotification = @"APC
 NSString *const kStudyIdentifierKey                 = @"StudyIdentifierKey";
 NSString *const kAppPrefixKey                       = @"AppPrefixKey";
 NSString *const kBridgeEnvironmentKey               = @"BridgeEnvironmentKey";
-NSString *const kNewsFeedTabKey                     = @"NewsFeedTabKey";
 NSString *const kExampleConsentKey                  = @"ExampleConsentKey";
 NSString *const kDatabaseNameKey                    = @"DatabaseNameKey";
 NSString *const kTasksAndSchedulesJSONFileNameKey   = @"TasksAndSchedulesJSONFileNameKey";

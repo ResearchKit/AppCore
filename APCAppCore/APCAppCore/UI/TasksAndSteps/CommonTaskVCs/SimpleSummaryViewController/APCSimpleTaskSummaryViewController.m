@@ -61,7 +61,7 @@
     
     NSNumber *remainingTasks = (completedScheduledTasks < allScheduledTasks) ? @(allScheduledTasks - completedScheduledTasks) : @(0);
     
-    UITabBarItem *activitiesTab = appDelegate.tabBarController.tabBar.selectedItem;
+    UITabBarItem *activitiesTab = appDelegate.tabster.tabBar.selectedItem;
     
     if ([remainingTasks integerValue] != 0) {
         activitiesTab.badgeValue = [remainingTasks stringValue];

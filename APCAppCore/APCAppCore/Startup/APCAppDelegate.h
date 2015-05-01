@@ -45,7 +45,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
 
 @property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
-@property (strong, nonatomic) UITabBarController *tabBarController;
+@property (strong, nonatomic) UITabBarController *tabster;
 
 //APC Related Properties & Methods
 @property (strong, nonatomic) APCDataSubstrate * dataSubstrate;
