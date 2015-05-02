@@ -86,17 +86,14 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
 /*********************************************************************************/
 - (void) updateTasksReminder
 {
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        @synchronized(self)
-        {
-            if (self.reminderOn) {
-                [self createOrUpdateTaskReminder];
-            }
-            else {
-                [self cancelLocalNotificationsIfExist];
-            }
-        }
-    });
+    
+    if (self.reminderOn) {
+        [self createOrUpdateTaskReminder];
+    }
+    else {
+        [self cancelLocalNotificationsIfExist];
+    }
+    
 }
 
 - (NSArray *) existingLocalNotifications {
