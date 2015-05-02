@@ -309,16 +309,14 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
         //default to on if user has given Notification permissions
         if ([[UIApplication sharedApplication] currentUserNotificationSettings].types != UIUserNotificationTypeNone){
             flag = @YES;
-            [[NSUserDefaults standardUserDefaults] setObject:flag forKey:kTasksReminderDefaultsOnOffKey];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+            [self updateReminderOn:flag];
         }
     }
     
     //if Notifications are not enabled, set Reminders to off
     if ([[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone) {
         flag = @NO;
-        [[NSUserDefaults standardUserDefaults] setObject:flag forKey:kTasksReminderDefaultsOnOffKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self updateReminderOn:flag];
     }
     
     return [flag boolValue];
