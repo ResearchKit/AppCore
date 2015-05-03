@@ -183,12 +183,11 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
                 APCLogDebug(@"HK Update received for: %@ - %d", workoutSample.sampleType.identifier, workoutSample.metadata);
             }
-            else
+            else if ([sampleKind isKindOfClass:[HKQuantitySample class]])
             {
                 HKQuantitySample* quantitySample = (HKQuantitySample*)sampleKind;
-                
-                APCLogDebug(@"HK Update received for: %@ - %@", quantitySample.quantityType.identifier, quantitySample.quantity);
 
+                APCLogDebug(@"HK Update received for: %@ - %@", quantitySample.quantityType.identifier, quantitySample.quantity);
             }
             
             if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
