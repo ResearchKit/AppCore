@@ -52,7 +52,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 @property (strong, nonatomic) APCDataMonitor * dataMonitor;
 @property (strong, nonatomic) APCScheduler * scheduler;
 @property (strong, nonatomic) APCTasksReminderManager * tasksReminder;
-@property (nonatomic, strong) APCPassiveDataCollector *passiveHealthKitCollector;
+@property (nonatomic, strong) APCPassiveDataCollector *passiveDataCollector;
 @property (strong, nonatomic) APCProfileViewController * profileViewController;
 @property (nonatomic) BOOL disableSignatureInConsent;
 
