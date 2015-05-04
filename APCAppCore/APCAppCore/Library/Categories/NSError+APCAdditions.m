@@ -31,23 +31,19 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-#import "APCAppCore.h"
+#import "NSError+APCAdditions.h"
+#import "APCLog.h"
 
-static NSString*    kServerBusy                     = @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.";
-static NSString*    kUnexpectConditionMessage       = @"An unexpected network condition has occurred. Please try again soon.";
-static NSString*    kNotConnectedMessage            = @"You are currently not connected to the Internet. Please try again when you are connected to a network.";
-static NSString*    kServerMaintanenceMessage       = @"The study server is currently undergoing maintanence. Please try again soon.";
-static NSString*    kAccountAlreadyExists           = @"An account has already been created for this email address. Please use a different email address, or sign in using the \"already participating\" link at the bottom of the Welcome page.";
-static NSString*    kAccountDoesNotExists           = @"There is no account registered for this email address.";
-static NSString*    kBadEmailAddress                = @"The email address submitted is not a valid email address. Please correct the email address and try again.";
-static NSString*    kBadPasswordAddress             = @"The password you have entered is not a valid password.  Please try again.";
-static NSString*    kNotReachableMessage            = @"We are currently not able to reach the study server. Please retry in a few moments.";
-static NSString*    kInvalidEmailAddressOrPassword  = @"Entered email address or password is not valid. Please correct the email address or password and try again.";
-static NSString*    kSageMessageKey                 = @"message";
-static NSString*    kSageErrorsKey                  = @"errors";
-static NSString*    kSageErrorPasswordKey           = @"password";
-static NSString*    kSageErrorEmailKey              = @"email";
-static NSString*    kSageInvalidUsernameOrPassword  = @"Invalid username or password.";
+NSString * const kServerBusy                     = @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.";
+NSString * const kUnexpectConditionMessage       = @"An unexpected network condition has occurred. Please try again soon.";
+NSString * const kNotConnectedMessage            = @"You are currently not connected to the Internet. Please try again when you are connected to a network.";
+NSString * const kServerMaintanenceMessage       = @"The study server is currently undergoing maintanence. Please try again soon.";
+NSString * const kAccountAlreadyExists           = @"An account has already been created for this email address. Please use a different email address, or sign in using the \"already participating\" link at the bottom of the Welcome page.";
+NSString * const kAccountDoesNotExists           = @"There is no account registered for this email address.";
+NSString * const kBadEmailAddress                = @"The email address submitted is not a valid email address. Please correct the email address and try again.";
+NSString * const kBadPasswordAddress             = @"The password you have entered is not a valid password.  Please try again.";
+NSString * const kNotReachableMessage            = @"We are currently not able to reach the study server. Please retry in a few moments.";
+NSString * const kInvalidEmailAddressOrPassword  = @"Entered email address or password is not valid. Please correct the email address or password and try again.";
 
 static NSString * const oneTab = @"    ";
 
@@ -62,11 +58,6 @@ static NSString * const oneTab = @"    ";
     {
         return NSLocalizedString(@"An unknown error occurred", nil);
     }
-    else
-    {
-        return message;
-    }
-    
     return message;
 }
 
@@ -82,97 +73,23 @@ static NSString * const oneTab = @"    ";
 }
 
 
-- (NSString*)bridgeErrorMessage
+- (NSString *)networkErrorMessage
 {
-    NSString*   message;
-    id          code = self.userInfo[SBB_ORIGINAL_ERROR_KEY];
+    NSString *message;
     
-    if ([code isKindOfClass:[NSError class]])
-    {
-        NSError*    e = (NSError*)code;
-        
-        if (e.code == kCFURLErrorNotConnectedToInternet)
-        {
-            message = NSLocalizedString(kNotConnectedMessage, nil);
-        }
-        else
-        {
-            APCLogError(@"Network error: %@", code);
-        }
-    }
-    else if (self.code == 400)
-    {
-        // There are several messages that need to be displayed within the 400
-        // Extract the internal message then act appropriately.
-        NSDictionary * errors = [code valueForKey: kSageErrorsKey];
-        if([errors valueForKey: kSageErrorEmailKey])
-        {
-            message = NSLocalizedString(kBadEmailAddress, nil);
-        }
-        else if([errors valueForKey: kSageErrorPasswordKey])
-        {
-            message = NSLocalizedString(kBadPasswordAddress, nil);
-        } else
-        {
-            message = NSLocalizedString(kInvalidEmailAddressOrPassword, nil);
-        }
-        
-    }
-    else if (self.code == 409)
-    {
+    if (self.code == 409) {
         message = NSLocalizedString(kAccountAlreadyExists, nil);
     }
-    else if (self.code == 404)
-    {
+    else if (self.code == 404) {
         message = NSLocalizedString(kAccountDoesNotExists, nil);
     }
-    else if ([code isEqual:@(503)] || self.code == 503)
-    {
+    else if (self.code >= 500 && self.code < 600) {
         message = NSLocalizedString(kServerBusy, nil);
     }
-    else if ([code  isEqual: @(kSBBInternetNotConnected)])
-    {
+    else if (self.code == kCFURLErrorDNSLookupFailed || self.code == kCFURLErrorInternationalRoamingOff) {
         message = NSLocalizedString(kNotConnectedMessage, nil);
     }
-    else if ([code isEqual:@(kSBBServerNotReachable)])
-    {
-        message = NSLocalizedString(kNotReachableMessage, nil);
-    }
-    else if ([code isEqual:@(kSBBServerUnderMaintenance)])
-    {
-        message = NSLocalizedString(kServerMaintanenceMessage, nil);
-    }
-    else
-    {
-        message = NSLocalizedString(kUnexpectConditionMessage, nil);
-    }
-
-    return message;
-}
-
-
-- (NSString*)networkErrorMessage
-{
-    NSString*   message;
-    
-    if (self.code == 409)
-    {
-        message = NSLocalizedString(kAccountAlreadyExists, nil);
-    }
-    else if (self.code == 404)
-    {
-        message = NSLocalizedString(kAccountDoesNotExists, nil);
-    }
-    else if (self.code >= 500 && self.code < 600)
-    {
-        message = NSLocalizedString(kServerBusy, nil);
-    }
-    else if (self.code == kCFURLErrorDNSLookupFailed || self.code == kCFURLErrorInternationalRoamingOff)
-    {
-        message = NSLocalizedString(kNotConnectedMessage, nil);
-    }
-    else
-    {
+    else {
         message = NSLocalizedString(kUnexpectConditionMessage, nil);
     }
     
@@ -180,19 +97,20 @@ static NSString * const oneTab = @"    ";
 }
 
 
-- (NSString*)message
+- (NSString *)message
 {
-    NSString*   message = kUnexpectConditionMessage;
+    NSString *message = kUnexpectConditionMessage;
     
-    if ([self.domain isEqualToString:(__bridge  NSString*)kCFErrorDomainCFNetwork])
-    {
+    if ([self.domain isEqualToString:(__bridge  NSString*)kCFErrorDomainCFNetwork]) {
         message = [self networkErrorMessage];
     }
-    else if ([self.domain isEqualToString:SBB_ERROR_DOMAIN])
-    {
-        message = [self bridgeErrorMessage];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+    else if ([self respondsToSelector:@selector(bridgeErrorMessage)]) {
+        message = [self performSelector:@selector(bridgeErrorMessage)];
     }
-    
+#pragma clang diagnostic pop
+	
     return [NSString stringWithFormat:@"\n%@\n\nError code: %@", [self checkMessageForNonUserTerms:message], @(self.code)];
 }
 
@@ -315,41 +233,34 @@ static NSString * const oneTab = @"    ";
 #pragma mark - Friendly printouts
 // ---------------------------------------------------------
 
-- (NSString *) friendlyFormattedString
+- (NSString *)friendlyFormattedString
 {
     return [self friendlyFormattedStringAtLevel: 0];
 }
 
-- (NSString *) friendlyFormattedStringAtLevel: (NSUInteger) tabLevel
+- (NSString *)friendlyFormattedStringAtLevel:(NSUInteger)tabLevel
 {
     NSMutableString *output = [NSMutableString new];
-
     NSString *tab = [@"" stringByPaddingToLength: tabLevel * oneTab.length
                                       withString: oneTab
                                  startingAtIndex: 0];
 
     NSString *tabForNestedObjects = [NSString stringWithFormat: @"\n%@", tab];
-
     NSString *domain = self.domain.length > 0 ? self.domain : @"(none)";
 
     [output appendFormat: @"%@Code: %@\n", tab, @(self.code)];
     [output appendFormat: @"%@Domain: %@\n", tab, domain];
 
-    if (self.userInfo.count > 0)
-    {
-        for (NSString *key in [self.userInfo.allKeys sortedArrayUsingSelector: @selector (compare:)])
-        {
+    if (self.userInfo.count > 0) {
+        for (NSString *key in [self.userInfo.allKeys sortedArrayUsingSelector: @selector (compare:)]) {
             id value = self.userInfo [key];
             NSString *valueString = nil;
 
-            if ([value isKindOfClass: [NSError class]])
-            {
+            if ([value isKindOfClass: [NSError class]]) {
                 valueString = [value friendlyFormattedStringAtLevel: tabLevel + 1];
                 [output appendFormat: @"%@%@:\n%@", tab, key, valueString];
             }
-
-            else
-            {
+            else {
                 valueString = [NSString stringWithFormat: @"%@", value];
                 valueString = [valueString stringByReplacingOccurrencesOfString: @"\\n" withString: @"\n"];
                 valueString = [valueString stringByReplacingOccurrencesOfString: @"\\\"" withString: @"\""];
@@ -359,12 +270,10 @@ static NSString * const oneTab = @"    ";
         }
     }
 
-    if (tabLevel == 0)
-    {
+    if (tabLevel == 0)  {
         [output insertString: @"An error occurred. Available info:\n----- ERROR INFO -----\n" atIndex: 0];
 
-        if ([output characterAtIndex: output.length - 1] != '\n')
-        {
+        if ([output characterAtIndex: output.length - 1] != '\n') {
             [output appendString: @"\n"];
         }
 

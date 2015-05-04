@@ -33,6 +33,17 @@
  
 #import <Foundation/Foundation.h>
 
+FOUNDATION_EXPORT NSString * const kServerBusy;
+FOUNDATION_EXPORT NSString * const kUnexpectConditionMessage;
+FOUNDATION_EXPORT NSString * const kNotConnectedMessage;
+FOUNDATION_EXPORT NSString * const kServerMaintanenceMessage;
+FOUNDATION_EXPORT NSString * const kAccountAlreadyExists;
+FOUNDATION_EXPORT NSString * const kAccountDoesNotExists;
+FOUNDATION_EXPORT NSString * const kBadEmailAddress;
+FOUNDATION_EXPORT NSString * const kBadPasswordAddress;
+FOUNDATION_EXPORT NSString * const kNotReachableMessage;
+FOUNDATION_EXPORT NSString * const kInvalidEmailAddressOrPassword;
+
 @interface NSError (APCAdditions)
 
 /*********************************************************************************/
