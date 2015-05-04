@@ -32,9 +32,15 @@
 // 
  
 #import "APCDataSubstrate+CoreData.h"
-#import "APCAppCore.h"
-#import <CoreData/CoreData.h>
+#import "APCAppDelegate.h"
+#import "APCLog.h"
+
+#import "APCTask+AddOn.h"
+#import "APCSchedule+AddOn.h"
+#import "APCScheduledTask+AddOn.h"
 #import "NSError+APCAdditions.h"
+
+#import <CoreData/CoreData.h>
 
 
 
@@ -47,7 +53,7 @@ static NSString * const kErrorCantCreateDatabase_Suggestion    = (@"We were unab
                                                                   "try again. If the problem recurs, please "
                                                                   "uninstall the app and try once more.");
 
-static NSInteger  const kErrorCantOpenDatabase_Code    = 2;
+static NSInteger  const kErrorCantOpenDatabase_Code            = 2;
 static NSString * const kErrorCantOpenDatabase_Reason          = @"Unable to Open Database";
 static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to open your existing data file. "
                                                                   "Please exit the app and try again. If the "
@@ -58,70 +64,67 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
 
 @implementation APCDataSubstrate (CoreData)
 
-/*********************************************************************************/
-#pragma mark - Core Data Subsystem
-/*********************************************************************************/
 
-- (void) setUpCoreDataStackWithPersistentStorePath: (NSString*) storePath additionalModels:(NSManagedObjectModel *)mergedModels
+
+#pragma mark - Core Data Subsystem
+
+- (void)setUpCoreDataStackWithPersistentStorePath:(NSString *)storePath additionalModels:(NSManagedObjectModel *)mergedModels
 {
     [self loadManagedObjectModel:mergedModels];
     [self initializePersistentStoreCoordinator:storePath];
     [self createManagedObjectContexts];
 }
 
-- (void) loadManagedObjectModel: (NSManagedObjectModel*) mergedModels
+- (void)loadManagedObjectModel:(NSManagedObjectModel *)mergedModels
 {
-    NSBundle* bundle =[NSBundle appleCoreBundle];
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     
-    NSString * modelPath = [bundle pathForResource:@"APCModel" ofType:@"momd"];
+    NSString *modelPath = [bundle pathForResource:@"APCModel" ofType:@"momd"];
     NSAssert(modelPath, @"No Model Path Found!");
     NSURL *modelURL = [NSURL fileURLWithPath:modelPath];
-    NSManagedObjectModel * model = [[[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL] mutableCopy];
+    NSManagedObjectModel *model = [[[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL] mutableCopy];
     if (mergedModels) {
         model = [NSManagedObjectModel modelByMergingModels:@[model, mergedModels]];
     }
     self.managedObjectModel = model;
 }
 
-- (void) initializePersistentStoreCoordinator: (NSString*) storePath
+- (void)initializePersistentStoreCoordinator:(NSString *)storePath
 {
     self.storePath = storePath;
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
     [self setUpPersistentStore];
 }
 
-- (void) setUpPersistentStore
+- (void)setUpPersistentStore
 {
     NSError *errorOpeningOrCreatingCoreDataFile = nil;
-    NSURL   *persistentStoreUrl  = [NSURL fileURLWithPath: self.storePath];
-    BOOL    fileAlreadyExists    = [[NSFileManager defaultManager] fileExistsAtPath: self.storePath];
-
+    NSURL *persistentStoreUrl = [NSURL fileURLWithPath:self.storePath];
+    BOOL fileAlreadyExists = [[NSFileManager defaultManager] fileExistsAtPath:self.storePath];
+    
     NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption : @(YES),
                                NSInferMappingModelAutomaticallyOption       : @(YES)
                                };
-
+    
     NSPersistentStore *persistentStore = [self.persistentStoreCoordinator addPersistentStoreWithType: NSSQLiteStoreType
                                                                                        configuration: nil
                                                                                                  URL: persistentStoreUrl
                                                                                              options: options
                                                                                                error: & errorOpeningOrCreatingCoreDataFile];
-
-    if (persistentStore)
-    {
+    
+    if (persistentStore) {
         // Great!  Everything worked.  (Sound of whistling)
     }
-    else
-    {
+    else {
         /*
          In case we want to switch() on them, the list of possible
          CoreData errors is here:
-
-                https://developer.apple.com/library/ios/documentation/Cocoa/Reference/CoreDataFramework/Miscellaneous/CoreData_Constants/
+         
+         https://developer.apple.com/library/ios/documentation/Cocoa/Reference/CoreDataFramework/Miscellaneous/CoreData_Constants/
          */
         NSError *catastrophe = nil;
-
-        if (fileAlreadyExists)
-        {
+        
+        if (fileAlreadyExists) {
             catastrophe = [NSError errorWithCode: kErrorCantOpenDatabase_Code
                                           domain: kCoreDataErrorDomain
                                    failureReason: kErrorCantOpenDatabase_Reason
@@ -130,8 +133,7 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
                                       relatedURL: persistentStoreUrl
                                      nestedError: errorOpeningOrCreatingCoreDataFile];
         }
-        else
-        {
+        else {
             catastrophe = [NSError errorWithCode: kErrorCantCreateDatabase_Code
                                           domain: kCoreDataErrorDomain
                                    failureReason: kErrorCantCreateDatabase_Reason
@@ -140,10 +142,10 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
                                       relatedURL: persistentStoreUrl
                                      nestedError: errorOpeningOrCreatingCoreDataFile];
         }
-
-        APCLogError2 (catastrophe);
-
-
+        
+        APCLogError2(catastrophe);
+        
+        
         /*
          Report this actually-catastrophic error to the app.
          It'll display it when it gets a chance -- a few
@@ -155,14 +157,14 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
     }
 }
 
-- (void) removeSqliteStore
+- (void)removeSqliteStore
 {
-    NSError* localError;
+    NSError *localError;
     [[NSFileManager defaultManager] removeItemAtPath:self.storePath error:&localError];
-    APCLogError2 (localError);
+    APCLogError2(localError);
 }
 
-- (void) createManagedObjectContexts
+- (void)createManagedObjectContexts
 {
     self.persistentContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     self.persistentContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
@@ -173,18 +175,17 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mergeChangesToMainContext:) name:NSManagedObjectContextDidSaveNotification object:self.persistentContext];
 }
 
-- (void) mergeChangesToMainContext: (NSNotification*) notification
+- (void)mergeChangesToMainContext:(NSNotification*) notification
 {
     [self.mainContext performBlock:^{
         [self.mainContext mergeChangesFromContextDidSaveNotification:notification];
     }];
-
 }
 
-/*********************************************************************************/
+
 #pragma mark - Core Data Public Methods
-/*********************************************************************************/
-- (void)loadStaticTasksAndSchedules: (NSDictionary*) jsonDictionary
+
+- (void)loadStaticTasksAndSchedules:(NSDictionary *)jsonDictionary
 {
     [APCTask createTasksFromJSON:jsonDictionary[@"tasks"] inContext:self.persistentContext];
     [APCSchedule createSchedulesFromJSON:jsonDictionary[@"schedules"] inContext:self.persistentContext];
@@ -205,36 +206,49 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
     [appDelegate loadStaticTasksAndSchedulesIfNecessary];
 }
 
-/*********************************************************************************/
-#pragma mark - Helpers - ONLY RETURNS IN NSManagedObjects in mainContext
-/*********************************************************************************/
 
-- (NSFetchRequest*) requestForScheduledTasksDueFrom:(NSDate *)fromDate toDate:(NSDate *)toDate sortDescriptors: (NSArray*) sortDescriptors
+#pragma mark - Helpers - ONLY RETURNS IN NSManagedObjects in mainContext
+
+- (NSFetchRequest*)requestForScheduledTasksDueFrom:(NSDate *)fromDate toDate:(NSDate *)toDate sortDescriptors:(NSArray *)sortDescriptors
 {
-    NSFetchRequest * request = [APCScheduledTask request];
+    NSFetchRequest *request = [APCScheduledTask request];
     request.predicate = [NSPredicate predicateWithFormat:@"dueOn >= %@ and dueOn < %@", fromDate, toDate];
     request.sortDescriptors = sortDescriptors;
     return request;
 }
 
-- (NSArray *)scheduledTasksDueFrom:(NSDate *)fromDate toDate:(NSDate *)toDate sortDescriptors: (NSArray*) sortDescriptors
+- (NSArray *)scheduledTasksDueFrom:(NSDate *)fromDate toDate:(NSDate *)toDate sortDescriptors:(NSArray *)sortDescriptors
 {
-    NSError* error;
-    return [self.mainContext executeFetchRequest:[self requestForScheduledTasksDueFrom:fromDate toDate:toDate sortDescriptors:sortDescriptors] error:&error];
+    NSError*error;
+    NSArray *res = [self.mainContext executeFetchRequest:[self requestForScheduledTasksDueFrom:fromDate toDate:toDate sortDescriptors:sortDescriptors]
+                                                   error:&error];
+    if (res) {
+        return res;
+    }
+    
+    APCLogError(@"Failed to search for due tasks: %@", error.localizedDescription);
+    return nil;
 }
 
-- (NSFetchRequest*) requestForScheduledTasksForPredicate:(NSPredicate *)predicate sortDescriptors: (NSArray*) sortDescriptors
+- (NSFetchRequest*)requestForScheduledTasksForPredicate:(NSPredicate *)predicate sortDescriptors:(NSArray *)sortDescriptors
 {
-    NSFetchRequest * request = [APCScheduledTask request];
+    NSFetchRequest *request = [APCScheduledTask request];
     request.predicate = predicate;
     request.sortDescriptors = sortDescriptors;
     return request;
 }
 
-- (NSArray *)scheduledTasksForPredicate:(NSPredicate *)predicate sortDescriptors: (NSArray*) sortDescriptors
+- (NSArray *)scheduledTasksForPredicate:(NSPredicate *)predicate sortDescriptors:(NSArray *)sortDescriptors
 {
-    NSError* error;
-    return [self.mainContext executeFetchRequest:[self requestForScheduledTasksForPredicate:predicate sortDescriptors:sortDescriptors] error:&error];
+    NSError *error;
+    NSArray *res = [self.mainContext executeFetchRequest:[self requestForScheduledTasksForPredicate:predicate sortDescriptors:sortDescriptors]
+                                                   error:&error];
+    if (res) {
+        return res;
+    }
+    
+    APCLogError(@"Failed to search for scheduled tasks: %@", error.localizedDescription);
+    return nil;
 }
 
 - (NSUInteger)countOfAllScheduledTasksForToday
@@ -242,7 +256,7 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
     return [APCScheduledTask countOfAllScheduledTasksTodayInContext:self.mainContext];
 }
 
-- (NSUInteger) countOfCompletedScheduledTasksForToday
+- (NSUInteger)countOfCompletedScheduledTasksForToday
 {
     return [APCScheduledTask countOfAllCompletedTasksTodayInContext:self.mainContext];
 }

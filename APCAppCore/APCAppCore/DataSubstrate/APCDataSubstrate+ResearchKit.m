@@ -33,8 +33,8 @@
  
 #import "APCDataSubstrate+ResearchKit.h"
 #import "APCAppCore.h"
-#import <ResearchKit/ResearchKit.h>
 
+#import <ResearchKit/ResearchKit.h>
 #import <CoreMotion/CoreMotion.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
