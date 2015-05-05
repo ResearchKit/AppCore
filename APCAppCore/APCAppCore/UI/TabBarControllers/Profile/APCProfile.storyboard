@@ -160,7 +160,6 @@
                                             <rect key="frame" x="196" y="17" width="110" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="30" id="JVW-p5-bat"/>
-                                                <constraint firstAttribute="width" constant="110" id="hFV-FD-zQg"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" keyboardAppearance="light"/>
@@ -257,16 +256,16 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XjR-k1-ssh" id="R7Y-lH-nIr">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AuT-nK-R7J">
-                                            <rect key="frame" x="20" y="23" width="185" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AuT-nK-R7J">
+                                            <rect key="frame" x="20" y="22" width="185" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="UCw-3X-AVs"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hhu-Za-IMS">
-                                            <rect key="frame" x="257" y="17" width="51" height="31"/>
+                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hhu-Za-IMS">
+                                            <rect key="frame" x="257" y="16" width="51" height="31"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="31" id="Ae4-Zm-QqF"/>
                                                 <constraint firstAttribute="width" constant="49" id="rYb-0R-hf7"/>
