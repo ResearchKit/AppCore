@@ -32,6 +32,9 @@
 // 
  
 #import "APCGenericSurveyTaskViewController.h"
+#import "APCScheduledTask.h"
+#import "APCLog.h"
+#import "APCTask+AddOn.h"
 
 @implementation APCGenericSurveyTaskViewController
 

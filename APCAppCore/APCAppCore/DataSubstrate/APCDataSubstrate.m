@@ -35,7 +35,9 @@
 #import "APCDataSubstrate+ResearchKit.h"
 #import "APCDataSubstrate+CoreData.h"
 #import "APCDataSubstrate+HealthKit.h"
+#import "APCConstants.h"
 #import "APCModel.h"
+#import "NSDate+Helper.h"
 
 static int dateCheckTimeInterval = 60;
 

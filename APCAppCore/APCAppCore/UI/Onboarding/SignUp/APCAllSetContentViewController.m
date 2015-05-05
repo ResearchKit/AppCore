@@ -34,6 +34,7 @@
 #import "APCAllSetContentViewController.h"
 #import "APCAppCore.h"
 #import "APCAllSetTableViewCell.h"
+#import "APCDemographicUploader.h"
 
 static NSString *kAllSetCellIdentifier = @"AllSetCell";
 
