@@ -1,8 +1,8 @@
 //
 //  NSError+Bridge.m
-//  AppCore
+//  APCAppCore
 //
-//  Copyright (c) 2015 Apple. All rights reserved.
+// Copyright (c) 2015, Apple Inc. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
@@ -34,11 +34,11 @@
 #import "NSError+Bridge.h"
 #import <BridgeSDK/BridgeSDK.h>
 
-static NSString*    kSageMessageKey                 = @"message";
-static NSString*    kSageErrorsKey                  = @"errors";
-static NSString*    kSageErrorPasswordKey           = @"password";
-static NSString*    kSageErrorEmailKey              = @"email";
-static NSString*    kSageInvalidUsernameOrPassword  = @"Invalid username or password.";
+static NSString *kSageMessageKey                 = @"message";
+static NSString *kSageErrorsKey                  = @"errors";
+static NSString *kSageErrorPasswordKey           = @"password";
+static NSString *kSageErrorEmailKey              = @"email";
+static NSString *kSageInvalidUsernameOrPassword  = @"Invalid username or password.";
 
 
 @implementation NSError (Bridge)
@@ -59,7 +59,7 @@ static NSString*    kSageInvalidUsernameOrPassword  = @"Invalid username or pass
 		
 		if (e.code == kCFURLErrorNotConnectedToInternet)
 		{
-			message = NSLocalizedString(kNotConnectedMessage, nil);
+			message = NSLocalizedString(kAPCNotConnectedErrorMessage, nil);
 		}
 		else
 		{
@@ -73,44 +73,44 @@ static NSString*    kSageInvalidUsernameOrPassword  = @"Invalid username or pass
 		NSDictionary * errors = [code valueForKey: kSageErrorsKey];
 		if([errors valueForKey: kSageErrorEmailKey])
 		{
-			message = NSLocalizedString(kBadEmailAddress, nil);
+			message = NSLocalizedString(kAPCBadEmailAddressErrorMessage, nil);
 		}
 		else if([errors valueForKey: kSageErrorPasswordKey])
 		{
-			message = NSLocalizedString(kBadPasswordAddress, nil);
+			message = NSLocalizedString(kAPCBadPasswordErrorMessage, nil);
 		} else
 		{
-			message = NSLocalizedString(kInvalidEmailAddressOrPassword, nil);
+			message = NSLocalizedString(kAPCInvalidEmailAddressOrPasswordErrorMessage, nil);
 		}
 		
 	}
 	else if (self.code == 409)
 	{
-		message = NSLocalizedString(kAccountAlreadyExists, nil);
+		message = NSLocalizedString(kAPCAccountAlreadyExistsErrorMessage, nil);
 	}
 	else if (self.code == 404)
 	{
-		message = NSLocalizedString(kAccountDoesNotExists, nil);
+		message = NSLocalizedString(kAPCAccountDoesNotExistErrorMessage, nil);
 	}
 	else if ([code isEqual:@(503)] || self.code == 503)
 	{
-		message = NSLocalizedString(kServerBusy, nil);
+		message = NSLocalizedString(kAPCServerBusyErrorMessage, nil);
 	}
 	else if ([code  isEqual: @(kSBBInternetNotConnected)])
 	{
-		message = NSLocalizedString(kNotConnectedMessage, nil);
+		message = NSLocalizedString(kAPCNotConnectedErrorMessage, nil);
 	}
 	else if ([code isEqual:@(kSBBServerNotReachable)])
 	{
-		message = NSLocalizedString(kNotReachableMessage, nil);
+		message = NSLocalizedString(kAPCNotReachableErrorMessage, nil);
 	}
 	else if ([code isEqual:@(kSBBServerUnderMaintenance)])
 	{
-		message = NSLocalizedString(kServerMaintanenceMessage, nil);
+		message = NSLocalizedString(kAPCServerUnderMaintanenceErrorMessage, nil);
 	}
 	else
 	{
-		message = NSLocalizedString(kUnexpectConditionMessage, nil);
+		message = NSLocalizedString(kAPCUnexpectedConditionErrorMessage, nil);
 	}
 	
 	return message;

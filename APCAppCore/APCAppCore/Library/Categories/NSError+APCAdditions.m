@@ -34,16 +34,16 @@
 #import "NSError+APCAdditions.h"
 #import "APCLog.h"
 
-NSString * const kServerBusy                     = @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.";
-NSString * const kUnexpectConditionMessage       = @"An unexpected network condition has occurred. Please try again soon.";
-NSString * const kNotConnectedMessage            = @"You are currently not connected to the Internet. Please try again when you are connected to a network.";
-NSString * const kServerMaintanenceMessage       = @"The study server is currently undergoing maintanence. Please try again soon.";
-NSString * const kAccountAlreadyExists           = @"An account has already been created for this email address. Please use a different email address, or sign in using the \"already participating\" link at the bottom of the Welcome page.";
-NSString * const kAccountDoesNotExists           = @"There is no account registered for this email address.";
-NSString * const kBadEmailAddress                = @"The email address submitted is not a valid email address. Please correct the email address and try again.";
-NSString * const kBadPasswordAddress             = @"The password you have entered is not a valid password.  Please try again.";
-NSString * const kNotReachableMessage            = @"We are currently not able to reach the study server. Please retry in a few moments.";
-NSString * const kInvalidEmailAddressOrPassword  = @"Entered email address or password is not valid. Please correct the email address or password and try again.";
+NSString * const kAPCServerBusyErrorMessage                     = @"Thank you for your interest in this study. We are working hard to process the large volume of interest, and should be back up momentarily. Please try again soon.";
+NSString * const kAPCUnexpectedConditionErrorMessage            = @"An unexpected network condition has occurred. Please try again soon.";
+NSString * const kAPCNotConnectedErrorMessage                   = @"You are currently not connected to the Internet. Please try again when you are connected to a network.";
+NSString * const kAPCServerUnderMaintanenceErrorMessage         = @"The study server is currently undergoing maintanence. Please try again soon.";
+NSString * const kAPCAccountAlreadyExistsErrorMessage           = @"An account has already been created for this email address. Please use a different email address, or sign in using the \"already participating\" link at the bottom of the Welcome page.";
+NSString * const kAPCAccountDoesNotExistErrorMessage            = @"There is no account registered for this email address.";
+NSString * const kAPCBadEmailAddressErrorMessage                = @"The email address submitted is not a valid email address. Please correct the email address and try again.";
+NSString * const kAPCBadPasswordErrorMessage                    = @"The password you have entered is not a valid password.  Please try again.";
+NSString * const kAPCNotReachableErrorMessage                   = @"We are currently not able to reach the study server. Please retry in a few moments.";
+NSString * const kAPCInvalidEmailAddressOrPasswordErrorMessage  = @"Entered email address or password is not valid. Please correct the email address or password and try again.";
 
 static NSString * const oneTab = @"    ";
 
@@ -78,19 +78,19 @@ static NSString * const oneTab = @"    ";
     NSString *message;
     
     if (self.code == 409) {
-        message = NSLocalizedString(kAccountAlreadyExists, nil);
+        message = NSLocalizedString(kAPCAccountAlreadyExistsErrorMessage, nil);
     }
     else if (self.code == 404) {
-        message = NSLocalizedString(kAccountDoesNotExists, nil);
+        message = NSLocalizedString(kAPCAccountDoesNotExistErrorMessage, nil);
     }
     else if (self.code >= 500 && self.code < 600) {
-        message = NSLocalizedString(kServerBusy, nil);
+        message = NSLocalizedString(kAPCServerBusyErrorMessage, nil);
     }
     else if (self.code == kCFURLErrorDNSLookupFailed || self.code == kCFURLErrorInternationalRoamingOff) {
-        message = NSLocalizedString(kNotConnectedMessage, nil);
+        message = NSLocalizedString(kAPCNotConnectedErrorMessage, nil);
     }
     else {
-        message = NSLocalizedString(kUnexpectConditionMessage, nil);
+        message = NSLocalizedString(kAPCUnexpectedConditionErrorMessage, nil);
     }
     
     return message;
@@ -99,7 +99,7 @@ static NSString * const oneTab = @"    ";
 
 - (NSString *)message
 {
-    NSString *message = kUnexpectConditionMessage;
+    NSString *message = kAPCUnexpectedConditionErrorMessage;
     
     if ([self.domain isEqualToString:(__bridge  NSString*)kCFErrorDomainCFNetwork]) {
         message = [self networkErrorMessage];
