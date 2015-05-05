@@ -271,7 +271,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
  ------------------------- */
 #import <APCAppCore/APCTableViewItem.h>
 #import <APCAppCore/APCGroupedScheduledTask.h>
-#import <APCAppCore/APCKeychainStore.h>
+#import <APCAppCore/APCKeychainStore+Passcode.h>
 #import <APCAppCore/APCPresentAnimator.h>
 #import <APCAppCore/APCFadeAnimator.h>
 #import <APCAppCore/APCScoring.h>
