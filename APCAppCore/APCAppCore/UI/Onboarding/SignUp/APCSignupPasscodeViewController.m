@@ -31,17 +31,23 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-#import "APCUser.h"
-#import "APCPasscodeView.h"
-#import "UIAlertController+Helper.h"
 #import "APCSignupPasscodeViewController.h"
 #import "APCSignUpPermissionsViewController.h"
 #import "APCAppDelegate.h"
+#import "APCDataSubstrate.h"
+#import "APCConstants.h"
+#import "APCUser.h"
+#import "APCLog.h"
+
+#import "APCPasscodeView.h"
+#import "APCCustomBackButton.h"
+#import "APCStepProgressBar.h"
+
+#import "UIView+Helper.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
-#import "APCKeychainStore.h"
-#import "UIView+Helper.h"
-#import "APCAppCore.h"
+#import "UIAlertController+Helper.h"
+#import "APCKeychainStore+Passcode.h"
 
 @import LocalAuthentication;
 
@@ -64,7 +70,8 @@
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     self.titleLabel.text = NSLocalizedString(@"Select a 4-digit passcode. Setting up a passcode will help provide quick and secure access to this application.", @"");
@@ -76,19 +83,21 @@
     [self setupNavAppearance];
 }
 
-- (void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
     
     [self showFirstTry];
 }
 
-- (void) viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated
+{
     [super viewDidAppear:animated];
     
     [self.stepProgressBar setCompletedSteps:([self onboarding].onboardingTask.currentStepNumber - 1) animation:YES];
     
     [self.passcodeView becomeFirstResponder];
-  APCLogViewControllerAppeared();
+    APCLogViewControllerAppeared();
 }
 
 #pragma mark - Setup
@@ -106,7 +115,8 @@
 
 }
 
-- (APCUser *) user {
+- (APCUser *)user
+{
     if (!_user) {
         _user = ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
     }
@@ -120,7 +130,8 @@
 
 #pragma mark - APCPasscodeViewDelegate
 
-- (void) passcodeViewDidFinish:(APCPasscodeView *)passcodeView withCode:(NSString *) __unused code {
+- (void)passcodeViewDidFinish:(APCPasscodeView *)passcodeView withCode:(NSString *) __unused code
+{
     if (passcodeView == self.passcodeView) {
         [self showRetry];
     }
@@ -147,10 +158,9 @@
         UIViewController *viewController = [[self onboarding] nextScene];
         [self.navigationController pushViewController:viewController animated:YES];
     }
-    
 }
 
-- (void) showFirstTry
+- (void)showFirstTry
 {
     self.passcodeView.hidden = NO;
     self.retryPasscodeView.hidden = YES;
@@ -161,7 +171,7 @@
     [self.passcodeView reset];
 }
 
-- (void) showRetry
+- (void)showRetry
 {
     self.passcodeView.hidden = YES;
     self.retryPasscodeView.hidden = NO;
@@ -185,8 +195,10 @@
 
 - (void)savePasscode
 {
-    [APCKeychainStore setString:self.retryPasscodeView.code forKey:kAPCPasscodeKey];
-    [self next];
+    if (self.retryPasscodeView.code) {
+        [APCKeychainStore setPasscode:self.retryPasscodeView.code];
+    }
+    [self next:nil];
 }
 
 #pragma mark - Selectors
@@ -198,13 +210,14 @@
     if ([self onboarding].taskType == kAPCOnboardingTaskTypeSignIn) {
         // We are posting this notification after .4 seconds delay, because we need to display the progress bar completion animation
         [self performSelector:@selector(setUserSignedIn) withObject:nil afterDelay:0.4];
-    } else{
+    }
+	else {
         [self performSelector:@selector(setUserSignedUp) withObject:nil afterDelay:0.4];
     }
     
 }
 
-- (void) setUserSignedUp
+- (void)setUserSignedUp
 {
     self.user.signedUp = YES;
 }
