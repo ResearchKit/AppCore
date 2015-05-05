@@ -143,9 +143,9 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
 
 - (void)savePasscode
 {
-	if (self.passcode) {
-		[APCKeychainStore setPasscode:self.passcode];
-	}
+    if (self.passcode) {
+        [APCKeychainStore setPasscode:self.passcode];
+    }
     self.passcode = @"";
 }
 
