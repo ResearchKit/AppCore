@@ -45,6 +45,7 @@
 #import "APCTableViewItem.h"
 #import "APCAppDelegate.h"				// should be removed
 #import "APCUserInfoConstants.h"
+#import "APCDataSubstrate.h"
 #import "APCConstants.h"
 #import "APCUtilities.h"
 #import "APCLog.h"
@@ -60,7 +61,7 @@
 #import "APCUser+UserData.h"
 #import "UIAlertController+Helper.h"
 
-@import ResearchKit;
+#import <ResearchKit/ResearchKit.h>
 
 static CGFloat const kSectionHeaderHeight = 40.f;
 static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
