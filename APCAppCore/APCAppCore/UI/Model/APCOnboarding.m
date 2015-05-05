@@ -63,7 +63,8 @@ static NSString * const kOnboardingStoryboardName = @"APCOnboarding";
         _taskType = taskType;
         
         if (taskType == kAPCOnboardingTaskTypeSignIn) {
-            _onboardingTask = [APCSignInTask new];
+            _onboardingTask = [APCSignInTask
+                               new];
         } else {
             _onboardingTask = [APCSignUpTask new];
         }

@@ -88,6 +88,7 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
         [self setUpHealthKit];
         [self setupParameters];
         [self setupNotifications];
+        [self setupNewsFeedManager];
     }
     return self;
 }
@@ -114,6 +115,11 @@ static NSString * const kErrorCantOpenDatabase_Suggestion      = (@"Unable to op
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instantiateTimer:) name:UIApplicationDidFinishLaunchingNotification object:nil];
 }
 
+- (void)setupNewsFeedManager
+{
+    _newsFeedManager = [[APCNewsFeedManager alloc] init];
+    [_newsFeedManager fetchFeedWithCompletion:nil];
+}
 
 #pragma mark - HealthKit
 
