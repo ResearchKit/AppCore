@@ -39,6 +39,7 @@
 #import "APCConsentTextChoiceQuestion.h"
 #import "APCConsentRedirector.h"
 #import "APCAppDelegate.h"
+#import <BridgeSDK/BridgeSDK.h>
 
 
 static NSString*    kDocumentHtmlTag                    = @"htmlDocument";

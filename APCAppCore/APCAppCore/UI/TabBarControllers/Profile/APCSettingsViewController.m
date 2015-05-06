@@ -33,9 +33,15 @@
  
 #import "APCSettingsViewController.h"
 #import "APCChangePasscodeViewController.h"
+#import "APCTasksReminderManager.h"
+#import "APCCustomBackButton.h"
+#import "APCTaskReminder.h"
 #import "APCAppDelegate.h"
+#import "APCLog.h"
+
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
+#import "NSBundle+Helper.h"
 
 
 static NSString * const kAPCBasicTableViewCellIdentifier = @"APCBasicTableViewCell";
@@ -60,7 +66,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-  APCLogViewControllerAppeared();
+    APCLogViewControllerAppeared();
 }
 
 - (void)prepareContent

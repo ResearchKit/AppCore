@@ -33,6 +33,8 @@
  
 #import "APCSchedule+AddOn.h"
 #import "APCModel.h"
+#import "APCLog.h"
+#import "NSDate+Helper.h"
 
 static NSString * const kScheduleShouldRemindKey = @"shouldRemind";
 static NSString * const kScheduleReminderOffsetKey = @"reminderOffset";

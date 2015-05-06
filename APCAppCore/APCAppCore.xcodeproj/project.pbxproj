@@ -322,7 +322,7 @@
 		CFFDEDFA1A95734000B25581 /* APCSetupTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CFFDEDC01A95734000B25581 /* APCSetupTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFFDEDFB1A95734000B25581 /* APCSetupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFDEDC11A95734000B25581 /* APCSetupTableViewCell.m */; };
 		CFFDEDFC1A95734000B25581 /* APCSetupTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFFDEDC21A95734000B25581 /* APCSetupTableViewCell.xib */; };
-		EE028FE31AF94B36001C8251 /* APCKeychainStore+Passcode.h in Headers */ = {isa = PBXBuildFile; fileRef = EE028FE11AF94B36001C8251 /* APCKeychainStore+Passcode.h */; };
+		EE028FE31AF94B36001C8251 /* APCKeychainStore+Passcode.h in Headers */ = {isa = PBXBuildFile; fileRef = EE028FE11AF94B36001C8251 /* APCKeychainStore+Passcode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EE028FE41AF94B36001C8251 /* APCKeychainStore+Passcode.m in Sources */ = {isa = PBXBuildFile; fileRef = EE028FE21AF94B36001C8251 /* APCKeychainStore+Passcode.m */; };
 		EE4B95251AF82BA6000097C7 /* NSError+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = EE4B95231AF82BA6000097C7 /* NSError+Bridge.h */; };
 		EE4B95261AF82BA6000097C7 /* NSError+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4B95241AF82BA6000097C7 /* NSError+Bridge.m */; };
