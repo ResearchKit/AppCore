@@ -322,8 +322,8 @@
 		CFFDEDFA1A95734000B25581 /* APCSetupTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = CFFDEDC01A95734000B25581 /* APCSetupTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFFDEDFB1A95734000B25581 /* APCSetupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFDEDC11A95734000B25581 /* APCSetupTableViewCell.m */; };
 		CFFDEDFC1A95734000B25581 /* APCSetupTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFFDEDC21A95734000B25581 /* APCSetupTableViewCell.xib */; };
-		EE2258261AF90F52007FA51E /* APCProfileViewController+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = EE2258241AF90F52007FA51E /* APCProfileViewController+Bridge.h */; };
-		EE2258271AF90F52007FA51E /* APCProfileViewController+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EE2258251AF90F52007FA51E /* APCProfileViewController+Bridge.m */; };
+		EE028FE31AF94B36001C8251 /* APCKeychainStore+Passcode.h in Headers */ = {isa = PBXBuildFile; fileRef = EE028FE11AF94B36001C8251 /* APCKeychainStore+Passcode.h */; };
+		EE028FE41AF94B36001C8251 /* APCKeychainStore+Passcode.m in Sources */ = {isa = PBXBuildFile; fileRef = EE028FE21AF94B36001C8251 /* APCKeychainStore+Passcode.m */; };
 		F50738C01A682E12004CF100 /* APCDateRange.h in Headers */ = {isa = PBXBuildFile; fileRef = F50738BE1A682E12004CF100 /* APCDateRange.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F50738C11A682E12004CF100 /* APCDateRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F50738BF1A682E12004CF100 /* APCDateRange.m */; };
 		F5306CCD1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5306CCB1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1007,8 +1007,8 @@
 		CFFDEDC01A95734000B25581 /* APCSetupTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCSetupTableViewCell.h; sourceTree = "<group>"; };
 		CFFDEDC11A95734000B25581 /* APCSetupTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSetupTableViewCell.m; sourceTree = "<group>"; };
 		CFFDEDC21A95734000B25581 /* APCSetupTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APCSetupTableViewCell.xib; sourceTree = "<group>"; };
-		EE2258241AF90F52007FA51E /* APCProfileViewController+Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCProfileViewController+Bridge.h"; sourceTree = "<group>"; };
-		EE2258251AF90F52007FA51E /* APCProfileViewController+Bridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCProfileViewController+Bridge.m"; sourceTree = "<group>"; };
+		EE028FE11AF94B36001C8251 /* APCKeychainStore+Passcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCKeychainStore+Passcode.h"; sourceTree = "<group>"; };
+		EE028FE21AF94B36001C8251 /* APCKeychainStore+Passcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCKeychainStore+Passcode.m"; sourceTree = "<group>"; };
 		F50738BE1A682E12004CF100 /* APCDateRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDateRange.h; sourceTree = "<group>"; };
 		F50738BF1A682E12004CF100 /* APCDateRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDateRange.m; sourceTree = "<group>"; };
 		F5179B2919D09128001DCCB7 /* APCAppCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APCAppCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2257,6 +2257,8 @@
 				087255BF1ABA390500586492 /* APCJSONSerializer.m */,
 				F5B947751A73272C0034C522 /* APCKeychainStore.h */,
 				F5B947761A73272C0034C522 /* APCKeychainStore.m */,
+				EE028FE11AF94B36001C8251 /* APCKeychainStore+Passcode.h */,
+				EE028FE21AF94B36001C8251 /* APCKeychainStore+Passcode.m */,
 				F5B947771A73272C0034C522 /* APCSegmentedButton.h */,
 				F5B947781A73272C0034C522 /* APCSegmentedButton.m */,
 				F5B947791A73272C0034C522 /* APCTasksReminderManager.h */,
@@ -2674,8 +2676,6 @@
 				F5F1298B1A2F78490015982C /* APCProfile.storyboard */,
 				F5F1298C1A2F78490015982C /* APCProfileViewController.h */,
 				F5F1298D1A2F78490015982C /* APCProfileViewController.m */,
-				EE2258241AF90F52007FA51E /* APCProfileViewController+Bridge.h */,
-				EE2258251AF90F52007FA51E /* APCProfileViewController+Bridge.m */,
 				F5F1298E1A2F78490015982C /* APCSettingsViewController.h */,
 				F5F1298F1A2F78490015982C /* APCSettingsViewController.m */,
 				F5F129901A2F78490015982C /* APCWithdrawCompleteViewController.h */,
@@ -3001,12 +3001,12 @@
 				A7CFE4B71A8B05F4009A171C /* APCStudyOverviewCollectionViewController.h in Headers */,
 				F5F12A931A2F78490015982C /* APCStudyDetailsViewController.h in Headers */,
 				F5F12AEC1A2F78490015982C /* APCDashboardMessageTableViewCell.h in Headers */,
+				EE028FE31AF94B36001C8251 /* APCKeychainStore+Passcode.h in Headers */,
 				F5B947B11A73272C0034C522 /* UIFont+APCAppearance.h in Headers */,
 				369E28171A96B7A200D35DFA /* APCMedTrackerPrescriptionColor+Helper.h in Headers */,
 				F5F12A731A2F78490015982C /* APCConfirmationView.h in Headers */,
 				F5B947FC1A73272C0034C522 /* APCPermissionsManager.h in Headers */,
 				F5F12ACA1A2F78490015982C /* APCProfileViewController.h in Headers */,
-				EE2258261AF90F52007FA51E /* APCProfileViewController+Bridge.h in Headers */,
 				F5B947E71A73272C0034C522 /* APCSegmentedButton.h in Headers */,
 				F5B947C71A73272C0034C522 /* NSObject+Helper.h in Headers */,
 				747307101A96E1DE0071D863 /* APCCMS.h in Headers */,
@@ -3537,7 +3537,6 @@
 				369E27F41A96B7A200D35DFA /* APCMedicationLozenge.m in Sources */,
 				7BF54F981AA158E50081C935 /* APCHorizontalBottomThinLineView.m in Sources */,
 				369E27FB1A96B7A200D35DFA /* APCMedicationUltraSimpleSelfInflator.m in Sources */,
-				EE2258271AF90F52007FA51E /* APCProfileViewController+Bridge.m in Sources */,
 				F5F12ABB1A2F78490015982C /* APCActivitiesViewController.m in Sources */,
 				5BB10C141A91F970002D2DD2 /* APCWebViewController.m in Sources */,
 				F5B948011A73272C0034C522 /* APCDayOfMonthSelector.m in Sources */,
@@ -3572,6 +3571,7 @@
 				F5F129F71A2F78490015982C /* APCResult+Bridge.m in Sources */,
 				36B7D2561A8D848D0043F968 /* ORKAnswerFormat+Helper.m in Sources */,
 				08970F131A8D407600EA46C3 /* APCFoodInsight.m in Sources */,
+				EE028FE41AF94B36001C8251 /* APCKeychainStore+Passcode.m in Sources */,
 				712AB44F1A9E692400556DA2 /* APCMotionHistoryReporter.m in Sources */,
 				F5B947B61A73272C0034C522 /* APCDeviceHardware+APCHelper.m in Sources */,
 				369E280D1A96B7A200D35DFA /* APCMedTrackerPrescription+Helper.m in Sources */,

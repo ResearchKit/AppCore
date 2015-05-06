@@ -35,12 +35,13 @@
 #import <LocalAuthentication/LocalAuthentication.h>
 #import "UIAlertController+Helper.h"
 #import "APCPasscodeView.h"
+#import "APCLog.h"
+
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
-#import "APCKeychainStore.h"
+#import "APCKeychainStore+Passcode.h"
 #import "APCUserInfoConstants.h"
 #import "UIImage+APCHelper.h"
-#import "APCLog.h"
 
 @interface APCPasscodeViewController ()<APCPasscodeViewDelegate>
 
@@ -127,7 +128,7 @@
 - (void) passcodeViewDidFinish:(APCPasscodeView *) __unused passcodeView withCode:(NSString *) __unused code {
 
     if (self.passcodeView.code.length > 0) {
-        if ([self.passcodeView.code isEqualToString:[APCKeychainStore stringForKey:kAPCPasscodeKey]]) {
+        if ([self.passcodeView.code isEqualToString:[APCKeychainStore passcode]]) {
             //Authenticate
             if ([self.delegate respondsToSelector:@selector(passcodeViewControllerDidSucceed:)]) {
                 [self.delegate passcodeViewControllerDidSucceed:self];

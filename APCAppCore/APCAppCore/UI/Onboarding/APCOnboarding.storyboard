@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -264,38 +264,54 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You are eligible to join the study." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jjP-Xm-7aC">
-                                <rect key="frame" x="16" y="235" width="288" height="32"/>
+                                <rect key="frame" x="16" y="245" width="288" height="23"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="4IS-lK-iaZ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="19"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="4IS-lK-iaZ"/>
+                                    </mask>
+                                </variation>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6YN-e1-J5I">
-                                <rect key="frame" x="138" y="182" width="45" height="45"/>
+                                <rect key="frame" x="138" y="175" width="45" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="ONf-7w-P58"/>
                                     <constraint firstAttribute="width" constant="45" id="Sxt-dz-Rhq"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap the button below to begin the consent process" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pqL-2G-mFb">
-                                <rect key="frame" x="40" y="275" width="240" height="56"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Tap the button below to begin the consent process" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pqL-2G-mFb">
+                                <rect key="frame" x="29" y="284" width="262" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="49U-RX-P5n"/>
-                                    <constraint firstAttribute="width" constant="240" id="XVy-A2-AO6"/>
+                                    <constraint firstAttribute="width" constant="262" id="m5v-G5-YSp"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="49U-RX-P5n"/>
+                                    </mask>
+                                </variation>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="InD-hO-v4g" customClass="APCButton">
                                 <rect key="frame" x="87" y="504" width="146" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="146" id="ZIq-PT-1LV"/>
                                     <constraint firstAttribute="height" constant="44" id="ayg-O0-ubw"/>
+                                    <constraint firstAttribute="width" constant="146" id="ido-lY-u5I"/>
                                 </constraints>
                                 <state key="normal" title="Start Consent"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="ZIq-PT-1LV"/>
+                                    </mask>
+                                </variation>
                                 <connections>
                                     <action selector="startConsentTapped:" destination="q2J-zJ-Y2u" eventType="touchUpInside" id="8W8-2Z-sZX"/>
                                 </connections>
@@ -303,19 +319,27 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="centerY" secondItem="pqL-2G-mFb" secondAttribute="centerY" constant="-19" id="06L-ww-qt5"/>
                             <constraint firstItem="x4r-Xw-i7I" firstAttribute="top" secondItem="InD-hO-v4g" secondAttribute="bottom" constant="20" id="8mM-KK-wHL"/>
                             <constraint firstAttribute="centerX" secondItem="InD-hO-v4g" secondAttribute="centerX" id="AOy-cg-Fix"/>
                             <constraint firstAttribute="centerX" secondItem="jjP-Xm-7aC" secondAttribute="centerX" id="Oue-qY-k4b"/>
                             <constraint firstAttribute="centerX" secondItem="pqL-2G-mFb" secondAttribute="centerX" id="Pea-cE-n8z"/>
-                            <constraint firstAttribute="centerY" secondItem="6YN-e1-J5I" secondAttribute="centerY" constant="79.5" id="V8b-hT-fzx"/>
-                            <constraint firstItem="InD-hO-v4g" firstAttribute="leading" secondItem="VjJ-rO-nAA" secondAttribute="leading" constant="87" id="WB3-Pj-6GI"/>
+                            <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="pqL-2G-mFb" secondAttribute="trailing" id="dCZ-2a-HJH"/>
                             <constraint firstAttribute="centerX" secondItem="6YN-e1-J5I" secondAttribute="centerX" constant="-0.5" id="ddy-Sx-d07"/>
                             <constraint firstItem="jjP-Xm-7aC" firstAttribute="trailing" secondItem="VjJ-rO-nAA" secondAttribute="trailingMargin" id="dhm-Kl-DM1"/>
+                            <constraint firstItem="pqL-2G-mFb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="VjJ-rO-nAA" secondAttribute="leadingMargin" id="iEg-zq-8Cb"/>
                             <constraint firstAttribute="trailing" secondItem="InD-hO-v4g" secondAttribute="trailing" constant="87" id="u2c-ac-1KQ"/>
-                            <constraint firstAttribute="centerY" secondItem="jjP-Xm-7aC" secondAttribute="centerY" constant="33" id="vUh-Op-4nS"/>
                             <constraint firstItem="jjP-Xm-7aC" firstAttribute="leading" secondItem="VjJ-rO-nAA" secondAttribute="leadingMargin" id="xSA-Yp-mxA"/>
+                            <constraint firstAttribute="centerY" secondItem="jjP-Xm-7aC" secondAttribute="centerY" constant="28" id="xjc-o0-ulp"/>
+                            <constraint firstItem="pqL-2G-mFb" firstAttribute="top" secondItem="jjP-Xm-7aC" secondAttribute="bottom" constant="16" id="zUH-qH-f4H"/>
+                            <constraint firstItem="jjP-Xm-7aC" firstAttribute="top" secondItem="6YN-e1-J5I" secondAttribute="bottom" constant="25" id="zxI-WT-6xq"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="dCZ-2a-HJH"/>
+                                <exclude reference="iEg-zq-8Cb"/>
+                                <exclude reference="u2c-ac-1KQ"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="Eligibility" id="M0R-Kr-X77"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
@@ -342,15 +366,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unfortunately, you are ineligible to join this study." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OEh-rs-UeO">
-                                <rect key="frame" x="16" y="247" width="288" height="74"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Unfortunately, you are ineligible to join this study." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OEh-rs-UeO">
+                                <rect key="frame" x="16" y="264" width="288" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="74" id="42L-03-3sC"/>
-                                    <constraint firstAttribute="width" constant="288" id="jiD-CI-9EP"/>
+                                    <constraint firstAttribute="width" constant="288" id="hXi-vX-Bof"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="42L-03-3sC"/>
+                                    </mask>
+                                </variation>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="na1-y1-IGE">
                                 <rect key="frame" x="138" y="194" width="45" height="45"/>
@@ -363,10 +392,22 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="na1-y1-IGE" secondAttribute="centerX" constant="-0.5" id="AwS-TL-i3U"/>
+                            <constraint firstItem="OEh-rs-UeO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="1kl-U6-YRL" secondAttribute="leadingMargin" id="PZm-b7-cC4"/>
+                            <constraint firstItem="OEh-rs-UeO" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1kl-U6-YRL" secondAttribute="trailingMargin" constant="20" id="ULy-RT-Hsc"/>
                             <constraint firstAttribute="centerX" secondItem="OEh-rs-UeO" secondAttribute="centerX" id="WMd-PI-qN2"/>
-                            <constraint firstAttribute="centerY" secondItem="na1-y1-IGE" secondAttribute="centerY" constant="67.5" id="hIe-YU-JXY"/>
+                            <constraint firstItem="OEh-rs-UeO" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1kl-U6-YRL" secondAttribute="trailingMargin" id="cVg-db-obW"/>
+                            <constraint firstItem="OEh-rs-UeO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="1kl-U6-YRL" secondAttribute="leadingMargin" constant="20" id="ebo-r9-tQG"/>
                             <constraint firstAttribute="centerY" secondItem="OEh-rs-UeO" secondAttribute="centerY" id="hzT-Nx-Yg8"/>
+                            <constraint firstItem="OEh-rs-UeO" firstAttribute="top" secondItem="na1-y1-IGE" secondAttribute="bottom" constant="25" id="qJz-kv-bKk"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="PZm-b7-cC4"/>
+                                <exclude reference="ULy-RT-Hsc"/>
+                                <exclude reference="cVg-db-obW"/>
+                                <exclude reference="ebo-r9-tQG"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="Eligibility" id="alz-yR-DVn"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
@@ -459,8 +500,8 @@
                                                         <constraint firstAttribute="width" constant="31" id="N6u-Ld-fg8"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Share on Twitter" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MGi-6n-04M">
-                                                    <rect key="frame" x="70" y="16" width="192" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Share on Twitter" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MGi-6n-04M">
+                                                    <rect key="frame" x="70" y="16" width="225" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="2O4-HG-aLK"/>
                                                     </constraints>
@@ -1898,7 +1939,6 @@
                                                                 <constraint firstAttribute="centerX" secondItem="JKF-q1-PXq" secondAttribute="centerX" constant="-0.5" id="bsp-SC-Olt"/>
                                                                 <constraint firstAttribute="trailing" secondItem="uxw-oh-YJl" secondAttribute="trailing" constant="16" id="gUg-iU-aBl"/>
                                                                 <constraint firstAttribute="centerY" secondItem="pWv-hc-Gq4" secondAttribute="centerY" constant="120" id="iQ0-Bo-boU"/>
-                                                                <constraint firstAttribute="height" constant="343" id="lcw-ow-lnm"/>
                                                                 <constraint firstAttribute="centerX" secondItem="Okl-v3-pRl" secondAttribute="centerX" constant="-0.5" id="o53-47-1wp"/>
                                                                 <constraint firstAttribute="centerX" secondItem="8qu-gd-IIq" secondAttribute="centerX" constant="-0.5" id="pBI-M1-YVF"/>
                                                                 <constraint firstAttribute="centerX" secondItem="pWv-hc-Gq4" secondAttribute="centerX" constant="-2.5" id="qQy-pe-Rtz"/>
@@ -2040,6 +2080,7 @@
                         <outlet property="gradientCollectionView" destination="QiS-6G-IB1" id="i3a-kD-LB2"/>
                         <outlet property="headerView" destination="dOr-00-ZDv" id="tNV-vH-TAv"/>
                         <outlet property="joinButton" destination="Srh-gC-C98" id="8XR-jK-5hG"/>
+                        <outlet property="loginButton" destination="bc0-QL-BYl" id="HPe-cL-cmk"/>
                         <outlet property="pageControl" destination="aLS-jv-EqI" id="Szo-fz-Q06"/>
                         <outlet property="researchInstituteImageView" destination="yIK-TZ-poi" id="bXo-Hj-XmE"/>
                     </connections>
@@ -2082,7 +2123,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="App Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gVA-FA-dsp">
-                                    <rect key="frame" x="8" y="151" width="304" height="21"/>
+                                    <rect key="frame" x="8" y="152" width="304" height="21"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
