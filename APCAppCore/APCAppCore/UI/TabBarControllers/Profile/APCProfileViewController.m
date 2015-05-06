@@ -43,7 +43,7 @@
 #import "APCSettingsViewController.h"
 #import "APCSpinnerViewController.h"
 #import "APCTableViewItem.h"
-#import "APCAppDelegate.h"				// should be removed
+#import "APCAppDelegate.h"
 #import "APCUserInfoConstants.h"
 #import "APCDataSubstrate.h"
 #import "APCConstants.h"
