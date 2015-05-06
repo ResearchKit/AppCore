@@ -35,6 +35,6 @@
 
 @interface APCDataSubstrate (HealthKit)
 
-- (void) setUpHealthKit;
+- (void)setUpHealthKit;
 
 @end

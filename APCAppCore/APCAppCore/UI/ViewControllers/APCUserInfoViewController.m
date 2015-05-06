@@ -32,10 +32,11 @@
 // 
  
 #import "APCUserInfoViewController.h"
+#import "APCLog.h"
 #import "NSDate+Helper.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
-#import "APCAppCore.h"
+
 
 static CGFloat const kPickerCellHeight = 164.0f;
 

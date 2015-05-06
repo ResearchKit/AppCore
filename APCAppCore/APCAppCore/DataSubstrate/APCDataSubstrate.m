@@ -32,25 +32,40 @@
 // 
  
 #import "APCDataSubstrate.h"
-#import "APCDataSubstrate+ResearchKit.h"
+#import "APCConstants.h"
+#import "APCUser.h"
+#import "APCAppDelegate.h"		// should be replaced
+#import "APCLog.h"
+
 #import "APCDataSubstrate+CoreData.h"
 #import "APCDataSubstrate+HealthKit.h"
-#import "APCConstants.h"
-#import "APCModel.h"
+
 #import "NSDate+Helper.h"
+#import "APCTask+AddOn.h"
+#import "APCSchedule+AddOn.h"
+#import "APCScheduledTask+AddOn.h"
+#import "NSError+APCAdditions.h"
 
 static int dateCheckTimeInterval = 60;
 
+
 @interface APCDataSubstrate ()
+
 @property (strong, nonatomic) NSTimer *dateChangeTestTimer;//refreshes Activities if the date crosses midnight.
 @property (strong, nonatomic) NSDate *tomorrowAtMidnight;
+
 @end
 
 @implementation APCDataSubstrate
 
-- (instancetype) initWithPersistentStorePath: (NSString*) storePath
-                            additionalModels: (NSManagedObjectModel *) mergedModels
-                             studyIdentifier: (NSString *) __unused studyIdentifier
+- (void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (instancetype)initWithPersistentStorePath:(NSString *)storePath
+						   additionalModels:(NSManagedObjectModel *)mergedModels
+                            studyIdentifier:(NSString *)__unused studyIdentifier
 {
     self = [super init];
     if (self) {
@@ -63,7 +78,7 @@ static int dateCheckTimeInterval = 60;
     return self;
 }
 
-- (void) setUpCurrentUser: (NSManagedObjectContext*) context
+- (void)setUpCurrentUser:(NSManagedObjectContext *)context
 {
     if (!_currentUser) {
         static dispatch_once_t onceToken;
@@ -73,42 +88,39 @@ static int dateCheckTimeInterval = 60;
     }
 }
 
-- (void) setupParameters {
+- (void)setupParameters
+{
     self.parameters = [[APCParameters alloc] initWithFileName:@"APCParameters.json"];
     [self.parameters setDelegate:self];
 }
 
-- (void) setupNotifications{
+- (void)setupNotifications
+{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instantiateTimer:) name:UIApplicationWillEnterForegroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(instantiateTimer:) name:UIApplicationDidFinishLaunchingNotification object:nil];
 }
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
-/*********************************************************************************/
 #pragma mark - Properties & Methods meant only for Categories
-/*************************************************s********************************/
-- (void) parameters: (APCParameters *) __unused parameters
-   didFailWithError: (NSError *) error
+
+- (void)parameters:(APCParameters *)__unused parameters didFailWithError:(NSError *)error
 {
     NSAssert(error, @"parameters are not loaded");
 }
 
-/*********************************************************************************/
-#pragma mark - Date Change Test Timer
-/*************************************************s********************************/
 
--(void) instantiateTimer: (NSNotification *)__unused notification {
+#pragma mark - Date Change Test Timer
+
+- (void)instantiateTimer:(NSNotification *)__unused notification
+{
     self.tomorrowAtMidnight = [NSDate tomorrowAtMidnight];
     self.dateChangeTestTimer = [NSTimer scheduledTimerWithTimeInterval:dateCheckTimeInterval target:self selector:@selector(didDateCrossMidnight:) userInfo:nil repeats:YES];
 }
 
--(void)didDateCrossMidnight: (NSNotification*)__unused notification{
+- (void)didDateCrossMidnight:(NSNotification *)__unused notification
+{
     if ([[NSDate new] compare:self.tomorrowAtMidnight] == NSOrderedDescending || [[NSDate new] compare:self.tomorrowAtMidnight] == NSOrderedSame) {
-        [[NSNotificationCenter defaultCenter]postNotificationName:APCDayChangedNotification object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:APCDayChangedNotification object:nil];
         self.tomorrowAtMidnight = [NSDate tomorrowAtMidnight];
     }
 }

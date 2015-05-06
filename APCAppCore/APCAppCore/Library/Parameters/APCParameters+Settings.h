@@ -33,6 +33,7 @@
  
 #import "APCParameters.h"
 
+
 @interface APCParameters (Settings)
 
 + (NSArray *)autoLockValues;

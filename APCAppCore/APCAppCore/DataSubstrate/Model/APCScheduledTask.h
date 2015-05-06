@@ -31,8 +31,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+#import "NSManagedObject+APCHelper.h"
+
 
 @class APCResult, APCSchedule, APCTask;
 
