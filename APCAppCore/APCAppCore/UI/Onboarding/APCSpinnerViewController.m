@@ -31,10 +31,11 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
+#import "APCSpinnerViewController.h"
+#import "APCLog.h"
 #import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
-#import "APCSpinnerViewController.h"
-#import "APCAppCore.h"
+
 
 @implementation APCSpinnerViewController
 
