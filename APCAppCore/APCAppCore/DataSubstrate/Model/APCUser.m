@@ -32,8 +32,15 @@
 // 
  
 #import "APCUser.h"
-#import "APCAppCore.h"
-#import <HealthKit/HealthKit.h>
+#import "APCStoredUserData.h"
+#import "APCAppDelegate.h"
+#import "APCDataSubstrate.h"
+#import "APCKeychainStore.h"
+#import "APCLog.h"
+
+#import "NSManagedObject+APCHelper.h"
+#import "HKHealthStore+APCExtensions.h"
+
 
 static NSString *const kNamePropertytName = @"name";
 static NSString *const kFirstNamePropertytName = @"firstName";
@@ -77,11 +84,11 @@ static NSString *const kSignedInKey = @"SignedIn";
 
 @interface APCUser ()
 {
-    NSDate * _birthDate;
+    NSDate *_birthDate;
     HKBiologicalSex _biologicalSex;
     HKBloodType _bloodType;
 }
-@property (nonatomic, readonly) HKHealthStore * healthStore;
+@property (nonatomic, readonly) HKHealthStore *healthStore;
 @end
 
 
@@ -91,7 +98,7 @@ static NSString *const kSignedInKey = @"SignedIn";
 #pragma mark - Initialization Methods
 /*********************************************************************************/
 
-- (instancetype)initWithContext: (NSManagedObjectContext*) context
+- (instancetype)initWithContext:(NSManagedObjectContext*)context
 {
     self = [super init];
     [self loadStoredUserData:context];
@@ -124,7 +131,7 @@ static NSString *const kSignedInKey = @"SignedIn";
             ", self.name, self.email, self.birthDate, (int) self.biologicalSex, @(self.isSignedUp), @(self.isUserConsented), @(self.isSignedIn), @(self.isConsented), self.medicalConditions, self.medications, (int) self.bloodType, self.height, self.weight, self.wakeUpTime, self.sleepTime, self.homeLocationAddress, self.homeLocationLat, self.homeLocationLong];
 }
 
-- (void) loadStoredUserData: (NSManagedObjectContext*) context
+- (void)loadStoredUserData:(NSManagedObjectContext *)context
 {
     [context performBlockAndWait:^{
         APCStoredUserData * storedUserData = [self loadStoredUserDataInContext:context];
@@ -132,11 +139,11 @@ static NSString *const kSignedInKey = @"SignedIn";
     }];
 }
 
-- (APCStoredUserData *) loadStoredUserDataInContext: (NSManagedObjectContext *) context
+- (APCStoredUserData *)loadStoredUserDataInContext:(NSManagedObjectContext *)context
 {
-    NSFetchRequest * request = [APCStoredUserData request];
-    NSError * error;
-    APCStoredUserData * storedUserData = [[context executeFetchRequest:request error:&error] firstObject];
+    NSFetchRequest *request = [APCStoredUserData request];
+    NSError *error;
+    APCStoredUserData *storedUserData = [[context executeFetchRequest:request error:&error] firstObject];
     APCLogError2 (error);
     if (!storedUserData) {
         storedUserData = [APCStoredUserData newObjectForContext:context];
@@ -147,7 +154,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     return storedUserData;
 }
 
-- (void) copyPropertiesFromStoredUserData: (APCStoredUserData*) storedUserData
+- (void)copyPropertiesFromStoredUserData:(APCStoredUserData*)storedUserData
 {
     _profileImage = [storedUserData.profileImage copy];
     _birthDate = [storedUserData.birthDate copy];
@@ -177,15 +184,15 @@ static NSString *const kSignedInKey = @"SignedIn";
     _sharedOptionSelection = [storedUserData.sharedOptionSelection copy];
 }
 
-- (void) updateStoredProperty:(NSString*) propertyName withValue: (id) value
+- (void)updateStoredProperty:(NSString *)propertyName withValue:(id)value
 {
     NSManagedObjectContext * context = [(APCAppDelegate*) [UIApplication sharedApplication].delegate dataSubstrate].persistentContext;
     [context performBlockAndWait:^{
-        APCStoredUserData * storedUserData = [self loadStoredUserDataInContext:context];
+        APCStoredUserData *storedUserData = [self loadStoredUserDataInContext:context];
         [storedUserData setValue:value forKey:propertyName];
-        NSError * saveError;
+        NSError *saveError;
         [storedUserData saveToPersistentStore:&saveError];
-        APCLogError2 (saveError);
+        APCLogError2(saveError);
     }];
 }
 
@@ -211,7 +218,6 @@ static NSString *const kSignedInKey = @"SignedIn";
     else {
         [APCKeychainStore removeValueForKey:kNamePropertytName];
     }
-
 }
 
 - (NSString *)firstName
@@ -281,16 +287,16 @@ static NSString *const kSignedInKey = @"SignedIn";
     [self updateStoredProperty:kSharedOptionSelection withValue:sharedOptionSelection];
 }
 
-- (void)setTaskCompletion:(NSDate *)taskCompletion {
+- (void)setTaskCompletion:(NSDate *)taskCompletion
+{
     _taskCompletion = taskCompletion;
     [self updateStoredProperty:kTaskCompletion withValue:taskCompletion];
 }
 
-- (void)setHasHeartDisease:(NSInteger)hasHeartDisease {
-
+- (void)setHasHeartDisease:(NSInteger)hasHeartDisease
+{
     _hasHeartDisease = hasHeartDisease;
     [self updateStoredProperty:kHasHeartDisease withValue:@(hasHeartDisease)];
-    
 }
 
 - (void)setAllowContact:(BOOL)allowContact
@@ -311,7 +317,6 @@ static NSString *const kSignedInKey = @"SignedIn";
     [self updateStoredProperty:kDailyScalesCompletionCounterPropertyName withValue:@(dailyScalesCompletionCounter)];
 }
 
-
 - (void)setPhoneNumber:(NSString *)phoneNumber
 {
     _phoneNumber = phoneNumber;
@@ -331,7 +336,6 @@ static NSString *const kSignedInKey = @"SignedIn";
     if (consented) {
         [[NSNotificationCenter defaultCenter] postNotificationName:APCUserDidConsentNotification object:nil];
     }
-
 }
 
 - (void)setUserConsented:(BOOL)userConsented
@@ -430,13 +434,13 @@ static NSString *const kSignedInKey = @"SignedIn";
     return dateOfBirth ?: _birthDate;
 }
 
--(void)setBirthDate:(NSDate *)birthDate
+- (void)setBirthDate:(NSDate *)birthDate
 {
     _birthDate = birthDate;
     [self updateStoredProperty:kBirthDatePropertyName withValue:birthDate];
 }
 
-- (HKBiologicalSex) biologicalSex
+- (HKBiologicalSex)biologicalSex
 {
     NSError *error;
     HKBiologicalSexObject * sexObject = [self.healthStore biologicalSexWithError:&error];
@@ -450,7 +454,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     [self updateStoredProperty:kBiologicalSexPropertyName withValue:@(biologicalSex)];
 }
 
-- (HKBloodType) bloodType
+- (HKBloodType)bloodType
 {
     NSError *error;
     HKBloodTypeObject * bloodObject = [self.healthStore bloodTypeWithError:&error];
@@ -516,7 +520,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     return weight;
 }
 
--(void)setWeight:(HKQuantity *)weight
+- (void)setWeight:(HKQuantity *)weight
 {
     
     HKQuantityType *weightType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
@@ -562,7 +566,7 @@ static NSString *const kSignedInKey = @"SignedIn";
 /*********************************************************************************/
 #pragma mark - NSUserDefault Simulated Methods
 /*********************************************************************************/
--(void)setSignedUp:(BOOL)signedUp
+- (void)setSignedUp:(BOOL)signedUp
 {
     [[NSUserDefaults standardUserDefaults] setBool:signedUp forKey:kSignedUpKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -571,7 +575,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     }
 }
 
-- (BOOL) isSignedUp
+- (BOOL)isSignedUp
 {
     return [[NSUserDefaults standardUserDefaults] boolForKey:kSignedUpKey];
 }
@@ -585,7 +589,7 @@ static NSString *const kSignedInKey = @"SignedIn";
     }
 }
 
-- (BOOL) isSignedIn
+- (BOOL)isSignedIn
 {
     return [[NSUserDefaults standardUserDefaults] boolForKey:kSignedInKey];
 }
