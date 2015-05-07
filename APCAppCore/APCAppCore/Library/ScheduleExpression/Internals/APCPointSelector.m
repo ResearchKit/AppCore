@@ -220,7 +220,11 @@
 
 	if (self.end == nil)
 	{
-		self.end = self.defaultEnd;
+        // Based on the unit tests, if this is not a wildcard or has a step defined, end should be nil.
+        if (self.isWildcard || self.step)
+        {
+            self.end = self.defaultEnd;
+        }
 	}
 	else if (self.end.integerValue > self.end.integerValue)
 	{
