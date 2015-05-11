@@ -68,8 +68,14 @@ static NSString *const kLearnStoryBoardKey         = @"APCLearn";
 static NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
 static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 
-static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
-static NSUInteger const kIndexOfProfileTab = 3;
+/*********************************************************************************/
+#pragma mark - User Defaults Keys
+/*********************************************************************************/
+
+static NSString*    const kDemographicDataWasUploadedKey    = @"kDemographicDataWasUploadedKey";
+static NSString*    const kLastUsedTimeKey                  = @"APHLastUsedTime";
+static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterForegroundTime";
+static NSUInteger   const kIndexOfProfileTab                = 3;
 
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
@@ -80,6 +86,7 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 @property (nonatomic, strong) NSOperationQueue *healthKitCollectorQueue;
 @property (nonatomic, strong) APCHealthKitDataCollector *healthKitCollector;
+@property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
 
 @end
 
@@ -145,6 +152,8 @@ static NSUInteger const kIndexOfProfileTab = 3;
 
 - (void)applicationDidBecomeActive:(UIApplication *) __unused application
 {
+    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kAppWillEnterForegroundTimeKey];
+    
 #ifndef DEVELOPMENT
     if (self.dataSubstrate.currentUser.signedIn) {
         [SBBComponent(SBBAuthManager) ensureSignedInWithCompletion: ^(NSURLSessionDataTask * __unused task,
@@ -173,6 +182,11 @@ static NSUInteger const kIndexOfProfileTab = 3;
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
+}
+
+- (NSDate*)applicationBecameActiveDate
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kAppWillEnterForegroundTimeKey];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *) __unused application
