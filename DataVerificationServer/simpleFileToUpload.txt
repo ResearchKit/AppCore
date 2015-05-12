@@ -1,0 +1,6 @@
+A simple file,
+with carriage returns,
+just to make sure I'm getting
+the file
+formatted
+as I like.

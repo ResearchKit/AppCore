@@ -47,11 +47,6 @@
  */
 @interface CMMotionActivity (Helper)
 
-<<<<<<< HEAD
-+ (NSArray *) csvColumnNames;
-- (NSArray *) csvColumnValues;
-=======
 + (NSString *) activityTypeName:(CMMotionActivity*)motionActivitySample;
->>>>>>> JIRA/APPLE-2796
 
 @end

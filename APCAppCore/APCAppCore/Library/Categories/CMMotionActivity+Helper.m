@@ -46,74 +46,6 @@ typedef enum : NSUInteger {
 
 @implementation CMMotionActivity (Helper)
 
-<<<<<<< HEAD
-+ (NSArray *) csvColumnNames
-{
-    /*
-     Keep these in the same order as the "column values" entries below.
-     */
-    return @[@"dateAndTime",
-             @"activityTypeName",
-             @"activityTypeValue",
-             @"confidenceName",
-             @"confidenceRaw",
-             @"confidencePercent"
-             ];
-}
-
-- (NSArray *) csvColumnValues
-{
-    NSString *dateStamp = self.startDate == nil ? @"unknown" : self.startDate.toStringInISO8601Format;
-    NSString *activityTypeName = self.activityTypeName;
-    APCCMMotionActivityType activityType = self.activityType;
-    NSString *confidenceName = self.confidenceName;
-    CMMotionActivityConfidence rawConfidence = self.confidence;
-    NSString *confidencePercentAsString = self.confidencePercentAsString;
-
-    /*
-     Keep these in the same order as the "column names" entries above.
-     */
-    NSArray *values = @[dateStamp,
-                        activityTypeName,
-                        @(activityType),
-                        confidenceName,
-                        @(rawConfidence),
-                        confidencePercentAsString
-                        ];
-
-    return values;
-}
-
-=======
->>>>>>> JIRA/APPLE-2796
-- (NSString *) confidenceName
-{
-    NSString *name = (self.confidence == CMMotionActivityConfidenceHigh ? @"high" :
-                      self.confidence == CMMotionActivityConfidenceMedium ? @"medium" :
-                      @"low");
-
-    return name;
-}
-
-<<<<<<< HEAD
-- (float) confidencePercent
-{
-    float confidence = (self.confidence == CMMotionActivityConfidenceHigh ? 1 :
-                        self.confidence == CMMotionActivityConfidenceMedium ? 0.5 :
-                        0);
-
-    return confidence;
-}
-
-- (NSString *) confidencePercentAsString
-{
-    NSString *percent = [NSString stringWithFormat: @"%3.2f", self.confidencePercent];
-
-    return percent;
-}
-
-=======
->>>>>>> JIRA/APPLE-2796
 - (APCCMMotionActivityType) activityType
 {
     APCCMMotionActivityType type = (self.stationary ? APCCMMotionActivityTypeStationary :
@@ -126,25 +58,6 @@ typedef enum : NSUInteger {
     return type;
 }
 
-<<<<<<< HEAD
-- (NSString *) activityTypeName
-{
-    NSString *name = nil;
-
-    switch (self.activityType)
-    {
-        case APCCMMotionActivityTypeStationary : name = @"stationary";  break;
-        case APCCMMotionActivityTypeWalking    : name = @"walking";     break;
-        case APCCMMotionActivityTypeRunning    : name = @"running";     break;
-        case APCCMMotionActivityTypeAutomotive : name = @"automotive";  break;
-        case APCCMMotionActivityTypeCycling    : name = @"cycling";     break;
-
-        default:
-        case APCCMMotionActivityTypeUnknown    : name = @"unknown";     break;
-    }
-
-    return name;
-=======
 + (NSString *) activityTypeName:(CMMotionActivity*)motionActivitySample
 {
     NSString* motionActivityName = nil;
@@ -178,8 +91,6 @@ typedef enum : NSUInteger {
     }
     
     return motionActivityName;
-
->>>>>>> JIRA/APPLE-2796
 }
 
 @end

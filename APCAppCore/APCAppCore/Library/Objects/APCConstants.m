@@ -87,6 +87,8 @@ NSString *const kHKQuantityTypeKey          = @"HKQuantityType";
 NSString *const kHKCategoryTypeKey          = @"HKCategoryType";
 NSString *const kHKCharacteristicTypeKey    = @"HKCharacteristicType";
 NSString *const kHKCorrelationTypeKey       = @"HKCorrelationType";
+NSString *const kHKWorkoutTypeKey       = @"HKWorkoutType";
+
 
 NSString * const kPasswordKey                    = @"Password";
 NSString * const kNumberOfMinutesForPasscodeKey  = @"NumberOfMinutesForPasscodeKey";
