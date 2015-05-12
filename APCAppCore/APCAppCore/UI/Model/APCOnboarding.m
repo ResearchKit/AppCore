@@ -32,6 +32,8 @@
 // 
  
 #import "APCOnboarding.h"
+#import "APCSignUpTask.h"
+#import "APCSignInTask.h"
 #import "APCLog.h"
 
 

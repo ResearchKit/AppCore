@@ -31,23 +31,16 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "APCOnboardingTask.h"
+
 #import <ResearchKit/ResearchKit.h>
-
-#import "APCSignUpTask.h"
-#import "APCSignInTask.h"
-
-NS_ASSUME_NONNULL_BEGIN
-
-typedef NS_ENUM(NSUInteger, APCOnboardingTaskType) {
-    kAPCOnboardingTaskTypeSignUp,
-    kAPCOnboardingTaskTypeSignIn,
-};
 
 @protocol APCOnboardingDelegate;
 @class APCScene;
 
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface APCOnboarding : NSObject
 
