@@ -32,19 +32,22 @@
 // 
  
 #import "APCStudyOverviewViewController.h"
+#import "APCStudyDetailsViewController.h"
+#import "APCShareViewController.h"
+#import "APCTintedTableViewCell.h"
+#import "APCOnboardingManager.h"
+#import "APCSignInViewController.h"
+#import "APCUser.h"
+#import "APCLog.h"
+
+#import "APCAppDelegate.h"
+
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "UIImage+APCHelper.h"
-#import "APCStudyDetailsViewController.h"
-#import "APCShareViewController.h"
-#import "APCAppDelegate.h"
-#import "APCOnboardingManager.h"
-#import "NSBundle+Helper.h"
-#import "APCSignInViewController.h"
-#import "APCUser.h"
 #import "UIAlertController+Helper.h"
 #import "APCDeviceHardware+APCHelper.h"
-#import "APCAppCore.h"
+#import "NSBundle+Helper.h"
 
 static NSString * const kStudyOverviewCellIdentifier = @"kStudyOverviewCellIdentifier";
 

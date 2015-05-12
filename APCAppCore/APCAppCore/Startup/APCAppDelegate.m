@@ -1163,7 +1163,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (APCOnboardingManager *)onboardingManager {
     if (!_onboardingManager) {
-        self.onboardingManager = [APCOnboardingManager managerWithProvider:self];
+        self.onboardingManager = [APCOnboardingManager managerWithProvider:self user:self.dataSubstrate.currentUser];
     }
     return _onboardingManager;
 }
@@ -1171,10 +1171,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 - (APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)__unused onboarding {
     NSAssert(NO, @"Cannot retun nil. Override this delegate method to return a valid APCScene.");
     return nil;
-}
-
-- (APCUser *)currentUser {
-    return self.dataSubstrate.currentUser;
 }
 
 - (NSInteger)numberOfServicesInPermissionsList {

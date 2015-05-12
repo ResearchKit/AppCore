@@ -33,14 +33,14 @@
  
 #import "APCPermissionPrimingViewController.h"
 #import "APCOnboardingManager.h"
+#import "APCCustomBackButton.h"
+#import "APCConstants.h"
+
 #import "UIFont+APCAppearance.h"
 #import "UIColor+APCAppearance.h"
+
 #import "APCAppDelegate.h"
-#import "APCCustomBackButton.h"
 
-@interface APCPermissionPrimingViewController ()
-
-@end
 
 @implementation APCPermissionPrimingViewController
 

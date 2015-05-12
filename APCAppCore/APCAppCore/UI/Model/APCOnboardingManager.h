@@ -48,9 +48,6 @@ NS_ASSUME_NONNULL_BEGIN
 /** The onboarding manager for the app. */
 - (APCOnboardingManager *)onboardingManager;
 
-/** TODO: Refactor after data substrate/APCUser refactoring. */
-- (APCUser *)currentUser;
-
 /** TODO: Refactor after initializationOptions refactoring. */
 - (NSInteger)numberOfServicesInPermissionsList;
 
@@ -80,9 +77,16 @@ NS_ASSUME_NONNULL_BEGIN
 /// The onboarding currently in use; can only have one at a time.
 @property (strong, nonatomic, nullable) APCOnboarding *onboarding;
 
-+ (instancetype)managerWithProvider:(id<APCOnboardingManagerProvider>)provider;
+/// The user/subject that is onboarding.
+@property (strong, nonatomic, readonly) APCUser *user;
 
-- (instancetype)initWithProvider:(id<APCOnboardingManagerProvider>)provider;
+/// Whether a sign-in action, to resume a study previously enrolled in, is supported. Defaults to YES.
+@property (nonatomic, getter=isSignInSupported) BOOL signInSupported;
+
++ (instancetype)managerWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser *)user;
+
+/** Designated initializer. */
+- (instancetype)initWithProvider:(id<APCOnboardingManagerProvider>)provider user:(APCUser *)user;
 
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
 

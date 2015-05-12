@@ -31,15 +31,22 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-#import "APCAppCore.h"
 #import "APCSignUpPermissionsViewController.h"
 #import "APCOnboardingManager.h"
+#import "APCPermissionsManager.h"
+#import "APCDataSubstrate.h"
+#import "APCUser.h"
+#import "APCLog.h"
 #import "APCTableViewItem.h"
 #import "APCPermissionsCell.h"
+#import "APCStepProgressBar.h"
+#import "APCCustomBackButton.h"
+
+#import "UIColor+APCAppearance.h"
 #import "NSBundle+Helper.h"
-#import "APCPermissionsManager.h"
-#import "UIAlertController+Helper.h"
 #import "UIView+Helper.h"
+#import "UIAlertController+Helper.h"
+
 #import "APCAppDelegate.h"
 
 #import <CoreMotion/CoreMotion.h>
@@ -58,7 +65,6 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 @synthesize stepProgressBar;
 
-@synthesize user = _user;
 
 - (instancetype)init
 {
@@ -198,16 +204,12 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
     [self.navigationItem setLeftBarButtonItem:backster];
 }
 
-- (APCUser *) user {
-    if (!_user) {
-        _user = ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
-    }
-    return _user;
+- (APCOnboarding *)onboarding {
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
 }
 
-- (APCOnboarding *)onboarding
-{
-    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
+- (APCUser *)user {
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].user;
 }
 
 #pragma mark - UITableViewDataSource methods

@@ -33,17 +33,18 @@
  
 #import "APCThankYouViewController.h"
 #import "APCOnboardingManager.h"
-#import "APCAppCore.h"
+#import "APCDataSubstrate.h"
+#import "APCButton.h"
+#import "APCConstants.h"
+#import "APCUser.h"
 
-@interface APCThankYouViewController ()
+#import "APCAppDelegate.h"
 
-@end
 
 @implementation APCThankYouViewController
 
 @synthesize stepProgressBar;
 
-@synthesize user = _user;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -55,20 +56,15 @@
     [super didReceiveMemoryWarning];
 }
 
-- (APCUser *) user {
-    if (!_user) {
-        _user = ((APCAppDelegate*) [UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
-    }
-    return _user;
-}
-
-
-- (APCOnboarding *)onboarding
-{
+- (APCOnboarding *)onboarding {
     return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
 }
 
-- (IBAction)next:(APCButton *) __unused sender {
+- (APCUser *)user {
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].user;
+}
+
+- (IBAction)next:(APCButton *)__unused sender {
     if (self.emailVerified) {
         [self performSelector:@selector(setUserSignedIn) withObject:nil afterDelay:0.4];
     } else {
@@ -76,8 +72,7 @@
     }
 }
 
-- (void)finishOnboarding
-{
+- (void)finishOnboarding {
     if ([self onboarding].taskType == kAPCOnboardingTaskTypeSignIn) {
         // We are posting this notification after .4 seconds delay, because we need to display the progress bar completion animation
         [self performSelector:@selector(setUserSignedIn) withObject:nil afterDelay:0.4];
@@ -86,13 +81,11 @@
     }
 }
 
-- (void) setUserSignedUp
-{
+- (void)setUserSignedUp {
     self.user.signedUp = YES;
 }
 
-- (void)setUserSignedIn
-{
+- (void)setUserSignedIn {
     self.user.signedIn = YES;
     [(APCAppDelegate *)[UIApplication sharedApplication].delegate afterOnBoardProcessIsFinished];
 }
