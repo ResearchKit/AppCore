@@ -32,6 +32,7 @@
 // 
  
 #import "APCInclusionCriteriaViewController.h"
+#import "APCOnboardingManager.h"
 #import "APCAppCore.h"
 
 @implementation APCInclusionCriteriaViewController
@@ -64,7 +65,7 @@
 
 - (APCOnboarding *)onboarding
 {
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
 }
 
 /*********************************************************************************/

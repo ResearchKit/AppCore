@@ -33,6 +33,7 @@
  
 #import "APCEligibleViewController.h"
 #import "APCConsentTaskViewController.h"
+#import "APCOnboardingManager.h"
 #import "APCAppCore.h"
 
 
@@ -85,7 +86,7 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
 
 - (APCOnboarding *)onboarding
 {
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
 }
 
 - (APCUser *) user {

@@ -33,6 +33,7 @@
  
 #import "APCAppCore.h"
 #import "APCSignUpPermissionsViewController.h"
+#import "APCOnboardingManager.h"
 #import "APCTableViewItem.h"
 #import "APCPermissionsCell.h"
 #import "NSBundle+Helper.h"
@@ -206,7 +207,7 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 - (APCOnboarding *)onboarding
 {
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
 }
 
 #pragma mark - UITableViewDataSource methods

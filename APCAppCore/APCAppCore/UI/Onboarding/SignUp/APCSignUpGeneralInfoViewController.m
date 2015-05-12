@@ -35,7 +35,7 @@
 #import "APCPermissionButton.h"
 #import "APCPermissionsManager.h"
 #import "APCTermsAndConditionsViewController.h"
-#import "APCOnboarding.h"
+#import "APCOnboardingManager.h"
 #import "APCAppDelegate.h"
 #import "UIColor+APCAppearance.h"
 #import "NSDate+Helper.h"
@@ -275,7 +275,7 @@ static CGFloat kHeaderHeight = 157.0f;
 
 - (APCOnboarding *)onboarding
 {
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
 }
 
 #pragma mark - UITextFieldDelegate methods

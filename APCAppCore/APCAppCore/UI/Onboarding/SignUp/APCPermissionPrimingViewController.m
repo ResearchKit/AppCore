@@ -32,6 +32,7 @@
 // 
  
 #import "APCPermissionPrimingViewController.h"
+#import "APCOnboardingManager.h"
 #import "UIFont+APCAppearance.h"
 #import "UIColor+APCAppearance.h"
 #import "APCAppDelegate.h"
@@ -83,7 +84,7 @@
 
 - (APCOnboarding *)onboarding
 {
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
 }
 
 - (IBAction)next:(id) __unused sender

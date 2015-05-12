@@ -32,6 +32,7 @@
 // 
  
 #import "APCInEligibleViewController.h"
+#import "APCOnboardingManager.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "UIImage+APCHelper.h"
@@ -81,7 +82,7 @@
 
 - (APCOnboarding *)onboarding
 {
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
 }
 
 #pragma mark - Selectors

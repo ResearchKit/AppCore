@@ -32,6 +32,7 @@
 // 
  
 #import "APCThankYouViewController.h"
+#import "APCOnboardingManager.h"
 #import "APCAppCore.h"
 
 @interface APCThankYouViewController ()
@@ -64,7 +65,7 @@
 
 - (APCOnboarding *)onboarding
 {
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
 }
 
 - (IBAction)next:(APCButton *) __unused sender {

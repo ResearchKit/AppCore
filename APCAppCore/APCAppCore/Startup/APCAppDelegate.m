@@ -88,6 +88,8 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 @property (nonatomic, strong) APCHealthKitDataCollector *healthKitCollector;
 @property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
 
+@property (nonatomic, strong, readwrite) APCOnboardingManager *onboardingManager;
+
 @end
 
 
@@ -1156,14 +1158,14 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
                     completion:nil];
 }
 
-- (void)instantiateOnboardingForType:(APCOnboardingTaskType)type
-{
-    if (self.onboarding) {
-        self.onboarding = nil;
-        self.onboarding.delegate = nil;
+
+#pragma mark - Onboarding Manager
+
+- (APCOnboardingManager *)onboardingManager {
+    if (!_onboardingManager) {
+        self.onboardingManager = [APCOnboardingManager new];
     }
-    
-    self.onboarding = [[APCOnboarding alloc] initWithDelegate:self taskType:type];
+    return _onboardingManager;
 }
 
 - (ORKTaskViewController *)consentViewController

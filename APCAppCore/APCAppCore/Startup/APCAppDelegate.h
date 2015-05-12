@@ -36,13 +36,14 @@
 #import "APCOnboarding.h"
 #import "APCPasscodeViewController.h"
 #import "APCProfileViewController.h"
+#import "APCOnboardingManager.h"
 #import "APCConsentTask.h"
 
 extern NSUInteger   const kTheEntireDataModelOfTheApp;
 
 @class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
 
-@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
+@interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingDelegate, APCOnboardingManagerProvider, APCOnboardingTaskDelegate, APCPasscodeViewControllerDelegate>
 
 @property (nonatomic, strong) APCFitnessAllocation *sevenDayFitnessAllocationData;
 @property (strong, nonatomic) UITabBarController *tabster;
@@ -61,6 +62,9 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 @property (nonatomic, strong) NSDictionary * initializationOptions;
 - (NSMutableDictionary*) defaultInitializationOptions;
 
+#pragma mark Onboarding
+
+@property (nonatomic, strong, readonly) APCOnboardingManager *onboardingManager;
 @property (strong, nonatomic) APCOnboarding *onboarding;
 
 @property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
@@ -112,7 +116,6 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 - (ORKTaskViewController *)consentViewController;
 - (NSMutableArray*)consentSectionsAndHtmlContent:(NSString**)htmlContent;
 
-- (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
-
 - (NSDate*)applicationBecameActiveDate;
+
 @end

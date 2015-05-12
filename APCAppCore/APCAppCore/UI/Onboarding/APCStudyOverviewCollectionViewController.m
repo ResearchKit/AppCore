@@ -32,8 +32,18 @@
 // 
  
 #import "APCStudyOverviewCollectionViewController.h"
-#import "APCAppCore.h"
 #import "APCWebViewController.h"
+#import "APCIntroVideoViewController.h"
+#import "APCOnboardingManager.h"
+#import "APCUser.h"
+#import "APCLog.h"
+
+#import "UIColor+APCAppearance.h"
+#import "UIFont+APCAppearance.h"
+
+#import <ResearchKit/ResearchKit.h>
+
+#import "APCAppDelegate.h"
 
 static NSString *kConsentEmailSubject = @"Consent Document";
 
@@ -72,7 +82,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
                                              selector:@selector(goBackToSignUpJoin:)
                                                  name:APCConsentCompletedWithDisagreeNotification
                                                object:nil];
-  APCLogViewControllerAppeared();
+    APCLogViewControllerAppeared();
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -170,11 +180,6 @@ static NSString *kConsentEmailSubject = @"Consent Document";
     
     self.btnAlreadyParticipated.tintColor = [UIColor appPrimaryColor];
     
-}
-
-- (APCOnboarding *)onboarding
-{
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
 }
 
 - (APCUser *)user
@@ -349,22 +354,22 @@ static NSString *kConsentEmailSubject = @"Consent Document";
     return studyItemType;
 }
 
-- (void) signInTapped: (id) __unused sender
-{
-    [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignIn];
+- (void)signInTapped:(id)__unused sender {
+    APCOnboardingManager *manager = [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager];
+    [manager instantiateOnboardingForType:kAPCOnboardingTaskTypeSignIn];
     
-    UIViewController *viewController = [[self onboarding] nextScene];
+    UIViewController *viewController = [manager.onboarding nextScene];
+    NSAssert(viewController, @"Expecting the first scene's view controller for sign-in onboarding but got nothing");
     [self.navigationController pushViewController:viewController animated:YES];
-    
 }
 
-- (void) signUpTapped: (id) __unused sender
-{
-    [((APCAppDelegate *)[UIApplication sharedApplication].delegate) instantiateOnboardingForType:kAPCOnboardingTaskTypeSignUp];
+- (void)signUpTapped:(id)__unused sender {
+    APCOnboardingManager *manager = [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager];
+    [manager instantiateOnboardingForType:kAPCOnboardingTaskTypeSignUp];
     
-    UIViewController *viewController = [[self onboarding] nextScene];
+    UIViewController *viewController = [manager.onboarding nextScene];
+    NSAssert(viewController, @"Expecting the first scene's view controller for sign-up onboarding but got nothing");
     [self.navigationController pushViewController:viewController animated:YES];
-    
 }
 
 - (IBAction)pageClicked:(UIPageControl *)sender {
@@ -391,7 +396,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 
 - (void)studyVideoCollectionViewCellReadConsent:(APCStudyVideoCollectionViewCell *) __unused cell
 {
-    APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
+    APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle bundleForClass:[self class]]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
     NSData *data = [NSData dataWithContentsOfFile:filePath];
     [webViewController.webview setDataDetectorTypes:UIDataDetectorTypeAll];
@@ -454,14 +459,11 @@ static NSString *kConsentEmailSubject = @"Consent Document";
         [mailComposeVC setSubject:kConsentEmailSubject];
         [self presentViewController:mailComposeVC animated:YES completion:NULL];
     }
-    
-
-    
 }
 
 - (void)studyLandingCollectionViewCellReadConsent:(APCStudyLandingCollectionViewCell *) __unused cell
 {
-    APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
+    APCWebViewController *webViewController = [[UIStoryboard storyboardWithName:@"APCOnboarding" bundle:[NSBundle bundleForClass:[self class]]] instantiateViewControllerWithIdentifier:@"APCWebViewController"];
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"consent" ofType:@"pdf"];
     NSData *data = [NSData dataWithContentsOfFile:filePath];
     [webViewController.webview setDataDetectorTypes:UIDataDetectorTypeAll];

@@ -326,6 +326,8 @@
 		EE028FE41AF94B36001C8251 /* APCKeychainStore+Passcode.m in Sources */ = {isa = PBXBuildFile; fileRef = EE028FE21AF94B36001C8251 /* APCKeychainStore+Passcode.m */; };
 		EE4B95251AF82BA6000097C7 /* NSError+Bridge.h in Headers */ = {isa = PBXBuildFile; fileRef = EE4B95231AF82BA6000097C7 /* NSError+Bridge.h */; };
 		EE4B95261AF82BA6000097C7 /* NSError+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4B95241AF82BA6000097C7 /* NSError+Bridge.m */; };
+		EE64F4311B02517000A402A7 /* APCOnboardingManager.h in Headers */ = {isa = PBXBuildFile; fileRef = EE64F42F1B02517000A402A7 /* APCOnboardingManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EE64F4321B02517000A402A7 /* APCOnboardingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EE64F4301B02517000A402A7 /* APCOnboardingManager.m */; };
 		F50738C01A682E12004CF100 /* APCDateRange.h in Headers */ = {isa = PBXBuildFile; fileRef = F50738BE1A682E12004CF100 /* APCDateRange.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F50738C11A682E12004CF100 /* APCDateRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F50738BF1A682E12004CF100 /* APCDateRange.m */; };
 		F5306CCD1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5306CCB1A8BE7F600732E60 /* ORKQuestionResult+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1013,6 +1015,8 @@
 		EE028FE21AF94B36001C8251 /* APCKeychainStore+Passcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCKeychainStore+Passcode.m"; sourceTree = "<group>"; };
 		EE4B95231AF82BA6000097C7 /* NSError+Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+Bridge.h"; sourceTree = "<group>"; };
 		EE4B95241AF82BA6000097C7 /* NSError+Bridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+Bridge.m"; sourceTree = "<group>"; };
+		EE64F42F1B02517000A402A7 /* APCOnboardingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCOnboardingManager.h; sourceTree = "<group>"; };
+		EE64F4301B02517000A402A7 /* APCOnboardingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCOnboardingManager.m; sourceTree = "<group>"; };
 		F50738BE1A682E12004CF100 /* APCDateRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDateRange.h; sourceTree = "<group>"; };
 		F50738BF1A682E12004CF100 /* APCDateRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDateRange.m; sourceTree = "<group>"; };
 		F5179B2919D09128001DCCB7 /* APCAppCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APCAppCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2520,6 +2524,8 @@
 		F5F1293C1A2F78490015982C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				EE64F42F1B02517000A402A7 /* APCOnboardingManager.h */,
+				EE64F4301B02517000A402A7 /* APCOnboardingManager.m */,
 				F5F1293D1A2F78490015982C /* APCOnboarding.h */,
 				F5F1293E1A2F78490015982C /* APCOnboarding.m */,
 				5B0432A51A322BEE000DC9ED /* APCOnboardingTask.h */,
@@ -2932,6 +2938,7 @@
 				5BFEB41D1AA72CCD0089DEF7 /* APCSharingOptionsViewController.h in Headers */,
 				F5F12AF61A2F78490015982C /* APCStepViewController.h in Headers */,
 				5B234E141A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.h in Headers */,
+				EE64F4311B02517000A402A7 /* APCOnboardingManager.h in Headers */,
 				F5F12AFB1A2F78490015982C /* APCInstructionStepViewController.h in Headers */,
 				F5F12A8B1A2F78490015982C /* APCIntroVideoViewController.h in Headers */,
 				F5F129E11A2F78490015982C /* APCAppCore.h in Headers */,
@@ -3517,6 +3524,7 @@
 				5B234E151A329BF300A5A3A0 /* APCWithdrawDescriptionViewController.m in Sources */,
 				F5B9480D1A73272C0034C522 /* APCScheduleExpressionTokenizer.m in Sources */,
 				6C7346091A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m in Sources */,
+				EE64F4321B02517000A402A7 /* APCOnboardingManager.m in Sources */,
 				F54DDD281A8026010073E4B4 /* APCDataTracker.m in Sources */,
 				F5F12A7A1A2F78490015982C /* APCAxisView.m in Sources */,
 				6CD8B6751AC5011D0061E6D6 /* APCTaskReminder.m in Sources */,

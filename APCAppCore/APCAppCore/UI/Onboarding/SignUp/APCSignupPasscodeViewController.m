@@ -33,6 +33,7 @@
  
 #import "APCSignupPasscodeViewController.h"
 #import "APCSignUpPermissionsViewController.h"
+#import "APCOnboardingManager.h"
 #import "APCAppDelegate.h"
 #import "APCDataSubstrate.h"
 #import "APCConstants.h"
@@ -125,7 +126,7 @@
 
 - (APCOnboarding *)onboarding
 {
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
 }
 
 #pragma mark - APCPasscodeViewDelegate

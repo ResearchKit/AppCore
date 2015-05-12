@@ -55,6 +55,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCPermissionsManager.h>
 #import <APCAppCore/APCAssertionHandler.h>
 #import <APCAppCore/APCSignUpProgressing.h>
+#import <APCAppCore/APCOnboardingManager.h>
 #import <APCAppCore/APCOnboarding.h>
 #import <APCAppCore/APCDataResult.h>
 #import <APCAppCore/APCTasksReminderManager.h>

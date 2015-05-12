@@ -33,6 +33,7 @@
  
 #import "APCSignUpMedicalInfoViewController.h"
 #import "APCSpinnerViewController.h"
+#import "APCOnboardingManager.h"
 #import "UIAlertController+Helper.h"
 #import "APCUser+Bridge.h"
 #import "APCAppDelegate.h"
@@ -315,7 +316,7 @@
 
 - (APCOnboarding *)onboarding
 {
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
 }
 
 #pragma mark - UIMethods

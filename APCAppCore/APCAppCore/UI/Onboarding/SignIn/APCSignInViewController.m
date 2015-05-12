@@ -33,6 +33,7 @@
  
 #import "APCAppCore.h"
 #import "APCSignInViewController.h"
+#import "APCOnboardingManager.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
 #import "APCEmailVerifyViewController.h"
@@ -144,7 +145,7 @@ static NSString * const kServerInvalidEmailErrorString = @"Invalid username or p
 
 - (APCOnboarding *)onboarding
 {
-    return ((APCAppDelegate *)[UIApplication sharedApplication].delegate).onboarding;
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
 }
 
 - (void)back
