@@ -33,7 +33,6 @@
  
 #import <UIKit/UIKit.h>
 #import "APCDataSubstrate.h"
-#import "APCOnboarding.h"
 #import "APCPasscodeViewController.h"
 #import "APCProfileViewController.h"
 #import "APCOnboardingManager.h"
@@ -41,7 +40,7 @@
 
 extern NSUInteger   const kTheEntireDataModelOfTheApp;
 
-@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCOnboarding, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
+@class APCDataSubstrate, APCDataMonitor, APCScheduler, APCPasscodeViewController, APCTasksReminderManager, APCPassiveDataCollector, APCFitnessAllocation;
 
 @interface APCAppDelegate : UIResponder <UIApplicationDelegate, APCOnboardingManagerProvider, APCPasscodeViewControllerDelegate>
 
@@ -65,7 +64,6 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 #pragma mark Onboarding
 
 @property (nonatomic, strong, readonly) APCOnboardingManager *onboardingManager;
-@property (strong, nonatomic) APCOnboarding *onboarding;
 
 @property  (nonatomic, strong)  NSArray  *storyboardIdInfo;
 

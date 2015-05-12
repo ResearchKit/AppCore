@@ -35,15 +35,15 @@
 #import "APCAppCore.h"
 #import "APCDebugWindow.h"
 #import "APCPasscodeViewController.h"
-#import <AVFoundation/AVFoundation.h>
-#import <AudioToolbox/AudioToolbox.h>
-#import "APCOnboardingManager.h"
 #import "APCTasksReminderManager.h"
 #import "UIView+Helper.h"
 #import "APCTabBarViewController.h"
 #import "UIAlertController+Helper.h"
 #import "APCHealthKitDataCollector.h"
 #import "APCConstants.h"
+
+#import <AVFoundation/AVFoundation.h>
+#import <AudioToolbox/AudioToolbox.h>
 
 /*
  Be sure to set the CORRECT current version before releasing to production
