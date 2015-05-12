@@ -515,8 +515,10 @@ typedef NS_ENUM(NSUInteger, APCActivitiesSections)
     for (APCScheduledTask *scheduledTask in ungroupedScheduledTasks) {
         NSString *taskId = scheduledTask.task.taskID;
         
-        if (![taskTypesArray containsObject:taskId]) {
-            [taskTypesArray addObject:taskId];
+        if (taskId) {
+            if (![taskTypesArray containsObject:taskId]) {
+                [taskTypesArray addObject:taskId];
+            }
         }
     }
     
