@@ -3218,7 +3218,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F5179B3C19D09128001DCCB7 /* Build configuration list for PBXNativeTarget "APCAppCore" */;
 			buildPhases = (
-				F53014E51A8F6F9700576521 /* ShellScript */,
 				F5179B2419D09128001DCCB7 /* Sources */,
 				F5179B2519D09128001DCCB7 /* Frameworks */,
 				F5179B2619D09128001DCCB7 /* Headers */,
@@ -3382,22 +3381,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		F53014E51A8F6F9700576521 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "${SRCROOT}/APCAppCore/Resources/bridge_framework_switcher.sh";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F5179B2419D09128001DCCB7 /* Sources */ = {
