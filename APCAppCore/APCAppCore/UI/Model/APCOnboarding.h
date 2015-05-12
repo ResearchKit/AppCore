@@ -38,6 +38,8 @@
 #import "APCSignUpTask.h"
 #import "APCSignInTask.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSUInteger, APCOnboardingTaskType) {
     kAPCOnboardingTaskTypeSignUp,
     kAPCOnboardingTaskTypeSignIn,
@@ -46,50 +48,65 @@ typedef NS_ENUM(NSUInteger, APCOnboardingTaskType) {
 @protocol APCOnboardingDelegate;
 @class APCScene;
 
+
 @interface APCOnboarding : NSObject
 
 @property (nonatomic, readonly) APCOnboardingTask *onboardingTask;
 
-@property (nonatomic, strong) ORKStep *currentStep;
-
-@property (nonatomic, strong) NSMutableDictionary *scenes;
+@property (nonatomic, strong) ORKStep *__nullable currentStep;
 
 @property (nonatomic, strong) NSMutableDictionary *sceneData;
 
-@property (nonatomic, weak) id <APCOnboardingDelegate> delegate;
+@property (nonatomic, weak) id <APCOnboardingDelegate> __nullable delegate;
 
 @property (nonatomic, readonly) APCOnboardingTaskType taskType;
 
-- (instancetype)initWithDelegate:(id)object taskType:(APCOnboardingTaskType)taskType;
+- (instancetype)initWithDelegate:(id<APCOnboardingDelegate>)object taskType:(APCOnboardingTaskType)taskType;
 
-- (UIViewController *)viewControllerForSceneIdentifier:(NSString *)identifier;
+- (nullable UIViewController *)viewControllerForSceneIdentifier:(NSString *)identifier;
 
 - (void)setScene:(APCScene *)scene forIdentifier:(NSString *)identifier;
 
-- (UIViewController *)nextScene;
+- (nullable UIViewController *)nextScene;
 
 - (void)popScene;
 
+- (BOOL)isSignInSupported;
+
 @end
 
-@protocol APCOnboardingDelegate <NSObject>
+
+@protocol APCOnboardingDelegate <APCOnboardingTaskDelegate>
 
 @required
 
-- (APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)onboarding;
-
-@optional
-
-- (APCScene *)customInfoSceneForOnboarding:(APCOnboarding *)onboarding;
+/**
+ *  Return the scene for the desired type, or nil if the scene should be skipped.
+ */
+- (nullable APCScene *)onboarding:(APCOnboarding *)onboarding sceneOfType:(NSString *)type;
 
 @end
 
-/*************************************/
 
+/**
+ *  Simple container to hold on to a specific view controller in a storyboard.
+ */
 @interface APCScene : NSObject
 
-@property (nonatomic, strong) NSString *name; //Refers to StoryboardID
+/** Refers to StoryboardID. */
+@property (nonatomic, strong) NSString *name;
+
+/** The name of the storyboard. */
 @property (nonatomic, strong) NSString *storyboardName;
+
+/** Defaults to the bundle this class resides in. */
 @property (nonatomic, strong) NSBundle *bundle;
 
+- (instancetype)initWithName:(NSString *)name inStoryboard:(NSString *)storyboardName;
+
+/** Instantiates the view controller as defined by this scene. */
+- (nullable UIViewController *)instantiateViewController;
+
 @end
+
+NS_ASSUME_NONNULL_END

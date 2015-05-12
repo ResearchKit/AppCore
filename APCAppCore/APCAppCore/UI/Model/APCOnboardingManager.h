@@ -3,6 +3,7 @@
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
+// Copyright (c) 2015, Boston Children's Hospital. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
@@ -36,26 +37,55 @@
 
 @class APCOnboardingManager;
 
+NS_ASSUME_NONNULL_BEGIN
 
 /**
- *  Protocoll, implemented by the app delegate, to obtain the app's onboarding manager.
+ *  Protocol, implemented by the app delegate, to obtain the app's onboarding manager.
  */
 @protocol APCOnboardingManagerProvider <NSObject>
 
 @required
+/** The onboarding manager for the app. */
 - (APCOnboardingManager *)onboardingManager;
+
+/** TODO: Refactor after data substrate/APCUser refactoring. */
+- (APCUser *)currentUser;
+
+/** TODO: Refactor after initializationOptions refactoring. */
+- (NSInteger)numberOfServicesInPermissionsList;
+
+@optional
+/**
+ *  Kept for backwards compatibility: return the inclusion criteria scene.
+ */
+- (nullable APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)onboarding;
+
+/**
+ *  Kept for backwards compatibility: return a custom info scene.
+ */
+- (nullable APCScene *)customInfoSceneForOnboarding:(APCOnboarding *)onboarding;
 
 @end
 
 
 /**
  *  Manager to configure and handle the onboarding process.
+ *
+ *  This superclass returns all scenes present in the "APCOnboarding" storyboard. It is missing an inclusion criteria
+ *  scene that you should provide by implementing `inclusionCriteriaSceneForOnboarding:` in APCOnboardingManagerProvider
+ *  or by creating a subclass and overriding `onboarding:sceneOfType:`.
  */
-@interface APCOnboardingManager : NSObject
+@interface APCOnboardingManager : NSObject <APCOnboardingDelegate>
 
 /// The onboarding currently in use; can only have one at a time.
-@property (strong, nonatomic) APCOnboarding *onboarding;
+@property (strong, nonatomic, nullable) APCOnboarding *onboarding;
+
++ (instancetype)managerWithProvider:(id<APCOnboardingManagerProvider>)provider;
+
+- (instancetype)initWithProvider:(id<APCOnboardingManagerProvider>)provider;
 
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
 
 @end
+
+NS_ASSUME_NONNULL_END

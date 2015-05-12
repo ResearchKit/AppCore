@@ -37,7 +37,7 @@
 #import "APCPasscodeViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
-#import "APCOnboarding.h"
+#import "APCOnboardingManager.h"
 #import "APCTasksReminderManager.h"
 #import "UIView+Helper.h"
 #import "APCTabBarViewController.h"
@@ -1163,49 +1163,40 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (APCOnboardingManager *)onboardingManager {
     if (!_onboardingManager) {
-        self.onboardingManager = [APCOnboardingManager new];
+        self.onboardingManager = [APCOnboardingManager managerWithProvider:self];
     }
     return _onboardingManager;
 }
 
-- (ORKTaskViewController *)consentViewController
-{
-    NSAssert(FALSE, @"Override this method to return a valid Consent Task View Controller.");
+- (APCScene *)inclusionCriteriaSceneForOnboarding:(APCOnboarding *)__unused onboarding {
+    NSAssert(NO, @"Cannot retun nil. Override this delegate method to return a valid APCScene.");
     return nil;
 }
 
-/*********************************************************************************/
+- (APCUser *)currentUser {
+    return self.dataSubstrate.currentUser;
+}
+
+- (NSInteger)numberOfServicesInPermissionsList {
+    NSArray *servicesArray = self.initializationOptions[kAppServicesListRequiredKey];
+    return [servicesArray count];
+}
+
+
+- (ORKTaskViewController *)consentViewController
+{
+    NSAssert(NO, @"Override this method to return a valid Consent Task View Controller.");
+    return nil;
+}
+
+
 #pragma mark - Private Helper Methods
-/*********************************************************************************/
+
 - (NSString *) applicationDocumentsDirectory
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *basePath = ([paths count] > 0) ? paths[0] : nil;
     return basePath;
-}
-
-#pragma mark - APCOnboardingDelegate methods
-
-- (APCScene *) inclusionCriteriaSceneForOnboarding: (APCOnboarding *) __unused onboarding
-{
-    NSAssert(FALSE, @"Cannot retun nil. Override this delegate method to return a valid APCScene.");
-    
-    return nil;
-}
-
-#pragma mark - APCOnboardingTaskDelegate methods
-
-- (APCUser *) userForOnboardingTask: (APCOnboardingTask *) __unused task
-{
-    return self.dataSubstrate.currentUser;
-}
-
-- (NSInteger) numberOfServicesInPermissionsListForOnboardingTask: (APCOnboardingTask *) __unused task
-{
-    NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
-    NSArray *servicesArray = initialOptions[kAppServicesListRequiredKey];
-    
-    return servicesArray.count;
 }
 
 #pragma mark - APCPasscodeViewControllerDelegate methods
@@ -1217,6 +1208,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 	
     self.isPasscodeShowing = NO;
 }
+
 
 #pragma mark - Secure View
 

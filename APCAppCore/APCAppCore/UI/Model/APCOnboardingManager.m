@@ -3,6 +3,7 @@
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
+// Copyright (c) 2015, Boston Children's Hospital. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
@@ -32,19 +33,105 @@
 //
 
 #import "APCOnboardingManager.h"
+#import "APCLog.h"
+
+
+NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
+
+
+@interface APCOnboardingManager ()
+
+@property (weak, nonatomic) id<APCOnboardingManagerProvider> provider;
+
+@end
 
 
 @implementation APCOnboardingManager
 
+
+- (instancetype)initWithProvider:(id<APCOnboardingManagerProvider>)provider {
+    if ((self = [super init])) {
+        self.provider = provider;
+    }
+    return self;
+}
+
++ (instancetype)managerWithProvider:(id<APCOnboardingManagerProvider>)provider
+{
+    return [[self alloc] initWithProvider:provider];
+}
+
+
+#pragma mark - Onboarding
 
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type {
     if (self.onboarding) {
         self.onboarding.delegate = nil;
         self.onboarding = nil;
     }
-    
-    self.onboarding = [[APCOnboarding alloc] initWithDelegate:nil taskType:type];
+    self.onboarding = [[APCOnboarding alloc] initWithDelegate:self taskType:type];
 }
 
+
+#pragma mark - APCOnboardingDelegate
+
+- (APCScene *)onboarding:(APCOnboarding * __nonnull)onboarding sceneOfType:(NSString * __nonnull)type {
+    NSParameterAssert(onboarding);
+    NSParameterAssert([type length] > 0);
+    
+    // Sign Up
+    if ([type isEqualToString:kAPCSignUpInclusionCriteriaStepIdentifier]) {
+        if ([_provider respondsToSelector:@selector(inclusionCriteriaSceneForOnboarding:)]) {
+            return [_provider performSelector:@selector(inclusionCriteriaSceneForOnboarding:) withObject:onboarding];
+        }
+        return nil;
+    }
+    if ([type isEqualToString:kAPCSignUpEligibleStepIdentifier]) {
+        return [[APCScene alloc] initWithName:@"APCEligibleViewController" inStoryboard:kAPCOnboardingStoryboardName];
+    }
+    if ([type isEqualToString:kAPCSignUpIneligibleStepIdentifier]) {
+        return [[APCScene alloc] initWithName:@"APCInEligibleViewController" inStoryboard:kAPCOnboardingStoryboardName];
+    }
+    if ([type isEqualToString:kAPCSignUpPermissionsPrimingStepIdentifier]) {
+        return [[APCScene alloc] initWithName:@"APCPermissionPrimingViewController" inStoryboard:kAPCOnboardingStoryboardName];     // "What to Expect" screen
+    }
+    if ([type isEqualToString:kAPCSignUpGeneralInfoStepIdentifier]) {
+        return [[APCScene alloc] initWithName:@"APCSignUpGeneralInfoViewController" inStoryboard:kAPCOnboardingStoryboardName];
+    }
+    if ([type isEqualToString:kAPCSignUpMedicalInfoStepIdentifier]) {
+        return [[APCScene alloc] initWithName:@"APCSignUpMedicalInfoViewController" inStoryboard:kAPCOnboardingStoryboardName];
+    }
+    if ([type isEqualToString:kAPCSignUpCustomInfoStepIdentifier]) {
+        if ([_provider respondsToSelector:@selector(customInfoSceneForOnboarding:)]) {
+            return [_provider performSelector:@selector(customInfoSceneForOnboarding:) withObject:onboarding];
+        }
+        return nil;
+    }
+    if ([type isEqualToString:kAPCSignUpPasscodeStepIdentifier]) {
+        return [[APCScene alloc] initWithName:@"APCSignupPasscodeViewController" inStoryboard:kAPCOnboardingStoryboardName];
+    }
+    if ([type isEqualToString:kAPCSignUpPermissionsStepIdentifier]) {
+        return [[APCScene alloc] initWithName:@"APCSignUpPermissionsViewController" inStoryboard:kAPCOnboardingStoryboardName];
+    }
+    if ([type isEqualToString:kAPCSignUpThankYouStepIdentifier]) {
+        return [[APCScene alloc] initWithName:@"APCThankYouViewController" inStoryboard:kAPCOnboardingStoryboardName];
+    }
+    
+    // Sign In
+    if ([type isEqualToString:kAPCSignInStepIdentifier]) {
+        return [[APCScene alloc] initWithName:@"APCSignInViewController" inStoryboard:kAPCOnboardingStoryboardName];
+    }
+    
+    APCLogDebug(@"Unknown onboarding scene type \"%@\"", type);
+    return nil;
+}
+
+- (APCUser *)userForOnboardingTask:(APCOnboardingTask *)__unused task {
+    return [_provider currentUser];
+}
+
+- (NSInteger)numberOfServicesInPermissionsListForOnboardingTask:(APCOnboardingTask *)__unused task {
+    return [_provider numberOfServicesInPermissionsList];
+}
 
 @end
