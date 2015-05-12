@@ -46,6 +46,7 @@ typedef enum : NSUInteger {
 
 @implementation CMMotionActivity (Helper)
 
+<<<<<<< HEAD
 + (NSArray *) csvColumnNames
 {
     /*
@@ -83,6 +84,8 @@ typedef enum : NSUInteger {
     return values;
 }
 
+=======
+>>>>>>> JIRA/APPLE-2796
 - (NSString *) confidenceName
 {
     NSString *name = (self.confidence == CMMotionActivityConfidenceHigh ? @"high" :
@@ -92,6 +95,7 @@ typedef enum : NSUInteger {
     return name;
 }
 
+<<<<<<< HEAD
 - (float) confidencePercent
 {
     float confidence = (self.confidence == CMMotionActivityConfidenceHigh ? 1 :
@@ -108,6 +112,8 @@ typedef enum : NSUInteger {
     return percent;
 }
 
+=======
+>>>>>>> JIRA/APPLE-2796
 - (APCCMMotionActivityType) activityType
 {
     APCCMMotionActivityType type = (self.stationary ? APCCMMotionActivityTypeStationary :
@@ -120,6 +126,7 @@ typedef enum : NSUInteger {
     return type;
 }
 
+<<<<<<< HEAD
 - (NSString *) activityTypeName
 {
     NSString *name = nil;
@@ -137,6 +144,42 @@ typedef enum : NSUInteger {
     }
 
     return name;
+=======
++ (NSString *) activityTypeName:(CMMotionActivity*)motionActivitySample
+{
+    NSString* motionActivityName = nil;
+    
+    if ([motionActivitySample unknown])
+    {
+        motionActivityName = @"unknown";
+    }
+    else if ([motionActivitySample stationary])
+    {
+        motionActivityName = @"stationary";
+    }
+    else if ([motionActivitySample walking])
+    {
+        motionActivityName = @"walking";
+    }
+    else if ([motionActivitySample running])
+    {
+        motionActivityName = @"running";
+    }
+    else if ([motionActivitySample cycling])
+    {
+        motionActivityName = @"cycling";
+    }
+    else if ([motionActivitySample automotive])
+    {
+        motionActivityName = @"automotive";
+    } else
+    {
+        motionActivityName = @"not available";
+    }
+    
+    return motionActivityName;
+
+>>>>>>> JIRA/APPLE-2796
 }
 
 @end

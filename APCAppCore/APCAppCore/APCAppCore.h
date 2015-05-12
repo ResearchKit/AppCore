@@ -78,13 +78,24 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCHKDiscreteQuantityTracker.h>
 #import <APCAppCore/APCHKCumulativeQuantityTracker.h>
 #import <APCAppCore/APCCoreLocationTracker.h>
-#import <APCAppCore/APCCoreMotionTracker.h>
+
 #import <APCAppCore/zipzap.h>
 #import <APCAppCore/ZZArchive.h>
 #import "APCAppCore/ZZArchiveEntry.h"
 #import "APCAppCore/ZZConstants.h"
 #import "APCAppCore/ZZError.h"
 #import "APCAppCore/APCCMS.h"
+#import "APCAppCore/APCPassiveDataCollector.h"
+#import "APCAppCore/APCCollectorProtocol.h"
+#import "APCAppCore/APCHealthKitBackgroundDataCollector.h"
+#import "APCAppCore/APCDataCollector.h"
+#import "APCAppCore/APCPassiveDataSink.h"
+#import "APCAppCore/APCPassiveDisplacementTrackingDataUploader.h"
+#import "APCAppCore/APCCoreMotionBackgroundDataCollector.h"
+#import "APCAppCore/APCDisplacementTrackingCollector.h"
+
+
+#import <APCAppCore/CLLocation+APCBearing.h>
 
 /* -------------------------
  Logging
@@ -304,6 +315,10 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDeviceHardware+APCHelper.h>
 #import <APCAppCore/ORKQuestionResult+APCHelper.h>
 #import <APCAppCore/NSOperationQueue+Helper.h>
+#import <APCAppCore/CMMotionActivity+Helper.h>
+#import <APCAppCore/NSDictionary+APCStringify.h>
+#import <APCAppCore/HKWorkout+APCHelper.h>
+#import <APCAppCore/CLLocation+APCBearing.h>
 
 /* -------------------------
  Appearance

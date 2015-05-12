@@ -1,5 +1,5 @@
 // 
-//  CMMotionActivity+Helper.h 
+//  APCCoreLocationTracker.h 
 //  APCAppCore 
 // 
 // Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -31,27 +31,13 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-#import <CoreMotion/CoreMotion.h>
+#import <Foundation/Foundation.h>
+#import "APCDataCollector.h"
+#import <CoreLocation/CoreLocation.h>
 
-/**
- We track CoreMotion motion activity as one of our "passive data"
- objects, using our "passive data collector."  This category helps
- us convert a CMMotionActivity object into a human-readable and
- machine-parseable entry in a comma-separated-values file.
- 
- The category contains a bunch of potentially-useful methods,
- including a typedef converting 6 Boolean fields into an enum.
- However, since no one *needs* that stuff outside this file,
- yet, I kept them inside.  Please feel free to expose them;
- they all work (we're using them when we call -csvColumValues).
- */
-@interface CMMotionActivity (Helper)
+@interface APCDisplacementTrackingCollector : APCDataCollector
 
-<<<<<<< HEAD
-+ (NSArray *) csvColumnNames;
-- (NSArray *) csvColumnValues;
-=======
-+ (NSString *) activityTypeName:(CMMotionActivity*)motionActivitySample;
->>>>>>> JIRA/APPLE-2796
+- (instancetype)initWithIdentifier:(NSString*)identifier deferredUpdatesTimeout:(NSTimeInterval)anUpdateTimeout;
 
 @end
+
