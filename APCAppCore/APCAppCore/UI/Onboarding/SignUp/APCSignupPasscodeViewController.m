@@ -140,10 +140,9 @@
             [self savePasscode];
         }
         else {
-            [self showFirstTry];
-
             UIAlertController *alert = [UIAlertController simpleAlertWithTitle:NSLocalizedString(@"Identification", @"") message:NSLocalizedString(@"Your passcodes are not identical. Please enter it again.", @"")];
-            [self presentViewController:alert animated:YES completion:nil];
+            __weak typeof(self) weakSelf = self;
+            [self presentViewController:alert animated:YES completion:^{[weakSelf showFirstTry];}];
         }
     }
 }
