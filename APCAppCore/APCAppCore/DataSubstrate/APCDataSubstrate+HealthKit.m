@@ -38,7 +38,6 @@
 
 - (void)setUpHealthKit
 {
-    
     self.healthStore = [HKHealthStore isHealthDataAvailable] ? [[HKHealthStore alloc] init] : nil;
 }
 

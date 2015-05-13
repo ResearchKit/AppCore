@@ -31,10 +31,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-#import <APCAppCore/APCAppCore.h>
+#import "APCDataSubstrate.h"
 
 @interface APCDataSubstrate (HealthKit)
 
-- (void) setUpHealthKit;
+- (void)setUpHealthKit;
 
 @end

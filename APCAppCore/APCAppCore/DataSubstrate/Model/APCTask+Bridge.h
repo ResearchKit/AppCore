@@ -31,11 +31,14 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-#import <APCAppCore/APCAppCore.h>
+#import "APCTask.h"
+#import <ResearchKit/ResearchKit.h>
+#import <BridgeSDK/BridgeSDK.h>
 
 @interface APCTask (Bridge)
 
 + (void) refreshSurveysOnCompletion: (void (^)(NSError * error)) completionBlock;
 - (void) loadSurveyOnCompletion: (void (^)(NSError * error)) completionBlock;
 + (ORKOrderedTask*) rkTaskFromSBBSurvey: (SBBSurvey*) survey;
+
 @end

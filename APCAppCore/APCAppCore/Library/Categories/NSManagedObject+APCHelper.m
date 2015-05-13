@@ -35,13 +35,13 @@
 
 @implementation NSManagedObject (APCHelper)
 
-+ (instancetype) newObjectForContext: (NSManagedObjectContext*) context
++ (instancetype)newObjectForContext:(NSManagedObjectContext*)context
 {
     return  [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
     
 }
 
-+(NSFetchRequest *)request
++ (NSFetchRequest *)request
 {
     return [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([self class])];
 }

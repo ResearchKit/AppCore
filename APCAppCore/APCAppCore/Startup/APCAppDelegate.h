@@ -89,6 +89,7 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 - (void) setUpInitializationOptions;
 - (void) setUpAppAppearance;
 - (void) registerCatastrophicStartupError: (NSError *) error;
+- (void) configureObserverQueries;
 
 //For User in Subclasses
 - (void) signedInNotification:(NSNotification *)notification;
@@ -113,4 +114,5 @@ extern NSUInteger   const kTheEntireDataModelOfTheApp;
 
 - (void)instantiateOnboardingForType:(APCOnboardingTaskType)type;
 
+- (NSDate*)applicationBecameActiveDate;
 @end

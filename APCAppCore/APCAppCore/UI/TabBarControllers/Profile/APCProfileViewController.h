@@ -31,7 +31,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-#import <UIKit/UIKit.h>
 #import "APCUserInfoViewController.h"
 
 
@@ -86,7 +85,7 @@
 @protocol APCProfileViewControllerDelegate <NSObject>
 @optional
 
-- (UITableViewCell *)cellForRowAtAdjustedIndexPath:(NSIndexPath *)indexPath;
+- (UITableViewCell *)decorateCell:(UITableViewCell *)cell atIndexPath: (NSIndexPath *)indexPath;
 
 - (BOOL)willDisplayCell:(NSIndexPath *)indexPath;
 

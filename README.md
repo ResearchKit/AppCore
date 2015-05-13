@@ -1,4 +1,4 @@
-ResearchKit AppCore
+AppCore
 ===================
 
 AppCore is a layer built on top of [ResearchKit](https://github.com/researchkit/ResearchKit) which forms the core of

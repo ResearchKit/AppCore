@@ -33,6 +33,17 @@
  
 #import <Foundation/Foundation.h>
 
+FOUNDATION_EXPORT NSString * const kAPCServerBusyErrorMessage;
+FOUNDATION_EXPORT NSString * const kAPCUnexpectedConditionErrorMessage;
+FOUNDATION_EXPORT NSString * const kAPCNotConnectedErrorMessage;
+FOUNDATION_EXPORT NSString * const kAPCServerUnderMaintanenceErrorMessage;
+FOUNDATION_EXPORT NSString * const kAPCAccountAlreadyExistsErrorMessage;
+FOUNDATION_EXPORT NSString * const kAPCAccountDoesNotExistErrorMessage;
+FOUNDATION_EXPORT NSString * const kAPCBadEmailAddressErrorMessage;
+FOUNDATION_EXPORT NSString * const kAPCBadPasswordErrorMessage;
+FOUNDATION_EXPORT NSString * const kAPCNotReachableErrorMessage;
+FOUNDATION_EXPORT NSString * const kAPCInvalidEmailAddressOrPasswordErrorMessage;
+
 @interface NSError (APCAdditions)
 
 /*********************************************************************************/

@@ -92,7 +92,7 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
     switch (self.entryType) {
         case kAPCPasscodeEntryTypeOld:
         {
-            if ([passcodeView.code isEqualToString:[APCKeychainStore stringForKey:kAPCPasscodeKey]]) {
+            if ([passcodeView.code isEqualToString:[APCKeychainStore passcode]]) {
                 self.textLabel.text = NSLocalizedString(@"Enter your new passcode", nil);
                 [passcodeView reset];
                 [passcodeView becomeFirstResponder];
@@ -143,7 +143,9 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
 
 - (void)savePasscode
 {
-    [APCKeychainStore setString:self.passcode forKey:kAPCPasscodeKey];
+    if (self.passcode) {
+        [APCKeychainStore setPasscode:self.passcode];
+    }
     self.passcode = @"";
 }
 

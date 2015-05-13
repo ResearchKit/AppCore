@@ -33,6 +33,7 @@
  
 #import "APCParameters.h"
 #import "APCConstants.h"
+#import "APCLog.h"
 #import "APCParameters+Settings.h"
 
 
