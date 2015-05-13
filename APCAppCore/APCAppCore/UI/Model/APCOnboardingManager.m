@@ -33,6 +33,7 @@
 //
 
 #import "APCOnboardingManager.h"
+#import "APCPermissionsManager.h"
 #import "APCLog.h"
 
 
@@ -44,6 +45,8 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 @property (weak, nonatomic) id<APCOnboardingManagerProvider> provider;
 
 @property (strong, nonatomic, readwrite) APCUser *user;
+
+@property (strong, nonatomic, readwrite) APCPermissionsManager *permissionsManager;
 
 @end
 
@@ -73,6 +76,20 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
         self.onboarding = nil;
     }
     self.onboarding = [[APCOnboarding alloc] initWithDelegate:self taskType:type];
+}
+
+
+#pragma mark - Permissions
+
+- (APCPermissionsManager *)permissionsManager {
+    if (!_permissionsManager) {
+        self.permissionsManager = [self createPermissionsManager];
+    }
+    return _permissionsManager;
+}
+
+- (APCPermissionsManager *)createPermissionsManager {
+    return [APCPermissionsManager new];
 }
 
 

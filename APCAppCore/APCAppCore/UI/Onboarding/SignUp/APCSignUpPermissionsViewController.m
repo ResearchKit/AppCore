@@ -84,9 +84,8 @@ static CGFloat const kTableViewRowHeight                 = 200.0f;
 
 - (void)sharedInit
 {
-    _permissions = [NSMutableArray array];
-    
-    _permissionsManager = [[APCPermissionsManager alloc] init];
+    self.permissions = [NSMutableArray array];
+    self.permissionsManager = [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].permissionsManager;
 }
 
 #pragma mark - Lifecycle

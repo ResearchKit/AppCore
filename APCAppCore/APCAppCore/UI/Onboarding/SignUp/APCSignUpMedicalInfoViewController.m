@@ -46,7 +46,7 @@
 
 @interface APCSignUpMedicalInfoViewController ()
 
-@property (nonatomic, strong) APCPermissionsManager *permissionManager;
+@property (nonatomic, strong) APCPermissionsManager *permissionsManager;
 @property (nonatomic) BOOL permissionGranted;
 
 @end
@@ -64,13 +64,12 @@
     
     self.navigationItem.hidesBackButton = YES;
     
-    self.permissionManager = [[APCPermissionsManager alloc] init];
-    
-    self.permissionGranted = [self.permissionManager isPermissionsGrantedForType:kAPCSignUpPermissionsTypeHealthKit];
+    self.permissionsManager = [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].permissionsManager;
+    self.permissionGranted = [self.permissionsManager isPermissionsGrantedForType:kAPCSignUpPermissionsTypeHealthKit];
     
     __weak typeof(self) weakSelf = self;
     if (!self.permissionGranted) {
-        [self.permissionManager requestForPermissionForType:kAPCSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
+        [self.permissionsManager requestForPermissionForType:kAPCSignUpPermissionsTypeHealthKit withCompletion:^(BOOL granted, NSError * __unused error) {
             if (granted) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     weakSelf.permissionGranted = YES;

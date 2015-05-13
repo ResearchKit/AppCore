@@ -113,7 +113,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [self initializeAppleCoreStack];
     [self loadStaticTasksAndSchedulesIfNecessary];
     [self registerNotifications];
-    [self setUpHKPermissions];
     [self setUpAppAppearance];
     [self setUpTasksReminder];
     [self showAppropriateVC];
@@ -575,11 +574,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     return consentSections;
 }
 
-- (void) setUpHKPermissions
-{
-    [APCPermissionsManager setHealthKitTypesToRead:self.initializationOptions[kHKReadPermissionsKey]];
-    [APCPermissionsManager setHealthKitTypesToWrite:self.initializationOptions[kHKWritePermissionsKey]];
-}
 
 - (void) setUpTasksReminder {/*Abstract Implementation*/}
 
@@ -1164,6 +1158,10 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 - (APCOnboardingManager *)onboardingManager {
     if (!_onboardingManager) {
         self.onboardingManager = [APCOnboardingManager managerWithProvider:self user:self.dataSubstrate.currentUser];
+        
+        // TODO: do away with initializationOptions[kHKReadPermissionsKey] and initializationOptions[kHKWritePermissionsKey]
+        _onboardingManager.permissionsManager.healthKitTypesToRead = self.initializationOptions[kHKReadPermissionsKey];
+        _onboardingManager.permissionsManager.healthKitTypesToWrite = self.initializationOptions[kHKWritePermissionsKey];
     }
     return _onboardingManager;
 }
