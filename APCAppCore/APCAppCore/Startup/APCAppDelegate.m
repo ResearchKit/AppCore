@@ -72,7 +72,6 @@ static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 #pragma mark - User Defaults Keys
 /*********************************************************************************/
 
-static NSString*    const kDemographicDataWasUploadedKey    = @"kDemographicDataWasUploadedKey";
 static NSString*    const kLastUsedTimeKey                  = @"APHLastUsedTime";
 static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterForegroundTime";
 static NSUInteger   const kIndexOfProfileTab                = 3;
@@ -86,7 +85,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 @property (nonatomic, strong) NSOperationQueue *healthKitCollectorQueue;
 @property (nonatomic, strong) APCHealthKitDataCollector *healthKitCollector;
-@property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
 
 @end
 
@@ -731,7 +729,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
                     NSPredicate *predicate = nil;
                     NSDate *consentDate = self.dataSubstrate.currentUser.consentSignatureDate;
                     
-                    if (anchorForSampleType == 0) {
+                    if (anchorForSampleType == 0 && consentDate) {
                         predicate = [NSPredicate predicateWithFormat:@"%K >= %@",
                                      HKPredicateKeyPathStartDate,
                                      [consentDate startOfDay]];

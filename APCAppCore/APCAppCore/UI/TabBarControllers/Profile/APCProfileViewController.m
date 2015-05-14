@@ -49,8 +49,9 @@
 #import "APCConstants.h"
 #import "APCUtilities.h"
 #import "APCLog.h"
+
 #ifndef APC_HAVE_CONSENT
-#import "APCExampleLabel.h"
+    #import "APCExampleLabel.h"
 #endif
 
 #import "UIColor+APCAppearance.h"
@@ -59,9 +60,12 @@
 #import "NSBundle+Helper.h"
 #import "NSError+APCAdditions.h"
 #import "APCUser+UserData.h"
+#import "APCUser+Bridge.h"
 #import "UIAlertController+Helper.h"
+#import "APCTasksReminderManager.h"
 
 #import <ResearchKit/ResearchKit.h>
+#import <BridgeSDK/BridgeSDK.h>
 
 static CGFloat const kSectionHeaderHeight = 40.f;
 static CGFloat const kStudyDetailsViewHeightConstant = 48.f;

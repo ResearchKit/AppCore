@@ -33,6 +33,7 @@
 
 #import "NSError+Bridge.h"
 #import <BridgeSDK/BridgeSDK.h>
+#import "APCLog.h"
 
 static NSString *kSageMessageKey                 = @"message";
 static NSString *kSageErrorsKey                  = @"errors";
