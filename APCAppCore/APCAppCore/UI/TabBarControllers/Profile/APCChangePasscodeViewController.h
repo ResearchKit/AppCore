@@ -32,7 +32,9 @@
 // 
  
 #import <UIKit/UIKit.h>
-#import "APCPasscodeView.h"
+
+@class APCPasscodeView;
+
 
 @interface APCChangePasscodeViewController : UIViewController
 
@@ -40,4 +42,5 @@
 @property (weak, nonatomic) IBOutlet APCPasscodeView *passcodeView;
 
 - (IBAction)cancel:(id)sender;
+
 @end
