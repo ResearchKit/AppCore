@@ -40,48 +40,55 @@
 
 @interface APCDataSubstrate : NSObject <APCParametersDelegate>
 
-/*********************************************************************************/
-#pragma mark - Initializer
-/*********************************************************************************/
-- (instancetype)initWithPersistentStorePath: (NSString*) storePath additionalModels:(NSManagedObjectModel *)mergedModels studyIdentifier: (NSString*) studyIdentifier;
 
-/*********************************************************************************/
+#pragma mark - Initializer
+
+- (instancetype)initWithPersistentStorePath:(NSString *)storePath additionalModels:(NSManagedObjectModel *)mergedModels studyIdentifier:(NSString *)studyIdentifier;
+
+
 #pragma mark - ResearchKit Subsystem Public Properties & Passive Location Tracking
-/*********************************************************************************/
+
 @property (assign) BOOL justJoined;
 @property (strong, nonatomic) NSString *logDirectory;
-@property (nonatomic, strong) APCUser * currentUser;
+@property (nonatomic, strong) APCUser *currentUser;
 
-/*********************************************************************************/
-#pragma mark - Core Data Subsystem Public Properties
-/*********************************************************************************/
-//Main context for use in View Controllers, Fetch Results Controllers etc.
+
+#pragma mark - CoreData
+
+@property (nonatomic, strong) NSString *storePath;
+@property (nonatomic, strong) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (nonatomic, strong) NSManagedObjectModel *managedObjectModel;
+
+/** Main context for use in View Controllers, Fetch Results Controllers etc. */
 @property (nonatomic, strong) NSManagedObjectContext * mainContext;
 
-//Persistent context: Parent of main context.
-//Please create a child context of persistentContext for any background processing tasks
+/** Persistent context: Parent of main context.
+ *  Please create a child context of persistentContext for any background processing tasks.
+ */
 @property (nonatomic, strong) NSManagedObjectContext * persistentContext;
 
-/*********************************************************************************/
-#pragma mark - Healthkit Public Properties
-/*********************************************************************************/
-@property (nonatomic, strong) HKHealthStore * healthStore;
 
-/*********************************************************************************/
-#pragma mark - Properties & Methods meant only for Categories
-/*********************************************************************************/
-//ResearchKit Subsystem
+#pragma mark - Core Data Public Methods
 
-//Core Data Subsystem
-@property (nonatomic, strong) NSString * storePath;
-@property (nonatomic, strong) NSPersistentStoreCoordinator * persistentStoreCoordinator;
-@property (nonatomic, strong) NSManagedObjectModel * managedObjectModel;
+- (void)loadStaticTasksAndSchedules:(NSDictionary *)jsonDictionary;
 
-//HealthKit Subsystem
-/*********************************************************************************/
+/** EXERCISE CAUTION IN CALLING THIS METHOD. */
+- (void)resetCoreData;
+
+
+#pragma mark - Core Data Helpers - ONLY RETURNS in NSManagedObjects in mainContext
+
+- (NSUInteger)countOfAllScheduledTasksForToday;
+- (NSUInteger)countOfCompletedScheduledTasksForToday;
+
+
+#pragma mark - HealthKit
+
+@property (nonatomic, strong) HKHealthStore *healthStore;
+
+
 #pragma mark - Parameters
-/*********************************************************************************/
-@property (strong, nonatomic) APCParameters *parameters;
 
+@property (strong, nonatomic) APCParameters *parameters;
 
 @end
