@@ -46,68 +46,6 @@ typedef enum : NSUInteger {
 
 @implementation CMMotionActivity (Helper)
 
-+ (NSArray *) csvColumnNames
-{
-    /*
-     Keep these in the same order as the "column values" entries below.
-     */
-    return @[@"dateAndTime",
-             @"activityTypeName",
-             @"activityTypeValue",
-             @"confidenceName",
-             @"confidenceRaw",
-             @"confidencePercent"
-             ];
-}
-
-- (NSArray *) csvColumnValues
-{
-    NSString *dateStamp = self.startDate == nil ? @"unknown" : self.startDate.toStringInISO8601Format;
-    NSString *activityTypeName = self.activityTypeName;
-    APCCMMotionActivityType activityType = self.activityType;
-    NSString *confidenceName = self.confidenceName;
-    CMMotionActivityConfidence rawConfidence = self.confidence;
-    NSString *confidencePercentAsString = self.confidencePercentAsString;
-
-    /*
-     Keep these in the same order as the "column names" entries above.
-     */
-    NSArray *values = @[dateStamp,
-                        activityTypeName,
-                        @(activityType),
-                        confidenceName,
-                        @(rawConfidence),
-                        confidencePercentAsString
-                        ];
-
-    return values;
-}
-
-- (NSString *) confidenceName
-{
-    NSString *name = (self.confidence == CMMotionActivityConfidenceHigh ? @"high" :
-                      self.confidence == CMMotionActivityConfidenceMedium ? @"medium" :
-                      @"low");
-
-    return name;
-}
-
-- (float) confidencePercent
-{
-    float confidence = (self.confidence == CMMotionActivityConfidenceHigh ? 1 :
-                        self.confidence == CMMotionActivityConfidenceMedium ? 0.5 :
-                        0);
-
-    return confidence;
-}
-
-- (NSString *) confidencePercentAsString
-{
-    NSString *percent = [NSString stringWithFormat: @"%3.2f", self.confidencePercent];
-
-    return percent;
-}
-
 - (APCCMMotionActivityType) activityType
 {
     APCCMMotionActivityType type = (self.stationary ? APCCMMotionActivityTypeStationary :
@@ -120,23 +58,39 @@ typedef enum : NSUInteger {
     return type;
 }
 
-- (NSString *) activityTypeName
++ (NSString *) activityTypeName:(CMMotionActivity*)motionActivitySample
 {
-    NSString *name = nil;
-
-    switch (self.activityType)
+    NSString* motionActivityName = nil;
+    
+    if ([motionActivitySample unknown])
     {
-        case APCCMMotionActivityTypeStationary : name = @"stationary";  break;
-        case APCCMMotionActivityTypeWalking    : name = @"walking";     break;
-        case APCCMMotionActivityTypeRunning    : name = @"running";     break;
-        case APCCMMotionActivityTypeAutomotive : name = @"automotive";  break;
-        case APCCMMotionActivityTypeCycling    : name = @"cycling";     break;
-
-        default:
-        case APCCMMotionActivityTypeUnknown    : name = @"unknown";     break;
+        motionActivityName = @"unknown";
     }
-
-    return name;
+    else if ([motionActivitySample stationary])
+    {
+        motionActivityName = @"stationary";
+    }
+    else if ([motionActivitySample walking])
+    {
+        motionActivityName = @"walking";
+    }
+    else if ([motionActivitySample running])
+    {
+        motionActivityName = @"running";
+    }
+    else if ([motionActivitySample cycling])
+    {
+        motionActivityName = @"cycling";
+    }
+    else if ([motionActivitySample automotive])
+    {
+        motionActivityName = @"automotive";
+    } else
+    {
+        motionActivityName = @"not available";
+    }
+    
+    return motionActivityName;
 }
 
 @end

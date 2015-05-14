@@ -60,7 +60,9 @@
 #import "NSError+APCAdditions.h"
 #import "APCUser+UserData.h"
 #import "UIAlertController+Helper.h"
-
+#import "APCTasksReminderManager.h"
+#import "APCUser+Bridge.h"
+#import <BridgeSDK/SBBConsentManager.h>
 #import <ResearchKit/ResearchKit.h>
 
 static CGFloat const kSectionHeaderHeight = 40.f;

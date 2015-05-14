@@ -42,7 +42,6 @@
 #import "UIView+Helper.h"
 #import "APCTabBarViewController.h"
 #import "UIAlertController+Helper.h"
-#import "APCHealthKitDataCollector.h"
 #import "APCConstants.h"
 
 /*
@@ -68,15 +67,11 @@ static NSString *const kLearnStoryBoardKey         = @"APCLearn";
 static NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
 static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 
-/*********************************************************************************/
-#pragma mark - User Defaults Keys
+static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
+static NSUInteger const kIndexOfProfileTab = 3;
 /*********************************************************************************/
 
-static NSString*    const kDemographicDataWasUploadedKey    = @"kDemographicDataWasUploadedKey";
-static NSString*    const kLastUsedTimeKey                  = @"APHLastUsedTime";
 static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterForegroundTime";
-static NSUInteger   const kIndexOfProfileTab                = 3;
-
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 
@@ -85,8 +80,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 @property (nonatomic, strong) NSError *catastrophicStartupError;
 
 @property (nonatomic, strong) NSOperationQueue *healthKitCollectorQueue;
-@property (nonatomic, strong) APCHealthKitDataCollector *healthKitCollector;
-@property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
 
 @end
 
@@ -117,8 +110,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
     [self showAppropriateVC];
     
     [self.dataMonitor appFinishedLaunching];
-    
-    [self configureObserverQueries];
     
     return YES;
 }
@@ -588,55 +579,9 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
     completionHandler();
-}
-
-/**
-  * @brief  This configures the observer queries for all HK data type
-  *         that the app will be asking for Read permissions.
-  */
-- (void)configureObserverQueries
-{
-    if (!self.dataSubstrate.currentUser.consented) {
-        return;
-    }
-    
-    NSArray *dataTypesWithReadPermission = self.initializationOptions[kHKReadPermissionsKey];
-    
-    if (dataTypesWithReadPermission) {
-        
-        if (!self.healthKitCollectorQueue) {
-            self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:@"HealthKit Data Collector"];
         }
         
-        if (!self.healthKitCollector) {
-            self.healthKitCollector = [[APCHealthKitDataCollector alloc] initWithIdentifier:@"HealthKitDataCollector"];
-            [self.passiveDataCollector addTracker:self.healthKitCollector];
-            [self.healthKitCollector startTracking];
-        }
-        
-        for (id dataType in dataTypesWithReadPermission) {
             
-            HKSampleType *sampleType = nil;
-            
-            if ([dataType isKindOfClass:[NSDictionary class]]) {
-                NSDictionary *categoryType = (NSDictionary *)dataType;
-                sampleType = [HKObjectType categoryTypeForIdentifier:categoryType[kHKCategoryTypeKey]];
-            } else {
-                sampleType = [HKObjectType quantityTypeForIdentifier:dataType];
-            }
-            
-            if (![[NSUserDefaults standardUserDefaults] integerForKey:sampleType.identifier]) {
-                // Initialize the anchor to 0 that will be later used
-                // and updated by the anchored query.
-                [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:sampleType.identifier];
-            }
-            
-            [self observerQueryForSampleType:sampleType
-                              withCompletion:nil];
-        }
-    }
-}
-
 - (NSArray *)offsetForTaskSchedules
 {
     //TODO: Number of days should be zero based. If I want something to show up on day 2 then the offset is 1
@@ -688,95 +633,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
      * Note: This needs to be refactored
      */
     return nil;
-}
-
-/*********************************************************************************/
-#pragma mark - Observer Query
-/*********************************************************************************/
-
-/**
-  * @brief  Sets up an observer query for the provided sample type and subscribes to background updates.
-  *
-  * @param  sampleType  HKSampleType that is used for setting up the observer query.
-  *
-  * @param  completion  A block that is called as soon as the observer query's update handler is 
-  *                     executed without any errors.
-  *
-  */
-- (void)observerQueryForSampleType:(HKSampleType *)sampleType
-                    withCompletion:(void (^)(void))completion
-{
-    APCLogDebug(@"Setting up observer query for sample type %@", sampleType.identifier);
-
-    __weak APCAppDelegate *weakSelf = self;
-    
-    [self.dataSubstrate.healthStore enableBackgroundDeliveryForType:sampleType
-                                                          frequency:HKUpdateFrequencyImmediate
-                                                     withCompletion:^(BOOL success, NSError *error)
-    {
-        if (success == NO) {
-            APCLogError2(error);
-        } else {
-            HKObserverQuery *observerQuery = [[HKObserverQuery alloc] initWithSampleType:sampleType
-                                                                               predicate:nil
-                                                                           updateHandler:^(HKObserverQuery __unused *query,
-                                                                                           HKObserverQueryCompletionHandler completionHandler,
-                                                                                           NSError *error)
-            {
-                if (error) {
-                    APCLogError2(error);
-                    completionHandler();
-                } else {
-                    NSUInteger anchorForSampleType = [[NSUserDefaults standardUserDefaults] integerForKey:sampleType.identifier];
-                    NSPredicate *predicate = nil;
-                    NSDate *consentDate = self.dataSubstrate.currentUser.consentSignatureDate;
-                    
-                    if (anchorForSampleType == 0) {
-                        predicate = [NSPredicate predicateWithFormat:@"%K >= %@",
-                                     HKPredicateKeyPathStartDate,
-                                     [consentDate startOfDay]];
-                    }
-                    
-                    APCLogDebug(@"Anchor: %lu (%@)", anchorForSampleType, sampleType.identifier);
-                    
-                    HKAnchoredObjectQuery *anchoredQuery = [[HKAnchoredObjectQuery alloc] initWithType:sampleType
-                                                                                             predicate:predicate
-                                                                                                anchor:anchorForSampleType
-                                                                                                 limit:HKObjectQueryNoLimit
-                                                                                     completionHandler:^(HKAnchoredObjectQuery * __unused query,
-                                                                                                         NSArray *results,
-                                                                                                         NSUInteger newAnchor,
-                                                                                                         NSError *error)
-                    {
-                        if (!results) {
-                            APCLogError2(error);
-                        } else {
-                            if (results.count > 0) {
-                                [[NSUserDefaults standardUserDefaults] setInteger:newAnchor forKey:sampleType.identifier];
-                                
-                                APCLogDebug(@"Old/New Anchor: %lu/%lu (%@) [%@]", anchorForSampleType, newAnchor, sampleType.identifier, results);
-                                
-                                [weakSelf processUpdatesFromHealthKitForSampleType:results];
-                            } else {
-                                
-                            }
-                        }
-                        
-                        completionHandler();
-                    }];
-                    
-                    [weakSelf.dataSubstrate.healthStore executeQuery:anchoredQuery];
-                    
-                    // If there's a completion block execute it.
-                    if (completion) {
-                        completion();
-                    }
-                }
-            }];
-            
-            [weakSelf.dataSubstrate.healthStore executeQuery:observerQuery];
-        }
-    }];
 }
 
 /*********************************************************************************/
@@ -882,56 +738,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 
 - (NSDictionary *) tasksAndSchedulesWillBeLoaded {
     return nil;
-}
-
-- (void)processUpdatesFromHealthKitForSampleType:(NSArray *)quantitySamples
-{
-    [self.healthKitCollectorQueue addOperationWithBlock:^{
-        NSString *filename = [self.healthKitCollector.folder stringByAppendingPathComponent:self.healthKitCollector.csvFilename];
-        
-        for (HKQuantitySample *quantitySample in quantitySamples) {
-            NSString *healthKitType = nil;
-            NSString *quantityValue = nil;
-            NSString *dateTimeStamp = [quantitySample.startDate toStringInISO8601Format];
-            NSString *sourceBundleIdentifier = quantitySample.source.bundleIdentifier;
-            NSString *sourceName = quantitySample.source.name;
-            
-            if ([quantitySample isKindOfClass:[HKCategorySample class]]) {
-                HKCategorySample *catSample = (HKCategorySample *)quantitySample;
-                healthKitType = catSample.categoryType.identifier;
-                
-                if ([healthKitType isEqualToString:HKCategoryTypeIdentifierSleepAnalysis]) {
-                    quantityValue = [NSString stringWithFormat:@"%ld", (long)catSample.value];
-                    
-                    // Get the difference in seconds between the start and end date for the sample
-                    NSDateComponents *secondsSpentInBedOrAsleep = [[NSCalendar currentCalendar] components:NSCalendarUnitSecond
-                                                                                                  fromDate:catSample.startDate
-                                                                                                    toDate:catSample.endDate
-                                                                                                   options:NSCalendarWrapComponents];
-                    if (catSample.value == HKCategoryValueSleepAnalysisInBed) {
-                        quantityValue = [NSString stringWithFormat:@"%ld,seconds in bed", (long)secondsSpentInBedOrAsleep.second];
-                    } else if (catSample.value == HKCategoryValueSleepAnalysisAsleep) {
-                        quantityValue = [NSString stringWithFormat:@"%ld,seconds asleep", (long)secondsSpentInBedOrAsleep.second];
-                    }
-                }
-            } else {
-                HKQuantitySample *qtySample = (HKQuantitySample *)quantitySample;
-                healthKitType = qtySample.quantityType.identifier;
-                
-                quantityValue = [NSString stringWithFormat:@"%@", qtySample.quantity];
-                quantityValue = [quantityValue stringByReplacingOccurrencesOfString:@" " withString:@","];
-            }
-            
-            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@\n",
-                                       dateTimeStamp, sourceBundleIdentifier, sourceName,
-                                       healthKitType, quantityValue];
-            
-            [APCPassiveDataCollector createOrAppendString:stringToWrite
-                                                   toFile:filename];
-            
-            [self.passiveDataCollector checkIfDataNeedsToBeFlushed:self.healthKitCollector];
-        }
-    }];
 }
 
 /*********************************************************************************/
