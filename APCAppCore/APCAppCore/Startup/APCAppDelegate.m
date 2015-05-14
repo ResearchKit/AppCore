@@ -89,8 +89,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 @property (nonatomic, strong) APCHealthKitDataCollector *healthKitCollector;
 @property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
 
-@property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
-
 @end
 
 
