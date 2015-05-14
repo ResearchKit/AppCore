@@ -166,7 +166,15 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
             user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
             
             NSDateFormatter *dateFormatter = [NSDateFormatter new];
-            dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
+            
+            NSString *consentDateFormat = consentResult.signature.signatureDateFormatString;
+            
+            if (consentDateFormat) {
+                dateFormatter.dateFormat = consentDateFormat;
+            } else {
+                dateFormatter.dateStyle = NSDateFormatterShortStyle;
+            }
+            
             user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
             [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
             
