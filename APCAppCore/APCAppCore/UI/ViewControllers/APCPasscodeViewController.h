@@ -37,12 +37,12 @@
 
 @interface APCPasscodeViewController : UIViewController
 
-@property (weak, nonatomic) id <APCPasscodeViewControllerDelegate> delegate;
+@property (weak, nonatomic, nullable) id <APCPasscodeViewControllerDelegate> delegate;
 
 @end
 
 @protocol APCPasscodeViewControllerDelegate <NSObject>
 
-- (void)passcodeViewControllerDidSucceed:(APCPasscodeViewController *)viewController;
+- (void)passcodeViewControllerDidSucceed:(nonnull APCPasscodeViewController *)viewController;
 
 @end
