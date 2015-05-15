@@ -48,6 +48,7 @@
 #import "APCDataSubstrate.h"
 #import "APCConstants.h"
 #import "APCUtilities.h"
+#import "APCUser.h"
 #import "APCLog.h"
 
 #ifndef APC_HAVE_CONSENT
@@ -143,7 +144,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self setupDataFromJSONFile:@"StudyOverview"];
     
-    if (self.user.sharedOptionSelection && self.user.sharedOptionSelection.integerValue == 0) {
+    if (APCUserConsentSharingScopeNone == self.user.sharingScope) {
         self.participationLabel.text = NSLocalizedString(@"Your data is no longer being used for this study.", @"");
         self.leaveStudyButton.hidden = YES;
     }
@@ -721,7 +722,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
-        if (self.user.sharedOptionSelection != [NSNumber numberWithInteger:SBBConsentShareScopeNone]) {
+        if (APCUserConsentSharingScopeNone != self.user.sharingScope) {
             //  Instead of prevent the row from being added to the table, a better option would be to
             //  disable the row (grey it out and don't respond to taps)
             APCTableViewItem *field = [APCTableViewItem new];
@@ -1300,7 +1301,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     [self presentViewController:spinnerController animated:YES completion:nil];
     
     typeof(self) __weak weakSelf = self;
-    self.user.sharedOptionSelection = [NSNumber numberWithInteger:SBBConsentShareScopeNone];
+    self.user.sharingScope = APCUserConsentSharingScopeNone;
     [self.user withdrawStudyOnCompletion:^(NSError *error) {
         if (error) {
             APCLogError2 (error);

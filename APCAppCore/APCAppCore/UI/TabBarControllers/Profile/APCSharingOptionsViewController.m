@@ -146,9 +146,9 @@ static NSInteger kNumberOfRows = 2;
     cell.textLabel.font = [UIFont appMediumFontWithSize:16.0f];
     cell.textLabel.textColor = [UIColor appSecondaryColor1];
     
-    if (indexPath.row == 0 && self.user.sharedOptionSelection.integerValue == SBBConsentShareScopeAll) {
+    if (indexPath.row == 0 && self.user.sharingScope == APCUserConsentSharingScopeAll) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    } else if (indexPath.row == 1 && self.user.sharedOptionSelection.integerValue == SBBConsentShareScopeStudy) {
+    } else if (indexPath.row == 1 && self.user.sharingScope == APCUserConsentSharingScopeStudy) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -162,9 +162,9 @@ static NSInteger kNumberOfRows = 2;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        self.user.sharedOptionSelection = [NSNumber numberWithInteger:SBBConsentShareScopeAll];
+        self.user.sharingScope = APCUserConsentSharingScopeAll;
     } else if (indexPath.row == 1) {
-        self.user.sharedOptionSelection = [NSNumber numberWithInteger:SBBConsentShareScopeStudy];
+        self.user.sharingScope = APCUserConsentSharingScopeStudy;
     }
     
     APCSpinnerViewController *spinnerController = [[APCSpinnerViewController alloc] init];
