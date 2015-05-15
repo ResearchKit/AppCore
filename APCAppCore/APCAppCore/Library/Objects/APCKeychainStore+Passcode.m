@@ -38,15 +38,17 @@ static NSString * const kAPCPasscodeKey = @"APCPasscode";
 
 @implementation APCKeychainStore (Passcode)
 
-+ (void)setPasscode:(nonnull NSString *)passcode
-{
++ (void)setPasscode:(nonnull NSString *)passcode {
     NSParameterAssert([passcode length] > 0);
     [APCKeychainStore setString:passcode forKey:kAPCPasscodeKey];
 }
 
-+ (nullable NSString *)passcode
-{
++ (nullable NSString *)passcode {
     return [APCKeychainStore stringForKey:kAPCPasscodeKey];
+}
+
++ (void)resetPasscode {
+    [APCKeychainStore removeValueForKey:kAPCPasscodeKey];
 }
 
 @end
