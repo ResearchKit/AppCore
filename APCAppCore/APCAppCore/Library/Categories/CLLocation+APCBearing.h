@@ -36,7 +36,6 @@
 @interface CLLocation (APCAdditions)
 
 - (double)bearingToLocation:(CLLocation*)destinationLocation;
-- (double)calculateMagnitudeToLocation:(CLLocation*)destinationLocation;
 - (double)calculateDirectionFromLocation:(CLLocation*)destinationLocation;
 
 @end

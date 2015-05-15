@@ -45,7 +45,7 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 @implementation APCHealthKitBackgroundDataCollector
 
-- (instancetype)initWithIdentifier:(NSString*)identifier sampleType:(HKSampleType*)type anchorName:(NSString*)anchorName launchDateAnchor:(InitialStartDatePredicateDesignator)launchDateAnchor
+- (instancetype)initWithIdentifier:(NSString*)identifier sampleType:(HKSampleType*)type anchorName:(NSString*)anchorName launchDateAnchor:(APCInitialStartDatePredicateDesignator)launchDateAnchor
 {
     self = [super initWithIdentifier:identifier dateAnchorName:anchorName launchDateAnchor:launchDateAnchor];
     
@@ -78,7 +78,7 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
     
     self.observerQuery = [[HKObserverQuery alloc] initWithSampleType:sampleType
                                                                  predicate:nil
-                                                             updateHandler:^(HKObserverQuery __unused *query,
+                                                             updateHandler:^(HKObserverQuery *query,
                                                                              HKObserverQueryCompletionHandler completionHandler,
                                                                              NSError *error)
     {
@@ -91,7 +91,7 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
             __typeof(self) strongSelf = weakSelf;
 
             [strongSelf anchorQuery:query
-                   completionHandle:completionHandler];
+                  completionHandler:completionHandler];
         }
     }];
 
@@ -104,7 +104,7 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 }
 
 
-- (void)anchorQuery:(HKObserverQuery*)query completionHandle:(HKObserverQueryCompletionHandler)completionHandler
+- (void)anchorQuery:(HKObserverQuery*)query completionHandler:(HKObserverQueryCompletionHandler)completionHandler
 {
     NSUInteger      anchorToUse                         = 0;
     NSUInteger      backgroundLaunchAnchorDate          = [[NSUserDefaults standardUserDefaults] integerForKey:self.anchorName];
@@ -166,33 +166,11 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 {
     if (results)
     {
-        id sampleKind = results.firstObject;
-
-        if (sampleKind)
+        if (results.firstObject)
         {
-            if ([sampleKind isKindOfClass:[HKCategorySample class]])
+            if ([self.delegate respondsToSelector:@selector(didReceiveUpdatedValueFromCollector:)])
             {
-                HKCategorySample* categorySample = (HKCategorySample*)sampleKind;
-
-                APCLogDebug(@"HK Update received for: %@ - %d", categorySample.categoryType.identifier, categorySample.value);
-
-            }
-            else if ([sampleKind isKindOfClass:[HKWorkout class]])
-            {
-                HKWorkout* workoutSample = (HKWorkout*)sampleKind;
-
-                APCLogDebug(@"HK Update received for: %@ - %d", workoutSample.sampleType.identifier, workoutSample.metadata);
-            }
-            else if ([sampleKind isKindOfClass:[HKQuantitySample class]])
-            {
-                HKQuantitySample* quantitySample = (HKQuantitySample*)sampleKind;
-
-                APCLogDebug(@"HK Update received for: %@ - %@", quantitySample.quantityType.identifier, quantitySample.quantity);
-            }
-            
-            if ([self.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
-            {
-                [self.delegate didRecieveUpdatedValuesFromCollector:results];
+                [self.delegate didReceiveUpdatedValuesFromCollector:results];
             }
         }
     }

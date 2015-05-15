@@ -38,8 +38,8 @@
 
 @optional
 
-- (void)didRecieveUpdatedValuesFromCollector:(id)results;
-- (void)didRecieveUpdatedValueFromCollector:(id)result;
-- (void)didRecieveUpdateWithLocationManager:(CLLocationManager*)manager withUpdateLocations:(NSArray*)locations;
+- (void)didReceiveUpdatedValuesFromCollector:(id)results;
+- (void)didReceiveUpdatedValueFromCollector:(id)result;
+- (void)didReceiveUpdateWithLocationManager:(CLLocationManager*)manager withUpdateLocations:(NSArray*)locations;
 
 @end

@@ -113,9 +113,9 @@
 - (void)updateArchiveDataWithLocationManager:(CLLocationManager*)manager withUpdateLocations:(NSArray*)locations
 {
     //Send to delegate
-    if ([self.delegate respondsToSelector:@selector(didRecieveUpdateWithLocationManager:withUpdateLocations:)])
+    if ([self.delegate respondsToSelector:@selector(didReceiveUpdateWithLocationManager:withUpdateLocations:)])
     {
-        [self.delegate didRecieveUpdateWithLocationManager:manager withUpdateLocations:locations];
+        [self.delegate didReceiveUpdateWithLocationManager:manager withUpdateLocations:locations];
     }
 }
 

@@ -57,8 +57,8 @@ typedef NSString* (^CSVSerializer)(id dataSample);
                        columnNames:(NSArray*)columnNames
                 operationQueueName:(NSString*)operationQueueName
                   andDataProcessor:(CSVSerializer)transformer;
-- (void)didRecieveUpdatedValuesFromCollector:(id)results;
-- (void)didRecieveUpdatedValueFromCollector:(id)result;
+- (void)didReceiveUpdatedValuesFromCollector:(id)results;
+- (void)didReceiveUpdatedValueFromCollector:(id)result;
 - (void)processUpdatesFromCollector:(id)quantitySample;
 - (void)checkIfDataNeedsToBeFlushed;
 

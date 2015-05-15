@@ -37,7 +37,7 @@
 
 - (instancetype)initWithIdentifier:(NSString*)identifier
                     dateAnchorName:(NSString*)anchorName
-                  launchDateAnchor:(InitialStartDatePredicateDesignator)launchDateAnchor
+                  launchDateAnchor:(APCInitialStartDatePredicateDesignator)launchDateAnchor
 {
     self = [super init];
     

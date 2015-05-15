@@ -35,7 +35,7 @@
 
 @implementation HKWorkout (APCHelper)
 
-+ (NSString*)workoutActivityTypeStringRepresentation:(int)num
++ (NSString*)apc_workoutActivityTypeStringRepresentation:(int)num
 {
     static NSDictionary* activityEvents;
     static dispatch_once_t onceToken;

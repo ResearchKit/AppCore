@@ -57,7 +57,7 @@ static NSUInteger       kDaysPerWeek        = 7;
 /*********************************************************************************/
 #pragma mark - Abstract methods from delegate
 /*********************************************************************************/
-- (void)didRecieveUpdatedValuesFromCollector:(NSArray*)quantitySamples
+- (void)didReceiveUpdatedValuesFromCollector:(NSArray*)quantitySamples
 {
     __weak typeof(self) weakSelf = self;
     
@@ -69,12 +69,12 @@ static NSUInteger       kDaysPerWeek        = 7;
     }];
 }
 
-- (void)didRecieveUpdatedValueFromCollector:(id)result
+- (void)didReceiveUpdatedValueFromCollector:(id)result
 {
     [self processUpdatesFromCollector:result];
 }
 
-- (void)didRecieveUpdateWithLocationManager:(CLLocationManager*) __unused manager withUpdateLocations:(NSArray*) __unused locations
+- (void)didReceiveUpdateWithLocationManager:(CLLocationManager*) __unused manager withUpdateLocations:(NSArray*) __unused locations
 {
     [self checkIfCSVStructureHasChanged];
 }
@@ -83,7 +83,7 @@ static NSUInteger       kDaysPerWeek        = 7;
 #pragma mark - Abstract methods
 /*********************************************************************************/
 
-- (void)processUpdatesFromCollector:(id)quantitySample
+- (void)processUpdatesFromCollector:(id)dataSamples
 {
     __weak typeof(self) weakSelf = self;
     
@@ -91,7 +91,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     
         __typeof(self) strongSelf = weakSelf;
         
-        NSString *stringToWrite = [self transformCollectorData:quantitySample];
+        NSString *stringToWrite = [self transformCollectorData:dataSamples];
         
         [APCPassiveDataSink createOrAppendString:stringToWrite
                                           toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];

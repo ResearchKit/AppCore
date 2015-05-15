@@ -258,8 +258,6 @@
 		7BCF70331ACB6C5C00838717 /* APCPassiveDataCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BCF70311ACB6C5C00838717 /* APCPassiveDataCollector.m */; };
 		7BD1D3D41A702ED200D6A377 /* APCDataResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BD1D3D21A702ED200D6A377 /* APCDataResult.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BD1D3D51A702ED200D6A377 /* APCDataResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BD1D3D31A702ED200D6A377 /* APCDataResult.m */; };
-		7BDF4D2A1AE5403E00ACC1F8 /* NSDictionary+APCStringify.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BDF4D281AE5403E00ACC1F8 /* NSDictionary+APCStringify.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7BDF4D2B1AE5403E00ACC1F8 /* NSDictionary+APCStringify.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BDF4D291AE5403E00ACC1F8 /* NSDictionary+APCStringify.m */; };
 		7BDF4D321AE5492400ACC1F8 /* HKWorkout+APCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BDF4D301AE5492400ACC1F8 /* HKWorkout+APCHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7BDF4D331AE5492400ACC1F8 /* HKWorkout+APCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BDF4D311AE5492400ACC1F8 /* HKWorkout+APCHelper.m */; };
 		7BEC13D31AA3AA5B00CA316C /* APCActivityTracking.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7BEC13CE1AA3AA5B00CA316C /* APCActivityTracking.storyboard */; };
@@ -948,8 +946,6 @@
 		7BCF70311ACB6C5C00838717 /* APCPassiveDataCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCPassiveDataCollector.m; sourceTree = "<group>"; };
 		7BD1D3D21A702ED200D6A377 /* APCDataResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataResult.h; sourceTree = "<group>"; };
 		7BD1D3D31A702ED200D6A377 /* APCDataResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCDataResult.m; sourceTree = "<group>"; };
-		7BDF4D281AE5403E00ACC1F8 /* NSDictionary+APCStringify.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+APCStringify.h"; sourceTree = "<group>"; };
-		7BDF4D291AE5403E00ACC1F8 /* NSDictionary+APCStringify.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+APCStringify.m"; sourceTree = "<group>"; };
 		7BDF4D301AE5492400ACC1F8 /* HKWorkout+APCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HKWorkout+APCHelper.h"; sourceTree = "<group>"; };
 		7BDF4D311AE5492400ACC1F8 /* HKWorkout+APCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HKWorkout+APCHelper.m"; sourceTree = "<group>"; };
 		7BEC13CE1AA3AA5B00CA316C /* APCActivityTracking.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APCActivityTracking.storyboard; sourceTree = "<group>"; };
@@ -2263,8 +2259,6 @@
 				F5B947611A73272C0034C522 /* UIView+Helper.m */,
 				36D0510C1ABB92F0008FC9B3 /* NSFileManager+Helper.h */,
 				36D0510D1ABB92F0008FC9B3 /* NSFileManager+Helper.m */,
-				7BDF4D281AE5403E00ACC1F8 /* NSDictionary+APCStringify.h */,
-				7BDF4D291AE5403E00ACC1F8 /* NSDictionary+APCStringify.m */,
 				7BDF4D301AE5492400ACC1F8 /* HKWorkout+APCHelper.h */,
 				7BDF4D311AE5492400ACC1F8 /* HKWorkout+APCHelper.m */,
 				7B558D261AE587DF00129167 /* CLLocation+APCBearing.h */,
@@ -3042,7 +3036,6 @@
 				F5B9480C1A73272C0034C522 /* APCScheduleExpressionTokenizer.h in Headers */,
 				F5F12A851A2F78490015982C /* APCOnboarding.h in Headers */,
 				369E27F31A96B7A200D35DFA /* APCMedicationLozenge.h in Headers */,
-				7BDF4D2A1AE5403E00ACC1F8 /* NSDictionary+APCStringify.h in Headers */,
 				364D348A1A7B1C8F0060B3F5 /* APCDataVerificationClient.h in Headers */,
 				089465471A8C179700A983AC /* APCDashboardInsightSummaryTableViewCell.h in Headers */,
 				F5F12B001A2F78490015982C /* APCSimpleTaskSummaryViewController.h in Headers */,
@@ -3529,7 +3522,6 @@
 				F5F12AAD1A2F78490015982C /* APCSignUpGeneralInfoViewController.m in Sources */,
 				F5B948151A73272C0034C522 /* APCScoring.m in Sources */,
 				F5B947B81A73272C0034C522 /* APCStepProgressBar+Appearance.m in Sources */,
-				7BDF4D2B1AE5403E00ACC1F8 /* NSDictionary+APCStringify.m in Sources */,
 				CFFDEDFB1A95734000B25581 /* APCSetupTableViewCell.m in Sources */,
 				7B8C20141AA3AB8600BFEFDA /* APCTheme.m in Sources */,
 				0894654E1A8C1F0200A983AC /* APCInsightBarView.m in Sources */,

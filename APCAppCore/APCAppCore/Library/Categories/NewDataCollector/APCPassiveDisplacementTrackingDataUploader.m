@@ -51,6 +51,7 @@ static  NSString* const kRecentLocationFileName                 = @"recentLocati
 static  NSString* const kLat                                    = @"lat";
 static  NSString* const kLon                                    = @"lon";
 
+
 @interface APCPassiveDisplacementTrackingDataUploader ()
 
 @property (nonatomic, strong) CLLocation* baseTrackingLocation;
@@ -58,10 +59,13 @@ static  NSString* const kLon                                    = @"lon";
 
 @end
 
+
 @implementation APCPassiveDisplacementTrackingDataUploader
+
 @synthesize baseTrackingLocation = _baseTrackingLocation;
 @synthesize mostRecentUpdatedLocation = _mostRecentUpdatedLocation;
-- (NSArray*)locationDictionaryWithLocationManager:(CLLocationManager*)manager
+
+- (NSArray*)locationArrayWithLocationManager:(CLLocationManager*)manager
                        distanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
                               andPreviousLocation:(CLLocation*)previousLocation
 {
@@ -120,7 +124,7 @@ static  NSString* const kLon                                    = @"lon";
 }
 
 
-- (void)didRecieveUpdateWithLocationManager:(CLLocationManager*)manager withUpdateLocations:(NSArray*)locations
+- (void)didReceiveUpdateWithLocationManager:(CLLocationManager*)manager withUpdateLocations:(NSArray*)locations
 {
     __weak typeof(self) weakSelf = self;
     
@@ -129,7 +133,7 @@ static  NSString* const kLon                                    = @"lon";
         __typeof(self)  strongSelf  = weakSelf;
         NSArray*        result      = nil;
         
-        if ((self.baseTrackingLocation.coordinate.latitude == 0.0) && (self.baseTrackingLocation.coordinate.longitude == 0.0))
+        if (!self.baseTrackingLocation)
         {
             self.baseTrackingLocation = [locations firstObject];
             self.mostRecentUpdatedLocation = self.baseTrackingLocation;
@@ -138,7 +142,7 @@ static  NSString* const kLon                                    = @"lon";
             {
                 CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
                 
-                result = [self locationDictionaryWithLocationManager:manager
+                result = [self locationArrayWithLocationManager:manager
                                           distanceFromReferencePoint:distanceFromReferencePoint
                                                  andPreviousLocation:self.baseTrackingLocation];
             }
@@ -149,32 +153,31 @@ static  NSString* const kLon                                    = @"lon";
             self.mostRecentUpdatedLocation = manager.location;
             
             CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
-            result = [self locationDictionaryWithLocationManager:manager
+            result = [self locationArrayWithLocationManager:manager
                                       distanceFromReferencePoint:distanceFromReferencePoint
                                              andPreviousLocation:self.baseTrackingLocation];
         }
         
         //Send to delegate
         if (result)
-        {  
-            NSString *stringToWrite = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,%@\n",
-                                                                   result[0],
-                                                                   result[1],
-                                                                   result[2],
-                                                                   result[3],
-                                                                   result[4],
-                                                                   result[5],
-                                                                   result[6],
-                                                                   result[7],
-                                                                   result[8],
-                                                                   result[9],
-                                                                   result[10],
-                                                                   result[11],
-                                                                   result[12],
-                                                                   result[13]];
-
+        {
+            //  Reduce the result array into a string using a comma as a separator.
+            NSMutableString*    outString = [[NSMutableString alloc] init];
+            NSUInteger          inCount   = result.count;
+            
+            for (NSUInteger ndx = 0; ndx < inCount; ++ndx)
+            {
+                [outString appendFormat:@"%@", result[ndx]];
+                if (ndx < inCount - 1)
+                {
+                    [outString appendString:@","];
+                }
+            }
+            
+            [outString appendString:@"\n"];
+            
             //Write to file
-            [APCPassiveDataSink createOrAppendString:stringToWrite
+            [APCPassiveDataSink createOrAppendString:outString
                                               toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
             
             [strongSelf checkIfDataNeedsToBeFlushed];

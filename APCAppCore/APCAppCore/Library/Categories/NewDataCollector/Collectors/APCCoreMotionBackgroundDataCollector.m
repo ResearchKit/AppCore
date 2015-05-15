@@ -92,9 +92,9 @@ static NSInteger const kDefaultNumberOfDaysBack = 8;
                         [[NSUserDefaults standardUserDefaults] setObject:futureDate forKey:self.anchorName];
                     }
                     
-                    if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValuesFromCollector:)])
+                    if ([strongSelf.delegate respondsToSelector:@selector(didReceiveUpdatedValuesFromCollector:)])
                     {
-                        [strongSelf.delegate didRecieveUpdatedValuesFromCollector:activities];
+                        [strongSelf.delegate didReceiveUpdatedValuesFromCollector:activities];
                     }
                 }
             }
@@ -118,9 +118,9 @@ static NSInteger const kDefaultNumberOfDaysBack = 8;
                     
                     [[NSUserDefaults standardUserDefaults] setObject:futureDate forKey:strongSelf.anchorName];
                     
-                    if ([strongSelf.delegate respondsToSelector:@selector(didRecieveUpdatedValueFromCollector:)])
+                    if ([strongSelf.delegate respondsToSelector:@selector(didReceiveUpdatedValueFromCollector:)])
                     {
-                        [strongSelf.delegate didRecieveUpdatedValueFromCollector:activity];
+                        [strongSelf.delegate didReceiveUpdatedValueFromCollector:activity];
                     }
                 }
             }];

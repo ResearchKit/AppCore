@@ -35,6 +35,6 @@
 
 @interface HKWorkout (APCHelper)
 
-+ (NSString*)workoutActivityTypeStringRepresentation:(int)num;
++ (NSString*)apc_workoutActivityTypeStringRepresentation:(int)num;
 
 @end

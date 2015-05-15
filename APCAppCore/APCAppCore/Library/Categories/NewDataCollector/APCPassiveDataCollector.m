@@ -37,6 +37,14 @@
 
 static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminatedTime";
 
+
+@interface APCPassiveDataCollector ()
+
+@property (nonatomic, strong)  NSMutableArray*  dataSinkList;
+
+@end
+
+
 @implementation APCPassiveDataCollector
 
 - (instancetype)init
@@ -51,31 +59,35 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
     return self;
 }
 
-- (void) addDataSink:(id)dataSync
+- (void)addDataSink:(APCDataCollector*)dataSync
 {
     [self.dataSinkList addObject:dataSync];
 }
 
 - (void)stopCollecting
 {
-    for (APCDataCollector* collector in self.dataSinkList)
-    {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
-        {
-            [collector stop];
-        });
-    }
+    NSArray*    sinkListCopy = [self.dataSinkList copy];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
+                   {
+                       [sinkListCopy enumerateObjectsUsingBlock:^(APCDataCollector* collector, NSUInteger __unused idx, BOOL* __unused stop)
+                        {
+                            [collector stop];
+                        }];
+                   });
 }
 
 - (void)startCollecting
 {
-    for (APCDataCollector * collector in self.dataSinkList)
-    {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
-        {
-            [collector start];
-        });
-    }
+    NSArray*    sinkListCopy = [self.dataSinkList copy];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^
+                   {
+                       [sinkListCopy enumerateObjectsUsingBlock:^(APCDataCollector* collector, NSUInteger __unused idx, BOOL* __unused stop)
+                        {
+                            [collector start];
+                        }];
+                   });
 }
 
 @end

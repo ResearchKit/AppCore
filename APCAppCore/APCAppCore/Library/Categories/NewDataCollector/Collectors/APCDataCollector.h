@@ -33,7 +33,7 @@
 #import <Foundation/Foundation.h>
 #import "APCCollectorProtocol.h"
 
-typedef NSDate*(^InitialStartDatePredicateDesignator)();
+typedef NSDate*(^APCInitialStartDatePredicateDesignator)();
 
 @interface APCDataCollector : NSObject
 
@@ -42,14 +42,14 @@ typedef NSDate*(^InitialStartDatePredicateDesignator)();
  */
 - (instancetype)initWithIdentifier:(NSString*)identifier
                     dateAnchorName:(NSString*)anchorName
-                  launchDateAnchor:(InitialStartDatePredicateDesignator)launchDateAnchor;
+                  launchDateAnchor:(APCInitialStartDatePredicateDesignator)launchDateAnchor;
 - (void)start;
 - (void)stop;
 - (void)updateTracking;
 - (NSDate*)launchDate;
 
 @property (strong, nonatomic) NSString*                             anchorName;
-@property (strong, nonatomic) InitialStartDatePredicateDesignator   launchDateAnchor;
+@property (strong, nonatomic) APCInitialStartDatePredicateDesignator   launchDateAnchor;
 @property (strong, nonatomic) id                                    receiver;
 @property (strong, nonatomic) id                                    <APCCollectorProtocol> delegate;
 @property (strong, nonatomic) NSString*                             identifier;
