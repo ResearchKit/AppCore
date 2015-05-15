@@ -32,6 +32,7 @@
 // 
  
 #import "APCSettingsViewController.h"
+#import "APCPermissionsManager.h"
 #import "APCChangePasscodeViewController.h"
 #import "APCTasksReminderManager.h"
 #import "APCCustomBackButton.h"
@@ -279,7 +280,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         //if on == TRUE && notification permission denied, request notification permission
         if (on && [[UIApplication sharedApplication] currentUserNotificationSettings].types == 0) {
             self.permissionsManager = [[APCPermissionsManager alloc]init];
-            [self.permissionsManager requestForPermissionForType:kSignUpPermissionsTypeLocalNotifications withCompletion:^(BOOL granted, NSError *error) {
+            [self.permissionsManager requestForPermissionForType:kAPCSignUpPermissionsTypeLocalNotifications withCompletion:^(BOOL granted, NSError *error) {
                 if (!granted) {
                     [weakSelf presentSettingsAlert:error];
                 }else{
