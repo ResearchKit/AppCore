@@ -48,6 +48,7 @@
 #import "APCDataSubstrate.h"
 #import "APCConstants.h"
 #import "APCUtilities.h"
+#import "APCTasksReminderManager.h"
 #import "APCLog.h"
 #ifndef APC_HAVE_CONSENT
 #import "APCExampleLabel.h"
@@ -59,6 +60,8 @@
 #import "NSBundle+Helper.h"
 #import "NSError+APCAdditions.h"
 #import "APCUser+UserData.h"
+#import "APCUser+Bridge.h"
+#import "UIAlertController+Helper.h"
 #import "APCPermissionsManager.h"
 #import "APCSharingOptionsViewController.h"
 #import "APCLicenseInfoViewController.h"
@@ -86,7 +89,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 @property (weak, nonatomic) IBOutlet UILabel *participationLabel;
 
 @property (strong, nonatomic) APCDemographicUploader  *demographicUploader;
-@property (nonatomic, assign)  BOOL                    profileEditsWerePerformed;
+@property (nonatomic, assign) BOOL                    profileEditsWerePerformed;
 
 @end
 
@@ -104,7 +107,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     self.versionLabel.text = [NSString stringWithFormat:@"Version: %@ (Build %@)", version, build];
     
-    self.demographicUploader = [[APCDemographicUploader alloc] init];
+    APCAppDelegate *appDelegate = (APCAppDelegate *)[UIApplication sharedApplication].delegate;
+    APCUser  *user = appDelegate.dataSubstrate.currentUser;
+    self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];
 }
 
 - (void)viewWillAppear:(BOOL)animated
