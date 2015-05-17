@@ -89,7 +89,6 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
 @property (nonatomic, strong) APCHealthKitDataCollector *healthKitCollector;
 @property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
 
-@property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
 
 @end
 
@@ -146,11 +145,11 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
         //    we run this code iff the user has previously consented,
         //    indicating that this is an update to a previously installed version of the application
         //
-    APCUser  *user = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
+    APCUser  *user = self.dataSubstrate.currentUser;
     if (user.isConsented) {
         BOOL  demographicDataWasUploaded = [defaults boolForKey:kDemographicDataWasUploadedKey];
         if (demographicDataWasUploaded == NO) {
-            self.demographicUploader = [[APCDemographicUploader alloc] init];
+            self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];
             [defaults setBool:YES forKey:kDemographicDataWasUploadedKey];
             [defaults synchronize];
             [self.demographicUploader uploadNonIdentifiableDemographicData];
@@ -766,7 +765,7 @@ static NSUInteger   const kIndexOfProfileTab                = 3;
                     NSPredicate *predicate = nil;
                     NSDate *consentDate = self.dataSubstrate.currentUser.consentSignatureDate;
                     
-                    if (anchorForSampleType == 0) {
+                    if ((anchorForSampleType == 0) && (consentDate)) {
                         predicate = [NSPredicate predicateWithFormat:@"%K >= %@",
                                      HKPredicateKeyPathStartDate,
                                      [consentDate startOfDay]];
