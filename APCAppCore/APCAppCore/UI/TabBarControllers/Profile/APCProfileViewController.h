@@ -33,6 +33,7 @@
  
 #import "APCUserInfoViewController.h"
 
+@class APCUser;
 
 @protocol APCProfileViewControllerDelegate;
 
