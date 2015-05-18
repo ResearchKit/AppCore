@@ -688,11 +688,11 @@ static CGFloat kHeaderHeight = 157.0f;
                 
                 APCLogError2 (error);
             
-                if ([error.message isEqualToString:kInternetNotAvailableErrorMessage1] || [error.message isEqualToString:kInternetNotAvailableErrorMessage2] || [error.message rangeOfString:kInternalMaxParticipantsMessage].location != NSNotFound) {
+                if (error.code == kSBBInternetNotConnected || error.code == kSBBServerNotReachable || error.code == kSBBServerUnderMaintenance) {
                     [spinnerController dismissViewControllerAnimated:NO completion:^{
                     
                         UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sign Up", @"")
-                                                                                            message:error.message
+                                                                                            message:error.localizedDescription
                                                                                      preferredStyle:UIAlertControllerStyleAlert];
 
                         UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault

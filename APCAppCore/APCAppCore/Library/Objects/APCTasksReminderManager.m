@@ -95,17 +95,14 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
 /*********************************************************************************/
 - (void) updateTasksReminder
 {
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        @synchronized(self)
-        {
-            if (self.reminderOn) {
-                [self createTaskReminder];
-            }
-            else {
-                [self cancelLocalNotificationsIfExist];
-            }
-        }
-    });
+    
+    if (self.reminderOn) {
+        [self createTaskReminder];
+    }
+    else {
+        [self cancelLocalNotificationsIfExist];
+    }
+    
 }
 
 - (NSArray *) existingLocalNotifications {
@@ -296,17 +293,23 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
 /*********************************************************************************/
 
 - (BOOL)reminderOn {
-    NSNumber * number = [[NSUserDefaults standardUserDefaults] objectForKey:kTasksReminderDefaultsOnOffKey];
+    NSNumber * flag = [[NSUserDefaults standardUserDefaults] objectForKey:kTasksReminderDefaultsOnOffKey];
     //Setting up defaults using initialization options
-    if (number == nil) {
-        APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
-        NSNumber * numberDefault = delegate.initializationOptions[kTaskReminderStartupDefaultOnOffKey];
-        number = numberDefault?:@NO;
-        [[NSUserDefaults standardUserDefaults] setObject:number forKey:kTasksReminderDefaultsOnOffKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+    if (flag == nil) {
+        //default to on if user has given Notification permissions
+        if ([[UIApplication sharedApplication] currentUserNotificationSettings].types != UIUserNotificationTypeNone){
+            flag = @YES;
+            [self updateReminderOn:flag];
+        }
     }
     
-    return [number boolValue];
+    //if Notifications are not enabled, set Reminders to off
+    if ([[UIApplication sharedApplication] currentUserNotificationSettings].types == UIUserNotificationTypeNone) {
+        flag = @NO;
+        [self updateReminderOn:flag];
+    }
+    
+    return [flag boolValue];
 }
 
 - (void)setReminderOn:(BOOL)reminderOn

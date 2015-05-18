@@ -497,10 +497,6 @@
 		F5F129E31A2F78490015982C /* APCDataMonitor+Bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128861A2F78490015982C /* APCDataMonitor+Bridge.m */; };
 		F5F129E41A2F78490015982C /* APCDataMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128871A2F78490015982C /* APCDataMonitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F129E51A2F78490015982C /* APCDataMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F128881A2F78490015982C /* APCDataMonitor.m */; };
-		F5F129E61A2F78490015982C /* APCDataSubstrate+CoreData.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F1288A1A2F78490015982C /* APCDataSubstrate+CoreData.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F5F129E71A2F78490015982C /* APCDataSubstrate+CoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F1288B1A2F78490015982C /* APCDataSubstrate+CoreData.m */; };
-		F5F129E81A2F78490015982C /* APCDataSubstrate+HealthKit.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F1288C1A2F78490015982C /* APCDataSubstrate+HealthKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F5F129E91A2F78490015982C /* APCDataSubstrate+HealthKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F1288D1A2F78490015982C /* APCDataSubstrate+HealthKit.m */; };
 		F5F129EA1A2F78490015982C /* APCDataSubstrate+ResearchKit.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F1288E1A2F78490015982C /* APCDataSubstrate+ResearchKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5F129EB1A2F78490015982C /* APCDataSubstrate+ResearchKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F1288F1A2F78490015982C /* APCDataSubstrate+ResearchKit.m */; };
 		F5F129EC1A2F78490015982C /* APCDataSubstrate.h in Headers */ = {isa = PBXBuildFile; fileRef = F5F128901A2F78490015982C /* APCDataSubstrate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1187,10 +1183,6 @@
 		F5F128861A2F78490015982C /* APCDataMonitor+Bridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "APCDataMonitor+Bridge.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		F5F128871A2F78490015982C /* APCDataMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataMonitor.h; sourceTree = "<group>"; };
 		F5F128881A2F78490015982C /* APCDataMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = APCDataMonitor.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		F5F1288A1A2F78490015982C /* APCDataSubstrate+CoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+CoreData.h"; sourceTree = "<group>"; };
-		F5F1288B1A2F78490015982C /* APCDataSubstrate+CoreData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "APCDataSubstrate+CoreData.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		F5F1288C1A2F78490015982C /* APCDataSubstrate+HealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+HealthKit.h"; sourceTree = "<group>"; };
-		F5F1288D1A2F78490015982C /* APCDataSubstrate+HealthKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "APCDataSubstrate+HealthKit.m"; sourceTree = "<group>"; };
 		F5F1288E1A2F78490015982C /* APCDataSubstrate+ResearchKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "APCDataSubstrate+ResearchKit.h"; sourceTree = "<group>"; };
 		F5F1288F1A2F78490015982C /* APCDataSubstrate+ResearchKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "APCDataSubstrate+ResearchKit.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		F5F128901A2F78490015982C /* APCDataSubstrate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCDataSubstrate.h; sourceTree = "<group>"; };
@@ -2394,10 +2386,6 @@
 			children = (
 				F5F128901A2F78490015982C /* APCDataSubstrate.h */,
 				F5F128911A2F78490015982C /* APCDataSubstrate.m */,
-				F5F1288A1A2F78490015982C /* APCDataSubstrate+CoreData.h */,
-				F5F1288B1A2F78490015982C /* APCDataSubstrate+CoreData.m */,
-				F5F1288C1A2F78490015982C /* APCDataSubstrate+HealthKit.h */,
-				F5F1288D1A2F78490015982C /* APCDataSubstrate+HealthKit.m */,
 				F5F1288E1A2F78490015982C /* APCDataSubstrate+ResearchKit.h */,
 				F5F1288F1A2F78490015982C /* APCDataSubstrate+ResearchKit.m */,
 				F5F128921A2F78490015982C /* Model */,
@@ -3077,7 +3065,6 @@
 				F5B9480A1A73272C0034C522 /* APCScheduleExpressionToken.h in Headers */,
 				F5F12AD01A2F78490015982C /* APCWithdrawSurveyViewController.h in Headers */,
 				368BAFE91A9AD91A00F04ABB /* APCMedTrackerDailyDosageRecord.h in Headers */,
-				F5F129E61A2F78490015982C /* APCDataSubstrate+CoreData.h in Headers */,
 				F5B947F61A73272C0034C522 /* APCParametersDashboardTableViewController.h in Headers */,
 				F5F12AF21A2F78490015982C /* APCBaseTaskViewController.h in Headers */,
 				F5F12AF41A2F78490015982C /* APCBaseWithProgressTaskViewController.h in Headers */,
@@ -3085,7 +3072,6 @@
 				0894654D1A8C1F0200A983AC /* APCInsightBarView.h in Headers */,
 				F5F12ABE1A2F78490015982C /* APCDashboardViewController.h in Headers */,
 				F5F129E41A2F78490015982C /* APCDataMonitor.h in Headers */,
-				F5F129E81A2F78490015982C /* APCDataSubstrate+HealthKit.h in Headers */,
 				F5F12AD81A2F78490015982C /* APCPermissionsCell.h in Headers */,
 				F5B946241A7309A20034C522 /* ZZArchive.h in Headers */,
 				F5B947DB1A73272C0034C522 /* APCLog.h in Headers */,
@@ -3432,7 +3418,6 @@
 				F5B946231A7309A20034C522 /* ZZAESDecryptInputStream.mm in Sources */,
 				A7CFE4B61A8B05F4009A171C /* APCStudyOverviewCollectionViewCell.m in Sources */,
 				F5B947D01A73272C0034C522 /* UIAlertController+Helper.m in Sources */,
-				F5F129E71A2F78490015982C /* APCDataSubstrate+CoreData.m in Sources */,
 				F5F12AD71A2F78490015982C /* APCDefaultTableViewCell.m in Sources */,
 				A7CFE4B81A8B05F4009A171C /* APCStudyOverviewCollectionViewController.m in Sources */,
 				F5F12A781A2F78490015982C /* APCStepProgressBar.m in Sources */,
@@ -3504,7 +3489,6 @@
 				F5F129F31A2F78490015982C /* APCModel.xcdatamodeld in Sources */,
 				087255C11ABA390500586492 /* APCJSONSerializer.m in Sources */,
 				F5F129E51A2F78490015982C /* APCDataMonitor.m in Sources */,
-				F5F129E91A2F78490015982C /* APCDataSubstrate+HealthKit.m in Sources */,
 				CFFDEDDE1A95734000B25581 /* APCFrequencyTableViewTimesCell.m in Sources */,
 				712AB44D1A9E692400556DA2 /* APCMotionHistoryData.m in Sources */,
 				36AAB3501A9A75BB00FAC255 /* APCMedTrackerPrescription.m in Sources */,

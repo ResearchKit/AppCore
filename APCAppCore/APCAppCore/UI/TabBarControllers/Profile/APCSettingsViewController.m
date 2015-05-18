@@ -32,6 +32,7 @@
 // 
  
 #import "APCSettingsViewController.h"
+#import "APCPermissionsManager.h"
 #import "APCChangePasscodeViewController.h"
 #import "APCTasksReminderManager.h"
 #import "APCCustomBackButton.h"
@@ -48,7 +49,7 @@ static NSString * const kAPCBasicTableViewCellIdentifier = @"APCBasicTableViewCe
 static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetailTableViewCell";
 
 @interface APCSettingsViewController ()
-
+@property (strong, nonatomic) APCPermissionsManager *permissionsManager;
 @end
 
 @implementation APCSettingsViewController
@@ -274,9 +275,25 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     BOOL allReminders = indexPath.section == 0 && indexPath.row == 0;
     if (allReminders) {
         
-        APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
-        appDelegate.tasksReminder.reminderOn = on;
- 
+        __block APCAppDelegate * appDelegate = (APCAppDelegate*) [UIApplication sharedApplication].delegate;
+        __weak APCSettingsViewController *weakSelf = self;
+        //if on == TRUE && notification permission denied, request notification permission
+        if (on && [[UIApplication sharedApplication] currentUserNotificationSettings].types == 0) {
+            self.permissionsManager = [[APCPermissionsManager alloc]init];
+            [self.permissionsManager requestForPermissionForType:kAPCSignUpPermissionsTypeLocalNotifications withCompletion:^(BOOL granted, NSError *error) {
+                if (!granted) {
+                    [weakSelf presentSettingsAlert:error];
+                }else{
+                    [appDelegate.tasksReminder setReminderOn:NO];
+                    [weakSelf prepareContent];
+                    [weakSelf.tableView reloadData];
+                }
+            }];
+            
+        }else{
+            appDelegate.tasksReminder.reminderOn = on;
+        }
+        
         //turn off each reminder if all reminders off
         NSArray *reminders = appDelegate.tasksReminder.reminders;
         if (on == NO) {
@@ -294,7 +311,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
         [[NSUserDefaults standardUserDefaults]synchronize];
         
         if (self.pickerShowing) {
-            [self hidePickerCell];            
+            [self hidePickerCell];
         }
     }else {
         //manage individual task reminders
@@ -326,15 +343,29 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
                 [self.tableView reloadData];
             }
             
-        
+            
         }
         [[NSUserDefaults standardUserDefaults]synchronize];
-
+        
     }
     [self prepareContent];
     [self.tableView reloadData];
     //reschedule based on the new on/off state
     [[NSNotificationCenter defaultCenter]postNotificationName:APCUpdateTasksReminderNotification object:nil];
+}
+
+- (void)presentSettingsAlert:(NSError *)error
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Permissions Denied", @"") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *dismiss = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *__unused action) {
+    }];
+    [alertController addAction:dismiss];
+    UIAlertAction *settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * __unused action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }];
+    [alertController addAction:settings];
+    
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark - Getter
