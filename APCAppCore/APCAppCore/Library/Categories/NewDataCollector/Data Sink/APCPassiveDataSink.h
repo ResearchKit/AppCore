@@ -52,11 +52,13 @@ typedef NSString* (^CSVSerializer)(id dataSample);
 @property (nonatomic, copy)     CSVSerializer           transformer;
 @property (nonatomic, strong)   NSString*               csvFilename;
 @property (nonatomic, strong)   NSOperationQueue*       healthKitCollectorQueue;
+@property (nonatomic, strong)   NSString*               fileProtectionKey;
 
 - (instancetype)initWithIdentifier:(NSString*)identifier
                        columnNames:(NSArray*)columnNames
                 operationQueueName:(NSString*)operationQueueName
-                  andDataProcessor:(CSVSerializer)transformer;
+                     dataProcessor:(CSVSerializer)transformer
+                 fileProtectionKey:(NSString*)fileProtectionKey;
 - (void)didReceiveUpdatedValuesFromCollector:(id)results;
 - (void)didReceiveUpdatedValueFromCollector:(id)result;
 - (void)processUpdatesFromCollector:(id)quantitySample;
@@ -64,7 +66,7 @@ typedef NSString* (^CSVSerializer)(id dataSample);
 
 + (void)createOrAppendString:(NSString*)string toFile:(NSString*)path;
 + (void)createOrReplaceString:(NSString*)string toFile:(NSString*)path;
-+ (void)createFolderIfDoesntExist:(NSString*)path;
++ (void)createFolderIfDoesntExist:(NSString*)path andProtectionValue:(NSString*)protectionValue;
 + (void)deleteFileIfExists:(NSString*)path;
 
 @end
