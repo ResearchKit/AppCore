@@ -50,70 +50,63 @@ static  NSString  *kPatientWeightPoundsKey         = @"patientWeightPounds";
 static  NSString  *kPatientWakeUpTimeKey           = @"patientWakeUpTime";
 static  NSString  *kPatientGoSleepTimeKey          = @"patientGoSleepTime";
 
+@interface APCDemographicUploader ( )
+
+@property (nonatomic, strong) APCUser *user;
+
+@end
+
 @implementation APCDemographicUploader
 
-- (instancetype)init
+- (instancetype)initWithUser:(APCUser *)user
 {
     self = [super init];
     if (self != nil) {
+        _user = user;
     }
     return  self;
 }
 
 - (void)uploadNonIdentifiableDemographicData
 {
-    APCUser  *user = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).dataSubstrate.currentUser;
-    
     NSMutableDictionary  *demographics = [NSMutableDictionary dictionary];
     
-    [demographics setObject:kNonIdentifiableDemographicsKey forKey:kPatientInformationKey];
+    demographics[kPatientInformationKey] = kNonIdentifiableDemographicsKey;
     
-    NSDate  *sleepTime = user.sleepTime;
-    if (sleepTime == nil) {
-        [demographics setObject:[NSNull null] forKey:kPatientGoSleepTimeKey];
-    } else {
-        [demographics setObject:sleepTime forKey:kPatientGoSleepTimeKey];
-    }
+    NSDate  *sleepTime = self.user.sleepTime;
+    demographics[kPatientGoSleepTimeKey] = (sleepTime != nil) ? sleepTime : [NSNull null];
     
-    NSDate  *wakeUpTime = user.wakeUpTime;
-    if (wakeUpTime == nil) {
-        [demographics setObject:[NSNull null] forKey:kPatientWakeUpTimeKey];
-    } else {
-        [demographics setObject:wakeUpTime forKey:kPatientWakeUpTimeKey];
-    }
+    NSDate  *wakeUpTime = self.user.wakeUpTime;
+    demographics[kPatientWakeUpTimeKey] = (wakeUpTime != nil) ? wakeUpTime : [NSNull null];
     
-    NSDate  *birthDate = user.birthDate;
+    NSDate  *birthDate = self.user.birthDate;
     if (birthDate == nil) {
-        [demographics setObject:[NSNull null] forKey:kPatientCurrentAgeKey];
+        demographics[kPatientCurrentAgeKey] = [NSNull null];
     } else {
         NSUInteger  age = [NSDate ageFromDateOfBirth:birthDate];
-        [demographics setObject:[NSNumber numberWithUnsignedInteger:age] forKey:kPatientCurrentAgeKey];
+        demographics[kPatientCurrentAgeKey] = [NSNumber numberWithUnsignedInteger:age];
     }
     
-    HKBiologicalSex  biologicalSex = user.biologicalSex;
+    HKBiologicalSex  biologicalSex = self.user.biologicalSex;
     NSString  *biologicalSexString = [APCUser stringValueFromSexType:biologicalSex];
-    if (biologicalSexString == nil) {
-        [demographics setObject:[NSNull null] forKey:kPatientBiologicalSexKey];
-    } else {
-        [demographics setObject:biologicalSexString forKey:kPatientBiologicalSexKey];
-    }
+    demographics[kPatientBiologicalSexKey] = (biologicalSexString != nil) ? biologicalSexString : [NSNull null];
     
-    HKQuantity  *height = user.height;
+    HKQuantity  *height = self.user.height;
     double  heightInInches = [APCUser heightInInches:height];
     int  klass = fpclassify(heightInInches);
     if ((klass == FP_INFINITE) || (klass == FP_NAN) || (klass == FP_ZERO)) {
-        [demographics setObject:@(0) forKey:kPatientHeightInchesKey];
+        demographics[kPatientHeightInchesKey] = @(0);
     } else {
-        [demographics setObject:@(heightInInches) forKey:kPatientHeightInchesKey];
+        demographics[kPatientHeightInchesKey] = @(heightInInches);
     }
     
-    HKQuantity  *weight = user.weight;
+    HKQuantity  *weight = self.user.weight;
     double  weightInPounds = [APCUser weightInPounds:weight];
     int  klarse = fpclassify(weightInPounds);
     if ((klarse == FP_INFINITE) || (klass == FP_NAN) || (klass == FP_ZERO)) {
-        [demographics setObject:@(0) forKey:kPatientWeightPoundsKey];
+        demographics[kPatientWeightPoundsKey] = @(0);
     } else {
-        [demographics setObject:@(weightInPounds) forKey:kPatientWeightPoundsKey];
+        demographics[kPatientWeightPoundsKey] = @(weightInPounds);
     }
     
     [APCDataArchiverAndUploader uploadDictionary:demographics

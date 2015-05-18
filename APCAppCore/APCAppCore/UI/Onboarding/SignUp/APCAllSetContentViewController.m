@@ -35,7 +35,7 @@
 #import "APCAppCore.h"
 #import "APCAllSetTableViewCell.h"
 
-static  NSString  *kAllSetCellIdentifier = @"AllSetCell";
+static  NSString *kAllSetCellIdentifier = @"AllSetCell";
 
 typedef NS_ENUM(NSUInteger, APCAllSetRows)
 {
@@ -68,7 +68,12 @@ typedef NS_ENUM(NSUInteger, APCAllSetRows)
     
     [self configureTextBlocks];
     
-    [(APCAppDelegate *)[UIApplication sharedApplication].delegate configureObserverQueries];
+    APCAppDelegate *appDelegate = (APCAppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate configureObserverQueries];
+    
+    APCUser  *user = appDelegate.dataSubstrate.currentUser;
+    self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];
+    [self.demographicUploader uploadNonIdentifiableDemographicData];
     
     [self.tableView reloadData];
 }

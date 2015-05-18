@@ -33,7 +33,11 @@
 
 #import <Foundation/Foundation.h>
 
+@class APCUser;
+
 @interface APCDemographicUploader : NSObject
+
+- (instancetype)initWithUser:(APCUser *)user;
 
 - (void)uploadNonIdentifiableDemographicData;
 

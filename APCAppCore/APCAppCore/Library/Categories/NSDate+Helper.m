@@ -139,7 +139,9 @@ static NSString * const kDateFormatISO8601 = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
     NSUInteger  answer = 0;
     if (dateOfBirth != nil) {
         NSDateComponents  *differences = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay)
-                                                                     fromDate:dateOfBirth toDate:[NSDate date] options:0];
+                                                                    fromDate:dateOfBirth
+                                                                    toDate:[NSDate date]
+                                                                    options:0];
         answer = [differences year];
     }
     return  answer;
