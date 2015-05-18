@@ -131,19 +131,13 @@ static  NSString* const kLon                                    = @"lon";
         __typeof(self)  strongSelf  = weakSelf;
         NSArray*        result      = nil;
         
-        if (!self.baseTrackingLocation)
+        if (self.baseTrackingLocation)
         {
-            self.baseTrackingLocation = manager.location;
-        }
-        
-        CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
-        result = [self locationArrayWithLocationManager:manager
-                             distanceFromReferencePoint:distanceFromReferencePoint
-                                    andPreviousLocation:self.baseTrackingLocation];
-        
-        //Send to delegate
-        if (result)
-        {
+            CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
+            result = [self locationArrayWithLocationManager:manager
+                                 distanceFromReferencePoint:distanceFromReferencePoint
+                                        andPreviousLocation:self.baseTrackingLocation];
+
             //  Reduce the result array into a string using a comma as a separator.
             NSMutableString*    outString = [[NSMutableString alloc] init];
             NSUInteger          inCount   = result.count;
@@ -159,14 +153,14 @@ static  NSString* const kLon                                    = @"lon";
             
             [outString appendString:@"\n"];
             
-            //Write to file
+            //  Write to file
             [APCPassiveDataSink createOrAppendString:outString
                                               toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
             
             [strongSelf checkIfDataNeedsToBeFlushed];
         }
 
-        self.baseTrackingLocation       = manager.location;
+        self.baseTrackingLocation = manager.location;
     }];
 }
 
