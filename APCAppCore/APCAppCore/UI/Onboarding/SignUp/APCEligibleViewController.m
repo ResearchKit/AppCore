@@ -192,11 +192,9 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
             }
             
             // retrieve consent signature and date
-            NSDateFormatter *dateFormatter = [NSDateFormatter new];
-            dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
-            user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
             user.consentSignatureName = [consentResult.signature.givenName stringByAppendingFormat:@" %@",consentResult.signature.familyName];
             user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
+            user.consentSignatureDate = consentResult.startDate;
             user.userConsented = YES;
             
             [self.consentVC dismissViewControllerAnimated:YES completion:^{
