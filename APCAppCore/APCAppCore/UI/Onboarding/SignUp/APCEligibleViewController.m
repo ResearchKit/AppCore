@@ -164,10 +164,8 @@ static NSString *kreturnControlOfTaskDelegate = @"returnControlOfTaskDelegate";
             APCUser *user = [self user];
             user.consentSignatureName = [consentResult.signature.givenName stringByAppendingFormat:@" %@",consentResult.signature.familyName];
             user.consentSignatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
+            user.consentSignatureDate = consentResult.startDate;
             
-            NSDateFormatter *dateFormatter = [NSDateFormatter new];
-            dateFormatter.dateFormat = consentResult.signature.signatureDateFormatString;
-            user.consentSignatureDate = [dateFormatter dateFromString:consentResult.signature.signatureDate];
             [((APCAppDelegate*)[UIApplication sharedApplication].delegate) dataSubstrate].currentUser.userConsented = YES;
             
             [self.consentVC dismissViewControllerAnimated:YES completion:^
