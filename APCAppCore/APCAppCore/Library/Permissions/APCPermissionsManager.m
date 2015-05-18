@@ -480,6 +480,9 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     UIUserNotificationSettings *settings = (UIUserNotificationSettings *)notification.object;
     
     if (settings.types != 0) {
+        APCAppDelegate * delegate = (APCAppDelegate*)[UIApplication sharedApplication].delegate;
+        [delegate.tasksReminder setReminderOn:YES];
+        
         if (self.completionBlock) {
             self.completionBlock(YES, nil);
             self.completionBlock = nil;
@@ -491,7 +494,6 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
             self.completionBlock = nil;
         }
     }
-
 }
 
 #pragma mark - Dealloc

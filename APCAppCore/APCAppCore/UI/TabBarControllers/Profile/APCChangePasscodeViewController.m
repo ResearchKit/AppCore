@@ -32,12 +32,15 @@
 // 
  
 #import "APCChangePasscodeViewController.h"
+#import "APCUserInfoConstants.h"
+#import "APCPasscodeView.h"
+#import "APCLog.h"
+
+#import "APCKeychainStore+Passcode.h"
 #import "UIColor+APCAppearance.h"
 #import "UIFont+APCAppearance.h"
-#import "APCKeychainStore.h"
-#import "APCUserInfoConstants.h"
 #import "UIAlertController+Helper.h"
-#import "APCAppCore.h"
+
 
 typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
     kAPCPasscodeEntryTypeOld,
@@ -45,18 +48,18 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
     kAPCPasscodeEntryTypeReEnter,
 };
 
-@interface APCChangePasscodeViewController ()<APCPasscodeViewDelegate>
+@interface APCChangePasscodeViewController () <APCPasscodeViewDelegate>
 
 @property (nonatomic) APCPasscodeEntryType entryType;
 @property (nonatomic, strong) NSString *passcode;
 
 @end
 
+
 @implementation APCChangePasscodeViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
     self.passcodeView.delegate = self;
     
@@ -64,17 +67,11 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
     self.textLabel.text = NSLocalizedString(@"Enter your old passcode", nil);
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     [self.passcodeView becomeFirstResponder];
-  APCLogViewControllerAppeared();
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    APCLogViewControllerAppeared();
 }
 
 #pragma mark - Setup
@@ -87,7 +84,7 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
 
 #pragma mark - APCPasscodeViewDelegate
 
-- (void) passcodeViewDidFinish:(APCPasscodeView *)passcodeView withCode:(NSString *) __unused code {
+- (void)passcodeViewDidFinish:(APCPasscodeView *)passcodeView withCode:(NSString *)__unused code {
     
     switch (self.entryType) {
         case kAPCPasscodeEntryTypeOld:
@@ -97,8 +94,7 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
                 [passcodeView reset];
                 [passcodeView becomeFirstResponder];
                 self.entryType = kAPCPasscodeEntryTypeNew;
-            } else{
-                
+            } else {
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Wrong Passcode", nil) message:NSLocalizedString(@"Please enter again.", nil) preferredStyle:UIAlertControllerStyleAlert];
                 
                 UIAlertAction *okayAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * __unused action) {
@@ -125,7 +121,7 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
             if ([passcodeView.code isEqualToString:self.passcode]) {
                 [self savePasscode];
                 [self dismissViewControllerAnimated:YES completion:nil];
-            } else{
+            } else {
                 [passcodeView reset];
                 [passcodeView becomeFirstResponder];
                 self.entryType = kAPCPasscodeEntryTypeReEnter;
@@ -141,18 +137,17 @@ typedef NS_ENUM(NSUInteger, APCPasscodeEntryType) {
     }
 }
 
-- (void)savePasscode
-{
+- (void)savePasscode {
     if (self.passcode) {
         [APCKeychainStore setPasscode:self.passcode];
     }
     self.passcode = @"";
 }
 
-- (IBAction)cancel:(id) __unused sender
-{
+- (IBAction)cancel:(id)__unused sender {
     self.passcodeView.delegate = nil;
     [self.passcodeView resignFirstResponder];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 @end

@@ -33,12 +33,19 @@
 
 #import "APCKeychainStore.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface APCKeychainStore (Passcode)
 
 /** Store given passcode to the keychain. */
-+ (void)setPasscode:(nonnull NSString *)passcode;
++ (void)setPasscode:(NSString *)passcode;
 
 /** Return the user's passcode, if any. */
 + (nullable NSString *)passcode;
 
+/** Reset passcode. */
++ (void)resetPasscode;
+
 @end
+
+NS_ASSUME_NONNULL_END
