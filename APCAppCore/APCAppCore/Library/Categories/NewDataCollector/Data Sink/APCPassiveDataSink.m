@@ -297,12 +297,10 @@ static NSUInteger       kDaysPerWeek        = 7;
                                                  andTaskRunUuid:nil
                                                  returningError:&error];
     
-    if (!success)
+    //  If the data fails to be copied and uploaded the next time data is collected the uploader will try again.
+    if (!success && error)
     {
-        if (error)
-        {
-            APCLogError2(error);
-        }
+        APCLogError2(error);
     }
     
     return success;

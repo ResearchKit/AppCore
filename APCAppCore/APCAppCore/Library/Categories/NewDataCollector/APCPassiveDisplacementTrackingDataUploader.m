@@ -173,7 +173,7 @@ static  NSString* const kLon                                    = @"lon";
     return [self.folder stringByAppendingPathComponent:kBaseTrackingFileName];
 }
 
-- (CLLocation*)locationFromFilePath:(NSString*)filePath
+- (CLLocation*)locationFromFilePath:(NSString*)filePath error:(NSError* __autoreleasing*)error
 {
     CLLocation* location = nil;
     
@@ -181,16 +181,17 @@ static  NSString* const kLon                                    = @"lon";
     {
         if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
         {
-            NSError*    error        = nil;
+            NSError*    fileError    = nil;
             NSString*   fileContent  = [NSString stringWithContentsOfFile:filePath
                                                                 encoding:NSUTF8StringEncoding
-                                                                   error:&error];
+                                                                   error:&fileError];
             
             if (!fileContent)
             {
                 if (error)
                 {
-                    APCLogError2(error);
+                    APCLogError2(fileError);
+                    *error = fileError;
                 }
             }
             else
@@ -211,7 +212,14 @@ static  NSString* const kLon                                    = @"lon";
 {
     if (!_baseTrackingLocation)
     {
-        _baseTrackingLocation = [self locationFromFilePath:[self baseTrackingFilePath]];
+        NSError* locationError = nil;
+        
+        _baseTrackingLocation = [self locationFromFilePath:[self baseTrackingFilePath] error:&locationError];
+        
+        if (!_baseTrackingLocation && locationError)
+        {
+            APCLogError2(locationError);
+        }
     }
     
     return _baseTrackingLocation;
