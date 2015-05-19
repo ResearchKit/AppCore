@@ -131,7 +131,7 @@ static  NSString* const kLon                                    = @"lon";
         __typeof(self)  strongSelf  = weakSelf;
         NSArray*        result      = nil;
         
-        if (self.baseTrackingLocation)
+        if ([self baseTrackingLocation])
         {
             CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
             result = [self locationArrayWithLocationManager:manager
@@ -160,7 +160,7 @@ static  NSString* const kLon                                    = @"lon";
             [strongSelf checkIfDataNeedsToBeFlushed];
         }
 
-        self.baseTrackingLocation = manager.location;
+        [self setBaseTrackingLocation:manager.location];
     }];
 }
 
@@ -181,12 +181,12 @@ static  NSString* const kLon                                    = @"lon";
     {
         if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
         {
-            NSError*    error       = nil;
-            NSString*   jsonString  = [NSString stringWithContentsOfFile:filePath
+            NSError*    error        = nil;
+            NSString*   fileContent  = [NSString stringWithContentsOfFile:filePath
                                                                 encoding:NSUTF8StringEncoding
                                                                    error:&error];
             
-            if (!jsonString)
+            if (!fileContent)
             {
                 if (error)
                 {
@@ -197,7 +197,7 @@ static  NSString* const kLon                                    = @"lon";
             {
                 NSDictionary* dict = nil;
                 
-                dict        = [NSDictionary dictionaryWithJSONString:jsonString];
+                dict        = [NSDictionary dictionaryWithJSONString:fileContent];
                 location    = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue]
                                                          longitude:[dict[kLon] doubleValue]];
             }
@@ -221,14 +221,18 @@ static  NSString* const kLon                                    = @"lon";
 {
     _baseTrackingLocation = baseTrackingLocation;
     
-    NSDictionary* dict = @{kLat : @(baseTrackingLocation.coordinate.latitude), kLon : @(baseTrackingLocation.coordinate.longitude)};
+    NSDictionary* dict = @{
+                           kLat : @(baseTrackingLocation.coordinate.latitude),
+                           kLon : @(baseTrackingLocation.coordinate.longitude)
+                           };
     
     [self writeDictionary:dict toPath:[self baseTrackingFilePath]];
 }
 
 - (void)writeDictionary:(NSDictionary*)dict toPath:(NSString*)path
 {
-    NSString*   dataString = [dict JSONString];
+    NSString* dataString = [dict JSONString];
+    
     [APCPassiveDisplacementTrackingDataUploader createOrReplaceString:dataString toFile:path];
 }
 
