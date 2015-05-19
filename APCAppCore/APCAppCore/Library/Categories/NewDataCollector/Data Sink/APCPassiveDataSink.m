@@ -105,17 +105,18 @@ static NSUInteger       kDaysPerWeek        = 7;
     return self.transformer(dataSample);
 }
 
-- (instancetype)initWithIdentifier:(NSString*)identifier columnNames:(NSArray*)columnNames operationQueueName:(NSString*)operationQueueName andDataProcessor:(CSVSerializer)transformer
+- (instancetype)initWithIdentifier:(NSString*)identifier columnNames:(NSArray*)columnNames operationQueueName:(NSString*)operationQueueName dataProcessor:(CSVSerializer)transformer fileProtectionKey:(NSString *)fileProtectionKey
 {
     self = [super init];
     
     if (self)
     {
         //Unique configuration for collector
-        _identifier     = identifier;
-        _columnNames    = columnNames;
-        _transformer    = transformer;
-
+        _identifier         = identifier;
+        _columnNames        = columnNames;
+        _transformer        = transformer;
+        _fileProtectionKey  = fileProtectionKey;
+        
         if (!self.healthKitCollectorQueue) {
             self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:operationQueueName];
         }
@@ -127,8 +128,9 @@ static NSUInteger       kDaysPerWeek        = 7;
 
         _collectorsPath         = [documentsDir stringByAppendingPathComponent:kCollectorFolder];
         
-        [APCPassiveDataSink createFolderIfDoesntExist:_collectorsPath];
-        [APCPassiveDataSink createFolderIfDoesntExist:[_collectorsPath stringByAppendingPathComponent:kUploadFolder]];
+        [APCPassiveDataSink createFolderIfDoesntExist:_collectorsPath andProtectionValue:self.fileProtectionKey];
+        [APCPassiveDataSink createFolderIfDoesntExist:[_collectorsPath stringByAppendingPathComponent:kUploadFolder]
+                                   andProtectionValue:self.fileProtectionKey];
         
         [self loadOrCreateDataFiles];
     }
@@ -161,7 +163,7 @@ static NSUInteger       kDaysPerWeek        = 7;
                                        withIntermediateDirectories:YES
                                                         attributes:@{
                                                                      NSFileProtectionKey :
-                                                                         NSFileProtectionCompleteUntilFirstUserAuthentication
+                                                                         self.fileProtectionKey
                                                                      }
                                                              error:&folderCreationError])
         {
@@ -276,13 +278,16 @@ static NSUInteger       kDaysPerWeek        = 7;
 - (void)flush
 {
     //  At this point the responsibility of the data is handed off to the uploadAndArchiver.
-    [self uploadWithDataArchiverAndUploader];
+    BOOL success = [self uploadWithDataArchiverAndUploader];
     
-    //  Reset the data files
-    [self resetDataFilesForTracker];
+    if (success)
+    {
+        //  Reset the data files
+        [self resetDataFilesForTracker];
+    }
 }
 
-- (void)uploadWithDataArchiverAndUploader
+- (BOOL)uploadWithDataArchiverAndUploader
 {
     NSError*    error       = nil;
     NSString*   csvFilePath = [self.folder stringByAppendingPathComponent:kCSVFilename];
@@ -292,13 +297,13 @@ static NSUInteger       kDaysPerWeek        = 7;
                                                  andTaskRunUuid:nil
                                                  returningError:&error];
     
-    if (!success)
+    //  If the data fails to be copied and uploaded the next time data is collected the uploader will try again.
+    if (!success && error)
     {
-        if (error)
-        {
-            APCLogError2(error);
-        }
+        APCLogError2(error);
     }
+    
+    return success;
 }
 
 /*********************************************************************************/
@@ -412,7 +417,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     }
 }
 
-+ (void)createFolderIfDoesntExist:(NSString*)path
++ (void)createFolderIfDoesntExist:(NSString*)path andProtectionValue:(NSString*)protectionValue
 {
     if (![[NSFileManager defaultManager] fileExistsAtPath:path])
     {
@@ -420,7 +425,7 @@ static NSUInteger       kDaysPerWeek        = 7;
         
         if (![[NSFileManager defaultManager] createDirectoryAtPath:path
                                        withIntermediateDirectories:YES
-                                                        attributes:@{ NSFileProtectionKey : NSFileProtectionCompleteUntilFirstUserAuthentication }
+                                                        attributes:@{ NSFileProtectionKey : protectionValue}
                                                              error:&folderCreationError])
         {
             

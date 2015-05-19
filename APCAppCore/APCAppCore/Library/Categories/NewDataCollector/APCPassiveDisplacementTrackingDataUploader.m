@@ -55,7 +55,6 @@ static  NSString* const kLon                                    = @"lon";
 @interface APCPassiveDisplacementTrackingDataUploader ()
 
 @property (nonatomic, strong) CLLocation* baseTrackingLocation;
-@property (nonatomic, strong) CLLocation* mostRecentUpdatedLocation;
 
 @end
 
@@ -63,7 +62,6 @@ static  NSString* const kLon                                    = @"lon";
 @implementation APCPassiveDisplacementTrackingDataUploader
 
 @synthesize baseTrackingLocation = _baseTrackingLocation;
-@synthesize mostRecentUpdatedLocation = _mostRecentUpdatedLocation;
 
 - (NSArray*)locationArrayWithLocationManager:(CLLocationManager*)manager
                        distanceFromReferencePoint:(CLLocationDistance)distanceFromReferencePoint
@@ -124,7 +122,7 @@ static  NSString* const kLon                                    = @"lon";
 }
 
 
-- (void)didReceiveUpdateWithLocationManager:(CLLocationManager*)manager withUpdateLocations:(NSArray*)locations
+- (void)didReceiveUpdateWithLocationManager:(CLLocationManager*)manager withUpdateLocations:(NSArray*) __unused locations
 {
     __weak typeof(self) weakSelf = self;
     
@@ -133,34 +131,13 @@ static  NSString* const kLon                                    = @"lon";
         __typeof(self)  strongSelf  = weakSelf;
         NSArray*        result      = nil;
         
-        if (!self.baseTrackingLocation)
+        if ([self baseTrackingLocation])
         {
-            self.baseTrackingLocation = [locations firstObject];
-            self.mostRecentUpdatedLocation = self.baseTrackingLocation;
-            
-            if ([locations count] >= 1)
-            {
-                CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
-                
-                result = [self locationArrayWithLocationManager:manager
-                                          distanceFromReferencePoint:distanceFromReferencePoint
-                                                 andPreviousLocation:self.baseTrackingLocation];
-            }
-        }
-        else
-        {
-            self.baseTrackingLocation = self.mostRecentUpdatedLocation;
-            self.mostRecentUpdatedLocation = manager.location;
-            
             CLLocationDistance  distanceFromReferencePoint = [self.baseTrackingLocation distanceFromLocation:manager.location];
             result = [self locationArrayWithLocationManager:manager
-                                      distanceFromReferencePoint:distanceFromReferencePoint
-                                             andPreviousLocation:self.baseTrackingLocation];
-        }
-        
-        //Send to delegate
-        if (result)
-        {
+                                 distanceFromReferencePoint:distanceFromReferencePoint
+                                        andPreviousLocation:self.baseTrackingLocation];
+
             //  Reduce the result array into a string using a comma as a separator.
             NSMutableString*    outString = [[NSMutableString alloc] init];
             NSUInteger          inCount   = result.count;
@@ -176,119 +153,94 @@ static  NSString* const kLon                                    = @"lon";
             
             [outString appendString:@"\n"];
             
-            //Write to file
+            //  Write to file
             [APCPassiveDataSink createOrAppendString:outString
                                               toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
             
             [strongSelf checkIfDataNeedsToBeFlushed];
-        }        
+        }
+
+        [self setBaseTrackingLocation:manager.location];
     }];
 }
 
 /*********************************************************************************/
 #pragma mark - Base Tracking Location & Recent Updated Location
 /*********************************************************************************/
+
 - (NSString*)baseTrackingFilePath
 {
     return [self.folder stringByAppendingPathComponent:kBaseTrackingFileName];
 }
 
-- (NSString*)recentLocationFilePath
+- (CLLocation*)locationFromFilePath:(NSString*)filePath error:(NSError* __autoreleasing*)error
 {
-    return [self.folder stringByAppendingPathComponent:kRecentLocationFileName];
-}
-
-- (void)setBaseTrackingLocation:(CLLocation*)baseTrackingLocation
-{
-    _baseTrackingLocation = baseTrackingLocation;
+    CLLocation* location = nil;
     
-    NSDictionary* dict = @{kLat : @(baseTrackingLocation.coordinate.latitude), kLon : @(baseTrackingLocation.coordinate.longitude)};
+    if (self.folder)
+    {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+        {
+            NSError*    fileError    = nil;
+            NSString*   fileContent  = [NSString stringWithContentsOfFile:filePath
+                                                                encoding:NSUTF8StringEncoding
+                                                                   error:&fileError];
+            
+            if (!fileContent)
+            {
+                if (error)
+                {
+                    APCLogError2(fileError);
+                    *error = fileError;
+                }
+            }
+            else
+            {
+                NSDictionary* dict = nil;
+                
+                dict        = [NSDictionary dictionaryWithJSONString:fileContent];
+                location    = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue]
+                                                         longitude:[dict[kLon] doubleValue]];
+            }
+        }
+    }
     
-    [self writeDictionary:dict toPath:[self baseTrackingFilePath]];
+    return location;
 }
 
 - (CLLocation*)baseTrackingLocation
 {
     if (!_baseTrackingLocation)
     {
-        if (self.folder)
+        NSError* locationError = nil;
+        
+        _baseTrackingLocation = [self locationFromFilePath:[self baseTrackingFilePath] error:&locationError];
+        
+        if (!_baseTrackingLocation && locationError)
         {
-            if ([[NSFileManager defaultManager] fileExistsAtPath:[self baseTrackingFilePath]])
-            {
-                NSError*    error       = nil;
-                NSString*   jsonString  = [NSString stringWithContentsOfFile:[self baseTrackingFilePath]
-                                                                    encoding:NSUTF8StringEncoding
-                                                                       error:&error];
-                
-                if (!jsonString)
-                {
-                    if (error)
-                    {
-                        APCLogError2(error);
-                    }
-                }
-                else
-                {
-                    NSDictionary* dict      = nil;
-                
-                    dict                    = [NSDictionary dictionaryWithJSONString:jsonString];
-                    _baseTrackingLocation   = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue]
-                                                                         longitude:[dict[kLon] doubleValue]];
-                }
-            }
+            APCLogError2(locationError);
         }
     }
     
     return _baseTrackingLocation;
 }
 
-- (void)setMostRecentUpdatedLocation:(CLLocation*)mostRecentUpdatedLocation
+- (void)setBaseTrackingLocation:(CLLocation*)baseTrackingLocation
 {
-    _mostRecentUpdatedLocation = mostRecentUpdatedLocation;
+    _baseTrackingLocation = baseTrackingLocation;
     
-    NSDictionary * dict = @{kLat : @(mostRecentUpdatedLocation.coordinate.latitude), kLon : @(mostRecentUpdatedLocation.coordinate.longitude)};
+    NSDictionary* dict = @{
+                           kLat : @(baseTrackingLocation.coordinate.latitude),
+                           kLon : @(baseTrackingLocation.coordinate.longitude)
+                           };
     
-    [self writeDictionary:dict toPath:[self recentLocationFilePath]];
-}
-
-- (CLLocation*)mostRecentUpdatedLocation
-{
-    if (!_mostRecentUpdatedLocation)
-    {
-        if (self.folder)
-        {
-            if ([[NSFileManager defaultManager] fileExistsAtPath:[self recentLocationFilePath]])
-            {
-                NSError*    error       = nil;
-                NSString*   jsonString  = [NSString stringWithContentsOfFile:[self recentLocationFilePath]
-                                                                    encoding:NSUTF8StringEncoding
-                                                                       error:&error];
-                
-                if (!jsonString)
-                {
-                    if (error)
-                    {
-                        APCLogError2(error);
-                    }
-                }
-                else
-                {
-                    NSDictionary* dict      = nil;
-
-                    dict                        = [NSDictionary dictionaryWithJSONString:jsonString];
-                    _mostRecentUpdatedLocation  = [[CLLocation alloc] initWithLatitude:[dict[kLat] doubleValue]
-                                                                             longitude:[dict[kLon] doubleValue]];
-                }
-            }
-        }
-    }
-    
-    return _mostRecentUpdatedLocation;
+    [self writeDictionary:dict toPath:[self baseTrackingFilePath]];
 }
 
 - (void)writeDictionary:(NSDictionary*)dict toPath:(NSString*)path
 {
-    NSString*   dataString = [dict JSONString];
+    NSString* dataString = [dict JSONString];
+    
     [APCPassiveDisplacementTrackingDataUploader createOrReplaceString:dataString toFile:path];
 }
 

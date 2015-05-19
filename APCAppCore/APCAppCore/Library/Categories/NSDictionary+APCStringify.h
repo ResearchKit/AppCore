@@ -1,5 +1,5 @@
 //
-//  APCHealthKitCumulativeQuantityTypeDataBridge.h
+//  NSDictionary+APCStringify.h
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -31,19 +31,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "APCDataCollector.h"
-#import <HealthKit/HealthKit.h>
+#import <Foundation/Foundation.h>
 
-@interface APCHealthKitBackgroundDataCollector : APCDataCollector
+@interface NSDictionary (APCStringify)
 
-@property (strong, nonatomic)   HKHealthStore*              healthStore;
-@property (strong, nonatomic)   HKUnit*                     unit;
-@property (strong, nonatomic)   HKSampleType*               sampleType;
-
-- (instancetype)initWithIdentifier:(NSString*)identifier
-                        sampleType:(HKSampleType*)type
-                        anchorName:(NSString*)anchorName
-                  launchDateAnchor:(APCInitialStartDatePredicateDesignator)launchDateAnchor
-                       healthStore:(HKHealthStore*)healthStore;
++ (NSString*)apc_stringFromDictionary:(NSDictionary*)dict error:(NSError* __autoreleasing*)error;
 
 @end

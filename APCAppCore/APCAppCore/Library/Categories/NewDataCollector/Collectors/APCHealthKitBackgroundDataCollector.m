@@ -45,14 +45,14 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 @implementation APCHealthKitBackgroundDataCollector
 
-- (instancetype)initWithIdentifier:(NSString*)identifier sampleType:(HKSampleType*)type anchorName:(NSString*)anchorName launchDateAnchor:(APCInitialStartDatePredicateDesignator)launchDateAnchor
+- (instancetype)initWithIdentifier:(NSString*)identifier sampleType:(HKSampleType*)type anchorName:(NSString*)anchorName launchDateAnchor:(APCInitialStartDatePredicateDesignator)launchDateAnchor healthStore:(HKHealthStore *)healthStore
 {
     self = [super initWithIdentifier:identifier dateAnchorName:anchorName launchDateAnchor:launchDateAnchor];
     
     if (self)
     {
         _sampleType         = type;
-        _healthStore        = [HKHealthStore new];
+        _healthStore        = healthStore;
     }
     
     return self;
@@ -110,6 +110,7 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
     NSUInteger      backgroundLaunchAnchorDate          = [[NSUserDefaults standardUserDefaults] integerForKey:self.anchorName];
     NSPredicate*    predicate                           = nil;
     
+    //  On first launch there is no anchor and so we use a predicate that specifies the launch date.
     if (backgroundLaunchAnchorDate)
     {
         anchorToUse = backgroundLaunchAnchorDate;

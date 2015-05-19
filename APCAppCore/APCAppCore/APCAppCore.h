@@ -313,7 +313,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/CMMotionActivity+Helper.h>
 #import <APCAppCore/HKWorkout+APCHelper.h>
 #import <APCAppCore/CLLocation+APCBearing.h>
-
+#import <APCAppCore/NSDictionary+APCStringify.h>
 /* -------------------------
  Appearance
  ------------------------- */
