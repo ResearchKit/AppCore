@@ -75,7 +75,7 @@
 
 - (void)start
 {
-    if ([CLLocationManager locationServicesEnabled])
+    if ([CLLocationManager authorizationStatus] > kCLAuthorizationStatusDenied)
     {
         if (!self.locationManager)
         {
@@ -97,7 +97,7 @@
 
 - (void)stop
 {
-    if ([CLLocationManager locationServicesEnabled])
+    if ([CLLocationManager authorizationStatus] > kCLAuthorizationStatusDenied)
     {
         if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES)
         {
