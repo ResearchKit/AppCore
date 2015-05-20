@@ -227,7 +227,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     }
 }
 
-- (void) flushDataIfNeeded
+- (void)flushDataIfNeeded
 {
     //Check for size
     NSString*       csvFilePath         = [self.folder stringByAppendingPathComponent:kCSVFilename];
