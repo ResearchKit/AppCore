@@ -139,7 +139,7 @@ NSString * const kTaskReminderDelayMessage = @"Remind me in 1 hour";
     
     // Schedule the Task notification
     UILocalNotification* taskNotification = [[UILocalNotification alloc] init];
-    taskNotification.alertBody = [self reminderMessage];
+    //taskNotification.alertBody = [self reminderMessage];
 
     BOOL subtaskReminderOnly = NO;
     if (self.remindersToSend.count >0) {

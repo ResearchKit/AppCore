@@ -157,7 +157,7 @@ static  NSString* const kLon                                    = @"lon";
             [APCPassiveDataSink createOrAppendString:outString
                                               toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
             
-            [strongSelf checkIfDataNeedsToBeFlushed];
+            [strongSelf flushDataIfNeeded];
         }
 
         [self setBaseTrackingLocation:manager.location];
