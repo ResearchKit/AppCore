@@ -1,5 +1,5 @@
 //
-//  CLLocation+APCBearing.h
+//  CLLocation+APCAdditions.h
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.

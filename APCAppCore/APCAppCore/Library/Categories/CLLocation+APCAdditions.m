@@ -1,5 +1,5 @@
 //
-//  CLLocation+APCBearing.m
+//  CLLocation+APCAdditions.m
 //  APCAppCore
 //
 // Copyright (c) 2015, Apple Inc. All rights reserved.
@@ -31,7 +31,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import "CLLocation+APCBearing.h"
+#import "CLLocation+APCAdditions.h"
 
 static double DegreesToRadians(double degrees) {return degrees * M_PI / 180;};
 static double RadiansToDegrees(double radians) {return radians * 180/M_PI;};

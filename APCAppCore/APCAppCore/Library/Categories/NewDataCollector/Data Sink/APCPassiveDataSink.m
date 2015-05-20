@@ -96,7 +96,7 @@ static NSUInteger       kDaysPerWeek        = 7;
         [APCPassiveDataSink createOrAppendString:stringToWrite
                                           toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
         
-        [strongSelf checkIfDataNeedsToBeFlushed];
+        [strongSelf flushDataIfNeeded];
     }];
 }
 
@@ -105,7 +105,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     return self.transformer(dataSample);
 }
 
-- (instancetype)initWithIdentifier:(NSString*)identifier columnNames:(NSArray*)columnNames operationQueueName:(NSString*)operationQueueName dataProcessor:(CSVSerializer)transformer fileProtectionKey:(NSString *)fileProtectionKey
+- (instancetype)initWithIdentifier:(NSString*)identifier columnNames:(NSArray*)columnNames operationQueueName:(NSString*)operationQueueName dataProcessor:(APCCSVSerializer)transformer fileProtectionKey:(NSString *)fileProtectionKey
 {
     self = [super init];
     
@@ -227,7 +227,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     }
 }
 
-- (void) checkIfDataNeedsToBeFlushed
+- (void) flushDataIfNeeded
 {
     //Check for size
     NSString*       csvFilePath         = [self.folder stringByAppendingPathComponent:kCSVFilename];

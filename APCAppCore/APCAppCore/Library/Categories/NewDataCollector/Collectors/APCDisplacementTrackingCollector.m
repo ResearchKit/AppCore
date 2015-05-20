@@ -1,5 +1,5 @@
 // 
-//  APCCoreLocationTracker.m 
+//  APCDisplacementTrackingCollector.m 
 //  APCAppCore 
 // 
 // Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -75,7 +75,7 @@
 
 - (void)start
 {
-    if ([CLLocationManager locationServicesEnabled] == YES)
+    if ([CLLocationManager locationServicesEnabled])
     {
         if (!self.locationManager)
         {
@@ -97,7 +97,7 @@
 
 - (void)stop
 {
-    if ([CLLocationManager locationServicesEnabled] == YES)
+    if ([CLLocationManager locationServicesEnabled])
     {
         if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES)
         {
