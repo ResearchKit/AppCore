@@ -89,9 +89,6 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import "APCAppCore/APCCoreMotionBackgroundDataCollector.h"
 #import "APCAppCore/APCDisplacementTrackingCollector.h"
 
-
-#import <APCAppCore/CLLocation+APCBearing.h>
-
 /* -------------------------
  Logging
  ------------------------- */
@@ -312,7 +309,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/NSOperationQueue+Helper.h>
 #import <APCAppCore/CMMotionActivity+Helper.h>
 #import <APCAppCore/HKWorkout+APCHelper.h>
-#import <APCAppCore/CLLocation+APCBearing.h>
+#import <APCAppCore/CLLocation+APCAdditions.h>
 #import <APCAppCore/NSDictionary+APCStringify.h>
 /* -------------------------
  Appearance

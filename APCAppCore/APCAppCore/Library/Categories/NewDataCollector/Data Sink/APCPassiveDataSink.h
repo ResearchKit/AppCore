@@ -34,7 +34,7 @@
 #import <Foundation/Foundation.h>
 #import "APCCollectorProtocol.h"
 
-typedef NSString* (^CSVSerializer)(id dataSample);
+typedef NSString* (^APCCSVSerializer)(id dataSample);
 
 @interface APCPassiveDataSink : NSObject <APCCollectorProtocol>
 
@@ -49,7 +49,7 @@ typedef NSString* (^CSVSerializer)(id dataSample);
 @property (nonatomic)           NSTimeInterval          stalenessInterval;
 @property (nonatomic) unsigned long long                sizeThreshold;
 @property (nonatomic)           NSArray*                columnNames;
-@property (nonatomic, copy)     CSVSerializer           transformer;
+@property (nonatomic, copy)     APCCSVSerializer        transformer;
 @property (nonatomic, strong)   NSString*               csvFilename;
 @property (nonatomic, strong)   NSOperationQueue*       healthKitCollectorQueue;
 @property (nonatomic, strong)   NSString*               fileProtectionKey;
@@ -57,7 +57,7 @@ typedef NSString* (^CSVSerializer)(id dataSample);
 - (instancetype)initWithIdentifier:(NSString*)identifier
                        columnNames:(NSArray*)columnNames
                 operationQueueName:(NSString*)operationQueueName
-                     dataProcessor:(CSVSerializer)transformer
+                     dataProcessor:(APCCSVSerializer)transformer
                  fileProtectionKey:(NSString*)fileProtectionKey;
 - (void)didReceiveUpdatedValuesFromCollector:(id)results;
 - (void)didReceiveUpdatedValueFromCollector:(id)result;
