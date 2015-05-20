@@ -49,6 +49,7 @@
 #import "APCConstants.h"
 #import "APCUtilities.h"
 #import "APCUser.h"
+#import "APCTasksReminderManager.h"
 #import "APCLog.h"
 
 #ifndef APC_HAVE_CONSENT
@@ -63,7 +64,10 @@
 #import "APCUser+UserData.h"
 #import "APCUser+Bridge.h"
 #import "UIAlertController+Helper.h"
-#import "APCTasksReminderManager.h"
+#import "APCPermissionsManager.h"
+#import "APCSharingOptionsViewController.h"
+#import "APCLicenseInfoViewController.h"
+#import "APCDemographicUploader.h"
 
 #import <ResearchKit/ResearchKit.h>
 #import <BridgeSDK/BridgeSDK.h>
@@ -87,6 +91,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 @property (weak, nonatomic) IBOutlet UILabel *participationLabel;
 
+@property (strong, nonatomic) APCDemographicUploader  *demographicUploader;
+@property (nonatomic, assign) BOOL                    profileEditsWerePerformed;
+
 @end
 
 @implementation APCProfileViewController
@@ -102,6 +109,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     NSString *build = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     self.versionLabel.text = [NSString stringWithFormat:@"Version: %@ (Build %@)", version, build];
+    
+    APCAppDelegate *appDelegate = (APCAppDelegate *)[UIApplication sharedApplication].delegate;
+    APCUser  *user = appDelegate.dataSubstrate.currentUser;
+    self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -150,6 +161,14 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (self.profileEditsWerePerformed == YES) {
+        self.profileEditsWerePerformed = NO;
+        [self.demographicUploader uploadNonIdentifiableDemographicData];
+    }
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -1479,6 +1498,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     else {
         sender.title = NSLocalizedString(@"Done", @"Done");
         sender.style = UIBarButtonItemStyleDone;
+        self.profileEditsWerePerformed = YES;
         
         self.navigationItem.leftBarButtonItem.enabled = NO;
         [self.items enumerateObjectsUsingBlock:^(id obj, NSUInteger  __unused idx, BOOL * __unused stop) {
