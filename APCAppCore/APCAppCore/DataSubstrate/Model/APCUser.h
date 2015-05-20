@@ -36,6 +36,13 @@
 #import <CoreData/CoreData.h>
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, APCUserConsentSharingScope) {
+    APCUserConsentSharingScopeNone = 0,
+    APCUserConsentSharingScopeStudy,
+    APCUserConsentSharingScopeAll,
+};
+
+
 @interface APCUser : NSObject
 
 /*********************************************************************************/
@@ -59,6 +66,7 @@
 /*********************************************************************************/
 #pragma mark - Stored Properties in Core Data
 /*********************************************************************************/
+@property (nonatomic) APCUserConsentSharingScope sharingScope;      // NOT stored to CoreData, reflected in "sharedOptionSelection"
 @property (nonatomic) NSNumber *sharedOptionSelection;
 @property (nonatomic, strong) NSData *profileImage;
 

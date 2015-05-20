@@ -1,8 +1,8 @@
 //
-//  APCKeychainStore+Passcode.m
+//  APCDemographicUploader.h
 //  APCAppCore
 //
-//  Copyright (c) 2015 Boston Children's Hospital, Inc. All rights reserved.
+// Copyright (c) 2015, Apple Inc. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
@@ -28,27 +28,17 @@
 // SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 // CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 //
 
-#import "APCKeychainStore+Passcode.h"
+#import <Foundation/Foundation.h>
 
-static NSString * const kAPCPasscodeKey = @"APCPasscode";
+@class APCUser;
 
+@interface APCDemographicUploader : NSObject
 
-@implementation APCKeychainStore (Passcode)
+- (instancetype)initWithUser:(APCUser *)user;
 
-+ (void)setPasscode:(nonnull NSString *)passcode {
-    NSParameterAssert([passcode length] > 0);
-    [APCKeychainStore setString:passcode forKey:kAPCPasscodeKey];
-}
-
-+ (nullable NSString *)passcode {
-    return [APCKeychainStore stringForKey:kAPCPasscodeKey];
-}
-
-+ (void)resetPasscode {
-    [APCKeychainStore removeValueForKey:kAPCPasscodeKey];
-}
+- (void)uploadNonIdentifiableDemographicData;
 
 @end

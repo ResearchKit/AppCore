@@ -35,7 +35,7 @@
 #import "APCMedTrackerMedication.h"
 #import "NSManagedObject+APCHelper.h"
 #import "APCAppDelegate.h"
-#import "APCDataSubstrate+CoreData.h"
+#import "APCDataSubstrate.h"
 #import "NSManagedObject+APCHelper.h"
 #import "NSDate+Helper.h"
 #import "APCMedTrackerDataStorageManager.h"

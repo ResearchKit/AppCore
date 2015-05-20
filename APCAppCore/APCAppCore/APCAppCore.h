@@ -47,9 +47,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDataMonitor.h>
 #import <APCAppCore/APCDataMonitor+Bridge.h>
 #import <APCAppCore/APCDataSubstrate.h>
-#import <APCAppCore/APCDataSubstrate+CoreData.h>
 #import <APCAppCore/APCDataSubstrate+ResearchKit.h>
-#import <APCAppCore/APCDataSubstrate+HealthKit.h>
 #import <APCAppCore/APCModel.h>
 #import <APCAppCore/APCParameters.h>
 #import <APCAppCore/APCPermissionsManager.h>

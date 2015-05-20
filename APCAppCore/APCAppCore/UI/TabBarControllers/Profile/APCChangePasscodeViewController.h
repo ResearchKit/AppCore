@@ -32,12 +32,18 @@
 // 
  
 #import <UIKit/UIKit.h>
-#import "APCPasscodeView.h"
+
+@class APCPasscodeView;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface APCChangePasscodeViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UILabel *textLabel;
-@property (weak, nonatomic) IBOutlet APCPasscodeView *passcodeView;
+@property (weak, nonatomic, nullable) IBOutlet UILabel *textLabel;
+@property (weak, nonatomic, nullable) IBOutlet APCPasscodeView *passcodeView;
 
-- (IBAction)cancel:(id)sender;
+- (IBAction)cancel:(nullable id)sender;
+
 @end
+
+NS_ASSUME_NONNULL_END

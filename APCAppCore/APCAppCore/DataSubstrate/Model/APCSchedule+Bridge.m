@@ -33,12 +33,11 @@
  
 #import "APCSchedule+Bridge.h"
 #import "APCAppDelegate.h"
-#import "APCTask.h"
-#import "APCLog.h"
-#import "SBBGuidCreatedOnVersionHolder+APCAdditions.h"
-#import "NSManagedObject+APCHelper.h"
 #import "APCTask+AddOn.h"
-#import <BridgeSDK/BridgeSDK.h>
+#import "APCLog.h"
+#import "NSManagedObject+APCHelper.h"
+#import "SBBGuidCreatedOnVersionHolder+APCAdditions.h"
+
 
 NSString *const kSurveyTaskViewController = @"APCGenericSurveyTaskViewController";
 

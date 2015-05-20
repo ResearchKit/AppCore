@@ -96,7 +96,7 @@ static NSUInteger       kDaysPerWeek        = 7;
         [APCPassiveDataSink createOrAppendString:stringToWrite
                                           toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
         
-        [strongSelf flushDataIfNeeded];
+        [strongSelf checkIfDataNeedsToBeFlushed];
     }];
 }
 
@@ -227,7 +227,7 @@ static NSUInteger       kDaysPerWeek        = 7;
     }
 }
 
-- (void)flushDataIfNeeded
+- (void)checkIfDataNeedsToBeFlushed
 {
     //Check for size
     NSString*       csvFilePath         = [self.folder stringByAppendingPathComponent:kCSVFilename];

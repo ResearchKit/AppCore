@@ -48,7 +48,10 @@
 #import "APCDataSubstrate.h"
 #import "APCConstants.h"
 #import "APCUtilities.h"
+#import "APCUser.h"
+#import "APCTasksReminderManager.h"
 #import "APCLog.h"
+
 #ifndef APC_HAVE_CONSENT
 #import "APCExampleLabel.h"
 #endif
@@ -59,11 +62,15 @@
 #import "NSBundle+Helper.h"
 #import "NSError+APCAdditions.h"
 #import "APCUser+UserData.h"
-#import "UIAlertController+Helper.h"
-#import "APCTasksReminderManager.h"
 #import "APCUser+Bridge.h"
-#import <BridgeSDK/SBBConsentManager.h>
+#import "UIAlertController+Helper.h"
+#import "APCPermissionsManager.h"
+#import "APCSharingOptionsViewController.h"
+#import "APCLicenseInfoViewController.h"
+#import "APCDemographicUploader.h"
+
 #import <ResearchKit/ResearchKit.h>
+#import <BridgeSDK/BridgeSDK.h>
 
 static CGFloat const kSectionHeaderHeight = 40.f;
 static CGFloat const kStudyDetailsViewHeightConstant = 48.f;
@@ -84,6 +91,9 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 
 @property (weak, nonatomic) IBOutlet UILabel *participationLabel;
 
+@property (strong, nonatomic) APCDemographicUploader  *demographicUploader;
+@property (nonatomic, assign) BOOL                    profileEditsWerePerformed;
+
 @end
 
 @implementation APCProfileViewController
@@ -99,6 +109,10 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     NSString *build = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
     NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     self.versionLabel.text = [NSString stringWithFormat:@"Version: %@ (Build %@)", version, build];
+    
+    APCAppDelegate *appDelegate = (APCAppDelegate *)[UIApplication sharedApplication].delegate;
+    APCUser  *user = appDelegate.dataSubstrate.currentUser;
+    self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -141,12 +155,20 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     
     [self setupDataFromJSONFile:@"StudyOverview"];
     
-    if (self.user.sharedOptionSelection && self.user.sharedOptionSelection.integerValue == 0) {
+    if (APCUserConsentSharingScopeNone == self.user.sharingScope) {
         self.participationLabel.text = NSLocalizedString(@"Your data is no longer being used for this study.", @"");
         self.leaveStudyButton.hidden = YES;
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (self.profileEditsWerePerformed != NO) {
+        self.profileEditsWerePerformed = NO;
+        [self.demographicUploader uploadNonIdentifiableDemographicData];
+    }
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -719,7 +741,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
             [rowItems addObject:row];
         }
         
-        if (self.user.sharedOptionSelection != [NSNumber numberWithInteger:SBBConsentShareScopeNone]) {
+        if (APCUserConsentSharingScopeNone != self.user.sharingScope) {
             //  Instead of prevent the row from being added to the table, a better option would be to
             //  disable the row (grey it out and don't respond to taps)
             APCTableViewItem *field = [APCTableViewItem new];
@@ -1298,7 +1320,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     [self presentViewController:spinnerController animated:YES completion:nil];
     
     typeof(self) __weak weakSelf = self;
-    self.user.sharedOptionSelection = [NSNumber numberWithInteger:SBBConsentShareScopeNone];
+    self.user.sharingScope = APCUserConsentSharingScopeNone;
     [self.user withdrawStudyOnCompletion:^(NSError *error) {
         if (error) {
             APCLogError2 (error);
@@ -1476,6 +1498,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
     else {
         sender.title = NSLocalizedString(@"Done", @"Done");
         sender.style = UIBarButtonItemStyleDone;
+        self.profileEditsWerePerformed = YES;
         
         self.navigationItem.leftBarButtonItem.enabled = NO;
         [self.items enumerateObjectsUsingBlock:^(id obj, NSUInteger  __unused idx, BOOL * __unused stop) {

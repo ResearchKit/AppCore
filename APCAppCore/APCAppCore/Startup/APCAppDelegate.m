@@ -42,6 +42,7 @@
 #import "UIView+Helper.h"
 #import "APCTabBarViewController.h"
 #import "UIAlertController+Helper.h"
+#import "APCDemographicUploader.h"
 #import "APCConstants.h"
 
 /*
@@ -67,11 +68,15 @@ static NSString *const kLearnStoryBoardKey         = @"APCLearn";
 static NSString *const kActivitiesStoryBoardKey    = @"APCActivities";
 static NSString *const kHealthProfileStoryBoardKey = @"APCProfile";
 
-static NSString *const kLastUsedTimeKey = @"APHLastUsedTime";
-static NSUInteger const kIndexOfProfileTab = 3;
+/*********************************************************************************/
+#pragma mark - User Defaults Keys
 /*********************************************************************************/
 
+static NSString*    const kDemographicDataWasUploadedKey    = @"kDemographicDataWasUploadedKey";
+static NSString*    const kLastUsedTimeKey                  = @"APHLastUsedTime";
 static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterForegroundTime";
+static NSUInteger   const kIndexOfProfileTab                = 3;
+
 
 @interface APCAppDelegate  ( )  <UITabBarControllerDelegate>
 
@@ -80,6 +85,7 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
 @property (nonatomic, strong) NSError *catastrophicStartupError;
 
 @property (nonatomic, strong) NSOperationQueue *healthKitCollectorQueue;
+@property (nonatomic, strong) APCDemographicUploader  *demographicUploader;
 
 @end
 
@@ -107,11 +113,43 @@ static NSString*    const kAppWillEnterForegroundTimeKey    = @"APCWillEnterFore
     [self setUpHKPermissions];
     [self setUpAppAppearance];
     [self setUpTasksReminder];
+    [self performDemographicUploadIfRequired];
     [self showAppropriateVC];
     
     [self.dataMonitor appFinishedLaunching];
     
     return YES;
+}
+
+- (void)performDemographicUploadIfRequired
+{
+    NSUserDefaults  *defaults = [NSUserDefaults standardUserDefaults];
+    
+        //
+        //    the Boolean will be NO if:
+        //        the user defaults value was never set
+        //        the actual value is NO (which should never happen)
+        //    in which case, we upload the (non-identifiable) Demographic data
+        //    Age, Sex, Height, Weight, Sleep Time, Wake Time, et al
+        //
+        //    otherwise, the value should have been set to YES, to
+        //    indicate that the Demographic data was previously uploaded
+        //
+    
+        //
+        //    we run this code iff the user has previously consented,
+        //    indicating that this is an update to a previously installed version of the application
+        //
+    APCUser  *user = self.dataSubstrate.currentUser;
+    if (user.isConsented) {
+        BOOL  demographicDataWasUploaded = [defaults boolForKey:kDemographicDataWasUploadedKey];
+        if (demographicDataWasUploaded == NO) {
+            self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];
+            [defaults setBool:YES forKey:kDemographicDataWasUploadedKey];
+            [defaults synchronize];
+            [self.demographicUploader uploadNonIdentifiableDemographicData];
+}
+    }
 }
 
 - (NSUInteger)obtainPreviousVersion {
