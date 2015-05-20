@@ -38,8 +38,11 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 
 @interface APCHealthKitBackgroundDataCollector()
 
-@property (strong, nonatomic)   HKObserverQuery*    observerQuery;
-@property (strong, nonatomic)   HKSampleQuery*      sampleQuery;
+@property (strong, nonatomic)   HKHealthStore*              healthStore;
+@property (strong, nonatomic)   HKUnit*                     unit;
+@property (strong, nonatomic)   HKSampleType*               sampleType;
+@property (strong, nonatomic)   HKObserverQuery*            observerQuery;
+@property (strong, nonatomic)   HKSampleQuery*              sampleQuery;
 
 @end
 
@@ -53,6 +56,25 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
     {
         _sampleType         = type;
         _healthStore        = healthStore;
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithQuantityTypeIdentifier:(NSString*)identifier
+                                    sampleType:(HKSampleType*)type
+                                    anchorName:(NSString*)anchorName
+                              launchDateAnchor:(APCInitialStartDatePredicateDesignator)launchDateAnchor
+                                   healthStore:(HKHealthStore*)healthStore
+                                          unit:(HKUnit*)unit
+{
+    self = [super initWithIdentifier:identifier dateAnchorName:anchorName launchDateAnchor:launchDateAnchor];
+    
+    if (self)
+    {
+        _sampleType         = type;
+        _healthStore        = healthStore;
+        _unit               = unit;
     }
     
     return self;
@@ -167,11 +189,43 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
 {
     if (results)
     {
-        if (results.firstObject)
+        id sampleKind = results.firstObject;
+        
+        if (sampleKind)
         {
-            if ([self.delegate respondsToSelector:@selector(didReceiveUpdatedValueFromCollector:)])
+            if ([sampleKind isKindOfClass:[HKCategorySample class]])
             {
-                [self.delegate didReceiveUpdatedValuesFromCollector:results];
+                HKCategorySample* categorySample = (HKCategorySample*)sampleKind;
+                
+                APCLogDebug(@"HK Update received for: %@ - %d", categorySample.categoryType.identifier, categorySample.value);
+                
+                if ([self.delegate respondsToSelector:@selector(didReceiveUpdatedValuesFromCollector:)])
+                {
+                    [self.delegate didReceiveUpdatedValuesFromCollector:results];
+                }
+                
+            }
+            else if ([sampleKind isKindOfClass:[HKWorkout class]])
+            {
+                HKWorkout* workoutSample = (HKWorkout*)sampleKind;
+                
+                APCLogDebug(@"HK Update received for: %@ - %d", workoutSample.sampleType.identifier, workoutSample.metadata);
+                
+                if ([self.delegate respondsToSelector:@selector(didReceiveUpdatedValuesFromCollector:)])
+                {
+                    [self.delegate didReceiveUpdatedValuesFromCollector:results];
+                }
+            }
+            else if ([sampleKind isKindOfClass:[HKQuantitySample class]])
+            {
+                HKQuantitySample* quantitySample = (HKQuantitySample*)sampleKind;
+                
+                APCLogDebug(@"HK Update received for: %@ - %@", quantitySample.quantityType.identifier, quantitySample.quantity);
+                
+                if ([self.delegate respondsToSelector:@selector(didReceiveUpdatedHealthkitSamplesFromCollector:withUnit:)])
+                {
+                    [self.delegate didReceiveUpdatedHealthkitSamplesFromCollector:results withUnit:self.unit];
+                }
             }
         }
     }
@@ -180,8 +234,5 @@ static NSString* const kLastUsedTimeKey = @"APCPassiveDataCollectorLastTerminate
         APCLogError2(error);
     }
 }
-
-
-
 
 @end

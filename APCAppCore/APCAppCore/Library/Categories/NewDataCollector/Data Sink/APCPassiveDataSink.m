@@ -57,6 +57,20 @@ static NSUInteger       kDaysPerWeek        = 7;
 /*********************************************************************************/
 #pragma mark - Abstract methods from delegate
 /*********************************************************************************/
+- (void)didReceiveUpdatedHealthkitSamplesFromCollector:(id)results withUnit:(HKUnit*)unit
+{
+    __weak typeof(self) weakSelf = self;
+    
+    NSArray* dataSamples = (NSArray*)results;
+    
+    [dataSamples enumerateObjectsUsingBlock: ^(id quantitySample, NSUInteger __unused idx, BOOL * __unused stop)
+     {
+         __typeof(self) strongSelf = weakSelf;
+         
+         [strongSelf processUpdatesFromCollector:quantitySample withUnit:unit];
+     }];
+}
+
 - (void)didReceiveUpdatedValuesFromCollector:(NSArray*)quantitySamples
 {
     __weak typeof(self) weakSelf = self;
@@ -83,6 +97,23 @@ static NSUInteger       kDaysPerWeek        = 7;
 #pragma mark - Abstract methods
 /*********************************************************************************/
 
+- (void)processUpdatesFromCollector:(id)dataSamples withUnit:(HKUnit*)unit
+{
+    __weak typeof(self) weakSelf = self;
+    
+    [self.healthKitCollectorQueue addOperationWithBlock:^{
+        
+        __typeof(self) strongSelf = weakSelf;
+        
+        NSString *stringToWrite = [self transformQuantityCollectorData:dataSamples withUnit:unit];
+        
+        [APCPassiveDataSink createOrAppendString:stringToWrite
+                                          toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
+        
+        [strongSelf flushDataIfNeeded];
+    }];
+}
+
 - (void)processUpdatesFromCollector:(id)dataSamples
 {
     __weak typeof(self) weakSelf = self;
@@ -103,6 +134,11 @@ static NSUInteger       kDaysPerWeek        = 7;
 - (NSString*)transformCollectorData:(id)dataSample
 {
     return self.transformer(dataSample);
+}
+
+- (NSString*)transformQuantityCollectorData:(id)dataSample withUnit:(HKUnit*)unit
+{
+    return self.quantitytransformer(dataSample, unit);
 }
 
 - (instancetype)initWithIdentifier:(NSString*)identifier columnNames:(NSArray*)columnNames operationQueueName:(NSString*)operationQueueName dataProcessor:(APCCSVSerializer)transformer fileProtectionKey:(NSString *)fileProtectionKey
@@ -126,6 +162,43 @@ static NSUInteger       kDaysPerWeek        = 7;
         //General configuration for file management
         NSString* documentsDir  = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
 
+        _collectorsPath         = [documentsDir stringByAppendingPathComponent:kCollectorFolder];
+        
+        [APCPassiveDataSink createFolderIfDoesntExist:_collectorsPath andProtectionValue:self.fileProtectionKey];
+        [APCPassiveDataSink createFolderIfDoesntExist:[_collectorsPath stringByAppendingPathComponent:kUploadFolder]
+                                   andProtectionValue:self.fileProtectionKey];
+        
+        [self loadOrCreateDataFiles];
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithQuantityIdentifier:(NSString*)identifier
+                               columnNames:(NSArray*)columnNames
+                        operationQueueName:(NSString*)operationQueueName
+                             dataProcessor:(APCQuantityCSVSerializer)transformer
+                         fileProtectionKey:(NSString*)fileProtectionKey
+{
+    self = [super init];
+    
+    if (self)
+    {
+        //Unique configuration for collector
+        _identifier             = identifier;
+        _columnNames            = columnNames;
+        _quantitytransformer    = transformer;
+        _fileProtectionKey  = fileProtectionKey;
+        
+        if (!self.healthKitCollectorQueue) {
+            self.healthKitCollectorQueue = [NSOperationQueue sequentialOperationQueueWithName:operationQueueName];
+        }
+        
+        [self checkIfCSVStructureHasChanged];
+        
+        //General configuration for file management
+        NSString* documentsDir  = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+        
         _collectorsPath         = [documentsDir stringByAppendingPathComponent:kCollectorFolder];
         
         [APCPassiveDataSink createFolderIfDoesntExist:_collectorsPath andProtectionValue:self.fileProtectionKey];

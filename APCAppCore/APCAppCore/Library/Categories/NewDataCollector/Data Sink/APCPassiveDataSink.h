@@ -35,34 +35,43 @@
 #import "APCCollectorProtocol.h"
 
 typedef NSString* (^APCCSVSerializer)(id dataSample);
+typedef NSString* (^APCQuantityCSVSerializer)(id dataSample, HKUnit*);
 
 @interface APCPassiveDataSink : NSObject <APCCollectorProtocol>
 
-@property (nonatomic, strong)   NSMutableDictionary*    registeredTrackers;
-@property (nonatomic, strong)   NSString*               collectorsPath;
-@property (nonatomic, readonly) NSString*               collectorsUploadPath;
+@property (nonatomic, strong)   NSMutableDictionary*        registeredTrackers;
+@property (nonatomic, strong)   NSString*                   collectorsPath;
+@property (nonatomic, readonly) NSString*                   collectorsUploadPath;
 
 //Unique configuration for collector
-@property (nonatomic, readonly) NSString*               identifier;
-@property (nonatomic, strong)   NSDictionary*           infoDictionary;
-@property (nonatomic, strong)   NSString*               folder;
-@property (nonatomic)           NSTimeInterval          stalenessInterval;
-@property (nonatomic) unsigned long long                sizeThreshold;
-@property (nonatomic)           NSArray*                columnNames;
-@property (nonatomic, copy)     APCCSVSerializer        transformer;
-@property (nonatomic, strong)   NSString*               csvFilename;
-@property (nonatomic, strong)   NSOperationQueue*       healthKitCollectorQueue;
-@property (nonatomic, strong)   NSString*               fileProtectionKey;
+@property (nonatomic, readonly) NSString*                   identifier;
+@property (nonatomic, strong)   NSDictionary*               infoDictionary;
+@property (nonatomic, strong)   NSString*                   folder;
+@property (nonatomic)           NSTimeInterval              stalenessInterval;
+@property (nonatomic) unsigned long long                    sizeThreshold;
+@property (nonatomic)           NSArray*                    columnNames;
+@property (nonatomic, copy)     APCCSVSerializer            transformer;
+@property (nonatomic, copy)     APCQuantityCSVSerializer    quantitytransformer;
+@property (nonatomic, strong)   NSString*                   csvFilename;
+@property (nonatomic, strong)   NSOperationQueue*           healthKitCollectorQueue;
+@property (nonatomic, strong)   NSString*                   fileProtectionKey;
 
 - (instancetype)initWithIdentifier:(NSString*)identifier
                        columnNames:(NSArray*)columnNames
                 operationQueueName:(NSString*)operationQueueName
                      dataProcessor:(APCCSVSerializer)transformer
                  fileProtectionKey:(NSString*)fileProtectionKey;
+
+- (instancetype)initWithQuantityIdentifier:(NSString*)identifier
+                               columnNames:(NSArray*)columnNames
+                        operationQueueName:(NSString*)operationQueueName
+                             dataProcessor:(APCQuantityCSVSerializer)transformer
+                         fileProtectionKey:(NSString*)fileProtectionKey;
+
 - (void)didReceiveUpdatedValuesFromCollector:(id)results;
 - (void)didReceiveUpdatedValueFromCollector:(id)result;
 - (void)processUpdatesFromCollector:(id)quantitySample;
-- (void)checkIfDataNeedsToBeFlushed;
+- (void)flushDataIfNeeded;
 
 + (void)createOrAppendString:(NSString*)string toFile:(NSString*)path;
 + (void)createOrReplaceString:(NSString*)string toFile:(NSString*)path;

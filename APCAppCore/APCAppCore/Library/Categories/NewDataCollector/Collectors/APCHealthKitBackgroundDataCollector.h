@@ -36,14 +36,16 @@
 
 @interface APCHealthKitBackgroundDataCollector : APCDataCollector
 
-@property (strong, nonatomic)   HKHealthStore*              healthStore;
-@property (strong, nonatomic)   HKUnit*                     unit;
-@property (strong, nonatomic)   HKSampleType*               sampleType;
-
 - (instancetype)initWithIdentifier:(NSString*)identifier
                         sampleType:(HKSampleType*)type
                         anchorName:(NSString*)anchorName
                   launchDateAnchor:(APCInitialStartDatePredicateDesignator)launchDateAnchor
                        healthStore:(HKHealthStore*)healthStore;
 
+- (instancetype)initWithQuantityTypeIdentifier:(NSString*)identifier
+                                    sampleType:(HKSampleType*)type
+                                    anchorName:(NSString*)anchorName
+                              launchDateAnchor:(APCInitialStartDatePredicateDesignator)launchDateAnchor
+                                   healthStore:(HKHealthStore*)healthStore
+                                          unit:(HKUnit*)unit;
 @end

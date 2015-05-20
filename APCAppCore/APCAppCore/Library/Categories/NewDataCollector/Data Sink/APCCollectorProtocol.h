@@ -38,6 +38,7 @@
 
 @optional
 
+- (void)didReceiveUpdatedHealthkitSamplesFromCollector:(id)results withUnit:(HKUnit*)unit;
 - (void)didReceiveUpdatedValuesFromCollector:(id)results;
 - (void)didReceiveUpdatedValueFromCollector:(id)result;
 - (void)didReceiveUpdateWithLocationManager:(CLLocationManager*)manager withUpdateLocations:(NSArray*)locations;
