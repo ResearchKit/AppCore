@@ -75,34 +75,28 @@
 
 - (void)start
 {
-    if ([CLLocationManager authorizationStatus] > kCLAuthorizationStatusDenied)
+    if (!self.locationManager)
     {
-        if (!self.locationManager)
+        APCLogDebug(@"Start location tracking");
+        
+        self.locationManager            = [[CLLocationManager alloc] init];
+        self.locationManager.delegate   = self;
+        
+        if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES &&
+            [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)
         {
-            APCLogDebug(@"Start location tracking");
+            APCLogDebug(@"Significant Location Change Monitoring is Available");
             
-            self.locationManager            = [[CLLocationManager alloc] init];
-            self.locationManager.delegate   = self;
-            
-            if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES &&
-                [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)
-            {
-                APCLogDebug(@"Significant Location Change Monitoring is Available");
-                
-                [self.locationManager startMonitoringSignificantLocationChanges];
-            }
+            [self.locationManager startMonitoringSignificantLocationChanges];
         }
     }
 }
 
 - (void)stop
 {
-    if ([CLLocationManager authorizationStatus] > kCLAuthorizationStatusDenied)
+    if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES)
     {
-        if ([CLLocationManager significantLocationChangeMonitoringAvailable] == YES)
-        {
-            [self.locationManager stopMonitoringSignificantLocationChanges];
-        }
+        [self.locationManager stopMonitoringSignificantLocationChanges];
     }
 }
 
