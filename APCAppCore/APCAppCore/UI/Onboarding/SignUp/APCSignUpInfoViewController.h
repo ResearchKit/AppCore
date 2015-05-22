@@ -51,8 +51,10 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *footerLabel;
 
-- (BOOL) isContentValid:(NSString **)errorMessage;
+- (BOOL)isContentValid:(NSString **)errorMessage;
 
 - (void)setupAppearance;
+
+- (APCUser *)user;
 
 @end

@@ -93,6 +93,23 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
     [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
 }
 
+- (void)onboardingDidFinish {
+    [self completeOnboardingAsSignIn:(self.onboarding.taskType == kAPCOnboardingTaskTypeSignIn)];
+}
+
+- (void)onboardingDidFinishAsSignIn {
+    [self completeOnboardingAsSignIn:YES];
+}
+
+- (void)completeOnboardingAsSignIn:(BOOL)wasSignIn {
+    if (wasSignIn) {
+        self.user.signedIn = YES;
+        //[(APCAppDelegate *)[UIApplication sharedApplication].delegate afterOnBoardProcessIsFinished];     // TODO: Untwine this spaghetti
+    } else {
+        self.user.signedUp = YES;
+    }
+}
+
 
 #pragma mark - Permissions
 

@@ -37,8 +37,6 @@
 
 @protocol APCSignUpProgressing <NSObject>
 
-@property (nonatomic, strong, readonly) APCUser *user;
-
 @property (nonatomic, strong) APCStepProgressBar *stepProgressBar;
 
 @end

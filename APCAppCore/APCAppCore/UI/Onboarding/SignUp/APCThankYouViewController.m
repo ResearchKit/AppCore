@@ -52,42 +52,22 @@
     self.navigationItem.hidesBackButton = YES;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-- (APCOnboarding *)onboarding {
-    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
-}
-
-- (APCUser *)user {
-    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].user;
+- (APCOnboardingManager *)onboardingManager {
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager];
 }
 
 - (IBAction)next:(APCButton *)__unused sender {
-    if (self.emailVerified) {
-        [self performSelector:@selector(setUserSignedIn) withObject:nil afterDelay:0.4];
-    } else {
-        [self finishOnboarding];
-    }
-}
-
-- (void)finishOnboarding {
-    if ([self onboarding].taskType == kAPCOnboardingTaskTypeSignIn) {
-        // We are posting this notification after .4 seconds delay, because we need to display the progress bar completion animation
-        [self performSelector:@selector(setUserSignedIn) withObject:nil afterDelay:0.4];
-    } else{
-        [self performSelector:@selector(setUserSignedUp) withObject:nil afterDelay:0.4];
-    }
-}
-
-- (void)setUserSignedUp {
-    self.user.signedUp = YES;
-}
-
-- (void)setUserSignedIn {
-    self.user.signedIn = YES;
-    [(APCAppDelegate *)[UIApplication sharedApplication].delegate afterOnBoardProcessIsFinished];
+    BOOL forceSignIn = self.emailVerified;
+    
+    // We are calling this method after .4 seconds delay, because we need to display the progress bar completion animation
+    APCOnboardingManager *manager = [self onboardingManager];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (forceSignIn) {
+            [manager onboardingDidFinishAsSignIn];
+        } else {
+            [manager onboardingDidFinish];
+        }
+    });
 }
 
 @end

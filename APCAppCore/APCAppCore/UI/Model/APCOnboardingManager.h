@@ -104,6 +104,12 @@ NS_ASSUME_NONNULL_BEGIN
 /** Called when the user does not agree to the consent. */
 - (void)userDeclinedConsent;
 
+/** Called when the onboarding's last step has concluded. */
+- (void)onboardingDidFinish;
+
+/** Kept for compatibility reason; no matter the receiver's onboarding type, this will finish onboarding as a user-sign-in. */
+- (void)onboardingDidFinishAsSignIn;
+
 @end
 
 NS_ASSUME_NONNULL_END
