@@ -1,5 +1,5 @@
 // 
-//  APCCoreLocationTracker.h 
+//  APCDisplacementTrackingCollector.h 
 //  APCAppCore 
 // 
 // Copyright (c) 2015, Apple Inc. All rights reserved. 
@@ -32,18 +32,12 @@
 // 
  
 #import <Foundation/Foundation.h>
+#import "APCDataCollector.h"
 #import <CoreLocation/CoreLocation.h>
-#import "APCDataTracker.h"
 
-typedef  enum  _APCPassiveLocationTrackingHomeLocation
-{
-    APCPassiveLocationTrackingHomeLocationAvailable,
-    APCPassiveLocationTrackingHomeLocationUnavailable
-}  APCPassiveLocationTrackingHomeLocation;
+@interface APCDisplacementTrackingCollector : APCDataCollector
 
-@interface APCCoreLocationTracker : APCDataTracker
-
-- (instancetype)initWithIdentifier: (NSString*) identifier deferredUpdatesTimeout:(NSTimeInterval)anUpdateTimeout andHomeLocationStatus:(APCPassiveLocationTrackingHomeLocation)aHomeLocationStatus;
+- (instancetype)initWithIdentifier:(NSString*)identifier deferredUpdatesTimeout:(NSTimeInterval)anUpdateTimeout;
 
 @end
 

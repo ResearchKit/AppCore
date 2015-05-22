@@ -47,7 +47,6 @@
  */
 @interface CMMotionActivity (Helper)
 
-+ (NSArray *) csvColumnNames;
-- (NSArray *) csvColumnValues;
++ (NSString *) activityTypeName:(CMMotionActivity*)motionActivitySample;
 
 @end
