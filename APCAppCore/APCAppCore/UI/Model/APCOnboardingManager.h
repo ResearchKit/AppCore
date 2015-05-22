@@ -34,6 +34,7 @@
 
 #import <Foundation/Foundation.h>
 #import "APCOnboarding.h"
+#import "APCUser.h"
 
 @class APCOnboardingManager;
 @class APCPermissionsManager;
@@ -96,6 +97,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** Subclasses can override to provide their own permissions manager. */
 - (APCPermissionsManager *)createPermissionsManager;
+
+/** Called when the user has agreed to and completed all consenting steps. */
+- (void)userDidConsentWithResult:(ORKConsentSignatureResult *)consentResult sharingScope:(APCUserConsentSharingScope)sharingScope;
+
+/** Called when the user does not agree to the consent. */
+- (void)userDeclinedConsent;
 
 @end
 

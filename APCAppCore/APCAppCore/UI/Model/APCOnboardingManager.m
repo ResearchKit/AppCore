@@ -78,6 +78,21 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
     self.onboarding = [[APCOnboarding alloc] initWithDelegate:self taskType:type];
 }
 
+- (void)userDidConsentWithResult:(ORKConsentSignatureResult *)consentResult sharingScope:(APCUserConsentSharingScope)sharingScope {
+    NSString *signatureName = [consentResult.signature.givenName stringByAppendingFormat:@" %@",consentResult.signature.familyName];
+    NSData *signatureImage = UIImagePNGRepresentation(consentResult.signature.signatureImage);
+    
+    _user.consentSignatureName = signatureName;
+    _user.consentSignatureImage = signatureImage;
+    _user.consentSignatureDate = consentResult.startDate;
+    _user.sharingScope = sharingScope;
+    _user.userConsented = YES;
+}
+
+- (void)userDeclinedConsent {
+    [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
+}
+
 
 #pragma mark - Permissions
 
