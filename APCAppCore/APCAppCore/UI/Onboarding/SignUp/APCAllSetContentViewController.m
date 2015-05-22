@@ -34,6 +34,7 @@
 #import "APCAllSetContentViewController.h"
 #import "APCAppCore.h"
 #import "APCAllSetTableViewCell.h"
+#import "APCDemographicUploader.h"
 
 static  NSString *kAllSetCellIdentifier = @"AllSetCell";
 
@@ -66,12 +67,11 @@ typedef NS_ENUM(NSUInteger, APCAllSetRows)
     self.tableView.estimatedRowHeight = 108.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     
-    [self configureTextBlocks];
+    [self configureTextBlocks];    
     
     APCAppDelegate *appDelegate = (APCAppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate configureObserverQueries];
-    
     APCUser  *user = appDelegate.dataSubstrate.currentUser;
+    
     self.demographicUploader = [[APCDemographicUploader alloc] initWithUser:user];
     [self.demographicUploader uploadNonIdentifiableDemographicData];
     

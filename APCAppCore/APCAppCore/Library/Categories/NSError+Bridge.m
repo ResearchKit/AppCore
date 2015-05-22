@@ -32,6 +32,7 @@
 //
 
 #import "NSError+Bridge.h"
+#import "APCLog.h"
 #import <BridgeSDK/BridgeSDK.h>
 #import "APCLog.h"
 

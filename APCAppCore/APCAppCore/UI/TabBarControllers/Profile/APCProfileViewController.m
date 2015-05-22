@@ -53,7 +53,7 @@
 #import "APCLog.h"
 
 #ifndef APC_HAVE_CONSENT
-    #import "APCExampleLabel.h"
+#import "APCExampleLabel.h"
 #endif
 
 #import "UIColor+APCAppearance.h"
@@ -164,7 +164,7 @@ static NSString * const kAPCRightDetailTableViewCellIdentifier = @"APCRightDetai
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if (self.profileEditsWerePerformed == YES) {
+    if (self.profileEditsWerePerformed != NO) {
         self.profileEditsWerePerformed = NO;
         [self.demographicUploader uploadNonIdentifiableDemographicData];
     }
