@@ -62,7 +62,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
 #pragma mark - Lifecycle
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:APCConsentCompletedWithDisagreeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:APCUserDidDeclineConsentNotification object:nil];
     _collectionView.delegate = nil;
 }
 
@@ -89,7 +89,7 @@ static NSString *kConsentEmailSubject = @"Consent Document";
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(goBackToSignUpJoin:)
-                                                 name:APCConsentCompletedWithDisagreeNotification
+                                                 name:APCUserDidDeclineConsentNotification
                                                object:nil];
     APCLogViewControllerAppeared();
 }

@@ -57,8 +57,9 @@ typedef NS_ENUM(NSUInteger, APCDashboardGraphType) {
 FOUNDATION_EXPORT NSString *const APCUserSignedUpNotification;
 FOUNDATION_EXPORT NSString *const APCUserSignedInNotification;
 FOUNDATION_EXPORT NSString *const APCUserLogOutNotification;
-FOUNDATION_EXPORT NSString *const APCUserWithdrawStudyNotification;
+FOUNDATION_EXPORT NSString *const APCUserDidWithdrawStudyNotification;
 FOUNDATION_EXPORT NSString *const APCUserDidConsentNotification;
+FOUNDATION_EXPORT NSString *const APCUserDidDeclineConsentNotification;
 
 FOUNDATION_EXPORT NSString *const APCScheduleUpdatedNotification;
 FOUNDATION_EXPORT NSString *const APCUpdateActivityNotification;
@@ -71,10 +72,6 @@ FOUNDATION_EXPORT NSString *const APCScoringHealthKitDataIsAvailableNotification
 FOUNDATION_EXPORT NSString *const APCTaskResultsProcessedNotification;
 
 FOUNDATION_EXPORT NSString *const APCUpdateTasksReminderNotification;
-
-FOUNDATION_EXPORT NSString *const APCConsentCompletedWithAgreeNotification;
-FOUNDATION_EXPORT NSString *const APCConsentCompletionWasSignInDictionaryKey;
-FOUNDATION_EXPORT NSString *const APCConsentCompletedWithDisagreeNotification;
 
 FOUNDATION_EXPORT NSString *const APCMotionHistoryReporterDoneNotification;
 

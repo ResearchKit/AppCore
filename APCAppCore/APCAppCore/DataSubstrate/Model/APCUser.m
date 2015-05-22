@@ -361,9 +361,6 @@ static NSString *const kSignedInKey = @"SignedIn";
 {
     _consented = consented;
     [self updateStoredProperty:kConsentedPropertyName withValue:@(consented)];
-    if (consented) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:APCUserDidConsentNotification object:nil];
-    }
 }
 
 - (void)setUserConsented:(BOOL)userConsented
@@ -598,9 +595,6 @@ static NSString *const kSignedInKey = @"SignedIn";
 {
     [[NSUserDefaults standardUserDefaults] setBool:signedUp forKey:kSignedUpKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    if (signedUp) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:(NSString *)APCUserSignedUpNotification object:nil];
-    }
 }
 
 - (BOOL)isSignedUp
@@ -612,9 +606,6 @@ static NSString *const kSignedInKey = @"SignedIn";
 {
     [[NSUserDefaults standardUserDefaults] setBool:signedIn forKey:kSignedInKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    if (signedIn) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:(NSString *)APCUserSignedInNotification object:nil];
-    }
 }
 
 - (BOOL)isSignedIn

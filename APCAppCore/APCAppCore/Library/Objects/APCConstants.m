@@ -39,15 +39,16 @@
 #pragma mark - Constants
 // ---------------------------------------------------------
 
-NSString *const APCUserSignedUpNotification   = @"APCUserSignedUpNotification";
-NSString *const APCUserSignedInNotification   = @"APCUserSignedInNotification";
-NSString *const APCUserLogOutNotification     = @"APCUserLogOutNotification";
-NSString *const APCUserWithdrawStudyNotification     = @"APCUserWithdrawStudyNotification";
-NSString *const APCUserDidConsentNotification = @"APCUserDidConsentNotification";
+NSString *const APCUserSignedUpNotification          = @"APCUserSignedUpNotification";
+NSString *const APCUserSignedInNotification          = @"APCUserSignedInNotification";
+NSString *const APCUserLogOutNotification            = @"APCUserLogOutNotification";
+NSString *const APCUserDidConsentNotification        = @"APCUserDidConsentNotification";
+NSString *const APCUserDidDeclineConsentNotification = @"APCUserDidConsentNotification";
+NSString *const APCUserDidWithdrawStudyNotification  = @"APCUserDidWithdrawStudyNotification";
 
-NSString *const APCScheduleUpdatedNotification      = @"APCScheduleUpdatedNotification";
-NSString *const APCUpdateActivityNotification       = @"APCUpdateActivityNotification";
-NSString *const APCDayChangedNotification           = @"APCDayChangedNotification";
+NSString *const APCScheduleUpdatedNotification       = @"APCScheduleUpdatedNotification";
+NSString *const APCUpdateActivityNotification        = @"APCUpdateActivityNotification";
+NSString *const APCDayChangedNotification            = @"APCDayChangedNotification";
 
 NSString *const APCAppDidRegisterUserNotification            = @"APCAppDidRegisterUserNotification";
 NSString *const APCAppDidFailToRegisterForRemoteNotification = @"APCAppDidFailToRegisterForRemoteNotifications";
@@ -56,10 +57,6 @@ NSString *const APCScoringHealthKitDataIsAvailableNotification = @"APCScoringHea
 NSString *const APCTaskResultsProcessedNotification = @"APCTaskResultsProcessedNotification";
 
 NSString *const APCUpdateTasksReminderNotification = @"APCUpdateTasksReminderNotification";
-
-NSString *const APCConsentCompletedWithAgreeNotification = @"APCConsentCompletedWithAgree";
-NSString *const APCConsentCompletionWasSignInDictionaryKey = @"wasSignIn";
-NSString *const APCConsentCompletedWithDisagreeNotification = @"goToSignInJoinScreen";
 
 NSString *const APCMotionHistoryReporterDoneNotification = @"APCMotionHistoryReporterDoneNotification";
 
