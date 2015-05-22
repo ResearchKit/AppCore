@@ -57,6 +57,8 @@ NSString *const APCTaskResultsProcessedNotification = @"APCTaskResultsProcessedN
 
 NSString *const APCUpdateTasksReminderNotification = @"APCUpdateTasksReminderNotification";
 
+NSString *const APCConsentCompletedWithAgreeNotification = @"APCConsentCompletedWithAgree";
+NSString *const APCConsentCompletionWasSignInDictionaryKey = @"wasSignIn";
 NSString *const APCConsentCompletedWithDisagreeNotification = @"goToSignInJoinScreen";
 
 NSString *const APCMotionHistoryReporterDoneNotification = @"APCMotionHistoryReporterDoneNotification";

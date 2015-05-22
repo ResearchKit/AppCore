@@ -72,6 +72,8 @@ FOUNDATION_EXPORT NSString *const APCTaskResultsProcessedNotification;
 
 FOUNDATION_EXPORT NSString *const APCUpdateTasksReminderNotification;
 
+FOUNDATION_EXPORT NSString *const APCConsentCompletedWithAgreeNotification;
+FOUNDATION_EXPORT NSString *const APCConsentCompletionWasSignInDictionaryKey;
 FOUNDATION_EXPORT NSString *const APCConsentCompletedWithDisagreeNotification;
 
 FOUNDATION_EXPORT NSString *const APCMotionHistoryReporterDoneNotification;

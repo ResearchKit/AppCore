@@ -90,7 +90,7 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
 }
 
 - (void)userDeclinedConsent {
-    [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithDisagreeNotification object:self];
 }
 
 - (void)onboardingDidFinish {
@@ -108,6 +108,9 @@ NSString * const kAPCOnboardingStoryboardName = @"APCOnboarding";
     } else {
         self.user.signedUp = YES;
     }
+    
+    NSDictionary *userInfo = @{APCConsentCompletionWasSignInDictionaryKey: @(wasSignIn)};
+    [[NSNotificationCenter defaultCenter] postNotificationName:APCConsentCompletedWithAgreeNotification object:self userInfo:userInfo];
 }
 
 
