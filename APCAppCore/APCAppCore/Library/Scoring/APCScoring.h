@@ -52,6 +52,15 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
 @property (nonatomic) CGFloat customMaximumPoint;
 @property (nonatomic) CGFloat customMinimumPoint;
 
+//Exposed for APCCorrelationsSelectorViewController
+@property (nonatomic, strong) NSString *caption;
+@property (nonatomic, strong) NSString *series1Name;
+@property (nonatomic, strong) NSString *series2Name;
+@property (nonatomic, strong) NSString *taskId;
+@property (nonatomic, strong) NSString *valueKey;
+@property (nonatomic, strong) HKQuantityType *quantityType;
+@property (nonatomic, strong) HKUnit *hkUnit;
+
 - (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
                                          unit:(HKUnit *)unit
                                  numberOfDays:(NSInteger)numberOfDays;
@@ -89,8 +98,9 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
                      groupBy:(APHTimelineGroups)groupBy;
 
 - (void)updatePeriodForDays:(NSInteger)numberOfDays
-                    groupBy:(APHTimelineGroups)groupBy
-      withCompletionHandler:(void (^)(void))completion;
+                    groupBy:(APHTimelineGroups)groupBy;
+
+-(void)correlateWithScoringObject:(APCScoring *)scoring;
 
 - (NSNumber *)minimumDataPoint;
 - (NSNumber *)maximumDataPoint;

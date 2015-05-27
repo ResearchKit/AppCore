@@ -43,6 +43,8 @@
 @property (nonatomic, strong) APCTableViewDashboardGraphItem *graphItem;
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *legendLabel;
+
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleLabelWidthConstraint;
 
 @property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;

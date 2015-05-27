@@ -55,7 +55,9 @@ NSString *const APCAppDidFailToRegisterForRemoteNotification = @"APCAppDidFailTo
 NSString *const APCScoringHealthKitDataIsAvailableNotification = @"APCScoringHealthKitDataIsAvailableNotification";
 NSString *const APCTaskResultsProcessedNotification = @"APCTaskResultsProcessedNotification";
 
+NSString *const APCSchedulerUpdatedScheduledTasksNotification = @"APCSchedulerUpdatedScheduledTasksNotification";
 NSString *const APCUpdateTasksReminderNotification = @"APCUpdateTasksReminderNotification";
+NSString *const APCUpdateChartsNotification = @"APCUpdateChartsNotification";
 
 NSString *const APCConsentCompletedWithDisagreeNotification = @"goToSignInJoinScreen";
 

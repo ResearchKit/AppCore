@@ -205,6 +205,8 @@
 		5BFEB41E1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BFEB41C1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m */; };
 		6C7346081A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C7346061A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C7346091A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */; };
+		6C8646401AF8077300B46C49 /* APCCorrelationsSelectorViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C86463E1AF8077300B46C49 /* APCCorrelationsSelectorViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6C8646411AF8077300B46C49 /* APCCorrelationsSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C86463F1AF8077300B46C49 /* APCCorrelationsSelectorViewController.m */; };
 		6CD8B6741AC5011D0061E6D6 /* APCTaskReminder.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CD8B6721AC5011D0061E6D6 /* APCTaskReminder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6CD8B6751AC5011D0061E6D6 /* APCTaskReminder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD8B6731AC5011D0061E6D6 /* APCTaskReminder.m */; };
 		712AB44C1A9E692400556DA2 /* APCMotionHistoryData.h in Headers */ = {isa = PBXBuildFile; fileRef = 712AB4481A9E692400556DA2 /* APCMotionHistoryData.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -895,6 +897,8 @@
 		5BFEB41C1AA72CCD0089DEF7 /* APCSharingOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCSharingOptionsViewController.m; sourceTree = "<group>"; };
 		6C7346061A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCConsentTaskViewController.h; sourceTree = "<group>"; };
 		6C7346071A7ECD3B00DA9CD8 /* APCConsentTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCConsentTaskViewController.m; sourceTree = "<group>"; };
+		6C86463E1AF8077300B46C49 /* APCCorrelationsSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCCorrelationsSelectorViewController.h; sourceTree = "<group>"; };
+		6C86463F1AF8077300B46C49 /* APCCorrelationsSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCCorrelationsSelectorViewController.m; sourceTree = "<group>"; };
 		6CD8B6721AC5011D0061E6D6 /* APCTaskReminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = APCTaskReminder.h; path = APCAppCore/Library/APCTaskReminder.h; sourceTree = SOURCE_ROOT; };
 		6CD8B6731AC5011D0061E6D6 /* APCTaskReminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = APCTaskReminder.m; path = APCAppCore/Library/APCTaskReminder.m; sourceTree = SOURCE_ROOT; };
 		712AB4481A9E692400556DA2 /* APCMotionHistoryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCMotionHistoryData.h; sourceTree = "<group>"; };
@@ -2686,6 +2690,8 @@
 				F5F129811A2F78490015982C /* APCGraphViewController.m */,
 				5B827B4A1A80A39900C685A3 /* APCDashboardMoreInfoViewController.h */,
 				5B827B4B1A80A39900C685A3 /* APCDashboardMoreInfoViewController.m */,
+				6C86463E1AF8077300B46C49 /* APCCorrelationsSelectorViewController.h */,
+				6C86463F1AF8077300B46C49 /* APCCorrelationsSelectorViewController.m */,
 				5B73CAF11A8B3B8C00FFE79C /* APCDashboard.storyboard */,
 			);
 			path = Dashboard;
@@ -3156,6 +3162,7 @@
 				6C7346081A7ECD3B00DA9CD8 /* APCConsentTaskViewController.h in Headers */,
 				F5B9462A1A7309A20034C522 /* ZZChannelOutput.h in Headers */,
 				F5F12AB41A2F78490015982C /* APCSignUpPermissionsViewController.h in Headers */,
+				6C8646401AF8077300B46C49 /* APCCorrelationsSelectorViewController.h in Headers */,
 				7BEC13D61AA3AA5B00CA316C /* APCFitnessAllocation.h in Headers */,
 				369E27ED1A96B7A200D35DFA /* APCMedicationColor.h in Headers */,
 				369E27EF1A96B7A200D35DFA /* APCMedicationDataStorageEngine.h in Headers */,
@@ -3521,6 +3528,8 @@
 				F5B948151A73272C0034C522 /* APCScoring.m in Sources */,
 				7B751D581B0A61A600E77BD2 /* NSDictionary+APCStringify.m in Sources */,
 				F5B947B81A73272C0034C522 /* APCStepProgressBar+Appearance.m in Sources */,
+				6C8646411AF8077300B46C49 /* APCCorrelationsSelectorViewController.m in Sources */,
+				7BDF4D2B1AE5403E00ACC1F8 /* NSDictionary+APCStringify.m in Sources */,
 				CFFDEDFB1A95734000B25581 /* APCSetupTableViewCell.m in Sources */,
 				7B8C20141AA3AB8600BFEFDA /* APCTheme.m in Sources */,
 				0894654E1A8C1F0200A983AC /* APCInsightBarView.m in Sources */,
