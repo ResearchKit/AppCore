@@ -71,7 +71,7 @@ typedef NSString* (^APCQuantityCSVSerializer)(id dataSample, HKUnit*);
 - (void)didReceiveUpdatedValuesFromCollector:(id)results;
 - (void)didReceiveUpdatedValueFromCollector:(id)result;
 - (void)processUpdatesFromCollector:(id)quantitySample;
-- (void)flushDataIfNeeded;
+- (void)checkIfDataNeedsToBeFlushed;
 
 + (void)createOrAppendString:(NSString*)string toFile:(NSString*)path;
 + (void)createOrReplaceString:(NSString*)string toFile:(NSString*)path;
