@@ -110,7 +110,7 @@ static NSUInteger       kDaysPerWeek        = 7;
         [APCPassiveDataSink createOrAppendString:stringToWrite
                                           toFile:[strongSelf.folder stringByAppendingPathComponent:kCSVFilename]];
         
-        [strongSelf flushDataIfNeeded];
+        [strongSelf checkIfDataNeedsToBeFlushed];
     }];
 }
 
