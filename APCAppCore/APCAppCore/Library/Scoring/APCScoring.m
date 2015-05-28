@@ -787,14 +787,11 @@ static NSInteger const kNumberOfDaysInYear    = 365;
         NSDictionary *rawData = nil;
         
         if (period == APHTimelineGroupForInsights) {
-            // We only need the latest for the raw data.
-            // Since our filtered array is sorted in a desending order
-            // we can take the first object.
             NSSortDescriptor *sortByDate = [[NSSortDescriptor alloc] initWithKey:kDatasetDateKey ascending:NO];
             NSArray *latestRawData = [elements sortedArrayUsingDescriptors:@[sortByDate]];
             
-            NSDictionary *latetstElement = [latestRawData firstObject];
-            rawData = latetstElement[kDatasetRawDataKey];
+            NSDictionary *latestElement = [latestRawData firstObject];
+            rawData = latestElement[kDatasetRawDataKey];
         }
         
         // Filter data point that fall between start/end dates (inclusive).
@@ -846,6 +843,7 @@ static NSInteger const kNumberOfDaysInYear    = 365;
 - (NSDictionary *)groupByKeyPath:(NSString *)key dataset:(NSArray *)dataset
 {
     NSMutableDictionary *groups = [NSMutableDictionary new];
+    //I'm not quite sure I follow why we're using integer values for specific keypaths for this, when we could much more easily use the timestamp on the object (which I hope exists) directly. Was this an attempt at a performance fix?
     
     for (id object in dataset) {
         id value = [object valueForKeyPath:key];
