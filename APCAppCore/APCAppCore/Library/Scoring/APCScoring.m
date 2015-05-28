@@ -1369,7 +1369,7 @@ static NSInteger const kNumberOfDaysInYear    = 365;
 - (APCRangePoint *)discreteGraph:(APCDiscreteGraphView *) __unused graphView plot:(NSInteger) plotIndex valueForPointAtIndex:(NSInteger) __unused pointIndex
 {
     
-    APCRangePoint *value = [APCRangePoint new];
+    APCRangePoint *value;
     NSDictionary *point = [NSDictionary new];
     
     if (plotIndex == 0) {
