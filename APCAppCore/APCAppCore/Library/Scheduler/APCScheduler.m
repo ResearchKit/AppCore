@@ -122,7 +122,6 @@ static NSString * const kOneTimeSchedule = @"once";
         
         //STEP 7: Issue notifications that we've completed a survey
         [[NSNotificationCenter defaultCenter]postNotificationName:APCUpdateTasksReminderNotification object:nil];
-        [[NSNotificationCenter defaultCenter]postNotificationName:APCSchedulerUpdatedScheduledTasksNotification object:nil];
         
         self.isUpdating = NO;
         APCLogEventWithData(kSchedulerEvent, (@{@"event_detail":[NSString stringWithFormat:@"Updated Schedule For %@", self.referenceRange.startDate]}));
