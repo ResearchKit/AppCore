@@ -439,7 +439,7 @@ static NSInteger const kNumberOfDaysInYear    = 365;
     }];
     
     NSUInteger highestIndex = 0;
-    if (dataPointsIndex > correlatedDataPointsIndex) {
+    if (dataPointsIndex >= correlatedDataPointsIndex) {
         highestIndex = dataPointsIndex;
     }else if(correlatedDataPointsIndex > dataPointsIndex){
         highestIndex = correlatedDataPointsIndex;
