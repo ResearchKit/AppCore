@@ -875,11 +875,11 @@ static NSInteger const kNumberOfDaysInYear    = 365;
         NSDate *pointDate = [[NSCalendar currentCalendar] dateFromComponents:components];
         
         if (groups[pointDate] == nil) {
-            groups[pointDate] = @[];
+            groups[pointDate] = [NSMutableArray new];
         }
         
-        NSArray *existingValues = groups[pointDate];
-        groups[pointDate] = [existingValues arrayByAddingObject:object];
+        [(NSMutableArray *)groups[pointDate] addObject:object];
+        
     }
     
     return groups;
