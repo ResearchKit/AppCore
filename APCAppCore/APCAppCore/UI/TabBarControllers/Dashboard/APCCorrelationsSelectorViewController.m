@@ -45,7 +45,7 @@
 
 @implementation APCCorrelationsSelectorViewController
 
--(id)initWithScoringObjects:(NSArray *)scoringObjects
+- (id)initWithScoringObjects:(NSArray *)scoringObjects
 {
     
     self = [super initWithStyle:UITableViewStyleGrouped];
@@ -64,7 +64,7 @@
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
 }
 
--(void) viewWillAppear:(BOOL)__unused animated
+- (void) viewWillAppear:(BOOL)__unused animated
 {
     [self.tableView reloadData];
 }
@@ -84,7 +84,7 @@
 }
 
 #pragma mark - UITableViewDelegate
--(UIView *)tableView:(UITableView *)__unused tableView viewForHeaderInSection:(NSInteger)section
+- (UIView *)tableView:(UITableView *)__unused tableView viewForHeaderInSection:(NSInteger)section
 {
     
     UITableViewHeaderFooterView *headerView;
@@ -102,7 +102,7 @@
     return headerView;
 }
 
--(CGFloat)tableView:(UITableView *)__unused tableView heightForHeaderInSection:(NSInteger)__unused section
+- (CGFloat)tableView:(UITableView *)__unused tableView heightForHeaderInSection:(NSInteger)__unused section
 {
     
     float defaultHeight = 44.0;
@@ -147,7 +147,7 @@
 
     return cell;
 }
--(void)tableView:(UITableView *)__unused tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)__unused tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
     //get the scoring object based on the current select
@@ -168,7 +168,7 @@
 
 }
 
--(void)updateSection:(NSUInteger)section WithSelectedScoringObject:(APCScoring *)selectedObject
+- (void)updateSection:(NSUInteger)section WithSelectedScoringObject:(APCScoring *)selectedObject
 {
     
     if (section == 0) {
@@ -199,6 +199,5 @@
         }
     }
 }
-
 
 @end

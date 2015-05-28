@@ -37,10 +37,10 @@
 
 @protocol APCCorrelationsSelectorDelegate <NSObject>
 @optional
--(void) viewController:(APCCorrelationsSelectorViewController *)viewController didChangeCorrelatedScoringDataSource:(APCScoring*)scoring;
+- (void) viewController:(APCCorrelationsSelectorViewController *)viewController didChangeCorrelatedScoringDataSource:(APCScoring*)scoring;
 @end
 
 @interface APCCorrelationsSelectorViewController : UITableViewController
 @property (weak, nonatomic) id<APCCorrelationsSelectorDelegate> delegate;
--(id)initWithScoringObjects:(NSArray *)scoringObjects;
+- (id)initWithScoringObjects:(NSArray *)scoringObjects;
 @end
