@@ -218,7 +218,7 @@ static NSInteger const kNumberOfDaysInYear    = 365;
         _groupBy = groupBy;
         _usesHealthKitData = NO;
         _quantityType = nil;
-        _hkUnit = nil;
+        _unit = nil;
         _customMaximumPoint = CGFLOAT_MAX;
         _customMinimumPoint = CGFLOAT_MIN;
         _latestOnly = latestOnly;
@@ -288,7 +288,7 @@ static NSInteger const kNumberOfDaysInYear    = 365;
         _groupBy = groupBy;
         _usesHealthKitData = YES;
         _quantityType = nil;
-        _hkUnit = nil;
+        _unit = nil;
         _customMaximumPoint = CGFLOAT_MAX;
         _customMinimumPoint = CGFLOAT_MIN;
         
@@ -302,7 +302,7 @@ static NSInteger const kNumberOfDaysInYear    = 365;
         // The very first thing that we need to make sure is that the unit and quantity types are compatible
         if ([quantityType isCompatibleWithUnit:unit]) {
             _quantityType = quantityType;
-            _hkUnit = unit;
+            _unit = unit;
             [self statsCollectionQueryForQuantityType:quantityType unit:unit forDays:numberOfDays];
         } else {
             NSAssert([quantityType isCompatibleWithUnit:unit], @"The quantity and the unit must be compatible");
@@ -325,17 +325,17 @@ static NSInteger const kNumberOfDaysInYear    = 365;
     self.dataPoints = [self dataPointsArrayForDays:_numberOfDays groupBy:_groupBy];
     
     if (self.usesHealthKitData) {
-        if ([self.quantityType isCompatibleWithUnit:self.hkUnit]) {
+        if ([self.quantityType isCompatibleWithUnit:self.unit]) {
             
             [self updateStatsCollectionForQuantityType:self.quantityType
-                                                  unit:self.hkUnit
+                                                  unit:self.unit
                                                forDays:numberOfDays
                                                groupBy:groupBy
                                             completion:^{
                                                 [weakSelf updateCharts];
                                             }];
         } else {
-            NSAssert([self.quantityType isCompatibleWithUnit:self.hkUnit], @"The quantity and the unit must be compatible");
+            NSAssert([self.quantityType isCompatibleWithUnit:self.unit], @"The quantity and the unit must be compatible");
         }
     } else {
         

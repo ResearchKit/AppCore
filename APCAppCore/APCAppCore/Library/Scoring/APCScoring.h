@@ -70,7 +70,7 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
 @property (nonatomic, strong) NSString *taskId;
 @property (nonatomic, strong) NSString *valueKey;
 @property (nonatomic, strong) HKQuantityType *quantityType;
-@property (nonatomic, strong) HKUnit *hkUnit;
+@property (nonatomic, strong) HKUnit *unit;
 
 - (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
                                          unit:(HKUnit *)unit

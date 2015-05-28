@@ -176,7 +176,7 @@
         self.series1SelectedObject = selectedObject;
         if (selectedObject.quantityType) {
             //HK Data initializer
-            self.scoring = [[APCScoring alloc]initWithHealthKitQuantityType:selectedObject.quantityType unit:selectedObject.hkUnit numberOfDays:-7];
+            self.scoring = [[APCScoring alloc]initWithHealthKitQuantityType:selectedObject.quantityType unit:selectedObject.unit numberOfDays:-7];
         }else{
             //Task type initializer
             self.scoring = [[APCScoring alloc]initWithTask:selectedObject.taskId numberOfDays:-7 valueKey:selectedObject.valueKey];
