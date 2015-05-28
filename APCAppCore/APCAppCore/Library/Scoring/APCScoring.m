@@ -392,14 +392,14 @@ static NSInteger const kNumberOfDaysInYear    = 365;
 /**
  @brief Add a series to correlate with an initialized APCScoring object's TaskId data series
  */
--(void)correlateWithScoringObject:(APCScoring *)scoring
+- (void)correlateWithScoringObject:(APCScoring *)scoring
 {
     self.correlatedScoring = scoring;
     self.correlatedScoring.weakParentScoring = self;
     [self correlateDataSources];
 }
 
--(void)discardIncongruentArrayElements
+- (void)discardIncongruentArrayElements
 {
     //arrays are NOT guaranteed to be the same length if queried with the same date range when one or more series is data from HealthKit
     
@@ -465,7 +465,7 @@ static NSInteger const kNumberOfDaysInYear    = 365;
     }
 }
 
--(void)indexDataSeries:(NSMutableArray *)series
+- (void)indexDataSeries:(NSMutableArray *)series
 {
     
     NSDictionary *basePointObject;
@@ -1356,7 +1356,7 @@ static NSInteger const kNumberOfDaysInYear    = 365;
 #pragma mark  APCDiscreteGraphViewDataSource
 /*********************************************************************************/
 
--(NSInteger)numberOfPlotsInDiscreteGraph:(APCDiscreteGraphView *)__unused graphView
+- (NSInteger)numberOfPlotsInDiscreteGraph:(APCDiscreteGraphView *)__unused graphView
 {
     return [self numberOfPlotsInGraph];
 }
