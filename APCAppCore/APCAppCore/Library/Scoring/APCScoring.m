@@ -483,11 +483,13 @@ static NSInteger const kNumberOfDaysInYear    = 365;
     //loop over all elements calculating the point index
     NSNumber *index;
     for (NSUInteger i = 0; i < series.count; i++) {
-        NSMutableDictionary *dictionary = [[series objectAtIndex:i] mutableCopy];
-        NSNumber *dataPoint = [dictionary valueForKey:kDatasetValueKey];
+        
+        NSNumber *dataPoint = [(NSDictionary *)[series objectAtIndex:i] valueForKey:kDatasetValueKey];
         float ind = dataPoint.floatValue / basePointValue.floatValue * 100;
         index = [NSNumber numberWithFloat:ind];
+        
         if (![dataPoint isEqual: @(NSNotFound)]) {
+            NSMutableDictionary *dictionary = [[series objectAtIndex:i] mutableCopy];
             [dictionary setValue:index forKey:kDatasetValueKey];
             APCRangePoint *point = [[APCRangePoint alloc]initWithMinimumValue:ind maximumValue:ind];
             [dictionary setValue:point forKey:kDatasetRangeValueKey];
@@ -497,7 +499,7 @@ static NSInteger const kNumberOfDaysInYear    = 365;
 }
 
 //Notification added in correlateWithScoringObject()
--(void)dealloc
+- (void)dealloc
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
