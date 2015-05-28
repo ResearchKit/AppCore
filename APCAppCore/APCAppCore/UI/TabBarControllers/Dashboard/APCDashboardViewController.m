@@ -393,7 +393,9 @@ static CGFloat const kAPCLineGraphCellHeight = 225.0f;
         self.presentAnimator.initialFrame = initialFrame;
         
         APCGraphViewController *graphViewController = [[UIStoryboard storyboardWithName:@"APCDashboard" bundle:[NSBundle appleCoreBundle]] instantiateViewControllerWithIdentifier:@"APCLineGraphViewController"];
+        
         graphViewController.graphItem = graphItem;
+        graphItem.graphData.scoringDelegate = graphViewController;
         [self.navigationController presentViewController:graphViewController animated:YES completion:nil];
     }
 }

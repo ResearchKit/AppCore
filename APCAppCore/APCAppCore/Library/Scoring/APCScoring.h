@@ -47,10 +47,21 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
     APHTimelineGroupForInsights
 };
 
+@class APCScoring;
+
+@protocol APCScoringDelegate <NSObject>
+
+-(void)graphViewControllerShouldUpdateChartWithScoring: (APCScoring *)scoring;
+
+@end
+
 @interface APCScoring : NSEnumerator <APCLineGraphViewDataSource, APCDiscreteGraphViewDataSource>
 
 @property (nonatomic) CGFloat customMaximumPoint;
 @property (nonatomic) CGFloat customMinimumPoint;
+
+//APCScoring Delegate
+@property (weak, nonatomic) id<APCScoringDelegate> scoringDelegate;
 
 //Exposed for APCCorrelationsSelectorViewController
 @property (nonatomic, strong) NSString *caption;
@@ -108,5 +119,6 @@ typedef NS_ENUM(NSUInteger, APHTimelineGroups)
 - (id)nextObject;
 - (NSArray *)allObjects;
 - (NSNumber *)numberOfDataPoints;
+- (void)updateCharts;
 
 @end

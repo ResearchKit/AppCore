@@ -60,8 +60,6 @@
         self.lineGraphView.hidden = YES;
     }
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadCharts:) name:APCUpdateChartsNotification object:nil];
-    
     graphView.tintColor = self.graphItem.tintColor;
     graphView.landscapeMode = YES;
     
@@ -214,7 +212,7 @@
     }
 }
 
--(void)reloadCharts:(NSNotification *)__unused notification
+-(void)reloadCharts
 {
     APCBaseGraphView *graphView;
     
@@ -233,6 +231,13 @@
         [graphView layoutSubviews];
         [graphView refreshGraph];
     });
+}
+
+#pragma mark - APCScoring Delegate
+
+-(void)graphViewControllerShouldUpdateChartWithScoring:(APCScoring *)__unused scoring
+{
+    [self reloadCharts];
 }
 
 @end

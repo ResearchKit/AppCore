@@ -35,7 +35,9 @@
 #import "APCGraph.h"
 #import "APCTableViewItem.h"
 
-@interface APCGraphViewController : UIViewController
+@class APCScoring;
+
+@interface APCGraphViewController : UIViewController <APCScoringDelegate>
 
 @property (weak, nonatomic) IBOutlet APCLineGraphView *lineGraphView;
 @property (weak, nonatomic) IBOutlet APCDiscreteGraphView *discreteGraphView;

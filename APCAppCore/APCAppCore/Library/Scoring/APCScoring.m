@@ -368,6 +368,7 @@ static NSInteger const kNumberOfDaysInYear    = 365;
     [self indexDataSeries:self.correlatedScoring.dataPoints];
 }
 
+//Called when user selects a new date range
 - (void)updateCharts{
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -377,7 +378,11 @@ static NSInteger const kNumberOfDaysInYear    = 365;
             [self.weakParentScoring correlateDataSources];
         }
         
-        [[NSNotificationCenter defaultCenter]postNotificationName:APCUpdateChartsNotification object:self];
+        //tell the APCGraphViewController to update its chart
+        if ([self.scoringDelegate respondsToSelector:@selector(graphViewControllerShouldUpdateChartWithScoring:)])
+        {
+            [self.scoringDelegate graphViewControllerShouldUpdateChartWithScoring:self];
+        }
     });
 }
 

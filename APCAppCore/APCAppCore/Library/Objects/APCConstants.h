@@ -71,7 +71,6 @@ FOUNDATION_EXPORT NSString *const APCScoringHealthKitDataIsAvailableNotification
 FOUNDATION_EXPORT NSString *const APCTaskResultsProcessedNotification;
 FOUNDATION_EXPORT NSString *const APCSchedulerUpdatedScheduledTasksNotification;
 FOUNDATION_EXPORT NSString *const APCUpdateTasksReminderNotification;
-FOUNDATION_EXPORT NSString *const APCUpdateChartsNotification;
 
 FOUNDATION_EXPORT NSString *const APCConsentCompletedWithDisagreeNotification;
 
