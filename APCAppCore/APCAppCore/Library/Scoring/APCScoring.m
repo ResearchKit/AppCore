@@ -47,6 +47,7 @@ static NSString *const kDatasetGroupByWeek    = @"datasetGroupByWeek";
 static NSString *const kDatasetGroupByMonth   = @"datasetGroupByMonth";
 static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
+static NSInteger const kNumberOfDaysInWeek    = 7;
 static NSInteger const kNumberOfDaysInMonth   = 30;
 static NSInteger const kNumberOfDaysIn3Months = 90;
 static NSInteger const kNumberOfDaysIn6Months = 180;
@@ -128,7 +129,7 @@ static NSInteger const kNumberOfDaysInYear    = 365;
 /**
  * @brief   Returns an instance of APHScoring.
  *
- * @param   taskId          The ID of the task who's data needs to be displayed
+ * @param   taskId          The ID of the task whose data needs to be displayed
  *
  * @param   numberOfDays    Number of days that the data is needed. Negative will produce data
  *                          from past and positive will yeild future days.
@@ -525,17 +526,17 @@ static NSInteger const kNumberOfDaysInYear    = 365;
             [timeline addObject:timelineDate];
         }
     } else if (groupBy == APHTimelineGroupWeek) {
-        for (NSInteger day = days; day <= 0; day += 7) {
+        for (NSInteger day = days; day <= 0; day += kNumberOfDaysInWeek) {
             NSDate *timelineDate = [[self dateForSpan:day] startOfDay];
             [timeline addObject:timelineDate];
         }
     } else if (groupBy == APHTimelineGroupMonth) {
-        for (NSInteger day = days; day <= 0; day += 30) {
+        for (NSInteger day = days; day <= 0; day += kNumberOfDaysInMonth) {
             NSDate *timelineDate = [[self dateForSpan:day] startOfDay];
             [timeline addObject:timelineDate];
         }
     } else {
-        for (NSInteger day = days; day <= 0; day += 365) {
+        for (NSInteger day = days; day <= 0; day += kNumberOfDaysInYear) {
             NSDate *timelineDate = [[self dateForSpan:day] startOfDay];
             [timeline addObject:timelineDate];
         }
