@@ -120,7 +120,7 @@ static NSString * const kOneTimeSchedule = @"once";
         //STEP 6: Delete non-validated schedules
         [self deleteAllNonvalidatedScheduledTasks];
         
-        //STEP 7: Notify APCTasksReminderManager that we've completed a survey
+        //STEP 7: Issue notifications that we've completed a survey
         [[NSNotificationCenter defaultCenter]postNotificationName:APCUpdateTasksReminderNotification object:nil];
         
         self.isUpdating = NO;

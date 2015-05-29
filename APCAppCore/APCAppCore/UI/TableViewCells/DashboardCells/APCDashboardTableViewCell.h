@@ -42,6 +42,8 @@
 
 - (void)dashboardTableViewCellDidTapMoreInfo:(APCDashboardTableViewCell *)cell;
 
+- (void)dashboardTableViewCellDidTapLegendTitle:(APCDashboardTableViewCell *)cell;
+
 @end
 
 @interface APCDashboardTableViewCell : UITableViewCell
@@ -58,5 +60,7 @@
 
 - (IBAction)infoTapped:(id)sender;
 - (IBAction)expandTapped:(id)sender;
+- (IBAction)legendLabelTapped:(id)sender;
+
 
 @end

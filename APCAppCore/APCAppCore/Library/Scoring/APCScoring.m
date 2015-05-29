@@ -1,42 +1,43 @@
-// 
-//  APCScoring.m 
-//  APCAppCore 
-// 
-// Copyright (c) 2015, Apple Inc. All rights reserved. 
-// 
+//
+//  APCScoring.m
+//  APCAppCore
+//
+// Copyright (c) 2015, Apple Inc. All rights reserved.
+//
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
-// 
+//
 // 1.  Redistributions of source code must retain the above copyright notice, this
 // list of conditions and the following disclaimer.
-// 
-// 2.  Redistributions in binary form must reproduce the above copyright notice, 
-// this list of conditions and the following disclaimer in the documentation and/or 
-// other materials provided with the distribution. 
-// 
-// 3.  Neither the name of the copyright holder(s) nor the names of any contributors 
-// may be used to endorse or promote products derived from this software without 
-// specific prior written permission. No license is granted to the trademarks of 
-// the copyright holders even if such marks are included in this software. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE 
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL 
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
-// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
-// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-// OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
-// 
- 
+//
+// 2.  Redistributions in binary form must reproduce the above copyright notice,
+// this list of conditions and the following disclaimer in the documentation and/or
+// other materials provided with the distribution.
+//
+// 3.  Neither the name of the copyright holder(s) nor the names of any contributors
+// may be used to endorse or promote products derived from this software without
+// specific prior written permission. No license is granted to the trademarks of
+// the copyright holders even if such marks are included in this software.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+// OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
 #import "APCScoring.h"
 #import "APCAppCore.h"
 
 NSString *const kDatasetDateKey        = @"datasetDateKey";
 NSString *const kDatasetValueKey       = @"datasetValueKey";
 NSString *const kDatasetRangeValueKey  = @"datasetRangeValueKey";
+NSString *const kDatasetRawDataKey     = @"datasetRawData";
 
 static NSString *const kDatasetSortKey        = @"datasetSortKey";
 static NSString *const kDatasetValueKindKey   = @"datasetValueKindKey";
@@ -46,25 +47,29 @@ static NSString *const kDatasetGroupByWeek    = @"datasetGroupByWeek";
 static NSString *const kDatasetGroupByMonth   = @"datasetGroupByMonth";
 static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
-@interface APCScoring()
+static NSInteger const kNumberOfDaysInWeek    = 7;
+static NSInteger const kNumberOfDaysInMonth   = 30;
+static NSInteger const kNumberOfDaysIn3Months = 90;
+static NSInteger const kNumberOfDaysIn6Months = 180;
+static NSInteger const kNumberOfDaysInYear    = 365;
 
+@interface APCScoring()
+@property (nonatomic, strong) APCScoring *correlatedScoring;
+@property (nonatomic, weak) APCScoring *weakParentScoring;
 @property (nonatomic, strong) NSMutableArray *dataPoints;
 @property (nonatomic, strong) NSMutableArray *updatedDataPoints;
-@property (nonatomic, strong) NSMutableArray *correlateDataPoints;
+
 @property (nonatomic, strong) NSArray *timeline;
 
+@property (nonatomic) APHTimelineGroups groupBy;
 @property (nonatomic) NSUInteger current;
 @property (nonatomic) NSUInteger correlatedCurrent;
-@property (nonatomic) BOOL hasCorrelateDataPoints;
+@property (nonatomic) NSInteger numberOfDays;
 @property (nonatomic) BOOL usesHealthKitData;
+@property (nonatomic) BOOL latestOnly;
 
-@property (nonatomic, strong) NSString *taskId;
-@property (nonatomic, strong) NSString *valueKey;
 @property (nonatomic, strong) NSString *dataKey;
 @property (nonatomic, strong) NSString *sortKey;
-
-@property (nonatomic, strong) HKQuantityType *quantityType;
-@property (nonatomic, strong) HKUnit *hkUnit;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @end
@@ -92,34 +97,29 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
  *   }
  */
 
-- (void)sharedInit:(NSInteger)days
+- (NSMutableArray *)dataPointsArrayForDays:(NSInteger)days groupBy:(NSUInteger)groupBy
 {
-    _dataPoints = [NSMutableArray array];
-    _updatedDataPoints = [NSMutableArray array];
-    _correlateDataPoints = [NSMutableArray array];
-    _hasCorrelateDataPoints = NO;
-    _usesHealthKitData = YES;
+    _timeline = [self configureTimelineForDays:days groupBy:groupBy];
     
-    _quantityType = nil;
-    _hkUnit = nil;
+    _numberOfDays = days;
+    NSMutableArray *dataPoints = [NSMutableArray new];
     
-    _taskId = nil;
-    _valueKey = nil;
-    _dataKey = nil;
-    _sortKey = nil;
-    
-    _customMaximumPoint = CGFLOAT_MAX;
-    _customMinimumPoint = CGFLOAT_MIN;
-    
-    if (!self.dateFormatter) {
-        self.dateFormatter = [[NSDateFormatter alloc] init];
-        [self.dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    for (NSDate *day in self.timeline) {
+        NSDate *timelineDay = [[NSCalendar currentCalendar] dateBySettingHour:0
+                                                                       minute:0
+                                                                       second:0
+                                                                       ofDate:day
+                                                                      options:0];
+        
+        
+        [dataPoints addObject:[self generateDataPointForDate:timelineDay
+                                                   withValue:@(NSNotFound)
+                                                 noDataValue:YES]];
     }
     
-    _timeline = [self configureTimelineForDays:days groupBy:APHTimelineGroupDay]; //[self configureTimelineForDays:days];
-    
-    [self generateEmptyDataset];
+    return dataPoints;
 }
+
 
 - (HKHealthStore *)healthStore
 {
@@ -129,7 +129,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 /**
  * @brief   Returns an instance of APHScoring.
  *
- * @param   taskId          The ID of the task whoes data needs to be displayed
+ * @param   taskId          The ID of the task whose data needs to be displayed
  *
  * @param   numberOfDays    Number of days that the data is needed. Negative will produce data
  *                          from past and positive will yeild future days.
@@ -176,7 +176,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                       dataKey:dataKey
                       sortKey:sortKey
                    latestOnly:YES
-                   groupBy:APHTimelineGroupDay];
+                      groupBy:APHTimelineGroupDay];
     
     return self;
 }
@@ -198,6 +198,9 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return self;
 }
 
+/**
+ @brief Designated Initializer for Task data source
+ */
 - (instancetype)initWithTask:(NSString *)taskId
                 numberOfDays:(NSInteger)numberOfDays
                     valueKey:(NSString *)valueKey
@@ -209,18 +212,32 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     self = [super init];
     
     if (self) {
-        NSInteger days = numberOfDays + 1;
-        [self sharedInit:days];
         
+        _dataPoints = [NSMutableArray array];
+        _updatedDataPoints = [NSMutableArray array];
+        _numberOfDays = numberOfDays;
+        _groupBy = groupBy;
         _usesHealthKitData = NO;
+        _quantityType = nil;
+        _unit = nil;
+        _customMaximumPoint = CGFLOAT_MAX;
+        _customMinimumPoint = CGFLOAT_MIN;
+        _latestOnly = latestOnly;
         
         _taskId = taskId;
         _valueKey = valueKey;
         _dataKey = dataKey;
         _sortKey = sortKey;
         
+        if (!self.dateFormatter) {
+            self.dateFormatter = [[NSDateFormatter alloc] init];
+            [self.dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+        }
+        
+        self.dataPoints = [self dataPointsArrayForDays:_numberOfDays groupBy:_groupBy];
+        
         [self queryTaskId:taskId
-                  forDays:days
+                  forDays:numberOfDays
                  valueKey:valueKey
                   dataKey:dataKey
                   sortKey:sortKey
@@ -254,23 +271,40 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return self;
 }
 
+/**
+ @brief Designated Initializer for Health Kit data source
+ */
 - (instancetype)initWithHealthKitQuantityType:(HKQuantityType *)quantityType
                                          unit:(HKUnit *)unit
                                  numberOfDays:(NSInteger)numberOfDays
-                                      groupBy:(APHTimelineGroups) __unused groupBy
+                                      groupBy:(APHTimelineGroups) groupBy
 {
     self = [super init];
     
     if (self) {
-        NSInteger days = numberOfDays + 1;
-        [self sharedInit:days];
         
-        // The very first thing that we need to make sure is that
-        // the unit and quantity types are compatible
+        _dataPoints = [NSMutableArray array];
+        _updatedDataPoints = [NSMutableArray array];
+        _numberOfDays = numberOfDays;
+        _groupBy = groupBy;
+        _usesHealthKitData = YES;
+        _quantityType = nil;
+        _unit = nil;
+        _customMaximumPoint = CGFLOAT_MAX;
+        _customMinimumPoint = CGFLOAT_MIN;
+        
+        if (!self.dateFormatter) {
+            self.dateFormatter = [[NSDateFormatter alloc] init];
+            [self.dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+        }
+        
+        self.dataPoints = [self dataPointsArrayForDays:_numberOfDays groupBy:_groupBy];
+        
+        // The very first thing that we need to make sure is that the unit and quantity types are compatible
         if ([quantityType isCompatibleWithUnit:unit]) {
             _quantityType = quantityType;
-            _hkUnit = unit;
-            [self statsCollectionQueryForQuantityType:quantityType unit:unit forDays:days];
+            _unit = unit;
+            [self statsCollectionQueryForQuantityType:quantityType unit:unit forDays:numberOfDays];
         } else {
             NSAssert([quantityType isCompatibleWithUnit:unit], @"The quantity and the unit must be compatible");
         }
@@ -281,37 +315,193 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 - (void)updatePeriodForDays:(NSInteger)numberOfDays
                     groupBy:(APHTimelineGroups)groupBy
-      withCompletionHandler:(void (^)(void))completion
 {
-    NSInteger days = numberOfDays + 1;
+    
+    _groupBy = groupBy;
+    _numberOfDays = numberOfDays;
+    
+    __weak typeof(self) weakSelf = self;
+    
+    // Update the generated dataset to be inline with the timeline.
+    self.dataPoints = [self dataPointsArrayForDays:_numberOfDays groupBy:_groupBy];
     
     if (self.usesHealthKitData) {
-        if ([self.quantityType isCompatibleWithUnit:self.hkUnit]) {
+        if ([self.quantityType isCompatibleWithUnit:self.unit]) {
             
             [self updateStatsCollectionForQuantityType:self.quantityType
-                                                  unit:self.hkUnit
-                                               forDays:days
+                                                  unit:self.unit
+                                               forDays:numberOfDays
                                                groupBy:groupBy
-                                            completion:completion];
+                                            completion:^{
+                                                [weakSelf updateCharts];
+                                            }];
         } else {
-            NSAssert([self.quantityType isCompatibleWithUnit:self.hkUnit], @"The quantity and the unit must be compatible");
+            NSAssert([self.quantityType isCompatibleWithUnit:self.unit], @"The quantity and the unit must be compatible");
         }
     } else {
-        // Update the timeline based on the number of days requested.
-        self.timeline = [self configureTimelineForDays:days groupBy:groupBy];
-        
-        // Update the generated dataset to be inline with the timeline.
-        [self generateEmptyDataset];
         
         [self queryTaskId:self.taskId
-                    forDays:days
+                  forDays:numberOfDays
                  valueKey:self.valueKey
                   dataKey:self.dataKey
                   sortKey:self.sortKey
-               latestOnly:YES
+               latestOnly:self.latestOnly
                   groupBy:groupBy
-               completion:completion];
+               completion:^{
+                   [weakSelf updateCharts];
+               }];
     }
+    
+    //update the correlatedScoring object
+    if (self.correlatedScoring) {
+        [self.correlatedScoring updatePeriodForDays:numberOfDays groupBy:groupBy];
+    }
+    
+}
+
+//should only be called by parent self of correlated data source
+- (void)correlateDataSources{
+    //move dataPoints into correlateDataPoints
+    [self discardIncongruentArrayElements];
+    
+    //index the arrays
+    [self indexDataSeries:self.dataPoints];
+    [self indexDataSeries:self.correlatedScoring.dataPoints];
+}
+
+//Called when user selects a new date range
+- (void)updateCharts{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.correlatedScoring) {
+            [self correlateDataSources];
+        }else if (self.weakParentScoring){
+            [self.weakParentScoring correlateDataSources];
+        }
+        
+        //tell the APCGraphViewController to update its chart
+        if ([self.scoringDelegate respondsToSelector:@selector(graphViewControllerShouldUpdateChartWithScoring:)])
+        {
+            [self.scoringDelegate graphViewControllerShouldUpdateChartWithScoring:self];
+        }
+    });
+}
+
+#pragma mark - Correlations
+
+/**
+ @brief Add a series to correlate with an initialized APCScoring object's TaskId data series
+ */
+- (void)correlateWithScoringObject:(APCScoring *)scoring
+{
+    self.correlatedScoring = scoring;
+    self.correlatedScoring.weakParentScoring = self;
+    [self correlateDataSources];
+}
+
+- (void)discardIncongruentArrayElements
+{
+    //arrays are NOT guaranteed to be the same length if queried with the same date range when one or more series is data from HealthKit
+    
+    //find the shortest array and difference in their counts
+    NSMutableArray *shortestArray = self.dataPoints.count <= self.correlatedScoring.dataPoints.count ? self.dataPoints : self.correlatedScoring.dataPoints;
+    NSMutableArray *longestArray = self.dataPoints.count >= self.correlatedScoring.dataPoints.count ? self.dataPoints : self.correlatedScoring.dataPoints;
+    
+    //add this number of dictionaries to the front of the shortest array
+    NSUInteger elementsVariance = longestArray.count - shortestArray.count;
+    
+    for (NSUInteger i = 0; i < elementsVariance; i++) {
+        
+        NSDictionary *dataPoint = [longestArray objectAtIndex:i];
+        NSDate *pointDate = [dataPoint objectForKey:kDatasetDateKey];
+        NSDictionary *dataPointsDictionary = [self generateDataPointForDate:pointDate
+                                                                  withValue:@(NSNotFound)
+                                                                noDataValue:YES];
+        
+        [shortestArray insertObject:dataPointsDictionary atIndex:i];
+    }
+    
+    //check they are now even
+    NSAssert(self.dataPoints.count == self.correlatedScoring.dataPoints.count, @"Arrays are not of equal length. dataPoints.count = %li, correlatedScoring.dataPoints.count = %li", self.dataPoints.count, self.correlatedScoring.dataPoints.count);
+    
+    //Arrays are not guaranteed to have non-NSNotFound data beginning at the same index
+    NSUInteger dataPointsIndex = [self.dataPoints indexOfObjectPassingTest:^BOOL(id obj, NSUInteger __unused idx, BOOL *stop) {
+        
+        if (![[(NSDictionary *)obj objectForKey:kDatasetValueKey] isEqualToNumber: @(NSNotFound)]) {
+            *stop = YES;
+            return YES;
+        }else{
+            return NO;
+        }
+    }];
+    
+    NSUInteger correlatedDataPointsIndex = [self.correlatedScoring.dataPoints indexOfObjectPassingTest:^BOOL(id obj, NSUInteger __unused idx, BOOL *stop) {
+        if (![[(NSDictionary *)obj objectForKey:kDatasetValueKey] isEqualToNumber: @(NSNotFound)]) {
+            *stop = YES;
+            return YES;
+        }else{
+            return NO;
+        }
+    }];
+    
+    NSUInteger highestIndex = 0;
+    if (dataPointsIndex >= correlatedDataPointsIndex) {
+        highestIndex = dataPointsIndex;
+    }else if(correlatedDataPointsIndex > dataPointsIndex){
+        highestIndex = correlatedDataPointsIndex;
+    }
+    
+    if (correlatedDataPointsIndex != NSNotFound && dataPointsIndex != NSNotFound && self.dataPoints.count == self.correlatedScoring.dataPoints.count){
+        for (NSUInteger i = 0; i < highestIndex; i++) {
+            NSMutableDictionary *dataPointDictionary = [[self.dataPoints objectAtIndex:i] mutableCopy];
+            [dataPointDictionary setObject:@(NSNotFound) forKey:kDatasetValueKey];
+            [self.dataPoints replaceObjectAtIndex:i withObject:dataPointDictionary];
+            
+            NSMutableDictionary *correlatedDataPointDictionary =[[self.correlatedScoring.dataPoints objectAtIndex:i] mutableCopy];
+            [correlatedDataPointDictionary setObject:@(NSNotFound) forKey:kDatasetValueKey];
+            [self.correlatedScoring.dataPoints replaceObjectAtIndex:i withObject:correlatedDataPointDictionary];
+            
+        }
+    }
+}
+
+- (void)indexDataSeries:(NSMutableArray *)series
+{
+    
+    NSDictionary *basePointObject;
+    NSNumber *basePointValue = @0;
+    
+    //find the earliest base point value
+    for (int i = (int)series.count -1; i >= 0; i--) {
+        basePointObject = series[i];
+        NSNumber *checkBasePointValue = [basePointObject valueForKey:kDatasetValueKey];
+        if (![checkBasePointValue  isEqual: @(NSNotFound)]) {
+            basePointValue = checkBasePointValue;
+        }
+    }
+    
+    //loop over all elements calculating the point index
+    NSNumber *index;
+    for (NSUInteger i = 0; i < series.count; i++) {
+        
+        NSNumber *dataPoint = [(NSDictionary *)[series objectAtIndex:i] valueForKey:kDatasetValueKey];
+        float ind = dataPoint.floatValue / basePointValue.floatValue * 100;
+        index = [NSNumber numberWithFloat:ind];
+        
+        if (![dataPoint isEqual: @(NSNotFound)]) {
+            NSMutableDictionary *dictionary = [[series objectAtIndex:i] mutableCopy];
+            [dictionary setValue:index forKey:kDatasetValueKey];
+            APCRangePoint *point = [[APCRangePoint alloc]initWithMinimumValue:ind maximumValue:ind];
+            [dictionary setValue:point forKey:kDatasetRangeValueKey];
+            [series replaceObjectAtIndex:i withObject:dictionary];
+        }
+    }
+}
+
+//Notification added in correlateWithScoringObject()
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 #pragma mark - Helpers
@@ -321,7 +511,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     NSMutableArray *timeline = [NSMutableArray array];
     
     for (NSInteger day = days; day <= 0; day++) {
-        NSDate *timelineDate = [self dateForSpan:day];
+        NSDate *timelineDate = [[self dateForSpan:day] startOfDay];
         [timeline addObject:timelineDate];
     }
     
@@ -334,45 +524,27 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     
     if (groupBy == APHTimelineGroupDay) {
         for (NSInteger day = days; day <= 0; day++) {
-            NSDate *timelineDate = [self dateForSpan:day];
+            NSDate *timelineDate = [[self dateForSpan:day] startOfDay];
             [timeline addObject:timelineDate];
         }
     } else if (groupBy == APHTimelineGroupWeek) {
-        for (NSInteger day = days; day <= 0; day += 7) {
-            NSDate *timelineDate = [self dateForSpan:day];
+        for (NSInteger day = days; day <= 0; day += kNumberOfDaysInWeek) {
+            NSDate *timelineDate = [[self dateForSpan:day] startOfDay];
             [timeline addObject:timelineDate];
         }
     } else if (groupBy == APHTimelineGroupMonth) {
-        for (NSInteger day = days; day <= 0; day += 30) {
-            NSDate *timelineDate = [self dateForSpan:day];
+        for (NSInteger day = days; day <= 0; day += kNumberOfDaysInMonth) {
+            NSDate *timelineDate = [[self dateForSpan:day] startOfDay];
             [timeline addObject:timelineDate];
         }
     } else {
-        for (NSInteger day = days; day <= 0; day += 365) {
-            NSDate *timelineDate = [self dateForSpan:day];
+        for (NSInteger day = days; day <= 0; day += kNumberOfDaysInYear) {
+            NSDate *timelineDate = [[self dateForSpan:day] startOfDay];
             [timeline addObject:timelineDate];
         }
     }
     
     return timeline;
-}
-
-- (void)generateEmptyDataset
-{
-    // clear out the datapoints
-    [self.dataPoints removeAllObjects];
-    
-    for (NSDate *day in self.timeline) {
-        NSDate *timelineDay = [[NSCalendar currentCalendar] dateBySettingHour:0
-                                                                       minute:0
-                                                                       second:0
-                                                                       ofDate:day
-                                                                      options:0];
-        
-        [self.dataPoints addObject:[self generateDataPointForDate:timelineDay
-                                                        withValue:@(NSNotFound)
-                                                      noDataValue:YES]];
-    }
 }
 
 - (NSDictionary *)generateDataPointForDate:(NSDate *)pointDate
@@ -489,10 +661,10 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                     NSMutableDictionary *dataPoint = nil;
                     
                     if (groupBy == APHTimelineGroupForInsights) {
-                        dataPoint = [[self generateDataPointForDate:pointDate
+                        dataPoint = [[self generateDataPointForDate:task.createdAt
                                                           withValue:taskValue
                                                         noDataValue:YES] mutableCopy];
-                        dataPoint[@"raw"] = taskResult;
+                        dataPoint[kDatasetRawDataKey] = taskResult;
                     } else {
                         if (!dataKey) {
                             dataPoint = [[self generateDataPointForDate:pointDate
@@ -525,11 +697,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
             self.dataPoints = [sortedDataPoints mutableCopy];
         }
         
-        if (groupBy == APHTimelineGroupDay) {
-            [self groupDatasetByDay];
-        } else {
-            [self groupDatasetbyPeriod:groupBy];
-        }
+        [self groupByPeriod:groupBy];
     }
     
     if (completion) {
@@ -575,113 +743,145 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return allResultSummaries;
 }
 
-- (void)groupDatasetByDay
+- (void)groupByPeriod:(APHTimelineGroups)period
 {
-    NSMutableArray *groupedDataset = [NSMutableArray array];
-    NSArray *days = [self.dataPoints valueForKeyPath:@"@distinctUnionOfObjects.datasetDateKey"];
+    NSString *periodKeyPath = nil;
     
-    for (NSString *day in days) {
-        NSMutableDictionary *entry = [NSMutableDictionary dictionary];
-        [entry setObject:day forKey:kDatasetDateKey];
+    switch (period) {
+        case APHTimelineGroupWeek:
+            periodKeyPath = kDatasetGroupByWeek;
+            break;
+        case APHTimelineGroupMonth:
+            periodKeyPath = kDatasetGroupByMonth;
+            break;
+        case APHTimelineGroupYear:
+            periodKeyPath = kDatasetGroupByYear;
+            break;
+        default:
+            periodKeyPath = kDatasetGroupByDay;
+            break;
+    }
+    
+    // Group the dataset based on the provided period.
+    NSDictionary *groupedDataset = [self groupByKeyPath:periodKeyPath dataset:self.dataPoints];
+    
+    // Summarize data for each group.
+    NSDictionary *summarizedDataset = [self summarizeDataset:groupedDataset period:period];
+    NSArray *sortedSummaryKeys = [summarizedDataset.allKeys sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSMutableArray *sortedSummarizedDataset = [NSMutableArray new];
+    
+    for (id key in sortedSummaryKeys) {
+        [sortedSummarizedDataset addObjectsFromArray:summarizedDataset[key]];
+    }
+    
+    [self.dataPoints removeAllObjects];
+    [self.dataPoints addObjectsFromArray:sortedSummarizedDataset];
+}
+
+- (NSDictionary *)summarizeDataset:(NSDictionary *)dataset period:(APHTimelineGroups)period
+{
+    NSMutableDictionary *summarizedDataset = [NSMutableDictionary new];
+    NSArray *keys = [dataset allKeys];
+    
+    for (id key in keys) {
+        NSArray *elements = dataset[key];
+        NSDictionary *rawData = nil;
         
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K = %@) and (%K <> %@)", kDatasetDateKey, day, kDatasetValueKey, @(NSNotFound)];
-        NSArray *groupItems = [self.dataPoints filteredArrayUsingPredicate:predicate];
+        if (period == APHTimelineGroupForInsights) {
+            // The elements array is sorted in ansending order,
+            // therefore the last object will be the latest data point.
+            NSDictionary *latestElement = [elements lastObject];
+            rawData = latestElement[kDatasetRawDataKey];
+        }
+        
+        // Exclude data points with NSNotFound
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K <> %@)", kDatasetValueKey, @(NSNotFound)];
+        NSArray *filteredDataPoints = [elements filteredArrayUsingPredicate:predicate];
         
         double itemSum = 0;
         double dayAverage = 0;
         
-        for (NSDictionary *item in groupItems) {
-            NSNumber *value = [item valueForKey:kDatasetValueKey];
+        for (NSDictionary *dataPoint in filteredDataPoints) {
+            NSNumber *value = [dataPoint valueForKey:kDatasetValueKey];
             
             if ([value integerValue] != NSNotFound) {
                 itemSum += [value doubleValue];
             }
         }
         
-        if (groupItems.count != 0) {
-            dayAverage = itemSum / groupItems.count;
+        if (filteredDataPoints.count != 0) {
+            dayAverage = itemSum / filteredDataPoints.count;
         }
         
         if (dayAverage == 0) {
             dayAverage = NSNotFound;
         }
         
-        // Set the min/max for the data
         APCRangePoint *rangePoint = [APCRangePoint new];
         
         if (dayAverage != NSNotFound) {
-            NSNumber *dataMinValue = [groupItems valueForKeyPath:@"@min.datasetValueKey"];
-            NSNumber *dataMaxValue = [groupItems valueForKeyPath:@"@max.datasetValueKey"];
+            NSNumber *minValue = [filteredDataPoints valueForKeyPath:@"@min.datasetValueKey"];
+            NSNumber *maxValue = [filteredDataPoints valueForKeyPath:@"@max.datasetValueKey"];
             
-            rangePoint.minimumValue = [dataMinValue floatValue];
-            rangePoint.maximumValue = [dataMaxValue floatValue];
+            rangePoint.minimumValue = [minValue floatValue];
+            rangePoint.maximumValue = [maxValue floatValue];
         }
         
-        [entry setObject:@(dayAverage) forKey:kDatasetValueKey];
-        [entry setObject:rangePoint forKey:kDatasetRangeValueKey];
+        NSMutableDictionary *entry = [[self generateDataPointForDate:key withValue:@(dayAverage) noDataValue:YES] mutableCopy];
+        entry[kDatasetRangeValueKey] = rangePoint;
         
-        [groupedDataset addObject:entry];
+        if (rawData) {
+            entry[kDatasetRawDataKey] = rawData;
+        }
+        
+        summarizedDataset[key] = @[entry];
     }
     
-    // resort the grouped dataset by date
-    NSSortDescriptor *sortByDate = [[NSSortDescriptor alloc] initWithKey:kDatasetDateKey
-                                                               ascending:YES];
-    [groupedDataset sortUsingDescriptors:@[sortByDate]];
-    
-    [self.dataPoints removeAllObjects];
-    [self.dataPoints addObjectsFromArray:groupedDataset];
+    return summarizedDataset;
 }
 
-- (void)groupDatasetbyPeriod:(APHTimelineGroups)period
+- (NSDictionary *)groupByKeyPath:(NSString *)key dataset:(NSArray *)dataset
 {
-    NSDateComponents *groupDateComponents = [[NSDateComponents alloc] init];
+    NSMutableDictionary *groups = [NSMutableDictionary new];
+    //I'm not quite sure I follow why we're using integer values for specific keypaths for this, when we could much more easily use the timestamp on the object (which I hope exists) directly. Was this an attempt at a performance fix?
     
-    for (NSDate *groupStartDate in self.timeline) {
-        NSDate *groupEndDate   = nil;
+    for (id object in dataset) {
+        id value = [object valueForKeyPath:key];
+        NSInteger yearNumber = [object[kDatasetGroupByYear] integerValue];
+        NSDateComponents *components = nil;
         
-        // Set start and end date for the grouping period
-        NSInteger weekNumber  = [[[NSCalendar currentCalendar] components:NSCalendarUnitWeekOfYear fromDate:groupStartDate] weekOfYear];
-        NSInteger monthNumber = [[[NSCalendar currentCalendar] components:NSCalendarUnitMonth fromDate:groupStartDate] month];
-        NSInteger yearNumber  = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:groupStartDate] year];
-        
-        if (period == APHTimelineGroupWeek) {
-            groupDateComponents.weekday = 7;
-            groupDateComponents.weekOfYear = weekNumber;
-            groupDateComponents.year = yearNumber;
-            
-            groupEndDate = [[NSCalendar currentCalendar] dateFromComponents:groupDateComponents];
-        } else if (period == APHTimelineGroupMonth) {
-            groupDateComponents.month = monthNumber;
-            groupEndDate = [[NSCalendar currentCalendar] dateFromComponents:groupDateComponents];
-        } else { // defaults to Day
-            groupEndDate = groupStartDate;
+        if ([key isEqualToString:kDatasetGroupByMonth]) {
+            components = [[NSDateComponents alloc] init];
+            components.weekday = 1;
+            components.month = [value integerValue];
+            components.year = yearNumber;
+        } else if ([key isEqualToString:kDatasetGroupByYear]) {
+            components = [[NSDateComponents alloc] init];
+            components.weekday = 1;
+            components.year = [value integerValue];
+        } else if ([key isEqualToString:kDatasetGroupByWeek]) {
+            components = [[NSDateComponents alloc] init];
+            components.weekday = 1;
+            components.weekOfYear = [value integerValue];
+            components.year = yearNumber;
+        } else {
+            // Group by day
+            components = [[NSCalendar currentCalendar] components:(NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear)
+                                                         fromDate:(NSDate *)value];
         }
         
-        // filter data points that are between the start and end dates
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K >= %@) AND (%K <= %@)",
-                                  kDatasetDateKey, groupStartDate,
-                                  kDatasetDateKey, groupEndDate];
-        NSArray *groupedPoints = [self.dataPoints filteredArrayUsingPredicate:predicate];
+        NSDate *pointDate = [[NSCalendar currentCalendar] dateFromComponents:components];
         
-        double itemSum = 0;
-        double dayAverage = 0;
-        
-        for (NSDictionary *dataPoint in groupedPoints) {
-            NSNumber *value = [dataPoint valueForKey:kDatasetValueKey];
-            
-            if ([value integerValue] != NSNotFound) {
-                itemSum += [value doubleValue];
-            }
-            
-            if (groupedPoints.count != 0) {
-                dayAverage = itemSum / groupedPoints.count;
-            }
-            
-            if (dayAverage == 0) {
-                dayAverage = NSNotFound;
-            }
+        if (groups[pointDate] == nil) {
+            groups[pointDate] = [NSMutableArray new];
         }
+        
+        [(NSMutableArray *)groups[pointDate] addObject:object];
+        
     }
+    
+    return groups;
 }
 
 
@@ -774,7 +974,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                                         unit:(HKUnit *)unit
                                      forDays:(NSInteger)days
                                      groupBy:(APHTimelineGroups)groupBy
-                                  completion:(void (^)(void))completion
+                                  completion:(void (^)(void)) completion
 {
     [self.updatedDataPoints removeAllObjects];
     
@@ -845,7 +1045,6 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
                                                                        kDatasetValueNoDataKey: (isDecreteQuantity) ? @(YES) : @(NO)
                                                                        };
                                            
-                                           //[self addDataPointToTimeline:dataPoint];
                                            [self.updatedDataPoints addObject:dataPoint];
                                        }];
             
@@ -861,6 +1060,8 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
             self.timeline = updatedTimeline;
             [self.dataPoints addObjectsFromArray:self.updatedDataPoints];
             
+            [self dataIsAvailableFromHealthKit];
+            
             if (completion) {
                 completion();
             }
@@ -874,7 +1075,7 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:APCScoringHealthKitDataIsAvailableNotification
-                                                            object:self.dataPoints];
+                                                            object:nil];
     });
 }
 
@@ -900,10 +1101,10 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
 
 #pragma mark - Min/Max/Avg
 
-- (NSNumber *)minimumDataPoint
+- (NSNumber *)minimumDataPointInSeries:(NSArray *)series
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
-    NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
+    NSArray *filteredArray = [series filteredArrayUsingPredicate:predicate];
     
     NSArray *rangeArray = [filteredArray valueForKey:kDatasetRangeValueKey];
     NSPredicate *rangePredicate = [NSPredicate predicateWithFormat:@"SELF <> %@", [NSNull null]];
@@ -918,20 +1119,37 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
         minValue = [filteredArray valueForKeyPath:@"@min.datasetValueKey"];
     }
     
-    return minValue;
+    return minValue ? minValue : @0;
 }
 
-- (NSNumber *)maximumDataPoint
+- (NSNumber *)minimumDataPoint
+{
+    NSNumber *minDataPoint = [self minimumDataPointInSeries:self.dataPoints];
+    NSNumber *minCorrelatedDataPoint = [self minimumDataPointInSeries:self.correlatedScoring.dataPoints];
+    NSNumber *min;
+    
+    if (!self.correlatedScoring ||
+        [minDataPoint compare:minCorrelatedDataPoint] == NSOrderedAscending ||
+        [minDataPoint compare:minCorrelatedDataPoint] == NSOrderedSame) {
+        min = minDataPoint;
+    } else {
+        min = minCorrelatedDataPoint;
+    }
+    
+    return min;
+}
+
+- (NSNumber *)maximumDataPointInSeries:(NSArray *)series
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K <> %@", kDatasetValueKey, @(NSNotFound)];
-
-    NSArray *filteredArray = [self.dataPoints filteredArrayUsingPredicate:predicate];
+    
+    NSArray *filteredArray = [series filteredArrayUsingPredicate:predicate];
     NSArray *rangeArray = [filteredArray valueForKey:kDatasetRangeValueKey];
     NSPredicate *rangePredicate = [NSPredicate predicateWithFormat:@"SELF <> %@", [NSNull null]];
     
     NSArray *rangePoints = [rangeArray filteredArrayUsingPredicate:rangePredicate];
     
-    NSNumber *maxValue = nil;
+    NSNumber *maxValue = @0;
     
     if (rangePoints.count != 0) {
         maxValue = [rangeArray valueForKeyPath:@"@max.maximumValue"];
@@ -939,7 +1157,22 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
         maxValue = [filteredArray valueForKeyPath:@"@max.datasetValueKey"];
     }
     
-    return maxValue;
+    return maxValue ? maxValue : @0;;
+}
+
+- (NSNumber *)maximumDataPoint
+{
+    NSNumber *maxDataPoint = [self maximumDataPointInSeries:self.dataPoints];
+    NSNumber *maxCorrelatedDataPoint = [self maximumDataPointInSeries:self.correlatedScoring.dataPoints];
+    NSNumber *max = [NSNumber new];
+    
+    if ([maxDataPoint compare:maxCorrelatedDataPoint] == NSOrderedAscending || [maxDataPoint compare:maxCorrelatedDataPoint] == NSOrderedSame) {
+        max = maxCorrelatedDataPoint;
+    }else{
+        max = maxDataPoint;
+    }
+    
+    return max;
 }
 
 - (NSNumber *)averageDataPoint
@@ -964,19 +1197,8 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
         self.current = 0;
         nextPoint = [self.dataPoints objectAtIndex:self.current++];
     }
-
+    
     return nextPoint;
-}
-
-- (id)nextCorrelatedObject
-{
-    id nextCorrelatedPoint = nil;
-    
-    if (self.correlatedCurrent < [self.correlateDataPoints count]) {
-        nextCorrelatedPoint = [self.correlateDataPoints objectAtIndex:self.correlatedCurrent++];
-    }
-    
-    return nextCorrelatedPoint;
 }
 
 - (NSArray *)allObjects
@@ -994,29 +1216,97 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return numberOfPoints;
 }
 
-#pragma mark - Graph Datasource
-#pragma mark Line
+/*********************************************************************************/
+#pragma mark - Common Graph Datasource
+/*********************************************************************************/
 
-- (NSInteger)lineGraph:(APCLineGraphView *) __unused graphView numberOfPointsInPlot:(NSInteger)plotIndex
+- (NSInteger)numberOfPointsInPlot:(NSInteger)plotIndex
 {
     NSInteger numberOfPoints = 0;
     
     if (plotIndex == 0) {
-        numberOfPoints = [self.timeline count]; //[self.dataPoints count];
-    } else {
-        numberOfPoints = [self.correlateDataPoints count];
+        numberOfPoints = self.dataPoints.count;
     }
+    else{
+        numberOfPoints = self.correlatedScoring.dataPoints.count;
+    }
+    
     return numberOfPoints;
+}
+
+- (NSInteger)numberOfDivisionsInXAxis
+{
+    NSInteger numberOfDivs = [self.dataPoints count];
+    
+    if (self.numberOfDays == -(kNumberOfDaysIn3Months - 1)) {
+        numberOfDivs = 4;
+    } else if (self.numberOfDays == -(kNumberOfDaysInYear - 1)){
+        numberOfDivs = 6;
+    }
+    
+    return numberOfDivs;
+}
+
+- (NSInteger)numberOfPlotsInGraph
+{
+    NSUInteger numberOfPlots = 1;
+    
+    if (self.correlatedScoring.dataPoints.count > 0) {
+        numberOfPlots = 2;
+    }
+    return numberOfPlots;
+}
+
+- (NSString *)graph:(APCBaseGraphView *) graphView titleForXAxisAtIndex:(NSInteger)pointIndex
+{
+    
+    NSDate *titleDate = nil;
+    NSInteger numOfTitles = 0;
+    if ([graphView isKindOfClass:[APCLineGraphView class]]) {
+        numOfTitles = [self numberOfDivisionsInXAxisForLineGraph:(APCLineGraphView *)graphView];
+    }else if ([graphView isKindOfClass:[APCDiscreteGraphView class]]){
+        numOfTitles = [self numberOfDivisionsInXAxisForDiscreteGraph:(APCDiscreteGraphView *)graphView];
+    }
+
+    NSInteger actualIndex = ((self.dataPoints.count - 1)/numOfTitles + 1) * pointIndex;
+    
+    titleDate = [[self.dataPoints objectAtIndex:actualIndex] valueForKey:kDatasetDateKey];
+    
+    switch (self.groupBy) {
+            
+        case APHTimelineGroupMonth:
+        case APHTimelineGroupYear:
+            [self.dateFormatter setDateFormat:@"MMM"];
+            break;
+            
+        case APHTimelineGroupWeek:
+        case APHTimelineGroupDay:
+        default:
+            if (actualIndex == 0) {
+                [self.dateFormatter setDateFormat:@"MMM d"];
+            } else {
+                [self.dateFormatter setDateFormat:@"d"];
+            }
+            break;
+    }
+    
+    NSString *xAxisTitle = [self.dateFormatter stringFromDate:titleDate] ? [self.dateFormatter stringFromDate:titleDate] : @"";
+    
+    return xAxisTitle;
+}
+
+/*********************************************************************************/
+#pragma mark  APCLineGraphViewDataSource
+/*********************************************************************************/
+
+- (NSInteger)lineGraph:(APCLineGraphView *) __unused graphView numberOfPointsInPlot:(NSInteger)plotIndex
+{
+    return [self numberOfPointsInPlot:plotIndex];
 }
 
 - (NSInteger)numberOfPlotsInLineGraph:(APCLineGraphView *) __unused graphView
 {
-    NSUInteger numberOfPlots = 1;
-    
-    if (self.hasCorrelateDataPoints) {
-        numberOfPlots = 2;
-    }
-    return numberOfPlots;
+    return [self numberOfPlotsInGraph];
 }
 
 - (CGFloat)minimumValueForLineGraph:(APCLineGraphView *) __unused graphView
@@ -1035,75 +1325,85 @@ static NSString *const kDatasetGroupByYear    = @"datasetGroupByYear";
     return (self.customMaximumPoint == CGFLOAT_MAX) ? [[self maximumDataPoint] doubleValue] : self.customMaximumPoint;
 }
 
-- (CGFloat)lineGraph:(APCLineGraphView *) __unused graphView plot:(NSInteger)plotIndex valueForPointAtIndex:(NSInteger) __unused pointIndex
+- (CGFloat)lineGraph:(APCLineGraphView *) __unused graphView plot:(NSInteger)plotIndex valueForPointAtIndex:(NSInteger) pointIndex
 {
+    
     CGFloat value;
     
-    if (plotIndex == 0) {
-        NSDictionary *point = [self nextObject];
-        value = [[point valueForKey:kDatasetValueKey] doubleValue];
-    } else {
-        NSDictionary *correlatedPoint = [self nextCorrelatedObject];
-        value = [[correlatedPoint valueForKey:kDatasetValueKey] doubleValue];
+    //if plotIndex == 0, we may or may not have a correlated chart, we could return the value if we have one, but we shouldn't if we don't have a corresponding point for the other plotIndex.
+    //if plotIndex == 1, we DO have a correlated chart, but we shouldn't return a value for plotIndex 0 if we don't have a plotIndex 1 value
+    //So we need to know if this is going to be a correlated chart before returning a value for either plotIndex
+    
+    //check if we have a data point for both plotIndexes before returning either value
+    CGFloat plotIndex0Value = [[[self.dataPoints objectAtIndex:pointIndex]valueForKey:kDatasetValueKey] doubleValue];
+    CGFloat plotIndex1Value = [[[self.correlatedScoring.dataPoints objectAtIndex:pointIndex]valueForKey:kDatasetValueKey] doubleValue];
+    
+    if ((self.correlatedScoring) && (plotIndex0Value == NSNotFound || plotIndex1Value == NSNotFound)) {
+        value = NSNotFound;
+    }else if (plotIndex == 0) {
+        value = plotIndex0Value;
+    }else if (plotIndex == 1){
+        value = plotIndex1Value;
+    }else{
+        value = NSNotFound;
     }
     
     return value;
 }
 
-- (NSString *)lineGraph:(APCLineGraphView *) __unused graphView titleForXAxisAtIndex:(NSInteger)pointIndex
+- (NSString *)lineGraph:(APCLineGraphView *) graphView titleForXAxisAtIndex:(NSInteger)pointIndex
 {
-    NSDate *titleDate = nil;
     
-    titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
-
-    if (pointIndex == 0) {
-        [self.dateFormatter setDateFormat:@"MMM d"];
-    } else {
-        [self.dateFormatter setDateFormat:@"d"];
-    }
+    return [self graph:graphView titleForXAxisAtIndex:pointIndex];
     
-    
-    NSString *xAxisTitle = [self.dateFormatter stringFromDate:titleDate];
-                            
-    return xAxisTitle;
 }
 
-#pragma mark Discrete
-
-- (NSInteger)discreteGraph:(APCDiscreteGraphView *) __unused graphView numberOfPointsInPlot:(NSInteger) __unused plotIndex
+- (NSInteger)numberOfDivisionsInXAxisForLineGraph:(APCLineGraphView *)__unused graphView
 {
-    return [self.timeline count];
+    return [self numberOfDivisionsInXAxis];
 }
 
-- (APCRangePoint *)discreteGraph:(APCDiscreteGraphView *) __unused graphView plot:(NSInteger) __unused plotIndex valueForPointAtIndex:(NSInteger) __unused pointIndex
+/*********************************************************************************/
+#pragma mark  APCDiscreteGraphViewDataSource
+/*********************************************************************************/
+
+- (NSInteger)numberOfPlotsInDiscreteGraph:(APCDiscreteGraphView *)__unused graphView
 {
+    return [self numberOfPlotsInGraph];
+}
+
+- (NSInteger)discreteGraph:(APCDiscreteGraphView *) __unused graphView numberOfPointsInPlot:(NSInteger) plotIndex
+{
+    return [self numberOfPointsInPlot:plotIndex];
+}
+
+- (APCRangePoint *)discreteGraph:(APCDiscreteGraphView *) __unused graphView plot:(NSInteger) plotIndex valueForPointAtIndex:(NSInteger) __unused pointIndex
+{
+    
     APCRangePoint *value;
+    NSDictionary *point = [NSDictionary new];
     
-    NSDictionary *point = [self nextObject];
-    value = [point valueForKey:kDatasetRangeValueKey];
-    
-    if (!value) {
-        value = [APCRangePoint new];
+    if (plotIndex == 0) {
+        point = [self.dataPoints objectAtIndex:pointIndex];
+        value = [point valueForKey:kDatasetRangeValueKey];
+    }else{
+        point = [self.correlatedScoring.dataPoints objectAtIndex:pointIndex];
+        value = [point valueForKey:kDatasetRangeValueKey];
     }
+    
     return value;
 }
 
-- (NSString *)discreteGraph:(APCDiscreteGraphView *) __unused graphView titleForXAxisAtIndex:(NSInteger) __unused pointIndex
+- (NSString *)discreteGraph:(APCDiscreteGraphView *) graphView titleForXAxisAtIndex:(NSInteger) pointIndex
 {
-    NSDate *titleDate = nil;
     
-    titleDate = [[self.dataPoints objectAtIndex:pointIndex] valueForKey:kDatasetDateKey];
+    return [self graph:graphView titleForXAxisAtIndex:pointIndex];
     
-    if (pointIndex == 0) {
-        [self.dateFormatter setDateFormat:@"MMM d"];
-    } else {
-        [self.dateFormatter setDateFormat:@"d"];
-    }
-    
-    
-    NSString *xAxisTitle = [self.dateFormatter stringFromDate:titleDate];
-    
-    return xAxisTitle;
+}
+
+- (NSInteger)numberOfDivisionsInXAxisForDiscreteGraph:(APCDiscreteGraphView *)__unused graphView
+{
+    return [self numberOfDivisionsInXAxis];
 }
 
 - (CGFloat)minimumValueForDiscreteGraph:(APCDiscreteGraphView *) __unused graphView

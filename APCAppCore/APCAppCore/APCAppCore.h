@@ -57,6 +57,7 @@ FOUNDATION_EXPORT const unsigned char APCAppCoreVersionString[];
 #import <APCAppCore/APCDataResult.h>
 #import <APCAppCore/APCTasksReminderManager.h>
 #import <APCAppCore/APCUtilities.h>
+#import <APCAppCore/APCCorrelationsSelectorViewController.h>
 
 //  Tasks
 #import <APCAppCore/APCConsentTask.h>

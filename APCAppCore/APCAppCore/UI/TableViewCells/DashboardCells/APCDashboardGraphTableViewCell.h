@@ -45,6 +45,6 @@ FOUNDATION_EXPORT NSString * const kAPCDashboardGraphTableViewCellIdentifier;
 @property (weak, nonatomic) IBOutlet APCDiscreteGraphView *discreteGraphView;
 @property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *averageImageView;
-
+@property (weak, nonatomic) IBOutlet UIButton *legendButton;
 
 @end

@@ -347,7 +347,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 {
     [self.xAxisPoints removeAllObjects];
     
-    for (int i=0 ; i<[self numberOfXAxisTitles]; i++) {
+    for (NSUInteger i=0 ; i < [self.dataPoints count]; i++) {
         
         CGFloat positionOnXAxis = ((CGRectGetWidth(self.plotsView.frame) / (self.yAxisPoints.count - 1)) * i);
         positionOnXAxis = round(positionOnXAxis);
@@ -364,7 +364,10 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
         
         if ([self.datasource respondsToSelector:@selector(lineGraph:plot:valueForPointAtIndex:)]) {
             CGFloat value = [self.datasource lineGraph:self plot:plotIndex valueForPointAtIndex:i];
-            [self.dataPoints addObject:@(value)];
+            
+            if (value) {
+                [self.dataPoints addObject:@(value)];
+            }
             
             if (value != NSNotFound){
                 self.hasDataPoint = YES;
@@ -510,7 +513,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     [self.referenceLines removeAllObjects];
     
     UIBezierPath *referenceLinePath = [UIBezierPath bezierPath];
-    [referenceLinePath moveToPoint:CGPointMake(kAPCGraphLeftPadding, kAPCGraphTopPadding + CGRectGetHeight(self.plotsView.frame)/2)];
+    [referenceLinePath moveToPoint:CGPointMake(0, kAPCGraphTopPadding + CGRectGetHeight(self.plotsView.frame)/2)];
     [referenceLinePath addLineToPoint:CGPointMake(CGRectGetWidth(self.frame), kAPCGraphTopPadding + CGRectGetHeight(self.plotsView.frame)/2)];
     
     CAShapeLayer *referenceLineLayer = [CAShapeLayer layer];
@@ -554,7 +557,10 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
 
 - (void)drawPointCirclesForPlotIndex:(NSInteger)plotIndex
 {
-    for (NSUInteger i=0 ; i<self.yAxisPoints.count; i++) {
+    
+    NSUInteger smallestArrayCount = self.yAxisPoints.count < self.xAxisPoints.count ?: self.xAxisPoints.count;
+
+    for (NSUInteger i=0 ; i< smallestArrayCount; i++) {
         
         CGFloat dataPointVal = [self.dataPoints[i] floatValue];
         
@@ -565,7 +571,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
             
             CGFloat pointSize = self.isLandscapeMode ? 10.0f : 8.0f;
             APCCircleView *point = [[APCCircleView alloc] initWithFrame:CGRectMake(0, 0, pointSize, pointSize)];
-            point.tintColor = (plotIndex == 0) ? self.tintColor : self.referenceLineColor;
+            point.tintColor = (plotIndex == 0) ? self.tintColor : self.secondaryTintColor;
             point.center = CGPointMake(positionOnXAxis, positionOnYAxis);
             [self.plotsView.layer addSublayer:point.layer];
             
@@ -587,7 +593,9 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     BOOL emptyDataPresent = NO;
     
-    for (NSUInteger i=0; i<self.yAxisPoints.count; i++) {
+    NSUInteger smallestArrayCount = self.yAxisPoints.count < self.xAxisPoints.count ?: self.xAxisPoints.count;
+    
+    for (NSUInteger i=0; i< smallestArrayCount; i++) {
         
         CGFloat dataPointVal = [self.dataPoints[i] floatValue];
         
@@ -613,7 +621,7 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
                 CAShapeLayer *plotLineLayer = [CAShapeLayer layer];
                 plotLineLayer.path = plotLinePath.CGPath;
                 plotLineLayer.fillColor = [UIColor clearColor].CGColor;
-                plotLineLayer.strokeColor = (plotIndex == 0) ? self.tintColor.CGColor : self.referenceLineColor.CGColor;
+                plotLineLayer.strokeColor = (plotIndex == 0) ? self.tintColor.CGColor : self.secondaryTintColor.CGColor;
                 plotLineLayer.lineJoin = kCALineJoinRound;
                 plotLineLayer.lineCap = kCALineCapRound;
                 plotLineLayer.lineWidth = self.isLandscapeMode ? 3.0 : 2.0;
@@ -642,14 +650,13 @@ static CGFloat const kSnappingClosenessFactor = 0.3f;
     
     CAShapeLayer *fillPathLayer = [CAShapeLayer layer];
     fillPathLayer.path = fillPath.CGPath;
-    fillPathLayer.fillColor = (plotIndex == 0) ? [self.tintColor colorWithAlphaComponent:0.4].CGColor : [self.referenceLineColor colorWithAlphaComponent:0.2].CGColor;
+    fillPathLayer.fillColor = (plotIndex == 0) ? [self.tintColor colorWithAlphaComponent:0.4].CGColor : [self.secondaryTintColor colorWithAlphaComponent:0.2].CGColor;
     [self.plotsView.layer addSublayer:fillPathLayer];
     
     if (self.shouldAnimate) {
         fillPathLayer.opacity = 0;
     }
     
-    [self.fillLayers addObject:fillPathLayer];
 }
 
 #pragma mark - Graph Calculations
