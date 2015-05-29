@@ -1258,6 +1258,44 @@ static NSInteger const kNumberOfDaysInYear    = 365;
     return numberOfPlots;
 }
 
+- (NSString *)graph:(APCBaseGraphView *) graphView titleForXAxisAtIndex:(NSInteger)pointIndex
+{
+    
+    NSDate *titleDate = nil;
+    NSInteger numOfTitles = 0;
+    if ([graphView isKindOfClass:[APCLineGraphView class]]) {
+        numOfTitles = [self numberOfDivisionsInXAxisForLineGraph:(APCLineGraphView *)graphView];
+    }else if ([graphView isKindOfClass:[APCDiscreteGraphView class]]){
+        numOfTitles = [self numberOfDivisionsInXAxisForDiscreteGraph:(APCDiscreteGraphView *)graphView];
+    }
+
+    NSInteger actualIndex = ((self.dataPoints.count - 1)/numOfTitles + 1) * pointIndex;
+    
+    titleDate = [[self.dataPoints objectAtIndex:actualIndex] valueForKey:kDatasetDateKey];
+    
+    switch (self.groupBy) {
+            
+        case APHTimelineGroupMonth:
+        case APHTimelineGroupYear:
+            [self.dateFormatter setDateFormat:@"MMM"];
+            break;
+            
+        case APHTimelineGroupWeek:
+        case APHTimelineGroupDay:
+        default:
+            if (actualIndex == 0) {
+                [self.dateFormatter setDateFormat:@"MMM d"];
+            } else {
+                [self.dateFormatter setDateFormat:@"d"];
+            }
+            break;
+    }
+    
+    NSString *xAxisTitle = [self.dateFormatter stringFromDate:titleDate] ? [self.dateFormatter stringFromDate:titleDate] : @"";
+    
+    return xAxisTitle;
+}
+
 /*********************************************************************************/
 #pragma mark  APCLineGraphViewDataSource
 /*********************************************************************************/
@@ -1314,37 +1352,11 @@ static NSInteger const kNumberOfDaysInYear    = 365;
     return value;
 }
 
-- (NSString *)lineGraph:(APCLineGraphView *) __unused graphView titleForXAxisAtIndex:(NSInteger)pointIndex
+- (NSString *)lineGraph:(APCLineGraphView *) graphView titleForXAxisAtIndex:(NSInteger)pointIndex
 {
-    NSDate *titleDate = nil;
     
-    NSInteger numOfTitles = [self numberOfDivisionsInXAxisForLineGraph:graphView];
-    NSInteger actualIndex = ((self.dataPoints.count - 1)/numOfTitles + 1) * pointIndex;
+    return [self graph:graphView titleForXAxisAtIndex:pointIndex];
     
-    titleDate = [[self.dataPoints objectAtIndex:actualIndex] valueForKey:kDatasetDateKey];
-    
-    if (self.numberOfDays <= -(kNumberOfDaysIn3Months - 1)) {
-        // 3 Months or more
-        [self.dateFormatter setDateFormat:@"MMM"];
-    } else if (self.numberOfDays == -(kNumberOfDaysInMonth - 1)){
-        //one month
-        if (actualIndex == 0 || (actualIndex == numOfTitles - 1)) {
-            [self.dateFormatter setDateFormat:@"MMM d"];
-        } else {
-            [self.dateFormatter setDateFormat:@"d"];
-        }
-    } else {
-        if (actualIndex == 0) {
-            [self.dateFormatter setDateFormat:@"MMM d"];
-        } else {
-            [self.dateFormatter setDateFormat:@"d"];
-        }
-    }
-    
-    
-    NSString *xAxisTitle = [self.dateFormatter stringFromDate:titleDate] ? [self.dateFormatter stringFromDate:titleDate] : @"";
-    
-    return xAxisTitle;
 }
 
 - (NSInteger)numberOfDivisionsInXAxisForLineGraph:(APCLineGraphView *)__unused graphView
@@ -1383,36 +1395,11 @@ static NSInteger const kNumberOfDaysInYear    = 365;
     return value;
 }
 
-- (NSString *)discreteGraph:(APCDiscreteGraphView *) __unused graphView titleForXAxisAtIndex:(NSInteger) pointIndex
+- (NSString *)discreteGraph:(APCDiscreteGraphView *) graphView titleForXAxisAtIndex:(NSInteger) pointIndex
 {
-    NSDate *titleDate = nil;
     
-    NSInteger numOfTitles = [self numberOfDivisionsInXAxisForDiscreteGraph:graphView];
-    NSInteger actualIndex = ((self.dataPoints.count - 1)/numOfTitles + 1) * pointIndex;
+    return [self graph:graphView titleForXAxisAtIndex:pointIndex];
     
-    titleDate = [[self.dataPoints objectAtIndex:actualIndex] valueForKey:kDatasetDateKey];
-    
-    if (self.numberOfDays <= -(kNumberOfDaysIn3Months - 1)) {
-        // 3 Months or more
-        [self.dateFormatter setDateFormat:@"MMM"];
-    } else if (self.numberOfDays == -(kNumberOfDaysInMonth - 1)){
-        //one month
-        if (actualIndex == 0 || (actualIndex == numOfTitles - 1)) {
-            [self.dateFormatter setDateFormat:@"MMM d"];
-        } else {
-            [self.dateFormatter setDateFormat:@"d"];
-        }
-    } else {
-        if (actualIndex == 0) {
-            [self.dateFormatter setDateFormat:@"MMM d"];
-        } else {
-            [self.dateFormatter setDateFormat:@"d"];
-        }
-    }
-    
-    NSString *xAxisTitle = [self.dateFormatter stringFromDate:titleDate];
-    
-    return xAxisTitle;
 }
 
 - (NSInteger)numberOfDivisionsInXAxisForDiscreteGraph:(APCDiscreteGraphView *)__unused graphView
