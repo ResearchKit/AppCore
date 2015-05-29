@@ -789,21 +789,20 @@ static NSInteger const kNumberOfDaysInYear    = 365;
         NSDictionary *rawData = nil;
         
         if (period == APHTimelineGroupForInsights) {
-            NSSortDescriptor *sortByDate = [[NSSortDescriptor alloc] initWithKey:kDatasetDateKey ascending:NO];
-            NSArray *latestRawData = [elements sortedArrayUsingDescriptors:@[sortByDate]];
-            
-            NSDictionary *latestElement = [latestRawData firstObject];
+            // The elements array is sorted in ansending order,
+            // therefore the last object will be the latest data point.
+            NSDictionary *latestElement = [elements lastObject];
             rawData = latestElement[kDatasetRawDataKey];
         }
         
-        // Filter data point that fall between start/end dates (inclusive).
+        // Exclude data points with NSNotFound
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K <> %@)", kDatasetValueKey, @(NSNotFound)];
-        NSArray *pointsBetweenStartAndEndDates = [elements filteredArrayUsingPredicate:predicate];
+        NSArray *filteredDataPoints = [elements filteredArrayUsingPredicate:predicate];
         
         double itemSum = 0;
         double dayAverage = 0;
         
-        for (NSDictionary *dataPoint in pointsBetweenStartAndEndDates) {
+        for (NSDictionary *dataPoint in filteredDataPoints) {
             NSNumber *value = [dataPoint valueForKey:kDatasetValueKey];
             
             if ([value integerValue] != NSNotFound) {
@@ -811,8 +810,8 @@ static NSInteger const kNumberOfDaysInYear    = 365;
             }
         }
         
-        if (pointsBetweenStartAndEndDates.count != 0) {
-            dayAverage = itemSum / pointsBetweenStartAndEndDates.count;
+        if (filteredDataPoints.count != 0) {
+            dayAverage = itemSum / filteredDataPoints.count;
         }
         
         if (dayAverage == 0) {
@@ -822,8 +821,8 @@ static NSInteger const kNumberOfDaysInYear    = 365;
         APCRangePoint *rangePoint = [APCRangePoint new];
         
         if (dayAverage != NSNotFound) {
-            NSNumber *minValue = [pointsBetweenStartAndEndDates valueForKeyPath:@"@min.datasetValueKey"];
-            NSNumber *maxValue = [pointsBetweenStartAndEndDates valueForKeyPath:@"@max.datasetValueKey"];
+            NSNumber *minValue = [filteredDataPoints valueForKeyPath:@"@min.datasetValueKey"];
+            NSNumber *maxValue = [filteredDataPoints valueForKeyPath:@"@max.datasetValueKey"];
             
             rangePoint.minimumValue = [minValue floatValue];
             rangePoint.maximumValue = [maxValue floatValue];
