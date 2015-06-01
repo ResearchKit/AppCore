@@ -33,13 +33,12 @@
  
 #import "APCPermissionPrimingViewController.h"
 #import "APCOnboardingManager.h"
+#import "APCPermissionsManager.h"
 #import "APCCustomBackButton.h"
 #import "APCConstants.h"
 
 #import "UIFont+APCAppearance.h"
 #import "UIColor+APCAppearance.h"
-
-#import "APCAppDelegate.h"
 
 
 @implementation APCPermissionPrimingViewController
@@ -51,16 +50,13 @@
     [self setupNavAppearance];
     
     self.title = NSLocalizedString(@"Consent", @"Consent");
-    
     self.titleLabel.text = NSLocalizedString(@"What to Expect", @"What to Expect");
     
-    NSDictionary *initialOptions = ((APCAppDelegate *)[UIApplication sharedApplication].delegate).initializationOptions;
-    NSDictionary *servicesDescrtiptions = initialOptions[kAppServicesDescriptionsKey];
-    self.detailTextLabel.text = servicesDescrtiptions[@(kAPCSignUpPermissionsTypeHealthKit)];
+    APCPermissionsManager *permissionsManager = [self onboardingManager].permissionsManager;
+    self.detailTextLabel.text = [permissionsManager permissionDescriptionForType:kAPCSignUpPermissionsTypeHealthKit];
 }
 
-- (void)setupAppearance
-{
+- (void)setupAppearance {
     self.titleLabel.font = [UIFont appLightFontWithSize:38.0f];
     self.titleLabel.textColor = [UIColor appSecondaryColor1];
     
@@ -70,8 +66,7 @@
     self.headerImageView.image = [UIImage imageNamed:@"switch_icon"];
 }
 
-- (void)setupNavAppearance
-{
+- (void)setupNavAppearance {
     if ([[self onboarding] taskType] == kAPCOnboardingTaskTypeSignUp) {
         UIBarButtonItem *backBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                        target:self
@@ -82,21 +77,21 @@
     }
 }
 
-- (APCOnboarding *)onboarding
-{
-    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager].onboarding;
+- (APCOnboardingManager *)onboardingManager {
+    return [(id<APCOnboardingManagerProvider>)[UIApplication sharedApplication].delegate onboardingManager];
 }
 
-- (IBAction)next:(id) __unused sender
-{
+- (APCOnboarding *)onboarding {
+    return [self onboardingManager].onboarding;
+}
+
+- (IBAction)next:(id) __unused sender {
     UIViewController *viewController = [[self onboarding] nextScene];
     [self.navigationController pushViewController:viewController animated:YES];
 }
 
-- (void)back
-{
+- (void)back {
     [[self onboarding] popScene];
-    
     [self.navigationController popViewControllerAnimated:YES];
 }
 

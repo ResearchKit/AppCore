@@ -382,6 +382,23 @@ typedef NS_ENUM(NSUInteger, APCPermissionsErrorCode) {
     return retValue;
 }
 
+- (NSString *)permissionDescriptionForType:(APCSignUpPermissionsType)type {
+    switch (type) {
+        case kAPCSignUpPermissionsTypeLocation:
+            return NSLocalizedString(@"Using your GPS enables the app to accurately determine distances travelled. Your actual location will never be shared.", @"");
+        case kAPCSignUpPermissionsTypeCoremotion:
+            return NSLocalizedString(@"Using the motion co-processor allows the app to determine your activity, helping the study better understand how activity level may influence disease.", @"");
+        case kAPCSignUpPermissionsTypeMicrophone:
+            return NSLocalizedString(@"Access to microphone is required for your Voice Recording Activity.", @"");
+        case kAPCSignUpPermissionsTypeLocalNotifications:
+            return NSLocalizedString(@"Allowing notifications enables the app to show you reminders.", @"");
+        case kAPCSignUpPermissionsTypeHealthKit:
+            return NSLocalizedString(@"On the next screen, you will be prompted to grant the app access to read and write some of your general and health information, such as height, weight and steps taken so you don't have to enter it again.", @"");
+        default:
+            return [NSString stringWithFormat:@"Unknown permission type: %u", (unsigned int)type];
+    }
+}
+
 - (NSError *)permissionDeniedErrorForType:(APCSignUpPermissionsType)type
 {
     NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
